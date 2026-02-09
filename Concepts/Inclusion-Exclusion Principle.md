@@ -18,14 +18,3 @@ $$- |A \cap B| - |A \cap C| - |B \cap C|$$
 $$+ |A \cap B \cap C|$$
 >The signs alternate: *add* single sets, *subtract* pairwise overlaps, *add* triple overlaps, and so on.
 
-## Battle Questions
-<!-- These embeds are hidden by CSS but parsed by JavaScript -->
-<!-- First 3 = Battle questions to learn the concept -->
-
-![[q_001_inclusion_exclusion]]
-![[q_002_inclusion_exclusion]]
-![[q_003_inclusion_exclusion]]
-
-<!-- Questions 4+ = Refresher pool for future spaced repetition -->
-<!-- ![[q_004_inclusion_exclusion]] -->
-<!-- ![[q_005_inclusion_exclusion]] -->

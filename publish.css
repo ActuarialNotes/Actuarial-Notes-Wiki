@@ -4026,3 +4026,44 @@ body.battle-modal-open {
         display: none !important;
     }
 }
+
+
+
+/* Hide the first heading (regardless of level) inside any embedded section */
+.internal-embed .markdown-embed-content
+  .markdown-preview-view .markdown-preview-sizer div:nth-child(3) 
+    :is(h1, h2, h3, h4, h5, h6) {
+  display: none !important;
+}
+
+
+/* Hide Obsidian block IDs in publish */
+a.internal-link[href*="#^"] {
+    display: none !important;
+}
+span.cm-formatting-attribute, 
+span.cm-string-2 {
+    visibility: hidden !important;
+}
+
+.hidden-anchor {
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  line-height: 0;
+  font-size: 0;
+}
+
+h6 {
+  font-size: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+}
+
+h6 a {
+  display: block;
+  height: 0;
+}
+

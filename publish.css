@@ -380,28 +380,32 @@ pre code { background: none; border: none; padding: 0; }
 
 
 /* ===========================================================
-   9) CALLOUTS — Wiki-style with left border accent
+   9) CALLOUTS — Subtle card-style with accent border
    =========================================================== */
 
 .callout {
-  background: transparent;
-  border: none;
-  border-left: 0px solid var(--brand);
-  padding: 4px 0 4px 0px;
-  border-radius: 0;
-  box-shadow: none;
-  margin: 1rem 0;
+  --callout-color: var(--brand);
+  background: color-mix(in oklab, var(--callout-color) 6%, var(--bg-elev));
+  border: 1px solid color-mix(in oklab, var(--callout-color) 15%, var(--muted));
+  border-left: 3px solid var(--callout-color);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin: 1.25rem 0;
+  box-shadow: var(--shadow-1);
 }
 
-/* Callout title — styled like a link */
+/* Callout title */
 .callout .callout-title {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 500;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  color: var(--callout-color);
   margin-bottom: 0;
-  color: var(--brand);
-  font-size: 0.95rem;
+  padding-bottom: 10px;
+  border-bottom: 1px solid color-mix(in oklab, var(--callout-color) 12%, transparent);
 }
 
 /* Hide the default icon */
@@ -411,98 +415,63 @@ pre code { background: none; border: none; padding: 0; }
 
 /* Style the fold indicator (chevron) */
 .callout .callout-fold {
-  color: var(--brand);
-  opacity: 1;
-  order: -1; /* Move chevron before title text */
+  color: var(--callout-color);
+  opacity: 0.8;
+  order: -1;
 }
 
 /* Title text styling */
 .callout .callout-title-inner {
-  color: var(--brand);
-  font-weight: 500;
+  color: var(--callout-color);
+  font-weight: 600;
 }
 
 /* Callout content */
 .callout .callout-content {
-  padding-top: 8px;
+  padding-top: 12px;
   color: var(--text);
 }
 
-/* Collapsed state */
+/* Collapsed state — tighten up when closed */
 .callout.is-collapsed .callout-content {
   display: none;
 }
+.callout.is-collapsed .callout-title {
+  padding-bottom: 0;
+  border-bottom: none;
+}
 
-/* Color variants */
+/* ---- Color variants ---- */
+
+/* Warning */
 .callout-warning,
 .callout[data-callout="warning"] {
-  border-left-color: var(--warning);
-}
-.callout-warning .callout-title,
-.callout-warning .callout-title-inner,
-.callout-warning .callout-fold,
-.callout[data-callout="warning"] .callout-title,
-.callout[data-callout="warning"] .callout-title-inner,
-.callout[data-callout="warning"] .callout-fold {
-  color: var(--warning);
+  --callout-color: var(--warning);
 }
 
+/* Danger / Error */
 .callout-danger,
 .callout[data-callout="danger"],
 .callout[data-callout="error"] {
-  border-left-color: var(--danger);
-}
-.callout-danger .callout-title,
-.callout-danger .callout-title-inner,
-.callout-danger .callout-fold,
-.callout[data-callout="danger"] .callout-title,
-.callout[data-callout="danger"] .callout-title-inner,
-.callout[data-callout="danger"] .callout-fold,
-.callout[data-callout="error"] .callout-title,
-.callout[data-callout="error"] .callout-title-inner,
-.callout[data-callout="error"] .callout-fold {
-  color: var(--danger);
+  --callout-color: var(--danger);
 }
 
+/* Success / Tip */
 .callout-success,
 .callout[data-callout="success"],
 .callout[data-callout="tip"] {
-  border-left-color: var(--success);
-}
-.callout-success .callout-title,
-.callout-success .callout-title-inner,
-.callout-success .callout-fold,
-.callout[data-callout="success"] .callout-title,
-.callout[data-callout="success"] .callout-title-inner,
-.callout[data-callout="success"] .callout-fold,
-.callout[data-callout="tip"] .callout-title,
-.callout[data-callout="tip"] .callout-title-inner,
-.callout[data-callout="tip"] .callout-fold {
-  color: var(--success);
+  --callout-color: var(--success);
 }
 
-/* Example callout - uses brand blue */
+/* Example — brand blue */
 .callout[data-callout="example"] {
-  border-left-color: var(--brand);
-}
-.callout[data-callout="example"] .callout-title,
-.callout[data-callout="example"] .callout-title-inner,
-.callout[data-callout="example"] .callout-fold {
-  color: var(--brand);
+  --callout-color: var(--brand);
 }
 
-/* Info/Note callouts */
+/* Info / Note — brand blue */
 .callout[data-callout="info"],
 .callout[data-callout="note"] {
-  border-left-color: var(--brand);
-}
-.callout[data-callout="info"] .callout-title,
-.callout[data-callout="info"] .callout-title-inner,
-.callout[data-callout="info"] .callout-fold,
-.callout[data-callout="note"] .callout-title,
-.callout[data-callout="note"] .callout-title-inner,
-.callout[data-callout="note"] .callout-fold {
-  color: var(--brand);
+  --callout-color: var(--brand);
 }
 
 

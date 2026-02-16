@@ -30,7 +30,7 @@ The **Probability (P-1) Exam** is a 3 hour, 30 multiple choice question exam abo
 
 
 ### 1. General Probability
-> [!example]- **Learning Objective**: Understand basic concepts of probability and discrete mathematics.
+> [!example]- **Learning Objective**: Understand basic concepts of probability and discrete mathematics. {15 concepts}
 
 ==Probability== is the mathematical framework that quantifies uncertainty by assigning numerical values (between 0 and 1) to the likelihood of events occurring. The mathematics of probability is expressed naturally in terms of sets.
 
@@ -121,7 +121,7 @@ The **Probability (P-1) Exam** is a 3 hour, 30 multiple choice question exam abo
 
 ### 2. Univariate Random Variables
 
-> [!example]- **Learning Objective:** Understand Discrete Univariate Distributions and Continuous Univariate Distributions and their applications.
+> [!example]- **Learning Objective:** Understand Discrete Univariate Distributions and Continuous Univariate Distributions and their applications. {20 concepts}
 > - Discrete distributions include: binomial, geometric, hypergeometric, negative binomial, Poisson, uniform
 > - Continuous distributions include beta, exponential, gamma, lognormal, normal, and uniform)
 
@@ -223,7 +223,7 @@ A ==Univariate Random Variable== is a single random variable that represents unc
 
 ### 3. Multivariate Random Variables
 
-> [!example]- **Learning Objective:** Understand key concepts in the discrete and continuous settings concerning multivariate distributions, the distribution of order statistics for independent random variables, and linear combinations of independent random variables, along with associated applications.
+> [!example]- **Learning Objective:** Understand key concepts in the discrete and continuous settings concerning multivariate distributions, the distribution of order statistics for independent random variables, and linear combinations of independent random variables, along with associated applications. {10 concepts}
 
 A ==Multivariate Random Variable== is a collection of two or more random variables considered jointly, capturing the relationships and dependencies among them.
 

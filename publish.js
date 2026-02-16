@@ -2496,58 +2496,47 @@
 })();
 
 /* ===========================================================
-   CONCEPT COUNT BADGES
-   Counts h6 headings after each [!example] callout and injects
-   a pill badge into the callout title.
+   CALLOUT BADGES
+   Extracts {badge text} from callout titles and renders it as
+   a pill badge.  Works on all callout types.
+   Syntax:  > [!example]- Title here {badge text}
    =========================================================== */
 
 (function () {
   'use strict';
 
-  function injectConceptCounts() {
-    const callouts = document.querySelectorAll('.callout[data-callout="example"]');
+  const BADGE_RE = /\{([^}]+)\}\s*$/;
 
-    callouts.forEach(callout => {
-      // Skip if badge already injected
-      if (callout.querySelector('.callout-concept-count')) return;
+  function injectBadges() {
+    document.querySelectorAll('.callout .callout-title-inner').forEach(inner => {
+      // Skip if already processed
+      if (inner.parentElement.querySelector('.callout-concept-count')) return;
 
-      // Walk siblings after the callout, counting h6 elements
-      let count = 0;
-      let sibling = callout.nextElementSibling;
-      while (sibling) {
-        const tag = sibling.tagName;
-        // Stop at the next major section boundary
-        if (tag === 'H2' || tag === 'H3') break;
-        if (tag === 'H6') count++;
-        sibling = sibling.nextElementSibling;
-      }
+      const text = inner.textContent;
+      const match = text.match(BADGE_RE);
+      if (!match) return;
 
-      if (count === 0) return;
+      // Strip the {…} from the visible title text
+      inner.textContent = text.replace(BADGE_RE, '').trimEnd();
 
       const badge = document.createElement('span');
       badge.className = 'callout-concept-count';
-      badge.textContent = count + (count === 1 ? ' concept' : ' concepts');
+      badge.textContent = match[1];
 
-      const title = callout.querySelector('.callout-title');
-      if (title) title.appendChild(badge);
+      inner.parentElement.appendChild(badge);
     });
   }
 
-  // Run on load and observe for SPA navigation
-  function init() {
-    setTimeout(injectConceptCounts, 200);
-  }
-
   function observePageChanges() {
-    window.addEventListener('popstate', () => setTimeout(injectConceptCounts, 300));
+    window.addEventListener('popstate', () => setTimeout(injectBadges, 300));
 
     document.addEventListener('click', (e) => {
       const link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
       if (link) {
         const href = link.getAttribute('href');
         if (href && !href.startsWith('#')) {
-          setTimeout(injectConceptCounts, 400);
-          setTimeout(injectConceptCounts, 800);
+          setTimeout(injectBadges, 400);
+          setTimeout(injectBadges, 800);
         }
       }
     });
@@ -2555,8 +2544,8 @@
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-          clearTimeout(window._conceptCountTimeout);
-          window._conceptCountTimeout = setTimeout(injectConceptCounts, 300);
+          clearTimeout(window._badgeTimeout);
+          window._badgeTimeout = setTimeout(injectBadges, 300);
           break;
         }
       }
@@ -2569,9 +2558,12 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { init(); observePageChanges(); });
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(injectBadges, 200);
+      observePageChanges();
+    });
   } else {
-    init();
+    setTimeout(injectBadges, 200);
     observePageChanges();
   }
 

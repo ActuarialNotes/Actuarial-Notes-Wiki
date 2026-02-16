@@ -2494,3 +2494,77 @@
     }
 
 })();
+
+/* ===========================================================
+   CALLOUT BADGES
+   Extracts {badge text} from callout titles and renders it as
+   a pill badge.  Works on all callout types.
+   Syntax:  > [!example]- Title here {badge text}
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  const BADGE_RE = /\{([^}]+)\}\s*$/;
+
+  function injectBadges() {
+    document.querySelectorAll('.callout .callout-title-inner').forEach(inner => {
+      // Skip if already processed
+      if (inner.parentElement.querySelector('.callout-concept-count')) return;
+
+      const text = inner.textContent;
+      const match = text.match(BADGE_RE);
+      if (!match) return;
+
+      // Strip the {…} from the visible title text
+      inner.textContent = text.replace(BADGE_RE, '').trimEnd();
+
+      const badge = document.createElement('span');
+      badge.className = 'callout-concept-count';
+      badge.textContent = match[1];
+
+      inner.parentElement.appendChild(badge);
+    });
+  }
+
+  function observePageChanges() {
+    window.addEventListener('popstate', () => setTimeout(injectBadges, 300));
+
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+      if (link) {
+        const href = link.getAttribute('href');
+        if (href && !href.startsWith('#')) {
+          setTimeout(injectBadges, 400);
+          setTimeout(injectBadges, 800);
+        }
+      }
+    });
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          clearTimeout(window._badgeTimeout);
+          window._badgeTimeout = setTimeout(injectBadges, 300);
+          break;
+        }
+      }
+    });
+
+    const container = document.querySelector('.site-body-center-column, .markdown-rendered, main');
+    if (container) {
+      observer.observe(container, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(injectBadges, 200);
+      observePageChanges();
+    });
+  } else {
+    setTimeout(injectBadges, 200);
+    observePageChanges();
+  }
+
+})();

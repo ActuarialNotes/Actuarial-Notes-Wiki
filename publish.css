@@ -473,6 +473,16 @@ pre code { background: none; border: none; padding: 0; }
   --callout-color: var(--brand);
 }
 
+/* Question / Answers — warm amber */
+.callout[data-callout="question"] {
+  --callout-color: var(--warning);
+}
+
+/* Solution — green */
+.callout[data-callout="solution"] {
+  --callout-color: var(--success);
+}
+
 /* Concept count badge */
 .callout-concept-count {
   margin-left: auto;

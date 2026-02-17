@@ -890,3 +890,436 @@
   }
 
 })();
+
+
+/* ===========================================================
+   QUESTION BROWSER
+   Adds a "?" button to each definition embed that opens a
+   modal for browsing questions across exams and concepts.
+
+   Questions are parsed from concept pages under ## Questions,
+   formatted as > [!example]- callouts.
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  /* ---- Configuration ---- */
+  const EXAMS = [
+    { key: 'P',  name: 'Exam P-1 (Probability)',            path: 'Exam P-1 (SOA)' },
+    { key: 'FM', name: 'Exam FM-2 (Financial Mathematics)',  path: 'Exam FM-2 (SOA)' },
+  ];
+
+  /* ---- Cache ---- */
+  const conceptsCache  = {};   // examKey  -> [conceptName, …]
+  const questionsCache = {};   // conceptName -> [{ title, category, difficulty, level }, …]
+
+  /* ---- DOM references ---- */
+  let overlayEl  = null;
+  let browserEl  = null;
+
+  /* ---- Init ---- */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(init, 250));
+  } else {
+    setTimeout(init, 250);
+  }
+
+  function init() {
+    createModal();
+    injectButtons();
+    observePageChanges();
+  }
+
+  /* -----------------------------------------------------------
+     OBSERVE PAGE CHANGES (SPA navigation / DOM mutations)
+     ----------------------------------------------------------- */
+  function observePageChanges() {
+    window.addEventListener('popstate', () => setTimeout(injectButtons, 250));
+
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+      if (link) {
+        const href = link.getAttribute('href');
+        if (href && !href.startsWith('#')) {
+          setTimeout(injectButtons, 300);
+          setTimeout(injectButtons, 600);
+        }
+      }
+    });
+
+    const root = document.querySelector('.site-body-center-column, .markdown-rendered, main');
+    if (root) {
+      const mo = new MutationObserver(() => {
+        clearTimeout(window._qbInjectTimeout);
+        window._qbInjectTimeout = setTimeout(injectButtons, 300);
+      });
+      mo.observe(root, { childList: true, subtree: true });
+    }
+  }
+
+  /* -----------------------------------------------------------
+     INJECT "?" BUTTONS into definition embeds
+     ----------------------------------------------------------- */
+  function injectButtons() {
+    document.querySelectorAll('.internal-embed').forEach(embed => {
+      if (embed.querySelector('.concept-question-btn')) return;
+
+      const src = embed.getAttribute('src') || embed.getAttribute('data-src') || '';
+      if (!src.includes('#Definition')) return;
+
+      const conceptName = src.split('#')[0].replace(/^Concepts\//, '').trim();
+      if (!conceptName) return;
+
+      const btn = document.createElement('button');
+      btn.className = 'concept-question-btn';
+      btn.type = 'button';
+      btn.textContent = '?';
+      btn.title = 'Browse questions – ' + conceptName;
+      btn.dataset.concept = conceptName;
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openBrowser(conceptName);
+      });
+
+      embed.appendChild(btn);
+    });
+  }
+
+  /* -----------------------------------------------------------
+     CREATE MODAL (once)
+     ----------------------------------------------------------- */
+  function createModal() {
+    if (document.querySelector('.question-browser-overlay')) return;
+
+    overlayEl = document.createElement('div');
+    overlayEl.className = 'question-browser-overlay';
+    overlayEl.addEventListener('click', closeBrowser);
+
+    browserEl = document.createElement('div');
+    browserEl.className = 'question-browser';
+    browserEl.innerHTML = [
+      '<div class="question-browser__header">',
+      '  <span class="question-browser__title">Question Browser</span>',
+      '  <button class="question-browser__close" type="button">&times;</button>',
+      '</div>',
+      '<div class="question-browser__selectors">',
+      '  <select class="question-browser__select" id="qb-exam-select">',
+      '    <option value="">Select Exam</option>',
+           EXAMS.map(e => '<option value="' + e.key + '">' + e.name + '</option>').join(''),
+      '  </select>',
+      '  <select class="question-browser__select" id="qb-concept-select" disabled>',
+      '    <option value="">Select Concept</option>',
+      '  </select>',
+      '</div>',
+      '<div class="question-browser__questions" id="qb-questions">',
+      '  <div class="question-browser__empty">Select an exam and concept to browse questions.</div>',
+      '</div>',
+    ].join('\n');
+
+    browserEl.querySelector('.question-browser__close').addEventListener('click', closeBrowser);
+    browserEl.querySelector('#qb-exam-select').addEventListener('change', handleExamChange);
+    browserEl.querySelector('#qb-concept-select').addEventListener('change', handleConceptChange);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeBrowser();
+    });
+
+    document.body.appendChild(overlayEl);
+    document.body.appendChild(browserEl);
+  }
+
+  /* -----------------------------------------------------------
+     OPEN / CLOSE
+     ----------------------------------------------------------- */
+  function openBrowser(conceptName) {
+    if (!overlayEl || !browserEl) createModal();
+
+    overlayEl.classList.add('is-visible');
+    browserEl.classList.add('is-visible');
+
+    // Auto-select the current exam then the concept
+    const examKey = detectCurrentExam();
+    const examSelect = browserEl.querySelector('#qb-exam-select');
+
+    if (examKey) {
+      examSelect.value = examKey;
+      handleExamChange().then(() => {
+        if (conceptName) {
+          const conceptSelect = browserEl.querySelector('#qb-concept-select');
+          conceptSelect.value = conceptName;
+          handleConceptChange();
+        }
+      });
+    }
+  }
+
+  function closeBrowser() {
+    if (overlayEl) overlayEl.classList.remove('is-visible');
+    if (browserEl) browserEl.classList.remove('is-visible');
+  }
+
+  /* -----------------------------------------------------------
+     DETECT CURRENT EXAM from page context
+     ----------------------------------------------------------- */
+  function detectCurrentExam() {
+    // Check exam-nav component
+    const nav = document.querySelector('.exam-nav[data-current]');
+    if (nav) {
+      const current = nav.dataset.current || '';
+      for (const exam of EXAMS) {
+        if (current.startsWith(exam.key)) return exam.key;
+      }
+    }
+    // Check page title / URL
+    const url = window.location.pathname;
+    const title = document.querySelector('.page-header, .publish-article-heading, h1');
+    const text = (title ? title.textContent : '') + ' ' + decodeURIComponent(url);
+    for (const exam of EXAMS) {
+      if (text.includes(exam.path)) return exam.key;
+    }
+    return EXAMS[0] ? EXAMS[0].key : '';
+  }
+
+  /* -----------------------------------------------------------
+     HANDLE EXAM CHANGE — populate concept dropdown
+     ----------------------------------------------------------- */
+  async function handleExamChange() {
+    const examKey = browserEl.querySelector('#qb-exam-select').value;
+    const conceptSelect = browserEl.querySelector('#qb-concept-select');
+    const questionsEl = browserEl.querySelector('#qb-questions');
+
+    // Reset
+    conceptSelect.innerHTML = '<option value="">Select Concept</option>';
+    conceptSelect.disabled = true;
+    questionsEl.innerHTML = '<div class="question-browser__empty">Select a concept to view questions.</div>';
+
+    if (!examKey) return;
+
+    const concepts = await getConceptsForExam(examKey);
+
+    concepts.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      conceptSelect.appendChild(opt);
+    });
+
+    conceptSelect.disabled = concepts.length === 0;
+
+    if (concepts.length === 0) {
+      questionsEl.innerHTML = '<div class="question-browser__empty">No concepts found for this exam.</div>';
+    }
+  }
+
+  /* -----------------------------------------------------------
+     HANDLE CONCEPT CHANGE — fetch & display questions
+     ----------------------------------------------------------- */
+  async function handleConceptChange() {
+    const conceptName = browserEl.querySelector('#qb-concept-select').value;
+    const questionsEl = browserEl.querySelector('#qb-questions');
+
+    if (!conceptName) {
+      questionsEl.innerHTML = '<div class="question-browser__empty">Select a concept to view questions.</div>';
+      return;
+    }
+
+    questionsEl.innerHTML = '<div class="question-browser__loading">Loading questions\u2026</div>';
+
+    var questions = await getQuestionsForConcept(conceptName);
+
+    if (questions.length === 0) {
+      questionsEl.innerHTML = '<div class="question-browser__empty">No questions available for this concept yet.</div>';
+      return;
+    }
+
+    renderQuestions(questionsEl, questions);
+  }
+
+  /* -----------------------------------------------------------
+     RENDER QUESTIONS grouped by category
+     ----------------------------------------------------------- */
+  function renderQuestions(container, questions) {
+    container.innerHTML = '';
+
+    // Group by category
+    var groups = {};
+    var order = [];
+    questions.forEach(function (q) {
+      var cat = q.category || 'General';
+      if (!groups[cat]) { groups[cat] = []; order.push(cat); }
+      groups[cat].push(q);
+    });
+
+    var num = 1;
+    order.forEach(function (cat) {
+      // Category header
+      var header = document.createElement('div');
+      header.className = 'question-browser__category';
+      header.textContent = cat;
+      container.appendChild(header);
+
+      groups[cat].forEach(function (q) {
+        var row = document.createElement('div');
+        row.className = 'question-browser__question-item';
+
+        var numEl = document.createElement('span');
+        numEl.className = 'question-browser__question-number';
+        numEl.textContent = num++;
+
+        var titleEl = document.createElement('span');
+        titleEl.className = 'question-browser__question-title';
+        titleEl.textContent = q.title;
+
+        row.appendChild(numEl);
+        row.appendChild(titleEl);
+
+        if (q.difficulty) {
+          var badge = document.createElement('span');
+          badge.className = 'question-browser__question-badge';
+          badge.textContent = q.difficulty;
+          badge.setAttribute('data-level', q.level || '0');
+          row.appendChild(badge);
+        }
+
+        container.appendChild(row);
+      });
+    });
+  }
+
+  /* -----------------------------------------------------------
+     DATA: Get concepts for an exam
+     ----------------------------------------------------------- */
+  async function getConceptsForExam(examKey) {
+    if (conceptsCache[examKey]) return conceptsCache[examKey];
+
+    var exam = EXAMS.find(function (e) { return e.key === examKey; });
+    if (!exam) return [];
+
+    // 1. Try parsing from current page DOM (fast, no fetch)
+    var nav = document.querySelector('.exam-nav[data-current]');
+    if (nav) {
+      var cur = nav.dataset.current || '';
+      if (cur.startsWith(examKey)) {
+        var concepts = parseConceptsFromDOM();
+        if (concepts.length > 0) {
+          conceptsCache[examKey] = concepts;
+          return concepts;
+        }
+      }
+    }
+
+    // 2. Fetch the exam page HTML and parse
+    try {
+      var url = '/' + exam.path.split('/').map(encodeURIComponent).join('/');
+      var resp = await fetch(url);
+      if (resp.ok) {
+        var html = await resp.text();
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var concepts = parseConceptsFromDoc(doc);
+        if (concepts.length > 0) {
+          conceptsCache[examKey] = concepts;
+          return concepts;
+        }
+      }
+    } catch (e) {
+      // Fetch failed — fall through
+    }
+
+    return [];
+  }
+
+  /** Parse concept names from the current page's embed elements */
+  function parseConceptsFromDOM() {
+    var concepts = [];
+    document.querySelectorAll('.internal-embed').forEach(function (embed) {
+      var src = embed.getAttribute('src') || embed.getAttribute('data-src') || '';
+      if (!src.includes('#Definition')) return;
+      var name = src.split('#')[0].replace(/^Concepts\//, '').trim();
+      if (name && concepts.indexOf(name) === -1) concepts.push(name);
+    });
+    return concepts;
+  }
+
+  /** Parse concept names from a fetched HTML document */
+  function parseConceptsFromDoc(doc) {
+    var concepts = [];
+    // Try embed sources first
+    doc.querySelectorAll('.internal-embed[src*="#Definition"]').forEach(function (embed) {
+      var src = embed.getAttribute('src') || '';
+      var name = src.split('#')[0].replace(/^Concepts\//, '').trim();
+      if (name && concepts.indexOf(name) === -1) concepts.push(name);
+    });
+    // Fallback: h6 headings (used as invisible concept anchors)
+    if (concepts.length === 0) {
+      doc.querySelectorAll('h6').forEach(function (h6) {
+        var text = h6.textContent.trim();
+        if (text && concepts.indexOf(text) === -1) concepts.push(text);
+      });
+    }
+    return concepts;
+  }
+
+  /* -----------------------------------------------------------
+     DATA: Get questions for a concept
+     ----------------------------------------------------------- */
+  async function getQuestionsForConcept(conceptName) {
+    if (questionsCache[conceptName]) return questionsCache[conceptName];
+
+    var paths = [
+      'Concepts/' + conceptName,
+      conceptName,
+    ];
+
+    for (var i = 0; i < paths.length; i++) {
+      try {
+        var url = '/' + paths[i].split('/').map(encodeURIComponent).join('/');
+        var resp = await fetch(url);
+        if (resp.ok) {
+          var html = await resp.text();
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var questions = parseQuestionsFromDoc(doc);
+          questionsCache[conceptName] = questions;
+          return questions;
+        }
+      } catch (e) {
+        // Try next path
+      }
+    }
+
+    questionsCache[conceptName] = [];
+    return [];
+  }
+
+  /** Parse questions from a fetched concept page */
+  function parseQuestionsFromDoc(doc) {
+    var questions = [];
+
+    doc.querySelectorAll('.callout[data-callout="example"]').forEach(function (callout) {
+      var titleEl = callout.querySelector('.callout-title-inner');
+      if (!titleEl) return;
+
+      var raw = titleEl.textContent.trim();
+      // Match pattern: "Question (Category, Difficulty-Level)"
+      var m = raw.match(/Question\s*\(([^,]+),\s*([^)]+)\)/i);
+
+      var category = m ? m[1].trim() : '';
+      var difficulty = m ? m[2].trim() : '';
+      var level = '0';
+      var levelMatch = difficulty.match(/(\d)/);
+      if (levelMatch) level = levelMatch[1];
+
+      questions.push({
+        title: raw.replace(/^Question\s*/i, '').replace(/^\(/, '').replace(/\)$/, '') || raw,
+        category: category,
+        difficulty: difficulty,
+        level: level,
+      });
+    });
+
+    return questions;
+  }
+
+})();

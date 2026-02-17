@@ -1139,7 +1139,7 @@
   }
 
   /* -----------------------------------------------------------
-     RENDER QUESTIONS grouped by category
+     RENDER QUESTIONS grouped by category (expandable rows)
      ----------------------------------------------------------- */
   function renderQuestions(container, questions) {
     container.innerHTML = '';
@@ -1155,15 +1155,26 @@
 
     var num = 1;
     order.forEach(function (cat) {
-      // Category header
       var header = document.createElement('div');
       header.className = 'question-browser__category';
       header.textContent = cat;
       container.appendChild(header);
 
       groups[cat].forEach(function (q) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'question-browser__question-wrapper';
+
+        // Header row (clickable)
         var row = document.createElement('div');
         row.className = 'question-browser__question-item';
+
+        var chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        chevron.setAttribute('class', 'question-browser__chevron');
+        chevron.setAttribute('viewBox', '0 0 24 24');
+        chevron.setAttribute('fill', 'none');
+        chevron.setAttribute('stroke', 'currentColor');
+        chevron.setAttribute('stroke-width', '2.5');
+        chevron.innerHTML = '<polyline points="9 6 15 12 9 18"/>';
 
         var numEl = document.createElement('span');
         numEl.className = 'question-browser__question-number';
@@ -1173,6 +1184,7 @@
         titleEl.className = 'question-browser__question-title';
         titleEl.textContent = q.title;
 
+        row.appendChild(chevron);
         row.appendChild(numEl);
         row.appendChild(titleEl);
 
@@ -1184,9 +1196,310 @@
           row.appendChild(badge);
         }
 
-        container.appendChild(row);
+        // Expand area (hidden by default)
+        var expand = document.createElement('div');
+        expand.className = 'question-browser__expand';
+
+        // Click to toggle expand
+        row.addEventListener('click', function () {
+          var isOpen = wrapper.classList.contains('is-expanded');
+          // Close all others
+          container.querySelectorAll('.question-browser__question-wrapper.is-expanded').forEach(function (w) {
+            if (w !== wrapper) w.classList.remove('is-expanded');
+          });
+          wrapper.classList.toggle('is-expanded', !isOpen);
+          // Load content on first expand
+          if (!isOpen && !expand.dataset.loaded) {
+            loadExpandedContent(expand, q);
+          }
+        });
+
+        wrapper.appendChild(row);
+        wrapper.appendChild(expand);
+        container.appendChild(wrapper);
       });
     });
+  }
+
+  /* -----------------------------------------------------------
+     LOAD EXPANDED CONTENT for a question
+     Fetches the referenced file or shows inline content.
+     ----------------------------------------------------------- */
+  async function loadExpandedContent(expand, q) {
+    expand.dataset.loaded = '1';
+    expand.innerHTML = '<div class="question-browser__expand-loading">Loading\u2026</div>';
+
+    var questionMd = null;
+    var solutionMd = null;
+
+    // If we have inline content directly
+    if (q.inlineContent) {
+      questionMd = q.inlineContent;
+    }
+
+    // If we have an embed reference, fetch the file
+    if (!questionMd && q.embedRef) {
+      var parts = q.embedRef.split('#');
+      var fileName = parts[0].trim();
+      var section = parts[1] || null;
+
+      var fileMd = await fetchFileMarkdown(fileName);
+      if (fileMd) {
+        questionMd = section ? extractSection(fileMd, section) : fileMd;
+        solutionMd = extractSection(fileMd, 'Solution') || extractSection(fileMd, 'Answer');
+      }
+    }
+
+    // If we still have nothing but there's a solution embed ref
+    if (!solutionMd && q.solutionRef) {
+      var sParts = q.solutionRef.split('#');
+      var sFile = sParts[0].trim();
+      var sSec = sParts[1] || null;
+      var sMd = await fetchFileMarkdown(sFile);
+      if (sMd) {
+        solutionMd = sSec ? extractSection(sMd, sSec) : sMd;
+      }
+    }
+
+    // Render
+    expand.innerHTML = '';
+
+    if (!questionMd) {
+      expand.innerHTML = '<div class="question-browser__expand-loading">No content available.</div>';
+      return;
+    }
+
+    // Question block
+    var qBlock = document.createElement('div');
+    qBlock.className = 'question-browser__q-block';
+    qBlock.innerHTML = renderMarkdown(questionMd);
+    expand.appendChild(qBlock);
+
+    // Solution toggle + block
+    if (solutionMd) {
+      var solBtn = document.createElement('button');
+      solBtn.type = 'button';
+      solBtn.className = 'question-browser__sol-toggle';
+      solBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg> Show Solution';
+
+      var solBlock = document.createElement('div');
+      solBlock.className = 'question-browser__sol-block';
+      solBlock.innerHTML = renderMarkdown(solutionMd);
+
+      solBtn.addEventListener('click', function () {
+        var open = solBlock.classList.toggle('is-visible');
+        solBtn.classList.toggle('is-open', open);
+        solBtn.innerHTML = (open
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg> Hide Solution'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg> Show Solution');
+      });
+
+      expand.appendChild(solBtn);
+      expand.appendChild(solBlock);
+    }
+
+    // Trigger math rendering if MathJax/KaTeX is available
+    triggerMathRender(expand);
+  }
+
+  /* -----------------------------------------------------------
+     FETCH RAW MARKDOWN for any file in the vault
+     ----------------------------------------------------------- */
+  var fileCache = {};
+  async function fetchFileMarkdown(fileName) {
+    // Normalize: strip .md extension if present, we'll add it for some strategies
+    var baseName = fileName.replace(/\.md$/, '');
+
+    if (fileCache[baseName] !== undefined) return fileCache[baseName];
+
+    // Strategy 1: Obsidian internal cache
+    var md = tryObsidianCacheFile(baseName);
+    if (md) { fileCache[baseName] = md; return md; }
+
+    // Strategy 2: Fetch from site
+    var tryPaths = [
+      'Questions/' + baseName,
+      'Concepts/' + baseName,
+      baseName,
+    ];
+    for (var i = 0; i < tryPaths.length; i++) {
+      try {
+        var url = '/' + tryPaths[i].split('/').map(encodeURIComponent).join('/');
+        var resp = await fetch(url);
+        if (!resp.ok) continue;
+        var text = await resp.text();
+
+        // If text looks like raw markdown (not HTML shell), use directly
+        if (text.indexOf('## ') !== -1 && text.indexOf('<!DOCTYPE') === -1) {
+          fileCache[baseName] = text;
+          return text;
+        }
+
+        // Try to extract markdown-like content from the response
+        // (Obsidian Publish may embed it in the page)
+        var mdContent = extractMarkdownFromResponse(text);
+        if (mdContent) { fileCache[baseName] = mdContent; return mdContent; }
+      } catch (e) { continue; }
+    }
+
+    // Strategy 3: Publish API
+    var siteId = extractSiteId();
+    if (siteId) {
+      var apiPaths = [
+        'Questions/' + baseName + '.md',
+        'Concepts/' + baseName + '.md',
+        baseName + '.md',
+      ];
+      for (var j = 0; j < apiPaths.length; j++) {
+        try {
+          var apiUrl = 'https://publish-01.obsidian.md/access/' + siteId + '/' + encodeURIComponent(apiPaths[j]);
+          var resp2 = await fetch(apiUrl);
+          if (!resp2.ok) continue;
+          var md2 = await resp2.text();
+          if (md2 && md2.indexOf('## ') !== -1) {
+            fileCache[baseName] = md2;
+            return md2;
+          }
+        } catch (e) { continue; }
+      }
+    }
+
+    fileCache[baseName] = null;
+    return null;
+  }
+
+  /** Try getting a file from Obsidian's internal cache */
+  function tryObsidianCacheFile(baseName) {
+    try {
+      var siteFiles = null;
+      if (window.publish && window.publish.vault) {
+        siteFiles = window.publish.vault.fileMap || window.publish.vault.files;
+      }
+      if (!siteFiles && window.app && window.app.vault) {
+        siteFiles = window.app.vault.fileMap || window.app.vault.files;
+      }
+      if (!siteFiles && window.publish && window.publish.site) {
+        siteFiles = window.publish.site.cache || window.publish.site.files;
+      }
+      if (!siteFiles) return null;
+
+      var candidates = [
+        'Questions/' + baseName + '.md',
+        'Concepts/' + baseName + '.md',
+        baseName + '.md',
+        'Questions/' + baseName,
+        'Concepts/' + baseName,
+        baseName,
+      ];
+      for (var k = 0; k < candidates.length; k++) {
+        var entry = siteFiles[candidates[k]];
+        if (!entry) continue;
+        var md = typeof entry === 'string' ? entry :
+                 (entry.content || entry.markdown || entry.data || '');
+        if (md) return md;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  /** Try extracting markdown content from an HTML response */
+  function extractMarkdownFromResponse(html) {
+    // The response might contain the markdown in a script tag or data attribute
+    // Try parsing as HTML and looking for rendered content
+    try {
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var content = doc.querySelector('.markdown-preview-view, .markdown-rendered, .publish-renderer');
+      if (content && content.textContent.trim().length > 20) {
+        return content.textContent.trim();
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  /* -----------------------------------------------------------
+     EXTRACT A SECTION from markdown by heading name
+     Returns text under ## SectionName until the next ## or EOF
+     ----------------------------------------------------------- */
+  function extractSection(md, sectionName) {
+    if (!sectionName || !md) return null;
+    // Escape regex special chars in section name
+    var escaped = sectionName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var re = new RegExp('##\\s+' + escaped + '\\s*\\n([\\s\\S]*?)(?=\\n##\\s|$)', 'i');
+    var m = md.match(re);
+    return m ? m[1].trim() : null;
+  }
+
+  /* -----------------------------------------------------------
+     RENDER MARKDOWN to basic HTML
+     Handles paragraphs, bold, italic, code, LaTeX, answer choices
+     ----------------------------------------------------------- */
+  function renderMarkdown(md) {
+    if (!md) return '';
+
+    // Normalize line endings
+    md = md.replace(/\r\n/g, '\n');
+
+    // Block-level LaTeX: $$...$$ → display math
+    md = md.replace(/\$\$([\s\S]*?)\$\$/g, function (_, tex) {
+      return '\n<div class="qb-math-block">\\[' + tex.trim() + '\\]</div>\n';
+    });
+
+    // Inline LaTeX: $...$ → inline math (avoid matching $$ or currency)
+    md = md.replace(/(?<!\$)\$(?!\$)([^\$\n]+?)\$(?!\$)/g, function (_, tex) {
+      return '<span class="qb-math-inline">\\(' + tex + '\\)</span>';
+    });
+
+    // Split into paragraphs
+    var blocks = md.split(/\n{2,}/);
+    var html = blocks.map(function (block) {
+      block = block.trim();
+      if (!block) return '';
+
+      // Already wrapped in HTML (math block, etc.)
+      if (block.startsWith('<div') || block.startsWith('<span')) return block;
+
+      // Bold
+      block = block.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      // Italic
+      block = block.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+      // Inline code
+      block = block.replace(/`([^`]+)`/g, '<code>$1</code>');
+      // Highlight ==text==
+      block = block.replace(/==(.+?)==/g, '<mark>$1</mark>');
+
+      // Answer choices: lines starting with **A.** **B.** etc.
+      block = block.replace(/^(\*\*[A-E]\.\*\*\s*.+)$/gm, '<span class="qb-choice">$1</span>');
+
+      // Line breaks within a block
+      block = block.replace(/\n/g, '<br>');
+
+      return '<p>' + block + '</p>';
+    }).join('');
+
+    return html;
+  }
+
+  /* -----------------------------------------------------------
+     TRIGGER MATH RENDERING if MathJax or KaTeX is available
+     ----------------------------------------------------------- */
+  function triggerMathRender(element) {
+    try {
+      if (window.MathJax) {
+        if (MathJax.typeset) {
+          MathJax.typeset([element]);
+        } else if (MathJax.Hub && MathJax.Hub.Queue) {
+          MathJax.Hub.Queue(['Typeset', MathJax.Hub, element]);
+        }
+      }
+      if (window.renderMathInElement) {
+        renderMathInElement(element, {
+          delimiters: [
+            { left: '\\[', right: '\\]', display: true },
+            { left: '\\(', right: '\\)', display: false },
+          ],
+        });
+      }
+    } catch (e) {}
   }
 
   /* -----------------------------------------------------------
@@ -1421,7 +1734,6 @@
   function parseQuestionsFromHTML(doc) {
     var questions = [];
 
-    // Try multiple selectors — Obsidian Publish may use different markup
     var callouts = doc.querySelectorAll('.callout[data-callout="example"]');
     if (callouts.length === 0) callouts = doc.querySelectorAll('[data-callout="example"]');
     if (callouts.length === 0) callouts = doc.querySelectorAll('.callout-example');
@@ -1432,7 +1744,18 @@
       if (!titleEl) return;
 
       var raw = titleEl.textContent.trim();
-      addParsedQuestion(questions, raw);
+
+      // Try to find embed references in the callout content
+      var embedRef = null;
+      var contentEl = callout.querySelector('.callout-content');
+      if (contentEl) {
+        var embedLink = contentEl.querySelector('.internal-embed');
+        if (embedLink) {
+          embedRef = embedLink.getAttribute('src') || embedLink.getAttribute('data-src') || null;
+        }
+      }
+
+      addParsedQuestion(questions, raw, embedRef, null);
     });
 
     return questions;
@@ -1440,30 +1763,48 @@
 
   /* -----------------------------------------------------------
      PARSE QUESTIONS from raw markdown / text
-     Matches > [!example]- <u>Question (...)</u> patterns
+     Multi-line parser: captures title, embed refs, inline content
      ----------------------------------------------------------- */
   function parseQuestionsFromMarkdown(text) {
     var questions = [];
+    var lines = text.split('\n');
 
-    // Pattern: > [!example]- <u>Question (Category, Difficulty)</u>
-    // Also handles without <u> tags
-    var re = />\s*\[!example\][+-]?\s*(.+)/gm;
-    var match;
-    while ((match = re.exec(text)) !== null) {
-      var line = match[1].trim();
-      // Strip HTML tags
-      line = line.replace(/<[^>]+>/g, '').trim();
-      if (line) addParsedQuestion(questions, line);
+    for (var i = 0; i < lines.length; i++) {
+      var titleMatch = lines[i].match(/^>\s*\[!example\][+-]?\s*(.+)/);
+      if (!titleMatch) continue;
+
+      var titleRaw = titleMatch[1].replace(/<[^>]+>/g, '').trim();
+
+      // Collect subsequent > continuation lines (callout body)
+      var bodyLines = [];
+      var j = i + 1;
+      while (j < lines.length && /^>/.test(lines[j])) {
+        bodyLines.push(lines[j].replace(/^>\s?/, ''));
+        j++;
+      }
+      var body = bodyLines.join('\n').trim();
+
+      // Check for embed reference: ![[filename#section]]
+      var embedRef = null;
+      var inlineContent = null;
+      var embedMatch = body.match(/!\[\[([^\]]+)\]\]/);
+      if (embedMatch) {
+        embedRef = embedMatch[1];
+      } else if (body) {
+        inlineContent = body;
+      }
+
+      addParsedQuestion(questions, titleRaw, embedRef, inlineContent);
+      i = j - 1; // skip body lines
     }
 
     return questions;
   }
 
   /* -----------------------------------------------------------
-     SHARED: Parse a single question title string into an object
+     SHARED: Build a question object from parsed data
      ----------------------------------------------------------- */
-  function addParsedQuestion(questions, raw) {
-    // Strip HTML tags if any remain
+  function addParsedQuestion(questions, raw, embedRef, inlineContent) {
     raw = raw.replace(/<[^>]+>/g, '').trim();
     if (!raw) return;
 
@@ -1476,7 +1817,6 @@
     var levelMatch = difficulty.match(/(\d)/);
     if (levelMatch) level = levelMatch[1];
 
-    // Clean up the display title
     var title = raw;
     if (m) {
       title = category + ', ' + difficulty;
@@ -1487,6 +1827,8 @@
       category: category,
       difficulty: difficulty,
       level: level,
+      embedRef: embedRef || null,
+      inlineContent: inlineContent || null,
     });
   }
 

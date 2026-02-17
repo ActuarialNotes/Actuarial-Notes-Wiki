@@ -3280,18 +3280,42 @@ h6 a {
   padding-top: 4px;
 }
 
-/* Individual question row */
+/* Individual question wrapper (header row + expand area) */
+.question-browser__question-wrapper {
+  border-radius: var(--radius-sm);
+  transition: background .12s ease;
+}
+.question-browser__question-wrapper.is-expanded {
+  background: color-mix(in oklab, var(--brand) 6%, var(--bg-elev));
+  margin-bottom: 4px;
+}
+
+/* Clickable header row */
 .question-browser__question-item {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
   border-radius: var(--radius-sm);
-  cursor: default;
+  cursor: pointer;
   transition: background .12s ease;
+  user-select: none;
 }
 .question-browser__question-item:hover {
   background: color-mix(in oklab, var(--brand) 8%, var(--bg-elev));
+}
+
+/* Expand chevron */
+.question-browser__chevron {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--text-dim);
+  transition: transform .15s ease;
+}
+.question-browser__question-wrapper.is-expanded .question-browser__chevron {
+  transform: rotate(90deg);
+  color: var(--brand);
 }
 
 .question-browser__question-number {
@@ -3317,6 +3341,96 @@ h6 a {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* ---- Expanded content area ---- */
+.question-browser__expand {
+  display: none;
+  padding: 0 12px 14px 58px; /* indent past number+chevron */
+}
+.question-browser__question-wrapper.is-expanded .question-browser__expand {
+  display: block;
+}
+
+.question-browser__expand-loading {
+  color: var(--text-dim);
+  font-size: 0.84rem;
+  padding: 8px 0;
+}
+
+/* Question text block */
+.question-browser__q-block {
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: var(--text);
+  padding: 10px 14px;
+  background: color-mix(in oklab, var(--bg) 70%, var(--bg-elev));
+  border: 1px solid color-mix(in oklab, var(--muted) 60%, transparent);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.question-browser__q-block p {
+  margin: 0 0 0.5em;
+}
+.question-browser__q-block p:last-child { margin-bottom: 0; }
+.question-browser__q-block strong { color: var(--text); }
+.question-browser__q-block code {
+  background: var(--bg);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.84em;
+}
+
+/* Answer choices (A. B. C. etc.) */
+.question-browser__q-block .qb-choice {
+  display: block;
+  padding: 2px 0;
+}
+
+/* Solution toggle button */
+.question-browser__sol-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: var(--brand);
+  background: color-mix(in oklab, var(--brand) 10%, var(--bg));
+  border: 1px solid color-mix(in oklab, var(--brand) 20%, var(--muted));
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease;
+  margin-bottom: 8px;
+}
+.question-browser__sol-toggle:hover {
+  background: color-mix(in oklab, var(--brand) 18%, var(--bg));
+}
+.question-browser__sol-toggle svg {
+  width: 12px;
+  height: 12px;
+  transition: transform .15s ease;
+}
+.question-browser__sol-toggle.is-open svg {
+  transform: rotate(90deg);
+}
+
+/* Solution text block */
+.question-browser__sol-block {
+  display: none;
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: var(--text);
+  padding: 10px 14px;
+  background: color-mix(in oklab, var(--success) 5%, var(--bg));
+  border: 1px solid color-mix(in oklab, var(--success) 15%, var(--muted));
+  border-radius: 8px;
+}
+.question-browser__sol-block.is-visible { display: block; }
+.question-browser__sol-block p {
+  margin: 0 0 0.5em;
+}
+.question-browser__sol-block p:last-child { margin-bottom: 0; }
 
 /* Difficulty badges */
 .question-browser__question-badge {

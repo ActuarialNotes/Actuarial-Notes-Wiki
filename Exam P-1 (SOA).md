@@ -117,6 +117,35 @@ The **Probability (P-1) Exam** is a 3 hour, 30 multiple choice question exam abo
 
 ![[Permutation#Definition]]
 
+#### Practice Problems
+
+> [!question]- **Problem 1.1** — An urn contains 10 balls: 4 red and 6 blue. Two balls are selected at random without replacement. What is the probability that both balls are red?
+> **A.** 2/15
+> **B.** 4/25
+> **C.** 1/5
+> **D.** 4/15
+> **E.** 2/5
+
+> [!solution]- **Solution 1.1**
+> Using combinations:
+> $$P(\text{both red}) = \frac{\binom{4}{2}}{\binom{10}{2}} = \frac{6}{45} = \frac{2}{15}$$
+>
+> **Answer: A**
+
+> [!question]- **Problem 1.2** — A survey of 200 students found that 120 study math, 90 study science, and 40 study both. What is the probability that a randomly selected student studies neither?
+> **A.** 0.10
+> **B.** 0.15
+> **C.** 0.25
+> **D.** 0.30
+> **E.** 0.85
+
+> [!solution]- **Solution 1.2**
+> By the inclusion-exclusion principle:
+> $$P(M \cup S) = P(M) + P(S) - P(M \cap S) = \frac{120}{200} + \frac{90}{200} - \frac{40}{200} = \frac{170}{200} = 0.85$$
+> $$P(\text{neither}) = 1 - 0.85 = 0.15$$
+>
+> **Answer: B**
+
 ---
 
 ### 2. Univariate Random Variables
@@ -219,6 +248,34 @@ A ==Univariate Random Variable== is a single random variable that represents unc
 
 ![[Payment Random Variable#Definition]]
 
+#### Practice Problems
+
+> [!question]- **Problem 2.1** — A continuous random variable $X$ has PDF $f(x) = 3x^2$ for $0 < x < 1$. Calculate $E[X]$.
+> **A.** 1/2
+> **B.** 3/5
+> **C.** 2/3
+> **D.** 3/4
+> **E.** 4/5
+
+> [!solution]- **Solution 2.1**
+> $$E[X] = \int_0^1 x \cdot 3x^2\, dx = 3\int_0^1 x^3\, dx = 3 \cdot \frac{x^4}{4}\Big|_0^1 = \frac{3}{4}$$
+>
+> **Answer: D**
+
+> [!question]- **Problem 2.2** — An insurance policy has a deductible of 100. Losses follow an exponential distribution with mean 200. What is the expected payment per loss?
+> **A.** 100
+> **B.** $200 e^{-1/2}$
+> **C.** $100 e^{-1/2}$
+> **D.** $200(1 - e^{-1/2})$
+> **E.** $100(1 + e^{-1/2})$
+
+> [!solution]- **Solution 2.2**
+> For an exponential distribution with mean $\theta = 200$ and deductible $d = 100$:
+> $$E[\text{payment per loss}] = E[(X - d)^+] = \theta \cdot e^{-d/\theta} = 200 \cdot e^{-100/200} = 200e^{-1/2}$$
+> This uses the memoryless property of the exponential distribution.
+>
+> **Answer: B**
+
 ---
 
 ### 3. Multivariate Random Variables
@@ -283,6 +340,35 @@ A ==Multivariate Random Variable== is a collection of two or more random variabl
 ###### Central Limit Theorem (CLT)
 
 ![[Central Limit Theorem (CLT)#Definition]]
+
+#### Practice Problems
+
+> [!question]- **Problem 3.1** — Let $X$ and $Y$ be independent random variables with $E[X] = 3$, $E[Y] = 5$, $\text{Var}(X) = 4$, and $\text{Var}(Y) = 9$. Calculate $\text{Var}(2X - Y + 1)$.
+> **A.** 7
+> **B.** 16
+> **C.** 22
+> **D.** 25
+> **E.** 31
+
+> [!solution]- **Solution 3.1**
+> Since $X$ and $Y$ are independent:
+> $$\text{Var}(2X - Y + 1) = 4\,\text{Var}(X) + \text{Var}(Y) = 4(4) + 9 = 25$$
+> Constants do not affect variance.
+>
+> **Answer: D**
+
+> [!question]- **Problem 3.2** — Two fair dice are rolled. Let $X$ be the minimum and $Y$ be the maximum of the two outcomes. Calculate $E[Y - X]$.
+> **A.** 25/18
+> **B.** 35/18
+> **C.** 45/18
+> **D.** 55/18
+> **E.** 65/18
+
+> [!solution]- **Solution 3.2**
+> For two fair dice, by direct enumeration over all 36 equally likely outcomes:
+> $$E[Y - X] = \frac{1}{36}\sum_{i=1}^{6}\sum_{j=1}^{6} |i - j| = \frac{70}{36} = \frac{35}{18}$$
+>
+> **Answer: B**
 
 
 ## Sources

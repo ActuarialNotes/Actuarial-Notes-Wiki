@@ -3357,80 +3357,139 @@ h6 a {
   padding: 8px 0;
 }
 
-/* Question text block */
-.question-browser__q-block {
+/* ---- Interactive Quiz ---- */
+.qb-quiz__question {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.qb-quiz__question p { margin: 0 0 0.5em; }
+.qb-quiz__question p:last-child { margin-bottom: 0; }
+
+/* Answer choices */
+.qb-quiz__choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.qb-quiz__choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1.5px solid var(--muted);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color .12s, background .12s, box-shadow .12s;
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text);
+  text-align: left;
+  width: 100%;
+}
+.qb-quiz__choice:hover:not(.is-locked) {
+  border-color: var(--brand);
+  background: color-mix(in oklab, var(--brand) 6%, var(--bg));
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand) 15%, transparent);
+}
+.qb-quiz__choice.is-locked { cursor: default; }
+.qb-quiz__choice.is-correct {
+  border-color: #16a34a;
+  background: color-mix(in oklab, #16a34a 10%, var(--bg));
+  box-shadow: 0 0 0 2px color-mix(in oklab, #16a34a 20%, transparent);
+}
+.qb-quiz__choice.is-correct .qb-quiz__choice-letter {
+  background: #16a34a;
+  color: #fff;
+}
+.qb-quiz__choice.is-wrong {
+  border-color: #dc2626;
+  background: color-mix(in oklab, #dc2626 8%, var(--bg));
+  box-shadow: 0 0 0 2px color-mix(in oklab, #dc2626 18%, transparent);
+}
+.qb-quiz__choice.is-wrong .qb-quiz__choice-letter {
+  background: #dc2626;
+  color: #fff;
+}
+
+/* Letter circle */
+.qb-quiz__choice-letter {
+  min-width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--brand) 15%, var(--bg));
+  color: var(--brand);
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  transition: background .15s, color .15s;
+}
+.qb-quiz__choice-text {
+  flex: 1;
+  min-width: 0;
+}
+.qb-quiz__choice-text p { margin: 0; }
+
+/* Result banner */
+.qb-quiz__result {
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.qb-quiz__result.is-correct {
+  background: color-mix(in oklab, #16a34a 12%, var(--bg));
+  color: #4ade80;
+  border: 1px solid color-mix(in oklab, #16a34a 25%, var(--muted));
+}
+.qb-quiz__result.is-wrong {
+  background: color-mix(in oklab, #dc2626 10%, var(--bg));
+  color: #f87171;
+  border: 1px solid color-mix(in oklab, #dc2626 20%, var(--muted));
+}
+
+/* Solution (hidden until answered) */
+.qb-quiz__solution {
+  display: none;
+}
+.qb-quiz__solution.is-visible {
+  display: block;
+}
+.qb-quiz__solution-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.qb-quiz__solution-body {
   font-size: 0.86rem;
   line-height: 1.7;
   color: var(--text);
-  padding: 10px 14px;
-  background: color-mix(in oklab, var(--bg) 70%, var(--bg-elev));
-  border: 1px solid color-mix(in oklab, var(--muted) 60%, transparent);
+  padding: 12px 14px;
+  background: color-mix(in oklab, var(--brand) 5%, var(--bg));
+  border: 1px solid color-mix(in oklab, var(--brand) 12%, var(--muted));
   border-radius: 8px;
-  margin-bottom: 8px;
 }
-.question-browser__q-block p {
-  margin: 0 0 0.5em;
-}
-.question-browser__q-block p:last-child { margin-bottom: 0; }
-.question-browser__q-block strong { color: var(--text); }
-.question-browser__q-block code {
+.qb-quiz__solution-body p { margin: 0 0 0.5em; }
+.qb-quiz__solution-body p:last-child { margin-bottom: 0; }
+.qb-quiz__solution-body strong { color: var(--text); }
+.qb-quiz__solution-body code {
   background: var(--bg);
   padding: 1px 5px;
   border-radius: 4px;
   font-size: 0.84em;
 }
-
-/* Answer choices (A. B. C. etc.) */
-.question-browser__q-block .qb-choice {
-  display: block;
-  padding: 2px 0;
-}
-
-/* Solution toggle button */
-.question-browser__sol-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  font-family: var(--font-sans);
-  color: var(--brand);
-  background: color-mix(in oklab, var(--brand) 10%, var(--bg));
-  border: 1px solid color-mix(in oklab, var(--brand) 20%, var(--muted));
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background .12s ease, color .12s ease;
-  margin-bottom: 8px;
-}
-.question-browser__sol-toggle:hover {
-  background: color-mix(in oklab, var(--brand) 18%, var(--bg));
-}
-.question-browser__sol-toggle svg {
-  width: 12px;
-  height: 12px;
-  transition: transform .15s ease;
-}
-.question-browser__sol-toggle.is-open svg {
-  transform: rotate(90deg);
-}
-
-/* Solution text block */
-.question-browser__sol-block {
-  display: none;
-  font-size: 0.86rem;
-  line-height: 1.7;
-  color: var(--text);
-  padding: 10px 14px;
-  background: color-mix(in oklab, var(--success) 5%, var(--bg));
-  border: 1px solid color-mix(in oklab, var(--success) 15%, var(--muted));
-  border-radius: 8px;
-}
-.question-browser__sol-block.is-visible { display: block; }
-.question-browser__sol-block p {
-  margin: 0 0 0.5em;
-}
-.question-browser__sol-block p:last-child { margin-bottom: 0; }
 
 /* Difficulty badges */
 .question-browser__question-badge {

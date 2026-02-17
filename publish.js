@@ -1223,83 +1223,185 @@
 
   /* -----------------------------------------------------------
      LOAD EXPANDED CONTENT for a question
-     Fetches the referenced file or shows inline content.
+     Fetches the referenced file and renders a quiz UI.
      ----------------------------------------------------------- */
   async function loadExpandedContent(expand, q) {
     expand.dataset.loaded = '1';
     expand.innerHTML = '<div class="question-browser__expand-loading">Loading\u2026</div>';
 
-    var questionMd = null;
-    var solutionMd = null;
-
-    // If we have inline content directly
-    if (q.inlineContent) {
-      questionMd = q.inlineContent;
-    }
+    var fileMd = null;
 
     // If we have an embed reference, fetch the file
-    if (!questionMd && q.embedRef) {
-      var parts = q.embedRef.split('#');
-      var fileName = parts[0].trim();
-      var section = parts[1] || null;
-
-      var fileMd = await fetchFileMarkdown(fileName);
-      if (fileMd) {
-        questionMd = section ? extractSection(fileMd, section) : fileMd;
-        solutionMd = extractSection(fileMd, 'Solution') || extractSection(fileMd, 'Answer');
-      }
+    if (q.embedRef) {
+      var fileName = q.embedRef.split('#')[0].trim();
+      fileMd = await fetchFileMarkdown(fileName);
     }
 
-    // If we still have nothing but there's a solution embed ref
-    if (!solutionMd && q.solutionRef) {
-      var sParts = q.solutionRef.split('#');
-      var sFile = sParts[0].trim();
-      var sSec = sParts[1] || null;
-      var sMd = await fetchFileMarkdown(sFile);
-      if (sMd) {
-        solutionMd = sSec ? extractSection(sMd, sSec) : sMd;
-      }
+    // Fallback: if inline content exists, try to parse that
+    if (!fileMd && q.inlineContent) {
+      fileMd = q.inlineContent;
     }
 
-    // Render
-    expand.innerHTML = '';
-
-    if (!questionMd) {
-      expand.innerHTML = '<div class="question-browser__expand-loading">No content available.</div>';
+    if (!fileMd) {
+      expand.innerHTML = '<div class="question-browser__expand-loading">Could not load question content.</div>';
       return;
     }
 
-    // Question block
-    var qBlock = document.createElement('div');
-    qBlock.className = 'question-browser__q-block';
-    qBlock.innerHTML = renderMarkdown(questionMd);
-    expand.appendChild(qBlock);
+    // Parse the question file into structured quiz data
+    var quiz = parseQuestionFile(fileMd);
 
-    // Solution toggle + block
-    if (solutionMd) {
-      var solBtn = document.createElement('button');
-      solBtn.type = 'button';
-      solBtn.className = 'question-browser__sol-toggle';
-      solBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg> Show Solution';
-
-      var solBlock = document.createElement('div');
-      solBlock.className = 'question-browser__sol-block';
-      solBlock.innerHTML = renderMarkdown(solutionMd);
-
-      solBtn.addEventListener('click', function () {
-        var open = solBlock.classList.toggle('is-visible');
-        solBtn.classList.toggle('is-open', open);
-        solBtn.innerHTML = (open
-          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg> Hide Solution'
-          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg> Show Solution');
-      });
-
-      expand.appendChild(solBtn);
-      expand.appendChild(solBlock);
+    if (!quiz.question) {
+      expand.innerHTML = '<div class="question-browser__expand-loading">Could not parse question.</div>';
+      return;
     }
 
-    // Trigger math rendering if MathJax/KaTeX is available
+    // Render the interactive quiz
+    expand.innerHTML = '';
+    renderQuiz(expand, quiz);
     triggerMathRender(expand);
+  }
+
+  /* -----------------------------------------------------------
+     PARSE QUESTION FILE into structured quiz data
+     Handles the format:
+       # Question
+       <text>
+       > [!question]- Answer Choices
+       > (A) ...
+       > [!solution]- Solution
+       > <text>
+       > **Answer: (X)**
+     ----------------------------------------------------------- */
+  function parseQuestionFile(md) {
+    var result = { question: null, choices: [], correctAnswer: null, solution: null };
+
+    // Normalise line endings
+    md = md.replace(/\r\n/g, '\n');
+
+    // --- Extract question text ---
+    // Everything after "# Question" until the first callout or next heading
+    var qMatch = md.match(/^#\s+Question\s*\n([\s\S]*?)(?=\n>\s*\[!|\n#\s|$)/m);
+    if (qMatch) {
+      result.question = qMatch[1].trim();
+    } else {
+      // Fallback: everything before the first callout
+      var fallback = md.match(/^([\s\S]*?)(?=\n>\s*\[!|$)/);
+      if (fallback) {
+        var fb = fallback[1].replace(/^#.*\n/, '').trim();
+        if (fb) result.question = fb;
+      }
+    }
+
+    // --- Extract answer choices from [!question] callout ---
+    var choiceBlock = md.match(/>\s*\[!question\][+-]?[^\n]*\n([\s\S]*?)(?=\n>\s*\[!(?!question)|(?:\n[^>\s])|\n\n(?!>)|$)/);
+    if (choiceBlock) {
+      var choiceText = choiceBlock[1];
+      var choiceRe = /\(([A-E])\)\s*(.+)/g;
+      var cm;
+      while ((cm = choiceRe.exec(choiceText)) !== null) {
+        result.choices.push({ letter: cm[1], text: cm[2].trim() });
+      }
+    }
+
+    // --- Extract solution from [!solution] callout ---
+    var solBlock = md.match(/>\s*\[!solution\][+-]?[^\n]*\n([\s\S]*?)$/);
+    if (solBlock) {
+      var solLines = solBlock[1].replace(/^>\s?/gm, '').trim();
+
+      // Extract correct answer: **Answer: (X)**
+      var ansMatch = solLines.match(/\*\*Answer:\s*\(([A-E])\)\*\*/);
+      if (ansMatch) result.correctAnswer = ansMatch[1];
+
+      result.solution = solLines;
+    }
+
+    return result;
+  }
+
+  /* -----------------------------------------------------------
+     RENDER INTERACTIVE QUIZ
+     ----------------------------------------------------------- */
+  function renderQuiz(container, quiz) {
+    // Question text
+    var qBlock = document.createElement('div');
+    qBlock.className = 'qb-quiz__question';
+    qBlock.innerHTML = renderMarkdown(quiz.question);
+    container.appendChild(qBlock);
+
+    // Answer choices
+    var choicesEl = document.createElement('div');
+    choicesEl.className = 'qb-quiz__choices';
+    var answered = false;
+
+    quiz.choices.forEach(function (choice) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'qb-quiz__choice';
+      btn.setAttribute('data-letter', choice.letter);
+
+      var letterSpan = document.createElement('span');
+      letterSpan.className = 'qb-quiz__choice-letter';
+      letterSpan.textContent = choice.letter;
+
+      var textSpan = document.createElement('span');
+      textSpan.className = 'qb-quiz__choice-text';
+      textSpan.innerHTML = renderMarkdown(choice.text);
+
+      btn.appendChild(letterSpan);
+      btn.appendChild(textSpan);
+
+      btn.addEventListener('click', function () {
+        if (answered) return;
+        answered = true;
+
+        var selected = choice.letter;
+        var correct = quiz.correctAnswer;
+
+        // Mark all choices
+        choicesEl.querySelectorAll('.qb-quiz__choice').forEach(function (c) {
+          c.classList.add('is-locked');
+          var l = c.getAttribute('data-letter');
+          if (l === correct) c.classList.add('is-correct');
+          if (l === selected && l !== correct) c.classList.add('is-wrong');
+        });
+
+        // Show result banner
+        var banner = document.createElement('div');
+        if (selected === correct) {
+          banner.className = 'qb-quiz__result is-correct';
+          banner.textContent = 'Correct!';
+        } else {
+          banner.className = 'qb-quiz__result is-wrong';
+          banner.textContent = 'Incorrect \u2014 the answer is (' + correct + ')';
+        }
+        container.insertBefore(banner, solWrap);
+
+        // Reveal solution
+        solWrap.classList.add('is-visible');
+        triggerMathRender(container);
+      });
+
+      choicesEl.appendChild(btn);
+    });
+    container.appendChild(choicesEl);
+
+    // Solution section (hidden until answered)
+    var solWrap = document.createElement('div');
+    solWrap.className = 'qb-quiz__solution';
+
+    if (quiz.solution) {
+      var solLabel = document.createElement('div');
+      solLabel.className = 'qb-quiz__solution-label';
+      solLabel.textContent = 'Explanation';
+
+      var solBody = document.createElement('div');
+      solBody.className = 'qb-quiz__solution-body';
+      solBody.innerHTML = renderMarkdown(quiz.solution);
+
+      solWrap.appendChild(solLabel);
+      solWrap.appendChild(solBody);
+    }
+    container.appendChild(solWrap);
   }
 
   /* -----------------------------------------------------------
@@ -1307,20 +1409,20 @@
      ----------------------------------------------------------- */
   var fileCache = {};
   async function fetchFileMarkdown(fileName) {
-    // Normalize: strip .md extension if present, we'll add it for some strategies
     var baseName = fileName.replace(/\.md$/, '');
 
     if (fileCache[baseName] !== undefined) return fileCache[baseName];
 
-    // Strategy 1: Obsidian internal cache
+    // Strategy 1: Obsidian internal cache (fastest)
     var md = tryObsidianCacheFile(baseName);
     if (md) { fileCache[baseName] = md; return md; }
 
-    // Strategy 2: Fetch from site
+    // Strategy 2: Fetch page from site — try many path variations
     var tryPaths = [
+      baseName,
       'Questions/' + baseName,
       'Concepts/' + baseName,
-      baseName,
+      'Concepts/Questions/' + baseName,
     ];
     for (var i = 0; i < tryPaths.length; i++) {
       try {
@@ -1329,26 +1431,26 @@
         if (!resp.ok) continue;
         var text = await resp.text();
 
-        // If text looks like raw markdown (not HTML shell), use directly
-        if (text.indexOf('## ') !== -1 && text.indexOf('<!DOCTYPE') === -1) {
+        // Check if it looks like markdown (has headings or callouts)
+        if (looksLikeMarkdown(text)) {
           fileCache[baseName] = text;
           return text;
         }
 
-        // Try to extract markdown-like content from the response
-        // (Obsidian Publish may embed it in the page)
+        // Try extracting markdown from the HTML response
         var mdContent = extractMarkdownFromResponse(text);
         if (mdContent) { fileCache[baseName] = mdContent; return mdContent; }
       } catch (e) { continue; }
     }
 
-    // Strategy 3: Publish API
+    // Strategy 3: Obsidian Publish content API
     var siteId = extractSiteId();
     if (siteId) {
       var apiPaths = [
+        baseName + '.md',
         'Questions/' + baseName + '.md',
         'Concepts/' + baseName + '.md',
-        baseName + '.md',
+        'Concepts/Questions/' + baseName + '.md',
       ];
       for (var j = 0; j < apiPaths.length; j++) {
         try {
@@ -1356,7 +1458,7 @@
           var resp2 = await fetch(apiUrl);
           if (!resp2.ok) continue;
           var md2 = await resp2.text();
-          if (md2 && md2.indexOf('## ') !== -1) {
+          if (md2 && looksLikeMarkdown(md2)) {
             fileCache[baseName] = md2;
             return md2;
           }
@@ -1366,6 +1468,13 @@
 
     fileCache[baseName] = null;
     return null;
+  }
+
+  /** Quick check: does this text look like raw markdown? */
+  function looksLikeMarkdown(text) {
+    if (!text || text.indexOf('<!DOCTYPE') !== -1) return false;
+    // Has a heading or a callout
+    return /^#\s/m.test(text) || />\s*\[!/m.test(text);
   }
 
   /** Try getting a file from Obsidian's internal cache */
@@ -1384,12 +1493,13 @@
       if (!siteFiles) return null;
 
       var candidates = [
+        baseName + '.md',
         'Questions/' + baseName + '.md',
         'Concepts/' + baseName + '.md',
-        baseName + '.md',
+        'Concepts/Questions/' + baseName + '.md',
+        baseName,
         'Questions/' + baseName,
         'Concepts/' + baseName,
-        baseName,
       ];
       for (var k = 0; k < candidates.length; k++) {
         var entry = siteFiles[candidates[k]];
@@ -1404,29 +1514,23 @@
 
   /** Try extracting markdown content from an HTML response */
   function extractMarkdownFromResponse(html) {
-    // The response might contain the markdown in a script tag or data attribute
-    // Try parsing as HTML and looking for rendered content
     try {
       var doc = new DOMParser().parseFromString(html, 'text/html');
+
+      // Look for rendered markdown containers
       var content = doc.querySelector('.markdown-preview-view, .markdown-rendered, .publish-renderer');
       if (content && content.textContent.trim().length > 20) {
-        return content.textContent.trim();
+        return content.innerHTML;
+      }
+
+      // Look for raw markdown in data attributes or script tags
+      var pageData = doc.querySelector('[data-page-content], [data-markdown]');
+      if (pageData) {
+        var raw = pageData.getAttribute('data-page-content') || pageData.getAttribute('data-markdown') || '';
+        if (raw && looksLikeMarkdown(raw)) return raw;
       }
     } catch (e) {}
     return null;
-  }
-
-  /* -----------------------------------------------------------
-     EXTRACT A SECTION from markdown by heading name
-     Returns text under ## SectionName until the next ## or EOF
-     ----------------------------------------------------------- */
-  function extractSection(md, sectionName) {
-    if (!sectionName || !md) return null;
-    // Escape regex special chars in section name
-    var escaped = sectionName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    var re = new RegExp('##\\s+' + escaped + '\\s*\\n([\\s\\S]*?)(?=\\n##\\s|$)', 'i');
-    var m = md.match(re);
-    return m ? m[1].trim() : null;
   }
 
   /* -----------------------------------------------------------

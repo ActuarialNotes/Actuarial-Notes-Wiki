@@ -1264,62 +1264,230 @@
 
   /* -----------------------------------------------------------
      DATA: Get questions for a concept
+     Uses multiple strategies since Obsidian Publish is a SPA
+     and fetch() may return the app shell without content.
      ----------------------------------------------------------- */
   async function getQuestionsForConcept(conceptName) {
     if (questionsCache[conceptName]) return questionsCache[conceptName];
 
-    var paths = [
+    var questions = [];
+
+    // Strategy 1: Obsidian Publish internal cache (fastest, most reliable)
+    questions = tryObsidianCache(conceptName);
+    if (questions.length > 0) {
+      questionsCache[conceptName] = questions;
+      return questions;
+    }
+
+    // Strategy 2: Fetch concept page and try multiple parsing methods
+    var fetchPaths = [
       'Concepts/' + conceptName,
       conceptName,
     ];
 
-    for (var i = 0; i < paths.length; i++) {
+    for (var i = 0; i < fetchPaths.length; i++) {
+      if (questions.length > 0) break;
       try {
-        var url = '/' + paths[i].split('/').map(encodeURIComponent).join('/');
+        var url = '/' + fetchPaths[i].split('/').map(encodeURIComponent).join('/');
         var resp = await fetch(url);
-        if (resp.ok) {
-          var html = await resp.text();
-          var doc = new DOMParser().parseFromString(html, 'text/html');
-          var questions = parseQuestionsFromDoc(doc);
-          questionsCache[conceptName] = questions;
-          return questions;
-        }
+        if (!resp.ok) continue;
+
+        var text = await resp.text();
+
+        // 2a: Parse rendered HTML for callout elements (works if SSR)
+        var doc = new DOMParser().parseFromString(text, 'text/html');
+        questions = parseQuestionsFromHTML(doc);
+        if (questions.length > 0) break;
+
+        // 2b: Parse raw text for markdown [!example] patterns
+        //     (works even if response is SPA shell with embedded data)
+        questions = parseQuestionsFromMarkdown(text);
+        if (questions.length > 0) break;
       } catch (e) {
         // Try next path
       }
     }
 
-    questionsCache[conceptName] = [];
+    // Strategy 3: Try the Obsidian Publish content API directly
+    if (questions.length === 0) {
+      questions = await tryPublishAPI(conceptName);
+    }
+
+    questionsCache[conceptName] = questions;
+    return questions;
+  }
+
+  /* -----------------------------------------------------------
+     Strategy 1: Access Obsidian Publish's in-memory file cache
+     ----------------------------------------------------------- */
+  function tryObsidianCache(conceptName) {
+    try {
+      // Obsidian Publish exposes the site object on window
+      var siteFiles = null;
+
+      // Try known Obsidian Publish internal structures
+      if (window.publish && window.publish.vault) {
+        siteFiles = window.publish.vault.fileMap || window.publish.vault.files;
+      }
+      if (!siteFiles && window.app && window.app.vault) {
+        siteFiles = window.app.vault.fileMap || window.app.vault.files;
+      }
+      if (!siteFiles && window.publish && window.publish.site) {
+        siteFiles = window.publish.site.cache || window.publish.site.files;
+      }
+
+      if (siteFiles) {
+        var filePaths = [
+          'Concepts/' + conceptName + '.md',
+          conceptName + '.md',
+          'Concepts/' + conceptName,
+          conceptName,
+        ];
+        for (var j = 0; j < filePaths.length; j++) {
+          var entry = siteFiles[filePaths[j]];
+          if (!entry) continue;
+
+          // The entry could be a string (raw md) or an object
+          var md = typeof entry === 'string' ? entry :
+                   (entry.content || entry.markdown || entry.data || '');
+          if (md) {
+            var q = parseQuestionsFromMarkdown(md);
+            if (q.length > 0) return q;
+          }
+        }
+      }
+    } catch (e) {
+      // Internal API not available — fall through
+    }
     return [];
   }
 
-  /** Parse questions from a fetched concept page */
-  function parseQuestionsFromDoc(doc) {
+  /* -----------------------------------------------------------
+     Strategy 3: Try Obsidian Publish content API
+     The API serves raw markdown at /access/<siteId>/<path>
+     ----------------------------------------------------------- */
+  async function tryPublishAPI(conceptName) {
+    try {
+      // Extract the site ID from the page
+      var siteId = extractSiteId();
+      if (!siteId) return [];
+
+      var filePaths = [
+        'Concepts/' + conceptName + '.md',
+        conceptName + '.md',
+      ];
+
+      for (var j = 0; j < filePaths.length; j++) {
+        try {
+          var apiUrl = 'https://publish-01.obsidian.md/access/' + siteId + '/' + encodeURIComponent(filePaths[j]);
+          var resp = await fetch(apiUrl);
+          if (!resp.ok) continue;
+          var md = await resp.text();
+          var q = parseQuestionsFromMarkdown(md);
+          if (q.length > 0) return q;
+        } catch (e) { continue; }
+      }
+    } catch (e) {
+      // API not available
+    }
+    return [];
+  }
+
+  /** Try to find the Obsidian Publish site ID from the page */
+  function extractSiteId() {
+    try {
+      // Check for publish site properties
+      if (window.publish && window.publish.siteId) return window.publish.siteId;
+      if (window.publish && window.publish.site && window.publish.site.id) return window.publish.site.id;
+
+      // Check <link> and <script> tags for publish-01.obsidian.md references
+      var els = document.querySelectorAll('link[href*="publish-01.obsidian.md"], script[src*="publish-01.obsidian.md"]');
+      for (var i = 0; i < els.length; i++) {
+        var attr = els[i].getAttribute('href') || els[i].getAttribute('src') || '';
+        var m = attr.match(/publish-01\.obsidian\.md\/access\/([a-f0-9]+)/);
+        if (m) return m[1];
+      }
+
+      // Check meta tags
+      var meta = document.querySelector('meta[name="publish-site-id"], meta[property="publish-site-id"]');
+      if (meta) return meta.content;
+    } catch (e) {}
+    return null;
+  }
+
+  /* -----------------------------------------------------------
+     PARSE QUESTIONS from rendered HTML (SSR callout elements)
+     ----------------------------------------------------------- */
+  function parseQuestionsFromHTML(doc) {
     var questions = [];
 
-    doc.querySelectorAll('.callout[data-callout="example"]').forEach(function (callout) {
-      var titleEl = callout.querySelector('.callout-title-inner');
+    // Try multiple selectors — Obsidian Publish may use different markup
+    var callouts = doc.querySelectorAll('.callout[data-callout="example"]');
+    if (callouts.length === 0) callouts = doc.querySelectorAll('[data-callout="example"]');
+    if (callouts.length === 0) callouts = doc.querySelectorAll('.callout-example');
+
+    callouts.forEach(function (callout) {
+      var titleEl = callout.querySelector('.callout-title-inner') ||
+                    callout.querySelector('.callout-title');
       if (!titleEl) return;
 
       var raw = titleEl.textContent.trim();
-      // Match pattern: "Question (Category, Difficulty-Level)"
-      var m = raw.match(/Question\s*\(([^,]+),\s*([^)]+)\)/i);
-
-      var category = m ? m[1].trim() : '';
-      var difficulty = m ? m[2].trim() : '';
-      var level = '0';
-      var levelMatch = difficulty.match(/(\d)/);
-      if (levelMatch) level = levelMatch[1];
-
-      questions.push({
-        title: raw.replace(/^Question\s*/i, '').replace(/^\(/, '').replace(/\)$/, '') || raw,
-        category: category,
-        difficulty: difficulty,
-        level: level,
-      });
+      addParsedQuestion(questions, raw);
     });
 
     return questions;
+  }
+
+  /* -----------------------------------------------------------
+     PARSE QUESTIONS from raw markdown / text
+     Matches > [!example]- <u>Question (...)</u> patterns
+     ----------------------------------------------------------- */
+  function parseQuestionsFromMarkdown(text) {
+    var questions = [];
+
+    // Pattern: > [!example]- <u>Question (Category, Difficulty)</u>
+    // Also handles without <u> tags
+    var re = />\s*\[!example\][+-]?\s*(.+)/gm;
+    var match;
+    while ((match = re.exec(text)) !== null) {
+      var line = match[1].trim();
+      // Strip HTML tags
+      line = line.replace(/<[^>]+>/g, '').trim();
+      if (line) addParsedQuestion(questions, line);
+    }
+
+    return questions;
+  }
+
+  /* -----------------------------------------------------------
+     SHARED: Parse a single question title string into an object
+     ----------------------------------------------------------- */
+  function addParsedQuestion(questions, raw) {
+    // Strip HTML tags if any remain
+    raw = raw.replace(/<[^>]+>/g, '').trim();
+    if (!raw) return;
+
+    // Match pattern: "Question (Category, Difficulty-Level)"
+    var m = raw.match(/Question\s*\(([^,]+),\s*([^)]+)\)/i);
+
+    var category = m ? m[1].trim() : '';
+    var difficulty = m ? m[2].trim() : '';
+    var level = '0';
+    var levelMatch = difficulty.match(/(\d)/);
+    if (levelMatch) level = levelMatch[1];
+
+    // Clean up the display title
+    var title = raw;
+    if (m) {
+      title = category + ', ' + difficulty;
+    }
+
+    questions.push({
+      title: title,
+      category: category,
+      difficulty: difficulty,
+      level: level,
+    });
   }
 
 })();

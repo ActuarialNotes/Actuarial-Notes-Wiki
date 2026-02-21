@@ -70,6 +70,9 @@
   --act-pill-courses-bg: #2a200f;
   --act-pill-ink: var(--text);
 
+  /* Callout accents */
+  --co-purple: #a78bfa;
+
   /* Embed */
   --embed-left-pad: 14px;
 
@@ -118,6 +121,8 @@
   --act-pill-project-bg: #dcfce7;
   --act-pill-courses-bg: #fef3c7;
   --act-pill-ink: #1e293b;
+
+  --co-purple: #7c3aed;
 }
 
 
@@ -380,17 +385,19 @@ pre code { background: none; border: none; padding: 0; }
 
 
 /* ===========================================================
-   9) CALLOUTS — Subtle card-style with accent border
+   9) CALLOUTS — Modern left-accent design
    =========================================================== */
 
 .callout {
   --callout-color: var(--brand);
-  background: color-mix(in oklab, var(--callout-color) 6%, var(--bg-elev));
-  border: 1px solid color-mix(in oklab, var(--callout-color) 15%, var(--muted));
-  border-radius: var(--radius-md);
-  padding: 16px 20px;
+  background: color-mix(in oklab, var(--callout-color) 7%, var(--bg-elev));
+  border: 1px solid color-mix(in oklab, var(--callout-color) 8%, var(--muted));
+  border-left: 3px solid var(--callout-color);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
   margin: 1.25rem 0;
-  box-shadow: var(--shadow-1);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.2s ease;
 }
 
 /* Callout title */
@@ -399,24 +406,37 @@ pre code { background: none; border: none; padding: 0; }
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: 0.01em;
+  font-size: 0.9rem;
+  letter-spacing: 0.015em;
   color: var(--callout-color);
   margin-bottom: 0;
-  padding-bottom: 10px;
-  border-bottom: 1px solid color-mix(in oklab, var(--callout-color) 12%, transparent);
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
-/* Hide the default icon */
+/* Callout icon — refined display */
 .callout .callout-icon {
-  display: none;
-}
-
-/* Style the fold indicator (chevron) */
-.callout .callout-fold {
+  display: flex;
+  align-items: center;
   color: var(--callout-color);
   opacity: 0.8;
-  order: -1;
+  flex-shrink: 0;
+}
+
+.callout .callout-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Fold indicator (chevron) */
+.callout .callout-fold {
+  color: var(--callout-color);
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.callout .callout-fold:hover {
+  opacity: 1;
 }
 
 /* Title text styling */
@@ -427,11 +447,11 @@ pre code { background: none; border: none; padding: 0; }
 
 /* Callout content */
 .callout .callout-content {
-  padding-top: 12px;
+  padding-top: 10px;
   color: var(--text);
 }
 
-/* Collapsed state — tighten up when closed */
+/* Collapsed state */
 .callout.is-collapsed .callout-content {
   display: none;
 }
@@ -442,29 +462,29 @@ pre code { background: none; border: none; padding: 0; }
 
 /* ---- Color variants ---- */
 
-/* Warning */
+/* Warning — amber */
 .callout-warning,
 .callout[data-callout="warning"] {
   --callout-color: var(--warning);
 }
 
-/* Danger / Error */
+/* Danger / Error — red */
 .callout-danger,
 .callout[data-callout="danger"],
 .callout[data-callout="error"] {
   --callout-color: var(--danger);
 }
 
-/* Success / Tip */
+/* Success / Tip — green */
 .callout-success,
 .callout[data-callout="success"],
 .callout[data-callout="tip"] {
   --callout-color: var(--success);
 }
 
-/* Example — brand blue */
+/* Example — purple (distinct from info/note) */
 .callout[data-callout="example"] {
-  --callout-color: var(--brand);
+  --callout-color: var(--co-purple);
 }
 
 /* Info / Note — brand blue */
@@ -473,7 +493,7 @@ pre code { background: none; border: none; padding: 0; }
   --callout-color: var(--brand);
 }
 
-/* Question / Answers — warm amber */
+/* Question — warm amber */
 .callout[data-callout="question"] {
   --callout-color: var(--warning);
 }

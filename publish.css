@@ -390,16 +390,13 @@ pre code { background: none; border: none; padding: 0; }
 
 .callout {
   --callout-color: var(--brand);
-  background: var(--sb-bg);
+  background: var(--bg-elev);
   border: 1px solid color-mix(in oklab, var(--callout-color) 8%, var(--muted));
   border-radius: var(--radius-sm);
   padding: 14px 18px;
   margin: 1.25rem 0;
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
   transition: box-shadow 0.2s ease;
-}
-.theme-light .callout {
-  background: var(--bg-elev);
 }
 
 /* Callout title */
@@ -475,9 +472,9 @@ pre code { background: none; border: none; padding: 0; }
   --callout-color: var(--success);
 }
 
-/* Example — purple (distinct from info/note) */
+/* Example — neutral text color */
 .callout[data-callout="example"] {
-  --callout-color: var(--co-purple);
+  --callout-color: var(--text);
 }
 
 /* Info / Note — brand blue */

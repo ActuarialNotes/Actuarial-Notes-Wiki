@@ -390,16 +390,12 @@ pre code { background: none; border: none; padding: 0; }
 
 .callout {
   --callout-color: var(--brand);
-  background: var(--sb-bg);
-  border: 1px solid color-mix(in oklab, var(--callout-color) 8%, var(--muted));
+  background: var(--bg-elev);
+  border: 1px solid color-mix(in oklab, var(--callout-color) 15%, var(--muted));
   border-radius: var(--radius-sm);
   padding: 14px 18px;
   margin: 1.25rem 0;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
-  transition: box-shadow 0.2s ease;
-}
-.theme-light .callout {
-  background: var(--bg-elev);
+  box-shadow: var(--shadow-1);
 }
 
 /* Callout title */
@@ -408,7 +404,7 @@ pre code { background: none; border: none; padding: 0; }
   align-items: center;
   gap: 8px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   letter-spacing: 0.015em;
   color: var(--callout-color);
   margin-bottom: 0;
@@ -475,9 +471,12 @@ pre code { background: none; border: none; padding: 0; }
   --callout-color: var(--success);
 }
 
-/* Example — purple (distinct from info/note) */
+/* Example — neutral accent, white/black title */
 .callout[data-callout="example"] {
-  --callout-color: var(--co-purple);
+  --callout-color: var(--text-dim);
+}
+.callout[data-callout="example"] .callout-title-inner {
+  color: var(--text);
 }
 
 /* Info / Note — brand blue */

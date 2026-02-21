@@ -385,19 +385,21 @@ pre code { background: none; border: none; padding: 0; }
 
 
 /* ===========================================================
-   9) CALLOUTS — Modern left-accent design
+   9) CALLOUTS
    =========================================================== */
 
 .callout {
   --callout-color: var(--brand);
-  background: color-mix(in oklab, var(--callout-color) 7%, var(--bg-elev));
+  background: var(--sb-bg);
   border: 1px solid color-mix(in oklab, var(--callout-color) 8%, var(--muted));
-  border-left: 3px solid var(--callout-color);
   border-radius: var(--radius-sm);
   padding: 14px 18px;
   margin: 1.25rem 0;
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
   transition: box-shadow 0.2s ease;
+}
+.theme-light .callout {
+  background: var(--bg-elev);
 }
 
 /* Callout title */
@@ -414,18 +416,9 @@ pre code { background: none; border: none; padding: 0; }
   border-bottom: none;
 }
 
-/* Callout icon — refined display */
+/* Callout icon — hidden */
 .callout .callout-icon {
-  display: flex;
-  align-items: center;
-  color: var(--callout-color);
-  opacity: 0.8;
-  flex-shrink: 0;
-}
-
-.callout .callout-icon svg {
-  width: 18px;
-  height: 18px;
+  display: none;
 }
 
 /* Fold indicator (chevron) */

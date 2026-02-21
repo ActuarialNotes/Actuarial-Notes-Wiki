@@ -819,33 +819,36 @@
 
 /* ===========================================================
    CALLOUT BADGES
-   Extracts {badge text} from callout titles and renders it as
-   a pill badge.  Works on all callout types.
-   Syntax:  > [!example]- Title here {badge text}
+   Extracts {badge text} from callout titles and renders them
+   as pill badges.  Works on all callout types.
+   Syntax:  > [!example]- Title here {23-30%} {19 Concepts}
    =========================================================== */
 
 (function () {
   'use strict';
 
-  const BADGE_RE = /\{([^}]+)\}\s*$/;
+  const BADGES_RE = /\{([^}]+)\}/g;
+  const PCT_RE = /\d+.*%/;
 
   function injectBadges() {
     document.querySelectorAll('.callout .callout-title-inner').forEach(inner => {
       // Skip if already processed
-      if (inner.parentElement.querySelector('.callout-concept-count')) return;
+      if (inner.parentElement.querySelector('.callout-badge')) return;
 
       const text = inner.textContent;
-      const match = text.match(BADGE_RE);
-      if (!match) return;
+      const matches = [...text.matchAll(BADGES_RE)];
+      if (!matches.length) return;
 
-      // Strip the {…} from the visible title text
-      inner.textContent = text.replace(BADGE_RE, '').trimEnd();
+      // Strip all {…} from the visible title text
+      inner.textContent = text.replace(BADGES_RE, '').trimEnd();
 
-      const badge = document.createElement('span');
-      badge.className = 'callout-concept-count';
-      badge.textContent = match[1];
-
-      inner.parentElement.appendChild(badge);
+      matches.forEach(match => {
+        const badge = document.createElement('span');
+        const isPct = PCT_RE.test(match[1]);
+        badge.className = 'callout-badge' + (isPct ? ' callout-badge--pct' : ' callout-concept-count');
+        badge.textContent = match[1];
+        inner.parentElement.appendChild(badge);
+      });
     });
   }
 

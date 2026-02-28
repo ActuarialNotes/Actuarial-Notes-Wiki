@@ -535,7 +535,7 @@
    
    Format:
    - data-color: Hex color for the exam theme (optional, defaults to --brand)
-   - data-prev: "Name|Full Name|URL" (optional)
+   - data-prev: "Name|Full|URL|Org,Name2|Full2|URL2|Org2" (comma-separated, optional)
    - data-current: "Name|Full Name" (required)
    - data-next: "Name|Full|URL|Org,Name2|Full2|URL2|Org2" (comma-separated, optional)
    - data-reqs: "REQ1,REQ2" (comma-separated, optional)
@@ -598,7 +598,7 @@
   function buildExamNav(container) {
     // Parse data attributes
     const customColor = container.dataset.color;
-    const prevData = parseExamData(container.dataset.prev);
+    const prevData = parseNextExams(container.dataset.prev);
     const currentData = parseExamData(container.dataset.current);
     const nextData = parseNextExams(container.dataset.next);
     const reqs = container.dataset.reqs ? container.dataset.reqs.split(',').map(r => r.trim()) : [];
@@ -610,21 +610,21 @@
       container.style.setProperty('--nav-color-hover', customColor);
     }
 
+    // Set exam color on page container for callout tinting
+    const pageEl = container.closest('.markdown-preview-view, .markdown-rendered, .page-container') || container.parentElement;
+    if (pageEl) {
+      pageEl.style.setProperty('--exam-color', customColor || 'var(--brand)');
+      pageEl.classList.add('has-exam-nav');
+    }
+
     // Clear container
     container.innerHTML = '';
 
-    // Previous exam button
-    if (prevData) {
-      const prevLink = document.createElement('a');
-      prevLink.className = 'exam-nav__btn';
-      prevLink.href = prevData.url || '#';
-      prevLink.innerHTML = `<span>${prevData.name}</span>`;
-      if (prevData.url) {
-        prevLink.classList.add('internal-link');
-      }
-      container.appendChild(prevLink);
+    // Previous exam(s)
+    if (prevData.length > 0) {
+      renderExamGroup(container, prevData, 'exam-nav__btn--prev');
 
-      // Arrow
+      // Arrow after prev
       const arrow1 = document.createElement('span');
       arrow1.className = 'exam-nav__arrow';
       arrow1.textContent = '→';
@@ -653,92 +653,13 @@
 
     // Next exam(s)
     if (nextData.length > 0) {
-      // Arrow
+      // Arrow before next
       const arrow2 = document.createElement('span');
       arrow2.className = 'exam-nav__arrow';
       arrow2.textContent = '→';
       container.appendChild(arrow2);
 
-      if (nextData.length === 1) {
-        // Single next exam - just a button
-        const nextLink = document.createElement('a');
-        nextLink.className = 'exam-nav__btn exam-nav__btn--next';
-        nextLink.href = nextData[0].url || '#';
-        nextLink.textContent = nextData[0].name;
-        if (nextData[0].url) {
-          nextLink.classList.add('internal-link');
-        }
-        container.appendChild(nextLink);
-      } else {
-        // Multiple next exams - dropdown
-        const dropdown = document.createElement('div');
-        dropdown.className = 'exam-nav__dropdown';
-
-        // Dropdown trigger button
-        const triggerBtn = document.createElement('button');
-        triggerBtn.className = 'exam-nav__btn exam-nav__btn--next';
-        triggerBtn.type = 'button';
-        triggerBtn.innerHTML = `
-          <span>${nextData.map(e => e.name.replace('Exam ', '')).join(' / ')}</span>
-          <svg class="exam-nav__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <polyline points="6 9 12 15 18 9"/>
-          </svg>
-        `;
-
-        // Dropdown menu
-        const menu = document.createElement('div');
-        menu.className = 'exam-nav__menu';
-        menu.innerHTML = `<div class="exam-nav__menu-header">Choose your path</div>`;
-
-        nextData.forEach(exam => {
-          const item = document.createElement('a');
-          item.className = 'exam-nav__menu-item';
-          item.href = exam.url || '#';
-          if (exam.url) {
-            item.classList.add('internal-link');
-          }
-
-          const orgClass = exam.org ? `exam-nav__org--${exam.org.toLowerCase()}` : '';
-          
-          item.innerHTML = `
-            <div class="exam-nav__menu-item-info">
-              <span class="exam-nav__menu-item-name">${exam.name}</span>
-              ${exam.fullName ? `<span class="exam-nav__menu-item-full">${exam.fullName}</span>` : ''}
-            </div>
-            ${exam.org ? `<span class="exam-nav__org ${orgClass}">${exam.org}</span>` : ''}
-          `;
-
-          // Close dropdown on item click
-          item.addEventListener('click', () => {
-            dropdown.classList.remove('is-open');
-            hideBackdrop();
-          });
-
-          menu.appendChild(item);
-        });
-
-        // Toggle dropdown
-        triggerBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const isOpen = dropdown.classList.contains('is-open');
-          
-          // Close all other dropdowns first
-          document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
-            d.classList.remove('is-open');
-          });
-          
-          if (!isOpen) {
-            dropdown.classList.add('is-open');
-            showBackdrop();
-          } else {
-            hideBackdrop();
-          }
-        });
-
-        dropdown.appendChild(triggerBtn);
-        dropdown.appendChild(menu);
-        container.appendChild(dropdown);
-      }
+      renderExamGroup(container, nextData, 'exam-nav__btn--next');
     }
 
     // Close dropdown when clicking outside
@@ -760,6 +681,90 @@
         hideBackdrop();
       }
     });
+  }
+
+  // Render a group of exams as either a single button or a dropdown
+  function renderExamGroup(container, exams, btnClass) {
+    if (exams.length === 1) {
+      // Single exam - just a button
+      const link = document.createElement('a');
+      link.className = `exam-nav__btn ${btnClass}`;
+      link.href = exams[0].url || '#';
+      link.textContent = exams[0].name;
+      if (exams[0].url) {
+        link.classList.add('internal-link');
+      }
+      container.appendChild(link);
+    } else {
+      // Multiple exams - dropdown
+      const dropdown = document.createElement('div');
+      dropdown.className = 'exam-nav__dropdown';
+
+      // Dropdown trigger button
+      const triggerBtn = document.createElement('button');
+      triggerBtn.className = `exam-nav__btn ${btnClass}`;
+      triggerBtn.type = 'button';
+      triggerBtn.innerHTML = `
+        <span>${exams.map(e => e.name.replace('Exam ', '')).join(' / ')}</span>
+        <svg class="exam-nav__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      `;
+
+      // Dropdown menu
+      const menu = document.createElement('div');
+      menu.className = 'exam-nav__menu';
+      menu.innerHTML = `<div class="exam-nav__menu-header">Choose your path</div>`;
+
+      exams.forEach(exam => {
+        const item = document.createElement('a');
+        item.className = 'exam-nav__menu-item';
+        item.href = exam.url || '#';
+        if (exam.url) {
+          item.classList.add('internal-link');
+        }
+
+        const orgClass = exam.org ? `exam-nav__org--${exam.org.toLowerCase()}` : '';
+
+        item.innerHTML = `
+          <div class="exam-nav__menu-item-info">
+            <span class="exam-nav__menu-item-name">${exam.name}</span>
+            ${exam.fullName ? `<span class="exam-nav__menu-item-full">${exam.fullName}</span>` : ''}
+          </div>
+          ${exam.org ? `<span class="exam-nav__org ${orgClass}">${exam.org}</span>` : ''}
+        `;
+
+        // Close dropdown on item click
+        item.addEventListener('click', () => {
+          dropdown.classList.remove('is-open');
+          hideBackdrop();
+        });
+
+        menu.appendChild(item);
+      });
+
+      // Toggle dropdown
+      triggerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.contains('is-open');
+
+        // Close all other dropdowns first
+        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
+          d.classList.remove('is-open');
+        });
+
+        if (!isOpen) {
+          dropdown.classList.add('is-open');
+          showBackdrop();
+        } else {
+          hideBackdrop();
+        }
+      });
+
+      dropdown.appendChild(triggerBtn);
+      dropdown.appendChild(menu);
+      container.appendChild(dropdown);
+    }
   }
 
   // Parse "Name|Full Name|URL" format

@@ -3040,6 +3040,13 @@ html {
   gap: 4px;
 }
 
+/* Side-by-side current exam buttons */
+.exam-nav__current-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* Current exam - highlighted */
 .exam-nav__btn--current {
   background: var(--nav-color) !important;

@@ -536,7 +536,7 @@
    Format:
    - data-color: Hex color for the exam theme (optional, defaults to --brand)
    - data-prev: "Name|Full|URL|Org,Name2|Full2|URL2|Org2" (comma-separated, optional)
-   - data-current: "Name|Full Name" (required)
+   - data-current: "Name|Full|URL|Org,Name2|Full2|URL2|Org2" (comma-separated, required)
    - data-next: "Name|Full|URL|Org,Name2|Full2|URL2|Org2" (comma-separated, optional)
    - data-reqs: "REQ1,REQ2" (comma-separated, optional)
    =========================================================== */
@@ -599,7 +599,7 @@
     // Parse data attributes
     const customColor = container.dataset.color;
     const prevData = parseNextExams(container.dataset.prev);
-    const currentData = parseExamData(container.dataset.current);
+    const currentData = parseNextExams(container.dataset.current);
     const nextData = parseNextExams(container.dataset.next);
     const reqs = container.dataset.reqs ? container.dataset.reqs.split(',').map(r => r.trim()) : [];
 
@@ -631,15 +631,22 @@
       container.appendChild(arrow1);
     }
 
-    // Current exam wrapper (button + requirements below)
+    // Current exam wrapper (buttons + requirements below)
     const currentWrapper = document.createElement('div');
     currentWrapper.className = 'exam-nav__current';
 
-    // Current exam button
-    const currentBtn = document.createElement('span');
-    currentBtn.className = 'exam-nav__btn exam-nav__btn--current';
-    currentBtn.textContent = currentData.name;
-    currentWrapper.appendChild(currentBtn);
+    // Current exam buttons (side-by-side when multiple)
+    const currentBtns = document.createElement('div');
+    currentBtns.className = 'exam-nav__current-btns';
+
+    currentData.forEach(exam => {
+      const btn = document.createElement('span');
+      btn.className = 'exam-nav__btn exam-nav__btn--current';
+      btn.textContent = exam.name;
+      currentBtns.appendChild(btn);
+    });
+
+    currentWrapper.appendChild(currentBtns);
 
     // Requirements text below current exam
     if (reqs.length > 0) {

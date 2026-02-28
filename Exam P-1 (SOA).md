@@ -11,7 +11,11 @@ aliases:
      data-next="FM-2|Financial Mathematics|Exam FM-2 (SOA).md"
 </div>
 
-<a href= "https://www.soa.org/4ab79c/globalassets/assets/files/edu/2026/spring/syllabi/2026-03-exam-p-syllabus.pdf" class="download-link download-link--blue">Exam P-1 Syllabus - March 2026</a>
+<div class="download-dropdown"
+     data-color="#2563eb"
+     data-label="Downloads"
+     data-files="Exam P-1 Syllabus - March 2026|https://www.soa.org/4ab79c/globalassets/assets/files/edu/2026/spring/syllabi/2026-03-exam-p-syllabus.pdf,Risk and Insurance|https://www.soa.org/49355c/globalassets/assets/files/edu/p-21-05.pdf">
+</div>
 
 ## Exam P-1 Syllabus
 The **Probability (P-1) Exam** is a 3 hour, 30 multiple choice question exam about probability theory concepts and their application to measuring risk.

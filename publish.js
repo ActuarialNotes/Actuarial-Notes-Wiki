@@ -818,6 +818,223 @@
 
 
 /* ===========================================================
+   DOWNLOAD DROPDOWN
+   Converts <div class="download-dropdown" data-files="..."> into
+   a styled dropdown button with a list of downloadable files.
+
+   Usage in Markdown:
+   <div class="download-dropdown"
+        data-color="#2563eb"
+        data-label="Downloads"
+        data-files="Label|URL,Label2|URL2">
+   </div>
+
+   Each file entry in data-files is pipe-delimited: Name|URL
+   Multiple entries are comma-separated.
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDownloadDropdowns);
+  } else {
+    initDownloadDropdowns();
+  }
+
+  function initDownloadDropdowns() {
+    setTimeout(buildAllDownloadDropdowns, 100);
+    observePageChanges();
+  }
+
+  function observePageChanges() {
+    window.addEventListener('popstate', () => setTimeout(buildAllDownloadDropdowns, 150));
+
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+      if (link) {
+        const href = link.getAttribute('href');
+        if (href && !href.startsWith('#')) {
+          setTimeout(buildAllDownloadDropdowns, 400);
+          setTimeout(buildAllDownloadDropdowns, 800);
+        }
+      }
+    });
+
+    const observer = new MutationObserver(() => {
+      setTimeout(buildAllDownloadDropdowns, 200);
+    });
+    const target = document.querySelector('.markdown-reading-view') || document.body;
+    observer.observe(target, { childList: true, subtree: true });
+  }
+
+  function buildAllDownloadDropdowns() {
+    document.querySelectorAll('.download-dropdown').forEach(el => {
+      if (el.dataset.built) return;
+      el.dataset.built = 'true';
+      buildDropdown(el);
+    });
+  }
+
+  function buildDropdown(el) {
+    const color = el.dataset.color || '#2563eb';
+    const label = el.dataset.label || 'Downloads';
+    const filesRaw = el.dataset.files || '';
+
+    if (!filesRaw) return;
+
+    const files = filesRaw.split(',').map(entry => {
+      const parts = entry.trim().split('|');
+      return { name: parts[0] || '', url: parts[1] || '#' };
+    }).filter(f => f.name);
+
+    if (!files.length) return;
+
+    el.style.setProperty('--dl-color', color);
+
+    // If only one file, render a simple download link (no dropdown needed)
+    if (files.length === 1) {
+      const link = document.createElement('a');
+      link.className = 'dl-dropdown__single';
+      link.href = files[0].url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.innerHTML = `
+        <svg class="dl-dropdown__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span>${files[0].name}</span>
+      `;
+      el.appendChild(link);
+      return;
+    }
+
+    // Multiple files — build dropdown
+    const wrapper = document.createElement('div');
+    wrapper.className = 'dl-dropdown__wrap';
+
+    // Trigger button
+    const trigger = document.createElement('button');
+    trigger.className = 'dl-dropdown__trigger';
+    trigger.type = 'button';
+    trigger.innerHTML = `
+      <svg class="dl-dropdown__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      <span>${label}</span>
+      <svg class="dl-dropdown__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    `;
+
+    // Menu
+    const menu = document.createElement('div');
+    menu.className = 'dl-dropdown__menu';
+    menu.innerHTML = `<div class="dl-dropdown__menu-header">Select a file</div>`;
+
+    files.forEach(file => {
+      const item = document.createElement('a');
+      item.className = 'dl-dropdown__menu-item';
+      item.href = file.url;
+      item.target = '_blank';
+      item.rel = 'noopener noreferrer';
+      item.innerHTML = `
+        <span class="dl-dropdown__menu-item-name">${file.name}</span>
+        <svg class="dl-dropdown__item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      `;
+
+      item.addEventListener('click', () => {
+        wrapper.classList.remove('is-open');
+        hideDlBackdrop();
+      });
+
+      menu.appendChild(item);
+    });
+
+    // Toggle
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = wrapper.classList.contains('is-open');
+
+      // Close any other open download dropdowns
+      document.querySelectorAll('.dl-dropdown__wrap.is-open').forEach(d => {
+        d.classList.remove('is-open');
+      });
+      // Also close exam-nav dropdowns
+      document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
+        d.classList.remove('is-open');
+      });
+
+      if (!isOpen) {
+        wrapper.classList.add('is-open');
+        showDlBackdrop();
+      } else {
+        hideDlBackdrop();
+      }
+    });
+
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(menu);
+    el.appendChild(wrapper);
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dl-dropdown__wrap')) {
+        wrapper.classList.remove('is-open');
+        hideDlBackdrop();
+      }
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        wrapper.classList.remove('is-open');
+        hideDlBackdrop();
+      }
+    });
+  }
+
+  // Backdrop helpers (reuses exam-nav backdrop where possible)
+  function showDlBackdrop() {
+    let backdrop = document.querySelector('.exam-nav-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'exam-nav-backdrop';
+      backdrop.addEventListener('click', () => {
+        document.querySelectorAll('.dl-dropdown__wrap.is-open').forEach(d => {
+          d.classList.remove('is-open');
+        });
+        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
+          d.classList.remove('is-open');
+        });
+        hideDlBackdrop();
+      });
+      document.body.appendChild(backdrop);
+    }
+    if (window.innerWidth <= 540) {
+      backdrop.classList.add('is-visible');
+    }
+  }
+
+  function hideDlBackdrop() {
+    const backdrop = document.querySelector('.exam-nav-backdrop');
+    if (backdrop) {
+      backdrop.classList.remove('is-visible');
+    }
+  }
+
+})();
+
+
+/* ===========================================================
    CALLOUT BADGES
    Extracts {badge text} from callout titles and renders them
    as pill badges.  Works on all callout types.

@@ -1820,6 +1820,194 @@ a.download-link.download-link--sky, .download-link.download-link--sky { backgrou
 a.download-link.download-link--slate, .download-link.download-link--slate { background: #475569; }
 a.download-link.download-link--gray, .download-link.download-link--gray { background: #52525b; }
 
+
+/* ===========================================================
+   DOWNLOAD DROPDOWN
+   Usage: <div class="download-dropdown"
+               data-color="#2563eb"
+               data-label="Downloads"
+               data-files="Label|URL,Label2|URL2">
+          </div>
+   =========================================================== */
+
+/* Container – inherits custom color via --dl-color */
+.download-dropdown {
+  display: inline-block;
+  --dl-color: #2563eb;
+}
+
+/* Single-file link (no dropdown, just a styled button) */
+.dl-dropdown__single {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--dl-color) !important;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.dl-dropdown__single:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+/* Dropdown wrapper */
+.dl-dropdown__wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Trigger button – mirrors exam-nav__btn style */
+.dl-dropdown__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: transparent !important;
+  border: 1px solid var(--muted) !important;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  cursor: pointer;
+  text-decoration: none !important;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-shadow: none !important;
+}
+
+.dl-dropdown__trigger:hover {
+  border-color: var(--dl-color) !important;
+  color: var(--dl-color);
+  background: color-mix(in oklab, var(--dl-color) 8%, transparent) !important;
+}
+
+/* Download icon in trigger & single */
+.dl-dropdown__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Chevron */
+.dl-dropdown__chevron {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.dl-dropdown__wrap.is-open .dl-dropdown__chevron {
+  transform: rotate(180deg);
+}
+
+/* Menu – same animation & positioning as exam-nav__menu */
+.dl-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--bg-elev);
+  border: 1px solid var(--muted);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  min-width: 260px;
+  padding: 8px;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: all 0.15s ease;
+}
+
+.dl-dropdown__wrap.is-open .dl-dropdown__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Mobile: bottom sheet like exam-nav */
+@media (max-width: 540px) {
+  .dl-dropdown__menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 16px;
+    min-width: auto;
+    transform: translateY(100%);
+  }
+
+  .dl-dropdown__wrap.is-open .dl-dropdown__menu {
+    transform: translateY(0);
+  }
+}
+
+/* Menu header */
+.dl-dropdown__menu-header {
+  padding: 8px 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Menu items */
+.dl-dropdown__menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none !important;
+  color: inherit;
+  transition: background 0.1s ease;
+}
+
+.dl-dropdown__menu-item:hover {
+  background: color-mix(in oklab, var(--dl-color) 10%, transparent);
+}
+
+.dl-dropdown__menu-item-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--dl-color);
+}
+
+/* Small download icon per item */
+.dl-dropdown__item-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  transition: color 0.1s ease;
+}
+
+.dl-dropdown__menu-item:hover .dl-dropdown__item-icon {
+  color: var(--dl-color);
+}
+
+/* Print: hide */
+@media print {
+  .download-dropdown {
+    display: none !important;
+  }
+}
+
 .popular-exams { margin-top: 1.5rem; }
 .pe-heading { font-size: 1.1rem; font-weight: 700; margin: 0 0 .75rem; }
 

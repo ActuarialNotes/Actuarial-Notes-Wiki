@@ -2984,13 +2984,13 @@ html {
   display: flex;
   align-items: center;
   padding: 10px 14px;
-  background: var(--bg-elev);
-  border: 1px solid var(--muted);
+  background: color-mix(in oklab, var(--nav-color) 5%, var(--bg-elev));
+  border: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
   border-radius: var(--radius-md);
   gap: 6px;
   flex-wrap: wrap;
   margin: 1.25rem 0;
-  
+
   /* Custom color support - defaults to brand */
   --nav-color: var(--brand);
   --nav-color-hover: var(--brand-hover);
@@ -3063,7 +3063,8 @@ html {
   letter-spacing: 0.01em;
 }
 
-/* Next exam(s) - same style as prev button */
+/* Prev / Next exam(s) - ghost button style */
+.exam-nav__btn--prev,
 .exam-nav__btn--next {
   background: transparent !important;
   border: 1px solid var(--muted) !important;
@@ -3071,6 +3072,7 @@ html {
   box-shadow: none !important;
 }
 
+.exam-nav__btn--prev:hover,
 .exam-nav__btn--next:hover {
   border-color: var(--nav-color) !important;
   color: var(--nav-color) !important;
@@ -3237,6 +3239,12 @@ html {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+}
+
+/* Example callout tinting on exam pages */
+.has-exam-nav .callout[data-callout="example"] {
+  background: color-mix(in oklab, var(--exam-color) 5%, var(--bg-elev));
+  border-color: color-mix(in oklab, var(--exam-color) 15%, var(--muted));
 }
 
 /* Print: hide nav */

@@ -2576,411 +2576,15 @@ figure.right figcaption,
 }
 
 /* ===========================================================
-   FLOATING TABLE OF CONTENTS + BACK TO TOP
-   Self-contained navigation for Obsidian Publish
-   
-   Add this to the end of your publish.css
-   =========================================================== */
-
-
-/* ===========================================================
-   1) FLOATING TOC CONTAINER
-   =========================================================== */
-
-.floating-toc {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  z-index: 100;
-  
-  width: 260px;
-  max-height: calc(100vh - 60px);
-  
-  background: var(--bg-elev);
-  border: 1px solid var(--muted);
-  border-radius: var(--radius-md);
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.15),
-    0 0 1px rgba(0, 0, 0, 0.1);
-  
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-/* Hide TOC on mobile only - show on desktop by default */
-@media (max-width: 768px) {
-  .floating-toc {
-    display: none;
-  }
-  .floating-toc.is-mobile-open {
-    display: flex;
-  }
-}
-
-
-/* ===========================================================
-   2) TOC HEADER
-   =========================================================== */
-
-.floating-toc__header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--muted);
-  background: color-mix(in oklab, var(--bg-elev) 50%, var(--muted) 12%);
-  flex-shrink: 0;
-}
-
-.floating-toc__title {
-  display: none;
-}
-
-/* Collapse button */
-.floating-toc__toggle {
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  color: var(--text-dim);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-
-.floating-toc__toggle:hover {
-  background: var(--muted);
-  color: var(--text);
-}
-
-.floating-toc__toggle svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease;
-}
-
-.floating-toc.is-collapsed .floating-toc__toggle svg {
-  transform: rotate(180deg);
-}
-
-
-/* ===========================================================
-   3) PROGRESS BAR
-   =========================================================== */
-
-.floating-toc__progress {
-  height: 3px;
-  background: var(--muted);
-  flex-shrink: 0;
-}
-
-.floating-toc__progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-hover) 100%);
-  transition: width 0.1s ease-out;
-  border-radius: 0 2px 2px 0;
-}
-
-
-/* ===========================================================
-   4) TOC LIST
-   =========================================================== */
-
-.floating-toc__list {
-  list-style: none;
-  margin: 0;
-  padding: 8px 0;
-  overflow-y: auto;
-  flex: 1;
-  
-  /* Custom scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: var(--muted) transparent;
-}
-
-.floating-toc__list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.floating-toc__list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.floating-toc__list::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 3px;
-}
-
-.floating-toc__list::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
-}
-
-/* Collapsed state */
-.floating-toc.is-collapsed .floating-toc__list,
-.floating-toc.is-collapsed .floating-toc__progress {
-  display: none;
-}
-
-.floating-toc.is-collapsed {
-  width: auto;
-}
-
-
-/* ===========================================================
-   5) TOC ITEMS
-   =========================================================== */
-
-.floating-toc__item {
-  margin: 0;
-}
-
-.floating-toc__link {
-  /* Reset all button styles */
-  appearance: none;
-  -webkit-appearance: none;
-  display: block;
-  width: 100%;
-  padding: 3px 12px;
-  margin: 0;
-  font-size: 0.84rem;
-  line-height: 1.45;
-  color: var(--text-dim);
-  text-decoration: none;
-  text-align: left;
-  background: none !important;
-  background-color: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  outline: none;
-  box-shadow: none !important;
-  font-family: inherit;
-  cursor: pointer;
-  transition: color 0.15s ease;
-}
-
-.floating-toc__link:hover,
-.floating-toc__link:focus {
-  color: var(--brand);
-  background: none !important;
-  border: none !important;
-  outline: none;
-  box-shadow: none !important;
-}
-
-/* Active state */
-.floating-toc__link.is-active {
-  color: var(--brand);
-  background: none !important;
-}
-
-/* Heading level indentation */
-.floating-toc__item[data-level="3"] .floating-toc__link {
-  padding-left: 24px;
-}
-
-.floating-toc__item[data-level="4"] .floating-toc__link {
-  padding-left: 36px;
-  opacity: 0.75;
-}
-
-.floating-toc__item[data-level="4"] .floating-toc__link.is-active {
-  opacity: 1;
-}
-
-
-/* ===========================================================
-   6) BACK TO TOP - REMOVED
-   =========================================================== */
-
-
-/* ===========================================================
-   7) MOBILE TOC TOGGLE BUTTON
-   =========================================================== */
-
-.floating-toc-mobile-toggle {
-  display: none;
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 101;
-  
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 1px solid var(--muted);
-  
-  background: var(--bg-elev);
-  color: var(--text-dim);
-  box-shadow: 
-    0 2px 12px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-  
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  
-  transition: all 0.2s ease;
-}
-
-.floating-toc-mobile-toggle:hover {
-  background: var(--bg-elev);
-  border-color: var(--brand);
-  color: var(--brand);
-  transform: scale(1.05);
-}
-
-.floating-toc-mobile-toggle:active {
-  transform: scale(0.95);
-}
-
-.floating-toc-mobile-toggle svg {
-  width: 22px;
-  height: 22px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
-}
-
-/* Show mobile toggle on narrow screens */
-@media (max-width: 768px) {
-  .floating-toc-mobile-toggle {
-    display: flex;
-  }
-}
-
-
-/* ===========================================================
-   8) MOBILE TOC MODAL
-   =========================================================== */
-
-@media (max-width: 768px) {
-  /* When open on mobile, show as centered modal */
-  .floating-toc.is-mobile-open {
-    display: flex !important;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    transform: translate(-50%, -50%);
-    width: calc(100vw - 48px);
-    max-width: 360px;
-    max-height: 70vh;
-    z-index: 1000;
-    opacity: 1;
-    animation: tocFadeIn 0.2s ease forwards;
-  }
-  
-  /* Turn collapse button into close button on mobile */
-  .floating-toc.is-mobile-open .floating-toc__toggle {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--muted);
-  }
-  
-  .floating-toc.is-mobile-open .floating-toc__toggle svg {
-    transform: rotate(180deg);
-  }
-  
-  .floating-toc.is-mobile-open .floating-toc__toggle:hover {
-    background: var(--danger);
-    color: white;
-  }
-  
-  @keyframes tocFadeIn {
-    from {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-  }
-}
-
-/* Backdrop */
-.floating-toc-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  
-  /* Hidden by default - completely non-interactive */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-}
-
-.floating-toc-backdrop.is-visible {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-
-/* ===========================================================
-   9) SMOOTH SCROLL & SCROLL MARGINS
-   =========================================================== */
-
-html {
-  scroll-behavior: smooth;
-}
-
-/* Prevent headings from hiding under fixed elements */
-.markdown-rendered h1,
-.markdown-rendered h2,
-.markdown-rendered h3,
-.markdown-rendered h4,
-.markdown-rendered h5,
-.markdown-rendered h6 {
-  scroll-margin-top: 24px;
-}
-
-
-/* ===========================================================
-   10) LIGHT MODE ADJUSTMENTS
-   =========================================================== */
-
-.theme-light .floating-toc {
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.08),
-    0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.theme-light .floating-toc-mobile-toggle {
-  box-shadow: 
-    0 2px 12px rgba(0, 0, 0, 0.1),
-    0 0 0 1px rgba(0, 0, 0, 0.03) inset;
-}
-
-
-/* ===========================================================
-   11) PRINT STYLES
-   =========================================================== */
-
-@media print {
-  .floating-toc,
-  .floating-toc-mobile-toggle,
-  .floating-toc-backdrop {
-    display: none !important;
-  }
-}
-
-/* ===========================================================
    EXAM NAVIGATION COMPONENT
    Add to your publish.css
    =========================================================== */
 
+
 /* Container */
 .exam-nav {
+  position: relative;
+  z-index: 200;
   display: flex;
   align-items: center;
   padding: 10px 14px;
@@ -3063,6 +2667,41 @@ html {
   letter-spacing: 0.01em;
 }
 
+/* Exam Track row */
+.exam-nav__track {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding-top: 6px;
+  margin-top: 4px;
+  border-top: 1px solid color-mix(in oklab, var(--nav-color) 10%, var(--muted));
+  font-size: 0.75rem;
+}
+
+.exam-nav__track-label {
+  color: var(--text-dim);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.exam-nav__track-link {
+  color: var(--nav-color) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+}
+
+.exam-nav__track-link:hover {
+  color: var(--nav-color-hover, var(--nav-color)) !important;
+  filter: brightness(1.2);
+}
+
+.exam-nav__track-sep {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
 /* Prev / Next exam(s) - ghost button style */
 .exam-nav__btn--prev,
 .exam-nav__btn--next {
@@ -3098,6 +2737,7 @@ html {
 /* Dropdown wrapper */
 .exam-nav__dropdown {
   position: relative;
+  z-index: 200;
 }
 
 /* Dropdown chevron */
@@ -3123,7 +2763,7 @@ html {
   box-shadow: var(--shadow-2);
   min-width: 260px;
   padding: 8px;
-  z-index: 100;
+  z-index: 200;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-4px);

@@ -1689,3 +1689,492 @@
   }
 
 })();
+
+
+/* ===========================================================
+   CONCEPT NAVIGATION COMPONENT
+   Renders prev → current → next navigation for concept pages,
+   with a learning-objective badge that opens a panel showing
+   all objectives and their concepts for the parent exam(s).
+
+   Usage in Markdown:
+
+   <div class="concept-nav"
+        data-color="#2563eb"
+        data-current="Inclusion-Exclusion Principle"
+        data-prev="Set Function|Concepts/Set Function,Venn Diagram|Concepts/Venn Diagram"
+        data-next="Conditional Probability|Concepts/Conditional Probability"
+        data-objectives="P-1|Probability|1. General Probability|Exam P-1 (SOA)">
+   </div>
+
+   Format:
+   - data-color: Hex color for theming (optional, defaults to --brand)
+   - data-current: Display name of this concept (required)
+   - data-prev: "Name|Path,Name2|Path2" — comma-separated, pipe-delimited (optional)
+   - data-next: "Name|Path,Name2|Path2" — comma-separated, pipe-delimited (optional)
+   - data-objectives: "ExamCode|ExamName|ObjectiveName|ExamPagePath;..." — semicolon-separated (optional)
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  /* ── Bootstrap ─────────────────────────────────────────── */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initConceptNav);
+  } else {
+    initConceptNav();
+  }
+
+  function initConceptNav() {
+    setTimeout(buildAllConceptNavs, 100);
+    observePageChanges();
+  }
+
+  function observePageChanges() {
+    window.addEventListener('popstate', function () { setTimeout(buildAllConceptNavs, 150); });
+
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+      if (link) {
+        var href = link.getAttribute('href');
+        if (href && !href.startsWith('#')) {
+          setTimeout(buildAllConceptNavs, 200);
+          setTimeout(buildAllConceptNavs, 500);
+        }
+      }
+    });
+
+    var observer = new MutationObserver(function () {
+      clearTimeout(window._conceptNavRebuildTimeout);
+      window._conceptNavRebuildTimeout = setTimeout(buildAllConceptNavs, 200);
+    });
+
+    var container = document.querySelector('.site-body-center-column, .markdown-rendered, main');
+    if (container) {
+      observer.observe(container, { childList: true, subtree: true });
+    }
+  }
+
+  function buildAllConceptNavs() {
+    document.querySelectorAll('.concept-nav[data-current]').forEach(function (nav) {
+      if (nav.dataset.built === 'true') return;
+      buildConceptNav(nav);
+      nav.dataset.built = 'true';
+    });
+  }
+
+  /* ── Parsers ───────────────────────────────────────────── */
+
+  function parseConcepts(str) {
+    if (!str) return [];
+    return str.split(',').map(function (entry) {
+      var parts = entry.split('|').map(function (p) { return p.trim(); });
+      return { name: parts[0] || '', path: parts[1] || '' };
+    }).filter(function (c) { return c.name; });
+  }
+
+  function parseObjectives(str) {
+    if (!str) return [];
+    return str.split(';').map(function (entry) {
+      var parts = entry.split('|').map(function (p) { return p.trim(); });
+      return {
+        code: parts[0] || '',
+        name: parts[1] || '',
+        objective: parts[2] || '',
+        pagePath: parts[3] || ''
+      };
+    }).filter(function (o) { return o.code; });
+  }
+
+  /* ── Main builder ──────────────────────────────────────── */
+
+  function buildConceptNav(container) {
+    var customColor = container.dataset.color;
+    var currentName = container.dataset.current;
+    var prevData = parseConcepts(container.dataset.prev);
+    var nextData = parseConcepts(container.dataset.next);
+    var objectives = parseObjectives(container.dataset.objectives);
+
+    if (customColor) {
+      container.style.setProperty('--cnav-color', customColor);
+    }
+
+    container.innerHTML = '';
+
+    /* ── Row 1: prev → current → next ──────────────────── */
+    var navRow = document.createElement('div');
+    navRow.className = 'concept-nav__row';
+
+    if (prevData.length > 0) {
+      renderConceptGroup(navRow, prevData, 'concept-nav__btn--prev');
+
+      var arrow1 = document.createElement('span');
+      arrow1.className = 'concept-nav__arrow';
+      arrow1.textContent = '→';
+      navRow.appendChild(arrow1);
+    }
+
+    var currentBtn = document.createElement('span');
+    currentBtn.className = 'concept-nav__btn concept-nav__btn--current';
+    currentBtn.textContent = currentName;
+    navRow.appendChild(currentBtn);
+
+    if (nextData.length > 0) {
+      var arrow2 = document.createElement('span');
+      arrow2.className = 'concept-nav__arrow';
+      arrow2.textContent = '→';
+      navRow.appendChild(arrow2);
+
+      renderConceptGroup(navRow, nextData, 'concept-nav__btn--next');
+    }
+
+    container.appendChild(navRow);
+
+    /* ── Row 2: learning objective badges ──────────────── */
+    if (objectives.length > 0) {
+      var objRow = document.createElement('div');
+      objRow.className = 'concept-nav__obj-row';
+
+      var objLabel = document.createElement('span');
+      objLabel.className = 'concept-nav__obj-label';
+      objLabel.textContent = 'Learning Objective:';
+      objRow.appendChild(objLabel);
+
+      objectives.forEach(function (obj) {
+        var badge = document.createElement('button');
+        badge.className = 'concept-nav__obj-badge';
+        badge.type = 'button';
+        badge.innerHTML =
+          '<span class="concept-nav__obj-code">' + obj.code + '</span>' +
+          '<span class="concept-nav__obj-name">' + obj.objective + '</span>' +
+          '<svg class="concept-nav__obj-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+        badge.addEventListener('click', function (e) {
+          e.stopPropagation();
+          openObjectivePanel(obj, container);
+        });
+
+        objRow.appendChild(badge);
+      });
+
+      container.appendChild(objRow);
+    }
+
+    /* ── Global close handlers (registered once) ───────── */
+    if (!window._conceptNavCloseRegistered) {
+      window._conceptNavCloseRegistered = true;
+
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.concept-nav__dropdown') &&
+            !e.target.closest('.concept-nav__panel')) {
+          closeAllConceptDropdowns();
+          closeObjectivePanel();
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeAllConceptDropdowns();
+          closeObjectivePanel();
+        }
+      });
+    }
+  }
+
+  /* ── Render a single concept link or dropdown ──────────── */
+
+  function renderConceptGroup(parent, concepts, btnClass) {
+    if (concepts.length === 1) {
+      var link = document.createElement('a');
+      link.className = 'concept-nav__btn ' + btnClass + ' internal-link';
+      link.href = concepts[0].path || '#';
+      link.textContent = concepts[0].name;
+      parent.appendChild(link);
+    } else {
+      var dropdown = document.createElement('div');
+      dropdown.className = 'concept-nav__dropdown';
+
+      var triggerBtn = document.createElement('button');
+      triggerBtn.className = 'concept-nav__btn ' + btnClass;
+      triggerBtn.type = 'button';
+      triggerBtn.innerHTML =
+        '<span>' + concepts.map(function (c) { return c.name; }).join(' / ') + '</span>' +
+        '<svg class="concept-nav__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+      var menu = document.createElement('div');
+      menu.className = 'concept-nav__menu';
+      menu.innerHTML = '<div class="concept-nav__menu-header">Choose your path</div>';
+
+      concepts.forEach(function (concept) {
+        var item = document.createElement('a');
+        item.className = 'concept-nav__menu-item internal-link';
+        item.href = concept.path || '#';
+        item.innerHTML = '<span class="concept-nav__menu-item-name">' + concept.name + '</span>';
+
+        item.addEventListener('click', function () {
+          dropdown.classList.remove('is-open');
+          hideConceptBackdrop();
+        });
+
+        menu.appendChild(item);
+      });
+
+      triggerBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = dropdown.classList.contains('is-open');
+        closeAllConceptDropdowns();
+        if (!isOpen) {
+          dropdown.classList.add('is-open');
+          showConceptBackdrop();
+        } else {
+          hideConceptBackdrop();
+        }
+      });
+
+      dropdown.appendChild(triggerBtn);
+      dropdown.appendChild(menu);
+      parent.appendChild(dropdown);
+    }
+  }
+
+  function closeAllConceptDropdowns() {
+    document.querySelectorAll('.concept-nav__dropdown.is-open').forEach(function (d) {
+      d.classList.remove('is-open');
+    });
+    hideConceptBackdrop();
+  }
+
+  /* ── Learning Objective Panel ──────────────────────────── */
+
+  var examObjectivesCache = {};
+
+  function openObjectivePanel(obj, navContainer) {
+    closeObjectivePanel();
+
+    var panel = document.createElement('div');
+    panel.className = 'concept-nav__panel';
+    panel.setAttribute('data-exam', obj.code);
+
+    var header = document.createElement('div');
+    header.className = 'concept-nav__panel-header';
+    header.innerHTML =
+      '<div class="concept-nav__panel-title">' +
+        '<span class="concept-nav__panel-exam-code">' + obj.code + '</span>' +
+        '<span>' + obj.name + ' — Learning Objectives</span>' +
+      '</div>' +
+      '<button class="concept-nav__panel-close" type="button">&times;</button>';
+
+    header.querySelector('.concept-nav__panel-close').addEventListener('click', function (e) {
+      e.stopPropagation();
+      closeObjectivePanel();
+    });
+
+    panel.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'concept-nav__panel-body';
+    body.innerHTML = '<div class="concept-nav__panel-loading">Loading objectives\u2026</div>';
+    panel.appendChild(body);
+
+    navContainer.appendChild(panel);
+    showConceptBackdrop();
+
+    panel.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+
+    fetchExamObjectives(obj.pagePath).then(function (objectives) {
+      renderObjectivesList(body, objectives, obj, navContainer);
+    }).catch(function () {
+      body.innerHTML = '<div class="concept-nav__panel-loading">Could not load objectives.</div>';
+    });
+  }
+
+  function closeObjectivePanel() {
+    document.querySelectorAll('.concept-nav__panel').forEach(function (p) {
+      p.remove();
+    });
+    hideConceptBackdrop();
+  }
+
+  function renderObjectivesList(body, objectives, currentObj, navContainer) {
+    body.innerHTML = '';
+
+    var list = document.createElement('div');
+    list.className = 'concept-nav__panel-list';
+
+    objectives.forEach(function (objective) {
+      var item = document.createElement('button');
+      item.className = 'concept-nav__panel-item';
+      item.type = 'button';
+
+      if (objective.name === currentObj.objective) {
+        item.classList.add('is-active');
+      }
+
+      item.innerHTML =
+        '<span class="concept-nav__panel-item-name">' + objective.name + '</span>' +
+        (objective.weight ? '<span class="concept-nav__panel-item-weight">' + objective.weight + '</span>' : '') +
+        '<svg class="concept-nav__panel-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>';
+
+      item.addEventListener('click', function (e) {
+        e.stopPropagation();
+        showConceptsForObjective(body, objective, objectives, currentObj, navContainer);
+      });
+
+      list.appendChild(item);
+    });
+
+    body.appendChild(list);
+  }
+
+  function showConceptsForObjective(body, objective, allObjectives, currentObj, navContainer) {
+    body.innerHTML = '';
+
+    var backBtn = document.createElement('button');
+    backBtn.className = 'concept-nav__panel-back';
+    backBtn.type = 'button';
+    backBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+      '<span>All Objectives</span>';
+
+    backBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      renderObjectivesList(body, allObjectives, currentObj, navContainer);
+    });
+    body.appendChild(backBtn);
+
+    var heading = document.createElement('div');
+    heading.className = 'concept-nav__panel-section-title';
+    heading.textContent = objective.name;
+    body.appendChild(heading);
+
+    if (objective.concepts.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'concept-nav__panel-loading';
+      empty.textContent = 'No concepts found.';
+      body.appendChild(empty);
+    } else {
+      var conceptList = document.createElement('div');
+      conceptList.className = 'concept-nav__panel-concepts';
+
+      objective.concepts.forEach(function (concept) {
+        var link = document.createElement('a');
+        link.className = 'concept-nav__panel-concept internal-link';
+        link.href = 'Concepts/' + concept;
+        link.textContent = concept;
+
+        link.addEventListener('click', function () {
+          closeObjectivePanel();
+        });
+
+        conceptList.appendChild(link);
+      });
+
+      body.appendChild(conceptList);
+    }
+  }
+
+  /* ── Fetch & parse exam page objectives ────────────────── */
+
+  function fetchExamObjectives(examPagePath) {
+    if (examObjectivesCache[examPagePath]) {
+      return Promise.resolve(examObjectivesCache[examPagePath]);
+    }
+
+    var url = '/' + encodeURIComponent(examPagePath).replace(/%20/g, '+');
+
+    return fetch(url)
+      .then(function (res) { return res.text(); })
+      .then(function (html) {
+        var objectives = parseObjectivesFromHTML(html);
+        examObjectivesCache[examPagePath] = objectives;
+        return objectives;
+      });
+  }
+
+  function parseObjectivesFromHTML(html) {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(html, 'text/html');
+    var objectives = [];
+
+    var callouts = doc.querySelectorAll('.callout[data-callout="example"]');
+
+    callouts.forEach(function (callout) {
+      var titleEl = callout.querySelector('.callout-title-inner');
+      if (!titleEl) return;
+
+      var titleText = titleEl.textContent.trim();
+
+      var weightMatch = titleText.match(/\{([^}]+)\}/);
+      var weight = weightMatch ? weightMatch[1] : '';
+      var name = titleText.replace(/\{[^}]+\}/g, '').trim();
+
+      var concepts = [];
+      var links = callout.querySelectorAll('a.internal-link');
+      links.forEach(function (link) {
+        var href = link.getAttribute('href') || '';
+        var conceptName = href.replace(/^Concepts\//, '').split('#')[0].trim();
+        if (!conceptName) {
+          conceptName = link.textContent.trim();
+        }
+        if (conceptName && concepts.indexOf(conceptName) === -1) {
+          concepts.push(conceptName);
+        }
+      });
+
+      if (concepts.length === 0) {
+        var bodyText = callout.textContent || '';
+        var wikiLinkRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+        var match;
+        while ((match = wikiLinkRe.exec(bodyText)) !== null) {
+          var cName = match[1].replace(/^Concepts\//, '').split('#')[0].trim();
+          if (cName && concepts.indexOf(cName) === -1) {
+            concepts.push(cName);
+          }
+        }
+      }
+
+      objectives.push({
+        name: name,
+        weight: weight,
+        concepts: concepts
+      });
+    });
+
+    return objectives;
+  }
+
+  /* ── Backdrop helpers ──────────────────────────────────── */
+
+  function showConceptBackdrop() {
+    var backdrop = document.querySelector('.exam-nav-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'exam-nav-backdrop';
+      backdrop.addEventListener('click', function () {
+        closeAllConceptDropdowns();
+        closeObjectivePanel();
+        document.querySelectorAll('.dl-dropdown__wrap.is-open').forEach(function (d) {
+          d.classList.remove('is-open');
+        });
+        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(function (d) {
+          d.classList.remove('is-open');
+        });
+        hideConceptBackdrop();
+      });
+      document.body.appendChild(backdrop);
+    }
+    if (window.innerWidth <= 540) {
+      backdrop.classList.add('is-visible');
+    }
+  }
+
+  function hideConceptBackdrop() {
+    var backdrop = document.querySelector('.exam-nav-backdrop');
+    if (backdrop) {
+      backdrop.classList.remove('is-visible');
+    }
+  }
+
+})();

@@ -9,6 +9,7 @@ aliases:
 	 data-color="#2563eb"
      data-current="P-1|Probability"
      data-next="FM-2|Financial Mathematics|Exam FM-2 (SOA).md"
+     data-tracks="ASA|Associate of the Society of Actuaries (ASA).md,ACAS|Associate of the Casualty Actuarial Society (ACAS).md">
 </div>
 
 <div class="download-dropdown"

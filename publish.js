@@ -1856,7 +1856,8 @@
       window._conceptNavCloseRegistered = true;
 
       document.addEventListener('click', function (e) {
-        if (!e.target.closest('.concept-nav__arrow-dropdown')) {
+        if (!e.target.closest('.concept-nav__arrow-dropdown') &&
+            !e.target.closest('.concept-nav__obj-wrap')) {
           closeAllConceptDropdowns();
         }
       });
@@ -1920,9 +1921,10 @@
   }
 
   function closeAllConceptDropdowns() {
-    document.querySelectorAll('.concept-nav__arrow-dropdown.is-open').forEach(function (d) {
+    document.querySelectorAll('.concept-nav__arrow-dropdown.is-open, .concept-nav__obj-wrap.is-open').forEach(function (d) {
       d.classList.remove('is-open');
     });
+    hideConceptBackdrop();
   }
 
   /* ── Inline objectives loading ──────────────────────────── */
@@ -1951,49 +1953,96 @@
         return { exam: exam, objectives: allObj };
       });
     })).then(function (results) {
-      section.innerHTML = '';
-
-      results.forEach(function (result) {
-        var header = document.createElement('div');
-        header.className = 'concept-nav__obj-header';
-        header.textContent = 'Exam ' + result.exam.code + ':';
-        section.appendChild(header);
-
-        if (result.objectives.length === 0) {
-          var empty = document.createElement('div');
-          empty.className = 'concept-nav__obj-loading';
-          empty.textContent = 'No objectives found.';
-          section.appendChild(empty);
-          return;
-        }
-
-        var list = document.createElement('ol');
-        list.className = 'concept-nav__obj-list';
-
-        result.objectives.forEach(function (objective) {
-          var li = document.createElement('li');
-          li.className = 'concept-nav__obj-item';
-
-          // Check if this is the current objective
-          var currentObjName = objectives[0].objective.replace(/^\d+\.\s*/, '');
-          if (objective.name === currentObjName ||
-              objective.name === objectives[0].objective) {
-            li.classList.add('is-current');
-          }
-
-          var link = document.createElement('a');
-          link.className = 'internal-link';
-          link.href = result.exam.pagePath;
-          link.textContent = objective.name;
-          li.appendChild(link);
-
-          list.appendChild(li);
-        });
-
-        section.appendChild(list);
-      });
+      renderObjectivesView(section, results, objectives);
     }).catch(function () {
       section.innerHTML = '<div class="concept-nav__obj-loading">Could not load objectives.</div>';
+    });
+  }
+
+  function renderObjectivesView(section, results, navObjectives) {
+    section.innerHTML = '';
+    var currentObjName = navObjectives[0].objective.replace(/^\d+\.\s*/, '');
+
+    results.forEach(function (result) {
+      var header = document.createElement('div');
+      header.className = 'concept-nav__obj-header';
+      header.textContent = 'Exam ' + result.exam.code + ':';
+      section.appendChild(header);
+
+      if (result.objectives.length === 0) {
+        var empty = document.createElement('div');
+        empty.className = 'concept-nav__obj-loading';
+        empty.textContent = 'No objectives found.';
+        section.appendChild(empty);
+        return;
+      }
+
+      var list = document.createElement('ol');
+      list.className = 'concept-nav__obj-list';
+
+      result.objectives.forEach(function (objective) {
+        var li = document.createElement('li');
+        li.className = 'concept-nav__obj-item';
+
+        if (objective.name === currentObjName ||
+            objective.name === navObjectives[0].objective) {
+          li.classList.add('is-current');
+        }
+
+        // Wrapper for dropdown positioning
+        var wrap = document.createElement('div');
+        wrap.className = 'concept-nav__obj-wrap';
+
+        var btn = document.createElement('button');
+        btn.className = 'concept-nav__obj-btn';
+        btn.type = 'button';
+        btn.textContent = objective.name;
+
+        // Build floating dropdown menu
+        var menu = document.createElement('div');
+        menu.className = 'concept-nav__obj-menu';
+
+        var menuHeader = document.createElement('div');
+        menuHeader.className = 'concept-nav__obj-menu-header';
+        menuHeader.textContent = objective.name;
+        menu.appendChild(menuHeader);
+
+        if (objective.concepts.length === 0) {
+          var emptyMsg = document.createElement('div');
+          emptyMsg.className = 'concept-nav__obj-loading';
+          emptyMsg.textContent = 'No concepts found.';
+          menu.appendChild(emptyMsg);
+        } else {
+          objective.concepts.forEach(function (concept) {
+            var link = document.createElement('a');
+            link.className = 'concept-nav__obj-menu-item internal-link';
+            link.href = 'Concepts/' + concept;
+            link.textContent = concept;
+            link.addEventListener('click', function () {
+              wrap.classList.remove('is-open');
+              hideConceptBackdrop();
+            });
+            menu.appendChild(link);
+          });
+        }
+
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var wasOpen = wrap.classList.contains('is-open');
+          closeAllConceptDropdowns();
+          if (!wasOpen) {
+            wrap.classList.add('is-open');
+            showConceptBackdrop();
+          }
+        });
+
+        wrap.appendChild(btn);
+        wrap.appendChild(menu);
+        li.appendChild(wrap);
+        list.appendChild(li);
+      });
+
+      section.appendChild(list);
     });
   }
 

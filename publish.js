@@ -1847,6 +1847,9 @@
       var objSection = document.createElement('div');
       objSection.className = 'concept-nav__objectives';
       container.appendChild(objSection);
+
+      // Eagerly fetch objectives to render the progress bar immediately
+      fetchProgressEagerly(container, objectives);
     }
 
     /* ── Global close handlers (registered once) ───────── */
@@ -2123,6 +2126,33 @@
     } else {
       container.appendChild(bar);
     }
+  }
+
+  function fetchProgressEagerly(container, objectives) {
+    var currentConceptName = container.dataset.current;
+    var rawObjName = objectives[0].objective;
+    var currentObjName = rawObjName.replace(/^\d+\.\s*/, '');
+
+    // Deduplicate by exam pagePath
+    var seen = {};
+    var uniqueExams = [];
+    objectives.forEach(function (obj) {
+      if (!seen[obj.pagePath]) {
+        seen[obj.pagePath] = true;
+        uniqueExams.push(obj);
+      }
+    });
+
+    Promise.all(uniqueExams.map(function (exam) {
+      return fetchExamObjectives(exam.pagePath).then(function (allObj) {
+        return { exam: exam, objectives: allObj };
+      });
+    })).then(function (results) {
+      var progressInfo = findConceptProgress(results, currentObjName, rawObjName, currentConceptName);
+      if (progressInfo) {
+        renderProgressBar(container, progressInfo);
+      }
+    }).catch(function () { /* silently skip progress bar on error */ });
   }
 
   /* ── Fetch & parse exam page objectives ────────────────── */

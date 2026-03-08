@@ -1739,6 +1739,9 @@ input[type="search"]:focus, .search-input:focus {
 .exam-link--gray {
   background: #52525b;
 }
+.exam-link--darkblue {
+  background: #1d2536;
+}
 
 /* ===========================================================
    DOWNLOAD LINKS

@@ -3439,6 +3439,35 @@ h6 a {
   justify-content: center;
 }
 
+/* Expandable variant (button with chevron) */
+.concept-nav__current--expandable {
+  border: none !important;
+  cursor: pointer;
+  gap: 8px;
+  font-family: inherit;
+  box-shadow: none !important;
+  transition: background 0.15s ease;
+}
+
+.concept-nav__current--expandable:hover {
+  background: color-mix(in oklab, var(--cnav-color) 85%, black);
+}
+
+.concept-nav__current-label {
+  flex: 1;
+}
+
+.concept-nav__current-chevron {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.concept-nav.is-expanded .concept-nav__current-chevron {
+  transform: rotate(180deg);
+}
+
 /* ── Arrow buttons (prev / next) ─────────────────────── */
 .concept-nav__arrow-btn {
   display: inline-flex;
@@ -3582,6 +3611,16 @@ h6 a {
   padding: 0 6px 4px;
 }
 
+.concept-nav__obj-header-link {
+  color: var(--cnav-color) !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.concept-nav__obj-header-link:hover {
+  text-decoration: underline !important;
+}
+
 .concept-nav__obj-list {
   margin: 0;
   padding-left: 22px;
@@ -3589,9 +3628,27 @@ h6 a {
 }
 
 .concept-nav__obj-item {
+  display: flex;
+  align-items: center;
   padding: 4px 6px;
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
+}
+
+.concept-nav__obj-count {
+  margin-left: auto;
+  padding: 1px 7px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: color-mix(in oklab, var(--cnav-color) 10%, transparent);
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+
+.concept-nav__obj-item.is-current .concept-nav__obj-count {
+  color: var(--cnav-color);
+  background: color-mix(in oklab, var(--cnav-color) 18%, transparent);
 }
 
 /* ── Objective item button + floating dropdown ────────── */

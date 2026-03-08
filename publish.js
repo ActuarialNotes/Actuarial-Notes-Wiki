@@ -1801,308 +1801,200 @@
 
     container.innerHTML = '';
 
-    /* ── Collapsed row (default visible) ───────────────── */
-    var collapsed = document.createElement('div');
-    collapsed.className = 'concept-nav__collapsed';
-
-    var collapsedName = document.createElement('span');
-    collapsedName.className = 'concept-nav__collapsed-name';
-    collapsedName.textContent = currentName;
-    collapsed.appendChild(collapsedName);
-
-    var expandBtn = document.createElement('button');
-    expandBtn.className = 'concept-nav__expand-btn';
-    expandBtn.type = 'button';
-    expandBtn.setAttribute('aria-label', 'Expand concept navigation');
-    expandBtn.innerHTML =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
-
-    expandBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      container.classList.toggle('is-expanded');
-    });
-
-    collapsed.appendChild(expandBtn);
-    container.appendChild(collapsed);
-
-    /* ── Details section (hidden by default) ────────────── */
-    var details = document.createElement('div');
-    details.className = 'concept-nav__details';
-
-    /* ── Row 1: prev → current → next ──────────────────── */
+    /* ── Main row: ◄  [Current Name]  ► ▾ ───────────── */
     var navRow = document.createElement('div');
     navRow.className = 'concept-nav__row';
 
+    // Prev arrow button
     if (prevData.length > 0) {
-      renderConceptGroup(navRow, prevData, 'concept-nav__btn--prev');
-
-      var arrow1 = document.createElement('span');
-      arrow1.className = 'concept-nav__arrow';
-      arrow1.textContent = '→';
-      navRow.appendChild(arrow1);
+      renderArrowBtn(navRow, prevData, 'prev');
     }
 
-    var currentBtn = document.createElement('span');
-    currentBtn.className = 'concept-nav__btn concept-nav__btn--current';
-    currentBtn.textContent = currentName;
-    navRow.appendChild(currentBtn);
+    // Current concept pill
+    var pill = document.createElement('span');
+    pill.className = 'concept-nav__current';
+    pill.textContent = currentName;
+    navRow.appendChild(pill);
 
+    // Next arrow button
     if (nextData.length > 0) {
-      var arrow2 = document.createElement('span');
-      arrow2.className = 'concept-nav__arrow';
-      arrow2.textContent = '→';
-      navRow.appendChild(arrow2);
-
-      renderConceptGroup(navRow, nextData, 'concept-nav__btn--next');
+      renderArrowBtn(navRow, nextData, 'next');
     }
 
-    details.appendChild(navRow);
-
-    /* ── Row 2: learning objective badges ──────────────── */
+    // Chevron to expand objectives
     if (objectives.length > 0) {
-      var objRow = document.createElement('div');
-      objRow.className = 'concept-nav__obj-row';
+      var chevronBtn = document.createElement('button');
+      chevronBtn.className = 'concept-nav__chevron-btn';
+      chevronBtn.type = 'button';
+      chevronBtn.setAttribute('aria-label', 'Show learning objectives');
+      chevronBtn.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
-      var objLabel = document.createElement('span');
-      objLabel.className = 'concept-nav__obj-label';
-      objLabel.textContent = 'Learning Objective:';
-      objRow.appendChild(objLabel);
-
-      objectives.forEach(function (obj) {
-        var badge = document.createElement('button');
-        badge.className = 'concept-nav__obj-badge';
-        badge.type = 'button';
-        badge.innerHTML =
-          '<span class="concept-nav__obj-code">' + obj.code + '</span>' +
-          '<span class="concept-nav__obj-name">' + obj.objective + '</span>' +
-          '<svg class="concept-nav__obj-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
-
-        badge.addEventListener('click', function (e) {
-          e.stopPropagation();
-          openObjectivePanel(obj, container);
-        });
-
-        objRow.appendChild(badge);
+      chevronBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var wasExpanded = container.classList.contains('is-expanded');
+        container.classList.toggle('is-expanded');
+        if (!wasExpanded && !container._objectivesLoaded) {
+          loadObjectivesInline(container, objectives);
+        }
       });
 
-      details.appendChild(objRow);
+      navRow.appendChild(chevronBtn);
     }
 
-    container.appendChild(details);
+    container.appendChild(navRow);
+
+    // Objectives section (hidden by default, shown on expand)
+    if (objectives.length > 0) {
+      var objSection = document.createElement('div');
+      objSection.className = 'concept-nav__objectives';
+      container.appendChild(objSection);
+    }
 
     /* ── Global close handlers (registered once) ───────── */
     if (!window._conceptNavCloseRegistered) {
       window._conceptNavCloseRegistered = true;
 
       document.addEventListener('click', function (e) {
-        if (!e.target.closest('.concept-nav__dropdown') &&
-            !e.target.closest('.concept-nav__panel')) {
+        if (!e.target.closest('.concept-nav__arrow-dropdown')) {
           closeAllConceptDropdowns();
-          closeObjectivePanel();
         }
       });
 
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
           closeAllConceptDropdowns();
-          closeObjectivePanel();
         }
       });
     }
   }
 
-  /* ── Render a single concept link or dropdown ──────────── */
+  /* ── Arrow button (prev/next) ───────────────────────────── */
 
-  function renderConceptGroup(parent, concepts, btnClass) {
+  function renderArrowBtn(parent, concepts, direction) {
+    var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
+    var svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>';
+    var svg = direction === 'prev' ? svgPrev : svgNext;
+
     if (concepts.length === 1) {
       var link = document.createElement('a');
-      link.className = 'concept-nav__btn ' + btnClass + ' internal-link';
+      link.className = 'concept-nav__arrow-btn internal-link';
       link.href = concepts[0].path || '#';
-      link.textContent = concepts[0].name;
+      link.innerHTML = svg;
       parent.appendChild(link);
     } else {
-      var dropdown = document.createElement('div');
-      dropdown.className = 'concept-nav__dropdown';
+      // Multiple paths — dropdown
+      var wrapper = document.createElement('div');
+      wrapper.className = 'concept-nav__arrow-dropdown';
 
-      var triggerBtn = document.createElement('button');
-      triggerBtn.className = 'concept-nav__btn ' + btnClass;
-      triggerBtn.type = 'button';
-      triggerBtn.innerHTML =
-        '<span>' + concepts.map(function (c) { return c.name; }).join(' / ') + '</span>' +
-        '<svg class="concept-nav__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+      var btn = document.createElement('button');
+      btn.className = 'concept-nav__arrow-btn';
+      btn.type = 'button';
+      btn.innerHTML = svg;
 
       var menu = document.createElement('div');
-      menu.className = 'concept-nav__menu';
-      menu.innerHTML = '<div class="concept-nav__menu-header">Choose your path</div>';
+      menu.className = 'concept-nav__arrow-menu';
 
-      concepts.forEach(function (concept) {
+      concepts.forEach(function (c) {
         var item = document.createElement('a');
-        item.className = 'concept-nav__menu-item internal-link';
-        item.href = concept.path || '#';
-        item.innerHTML = '<span class="concept-nav__menu-item-name">' + concept.name + '</span>';
-
+        item.className = 'concept-nav__arrow-menu-item internal-link';
+        item.href = c.path || '#';
+        item.textContent = c.name;
         item.addEventListener('click', function () {
-          dropdown.classList.remove('is-open');
-          hideConceptBackdrop();
+          wrapper.classList.remove('is-open');
         });
-
         menu.appendChild(item);
       });
 
-      triggerBtn.addEventListener('click', function (e) {
+      btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        var isOpen = dropdown.classList.contains('is-open');
+        var isOpen = wrapper.classList.contains('is-open');
         closeAllConceptDropdowns();
-        if (!isOpen) {
-          dropdown.classList.add('is-open');
-          showConceptBackdrop();
-        } else {
-          hideConceptBackdrop();
-        }
+        if (!isOpen) wrapper.classList.add('is-open');
       });
 
-      dropdown.appendChild(triggerBtn);
-      dropdown.appendChild(menu);
-      parent.appendChild(dropdown);
+      wrapper.appendChild(btn);
+      wrapper.appendChild(menu);
+      parent.appendChild(wrapper);
     }
   }
 
   function closeAllConceptDropdowns() {
-    document.querySelectorAll('.concept-nav__dropdown.is-open').forEach(function (d) {
+    document.querySelectorAll('.concept-nav__arrow-dropdown.is-open').forEach(function (d) {
       d.classList.remove('is-open');
     });
-    hideConceptBackdrop();
   }
 
-  /* ── Learning Objective Panel ──────────────────────────── */
+  /* ── Inline objectives loading ──────────────────────────── */
 
   var examObjectivesCache = {};
 
-  function openObjectivePanel(obj, navContainer) {
-    closeObjectivePanel();
+  function loadObjectivesInline(container, objectives) {
+    container._objectivesLoaded = true;
+    var section = container.querySelector('.concept-nav__objectives');
+    if (!section) return;
 
-    var panel = document.createElement('div');
-    panel.className = 'concept-nav__panel';
-    panel.setAttribute('data-exam', obj.code);
+    section.innerHTML = '<div class="concept-nav__obj-loading">Loading\u2026</div>';
 
-    var header = document.createElement('div');
-    header.className = 'concept-nav__panel-header';
-    header.innerHTML =
-      '<div class="concept-nav__panel-title">' +
-        '<span class="concept-nav__panel-exam-code">' + obj.code + '</span>' +
-        '<span>' + obj.name + ' — Learning Objectives</span>' +
-      '</div>' +
-      '<button class="concept-nav__panel-close" type="button">&times;</button>';
-
-    header.querySelector('.concept-nav__panel-close').addEventListener('click', function (e) {
-      e.stopPropagation();
-      closeObjectivePanel();
-    });
-
-    panel.appendChild(header);
-
-    var body = document.createElement('div');
-    body.className = 'concept-nav__panel-body';
-    body.innerHTML = '<div class="concept-nav__panel-loading">Loading objectives\u2026</div>';
-    panel.appendChild(body);
-
-    navContainer.appendChild(panel);
-    showConceptBackdrop();
-
-    panel.addEventListener('click', function (e) {
-      e.stopPropagation();
-    });
-
-    fetchExamObjectives(obj.pagePath).then(function (objectives) {
-      renderObjectivesList(body, objectives, obj, navContainer);
-    }).catch(function () {
-      body.innerHTML = '<div class="concept-nav__panel-loading">Could not load objectives.</div>';
-    });
-  }
-
-  function closeObjectivePanel() {
-    document.querySelectorAll('.concept-nav__panel').forEach(function (p) {
-      p.remove();
-    });
-    hideConceptBackdrop();
-  }
-
-  function renderObjectivesList(body, objectives, currentObj, navContainer) {
-    body.innerHTML = '';
-
-    var list = document.createElement('div');
-    list.className = 'concept-nav__panel-list';
-
-    objectives.forEach(function (objective) {
-      var item = document.createElement('button');
-      item.className = 'concept-nav__panel-item';
-      item.type = 'button';
-
-      if (objective.name === currentObj.objective) {
-        item.classList.add('is-active');
+    // Deduplicate by exam pagePath
+    var seen = {};
+    var uniqueExams = [];
+    objectives.forEach(function (obj) {
+      if (!seen[obj.pagePath]) {
+        seen[obj.pagePath] = true;
+        uniqueExams.push(obj);
       }
+    });
 
-      item.innerHTML =
-        '<span class="concept-nav__panel-item-name">' + objective.name + '</span>' +
-        (objective.weight ? '<span class="concept-nav__panel-item-weight">' + objective.weight + '</span>' : '') +
-        '<svg class="concept-nav__panel-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>';
-
-      item.addEventListener('click', function (e) {
-        e.stopPropagation();
-        showConceptsForObjective(body, objective, objectives, currentObj, navContainer);
+    Promise.all(uniqueExams.map(function (exam) {
+      return fetchExamObjectives(exam.pagePath).then(function (allObj) {
+        return { exam: exam, objectives: allObj };
       });
+    })).then(function (results) {
+      section.innerHTML = '';
 
-      list.appendChild(item);
-    });
+      results.forEach(function (result) {
+        var header = document.createElement('div');
+        header.className = 'concept-nav__obj-header';
+        header.textContent = 'Exam ' + result.exam.code + ':';
+        section.appendChild(header);
 
-    body.appendChild(list);
-  }
+        if (result.objectives.length === 0) {
+          var empty = document.createElement('div');
+          empty.className = 'concept-nav__obj-loading';
+          empty.textContent = 'No objectives found.';
+          section.appendChild(empty);
+          return;
+        }
 
-  function showConceptsForObjective(body, objective, allObjectives, currentObj, navContainer) {
-    body.innerHTML = '';
+        var list = document.createElement('ol');
+        list.className = 'concept-nav__obj-list';
 
-    var backBtn = document.createElement('button');
-    backBtn.className = 'concept-nav__panel-back';
-    backBtn.type = 'button';
-    backBtn.innerHTML =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>' +
-      '<span>All Objectives</span>';
+        result.objectives.forEach(function (objective) {
+          var li = document.createElement('li');
+          li.className = 'concept-nav__obj-item';
 
-    backBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      renderObjectivesList(body, allObjectives, currentObj, navContainer);
-    });
-    body.appendChild(backBtn);
+          // Check if this is the current objective
+          var currentObjName = objectives[0].objective.replace(/^\d+\.\s*/, '');
+          if (objective.name === currentObjName ||
+              objective.name === objectives[0].objective) {
+            li.classList.add('is-current');
+          }
 
-    var heading = document.createElement('div');
-    heading.className = 'concept-nav__panel-section-title';
-    heading.textContent = objective.name;
-    body.appendChild(heading);
+          var link = document.createElement('a');
+          link.className = 'internal-link';
+          link.href = result.exam.pagePath;
+          link.textContent = objective.name;
+          li.appendChild(link);
 
-    if (objective.concepts.length === 0) {
-      var empty = document.createElement('div');
-      empty.className = 'concept-nav__panel-loading';
-      empty.textContent = 'No concepts found.';
-      body.appendChild(empty);
-    } else {
-      var conceptList = document.createElement('div');
-      conceptList.className = 'concept-nav__panel-concepts';
-
-      objective.concepts.forEach(function (concept) {
-        var link = document.createElement('a');
-        link.className = 'concept-nav__panel-concept internal-link';
-        link.href = 'Concepts/' + concept;
-        link.textContent = concept;
-
-        link.addEventListener('click', function () {
-          closeObjectivePanel();
+          list.appendChild(li);
         });
 
-        conceptList.appendChild(link);
+        section.appendChild(list);
       });
-
-      body.appendChild(conceptList);
-    }
+    }).catch(function () {
+      section.innerHTML = '<div class="concept-nav__obj-loading">Could not load objectives.</div>';
+    });
   }
 
   /* ── Fetch & parse exam page objectives ────────────────── */
@@ -2119,14 +2011,19 @@
     });
   }
 
-  /** Fetch raw markdown for an exam page using the same 3-strategy
-      approach as the Question Browser's fetchFileMarkdown(). */
+  /** Fetch raw markdown for an exam page using a multi-strategy approach.
+      Validates that the result actually contains callout blocks before
+      accepting it — this prevents SPA HTML shells from short-circuiting. */
   function fetchExamMarkdown(pagePath) {
     var baseName = pagePath.replace(/\.md$/, '');
 
+    function hasCallouts(text) {
+      return text && /\[!example\]/i.test(text);
+    }
+
     // Strategy 1: Obsidian internal cache
     var cached = cnavTryCache(baseName);
-    if (cached) return Promise.resolve(cached);
+    if (cached && hasCallouts(cached)) return Promise.resolve(cached);
 
     // Strategy 2: Fetch page URL
     var url = '/' + baseName.split('/').map(encodeURIComponent).join('/');
@@ -2134,8 +2031,17 @@
       if (!res.ok) throw new Error(res.status);
       return res.text();
     }).then(function (text) {
-      if (cnavLooksLikeMarkdown(text)) return text;
-      return cnavExtractMarkdown(text);
+      // Check if raw markdown was returned
+      if (cnavLooksLikeMarkdown(text) && hasCallouts(text)) return text;
+
+      // Try extracting markdown from HTML response
+      var extracted = cnavExtractMarkdown(text);
+      if (extracted && hasCallouts(extracted)) return extracted;
+
+      // HTML response with no useful content — fall through
+      return null;
+    }).catch(function () {
+      return null;
     }).then(function (md) {
       if (md) return md;
 
@@ -2147,9 +2053,9 @@
         if (!r.ok) return null;
         return r.text();
       }).then(function (t) {
-        return (t && cnavLooksLikeMarkdown(t)) ? t : null;
-      });
-    }).catch(function () { return null; });
+        return (t && hasCallouts(t)) ? t : null;
+      }).catch(function () { return null; });
+    });
   }
 
   /** Parse learning objectives from raw exam page markdown.
@@ -2281,7 +2187,6 @@
       backdrop.className = 'exam-nav-backdrop';
       backdrop.addEventListener('click', function () {
         closeAllConceptDropdowns();
-        closeObjectivePanel();
         document.querySelectorAll('.dl-dropdown__wrap.is-open').forEach(function (d) {
           d.classList.remove('is-open');
         });

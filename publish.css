@@ -3591,23 +3591,84 @@ h6 a {
   border-radius: var(--radius-sm);
 }
 
-.concept-nav__obj-item a {
-  color: var(--text-normal) !important;
-  text-decoration: none !important;
+.concept-nav__obj-btn {
+  background: none !important;
+  border: none !important;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-normal);
+  cursor: pointer;
+  text-align: left;
   box-shadow: none !important;
+  transition: color 0.1s ease;
 }
 
-.concept-nav__obj-item a:hover {
-  color: var(--cnav-color) !important;
+.concept-nav__obj-btn:hover {
+  color: var(--cnav-color);
 }
 
 .concept-nav__obj-item.is-current {
   background: color-mix(in oklab, var(--cnav-color) 12%, transparent);
+  border-radius: var(--radius-sm);
   font-weight: 600;
 }
 
-.concept-nav__obj-item.is-current a {
+.concept-nav__obj-item.is-current .concept-nav__obj-btn {
+  color: var(--cnav-color);
+}
+
+/* ── Back button ─────────────────────────────────────── */
+.concept-nav__obj-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  margin-bottom: 4px;
+  background: none !important;
+  border: none !important;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--cnav-color);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background 0.1s ease;
+  box-shadow: none !important;
+}
+
+.concept-nav__obj-back:hover {
+  background: color-mix(in oklab, var(--cnav-color) 8%, transparent) !important;
+}
+
+.concept-nav__obj-back svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── Concepts drill-in ───────────────────────────────── */
+.concept-nav__obj-concepts {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 4px;
+}
+
+.concept-nav__obj-concept {
+  display: block;
+  padding: 6px 6px 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
   color: var(--cnav-color) !important;
+  text-decoration: none !important;
+  border-radius: var(--radius-sm);
+  box-shadow: none !important;
+  transition: background 0.1s ease;
+}
+
+.concept-nav__obj-concept:hover {
+  background: color-mix(in oklab, var(--cnav-color) 8%, transparent);
+  text-decoration: none !important;
 }
 
 .concept-nav__obj-loading {

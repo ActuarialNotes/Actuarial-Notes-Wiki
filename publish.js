@@ -1951,50 +1951,100 @@
         return { exam: exam, objectives: allObj };
       });
     })).then(function (results) {
-      section.innerHTML = '';
-
-      results.forEach(function (result) {
-        var header = document.createElement('div');
-        header.className = 'concept-nav__obj-header';
-        header.textContent = 'Exam ' + result.exam.code + ':';
-        section.appendChild(header);
-
-        if (result.objectives.length === 0) {
-          var empty = document.createElement('div');
-          empty.className = 'concept-nav__obj-loading';
-          empty.textContent = 'No objectives found.';
-          section.appendChild(empty);
-          return;
-        }
-
-        var list = document.createElement('ol');
-        list.className = 'concept-nav__obj-list';
-
-        result.objectives.forEach(function (objective) {
-          var li = document.createElement('li');
-          li.className = 'concept-nav__obj-item';
-
-          // Check if this is the current objective
-          var currentObjName = objectives[0].objective.replace(/^\d+\.\s*/, '');
-          if (objective.name === currentObjName ||
-              objective.name === objectives[0].objective) {
-            li.classList.add('is-current');
-          }
-
-          var link = document.createElement('a');
-          link.className = 'internal-link';
-          link.href = result.exam.pagePath;
-          link.textContent = objective.name;
-          li.appendChild(link);
-
-          list.appendChild(li);
-        });
-
-        section.appendChild(list);
-      });
+      renderObjectivesView(section, results, objectives);
     }).catch(function () {
       section.innerHTML = '<div class="concept-nav__obj-loading">Could not load objectives.</div>';
     });
+  }
+
+  function renderObjectivesView(section, results, navObjectives) {
+    section.innerHTML = '';
+    var currentObjName = navObjectives[0].objective.replace(/^\d+\.\s*/, '');
+
+    results.forEach(function (result) {
+      var header = document.createElement('div');
+      header.className = 'concept-nav__obj-header';
+      header.textContent = 'Exam ' + result.exam.code + ':';
+      section.appendChild(header);
+
+      if (result.objectives.length === 0) {
+        var empty = document.createElement('div');
+        empty.className = 'concept-nav__obj-loading';
+        empty.textContent = 'No objectives found.';
+        section.appendChild(empty);
+        return;
+      }
+
+      var list = document.createElement('ol');
+      list.className = 'concept-nav__obj-list';
+
+      result.objectives.forEach(function (objective) {
+        var li = document.createElement('li');
+        li.className = 'concept-nav__obj-item';
+
+        if (objective.name === currentObjName ||
+            objective.name === navObjectives[0].objective) {
+          li.classList.add('is-current');
+        }
+
+        var btn = document.createElement('button');
+        btn.className = 'concept-nav__obj-btn';
+        btn.type = 'button';
+        btn.textContent = objective.name;
+
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          renderConceptsView(section, objective, results, navObjectives);
+        });
+
+        li.appendChild(btn);
+        list.appendChild(li);
+      });
+
+      section.appendChild(list);
+    });
+  }
+
+  function renderConceptsView(section, objective, results, navObjectives) {
+    section.innerHTML = '';
+
+    var back = document.createElement('button');
+    back.className = 'concept-nav__obj-back';
+    back.type = 'button';
+    back.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+      '<span>All Objectives</span>';
+    back.addEventListener('click', function (e) {
+      e.stopPropagation();
+      renderObjectivesView(section, results, navObjectives);
+    });
+    section.appendChild(back);
+
+    var heading = document.createElement('div');
+    heading.className = 'concept-nav__obj-header';
+    heading.textContent = objective.name;
+    section.appendChild(heading);
+
+    if (objective.concepts.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'concept-nav__obj-loading';
+      empty.textContent = 'No concepts found.';
+      section.appendChild(empty);
+      return;
+    }
+
+    var conceptList = document.createElement('div');
+    conceptList.className = 'concept-nav__obj-concepts';
+
+    objective.concepts.forEach(function (concept) {
+      var link = document.createElement('a');
+      link.className = 'concept-nav__obj-concept internal-link';
+      link.href = 'Concepts/' + concept;
+      link.textContent = concept;
+      conceptList.appendChild(link);
+    });
+
+    section.appendChild(conceptList);
   }
 
   /* ── Fetch & parse exam page objectives ────────────────── */

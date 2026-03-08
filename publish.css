@@ -3640,8 +3640,8 @@ h6 a {
   padding: 1px 7px;
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-dim);
-  background: color-mix(in oklab, var(--cnav-color) 10%, transparent);
+  color: var(--cnav-color);
+  background: color-mix(in oklab, var(--cnav-color) 12%, transparent);
   border-radius: 9px;
   flex-shrink: 0;
 }
@@ -3736,7 +3736,9 @@ h6 a {
 }
 
 .concept-nav__obj-menu-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 10px 12px;
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
@@ -3746,6 +3748,20 @@ h6 a {
   box-shadow: none !important;
   cursor: pointer;
   transition: background 0.1s ease;
+}
+
+.concept-nav__obj-menu-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cnav-color);
+  background: color-mix(in oklab, var(--cnav-color) 12%, transparent);
+  border-radius: 10px;
+  flex-shrink: 0;
 }
 
 .concept-nav__obj-menu-item:hover {

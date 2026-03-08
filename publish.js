@@ -2019,11 +2019,15 @@
           emptyMsg.textContent = 'No concepts found.';
           menu.appendChild(emptyMsg);
         } else {
-          objective.concepts.forEach(function (concept) {
+          objective.concepts.forEach(function (concept, idx) {
             var link = document.createElement('a');
             link.className = 'concept-nav__obj-menu-item internal-link';
             link.href = 'Concepts/' + concept;
-            link.textContent = concept;
+            var numSpan = document.createElement('span');
+            numSpan.className = 'concept-nav__obj-menu-num';
+            numSpan.textContent = (idx + 1);
+            link.appendChild(numSpan);
+            link.appendChild(document.createTextNode(concept));
             link.addEventListener('click', function () {
               wrap.classList.remove('is-open');
               hideConceptBackdrop();

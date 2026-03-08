@@ -3414,12 +3414,49 @@ h6 a {
   --cnav-color: var(--brand);
 }
 
+/* ── Expand/collapse button (always visible, top-right) ── */
+.concept-nav__expand-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent !important;
+  border: 1px solid var(--muted) !important;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.concept-nav__expand-btn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.concept-nav__expand-btn:hover {
+  border-color: var(--cnav-color) !important;
+  color: var(--cnav-color);
+  background: color-mix(in oklab, var(--cnav-color) 8%, transparent) !important;
+}
+
+.concept-nav.is-expanded .concept-nav__expand-btn svg {
+  transform: rotate(180deg);
+}
+
 /* ── Collapsed state (default) ────────────────────────── */
 .concept-nav__collapsed {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
+  padding-right: 36px; /* room for expand button */
 }
 
 .concept-nav__collapsed-name {
@@ -3432,34 +3469,6 @@ h6 a {
   font-weight: 600;
   color: white;
   white-space: nowrap;
-}
-
-.concept-nav__expand-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  background: transparent !important;
-  border: 1px solid var(--muted) !important;
-  border-radius: var(--radius-sm);
-  color: var(--text-dim);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  flex-shrink: 0;
-}
-
-.concept-nav__expand-btn svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease;
-}
-
-.concept-nav__expand-btn:hover {
-  border-color: var(--cnav-color) !important;
-  color: var(--cnav-color);
-  background: color-mix(in oklab, var(--cnav-color) 8%, transparent) !important;
 }
 
 /* ── Details section (hidden by default) ─────────────── */

@@ -1801,15 +1801,7 @@
 
     container.innerHTML = '';
 
-    /* ── Collapsed row (default visible) ───────────────── */
-    var collapsed = document.createElement('div');
-    collapsed.className = 'concept-nav__collapsed';
-
-    var collapsedName = document.createElement('span');
-    collapsedName.className = 'concept-nav__collapsed-name';
-    collapsedName.textContent = currentName;
-    collapsed.appendChild(collapsedName);
-
+    /* ── Expand/collapse button (always visible, top-right) ── */
     var expandBtn = document.createElement('button');
     expandBtn.className = 'concept-nav__expand-btn';
     expandBtn.type = 'button';
@@ -1822,7 +1814,17 @@
       container.classList.toggle('is-expanded');
     });
 
-    collapsed.appendChild(expandBtn);
+    container.appendChild(expandBtn);
+
+    /* ── Collapsed row (default visible) ───────────────── */
+    var collapsed = document.createElement('div');
+    collapsed.className = 'concept-nav__collapsed';
+
+    var collapsedName = document.createElement('span');
+    collapsedName.className = 'concept-nav__collapsed-name';
+    collapsedName.textContent = currentName;
+    collapsed.appendChild(collapsedName);
+
     container.appendChild(collapsed);
 
     /* ── Details section (hidden by default) ────────────── */
@@ -2119,14 +2121,19 @@
     });
   }
 
-  /** Fetch raw markdown for an exam page using the same 3-strategy
-      approach as the Question Browser's fetchFileMarkdown(). */
+  /** Fetch raw markdown for an exam page using a multi-strategy approach.
+      Validates that the result actually contains callout blocks before
+      accepting it — this prevents SPA HTML shells from short-circuiting. */
   function fetchExamMarkdown(pagePath) {
     var baseName = pagePath.replace(/\.md$/, '');
 
+    function hasCallouts(text) {
+      return text && /\[!example\]/i.test(text);
+    }
+
     // Strategy 1: Obsidian internal cache
     var cached = cnavTryCache(baseName);
-    if (cached) return Promise.resolve(cached);
+    if (cached && hasCallouts(cached)) return Promise.resolve(cached);
 
     // Strategy 2: Fetch page URL
     var url = '/' + baseName.split('/').map(encodeURIComponent).join('/');
@@ -2134,8 +2141,17 @@
       if (!res.ok) throw new Error(res.status);
       return res.text();
     }).then(function (text) {
-      if (cnavLooksLikeMarkdown(text)) return text;
-      return cnavExtractMarkdown(text);
+      // Check if raw markdown was returned
+      if (cnavLooksLikeMarkdown(text) && hasCallouts(text)) return text;
+
+      // Try extracting markdown from HTML response
+      var extracted = cnavExtractMarkdown(text);
+      if (extracted && hasCallouts(extracted)) return extracted;
+
+      // HTML response with no useful content — fall through
+      return null;
+    }).catch(function () {
+      return null;
     }).then(function (md) {
       if (md) return md;
 
@@ -2147,9 +2163,9 @@
         if (!r.ok) return null;
         return r.text();
       }).then(function (t) {
-        return (t && cnavLooksLikeMarkdown(t)) ? t : null;
-      });
-    }).catch(function () { return null; });
+        return (t && hasCallouts(t)) ? t : null;
+      }).catch(function () { return null; });
+    });
   }
 
   /** Parse learning objectives from raw exam page markdown.

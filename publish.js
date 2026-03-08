@@ -1801,6 +1801,34 @@
 
     container.innerHTML = '';
 
+    /* ── Collapsed row (default visible) ───────────────── */
+    var collapsed = document.createElement('div');
+    collapsed.className = 'concept-nav__collapsed';
+
+    var collapsedName = document.createElement('span');
+    collapsedName.className = 'concept-nav__collapsed-name';
+    collapsedName.textContent = currentName;
+    collapsed.appendChild(collapsedName);
+
+    var expandBtn = document.createElement('button');
+    expandBtn.className = 'concept-nav__expand-btn';
+    expandBtn.type = 'button';
+    expandBtn.setAttribute('aria-label', 'Expand concept navigation');
+    expandBtn.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    expandBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      container.classList.toggle('is-expanded');
+    });
+
+    collapsed.appendChild(expandBtn);
+    container.appendChild(collapsed);
+
+    /* ── Details section (hidden by default) ────────────── */
+    var details = document.createElement('div');
+    details.className = 'concept-nav__details';
+
     /* ── Row 1: prev → current → next ──────────────────── */
     var navRow = document.createElement('div');
     navRow.className = 'concept-nav__row';
@@ -1828,7 +1856,7 @@
       renderConceptGroup(navRow, nextData, 'concept-nav__btn--next');
     }
 
-    container.appendChild(navRow);
+    details.appendChild(navRow);
 
     /* ── Row 2: learning objective badges ──────────────── */
     if (objectives.length > 0) {
@@ -1857,8 +1885,10 @@
         objRow.appendChild(badge);
       });
 
-      container.appendChild(objRow);
+      details.appendChild(objRow);
     }
+
+    container.appendChild(details);
 
     /* ── Global close handlers (registered once) ───────── */
     if (!window._conceptNavCloseRegistered) {
@@ -2082,67 +2112,164 @@
       return Promise.resolve(examObjectivesCache[examPagePath]);
     }
 
-    var url = '/' + encodeURIComponent(examPagePath).replace(/%20/g, '+');
-
-    return fetch(url)
-      .then(function (res) { return res.text(); })
-      .then(function (html) {
-        var objectives = parseObjectivesFromHTML(html);
-        examObjectivesCache[examPagePath] = objectives;
-        return objectives;
-      });
+    return fetchExamMarkdown(examPagePath).then(function (md) {
+      var objectives = md ? parseObjectivesFromMarkdown(md) : [];
+      examObjectivesCache[examPagePath] = objectives;
+      return objectives;
+    });
   }
 
-  function parseObjectivesFromHTML(html) {
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(html, 'text/html');
-    var objectives = [];
+  /** Fetch raw markdown for an exam page using the same 3-strategy
+      approach as the Question Browser's fetchFileMarkdown(). */
+  function fetchExamMarkdown(pagePath) {
+    var baseName = pagePath.replace(/\.md$/, '');
 
-    var callouts = doc.querySelectorAll('.callout[data-callout="example"]');
+    // Strategy 1: Obsidian internal cache
+    var cached = cnavTryCache(baseName);
+    if (cached) return Promise.resolve(cached);
 
-    callouts.forEach(function (callout) {
-      var titleEl = callout.querySelector('.callout-title-inner');
-      if (!titleEl) return;
+    // Strategy 2: Fetch page URL
+    var url = '/' + baseName.split('/').map(encodeURIComponent).join('/');
+    return fetch(url).then(function (res) {
+      if (!res.ok) throw new Error(res.status);
+      return res.text();
+    }).then(function (text) {
+      if (cnavLooksLikeMarkdown(text)) return text;
+      return cnavExtractMarkdown(text);
+    }).then(function (md) {
+      if (md) return md;
 
-      var titleText = titleEl.textContent.trim();
-
-      var weightMatch = titleText.match(/\{([^}]+)\}/);
-      var weight = weightMatch ? weightMatch[1] : '';
-      var name = titleText.replace(/\{[^}]+\}/g, '').trim();
-
-      var concepts = [];
-      var links = callout.querySelectorAll('a.internal-link');
-      links.forEach(function (link) {
-        var href = link.getAttribute('href') || '';
-        var conceptName = href.replace(/^Concepts\//, '').split('#')[0].trim();
-        if (!conceptName) {
-          conceptName = link.textContent.trim();
-        }
-        if (conceptName && concepts.indexOf(conceptName) === -1) {
-          concepts.push(conceptName);
-        }
+      // Strategy 3: Obsidian Publish content API
+      var siteId = cnavExtractSiteId();
+      if (!siteId) return null;
+      var apiUrl = 'https://publish-01.obsidian.md/access/' + siteId + '/' + encodeURIComponent(baseName + '.md');
+      return fetch(apiUrl).then(function (r) {
+        if (!r.ok) return null;
+        return r.text();
+      }).then(function (t) {
+        return (t && cnavLooksLikeMarkdown(t)) ? t : null;
       });
+    }).catch(function () { return null; });
+  }
 
-      if (concepts.length === 0) {
-        var bodyText = callout.textContent || '';
-        var wikiLinkRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
-        var match;
-        while ((match = wikiLinkRe.exec(bodyText)) !== null) {
-          var cName = match[1].replace(/^Concepts\//, '').split('#')[0].trim();
-          if (cName && concepts.indexOf(cName) === -1) {
-            concepts.push(cName);
-          }
+  /** Parse learning objectives from raw exam page markdown.
+      Splits on `> [!example]-` callout blocks and extracts titles,
+      weights, and [[wikilink]] concepts from each block. */
+  function parseObjectivesFromMarkdown(md) {
+    if (!md) return [];
+
+    var objectives = [];
+    // Split into callout blocks: each starts with "> [!example]-"
+    var blocks = md.split(/^>\s*\[!example\]-?\s*/m);
+
+    // First element is everything before the first callout — skip it
+    for (var i = 1; i < blocks.length; i++) {
+      var block = blocks[i];
+      var lines = block.split('\n');
+
+      // First line is the callout title: "General Probability {23-30%}"
+      var titleLine = lines[0].trim();
+      var weightMatch = titleLine.match(/\{([^}]+)\}/);
+      var weight = weightMatch ? weightMatch[1] : '';
+      var name = titleLine.replace(/\{[^}]+\}/g, '').trim();
+
+      // Collect the rest of the callout body (lines starting with ">")
+      var bodyLines = [];
+      for (var j = 1; j < lines.length; j++) {
+        var line = lines[j];
+        // Callout body lines start with ">" or ">>"
+        if (/^>\s?/.test(line)) {
+          bodyLines.push(line.replace(/^>\s?/, ''));
+        } else {
+          // End of callout block
+          break;
+        }
+      }
+      var body = bodyLines.join('\n');
+
+      // Extract [[wikilinks]] from body
+      var concepts = [];
+      var wikiLinkRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+      var match;
+      while ((match = wikiLinkRe.exec(body)) !== null) {
+        var cName = match[1].replace(/^Concepts\//, '').split('#')[0].trim();
+        if (cName && concepts.indexOf(cName) === -1) {
+          concepts.push(cName);
         }
       }
 
-      objectives.push({
-        name: name,
-        weight: weight,
-        concepts: concepts
-      });
-    });
+      if (name) {
+        objectives.push({ name: name, weight: weight, concepts: concepts });
+      }
+    }
 
     return objectives;
+  }
+
+  /* ── Shared fetch helpers (minimal copies from Question Browser) ── */
+
+  function cnavLooksLikeMarkdown(text) {
+    if (!text || text.indexOf('<!DOCTYPE') !== -1) return false;
+    return /^#\s/m.test(text) || />\s*\[!/m.test(text);
+  }
+
+  function cnavTryCache(baseName) {
+    try {
+      var siteFiles = null;
+      if (window.publish && window.publish.vault) {
+        siteFiles = window.publish.vault.fileMap || window.publish.vault.files;
+      }
+      if (!siteFiles && window.app && window.app.vault) {
+        siteFiles = window.app.vault.fileMap || window.app.vault.files;
+      }
+      if (!siteFiles && window.publish && window.publish.site) {
+        siteFiles = window.publish.site.cache || window.publish.site.files;
+      }
+      if (!siteFiles) return null;
+
+      var candidates = [baseName + '.md', baseName];
+      for (var k = 0; k < candidates.length; k++) {
+        var entry = siteFiles[candidates[k]];
+        if (!entry) continue;
+        var md = typeof entry === 'string' ? entry :
+                 (entry.content || entry.markdown || entry.data || '');
+        if (md) return md;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function cnavExtractMarkdown(html) {
+    try {
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var content = doc.querySelector('.markdown-preview-view, .markdown-rendered, .publish-renderer');
+      if (content && content.textContent.trim().length > 20) {
+        // The rendered HTML might contain wiki link text we can parse
+        return content.innerHTML;
+      }
+      var pageData = doc.querySelector('[data-page-content], [data-markdown]');
+      if (pageData) {
+        var raw = pageData.getAttribute('data-page-content') || pageData.getAttribute('data-markdown') || '';
+        if (raw && cnavLooksLikeMarkdown(raw)) return raw;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function cnavExtractSiteId() {
+    try {
+      if (window.publish && window.publish.siteId) return window.publish.siteId;
+      if (window.publish && window.publish.site && window.publish.site.id) return window.publish.site.id;
+      var els = document.querySelectorAll('link[href*="publish-01.obsidian.md"], script[src*="publish-01.obsidian.md"]');
+      for (var i = 0; i < els.length; i++) {
+        var attr = els[i].getAttribute('href') || els[i].getAttribute('src') || '';
+        var m = attr.match(/publish-01\.obsidian\.md\/access\/([a-f0-9]+)/);
+        if (m) return m[1];
+      }
+      var meta = document.querySelector('meta[name="publish-site-id"], meta[property="publish-site-id"]');
+      if (meta) return meta.content;
+    } catch (e) {}
+    return null;
   }
 
   /* ── Backdrop helpers ──────────────────────────────────── */

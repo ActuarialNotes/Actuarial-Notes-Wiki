@@ -3429,11 +3429,11 @@ h6 a {
   display: inline-flex;
   align-items: center;
   padding: 8px 14px;
-  background: var(--cnav-color);
+  background: var(--cnav-color) !important;
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-weight: 600;
-  color: white;
+  color: white !important;
   white-space: nowrap;
   flex: 1;
   justify-content: center;
@@ -3450,7 +3450,7 @@ h6 a {
 }
 
 .concept-nav__current--expandable:hover {
-  background: color-mix(in oklab, var(--cnav-color) 85%, black);
+  background: color-mix(in oklab, var(--cnav-color) 85%, black) !important;
 }
 
 .concept-nav__current-label {
@@ -3674,7 +3674,7 @@ h6 a {
 }
 
 .concept-nav__obj-item.is-current {
-  background: color-mix(in oklab, var(--cnav-color) 12%, transparent);
+  background: color-mix(in oklab, var(--cnav-color) 18%, var(--bg-elev));
   border-radius: var(--radius-sm);
   font-weight: 600;
 }

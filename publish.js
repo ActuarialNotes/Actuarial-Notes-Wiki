@@ -1856,7 +1856,8 @@
       window._conceptNavCloseRegistered = true;
 
       document.addEventListener('click', function (e) {
-        if (!e.target.closest('.concept-nav__arrow-dropdown')) {
+        if (!e.target.closest('.concept-nav__arrow-dropdown') &&
+            !e.target.closest('.concept-nav__obj-wrap')) {
           closeAllConceptDropdowns();
         }
       });
@@ -1920,9 +1921,10 @@
   }
 
   function closeAllConceptDropdowns() {
-    document.querySelectorAll('.concept-nav__arrow-dropdown.is-open').forEach(function (d) {
+    document.querySelectorAll('.concept-nav__arrow-dropdown.is-open, .concept-nav__obj-wrap.is-open').forEach(function (d) {
       d.classList.remove('is-open');
     });
+    hideConceptBackdrop();
   }
 
   /* ── Inline objectives loading ──────────────────────────── */
@@ -1987,64 +1989,61 @@
           li.classList.add('is-current');
         }
 
+        // Wrapper for dropdown positioning
+        var wrap = document.createElement('div');
+        wrap.className = 'concept-nav__obj-wrap';
+
         var btn = document.createElement('button');
         btn.className = 'concept-nav__obj-btn';
         btn.type = 'button';
         btn.textContent = objective.name;
 
+        // Build floating dropdown menu
+        var menu = document.createElement('div');
+        menu.className = 'concept-nav__obj-menu';
+
+        var menuHeader = document.createElement('div');
+        menuHeader.className = 'concept-nav__obj-menu-header';
+        menuHeader.textContent = objective.name;
+        menu.appendChild(menuHeader);
+
+        if (objective.concepts.length === 0) {
+          var emptyMsg = document.createElement('div');
+          emptyMsg.className = 'concept-nav__obj-loading';
+          emptyMsg.textContent = 'No concepts found.';
+          menu.appendChild(emptyMsg);
+        } else {
+          objective.concepts.forEach(function (concept) {
+            var link = document.createElement('a');
+            link.className = 'concept-nav__obj-menu-item internal-link';
+            link.href = 'Concepts/' + concept;
+            link.textContent = concept;
+            link.addEventListener('click', function () {
+              wrap.classList.remove('is-open');
+              hideConceptBackdrop();
+            });
+            menu.appendChild(link);
+          });
+        }
+
         btn.addEventListener('click', function (e) {
           e.stopPropagation();
-          renderConceptsView(section, objective, results, navObjectives);
+          var wasOpen = wrap.classList.contains('is-open');
+          closeAllConceptDropdowns();
+          if (!wasOpen) {
+            wrap.classList.add('is-open');
+            showConceptBackdrop();
+          }
         });
 
-        li.appendChild(btn);
+        wrap.appendChild(btn);
+        wrap.appendChild(menu);
+        li.appendChild(wrap);
         list.appendChild(li);
       });
 
       section.appendChild(list);
     });
-  }
-
-  function renderConceptsView(section, objective, results, navObjectives) {
-    section.innerHTML = '';
-
-    var back = document.createElement('button');
-    back.className = 'concept-nav__obj-back';
-    back.type = 'button';
-    back.innerHTML =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>' +
-      '<span>All Objectives</span>';
-    back.addEventListener('click', function (e) {
-      e.stopPropagation();
-      renderObjectivesView(section, results, navObjectives);
-    });
-    section.appendChild(back);
-
-    var heading = document.createElement('div');
-    heading.className = 'concept-nav__obj-header';
-    heading.textContent = objective.name;
-    section.appendChild(heading);
-
-    if (objective.concepts.length === 0) {
-      var empty = document.createElement('div');
-      empty.className = 'concept-nav__obj-loading';
-      empty.textContent = 'No concepts found.';
-      section.appendChild(empty);
-      return;
-    }
-
-    var conceptList = document.createElement('div');
-    conceptList.className = 'concept-nav__obj-concepts';
-
-    objective.concepts.forEach(function (concept) {
-      var link = document.createElement('a');
-      link.className = 'concept-nav__obj-concept internal-link';
-      link.href = 'Concepts/' + concept;
-      link.textContent = concept;
-      conceptList.appendChild(link);
-    });
-
-    section.appendChild(conceptList);
   }
 
   /* ── Fetch & parse exam page objectives ────────────────── */

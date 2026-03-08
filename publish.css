@@ -3591,6 +3591,11 @@ h6 a {
   border-radius: var(--radius-sm);
 }
 
+/* ── Objective item button + floating dropdown ────────── */
+.concept-nav__obj-wrap {
+  position: relative;
+}
+
 .concept-nav__obj-btn {
   background: none !important;
   border: none !important;
@@ -3618,56 +3623,73 @@ h6 a {
   color: var(--cnav-color);
 }
 
-/* ── Back button ─────────────────────────────────────── */
-.concept-nav__obj-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 6px;
+/* ── Floating concept menu (matches dl-dropdown pattern) ── */
+.concept-nav__obj-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--bg-elev);
+  border: 1px solid var(--muted);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  min-width: 260px;
+  max-height: 340px;
+  overflow-y: auto;
+  padding: 8px;
+  z-index: 300;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: all 0.15s ease;
+}
+
+.concept-nav__obj-wrap.is-open .concept-nav__obj-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+@media (max-width: 540px) {
+  .concept-nav__obj-menu {
+    position: fixed;
+    bottom: 0; left: 0; right: 0; top: auto;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 16px;
+    min-width: auto;
+    max-height: 60vh;
+    transform: translateY(100%);
+  }
+  .concept-nav__obj-wrap.is-open .concept-nav__obj-menu {
+    transform: translateY(0);
+  }
+}
+
+.concept-nav__obj-menu-header {
+  padding: 8px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--muted);
   margin-bottom: 4px;
-  background: none !important;
-  border: none !important;
-  font-family: inherit;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--cnav-color);
-  cursor: pointer;
-  border-radius: var(--radius-sm);
-  transition: background 0.1s ease;
-  box-shadow: none !important;
 }
 
-.concept-nav__obj-back:hover {
-  background: color-mix(in oklab, var(--cnav-color) 8%, transparent) !important;
-}
-
-.concept-nav__obj-back svg {
-  width: 13px;
-  height: 13px;
-}
-
-/* ── Concepts drill-in ───────────────────────────────── */
-.concept-nav__obj-concepts {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  margin-top: 4px;
-}
-
-.concept-nav__obj-concept {
+.concept-nav__obj-menu-item {
   display: block;
-  padding: 6px 6px 6px 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--cnav-color) !important;
   text-decoration: none !important;
-  border-radius: var(--radius-sm);
   box-shadow: none !important;
+  cursor: pointer;
   transition: background 0.1s ease;
 }
 
-.concept-nav__obj-concept:hover {
-  background: color-mix(in oklab, var(--cnav-color) 8%, transparent);
+.concept-nav__obj-menu-item:hover {
+  background: color-mix(in oklab, var(--cnav-color) 10%, transparent);
   text-decoration: none !important;
 }
 

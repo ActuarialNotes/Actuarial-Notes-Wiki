@@ -1951,15 +1951,24 @@
         return { exam: exam, objectives: allObj };
       });
     })).then(function (results) {
-      renderObjectivesView(section, results, objectives);
+      renderObjectivesView(section, results, objectives, container);
     }).catch(function () {
       section.innerHTML = '<div class="concept-nav__obj-loading">Could not load objectives.</div>';
     });
   }
 
-  function renderObjectivesView(section, results, navObjectives) {
+  function renderObjectivesView(section, results, navObjectives, container) {
     section.innerHTML = '';
     var currentObjName = navObjectives[0].objective.replace(/^\d+\.\s*/, '');
+    var currentConceptName = container ? container.dataset.current : '';
+
+    // Find current concept's position in its objective and render progress bar
+    if (currentConceptName && container) {
+      var progressInfo = findConceptProgress(results, currentObjName, navObjectives[0].objective, currentConceptName);
+      if (progressInfo) {
+        renderProgressBar(container, progressInfo);
+      }
+    }
 
     results.forEach(function (result) {
       var header = document.createElement('div');
@@ -2063,6 +2072,57 @@
 
       section.appendChild(list);
     });
+  }
+
+  /* ── Progress bar ─────────────────────────────────────── */
+
+  function findConceptProgress(results, currentObjName, rawObjName, currentConceptName) {
+    for (var i = 0; i < results.length; i++) {
+      var objectives = results[i].objectives;
+      for (var j = 0; j < objectives.length; j++) {
+        var obj = objectives[j];
+        if (obj.name !== currentObjName && obj.name !== rawObjName) continue;
+        var idx = obj.concepts.indexOf(currentConceptName);
+        if (idx !== -1) {
+          return { position: idx + 1, total: obj.concepts.length, objectiveName: obj.name };
+        }
+      }
+    }
+    return null;
+  }
+
+  function renderProgressBar(container, info) {
+    // Remove any existing progress bar
+    var existing = container.querySelector('.concept-nav__progress');
+    if (existing) existing.remove();
+
+    var pct = (info.position / info.total) * 100;
+
+    var bar = document.createElement('div');
+    bar.className = 'concept-nav__progress';
+
+    var track = document.createElement('div');
+    track.className = 'concept-nav__progress-track';
+
+    var fill = document.createElement('div');
+    fill.className = 'concept-nav__progress-fill';
+    fill.style.width = pct + '%';
+
+    var label = document.createElement('span');
+    label.className = 'concept-nav__progress-label';
+    label.textContent = info.position + ' / ' + info.total;
+
+    track.appendChild(fill);
+    bar.appendChild(track);
+    bar.appendChild(label);
+
+    // Insert after the nav row, before objectives section
+    var navRow = container.querySelector('.concept-nav__row');
+    if (navRow && navRow.nextSibling) {
+      container.insertBefore(bar, navRow.nextSibling);
+    } else {
+      container.appendChild(bar);
+    }
   }
 
   /* ── Fetch & parse exam page objectives ────────────────── */

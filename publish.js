@@ -75,6 +75,9 @@
     });
   }
 
+  // Cache for fetched exam objectives
+  var examNavObjectivesCache = {};
+
   function buildExamNav(container) {
     // Parse data attributes
     const customColor = container.dataset.color;
@@ -100,6 +103,40 @@
 
     // Clear container
     container.innerHTML = '';
+
+    // Exam Track row (at the top)
+    if (tracks.length > 0) {
+      const trackRow = document.createElement('div');
+      trackRow.className = 'exam-nav__track';
+
+      const trackLabel = document.createElement('span');
+      trackLabel.className = 'exam-nav__track-label';
+      trackLabel.textContent = 'Exam Track:';
+      trackRow.appendChild(trackLabel);
+
+      tracks.forEach((track, i) => {
+        if (i > 0) {
+          const sep = document.createElement('span');
+          sep.className = 'exam-nav__track-sep';
+          sep.textContent = '/';
+          trackRow.appendChild(sep);
+        }
+        if (track.url) {
+          const link = document.createElement('a');
+          link.className = 'exam-nav__track-link internal-link';
+          link.href = track.url;
+          link.textContent = track.name;
+          trackRow.appendChild(link);
+        } else {
+          const span = document.createElement('span');
+          span.className = 'exam-nav__track-link';
+          span.textContent = track.name;
+          trackRow.appendChild(span);
+        }
+      });
+
+      container.appendChild(trackRow);
+    }
 
     // Previous exam(s)
     if (prevData.length > 0) {
@@ -143,59 +180,351 @@
       renderExamGroup(container, nextData, 'exam-nav__btn--next');
     }
 
-    // Exam Track row
-    if (tracks.length > 0) {
-      const trackRow = document.createElement('div');
-      trackRow.className = 'exam-nav__track';
+    // Learning Objectives dropdown
+    buildExamObjectivesSection(container);
 
-      const trackLabel = document.createElement('span');
-      trackLabel.className = 'exam-nav__track-label';
-      trackLabel.textContent = 'Exam Track:';
-      trackRow.appendChild(trackLabel);
+    // Close dropdown when clicking outside
+    if (!window._examNavCloseRegistered) {
+      window._examNavCloseRegistered = true;
 
-      tracks.forEach((track, i) => {
-        if (i > 0) {
-          const sep = document.createElement('span');
-          sep.className = 'exam-nav__track-sep';
-          sep.textContent = '/';
-          trackRow.appendChild(sep);
-        }
-        if (track.url) {
-          const link = document.createElement('a');
-          link.className = 'exam-nav__track-link internal-link';
-          link.href = track.url;
-          link.textContent = track.name;
-          trackRow.appendChild(link);
-        } else {
-          const span = document.createElement('span');
-          span.className = 'exam-nav__track-link';
-          span.textContent = track.name;
-          trackRow.appendChild(span);
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.exam-nav__dropdown') &&
+            !e.target.closest('.exam-nav__lo-wrap')) {
+          document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
+            d.classList.remove('is-open');
+          });
+          document.querySelectorAll('.exam-nav__lo-wrap.is-open').forEach(d => {
+            d.classList.remove('is-open');
+          });
+          hideBackdrop();
         }
       });
 
-      container.appendChild(trackRow);
+      // ESC key closes dropdown
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
+            d.classList.remove('is-open');
+          });
+          document.querySelectorAll('.exam-nav__lo-wrap.is-open').forEach(d => {
+            d.classList.remove('is-open');
+          });
+          hideBackdrop();
+        }
+      });
+    }
+  }
+
+  // Build the Learning Objectives expandable section
+  function buildExamObjectivesSection(container) {
+    // Toggle button row
+    const toggleRow = document.createElement('div');
+    toggleRow.className = 'exam-nav__lo-toggle';
+
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'exam-nav__lo-btn';
+    toggleBtn.type = 'button';
+    toggleBtn.innerHTML =
+      '<span class="exam-nav__lo-btn-label">Learning Objectives</span>' +
+      '<svg class="exam-nav__lo-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    toggleBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var wasExpanded = container.classList.contains('is-lo-expanded');
+      container.classList.toggle('is-lo-expanded');
+      if (!wasExpanded && !container._loLoaded) {
+        loadExamObjectives(container);
+      }
+    });
+
+    toggleRow.appendChild(toggleBtn);
+    container.appendChild(toggleRow);
+
+    // Objectives section (hidden by default)
+    var objSection = document.createElement('div');
+    objSection.className = 'exam-nav__lo-section';
+    container.appendChild(objSection);
+  }
+
+  // Load and render objectives for this exam page
+  function loadExamObjectives(container) {
+    container._loLoaded = true;
+    var section = container.querySelector('.exam-nav__lo-section');
+    if (!section) return;
+
+    section.innerHTML = '<div class="exam-nav__lo-loading">Loading\u2026</div>';
+
+    // Get current page path from URL
+    var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
+    if (!pagePath) pagePath = document.title;
+
+    fetchExamNavObjectives(pagePath).then(function (objectives) {
+      renderExamNavObjectives(section, objectives, container);
+    }).catch(function () {
+      section.innerHTML = '<div class="exam-nav__lo-loading">Could not load objectives.</div>';
+    });
+  }
+
+  // Render objectives list with concept sub-dropdowns (styled like concept-nav)
+  function renderExamNavObjectives(section, objectives, container) {
+    section.innerHTML = '';
+
+    if (objectives.length === 0) {
+      section.innerHTML = '<div class="exam-nav__lo-loading">No objectives found.</div>';
+      return;
     }
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.exam-nav__dropdown')) {
-        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
+    var list = document.createElement('ol');
+    list.className = 'exam-nav__lo-list';
+
+    objectives.forEach(function (objective) {
+      var li = document.createElement('li');
+      li.className = 'exam-nav__lo-item';
+
+      // Wrapper for dropdown positioning
+      var wrap = document.createElement('div');
+      wrap.className = 'exam-nav__lo-wrap';
+
+      var btn = document.createElement('button');
+      btn.className = 'exam-nav__lo-obj-btn';
+      btn.type = 'button';
+
+      var nameSpan = document.createElement('span');
+      nameSpan.textContent = objective.name;
+      btn.appendChild(nameSpan);
+
+      if (objective.weight) {
+        var weightSpan = document.createElement('span');
+        weightSpan.className = 'exam-nav__lo-weight';
+        weightSpan.textContent = objective.weight;
+        btn.appendChild(weightSpan);
+      }
+
+      // Build floating dropdown menu with concepts
+      var menu = document.createElement('div');
+      menu.className = 'exam-nav__lo-menu';
+
+      var menuHeader = document.createElement('div');
+      menuHeader.className = 'exam-nav__lo-menu-header';
+      menuHeader.textContent = objective.name;
+      menu.appendChild(menuHeader);
+
+      if (objective.concepts.length === 0) {
+        var emptyMsg = document.createElement('div');
+        emptyMsg.className = 'exam-nav__lo-loading';
+        emptyMsg.textContent = 'No concepts found.';
+        menu.appendChild(emptyMsg);
+      } else {
+        objective.concepts.forEach(function (concept, idx) {
+          var link = document.createElement('a');
+          link.className = 'exam-nav__lo-menu-item internal-link';
+          link.href = 'Concepts/' + concept;
+          var numSpan = document.createElement('span');
+          numSpan.className = 'exam-nav__lo-menu-num';
+          numSpan.textContent = (idx + 1);
+          link.appendChild(numSpan);
+          link.appendChild(document.createTextNode(concept));
+          link.addEventListener('click', function () {
+            wrap.classList.remove('is-open');
+            hideBackdrop();
+          });
+          menu.appendChild(link);
+        });
+      }
+
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var wasOpen = wrap.classList.contains('is-open');
+        // Close all other LO dropdowns
+        document.querySelectorAll('.exam-nav__lo-wrap.is-open').forEach(function (d) {
           d.classList.remove('is-open');
         });
-        hideBackdrop();
+        if (!wasOpen) {
+          wrap.classList.add('is-open');
+          showBackdrop();
+        } else {
+          hideBackdrop();
+        }
+      });
+
+      wrap.appendChild(btn);
+      wrap.appendChild(menu);
+      li.appendChild(wrap);
+
+      // Concept count badge
+      if (objective.concepts.length > 0) {
+        var countBadge = document.createElement('span');
+        countBadge.className = 'exam-nav__lo-count';
+        countBadge.textContent = objective.concepts.length;
+        li.appendChild(countBadge);
       }
+
+      list.appendChild(li);
     });
 
-    // ESC key closes dropdown
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
-          d.classList.remove('is-open');
-        });
-        hideBackdrop();
-      }
+    section.appendChild(list);
+  }
+
+  /* ── Fetch & parse exam page objectives ────────────────── */
+
+  function fetchExamNavObjectives(pagePath) {
+    if (examNavObjectivesCache[pagePath]) {
+      return Promise.resolve(examNavObjectivesCache[pagePath]);
+    }
+
+    return fetchExamNavMarkdown(pagePath).then(function (md) {
+      var objectives = md ? parseExamNavObjectives(md) : [];
+      examNavObjectivesCache[pagePath] = objectives;
+      return objectives;
     });
+  }
+
+  function fetchExamNavMarkdown(pagePath) {
+    var baseName = pagePath.replace(/\.md$/, '');
+
+    function hasCallouts(text) {
+      return text && /\[!example\]/i.test(text);
+    }
+
+    // Strategy 1: Obsidian internal cache
+    var cached = examNavTryCache(baseName);
+    if (cached && hasCallouts(cached)) return Promise.resolve(cached);
+
+    // Strategy 2: Fetch page URL
+    var url = '/' + baseName.split('/').map(encodeURIComponent).join('/');
+    return fetch(url).then(function (res) {
+      if (!res.ok) throw new Error(res.status);
+      return res.text();
+    }).then(function (text) {
+      if (examNavLooksLikeMarkdown(text) && hasCallouts(text)) return text;
+      var extracted = examNavExtractMarkdown(text);
+      if (extracted && hasCallouts(extracted)) return extracted;
+      return null;
+    }).catch(function () {
+      return null;
+    }).then(function (md) {
+      if (md) return md;
+
+      // Strategy 3: Obsidian Publish content API
+      var siteId = examNavExtractSiteId();
+      if (!siteId) return null;
+      var apiUrl = 'https://publish-01.obsidian.md/access/' + siteId + '/' + encodeURIComponent(baseName + '.md');
+      return fetch(apiUrl).then(function (r) {
+        if (!r.ok) return null;
+        return r.text();
+      }).then(function (t) {
+        return (t && hasCallouts(t)) ? t : null;
+      }).catch(function () { return null; });
+    });
+  }
+
+  function parseExamNavObjectives(md) {
+    if (!md) return [];
+
+    var objectives = [];
+    var blocks = md.split(/^>\s*\[!example\]-?\s*/m);
+
+    for (var i = 1; i < blocks.length; i++) {
+      var block = blocks[i];
+      var lines = block.split('\n');
+
+      var titleLine = lines[0].trim();
+      var weightMatch = titleLine.match(/\{([^}]+)\}/);
+      var weight = weightMatch ? weightMatch[1] : '';
+      var name = titleLine.replace(/\{[^}]+\}/g, '').trim();
+
+      var bodyLines = [];
+      for (var j = 1; j < lines.length; j++) {
+        var line = lines[j];
+        if (/^>\s?/.test(line)) {
+          bodyLines.push(line.replace(/^>\s?/, ''));
+        } else {
+          break;
+        }
+      }
+      var body = bodyLines.join('\n');
+
+      var concepts = [];
+      var wikiLinkRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+      var match;
+      while ((match = wikiLinkRe.exec(body)) !== null) {
+        var cName = match[1].replace(/^Concepts\//, '').split('#')[0].trim();
+        if (cName && concepts.indexOf(cName) === -1) {
+          concepts.push(cName);
+        }
+      }
+
+      if (name) {
+        objectives.push({ name: name, weight: weight, concepts: concepts });
+      }
+    }
+
+    return objectives;
+  }
+
+  /* ── Shared fetch helpers ────────────────────────────── */
+
+  function examNavLooksLikeMarkdown(text) {
+    if (!text || text.indexOf('<!DOCTYPE') !== -1) return false;
+    return /^#\s/m.test(text) || />\s*\[!/m.test(text);
+  }
+
+  function examNavTryCache(baseName) {
+    try {
+      var siteFiles = null;
+      if (window.publish && window.publish.vault) {
+        siteFiles = window.publish.vault.fileMap || window.publish.vault.files;
+      }
+      if (!siteFiles && window.app && window.app.vault) {
+        siteFiles = window.app.vault.fileMap || window.app.vault.files;
+      }
+      if (!siteFiles && window.publish && window.publish.site) {
+        siteFiles = window.publish.site.cache || window.publish.site.files;
+      }
+      if (!siteFiles) return null;
+
+      var candidates = [baseName + '.md', baseName];
+      for (var k = 0; k < candidates.length; k++) {
+        var entry = siteFiles[candidates[k]];
+        if (!entry) continue;
+        var md = typeof entry === 'string' ? entry :
+                 (entry.content || entry.markdown || entry.data || '');
+        if (md) return md;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function examNavExtractMarkdown(html) {
+    try {
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      var content = doc.querySelector('.markdown-preview-view, .markdown-rendered, .publish-renderer');
+      if (content && content.textContent.trim().length > 20) {
+        return content.innerHTML;
+      }
+      var pageData = doc.querySelector('[data-page-content], [data-markdown]');
+      if (pageData) {
+        var raw = pageData.getAttribute('data-page-content') || pageData.getAttribute('data-markdown') || '';
+        if (raw && examNavLooksLikeMarkdown(raw)) return raw;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function examNavExtractSiteId() {
+    try {
+      if (window.publish && window.publish.siteId) return window.publish.siteId;
+      if (window.publish && window.publish.site && window.publish.site.id) return window.publish.site.id;
+      var els = document.querySelectorAll('link[href*="publish-01.obsidian.md"], script[src*="publish-01.obsidian.md"]');
+      for (var i = 0; i < els.length; i++) {
+        var attr = els[i].getAttribute('href') || els[i].getAttribute('src') || '';
+        var m = attr.match(/publish-01\.obsidian\.md\/access\/([a-f0-9]+)/);
+        if (m) return m[1];
+      }
+      var meta = document.querySelector('meta[name="publish-site-id"], meta[property="publish-site-id"]');
+      if (meta) return meta.content;
+    } catch (e) {}
+    return null;
   }
 
   // Render a group of exams as either a single button or a dropdown

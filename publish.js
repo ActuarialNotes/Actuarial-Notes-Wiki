@@ -1810,27 +1810,16 @@
       renderArrowBtn(navRow, prevData, 'prev');
     }
 
-    // Current concept pill
-    var pill = document.createElement('span');
-    pill.className = 'concept-nav__current';
-    pill.textContent = currentName;
-    navRow.appendChild(pill);
-
-    // Next arrow button
-    if (nextData.length > 0) {
-      renderArrowBtn(navRow, nextData, 'next');
-    }
-
-    // Chevron to expand objectives
+    // Current concept pill (clickable to expand objectives if available)
     if (objectives.length > 0) {
-      var chevronBtn = document.createElement('button');
-      chevronBtn.className = 'concept-nav__chevron-btn';
-      chevronBtn.type = 'button';
-      chevronBtn.setAttribute('aria-label', 'Show learning objectives');
-      chevronBtn.innerHTML =
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+      var pill = document.createElement('button');
+      pill.className = 'concept-nav__current concept-nav__current--expandable';
+      pill.type = 'button';
+      pill.innerHTML =
+        '<span class="concept-nav__current-label">' + currentName.replace(/</g, '&lt;') + '</span>' +
+        '<svg class="concept-nav__current-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
-      chevronBtn.addEventListener('click', function (e) {
+      pill.addEventListener('click', function (e) {
         e.stopPropagation();
         var wasExpanded = container.classList.contains('is-expanded');
         container.classList.toggle('is-expanded');
@@ -1838,8 +1827,17 @@
           loadObjectivesInline(container, objectives);
         }
       });
+      navRow.appendChild(pill);
+    } else {
+      var pill = document.createElement('span');
+      pill.className = 'concept-nav__current';
+      pill.textContent = currentName;
+      navRow.appendChild(pill);
+    }
 
-      navRow.appendChild(chevronBtn);
+    // Next arrow button
+    if (nextData.length > 0) {
+      renderArrowBtn(navRow, nextData, 'next');
     }
 
     container.appendChild(navRow);
@@ -1966,7 +1964,15 @@
     results.forEach(function (result) {
       var header = document.createElement('div');
       header.className = 'concept-nav__obj-header';
-      header.textContent = 'Exam ' + result.exam.code + ':';
+      if (result.exam.pagePath) {
+        var headerLink = document.createElement('a');
+        headerLink.className = 'concept-nav__obj-header-link internal-link';
+        headerLink.href = result.exam.pagePath;
+        headerLink.textContent = 'Exam ' + result.exam.code;
+        header.appendChild(headerLink);
+      } else {
+        header.textContent = 'Exam ' + result.exam.code + ':';
+      }
       section.appendChild(header);
 
       if (result.objectives.length === 0) {
@@ -2039,6 +2045,15 @@
         wrap.appendChild(btn);
         wrap.appendChild(menu);
         li.appendChild(wrap);
+
+        // Concept count badge (right-aligned)
+        if (objective.concepts.length > 0) {
+          var countBadge = document.createElement('span');
+          countBadge.className = 'concept-nav__obj-count';
+          countBadge.textContent = objective.concepts.length;
+          li.appendChild(countBadge);
+        }
+
         list.appendChild(li);
       });
 

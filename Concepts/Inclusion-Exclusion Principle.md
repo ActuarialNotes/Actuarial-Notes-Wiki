@@ -1,7 +1,12 @@
 [[Wiki]] / [[Concepts]] / **Inclusion-Exclusion Principle**
 
-<section class="exam-links"> <a class="exam-link exam-link--blue internal-link" href="Exam P-1 (SOA)#Inclusion-Exclusion Principle"> <span class="exam-code">P-1</span><span class="exam-name">Probability</span> </a>
-</section>
+<div class="concept-nav"
+     data-color="#2563eb"
+     data-current="Inclusion-Exclusion Principle"
+     data-prev="Probability Addition Rule|Concepts/Probability Addition Rule,Probability Multiplication Rules|Concepts/Probability Multiplication Rules"
+     data-next="Conditional Probability|Concepts/Conditional Probability"
+     data-objectives="P-1|Probability|1. General Probability|Exam P-1 (SOA)">
+</div>
 
 # Inclusion-Exclusion Principle
 

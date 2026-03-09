@@ -297,16 +297,14 @@
       var contentEl = callout.querySelector('.callout-content');
       var concepts = [];
       if (contentEl) {
+        var seenNames = {};
         var links = contentEl.querySelectorAll('a.internal-link');
         links.forEach(function (link) {
           var cName = link.textContent.trim();
-          // Also check href to extract clean name from path
           var href = link.getAttribute('href') || link.getAttribute('data-href') || '';
-          var hrefName = href.replace(/^Concepts\//, '').split('#')[0].trim();
-          // Use href-derived name if available (more reliable), else link text
-          var conceptName = hrefName || cName;
-          if (conceptName && concepts.indexOf(conceptName) === -1) {
-            concepts.push(conceptName);
+          if (cName && !seenNames[cName]) {
+            seenNames[cName] = true;
+            concepts.push({ name: cName, href: href });
           }
         });
       }
@@ -370,14 +368,17 @@
         menu.appendChild(emptyMsg);
       } else {
         objective.concepts.forEach(function (concept, idx) {
+          // concept can be a string (from markdown parse) or {name, href} (from DOM parse)
+          var cName = typeof concept === 'string' ? concept : concept.name;
+          var cHref = typeof concept === 'string' ? ('Concepts/' + concept) : concept.href;
           var link = document.createElement('a');
           link.className = 'exam-nav__lo-menu-item internal-link';
-          link.href = 'Concepts/' + concept;
+          link.href = cHref;
           var numSpan = document.createElement('span');
           numSpan.className = 'exam-nav__lo-menu-num';
           numSpan.textContent = (idx + 1);
           link.appendChild(numSpan);
-          link.appendChild(document.createTextNode(concept));
+          link.appendChild(document.createTextNode(cName));
           link.addEventListener('click', function () {
             wrap.classList.remove('is-open');
             hideBackdrop();

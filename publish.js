@@ -254,7 +254,14 @@
 
     section.innerHTML = '<div class="exam-nav__lo-loading">Loading\u2026</div>';
 
-    // Get current page path from URL
+    // Strategy 1: Parse directly from the rendered DOM callout blocks
+    var domObjectives = parseObjectivesFromDOM(container);
+    if (domObjectives.length > 0) {
+      renderExamNavObjectives(section, domObjectives, container);
+      return;
+    }
+
+    // Strategy 2: Fetch markdown (fallback)
     var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
     if (!pagePath) pagePath = document.title;
 
@@ -263,6 +270,53 @@
     }).catch(function () {
       section.innerHTML = '<div class="exam-nav__lo-loading">Could not load objectives.</div>';
     });
+  }
+
+  // Parse objectives directly from rendered callout blocks in the DOM
+  function parseObjectivesFromDOM(examNavContainer) {
+    // Find the page content container that holds the callout blocks
+    var pageEl = examNavContainer.closest('.markdown-preview-view, .markdown-rendered, .page-container')
+              || examNavContainer.parentElement;
+    if (!pageEl) return [];
+
+    var callouts = pageEl.querySelectorAll('.callout[data-callout="example"]');
+    if (!callouts.length) return [];
+
+    var objectives = [];
+
+    callouts.forEach(function (callout) {
+      var titleEl = callout.querySelector('.callout-title-inner');
+      if (!titleEl) return;
+
+      var titleText = titleEl.textContent.trim();
+      var weightMatch = titleText.match(/\{([^}]+)\}/);
+      var weight = weightMatch ? weightMatch[1] : '';
+      var name = titleText.replace(/\{[^}]+\}/g, '').trim();
+
+      // Extract concepts from internal links inside the callout content
+      var contentEl = callout.querySelector('.callout-content');
+      var concepts = [];
+      if (contentEl) {
+        var links = contentEl.querySelectorAll('a.internal-link');
+        links.forEach(function (link) {
+          var cName = link.textContent.trim();
+          // Also check href to extract clean name from path
+          var href = link.getAttribute('href') || link.getAttribute('data-href') || '';
+          var hrefName = href.replace(/^Concepts\//, '').split('#')[0].trim();
+          // Use href-derived name if available (more reliable), else link text
+          var conceptName = hrefName || cName;
+          if (conceptName && concepts.indexOf(conceptName) === -1) {
+            concepts.push(conceptName);
+          }
+        });
+      }
+
+      if (name) {
+        objectives.push({ name: name, weight: weight, concepts: concepts });
+      }
+    });
+
+    return objectives;
   }
 
   // Render objectives list with concept sub-dropdowns (styled like concept-nav)

@@ -3094,8 +3094,10 @@ figure.right figcaption,
 /* ── Learning Objectives section (expandable) ────────── */
 .exam-nav__lo-section {
   display: none;
-  width: 100%;
-  padding: 10px 0 4px;
+  width: calc(100% + 28px);
+  margin-left: -14px;
+  margin-right: -14px;
+  padding: 10px 8px 4px;
 }
 
 .exam-nav.is-lo-expanded .exam-nav__lo-section {
@@ -4024,7 +4026,10 @@ h6 a {
 /* ── Objectives section (inline, expanded) ───────────── */
 .concept-nav__objectives {
   display: none;
-  padding: 8px 0 4px;
+  width: calc(100% + 28px);
+  margin-left: -14px;
+  margin-right: -14px;
+  padding: 8px 8px 4px;
   border-top: 1px solid color-mix(in oklab, var(--cnav-color) 10%, var(--muted));
   margin-top: 6px;
 }

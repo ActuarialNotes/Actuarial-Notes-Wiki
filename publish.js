@@ -183,9 +183,6 @@
     // Learning Objectives dropdown
     buildExamObjectivesSection(container);
 
-    // Progress dial (top-right corner) — loaded after objectives are fetched
-    buildExamProgressDial(container);
-
     // Close dropdown when clicking outside
     if (!window._examNavCloseRegistered) {
       window._examNavCloseRegistered = true;
@@ -216,75 +213,6 @@
         }
       });
     }
-  }
-
-  // Build the progress dial for the exam nav
-  function buildExamProgressDial(container) {
-    if (!window.ExamProgress) return;
-
-    // Get exam page path from current URL
-    var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
-    if (!pagePath) pagePath = document.title;
-
-    function renderDial(objectives) {
-      // Remove existing dial
-      var existing = container.querySelector('.exam-nav__progress-dial');
-      if (existing) existing.remove();
-
-      // Count total concepts and learned concepts
-      var totalConcepts = 0;
-      var learnedConcepts = 0;
-      var learned = window.ExamProgress.getLearned(pagePath.replace(/\.md$/, ''));
-
-      objectives.forEach(function (obj) {
-        totalConcepts += obj.concepts.length;
-        obj.concepts.forEach(function (c) {
-          var cName = typeof c === 'string' ? c : c.name;
-          if (learned.indexOf(cName) !== -1) learnedConcepts++;
-        });
-      });
-
-      if (totalConcepts === 0) return;
-
-      var pct = (learnedConcepts / totalConcepts) * 100;
-      var dial = window.ExamProgress.createProgressDial(pct, 42, 'var(--nav-color)');
-      dial.classList.add('exam-nav__progress-dial');
-      dial.title = learnedConcepts + ' / ' + totalConcepts + ' concepts learned';
-
-      // Insert in the track row area (top-right)
-      var trackRow = container.querySelector('.exam-nav__track');
-      if (trackRow) {
-        trackRow.appendChild(dial);
-      } else {
-        // No track row — prepend a wrapper row
-        container.insertBefore(dial, container.firstChild);
-      }
-    }
-
-    // Try DOM-based objectives first (fast)
-    var domObjectives = parseObjectivesFromDOM(container);
-    if (domObjectives.length > 0) {
-      renderDial(domObjectives);
-    } else {
-      // Fetch and render
-      var examPath = pagePath.replace(/\.md$/, '');
-      fetchExamNavObjectives(examPath).then(function (objectives) {
-        renderDial(objectives);
-      }).catch(function () {});
-    }
-
-    // Listen for progress updates
-    window.addEventListener('exam-progress-update', function () {
-      var objectives = parseObjectivesFromDOM(container);
-      if (objectives.length > 0) {
-        renderDial(objectives);
-      } else {
-        var examPath = pagePath.replace(/\.md$/, '');
-        fetchExamNavObjectives(examPath).then(function (obj) {
-          renderDial(obj);
-        }).catch(function () {});
-      }
-    });
   }
 
   // Build the Learning Objectives expandable section
@@ -442,9 +370,6 @@
         emptyMsg.textContent = 'No concepts found.';
         menu.appendChild(emptyMsg);
       } else {
-        // Get exam page path for learned checks
-        var examPagePath = decodeURIComponent(window.location.pathname.replace(/^\//, '')).replace(/\.md$/, '');
-
         objective.concepts.forEach(function (concept, idx) {
           // concept can be a string (from markdown parse) or {name, href} (from DOM parse)
           var cName = typeof concept === 'string' ? concept : concept.name;
@@ -457,13 +382,6 @@
           numSpan.textContent = (idx + 1);
           link.appendChild(numSpan);
           link.appendChild(document.createTextNode(cName));
-          // Learned indicator
-          if (window.ExamProgress && window.ExamProgress.isLearned(examPagePath, cName)) {
-            var learnedMark = document.createElement('span');
-            learnedMark.className = 'exam-nav__lo-menu-learned';
-            learnedMark.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-            link.appendChild(learnedMark);
-          }
           link.addEventListener('click', function () {
             wrap.classList.remove('is-open');
             hideBackdrop();
@@ -491,22 +409,11 @@
       wrap.appendChild(menu);
       li.appendChild(wrap);
 
-      // Progress count badge (learned / total)
+      // Concept count badge
       if (objective.concepts.length > 0) {
-        var loExamPath = decodeURIComponent(window.location.pathname.replace(/^\//, '')).replace(/\.md$/, '');
-        var loLearnedCount = 0;
-        if (window.ExamProgress) {
-          objective.concepts.forEach(function (c) {
-            var cn = typeof c === 'string' ? c : c.name;
-            if (window.ExamProgress.isLearned(loExamPath, cn)) loLearnedCount++;
-          });
-        }
         var countBadge = document.createElement('span');
         countBadge.className = 'exam-nav__lo-count';
-        if (loLearnedCount === objective.concepts.length && loLearnedCount > 0) {
-          countBadge.classList.add('is-complete');
-        }
-        countBadge.textContent = loLearnedCount > 0 ? loLearnedCount + '/' + objective.concepts.length : objective.concepts.length;
+        countBadge.textContent = objective.concepts.length;
         li.appendChild(countBadge);
       }
 
@@ -2322,33 +2229,6 @@
 
     container.appendChild(navRow);
 
-    // "Learned" toggle row
-    if (objectives.length > 0 && window.ExamProgress) {
-      var examPagePath = objectives[0].pagePath;
-      var learnedRow = document.createElement('div');
-      learnedRow.className = 'concept-nav__learned-row';
-
-      var learnedBtn = document.createElement('button');
-      learnedBtn.className = 'concept-nav__learned-btn';
-      learnedBtn.type = 'button';
-
-      var checkSvg = '<svg class="concept-nav__learned-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-      learnedBtn.innerHTML = checkSvg + '<span class="concept-nav__learned-label">Learned</span>';
-
-      if (window.ExamProgress.isLearned(examPagePath, currentName)) {
-        learnedBtn.classList.add('is-learned');
-      }
-
-      learnedBtn.addEventListener('click', function () {
-        var nowLearned = window.ExamProgress.toggleLearned(examPagePath, currentName);
-        learnedBtn.classList.toggle('is-learned', nowLearned);
-        window.ExamProgress.fireProgressUpdate(examPagePath);
-      });
-
-      learnedRow.appendChild(learnedBtn);
-      container.appendChild(learnedRow);
-    }
-
     // Objectives section (hidden by default, shown on expand)
     if (objectives.length > 0) {
       var objSection = document.createElement('div');
@@ -2538,7 +2418,6 @@
           emptyMsg.textContent = 'No concepts found.';
           menu.appendChild(emptyMsg);
         } else {
-          var examPath = navObjectives[0] ? navObjectives[0].pagePath : '';
           objective.concepts.forEach(function (concept, idx) {
             var link = document.createElement('a');
             link.className = 'concept-nav__obj-menu-item internal-link';
@@ -2548,13 +2427,6 @@
             numSpan.textContent = (idx + 1);
             link.appendChild(numSpan);
             link.appendChild(document.createTextNode(concept));
-            // Learned indicator
-            if (window.ExamProgress && examPath && window.ExamProgress.isLearned(examPath, concept)) {
-              var learnedMark = document.createElement('span');
-              learnedMark.className = 'concept-nav__obj-menu-learned';
-              learnedMark.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-              link.appendChild(learnedMark);
-            }
             link.addEventListener('click', function () {
               wrap.classList.remove('is-open');
               hideConceptBackdrop();
@@ -2577,21 +2449,11 @@
         wrap.appendChild(menu);
         li.appendChild(wrap);
 
-        // Progress count badge (learned / total)
+        // Concept count badge (right-aligned)
         if (objective.concepts.length > 0) {
-          var examPath2 = navObjectives[0] ? navObjectives[0].pagePath : '';
-          var learnedCount = 0;
-          if (window.ExamProgress && examPath2) {
-            objective.concepts.forEach(function (c) {
-              if (window.ExamProgress.isLearned(examPath2, c)) learnedCount++;
-            });
-          }
           var countBadge = document.createElement('span');
           countBadge.className = 'concept-nav__obj-count';
-          if (learnedCount === objective.concepts.length && learnedCount > 0) {
-            countBadge.classList.add('is-complete');
-          }
-          countBadge.textContent = learnedCount > 0 ? learnedCount + '/' + objective.concepts.length : objective.concepts.length;
+          countBadge.textContent = objective.concepts.length;
           li.appendChild(countBadge);
         }
 
@@ -2657,7 +2519,6 @@
     var currentConceptName = container.dataset.current;
     var rawObjName = objectives[0].objective;
     var currentObjName = rawObjName.replace(/^\d+\.\s*/, '');
-    var examPagePath = objectives[0].pagePath;
 
     // Deduplicate by exam pagePath
     var seen = {};
@@ -2669,39 +2530,6 @@
       }
     });
 
-    function renderConceptDial(results) {
-      if (!window.ExamProgress) return;
-      // Remove existing dial
-      var existingDial = container.querySelector('.concept-nav__progress-dial');
-      if (existingDial) existingDial.remove();
-
-      var totalConcepts = 0;
-      var learnedConcepts = 0;
-      var learned = window.ExamProgress.getLearned(examPagePath);
-
-      results.forEach(function (r) {
-        r.objectives.forEach(function (obj) {
-          totalConcepts += obj.concepts.length;
-          obj.concepts.forEach(function (c) {
-            if (learned.indexOf(c) !== -1) learnedConcepts++;
-          });
-        });
-      });
-
-      if (totalConcepts === 0) return;
-
-      var pct = (learnedConcepts / totalConcepts) * 100;
-      var dial = window.ExamProgress.createProgressDial(pct, 36, 'var(--cnav-color)');
-      dial.classList.add('concept-nav__progress-dial');
-      dial.title = learnedConcepts + ' / ' + totalConcepts + ' concepts learned';
-
-      // Insert in the nav row before first child
-      var navRow = container.querySelector('.concept-nav__row');
-      if (navRow) {
-        navRow.insertBefore(dial, navRow.firstChild);
-      }
-    }
-
     Promise.all(uniqueExams.map(function (exam) {
       return fetchExamObjectives(exam.pagePath).then(function (allObj) {
         return { exam: exam, objectives: allObj };
@@ -2711,14 +2539,6 @@
       if (progressInfo) {
         renderProgressBar(container, progressInfo);
       }
-      renderConceptDial(results);
-
-      // Listen for progress updates
-      window.addEventListener('exam-progress-update', function (e) {
-        if (e.detail && e.detail.examPagePath === examPagePath) {
-          renderConceptDial(results);
-        }
-      });
     }).catch(function () { /* silently skip progress bar on error */ });
   }
 
@@ -2933,112 +2753,5 @@
       backdrop.classList.remove('is-visible');
     }
   }
-
-})();
-
-
-/* ===========================================================
-   EXAM PROGRESS TRACKING
-   Persists learned-concept state in localStorage and renders
-   circular progress dials in exam-nav and concept-nav.
-
-   Storage format:
-     localStorage key  "progress:{ExamPagePath}"
-     value             JSON array of learned concept names
-
-   The module exposes a global `ExamProgress` object so the
-   existing exam-nav and concept-nav IIFEs can call into it.
-   =========================================================== */
-
-(function () {
-  'use strict';
-
-  /* ── localStorage helpers ─────────────────────────────── */
-
-  function storageKey(examPagePath) {
-    return 'progress:' + examPagePath;
-  }
-
-  function getLearned(examPagePath) {
-    try {
-      var raw = localStorage.getItem(storageKey(examPagePath));
-      return raw ? JSON.parse(raw) : [];
-    } catch (e) { return []; }
-  }
-
-  function setLearned(examPagePath, arr) {
-    try {
-      localStorage.setItem(storageKey(examPagePath), JSON.stringify(arr));
-    } catch (e) {}
-  }
-
-  function isLearned(examPagePath, conceptName) {
-    return getLearned(examPagePath).indexOf(conceptName) !== -1;
-  }
-
-  function toggleLearned(examPagePath, conceptName) {
-    var arr = getLearned(examPagePath);
-    var idx = arr.indexOf(conceptName);
-    if (idx === -1) {
-      arr.push(conceptName);
-    } else {
-      arr.splice(idx, 1);
-    }
-    setLearned(examPagePath, arr);
-    return idx === -1; // returns new state: true = now learned
-  }
-
-  /* ── SVG circular dial renderer ───────────────────────── */
-
-  function createProgressDial(pct, size, colorVar) {
-    size = size || 38;
-    colorVar = colorVar || 'var(--nav-color)';
-    var strokeWidth = 3;
-    var radius = (size - strokeWidth) / 2;
-    var circumference = 2 * Math.PI * radius;
-    var offset = circumference - (pct / 100) * circumference;
-    var cx = size / 2;
-    var cy = size / 2;
-
-    var wrapper = document.createElement('div');
-    wrapper.className = 'progress-dial';
-    wrapper.style.width = size + 'px';
-    wrapper.style.height = size + 'px';
-
-    wrapper.innerHTML =
-      '<svg viewBox="0 0 ' + size + ' ' + size + '" width="' + size + '" height="' + size + '">' +
-        '<circle cx="' + cx + '" cy="' + cy + '" r="' + radius + '" ' +
-          'fill="none" stroke="currentColor" stroke-width="' + strokeWidth + '" ' +
-          'class="progress-dial__track"/>' +
-        '<circle cx="' + cx + '" cy="' + cy + '" r="' + radius + '" ' +
-          'fill="none" stroke="' + colorVar + '" stroke-width="' + strokeWidth + '" ' +
-          'stroke-dasharray="' + circumference + '" ' +
-          'stroke-dashoffset="' + offset + '" ' +
-          'stroke-linecap="round" ' +
-          'class="progress-dial__fill" ' +
-          'transform="rotate(-90 ' + cx + ' ' + cy + ')"/>' +
-      '</svg>' +
-      '<span class="progress-dial__label">' + Math.round(pct) + '%</span>';
-
-    return wrapper;
-  }
-
-  /* ── Broadcast updates across components ──────────────── */
-
-  function fireProgressUpdate(examPagePath) {
-    window.dispatchEvent(new CustomEvent('exam-progress-update', {
-      detail: { examPagePath: examPagePath }
-    }));
-  }
-
-  /* ── Expose global API ────────────────────────────────── */
-
-  window.ExamProgress = {
-    getLearned: getLearned,
-    isLearned: isLearned,
-    toggleLearned: toggleLearned,
-    createProgressDial: createProgressDial,
-    fireProgressUpdate: fireProgressUpdate
-  };
 
 })();

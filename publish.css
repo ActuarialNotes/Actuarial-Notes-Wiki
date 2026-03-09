@@ -3094,10 +3094,8 @@ figure.right figcaption,
 /* ── Learning Objectives section (expandable) ────────── */
 .exam-nav__lo-section {
   display: none;
-  width: calc(100% + 28px);
-  margin-left: -14px;
-  margin-right: -14px;
-  padding: 10px 8px 4px;
+  width: 100%;
+  padding: 10px 0 4px;
 }
 
 .exam-nav.is-lo-expanded .exam-nav__lo-section {
@@ -3139,7 +3137,7 @@ figure.right figcaption,
   width: 100%;
   background: none !important;
   border: none !important;
-  padding: 4px 6px;
+  padding: 6px 0;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);
@@ -4026,10 +4024,7 @@ h6 a {
 /* ── Objectives section (inline, expanded) ───────────── */
 .concept-nav__objectives {
   display: none;
-  width: calc(100% + 28px);
-  margin-left: -14px;
-  margin-right: -14px;
-  padding: 8px 8px 4px;
+  padding: 8px 0 4px;
   border-top: 1px solid color-mix(in oklab, var(--cnav-color) 10%, var(--muted));
   margin-top: 6px;
 }
@@ -4042,7 +4037,7 @@ h6 a {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-dim);
-  padding: 0 0 4px;
+  padding-bottom: 4px;
 }
 
 .concept-nav__obj-header-link {
@@ -4097,7 +4092,7 @@ h6 a {
   width: 100%;
   background: none !important;
   border: none !important;
-  padding: 4px 6px;
+  padding: 6px 0;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);

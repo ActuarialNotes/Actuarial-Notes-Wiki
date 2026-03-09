@@ -2748,6 +2748,12 @@ figure.right figcaption,
   z-index: 200;
 }
 
+@media (max-width: 540px) {
+  .exam-nav__dropdown {
+    z-index: auto;
+  }
+}
+
 /* Dropdown chevron */
 .exam-nav__chevron {
   width: 12px;
@@ -2972,11 +2978,14 @@ figure.right figcaption,
   padding: 4px 6px;
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
+  min-width: 0;
 }
 
 /* ── LO objective button ─────────────────────────────── */
 .exam-nav__lo-wrap {
   position: relative;
+  min-width: 0;
+  flex: 1;
 }
 
 .exam-nav__lo-obj-btn {
@@ -2993,6 +3002,12 @@ figure.right figcaption,
   text-align: left;
   box-shadow: none !important;
   transition: color 0.1s ease;
+  min-width: 0;
+}
+
+.exam-nav__lo-obj-btn > span:first-child {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .exam-nav__lo-obj-btn:hover {

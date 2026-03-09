@@ -4043,6 +4043,132 @@ h6 a {
   .concept-nav__arrow-btn { width: 32px; height: 32px; }
 }
 
+/* ── Learned toggle row ──────────────────────────────── */
+.concept-nav__learned-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 0 0;
+}
+
+.concept-nav__learned-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: transparent !important;
+  border: 1px solid var(--muted) !important;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  cursor: pointer;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+
+.concept-nav__learned-check {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.concept-nav__learned-btn:hover {
+  border-color: var(--success) !important;
+  color: var(--success);
+  background: color-mix(in oklab, var(--success) 8%, transparent) !important;
+}
+
+.concept-nav__learned-btn:hover .concept-nav__learned-check {
+  opacity: 0.7;
+}
+
+.concept-nav__learned-btn.is-learned {
+  border-color: var(--success) !important;
+  color: var(--success);
+  background: color-mix(in oklab, var(--success) 12%, transparent) !important;
+}
+
+.concept-nav__learned-btn.is-learned .concept-nav__learned-check {
+  opacity: 1;
+}
+
+/* ── Learned indicators in concept menus ─────────────── */
+.concept-nav__obj-menu-learned,
+.exam-nav__lo-menu-learned {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+.concept-nav__obj-menu-learned svg,
+.exam-nav__lo-menu-learned svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Complete badge state ────────────────────────────── */
+.concept-nav__obj-count.is-complete {
+  color: var(--success);
+  background: color-mix(in oklab, var(--success) 15%, transparent);
+}
+
+.exam-nav__lo-count.is-complete {
+  color: var(--success);
+  background: color-mix(in oklab, var(--success) 15%, transparent);
+}
+
+/* ===========================================================
+   PROGRESS DIAL — Shared circular gauge
+   =========================================================== */
+
+.progress-dial {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.progress-dial svg {
+  display: block;
+}
+
+.progress-dial__track {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.progress-dial__fill {
+  transition: stroke-dashoffset 0.4s ease;
+}
+
+.progress-dial__label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+/* ── Exam-nav dial placement (top-right of track row) ── */
+.exam-nav__progress-dial {
+  margin-left: auto;
+}
+
+/* ── Concept-nav dial placement (left of nav row) ────── */
+.concept-nav__progress-dial {
+  margin-right: 4px;
+}
+
 /* ── Print: hide ─────────────────────────────────────── */
 @media print {
   .concept-nav { display: none !important; }

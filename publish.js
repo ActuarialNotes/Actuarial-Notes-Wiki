@@ -301,7 +301,10 @@
         var links = contentEl.querySelectorAll('a.internal-link');
         links.forEach(function (link) {
           var cName = link.textContent.trim();
-          var href = link.getAttribute('href') || link.getAttribute('data-href') || '';
+          // Use data-href (Obsidian's raw path) first, then strip href to relative path
+          var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
+          // Strip origin/protocol to get a relative path if it's absolute
+          try { href = new URL(href, window.location.origin).pathname.replace(/^\//, ''); } catch (e) {}
           if (cName && !seenNames[cName]) {
             seenNames[cName] = true;
             concepts.push({ name: cName, href: href });

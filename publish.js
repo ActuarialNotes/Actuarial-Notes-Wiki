@@ -225,7 +225,7 @@
     toggleBtn.className = 'exam-nav__lo-btn';
     toggleBtn.type = 'button';
     toggleBtn.innerHTML =
-      '<span class="exam-nav__lo-btn-label">Learning Objectives</span>' +
+      '<span class="exam-nav__lo-btn-label">Concepts</span>' +
       '<svg class="exam-nav__lo-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
     toggleBtn.addEventListener('click', function (e) {
@@ -301,7 +301,10 @@
         var links = contentEl.querySelectorAll('a.internal-link');
         links.forEach(function (link) {
           var cName = link.textContent.trim();
-          var href = link.getAttribute('href') || link.getAttribute('data-href') || '';
+          // Use data-href (Obsidian's raw path) first, then strip href to relative path
+          var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
+          // Strip origin/protocol to get a relative path if it's absolute
+          try { href = new URL(href, window.location.origin).pathname.replace(/^\//, ''); } catch (e) {}
           if (cName && !seenNames[cName]) {
             seenNames[cName] = true;
             concepts.push({ name: cName, href: href });

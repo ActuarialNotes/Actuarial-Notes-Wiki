@@ -2608,6 +2608,7 @@ figure.right figcaption,
   .exam-nav {
     gap: 10px;
     padding: 12px;
+    z-index: auto;
   }
 }
 
@@ -4016,7 +4017,7 @@ h6 a {
 }
 
 @media (max-width: 540px) {
-  .concept-nav { padding: 10px; }
+  .concept-nav { padding: 10px; z-index: auto; }
   .concept-nav__row { gap: 6px; }
   .concept-nav__current { font-size: 0.82rem; padding: 7px 10px; }
   .concept-nav__arrow-btn { width: 32px; height: 32px; }

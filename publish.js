@@ -104,6 +104,52 @@
     // Clear container
     container.innerHTML = '';
 
+    // SVG arrow icons (reused for collapsed view)
+    var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
+    var svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>';
+    var svgExpand = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    // ── Collapsed view: < [Current Exam] > [v] ──────────
+    var collapsedView = document.createElement('div');
+    collapsedView.className = 'exam-nav__collapsed-view';
+
+    if (prevData.length > 0) {
+      var prevArrow = document.createElement('a');
+      prevArrow.className = 'exam-nav__collapse-arrow internal-link';
+      prevArrow.href = prevData[0].url || '#';
+      prevArrow.innerHTML = svgPrev;
+      collapsedView.appendChild(prevArrow);
+    }
+
+    var collapsedPill = document.createElement('span');
+    collapsedPill.className = 'exam-nav__btn exam-nav__btn--current exam-nav__collapsed-pill';
+    collapsedPill.textContent = currentData.name;
+    collapsedView.appendChild(collapsedPill);
+
+    if (nextData.length > 0) {
+      var nextArrow = document.createElement('a');
+      nextArrow.className = 'exam-nav__collapse-arrow internal-link';
+      nextArrow.href = nextData[0].url || '#';
+      nextArrow.innerHTML = svgNext;
+      collapsedView.appendChild(nextArrow);
+    }
+
+    var expandBtn = document.createElement('button');
+    expandBtn.className = 'exam-nav__expand-btn';
+    expandBtn.type = 'button';
+    expandBtn.innerHTML = svgExpand;
+    expandBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      container.classList.remove('is-collapsed');
+    });
+    collapsedView.appendChild(expandBtn);
+
+    container.appendChild(collapsedView);
+
+    // ── Expanded view: full track + pill row ─────────────
+    var expandedView = document.createElement('div');
+    expandedView.className = 'exam-nav__expanded-view';
+
     // Exam Track row (at the top)
     if (tracks.length > 0) {
       const trackRow = document.createElement('div');
@@ -135,18 +181,22 @@
         }
       });
 
-      container.appendChild(trackRow);
+      expandedView.appendChild(trackRow);
     }
+
+    // Pill row container
+    var pillRow = document.createElement('div');
+    pillRow.className = 'exam-nav__pill-row';
 
     // Previous exam(s)
     if (prevData.length > 0) {
-      renderExamGroup(container, prevData, 'exam-nav__btn--prev');
+      renderExamGroup(pillRow, prevData, 'exam-nav__btn--prev');
 
       // Arrow after prev
       const arrow1 = document.createElement('span');
       arrow1.className = 'exam-nav__arrow';
       arrow1.textContent = '→';
-      container.appendChild(arrow1);
+      pillRow.appendChild(arrow1);
     }
 
     // Current exam wrapper (button + requirements below)
@@ -167,7 +217,7 @@
       currentWrapper.appendChild(reqsText);
     }
 
-    container.appendChild(currentWrapper);
+    pillRow.appendChild(currentWrapper);
 
     // Next exam(s)
     if (nextData.length > 0) {
@@ -175,10 +225,27 @@
       const arrow2 = document.createElement('span');
       arrow2.className = 'exam-nav__arrow';
       arrow2.textContent = '→';
-      container.appendChild(arrow2);
+      pillRow.appendChild(arrow2);
 
-      renderExamGroup(container, nextData, 'exam-nav__btn--next');
+      renderExamGroup(pillRow, nextData, 'exam-nav__btn--next');
     }
+
+    // Collapse button at the end of pill row
+    var collapseBtn = document.createElement('button');
+    collapseBtn.className = 'exam-nav__collapse-btn';
+    collapseBtn.type = 'button';
+    collapseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>';
+    collapseBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      container.classList.add('is-collapsed');
+    });
+    pillRow.appendChild(collapseBtn);
+
+    expandedView.appendChild(pillRow);
+    container.appendChild(expandedView);
+
+    // Default to collapsed state
+    container.classList.add('is-collapsed');
 
     // Learning Objectives dropdown
     buildExamObjectivesSection(container);
@@ -2482,9 +2549,11 @@
   }
 
   function renderProgressBar(container, info) {
-    // Remove any existing progress bar
+    // Remove any existing progress bar and LO label
     var existing = container.querySelector('.concept-nav__progress');
     if (existing) existing.remove();
+    var existingLabel = container.querySelector('.concept-nav__lo-label');
+    if (existingLabel) existingLabel.remove();
 
     var pct = (info.position / info.total) * 100;
 
@@ -2512,6 +2581,30 @@
       container.insertBefore(bar, navRow.nextSibling);
     } else {
       container.appendChild(bar);
+    }
+
+    // Add LO label below progress bar (clickable to expand)
+    if (info.objectiveName) {
+      var loLabel = document.createElement('div');
+      loLabel.className = 'concept-nav__lo-label';
+      loLabel.textContent = info.objectiveName;
+      loLabel.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (!container.classList.contains('is-expanded')) {
+          container.classList.add('is-expanded');
+          var objectives = parseObjectives(container.dataset.objectives);
+          if (!container._objectivesLoaded && objectives.length > 0) {
+            loadObjectivesInline(container, objectives);
+          }
+        }
+      });
+
+      // Insert after progress bar, before objectives section
+      if (bar.nextSibling) {
+        container.insertBefore(loLabel, bar.nextSibling);
+      } else {
+        container.appendChild(loLabel);
+      }
     }
   }
 

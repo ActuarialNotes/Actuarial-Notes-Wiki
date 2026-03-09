@@ -107,42 +107,91 @@
     // SVG arrow icons (reused for collapsed view)
     var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
     var svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>';
-    var svgExpand = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+    var svgChevron = '<svg class="exam-nav__collapsed-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
-    // ── Collapsed view: < [Current Exam] > [v] ──────────
+    // Helper: build a collapsed arrow (single link or dropdown for multiple exams)
+    function buildCollapsedArrow(exams, direction) {
+      var svg = direction === 'prev' ? svgPrev : svgNext;
+
+      if (exams.length === 1) {
+        var link = document.createElement('a');
+        link.className = 'exam-nav__collapse-arrow internal-link';
+        link.href = exams[0].url || '#';
+        link.innerHTML = svg;
+        return link;
+      }
+
+      // Multiple exams — dropdown
+      var dropdown = document.createElement('div');
+      dropdown.className = 'exam-nav__dropdown exam-nav__collapse-arrow-dropdown';
+
+      var btn = document.createElement('button');
+      btn.className = 'exam-nav__collapse-arrow';
+      btn.type = 'button';
+      btn.innerHTML = svg;
+
+      var menu = document.createElement('div');
+      menu.className = 'exam-nav__menu';
+      menu.innerHTML = '<div class="exam-nav__menu-header">Choose your path</div>';
+
+      exams.forEach(function (exam) {
+        var item = document.createElement('a');
+        item.className = 'exam-nav__menu-item';
+        item.href = exam.url || '#';
+        if (exam.url) item.classList.add('internal-link');
+        var orgClass = exam.org ? 'exam-nav__org--' + exam.org.toLowerCase() : '';
+        item.innerHTML =
+          '<div class="exam-nav__menu-item-info">' +
+            '<span class="exam-nav__menu-item-name">' + exam.name + '</span>' +
+            (exam.fullName ? '<span class="exam-nav__menu-item-full">' + exam.fullName + '</span>' : '') +
+          '</div>' +
+          (exam.org ? '<span class="exam-nav__org ' + orgClass + '">' + exam.org + '</span>' : '');
+        item.addEventListener('click', function () {
+          dropdown.classList.remove('is-open');
+          hideBackdrop();
+        });
+        menu.appendChild(item);
+      });
+
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = dropdown.classList.contains('is-open');
+        // Close any other open dropdowns first
+        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(function (d) {
+          d.classList.remove('is-open');
+        });
+        hideBackdrop();
+        if (!isOpen) dropdown.classList.add('is-open');
+      });
+
+      dropdown.appendChild(btn);
+      dropdown.appendChild(menu);
+      return dropdown;
+    }
+
+    // ── Collapsed view: < [Current Exam ▾] > ────────────
     var collapsedView = document.createElement('div');
     collapsedView.className = 'exam-nav__collapsed-view';
 
     if (prevData.length > 0) {
-      var prevArrow = document.createElement('a');
-      prevArrow.className = 'exam-nav__collapse-arrow internal-link';
-      prevArrow.href = prevData[0].url || '#';
-      prevArrow.innerHTML = svgPrev;
-      collapsedView.appendChild(prevArrow);
+      collapsedView.appendChild(buildCollapsedArrow(prevData, 'prev'));
     }
 
-    var collapsedPill = document.createElement('span');
+    var collapsedPill = document.createElement('button');
     collapsedPill.className = 'exam-nav__btn exam-nav__btn--current exam-nav__collapsed-pill';
-    collapsedPill.textContent = currentData.name;
-    collapsedView.appendChild(collapsedPill);
-
-    if (nextData.length > 0) {
-      var nextArrow = document.createElement('a');
-      nextArrow.className = 'exam-nav__collapse-arrow internal-link';
-      nextArrow.href = nextData[0].url || '#';
-      nextArrow.innerHTML = svgNext;
-      collapsedView.appendChild(nextArrow);
-    }
-
-    var expandBtn = document.createElement('button');
-    expandBtn.className = 'exam-nav__expand-btn';
-    expandBtn.type = 'button';
-    expandBtn.innerHTML = svgExpand;
-    expandBtn.addEventListener('click', function (e) {
+    collapsedPill.type = 'button';
+    collapsedPill.innerHTML =
+      '<span class="exam-nav__collapsed-label">' + currentData.name + '</span>' +
+      svgChevron;
+    collapsedPill.addEventListener('click', function (e) {
       e.stopPropagation();
       container.classList.remove('is-collapsed');
     });
-    collapsedView.appendChild(expandBtn);
+    collapsedView.appendChild(collapsedPill);
+
+    if (nextData.length > 0) {
+      collapsedView.appendChild(buildCollapsedArrow(nextData, 'next'));
+    }
 
     container.appendChild(collapsedView);
 

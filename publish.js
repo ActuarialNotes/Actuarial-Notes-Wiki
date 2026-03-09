@@ -225,7 +225,7 @@
     toggleBtn.className = 'exam-nav__lo-btn';
     toggleBtn.type = 'button';
     toggleBtn.innerHTML =
-      '<span class="exam-nav__lo-btn-label">Learning Objectives</span>' +
+      '<span class="exam-nav__lo-btn-label">Concepts</span>' +
       '<svg class="exam-nav__lo-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
     toggleBtn.addEventListener('click', function (e) {

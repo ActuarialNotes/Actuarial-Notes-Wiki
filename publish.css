@@ -2678,7 +2678,6 @@ figure.right figcaption,
   width: 100%;
   padding-bottom: 6px;
   margin-bottom: 4px;
-  border-bottom: 1px solid color-mix(in oklab, var(--nav-color) 10%, var(--muted));
   font-size: 0.75rem;
 }
 
@@ -2896,7 +2895,6 @@ figure.right figcaption,
   width: 100%;
   padding-top: 6px;
   margin-top: 4px;
-  border-top: 1px solid color-mix(in oklab, var(--nav-color) 10%, var(--muted));
 }
 
 .exam-nav__lo-btn {

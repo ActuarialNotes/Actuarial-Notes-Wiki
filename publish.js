@@ -252,10 +252,17 @@
     const currentWrapper = document.createElement('div');
     currentWrapper.className = 'exam-nav__current';
 
-    // Current exam button
-    const currentBtn = document.createElement('span');
-    currentBtn.className = 'exam-nav__btn exam-nav__btn--current';
-    currentBtn.textContent = currentData.name;
+    // Current exam button (clickable to collapse, like concept nav)
+    const currentBtn = document.createElement('button');
+    currentBtn.className = 'exam-nav__btn exam-nav__btn--current exam-nav__btn--collapsible';
+    currentBtn.type = 'button';
+    currentBtn.innerHTML =
+      '<span>' + currentData.name + '</span>' +
+      '<svg class="exam-nav__collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>';
+    currentBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      container.classList.add('is-collapsed');
+    });
     currentWrapper.appendChild(currentBtn);
 
     // Requirements text below current exam
@@ -279,16 +286,7 @@
       renderExamGroup(pillRow, nextData, 'exam-nav__btn--next');
     }
 
-    // Collapse button at the end of pill row
-    var collapseBtn = document.createElement('button');
-    collapseBtn.className = 'exam-nav__collapse-btn';
-    collapseBtn.type = 'button';
-    collapseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>';
-    collapseBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      container.classList.add('is-collapsed');
-    });
-    pillRow.appendChild(collapseBtn);
+    // (collapse button removed — current pill is now collapsible)
 
     expandedView.appendChild(pillRow);
     container.appendChild(expandedView);
@@ -521,17 +519,17 @@
         }
       });
 
-      wrap.appendChild(btn);
-      wrap.appendChild(menu);
-      li.appendChild(wrap);
-
-      // Concept count badge
+      // Concept count badge (inside button for full-width clickability)
       if (objective.concepts.length > 0) {
         var countBadge = document.createElement('span');
         countBadge.className = 'exam-nav__lo-count';
         countBadge.textContent = objective.concepts.length;
-        li.appendChild(countBadge);
+        btn.appendChild(countBadge);
       }
+
+      wrap.appendChild(btn);
+      wrap.appendChild(menu);
+      li.appendChild(wrap);
 
       list.appendChild(li);
     });
@@ -2561,17 +2559,17 @@
           }
         });
 
-        wrap.appendChild(btn);
-        wrap.appendChild(menu);
-        li.appendChild(wrap);
-
-        // Concept count badge (right-aligned)
+        // Concept count badge (inside button for full-width clickability)
         if (objective.concepts.length > 0) {
           var countBadge = document.createElement('span');
           countBadge.className = 'concept-nav__obj-count';
           countBadge.textContent = objective.concepts.length;
-          li.appendChild(countBadge);
+          btn.appendChild(countBadge);
         }
+
+        wrap.appendChild(btn);
+        wrap.appendChild(menu);
+        li.appendChild(wrap);
 
         list.appendChild(li);
       });

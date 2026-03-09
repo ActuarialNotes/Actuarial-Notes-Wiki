@@ -2737,36 +2737,22 @@ figure.right figcaption,
   }
 }
 
-/* Collapse button in expanded view */
-.exam-nav__collapse-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
-  border: 1px solid color-mix(in oklab, var(--nav-color) 20%, var(--muted)) !important;
-  border-radius: var(--radius-sm);
-  color: var(--nav-color);
+/* Current exam pill - collapsible (click to collapse) */
+.exam-nav__btn--current.exam-nav__btn--collapsible {
   cursor: pointer;
-  flex-shrink: 0;
-  margin-left: auto;
-  transition: all 0.15s ease;
+  gap: 8px;
+  font-family: inherit;
+  box-shadow: none !important;
 }
 
-.exam-nav__collapse-btn svg {
+.exam-nav__btn--current.exam-nav__btn--collapsible:hover {
+  filter: brightness(0.9);
+}
+
+.exam-nav__btn--collapsible .exam-nav__collapse-chevron {
   width: 14px;
   height: 14px;
-}
-
-.exam-nav__collapse-btn:hover {
-  background: color-mix(in oklab, var(--nav-color) 14%, transparent) !important;
-  border-color: var(--nav-color) !important;
-}
-
-.exam-nav__collapse-btn svg {
-  transform: rotate(0deg);
+  flex-shrink: 0;
 }
 
 /* All buttons base style */
@@ -3109,7 +3095,7 @@ figure.right figcaption,
 .exam-nav__lo-section {
   display: none;
   width: 100%;
-  padding: 10px 4px 4px;
+  padding: 10px 0 4px;
 }
 
 .exam-nav.is-lo-expanded .exam-nav__lo-section {
@@ -3125,14 +3111,13 @@ figure.right figcaption,
 
 .exam-nav__lo-list {
   margin: 0;
-  padding-left: 22px;
-  list-style: decimal;
+  padding-left: 0;
+  list-style: none;
 }
 
 .exam-nav__lo-item {
   display: flex;
   align-items: center;
-  padding: 4px 6px;
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
   min-width: 0;
@@ -3142,33 +3127,38 @@ figure.right figcaption,
 .exam-nav__lo-wrap {
   position: relative;
   min-width: 0;
-  flex: 1;
+  width: 100%;
 }
 
 .exam-nav__lo-obj-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
   background: none !important;
   border: none !important;
-  padding: 0;
+  padding: 4px 6px;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);
   cursor: pointer;
   text-align: left;
   box-shadow: none !important;
-  transition: color 0.1s ease;
+  transition: color 0.1s ease, background 0.1s ease;
   min-width: 0;
-}
-
-.exam-nav__lo-obj-btn > span:first-child {
-  word-break: break-word;
-  overflow-wrap: break-word;
+  border-radius: var(--radius-sm);
 }
 
 .exam-nav__lo-obj-btn:hover {
-  color: var(--nav-color);
+  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
+}
+
+.exam-nav__lo-obj-btn > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
 }
 
 .exam-nav__lo-weight {
@@ -3188,6 +3178,7 @@ figure.right figcaption,
   background: color-mix(in oklab, var(--nav-color) 12%, transparent);
   border-radius: 9px;
   flex-shrink: 0;
+  pointer-events: none;
 }
 
 /* ── LO floating concept menu (matches concept-nav) ──── */
@@ -4033,7 +4024,7 @@ h6 a {
 /* ── Objectives section (inline, expanded) ───────────── */
 .concept-nav__objectives {
   display: none;
-  padding: 8px 4px 4px;
+  padding: 8px 0 4px;
   border-top: 1px solid color-mix(in oklab, var(--cnav-color) 10%, var(--muted));
   margin-top: 6px;
 }
@@ -4046,7 +4037,7 @@ h6 a {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-dim);
-  padding: 0 6px 4px;
+  padding: 0 0 4px;
 }
 
 .concept-nav__obj-header-link {
@@ -4061,14 +4052,13 @@ h6 a {
 
 .concept-nav__obj-list {
   margin: 0;
-  padding-left: 22px;
-  list-style: decimal;
+  padding-left: 0;
+  list-style: none;
 }
 
 .concept-nav__obj-item {
   display: flex;
   align-items: center;
-  padding: 4px 6px;
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
 }
@@ -4082,6 +4072,7 @@ h6 a {
   background: color-mix(in oklab, var(--cnav-color) 12%, transparent);
   border-radius: 9px;
   flex-shrink: 0;
+  pointer-events: none;
 }
 
 .concept-nav__obj-item.is-current .concept-nav__obj-count {
@@ -4092,23 +4083,33 @@ h6 a {
 /* ── Objective item button + floating dropdown ────────── */
 .concept-nav__obj-wrap {
   position: relative;
+  width: 100%;
 }
 
 .concept-nav__obj-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
   background: none !important;
   border: none !important;
-  padding: 0;
+  padding: 4px 6px;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);
   cursor: pointer;
   text-align: left;
   box-shadow: none !important;
-  transition: color 0.1s ease;
+  transition: color 0.1s ease, background 0.1s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  border-radius: var(--radius-sm);
 }
 
 .concept-nav__obj-btn:hover {
   color: var(--cnav-color);
+  background: color-mix(in oklab, var(--cnav-color) 8%, transparent) !important;
 }
 
 .concept-nav__obj-item.is-current {

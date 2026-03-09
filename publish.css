@@ -2612,6 +2612,140 @@ figure.right figcaption,
   }
 }
 
+/* ── Collapsed / Expanded views ──────────────────────── */
+.exam-nav__collapsed-view {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.exam-nav.is-collapsed .exam-nav__collapsed-view {
+  display: flex;
+}
+
+.exam-nav__expanded-view {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.exam-nav.is-collapsed .exam-nav__expanded-view {
+  display: none;
+}
+
+.exam-nav__pill-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Hide LO toggle/section when collapsed */
+.exam-nav.is-collapsed .exam-nav__lo-toggle,
+.exam-nav.is-collapsed .exam-nav__lo-section {
+  display: none !important;
+}
+
+/* Collapsed pill takes up remaining space */
+.exam-nav__collapsed-pill {
+  flex: 1;
+  justify-content: center;
+}
+
+/* Collapsed view arrow buttons (reuse concept-nav arrow style) */
+.exam-nav__collapse-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent !important;
+  border: 1px solid var(--muted) !important;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.exam-nav__collapse-arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.exam-nav__collapse-arrow:hover {
+  border-color: var(--nav-color) !important;
+  color: var(--nav-color);
+  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+/* Expand button in collapsed view */
+.exam-nav__expand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
+  border: 1px solid color-mix(in oklab, var(--nav-color) 20%, var(--muted)) !important;
+  border-radius: var(--radius-sm);
+  color: var(--nav-color);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: all 0.15s ease;
+}
+
+.exam-nav__expand-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.exam-nav__expand-btn:hover {
+  background: color-mix(in oklab, var(--nav-color) 14%, transparent) !important;
+  border-color: var(--nav-color) !important;
+}
+
+/* Collapse button in expanded view */
+.exam-nav__collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
+  border: 1px solid color-mix(in oklab, var(--nav-color) 20%, var(--muted)) !important;
+  border-radius: var(--radius-sm);
+  color: var(--nav-color);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: all 0.15s ease;
+}
+
+.exam-nav__collapse-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.exam-nav__collapse-btn:hover {
+  background: color-mix(in oklab, var(--nav-color) 14%, transparent) !important;
+  border-color: var(--nav-color) !important;
+}
+
+.exam-nav__collapse-btn svg {
+  transform: rotate(0deg);
+}
+
 /* All buttons base style */
 .exam-nav__btn {
   display: inline-flex;
@@ -3826,7 +3960,7 @@ h6 a {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 2px 0;
+  padding: 6px 2px 0;
 }
 
 .concept-nav__progress-track {
@@ -3852,12 +3986,33 @@ h6 a {
   flex-shrink: 0;
 }
 
+/* ── Learning Objective label (below progress bar) ───── */
+.concept-nav__lo-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--cnav-color);
+  padding: 4px 2px 0;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.15s ease;
+  word-break: break-word;
+}
+
+.concept-nav__lo-label:hover {
+  opacity: 1;
+}
+
+/* Hide LO label when expanded (it's shown in objectives list) */
+.concept-nav.is-expanded .concept-nav__lo-label {
+  display: none;
+}
+
 /* ── Objectives section (inline, expanded) ───────────── */
 .concept-nav__objectives {
   display: none;
-  padding: 10px 4px 4px;
+  padding: 8px 4px 4px;
   border-top: 1px solid color-mix(in oklab, var(--cnav-color) 10%, var(--muted));
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .concept-nav.is-expanded .concept-nav__objectives {

@@ -3110,9 +3110,9 @@ figure.right figcaption,
 }
 
 .exam-nav__lo-list {
-  margin: 0;
-  padding-left: 0;
-  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
 
 .exam-nav__lo-item {
@@ -3121,6 +3121,8 @@ figure.right figcaption,
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
   min-width: 0;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 /* ── LO objective button ─────────────────────────────── */
@@ -4051,9 +4053,9 @@ h6 a {
 }
 
 .concept-nav__obj-list {
-  margin: 0;
-  padding-left: 0;
-  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
 }
 
 .concept-nav__obj-item {
@@ -4061,6 +4063,8 @@ h6 a {
   align-items: center;
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .concept-nav__obj-count {

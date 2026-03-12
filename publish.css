@@ -201,7 +201,7 @@ hr {
 .right-sidebar a.internal-link,
 .left-sidebar a.internal-link {
   color: var(--brand) !important;
-  text-decoration: none;
+  text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1.25px;
   transition: color .18s ease, text-decoration-color .18s ease;

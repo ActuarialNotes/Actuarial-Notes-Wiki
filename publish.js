@@ -446,7 +446,7 @@
     var list = document.createElement('ol');
     list.className = 'exam-nav__lo-list';
 
-    objectives.forEach(function (objective) {
+    objectives.forEach(function (objective, objIdx) {
       var li = document.createElement('li');
       li.className = 'exam-nav__lo-item';
 
@@ -457,6 +457,11 @@
       var btn = document.createElement('button');
       btn.className = 'exam-nav__lo-obj-btn';
       btn.type = 'button';
+
+      var numSpan = document.createElement('span');
+      numSpan.className = 'exam-nav__lo-obj-num';
+      numSpan.textContent = (objIdx + 1);
+      btn.appendChild(numSpan);
 
       var nameSpan = document.createElement('span');
       nameSpan.textContent = objective.name;
@@ -1080,7 +1085,10 @@
   const BADGES_RE = /\{([^}]+)\}/g;
   const PCT_RE = /\d+.*%/;
 
+  let loCounter = 0;
+
   function injectBadges() {
+    loCounter = 0;
     document.querySelectorAll('.callout .callout-title-inner').forEach(inner => {
       // Skip if already processed
       if (inner.parentElement.querySelector('.callout-badge')) return;
@@ -1091,6 +1099,13 @@
 
       // Strip all {…} from the visible title text
       inner.textContent = text.replace(BADGES_RE, '').trimEnd();
+
+      // Add subtle objective number
+      loCounter++;
+      const numEl = document.createElement('span');
+      numEl.className = 'callout-obj-num';
+      numEl.textContent = loCounter;
+      inner.parentElement.insertBefore(numEl, inner);
 
       matches.forEach(match => {
         const badge = document.createElement('span');

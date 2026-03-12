@@ -521,6 +521,15 @@ pre code { background: none; border: none; padding: 0; }
   background: color-mix(in oklab, var(--text) 10%, transparent);
 }
 
+/* Objective number beside callout title — subtle white anchor */
+.callout-obj-num {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
 
 /* ===========================================================
    10) CARDS
@@ -3153,7 +3162,16 @@ figure.right figcaption,
   background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
 }
 
-.exam-nav__lo-obj-btn > span:first-child {
+/* Subtle objective number in exam-nav */
+.exam-nav__lo-obj-num {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.exam-nav__lo-obj-btn > span:nth-child(2) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

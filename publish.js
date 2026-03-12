@@ -2926,8 +2926,8 @@
 
 /* ===========================================================
    HIGH CONTRAST TOGGLE
-   Injects a toggle switch into the Obsidian Publish sidebar,
-   next to the built-in dark/light mode switch.
+   Injects a contrast icon button next to the built-in
+   dark/light mode toggle in the Obsidian Publish sidebar.
    Persists preference in localStorage.
    =========================================================== */
 
@@ -2935,6 +2935,13 @@
   'use strict';
 
   var STORAGE_KEY = 'actuarial-notes-high-contrast';
+
+  // Half-circle contrast icon (matches the provided symbol)
+  var HC_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<circle cx="12" cy="12" r="10"/>' +
+    '<path d="M12 2v20" />' +
+    '<path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" stroke="none"/>' +
+    '</svg>';
 
   function applyHighContrast(enabled) {
     if (enabled) {
@@ -2956,46 +2963,52 @@
   function buildToggle() {
     if (document.querySelector('.hc-toggle')) return;
 
-    var sidebar = document.querySelector('.site-body-left-column');
-    if (!sidebar) return;
+    // Find the theme toggle (dark/light switch) in the sidebar.
+    // Obsidian Publish renders it as a .theme-toggle or the first
+    // clickable-icon / label pair inside .site-body-left-column.
+    var themeToggle = document.querySelector(
+      '.site-body-left-column .theme-toggle, ' +
+      '.site-body-left-column .clickable-icon, ' +
+      '.site-body-left-column label[class*="checkbox"]'
+    );
 
-    var wrapper = document.createElement('div');
-    wrapper.className = 'hc-toggle';
-    wrapper.setAttribute('role', 'switch');
-    wrapper.setAttribute('tabindex', '0');
-    wrapper.setAttribute('aria-label', 'Toggle high contrast mode');
+    // Fallback: just look for the first interactive element at the top
+    if (!themeToggle) {
+      var sidebar = document.querySelector('.site-body-left-column');
+      if (!sidebar) return;
+      // Insert at the very top of the sidebar
+      themeToggle = sidebar.firstElementChild;
+    }
 
-    var track = document.createElement('div');
-    track.className = 'hc-toggle__track';
-    var thumb = document.createElement('div');
-    thumb.className = 'hc-toggle__thumb';
-    track.appendChild(thumb);
+    if (!themeToggle) return;
 
-    var label = document.createElement('span');
-    label.textContent = 'High Contrast';
-
-    wrapper.appendChild(track);
-    wrapper.appendChild(label);
+    var btn = document.createElement('button');
+    btn.className = 'hc-toggle';
+    btn.setAttribute('type', 'button');
+    btn.setAttribute('role', 'switch');
+    btn.setAttribute('tabindex', '0');
+    btn.setAttribute('aria-label', 'Toggle high contrast mode');
+    btn.setAttribute('title', 'High Contrast');
+    btn.innerHTML = HC_ICON;
 
     function updateAria() {
       var on = document.body.classList.contains('high-contrast');
-      wrapper.setAttribute('aria-checked', on ? 'true' : 'false');
+      btn.setAttribute('aria-checked', on ? 'true' : 'false');
     }
 
-    wrapper.addEventListener('click', function () {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
       var nowOn = !document.body.classList.contains('high-contrast');
       applyHighContrast(nowOn);
       updateAria();
     });
 
-    wrapper.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        wrapper.click();
-      }
-    });
-
-    sidebar.appendChild(wrapper);
+    // Insert right after the theme toggle so they sit side-by-side
+    if (themeToggle.nextSibling) {
+      themeToggle.parentNode.insertBefore(btn, themeToggle.nextSibling);
+    } else {
+      themeToggle.parentNode.appendChild(btn);
+    }
     updateAria();
   }
 
@@ -3018,9 +3031,9 @@
   });
 
   function observeSidebar() {
-    var sidebar = document.querySelector('.site-body-left-column');
-    if (sidebar) {
-      hcObserver.observe(sidebar, { childList: true, subtree: true });
+    var target = document.querySelector('.site-body-left-column');
+    if (target) {
+      hcObserver.observe(target, { childList: true, subtree: true });
     }
   }
 

@@ -2542,7 +2542,16 @@
         var btn = document.createElement('button');
         btn.className = 'concept-nav__obj-btn';
         btn.type = 'button';
-        btn.textContent = objective.name;
+
+        var objNumSpan = document.createElement('span');
+        objNumSpan.className = 'concept-nav__obj-num';
+        objNumSpan.textContent = (result.objectives.indexOf(objective) + 1);
+        btn.appendChild(objNumSpan);
+
+        var objNameSpan = document.createElement('span');
+        objNameSpan.className = 'concept-nav__obj-name';
+        objNameSpan.textContent = objective.name;
+        btn.appendChild(objNameSpan);
 
         // Build floating dropdown menu
         var menu = document.createElement('div');

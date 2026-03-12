@@ -4265,59 +4265,80 @@ h6 a {
    Strips colours to pure black-on-white (light) or white-on-black (dark).
    =========================================================== */
 
-/* ── High-contrast toggle (icon + pill switch, beside dark mode) ── */
+/* ── High-contrast toggle (icon-in-knob pill switch, beside dark mode) ── */
 
-/* Wrapper injected into the same container as the dark/light toggle */
+/* Wrapper — sits inline inside the dark mode toggle row */
 .hc-toggle-row {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
   margin-left: 6px;
   cursor: pointer;
   user-select: none;
   flex-shrink: 0;
 }
 
-/* Contrast icon */
-.hc-toggle-row__icon {
-  display: flex;
-  align-items: center;
-  color: var(--text-dim);
-  opacity: 0.7;
-  transition: opacity 0.15s ease, color 0.15s ease;
-}
-.hc-toggle-row__icon svg { width: 15px; height: 15px; }
-.hc-toggle-row:hover .hc-toggle-row__icon { opacity: 1; }
-.high-contrast .hc-toggle-row__icon { opacity: 1; color: var(--text); }
-
-/* Pill track — sized to match Obsidian's native theme toggle */
+/* Pill track — matches Obsidian's native toggle dimensions */
 .hc-toggle-row__track {
   position: relative;
-  width: 30px;
-  height: 17px;
+  width: 36px;
+  height: 20px;
   background: var(--muted);
-  border-radius: 17px;
+  border-radius: 20px;
   transition: background 0.2s ease;
   flex-shrink: 0;
 }
+
+/* Thumb — large enough to hold the icon */
 .hc-toggle-row__thumb {
   position: absolute;
-  top: 2.5px;
-  left: 2.5px;
-  width: 12px;
-  height: 12px;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
   background: var(--text-dim);
   border-radius: 50%;
   transition: transform 0.2s ease, background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Active (on) state */
+/* Icon inside the thumb */
+.hc-toggle-row__thumb svg {
+  width: 10px;
+  height: 10px;
+  color: var(--muted);
+}
+
+/* ── Active (on) state ── */
 .high-contrast .hc-toggle-row__track {
-  background: var(--interactive-accent, var(--brand));
+  background: #555;
 }
 .high-contrast .hc-toggle-row__thumb {
-  transform: translateX(13px);
+  transform: translateX(16px);
   background: #fff;
+}
+.high-contrast .hc-toggle-row__thumb svg {
+  color: #000;
+}
+
+/* Dark HC: ensure knob contrasts against the track */
+body.high-contrast:not(.theme-light) .hc-toggle-row__track {
+  background: #666;
+}
+body.high-contrast:not(.theme-light) .hc-toggle-row__thumb {
+  background: #fff;
+}
+
+/* Light HC */
+body.high-contrast.theme-light .hc-toggle-row__track {
+  background: #999;
+}
+body.high-contrast.theme-light .hc-toggle-row__thumb {
+  background: #000;
+}
+body.high-contrast.theme-light .hc-toggle-row__thumb svg {
+  color: #fff;
 }
 
 /* ── Dark + high contrast ────────────────────────────── */
@@ -4508,10 +4529,43 @@ body.high-contrast .concept-nav {
   background: var(--bg) !important;
   border-color: var(--text) !important;
 }
+/* Current concept button: text on colored bg — invert so text is readable */
+body.high-contrast .concept-nav__current {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+body.high-contrast .concept-nav__current-label,
+body.high-contrast .concept-nav__current-chevron {
+  color: var(--bg) !important;
+}
 
-/* Download links */
+/* Download button */
 body.high-contrast .download-link,
 body.high-contrast a.download-link {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+
+/* Download dropdown menu */
+body.high-contrast .dl-dropdown__wrap {
+  --dl-color: var(--text) !important;
+}
+body.high-contrast .dl-dropdown__menu {
+  background: var(--bg) !important;
+  border-color: var(--text) !important;
+}
+body.high-contrast .dl-dropdown__menu-item-name {
+  color: var(--text) !important;
+}
+body.high-contrast .dl-dropdown__menu-header {
+  color: var(--text) !important;
+}
+body.high-contrast .dl-dropdown__trigger {
+  border-color: var(--text) !important;
+  color: var(--text) !important;
+  background: var(--bg) !important;
+}
+body.high-contrast .dl-dropdown__single {
   background: var(--text) !important;
   color: var(--bg) !important;
 }

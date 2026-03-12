@@ -2605,7 +2605,7 @@ figure.right figcaption,
   z-index: 200;
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  padding: 10px 14px;
   background: color-mix(in oklab, var(--nav-color) 5%, var(--bg-elev));
   border: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
   border-radius: var(--radius-md);
@@ -2622,7 +2622,7 @@ figure.right figcaption,
 @media (max-width: 540px) {
   .exam-nav {
     gap: 10px;
-    padding: 12px 0;
+    padding: 12px;
     z-index: auto;
   }
 }
@@ -2633,7 +2633,6 @@ figure.right figcaption,
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 0 14px;
 }
 
 .exam-nav.is-collapsed .exam-nav__collapsed-view {
@@ -2645,7 +2644,6 @@ figure.right figcaption,
   flex-direction: column;
   gap: 6px;
   width: 100%;
-  padding: 0 14px;
 }
 
 .exam-nav.is-collapsed .exam-nav__expanded-view {
@@ -3065,7 +3063,7 @@ figure.right figcaption,
 .exam-nav__lo-toggle {
   display: flex;
   width: 100%;
-  padding: 6px 14px 0;
+  padding-top: 6px;
   margin-top: 4px;
 }
 
@@ -3128,8 +3126,8 @@ figure.right figcaption,
 }
 
 .exam-nav__lo-list {
-  margin: 0;
-  padding-left: 0;
+  margin: 0 -14px !important;
+  padding-left: 0 !important;
   list-style: none;
 }
 
@@ -3155,7 +3153,7 @@ figure.right figcaption,
   width: 100%;
   background: none !important;
   border: none !important;
-  padding: 6px 14px;
+  padding: 6px 14px 6px 6px;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);
@@ -3818,7 +3816,7 @@ h6 a {
   z-index: 200;
   display: flex;
   flex-direction: column;
-  padding: 10px 0;
+  padding: 10px 14px;
   background: color-mix(in oklab, var(--cnav-color) 5%, var(--bg-elev));
   border: 1px solid color-mix(in oklab, var(--cnav-color) 15%, var(--muted));
   border-radius: var(--radius-md);
@@ -3832,7 +3830,6 @@ h6 a {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 14px;
 }
 
 /* ── Current concept pill ────────────────────────────── */
@@ -4008,7 +4005,7 @@ h6 a {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 14px 0;
+  padding: 6px 2px 0;
 }
 
 .concept-nav__progress-track {
@@ -4039,7 +4036,7 @@ h6 a {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--cnav-color);
-  padding: 4px 14px 0;
+  padding: 4px 2px 0;
   cursor: pointer;
   opacity: 0.85;
   transition: opacity 0.15s ease;
@@ -4071,7 +4068,7 @@ h6 a {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-dim);
-  padding: 0 14px 4px;
+  padding-bottom: 4px;
 }
 
 .concept-nav__obj-header-link {
@@ -4085,8 +4082,8 @@ h6 a {
 }
 
 .concept-nav__obj-list {
-  margin: 0;
-  padding-left: 0;
+  margin: 0 -14px !important;
+  padding-left: 0 !important;
   list-style: none;
 }
 
@@ -4127,7 +4124,7 @@ h6 a {
   width: 100%;
   background: none !important;
   border: none !important;
-  padding: 6px 14px;
+  padding: 6px 14px 6px 6px;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);
@@ -4271,7 +4268,7 @@ h6 a {
 }
 
 @media (max-width: 540px) {
-  .concept-nav { padding: 10px 0; z-index: auto; }
+  .concept-nav { padding: 10px; z-index: auto; }
   .concept-nav__row { gap: 6px; }
   .concept-nav__current { font-size: 0.82rem; padding: 7px 10px; white-space: normal; text-align: center; min-width: 0; }
   .concept-nav__arrow-btn { width: 32px; height: 32px; }

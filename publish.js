@@ -346,8 +346,13 @@
       e.stopPropagation();
       var wasExpanded = container.classList.contains('is-lo-expanded');
       container.classList.toggle('is-lo-expanded');
-      if (!wasExpanded && !container._loLoaded) {
-        loadExamObjectives(container);
+      if (!wasExpanded) {
+        elevateCenterColumn();
+        if (!container._loLoaded) {
+          loadExamObjectives(container);
+        }
+      } else {
+        deelevateCenterColumn();
       }
     });
 
@@ -835,7 +840,25 @@
   }
 
   // Mobile backdrop helpers
+  // Elevate / de-elevate the center column so exam-nav popups render above the sidebar
+  function elevateCenterColumn() {
+    var col = document.querySelector('.site-body-center-column');
+    if (col) col.classList.add('exam-nav-elevated');
+  }
+
+  function deelevateCenterColumn() {
+    // Only remove if nothing is still open
+    var anyOpen = document.querySelector(
+      '.exam-nav.is-lo-expanded, .exam-nav__dropdown.is-open, .exam-nav__lo-wrap.is-open'
+    );
+    if (!anyOpen) {
+      var col = document.querySelector('.site-body-center-column');
+      if (col) col.classList.remove('exam-nav-elevated');
+    }
+  }
+
   function showBackdrop() {
+    elevateCenterColumn();
     let backdrop = document.querySelector('.exam-nav-backdrop');
     if (!backdrop) {
       backdrop = document.createElement('div');
@@ -859,6 +882,7 @@
     if (backdrop) {
       backdrop.classList.remove('is-visible');
     }
+    deelevateCenterColumn();
   }
 
 })();
@@ -2351,8 +2375,13 @@
         e.stopPropagation();
         var wasExpanded = container.classList.contains('is-expanded');
         container.classList.toggle('is-expanded');
-        if (!wasExpanded && !container._objectivesLoaded) {
-          loadObjectivesInline(container, objectives);
+        if (!wasExpanded) {
+          elevateCenterCol();
+          if (!container._objectivesLoaded) {
+            loadObjectivesInline(container, objectives);
+          }
+        } else {
+          deelevateCenterCol();
         }
       });
       navRow.appendChild(pill);
@@ -2901,7 +2930,24 @@
 
   /* ── Backdrop helpers ──────────────────────────────────── */
 
+  function elevateCenterCol() {
+    var col = document.querySelector('.site-body-center-column');
+    if (col) col.classList.add('exam-nav-elevated');
+  }
+
+  function deelevateCenterCol() {
+    var anyOpen = document.querySelector(
+      '.concept-nav.is-expanded, .concept-nav__arrow-dropdown.is-open, .concept-nav__obj-wrap.is-open,' +
+      '.exam-nav.is-lo-expanded, .exam-nav__dropdown.is-open, .exam-nav__lo-wrap.is-open'
+    );
+    if (!anyOpen) {
+      var col = document.querySelector('.site-body-center-column');
+      if (col) col.classList.remove('exam-nav-elevated');
+    }
+  }
+
   function showConceptBackdrop() {
+    elevateCenterCol();
     var backdrop = document.querySelector('.exam-nav-backdrop');
     if (!backdrop) {
       backdrop = document.createElement('div');
@@ -2928,6 +2974,7 @@
     if (backdrop) {
       backdrop.classList.remove('is-visible');
     }
+    deelevateCenterCol();
   }
 
 })();

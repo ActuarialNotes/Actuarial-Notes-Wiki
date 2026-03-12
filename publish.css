@@ -3300,6 +3300,18 @@ figure.right figcaption,
   font-variant-numeric: tabular-nums;
 }
 
+/* ── Stacking fix: elevate center column above sidebar when popups are active ── */
+.site-body-center-column:has(.exam-nav.is-lo-expanded),
+.site-body-center-column:has(.exam-nav__dropdown.is-open),
+.site-body-center-column:has(.exam-nav__lo-wrap.is-open),
+.site-body-center-column:has(.concept-nav__arrow-dropdown.is-open),
+.site-body-center-column:has(.concept-nav__obj-wrap.is-open),
+.site-body-center-column:has(.concept-nav.is-expanded),
+.site-body-center-column.exam-nav-elevated {
+  position: relative;
+  z-index: 200;
+}
+
 /* Print: hide nav */
 @media print {
   .exam-nav,

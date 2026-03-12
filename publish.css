@@ -4258,3 +4258,254 @@ h6 a {
   .concept-nav { display: none !important; }
 }
 
+
+/* ===========================================================
+   HIGH CONTRAST MODE
+   Activated by adding .high-contrast to <body>.
+   Strips colours to pure black-on-white (light) or white-on-black (dark).
+   =========================================================== */
+
+/* ── Toggle switch in sidebar ────────────────────────── */
+.hc-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--sb-text);
+  border-radius: 8px;
+  transition: background 0.12s ease;
+}
+.hc-toggle:hover { background: var(--sb-hover); }
+
+.hc-toggle__track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: var(--muted);
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+.hc-toggle__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--text-dim);
+  border-radius: 50%;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.high-contrast .hc-toggle__track {
+  background: var(--brand);
+}
+.high-contrast .hc-toggle__thumb {
+  transform: translateX(16px);
+  background: #fff;
+}
+
+/* ── Dark + high contrast ────────────────────────────── */
+body.high-contrast:not(.theme-light),
+.theme-dark body.high-contrast {
+  --bg: #000000;
+  --bg-elev: #000000;
+  --text: #ffffff;
+  --text-dim: #ffffff;
+  --muted: #333333;
+  --brand: #ffffff;
+  --brand-hover: #ffffff;
+  --brand-visited: #ffffff;
+  --brand-ext: #ffffff;
+  --brand-ext-hover: #ffffff;
+  --danger: #ffffff;
+  --success: #ffffff;
+  --warning: #ffffff;
+  --co-purple: #ffffff;
+  --sb-bg: #000000;
+  --sb-border: #333333;
+  --sb-text: #ffffff;
+  --sb-dim: #ffffff;
+  --sb-hover: #1a1a1a;
+  --sb-active: #1a1a1a;
+  --tbl-bg: #000000;
+  --tbl-head-bg: #111111;
+  --tbl-head-text: #ffffff;
+  --tbl-text: #ffffff;
+  --tbl-muted: #333333;
+  --tbl-stripe: #0a0a0a;
+  --tbl-hover-bg: #1a1a1a;
+  --tbl-hover-text: #ffffff;
+  --tbl-badge-bg: #1a1a1a;
+  --tbl-badge-text: #ffffff;
+  --act-pill-exams-bg: #1a1a1a;
+  --act-pill-project-bg: #1a1a1a;
+  --act-pill-courses-bg: #1a1a1a;
+  --act-pill-ink: #ffffff;
+  background: #000000 !important;
+}
+
+/* ── Light + high contrast ───────────────────────────── */
+body.high-contrast.theme-light {
+  --bg: #ffffff;
+  --bg-elev: #ffffff;
+  --text: #000000;
+  --text-dim: #000000;
+  --muted: #cccccc;
+  --brand: #000000;
+  --brand-hover: #000000;
+  --brand-visited: #000000;
+  --brand-ext: #000000;
+  --brand-ext-hover: #000000;
+  --danger: #000000;
+  --success: #000000;
+  --warning: #000000;
+  --co-purple: #000000;
+  --sb-bg: #ffffff;
+  --sb-border: #cccccc;
+  --sb-text: #000000;
+  --sb-dim: #000000;
+  --sb-hover: #f0f0f0;
+  --sb-active: #f0f0f0;
+  --tbl-bg: #ffffff;
+  --tbl-head-bg: #f0f0f0;
+  --tbl-head-text: #000000;
+  --tbl-text: #000000;
+  --tbl-muted: #cccccc;
+  --tbl-stripe: #fafafa;
+  --tbl-hover-bg: #f0f0f0;
+  --tbl-hover-text: #000000;
+  --tbl-badge-bg: #f0f0f0;
+  --tbl-badge-text: #000000;
+  --act-pill-exams-bg: #f0f0f0;
+  --act-pill-project-bg: #f0f0f0;
+  --act-pill-courses-bg: #f0f0f0;
+  --act-pill-ink: #000000;
+  background: #ffffff !important;
+}
+
+/* ── Shared high contrast overrides ──────────────────── */
+
+/* Kill dark-mode gradient background */
+.theme-dark body.high-contrast {
+  background: #000000 !important;
+}
+
+/* All links underlined */
+body.high-contrast .markdown-rendered a.internal-link,
+body.high-contrast .site-body a.internal-link,
+body.high-contrast .markdown-rendered a:not(.internal-link),
+body.high-contrast .site-body a:not(.internal-link) {
+  text-decoration: underline !important;
+  text-decoration-thickness: 1.5px !important;
+}
+
+/* Callouts — no colour accents */
+body.high-contrast .callout {
+  --callout-color: var(--text) !important;
+  background: var(--bg) !important;
+  border-color: var(--text) !important;
+  box-shadow: none !important;
+}
+body.high-contrast .callout .callout-title,
+body.high-contrast .callout .callout-title-inner,
+body.high-contrast .callout .callout-fold {
+  color: var(--text) !important;
+}
+body.high-contrast .callout-concept-count,
+body.high-contrast .callout-badge--pct {
+  color: var(--text) !important;
+  background: color-mix(in oklab, var(--text) 12%, transparent) !important;
+}
+body.high-contrast data.callout-obj-num {
+  color: var(--text) !important;
+  opacity: 0.6;
+}
+
+/* Exam link buttons — strip colour */
+body.high-contrast .exam-link,
+body.high-contrast .exam-link[class*="exam-link--"] {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+body.high-contrast .exam-link .exam-code,
+body.high-contrast .exam-link .exam-name {
+  color: var(--bg) !important;
+}
+
+/* Exam nav component */
+body.high-contrast .exam-nav {
+  --nav-color: var(--text) !important;
+  background: var(--bg) !important;
+  border-color: var(--text) !important;
+}
+body.high-contrast .exam-nav__btn--current {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+body.high-contrast .exam-nav__btn--prev,
+body.high-contrast .exam-nav__btn--next {
+  border-color: var(--text) !important;
+  color: var(--text) !important;
+}
+
+/* Cards — strip colour */
+body.high-contrast .card,
+body.high-contrast .act-card {
+  background: var(--bg) !important;
+  border-color: var(--text) !important;
+  box-shadow: none !important;
+}
+body.high-contrast .act-card__title {
+  color: var(--text) !important;
+}
+body.high-contrast .act-card__badge {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+
+/* Sidebar buttons — strip colour */
+body.high-contrast .sidebar-btn {
+  background: transparent !important;
+  color: var(--text) !important;
+  border: 1.5px solid var(--text) !important;
+  box-shadow: none !important;
+}
+
+/* Blockquotes */
+body.high-contrast blockquote {
+  border-color: var(--text) !important;
+  background: var(--bg) !important;
+  box-shadow: none !important;
+}
+
+/* Highlights */
+body.high-contrast mark,
+body.high-contrast span.highlight,
+body.high-contrast span.cm-highlight {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+
+/* Concept nav */
+body.high-contrast .concept-nav {
+  --cnav-color: var(--text) !important;
+  background: var(--bg) !important;
+  border-color: var(--text) !important;
+}
+
+/* Download links */
+body.high-contrast .download-link,
+body.high-contrast a.download-link {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+
+/* Print: hide toggle */
+@media print {
+  .hc-toggle { display: none !important; }
+}
+

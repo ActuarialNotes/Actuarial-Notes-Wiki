@@ -2922,3 +2922,111 @@
   }
 
 })();
+
+
+/* ===========================================================
+   HIGH CONTRAST TOGGLE
+   Injects a toggle switch into the Obsidian Publish sidebar,
+   next to the built-in dark/light mode switch.
+   Persists preference in localStorage.
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'actuarial-notes-high-contrast';
+
+  function applyHighContrast(enabled) {
+    if (enabled) {
+      document.body.classList.add('high-contrast');
+    } else {
+      document.body.classList.remove('high-contrast');
+    }
+    try { localStorage.setItem(STORAGE_KEY, enabled ? '1' : '0'); } catch (e) {}
+  }
+
+  function restorePreference() {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === '1';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function buildToggle() {
+    if (document.querySelector('.hc-toggle')) return;
+
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (!sidebar) return;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'hc-toggle';
+    wrapper.setAttribute('role', 'switch');
+    wrapper.setAttribute('tabindex', '0');
+    wrapper.setAttribute('aria-label', 'Toggle high contrast mode');
+
+    var track = document.createElement('div');
+    track.className = 'hc-toggle__track';
+    var thumb = document.createElement('div');
+    thumb.className = 'hc-toggle__thumb';
+    track.appendChild(thumb);
+
+    var label = document.createElement('span');
+    label.textContent = 'High Contrast';
+
+    wrapper.appendChild(track);
+    wrapper.appendChild(label);
+
+    function updateAria() {
+      var on = document.body.classList.contains('high-contrast');
+      wrapper.setAttribute('aria-checked', on ? 'true' : 'false');
+    }
+
+    wrapper.addEventListener('click', function () {
+      var nowOn = !document.body.classList.contains('high-contrast');
+      applyHighContrast(nowOn);
+      updateAria();
+    });
+
+    wrapper.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        wrapper.click();
+      }
+    });
+
+    sidebar.appendChild(wrapper);
+    updateAria();
+  }
+
+  function init() {
+    applyHighContrast(restorePreference());
+    buildToggle();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 200); });
+  } else {
+    setTimeout(init, 200);
+  }
+
+  // Re-inject toggle if sidebar re-renders (SPA navigation)
+  var hcObserver = new MutationObserver(function () {
+    if (!document.querySelector('.hc-toggle')) {
+      buildToggle();
+    }
+  });
+
+  function observeSidebar() {
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (sidebar) {
+      hcObserver.observe(sidebar, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(observeSidebar, 300); });
+  } else {
+    setTimeout(observeSidebar, 300);
+  }
+})();

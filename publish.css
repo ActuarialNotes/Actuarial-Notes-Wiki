@@ -524,12 +524,15 @@ pre code { background: none; border: none; padding: 0; }
 /* Objective number beside callout title — subtle white anchor
    Uses <data> element to avoid breaking span:first-of-type badge alignment */
 data.callout-obj-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
   color: rgba(255, 255, 255, 0.35);
   flex-shrink: 0;
-  min-width: 1.1em;
-  text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
@@ -3167,12 +3170,15 @@ figure.right figcaption,
 
 /* Subtle objective number in exam-nav */
 .exam-nav__lo-obj-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
   color: rgba(255, 255, 255, 0.35);
   flex-shrink: 0;
-  min-width: 1.1em;
-  text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
@@ -3288,6 +3294,7 @@ figure.right figcaption,
   background: color-mix(in oklab, var(--nav-color) 12%, transparent);
   border-radius: 10px;
   flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Print: hide nav */

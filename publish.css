@@ -4265,49 +4265,53 @@ h6 a {
    Strips colours to pure black-on-white (light) or white-on-black (dark).
    =========================================================== */
 
-/* ── High-contrast toggle (icon-in-knob pill switch, beside dark mode) ── */
+/* ── High-contrast toggle (icon + pill switch, beside dark mode) ── */
 
 /* Wrapper — sits inline inside the dark mode toggle row */
 .hc-toggle-row {
   display: inline-flex;
   align-items: center;
-  margin-left: 6px;
+  gap: 6px;
+  margin-left: 8px;
   cursor: pointer;
   user-select: none;
   flex-shrink: 0;
 }
 
-/* Pill track — matches Obsidian's native toggle dimensions */
+/* Contrast icon — sits to the left of the track, like the moon icon */
+.hc-toggle-row__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  opacity: 0.7;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.hc-toggle-row__icon svg { width: 16px; height: 16px; }
+.hc-toggle-row:hover .hc-toggle-row__icon { opacity: 1; }
+.high-contrast .hc-toggle-row__icon { opacity: 1; color: var(--text); }
+
+/* Pill track — sized to match Obsidian's native theme toggle */
 .hc-toggle-row__track {
   position: relative;
-  width: 36px;
-  height: 20px;
+  width: 42px;
+  height: 24px;
   background: var(--muted);
-  border-radius: 20px;
+  border-radius: 24px;
   transition: background 0.2s ease;
   flex-shrink: 0;
 }
 
-/* Thumb — large enough to hold the icon */
+/* Thumb / knob */
 .hc-toggle-row__thumb {
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   background: var(--text-dim);
   border-radius: 50%;
   transition: transform 0.2s ease, background 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Icon inside the thumb */
-.hc-toggle-row__thumb svg {
-  width: 10px;
-  height: 10px;
-  color: var(--muted);
 }
 
 /* ── Active (on) state ── */
@@ -4315,11 +4319,8 @@ h6 a {
   background: #555;
 }
 .high-contrast .hc-toggle-row__thumb {
-  transform: translateX(16px);
+  transform: translateX(18px);
   background: #fff;
-}
-.high-contrast .hc-toggle-row__thumb svg {
-  color: #000;
 }
 
 /* Dark HC: ensure knob contrasts against the track */
@@ -4336,9 +4337,6 @@ body.high-contrast.theme-light .hc-toggle-row__track {
 }
 body.high-contrast.theme-light .hc-toggle-row__thumb {
   background: #000;
-}
-body.high-contrast.theme-light .hc-toggle-row__thumb svg {
-  color: #fff;
 }
 
 /* ── Dark + high contrast ────────────────────────────── */

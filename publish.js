@@ -2992,7 +2992,7 @@
     var toggleRow = findThemeToggleRow();
     if (!toggleRow) return;
 
-    // Build: [pill-track > thumb(icon-inside)]
+    // Build: [icon] [pill-track > thumb]  (icon beside track, like dark mode switch)
     var row = document.createElement('div');
     row.className = 'hc-toggle-row';
     row.setAttribute('role', 'switch');
@@ -3000,13 +3000,17 @@
     row.setAttribute('aria-label', 'Toggle high contrast mode');
     row.setAttribute('title', 'High Contrast');
 
+    var icon = document.createElement('span');
+    icon.className = 'hc-toggle-row__icon';
+    icon.innerHTML = HC_ICON_SVG;
+
     var track = document.createElement('div');
     track.className = 'hc-toggle-row__track';
     var thumb = document.createElement('div');
     thumb.className = 'hc-toggle-row__thumb';
-    thumb.innerHTML = HC_ICON_SVG;
     track.appendChild(thumb);
 
+    row.appendChild(icon);
     row.appendChild(track);
 
     function updateAria() {

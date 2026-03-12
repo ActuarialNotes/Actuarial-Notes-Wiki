@@ -528,6 +528,9 @@ data.callout-obj-num {
   font-weight: 600;
   color: rgba(255, 255, 255, 0.35);
   flex-shrink: 0;
+  min-width: 1.1em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 
@@ -3168,7 +3171,9 @@ figure.right figcaption,
   font-weight: 600;
   color: rgba(255, 255, 255, 0.35);
   flex-shrink: 0;
-  min-width: 0;
+  min-width: 1.1em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .exam-nav__lo-obj-btn > span:nth-child(2) {
@@ -4219,6 +4224,7 @@ h6 a {
   background: color-mix(in oklab, var(--cnav-color) 12%, transparent);
   border-radius: 10px;
   flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .concept-nav__obj-menu-item:hover {

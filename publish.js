@@ -2992,7 +2992,7 @@
     var toggleRow = findThemeToggleRow();
     if (!toggleRow) return;
 
-    // Build: [icon] [pill-track > thumb]  (icon beside track, like dark mode switch)
+    // Build: [pill-track > icon + thumb]  (icon inside track, opposite the thumb)
     var row = document.createElement('div');
     row.className = 'hc-toggle-row';
     row.setAttribute('role', 'switch');
@@ -3008,9 +3008,9 @@
     track.className = 'hc-toggle-row__track';
     var thumb = document.createElement('div');
     thumb.className = 'hc-toggle-row__thumb';
+    track.appendChild(icon);
     track.appendChild(thumb);
 
-    row.appendChild(icon);
     row.appendChild(track);
 
     function updateAria() {

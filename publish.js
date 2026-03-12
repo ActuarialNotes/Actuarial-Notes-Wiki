@@ -1100,12 +1100,15 @@
       // Strip all {…} from the visible title text
       inner.textContent = text.replace(BADGES_RE, '').trimEnd();
 
-      // Add subtle objective number
-      loCounter++;
-      const numEl = document.createElement('span');
-      numEl.className = 'callout-obj-num';
-      numEl.textContent = loCounter;
-      inner.parentElement.insertBefore(numEl, inner);
+      // Check if this is a learning objective (has a percentage badge)
+      const isLO = matches.some(m => PCT_RE.test(m[1]));
+      if (isLO) {
+        loCounter++;
+        const numEl = document.createElement('data');
+        numEl.className = 'callout-obj-num';
+        numEl.textContent = loCounter;
+        inner.parentElement.insertBefore(numEl, inner);
+      }
 
       matches.forEach(match => {
         const badge = document.createElement('span');

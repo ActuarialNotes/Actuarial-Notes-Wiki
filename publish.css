@@ -2616,6 +2616,7 @@ figure.right figcaption,
   /* Custom color support - defaults to brand */
   --nav-color: var(--brand);
   --nav-color-hover: var(--brand-hover);
+  --nav-pad-x: 14px;
 }
 
 /* Mobile: allow wrapping */
@@ -2623,6 +2624,7 @@ figure.right figcaption,
   .exam-nav {
     gap: 10px;
     padding: 12px;
+    --nav-pad-x: 12px;
     z-index: auto;
   }
 }
@@ -3126,7 +3128,7 @@ figure.right figcaption,
 }
 
 .exam-nav__lo-list {
-  margin: 0;
+  margin: 0 calc(-1 * var(--nav-pad-x, 14px));
   padding-left: 0;
   list-style: none;
 }
@@ -3153,7 +3155,7 @@ figure.right figcaption,
   width: 100%;
   background: none !important;
   border: none !important;
-  padding: 6px 0;
+  padding: 6px var(--nav-pad-x, 14px);
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);
@@ -3823,6 +3825,7 @@ h6 a {
   gap: 0;
   margin: 1.25rem 0 2rem;
   --cnav-color: var(--brand);
+  --cnav-pad-x: 14px;
 }
 
 /* ── Main row: ◄ [Current] ► ▾ ──────────────────────── */
@@ -4069,6 +4072,9 @@ h6 a {
   font-weight: 600;
   color: var(--text-dim);
   padding-bottom: 4px;
+  margin: 0 calc(-1 * var(--cnav-pad-x, 14px));
+  padding-left: var(--cnav-pad-x, 14px);
+  padding-right: var(--cnav-pad-x, 14px);
 }
 
 .concept-nav__obj-header-link {
@@ -4082,7 +4088,7 @@ h6 a {
 }
 
 .concept-nav__obj-list {
-  margin: 0;
+  margin: 0 calc(-1 * var(--cnav-pad-x, 14px));
   padding-left: 0;
   list-style: none;
 }
@@ -4124,7 +4130,7 @@ h6 a {
   width: 100%;
   background: none !important;
   border: none !important;
-  padding: 6px 0;
+  padding: 6px var(--cnav-pad-x, 14px);
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);
@@ -4268,7 +4274,7 @@ h6 a {
 }
 
 @media (max-width: 540px) {
-  .concept-nav { padding: 10px; z-index: auto; }
+  .concept-nav { padding: 10px; --cnav-pad-x: 10px; z-index: auto; }
   .concept-nav__row { gap: 6px; }
   .concept-nav__current { font-size: 0.82rem; padding: 7px 10px; white-space: normal; text-align: center; min-width: 0; }
   .concept-nav__arrow-btn { width: 32px; height: 32px; }

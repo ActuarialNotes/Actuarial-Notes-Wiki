@@ -414,12 +414,20 @@
         var seenNames = {};
         var links = contentEl.querySelectorAll('a.internal-link');
         links.forEach(function (link) {
-          // Use data-href (Obsidian's raw path) first, then strip href to relative path
-          var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
-          // Strip origin/protocol to get a relative path if it's absolute
-          try { href = new URL(href, window.location.origin).pathname.replace(/^\//, ''); } catch (e) {}
-          // Derive name from href (page name) so aliased links like [[Page|Alias]] show the page name
-          var cName = href.replace(/^Concepts\//, '').split('#')[0].trim() || link.textContent.trim();
+          // data-href preserves original page name; href may be lowercased/encoded
+          var dataHref = link.getAttribute('data-href') || '';
+          var rawHref = link.getAttribute('href') || '';
+          // Use actual href attribute for the link target (not data-href which may not be a full path)
+          var href = rawHref;
+          try { href = new URL(rawHref, window.location.origin).pathname.replace(/^\//, ''); } catch (e) {}
+          // Derive display name from data-href (preserves casing) when available
+          var cName;
+          if (dataHref) {
+            cName = dataHref.replace(/^Concepts\//, '').split('#')[0].trim();
+          }
+          // Fall back to textContent (which has the alias for aliased links,
+          // but at least is human-readable and properly cased)
+          cName = cName || link.textContent.trim();
           if (cName && !seenNames[cName]) {
             seenNames[cName] = true;
             concepts.push({ name: cName, href: href });

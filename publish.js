@@ -2926,9 +2926,9 @@
 
 /* ===========================================================
    HIGH CONTRAST TOGGLE
-   Injects a contrast icon button next to the built-in
-   dark/light mode toggle in the Obsidian Publish sidebar.
-   Persists preference in localStorage.
+   Injects a contrast icon + pill switch right beside the
+   built-in dark/light mode toggle in the Obsidian Publish
+   sidebar. Persists preference in localStorage.
    =========================================================== */
 
 (function () {
@@ -2936,10 +2936,9 @@
 
   var STORAGE_KEY = 'actuarial-notes-high-contrast';
 
-  // Half-circle contrast icon (matches the provided symbol)
-  var HC_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+  // Half-circle contrast icon SVG
+  var HC_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
     '<circle cx="12" cy="12" r="10"/>' +
-    '<path d="M12 2v20" />' +
     '<path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" stroke="none"/>' +
     '</svg>';
 
@@ -2953,62 +2952,107 @@
   }
 
   function restorePreference() {
-    try {
-      return localStorage.getItem(STORAGE_KEY) === '1';
-    } catch (e) {
-      return false;
+    try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function findThemeToggleContainer() {
+    // Obsidian Publish's dark/light toggle lives inside .site-body-left-column.
+    // It's typically a <div> wrapping an SVG icon + a checkbox-style toggle.
+    // We look for the container that holds the toggle elements near the top.
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (!sidebar) return null;
+
+    // Strategy 1: Look for known Obsidian Publish toggle selectors
+    var toggle = sidebar.querySelector(
+      '.theme-toggle, ' +
+      '.checkbox-container, ' +
+      'label.checkbox-container, ' +
+      '.clickable-icon'
+    );
+    if (toggle) return toggle.parentElement || toggle;
+
+    // Strategy 2: The toggle is usually the first or second child element
+    // that contains an SVG (the moon/sun icon). Walk the first few children.
+    var children = sidebar.children;
+    for (var i = 0; i < Math.min(children.length, 5); i++) {
+      var child = children[i];
+      // Skip the site name, search bar, and nav trees
+      if (child.querySelector && child.querySelector('svg, input[type="checkbox"]')) {
+        return child;
+      }
+      // Also check if the child itself is small (toggle-sized, not a nav tree)
+      if (child.offsetHeight && child.offsetHeight < 50 && child.querySelector('svg')) {
+        return child;
+      }
     }
+
+    // Strategy 3: Fallback — just return the sidebar itself
+    return sidebar;
   }
 
   function buildToggle() {
-    if (document.querySelector('.hc-toggle')) return;
+    if (document.querySelector('.hc-toggle-row')) return;
 
-    // Find the theme toggle (dark/light switch) in the sidebar.
-    // Obsidian Publish renders it as a .theme-toggle or the first
-    // clickable-icon / label pair inside .site-body-left-column.
-    var themeToggle = document.querySelector(
-      '.site-body-left-column .theme-toggle, ' +
-      '.site-body-left-column .clickable-icon, ' +
-      '.site-body-left-column label[class*="checkbox"]'
-    );
+    var anchor = findThemeToggleContainer();
+    if (!anchor) return;
 
-    // Fallback: just look for the first interactive element at the top
-    if (!themeToggle) {
-      var sidebar = document.querySelector('.site-body-left-column');
-      if (!sidebar) return;
-      // Insert at the very top of the sidebar
-      themeToggle = sidebar.firstElementChild;
-    }
+    // Build: [contrast-icon] [pill-track > thumb]
+    var row = document.createElement('div');
+    row.className = 'hc-toggle-row';
+    row.setAttribute('role', 'switch');
+    row.setAttribute('tabindex', '0');
+    row.setAttribute('aria-label', 'Toggle high contrast mode');
+    row.setAttribute('title', 'High Contrast');
 
-    if (!themeToggle) return;
+    var icon = document.createElement('span');
+    icon.className = 'hc-toggle-row__icon';
+    icon.innerHTML = HC_ICON_SVG;
 
-    var btn = document.createElement('button');
-    btn.className = 'hc-toggle';
-    btn.setAttribute('type', 'button');
-    btn.setAttribute('role', 'switch');
-    btn.setAttribute('tabindex', '0');
-    btn.setAttribute('aria-label', 'Toggle high contrast mode');
-    btn.setAttribute('title', 'High Contrast');
-    btn.innerHTML = HC_ICON;
+    var track = document.createElement('div');
+    track.className = 'hc-toggle-row__track';
+    var thumb = document.createElement('div');
+    thumb.className = 'hc-toggle-row__thumb';
+    track.appendChild(thumb);
+
+    row.appendChild(icon);
+    row.appendChild(track);
 
     function updateAria() {
       var on = document.body.classList.contains('high-contrast');
-      btn.setAttribute('aria-checked', on ? 'true' : 'false');
+      row.setAttribute('aria-checked', on ? 'true' : 'false');
     }
 
-    btn.addEventListener('click', function (e) {
+    row.addEventListener('click', function (e) {
       e.stopPropagation();
       var nowOn = !document.body.classList.contains('high-contrast');
       applyHighContrast(nowOn);
       updateAria();
     });
 
-    // Insert right after the theme toggle so they sit side-by-side
-    if (themeToggle.nextSibling) {
-      themeToggle.parentNode.insertBefore(btn, themeToggle.nextSibling);
+    row.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        row.click();
+      }
+    });
+
+    // Insert right after the theme toggle container so they sit on the same line
+    if (anchor.nextSibling) {
+      anchor.parentNode.insertBefore(row, anchor.nextSibling);
     } else {
-      themeToggle.parentNode.appendChild(btn);
+      anchor.parentNode.appendChild(row);
     }
+
+    // Ensure the parent is flex so both toggles sit side-by-side
+    var parent = row.parentNode;
+    var cs = window.getComputedStyle(parent);
+    if (cs.display !== 'flex' && cs.display !== 'inline-flex') {
+      parent.style.display = 'flex';
+      parent.style.alignItems = 'center';
+      parent.style.flexWrap = 'wrap';
+      parent.style.gap = '0';
+    }
+
     updateAria();
   }
 
@@ -3023,9 +3067,9 @@
     setTimeout(init, 200);
   }
 
-  // Re-inject toggle if sidebar re-renders (SPA navigation)
+  // Re-inject if sidebar re-renders (SPA navigation)
   var hcObserver = new MutationObserver(function () {
-    if (!document.querySelector('.hc-toggle')) {
+    if (!document.querySelector('.hc-toggle-row')) {
       buildToggle();
     }
   });

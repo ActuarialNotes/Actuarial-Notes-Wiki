@@ -4265,35 +4265,59 @@ h6 a {
    Strips colours to pure black-on-white (light) or white-on-black (dark).
    =========================================================== */
 
-/* ── High-contrast icon button (sits beside dark/light toggle) ── */
-.hc-toggle {
+/* ── High-contrast toggle (icon + pill switch, beside dark mode) ── */
+
+/* Wrapper injected into the same container as the dark/light toggle */
+.hc-toggle-row {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: none;
+  gap: 4px;
+  margin-left: 6px;
   cursor: pointer;
-  border-radius: 6px;
-  color: var(--text-dim);
-  opacity: 0.65;
-  transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+  user-select: none;
   flex-shrink: 0;
 }
-.hc-toggle:hover {
-  opacity: 1;
-  background: var(--sb-hover);
+
+/* Contrast icon */
+.hc-toggle-row__icon {
+  display: flex;
+  align-items: center;
+  color: var(--text-dim);
+  opacity: 0.7;
+  transition: opacity 0.15s ease, color 0.15s ease;
 }
-.hc-toggle svg {
-  width: 18px;
-  height: 18px;
+.hc-toggle-row__icon svg { width: 15px; height: 15px; }
+.hc-toggle-row:hover .hc-toggle-row__icon { opacity: 1; }
+.high-contrast .hc-toggle-row__icon { opacity: 1; color: var(--text); }
+
+/* Pill track — sized to match Obsidian's native theme toggle */
+.hc-toggle-row__track {
+  position: relative;
+  width: 30px;
+  height: 17px;
+  background: var(--muted);
+  border-radius: 17px;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
 }
-.high-contrast .hc-toggle {
-  opacity: 1;
-  color: var(--brand);
+.hc-toggle-row__thumb {
+  position: absolute;
+  top: 2.5px;
+  left: 2.5px;
+  width: 12px;
+  height: 12px;
+  background: var(--text-dim);
+  border-radius: 50%;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+/* Active (on) state */
+.high-contrast .hc-toggle-row__track {
+  background: var(--interactive-accent, var(--brand));
+}
+.high-contrast .hc-toggle-row__thumb {
+  transform: translateX(13px);
+  background: #fff;
 }
 
 /* ── Dark + high contrast ────────────────────────────── */
@@ -4494,6 +4518,6 @@ body.high-contrast a.download-link {
 
 /* Print: hide toggle */
 @media print {
-  .hc-toggle { display: none !important; }
+  .hc-toggle-row { display: none !important; }
 }
 

@@ -521,12 +521,12 @@ pre code { background: none; border: none; padding: 0; }
   background: color-mix(in oklab, var(--text) 10%, transparent);
 }
 
-/* Objective number beside callout title — subtle white anchor */
-.callout-obj-num {
+/* Objective number beside callout title — subtle white anchor
+   Uses <data> element to avoid breaking span:first-of-type badge alignment */
+data.callout-obj-num {
   font-size: 0.72rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.35);
-  margin-right: 6px;
   flex-shrink: 0;
 }
 

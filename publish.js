@@ -414,11 +414,12 @@
         var seenNames = {};
         var links = contentEl.querySelectorAll('a.internal-link');
         links.forEach(function (link) {
-          var cName = link.textContent.trim();
           // Use data-href (Obsidian's raw path) first, then strip href to relative path
           var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
           // Strip origin/protocol to get a relative path if it's absolute
           try { href = new URL(href, window.location.origin).pathname.replace(/^\//, ''); } catch (e) {}
+          // Derive name from href (page name) so aliased links like [[Page|Alias]] show the page name
+          var cName = href.replace(/^Concepts\//, '').split('#')[0].trim() || link.textContent.trim();
           if (cName && !seenNames[cName]) {
             seenNames[cName] = true;
             concepts.push({ name: cName, href: href });

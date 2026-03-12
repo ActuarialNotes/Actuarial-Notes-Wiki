@@ -4265,47 +4265,35 @@ h6 a {
    Strips colours to pure black-on-white (light) or white-on-black (dark).
    =========================================================== */
 
-/* ── Toggle switch in sidebar ────────────────────────── */
+/* ── High-contrast icon button (sits beside dark/light toggle) ── */
 .hc-toggle {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
   cursor: pointer;
-  user-select: none;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--sb-text);
-  border-radius: 8px;
-  transition: background 0.12s ease;
-}
-.hc-toggle:hover { background: var(--sb-hover); }
-
-.hc-toggle__track {
-  position: relative;
-  width: 36px;
-  height: 20px;
-  background: var(--muted);
-  border-radius: 10px;
+  border-radius: 6px;
+  color: var(--text-dim);
+  opacity: 0.65;
+  transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
   flex-shrink: 0;
-  transition: background 0.2s ease;
 }
-.hc-toggle__thumb {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 16px;
-  height: 16px;
-  background: var(--text-dim);
-  border-radius: 50%;
-  transition: transform 0.2s ease, background 0.2s ease;
+.hc-toggle:hover {
+  opacity: 1;
+  background: var(--sb-hover);
 }
-.high-contrast .hc-toggle__track {
-  background: var(--brand);
+.hc-toggle svg {
+  width: 18px;
+  height: 18px;
 }
-.high-contrast .hc-toggle__thumb {
-  transform: translateX(16px);
-  background: #fff;
+.high-contrast .hc-toggle {
+  opacity: 1;
+  color: var(--brand);
 }
 
 /* ── Dark + high contrast ────────────────────────────── */

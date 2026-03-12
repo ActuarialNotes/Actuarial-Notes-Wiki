@@ -2955,46 +2955,42 @@
     try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { return false; }
   }
 
-  function findThemeToggleContainer() {
+  function findThemeToggleRow() {
     // Obsidian Publish's dark/light toggle lives inside .site-body-left-column.
-    // It's typically a <div> wrapping an SVG icon + a checkbox-style toggle.
-    // We look for the container that holds the toggle elements near the top.
+    // It renders as a wrapper div containing: [SVG icon] [checkbox/toggle element].
+    // We need to find that wrapper so we can append our elements INSIDE it.
     var sidebar = document.querySelector('.site-body-left-column');
     if (!sidebar) return null;
 
-    // Strategy 1: Look for known Obsidian Publish toggle selectors
-    var toggle = sidebar.querySelector(
-      '.theme-toggle, ' +
-      '.checkbox-container, ' +
-      'label.checkbox-container, ' +
-      '.clickable-icon'
-    );
-    if (toggle) return toggle.parentElement || toggle;
+    // Strategy 1: Find the checkbox-container (Obsidian's toggle pill) and return its parent
+    var checkbox = sidebar.querySelector('.checkbox-container');
+    if (checkbox) return checkbox.parentElement;
 
-    // Strategy 2: The toggle is usually the first or second child element
-    // that contains an SVG (the moon/sun icon). Walk the first few children.
+    // Strategy 2: Find a clickable-icon (the moon/sun SVG) and return its parent
+    var clickableIcon = sidebar.querySelector('.clickable-icon');
+    if (clickableIcon) return clickableIcon.parentElement;
+
+    // Strategy 3: Walk the first few direct children of the sidebar looking
+    // for a short element that contains an SVG (the toggle row, not the nav tree)
     var children = sidebar.children;
     for (var i = 0; i < Math.min(children.length, 5); i++) {
       var child = children[i];
-      // Skip the site name, search bar, and nav trees
-      if (child.querySelector && child.querySelector('svg, input[type="checkbox"]')) {
-        return child;
-      }
-      // Also check if the child itself is small (toggle-sized, not a nav tree)
-      if (child.offsetHeight && child.offsetHeight < 50 && child.querySelector('svg')) {
-        return child;
-      }
+      if (!child.querySelector) continue;
+      // The toggle row will have an SVG but won't be the site name or search
+      var hasSvg = child.querySelector('svg');
+      var isSearch = child.querySelector('input[type="search"], input[type="text"]');
+      var isNav = child.classList.contains('nav-folder') || child.classList.contains('tree-item');
+      if (hasSvg && !isSearch && !isNav) return child;
     }
 
-    // Strategy 3: Fallback — just return the sidebar itself
-    return sidebar;
+    return null;
   }
 
   function buildToggle() {
     if (document.querySelector('.hc-toggle-row')) return;
 
-    var anchor = findThemeToggleContainer();
-    if (!anchor) return;
+    var toggleRow = findThemeToggleRow();
+    if (!toggleRow) return;
 
     // Build: [contrast-icon] [pill-track > thumb]
     var row = document.createElement('div');
@@ -3036,22 +3032,13 @@
       }
     });
 
-    // Insert right after the theme toggle container so they sit on the same line
-    if (anchor.nextSibling) {
-      anchor.parentNode.insertBefore(row, anchor.nextSibling);
-    } else {
-      anchor.parentNode.appendChild(row);
-    }
+    // Append INSIDE the same row that contains the dark mode toggle
+    toggleRow.appendChild(row);
 
-    // Ensure the parent is flex so both toggles sit side-by-side
-    var parent = row.parentNode;
-    var cs = window.getComputedStyle(parent);
-    if (cs.display !== 'flex' && cs.display !== 'inline-flex') {
-      parent.style.display = 'flex';
-      parent.style.alignItems = 'center';
-      parent.style.flexWrap = 'wrap';
-      parent.style.gap = '0';
-    }
+    // Ensure the row is flex so everything sits side-by-side
+    toggleRow.style.display = 'flex';
+    toggleRow.style.alignItems = 'center';
+    toggleRow.style.gap = '0';
 
     updateAria();
   }

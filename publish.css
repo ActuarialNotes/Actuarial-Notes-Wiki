@@ -4327,7 +4327,7 @@ h6 a {
   transition: opacity 0.15s ease, color 0.15s ease, right 0.2s ease, left 0.2s ease;
   pointer-events: none;
 }
-.hc-toggle-row__icon svg { width: 18px; height: 18px; }
+.hc-toggle-row__icon svg { width: 15px; height: 15px; }
 .hc-toggle-row:hover .hc-toggle-row__icon { opacity: 1; }
 .high-contrast .hc-toggle-row__icon {
   opacity: 1;
@@ -4339,7 +4339,7 @@ h6 a {
 /* Pill track — sized to match Obsidian's native theme toggle */
 .hc-toggle-row__track {
   position: relative;
-  width: 46px;
+  width: 48px;
   height: 22px;
   background: var(--muted);
   border-radius: 22px;
@@ -4350,10 +4350,10 @@ h6 a {
 /* Thumb / knob */
 .hc-toggle-row__thumb {
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
   background: var(--text-dim);
   border-radius: 50%;
   transition: transform 0.2s ease, background 0.2s ease;
@@ -4364,7 +4364,7 @@ h6 a {
   background: #555;
 }
 .high-contrast .hc-toggle-row__thumb {
-  transform: translateX(24px);
+  transform: translateX(26px);
   background: #fff;
 }
 

@@ -3070,7 +3070,7 @@ figure.right figcaption,
 .exam-nav__lo-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
   width: 100%;
   padding: 8px 14px;
@@ -4119,6 +4119,7 @@ h6 a {
 .concept-nav__obj-btn {
   display: flex;
   align-items: center;
+  gap: 8px;
   width: 100%;
   background: none !important;
   border: none !important;
@@ -4130,9 +4131,6 @@ h6 a {
   text-align: left;
   box-shadow: none !important;
   transition: color 0.1s ease, background 0.1s ease;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   min-width: 0;
   border-radius: var(--radius-sm);
 }
@@ -4140,6 +4138,28 @@ h6 a {
 .concept-nav__obj-btn:hover {
   color: var(--cnav-color);
   background: color-mix(in oklab, var(--cnav-color) 8%, transparent) !important;
+}
+
+/* Subtle objective number in concept-nav */
+.concept-nav__obj-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.concept-nav__obj-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
 }
 
 .concept-nav__obj-item.is-current {

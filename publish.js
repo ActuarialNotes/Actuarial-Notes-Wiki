@@ -2371,29 +2371,20 @@
       fetchProgressEagerly(container, objectives);
     }
 
-    /* ── Floating FAB (appears when concept-nav scrolls out of view) ── */
-    if (objectives.length > 0) {
-      setupFloatingFab(container, objectives);
-    }
-
     /* ── Global close handlers (registered once) ───────── */
     if (!window._conceptNavCloseRegistered) {
       window._conceptNavCloseRegistered = true;
 
       document.addEventListener('click', function (e) {
         if (!e.target.closest('.concept-nav__arrow-dropdown') &&
-            !e.target.closest('.concept-nav__obj-wrap') &&
-            !e.target.closest('.concept-nav__fab') &&
-            !e.target.closest('.concept-nav__fab-panel')) {
+            !e.target.closest('.concept-nav__obj-wrap')) {
           closeAllConceptDropdowns();
-          closeAllFabPanels();
         }
       });
 
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
           closeAllConceptDropdowns();
-          closeAllFabPanels();
         }
       });
     }
@@ -2888,202 +2879,6 @@
       if (meta) return meta.content;
     } catch (e) {}
     return null;
-  }
-
-  /* ── Floating FAB ─────────────────────────────────────── */
-
-  function setupFloatingFab(container, objectives) {
-    // Extract exam code for the label
-    var examCode = objectives[0] ? objectives[0].code : '';
-    var customColor = container.dataset.color || '';
-
-    // Create the FAB
-    var fab = document.createElement('button');
-    fab.className = 'concept-nav__fab';
-    fab.type = 'button';
-    if (customColor) fab.style.setProperty('--cnav-color', customColor);
-    fab.textContent = examCode;
-
-    // Create the FAB panel (mirrors the objectives section)
-    var panel = document.createElement('div');
-    panel.className = 'concept-nav__fab-panel';
-    if (customColor) panel.style.setProperty('--cnav-color', customColor);
-
-    fab.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var isOpen = fab.classList.contains('is-open');
-      closeAllFabPanels();
-      if (!isOpen) {
-        fab.classList.add('is-open');
-        panel.classList.add('is-open');
-        if (!panel._loaded) {
-          panel._loaded = true;
-          loadFabPanel(panel, objectives);
-        }
-      }
-    });
-
-    document.body.appendChild(fab);
-    document.body.appendChild(panel);
-
-    // Store reference on container for cleanup
-    container._fab = fab;
-    container._fabPanel = panel;
-
-    // IntersectionObserver to show/hide FAB
-    if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            fab.classList.remove('is-visible');
-            fab.classList.remove('is-open');
-            panel.classList.remove('is-open');
-          } else {
-            fab.classList.add('is-visible');
-          }
-        });
-      }, { threshold: 0 });
-      observer.observe(container);
-    }
-  }
-
-  function loadFabPanel(panel, objectives) {
-    panel.innerHTML = '<div class="concept-nav__obj-loading">Loading\u2026</div>';
-
-    var seen = {};
-    var uniqueExams = [];
-    objectives.forEach(function (obj) {
-      if (!seen[obj.pagePath]) {
-        seen[obj.pagePath] = true;
-        uniqueExams.push(obj);
-      }
-    });
-
-    Promise.all(uniqueExams.map(function (exam) {
-      return fetchExamObjectives(exam.pagePath).then(function (allObj) {
-        return { exam: exam, objectives: allObj };
-      });
-    })).then(function (results) {
-      renderFabPanelView(panel, results, objectives);
-    }).catch(function () {
-      panel.innerHTML = '<div class="concept-nav__obj-loading">Could not load objectives.</div>';
-    });
-  }
-
-  function renderFabPanelView(panel, results, navObjectives) {
-    panel.innerHTML = '';
-    var currentObjName = navObjectives[0].objective.replace(/^\d+\.\s*/, '');
-
-    results.forEach(function (result) {
-      var header = document.createElement('div');
-      header.className = 'concept-nav__obj-header';
-      if (result.exam.pagePath) {
-        var headerLink = document.createElement('a');
-        headerLink.className = 'concept-nav__obj-header-link internal-link';
-        headerLink.href = result.exam.pagePath;
-        headerLink.textContent = 'Exam ' + result.exam.code;
-        header.appendChild(headerLink);
-      } else {
-        header.textContent = 'Exam ' + result.exam.code;
-      }
-      panel.appendChild(header);
-
-      if (result.objectives.length === 0) {
-        var empty = document.createElement('div');
-        empty.className = 'concept-nav__obj-loading';
-        empty.textContent = 'No objectives found.';
-        panel.appendChild(empty);
-        return;
-      }
-
-      var list = document.createElement('ol');
-      list.className = 'concept-nav__obj-list';
-
-      result.objectives.forEach(function (objective) {
-        var li = document.createElement('li');
-        li.className = 'concept-nav__obj-item';
-
-        if (objective.name === currentObjName ||
-            objective.name === navObjectives[0].objective) {
-          li.classList.add('is-current');
-        }
-
-        var wrap = document.createElement('div');
-        wrap.className = 'concept-nav__obj-wrap';
-
-        var btn = document.createElement('button');
-        btn.className = 'concept-nav__obj-btn';
-        btn.type = 'button';
-        btn.textContent = objective.name;
-
-        var menu = document.createElement('div');
-        menu.className = 'concept-nav__obj-menu';
-
-        var menuHeader = document.createElement('div');
-        menuHeader.className = 'concept-nav__obj-menu-header';
-        menuHeader.textContent = objective.name;
-        menu.appendChild(menuHeader);
-
-        if (objective.concepts.length === 0) {
-          var emptyMsg = document.createElement('div');
-          emptyMsg.className = 'concept-nav__obj-loading';
-          emptyMsg.textContent = 'No concepts found.';
-          menu.appendChild(emptyMsg);
-        } else {
-          objective.concepts.forEach(function (concept, idx) {
-            var link = document.createElement('a');
-            link.className = 'concept-nav__obj-menu-item internal-link';
-            link.href = 'Concepts/' + concept;
-            var numSpan = document.createElement('span');
-            numSpan.className = 'concept-nav__obj-menu-num';
-            numSpan.textContent = (idx + 1);
-            link.appendChild(numSpan);
-            link.appendChild(document.createTextNode(concept));
-            link.addEventListener('click', function () {
-              wrap.classList.remove('is-open');
-              hideConceptBackdrop();
-            });
-            menu.appendChild(link);
-          });
-        }
-
-        btn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          var wasOpen = wrap.classList.contains('is-open');
-          // Close other wraps in this panel
-          panel.querySelectorAll('.concept-nav__obj-wrap.is-open').forEach(function (d) {
-            d.classList.remove('is-open');
-          });
-          if (!wasOpen) {
-            wrap.classList.add('is-open');
-            showConceptBackdrop();
-          }
-        });
-
-        if (objective.concepts.length > 0) {
-          var countBadge = document.createElement('span');
-          countBadge.className = 'concept-nav__obj-count';
-          countBadge.textContent = objective.concepts.length;
-          btn.appendChild(countBadge);
-        }
-
-        wrap.appendChild(btn);
-        wrap.appendChild(menu);
-        li.appendChild(wrap);
-        list.appendChild(li);
-      });
-
-      panel.appendChild(list);
-    });
-  }
-
-  function closeAllFabPanels() {
-    document.querySelectorAll('.concept-nav__fab.is-open').forEach(function (f) {
-      f.classList.remove('is-open');
-    });
-    document.querySelectorAll('.concept-nav__fab-panel.is-open').forEach(function (p) {
-      p.classList.remove('is-open');
-    });
   }
 
   /* ── Backdrop helpers ──────────────────────────────────── */

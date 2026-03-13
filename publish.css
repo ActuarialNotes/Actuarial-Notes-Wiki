@@ -1547,7 +1547,11 @@ input[type="search"]:focus, .search-input:focus {
   overflow: hidden;
   min-width: 0;
   max-width: 100%;
+  width: calc(100% - 20px);
   box-sizing: border-box;
+  display: block;
+  float: none;
+  clear: both;
 }
 
 /* Header row: title + count */
@@ -1558,11 +1562,11 @@ input[type="search"]:focus, .search-input:focus {
   margin-bottom: 8px;
 }
 .journey-tracker__title {
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .04em;
-  color: var(--brand);
+  color: var(--sb-dim);
 }
 .journey-tracker__count {
   font-size: 0.75rem;
@@ -1744,6 +1748,18 @@ a.journey-tracker__name {
 }
 a.journey-tracker__name:hover {
   color: var(--brand-hover);
+}
+
+/* Mobile: ensure tracker sits below search, full width */
+@media (max-width: 768px) {
+  .site-body-left-column {
+    flex-direction: column !important;
+  }
+  .journey-tracker {
+    width: calc(100% - 20px) !important;
+    flex-shrink: 0;
+    order: 10;   /* push below site-name & search */
+  }
 }
 
 /* "or" separator between ALTAM/ASTAM */

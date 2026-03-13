@@ -3272,6 +3272,15 @@
     trackerEl.appendChild(select);
     trackerEl.appendChild(sectionsEl);
 
+    // Ensure the parent container stacks children vertically
+    // (Obsidian Publish may use flex-row on some viewports)
+    if (insertParent) {
+      var cs = window.getComputedStyle(insertParent);
+      if (cs.display === 'flex' || cs.display === 'inline-flex') {
+        insertParent.style.flexDirection = 'column';
+      }
+    }
+
     if (insertBefore) {
       insertParent.insertBefore(trackerEl, insertBefore);
     } else {

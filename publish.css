@@ -1534,6 +1534,221 @@ input[type="search"]:focus, .search-input:focus {
 
 
 /* ===========================================================
+   13b) EXAM JOURNEY TRACKER (sidebar widget)
+   =========================================================== */
+
+.journey-tracker {
+  margin: 8px 10px 12px;
+  padding: 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--sb-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+}
+
+/* Header row: title + count */
+.journey-tracker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.journey-tracker__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--brand);
+}
+.journey-tracker__count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Progress bar */
+.journey-tracker__bar {
+  height: 4px;
+  background: var(--muted);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.journey-tracker__bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand), color-mix(in oklab, var(--brand) 75%, var(--success)));
+  transition: width .35s ease;
+  min-width: 0;
+}
+
+/* Track selector */
+.journey-tracker__select {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--sb-border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: border-color .15s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23b6c0cc' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+.journey-tracker__select:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 20%, transparent);
+}
+.journey-tracker__select option {
+  background: var(--bg-elev);
+  color: var(--text);
+}
+
+/* Sections */
+.journey-tracker__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Section header (collapsible) */
+.journey-tracker__section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--text-dim);
+  padding: 6px 4px 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: color .12s ease;
+}
+.journey-tracker__section-header:hover {
+  color: var(--text);
+}
+.journey-tracker__section-chevron {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  transition: transform .15s ease;
+  opacity: .6;
+}
+.journey-tracker__section.is-collapsed .journey-tracker__section-chevron {
+  transform: rotate(-90deg);
+}
+.journey-tracker__section.is-collapsed .journey-tracker__items {
+  display: none;
+}
+
+/* Items list */
+.journey-tracker__items {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* Single item row */
+.journey-tracker__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  border-radius: 6px;
+  transition: background .12s ease;
+}
+.journey-tracker__item:hover {
+  background: var(--sb-hover);
+}
+
+/* Status button */
+.journey-tracker__status {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: transform .12s ease, background .12s ease;
+}
+.journey-tracker__status:hover {
+  transform: scale(1.15);
+  background: color-mix(in oklab, var(--muted) 60%, transparent);
+}
+.journey-tracker__status svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Status: not started */
+.journey-tracker__item[data-status="not_started"] .journey-tracker__status {
+  color: var(--text-dim);
+  opacity: .5;
+}
+/* Status: in progress */
+.journey-tracker__item[data-status="in_progress"] .journey-tracker__status {
+  color: var(--warning);
+  opacity: 1;
+}
+/* Status: completed */
+.journey-tracker__item[data-status="completed"] .journey-tracker__status {
+  color: var(--success);
+  opacity: 1;
+}
+.journey-tracker__item[data-status="completed"] .journey-tracker__name {
+  color: var(--text-dim);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in oklab, var(--text-dim) 40%, transparent);
+}
+
+/* Item name / link */
+.journey-tracker__name {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--sb-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color .12s ease;
+}
+a.journey-tracker__name {
+  color: var(--brand);
+  text-decoration: none;
+  cursor: pointer;
+}
+a.journey-tracker__name:hover {
+  color: var(--brand-hover);
+}
+
+/* "or" separator between ALTAM/ASTAM */
+.journey-tracker__or {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  opacity: .6;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: 0 6px 0 28px;
+}
+
+
+/* ===========================================================
    14) EMBEDS
    =========================================================== */
 

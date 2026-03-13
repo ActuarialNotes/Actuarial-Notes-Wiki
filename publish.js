@@ -2981,6 +2981,443 @@
 
 
 /* ===========================================================
+   EXAM JOURNEY TRACKER
+   Sidebar widget that lets users pick a certification track
+   (ASA, ACAS, FSA, FCAS), view requirements, and mark progress.
+   Persists state in localStorage.
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'actuarial-notes-journey';
+
+  /* ---- SVG icons ---- */
+  var SVG_CIRCLE = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/></svg>';
+
+  var SVG_PROGRESS = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/>' +
+    '<path d="M10 2a8 8 0 0 1 0 16" fill="currentColor" opacity=".45"/></svg>';
+
+  var SVG_CHECK = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="10" cy="10" r="8" fill="currentColor" opacity=".2"/>' +
+    '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/>' +
+    '<polyline points="6.5 10.5 9 13 14 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  var SVG_CHEVRON = '<svg class="journey-tracker__section-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<polyline points="6 8 10 12 14 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  var STATUS_ICONS = { not_started: SVG_CIRCLE, in_progress: SVG_PROGRESS, completed: SVG_CHECK };
+  var STATUS_CYCLE = { not_started: 'in_progress', in_progress: 'completed', completed: 'not_started' };
+
+  /* ---- Track definitions ---- */
+  var TRACKS = [
+    {
+      key: 'ASA',
+      name: 'ASA \u2014 Associate (SOA)',
+      sections: [
+        {
+          label: 'Preliminary Exams',
+          items: [
+            { id: 'P',     name: 'Exam P \u2014 Probability',             path: 'Exam P-1 (SOA)' },
+            { id: 'FM',    name: 'Exam FM \u2014 Financial Mathematics',   path: 'Exam FM-2 (SOA)' },
+            { id: 'FAM',   name: 'Exam FAM \u2014 Fundamentals of Actuarial Math', path: null },
+            { id: 'ALTAM', name: 'Exam ALTAM \u2014 Advanced Long-Term',   path: null, or: 'ASTAM' },
+            { id: 'ASTAM', name: 'Exam ASTAM \u2014 Advanced Short-Term',  path: null, or: 'ALTAM' },
+            { id: 'SRM',   name: 'Exam SRM \u2014 Statistics for Risk Modeling', path: null },
+            { id: 'PA',    name: 'Exam PA \u2014 Predictive Analytics',    path: null }
+          ]
+        },
+        {
+          label: 'VEE Requirements',
+          items: [
+            { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
+            { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null },
+            { id: 'VEE-MS',   name: 'VEE \u2014 Mathematical Statistics', path: null }
+          ]
+        },
+        {
+          label: 'Experience & Courses',
+          items: [
+            { id: 'FAP', name: 'FAP \u2014 Fundamentals of Actuarial Practice', path: null },
+            { id: 'APC', name: 'APC \u2014 Associateship Professionalism Course', path: null }
+          ]
+        }
+      ]
+    },
+    {
+      key: 'ACAS',
+      name: 'ACAS \u2014 Associate (CAS)',
+      sections: [
+        {
+          label: 'Preliminary Exams',
+          items: [
+            { id: 'P',      name: 'Exam 1/P \u2014 Probability',           path: 'Exam P-1 (SOA)' },
+            { id: 'FM',     name: 'Exam 2/FM \u2014 Financial Mathematics', path: 'Exam FM-2 (SOA)' },
+            { id: 'MAS-I',  name: 'Exam MAS-I \u2014 Modern Actuarial Statistics I',  path: null },
+            { id: 'MAS-II', name: 'Exam MAS-II \u2014 Modern Actuarial Statistics II', path: null },
+            { id: 'CAS-5',  name: 'Exam 5 \u2014 Basic Techniques for Ratemaking & Reserving', path: null },
+            { id: 'CAS-6',  name: 'Exam 6 \u2014 Regulation and Financial Reporting',  path: null }
+          ]
+        },
+        {
+          label: 'VEE Requirements',
+          items: [
+            { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
+            { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null },
+            { id: 'VEE-MS',   name: 'VEE \u2014 Mathematical Statistics', path: null }
+          ]
+        },
+        {
+          label: 'Online Courses',
+          items: [
+            { id: 'CAS-OC1',   name: 'CAS Online Course 1',                   path: null },
+            { id: 'CAS-OC2',   name: 'CAS Online Course 2',                   path: null },
+            { id: 'CAS-PROF',  name: 'CAS Course on Professionalism',          path: null }
+          ]
+        }
+      ]
+    },
+    {
+      key: 'FSA',
+      name: 'FSA \u2014 Fellow (SOA)',
+      sections: [
+        {
+          label: 'ASA Requirements',
+          items: [
+            { id: 'P',     name: 'Exam P \u2014 Probability',             path: 'Exam P-1 (SOA)' },
+            { id: 'FM',    name: 'Exam FM \u2014 Financial Mathematics',   path: 'Exam FM-2 (SOA)' },
+            { id: 'FAM',   name: 'Exam FAM \u2014 Fundamentals of Actuarial Math', path: null },
+            { id: 'ALTAM', name: 'Exam ALTAM \u2014 Advanced Long-Term',   path: null, or: 'ASTAM' },
+            { id: 'ASTAM', name: 'Exam ASTAM \u2014 Advanced Short-Term',  path: null, or: 'ALTAM' },
+            { id: 'SRM',   name: 'Exam SRM \u2014 Statistics for Risk Modeling', path: null },
+            { id: 'PA',    name: 'Exam PA \u2014 Predictive Analytics',    path: null },
+            { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
+            { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null },
+            { id: 'VEE-MS',   name: 'VEE \u2014 Mathematical Statistics', path: null },
+            { id: 'FAP', name: 'FAP \u2014 Fundamentals of Actuarial Practice', path: null },
+            { id: 'APC', name: 'APC \u2014 Associateship Professionalism Course', path: null }
+          ]
+        },
+        {
+          label: 'Fellowship Exams',
+          items: [
+            { id: 'FSA-EXAM', name: 'Fellowship Exam (track-specific)',  path: null },
+            { id: 'FSA-MOD',  name: 'Fellowship Module (track-specific)', path: null },
+            { id: 'FSA-DMAC', name: 'DMAC \u2014 Decision Making & Communication', path: null }
+          ]
+        },
+        {
+          label: 'Fellowship Course',
+          items: [
+            { id: 'FPC', name: 'FPC \u2014 Fellowship Professionalism Course', path: null }
+          ]
+        }
+      ]
+    },
+    {
+      key: 'FCAS',
+      name: 'FCAS \u2014 Fellow (CAS)',
+      sections: [
+        {
+          label: 'ACAS Requirements',
+          items: [
+            { id: 'P',      name: 'Exam 1/P \u2014 Probability',           path: 'Exam P-1 (SOA)' },
+            { id: 'FM',     name: 'Exam 2/FM \u2014 Financial Mathematics', path: 'Exam FM-2 (SOA)' },
+            { id: 'MAS-I',  name: 'Exam MAS-I \u2014 Modern Actuarial Statistics I',  path: null },
+            { id: 'MAS-II', name: 'Exam MAS-II \u2014 Modern Actuarial Statistics II', path: null },
+            { id: 'CAS-5',  name: 'Exam 5 \u2014 Basic Techniques for Ratemaking & Reserving', path: null },
+            { id: 'CAS-6',  name: 'Exam 6 \u2014 Regulation and Financial Reporting',  path: null },
+            { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
+            { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null },
+            { id: 'VEE-MS',   name: 'VEE \u2014 Mathematical Statistics', path: null },
+            { id: 'CAS-OC1',   name: 'CAS Online Course 1',              path: null },
+            { id: 'CAS-OC2',   name: 'CAS Online Course 2',              path: null },
+            { id: 'CAS-PROF',  name: 'CAS Course on Professionalism',     path: null }
+          ]
+        },
+        {
+          label: 'Fellowship Exams',
+          items: [
+            { id: 'CAS-7', name: 'Exam 7 \u2014 Estimation of Policy Liabilities', path: null },
+            { id: 'CAS-8', name: 'Exam 8 \u2014 Advanced Ratemaking',               path: null },
+            { id: 'CAS-9', name: 'Exam 9 \u2014 Financial Risk & Rate of Return',   path: null }
+          ]
+        }
+      ]
+    }
+  ];
+
+  /* ---- State management ---- */
+  var state = { selectedTrack: 'ASA', progress: {} };
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.selectedTrack) state.selectedTrack = parsed.selectedTrack;
+        if (parsed && parsed.progress) state.progress = parsed.progress;
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+  }
+
+  function getStatus(id) {
+    return state.progress[id] || 'not_started';
+  }
+
+  function cycleStatus(id) {
+    var current = getStatus(id);
+    state.progress[id] = STATUS_CYCLE[current];
+    saveState();
+  }
+
+  /* ---- Count helpers ---- */
+  function getTrackCounts(track) {
+    var total = 0;
+    var done = 0;
+    var orSeen = {};
+    track.sections.forEach(function (sec) {
+      sec.items.forEach(function (item) {
+        // For "or" pairs, only count one toward total
+        if (item.or) {
+          var pairKey = [item.id, item.or].sort().join('|');
+          if (orSeen[pairKey]) return; // skip second of pair
+          orSeen[pairKey] = true;
+          // Count as done if either is completed
+          if (getStatus(item.id) === 'completed' || getStatus(item.or) === 'completed') done++;
+          total++;
+        } else {
+          total++;
+          if (getStatus(item.id) === 'completed') done++;
+        }
+      });
+    });
+    return { total: total, done: done };
+  }
+
+  /* ---- DOM references ---- */
+  var trackerEl = null;
+  var countEl = null;
+  var barFillEl = null;
+  var sectionsEl = null;
+
+  /* ---- Build the tracker ---- */
+  function buildTracker() {
+    if (document.querySelector('.journey-tracker')) return;
+
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (!sidebar) return;
+
+    // Find insertion point: after search input, before nav tree
+    var insertBefore = null;
+    var children = sidebar.children;
+    for (var i = 0; i < children.length; i++) {
+      var child = children[i];
+      if (child.classList.contains('nav-folder') ||
+          child.classList.contains('tree-item') ||
+          child.querySelector('.nav-folder, .tree-item')) {
+        insertBefore = child;
+        break;
+      }
+    }
+
+    trackerEl = document.createElement('div');
+    trackerEl.className = 'journey-tracker';
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'journey-tracker__header';
+    var title = document.createElement('span');
+    title.className = 'journey-tracker__title';
+    title.textContent = 'Exam Journey';
+    countEl = document.createElement('span');
+    countEl.className = 'journey-tracker__count';
+    header.appendChild(title);
+    header.appendChild(countEl);
+
+    // Progress bar
+    var bar = document.createElement('div');
+    bar.className = 'journey-tracker__bar';
+    barFillEl = document.createElement('div');
+    barFillEl.className = 'journey-tracker__bar-fill';
+    bar.appendChild(barFillEl);
+
+    // Track selector
+    var select = document.createElement('select');
+    select.className = 'journey-tracker__select';
+    TRACKS.forEach(function (t) {
+      var opt = document.createElement('option');
+      opt.value = t.key;
+      opt.textContent = t.name;
+      select.appendChild(opt);
+    });
+    select.value = state.selectedTrack;
+    select.addEventListener('change', function () {
+      state.selectedTrack = select.value;
+      saveState();
+      renderSections();
+      updateProgress();
+    });
+
+    // Sections container
+    sectionsEl = document.createElement('div');
+    sectionsEl.className = 'journey-tracker__sections';
+
+    trackerEl.appendChild(header);
+    trackerEl.appendChild(bar);
+    trackerEl.appendChild(select);
+    trackerEl.appendChild(sectionsEl);
+
+    if (insertBefore) {
+      sidebar.insertBefore(trackerEl, insertBefore);
+    } else {
+      sidebar.appendChild(trackerEl);
+    }
+
+    renderSections();
+    updateProgress();
+  }
+
+  function renderSections() {
+    if (!sectionsEl) return;
+    sectionsEl.innerHTML = '';
+
+    var track = TRACKS.find(function (t) { return t.key === state.selectedTrack; });
+    if (!track) return;
+
+    track.sections.forEach(function (sec) {
+      var section = document.createElement('div');
+      section.className = 'journey-tracker__section';
+
+      // Section header
+      var sHeader = document.createElement('div');
+      sHeader.className = 'journey-tracker__section-header';
+      sHeader.innerHTML = SVG_CHEVRON;
+      var sLabel = document.createElement('span');
+      sLabel.textContent = sec.label;
+      sHeader.appendChild(sLabel);
+      sHeader.addEventListener('click', function () {
+        section.classList.toggle('is-collapsed');
+      });
+
+      // Items container
+      var itemsEl = document.createElement('div');
+      itemsEl.className = 'journey-tracker__items';
+
+      sec.items.forEach(function (item, idx) {
+        // "or" separator
+        if (item.or && idx > 0) {
+          var prevItem = sec.items[idx - 1];
+          if (prevItem && prevItem.or === item.id) {
+            var orDiv = document.createElement('div');
+            orDiv.className = 'journey-tracker__or';
+            orDiv.textContent = 'or';
+            itemsEl.appendChild(orDiv);
+          }
+        }
+
+        var row = document.createElement('div');
+        row.className = 'journey-tracker__item';
+        row.dataset.status = getStatus(item.id);
+        row.dataset.itemId = item.id;
+
+        // Status button
+        var statusBtn = document.createElement('button');
+        statusBtn.className = 'journey-tracker__status';
+        statusBtn.type = 'button';
+        statusBtn.title = 'Click to change status';
+        statusBtn.innerHTML = STATUS_ICONS[getStatus(item.id)];
+        statusBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          cycleStatus(item.id);
+          row.dataset.status = getStatus(item.id);
+          statusBtn.innerHTML = STATUS_ICONS[getStatus(item.id)];
+          updateProgress();
+        });
+
+        // Name (link if path exists)
+        var nameEl;
+        if (item.path) {
+          nameEl = document.createElement('a');
+          nameEl.className = 'journey-tracker__name internal-link';
+          nameEl.href = '/' + encodeURIComponent(item.path).replace(/%20/g, '+');
+          nameEl.dataset.href = item.path;
+        } else {
+          nameEl = document.createElement('span');
+          nameEl.className = 'journey-tracker__name';
+        }
+        nameEl.textContent = item.name;
+        nameEl.title = item.name;
+
+        row.appendChild(statusBtn);
+        row.appendChild(nameEl);
+        itemsEl.appendChild(row);
+      });
+
+      section.appendChild(sHeader);
+      section.appendChild(itemsEl);
+      sectionsEl.appendChild(section);
+    });
+  }
+
+  function updateProgress() {
+    var track = TRACKS.find(function (t) { return t.key === state.selectedTrack; });
+    if (!track) return;
+
+    var counts = getTrackCounts(track);
+    if (countEl) countEl.textContent = counts.done + ' / ' + counts.total;
+    if (barFillEl) {
+      var pct = counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0;
+      barFillEl.style.width = pct + '%';
+    }
+  }
+
+  /* ---- Init & SPA survival ---- */
+  function init() {
+    loadState();
+    buildTracker();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 250); });
+  } else {
+    setTimeout(init, 250);
+  }
+
+  // Re-inject if sidebar re-renders (SPA navigation)
+  var jtObserver = new MutationObserver(function () {
+    if (!document.querySelector('.journey-tracker')) {
+      trackerEl = null;
+      countEl = null;
+      barFillEl = null;
+      sectionsEl = null;
+      buildTracker();
+    }
+  });
+
+  function observeSidebar() {
+    var target = document.querySelector('.site-body-left-column');
+    if (target) {
+      jtObserver.observe(target, { childList: true, subtree: false });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(observeSidebar, 350); });
+  } else {
+    setTimeout(observeSidebar, 350);
+  }
+
+})();
+
+
+/* ===========================================================
    HIGH CONTRAST TOGGLE
    Injects a contrast icon + pill switch right beside the
    built-in dark/light mode toggle in the Obsidian Publish

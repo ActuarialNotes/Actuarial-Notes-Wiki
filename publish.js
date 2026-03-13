@@ -3214,33 +3214,16 @@
     var sidebar = document.querySelector('.site-body-left-column');
     if (!sidebar) return;
 
-    // Find insertion point: after search input, before nav tree
-    // Look for the search input first and insert after it;
-    // otherwise fall back to inserting before the first nav-folder/tree-item direct child
-    var insertBefore = null;
-    var searchInput = sidebar.querySelector('input[type="search"], .search-input-container, .search-container');
-    if (searchInput) {
-      // Walk up to the direct child of sidebar that contains the search
-      var searchParent = searchInput;
-      while (searchParent && searchParent.parentElement !== sidebar) {
-        searchParent = searchParent.parentElement;
-      }
-      if (searchParent && searchParent.parentElement === sidebar) {
-        insertBefore = searchParent.nextElementSibling;
-      }
-    }
-    if (!insertBefore) {
-      // Fallback: insert before the first direct-child nav-folder or tree-item
-      var children = sidebar.children;
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
-        if (child.classList.contains('nav-folder') ||
-            child.classList.contains('tree-item')) {
-          insertBefore = child;
-          break;
-        }
-      }
-    }
+    // Obsidian Publish wraps the sidebar content (site-name, search, nav-tree)
+    // inside an inner container. We must insert inside that container (not as a
+    // direct child of .site-body-left-column) to avoid side-by-side layout.
+    // Strategy: find the root nav tree element, then insert before it within
+    // its parent so we appear right after the search bar.
+    var navRoot = sidebar.querySelector('.nav-folder.mod-root') ||
+                  sidebar.querySelector('.nav-folder') ||
+                  sidebar.querySelector('.tree-item');
+    var insertParent = (navRoot && navRoot.parentElement) ? navRoot.parentElement : sidebar;
+    var insertBefore = navRoot || null;
 
     trackerEl = document.createElement('div');
     trackerEl.className = 'journey-tracker';
@@ -3290,9 +3273,9 @@
     trackerEl.appendChild(sectionsEl);
 
     if (insertBefore) {
-      sidebar.insertBefore(trackerEl, insertBefore);
+      insertParent.insertBefore(trackerEl, insertBefore);
     } else {
-      sidebar.appendChild(trackerEl);
+      insertParent.appendChild(trackerEl);
     }
 
     renderSections();

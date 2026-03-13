@@ -3215,15 +3215,30 @@
     if (!sidebar) return;
 
     // Find insertion point: after search input, before nav tree
+    // Look for the search input first and insert after it;
+    // otherwise fall back to inserting before the first nav-folder/tree-item direct child
     var insertBefore = null;
-    var children = sidebar.children;
-    for (var i = 0; i < children.length; i++) {
-      var child = children[i];
-      if (child.classList.contains('nav-folder') ||
-          child.classList.contains('tree-item') ||
-          child.querySelector('.nav-folder, .tree-item')) {
-        insertBefore = child;
-        break;
+    var searchInput = sidebar.querySelector('input[type="search"], .search-input-container, .search-container');
+    if (searchInput) {
+      // Walk up to the direct child of sidebar that contains the search
+      var searchParent = searchInput;
+      while (searchParent && searchParent.parentElement !== sidebar) {
+        searchParent = searchParent.parentElement;
+      }
+      if (searchParent && searchParent.parentElement === sidebar) {
+        insertBefore = searchParent.nextElementSibling;
+      }
+    }
+    if (!insertBefore) {
+      // Fallback: insert before the first direct-child nav-folder or tree-item
+      var children = sidebar.children;
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i];
+        if (child.classList.contains('nav-folder') ||
+            child.classList.contains('tree-item')) {
+          insertBefore = child;
+          break;
+        }
       }
     }
 

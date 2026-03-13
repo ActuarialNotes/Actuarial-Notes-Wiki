@@ -1758,7 +1758,6 @@ a.journey-tracker__name:hover {
   .journey-tracker {
     width: calc(100% - 20px) !important;
     flex-shrink: 0;
-    order: 10;   /* push below site-name & search */
   }
 }
 

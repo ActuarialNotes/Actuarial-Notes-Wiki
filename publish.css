@@ -1544,7 +1544,7 @@ input[type="search"]:focus, .search-input:focus {
   border: 1px solid var(--sb-border);
   border-radius: var(--radius-md);
   font-family: var(--font-sans);
-  overflow: hidden;
+  overflow: visible;
   min-width: 0;
   max-width: 100%;
   width: calc(100% - 20px);
@@ -1554,7 +1554,7 @@ input[type="search"]:focus, .search-input:focus {
   clear: both;
   /* Prevent flex layout from stretching/pushing the tracker */
   flex-grow: 0;
-  flex-shrink: 0;
+  flex-shrink: 1;
   flex-basis: auto;
 }
 
@@ -1632,7 +1632,9 @@ input[type="search"]:focus, .search-input:focus {
   flex-direction: column;
   gap: 2px;
   min-width: 0;
-  overflow: hidden;
+  max-height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Section header (collapsible) */

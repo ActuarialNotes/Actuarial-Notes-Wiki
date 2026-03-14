@@ -3395,8 +3395,14 @@
         if (item.path) {
           nameEl = document.createElement('a');
           nameEl.className = 'journey-tracker__name internal-link';
-          nameEl.href = item.path;
+          var slug = item.path.replace(/ /g, '+');
+          nameEl.href = '/' + slug;
           nameEl.dataset.href = item.path;
+          nameEl.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = '/' + slug;
+          });
         } else {
           nameEl = document.createElement('span');
           nameEl.className = 'journey-tracker__name';

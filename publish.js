@@ -3394,15 +3394,14 @@
         var nameEl;
         if (item.path) {
           nameEl = document.createElement('a');
-          nameEl.className = 'journey-tracker__name internal-link';
+          nameEl.className = 'journey-tracker__name journey-tracker__link';
           var slug = item.path.replace(/ /g, '+');
-          nameEl.href = '/' + slug;
-          nameEl.dataset.href = item.path;
+          nameEl.href = window.location.origin + '/' + slug;
           nameEl.addEventListener('click', function (e) {
             e.preventDefault();
-            e.stopPropagation();
-            window.location.href = '/' + slug;
-          });
+            e.stopImmediatePropagation();
+            window.open(window.location.origin + '/' + slug, '_self');
+          }, true);
         } else {
           nameEl = document.createElement('span');
           nameEl.className = 'journey-tracker__name';

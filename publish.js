@@ -3029,22 +3029,22 @@
           label: 'Preliminary Exams',
           items: [
             { id: 'P',     name: 'Exam P \u2014 Probability',             path: 'Exam P-1 (SOA)' },
-            { id: 'FM',    name: 'Exam FM \u2014 Financial Mathematics',   path: 'Exam FM-2 (SOA)' },
+            { id: 'FM',    name: 'Exam FM \u2014 Financial Mathematics',   path: 'Exam FM-2 (SOA)' }
+          ]
+        },
+        {
+          label: 'Exams & E-Learning',
+          items: [
             { id: 'PAF',   name: 'PAF \u2014 Pre-Actuarial Foundations',   path: null },
             { id: 'FAM',   name: 'Exam FAM \u2014 Fundamentals of Actuarial Mathematics', path: null },
             { id: 'SRM',   name: 'Exam SRM \u2014 Statistics for Risk Modeling', path: null },
             { id: 'ASF',   name: 'ASF \u2014 Actuarial Science Foundations', path: null },
             { id: 'PA',    name: 'Exam PA \u2014 Predictive Analytics',    path: null },
             { id: 'ALTAM', name: 'Exam ALTAM \u2014 Advanced Long-Term Actuarial Mathematics',   path: null, or: 'ASTAM' },
-            { id: 'ASTAM', name: 'Exam ASTAM \u2014 Advanced Short-Term Actuarial Mathematics',  path: null, or: 'ALTAM' }
-          ]
-        },
-        {
-          label: 'Experience & Courses',
-          items: [
-            { id: 'ATPA', name: 'ATPA \u2014 Advanced Topics in Predictive Analytics', path: null },
-            { id: 'FAP',  name: 'FAP \u2014 Fundamentals of Actuarial Practice',       path: null },
-            { id: 'APC',  name: 'APC \u2014 Associateship Professionalism Course',     path: null }
+            { id: 'ASTAM', name: 'Exam ASTAM \u2014 Advanced Short-Term Actuarial Mathematics',  path: null, or: 'ALTAM' },
+            { id: 'ATPA',  name: 'ATPA \u2014 Advanced Topics in Predictive Analytics', path: null },
+            { id: 'FAP',   name: 'FAP \u2014 Fundamentals of Actuarial Practice',       path: null },
+            { id: 'APC',   name: 'APC \u2014 Associateship Professionalism Course',     path: null }
           ]
         }
       ]
@@ -3064,14 +3064,14 @@
           label: 'Preliminary Exams',
           items: [
             { id: 'P',      name: 'Exam P-1 \u2014 Probability',           path: 'Exam P-1 (SOA)' },
-            { id: 'FM',     name: 'Exam FM-2 \u2014 Financial Mathematics', path: 'Exam FM-2 (SOA)' },
-            { id: 'MAS-I',  name: 'Exam MAS-I \u2014 Modern Actuarial Statistics I',  path: null },
-            { id: 'MAS-II', name: 'Exam MAS-II \u2014 Modern Actuarial Statistics II', path: null }
+            { id: 'FM',     name: 'Exam FM-2 \u2014 Financial Mathematics', path: 'Exam FM-2 (SOA)' }
           ]
         },
         {
-          label: 'CAS-Specific Requirements',
+          label: 'Exams & Requirements',
           items: [
+            { id: 'MAS-I',    name: 'Exam MAS-I \u2014 Modern Actuarial Statistics I',  path: null },
+            { id: 'MAS-II',   name: 'Exam MAS-II \u2014 Modern Actuarial Statistics II', path: null },
             { id: 'CAS-IA',   name: 'CAS DISC IA \u2014 Insurance Accounting',   path: null },
             { id: 'CAS-DA',   name: 'CAS DISC DA \u2014 Data & Analytics',        path: null },
             { id: 'CAS-RM',   name: 'CAS DISC RM \u2014 Risk Management',         path: null },
@@ -3089,6 +3089,7 @@
       sections: [
         {
           label: 'ASA Requirements',
+          collapsed: true,
           items: [
             { id: 'VEE-MS',   name: 'VEE \u2014 Mathematical Statistics', path: null },
             { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
@@ -3124,6 +3125,7 @@
       sections: [
         {
           label: 'ACAS Requirements',
+          collapsed: true,
           items: [
             { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
             { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null },
@@ -3340,6 +3342,7 @@
     track.sections.forEach(function (sec) {
       var section = document.createElement('div');
       section.className = 'journey-tracker__section';
+      if (sec.collapsed) section.classList.add('is-collapsed');
 
       // Section header
       var sHeader = document.createElement('div');

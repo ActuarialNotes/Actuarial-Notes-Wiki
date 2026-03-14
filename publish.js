@@ -3261,42 +3261,65 @@
     trackerEl.appendChild(select);
     trackerEl.appendChild(sectionsEl);
 
-    // Insert as a DIRECT child of .site-body-left-column, right after
-    // the search bar (below toggles/search, above nav tree).
-    // Strategy: find the search input, walk up to the direct child of
-    // sidebar that contains it, and insert after that element.
+    // .site-body-left-column is a flex-row with an inner wrapper that holds
+    // site-name, toggles, search, and nav tree. We must insert INSIDE that
+    // wrapper, not as a direct child of sidebar (which causes side-by-side).
+    //
+    // Strategy: find the search input → walk up to the inner wrapper (the
+    // direct child of sidebar that contains it) → insert inside that wrapper,
+    // right after the search and before the nav tree.
     var searchInput = sidebar.querySelector('input[type="search"], input[type="text"]');
-    var anchor = searchInput;
-    if (anchor) {
-      // Walk up to the direct child of sidebar that contains the search
-      while (anchor.parentElement && anchor.parentElement !== sidebar) {
-        anchor = anchor.parentElement;
+    var innerWrapper = null;
+
+    if (searchInput) {
+      // Walk up from search input to find the direct child of sidebar
+      var el = searchInput;
+      while (el.parentElement && el.parentElement !== sidebar) {
+        el = el.parentElement;
+      }
+      if (el.parentElement === sidebar) {
+        innerWrapper = el;
       }
     }
 
-    if (anchor && anchor.parentElement === sidebar) {
-      // Insert right after the search bar's container
-      if (anchor.nextSibling) {
-        sidebar.insertBefore(trackerEl, anchor.nextSibling);
-      } else {
-        sidebar.appendChild(trackerEl);
-      }
-    } else {
-      // Fallback: try inserting before the nav tree
-      var navRoot = null;
+    // If we couldn't find via search, try finding the wrapper that contains the nav tree
+    if (!innerWrapper) {
       var children = sidebar.children;
       for (var ci = 0; ci < children.length; ci++) {
         var child = children[ci];
-        if (child.classList.contains('nav-folder') || child.classList.contains('tree-item') ||
-            child.querySelector('.nav-folder, .tree-item')) {
-          navRoot = child;
+        if (child.querySelector && (child.querySelector('.nav-folder, .tree-item') ||
+            child.querySelector('input[type="search"]'))) {
+          innerWrapper = child;
           break;
         }
       }
-      if (navRoot) {
-        sidebar.insertBefore(trackerEl, navRoot);
+    }
+
+    // Target container: the inner wrapper if found, otherwise sidebar itself
+    var container = innerWrapper || sidebar;
+
+    // Inside the container, find the nav tree and insert before it
+    var navRoot = container.querySelector('.nav-folder.mod-root') ||
+                  container.querySelector('.nav-folder') ||
+                  container.querySelector('.tree-item');
+
+    if (navRoot) {
+      navRoot.parentElement.insertBefore(trackerEl, navRoot);
+    } else {
+      // No nav tree yet — insert after the search bar within the container
+      if (searchInput) {
+        // Walk up to a direct child of container
+        var searchAncestor = searchInput;
+        while (searchAncestor.parentElement && searchAncestor.parentElement !== container) {
+          searchAncestor = searchAncestor.parentElement;
+        }
+        if (searchAncestor.parentElement === container && searchAncestor.nextSibling) {
+          container.insertBefore(trackerEl, searchAncestor.nextSibling);
+        } else {
+          container.appendChild(trackerEl);
+        }
       } else {
-        sidebar.appendChild(trackerEl);
+        container.appendChild(trackerEl);
       }
     }
 

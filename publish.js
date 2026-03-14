@@ -3214,16 +3214,28 @@
     var sidebar = document.querySelector('.site-body-left-column');
     if (!sidebar) return;
 
-    // Obsidian Publish wraps the sidebar content (site-name, search, nav-tree)
-    // inside an inner container. We must insert inside that container (not as a
-    // direct child of .site-body-left-column) to avoid side-by-side layout.
-    // Strategy: find the root nav tree element, then insert before it within
-    // its parent so we appear right after the search bar.
+    // Find the search bar and nav tree to determine insertion point.
+    // We want to appear right after the search bar, before the nav tree.
+    var searchBar = sidebar.querySelector('input[type="search"], input[type="text"]');
+    var searchContainer = searchBar ? searchBar.closest('.search-input-container, .search-component, div') : null;
+    // Walk up to find the direct child of sidebar that contains the search bar
+    if (searchContainer) {
+      while (searchContainer.parentElement && searchContainer.parentElement !== sidebar) {
+        var grandparent = searchContainer.parentElement;
+        // Stop if we've left the sidebar subtree
+        if (!sidebar.contains(grandparent)) break;
+        searchContainer = grandparent;
+      }
+      // If searchContainer's parent isn't the sidebar, it's inside a nested wrapper
+      if (searchContainer.parentElement !== sidebar) searchContainer = null;
+    }
+
     var navRoot = sidebar.querySelector('.nav-folder.mod-root') ||
                   sidebar.querySelector('.nav-folder') ||
                   sidebar.querySelector('.tree-item');
+
+    // Determine insertion target: prefer the inner container that holds the nav tree
     var insertParent = (navRoot && navRoot.parentElement) ? navRoot.parentElement : sidebar;
-    var insertBefore = navRoot || null;
 
     trackerEl = document.createElement('div');
     trackerEl.className = 'journey-tracker';
@@ -3272,10 +3284,30 @@
     trackerEl.appendChild(select);
     trackerEl.appendChild(sectionsEl);
 
-    if (insertBefore) {
-      insertParent.insertBefore(trackerEl, insertBefore);
+    // Ensure the parent container stacks children vertically
+    // (Obsidian Publish may use flex-row on some viewports)
+    if (insertParent) {
+      var cs = window.getComputedStyle(insertParent);
+      if (cs.display === 'flex' || cs.display === 'inline-flex') {
+        insertParent.style.flexDirection = 'column';
+      }
+    }
+
+    // Insertion priority:
+    // 1. Before the nav tree (ideal — appears after search, before file list)
+    // 2. After the search container (if nav tree not yet rendered)
+    // 3. As first child of sidebar (fallback — ensures it's at the top)
+    if (navRoot) {
+      insertParent.insertBefore(trackerEl, navRoot);
+    } else if (searchContainer && searchContainer.nextSibling) {
+      sidebar.insertBefore(trackerEl, searchContainer.nextSibling);
     } else {
-      insertParent.appendChild(trackerEl);
+      // Nav tree hasn't loaded yet — put tracker as first child so it's at top
+      if (sidebar.firstChild) {
+        sidebar.insertBefore(trackerEl, sidebar.firstChild);
+      } else {
+        sidebar.appendChild(trackerEl);
+      }
     }
 
     renderSections();
@@ -3388,7 +3420,8 @@
     setTimeout(init, 250);
   }
 
-  // Re-inject if sidebar re-renders (SPA navigation)
+  // Re-inject if sidebar re-renders (SPA navigation), and reposition
+  // the tracker if the nav tree loads after the tracker was inserted.
   var jtObserver = new MutationObserver(function () {
     if (!document.querySelector('.journey-tracker')) {
       trackerEl = null;
@@ -3396,13 +3429,24 @@
       barFillEl = null;
       sectionsEl = null;
       buildTracker();
+    } else if (trackerEl) {
+      // Reposition: if nav tree now exists and tracker is after it, move tracker above it
+      var sidebar = document.querySelector('.site-body-left-column');
+      if (sidebar) {
+        var nav = sidebar.querySelector('.nav-folder.mod-root') ||
+                  sidebar.querySelector('.nav-folder');
+        if (nav && trackerEl.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_PRECEDING) {
+          // nav is before tracker — move tracker before nav
+          nav.parentElement.insertBefore(trackerEl, nav);
+        }
+      }
     }
   });
 
   function observeSidebar() {
     var target = document.querySelector('.site-body-left-column');
     if (target) {
-      jtObserver.observe(target, { childList: true, subtree: false });
+      jtObserver.observe(target, { childList: true, subtree: true });
     }
   }
 

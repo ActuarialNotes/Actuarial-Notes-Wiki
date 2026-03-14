@@ -1750,15 +1750,10 @@ a.journey-tracker__name:hover {
   color: var(--brand-hover);
 }
 
-/* Mobile: ensure tracker sits below search, full width */
-@media (max-width: 768px) {
-  .site-body-left-column {
-    flex-direction: column !important;
-  }
-  .journey-tracker {
-    width: calc(100% - 20px) !important;
-    flex-shrink: 0;
-  }
+/* Force tracker to occupy full row in any flex context */
+.journey-tracker {
+  flex-basis: 100% !important;
+  flex-shrink: 0;
 }
 
 /* "or" separator between ALTAM/ASTAM */

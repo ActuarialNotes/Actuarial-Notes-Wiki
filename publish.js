@@ -3571,48 +3571,40 @@ var SoundFX = (function () {
     }
   }
 
-  // Gem collect — warm ascending arpeggio with harmonic depth
+  // Callout open — quick warm tonal swell (rises and fades smoothly)
   function playCalloutOpen() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
+    var dur = 0.18;
 
-    var notes = [520, 660, 780]; // warmer, lower register (C5-ish, E5, G5 — major triad)
-    var spacing = 0.07;
+    // Primary tone — sine sweeping up for the "swell" feel
+    var osc1 = ac.createOscillator();
+    var g1 = ac.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(340, t);       // starts warm (F4-ish)
+    osc1.frequency.linearRampToValueAtTime(520, t + dur); // swells up to C5
+    g1.gain.setValueAtTime(0.0, t);
+    g1.gain.linearRampToValueAtTime(0.12, t + dur * 0.35); // quick rise
+    g1.gain.exponentialRampToValueAtTime(0.001, t + dur);   // smooth fade
+    osc1.connect(g1);
+    g1.connect(ac.destination);
+    osc1.start(t);
+    osc1.stop(t + dur);
 
-    for (var i = 0; i < notes.length; i++) {
-      (function (idx) {
-        var start = t + idx * spacing;
-        var dur = 0.22;
-
-        // Primary tone — sine for warmth
-        var osc1 = ac.createOscillator();
-        var g1 = ac.createGain();
-        osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(notes[idx], start);
-        osc1.frequency.linearRampToValueAtTime(notes[idx] * 1.01, start + dur);
-        g1.gain.setValueAtTime(0.0, start);
-        g1.gain.linearRampToValueAtTime(0.10, start + 0.015); // softer attack
-        g1.gain.exponentialRampToValueAtTime(0.001, start + dur);
-        osc1.connect(g1);
-        g1.connect(ac.destination);
-        osc1.start(start);
-        osc1.stop(start + dur);
-
-        // Octave-below undertone — adds body and warmth
-        var osc2 = ac.createOscillator();
-        var g2 = ac.createGain();
-        osc2.type = 'sine';
-        osc2.frequency.setValueAtTime(notes[idx] * 0.5, start);
-        g2.gain.setValueAtTime(0.0, start);
-        g2.gain.linearRampToValueAtTime(0.04, start + 0.02);
-        g2.gain.exponentialRampToValueAtTime(0.001, start + dur * 0.8);
-        osc2.connect(g2);
-        g2.connect(ac.destination);
-        osc2.start(start);
-        osc2.stop(start + dur);
-      })(i);
-    }
+    // Undertone — octave below, adds body
+    var osc2 = ac.createOscillator();
+    var g2 = ac.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(170, t);
+    osc2.frequency.linearRampToValueAtTime(260, t + dur);
+    g2.gain.setValueAtTime(0.0, t);
+    g2.gain.linearRampToValueAtTime(0.05, t + dur * 0.35);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc2.connect(g2);
+    g2.connect(ac.destination);
+    osc2.start(t);
+    osc2.stop(t + dur);
   }
 
   return {

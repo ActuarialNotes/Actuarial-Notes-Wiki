@@ -3397,12 +3397,6 @@
           nameEl.className = 'journey-tracker__name internal-link';
           nameEl.href = item.path;
           nameEl.dataset.href = item.path;
-          nameEl.addEventListener('click', function (e) {
-            e.preventDefault();
-            // Navigate using Obsidian Publish URL format (spaces → +)
-            var slug = item.path.replace(/ /g, '+');
-            window.location.assign('/' + slug);
-          });
         } else {
           nameEl = document.createElement('span');
           nameEl.className = 'journey-tracker__name';

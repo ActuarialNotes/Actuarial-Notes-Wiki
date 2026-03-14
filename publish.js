@@ -3525,19 +3525,28 @@ var SoundFX = (function () {
   }
 
   // Soft mouse click — single short noise burst
-  function playClick() {
-    if (isMuted()) return;
-    var ac = getCtx();
-    var t = ac.currentTime;
-
+  // Pre-generate the click buffer once so every click sounds identical
+  var _clickBuf = null;
+  function getClickBuf(ac) {
+    if (_clickBuf && _clickBuf.sampleRate === ac.sampleRate) return _clickBuf;
     var len = 0.012;
     var buf = ac.createBuffer(1, Math.ceil(ac.sampleRate * len), ac.sampleRate);
     var data = buf.getChannelData(0);
     for (var i = 0; i < data.length; i++) {
       data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
     }
+    _clickBuf = buf;
+    return buf;
+  }
+
+  function playClick() {
+    if (isMuted()) return;
+    var ac = getCtx();
+    var t = ac.currentTime;
+
+    var len = 0.012;
     var src = ac.createBufferSource();
-    src.buffer = buf;
+    src.buffer = getClickBuf(ac);
 
     var filt = ac.createBiquadFilter();
     filt.type = 'bandpass';
@@ -3612,8 +3621,8 @@ var SoundFX = (function () {
     // Volume envelope — quick swell then fade
     var gain = ac.createGain();
     gain.gain.setValueAtTime(0.0, t);
-    gain.gain.linearRampToValueAtTime(0.08, t + dur * 0.25);
-    gain.gain.linearRampToValueAtTime(0.06, t + dur * 0.6);
+    gain.gain.linearRampToValueAtTime(0.04, t + dur * 0.25);
+    gain.gain.linearRampToValueAtTime(0.03, t + dur * 0.6);
     gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
 
     src.connect(filt);
@@ -3645,7 +3654,7 @@ var SoundFX = (function () {
   // Dropdown triggers — get the tonal triple-tap sound
   var DROPDOWN = '.dl-dropdown__trigger, ' +
     'button.exam-nav__collapse-arrow, .exam-nav__lo-obj-btn, ' +
-    'button.concept-nav__arrow-btn, .concept-nav__current--expandable';
+    'button.concept-nav__arrow-btn, .concept-nav__current--expandable, .concept-nav__obj-btn';
 
   // Debounce flag — prevents double-firing when nested elements both match
   var _sfxLock = false;

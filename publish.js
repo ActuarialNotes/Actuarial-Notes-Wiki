@@ -3482,6 +3482,7 @@ var SoundFX = (function () {
 
   var MUTE_KEY = 'actuarial-notes-muted';
   var ctx = null;
+  var _unlocked = false;
 
   function getCtx() {
     if (!ctx) {
@@ -3490,6 +3491,24 @@ var SoundFX = (function () {
     if (ctx.state === 'suspended') ctx.resume();
     return ctx;
   }
+
+  // Mobile browsers keep AudioContext suspended until a user gesture handler
+  // calls resume(). Eagerly unlock on the first touch/click so that the
+  // actual sound-playing code always finds a running context.
+  function unlockAudio() {
+    if (_unlocked) return;
+    var ac = getCtx();
+    // Play a silent buffer to fully unlock on iOS Safari
+    var buf = ac.createBuffer(1, 1, ac.sampleRate);
+    var src = ac.createBufferSource();
+    src.buffer = buf;
+    src.connect(ac.destination);
+    src.start(0);
+    if (ac.state === 'suspended') ac.resume();
+    _unlocked = true;
+  }
+  document.addEventListener('touchstart', unlockAudio, { once: true });
+  document.addEventListener('click', unlockAudio, { once: true });
 
   function isMuted() {
     try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (e) { return false; }

@@ -3582,52 +3582,45 @@ var SoundFX = (function () {
     }
   }
 
-  // Callout open — single 750Hz tone that swells up then fades, with reverb
+  // Callout open — soft woosh / unfolding sound
+  // Filtered noise with a bandpass sweep from low to high
   function playCalloutOpen() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
-    var dur = 0.35;
+    var dur = 0.25;
 
-    // Build a simple synthetic impulse response for reverb
-    var reverbLen = 1.2;
-    var reverbSamples = Math.ceil(ac.sampleRate * reverbLen);
-    var reverbBuf = ac.createBuffer(2, reverbSamples, ac.sampleRate);
-    for (var ch = 0; ch < 2; ch++) {
-      var rd = reverbBuf.getChannelData(ch);
-      for (var i = 0; i < reverbSamples; i++) {
-        rd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / reverbSamples, 2.5);
-      }
+    // White noise source
+    var len = dur + 0.1;
+    var samples = Math.ceil(ac.sampleRate * len);
+    var buf = ac.createBuffer(1, samples, ac.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < samples; i++) {
+      data[i] = Math.random() * 2 - 1;
     }
-    var reverb = ac.createConvolver();
-    reverb.buffer = reverbBuf;
+    var src = ac.createBufferSource();
+    src.buffer = buf;
 
-    var osc = ac.createOscillator();
+    // Bandpass filter sweeps upward — creates the woosh
+    var filt = ac.createBiquadFilter();
+    filt.type = 'bandpass';
+    filt.Q.value = 0.8;
+    filt.frequency.setValueAtTime(300, t);
+    filt.frequency.exponentialRampToValueAtTime(3000, t + dur * 0.7);
+    filt.frequency.exponentialRampToValueAtTime(2000, t + dur);
+
+    // Volume envelope — quick swell then fade
     var gain = ac.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(750, t);
-
-    // Swell up then fade out
     gain.gain.setValueAtTime(0.0, t);
-    gain.gain.linearRampToValueAtTime(0.10, t + dur * 0.4);
-    gain.gain.linearRampToValueAtTime(0.07, t + dur * 0.7);
+    gain.gain.linearRampToValueAtTime(0.13, t + dur * 0.25);
+    gain.gain.linearRampToValueAtTime(0.10, t + dur * 0.6);
     gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
 
-    // Dry + wet (reverb) paths
-    var dry = ac.createGain();
-    dry.gain.value = 0.7;
-    var wet = ac.createGain();
-    wet.gain.value = 0.5;
-
-    osc.connect(gain);
-    gain.connect(dry);
-    gain.connect(reverb);
-    reverb.connect(wet);
-    dry.connect(ac.destination);
-    wet.connect(ac.destination);
-
-    osc.start(t);
-    osc.stop(t + dur + 0.05);
+    src.connect(filt);
+    filt.connect(gain);
+    gain.connect(ac.destination);
+    src.start(t);
+    src.stop(t + dur + 0.05);
   }
 
   return {

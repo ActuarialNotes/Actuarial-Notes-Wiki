@@ -3571,33 +3571,31 @@ var SoundFX = (function () {
     }
   }
 
-  // Callout open — pleasant major chord swell
+  // Callout open — repeated tone, major third above the dropdown note
+  // Dropdown is 600Hz; major third up = 750Hz
   function playCalloutOpen() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
-    var dur = 0.25;
 
-    // Major chord tones — C5, E5, G5 played simultaneously
-    var chord = [523, 659, 784];
-    var vols = [0.08, 0.06, 0.05]; // root loudest, upper voices softer
+    var taps = 3;
+    var spacing = 0.045;
 
-    for (var i = 0; i < chord.length; i++) {
-      (function (freq, vol) {
+    for (var i = 0; i < taps; i++) {
+      (function (idx) {
+        var start = t + idx * spacing;
         var osc = ac.createOscillator();
         var gain = ac.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, t);
-        // Smooth swell in, gentle fade out — no pitch movement
-        gain.gain.setValueAtTime(0.0, t);
-        gain.gain.linearRampToValueAtTime(vol, t + 0.04);  // soft bloom
-        gain.gain.linearRampToValueAtTime(vol * 0.7, t + dur * 0.6);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc.frequency.setValueAtTime(750, start);
+        gain.gain.setValueAtTime(0.0, start);
+        gain.gain.linearRampToValueAtTime(0.09, start + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.06);
         osc.connect(gain);
         gain.connect(ac.destination);
-        osc.start(t);
-        osc.stop(t + dur);
-      })(chord[i], vols[i]);
+        osc.start(start);
+        osc.stop(start + 0.06);
+      })(i);
     }
   }
 
@@ -3625,16 +3623,6 @@ var SoundFX = (function () {
     'button.exam-nav__collapse-arrow, .exam-nav__lo-obj-btn, ' +
     'button.concept-nav__arrow-btn, .concept-nav__current--expandable';
 
-  // Everything else interactive — get the plain click sound
-  // Includes generic 'a' and 'button' as a catch-all for links/buttons,
-  // but DROPDOWN is checked first so dropdown triggers won't double-fire.
-  var INTERACTIVE = 'a, button, .clickable-icon, .checkbox-container, ' +
-    '.hc-toggle-row, .mute-toggle-btn, .callout-title, .nav-file-title, ' +
-    '.tree-item-self, .concept-question-btn, ' +
-    '.question-browser__close, .question-browser__nav-btn, ' +
-    '.concept-nav__arrow-menu-item, .concept-nav__obj-header-link, ' +
-    '.concept-nav__obj-item';
-
   // Debounce flag — prevents double-firing when nested elements both match
   var _sfxLock = false;
 
@@ -3643,25 +3631,18 @@ var SoundFX = (function () {
     var el = e.target;
     if (!el.closest) return;
 
-    // Skip non-interactive targets (text, images, empty space)
-    var tag = el.tagName;
-    var isInteractiveEl = tag === 'A' || tag === 'BUTTON' || tag === 'INPUT' ||
-      tag === 'SELECT' || el.closest(DROPDOWN) || el.closest(INTERACTIVE);
-    if (!isInteractiveEl) return;
-
-    var matched = false;
+    // Check dropdown triggers first (tonal triple-tap)
     if (el.closest(DROPDOWN)) {
       SoundFX.dropdownOpen();
-      matched = true;
-    } else if (el.closest(INTERACTIVE)) {
+    // All other links, buttons, and interactive elements get the same click
+    } else if (el.closest('a, button, .clickable-icon, .checkbox-container, .callout-title')) {
       SoundFX.click();
-      matched = true;
+    } else {
+      return; // not interactive, no sound
     }
 
-    if (matched) {
-      _sfxLock = true;
-      setTimeout(function () { _sfxLock = false; }, 60);
-    }
+    _sfxLock = true;
+    setTimeout(function () { _sfxLock = false; }, 60);
   }, true);
 
   // Watch for callouts losing .is-collapsed (= opening)

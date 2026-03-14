@@ -3261,28 +3261,43 @@
     trackerEl.appendChild(select);
     trackerEl.appendChild(sectionsEl);
 
-    // Always insert as a DIRECT child of .site-body-left-column.
-    // Walk sidebar's direct children to find the right spot: after the
-    // search bar / toggles, before the nav tree (or its wrapper).
-    var inserted = false;
-    var children = sidebar.children;
-    for (var ci = 0; ci < children.length; ci++) {
-      var child = children[ci];
-      // The nav tree (or its wrapper) is the first direct child that
-      // contains a .nav-folder or .tree-item element, or IS one.
-      var isNav = child.classList.contains('nav-folder') ||
-                  child.classList.contains('tree-item') ||
-                  child.querySelector('.nav-folder, .tree-item');
-      if (isNav) {
-        sidebar.insertBefore(trackerEl, child);
-        inserted = true;
-        break;
+    // Insert as a DIRECT child of .site-body-left-column, right after
+    // the search bar (below toggles/search, above nav tree).
+    // Strategy: find the search input, walk up to the direct child of
+    // sidebar that contains it, and insert after that element.
+    var searchInput = sidebar.querySelector('input[type="search"], input[type="text"]');
+    var anchor = searchInput;
+    if (anchor) {
+      // Walk up to the direct child of sidebar that contains the search
+      while (anchor.parentElement && anchor.parentElement !== sidebar) {
+        anchor = anchor.parentElement;
       }
     }
-    if (!inserted) {
-      // Nav tree not yet in DOM — append to sidebar. The MutationObserver
-      // will reposition it once the nav tree appears.
-      sidebar.appendChild(trackerEl);
+
+    if (anchor && anchor.parentElement === sidebar) {
+      // Insert right after the search bar's container
+      if (anchor.nextSibling) {
+        sidebar.insertBefore(trackerEl, anchor.nextSibling);
+      } else {
+        sidebar.appendChild(trackerEl);
+      }
+    } else {
+      // Fallback: try inserting before the nav tree
+      var navRoot = null;
+      var children = sidebar.children;
+      for (var ci = 0; ci < children.length; ci++) {
+        var child = children[ci];
+        if (child.classList.contains('nav-folder') || child.classList.contains('tree-item') ||
+            child.querySelector('.nav-folder, .tree-item')) {
+          navRoot = child;
+          break;
+        }
+      }
+      if (navRoot) {
+        sidebar.insertBefore(trackerEl, navRoot);
+      } else {
+        sidebar.appendChild(trackerEl);
+      }
     }
 
     renderSections();
@@ -3395,8 +3410,7 @@
     setTimeout(init, 250);
   }
 
-  // Re-inject if sidebar re-renders (SPA navigation), and reposition
-  // the tracker if the nav tree loads after the tracker was inserted.
+  // Re-inject if sidebar re-renders (SPA navigation)
   var jtObserver = new MutationObserver(function () {
     if (!document.querySelector('.journey-tracker')) {
       trackerEl = null;
@@ -3404,48 +3418,6 @@
       barFillEl = null;
       sectionsEl = null;
       buildTracker();
-    } else if (trackerEl) {
-      // Reposition: ensure tracker is a direct child of sidebar and sits
-      // before the nav tree (or its wrapper), not after it.
-      var sidebar = document.querySelector('.site-body-left-column');
-      if (!sidebar) return;
-
-      // If tracker isn't a direct child of sidebar, move it there
-      if (trackerEl.parentElement !== sidebar) {
-        trackerEl.remove();
-      }
-
-      // Find the direct child of sidebar that contains the nav tree
-      var navChild = null;
-      var kids = sidebar.children;
-      for (var k = 0; k < kids.length; k++) {
-        var kid = kids[k];
-        if (kid === trackerEl) continue;
-        if (kid.classList.contains('nav-folder') || kid.classList.contains('tree-item') ||
-            kid.querySelector('.nav-folder, .tree-item')) {
-          navChild = kid;
-          break;
-        }
-      }
-
-      if (navChild) {
-        // Ensure tracker is before the nav child
-        var trackerIdx = -1, navIdx = -1;
-        for (var m = 0; m < kids.length; m++) {
-          if (kids[m] === trackerEl) trackerIdx = m;
-          if (kids[m] === navChild) navIdx = m;
-        }
-        if (trackerIdx < 0) {
-          // Tracker was removed — reinsert before nav
-          sidebar.insertBefore(trackerEl, navChild);
-        } else if (trackerIdx > navIdx) {
-          // Tracker is after nav — move it before
-          sidebar.insertBefore(trackerEl, navChild);
-        }
-      } else if (!trackerEl.parentElement) {
-        // Tracker was removed and no nav found — re-append
-        sidebar.appendChild(trackerEl);
-      }
     }
   });
 

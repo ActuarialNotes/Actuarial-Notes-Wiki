@@ -3294,18 +3294,35 @@
     }
 
     // Insertion priority:
-    // 1. Before the nav tree (ideal — appears after search, before file list)
-    // 2. After the search container (if nav tree not yet rendered)
-    // 3. As first child of sidebar (fallback — ensures it's at the top)
+    // 1. Before the nav tree (ideal — appears after toggles/search, before file list)
+    // 2. After the last control element (search bar, toggles) in the sidebar
+    // 3. Append to sidebar (fallback)
     if (navRoot) {
       insertParent.insertBefore(trackerEl, navRoot);
-    } else if (searchContainer && searchContainer.nextSibling) {
-      sidebar.insertBefore(trackerEl, searchContainer.nextSibling);
     } else {
-      // Nav tree hasn't loaded yet — put tracker as first child so it's at top
-      if (sidebar.firstChild) {
-        sidebar.insertBefore(trackerEl, sidebar.firstChild);
+      // Find the last "control" element in the sidebar (search, toggles, site name)
+      // and insert after it. This ensures we appear below search/dark-mode/HC toggles
+      // but above the nav tree when it loads later.
+      var controls = sidebar.querySelectorAll(
+        'input[type="search"], input[type="text"], .search-input-container, ' +
+        '.checkbox-container, .clickable-icon, .hc-toggle-row, ' +
+        '.site-body-left-column-site-name'
+      );
+      var lastControl = controls.length ? controls[controls.length - 1] : null;
+      // Walk up to the direct child of sidebar (or insertParent)
+      if (lastControl) {
+        var anchor = lastControl;
+        while (anchor.parentElement && anchor.parentElement !== sidebar && anchor.parentElement !== insertParent) {
+          anchor = anchor.parentElement;
+        }
+        var targetParent = anchor.parentElement || sidebar;
+        if (anchor.nextSibling) {
+          targetParent.insertBefore(trackerEl, anchor.nextSibling);
+        } else {
+          targetParent.appendChild(trackerEl);
+        }
       } else {
+        // Nothing found — just append
         sidebar.appendChild(trackerEl);
       }
     }

@@ -3541,6 +3541,21 @@ var SoundFX = (function () {
     // Down-click (slightly louder) then up-click after short gap
     clickBurst(t, 0.25);
     clickBurst(t + 0.04, 0.15);
+
+    // Subtle tonal ping — 600Hz sine (octave below callout's first note)
+    // Blends the click into the same harmonic family as the gem chime
+    var osc = ac.createOscillator();
+    var toneGain = ac.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, t);
+    osc.frequency.linearRampToValueAtTime(580, t + 0.06); // tiny drop for warmth
+    toneGain.gain.setValueAtTime(0.0, t);
+    toneGain.gain.linearRampToValueAtTime(0.06, t + 0.005); // soft attack
+    toneGain.gain.exponentialRampToValueAtTime(0.001, t + 0.07); // quick fade
+    osc.connect(toneGain);
+    toneGain.connect(ac.destination);
+    osc.start(t);
+    osc.stop(t + 0.07);
   }
 
   // Gem collect — bright ascending arpeggio (three quick sparkly notes)

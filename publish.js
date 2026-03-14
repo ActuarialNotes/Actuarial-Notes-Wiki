@@ -3541,21 +3541,34 @@ var SoundFX = (function () {
     // Down-click (slightly louder) then up-click after short gap
     clickBurst(t, 0.25);
     clickBurst(t + 0.04, 0.15);
+  }
 
-    // Subtle tonal ping — 600Hz sine (octave below callout's first note)
-    // Blends the click into the same harmonic family as the gem chime
-    var osc = ac.createOscillator();
-    var toneGain = ac.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(600, t);
-    osc.frequency.linearRampToValueAtTime(580, t + 0.06); // tiny drop for warmth
-    toneGain.gain.setValueAtTime(0.0, t);
-    toneGain.gain.linearRampToValueAtTime(0.06, t + 0.005); // soft attack
-    toneGain.gain.exponentialRampToValueAtTime(0.001, t + 0.07); // quick fade
-    osc.connect(toneGain);
-    toneGain.connect(ac.destination);
-    osc.start(t);
-    osc.stop(t + 0.07);
+  // Dropdown open — rapid repeated 600Hz tonal taps (same note, quick arpeggio)
+  // Harmonically related to the callout gem chime (600Hz = octave below 1200Hz)
+  function playDropdownOpen() {
+    if (isMuted()) return;
+    var ac = getCtx();
+    var t = ac.currentTime;
+
+    var taps = 3;
+    var spacing = 0.045;
+
+    for (var i = 0; i < taps; i++) {
+      (function (idx) {
+        var start = t + idx * spacing;
+        var osc = ac.createOscillator();
+        var gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, start);
+        gain.gain.setValueAtTime(0.0, start);
+        gain.gain.linearRampToValueAtTime(0.09, start + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.06);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(start);
+        osc.stop(start + 0.06);
+      })(i);
+    }
   }
 
   // Gem collect — bright ascending arpeggio (three quick sparkly notes)
@@ -3593,6 +3606,7 @@ var SoundFX = (function () {
 
   return {
     click: playClick,
+    dropdownOpen: playDropdownOpen,
     calloutOpen: playCalloutOpen,
     isMuted: isMuted,
     toggleMute: toggleMute
@@ -3609,13 +3623,20 @@ var SoundFX = (function () {
 (function () {
   'use strict';
 
+  var DROPDOWN = '.dl-dropdown__trigger, .exam-nav__collapse-arrow, ' +
+    '.exam-nav__lo-obj-btn';
+
   var INTERACTIVE = 'a, button, .clickable-icon, .checkbox-container, ' +
     '.hc-toggle-row, .mute-toggle-btn, .callout-title, .nav-file-title, ' +
-    '.tree-item-self, .download-dropdown__trigger, .concept-question-btn';
+    '.tree-item-self, .dl-dropdown__trigger, .concept-question-btn, ' +
+    '.exam-nav__collapse-arrow, .exam-nav__lo-obj-btn';
 
   document.addEventListener('click', function (e) {
     var el = e.target;
-    if (el.closest && el.closest(INTERACTIVE)) {
+    if (!el.closest) return;
+    if (el.closest(DROPDOWN)) {
+      SoundFX.dropdownOpen();
+    } else if (el.closest(INTERACTIVE)) {
       SoundFX.click();
     }
   }, true);

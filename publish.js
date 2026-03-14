@@ -3623,21 +3623,37 @@ var SoundFX = (function () {
 (function () {
   'use strict';
 
-  var DROPDOWN = '.dl-dropdown__trigger, .exam-nav__collapse-arrow, ' +
-    '.exam-nav__lo-obj-btn';
+  // Dropdown triggers — get the tonal triple-tap sound
+  var DROPDOWN = '.dl-dropdown__trigger, ' +
+    'button.exam-nav__collapse-arrow, .exam-nav__lo-obj-btn';
 
-  var INTERACTIVE = 'a, button, .clickable-icon, .checkbox-container, ' +
+  // Everything else interactive — get the plain click sound
+  var INTERACTIVE = '.clickable-icon, .checkbox-container, ' +
     '.hc-toggle-row, .mute-toggle-btn, .callout-title, .nav-file-title, ' +
-    '.tree-item-self, .dl-dropdown__trigger, .concept-question-btn, ' +
-    '.exam-nav__collapse-arrow, .exam-nav__lo-obj-btn';
+    '.tree-item-self, .concept-question-btn, ' +
+    'a.exam-nav__collapse-arrow, a.exam-nav__menu-item, ' +
+    '.question-browser__close, .question-browser__nav-btn';
+
+  // Debounce flag — prevents double-firing when nested elements both match
+  var _sfxLock = false;
 
   document.addEventListener('click', function (e) {
+    if (_sfxLock) return;
     var el = e.target;
     if (!el.closest) return;
+
+    var matched = false;
     if (el.closest(DROPDOWN)) {
       SoundFX.dropdownOpen();
+      matched = true;
     } else if (el.closest(INTERACTIVE)) {
       SoundFX.click();
+      matched = true;
+    }
+
+    if (matched) {
+      _sfxLock = true;
+      setTimeout(function () { _sfxLock = false; }, 60);
     }
   }, true);
 

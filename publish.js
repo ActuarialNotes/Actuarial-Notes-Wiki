@@ -3505,42 +3505,75 @@ var SoundFX = (function () {
     return m;
   }
 
-  // Short punchy pop/blip — square wave with fast pitch drop
+  // Soft mouse click — two tiny noise bursts (down-click + up-click)
   function playClick() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
 
-    var osc = ac.createOscillator();
-    var gain = ac.createGain();
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(600, t);
-    osc.frequency.exponentialRampToValueAtTime(200, t + 0.08);
-    gain.gain.setValueAtTime(0.13, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
-    osc.connect(gain);
-    gain.connect(ac.destination);
-    osc.start(t);
-    osc.stop(t + 0.1);
+    // Helper: short filtered noise burst (mimics a mechanical click)
+    function clickBurst(time, vol) {
+      var len = 0.012;
+      var buf = ac.createBuffer(1, Math.ceil(ac.sampleRate * len), ac.sampleRate);
+      var data = buf.getChannelData(0);
+      for (var i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+      }
+      var src = ac.createBufferSource();
+      src.buffer = buf;
+
+      // Bandpass filter to soften — gives it a tactile "tick" feel
+      var filt = ac.createBiquadFilter();
+      filt.type = 'bandpass';
+      filt.frequency.value = 3500;
+      filt.Q.value = 1.2;
+
+      var gain = ac.createGain();
+      gain.gain.setValueAtTime(vol, time);
+      gain.gain.exponentialRampToValueAtTime(0.001, time + len);
+
+      src.connect(filt);
+      filt.connect(gain);
+      gain.connect(ac.destination);
+      src.start(time);
+    }
+
+    // Down-click (slightly louder) then up-click after short gap
+    clickBurst(t, 0.25);
+    clickBurst(t + 0.04, 0.15);
   }
 
-  // Ascending chime — triangle wave sweep up with gentle decay
+  // Gem collect — bright ascending arpeggio (three quick sparkly notes)
   function playCalloutOpen() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
 
-    var osc = ac.createOscillator();
-    var gain = ac.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(400, t);
-    osc.frequency.exponentialRampToValueAtTime(900, t + 0.12);
-    gain.gain.setValueAtTime(0.15, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
-    osc.connect(gain);
-    gain.connect(ac.destination);
-    osc.start(t);
-    osc.stop(t + 0.18);
+    var notes = [1200, 1500, 1800]; // sparkling high pitches
+    var spacing = 0.055;
+
+    for (var i = 0; i < notes.length; i++) {
+      (function (idx) {
+        var start = t + idx * spacing;
+        var osc = ac.createOscillator();
+        var gain = ac.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(notes[idx], start);
+
+        // Add a subtle shimmer with slight pitch rise
+        osc.frequency.linearRampToValueAtTime(notes[idx] * 1.02, start + 0.08);
+
+        gain.gain.setValueAtTime(0.0, start);
+        gain.gain.linearRampToValueAtTime(0.12, start + 0.008); // fast attack
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.14); // ring out
+
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(start);
+        osc.stop(start + 0.14);
+      })(i);
+    }
   }
 
   return {

@@ -3571,40 +3571,34 @@ var SoundFX = (function () {
     }
   }
 
-  // Callout open — quick warm tonal swell (rises and fades smoothly)
+  // Callout open — pleasant major chord swell
   function playCalloutOpen() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
-    var dur = 0.18;
+    var dur = 0.25;
 
-    // Primary tone — sine sweeping up for the "swell" feel
-    var osc1 = ac.createOscillator();
-    var g1 = ac.createGain();
-    osc1.type = 'sine';
-    osc1.frequency.setValueAtTime(340, t);       // starts warm (F4-ish)
-    osc1.frequency.linearRampToValueAtTime(520, t + dur); // swells up to C5
-    g1.gain.setValueAtTime(0.0, t);
-    g1.gain.linearRampToValueAtTime(0.12, t + dur * 0.35); // quick rise
-    g1.gain.exponentialRampToValueAtTime(0.001, t + dur);   // smooth fade
-    osc1.connect(g1);
-    g1.connect(ac.destination);
-    osc1.start(t);
-    osc1.stop(t + dur);
+    // Major chord tones — C5, E5, G5 played simultaneously
+    var chord = [523, 659, 784];
+    var vols = [0.08, 0.06, 0.05]; // root loudest, upper voices softer
 
-    // Undertone — octave below, adds body
-    var osc2 = ac.createOscillator();
-    var g2 = ac.createGain();
-    osc2.type = 'sine';
-    osc2.frequency.setValueAtTime(170, t);
-    osc2.frequency.linearRampToValueAtTime(260, t + dur);
-    g2.gain.setValueAtTime(0.0, t);
-    g2.gain.linearRampToValueAtTime(0.05, t + dur * 0.35);
-    g2.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    osc2.connect(g2);
-    g2.connect(ac.destination);
-    osc2.start(t);
-    osc2.stop(t + dur);
+    for (var i = 0; i < chord.length; i++) {
+      (function (freq, vol) {
+        var osc = ac.createOscillator();
+        var gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t);
+        // Smooth swell in, gentle fade out — no pitch movement
+        gain.gain.setValueAtTime(0.0, t);
+        gain.gain.linearRampToValueAtTime(vol, t + 0.04);  // soft bloom
+        gain.gain.linearRampToValueAtTime(vol * 0.7, t + dur * 0.6);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(t);
+        osc.stop(t + dur);
+      })(chord[i], vols[i]);
+    }
   }
 
   return {

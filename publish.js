@@ -3389,8 +3389,7 @@
         if (item.path) {
           nameEl = document.createElement('a');
           nameEl.className = 'journey-tracker__name internal-link';
-          nameEl.href = item.path;
-          nameEl.dataset.href = item.path;
+          nameEl.href = item.path + '.md';
         } else {
           nameEl = document.createElement('span');
           nameEl.className = 'journey-tracker__name';

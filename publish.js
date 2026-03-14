@@ -3482,6 +3482,7 @@ var SoundFX = (function () {
 
   var MUTE_KEY = 'actuarial-notes-muted';
   var ctx = null;
+  var _unlocked = false;
 
   function getCtx() {
     if (!ctx) {
@@ -3490,6 +3491,24 @@ var SoundFX = (function () {
     if (ctx.state === 'suspended') ctx.resume();
     return ctx;
   }
+
+  // Mobile browsers keep AudioContext suspended until a user gesture handler
+  // calls resume(). Eagerly unlock on the first touch/click so that the
+  // actual sound-playing code always finds a running context.
+  function unlockAudio() {
+    if (_unlocked) return;
+    var ac = getCtx();
+    // Play a silent buffer to fully unlock on iOS Safari
+    var buf = ac.createBuffer(1, 1, ac.sampleRate);
+    var src = ac.createBufferSource();
+    src.buffer = buf;
+    src.connect(ac.destination);
+    src.start(0);
+    if (ac.state === 'suspended') ac.resume();
+    _unlocked = true;
+  }
+  document.addEventListener('touchstart', unlockAudio, { once: true });
+  document.addEventListener('click', unlockAudio, { once: true });
 
   function isMuted() {
     try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (e) { return false; }
@@ -3505,42 +3524,34 @@ var SoundFX = (function () {
     return m;
   }
 
-  // Soft mouse click — two tiny noise bursts (down-click + up-click)
+  // Soft mouse click — single short noise burst
   function playClick() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
 
-    // Helper: short filtered noise burst (mimics a mechanical click)
-    function clickBurst(time, vol) {
-      var len = 0.012;
-      var buf = ac.createBuffer(1, Math.ceil(ac.sampleRate * len), ac.sampleRate);
-      var data = buf.getChannelData(0);
-      for (var i = 0; i < data.length; i++) {
-        data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
-      }
-      var src = ac.createBufferSource();
-      src.buffer = buf;
-
-      // Bandpass filter to soften — gives it a tactile "tick" feel
-      var filt = ac.createBiquadFilter();
-      filt.type = 'bandpass';
-      filt.frequency.value = 3500;
-      filt.Q.value = 1.2;
-
-      var gain = ac.createGain();
-      gain.gain.setValueAtTime(vol, time);
-      gain.gain.exponentialRampToValueAtTime(0.001, time + len);
-
-      src.connect(filt);
-      filt.connect(gain);
-      gain.connect(ac.destination);
-      src.start(time);
+    var len = 0.012;
+    var buf = ac.createBuffer(1, Math.ceil(ac.sampleRate * len), ac.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < data.length; i++) {
+      data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
     }
+    var src = ac.createBufferSource();
+    src.buffer = buf;
 
-    // Down-click (slightly louder) then up-click after short gap
-    clickBurst(t, 0.25);
-    clickBurst(t + 0.04, 0.15);
+    var filt = ac.createBiquadFilter();
+    filt.type = 'bandpass';
+    filt.frequency.value = 3500;
+    filt.Q.value = 1.2;
+
+    var gain = ac.createGain();
+    gain.gain.setValueAtTime(0.22, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + len);
+
+    src.connect(filt);
+    filt.connect(gain);
+    gain.connect(ac.destination);
+    src.start(t);
   }
 
   // Dropdown open — rapid repeated 600Hz tonal taps (same note, quick arpeggio)
@@ -3571,32 +3582,52 @@ var SoundFX = (function () {
     }
   }
 
-  // Callout open — repeated tone, major third above the dropdown note
-  // Dropdown is 600Hz; major third up = 750Hz
+  // Callout open — single 750Hz tone that swells up then fades, with reverb
   function playCalloutOpen() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
+    var dur = 0.35;
 
-    var taps = 3;
-    var spacing = 0.045;
-
-    for (var i = 0; i < taps; i++) {
-      (function (idx) {
-        var start = t + idx * spacing;
-        var osc = ac.createOscillator();
-        var gain = ac.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(750, start);
-        gain.gain.setValueAtTime(0.0, start);
-        gain.gain.linearRampToValueAtTime(0.09, start + 0.005);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.06);
-        osc.connect(gain);
-        gain.connect(ac.destination);
-        osc.start(start);
-        osc.stop(start + 0.06);
-      })(i);
+    // Build a simple synthetic impulse response for reverb
+    var reverbLen = 1.2;
+    var reverbSamples = Math.ceil(ac.sampleRate * reverbLen);
+    var reverbBuf = ac.createBuffer(2, reverbSamples, ac.sampleRate);
+    for (var ch = 0; ch < 2; ch++) {
+      var rd = reverbBuf.getChannelData(ch);
+      for (var i = 0; i < reverbSamples; i++) {
+        rd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / reverbSamples, 2.5);
+      }
     }
+    var reverb = ac.createConvolver();
+    reverb.buffer = reverbBuf;
+
+    var osc = ac.createOscillator();
+    var gain = ac.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(750, t);
+
+    // Swell up then fade out
+    gain.gain.setValueAtTime(0.0, t);
+    gain.gain.linearRampToValueAtTime(0.10, t + dur * 0.4);
+    gain.gain.linearRampToValueAtTime(0.07, t + dur * 0.7);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+    // Dry + wet (reverb) paths
+    var dry = ac.createGain();
+    dry.gain.value = 0.7;
+    var wet = ac.createGain();
+    wet.gain.value = 0.5;
+
+    osc.connect(gain);
+    gain.connect(dry);
+    gain.connect(reverb);
+    reverb.connect(wet);
+    dry.connect(ac.destination);
+    wet.connect(ac.destination);
+
+    osc.start(t);
+    osc.stop(t + dur + 0.05);
   }
 
   return {

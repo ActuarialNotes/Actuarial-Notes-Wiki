@@ -3554,31 +3554,31 @@ var SoundFX = (function () {
     src.start(t);
   }
 
-  // Dropdown open — rapid repeated 600Hz tonal taps (same note, quick arpeggio)
-  // Harmonically related to the callout gem chime (600Hz = octave below 1200Hz)
+  // Dropdown open — quick ascending two-note chime (discovery / reveal)
+  // Rising major third: C5 → E5, bright and pleasant
   function playDropdownOpen() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
 
-    var taps = 3;
-    var spacing = 0.045;
+    var notes = [523, 659]; // C5, E5 — rising major third
+    var spacing = 0.06;
 
-    for (var i = 0; i < taps; i++) {
-      (function (idx) {
+    for (var i = 0; i < notes.length; i++) {
+      (function (freq, idx) {
         var start = t + idx * spacing;
         var osc = ac.createOscillator();
         var gain = ac.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, start);
+        osc.frequency.setValueAtTime(freq, start);
         gain.gain.setValueAtTime(0.0, start);
-        gain.gain.linearRampToValueAtTime(0.09, start + 0.005);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.06);
+        gain.gain.linearRampToValueAtTime(0.07, start + 0.008);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.09);
         osc.connect(gain);
         gain.connect(ac.destination);
         osc.start(start);
-        osc.stop(start + 0.06);
-      })(i);
+        osc.stop(start + 0.09);
+      })(notes[i], i);
     }
   }
 
@@ -3612,8 +3612,8 @@ var SoundFX = (function () {
     // Volume envelope — quick swell then fade
     var gain = ac.createGain();
     gain.gain.setValueAtTime(0.0, t);
-    gain.gain.linearRampToValueAtTime(0.13, t + dur * 0.25);
-    gain.gain.linearRampToValueAtTime(0.10, t + dur * 0.6);
+    gain.gain.linearRampToValueAtTime(0.08, t + dur * 0.25);
+    gain.gain.linearRampToValueAtTime(0.06, t + dur * 0.6);
     gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
 
     src.connect(filt);

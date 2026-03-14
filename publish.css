@@ -4617,6 +4617,44 @@ body.high-contrast.theme-light .hc-toggle-row__thumb {
   background: #000;
 }
 
+/* ── Mute / sound toggle button ─────────────────────── */
+
+.mute-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.mute-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+}
+.mute-toggle-btn:hover {
+  color: var(--text);
+  background: var(--muted);
+}
+.mute-toggle-btn:active {
+  opacity: 0.7;
+}
+
+/* High-contrast overrides */
+.high-contrast .mute-toggle-btn {
+  color: var(--text);
+}
+.high-contrast .mute-toggle-btn:hover {
+  background: var(--muted);
+}
+
 /* ── Dark + high contrast ────────────────────────────── */
 body.high-contrast:not(.theme-light),
 .theme-dark body.high-contrast {

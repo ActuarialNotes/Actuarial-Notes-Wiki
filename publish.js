@@ -3472,6 +3472,139 @@
 
 
 /* ===========================================================
+   SOUND EFFECTS ENGINE
+   Synthesises short, satisfying video-game sounds via the
+   Web Audio API.  No external audio files required.
+   =========================================================== */
+
+var SoundFX = (function () {
+  'use strict';
+
+  var MUTE_KEY = 'actuarial-notes-muted';
+  var ctx = null;
+
+  function getCtx() {
+    if (!ctx) {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  function isMuted() {
+    try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function setMuted(m) {
+    try { localStorage.setItem(MUTE_KEY, m ? '1' : '0'); } catch (e) {}
+  }
+
+  function toggleMute() {
+    var m = !isMuted();
+    setMuted(m);
+    return m;
+  }
+
+  // Short punchy pop/blip — square wave with fast pitch drop
+  function playClick() {
+    if (isMuted()) return;
+    var ac = getCtx();
+    var t = ac.currentTime;
+
+    var osc = ac.createOscillator();
+    var gain = ac.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(600, t);
+    osc.frequency.exponentialRampToValueAtTime(200, t + 0.08);
+    gain.gain.setValueAtTime(0.13, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    osc.connect(gain);
+    gain.connect(ac.destination);
+    osc.start(t);
+    osc.stop(t + 0.1);
+  }
+
+  // Ascending chime — triangle wave sweep up with gentle decay
+  function playCalloutOpen() {
+    if (isMuted()) return;
+    var ac = getCtx();
+    var t = ac.currentTime;
+
+    var osc = ac.createOscillator();
+    var gain = ac.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(400, t);
+    osc.frequency.exponentialRampToValueAtTime(900, t + 0.12);
+    gain.gain.setValueAtTime(0.15, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+    osc.connect(gain);
+    gain.connect(ac.destination);
+    osc.start(t);
+    osc.stop(t + 0.18);
+  }
+
+  return {
+    click: playClick,
+    calloutOpen: playCalloutOpen,
+    isMuted: isMuted,
+    toggleMute: toggleMute
+  };
+})();
+
+
+/* ===========================================================
+   SOUND EFFECT HOOKS
+   Plays SoundFX.click() on interactive element clicks and
+   SoundFX.calloutOpen() when a callout expands.
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  var INTERACTIVE = 'a, button, .clickable-icon, .checkbox-container, ' +
+    '.hc-toggle-row, .mute-toggle-btn, .callout-title, .nav-file-title, ' +
+    '.tree-item-self, .download-dropdown__trigger, .concept-question-btn';
+
+  document.addEventListener('click', function (e) {
+    var el = e.target;
+    if (el.closest && el.closest(INTERACTIVE)) {
+      SoundFX.click();
+    }
+  }, true);
+
+  // Watch for callouts losing .is-collapsed (= opening)
+  function observeCallouts() {
+    var observer = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        var m = mutations[i];
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          var t = m.target;
+          if (t.classList && t.classList.contains('callout') &&
+              !t.classList.contains('is-collapsed') &&
+              m.oldValue && m.oldValue.indexOf('is-collapsed') !== -1) {
+            SoundFX.calloutOpen();
+          }
+        }
+      }
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+      attributeOldValue: true,
+      subtree: true
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(observeCallouts, 250); });
+  } else {
+    setTimeout(observeCallouts, 250);
+  }
+})();
+
+
+/* ===========================================================
    HIGH CONTRAST TOGGLE
    Injects a contrast icon + pill switch right beside the
    built-in dark/light mode toggle in the Obsidian Publish
@@ -3590,9 +3723,50 @@
     updateAria();
   }
 
+  // Speaker SVGs for mute button
+  var SPEAKER_ON_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>' +
+    '<path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+    '<path d="M18.07 5.93a9 9 0 0 1 0 12.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+    '</svg>';
+
+  var SPEAKER_OFF_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>' +
+    '<line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+    '<line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+    '</svg>';
+
+  function buildMuteButton() {
+    if (document.querySelector('.mute-toggle-btn')) return;
+
+    var toggleRow = findThemeToggleRow();
+    if (!toggleRow) return;
+
+    var btn = document.createElement('button');
+    btn.className = 'mute-toggle-btn';
+    btn.setAttribute('aria-label', 'Toggle sound effects');
+    btn.setAttribute('title', 'Sound Effects');
+    btn.type = 'button';
+
+    function updateIcon() {
+      btn.innerHTML = SoundFX.isMuted() ? SPEAKER_OFF_SVG : SPEAKER_ON_SVG;
+      btn.setAttribute('aria-pressed', SoundFX.isMuted() ? 'true' : 'false');
+    }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      SoundFX.toggleMute();
+      updateIcon();
+    });
+
+    updateIcon();
+    toggleRow.appendChild(btn);
+  }
+
   function init() {
     applyHighContrast(restorePreference());
     buildToggle();
+    buildMuteButton();
   }
 
   if (document.readyState === 'loading') {
@@ -3605,6 +3779,9 @@
   var hcObserver = new MutationObserver(function () {
     if (!document.querySelector('.hc-toggle-row')) {
       buildToggle();
+    }
+    if (!document.querySelector('.mute-toggle-btn')) {
+      buildMuteButton();
     }
   });
 

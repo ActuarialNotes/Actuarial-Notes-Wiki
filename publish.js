@@ -3015,139 +3015,139 @@
   var TRACKS = [
     {
       key: 'ASA',
-      name: 'ASA \u2014 Associate (SOA)',
+      name: 'ASA (SOA)',
       sections: [
         {
           label: 'VEE Requirements',
           items: [
-            { id: 'VEE-MS',   name: 'VEE \u2014 Mathematical Statistics', path: null },
-            { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
-            { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null }
+            { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', path: null },
+            { id: 'VEE-ECON', name: 'VEE Economics',             path: null },
+            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null }
           ]
         },
         {
           label: 'Preliminary Exams',
           items: [
-            { id: 'P',     name: 'Exam P \u2014 Probability',             path: 'Exam P-1 (SOA)' },
-            { id: 'FM',    name: 'Exam FM \u2014 Financial Mathematics',   path: 'Exam FM-2 (SOA)' }
+            { id: 'P',     name: 'Exam P-1',   path: 'Exam P-1 (SOA)' },
+            { id: 'FM',    name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)' }
           ]
         },
         {
           label: 'Exams & E-Learning',
           items: [
-            { id: 'PAF',   name: 'PAF \u2014 Pre-Actuarial Foundations',   path: null },
-            { id: 'FAM',   name: 'Exam FAM \u2014 Fundamentals of Actuarial Mathematics', path: null },
-            { id: 'SRM',   name: 'Exam SRM \u2014 Statistics for Risk Modeling', path: null },
-            { id: 'ASF',   name: 'ASF \u2014 Actuarial Science Foundations', path: null },
-            { id: 'PA',    name: 'Exam PA \u2014 Predictive Analytics',    path: null },
-            { id: 'ALTAM', name: 'Exam ALTAM \u2014 Advanced Long-Term Actuarial Mathematics',   path: null, or: 'ASTAM' },
-            { id: 'ASTAM', name: 'Exam ASTAM \u2014 Advanced Short-Term Actuarial Mathematics',  path: null, or: 'ALTAM' },
-            { id: 'ATPA',  name: 'ATPA \u2014 Advanced Topics in Predictive Analytics', path: null },
-            { id: 'FAP',   name: 'FAP \u2014 Fundamentals of Actuarial Practice',       path: null },
-            { id: 'APC',   name: 'APC \u2014 Associateship Professionalism Course',     path: null }
+            { id: 'PAF',   name: 'PAF',        path: null },
+            { id: 'FAM',   name: 'Exam FAM',   path: null },
+            { id: 'SRM',   name: 'Exam SRM',   path: null },
+            { id: 'ASF',   name: 'ASF',        path: null },
+            { id: 'PA',    name: 'Exam PA',     path: null },
+            { id: 'ALTAM', name: 'Exam ALTAM',  path: null, or: 'ASTAM' },
+            { id: 'ASTAM', name: 'Exam ASTAM',  path: null, or: 'ALTAM' },
+            { id: 'ATPA',  name: 'ATPA',        path: null },
+            { id: 'FAP',   name: 'FAP',         path: null },
+            { id: 'APC',   name: 'APC',         path: null }
           ]
         }
       ]
     },
     {
       key: 'ACAS',
-      name: 'ACAS \u2014 Associate (CAS)',
+      name: 'ACAS (CAS)',
       sections: [
         {
           label: 'VEE Requirements',
           items: [
-            { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
-            { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null }
+            { id: 'VEE-ECON', name: 'VEE Economics',             path: null },
+            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null }
           ]
         },
         {
           label: 'Preliminary Exams',
           items: [
-            { id: 'P',      name: 'Exam P-1 \u2014 Probability',           path: 'Exam P-1 (SOA)' },
-            { id: 'FM',     name: 'Exam FM-2 \u2014 Financial Mathematics', path: 'Exam FM-2 (SOA)' }
+            { id: 'P',      name: 'Exam P-1',   path: 'Exam P-1 (SOA)' },
+            { id: 'FM',     name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)' }
           ]
         },
         {
           label: 'Exams & Requirements',
           items: [
-            { id: 'MAS-I',    name: 'Exam MAS-I \u2014 Modern Actuarial Statistics I',  path: null },
-            { id: 'MAS-II',   name: 'Exam MAS-II \u2014 Modern Actuarial Statistics II', path: null },
-            { id: 'CAS-IA',   name: 'CAS DISC IA \u2014 Insurance Accounting',   path: null },
-            { id: 'CAS-DA',   name: 'CAS DISC DA \u2014 Data & Analytics',        path: null },
-            { id: 'CAS-RM',   name: 'CAS DISC RM \u2014 Risk Management',         path: null },
-            { id: 'CAS-5',    name: 'Exam 5 \u2014 Ratemaking and Reserving',      path: null },
-            { id: 'CAS-PCPA', name: 'PCPA \u2014 Predictive Analytics',            path: null },
-            { id: 'CAS-6',    name: 'Exam 6 \u2014 Regulation and Financial Reporting', path: null },
-            { id: 'CAS-APC',  name: 'APC \u2014 Associate Professionalism Course', path: null }
+            { id: 'MAS-I',    name: 'Exam MAS-I',    path: null },
+            { id: 'MAS-II',   name: 'Exam MAS-II',   path: null },
+            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null },
+            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null },
+            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null },
+            { id: 'CAS-5',    name: 'Exam 5',         path: null },
+            { id: 'CAS-PCPA', name: 'PCPA',           path: null },
+            { id: 'CAS-6',    name: 'Exam 6',         path: null },
+            { id: 'CAS-APC',  name: 'APC',            path: null }
           ]
         }
       ]
     },
     {
       key: 'FSA',
-      name: 'FSA \u2014 Fellow (SOA)',
+      name: 'FSA (SOA)',
       sections: [
         {
           label: 'ASA Requirements',
           collapsed: true,
           items: [
-            { id: 'VEE-MS',   name: 'VEE \u2014 Mathematical Statistics', path: null },
-            { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
-            { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null },
-            { id: 'P',     name: 'Exam P \u2014 Probability',             path: 'Exam P-1 (SOA)' },
-            { id: 'FM',    name: 'Exam FM \u2014 Financial Mathematics',   path: 'Exam FM-2 (SOA)' },
-            { id: 'PAF',   name: 'PAF \u2014 Pre-Actuarial Foundations',   path: null },
-            { id: 'FAM',   name: 'Exam FAM \u2014 Fundamentals of Actuarial Mathematics', path: null },
-            { id: 'SRM',   name: 'Exam SRM \u2014 Statistics for Risk Modeling', path: null },
-            { id: 'ASF',   name: 'ASF \u2014 Actuarial Science Foundations', path: null },
-            { id: 'PA',    name: 'Exam PA \u2014 Predictive Analytics',    path: null },
-            { id: 'ALTAM', name: 'Exam ALTAM \u2014 Advanced Long-Term Actuarial Mathematics',   path: null, or: 'ASTAM' },
-            { id: 'ASTAM', name: 'Exam ASTAM \u2014 Advanced Short-Term Actuarial Mathematics',  path: null, or: 'ALTAM' },
-            { id: 'ATPA', name: 'ATPA \u2014 Advanced Topics in Predictive Analytics', path: null },
-            { id: 'FAP',  name: 'FAP \u2014 Fundamentals of Actuarial Practice',       path: null },
-            { id: 'APC',  name: 'APC \u2014 Associateship Professionalism Course',     path: null }
+            { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', path: null },
+            { id: 'VEE-ECON', name: 'VEE Economics',             path: null },
+            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null },
+            { id: 'P',     name: 'Exam P-1',   path: 'Exam P-1 (SOA)' },
+            { id: 'FM',    name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)' },
+            { id: 'PAF',   name: 'PAF',        path: null },
+            { id: 'FAM',   name: 'Exam FAM',   path: null },
+            { id: 'SRM',   name: 'Exam SRM',   path: null },
+            { id: 'ASF',   name: 'ASF',        path: null },
+            { id: 'PA',    name: 'Exam PA',     path: null },
+            { id: 'ALTAM', name: 'Exam ALTAM',  path: null, or: 'ASTAM' },
+            { id: 'ASTAM', name: 'Exam ASTAM',  path: null, or: 'ALTAM' },
+            { id: 'ATPA', name: 'ATPA',        path: null },
+            { id: 'FAP',  name: 'FAP',         path: null },
+            { id: 'APC',  name: 'APC',         path: null }
           ]
         },
         {
-          label: 'Fellowship — Courses (choose 101-201 sequence + 2 others)',
+          label: 'Fellowship Courses',
           items: [
-            { id: 'FSA-EXAM', name: 'Fellowship Exam (track-specific)',  path: null },
-            { id: 'FSA-MOD',  name: 'Fellowship Module (track-specific)', path: null },
-            { id: 'FSA-DMAC', name: 'DMAC \u2014 Decision Making & Communication', path: null },
-            { id: 'FSA-FAC',  name: 'FAC \u2014 Fellowship Admissions Course',     path: null }
+            { id: 'FSA-EXAM', name: 'Fellowship Exam',    path: null },
+            { id: 'FSA-MOD',  name: 'Fellowship Module',  path: null },
+            { id: 'FSA-DMAC', name: 'DMAC',               path: null },
+            { id: 'FSA-FAC',  name: 'FAC',                path: null }
           ]
         }
       ]
     },
     {
       key: 'FCAS',
-      name: 'FCAS \u2014 Fellow (CAS)',
+      name: 'FCAS (CAS)',
       sections: [
         {
           label: 'ACAS Requirements',
           collapsed: true,
           items: [
-            { id: 'VEE-ECON', name: 'VEE \u2014 Economics',             path: null },
-            { id: 'VEE-AF',   name: 'VEE \u2014 Accounting & Finance',  path: null },
-            { id: 'P',      name: 'Exam P-1 \u2014 Probability',           path: 'Exam P-1 (SOA)' },
-            { id: 'FM',     name: 'Exam FM-2 \u2014 Financial Mathematics', path: 'Exam FM-2 (SOA)' },
-            { id: 'MAS-I',  name: 'Exam MAS-I \u2014 Modern Actuarial Statistics I',  path: null },
-            { id: 'MAS-II', name: 'Exam MAS-II \u2014 Modern Actuarial Statistics II', path: null },
-            { id: 'CAS-IA',   name: 'CAS DISC IA \u2014 Insurance Accounting',   path: null },
-            { id: 'CAS-DA',   name: 'CAS DISC DA \u2014 Data & Analytics',        path: null },
-            { id: 'CAS-RM',   name: 'CAS DISC RM \u2014 Risk Management',         path: null },
-            { id: 'CAS-5',    name: 'Exam 5 \u2014 Ratemaking and Reserving',      path: null },
-            { id: 'CAS-PCPA', name: 'PCPA \u2014 Predictive Analytics',            path: null },
-            { id: 'CAS-6',    name: 'Exam 6 \u2014 Regulation and Financial Reporting', path: null },
-            { id: 'CAS-APC',  name: 'APC \u2014 Associate Professionalism Course', path: null }
+            { id: 'VEE-ECON', name: 'VEE Economics',             path: null },
+            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null },
+            { id: 'P',      name: 'Exam P-1',     path: 'Exam P-1 (SOA)' },
+            { id: 'FM',     name: 'Exam FM-2',     path: 'Exam FM-2 (SOA)' },
+            { id: 'MAS-I',  name: 'Exam MAS-I',    path: null },
+            { id: 'MAS-II', name: 'Exam MAS-II',   path: null },
+            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null },
+            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null },
+            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null },
+            { id: 'CAS-5',    name: 'Exam 5',         path: null },
+            { id: 'CAS-PCPA', name: 'PCPA',           path: null },
+            { id: 'CAS-6',    name: 'Exam 6',         path: null },
+            { id: 'CAS-APC',  name: 'APC',            path: null }
           ]
         },
         {
           label: 'Fellowship Exams',
           items: [
-            { id: 'CAS-7', name: 'Exam 7 \u2014 Estimation of Policy Liabilities', path: null },
-            { id: 'CAS-8', name: 'Exam 8 \u2014 Advanced Ratemaking',               path: null },
-            { id: 'CAS-9', name: 'Exam 9 \u2014 Financial Risk & Rate of Return',   path: null }
+            { id: 'CAS-7', name: 'Exam 7',   path: null },
+            { id: 'CAS-8', name: 'Exam 8',   path: null },
+            { id: 'CAS-9', name: 'Exam 9',   path: null }
           ]
         }
       ]
@@ -3397,12 +3397,6 @@
           nameEl.className = 'journey-tracker__name internal-link';
           nameEl.href = item.path;
           nameEl.dataset.href = item.path;
-          nameEl.addEventListener('click', function (e) {
-            e.preventDefault();
-            // Navigate using Obsidian Publish URL format (spaces → +)
-            var slug = item.path.replace(/ /g, '+');
-            window.location.assign('/' + slug);
-          });
         } else {
           nameEl = document.createElement('span');
           nameEl.className = 'journey-tracker__name';

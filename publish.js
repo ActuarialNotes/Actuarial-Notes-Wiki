@@ -3571,120 +3571,46 @@ var SoundFX = (function () {
     }
   }
 
-  // Gem collect — warm ascending arpeggio with harmonic depth
+  // Callout open — quick warm tonal swell (rises and fades smoothly)
   function playCalloutOpen() {
     if (isMuted()) return;
     var ac = getCtx();
     var t = ac.currentTime;
+    var dur = 0.18;
 
-    var notes = [520, 660, 780]; // warmer, lower register (C5-ish, E5, G5 — major triad)
-    var spacing = 0.07;
+    // Primary tone — sine sweeping up for the "swell" feel
+    var osc1 = ac.createOscillator();
+    var g1 = ac.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(340, t);       // starts warm (F4-ish)
+    osc1.frequency.linearRampToValueAtTime(520, t + dur); // swells up to C5
+    g1.gain.setValueAtTime(0.0, t);
+    g1.gain.linearRampToValueAtTime(0.12, t + dur * 0.35); // quick rise
+    g1.gain.exponentialRampToValueAtTime(0.001, t + dur);   // smooth fade
+    osc1.connect(g1);
+    g1.connect(ac.destination);
+    osc1.start(t);
+    osc1.stop(t + dur);
 
-    for (var i = 0; i < notes.length; i++) {
-      (function (idx) {
-        var start = t + idx * spacing;
-        var dur = 0.22;
-
-        // Primary tone — sine for warmth
-        var osc1 = ac.createOscillator();
-        var g1 = ac.createGain();
-        osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(notes[idx], start);
-        osc1.frequency.linearRampToValueAtTime(notes[idx] * 1.01, start + dur);
-        g1.gain.setValueAtTime(0.0, start);
-        g1.gain.linearRampToValueAtTime(0.10, start + 0.015); // softer attack
-        g1.gain.exponentialRampToValueAtTime(0.001, start + dur);
-        osc1.connect(g1);
-        g1.connect(ac.destination);
-        osc1.start(start);
-        osc1.stop(start + dur);
-
-        // Octave-below undertone — adds body and warmth
-        var osc2 = ac.createOscillator();
-        var g2 = ac.createGain();
-        osc2.type = 'sine';
-        osc2.frequency.setValueAtTime(notes[idx] * 0.5, start);
-        g2.gain.setValueAtTime(0.0, start);
-        g2.gain.linearRampToValueAtTime(0.04, start + 0.02);
-        g2.gain.exponentialRampToValueAtTime(0.001, start + dur * 0.8);
-        osc2.connect(g2);
-        g2.connect(ac.destination);
-        osc2.start(start);
-        osc2.stop(start + dur);
-      })(i);
-    }
-  }
-
-  // Startup chime — warm glowing tech swell (PlayStation/Xbox inspired)
-  function playStartup() {
-    if (isMuted()) return;
-    var ac = getCtx();
-    var t = ac.currentTime;
-
-    // Layer 1: Deep warm pad — slow swell and fade
-    var pad = ac.createOscillator();
-    var padGain = ac.createGain();
-    pad.type = 'sine';
-    pad.frequency.setValueAtTime(130, t); // low C
-    pad.frequency.linearRampToValueAtTime(165, t + 1.2); // glide up to E
-    padGain.gain.setValueAtTime(0.0, t);
-    padGain.gain.linearRampToValueAtTime(0.08, t + 0.5); // slow swell
-    padGain.gain.linearRampToValueAtTime(0.06, t + 1.0);
-    padGain.gain.exponentialRampToValueAtTime(0.001, t + 1.8);
-    pad.connect(padGain);
-    padGain.connect(ac.destination);
-    pad.start(t);
-    pad.stop(t + 1.8);
-
-    // Layer 2: Mid-range harmonic — fifth above, triangle for richness
-    var mid = ac.createOscillator();
-    var midGain = ac.createGain();
-    mid.type = 'triangle';
-    mid.frequency.setValueAtTime(195, t + 0.15); // G below middle C
-    mid.frequency.linearRampToValueAtTime(260, t + 1.3); // rises to middle C
-    midGain.gain.setValueAtTime(0.0, t + 0.15);
-    midGain.gain.linearRampToValueAtTime(0.06, t + 0.6);
-    midGain.gain.linearRampToValueAtTime(0.04, t + 1.1);
-    midGain.gain.exponentialRampToValueAtTime(0.001, t + 1.7);
-    mid.connect(midGain);
-    midGain.connect(ac.destination);
-    mid.start(t + 0.15);
-    mid.stop(t + 1.7);
-
-    // Layer 3: High shimmer — delayed sparkle on top
-    var hi = ac.createOscillator();
-    var hiGain = ac.createGain();
-    hi.type = 'sine';
-    hi.frequency.setValueAtTime(520, t + 0.4);
-    hi.frequency.linearRampToValueAtTime(660, t + 1.4); // rises gently
-    hiGain.gain.setValueAtTime(0.0, t + 0.4);
-    hiGain.gain.linearRampToValueAtTime(0.05, t + 0.7);
-    hiGain.gain.exponentialRampToValueAtTime(0.001, t + 1.6);
-    hi.connect(hiGain);
-    hiGain.connect(ac.destination);
-    hi.start(t + 0.4);
-    hi.stop(t + 1.6);
-
-    // Layer 4: Final resolve note — a clear tone that "lands"
-    var resolve = ac.createOscillator();
-    var resGain = ac.createGain();
-    resolve.type = 'sine';
-    resolve.frequency.setValueAtTime(330, t + 0.9); // E4
-    resGain.gain.setValueAtTime(0.0, t + 0.9);
-    resGain.gain.linearRampToValueAtTime(0.07, t + 1.05);
-    resGain.gain.linearRampToValueAtTime(0.05, t + 1.5);
-    resGain.gain.exponentialRampToValueAtTime(0.001, t + 2.2);
-    resolve.connect(resGain);
-    resGain.connect(ac.destination);
-    resolve.start(t + 0.9);
-    resolve.stop(t + 2.2);
+    // Undertone — octave below, adds body
+    var osc2 = ac.createOscillator();
+    var g2 = ac.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(170, t);
+    osc2.frequency.linearRampToValueAtTime(260, t + dur);
+    g2.gain.setValueAtTime(0.0, t);
+    g2.gain.linearRampToValueAtTime(0.05, t + dur * 0.35);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc2.connect(g2);
+    g2.connect(ac.destination);
+    osc2.start(t);
+    osc2.stop(t + dur);
   }
 
   return {
     click: playClick,
     dropdownOpen: playDropdownOpen,
     calloutOpen: playCalloutOpen,
-    startup: playStartup,
     isMuted: isMuted,
     toggleMute: toggleMute
   };
@@ -3702,14 +3628,18 @@ var SoundFX = (function () {
 
   // Dropdown triggers — get the tonal triple-tap sound
   var DROPDOWN = '.dl-dropdown__trigger, ' +
-    'button.exam-nav__collapse-arrow, .exam-nav__lo-obj-btn';
+    'button.exam-nav__collapse-arrow, .exam-nav__lo-obj-btn, ' +
+    'button.concept-nav__arrow-btn, .concept-nav__current--expandable';
 
   // Everything else interactive — get the plain click sound
-  var INTERACTIVE = '.clickable-icon, .checkbox-container, ' +
+  // Includes generic 'a' and 'button' as a catch-all for links/buttons,
+  // but DROPDOWN is checked first so dropdown triggers won't double-fire.
+  var INTERACTIVE = 'a, button, .clickable-icon, .checkbox-container, ' +
     '.hc-toggle-row, .mute-toggle-btn, .callout-title, .nav-file-title, ' +
     '.tree-item-self, .concept-question-btn, ' +
-    'a.exam-nav__collapse-arrow, a.exam-nav__menu-item, ' +
-    '.question-browser__close, .question-browser__nav-btn';
+    '.question-browser__close, .question-browser__nav-btn, ' +
+    '.concept-nav__arrow-menu-item, .concept-nav__obj-header-link, ' +
+    '.concept-nav__obj-item';
 
   // Debounce flag — prevents double-firing when nested elements both match
   var _sfxLock = false;
@@ -3718,6 +3648,12 @@ var SoundFX = (function () {
     if (_sfxLock) return;
     var el = e.target;
     if (!el.closest) return;
+
+    // Skip non-interactive targets (text, images, empty space)
+    var tag = el.tagName;
+    var isInteractiveEl = tag === 'A' || tag === 'BUTTON' || tag === 'INPUT' ||
+      tag === 'SELECT' || el.closest(DROPDOWN) || el.closest(INTERACTIVE);
+    if (!isInteractiveEl) return;
 
     var matched = false;
     if (el.closest(DROPDOWN)) {
@@ -3764,20 +3700,6 @@ var SoundFX = (function () {
     setTimeout(observeCallouts, 250);
   }
 
-  // Startup sound — plays once on first user interaction per session
-  // (browsers require a user gesture before AudioContext can play)
-  var STARTUP_KEY = 'actuarial-notes-startup-played';
-  function tryStartup() {
-    try {
-      if (sessionStorage.getItem(STARTUP_KEY)) return;
-      sessionStorage.setItem(STARTUP_KEY, '1');
-    } catch (e) {}
-    SoundFX.startup();
-    document.removeEventListener('click', tryStartup, true);
-    document.removeEventListener('keydown', tryStartup, true);
-  }
-  document.addEventListener('click', tryStartup, true);
-  document.addEventListener('keydown', tryStartup, true);
 })();
 
 

@@ -1552,6 +1552,10 @@ input[type="search"]:focus, .search-input:focus {
   display: block;
   float: none;
   clear: both;
+  /* Prevent flex layout from stretching/pushing the tracker */
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
 }
 
 /* Header row: title + count */
@@ -1750,11 +1754,6 @@ a.journey-tracker__name:hover {
   color: var(--brand-hover);
 }
 
-/* Force tracker to occupy full row in any flex context */
-.journey-tracker {
-  flex-basis: 100% !important;
-  flex-shrink: 0;
-}
 
 /* "or" separator between ALTAM/ASTAM */
 .journey-tracker__or {

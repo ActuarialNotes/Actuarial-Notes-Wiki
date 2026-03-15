@@ -3651,7 +3651,8 @@ var SoundFX = (function () {
   // Dropdown triggers — get the tonal triple-tap sound
   var DROPDOWN = '.dl-dropdown__trigger, ' +
     'button.exam-nav__collapse-arrow, .exam-nav__lo-obj-btn, ' +
-    'button.concept-nav__arrow-btn, .concept-nav__current--expandable, .concept-nav__obj-btn';
+    'button.concept-nav__arrow-btn, .concept-nav__current--expandable, .concept-nav__obj-btn, ' +
+    '.exam-nav__dropdown > .exam-nav__btn';
 
   // Debounce flag — prevents double-firing when nested elements both match
   var _sfxLock = false;

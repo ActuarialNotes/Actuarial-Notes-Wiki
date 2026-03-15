@@ -3546,7 +3546,6 @@ figure.right figcaption,
 .site-body-center-column:has(.exam-nav__lo-wrap.is-open),
 .site-body-center-column:has(.concept-nav__arrow-dropdown.is-open),
 .site-body-center-column:has(.concept-nav__obj-wrap.is-open),
-.site-body-center-column:has(.concept-nav.is-expanded),
 .site-body-center-column.exam-nav-elevated {
   position: relative;
   z-index: 200;

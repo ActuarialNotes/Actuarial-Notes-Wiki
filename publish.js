@@ -3666,7 +3666,7 @@ var SoundFX = (function () {
     if (el.closest(DROPDOWN)) {
       SoundFX.dropdownOpen();
     // All other links, buttons, and interactive elements get the same click
-    } else if (el.closest('a, button, .clickable-icon, .checkbox-container, .callout-title')) {
+    } else if (el.closest('a, button, .clickable-icon, .checkbox-container, .callout-title, .hc-toggle-row')) {
       SoundFX.click();
     } else {
       return; // not interactive, no sound

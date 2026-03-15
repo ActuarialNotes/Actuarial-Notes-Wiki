@@ -1,6 +1,24 @@
-/* ===========================================================
-   EXAM NAVIGATION COMPONENT - JavaScript
-   Add to your publish.js
+/* ═══════════════════════════════════════════════════════════════════════
+   ACTUARIAL NOTES WIKI — publish.js
+   Custom interactive components for Obsidian Publish
+
+   TABLE OF CONTENTS
+   ─────────────────
+    1. EXAM NAVIGATION COMPONENT ................. line ~30
+    2. DOWNLOAD DROPDOWN ......................... line ~920
+    3. CALLOUT BADGES ............................ line ~1140
+    4. QUESTION BROWSER .......................... line ~1230
+    5. CONCEPT NAVIGATION COMPONENT .............. line ~2280
+    6. EXAM JOURNEY TRACKER ...................... line ~3010
+    7. SOUND EFFECTS ENGINE ...................... line ~3500
+    8. SOUND EFFECT HOOKS ........................ line ~3670
+    9. HIGH CONTRAST TOGGLE ...................... line ~3740
+   10. READ-ALOUD BUTTON ........................ line ~3940
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   1. EXAM NAVIGATION COMPONENT
+   Renders prev → current → next navigation for exam pages
    
    Usage in your notes (HTML):
    
@@ -19,7 +37,7 @@
    - data-next: "Name|Full|URL|Org,Name2|Full2|URL2|Org2" (comma-separated, optional)
    - data-reqs: "REQ1,REQ2" (comma-separated, optional)
    - data-tracks: "TrackName|URL,TrackName2|URL2" (comma-separated, optional)
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 (function() {
   'use strict';
@@ -888,8 +906,8 @@
 })();
 
 
-/* ===========================================================
-   DOWNLOAD DROPDOWN
+/* ═══════════════════════════════════════════════════════════════════════
+   2. DOWNLOAD DROPDOWN
    Converts <div class="download-dropdown" data-files="..."> into
    a styled dropdown button with a list of downloadable files.
 
@@ -902,7 +920,7 @@
 
    Each file entry in data-files is pipe-delimited: Name|URL
    Multiple entries are comma-separated.
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
@@ -1105,12 +1123,12 @@
 })();
 
 
-/* ===========================================================
-   CALLOUT BADGES
+/* ═══════════════════════════════════════════════════════════════════════
+   3. CALLOUT BADGES
    Extracts {badge text} from callout titles and renders them
    as pill badges.  Works on all callout types.
    Syntax:  > [!example]- Title here {23-30%} {19 Concepts}
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
@@ -1196,14 +1214,14 @@
 })();
 
 
-/* ===========================================================
-   QUESTION BROWSER
+/* ═══════════════════════════════════════════════════════════════════════
+   4. QUESTION BROWSER
    Adds a "?" button to each definition embed that opens a
    modal for browsing questions across exams and concepts.
 
    Questions are parsed from concept pages under ## Questions,
    formatted as > [!example]- callouts.
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
@@ -2243,8 +2261,8 @@
 })();
 
 
-/* ===========================================================
-   CONCEPT NAVIGATION COMPONENT
+/* ═══════════════════════════════════════════════════════════════════════
+   5. CONCEPT NAVIGATION COMPONENT
    Renders prev → current → next navigation for concept pages,
    with a learning-objective badge that opens a panel showing
    all objectives and their concepts for the parent exam(s).
@@ -2265,7 +2283,7 @@
    - data-prev: "Name|Path,Name2|Path2" — comma-separated, pipe-delimited (optional)
    - data-next: "Name|Path,Name2|Path2" — comma-separated, pipe-delimited (optional)
    - data-objectives: "ExamCode|ExamName|ObjectiveName|ExamPagePath;..." — semicolon-separated (optional)
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
@@ -2977,12 +2995,12 @@
 })();
 
 
-/* ===========================================================
-   EXAM JOURNEY TRACKER
+/* ═══════════════════════════════════════════════════════════════════════
+   6. EXAM JOURNEY TRACKER
    Sidebar widget that lets users pick a certification track
    (ASA, ACAS, FSA, FCAS), view requirements, and mark progress.
    Persists state in localStorage.
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
@@ -3468,11 +3486,11 @@
 })();
 
 
-/* ===========================================================
-   SOUND EFFECTS ENGINE
+/* ═══════════════════════════════════════════════════════════════════════
+   7. SOUND EFFECTS ENGINE
    Synthesises short, satisfying video-game sounds via the
    Web Audio API.  No external audio files required.
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 var SoundFX = (function () {
   'use strict';
@@ -3639,11 +3657,11 @@ var SoundFX = (function () {
 })();
 
 
-/* ===========================================================
-   SOUND EFFECT HOOKS
+/* ═══════════════════════════════════════════════════════════════════════
+   8. SOUND EFFECT HOOKS
    Plays SoundFX.click() on interactive element clicks and
    SoundFX.calloutOpen() when a callout expands.
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
@@ -3709,12 +3727,12 @@ var SoundFX = (function () {
 })();
 
 
-/* ===========================================================
-   HIGH CONTRAST TOGGLE
+/* ═══════════════════════════════════════════════════════════════════════
+   9. HIGH CONTRAST TOGGLE
    Injects a contrast icon + pill switch right beside the
    built-in dark/light mode toggle in the Obsidian Publish
    sidebar. Persists preference in localStorage.
-   =========================================================== */
+   ═══════════════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
@@ -3906,8 +3924,9 @@ var SoundFX = (function () {
 
 
 /* ═══════════════════════════════════════════════════════════════════════
-   7. READ-ALOUD BUTTON — replaces native heading anchor with a speaker
-      icon that reads the section content aloud via SpeechSynthesis API
+   10. READ-ALOUD BUTTON
+   Replaces native heading anchor with a speaker icon that reads
+   the section content aloud via SpeechSynthesis API.
    ═══════════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';

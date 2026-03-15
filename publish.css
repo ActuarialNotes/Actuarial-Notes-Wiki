@@ -3307,6 +3307,99 @@ figure.right figcaption,
   pointer-events: auto;
 }
 
+/* ── Sticky exam nav bar ──────────────────────────── */
+.exam-nav__sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 300;
+  padding: 8px 16px;
+  background: color-mix(in oklab, var(--nav-color) 6%, var(--bg-elev));
+  border-bottom: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.25s ease, opacity 0.25s ease, visibility 0.25s ease;
+  --nav-color: var(--brand);
+  --nav-color-hover: var(--brand-hover);
+}
+
+.exam-nav__sticky.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.exam-nav__sticky-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--nav-color);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter 0.15s ease;
+  box-shadow: none !important;
+}
+
+.exam-nav__sticky-btn:hover {
+  filter: brightness(1.1);
+}
+
+.exam-nav__sticky-chevron {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.exam-nav__sticky.is-open .exam-nav__sticky-chevron {
+  transform: rotate(180deg);
+}
+
+.exam-nav__sticky-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.exam-nav__sticky.is-open .exam-nav__sticky-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-top: 10px;
+}
+
+/* Sticky content track row spacing */
+.exam-nav__sticky-content .exam-nav__track {
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+/* Sticky LO section always visible (no toggle) */
+.exam-nav__sticky .exam-nav__lo-section {
+  display: block;
+}
+
+@media (max-width: 540px) {
+  .exam-nav__sticky {
+    padding: 6px 10px;
+  }
+  .exam-nav__sticky-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+}
+
 /* Example callout tinting on exam pages */
 .has-exam-nav .callout[data-callout="example"] {
   background: color-mix(in oklab, var(--exam-color) 5%, var(--bg-elev));
@@ -3361,15 +3454,16 @@ figure.right figcaption,
   transform: rotate(180deg);
 }
 
-/* ── Learning Objectives section (expandable) ────────── */
+/* ── Learning Objectives section (always visible in expanded view) ── */
 .exam-nav__lo-section {
-  display: none;
+  display: block;
   width: 100%;
   padding: 10px 0 4px;
 }
 
-.exam-nav.is-lo-expanded .exam-nav__lo-section {
-  display: block;
+/* Hide LO section when collapsed */
+.exam-nav.is-collapsed .exam-nav__lo-section {
+  display: none;
 }
 
 .exam-nav__lo-loading {

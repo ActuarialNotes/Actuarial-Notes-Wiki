@@ -1759,6 +1759,21 @@ a.journey-tracker__name:hover {
   color: var(--brand-hover);
 }
 
+/* In-progress: style name as compact exam-link pill */
+.journey-tracker__item[data-status="in_progress"] .journey-tracker__name {
+  background: var(--brand);
+  color: #fff !important;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-decoration: none;
+  transition: background .15s ease, color .15s ease, padding .15s ease;
+}
+.journey-tracker__item[data-status="in_progress"] a.journey-tracker__name:hover {
+  color: #fff !important;
+  filter: brightness(1.1);
+}
 
 /* "or" separator between ALTAM/ASTAM */
 .journey-tracker__or {

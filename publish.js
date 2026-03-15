@@ -3382,9 +3382,17 @@
         statusBtn.addEventListener('click', function (e) {
           e.stopPropagation();
           cycleStatus(item.id);
-          row.dataset.status = getStatus(item.id);
-          statusBtn.innerHTML = STATUS_ICONS[getStatus(item.id)];
+          var newStatus = getStatus(item.id);
+          row.dataset.status = newStatus;
+          statusBtn.innerHTML = STATUS_ICONS[newStatus];
           updateProgress();
+          if (newStatus === 'in_progress') {
+            SoundFX.inProgress();
+          } else if (newStatus === 'completed') {
+            SoundFX.complete();
+          } else {
+            SoundFX.click();
+          }
         });
 
         // Name (link if path exists)
@@ -3560,6 +3568,54 @@ var SoundFX = (function () {
     src.start(t);
   }
 
+  // In-progress — single upward sweep tone (activating)
+  function playInProgress() {
+    if (isMuted()) return;
+    var ac = getCtx();
+    var t = ac.currentTime;
+    var dur = 0.18;
+
+    var osc = ac.createOscillator();
+    var gain = ac.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(262, t);
+    osc.frequency.exponentialRampToValueAtTime(392, t + dur * 0.8);
+    gain.gain.setValueAtTime(0.0, t);
+    gain.gain.linearRampToValueAtTime(0.09, t + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc.connect(gain);
+    gain.connect(ac.destination);
+    osc.start(t);
+    osc.stop(t + dur + 0.01);
+  }
+
+  // Complete — ascending major triad chime (achievement)
+  function playComplete() {
+    if (isMuted()) return;
+    var ac = getCtx();
+    var t = ac.currentTime;
+
+    var notes = [523, 659, 784]; // C5, E5, G5
+    var spacing = 0.07;
+
+    for (var i = 0; i < notes.length; i++) {
+      (function (freq, idx) {
+        var start = t + idx * spacing;
+        var osc = ac.createOscillator();
+        var gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, start);
+        gain.gain.setValueAtTime(0.0, start);
+        gain.gain.linearRampToValueAtTime(0.08, start + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.15);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(start);
+        osc.stop(start + 0.16);
+      })(notes[i], i);
+    }
+  }
+
   // Dropdown open — quick ascending two-note chime (discovery / reveal)
   // Rising major third: C5 → E5, bright and pleasant
   function playDropdownOpen() {
@@ -3633,6 +3689,8 @@ var SoundFX = (function () {
     click: playClick,
     dropdownOpen: playDropdownOpen,
     calloutOpen: playCalloutOpen,
+    inProgress: playInProgress,
+    complete: playComplete,
     isMuted: isMuted,
     toggleMute: toggleMute
   };

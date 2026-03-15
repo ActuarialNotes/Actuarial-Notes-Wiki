@@ -3730,33 +3730,43 @@ var SoundFX = (function () {
 
   var MUTE_KEY = 'actuarial-notes-muted';
   var ctx = null;
-  var _unlocked = false;
+  var _silentPlayed = false;
 
   function getCtx() {
     if (!ctx) {
       ctx = new (window.AudioContext || window.webkitAudioContext)();
     }
-    if (ctx.state === 'suspended') ctx.resume();
     return ctx;
   }
 
   // Mobile browsers keep AudioContext suspended until a user gesture handler
-  // calls resume(). Eagerly unlock on the first touch/click so that the
-  // actual sound-playing code always finds a running context.
+  // calls resume(). Re-run on every gesture because the context can be
+  // re-suspended after tab switches, lock-screen, etc.
   function unlockAudio() {
-    if (_unlocked) return;
     var ac = getCtx();
-    // Play a silent buffer to fully unlock on iOS Safari
-    var buf = ac.createBuffer(1, 1, ac.sampleRate);
-    var src = ac.createBufferSource();
-    src.buffer = buf;
-    src.connect(ac.destination);
-    src.start(0);
     if (ac.state === 'suspended') ac.resume();
-    _unlocked = true;
+    // Play a silent buffer once to fully unlock on iOS Safari
+    if (!_silentPlayed) {
+      var buf = ac.createBuffer(1, 1, ac.sampleRate);
+      var src = ac.createBufferSource();
+      src.buffer = buf;
+      src.connect(ac.destination);
+      src.start(0);
+      _silentPlayed = true;
+    }
   }
-  document.addEventListener('touchstart', unlockAudio, { once: true });
-  document.addEventListener('click', unlockAudio, { once: true });
+  document.addEventListener('touchstart', unlockAudio, true);
+  document.addEventListener('click', unlockAudio, true);
+
+  // Ensure AudioContext is running before scheduling audio.
+  // On mobile, resume() is async — scheduling at a frozen currentTime
+  // produces silent or quiet playback.  This helper waits for 'running'
+  // state so that currentTime is accurate when the callback fires.
+  function ensureRunning(cb) {
+    var ac = getCtx();
+    if (ac.state === 'running') { cb(ac); return; }
+    ac.resume().then(function () { cb(ac); });
+  }
 
   function isMuted() {
     try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (e) { return false; }
@@ -3789,143 +3799,148 @@ var SoundFX = (function () {
 
   function playClick() {
     if (isMuted()) return;
-    var ac = getCtx();
-    var t = ac.currentTime;
+    ensureRunning(function (ac) {
+      var t = ac.currentTime;
 
-    var len = 0.012;
-    var src = ac.createBufferSource();
-    src.buffer = getClickBuf(ac);
+      var len = 0.012;
+      var src = ac.createBufferSource();
+      src.buffer = getClickBuf(ac);
 
-    var filt = ac.createBiquadFilter();
-    filt.type = 'bandpass';
-    filt.frequency.value = 3500;
-    filt.Q.value = 1.2;
+      var filt = ac.createBiquadFilter();
+      filt.type = 'bandpass';
+      filt.frequency.value = 3500;
+      filt.Q.value = 1.2;
 
-    var gain = ac.createGain();
-    gain.gain.setValueAtTime(0.22, t);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + len);
+      var gain = ac.createGain();
+      gain.gain.setValueAtTime(0.22, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + len);
 
-    src.connect(filt);
-    filt.connect(gain);
-    gain.connect(ac.destination);
-    src.start(t);
+      src.connect(filt);
+      filt.connect(gain);
+      gain.connect(ac.destination);
+      src.start(t);
+    });
   }
 
   // In-progress — single upward sweep tone (activating)
   function playInProgress() {
     if (isMuted()) return;
-    var ac = getCtx();
-    var t = ac.currentTime;
-    var dur = 0.18;
+    ensureRunning(function (ac) {
+      var t = ac.currentTime;
+      var dur = 0.18;
 
-    var osc = ac.createOscillator();
-    var gain = ac.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(262, t);
-    osc.frequency.exponentialRampToValueAtTime(392, t + dur * 0.8);
-    gain.gain.setValueAtTime(0.0, t);
-    gain.gain.linearRampToValueAtTime(0.09, t + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    osc.connect(gain);
-    gain.connect(ac.destination);
-    osc.start(t);
-    osc.stop(t + dur + 0.01);
+      var osc = ac.createOscillator();
+      var gain = ac.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(262, t);
+      osc.frequency.exponentialRampToValueAtTime(392, t + dur * 0.8);
+      gain.gain.setValueAtTime(0.0, t);
+      gain.gain.linearRampToValueAtTime(0.09, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(t);
+      osc.stop(t + dur + 0.01);
+    });
   }
 
   // Complete — ascending major triad chime (achievement)
   function playComplete() {
     if (isMuted()) return;
-    var ac = getCtx();
-    var t = ac.currentTime;
+    ensureRunning(function (ac) {
+      var t = ac.currentTime;
 
-    var notes = [523, 659, 784]; // C5, E5, G5
-    var spacing = 0.07;
+      var notes = [523, 659, 784]; // C5, E5, G5
+      var spacing = 0.07;
 
-    for (var i = 0; i < notes.length; i++) {
-      (function (freq, idx) {
-        var start = t + idx * spacing;
-        var osc = ac.createOscillator();
-        var gain = ac.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, start);
-        gain.gain.setValueAtTime(0.0, start);
-        gain.gain.linearRampToValueAtTime(0.08, start + 0.01);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.15);
-        osc.connect(gain);
-        gain.connect(ac.destination);
-        osc.start(start);
-        osc.stop(start + 0.16);
-      })(notes[i], i);
-    }
+      for (var i = 0; i < notes.length; i++) {
+        (function (freq, idx) {
+          var start = t + idx * spacing;
+          var osc = ac.createOscillator();
+          var gain = ac.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, start);
+          gain.gain.setValueAtTime(0.0, start);
+          gain.gain.linearRampToValueAtTime(0.08, start + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.15);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start(start);
+          osc.stop(start + 0.16);
+        })(notes[i], i);
+      }
+    });
   }
 
   // Dropdown open — quick ascending two-note chime (discovery / reveal)
   // Rising major third: C5 → E5, bright and pleasant
   function playDropdownOpen() {
     if (isMuted()) return;
-    var ac = getCtx();
-    var t = ac.currentTime;
+    ensureRunning(function (ac) {
+      var t = ac.currentTime;
 
-    var notes = [523, 659]; // C5, E5 — rising major third
-    var spacing = 0.06;
+      var notes = [523, 659]; // C5, E5 — rising major third
+      var spacing = 0.06;
 
-    for (var i = 0; i < notes.length; i++) {
-      (function (freq, idx) {
-        var start = t + idx * spacing;
-        var osc = ac.createOscillator();
-        var gain = ac.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, start);
-        gain.gain.setValueAtTime(0.0, start);
-        gain.gain.linearRampToValueAtTime(0.07, start + 0.008);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.09);
-        osc.connect(gain);
-        gain.connect(ac.destination);
-        osc.start(start);
-        osc.stop(start + 0.09);
-      })(notes[i], i);
-    }
+      for (var i = 0; i < notes.length; i++) {
+        (function (freq, idx) {
+          var start = t + idx * spacing;
+          var osc = ac.createOscillator();
+          var gain = ac.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, start);
+          gain.gain.setValueAtTime(0.0, start);
+          gain.gain.linearRampToValueAtTime(0.07, start + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.001, start + 0.09);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start(start);
+          osc.stop(start + 0.09);
+        })(notes[i], i);
+      }
+    });
   }
 
   // Callout open — soft woosh / unfolding sound
   // Filtered noise with a bandpass sweep from low to high
   function playCalloutOpen() {
     if (isMuted()) return;
-    var ac = getCtx();
-    var t = ac.currentTime;
-    var dur = 0.25;
+    ensureRunning(function (ac) {
+      var t = ac.currentTime;
+      var dur = 0.25;
 
-    // White noise source
-    var len = dur + 0.1;
-    var samples = Math.ceil(ac.sampleRate * len);
-    var buf = ac.createBuffer(1, samples, ac.sampleRate);
-    var data = buf.getChannelData(0);
-    for (var i = 0; i < samples; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
-    var src = ac.createBufferSource();
-    src.buffer = buf;
+      // White noise source
+      var len = dur + 0.1;
+      var samples = Math.ceil(ac.sampleRate * len);
+      var buf = ac.createBuffer(1, samples, ac.sampleRate);
+      var data = buf.getChannelData(0);
+      for (var i = 0; i < samples; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      var src = ac.createBufferSource();
+      src.buffer = buf;
 
-    // Bandpass filter sweeps upward — creates the woosh
-    var filt = ac.createBiquadFilter();
-    filt.type = 'bandpass';
-    filt.Q.value = 0.8;
-    filt.frequency.setValueAtTime(300, t);
-    filt.frequency.exponentialRampToValueAtTime(3000, t + dur * 0.7);
-    filt.frequency.exponentialRampToValueAtTime(2000, t + dur);
+      // Bandpass filter sweeps upward — creates the woosh
+      var filt = ac.createBiquadFilter();
+      filt.type = 'bandpass';
+      filt.Q.value = 0.8;
+      filt.frequency.setValueAtTime(300, t);
+      filt.frequency.exponentialRampToValueAtTime(3000, t + dur * 0.7);
+      filt.frequency.exponentialRampToValueAtTime(2000, t + dur);
 
-    // Volume envelope — quick swell then fade
-    var gain = ac.createGain();
-    gain.gain.setValueAtTime(0.0, t);
-    gain.gain.linearRampToValueAtTime(0.04, t + dur * 0.25);
-    gain.gain.linearRampToValueAtTime(0.03, t + dur * 0.6);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      // Volume envelope — quick swell then fade
+      var gain = ac.createGain();
+      gain.gain.setValueAtTime(0.0, t);
+      gain.gain.linearRampToValueAtTime(0.04, t + dur * 0.25);
+      gain.gain.linearRampToValueAtTime(0.03, t + dur * 0.6);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
 
-    src.connect(filt);
-    filt.connect(gain);
-    gain.connect(ac.destination);
-    src.start(t);
-    src.stop(t + dur + 0.05);
+      src.connect(filt);
+      filt.connect(gain);
+      gain.connect(ac.destination);
+      src.start(t);
+      src.stop(t + dur + 0.05);
+    });
   }
 
   return {
@@ -3967,7 +3982,7 @@ var SoundFX = (function () {
     if (el.closest(DROPDOWN)) {
       SoundFX.dropdownOpen();
     // All other links, buttons, and interactive elements get the same click
-    } else if (el.closest('a, button, .clickable-icon, .checkbox-container, .callout-title, .hc-toggle-row')) {
+    } else if (el.closest('a, button, .clickable-icon, .checkbox-container, .callout-title')) {
       SoundFX.click();
     } else {
       return; // not interactive, no sound
@@ -4106,6 +4121,7 @@ var SoundFX = (function () {
 
     row.addEventListener('click', function (e) {
       e.stopPropagation();
+      SoundFX.click();
       var nowOn = !document.body.classList.contains('high-contrast');
       applyHighContrast(nowOn);
       updateAria();

@@ -237,17 +237,6 @@
     var pillRow = document.createElement('div');
     pillRow.className = 'exam-nav__pill-row';
 
-    // Previous exam(s)
-    if (prevData.length > 0) {
-      renderExamGroup(pillRow, prevData, 'exam-nav__btn--prev');
-
-      // Arrow after prev
-      const arrow1 = document.createElement('span');
-      arrow1.className = 'exam-nav__arrow';
-      arrow1.textContent = '→';
-      pillRow.appendChild(arrow1);
-    }
-
     // Current exam wrapper (button + requirements below)
     const currentWrapper = document.createElement('div');
     currentWrapper.className = 'exam-nav__current';
@@ -275,27 +264,139 @@
 
     pillRow.appendChild(currentWrapper);
 
-    // Next exam(s)
-    if (nextData.length > 0) {
-      // Arrow before next
-      const arrow2 = document.createElement('span');
-      arrow2.className = 'exam-nav__arrow';
-      arrow2.textContent = '→';
-      pillRow.appendChild(arrow2);
-
-      renderExamGroup(pillRow, nextData, 'exam-nav__btn--next');
-    }
-
-    // (collapse button removed — current pill is now collapsible)
-
     expandedView.appendChild(pillRow);
+
+    // Learning Objectives — directly visible in expanded view (no toggle)
+    var loSection = document.createElement('div');
+    loSection.className = 'exam-nav__lo-section';
+    expandedView.appendChild(loSection);
+
     container.appendChild(expandedView);
 
     // Default to collapsed state
     container.classList.add('is-collapsed');
 
-    // Learning Objectives dropdown
-    buildExamObjectivesSection(container);
+    // Load concepts directly into the expanded view
+    function loadConceptsInline() {
+      var objectives = parseObjectivesFromDOM(container);
+      if (objectives.length > 0) {
+        renderExamNavObjectives(loSection, objectives, container);
+      } else {
+        // Fallback: try fetching from markdown
+        var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
+        if (!pagePath) pagePath = document.title;
+        fetchExamNavObjectives(pagePath).then(function (objs) {
+          renderExamNavObjectives(loSection, objs, container);
+        }).catch(function () {
+          loSection.innerHTML = '';
+        });
+      }
+    }
+    // Delay slightly so the DOM callout blocks are available for parsing
+    setTimeout(loadConceptsInline, 150);
+
+    // ── Sticky bar ────────────────────────────────────────
+    // Clean up previous sticky bar if rebuilding
+    if (container._stickyEl) {
+      container._stickyEl.remove();
+    }
+    if (container._stickyObserver) {
+      container._stickyObserver.disconnect();
+    }
+
+    var sticky = document.createElement('div');
+    sticky.className = 'exam-nav__sticky';
+    if (customColor) {
+      sticky.style.setProperty('--nav-color', customColor);
+      sticky.style.setProperty('--nav-color-hover', customColor);
+    }
+
+    var stickyBtn = document.createElement('button');
+    stickyBtn.className = 'exam-nav__sticky-btn';
+    stickyBtn.type = 'button';
+    stickyBtn.innerHTML =
+      '<span>' + currentData.name + '</span>' +
+      '<svg class="exam-nav__sticky-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    var stickyContent = document.createElement('div');
+    stickyContent.className = 'exam-nav__sticky-content';
+
+    // Track row in sticky (if tracks exist)
+    if (tracks.length > 0) {
+      var stickyTrack = document.createElement('div');
+      stickyTrack.className = 'exam-nav__track';
+      var stickyTrackLabel = document.createElement('span');
+      stickyTrackLabel.className = 'exam-nav__track-label';
+      stickyTrackLabel.textContent = 'Exam Track:';
+      stickyTrack.appendChild(stickyTrackLabel);
+      tracks.forEach(function (track, i) {
+        if (i > 0) {
+          var sep = document.createElement('span');
+          sep.className = 'exam-nav__track-sep';
+          sep.textContent = '/';
+          stickyTrack.appendChild(sep);
+        }
+        if (track.url) {
+          var link = document.createElement('a');
+          link.className = 'exam-nav__track-link internal-link';
+          link.href = track.url;
+          link.textContent = track.name;
+          stickyTrack.appendChild(link);
+        } else {
+          var span = document.createElement('span');
+          span.className = 'exam-nav__track-link';
+          span.textContent = track.name;
+          stickyTrack.appendChild(span);
+        }
+      });
+      stickyContent.appendChild(stickyTrack);
+    }
+
+    // Concepts list in sticky
+    var stickyLoSection = document.createElement('div');
+    stickyLoSection.className = 'exam-nav__lo-section exam-nav__sticky-lo';
+    stickyContent.appendChild(stickyLoSection);
+
+    // Load concepts into sticky panel
+    function loadStickyObjectives() {
+      var objectives = parseObjectivesFromDOM(container);
+      if (objectives.length > 0) {
+        renderExamNavObjectives(stickyLoSection, objectives, container);
+      } else {
+        var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
+        if (!pagePath) pagePath = document.title;
+        fetchExamNavObjectives(pagePath).then(function (objs) {
+          renderExamNavObjectives(stickyLoSection, objs, container);
+        }).catch(function () {});
+      }
+    }
+    setTimeout(loadStickyObjectives, 200);
+
+    stickyBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      sticky.classList.toggle('is-open');
+    });
+
+    sticky.appendChild(stickyBtn);
+    sticky.appendChild(stickyContent);
+    document.body.appendChild(sticky);
+    container._stickyEl = sticky;
+
+    // IntersectionObserver to show/hide sticky bar
+    if ('IntersectionObserver' in window) {
+      var stickyObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) {
+            sticky.classList.add('is-visible');
+          } else {
+            sticky.classList.remove('is-visible');
+            sticky.classList.remove('is-open');
+          }
+        });
+      }, { threshold: 0 });
+      stickyObserver.observe(container);
+      container._stickyObserver = stickyObserver;
+    }
 
     // Close dropdown when clicking outside
     if (!window._examNavCloseRegistered) {
@@ -303,11 +404,15 @@
 
       document.addEventListener('click', (e) => {
         if (!e.target.closest('.exam-nav__dropdown') &&
-            !e.target.closest('.exam-nav__lo-wrap')) {
+            !e.target.closest('.exam-nav__lo-wrap') &&
+            !e.target.closest('.exam-nav__sticky')) {
           document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
             d.classList.remove('is-open');
           });
           document.querySelectorAll('.exam-nav__lo-wrap.is-open').forEach(d => {
+            d.classList.remove('is-open');
+          });
+          document.querySelectorAll('.exam-nav__sticky.is-open').forEach(d => {
             d.classList.remove('is-open');
           });
           hideBackdrop();
@@ -321,6 +426,9 @@
             d.classList.remove('is-open');
           });
           document.querySelectorAll('.exam-nav__lo-wrap.is-open').forEach(d => {
+            d.classList.remove('is-open');
+          });
+          document.querySelectorAll('.exam-nav__sticky.is-open').forEach(d => {
             d.classList.remove('is-open');
           });
           hideBackdrop();

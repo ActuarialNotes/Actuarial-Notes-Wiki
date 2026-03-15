@@ -3246,26 +3246,27 @@
     var done = 0;
     var orSeen = {};
     var electiveDone = 0;
-    var electiveTotal = 0;
-    var seqCompleted = {}; // track completed seq items: { CFE: ['101','201'], ... }
     var hasElectives = false;
 
     track.sections.forEach(function (sec) {
       if (sec.elective) {
         hasElectives = true;
         sec.items.forEach(function (item) {
-          electiveTotal++;
-          if (getStatus(item.id) === 'completed') {
-            electiveDone++;
-            if (item.seq) {
-              if (!seqCompleted[item.seq]) seqCompleted[item.seq] = [];
-              // Extract 101/201 from id (e.g. FSA-CFE101 -> 101)
-              var num = item.id.replace(/^.*?(\d+)$/, '$1');
-              seqCompleted[item.seq].push(num);
-            }
-          }
+          if (getStatus(item.id) === 'completed') electiveDone++;
         });
         return; // don't add to main total yet
+      }
+      // Collapsed prereq sections count as 1 requirement
+      if (sec.collapsed) {
+        total++;
+        var allDone = sec.items.every(function (item) {
+          if (item.or) {
+            return getStatus(item.id) === 'completed' || getStatus(item.or) === 'completed';
+          }
+          return getStatus(item.id) === 'completed';
+        });
+        if (allDone) done++;
+        return;
       }
       sec.items.forEach(function (item) {
         if (item.or) {
@@ -3282,20 +3283,8 @@
     });
 
     if (hasElectives) {
-      // FSA: need a 101-201 sequence pair + 2 others = 4 electives
-      var hasValidPair = false;
-      Object.keys(seqCompleted).forEach(function (key) {
-        var nums = seqCompleted[key];
-        if (nums.indexOf('101') !== -1 && nums.indexOf('201') !== -1) {
-          hasValidPair = true;
-        }
-      });
-      // Cap: without a valid pair, max 2 "other" slots; with pair, max 4
-      var cappedElectiveDone = hasValidPair
-        ? Math.min(electiveDone, 4)
-        : Math.min(electiveDone, 2);
       total += 4; // always 4 elective slots required
-      done += cappedElectiveDone;
+      done += Math.min(electiveDone, 4);
     }
 
     return { total: total, done: done };

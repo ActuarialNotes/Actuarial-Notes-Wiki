@@ -1758,6 +1758,26 @@ a.journey-tracker__name {
 a.journey-tracker__name:hover {
   color: var(--brand-hover);
 }
+/* Per-exam link colors (non-in-progress state) */
+[data-exam-color="sky"] > a.journey-tracker__name { color: #0284c7; }
+[data-exam-color="blue"] > a.journey-tracker__name { color: #2563eb; }
+[data-exam-color="indigo"] > a.journey-tracker__name { color: #4f46e5; }
+[data-exam-color="violet"] > a.journey-tracker__name { color: #7c3aed; }
+[data-exam-color="purple"] > a.journey-tracker__name { color: #9333ea; }
+[data-exam-color="fuchsia"] > a.journey-tracker__name { color: #c026d3; }
+[data-exam-color="pink"] > a.journey-tracker__name { color: #db2777; }
+[data-exam-color="rose"] > a.journey-tracker__name { color: #e11d48; }
+[data-exam-color="red"] > a.journey-tracker__name { color: #dc2626; }
+[data-exam-color="orange"] > a.journey-tracker__name { color: #ea580c; }
+[data-exam-color="amber"] > a.journey-tracker__name { color: #d97706; }
+[data-exam-color="yellow"] > a.journey-tracker__name { color: #ca8a04; }
+[data-exam-color="lime"] > a.journey-tracker__name { color: #65a30d; }
+[data-exam-color="green"] > a.journey-tracker__name { color: #16a34a; }
+[data-exam-color="emerald"] > a.journey-tracker__name { color: #059669; }
+[data-exam-color="teal"] > a.journey-tracker__name { color: #0d9488; }
+[data-exam-color="cyan"] > a.journey-tracker__name { color: #0891b2; }
+[data-exam-color="slate"] > a.journey-tracker__name { color: #475569; }
+[data-exam-color] > a.journey-tracker__name:hover { filter: brightness(1.15); }
 
 /* In-progress: style name as compact exam-link pill */
 .journey-tracker__item[data-status="in_progress"] .journey-tracker__name {
@@ -4821,6 +4841,15 @@ body.high-contrast .callout-badge--pct {
 body.high-contrast data.callout-obj-num {
   color: var(--text) !important;
   opacity: 0.6;
+}
+
+/* Journey tracker — strip colour in high contrast */
+body.high-contrast .journey-tracker__item[data-status="in_progress"] .journey-tracker__name {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+body.high-contrast [data-exam-color] > a.journey-tracker__name {
+  color: var(--text) !important;
 }
 
 /* Exam link buttons — strip colour */

@@ -1774,6 +1774,34 @@ a.journey-tracker__name:hover {
   color: #fff !important;
   filter: brightness(1.1);
 }
+/* Per-exam color variants for in-progress pills */
+.journey-tracker__item[data-status="in_progress"][data-exam-color="sky"] .journey-tracker__name { background: #0284c7; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="blue"] .journey-tracker__name { background: #2563eb; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="indigo"] .journey-tracker__name { background: #4f46e5; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="violet"] .journey-tracker__name { background: #7c3aed; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="purple"] .journey-tracker__name { background: #9333ea; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="fuchsia"] .journey-tracker__name { background: #c026d3; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="pink"] .journey-tracker__name { background: #db2777; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="rose"] .journey-tracker__name { background: #e11d48; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="red"] .journey-tracker__name { background: #dc2626; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="orange"] .journey-tracker__name { background: #ea580c; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="amber"] .journey-tracker__name { background: #d97706; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="yellow"] .journey-tracker__name { background: #ca8a04; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="lime"] .journey-tracker__name { background: #65a30d; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="green"] .journey-tracker__name { background: #16a34a; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="emerald"] .journey-tracker__name { background: #059669; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="teal"] .journey-tracker__name { background: #0d9488; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="cyan"] .journey-tracker__name { background: #0891b2; }
+.journey-tracker__item[data-status="in_progress"][data-exam-color="slate"] .journey-tracker__name { background: #475569; }
+
+/* FSA elective info note */
+.journey-tracker__info-note {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  opacity: .7;
+  padding: 4px 6px 2px;
+  font-style: italic;
+}
 
 /* "or" separator between ALTAM/ASTAM */
 .journey-tracker__or {

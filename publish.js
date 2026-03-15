@@ -3947,12 +3947,20 @@ var SoundFX = (function () {
   function getTextBetweenHeadings(heading) {
     var level = parseInt(heading.tagName.charAt(1), 10);
     var parts = [heading.textContent.trim()];
-    var sibling = heading.nextElementSibling;
+
+    // In Obsidian Publish each block is wrapped in a div, so walk
+    // siblings of the wrapper div rather than the heading itself.
+    var wrapper = heading.parentElement;
+    var sibling = wrapper.nextElementSibling;
 
     while (sibling) {
-      var tag = sibling.tagName;
-      if (/^H[1-6]$/.test(tag)) {
-        var sibLevel = parseInt(tag.charAt(1), 10);
+      // Check if this sibling (or its child) is a heading
+      var childHeading = sibling.querySelector(':is(h1, h2, h3, h4, h5, h6)');
+      if (!childHeading && /^H[1-6]$/.test(sibling.tagName)) {
+        childHeading = sibling; // flat DOM fallback
+      }
+      if (childHeading) {
+        var sibLevel = parseInt(childHeading.tagName.charAt(1), 10);
         if (sibLevel <= level) break;
       }
       parts.push(sibling.textContent.trim());

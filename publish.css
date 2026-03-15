@@ -3428,6 +3428,7 @@ figure.right figcaption,
 
 .exam-nav__sticky-content-inner {
   overflow: hidden;
+  min-height: 0;
 }
 
 .exam-nav__sticky.is-open .exam-nav__sticky-content {
@@ -3437,6 +3438,21 @@ figure.right figcaption,
 
 .exam-nav__sticky.is-open .exam-nav__sticky-content-inner {
   overflow: visible;
+}
+
+/* Mobile: sticky LO menus as bottom sheets */
+@media (max-width: 540px) {
+  .exam-nav__sticky .exam-nav__lo-menu {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: auto;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 16px;
+    min-width: auto;
+    max-height: 60vh;
+  }
 }
 
 /* LO menus inside sticky: fixed positioning so they aren't clipped */
@@ -4989,6 +5005,16 @@ body.high-contrast .exam-nav__btn--prev,
 body.high-contrast .exam-nav__btn--next {
   border-color: var(--text) !important;
   color: var(--text) !important;
+}
+body.high-contrast .exam-nav__sticky {
+  --nav-color: var(--text) !important;
+  background: var(--bg) !important;
+  border-color: var(--text) !important;
+}
+body.high-contrast .exam-nav__sticky-btn {
+  background: var(--text) !important;
+  border-color: var(--text) !important;
+  color: var(--bg) !important;
 }
 
 /* Cards — strip colour */

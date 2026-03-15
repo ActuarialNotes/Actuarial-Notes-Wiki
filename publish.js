@@ -2376,12 +2376,9 @@
         var wasExpanded = container.classList.contains('is-expanded');
         container.classList.toggle('is-expanded');
         if (!wasExpanded) {
-          elevateCenterCol();
           if (!container._objectivesLoaded) {
             loadObjectivesInline(container, objectives);
           }
-        } else {
-          deelevateCenterCol();
         }
       });
       navRow.appendChild(pill);
@@ -2937,7 +2934,7 @@
 
   function deelevateCenterCol() {
     var anyOpen = document.querySelector(
-      '.concept-nav.is-expanded, .concept-nav__arrow-dropdown.is-open, .concept-nav__obj-wrap.is-open,' +
+      '.concept-nav__arrow-dropdown.is-open, .concept-nav__obj-wrap.is-open,' +
       '.exam-nav.is-lo-expanded, .exam-nav__dropdown.is-open, .exam-nav__lo-wrap.is-open'
     );
     if (!anyOpen) {

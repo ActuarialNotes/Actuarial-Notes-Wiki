@@ -3896,3 +3896,186 @@ var SoundFX = (function () {
     setTimeout(observeSidebar, 300);
   }
 })();
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   7. READ-ALOUD BUTTON — replaces native heading anchor with a speaker
+      icon that reads the section content aloud via SpeechSynthesis API
+   ═══════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  if (!window.speechSynthesis) return;
+
+  // ── SVG icons ──────────────────────────────────────────────────────
+  var SPEAK_SVG =
+    '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>' +
+    '<path d="M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+    '<path d="M19.07 4.93a10 10 0 010 14.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+    '</svg>';
+
+  var STOP_SVG =
+    '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/>' +
+    '</svg>';
+
+  // ── State ──────────────────────────────────────────────────────────
+  var currentUtterance = null;
+  var currentBtn = null;
+  var keepAliveTimer = null;
+
+  // ── Helpers ────────────────────────────────────────────────────────
+  function resetBtn(btn) {
+    btn.innerHTML = SPEAK_SVG;
+    btn.classList.remove('is-speaking');
+    btn.setAttribute('aria-label', 'Read this section aloud');
+    if (btn === currentBtn) {
+      currentBtn = null;
+      currentUtterance = null;
+    }
+  }
+
+  function stopSpeech() {
+    window.speechSynthesis.cancel();
+    if (keepAliveTimer) { clearInterval(keepAliveTimer); keepAliveTimer = null; }
+    if (currentBtn) resetBtn(currentBtn);
+    currentUtterance = null;
+    currentBtn = null;
+  }
+
+  function getTextBetweenHeadings(heading) {
+    var level = parseInt(heading.tagName.charAt(1), 10);
+    var parts = [heading.textContent.trim()];
+    var sibling = heading.nextElementSibling;
+
+    while (sibling) {
+      var tag = sibling.tagName;
+      if (/^H[1-6]$/.test(tag)) {
+        var sibLevel = parseInt(tag.charAt(1), 10);
+        if (sibLevel <= level) break;
+      }
+      parts.push(sibling.textContent.trim());
+      sibling = sibling.nextElementSibling;
+    }
+
+    return parts.filter(Boolean).join('. ');
+  }
+
+  function toggleSpeech(heading, btn) {
+    // If this heading is already speaking, stop it
+    if (currentBtn === btn && window.speechSynthesis.speaking) {
+      stopSpeech();
+      return;
+    }
+
+    // Stop any other speech first
+    if (window.speechSynthesis.speaking) {
+      stopSpeech();
+    }
+
+    var text = getTextBetweenHeadings(heading);
+    if (!text) return;
+
+    currentUtterance = new SpeechSynthesisUtterance(text);
+    currentUtterance.lang = 'en-US';
+    currentUtterance.rate = 1.0;
+    currentBtn = btn;
+
+    btn.innerHTML = STOP_SVG;
+    btn.classList.add('is-speaking');
+    btn.setAttribute('aria-label', 'Stop reading');
+
+    currentUtterance.onend = function () { resetBtn(btn); };
+    currentUtterance.onerror = function () { resetBtn(btn); };
+
+    window.speechSynthesis.speak(currentUtterance);
+
+    // Chrome workaround: speech stops after ~15s unless we pause/resume
+    keepAliveTimer = setInterval(function () {
+      if (!window.speechSynthesis.speaking) {
+        clearInterval(keepAliveTimer);
+        keepAliveTimer = null;
+        return;
+      }
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+    }, 10000);
+  }
+
+  // ── Button injection ───────────────────────────────────────────────
+  function injectButtons() {
+    var headings = document.querySelectorAll(
+      '.markdown-preview-sizer :is(h1, h2, h3, h4, h5, h6)'
+    );
+
+    headings.forEach(function (heading) {
+      if (heading.querySelector('.read-aloud-btn')) return;
+      // Skip headings inside embeds
+      if (heading.closest('.markdown-embed')) return;
+
+      var btn = document.createElement('button');
+      btn.className = 'read-aloud-btn';
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Read this section aloud');
+      btn.setAttribute('tabindex', '0');
+      btn.innerHTML = SPEAK_SVG;
+
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleSpeech(heading, btn);
+      });
+
+      heading.appendChild(btn);
+    });
+  }
+
+  // ── SPA navigation handling ────────────────────────────────────────
+  function onNavigate() {
+    stopSpeech();
+    injectButtons();
+  }
+
+  function observePageChanges() {
+    window.addEventListener('popstate', function () {
+      setTimeout(onNavigate, 150);
+    });
+
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+      if (link) {
+        var href = link.getAttribute('href');
+        if (href && !href.startsWith('#')) {
+          setTimeout(onNavigate, 200);
+          setTimeout(onNavigate, 500);
+        }
+      }
+    });
+
+    var rebuildTimeout;
+    var observer = new MutationObserver(function () {
+      clearTimeout(rebuildTimeout);
+      rebuildTimeout = setTimeout(injectButtons, 200);
+    });
+
+    var container = document.querySelector('.markdown-preview-view');
+    if (container) {
+      observer.observe(container, { childList: true, subtree: true });
+    }
+  }
+
+  // Stop speech when tab is hidden
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) stopSpeech();
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () { injectButtons(); observePageChanges(); }, 200);
+    });
+  } else {
+    setTimeout(function () { injectButtons(); observePageChanges(); }, 200);
+  }
+})();

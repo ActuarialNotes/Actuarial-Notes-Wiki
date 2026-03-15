@@ -321,6 +321,9 @@
     var stickyContent = document.createElement('div');
     stickyContent.className = 'exam-nav__sticky-content';
 
+    var stickyInner = document.createElement('div');
+    stickyInner.className = 'exam-nav__sticky-content-inner';
+
     // Track row in sticky (if tracks exist)
     if (tracks.length > 0) {
       var stickyTrack = document.createElement('div');
@@ -349,13 +352,14 @@
           stickyTrack.appendChild(span);
         }
       });
-      stickyContent.appendChild(stickyTrack);
+      stickyInner.appendChild(stickyTrack);
     }
 
     // Concepts list in sticky
     var stickyLoSection = document.createElement('div');
     stickyLoSection.className = 'exam-nav__lo-section exam-nav__sticky-lo';
-    stickyContent.appendChild(stickyLoSection);
+    stickyInner.appendChild(stickyLoSection);
+    stickyContent.appendChild(stickyInner);
 
     // Load concepts into sticky panel
     function loadStickyObjectives() {
@@ -641,6 +645,14 @@
         if (!wasOpen) {
           wrap.classList.add('is-open');
           showBackdrop();
+          // Position fixed menus inside sticky bar
+          if (wrap.closest('.exam-nav__sticky')) {
+            var btnRect = btn.getBoundingClientRect();
+            menu.style.top = (btnRect.bottom + 6) + 'px';
+            menu.style.left = btnRect.left + 'px';
+            menu.style.right = 'auto';
+            menu.style.width = btnRect.width + 'px';
+          }
         } else {
           hideBackdrop();
         }

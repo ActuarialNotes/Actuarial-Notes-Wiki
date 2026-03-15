@@ -3340,19 +3340,22 @@ figure.right figcaption,
   justify-content: center;
   gap: 8px;
   padding: 8px 14px;
-  background: var(--nav-color);
-  color: white;
+  background: var(--nav-color) !important;
+  border: 1px solid var(--nav-color) !important;
+  color: white !important;
   font-weight: 600;
   font-size: 0.9rem;
-  border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: inherit;
-  transition: filter 0.15s ease;
+  transition: all 0.15s ease;
   box-shadow: none !important;
 }
 
 .exam-nav__sticky-btn:hover {
+  background: var(--nav-color-hover, var(--nav-color)) !important;
+  border-color: var(--nav-color-hover, var(--nav-color)) !important;
+  color: white !important;
   filter: brightness(1.1);
 }
 
@@ -3368,15 +3371,29 @@ figure.right figcaption,
 }
 
 .exam-nav__sticky-content {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease, padding 0.3s ease;
+  padding-top: 0;
+}
+
+.exam-nav__sticky-content-inner {
   overflow: hidden;
-  transition: max-height 0.3s ease;
 }
 
 .exam-nav__sticky.is-open .exam-nav__sticky-content {
-  max-height: 70vh;
-  overflow-y: auto;
+  grid-template-rows: 1fr;
   padding-top: 10px;
+}
+
+.exam-nav__sticky.is-open .exam-nav__sticky-content-inner {
+  overflow: visible;
+}
+
+/* LO menus inside sticky: fixed positioning so they aren't clipped */
+.exam-nav__sticky .exam-nav__lo-menu {
+  position: fixed;
+  z-index: 400;
 }
 
 /* Sticky content track row spacing */

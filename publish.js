@@ -3017,31 +3017,31 @@
         {
           label: 'VEE Requirements',
           items: [
-            { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', path: null },
-            { id: 'VEE-ECON', name: 'VEE Economics',             path: null },
-            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null }
+            { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', path: null, color: 'sky' },
+            { id: 'VEE-ECON', name: 'VEE Economics',             path: null, color: 'sky' },
+            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null, color: 'sky' }
           ]
         },
         {
           label: 'Preliminary Exams',
           items: [
-            { id: 'P',     name: 'Exam P-1',   path: 'Exam P-1 (SOA)' },
-            { id: 'FM',    name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)' }
+            { id: 'P',     name: 'Exam P-1',   path: 'Exam P-1 (SOA)', color: 'blue' },
+            { id: 'FM',    name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)', color: 'indigo' }
           ]
         },
         {
           label: 'Exams & E-Learning',
           items: [
-            { id: 'PAF',   name: 'PAF',        path: null },
-            { id: 'FAM',   name: 'Exam FAM',   path: null },
-            { id: 'SRM',   name: 'Exam SRM',   path: null },
-            { id: 'ASF',   name: 'ASF',        path: null },
-            { id: 'PA',    name: 'Exam PA',     path: null },
-            { id: 'ALTAM', name: 'Exam ALTAM',  path: null, or: 'ASTAM' },
-            { id: 'ASTAM', name: 'Exam ASTAM',  path: null, or: 'ALTAM' },
-            { id: 'ATPA',  name: 'ATPA',        path: null },
-            { id: 'FAP',   name: 'FAP',         path: null },
-            { id: 'APC',   name: 'APC',         path: null }
+            { id: 'PAF',   name: 'PAF',        path: null, color: 'violet' },
+            { id: 'FAM',   name: 'Exam FAM',   path: null, color: 'purple' },
+            { id: 'SRM',   name: 'Exam SRM',   path: null, color: 'fuchsia' },
+            { id: 'ASF',   name: 'ASF',        path: null, color: 'pink' },
+            { id: 'PA',    name: 'Exam PA',     path: null, color: 'rose' },
+            { id: 'ALTAM', name: 'Exam ALTAM',  path: null, or: 'ASTAM', color: 'red' },
+            { id: 'ASTAM', name: 'Exam ASTAM',  path: null, or: 'ALTAM', color: 'red' },
+            { id: 'ATPA',  name: 'ATPA',        path: null, color: 'orange' },
+            { id: 'FAP',   name: 'FAP',         path: null, color: 'amber' },
+            { id: 'APC',   name: 'APC',         path: null, color: 'slate' }
           ]
         }
       ]
@@ -3053,29 +3053,29 @@
         {
           label: 'VEE Requirements',
           items: [
-            { id: 'VEE-ECON', name: 'VEE Economics',             path: null },
-            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null }
+            { id: 'VEE-ECON', name: 'VEE Economics',             path: null, color: 'sky' },
+            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null, color: 'sky' }
           ]
         },
         {
           label: 'Preliminary Exams',
           items: [
-            { id: 'P',      name: 'Exam P-1',   path: 'Exam P-1 (SOA)' },
-            { id: 'FM',     name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)' }
+            { id: 'P',      name: 'Exam P-1',   path: 'Exam P-1 (SOA)', color: 'blue' },
+            { id: 'FM',     name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)', color: 'indigo' }
           ]
         },
         {
           label: 'Exams & Requirements',
           items: [
-            { id: 'MAS-I',    name: 'Exam MAS-I',    path: null },
-            { id: 'MAS-II',   name: 'Exam MAS-II',   path: null },
-            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null },
-            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null },
-            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null },
-            { id: 'CAS-5',    name: 'Exam 5',         path: null },
-            { id: 'CAS-PCPA', name: 'PCPA',           path: null },
-            { id: 'CAS-6',    name: 'Exam 6',         path: null },
-            { id: 'CAS-APC',  name: 'APC',            path: null }
+            { id: 'MAS-I',    name: 'Exam MAS-I',    path: null, color: 'violet' },
+            { id: 'MAS-II',   name: 'Exam MAS-II',   path: null, color: 'violet' },
+            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, color: 'fuchsia' },
+            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, color: 'fuchsia' },
+            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, color: 'fuchsia' },
+            { id: 'CAS-5',    name: 'Exam 5',         path: null, color: 'pink' },
+            { id: 'CAS-PCPA', name: 'PCPA',           path: null, color: 'rose' },
+            { id: 'CAS-6',    name: 'Exam 6',         path: null, color: 'orange' },
+            { id: 'CAS-APC',  name: 'APC',            path: null, color: 'slate' }
           ]
         }
       ]
@@ -3088,30 +3088,91 @@
           label: 'ASA Requirements',
           collapsed: true,
           items: [
-            { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', path: null },
-            { id: 'VEE-ECON', name: 'VEE Economics',             path: null },
-            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null },
-            { id: 'P',     name: 'Exam P-1',   path: 'Exam P-1 (SOA)' },
-            { id: 'FM',    name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)' },
-            { id: 'PAF',   name: 'PAF',        path: null },
-            { id: 'FAM',   name: 'Exam FAM',   path: null },
-            { id: 'SRM',   name: 'Exam SRM',   path: null },
-            { id: 'ASF',   name: 'ASF',        path: null },
-            { id: 'PA',    name: 'Exam PA',     path: null },
-            { id: 'ALTAM', name: 'Exam ALTAM',  path: null, or: 'ASTAM' },
-            { id: 'ASTAM', name: 'Exam ASTAM',  path: null, or: 'ALTAM' },
-            { id: 'ATPA', name: 'ATPA',        path: null },
-            { id: 'FAP',  name: 'FAP',         path: null },
-            { id: 'APC',  name: 'APC',         path: null }
+            { id: 'VEE-MS',   name: 'VEE Mathematical Statistics', path: null, color: 'sky' },
+            { id: 'VEE-ECON', name: 'VEE Economics',             path: null, color: 'sky' },
+            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null, color: 'sky' },
+            { id: 'P',     name: 'Exam P-1',   path: 'Exam P-1 (SOA)', color: 'blue' },
+            { id: 'FM',    name: 'Exam FM-2',   path: 'Exam FM-2 (SOA)', color: 'indigo' },
+            { id: 'PAF',   name: 'PAF',        path: null, color: 'violet' },
+            { id: 'FAM',   name: 'Exam FAM',   path: null, color: 'purple' },
+            { id: 'SRM',   name: 'Exam SRM',   path: null, color: 'fuchsia' },
+            { id: 'ASF',   name: 'ASF',        path: null, color: 'pink' },
+            { id: 'PA',    name: 'Exam PA',     path: null, color: 'rose' },
+            { id: 'ALTAM', name: 'Exam ALTAM',  path: null, or: 'ASTAM', color: 'red' },
+            { id: 'ASTAM', name: 'Exam ASTAM',  path: null, or: 'ALTAM', color: 'red' },
+            { id: 'ATPA', name: 'ATPA',        path: null, color: 'orange' },
+            { id: 'FAP',  name: 'FAP',         path: null, color: 'amber' },
+            { id: 'APC',  name: 'APC',         path: null, color: 'slate' }
           ]
         },
         {
-          label: 'Fellowship Courses',
+          label: 'Required Courses',
           items: [
-            { id: 'FSA-EXAM', name: 'Fellowship Exam',    path: null },
-            { id: 'FSA-MOD',  name: 'Fellowship Module',  path: null },
-            { id: 'FSA-DMAC', name: 'DMAC',               path: null },
-            { id: 'FSA-FAC',  name: 'FAC',                path: null }
+            { id: 'FSA-DMAC', name: 'DMAC', path: null, color: 'amber' },
+            { id: 'FSA-FAC',  name: 'FAC',  path: null, color: 'slate' }
+          ]
+        },
+        {
+          label: 'Corporate Finance and ERM',
+          elective: true,
+          items: [
+            { id: 'FSA-CFE101', name: 'CFE 101', path: null, color: 'lime', seq: 'CFE' },
+            { id: 'FSA-CFE201', name: 'CFE 201', path: null, color: 'lime', seq: 'CFE' }
+          ]
+        },
+        {
+          label: 'Group and Health Insurance',
+          elective: true,
+          items: [
+            { id: 'FSA-GH101', name: 'GH 101',     path: null, color: 'green', seq: 'GH' },
+            { id: 'FSA-GH201', name: 'GH 201-U/C', path: null, color: 'green', seq: 'GH' },
+            { id: 'FSA-GH301', name: 'GH 301',     path: null, color: 'green' }
+          ]
+        },
+        {
+          label: 'General Insurance',
+          elective: true,
+          items: [
+            { id: 'FSA-GI101', name: 'GI 101', path: null, color: 'emerald', seq: 'GI' },
+            { id: 'FSA-GI201', name: 'GI 201', path: null, color: 'emerald', seq: 'GI' },
+            { id: 'FSA-GI301', name: 'GI 301', path: null, color: 'emerald' },
+            { id: 'FSA-GI302', name: 'GI 302', path: null, color: 'emerald' }
+          ]
+        },
+        {
+          label: 'Individual Life and Annuities',
+          elective: true,
+          items: [
+            { id: 'FSA-ILA101', name: 'ILA 101',     path: null, color: 'teal', seq: 'ILA' },
+            { id: 'FSA-ILA201', name: 'ILA 201-U/I', path: null, color: 'teal', seq: 'ILA' }
+          ]
+        },
+        {
+          label: 'Investment',
+          elective: true,
+          items: [
+            { id: 'FSA-INV101', name: 'INV 101', path: null, color: 'cyan', seq: 'INV' },
+            { id: 'FSA-INV201', name: 'INV 201', path: null, color: 'cyan', seq: 'INV' }
+          ]
+        },
+        {
+          label: 'Retirement Benefits',
+          elective: true,
+          items: [
+            { id: 'FSA-RET101', name: 'RET 101', path: null, color: 'yellow', seq: 'RET' },
+            { id: 'FSA-RET201', name: 'RET 201', path: null, color: 'yellow', seq: 'RET' },
+            { id: 'FSA-RET301', name: 'RET 301', path: null, color: 'yellow' }
+          ]
+        },
+        {
+          label: 'Cross Practice',
+          elective: true,
+          items: [
+            { id: 'FSA-CP311', name: 'CP 311', path: null, color: 'orange' },
+            { id: 'FSA-CP312', name: 'CP 312', path: null, color: 'orange' },
+            { id: 'FSA-CP321', name: 'CP 321', path: null, color: 'orange' },
+            { id: 'FSA-CP341', name: 'CP 341', path: null, color: 'orange' },
+            { id: 'FSA-CP351', name: 'CP 351', path: null, color: 'orange' }
           ]
         }
       ]
@@ -3124,27 +3185,27 @@
           label: 'ACAS Requirements',
           collapsed: true,
           items: [
-            { id: 'VEE-ECON', name: 'VEE Economics',             path: null },
-            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null },
-            { id: 'P',      name: 'Exam P-1',     path: 'Exam P-1 (SOA)' },
-            { id: 'FM',     name: 'Exam FM-2',     path: 'Exam FM-2 (SOA)' },
-            { id: 'MAS-I',  name: 'Exam MAS-I',    path: null },
-            { id: 'MAS-II', name: 'Exam MAS-II',   path: null },
-            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null },
-            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null },
-            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null },
-            { id: 'CAS-5',    name: 'Exam 5',         path: null },
-            { id: 'CAS-PCPA', name: 'PCPA',           path: null },
-            { id: 'CAS-6',    name: 'Exam 6',         path: null },
-            { id: 'CAS-APC',  name: 'APC',            path: null }
+            { id: 'VEE-ECON', name: 'VEE Economics',             path: null, color: 'sky' },
+            { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null, color: 'sky' },
+            { id: 'P',      name: 'Exam P-1',     path: 'Exam P-1 (SOA)', color: 'blue' },
+            { id: 'FM',     name: 'Exam FM-2',     path: 'Exam FM-2 (SOA)', color: 'indigo' },
+            { id: 'MAS-I',  name: 'Exam MAS-I',    path: null, color: 'violet' },
+            { id: 'MAS-II', name: 'Exam MAS-II',   path: null, color: 'violet' },
+            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, color: 'fuchsia' },
+            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, color: 'fuchsia' },
+            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, color: 'fuchsia' },
+            { id: 'CAS-5',    name: 'Exam 5',         path: null, color: 'pink' },
+            { id: 'CAS-PCPA', name: 'PCPA',           path: null, color: 'rose' },
+            { id: 'CAS-6',    name: 'Exam 6',         path: null, color: 'orange' },
+            { id: 'CAS-APC',  name: 'APC',            path: null, color: 'slate' }
           ]
         },
         {
           label: 'Fellowship Exams',
           items: [
-            { id: 'CAS-7', name: 'Exam 7',   path: null },
-            { id: 'CAS-8', name: 'Exam 8',   path: null },
-            { id: 'CAS-9', name: 'Exam 9',   path: null }
+            { id: 'CAS-7', name: 'Exam 7',   path: null, color: 'lime' },
+            { id: 'CAS-8', name: 'Exam 8',   path: null, color: 'green' },
+            { id: 'CAS-9', name: 'Exam 9',   path: null, color: 'emerald' }
           ]
         }
       ]
@@ -3184,14 +3245,33 @@
     var total = 0;
     var done = 0;
     var orSeen = {};
+    var electiveDone = 0;
+    var electiveTotal = 0;
+    var seqCompleted = {}; // track completed seq items: { CFE: ['101','201'], ... }
+    var hasElectives = false;
+
     track.sections.forEach(function (sec) {
+      if (sec.elective) {
+        hasElectives = true;
+        sec.items.forEach(function (item) {
+          electiveTotal++;
+          if (getStatus(item.id) === 'completed') {
+            electiveDone++;
+            if (item.seq) {
+              if (!seqCompleted[item.seq]) seqCompleted[item.seq] = [];
+              // Extract 101/201 from id (e.g. FSA-CFE101 -> 101)
+              var num = item.id.replace(/^.*?(\d+)$/, '$1');
+              seqCompleted[item.seq].push(num);
+            }
+          }
+        });
+        return; // don't add to main total yet
+      }
       sec.items.forEach(function (item) {
-        // For "or" pairs, only count one toward total
         if (item.or) {
           var pairKey = [item.id, item.or].sort().join('|');
-          if (orSeen[pairKey]) return; // skip second of pair
+          if (orSeen[pairKey]) return;
           orSeen[pairKey] = true;
-          // Count as done if either is completed
           if (getStatus(item.id) === 'completed' || getStatus(item.or) === 'completed') done++;
           total++;
         } else {
@@ -3200,6 +3280,24 @@
         }
       });
     });
+
+    if (hasElectives) {
+      // FSA: need a 101-201 sequence pair + 2 others = 4 electives
+      var hasValidPair = false;
+      Object.keys(seqCompleted).forEach(function (key) {
+        var nums = seqCompleted[key];
+        if (nums.indexOf('101') !== -1 && nums.indexOf('201') !== -1) {
+          hasValidPair = true;
+        }
+      });
+      // Cap: without a valid pair, max 2 "other" slots; with pair, max 4
+      var cappedElectiveDone = hasValidPair
+        ? Math.min(electiveDone, 4)
+        : Math.min(electiveDone, 2);
+      total += 4; // always 4 elective slots required
+      done += cappedElectiveDone;
+    }
+
     return { total: total, done: done };
   }
 
@@ -3352,6 +3450,18 @@
         section.classList.toggle('is-collapsed');
       });
 
+      // FSA elective info note (shown once before the first elective section)
+      if (sec.elective && !section.parentElement) {
+        var prevSections = track.sections.slice(0, track.sections.indexOf(sec));
+        var isFirstElective = !prevSections.some(function (s) { return s.elective; });
+        if (isFirstElective) {
+          var infoNote = document.createElement('div');
+          infoNote.className = 'journey-tracker__info-note';
+          infoNote.textContent = 'Pick a 101\u2013201 sequence + 2 others';
+          sectionsEl.appendChild(infoNote);
+        }
+      }
+
       // Items container
       var itemsEl = document.createElement('div');
       itemsEl.className = 'journey-tracker__items';
@@ -3372,6 +3482,7 @@
         row.className = 'journey-tracker__item';
         row.dataset.status = getStatus(item.id);
         row.dataset.itemId = item.id;
+        if (item.color) row.dataset.examColor = item.color;
 
         // Status button
         var statusBtn = document.createElement('button');

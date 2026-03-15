@@ -66,10 +66,20 @@
   }
 
   function buildAllExamNavs() {
-    document.querySelectorAll('.exam-nav[data-current]').forEach(nav => {
+    var examNavs = document.querySelectorAll('.exam-nav[data-current]');
+
+    // Clean up orphaned sticky bars when navigating to a non-exam page
+    if (examNavs.length === 0) {
+      document.querySelectorAll('.exam-nav__sticky').forEach(function (s) {
+        s.remove();
+      });
+      return;
+    }
+
+    examNavs.forEach(nav => {
       // Skip if already built
       if (nav.dataset.built === 'true') return;
-      
+
       buildExamNav(nav);
       nav.dataset.built = 'true';
     });
@@ -321,9 +331,6 @@
     var stickyContent = document.createElement('div');
     stickyContent.className = 'exam-nav__sticky-content';
 
-    var stickyInner = document.createElement('div');
-    stickyInner.className = 'exam-nav__sticky-content-inner';
-
     // Track row in sticky (if tracks exist)
     if (tracks.length > 0) {
       var stickyTrack = document.createElement('div');
@@ -352,14 +359,13 @@
           stickyTrack.appendChild(span);
         }
       });
-      stickyInner.appendChild(stickyTrack);
+      stickyContent.appendChild(stickyTrack);
     }
 
     // Concepts list in sticky
     var stickyLoSection = document.createElement('div');
     stickyLoSection.className = 'exam-nav__lo-section exam-nav__sticky-lo';
-    stickyInner.appendChild(stickyLoSection);
-    stickyContent.appendChild(stickyInner);
+    stickyContent.appendChild(stickyLoSection);
 
     // Load concepts into sticky panel
     function loadStickyObjectives() {
@@ -381,32 +387,19 @@
       sticky.classList.toggle('is-open');
     });
 
-    // Handle internal link clicks in sticky bar (outside Obsidian's SPA container)
+    // Close sticky panel when an internal link is clicked
     sticky.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link');
-      if (!link) return;
-      e.preventDefault();
-      var href = link.getAttribute('href') || '';
-      // Create a temporary link inside the content area for Obsidian's SPA router
-      var siteContainer = document.querySelector('.site-body-center-column, .markdown-rendered, main');
-      if (siteContainer) {
-        var tempLink = document.createElement('a');
-        tempLink.className = 'internal-link';
-        tempLink.href = href;
-        tempLink.style.display = 'none';
-        siteContainer.appendChild(tempLink);
-        tempLink.click();
-        tempLink.remove();
-      } else {
-        // Fallback: direct navigation
-        window.location.href = href;
+      if (link) {
+        sticky.classList.remove('is-open');
       }
-      sticky.classList.remove('is-open');
     });
 
     sticky.appendChild(stickyBtn);
     sticky.appendChild(stickyContent);
-    document.body.appendChild(sticky);
+    // Append inside the publish container so Obsidian's SPA router handles internal links
+    var publishContainer = document.querySelector('.publish-renderer, .site-body, .site-body-center-column') || document.body;
+    publishContainer.appendChild(sticky);
     container._stickyEl = sticky;
 
     // IntersectionObserver to show/hide sticky bar

@@ -381,6 +381,29 @@
       sticky.classList.toggle('is-open');
     });
 
+    // Handle internal link clicks in sticky bar (outside Obsidian's SPA container)
+    sticky.addEventListener('click', function (e) {
+      var link = e.target.closest('a.internal-link');
+      if (!link) return;
+      e.preventDefault();
+      var href = link.getAttribute('href') || '';
+      // Create a temporary link inside the content area for Obsidian's SPA router
+      var siteContainer = document.querySelector('.site-body-center-column, .markdown-rendered, main');
+      if (siteContainer) {
+        var tempLink = document.createElement('a');
+        tempLink.className = 'internal-link';
+        tempLink.href = href;
+        tempLink.style.display = 'none';
+        siteContainer.appendChild(tempLink);
+        tempLink.click();
+        tempLink.remove();
+      } else {
+        // Fallback: direct navigation
+        window.location.href = href;
+      }
+      sticky.classList.remove('is-open');
+    });
+
     sticky.appendChild(stickyBtn);
     sticky.appendChild(stickyContent);
     document.body.appendChild(sticky);

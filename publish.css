@@ -1758,29 +1758,30 @@ a.journey-tracker__name {
 a.journey-tracker__name:hover {
   color: var(--brand-hover);
 }
-/* Per-exam link colors (non-in-progress state) */
-[data-exam-color="sky"] > a.journey-tracker__name { color: #0284c7; }
-[data-exam-color="blue"] > a.journey-tracker__name { color: #2563eb; }
-[data-exam-color="indigo"] > a.journey-tracker__name { color: #4f46e5; }
-[data-exam-color="violet"] > a.journey-tracker__name { color: #7c3aed; }
-[data-exam-color="purple"] > a.journey-tracker__name { color: #9333ea; }
-[data-exam-color="fuchsia"] > a.journey-tracker__name { color: #c026d3; }
-[data-exam-color="pink"] > a.journey-tracker__name { color: #db2777; }
-[data-exam-color="rose"] > a.journey-tracker__name { color: #e11d48; }
-[data-exam-color="red"] > a.journey-tracker__name { color: #dc2626; }
-[data-exam-color="orange"] > a.journey-tracker__name { color: #ea580c; }
-[data-exam-color="amber"] > a.journey-tracker__name { color: #d97706; }
-[data-exam-color="yellow"] > a.journey-tracker__name { color: #ca8a04; }
-[data-exam-color="lime"] > a.journey-tracker__name { color: #65a30d; }
-[data-exam-color="green"] > a.journey-tracker__name { color: #16a34a; }
-[data-exam-color="emerald"] > a.journey-tracker__name { color: #059669; }
-[data-exam-color="teal"] > a.journey-tracker__name { color: #0d9488; }
-[data-exam-color="cyan"] > a.journey-tracker__name { color: #0891b2; }
-[data-exam-color="slate"] > a.journey-tracker__name { color: #475569; }
-[data-exam-color] > a.journey-tracker__name:hover { filter: brightness(1.15); }
+/* Per-exam link colors (non-in-progress state only) */
+[data-exam-color="sky"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #0284c7; }
+[data-exam-color="blue"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #2563eb; }
+[data-exam-color="indigo"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #4f46e5; }
+[data-exam-color="violet"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #7c3aed; }
+[data-exam-color="purple"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #9333ea; }
+[data-exam-color="fuchsia"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #c026d3; }
+[data-exam-color="pink"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #db2777; }
+[data-exam-color="rose"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #e11d48; }
+[data-exam-color="red"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #dc2626; }
+[data-exam-color="orange"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #ea580c; }
+[data-exam-color="amber"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #d97706; }
+[data-exam-color="yellow"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #ca8a04; }
+[data-exam-color="lime"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #65a30d; }
+[data-exam-color="green"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #16a34a; }
+[data-exam-color="emerald"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #059669; }
+[data-exam-color="teal"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #0d9488; }
+[data-exam-color="cyan"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #0891b2; }
+[data-exam-color="slate"]:not([data-status="in_progress"]) > a.journey-tracker__name { color: #475569; }
+[data-exam-color]:not([data-status="in_progress"]) > a.journey-tracker__name:hover { filter: brightness(1.15); }
 
 /* In-progress: style name as compact exam-link pill */
-.journey-tracker__item[data-status="in_progress"] .journey-tracker__name {
+.journey-tracker__item[data-status="in_progress"] .journey-tracker__name,
+.journey-tracker__item[data-status="in_progress"] a.journey-tracker__name {
   background: var(--brand);
   color: #fff !important;
   padding: 2px 8px;

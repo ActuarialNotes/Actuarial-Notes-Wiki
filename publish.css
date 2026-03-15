@@ -535,6 +535,9 @@ data.callout-obj-num {
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
+.theme-light data.callout-obj-num {
+  color: rgba(0, 0, 0, 0.35);
+}
 
 
 /* ===========================================================
@@ -3418,6 +3421,9 @@ figure.right figcaption,
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
+.theme-light .exam-nav__lo-obj-num {
+  color: rgba(0, 0, 0, 0.35);
+}
 
 .exam-nav__lo-obj-btn > span:nth-child(2) {
   overflow: hidden;
@@ -4401,6 +4407,9 @@ h6 a {
   color: rgba(255, 255, 255, 0.35);
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
+}
+.theme-light .concept-nav__obj-num {
+  color: rgba(0, 0, 0, 0.35);
 }
 
 .concept-nav__obj-name {

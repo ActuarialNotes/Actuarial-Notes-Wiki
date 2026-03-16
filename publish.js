@@ -288,31 +288,21 @@
 
     // Handle internal link clicks — Obsidian's SPA router doesn't reach
     // the sticky bar since it's outside the page content container.
-    // We create a temporary link inside the page content and click it.
+    // Use window.open(_self) pattern (same as journey tracker).
     sticky.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link');
       if (link) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         closeSticky();
         var href = link.getAttribute('href');
-        var dataHref = link.getAttribute('data-href');
-        // Find the page content container where Obsidian's router listens
-        var contentEl = document.querySelector('.markdown-preview-view, .markdown-rendered');
-        if (contentEl && href) {
-          var tempLink = document.createElement('a');
-          tempLink.className = 'internal-link';
-          tempLink.href = href;
-          if (dataHref) tempLink.setAttribute('data-href', dataHref);
-          tempLink.style.display = 'none';
-          contentEl.appendChild(tempLink);
-          tempLink.click();
-          tempLink.remove();
-        } else if (href) {
-          // Fallback: normal navigation
-          window.location.href = href;
+        if (href) {
+          var url = href.startsWith('http') ? href
+            : window.location.origin + (href.startsWith('/') ? '' : '/') + href;
+          window.open(url, '_self');
         }
       }
-    });
+    }, true);
 
     sticky.appendChild(stickyBtn);
     sticky.appendChild(stickyContent);
@@ -2859,6 +2849,14 @@
   var STATUS_ICONS = { not_started: SVG_CIRCLE, in_progress: SVG_PROGRESS, completed: SVG_CHECK };
   var STATUS_CYCLE = { not_started: 'in_progress', in_progress: 'completed', completed: 'not_started' };
 
+  var COLOR_HEX = {
+    sky: '#0284c7', blue: '#2563eb', indigo: '#4f46e5', violet: '#7c3aed',
+    purple: '#9333ea', fuchsia: '#c026d3', pink: '#db2777', rose: '#e11d48',
+    red: '#dc2626', orange: '#ea580c', amber: '#d97706', yellow: '#ca8a04',
+    lime: '#65a30d', green: '#16a34a', emerald: '#059669', teal: '#0d9488',
+    cyan: '#0891b2', slate: '#475569'
+  };
+
   /* ---- Track definitions ---- */
   var TRACKS = [
     {
@@ -2881,7 +2879,7 @@
           ]
         },
         {
-          label: 'Exams & E-Learning',
+          label: 'Exams & Courses',
           items: [
             { id: 'PAF',   name: 'PAF',        path: null, color: 'violet' },
             { id: 'FAM',   name: 'Exam FAM',   path: null, color: 'purple' },
@@ -2958,6 +2956,7 @@
         },
         {
           label: 'Required Courses',
+          collapsed: true,
           items: [
             { id: 'FSA-DMAC', name: 'DMAC', path: null, color: 'amber' },
             { id: 'FSA-FAC',  name: 'FAC',  path: null, color: 'slate' }
@@ -2966,6 +2965,7 @@
         {
           label: 'Corporate Finance and ERM',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-CFE101', name: 'CFE 101', path: null, color: 'lime', seq: 'CFE' },
             { id: 'FSA-CFE201', name: 'CFE 201', path: null, color: 'lime', seq: 'CFE' }
@@ -2974,6 +2974,7 @@
         {
           label: 'Group and Health Insurance',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-GH101', name: 'GH 101',     path: null, color: 'green', seq: 'GH' },
             { id: 'FSA-GH201', name: 'GH 201-U/C', path: null, color: 'green', seq: 'GH' },
@@ -2983,6 +2984,7 @@
         {
           label: 'General Insurance',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-GI101', name: 'GI 101', path: null, color: 'emerald', seq: 'GI' },
             { id: 'FSA-GI201', name: 'GI 201', path: null, color: 'emerald', seq: 'GI' },
@@ -2993,6 +2995,7 @@
         {
           label: 'Individual Life and Annuities',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-ILA101', name: 'ILA 101',     path: null, color: 'teal', seq: 'ILA' },
             { id: 'FSA-ILA201', name: 'ILA 201-U/I', path: null, color: 'teal', seq: 'ILA' }
@@ -3001,6 +3004,7 @@
         {
           label: 'Investment',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-INV101', name: 'INV 101', path: null, color: 'cyan', seq: 'INV' },
             { id: 'FSA-INV201', name: 'INV 201', path: null, color: 'cyan', seq: 'INV' }
@@ -3009,6 +3013,7 @@
         {
           label: 'Retirement Benefits',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-RET101', name: 'RET 101', path: null, color: 'yellow', seq: 'RET' },
             { id: 'FSA-RET201', name: 'RET 201', path: null, color: 'yellow', seq: 'RET' },
@@ -3018,6 +3023,7 @@
         {
           label: 'Cross Practice',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-CP311', name: 'CP 311', path: null, color: 'orange' },
             { id: 'FSA-CP312', name: 'CP 312', path: null, color: 'orange' },
@@ -3438,7 +3444,6 @@ var SoundFX = (function () {
 
   var MUTE_KEY = 'actuarial-notes-muted';
   var ctx = null;
-  var _silentPlayed = false;
 
   function getCtx() {
     if (!ctx) {
@@ -3449,19 +3454,20 @@ var SoundFX = (function () {
 
   // Mobile browsers keep AudioContext suspended until a user gesture handler
   // calls resume(). Re-run on every gesture because the context can be
-  // re-suspended after tab switches, lock-screen, etc.
+  // re-suspended after tab switches, lock-screen, or overlay open/close.
+  // Play a silent buffer each time we re-unlock — iOS Safari needs this to
+  // fully restore audio after a re-suspension (e.g. caused by body overflow
+  // toggling when the mobile nav overlay opens).
   function unlockAudio() {
     var ac = getCtx();
-    if (ac.state === 'suspended') ac.resume();
-    // Play a silent buffer once to fully unlock on iOS Safari
-    if (!_silentPlayed) {
-      var buf = ac.createBuffer(1, 1, ac.sampleRate);
-      var src = ac.createBufferSource();
-      src.buffer = buf;
-      src.connect(ac.destination);
-      src.start(0);
-      _silentPlayed = true;
-    }
+    if (ac.state === 'running') return; // already unlocked, nothing to do
+    ac.resume();
+    // Silent 1-sample buffer kicks iOS Safari out of the suspended state
+    var buf = ac.createBuffer(1, 1, ac.sampleRate);
+    var src = ac.createBufferSource();
+    src.buffer = buf;
+    src.connect(ac.destination);
+    src.start(0);
   }
   document.addEventListener('touchstart', unlockAudio, true);
   document.addEventListener('click', unlockAudio, true);

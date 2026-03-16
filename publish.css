@@ -3369,12 +3369,130 @@ figure.right figcaption,
 @media print {
   .exam-nav,
   .exam-nav__sticky,
-  .exam-nav-backdrop {
+  .exam-nav-backdrop,
+  .persistent-exam-navs {
     display: none !important;
   }
 }
 
+/* ── Persistent exam nav tabs (in-progress exams) ──────── */
+.persistent-exam-navs {
+  position: fixed;
+  top: 0;
+  right: 16px;
+  z-index: 290;
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+  pointer-events: auto;
+}
 
+.persistent-exam-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: var(--tab-color, var(--brand));
+  color: white !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none !important;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  cursor: pointer;
+  transition: transform 0.25s ease, opacity 0.2s ease, margin 0.25s ease, filter 0.15s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: none;
+  line-height: 1.3;
+}
+
+.persistent-exam-tab:hover {
+  filter: brightness(1.12);
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.persistent-exam-tab__name {
+  pointer-events: none;
+}
+
+/* ── Stacked / layered appearance (2+ tabs) ── */
+.persistent-exam-navs.is-stacked:not(.is-expanded) {
+  cursor: pointer;
+}
+
+.persistent-exam-navs.is-stacked:not(.is-expanded) .persistent-exam-tab {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* Each tab peeks out a bit more to the left */
+.persistent-exam-navs.is-stacked:not(.is-expanded) .persistent-exam-tab:nth-child(1) {
+  transform: translateX(0);
+}
+
+.persistent-exam-navs.is-stacked:not(.is-expanded) .persistent-exam-tab:nth-child(2) {
+  transform: translateX(-18px) scale(0.96);
+  opacity: 0.75;
+}
+
+.persistent-exam-navs.is-stacked:not(.is-expanded) .persistent-exam-tab:nth-child(3) {
+  transform: translateX(-34px) scale(0.92);
+  opacity: 0.55;
+}
+
+.persistent-exam-navs.is-stacked:not(.is-expanded) .persistent-exam-tab:nth-child(n+4) {
+  transform: translateX(-46px) scale(0.88);
+  opacity: 0.35;
+}
+
+/* Reserve space for the stacked pile so layout doesn't collapse */
+.persistent-exam-navs.is-stacked:not(.is-expanded) {
+  min-width: 120px;
+  min-height: 32px;
+  position: fixed;
+  top: 0;
+  right: 16px;
+}
+
+/* ── Expanded state (fanned out) ── */
+.persistent-exam-navs.is-stacked.is-expanded {
+  gap: 6px;
+}
+
+.persistent-exam-navs.is-stacked.is-expanded .persistent-exam-tab {
+  position: relative;
+  transform: none;
+  opacity: 1;
+}
+
+/* ── Single tab (no stacking) ── */
+.persistent-exam-navs:not(.is-stacked) {
+  gap: 6px;
+}
+
+/* ── Mobile adjustments ── */
+@media (max-width: 540px) {
+  .persistent-exam-navs {
+    right: 0;
+  }
+
+  .persistent-exam-tab {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+
+  .persistent-exam-navs.is-stacked:not(.is-expanded) {
+    right: 0;
+  }
+}
+
+/* ── High-contrast mode ── */
+body.high-contrast .persistent-exam-tab {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
 
 
 

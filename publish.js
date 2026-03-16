@@ -73,6 +73,10 @@
       document.querySelectorAll('.exam-nav__sticky').forEach(function (s) {
         s.remove();
       });
+      // Trigger persistent nav update (if journey tracker has loaded)
+      if (typeof window._updatePersistentExamNavs === 'function') {
+        setTimeout(window._updatePersistentExamNavs, 100);
+      }
       return;
     }
 
@@ -3392,13 +3396,158 @@
       var pct = counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0;
       barFillEl.style.width = pct + '%';
     }
+
+    // Update persistent exam nav tabs for in-progress exams
+    updatePersistentExamNavs();
+  }
+
+  /* ---- Persistent exam nav tabs for in-progress exams ---- */
+  function getInProgressExams() {
+    var seen = {};
+    var result = [];
+    TRACKS.forEach(function (track) {
+      track.sections.forEach(function (sec) {
+        sec.items.forEach(function (item) {
+          if (!seen[item.id] && getStatus(item.id) === 'in_progress') {
+            seen[item.id] = true;
+            result.push({
+              id: item.id,
+              name: item.name,
+              path: item.path,
+              color: item.color
+            });
+          }
+        });
+      });
+    });
+    return result;
+  }
+
+  function isOnExamPage(examPath) {
+    if (!examPath) return false;
+    var currentPath = decodeURIComponent(window.location.pathname.replace(/^\//, '').replace(/\+/g, ' '));
+    return currentPath === examPath || currentPath === examPath.replace(/ /g, '+');
+  }
+
+  function updatePersistentExamNavs() {
+    var container = document.querySelector('.persistent-exam-navs');
+    var inProgress = getInProgressExams();
+
+    // Filter out exams whose page we're currently on (the real sticky nav handles those)
+    var filtered = inProgress.filter(function (exam) {
+      return !isOnExamPage(exam.path);
+    });
+
+    // Also hide if the real exam-nav sticky is visible for any of these exams
+    var realStickyName = '';
+    var realSticky = document.querySelector('.exam-nav__sticky.is-visible');
+    if (realSticky) {
+      var btn = realSticky.querySelector('.exam-nav__sticky-btn span');
+      if (btn) realStickyName = btn.textContent.trim();
+    }
+    if (realStickyName) {
+      filtered = filtered.filter(function (exam) {
+        return exam.name !== realStickyName;
+      });
+    }
+
+    if (filtered.length === 0) {
+      if (container) container.remove();
+      return;
+    }
+
+    // Create container if it doesn't exist
+    if (!container) {
+      container = document.createElement('div');
+      container.className = 'persistent-exam-navs';
+      document.body.appendChild(container);
+    }
+
+    // Check if content changed
+    var currentIds = filtered.map(function (e) { return e.id; }).join(',');
+    if (container.dataset.examIds === currentIds) return;
+    container.dataset.examIds = currentIds;
+
+    container.innerHTML = '';
+
+    var isStacked = filtered.length >= 2;
+    if (isStacked) container.classList.add('is-stacked');
+    else container.classList.remove('is-stacked');
+
+    filtered.forEach(function (exam, idx) {
+      var tab = document.createElement('a');
+      tab.className = 'persistent-exam-tab';
+      tab.dataset.examId = exam.id;
+      if (exam.path) {
+        var slug = exam.path.replace(/ /g, '+');
+        tab.href = window.location.origin + '/' + slug;
+        tab.addEventListener('click', function (e) {
+          e.preventDefault();
+          window.open(window.location.origin + '/' + slug, '_self');
+        }, true);
+      } else {
+        tab.href = '#';
+        tab.addEventListener('click', function (e) { e.preventDefault(); });
+      }
+
+      var hexColor = COLOR_HEX[exam.color] || 'var(--brand)';
+      tab.style.setProperty('--tab-color', hexColor);
+
+      if (isStacked) {
+        tab.style.zIndex = String(filtered.length - idx);
+      }
+
+      tab.innerHTML =
+        '<span class="persistent-exam-tab__name">' + exam.name + '</span>';
+
+      container.appendChild(tab);
+    });
+
+    // Toggle expand on click for stacked tabs
+    if (isStacked) {
+      container.addEventListener('click', function (e) {
+        if (!container.classList.contains('is-expanded')) {
+          e.preventDefault();
+          e.stopPropagation();
+          container.classList.add('is-expanded');
+        }
+      }, true);
+    }
+
+    // Register close-outside listener once
+    if (!window._persistentNavCloseRegistered) {
+      window._persistentNavCloseRegistered = true;
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.persistent-exam-navs')) {
+          var c = document.querySelector('.persistent-exam-navs');
+          if (c) c.classList.remove('is-expanded');
+        }
+      });
+    }
   }
 
   /* ---- Init & SPA survival ---- */
   function init() {
     loadState();
     buildTracker();
+    // Show persistent exam nav tabs for any in-progress exams
+    setTimeout(updatePersistentExamNavs, 300);
   }
+
+  // Expose for cross-IIFE access (exam nav cleanup triggers this)
+  window._updatePersistentExamNavs = updatePersistentExamNavs;
+
+  // Re-check persistent navs on SPA navigation
+  window.addEventListener('popstate', function () {
+    setTimeout(updatePersistentExamNavs, 250);
+  });
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+    if (link) {
+      setTimeout(updatePersistentExamNavs, 300);
+      setTimeout(updatePersistentExamNavs, 600);
+    }
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 250); });

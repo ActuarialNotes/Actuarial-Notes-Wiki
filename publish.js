@@ -288,31 +288,21 @@
 
     // Handle internal link clicks — Obsidian's SPA router doesn't reach
     // the sticky bar since it's outside the page content container.
-    // We create a temporary link inside the page content and click it.
+    // Use window.open(_self) pattern (same as journey tracker).
     sticky.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link');
       if (link) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         closeSticky();
         var href = link.getAttribute('href');
-        var dataHref = link.getAttribute('data-href');
-        // Find the page content container where Obsidian's router listens
-        var contentEl = document.querySelector('.markdown-preview-view, .markdown-rendered');
-        if (contentEl && href) {
-          var tempLink = document.createElement('a');
-          tempLink.className = 'internal-link';
-          tempLink.href = href;
-          if (dataHref) tempLink.setAttribute('data-href', dataHref);
-          tempLink.style.display = 'none';
-          contentEl.appendChild(tempLink);
-          tempLink.click();
-          tempLink.remove();
-        } else if (href) {
-          // Fallback: normal navigation
-          window.location.href = href;
+        if (href) {
+          var url = href.startsWith('http') ? href
+            : window.location.origin + (href.startsWith('/') ? '' : '/') + href;
+          window.open(url, '_self');
         }
       }
-    });
+    }, true);
 
     sticky.appendChild(stickyBtn);
     sticky.appendChild(stickyContent);

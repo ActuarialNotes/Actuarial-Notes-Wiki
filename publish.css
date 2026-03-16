@@ -3217,6 +3217,7 @@ figure.right figcaption,
 .exam-nav__lo-obj-btn > span:nth-child(2) {
   min-width: 0;
   flex: 1;
+  overflow-wrap: anywhere;
 }
 
 .exam-nav__lo-weight {
@@ -3304,6 +3305,7 @@ figure.right figcaption,
   box-shadow: none !important;
   cursor: pointer;
   transition: background 0.1s ease;
+  overflow-wrap: anywhere;
 }
 
 .exam-nav__lo-menu-item:hover {
@@ -3331,6 +3333,28 @@ figure.right figcaption,
   padding-top: 10px;
   margin-top: 8px;
   border-top: 1px solid color-mix(in oklab, var(--nav-color) 12%, var(--muted));
+}
+
+/* Inline the download dropdown menu so it isn't clipped by overflow-y */
+.exam-nav__sticky .dl-dropdown__menu {
+  position: relative;
+  top: auto;
+  left: auto;
+  min-width: auto;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0 0 0 12px;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease;
+}
+
+.exam-nav__sticky .dl-dropdown__wrap.is-open .dl-dropdown__menu {
+  max-height: 500px;
 }
 
 /* ── Stacking fix: elevate center column above sidebar when popups are active ── */

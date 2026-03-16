@@ -2933,12 +2933,13 @@ figure.right figcaption,
 .exam-nav__sticky {
   position: fixed;
   top: 0;
-  left: 0;
   right: 0;
   z-index: 300;
   padding: 8px 16px;
   background: color-mix(in oklab, var(--nav-color) 6%, var(--bg-elev));
+  border-bottom-left-radius: var(--radius-sm);
   border-bottom: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
+  border-left: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transform: translateY(-100%);
@@ -2955,23 +2956,29 @@ figure.right figcaption,
   visibility: visible;
 }
 
+/* When open, expand to full width */
+.exam-nav__sticky.is-open {
+  left: 0;
+  border-bottom-left-radius: 0;
+  border-left: none;
+}
+
 .exam-nav__sticky-btn {
-  width: 100%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: 6px;
+  padding: 6px 12px;
   background: var(--nav-color) !important;
   border: 1px solid var(--nav-color) !important;
   color: white !important;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.15s ease;
   box-shadow: none !important;
+  white-space: nowrap;
 }
 
 .exam-nav__sticky-btn:hover {
@@ -3024,22 +3031,26 @@ figure.right figcaption,
     padding: 6px 10px;
   }
   .exam-nav__sticky-btn {
-    padding: 8px 12px;
-    font-size: 0.85rem;
+    padding: 6px 10px;
+    font-size: 0.82rem;
   }
-  .exam-nav__sticky.is-open .exam-nav__sticky-content {
-    position: fixed;
-    top: auto;
+  /* When open on mobile: full-screen overlay */
+  .exam-nav__sticky.is-open {
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    border-radius: 0;
+    border-left: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .exam-nav__sticky.is-open .exam-nav__sticky-content {
+    flex: 1;
     overflow-y: auto;
-    background: var(--bg-elev);
+    -webkit-overflow-scrolling: touch;
     padding: 12px 16px 24px;
-    z-index: 300;
-    border-top: 1px solid var(--muted);
-    /* top is set dynamically, but as fallback use max height */
-    max-height: calc(100dvh - 50px);
   }
   /* LO menus inside sticky on mobile: render as bottom sheets within the panel */
   .exam-nav__sticky .exam-nav__lo-menu {
@@ -3285,45 +3296,11 @@ figure.right figcaption,
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Download links inside sticky ────────────────────── */
+/* ── Download dropdown inside sticky ──────────────────── */
 .exam-nav__sticky-downloads {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
   padding-top: 10px;
   margin-top: 8px;
   border-top: 1px solid color-mix(in oklab, var(--nav-color) 12%, var(--muted));
-}
-
-.exam-nav__sticky-dl-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: var(--dl-color, var(--nav-color)) !important;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #fff !important;
-  text-decoration: none !important;
-  cursor: pointer;
-  transition: filter 0.15s ease, transform 0.15s ease;
-  box-shadow: none !important;
-}
-
-.exam-nav__sticky-dl-link:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.15);
-  color: #fff !important;
-  text-decoration: none !important;
-}
-
-.exam-nav__sticky-dl-icon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
 }
 
 /* ── Stacking fix: elevate center column above sidebar when popups are active ── */

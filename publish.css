@@ -155,6 +155,23 @@ body {
 /* Full-width content */
 main, .content, .markdown-body, .markdown-rendered { max-width: none !important; }
 
+/* Constrain text elements so they don't stretch edge-to-edge, but callouts stay full-width */
+.markdown-preview-view > h1,
+.markdown-preview-view > h2,
+.markdown-preview-view > h3,
+.markdown-preview-view > h4,
+.markdown-preview-view > h5,
+.markdown-preview-view > h6,
+.markdown-preview-view > p,
+.markdown-preview-view > ul,
+.markdown-preview-view > ol,
+.markdown-preview-view > blockquote,
+.markdown-preview-view > table,
+.markdown-preview-view > .markdown-embed {
+  max-width: 900px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
 
 /* ===========================================================
    3) TYPOGRAPHY
@@ -1338,6 +1355,8 @@ input[type="search"]:focus, .search-input:focus {
   background: var(--sb-bg);
   border-right: 1px solid var(--sb-border);
   color: var(--sb-text);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .right-sidebar { border-left: 1px solid var(--sb-border); border-right: none; }
 
@@ -4951,6 +4970,8 @@ body.high-contrast .dl-dropdown__single {
 .custom-exam__my-exams {
   margin: 0 0 8px;
   padding: 0;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 .custom-exam__my-exams-header {
   display: flex;

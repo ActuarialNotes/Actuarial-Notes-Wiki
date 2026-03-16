@@ -2931,28 +2931,16 @@ figure.right figcaption,
 
 /* ── Sticky exam nav bar (primary & only nav) ──────── */
 .exam-nav__sticky {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 300;
   padding: 8px 16px;
   background: color-mix(in oklab, var(--nav-color) 6%, var(--bg-elev));
   border-bottom: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transform: translateY(-100%);
-  opacity: 0;
-  visibility: hidden;
-  transition: transform 0.25s ease, opacity 0.25s ease, visibility 0.25s ease;
   --nav-color: var(--brand);
   --nav-color-hover: var(--brand-hover);
-}
-
-.exam-nav__sticky.is-visible {
-  transform: translateY(0);
-  opacity: 1;
-  visibility: visible;
 }
 
 .exam-nav__sticky-btn {
@@ -3046,6 +3034,8 @@ figure.right figcaption,
 /* ── Mobile: compact right-aligned button, full-screen overlay ── */
 @media (max-width: 540px) {
   .exam-nav__sticky {
+    position: fixed;
+    top: 0;
     left: auto;
     right: 0;
     padding: 0;

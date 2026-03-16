@@ -306,9 +306,9 @@
 
     sticky.appendChild(stickyBtn);
     sticky.appendChild(stickyContent);
-    // Append inside the publish container so Obsidian's SPA router handles internal links
-    var publishContainer = document.querySelector('.publish-renderer, .site-body, .site-body-center-column') || document.body;
-    publishContainer.appendChild(sticky);
+    // Insert at the top of the center column so sticky nav is scoped to page width
+    var publishContainer = document.querySelector('.site-body-center-column') || document.querySelector('.publish-renderer, .site-body') || document.body;
+    publishContainer.prepend(sticky);
     container._stickyEl = sticky;
 
     // Close dropdown when clicking outside

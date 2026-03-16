@@ -5391,6 +5391,10 @@ body.high-contrast .dl-dropdown__single {
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
+  transform: none;
+}
+.custom-exam__btn:hover {
+  transform: none;
 }
 .custom-exam__btn--primary {
   background: var(--brand);
@@ -5760,7 +5764,8 @@ body.high-contrast .dl-dropdown__single {
 /* ── Exam Viewer (main content) ── */
 
 .custom-exam__viewer {
-  padding: 24px 0 48px;
+  padding: 24px 16px 48px;
+  max-width: 900px;
   animation: ceStepFadeIn 0.3s ease;
 }
 .custom-exam__viewer-toolbar {

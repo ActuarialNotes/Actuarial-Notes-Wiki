@@ -4282,7 +4282,7 @@ var SoundFX = (function () {
 
   var STORAGE_KEY = 'actuarial-notes-custom-exams';
   var INVITE_CODE_KEY = 'actuarial-notes-invite-code';
-  var API_PROXY_URL = 'https://actuarial-notes-wiki.vercel.app/api/chat';
+  var API_PROXY_URL = 'https://actuarial-notes-wiki-server.vercel.app/api/chat';
   var PDFJS_VERSION = '4.0.379';
   var PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VERSION;
 

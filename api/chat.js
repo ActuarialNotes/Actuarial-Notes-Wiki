@@ -5,7 +5,7 @@
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL = 'claude-sonnet-4-20250514';
-const MAX_TOKENS = 8192;
+const MAX_TOKENS = 12288;
 const MAX_CHARS = 90000;
 const RATE_LIMIT = 5;           // requests per window
 const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
@@ -163,17 +163,29 @@ export default async function handler(req, res) {
       return res.status(502).json({ error: 'Empty response from AI. Please try again.' });
     }
 
-    // Parse JSON (handle possible markdown fences)
+    // Parse JSON — try direct parse first, then strip fences/prose
     let jsonStr = content.trim();
-    if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
-    }
-
     let parsed;
     try {
       parsed = JSON.parse(jsonStr);
-    } catch (e) {
-      return res.status(502).json({ error: 'Failed to parse AI response. The document may be too complex. Please try again.' });
+    } catch (e1) {
+      // Strip markdown fences (may appear anywhere in the response)
+      const fenceMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+      if (fenceMatch) {
+        jsonStr = fenceMatch[1];
+      } else {
+        // Find JSON object boundaries in surrounding prose
+        const objStart = jsonStr.indexOf('{');
+        const objEnd = jsonStr.lastIndexOf('}');
+        if (objStart !== -1 && objEnd > objStart) {
+          jsonStr = jsonStr.substring(objStart, objEnd + 1);
+        }
+      }
+      try {
+        parsed = JSON.parse(jsonStr);
+      } catch (e2) {
+        return res.status(502).json({ error: 'Failed to parse AI response. The document may be too complex. Please try again.' });
+      }
     }
 
     return res.status(200).json(parsed);

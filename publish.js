@@ -73,7 +73,10 @@
       document.querySelectorAll('.exam-nav__sticky').forEach(function (s) {
         s.remove();
       });
-      // Trigger persistent nav update (if journey tracker has loaded)
+      // Reset persistent tabs position and trigger update
+      window._syncPersistentOffset = null;
+      var persistentNav = document.querySelector('.persistent-exam-navs');
+      if (persistentNav) persistentNav.style.right = '';
       if (typeof window._updatePersistentExamNavs === 'function') {
         setTimeout(window._updatePersistentExamNavs, 100);
       }
@@ -306,10 +309,21 @@
 
     sticky.appendChild(stickyBtn);
     sticky.appendChild(stickyContent);
-    // Insert at the top of the center column so sticky nav is scoped to page width
-    var publishContainer = document.querySelector('.site-body-center-column') || document.querySelector('.publish-renderer, .site-body') || document.body;
-    publishContainer.prepend(sticky);
+    // Insert into body so fixed positioning works cleanly
+    document.body.appendChild(sticky);
     container._stickyEl = sticky;
+
+    // Offset persistent tabs to sit left of the sticky tab
+    function syncPersistentOffset() {
+      var stickyRect = stickyBtn.getBoundingClientRect();
+      var persistentNav = document.querySelector('.persistent-exam-navs');
+      if (persistentNav) {
+        persistentNav.style.right = (stickyRect.width + 6) + 'px';
+      }
+    }
+    setTimeout(syncPersistentOffset, 350);
+    // Re-sync when persistent navs update
+    window._syncPersistentOffset = syncPersistentOffset;
 
     // Close dropdown when clicking outside
     if (!window._examNavCloseRegistered) {
@@ -3505,6 +3519,11 @@
           container.classList.add('is-expanded');
         }
       }, true);
+    }
+
+    // Sync offset with sticky exam tab if present
+    if (typeof window._syncPersistentOffset === 'function') {
+      setTimeout(window._syncPersistentOffset, 50);
     }
 
     // Register close-outside listener once

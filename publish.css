@@ -2902,438 +2902,11 @@ figure.right figcaption,
    =========================================================== */
 
 
-/* Container */
+/* Container — hidden sentinel (data holder for JS) */
 .exam-nav {
-  position: relative;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  padding: 10px 14px;
-  background: color-mix(in oklab, var(--nav-color) 5%, var(--bg-elev));
-  border: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
-  border-radius: var(--radius-md);
-  gap: 6px;
-  flex-wrap: wrap;
-  margin: 1.25rem 0;
-
-  /* Custom color support - defaults to brand */
+  display: none !important;
   --nav-color: var(--brand);
   --nav-color-hover: var(--brand-hover);
-}
-
-/* Mobile: allow wrapping */
-@media (max-width: 540px) {
-  .exam-nav {
-    gap: 10px;
-    padding: 12px;
-    z-index: auto;
-  }
-}
-
-/* ── Collapsed / Expanded views ──────────────────────── */
-.exam-nav__collapsed-view {
-  display: none;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-
-.exam-nav.is-collapsed .exam-nav__collapsed-view {
-  display: flex;
-}
-
-.exam-nav__expanded-view {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-}
-
-.exam-nav.is-collapsed .exam-nav__expanded-view {
-  display: none;
-}
-
-.exam-nav__pill-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-/* Hide LO toggle/section when collapsed */
-.exam-nav.is-collapsed .exam-nav__lo-toggle,
-.exam-nav.is-collapsed .exam-nav__lo-section {
-  display: none !important;
-}
-
-/* Collapsed pill takes up remaining space */
-.exam-nav__collapsed-pill {
-  flex: 1;
-  justify-content: center;
-}
-
-/* Collapsed view arrow buttons (reuse concept-nav arrow style) */
-.exam-nav__collapse-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  background: transparent !important;
-  border: 1px solid var(--muted) !important;
-  border-radius: var(--radius-sm);
-  color: var(--text-dim);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  flex-shrink: 0;
-  text-decoration: none !important;
-  box-shadow: none !important;
-}
-
-.exam-nav__collapse-arrow svg {
-  width: 18px;
-  height: 18px;
-}
-
-.exam-nav__collapse-arrow:hover {
-  border-color: var(--nav-color) !important;
-  color: var(--nav-color);
-  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
-  text-decoration: none !important;
-  box-shadow: none !important;
-}
-
-/* Collapsed pill: button with label + chevron (like concept nav) */
-.exam-nav__collapsed-pill {
-  flex: 1;
-  justify-content: center;
-  gap: 8px;
-  cursor: pointer;
-  font-family: inherit;
-  box-shadow: none !important;
-}
-
-.exam-nav__collapsed-label {
-  flex: 1;
-}
-
-.exam-nav__collapsed-chevron {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-/* Arrow dropdown for multi-exam collapsed arrows */
-.exam-nav__collapse-arrow-dropdown {
-  position: relative;
-  z-index: 200;
-}
-
-.exam-nav__collapse-arrow-dropdown .exam-nav__menu {
-  top: calc(100% + 8px);
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%) translateY(-4px);
-}
-
-.exam-nav__collapse-arrow-dropdown.is-open .exam-nav__menu {
-  transform: translateX(-50%) translateY(0);
-}
-
-@media (max-width: 540px) {
-  .exam-nav__collapse-arrow-dropdown .exam-nav__menu {
-    position: fixed;
-    bottom: 0; left: 0; right: 0; top: auto;
-    transform: translateY(100%);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    min-width: auto;
-  }
-  .exam-nav__collapse-arrow-dropdown.is-open .exam-nav__menu {
-    transform: translateY(0);
-  }
-}
-
-/* Current exam pill - collapsible (click to collapse) */
-.exam-nav__btn--current.exam-nav__btn--collapsible {
-  cursor: pointer;
-  gap: 8px;
-  font-family: inherit;
-  box-shadow: none !important;
-}
-
-.exam-nav__btn--current.exam-nav__btn--collapsible:hover {
-  filter: brightness(0.9);
-}
-
-.exam-nav__btn--collapsible .exam-nav__collapse-chevron {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
-
-/* All buttons base style */
-.exam-nav__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: transparent !important;
-  border: 1px solid var(--muted) !important;
-  border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-dim);
-  cursor: pointer;
-  text-decoration: none !important;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-  box-shadow: none !important;
-}
-
-.exam-nav__btn:hover {
-  border-color: var(--nav-color) !important;
-  color: var(--nav-color);
-  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
-  text-decoration: none !important;
-  box-shadow: none !important;
-}
-
-/* Current exam wrapper (for stacking name + requirements) */
-.exam-nav__current {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-/* Current exam - highlighted */
-.exam-nav__btn--current {
-  background: var(--nav-color) !important;
-  border-color: var(--nav-color) !important;
-  color: white !important;
-  font-weight: 600;
-}
-
-.exam-nav__btn--current:hover {
-  background: var(--nav-color-hover, var(--nav-color)) !important;
-  border-color: var(--nav-color-hover, var(--nav-color)) !important;
-  color: white !important;
-  filter: brightness(1.1);
-}
-
-/* Requirements text below current exam */
-.exam-nav__reqs {
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  font-weight: 500;
-  letter-spacing: 0.01em;
-}
-
-/* Exam Track row (at the top of exam-nav) */
-.exam-nav__track {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  font-size: 0.75rem;
-}
-
-.exam-nav__track-label {
-  color: var(--text-dim);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.exam-nav__track-link {
-  color: var(--nav-color) !important;
-  font-weight: 600;
-  text-decoration: none !important;
-  transition: color 0.15s ease;
-}
-
-.exam-nav__track-link:hover {
-  color: var(--nav-color-hover, var(--nav-color)) !important;
-  filter: brightness(1.2);
-}
-
-.exam-nav__track-sep {
-  color: var(--text-dim);
-  font-weight: 400;
-}
-
-/* Prev / Next exam(s) - ghost button style */
-.exam-nav__btn--prev,
-.exam-nav__btn--next {
-  background: transparent !important;
-  border: 1px solid var(--muted) !important;
-  color: var(--text-dim) !important;
-  box-shadow: none !important;
-}
-
-.exam-nav__btn--prev:hover,
-.exam-nav__btn--next:hover {
-  border-color: var(--nav-color) !important;
-  color: var(--nav-color) !important;
-  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
-  box-shadow: none !important;
-}
-
-/* Arrow separator */
-.exam-nav__arrow {
-  color: var(--text-dim);
-  font-size: 0.9rem;
-  flex-shrink: 0;
-  user-select: none;
-}
-
-@media (max-width: 540px) {
-  .exam-nav__btn {
-    white-space: normal;
-    text-align: center;
-    min-width: 0;
-  }
-  .exam-nav__arrow {
-    font-size: 0.75rem;
-    opacity: 0.7;
-  }
-}
-
-/* Dropdown wrapper */
-.exam-nav__dropdown {
-  position: relative;
-  z-index: 200;
-}
-
-@media (max-width: 540px) {
-  .exam-nav__dropdown {
-    z-index: auto;
-  }
-}
-
-/* Dropdown chevron */
-.exam-nav__chevron {
-  width: 12px;
-  height: 12px;
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-}
-
-.exam-nav__dropdown.is-open .exam-nav__chevron {
-  transform: rotate(180deg);
-}
-
-/* Dropdown menu */
-.exam-nav__menu {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  background: var(--bg-elev);
-  border: 1px solid var(--muted);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-2);
-  min-width: 260px;
-  padding: 8px;
-  z-index: 200;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-4px);
-  transition: all 0.15s ease;
-}
-
-.exam-nav__dropdown.is-open .exam-nav__menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-/* Mobile: full-width dropdown */
-@media (max-width: 540px) {
-  .exam-nav__menu {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: auto;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    padding: 16px;
-    min-width: auto;
-    transform: translateY(100%);
-  }
-  
-  .exam-nav__dropdown.is-open .exam-nav__menu {
-    transform: translateY(0);
-  }
-}
-
-/* Dropdown header */
-.exam-nav__menu-header {
-  padding: 8px 12px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Dropdown item */
-.exam-nav__menu-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  text-decoration: none !important;
-  color: inherit;
-  transition: background 0.1s ease;
-}
-
-.exam-nav__menu-item:hover {
-  background: color-mix(in oklab, var(--nav-color) 10%, transparent);
-}
-
-.exam-nav__menu-item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.exam-nav__menu-item-name {
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--nav-color);
-}
-
-.exam-nav__menu-item-full {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-}
-
-/* Organization tag */
-.exam-nav__org {
-  padding: 4px 8px;
-  background: var(--muted);
-  border-radius: 5px;
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--text-dim);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.exam-nav__org--soa {
-  background: var(--muted);
-  color: var(--text-dim);
-}
-
-.exam-nav__org--cas {
-  background: var(--muted);
-  color: var(--text-dim);
 }
 
 /* Mobile backdrop */
@@ -3341,7 +2914,7 @@ figure.right figcaption,
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 99;
+  z-index: 299;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   opacity: 0;
@@ -3356,7 +2929,7 @@ figure.right figcaption,
   pointer-events: auto;
 }
 
-/* ── Sticky exam nav bar ──────────────────────────── */
+/* ── Sticky exam nav bar (primary & only nav) ──────── */
 .exam-nav__sticky {
   position: fixed;
   top: 0;
@@ -3434,8 +3007,41 @@ figure.right figcaption,
   z-index: 400;
 }
 
-/* Mobile: sticky LO menus as bottom sheets */
+/* Sticky content track row spacing */
+.exam-nav__sticky-content .exam-nav__track {
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+}
+
+/* Sticky LO section always visible (no toggle) */
+.exam-nav__sticky .exam-nav__lo-section {
+  display: block;
+}
+
+/* ── Mobile: full-screen dropdown ──────────────────── */
 @media (max-width: 540px) {
+  .exam-nav__sticky {
+    padding: 6px 10px;
+  }
+  .exam-nav__sticky-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  .exam-nav__sticky.is-open .exam-nav__sticky-content {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    background: var(--bg-elev);
+    padding: 12px 16px 24px;
+    z-index: 300;
+    border-top: 1px solid var(--muted);
+    /* top is set dynamically, but as fallback use max height */
+    max-height: calc(100dvh - 50px);
+  }
+  /* LO menus inside sticky on mobile: render as bottom sheets within the panel */
   .exam-nav__sticky .exam-nav__lo-menu {
     bottom: 0;
     left: 0;
@@ -3449,97 +3055,51 @@ figure.right figcaption,
   }
 }
 
-/* Sticky content track row spacing */
-.exam-nav__sticky-content .exam-nav__track {
-  padding-bottom: 8px;
-  margin-bottom: 6px;
-}
-
-/* Sticky LO section always visible (no toggle) */
-.exam-nav__sticky .exam-nav__lo-section {
-  display: block;
-}
-
-@media (max-width: 540px) {
-  .exam-nav__sticky {
-    left: auto;
-    padding: 6px 10px;
-    border-bottom-left-radius: var(--radius-sm);
-  }
-  .exam-nav__sticky.is-open {
-    left: 0;
-    border-bottom-left-radius: 0;
-  }
-  .exam-nav__sticky-btn {
-    padding: 8px 12px;
-    font-size: 0.85rem;
-  }
-}
-
 /* Example callout tinting on exam pages */
 .has-exam-nav .callout[data-callout="example"] {
   background: color-mix(in oklab, var(--exam-color) 5%, var(--bg-elev));
   border-color: color-mix(in oklab, var(--exam-color) 15%, var(--muted));
 }
 
-/* ── Learning Objectives toggle row ──────────────────── */
-.exam-nav__lo-toggle {
-  display: flex;
-  width: 100%;
-  padding-top: 6px;
-  margin-top: 4px;
-}
-
-.exam-nav__lo-btn {
+/* Exam Track row */
+.exam-nav__track {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
-  padding: 8px 14px;
-  background: color-mix(in oklab, var(--nav-color) 8%, transparent) !important;
-  border: 1px solid color-mix(in oklab, var(--nav-color) 20%, var(--muted)) !important;
-  border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: 0.85rem;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+}
+
+.exam-nav__track-label {
+  color: var(--text-dim);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.exam-nav__track-link {
+  color: var(--nav-color) !important;
   font-weight: 600;
-  color: var(--nav-color);
-  cursor: pointer;
-  box-shadow: none !important;
-  transition: all 0.15s ease;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
 }
 
-.exam-nav__lo-btn:hover {
-  background: color-mix(in oklab, var(--nav-color) 14%, transparent) !important;
-  border-color: var(--nav-color) !important;
+.exam-nav__track-link:hover {
+  color: var(--nav-color-hover, var(--nav-color)) !important;
+  filter: brightness(1.2);
 }
 
-.exam-nav__lo-btn-label {
-  flex: 1;
-  text-align: left;
+.exam-nav__track-sep {
+  color: var(--text-dim);
+  font-weight: 400;
 }
 
-.exam-nav__lo-chevron {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.exam-nav.is-lo-expanded .exam-nav__lo-chevron {
-  transform: rotate(180deg);
-}
-
-/* ── Learning Objectives section (always visible in expanded view) ── */
+/* ── Learning Objectives section ─────────────────────── */
 .exam-nav__lo-section {
   display: block;
   width: 100%;
   padding: 10px 0 4px;
-}
-
-/* Hide LO section when collapsed */
-.exam-nav.is-collapsed .exam-nav__lo-section {
-  display: none;
 }
 
 .exam-nav__lo-loading {
@@ -3550,7 +3110,7 @@ figure.right figcaption,
 }
 
 .exam-nav__lo-list {
-  margin: 0 -14px !important;
+  margin: 0 !important;
   padding-left: 0 !important;
   list-style: none;
 }
@@ -3638,7 +3198,7 @@ figure.right figcaption,
   pointer-events: none;
 }
 
-/* ── LO floating concept menu (matches concept-nav) ──── */
+/* ── LO floating concept menu ────────────────────────── */
 .exam-nav__lo-menu {
   position: absolute;
   top: calc(100% + 6px);
@@ -3725,13 +3285,50 @@ figure.right figcaption,
   font-variant-numeric: tabular-nums;
 }
 
+/* ── Download links inside sticky ────────────────────── */
+.exam-nav__sticky-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 10px;
+  margin-top: 8px;
+  border-top: 1px solid color-mix(in oklab, var(--nav-color) 12%, var(--muted));
+}
+
+.exam-nav__sticky-dl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--dl-color, var(--nav-color)) !important;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+  box-shadow: none !important;
+}
+
+.exam-nav__sticky-dl-link:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.exam-nav__sticky-dl-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 /* ── Stacking fix: elevate center column above sidebar when popups are active ── */
-.site-body-center-column:has(.exam-nav.is-lo-expanded),
-.site-body-center-column:has(.exam-nav__dropdown.is-open),
-.site-body-center-column:has(.exam-nav__lo-wrap.is-open),
 .site-body-center-column:has(.concept-nav__arrow-dropdown.is-open),
-.site-body-center-column:has(.concept-nav__obj-wrap.is-open),
-.site-body-center-column.exam-nav-elevated {
+.site-body-center-column:has(.concept-nav__obj-wrap.is-open) {
   position: relative;
   z-index: 200;
 }
@@ -3739,6 +3336,7 @@ figure.right figcaption,
 /* Print: hide nav */
 @media print {
   .exam-nav,
+  .exam-nav__sticky,
   .exam-nav-backdrop {
     display: none !important;
   }

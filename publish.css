@@ -5947,14 +5947,19 @@ body.high-contrast .dl-dropdown__single {
   align-items: center;
   justify-content: center;
   height: 100px;
-  background: linear-gradient(135deg, var(--bg-elev, #1a1a2e) 0%, var(--bg, #111) 100%);
-  border-bottom: 1px solid var(--muted, #333);
 }
 
-.doc-library__card-icon svg {
-  width: 40px;
-  height: 40px;
-  opacity: 0.3;
+.doc-library__card-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #fff;
+  letter-spacing: 0.02em;
 }
 
 .doc-library__card-info {

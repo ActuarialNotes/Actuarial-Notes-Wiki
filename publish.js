@@ -4482,22 +4482,23 @@ var SoundFX = (function () {
     });
 
     // Insert before journey tracker
+    // Order: Document Library → Add Custom Exam → My Exams → (rest)
     var journeyTracker = container.querySelector('.journey-tracker');
     if (journeyTracker) {
+      journeyTracker.parentElement.insertBefore(libraryBtnEl, journeyTracker);
       journeyTracker.parentElement.insertBefore(sidebarBtnEl, journeyTracker);
       journeyTracker.parentElement.insertBefore(myExamsEl, journeyTracker);
-      journeyTracker.parentElement.insertBefore(libraryBtnEl, journeyTracker);
     } else {
       // Insert before nav tree
       var navRoot = container.querySelector('.nav-folder.mod-root') || container.querySelector('.nav-folder') || container.querySelector('.tree-item');
       if (navRoot) {
+        navRoot.parentElement.insertBefore(libraryBtnEl, navRoot);
         navRoot.parentElement.insertBefore(sidebarBtnEl, navRoot);
         navRoot.parentElement.insertBefore(myExamsEl, navRoot);
-        navRoot.parentElement.insertBefore(libraryBtnEl, navRoot);
       } else {
+        container.appendChild(libraryBtnEl);
         container.appendChild(sidebarBtnEl);
         container.appendChild(myExamsEl);
-        container.appendChild(libraryBtnEl);
       }
     }
   }
@@ -6417,6 +6418,32 @@ var SoundFX = (function () {
   var SVG_UNLINK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 7l1.5-1.5a2.83 2.83 0 1 1 4 4L15 11"/><path d="M9 13l-1.5 1.5a2.83 2.83 0 1 1-4-4L5 9"/><line x1="4" y1="16" x2="16" y2="4"/></svg>';
   var SVG_SEARCH = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><line x1="13.5" y1="13.5" x2="17" y2="17"/></svg>';
 
+  var DOC_COLORS = ['#2563eb', '#7c3aed', '#059669', '#d97706', '#db2777', '#0891b2', '#4f46e5', '#c2410c', '#0d9488', '#6d28d9'];
+
+  function getDocInitials(title) {
+    if (!title) return '??';
+    var words = title.split(/\s+/).filter(function (w) { return w.length > 0; });
+    // Skip common short words for second initial
+    var skip = { 'a': 1, 'an': 1, 'the': 1, 'and': 1, 'or': 1, 'of': 1, 'for': 1, 'in': 1, 'on': 1, 'to': 1, '-': 1 };
+    var initials = '';
+    for (var i = 0; i < words.length && initials.length < 2; i++) {
+      if (initials.length === 1 && skip[words[i].toLowerCase()]) continue;
+      initials += words[i][0].toUpperCase();
+    }
+    if (initials.length < 2 && title.length >= 2) initials = title.substring(0, 2).toUpperCase();
+    return initials || '??';
+  }
+
+  function getDocColor(id) {
+    // Simple hash to pick a consistent color
+    var hash = 0;
+    for (var i = 0; i < id.length; i++) {
+      hash = ((hash << 5) - hash) + id.charCodeAt(i);
+      hash = hash & hash; // Convert to 32-bit int
+    }
+    return DOC_COLORS[Math.abs(hash) % DOC_COLORS.length];
+  }
+
   /* ---- Library viewer page ---- */
   function renderLibraryViewer() {
     var viewer = document.createElement('div');
@@ -6469,7 +6496,9 @@ var SoundFX = (function () {
 
         var iconArea = document.createElement('div');
         iconArea.className = 'doc-library__card-icon';
-        iconArea.innerHTML = SVG_DOC;
+        var docColor = getDocColor(doc.id);
+        var docInitials = getDocInitials(doc.title);
+        iconArea.innerHTML = '<div class="doc-library__card-avatar" style="background:' + docColor + '">' + escHtml(docInitials) + '</div>';
 
         var info = document.createElement('div');
         info.className = 'doc-library__card-info';
@@ -6785,63 +6814,73 @@ var SoundFX = (function () {
     analyzeBtn.textContent = 'Analyze Document';
     analyzeBtn.disabled = true;
 
-    // Progress area (hidden initially)
+    // Progress area (hidden initially) — uses same pattern as exam processing
     var progressArea = document.createElement('div');
+    progressArea.className = 'custom-exam__progress';
     progressArea.style.display = 'none';
+
+    var libTasks = [
+      { id: 'extract', label: 'Reading PDF' },
+      { id: 'toc', label: 'Analyzing document structure' },
+      { id: 'glossary', label: 'Extracting glossary terms' }
+    ];
+
+    libTasks.forEach(function (task) {
+      var row = document.createElement('div');
+      row.className = 'custom-exam__progress-task';
+      row.setAttribute('data-task', task.id);
+
+      var statusIcon = document.createElement('span');
+      statusIcon.className = 'custom-exam__progress-status';
+      statusIcon.innerHTML = '<span class="custom-exam__progress-dot"></span>';
+
+      var text = document.createElement('span');
+      text.className = 'custom-exam__progress-label';
+      text.textContent = task.label;
+
+      var result = document.createElement('span');
+      result.className = 'custom-exam__progress-result';
+
+      row.appendChild(statusIcon);
+      row.appendChild(text);
+      row.appendChild(result);
+      progressArea.appendChild(row);
+    });
+
+    var libErrorEl = document.createElement('div');
+    libErrorEl.className = 'custom-exam__error';
 
     analyzeBtn.addEventListener('click', async function () {
       if (!selectedFile) return;
       analyzeBtn.disabled = true;
       analyzeBtn.innerHTML = SVG_SPINNER + ' Processing…';
       dropzone.style.display = 'none';
-      progressArea.style.display = 'block';
-
-      var tasks = [
-        { id: 'extract', label: 'Extracting text', status: 'pending' },
-        { id: 'toc', label: 'Analyzing structure', status: 'pending' },
-        { id: 'glossary', label: 'Extracting glossary', status: 'pending' }
-      ];
-
-      function renderProgress() {
-        progressArea.innerHTML = '';
-        tasks.forEach(function (t) {
-          var row = document.createElement('div');
-          row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 0;font-size:0.9rem';
-          if (t.status === 'done') {
-            row.innerHTML = '<span style="color:var(--brand,#10b981);width:20px;height:20px;display:inline-flex">' + SVG_CHECK_CIRCLE + '</span> ' + escHtml(t.label);
-          } else if (t.status === 'active') {
-            row.innerHTML = '<span style="width:20px;height:20px;display:inline-flex">' + SVG_SPINNER + '</span> ' + escHtml(t.label) + '…';
-          } else if (t.status === 'error') {
-            row.innerHTML = '<span style="color:var(--danger,#dc2626);width:20px;height:20px;display:inline-flex">✗</span> ' + escHtml(t.label) + ' — failed';
-          } else {
-            row.innerHTML = '<span style="opacity:0.3;width:20px;height:20px;display:inline-flex">○</span> ' + escHtml(t.label);
-          }
-          progressArea.appendChild(row);
-        });
-      }
-      renderProgress();
+      progressArea.style.display = '';
+      libErrorEl.style.display = 'none';
 
       try {
         // Step 1: Extract text
-        tasks[0].status = 'active'; renderProgress();
+        setTaskStatus(progressArea, 'extract', 'active');
         var pdfResult = await extractPdfText(selectedFile);
         var pdfText = pdfResult.text || '';
-        tasks[0].status = 'done'; renderProgress();
+        setTaskStatus(progressArea, 'extract', 'done', pdfResult.pageCount + ' pages extracted');
 
         // Truncate for storage
         var storedText = pdfText.substring(0, 100000);
 
         // Step 2: Extract TOC
-        tasks[1].status = 'active'; renderProgress();
+        setTaskStatus(progressArea, 'toc', 'active');
         var tocPromptText = 'Document:\n' + pdfText.substring(0, 80000);
         var tocResult = await callClaudeApi(tocPromptText, DEFAULT_LIBRARY_TOC_PROMPT);
-        tasks[1].status = 'done'; renderProgress();
+        var tocItems = tocResult.toc || [];
+        setTaskStatus(progressArea, 'toc', 'done', tocItems.length + ' sections found');
 
         // Step 3: Extract glossary
-        tasks[2].status = 'active'; renderProgress();
+        setTaskStatus(progressArea, 'glossary', 'active');
         var glossaryPromptText = 'Document:\n' + pdfText.substring(0, 80000);
         var glossaryResult = await callClaudeApi(glossaryPromptText, DEFAULT_LIBRARY_GLOSSARY_PROMPT);
-        tasks[2].status = 'done'; renderProgress();
+        var glossaryItems = glossaryResult.glossary || [];
+        setTaskStatus(progressArea, 'glossary', 'done', glossaryItems.length + ' terms extracted');
 
         // Build document object
         var newDoc = {
@@ -6849,48 +6888,45 @@ var SoundFX = (function () {
           title: tocResult.title || selectedFile.name.replace(/\.pdf$/i, ''),
           author: tocResult.author || '',
           pdfText: storedText,
-          toc: tocResult.toc || [],
-          glossary: glossaryResult.glossary || [],
+          toc: tocItems,
+          glossary: glossaryItems,
           uploadedAt: Date.now()
         };
 
         libraryDocs.push(newDoc);
         saveLibrary();
 
-        // Show success
-        progressArea.innerHTML = '';
-        var successMsg = document.createElement('div');
-        successMsg.style.cssText = 'text-align:center;padding:1rem';
-        successMsg.innerHTML = '<div style="color:var(--brand,#10b981);width:32px;height:32px;margin:0 auto 12px">' + SVG_CHECK_CIRCLE + '</div>' +
-          '<p style="font-size:1rem;margin-bottom:4px"><strong>' + escHtml(newDoc.title) + '</strong> added to library</p>' +
-          '<p style="opacity:0.6;font-size:0.85rem">' + (newDoc.toc.length) + ' sections · ' + (newDoc.glossary.length) + ' glossary terms</p>';
-        progressArea.appendChild(successMsg);
-
+        // Show success — replace analyze button with View in Library
         analyzeBtn.style.display = 'none';
+
+        var successMsg = document.createElement('p');
+        successMsg.style.cssText = 'text-align:center;margin-top:16px;font-size:0.95rem';
+        successMsg.innerHTML = '<strong>' + escHtml(newDoc.title) + '</strong> added to library';
+        progressArea.parentElement.appendChild(successMsg);
 
         var doneBtn = document.createElement('button');
         doneBtn.className = 'custom-exam__btn custom-exam__btn--primary';
-        doneBtn.style.cssText = 'width:100%;margin-top:16px';
+        doneBtn.style.cssText = 'width:100%;margin-top:12px';
         doneBtn.textContent = 'View in Library';
         doneBtn.addEventListener('click', function () {
           closeLibModal();
           renderLibraryViewer();
         });
-        progressArea.appendChild(doneBtn);
+        progressArea.parentElement.appendChild(doneBtn);
 
       } catch (err) {
-        var activeTask = tasks.find(function (t) { return t.status === 'active'; });
-        if (activeTask) activeTask.status = 'error';
-        renderProgress();
+        // Mark the active task as error
+        ['extract', 'toc', 'glossary'].forEach(function (id) {
+          var row = progressArea.querySelector('[data-task="' + id + '"]');
+          if (row && row.classList.contains('is-active')) {
+            setTaskStatus(progressArea, id, 'error');
+          }
+        });
 
-        var errDiv = document.createElement('div');
-        errDiv.className = 'custom-exam__error';
-        errDiv.style.display = 'block';
-        errDiv.textContent = 'Error: ' + (err.message || 'Processing failed');
-        progressArea.appendChild(errDiv);
+        libErrorEl.style.display = 'block';
+        libErrorEl.textContent = 'Error: ' + (err.message || 'Processing failed');
 
         analyzeBtn.disabled = false;
-        analyzeBtn.textContent = 'Retry';
         analyzeBtn.innerHTML = 'Retry';
         dropzone.style.display = '';
       }
@@ -6899,6 +6935,7 @@ var SoundFX = (function () {
     body.appendChild(dropzone);
     body.appendChild(analyzeBtn);
     body.appendChild(progressArea);
+    body.appendChild(libErrorEl);
 
     libModal.appendChild(header);
     libModal.appendChild(body);

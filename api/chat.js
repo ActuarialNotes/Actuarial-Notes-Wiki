@@ -115,15 +115,20 @@ export default async function handler(req, res) {
   }
 
   // Use custom system prompt if provided, else fall back to default
-  const activePrompt = (systemPrompt && typeof systemPrompt === 'string' && systemPrompt.trim())
-    ? systemPrompt.trim()
-    : SYSTEM_PROMPT;
+  const hasCustomPrompt = (systemPrompt && typeof systemPrompt === 'string' && systemPrompt.trim());
+  const activePrompt = hasCustomPrompt ? systemPrompt.trim() : SYSTEM_PROMPT;
 
   // Truncate
   let truncated = text;
   if (truncated.length > MAX_CHARS) {
     truncated = truncated.substring(0, MAX_CHARS) + '\n\n[Document truncated at ' + MAX_CHARS + ' characters]';
   }
+
+  // When a custom system prompt is provided, use the raw text as the user message
+  // to avoid conflicting instructions. Default flow keeps the exam-specific prefix.
+  const userMessage = hasCustomPrompt
+    ? truncated
+    : 'Analyze this document and extract the learning content:\n\n' + truncated;
 
   // Proxy to Anthropic
   try {
@@ -139,7 +144,7 @@ export default async function handler(req, res) {
         max_tokens: MAX_TOKENS,
         system: activePrompt,
         messages: [
-          { role: 'user', content: 'Analyze this document and extract the learning content:\n\n' + truncated }
+          { role: 'user', content: userMessage }
         ]
       })
     });

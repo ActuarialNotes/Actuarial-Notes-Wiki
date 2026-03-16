@@ -5,7 +5,7 @@
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL = 'claude-sonnet-4-20250514';
-const MAX_TOKENS = 12288;
+const MAX_TOKENS = 16384;
 const MAX_CHARS = 90000;
 const RATE_LIMIT = 5;           // requests per window
 const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour

@@ -109,10 +109,15 @@ export default async function handler(req, res) {
   }
 
   // Validate body
-  const { text } = req.body || {};
+  const { text, systemPrompt } = req.body || {};
   if (!text || typeof text !== 'string') {
     return res.status(400).json({ error: 'Missing or invalid "text" field in request body' });
   }
+
+  // Use custom system prompt if provided, else fall back to default
+  const activePrompt = (systemPrompt && typeof systemPrompt === 'string' && systemPrompt.trim())
+    ? systemPrompt.trim()
+    : SYSTEM_PROMPT;
 
   // Truncate
   let truncated = text;
@@ -132,7 +137,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: MAX_TOKENS,
-        system: SYSTEM_PROMPT,
+        system: activePrompt,
         messages: [
           { role: 'user', content: 'Analyze this document and extract the learning content:\n\n' + truncated }
         ]

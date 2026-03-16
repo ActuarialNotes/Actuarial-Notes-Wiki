@@ -4288,7 +4288,8 @@ var SoundFX = (function () {
   'use strict';
 
   var STORAGE_KEY = 'actuarial-notes-custom-exams';
-  var API_KEY_KEY = 'actuarial-notes-ai-key';
+  var INVITE_CODE_KEY = 'actuarial-notes-invite-code';
+  var API_PROXY_URL = 'https://actuarial-notes-wiki.vercel.app/api/chat';
   var PDFJS_VERSION = '4.0.379';
   var PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VERSION;
 
@@ -4323,10 +4324,6 @@ var SoundFX = (function () {
 
   var SVG_GEAR = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3"/><path d="M16.5 11.13a1.5 1.5 0 0 0 .3 1.65l.05.05a1.82 1.82 0 1 1-2.57 2.57l-.05-.05a1.5 1.5 0 0 0-1.65-.3 1.5 1.5 0 0 0-.91 1.37v.15a1.82 1.82 0 1 1-3.64 0v-.08a1.5 1.5 0 0 0-.98-1.37 1.5 1.5 0 0 0-1.65.3l-.05.05a1.82 1.82 0 1 1-2.57-2.57l.05-.05a1.5 1.5 0 0 0 .3-1.65 1.5 1.5 0 0 0-1.37-.91h-.15a1.82 1.82 0 1 1 0-3.64h.08a1.5 1.5 0 0 0 1.37-.98 1.5 1.5 0 0 0-.3-1.65l-.05-.05a1.82 1.82 0 1 1 2.57-2.57l.05.05a1.5 1.5 0 0 0 1.65.3h.07a1.5 1.5 0 0 0 .91-1.37v-.15a1.82 1.82 0 1 1 3.64 0v.08a1.5 1.5 0 0 0 .91 1.37 1.5 1.5 0 0 0 1.65-.3l.05-.05a1.82 1.82 0 1 1 2.57 2.57l-.05.05a1.5 1.5 0 0 0-.3 1.65v.07a1.5 1.5 0 0 0 1.37.91h.15a1.82 1.82 0 1 1 0 3.64h-.08a1.5 1.5 0 0 0-1.37.91z"/></svg>';
 
-  var SVG_EYE = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10s3.5-7 9-7 9 7 9 7-3.5 7-9 7-9-7-9-7z"/><circle cx="10" cy="10" r="3"/></svg>';
-
-  var SVG_EYE_OFF = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.46 3.56A8.4 8.4 0 0 1 10 3c5.5 0 9 7 9 7a14.8 14.8 0 0 1-1.77 2.67M5.94 5.94A14.3 14.3 0 0 0 1 10s3.5 7 9 7a8.3 8.3 0 0 0 4.06-1.06"/><line x1="1" y1="1" x2="19" y2="19"/></svg>';
-
   /* ---- HTML escaping ---- */
   function escHtml(str) {
     if (!str) return '';
@@ -4348,12 +4345,12 @@ var SoundFX = (function () {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(customExams)); } catch (e) { /* ignore */ }
   }
 
-  function getApiKey() {
-    try { return localStorage.getItem(API_KEY_KEY) || ''; } catch (e) { return ''; }
+  function getInviteCode() {
+    try { return localStorage.getItem(INVITE_CODE_KEY) || ''; } catch (e) { return ''; }
   }
 
-  function setApiKey(key) {
-    try { localStorage.setItem(API_KEY_KEY, key); } catch (e) { /* ignore */ }
+  function setInviteCode(code) {
+    try { localStorage.setItem(INVITE_CODE_KEY, code); } catch (e) { /* ignore */ }
   }
 
   /* ---- Sidebar: Button + My Exams ---- */
@@ -4493,14 +4490,14 @@ var SoundFX = (function () {
   }
 
   /* ---- Modal system ---- */
-  var STEP_LABELS = ['API Key', 'Upload', 'Processing', 'Review', 'Complete'];
+  var STEP_LABELS = ['Access', 'Upload', 'Processing', 'Review', 'Complete'];
 
   function openModal(startStep) {
     if (modalEl) closeModal(true);
 
-    var hasKey = !!getApiKey();
+    var hasCode = !!getInviteCode();
     if (!startStep) {
-      currentStep = hasKey ? 2 : 1;
+      currentStep = hasCode ? 2 : 1;
     } else {
       currentStep = startStep;
     }
@@ -4529,7 +4526,7 @@ var SoundFX = (function () {
     var gearBtn = document.createElement('button');
     gearBtn.className = 'custom-exam__modal-icon-btn';
     gearBtn.type = 'button';
-    gearBtn.title = 'API Key Settings';
+    gearBtn.title = 'Access Settings';
     gearBtn.innerHTML = SVG_GEAR;
     gearBtn.addEventListener('click', function () {
       currentStep = 1;
@@ -4664,7 +4661,7 @@ var SoundFX = (function () {
     body.innerHTML = '';
 
     switch (currentStep) {
-      case 1: renderApiKeyStep(body); break;
+      case 1: renderInviteCodeStep(body); break;
       case 2: renderUploadStep(body); break;
       case 3: renderProcessingStep(body); break;
       case 4: renderReviewStep(body); break;
@@ -4672,8 +4669,8 @@ var SoundFX = (function () {
     }
   }
 
-  /* ---- Step 1: API Key ---- */
-  function renderApiKeyStep(body) {
+  /* ---- Step 1: Invite Code ---- */
+  function renderInviteCodeStep(body) {
     var wrap = document.createElement('div');
     wrap.className = 'custom-exam__step-content';
 
@@ -4683,73 +4680,49 @@ var SoundFX = (function () {
 
     var title = document.createElement('h3');
     title.className = 'custom-exam__step-title';
-    title.textContent = 'Connect to Claude AI';
+    title.textContent = 'Enter Invite Code';
 
     var desc = document.createElement('p');
     desc.className = 'custom-exam__step-desc';
-    desc.textContent = 'Enter your Anthropic API key to enable AI-powered PDF analysis. Your key is stored locally in your browser and only used to communicate with Anthropic\'s API.';
+    desc.textContent = 'Enter your invite code to access AI-powered PDF analysis. Your code is stored locally in your browser.';
 
     var inputWrap = document.createElement('div');
     inputWrap.className = 'custom-exam__input-wrap';
 
     var label = document.createElement('label');
     label.className = 'custom-exam__label';
-    label.textContent = 'Anthropic API Key';
-
-    var fieldWrap = document.createElement('div');
-    fieldWrap.className = 'custom-exam__field-wrap';
+    label.textContent = 'Invite Code';
 
     var input = document.createElement('input');
     input.className = 'custom-exam__input';
-    input.type = 'password';
-    input.placeholder = 'sk-ant-api03-...';
-    input.value = getApiKey();
+    input.type = 'text';
+    input.placeholder = 'Enter your invite code...';
+    input.value = getInviteCode();
     input.autocomplete = 'off';
-
-    var toggleVis = document.createElement('button');
-    toggleVis.className = 'custom-exam__input-toggle';
-    toggleVis.type = 'button';
-    toggleVis.innerHTML = SVG_EYE;
-    toggleVis.addEventListener('click', function () {
-      var isPass = input.type === 'password';
-      input.type = isPass ? 'text' : 'password';
-      toggleVis.innerHTML = isPass ? SVG_EYE_OFF : SVG_EYE;
-    });
-
-    fieldWrap.appendChild(input);
-    fieldWrap.appendChild(toggleVis);
 
     var error = document.createElement('div');
     error.className = 'custom-exam__error';
-
-    var link = document.createElement('a');
-    link.href = 'https://console.anthropic.com/settings/keys';
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.className = 'custom-exam__link';
-    link.textContent = 'Get an API key from console.anthropic.com';
 
     var btn = document.createElement('button');
     btn.className = 'custom-exam__btn custom-exam__btn--primary';
     btn.type = 'button';
     btn.textContent = 'Continue';
     btn.addEventListener('click', function () {
-      var key = input.value.trim();
-      if (!key.startsWith('sk-ant-')) {
-        error.textContent = 'Please enter a valid Anthropic API key (starts with sk-ant-)';
+      var code = input.value.trim();
+      if (!code) {
+        error.textContent = 'Please enter an invite code';
         error.style.display = 'block';
         return;
       }
       error.style.display = 'none';
-      setApiKey(key);
+      setInviteCode(code);
       currentStep = 2;
       renderStep();
     });
 
     inputWrap.appendChild(label);
-    inputWrap.appendChild(fieldWrap);
+    inputWrap.appendChild(input);
     inputWrap.appendChild(error);
-    inputWrap.appendChild(link);
 
     wrap.appendChild(icon);
     wrap.appendChild(title);
@@ -4989,8 +4962,16 @@ var SoundFX = (function () {
       }, 800);
 
     } catch (err) {
-      errorEl.textContent = 'Error: ' + (err.message || 'Processing failed. Please try again.');
+      var errMsg = err.message || 'Processing failed. Please try again.';
+      errorEl.textContent = 'Error: ' + errMsg;
       errorEl.style.display = 'block';
+
+      // If invite code is invalid, redirect to step 1
+      if (errMsg.toLowerCase().indexOf('invite code') !== -1) {
+        setTimeout(function () { currentStep = 1; renderStep(); }, 1500);
+        return;
+      }
+
       retryBtn.style.display = 'inline-flex';
 
       // Mark current active task as error
@@ -5047,60 +5028,29 @@ var SoundFX = (function () {
     return { text: allText, pageCount: pageCount };
   }
 
-  /* ---- Claude API call ---- */
+  /* ---- AI API call (via Vercel proxy) ---- */
   async function callClaudeApi(text) {
-    var apiKey = getApiKey();
-    if (!apiKey) throw new Error('No API key configured. Please set up your Anthropic API key.');
+    var code = getInviteCode();
+    if (!code) throw new Error('No invite code. Please enter your invite code.');
 
-    // Truncate text if too long
-    var maxChars = 90000;
-    if (text.length > maxChars) {
-      text = text.substring(0, maxChars) + '\n\n[Document truncated at ' + maxChars + ' characters]';
-    }
-
-    var systemPrompt = 'You are an expert actuarial exam content analyst. Analyze the provided document and extract structured learning content.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview of the exam/document",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "weight": 25,\n      "concepts": [\n        {\n          "name": "Concept Name",\n          "description": "Clear 1-3 sentence description of this concept"\n        }\n      ]\n    }\n  ],\n  "sources": [\n    {\n      "title": "Source Title",\n      "author": "Author Name",\n      "chapters": "Relevant chapters/sections",\n      "type": "textbook"\n    }\n  ]\n}\n\nRules:\n- weight is a percentage (number) if found in the document, otherwise null\n- Each objective should have 2-8 relevant concepts\n- Sources type should be one of: textbook, paper, manual, online, syllabus\n- Extract ALL learning objectives you can identify\n- Be thorough but accurate — only include what the document supports';
-
-    var response = await fetch('https://api.anthropic.com/v1/messages', {
+    var response = await fetch(API_PROXY_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
+        'X-Invite-Code': code
       },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 8192,
-        system: systemPrompt,
-        messages: [
-          { role: 'user', content: 'Analyze this document and extract the learning content:\n\n' + text }
-        ]
-      })
+      body: JSON.stringify({ text: text })
     });
 
     if (!response.ok) {
-      var errBody = '';
-      try { errBody = await response.text(); } catch (e) { /* ignore */ }
-      if (response.status === 401) throw new Error('Invalid API key. Please check your Anthropic API key.');
-      if (response.status === 429) throw new Error('Rate limited. Please wait a moment and try again.');
-      throw new Error('API error (' + response.status + '): ' + (errBody || 'Unknown error'));
+      var errData;
+      try { errData = await response.json(); } catch (e) { errData = {}; }
+      if (response.status === 401) throw new Error('Invalid invite code. Please check your code and try again.');
+      if (response.status === 429) throw new Error('Rate limit exceeded. Please wait a few minutes and try again.');
+      throw new Error(errData.error || 'API error (' + response.status + ')');
     }
 
-    var data = await response.json();
-    var content = data.content && data.content[0] && data.content[0].text;
-    if (!content) throw new Error('Empty response from AI. Please try again.');
-
-    // Parse JSON from response (handle possible markdown fences)
-    var jsonStr = content.trim();
-    if (jsonStr.startsWith('```')) {
-      jsonStr = jsonStr.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
-    }
-
-    try {
-      return JSON.parse(jsonStr);
-    } catch (e) {
-      throw new Error('Failed to parse AI response. The document may be too complex. Please try again.');
-    }
+    return await response.json();
   }
 
   /* ---- Step 4: Review & Edit ---- */

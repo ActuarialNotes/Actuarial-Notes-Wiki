@@ -379,7 +379,7 @@
           cName = cName || link.textContent.trim();
           if (cName && !seenNames[cName]) {
             seenNames[cName] = true;
-            concepts.push({ name: cName, href: href });
+            concepts.push({ name: cName, href: href, dataHref: dataHref });
           }
         });
       }
@@ -448,12 +448,16 @@
         menu.appendChild(emptyMsg);
       } else {
         objective.concepts.forEach(function (concept, idx) {
-          // concept can be a string (from markdown parse) or {name, href} (from DOM parse)
+          // concept can be a string (from markdown parse) or {name, href, dataHref} (from DOM parse)
           var cName = typeof concept === 'string' ? concept : concept.name;
           var cHref = typeof concept === 'string' ? ('Concepts/' + concept) : concept.href;
+          var cDataHref = (typeof concept === 'object' && concept.dataHref) ? concept.dataHref : cHref;
+          // Ensure href has a leading slash for proper navigation
+          var linkHref = cHref.startsWith('/') ? cHref : ('/' + cHref);
           var link = document.createElement('a');
           link.className = 'exam-nav__lo-menu-item internal-link';
-          link.href = cHref;
+          link.href = linkHref;
+          link.setAttribute('data-href', cDataHref);
           var numSpan = document.createElement('span');
           numSpan.className = 'exam-nav__lo-menu-num';
           numSpan.textContent = (idx + 1);
@@ -476,17 +480,6 @@
         });
         if (!wasOpen) {
           wrap.classList.add('is-open');
-          showBackdrop();
-          // Position fixed menus inside sticky bar
-          if (wrap.closest('.exam-nav__sticky')) {
-            var btnRect = btn.getBoundingClientRect();
-            menu.style.top = (btnRect.bottom + 6) + 'px';
-            menu.style.left = btnRect.left + 'px';
-            menu.style.right = 'auto';
-            menu.style.width = btnRect.width + 'px';
-          }
-        } else {
-          hideBackdrop();
         }
       });
 

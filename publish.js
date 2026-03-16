@@ -4119,3 +4119,1506 @@ var SoundFX = (function () {
     setTimeout(function () { injectButtons(); observePageChanges(); }, 200);
   }
 })();
+
+
+/* ===========================================================
+   CUSTOM EXAM WORKFLOW
+   Sidebar button + multi-step AI-powered PDF analysis workflow.
+   Lets users upload a PDF, extract learning objectives/sources/
+   concepts via Anthropic Claude API, and create custom exam
+   study guides stored in localStorage.
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'actuarial-notes-custom-exams';
+  var API_KEY_KEY = 'actuarial-notes-ai-key';
+  var PDFJS_VERSION = '4.0.379';
+  var PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VERSION;
+
+  /* ---- State ---- */
+  var customExams = [];
+  var sidebarBtnEl = null;
+  var myExamsEl = null;
+  var modalEl = null;
+  var backdropEl = null;
+  var currentStep = 1;
+  var workflowData = {};
+  var editingExamId = null;
+
+  /* ---- SVG Icons ---- */
+  var SVG_PLUS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>';
+
+  var SVG_DOC = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6l-4-4z"/><polyline points="12 2 12 6 16 6"/></svg>';
+
+  var SVG_CHECK_CIRCLE = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><polyline points="6.5 10.5 9 13 14 7"/></svg>';
+
+  var SVG_CLOSE = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg>';
+
+  var SVG_UPLOAD = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M32 32l-8-8-8 8"/><line x1="24" y1="24" x2="24" y2="42"/><path d="M40.78 34.78A8 8 0 0 0 36 20h-2.02A12.98 12.98 0 0 0 10 24c0 3.28 1.22 6.28 3.22 8.56"/></svg>';
+
+  var SVG_SPINNER = '<svg class="custom-exam__spinner" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10 2a8 8 0 0 1 8 8"/></svg>';
+
+  var SVG_TRASH = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 6 5 16 15 16 15 6"/><line x1="3" y1="6" x2="17" y2="6"/><path d="M8 6V4h4v2"/></svg>';
+
+  var SVG_EDIT = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 3.5l5 5L6 19H1v-5L11.5 3.5z"/></svg>';
+
+  var SVG_DOWNLOAD = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 13v4H3v-4"/><polyline points="7 8 10 11 13 8"/><line x1="10" y1="11" x2="10" y2="2"/></svg>';
+
+  var SVG_GEAR = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3"/><path d="M16.5 11.13a1.5 1.5 0 0 0 .3 1.65l.05.05a1.82 1.82 0 1 1-2.57 2.57l-.05-.05a1.5 1.5 0 0 0-1.65-.3 1.5 1.5 0 0 0-.91 1.37v.15a1.82 1.82 0 1 1-3.64 0v-.08a1.5 1.5 0 0 0-.98-1.37 1.5 1.5 0 0 0-1.65.3l-.05.05a1.82 1.82 0 1 1-2.57-2.57l.05-.05a1.5 1.5 0 0 0 .3-1.65 1.5 1.5 0 0 0-1.37-.91h-.15a1.82 1.82 0 1 1 0-3.64h.08a1.5 1.5 0 0 0 1.37-.98 1.5 1.5 0 0 0-.3-1.65l-.05-.05a1.82 1.82 0 1 1 2.57-2.57l.05.05a1.5 1.5 0 0 0 1.65.3h.07a1.5 1.5 0 0 0 .91-1.37v-.15a1.82 1.82 0 1 1 3.64 0v.08a1.5 1.5 0 0 0 .91 1.37 1.5 1.5 0 0 0 1.65-.3l.05-.05a1.82 1.82 0 1 1 2.57 2.57l-.05.05a1.5 1.5 0 0 0-.3 1.65v.07a1.5 1.5 0 0 0 1.37.91h.15a1.82 1.82 0 1 1 0 3.64h-.08a1.5 1.5 0 0 0-1.37.91z"/></svg>';
+
+  var SVG_EYE = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 10s3.5-7 9-7 9 7 9 7-3.5 7-9 7-9-7-9-7z"/><circle cx="10" cy="10" r="3"/></svg>';
+
+  var SVG_EYE_OFF = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.46 3.56A8.4 8.4 0 0 1 10 3c5.5 0 9 7 9 7a14.8 14.8 0 0 1-1.77 2.67M5.94 5.94A14.3 14.3 0 0 0 1 10s3.5 7 9 7a8.3 8.3 0 0 0 4.06-1.06"/><line x1="1" y1="1" x2="19" y2="19"/></svg>';
+
+  /* ---- Color palette for exams ---- */
+  var EXAM_COLORS = ['#2563eb', '#7c3aed', '#dc2626', '#059669', '#d97706', '#db2777', '#0891b2', '#4f46e5', '#c2410c', '#0d9488'];
+
+  /* ---- Persistence ---- */
+  function loadExams() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      customExams = raw ? JSON.parse(raw) : [];
+    } catch (e) { customExams = []; }
+  }
+
+  function saveExams() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(customExams)); } catch (e) { /* ignore */ }
+  }
+
+  function getApiKey() {
+    try { return localStorage.getItem(API_KEY_KEY) || ''; } catch (e) { return ''; }
+  }
+
+  function setApiKey(key) {
+    try { localStorage.setItem(API_KEY_KEY, key); } catch (e) { /* ignore */ }
+  }
+
+  /* ---- Sidebar: Button + My Exams ---- */
+  function buildSidebar() {
+    if (document.querySelector('.custom-exam__sidebar-btn')) return;
+
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (!sidebar) return;
+
+    // Find the inner wrapper (same strategy as journey tracker)
+    var searchInput = sidebar.querySelector('input[type="search"], input[type="text"]');
+    var innerWrapper = null;
+
+    if (searchInput) {
+      var el = searchInput;
+      while (el.parentElement && el.parentElement !== sidebar) { el = el.parentElement; }
+      if (el.parentElement === sidebar) { innerWrapper = el; }
+    }
+    if (!innerWrapper) {
+      var children = sidebar.children;
+      for (var ci = 0; ci < children.length; ci++) {
+        if (children[ci].querySelector && (children[ci].querySelector('.nav-folder, .tree-item') || children[ci].querySelector('input[type="search"]'))) {
+          innerWrapper = children[ci];
+          break;
+        }
+      }
+    }
+    var container = innerWrapper || sidebar;
+
+    // Create button
+    sidebarBtnEl = document.createElement('button');
+    sidebarBtnEl.className = 'custom-exam__sidebar-btn';
+    sidebarBtnEl.type = 'button';
+    sidebarBtnEl.innerHTML = '<span class="custom-exam__sidebar-btn-icon">' + SVG_PLUS + '</span><span>Add Custom Exam</span>';
+    sidebarBtnEl.addEventListener('click', function () {
+      editingExamId = null;
+      workflowData = {};
+      openModal();
+    });
+
+    // Create My Exams section
+    myExamsEl = document.createElement('div');
+    myExamsEl.className = 'custom-exam__my-exams';
+    renderMyExams();
+
+    // Insert before journey tracker
+    var journeyTracker = container.querySelector('.journey-tracker');
+    if (journeyTracker) {
+      journeyTracker.parentElement.insertBefore(sidebarBtnEl, journeyTracker);
+      journeyTracker.parentElement.insertBefore(myExamsEl, journeyTracker);
+    } else {
+      // Insert before nav tree
+      var navRoot = container.querySelector('.nav-folder.mod-root') || container.querySelector('.nav-folder') || container.querySelector('.tree-item');
+      if (navRoot) {
+        navRoot.parentElement.insertBefore(sidebarBtnEl, navRoot);
+        navRoot.parentElement.insertBefore(myExamsEl, navRoot);
+      } else {
+        container.appendChild(sidebarBtnEl);
+        container.appendChild(myExamsEl);
+      }
+    }
+  }
+
+  function renderMyExams() {
+    if (!myExamsEl) return;
+    myExamsEl.innerHTML = '';
+
+    if (customExams.length === 0) {
+      myExamsEl.style.display = 'none';
+      return;
+    }
+    myExamsEl.style.display = '';
+
+    var header = document.createElement('div');
+    header.className = 'custom-exam__my-exams-header';
+    header.innerHTML = '<span class="custom-exam__my-exams-title">My Custom Exams</span><span class="custom-exam__my-exams-count">' + customExams.length + '</span>';
+    myExamsEl.appendChild(header);
+
+    var list = document.createElement('div');
+    list.className = 'custom-exam__my-exams-list';
+
+    customExams.forEach(function (exam) {
+      var item = document.createElement('div');
+      item.className = 'custom-exam__my-exams-item';
+      item.setAttribute('data-exam-id', exam.id);
+
+      var dot = document.createElement('span');
+      dot.className = 'custom-exam__my-exams-dot';
+      dot.style.background = exam.color || '#2563eb';
+
+      var name = document.createElement('span');
+      name.className = 'custom-exam__my-exams-name';
+      name.textContent = exam.name;
+
+      var actions = document.createElement('span');
+      actions.className = 'custom-exam__my-exams-actions';
+
+      var editBtn = document.createElement('button');
+      editBtn.className = 'custom-exam__my-exams-action';
+      editBtn.type = 'button';
+      editBtn.title = 'Edit';
+      editBtn.innerHTML = SVG_EDIT;
+      editBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openEditModal(exam.id);
+      });
+
+      var deleteBtn = document.createElement('button');
+      deleteBtn.className = 'custom-exam__my-exams-action custom-exam__my-exams-action--danger';
+      deleteBtn.type = 'button';
+      deleteBtn.title = 'Delete';
+      deleteBtn.innerHTML = SVG_TRASH;
+      deleteBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (confirm('Delete "' + exam.name + '"? This cannot be undone.')) {
+          customExams = customExams.filter(function (ex) { return ex.id !== exam.id; });
+          saveExams();
+          renderMyExams();
+        }
+      });
+
+      actions.appendChild(editBtn);
+      actions.appendChild(deleteBtn);
+
+      item.appendChild(dot);
+      item.appendChild(name);
+      item.appendChild(actions);
+
+      item.addEventListener('click', function () {
+        renderExamViewer(exam.id);
+      });
+
+      list.appendChild(item);
+    });
+
+    myExamsEl.appendChild(list);
+  }
+
+  /* ---- Modal system ---- */
+  var STEP_LABELS = ['API Key', 'Upload', 'Processing', 'Review', 'Complete'];
+
+  function openModal(startStep) {
+    if (modalEl) closeModal();
+
+    var hasKey = !!getApiKey();
+    if (!startStep) {
+      currentStep = hasKey ? 2 : 1;
+    } else {
+      currentStep = startStep;
+    }
+
+    // Backdrop
+    backdropEl = document.createElement('div');
+    backdropEl.className = 'custom-exam__backdrop';
+    backdropEl.addEventListener('click', closeModal);
+
+    // Modal
+    modalEl = document.createElement('div');
+    modalEl.className = 'custom-exam__modal';
+    modalEl.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'custom-exam__modal-header';
+
+    var titleEl = document.createElement('span');
+    titleEl.className = 'custom-exam__modal-title';
+    titleEl.textContent = editingExamId ? 'Edit Custom Exam' : 'Create Custom Exam';
+
+    var headerActions = document.createElement('div');
+    headerActions.className = 'custom-exam__modal-header-actions';
+
+    var gearBtn = document.createElement('button');
+    gearBtn.className = 'custom-exam__modal-icon-btn';
+    gearBtn.type = 'button';
+    gearBtn.title = 'API Key Settings';
+    gearBtn.innerHTML = SVG_GEAR;
+    gearBtn.addEventListener('click', function () {
+      currentStep = 1;
+      renderStep();
+    });
+
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'custom-exam__modal-icon-btn';
+    closeBtn.type = 'button';
+    closeBtn.title = 'Close';
+    closeBtn.innerHTML = SVG_CLOSE;
+    closeBtn.addEventListener('click', closeModal);
+
+    headerActions.appendChild(gearBtn);
+    headerActions.appendChild(closeBtn);
+    header.appendChild(titleEl);
+    header.appendChild(headerActions);
+
+    // Step indicator
+    var stepsBar = document.createElement('div');
+    stepsBar.className = 'custom-exam__steps';
+    stepsBar.setAttribute('data-steps', 'true');
+
+    for (var i = 0; i < STEP_LABELS.length; i++) {
+      var step = document.createElement('div');
+      step.className = 'custom-exam__step';
+      step.setAttribute('data-step', String(i + 1));
+      var num = document.createElement('span');
+      num.className = 'custom-exam__step-num';
+      num.textContent = String(i + 1);
+      var lbl = document.createElement('span');
+      lbl.className = 'custom-exam__step-label';
+      lbl.textContent = STEP_LABELS[i];
+      step.appendChild(num);
+      step.appendChild(lbl);
+      if (i < STEP_LABELS.length - 1) {
+        var line = document.createElement('span');
+        line.className = 'custom-exam__step-line';
+        stepsBar.appendChild(step);
+        stepsBar.appendChild(line);
+      } else {
+        stepsBar.appendChild(step);
+      }
+    }
+
+    // Body
+    var body = document.createElement('div');
+    body.className = 'custom-exam__modal-body';
+
+    modalEl.appendChild(header);
+    modalEl.appendChild(stepsBar);
+    modalEl.appendChild(body);
+
+    document.body.appendChild(backdropEl);
+    document.body.appendChild(modalEl);
+
+    // Force reflow for animation
+    void modalEl.offsetHeight;
+    backdropEl.classList.add('is-visible');
+    modalEl.classList.add('is-visible');
+
+    renderStep();
+
+    // ESC to close
+    document.addEventListener('keydown', handleModalEsc);
+  }
+
+  function closeModal() {
+    if (modalEl) {
+      modalEl.classList.remove('is-visible');
+      backdropEl.classList.remove('is-visible');
+      setTimeout(function () {
+        if (modalEl && modalEl.parentElement) modalEl.parentElement.removeChild(modalEl);
+        if (backdropEl && backdropEl.parentElement) backdropEl.parentElement.removeChild(backdropEl);
+        modalEl = null;
+        backdropEl = null;
+      }, 250);
+    }
+    document.removeEventListener('keydown', handleModalEsc);
+  }
+
+  function handleModalEsc(e) {
+    if (e.key === 'Escape') closeModal();
+  }
+
+  function openEditModal(examId) {
+    var exam = customExams.find(function (ex) { return ex.id === examId; });
+    if (!exam) return;
+    editingExamId = examId;
+    workflowData = {
+      examTitle: exam.name,
+      examDescription: exam.description || '',
+      objectives: JSON.parse(JSON.stringify(exam.objectives)),
+      sources: JSON.parse(JSON.stringify(exam.sources)),
+      color: exam.color
+    };
+    openModal(4);
+  }
+
+  /* ---- Step rendering ---- */
+  function renderStep() {
+    if (!modalEl) return;
+
+    // Update step indicator
+    var steps = modalEl.querySelectorAll('.custom-exam__step');
+    steps.forEach(function (s) {
+      var sNum = parseInt(s.getAttribute('data-step'), 10);
+      s.classList.remove('is-active', 'is-done');
+      if (sNum === currentStep) s.classList.add('is-active');
+      else if (sNum < currentStep) s.classList.add('is-done');
+    });
+
+    // Update lines
+    var lines = modalEl.querySelectorAll('.custom-exam__step-line');
+    lines.forEach(function (l, idx) {
+      l.classList.toggle('is-done', (idx + 1) < currentStep);
+    });
+
+    var body = modalEl.querySelector('.custom-exam__modal-body');
+    if (!body) return;
+    body.innerHTML = '';
+
+    switch (currentStep) {
+      case 1: renderApiKeyStep(body); break;
+      case 2: renderUploadStep(body); break;
+      case 3: renderProcessingStep(body); break;
+      case 4: renderReviewStep(body); break;
+      case 5: renderCompleteStep(body); break;
+    }
+  }
+
+  /* ---- Step 1: API Key ---- */
+  function renderApiKeyStep(body) {
+    var wrap = document.createElement('div');
+    wrap.className = 'custom-exam__step-content';
+
+    var icon = document.createElement('div');
+    icon.className = 'custom-exam__step-icon';
+    icon.innerHTML = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 4-4 2 4 2 2 4 2-4 4-2-4-2-2-4z"/><path d="M10 14l-1.5 3L5 18.5l3.5 1.5L10 23l1.5-3 3.5-1.5L11.5 17 10 14z"/><circle cx="30" cy="30" r="12"/><path d="M26 30l3 3 5-6"/></svg>';
+
+    var title = document.createElement('h3');
+    title.className = 'custom-exam__step-title';
+    title.textContent = 'Connect to Claude AI';
+
+    var desc = document.createElement('p');
+    desc.className = 'custom-exam__step-desc';
+    desc.textContent = 'Enter your Anthropic API key to enable AI-powered PDF analysis. Your key is stored locally in your browser and only used to communicate with Anthropic\'s API.';
+
+    var inputWrap = document.createElement('div');
+    inputWrap.className = 'custom-exam__input-wrap';
+
+    var label = document.createElement('label');
+    label.className = 'custom-exam__label';
+    label.textContent = 'Anthropic API Key';
+
+    var fieldWrap = document.createElement('div');
+    fieldWrap.className = 'custom-exam__field-wrap';
+
+    var input = document.createElement('input');
+    input.className = 'custom-exam__input';
+    input.type = 'password';
+    input.placeholder = 'sk-ant-api03-...';
+    input.value = getApiKey();
+    input.autocomplete = 'off';
+
+    var toggleVis = document.createElement('button');
+    toggleVis.className = 'custom-exam__input-toggle';
+    toggleVis.type = 'button';
+    toggleVis.innerHTML = SVG_EYE;
+    toggleVis.addEventListener('click', function () {
+      var isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      toggleVis.innerHTML = isPass ? SVG_EYE_OFF : SVG_EYE;
+    });
+
+    fieldWrap.appendChild(input);
+    fieldWrap.appendChild(toggleVis);
+
+    var error = document.createElement('div');
+    error.className = 'custom-exam__error';
+
+    var link = document.createElement('a');
+    link.href = 'https://console.anthropic.com/settings/keys';
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.className = 'custom-exam__link';
+    link.textContent = 'Get an API key from console.anthropic.com';
+
+    var btn = document.createElement('button');
+    btn.className = 'custom-exam__btn custom-exam__btn--primary';
+    btn.type = 'button';
+    btn.textContent = 'Continue';
+    btn.addEventListener('click', function () {
+      var key = input.value.trim();
+      if (!key.startsWith('sk-ant-')) {
+        error.textContent = 'Please enter a valid Anthropic API key (starts with sk-ant-)';
+        error.style.display = 'block';
+        return;
+      }
+      error.style.display = 'none';
+      setApiKey(key);
+      currentStep = 2;
+      renderStep();
+    });
+
+    inputWrap.appendChild(label);
+    inputWrap.appendChild(fieldWrap);
+    inputWrap.appendChild(error);
+    inputWrap.appendChild(link);
+
+    wrap.appendChild(icon);
+    wrap.appendChild(title);
+    wrap.appendChild(desc);
+    wrap.appendChild(inputWrap);
+    wrap.appendChild(btn);
+    body.appendChild(wrap);
+  }
+
+  /* ---- Step 2: Upload PDF ---- */
+  function renderUploadStep(body) {
+    var wrap = document.createElement('div');
+    wrap.className = 'custom-exam__step-content';
+
+    var title = document.createElement('h3');
+    title.className = 'custom-exam__step-title';
+    title.textContent = 'Upload PDF Document';
+
+    var desc = document.createElement('p');
+    desc.className = 'custom-exam__step-desc';
+    desc.textContent = 'Upload an exam syllabus, textbook chapter, or study guide. The AI will extract learning objectives, source materials, and key concepts.';
+
+    var dropzone = document.createElement('div');
+    dropzone.className = 'custom-exam__dropzone';
+
+    var dzInner = document.createElement('div');
+    dzInner.className = 'custom-exam__dropzone-inner';
+    dzInner.innerHTML = '<div class="custom-exam__dropzone-icon">' + SVG_UPLOAD + '</div>' +
+      '<div class="custom-exam__dropzone-text">Drag & drop your PDF here</div>' +
+      '<div class="custom-exam__dropzone-sub">or click to browse</div>';
+
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf';
+    fileInput.style.display = 'none';
+
+    var fileInfo = document.createElement('div');
+    fileInfo.className = 'custom-exam__file-info';
+    fileInfo.style.display = 'none';
+
+    dropzone.appendChild(dzInner);
+    dropzone.appendChild(fileInput);
+
+    // Drag events
+    dropzone.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      dropzone.classList.add('is-dragover');
+    });
+    dropzone.addEventListener('dragleave', function () {
+      dropzone.classList.remove('is-dragover');
+    });
+    dropzone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      dropzone.classList.remove('is-dragover');
+      var files = e.dataTransfer.files;
+      if (files.length > 0 && files[0].type === 'application/pdf') {
+        handleFile(files[0]);
+      }
+    });
+    dropzone.addEventListener('click', function () {
+      fileInput.click();
+    });
+    fileInput.addEventListener('change', function () {
+      if (fileInput.files.length > 0) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+
+    var selectedFile = null;
+    function handleFile(file) {
+      selectedFile = file;
+      var sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+      fileInfo.innerHTML = '<span class="custom-exam__file-info-icon">' + SVG_DOC + '</span>' +
+        '<span class="custom-exam__file-info-name">' + file.name + '</span>' +
+        '<span class="custom-exam__file-info-size">' + sizeMB + ' MB</span>';
+      fileInfo.style.display = 'flex';
+      dzInner.innerHTML = '<div class="custom-exam__dropzone-icon custom-exam__dropzone-icon--success">' + SVG_CHECK_CIRCLE + '</div>' +
+        '<div class="custom-exam__dropzone-text">PDF selected</div>' +
+        '<div class="custom-exam__dropzone-sub">Click to change file</div>';
+      analyzeBtn.disabled = false;
+      analyzeBtn.classList.remove('custom-exam__btn--disabled');
+    }
+
+    var error = document.createElement('div');
+    error.className = 'custom-exam__error';
+
+    var analyzeBtn = document.createElement('button');
+    analyzeBtn.className = 'custom-exam__btn custom-exam__btn--primary custom-exam__btn--disabled';
+    analyzeBtn.type = 'button';
+    analyzeBtn.disabled = true;
+    analyzeBtn.textContent = 'Analyze Document';
+    analyzeBtn.addEventListener('click', function () {
+      if (!selectedFile) return;
+      workflowData.file = selectedFile;
+      currentStep = 3;
+      renderStep();
+    });
+
+    wrap.appendChild(title);
+    wrap.appendChild(desc);
+    wrap.appendChild(dropzone);
+    wrap.appendChild(fileInfo);
+    wrap.appendChild(error);
+    wrap.appendChild(analyzeBtn);
+    body.appendChild(wrap);
+  }
+
+  /* ---- Step 3: AI Processing ---- */
+  function renderProcessingStep(body) {
+    var wrap = document.createElement('div');
+    wrap.className = 'custom-exam__step-content';
+
+    var title = document.createElement('h3');
+    title.className = 'custom-exam__step-title';
+    title.textContent = 'Analyzing Document';
+
+    var desc = document.createElement('p');
+    desc.className = 'custom-exam__step-desc';
+    desc.textContent = 'The AI is reading your document and extracting structured content.';
+
+    // Progress tasks
+    var tasks = [
+      { id: 'extract', label: 'Extracting text from PDF' },
+      { id: 'analyze', label: 'Identifying learning objectives & sources' },
+      { id: 'concepts', label: 'Generating concept breakdowns' }
+    ];
+
+    var progressEl = document.createElement('div');
+    progressEl.className = 'custom-exam__progress';
+
+    tasks.forEach(function (task) {
+      var row = document.createElement('div');
+      row.className = 'custom-exam__progress-task';
+      row.setAttribute('data-task', task.id);
+
+      var statusIcon = document.createElement('span');
+      statusIcon.className = 'custom-exam__progress-status';
+      statusIcon.innerHTML = '<span class="custom-exam__progress-dot"></span>';
+
+      var text = document.createElement('span');
+      text.className = 'custom-exam__progress-label';
+      text.textContent = task.label;
+
+      var result = document.createElement('span');
+      result.className = 'custom-exam__progress-result';
+
+      row.appendChild(statusIcon);
+      row.appendChild(text);
+      row.appendChild(result);
+      progressEl.appendChild(row);
+    });
+
+    var errorEl = document.createElement('div');
+    errorEl.className = 'custom-exam__error';
+
+    var retryBtn = document.createElement('button');
+    retryBtn.className = 'custom-exam__btn custom-exam__btn--secondary';
+    retryBtn.type = 'button';
+    retryBtn.textContent = 'Retry';
+    retryBtn.style.display = 'none';
+    retryBtn.addEventListener('click', function () {
+      currentStep = 3;
+      renderStep();
+    });
+
+    wrap.appendChild(title);
+    wrap.appendChild(desc);
+    wrap.appendChild(progressEl);
+    wrap.appendChild(errorEl);
+    wrap.appendChild(retryBtn);
+    body.appendChild(wrap);
+
+    // Start processing
+    runProcessing(progressEl, errorEl, retryBtn);
+  }
+
+  function setTaskStatus(progressEl, taskId, status, resultText) {
+    var row = progressEl.querySelector('[data-task="' + taskId + '"]');
+    if (!row) return;
+    var statusEl = row.querySelector('.custom-exam__progress-status');
+    var resultEl = row.querySelector('.custom-exam__progress-result');
+
+    row.classList.remove('is-pending', 'is-active', 'is-done', 'is-error');
+
+    if (status === 'active') {
+      row.classList.add('is-active');
+      statusEl.innerHTML = SVG_SPINNER;
+    } else if (status === 'done') {
+      row.classList.add('is-done');
+      statusEl.innerHTML = SVG_CHECK_CIRCLE;
+    } else if (status === 'error') {
+      row.classList.add('is-error');
+      statusEl.innerHTML = SVG_CLOSE;
+    } else {
+      row.classList.add('is-pending');
+      statusEl.innerHTML = '<span class="custom-exam__progress-dot"></span>';
+    }
+
+    if (resultText) resultEl.textContent = resultText;
+  }
+
+  async function runProcessing(progressEl, errorEl, retryBtn) {
+    try {
+      // Task 1: Extract text
+      setTaskStatus(progressEl, 'extract', 'active');
+      setTaskStatus(progressEl, 'analyze', 'pending');
+      setTaskStatus(progressEl, 'concepts', 'pending');
+
+      var pdfText = await extractPdfText(workflowData.file);
+      var pageCount = pdfText.pageCount;
+      workflowData.pdfText = pdfText.text;
+      setTaskStatus(progressEl, 'extract', 'done', pageCount + ' pages extracted');
+
+      // Task 2 + 3: AI analysis
+      setTaskStatus(progressEl, 'analyze', 'active');
+      var aiResult = await callClaudeApi(pdfText.text);
+      workflowData.examTitle = aiResult.examTitle || 'Custom Exam';
+      workflowData.examDescription = aiResult.examDescription || '';
+      workflowData.objectives = aiResult.objectives || [];
+      workflowData.sources = aiResult.sources || [];
+      workflowData.color = EXAM_COLORS[Math.floor(Math.random() * EXAM_COLORS.length)];
+
+      var objCount = workflowData.objectives.length;
+      var srcCount = workflowData.sources.length;
+      var conceptCount = 0;
+      workflowData.objectives.forEach(function (o) {
+        conceptCount += (o.concepts || []).length;
+      });
+
+      setTaskStatus(progressEl, 'analyze', 'done', objCount + ' objectives, ' + srcCount + ' sources');
+      setTaskStatus(progressEl, 'concepts', 'done', conceptCount + ' concepts identified');
+
+      // Auto-advance after brief pause
+      setTimeout(function () {
+        currentStep = 4;
+        renderStep();
+      }, 800);
+
+    } catch (err) {
+      errorEl.textContent = 'Error: ' + (err.message || 'Processing failed. Please try again.');
+      errorEl.style.display = 'block';
+      retryBtn.style.display = 'inline-flex';
+
+      // Mark current active task as error
+      ['extract', 'analyze', 'concepts'].forEach(function (id) {
+        var row = progressEl.querySelector('[data-task="' + id + '"]');
+        if (row && row.classList.contains('is-active')) {
+          setTaskStatus(progressEl, id, 'error');
+        }
+      });
+    }
+  }
+
+  /* ---- PDF.js text extraction ---- */
+  async function loadPdfJs() {
+    if (window.pdfjsLib) return window.pdfjsLib;
+
+    return new Promise(function (resolve, reject) {
+      var moduleScript = document.createElement('script');
+      moduleScript.type = 'module';
+      moduleScript.textContent = 'import * as pdfjsLib from "' + PDFJS_CDN + '/pdf.min.mjs"; window.pdfjsLib = pdfjsLib; window.pdfjsLib.GlobalWorkerOptions.workerSrc = "' + PDFJS_CDN + '/pdf.worker.min.mjs"; window.dispatchEvent(new Event("pdfjs-loaded"));';
+
+      window.addEventListener('pdfjs-loaded', function handler() {
+        window.removeEventListener('pdfjs-loaded', handler);
+        resolve(window.pdfjsLib);
+      });
+
+      document.head.appendChild(moduleScript);
+
+      setTimeout(function () {
+        reject(new Error('PDF.js failed to load. Check your internet connection.'));
+      }, 15000);
+    });
+  }
+
+  async function extractPdfText(file) {
+    var pdfjsLib = await loadPdfJs();
+    var arrayBuffer = await file.arrayBuffer();
+    var pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+    var allText = '';
+    var pageCount = pdf.numPages;
+
+    for (var i = 1; i <= pageCount; i++) {
+      var page = await pdf.getPage(i);
+      var content = await page.getTextContent();
+      var pageText = content.items.map(function (item) { return item.str; }).join(' ');
+      allText += '\n--- Page ' + i + ' ---\n' + pageText;
+    }
+
+    return { text: allText, pageCount: pageCount };
+  }
+
+  /* ---- Claude API call ---- */
+  async function callClaudeApi(text) {
+    var apiKey = getApiKey();
+    if (!apiKey) throw new Error('No API key configured. Please set up your Anthropic API key.');
+
+    // Truncate text if too long
+    var maxChars = 90000;
+    if (text.length > maxChars) {
+      text = text.substring(0, maxChars) + '\n\n[Document truncated at ' + maxChars + ' characters]';
+    }
+
+    var systemPrompt = 'You are an expert actuarial exam content analyst. Analyze the provided document and extract structured learning content.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview of the exam/document",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "weight": 25,\n      "concepts": [\n        {\n          "name": "Concept Name",\n          "description": "Clear 1-3 sentence description of this concept"\n        }\n      ]\n    }\n  ],\n  "sources": [\n    {\n      "title": "Source Title",\n      "author": "Author Name",\n      "chapters": "Relevant chapters/sections",\n      "type": "textbook"\n    }\n  ]\n}\n\nRules:\n- weight is a percentage (number) if found in the document, otherwise null\n- Each objective should have 2-8 relevant concepts\n- Sources type should be one of: textbook, paper, manual, online, syllabus\n- Extract ALL learning objectives you can identify\n- Be thorough but accurate — only include what the document supports';
+
+    var response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 8192,
+        system: systemPrompt,
+        messages: [
+          { role: 'user', content: 'Analyze this document and extract the learning content:\n\n' + text }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      var errBody = '';
+      try { errBody = await response.text(); } catch (e) { /* ignore */ }
+      if (response.status === 401) throw new Error('Invalid API key. Please check your Anthropic API key.');
+      if (response.status === 429) throw new Error('Rate limited. Please wait a moment and try again.');
+      throw new Error('API error (' + response.status + '): ' + (errBody || 'Unknown error'));
+    }
+
+    var data = await response.json();
+    var content = data.content && data.content[0] && data.content[0].text;
+    if (!content) throw new Error('Empty response from AI. Please try again.');
+
+    // Parse JSON from response (handle possible markdown fences)
+    var jsonStr = content.trim();
+    if (jsonStr.startsWith('```')) {
+      jsonStr = jsonStr.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+    }
+
+    try {
+      return JSON.parse(jsonStr);
+    } catch (e) {
+      throw new Error('Failed to parse AI response. The document may be too complex. Please try again.');
+    }
+  }
+
+  /* ---- Step 4: Review & Edit ---- */
+  function renderReviewStep(body) {
+    var wrap = document.createElement('div');
+    wrap.className = 'custom-exam__step-content custom-exam__review';
+
+    var title = document.createElement('h3');
+    title.className = 'custom-exam__step-title';
+    title.textContent = 'Review & Edit';
+
+    var desc = document.createElement('p');
+    desc.className = 'custom-exam__step-desc';
+    desc.textContent = 'Review the AI-extracted content. Edit, add, or remove items before saving.';
+
+    // Exam title
+    var titleGroup = document.createElement('div');
+    titleGroup.className = 'custom-exam__form-group';
+    titleGroup.innerHTML = '<label class="custom-exam__label">Exam Title</label>';
+    var titleInput = document.createElement('input');
+    titleInput.className = 'custom-exam__input';
+    titleInput.type = 'text';
+    titleInput.value = workflowData.examTitle || '';
+    titleInput.addEventListener('input', function () { workflowData.examTitle = titleInput.value; });
+    titleGroup.appendChild(titleInput);
+
+    // Description
+    var descGroup = document.createElement('div');
+    descGroup.className = 'custom-exam__form-group';
+    descGroup.innerHTML = '<label class="custom-exam__label">Description</label>';
+    var descInput = document.createElement('textarea');
+    descInput.className = 'custom-exam__textarea';
+    descInput.rows = 2;
+    descInput.value = workflowData.examDescription || '';
+    descInput.addEventListener('input', function () { workflowData.examDescription = descInput.value; });
+    descGroup.appendChild(descInput);
+
+    // Color picker
+    var colorGroup = document.createElement('div');
+    colorGroup.className = 'custom-exam__form-group';
+    colorGroup.innerHTML = '<label class="custom-exam__label">Accent Color</label>';
+    var colorRow = document.createElement('div');
+    colorRow.className = 'custom-exam__color-row';
+    EXAM_COLORS.forEach(function (c) {
+      var swatch = document.createElement('button');
+      swatch.type = 'button';
+      swatch.className = 'custom-exam__color-swatch';
+      if (workflowData.color === c) swatch.classList.add('is-selected');
+      swatch.style.background = c;
+      swatch.addEventListener('click', function () {
+        workflowData.color = c;
+        colorRow.querySelectorAll('.custom-exam__color-swatch').forEach(function (s) { s.classList.remove('is-selected'); });
+        swatch.classList.add('is-selected');
+      });
+      colorRow.appendChild(swatch);
+    });
+    colorGroup.appendChild(colorRow);
+
+    // Learning objectives
+    var objSection = document.createElement('div');
+    objSection.className = 'custom-exam__form-section';
+
+    var objHeader = document.createElement('div');
+    objHeader.className = 'custom-exam__form-section-header';
+    objHeader.innerHTML = '<span class="custom-exam__form-section-title">Learning Objectives (' + (workflowData.objectives || []).length + ')</span>';
+
+    var addObjBtn = document.createElement('button');
+    addObjBtn.className = 'custom-exam__btn custom-exam__btn--small';
+    addObjBtn.type = 'button';
+    addObjBtn.textContent = '+ Add Objective';
+    addObjBtn.addEventListener('click', function () {
+      workflowData.objectives.push({ title: 'New Objective', weight: null, concepts: [] });
+      renderReviewStep(body);
+    });
+    objHeader.appendChild(addObjBtn);
+    objSection.appendChild(objHeader);
+
+    (workflowData.objectives || []).forEach(function (obj, oi) {
+      var card = document.createElement('div');
+      card.className = 'custom-exam__obj-card';
+      card.style.setProperty('--obj-color', workflowData.color || '#2563eb');
+
+      // Objective header
+      var cardHeader = document.createElement('div');
+      cardHeader.className = 'custom-exam__obj-header';
+
+      var objTitleInput = document.createElement('input');
+      objTitleInput.className = 'custom-exam__input custom-exam__input--inline';
+      objTitleInput.type = 'text';
+      objTitleInput.value = obj.title;
+      objTitleInput.addEventListener('input', function () { obj.title = objTitleInput.value; });
+
+      var weightInput = document.createElement('input');
+      weightInput.className = 'custom-exam__input custom-exam__input--small';
+      weightInput.type = 'number';
+      weightInput.min = '0';
+      weightInput.max = '100';
+      weightInput.placeholder = '%';
+      weightInput.value = obj.weight != null ? obj.weight : '';
+      weightInput.addEventListener('input', function () {
+        obj.weight = weightInput.value ? parseInt(weightInput.value, 10) : null;
+      });
+
+      var removeObjBtn = document.createElement('button');
+      removeObjBtn.className = 'custom-exam__btn--icon custom-exam__btn--danger';
+      removeObjBtn.type = 'button';
+      removeObjBtn.title = 'Remove objective';
+      removeObjBtn.innerHTML = SVG_TRASH;
+      removeObjBtn.addEventListener('click', function () {
+        workflowData.objectives.splice(oi, 1);
+        renderReviewStep(body);
+      });
+
+      cardHeader.appendChild(objTitleInput);
+      cardHeader.appendChild(weightInput);
+      cardHeader.appendChild(removeObjBtn);
+      card.appendChild(cardHeader);
+
+      // Concepts
+      var conceptsList = document.createElement('div');
+      conceptsList.className = 'custom-exam__concepts-list';
+
+      (obj.concepts || []).forEach(function (concept, ci) {
+        var conceptRow = document.createElement('div');
+        conceptRow.className = 'custom-exam__concept-row';
+
+        var cName = document.createElement('input');
+        cName.className = 'custom-exam__input custom-exam__input--inline';
+        cName.type = 'text';
+        cName.placeholder = 'Concept name';
+        cName.value = concept.name;
+        cName.addEventListener('input', function () { concept.name = cName.value; });
+
+        var cDesc = document.createElement('input');
+        cDesc.className = 'custom-exam__input custom-exam__input--inline custom-exam__input--desc';
+        cDesc.type = 'text';
+        cDesc.placeholder = 'Description';
+        cDesc.value = concept.description;
+        cDesc.addEventListener('input', function () { concept.description = cDesc.value; });
+
+        var removeCBtn = document.createElement('button');
+        removeCBtn.className = 'custom-exam__btn--icon custom-exam__btn--danger';
+        removeCBtn.type = 'button';
+        removeCBtn.innerHTML = SVG_CLOSE;
+        removeCBtn.addEventListener('click', function () {
+          obj.concepts.splice(ci, 1);
+          renderReviewStep(body);
+        });
+
+        conceptRow.appendChild(cName);
+        conceptRow.appendChild(cDesc);
+        conceptRow.appendChild(removeCBtn);
+        conceptsList.appendChild(conceptRow);
+      });
+
+      var addConceptBtn = document.createElement('button');
+      addConceptBtn.className = 'custom-exam__btn custom-exam__btn--tiny';
+      addConceptBtn.type = 'button';
+      addConceptBtn.textContent = '+ Concept';
+      addConceptBtn.addEventListener('click', function () {
+        obj.concepts.push({ name: '', description: '' });
+        renderReviewStep(body);
+      });
+      conceptsList.appendChild(addConceptBtn);
+
+      card.appendChild(conceptsList);
+      objSection.appendChild(card);
+    });
+
+    // Sources section
+    var srcSection = document.createElement('div');
+    srcSection.className = 'custom-exam__form-section';
+
+    var srcHeader = document.createElement('div');
+    srcHeader.className = 'custom-exam__form-section-header';
+    srcHeader.innerHTML = '<span class="custom-exam__form-section-title">Sources (' + (workflowData.sources || []).length + ')</span>';
+
+    var addSrcBtn = document.createElement('button');
+    addSrcBtn.className = 'custom-exam__btn custom-exam__btn--small';
+    addSrcBtn.type = 'button';
+    addSrcBtn.textContent = '+ Add Source';
+    addSrcBtn.addEventListener('click', function () {
+      workflowData.sources.push({ title: '', author: '', chapters: '', type: 'textbook' });
+      renderReviewStep(body);
+    });
+    srcHeader.appendChild(addSrcBtn);
+    srcSection.appendChild(srcHeader);
+
+    (workflowData.sources || []).forEach(function (src, si) {
+      var row = document.createElement('div');
+      row.className = 'custom-exam__src-row';
+
+      var srcTitle = document.createElement('input');
+      srcTitle.className = 'custom-exam__input custom-exam__input--inline';
+      srcTitle.type = 'text';
+      srcTitle.placeholder = 'Title';
+      srcTitle.value = src.title;
+      srcTitle.addEventListener('input', function () { src.title = srcTitle.value; });
+
+      var srcAuthor = document.createElement('input');
+      srcAuthor.className = 'custom-exam__input custom-exam__input--inline custom-exam__input--small';
+      srcAuthor.type = 'text';
+      srcAuthor.placeholder = 'Author';
+      srcAuthor.value = src.author;
+      srcAuthor.addEventListener('input', function () { src.author = srcAuthor.value; });
+
+      var srcChap = document.createElement('input');
+      srcChap.className = 'custom-exam__input custom-exam__input--inline custom-exam__input--small';
+      srcChap.type = 'text';
+      srcChap.placeholder = 'Chapters';
+      srcChap.value = src.chapters;
+      srcChap.addEventListener('input', function () { src.chapters = srcChap.value; });
+
+      var removeSrcBtn = document.createElement('button');
+      removeSrcBtn.className = 'custom-exam__btn--icon custom-exam__btn--danger';
+      removeSrcBtn.type = 'button';
+      removeSrcBtn.innerHTML = SVG_TRASH;
+      removeSrcBtn.addEventListener('click', function () {
+        workflowData.sources.splice(si, 1);
+        renderReviewStep(body);
+      });
+
+      row.appendChild(srcTitle);
+      row.appendChild(srcAuthor);
+      row.appendChild(srcChap);
+      row.appendChild(removeSrcBtn);
+      srcSection.appendChild(row);
+    });
+
+    // Create/Save button
+    var createBtn = document.createElement('button');
+    createBtn.className = 'custom-exam__btn custom-exam__btn--primary custom-exam__btn--large';
+    createBtn.type = 'button';
+    createBtn.textContent = editingExamId ? 'Save Changes' : 'Create Exam';
+    createBtn.addEventListener('click', function () {
+      if (!workflowData.examTitle || !workflowData.examTitle.trim()) {
+        alert('Please enter an exam title.');
+        return;
+      }
+      saveExamFromWorkflow();
+      currentStep = 5;
+      renderStep();
+    });
+
+    wrap.appendChild(title);
+    wrap.appendChild(desc);
+    wrap.appendChild(titleGroup);
+    wrap.appendChild(descGroup);
+    wrap.appendChild(colorGroup);
+    wrap.appendChild(objSection);
+    wrap.appendChild(srcSection);
+    wrap.appendChild(createBtn);
+
+    body.innerHTML = '';
+    body.appendChild(wrap);
+  }
+
+  function saveExamFromWorkflow() {
+    if (editingExamId) {
+      var idx = customExams.findIndex(function (ex) { return ex.id === editingExamId; });
+      if (idx !== -1) {
+        customExams[idx].name = workflowData.examTitle;
+        customExams[idx].description = workflowData.examDescription;
+        customExams[idx].color = workflowData.color;
+        customExams[idx].objectives = workflowData.objectives;
+        customExams[idx].sources = workflowData.sources;
+        customExams[idx].updatedAt = new Date().toISOString();
+      }
+    } else {
+      customExams.push({
+        id: 'ce_' + Date.now(),
+        name: workflowData.examTitle,
+        description: workflowData.examDescription || '',
+        color: workflowData.color || '#2563eb',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        objectives: workflowData.objectives || [],
+        sources: workflowData.sources || []
+      });
+    }
+    saveExams();
+    renderMyExams();
+  }
+
+  /* ---- Step 5: Complete ---- */
+  function renderCompleteStep(body) {
+    var wrap = document.createElement('div');
+    wrap.className = 'custom-exam__step-content custom-exam__complete';
+
+    var successIcon = document.createElement('div');
+    successIcon.className = 'custom-exam__success-icon';
+    successIcon.innerHTML = SVG_CHECK_CIRCLE;
+
+    var title = document.createElement('h3');
+    title.className = 'custom-exam__step-title';
+    title.textContent = editingExamId ? 'Exam Updated!' : 'Custom Exam Created!';
+
+    var desc = document.createElement('p');
+    desc.className = 'custom-exam__step-desc';
+    desc.textContent = '"' + workflowData.examTitle + '" has been saved. You can view it from the sidebar, edit it anytime, or download a PDF study guide.';
+
+    // Stats
+    var stats = document.createElement('div');
+    stats.className = 'custom-exam__stats';
+
+    var objCount = (workflowData.objectives || []).length;
+    var conceptCount = 0;
+    (workflowData.objectives || []).forEach(function (o) { conceptCount += (o.concepts || []).length; });
+    var srcCount = (workflowData.sources || []).length;
+
+    [
+      { label: 'Objectives', value: objCount },
+      { label: 'Concepts', value: conceptCount },
+      { label: 'Sources', value: srcCount }
+    ].forEach(function (stat) {
+      var s = document.createElement('div');
+      s.className = 'custom-exam__stat';
+      s.innerHTML = '<span class="custom-exam__stat-value">' + stat.value + '</span><span class="custom-exam__stat-label">' + stat.label + '</span>';
+      stats.appendChild(s);
+    });
+
+    // Buttons
+    var btnRow = document.createElement('div');
+    btnRow.className = 'custom-exam__btn-row';
+
+    var downloadBtn = document.createElement('button');
+    downloadBtn.className = 'custom-exam__btn custom-exam__btn--primary';
+    downloadBtn.type = 'button';
+    downloadBtn.innerHTML = '<span class="custom-exam__btn-icon">' + SVG_DOWNLOAD + '</span> Download Study Guide PDF';
+    downloadBtn.addEventListener('click', function () {
+      generatePdf(workflowData);
+    });
+
+    var viewBtn = document.createElement('button');
+    viewBtn.className = 'custom-exam__btn custom-exam__btn--secondary';
+    viewBtn.type = 'button';
+    viewBtn.textContent = 'View Exam';
+    viewBtn.addEventListener('click', function () {
+      var examId = editingExamId || customExams[customExams.length - 1].id;
+      closeModal();
+      renderExamViewer(examId);
+    });
+
+    var addAnotherBtn = document.createElement('button');
+    addAnotherBtn.className = 'custom-exam__btn custom-exam__btn--ghost';
+    addAnotherBtn.type = 'button';
+    addAnotherBtn.textContent = 'Add Another';
+    addAnotherBtn.addEventListener('click', function () {
+      editingExamId = null;
+      workflowData = {};
+      currentStep = 2;
+      renderStep();
+    });
+
+    btnRow.appendChild(downloadBtn);
+    btnRow.appendChild(viewBtn);
+    btnRow.appendChild(addAnotherBtn);
+
+    wrap.appendChild(successIcon);
+    wrap.appendChild(title);
+    wrap.appendChild(desc);
+    wrap.appendChild(stats);
+    wrap.appendChild(btnRow);
+    body.appendChild(wrap);
+  }
+
+  /* ---- PDF Generation (jsPDF) ---- */
+  async function loadJsPdf() {
+    if (window.jspdf) return window.jspdf;
+
+    return new Promise(function (resolve, reject) {
+      var script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js';
+      script.onload = function () {
+        var script2 = document.createElement('script');
+        script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+        script2.onload = function () { resolve(window.jspdf); };
+        script2.onerror = function () { resolve(window.jspdf); };
+        document.head.appendChild(script2);
+      };
+      script.onerror = function () { reject(new Error('Failed to load jsPDF')); };
+      document.head.appendChild(script);
+    });
+  }
+
+  async function generatePdf(data) {
+    try {
+      var jspdfLib = await loadJsPdf();
+      var doc = new jspdfLib.jsPDF();
+
+      var pageWidth = doc.internal.pageSize.getWidth();
+      var margin = 20;
+      var contentWidth = pageWidth - 2 * margin;
+      var y = margin;
+
+      // Title page
+      doc.setFontSize(28);
+      doc.setFont(undefined, 'bold');
+      doc.text(data.examTitle || 'Custom Exam', pageWidth / 2, 60, { align: 'center' });
+
+      doc.setFontSize(14);
+      doc.setFont(undefined, 'normal');
+      if (data.examDescription) {
+        var descLines = doc.splitTextToSize(data.examDescription, contentWidth);
+        doc.text(descLines, pageWidth / 2, 75, { align: 'center' });
+      }
+
+      doc.setFontSize(11);
+      doc.text('Study Guide', pageWidth / 2, 95, { align: 'center' });
+      doc.text('Generated ' + new Date().toLocaleDateString(), pageWidth / 2, 103, { align: 'center' });
+
+      // Objectives section
+      doc.addPage();
+      y = margin;
+
+      doc.setFontSize(20);
+      doc.setFont(undefined, 'bold');
+      doc.text('Learning Objectives', margin, y);
+      y += 12;
+
+      (data.objectives || []).forEach(function (obj, i) {
+        if (y > 260) { doc.addPage(); y = margin; }
+
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        var objTitle = (i + 1) + '. ' + obj.title;
+        if (obj.weight) objTitle += ' (' + obj.weight + '%)';
+        var titleLines = doc.splitTextToSize(objTitle, contentWidth);
+        doc.text(titleLines, margin, y);
+        y += titleLines.length * 7 + 4;
+
+        (obj.concepts || []).forEach(function (concept) {
+          if (y > 260) { doc.addPage(); y = margin; }
+
+          doc.setFontSize(11);
+          doc.setFont(undefined, 'bold');
+          doc.text('  ' + concept.name, margin + 4, y);
+          y += 6;
+
+          doc.setFont(undefined, 'normal');
+          if (concept.description) {
+            var conceptLines = doc.splitTextToSize(concept.description, contentWidth - 12);
+            doc.text(conceptLines, margin + 8, y);
+            y += conceptLines.length * 5 + 4;
+          }
+        });
+
+        y += 6;
+      });
+
+      // Sources section
+      if (data.sources && data.sources.length > 0) {
+        if (y > 220) { doc.addPage(); y = margin; }
+
+        doc.setFontSize(20);
+        doc.setFont(undefined, 'bold');
+        doc.text('Sources & References', margin, y);
+        y += 12;
+
+        if (doc.autoTable) {
+          doc.autoTable({
+            startY: y,
+            head: [['Title', 'Author', 'Chapters', 'Type']],
+            body: data.sources.map(function (s) {
+              return [s.title || '', s.author || '', s.chapters || '', s.type || ''];
+            }),
+            margin: { left: margin, right: margin },
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [37, 99, 235] }
+          });
+        } else {
+          data.sources.forEach(function (src) {
+            if (y > 270) { doc.addPage(); y = margin; }
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            doc.text(src.title + ' — ' + src.author + ' (Ch. ' + (src.chapters || 'N/A') + ')', margin, y);
+            y += 6;
+          });
+        }
+      }
+
+      // Footer on all pages
+      var pageCount = doc.internal.getNumberOfPages();
+      for (var p = 1; p <= pageCount; p++) {
+        doc.setPage(p);
+        doc.setFontSize(8);
+        doc.setFont(undefined, 'normal');
+        doc.text('Generated by Actuarial Notes Wiki', pageWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+        doc.text('Page ' + p + ' of ' + pageCount, pageWidth - margin, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
+      }
+
+      var filename = (data.examTitle || 'Custom-Exam').replace(/[^a-zA-Z0-9]/g, '-') + '-Study-Guide.pdf';
+      doc.save(filename);
+    } catch (err) {
+      alert('PDF generation failed: ' + err.message);
+    }
+  }
+
+  /* ---- Exam Viewer (main content area) ---- */
+  function renderExamViewer(examId) {
+    var exam = customExams.find(function (ex) { return ex.id === examId; });
+    if (!exam) return;
+
+    var center = document.querySelector('.site-body-center-column');
+    if (!center) return;
+
+    var contentEl = center.querySelector('.markdown-preview-view') || center.querySelector('.markdown-rendered') || center;
+
+    // Remove any existing custom viewer
+    var existing = document.querySelector('.custom-exam__viewer');
+    if (existing) existing.remove();
+
+    // Also remove any existing sticky bars from actual exam pages
+    document.querySelectorAll('.exam-nav__sticky').forEach(function (s) { s.remove(); });
+
+    var viewer = document.createElement('div');
+    viewer.className = 'custom-exam__viewer';
+    viewer.style.setProperty('--exam-color', exam.color || '#2563eb');
+
+    // Toolbar
+    var toolbar = document.createElement('div');
+    toolbar.className = 'custom-exam__viewer-toolbar';
+
+    var backBtn = document.createElement('button');
+    backBtn.className = 'custom-exam__btn custom-exam__btn--ghost custom-exam__btn--small';
+    backBtn.type = 'button';
+    backBtn.textContent = 'Back';
+    backBtn.addEventListener('click', function () { viewer.remove(); });
+
+    var toolbarActions = document.createElement('div');
+    toolbarActions.className = 'custom-exam__viewer-actions';
+
+    var dlBtn = document.createElement('button');
+    dlBtn.className = 'custom-exam__btn custom-exam__btn--secondary custom-exam__btn--small';
+    dlBtn.type = 'button';
+    dlBtn.innerHTML = '<span class="custom-exam__btn-icon">' + SVG_DOWNLOAD + '</span> PDF';
+    dlBtn.addEventListener('click', function () {
+      generatePdf({ examTitle: exam.name, examDescription: exam.description, objectives: exam.objectives, sources: exam.sources });
+    });
+
+    var editBtn = document.createElement('button');
+    editBtn.className = 'custom-exam__btn custom-exam__btn--secondary custom-exam__btn--small';
+    editBtn.type = 'button';
+    editBtn.innerHTML = '<span class="custom-exam__btn-icon">' + SVG_EDIT + '</span> Edit';
+    editBtn.addEventListener('click', function () {
+      viewer.remove();
+      openEditModal(exam.id);
+    });
+
+    var deleteBtn = document.createElement('button');
+    deleteBtn.className = 'custom-exam__btn custom-exam__btn--danger custom-exam__btn--small';
+    deleteBtn.type = 'button';
+    deleteBtn.innerHTML = '<span class="custom-exam__btn-icon">' + SVG_TRASH + '</span> Delete';
+    deleteBtn.addEventListener('click', function () {
+      if (confirm('Delete "' + exam.name + '"?')) {
+        customExams = customExams.filter(function (ex) { return ex.id !== exam.id; });
+        saveExams();
+        renderMyExams();
+        viewer.remove();
+      }
+    });
+
+    toolbarActions.appendChild(dlBtn);
+    toolbarActions.appendChild(editBtn);
+    toolbarActions.appendChild(deleteBtn);
+    toolbar.appendChild(backBtn);
+    toolbar.appendChild(toolbarActions);
+
+    // Title
+    var titleEl = document.createElement('h1');
+    titleEl.className = 'custom-exam__viewer-title';
+    titleEl.textContent = exam.name;
+    titleEl.style.color = exam.color;
+
+    var descEl = document.createElement('p');
+    descEl.className = 'custom-exam__viewer-desc';
+    descEl.textContent = exam.description || '';
+
+    // Learning objectives
+    var objSection = document.createElement('div');
+    objSection.className = 'custom-exam__viewer-section';
+
+    var objTitle = document.createElement('h2');
+    objTitle.className = 'custom-exam__viewer-section-title';
+    objTitle.textContent = 'Learning Objectives';
+    objSection.appendChild(objTitle);
+
+    (exam.objectives || []).forEach(function (obj, i) {
+      var card = document.createElement('div');
+      card.className = 'custom-exam__viewer-obj';
+
+      var cardHeader = document.createElement('div');
+      cardHeader.className = 'custom-exam__viewer-obj-header';
+      cardHeader.innerHTML = '<span class="custom-exam__viewer-obj-num">' + (i + 1) + '</span>' +
+        '<span class="custom-exam__viewer-obj-title">' + obj.title + '</span>' +
+        (obj.weight ? '<span class="custom-exam__viewer-obj-weight">' + obj.weight + '%</span>' : '');
+
+      var cardBody = document.createElement('div');
+      cardBody.className = 'custom-exam__viewer-obj-body';
+      cardBody.style.display = 'none';
+
+      (obj.concepts || []).forEach(function (concept) {
+        var conceptEl = document.createElement('div');
+        conceptEl.className = 'custom-exam__viewer-concept';
+        conceptEl.innerHTML = '<div class="custom-exam__viewer-concept-name">' + concept.name + '</div>' +
+          '<div class="custom-exam__viewer-concept-desc">' + (concept.description || '') + '</div>';
+        cardBody.appendChild(conceptEl);
+      });
+
+      cardHeader.style.cursor = 'pointer';
+      cardHeader.addEventListener('click', function () {
+        var isOpen = cardBody.style.display !== 'none';
+        cardBody.style.display = isOpen ? 'none' : 'block';
+        card.classList.toggle('is-open', !isOpen);
+      });
+
+      card.appendChild(cardHeader);
+      card.appendChild(cardBody);
+      objSection.appendChild(card);
+    });
+
+    // Sources table
+    var srcSection = document.createElement('div');
+    srcSection.className = 'custom-exam__viewer-section';
+
+    if (exam.sources && exam.sources.length > 0) {
+      var srcTitle = document.createElement('h2');
+      srcTitle.className = 'custom-exam__viewer-section-title';
+      srcTitle.textContent = 'Sources & References';
+
+      var table = document.createElement('table');
+      table.className = 'custom-exam__viewer-table';
+      table.innerHTML = '<thead><tr><th>Title</th><th>Author</th><th>Chapters</th><th>Type</th></tr></thead>';
+
+      var tbody = document.createElement('tbody');
+      exam.sources.forEach(function (src) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + (src.title || '') + '</td><td>' + (src.author || '') + '</td><td>' + (src.chapters || '') + '</td><td>' + (src.type || '') + '</td>';
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+
+      srcSection.appendChild(srcTitle);
+      srcSection.appendChild(table);
+    }
+
+    viewer.appendChild(toolbar);
+    viewer.appendChild(titleEl);
+    viewer.appendChild(descEl);
+    viewer.appendChild(objSection);
+    viewer.appendChild(srcSection);
+
+    contentEl.insertBefore(viewer, contentEl.firstChild);
+    viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ---- Init & SPA survival ---- */
+  function init() {
+    loadExams();
+    buildSidebar();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 300); });
+  } else {
+    setTimeout(init, 300);
+  }
+
+  // Re-inject if sidebar re-renders
+  var ceObserver = new MutationObserver(function () {
+    if (!document.querySelector('.custom-exam__sidebar-btn')) {
+      sidebarBtnEl = null;
+      myExamsEl = null;
+      buildSidebar();
+    }
+  });
+
+  function observeSidebar() {
+    var target = document.querySelector('.site-body-left-column');
+    if (target) {
+      ceObserver.observe(target, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(observeSidebar, 350); });
+  } else {
+    setTimeout(observeSidebar, 350);
+  }
+
+  // Clean up custom viewer on SPA navigation
+  window.addEventListener('popstate', function () {
+    var viewer = document.querySelector('.custom-exam__viewer');
+    if (viewer) viewer.remove();
+  });
+
+})();

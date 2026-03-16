@@ -3328,33 +3328,45 @@ figure.right figcaption,
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Download dropdown inside sticky ──────────────────── */
+/* ── Download links inside sticky ────────────────────── */
 .exam-nav__sticky-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   padding-top: 10px;
   margin-top: 8px;
   border-top: 1px solid color-mix(in oklab, var(--nav-color) 12%, var(--muted));
 }
 
-/* Inline the download dropdown menu so it isn't clipped by overflow-y */
-.exam-nav__sticky .dl-dropdown__menu {
-  position: relative;
-  top: auto;
-  left: auto;
-  min-width: auto;
+.exam-nav__sticky-dl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--dl-color, var(--nav-color)) !important;
   border: none;
-  box-shadow: none;
-  background: transparent;
-  padding: 0 0 0 12px;
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.25s ease;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+  box-shadow: none !important;
 }
 
-.exam-nav__sticky .dl-dropdown__wrap.is-open .dl-dropdown__menu {
-  max-height: 500px;
+.exam-nav__sticky-dl-link:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.15);
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.exam-nav__sticky-dl-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
 
 /* ── Stacking fix: elevate center column above sidebar when popups are active ── */

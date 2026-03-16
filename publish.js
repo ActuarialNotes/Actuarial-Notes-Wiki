@@ -4314,11 +4314,16 @@ var SoundFX = (function () {
 
   var DEFAULT_CONCEPTS_PROMPT = 'You are an expert actuarial exam content analyst. Given the following document text and a list of concept names, find detailed definitions and explanations for each concept.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "conceptDetails": {\n    "Concept Name": "A thorough 2-5 sentence definition and explanation of this concept as described in the source document, including key formulas, relationships, or examples where relevant."\n  }\n}\n\nRules:\n- Use the EXACT concept names as keys\n- Draw definitions directly from the source document content\n- Include mathematical formulas or relationships if mentioned\n- If a concept is not found in the document, provide a brief general definition and note it was not explicitly covered\n- Be thorough but concise';
 
-  var DEFAULT_CONCEPT_CHAT_PROMPT = 'You are a knowledgeable actuarial tutor. The student is studying the concept described below. Answer their question using the source document as primary reference. Be clear, concise, and educational. If the answer involves formulas, show them.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "answer": "Your detailed answer here"\n}';
+  var DEFAULT_LIBRARY_TOC_PROMPT = 'You are an expert document analyst. Analyze the provided document text and extract its table of contents or logical structure.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "title": "Document Title",\n  "author": "Author Name or empty string if unknown",\n  "toc": [\n    {\n      "title": "Section Title",\n      "level": 1,\n      "page": null,\n      "children": [\n        { "title": "Subsection", "level": 2, "page": null, "children": [] }\n      ]\n    }\n  ]\n}\n\nRules:\n- level 1 = top-level chapter/section, level 2 = subsection, level 3 = sub-subsection\n- page is the page number if identifiable, otherwise null\n- Preserve the document\'s original section hierarchy\n- If no explicit table of contents exists, infer structure from headings and content organization\n- Include ALL identifiable sections';
+
+  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are an expert document analyst. Extract key terms, definitions, and important concepts from the provided document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Term Name",\n      "definition": "Clear, concise definition as described in the document.",\n      "page": null\n    }\n  ]\n}\n\nRules:\n- Extract ALL significant terms, definitions, and key concepts\n- Use the EXACT terminology from the document\n- definition should be 1-3 sentences\n- page is the page number where the term is primarily defined, or null\n- Focus on domain-specific terminology, not common words\n- Aim for 20-100 terms depending on document length';
 
   /* ---- State ---- */
+  var LIBRARY_STORAGE_KEY = 'actuarial-notes-doc-library';
   var customExams = [];
+  var libraryDocs = [];
   var sidebarBtnEl = null;
+  var libraryBtnEl = null;
   var myExamsEl = null;
   var modalEl = null;
   var backdropEl = null;
@@ -4400,6 +4405,45 @@ var SoundFX = (function () {
     try { localStorage.setItem(PROMPTS_KEY, JSON.stringify(prompts)); } catch (e) { /* ignore */ }
   }
 
+  function loadLibrary() {
+    try {
+      var raw = localStorage.getItem(LIBRARY_STORAGE_KEY);
+      libraryDocs = raw ? JSON.parse(raw) : [];
+    } catch (e) { libraryDocs = []; }
+  }
+
+  function saveLibrary() {
+    try { localStorage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify(libraryDocs)); } catch (e) { /* ignore */ }
+  }
+
+  /* ---- Glossary search helper ---- */
+  function searchGlossary(query) {
+    var results = [];
+    var q = (query || '').toLowerCase().trim();
+    if (!q) return results;
+    var words = q.split(/\s+/).filter(function (w) { return w.length >= 3; });
+
+    libraryDocs.forEach(function (doc) {
+      (doc.glossary || []).forEach(function (entry) {
+        var termLower = entry.term.toLowerCase();
+        var match = termLower.indexOf(q) !== -1 || q.indexOf(termLower) !== -1;
+        if (!match && words.length > 0) {
+          match = words.some(function (w) { return termLower.indexOf(w) !== -1; });
+        }
+        if (match) {
+          results.push({
+            term: entry.term,
+            definition: entry.definition,
+            page: entry.page,
+            sourceDocId: doc.id,
+            sourceDocTitle: doc.title
+          });
+        }
+      });
+    });
+    return results;
+  }
+
   /* ---- Sidebar: Button + My Exams ---- */
   function buildSidebar() {
     if (document.querySelector('.custom-exam__sidebar-btn')) return;
@@ -4443,20 +4487,36 @@ var SoundFX = (function () {
     myExamsEl.className = 'custom-exam__my-exams';
     renderMyExams();
 
+    // Create Document Library button
+    libraryBtnEl = document.createElement('button');
+    libraryBtnEl.className = 'custom-exam__sidebar-btn doc-library__sidebar-btn';
+    libraryBtnEl.type = 'button';
+    libraryBtnEl.innerHTML = '<span class="custom-exam__sidebar-btn-icon">' + SVG_BOOK + '</span><span>Document Library</span>';
+    if (libraryDocs.length > 0) {
+      libraryBtnEl.innerHTML += '<span class="doc-library__sidebar-count">' + libraryDocs.length + '</span>';
+    }
+    libraryBtnEl.addEventListener('click', function () {
+      renderLibraryViewer();
+      closeSidebar();
+    });
+
     // Insert before journey tracker
     var journeyTracker = container.querySelector('.journey-tracker');
     if (journeyTracker) {
       journeyTracker.parentElement.insertBefore(sidebarBtnEl, journeyTracker);
       journeyTracker.parentElement.insertBefore(myExamsEl, journeyTracker);
+      journeyTracker.parentElement.insertBefore(libraryBtnEl, journeyTracker);
     } else {
       // Insert before nav tree
       var navRoot = container.querySelector('.nav-folder.mod-root') || container.querySelector('.nav-folder') || container.querySelector('.tree-item');
       if (navRoot) {
         navRoot.parentElement.insertBefore(sidebarBtnEl, navRoot);
         navRoot.parentElement.insertBefore(myExamsEl, navRoot);
+        navRoot.parentElement.insertBefore(libraryBtnEl, navRoot);
       } else {
         container.appendChild(sidebarBtnEl);
         container.appendChild(myExamsEl);
+        container.appendChild(libraryBtnEl);
       }
     }
   }
@@ -6238,50 +6298,112 @@ var SoundFX = (function () {
     var detailArea = document.createElement('div');
     detailArea.className = 'custom-exam__concept-detail';
 
+    // Linked definition (from library glossary)
+    if (concept.linkedDefinition) {
+      var linkedWrap = document.createElement('div');
+      linkedWrap.className = 'doc-library__linked-definition';
+
+      var linkedHeader = document.createElement('div');
+      linkedHeader.className = 'doc-library__linked-header';
+
+      var linkedIcon = document.createElement('span');
+      linkedIcon.style.cssText = 'width:16px;height:16px;display:inline-flex;opacity:0.6';
+      linkedIcon.innerHTML = SVG_LINK;
+
+      var linkedLabel = document.createElement('span');
+      linkedLabel.style.cssText = 'font-size:0.8rem;opacity:0.6;text-transform:uppercase;letter-spacing:0.05em';
+      linkedLabel.textContent = 'Linked Definition';
+
+      linkedHeader.appendChild(linkedIcon);
+      linkedHeader.appendChild(linkedLabel);
+      linkedWrap.appendChild(linkedHeader);
+
+      var linkedTerm = document.createElement('div');
+      linkedTerm.className = 'doc-library__linked-term';
+      linkedTerm.textContent = concept.linkedDefinition.term;
+      linkedWrap.appendChild(linkedTerm);
+
+      var linkedDef = document.createElement('div');
+      linkedDef.className = 'doc-library__linked-def-text';
+      linkedDef.textContent = concept.linkedDefinition.definition;
+      linkedWrap.appendChild(linkedDef);
+
+      var linkedSource = document.createElement('div');
+      linkedSource.className = 'doc-library__linked-source';
+      linkedSource.textContent = 'Source: ' + (concept.linkedDefinition.sourceDocTitle || 'Unknown');
+      linkedWrap.appendChild(linkedSource);
+
+      var linkedActions = document.createElement('div');
+      linkedActions.style.cssText = 'display:flex;gap:8px;margin-top:12px';
+
+      var changeBtn = document.createElement('button');
+      changeBtn.className = 'custom-exam__btn custom-exam__btn--ghost custom-exam__btn--tiny';
+      changeBtn.type = 'button';
+      changeBtn.innerHTML = SVG_LINK + ' Change';
+      changeBtn.addEventListener('click', function () {
+        openLinkDefinitionModal(examId, objIndex, conceptIndex);
+      });
+
+      var unlinkBtn = document.createElement('button');
+      unlinkBtn.className = 'custom-exam__btn custom-exam__btn--ghost custom-exam__btn--tiny';
+      unlinkBtn.type = 'button';
+      unlinkBtn.innerHTML = SVG_UNLINK + ' Unlink';
+      unlinkBtn.addEventListener('click', function () {
+        delete concept.linkedDefinition;
+        saveExams();
+        var existingViewer = document.querySelector('.custom-exam__viewer');
+        if (existingViewer) removeViewer(existingViewer);
+        renderConceptPage(examId, objIndex, conceptIndex);
+      });
+
+      linkedActions.appendChild(changeBtn);
+      linkedActions.appendChild(unlinkBtn);
+      linkedWrap.appendChild(linkedActions);
+
+      detailArea.appendChild(linkedWrap);
+    }
+
+    // Existing detail content (from prior AI generation)
     if (concept.detail) {
       renderConceptDetail(detailArea, concept.detail, exam.color);
-    } else {
-      // Generate button
-      var generateWrap = document.createElement('div');
-      generateWrap.style.cssText = 'padding:24px;border:2px dashed var(--muted,#333);border-radius:8px;text-align:center;margin:1rem 0';
+    } else if (!concept.linkedDefinition) {
+      // Link Definition empty state
+      var linkWrap = document.createElement('div');
+      linkWrap.style.cssText = 'padding:24px;border:2px dashed var(--muted,#333);border-radius:8px;text-align:center;margin:1rem 0';
 
-      var generateHint = document.createElement('p');
-      generateHint.style.cssText = 'opacity:0.6;margin-bottom:12px;font-size:0.9rem';
-      generateHint.textContent = 'No detailed content yet. Generate a research summary from the source document.';
-      generateWrap.appendChild(generateHint);
+      var linkHint = document.createElement('p');
+      linkHint.style.cssText = 'opacity:0.6;margin-bottom:12px;font-size:0.9rem';
+      linkHint.textContent = 'No definition linked yet. Search your document library to link a definition.';
+      linkWrap.appendChild(linkHint);
 
-      var generateBtn = document.createElement('button');
-      generateBtn.className = 'custom-exam__btn custom-exam__btn--primary';
-      generateBtn.type = 'button';
-      generateBtn.innerHTML = '<span class="custom-exam__btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span> Generate from Source';
-      generateBtn.addEventListener('click', async function () {
-        generateBtn.disabled = true;
-        generateBtn.innerHTML = SVG_SPINNER + ' Researching…';
+      if (libraryDocs.length === 0) {
+        var libHint = document.createElement('p');
+        libHint.style.cssText = 'opacity:0.5;margin-bottom:12px;font-size:0.85rem';
+        libHint.textContent = 'Upload documents to your library first.';
+        linkWrap.appendChild(libHint);
 
-        try {
-          var pdfText = exam.pdfText || '';
-          if (!pdfText) throw new Error('No source document text available. Please re-create the exam with a PDF upload.');
+        var goToLibBtn = document.createElement('button');
+        goToLibBtn.className = 'custom-exam__btn custom-exam__btn--secondary';
+        goToLibBtn.type = 'button';
+        goToLibBtn.innerHTML = '<span class="custom-exam__btn-icon" style="width:16px;height:16px;display:inline-flex">' + SVG_BOOK + '</span> Go to Library';
+        goToLibBtn.addEventListener('click', function () {
+          var existingViewer = document.querySelector('.custom-exam__viewer');
+          if (existingViewer) removeViewer(existingViewer);
+          renderLibraryViewer();
+        });
+        linkWrap.appendChild(goToLibBtn);
+      } else {
+        var linkBtn = document.createElement('button');
+        linkBtn.className = 'custom-exam__btn custom-exam__btn--primary';
+        linkBtn.type = 'button';
+        linkBtn.innerHTML = '<span class="custom-exam__btn-icon" style="width:16px;height:16px;display:inline-flex">' + SVG_LINK + '</span> Link Definition';
+        linkBtn.addEventListener('click', function () {
+          openLinkDefinitionModal(examId, objIndex, conceptIndex);
+        });
+        linkWrap.appendChild(linkBtn);
+      }
 
-          var promptText = 'Document:\n' + pdfText.substring(0, 80000) + '\n\nConcept to research: ' + concept.name + '\nCurrent description: ' + (concept.description || 'N/A');
-          var result = await callClaudeApi(promptText, DEFAULT_CONCEPTS_PROMPT);
-          var details = result.conceptDetails || {};
-          concept.detail = details[concept.name] || details[Object.keys(details)[0]] || 'No detailed information found.';
-          saveExams();
-
-          generateWrap.remove();
-          renderConceptDetail(detailArea, concept.detail, exam.color);
-        } catch (err) {
-          generateBtn.disabled = false;
-          generateBtn.innerHTML = '<span class="custom-exam__btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span> Generate from Source';
-          var errDiv = generateWrap.querySelector('.custom-exam__error') || document.createElement('div');
-          errDiv.className = 'custom-exam__error';
-          errDiv.textContent = 'Error: ' + (err.message || 'Failed to generate');
-          errDiv.style.display = 'block';
-          if (!errDiv.parentElement) generateWrap.appendChild(errDiv);
-        }
-      });
-      generateWrap.appendChild(generateBtn);
-      detailArea.appendChild(generateWrap);
+      detailArea.appendChild(linkWrap);
     }
     contentWrap.appendChild(detailArea);
 
@@ -6290,90 +6412,6 @@ var SoundFX = (function () {
     partOf.style.cssText = 'margin-top:1.5rem;opacity:0.5;font-size:0.85rem';
     partOf.innerHTML = '<strong>Part of:</strong> ' + escHtml(exam.name) + ' › ' + escHtml(obj.title);
     contentWrap.appendChild(partOf);
-
-    // Q&A Chat
-    var chatSection = document.createElement('div');
-    chatSection.className = 'custom-exam__concept-chat';
-    chatSection.style.cssText = 'margin-top:2rem;border-top:1px solid var(--muted,#333);padding-top:1.5rem';
-
-    var chatTitle = document.createElement('h3');
-    chatTitle.style.cssText = 'font-size:1rem;margin-bottom:0.75rem';
-    chatTitle.textContent = 'Ask about this concept';
-    chatSection.appendChild(chatTitle);
-
-    var chatMessages = document.createElement('div');
-    chatMessages.className = 'custom-exam__chat-messages';
-    chatMessages.style.cssText = 'max-height:300px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:8px';
-    chatSection.appendChild(chatMessages);
-
-    var chatInputRow = document.createElement('div');
-    chatInputRow.style.cssText = 'display:flex;gap:8px';
-
-    var chatInput = document.createElement('input');
-    chatInput.className = 'custom-exam__input';
-    chatInput.type = 'text';
-    chatInput.placeholder = 'Ask a question about ' + concept.name + '…';
-    chatInput.style.flex = '1';
-
-    var chatSendBtn = document.createElement('button');
-    chatSendBtn.className = 'custom-exam__btn custom-exam__btn--primary';
-    chatSendBtn.type = 'button';
-    chatSendBtn.textContent = 'Send';
-
-    var chatHistory = [];
-
-    async function sendChatMessage() {
-      var q = chatInput.value.trim();
-      if (!q) return;
-      chatInput.value = '';
-
-      // Add user message
-      var userMsg = document.createElement('div');
-      userMsg.style.cssText = 'align-self:flex-end;background:var(--brand,#2563eb);color:#fff;padding:8px 12px;border-radius:12px 12px 2px 12px;max-width:80%;font-size:0.9rem';
-      userMsg.textContent = q;
-      chatMessages.appendChild(userMsg);
-
-      // Add loading message
-      var loadingMsg = document.createElement('div');
-      loadingMsg.style.cssText = 'align-self:flex-start;background:var(--bg-elev,#1a1a2e);padding:8px 12px;border-radius:12px 12px 12px 2px;max-width:80%;font-size:0.9rem;opacity:0.6';
-      loadingMsg.innerHTML = SVG_SPINNER + ' Thinking…';
-      chatMessages.appendChild(loadingMsg);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      chatSendBtn.disabled = true;
-
-      try {
-        chatHistory.push({ role: 'user', content: q });
-        var contextText = 'Concept: ' + concept.name + '\nDescription: ' + (concept.description || '') + '\nDetailed content: ' + (concept.detail || 'Not yet generated') + '\n\nSource document excerpt:\n' + (exam.pdfText || '').substring(0, 40000) + '\n\nConversation:\n' + chatHistory.map(function (m) { return m.role + ': ' + m.content; }).join('\n') + '\n\nAnswer the latest question.';
-        var result = await callClaudeApi(contextText, DEFAULT_CONCEPT_CHAT_PROMPT);
-        var answer = result.answer || JSON.stringify(result);
-
-        chatHistory.push({ role: 'assistant', content: answer });
-
-        loadingMsg.style.opacity = '1';
-        loadingMsg.style.background = 'var(--bg-elev,#1a1a2e)';
-        loadingMsg.innerHTML = '';
-        loadingMsg.textContent = answer;
-      } catch (err) {
-        loadingMsg.style.opacity = '1';
-        loadingMsg.style.color = 'var(--danger,#dc2626)';
-        loadingMsg.innerHTML = '';
-        loadingMsg.textContent = 'Error: ' + (err.message || 'Failed to respond');
-      }
-
-      chatSendBtn.disabled = false;
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    chatSendBtn.addEventListener('click', sendChatMessage);
-    chatInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') sendChatMessage();
-    });
-
-    chatInputRow.appendChild(chatInput);
-    chatInputRow.appendChild(chatSendBtn);
-    chatSection.appendChild(chatInputRow);
-    contentWrap.appendChild(chatSection);
 
     viewer.appendChild(toolbar);
     viewer.appendChild(contentWrap);
@@ -6385,6 +6423,681 @@ var SoundFX = (function () {
     detailEl.style.cssText = 'padding:16px 20px;background:var(--bg-elev,#1a1a2e);border-left:4px solid ' + (color || 'var(--brand,#2563eb)') + ';border-radius:6px;margin:1rem 0;line-height:1.6;font-size:0.95rem';
     detailEl.textContent = detail;
     container.appendChild(detailEl);
+  }
+
+  /* =========================================================
+     DOCUMENT LIBRARY
+     Global document library for supplementary source materials.
+     Separate from the exam syllabus — stored independently.
+     ========================================================= */
+
+  var SVG_BOOK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a2 2 0 0 1 2 2v12a1.5 1.5 0 0 0-1.5-1.5H2V3z"/><path d="M18 3h-6a2 2 0 0 0-2 2v12a1.5 1.5 0 0 1 1.5-1.5H18V3z"/></svg>';
+  var SVG_LINK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 13.5l3-3"/><path d="M11 7l1.5-1.5a2.83 2.83 0 1 1 4 4L15 11"/><path d="M9 13l-1.5 1.5a2.83 2.83 0 1 1-4-4L5 9"/></svg>';
+  var SVG_UNLINK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 7l1.5-1.5a2.83 2.83 0 1 1 4 4L15 11"/><path d="M9 13l-1.5 1.5a2.83 2.83 0 1 1-4-4L5 9"/><line x1="4" y1="16" x2="16" y2="4"/></svg>';
+  var SVG_SEARCH = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><line x1="13.5" y1="13.5" x2="17" y2="17"/></svg>';
+
+  /* ---- Library viewer page ---- */
+  function renderLibraryViewer() {
+    var viewer = document.createElement('div');
+    viewer.className = 'custom-exam__viewer';
+
+    var toolbar = document.createElement('div');
+    toolbar.className = 'custom-exam__viewer-toolbar';
+
+    var titleEl = document.createElement('span');
+    titleEl.style.cssText = 'font-size:1.1rem;font-weight:600;display:flex;align-items:center;gap:8px';
+    titleEl.innerHTML = '<span style="width:20px;height:20px;display:inline-flex">' + SVG_BOOK + '</span> Document Library';
+    toolbar.appendChild(titleEl);
+
+    var toolbarActions = document.createElement('div');
+    toolbarActions.className = 'custom-exam__viewer-actions';
+
+    var uploadBtn = document.createElement('button');
+    uploadBtn.className = 'custom-exam__btn custom-exam__btn--primary custom-exam__btn--small';
+    uploadBtn.type = 'button';
+    uploadBtn.innerHTML = '<span class="custom-exam__btn-icon">' + SVG_PLUS + '</span> Upload Document';
+    uploadBtn.addEventListener('click', function () { openLibraryUploadModal(); });
+    toolbarActions.appendChild(uploadBtn);
+    toolbar.appendChild(toolbarActions);
+
+    var contentWrap = document.createElement('div');
+
+    if (libraryDocs.length === 0) {
+      // Empty state
+      var empty = document.createElement('div');
+      empty.style.cssText = 'text-align:center;padding:3rem 1rem;opacity:0.7';
+      empty.innerHTML = '<div style="width:48px;height:48px;margin:0 auto 16px;opacity:0.4">' + SVG_BOOK + '</div>' +
+        '<p style="font-size:1.1rem;margin-bottom:8px">No documents yet</p>' +
+        '<p style="font-size:0.9rem;opacity:0.7;margin-bottom:20px">Upload textbooks, articles, or lecture notes to build your library.</p>';
+
+      var emptyUploadBtn = document.createElement('button');
+      emptyUploadBtn.className = 'custom-exam__btn custom-exam__btn--primary';
+      emptyUploadBtn.type = 'button';
+      emptyUploadBtn.innerHTML = '<span class="custom-exam__btn-icon">' + SVG_PLUS + '</span> Upload Document';
+      emptyUploadBtn.addEventListener('click', function () { openLibraryUploadModal(); });
+      empty.appendChild(emptyUploadBtn);
+      contentWrap.appendChild(empty);
+    } else {
+      // Card grid
+      var grid = document.createElement('div');
+      grid.className = 'doc-library__card-grid';
+
+      libraryDocs.forEach(function (doc) {
+        var card = document.createElement('div');
+        card.className = 'doc-library__card';
+
+        var iconArea = document.createElement('div');
+        iconArea.className = 'doc-library__card-icon';
+        iconArea.innerHTML = SVG_DOC;
+
+        var info = document.createElement('div');
+        info.className = 'doc-library__card-info';
+
+        var docTitle = document.createElement('div');
+        docTitle.className = 'doc-library__card-title';
+        docTitle.textContent = doc.title || 'Untitled Document';
+
+        var docAuthor = document.createElement('div');
+        docAuthor.className = 'doc-library__card-author';
+        docAuthor.textContent = doc.author || '';
+
+        var stats = document.createElement('div');
+        stats.className = 'doc-library__card-stats';
+        var tocCount = (doc.toc || []).length;
+        var glossaryCount = (doc.glossary || []).length;
+        stats.textContent = tocCount + ' sections · ' + glossaryCount + ' terms';
+
+        info.appendChild(docTitle);
+        if (doc.author) info.appendChild(docAuthor);
+        info.appendChild(stats);
+
+        var actions = document.createElement('div');
+        actions.className = 'doc-library__card-actions';
+
+        var deleteBtn = document.createElement('button');
+        deleteBtn.className = 'custom-exam__btn custom-exam__btn--ghost custom-exam__btn--tiny';
+        deleteBtn.type = 'button';
+        deleteBtn.title = 'Delete';
+        deleteBtn.innerHTML = SVG_TRASH;
+        deleteBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (confirm('Delete "' + (doc.title || 'this document') + '"? This cannot be undone.')) {
+            libraryDocs = libraryDocs.filter(function (d) { return d.id !== doc.id; });
+            saveLibrary();
+            removeViewer(viewer);
+            renderLibraryViewer();
+          }
+        });
+        actions.appendChild(deleteBtn);
+
+        card.appendChild(iconArea);
+        card.appendChild(info);
+        card.appendChild(actions);
+
+        card.addEventListener('click', function () {
+          removeViewer(viewer);
+          renderLibraryDocPage(doc.id);
+        });
+
+        grid.appendChild(card);
+      });
+
+      contentWrap.appendChild(grid);
+    }
+
+    viewer.appendChild(toolbar);
+    viewer.appendChild(contentWrap);
+    showInContentArea(viewer);
+  }
+
+  /* ---- Library document detail page ---- */
+  function renderLibraryDocPage(docId) {
+    var doc = libraryDocs.find(function (d) { return d.id === docId; });
+    if (!doc) return;
+
+    var viewer = document.createElement('div');
+    viewer.className = 'custom-exam__viewer';
+
+    var toolbar = document.createElement('div');
+    toolbar.className = 'custom-exam__viewer-toolbar';
+
+    var backBtn = document.createElement('button');
+    backBtn.className = 'custom-exam__btn custom-exam__btn--ghost custom-exam__btn--small';
+    backBtn.type = 'button';
+    backBtn.textContent = '← Library';
+    backBtn.addEventListener('click', function () {
+      removeViewer(viewer);
+      renderLibraryViewer();
+    });
+    toolbar.appendChild(backBtn);
+
+    var toolbarActions = document.createElement('div');
+    toolbarActions.className = 'custom-exam__viewer-actions';
+
+    var deleteBtn = document.createElement('button');
+    deleteBtn.className = 'custom-exam__btn custom-exam__btn--danger custom-exam__btn--small';
+    deleteBtn.type = 'button';
+    deleteBtn.innerHTML = SVG_TRASH + ' Delete';
+    deleteBtn.addEventListener('click', function () {
+      if (confirm('Delete "' + (doc.title || 'this document') + '"? This cannot be undone.')) {
+        libraryDocs = libraryDocs.filter(function (d) { return d.id !== doc.id; });
+        saveLibrary();
+        removeViewer(viewer);
+        renderLibraryViewer();
+      }
+    });
+    toolbarActions.appendChild(deleteBtn);
+    toolbar.appendChild(toolbarActions);
+
+    var contentWrap = document.createElement('div');
+
+    var titleEl = document.createElement('h1');
+    titleEl.style.cssText = 'margin-bottom:0.25rem';
+    titleEl.textContent = doc.title || 'Untitled Document';
+    contentWrap.appendChild(titleEl);
+
+    if (doc.author) {
+      var authorEl = document.createElement('p');
+      authorEl.style.cssText = 'opacity:0.6;font-size:0.95rem;margin-bottom:0.5rem';
+      authorEl.textContent = 'by ' + doc.author;
+      contentWrap.appendChild(authorEl);
+    }
+
+    var dateEl = document.createElement('p');
+    dateEl.style.cssText = 'opacity:0.4;font-size:0.85rem;margin-bottom:1.5rem';
+    dateEl.textContent = 'Uploaded ' + new Date(doc.uploadedAt).toLocaleDateString();
+    contentWrap.appendChild(dateEl);
+
+    // Table of Contents section
+    var tocSection = document.createElement('div');
+    tocSection.style.cssText = 'margin-bottom:2rem';
+
+    var tocHeader = document.createElement('h2');
+    tocHeader.style.cssText = 'font-size:1.1rem;margin-bottom:0.75rem';
+    tocHeader.textContent = 'Table of Contents';
+    tocSection.appendChild(tocHeader);
+
+    if ((doc.toc || []).length === 0) {
+      var tocEmpty = document.createElement('p');
+      tocEmpty.style.cssText = 'opacity:0.5;font-size:0.9rem';
+      tocEmpty.textContent = 'No table of contents extracted.';
+      tocSection.appendChild(tocEmpty);
+    } else {
+      var tocList = document.createElement('div');
+      tocList.className = 'doc-library__toc-list';
+      renderTocItems(tocList, doc.toc);
+      tocSection.appendChild(tocList);
+    }
+    contentWrap.appendChild(tocSection);
+
+    // Glossary section
+    var glossarySection = document.createElement('div');
+    glossarySection.style.cssText = 'margin-bottom:2rem';
+
+    var glossaryHeader = document.createElement('h2');
+    glossaryHeader.style.cssText = 'font-size:1.1rem;margin-bottom:0.75rem';
+    glossaryHeader.textContent = 'Glossary (' + (doc.glossary || []).length + ' terms)';
+    glossarySection.appendChild(glossaryHeader);
+
+    if ((doc.glossary || []).length === 0) {
+      var glossaryEmpty = document.createElement('p');
+      glossaryEmpty.style.cssText = 'opacity:0.5;font-size:0.9rem';
+      glossaryEmpty.textContent = 'No glossary terms extracted.';
+      glossarySection.appendChild(glossaryEmpty);
+    } else {
+      var glossaryList = document.createElement('div');
+      glossaryList.className = 'doc-library__glossary-list';
+
+      doc.glossary.forEach(function (entry) {
+        var item = document.createElement('div');
+        item.className = 'doc-library__glossary-item';
+
+        var term = document.createElement('div');
+        term.className = 'doc-library__glossary-term';
+        term.textContent = entry.term;
+
+        var def = document.createElement('div');
+        def.className = 'doc-library__glossary-def';
+        def.textContent = entry.definition;
+
+        item.appendChild(term);
+        item.appendChild(def);
+        glossaryList.appendChild(item);
+      });
+
+      glossarySection.appendChild(glossaryList);
+    }
+    contentWrap.appendChild(glossarySection);
+
+    viewer.appendChild(toolbar);
+    viewer.appendChild(contentWrap);
+    showInContentArea(viewer);
+  }
+
+  function renderTocItems(container, items) {
+    items.forEach(function (item) {
+      var el = document.createElement('div');
+      el.className = 'doc-library__toc-item';
+      el.style.paddingLeft = ((item.level - 1) * 20) + 'px';
+
+      var title = document.createElement('span');
+      title.textContent = item.title;
+      el.appendChild(title);
+
+      if (item.page) {
+        var page = document.createElement('span');
+        page.style.cssText = 'opacity:0.4;margin-left:8px;font-size:0.85rem';
+        page.textContent = 'p. ' + item.page;
+        el.appendChild(page);
+      }
+
+      container.appendChild(el);
+
+      if (item.children && item.children.length > 0) {
+        renderTocItems(container, item.children);
+      }
+    });
+  }
+
+  /* ---- Library upload modal ---- */
+  function openLibraryUploadModal() {
+    // Create separate modal (shares CSS chrome with exam modal)
+    var libBackdrop = document.createElement('div');
+    libBackdrop.className = 'custom-exam__backdrop';
+
+    var libModal = document.createElement('div');
+    libModal.className = 'custom-exam__modal';
+    libModal.style.maxWidth = '540px';
+    libModal.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'custom-exam__modal-header';
+    header.innerHTML = '<span class="custom-exam__modal-title">Upload to Library</span>';
+
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'custom-exam__modal-icon-btn';
+    closeBtn.type = 'button';
+    closeBtn.innerHTML = SVG_CLOSE;
+    var closeLibModal = function () {
+      libModal.classList.remove('is-visible');
+      libBackdrop.classList.remove('is-visible');
+      setTimeout(function () {
+        if (libModal.parentElement) libModal.parentElement.removeChild(libModal);
+        if (libBackdrop.parentElement) libBackdrop.parentElement.removeChild(libBackdrop);
+      }, 250);
+      document.removeEventListener('keydown', handleLibEsc);
+    };
+    closeBtn.addEventListener('click', closeLibModal);
+    header.appendChild(closeBtn);
+
+    libBackdrop.addEventListener('click', closeLibModal);
+
+    function handleLibEsc(e) { if (e.key === 'Escape') closeLibModal(); }
+    document.addEventListener('keydown', handleLibEsc);
+
+    // Body
+    var body = document.createElement('div');
+    body.className = 'custom-exam__modal-body';
+    body.style.padding = '20px';
+
+    // Dropzone
+    var dropzone = document.createElement('div');
+    dropzone.className = 'custom-exam__dropzone';
+
+    var dropIcon = document.createElement('div');
+    dropIcon.style.cssText = 'width:48px;height:48px;margin:0 auto 12px;opacity:0.4';
+    dropIcon.innerHTML = SVG_UPLOAD;
+
+    var dropText = document.createElement('p');
+    dropText.style.cssText = 'margin-bottom:4px;font-size:0.95rem';
+    dropText.textContent = 'Drop a PDF here or click to browse';
+
+    var dropHint = document.createElement('p');
+    dropHint.style.cssText = 'opacity:0.5;font-size:0.8rem';
+    dropHint.textContent = 'Textbooks, articles, lecture notes, etc.';
+
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf';
+    fileInput.style.display = 'none';
+
+    var fileInfo = document.createElement('div');
+    fileInfo.style.cssText = 'margin-top:12px;font-size:0.85rem;display:none';
+
+    dropzone.appendChild(dropIcon);
+    dropzone.appendChild(dropText);
+    dropzone.appendChild(dropHint);
+    dropzone.appendChild(fileInput);
+    dropzone.appendChild(fileInfo);
+
+    dropzone.addEventListener('click', function () { fileInput.click(); });
+    dropzone.addEventListener('dragover', function (e) { e.preventDefault(); dropzone.classList.add('is-dragover'); });
+    dropzone.addEventListener('dragleave', function () { dropzone.classList.remove('is-dragover'); });
+    dropzone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      dropzone.classList.remove('is-dragover');
+      var files = e.dataTransfer.files;
+      if (files.length > 0 && files[0].type === 'application/pdf') {
+        fileInput.files = files;
+        fileInput.dispatchEvent(new Event('change'));
+      }
+    });
+
+    var selectedFile = null;
+
+    fileInput.addEventListener('change', function () {
+      if (fileInput.files.length > 0) {
+        selectedFile = fileInput.files[0];
+        var sizeMB = (selectedFile.size / (1024 * 1024)).toFixed(1);
+        fileInfo.style.display = 'block';
+        fileInfo.innerHTML = SVG_DOC + ' <strong>' + escHtml(selectedFile.name) + '</strong> (' + sizeMB + ' MB)';
+        analyzeBtn.disabled = false;
+      }
+    });
+
+    // Analyze button
+    var analyzeBtn = document.createElement('button');
+    analyzeBtn.className = 'custom-exam__btn custom-exam__btn--primary';
+    analyzeBtn.type = 'button';
+    analyzeBtn.style.cssText = 'width:100%;margin-top:16px';
+    analyzeBtn.textContent = 'Analyze Document';
+    analyzeBtn.disabled = true;
+
+    // Progress area (hidden initially)
+    var progressArea = document.createElement('div');
+    progressArea.style.display = 'none';
+
+    analyzeBtn.addEventListener('click', async function () {
+      if (!selectedFile) return;
+      analyzeBtn.disabled = true;
+      analyzeBtn.innerHTML = SVG_SPINNER + ' Processing…';
+      dropzone.style.display = 'none';
+      progressArea.style.display = 'block';
+
+      var tasks = [
+        { id: 'extract', label: 'Extracting text', status: 'pending' },
+        { id: 'toc', label: 'Analyzing structure', status: 'pending' },
+        { id: 'glossary', label: 'Extracting glossary', status: 'pending' }
+      ];
+
+      function renderProgress() {
+        progressArea.innerHTML = '';
+        tasks.forEach(function (t) {
+          var row = document.createElement('div');
+          row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 0;font-size:0.9rem';
+          if (t.status === 'done') {
+            row.innerHTML = '<span style="color:var(--brand,#10b981);width:20px;height:20px;display:inline-flex">' + SVG_CHECK_CIRCLE + '</span> ' + escHtml(t.label);
+          } else if (t.status === 'active') {
+            row.innerHTML = '<span style="width:20px;height:20px;display:inline-flex">' + SVG_SPINNER + '</span> ' + escHtml(t.label) + '…';
+          } else if (t.status === 'error') {
+            row.innerHTML = '<span style="color:var(--danger,#dc2626);width:20px;height:20px;display:inline-flex">✗</span> ' + escHtml(t.label) + ' — failed';
+          } else {
+            row.innerHTML = '<span style="opacity:0.3;width:20px;height:20px;display:inline-flex">○</span> ' + escHtml(t.label);
+          }
+          progressArea.appendChild(row);
+        });
+      }
+      renderProgress();
+
+      try {
+        // Step 1: Extract text
+        tasks[0].status = 'active'; renderProgress();
+        var pdfResult = await extractPdfText(selectedFile);
+        var pdfText = pdfResult.text || '';
+        tasks[0].status = 'done'; renderProgress();
+
+        // Truncate for storage
+        var storedText = pdfText.substring(0, 100000);
+
+        // Step 2: Extract TOC
+        tasks[1].status = 'active'; renderProgress();
+        var tocPromptText = 'Document:\n' + pdfText.substring(0, 80000);
+        var tocResult = await callClaudeApi(tocPromptText, DEFAULT_LIBRARY_TOC_PROMPT);
+        tasks[1].status = 'done'; renderProgress();
+
+        // Step 3: Extract glossary
+        tasks[2].status = 'active'; renderProgress();
+        var glossaryPromptText = 'Document:\n' + pdfText.substring(0, 80000);
+        var glossaryResult = await callClaudeApi(glossaryPromptText, DEFAULT_LIBRARY_GLOSSARY_PROMPT);
+        tasks[2].status = 'done'; renderProgress();
+
+        // Build document object
+        var newDoc = {
+          id: 'lib_' + Date.now(),
+          title: tocResult.title || selectedFile.name.replace(/\.pdf$/i, ''),
+          author: tocResult.author || '',
+          pdfText: storedText,
+          toc: tocResult.toc || [],
+          glossary: glossaryResult.glossary || [],
+          uploadedAt: Date.now()
+        };
+
+        libraryDocs.push(newDoc);
+        saveLibrary();
+
+        // Show success
+        progressArea.innerHTML = '';
+        var successMsg = document.createElement('div');
+        successMsg.style.cssText = 'text-align:center;padding:1rem';
+        successMsg.innerHTML = '<div style="color:var(--brand,#10b981);width:32px;height:32px;margin:0 auto 12px">' + SVG_CHECK_CIRCLE + '</div>' +
+          '<p style="font-size:1rem;margin-bottom:4px"><strong>' + escHtml(newDoc.title) + '</strong> added to library</p>' +
+          '<p style="opacity:0.6;font-size:0.85rem">' + (newDoc.toc.length) + ' sections · ' + (newDoc.glossary.length) + ' glossary terms</p>';
+        progressArea.appendChild(successMsg);
+
+        analyzeBtn.style.display = 'none';
+
+        var doneBtn = document.createElement('button');
+        doneBtn.className = 'custom-exam__btn custom-exam__btn--primary';
+        doneBtn.style.cssText = 'width:100%;margin-top:16px';
+        doneBtn.textContent = 'View in Library';
+        doneBtn.addEventListener('click', function () {
+          closeLibModal();
+          renderLibraryViewer();
+        });
+        progressArea.appendChild(doneBtn);
+
+      } catch (err) {
+        var activeTask = tasks.find(function (t) { return t.status === 'active'; });
+        if (activeTask) activeTask.status = 'error';
+        renderProgress();
+
+        var errDiv = document.createElement('div');
+        errDiv.className = 'custom-exam__error';
+        errDiv.style.display = 'block';
+        errDiv.textContent = 'Error: ' + (err.message || 'Processing failed');
+        progressArea.appendChild(errDiv);
+
+        analyzeBtn.disabled = false;
+        analyzeBtn.textContent = 'Retry';
+        analyzeBtn.innerHTML = 'Retry';
+        dropzone.style.display = '';
+      }
+    });
+
+    body.appendChild(dropzone);
+    body.appendChild(analyzeBtn);
+    body.appendChild(progressArea);
+
+    libModal.appendChild(header);
+    libModal.appendChild(body);
+
+    document.body.appendChild(libBackdrop);
+    document.body.appendChild(libModal);
+
+    void libModal.offsetHeight;
+    libBackdrop.classList.add('is-visible');
+    libModal.classList.add('is-visible');
+  }
+
+  /* ---- Link Definition modal ---- */
+  function openLinkDefinitionModal(examId, objIndex, conceptIndex) {
+    var exam = customExams.find(function (ex) { return ex.id === examId; });
+    if (!exam) return;
+    var obj = (exam.objectives || [])[objIndex];
+    if (!obj) return;
+    var concept = (obj.concepts || [])[conceptIndex];
+    if (!concept) return;
+
+    var libBackdrop = document.createElement('div');
+    libBackdrop.className = 'custom-exam__backdrop';
+
+    var libModal = document.createElement('div');
+    libModal.className = 'custom-exam__modal';
+    libModal.style.maxWidth = '600px';
+    libModal.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'custom-exam__modal-header';
+
+    var titleEl = document.createElement('span');
+    titleEl.className = 'custom-exam__modal-title';
+    titleEl.textContent = 'Link Definition';
+    header.appendChild(titleEl);
+
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'custom-exam__modal-icon-btn';
+    closeBtn.type = 'button';
+    closeBtn.innerHTML = SVG_CLOSE;
+
+    var closeLinkModal = function () {
+      libModal.classList.remove('is-visible');
+      libBackdrop.classList.remove('is-visible');
+      setTimeout(function () {
+        if (libModal.parentElement) libModal.parentElement.removeChild(libModal);
+        if (libBackdrop.parentElement) libBackdrop.parentElement.removeChild(libBackdrop);
+      }, 250);
+      document.removeEventListener('keydown', handleLinkEsc);
+    };
+
+    closeBtn.addEventListener('click', closeLinkModal);
+    header.appendChild(closeBtn);
+    libBackdrop.addEventListener('click', closeLinkModal);
+
+    function handleLinkEsc(e) { if (e.key === 'Escape') closeLinkModal(); }
+    document.addEventListener('keydown', handleLinkEsc);
+
+    // Body
+    var body = document.createElement('div');
+    body.className = 'custom-exam__modal-body';
+    body.style.padding = '20px';
+
+    var conceptLabel = document.createElement('p');
+    conceptLabel.style.cssText = 'opacity:0.6;font-size:0.85rem;margin-bottom:12px';
+    conceptLabel.textContent = 'Find a definition for: ' + concept.name;
+    body.appendChild(conceptLabel);
+
+    // Search input
+    var searchRow = document.createElement('div');
+    searchRow.style.cssText = 'position:relative;margin-bottom:16px';
+
+    var searchInput = document.createElement('input');
+    searchInput.className = 'custom-exam__input';
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search glossary terms…';
+    searchInput.value = concept.name;
+    searchInput.style.cssText = 'width:100%;padding-left:32px';
+    searchRow.innerHTML = '<span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:16px;height:16px;opacity:0.4">' + SVG_SEARCH + '</span>';
+    searchRow.appendChild(searchInput);
+    body.appendChild(searchRow);
+
+    // Results area
+    var resultsArea = document.createElement('div');
+    resultsArea.style.cssText = 'max-height:350px;overflow-y:auto';
+    body.appendChild(resultsArea);
+
+    var debounceTimer = null;
+
+    function doSearch() {
+      var query = searchInput.value.trim();
+      resultsArea.innerHTML = '';
+
+      if (libraryDocs.length === 0) {
+        resultsArea.innerHTML = '<div style="text-align:center;padding:2rem 1rem;opacity:0.6">' +
+          '<p style="margin-bottom:8px">No documents in your library.</p>' +
+          '<p style="font-size:0.85rem">Upload a document to get started.</p></div>';
+        var goToLibBtn = document.createElement('button');
+        goToLibBtn.className = 'custom-exam__btn custom-exam__btn--secondary';
+        goToLibBtn.style.cssText = 'display:block;margin:0 auto';
+        goToLibBtn.textContent = 'Go to Library';
+        goToLibBtn.addEventListener('click', function () {
+          closeLinkModal();
+          renderLibraryViewer();
+        });
+        resultsArea.appendChild(goToLibBtn);
+        return;
+      }
+
+      var results = searchGlossary(query);
+
+      if (results.length === 0) {
+        resultsArea.innerHTML = '<div style="text-align:center;padding:2rem 1rem;opacity:0.6">' +
+          '<p style="margin-bottom:4px">No matching definitions found.</p>' +
+          '<p style="font-size:0.85rem">Try a different search term.</p></div>';
+        return;
+      }
+
+      results.forEach(function (r) {
+        var item = document.createElement('div');
+        item.className = 'doc-library__search-result';
+
+        var termEl = document.createElement('div');
+        termEl.className = 'doc-library__search-result-term';
+        termEl.textContent = r.term;
+
+        var defEl = document.createElement('div');
+        defEl.className = 'doc-library__search-result-def';
+        var defText = r.definition || '';
+        defEl.textContent = defText.length > 200 ? defText.substring(0, 200) + '…' : defText;
+
+        var sourceEl = document.createElement('div');
+        sourceEl.className = 'doc-library__search-result-source';
+        sourceEl.textContent = 'From: ' + (r.sourceDocTitle || 'Unknown');
+
+        item.appendChild(termEl);
+        item.appendChild(defEl);
+        item.appendChild(sourceEl);
+
+        item.addEventListener('click', function () {
+          concept.linkedDefinition = {
+            term: r.term,
+            definition: r.definition,
+            sourceDocId: r.sourceDocId,
+            sourceDocTitle: r.sourceDocTitle
+          };
+          saveExams();
+          closeLinkModal();
+          // Re-render concept page
+          var existingViewer = document.querySelector('.custom-exam__viewer');
+          if (existingViewer) removeViewer(existingViewer);
+          renderConceptPage(examId, objIndex, conceptIndex);
+        });
+
+        resultsArea.appendChild(item);
+      });
+    }
+
+    searchInput.addEventListener('input', function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(doSearch, 300);
+    });
+
+    // Initial search
+    doSearch();
+
+    // Focus search input after modal opens
+    setTimeout(function () { searchInput.focus(); searchInput.select(); }, 100);
+
+    libModal.appendChild(header);
+    libModal.appendChild(body);
+
+    document.body.appendChild(libBackdrop);
+    document.body.appendChild(libModal);
+
+    void libModal.offsetHeight;
+    libBackdrop.classList.add('is-visible');
+    libModal.classList.add('is-visible');
   }
 
   /* ---- Source page ---- */
@@ -6522,6 +7235,7 @@ var SoundFX = (function () {
   /* ---- Init & SPA survival ---- */
   function init() {
     loadExams();
+    loadLibrary();
     buildSidebar();
   }
 
@@ -6539,6 +7253,7 @@ var SoundFX = (function () {
       if (!document.querySelector('.custom-exam__sidebar-btn')) {
         sidebarBtnEl = null;
         myExamsEl = null;
+        libraryBtnEl = null;
         buildSidebar();
       }
     }, 200);

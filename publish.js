@@ -3438,7 +3438,6 @@ var SoundFX = (function () {
 
   var MUTE_KEY = 'actuarial-notes-muted';
   var ctx = null;
-  var _silentPlayed = false;
 
   function getCtx() {
     if (!ctx) {
@@ -3449,19 +3448,20 @@ var SoundFX = (function () {
 
   // Mobile browsers keep AudioContext suspended until a user gesture handler
   // calls resume(). Re-run on every gesture because the context can be
-  // re-suspended after tab switches, lock-screen, etc.
+  // re-suspended after tab switches, lock-screen, or overlay open/close.
+  // Play a silent buffer each time we re-unlock — iOS Safari needs this to
+  // fully restore audio after a re-suspension (e.g. caused by body overflow
+  // toggling when the mobile nav overlay opens).
   function unlockAudio() {
     var ac = getCtx();
-    if (ac.state === 'suspended') ac.resume();
-    // Play a silent buffer once to fully unlock on iOS Safari
-    if (!_silentPlayed) {
-      var buf = ac.createBuffer(1, 1, ac.sampleRate);
-      var src = ac.createBufferSource();
-      src.buffer = buf;
-      src.connect(ac.destination);
-      src.start(0);
-      _silentPlayed = true;
-    }
+    if (ac.state === 'running') return; // already unlocked, nothing to do
+    ac.resume();
+    // Silent 1-sample buffer kicks iOS Safari out of the suspended state
+    var buf = ac.createBuffer(1, 1, ac.sampleRate);
+    var src = ac.createBufferSource();
+    src.buffer = buf;
+    src.connect(ac.destination);
+    src.start(0);
   }
   document.addEventListener('touchstart', unlockAudio, true);
   document.addEventListener('click', unlockAudio, true);

@@ -2859,6 +2859,14 @@
   var STATUS_ICONS = { not_started: SVG_CIRCLE, in_progress: SVG_PROGRESS, completed: SVG_CHECK };
   var STATUS_CYCLE = { not_started: 'in_progress', in_progress: 'completed', completed: 'not_started' };
 
+  var COLOR_HEX = {
+    sky: '#0284c7', blue: '#2563eb', indigo: '#4f46e5', violet: '#7c3aed',
+    purple: '#9333ea', fuchsia: '#c026d3', pink: '#db2777', rose: '#e11d48',
+    red: '#dc2626', orange: '#ea580c', amber: '#d97706', yellow: '#ca8a04',
+    lime: '#65a30d', green: '#16a34a', emerald: '#059669', teal: '#0d9488',
+    cyan: '#0891b2', slate: '#475569'
+  };
+
   /* ---- Track definitions ---- */
   var TRACKS = [
     {
@@ -2881,7 +2889,7 @@
           ]
         },
         {
-          label: 'Exams & E-Learning',
+          label: 'Exams & Courses',
           items: [
             { id: 'PAF',   name: 'PAF',        path: null, color: 'violet' },
             { id: 'FAM',   name: 'Exam FAM',   path: null, color: 'purple' },
@@ -2958,6 +2966,7 @@
         },
         {
           label: 'Required Courses',
+          collapsed: true,
           items: [
             { id: 'FSA-DMAC', name: 'DMAC', path: null, color: 'amber' },
             { id: 'FSA-FAC',  name: 'FAC',  path: null, color: 'slate' }
@@ -2966,6 +2975,7 @@
         {
           label: 'Corporate Finance and ERM',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-CFE101', name: 'CFE 101', path: null, color: 'lime', seq: 'CFE' },
             { id: 'FSA-CFE201', name: 'CFE 201', path: null, color: 'lime', seq: 'CFE' }
@@ -2974,6 +2984,7 @@
         {
           label: 'Group and Health Insurance',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-GH101', name: 'GH 101',     path: null, color: 'green', seq: 'GH' },
             { id: 'FSA-GH201', name: 'GH 201-U/C', path: null, color: 'green', seq: 'GH' },
@@ -2983,6 +2994,7 @@
         {
           label: 'General Insurance',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-GI101', name: 'GI 101', path: null, color: 'emerald', seq: 'GI' },
             { id: 'FSA-GI201', name: 'GI 201', path: null, color: 'emerald', seq: 'GI' },
@@ -2993,6 +3005,7 @@
         {
           label: 'Individual Life and Annuities',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-ILA101', name: 'ILA 101',     path: null, color: 'teal', seq: 'ILA' },
             { id: 'FSA-ILA201', name: 'ILA 201-U/I', path: null, color: 'teal', seq: 'ILA' }
@@ -3001,6 +3014,7 @@
         {
           label: 'Investment',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-INV101', name: 'INV 101', path: null, color: 'cyan', seq: 'INV' },
             { id: 'FSA-INV201', name: 'INV 201', path: null, color: 'cyan', seq: 'INV' }
@@ -3009,6 +3023,7 @@
         {
           label: 'Retirement Benefits',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-RET101', name: 'RET 101', path: null, color: 'yellow', seq: 'RET' },
             { id: 'FSA-RET201', name: 'RET 201', path: null, color: 'yellow', seq: 'RET' },
@@ -3018,6 +3033,7 @@
         {
           label: 'Cross Practice',
           elective: true,
+          collapsed: true,
           items: [
             { id: 'FSA-CP311', name: 'CP 311', path: null, color: 'orange' },
             { id: 'FSA-CP312', name: 'CP 312', path: null, color: 'orange' },
@@ -3337,6 +3353,7 @@
           row.dataset.status = newStatus;
           statusBtn.innerHTML = STATUS_ICONS[newStatus];
           updateProgress();
+          updateFloatingNav();
           if (newStatus === 'in_progress') {
             SoundFX.inProgress();
           } else if (newStatus === 'completed') {
@@ -3388,10 +3405,112 @@
     }
   }
 
+  /* ---- Floating exam nav for in-progress items ---- */
+  var floatingNavEl = null;
+
+  function getInProgressItems() {
+    var items = [];
+    var seenIds = {};
+    TRACKS.forEach(function (track) {
+      track.sections.forEach(function (sec) {
+        sec.items.forEach(function (item) {
+          if (!seenIds[item.id] && getStatus(item.id) === 'in_progress') {
+            items.push(item);
+            seenIds[item.id] = true;
+          }
+        });
+      });
+    });
+    return items;
+  }
+
+  function isCurrentPage(item) {
+    if (!item.path) return false;
+    var slug = item.path.replace(/ /g, '+');
+    var current = decodeURIComponent(window.location.pathname).replace(/^\//, '');
+    return current === item.path || current === slug;
+  }
+
+  function updateFloatingNav() {
+    var items = getInProgressItems().filter(function (item) { return item.path; });
+
+    // Sort: current page item first
+    items.sort(function (a, b) {
+      return (isCurrentPage(a) ? 0 : 1) - (isCurrentPage(b) ? 0 : 1);
+    });
+
+    if (items.length === 0) {
+      if (floatingNavEl) { floatingNavEl.remove(); floatingNavEl = null; }
+      return;
+    }
+
+    var wasOpen = floatingNavEl && floatingNavEl.classList.contains('is-open');
+    if (!floatingNavEl) {
+      floatingNavEl = document.createElement('div');
+      floatingNavEl.className = 'floating-exam-nav';
+      document.body.appendChild(floatingNavEl);
+    }
+    floatingNavEl.innerHTML = '';
+
+    var isMultiple = items.length > 1;
+
+    if (isMultiple) {
+      var toggle = document.createElement('button');
+      toggle.className = 'floating-exam-nav__toggle';
+      toggle.type = 'button';
+      var topItem = items[0];
+      toggle.style.setProperty('--nav-color', COLOR_HEX[topItem.color] || COLOR_HEX.blue);
+      toggle.innerHTML = '<span class="floating-exam-nav__label">' + topItem.name + '</span>' +
+        '<span class="floating-exam-nav__badge">' + items.length + '</span>';
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        floatingNavEl.classList.toggle('is-open');
+      });
+      floatingNavEl.appendChild(toggle);
+    }
+
+    var stack = document.createElement('div');
+    stack.className = 'floating-exam-nav__stack';
+
+    items.forEach(function (item) {
+      var btn = document.createElement('a');
+      btn.className = 'floating-exam-nav__btn';
+      var slug = item.path.replace(/ /g, '+');
+      btn.href = window.location.origin + '/' + slug;
+      btn.style.setProperty('--nav-color', COLOR_HEX[item.color] || COLOR_HEX.blue);
+      btn.textContent = item.name;
+      if (isCurrentPage(item)) btn.classList.add('is-current');
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.open(window.location.origin + '/' + slug, '_self');
+      });
+      stack.appendChild(btn);
+    });
+
+    floatingNavEl.appendChild(stack);
+
+    if (!isMultiple) {
+      floatingNavEl.classList.add('is-single');
+      floatingNavEl.classList.remove('is-open');
+    } else {
+      floatingNavEl.classList.remove('is-single');
+      if (wasOpen) floatingNavEl.classList.add('is-open');
+    }
+  }
+
+  // Close floating nav when clicking outside
+  document.addEventListener('click', function (e) {
+    if (floatingNavEl && floatingNavEl.classList.contains('is-open') &&
+        !floatingNavEl.contains(e.target)) {
+      floatingNavEl.classList.remove('is-open');
+    }
+  });
+
   /* ---- Init & SPA survival ---- */
   function init() {
     loadState();
     buildTracker();
+    updateFloatingNav();
   }
 
   if (document.readyState === 'loading') {
@@ -3408,6 +3527,7 @@
       barFillEl = null;
       sectionsEl = null;
       buildTracker();
+      updateFloatingNav();
     }
   });
 
@@ -3423,6 +3543,18 @@
   } else {
     setTimeout(observeSidebar, 350);
   }
+
+  // Update floating nav on SPA navigation (re-sort for current page)
+  window.addEventListener('popstate', function () {
+    setTimeout(updateFloatingNav, 200);
+  });
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+    if (link) {
+      setTimeout(updateFloatingNav, 300);
+      setTimeout(updateFloatingNav, 600);
+    }
+  });
 
 })();
 

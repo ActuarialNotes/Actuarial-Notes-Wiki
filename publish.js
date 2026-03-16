@@ -4293,6 +4293,10 @@ var SoundFX = (function () {
 
   var DEFAULT_FEEDBACK_PROMPT = 'You are an expert actuarial exam content analyst. The user has reviewed the following extracted exam content and provided feedback. Update the content based on their feedback and return the complete updated JSON.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "weight": 25,\n      "concepts": [\n        {\n          "name": "Concept Name",\n          "description": "Description"\n        }\n      ]\n    }\n  ],\n  "sources": [\n    {\n      "title": "Source Title",\n      "author": "Author Name",\n      "chapters": "Relevant chapters",\n      "type": "textbook"\n    }\n  ]\n}';
 
+  var DEFAULT_CONCEPTS_PROMPT = 'You are an expert actuarial exam content analyst. Given the following document text and a list of concept names, find detailed definitions and explanations for each concept.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "conceptDetails": {\n    "Concept Name": "A thorough 2-5 sentence definition and explanation of this concept as described in the source document, including key formulas, relationships, or examples where relevant."\n  }\n}\n\nRules:\n- Use the EXACT concept names as keys\n- Draw definitions directly from the source document content\n- Include mathematical formulas or relationships if mentioned\n- If a concept is not found in the document, provide a brief general definition and note it was not explicitly covered\n- Be thorough but concise';
+
+  var DEFAULT_CONCEPT_CHAT_PROMPT = 'You are a knowledgeable actuarial tutor. The student is studying the concept described below. Answer their question using the source document as primary reference. Be clear, concise, and educational. If the answer involves formulas, show them.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "answer": "Your detailed answer here"\n}';
+
   /* ---- State ---- */
   var customExams = [];
   var sidebarBtnEl = null;
@@ -4302,6 +4306,19 @@ var SoundFX = (function () {
   var currentStep = 1;
   var workflowData = {};
   var editingExamId = null;
+
+  /* ---- Sidebar helper ---- */
+  function closeSidebar() {
+    // Obsidian Publish: click the sidebar toggle button if it exists
+    var toggleBtn = document.querySelector('.site-body-left-column-collapse-icon, .sidebar-toggle-button, [aria-label="Toggle left sidebar"]');
+    if (toggleBtn) { toggleBtn.click(); return; }
+    // Fallback: hide sidebar via CSS on mobile/tablet
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (sidebar && window.innerWidth < 1000) {
+      sidebar.style.display = 'none';
+      setTimeout(function () { sidebar.style.display = ''; }, 50);
+    }
+  }
 
   /* ---- SVG Icons ---- */
   var SVG_PLUS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>';
@@ -4492,6 +4509,7 @@ var SoundFX = (function () {
 
       item.addEventListener('click', function () {
         renderExamViewer(exam.id);
+        closeSidebar();
       });
 
       list.appendChild(item);
@@ -4537,6 +4555,7 @@ var SoundFX = (function () {
             link.addEventListener('click', function (e) {
               e.stopPropagation();
               renderConceptPage(exam.id, oi, ci);
+              closeSidebar();
             });
             subList.appendChild(link);
           });
@@ -4708,15 +4727,124 @@ var SoundFX = (function () {
   function openEditModal(examId) {
     var exam = customExams.find(function (ex) { return ex.id === examId; });
     if (!exam) return;
-    editingExamId = examId;
-    workflowData = {
-      examTitle: exam.name,
-      examDescription: exam.description || '',
-      objectives: JSON.parse(JSON.stringify(exam.objectives)),
-      sources: JSON.parse(JSON.stringify(exam.sources)),
-      color: exam.color
-    };
-    openModal(4);
+
+    // Lightweight edit modal — name, colour, filename only
+    var backdrop = document.createElement('div');
+    backdrop.className = 'custom-exam__backdrop';
+
+    var modal = document.createElement('div');
+    modal.className = 'custom-exam__modal';
+    modal.style.maxWidth = '420px';
+    modal.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'custom-exam__modal-header';
+    header.innerHTML = '<span class="custom-exam__modal-title">Edit Exam</span>';
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'custom-exam__modal-icon-btn';
+    closeBtn.type = 'button';
+    closeBtn.innerHTML = SVG_CLOSE;
+    closeBtn.addEventListener('click', function () { backdrop.remove(); modal.remove(); });
+    header.appendChild(closeBtn);
+
+    var body = document.createElement('div');
+    body.className = 'custom-exam__modal-body';
+    body.style.padding = '20px';
+
+    // Name field
+    var nameGroup = document.createElement('div');
+    nameGroup.className = 'custom-exam__form-group';
+    nameGroup.innerHTML = '<label class="custom-exam__label">Exam Name</label>';
+    var nameInput = document.createElement('input');
+    nameInput.className = 'custom-exam__input';
+    nameInput.type = 'text';
+    nameInput.value = exam.name;
+    nameGroup.appendChild(nameInput);
+    body.appendChild(nameGroup);
+
+    // Colour dropdown
+    var colorGroup = document.createElement('div');
+    colorGroup.className = 'custom-exam__form-group';
+    colorGroup.innerHTML = '<label class="custom-exam__label">Accent Colour</label>';
+    var colorSelectRow = document.createElement('div');
+    colorSelectRow.style.cssText = 'display:flex;align-items:center;gap:10px';
+    var colorDot = document.createElement('span');
+    colorDot.style.cssText = 'width:20px;height:20px;border-radius:50%;flex-shrink:0';
+    colorDot.style.background = exam.color || '#2563eb';
+    var colorSelect = document.createElement('select');
+    colorSelect.className = 'custom-exam__input';
+    colorSelect.style.flex = '1';
+    var selectedColor = exam.color || '#2563eb';
+    EXAM_COLORS.forEach(function (c) {
+      var opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      opt.style.color = c;
+      if (c === selectedColor) opt.selected = true;
+      colorSelect.appendChild(opt);
+    });
+    colorSelect.addEventListener('change', function () {
+      selectedColor = colorSelect.value;
+      colorDot.style.background = selectedColor;
+    });
+    colorSelectRow.appendChild(colorDot);
+    colorSelectRow.appendChild(colorSelect);
+    colorGroup.appendChild(colorSelectRow);
+    body.appendChild(colorGroup);
+
+    // Source filename
+    if (exam.fileName) {
+      var fileGroup = document.createElement('div');
+      fileGroup.className = 'custom-exam__form-group';
+      fileGroup.innerHTML = '<label class="custom-exam__label">Source File</label>';
+      var fileDisplay = document.createElement('div');
+      fileDisplay.style.cssText = 'font-size:0.9rem;opacity:0.7;padding:8px 0';
+      fileDisplay.textContent = exam.fileName;
+      fileGroup.appendChild(fileDisplay);
+      body.appendChild(fileGroup);
+    }
+
+    // Buttons
+    var btnRow = document.createElement('div');
+    btnRow.className = 'custom-exam__btn-row';
+    btnRow.style.marginTop = '20px';
+
+    var cancelBtn = document.createElement('button');
+    cancelBtn.className = 'custom-exam__btn custom-exam__btn--ghost';
+    cancelBtn.type = 'button';
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.addEventListener('click', function () { backdrop.remove(); modal.remove(); });
+
+    var saveBtn = document.createElement('button');
+    saveBtn.className = 'custom-exam__btn custom-exam__btn--primary';
+    saveBtn.type = 'button';
+    saveBtn.textContent = 'Save';
+    saveBtn.addEventListener('click', function () {
+      var newName = nameInput.value.trim();
+      if (!newName) { nameInput.focus(); return; }
+      exam.name = newName;
+      exam.color = selectedColor;
+      exam.updatedAt = new Date().toISOString();
+      saveExams();
+      renderMyExams();
+      // If viewer is open, refresh it
+      var existingViewer = document.querySelector('.custom-exam__viewer');
+      if (existingViewer) { removeViewer(existingViewer); renderExamViewer(exam.id); }
+      backdrop.remove();
+      modal.remove();
+    });
+
+    btnRow.appendChild(cancelBtn);
+    btnRow.appendChild(saveBtn);
+    body.appendChild(btnRow);
+
+    modal.appendChild(header);
+    modal.appendChild(body);
+    backdrop.appendChild(modal);
+    backdrop.addEventListener('click', function (e) { if (e.target === backdrop) { backdrop.remove(); } });
+    document.body.appendChild(backdrop);
+    requestAnimationFrame(function () { backdrop.style.opacity = '1'; backdrop.style.visibility = 'visible'; });
   }
 
   /* ---- Step rendering ---- */
@@ -4996,6 +5124,7 @@ var SoundFX = (function () {
     var tasks = [
       { id: 'extract', label: 'Reading PDF' },
       { id: 'objectives', label: 'Extracting learning objectives' },
+      { id: 'concepts', label: 'Extracting concepts' },
       { id: 'sources', label: 'Identifying sources & references' }
     ];
 
@@ -5113,6 +5242,7 @@ var SoundFX = (function () {
 
       // Task 2: Extract objectives
       setTaskStatus(progressEl, 'objectives', 'active');
+      setTaskStatus(progressEl, 'concepts', 'pending');
       var objPrompt = prompts.objectives || DEFAULT_OBJECTIVES_PROMPT;
       var objResult = await callClaudeApi(pdfText.text, objPrompt);
       workflowData.examTitle = objResult.examTitle || 'Custom Exam';
@@ -5143,8 +5273,35 @@ var SoundFX = (function () {
         return el;
       }, 100);
 
-      // Task 3: Extract sources
+      // Task 3: Extract concept details
       await new Promise(function (r) { setTimeout(r, workflowData.objectives.length * 100 + 200); });
+      setTaskStatus(progressEl, 'concepts', 'active');
+
+      var allConceptNames = [];
+      workflowData.objectives.forEach(function (o) {
+        (o.concepts || []).forEach(function (c) { allConceptNames.push(c.name); });
+      });
+
+      if (allConceptNames.length > 0) {
+        try {
+          var conceptText = 'Document:\n' + pdfText.text.substring(0, 80000) + '\n\nConcepts to define:\n' + allConceptNames.join('\n');
+          var conceptResult = await callClaudeApi(conceptText, DEFAULT_CONCEPTS_PROMPT);
+          var details = conceptResult.conceptDetails || {};
+          workflowData.objectives.forEach(function (o) {
+            (o.concepts || []).forEach(function (c) {
+              if (details[c.name]) c.detail = details[c.name];
+            });
+          });
+          var enrichedCount = Object.keys(details).length;
+          setTaskStatus(progressEl, 'concepts', 'done', enrichedCount + ' concepts enriched');
+        } catch (conceptErr) {
+          setTaskStatus(progressEl, 'concepts', 'done', 'skipped (will generate on demand)');
+        }
+      } else {
+        setTaskStatus(progressEl, 'concepts', 'done', '0 concepts');
+      }
+
+      // Task 4: Extract sources
       setTaskStatus(progressEl, 'sources', 'active');
       var srcPrompt = prompts.sources || DEFAULT_SOURCES_PROMPT;
       var srcResult = await callClaudeApi(pdfText.text, srcPrompt);
@@ -5190,7 +5347,7 @@ var SoundFX = (function () {
 
       retryBtn.style.display = 'inline-flex';
 
-      ['extract', 'objectives', 'sources'].forEach(function (id) {
+      ['extract', 'objectives', 'concepts', 'sources'].forEach(function (id) {
         var row = progressEl.querySelector('[data-task="' + id + '"]');
         if (row && row.classList.contains('is-active')) {
           setTaskStatus(progressEl, id, 'error');
@@ -5282,12 +5439,12 @@ var SoundFX = (function () {
 
     var desc = document.createElement('p');
     desc.className = 'custom-exam__step-desc';
-    desc.textContent = 'Review the extracted content. Approve to save, or give feedback to refine.';
+    desc.textContent = 'Review the extracted content. Edit name or colour, then save.';
 
     // Exam title (editable)
     var titleGroup = document.createElement('div');
     titleGroup.className = 'custom-exam__form-group';
-    titleGroup.innerHTML = '<label class="custom-exam__label">Exam Title</label>';
+    titleGroup.innerHTML = '<label class="custom-exam__label">Exam Name</label>';
     var titleInput = document.createElement('input');
     titleInput.className = 'custom-exam__input';
     titleInput.type = 'text';
@@ -5295,41 +5452,56 @@ var SoundFX = (function () {
     titleInput.addEventListener('input', function () { workflowData.examTitle = titleInput.value; });
     titleGroup.appendChild(titleInput);
 
-    // Description (editable)
-    var descGroup = document.createElement('div');
-    descGroup.className = 'custom-exam__form-group';
-    descGroup.innerHTML = '<label class="custom-exam__label">Description</label>';
-    var descInput = document.createElement('textarea');
-    descInput.className = 'custom-exam__textarea';
-    descInput.rows = 2;
-    descInput.value = workflowData.examDescription || '';
-    descInput.addEventListener('input', function () { workflowData.examDescription = descInput.value; });
-    descGroup.appendChild(descInput);
-
-    // Color picker
+    // Colour dropdown (not swatches)
     var colorGroup = document.createElement('div');
     colorGroup.className = 'custom-exam__form-group';
-    colorGroup.innerHTML = '<label class="custom-exam__label">Accent Color</label>';
-    var colorRow = document.createElement('div');
-    colorRow.className = 'custom-exam__color-row';
+    colorGroup.innerHTML = '<label class="custom-exam__label">Accent Colour</label>';
+    var colorSelectRow = document.createElement('div');
+    colorSelectRow.style.cssText = 'display:flex;align-items:center;gap:10px';
+    var colorDot = document.createElement('span');
+    colorDot.style.cssText = 'width:20px;height:20px;border-radius:50%;flex-shrink:0';
+    colorDot.style.background = workflowData.color || '#2563eb';
+    var colorSelect = document.createElement('select');
+    colorSelect.className = 'custom-exam__input';
+    colorSelect.style.flex = '1';
     EXAM_COLORS.forEach(function (c) {
-      var swatch = document.createElement('button');
-      swatch.type = 'button';
-      swatch.className = 'custom-exam__color-swatch';
-      if (workflowData.color === c) swatch.classList.add('is-selected');
-      swatch.style.background = c;
-      swatch.addEventListener('click', function () {
-        workflowData.color = c;
-        colorRow.querySelectorAll('.custom-exam__color-swatch').forEach(function (s) { s.classList.remove('is-selected'); });
-        swatch.classList.add('is-selected');
-      });
-      colorRow.appendChild(swatch);
+      var opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      if (c === (workflowData.color || '#2563eb')) opt.selected = true;
+      colorSelect.appendChild(opt);
     });
-    colorGroup.appendChild(colorRow);
+    colorSelect.addEventListener('change', function () {
+      workflowData.color = colorSelect.value;
+      colorDot.style.background = colorSelect.value;
+    });
+    colorSelectRow.appendChild(colorDot);
+    colorSelectRow.appendChild(colorSelect);
+    colorGroup.appendChild(colorSelectRow);
+
+    // Save handler (shared by top and bottom buttons)
+    function handleSave() {
+      if (!workflowData.examTitle || !workflowData.examTitle.trim()) {
+        alert('Please enter an exam name.');
+        return;
+      }
+      saveExamFromWorkflow();
+      currentStep = 5;
+      renderStep();
+    }
+
+    // Top Save button
+    var topSaveBtn = document.createElement('button');
+    topSaveBtn.className = 'custom-exam__btn custom-exam__btn--primary custom-exam__btn--large';
+    topSaveBtn.type = 'button';
+    topSaveBtn.textContent = 'Save';
+    topSaveBtn.style.cssText = 'margin-top:12px;font-size:1rem;font-weight:700';
+    topSaveBtn.addEventListener('click', handleSave);
 
     // Read-only preview of objectives
     var previewSection = document.createElement('div');
     previewSection.className = 'custom-exam__form-section';
+    previewSection.style.marginTop = '16px';
     var previewHeader = document.createElement('div');
     previewHeader.className = 'custom-exam__form-section-header';
     previewHeader.innerHTML = '<span class="custom-exam__form-section-title">Learning Objectives (' + (workflowData.objectives || []).length + ')</span>';
@@ -5424,10 +5596,10 @@ var SoundFX = (function () {
     var feedbackErrorEl = document.createElement('div');
     feedbackErrorEl.className = 'custom-exam__error';
 
-    // Buttons row
-    var btnRow = document.createElement('div');
-    btnRow.className = 'custom-exam__btn-row';
-    btnRow.style.marginTop = '12px';
+    // Feedback + bottom save row
+    var feedbackBtnRow = document.createElement('div');
+    feedbackBtnRow.className = 'custom-exam__btn-row';
+    feedbackBtnRow.style.marginTop = '12px';
 
     var feedbackBtn = document.createElement('button');
     feedbackBtn.className = 'custom-exam__btn custom-exam__btn--secondary';
@@ -5466,33 +5638,26 @@ var SoundFX = (function () {
         feedbackBtn.textContent = 'Send Feedback →';
       }
     });
+    feedbackBtnRow.appendChild(feedbackBtn);
 
-    var approveBtn = document.createElement('button');
-    approveBtn.className = 'custom-exam__btn custom-exam__btn--primary';
-    approveBtn.type = 'button';
-    approveBtn.textContent = editingExamId ? 'Save Changes' : 'Approve & Save';
-    approveBtn.addEventListener('click', function () {
-      if (!workflowData.examTitle || !workflowData.examTitle.trim()) {
-        alert('Please enter an exam title.');
-        return;
-      }
-      saveExamFromWorkflow();
-      currentStep = 5;
-      renderStep();
-    });
-
-    btnRow.appendChild(feedbackBtn);
-    btnRow.appendChild(approveBtn);
+    // Bottom Save button
+    var bottomSaveBtn = document.createElement('button');
+    bottomSaveBtn.className = 'custom-exam__btn custom-exam__btn--primary custom-exam__btn--large';
+    bottomSaveBtn.type = 'button';
+    bottomSaveBtn.textContent = 'Save';
+    bottomSaveBtn.style.cssText = 'font-size:1rem;font-weight:700';
+    bottomSaveBtn.addEventListener('click', handleSave);
 
     wrap.appendChild(title);
     wrap.appendChild(desc);
     wrap.appendChild(titleGroup);
-    wrap.appendChild(descGroup);
     wrap.appendChild(colorGroup);
+    wrap.appendChild(topSaveBtn);
     wrap.appendChild(previewSection);
     wrap.appendChild(feedbackSection);
     wrap.appendChild(feedbackErrorEl);
-    wrap.appendChild(btnRow);
+    wrap.appendChild(feedbackBtnRow);
+    wrap.appendChild(bottomSaveBtn);
 
     body.innerHTML = '';
     body.appendChild(wrap);
@@ -5518,7 +5683,9 @@ var SoundFX = (function () {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         objectives: workflowData.objectives || [],
-        sources: workflowData.sources || []
+        sources: workflowData.sources || [],
+        pdfText: workflowData.pdfText || '',
+        fileName: workflowData.file ? workflowData.file.name : ''
       });
     }
     saveExams();
@@ -5857,7 +6024,10 @@ var SoundFX = (function () {
     objHeading.textContent = 'Learning Objectives';
     contentWrap.appendChild(objHeading);
 
-    // Native callout for each objective
+    // Add has-exam-nav class for proper callout tinting
+    contentWrap.classList.add('has-exam-nav');
+
+    // Native callout for each objective (matching Obsidian's DOM structure)
     (exam.objectives || []).forEach(function (obj, i) {
       var callout = document.createElement('div');
       callout.className = 'callout is-collapsed';
@@ -5867,6 +6037,11 @@ var SoundFX = (function () {
       var calloutTitle = document.createElement('div');
       calloutTitle.className = 'callout-title';
       calloutTitle.style.cursor = 'pointer';
+
+      // Icon element (hidden by CSS but matches native structure)
+      var calloutIcon = document.createElement('div');
+      calloutIcon.className = 'callout-icon';
+      calloutTitle.appendChild(calloutIcon);
 
       var numEl = document.createElement('data');
       numEl.className = 'callout-obj-num';
@@ -5892,6 +6067,14 @@ var SoundFX = (function () {
         pctBadge.className = 'callout-badge callout-badge--pct';
         pctBadge.textContent = obj.weight + '%';
         calloutTitle.appendChild(pctBadge);
+      }
+
+      // Concept count badge
+      if ((obj.concepts || []).length > 0) {
+        var conceptBadge = document.createElement('span');
+        conceptBadge.className = 'callout-concept-count';
+        conceptBadge.textContent = (obj.concepts || []).length + ' Concepts';
+        calloutTitle.appendChild(conceptBadge);
       }
 
       calloutTitle.appendChild(foldEl);
@@ -6027,18 +6210,162 @@ var SoundFX = (function () {
 
     if (concept.description) {
       var descEl = document.createElement('p');
+      descEl.style.cssText = 'opacity:0.8;font-size:1rem;margin-bottom:1rem';
       descEl.textContent = concept.description;
       contentWrap.appendChild(descEl);
     }
 
+    // Detail content area
+    var detailArea = document.createElement('div');
+    detailArea.className = 'custom-exam__concept-detail';
+
+    if (concept.detail) {
+      renderConceptDetail(detailArea, concept.detail, exam.color);
+    } else {
+      // Generate button
+      var generateWrap = document.createElement('div');
+      generateWrap.style.cssText = 'padding:24px;border:2px dashed var(--muted,#333);border-radius:8px;text-align:center;margin:1rem 0';
+
+      var generateHint = document.createElement('p');
+      generateHint.style.cssText = 'opacity:0.6;margin-bottom:12px;font-size:0.9rem';
+      generateHint.textContent = 'No detailed content yet. Generate a research summary from the source document.';
+      generateWrap.appendChild(generateHint);
+
+      var generateBtn = document.createElement('button');
+      generateBtn.className = 'custom-exam__btn custom-exam__btn--primary';
+      generateBtn.type = 'button';
+      generateBtn.innerHTML = '<span class="custom-exam__btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span> Generate from Source';
+      generateBtn.addEventListener('click', async function () {
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = SVG_SPINNER + ' Researching…';
+
+        try {
+          var pdfText = exam.pdfText || '';
+          if (!pdfText) throw new Error('No source document text available. Please re-create the exam with a PDF upload.');
+
+          var promptText = 'Document:\n' + pdfText.substring(0, 80000) + '\n\nConcept to research: ' + concept.name + '\nCurrent description: ' + (concept.description || 'N/A');
+          var result = await callClaudeApi(promptText, DEFAULT_CONCEPTS_PROMPT);
+          var details = result.conceptDetails || {};
+          concept.detail = details[concept.name] || details[Object.keys(details)[0]] || 'No detailed information found.';
+          saveExams();
+
+          generateWrap.remove();
+          renderConceptDetail(detailArea, concept.detail, exam.color);
+        } catch (err) {
+          generateBtn.disabled = false;
+          generateBtn.innerHTML = '<span class="custom-exam__btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span> Generate from Source';
+          var errDiv = generateWrap.querySelector('.custom-exam__error') || document.createElement('div');
+          errDiv.className = 'custom-exam__error';
+          errDiv.textContent = 'Error: ' + (err.message || 'Failed to generate');
+          errDiv.style.display = 'block';
+          if (!errDiv.parentElement) generateWrap.appendChild(errDiv);
+        }
+      });
+      generateWrap.appendChild(generateBtn);
+      detailArea.appendChild(generateWrap);
+    }
+    contentWrap.appendChild(detailArea);
+
+    // Part of
     var partOf = document.createElement('p');
-    partOf.style.cssText = 'margin-top:2rem;opacity:0.6;font-size:0.9rem';
+    partOf.style.cssText = 'margin-top:1.5rem;opacity:0.5;font-size:0.85rem';
     partOf.innerHTML = '<strong>Part of:</strong> ' + escHtml(exam.name) + ' › ' + escHtml(obj.title);
     contentWrap.appendChild(partOf);
+
+    // Q&A Chat
+    var chatSection = document.createElement('div');
+    chatSection.className = 'custom-exam__concept-chat';
+    chatSection.style.cssText = 'margin-top:2rem;border-top:1px solid var(--muted,#333);padding-top:1.5rem';
+
+    var chatTitle = document.createElement('h3');
+    chatTitle.style.cssText = 'font-size:1rem;margin-bottom:0.75rem';
+    chatTitle.textContent = 'Ask about this concept';
+    chatSection.appendChild(chatTitle);
+
+    var chatMessages = document.createElement('div');
+    chatMessages.className = 'custom-exam__chat-messages';
+    chatMessages.style.cssText = 'max-height:300px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:8px';
+    chatSection.appendChild(chatMessages);
+
+    var chatInputRow = document.createElement('div');
+    chatInputRow.style.cssText = 'display:flex;gap:8px';
+
+    var chatInput = document.createElement('input');
+    chatInput.className = 'custom-exam__input';
+    chatInput.type = 'text';
+    chatInput.placeholder = 'Ask a question about ' + concept.name + '…';
+    chatInput.style.flex = '1';
+
+    var chatSendBtn = document.createElement('button');
+    chatSendBtn.className = 'custom-exam__btn custom-exam__btn--primary';
+    chatSendBtn.type = 'button';
+    chatSendBtn.textContent = 'Send';
+
+    var chatHistory = [];
+
+    async function sendChatMessage() {
+      var q = chatInput.value.trim();
+      if (!q) return;
+      chatInput.value = '';
+
+      // Add user message
+      var userMsg = document.createElement('div');
+      userMsg.style.cssText = 'align-self:flex-end;background:var(--brand,#2563eb);color:#fff;padding:8px 12px;border-radius:12px 12px 2px 12px;max-width:80%;font-size:0.9rem';
+      userMsg.textContent = q;
+      chatMessages.appendChild(userMsg);
+
+      // Add loading message
+      var loadingMsg = document.createElement('div');
+      loadingMsg.style.cssText = 'align-self:flex-start;background:var(--bg-elev,#1a1a2e);padding:8px 12px;border-radius:12px 12px 12px 2px;max-width:80%;font-size:0.9rem;opacity:0.6';
+      loadingMsg.innerHTML = SVG_SPINNER + ' Thinking…';
+      chatMessages.appendChild(loadingMsg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      chatSendBtn.disabled = true;
+
+      try {
+        chatHistory.push({ role: 'user', content: q });
+        var contextText = 'Concept: ' + concept.name + '\nDescription: ' + (concept.description || '') + '\nDetailed content: ' + (concept.detail || 'Not yet generated') + '\n\nSource document excerpt:\n' + (exam.pdfText || '').substring(0, 40000) + '\n\nConversation:\n' + chatHistory.map(function (m) { return m.role + ': ' + m.content; }).join('\n') + '\n\nAnswer the latest question.';
+        var result = await callClaudeApi(contextText, DEFAULT_CONCEPT_CHAT_PROMPT);
+        var answer = result.answer || JSON.stringify(result);
+
+        chatHistory.push({ role: 'assistant', content: answer });
+
+        loadingMsg.style.opacity = '1';
+        loadingMsg.style.background = 'var(--bg-elev,#1a1a2e)';
+        loadingMsg.innerHTML = '';
+        loadingMsg.textContent = answer;
+      } catch (err) {
+        loadingMsg.style.opacity = '1';
+        loadingMsg.style.color = 'var(--danger,#dc2626)';
+        loadingMsg.innerHTML = '';
+        loadingMsg.textContent = 'Error: ' + (err.message || 'Failed to respond');
+      }
+
+      chatSendBtn.disabled = false;
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    chatSendBtn.addEventListener('click', sendChatMessage);
+    chatInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') sendChatMessage();
+    });
+
+    chatInputRow.appendChild(chatInput);
+    chatInputRow.appendChild(chatSendBtn);
+    chatSection.appendChild(chatInputRow);
+    contentWrap.appendChild(chatSection);
 
     viewer.appendChild(toolbar);
     viewer.appendChild(contentWrap);
     showInContentArea(viewer);
+  }
+
+  function renderConceptDetail(container, detail, color) {
+    var detailEl = document.createElement('div');
+    detailEl.style.cssText = 'padding:16px 20px;background:var(--bg-elev,#1a1a2e);border-left:4px solid ' + (color || 'var(--brand,#2563eb)') + ';border-radius:6px;margin:1rem 0;line-height:1.6;font-size:0.95rem';
+    detailEl.textContent = detail;
+    container.appendChild(detailEl);
   }
 
   /* ---- Source page ---- */

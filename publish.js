@@ -3619,16 +3619,25 @@ var SoundFX = (function () {
   // Always play a silent 1-sample buffer: iOS Safari can silently deactivate
   // the audio session even while ac.state === 'running' (e.g. after page
   // layout changes).  Re-activating it on every touchstart is the safest fix.
+  // IMPORTANT: the silent buffer must be played *after* resume() resolves —
+  // calling start() on a suspended context throws a DOMException (caught
+  // silently) meaning the iOS audio session never actually gets activated.
   function unlockAudio() {
     var ac = getCtx();
-    if (ac.state === 'suspended') ac.resume();
-    try {
-      var buf = ac.createBuffer(1, 1, ac.sampleRate);
-      var src = ac.createBufferSource();
-      src.buffer = buf;
-      src.connect(ac.destination);
-      src.start(0);
-    } catch (e) {}
+    function playSilent() {
+      try {
+        var buf = ac.createBuffer(1, 1, ac.sampleRate);
+        var src = ac.createBufferSource();
+        src.buffer = buf;
+        src.connect(ac.destination);
+        src.start(0);
+      } catch (e) {}
+    }
+    if (ac.state === 'running') {
+      playSilent();
+    } else {
+      ac.resume().then(playSilent).catch(function () {});
+    }
   }
   document.addEventListener('touchstart', unlockAudio, { capture: true, passive: true });
   document.addEventListener('click', unlockAudio, true);
@@ -3640,7 +3649,7 @@ var SoundFX = (function () {
   function ensureRunning(cb) {
     var ac = getCtx();
     if (ac.state === 'running') { cb(ac); return; }
-    ac.resume().then(function () { cb(ac); });
+    ac.resume().then(function () { cb(ac); }).catch(function () {});
   }
 
   function isMuted() {

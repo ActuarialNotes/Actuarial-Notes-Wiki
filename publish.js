@@ -3343,7 +3343,6 @@
           row.dataset.status = newStatus;
           statusBtn.innerHTML = STATUS_ICONS[newStatus];
           updateProgress();
-          updateFloatingNav();
           if (newStatus === 'in_progress') {
             SoundFX.inProgress();
           } else if (newStatus === 'completed') {
@@ -3395,112 +3394,10 @@
     }
   }
 
-  /* ---- Floating exam nav for in-progress items ---- */
-  var floatingNavEl = null;
-
-  function getInProgressItems() {
-    var items = [];
-    var seenIds = {};
-    TRACKS.forEach(function (track) {
-      track.sections.forEach(function (sec) {
-        sec.items.forEach(function (item) {
-          if (!seenIds[item.id] && getStatus(item.id) === 'in_progress') {
-            items.push(item);
-            seenIds[item.id] = true;
-          }
-        });
-      });
-    });
-    return items;
-  }
-
-  function isCurrentPage(item) {
-    if (!item.path) return false;
-    var slug = item.path.replace(/ /g, '+');
-    var current = decodeURIComponent(window.location.pathname).replace(/^\//, '');
-    return current === item.path || current === slug;
-  }
-
-  function updateFloatingNav() {
-    var items = getInProgressItems().filter(function (item) { return item.path; });
-
-    // Sort: current page item first
-    items.sort(function (a, b) {
-      return (isCurrentPage(a) ? 0 : 1) - (isCurrentPage(b) ? 0 : 1);
-    });
-
-    if (items.length === 0) {
-      if (floatingNavEl) { floatingNavEl.remove(); floatingNavEl = null; }
-      return;
-    }
-
-    var wasOpen = floatingNavEl && floatingNavEl.classList.contains('is-open');
-    if (!floatingNavEl) {
-      floatingNavEl = document.createElement('div');
-      floatingNavEl.className = 'floating-exam-nav';
-      document.body.appendChild(floatingNavEl);
-    }
-    floatingNavEl.innerHTML = '';
-
-    var isMultiple = items.length > 1;
-
-    if (isMultiple) {
-      var toggle = document.createElement('button');
-      toggle.className = 'floating-exam-nav__toggle';
-      toggle.type = 'button';
-      var topItem = items[0];
-      toggle.style.setProperty('--nav-color', COLOR_HEX[topItem.color] || COLOR_HEX.blue);
-      toggle.innerHTML = '<span class="floating-exam-nav__label">' + topItem.name + '</span>' +
-        '<span class="floating-exam-nav__badge">' + items.length + '</span>';
-      toggle.addEventListener('click', function (e) {
-        e.stopPropagation();
-        floatingNavEl.classList.toggle('is-open');
-      });
-      floatingNavEl.appendChild(toggle);
-    }
-
-    var stack = document.createElement('div');
-    stack.className = 'floating-exam-nav__stack';
-
-    items.forEach(function (item) {
-      var btn = document.createElement('a');
-      btn.className = 'floating-exam-nav__btn';
-      var slug = item.path.replace(/ /g, '+');
-      btn.href = window.location.origin + '/' + slug;
-      btn.style.setProperty('--nav-color', COLOR_HEX[item.color] || COLOR_HEX.blue);
-      btn.textContent = item.name;
-      if (isCurrentPage(item)) btn.classList.add('is-current');
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        window.open(window.location.origin + '/' + slug, '_self');
-      });
-      stack.appendChild(btn);
-    });
-
-    floatingNavEl.appendChild(stack);
-
-    if (!isMultiple) {
-      floatingNavEl.classList.add('is-single');
-      floatingNavEl.classList.remove('is-open');
-    } else {
-      floatingNavEl.classList.remove('is-single');
-      if (wasOpen) floatingNavEl.classList.add('is-open');
-    }
-  }
-
-  // Close floating nav when clicking outside
-  document.addEventListener('click', function (e) {
-    if (floatingNavEl && floatingNavEl.classList.contains('is-open') &&
-        !floatingNavEl.contains(e.target)) {
-      floatingNavEl.classList.remove('is-open');
-    }
-  });
-
   /* ---- Init & SPA survival ---- */
   function init() {
     loadState();
     buildTracker();
-    updateFloatingNav();
   }
 
   if (document.readyState === 'loading') {
@@ -3517,7 +3414,6 @@
       barFillEl = null;
       sectionsEl = null;
       buildTracker();
-      updateFloatingNav();
     }
   });
 
@@ -3533,18 +3429,6 @@
   } else {
     setTimeout(observeSidebar, 350);
   }
-
-  // Update floating nav on SPA navigation (re-sort for current page)
-  window.addEventListener('popstate', function () {
-    setTimeout(updateFloatingNav, 200);
-  });
-  document.addEventListener('click', function (e) {
-    var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
-    if (link) {
-      setTimeout(updateFloatingNav, 300);
-      setTimeout(updateFloatingNav, 600);
-    }
-  });
 
 })();
 

@@ -4172,6 +4172,12 @@ var SoundFX = (function () {
 
   var SVG_EYE_OFF = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.46 3.56A8.4 8.4 0 0 1 10 3c5.5 0 9 7 9 7a14.8 14.8 0 0 1-1.77 2.67M5.94 5.94A14.3 14.3 0 0 0 1 10s3.5 7 9 7a8.3 8.3 0 0 0 4.06-1.06"/><line x1="1" y1="1" x2="19" y2="19"/></svg>';
 
+  /* ---- HTML escaping ---- */
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   /* ---- Color palette for exams ---- */
   var EXAM_COLORS = ['#2563eb', '#7c3aed', '#dc2626', '#059669', '#d97706', '#db2777', '#0891b2', '#4f46e5', '#c2410c', '#0d9488'];
 
@@ -4335,7 +4341,7 @@ var SoundFX = (function () {
   var STEP_LABELS = ['API Key', 'Upload', 'Processing', 'Review', 'Complete'];
 
   function openModal(startStep) {
-    if (modalEl) closeModal();
+    if (modalEl) closeModal(true);
 
     var hasKey = !!getApiKey();
     if (!startStep) {
@@ -4436,18 +4442,29 @@ var SoundFX = (function () {
     document.addEventListener('keydown', handleModalEsc);
   }
 
-  function closeModal() {
-    if (modalEl) {
-      modalEl.classList.remove('is-visible');
-      backdropEl.classList.remove('is-visible');
+  function closeModal(immediate) {
+    document.removeEventListener('keydown', handleModalEsc);
+    if (!modalEl) return;
+
+    if (immediate) {
+      // Synchronous removal (used when reopening immediately)
+      if (modalEl.parentElement) modalEl.parentElement.removeChild(modalEl);
+      if (backdropEl && backdropEl.parentElement) backdropEl.parentElement.removeChild(backdropEl);
+      modalEl = null;
+      backdropEl = null;
+    } else {
+      // Animated removal
+      var oldModal = modalEl;
+      var oldBackdrop = backdropEl;
+      oldModal.classList.remove('is-visible');
+      if (oldBackdrop) oldBackdrop.classList.remove('is-visible');
+      modalEl = null;
+      backdropEl = null;
       setTimeout(function () {
-        if (modalEl && modalEl.parentElement) modalEl.parentElement.removeChild(modalEl);
-        if (backdropEl && backdropEl.parentElement) backdropEl.parentElement.removeChild(backdropEl);
-        modalEl = null;
-        backdropEl = null;
+        if (oldModal && oldModal.parentElement) oldModal.parentElement.removeChild(oldModal);
+        if (oldBackdrop && oldBackdrop.parentElement) oldBackdrop.parentElement.removeChild(oldBackdrop);
       }, 250);
     }
-    document.removeEventListener('keydown', handleModalEsc);
   }
 
   function handleModalEsc(e) {
@@ -4832,10 +4849,12 @@ var SoundFX = (function () {
   }
 
   /* ---- PDF.js text extraction ---- */
+  var _pdfjsLoadPromise = null;
   async function loadPdfJs() {
     if (window.pdfjsLib) return window.pdfjsLib;
+    if (_pdfjsLoadPromise) return _pdfjsLoadPromise;
 
-    return new Promise(function (resolve, reject) {
+    _pdfjsLoadPromise = new Promise(function (resolve, reject) {
       var moduleScript = document.createElement('script');
       moduleScript.type = 'module';
       moduleScript.textContent = 'import * as pdfjsLib from "' + PDFJS_CDN + '/pdf.min.mjs"; window.pdfjsLib = pdfjsLib; window.pdfjsLib.GlobalWorkerOptions.workerSrc = "' + PDFJS_CDN + '/pdf.worker.min.mjs"; window.dispatchEvent(new Event("pdfjs-loaded"));';
@@ -4848,9 +4867,11 @@ var SoundFX = (function () {
       document.head.appendChild(moduleScript);
 
       setTimeout(function () {
+        _pdfjsLoadPromise = null;
         reject(new Error('PDF.js failed to load. Check your internet connection.'));
       }, 15000);
     });
+    return _pdfjsLoadPromise;
   }
 
   async function extractPdfText(file) {
@@ -5292,10 +5313,12 @@ var SoundFX = (function () {
   }
 
   /* ---- PDF Generation (jsPDF) ---- */
+  var _jspdfLoadPromise = null;
   async function loadJsPdf() {
     if (window.jspdf) return window.jspdf;
+    if (_jspdfLoadPromise) return _jspdfLoadPromise;
 
-    return new Promise(function (resolve, reject) {
+    _jspdfLoadPromise = new Promise(function (resolve, reject) {
       var script = document.createElement('script');
       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js';
       script.onload = function () {
@@ -5305,9 +5328,10 @@ var SoundFX = (function () {
         script2.onerror = function () { resolve(window.jspdf); };
         document.head.appendChild(script2);
       };
-      script.onerror = function () { reject(new Error('Failed to load jsPDF')); };
+      script.onerror = function () { _jspdfLoadPromise = null; reject(new Error('Failed to load jsPDF')); };
       document.head.appendChild(script);
     });
+    return _jspdfLoadPromise;
   }
 
   async function generatePdf(data) {
@@ -5519,8 +5543,8 @@ var SoundFX = (function () {
       var cardHeader = document.createElement('div');
       cardHeader.className = 'custom-exam__viewer-obj-header';
       cardHeader.innerHTML = '<span class="custom-exam__viewer-obj-num">' + (i + 1) + '</span>' +
-        '<span class="custom-exam__viewer-obj-title">' + obj.title + '</span>' +
-        (obj.weight ? '<span class="custom-exam__viewer-obj-weight">' + obj.weight + '%</span>' : '');
+        '<span class="custom-exam__viewer-obj-title">' + escHtml(obj.title) + '</span>' +
+        (obj.weight ? '<span class="custom-exam__viewer-obj-weight">' + escHtml(obj.weight) + '%</span>' : '');
 
       var cardBody = document.createElement('div');
       cardBody.className = 'custom-exam__viewer-obj-body';
@@ -5529,8 +5553,8 @@ var SoundFX = (function () {
       (obj.concepts || []).forEach(function (concept) {
         var conceptEl = document.createElement('div');
         conceptEl.className = 'custom-exam__viewer-concept';
-        conceptEl.innerHTML = '<div class="custom-exam__viewer-concept-name">' + concept.name + '</div>' +
-          '<div class="custom-exam__viewer-concept-desc">' + (concept.description || '') + '</div>';
+        conceptEl.innerHTML = '<div class="custom-exam__viewer-concept-name">' + escHtml(concept.name) + '</div>' +
+          '<div class="custom-exam__viewer-concept-desc">' + escHtml(concept.description) + '</div>';
         cardBody.appendChild(conceptEl);
       });
 
@@ -5562,7 +5586,7 @@ var SoundFX = (function () {
       var tbody = document.createElement('tbody');
       exam.sources.forEach(function (src) {
         var tr = document.createElement('tr');
-        tr.innerHTML = '<td>' + (src.title || '') + '</td><td>' + (src.author || '') + '</td><td>' + (src.chapters || '') + '</td><td>' + (src.type || '') + '</td>';
+        tr.innerHTML = '<td>' + escHtml(src.title) + '</td><td>' + escHtml(src.author) + '</td><td>' + escHtml(src.chapters) + '</td><td>' + escHtml(src.type) + '</td>';
         tbody.appendChild(tr);
       });
       table.appendChild(tbody);
@@ -5593,13 +5617,17 @@ var SoundFX = (function () {
     setTimeout(init, 300);
   }
 
-  // Re-inject if sidebar re-renders
+  // Re-inject if sidebar re-renders (debounced)
+  var _ceObserverTimeout = null;
   var ceObserver = new MutationObserver(function () {
-    if (!document.querySelector('.custom-exam__sidebar-btn')) {
-      sidebarBtnEl = null;
-      myExamsEl = null;
-      buildSidebar();
-    }
+    clearTimeout(_ceObserverTimeout);
+    _ceObserverTimeout = setTimeout(function () {
+      if (!document.querySelector('.custom-exam__sidebar-btn')) {
+        sidebarBtnEl = null;
+        myExamsEl = null;
+        buildSidebar();
+      }
+    }, 200);
   });
 
   function observeSidebar() {

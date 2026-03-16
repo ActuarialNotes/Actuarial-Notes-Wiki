@@ -223,9 +223,6 @@
       showBackdrop();
       if (window.innerWidth <= 540) {
         document.body.style.overflow = 'hidden';
-        // Position the content panel below the sticky bar
-        var stickyRect = sticky.getBoundingClientRect();
-        stickyContent.style.top = stickyRect.bottom + 'px';
       }
     }
 

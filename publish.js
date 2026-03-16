@@ -6887,19 +6887,36 @@ var SoundFX = (function () {
         // Truncate for storage
         var storedText = pdfText.substring(0, 100000);
 
+        // Helper: robustly extract an array from an AI response object
+        function extractArray(obj, primaryKey, altKeys) {
+          if (!obj || typeof obj !== 'object') return [];
+          if (Array.isArray(obj[primaryKey]) && obj[primaryKey].length > 0) return obj[primaryKey];
+          for (var i = 0; i < altKeys.length; i++) {
+            if (Array.isArray(obj[altKeys[i]]) && obj[altKeys[i]].length > 0) return obj[altKeys[i]];
+          }
+          // Last resort: find first non-empty array property
+          var keys = Object.keys(obj);
+          for (var j = 0; j < keys.length; j++) {
+            if (Array.isArray(obj[keys[j]]) && obj[keys[j]].length > 0) return obj[keys[j]];
+          }
+          return [];
+        }
+
         // Step 2: Extract TOC
         setTaskStatus(progressArea, 'toc', 'active');
         var tocPromptText = 'Document:\n' + pdfText.substring(0, 80000);
         var tocResult = await callClaudeApi(tocPromptText, DEFAULT_LIBRARY_TOC_PROMPT);
-        var tocItems = tocResult.toc || [];
-        setTaskStatus(progressArea, 'toc', 'done', tocItems.length + ' sections found');
+        console.log('[Library] TOC response keys:', Object.keys(tocResult || {}));
+        var tocItems = extractArray(tocResult, 'toc', ['sections', 'tableOfContents', 'chapters']);
+        setTaskStatus(progressArea, 'toc', 'done', tocItems.length > 0 ? tocItems.length + ' sections found' : '0 sections found (check document)');
 
         // Step 3: Extract glossary
         setTaskStatus(progressArea, 'glossary', 'active');
         var glossaryPromptText = 'Document:\n' + pdfText.substring(0, 80000);
         var glossaryResult = await callClaudeApi(glossaryPromptText, DEFAULT_LIBRARY_GLOSSARY_PROMPT);
-        var glossaryItems = glossaryResult.glossary || [];
-        setTaskStatus(progressArea, 'glossary', 'done', glossaryItems.length + ' terms extracted');
+        console.log('[Library] Glossary response keys:', Object.keys(glossaryResult || {}));
+        var glossaryItems = extractArray(glossaryResult, 'glossary', ['terms', 'definitions', 'concepts']);
+        setTaskStatus(progressArea, 'glossary', 'done', glossaryItems.length > 0 ? glossaryItems.length + ' terms extracted' : '0 terms extracted (check document)');
 
         // Build document object
         var newDoc = {

@@ -5896,6 +5896,210 @@ body.high-contrast .dl-dropdown__single {
   .custom-exam__my-exams,
   .custom-exam__backdrop,
   .custom-exam__modal,
-  .custom-exam__viewer-toolbar { display: none !important; }
+  .custom-exam__viewer-toolbar,
+  .doc-library__sidebar-btn { display: none !important; }
+}
+
+/* =========================================================
+   DOCUMENT LIBRARY
+   ========================================================= */
+
+.doc-library__sidebar-btn {
+  margin-top: 4px;
+}
+
+.doc-library__sidebar-count {
+  margin-left: auto;
+  background: var(--brand, #2563eb);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Card grid */
+.doc-library__card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 1rem 0;
+}
+
+.doc-library__card {
+  background: var(--bg-elev, #1a1a2e);
+  border: 1px solid var(--muted, #333);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-library__card:hover {
+  border-color: var(--brand, #2563eb);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.doc-library__card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  background: linear-gradient(135deg, var(--bg-elev, #1a1a2e) 0%, var(--bg, #111) 100%);
+  border-bottom: 1px solid var(--muted, #333);
+}
+
+.doc-library__card-icon svg {
+  width: 40px;
+  height: 40px;
+  opacity: 0.3;
+}
+
+.doc-library__card-info {
+  padding: 12px;
+  flex: 1;
+}
+
+.doc-library__card-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.doc-library__card-author {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+.doc-library__card-stats {
+  font-size: 0.75rem;
+  opacity: 0.4;
+}
+
+.doc-library__card-actions {
+  padding: 0 12px 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* TOC */
+.doc-library__toc-list {
+  background: var(--bg-elev, #1a1a2e);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.doc-library__toc-item {
+  padding: 6px 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--muted, #222);
+  line-height: 1.4;
+}
+
+.doc-library__toc-item:last-child {
+  border-bottom: none;
+}
+
+/* Glossary */
+.doc-library__glossary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.doc-library__glossary-item {
+  background: var(--bg-elev, #1a1a2e);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.doc-library__glossary-term {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.doc-library__glossary-def {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  line-height: 1.5;
+}
+
+/* Search results (Link Definition modal) */
+.doc-library__search-result {
+  padding: 12px;
+  border: 1px solid var(--muted, #333);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.doc-library__search-result:hover {
+  border-color: var(--brand, #2563eb);
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.doc-library__search-result-term {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.doc-library__search-result-def {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.doc-library__search-result-source {
+  font-size: 0.75rem;
+  opacity: 0.4;
+}
+
+/* Linked definition on concept page */
+.doc-library__linked-definition {
+  background: var(--bg-elev, #1a1a2e);
+  border-left: 4px solid var(--brand, #2563eb);
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin: 1rem 0;
+}
+
+.doc-library__linked-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.doc-library__linked-term {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.doc-library__linked-def-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.doc-library__linked-source {
+  font-size: 0.8rem;
+  opacity: 0.4;
+  margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 540px) {
+  .doc-library__card-grid {
+    grid-template-columns: 1fr;
+  }
 }
 

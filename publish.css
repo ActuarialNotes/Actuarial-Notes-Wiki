@@ -4770,3 +4770,114 @@ body.high-contrast .dl-dropdown__single {
   .read-aloud-btn { display: none !important; }
 }
 
+/* ── Floating Exam Nav ──────────────────────────────────── */
+.floating-exam-nav {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 280;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+/* Single item: hide toggle, always show stack */
+.floating-exam-nav.is-single .floating-exam-nav__toggle { display: none; }
+
+/* Multiple items collapsed: hide stack */
+.floating-exam-nav:not(.is-single):not(.is-open) .floating-exam-nav__stack {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
+/* Toggle button */
+.floating-exam-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none !important;
+  border-radius: var(--radius-sm);
+  background: var(--nav-color) !important;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
+  transition: filter 0.15s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+.floating-exam-nav__toggle:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* Count badge */
+.floating-exam-nav__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Stack container */
+.floating-exam-nav__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Individual exam button */
+.floating-exam-nav__btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--nav-color) !important;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none !important;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
+  transition: filter 0.15s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+.floating-exam-nav__btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  text-decoration: none !important;
+  color: #fff !important;
+}
+.floating-exam-nav__btn.is-current {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 1px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .floating-exam-nav { bottom: 16px; right: 16px; }
+  .floating-exam-nav__toggle,
+  .floating-exam-nav__btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+
+/* Print: hide floating nav */
+@media print {
+  .floating-exam-nav { display: none !important; }
+}
+

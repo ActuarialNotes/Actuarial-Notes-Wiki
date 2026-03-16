@@ -91,18 +91,8 @@
   function buildExamNav(container) {
     // Parse data attributes
     const customColor = container.dataset.color;
-    const prevData = parseNextExams(container.dataset.prev);
     const currentData = parseExamData(container.dataset.current);
-    const nextData = parseNextExams(container.dataset.next);
-    const reqs = container.dataset.reqs ? container.dataset.reqs.split(',').map(r => r.trim()) : [];
     const tracks = parseTracks(container.dataset.tracks);
-
-    // Apply custom color if provided
-    if (customColor) {
-      container.style.setProperty('--nav-color', customColor);
-      // Create a slightly lighter version for hover
-      container.style.setProperty('--nav-color-hover', customColor);
-    }
 
     // Set exam color on page container for callout tinting
     const pageEl = container.closest('.markdown-preview-view, .markdown-rendered, .page-container') || container.parentElement;
@@ -111,211 +101,17 @@
       pageEl.classList.add('has-exam-nav');
     }
 
-    // Clear container
+    // Container is now just a hidden sentinel — clear it
     container.innerHTML = '';
 
-    // SVG arrow icons (reused for collapsed view)
-    var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
-    var svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>';
-    var svgChevron = '<svg class="exam-nav__collapsed-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
-
-    // Helper: build a collapsed arrow (single link or dropdown for multiple exams)
-    function buildCollapsedArrow(exams, direction) {
-      var svg = direction === 'prev' ? svgPrev : svgNext;
-
-      if (exams.length === 1) {
-        var link = document.createElement('a');
-        link.className = 'exam-nav__collapse-arrow internal-link';
-        link.href = exams[0].url || '#';
-        link.innerHTML = svg;
-        return link;
-      }
-
-      // Multiple exams — dropdown
-      var dropdown = document.createElement('div');
-      dropdown.className = 'exam-nav__dropdown exam-nav__collapse-arrow-dropdown';
-
-      var btn = document.createElement('button');
-      btn.className = 'exam-nav__collapse-arrow';
-      btn.type = 'button';
-      btn.innerHTML = svg;
-
-      var menu = document.createElement('div');
-      menu.className = 'exam-nav__menu';
-      menu.innerHTML = '<div class="exam-nav__menu-header">Choose your path</div>';
-
-      exams.forEach(function (exam) {
-        var item = document.createElement('a');
-        item.className = 'exam-nav__menu-item';
-        item.href = exam.url || '#';
-        if (exam.url) item.classList.add('internal-link');
-        var orgClass = exam.org ? 'exam-nav__org--' + exam.org.toLowerCase() : '';
-        item.innerHTML =
-          '<div class="exam-nav__menu-item-info">' +
-            '<span class="exam-nav__menu-item-name">' + exam.name + '</span>' +
-            (exam.fullName ? '<span class="exam-nav__menu-item-full">' + exam.fullName + '</span>' : '') +
-          '</div>' +
-          (exam.org ? '<span class="exam-nav__org ' + orgClass + '">' + exam.org + '</span>' : '');
-        item.addEventListener('click', function () {
-          dropdown.classList.remove('is-open');
-          hideBackdrop();
-        });
-        menu.appendChild(item);
-      });
-
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var isOpen = dropdown.classList.contains('is-open');
-        // Close any other open dropdowns first
-        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(function (d) {
-          d.classList.remove('is-open');
-        });
-        hideBackdrop();
-        if (!isOpen) dropdown.classList.add('is-open');
-      });
-
-      dropdown.appendChild(btn);
-      dropdown.appendChild(menu);
-      return dropdown;
-    }
-
-    // ── Collapsed view: < [Current Exam ▾] > ────────────
-    var collapsedView = document.createElement('div');
-    collapsedView.className = 'exam-nav__collapsed-view';
-
-    if (prevData.length > 0) {
-      collapsedView.appendChild(buildCollapsedArrow(prevData, 'prev'));
-    }
-
-    var collapsedPill = document.createElement('button');
-    collapsedPill.className = 'exam-nav__btn exam-nav__btn--current exam-nav__collapsed-pill';
-    collapsedPill.type = 'button';
-    collapsedPill.innerHTML =
-      '<span class="exam-nav__collapsed-label">' + currentData.name + '</span>' +
-      svgChevron;
-    collapsedPill.addEventListener('click', function (e) {
-      e.stopPropagation();
-      container.classList.remove('is-collapsed');
-    });
-    collapsedView.appendChild(collapsedPill);
-
-    if (nextData.length > 0) {
-      collapsedView.appendChild(buildCollapsedArrow(nextData, 'next'));
-    }
-
-    container.appendChild(collapsedView);
-
-    // ── Expanded view: full track + pill row ─────────────
-    var expandedView = document.createElement('div');
-    expandedView.className = 'exam-nav__expanded-view';
-
-    // Exam Track row (at the top)
-    if (tracks.length > 0) {
-      const trackRow = document.createElement('div');
-      trackRow.className = 'exam-nav__track';
-
-      const trackLabel = document.createElement('span');
-      trackLabel.className = 'exam-nav__track-label';
-      trackLabel.textContent = 'Exam Track:';
-      trackRow.appendChild(trackLabel);
-
-      tracks.forEach((track, i) => {
-        if (i > 0) {
-          const sep = document.createElement('span');
-          sep.className = 'exam-nav__track-sep';
-          sep.textContent = '/';
-          trackRow.appendChild(sep);
-        }
-        if (track.url) {
-          const link = document.createElement('a');
-          link.className = 'exam-nav__track-link internal-link';
-          link.href = track.url;
-          link.textContent = track.name;
-          trackRow.appendChild(link);
-        } else {
-          const span = document.createElement('span');
-          span.className = 'exam-nav__track-link';
-          span.textContent = track.name;
-          trackRow.appendChild(span);
-        }
-      });
-
-      expandedView.appendChild(trackRow);
-    }
-
-    // Pill row container
-    var pillRow = document.createElement('div');
-    pillRow.className = 'exam-nav__pill-row';
-
-    // Current exam wrapper (button + requirements below)
-    const currentWrapper = document.createElement('div');
-    currentWrapper.className = 'exam-nav__current';
-
-    // Current exam button (clickable to collapse, like concept nav)
-    const currentBtn = document.createElement('button');
-    currentBtn.className = 'exam-nav__btn exam-nav__btn--current exam-nav__btn--collapsible';
-    currentBtn.type = 'button';
-    currentBtn.innerHTML =
-      '<span>' + currentData.name + '</span>' +
-      '<svg class="exam-nav__collapse-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>';
-    currentBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      container.classList.add('is-collapsed');
-    });
-    currentWrapper.appendChild(currentBtn);
-
-    // Requirements text below current exam
-    if (reqs.length > 0) {
-      const reqsText = document.createElement('span');
-      reqsText.className = 'exam-nav__reqs';
-      reqsText.textContent = `Required for ${reqs.join(', ')}`;
-      currentWrapper.appendChild(reqsText);
-    }
-
-    pillRow.appendChild(currentWrapper);
-
-    expandedView.appendChild(pillRow);
-
-    // Learning Objectives — directly visible in expanded view (no toggle)
-    var loSection = document.createElement('div');
-    loSection.className = 'exam-nav__lo-section';
-    expandedView.appendChild(loSection);
-
-    container.appendChild(expandedView);
-
-    // Default to collapsed state
-    container.classList.add('is-collapsed');
-
-    // Load concepts directly into the expanded view
-    function loadConceptsInline() {
-      var objectives = parseObjectivesFromDOM(container);
-      if (objectives.length > 0) {
-        renderExamNavObjectives(loSection, objectives, container);
-      } else {
-        // Fallback: try fetching from markdown
-        var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
-        if (!pagePath) pagePath = document.title;
-        fetchExamNavObjectives(pagePath).then(function (objs) {
-          renderExamNavObjectives(loSection, objs, container);
-        }).catch(function () {
-          loSection.innerHTML = '';
-        });
-      }
-    }
-    // Delay slightly so the DOM callout blocks are available for parsing
-    setTimeout(loadConceptsInline, 150);
-
-    // ── Sticky bar ────────────────────────────────────────
+    // ── Sticky bar (primary & only nav) ──────────────────
     // Clean up previous sticky bar if rebuilding
     if (container._stickyEl) {
       container._stickyEl.remove();
     }
-    if (container._stickyObserver) {
-      container._stickyObserver.disconnect();
-    }
 
     var sticky = document.createElement('div');
-    sticky.className = 'exam-nav__sticky';
+    sticky.className = 'exam-nav__sticky is-visible';
     if (customColor) {
       sticky.style.setProperty('--nav-color', customColor);
       sticky.style.setProperty('--nav-color-hover', customColor);
@@ -382,16 +178,77 @@
     }
     setTimeout(loadStickyObjectives, 200);
 
+    // ── Embed download button ────────────────────────────
+    var dlEl = pageEl ? pageEl.querySelector('.download-dropdown') : null;
+    if (dlEl) {
+      var dlFilesRaw = dlEl.dataset.files || '';
+      var dlColor = dlEl.dataset.color || customColor || '#2563eb';
+      var dlFiles = dlFilesRaw.split(',').map(function (entry) {
+        var parts = entry.trim().split('|');
+        return { name: parts[0] || '', url: parts[1] || '#' };
+      }).filter(function (f) { return f.name; });
+
+      if (dlFiles.length > 0) {
+        var dlSection = document.createElement('div');
+        dlSection.className = 'exam-nav__sticky-downloads';
+        dlSection.style.setProperty('--dl-color', dlColor);
+
+        var dlIcon = '<svg class="exam-nav__sticky-dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+          '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>' +
+          '<polyline points="7 10 12 15 17 10"/>' +
+          '<line x1="12" y1="15" x2="12" y2="3"/>' +
+          '</svg>';
+
+        dlFiles.forEach(function (file) {
+          var link = document.createElement('a');
+          link.className = 'exam-nav__sticky-dl-link';
+          link.href = file.url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.innerHTML = dlIcon + '<span>' + file.name + '</span>';
+          dlSection.appendChild(link);
+        });
+
+        stickyContent.appendChild(dlSection);
+      }
+
+      // Hide original download-dropdown so the separate IIFE doesn't render it
+      dlEl.dataset.built = 'true';
+      dlEl.style.display = 'none';
+    }
+
+    // ── Toggle open/close ────────────────────────────────
+    function openSticky() {
+      sticky.classList.add('is-open');
+      showBackdrop();
+      if (window.innerWidth <= 540) {
+        document.body.style.overflow = 'hidden';
+        // Position the content panel below the sticky bar
+        var stickyRect = sticky.getBoundingClientRect();
+        stickyContent.style.top = stickyRect.bottom + 'px';
+      }
+    }
+
+    function closeSticky() {
+      sticky.classList.remove('is-open');
+      hideBackdrop();
+      document.body.style.overflow = '';
+    }
+
     stickyBtn.addEventListener('click', function (e) {
       e.stopPropagation();
-      sticky.classList.toggle('is-open');
+      if (sticky.classList.contains('is-open')) {
+        closeSticky();
+      } else {
+        openSticky();
+      }
     });
 
-    // Close sticky panel when an internal link is clicked
+    // Close sticky panel when a link is clicked
     sticky.addEventListener('click', function (e) {
-      var link = e.target.closest('a.internal-link');
+      var link = e.target.closest('a.internal-link, a.exam-nav__sticky-dl-link');
       if (link) {
-        sticky.classList.remove('is-open');
+        closeSticky();
       }
     });
 
@@ -402,33 +259,13 @@
     publishContainer.appendChild(sticky);
     container._stickyEl = sticky;
 
-    // IntersectionObserver to show/hide sticky bar
-    if ('IntersectionObserver' in window) {
-      var stickyObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) {
-            sticky.classList.add('is-visible');
-          } else {
-            sticky.classList.remove('is-visible');
-            sticky.classList.remove('is-open');
-          }
-        });
-      }, { threshold: 0 });
-      stickyObserver.observe(container);
-      container._stickyObserver = stickyObserver;
-    }
-
     // Close dropdown when clicking outside
     if (!window._examNavCloseRegistered) {
       window._examNavCloseRegistered = true;
 
       document.addEventListener('click', (e) => {
-        if (!e.target.closest('.exam-nav__dropdown') &&
-            !e.target.closest('.exam-nav__lo-wrap') &&
+        if (!e.target.closest('.exam-nav__lo-wrap') &&
             !e.target.closest('.exam-nav__sticky')) {
-          document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
-            d.classList.remove('is-open');
-          });
           document.querySelectorAll('.exam-nav__lo-wrap.is-open').forEach(d => {
             d.classList.remove('is-open');
           });
@@ -436,15 +273,13 @@
             d.classList.remove('is-open');
           });
           hideBackdrop();
+          document.body.style.overflow = '';
         }
       });
 
       // ESC key closes dropdown
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-          document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
-            d.classList.remove('is-open');
-          });
           document.querySelectorAll('.exam-nav__lo-wrap.is-open').forEach(d => {
             d.classList.remove('is-open');
           });
@@ -452,71 +287,10 @@
             d.classList.remove('is-open');
           });
           hideBackdrop();
+          document.body.style.overflow = '';
         }
       });
     }
-  }
-
-  // Build the Learning Objectives expandable section
-  function buildExamObjectivesSection(container) {
-    // Toggle button row
-    const toggleRow = document.createElement('div');
-    toggleRow.className = 'exam-nav__lo-toggle';
-
-    const toggleBtn = document.createElement('button');
-    toggleBtn.className = 'exam-nav__lo-btn';
-    toggleBtn.type = 'button';
-    toggleBtn.innerHTML =
-      '<span class="exam-nav__lo-btn-label">Concepts</span>' +
-      '<svg class="exam-nav__lo-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
-
-    toggleBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var wasExpanded = container.classList.contains('is-lo-expanded');
-      container.classList.toggle('is-lo-expanded');
-      if (!wasExpanded) {
-        elevateCenterColumn();
-        if (!container._loLoaded) {
-          loadExamObjectives(container);
-        }
-      } else {
-        deelevateCenterColumn();
-      }
-    });
-
-    toggleRow.appendChild(toggleBtn);
-    container.appendChild(toggleRow);
-
-    // Objectives section (hidden by default)
-    var objSection = document.createElement('div');
-    objSection.className = 'exam-nav__lo-section';
-    container.appendChild(objSection);
-  }
-
-  // Load and render objectives for this exam page
-  function loadExamObjectives(container) {
-    container._loLoaded = true;
-    var section = container.querySelector('.exam-nav__lo-section');
-    if (!section) return;
-
-    section.innerHTML = '<div class="exam-nav__lo-loading">Loading\u2026</div>';
-
-    // Strategy 1: Parse directly from the rendered DOM callout blocks
-    var domObjectives = parseObjectivesFromDOM(container);
-    if (domObjectives.length > 0) {
-      renderExamNavObjectives(section, domObjectives, container);
-      return;
-    }
-
-    // Strategy 2: Fetch markdown (fallback)
-    var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
-    if (!pagePath) pagePath = document.title;
-
-    fetchExamNavObjectives(pagePath).then(function (objectives) {
-      renderExamNavObjectives(section, objectives, container);
-    }).catch(function () {
-      section.innerHTML = '<div class="exam-nav__lo-loading">Could not load objectives.</div>';
-    });
   }
 
   // Parse objectives directly from rendered callout blocks in the DOM
@@ -854,90 +628,6 @@
     return null;
   }
 
-  // Render a group of exams as either a single button or a dropdown
-  function renderExamGroup(container, exams, btnClass) {
-    if (exams.length === 1) {
-      // Single exam - just a button
-      const link = document.createElement('a');
-      link.className = `exam-nav__btn ${btnClass}`;
-      link.href = exams[0].url || '#';
-      link.textContent = exams[0].name;
-      if (exams[0].url) {
-        link.classList.add('internal-link');
-      }
-      container.appendChild(link);
-    } else {
-      // Multiple exams - dropdown
-      const dropdown = document.createElement('div');
-      dropdown.className = 'exam-nav__dropdown';
-
-      // Dropdown trigger button
-      const triggerBtn = document.createElement('button');
-      triggerBtn.className = `exam-nav__btn ${btnClass}`;
-      triggerBtn.type = 'button';
-      triggerBtn.innerHTML = `
-        <span>${exams.map(e => e.name.replace('Exam ', '')).join(' / ')}</span>
-        <svg class="exam-nav__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-      `;
-
-      // Dropdown menu
-      const menu = document.createElement('div');
-      menu.className = 'exam-nav__menu';
-      menu.innerHTML = `<div class="exam-nav__menu-header">Choose your path</div>`;
-
-      exams.forEach(exam => {
-        const item = document.createElement('a');
-        item.className = 'exam-nav__menu-item';
-        item.href = exam.url || '#';
-        if (exam.url) {
-          item.classList.add('internal-link');
-        }
-
-        const orgClass = exam.org ? `exam-nav__org--${exam.org.toLowerCase()}` : '';
-
-        item.innerHTML = `
-          <div class="exam-nav__menu-item-info">
-            <span class="exam-nav__menu-item-name">${exam.name}</span>
-            ${exam.fullName ? `<span class="exam-nav__menu-item-full">${exam.fullName}</span>` : ''}
-          </div>
-          ${exam.org ? `<span class="exam-nav__org ${orgClass}">${exam.org}</span>` : ''}
-        `;
-
-        // Close dropdown on item click
-        item.addEventListener('click', () => {
-          dropdown.classList.remove('is-open');
-          hideBackdrop();
-        });
-
-        menu.appendChild(item);
-      });
-
-      // Toggle dropdown
-      triggerBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = dropdown.classList.contains('is-open');
-
-        // Close all other dropdowns first
-        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
-          d.classList.remove('is-open');
-        });
-
-        if (!isOpen) {
-          dropdown.classList.add('is-open');
-          showBackdrop();
-        } else {
-          hideBackdrop();
-        }
-      });
-
-      dropdown.appendChild(triggerBtn);
-      dropdown.appendChild(menu);
-      container.appendChild(dropdown);
-    }
-  }
-
   // Parse "Name|Full Name|URL" format
   function parseExamData(str) {
     if (!str) return null;
@@ -947,20 +637,6 @@
       fullName: parts[1] || '',
       url: parts[2] || ''
     };
-  }
-
-  // Parse multiple exams: "Name|Full|URL|Org,Name2|Full2|URL2|Org2"
-  function parseNextExams(str) {
-    if (!str) return [];
-    return str.split(',').map(exam => {
-      const parts = exam.split('|').map(p => p.trim());
-      return {
-        name: parts[0] || '',
-        fullName: parts[1] || '',
-        url: parts[2] || '',
-        org: parts[3] || ''
-      };
-    });
   }
 
   // Parse tracks: "TrackName|URL,TrackName2|URL2"
@@ -975,39 +651,24 @@
     });
   }
 
-  // Mobile backdrop helpers
-  // Elevate / de-elevate the center column so exam-nav popups render above the sidebar
-  function elevateCenterColumn() {
-    var col = document.querySelector('.site-body-center-column');
-    if (col) col.classList.add('exam-nav-elevated');
-  }
-
-  function deelevateCenterColumn() {
-    // Only remove if nothing is still open
-    var anyOpen = document.querySelector(
-      '.exam-nav.is-lo-expanded, .exam-nav__dropdown.is-open, .exam-nav__lo-wrap.is-open'
-    );
-    if (!anyOpen) {
-      var col = document.querySelector('.site-body-center-column');
-      if (col) col.classList.remove('exam-nav-elevated');
-    }
-  }
-
+  // Backdrop helpers
   function showBackdrop() {
-    elevateCenterColumn();
     let backdrop = document.querySelector('.exam-nav-backdrop');
     if (!backdrop) {
       backdrop = document.createElement('div');
       backdrop.className = 'exam-nav-backdrop';
       backdrop.addEventListener('click', () => {
-        document.querySelectorAll('.exam-nav__dropdown.is-open').forEach(d => {
+        document.querySelectorAll('.exam-nav__lo-wrap.is-open').forEach(d => {
+          d.classList.remove('is-open');
+        });
+        document.querySelectorAll('.exam-nav__sticky.is-open').forEach(d => {
           d.classList.remove('is-open');
         });
         hideBackdrop();
+        document.body.style.overflow = '';
       });
       document.body.appendChild(backdrop);
     }
-    // Only show backdrop on mobile
     if (window.innerWidth <= 540) {
       backdrop.classList.add('is-visible');
     }
@@ -1018,7 +679,6 @@
     if (backdrop) {
       backdrop.classList.remove('is-visible');
     }
-    deelevateCenterColumn();
   }
 
 })();

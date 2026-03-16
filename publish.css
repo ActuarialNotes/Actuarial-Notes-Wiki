@@ -6046,6 +6046,23 @@ body.high-contrast .dl-dropdown__single {
   border-bottom: none;
 }
 
+.doc-library__toc-item--level-1 {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.doc-library__toc-item--level-2 {
+  font-weight: 400;
+  font-size: 0.88rem;
+}
+
+.doc-library__toc-item--level-3,
+.doc-library__toc-item--level-4 {
+  font-weight: 400;
+  font-size: 0.84rem;
+  opacity: 0.85;
+}
+
 /* Glossary */
 .doc-library__glossary-list {
   display: flex;

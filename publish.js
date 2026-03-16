@@ -4316,7 +4316,7 @@ var SoundFX = (function () {
 
   var DEFAULT_LIBRARY_TOC_PROMPT = 'You are a document structure extraction tool. Your job is to reproduce the EXACT table of contents of this document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "title": "Document Title",\n  "author": "Author Name or empty string if unknown",\n  "toc": [\n    { "title": "Chapter 1: Introduction to Ratemaking", "level": 1, "page": 1 },\n    { "title": "1.1 The Ratemaking Process", "level": 2, "page": 2 },\n    { "title": "1.2 Basic Terminology", "level": 2, "page": 5 },\n    { "title": "Chapter 2: Rating Manuals", "level": 1, "page": 15 },\n    { "title": "2.1 Manual Rate Components", "level": 2, "page": 16 },\n    { "title": "Appendix A: Formulas", "level": 1, "page": 200 }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- If the document contains a Table of Contents page, reproduce it EXACTLY as-is with all entries\n- List EVERY individual chapter AND every numbered subsection (e.g., 1.1, 1.2, 2.1, 2.2, 2.3, etc.)\n- Do NOT group or combine multiple chapters into summary categories\n- Do NOT invent your own section titles — use the exact titles from the document\n- level 1 = chapter (e.g., "Chapter 5"), level 2 = section (e.g., "5.1", "5.2"), level 3 = subsection (e.g., "5.1.1")\n- Use a FLAT list — no nested children objects\n- Include ALL appendices, exhibits, and back matter as separate entries\n- A typical textbook should have 10-20 chapters EACH with multiple numbered subsections — expect 50-200+ total entries\n- page is the page number if identifiable, otherwise null';
 
-  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are a technical glossary extraction tool. Extract specific technical TERMS and their DEFINITIONS from this document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Chain Ladder Method",\n      "definition": "A reserving technique that uses historical loss development patterns to project ultimate losses by applying age-to-age development factors.",\n      "page": null\n    },\n    {\n      "term": "IBNR",\n      "definition": "Incurred But Not Reported. Reserves set aside for claims that have occurred but have not yet been reported to the insurer.",\n      "page": null\n    },\n    {\n      "term": "Loss Development Factor",\n      "definition": "A multiplicative factor applied to losses at a given maturity to project them to ultimate value. Calculated as the ratio of losses at successive evaluations.",\n      "page": null\n    }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- A "term" is a specific METHOD, FORMULA, RATIO, ACRONYM, METRIC, or TECHNICAL CONCEPT — a named thing with a definition\n- Good examples of terms: "Bornhuetter-Ferguson Method", "Loss Ratio", "Credibility Weight", "Pure Premium", "Expense Ratio", "Combined Ratio"\n- BAD examples (DO NOT include these): chapter titles like "Introduction to Ratemaking", section headings like "Loss and LAE Analysis", topic descriptions like "Premium Analysis and Adjustments"\n- Every entry MUST have both a "term" (short name, 1-5 words) and a "definition" (1-3 sentence explanation)\n- Extract terms from the ENTIRE document, not just the beginning\n- Include: named methods, formulas, statistical techniques, ratios, acronyms, regulatory terms, and defined technical vocabulary\n- For a textbook of 30+ pages, extract at LEAST 50 terms\n- page is where the term is defined, or null';
+  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are a technical glossary extraction tool. Extract specific technical TERMS and their DEFINITIONS from this document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Chain Ladder Method",\n      "definition": "A reserving technique that uses historical loss development patterns to project ultimate losses by applying age-to-age development factors.",\n      "page": null\n    },\n    {\n      "term": "IBNR",\n      "definition": "Incurred But Not Reported. Reserves set aside for claims that have occurred but have not yet been reported to the insurer.",\n      "page": null\n    },\n    {\n      "term": "Loss Development Factor",\n      "definition": "A multiplicative factor applied to losses at a given maturity to project them to ultimate value. Calculated as the ratio of losses at successive evaluations.",\n      "page": null\n    }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- A "term" is a specific METHOD, FORMULA, RATIO, ACRONYM, METRIC, or TECHNICAL CONCEPT — a named thing with a definition\n- Good examples of terms: "Bornhuetter-Ferguson Method", "Loss Ratio", "Credibility Weight", "Pure Premium", "Expense Ratio", "Combined Ratio"\n- BAD examples (DO NOT include these): chapter titles like "Introduction to Ratemaking", section headings like "Loss and LAE Analysis", topic descriptions like "Premium Analysis and Adjustments"\n- Every entry MUST have both a "term" (short name, 1-5 words) and a "definition" (1-3 sentence explanation)\n- Extract terms from the ENTIRE document, not just the beginning\n- Include: named methods, formulas, statistical techniques, ratios, acronyms, regulatory terms, and defined technical vocabulary\n- For a textbook of 30+ pages, extract at LEAST 50 terms — aim for 100-200 terms for comprehensive textbooks\n- Go through the document systematically section by section to ensure you capture terms from ALL parts of the document, not just the beginning\n- page is where the term is defined, or null';
 
   /* ---- State ---- */
   var LIBRARY_STORAGE_KEY = 'actuarial-notes-doc-library';
@@ -5511,6 +5511,18 @@ var SoundFX = (function () {
     return await response.json();
   }
 
+  /* ---- Text chunking for large documents ---- */
+  function splitTextIntoChunks(text, chunkSize, overlap) {
+    if (!text || text.length <= chunkSize) return [text];
+    var chunks = [];
+    var start = 0;
+    while (start < text.length) {
+      chunks.push(text.substring(start, start + chunkSize));
+      start += chunkSize - overlap;
+    }
+    return chunks;
+  }
+
   /* ---- Step 4: Review (feedback loop) ---- */
   function renderReviewStep(body) {
     var wrap = document.createElement('div');
@@ -6666,42 +6678,92 @@ var SoundFX = (function () {
     var glossarySection = document.createElement('div');
     glossarySection.style.cssText = 'margin-bottom:2rem';
 
+    var totalTerms = (doc.glossary || []).length;
     var glossaryHeader = document.createElement('h2');
     glossaryHeader.style.cssText = 'font-size:1.1rem;margin-bottom:0.75rem';
-    glossaryHeader.textContent = 'Glossary (' + (doc.glossary || []).length + ' terms)';
+    glossaryHeader.textContent = 'Glossary (' + totalTerms + ' terms)';
     glossarySection.appendChild(glossaryHeader);
 
-    if ((doc.glossary || []).length === 0) {
+    if (totalTerms === 0) {
       var glossaryEmpty = document.createElement('p');
       glossaryEmpty.style.cssText = 'opacity:0.5;font-size:0.9rem';
       glossaryEmpty.textContent = 'No glossary terms extracted.';
       glossarySection.appendChild(glossaryEmpty);
     } else {
+      // Search input
+      var glossarySearchRow = document.createElement('div');
+      glossarySearchRow.style.cssText = 'position:relative;margin-bottom:12px';
+
+      var searchIcon = document.createElement('span');
+      searchIcon.style.cssText = 'position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;opacity:0.4;display:flex;align-items:center';
+      searchIcon.innerHTML = SVG_SEARCH;
+      glossarySearchRow.appendChild(searchIcon);
+
+      var glossarySearchInput = document.createElement('input');
+      glossarySearchInput.className = 'custom-exam__input';
+      glossarySearchInput.type = 'text';
+      glossarySearchInput.placeholder = 'Search glossary terms\u2026';
+      glossarySearchInput.style.cssText = 'width:100%;padding-left:32px;box-sizing:border-box';
+      glossarySearchRow.appendChild(glossarySearchInput);
+      glossarySection.appendChild(glossarySearchRow);
+
       var glossaryList = document.createElement('div');
       glossaryList.className = 'doc-library__glossary-list';
 
-      doc.glossary.forEach(function (entry) {
-        var vals = Object.values(entry);
-        var termText = entry.term || entry.name || entry.title || (typeof vals[0] === 'string' ? vals[0] : '');
-        var defText = entry.definition || entry.description || entry.def || (typeof vals[1] === 'string' ? vals[1] : '');
-        if (!termText) return; // skip empty entries
+      function renderGlossaryItems(filterText) {
+        glossaryList.innerHTML = '';
+        var lower = (filterText || '').toLowerCase();
+        var count = 0;
 
-        var item = document.createElement('div');
-        item.className = 'doc-library__glossary-item';
+        doc.glossary.forEach(function (entry) {
+          var vals = Object.values(entry);
+          var termText = entry.term || entry.name || entry.title || (typeof vals[0] === 'string' ? vals[0] : '');
+          var defText = entry.definition || entry.description || entry.def || (typeof vals[1] === 'string' ? vals[1] : '');
+          if (!termText) return;
 
-        var term = document.createElement('div');
-        term.className = 'doc-library__glossary-term';
-        term.textContent = termText;
+          if (lower && termText.toLowerCase().indexOf(lower) === -1 && defText.toLowerCase().indexOf(lower) === -1) return;
 
-        var def = document.createElement('div');
-        def.className = 'doc-library__glossary-def';
-        def.textContent = defText;
+          var item = document.createElement('div');
+          item.className = 'doc-library__glossary-item';
 
-        item.appendChild(term);
-        item.appendChild(def);
-        glossaryList.appendChild(item);
+          var term = document.createElement('div');
+          term.className = 'doc-library__glossary-term';
+          term.textContent = termText;
+
+          var def = document.createElement('div');
+          def.className = 'doc-library__glossary-def';
+          def.textContent = defText;
+
+          item.appendChild(term);
+          item.appendChild(def);
+          glossaryList.appendChild(item);
+          count++;
+        });
+
+        // Update header with filter count
+        if (lower && count < totalTerms) {
+          glossaryHeader.textContent = 'Glossary (' + count + ' of ' + totalTerms + ' terms)';
+        } else {
+          glossaryHeader.textContent = 'Glossary (' + totalTerms + ' terms)';
+        }
+
+        if (count === 0 && lower) {
+          var noMatch = document.createElement('p');
+          noMatch.style.cssText = 'opacity:0.5;font-size:0.9rem;text-align:center;padding:1rem';
+          noMatch.textContent = 'No matching terms found.';
+          glossaryList.appendChild(noMatch);
+        }
+      }
+
+      var glossaryDebounce = null;
+      glossarySearchInput.addEventListener('input', function () {
+        clearTimeout(glossaryDebounce);
+        glossaryDebounce = setTimeout(function () {
+          renderGlossaryItems(glossarySearchInput.value);
+        }, 150);
       });
 
+      renderGlossaryItems('');
       glossarySection.appendChild(glossaryList);
     }
     contentWrap.appendChild(glossarySection);
@@ -6712,13 +6774,33 @@ var SoundFX = (function () {
   }
 
   function renderTocItems(container, items) {
+    // Track counters per level to generate numbering (e.g. 1, 1.1, 1.2, 2, 2.1)
+    var counters = [0, 0, 0, 0]; // levels 1-4
+    var hasNumbering = /^\d+[\.\):]|^chapter\s+\d/i;
+
     items.forEach(function (item) {
+      var level = Math.min(Math.max(item.level || 1, 1), 4);
+
+      // Update counters
+      counters[level - 1]++;
+      // Reset deeper levels when a higher level increments
+      for (var r = level; r < counters.length; r++) counters[r] = 0;
+
       var el = document.createElement('div');
-      el.className = 'doc-library__toc-item';
-      el.style.paddingLeft = ((item.level - 1) * 20) + 'px';
+      el.className = 'doc-library__toc-item doc-library__toc-item--level-' + level;
+      el.style.paddingLeft = ((level - 1) * 20) + 'px';
+
+      // Build number prefix (e.g. "1.", "1.1", "1.1.2") only if title lacks numbering
+      var titleText = item.title || '';
+      var numberPrefix = '';
+      if (!hasNumbering.test(titleText.trim())) {
+        var parts = [];
+        for (var n = 0; n < level; n++) parts.push(counters[n] || 1);
+        numberPrefix = parts.join('.') + '. ';
+      }
 
       var title = document.createElement('span');
-      title.textContent = item.title;
+      title.textContent = numberPrefix + titleText;
       el.appendChild(title);
 
       if (item.page) {
@@ -6912,18 +6994,34 @@ var SoundFX = (function () {
 
         // Step 2: Extract TOC
         setTaskStatus(progressArea, 'toc', 'active');
-        var tocPromptText = 'Document:\n' + pdfText.substring(0, 80000);
+        var tocPromptText = 'Document:\n' + pdfText.substring(0, 90000);
         var tocResult = await callClaudeApi(tocPromptText, DEFAULT_LIBRARY_TOC_PROMPT);
         console.log('[Library] TOC response keys:', Object.keys(tocResult || {}));
         var tocItems = extractArray(tocResult, 'toc', ['sections', 'tableOfContents', 'chapters']);
         setTaskStatus(progressArea, 'toc', 'done', tocItems.length > 0 ? tocItems.length + ' sections found' : '0 sections found (check document)');
 
-        // Step 3: Extract glossary
+        // Step 3: Extract glossary (chunked for large documents)
         setTaskStatus(progressArea, 'glossary', 'active');
-        var glossaryPromptText = 'Document:\n' + pdfText.substring(0, 80000);
-        var glossaryResult = await callClaudeApi(glossaryPromptText, DEFAULT_LIBRARY_GLOSSARY_PROMPT);
-        console.log('[Library] Glossary response keys:', Object.keys(glossaryResult || {}));
-        var glossaryItems = extractArray(glossaryResult, 'glossary', ['terms', 'definitions', 'concepts']);
+        var glossaryChunks = splitTextIntoChunks(pdfText, 70000, 3000);
+        var allGlossaryTerms = [];
+        for (var ci = 0; ci < glossaryChunks.length; ci++) {
+          if (glossaryChunks.length > 1) {
+            setTaskStatus(progressArea, 'glossary', 'active', 'Part ' + (ci + 1) + '/' + glossaryChunks.length);
+          }
+          var chunkLabel = glossaryChunks.length > 1 ? 'Document (part ' + (ci + 1) + ' of ' + glossaryChunks.length + '):\n' : 'Document:\n';
+          var glossaryResult = await callClaudeApi(chunkLabel + glossaryChunks[ci], DEFAULT_LIBRARY_GLOSSARY_PROMPT);
+          console.log('[Library] Glossary chunk ' + (ci + 1) + ' response keys:', Object.keys(glossaryResult || {}));
+          var chunkTerms = extractArray(glossaryResult, 'glossary', ['terms', 'definitions', 'concepts']);
+          allGlossaryTerms = allGlossaryTerms.concat(chunkTerms);
+        }
+        // Deduplicate by normalized term name
+        var seenTerms = {};
+        var glossaryItems = allGlossaryTerms.filter(function (entry) {
+          var key = (entry.term || entry.name || entry.title || '').toLowerCase().trim();
+          if (!key || seenTerms[key]) return false;
+          seenTerms[key] = true;
+          return true;
+        });
         setTaskStatus(progressArea, 'glossary', 'done', glossaryItems.length > 0 ? glossaryItems.length + ' terms extracted' : '0 terms extracted (check document)');
 
         // Build document object

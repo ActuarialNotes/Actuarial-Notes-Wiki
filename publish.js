@@ -178,11 +178,12 @@
     }
     setTimeout(loadStickyObjectives, 200);
 
-    // ── Embed download button ────────────────────────────
+    // ── Embed download dropdown ─────────────────────────
     var dlEl = pageEl ? pageEl.querySelector('.download-dropdown') : null;
     if (dlEl) {
       var dlFilesRaw = dlEl.dataset.files || '';
       var dlColor = dlEl.dataset.color || customColor || '#2563eb';
+      var dlLabel = dlEl.dataset.label || 'Downloads';
       var dlFiles = dlFilesRaw.split(',').map(function (entry) {
         var parts = entry.trim().split('|');
         return { name: parts[0] || '', url: parts[1] || '#' };
@@ -193,21 +194,65 @@
         dlSection.className = 'exam-nav__sticky-downloads';
         dlSection.style.setProperty('--dl-color', dlColor);
 
-        var dlIcon = '<svg class="exam-nav__sticky-dl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+        var dlIconSvg = '<svg class="dl-dropdown__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
           '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>' +
           '<polyline points="7 10 12 15 17 10"/>' +
           '<line x1="12" y1="15" x2="12" y2="3"/>' +
           '</svg>';
 
-        dlFiles.forEach(function (file) {
-          var link = document.createElement('a');
-          link.className = 'exam-nav__sticky-dl-link';
-          link.href = file.url;
-          link.target = '_blank';
-          link.rel = 'noopener noreferrer';
-          link.innerHTML = dlIcon + '<span>' + file.name + '</span>';
-          dlSection.appendChild(link);
-        });
+        if (dlFiles.length === 1) {
+          // Single file — direct link
+          var singleLink = document.createElement('a');
+          singleLink.className = 'dl-dropdown__single';
+          singleLink.href = dlFiles[0].url;
+          singleLink.target = '_blank';
+          singleLink.rel = 'noopener noreferrer';
+          singleLink.innerHTML = dlIconSvg + '<span>' + dlFiles[0].name + '</span>';
+          dlSection.appendChild(singleLink);
+        } else {
+          // Multiple files — full dropdown (reuse dl-dropdown classes)
+          var wrapper = document.createElement('div');
+          wrapper.className = 'dl-dropdown__wrap';
+
+          var trigger = document.createElement('button');
+          trigger.className = 'dl-dropdown__trigger';
+          trigger.type = 'button';
+          trigger.innerHTML = dlIconSvg +
+            '<span>' + dlLabel + '</span>' +
+            '<svg class="dl-dropdown__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+          var menu = document.createElement('div');
+          menu.className = 'dl-dropdown__menu';
+          menu.innerHTML = '<div class="dl-dropdown__menu-header">Select a file</div>';
+
+          dlFiles.forEach(function (file) {
+            var item = document.createElement('a');
+            item.className = 'dl-dropdown__menu-item';
+            item.href = file.url;
+            item.target = '_blank';
+            item.rel = 'noopener noreferrer';
+            item.innerHTML =
+              '<span class="dl-dropdown__menu-item-name">' + file.name + '</span>' +
+              '<svg class="dl-dropdown__item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>' +
+                '<polyline points="7 10 12 15 17 10"/>' +
+                '<line x1="12" y1="15" x2="12" y2="3"/>' +
+              '</svg>';
+            item.addEventListener('click', function () {
+              wrapper.classList.remove('is-open');
+            });
+            menu.appendChild(item);
+          });
+
+          trigger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            wrapper.classList.toggle('is-open');
+          });
+
+          wrapper.appendChild(trigger);
+          wrapper.appendChild(menu);
+          dlSection.appendChild(wrapper);
+        }
 
         stickyContent.appendChild(dlSection);
       }
@@ -241,9 +286,9 @@
       }
     });
 
-    // Close sticky panel when a link is clicked
+    // Close sticky panel when an internal link is clicked
     sticky.addEventListener('click', function (e) {
-      var link = e.target.closest('a.internal-link, a.exam-nav__sticky-dl-link');
+      var link = e.target.closest('a.internal-link');
       if (link) {
         closeSticky();
       }

@@ -3335,26 +3335,27 @@ figure.right figcaption,
   border-top: 1px solid color-mix(in oklab, var(--nav-color) 12%, var(--muted));
 }
 
-/* Inline the download dropdown menu so it isn't clipped by overflow-y */
+/* Download dropdown inside sticky: fixed positioning escapes overflow clipping */
 .exam-nav__sticky .dl-dropdown__menu {
-  position: relative;
+  position: fixed;
   top: auto;
   left: auto;
-  min-width: auto;
-  border: none;
-  box-shadow: none;
-  background: transparent;
-  padding: 0 0 0 12px;
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.25s ease;
+  z-index: 400;
 }
 
-.exam-nav__sticky .dl-dropdown__wrap.is-open .dl-dropdown__menu {
-  max-height: 500px;
+/* Mobile: bottom sheet for downloads inside sticky */
+@media (max-width: 540px) {
+  .exam-nav__sticky .dl-dropdown__menu {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: auto;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 16px;
+    min-width: auto;
+    max-height: 60vh;
+  }
 }
 
 /* ── Stacking fix: elevate center column above sidebar when popups are active ── */

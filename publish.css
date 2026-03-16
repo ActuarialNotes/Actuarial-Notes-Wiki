@@ -3000,6 +3000,8 @@ figure.right figcaption,
 
 .exam-nav__sticky.is-open .exam-nav__sticky-content {
   display: block;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
 }
 
 /* LO menus inside sticky: inline expand (not floating) */
@@ -3213,9 +3215,6 @@ figure.right figcaption,
 }
 
 .exam-nav__lo-obj-btn > span:nth-child(2) {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   min-width: 0;
   flex: 1;
 }

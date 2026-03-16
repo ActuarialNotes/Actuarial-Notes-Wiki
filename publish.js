@@ -270,15 +270,11 @@
     function openSticky() {
       sticky.classList.add('is-open');
       showBackdrop();
-      if (window.innerWidth <= 540) {
-        document.body.style.overflow = 'hidden';
-      }
     }
 
     function closeSticky() {
       sticky.classList.remove('is-open');
       hideBackdrop();
-      document.body.style.overflow = '';
     }
 
     stickyBtn.addEventListener('click', function (e) {
@@ -329,7 +325,6 @@
             d.classList.remove('is-open');
           });
           hideBackdrop();
-          document.body.style.overflow = '';
         }
       });
 
@@ -343,7 +338,6 @@
             d.classList.remove('is-open');
           });
           hideBackdrop();
-          document.body.style.overflow = '';
         }
       });
     }
@@ -714,7 +708,6 @@
           d.classList.remove('is-open');
         });
         hideBackdrop();
-        document.body.style.overflow = '';
       });
       document.body.appendChild(backdrop);
     }
@@ -3602,23 +3595,23 @@ var SoundFX = (function () {
   }
 
   // Mobile browsers keep AudioContext suspended until a user gesture handler
-  // calls resume(). Re-run on every gesture because the context can be
-  // re-suspended after tab switches, lock-screen, or overlay open/close.
-  // Play a silent buffer each time we re-unlock — iOS Safari needs this to
-  // fully restore audio after a re-suspension (e.g. caused by body overflow
-  // toggling when the mobile nav overlay opens).
+  // calls resume(). Re-run on every gesture in case of re-suspension (tab
+  // switches, lock-screen, etc.).
+  // Always play a silent 1-sample buffer: iOS Safari can silently deactivate
+  // the audio session even while ac.state === 'running' (e.g. after page
+  // layout changes).  Re-activating it on every touchstart is the safest fix.
   function unlockAudio() {
     var ac = getCtx();
-    if (ac.state === 'running') return; // already unlocked, nothing to do
-    ac.resume();
-    // Silent 1-sample buffer kicks iOS Safari out of the suspended state
-    var buf = ac.createBuffer(1, 1, ac.sampleRate);
-    var src = ac.createBufferSource();
-    src.buffer = buf;
-    src.connect(ac.destination);
-    src.start(0);
+    if (ac.state === 'suspended') ac.resume();
+    try {
+      var buf = ac.createBuffer(1, 1, ac.sampleRate);
+      var src = ac.createBufferSource();
+      src.buffer = buf;
+      src.connect(ac.destination);
+      src.start(0);
+    } catch (e) {}
   }
-  document.addEventListener('touchstart', unlockAudio, true);
+  document.addEventListener('touchstart', unlockAudio, { capture: true, passive: true });
   document.addEventListener('click', unlockAudio, true);
 
   // Ensure AudioContext is running before scheduling audio.

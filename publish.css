@@ -6055,6 +6055,7 @@ body.high-contrast .dl-dropdown__single {
 
 .doc-library__glossary-item {
   background: var(--bg-elev, #1a1a2e);
+  border: 1px solid var(--muted);
   border-radius: 8px;
   padding: 12px 16px;
 }

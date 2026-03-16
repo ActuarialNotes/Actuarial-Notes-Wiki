@@ -4314,9 +4314,9 @@ var SoundFX = (function () {
 
   var DEFAULT_CONCEPTS_PROMPT = 'You are an expert actuarial exam content analyst. Given the following document text and a list of concept names, find detailed definitions and explanations for each concept.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "conceptDetails": {\n    "Concept Name": "A thorough 2-5 sentence definition and explanation of this concept as described in the source document, including key formulas, relationships, or examples where relevant."\n  }\n}\n\nRules:\n- Use the EXACT concept names as keys\n- Draw definitions directly from the source document content\n- Include mathematical formulas or relationships if mentioned\n- If a concept is not found in the document, provide a brief general definition and note it was not explicitly covered\n- Be thorough but concise';
 
-  var DEFAULT_LIBRARY_TOC_PROMPT = 'You are an expert document analyst. Analyze the provided document text and extract its table of contents or logical structure.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "title": "Document Title",\n  "author": "Author Name or empty string if unknown",\n  "toc": [\n    {\n      "title": "Section Title",\n      "level": 1,\n      "page": null,\n      "children": [\n        { "title": "Subsection", "level": 2, "page": null, "children": [] }\n      ]\n    }\n  ]\n}\n\nRules:\n- level 1 = top-level chapter/section, level 2 = subsection, level 3 = sub-subsection\n- page is the page number if identifiable, otherwise null\n- Preserve the document\'s original section hierarchy\n- If no explicit table of contents exists, infer structure from headings and content organization\n- Include ALL identifiable sections';
+  var DEFAULT_LIBRARY_TOC_PROMPT = 'You are an expert document analyst. Extract the COMPLETE table of contents from the provided document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "title": "Document Title",\n  "author": "Author Name or empty string if unknown",\n  "toc": [\n    { "title": "Chapter 1 - Introduction", "level": 1, "page": 1 },\n    { "title": "1.1 Background", "level": 2, "page": 3 },\n    { "title": "1.1.1 Historical Context", "level": 3, "page": 4 },\n    { "title": "Appendix A - Tables", "level": 1, "page": 200 }\n  ]\n}\n\nCRITICAL RULES:\n- You MUST extract EVERY chapter, section, subsection, and appendix. Do NOT summarize or skip any.\n- Scan the ENTIRE document from start to finish, not just the beginning.\n- level 1 = chapter or major section, level 2 = subsection, level 3 = sub-subsection\n- Use a FLAT list (no nested children objects) — use the level field for hierarchy\n- page is the page number if identifiable, otherwise null\n- Include appendices, indices, and any back matter\n- Preserve the document\'s original numbering (e.g., "Chapter 1", "Section 2.3", "Appendix A")\n- For textbooks, expect 10-30+ top-level chapters plus many subsections\n- If no explicit table of contents page exists, infer structure from all headings throughout the document';
 
-  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are an expert document analyst. Extract key terms, definitions, and important concepts from the provided document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Term Name",\n      "definition": "Clear, concise definition as described in the document.",\n      "page": null\n    }\n  ]\n}\n\nRules:\n- Extract ALL significant terms, definitions, and key concepts\n- Use the EXACT terminology from the document\n- definition should be 1-3 sentences\n- page is the page number where the term is primarily defined, or null\n- Focus on domain-specific terminology, not common words\n- Aim for 20-100 terms depending on document length';
+  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are an expert document analyst. Extract ALL key terms, definitions, formulas, acronyms, and important concepts from the provided document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Term Name",\n      "definition": "Clear, concise definition as described in the document.",\n      "page": null\n    }\n  ]\n}\n\nCRITICAL RULES:\n- Extract EVERY significant technical term, acronym, formula name, and defined concept\n- Use the EXACT terminology from the document\n- The "term" field must contain the term name, and the "definition" field must contain the explanation\n- definition should be 1-3 sentences capturing the meaning from the document\n- page is the page number where the term is primarily defined, or null\n- Focus on domain-specific terminology, formulas, ratios, acronyms, and technical definitions\n- Do NOT include common English words or generic terms\n- For a textbook or long document (30+ pages), extract at LEAST 50 terms, ideally 80-150\n- For shorter documents (under 30 pages), extract at least 20-50 terms\n- Be thorough — scan the entire document, not just the first few pages';
 
   /* ---- State ---- */
   var LIBRARY_STORAGE_KEY = 'actuarial-notes-doc-library';
@@ -4425,15 +4425,18 @@ var SoundFX = (function () {
 
     libraryDocs.forEach(function (doc) {
       (doc.glossary || []).forEach(function (entry) {
-        var termLower = entry.term.toLowerCase();
+        var entryTerm = entry.term || entry.name || entry.title || '';
+        var entryDef = entry.definition || entry.description || entry.def || '';
+        if (!entryTerm) return;
+        var termLower = entryTerm.toLowerCase();
         var match = termLower.indexOf(q) !== -1 || q.indexOf(termLower) !== -1;
         if (!match && words.length > 0) {
           match = words.some(function (w) { return termLower.indexOf(w) !== -1; });
         }
         if (match) {
           results.push({
-            term: entry.term,
-            definition: entry.definition,
+            term: entryTerm,
+            definition: entryDef,
             page: entry.page,
             sourceDocId: doc.id,
             sourceDocTitle: doc.title
@@ -6678,16 +6681,21 @@ var SoundFX = (function () {
       glossaryList.className = 'doc-library__glossary-list';
 
       doc.glossary.forEach(function (entry) {
+        var vals = Object.values(entry);
+        var termText = entry.term || entry.name || entry.title || (typeof vals[0] === 'string' ? vals[0] : '');
+        var defText = entry.definition || entry.description || entry.def || (typeof vals[1] === 'string' ? vals[1] : '');
+        if (!termText) return; // skip empty entries
+
         var item = document.createElement('div');
         item.className = 'doc-library__glossary-item';
 
         var term = document.createElement('div');
         term.className = 'doc-library__glossary-term';
-        term.textContent = entry.term;
+        term.textContent = termText;
 
         var def = document.createElement('div');
         def.className = 'doc-library__glossary-def';
-        def.textContent = entry.definition;
+        def.textContent = defText;
 
         item.appendChild(term);
         item.appendChild(def);

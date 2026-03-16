@@ -2950,36 +2950,44 @@ figure.right figcaption,
 
 /* ── Sticky exam nav bar (primary & only nav) ──────── */
 .exam-nav__sticky {
-  position: sticky;
+  position: fixed;
   top: 0;
+  right: 0;
+  left: auto;
   z-index: 300;
-  padding: 8px 16px;
+  padding: 0;
   background: color-mix(in oklab, var(--nav-color) 6%, var(--bg-elev));
+  border-bottom-left-radius: var(--radius-sm);
+  border-left: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
   border-bottom: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   --nav-color: var(--brand);
   --nav-color-hover: var(--brand-hover);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .exam-nav__sticky-btn {
-  width: 100%;
-  display: flex;
+  width: auto;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 8px 14px;
+  padding: 7px 16px;
   background: var(--nav-color) !important;
-  border: 1px solid var(--nav-color) !important;
+  border: none !important;
   color: white !important;
   font-weight: 600;
-  font-size: 0.9rem;
-  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  border-radius: 0 0 0 var(--radius-sm);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.15s ease;
-  box-shadow: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   white-space: nowrap;
+  line-height: 1.3;
 }
 
 .exam-nav__sticky-btn:hover {
@@ -3005,10 +3013,26 @@ figure.right figcaption,
   padding-top: 10px;
 }
 
+/* Desktop: dropdown panel from top-right */
+.exam-nav__sticky.is-open {
+  width: 420px;
+  max-width: 90vw;
+  border-radius: 0 0 0 var(--radius-md);
+  box-shadow: var(--shadow-2);
+  background: var(--bg-elev);
+}
+
+.exam-nav__sticky.is-open .exam-nav__sticky-btn {
+  width: 100%;
+  border-radius: 0;
+}
+
 .exam-nav__sticky.is-open .exam-nav__sticky-content {
   display: block;
   max-height: calc(100vh - 60px);
   overflow-y: auto;
+  padding: 12px 16px 24px;
+  width: 100%;
 }
 
 /* LO menus inside sticky: inline expand (not floating) */
@@ -3050,48 +3074,30 @@ figure.right figcaption,
   display: block;
 }
 
-/* ── Mobile: compact right-aligned button, full-screen overlay ── */
+/* ── Mobile: full-screen overlay when open ── */
 @media (max-width: 540px) {
   .exam-nav__sticky {
-    position: fixed;
-    top: 0;
-    left: auto;
-    right: 0;
-    padding: 0;
     height: 48px;
-    display: flex;
     align-items: center;
     justify-content: flex-end;
     border-bottom: none;
-    border-bottom-left-radius: var(--radius-sm);
-    border-left: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
-    background: color-mix(in oklab, var(--nav-color) 6%, var(--bg-elev));
   }
   .exam-nav__sticky-btn {
-    width: auto;
-    display: inline-flex;
-    justify-content: center;
     height: 100%;
     padding: 0 14px;
-    font-size: 0.82rem;
-    border-radius: 0 0 0 var(--radius-sm);
-    border: none !important;
-    background: var(--nav-color) !important;
   }
   /* When open on mobile: full-screen overlay */
   .exam-nav__sticky.is-open {
-    top: 0;
     left: 0;
-    right: 0;
     bottom: 0;
+    width: 100%;
+    max-width: none;
     height: auto;
     border-radius: 0;
     border-left: none;
     border-bottom: none;
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
-    background: var(--bg-elev);
+    box-shadow: none;
   }
   .exam-nav__sticky.is-open .exam-nav__sticky-btn {
     width: 100%;
@@ -3287,6 +3293,26 @@ figure.right figcaption,
   }
   .exam-nav__lo-wrap.is-open .exam-nav__lo-menu {
     transform: translateY(0);
+  }
+
+  /* Prevent long LO text from overlapping badges / adjacent items */
+  .exam-nav__lo-obj-btn {
+    gap: 6px;
+    padding: 8px 10px 8px 4px;
+  }
+  .exam-nav__lo-obj-btn > span:nth-child(2) {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.35;
+  }
+  .exam-nav__lo-item {
+    min-height: 0;
+    align-items: flex-start;
+  }
+  .exam-nav__lo-weight,
+  .exam-nav__lo-count {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 }
 
@@ -3500,7 +3526,13 @@ figure.right figcaption,
 
 /* ── High-contrast mode ── */
 body.high-contrast .persistent-exam-tab {
+  background: var(--text) !important;
+  color: var(--bg) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+body.high-contrast .persistent-exam-tab:hover {
+  filter: none;
+  color: var(--bg) !important;
 }
 
 

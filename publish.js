@@ -4367,15 +4367,19 @@ var SoundFX = (function () {
     // Obsidian Publish: click the sidebar toggle button if it exists
     var toggleBtn = document.querySelector('.site-body-left-column-collapse-icon, .sidebar-toggle-button, [aria-label="Toggle left sidebar"]');
     if (toggleBtn) { toggleBtn.click(); return; }
-    // Fallback: hide sidebar on mobile/tablet and restore on next user-initiated open
+    // Fallback: hide sidebar on mobile/tablet
     var sidebar = document.querySelector('.site-body-left-column');
     if (sidebar && window.innerWidth < 1000) {
       sidebar.style.display = 'none';
-      var obs = new MutationObserver(function () {
-        obs.disconnect();
+      // Restore sidebar visibility on next user interaction (e.g. tapping hamburger)
+      function restore() {
         sidebar.style.display = '';
-      });
-      obs.observe(sidebar, { attributes: true, childList: true });
+        document.removeEventListener('click', restore, true);
+      }
+      // Use setTimeout so the current click event doesn't immediately trigger restore
+      setTimeout(function () {
+        document.addEventListener('click', restore, true);
+      }, 0);
     }
   }
 

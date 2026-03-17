@@ -1580,12 +1580,39 @@ input[type="search"]:focus, .search-input:focus {
   flex-basis: auto;
 }
 
-/* Header row: title + count */
+/* Collapsible body */
+.journey-tracker__body {
+  /* wrapper for bar + select + sections */
+}
+.journey-tracker.is-collapsed .journey-tracker__body {
+  display: none;
+}
+.journey-tracker.is-collapsed .journey-tracker__header {
+  margin-bottom: 0;
+}
+.journey-tracker__collapse-btn {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  opacity: 0.5;
+  transition: transform 0.15s ease;
+}
+.journey-tracker__collapse-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.journey-tracker.is-collapsed .journey-tracker__collapse-btn {
+  transform: rotate(-90deg);
+}
+
+/* Header row: title + count + collapse */
 .journey-tracker__header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 6px;
   margin-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
 }
 .journey-tracker__title {
   font-size: 0.75rem;
@@ -4964,24 +4991,28 @@ body.high-contrast .dl-dropdown__single {
 
 /* ── Sidebar Button ── */
 
+.sidebar-btn-row {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0;
+}
 .custom-exam__sidebar-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px 14px;
-  margin: 8px 0;
-  background: color-mix(in oklab, var(--brand) 12%, var(--bg-elev));
-  border: 1.5px dashed color-mix(in oklab, var(--brand) 40%, transparent);
+  gap: 6px;
+  flex: 1;
+  padding: 7px 10px;
+  background: color-mix(in oklab, var(--brand) 6%, var(--bg-elev));
+  border: 1px solid color-mix(in oklab, var(--brand) 25%, transparent);
   border-radius: var(--radius-sm);
   color: var(--brand);
-  font: 600 13px/1 var(--font-sans);
+  font: 600 12px/1 var(--font-sans);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 .custom-exam__sidebar-btn:hover {
-  background: color-mix(in oklab, var(--brand) 20%, var(--bg-elev));
-  border-color: var(--brand);
+  background: color-mix(in oklab, var(--brand) 14%, var(--bg-elev));
+  border-color: color-mix(in oklab, var(--brand) 50%, transparent);
   color: var(--brand-hover);
 }
 .custom-exam__sidebar-btn-icon {
@@ -4993,8 +5024,8 @@ body.high-contrast .dl-dropdown__single {
   flex-shrink: 0;
 }
 .custom-exam__sidebar-btn-icon svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 /* ── My Custom Exams (sidebar tracker) ── */
@@ -5929,6 +5960,7 @@ body.high-contrast .dl-dropdown__single {
 
 /* Print: hide custom exam UI */
 @media print {
+  .sidebar-btn-row,
   .custom-exam__sidebar-btn,
   .custom-exam__my-exams,
   .custom-exam__backdrop,
@@ -5942,7 +5974,7 @@ body.high-contrast .dl-dropdown__single {
    ========================================================= */
 
 .doc-library__sidebar-btn {
-  margin-top: 4px;
+  /* no extra margin needed — handled by .sidebar-btn-row */
 }
 
 .doc-library__sidebar-count {

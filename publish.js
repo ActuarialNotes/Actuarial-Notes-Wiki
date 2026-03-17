@@ -5746,13 +5746,16 @@ var SoundFX = (function () {
     return null;
   }
 
-  async function extractGlossary(pages, fullText, bodyFontSize) {
+  async function extractGlossary(pages, fullText, bodyFontSize, onProgress) {
     // Phase 1: Extract just TERM NAMES from the document (small output, ~1 API call)
     // Phase 2: Generate DEFINITIONS from term names alone (no document needed)
+    var notify = onProgress || function () {};
 
     var allTermNames = [];
 
     // --- Phase 1: Find terms ---
+    notify({ phase: 'finding', status: 'Scanning document for key terms…', termCount: 0, definedCount: 0 });
+
     var glossarySection = findGlossarySection(pages, bodyFontSize);
 
     if (glossarySection) {
@@ -5764,11 +5767,13 @@ var SoundFX = (function () {
       var sectionResult = await callClaudeApi('Glossary section:\n' + sectionText.substring(0, 90000), DEFAULT_LIBRARY_GLOSSARY_PROMPT);
       var sectionTerms = extractArray(sectionResult, 'terms', ['glossary', 'concepts']);
       allTermNames = allTermNames.concat(sectionTerms);
-      console.log('[Library] Glossary section yielded ' + sectionTerms.length + ' term names');
+      notify({ phase: 'finding', status: 'Found glossary section', termCount: allTermNames.length, definedCount: 0, newTerms: sectionTerms });
     }
 
     // If glossary section didn't give us enough, scan the document for more terms
     if (allTermNames.length < 30) {
+      notify({ phase: 'finding', status: 'Scanning document pages for terms…', termCount: allTermNames.length, definedCount: 0 });
+
       // Build sampled text from key regions
       var sampledText = '';
 
@@ -5804,9 +5809,11 @@ var SoundFX = (function () {
       var chunks = splitTextIntoChunks(sampledText, 90000, 3000);
       for (var ci = 0; ci < chunks.length; ci++) {
         var chunkLabel = chunks.length > 1 ? 'Document (part ' + (ci + 1) + ' of ' + chunks.length + '):\n' : 'Document:\n';
+        notify({ phase: 'finding', status: 'Extracting terms' + (chunks.length > 1 ? ' (part ' + (ci + 1) + '/' + chunks.length + ')' : '') + '…', termCount: allTermNames.length, definedCount: 0 });
         var termResult = await callClaudeApi(chunkLabel + chunks[ci], DEFAULT_LIBRARY_GLOSSARY_PROMPT);
         var chunkTerms = extractArray(termResult, 'terms', ['glossary', 'concepts']);
         allTermNames = allTermNames.concat(chunkTerms);
+        notify({ phase: 'finding', status: 'Found ' + allTermNames.length + ' terms so far', termCount: allTermNames.length, definedCount: 0, newTerms: chunkTerms });
         console.log('[Library] Phase 1 chunk ' + (ci + 1) + ': ' + chunkTerms.length + ' terms');
       }
     }
@@ -5814,6 +5821,7 @@ var SoundFX = (function () {
     // Deduplicate term names
     var uniqueTerms = deduplicateTerms(allTermNames);
     console.log('[Library] Phase 1 complete: ' + uniqueTerms.length + ' unique terms found');
+    notify({ phase: 'finding', status: uniqueTerms.length + ' unique terms identified', termCount: uniqueTerms.length, definedCount: 0 });
 
     if (uniqueTerms.length === 0) {
       return { glossary: [], method: 'none' };
@@ -5824,11 +5832,17 @@ var SoundFX = (function () {
       return { term: t.term || t.name || t.title || '', page: t.page || null };
     }).filter(function (t) { return t.term; });
 
+    notify({ phase: 'defining', status: 'Generating definitions for ' + termList.length + ' terms…', termCount: termList.length, definedCount: 0 });
+
     // Batch terms into groups of ~40 to keep output manageable
     var BATCH_SIZE = 40;
     var allDefined = [];
     for (var bi = 0; bi < termList.length; bi += BATCH_SIZE) {
       var batch = termList.slice(bi, bi + BATCH_SIZE);
+      var batchNum = Math.floor(bi / BATCH_SIZE) + 1;
+      var totalBatches = Math.ceil(termList.length / BATCH_SIZE);
+      notify({ phase: 'defining', status: 'Generating definitions' + (totalBatches > 1 ? ' (batch ' + batchNum + '/' + totalBatches + ')' : '') + '…', termCount: termList.length, definedCount: allDefined.length });
+
       var termListStr = batch.map(function (t, idx) {
         return (idx + 1) + '. ' + t.term + (t.page ? ' (page ' + t.page + ')' : '');
       }).join('\n');
@@ -5836,7 +5850,8 @@ var SoundFX = (function () {
       var defineResult = await callClaudeApi('Define these ' + batch.length + ' actuarial terms:\n\n' + termListStr, DEFAULT_LIBRARY_DEFINE_PROMPT);
       var defined = extractArray(defineResult, 'glossary', ['terms', 'definitions']);
       allDefined = allDefined.concat(defined);
-      console.log('[Library] Phase 2 batch ' + Math.floor(bi / BATCH_SIZE + 1) + ': ' + defined.length + ' definitions');
+      notify({ phase: 'defining', status: allDefined.length + ' of ' + termList.length + ' definitions complete', termCount: termList.length, definedCount: allDefined.length, newTerms: defined });
+      console.log('[Library] Phase 2 batch ' + batchNum + ': ' + defined.length + ' definitions');
     }
 
     return { glossary: deduplicateTerms(allDefined), method: glossarySection ? 'section+ai' : 'ai' };
@@ -5874,24 +5889,37 @@ var SoundFX = (function () {
     var body = { text: text };
     if (systemPrompt) body.systemPrompt = systemPrompt;
 
-    var response = await fetch(API_PROXY_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Invite-Code': code
-      },
-      body: JSON.stringify(body)
-    });
+    var MAX_RETRIES = 3;
+    var RETRY_DELAYS = [3000, 8000, 15000]; // exponential-ish backoff
 
-    if (!response.ok) {
+    for (var attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      var response = await fetch(API_PROXY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Invite-Code': code
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (response.ok) {
+        return await response.json();
+      }
+
+      if (response.status === 401) throw new Error('Invalid invite code. Please check your code and try again.');
+
+      // Retry on 429 (rate limit) and 529/502/503 (overload/temporary)
+      if ((response.status === 429 || response.status >= 500) && attempt < MAX_RETRIES) {
+        console.log('[API] Got ' + response.status + ', retrying in ' + (RETRY_DELAYS[attempt] / 1000) + 's (attempt ' + (attempt + 1) + '/' + MAX_RETRIES + ')');
+        await new Promise(function (r) { setTimeout(r, RETRY_DELAYS[attempt]); });
+        continue;
+      }
+
       var errData;
       try { errData = await response.json(); } catch (e) { errData = {}; }
-      if (response.status === 401) throw new Error('Invalid invite code. Please check your code and try again.');
-      if (response.status === 429) throw new Error('Rate limit exceeded. Please wait a few minutes and try again.');
+      if (response.status === 429) throw new Error('Rate limit exceeded after retries. Please wait a few minutes and try again.');
       throw new Error(errData.error || 'API error (' + response.status + ')');
     }
-
-    return await response.json();
   }
 
   /* ---- Text chunking for large documents ---- */
@@ -7203,7 +7231,6 @@ var SoundFX = (function () {
 
   /* ---- Library upload modal ---- */
   function openLibraryUploadModal() {
-    // Create separate modal (shares CSS chrome with exam modal)
     var libBackdrop = document.createElement('div');
     libBackdrop.className = 'custom-exam__backdrop';
 
@@ -7243,20 +7270,17 @@ var SoundFX = (function () {
     body.className = 'custom-exam__modal-body';
     body.style.padding = '20px';
 
-    // Dropzone
+    // Compact dropzone — no giant icon
     var dropzone = document.createElement('div');
     dropzone.className = 'custom-exam__dropzone';
-
-    var dropIcon = document.createElement('div');
-    dropIcon.style.cssText = 'width:48px;height:48px;margin:0 auto 12px;opacity:0.4';
-    dropIcon.innerHTML = SVG_UPLOAD;
+    dropzone.style.padding = '24px 20px';
 
     var dropText = document.createElement('p');
-    dropText.style.cssText = 'margin-bottom:4px;font-size:0.95rem';
+    dropText.style.cssText = 'margin:0 0 4px;font-size:0.9rem';
     dropText.textContent = 'Drop a PDF here or click to browse';
 
     var dropHint = document.createElement('p');
-    dropHint.style.cssText = 'opacity:0.5;font-size:0.8rem';
+    dropHint.style.cssText = 'opacity:0.5;font-size:0.78rem;margin:0';
     dropHint.textContent = 'Textbooks, articles, lecture notes, etc.';
 
     var fileInput = document.createElement('input');
@@ -7264,14 +7288,9 @@ var SoundFX = (function () {
     fileInput.accept = '.pdf';
     fileInput.style.display = 'none';
 
-    var fileInfo = document.createElement('div');
-    fileInfo.style.cssText = 'margin-top:12px;font-size:0.85rem;display:none';
-
-    dropzone.appendChild(dropIcon);
     dropzone.appendChild(dropText);
     dropzone.appendChild(dropHint);
     dropzone.appendChild(fileInput);
-    dropzone.appendChild(fileInfo);
 
     dropzone.addEventListener('click', function () { fileInput.click(); });
     dropzone.addEventListener('dragover', function (e) { e.preventDefault(); dropzone.classList.add('is-dragover'); });
@@ -7292,8 +7311,13 @@ var SoundFX = (function () {
       if (fileInput.files.length > 0) {
         selectedFile = fileInput.files[0];
         var sizeMB = (selectedFile.size / (1024 * 1024)).toFixed(1);
-        fileInfo.style.display = 'block';
-        fileInfo.innerHTML = SVG_DOC + ' <strong>' + escHtml(selectedFile.name) + '</strong> (' + sizeMB + ' MB)';
+        // Replace dropzone content with compact file info
+        dropzone.style.borderColor = 'var(--success, #059669)';
+        dropzone.style.background = 'color-mix(in oklab, var(--success) 4%, var(--bg))';
+        dropText.innerHTML = SVG_DOC + ' <strong style="margin-left:6px">' + escHtml(selectedFile.name) + '</strong>';
+        dropText.style.cssText = 'margin:0;font-size:0.85rem;display:flex;align-items:center';
+        dropText.querySelector('svg').style.cssText = 'width:16px;height:16px;flex-shrink:0';
+        dropHint.textContent = sizeMB + ' MB';
         analyzeBtn.disabled = false;
       }
     });
@@ -7302,19 +7326,20 @@ var SoundFX = (function () {
     var analyzeBtn = document.createElement('button');
     analyzeBtn.className = 'custom-exam__btn custom-exam__btn--primary';
     analyzeBtn.type = 'button';
-    analyzeBtn.style.cssText = 'width:100%;margin-top:16px';
+    analyzeBtn.style.cssText = 'width:100%;margin-top:12px';
     analyzeBtn.textContent = 'Analyze Document';
     analyzeBtn.disabled = true;
 
-    // Progress area (hidden initially) — uses same pattern as exam processing
+    // Progress area (hidden initially)
     var progressArea = document.createElement('div');
     progressArea.className = 'custom-exam__progress';
     progressArea.style.display = 'none';
 
     var libTasks = [
       { id: 'extract', label: 'Reading PDF' },
-      { id: 'toc', label: 'Analyzing document structure' },
-      { id: 'glossary', label: 'Extracting glossary terms' }
+      { id: 'toc', label: 'Analyzing structure' },
+      { id: 'glossary', label: 'Finding key terms' },
+      { id: 'define', label: 'Generating definitions' }
     ];
 
     libTasks.forEach(function (task) {
@@ -7339,37 +7364,139 @@ var SoundFX = (function () {
       progressArea.appendChild(row);
     });
 
+    // Live preview panel (terms appear as they're found)
+    var livePreview = document.createElement('div');
+    livePreview.className = 'custom-exam__live-preview';
+    livePreview.style.display = 'none';
+
     var libErrorEl = document.createElement('div');
     libErrorEl.className = 'custom-exam__error';
 
     analyzeBtn.addEventListener('click', async function () {
       if (!selectedFile) return;
       analyzeBtn.disabled = true;
-      analyzeBtn.innerHTML = SVG_SPINNER + ' Processing…';
+      analyzeBtn.innerHTML = SVG_SPINNER + ' Analyzing…';
       dropzone.style.display = 'none';
       progressArea.style.display = '';
       libErrorEl.style.display = 'none';
 
       try {
-        // Step 1: Structured PDF extraction
+        // Step 1: Read PDF
         setTaskStatus(progressArea, 'extract', 'active');
         var structured = await extractPdfStructured(selectedFile);
-        setTaskStatus(progressArea, 'extract', 'done', structured.pageCount + ' pages extracted');
+        setTaskStatus(progressArea, 'extract', 'done', structured.pageCount + ' pages');
 
-        // Truncate fullText for storage (used by glossary search across documents)
         var storedText = structured.fullText.substring(0, 100000);
 
-        // Step 2: Extract TOC (tries PDF outline first, then AI fallback)
+        // Step 2: Extract TOC
         setTaskStatus(progressArea, 'toc', 'active');
         var tocResult = await extractToc(structured.pdf, structured.pages, structured.bodyFontSize);
-        var tocMethodLabel = tocResult.method === 'outline' ? ' (from outline)' : ' (via AI)';
-        setTaskStatus(progressArea, 'toc', 'done', tocResult.toc.length > 0 ? tocResult.toc.length + ' sections found' + tocMethodLabel : '0 sections found (check document)');
+        var tocMethodLabel = tocResult.method === 'outline' ? ' (outline)' : ' (AI)';
+        setTaskStatus(progressArea, 'toc', 'done', tocResult.toc.length + ' sections' + tocMethodLabel);
 
-        // Step 3: Extract glossary (detects glossary section first, then AI)
+        // Show TOC in live preview
+        if (tocResult.toc.length > 0) {
+          livePreview.style.display = 'block';
+          var tocPreviewLabel = document.createElement('div');
+          tocPreviewLabel.style.cssText = 'font-weight:600;font-size:0.78rem;opacity:0.5;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em';
+          tocPreviewLabel.textContent = 'Table of Contents';
+          livePreview.appendChild(tocPreviewLabel);
+          var tocList = document.createElement('div');
+          livePreview.appendChild(tocList);
+          animateItemsIn(tocList, tocResult.toc.slice(0, 12), function (item) {
+            var el = document.createElement('div');
+            el.style.cssText = 'padding:3px 8px;border-left:3px solid var(--brand,#2563eb);margin-bottom:3px;font-size:0.8rem;border-radius:2px;background:var(--bg-elev,#f8f8f8)';
+            el.textContent = item.title || item.name || item;
+            return el;
+          }, 80);
+          if (tocResult.toc.length > 12) {
+            setTimeout(function () {
+              var more = document.createElement('div');
+              more.style.cssText = 'font-size:0.75rem;opacity:0.5;padding:2px 8px';
+              more.textContent = '+ ' + (tocResult.toc.length - 12) + ' more sections';
+              tocList.appendChild(more);
+            }, 12 * 80 + 100);
+          }
+        }
+
+        // Step 3 + 4: Extract glossary with live progress
         setTaskStatus(progressArea, 'glossary', 'active');
-        var glossaryResult = await extractGlossary(structured.pages, structured.fullText, structured.bodyFontSize);
-        var glossaryMethodLabel = glossaryResult.method === 'section' ? ' (from glossary section)' : glossaryResult.method === 'section+ai' ? ' (section + AI)' : ' (via AI)';
-        setTaskStatus(progressArea, 'glossary', 'done', glossaryResult.glossary.length > 0 ? glossaryResult.glossary.length + ' terms extracted' + glossaryMethodLabel : '0 terms extracted (check document)');
+
+        // Glossary live preview section
+        var glossaryLabel = document.createElement('div');
+        glossaryLabel.style.cssText = 'font-weight:600;font-size:0.78rem;opacity:0.5;margin:14px 0 6px;text-transform:uppercase;letter-spacing:0.04em;display:none';
+        glossaryLabel.textContent = 'Glossary Terms';
+        livePreview.appendChild(glossaryLabel);
+        var termsList = document.createElement('div');
+        livePreview.appendChild(termsList);
+
+        var glossaryTermCount = 0;
+
+        var glossaryResult = await extractGlossary(structured.pages, structured.fullText, structured.bodyFontSize, function (progress) {
+          // Update task labels and live preview based on phase
+          if (progress.phase === 'finding') {
+            glossaryTermCount = progress.termCount;
+            var findLabel = 'Finding key terms';
+            if (progress.termCount > 0) findLabel += ' (' + progress.termCount + ' found)';
+            var glossaryRow = progressArea.querySelector('[data-task="glossary"]');
+            if (glossaryRow) {
+              var labelEl = glossaryRow.querySelector('.custom-exam__progress-label');
+              if (labelEl) labelEl.textContent = findLabel;
+            }
+
+            // Animate new terms into the live preview
+            if (progress.newTerms && progress.newTerms.length > 0) {
+              livePreview.style.display = 'block';
+              glossaryLabel.style.display = 'block';
+              animateItemsIn(termsList, progress.newTerms, function (t) {
+                var el = document.createElement('div');
+                el.style.cssText = 'padding:3px 8px;border-left:3px solid var(--warning,#d97706);margin-bottom:3px;font-size:0.8rem;border-radius:2px;background:var(--bg-elev,#f8f8f8)';
+                el.textContent = t.term || t.name || t.title || '';
+                return el;
+              }, 60);
+            }
+          } else if (progress.phase === 'defining') {
+            // Phase 1 done — mark glossary task done, activate define task
+            setTaskStatus(progressArea, 'glossary', 'done', glossaryTermCount + ' terms found');
+            setTaskStatus(progressArea, 'define', 'active');
+
+            var defineLabel = 'Generating definitions';
+            if (progress.definedCount > 0) defineLabel += ' (' + progress.definedCount + '/' + progress.termCount + ')';
+            var defineRow = progressArea.querySelector('[data-task="define"]');
+            if (defineRow) {
+              var defLabelEl = defineRow.querySelector('.custom-exam__progress-label');
+              if (defLabelEl) defLabelEl.textContent = defineLabel;
+            }
+
+            // Replace term-only items with defined terms as they come in
+            if (progress.newTerms && progress.newTerms.length > 0) {
+              // Clear previous term-only list and rebuild with definitions
+              termsList.innerHTML = '';
+              glossaryLabel.textContent = 'Glossary (' + progress.definedCount + ' defined)';
+              // Show all defined terms so far (compact)
+              var allSoFar = progress.newTerms; // just the new batch, but let's show last few
+              animateItemsIn(termsList, allSoFar.slice(-8), function (t) {
+                var el = document.createElement('div');
+                el.style.cssText = 'padding:4px 8px;border-left:3px solid var(--success,#059669);margin-bottom:3px;font-size:0.8rem;border-radius:2px;background:var(--bg-elev,#f8f8f8)';
+                var strong = document.createElement('strong');
+                strong.textContent = t.term || '';
+                el.appendChild(strong);
+                if (t.definition) {
+                  var defSpan = document.createElement('span');
+                  defSpan.style.cssText = 'opacity:0.7;margin-left:6px';
+                  defSpan.textContent = '— ' + (t.definition.length > 80 ? t.definition.substring(0, 80) + '…' : t.definition);
+                  el.appendChild(defSpan);
+                }
+                return el;
+              }, 60);
+            }
+          }
+        });
+
+        // Mark final task done
+        setTaskStatus(progressArea, 'glossary', 'done', glossaryTermCount + ' terms found');
+        var glossaryMethodLabel = glossaryResult.method === 'section' ? ' (glossary section)' : glossaryResult.method === 'section+ai' ? ' (section + AI)' : ' (AI)';
+        setTaskStatus(progressArea, 'define', 'done', glossaryResult.glossary.length + ' definitions' + glossaryMethodLabel);
 
         // Build document object
         var newDoc = {
@@ -7387,27 +7514,26 @@ var SoundFX = (function () {
         libraryDocs.push(newDoc);
         saveLibrary();
 
-        // Show success — replace analyze button with View in Library
+        // Show success
         analyzeBtn.style.display = 'none';
 
         var successMsg = document.createElement('p');
-        successMsg.style.cssText = 'text-align:center;margin-top:16px;font-size:0.95rem';
+        successMsg.style.cssText = 'text-align:center;margin-top:14px;font-size:0.9rem';
         successMsg.innerHTML = '<strong>' + escHtml(newDoc.title) + '</strong> added to library';
-        progressArea.parentElement.appendChild(successMsg);
+        body.appendChild(successMsg);
 
         var doneBtn = document.createElement('button');
         doneBtn.className = 'custom-exam__btn custom-exam__btn--primary';
-        doneBtn.style.cssText = 'width:100%;margin-top:12px';
+        doneBtn.style.cssText = 'width:100%;margin-top:10px';
         doneBtn.textContent = 'View in Library';
         doneBtn.addEventListener('click', function () {
           closeLibModal();
           renderLibraryViewer();
         });
-        progressArea.parentElement.appendChild(doneBtn);
+        body.appendChild(doneBtn);
 
       } catch (err) {
-        // Mark the active task as error
-        ['extract', 'toc', 'glossary'].forEach(function (id) {
+        ['extract', 'toc', 'glossary', 'define'].forEach(function (id) {
           var row = progressArea.querySelector('[data-task="' + id + '"]');
           if (row && row.classList.contains('is-active')) {
             setTaskStatus(progressArea, id, 'error');
@@ -7426,6 +7552,7 @@ var SoundFX = (function () {
     body.appendChild(dropzone);
     body.appendChild(analyzeBtn);
     body.appendChild(progressArea);
+    body.appendChild(livePreview);
     body.appendChild(libErrorEl);
 
     libModal.appendChild(header);

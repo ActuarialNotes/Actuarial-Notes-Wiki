@@ -1577,8 +1577,10 @@ input[type="search"]:focus, .search-input:focus {
   align-items: stretch;
   flex-shrink: 0;
   padding: 0;
-  background: transparent;
-  border-bottom: 1px solid var(--sb-border);
+  background: transparent !important;
+  border-bottom: 1px solid var(--sb-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 .sidebar-tabs__tab {
@@ -1588,8 +1590,10 @@ input[type="search"]:focus, .search-input:focus {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 8px 2px 8px;
-  border: none !important;
+  padding: 10px 4px 8px;
+  border-top: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+  border-left: 1px solid transparent !important;
   border-bottom: 2px solid transparent !important;
   border-radius: 0 !important;
   margin-bottom: -1px;
@@ -1598,19 +1602,25 @@ input[type="search"]:focus, .search-input:focus {
   box-shadow: none !important;
   cursor: pointer;
   color: var(--text-dim);
-  transition: color .15s ease, border-color .15s ease;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
   user-select: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  position: relative;
 }
 .sidebar-tabs__tab:hover {
   color: var(--text);
+  background: color-mix(in oklab, var(--sb-border) 20%, transparent) !important;
 }
 .sidebar-tabs__tab.is-active {
   color: var(--text);
   font-weight: 600;
   border-bottom-color: var(--brand) !important;
+  border-top-color: var(--sb-border) !important;
+  border-right-color: var(--sb-border) !important;
+  border-left-color: var(--sb-border) !important;
+  background: var(--sb-bg) !important;
 }
 
 .sidebar-tabs__tab-icon {
@@ -1626,11 +1636,24 @@ input[type="search"]:focus, .search-input:focus {
 }
 
 .sidebar-tabs__tab-label {
-  font-size: 0.65rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: .04em;
+  letter-spacing: .03em;
   line-height: 1;
+}
+
+/* ---- Override: prevent Obsidian Publish from rounding tabs ---- */
+.sidebar-tabs .sidebar-tabs__bar .sidebar-tabs__tab,
+.sidebar-tabs .sidebar-tabs__bar .sidebar-tabs__tab:hover,
+.sidebar-tabs .sidebar-tabs__bar .sidebar-tabs__tab.is-active,
+.sidebar-tabs .sidebar-tabs__bar .sidebar-tabs__tab:focus,
+.sidebar-tabs .sidebar-tabs__bar .sidebar-tabs__tab:active {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
 }
 
 /* ---- Panel area ---- */

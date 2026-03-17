@@ -3498,25 +3498,31 @@
     });
     container.appendChild(select);
 
+    // Results area (below actions)
+    var resultsArea = document.createElement('div');
+    resultsArea.style.cssText = 'margin-top:12px';
+
     // Action cards
     var grid = document.createElement('div');
     grid.className = 'docproc-panel__action-grid';
 
     var tocCard = createActionCard('Extract Table of Contents',
-      'Generate a hierarchical outline of the document structure.',
+      'View the hierarchical outline of the document structure.',
       function () {
         var docId = select.value;
         if (!docId) { alert('Please select a document first.'); return; }
-        if (typeof window._processDocTOC === 'function') window._processDocTOC(docId);
+        var doc = findDoc(docId, docs);
+        if (!doc) return;
+        renderTocViewer(resultsArea, doc);
       });
     grid.appendChild(tocCard);
 
     var termsCard = createActionCard('Extract Terms & Definitions',
-      'Identify key terms with multi-layered definitions (mathematical, technical, experiential).',
+      'View key terms with multi-layered definitions (mathematical, technical, experiential).',
       function () {
         var docId = select.value;
         if (!docId) { alert('Please select a document first.'); return; }
-        if (typeof window._processDocTerms === 'function') window._processDocTerms(docId);
+        renderTermsViewer(resultsArea, docId, docs);
       });
     grid.appendChild(termsCard);
 
@@ -3527,15 +3533,58 @@
     grid.appendChild(moreCard);
 
     container.appendChild(grid);
+    container.appendChild(resultsArea);
+  }
 
-    // Terms viewer — show terms for selected doc
-    var termsViewer = document.createElement('div');
-    termsViewer.style.cssText = 'margin-top:12px';
-    container.appendChild(termsViewer);
+  function findDoc(docId, docs) {
+    for (var i = 0; i < docs.length; i++) {
+      if (docs[i].id === docId) return docs[i];
+    }
+    return null;
+  }
 
-    select.addEventListener('change', function () {
-      renderTermsViewer(termsViewer, select.value, docs);
+  function renderTocViewer(container, doc) {
+    container.innerHTML = '';
+    var toc = doc.toc || [];
+    if (toc.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'sidebar-tabs__empty';
+      empty.innerHTML = '<div class="sidebar-tabs__empty-title">No TOC data</div>' +
+        '<div class="sidebar-tabs__empty-desc">This document has no table of contents extracted yet.</div>';
+      container.appendChild(empty);
+      return;
+    }
+
+    var header = document.createElement('div');
+    header.className = 'sidebar-tabs__panel-header';
+    header.innerHTML = '<span class="sidebar-tabs__panel-title">Table of Contents</span>' +
+      '<span class="sidebar-tabs__panel-count">' + toc.length + '</span>';
+    container.appendChild(header);
+
+    var list = document.createElement('div');
+    list.style.cssText = 'display:flex;flex-direction:column;gap:2px';
+    toc.forEach(function (item) {
+      var row = document.createElement('div');
+      row.className = 'docproc-panel__toc-item';
+      var level = item.level || item.depth || 0;
+      row.style.paddingLeft = (level * 14) + 'px';
+
+      var titleEl = document.createElement('span');
+      titleEl.className = 'docproc-panel__toc-title';
+      var vals = Object.values(item);
+      titleEl.textContent = item.title || item.name || item.text || (typeof vals[0] === 'string' ? vals[0] : 'Untitled');
+      row.appendChild(titleEl);
+
+      if (item.page || item.pageNum) {
+        var pageEl = document.createElement('span');
+        pageEl.className = 'docproc-panel__toc-page';
+        pageEl.textContent = 'p.' + (item.page || item.pageNum);
+        row.appendChild(pageEl);
+      }
+
+      list.appendChild(row);
     });
+    container.appendChild(list);
   }
 
   function createActionCard(titleText, descText, onClick) {
@@ -3561,7 +3610,14 @@
     for (var i = 0; i < docs.length; i++) {
       if (docs[i].id === docId) { doc = docs[i]; break; }
     }
-    if (!doc || !(doc.glossary && doc.glossary.length > 0)) return;
+    if (!doc || !(doc.glossary && doc.glossary.length > 0)) {
+      var empty = document.createElement('div');
+      empty.className = 'sidebar-tabs__empty';
+      empty.innerHTML = '<div class="sidebar-tabs__empty-title">No terms found</div>' +
+        '<div class="sidebar-tabs__empty-desc">This document has no terms & definitions extracted yet.</div>';
+      container.appendChild(empty);
+      return;
+    }
 
     var header = document.createElement('div');
     header.className = 'sidebar-tabs__panel-header';

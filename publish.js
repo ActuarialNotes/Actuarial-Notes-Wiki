@@ -4323,9 +4323,9 @@ var SoundFX = (function () {
 
   var DEFAULT_CONCEPTS_PROMPT = 'You are an expert actuarial exam content analyst. Given the following document text and a list of concept names, find detailed definitions and explanations for each concept.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "conceptDetails": {\n    "Concept Name": "A thorough 2-5 sentence definition and explanation of this concept as described in the source document, including key formulas, relationships, or examples where relevant."\n  }\n}\n\nRules:\n- Use the EXACT concept names as keys\n- Draw definitions directly from the source document content\n- Include mathematical formulas or relationships if mentioned\n- If a concept is not found in the document, provide a brief general definition and note it was not explicitly covered\n- Be thorough but concise';
 
-  var DEFAULT_LIBRARY_TOC_PROMPT = 'You are a document structure extraction tool. Your job is to reproduce the EXACT table of contents of this document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "title": "Document Title",\n  "author": "Author Name or empty string if unknown",\n  "toc": [\n    { "title": "Chapter 1: Introduction to Ratemaking", "level": 1, "page": 1 },\n    { "title": "1.1 The Ratemaking Process", "level": 2, "page": 2 },\n    { "title": "1.2 Basic Terminology", "level": 2, "page": 5 },\n    { "title": "Chapter 2: Rating Manuals", "level": 1, "page": 15 },\n    { "title": "2.1 Manual Rate Components", "level": 2, "page": 16 },\n    { "title": "Appendix A: Formulas", "level": 1, "page": 200 }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- If the document contains a Table of Contents page, reproduce it EXACTLY as-is with all entries\n- List EVERY individual chapter AND every numbered subsection (e.g., 1.1, 1.2, 2.1, 2.2, 2.3, etc.)\n- Do NOT group or combine multiple chapters into summary categories\n- Do NOT invent your own section titles — use the exact titles from the document\n- level 1 = chapter (e.g., "Chapter 5"), level 2 = section (e.g., "5.1", "5.2"), level 3 = subsection (e.g., "5.1.1")\n- Use a FLAT list — no nested children objects\n- Include ALL appendices, exhibits, and back matter as separate entries\n- A typical textbook should have 10-20 chapters EACH with multiple numbered subsections — expect 50-200+ total entries\n- page is the page number if identifiable, otherwise null';
+  var DEFAULT_LIBRARY_TOC_PROMPT = 'You are a document structure extraction tool. Your job is to reproduce the EXACT table of contents of this document.\n\nThe document text preserves line breaks and includes heading markers:\n- [H1] = large heading (chapter-level)\n- [H2] = medium heading (section-level)\n- Lines without markers are body text\n- Page boundaries are marked with "--- Page N ---"\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "title": "Document Title",\n  "author": "Author Name or empty string if unknown",\n  "toc": [\n    { "title": "Chapter 1: Introduction to Ratemaking", "level": 1, "page": 1 },\n    { "title": "1.1 The Ratemaking Process", "level": 2, "page": 2 },\n    { "title": "1.2 Basic Terminology", "level": 2, "page": 5 },\n    { "title": "Chapter 2: Rating Manuals", "level": 1, "page": 15 },\n    { "title": "2.1 Manual Rate Components", "level": 2, "page": 16 },\n    { "title": "Appendix A: Formulas", "level": 1, "page": 200 }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- Use [H1] and [H2] markers to identify chapter and section headings throughout the document\n- If the document contains a Table of Contents page, reproduce it EXACTLY as-is with all entries\n- List EVERY individual chapter AND every numbered subsection (e.g., 1.1, 1.2, 2.1, 2.2, 2.3, etc.)\n- Do NOT group or combine multiple chapters into summary categories\n- Do NOT invent your own section titles — use the exact titles from the document (without the [H1]/[H2] markers)\n- level 1 = chapter (e.g., "Chapter 5"), level 2 = section (e.g., "5.1", "5.2"), level 3 = subsection (e.g., "5.1.1")\n- Use a FLAT list — no nested children objects\n- Include ALL appendices, exhibits, and back matter as separate entries\n- A typical textbook should have 10-20 chapters EACH with multiple numbered subsections — expect 50-200+ total entries\n- page is the page number from the nearest "--- Page N ---" marker, or null';
 
-  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are a technical glossary extraction tool. Extract specific technical TERMS and their DEFINITIONS from this document.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Chain Ladder Method",\n      "definition": "A reserving technique that uses historical loss development patterns to project ultimate losses by applying age-to-age development factors.",\n      "page": null\n    },\n    {\n      "term": "IBNR",\n      "definition": "Incurred But Not Reported. Reserves set aside for claims that have occurred but have not yet been reported to the insurer.",\n      "page": null\n    },\n    {\n      "term": "Loss Development Factor",\n      "definition": "A multiplicative factor applied to losses at a given maturity to project them to ultimate value. Calculated as the ratio of losses at successive evaluations.",\n      "page": null\n    }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- A "term" is a specific METHOD, FORMULA, RATIO, ACRONYM, METRIC, or TECHNICAL CONCEPT — a named thing with a definition\n- Good examples of terms: "Bornhuetter-Ferguson Method", "Loss Ratio", "Credibility Weight", "Pure Premium", "Expense Ratio", "Combined Ratio"\n- BAD examples (DO NOT include these): chapter titles like "Introduction to Ratemaking", section headings like "Loss and LAE Analysis", topic descriptions like "Premium Analysis and Adjustments"\n- Every entry MUST have both a "term" (short name, 1-5 words) and a "definition" (1-3 sentence explanation)\n- Extract terms from the ENTIRE document, not just the beginning\n- Include: named methods, formulas, statistical techniques, ratios, acronyms, regulatory terms, and defined technical vocabulary\n- For a textbook of 30+ pages, extract at LEAST 50 terms — aim for 100-200 terms for comprehensive textbooks\n- Go through the document systematically section by section to ensure you capture terms from ALL parts of the document, not just the beginning\n- page is where the term is defined, or null';
+  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are a technical glossary extraction tool. Extract specific technical TERMS and their DEFINITIONS from this document.\n\nThe document text preserves line breaks and includes formatting markers:\n- [H1] / [H2] = heading markers (skip these as terms — they are section titles)\n- Page boundaries are marked with "--- Page N ---"\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Chain Ladder Method",\n      "definition": "A reserving technique that uses historical loss development patterns to project ultimate losses by applying age-to-age development factors.",\n      "page": null\n    },\n    {\n      "term": "IBNR",\n      "definition": "Incurred But Not Reported. Reserves set aside for claims that have occurred but have not yet been reported to the insurer.",\n      "page": null\n    },\n    {\n      "term": "Loss Development Factor",\n      "definition": "A multiplicative factor applied to losses at a given maturity to project them to ultimate value. Calculated as the ratio of losses at successive evaluations.",\n      "page": null\n    }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- A "term" is a specific METHOD, FORMULA, RATIO, ACRONYM, METRIC, or TECHNICAL CONCEPT — a named thing with a definition\n- Good examples of terms: "Bornhuetter-Ferguson Method", "Loss Ratio", "Credibility Weight", "Pure Premium", "Expense Ratio", "Combined Ratio"\n- BAD examples (DO NOT include these): chapter titles like "Introduction to Ratemaking", section headings marked with [H1]/[H2], topic descriptions like "Premium Analysis and Adjustments"\n- Every entry MUST have both a "term" (short name, 1-5 words) and a "definition" (1-3 sentence explanation)\n- Extract terms from the ENTIRE document, not just the beginning\n- Include: named methods, formulas, statistical techniques, ratios, acronyms, regulatory terms, and defined technical vocabulary\n- For a textbook of 30+ pages, extract at LEAST 50 terms — aim for 100-200 terms for comprehensive textbooks\n- Go through the document systematically section by section to ensure you capture terms from ALL parts of the document, not just the beginning\n- page is the page number from the nearest "--- Page N ---" marker, or null';
 
   /* ---- State ---- */
   var LIBRARY_STORAGE_KEY = 'actuarial-notes-doc-library';
@@ -5490,6 +5490,366 @@ var SoundFX = (function () {
     }
 
     return { text: allText, pageCount: pageCount };
+  }
+
+  /* ---- Structured PDF extraction (for Library feature) ---- */
+
+  function getFontSize(transform) {
+    return Math.sqrt(transform[0] * transform[0] + transform[1] * transform[1]);
+  }
+
+  function groupItemsIntoLines(items) {
+    if (!items || items.length === 0) return [];
+    var enriched = items.map(function (item) {
+      return {
+        str: item.str,
+        fontName: item.fontName,
+        fontSize: getFontSize(item.transform),
+        x: item.transform[4],
+        y: item.transform[5],
+        width: item.width || 0
+      };
+    });
+    // Sort by Y descending (PDF coords: Y=0 at bottom), then X ascending
+    enriched.sort(function (a, b) { return b.y - a.y || a.x - b.x; });
+
+    var lines = [];
+    var currentLine = [enriched[0]];
+    for (var i = 1; i < enriched.length; i++) {
+      // Items within 3pt of same Y are on the same line
+      if (Math.abs(enriched[i].y - currentLine[0].y) < 3) {
+        currentLine.push(enriched[i]);
+      } else {
+        currentLine.sort(function (a, b) { return a.x - b.x; });
+        lines.push(currentLine);
+        currentLine = [enriched[i]];
+      }
+    }
+    if (currentLine.length > 0) {
+      currentLine.sort(function (a, b) { return a.x - b.x; });
+      lines.push(currentLine);
+    }
+
+    return lines.map(function (lineItems) {
+      var maxFontSize = 0;
+      for (var j = 0; j < lineItems.length; j++) {
+        if (lineItems[j].fontSize > maxFontSize) maxFontSize = lineItems[j].fontSize;
+      }
+      return {
+        items: lineItems,
+        text: lineItems.map(function (it) { return it.str; }).join(' ').trim(),
+        indent: lineItems[0].x,
+        fontSize: maxFontSize,
+        y: lineItems[0].y
+      };
+    });
+  }
+
+  function detectBodyFontSize(pages) {
+    var sizeCounts = {};
+    for (var p = 0; p < pages.length; p++) {
+      var lines = pages[p].lines;
+      for (var l = 0; l < lines.length; l++) {
+        var items = lines[l].items;
+        for (var i = 0; i < items.length; i++) {
+          var s = Math.round(items[i].fontSize * 2) / 2; // round to nearest 0.5
+          var charCount = (items[i].str || '').length;
+          sizeCounts[s] = (sizeCounts[s] || 0) + charCount;
+        }
+      }
+    }
+    var bodySize = 0;
+    var maxCount = 0;
+    var keys = Object.keys(sizeCounts);
+    for (var k = 0; k < keys.length; k++) {
+      if (sizeCounts[keys[k]] > maxCount) {
+        maxCount = sizeCounts[keys[k]];
+        bodySize = parseFloat(keys[k]);
+      }
+    }
+    return bodySize;
+  }
+
+  function reconstructPageText(page, bodyFontSize) {
+    var result = '';
+    var lines = page.lines;
+    for (var l = 0; l < lines.length; l++) {
+      var line = lines[l];
+      if (!line.text) continue;
+      var prefix = '';
+      if (line.fontSize > bodyFontSize * 1.4) {
+        prefix = '[H1] ';
+      } else if (line.fontSize > bodyFontSize * 1.15) {
+        prefix = '[H2] ';
+      }
+      result += prefix + line.text + '\n';
+    }
+    return result;
+  }
+
+  async function extractPdfStructured(file) {
+    var pdfjsLib = await loadPdfJs();
+    var arrayBuffer = await file.arrayBuffer();
+    var pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    var pageCount = pdf.numPages;
+    var pages = [];
+    var fullText = '';
+
+    for (var i = 1; i <= pageCount; i++) {
+      var page = await pdf.getPage(i);
+      var content = await page.getTextContent();
+      var lines = groupItemsIntoLines(content.items.filter(function (it) { return it.str && it.str.trim(); }));
+      var pageText = lines.map(function (ln) { return ln.text; }).join('\n');
+      pages.push({ pageNum: i, lines: lines, text: pageText });
+      fullText += '\n--- Page ' + i + ' ---\n' + pageText;
+    }
+
+    var bodyFontSize = detectBodyFontSize(pages);
+
+    return {
+      pdf: pdf,
+      pageCount: pageCount,
+      pages: pages,
+      fullText: fullText,
+      bodyFontSize: bodyFontSize
+    };
+  }
+
+  /* ---- Title & Author extraction ---- */
+  function extractTitleAuthor(pages, bodyFontSize) {
+    var title = '';
+    var author = '';
+    // Examine first 2 pages for largest and second-largest font text
+    var candidates = [];
+    var limit = Math.min(2, pages.length);
+    for (var p = 0; p < limit; p++) {
+      var lines = pages[p].lines;
+      for (var l = 0; l < lines.length; l++) {
+        var line = lines[l];
+        if (line.text && line.fontSize > bodyFontSize * 1.1) {
+          candidates.push({ text: line.text, fontSize: line.fontSize, page: p });
+        }
+      }
+    }
+    candidates.sort(function (a, b) { return b.fontSize - a.fontSize; });
+    if (candidates.length > 0) title = candidates[0].text;
+    // Author is typically the second-largest distinct font size on page 1
+    if (candidates.length > 1) {
+      for (var c = 1; c < candidates.length; c++) {
+        if (candidates[c].fontSize < candidates[0].fontSize * 0.95) {
+          author = candidates[c].text;
+          break;
+        }
+      }
+    }
+    return { title: title, author: author };
+  }
+
+  /* ---- TOC Extraction: Tier 1 — PDF Outline/Bookmarks ---- */
+  async function extractTocFromOutline(pdf) {
+    var outline;
+    try {
+      outline = await pdf.getOutline();
+    } catch (e) {
+      console.log('[Library] getOutline() failed:', e.message);
+      return null;
+    }
+    if (!outline || outline.length === 0) return null;
+
+    var tocItems = [];
+
+    async function walkOutline(nodes, level) {
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        var pageNum = null;
+        try {
+          var dest = node.dest;
+          if (typeof dest === 'string') {
+            dest = await pdf.getDestination(dest);
+          }
+          if (dest && dest[0]) {
+            var pageIndex = await pdf.getPageIndex(dest[0]);
+            pageNum = pageIndex + 1;
+          }
+        } catch (e) {
+          // Skip malformed destinations
+        }
+        tocItems.push({
+          title: (node.title || '').trim(),
+          level: level,
+          page: pageNum
+        });
+        if (node.items && node.items.length > 0) {
+          await walkOutline(node.items, level + 1);
+        }
+      }
+    }
+
+    await walkOutline(outline, 1);
+
+    // Quality gate: too few entries means outline is sparse/useless
+    if (tocItems.length < 3) return null;
+
+    console.log('[Library] Outline extracted: ' + tocItems.length + ' entries');
+    return tocItems;
+  }
+
+  /* ---- TOC Extraction: Tier 2 — AI with structured text ---- */
+  async function extractTocWithAI(pages, bodyFontSize) {
+    // Build structured text with heading markers, focusing on first 20 pages
+    // plus sampled chapter openings from the rest
+    var parts = [];
+    var charCount = 0;
+    var maxChars = 88000;
+
+    // First 20 pages in full (where TOC usually lives)
+    var fullPages = Math.min(20, pages.length);
+    for (var i = 0; i < fullPages && charCount < maxChars; i++) {
+      var pageHeader = '\n--- Page ' + pages[i].pageNum + ' ---\n';
+      var pageText = reconstructPageText(pages[i], bodyFontSize);
+      parts.push(pageHeader + pageText);
+      charCount += pageHeader.length + pageText.length;
+    }
+
+    // Sample remaining pages: first 5 lines of each page (captures chapter headings)
+    for (var j = fullPages; j < pages.length && charCount < maxChars; j++) {
+      var sampledLines = pages[j].lines.slice(0, 5);
+      if (sampledLines.length === 0) continue;
+      var sampleHeader = '\n--- Page ' + pages[j].pageNum + ' ---\n';
+      var sampleText = '';
+      for (var sl = 0; sl < sampledLines.length; sl++) {
+        var ln = sampledLines[sl];
+        var px = '';
+        if (ln.fontSize > bodyFontSize * 1.4) px = '[H1] ';
+        else if (ln.fontSize > bodyFontSize * 1.15) px = '[H2] ';
+        sampleText += px + ln.text + '\n';
+      }
+      parts.push(sampleHeader + sampleText);
+      charCount += sampleHeader.length + sampleText.length;
+    }
+
+    var promptText = 'Document:\n' + parts.join('');
+    var tocResult = await callClaudeApi(promptText, DEFAULT_LIBRARY_TOC_PROMPT);
+    console.log('[Library] AI TOC response keys:', Object.keys(tocResult || {}));
+
+    var tocItems = extractArray(tocResult, 'toc', ['sections', 'tableOfContents', 'chapters']);
+    return { toc: tocItems, title: tocResult.title || '', author: tocResult.author || '' };
+  }
+
+  /* ---- TOC Orchestrator ---- */
+  async function extractToc(pdf, pages, bodyFontSize) {
+    // Tier 1: Try PDF outline
+    var outlineToc = await extractTocFromOutline(pdf);
+    if (outlineToc && outlineToc.length >= 3) {
+      var meta = extractTitleAuthor(pages, bodyFontSize);
+      return { title: meta.title, author: meta.author, toc: outlineToc, method: 'outline' };
+    }
+
+    // Tier 2: AI with structured text
+    var aiResult = await extractTocWithAI(pages, bodyFontSize);
+    var meta2 = extractTitleAuthor(pages, bodyFontSize);
+    return {
+      title: aiResult.title || meta2.title,
+      author: aiResult.author || meta2.author,
+      toc: aiResult.toc,
+      method: 'ai'
+    };
+  }
+
+  /* ---- Glossary Extraction ---- */
+  function findGlossarySection(pages, bodyFontSize) {
+    // Scan from ~60% through document for glossary heading
+    var startScan = Math.floor(pages.length * 0.6);
+    var glossaryPattern = /^(glossary|glossary of terms|key terms|definitions|glossary of key terms|list of terms)$/i;
+    for (var p = startScan; p < pages.length; p++) {
+      var lines = pages[p].lines;
+      for (var l = 0; l < lines.length; l++) {
+        var line = lines[l];
+        if (line.fontSize > bodyFontSize * 1.15 && glossaryPattern.test(line.text.trim())) {
+          // Find end: next major heading or end of document
+          var endPage = pages.length - 1;
+          var endPattern = /^(index|appendix|references|bibliography|answers|solutions)$/i;
+          for (var ep = p + 1; ep < pages.length; ep++) {
+            var epLines = pages[ep].lines;
+            for (var el = 0; el < epLines.length; el++) {
+              if (epLines[el].fontSize > bodyFontSize * 1.15 && endPattern.test(epLines[el].text.trim())) {
+                endPage = ep - 1;
+                break;
+              }
+            }
+            if (endPage < pages.length - 1) break;
+          }
+          console.log('[Library] Glossary section found: pages ' + pages[p].pageNum + '-' + pages[endPage].pageNum);
+          return { startPage: p, endPage: endPage };
+        }
+      }
+    }
+    return null;
+  }
+
+  async function extractGlossary(pages, fullText, bodyFontSize) {
+    var glossarySection = findGlossarySection(pages, bodyFontSize);
+    var allTerms = [];
+
+    if (glossarySection) {
+      // Extract just the glossary section text with formatting, send to AI
+      var sectionText = '';
+      for (var p = glossarySection.startPage; p <= glossarySection.endPage; p++) {
+        sectionText += '\n--- Page ' + pages[p].pageNum + ' ---\n';
+        sectionText += reconstructPageText(pages[p], bodyFontSize);
+      }
+      var sectionResult = await callClaudeApi('Glossary section:\n' + sectionText.substring(0, 90000), DEFAULT_LIBRARY_GLOSSARY_PROMPT);
+      var sectionTerms = extractArray(sectionResult, 'glossary', ['terms', 'definitions', 'concepts']);
+      allTerms = allTerms.concat(sectionTerms);
+      console.log('[Library] Glossary section yielded ' + sectionTerms.length + ' terms');
+
+      // If glossary section gave us enough terms, skip scanning rest of document
+      if (sectionTerms.length >= 30) {
+        return { glossary: deduplicateTerms(allTerms), method: 'section' };
+      }
+    }
+
+    // AI extraction on full document with structured text
+    var structuredText = '';
+    for (var i = 0; i < pages.length; i++) {
+      structuredText += '\n--- Page ' + pages[i].pageNum + ' ---\n';
+      structuredText += reconstructPageText(pages[i], bodyFontSize);
+    }
+
+    var chunks = splitTextIntoChunks(structuredText, 85000, 3000);
+    for (var ci = 0; ci < chunks.length; ci++) {
+      var chunkLabel = chunks.length > 1 ? 'Document (part ' + (ci + 1) + ' of ' + chunks.length + '):\n' : 'Document:\n';
+      var glossaryResult = await callClaudeApi(chunkLabel + chunks[ci], DEFAULT_LIBRARY_GLOSSARY_PROMPT);
+      console.log('[Library] Glossary chunk ' + (ci + 1) + ' response keys:', Object.keys(glossaryResult || {}));
+      var chunkTerms = extractArray(glossaryResult, 'glossary', ['terms', 'definitions', 'concepts']);
+      allTerms = allTerms.concat(chunkTerms);
+    }
+
+    return { glossary: deduplicateTerms(allTerms), method: glossarySection ? 'section+ai' : 'ai' };
+  }
+
+  function deduplicateTerms(terms) {
+    var seen = {};
+    return terms.filter(function (entry) {
+      var key = (entry.term || entry.name || entry.title || '').toLowerCase().trim();
+      if (!key || seen[key]) return false;
+      seen[key] = true;
+      return true;
+    });
+  }
+
+  // Helper: robustly extract an array from an AI response object
+  function extractArray(obj, primaryKey, altKeys) {
+    if (!obj || typeof obj !== 'object') return [];
+    if (Array.isArray(obj[primaryKey]) && obj[primaryKey].length > 0) return obj[primaryKey];
+    for (var i = 0; i < altKeys.length; i++) {
+      if (Array.isArray(obj[altKeys[i]]) && obj[altKeys[i]].length > 0) return obj[altKeys[i]];
+    }
+    var keys = Object.keys(obj);
+    for (var j = 0; j < keys.length; j++) {
+      if (Array.isArray(obj[keys[j]]) && obj[keys[j]].length > 0) return obj[keys[j]];
+    }
+    return [];
   }
 
   /* ---- AI API call (via Vercel proxy) ---- */
@@ -6977,61 +7337,25 @@ var SoundFX = (function () {
       libErrorEl.style.display = 'none';
 
       try {
-        // Step 1: Extract text
+        // Step 1: Structured PDF extraction
         setTaskStatus(progressArea, 'extract', 'active');
-        var pdfResult = await extractPdfText(selectedFile);
-        var pdfText = pdfResult.text || '';
-        setTaskStatus(progressArea, 'extract', 'done', pdfResult.pageCount + ' pages extracted');
+        var structured = await extractPdfStructured(selectedFile);
+        setTaskStatus(progressArea, 'extract', 'done', structured.pageCount + ' pages extracted');
 
-        // Truncate for storage
-        var storedText = pdfText.substring(0, 100000);
+        // Truncate fullText for storage (used by glossary search across documents)
+        var storedText = structured.fullText.substring(0, 100000);
 
-        // Helper: robustly extract an array from an AI response object
-        function extractArray(obj, primaryKey, altKeys) {
-          if (!obj || typeof obj !== 'object') return [];
-          if (Array.isArray(obj[primaryKey]) && obj[primaryKey].length > 0) return obj[primaryKey];
-          for (var i = 0; i < altKeys.length; i++) {
-            if (Array.isArray(obj[altKeys[i]]) && obj[altKeys[i]].length > 0) return obj[altKeys[i]];
-          }
-          // Last resort: find first non-empty array property
-          var keys = Object.keys(obj);
-          for (var j = 0; j < keys.length; j++) {
-            if (Array.isArray(obj[keys[j]]) && obj[keys[j]].length > 0) return obj[keys[j]];
-          }
-          return [];
-        }
-
-        // Step 2: Extract TOC
+        // Step 2: Extract TOC (tries PDF outline first, then AI fallback)
         setTaskStatus(progressArea, 'toc', 'active');
-        var tocPromptText = 'Document:\n' + pdfText.substring(0, 90000);
-        var tocResult = await callClaudeApi(tocPromptText, DEFAULT_LIBRARY_TOC_PROMPT);
-        console.log('[Library] TOC response keys:', Object.keys(tocResult || {}));
-        var tocItems = extractArray(tocResult, 'toc', ['sections', 'tableOfContents', 'chapters']);
-        setTaskStatus(progressArea, 'toc', 'done', tocItems.length > 0 ? tocItems.length + ' sections found' : '0 sections found (check document)');
+        var tocResult = await extractToc(structured.pdf, structured.pages, structured.bodyFontSize);
+        var tocMethodLabel = tocResult.method === 'outline' ? ' (from outline)' : ' (via AI)';
+        setTaskStatus(progressArea, 'toc', 'done', tocResult.toc.length > 0 ? tocResult.toc.length + ' sections found' + tocMethodLabel : '0 sections found (check document)');
 
-        // Step 3: Extract glossary (chunked for large documents)
+        // Step 3: Extract glossary (detects glossary section first, then AI)
         setTaskStatus(progressArea, 'glossary', 'active');
-        var glossaryChunks = splitTextIntoChunks(pdfText, 70000, 3000);
-        var allGlossaryTerms = [];
-        for (var ci = 0; ci < glossaryChunks.length; ci++) {
-          if (glossaryChunks.length > 1) {
-            setTaskStatus(progressArea, 'glossary', 'active', 'Part ' + (ci + 1) + '/' + glossaryChunks.length);
-          }
-          var chunkLabel = glossaryChunks.length > 1 ? 'Document (part ' + (ci + 1) + ' of ' + glossaryChunks.length + '):\n' : 'Document:\n';
-          var glossaryResult = await callClaudeApi(chunkLabel + glossaryChunks[ci], DEFAULT_LIBRARY_GLOSSARY_PROMPT);
-          console.log('[Library] Glossary chunk ' + (ci + 1) + ' response keys:', Object.keys(glossaryResult || {}));
-          var chunkTerms = extractArray(glossaryResult, 'glossary', ['terms', 'definitions', 'concepts']);
-          allGlossaryTerms = allGlossaryTerms.concat(chunkTerms);
-        }
-        // Deduplicate by normalized term name
-        var seenTerms = {};
-        var glossaryItems = allGlossaryTerms.filter(function (entry) {
-          var key = (entry.term || entry.name || entry.title || '').toLowerCase().trim();
-          if (!key || seenTerms[key]) return false;
-          seenTerms[key] = true;
-          return true;
-        });
-        setTaskStatus(progressArea, 'glossary', 'done', glossaryItems.length > 0 ? glossaryItems.length + ' terms extracted' : '0 terms extracted (check document)');
+        var glossaryResult = await extractGlossary(structured.pages, structured.fullText, structured.bodyFontSize);
+        var glossaryMethodLabel = glossaryResult.method === 'section' ? ' (from glossary section)' : glossaryResult.method === 'section+ai' ? ' (section + AI)' : ' (via AI)';
+        setTaskStatus(progressArea, 'glossary', 'done', glossaryResult.glossary.length > 0 ? glossaryResult.glossary.length + ' terms extracted' + glossaryMethodLabel : '0 terms extracted (check document)');
 
         // Build document object
         var newDoc = {
@@ -7039,8 +7363,10 @@ var SoundFX = (function () {
           title: tocResult.title || selectedFile.name.replace(/\.pdf$/i, ''),
           author: tocResult.author || '',
           pdfText: storedText,
-          toc: tocItems,
-          glossary: glossaryItems,
+          toc: tocResult.toc,
+          glossary: glossaryResult.glossary,
+          tocMethod: tocResult.method,
+          glossaryMethod: glossaryResult.method,
           uploadedAt: Date.now()
         };
 

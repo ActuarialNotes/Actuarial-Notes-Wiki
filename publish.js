@@ -3081,7 +3081,7 @@
   ];
 
   /* ---- State management ---- */
-  var state = { selectedTrack: 'ASA', progress: {} };
+  var state = { selectedTrack: 'ASA', progress: {}, journeyCollapsed: true };
 
   function loadState() {
     try {
@@ -3090,6 +3090,7 @@
         var parsed = JSON.parse(raw);
         if (parsed && parsed.selectedTrack) state.selectedTrack = parsed.selectedTrack;
         if (parsed && parsed.progress) state.progress = parsed.progress;
+        if (parsed && typeof parsed.journeyCollapsed === 'boolean') state.journeyCollapsed = parsed.journeyCollapsed;
       }
     } catch (e) { /* ignore */ }
   }
@@ -3173,8 +3174,9 @@
 
     trackerEl = document.createElement('div');
     trackerEl.className = 'journey-tracker';
+    if (state.journeyCollapsed) trackerEl.classList.add('is-collapsed');
 
-    // Header
+    // Header (clickable to toggle collapse)
     var header = document.createElement('div');
     header.className = 'journey-tracker__header';
     var title = document.createElement('span');
@@ -3182,8 +3184,21 @@
     title.textContent = 'Exam Journey';
     countEl = document.createElement('span');
     countEl.className = 'journey-tracker__count';
+    var collapseBtn = document.createElement('span');
+    collapseBtn.className = 'journey-tracker__collapse-btn';
+    collapseBtn.innerHTML = SVG_CHEVRON;
     header.appendChild(title);
     header.appendChild(countEl);
+    header.appendChild(collapseBtn);
+    header.addEventListener('click', function () {
+      state.journeyCollapsed = !state.journeyCollapsed;
+      if (state.journeyCollapsed) {
+        trackerEl.classList.add('is-collapsed');
+      } else {
+        trackerEl.classList.remove('is-collapsed');
+      }
+      saveState();
+    });
 
     // Progress bar
     var bar = document.createElement('div');
@@ -3204,6 +3219,8 @@
     select.value = state.selectedTrack;
     select.addEventListener('change', function () {
       state.selectedTrack = select.value;
+      state.journeyCollapsed = false;
+      trackerEl.classList.remove('is-collapsed');
       saveState();
       renderSections();
       updateProgress();
@@ -3213,10 +3230,15 @@
     sectionsEl = document.createElement('div');
     sectionsEl.className = 'journey-tracker__sections';
 
+    // Body wrapper (collapsible)
+    var bodyEl = document.createElement('div');
+    bodyEl.className = 'journey-tracker__body';
+    bodyEl.appendChild(bar);
+    bodyEl.appendChild(select);
+    bodyEl.appendChild(sectionsEl);
+
     trackerEl.appendChild(header);
-    trackerEl.appendChild(bar);
-    trackerEl.appendChild(select);
-    trackerEl.appendChild(sectionsEl);
+    trackerEl.appendChild(bodyEl);
 
     // .site-body-left-column is a flex-row with an inner wrapper that holds
     // site-name, toggles, search, and nav tree. We must insert INSIDE that
@@ -4345,11 +4367,15 @@ var SoundFX = (function () {
     // Obsidian Publish: click the sidebar toggle button if it exists
     var toggleBtn = document.querySelector('.site-body-left-column-collapse-icon, .sidebar-toggle-button, [aria-label="Toggle left sidebar"]');
     if (toggleBtn) { toggleBtn.click(); return; }
-    // Fallback: hide sidebar via CSS on mobile/tablet
+    // Fallback: hide sidebar on mobile/tablet and restore on next user-initiated open
     var sidebar = document.querySelector('.site-body-left-column');
     if (sidebar && window.innerWidth < 1000) {
       sidebar.style.display = 'none';
-      setTimeout(function () { sidebar.style.display = ''; }, 50);
+      var obs = new MutationObserver(function () {
+        obs.disconnect();
+        sidebar.style.display = '';
+      });
+      obs.observe(sidebar, { attributes: true, childList: true });
     }
   }
 
@@ -4503,7 +4529,7 @@ var SoundFX = (function () {
     libraryBtnEl = document.createElement('button');
     libraryBtnEl.className = 'custom-exam__sidebar-btn doc-library__sidebar-btn';
     libraryBtnEl.type = 'button';
-    libraryBtnEl.innerHTML = '<span class="custom-exam__sidebar-btn-icon">' + SVG_BOOK + '</span><span>Document Library</span>';
+    libraryBtnEl.innerHTML = '<span class="custom-exam__sidebar-btn-icon">' + SVG_BOOK + '</span><span>Library</span>';
     if (libraryDocs.length > 0) {
       libraryBtnEl.innerHTML += '<span class="doc-library__sidebar-count">' + libraryDocs.length + '</span>';
     }
@@ -4512,23 +4538,26 @@ var SoundFX = (function () {
       closeSidebar();
     });
 
+    // Wrap both buttons in a row
+    var btnRow = document.createElement('div');
+    btnRow.className = 'sidebar-btn-row';
+    btnRow.appendChild(libraryBtnEl);
+    btnRow.appendChild(sidebarBtnEl);
+
     // Insert before journey tracker
-    // Order: Document Library → Add Custom Exam → My Exams → (rest)
+    // Order: Button Row → My Exams → (rest)
     var journeyTracker = container.querySelector('.journey-tracker');
     if (journeyTracker) {
-      journeyTracker.parentElement.insertBefore(libraryBtnEl, journeyTracker);
-      journeyTracker.parentElement.insertBefore(sidebarBtnEl, journeyTracker);
+      journeyTracker.parentElement.insertBefore(btnRow, journeyTracker);
       journeyTracker.parentElement.insertBefore(myExamsEl, journeyTracker);
     } else {
       // Insert before nav tree
       var navRoot = container.querySelector('.nav-folder.mod-root') || container.querySelector('.nav-folder') || container.querySelector('.tree-item');
       if (navRoot) {
-        navRoot.parentElement.insertBefore(libraryBtnEl, navRoot);
-        navRoot.parentElement.insertBefore(sidebarBtnEl, navRoot);
+        navRoot.parentElement.insertBefore(btnRow, navRoot);
         navRoot.parentElement.insertBefore(myExamsEl, navRoot);
       } else {
-        container.appendChild(libraryBtnEl);
-        container.appendChild(sidebarBtnEl);
+        container.appendChild(btnRow);
         container.appendChild(myExamsEl);
       }
     }
@@ -4605,78 +4634,6 @@ var SoundFX = (function () {
       });
 
       list.appendChild(item);
-
-      // Sub-list: concepts + sources
-      var totalConcepts = 0;
-      (exam.objectives || []).forEach(function (o) { totalConcepts += (o.concepts || []).length; });
-      var totalSources = (exam.sources || []).length;
-
-      if (totalConcepts + totalSources > 0) {
-        var subToggle = document.createElement('button');
-        subToggle.className = 'custom-exam__my-exams-subtoggle';
-        subToggle.type = 'button';
-        subToggle.style.cssText = 'display:block;width:100%;text-align:left;padding:2px 8px 2px 24px;font-size:0.72rem;opacity:0.55;background:none;border:none;cursor:pointer;color:inherit';
-        var subOpen = false;
-        subToggle.textContent = '▸ ' + totalConcepts + ' concepts, ' + totalSources + ' sources';
-
-        var subList = document.createElement('div');
-        subList.style.display = 'none';
-
-        subToggle.addEventListener('click', function (e) {
-          e.stopPropagation();
-          subOpen = !subOpen;
-          subList.style.display = subOpen ? 'block' : 'none';
-          subToggle.textContent = (subOpen ? '▾' : '▸') + ' ' + totalConcepts + ' concepts, ' + totalSources + ' sources';
-        });
-
-        // Concepts grouped by objective
-        (exam.objectives || []).forEach(function (obj, oi) {
-          if ((obj.concepts || []).length === 0) return;
-
-          var objLabel = document.createElement('div');
-          objLabel.style.cssText = 'padding:4px 8px 2px 24px;font-size:0.72rem;font-weight:600;opacity:0.5';
-          objLabel.textContent = obj.title;
-          subList.appendChild(objLabel);
-
-          (obj.concepts || []).forEach(function (concept, ci) {
-            var link = document.createElement('div');
-            link.style.cssText = 'padding:2px 8px 2px 32px;font-size:0.78rem;cursor:pointer;opacity:0.75;border-radius:3px';
-            link.textContent = concept.name;
-            link.addEventListener('mouseenter', function () { link.style.opacity = '1'; link.style.background = 'var(--bg-elev,rgba(0,0,0,0.04))'; });
-            link.addEventListener('mouseleave', function () { link.style.opacity = '0.75'; link.style.background = 'none'; });
-            link.addEventListener('click', function (e) {
-              e.stopPropagation();
-              renderConceptPage(exam.id, oi, ci);
-              closeSidebar();
-            });
-            subList.appendChild(link);
-          });
-        });
-
-        // Sources
-        if (totalSources > 0) {
-          var srcLabel = document.createElement('div');
-          srcLabel.style.cssText = 'padding:4px 8px 2px 24px;font-size:0.72rem;font-weight:600;opacity:0.5';
-          srcLabel.textContent = 'Sources';
-          subList.appendChild(srcLabel);
-
-          (exam.sources || []).forEach(function (src, si) {
-            var link = document.createElement('div');
-            link.style.cssText = 'padding:2px 8px 2px 32px;font-size:0.78rem;cursor:pointer;opacity:0.75;border-radius:3px';
-            link.textContent = src.title || 'Untitled';
-            link.addEventListener('mouseenter', function () { link.style.opacity = '1'; link.style.background = 'var(--bg-elev,rgba(0,0,0,0.04))'; });
-            link.addEventListener('mouseleave', function () { link.style.opacity = '0.75'; link.style.background = 'none'; });
-            link.addEventListener('click', function (e) {
-              e.stopPropagation();
-              renderSourcePage(exam.id, si);
-            });
-            subList.appendChild(link);
-          });
-        }
-
-        list.appendChild(subToggle);
-        list.appendChild(subList);
-      }
     });
 
     myExamsEl.appendChild(list);

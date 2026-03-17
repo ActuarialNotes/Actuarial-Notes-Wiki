@@ -4347,8 +4347,6 @@ var SoundFX = (function () {
 
   var DEFAULT_LIBRARY_TOC_PROMPT = 'You are a document structure extraction tool. Your job is to reproduce the EXACT table of contents of this document.\n\nThe document text preserves line breaks and includes heading markers:\n- [H1] = large heading (chapter-level)\n- [H2] = medium heading (section-level)\n- Lines without markers are body text\n- Page boundaries are marked with "--- Page N ---"\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "title": "Document Title",\n  "author": "Author Name or empty string if unknown",\n  "toc": [\n    { "title": "Chapter 1: Introduction to Ratemaking", "level": 1, "page": 1 },\n    { "title": "1.1 The Ratemaking Process", "level": 2, "page": 2 },\n    { "title": "1.2 Basic Terminology", "level": 2, "page": 5 },\n    { "title": "Chapter 2: Rating Manuals", "level": 1, "page": 15 },\n    { "title": "2.1 Manual Rate Components", "level": 2, "page": 16 },\n    { "title": "Appendix A: Formulas", "level": 1, "page": 200 }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- Use [H1] and [H2] markers to identify chapter and section headings throughout the document\n- If the document contains a Table of Contents page, reproduce it EXACTLY as-is with all entries\n- List EVERY individual chapter AND every numbered subsection (e.g., 1.1, 1.2, 2.1, 2.2, 2.3, etc.)\n- Do NOT group or combine multiple chapters into summary categories\n- Do NOT invent your own section titles — use the exact titles from the document (without the [H1]/[H2] markers)\n- level 1 = chapter (e.g., "Chapter 5"), level 2 = section (e.g., "5.1", "5.2"), level 3 = subsection (e.g., "5.1.1")\n- Use a FLAT list — no nested children objects\n- Include ALL appendices, exhibits, and back matter as separate entries\n- A typical textbook should have 10-20 chapters EACH with multiple numbered subsections — expect 50-200+ total entries\n- page is the page number from the nearest "--- Page N ---" marker, or null';
 
-  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are a technical term extraction tool. Identify the important technical TERMS from this actuarial document.\n\nThe document text preserves line breaks and includes formatting markers:\n- [H1] / [H2] = heading markers (skip these as terms — they are section titles)\n- Page boundaries are marked with "--- Page N ---"\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "terms": [\n    {"term": "Chain Ladder Method", "page": 12},\n    {"term": "IBNR", "page": 5},\n    {"term": "Loss Development Factor", "page": 8}\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- A "term" is a specific METHOD, FORMULA, RATIO, ACRONYM, METRIC, or TECHNICAL CONCEPT — a named thing\n- Good examples: "Bornhuetter-Ferguson Method", "Loss Ratio", "Credibility Weight", "Pure Premium", "Expense Ratio", "Combined Ratio"\n- BAD examples (DO NOT include): chapter titles like "Introduction to Ratemaking", section headings marked with [H1]/[H2], topic descriptions\n- Each entry needs only "term" (1-5 words) and "page" (from nearest "--- Page N ---" marker, or null)\n- DO NOT include definitions — just the term names and page numbers\n- Extract 30-80 of the MOST IMPORTANT terms from the document\n- Include: named methods, formulas, statistical techniques, ratios, acronyms, regulatory terms, and technical vocabulary';
-
   var DEFAULT_LIBRARY_DEFINE_PROMPT = 'You are an actuarial science expert. Generate clear, concise definitions for the following technical terms.\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {"term": "Chain Ladder Method", "definition": "A reserving technique that uses historical loss development patterns to project ultimate losses by applying age-to-age development factors.", "page": 12},\n    {"term": "IBNR", "definition": "Incurred But Not Reported. Reserves set aside for claims that have occurred but have not yet been reported to the insurer.", "page": 5}\n  ]\n}\n\nREQUIREMENTS:\n- Provide a 1-2 sentence definition for EACH term listed\n- Definitions should be accurate for actuarial science contexts\n- If a term is an acronym, expand it and explain what it means\n- Keep definitions concise but complete';
 
   /* ---- State ---- */
@@ -5746,96 +5744,149 @@ var SoundFX = (function () {
     return null;
   }
 
-  async function extractGlossary(pages, fullText, bodyFontSize, onProgress) {
-    // Phase 1: Extract just TERM NAMES from the document (small output, ~1 API call)
-    // Phase 2: Generate DEFINITIONS from term names alone (no document needed)
+  /* ---- Local term extraction (no API calls) ---- */
+  function extractTermsLocal(pages, bodyFontSize, tocTitles) {
+    var terms = [];
+    var tocSet = {};
+    (tocTitles || []).forEach(function (t) {
+      tocSet[(t || '').toLowerCase().trim()] = true;
+    });
+
+    function isBold(item) {
+      var fn = (item.fontName || '').toLowerCase();
+      return fn.indexOf('bold') !== -1 || /[-.]b[^a-z]/i.test(item.fontName);
+    }
+    function isItalic(item) {
+      var fn = (item.fontName || '').toLowerCase();
+      return fn.indexOf('italic') !== -1 || fn.indexOf('oblique') !== -1;
+    }
+    function isHeading(line) {
+      return line.fontSize > bodyFontSize * 1.15;
+    }
+    function cleanTerm(s) {
+      return s.replace(/[\s]+/g, ' ').replace(/[.,;:!?\-—]+$/, '').trim();
+    }
+    function isValidTerm(t) {
+      if (!t || t.length < 2 || t.length > 80) return false;
+      var words = t.split(/\s+/);
+      if (words.length > 7) return false;
+      // Skip numbering, bullets, single letters
+      if (/^[\d.\-–•]+$/.test(t)) return false;
+      if (/^\d/.test(t) && words.length <= 2) return false;
+      // Skip common noise
+      if (/^(chapter|section|page|figure|table|example|exhibit|note|see|the|a|an|is|in|of)\b/i.test(t) && words.length <= 2) return false;
+      // Skip if matches a TOC title
+      if (tocSet[t.toLowerCase().trim()]) return false;
+      return true;
+    }
+    function addTerm(term, pageNum) {
+      var cleaned = cleanTerm(term);
+      if (isValidTerm(cleaned)) {
+        terms.push({ term: cleaned, page: pageNum });
+      }
+    }
+
+    for (var pi = 0; pi < pages.length; pi++) {
+      var page = pages[pi];
+      var pageNum = page.pageNum;
+      var lines = page.lines;
+
+      for (var li = 0; li < lines.length; li++) {
+        var line = lines[li];
+        if (!line.items || line.items.length === 0) continue;
+        if (isHeading(line)) continue; // skip headings
+
+        // Strategy A: Bold text at body font size = likely a defined term
+        var boldRun = '';
+        var hitNonBold = false;
+        for (var ii = 0; ii < line.items.length; ii++) {
+          var item = line.items[ii];
+          if (isBold(item) && item.fontSize <= bodyFontSize * 1.15) {
+            if (!hitNonBold) {
+              boldRun += item.str;
+            }
+          } else {
+            if (boldRun) hitNonBold = true;
+          }
+        }
+        if (boldRun && hitNonBold) {
+          // Bold text followed by non-bold = definition pattern
+          addTerm(boldRun, pageNum);
+        }
+
+        // Strategy B: Italic text at start of line (term introduction)
+        if (isItalic(line.items[0]) && line.items.length > 1) {
+          var italicRun = '';
+          for (var ij = 0; ij < line.items.length; ij++) {
+            if (isItalic(line.items[ij])) {
+              italicRun += line.items[ij].str;
+            } else {
+              break;
+            }
+          }
+          if (italicRun && ij < line.items.length) {
+            addTerm(italicRun, pageNum);
+          }
+        }
+
+        // Strategy C: "Term — definition" or "Term: definition" pattern
+        var text = line.text;
+        var defMatch = text.match(/^([A-Z][A-Za-z\s\-\/&()']{2,50}?)\s*[:\-—–]\s+[A-Z]/);
+        if (defMatch) {
+          addTerm(defMatch[1], pageNum);
+        }
+
+        // Strategy D: Acronyms with expansion — "IBNR (Incurred But Not Reported)"
+        var acronymMatch = text.match(/\b([A-Z]{2,7})\s*\(([A-Z][A-Za-z\s]{4,60})\)/);
+        if (acronymMatch) {
+          addTerm(acronymMatch[1], pageNum);
+        }
+        // Reverse: "Incurred But Not Reported (IBNR)"
+        var reverseMatch = text.match(/([A-Z][A-Za-z\s]{4,60})\s*\(([A-Z]{2,7})\)/);
+        if (reverseMatch && reverseMatch[2].length >= 2) {
+          addTerm(reverseMatch[2], pageNum);
+        }
+      }
+    }
+
+    // Deduplicate
+    var seen = {};
+    var unique = [];
+    for (var ti = 0; ti < terms.length; ti++) {
+      var key = terms[ti].term.toLowerCase();
+      if (!seen[key]) {
+        seen[key] = true;
+        unique.push(terms[ti]);
+      }
+    }
+
+    console.log('[Library] Local term extraction: ' + unique.length + ' terms from ' + pages.length + ' pages');
+    return unique;
+  }
+
+  async function extractGlossary(pages, fullText, bodyFontSize, onProgress, tocTitles) {
+    // Phase 1: Extract term names LOCALLY from PDF font metadata (instant, no API)
+    // Phase 2: Generate definitions via AI (1-2 API calls only)
     var notify = onProgress || function () {};
 
-    var allTermNames = [];
-
-    // --- Phase 1: Find terms ---
+    // --- Phase 1: Local extraction (instant) ---
     notify({ phase: 'finding', status: 'Scanning document for key terms…', termCount: 0, definedCount: 0 });
 
-    var glossarySection = findGlossarySection(pages, bodyFontSize);
+    var localTerms = extractTermsLocal(pages, bodyFontSize, tocTitles);
+    notify({ phase: 'finding', status: localTerms.length + ' terms found', termCount: localTerms.length, definedCount: 0, newTerms: localTerms });
 
-    if (glossarySection) {
-      var sectionText = '';
-      for (var p = glossarySection.startPage; p <= glossarySection.endPage; p++) {
-        sectionText += '\n--- Page ' + pages[p].pageNum + ' ---\n';
-        sectionText += reconstructPageText(pages[p], bodyFontSize);
-      }
-      var sectionResult = await callClaudeApi('Glossary section:\n' + sectionText.substring(0, 90000), DEFAULT_LIBRARY_GLOSSARY_PROMPT);
-      var sectionTerms = extractArray(sectionResult, 'terms', ['glossary', 'concepts']);
-      allTermNames = allTermNames.concat(sectionTerms);
-      notify({ phase: 'finding', status: 'Found glossary section', termCount: allTermNames.length, definedCount: 0, newTerms: sectionTerms });
-    }
-
-    // If glossary section didn't give us enough, scan the document for more terms
-    if (allTermNames.length < 30) {
-      notify({ phase: 'finding', status: 'Scanning document pages for terms…', termCount: allTermNames.length, definedCount: 0 });
-
-      // Build sampled text from key regions
-      var sampledText = '';
-
-      // First 15 pages (introductory definitions)
-      var introPages = Math.min(15, pages.length);
-      for (var i = 0; i < introPages; i++) {
-        sampledText += '\n--- Page ' + pages[i].pageNum + ' ---\n';
-        sampledText += reconstructPageText(pages[i], bodyFontSize);
-      }
-
-      // Pages with headings from the middle (where terms are introduced)
-      for (var m = introPages; m < Math.floor(pages.length * 0.85); m++) {
-        var mLines = pages[m].lines;
-        var hasHeading = false;
-        for (var hl = 0; hl < mLines.length; hl++) {
-          if (mLines[hl].fontSize > bodyFontSize * 1.15) { hasHeading = true; break; }
-        }
-        if (hasHeading) {
-          sampledText += '\n--- Page ' + pages[m].pageNum + ' ---\n';
-          sampledText += reconstructPageText(pages[m], bodyFontSize);
-        }
-      }
-
-      // Last 15% of pages (back matter)
-      var backStart = Math.max(introPages, Math.floor(pages.length * 0.85));
-      for (var b = backStart; b < pages.length; b++) {
-        sampledText += '\n--- Page ' + pages[b].pageNum + ' ---\n';
-        sampledText += reconstructPageText(pages[b], bodyFontSize);
-      }
-
-      console.log('[Library] Phase 1 sampled text: ' + Math.round(sampledText.length / 1000) + 'K chars');
-
-      var chunks = splitTextIntoChunks(sampledText, 90000, 3000);
-      for (var ci = 0; ci < chunks.length; ci++) {
-        var chunkLabel = chunks.length > 1 ? 'Document (part ' + (ci + 1) + ' of ' + chunks.length + '):\n' : 'Document:\n';
-        notify({ phase: 'finding', status: 'Extracting terms' + (chunks.length > 1 ? ' (part ' + (ci + 1) + '/' + chunks.length + ')' : '') + '…', termCount: allTermNames.length, definedCount: 0 });
-        var termResult = await callClaudeApi(chunkLabel + chunks[ci], DEFAULT_LIBRARY_GLOSSARY_PROMPT);
-        var chunkTerms = extractArray(termResult, 'terms', ['glossary', 'concepts']);
-        allTermNames = allTermNames.concat(chunkTerms);
-        notify({ phase: 'finding', status: 'Found ' + allTermNames.length + ' terms so far', termCount: allTermNames.length, definedCount: 0, newTerms: chunkTerms });
-        console.log('[Library] Phase 1 chunk ' + (ci + 1) + ': ' + chunkTerms.length + ' terms');
-      }
-    }
-
-    // Deduplicate term names
-    var uniqueTerms = deduplicateTerms(allTermNames);
-    console.log('[Library] Phase 1 complete: ' + uniqueTerms.length + ' unique terms found');
-    notify({ phase: 'finding', status: uniqueTerms.length + ' unique terms identified', termCount: uniqueTerms.length, definedCount: 0 });
-
-    if (uniqueTerms.length === 0) {
+    if (localTerms.length === 0) {
       return { glossary: [], method: 'none' };
     }
 
-    // --- Phase 2: Generate definitions (no document text needed, just term list) ---
-    var termList = uniqueTerms.map(function (t) {
-      return { term: t.term || t.name || t.title || '', page: t.page || null };
-    }).filter(function (t) { return t.term; });
+    // --- Phase 2: Generate definitions (1-2 API calls) ---
+    var termList = localTerms.map(function (t) {
+      return { term: t.term, page: t.page || null };
+    });
 
     notify({ phase: 'defining', status: 'Generating definitions for ' + termList.length + ' terms…', termCount: termList.length, definedCount: 0 });
 
-    // Batch terms into groups of ~40 to keep output manageable
-    var BATCH_SIZE = 40;
+    var BATCH_SIZE = 50;
     var allDefined = [];
     for (var bi = 0; bi < termList.length; bi += BATCH_SIZE) {
       var batch = termList.slice(bi, bi + BATCH_SIZE);
@@ -5847,14 +5898,14 @@ var SoundFX = (function () {
         return (idx + 1) + '. ' + t.term + (t.page ? ' (page ' + t.page + ')' : '');
       }).join('\n');
 
-      var defineResult = await callClaudeApi('Define these ' + batch.length + ' actuarial terms:\n\n' + termListStr, DEFAULT_LIBRARY_DEFINE_PROMPT);
+      var defineResult = await callClaudeApi('Define these ' + batch.length + ' actuarial/insurance terms:\n\n' + termListStr, DEFAULT_LIBRARY_DEFINE_PROMPT);
       var defined = extractArray(defineResult, 'glossary', ['terms', 'definitions']);
       allDefined = allDefined.concat(defined);
       notify({ phase: 'defining', status: allDefined.length + ' of ' + termList.length + ' definitions complete', termCount: termList.length, definedCount: allDefined.length, newTerms: defined });
-      console.log('[Library] Phase 2 batch ' + batchNum + ': ' + defined.length + ' definitions');
+      console.log('[Library] Definitions batch ' + batchNum + ': ' + defined.length + ' definitions');
     }
 
-    return { glossary: deduplicateTerms(allDefined), method: glossarySection ? 'section+ai' : 'ai' };
+    return { glossary: deduplicateTerms(allDefined), method: 'local+ai' };
   }
 
   function deduplicateTerms(terms) {
@@ -7375,7 +7426,7 @@ var SoundFX = (function () {
     analyzeBtn.addEventListener('click', async function () {
       if (!selectedFile) return;
       analyzeBtn.disabled = true;
-      analyzeBtn.innerHTML = SVG_SPINNER + ' Analyzing…';
+      analyzeBtn.style.display = 'none';
       dropzone.style.display = 'none';
       progressArea.style.display = '';
       libErrorEl.style.display = 'none';
@@ -7432,6 +7483,7 @@ var SoundFX = (function () {
 
         var glossaryTermCount = 0;
 
+        var tocTitleList = tocResult.toc.map(function (s) { return s.title || s.name || ''; });
         var glossaryResult = await extractGlossary(structured.pages, structured.fullText, structured.bodyFontSize, function (progress) {
           // Update task labels and live preview based on phase
           if (progress.phase === 'finding') {
@@ -7491,7 +7543,7 @@ var SoundFX = (function () {
               }, 60);
             }
           }
-        });
+        }, tocTitleList);
 
         // Mark final task done
         setTaskStatus(progressArea, 'glossary', 'done', glossaryTermCount + ' terms found');
@@ -7544,7 +7596,8 @@ var SoundFX = (function () {
         libErrorEl.textContent = 'Error: ' + (err.message || 'Processing failed');
 
         analyzeBtn.disabled = false;
-        analyzeBtn.innerHTML = 'Retry';
+        analyzeBtn.style.display = '';
+        analyzeBtn.textContent = 'Retry';
         dropzone.style.display = '';
       }
     });

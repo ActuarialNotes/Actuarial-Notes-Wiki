@@ -2830,16 +2830,18 @@
 
 
 /* ===========================================================
-   EXAM JOURNEY TRACKER
-   Sidebar widget that lets users pick a certification track
-   (ASA, ACAS, FSA, FCAS), view requirements, and mark progress.
-   Persists state in localStorage.
+   SIDEBAR TABS
+   Modern 4-tab sidebar: Library, Process, Exams, Practice.
+   Replaces the entire left sidebar with a tabbed interface.
+   Persists active tab and journey state in localStorage.
    =========================================================== */
 
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'actuarial-notes-journey';
+  /* ---- Storage keys ---- */
+  var TAB_KEY = 'actuarial-notes-active-tab';
+  var JOURNEY_KEY = 'actuarial-notes-journey';
 
   /* ---- SVG icons ---- */
   var SVG_CIRCLE = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
@@ -2854,8 +2856,33 @@
     '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/>' +
     '<polyline points="6.5 10.5 9 13 14 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  var SVG_CHEVRON = '<svg class="journey-tracker__section-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+  var SVG_CHEVRON = '<svg class="sidebar-tabs__section-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<polyline points="6 8 10 12 14 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  var SVG_PLUS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>';
+
+  var SVG_BOOK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4c0-1 1-2 3-2s4 1 5 2c1-1 3-2 5-2s3 1 3 2v11c0 .5-.5 1-1 1-.5 0-1.5-.5-4-.5s-3 1-3 1-1-1-3-1-3.5.5-4 .5c-.5 0-1-.5-1-1V4z"/><path d="M10 6v10"/></svg>';
+
+  var SVG_TRASH = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 6 5 16 15 16 15 6"/><line x1="3" y1="6" x2="17" y2="6"/><path d="M8 6V4h4v2"/></svg>';
+
+  var SVG_EDIT = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 3.5l5 5L6 19H1v-5L11.5 3.5z"/></svg>';
+
+  /* Tab icons */
+  var SVG_TAB_LIBRARY = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4c0-1 1-2 3-2s4 1 5 2c1-1 3-2 5-2s3 1 3 2v11c0 .5-.5 1-1 1-.5 0-1.5-.5-4-.5s-3 1-3 1-1-1-3-1-3.5.5-4 .5c-.5 0-1-.5-1-1V4z"/><path d="M10 6v10"/></svg>';
+
+  var SVG_TAB_PROCESS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="14" height="5" rx="1"/><rect x="3" y="13" width="14" height="5" rx="1"/><path d="M10 7v2m0 2v2"/><path d="M7 11h6"/></svg>';
+
+  var SVG_TAB_EXAMS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h9l4 4v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><polyline points="13 2 13 6 17 6"/><line x1="6" y1="10" x2="14" y2="10"/><line x1="6" y1="13" x2="14" y2="13"/><line x1="6" y1="16" x2="10" y2="16"/></svg>';
+
+  var SVG_TAB_PRACTICE = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2l5 5-10 10H3v-5L13 2z"/><path d="M11 4l5 5"/></svg>';
+
+  var SVG_HC_ICON = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>' +
+    '<path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"/></svg>';
+
+  var SVG_SPEAKER_ON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 7 7 7 12 3 12 17 7 13 3 13"/><path d="M15 7a4 4 0 0 1 0 6"/></svg>';
+
+  var SVG_SPEAKER_OFF = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 7 7 7 12 3 12 17 7 13 3 13"/><line x1="15" y1="8" x2="19" y2="12"/><line x1="19" y1="8" x2="15" y2="12"/></svg>';
 
   var STATUS_ICONS = { not_started: SVG_CIRCLE, in_progress: SVG_PROGRESS, completed: SVG_CHECK };
   var STATUS_CYCLE = { not_started: 'in_progress', in_progress: 'completed', completed: 'not_started' };
@@ -2867,6 +2894,20 @@
     lime: '#65a30d', green: '#16a34a', emerald: '#059669', teal: '#0d9488',
     cyan: '#0891b2', slate: '#475569'
   };
+
+  /* ---- Tab definitions ---- */
+  var TABS = [
+    { id: 'library',  label: 'Library',  icon: SVG_TAB_LIBRARY },
+    { id: 'process',  label: 'Process',  icon: SVG_TAB_PROCESS },
+    { id: 'exams',    label: 'Exams',    icon: SVG_TAB_EXAMS },
+    { id: 'practice', label: 'Practice', icon: SVG_TAB_PRACTICE }
+  ];
+
+  /* ---- Practice exams list ---- */
+  var PRACTICE_EXAMS = [
+    { key: 'P',  name: 'Exam P-1 (Probability)',            path: 'Exam P-1 (SOA)' },
+    { key: 'FM', name: 'Exam FM-2 (Financial Mathematics)',  path: 'Exam FM-2 (SOA)' }
+  ];
 
   /* ---- Track definitions ---- */
   var TRACKS = [
@@ -3080,33 +3121,41 @@
     }
   ];
 
-  /* ---- State management ---- */
-  var state = { selectedTrack: 'ASA', progress: {}, journeyCollapsed: true };
+  /* ---- Journey state management ---- */
+  var journeyState = { selectedTrack: 'ASA', progress: {} };
 
-  function loadState() {
+  function loadJourneyState() {
     try {
-      var raw = localStorage.getItem(STORAGE_KEY);
+      var raw = localStorage.getItem(JOURNEY_KEY);
       if (raw) {
         var parsed = JSON.parse(raw);
-        if (parsed && parsed.selectedTrack) state.selectedTrack = parsed.selectedTrack;
-        if (parsed && parsed.progress) state.progress = parsed.progress;
-        if (parsed && typeof parsed.journeyCollapsed === 'boolean') state.journeyCollapsed = parsed.journeyCollapsed;
+        if (parsed && parsed.selectedTrack) journeyState.selectedTrack = parsed.selectedTrack;
+        if (parsed && parsed.progress) journeyState.progress = parsed.progress;
       }
     } catch (e) { /* ignore */ }
   }
 
-  function saveState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+  function saveJourneyState() {
+    try { localStorage.setItem(JOURNEY_KEY, JSON.stringify(journeyState)); } catch (e) { /* ignore */ }
   }
 
   function getStatus(id) {
-    return state.progress[id] || 'not_started';
+    return journeyState.progress[id] || 'not_started';
   }
 
   function cycleStatus(id) {
     var current = getStatus(id);
-    state.progress[id] = STATUS_CYCLE[current];
-    saveState();
+    journeyState.progress[id] = STATUS_CYCLE[current];
+    saveJourneyState();
+  }
+
+  /* ---- Active tab state ---- */
+  var activeTab = 'exams';
+  function loadActiveTab() {
+    try { activeTab = localStorage.getItem(TAB_KEY) || 'exams'; } catch (e) { /* ignore */ }
+  }
+  function saveActiveTab() {
+    try { localStorage.setItem(TAB_KEY, activeTab); } catch (e) { /* ignore */ }
   }
 
   /* ---- Count helpers ---- */
@@ -3123,9 +3172,8 @@
         sec.items.forEach(function (item) {
           if (getStatus(item.id) === 'completed') electiveDone++;
         });
-        return; // don't add to main total yet
+        return;
       }
-      // Collapsed prereq sections count as 1 requirement
       if (sec.collapsed) {
         total++;
         var allDone = sec.items.every(function (item) {
@@ -3152,271 +3200,625 @@
     });
 
     if (hasElectives) {
-      total += 4; // always 4 elective slots required
+      total += 4;
       done += Math.min(electiveDone, 4);
     }
 
     return { total: total, done: done };
   }
 
-  /* ---- DOM references ---- */
-  var trackerEl = null;
-  var countEl = null;
-  var barFillEl = null;
-  var sectionsEl = null;
+  /* ---- HTML escaping ---- */
+  function esc(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
 
-  /* ---- Build the tracker ---- */
-  function buildTracker() {
-    if (document.querySelector('.journey-tracker')) return;
+  /* ============================================================
+     DOM REFERENCES & BUILD
+     ============================================================ */
+  var containerEl = null;
+  var panelEl = null;
+  var barFillEl = null;
+  var countEl = null;
+
+  function buildSidebarTabs() {
+    if (document.querySelector('.sidebar-tabs')) return;
 
     var sidebar = document.querySelector('.site-body-left-column');
     if (!sidebar) return;
 
-    trackerEl = document.createElement('div');
-    trackerEl.className = 'journey-tracker';
-    if (state.journeyCollapsed) trackerEl.classList.add('is-collapsed');
+    // Ensure sidebar has relative positioning for the absolute overlay
+    if (getComputedStyle(sidebar).position === 'static') {
+      sidebar.style.position = 'relative';
+    }
 
-    // Header (clickable to toggle collapse)
-    var header = document.createElement('div');
-    header.className = 'journey-tracker__header';
-    var title = document.createElement('span');
-    title.className = 'journey-tracker__title';
-    title.textContent = 'Exam Journey';
-    countEl = document.createElement('span');
-    countEl.className = 'journey-tracker__count';
-    var collapseBtn = document.createElement('span');
-    collapseBtn.className = 'journey-tracker__collapse-btn';
-    collapseBtn.innerHTML = SVG_CHEVRON;
-    header.appendChild(title);
-    header.appendChild(countEl);
-    header.appendChild(collapseBtn);
-    header.addEventListener('click', function () {
-      state.journeyCollapsed = !state.journeyCollapsed;
-      if (state.journeyCollapsed) {
-        trackerEl.classList.add('is-collapsed');
-      } else {
-        trackerEl.classList.remove('is-collapsed');
-      }
-      saveState();
+    containerEl = document.createElement('div');
+    containerEl.className = 'sidebar-tabs';
+
+    /* ---- Tab bar ---- */
+    var bar = document.createElement('div');
+    bar.className = 'sidebar-tabs__bar';
+
+    TABS.forEach(function (tab) {
+      var btn = document.createElement('button');
+      btn.className = 'sidebar-tabs__tab';
+      btn.type = 'button';
+      btn.dataset.tabId = tab.id;
+      if (tab.id === activeTab) btn.classList.add('is-active');
+
+      var iconSpan = document.createElement('span');
+      iconSpan.className = 'sidebar-tabs__tab-icon';
+      iconSpan.innerHTML = tab.icon;
+
+      var labelSpan = document.createElement('span');
+      labelSpan.className = 'sidebar-tabs__tab-label';
+      labelSpan.textContent = tab.label;
+
+      btn.appendChild(iconSpan);
+      btn.appendChild(labelSpan);
+
+      btn.addEventListener('click', function () {
+        activeTab = tab.id;
+        saveActiveTab();
+        // Update active state on all tabs
+        var allTabs = bar.querySelectorAll('.sidebar-tabs__tab');
+        for (var i = 0; i < allTabs.length; i++) {
+          allTabs[i].classList.toggle('is-active', allTabs[i].dataset.tabId === activeTab);
+        }
+        renderActivePanel();
+        if (typeof SoundFX !== 'undefined' && SoundFX.click) SoundFX.click();
+      });
+
+      bar.appendChild(btn);
     });
 
-    // Progress bar
-    var bar = document.createElement('div');
-    bar.className = 'journey-tracker__bar';
-    barFillEl = document.createElement('div');
-    barFillEl.className = 'journey-tracker__bar-fill';
-    bar.appendChild(barFillEl);
+    /* ---- Panel ---- */
+    panelEl = document.createElement('div');
+    panelEl.className = 'sidebar-tabs__panel';
+
+    /* ---- Utility bar ---- */
+    var utilBar = document.createElement('div');
+    utilBar.className = 'sidebar-tabs__utility';
+
+    // High contrast toggle
+    var hcBtn = document.createElement('button');
+    hcBtn.className = 'sidebar-tabs__utility-btn';
+    hcBtn.type = 'button';
+    hcBtn.title = 'High Contrast';
+    hcBtn.innerHTML = SVG_HC_ICON;
+    if (document.body.classList.contains('high-contrast')) hcBtn.classList.add('is-active');
+    hcBtn.addEventListener('click', function () {
+      var on = document.body.classList.toggle('high-contrast');
+      try { localStorage.setItem('actuarial-notes-high-contrast', on ? '1' : '0'); } catch (e) {}
+      hcBtn.classList.toggle('is-active', on);
+    });
+    utilBar.appendChild(hcBtn);
+
+    // Sound mute toggle
+    var muteBtn = document.createElement('button');
+    muteBtn.className = 'sidebar-tabs__utility-btn';
+    muteBtn.type = 'button';
+    muteBtn.title = 'Toggle Sound';
+    var isMuted = false;
+    try { isMuted = localStorage.getItem('actuarial-notes-muted') === '1'; } catch (e) {}
+    muteBtn.innerHTML = isMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+    muteBtn.addEventListener('click', function () {
+      if (typeof SoundFX !== 'undefined' && SoundFX.toggleMute) {
+        SoundFX.toggleMute();
+        isMuted = !isMuted;
+        muteBtn.innerHTML = isMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
+      }
+    });
+    utilBar.appendChild(muteBtn);
+
+    containerEl.appendChild(bar);
+    containerEl.appendChild(panelEl);
+    containerEl.appendChild(utilBar);
+
+    sidebar.appendChild(containerEl);
+
+    renderActivePanel();
+  }
+
+  /* ============================================================
+     PANEL RENDERING — dispatches to tab-specific renderers
+     ============================================================ */
+  function renderActivePanel() {
+    if (!panelEl) return;
+    panelEl.innerHTML = '';
+
+    var content = document.createElement('div');
+    content.className = 'sidebar-tabs__panel-content';
+
+    switch (activeTab) {
+      case 'library':  renderLibraryPanel(content);  break;
+      case 'process':  renderProcessPanel(content);  break;
+      case 'exams':    renderExamsPanel(content);     break;
+      case 'practice': renderPracticePanel(content);  break;
+    }
+
+    panelEl.appendChild(content);
+  }
+
+  /* ============================================================
+     LIBRARY TAB
+     ============================================================ */
+  function renderLibraryPanel(container) {
+    var docs = (typeof window._getLibraryDocs === 'function') ? window._getLibraryDocs() : [];
+
+    // Header + upload button
+    var header = document.createElement('div');
+    header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px';
+
+    var titleRow = document.createElement('div');
+    titleRow.className = 'sidebar-tabs__panel-header';
+    var title = document.createElement('span');
+    title.className = 'sidebar-tabs__panel-title';
+    title.textContent = 'Document Library';
+    var countSpan = document.createElement('span');
+    countSpan.className = 'sidebar-tabs__panel-count';
+    countSpan.textContent = docs.length > 0 ? String(docs.length) : '';
+    titleRow.appendChild(title);
+    titleRow.appendChild(countSpan);
+    header.appendChild(titleRow);
+
+    var uploadBtn = document.createElement('button');
+    uploadBtn.className = 'sidebar-tabs__btn sidebar-tabs__btn--primary';
+    uploadBtn.type = 'button';
+    uploadBtn.innerHTML = '<span class="sidebar-tabs__btn-icon">' + SVG_PLUS + '</span> Upload';
+    uploadBtn.style.cssText = 'font-size:0.75rem;padding:5px 10px';
+    uploadBtn.addEventListener('click', function () {
+      if (typeof window._openLibraryUploadModal === 'function') window._openLibraryUploadModal();
+    });
+    header.appendChild(uploadBtn);
+    container.appendChild(header);
+
+    if (docs.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'sidebar-tabs__empty';
+      empty.innerHTML =
+        '<div class="sidebar-tabs__empty-icon">' + SVG_BOOK + '</div>' +
+        '<div class="sidebar-tabs__empty-title">No documents yet</div>' +
+        '<div class="sidebar-tabs__empty-desc">Upload textbooks, articles, or lecture notes to build your library.</div>';
+      container.appendChild(empty);
+      return;
+    }
+
+    // Document list
+    docs.forEach(function (doc) {
+      var item = document.createElement('div');
+      item.className = 'library-panel__doc-item';
+
+      var color = getDocColor(doc.id);
+      var initials = getDocInitials(doc.title);
+
+      var avatar = document.createElement('div');
+      avatar.className = 'library-panel__doc-avatar';
+      avatar.style.background = color;
+      avatar.textContent = initials;
+
+      var info = document.createElement('div');
+      info.className = 'library-panel__doc-info';
+
+      var docTitle = document.createElement('div');
+      docTitle.className = 'library-panel__doc-title';
+      docTitle.textContent = doc.title || 'Untitled Document';
+
+      var meta = document.createElement('div');
+      meta.className = 'library-panel__doc-meta';
+      var tocCount = (doc.toc || []).length;
+      var glossaryCount = (doc.glossary || []).length;
+      meta.textContent = (doc.author ? doc.author + ' · ' : '') + tocCount + ' sections · ' + glossaryCount + ' terms';
+
+      var badges = document.createElement('div');
+      badges.className = 'library-panel__doc-badges';
+      if (tocCount > 0) {
+        var tocBadge = document.createElement('span');
+        tocBadge.className = 'library-panel__badge library-panel__badge--active';
+        tocBadge.textContent = 'TOC';
+        badges.appendChild(tocBadge);
+      }
+      if (glossaryCount > 0) {
+        var termBadge = document.createElement('span');
+        termBadge.className = 'library-panel__badge library-panel__badge--active';
+        termBadge.textContent = 'Terms';
+        badges.appendChild(termBadge);
+      }
+
+      info.appendChild(docTitle);
+      info.appendChild(meta);
+      info.appendChild(badges);
+
+      item.appendChild(avatar);
+      item.appendChild(info);
+
+      item.addEventListener('click', function () {
+        if (typeof window._openLibraryDocPage === 'function') window._openLibraryDocPage(doc.id);
+      });
+
+      container.appendChild(item);
+    });
+  }
+
+  function getDocColor(id) {
+    var colors = ['#2563eb', '#7c3aed', '#dc2626', '#059669', '#d97706', '#db2777', '#0891b2', '#4f46e5'];
+    var hash = 0;
+    var s = String(id);
+    for (var i = 0; i < s.length; i++) hash = ((hash << 5) - hash + s.charCodeAt(i)) | 0;
+    return colors[Math.abs(hash) % colors.length];
+  }
+
+  function getDocInitials(title) {
+    if (!title) return '?';
+    var words = title.split(/\s+/).filter(function (w) { return w.length > 0; });
+    if (words.length === 0) return '?';
+    if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
+
+  /* ============================================================
+     DOCUMENT PROCESSING TAB
+     ============================================================ */
+  function renderProcessPanel(container) {
+    var docs = (typeof window._getLibraryDocs === 'function') ? window._getLibraryDocs() : [];
+
+    var title = document.createElement('div');
+    title.className = 'sidebar-tabs__panel-header';
+    title.innerHTML = '<span class="sidebar-tabs__panel-title">Document Processing</span>';
+    container.appendChild(title);
+
+    if (docs.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'sidebar-tabs__empty';
+      empty.innerHTML =
+        '<div class="sidebar-tabs__empty-icon">' + SVG_TAB_PROCESS + '</div>' +
+        '<div class="sidebar-tabs__empty-title">No documents to process</div>' +
+        '<div class="sidebar-tabs__empty-desc">Upload a document in the Library tab first, then come here to extract structured content.</div>';
+      container.appendChild(empty);
+      return;
+    }
+
+    // Document selector
+    var selectLabel = document.createElement('div');
+    selectLabel.style.cssText = 'font-size:0.78rem;color:var(--text-dim);margin-bottom:4px';
+    selectLabel.textContent = 'Select document:';
+    container.appendChild(selectLabel);
+
+    var select = document.createElement('select');
+    select.className = 'sidebar-tabs__select';
+    var defaultOpt = document.createElement('option');
+    defaultOpt.value = '';
+    defaultOpt.textContent = 'Choose a document...';
+    select.appendChild(defaultOpt);
+    docs.forEach(function (doc) {
+      var opt = document.createElement('option');
+      opt.value = doc.id;
+      opt.textContent = doc.title || 'Untitled';
+      select.appendChild(opt);
+    });
+    container.appendChild(select);
+
+    // Action cards
+    var grid = document.createElement('div');
+    grid.className = 'docproc-panel__action-grid';
+
+    var tocCard = createActionCard('Extract Table of Contents',
+      'Generate a hierarchical outline of the document structure.',
+      function () {
+        var docId = select.value;
+        if (!docId) { alert('Please select a document first.'); return; }
+        if (typeof window._processDocTOC === 'function') window._processDocTOC(docId);
+      });
+    grid.appendChild(tocCard);
+
+    var termsCard = createActionCard('Extract Terms & Definitions',
+      'Identify key terms with multi-layered definitions (mathematical, technical, experiential).',
+      function () {
+        var docId = select.value;
+        if (!docId) { alert('Please select a document first.'); return; }
+        if (typeof window._processDocTerms === 'function') window._processDocTerms(docId);
+      });
+    grid.appendChild(termsCard);
+
+    var moreCard = createActionCard('More Formats',
+      'Summaries, key assumptions, formula sheets — coming soon.',
+      null);
+    moreCard.classList.add('is-disabled');
+    grid.appendChild(moreCard);
+
+    container.appendChild(grid);
+
+    // Terms viewer — show terms for selected doc
+    var termsViewer = document.createElement('div');
+    termsViewer.style.cssText = 'margin-top:12px';
+    container.appendChild(termsViewer);
+
+    select.addEventListener('change', function () {
+      renderTermsViewer(termsViewer, select.value, docs);
+    });
+  }
+
+  function createActionCard(titleText, descText, onClick) {
+    var card = document.createElement('div');
+    card.className = 'docproc-panel__action-card';
+    var t = document.createElement('div');
+    t.className = 'docproc-panel__action-title';
+    t.textContent = titleText;
+    var d = document.createElement('div');
+    d.className = 'docproc-panel__action-desc';
+    d.textContent = descText;
+    card.appendChild(t);
+    card.appendChild(d);
+    if (onClick) card.addEventListener('click', onClick);
+    return card;
+  }
+
+  function renderTermsViewer(container, docId, docs) {
+    container.innerHTML = '';
+    if (!docId) return;
+
+    var doc = null;
+    for (var i = 0; i < docs.length; i++) {
+      if (docs[i].id === docId) { doc = docs[i]; break; }
+    }
+    if (!doc || !(doc.glossary && doc.glossary.length > 0)) return;
+
+    var header = document.createElement('div');
+    header.className = 'sidebar-tabs__panel-header';
+    header.innerHTML = '<span class="sidebar-tabs__panel-title">Terms</span>' +
+      '<span class="sidebar-tabs__panel-count">' + doc.glossary.length + '</span>';
+    container.appendChild(header);
+
+    doc.glossary.forEach(function (entry) {
+      var card = document.createElement('div');
+      card.className = 'docproc-panel__term-card';
+
+      var name = document.createElement('div');
+      name.className = 'docproc-panel__term-name';
+      name.textContent = entry.term || entry.name || '';
+      card.appendChild(name);
+
+      if (entry.page) {
+        var page = document.createElement('div');
+        page.className = 'docproc-panel__term-page';
+        page.textContent = 'Page ' + entry.page;
+        card.appendChild(page);
+      }
+
+      // Definition — support multi-layered or single
+      var defs = entry.definitions || null;
+      var singleDef = entry.definition || entry.description || entry.def || '';
+
+      if (defs && (defs.mathematical || defs.technical || defs.experiential)) {
+        // Multi-layered definitions with tabs
+        var defTabs = document.createElement('div');
+        defTabs.className = 'docproc-panel__def-tabs';
+        var defContent = document.createElement('div');
+        defContent.className = 'docproc-panel__def-content';
+
+        var types = [
+          { key: 'mathematical', label: 'Math' },
+          { key: 'technical', label: 'Technical' },
+          { key: 'experiential', label: 'Intuitive' }
+        ];
+
+        var firstActive = null;
+        types.forEach(function (type) {
+          var tab = document.createElement('button');
+          tab.className = 'docproc-panel__def-tab';
+          tab.type = 'button';
+          tab.textContent = type.label;
+          if (!defs[type.key]) {
+            tab.classList.add('is-empty');
+          } else if (!firstActive) {
+            firstActive = type.key;
+            tab.classList.add('is-active');
+            defContent.textContent = defs[type.key];
+          }
+          tab.addEventListener('click', function () {
+            if (!defs[type.key]) return;
+            var allTabs = defTabs.querySelectorAll('.docproc-panel__def-tab');
+            for (var j = 0; j < allTabs.length; j++) allTabs[j].classList.remove('is-active');
+            tab.classList.add('is-active');
+            defContent.textContent = defs[type.key];
+          });
+          defTabs.appendChild(tab);
+        });
+
+        card.appendChild(defTabs);
+        card.appendChild(defContent);
+      } else if (singleDef) {
+        var defEl = document.createElement('div');
+        defEl.className = 'docproc-panel__def-content';
+        defEl.textContent = singleDef;
+        card.appendChild(defEl);
+      }
+
+      container.appendChild(card);
+    });
+  }
+
+  /* ============================================================
+     EXAMS TAB
+     ============================================================ */
+  function renderExamsPanel(container) {
+    // Track selector + progress header
+    var headerRow = document.createElement('div');
+    headerRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px';
+
+    var titleRow = document.createElement('div');
+    titleRow.className = 'sidebar-tabs__panel-header';
+    var titleSpan = document.createElement('span');
+    titleSpan.className = 'sidebar-tabs__panel-title';
+    titleSpan.textContent = 'Certification Track';
+    countEl = document.createElement('span');
+    countEl.className = 'sidebar-tabs__panel-count';
+    titleRow.appendChild(titleSpan);
+    titleRow.appendChild(countEl);
+    headerRow.appendChild(titleRow);
+    container.appendChild(headerRow);
 
     // Track selector
     var select = document.createElement('select');
-    select.className = 'journey-tracker__select';
+    select.className = 'sidebar-tabs__select';
     TRACKS.forEach(function (t) {
       var opt = document.createElement('option');
       opt.value = t.key;
       opt.textContent = t.name;
       select.appendChild(opt);
     });
-    select.value = state.selectedTrack;
-    select.addEventListener('change', function () {
-      state.selectedTrack = select.value;
-      state.journeyCollapsed = false;
-      trackerEl.classList.remove('is-collapsed');
-      saveState();
-      renderSections();
-      updateProgress();
-    });
+    select.value = journeyState.selectedTrack;
+    container.appendChild(select);
+
+    // Progress bar
+    var bar = document.createElement('div');
+    bar.className = 'sidebar-tabs__progress-bar';
+    barFillEl = document.createElement('div');
+    barFillEl.className = 'sidebar-tabs__progress-fill';
+    bar.appendChild(barFillEl);
+    container.appendChild(bar);
 
     // Sections container
-    sectionsEl = document.createElement('div');
-    sectionsEl.className = 'journey-tracker__sections';
+    var sectionsEl = document.createElement('div');
+    sectionsEl.style.cssText = 'display:flex;flex-direction:column;gap:2px';
+    container.appendChild(sectionsEl);
 
-    // Body wrapper (collapsible)
-    var bodyEl = document.createElement('div');
-    bodyEl.className = 'journey-tracker__body';
-    bodyEl.appendChild(bar);
-    bodyEl.appendChild(select);
-    bodyEl.appendChild(sectionsEl);
+    function renderTrackSections() {
+      sectionsEl.innerHTML = '';
+      var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
+      if (!track) return;
 
-    trackerEl.appendChild(header);
-    trackerEl.appendChild(bodyEl);
+      track.sections.forEach(function (sec) {
+        var section = document.createElement('div');
+        section.className = 'sidebar-tabs__section';
+        if (sec.collapsed) section.classList.add('is-collapsed');
 
-    // .site-body-left-column is a flex-row with an inner wrapper that holds
-    // site-name, toggles, search, and nav tree. We must insert INSIDE that
-    // wrapper, not as a direct child of sidebar (which causes side-by-side).
-    //
-    // Strategy: find the search input → walk up to the inner wrapper (the
-    // direct child of sidebar that contains it) → insert inside that wrapper,
-    // right after the search and before the nav tree.
-    var searchInput = sidebar.querySelector('input[type="search"], input[type="text"]');
-    var innerWrapper = null;
-
-    if (searchInput) {
-      // Walk up from search input to find the direct child of sidebar
-      var el = searchInput;
-      while (el.parentElement && el.parentElement !== sidebar) {
-        el = el.parentElement;
-      }
-      if (el.parentElement === sidebar) {
-        innerWrapper = el;
-      }
-    }
-
-    // If we couldn't find via search, try finding the wrapper that contains the nav tree
-    if (!innerWrapper) {
-      var children = sidebar.children;
-      for (var ci = 0; ci < children.length; ci++) {
-        var child = children[ci];
-        if (child.querySelector && (child.querySelector('.nav-folder, .tree-item') ||
-            child.querySelector('input[type="search"]'))) {
-          innerWrapper = child;
-          break;
-        }
-      }
-    }
-
-    // Target container: the inner wrapper if found, otherwise sidebar itself
-    var container = innerWrapper || sidebar;
-
-    // Inside the container, find the nav tree and insert before it
-    var navRoot = container.querySelector('.nav-folder.mod-root') ||
-                  container.querySelector('.nav-folder') ||
-                  container.querySelector('.tree-item');
-
-    if (navRoot) {
-      navRoot.parentElement.insertBefore(trackerEl, navRoot);
-    } else {
-      // No nav tree yet — insert after the search bar within the container
-      if (searchInput) {
-        // Walk up to a direct child of container
-        var searchAncestor = searchInput;
-        while (searchAncestor.parentElement && searchAncestor.parentElement !== container) {
-          searchAncestor = searchAncestor.parentElement;
-        }
-        if (searchAncestor.parentElement === container && searchAncestor.nextSibling) {
-          container.insertBefore(trackerEl, searchAncestor.nextSibling);
-        } else {
-          container.appendChild(trackerEl);
-        }
-      } else {
-        container.appendChild(trackerEl);
-      }
-    }
-
-    renderSections();
-    updateProgress();
-  }
-
-  function renderSections() {
-    if (!sectionsEl) return;
-    sectionsEl.innerHTML = '';
-
-    var track = TRACKS.find(function (t) { return t.key === state.selectedTrack; });
-    if (!track) return;
-
-    track.sections.forEach(function (sec) {
-      var section = document.createElement('div');
-      section.className = 'journey-tracker__section';
-      if (sec.collapsed) section.classList.add('is-collapsed');
-
-      // Section header
-      var sHeader = document.createElement('div');
-      sHeader.className = 'journey-tracker__section-header';
-      sHeader.innerHTML = SVG_CHEVRON;
-      var sLabel = document.createElement('span');
-      sLabel.textContent = sec.label;
-      sHeader.appendChild(sLabel);
-      sHeader.addEventListener('click', function () {
-        section.classList.toggle('is-collapsed');
-      });
-
-      // FSA elective info note (shown once before the first elective section)
-      if (sec.elective && !section.parentElement) {
-        var prevSections = track.sections.slice(0, track.sections.indexOf(sec));
-        var isFirstElective = !prevSections.some(function (s) { return s.elective; });
-        if (isFirstElective) {
-          var infoNote = document.createElement('div');
-          infoNote.className = 'journey-tracker__info-note';
-          infoNote.textContent = 'Pick a 101\u2013201 sequence + 2 others';
-          sectionsEl.appendChild(infoNote);
-        }
-      }
-
-      // Items container
-      var itemsEl = document.createElement('div');
-      itemsEl.className = 'journey-tracker__items';
-
-      sec.items.forEach(function (item, idx) {
-        // "or" separator
-        if (item.or && idx > 0) {
-          var prevItem = sec.items[idx - 1];
-          if (prevItem && prevItem.or === item.id) {
-            var orDiv = document.createElement('div');
-            orDiv.className = 'journey-tracker__or';
-            orDiv.textContent = 'or';
-            itemsEl.appendChild(orDiv);
-          }
-        }
-
-        var row = document.createElement('div');
-        row.className = 'journey-tracker__item';
-        row.dataset.status = getStatus(item.id);
-        row.dataset.itemId = item.id;
-        if (item.color) row.dataset.examColor = item.color;
-
-        // Status button
-        var statusBtn = document.createElement('button');
-        statusBtn.className = 'journey-tracker__status';
-        statusBtn.type = 'button';
-        statusBtn.title = 'Click to change status';
-        statusBtn.innerHTML = STATUS_ICONS[getStatus(item.id)];
-        statusBtn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          cycleStatus(item.id);
-          var newStatus = getStatus(item.id);
-          row.dataset.status = newStatus;
-          statusBtn.innerHTML = STATUS_ICONS[newStatus];
-          updateProgress();
-          if (newStatus === 'in_progress') {
-            SoundFX.inProgress();
-          } else if (newStatus === 'completed') {
-            SoundFX.complete();
-          } else {
-            SoundFX.click();
-          }
+        var sHeader = document.createElement('div');
+        sHeader.className = 'sidebar-tabs__section-header';
+        sHeader.innerHTML = SVG_CHEVRON;
+        var sLabel = document.createElement('span');
+        sLabel.textContent = sec.label;
+        sHeader.appendChild(sLabel);
+        sHeader.addEventListener('click', function () {
+          section.classList.toggle('is-collapsed');
         });
 
-        // Name (link if path exists)
-        var nameEl;
-        if (item.path) {
-          nameEl = document.createElement('a');
-          nameEl.className = 'journey-tracker__name journey-tracker__link';
-          var slug = item.path.replace(/ /g, '+');
-          nameEl.href = window.location.origin + '/' + slug;
-          nameEl.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            window.open(window.location.origin + '/' + slug, '_self');
-          }, true);
-        } else {
-          nameEl = document.createElement('span');
-          nameEl.className = 'journey-tracker__name';
+        // FSA elective info note
+        if (sec.elective) {
+          var prevSections = track.sections.slice(0, track.sections.indexOf(sec));
+          var isFirstElective = !prevSections.some(function (s) { return s.elective; });
+          if (isFirstElective) {
+            var infoNote = document.createElement('div');
+            infoNote.className = 'exams-panel__info-note';
+            infoNote.textContent = 'Pick a 101\u2013201 sequence + 2 others';
+            sectionsEl.appendChild(infoNote);
+          }
         }
-        nameEl.textContent = item.name;
-        nameEl.title = item.name;
 
-        row.appendChild(statusBtn);
-        row.appendChild(nameEl);
-        itemsEl.appendChild(row);
+        var itemsEl = document.createElement('div');
+        itemsEl.className = 'exams-panel__items sidebar-tabs__section-items';
+
+        sec.items.forEach(function (item, idx) {
+          // "or" separator
+          if (item.or && idx > 0) {
+            var prevItem = sec.items[idx - 1];
+            if (prevItem && prevItem.or === item.id) {
+              var orDiv = document.createElement('div');
+              orDiv.className = 'exams-panel__or';
+              orDiv.textContent = 'or';
+              itemsEl.appendChild(orDiv);
+            }
+          }
+
+          var row = document.createElement('div');
+          row.className = 'exams-panel__item';
+          row.dataset.status = getStatus(item.id);
+          row.dataset.itemId = item.id;
+          if (item.color) row.dataset.examColor = item.color;
+
+          var statusBtn = document.createElement('button');
+          statusBtn.className = 'exams-panel__status';
+          statusBtn.type = 'button';
+          statusBtn.title = 'Click to change status';
+          statusBtn.innerHTML = STATUS_ICONS[getStatus(item.id)];
+          statusBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            cycleStatus(item.id);
+            var newStatus = getStatus(item.id);
+            row.dataset.status = newStatus;
+            statusBtn.innerHTML = STATUS_ICONS[newStatus];
+            updateExamsProgress();
+            if (typeof SoundFX !== 'undefined') {
+              if (newStatus === 'in_progress' && SoundFX.inProgress) SoundFX.inProgress();
+              else if (newStatus === 'completed' && SoundFX.complete) SoundFX.complete();
+              else if (SoundFX.click) SoundFX.click();
+            }
+          });
+
+          var nameEl;
+          if (item.path) {
+            nameEl = document.createElement('a');
+            nameEl.className = 'exams-panel__name';
+            var slug = item.path.replace(/ /g, '+');
+            nameEl.href = window.location.origin + '/' + slug;
+            nameEl.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              window.open(window.location.origin + '/' + slug, '_self');
+            }, true);
+          } else {
+            nameEl = document.createElement('span');
+            nameEl.className = 'exams-panel__name';
+          }
+          nameEl.textContent = item.name;
+          nameEl.title = item.name;
+
+          row.appendChild(statusBtn);
+          row.appendChild(nameEl);
+          itemsEl.appendChild(row);
+        });
+
+        section.appendChild(sHeader);
+        section.appendChild(itemsEl);
+        sectionsEl.appendChild(section);
       });
+    }
 
-      section.appendChild(sHeader);
-      section.appendChild(itemsEl);
-      sectionsEl.appendChild(section);
+    select.addEventListener('change', function () {
+      journeyState.selectedTrack = select.value;
+      saveJourneyState();
+      renderTrackSections();
+      updateExamsProgress();
     });
+
+    renderTrackSections();
+    updateExamsProgress();
+
+    // Divider before custom exams
+    var divider = document.createElement('div');
+    divider.style.cssText = 'height:1px;background:var(--sb-border);margin:12px 0';
+    container.appendChild(divider);
+
+    // Custom Exams section
+    renderCustomExamsSection(container);
+
+    // Add Custom Exam + Library buttons
+    var btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex;gap:6px;margin-top:10px';
+
+    var addExamBtn = document.createElement('button');
+    addExamBtn.className = 'sidebar-tabs__btn sidebar-tabs__btn--full';
+    addExamBtn.type = 'button';
+    addExamBtn.innerHTML = '<span class="sidebar-tabs__btn-icon">' + SVG_PLUS + '</span> Add Custom Exam';
+    addExamBtn.addEventListener('click', function () {
+      if (typeof window._openCustomExamModal === 'function') window._openCustomExamModal();
+    });
+    btnRow.appendChild(addExamBtn);
+    container.appendChild(btnRow);
   }
 
-  function updateProgress() {
-    var track = TRACKS.find(function (t) { return t.key === state.selectedTrack; });
+  function updateExamsProgress() {
+    var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
     if (!track) return;
 
     var counts = getTrackCounts(track);
@@ -3426,11 +3828,302 @@
       barFillEl.style.width = pct + '%';
     }
 
-    // Update persistent exam nav tabs for in-progress exams
     updatePersistentExamNavs();
   }
 
-  /* ---- Persistent exam nav tabs for in-progress exams ---- */
+  function renderCustomExamsSection(container) {
+    var customExams = (typeof window._getCustomExams === 'function') ? window._getCustomExams() : [];
+
+    if (customExams.length === 0) return;
+
+    var header = document.createElement('div');
+    header.className = 'sidebar-tabs__panel-header';
+    header.innerHTML = '<span class="sidebar-tabs__panel-title">My Custom Exams</span>' +
+      '<span class="sidebar-tabs__panel-count">' + customExams.length + '</span>';
+    container.appendChild(header);
+
+    var list = document.createElement('div');
+    list.style.cssText = 'display:flex;flex-direction:column;gap:1px';
+
+    customExams.forEach(function (exam) {
+      var item = document.createElement('div');
+      item.className = 'exams-panel__custom-item';
+
+      var dot = document.createElement('span');
+      dot.className = 'exams-panel__custom-dot';
+      dot.style.background = exam.color || '#2563eb';
+
+      var name = document.createElement('span');
+      name.className = 'exams-panel__custom-name';
+      name.textContent = exam.name;
+
+      var actions = document.createElement('span');
+      actions.className = 'exams-panel__custom-actions';
+
+      var editBtn = document.createElement('button');
+      editBtn.className = 'exams-panel__custom-action';
+      editBtn.type = 'button';
+      editBtn.title = 'Edit';
+      editBtn.innerHTML = SVG_EDIT;
+      editBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (typeof window._openEditExamModal === 'function') window._openEditExamModal(exam.id);
+      });
+
+      var deleteBtn = document.createElement('button');
+      deleteBtn.className = 'exams-panel__custom-action exams-panel__custom-action--danger';
+      deleteBtn.type = 'button';
+      deleteBtn.title = 'Delete';
+      deleteBtn.innerHTML = SVG_TRASH;
+      deleteBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (typeof window._deleteCustomExam === 'function') {
+          window._deleteCustomExam(exam.id);
+          refreshTab('exams');
+        }
+      });
+
+      actions.appendChild(editBtn);
+      actions.appendChild(deleteBtn);
+
+      item.appendChild(dot);
+      item.appendChild(name);
+      item.appendChild(actions);
+
+      item.addEventListener('click', function () {
+        if (typeof window._openExamViewer === 'function') window._openExamViewer(exam.id);
+      });
+
+      list.appendChild(item);
+    });
+
+    container.appendChild(list);
+  }
+
+  /* ============================================================
+     PRACTICE TAB
+     ============================================================ */
+  var practiceMode = 'exam-prep';
+
+  function renderPracticePanel(container) {
+    var title = document.createElement('div');
+    title.className = 'sidebar-tabs__panel-header';
+    title.innerHTML = '<span class="sidebar-tabs__panel-title">Practice</span>';
+    container.appendChild(title);
+
+    // Mode toggle
+    var toggle = document.createElement('div');
+    toggle.className = 'practice-panel__mode-toggle';
+
+    var examPrepBtn = document.createElement('button');
+    examPrepBtn.className = 'practice-panel__mode-btn';
+    examPrepBtn.type = 'button';
+    examPrepBtn.textContent = 'Exam Prep';
+    if (practiceMode === 'exam-prep') examPrepBtn.classList.add('is-active');
+
+    var workProbBtn = document.createElement('button');
+    workProbBtn.className = 'practice-panel__mode-btn';
+    workProbBtn.type = 'button';
+    workProbBtn.textContent = 'Work Problem';
+    if (practiceMode === 'work-problem') workProbBtn.classList.add('is-active');
+
+    var modeContent = document.createElement('div');
+
+    function renderMode() {
+      modeContent.innerHTML = '';
+      examPrepBtn.classList.toggle('is-active', practiceMode === 'exam-prep');
+      workProbBtn.classList.toggle('is-active', practiceMode === 'work-problem');
+      if (practiceMode === 'exam-prep') {
+        renderExamPrepMode(modeContent);
+      } else {
+        renderWorkProblemMode(modeContent);
+      }
+    }
+
+    examPrepBtn.addEventListener('click', function () {
+      practiceMode = 'exam-prep';
+      renderMode();
+    });
+    workProbBtn.addEventListener('click', function () {
+      practiceMode = 'work-problem';
+      renderMode();
+    });
+
+    toggle.appendChild(examPrepBtn);
+    toggle.appendChild(workProbBtn);
+    container.appendChild(toggle);
+    container.appendChild(modeContent);
+
+    renderMode();
+  }
+
+  function renderExamPrepMode(container) {
+    // Stats summary
+    var stats = loadPracticeStats();
+    var statsGrid = document.createElement('div');
+    statsGrid.className = 'practice-panel__stats';
+
+    var totalStat = createStat(String(stats.total), 'Attempted');
+    var correctStat = createStat(String(stats.correct), 'Correct');
+    var pctStat = createStat(stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) + '%' : '—', 'Accuracy');
+    var streakStat = createStat(String(stats.streak), 'Streak');
+
+    statsGrid.appendChild(totalStat);
+    statsGrid.appendChild(correctStat);
+    statsGrid.appendChild(pctStat);
+    statsGrid.appendChild(streakStat);
+    container.appendChild(statsGrid);
+
+    // Exam selector
+    var allExams = PRACTICE_EXAMS.slice();
+    var customExams = (typeof window._getCustomExams === 'function') ? window._getCustomExams() : [];
+    customExams.forEach(function (ex) {
+      allExams.push({ key: 'custom-' + ex.id, name: ex.name, path: null });
+    });
+
+    var examLabel = document.createElement('div');
+    examLabel.style.cssText = 'font-size:0.78rem;color:var(--text-dim);margin-bottom:4px';
+    examLabel.textContent = 'Select exam:';
+    container.appendChild(examLabel);
+
+    var examSelect = document.createElement('select');
+    examSelect.className = 'sidebar-tabs__select';
+    var defaultOpt = document.createElement('option');
+    defaultOpt.value = '';
+    defaultOpt.textContent = 'Choose an exam...';
+    examSelect.appendChild(defaultOpt);
+    allExams.forEach(function (ex) {
+      var opt = document.createElement('option');
+      opt.value = ex.key;
+      opt.textContent = ex.name;
+      examSelect.appendChild(opt);
+    });
+    container.appendChild(examSelect);
+
+    // Concept selector (populated on exam change)
+    var conceptLabel = document.createElement('div');
+    conceptLabel.style.cssText = 'font-size:0.78rem;color:var(--text-dim);margin:8px 0 4px';
+    conceptLabel.textContent = 'Select concept:';
+    container.appendChild(conceptLabel);
+
+    var conceptSelect = document.createElement('select');
+    conceptSelect.className = 'sidebar-tabs__select';
+    conceptSelect.disabled = true;
+    var conceptDefault = document.createElement('option');
+    conceptDefault.value = '';
+    conceptDefault.textContent = 'Choose an exam first...';
+    conceptSelect.appendChild(conceptDefault);
+    container.appendChild(conceptSelect);
+
+    examSelect.addEventListener('change', function () {
+      var examKey = examSelect.value;
+      conceptSelect.innerHTML = '';
+      if (!examKey) {
+        conceptSelect.disabled = true;
+        var defOpt = document.createElement('option');
+        defOpt.value = '';
+        defOpt.textContent = 'Choose an exam first...';
+        conceptSelect.appendChild(defOpt);
+        return;
+      }
+      conceptSelect.disabled = false;
+      var loadOpt = document.createElement('option');
+      loadOpt.value = '';
+      loadOpt.textContent = 'Loading concepts...';
+      conceptSelect.appendChild(loadOpt);
+
+      // Try to load concepts via exposed function
+      if (typeof window._fetchConceptsForExam === 'function') {
+        window._fetchConceptsForExam(examKey, function (concepts) {
+          conceptSelect.innerHTML = '';
+          var allOpt = document.createElement('option');
+          allOpt.value = '';
+          allOpt.textContent = 'All concepts (' + concepts.length + ')';
+          conceptSelect.appendChild(allOpt);
+          concepts.forEach(function (c) {
+            var opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            conceptSelect.appendChild(opt);
+          });
+        });
+      } else {
+        conceptSelect.innerHTML = '';
+        var na = document.createElement('option');
+        na.value = '';
+        na.textContent = 'No concepts available';
+        conceptSelect.appendChild(na);
+      }
+    });
+
+    // Start Quiz button
+    var quizBtn = document.createElement('button');
+    quizBtn.className = 'sidebar-tabs__btn sidebar-tabs__btn--primary sidebar-tabs__btn--full';
+    quizBtn.type = 'button';
+    quizBtn.textContent = 'Start Quiz';
+    quizBtn.style.marginTop = '12px';
+    quizBtn.addEventListener('click', function () {
+      var examKey = examSelect.value;
+      var concept = conceptSelect.value;
+      if (!examKey) { alert('Please select an exam first.'); return; }
+      if (typeof window._openQuizForConcept === 'function') {
+        window._openQuizForConcept(examKey, concept);
+      }
+    });
+    container.appendChild(quizBtn);
+  }
+
+  function renderWorkProblemMode(container) {
+    var desc = document.createElement('div');
+    desc.style.cssText = 'font-size:0.82rem;color:var(--text-dim);margin-bottom:10px;line-height:1.5';
+    desc.textContent = 'Describe a real-world actuarial problem or scenario. AI-powered assistance will draw on your Library terms and definitions to help you work through it.';
+    container.appendChild(desc);
+
+    var textarea = document.createElement('textarea');
+    textarea.className = 'practice-panel__textarea';
+    textarea.placeholder = 'Describe your problem or scenario...';
+    container.appendChild(textarea);
+
+    var helpBtn = document.createElement('button');
+    helpBtn.className = 'sidebar-tabs__btn sidebar-tabs__btn--primary sidebar-tabs__btn--full';
+    helpBtn.type = 'button';
+    helpBtn.textContent = 'Get Help';
+    helpBtn.addEventListener('click', function () {
+      var text = textarea.value.trim();
+      if (!text) { alert('Please describe a problem first.'); return; }
+      if (typeof window._startWorkProblem === 'function') {
+        window._startWorkProblem(text);
+      }
+    });
+    container.appendChild(helpBtn);
+  }
+
+  function createStat(value, label) {
+    var el = document.createElement('div');
+    el.className = 'practice-panel__stat';
+    var v = document.createElement('div');
+    v.className = 'practice-panel__stat-value';
+    v.textContent = value;
+    var l = document.createElement('div');
+    l.className = 'practice-panel__stat-label';
+    l.textContent = label;
+    el.appendChild(v);
+    el.appendChild(l);
+    return el;
+  }
+
+  function loadPracticeStats() {
+    try {
+      var raw = localStorage.getItem('actuarial-notes-practice-stats');
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return { total: 0, correct: 0, streak: 0 };
+  }
+
+  /* ============================================================
+     PERSISTENT EXAM NAV TABS (right side of viewport)
+     Kept from original code — shows in-progress exams
+     ============================================================ */
   function getInProgressExams() {
     var seen = {};
     var result = [];
@@ -3439,12 +4132,7 @@
         sec.items.forEach(function (item) {
           if (!seen[item.id] && getStatus(item.id) === 'in_progress') {
             seen[item.id] = true;
-            result.push({
-              id: item.id,
-              name: item.name,
-              path: item.path,
-              color: item.color
-            });
+            result.push({ id: item.id, name: item.name, path: item.path, color: item.color });
           }
         });
       });
@@ -3459,15 +4147,11 @@
   }
 
   function updatePersistentExamNavs() {
-    var container = document.querySelector('.persistent-exam-navs');
+    var navContainer = document.querySelector('.persistent-exam-navs');
     var inProgress = getInProgressExams();
 
-    // Filter out exams whose page we're currently on (the real sticky nav handles those)
-    var filtered = inProgress.filter(function (exam) {
-      return !isOnExamPage(exam.path);
-    });
+    var filtered = inProgress.filter(function (exam) { return !isOnExamPage(exam.path); });
 
-    // Also hide if the real exam-nav sticky is visible for any of these exams
     var realStickyName = '';
     var realSticky = document.querySelector('.exam-nav__sticky.is-visible');
     if (realSticky) {
@@ -3475,33 +4159,28 @@
       if (btn) realStickyName = btn.textContent.trim();
     }
     if (realStickyName) {
-      filtered = filtered.filter(function (exam) {
-        return exam.name !== realStickyName;
-      });
+      filtered = filtered.filter(function (exam) { return exam.name !== realStickyName; });
     }
 
     if (filtered.length === 0) {
-      if (container) container.remove();
+      if (navContainer) navContainer.remove();
       return;
     }
 
-    // Create container if it doesn't exist
-    if (!container) {
-      container = document.createElement('div');
-      container.className = 'persistent-exam-navs';
-      document.body.appendChild(container);
+    if (!navContainer) {
+      navContainer = document.createElement('div');
+      navContainer.className = 'persistent-exam-navs';
+      document.body.appendChild(navContainer);
     }
 
-    // Check if content changed
     var currentIds = filtered.map(function (e) { return e.id; }).join(',');
-    if (container.dataset.examIds === currentIds) return;
-    container.dataset.examIds = currentIds;
-
-    container.innerHTML = '';
+    if (navContainer.dataset.examIds === currentIds) return;
+    navContainer.dataset.examIds = currentIds;
+    navContainer.innerHTML = '';
 
     var isStacked = filtered.length >= 2;
-    if (isStacked) container.classList.add('is-stacked');
-    else container.classList.remove('is-stacked');
+    if (isStacked) navContainer.classList.add('is-stacked');
+    else navContainer.classList.remove('is-stacked');
 
     filtered.forEach(function (exam, idx) {
       var tab = document.createElement('a');
@@ -3518,37 +4197,26 @@
         tab.href = '#';
         tab.addEventListener('click', function (e) { e.preventDefault(); });
       }
-
-      var hexColor = COLOR_HEX[exam.color] || 'var(--brand)';
-      tab.style.setProperty('--tab-color', hexColor);
-
-      if (isStacked) {
-        tab.style.zIndex = String(filtered.length - idx);
-      }
-
-      tab.innerHTML =
-        '<span class="persistent-exam-tab__name">' + exam.name + '</span>';
-
-      container.appendChild(tab);
+      tab.style.setProperty('--tab-color', COLOR_HEX[exam.color] || 'var(--brand)');
+      if (isStacked) tab.style.zIndex = String(filtered.length - idx);
+      tab.innerHTML = '<span class="persistent-exam-tab__name">' + esc(exam.name) + '</span>';
+      navContainer.appendChild(tab);
     });
 
-    // Toggle expand on click for stacked tabs
     if (isStacked) {
-      container.addEventListener('click', function (e) {
-        if (!container.classList.contains('is-expanded')) {
+      navContainer.addEventListener('click', function (e) {
+        if (!navContainer.classList.contains('is-expanded')) {
           e.preventDefault();
           e.stopPropagation();
-          container.classList.add('is-expanded');
+          navContainer.classList.add('is-expanded');
         }
       }, true);
     }
 
-    // Sync offset with sticky exam tab if present
     if (typeof window._syncPersistentOffset === 'function') {
       setTimeout(window._syncPersistentOffset, 50);
     }
 
-    // Register close-outside listener once
     if (!window._persistentNavCloseRegistered) {
       window._persistentNavCloseRegistered = true;
       document.addEventListener('click', function (e) {
@@ -3560,16 +4228,27 @@
     }
   }
 
-  /* ---- Init & SPA survival ---- */
+  /* ============================================================
+     REFRESH — allows other IIFEs to trigger re-renders
+     ============================================================ */
+  function refreshTab(tabId) {
+    if (tabId && tabId !== activeTab) return;
+    renderActivePanel();
+  }
+
+  /* ============================================================
+     INIT & SPA SURVIVAL
+     ============================================================ */
   function init() {
-    loadState();
-    buildTracker();
-    // Show persistent exam nav tabs for any in-progress exams
+    loadJourneyState();
+    loadActiveTab();
+    buildSidebarTabs();
     setTimeout(updatePersistentExamNavs, 300);
   }
 
-  // Expose for cross-IIFE access (exam nav cleanup triggers this)
+  // Expose API for cross-IIFE access
   window._updatePersistentExamNavs = updatePersistentExamNavs;
+  window._sidebarTabs = { refresh: refreshTab };
 
   // Re-check persistent navs on SPA navigation
   window.addEventListener('popstate', function () {
@@ -3590,20 +4269,20 @@
   }
 
   // Re-inject if sidebar re-renders (SPA navigation)
-  var jtObserver = new MutationObserver(function () {
-    if (!document.querySelector('.journey-tracker')) {
-      trackerEl = null;
-      countEl = null;
+  var stObserver = new MutationObserver(function () {
+    if (!document.querySelector('.sidebar-tabs')) {
+      containerEl = null;
+      panelEl = null;
       barFillEl = null;
-      sectionsEl = null;
-      buildTracker();
+      countEl = null;
+      buildSidebarTabs();
     }
   });
 
   function observeSidebar() {
     var target = document.querySelector('.site-body-left-column');
     if (target) {
-      jtObserver.observe(target, { childList: true, subtree: true });
+      stObserver.observe(target, { childList: true, subtree: true });
     }
   }
 
@@ -3932,198 +4611,25 @@ var SoundFX = (function () {
 
 
 /* ===========================================================
-   HIGH CONTRAST TOGGLE
-   Injects a contrast icon + pill switch right beside the
-   built-in dark/light mode toggle in the Obsidian Publish
-   sidebar. Persists preference in localStorage.
+   HIGH CONTRAST — Restore preference on load
+   (Toggle UI is now in the sidebar tabs utility bar)
    =========================================================== */
 
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'actuarial-notes-high-contrast';
-
-  // Half-circle contrast icon SVG
-  var HC_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-    '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>' +
-    '<path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"/>' +
-    '</svg>';
-
-  function applyHighContrast(enabled) {
-    if (enabled) {
-      document.body.classList.add('high-contrast');
-    } else {
-      document.body.classList.remove('high-contrast');
-    }
-    try { localStorage.setItem(STORAGE_KEY, enabled ? '1' : '0'); } catch (e) {}
-  }
-
-  function restorePreference() {
-    try { return localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { return false; }
-  }
-
-  function findThemeToggleRow() {
-    // Obsidian Publish's dark/light toggle lives inside .site-body-left-column.
-    // It renders as a wrapper div containing: [SVG icon] [checkbox/toggle element].
-    // We need to find that wrapper so we can append our elements INSIDE it.
-    var sidebar = document.querySelector('.site-body-left-column');
-    if (!sidebar) return null;
-
-    // Strategy 1: Find the checkbox-container (Obsidian's toggle pill) and return its parent
-    var checkbox = sidebar.querySelector('.checkbox-container');
-    if (checkbox) return checkbox.parentElement;
-
-    // Strategy 2: Find a clickable-icon (the moon/sun SVG) and return its parent
-    var clickableIcon = sidebar.querySelector('.clickable-icon');
-    if (clickableIcon) return clickableIcon.parentElement;
-
-    // Strategy 3: Walk the first few direct children of the sidebar looking
-    // for a short element that contains an SVG (the toggle row, not the nav tree)
-    var children = sidebar.children;
-    for (var i = 0; i < Math.min(children.length, 5); i++) {
-      var child = children[i];
-      if (!child.querySelector) continue;
-      // The toggle row will have an SVG but won't be the site name or search
-      var hasSvg = child.querySelector('svg');
-      var isSearch = child.querySelector('input[type="search"], input[type="text"]');
-      var isNav = child.classList.contains('nav-folder') || child.classList.contains('tree-item');
-      if (hasSvg && !isSearch && !isNav) return child;
-    }
-
-    return null;
-  }
-
-  function buildToggle() {
-    if (document.querySelector('.hc-toggle-row')) return;
-
-    var toggleRow = findThemeToggleRow();
-    if (!toggleRow) return;
-
-    // Build: [pill-track > icon + thumb]  (icon inside track, opposite the thumb)
-    var row = document.createElement('div');
-    row.className = 'hc-toggle-row';
-    row.setAttribute('role', 'switch');
-    row.setAttribute('tabindex', '0');
-    row.setAttribute('aria-label', 'Toggle high contrast mode');
-    row.setAttribute('title', 'High Contrast');
-
-    var icon = document.createElement('span');
-    icon.className = 'hc-toggle-row__icon';
-    icon.innerHTML = HC_ICON_SVG;
-
-    var track = document.createElement('div');
-    track.className = 'hc-toggle-row__track';
-    var thumb = document.createElement('div');
-    thumb.className = 'hc-toggle-row__thumb';
-    track.appendChild(icon);
-    track.appendChild(thumb);
-
-    row.appendChild(track);
-
-    function updateAria() {
-      var on = document.body.classList.contains('high-contrast');
-      row.setAttribute('aria-checked', on ? 'true' : 'false');
-    }
-
-    row.addEventListener('click', function (e) {
-      e.stopPropagation();
-      SoundFX.click();
-      var nowOn = !document.body.classList.contains('high-contrast');
-      applyHighContrast(nowOn);
-      updateAria();
-    });
-
-    row.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        row.click();
+  function restoreHighContrast() {
+    try {
+      if (localStorage.getItem('actuarial-notes-high-contrast') === '1') {
+        document.body.classList.add('high-contrast');
       }
-    });
-
-    // Append INSIDE the same row that contains the dark mode toggle
-    toggleRow.appendChild(row);
-
-    // Ensure the row is flex so everything sits side-by-side
-    toggleRow.style.display = 'flex';
-    toggleRow.style.alignItems = 'center';
-    toggleRow.style.gap = '0';
-
-    updateAria();
-  }
-
-  // Speaker SVGs for mute button
-  var SPEAKER_ON_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-    '<path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>' +
-    '<path d="M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
-    '<path d="M18.07 5.93a9 9 0 0 1 0 12.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
-    '</svg>';
-
-  var SPEAKER_OFF_SVG = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-    '<path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>' +
-    '<line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
-    '<line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
-    '</svg>';
-
-  function buildMuteButton() {
-    if (document.querySelector('.mute-toggle-btn')) return;
-
-    var toggleRow = findThemeToggleRow();
-    if (!toggleRow) return;
-
-    var btn = document.createElement('button');
-    btn.className = 'mute-toggle-btn';
-    btn.setAttribute('aria-label', 'Toggle sound effects');
-    btn.setAttribute('title', 'Sound Effects');
-    btn.type = 'button';
-
-    function updateIcon() {
-      btn.innerHTML = SoundFX.isMuted() ? SPEAKER_OFF_SVG : SPEAKER_ON_SVG;
-      btn.setAttribute('aria-pressed', SoundFX.isMuted() ? 'true' : 'false');
-    }
-
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      SoundFX.toggleMute();
-      updateIcon();
-    });
-
-    updateIcon();
-    toggleRow.appendChild(btn);
-  }
-
-  function init() {
-    applyHighContrast(restorePreference());
-    buildToggle();
-    buildMuteButton();
+    } catch (e) {}
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 200); });
+    document.addEventListener('DOMContentLoaded', restoreHighContrast);
   } else {
-    setTimeout(init, 200);
-  }
-
-  // Re-inject if sidebar re-renders (SPA navigation)
-  var hcObserver = new MutationObserver(function () {
-    if (!document.querySelector('.hc-toggle-row')) {
-      buildToggle();
-    }
-    if (!document.querySelector('.mute-toggle-btn')) {
-      buildMuteButton();
-    }
-  });
-
-  function observeSidebar() {
-    var target = document.querySelector('.site-body-left-column');
-    if (target) {
-      hcObserver.observe(target, { childList: true, subtree: true });
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { setTimeout(observeSidebar, 300); });
-  } else {
-    setTimeout(observeSidebar, 300);
+    restoreHighContrast();
   }
 })();
 
@@ -4451,6 +4957,8 @@ var SoundFX = (function () {
 
   function saveLibrary() {
     try { localStorage.setItem(LIBRARY_STORAGE_KEY, JSON.stringify(libraryDocs)); } catch (e) { /* ignore */ }
+    // Refresh sidebar tabs to reflect library changes
+    if (window._sidebarTabs && window._sidebarTabs.refresh) window._sidebarTabs.refresh();
   }
 
   /* ---- Glossary search helper ---- */
@@ -4566,6 +5074,8 @@ var SoundFX = (function () {
   }
 
   function renderMyExams() {
+    // Refresh sidebar tabs to reflect changes
+    if (window._sidebarTabs && window._sidebarTabs.refresh) window._sidebarTabs.refresh();
     if (!myExamsEl) return;
     myExamsEl.innerHTML = '';
 
@@ -7872,40 +8382,34 @@ var SoundFX = (function () {
   function init() {
     loadExams();
     loadLibrary();
-    buildSidebar();
+    // No longer builds sidebar buttons — the sidebar tabs system handles UI.
+    // Expose functions for the tabs system to call:
+    window._getCustomExams = function () { return customExams; };
+    window._openCustomExamModal = function () {
+      editingExamId = null;
+      workflowData = {};
+      openModal();
+    };
+    window._openEditExamModal = function (examId) { openEditModal(examId); };
+    window._deleteCustomExam = function (examId) {
+      customExams = customExams.filter(function (ex) { return ex.id !== examId; });
+      saveExams();
+    };
+    window._openExamViewer = function (examId) { renderExamViewer(examId); };
+    window._getLibraryDocs = function () { return libraryDocs; };
+    window._openLibraryViewer = function () { renderLibraryViewer(); };
+    window._openLibraryUploadModal = function () { openLibraryUploadModal(); };
+    window._openLibraryDocPage = function (docId) { renderLibraryDocPage(docId); };
+    // Trigger sidebar tabs refresh after data is ready
+    if (window._sidebarTabs && window._sidebarTabs.refresh) {
+      window._sidebarTabs.refresh();
+    }
   }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () { setTimeout(init, 300); });
   } else {
     setTimeout(init, 300);
-  }
-
-  // Re-inject if sidebar re-renders (debounced)
-  var _ceObserverTimeout = null;
-  var ceObserver = new MutationObserver(function () {
-    clearTimeout(_ceObserverTimeout);
-    _ceObserverTimeout = setTimeout(function () {
-      if (!document.querySelector('.custom-exam__sidebar-btn')) {
-        sidebarBtnEl = null;
-        myExamsEl = null;
-        libraryBtnEl = null;
-        buildSidebar();
-      }
-    }, 200);
-  });
-
-  function observeSidebar() {
-    var target = document.querySelector('.site-body-left-column');
-    if (target) {
-      ceObserver.observe(target, { childList: true, subtree: true });
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { setTimeout(observeSidebar, 350); });
-  } else {
-    setTimeout(observeSidebar, 350);
   }
 
   // Clean up custom viewer on SPA navigation

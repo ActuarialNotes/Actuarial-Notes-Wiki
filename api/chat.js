@@ -5,7 +5,7 @@
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const MODEL = 'claude-sonnet-4-20250514';
-const MAX_TOKENS = 16384;
+const MAX_TOKENS = 24576;
 const MAX_CHARS = 100000;
 const RATE_LIMIT = 5;           // requests per window
 const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
@@ -163,6 +163,8 @@ export default async function handler(req, res) {
       return res.status(502).json({ error: 'Empty response from AI. Please try again.' });
     }
 
+    const wasTruncated = data.stop_reason === 'max_tokens';
+
     // Parse JSON — try direct parse first, then strip fences/prose
     let jsonStr = content.trim();
     let parsed;
@@ -184,7 +186,23 @@ export default async function handler(req, res) {
       try {
         parsed = JSON.parse(jsonStr);
       } catch (e2) {
-        return res.status(502).json({ error: 'Failed to parse AI response. The document may be too complex. Please try again.' });
+        // If truncated by max_tokens, try to repair by closing open JSON structures
+        if (wasTruncated) {
+          try {
+            // Find the last complete entry: trim to last '}' then close array and object
+            const lastBrace = jsonStr.lastIndexOf('}');
+            if (lastBrace > 0) {
+              const repaired = jsonStr.substring(0, lastBrace + 1) + ']}';
+              parsed = JSON.parse(repaired);
+            }
+          } catch (e3) {
+            // Repair failed
+          }
+        }
+        if (!parsed) {
+          const hint = wasTruncated ? ' The response was cut off due to length.' : '';
+          return res.status(502).json({ error: 'Failed to parse AI response.' + hint + ' Please try again.' });
+        }
       }
     }
 

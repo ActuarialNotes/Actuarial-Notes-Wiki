@@ -1575,10 +1575,9 @@ input[type="search"]:focus, .search-input:focus {
 .sidebar-tabs__bar {
   display: flex;
   align-items: stretch;
-  border-bottom: 1px solid var(--sb-border);
-  background: var(--bg);
   flex-shrink: 0;
   padding: 0;
+  background: var(--bg);
 }
 
 .sidebar-tabs__tab {
@@ -1587,32 +1586,24 @@ input[type="search"]:focus, .search-input:focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 10px 4px 8px;
+  gap: 2px;
+  padding: 8px 2px 6px;
   border: none;
+  border-bottom: 2px solid transparent;
   background: none;
   cursor: pointer;
   color: var(--text-dim);
-  position: relative;
-  transition: color .15s ease, background .15s ease;
+  transition: color .12s ease, background .12s ease, border-color .12s ease;
   user-select: none;
 }
 .sidebar-tabs__tab:hover {
   color: var(--text);
-  background: var(--sb-hover);
+  background: color-mix(in oklab, var(--sb-bg) 50%, var(--bg));
 }
 .sidebar-tabs__tab.is-active {
   color: var(--brand);
-}
-.sidebar-tabs__tab.is-active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 20%;
-  right: 20%;
-  height: 2px;
-  background: var(--brand);
-  border-radius: 2px 2px 0 0;
+  border-bottom-color: var(--brand);
+  background: var(--sb-bg);
 }
 
 .sidebar-tabs__tab-icon {

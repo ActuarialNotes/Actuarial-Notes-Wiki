@@ -3573,9 +3573,12 @@
       var card = document.createElement('div');
       card.className = 'docproc-panel__term-card';
 
+      var vals = Object.values(entry);
+      var termText = entry.term || entry.name || entry.title || (typeof vals[0] === 'string' ? vals[0] : '');
+
       var name = document.createElement('div');
       name.className = 'docproc-panel__term-name';
-      name.textContent = entry.term || entry.name || '';
+      name.textContent = termText;
       card.appendChild(name);
 
       if (entry.page) {
@@ -3587,7 +3590,7 @@
 
       // Definition — support multi-layered or single
       var defs = entry.definitions || null;
-      var singleDef = entry.definition || entry.description || entry.def || '';
+      var singleDef = entry.definition || entry.description || entry.def || (typeof vals[1] === 'string' ? vals[1] : '');
 
       if (defs && (defs.mathematical || defs.technical || defs.experiential)) {
         // Multi-layered definitions with tabs
@@ -3642,9 +3645,19 @@
      EXAMS TAB
      ============================================================ */
   function renderExamsPanel(container) {
+    // Add Custom Exam button at top
+    var addExamBtn = document.createElement('button');
+    addExamBtn.className = 'sidebar-tabs__btn sidebar-tabs__btn--primary sidebar-tabs__btn--full';
+    addExamBtn.type = 'button';
+    addExamBtn.innerHTML = '<span class="sidebar-tabs__btn-icon">' + SVG_PLUS + '</span> Add Custom Exam';
+    addExamBtn.addEventListener('click', function () {
+      if (typeof window._openCustomExamModal === 'function') window._openCustomExamModal();
+    });
+    container.appendChild(addExamBtn);
+
     // Track selector + progress header
     var headerRow = document.createElement('div');
-    headerRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px';
+    headerRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;margin-top:10px';
 
     var titleRow = document.createElement('div');
     titleRow.className = 'sidebar-tabs__panel-header';
@@ -3801,20 +3814,6 @@
 
     // Custom Exams section
     renderCustomExamsSection(container);
-
-    // Add Custom Exam + Library buttons
-    var btnRow = document.createElement('div');
-    btnRow.style.cssText = 'display:flex;gap:6px;margin-top:10px';
-
-    var addExamBtn = document.createElement('button');
-    addExamBtn.className = 'sidebar-tabs__btn sidebar-tabs__btn--full';
-    addExamBtn.type = 'button';
-    addExamBtn.innerHTML = '<span class="sidebar-tabs__btn-icon">' + SVG_PLUS + '</span> Add Custom Exam';
-    addExamBtn.addEventListener('click', function () {
-      if (typeof window._openCustomExamModal === 'function') window._openCustomExamModal();
-    });
-    btnRow.appendChild(addExamBtn);
-    container.appendChild(btnRow);
   }
 
   function updateExamsProgress() {
@@ -3903,222 +3902,19 @@
   /* ============================================================
      PRACTICE TAB
      ============================================================ */
-  var practiceMode = 'exam-prep';
 
   function renderPracticePanel(container) {
-    var title = document.createElement('div');
-    title.className = 'sidebar-tabs__panel-header';
-    title.innerHTML = '<span class="sidebar-tabs__panel-title">Practice</span>';
-    container.appendChild(title);
-
-    // Mode toggle
-    var toggle = document.createElement('div');
-    toggle.className = 'practice-panel__mode-toggle';
-
-    var examPrepBtn = document.createElement('button');
-    examPrepBtn.className = 'practice-panel__mode-btn';
-    examPrepBtn.type = 'button';
-    examPrepBtn.textContent = 'Exam Prep';
-    if (practiceMode === 'exam-prep') examPrepBtn.classList.add('is-active');
-
-    var workProbBtn = document.createElement('button');
-    workProbBtn.className = 'practice-panel__mode-btn';
-    workProbBtn.type = 'button';
-    workProbBtn.textContent = 'Work Problem';
-    if (practiceMode === 'work-problem') workProbBtn.classList.add('is-active');
-
-    var modeContent = document.createElement('div');
-
-    function renderMode() {
-      modeContent.innerHTML = '';
-      examPrepBtn.classList.toggle('is-active', practiceMode === 'exam-prep');
-      workProbBtn.classList.toggle('is-active', practiceMode === 'work-problem');
-      if (practiceMode === 'exam-prep') {
-        renderExamPrepMode(modeContent);
-      } else {
-        renderWorkProblemMode(modeContent);
-      }
-    }
-
-    examPrepBtn.addEventListener('click', function () {
-      practiceMode = 'exam-prep';
-      renderMode();
-    });
-    workProbBtn.addEventListener('click', function () {
-      practiceMode = 'work-problem';
-      renderMode();
-    });
-
-    toggle.appendChild(examPrepBtn);
-    toggle.appendChild(workProbBtn);
-    container.appendChild(toggle);
-    container.appendChild(modeContent);
-
-    renderMode();
+    var empty = document.createElement('div');
+    empty.className = 'sidebar-tabs__empty';
+    empty.style.paddingTop = '3rem';
+    empty.innerHTML =
+      '<div class="sidebar-tabs__empty-icon">' + SVG_TAB_PRACTICE + '</div>' +
+      '<div class="sidebar-tabs__empty-title">Coming Soon!</div>' +
+      '<div class="sidebar-tabs__empty-desc">Exam prep mode and work problem mode are on the way. Stay tuned.</div>';
+    container.appendChild(empty);
   }
 
-  function renderExamPrepMode(container) {
-    // Stats summary
-    var stats = loadPracticeStats();
-    var statsGrid = document.createElement('div');
-    statsGrid.className = 'practice-panel__stats';
-
-    var totalStat = createStat(String(stats.total), 'Attempted');
-    var correctStat = createStat(String(stats.correct), 'Correct');
-    var pctStat = createStat(stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) + '%' : '—', 'Accuracy');
-    var streakStat = createStat(String(stats.streak), 'Streak');
-
-    statsGrid.appendChild(totalStat);
-    statsGrid.appendChild(correctStat);
-    statsGrid.appendChild(pctStat);
-    statsGrid.appendChild(streakStat);
-    container.appendChild(statsGrid);
-
-    // Exam selector
-    var allExams = PRACTICE_EXAMS.slice();
-    var customExams = (typeof window._getCustomExams === 'function') ? window._getCustomExams() : [];
-    customExams.forEach(function (ex) {
-      allExams.push({ key: 'custom-' + ex.id, name: ex.name, path: null });
-    });
-
-    var examLabel = document.createElement('div');
-    examLabel.style.cssText = 'font-size:0.78rem;color:var(--text-dim);margin-bottom:4px';
-    examLabel.textContent = 'Select exam:';
-    container.appendChild(examLabel);
-
-    var examSelect = document.createElement('select');
-    examSelect.className = 'sidebar-tabs__select';
-    var defaultOpt = document.createElement('option');
-    defaultOpt.value = '';
-    defaultOpt.textContent = 'Choose an exam...';
-    examSelect.appendChild(defaultOpt);
-    allExams.forEach(function (ex) {
-      var opt = document.createElement('option');
-      opt.value = ex.key;
-      opt.textContent = ex.name;
-      examSelect.appendChild(opt);
-    });
-    container.appendChild(examSelect);
-
-    // Concept selector (populated on exam change)
-    var conceptLabel = document.createElement('div');
-    conceptLabel.style.cssText = 'font-size:0.78rem;color:var(--text-dim);margin:8px 0 4px';
-    conceptLabel.textContent = 'Select concept:';
-    container.appendChild(conceptLabel);
-
-    var conceptSelect = document.createElement('select');
-    conceptSelect.className = 'sidebar-tabs__select';
-    conceptSelect.disabled = true;
-    var conceptDefault = document.createElement('option');
-    conceptDefault.value = '';
-    conceptDefault.textContent = 'Choose an exam first...';
-    conceptSelect.appendChild(conceptDefault);
-    container.appendChild(conceptSelect);
-
-    examSelect.addEventListener('change', function () {
-      var examKey = examSelect.value;
-      conceptSelect.innerHTML = '';
-      if (!examKey) {
-        conceptSelect.disabled = true;
-        var defOpt = document.createElement('option');
-        defOpt.value = '';
-        defOpt.textContent = 'Choose an exam first...';
-        conceptSelect.appendChild(defOpt);
-        return;
-      }
-      conceptSelect.disabled = false;
-      var loadOpt = document.createElement('option');
-      loadOpt.value = '';
-      loadOpt.textContent = 'Loading concepts...';
-      conceptSelect.appendChild(loadOpt);
-
-      // Try to load concepts via exposed function
-      if (typeof window._fetchConceptsForExam === 'function') {
-        window._fetchConceptsForExam(examKey, function (concepts) {
-          conceptSelect.innerHTML = '';
-          var allOpt = document.createElement('option');
-          allOpt.value = '';
-          allOpt.textContent = 'All concepts (' + concepts.length + ')';
-          conceptSelect.appendChild(allOpt);
-          concepts.forEach(function (c) {
-            var opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = c;
-            conceptSelect.appendChild(opt);
-          });
-        });
-      } else {
-        conceptSelect.innerHTML = '';
-        var na = document.createElement('option');
-        na.value = '';
-        na.textContent = 'No concepts available';
-        conceptSelect.appendChild(na);
-      }
-    });
-
-    // Start Quiz button
-    var quizBtn = document.createElement('button');
-    quizBtn.className = 'sidebar-tabs__btn sidebar-tabs__btn--primary sidebar-tabs__btn--full';
-    quizBtn.type = 'button';
-    quizBtn.textContent = 'Start Quiz';
-    quizBtn.style.marginTop = '12px';
-    quizBtn.addEventListener('click', function () {
-      var examKey = examSelect.value;
-      var concept = conceptSelect.value;
-      if (!examKey) { alert('Please select an exam first.'); return; }
-      if (typeof window._openQuizForConcept === 'function') {
-        window._openQuizForConcept(examKey, concept);
-      }
-    });
-    container.appendChild(quizBtn);
-  }
-
-  function renderWorkProblemMode(container) {
-    var desc = document.createElement('div');
-    desc.style.cssText = 'font-size:0.82rem;color:var(--text-dim);margin-bottom:10px;line-height:1.5';
-    desc.textContent = 'Describe a real-world actuarial problem or scenario. AI-powered assistance will draw on your Library terms and definitions to help you work through it.';
-    container.appendChild(desc);
-
-    var textarea = document.createElement('textarea');
-    textarea.className = 'practice-panel__textarea';
-    textarea.placeholder = 'Describe your problem or scenario...';
-    container.appendChild(textarea);
-
-    var helpBtn = document.createElement('button');
-    helpBtn.className = 'sidebar-tabs__btn sidebar-tabs__btn--primary sidebar-tabs__btn--full';
-    helpBtn.type = 'button';
-    helpBtn.textContent = 'Get Help';
-    helpBtn.addEventListener('click', function () {
-      var text = textarea.value.trim();
-      if (!text) { alert('Please describe a problem first.'); return; }
-      if (typeof window._startWorkProblem === 'function') {
-        window._startWorkProblem(text);
-      }
-    });
-    container.appendChild(helpBtn);
-  }
-
-  function createStat(value, label) {
-    var el = document.createElement('div');
-    el.className = 'practice-panel__stat';
-    var v = document.createElement('div');
-    v.className = 'practice-panel__stat-value';
-    v.textContent = value;
-    var l = document.createElement('div');
-    l.className = 'practice-panel__stat-label';
-    l.textContent = label;
-    el.appendChild(v);
-    el.appendChild(l);
-    return el;
-  }
-
-  function loadPracticeStats() {
-    try {
-      var raw = localStorage.getItem('actuarial-notes-practice-stats');
-      if (raw) return JSON.parse(raw);
-    } catch (e) {}
-    return { total: 0, correct: 0, streak: 0 };
-  }
+  /* (Practice sub-functions removed — coming soon placeholder only) */
 
   /* ============================================================
      PERSISTENT EXAM NAV TABS (right side of viewport)

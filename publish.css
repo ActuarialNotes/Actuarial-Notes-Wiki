@@ -1571,13 +1571,14 @@ input[type="search"]:focus, .search-input:focus {
   overflow: hidden;
 }
 
-/* ---- Tab bar ---- */
+/* ---- Tab bar (GitHub-style) ---- */
 .sidebar-tabs__bar {
   display: flex;
   align-items: stretch;
   flex-shrink: 0;
   padding: 0;
-  background: var(--bg);
+  background: transparent;
+  border-bottom: 1px solid var(--sb-border);
 }
 
 .sidebar-tabs__tab {
@@ -1587,23 +1588,23 @@ input[type="search"]:focus, .search-input:focus {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 8px 2px 6px;
+  padding: 8px 2px 8px;
   border: none;
   border-bottom: 2px solid transparent;
-  background: none;
+  margin-bottom: -1px;
+  background: transparent;
   cursor: pointer;
   color: var(--text-dim);
-  transition: color .12s ease, background .12s ease, border-color .12s ease;
+  transition: color .15s ease, border-color .15s ease;
   user-select: none;
 }
 .sidebar-tabs__tab:hover {
   color: var(--text);
-  background: color-mix(in oklab, var(--sb-bg) 50%, var(--bg));
 }
 .sidebar-tabs__tab.is-active {
-  color: var(--brand);
+  color: var(--text);
+  font-weight: 600;
   border-bottom-color: var(--brand);
-  background: var(--sb-bg);
 }
 
 .sidebar-tabs__tab-icon {

@@ -4347,7 +4347,7 @@ var SoundFX = (function () {
 
   var DEFAULT_LIBRARY_TOC_PROMPT = 'You are a document structure extraction tool. Your job is to reproduce the EXACT table of contents of this document.\n\nThe document text preserves line breaks and includes heading markers:\n- [H1] = large heading (chapter-level)\n- [H2] = medium heading (section-level)\n- Lines without markers are body text\n- Page boundaries are marked with "--- Page N ---"\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "title": "Document Title",\n  "author": "Author Name or empty string if unknown",\n  "toc": [\n    { "title": "Chapter 1: Introduction to Ratemaking", "level": 1, "page": 1 },\n    { "title": "1.1 The Ratemaking Process", "level": 2, "page": 2 },\n    { "title": "1.2 Basic Terminology", "level": 2, "page": 5 },\n    { "title": "Chapter 2: Rating Manuals", "level": 1, "page": 15 },\n    { "title": "2.1 Manual Rate Components", "level": 2, "page": 16 },\n    { "title": "Appendix A: Formulas", "level": 1, "page": 200 }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- Use [H1] and [H2] markers to identify chapter and section headings throughout the document\n- If the document contains a Table of Contents page, reproduce it EXACTLY as-is with all entries\n- List EVERY individual chapter AND every numbered subsection (e.g., 1.1, 1.2, 2.1, 2.2, 2.3, etc.)\n- Do NOT group or combine multiple chapters into summary categories\n- Do NOT invent your own section titles — use the exact titles from the document (without the [H1]/[H2] markers)\n- level 1 = chapter (e.g., "Chapter 5"), level 2 = section (e.g., "5.1", "5.2"), level 3 = subsection (e.g., "5.1.1")\n- Use a FLAT list — no nested children objects\n- Include ALL appendices, exhibits, and back matter as separate entries\n- A typical textbook should have 10-20 chapters EACH with multiple numbered subsections — expect 50-200+ total entries\n- page is the page number from the nearest "--- Page N ---" marker, or null';
 
-  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are a technical glossary extraction tool. Extract specific technical TERMS and their DEFINITIONS from this document.\n\nThe document text preserves line breaks and includes formatting markers:\n- [H1] / [H2] = heading markers (skip these as terms — they are section titles)\n- Page boundaries are marked with "--- Page N ---"\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Chain Ladder Method",\n      "definition": "A reserving technique that uses historical loss development patterns to project ultimate losses by applying age-to-age development factors.",\n      "page": null\n    },\n    {\n      "term": "IBNR",\n      "definition": "Incurred But Not Reported. Reserves set aside for claims that have occurred but have not yet been reported to the insurer.",\n      "page": null\n    },\n    {\n      "term": "Loss Development Factor",\n      "definition": "A multiplicative factor applied to losses at a given maturity to project them to ultimate value. Calculated as the ratio of losses at successive evaluations.",\n      "page": null\n    }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- A "term" is a specific METHOD, FORMULA, RATIO, ACRONYM, METRIC, or TECHNICAL CONCEPT — a named thing with a definition\n- Good examples of terms: "Bornhuetter-Ferguson Method", "Loss Ratio", "Credibility Weight", "Pure Premium", "Expense Ratio", "Combined Ratio"\n- BAD examples (DO NOT include these): chapter titles like "Introduction to Ratemaking", section headings marked with [H1]/[H2], topic descriptions like "Premium Analysis and Adjustments"\n- Every entry MUST have both a "term" (short name, 1-5 words) and a "definition" (1-3 sentence explanation)\n- Extract terms from the ENTIRE document, not just the beginning\n- Include: named methods, formulas, statistical techniques, ratios, acronyms, regulatory terms, and defined technical vocabulary\n- For a textbook of 30+ pages, extract at LEAST 50 terms — aim for 100-200 terms for comprehensive textbooks\n- Go through the document systematically section by section to ensure you capture terms from ALL parts of the document, not just the beginning\n- page is the page number from the nearest "--- Page N ---" marker, or null';
+  var DEFAULT_LIBRARY_GLOSSARY_PROMPT = 'You are a technical glossary extraction tool. Extract specific technical TERMS and their DEFINITIONS from this document.\n\nThe document text preserves line breaks and includes formatting markers:\n- [H1] / [H2] = heading markers (skip these as terms — they are section titles)\n- Page boundaries are marked with "--- Page N ---"\n\nReturn ONLY valid JSON (no markdown, no code fences):\n{\n  "glossary": [\n    {\n      "term": "Chain Ladder Method",\n      "definition": "A reserving technique that uses historical loss development patterns to project ultimate losses by applying age-to-age development factors.",\n      "page": null\n    },\n    {\n      "term": "IBNR",\n      "definition": "Incurred But Not Reported. Reserves set aside for claims that have occurred but have not yet been reported to the insurer.",\n      "page": null\n    },\n    {\n      "term": "Loss Development Factor",\n      "definition": "A multiplicative factor applied to losses at a given maturity to project them to ultimate value. Calculated as the ratio of losses at successive evaluations.",\n      "page": null\n    }\n  ]\n}\n\nCRITICAL REQUIREMENTS:\n- A "term" is a specific METHOD, FORMULA, RATIO, ACRONYM, METRIC, or TECHNICAL CONCEPT — a named thing with a definition\n- Good examples of terms: "Bornhuetter-Ferguson Method", "Loss Ratio", "Credibility Weight", "Pure Premium", "Expense Ratio", "Combined Ratio"\n- BAD examples (DO NOT include these): chapter titles like "Introduction to Ratemaking", section headings marked with [H1]/[H2], topic descriptions like "Premium Analysis and Adjustments"\n- Every entry MUST have both a "term" (short name, 1-5 words) and a "definition" (1-3 sentence explanation)\n- Extract terms from the ENTIRE document, not just the beginning\n- Include: named methods, formulas, statistical techniques, ratios, acronyms, regulatory terms, and defined technical vocabulary\n- Extract the 30-50 MOST IMPORTANT terms from this portion of the document\n- Prioritize: named methods and formulas first, then key ratios and metrics, then acronyms and regulatory terms\n- Keep definitions concise (1-2 sentences max) to stay within output limits\n- page is the page number from the nearest "--- Page N ---" marker, or null';
 
   /* ---- State ---- */
   var LIBRARY_STORAGE_KEY = 'actuarial-notes-doc-library';
@@ -5766,14 +5766,41 @@ var SoundFX = (function () {
       }
     }
 
-    // AI extraction on full document with structured text
-    var structuredText = '';
-    for (var i = 0; i < pages.length; i++) {
-      structuredText += '\n--- Page ' + pages[i].pageNum + ' ---\n';
-      structuredText += reconstructPageText(pages[i], bodyFontSize);
+    // AI extraction using sampled content (not full sequential chunks)
+    // Strategy: concentrate term-dense regions into 1-2 API calls
+    var sampledText = '';
+
+    // Part A: First 15 pages (introductory definitions, notation sections)
+    var introPages = Math.min(15, pages.length);
+    for (var i = 0; i < introPages; i++) {
+      sampledText += '\n--- Page ' + pages[i].pageNum + ' ---\n';
+      sampledText += reconstructPageText(pages[i], bodyFontSize);
     }
 
-    var chunks = splitTextIntoChunks(structuredText, 85000, 3000);
+    // Part B: Sample heading + first paragraph from each chapter in the middle
+    // (terms are typically defined when first introduced under a heading)
+    for (var m = introPages; m < Math.floor(pages.length * 0.85); m++) {
+      var mLines = pages[m].lines;
+      var hasHeading = false;
+      for (var hl = 0; hl < mLines.length; hl++) {
+        if (mLines[hl].fontSize > bodyFontSize * 1.15) { hasHeading = true; break; }
+      }
+      if (hasHeading) {
+        sampledText += '\n--- Page ' + pages[m].pageNum + ' ---\n';
+        sampledText += reconstructPageText(pages[m], bodyFontSize);
+      }
+    }
+
+    // Part C: Last 15% of pages (glossary, appendix, back matter)
+    var backStart = Math.max(introPages, Math.floor(pages.length * 0.85));
+    for (var b = backStart; b < pages.length; b++) {
+      sampledText += '\n--- Page ' + pages[b].pageNum + ' ---\n';
+      sampledText += reconstructPageText(pages[b], bodyFontSize);
+    }
+
+    console.log('[Library] Glossary sampled text: ' + Math.round(sampledText.length / 1000) + 'K chars from ' + pages.length + ' pages');
+
+    var chunks = splitTextIntoChunks(sampledText, 90000, 3000);
     for (var ci = 0; ci < chunks.length; ci++) {
       var chunkLabel = chunks.length > 1 ? 'Document (part ' + (ci + 1) + ' of ' + chunks.length + '):\n' : 'Document:\n';
       var glossaryResult = await callClaudeApi(chunkLabel + chunks[ci], DEFAULT_LIBRARY_GLOSSARY_PROMPT);

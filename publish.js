@@ -3408,21 +3408,41 @@
       meta.className = 'library-panel__doc-meta';
       var tocCount = (doc.toc || []).length;
       var glossaryCount = (doc.glossary || []).length;
-      meta.textContent = (doc.author ? doc.author + ' · ' : '') + tocCount + ' sections · ' + glossaryCount + ' terms';
+      var isSourceOnly = !doc.pdfText && tocCount === 0 && glossaryCount === 0;
+
+      if (isSourceOnly) {
+        // Source-only document: show author, year, type
+        var metaParts = [];
+        if (doc.author) metaParts.push(doc.author);
+        if (doc.year) metaParts.push(String(doc.year));
+        if (doc.sourceType) metaParts.push(doc.sourceType.charAt(0).toUpperCase() + doc.sourceType.slice(1));
+        meta.textContent = metaParts.length > 0 ? metaParts.join(' · ') : 'Source reference';
+      } else {
+        meta.textContent = (doc.author ? doc.author + ' · ' : '') + tocCount + ' sections · ' + glossaryCount + ' terms';
+      }
 
       var badges = document.createElement('div');
       badges.className = 'library-panel__doc-badges';
-      if (tocCount > 0) {
-        var tocBadge = document.createElement('span');
-        tocBadge.className = 'library-panel__badge library-panel__badge--active';
-        tocBadge.textContent = 'TOC';
-        badges.appendChild(tocBadge);
-      }
-      if (glossaryCount > 0) {
-        var termBadge = document.createElement('span');
-        termBadge.className = 'library-panel__badge library-panel__badge--active';
-        termBadge.textContent = 'Terms';
-        badges.appendChild(termBadge);
+      if (isSourceOnly) {
+        if (doc.sourceType) {
+          var typeBadge = document.createElement('span');
+          typeBadge.className = 'library-panel__badge library-panel__badge--active';
+          typeBadge.textContent = doc.sourceType.charAt(0).toUpperCase() + doc.sourceType.slice(1);
+          badges.appendChild(typeBadge);
+        }
+      } else {
+        if (tocCount > 0) {
+          var tocBadge = document.createElement('span');
+          tocBadge.className = 'library-panel__badge library-panel__badge--active';
+          tocBadge.textContent = 'TOC';
+          badges.appendChild(tocBadge);
+        }
+        if (glossaryCount > 0) {
+          var termBadge = document.createElement('span');
+          termBadge.className = 'library-panel__badge library-panel__badge--active';
+          termBadge.textContent = 'Terms';
+          badges.appendChild(termBadge);
+        }
       }
 
       info.appendChild(docTitle);
@@ -4697,9 +4717,9 @@ var SoundFX = (function () {
 
   var DEFAULT_OBJECTIVES_PROMPT = 'You are an expert actuarial exam content analyst. Analyze the provided document and extract the learning objectives.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview of the exam/document",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "weight": 25,\n      "concepts": [\n        {\n          "name": "Concept Name",\n          "description": "Clear 1-3 sentence description of this concept"\n        }\n      ]\n    }\n  ]\n}\n\nRules:\n- weight is a percentage (number) if found in the document, otherwise null\n- Each objective should have 2-8 relevant concepts\n- Extract ALL learning objectives you can identify\n- Be thorough but accurate — only include what the document supports\n- CRITICAL: concept "name" fields must use the EXACT noun phrases and terminology from the source document verbatim — do not paraphrase, rename, or generalize them\n- Group concepts logically under each objective so that closely related topics appear together\n- concept "description" should be a concise 1-2 sentence explanation of what the student needs to do or understand for that concept';
 
-  var DEFAULT_SOURCES_PROMPT = 'You are an expert actuarial exam content analyst. Analyze the provided document and extract the required sources and references.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "sources": [\n    {\n      "title": "Source Title",\n      "author": "Author Name",\n      "chapters": "Relevant chapters/sections",\n      "type": "textbook"\n    }\n  ]\n}\n\nRules:\n- Sources type should be one of: textbook, paper, manual, online, syllabus\n- Extract ALL required readings, textbooks, and references mentioned\n- Include chapter/section ranges where specified';
+  var DEFAULT_SOURCES_PROMPT = 'You are an expert actuarial exam content analyst. Analyze the provided document and extract the required sources and references.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "sources": [\n    {\n      "title": "Source Title",\n      "author": "Author Name",\n      "year": "Year published (e.g. 2020) or null if unknown",\n      "chapters": "Relevant chapters/sections",\n      "type": "textbook"\n    }\n  ]\n}\n\nRules:\n- Sources type should be one of: textbook, paper, manual, online, syllabus\n- Extract ALL required readings, textbooks, and references mentioned\n- Include chapter/section ranges where specified\n- For year, extract the publication year or edition year if mentioned; use null if not found';
 
-  var DEFAULT_FEEDBACK_PROMPT = 'You are an expert actuarial exam content analyst. The user has reviewed the following extracted exam content and provided feedback. Update the content based on their feedback and return the complete updated JSON.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "weight": 25,\n      "concepts": [\n        {\n          "name": "Concept Name",\n          "description": "Description"\n        }\n      ]\n    }\n  ],\n  "sources": [\n    {\n      "title": "Source Title",\n      "author": "Author Name",\n      "chapters": "Relevant chapters",\n      "type": "textbook"\n    }\n  ]\n}';
+  var DEFAULT_FEEDBACK_PROMPT = 'You are an expert actuarial exam content analyst. The user has reviewed the following extracted exam content and provided feedback. Update the content based on their feedback and return the complete updated JSON.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "weight": 25,\n      "concepts": [\n        {\n          "name": "Concept Name",\n          "description": "Description"\n        }\n      ]\n    }\n  ],\n  "sources": [\n    {\n      "title": "Source Title",\n      "author": "Author Name",\n      "year": "Year published or null",\n      "chapters": "Relevant chapters",\n      "type": "textbook"\n    }\n  ]\n}';
 
   var DEFAULT_CONCEPTS_PROMPT = 'You are an expert actuarial exam content analyst. Given the following document text and a list of concept names, find detailed definitions and explanations for each concept.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "conceptDetails": {\n    "Concept Name": "A thorough 2-5 sentence definition and explanation of this concept as described in the source document, including key formulas, relationships, or examples where relevant."\n  }\n}\n\nRules:\n- Use the EXACT concept names as keys\n- Draw definitions directly from the source document content\n- Include mathematical formulas or relationships if mentioned\n- If a concept is not found in the document, provide a brief general definition and note it was not explicitly covered\n- Be thorough but concise';
 
@@ -6445,7 +6465,8 @@ var SoundFX = (function () {
         row.style.cssText = 'padding:6px 8px;font-size:0.85rem;border-bottom:1px solid var(--muted,#eee)';
         row.innerHTML = '<strong>' + escHtml(src.title) + '</strong>';
         if (src.author) row.innerHTML += ' — ' + escHtml(src.author);
-        if (src.chapters) row.innerHTML += ' <span style="opacity:0.6">(Ch. ' + escHtml(src.chapters) + ')</span>';
+        if (src.year) row.innerHTML += ' <span style="opacity:0.6">(' + escHtml(String(src.year)) + ')</span>';
+        if (src.chapters) row.innerHTML += ' <span style="opacity:0.6">Ch. ' + escHtml(src.chapters) + '</span>';
         previewSection.appendChild(row);
       });
     }
@@ -6532,6 +6553,7 @@ var SoundFX = (function () {
   }
 
   function saveExamFromWorkflow() {
+    var examId;
     if (editingExamId) {
       var idx = customExams.findIndex(function (ex) { return ex.id === editingExamId; });
       if (idx !== -1) {
@@ -6541,10 +6563,12 @@ var SoundFX = (function () {
         customExams[idx].objectives = workflowData.objectives;
         customExams[idx].sources = workflowData.sources;
         customExams[idx].updatedAt = new Date().toISOString();
+        examId = editingExamId;
       }
     } else {
+      examId = 'ce_' + Date.now();
       customExams.push({
-        id: 'ce_' + Date.now(),
+        id: examId,
         name: workflowData.examTitle,
         description: workflowData.examDescription || '',
         color: workflowData.color || '#2563eb',
@@ -6557,7 +6581,39 @@ var SoundFX = (function () {
       });
     }
     saveExams();
+    addSourcesToLibrary(workflowData.sources || [], examId);
     renderMyExams();
+  }
+
+  /** Add exam sources to the document library (skip duplicates by title). */
+  function addSourcesToLibrary(sources, examId) {
+    if (!sources || sources.length === 0) return;
+    var added = false;
+    sources.forEach(function (src, i) {
+      if (!src.title) return;
+      // Skip if a library doc with the same title already exists
+      var titleLower = src.title.toLowerCase().trim();
+      var exists = libraryDocs.some(function (doc) {
+        return (doc.title || '').toLowerCase().trim() === titleLower;
+      });
+      if (exists) return;
+
+      libraryDocs.push({
+        id: 'lib_' + Date.now() + '_' + i,
+        title: src.title,
+        author: src.author || '',
+        year: src.year || null,
+        sourceType: src.type || '',
+        chapters: src.chapters || '',
+        fromExamId: examId || null,
+        toc: [],
+        glossary: [],
+        pdfText: '',
+        uploadedAt: Date.now()
+      });
+      added = true;
+    });
+    if (added) saveLibrary();
   }
 
   /* ---- Step 5: Complete ---- */
@@ -7367,6 +7423,121 @@ var SoundFX = (function () {
     showInContentArea(viewer);
   }
 
+  /* ---- Source-only library document detail page ---- */
+  function renderSourceOnlyDocPage(container, doc) {
+    var color = getDocColor(doc.id);
+
+    // Cover + info layout (mirrors renderSourcePage)
+    var infoLayout = document.createElement('div');
+    infoLayout.style.cssText = 'display:flex;gap:1.5rem;align-items:flex-start;margin-bottom:2rem';
+
+    // Cover image area
+    var coverWrap = document.createElement('div');
+    coverWrap.style.flexShrink = '0';
+
+    var initials = getDocInitials(doc.title);
+    var placeholder = document.createElement('div');
+    placeholder.style.cssText = 'width:120px;height:160px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,0.15)';
+    placeholder.style.background = color;
+    placeholder.textContent = initials;
+
+    var coverImg = document.createElement('img');
+    coverImg.style.cssText = 'display:none;width:120px;height:auto;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.2)';
+
+    coverWrap.appendChild(placeholder);
+    coverWrap.appendChild(coverImg);
+
+    // Fetch cover from Open Library
+    var searchQ = encodeURIComponent((doc.title || '') + ' ' + (doc.author || ''));
+    fetch('https://openlibrary.org/search.json?q=' + searchQ + '&limit=1&fields=cover_i')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var coverId = data.docs && data.docs[0] && data.docs[0].cover_i;
+        if (coverId) {
+          coverImg.src = 'https://covers.openlibrary.org/b/id/' + coverId + '-M.jpg';
+          coverImg.onload = function () { coverImg.style.display = 'block'; placeholder.style.display = 'none'; };
+        }
+      })
+      .catch(function () { /* keep placeholder */ });
+
+    // Right side info
+    var infoRight = document.createElement('div');
+    infoRight.style.flex = '1';
+
+    var titleEl = document.createElement('h1');
+    titleEl.style.color = color;
+    titleEl.textContent = doc.title || 'Unknown Title';
+    infoRight.appendChild(titleEl);
+
+    if (doc.author) {
+      var authorEl = document.createElement('p');
+      authorEl.style.opacity = '0.7';
+      authorEl.textContent = 'By ' + doc.author;
+      infoRight.appendChild(authorEl);
+    }
+    if (doc.chapters) {
+      var chapEl = document.createElement('p');
+      chapEl.innerHTML = '<strong>Chapters:</strong> ' + escHtml(doc.chapters);
+      infoRight.appendChild(chapEl);
+    }
+    if (doc.sourceType) {
+      var typeEl = document.createElement('p');
+      typeEl.innerHTML = '<strong>Type:</strong> ' + escHtml(doc.sourceType);
+      infoRight.appendChild(typeEl);
+    }
+    if (doc.year) {
+      var yearEl = document.createElement('p');
+      yearEl.innerHTML = '<strong>Year Published:</strong> ' + escHtml(String(doc.year));
+      infoRight.appendChild(yearEl);
+    }
+
+    infoLayout.appendChild(coverWrap);
+    infoLayout.appendChild(infoRight);
+    container.appendChild(infoLayout);
+
+    // Find This Resource links
+    var linksHeading = document.createElement('h3');
+    linksHeading.textContent = 'Find This Resource';
+    container.appendChild(linksHeading);
+
+    var linksList = document.createElement('ul');
+    var searchLinks = [
+      { label: 'Search on Google Books', url: 'https://books.google.com/books?q=' + searchQ },
+      { label: 'Search online', url: 'https://www.google.com/search?q=' + searchQ }
+    ];
+    if (doc.sourceType === 'manual' || doc.sourceType === 'syllabus') {
+      searchLinks.push({ label: 'SOA study materials', url: 'https://www.soa.org/education/exam-req/' });
+      searchLinks.push({ label: 'CAS study materials', url: 'https://www.casact.org/exam/study-tools' });
+    }
+    searchLinks.forEach(function (link) {
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = link.url;
+      a.textContent = link.label;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.style.color = color;
+      li.appendChild(a);
+      linksList.appendChild(li);
+    });
+    container.appendChild(linksList);
+
+    // Link to source exam if available
+    if (doc.fromExamId) {
+      var exam = customExams.find(function (ex) { return ex.id === doc.fromExamId; });
+      if (exam) {
+        var examLink = document.createElement('p');
+        examLink.style.cssText = 'margin-top:1.5rem;font-size:0.9rem;opacity:0.7';
+        examLink.innerHTML = 'Source: <a href="#" style="color:' + (exam.color || color) + '">' + escHtml(exam.name) + '</a>';
+        examLink.querySelector('a').addEventListener('click', function (e) {
+          e.preventDefault();
+          renderExamViewer(doc.fromExamId);
+        });
+        container.appendChild(examLink);
+      }
+    }
+  }
+
   /* ---- Library document detail page ---- */
   function renderLibraryDocPage(docId) {
     var doc = libraryDocs.find(function (d) { return d.id === docId; });
@@ -7407,6 +7578,16 @@ var SoundFX = (function () {
     toolbar.appendChild(toolbarActions);
 
     var contentWrap = document.createElement('div');
+
+    // Source-only document: show rich metadata page instead of TOC/Glossary
+    var isSourceOnly = !doc.pdfText && (doc.toc || []).length === 0 && (doc.glossary || []).length === 0;
+    if (isSourceOnly) {
+      renderSourceOnlyDocPage(contentWrap, doc);
+      viewer.appendChild(toolbar);
+      viewer.appendChild(contentWrap);
+      showInContentArea(viewer);
+      return;
+    }
 
     var titleEl = document.createElement('h1');
     titleEl.style.cssText = 'margin-bottom:0.25rem';
@@ -8192,6 +8373,11 @@ var SoundFX = (function () {
       var typeEl = document.createElement('p');
       typeEl.innerHTML = '<strong>Type:</strong> ' + escHtml(src.type);
       infoRight.appendChild(typeEl);
+    }
+    if (src.year) {
+      var yearEl = document.createElement('p');
+      yearEl.innerHTML = '<strong>Year Published:</strong> ' + escHtml(String(src.year));
+      infoRight.appendChild(yearEl);
     }
 
     infoLayout.appendChild(coverWrap);

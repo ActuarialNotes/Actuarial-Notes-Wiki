@@ -1773,6 +1773,55 @@ input[type="search"]:focus, .search-input:focus {
   color: var(--text);
 }
 
+/* Track switcher (segmented control) */
+.track-switcher {
+  display: flex;
+  position: relative;
+  background: color-mix(in oklab, var(--muted) 40%, var(--bg));
+  border: 1px solid var(--sb-border);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.track-switcher__btn {
+  flex: 1;
+  padding: 6px 8px;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  position: relative;
+  z-index: 1;
+  transition: color 0.25s ease, transform 0.15s ease;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+.track-switcher__btn:hover {
+  color: var(--text);
+}
+.track-switcher__btn.is-active {
+  color: #fff;
+}
+.track-switcher__btn:active {
+  transform: scale(0.96);
+}
+.track-switcher__highlight {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  border-radius: 8px;
+  background: var(--brand);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
 /* Progress bar */
 .sidebar-tabs__progress-bar {
   height: 4px;
@@ -1934,7 +1983,7 @@ input[type="search"]:focus, .search-input:focus {
   opacity: .5;
 }
 .exams-panel__item[data-status="in_progress"] .exams-panel__status {
-  color: var(--warning);
+  color: var(--exam-accent, var(--warning));
   opacity: 1;
 }
 .exams-panel__item[data-status="completed"] .exams-panel__status {
@@ -1988,10 +2037,10 @@ a.exams-panel__name:hover {
 [data-exam-color="slate"]:not([data-status="in_progress"]) > a.exams-panel__name { color: #475569; }
 [data-exam-color]:not([data-status="in_progress"]) > a.exams-panel__name:hover { filter: brightness(1.15); }
 
-/* In-progress pill style */
+/* In-progress pill style — uses --exam-accent set inline from JS */
 .exams-panel__item[data-status="in_progress"] .exams-panel__name,
 .exams-panel__item[data-status="in_progress"] a.exams-panel__name {
-  background: var(--brand);
+  background: var(--exam-accent, var(--brand));
   color: #fff !important;
   padding: 2px 8px;
   border-radius: 5px;
@@ -2004,25 +2053,6 @@ a.exams-panel__name:hover {
   color: #fff !important;
   filter: brightness(1.1);
 }
-/* Per-exam color variants for in-progress pills */
-.exams-panel__item[data-status="in_progress"][data-exam-color="sky"] .exams-panel__name { background: #0284c7; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="blue"] .exams-panel__name { background: #2563eb; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="indigo"] .exams-panel__name { background: #4f46e5; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="violet"] .exams-panel__name { background: #7c3aed; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="purple"] .exams-panel__name { background: #9333ea; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="fuchsia"] .exams-panel__name { background: #c026d3; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="pink"] .exams-panel__name { background: #db2777; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="rose"] .exams-panel__name { background: #e11d48; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="red"] .exams-panel__name { background: #dc2626; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="orange"] .exams-panel__name { background: #ea580c; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="amber"] .exams-panel__name { background: #d97706; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="yellow"] .exams-panel__name { background: #ca8a04; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="lime"] .exams-panel__name { background: #65a30d; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="green"] .exams-panel__name { background: #16a34a; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="emerald"] .exams-panel__name { background: #059669; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="teal"] .exams-panel__name { background: #0d9488; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="cyan"] .exams-panel__name { background: #0891b2; }
-.exams-panel__item[data-status="in_progress"][data-exam-color="slate"] .exams-panel__name { background: #475569; }
 
 /* Elective info note */
 .exams-panel__info-note {
@@ -3589,7 +3619,7 @@ figure.right figcaption,
   display: block;
 }
 
-/* ── Mobile: full-screen overlay when open ── */
+/* ── Mobile: slide-in panel from right ── */
 @media (max-width: 540px) {
   .exam-nav__sticky {
     height: 48px;
@@ -3601,18 +3631,20 @@ figure.right figcaption,
     height: 100%;
     padding: 0 14px;
   }
-  /* When open on mobile: full-screen overlay */
+  /* Panel: starts off-screen right, slides in */
   .exam-nav__sticky.is-open {
-    left: 0;
+    left: auto;
+    right: 0;
     bottom: 0;
-    width: 100%;
-    max-width: none;
-    height: auto;
+    width: 85vw;
+    max-width: 380px;
+    height: 100%;
     border-radius: 0;
-    border-left: none;
+    border-left: 1px solid color-mix(in oklab, var(--nav-color) 15%, var(--muted));
     border-bottom: none;
     overflow: hidden;
-    box-shadow: none;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.25);
+    animation: slideInFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
   }
   .exam-nav__sticky.is-open .exam-nav__sticky-btn {
     width: 100%;
@@ -3627,6 +3659,11 @@ figure.right figcaption,
     -webkit-overflow-scrolling: touch;
     padding: 12px 16px 24px;
   }
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
 
 /* Example callout tinting on exam pages */
@@ -4035,32 +4072,43 @@ figure.right figcaption,
   gap: 6px;
 }
 
-/* ── Mobile adjustments ── */
+/* ── Mobile: horizontal scroll instead of stacking ── */
 @media (max-width: 540px) {
   .persistent-exam-navs {
     right: 0;
+    left: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 6px;
+    padding: 0 8px;
+    scroll-snap-type: x mandatory;
   }
+  .persistent-exam-navs::-webkit-scrollbar { display: none; }
 
   .persistent-exam-tab {
     font-size: 0.75rem;
     padding: 6px 12px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
   }
 
+  /* Override stacking on mobile — all tabs inline & scrollable */
   .persistent-exam-navs.is-stacked:not(.is-expanded) {
     right: 0;
+    left: 0;
+    min-width: unset;
+  }
+  .persistent-exam-navs.is-stacked:not(.is-expanded) .persistent-exam-tab {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    opacity: 1;
   }
 }
 
 /* ── High-contrast mode ── */
-body.high-contrast .persistent-exam-tab {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-body.high-contrast .persistent-exam-tab:hover {
-  filter: none;
-  color: var(--bg) !important;
-}
 
 
 
@@ -5034,395 +5082,6 @@ h6 a {
 /* ── Print: hide ─────────────────────────────────────── */
 @media print {
   .concept-nav { display: none !important; }
-}
-
-
-/* ===========================================================
-   HIGH CONTRAST MODE
-   Activated by adding .high-contrast to <body>.
-   Strips colours to pure black-on-white (light) or white-on-black (dark).
-   =========================================================== */
-
-/* ── High-contrast toggle (icon + pill switch, beside dark mode) ── */
-
-/* Wrapper — sits inline inside the dark mode toggle row */
-.hc-toggle-row {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 8px;
-  cursor: pointer;
-  user-select: none;
-  flex-shrink: 0;
-}
-
-/* Contrast icon — inside the track, opposite the thumb */
-.hc-toggle-row__icon {
-  position: absolute;
-  top: 50%;
-  right: 4px;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-dim);
-  opacity: 0.7;
-  transition: opacity 0.15s ease, color 0.15s ease, right 0.2s ease, left 0.2s ease;
-  pointer-events: none;
-}
-.hc-toggle-row__icon svg { width: 15px; height: 15px; }
-.hc-toggle-row:hover .hc-toggle-row__icon { opacity: 1; }
-.high-contrast .hc-toggle-row__icon {
-  opacity: 1;
-  color: var(--text);
-  right: auto;
-  left: 4px;
-}
-
-/* Pill track — sized to match Obsidian's native theme toggle */
-.hc-toggle-row__track {
-  position: relative;
-  width: 48px;
-  height: 22px;
-  background: var(--muted);
-  border-radius: 22px;
-  transition: background 0.2s ease;
-  flex-shrink: 0;
-}
-
-/* Thumb / knob */
-.hc-toggle-row__thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
-  background: var(--text-dim);
-  border-radius: 50%;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-/* ── Active (on) state ── */
-.high-contrast .hc-toggle-row__track {
-  background: #555;
-}
-.high-contrast .hc-toggle-row__thumb {
-  transform: translateX(26px);
-  background: #fff;
-}
-
-/* Dark HC: ensure knob contrasts against the track */
-body.high-contrast:not(.theme-light) .hc-toggle-row__track {
-  background: #666;
-}
-body.high-contrast:not(.theme-light) .hc-toggle-row__thumb {
-  background: #fff;
-}
-
-/* Light HC */
-body.high-contrast.theme-light .hc-toggle-row__track {
-  background: #999;
-}
-body.high-contrast.theme-light .hc-toggle-row__thumb {
-  background: #000;
-}
-
-/* ── Mute / sound toggle button ─────────────────────── */
-
-.mute-toggle-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 8px;
-  padding: 0;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text-dim);
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: color 0.15s ease, background 0.15s ease;
-}
-.mute-toggle-btn svg {
-  width: 18px;
-  height: 18px;
-}
-.mute-toggle-btn:hover {
-  color: var(--text);
-  background: var(--muted);
-}
-.mute-toggle-btn:active {
-  opacity: 0.7;
-}
-
-/* High-contrast overrides */
-.high-contrast .mute-toggle-btn {
-  color: var(--text);
-}
-.high-contrast .mute-toggle-btn:hover {
-  background: var(--muted);
-}
-
-/* ── Dark + high contrast ────────────────────────────── */
-body.high-contrast:not(.theme-light),
-.theme-dark body.high-contrast {
-  --bg: #000000;
-  --bg-elev: #000000;
-  --text: #ffffff;
-  --text-dim: #ffffff;
-  --muted: #333333;
-  --brand: #ffffff;
-  --brand-hover: #ffffff;
-  --brand-visited: #ffffff;
-  --brand-ext: #ffffff;
-  --brand-ext-hover: #ffffff;
-  --danger: #ffffff;
-  --success: #ffffff;
-  --warning: #ffffff;
-  --co-purple: #ffffff;
-  --sb-bg: #000000;
-  --sb-border: #333333;
-  --sb-text: #ffffff;
-  --sb-dim: #ffffff;
-  --sb-hover: #1a1a1a;
-  --sb-active: #1a1a1a;
-  --tbl-bg: #000000;
-  --tbl-head-bg: #111111;
-  --tbl-head-text: #ffffff;
-  --tbl-text: #ffffff;
-  --tbl-muted: #333333;
-  --tbl-stripe: #0a0a0a;
-  --tbl-hover-bg: #1a1a1a;
-  --tbl-hover-text: #ffffff;
-  --tbl-badge-bg: #1a1a1a;
-  --tbl-badge-text: #ffffff;
-  --act-pill-exams-bg: #1a1a1a;
-  --act-pill-project-bg: #1a1a1a;
-  --act-pill-courses-bg: #1a1a1a;
-  --act-pill-ink: #ffffff;
-  background: #000000 !important;
-}
-
-/* ── Light + high contrast ───────────────────────────── */
-body.high-contrast.theme-light {
-  --bg: #ffffff;
-  --bg-elev: #ffffff;
-  --text: #000000;
-  --text-dim: #000000;
-  --muted: #cccccc;
-  --brand: #000000;
-  --brand-hover: #000000;
-  --brand-visited: #000000;
-  --brand-ext: #000000;
-  --brand-ext-hover: #000000;
-  --danger: #000000;
-  --success: #000000;
-  --warning: #000000;
-  --co-purple: #000000;
-  --sb-bg: #ffffff;
-  --sb-border: #cccccc;
-  --sb-text: #000000;
-  --sb-dim: #000000;
-  --sb-hover: #f0f0f0;
-  --sb-active: #f0f0f0;
-  --tbl-bg: #ffffff;
-  --tbl-head-bg: #f0f0f0;
-  --tbl-head-text: #000000;
-  --tbl-text: #000000;
-  --tbl-muted: #cccccc;
-  --tbl-stripe: #fafafa;
-  --tbl-hover-bg: #f0f0f0;
-  --tbl-hover-text: #000000;
-  --tbl-badge-bg: #f0f0f0;
-  --tbl-badge-text: #000000;
-  --act-pill-exams-bg: #f0f0f0;
-  --act-pill-project-bg: #f0f0f0;
-  --act-pill-courses-bg: #f0f0f0;
-  --act-pill-ink: #000000;
-  background: #ffffff !important;
-}
-
-/* ── Shared high contrast overrides ──────────────────── */
-
-/* Kill dark-mode gradient background */
-.theme-dark body.high-contrast {
-  background: #000000 !important;
-}
-
-/* All links underlined */
-body.high-contrast .markdown-rendered a.internal-link,
-body.high-contrast .site-body a.internal-link,
-body.high-contrast .markdown-rendered a:not(.internal-link),
-body.high-contrast .site-body a:not(.internal-link) {
-  text-decoration: underline !important;
-  text-decoration-thickness: 1.5px !important;
-}
-
-/* Callouts — no colour accents */
-body.high-contrast .callout {
-  --callout-color: var(--text) !important;
-  background: var(--bg) !important;
-  border-color: var(--text) !important;
-  box-shadow: none !important;
-}
-body.high-contrast .callout .callout-title,
-body.high-contrast .callout .callout-title-inner,
-body.high-contrast .callout .callout-fold {
-  color: var(--text) !important;
-}
-body.high-contrast .callout-concept-count,
-body.high-contrast .callout-badge--pct {
-  color: var(--text) !important;
-  background: color-mix(in oklab, var(--text) 12%, transparent) !important;
-}
-body.high-contrast data.callout-obj-num {
-  color: var(--text) !important;
-  opacity: 0.6;
-}
-
-/* Journey tracker — strip colour in high contrast */
-body.high-contrast .journey-tracker__item[data-status="in_progress"] .journey-tracker__name {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-}
-body.high-contrast [data-exam-color] > a.journey-tracker__name {
-  color: var(--text) !important;
-}
-
-/* Exam link buttons — strip colour */
-body.high-contrast .exam-link,
-body.high-contrast .exam-link[class*="exam-link--"] {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-}
-body.high-contrast .exam-link .exam-code,
-body.high-contrast .exam-link .exam-name {
-  color: var(--bg) !important;
-}
-
-/* Exam nav component */
-body.high-contrast .exam-nav {
-  --nav-color: var(--text) !important;
-  background: var(--bg) !important;
-  border-color: var(--text) !important;
-}
-body.high-contrast .exam-nav__btn--current {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-}
-body.high-contrast .exam-nav__btn--prev,
-body.high-contrast .exam-nav__btn--next {
-  border-color: var(--text) !important;
-  color: var(--text) !important;
-}
-body.high-contrast .exam-nav__sticky {
-  --nav-color: var(--text) !important;
-  background: var(--bg) !important;
-  border-color: var(--text) !important;
-}
-body.high-contrast .exam-nav__sticky-btn {
-  background: var(--text) !important;
-  border-color: var(--text) !important;
-  color: var(--bg) !important;
-}
-
-/* Cards — strip colour */
-body.high-contrast .card,
-body.high-contrast .act-card {
-  background: var(--bg) !important;
-  border-color: var(--text) !important;
-  box-shadow: none !important;
-}
-body.high-contrast .act-card__title {
-  color: var(--text) !important;
-}
-body.high-contrast .act-card__badge {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-}
-
-/* Sidebar buttons — strip colour */
-body.high-contrast .sidebar-btn {
-  background: transparent !important;
-  color: var(--text) !important;
-  border: 1.5px solid var(--text) !important;
-  box-shadow: none !important;
-}
-
-/* Blockquotes */
-body.high-contrast blockquote {
-  border-color: var(--text) !important;
-  background: var(--bg) !important;
-  box-shadow: none !important;
-}
-
-/* Highlights */
-body.high-contrast mark,
-body.high-contrast span.highlight,
-body.high-contrast span.cm-highlight {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-}
-
-/* Concept nav */
-body.high-contrast .concept-nav {
-  --cnav-color: var(--text) !important;
-  background: var(--bg) !important;
-  border-color: var(--text) !important;
-}
-/* Current concept button: text on colored bg — invert so text is readable */
-body.high-contrast .concept-nav__current {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-}
-body.high-contrast .concept-nav__current-label,
-body.high-contrast .concept-nav__current-chevron {
-  color: var(--bg) !important;
-}
-
-/* Download button */
-body.high-contrast .download-link,
-body.high-contrast a.download-link {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-}
-
-/* Download dropdown menu */
-body.high-contrast .dl-dropdown__wrap {
-  --dl-color: var(--text) !important;
-}
-body.high-contrast .dl-dropdown__menu {
-  background: var(--bg) !important;
-  border-color: var(--text) !important;
-}
-body.high-contrast .dl-dropdown__menu-item-name {
-  color: var(--text) !important;
-}
-body.high-contrast .dl-dropdown__menu-header {
-  color: var(--text) !important;
-}
-body.high-contrast .exam-nav__lo-menu-num.is-learned {
-  color: var(--bg) !important;
-  background: var(--text) !important;
-}
-body.high-contrast .exam-nav__lo-count.is-all-learned {
-  color: var(--bg) !important;
-  background: var(--text) !important;
-}
-body.high-contrast .dl-dropdown__trigger {
-  border-color: var(--text) !important;
-  color: var(--text) !important;
-  background: var(--bg) !important;
-}
-body.high-contrast .dl-dropdown__single {
-  background: var(--text) !important;
-  color: var(--bg) !important;
-}
-
-/* Print: hide toggle */
-@media print {
-  .hc-toggle-row { display: none !important; }
 }
 
 

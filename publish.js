@@ -3465,27 +3465,84 @@
     years.sort(function (a, b) { return a - b; });
     types.sort();
 
-    var filterRow = document.createElement('div');
-    filterRow.className = 'library-panel__filters';
-
-    // ---- Year dual-ended range slider ----
+    // ---- Filter row: Year toggle + Category toggle side by side ----
     var yearMinVal = years.length > 0 ? years[0] : 2000;
     var yearMaxVal = years.length > 0 ? years[years.length - 1] : 2030;
     var yearLowVal = yearMinVal;
     var yearHighVal = yearMaxVal;
+    var selectedTypes = [];
 
-    var yearWrap = document.createElement('div');
-    yearWrap.className = 'library-panel__year-slider';
+    var filterRow = document.createElement('div');
+    filterRow.className = 'library-panel__filters';
 
-    var yearLabel = document.createElement('div');
-    yearLabel.className = 'library-panel__filter-label';
-    yearLabel.textContent = 'Year';
-    yearWrap.appendChild(yearLabel);
+    // Year toggle button
+    var yearToggleBtn = document.createElement('div');
+    yearToggleBtn.className = 'library-panel__filter-toggle';
+    yearToggleBtn.textContent = 'Year: All';
+    filterRow.appendChild(yearToggleBtn);
+
+    // Category toggle + dropdown wrapper
+    var typeWrap = document.createElement('div');
+    typeWrap.className = 'library-panel__type-multi';
+
+    var typeToggle = document.createElement('div');
+    typeToggle.className = 'library-panel__filter-toggle';
+    typeToggle.textContent = 'Category: All';
+    typeWrap.appendChild(typeToggle);
+
+    var typeDropdown = document.createElement('div');
+    typeDropdown.className = 'library-panel__multi-dropdown';
+    typeDropdown.style.display = 'none';
+
+    types.forEach(function (t) {
+      var item = document.createElement('label');
+      item.className = 'library-panel__multi-item';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.value = t;
+      cb.className = 'library-panel__multi-cb';
+      var lbl = document.createElement('span');
+      lbl.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      item.appendChild(cb);
+      item.appendChild(lbl);
+      typeDropdown.appendChild(item);
+
+      cb.addEventListener('change', function () {
+        var idx = selectedTypes.indexOf(t);
+        if (cb.checked && idx === -1) selectedTypes.push(t);
+        if (!cb.checked && idx !== -1) selectedTypes.splice(idx, 1);
+        typeToggle.textContent = selectedTypes.length === 0 ? 'Category: All' :
+          selectedTypes.length === 1 ? selectedTypes[0].charAt(0).toUpperCase() + selectedTypes[0].slice(1) :
+          selectedTypes.length + ' selected';
+        renderDocGrid();
+      });
+    });
+    typeWrap.appendChild(typeDropdown);
+
+    typeToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = typeDropdown.style.display !== 'none';
+      typeDropdown.style.display = isOpen ? 'none' : 'block';
+      // Close year slider if open
+      if (!isOpen) yearSliderPanel.style.display = 'none';
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!typeWrap.contains(e.target)) typeDropdown.style.display = 'none';
+    });
+
+    filterRow.appendChild(typeWrap);
+    container.appendChild(filterRow);
+
+    // ---- Year slider collapsible panel (below filter row) ----
+    var yearSliderPanel = document.createElement('div');
+    yearSliderPanel.className = 'library-panel__year-panel';
+    yearSliderPanel.style.display = 'none';
 
     var yearDisplay = document.createElement('div');
     yearDisplay.className = 'library-panel__year-display';
     yearDisplay.textContent = yearMinVal === yearMaxVal ? String(yearMinVal) : yearMinVal + ' – ' + yearMaxVal;
-    yearWrap.appendChild(yearDisplay);
+    yearSliderPanel.appendChild(yearDisplay);
 
     var sliderTrack = document.createElement('div');
     sliderTrack.className = 'library-panel__slider-track';
@@ -3512,7 +3569,7 @@
     sliderHigh.step = '1';
     sliderTrack.appendChild(sliderHigh);
 
-    yearWrap.appendChild(sliderTrack);
+    yearSliderPanel.appendChild(sliderTrack);
 
     function updateSliderRange() {
       var low = parseInt(sliderLow.value, 10);
@@ -3526,72 +3583,28 @@
       sliderRange.style.left = pctLow + '%';
       sliderRange.style.width = (pctHigh - pctLow) + '%';
       yearDisplay.textContent = low === high ? String(low) : low + ' – ' + high;
+      yearToggleBtn.textContent = (low === yearMinVal && high === yearMaxVal) ? 'Year: All' : 'Year: ' + low + '–' + high;
     }
     updateSliderRange();
 
     sliderLow.addEventListener('input', function () { updateSliderRange(); renderDocGrid(); });
     sliderHigh.addEventListener('input', function () { updateSliderRange(); renderDocGrid(); });
 
-    filterRow.appendChild(yearWrap);
-
-    // ---- Category multi-select ----
-    var selectedTypes = [];
-
-    var typeWrap = document.createElement('div');
-    typeWrap.className = 'library-panel__type-multi';
-
-    var typeLabel = document.createElement('div');
-    typeLabel.className = 'library-panel__filter-label';
-    typeLabel.textContent = 'Category';
-    typeWrap.appendChild(typeLabel);
-
-    var typeToggle = document.createElement('div');
-    typeToggle.className = 'library-panel__multi-toggle';
-    typeToggle.textContent = 'All Types';
-    typeWrap.appendChild(typeToggle);
-
-    var typeDropdown = document.createElement('div');
-    typeDropdown.className = 'library-panel__multi-dropdown';
-    typeDropdown.style.display = 'none';
-
-    types.forEach(function (t) {
-      var item = document.createElement('label');
-      item.className = 'library-panel__multi-item';
-      var cb = document.createElement('input');
-      cb.type = 'checkbox';
-      cb.value = t;
-      cb.className = 'library-panel__multi-cb';
-      var lbl = document.createElement('span');
-      lbl.textContent = t.charAt(0).toUpperCase() + t.slice(1);
-      item.appendChild(cb);
-      item.appendChild(lbl);
-      typeDropdown.appendChild(item);
-
-      cb.addEventListener('change', function () {
-        var idx = selectedTypes.indexOf(t);
-        if (cb.checked && idx === -1) selectedTypes.push(t);
-        if (!cb.checked && idx !== -1) selectedTypes.splice(idx, 1);
-        typeToggle.textContent = selectedTypes.length === 0 ? 'All Types' :
-          selectedTypes.length === 1 ? selectedTypes[0].charAt(0).toUpperCase() + selectedTypes[0].slice(1) :
-          selectedTypes.length + ' selected';
-        renderDocGrid();
-      });
-    });
-    typeWrap.appendChild(typeDropdown);
-
-    typeToggle.addEventListener('click', function (e) {
+    yearToggleBtn.addEventListener('click', function (e) {
       e.stopPropagation();
-      var isOpen = typeDropdown.style.display !== 'none';
-      typeDropdown.style.display = isOpen ? 'none' : 'block';
+      var isOpen = yearSliderPanel.style.display !== 'none';
+      yearSliderPanel.style.display = isOpen ? 'none' : 'block';
+      // Close category dropdown if open
+      if (!isOpen) typeDropdown.style.display = 'none';
     });
 
-    // Close dropdown when clicking outside
     document.addEventListener('click', function (e) {
-      if (!typeWrap.contains(e.target)) typeDropdown.style.display = 'none';
+      if (!yearToggleBtn.contains(e.target) && !yearSliderPanel.contains(e.target)) {
+        yearSliderPanel.style.display = 'none';
+      }
     });
 
-    filterRow.appendChild(typeWrap);
-    container.appendChild(filterRow);
+    container.appendChild(yearSliderPanel);
 
     // Document grid
     var grid = document.createElement('div');

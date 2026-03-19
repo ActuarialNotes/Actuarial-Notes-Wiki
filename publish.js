@@ -2953,8 +2953,9 @@
 
   var SVG_TAB_EXAMS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h9l4 4v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><polyline points="13 2 13 6 17 6"/><line x1="6" y1="10" x2="14" y2="10"/><line x1="6" y1="13" x2="14" y2="13"/><line x1="6" y1="16" x2="10" y2="16"/></svg>';
 
-  var SVG_MOON_ICON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.3 13.3A7 7 0 0 1 6.7 2.7a7 7 0 1 0 10.6 10.6z"/></svg>';
-  var SVG_SUN_ICON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3.5"/><line x1="10" y1="1.5" x2="10" y2="3.5"/><line x1="10" y1="16.5" x2="10" y2="18.5"/><line x1="1.5" y1="10" x2="3.5" y2="10"/><line x1="16.5" y1="10" x2="18.5" y2="10"/><line x1="4" y1="4" x2="5.4" y2="5.4"/><line x1="14.6" y1="14.6" x2="16" y2="16"/><line x1="4" y1="16" x2="5.4" y2="14.6"/><line x1="14.6" y1="5.4" x2="16" y2="4"/></svg>';
+  var SVG_HC_ICON = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>' +
+    '<path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"/></svg>';
 
   var SVG_SPEAKER_ON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 7 7 7 12 3 12 17 7 13 3 13"/><path d="M15 7a4 4 0 0 1 0 6"/></svg>';
 
@@ -3351,20 +3352,19 @@
     var utilBar = document.createElement('div');
     utilBar.className = 'sidebar-tabs__utility';
 
-    // Dark / Light mode toggle
-    var themeBtn = document.createElement('button');
-    themeBtn.className = 'sidebar-tabs__utility-btn';
-    themeBtn.type = 'button';
-    var isLight = document.body.classList.contains('theme-light');
-    themeBtn.title = isLight ? 'Switch to Dark' : 'Switch to Light';
-    themeBtn.innerHTML = isLight ? SVG_SUN_ICON : SVG_MOON_ICON;
-    themeBtn.addEventListener('click', function () {
-      isLight = document.body.classList.toggle('theme-light');
-      try { localStorage.setItem('actuarial-notes-theme', isLight ? 'light' : 'dark'); } catch (e) {}
-      themeBtn.innerHTML = isLight ? SVG_SUN_ICON : SVG_MOON_ICON;
-      themeBtn.title = isLight ? 'Switch to Dark' : 'Switch to Light';
+    // High contrast toggle
+    var hcBtn = document.createElement('button');
+    hcBtn.className = 'sidebar-tabs__utility-btn';
+    hcBtn.type = 'button';
+    hcBtn.title = 'High Contrast';
+    hcBtn.innerHTML = SVG_HC_ICON;
+    if (document.body.classList.contains('high-contrast')) hcBtn.classList.add('is-active');
+    hcBtn.addEventListener('click', function () {
+      var on = document.body.classList.toggle('high-contrast');
+      try { localStorage.setItem('actuarial-notes-high-contrast', on ? '1' : '0'); } catch (e) {}
+      hcBtn.classList.toggle('is-active', on);
     });
-    utilBar.appendChild(themeBtn);
+    utilBar.appendChild(hcBtn);
 
     // Sound mute toggle
     var muteBtn = document.createElement('button');
@@ -3718,53 +3718,17 @@
     headerRow.appendChild(titleRow);
     container.appendChild(headerRow);
 
-    // Track switcher (segmented control with sliding highlight)
-    var switcher = document.createElement('div');
-    switcher.className = 'track-switcher';
-    var highlight = document.createElement('div');
-    highlight.className = 'track-switcher__highlight';
-    switcher.appendChild(highlight);
-
-    var trackBtns = [];
+    // Track selector
+    var select = document.createElement('select');
+    select.className = 'sidebar-tabs__select';
     TRACKS.forEach(function (t) {
-      var btn = document.createElement('button');
-      btn.className = 'track-switcher__btn';
-      btn.type = 'button';
-      btn.dataset.track = t.key;
-      btn.textContent = t.key;
-      if (t.key === journeyState.selectedTrack) btn.classList.add('is-active');
-      trackBtns.push(btn);
-      switcher.appendChild(btn);
+      var opt = document.createElement('option');
+      opt.value = t.key;
+      opt.textContent = t.name;
+      select.appendChild(opt);
     });
-
-    function moveHighlight(animate) {
-      var active = switcher.querySelector('.track-switcher__btn.is-active');
-      if (!active) return;
-      if (!animate) highlight.style.transition = 'none';
-      highlight.style.left = active.offsetLeft + 'px';
-      highlight.style.width = active.offsetWidth + 'px';
-      if (!animate) {
-        highlight.offsetHeight; // force reflow
-        highlight.style.transition = '';
-      }
-    }
-
-    trackBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        trackBtns.forEach(function (b) { b.classList.remove('is-active'); });
-        btn.classList.add('is-active');
-        moveHighlight(true);
-        journeyState.selectedTrack = btn.dataset.track;
-        saveJourneyState();
-        renderTrackSections();
-        updateExamsProgress();
-        if (typeof SoundFX !== 'undefined' && SoundFX.click) SoundFX.click();
-      });
-    });
-
-    container.appendChild(switcher);
-    // Position highlight once rendered
-    requestAnimationFrame(function () { moveHighlight(false); });
+    select.value = journeyState.selectedTrack;
+    container.appendChild(select);
 
     // Progress bar
     var bar = document.createElement('div');
@@ -3830,10 +3794,7 @@
           row.className = 'exams-panel__item';
           row.dataset.status = getStatus(item.id);
           row.dataset.itemId = item.id;
-          if (item.color) {
-            row.dataset.examColor = item.color;
-            if (COLOR_HEX[item.color]) row.style.setProperty('--exam-accent', COLOR_HEX[item.color]);
-          }
+          if (item.color) row.dataset.examColor = item.color;
 
           var statusBtn = document.createElement('button');
           statusBtn.className = 'exams-panel__status';
@@ -3882,6 +3843,13 @@
         sectionsEl.appendChild(section);
       });
     }
+
+    select.addEventListener('change', function () {
+      journeyState.selectedTrack = select.value;
+      saveJourneyState();
+      renderTrackSections();
+      updateExamsProgress();
+    });
 
     renderTrackSections();
     updateExamsProgress();
@@ -4489,25 +4457,25 @@ var SoundFX = (function () {
 
 
 /* ===========================================================
-   THEME — Restore dark / light preference on load
-   (Toggle UI is in the sidebar tabs utility bar)
+   HIGH CONTRAST — Restore preference on load
+   (Toggle UI is now in the sidebar tabs utility bar)
    =========================================================== */
 
 (function () {
   'use strict';
 
-  function restoreTheme() {
+  function restoreHighContrast() {
     try {
-      if (localStorage.getItem('actuarial-notes-theme') === 'light') {
-        document.body.classList.add('theme-light');
+      if (localStorage.getItem('actuarial-notes-high-contrast') === '1') {
+        document.body.classList.add('high-contrast');
       }
     } catch (e) {}
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', restoreTheme);
+    document.addEventListener('DOMContentLoaded', restoreHighContrast);
   } else {
-    restoreTheme();
+    restoreHighContrast();
   }
 })();
 

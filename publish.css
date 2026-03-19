@@ -1651,6 +1651,8 @@ input[type="search"]:focus, .search-input:focus {
 .sidebar-tabs .sidebar-tabs__bar .sidebar-tabs__tab:active {
   border-radius: 0 !important;
   box-shadow: none !important;
+  padding: 16px 6px 14px !important;
+  min-height: 52px !important;
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   appearance: none !important;
@@ -2115,6 +2117,7 @@ a.exams-panel__name:hover {
 
 .library-panel__filter-toggle {
   flex: 1;
+  min-width: 0;
   font-size: 0.72rem;
   padding: 5px 8px;
   border-radius: 6px;
@@ -2136,7 +2139,7 @@ a.exams-panel__name:hover {
 /* ---- Year slider collapsible panel ---- */
 .library-panel__year-panel {
   margin-bottom: 8px;
-  padding: 8px 10px;
+  padding: 8px 12px 10px;
   border-radius: 6px;
   border: 1px solid var(--sb-border, #333);
   background: var(--bg-elev, #1a1a2e);
@@ -2145,24 +2148,24 @@ a.exams-panel__name:hover {
 .library-panel__year-display {
   font-size: 0.72rem;
   color: var(--text-dim);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   text-align: center;
 }
 
 .library-panel__slider-track {
   position: relative;
-  height: 24px;
-  display: flex;
-  align-items: center;
+  height: 6px;
+  background: var(--sb-border, #333);
+  border-radius: 3px;
+  margin: 10px 0;
 }
 
 .library-panel__slider-range {
   position: absolute;
-  height: 4px;
-  background: var(--brand, #2563eb);
-  border-radius: 2px;
-  top: 50%;
-  transform: translateY(-50%);
+  height: 100%;
+  background: var(--text-dim, #888);
+  border-radius: 3px;
+  top: 0;
   pointer-events: none;
   z-index: 1;
 }
@@ -2170,58 +2173,53 @@ a.exams-panel__name:hover {
 .library-panel__slider-input {
   position: absolute;
   width: 100%;
-  top: 0;
-  height: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 6px;
   margin: 0;
   padding: 0;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
 }
 
 .library-panel__slider-input::-webkit-slider-runnable-track {
-  height: 4px;
-  background: var(--sb-border, #333);
-  border-radius: 2px;
-}
-
-.library-panel__slider-input--high::-webkit-slider-runnable-track {
+  height: 6px;
   background: transparent;
+  border-radius: 3px;
 }
 
 .library-panel__slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: var(--brand, #2563eb);
+  background: var(--text, #fff);
   border: 2px solid var(--bg-elev, #1a1a2e);
+  box-shadow: 0 0 0 1px var(--sb-border, #333);
   cursor: pointer;
   pointer-events: auto;
   margin-top: -5px;
   position: relative;
-  z-index: 3;
+  z-index: 4;
 }
 
 .library-panel__slider-input::-moz-range-track {
-  height: 4px;
-  background: var(--sb-border, #333);
-  border-radius: 2px;
+  height: 6px;
+  background: transparent;
+  border-radius: 3px;
   border: none;
 }
 
-.library-panel__slider-input--high::-moz-range-track {
-  background: transparent;
-}
-
 .library-panel__slider-input::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: var(--brand, #2563eb);
+  background: var(--text, #fff);
   border: 2px solid var(--bg-elev, #1a1a2e);
+  box-shadow: 0 0 0 1px var(--sb-border, #333);
   cursor: pointer;
   pointer-events: auto;
 }
@@ -2229,6 +2227,12 @@ a.exams-panel__name:hover {
 /* ---- Category multi-select ---- */
 .library-panel__type-multi {
   position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.library-panel__type-multi .library-panel__filter-toggle {
+  width: 100%;
 }
 
 .library-panel__multi-dropdown {

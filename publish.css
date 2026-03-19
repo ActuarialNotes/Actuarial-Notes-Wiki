@@ -1589,8 +1589,8 @@ input[type="search"]:focus, .search-input:focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 10px 4px 8px;
+  gap: 4px;
+  padding: 16px 4px 14px;
   border-top: 1px solid transparent !important;
   border-right: 1px solid transparent !important;
   border-left: 1px solid transparent !important;
@@ -2109,30 +2109,44 @@ a.exams-panel__name:hover {
 
 .library-panel__filters {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
-.library-panel__filter-label {
-  font-size: 0.68rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--text-dim);
-  margin-bottom: 4px;
+.library-panel__filter-toggle {
+  flex: 1;
+  font-size: 0.72rem;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--sb-border, #333);
+  background: var(--bg-elev, #1a1a2e);
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ---- Year dual-ended slider ---- */
-.library-panel__year-slider {
-  display: flex;
-  flex-direction: column;
+.library-panel__filter-toggle:hover {
+  border-color: var(--text-dim);
+}
+
+/* ---- Year slider collapsible panel ---- */
+.library-panel__year-panel {
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--sb-border, #333);
+  background: var(--bg-elev, #1a1a2e);
 }
 
 .library-panel__year-display {
-  font-size: 0.75rem;
-  color: var(--text);
+  font-size: 0.72rem;
+  color: var(--text-dim);
   margin-bottom: 6px;
+  text-align: center;
 }
 
 .library-panel__slider-track {
@@ -2217,21 +2231,6 @@ a.exams-panel__name:hover {
   position: relative;
 }
 
-.library-panel__multi-toggle {
-  font-size: 0.75rem;
-  padding: 5px 8px;
-  border-radius: 6px;
-  border: 1px solid var(--sb-border, #333);
-  background: var(--bg-elev, #1a1a2e);
-  color: var(--text);
-  cursor: pointer;
-  user-select: none;
-}
-
-.library-panel__multi-toggle:hover {
-  border-color: var(--brand, #2563eb);
-}
-
 .library-panel__multi-dropdown {
   position: absolute;
   top: 100%;
@@ -2259,7 +2258,7 @@ a.exams-panel__name:hover {
 }
 
 .library-panel__multi-item:hover {
-  background: color-mix(in oklab, var(--sb-border) 30%, transparent);
+  background: rgba(128, 128, 128, 0.15);
 }
 
 .library-panel__multi-cb {
@@ -2327,7 +2326,7 @@ a.exams-panel__name:hover {
     display: none;
   }
   .sidebar-tabs__tab {
-    padding: 8px 4px 6px;
+    padding: 14px 4px 12px;
   }
   .sidebar-tabs__tab-icon svg {
     width: 20px;

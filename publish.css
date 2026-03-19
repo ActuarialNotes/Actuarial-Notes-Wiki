@@ -2154,18 +2154,29 @@ a.exams-panel__name:hover {
 
 .library-panel__slider-track {
   position: relative;
+  height: 28px;
+  margin: 4px 0;
+}
+
+.library-panel__slider-rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   height: 6px;
   background: var(--sb-border, #333);
   border-radius: 3px;
-  margin: 10px 0;
+  pointer-events: none;
 }
 
 .library-panel__slider-range {
   position: absolute;
-  height: 100%;
+  height: 6px;
   background: var(--text-dim, #888);
   border-radius: 3px;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   pointer-events: none;
   z-index: 1;
 }
@@ -2173,9 +2184,9 @@ a.exams-panel__name:hover {
 .library-panel__slider-input {
   position: absolute;
   width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 6px;
+  left: 0;
+  top: 0;
+  height: 100%;
   margin: 0;
   padding: 0;
   -webkit-appearance: none;
@@ -2186,9 +2197,8 @@ a.exams-panel__name:hover {
 }
 
 .library-panel__slider-input::-webkit-slider-runnable-track {
-  height: 6px;
+  height: 100%;
   background: transparent;
-  border-radius: 3px;
 }
 
 .library-panel__slider-input::-webkit-slider-thumb {
@@ -2201,15 +2211,14 @@ a.exams-panel__name:hover {
   box-shadow: 0 0 0 1px var(--sb-border, #333);
   cursor: pointer;
   pointer-events: auto;
-  margin-top: -5px;
+  margin-top: 6px;
   position: relative;
   z-index: 4;
 }
 
 .library-panel__slider-input::-moz-range-track {
-  height: 6px;
+  height: 100%;
   background: transparent;
-  border-radius: 3px;
   border: none;
 }
 

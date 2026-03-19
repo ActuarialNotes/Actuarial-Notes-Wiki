@@ -3462,39 +3462,135 @@
       var st = doc.sourceType || '';
       if (st && types.indexOf(st) === -1) types.push(st);
     });
-    years.sort(function (a, b) { return b - a; });
+    years.sort(function (a, b) { return a - b; });
     types.sort();
 
     var filterRow = document.createElement('div');
     filterRow.className = 'library-panel__filters';
 
-    var yearSelect = document.createElement('select');
-    yearSelect.className = 'library-panel__filter-select';
-    var yearAll = document.createElement('option');
-    yearAll.value = '';
-    yearAll.textContent = 'All Years';
-    yearSelect.appendChild(yearAll);
-    years.forEach(function (y) {
-      var opt = document.createElement('option');
-      opt.value = String(y);
-      opt.textContent = String(y);
-      yearSelect.appendChild(opt);
-    });
-    filterRow.appendChild(yearSelect);
+    // ---- Year dual-ended range slider ----
+    var yearMinVal = years.length > 0 ? years[0] : 2000;
+    var yearMaxVal = years.length > 0 ? years[years.length - 1] : 2030;
+    var yearLowVal = yearMinVal;
+    var yearHighVal = yearMaxVal;
 
-    var typeSelect = document.createElement('select');
-    typeSelect.className = 'library-panel__filter-select';
-    var typeAll = document.createElement('option');
-    typeAll.value = '';
-    typeAll.textContent = 'All Types';
-    typeSelect.appendChild(typeAll);
+    var yearWrap = document.createElement('div');
+    yearWrap.className = 'library-panel__year-slider';
+
+    var yearLabel = document.createElement('div');
+    yearLabel.className = 'library-panel__filter-label';
+    yearLabel.textContent = 'Year';
+    yearWrap.appendChild(yearLabel);
+
+    var yearDisplay = document.createElement('div');
+    yearDisplay.className = 'library-panel__year-display';
+    yearDisplay.textContent = yearMinVal === yearMaxVal ? String(yearMinVal) : yearMinVal + ' – ' + yearMaxVal;
+    yearWrap.appendChild(yearDisplay);
+
+    var sliderTrack = document.createElement('div');
+    sliderTrack.className = 'library-panel__slider-track';
+
+    var sliderRange = document.createElement('div');
+    sliderRange.className = 'library-panel__slider-range';
+    sliderTrack.appendChild(sliderRange);
+
+    var sliderLow = document.createElement('input');
+    sliderLow.type = 'range';
+    sliderLow.className = 'library-panel__slider-input library-panel__slider-input--low';
+    sliderLow.min = String(yearMinVal);
+    sliderLow.max = String(yearMaxVal);
+    sliderLow.value = String(yearMinVal);
+    sliderLow.step = '1';
+    sliderTrack.appendChild(sliderLow);
+
+    var sliderHigh = document.createElement('input');
+    sliderHigh.type = 'range';
+    sliderHigh.className = 'library-panel__slider-input library-panel__slider-input--high';
+    sliderHigh.min = String(yearMinVal);
+    sliderHigh.max = String(yearMaxVal);
+    sliderHigh.value = String(yearMaxVal);
+    sliderHigh.step = '1';
+    sliderTrack.appendChild(sliderHigh);
+
+    yearWrap.appendChild(sliderTrack);
+
+    function updateSliderRange() {
+      var low = parseInt(sliderLow.value, 10);
+      var high = parseInt(sliderHigh.value, 10);
+      if (low > high) { var tmp = low; low = high; high = tmp; }
+      yearLowVal = low;
+      yearHighVal = high;
+      var total = yearMaxVal - yearMinVal;
+      var pctLow = total > 0 ? ((low - yearMinVal) / total) * 100 : 0;
+      var pctHigh = total > 0 ? ((high - yearMinVal) / total) * 100 : 100;
+      sliderRange.style.left = pctLow + '%';
+      sliderRange.style.width = (pctHigh - pctLow) + '%';
+      yearDisplay.textContent = low === high ? String(low) : low + ' – ' + high;
+    }
+    updateSliderRange();
+
+    sliderLow.addEventListener('input', function () { updateSliderRange(); renderDocGrid(); });
+    sliderHigh.addEventListener('input', function () { updateSliderRange(); renderDocGrid(); });
+
+    filterRow.appendChild(yearWrap);
+
+    // ---- Category multi-select ----
+    var selectedTypes = [];
+
+    var typeWrap = document.createElement('div');
+    typeWrap.className = 'library-panel__type-multi';
+
+    var typeLabel = document.createElement('div');
+    typeLabel.className = 'library-panel__filter-label';
+    typeLabel.textContent = 'Category';
+    typeWrap.appendChild(typeLabel);
+
+    var typeToggle = document.createElement('div');
+    typeToggle.className = 'library-panel__multi-toggle';
+    typeToggle.textContent = 'All Types';
+    typeWrap.appendChild(typeToggle);
+
+    var typeDropdown = document.createElement('div');
+    typeDropdown.className = 'library-panel__multi-dropdown';
+    typeDropdown.style.display = 'none';
+
     types.forEach(function (t) {
-      var opt = document.createElement('option');
-      opt.value = t;
-      opt.textContent = t.charAt(0).toUpperCase() + t.slice(1);
-      typeSelect.appendChild(opt);
+      var item = document.createElement('label');
+      item.className = 'library-panel__multi-item';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.value = t;
+      cb.className = 'library-panel__multi-cb';
+      var lbl = document.createElement('span');
+      lbl.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      item.appendChild(cb);
+      item.appendChild(lbl);
+      typeDropdown.appendChild(item);
+
+      cb.addEventListener('change', function () {
+        var idx = selectedTypes.indexOf(t);
+        if (cb.checked && idx === -1) selectedTypes.push(t);
+        if (!cb.checked && idx !== -1) selectedTypes.splice(idx, 1);
+        typeToggle.textContent = selectedTypes.length === 0 ? 'All Types' :
+          selectedTypes.length === 1 ? selectedTypes[0].charAt(0).toUpperCase() + selectedTypes[0].slice(1) :
+          selectedTypes.length + ' selected';
+        renderDocGrid();
+      });
     });
-    filterRow.appendChild(typeSelect);
+    typeWrap.appendChild(typeDropdown);
+
+    typeToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = typeDropdown.style.display !== 'none';
+      typeDropdown.style.display = isOpen ? 'none' : 'block';
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!typeWrap.contains(e.target)) typeDropdown.style.display = 'none';
+    });
+
+    filterRow.appendChild(typeWrap);
     container.appendChild(filterRow);
 
     // Document grid
@@ -3504,13 +3600,12 @@
 
     function renderDocGrid() {
       grid.innerHTML = '';
-      var filterYear = yearSelect.value;
-      var filterType = typeSelect.value;
       var count = 0;
 
       docs.forEach(function (doc) {
-        if (filterYear && String(doc.year || '') !== filterYear) return;
-        if (filterType && (doc.sourceType || '') !== filterType) return;
+        var docYear = doc.year ? parseInt(doc.year, 10) : 0;
+        if (docYear && (docYear < yearLowVal || docYear > yearHighVal)) return;
+        if (selectedTypes.length > 0 && selectedTypes.indexOf(doc.sourceType || '') === -1) return;
 
         var card = document.createElement('div');
         card.className = 'library-panel__grid-card';
@@ -3557,8 +3652,6 @@
       }
     }
 
-    yearSelect.addEventListener('change', renderDocGrid);
-    typeSelect.addEventListener('change', renderDocGrid);
     renderDocGrid();
   }
 

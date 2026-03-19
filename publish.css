@@ -1589,8 +1589,8 @@ input[type="search"]:focus, .search-input:focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 14px 4px 12px;
+  gap: 3px;
+  padding: 10px 4px 8px;
   border-top: 1px solid transparent !important;
   border-right: 1px solid transparent !important;
   border-left: 1px solid transparent !important;
@@ -1624,19 +1624,19 @@ input[type="search"]:focus, .search-input:focus {
 }
 
 .sidebar-tabs__tab-icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .sidebar-tabs__tab-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
 }
 
 .sidebar-tabs__tab-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: .03em;
@@ -2109,24 +2109,162 @@ a.exams-panel__name:hover {
 
 .library-panel__filters {
   display: flex;
-  gap: 6px;
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: 10px;
 }
 
-.library-panel__filter-select {
-  flex: 1;
+.library-panel__filter-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+/* ---- Year dual-ended slider ---- */
+.library-panel__year-slider {
+  display: flex;
+  flex-direction: column;
+}
+
+.library-panel__year-display {
   font-size: 0.75rem;
-  padding: 5px 6px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.library-panel__slider-track {
+  position: relative;
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.library-panel__slider-range {
+  position: absolute;
+  height: 4px;
+  background: var(--brand, #2563eb);
+  border-radius: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.library-panel__slider-input {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.library-panel__slider-input::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--sb-border, #333);
+  border-radius: 2px;
+}
+
+.library-panel__slider-input--high::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+.library-panel__slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--brand, #2563eb);
+  border: 2px solid var(--bg-elev, #1a1a2e);
+  cursor: pointer;
+  pointer-events: auto;
+  margin-top: -5px;
+  position: relative;
+  z-index: 3;
+}
+
+.library-panel__slider-input::-moz-range-track {
+  height: 4px;
+  background: var(--sb-border, #333);
+  border-radius: 2px;
+  border: none;
+}
+
+.library-panel__slider-input--high::-moz-range-track {
+  background: transparent;
+}
+
+.library-panel__slider-input::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--brand, #2563eb);
+  border: 2px solid var(--bg-elev, #1a1a2e);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* ---- Category multi-select ---- */
+.library-panel__type-multi {
+  position: relative;
+}
+
+.library-panel__multi-toggle {
+  font-size: 0.75rem;
+  padding: 5px 8px;
   border-radius: 6px;
   border: 1px solid var(--sb-border, #333);
   background: var(--bg-elev, #1a1a2e);
   color: var(--text);
-  font-family: var(--font-sans);
-  outline: none;
   cursor: pointer;
+  user-select: none;
 }
-.library-panel__filter-select:focus {
-  border-color: var(--brand);
+
+.library-panel__multi-toggle:hover {
+  border-color: var(--brand, #2563eb);
+}
+
+.library-panel__multi-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: var(--bg-elev, #1a1a2e);
+  border: 1px solid var(--sb-border, #333);
+  border-radius: 6px;
+  padding: 4px 0;
+  z-index: 50;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.library-panel__multi-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.library-panel__multi-item:hover {
+  background: color-mix(in oklab, var(--sb-border) 30%, transparent);
+}
+
+.library-panel__multi-cb {
+  accent-color: var(--brand, #2563eb);
+  cursor: pointer;
 }
 
 .library-panel__grid {
@@ -2189,11 +2327,11 @@ a.exams-panel__name:hover {
     display: none;
   }
   .sidebar-tabs__tab {
-    padding: 12px 4px 10px;
+    padding: 8px 4px 6px;
   }
   .sidebar-tabs__tab-icon svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 }
 

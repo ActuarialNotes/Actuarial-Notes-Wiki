@@ -2870,11 +2870,7 @@
   /* Tab icons */
   var SVG_TAB_LIBRARY = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4c0-1 1-2 3-2s4 1 5 2c1-1 3-2 5-2s3 1 3 2v11c0 .5-.5 1-1 1-.5 0-1.5-.5-4-.5s-3 1-3 1-1-1-3-1-3.5.5-4 .5c-.5 0-1-.5-1-1V4z"/><path d="M10 6v10"/></svg>';
 
-  var SVG_TAB_PROCESS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2" width="14" height="5" rx="1"/><rect x="3" y="13" width="14" height="5" rx="1"/><path d="M10 7v2m0 2v2"/><path d="M7 11h6"/></svg>';
-
   var SVG_TAB_EXAMS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h9l4 4v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><polyline points="13 2 13 6 17 6"/><line x1="6" y1="10" x2="14" y2="10"/><line x1="6" y1="13" x2="14" y2="13"/><line x1="6" y1="16" x2="10" y2="16"/></svg>';
-
-  var SVG_TAB_PRACTICE = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2l5 5-10 10H3v-5L13 2z"/><path d="M11 4l5 5"/></svg>';
 
   var SVG_HC_ICON = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>' +
@@ -2898,15 +2894,7 @@
   /* ---- Tab definitions ---- */
   var TABS = [
     { id: 'library',  label: 'Library',  icon: SVG_TAB_LIBRARY },
-    { id: 'process',  label: 'Process',  icon: SVG_TAB_PROCESS },
-    { id: 'exams',    label: 'Exams',    icon: SVG_TAB_EXAMS },
-    { id: 'practice', label: 'Practice', icon: SVG_TAB_PRACTICE }
-  ];
-
-  /* ---- Practice exams list ---- */
-  var PRACTICE_EXAMS = [
-    { key: 'P',  name: 'Exam P-1 (Probability)',            path: 'Exam P-1 (SOA)' },
-    { key: 'FM', name: 'Exam FM-2 (Financial Mathematics)',  path: 'Exam FM-2 (SOA)' }
+    { id: 'exams',    label: 'Exams',    icon: SVG_TAB_EXAMS }
   ];
 
   /* ---- Track definitions ---- */
@@ -3152,7 +3140,10 @@
   /* ---- Active tab state ---- */
   var activeTab = 'exams';
   function loadActiveTab() {
-    try { activeTab = localStorage.getItem(TAB_KEY) || 'exams'; } catch (e) { /* ignore */ }
+    try {
+      activeTab = localStorage.getItem(TAB_KEY) || 'exams';
+      if (activeTab !== 'library' && activeTab !== 'exams') activeTab = 'exams';
+    } catch (e) { /* ignore */ }
   }
   function saveActiveTab() {
     try { localStorage.setItem(TAB_KEY, activeTab); } catch (e) { /* ignore */ }
@@ -3332,9 +3323,7 @@
 
     switch (activeTab) {
       case 'library':  renderLibraryPanel(content);  break;
-      case 'process':  renderProcessPanel(content);  break;
       case 'exams':    renderExamsPanel(content);     break;
-      case 'practice': renderPracticePanel(content);  break;
     }
 
     panelEl.appendChild(content);
@@ -3384,80 +3373,112 @@
       return;
     }
 
-    // Document list
+    // Filters
+    var years = [];
+    var types = [];
     docs.forEach(function (doc) {
-      var item = document.createElement('div');
-      item.className = 'library-panel__doc-item';
+      if (doc.year && years.indexOf(doc.year) === -1) years.push(doc.year);
+      var st = doc.sourceType || '';
+      if (st && types.indexOf(st) === -1) types.push(st);
+    });
+    years.sort(function (a, b) { return b - a; });
+    types.sort();
 
-      var color = getDocColor(doc.id);
-      var initials = getDocInitials(doc.title);
+    var filterRow = document.createElement('div');
+    filterRow.className = 'library-panel__filters';
 
-      var avatar = document.createElement('div');
-      avatar.className = 'library-panel__doc-avatar';
-      avatar.style.background = color;
-      avatar.textContent = initials;
+    var yearSelect = document.createElement('select');
+    yearSelect.className = 'library-panel__filter-select';
+    var yearAll = document.createElement('option');
+    yearAll.value = '';
+    yearAll.textContent = 'All Years';
+    yearSelect.appendChild(yearAll);
+    years.forEach(function (y) {
+      var opt = document.createElement('option');
+      opt.value = String(y);
+      opt.textContent = String(y);
+      yearSelect.appendChild(opt);
+    });
+    filterRow.appendChild(yearSelect);
 
-      var info = document.createElement('div');
-      info.className = 'library-panel__doc-info';
+    var typeSelect = document.createElement('select');
+    typeSelect.className = 'library-panel__filter-select';
+    var typeAll = document.createElement('option');
+    typeAll.value = '';
+    typeAll.textContent = 'All Types';
+    typeSelect.appendChild(typeAll);
+    types.forEach(function (t) {
+      var opt = document.createElement('option');
+      opt.value = t;
+      opt.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      typeSelect.appendChild(opt);
+    });
+    filterRow.appendChild(typeSelect);
+    container.appendChild(filterRow);
 
-      var docTitle = document.createElement('div');
-      docTitle.className = 'library-panel__doc-title';
-      docTitle.textContent = doc.title || 'Untitled Document';
+    // Document grid
+    var grid = document.createElement('div');
+    grid.className = 'library-panel__grid';
+    container.appendChild(grid);
 
-      var meta = document.createElement('div');
-      meta.className = 'library-panel__doc-meta';
-      var tocCount = (doc.toc || []).length;
-      var glossaryCount = (doc.glossary || []).length;
-      var isSourceOnly = !doc.pdfText && tocCount === 0 && glossaryCount === 0;
+    function renderDocGrid() {
+      grid.innerHTML = '';
+      var filterYear = yearSelect.value;
+      var filterType = typeSelect.value;
+      var count = 0;
 
-      if (isSourceOnly) {
-        // Source-only document: show author, year, type
+      docs.forEach(function (doc) {
+        if (filterYear && String(doc.year || '') !== filterYear) return;
+        if (filterType && (doc.sourceType || '') !== filterType) return;
+
+        var card = document.createElement('div');
+        card.className = 'library-panel__grid-card';
+
+        var color = getDocColor(doc.id);
+        var initials = getDocInitials(doc.title);
+
+        var avatar = document.createElement('div');
+        avatar.className = 'library-panel__grid-avatar';
+        avatar.style.background = color;
+        avatar.textContent = initials;
+
+        var docTitle = document.createElement('div');
+        docTitle.className = 'library-panel__grid-title';
+        docTitle.textContent = doc.title || 'Untitled Document';
+
+        var meta = document.createElement('div');
+        meta.className = 'library-panel__grid-meta';
         var metaParts = [];
         if (doc.author) metaParts.push(doc.author);
-        if (doc.year) metaParts.push(String(doc.year));
         if (doc.sourceType) metaParts.push(doc.sourceType.charAt(0).toUpperCase() + doc.sourceType.slice(1));
-        meta.textContent = metaParts.length > 0 ? metaParts.join(' · ') : 'Source reference';
-      } else {
-        meta.textContent = (doc.author ? doc.author + ' · ' : '') + tocCount + ' sections · ' + glossaryCount + ' terms';
-      }
+        meta.textContent = metaParts.join(' · ') || '';
 
-      var badges = document.createElement('div');
-      badges.className = 'library-panel__doc-badges';
-      if (isSourceOnly) {
-        if (doc.sourceType) {
-          var typeBadge = document.createElement('span');
-          typeBadge.className = 'library-panel__badge library-panel__badge--active';
-          typeBadge.textContent = doc.sourceType.charAt(0).toUpperCase() + doc.sourceType.slice(1);
-          badges.appendChild(typeBadge);
-        }
-      } else {
-        if (tocCount > 0) {
-          var tocBadge = document.createElement('span');
-          tocBadge.className = 'library-panel__badge library-panel__badge--active';
-          tocBadge.textContent = 'TOC';
-          badges.appendChild(tocBadge);
-        }
-        if (glossaryCount > 0) {
-          var termBadge = document.createElement('span');
-          termBadge.className = 'library-panel__badge library-panel__badge--active';
-          termBadge.textContent = 'Terms';
-          badges.appendChild(termBadge);
-        }
-      }
+        card.appendChild(avatar);
+        card.appendChild(docTitle);
+        card.appendChild(meta);
 
-      info.appendChild(docTitle);
-      info.appendChild(meta);
-      info.appendChild(badges);
+        card.addEventListener('click', function () {
+          if (typeof window._openLibraryDocPage === 'function') window._openLibraryDocPage(doc.id);
+        });
 
-      item.appendChild(avatar);
-      item.appendChild(info);
-
-      item.addEventListener('click', function () {
-        if (typeof window._openLibraryDocPage === 'function') window._openLibraryDocPage(doc.id);
+        grid.appendChild(card);
+        count++;
       });
 
-      container.appendChild(item);
-    });
+      countSpan.textContent = count > 0 ? String(count) : '';
+
+      if (count === 0) {
+        var noResults = document.createElement('div');
+        noResults.className = 'library-panel__grid-empty';
+        noResults.textContent = 'No documents match filters.';
+        noResults.style.cssText = 'grid-column:1/-1;text-align:center;padding:1.5rem 0;opacity:0.5;font-size:0.82rem';
+        grid.appendChild(noResults);
+      }
+    }
+
+    yearSelect.addEventListener('change', renderDocGrid);
+    typeSelect.addEventListener('change', renderDocGrid);
+    renderDocGrid();
   }
 
   function getDocColor(id) {
@@ -3474,247 +3495,6 @@
     if (words.length === 0) return '?';
     if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
     return (words[0][0] + words[1][0]).toUpperCase();
-  }
-
-  /* ============================================================
-     DOCUMENT PROCESSING TAB
-     ============================================================ */
-  function renderProcessPanel(container) {
-    var docs = (typeof window._getLibraryDocs === 'function') ? window._getLibraryDocs() : [];
-
-    var title = document.createElement('div');
-    title.className = 'sidebar-tabs__panel-header';
-    title.innerHTML = '<span class="sidebar-tabs__panel-title">Document Processing</span>';
-    container.appendChild(title);
-
-    if (docs.length === 0) {
-      var empty = document.createElement('div');
-      empty.className = 'sidebar-tabs__empty';
-      empty.innerHTML =
-        '<div class="sidebar-tabs__empty-icon">' + SVG_TAB_PROCESS + '</div>' +
-        '<div class="sidebar-tabs__empty-title">No documents to process</div>' +
-        '<div class="sidebar-tabs__empty-desc">Upload a document in the Library tab first, then come here to extract structured content.</div>';
-      container.appendChild(empty);
-      return;
-    }
-
-    // Document selector
-    var selectLabel = document.createElement('div');
-    selectLabel.style.cssText = 'font-size:0.78rem;color:var(--text-dim);margin-bottom:4px';
-    selectLabel.textContent = 'Select document:';
-    container.appendChild(selectLabel);
-
-    var select = document.createElement('select');
-    select.className = 'sidebar-tabs__select';
-    var defaultOpt = document.createElement('option');
-    defaultOpt.value = '';
-    defaultOpt.textContent = 'Choose a document...';
-    select.appendChild(defaultOpt);
-    docs.forEach(function (doc) {
-      var opt = document.createElement('option');
-      opt.value = doc.id;
-      opt.textContent = doc.title || 'Untitled';
-      select.appendChild(opt);
-    });
-    container.appendChild(select);
-
-    // Results area (below actions)
-    var resultsArea = document.createElement('div');
-    resultsArea.style.cssText = 'margin-top:12px';
-
-    // Action cards
-    var grid = document.createElement('div');
-    grid.className = 'docproc-panel__action-grid';
-
-    var tocCard = createActionCard('Extract Table of Contents',
-      'View the hierarchical outline of the document structure.',
-      function () {
-        var docId = select.value;
-        if (!docId) { alert('Please select a document first.'); return; }
-        var doc = findDoc(docId, docs);
-        if (!doc) return;
-        renderTocViewer(resultsArea, doc);
-      });
-    grid.appendChild(tocCard);
-
-    var termsCard = createActionCard('Extract Terms & Definitions',
-      'View key terms with multi-layered definitions (mathematical, technical, experiential).',
-      function () {
-        var docId = select.value;
-        if (!docId) { alert('Please select a document first.'); return; }
-        renderTermsViewer(resultsArea, docId, docs);
-      });
-    grid.appendChild(termsCard);
-
-    var moreCard = createActionCard('More Formats',
-      'Summaries, key assumptions, formula sheets — coming soon.',
-      null);
-    moreCard.classList.add('is-disabled');
-    grid.appendChild(moreCard);
-
-    container.appendChild(grid);
-    container.appendChild(resultsArea);
-  }
-
-  function findDoc(docId, docs) {
-    for (var i = 0; i < docs.length; i++) {
-      if (docs[i].id === docId) return docs[i];
-    }
-    return null;
-  }
-
-  function renderTocViewer(container, doc) {
-    container.innerHTML = '';
-    var toc = doc.toc || [];
-    if (toc.length === 0) {
-      var empty = document.createElement('div');
-      empty.className = 'sidebar-tabs__empty';
-      empty.innerHTML = '<div class="sidebar-tabs__empty-title">No TOC data</div>' +
-        '<div class="sidebar-tabs__empty-desc">This document has no table of contents extracted yet.</div>';
-      container.appendChild(empty);
-      return;
-    }
-
-    var header = document.createElement('div');
-    header.className = 'sidebar-tabs__panel-header';
-    header.innerHTML = '<span class="sidebar-tabs__panel-title">Table of Contents</span>' +
-      '<span class="sidebar-tabs__panel-count">' + toc.length + '</span>';
-    container.appendChild(header);
-
-    var list = document.createElement('div');
-    list.style.cssText = 'display:flex;flex-direction:column;gap:2px';
-    toc.forEach(function (item) {
-      var row = document.createElement('div');
-      row.className = 'docproc-panel__toc-item';
-      var level = item.level || item.depth || 0;
-      row.style.paddingLeft = (level * 14) + 'px';
-
-      var titleEl = document.createElement('span');
-      titleEl.className = 'docproc-panel__toc-title';
-      var vals = Object.values(item);
-      titleEl.textContent = item.title || item.name || item.text || (typeof vals[0] === 'string' ? vals[0] : 'Untitled');
-      row.appendChild(titleEl);
-
-      if (item.page || item.pageNum) {
-        var pageEl = document.createElement('span');
-        pageEl.className = 'docproc-panel__toc-page';
-        pageEl.textContent = 'p.' + (item.page || item.pageNum);
-        row.appendChild(pageEl);
-      }
-
-      list.appendChild(row);
-    });
-    container.appendChild(list);
-  }
-
-  function createActionCard(titleText, descText, onClick) {
-    var card = document.createElement('div');
-    card.className = 'docproc-panel__action-card';
-    var t = document.createElement('div');
-    t.className = 'docproc-panel__action-title';
-    t.textContent = titleText;
-    var d = document.createElement('div');
-    d.className = 'docproc-panel__action-desc';
-    d.textContent = descText;
-    card.appendChild(t);
-    card.appendChild(d);
-    if (onClick) card.addEventListener('click', onClick);
-    return card;
-  }
-
-  function renderTermsViewer(container, docId, docs) {
-    container.innerHTML = '';
-    if (!docId) return;
-
-    var doc = null;
-    for (var i = 0; i < docs.length; i++) {
-      if (docs[i].id === docId) { doc = docs[i]; break; }
-    }
-    if (!doc || !(doc.glossary && doc.glossary.length > 0)) {
-      var empty = document.createElement('div');
-      empty.className = 'sidebar-tabs__empty';
-      empty.innerHTML = '<div class="sidebar-tabs__empty-title">No terms found</div>' +
-        '<div class="sidebar-tabs__empty-desc">This document has no terms & definitions extracted yet.</div>';
-      container.appendChild(empty);
-      return;
-    }
-
-    var header = document.createElement('div');
-    header.className = 'sidebar-tabs__panel-header';
-    header.innerHTML = '<span class="sidebar-tabs__panel-title">Terms</span>' +
-      '<span class="sidebar-tabs__panel-count">' + doc.glossary.length + '</span>';
-    container.appendChild(header);
-
-    doc.glossary.forEach(function (entry) {
-      var card = document.createElement('div');
-      card.className = 'docproc-panel__term-card';
-
-      var vals = Object.values(entry);
-      var termText = entry.term || entry.name || entry.title || (typeof vals[0] === 'string' ? vals[0] : '');
-
-      var name = document.createElement('div');
-      name.className = 'docproc-panel__term-name';
-      name.textContent = termText;
-      card.appendChild(name);
-
-      if (entry.page) {
-        var page = document.createElement('div');
-        page.className = 'docproc-panel__term-page';
-        page.textContent = 'Page ' + entry.page;
-        card.appendChild(page);
-      }
-
-      // Definition — support multi-layered or single
-      var defs = entry.definitions || null;
-      var singleDef = entry.definition || entry.description || entry.def || (typeof vals[1] === 'string' ? vals[1] : '');
-
-      if (defs && (defs.mathematical || defs.technical || defs.experiential)) {
-        // Multi-layered definitions with tabs
-        var defTabs = document.createElement('div');
-        defTabs.className = 'docproc-panel__def-tabs';
-        var defContent = document.createElement('div');
-        defContent.className = 'docproc-panel__def-content';
-
-        var types = [
-          { key: 'mathematical', label: 'Math' },
-          { key: 'technical', label: 'Technical' },
-          { key: 'experiential', label: 'Intuitive' }
-        ];
-
-        var firstActive = null;
-        types.forEach(function (type) {
-          var tab = document.createElement('button');
-          tab.className = 'docproc-panel__def-tab';
-          tab.type = 'button';
-          tab.textContent = type.label;
-          if (!defs[type.key]) {
-            tab.classList.add('is-empty');
-          } else if (!firstActive) {
-            firstActive = type.key;
-            tab.classList.add('is-active');
-            defContent.textContent = defs[type.key];
-          }
-          tab.addEventListener('click', function () {
-            if (!defs[type.key]) return;
-            var allTabs = defTabs.querySelectorAll('.docproc-panel__def-tab');
-            for (var j = 0; j < allTabs.length; j++) allTabs[j].classList.remove('is-active');
-            tab.classList.add('is-active');
-            defContent.textContent = defs[type.key];
-          });
-          defTabs.appendChild(tab);
-        });
-
-        card.appendChild(defTabs);
-        card.appendChild(defContent);
-      } else if (singleDef) {
-        var defEl = document.createElement('div');
-        defEl.className = 'docproc-panel__def-content';
-        defEl.textContent = singleDef;
-        card.appendChild(defEl);
-      }
-
-      container.appendChild(card);
-    });
   }
 
   /* ============================================================
@@ -3974,23 +3754,6 @@
 
     container.appendChild(list);
   }
-
-  /* ============================================================
-     PRACTICE TAB
-     ============================================================ */
-
-  function renderPracticePanel(container) {
-    var empty = document.createElement('div');
-    empty.className = 'sidebar-tabs__empty';
-    empty.style.paddingTop = '3rem';
-    empty.innerHTML =
-      '<div class="sidebar-tabs__empty-icon">' + SVG_TAB_PRACTICE + '</div>' +
-      '<div class="sidebar-tabs__empty-title">Coming Soon!</div>' +
-      '<div class="sidebar-tabs__empty-desc">Exam prep mode and work problem mode are on the way. Stay tuned.</div>';
-    container.appendChild(empty);
-  }
-
-  /* (Practice sub-functions removed — coming soon placeholder only) */
 
   /* ============================================================
      PERSISTENT EXAM NAV TABS (right side of viewport)
@@ -4916,8 +4679,7 @@ var SoundFX = (function () {
       libraryBtnEl.innerHTML += '<span class="doc-library__sidebar-count">' + libraryDocs.length + '</span>';
     }
     libraryBtnEl.addEventListener('click', function () {
-      renderLibraryViewer();
-      closeSidebar();
+      switchToLibraryTab();
     });
 
     // Wrap both buttons in a row
@@ -7308,119 +7070,24 @@ var SoundFX = (function () {
   }
 
   /* ---- Library viewer page ---- */
-  function renderLibraryViewer() {
-    var viewer = document.createElement('div');
-    viewer.className = 'custom-exam__viewer';
-
-    var toolbar = document.createElement('div');
-    toolbar.className = 'custom-exam__viewer-toolbar';
-
-    var titleEl = document.createElement('span');
-    titleEl.style.cssText = 'font-size:1.1rem;font-weight:600;display:flex;align-items:center;gap:8px';
-    titleEl.innerHTML = '<span style="width:20px;height:20px;display:inline-flex">' + SVG_BOOK + '</span> Document Library';
-    toolbar.appendChild(titleEl);
-
-    var toolbarActions = document.createElement('div');
-    toolbarActions.className = 'custom-exam__viewer-actions';
-
-    var uploadBtn = document.createElement('button');
-    uploadBtn.className = 'custom-exam__btn custom-exam__btn--primary custom-exam__btn--small';
-    uploadBtn.type = 'button';
-    uploadBtn.innerHTML = '<span class="custom-exam__btn-icon">' + SVG_PLUS + '</span> Upload Document';
-    uploadBtn.addEventListener('click', function () { openLibraryUploadModal(); });
-    toolbarActions.appendChild(uploadBtn);
-    toolbar.appendChild(toolbarActions);
-
-    var contentWrap = document.createElement('div');
-
-    if (libraryDocs.length === 0) {
-      // Empty state
-      var empty = document.createElement('div');
-      empty.style.cssText = 'text-align:center;padding:3rem 1rem;opacity:0.7';
-      empty.innerHTML = '<div style="width:48px;height:48px;margin:0 auto 16px;opacity:0.4">' + SVG_BOOK + '</div>' +
-        '<p style="font-size:1.1rem;margin-bottom:8px">No documents yet</p>' +
-        '<p style="font-size:0.9rem;opacity:0.7;margin-bottom:20px">Upload textbooks, articles, or lecture notes to build your library.</p>';
-
-      var emptyUploadBtn = document.createElement('button');
-      emptyUploadBtn.className = 'custom-exam__btn custom-exam__btn--primary';
-      emptyUploadBtn.type = 'button';
-      emptyUploadBtn.innerHTML = '<span class="custom-exam__btn-icon">' + SVG_PLUS + '</span> Upload Document';
-      emptyUploadBtn.addEventListener('click', function () { openLibraryUploadModal(); });
-      empty.appendChild(emptyUploadBtn);
-      contentWrap.appendChild(empty);
-    } else {
-      // Card grid
-      var grid = document.createElement('div');
-      grid.className = 'doc-library__card-grid';
-
-      libraryDocs.forEach(function (doc) {
-        var card = document.createElement('div');
-        card.className = 'doc-library__card';
-
-        var iconArea = document.createElement('div');
-        iconArea.className = 'doc-library__card-icon';
-        var docColor = getDocColor(doc.id);
-        var docInitials = getDocInitials(doc.title);
-        iconArea.innerHTML = '<div class="doc-library__card-avatar" style="background:' + docColor + '">' + escHtml(docInitials) + '</div>';
-
-        var info = document.createElement('div');
-        info.className = 'doc-library__card-info';
-
-        var docTitle = document.createElement('div');
-        docTitle.className = 'doc-library__card-title';
-        docTitle.textContent = doc.title || 'Untitled Document';
-
-        var docAuthor = document.createElement('div');
-        docAuthor.className = 'doc-library__card-author';
-        docAuthor.textContent = doc.author || '';
-
-        var stats = document.createElement('div');
-        stats.className = 'doc-library__card-stats';
-        var tocCount = (doc.toc || []).length;
-        var glossaryCount = (doc.glossary || []).length;
-        stats.textContent = tocCount + ' sections · ' + glossaryCount + ' terms';
-
-        info.appendChild(docTitle);
-        if (doc.author) info.appendChild(docAuthor);
-        info.appendChild(stats);
-
-        var actions = document.createElement('div');
-        actions.className = 'doc-library__card-actions';
-
-        var deleteBtn = document.createElement('button');
-        deleteBtn.className = 'custom-exam__btn custom-exam__btn--ghost custom-exam__btn--tiny';
-        deleteBtn.type = 'button';
-        deleteBtn.title = 'Delete';
-        deleteBtn.innerHTML = SVG_TRASH;
-        deleteBtn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          if (confirm('Delete "' + (doc.title || 'this document') + '"? This cannot be undone.')) {
-            libraryDocs = libraryDocs.filter(function (d) { return d.id !== doc.id; });
-            saveLibrary();
-            removeViewer(viewer);
-            renderLibraryViewer();
-          }
-        });
-        actions.appendChild(deleteBtn);
-
-        card.appendChild(iconArea);
-        card.appendChild(info);
-        card.appendChild(actions);
-
-        card.addEventListener('click', function () {
-          removeViewer(viewer);
-          renderLibraryDocPage(doc.id);
-        });
-
-        grid.appendChild(card);
-      });
-
-      contentWrap.appendChild(grid);
+  function switchToLibraryTab() {
+    activeTab = 'library';
+    saveActiveTab();
+    var bar = document.querySelector('.sidebar-tabs__bar');
+    if (bar) {
+      var allTabs = bar.querySelectorAll('.sidebar-tabs__tab');
+      for (var i = 0; i < allTabs.length; i++) {
+        allTabs[i].classList.toggle('is-active', allTabs[i].dataset.tabId === 'library');
+      }
     }
+    renderActivePanel();
+  }
 
-    viewer.appendChild(toolbar);
-    viewer.appendChild(contentWrap);
-    showInContentArea(viewer);
+  function renderLibraryViewer() {
+    // No longer shows a separate page — just switch to the Library tab in sidebar
+    var existing = document.querySelector('.custom-exam__viewer');
+    if (existing) removeViewer(existing);
+    switchToLibraryTab();
   }
 
   /* ---- Source-only library document detail page ---- */
@@ -7465,13 +7132,12 @@ var SoundFX = (function () {
     infoRight.style.flex = '1';
 
     var titleEl = document.createElement('h1');
-    titleEl.style.color = color;
     titleEl.textContent = doc.title || 'Unknown Title';
     infoRight.appendChild(titleEl);
 
     if (doc.author) {
       var authorEl = document.createElement('p');
-      authorEl.style.opacity = '0.7';
+      authorEl.className = 'doc-library__doc-author';
       authorEl.textContent = 'By ' + doc.author;
       infoRight.appendChild(authorEl);
     }
@@ -7578,6 +7244,7 @@ var SoundFX = (function () {
     toolbar.appendChild(toolbarActions);
 
     var contentWrap = document.createElement('div');
+    contentWrap.className = 'markdown-rendered';
 
     // Source-only document: show rich metadata page instead of TOC/Glossary
     var isSourceOnly = !doc.pdfText && (doc.toc || []).length === 0 && (doc.glossary || []).length === 0;
@@ -7590,34 +7257,30 @@ var SoundFX = (function () {
     }
 
     var titleEl = document.createElement('h1');
-    titleEl.style.cssText = 'margin-bottom:0.25rem';
     titleEl.textContent = doc.title || 'Untitled Document';
     contentWrap.appendChild(titleEl);
 
     if (doc.author) {
       var authorEl = document.createElement('p');
-      authorEl.style.cssText = 'opacity:0.6;font-size:0.95rem;margin-bottom:0.5rem';
+      authorEl.className = 'doc-library__doc-author';
       authorEl.textContent = 'by ' + doc.author;
       contentWrap.appendChild(authorEl);
     }
 
     var dateEl = document.createElement('p');
-    dateEl.style.cssText = 'opacity:0.4;font-size:0.85rem;margin-bottom:1.5rem';
+    dateEl.className = 'doc-library__doc-date';
     dateEl.textContent = 'Uploaded ' + new Date(doc.uploadedAt).toLocaleDateString();
     contentWrap.appendChild(dateEl);
 
     // Table of Contents section
     var tocSection = document.createElement('div');
-    tocSection.style.cssText = 'margin-bottom:2rem';
 
     var tocHeader = document.createElement('h2');
-    tocHeader.style.cssText = 'font-size:1.1rem;margin-bottom:0.75rem';
     tocHeader.textContent = 'Table of Contents';
     tocSection.appendChild(tocHeader);
 
     if ((doc.toc || []).length === 0) {
       var tocEmpty = document.createElement('p');
-      tocEmpty.style.cssText = 'opacity:0.5;font-size:0.9rem';
       tocEmpty.textContent = 'No table of contents extracted.';
       tocSection.appendChild(tocEmpty);
     } else {
@@ -7630,17 +7293,14 @@ var SoundFX = (function () {
 
     // Glossary section
     var glossarySection = document.createElement('div');
-    glossarySection.style.cssText = 'margin-bottom:2rem';
 
     var totalTerms = (doc.glossary || []).length;
     var glossaryHeader = document.createElement('h2');
-    glossaryHeader.style.cssText = 'font-size:1.1rem;margin-bottom:0.75rem';
     glossaryHeader.textContent = 'Glossary (' + totalTerms + ' terms)';
     glossarySection.appendChild(glossaryHeader);
 
     if (totalTerms === 0) {
       var glossaryEmpty = document.createElement('p');
-      glossaryEmpty.style.cssText = 'opacity:0.5;font-size:0.9rem';
       glossaryEmpty.textContent = 'No glossary terms extracted.';
       glossarySection.appendChild(glossaryEmpty);
     } else {

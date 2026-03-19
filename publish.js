@@ -95,11 +95,62 @@
   // Cache for fetched exam objectives
   var examNavObjectivesCache = {};
 
+  // ── Learned-concepts state ──────────────────────────────
+  var LEARNED_KEY = 'actuarial-notes-learned';
+  var learnedConcepts = {};
+
+  function loadLearnedConcepts() {
+    try {
+      var raw = localStorage.getItem(LEARNED_KEY);
+      if (raw) learnedConcepts = JSON.parse(raw) || {};
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveLearnedConcepts() {
+    try { localStorage.setItem(LEARNED_KEY, JSON.stringify(learnedConcepts)); } catch (e) { /* ignore */ }
+  }
+
+  function isConceptLearned(examId, conceptName) {
+    return learnedConcepts[examId] && learnedConcepts[examId].indexOf(conceptName) !== -1;
+  }
+
+  function toggleConceptLearned(examId, conceptName) {
+    if (!learnedConcepts[examId]) learnedConcepts[examId] = [];
+    var idx = learnedConcepts[examId].indexOf(conceptName);
+    if (idx === -1) {
+      learnedConcepts[examId].push(conceptName);
+    } else {
+      learnedConcepts[examId].splice(idx, 1);
+    }
+    saveLearnedConcepts();
+  }
+
+  function getExamId(currentData) {
+    return currentData.name;
+  }
+
+  function updateObjectiveBadge(wrapEl, examId, objective) {
+    var badge = wrapEl.querySelector('.exam-nav__lo-count');
+    if (!badge) return;
+    var allLearned = objective.concepts.length > 0 && objective.concepts.every(function (concept) {
+      var cName = typeof concept === 'string' ? concept : concept.name;
+      return isConceptLearned(examId, cName);
+    });
+    if (allLearned) {
+      badge.classList.add('is-all-learned');
+    } else {
+      badge.classList.remove('is-all-learned');
+    }
+  }
+
+  loadLearnedConcepts();
+
   function buildExamNav(container) {
     // Parse data attributes
     const customColor = container.dataset.color;
     const currentData = parseExamData(container.dataset.current);
     const tracks = parseTracks(container.dataset.tracks);
+    var examId = getExamId(currentData);
 
     // Set exam color on page container for callout tinting
     const pageEl = container.closest('.markdown-preview-view, .markdown-rendered, .page-container') || container.parentElement;
@@ -174,12 +225,12 @@
     function loadStickyObjectives() {
       var objectives = parseObjectivesFromDOM(container);
       if (objectives.length > 0) {
-        renderExamNavObjectives(stickyLoSection, objectives, container);
+        renderExamNavObjectives(stickyLoSection, objectives, container, examId);
       } else {
         var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
         if (!pagePath) pagePath = document.title;
         fetchExamNavObjectives(pagePath).then(function (objs) {
-          renderExamNavObjectives(stickyLoSection, objs, container);
+          renderExamNavObjectives(stickyLoSection, objs, container, examId);
         }).catch(function () {});
       }
     }
@@ -230,7 +281,23 @@
 
           var menu = document.createElement('div');
           menu.className = 'dl-dropdown__menu';
-          menu.innerHTML = '<div class="dl-dropdown__menu-header">Select a file</div>';
+
+          var menuHeader = document.createElement('div');
+          menuHeader.className = 'dl-dropdown__menu-header';
+          var headerText = document.createElement('span');
+          headerText.textContent = 'Select a file';
+          menuHeader.appendChild(headerText);
+          var closeChevron = document.createElement('button');
+          closeChevron.className = 'dl-dropdown__menu-close';
+          closeChevron.type = 'button';
+          closeChevron.setAttribute('aria-label', 'Close');
+          closeChevron.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 15 12 9 18 15"/></svg>';
+          closeChevron.addEventListener('click', function (e) {
+            e.stopPropagation();
+            wrapper.classList.remove('is-open');
+          });
+          menuHeader.appendChild(closeChevron);
+          menu.appendChild(menuHeader);
 
           dlFiles.forEach(function (file) {
             var item = document.createElement('a');
@@ -415,7 +482,7 @@
   }
 
   // Render objectives list with concept sub-dropdowns (styled like concept-nav)
-  function renderExamNavObjectives(section, objectives, container) {
+  function renderExamNavObjectives(section, objectives, container, examId) {
     section.innerHTML = '';
 
     if (objectives.length === 0) {
@@ -483,6 +550,19 @@
           var numSpan = document.createElement('span');
           numSpan.className = 'exam-nav__lo-menu-num';
           numSpan.textContent = (idx + 1);
+          if (examId && isConceptLearned(examId, cName)) {
+            numSpan.classList.add('is-learned');
+          }
+          (function (ns, cn, obj) {
+            ns.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleConceptLearned(examId, cn);
+              ns.classList.toggle('is-learned');
+              updateObjectiveBadge(wrap, examId, obj);
+            });
+          })(numSpan, cName, objective);
+          numSpan.style.cursor = 'pointer';
           link.appendChild(numSpan);
           link.appendChild(document.createTextNode(cName));
           link.addEventListener('click', function () {
@@ -515,6 +595,7 @@
 
       wrap.appendChild(btn);
       wrap.appendChild(menu);
+      if (examId) updateObjectiveBadge(wrap, examId, objective);
       li.appendChild(wrap);
 
       list.appendChild(li);

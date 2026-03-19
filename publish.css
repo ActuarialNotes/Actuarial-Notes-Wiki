@@ -2648,6 +2648,37 @@ a.download-link.download-link--gray, .download-link.download-link--gray { backgr
   letter-spacing: 0.05em;
 }
 
+.exam-nav__sticky .dl-dropdown__menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dl-dropdown__menu-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.dl-dropdown__menu-close:hover {
+  color: var(--text);
+  background: color-mix(in oklab, var(--nav-color, var(--text-dim)) 12%, transparent);
+}
+
+.dl-dropdown__menu-close svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* Menu items */
 .dl-dropdown__menu-item {
   display: flex;
@@ -3704,6 +3735,18 @@ figure.right figcaption,
   border-radius: 10px;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
+}
+
+/* Learned concept number */
+.exam-nav__lo-menu-num.is-learned {
+  color: #fff;
+  background: var(--nav-color);
+}
+
+/* All concepts learned — count badge */
+.exam-nav__lo-count.is-all-learned {
+  color: #fff;
+  background: var(--nav-color);
 }
 
 /* ── Download dropdown inside sticky ──────────────────── */
@@ -5217,6 +5260,14 @@ body.high-contrast .dl-dropdown__menu-item-name {
 }
 body.high-contrast .dl-dropdown__menu-header {
   color: var(--text) !important;
+}
+body.high-contrast .exam-nav__lo-menu-num.is-learned {
+  color: var(--bg) !important;
+  background: var(--text) !important;
+}
+body.high-contrast .exam-nav__lo-count.is-all-learned {
+  color: var(--bg) !important;
+  background: var(--text) !important;
 }
 body.high-contrast .dl-dropdown__trigger {
   border-color: var(--text) !important;

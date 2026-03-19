@@ -3547,6 +3547,10 @@
     var sliderTrack = document.createElement('div');
     sliderTrack.className = 'library-panel__slider-track';
 
+    var sliderRail = document.createElement('div');
+    sliderRail.className = 'library-panel__slider-rail';
+    sliderTrack.appendChild(sliderRail);
+
     var sliderRange = document.createElement('div');
     sliderRange.className = 'library-panel__slider-range';
     sliderTrack.appendChild(sliderRange);

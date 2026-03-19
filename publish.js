@@ -4715,11 +4715,11 @@ var SoundFX = (function () {
   var PDFJS_VERSION = '4.0.379';
   var PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VERSION;
 
-  var DEFAULT_OBJECTIVES_PROMPT = 'You are an expert actuarial exam content analyst. Analyze the provided document and extract the learning objectives.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview of the exam/document",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "description": "Verbatim introductory text for this objective section copied exactly from the document",\n      "weight": 25,\n      "concepts": [\n        {\n          "name": "Concept Name",\n          "description": "Exact verbatim text from the document for this item"\n        }\n      ]\n    }\n  ]\n}\n\nRules:\n- weight is a percentage (number) if found in the document, otherwise null\n- Each objective should have 2-8 relevant concepts\n- Extract ALL learning objectives you can identify\n- Be thorough but accurate — only include what the document supports\n- CRITICAL: concept "name" fields must use the EXACT noun phrases and terminology from the source document verbatim — do not paraphrase, rename, or generalize them\n- Group concepts logically under each objective so that closely related topics appear together\n- CRITICAL: concept "description" must be the EXACT verbatim text from the document that defines or describes this concept. Copy the text word-for-word — do NOT paraphrase, summarize, or rewrite. If the concept appears as a numbered item (e.g. "1. Define set functions..."), include the full text of that numbered item exactly as written.\n- Each objective "description" must be the verbatim introductory text for that objective section (e.g. "Understand basic concepts of probability and discrete mathematics.") copied exactly from the document. If no introductory text exists, use null.';
+  var DEFAULT_OBJECTIVES_PROMPT = 'You are an expert actuarial exam content analyst. Analyze the provided document and extract the learning objectives with their EXACT verbatim text.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview of the exam/document",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "weight": 25,\n      "body": "The EXACT verbatim text of this learning objective section, with key terms wrapped in [[double brackets]]."\n    }\n  ]\n}\n\nRules:\n- weight is a percentage (number) if found in the document, otherwise null\n- Extract ALL learning objectives you can identify\n- CRITICAL: The "body" field must contain the EXACT verbatim text from the document for that learning objective section. Copy EVERY word exactly as written in the source. Do NOT paraphrase, summarize, abbreviate, or rewrite ANY part of the text.\n- Include any introductory sentence, followed by ALL numbered items, exactly as they appear in the document. Preserve the numbering (1., 2., 3., etc.). Separate items with newline characters.\n- Within the verbatim text, wrap important technical terms, methods, proper nouns, and concepts in [[double brackets]] to create wiki links.\n  Example: "Calculate probabilities using [[combinatorics]], such as [[combinations]] and [[permutations]]."\n  Example: "Organize ratemaking data by [[calendar year]], [[policy year]], [[accident year]], and [[report year]]."\n- Only wrap specific technical nouns — do NOT wrap generic words like "data", "methods", "analysis", "process"\n- Use Title Case inside the brackets for proper nouns: [[Calendar Year]] not [[calendar year]], [[Bayes Theorem]] not [[bayes theorem]]\n- If a term appears multiple times in the body, wrap it in [[]] every time';
 
   var DEFAULT_SOURCES_PROMPT = 'You are an expert actuarial exam content analyst. Analyze the provided document and extract the required sources and references.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "sources": [\n    {\n      "title": "Full Title of the Source",\n      "author": "Author Last Name(s)",\n      "year": "Year published (e.g. 2020) or null if unknown",\n      "coverage": "Chapters 1-8",\n      "exclusions": "Excluding 4.8.4, 5.6.2, 5.6.3" \n    }\n  ]\n}\n\nRules:\n- Extract ALL required readings, textbooks, and references mentioned\n- "coverage" should capture the EXACT chapters, sections, or page ranges specified in the document (e.g. "Chapters 1-8", "Chapters 1-11", "Sections 3.1-3.5")\n- "exclusions" should capture any explicitly excluded sections or chapters mentioned, exactly as written in the document. Use null if no exclusions are specified.\n- For author, use the format from the document (e.g. "Ross", "Wackerly, Mendenhall, & Scheaffer", "Hassett")\n- For year, extract the publication year or edition year if mentioned; use null if not found';
 
-  var DEFAULT_FEEDBACK_PROMPT = 'You are an expert actuarial exam content analyst. The user has reviewed the following extracted exam content and provided feedback. Update the content based on their feedback and return the complete updated JSON.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "description": "Verbatim introductory text for this objective section from the document, or null",\n      "weight": 25,\n      "concepts": [\n        {\n          "name": "Concept Name",\n          "description": "Exact verbatim text from the document for this concept"\n        }\n      ]\n    }\n  ],\n  "sources": [\n    {\n      "title": "Full Title of the Source",\n      "author": "Author Last Name(s)",\n      "year": "Year published or null",\n      "coverage": "Chapters/sections covered",\n      "exclusions": "Excluded sections or null"\n    }\n  ]\n}';
+  var DEFAULT_FEEDBACK_PROMPT = 'You are an expert actuarial exam content analyst. The user has reviewed the following extracted exam content and provided feedback. Update the content based on their feedback and return the complete updated JSON.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "examTitle": "Short exam or course name",\n  "examDescription": "1-2 sentence overview",\n  "objectives": [\n    {\n      "title": "Learning Objective Title",\n      "weight": 25,\n      "body": "Exact verbatim text from the document with key terms wrapped in [[double brackets]]"\n    }\n  ],\n  "sources": [\n    {\n      "title": "Full Title of the Source",\n      "author": "Author Last Name(s)",\n      "year": "Year published or null",\n      "coverage": "Chapters/sections covered",\n      "exclusions": "Excluded sections or null"\n    }\n  ]\n}';
 
   var DEFAULT_CONCEPTS_PROMPT = 'You are an expert actuarial exam content analyst. Given the following document text and a list of concept names, find detailed definitions and explanations for each concept.\n\nReturn ONLY valid JSON with this exact structure (no markdown, no code fences):\n{\n  "conceptDetails": {\n    "Concept Name": "A thorough 2-5 sentence definition and explanation of this concept as described in the source document, including key formulas, relationships, or examples where relevant."\n  }\n}\n\nRules:\n- Use the EXACT concept names as keys\n- Draw definitions directly from the source document content\n- Include mathematical formulas or relationships if mentioned\n- If a concept is not found in the document, provide a brief general definition and note it was not explicitly covered\n- Be thorough but concise';
 
@@ -5683,9 +5683,7 @@ var SoundFX = (function () {
       workflowData.objectives = objResult.objectives || [];
       workflowData.color = EXAM_COLORS[Math.floor(Math.random() * EXAM_COLORS.length)];
 
-      var conceptCount = 0;
-      workflowData.objectives.forEach(function (o) { conceptCount += (o.concepts || []).length; });
-      setTaskStatus(progressEl, 'objectives', 'done', workflowData.objectives.length + ' objectives, ' + conceptCount + ' concepts');
+      setTaskStatus(progressEl, 'objectives', 'done', workflowData.objectives.length + ' objectives');
 
       // Show objectives preview
       livePreview.style.display = 'block';
@@ -5706,43 +5704,25 @@ var SoundFX = (function () {
         return el;
       }, 100);
 
-      // Task 3: Resolve concepts against existing wiki pages
+      // Task 3: Parse [[wiki links]] from objective bodies to extract concepts
       await new Promise(function (r) { setTimeout(r, workflowData.objectives.length * 100 + 200); });
       setTaskStatus(progressEl, 'concepts', 'active');
 
-      var allConcepts = [];
+      var allConceptNames = [];
       workflowData.objectives.forEach(function (o) {
-        (o.concepts || []).forEach(function (c) { allConcepts.push(c); });
-      });
-
-      if (allConcepts.length > 0) {
-        try {
-          var wikiSiteId = examNavExtractSiteId();
-          var existingCount = 0;
-          var newConceptCount = 0;
-
-          // Batch check wiki pages (5 concurrent at a time)
-          for (var batchStart = 0; batchStart < allConcepts.length; batchStart += 5) {
-            var batch = allConcepts.slice(batchStart, batchStart + 5);
-            var results = await Promise.all(batch.map(function (c) {
-              return checkWikiPageExists(wikiSiteId, c.name);
-            }));
-            results.forEach(function (exists, idx) {
-              batch[idx].wikiExists = exists;
-              if (exists) existingCount++;
-              else newConceptCount++;
-            });
+        var bodyText = o.body || '';
+        var wikiRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+        var m;
+        while ((m = wikiRe.exec(bodyText)) !== null) {
+          var cName = m[1].trim();
+          if (cName && allConceptNames.indexOf(cName) === -1) {
+            allConceptNames.push(cName);
           }
-
-          setTaskStatus(progressEl, 'concepts', 'done', existingCount + ' existing, ' + newConceptCount + ' new');
-        } catch (wikiErr) {
-          // If wiki check fails, mark all as unknown
-          allConcepts.forEach(function (c) { c.wikiExists = false; });
-          setTaskStatus(progressEl, 'concepts', 'done', allConcepts.length + ' concepts (wiki check unavailable)');
         }
-      } else {
-        setTaskStatus(progressEl, 'concepts', 'done', '0 concepts');
-      }
+      });
+      // Store concept names on workflowData for reference
+      workflowData.concepts = allConceptNames;
+      setTaskStatus(progressEl, 'concepts', 'done', allConceptNames.length + ' concepts linked');
 
       // Task 4: Extract sources
       setTaskStatus(progressEl, 'sources', 'active');
@@ -5845,23 +5825,6 @@ var SoundFX = (function () {
     }
 
     return { text: allText, pageCount: pageCount };
-  }
-
-  /* ---- Wiki page existence check (for concept resolution) ---- */
-  async function checkWikiPageExists(siteId, conceptName) {
-    if (!siteId) return false;
-    var paths = [
-      'Concepts/' + conceptName + '.md',
-      conceptName + '.md'
-    ];
-    for (var i = 0; i < paths.length; i++) {
-      try {
-        var url = 'https://publish-01.obsidian.md/access/' + siteId + '/' + encodeURIComponent(paths[i]);
-        var resp = await fetch(url, { method: 'HEAD' });
-        if (resp.ok) return true;
-      } catch (e) { continue; }
-    }
-    return false;
   }
 
   /* ---- Structured PDF extraction (for Library feature) ---- */
@@ -6453,42 +6416,47 @@ var SoundFX = (function () {
         objTitleEl.appendChild(weightBadge);
       }
 
+      // Count [[wiki links]] in body for concept count badge
+      var reviewBodyText = obj.body || '';
+      var reviewLinkCount = 0;
+      var reviewLinkSeen = {};
+      var reviewLinkRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+      var reviewLinkMatch;
+      while ((reviewLinkMatch = reviewLinkRe.exec(reviewBodyText)) !== null) {
+        var rlName = reviewLinkMatch[1].trim();
+        if (rlName && !reviewLinkSeen[rlName]) { reviewLinkSeen[rlName] = true; reviewLinkCount++; }
+      }
+
       var conceptCountBadge = document.createElement('span');
       conceptCountBadge.style.cssText = 'margin-left:auto;font-size:0.75rem;opacity:0.5';
-      conceptCountBadge.textContent = (obj.concepts || []).length + ' concepts';
+      conceptCountBadge.textContent = reviewLinkCount + ' concepts';
 
       cardHeader.appendChild(numEl);
       cardHeader.appendChild(objTitleEl);
       cardHeader.appendChild(conceptCountBadge);
       card.appendChild(cardHeader);
 
-      var conceptsList = document.createElement('div');
-      conceptsList.className = 'custom-exam__concepts-list';
-      conceptsList.style.display = 'none';
+      var bodyPreview = document.createElement('div');
+      bodyPreview.className = 'custom-exam__concepts-list';
+      bodyPreview.style.display = 'none';
+      bodyPreview.style.cssText += ';padding:8px 12px;font-size:0.85rem;opacity:0.8;white-space:pre-line';
 
-      (obj.concepts || []).forEach(function (concept) {
-        var row = document.createElement('div');
-        row.style.cssText = 'padding:4px 0 4px 16px;font-size:0.85rem;border-bottom:1px solid var(--muted,#eee)';
-        var wikiTag = '';
-        if (concept.wikiExists === true) {
-          wikiTag = ' <span style="font-size:0.7rem;opacity:0.5;margin-left:4px">✓ exists</span>';
-        } else if (concept.wikiExists === false) {
-          wikiTag = ' <span style="font-size:0.7rem;opacity:0.5;margin-left:4px;color:var(--warning,#f59e0b)">new</span>';
-        }
-        row.innerHTML = '<strong>' + escHtml(concept.name) + '</strong>' + wikiTag;
-        if (concept.description) {
-          var truncDesc = concept.description.length > 120 ? concept.description.substring(0, 120) + '…' : concept.description;
-          row.innerHTML += ' — <span style="opacity:0.7;font-size:0.82rem">' + escHtml(truncDesc) + '</span>';
-        }
-        conceptsList.appendChild(row);
-      });
+      if (obj.body) {
+        // Show body text with [[links]] stripped to plain text for review
+        var previewText = obj.body.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, function (_, target, alias) {
+          return alias || target;
+        });
+        // Truncate if very long
+        if (previewText.length > 500) previewText = previewText.substring(0, 500) + '…';
+        bodyPreview.textContent = previewText;
+      }
 
       cardHeader.addEventListener('click', function () {
-        var open = conceptsList.style.display !== 'none';
-        conceptsList.style.display = open ? 'none' : 'block';
+        var open = bodyPreview.style.display !== 'none';
+        bodyPreview.style.display = open ? 'none' : 'block';
       });
 
-      card.appendChild(conceptsList);
+      card.appendChild(bodyPreview);
       previewSection.appendChild(card);
     });
 
@@ -6682,8 +6650,7 @@ var SoundFX = (function () {
     stats.className = 'custom-exam__stats';
 
     var objCount = (workflowData.objectives || []).length;
-    var conceptCount = 0;
-    (workflowData.objectives || []).forEach(function (o) { conceptCount += (o.concepts || []).length; });
+    var conceptCount = (workflowData.concepts || []).length;
     var srcCount = (workflowData.sources || []).length;
 
     [
@@ -6822,21 +6789,35 @@ var SoundFX = (function () {
         doc.text(titleLines, margin, y);
         y += titleLines.length * 7 + 4;
 
-        (obj.concepts || []).forEach(function (concept) {
-          if (y > 260) { doc.addPage(); y = margin; }
-
+        // Render body text (strip [[wiki links]] to plain text for PDF)
+        if (obj.body) {
           doc.setFontSize(11);
-          doc.setFont(undefined, 'bold');
-          doc.text('  ' + concept.name, margin + 4, y);
-          y += 6;
-
           doc.setFont(undefined, 'normal');
-          if (concept.description) {
-            var conceptLines = doc.splitTextToSize(concept.description, contentWidth - 12);
-            doc.text(conceptLines, margin + 8, y);
-            y += conceptLines.length * 5 + 4;
-          }
-        });
+          var pdfBodyText = obj.body.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, function (_, target, alias) {
+            return alias || target;
+          });
+          var bodyLines = doc.splitTextToSize(pdfBodyText, contentWidth - 8);
+          bodyLines.forEach(function (bLine) {
+            if (y > 260) { doc.addPage(); y = margin; }
+            doc.text(bLine, margin + 4, y);
+            y += 5;
+          });
+        } else if (obj.concepts) {
+          // Backwards compat: old-format exams
+          (obj.concepts || []).forEach(function (concept) {
+            if (y > 260) { doc.addPage(); y = margin; }
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.text('  ' + concept.name, margin + 4, y);
+            y += 6;
+            doc.setFont(undefined, 'normal');
+            if (concept.description) {
+              var conceptLines = doc.splitTextToSize(concept.description, contentWidth - 12);
+              doc.text(conceptLines, margin + 8, y);
+              y += conceptLines.length * 5 + 4;
+            }
+          });
+        }
 
         y += 6;
       });
@@ -6931,6 +6912,44 @@ var SoundFX = (function () {
 
     contentEl.appendChild(viewer);
     window.scrollTo(0, 0);
+  }
+
+  /** Render a body string containing [[wiki links]] as HTML with clickable links.
+   *  Splits on newlines and converts [[Name]] or [[Name|Alias]] to <a> tags. */
+  function renderWikiBody(container, body, color) {
+    var lines = body.split('\n');
+    lines.forEach(function (line, li) {
+      if (!line.trim()) return; // skip empty lines
+      var lineEl = document.createElement('div');
+      lineEl.style.cssText = 'margin-bottom:4px;font-size:0.95rem;line-height:1.5';
+
+      // Parse [[wiki links]] and render inline
+      var wikiRe = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
+      var lastIdx = 0;
+      var match;
+      while ((match = wikiRe.exec(line)) !== null) {
+        // Text before the link
+        if (match.index > lastIdx) {
+          lineEl.appendChild(document.createTextNode(line.substring(lastIdx, match.index)));
+        }
+        var linkTarget = match[1].trim();
+        var linkDisplay = (match[2] || match[1]).trim();
+        var a = document.createElement('a');
+        a.className = 'internal-link';
+        a.href = '/Concepts/' + encodeURIComponent(linkTarget);
+        a.setAttribute('data-href', 'Concepts/' + linkTarget);
+        a.style.color = color || '#2563eb';
+        a.style.fontWeight = '600';
+        a.textContent = linkDisplay;
+        lineEl.appendChild(a);
+        lastIdx = match.index + match[0].length;
+      }
+      // Remaining text after last link
+      if (lastIdx < line.length) {
+        lineEl.appendChild(document.createTextNode(line.substring(lastIdx)));
+      }
+      container.appendChild(lineEl);
+    });
   }
 
   function renderExamViewer(examId) {
@@ -7047,11 +7066,20 @@ var SoundFX = (function () {
         calloutTitle.appendChild(pctBadge);
       }
 
-      // Concept count badge
-      if ((obj.concepts || []).length > 0) {
+      // Concept count badge (count [[links]] in body)
+      var bodyConceptCount = 0;
+      var bodyText = obj.body || '';
+      var ccRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+      var ccSeen = {};
+      var ccMatch;
+      while ((ccMatch = ccRe.exec(bodyText)) !== null) {
+        var ccName = ccMatch[1].trim();
+        if (ccName && !ccSeen[ccName]) { ccSeen[ccName] = true; bodyConceptCount++; }
+      }
+      if (bodyConceptCount > 0) {
         var conceptBadge = document.createElement('span');
         conceptBadge.className = 'callout-concept-count';
-        conceptBadge.textContent = (obj.concepts || []).length + ' Concepts';
+        conceptBadge.textContent = bodyConceptCount + ' Concepts';
         calloutTitle.appendChild(conceptBadge);
       }
 
@@ -7060,53 +7088,28 @@ var SoundFX = (function () {
       var calloutContent = document.createElement('div');
       calloutContent.className = 'callout-content';
 
-      // Objective introductory description (verbatim from document)
-      if (obj.description) {
-        var objDescEl = document.createElement('p');
-        objDescEl.style.cssText = 'margin:0 0 0.5rem;font-size:0.95rem;opacity:0.9';
-        objDescEl.textContent = obj.description;
-        calloutContent.appendChild(objDescEl);
-      }
-
-      var conceptList = document.createElement('ol');
-      (obj.concepts || []).forEach(function (concept, ci) {
-        var li = document.createElement('li');
-
-        // Concept name as wiki-style link
-        var nameLink = document.createElement('a');
-        nameLink.style.color = exam.color || '#2563eb';
-        nameLink.style.fontWeight = '600';
-        if (concept.wikiExists) {
-          // Link to actual wiki page
-          nameLink.href = '/Concepts/' + encodeURIComponent(concept.name);
-          nameLink.className = 'internal-link';
-          nameLink.setAttribute('data-href', 'Concepts/' + concept.name);
-        } else {
-          // No wiki page — open concept page within custom exam viewer
+      // Render objective body with [[wiki links]] as clickable links
+      if (obj.body) {
+        renderWikiBody(calloutContent, obj.body, exam.color || '#2563eb');
+      } else if (obj.concepts) {
+        // Backwards compat: old-format exams with concepts array
+        var conceptList = document.createElement('ol');
+        (obj.concepts || []).forEach(function (concept) {
+          var li = document.createElement('li');
+          var nameLink = document.createElement('a');
           nameLink.href = '#';
-          nameLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            renderConceptPage(exam.id, i, ci);
-          });
-        }
-        nameLink.textContent = concept.name;
-        li.appendChild(nameLink);
-
-        // Show "new" badge for concepts without wiki pages
-        if (concept.wikiExists === false) {
-          var newBadge = document.createElement('span');
-          newBadge.style.cssText = 'display:inline-block;margin-left:6px;padding:1px 6px;font-size:0.7rem;border-radius:3px;background:var(--muted,#333);color:var(--text-muted,#999);vertical-align:middle';
-          newBadge.textContent = 'new';
-          li.appendChild(newBadge);
-        }
-
-        if (concept.description) {
-          li.appendChild(document.createTextNode(' — ' + concept.description));
-        }
-        conceptList.appendChild(li);
-      });
-
-      calloutContent.appendChild(conceptList);
+          nameLink.className = 'internal-link';
+          nameLink.style.color = exam.color || '#2563eb';
+          nameLink.style.fontWeight = '600';
+          nameLink.textContent = concept.name;
+          li.appendChild(nameLink);
+          if (concept.description) {
+            li.appendChild(document.createTextNode(' — ' + concept.description));
+          }
+          conceptList.appendChild(li);
+        });
+        calloutContent.appendChild(conceptList);
+      }
 
       calloutTitle.addEventListener('click', function () {
         var collapsed = callout.classList.toggle('is-collapsed');

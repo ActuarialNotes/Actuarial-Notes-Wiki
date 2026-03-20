@@ -3496,7 +3496,7 @@ figure.right figcaption,
 
 .exam-nav__lo-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
   min-width: 0;
@@ -3526,6 +3526,7 @@ figure.right figcaption,
   transition: color 0.1s ease, background 0.1s ease;
   min-width: 0;
   border-radius: var(--radius-sm);
+  white-space: normal;
 }
 
 .exam-nav__lo-obj-btn:hover {

@@ -80,6 +80,9 @@
       if (typeof window._updatePersistentExamNavs === 'function') {
         setTimeout(window._updatePersistentExamNavs, 100);
       }
+      if (typeof window._updateExamLinkButtons === 'function') {
+        setTimeout(window._updateExamLinkButtons, 150);
+      }
       return;
     }
 
@@ -3567,6 +3570,35 @@
     }
 
     updatePersistentExamNavs();
+    updateExamLinkButtons();
+  }
+
+  /* ---- Colour in-progress exam-link buttons on the home page ---- */
+  function updateExamLinkButtons() {
+    var links = document.querySelectorAll('.exam-link');
+    if (!links.length) return;
+
+    var inProgress = getInProgressExams();
+    var pathSet = {};
+    inProgress.forEach(function (exam) {
+      if (exam.path) {
+        pathSet[exam.path.toLowerCase()] = exam;
+      }
+    });
+
+    links.forEach(function (link) {
+      var href = decodeURIComponent(link.getAttribute('href') || '')
+        .replace(/\+/g, ' ')
+        .replace(/^\//, '');
+      var match = pathSet[href.toLowerCase()] || null;
+      if (match) {
+        link.classList.add('is-in-progress');
+        link.style.setProperty('--link-accent', COLOR_HEX[match.color] || 'var(--brand)');
+      } else {
+        link.classList.remove('is-in-progress');
+        link.style.removeProperty('--link-accent');
+      }
+    });
   }
 
   /* ============================================================
@@ -3693,21 +3725,26 @@
     loadActiveTab();
     buildSidebarTabs();
     setTimeout(updatePersistentExamNavs, 300);
+    setTimeout(updateExamLinkButtons, 350);
   }
 
   // Expose API for cross-IIFE access
   window._updatePersistentExamNavs = updatePersistentExamNavs;
+  window._updateExamLinkButtons = updateExamLinkButtons;
   window._sidebarTabs = { refresh: refreshTab };
 
   // Re-check persistent navs on SPA navigation
   window.addEventListener('popstate', function () {
     setTimeout(updatePersistentExamNavs, 250);
+    setTimeout(updateExamLinkButtons, 300);
   });
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
     if (link) {
       setTimeout(updatePersistentExamNavs, 300);
       setTimeout(updatePersistentExamNavs, 600);
+      setTimeout(updateExamLinkButtons, 350);
+      setTimeout(updateExamLinkButtons, 650);
     }
   });
 

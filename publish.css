@@ -2285,6 +2285,12 @@ a.exams-panel__name:hover {
   background: #1d2536;
 }
 
+/* In-progress accent glow */
+.exam-link.is-in-progress {
+  box-shadow: 0 0 0 2px var(--bg, #0b0e12), 0 0 0 4px var(--link-accent, var(--brand)),
+              0 0 14px color-mix(in srgb, var(--link-accent, var(--brand)) 50%, transparent);
+}
+
 /* ===========================================================
    DOWNLOAD LINKS
    Usage: <a href="file.pdf" class="download-link">P-1 Syllabus</a>

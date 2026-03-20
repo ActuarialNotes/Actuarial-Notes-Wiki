@@ -173,9 +173,20 @@
 
     var sticky = document.createElement('div');
     sticky.className = 'exam-nav__sticky is-visible';
-    if (customColor) {
-      sticky.style.setProperty('--nav-color', customColor);
-      sticky.style.setProperty('--nav-color-hover', customColor);
+
+    // Resolve accent color from data-color or TRACKS definition
+    var accentColor = customColor;
+    var examInfo = typeof window._getExamInfoByPage === 'function' ? window._getExamInfoByPage() : null;
+    if (!accentColor && examInfo && examInfo.color) {
+      accentColor = examInfo.color;
+    }
+    if (accentColor) {
+      sticky.style.setProperty('--nav-color', accentColor);
+      sticky.style.setProperty('--nav-color-hover', accentColor);
+      sticky.style.setProperty('--nav-accent', accentColor);
+    }
+    if (examInfo && examInfo.status === 'in_progress') {
+      sticky.classList.add('is-in-progress');
     }
 
     var stickyBtn = document.createElement('button');
@@ -3769,6 +3780,7 @@
 
     updatePersistentExamNavs();
     updateExamLinkButtons();
+    syncStickyExamNavStatus();
   }
 
   /* ---- Colour in-progress exam-link buttons on the home page ---- */
@@ -3817,6 +3829,17 @@
       });
     });
     return result;
+  }
+
+  function syncStickyExamNavStatus() {
+    var sticky = document.querySelector('.exam-nav__sticky');
+    if (!sticky) return;
+    var info = window._getExamInfoByPage ? window._getExamInfoByPage() : null;
+    if (info && info.status === 'in_progress') {
+      sticky.classList.add('is-in-progress');
+    } else {
+      sticky.classList.remove('is-in-progress');
+    }
   }
 
   function isOnExamPage(examPath) {
@@ -3930,6 +3953,22 @@
   window._updatePersistentExamNavs = updatePersistentExamNavs;
   window._updateExamLinkButtons = updateExamLinkButtons;
   window._sidebarTabs = { refresh: refreshTab };
+
+  // Allow exam-nav IIFE to check current page exam status
+  window._getExamInfoByPage = function () {
+    var currentPath = decodeURIComponent(window.location.pathname.replace(/^\//, '').replace(/\+/g, ' '));
+    for (var t = 0; t < TRACKS.length; t++) {
+      for (var s = 0; s < TRACKS[t].sections.length; s++) {
+        var items = TRACKS[t].sections[s].items;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].path && (currentPath === items[i].path || currentPath === items[i].path.replace(/ /g, '+'))) {
+            return { id: items[i].id, status: getStatus(items[i].id), color: COLOR_HEX[items[i].color] || null };
+          }
+        }
+      }
+    }
+    return null;
+  };
 
   // Re-check persistent navs on SPA navigation
   window.addEventListener('popstate', function () {

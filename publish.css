@@ -5049,12 +5049,21 @@ body.high-contrast .exam-nav__btn--next {
   color: var(--text) !important;
 }
 body.high-contrast .exam-nav__sticky {
+  --nav-color: var(--text) !important;
   background: var(--bg) !important;
-  border-color: var(--nav-color) !important;
+  border-color: var(--text) !important;
 }
 body.high-contrast .exam-nav__sticky-btn {
-  background: var(--nav-color) !important;
-  border-color: var(--nav-color) !important;
+  background: var(--text) !important;
+  border-color: var(--text) !important;
+  color: var(--bg) !important;
+}
+body.high-contrast .exam-nav__sticky.is-in-progress {
+  border-color: var(--nav-accent) !important;
+}
+body.high-contrast .exam-nav__sticky.is-in-progress .exam-nav__sticky-btn {
+  background: var(--nav-accent) !important;
+  border-color: var(--nav-accent) !important;
   color: #fff !important;
 }
 

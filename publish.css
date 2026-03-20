@@ -2573,10 +2573,11 @@ a.exams-panel__name:hover {
   background: #1d2536;
 }
 
-/* In-progress accent glow */
+/* In-progress accent fill */
 .exam-link.is-in-progress {
-  box-shadow: 0 0 0 2px var(--bg, #0b0e12), 0 0 0 4px var(--link-accent, var(--brand)),
-              0 0 14px color-mix(in srgb, var(--link-accent, var(--brand)) 50%, transparent);
+  background: var(--link-accent, var(--brand)) !important;
+  color: #fff !important;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--link-accent, var(--brand)) 50%, transparent);
 }
 
 /* ===========================================================

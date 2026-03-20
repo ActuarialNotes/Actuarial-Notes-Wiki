@@ -3994,6 +3994,7 @@ var SoundFX = (function () {
   function getCtx() {
     if (!ctx) {
       ctx = new (window.AudioContext || window.webkitAudioContext)();
+      watchState(ctx);
     }
     return ctx;
   }
@@ -4009,21 +4010,25 @@ var SoundFX = (function () {
       src.buffer = buf;
       src.connect(ac.destination);
       src.start(0);
-    } catch (e) {}
+    } catch (e) {
+      if (typeof console !== 'undefined' && console.warn) {
+        console.warn('[SoundFX] playSilent failed:', e.message, 'state:', ac.state);
+      }
+    }
   }
 
   // Mobile browsers keep AudioContext suspended until a user gesture handler
   // calls resume(). Re-run on every gesture in case of re-suspension (tab
   // switches, lock-screen, etc.).
-  // IMPORTANT: the silent buffer must be played *after* resume() resolves —
-  // calling start() on a suspended context throws a DOMException (caught
-  // silently) meaning the iOS audio session never actually gets activated.
   function unlockAudio() {
     var ac = getCtx();
+    // Always call resume() — iOS can silently deactivate the audio
+    // session while ac.state still reports 'running'.
+    ac.resume().catch(function () {});
+    // Play silent buffer synchronously when running to stay within
+    // the gesture call stack (required by iOS Safari).
     if (ac.state === 'running') {
       playSilent(ac);
-    } else {
-      ac.resume().then(function () { playSilent(ac); }).catch(function () {});
     }
   }
   document.addEventListener('touchstart', unlockAudio, { capture: true, passive: true });
@@ -4032,8 +4037,7 @@ var SoundFX = (function () {
 
   // Auto-resume if iOS re-suspends the context (e.g. after tab switch,
   // lock-screen, or interruption from a phone call).
-  function watchState() {
-    var ac = getCtx();
+  function watchState(ac) {
     if (ac.addEventListener) {
       ac.addEventListener('statechange', function () {
         if (ac.state === 'suspended' || ac.state === 'interrupted') {
@@ -4042,19 +4046,28 @@ var SoundFX = (function () {
       });
     }
   }
-  watchState();
 
   // Ensure AudioContext is running before scheduling audio.
-  // Always call resume() + play a silent buffer, even when ac.state says
-  // 'running', because iOS can deactivate the audio session without
-  // changing the state property.  This is cheap (no-op if truly running)
-  // and guarantees the audio session is live before we schedule real audio.
+  // Uses a synchronous fast path when the context is already running so
+  // that audio nodes are scheduled within the user-gesture call stack —
+  // iOS Safari blocks audio initiated from async callbacks (microtasks).
   function ensureRunning(cb) {
     var ac = getCtx();
-    ac.resume().then(function () {
+    // Always fire resume() — cheap no-op when running, but reactivates
+    // silently-deactivated iOS audio sessions.
+    ac.resume().catch(function () {});
+
+    if (ac.state === 'running') {
+      // SYNCHRONOUS path: stays within the user-gesture call stack.
       playSilent(ac);
       cb(ac);
-    }).catch(function () {});
+    } else {
+      // Context genuinely suspended (first interaction or long background).
+      ac.resume().then(function () {
+        playSilent(ac);
+        cb(ac);
+      }).catch(function () {});
+    }
   }
 
   function isMuted() {

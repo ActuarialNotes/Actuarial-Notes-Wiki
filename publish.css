@@ -1571,6 +1571,32 @@ input[type="search"]:focus, .search-input:focus {
   overflow: hidden;
 }
 
+/* ---- Sidebar resize handle (desktop drag-to-resize) ---- */
+.sidebar-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  bottom: 0;
+  width: 5px;
+  cursor: col-resize;
+  z-index: 20;
+  background: transparent;
+  transition: background .15s ease;
+}
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle.is-active {
+  background: color-mix(in oklab, var(--brand) 35%, transparent);
+}
+body.sidebar-resizing {
+  cursor: col-resize !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+body.sidebar-resizing iframe { pointer-events: none; }
+@media (max-width: 768px) {
+  .sidebar-resize-handle { display: none; }
+}
+
 /* ---- Tab bar (GitHub-style) ---- */
 .sidebar-tabs__bar {
   display: flex;

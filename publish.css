@@ -1773,9 +1773,41 @@ input[type="search"]:focus, .search-input:focus {
   color: var(--text);
 }
 
+/* Select row (dropdown + cert button) */
+.sidebar-tabs__select-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.sidebar-tabs__select-row .sidebar-tabs__select {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+.sidebar-tabs__cert-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  flex-shrink: 0;
+  border: 1px solid var(--sb-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+  text-decoration: none;
+}
+.sidebar-tabs__cert-btn:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: color-mix(in oklab, var(--brand) 8%, var(--bg));
+}
+
 /* Progress bar */
 .sidebar-tabs__progress-bar {
-  height: 4px;
+  height: 10px;
   background: var(--muted);
   border-radius: 999px;
   overflow: hidden;

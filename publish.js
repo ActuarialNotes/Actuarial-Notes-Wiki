@@ -2969,8 +2969,23 @@
   /* ---- Track definitions ---- */
   var TRACKS = [
     {
+      key: 'DEFAULT',
+      name: 'Choose a Track',
+      certUrl: null,
+      sections: [
+        {
+          label: 'Preliminary Exams',
+          items: [
+            { id: 'P',  name: 'Exam P-1',  path: 'Exam P-1 (SOA)', color: 'blue' },
+            { id: 'FM', name: 'Exam FM-2',  path: 'Exam FM-2 (SOA)', color: 'indigo' }
+          ]
+        }
+      ]
+    },
+    {
       key: 'ASA',
       name: 'ASA (SOA)',
+      certUrl: 'https://www.soa.org/education/exam-req/edu-asa-req/',
       sections: [
         {
           label: 'VEE Requirements',
@@ -3007,6 +3022,7 @@
     {
       key: 'ACAS',
       name: 'ACAS (CAS)',
+      certUrl: 'https://www.casact.org/exams-admissions',
       sections: [
         {
           label: 'VEE Requirements',
@@ -3041,6 +3057,7 @@
     {
       key: 'FSA',
       name: 'FSA (SOA)',
+      certUrl: 'https://www.soa.org/education/exam-req/edu-fsa-req/',
       sections: [
         {
           label: 'ASA Requirements',
@@ -3146,6 +3163,7 @@
     {
       key: 'FCAS',
       name: 'FCAS (CAS)',
+      certUrl: 'https://www.casact.org/exams-admissions',
       sections: [
         {
           label: 'ACAS Requirements',
@@ -3179,7 +3197,7 @@
   ];
 
   /* ---- Journey state management ---- */
-  var journeyState = { selectedTrack: 'ASA', progress: {} };
+  var journeyState = { selectedTrack: 'DEFAULT', progress: {} };
 
   function loadJourneyState() {
     try {
@@ -3403,7 +3421,10 @@
     headerRow.appendChild(titleRow);
     container.appendChild(headerRow);
 
-    // Track selector
+    // Track selector row (select + cert link button)
+    var selectRow = document.createElement('div');
+    selectRow.className = 'sidebar-tabs__select-row';
+
     var select = document.createElement('select');
     select.className = 'sidebar-tabs__select';
     TRACKS.forEach(function (t) {
@@ -3413,7 +3434,30 @@
       select.appendChild(opt);
     });
     select.value = journeyState.selectedTrack;
-    container.appendChild(select);
+    selectRow.appendChild(select);
+
+    // Certification page link button
+    var certBtn = document.createElement('a');
+    certBtn.className = 'sidebar-tabs__cert-btn';
+    certBtn.title = 'View certification requirements';
+    certBtn.target = '_blank';
+    certBtn.rel = 'noopener noreferrer';
+    certBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+    selectRow.appendChild(certBtn);
+
+    function updateCertBtn() {
+      var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
+      if (track && track.certUrl) {
+        certBtn.href = track.certUrl;
+        certBtn.style.display = '';
+      } else {
+        certBtn.removeAttribute('href');
+        certBtn.style.display = 'none';
+      }
+    }
+    updateCertBtn();
+
+    container.appendChild(selectRow);
 
     // Progress bar
     var bar = document.createElement('div');
@@ -3534,6 +3578,7 @@
       saveJourneyState();
       renderTrackSections();
       updateExamsProgress();
+      updateCertBtn();
     });
 
     renderTrackSections();

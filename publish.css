@@ -5028,6 +5028,15 @@ body.high-contrast .exam-link .exam-code,
 body.high-contrast .exam-link .exam-name {
   color: var(--bg) !important;
 }
+body.high-contrast .exam-link.is-in-progress,
+body.high-contrast .exam-link.is-in-progress[class*="exam-link--"] {
+  background: var(--link-accent, var(--brand)) !important;
+  color: #fff !important;
+}
+body.high-contrast .exam-link.is-in-progress .exam-code,
+body.high-contrast .exam-link.is-in-progress .exam-name {
+  color: #fff !important;
+}
 
 /* Exam nav component */
 body.high-contrast .exam-nav {

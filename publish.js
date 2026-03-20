@@ -2971,7 +2971,7 @@
     {
       key: 'DEFAULT',
       name: 'Choose a Track',
-      certUrl: null,
+      certPath: null,
       sections: [
         {
           label: 'Preliminary Exams',
@@ -2985,7 +2985,7 @@
     {
       key: 'ASA',
       name: 'ASA (SOA)',
-      certUrl: 'https://www.soa.org/education/exam-req/edu-asa-req/',
+      certPath: 'Exams/Certifications/Associate of the Society of Actuaries (ASA)',
       sections: [
         {
           label: 'VEE Requirements',
@@ -3022,7 +3022,7 @@
     {
       key: 'ACAS',
       name: 'ACAS (CAS)',
-      certUrl: 'https://www.casact.org/exams-admissions',
+      certPath: 'Exams/Certifications/Associate of the Casualty Actuarial Society (ACAS)',
       sections: [
         {
           label: 'VEE Requirements',
@@ -3057,7 +3057,7 @@
     {
       key: 'FSA',
       name: 'FSA (SOA)',
-      certUrl: 'https://www.soa.org/education/exam-req/edu-fsa-req/',
+      certPath: 'Exams/Certifications/Fellow of the Society of Actuaries (FSA)',
       sections: [
         {
           label: 'ASA Requirements',
@@ -3163,7 +3163,7 @@
     {
       key: 'FCAS',
       name: 'FCAS (CAS)',
-      certUrl: 'https://www.casact.org/exams-admissions',
+      certPath: 'Exams/Certifications/Fellow of the Casualty Actuarial Society (FCAS)',
       sections: [
         {
           label: 'ACAS Requirements',
@@ -3283,6 +3283,87 @@
     }
 
     return { total: total, done: done };
+  }
+
+  /* Build an array of { status, color } segments for the progress bar.
+     Each segment represents one "unit" matching getTrackCounts logic. */
+  function getTrackSegments(track) {
+    var segments = [];
+    var orSeen = {};
+    var electiveItems = [];
+    var hasElectives = false;
+
+    track.sections.forEach(function (sec) {
+      if (sec.elective) {
+        hasElectives = true;
+        sec.items.forEach(function (item) {
+          electiveItems.push(item);
+        });
+        return;
+      }
+      if (sec.collapsed) {
+        // Collapsed section = 1 unit; pick best status & first color
+        var allDone = sec.items.every(function (item) {
+          if (item.or) return getStatus(item.id) === 'completed' || getStatus(item.or) === 'completed';
+          return getStatus(item.id) === 'completed';
+        });
+        var anyInProgress = sec.items.some(function (item) {
+          return getStatus(item.id) === 'in_progress';
+        });
+        var bestColor = sec.items[0] ? sec.items[0].color : 'slate';
+        // Find the in-progress item color if any
+        if (anyInProgress && !allDone) {
+          var ipItem = sec.items.find(function (item) { return getStatus(item.id) === 'in_progress'; });
+          if (ipItem) bestColor = ipItem.color;
+        }
+        segments.push({
+          status: allDone ? 'completed' : (anyInProgress ? 'in_progress' : 'not_started'),
+          color: bestColor
+        });
+        return;
+      }
+      sec.items.forEach(function (item) {
+        if (item.or) {
+          var pairKey = [item.id, item.or].sort().join('|');
+          if (orSeen[pairKey]) return;
+          orSeen[pairKey] = true;
+          var s1 = getStatus(item.id);
+          var s2 = getStatus(item.or);
+          var pairDone = s1 === 'completed' || s2 === 'completed';
+          var pairInProgress = s1 === 'in_progress' || s2 === 'in_progress';
+          var pairColor = item.color;
+          if (pairInProgress && !pairDone) {
+            pairColor = s1 === 'in_progress' ? item.color : item.color;
+          }
+          segments.push({
+            status: pairDone ? 'completed' : (pairInProgress ? 'in_progress' : 'not_started'),
+            color: pairColor
+          });
+        } else {
+          var st = getStatus(item.id);
+          segments.push({ status: st, color: item.color });
+        }
+      });
+    });
+
+    if (hasElectives) {
+      // Sort elective items: completed first, then in_progress, then not_started
+      var sortedElectives = electiveItems.slice().sort(function (a, b) {
+        var order = { completed: 0, in_progress: 1, not_started: 2 };
+        return (order[getStatus(a.id)] || 2) - (order[getStatus(b.id)] || 2);
+      });
+      for (var i = 0; i < 4; i++) {
+        if (i < sortedElectives.length) {
+          var elItem = sortedElectives[i];
+          var elStatus = getStatus(elItem.id);
+          segments.push({ status: elStatus, color: elItem.color });
+        } else {
+          segments.push({ status: 'not_started', color: 'slate' });
+        }
+      }
+    }
+
+    return segments;
   }
 
   /* ---- HTML escaping ---- */
@@ -3436,19 +3517,27 @@
     select.value = journeyState.selectedTrack;
     selectRow.appendChild(select);
 
-    // Certification page link button
+    // Certification page link button (uses same internal link approach as exam links)
     var certBtn = document.createElement('a');
     certBtn.className = 'sidebar-tabs__cert-btn';
     certBtn.title = 'View certification requirements';
-    certBtn.target = '_blank';
-    certBtn.rel = 'noopener noreferrer';
     certBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+    certBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
+      if (track && track.certPath) {
+        var slug = track.certPath.replace(/ /g, '+');
+        window.open(window.location.origin + '/' + slug, '_self');
+      }
+    }, true);
     selectRow.appendChild(certBtn);
 
     function updateCertBtn() {
       var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
-      if (track && track.certUrl) {
-        certBtn.href = track.certUrl;
+      if (track && track.certPath) {
+        var slug = track.certPath.replace(/ /g, '+');
+        certBtn.href = window.location.origin + '/' + slug;
         certBtn.style.display = '';
       } else {
         certBtn.removeAttribute('href');
@@ -3459,12 +3548,10 @@
 
     container.appendChild(selectRow);
 
-    // Progress bar
+    // Progress bar (segmented)
     var bar = document.createElement('div');
     bar.className = 'sidebar-tabs__progress-bar';
-    barFillEl = document.createElement('div');
-    barFillEl.className = 'sidebar-tabs__progress-fill';
-    bar.appendChild(barFillEl);
+    barFillEl = bar; // store reference to the bar container itself
     container.appendChild(bar);
 
     // Sections container
@@ -3591,9 +3678,22 @@
 
     var counts = getTrackCounts(track);
     if (countEl) countEl.textContent = counts.done + ' / ' + counts.total;
+
+    // Rebuild segmented progress bar
     if (barFillEl) {
-      var pct = counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0;
-      barFillEl.style.width = pct + '%';
+      barFillEl.innerHTML = '';
+      var segments = getTrackSegments(track);
+      segments.forEach(function (seg) {
+        var segEl = document.createElement('div');
+        segEl.className = 'sidebar-tabs__progress-seg';
+        if (seg.status === 'completed') {
+          segEl.classList.add('is-completed');
+        } else if (seg.status === 'in_progress') {
+          segEl.classList.add('is-in-progress');
+          segEl.style.setProperty('--seg-color', COLOR_HEX[seg.color] || 'var(--brand)');
+        }
+        barFillEl.appendChild(segEl);
+      });
     }
 
     updatePersistentExamNavs();

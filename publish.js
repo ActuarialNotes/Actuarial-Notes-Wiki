@@ -3291,6 +3291,19 @@
     return null;
   }
 
+  function adoptThemeToggle() {
+    var utilBar = document.querySelector('.sidebar-tabs__utility');
+    if (!utilBar) return false;
+    if (utilBar.querySelector('.sidebar-tabs__theme-toggle')) return true;
+    var themeRow = findThemeToggleRow();
+    if (themeRow) {
+      themeRow.classList.add('sidebar-tabs__theme-toggle');
+      utilBar.insertBefore(themeRow, utilBar.firstChild);
+      return true;
+    }
+    return false;
+  }
+
   function buildSidebarTabs() {
     if (document.querySelector('.sidebar-tabs')) return;
 
@@ -3350,12 +3363,8 @@
     var utilBar = document.createElement('div');
     utilBar.className = 'sidebar-tabs__utility';
 
-    // Move native dark mode toggle into utility bar
-    var themeRow = findThemeToggleRow();
-    if (themeRow) {
-      themeRow.classList.add('sidebar-tabs__theme-toggle');
-      utilBar.appendChild(themeRow);
-    }
+    // Move native dark mode toggle into utility bar (may not exist yet)
+    adoptThemeToggle();
 
     // Sound mute toggle
     var muteBtn = document.createElement('button');
@@ -3762,6 +3771,8 @@
       countEl = null;
       buildSidebarTabs();
     }
+    // Adopt native dark mode toggle if it appeared after initial build
+    adoptThemeToggle();
   });
 
   function observeSidebar() {

@@ -2946,10 +2946,6 @@
   /* Tab icons */
   var SVG_TAB_EXAMS = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2h9l4 4v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/><polyline points="13 2 13 6 17 6"/><line x1="6" y1="10" x2="14" y2="10"/><line x1="6" y1="13" x2="14" y2="13"/><line x1="6" y1="16" x2="10" y2="16"/></svg>';
 
-  var SVG_HC_ICON = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-    '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5"/>' +
-    '<path d="M12 2a10 10 0 0 1 0 20z" fill="currentColor"/></svg>';
-
   var SVG_SPEAKER_ON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 7 7 7 12 3 12 17 7 13 3 13"/><path d="M15 7a4 4 0 0 1 0 6"/></svg>';
 
   var SVG_SPEAKER_OFF = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 7 7 7 12 3 12 17 7 13 3 13"/><line x1="15" y1="8" x2="19" y2="12"/><line x1="19" y1="8" x2="15" y2="12"/></svg>';
@@ -3343,20 +3339,6 @@
     /* ---- Utility bar ---- */
     var utilBar = document.createElement('div');
     utilBar.className = 'sidebar-tabs__utility';
-
-    // High contrast toggle
-    var hcBtn = document.createElement('button');
-    hcBtn.className = 'sidebar-tabs__utility-btn';
-    hcBtn.type = 'button';
-    hcBtn.title = 'High Contrast';
-    hcBtn.innerHTML = SVG_HC_ICON;
-    if (document.body.classList.contains('high-contrast')) hcBtn.classList.add('is-active');
-    hcBtn.addEventListener('click', function () {
-      var on = document.body.classList.toggle('high-contrast');
-      try { localStorage.setItem('actuarial-notes-high-contrast', on ? '1' : '0'); } catch (e) {}
-      hcBtn.classList.toggle('is-active', on);
-    });
-    utilBar.appendChild(hcBtn);
 
     // Sound mute toggle
     var muteBtn = document.createElement('button');
@@ -4117,25 +4099,20 @@ var SoundFX = (function () {
 
 
 /* ===========================================================
-   HIGH CONTRAST — Restore preference on load
-   (Toggle UI is now in the sidebar tabs utility bar)
+   HIGH CONTRAST — Always enabled
    =========================================================== */
 
 (function () {
   'use strict';
 
-  function restoreHighContrast() {
-    try {
-      if (localStorage.getItem('actuarial-notes-high-contrast') === '1') {
-        document.body.classList.add('high-contrast');
-      }
-    } catch (e) {}
+  function applyHighContrast() {
+    document.body.classList.add('high-contrast');
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', restoreHighContrast);
+    document.addEventListener('DOMContentLoaded', applyHighContrast);
   } else {
-    restoreHighContrast();
+    applyHighContrast();
   }
 })();
 

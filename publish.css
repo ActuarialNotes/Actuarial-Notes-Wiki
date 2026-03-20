@@ -3858,13 +3858,13 @@ figure.right figcaption,
 
 /* ── High-contrast mode ── */
 body.high-contrast .persistent-exam-tab {
-  background: var(--text) !important;
-  color: var(--bg) !important;
+  background: var(--tab-color, var(--brand)) !important;
+  color: #fff !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 body.high-contrast .persistent-exam-tab:hover {
-  filter: none;
-  color: var(--bg) !important;
+  filter: brightness(1.12);
+  color: #fff !important;
 }
 
 
@@ -5048,14 +5048,13 @@ body.high-contrast .exam-nav__btn--next {
   color: var(--text) !important;
 }
 body.high-contrast .exam-nav__sticky {
-  --nav-color: var(--text) !important;
   background: var(--bg) !important;
-  border-color: var(--text) !important;
+  border-color: var(--nav-color) !important;
 }
 body.high-contrast .exam-nav__sticky-btn {
-  background: var(--text) !important;
-  border-color: var(--text) !important;
-  color: var(--bg) !important;
+  background: var(--nav-color) !important;
+  border-color: var(--nav-color) !important;
+  color: #fff !important;
 }
 
 /* Cards — strip colour */

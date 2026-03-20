@@ -3281,6 +3281,16 @@
   var barFillEl = null;
   var countEl = null;
 
+  function findThemeToggleRow() {
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (!sidebar) return null;
+    var checkbox = sidebar.querySelector('.checkbox-container');
+    if (checkbox) return checkbox.parentElement;
+    var clickableIcon = sidebar.querySelector('.clickable-icon');
+    if (clickableIcon) return clickableIcon.parentElement;
+    return null;
+  }
+
   function buildSidebarTabs() {
     if (document.querySelector('.sidebar-tabs')) return;
 
@@ -3339,6 +3349,13 @@
     /* ---- Utility bar ---- */
     var utilBar = document.createElement('div');
     utilBar.className = 'sidebar-tabs__utility';
+
+    // Move native dark mode toggle into utility bar
+    var themeRow = findThemeToggleRow();
+    if (themeRow) {
+      themeRow.classList.add('sidebar-tabs__theme-toggle');
+      utilBar.appendChild(themeRow);
+    }
 
     // Sound mute toggle
     var muteBtn = document.createElement('button');

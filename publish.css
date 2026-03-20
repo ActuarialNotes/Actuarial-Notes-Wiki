@@ -1682,6 +1682,13 @@ input[type="search"]:focus, .search-input:focus {
   background: var(--bg);
 }
 
+.sidebar-tabs__theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: auto;
+}
+
 .sidebar-tabs__utility-btn {
   width: 28px;
   height: 28px;

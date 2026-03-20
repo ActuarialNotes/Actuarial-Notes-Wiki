@@ -3025,8 +3025,8 @@
         {
           label: 'Exams & Requirements',
           items: [
-            { id: 'MAS-I',    name: 'Exam MAS-I',    path: null, color: 'violet' },
-            { id: 'MAS-II',   name: 'Exam MAS-II',   path: null, color: 'violet' },
+            { id: 'MAS-I',    name: 'Exam MAS-I',    path: 'Exam MAS-I (CAS)', color: 'violet' },
+            { id: 'MAS-II',   name: 'Exam MAS-II',   path: 'Exam MAS-II (CAS)', color: 'violet' },
             { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, color: 'fuchsia' },
             { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, color: 'fuchsia' },
             { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, color: 'fuchsia' },
@@ -3155,8 +3155,8 @@
             { id: 'VEE-AF',   name: 'VEE Accounting & Finance',  path: null, color: 'sky' },
             { id: 'P',      name: 'Exam P-1',     path: 'Exam P-1 (SOA)', color: 'blue' },
             { id: 'FM',     name: 'Exam FM-2',     path: 'Exam FM-2 (SOA)', color: 'indigo' },
-            { id: 'MAS-I',  name: 'Exam MAS-I',    path: null, color: 'violet' },
-            { id: 'MAS-II', name: 'Exam MAS-II',   path: null, color: 'violet' },
+            { id: 'MAS-I',  name: 'Exam MAS-I',    path: 'Exam MAS-I (CAS)', color: 'violet' },
+            { id: 'MAS-II', name: 'Exam MAS-II',   path: 'Exam MAS-II (CAS)', color: 'violet' },
             { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, color: 'fuchsia' },
             { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, color: 'fuchsia' },
             { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, color: 'fuchsia' },

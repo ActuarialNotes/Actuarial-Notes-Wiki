@@ -3291,11 +3291,6 @@
     var sidebar = document.querySelector('.site-body-left-column');
     if (!sidebar) return;
 
-    // Ensure sidebar has relative positioning for the absolute overlay
-    if (getComputedStyle(sidebar).position === 'static') {
-      sidebar.style.position = 'relative';
-    }
-
     containerEl = document.createElement('div');
     containerEl.className = 'sidebar-tabs';
 

@@ -1358,6 +1358,12 @@ input[type="search"]:focus, .search-input:focus {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
+.site-body-left-column {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
 .right-sidebar { border-left: 1px solid var(--sb-border); border-right: none; }
 
 /* Site title in sidebar */
@@ -1569,8 +1575,6 @@ input[type="search"]:focus, .search-input:focus {
   font-family: var(--font-sans);
   z-index: 10;
   overflow: hidden;
-  min-height: 100vh;
-  min-height: 100dvh;
 }
 
 /* ---- Tab bar (GitHub-style) ---- */

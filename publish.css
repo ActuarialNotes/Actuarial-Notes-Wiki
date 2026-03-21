@@ -1569,6 +1569,8 @@ input[type="search"]:focus, .search-input:focus {
   font-family: var(--font-sans);
   z-index: 10;
   overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* ---- Sidebar resize handle (desktop drag-to-resize) ---- */
@@ -2129,33 +2131,6 @@ a.exams-panel__name:hover {
   }
 }
 
-/* ---- Mobile theme toggle (fixed top-right, hidden on desktop) ---- */
-.mobile-theme-toggle {
-  display: none;
-  position: fixed;
-  top: 8px;
-  right: 12px;
-  z-index: 999;
-  width: 34px;
-  height: 34px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--muted);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--text);
-  cursor: pointer;
-  padding: 0;
-  transition: background .15s ease, border-color .15s ease;
-}
-.mobile-theme-toggle:hover {
-  background: var(--sb-hover);
-}
-@media (max-width: 750px) {
-  .mobile-theme-toggle {
-    display: flex;
-  }
-}
 
 
 /* ===========================================================

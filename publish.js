@@ -69,8 +69,9 @@
     var examNavs = document.querySelectorAll('.exam-nav[data-current]');
 
     // Clean up orphaned sticky bars when navigating to a non-exam page
+    // Skip stickies created by concept-nav (marked with data-from-concept)
     if (examNavs.length === 0) {
-      document.querySelectorAll('.exam-nav__sticky').forEach(function (s) {
+      document.querySelectorAll('.exam-nav__sticky:not([data-from-concept])').forEach(function (s) {
         s.remove();
       });
       // Reset persistent tabs position and trigger update
@@ -241,7 +242,8 @@
       if (objectives.length > 0) {
         renderExamNavObjectives(stickyLoSection, objectives, container, examId);
       } else {
-        var pagePath = decodeURIComponent(window.location.pathname.replace(/^\//, ''));
+        // Use data-exam-page if set (concept pages inject this), else current URL
+        var pagePath = container.dataset.examPage || decodeURIComponent(window.location.pathname.replace(/^\//, ''));
         if (!pagePath) pagePath = document.title;
         fetchExamNavObjectives(pagePath).then(function (objs) {
           renderExamNavObjectives(stickyLoSection, objs, container, examId);
@@ -2255,7 +2257,13 @@
   }
 
   function buildAllConceptNavs() {
-    document.querySelectorAll('.concept-nav[data-current]').forEach(function (nav) {
+    var navs = document.querySelectorAll('.concept-nav[data-current]');
+    // Clean up footer and concept-sourced exam-nav stickies when no concept-nav on page
+    if (navs.length === 0) {
+      document.querySelectorAll('.concept-footer').forEach(function (f) { f.remove(); });
+      document.querySelectorAll('.exam-nav__sticky[data-from-concept]').forEach(function (s) { s.remove(); });
+    }
+    navs.forEach(function (nav) {
       if (nav.dataset.built === 'true') return;
       buildConceptNav(nav);
       nav.dataset.built = 'true';
@@ -2351,7 +2359,13 @@
 
       // Eagerly fetch objectives to render the progress bar immediately
       fetchProgressEagerly(container, objectives);
+
+      // Inject an exam-nav sentinel so the exam-nav IIFE builds a sticky bar
+      injectExamNavSentinel(container, objectives, customColor);
     }
+
+    // Build the concept-nav footer with back/forward + progress
+    buildConceptFooter(container, prevData, nextData, objectives, customColor, currentName);
 
     /* ── Global close handlers (registered once) ───────── */
     if (!window._conceptNavCloseRegistered) {
@@ -2919,6 +2933,229 @@
       backdrop.classList.remove('is-visible');
     }
     deelevateCenterCol();
+  }
+
+  /* ── Inject exam-nav sentinel for concept pages ────────── */
+
+  function injectExamNavSentinel(container, objectives, customColor) {
+    // Remove previous sentinel if rebuilding
+    if (container._examNavSentinel) {
+      // Also remove the sticky it created
+      var oldSticky = container._examNavSentinel._stickyEl;
+      if (oldSticky) oldSticky.remove();
+      container._examNavSentinel.remove();
+    }
+
+    var exam = objectives[0];
+    var sentinel = document.createElement('div');
+    sentinel.className = 'exam-nav';
+    sentinel.style.display = 'none';
+    sentinel.dataset.current = exam.code + '|' + exam.name;
+    if (customColor) sentinel.dataset.color = customColor;
+    // Store exam page path so the exam-nav IIFE fetches from the right page
+    sentinel.dataset.examPage = exam.pagePath;
+
+    // Inject into the page content so the exam-nav IIFE's MutationObserver picks it up
+    var pageEl = container.closest('.markdown-preview-view, .markdown-rendered, .page-container') || container.parentElement;
+    if (pageEl) {
+      pageEl.appendChild(sentinel);
+    }
+    container._examNavSentinel = sentinel;
+
+    // Mark the resulting sticky as concept-sourced so cleanup doesn't remove it
+    // The exam-nav IIFE will build from this sentinel asynchronously; apply the flag after
+    setTimeout(function () {
+      if (sentinel._stickyEl) {
+        sentinel._stickyEl.setAttribute('data-from-concept', 'true');
+      }
+    }, 350);
+  }
+
+  /* ── Concept navigation footer ─────────────────────────── */
+
+  function buildConceptFooter(container, prevData, nextData, objectives, customColor, currentName) {
+    // Clean up previous footer
+    if (container._footerEl) {
+      container._footerEl.remove();
+    }
+
+    // Only show footer if there's prev or next navigation
+    if (prevData.length === 0 && nextData.length === 0) return;
+
+    var footer = document.createElement('div');
+    footer.className = 'concept-footer';
+    if (customColor) {
+      footer.style.setProperty('--cnav-color', customColor);
+    }
+
+    var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
+    var svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>';
+
+    // ── Prev button ──
+    var prevBtn;
+    if (prevData.length > 0) {
+      if (prevData.length === 1) {
+        prevBtn = document.createElement('a');
+        prevBtn.className = 'concept-footer__btn concept-footer__btn--prev internal-link';
+        prevBtn.href = prevData[0].path || '#';
+        prevBtn.innerHTML = svgPrev + '<span class="concept-footer__btn-label">' + prevData[0].name.replace(/</g, '&lt;') + '</span>';
+      } else {
+        prevBtn = document.createElement('div');
+        prevBtn.className = 'concept-footer__btn-group concept-footer__btn-group--prev';
+
+        var prevTrigger = document.createElement('button');
+        prevTrigger.className = 'concept-footer__btn concept-footer__btn--prev';
+        prevTrigger.type = 'button';
+        prevTrigger.innerHTML = svgPrev + '<span class="concept-footer__btn-label">Previous</span>';
+
+        var prevMenu = document.createElement('div');
+        prevMenu.className = 'concept-footer__menu concept-footer__menu--prev';
+        prevData.forEach(function (c) {
+          var item = document.createElement('a');
+          item.className = 'concept-footer__menu-item internal-link';
+          item.href = c.path || '#';
+          item.textContent = c.name;
+          prevMenu.appendChild(item);
+        });
+
+        prevTrigger.addEventListener('click', function (e) {
+          e.stopPropagation();
+          prevBtn.classList.toggle('is-open');
+        });
+
+        prevBtn.appendChild(prevTrigger);
+        prevBtn.appendChild(prevMenu);
+      }
+    } else {
+      prevBtn = document.createElement('div');
+      prevBtn.className = 'concept-footer__btn concept-footer__btn--prev concept-footer__btn--disabled';
+      prevBtn.innerHTML = svgPrev + '<span class="concept-footer__btn-label"></span>';
+    }
+    footer.appendChild(prevBtn);
+
+    // ── Center: progress indicator ──
+    var center = document.createElement('div');
+    center.className = 'concept-footer__center';
+
+    var progressTrack = document.createElement('div');
+    progressTrack.className = 'concept-footer__progress-track';
+    var progressFill = document.createElement('div');
+    progressFill.className = 'concept-footer__progress-fill';
+    progressTrack.appendChild(progressFill);
+
+    var progressLabel = document.createElement('span');
+    progressLabel.className = 'concept-footer__progress-label';
+
+    center.appendChild(progressTrack);
+    center.appendChild(progressLabel);
+    footer.appendChild(center);
+
+    // ── Next button ──
+    var nextBtn;
+    if (nextData.length > 0) {
+      if (nextData.length === 1) {
+        nextBtn = document.createElement('a');
+        nextBtn.className = 'concept-footer__btn concept-footer__btn--next internal-link';
+        nextBtn.href = nextData[0].path || '#';
+        nextBtn.innerHTML = '<span class="concept-footer__btn-label">' + nextData[0].name.replace(/</g, '&lt;') + '</span>' + svgNext;
+      } else {
+        nextBtn = document.createElement('div');
+        nextBtn.className = 'concept-footer__btn-group concept-footer__btn-group--next';
+
+        var nextTrigger = document.createElement('button');
+        nextTrigger.className = 'concept-footer__btn concept-footer__btn--next';
+        nextTrigger.type = 'button';
+        nextTrigger.innerHTML = '<span class="concept-footer__btn-label">Next</span>' + svgNext;
+
+        var nextMenu = document.createElement('div');
+        nextMenu.className = 'concept-footer__menu concept-footer__menu--next';
+        nextData.forEach(function (c) {
+          var item = document.createElement('a');
+          item.className = 'concept-footer__menu-item internal-link';
+          item.href = c.path || '#';
+          item.textContent = c.name;
+          nextMenu.appendChild(item);
+        });
+
+        nextTrigger.addEventListener('click', function (e) {
+          e.stopPropagation();
+          nextBtn.classList.toggle('is-open');
+        });
+
+        nextBtn.appendChild(nextTrigger);
+        nextBtn.appendChild(nextMenu);
+      }
+    } else {
+      nextBtn = document.createElement('div');
+      nextBtn.className = 'concept-footer__btn concept-footer__btn--next concept-footer__btn--disabled';
+      nextBtn.innerHTML = '<span class="concept-footer__btn-label"></span>' + svgNext;
+    }
+    footer.appendChild(nextBtn);
+
+    // Insert into body for fixed positioning
+    document.body.appendChild(footer);
+    container._footerEl = footer;
+
+    // Handle SPA navigation on internal links in the footer
+    footer.addEventListener('click', function (e) {
+      var link = e.target.closest('a.internal-link');
+      if (link) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        // Close any open menus
+        footer.querySelectorAll('.is-open').forEach(function (d) { d.classList.remove('is-open'); });
+        var href = link.getAttribute('href');
+        if (href) {
+          var url = href.startsWith('http') ? href
+            : window.location.origin + (href.startsWith('/') ? '' : '/') + href;
+          window.open(url, '_self');
+        }
+      }
+    }, true);
+
+    // Close footer menus on outside click
+    if (!window._conceptFooterCloseRegistered) {
+      window._conceptFooterCloseRegistered = true;
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.concept-footer__btn-group')) {
+          document.querySelectorAll('.concept-footer__btn-group.is-open').forEach(function (d) {
+            d.classList.remove('is-open');
+          });
+        }
+      });
+    }
+
+    // Populate progress once objectives are fetched
+    if (objectives && objectives.length > 0) {
+      fetchFooterProgress(container, objectives, progressFill, progressLabel, currentName);
+    }
+  }
+
+  function fetchFooterProgress(container, objectives, fillEl, labelEl, currentConceptName) {
+    var rawObjName = objectives[0].objective;
+    var currentObjName = rawObjName.replace(/^\d+\.\s*/, '');
+
+    var seen = {};
+    var uniqueExams = [];
+    objectives.forEach(function (obj) {
+      if (!seen[obj.pagePath]) {
+        seen[obj.pagePath] = true;
+        uniqueExams.push(obj);
+      }
+    });
+
+    Promise.all(uniqueExams.map(function (exam) {
+      return fetchExamObjectives(exam.pagePath).then(function (allObj) {
+        return { exam: exam, objectives: allObj };
+      });
+    })).then(function (results) {
+      var progressInfo = findConceptProgress(results, currentObjName, rawObjName, currentConceptName);
+      if (progressInfo) {
+        var pct = (progressInfo.position / progressInfo.total) * 100;
+        fillEl.style.width = pct + '%';
+        labelEl.textContent = progressInfo.position + ' / ' + progressInfo.total;
+      }
+    }).catch(function () { /* silently skip */ });
   }
 
 })();

@@ -1569,6 +1569,8 @@ input[type="search"]:focus, .search-input:focus {
   font-family: var(--font-sans);
   z-index: 10;
   overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* ---- Sidebar resize handle (desktop drag-to-resize) ---- */
@@ -1706,13 +1708,6 @@ body.sidebar-resizing iframe { pointer-events: none; }
   border-top: 1px solid var(--sb-border);
   flex-shrink: 0;
   background: var(--bg);
-}
-
-.sidebar-tabs__theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-right: auto;
 }
 
 .sidebar-tabs__utility-btn {
@@ -2137,6 +2132,7 @@ a.exams-panel__name:hover {
 }
 
 
+
 /* ===========================================================
    14) EMBEDS
    =========================================================== */
@@ -2254,6 +2250,7 @@ a.exams-panel__name:hover {
 }
 
 .exam-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -2265,7 +2262,7 @@ a.exams-panel__name:hover {
   font-weight: 600;
   font-size: 0.9rem;
   color: #fff !important;
-  transition: filter .15s ease, transform .15s ease;
+  transition: filter .15s ease, transform .15s ease, opacity .25s ease;
 }
 .exam-link:hover,
 .exam-link:visited,
@@ -2367,6 +2364,26 @@ a.exams-panel__name:hover {
   background: var(--link-accent, var(--brand)) !important;
   color: #fff !important;
   box-shadow: 0 0 14px color-mix(in srgb, var(--link-accent, var(--brand)) 50%, transparent);
+}
+
+/* Completed exam indicator — dimmed with checkmark badge */
+.exam-link.is-completed {
+  opacity: 0.5;
+}
+.exam-link.is-completed::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg, #fff);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3E%3Ccircle cx='10' cy='10' r='10' fill='%2316a34a'/%3E%3Cpolyline points='6 10.5 9 13.5 14.5 7' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
 }
 
 /* ===========================================================
@@ -2577,6 +2594,7 @@ a.download-link.download-link--gray, .download-link.download-link--gray { backgr
     padding: 16px;
     min-width: auto;
     transform: translateY(100%);
+    z-index: 300;
   }
 
   .dl-dropdown__wrap.is-open .dl-dropdown__menu {
@@ -3496,7 +3514,7 @@ figure.right figcaption,
 
 .exam-nav__lo-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   font-size: 0.85rem;
   border-radius: var(--radius-sm);
   min-width: 0;
@@ -3516,7 +3534,7 @@ figure.right figcaption,
   width: 100%;
   background: none !important;
   border: none !important;
-  padding: 6px 14px 6px 6px;
+  padding: 9px 14px 9px 6px;
   font-family: inherit;
   font-size: inherit;
   color: var(--text-normal);
@@ -3526,6 +3544,7 @@ figure.right figcaption,
   transition: color 0.1s ease, background 0.1s ease;
   min-width: 0;
   border-radius: var(--radius-sm);
+  white-space: normal;
 }
 
 .exam-nav__lo-obj-btn:hover {
@@ -3858,13 +3877,13 @@ figure.right figcaption,
 
 /* ── High-contrast mode ── */
 body.high-contrast .persistent-exam-tab {
-  background: var(--text) !important;
-  color: var(--bg) !important;
+  background: var(--tab-color, var(--brand)) !important;
+  color: #fff !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 body.high-contrast .persistent-exam-tab:hover {
-  filter: none;
-  color: var(--bg) !important;
+  filter: brightness(1.12);
+  color: #fff !important;
 }
 
 
@@ -5056,6 +5075,14 @@ body.high-contrast .exam-nav__sticky-btn {
   background: var(--text) !important;
   border-color: var(--text) !important;
   color: var(--bg) !important;
+}
+body.high-contrast .exam-nav__sticky.is-in-progress {
+  border-color: var(--nav-accent) !important;
+}
+body.high-contrast .exam-nav__sticky.is-in-progress .exam-nav__sticky-btn {
+  background: var(--nav-accent) !important;
+  border-color: var(--nav-accent) !important;
+  color: #fff !important;
 }
 
 /* Cards — strip colour */

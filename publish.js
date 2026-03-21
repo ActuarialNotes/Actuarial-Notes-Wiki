@@ -173,9 +173,20 @@
 
     var sticky = document.createElement('div');
     sticky.className = 'exam-nav__sticky is-visible';
-    if (customColor) {
-      sticky.style.setProperty('--nav-color', customColor);
-      sticky.style.setProperty('--nav-color-hover', customColor);
+
+    // Resolve accent color from data-color or TRACKS definition
+    var accentColor = customColor;
+    var examInfo = typeof window._getExamInfoByPage === 'function' ? window._getExamInfoByPage() : null;
+    if (!accentColor && examInfo && examInfo.color) {
+      accentColor = examInfo.color;
+    }
+    if (accentColor) {
+      sticky.style.setProperty('--nav-color', accentColor);
+      sticky.style.setProperty('--nav-color-hover', accentColor);
+      sticky.style.setProperty('--nav-accent', accentColor);
+    }
+    if (examInfo && examInfo.status === 'in_progress') {
+      sticky.classList.add('is-in-progress');
     }
 
     var stickyBtn = document.createElement('button');
@@ -2950,6 +2961,10 @@
 
   var SVG_SPEAKER_OFF = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 7 7 7 12 3 12 17 7 13 3 13"/><line x1="15" y1="8" x2="19" y2="12"/><line x1="19" y1="8" x2="15" y2="12"/></svg>';
 
+  var SVG_SUN = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3.5"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="10" y1="16" x2="10" y2="18"/><line x1="3.3" y1="3.3" x2="4.7" y2="4.7"/><line x1="15.3" y1="15.3" x2="16.7" y2="16.7"/><line x1="2" y1="10" x2="4" y2="10"/><line x1="16" y1="10" x2="18" y2="10"/><line x1="3.3" y1="16.7" x2="4.7" y2="15.3"/><line x1="15.3" y1="4.7" x2="16.7" y2="3.3"/></svg>';
+
+  var SVG_MOON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11.4A7 7 0 0 1 8.6 3a7 7 0 1 0 8.4 8.4z"/></svg>';
+
   var STATUS_ICONS = { not_started: SVG_CIRCLE, in_progress: SVG_PROGRESS, completed: SVG_CHECK };
   var STATUS_CYCLE = { not_started: 'in_progress', in_progress: 'completed', completed: 'not_started' };
 
@@ -3380,16 +3395,6 @@
   var barFillEl = null;
   var countEl = null;
 
-  function findThemeToggleRow() {
-    var sidebar = document.querySelector('.site-body-left-column');
-    if (!sidebar) return null;
-    var checkbox = sidebar.querySelector('.checkbox-container');
-    if (checkbox) return checkbox.parentElement;
-    var clickableIcon = sidebar.querySelector('.clickable-icon');
-    if (clickableIcon) return clickableIcon.parentElement;
-    return null;
-  }
-
   function buildSidebarTabs() {
     if (document.querySelector('.sidebar-tabs')) return;
 
@@ -3449,12 +3454,22 @@
     var utilBar = document.createElement('div');
     utilBar.className = 'sidebar-tabs__utility';
 
-    // Move native dark mode toggle into utility bar
-    var themeRow = findThemeToggleRow();
-    if (themeRow) {
-      themeRow.classList.add('sidebar-tabs__theme-toggle');
-      utilBar.appendChild(themeRow);
-    }
+    // Dark / Light mode toggle
+    var themeBtn = document.createElement('button');
+    themeBtn.className = 'sidebar-tabs__utility-btn';
+    themeBtn.type = 'button';
+    var isLight = document.body.classList.contains('theme-light');
+    themeBtn.title = isLight ? 'Switch to Dark' : 'Switch to Light';
+    themeBtn.innerHTML = isLight ? SVG_SUN : SVG_MOON;
+    themeBtn.addEventListener('click', function () {
+      isLight = !isLight;
+      document.body.classList.toggle('theme-light', isLight);
+      document.body.classList.toggle('theme-dark', !isLight);
+      themeBtn.innerHTML = isLight ? SVG_SUN : SVG_MOON;
+      themeBtn.title = isLight ? 'Switch to Dark' : 'Switch to Light';
+      try { localStorage.setItem('actuarial-notes-theme', isLight ? 'light' : 'dark'); } catch (e) {}
+    });
+    utilBar.appendChild(themeBtn);
 
     // Sound mute toggle
     var muteBtn = document.createElement('button');
@@ -3769,6 +3784,7 @@
 
     updatePersistentExamNavs();
     updateExamLinkButtons();
+    syncStickyExamNavStatus();
   }
 
   /* ---- Colour in-progress exam-link buttons on the home page ---- */
@@ -3776,24 +3792,42 @@
     var links = document.querySelectorAll('.exam-link');
     if (!links.length) return;
 
-    var inProgress = getInProgressExams();
-    var pathSet = {};
-    inProgress.forEach(function (exam) {
-      if (exam.path) {
-        pathSet[exam.path.toLowerCase()] = exam;
-      }
+    /* Build path → { status, color } lookup from all tracks */
+    var pathMap = {};
+    TRACKS.forEach(function (track) {
+      track.sections.forEach(function (sec) {
+        sec.items.forEach(function (item) {
+          if (item.path) {
+            var key = item.path.toLowerCase();
+            if (!pathMap[key]) {
+              pathMap[key] = { status: getStatus(item.id), color: item.color };
+            }
+          }
+        });
+      });
     });
 
     links.forEach(function (link) {
       var href = decodeURIComponent(link.getAttribute('href') || '')
         .replace(/\+/g, ' ')
         .replace(/^\//, '');
-      var match = pathSet[href.toLowerCase()] || null;
-      if (match) {
+      var info = pathMap[href.toLowerCase()] || null;
+      var status = info ? info.status : 'not_started';
+
+      /* In-progress: accent colour + glow */
+      if (status === 'in_progress') {
         link.classList.add('is-in-progress');
-        link.style.setProperty('--link-accent', COLOR_HEX[match.color] || 'var(--brand)');
+        link.classList.remove('is-completed');
+        link.style.setProperty('--link-accent', COLOR_HEX[info.color] || 'var(--brand)');
+      /* Completed: dimmed + checkmark badge */
+      } else if (status === 'completed') {
+        link.classList.remove('is-in-progress');
+        link.classList.add('is-completed');
+        link.style.removeProperty('--link-accent');
+      /* Not started: default look */
       } else {
         link.classList.remove('is-in-progress');
+        link.classList.remove('is-completed');
         link.style.removeProperty('--link-accent');
       }
     });
@@ -3817,6 +3851,17 @@
       });
     });
     return result;
+  }
+
+  function syncStickyExamNavStatus() {
+    var sticky = document.querySelector('.exam-nav__sticky');
+    if (!sticky) return;
+    var info = window._getExamInfoByPage ? window._getExamInfoByPage() : null;
+    if (info && info.status === 'in_progress') {
+      sticky.classList.add('is-in-progress');
+    } else {
+      sticky.classList.remove('is-in-progress');
+    }
   }
 
   function isOnExamPage(examPath) {
@@ -3930,6 +3975,22 @@
   window._updatePersistentExamNavs = updatePersistentExamNavs;
   window._updateExamLinkButtons = updateExamLinkButtons;
   window._sidebarTabs = { refresh: refreshTab };
+
+  // Allow exam-nav IIFE to check current page exam status
+  window._getExamInfoByPage = function () {
+    var currentPath = decodeURIComponent(window.location.pathname.replace(/^\//, '').replace(/\+/g, ' '));
+    for (var t = 0; t < TRACKS.length; t++) {
+      for (var s = 0; s < TRACKS[t].sections.length; s++) {
+        var items = TRACKS[t].sections[s].items;
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].path && (currentPath === items[i].path || currentPath === items[i].path.replace(/ /g, '+'))) {
+            return { id: items[i].id, status: getStatus(items[i].id), color: COLOR_HEX[items[i].color] || null };
+          }
+        }
+      }
+    }
+    return null;
+  };
 
   // Re-check persistent navs on SPA navigation
   window.addEventListener('popstate', function () {
@@ -4384,19 +4445,30 @@ var SoundFX = (function () {
 
 /* ===========================================================
    HIGH CONTRAST — Always enabled
+   HIGH CONTRAST — Always enabled  +  Restore theme preference
    =========================================================== */
 
 (function () {
   'use strict';
 
-  function applyHighContrast() {
+  function applyDefaults() {
     document.body.classList.add('high-contrast');
+    try {
+      var saved = localStorage.getItem('actuarial-notes-theme');
+      if (saved === 'light') {
+        document.body.classList.add('theme-light');
+        document.body.classList.remove('theme-dark');
+      } else if (saved === 'dark') {
+        document.body.classList.remove('theme-light');
+        document.body.classList.add('theme-dark');
+      }
+    } catch (e) {}
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', applyHighContrast);
+    document.addEventListener('DOMContentLoaded', applyDefaults);
   } else {
-    applyHighContrast();
+    applyDefaults();
   }
 })();
 

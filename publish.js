@@ -4665,6 +4665,119 @@ var SoundFX = (function () {
 
 
 /* ===========================================================
+   HIGHLIGHT UPCOMING ROW COMPONENT
+
+   Scans a table for dates and highlights the row containing
+   the next upcoming date. Works with any table — add a wrapper:
+
+   <div class="highlight-upcoming" data-date-col="0"></div>
+
+   The div must appear immediately before the table in Markdown.
+   - data-date-col: 0-based column index containing dates
+                     (defaults to 0)
+
+   Dates are parsed from cell text; supports formats like
+   "Jan 2026", "January 15, 2026", "2026-03-21", etc.
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  function highlightUpcoming() {
+    var markers = document.querySelectorAll('.highlight-upcoming');
+    markers.forEach(function (marker) {
+      var table = marker.nextElementSibling;
+      while (table && table.tagName !== 'TABLE') {
+        table = table.nextElementSibling;
+      }
+      if (!table) return;
+
+      var colIdx = parseInt(marker.getAttribute('data-date-col') || '0', 10);
+      var rows = table.querySelectorAll('tbody tr');
+      var now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      var bestRow = null;
+      var bestDate = null;
+
+      rows.forEach(function (row) {
+        row.classList.remove('row-highlight-next');
+        var cells = row.querySelectorAll('td');
+        if (cells.length <= colIdx) return;
+
+        var text = cells[colIdx].textContent.trim();
+        var d = parseFlexDate(text);
+        if (!d || d < now) return;
+
+        if (!bestDate || d < bestDate) {
+          bestDate = d;
+          bestRow = row;
+        }
+      });
+
+      if (bestRow) bestRow.classList.add('row-highlight-next');
+    });
+  }
+
+  function parseFlexDate(str) {
+    // Try native parse first (handles ISO, "Month Day, Year", etc.)
+    var d = new Date(str);
+    if (!isNaN(d.getTime())) return d;
+
+    // "Month Year" shorthand → first day of that month
+    var m = str.match(/^([A-Za-z]+)\s+(\d{4})$/);
+    if (m) {
+      d = new Date(m[1] + ' 1, ' + m[2]);
+      if (!isNaN(d.getTime())) return d;
+    }
+
+    return null;
+  }
+
+  // ── SPA-aware init (matches other components) ──────────────
+  function init() {
+    highlightUpcoming();
+    observePageChanges();
+  }
+
+  function observePageChanges() {
+    window.addEventListener('popstate', function () {
+      setTimeout(highlightUpcoming, 150);
+    });
+
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+      if (link) {
+        var href = link.getAttribute('href');
+        if (href && href.charAt(0) !== '#') {
+          setTimeout(highlightUpcoming, 200);
+          setTimeout(highlightUpcoming, 500);
+        }
+      }
+    });
+
+    var container = document.querySelector('.markdown-preview-view')
+                 || document.querySelector('.publish-renderer');
+    if (container) {
+      var observer = new MutationObserver(function () {
+        clearTimeout(window._hlUpcomingTimeout);
+        window._hlUpcomingTimeout = setTimeout(highlightUpcoming, 200);
+      });
+      observer.observe(container, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(init, 200);
+    });
+  } else {
+    setTimeout(init, 200);
+  }
+})();
+
+
+/* ===========================================================
    CUSTOM EXAM WORKFLOW — ARCHIVED
    Syllabus uploader & document library features have been moved
    to publish-archived-custom-exam.js for future refinement.

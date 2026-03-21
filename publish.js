@@ -3453,6 +3453,9 @@
     if (filePath.indexOf('Concepts/') === 0) {
       category = 'concept';
       displayName = baseName.replace(/^Concepts\//, '');
+    } else if (filePath.indexOf('Resources/') === 0) {
+      category = 'document';
+      displayName = baseName.replace(/^Resources\//, '');
     } else if (filePath.indexOf('Exams/') === 0) {
       category = 'exam';
       displayName = baseName.replace(/^Exams\//, '');
@@ -3484,9 +3487,15 @@
     // 2) Scan DOM for internal links (discovers concepts referenced on current page)
     var domLinks = document.querySelectorAll('a.internal-link[data-href]');
     for (var i = 0; i < domLinks.length; i++) {
-      var href = domLinks[i].getAttribute('data-href') || '';
-      if (!href) continue;
-      var info = categorizeFile(href);
+      var linkEl = domLinks[i];
+      // Use href (URL path) for categorization since data-href may lack folder prefix
+      var linkHref = linkEl.getAttribute('href') || '';
+      var linkPath = linkHref.replace(/^\//, '').replace(/\+/g, ' ');
+      if (!linkPath) {
+        linkPath = linkEl.getAttribute('data-href') || '';
+      }
+      if (!linkPath) continue;
+      var info = categorizeFile(linkPath);
       if (examPaths[info.path.toLowerCase()]) continue;
       addToIndex(index, seen, info.name, info.path, info.category, null);
     }
@@ -3553,13 +3562,7 @@
         try {
           if (xhr.status === 200) {
             var data = JSON.parse(xhr.responseText);
-            // The API returns file paths as keys
             var files = Object.keys(data);
-            var seen = {};
-            // Rebuild seen map from existing index
-            _vaultIndexCache.forEach(function (item) {
-              seen[item.name.toLowerCase()] = true;
-            });
             var examPaths = {};
             TRACKS.forEach(function (track) {
               track.sections.forEach(function (sec) {
@@ -3569,14 +3572,36 @@
               });
             });
 
+            // Build a map of authoritative categories from API file paths
+            var apiCategories = {};
             for (var k = 0; k < files.length; k++) {
               var fp = files[k];
               if (fp.charAt(0) === '.' || fp.indexOf('/.') !== -1) continue;
               if (fp === 'README.md' || fp === 'Home.md' || fp === 'publish.js' || fp === 'publish.css') continue;
               if (!fp.match(/\.md$/)) continue;
               var info = categorizeFile(fp);
-              if (examPaths[info.path.toLowerCase()]) continue;
-              addToIndex(_vaultIndexCache, seen, info.name, info.path, info.category, null);
+              apiCategories[info.name.toLowerCase()] = info;
+            }
+
+            // Correct categories of existing entries using API data
+            for (var m = 0; m < _vaultIndexCache.length; m++) {
+              var existing = _vaultIndexCache[m];
+              var apiInfo = apiCategories[existing.name.toLowerCase()];
+              if (apiInfo && existing.category !== 'exam') {
+                existing.category = apiInfo.category;
+                existing.path = apiInfo.path;
+              }
+            }
+
+            // Add new entries not yet in cache
+            var seen = {};
+            _vaultIndexCache.forEach(function (item) {
+              seen[item.name.toLowerCase()] = true;
+            });
+            for (var key in apiCategories) {
+              var entry = apiCategories[key];
+              if (examPaths[entry.path.toLowerCase()]) continue;
+              addToIndex(_vaultIndexCache, seen, entry.name, entry.path, entry.category, null);
             }
           }
         } catch (e) {}

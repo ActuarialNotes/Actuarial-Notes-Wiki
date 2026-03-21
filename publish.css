@@ -1879,7 +1879,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
 }
 .sidebar-tabs__search-icon {
   position: absolute;
-  left: 10px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   width: 14px;
@@ -1888,7 +1888,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
   pointer-events: none;
   display: flex;
   align-items: center;
-  z-index: 1;
+  z-index: 2;
 }
 .sidebar-tabs__search-icon svg {
   width: 14px;
@@ -1896,7 +1896,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
 }
 .sidebar-tabs__search-input {
   width: 100%;
-  padding: 8px 32px 8px 36px;
+  padding: 8px 32px 8px 38px !important;
   border-radius: var(--radius-sm);
   border: 1px solid var(--sb-border);
   background: var(--bg);

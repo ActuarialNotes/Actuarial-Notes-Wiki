@@ -4085,20 +4085,23 @@ var SoundFX = (function () {
   }
 
   // Ensure AudioContext is running before scheduling audio.
-  // ALWAYS synchronous — no async branching.  Audio nodes can be created
-  // and scheduled on a suspended context; they queue and start the instant
-  // resume() resolves (within ~1-5 ms of the user gesture).  Keeping
-  // everything synchronous is critical because iOS Safari only honours
-  // resume() calls that originate from the *synchronous* call-stack of a
-  // user-gesture handler — .then() callbacks are microtasks that lose
-  // that privileged context, causing audio to be silently blocked.
+  // On iOS Safari the context starts suspended; resume() must be called
+  // from a user-gesture handler.  If the context is already running
+  // (typical after the first interaction), we play immediately.
+  // Otherwise we resume and schedule in the .then() callback — this is
+  // fine because the unlockAudio() touchstart handler has already called
+  // resume() in the gesture context, so the .then() just waits for it
+  // to finish.
   function ensureRunning(cb) {
     var ac = getCtx();
-    // resume() is a no-op when already running but reactivates
-    // silently-deactivated iOS audio sessions.
-    ac.resume().catch(function () {});
-    playSilent(ac);
-    cb(ac);
+    if (ac.state === 'running') {
+      cb(ac);
+    } else {
+      ac.resume().then(function () {
+        playSilent(ac);
+        cb(ac);
+      }).catch(function () {});
+    }
   }
 
   function isMuted() {
@@ -4304,9 +4307,10 @@ var SoundFX = (function () {
     '.exam-nav__dropdown > .exam-nav__btn';
 
   // Debounce flag — prevents double-firing when nested elements both match
+  // and prevents touchend + click from firing the same sound twice.
   var _sfxLock = false;
 
-  document.addEventListener('click', function (e) {
+  function triggerSfx(e) {
     if (_sfxLock) return;
     var el = e.target;
     if (!el.closest) return;
@@ -4322,8 +4326,15 @@ var SoundFX = (function () {
     }
 
     _sfxLock = true;
-    setTimeout(function () { _sfxLock = false; }, 60);
-  }, true);
+    setTimeout(function () { _sfxLock = false; }, 350);
+  }
+
+  // On touch devices, touchend fires immediately in the gesture context
+  // (no 300ms delay like click). This ensures iOS Safari has the context
+  // running by the time we schedule audio.
+  document.addEventListener('touchend', triggerSfx, { capture: true, passive: true });
+  // Desktop fallback — also catches touch devices where touchend missed
+  document.addEventListener('click', triggerSfx, true);
 
   // Watch for callouts losing .is-collapsed (= opening)
   function observeCallouts() {

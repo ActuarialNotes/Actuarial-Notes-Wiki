@@ -5196,13 +5196,17 @@ var SoundFX = (function () {
 
   // ── SPA-aware init (matches other components) ──────────────
   function init() {
+    // Stagger calls so late-rendering content (callouts) is caught
     highlightUpcoming();
+    setTimeout(highlightUpcoming, 500);
+    setTimeout(highlightUpcoming, 1200);
     observePageChanges();
   }
 
   function observePageChanges() {
     window.addEventListener('popstate', function () {
       setTimeout(highlightUpcoming, 150);
+      setTimeout(highlightUpcoming, 600);
     });
 
     document.addEventListener('click', function (e) {
@@ -5211,20 +5215,26 @@ var SoundFX = (function () {
         var href = link.getAttribute('href');
         if (href && href.charAt(0) !== '#') {
           setTimeout(highlightUpcoming, 200);
-          setTimeout(highlightUpcoming, 500);
+          setTimeout(highlightUpcoming, 600);
         }
       }
     });
 
-    var container = document.querySelector('.markdown-preview-view')
-                 || document.querySelector('.publish-renderer');
-    if (container) {
-      var observer = new MutationObserver(function () {
-        clearTimeout(window._hlUpcomingTimeout);
-        window._hlUpcomingTimeout = setTimeout(highlightUpcoming, 200);
-      });
-      observer.observe(container, { childList: true, subtree: true });
+    // Retry observer setup until container exists
+    function attachObserver() {
+      var container = document.querySelector('.markdown-preview-view')
+                   || document.querySelector('.publish-renderer');
+      if (container) {
+        var observer = new MutationObserver(function () {
+          clearTimeout(window._hlUpcomingTimeout);
+          window._hlUpcomingTimeout = setTimeout(highlightUpcoming, 200);
+        });
+        observer.observe(container, { childList: true, subtree: true });
+      } else {
+        setTimeout(attachObserver, 500);
+      }
     }
+    attachObserver();
   }
 
   if (document.readyState === 'loading') {

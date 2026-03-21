@@ -1708,13 +1708,6 @@ body.sidebar-resizing iframe { pointer-events: none; }
   background: var(--bg);
 }
 
-.sidebar-tabs__theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-right: auto;
-}
-
 .sidebar-tabs__utility-btn {
   width: 28px;
   height: 28px;
@@ -2133,6 +2126,34 @@ a.exams-panel__name:hover {
   .sidebar-tabs__tab-icon svg {
     width: 20px;
     height: 20px;
+  }
+}
+
+/* ---- Mobile theme toggle (fixed top-right, hidden on desktop) ---- */
+.mobile-theme-toggle {
+  display: none;
+  position: fixed;
+  top: 8px;
+  right: 12px;
+  z-index: 999;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--muted);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+  transition: background .15s ease, border-color .15s ease;
+}
+.mobile-theme-toggle:hover {
+  background: var(--sb-hover);
+}
+@media (max-width: 750px) {
+  .mobile-theme-toggle {
+    display: flex;
   }
 }
 

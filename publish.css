@@ -2598,6 +2598,7 @@ a.download-link.download-link--gray, .download-link.download-link--gray { backgr
     padding: 16px;
     min-width: auto;
     transform: translateY(100%);
+    z-index: 300;
   }
 
   .dl-dropdown__wrap.is-open .dl-dropdown__menu {

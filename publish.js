@@ -2989,7 +2989,8 @@
 
   /* ---- Tab definitions ---- */
   var TABS = [
-    { id: 'exams',    label: 'Exams',    icon: SVG_TAB_EXAMS }
+    { id: 'exams',    label: 'Exams',    icon: SVG_TAB_EXAMS },
+    { id: 'search',   label: 'Search',   icon: SVG_SEARCH }
   ];
 
   /* ---- Track definitions ---- */
@@ -3423,14 +3424,15 @@
     if (_vaultIndexCache) return _vaultIndexCache;
 
     var index = [];
-    var seen = {};
+    var seen = {};  // keyed by lowercase name to deduplicate
 
     // 1) Add all exam items from TRACKS (always available)
     TRACKS.forEach(function (track) {
       track.sections.forEach(function (sec) {
         sec.items.forEach(function (item) {
-          if (!seen[item.id]) {
-            seen[item.id] = true;
+          var key = item.name.toLowerCase();
+          if (!seen[key]) {
+            seen[key] = true;
             index.push({
               name: item.name,
               path: item.path || null,
@@ -3448,47 +3450,80 @@
       var examPaths = {};
       index.forEach(function (e) {
         if (e.path) examPaths[e.path.toLowerCase()] = true;
-        if (e.path) examPaths[(e.path + '.md').toLowerCase()] = true;
       });
 
       var keys = Object.keys(sf);
       for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
+        var fileKey = keys[i];
         // Skip hidden/system files
-        if (key.charAt(0) === '.' || key.indexOf('/.') !== -1) continue;
+        if (fileKey.charAt(0) === '.' || fileKey.indexOf('/.') !== -1) continue;
 
-        var baseName = key.replace(/\.md$/, '');
+        var baseName = fileKey.replace(/\.md$/, '');
         var displayName = baseName;
         var category = 'document';
 
-        if (key.indexOf('Concepts/') === 0) {
+        if (fileKey.indexOf('Concepts/') === 0) {
           category = 'concept';
           displayName = baseName.replace(/^Concepts\//, '');
-        } else if (key.indexOf('Exams/') === 0) {
-          // Could be an exam page not in TRACKS
-          if (examPaths[key.toLowerCase()] || examPaths[baseName.toLowerCase()]) continue;
+        } else if (fileKey.indexOf('Exams/') === 0) {
+          if (examPaths[baseName.toLowerCase()]) continue;
           category = 'exam';
           displayName = baseName.replace(/^Exams\//, '');
         } else {
-          // Check if it's already an exam from TRACKS
-          if (examPaths[key.toLowerCase()] || examPaths[baseName.toLowerCase()]) continue;
-          // Check if path matches a known exam path pattern
+          if (examPaths[baseName.toLowerCase()]) continue;
           var lk = baseName.toLowerCase();
           if (lk.indexOf('exam ') === 0 || lk.indexOf('exam-') === 0) {
             category = 'exam';
           }
         }
 
-        // Skip things that aren't useful content
-        if (key === 'README.md' || key === 'Home.md') continue;
+        if (fileKey === 'README.md' || fileKey === 'Home.md') continue;
 
-        var pathSlug = baseName;
-        index.push({
-          name: displayName,
-          path: pathSlug,
-          category: category,
-          color: null
-        });
+        var nameKey = displayName.toLowerCase();
+        if (!seen[nameKey]) {
+          seen[nameKey] = true;
+          index.push({
+            name: displayName,
+            path: baseName,
+            category: category,
+            color: null
+          });
+        }
+
+        // 3) Extract [[wikilinks]] from markdown content to discover concepts
+        var entry = sf[fileKey];
+        var md = typeof entry === 'string' ? entry :
+                 (entry && (entry.content || entry.markdown || entry.data || ''));
+        if (md && typeof md === 'string') {
+          var wikiRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+          var match;
+          while ((match = wikiRe.exec(md)) !== null) {
+            var linkTarget = match[1].trim();
+            var conceptName = linkTarget;
+            var conceptPath = linkTarget;
+            var conceptCat = 'concept';
+
+            // If link is like Concepts/Foo, strip prefix for display
+            if (linkTarget.indexOf('Concepts/') === 0) {
+              conceptName = linkTarget.replace(/^Concepts\//, '');
+              conceptPath = linkTarget;
+            } else {
+              // Assume standalone wikilinks are concepts
+              conceptPath = 'Concepts/' + linkTarget;
+            }
+
+            var ck = conceptName.toLowerCase();
+            if (!seen[ck]) {
+              seen[ck] = true;
+              index.push({
+                name: conceptName,
+                path: conceptPath,
+                category: conceptCat,
+                color: null
+              });
+            }
+          }
+        }
       }
     }
 
@@ -3672,6 +3707,7 @@
 
     switch (activeTab) {
       case 'exams':    renderExamsPanel(content);     break;
+      case 'search':   renderSearchPanel(content);    break;
     }
 
     panelEl.appendChild(content);
@@ -3748,209 +3784,6 @@
     bar.className = 'sidebar-tabs__progress-bar';
     barFillEl = bar; // store reference to the bar container itself
     container.appendChild(bar);
-
-    // ---- Search row ----
-    var searchRow = document.createElement('div');
-    searchRow.className = 'sidebar-tabs__search-row';
-
-    var searchIcon = document.createElement('span');
-    searchIcon.className = 'sidebar-tabs__search-icon';
-    searchIcon.innerHTML = SVG_SEARCH;
-    searchRow.appendChild(searchIcon);
-
-    var searchInput = document.createElement('input');
-    searchInput.className = 'sidebar-tabs__search-input';
-    searchInput.type = 'text';
-    searchInput.placeholder = 'Search exams, concepts\u2026';
-    searchRow.appendChild(searchInput);
-
-    var searchClear = document.createElement('button');
-    searchClear.className = 'sidebar-tabs__search-clear';
-    searchClear.type = 'button';
-    searchClear.title = 'Clear search';
-    searchClear.innerHTML = SVG_CLEAR;
-    searchRow.appendChild(searchClear);
-
-    // ---- Search dropdown ----
-    var searchDropdown = document.createElement('div');
-    searchDropdown.className = 'sidebar-tabs__search-dropdown';
-    searchRow.appendChild(searchDropdown);
-
-    var searchSelectedIdx = -1;
-    var searchResultEls = [];
-
-    var CAT_ICONS = { exam: SVG_CAT_EXAM, concept: SVG_CAT_CONCEPT, document: SVG_CAT_DOC };
-    var CAT_LABELS = { exam: 'Exams', concept: 'Concepts', document: 'Documents' };
-    var CAT_ORDER = ['exam', 'concept', 'document'];
-    var MAX_PER_CAT = 8;
-
-    function highlightMatch(text, term) {
-      if (!term) return esc(text);
-      var lower = text.toLowerCase();
-      var idx = lower.indexOf(term);
-      if (idx === -1) return esc(text);
-      return esc(text.substring(0, idx)) +
-        '<mark>' + esc(text.substring(idx, idx + term.length)) + '</mark>' +
-        esc(text.substring(idx + term.length));
-    }
-
-    function navigateToResult(path) {
-      if (!path) return;
-      var slug = path.replace(/ /g, '+');
-      window.open(window.location.origin + '/' + slug, '_self');
-    }
-
-    function closeDropdown() {
-      searchDropdown.classList.remove('is-open');
-      searchSelectedIdx = -1;
-      searchResultEls = [];
-    }
-
-    function updateSelectedResult() {
-      for (var i = 0; i < searchResultEls.length; i++) {
-        searchResultEls[i].classList.toggle('is-selected', i === searchSelectedIdx);
-      }
-      if (searchSelectedIdx >= 0 && searchResultEls[searchSelectedIdx]) {
-        searchResultEls[searchSelectedIdx].scrollIntoView({ block: 'nearest' });
-      }
-    }
-
-    function performSearch(query) {
-      var term = query.trim().toLowerCase();
-      searchResultEls = [];
-      searchSelectedIdx = -1;
-
-      if (!term) {
-        closeDropdown();
-        searchClear.classList.remove('is-visible');
-        return;
-      }
-
-      searchClear.classList.add('is-visible');
-
-      var allItems = getVaultIndex();
-      // Group matches by category
-      var grouped = {};
-      CAT_ORDER.forEach(function (c) { grouped[c] = []; });
-
-      for (var i = 0; i < allItems.length; i++) {
-        var item = allItems[i];
-        if (item.name.toLowerCase().indexOf(term) !== -1) {
-          var cat = item.category || 'document';
-          if (grouped[cat] && grouped[cat].length < MAX_PER_CAT) {
-            grouped[cat].push(item);
-          }
-        }
-      }
-
-      // Check if any results
-      var totalResults = 0;
-      CAT_ORDER.forEach(function (c) { totalResults += grouped[c].length; });
-
-      searchDropdown.innerHTML = '';
-
-      if (totalResults === 0) {
-        var emptyEl = document.createElement('div');
-        emptyEl.className = 'sidebar-tabs__search-empty';
-        emptyEl.textContent = 'No results found';
-        searchDropdown.appendChild(emptyEl);
-        searchDropdown.classList.add('is-open');
-        return;
-      }
-
-      CAT_ORDER.forEach(function (cat) {
-        var items = grouped[cat];
-        if (!items.length) return;
-
-        var group = document.createElement('div');
-        group.className = 'sidebar-tabs__search-group';
-
-        var label = document.createElement('div');
-        label.className = 'sidebar-tabs__search-group-label';
-        label.textContent = CAT_LABELS[cat];
-        group.appendChild(label);
-
-        items.forEach(function (item) {
-          var result = document.createElement('a');
-          result.className = 'sidebar-tabs__search-result';
-          result.dataset.category = cat;
-          if (item.path) {
-            result.href = window.location.origin + '/' + item.path.replace(/ /g, '+');
-          }
-
-          var iconEl = document.createElement('span');
-          iconEl.className = 'sidebar-tabs__search-result-icon';
-          iconEl.innerHTML = CAT_ICONS[cat] || CAT_ICONS.document;
-          result.appendChild(iconEl);
-
-          var nameEl = document.createElement('span');
-          nameEl.className = 'sidebar-tabs__search-result-name';
-          nameEl.innerHTML = highlightMatch(item.name, term);
-          result.appendChild(nameEl);
-
-          result.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            navigateToResult(item.path);
-          }, true);
-
-          result.addEventListener('mouseenter', function () {
-            searchSelectedIdx = searchResultEls.indexOf(result);
-            updateSelectedResult();
-          });
-
-          group.appendChild(result);
-          searchResultEls.push(result);
-        });
-
-        searchDropdown.appendChild(group);
-      });
-
-      searchDropdown.classList.add('is-open');
-    }
-
-    searchInput.addEventListener('input', function () {
-      performSearch(searchInput.value);
-    });
-
-    searchInput.addEventListener('keydown', function (e) {
-      if (!searchDropdown.classList.contains('is-open')) return;
-
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        searchSelectedIdx = Math.min(searchSelectedIdx + 1, searchResultEls.length - 1);
-        updateSelectedResult();
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        searchSelectedIdx = Math.max(searchSelectedIdx - 1, 0);
-        updateSelectedResult();
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        if (searchSelectedIdx >= 0 && searchResultEls[searchSelectedIdx]) {
-          searchResultEls[searchSelectedIdx].click();
-        }
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        closeDropdown();
-        searchInput.blur();
-      }
-    });
-
-    searchClear.addEventListener('click', function () {
-      searchInput.value = '';
-      closeDropdown();
-      searchClear.classList.remove('is-visible');
-      searchInput.focus();
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function (e) {
-      if (!searchRow.contains(e.target)) {
-        closeDropdown();
-      }
-    });
-
-    container.appendChild(searchRow);
 
     // Sections container
     var sectionsEl = document.createElement('div');
@@ -4061,9 +3894,6 @@
     select.addEventListener('change', function () {
       journeyState.selectedTrack = select.value;
       saveJourneyState();
-      searchInput.value = '';
-      closeDropdown();
-      searchClear.classList.remove('is-visible');
       renderTrackSections();
       updateExamsProgress();
       updateCertBtn();
@@ -4071,6 +3901,203 @@
 
     renderTrackSections();
     updateExamsProgress();
+  }
+
+  /* ============================================================
+     SEARCH TAB
+     ============================================================ */
+  var CAT_ICONS = { exam: SVG_CAT_EXAM, concept: SVG_CAT_CONCEPT, document: SVG_CAT_DOC };
+  var CAT_LABELS = { exam: 'Exams', concept: 'Concepts', document: 'Documents' };
+  var CAT_ORDER = ['exam', 'concept', 'document'];
+  var MAX_PER_CAT = 12;
+
+  function highlightMatch(text, term) {
+    if (!term) return esc(text);
+    var lower = text.toLowerCase();
+    var idx = lower.indexOf(term);
+    if (idx === -1) return esc(text);
+    return esc(text.substring(0, idx)) +
+      '<mark>' + esc(text.substring(idx, idx + term.length)) + '</mark>' +
+      esc(text.substring(idx + term.length));
+  }
+
+  function navigateToResult(path) {
+    if (!path) return;
+    var slug = path.replace(/ /g, '+');
+    window.open(window.location.origin + '/' + slug, '_self');
+  }
+
+  function renderSearchPanel(container) {
+    // Search input row
+    var searchRow = document.createElement('div');
+    searchRow.className = 'sidebar-tabs__search-row';
+    searchRow.style.marginTop = '10px';
+
+    var searchIcon = document.createElement('span');
+    searchIcon.className = 'sidebar-tabs__search-icon';
+    searchIcon.innerHTML = SVG_SEARCH;
+    searchRow.appendChild(searchIcon);
+
+    var searchInput = document.createElement('input');
+    searchInput.className = 'sidebar-tabs__search-input';
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search exams, concepts\u2026';
+    searchRow.appendChild(searchInput);
+
+    var searchClear = document.createElement('button');
+    searchClear.className = 'sidebar-tabs__search-clear';
+    searchClear.type = 'button';
+    searchClear.title = 'Clear search';
+    searchClear.innerHTML = SVG_CLEAR;
+    searchRow.appendChild(searchClear);
+
+    container.appendChild(searchRow);
+
+    // Results container (inline, not a dropdown)
+    var resultsEl = document.createElement('div');
+    resultsEl.className = 'sidebar-tabs__search-results';
+    container.appendChild(resultsEl);
+
+    var selectedIdx = -1;
+    var resultEls = [];
+
+    // Empty state (shown when no query)
+    var emptyState = document.createElement('div');
+    emptyState.className = 'sidebar-tabs__search-hint';
+    emptyState.innerHTML = '<span class="sidebar-tabs__search-hint-icon">' + SVG_SEARCH + '</span>' +
+      '<span>Search across all exams, concepts, and documents</span>';
+    resultsEl.appendChild(emptyState);
+
+    function updateSelected() {
+      for (var i = 0; i < resultEls.length; i++) {
+        resultEls[i].classList.toggle('is-selected', i === selectedIdx);
+      }
+      if (selectedIdx >= 0 && resultEls[selectedIdx]) {
+        resultEls[selectedIdx].scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function performSearch(query) {
+      var term = query.trim().toLowerCase();
+      resultEls = [];
+      selectedIdx = -1;
+
+      if (!term) {
+        resultsEl.innerHTML = '';
+        resultsEl.appendChild(emptyState);
+        searchClear.classList.remove('is-visible');
+        return;
+      }
+
+      searchClear.classList.add('is-visible');
+
+      var allItems = getVaultIndex();
+      var grouped = {};
+      CAT_ORDER.forEach(function (c) { grouped[c] = []; });
+
+      for (var i = 0; i < allItems.length; i++) {
+        var item = allItems[i];
+        if (item.name.toLowerCase().indexOf(term) !== -1) {
+          var cat = item.category || 'document';
+          if (grouped[cat] && grouped[cat].length < MAX_PER_CAT) {
+            grouped[cat].push(item);
+          }
+        }
+      }
+
+      var totalResults = 0;
+      CAT_ORDER.forEach(function (c) { totalResults += grouped[c].length; });
+
+      resultsEl.innerHTML = '';
+
+      if (totalResults === 0) {
+        var noResults = document.createElement('div');
+        noResults.className = 'sidebar-tabs__search-empty';
+        noResults.textContent = 'No results found';
+        resultsEl.appendChild(noResults);
+        return;
+      }
+
+      CAT_ORDER.forEach(function (cat) {
+        var items = grouped[cat];
+        if (!items.length) return;
+
+        var group = document.createElement('div');
+        group.className = 'sidebar-tabs__search-group';
+
+        var label = document.createElement('div');
+        label.className = 'sidebar-tabs__search-group-label';
+        label.textContent = CAT_LABELS[cat];
+        group.appendChild(label);
+
+        items.forEach(function (item) {
+          var result = document.createElement('a');
+          result.className = 'sidebar-tabs__search-result';
+          result.dataset.category = cat;
+          if (item.path) {
+            result.href = window.location.origin + '/' + item.path.replace(/ /g, '+');
+          }
+
+          var iconEl = document.createElement('span');
+          iconEl.className = 'sidebar-tabs__search-result-icon';
+          iconEl.innerHTML = CAT_ICONS[cat] || CAT_ICONS.document;
+          result.appendChild(iconEl);
+
+          var nameEl = document.createElement('span');
+          nameEl.className = 'sidebar-tabs__search-result-name';
+          nameEl.innerHTML = highlightMatch(item.name, term);
+          result.appendChild(nameEl);
+
+          result.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            navigateToResult(item.path);
+          }, true);
+
+          result.addEventListener('mouseenter', function () {
+            selectedIdx = resultEls.indexOf(result);
+            updateSelected();
+          });
+
+          group.appendChild(result);
+          resultEls.push(result);
+        });
+
+        resultsEl.appendChild(group);
+      });
+    }
+
+    searchInput.addEventListener('input', function () {
+      performSearch(searchInput.value);
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+      if (!resultEls.length) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedIdx = Math.min(selectedIdx + 1, resultEls.length - 1);
+        updateSelected();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedIdx = Math.max(selectedIdx - 1, 0);
+        updateSelected();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (selectedIdx >= 0 && resultEls[selectedIdx]) {
+          resultEls[selectedIdx].click();
+        }
+      }
+    });
+
+    searchClear.addEventListener('click', function () {
+      searchInput.value = '';
+      performSearch('');
+      searchInput.focus();
+    });
+
+    // Auto-focus the search input when tab opens
+    setTimeout(function () { searchInput.focus(); }, 50);
   }
 
   function updateExamsProgress() {

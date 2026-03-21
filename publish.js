@@ -3403,6 +3403,8 @@
      VAULT CONTENT INDEX (for sidebar search)
      ============================================================ */
   var _vaultIndexCache = null;
+  var _vaultIndexLoading = false;
+  var _vaultIndexCallbacks = [];
 
   function getSiteFiles() {
     try {
@@ -3420,115 +3422,181 @@
     } catch (e) { return null; }
   }
 
-  function getVaultIndex() {
-    if (_vaultIndexCache) return _vaultIndexCache;
+  function extractSiteId() {
+    try {
+      if (window.publish && window.publish.siteId) return window.publish.siteId;
+      if (window.publish && window.publish.site && window.publish.site.id) return window.publish.site.id;
+      var els = document.querySelectorAll('link[href*="publish-01.obsidian.md"], script[src*="publish-01.obsidian.md"]');
+      for (var i = 0; i < els.length; i++) {
+        var attr = els[i].getAttribute('href') || els[i].getAttribute('src') || '';
+        var m = attr.match(/publish-01\.obsidian\.md\/access\/([a-f0-9]+)/);
+        if (m) return m[1];
+      }
+      var meta = document.querySelector('meta[name="publish-site-id"], meta[property="publish-site-id"]');
+      if (meta) return meta.content;
+    } catch (e) {}
+    return null;
+  }
 
+  function addToIndex(index, seen, name, path, category, color) {
+    var key = name.toLowerCase();
+    if (seen[key]) return;
+    seen[key] = true;
+    index.push({ name: name, path: path, category: category, color: color || null });
+  }
+
+  function categorizeFile(filePath) {
+    var baseName = filePath.replace(/\.md$/, '');
+    var displayName = baseName;
+    var category = 'document';
+
+    if (filePath.indexOf('Concepts/') === 0) {
+      category = 'concept';
+      displayName = baseName.replace(/^Concepts\//, '');
+    } else if (filePath.indexOf('Exams/') === 0) {
+      category = 'exam';
+      displayName = baseName.replace(/^Exams\//, '');
+    } else {
+      var lk = baseName.toLowerCase();
+      if (lk.indexOf('exam ') === 0 || lk.indexOf('exam-') === 0) {
+        category = 'exam';
+      }
+    }
+
+    return { name: displayName, path: baseName, category: category };
+  }
+
+  function buildBaseIndex() {
     var index = [];
-    var seen = {};  // keyed by lowercase name to deduplicate
+    var seen = {};
+    var examPaths = {};
 
     // 1) Add all exam items from TRACKS (always available)
     TRACKS.forEach(function (track) {
       track.sections.forEach(function (sec) {
         sec.items.forEach(function (item) {
-          var key = item.name.toLowerCase();
-          if (!seen[key]) {
-            seen[key] = true;
-            index.push({
-              name: item.name,
-              path: item.path || null,
-              category: 'exam',
-              color: item.color || null
-            });
-          }
+          addToIndex(index, seen, item.name, item.path || null, 'exam', item.color);
+          if (item.path) examPaths[item.path.toLowerCase()] = true;
         });
       });
     });
 
-    // 2) Add files from vault (concepts + documents)
+    // 2) Scan DOM for internal links (discovers concepts referenced on current page)
+    var domLinks = document.querySelectorAll('a.internal-link[data-href]');
+    for (var i = 0; i < domLinks.length; i++) {
+      var href = domLinks[i].getAttribute('data-href') || '';
+      if (!href) continue;
+      var info = categorizeFile(href);
+      if (examPaths[info.path.toLowerCase()]) continue;
+      addToIndex(index, seen, info.name, info.path, info.category, null);
+    }
+
+    // 3) Add files from vault object (if available)
     var sf = getSiteFiles();
     if (sf) {
-      var examPaths = {};
-      index.forEach(function (e) {
-        if (e.path) examPaths[e.path.toLowerCase()] = true;
-      });
-
       var keys = Object.keys(sf);
-      for (var i = 0; i < keys.length; i++) {
-        var fileKey = keys[i];
-        // Skip hidden/system files
+      for (var j = 0; j < keys.length; j++) {
+        var fileKey = keys[j];
         if (fileKey.charAt(0) === '.' || fileKey.indexOf('/.') !== -1) continue;
-
-        var baseName = fileKey.replace(/\.md$/, '');
-        var displayName = baseName;
-        var category = 'document';
-
-        if (fileKey.indexOf('Concepts/') === 0) {
-          category = 'concept';
-          displayName = baseName.replace(/^Concepts\//, '');
-        } else if (fileKey.indexOf('Exams/') === 0) {
-          if (examPaths[baseName.toLowerCase()]) continue;
-          category = 'exam';
-          displayName = baseName.replace(/^Exams\//, '');
-        } else {
-          if (examPaths[baseName.toLowerCase()]) continue;
-          var lk = baseName.toLowerCase();
-          if (lk.indexOf('exam ') === 0 || lk.indexOf('exam-') === 0) {
-            category = 'exam';
-          }
-        }
-
         if (fileKey === 'README.md' || fileKey === 'Home.md') continue;
+        var fileInfo = categorizeFile(fileKey);
+        if (examPaths[fileInfo.path.toLowerCase()]) continue;
+        addToIndex(index, seen, fileInfo.name, fileInfo.path, fileInfo.category, null);
 
-        var nameKey = displayName.toLowerCase();
-        if (!seen[nameKey]) {
-          seen[nameKey] = true;
-          index.push({
-            name: displayName,
-            path: baseName,
-            category: category,
-            color: null
-          });
-        }
-
-        // 3) Extract [[wikilinks]] from markdown content to discover concepts
+        // Try to extract [[wikilinks]] from content if available
         var entry = sf[fileKey];
         var md = typeof entry === 'string' ? entry :
                  (entry && (entry.content || entry.markdown || entry.data || ''));
-        if (md && typeof md === 'string') {
+        if (md && typeof md === 'string' && md.indexOf('[[') !== -1) {
           var wikiRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
           var match;
           while ((match = wikiRe.exec(md)) !== null) {
             var linkTarget = match[1].trim();
             var conceptName = linkTarget;
             var conceptPath = linkTarget;
-            var conceptCat = 'concept';
-
-            // If link is like Concepts/Foo, strip prefix for display
             if (linkTarget.indexOf('Concepts/') === 0) {
               conceptName = linkTarget.replace(/^Concepts\//, '');
-              conceptPath = linkTarget;
             } else {
-              // Assume standalone wikilinks are concepts
               conceptPath = 'Concepts/' + linkTarget;
             }
-
-            var ck = conceptName.toLowerCase();
-            if (!seen[ck]) {
-              seen[ck] = true;
-              index.push({
-                name: conceptName,
-                path: conceptPath,
-                category: conceptCat,
-                color: null
-              });
+            if (!examPaths[conceptPath.toLowerCase()]) {
+              addToIndex(index, seen, conceptName, conceptPath, 'concept', null);
             }
           }
         }
       }
     }
 
-    _vaultIndexCache = index;
-    return index;
+    return { index: index, seen: seen };
+  }
+
+  function getVaultIndex(callback) {
+    if (_vaultIndexCache) {
+      if (callback) callback(_vaultIndexCache);
+      return _vaultIndexCache;
+    }
+
+    var base = buildBaseIndex();
+    _vaultIndexCache = base.index;
+
+    // Try to fetch full file listing from Obsidian Publish API (async enhancement)
+    var siteId = extractSiteId();
+    if (siteId && !_vaultIndexLoading) {
+      _vaultIndexLoading = true;
+      if (callback) _vaultIndexCallbacks.push(callback);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://publish-01.obsidian.md/cache/' + siteId, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.timeout = 5000;
+      xhr.onload = function () {
+        try {
+          if (xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            // The API returns file paths as keys
+            var files = Object.keys(data);
+            var seen = {};
+            // Rebuild seen map from existing index
+            _vaultIndexCache.forEach(function (item) {
+              seen[item.name.toLowerCase()] = true;
+            });
+            var examPaths = {};
+            TRACKS.forEach(function (track) {
+              track.sections.forEach(function (sec) {
+                sec.items.forEach(function (item) {
+                  if (item.path) examPaths[item.path.toLowerCase()] = true;
+                });
+              });
+            });
+
+            for (var k = 0; k < files.length; k++) {
+              var fp = files[k];
+              if (fp.charAt(0) === '.' || fp.indexOf('/.') !== -1) continue;
+              if (fp === 'README.md' || fp === 'Home.md' || fp === 'publish.js' || fp === 'publish.css') continue;
+              if (!fp.match(/\.md$/)) continue;
+              var info = categorizeFile(fp);
+              if (examPaths[info.path.toLowerCase()]) continue;
+              addToIndex(_vaultIndexCache, seen, info.name, info.path, info.category, null);
+            }
+          }
+        } catch (e) {}
+        _vaultIndexLoading = false;
+        var cbs = _vaultIndexCallbacks.slice();
+        _vaultIndexCallbacks = [];
+        cbs.forEach(function (cb) { cb(_vaultIndexCache); });
+      };
+      xhr.onerror = xhr.ontimeout = function () {
+        _vaultIndexLoading = false;
+        var cbs = _vaultIndexCallbacks.slice();
+        _vaultIndexCallbacks = [];
+        cbs.forEach(function (cb) { cb(_vaultIndexCache); });
+      };
+      xhr.send(JSON.stringify({ id: siteId }));
+    } else {
+      if (callback) callback(_vaultIndexCache);
+    }
+
+    return _vaultIndexCache;
   }
 
   /* ============================================================
@@ -3991,7 +4059,20 @@
 
       searchClear.classList.add('is-visible');
 
-      var allItems = getVaultIndex();
+      // Get index synchronously (returns what's available now)
+      var allItems = getVaultIndex(function (updatedItems) {
+        // Re-render with updated index if query still matches
+        if (searchInput.value.trim().toLowerCase() === term) {
+          renderResults(updatedItems, term);
+        }
+      });
+      renderResults(allItems, term);
+    }
+
+    function renderResults(allItems, term) {
+      resultEls = [];
+      selectedIdx = -1;
+
       var grouped = {};
       CAT_ORDER.forEach(function (c) { grouped[c] = []; });
 

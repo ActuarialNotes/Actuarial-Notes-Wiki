@@ -1896,7 +1896,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
 }
 .sidebar-tabs__search-input {
   width: 100%;
-  padding: 8px 32px 8px 32px;
+  padding: 8px 32px 8px 36px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--sb-border);
   background: var(--bg);

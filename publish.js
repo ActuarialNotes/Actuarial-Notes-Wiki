@@ -4686,9 +4686,19 @@ var SoundFX = (function () {
   function highlightUpcoming() {
     var markers = document.querySelectorAll('.highlight-upcoming');
     markers.forEach(function (marker) {
+      // Find nearest table: try siblings first, then search parent container
       var table = marker.nextElementSibling;
       while (table && table.tagName !== 'TABLE') {
+        // Check inside wrapper elements (Obsidian may wrap in <p> or <div>)
+        if (table.querySelector && table.querySelector('table')) {
+          table = table.querySelector('table');
+          break;
+        }
         table = table.nextElementSibling;
+      }
+      // Fallback: search within the same parent (works inside callouts)
+      if (!table || table.tagName !== 'TABLE') {
+        table = marker.parentElement && marker.parentElement.querySelector('table');
       }
       if (!table) return;
 

@@ -4126,9 +4126,6 @@ var SoundFX = (function () {
 (function () {
   'use strict';
 
-  var SVG_SUN_SM = '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3.5"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="10" y1="16" x2="10" y2="18"/><line x1="3.3" y1="3.3" x2="4.7" y2="4.7"/><line x1="15.3" y1="15.3" x2="16.7" y2="16.7"/><line x1="2" y1="10" x2="4" y2="10"/><line x1="16" y1="10" x2="18" y2="10"/><line x1="3.3" y1="16.7" x2="4.7" y2="15.3"/><line x1="15.3" y1="4.7" x2="16.7" y2="3.3"/></svg>';
-  var SVG_MOON_SM = '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11.4A7 7 0 0 1 8.6 3a7 7 0 1 0 8.4 8.4z"/></svg>';
-
   function applyDefaults() {
     document.body.classList.add('high-contrast');
     try {
@@ -4143,41 +4140,10 @@ var SoundFX = (function () {
     } catch (e) {}
   }
 
-  function injectMobileThemeToggle() {
-    if (document.querySelector('.mobile-theme-toggle')) return;
-    var btn = document.createElement('button');
-    btn.className = 'mobile-theme-toggle';
-    btn.type = 'button';
-    var isLight = document.body.classList.contains('theme-light');
-    btn.innerHTML = isLight ? SVG_SUN_SM : SVG_MOON_SM;
-    btn.title = isLight ? 'Switch to Dark' : 'Switch to Light';
-    btn.addEventListener('click', function () {
-      isLight = !isLight;
-      document.body.classList.toggle('theme-light', isLight);
-      document.body.classList.toggle('theme-dark', !isLight);
-      btn.innerHTML = isLight ? SVG_SUN_SM : SVG_MOON_SM;
-      btn.title = isLight ? 'Switch to Dark' : 'Switch to Light';
-      try { localStorage.setItem('actuarial-notes-theme', isLight ? 'light' : 'dark'); } catch (e) {}
-      // Sync desktop toggle if present
-      var desktopBtn = document.querySelector('.sidebar-tabs__utility .sidebar-tabs__utility-btn');
-      if (desktopBtn) {
-        desktopBtn.innerHTML = isLight
-          ? '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="3.5"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="10" y1="16" x2="10" y2="18"/><line x1="3.3" y1="3.3" x2="4.7" y2="4.7"/><line x1="15.3" y1="15.3" x2="16.7" y2="16.7"/><line x1="2" y1="10" x2="4" y2="10"/><line x1="16" y1="10" x2="18" y2="10"/><line x1="3.3" y1="16.7" x2="4.7" y2="15.3"/><line x1="15.3" y1="4.7" x2="16.7" y2="3.3"/></svg>'
-          : '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11.4A7 7 0 0 1 8.6 3a7 7 0 1 0 8.4 8.4z"/></svg>';
-        desktopBtn.title = isLight ? 'Switch to Dark' : 'Switch to Light';
-      }
-    });
-    document.body.appendChild(btn);
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      applyDefaults();
-      injectMobileThemeToggle();
-    });
+    document.addEventListener('DOMContentLoaded', applyDefaults);
   } else {
     applyDefaults();
-    injectMobileThemeToggle();
   }
 })();
 

@@ -3792,24 +3792,42 @@
     var links = document.querySelectorAll('.exam-link');
     if (!links.length) return;
 
-    var inProgress = getInProgressExams();
-    var pathSet = {};
-    inProgress.forEach(function (exam) {
-      if (exam.path) {
-        pathSet[exam.path.toLowerCase()] = exam;
-      }
+    /* Build path → { status, color } lookup from all tracks */
+    var pathMap = {};
+    TRACKS.forEach(function (track) {
+      track.sections.forEach(function (sec) {
+        sec.items.forEach(function (item) {
+          if (item.path) {
+            var key = item.path.toLowerCase();
+            if (!pathMap[key]) {
+              pathMap[key] = { status: getStatus(item.id), color: item.color };
+            }
+          }
+        });
+      });
     });
 
     links.forEach(function (link) {
       var href = decodeURIComponent(link.getAttribute('href') || '')
         .replace(/\+/g, ' ')
         .replace(/^\//, '');
-      var match = pathSet[href.toLowerCase()] || null;
-      if (match) {
+      var info = pathMap[href.toLowerCase()] || null;
+      var status = info ? info.status : 'not_started';
+
+      /* In-progress: accent colour + glow */
+      if (status === 'in_progress') {
         link.classList.add('is-in-progress');
-        link.style.setProperty('--link-accent', COLOR_HEX[match.color] || 'var(--brand)');
+        link.classList.remove('is-completed');
+        link.style.setProperty('--link-accent', COLOR_HEX[info.color] || 'var(--brand)');
+      /* Completed: dimmed + checkmark badge */
+      } else if (status === 'completed') {
+        link.classList.remove('is-in-progress');
+        link.classList.add('is-completed');
+        link.style.removeProperty('--link-accent');
+      /* Not started: default look */
       } else {
         link.classList.remove('is-in-progress');
+        link.classList.remove('is-completed');
         link.style.removeProperty('--link-accent');
       }
     });

@@ -4019,17 +4019,11 @@ var SoundFX = (function () {
 
   // Mobile browsers keep AudioContext suspended until a user gesture handler
   // calls resume(). Re-run on every gesture in case of re-suspension (tab
-  // switches, lock-screen, etc.).
+  // switches, lock-screen, etc.).  Always synchronous — no state checks.
   function unlockAudio() {
     var ac = getCtx();
-    // Always call resume() — iOS can silently deactivate the audio
-    // session while ac.state still reports 'running'.
     ac.resume().catch(function () {});
-    // Play silent buffer synchronously when running to stay within
-    // the gesture call stack (required by iOS Safari).
-    if (ac.state === 'running') {
-      playSilent(ac);
-    }
+    playSilent(ac);
   }
   document.addEventListener('touchstart', unlockAudio, { capture: true, passive: true });
   document.addEventListener('touchend', unlockAudio, { capture: true, passive: true });
@@ -4048,26 +4042,20 @@ var SoundFX = (function () {
   }
 
   // Ensure AudioContext is running before scheduling audio.
-  // Uses a synchronous fast path when the context is already running so
-  // that audio nodes are scheduled within the user-gesture call stack —
-  // iOS Safari blocks audio initiated from async callbacks (microtasks).
+  // ALWAYS synchronous — no async branching.  Audio nodes can be created
+  // and scheduled on a suspended context; they queue and start the instant
+  // resume() resolves (within ~1-5 ms of the user gesture).  Keeping
+  // everything synchronous is critical because iOS Safari only honours
+  // resume() calls that originate from the *synchronous* call-stack of a
+  // user-gesture handler — .then() callbacks are microtasks that lose
+  // that privileged context, causing audio to be silently blocked.
   function ensureRunning(cb) {
     var ac = getCtx();
-    // Always fire resume() — cheap no-op when running, but reactivates
+    // resume() is a no-op when already running but reactivates
     // silently-deactivated iOS audio sessions.
     ac.resume().catch(function () {});
-
-    if (ac.state === 'running') {
-      // SYNCHRONOUS path: stays within the user-gesture call stack.
-      playSilent(ac);
-      cb(ac);
-    } else {
-      // Context genuinely suspended (first interaction or long background).
-      ac.resume().then(function () {
-        playSilent(ac);
-        cb(ac);
-      }).catch(function () {});
-    }
+    playSilent(ac);
+    cb(ac);
   }
 
   function isMuted() {

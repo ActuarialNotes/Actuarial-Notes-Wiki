@@ -3448,7 +3448,7 @@
   function categorizeFile(filePath) {
     var baseName = filePath.replace(/\.md$/, '');
     var displayName = baseName;
-    var category = 'document';
+    var category = null;  // null = skip unless matched
 
     if (filePath.indexOf('Concepts/') === 0) {
       category = 'concept';
@@ -3467,6 +3467,20 @@
     }
 
     return { name: displayName, path: baseName, category: category };
+  }
+
+  /** Strip full URL to just the pathname portion (no leading slash). */
+  function hrefToPath(href) {
+    if (!href) return '';
+    // Handle full URLs: https://wiki.actuarialnotes.com/Concepts/Foo
+    try {
+      if (href.indexOf('http') === 0) {
+        var url = new URL(href);
+        href = url.pathname;
+      }
+    } catch (e) {}
+    // Strip leading slash and decode
+    return decodeURIComponent(href.replace(/^\//, '')).replace(/\+/g, ' ');
   }
 
   function buildBaseIndex() {
@@ -3488,14 +3502,11 @@
     var domLinks = document.querySelectorAll('a.internal-link[data-href]');
     for (var i = 0; i < domLinks.length; i++) {
       var linkEl = domLinks[i];
-      // Use href (URL path) for categorization since data-href may lack folder prefix
-      var linkHref = linkEl.getAttribute('href') || '';
-      var linkPath = linkHref.replace(/^\//, '').replace(/\+/g, ' ');
-      if (!linkPath) {
-        linkPath = linkEl.getAttribute('data-href') || '';
-      }
+      var linkPath = hrefToPath(linkEl.getAttribute('href'));
+      if (!linkPath) linkPath = linkEl.getAttribute('data-href') || '';
       if (!linkPath) continue;
       var info = categorizeFile(linkPath);
+      if (!info.category) continue;  // skip files not in Concepts/Resources/Exams
       if (examPaths[info.path.toLowerCase()]) continue;
       addToIndex(index, seen, info.name, info.path, info.category, null);
     }
@@ -3509,6 +3520,7 @@
         if (fileKey.charAt(0) === '.' || fileKey.indexOf('/.') !== -1) continue;
         if (fileKey === 'README.md' || fileKey === 'Home.md') continue;
         var fileInfo = categorizeFile(fileKey);
+        if (!fileInfo.category) continue;  // only index Concepts/Resources/Exams
         if (examPaths[fileInfo.path.toLowerCase()]) continue;
         addToIndex(index, seen, fileInfo.name, fileInfo.path, fileInfo.category, null);
 
@@ -3580,6 +3592,7 @@
               if (fp === 'README.md' || fp === 'Home.md' || fp === 'publish.js' || fp === 'publish.css') continue;
               if (!fp.match(/\.md$/)) continue;
               var info = categorizeFile(fp);
+              if (!info.category) continue;  // only index Concepts/Resources/Exams
               apiCategories[info.name.toLowerCase()] = info;
             }
 
@@ -3587,7 +3600,7 @@
             for (var m = 0; m < _vaultIndexCache.length; m++) {
               var existing = _vaultIndexCache[m];
               var apiInfo = apiCategories[existing.name.toLowerCase()];
-              if (apiInfo && existing.category !== 'exam') {
+              if (apiInfo && apiInfo.category && existing.category !== 'exam') {
                 existing.category = apiInfo.category;
                 existing.path = apiInfo.path;
               }
@@ -4000,7 +4013,7 @@
      SEARCH TAB
      ============================================================ */
   var CAT_ICONS = { exam: SVG_CAT_EXAM, concept: SVG_CAT_CONCEPT, document: SVG_CAT_DOC };
-  var CAT_LABELS = { exam: 'Exams', concept: 'Concepts', document: 'Documents' };
+  var CAT_LABELS = { exam: 'Exams', concept: 'Concepts', document: 'Resources' };
   var CAT_ORDER = ['exam', 'concept', 'document'];
   var MAX_PER_CAT = 12;
 
@@ -4104,7 +4117,8 @@
       for (var i = 0; i < allItems.length; i++) {
         var item = allItems[i];
         if (item.name.toLowerCase().indexOf(term) !== -1) {
-          var cat = item.category || 'document';
+          var cat = item.category;
+          if (!cat) continue;  // skip uncategorized items
           if (grouped[cat] && grouped[cat].length < MAX_PER_CAT) {
             grouped[cat].push(item);
           }

@@ -5054,6 +5054,202 @@ h6 a {
 /* ── Print: hide ─────────────────────────────────────── */
 @media print {
   .concept-nav { display: none !important; }
+  .concept-footer { display: none !important; }
+}
+
+
+/* ===========================================================
+   CONCEPT NAVIGATION FOOTER
+   Fixed bottom bar with prev/next buttons and progress indicator.
+   =========================================================== */
+
+.concept-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 250;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 12px;
+  height: 48px;
+  background: color-mix(in oklab, var(--cnav-color, var(--brand)) 4%, var(--bg-elev));
+  border-top: 1px solid color-mix(in oklab, var(--cnav-color, var(--brand)) 15%, var(--muted));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  --cnav-color: var(--brand);
+}
+
+/* ── Footer nav buttons ───────────────────────────────── */
+.concept-footer__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid color-mix(in oklab, var(--cnav-color) 20%, var(--muted));
+  border-radius: var(--radius-sm);
+  color: var(--text) !important;
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: inherit;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  max-width: 200px;
+  flex-shrink: 0;
+}
+
+.concept-footer__btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--cnav-color);
+}
+
+.concept-footer__btn:hover {
+  border-color: var(--cnav-color) !important;
+  background: color-mix(in oklab, var(--cnav-color) 8%, transparent);
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.concept-footer__btn--disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  border-color: var(--muted) !important;
+}
+
+.concept-footer__btn-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* ── Multi-path dropdown in footer ────────────────────── */
+.concept-footer__btn-group {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.concept-footer__menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  background: var(--bg-elev);
+  border: 1px solid var(--muted);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  min-width: 200px;
+  padding: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: all 0.15s ease;
+}
+
+.concept-footer__menu--prev { left: 0; }
+.concept-footer__menu--next { right: 0; }
+
+.concept-footer__btn-group.is-open .concept-footer__menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.concept-footer__menu-item {
+  display: block;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cnav-color) !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.concept-footer__menu-item:hover {
+  background: color-mix(in oklab, var(--cnav-color) 10%, transparent);
+}
+
+/* ── Center: progress bar ─────────────────────────────── */
+.concept-footer__center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  min-width: 0;
+}
+
+.concept-footer__progress-track {
+  flex: 1;
+  height: 4px;
+  background: color-mix(in oklab, var(--cnav-color) 15%, var(--muted));
+  border-radius: 2px;
+  overflow: hidden;
+  min-width: 40px;
+}
+
+.concept-footer__progress-fill {
+  height: 100%;
+  background: var(--cnav-color);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+.concept-footer__progress-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cnav-color);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Mobile adjustments ───────────────────────────────── */
+@media (max-width: 540px) {
+  .concept-footer {
+    padding: 0 8px;
+    height: 44px;
+  }
+  .concept-footer__btn {
+    padding: 5px 8px;
+    font-size: 0.78rem;
+    max-width: 130px;
+  }
+  .concept-footer__btn svg {
+    width: 14px;
+    height: 14px;
+  }
+  .concept-footer__center {
+    padding: 0 8px;
+  }
+  .concept-footer__menu {
+    position: fixed;
+    bottom: 44px;
+    left: 0;
+    right: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 12px;
+    min-width: auto;
+  }
+  .concept-footer__menu--prev,
+  .concept-footer__menu--next {
+    left: 0;
+    right: 0;
+  }
+}
+
+/* ── Pad page content so footer doesn't overlap ──────── */
+body:has(.concept-footer) .markdown-preview-view,
+body:has(.concept-footer) .markdown-rendered {
+  padding-bottom: 60px;
 }
 
 

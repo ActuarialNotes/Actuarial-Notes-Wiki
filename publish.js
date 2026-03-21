@@ -4707,6 +4707,7 @@ var SoundFX = (function () {
 
         var text = cells[colIdx].textContent.trim();
         var d = parseFlexDate(text);
+        // For ranges, use end date so active windows stay highlighted
         if (!d || d < now) return;
 
         if (!bestDate || d < bestDate) {
@@ -4720,12 +4721,38 @@ var SoundFX = (function () {
   }
 
   function parseFlexDate(str) {
-    // Try native parse first (handles ISO, "Month Day, Year", etc.)
+    // Handle date ranges ("Apr 22 - May 1", "Apr 22 – May 1, 2026")
+    // Use the END date so active windows stay highlighted through their close
+    var rangeSep = /\s*[-–—]\s*/;
+    var parts = str.split(rangeSep);
+    var endPart = parts[parts.length - 1].trim();
+    var startPart = parts[0].trim();
+
+    var d = parseSingleDate(endPart, startPart);
+    return d;
+  }
+
+  function parseSingleDate(str, startStr) {
+    // 1. Explicit year — native parse handles most formats
     var d = new Date(str);
     if (!isNaN(d.getTime())) return d;
 
-    // "Month Year" shorthand → first day of that month
-    var m = str.match(/^([A-Za-z]+)\s+(\d{4})$/);
+    var now = new Date();
+    var year = now.getFullYear();
+
+    // 2. "Month Day" → "Month Day, <year>" with rollover
+    var m = str.match(/^([A-Za-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?$/);
+    if (m) {
+      // If start month is provided, use it to detect cross-year ranges
+      d = new Date(m[1] + ' ' + m[2] + ', ' + year);
+      if (!isNaN(d.getTime())) {
+        if (d < now) d = new Date(m[1] + ' ' + m[2] + ', ' + (year + 1));
+        return d;
+      }
+    }
+
+    // 3. "Month Year" → first of that month
+    m = str.match(/^([A-Za-z]+)\s+(\d{4})$/);
     if (m) {
       d = new Date(m[1] + ' 1, ' + m[2]);
       if (!isNaN(d.getTime())) return d;

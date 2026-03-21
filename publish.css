@@ -60,6 +60,8 @@
   --tbl-hover-text: var(--text);
   --tbl-badge-bg: #262f3e;
   --tbl-badge-text: #e6e8ee;
+  --tbl-hl-bg: #ffffff;
+  --tbl-hl-text: #0b0e12;
 
   /* Cards */
   --act-radius: 14px;
@@ -116,6 +118,8 @@
   --tbl-hover-text: var(--text);
   --tbl-badge-bg: #e2e8f0;
   --tbl-badge-text: #1e293b;
+  --tbl-hl-bg: #1a1a2e;
+  --tbl-hl-text: #ffffff;
 
   --act-pill-exams-bg: #dbeafe;
   --act-pill-project-bg: #dcfce7;
@@ -367,6 +371,17 @@ a.button + table,
 .markdown-rendered tbody tr:hover td,
 .markdown-rendered tbody tr:focus-within td {
   background: color-mix(in oklab, var(--tbl-bg) 88%, var(--brand));
+}
+
+/* Highlighted row — next upcoming (high contrast inversion) */
+.markdown-rendered tbody tr.row-highlight-next td {
+  background: var(--tbl-hl-bg) !important;
+  color: var(--tbl-hl-text);
+  font-weight: 600;
+}
+
+.markdown-rendered tbody tr.row-highlight-next td a {
+  color: var(--tbl-hl-text);
 }
 
 /* Keep last column left-aligned (override any prior numeric alignment rules) */

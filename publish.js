@@ -3999,17 +3999,21 @@ var SoundFX = (function () {
     return ctx;
   }
 
-  // Play a 1-sample silent buffer to (re-)activate the iOS audio session.
-  // iOS Safari can silently deactivate the session even while
-  // ac.state === 'running', so we must replay this on every user gesture
-  // AND before every real sound.
+  // Play a near-inaudible tone to (re-)activate the iOS audio session.
+  // IMPORTANT: iOS requires *actual non-zero audio output* to activate
+  // the session — a silent (all-zeros) buffer is not enough.  We use a
+  // very short, very quiet oscillator pulse that is effectively inaudible
+  // but satisfies the iOS audio-session activation requirement.
   function playSilent(ac) {
     try {
-      var buf = ac.createBuffer(1, 1, ac.sampleRate);
-      var src = ac.createBufferSource();
-      src.buffer = buf;
-      src.connect(ac.destination);
-      src.start(0);
+      var osc = ac.createOscillator();
+      var gain = ac.createGain();
+      gain.gain.value = 0.001;          // ~-60dB, inaudible
+      osc.frequency.value = 200;
+      osc.connect(gain);
+      gain.connect(ac.destination);
+      osc.start(0);
+      osc.stop(ac.currentTime + 0.01);  // 10ms pulse
     } catch (e) {
       if (typeof console !== 'undefined' && console.warn) {
         console.warn('[SoundFX] playSilent failed:', e.message, 'state:', ac.state);
@@ -4019,11 +4023,16 @@ var SoundFX = (function () {
 
   // Mobile browsers keep AudioContext suspended until a user gesture handler
   // calls resume(). Re-run on every gesture in case of re-suspension (tab
-  // switches, lock-screen, etc.).  Always synchronous — no state checks.
+  // switches, lock-screen, etc.).
   function unlockAudio() {
     var ac = getCtx();
-    ac.resume().catch(function () {});
-    playSilent(ac);
+    if (ac.state === 'running') {
+      playSilent(ac);
+    } else {
+      ac.resume().then(function () {
+        playSilent(ac);
+      }).catch(function () {});
+    }
   }
   document.addEventListener('touchstart', unlockAudio, { capture: true, passive: true });
   document.addEventListener('touchend', unlockAudio, { capture: true, passive: true });
@@ -4243,7 +4252,8 @@ var SoundFX = (function () {
     inProgress: playInProgress,
     complete: playComplete,
     isMuted: isMuted,
-    toggleMute: toggleMute
+    toggleMute: toggleMute,
+    _dbg: function () { return ctx ? ctx.state : 'no-ctx'; }
   };
 })();
 
@@ -4323,6 +4333,52 @@ var SoundFX = (function () {
     setTimeout(observeCallouts, 250);
   }
 
+})();
+
+
+/* ===========================================================
+   SFX DEBUG OVERLAY
+   Activate with ?sfx-debug=1 in the URL.
+   Shows AudioContext state and event flow on mobile.
+   =========================================================== */
+
+(function () {
+  if (!/[?&]sfx-debug=1/.test(window.location.search)) return;
+
+  var el = document.createElement('div');
+  el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:999999;' +
+    'background:rgba(0,0,0,0.85);color:#0f0;font:11px/1.4 monospace;' +
+    'padding:8px 10px;max-height:40vh;overflow-y:auto;pointer-events:none;';
+  document.body.appendChild(el);
+
+  var lines = [];
+  function log(msg) {
+    var ts = new Date().toTimeString().slice(0, 8);
+    lines.push(ts + ' ' + msg);
+    if (lines.length > 30) lines.shift();
+    el.textContent = lines.join('\n');
+  }
+
+  // Patch SoundFX methods to log calls
+  ['click', 'dropdownOpen', 'calloutOpen', 'inProgress', 'complete'].forEach(function (name) {
+    var orig = SoundFX[name];
+    SoundFX[name] = function () {
+      var state = SoundFX._dbg ? SoundFX._dbg() : '?';
+      log('SoundFX.' + name + '() ctx=' + state + ' muted=' + SoundFX.isMuted());
+      return orig.apply(this, arguments);
+    };
+  });
+
+  // Log touch/click events on interactive elements
+  ['touchstart', 'touchend', 'click'].forEach(function (evName) {
+    document.addEventListener(evName, function (e) {
+      var tag = e.target.tagName || '?';
+      var cls = (e.target.className || '').toString().slice(0, 30);
+      log(evName + ' <' + tag + '> .' + cls);
+    }, { capture: true, passive: true });
+  });
+
+  log('SFX debug active. Tap something!');
 })();
 
 

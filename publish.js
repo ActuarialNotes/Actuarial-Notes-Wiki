@@ -2965,6 +2965,17 @@
 
   var SVG_MOON = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11.4A7 7 0 0 1 8.6 3a7 7 0 1 0 8.4 8.4z"/></svg>';
 
+  var SVG_SEARCH = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg>';
+
+  var SVG_CLEAR = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="14" y2="14"/><line x1="14" y1="6" x2="6" y2="14"/></svg>';
+
+  /* Search result category icons */
+  var SVG_CAT_EXAM = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h7.5L13 4v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2.5A1 1 0 0 1 3 1.5z"/><polyline points="10.5 1.5 10.5 4.5 13 4.5"/><line x1="5" y1="8" x2="11" y2="8"/><line x1="5" y1="10.5" x2="11" y2="10.5"/></svg>';
+
+  var SVG_CAT_CONCEPT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="6" r="4"/><line x1="6.5" y1="12" x2="9.5" y2="12"/><line x1="7" y1="14" x2="9" y2="14"/><line x1="6.5" y1="10" x2="9.5" y2="10"/></svg>';
+
+  var SVG_CAT_DOC = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h10a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2.5A1 1 0 0 1 3 1.5z"/><line x1="5" y1="5" x2="11" y2="5"/><line x1="5" y1="7.5" x2="11" y2="7.5"/><line x1="5" y1="10" x2="9" y2="10"/></svg>';
+
   var STATUS_ICONS = { not_started: SVG_CIRCLE, in_progress: SVG_PROGRESS, completed: SVG_CHECK };
   var STATUS_CYCLE = { not_started: 'in_progress', in_progress: 'completed', completed: 'not_started' };
 
@@ -3388,6 +3399,104 @@
   }
 
   /* ============================================================
+     VAULT CONTENT INDEX (for sidebar search)
+     ============================================================ */
+  var _vaultIndexCache = null;
+
+  function getSiteFiles() {
+    try {
+      var sf = null;
+      if (window.publish && window.publish.vault) {
+        sf = window.publish.vault.fileMap || window.publish.vault.files;
+      }
+      if (!sf && window.app && window.app.vault) {
+        sf = window.app.vault.fileMap || window.app.vault.files;
+      }
+      if (!sf && window.publish && window.publish.site) {
+        sf = window.publish.site.cache || window.publish.site.files;
+      }
+      return sf;
+    } catch (e) { return null; }
+  }
+
+  function getVaultIndex() {
+    if (_vaultIndexCache) return _vaultIndexCache;
+
+    var index = [];
+    var seen = {};
+
+    // 1) Add all exam items from TRACKS (always available)
+    TRACKS.forEach(function (track) {
+      track.sections.forEach(function (sec) {
+        sec.items.forEach(function (item) {
+          if (!seen[item.id]) {
+            seen[item.id] = true;
+            index.push({
+              name: item.name,
+              path: item.path || null,
+              category: 'exam',
+              color: item.color || null
+            });
+          }
+        });
+      });
+    });
+
+    // 2) Add files from vault (concepts + documents)
+    var sf = getSiteFiles();
+    if (sf) {
+      var examPaths = {};
+      index.forEach(function (e) {
+        if (e.path) examPaths[e.path.toLowerCase()] = true;
+        if (e.path) examPaths[(e.path + '.md').toLowerCase()] = true;
+      });
+
+      var keys = Object.keys(sf);
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        // Skip hidden/system files
+        if (key.charAt(0) === '.' || key.indexOf('/.') !== -1) continue;
+
+        var baseName = key.replace(/\.md$/, '');
+        var displayName = baseName;
+        var category = 'document';
+
+        if (key.indexOf('Concepts/') === 0) {
+          category = 'concept';
+          displayName = baseName.replace(/^Concepts\//, '');
+        } else if (key.indexOf('Exams/') === 0) {
+          // Could be an exam page not in TRACKS
+          if (examPaths[key.toLowerCase()] || examPaths[baseName.toLowerCase()]) continue;
+          category = 'exam';
+          displayName = baseName.replace(/^Exams\//, '');
+        } else {
+          // Check if it's already an exam from TRACKS
+          if (examPaths[key.toLowerCase()] || examPaths[baseName.toLowerCase()]) continue;
+          // Check if path matches a known exam path pattern
+          var lk = baseName.toLowerCase();
+          if (lk.indexOf('exam ') === 0 || lk.indexOf('exam-') === 0) {
+            category = 'exam';
+          }
+        }
+
+        // Skip things that aren't useful content
+        if (key === 'README.md' || key === 'Home.md') continue;
+
+        var pathSlug = baseName;
+        index.push({
+          name: displayName,
+          path: pathSlug,
+          category: category,
+          color: null
+        });
+      }
+    }
+
+    _vaultIndexCache = index;
+    return index;
+  }
+
+  /* ============================================================
      DOM REFERENCES & BUILD
      ============================================================ */
   var containerEl = null;
@@ -3640,6 +3749,209 @@
     barFillEl = bar; // store reference to the bar container itself
     container.appendChild(bar);
 
+    // ---- Search row ----
+    var searchRow = document.createElement('div');
+    searchRow.className = 'sidebar-tabs__search-row';
+
+    var searchIcon = document.createElement('span');
+    searchIcon.className = 'sidebar-tabs__search-icon';
+    searchIcon.innerHTML = SVG_SEARCH;
+    searchRow.appendChild(searchIcon);
+
+    var searchInput = document.createElement('input');
+    searchInput.className = 'sidebar-tabs__search-input';
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search exams, concepts\u2026';
+    searchRow.appendChild(searchInput);
+
+    var searchClear = document.createElement('button');
+    searchClear.className = 'sidebar-tabs__search-clear';
+    searchClear.type = 'button';
+    searchClear.title = 'Clear search';
+    searchClear.innerHTML = SVG_CLEAR;
+    searchRow.appendChild(searchClear);
+
+    // ---- Search dropdown ----
+    var searchDropdown = document.createElement('div');
+    searchDropdown.className = 'sidebar-tabs__search-dropdown';
+    searchRow.appendChild(searchDropdown);
+
+    var searchSelectedIdx = -1;
+    var searchResultEls = [];
+
+    var CAT_ICONS = { exam: SVG_CAT_EXAM, concept: SVG_CAT_CONCEPT, document: SVG_CAT_DOC };
+    var CAT_LABELS = { exam: 'Exams', concept: 'Concepts', document: 'Documents' };
+    var CAT_ORDER = ['exam', 'concept', 'document'];
+    var MAX_PER_CAT = 8;
+
+    function highlightMatch(text, term) {
+      if (!term) return esc(text);
+      var lower = text.toLowerCase();
+      var idx = lower.indexOf(term);
+      if (idx === -1) return esc(text);
+      return esc(text.substring(0, idx)) +
+        '<mark>' + esc(text.substring(idx, idx + term.length)) + '</mark>' +
+        esc(text.substring(idx + term.length));
+    }
+
+    function navigateToResult(path) {
+      if (!path) return;
+      var slug = path.replace(/ /g, '+');
+      window.open(window.location.origin + '/' + slug, '_self');
+    }
+
+    function closeDropdown() {
+      searchDropdown.classList.remove('is-open');
+      searchSelectedIdx = -1;
+      searchResultEls = [];
+    }
+
+    function updateSelectedResult() {
+      for (var i = 0; i < searchResultEls.length; i++) {
+        searchResultEls[i].classList.toggle('is-selected', i === searchSelectedIdx);
+      }
+      if (searchSelectedIdx >= 0 && searchResultEls[searchSelectedIdx]) {
+        searchResultEls[searchSelectedIdx].scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function performSearch(query) {
+      var term = query.trim().toLowerCase();
+      searchResultEls = [];
+      searchSelectedIdx = -1;
+
+      if (!term) {
+        closeDropdown();
+        searchClear.classList.remove('is-visible');
+        return;
+      }
+
+      searchClear.classList.add('is-visible');
+
+      var allItems = getVaultIndex();
+      // Group matches by category
+      var grouped = {};
+      CAT_ORDER.forEach(function (c) { grouped[c] = []; });
+
+      for (var i = 0; i < allItems.length; i++) {
+        var item = allItems[i];
+        if (item.name.toLowerCase().indexOf(term) !== -1) {
+          var cat = item.category || 'document';
+          if (grouped[cat] && grouped[cat].length < MAX_PER_CAT) {
+            grouped[cat].push(item);
+          }
+        }
+      }
+
+      // Check if any results
+      var totalResults = 0;
+      CAT_ORDER.forEach(function (c) { totalResults += grouped[c].length; });
+
+      searchDropdown.innerHTML = '';
+
+      if (totalResults === 0) {
+        var emptyEl = document.createElement('div');
+        emptyEl.className = 'sidebar-tabs__search-empty';
+        emptyEl.textContent = 'No results found';
+        searchDropdown.appendChild(emptyEl);
+        searchDropdown.classList.add('is-open');
+        return;
+      }
+
+      CAT_ORDER.forEach(function (cat) {
+        var items = grouped[cat];
+        if (!items.length) return;
+
+        var group = document.createElement('div');
+        group.className = 'sidebar-tabs__search-group';
+
+        var label = document.createElement('div');
+        label.className = 'sidebar-tabs__search-group-label';
+        label.textContent = CAT_LABELS[cat];
+        group.appendChild(label);
+
+        items.forEach(function (item) {
+          var result = document.createElement('a');
+          result.className = 'sidebar-tabs__search-result';
+          result.dataset.category = cat;
+          if (item.path) {
+            result.href = window.location.origin + '/' + item.path.replace(/ /g, '+');
+          }
+
+          var iconEl = document.createElement('span');
+          iconEl.className = 'sidebar-tabs__search-result-icon';
+          iconEl.innerHTML = CAT_ICONS[cat] || CAT_ICONS.document;
+          result.appendChild(iconEl);
+
+          var nameEl = document.createElement('span');
+          nameEl.className = 'sidebar-tabs__search-result-name';
+          nameEl.innerHTML = highlightMatch(item.name, term);
+          result.appendChild(nameEl);
+
+          result.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            navigateToResult(item.path);
+          }, true);
+
+          result.addEventListener('mouseenter', function () {
+            searchSelectedIdx = searchResultEls.indexOf(result);
+            updateSelectedResult();
+          });
+
+          group.appendChild(result);
+          searchResultEls.push(result);
+        });
+
+        searchDropdown.appendChild(group);
+      });
+
+      searchDropdown.classList.add('is-open');
+    }
+
+    searchInput.addEventListener('input', function () {
+      performSearch(searchInput.value);
+    });
+
+    searchInput.addEventListener('keydown', function (e) {
+      if (!searchDropdown.classList.contains('is-open')) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        searchSelectedIdx = Math.min(searchSelectedIdx + 1, searchResultEls.length - 1);
+        updateSelectedResult();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        searchSelectedIdx = Math.max(searchSelectedIdx - 1, 0);
+        updateSelectedResult();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (searchSelectedIdx >= 0 && searchResultEls[searchSelectedIdx]) {
+          searchResultEls[searchSelectedIdx].click();
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeDropdown();
+        searchInput.blur();
+      }
+    });
+
+    searchClear.addEventListener('click', function () {
+      searchInput.value = '';
+      closeDropdown();
+      searchClear.classList.remove('is-visible');
+      searchInput.focus();
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+      if (!searchRow.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    container.appendChild(searchRow);
+
     // Sections container
     var sectionsEl = document.createElement('div');
     sectionsEl.style.cssText = 'display:flex;flex-direction:column;gap:2px';
@@ -3749,6 +4061,9 @@
     select.addEventListener('change', function () {
       journeyState.selectedTrack = select.value;
       saveJourneyState();
+      searchInput.value = '';
+      closeDropdown();
+      searchClear.classList.remove('is-visible');
       renderTrackSections();
       updateExamsProgress();
       updateCertBtn();

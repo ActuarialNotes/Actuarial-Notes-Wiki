@@ -3749,7 +3749,21 @@ window._spaNavigate = function (path) {
       });
     });
 
-    // 2) Scan DOM for internal links (discovers concepts referenced on current page)
+    // 2) Scan Obsidian Publish navigation tree for full file listing
+    //    Nav tree items have data-path with full folder paths (e.g., "Concepts/Future Value")
+    //    Must run BEFORE DOM link scan so correct categories win deduplication
+    var navItems = document.querySelectorAll('.nav-file-title[data-path], .tree-item-self[data-path]');
+    for (var n = 0; n < navItems.length; n++) {
+      var navPath = navItems[n].getAttribute('data-path');
+      if (!navPath) continue;
+      var navInfo = categorizeFile(navPath);
+      if (!navInfo.category) continue;
+      _knownFileCategories[navInfo.name.toLowerCase()] = navInfo;
+      if (examPaths[navInfo.path.toLowerCase()]) continue;
+      addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null);
+    }
+
+    // 3) Scan DOM for internal links (discovers items not in nav tree)
     var domLinks = document.querySelectorAll('a.internal-link[data-href]');
     for (var i = 0; i < domLinks.length; i++) {
       var linkEl = domLinks[i];
@@ -3764,19 +3778,7 @@ window._spaNavigate = function (path) {
       addToIndex(index, seen, info.name, info.path, info.category, null);
     }
 
-    // 2.5) Scan Obsidian Publish navigation tree for full file listing
-    //      Nav tree items have data-path with full folder paths (e.g., "Concepts/Future Value")
-    var navItems = document.querySelectorAll('.nav-file-title[data-path], .tree-item-self[data-path]');
-    for (var n = 0; n < navItems.length; n++) {
-      var navPath = navItems[n].getAttribute('data-path');
-      if (!navPath) continue;
-      var navInfo = categorizeFile(navPath);
-      if (!navInfo.category) continue;
-      if (examPaths[navInfo.path.toLowerCase()]) continue;
-      addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null);
-    }
-
-    // 3) Add files from vault object (if available)
+    // 4) Add files from vault object (if available)
     var sf = getSiteFiles();
     if (sf) {
       var keys = Object.keys(sf);

@@ -1,3 +1,18 @@
+/* SPA-safe navigation helper — triggers Obsidian Publish's internal router */
+window._spaNavigate = function (path) {
+  if (!path) return;
+  var slug = path.replace(/ /g, '+');
+  var url = window.location.origin + '/' + slug;
+  var a = document.createElement('a');
+  a.className = 'internal-link';
+  a.setAttribute('data-href', path);
+  a.href = url;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
+
 /* ===========================================================
    EXAM NAVIGATION COMPONENT - JavaScript
    Add to your publish.js
@@ -372,20 +387,17 @@
       }
     });
 
-    // Handle internal link clicks — Obsidian's SPA router doesn't reach
-    // the sticky bar since it's outside the page content container.
-    // Use window.open(_self) pattern (same as journey tracker).
+    // Handle internal link clicks — use SPA navigation helper
     sticky.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link');
       if (link) {
         e.preventDefault();
         e.stopImmediatePropagation();
         closeSticky();
-        var href = link.getAttribute('href');
+        var href = link.getAttribute('href') || link.getAttribute('data-href') || '';
         if (href) {
-          var url = href.startsWith('http') ? href
-            : window.location.origin + (href.startsWith('/') ? '' : '/') + href;
-          window.open(url, '_self');
+          var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//,'').replace(/\+/g, ' ');
+          window._spaNavigate(path);
         }
       }
     }, true);
@@ -3104,11 +3116,10 @@
         e.stopImmediatePropagation();
         // Close any open menus
         footer.querySelectorAll('.is-open').forEach(function (d) { d.classList.remove('is-open'); });
-        var href = link.getAttribute('href');
+        var href = link.getAttribute('href') || link.getAttribute('data-href') || '';
         if (href) {
-          var url = href.startsWith('http') ? href
-            : window.location.origin + (href.startsWith('/') ? '' : '/') + href;
-          window.open(url, '_self');
+          var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//,'').replace(/\+/g, ' ');
+          window._spaNavigate(path);
         }
       }
     }, true);
@@ -3700,6 +3711,8 @@
       var lk = baseName.toLowerCase();
       if (lk.indexOf('exam ') === 0 || lk.indexOf('exam-') === 0) {
         category = 'exam';
+      } else if (baseName !== 'README' && baseName !== 'Home' && baseName !== 'publish') {
+        category = 'document';
       }
     }
 
@@ -4101,8 +4114,7 @@
       e.stopImmediatePropagation();
       var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
       if (track && track.certPath) {
-        var slug = track.certPath.replace(/ /g, '+');
-        window.open(window.location.origin + '/' + slug, '_self');
+        window._spaNavigate(track.certPath);
       }
     }, true);
     selectRow.appendChild(certBtn);
@@ -4209,12 +4221,11 @@
           if (item.path) {
             nameEl = document.createElement('a');
             nameEl.className = 'exams-panel__name';
-            var slug = item.path.replace(/ /g, '+');
-            nameEl.href = window.location.origin + '/' + slug;
+            nameEl.href = window.location.origin + '/' + item.path.replace(/ /g, '+');
             nameEl.addEventListener('click', function (e) {
               e.preventDefault();
               e.stopImmediatePropagation();
-              window.open(window.location.origin + '/' + slug, '_self');
+              window._spaNavigate(item.path);
             }, true);
           } else {
             nameEl = document.createElement('span');
@@ -4266,8 +4277,7 @@
 
   function navigateToResult(path) {
     if (!path) return;
-    var slug = path.replace(/ /g, '+');
-    window.open(window.location.origin + '/' + slug, '_self');
+    window._spaNavigate(path);
   }
 
   function renderSearchPanel(container) {
@@ -4610,11 +4620,10 @@
       tab.className = 'persistent-exam-tab';
       tab.dataset.examId = exam.id;
       if (exam.path) {
-        var slug = exam.path.replace(/ /g, '+');
-        tab.href = window.location.origin + '/' + slug;
+        tab.href = window.location.origin + '/' + exam.path.replace(/ /g, '+');
         tab.addEventListener('click', function (e) {
           e.preventDefault();
-          window.open(window.location.origin + '/' + slug, '_self');
+          window._spaNavigate(exam.path);
         }, true);
       } else {
         tab.href = '#';
@@ -4691,14 +4700,16 @@
     return null;
   };
 
-  // Re-check persistent navs on SPA navigation
+  // Re-check persistent navs on SPA navigation + invalidate search cache
   window.addEventListener('popstate', function () {
+    _vaultIndexCache = null;
     setTimeout(updatePersistentExamNavs, 250);
     setTimeout(updateExamLinkButtons, 300);
   });
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
     if (link) {
+      _vaultIndexCache = null;
       setTimeout(updatePersistentExamNavs, 300);
       setTimeout(updatePersistentExamNavs, 600);
       setTimeout(updateExamLinkButtons, 350);
@@ -5519,6 +5530,124 @@ var SoundFX = (function () {
     });
   } else {
     setTimeout(init, 200);
+  }
+})();
+
+
+/* ===========================================================
+   CONTRIBUTE+ (NOT FOUND PAGE)
+   Replaces Obsidian's default 404 with a friendly page that
+   encourages users to request or contribute content.
+   =========================================================== */
+(function () {
+  'use strict';
+
+  var CONTRIBUTE_CLASS = 'contribute-plus';
+  var GITHUB_REPO = 'https://github.com/ActuarialNotes/Actuarial-Notes-Wiki';
+
+  function getPageName() {
+    var path = decodeURIComponent(
+      window.location.pathname.replace(/^\//, '').replace(/\+/g, ' ')
+    );
+    return path || 'Unknown Page';
+  }
+
+  function isNotFound() {
+    if (document.querySelector('.' + CONTRIBUTE_CLASS)) return false;
+
+    var renderer = document.querySelector('.markdown-preview-view')
+                || document.querySelector('.publish-renderer');
+    if (!renderer) return false;
+
+    var text = renderer.textContent.trim();
+    if (text === '' || /page not found/i.test(text)) return true;
+
+    var hasContent = renderer.querySelector(
+      'p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, .callout, pre'
+    );
+    return !hasContent;
+  }
+
+  function inject() {
+    if (!isNotFound()) return;
+
+    var renderer = document.querySelector('.markdown-preview-view')
+                || document.querySelector('.publish-renderer');
+    if (!renderer) return;
+
+    var pageName = getPageName();
+
+    renderer.innerHTML = '';
+    var container = document.createElement('div');
+    container.className = CONTRIBUTE_CLASS;
+
+    container.innerHTML =
+      '<div class="' + CONTRIBUTE_CLASS + '__icon">' +
+        '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+          '<circle cx="24" cy="24" r="20"/>' +
+          '<line x1="24" y1="16" x2="24" y2="28"/>' +
+          '<circle cx="24" cy="34" r="1.5" fill="currentColor" stroke="none"/>' +
+        '</svg>' +
+      '</div>' +
+      '<h1 class="' + CONTRIBUTE_CLASS + '__title">Page Not Found</h1>' +
+      '<p class="' + CONTRIBUTE_CLASS + '__page-name">' +
+        '<code>' + pageName.replace(/</g, '&lt;') + '</code>' +
+      '</p>' +
+      '<p class="' + CONTRIBUTE_CLASS + '__message">' +
+        'This page doesn\u2019t exist yet \u2014 but you can help change that!' +
+      '</p>' +
+      '<div class="' + CONTRIBUTE_CLASS + '__actions">' +
+        '<a class="' + CONTRIBUTE_CLASS + '__btn ' + CONTRIBUTE_CLASS + '__btn--primary" ' +
+          'href="' + GITHUB_REPO + '/issues/new?title=' + encodeURIComponent('Request: ' + pageName) + '&labels=content-request" ' +
+          'target="_blank" rel="noopener">' +
+          '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><line x1="10" y1="6" x2="10" y2="14"/><line x1="6" y1="10" x2="14" y2="10"/></svg>' +
+          ' Request This Page' +
+        '</a>' +
+        '<a class="' + CONTRIBUTE_CLASS + '__btn ' + CONTRIBUTE_CLASS + '__btn--secondary" ' +
+          'href="' + GITHUB_REPO + '#contributing" ' +
+          'target="_blank" rel="noopener">' +
+          '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3l2 2-9 9H6v-2L15 3z"/><line x1="12" y1="6" x2="14" y2="8"/></svg>' +
+          ' Contribute' +
+        '</a>' +
+      '</div>' +
+      '<p class="' + CONTRIBUTE_CLASS + '__hint">' +
+        'Know about this topic? We\u2019re actively looking for volunteer contributors.' +
+      '</p>';
+
+    renderer.appendChild(container);
+  }
+
+  function check() {
+    setTimeout(inject, 300);
+    setTimeout(inject, 800);
+  }
+
+  window.addEventListener('popstate', check);
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+    if (link) check();
+  });
+
+  function attachObserver() {
+    var target = document.querySelector('.markdown-preview-view')
+              || document.querySelector('.publish-renderer');
+    if (target) {
+      var observer = new MutationObserver(function () {
+        clearTimeout(window._contributePlusTimeout);
+        window._contributePlusTimeout = setTimeout(inject, 300);
+      });
+      observer.observe(target, { childList: true, subtree: true });
+    } else {
+      setTimeout(attachObserver, 500);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () { check(); attachObserver(); }, 300);
+    });
+  } else {
+    setTimeout(function () { check(); attachObserver(); }, 300);
   }
 })();
 

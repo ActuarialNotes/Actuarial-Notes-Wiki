@@ -5634,6 +5634,88 @@ body.high-contrast .dl-dropdown__single {
 }
 
 
+/* ── Contribute+ (Not Found) ─────────────────────────────── */
+.contribute-plus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  min-height: 50vh;
+  gap: 0.5rem;
+}
+.contribute-plus__icon {
+  width: 64px;
+  height: 64px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+}
+.contribute-plus__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-normal);
+}
+.contribute-plus__page-name code {
+  font-size: 0.95rem;
+  padding: 0.2em 0.6em;
+  border-radius: 6px;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+}
+.contribute-plus__message {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin: 0.5rem 0 1.5rem;
+}
+.contribute-plus__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.contribute-plus__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.6em 1.2em;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+.contribute-plus__btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.contribute-plus__btn--primary {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+.contribute-plus__btn--primary:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  filter: brightness(1.1);
+}
+.contribute-plus__btn--secondary {
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+}
+.contribute-plus__btn--secondary:hover {
+  background: var(--background-modifier-hover);
+}
+.contribute-plus__hint {
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  margin-top: 1.5rem;
+}
+
+
 /* ===========================================================
    CUSTOM EXAM WORKFLOW CSS — ARCHIVED
    Styles moved to publish-archived-custom-exam.css.

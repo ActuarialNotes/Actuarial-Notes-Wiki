@@ -4623,6 +4623,16 @@ h6 a {
   flex-direction: column;
   overflow: hidden !important;
 }
+/* Hide "Powered by Obsidian Publish" footer when split pane is open */
+.concept-split--open ~ .publish-renderer__footer,
+.concept-split--open .publish-renderer__footer,
+.publish-renderer__footer:has(~ .concept-split--open) {
+  display: none !important;
+}
+/* Also hide it globally — it overlaps the split-pane Next button */
+.publish-renderer__footer {
+  display: none !important;
+}
 
 .concept-split__top {
   flex: 1;
@@ -4691,51 +4701,38 @@ body.concept-split-resizing iframe {
   pointer-events: none;
 }
 
-/* ---- Learned checkmark button ---- */
+/* ---- Learned circle button ---- */
 .concept-popup__learned-btn {
   background: none;
-  border: 1px solid var(--muted, #333);
-  color: var(--text-muted, #888);
+  border: 2px solid var(--text-muted, #888);
+  color: transparent;
   cursor: pointer;
-  padding: 3px;
-  border-radius: 4px;
+  padding: 0;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: color .15s ease, background .15s ease, border-color .15s ease;
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.concept-popup__learned-btn svg {
+  width: 12px;
+  height: 12px;
 }
 .concept-popup__learned-btn:hover {
-  color: var(--text, #cdd6f4);
-  border-color: var(--text-muted, #888);
-  background: var(--muted, #333);
+  border-color: var(--text, #cdd6f4);
+  background: color-mix(in oklab, var(--text-muted, #888) 15%, transparent);
 }
 .concept-popup__learned-btn.is-learned {
-  color: #22c55e;
+  color: #fff;
   border-color: #22c55e;
-  background: rgba(34, 197, 94, 0.1);
+  background: #22c55e;
 }
 .concept-popup__learned-btn.is-learned:hover {
-  color: #4ade80;
   border-color: #4ade80;
-  background: rgba(34, 197, 94, 0.18);
-}
-
-.concept-popup__open-full {
-  background: none;
-  border: none;
-  color: var(--text-muted, #888);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  transition: color .15s ease, background .15s ease;
-}
-.concept-popup__open-full:hover {
-  color: var(--text, #cdd6f4);
-  background: var(--muted, #333);
+  background: #4ade80;
 }
 .concept-popup__close {
   background: none;

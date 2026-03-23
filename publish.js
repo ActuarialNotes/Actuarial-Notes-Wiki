@@ -2255,7 +2255,6 @@ window._spaNavigate = function (path) {
   var nextBtn = null;
   var posLabel = null;
   var loadingEl = null;
-  var openFullBtn = null;
   var learnedBtn = null;
 
   /* ---- State ---- */
@@ -2267,8 +2266,7 @@ window._spaNavigate = function (path) {
   /* ---- SVGs ---- */
   var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
   var svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>';
-  var svgExternal = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
-  var svgCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="20 6 9 17 4 12"/></svg>';
+  var svgCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><polyline points="20 6 9 17 4 12"/></svg>';
 
   /* ---- Init ---- */
   if (document.readyState === 'loading') {
@@ -2339,20 +2337,6 @@ window._spaNavigate = function (path) {
       toggleLearned();
     });
 
-    openFullBtn = document.createElement('button');
-    openFullBtn.className = 'concept-popup__open-full';
-    openFullBtn.type = 'button';
-    openFullBtn.title = 'Open full page';
-    openFullBtn.innerHTML = svgExternal;
-    openFullBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (currentIndex >= 0 && currentIndex < conceptList.length) {
-        var path = conceptList[currentIndex].path;
-        closeSplitPane();
-        window._spaNavigate(path);
-      }
-    });
-
     var closeBtn = document.createElement('button');
     closeBtn.className = 'concept-popup__close';
     closeBtn.type = 'button';
@@ -2362,9 +2346,8 @@ window._spaNavigate = function (path) {
       closeSplitPane();
     });
 
-    header.appendChild(titleEl);
     header.appendChild(learnedBtn);
-    header.appendChild(openFullBtn);
+    header.appendChild(titleEl);
     header.appendChild(closeBtn);
 
     // Body (iframe container)
@@ -2384,7 +2367,7 @@ window._spaNavigate = function (path) {
           style.textContent =
             '.concept-nav, .concept-footer, .exam-nav__sticky, .exam-nav-backdrop, ' +
             '.sidebar-tabs-container, .site-body-left-column, .site-navbar, ' +
-            '.page-header, .site-header, .site-footer ' +
+            '.page-header, .site-header, .site-footer, .publish-renderer__footer ' +
             '{ display: none !important; } ' +
             '.publish-renderer, .site-body { padding-bottom: 0 !important; } ' +
             '.site-body-center-column { margin: 0 auto !important; max-width: 100% !important; } ' +
@@ -2739,7 +2722,9 @@ window._spaNavigate = function (path) {
      CLICK INTERCEPTOR — capture concept link clicks
      ----------------------------------------------------------- */
   function installClickInterceptor() {
-    document.addEventListener('click', function (e) {
+    // Use window (not document) capture phase so we fire before Obsidian's
+    // own document-level SPA handler and can intercept concept links.
+    window.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link, a[data-href]');
       if (!link) return;
 

@@ -4224,6 +4224,54 @@ window._spaNavigate = function (path) {
   var _vaultIndexCallbacks = [];
   var _knownFileCategories = {};
   var _currentPagePaths = {};  // tracks items discovered from current page links
+  var _navTreeObserver = null;
+  var SESSION_INDEX_KEY = 'wiki-search-discovered';
+
+  /** Watch for Obsidian's nav tree to load (it renders client-side and may
+      not be in the DOM when buildBaseIndex first runs). When nav elements
+      appear, invalidate the cached index so the next search picks them up. */
+  function observeNavTree() {
+    if (_navTreeObserver) return;
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (!sidebar) return;
+
+    _navTreeObserver = new MutationObserver(function () {
+      var navEls = document.querySelectorAll(
+        '.nav-file-title[data-path], .tree-item-self[data-path]'
+      );
+      if (navEls.length > 0) {
+        _navTreeObserver.disconnect();
+        _navTreeObserver = null;
+        _vaultIndexCache = null;
+        _vaultIndexLoading = false;
+      }
+    });
+
+    _navTreeObserver.observe(sidebar, { childList: true, subtree: true });
+  }
+
+  /** Persist globally-discovered file paths across SPA navigations so that
+      pages visited earlier contribute to the "Entire Wiki" index. */
+  function saveDiscoveredFiles(index) {
+    try {
+      var files = [];
+      for (var i = 0; i < index.length; i++) {
+        if (index[i].source === 'global' && index[i].path) {
+          files.push(index[i].path + '.md');
+        }
+      }
+      if (files.length > 5) {
+        sessionStorage.setItem(SESSION_INDEX_KEY, JSON.stringify(files));
+      }
+    } catch (e) {}
+  }
+
+  function loadDiscoveredFiles() {
+    try {
+      var json = sessionStorage.getItem(SESSION_INDEX_KEY);
+      return json ? JSON.parse(json) : [];
+    } catch (e) { return []; }
+  }
 
   function getSiteFiles() {
     try {
@@ -4466,6 +4514,17 @@ window._spaNavigate = function (path) {
       }
     }
 
+    // 5) Load previously-discovered files from sessionStorage
+    var prevFiles = loadDiscoveredFiles();
+    for (var pf = 0; pf < prevFiles.length; pf++) {
+      var pfPath = prevFiles[pf];
+      if (!pfPath) continue;
+      var pfInfo = categorizeFile(pfPath);
+      if (!pfInfo.category) continue;
+      if (examPaths[pfInfo.path.toLowerCase()]) continue;
+      addToIndex(index, seen, pfInfo.name, pfInfo.path, pfInfo.category, null, 'global');
+    }
+
     return { index: index, seen: seen, navFound: navFound };
   }
 
@@ -4538,6 +4597,21 @@ window._spaNavigate = function (path) {
               if (rFile && rFile.indexOf('.') === -1) {
                 remotePaths.push(rFile + '.md');
               }
+            } else if (rHref && rHref.indexOf('http') !== 0 && rHref.indexOf('#') !== 0 && rHref.indexOf('mailto') !== 0) {
+              // Also catch relative links (without leading /)
+              var rFile2 = decodeURIComponent(rHref.replace(/\+/g, ' '));
+              if (rFile2 && rFile2.indexOf('.') === -1) {
+                remotePaths.push(rFile2 + '.md');
+              }
+            }
+          }
+
+          // Also scan data-href attributes from internal links in fetched page
+          var remoteInternalLinks = doc.querySelectorAll('a.internal-link[data-href]');
+          for (var rl = 0; rl < remoteInternalLinks.length; rl++) {
+            var rDataHref = remoteInternalLinks[rl].getAttribute('data-href') || '';
+            if (rDataHref) {
+              remotePaths.push(rDataHref.replace(/\.md$/, '') + '.md');
             }
           }
 
@@ -4585,6 +4659,30 @@ window._spaNavigate = function (path) {
     xhr2.send();
   }
 
+  /** Rescan the *live* DOM for nav-tree elements and internal links.
+      This catches elements that weren't present at the initial 250ms mark. */
+  function rescanLiveDOM(examPaths) {
+    var found = [];
+    var navItems = document.querySelectorAll(
+      '.nav-file-title[data-path], .tree-item-self[data-path]'
+    );
+    for (var i = 0; i < navItems.length; i++) {
+      var p = navItems[i].getAttribute('data-path');
+      if (p) found.push(p.replace(/\.md$/, '') + '.md');
+    }
+    var allLinks = document.querySelectorAll(
+      '.markdown-preview-view a.internal-link[data-href], ' +
+      '.publish-renderer a.internal-link[data-href]'
+    );
+    for (var j = 0; j < allLinks.length; j++) {
+      var href = allLinks[j].getAttribute('data-href') || '';
+      if (href) found.push(href.replace(/\.md$/, '') + '.md');
+    }
+    if (found.length > 0) {
+      mergeFilesIntoCache(found, examPaths);
+    }
+  }
+
   function getVaultIndex(callback) {
     if (_vaultIndexCache) {
       if (callback) callback(_vaultIndexCache);
@@ -4593,6 +4691,11 @@ window._spaNavigate = function (path) {
 
     var base = buildBaseIndex();
     _vaultIndexCache = base.index;
+
+    // If the Obsidian nav tree wasn't in the DOM yet, watch for it
+    if (base.navFound === 0) {
+      observeNavTree();
+    }
 
     if (_vaultIndexLoading) {
       if (callback) _vaultIndexCallbacks.push(callback);
@@ -4610,10 +4713,17 @@ window._spaNavigate = function (path) {
 
     function notifyCallbacks() {
       _vaultIndexLoading = false;
+      saveDiscoveredFiles(_vaultIndexCache);
       var cbs = _vaultIndexCallbacks.slice();
       _vaultIndexCallbacks = [];
       cbs.forEach(function (cb) { cb(_vaultIndexCache); });
     }
+
+    // Schedule a delayed live-DOM rescan to catch late-loading nav elements
+    setTimeout(function () {
+      rescanLiveDOM(examPaths);
+      notifyCallbacks();
+    }, 1500);
 
     // Try to fetch full file listing from Obsidian Publish API
     var siteId = extractSiteId();

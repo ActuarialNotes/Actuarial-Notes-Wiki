@@ -3764,6 +3764,18 @@ window._spaNavigate = function (path) {
       addToIndex(index, seen, info.name, info.path, info.category, null);
     }
 
+    // 2.5) Scan Obsidian Publish navigation tree for full file listing
+    //      Nav tree items have data-path with full folder paths (e.g., "Concepts/Future Value")
+    var navItems = document.querySelectorAll('.nav-file-title[data-path], .tree-item-self[data-path]');
+    for (var n = 0; n < navItems.length; n++) {
+      var navPath = navItems[n].getAttribute('data-path');
+      if (!navPath) continue;
+      var navInfo = categorizeFile(navPath);
+      if (!navInfo.category) continue;
+      if (examPaths[navInfo.path.toLowerCase()]) continue;
+      addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null);
+    }
+
     // 3) Add files from vault object (if available)
     var sf = getSiteFiles();
     if (sf) {

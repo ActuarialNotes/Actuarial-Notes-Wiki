@@ -3675,14 +3675,22 @@ window._spaNavigate = function (path) {
     try {
       if (window.publish && window.publish.siteId) return window.publish.siteId;
       if (window.publish && window.publish.site && window.publish.site.id) return window.publish.site.id;
-      var els = document.querySelectorAll('link[href*="publish-01.obsidian.md"], script[src*="publish-01.obsidian.md"]');
-      for (var i = 0; i < els.length; i++) {
-        var attr = els[i].getAttribute('href') || els[i].getAttribute('src') || '';
-        var m = attr.match(/publish-01\.obsidian\.md\/access\/([a-f0-9]+)/);
+      // Check ALL script and link tags for obsidian.md references
+      var allEls = document.querySelectorAll('link[href*="obsidian.md"], script[src*="obsidian.md"]');
+      for (var i = 0; i < allEls.length; i++) {
+        var attr = allEls[i].getAttribute('href') || allEls[i].getAttribute('src') || '';
+        var m = attr.match(/obsidian\.md\/access\/([a-f0-9]+)/);
         if (m) return m[1];
       }
       var meta = document.querySelector('meta[name="publish-site-id"], meta[property="publish-site-id"]');
       if (meta) return meta.content;
+      // Check inline script tags for embedded site config
+      var scripts = document.querySelectorAll('script:not([src])');
+      for (var j = 0; j < scripts.length; j++) {
+        var txt = scripts[j].textContent || '';
+        var idMatch = txt.match(/siteId['":\s]+['"]([a-f0-9]{20,})['"]/);
+        if (idMatch) return idMatch[1];
+      }
     } catch (e) {}
     return null;
   }
@@ -3712,8 +3720,10 @@ window._spaNavigate = function (path) {
       var lk = baseName.toLowerCase();
       if (lk.indexOf('exam ') === 0 || lk.indexOf('exam-') === 0) {
         category = 'exam';
-      } else if (baseName !== 'README' && baseName !== 'Home' && baseName !== 'publish') {
+      } else if (/\([^)]*\d{4}\)/.test(baseName) || lk.indexOf('books/') === 0) {
         category = 'document';
+      } else if (baseName !== 'README' && baseName !== 'Home' && baseName !== 'publish') {
+        category = 'concept';
       }
     }
 
@@ -3749,18 +3759,36 @@ window._spaNavigate = function (path) {
       });
     });
 
-    // 2) Scan Obsidian Publish navigation tree for full file listing
-    //    Nav tree items have data-path with full folder paths (e.g., "Concepts/Future Value")
-    //    Must run BEFORE DOM link scan so correct categories win deduplication
-    var navItems = document.querySelectorAll('.nav-file-title[data-path], .tree-item-self[data-path]');
-    for (var n = 0; n < navItems.length; n++) {
-      var navPath = navItems[n].getAttribute('data-path');
-      if (!navPath) continue;
-      var navInfo = categorizeFile(navPath);
-      if (!navInfo.category) continue;
-      _knownFileCategories[navInfo.name.toLowerCase()] = navInfo;
-      if (examPaths[navInfo.path.toLowerCase()]) continue;
-      addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null);
+    // 2) Scan Obsidian Publish navigation tree for site-wide file discovery
+    //    Walk folder hierarchy to reconstruct full paths (e.g., "Concepts/Probability")
+    var navTreeItems = document.querySelectorAll('.nav-file-title[data-path], .tree-item-self[data-path]');
+    if (navTreeItems.length > 0) {
+      for (var n = 0; n < navTreeItems.length; n++) {
+        var navPath = navTreeItems[n].getAttribute('data-path');
+        if (!navPath) continue;
+        var navInfo = categorizeFile(navPath);
+        if (!navInfo.category) continue;
+        if (examPaths[navInfo.path.toLowerCase()]) continue;
+        addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null);
+      }
+    } else {
+      // Fallback: walk folder hierarchy using text content
+      var navFolders = document.querySelectorAll('.nav-folder');
+      for (var f = 0; f < navFolders.length; f++) {
+        var folderTitleEl = navFolders[f].querySelector(':scope > .nav-folder-title, :scope > .tree-item-self');
+        var folderName = folderTitleEl ? (folderTitleEl.textContent || '').trim() : '';
+        var fileEls = navFolders[f].querySelectorAll('.nav-file-title-content, .tree-item-inner');
+        for (var g = 0; g < fileEls.length; g++) {
+          if (fileEls[g].closest('.nav-folder') !== navFolders[f]) continue;
+          var fileName = (fileEls[g].textContent || '').trim();
+          if (!fileName) continue;
+          var fullPath = folderName ? folderName + '/' + fileName : fileName;
+          var fInfo = categorizeFile(fullPath);
+          if (!fInfo.category) continue;
+          if (examPaths[fInfo.path.toLowerCase()]) continue;
+          addToIndex(index, seen, fInfo.name, fInfo.path, fInfo.category, null);
+        }
+      }
     }
 
     // 3) Scan DOM for internal links (discovers items not in nav tree)

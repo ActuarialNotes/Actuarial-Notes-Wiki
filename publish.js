@@ -3653,6 +3653,7 @@ window._spaNavigate = function (path) {
   var _vaultIndexCache = null;
   var _vaultIndexLoading = false;
   var _vaultIndexCallbacks = [];
+  var _knownFileCategories = {};
 
   function getSiteFiles() {
     try {
@@ -3756,7 +3757,9 @@ window._spaNavigate = function (path) {
       if (!linkPath) linkPath = linkEl.getAttribute('data-href') || '';
       if (!linkPath) continue;
       var info = categorizeFile(linkPath);
-      if (!info.category) continue;  // skip files not in Concepts/Resources/Exams
+      var known = _knownFileCategories[info.name.toLowerCase()];
+      if (known) info = known;
+      if (!info.category) continue;
       if (examPaths[info.path.toLowerCase()]) continue;
       addToIndex(index, seen, info.name, info.path, info.category, null);
     }
@@ -3842,8 +3845,9 @@ window._spaNavigate = function (path) {
               if (fp === 'README.md' || fp === 'Home.md' || fp === 'publish.js' || fp === 'publish.css') continue;
               if (!fp.match(/\.md$/)) continue;
               var info = categorizeFile(fp);
-              if (!info.category) continue;  // only index Concepts/Resources/Exams
+              if (!info.category) continue;
               apiCategories[info.name.toLowerCase()] = info;
+              _knownFileCategories[info.name.toLowerCase()] = info;
             }
 
             // Correct categories of existing entries using API data
@@ -4703,6 +4707,7 @@ window._spaNavigate = function (path) {
   // Re-check persistent navs on SPA navigation + invalidate search cache
   window.addEventListener('popstate', function () {
     _vaultIndexCache = null;
+    _vaultIndexLoading = false;
     setTimeout(updatePersistentExamNavs, 250);
     setTimeout(updateExamLinkButtons, 300);
   });
@@ -4710,6 +4715,7 @@ window._spaNavigate = function (path) {
     var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
     if (link) {
       _vaultIndexCache = null;
+      _vaultIndexLoading = false;
       setTimeout(updatePersistentExamNavs, 300);
       setTimeout(updatePersistentExamNavs, 600);
       setTimeout(updateExamLinkButtons, 350);

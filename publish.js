@@ -2205,6 +2205,404 @@ window._spaNavigate = function (path) {
 
 
 /* ===========================================================
+   CONCEPT POPUP WINDOW
+   Opens a modal popup when any concept link is clicked,
+   rendering the concept page in an iframe with a footer
+   nav bar for prev/next navigation through the concept list.
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  /* ---- DOM references ---- */
+  var overlayEl = null;
+  var popupEl = null;
+  var iframeEl = null;
+  var titleEl = null;
+  var prevBtn = null;
+  var nextBtn = null;
+  var posLabel = null;
+  var loadingEl = null;
+  var openFullBtn = null;
+
+  /* ---- State ---- */
+  var conceptList = [];   // [{ name, path }, …]
+  var currentIndex = -1;
+  var isOpen = false;
+
+  /* ---- SVGs ---- */
+  var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
+  var svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>';
+  var svgExternal = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+
+  /* ---- Init ---- */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  function init() {
+    createPopup();
+    installClickInterceptor();
+  }
+
+  /* -----------------------------------------------------------
+     CREATE POPUP DOM (once)
+     ----------------------------------------------------------- */
+  function createPopup() {
+    if (document.querySelector('.concept-popup-overlay')) return;
+
+    // Overlay
+    overlayEl = document.createElement('div');
+    overlayEl.className = 'concept-popup-overlay';
+    overlayEl.addEventListener('click', closePopup);
+
+    // Main popup container
+    popupEl = document.createElement('div');
+    popupEl.className = 'concept-popup';
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'concept-popup__header';
+
+    titleEl = document.createElement('span');
+    titleEl.className = 'concept-popup__title';
+    titleEl.textContent = 'Concept';
+
+    openFullBtn = document.createElement('button');
+    openFullBtn.className = 'concept-popup__open-full';
+    openFullBtn.type = 'button';
+    openFullBtn.title = 'Open full page';
+    openFullBtn.innerHTML = svgExternal;
+    openFullBtn.addEventListener('click', function () {
+      if (currentIndex >= 0 && currentIndex < conceptList.length) {
+        var path = conceptList[currentIndex].path;
+        closePopup();
+        window._spaNavigate(path);
+      }
+    });
+
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'concept-popup__close';
+    closeBtn.type = 'button';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.addEventListener('click', closePopup);
+
+    header.appendChild(titleEl);
+    header.appendChild(openFullBtn);
+    header.appendChild(closeBtn);
+
+    // Body (iframe container)
+    var body = document.createElement('div');
+    body.className = 'concept-popup__body';
+
+    iframeEl = document.createElement('iframe');
+    iframeEl.className = 'concept-popup__iframe';
+    iframeEl.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups');
+    iframeEl.addEventListener('load', function () {
+      if (loadingEl) loadingEl.classList.remove('is-visible');
+      // Try to hide concept-nav/footer inside iframe
+      try {
+        var iDoc = iframeEl.contentDocument || iframeEl.contentWindow.document;
+        if (iDoc) {
+          var style = iDoc.createElement('style');
+          style.textContent = '.concept-nav, .concept-footer, .exam-nav__sticky, .sidebar-tabs-container, .exam-nav-backdrop { display: none !important; } .page-header { display: none !important; } .publish-renderer { padding-bottom: 0 !important; }';
+          iDoc.head.appendChild(style);
+        }
+      } catch (e) { /* cross-origin — skip */ }
+    });
+
+    loadingEl = document.createElement('div');
+    loadingEl.className = 'concept-popup__loading';
+    loadingEl.innerHTML = '<div class="concept-popup__spinner"></div>';
+
+    body.appendChild(iframeEl);
+    body.appendChild(loadingEl);
+
+    // Footer nav bar
+    var footer = document.createElement('div');
+    footer.className = 'concept-popup__footer';
+
+    prevBtn = document.createElement('button');
+    prevBtn.className = 'concept-popup__nav-btn concept-popup__nav-btn--prev';
+    prevBtn.type = 'button';
+    prevBtn.innerHTML = svgPrev + '<span>Previous</span>';
+    prevBtn.addEventListener('click', function () { navigatePopup(-1); });
+
+    posLabel = document.createElement('span');
+    posLabel.className = 'concept-popup__pos-label';
+
+    nextBtn = document.createElement('button');
+    nextBtn.className = 'concept-popup__nav-btn concept-popup__nav-btn--next';
+    nextBtn.type = 'button';
+    nextBtn.innerHTML = '<span>Next</span>' + svgNext;
+    nextBtn.addEventListener('click', function () { navigatePopup(1); });
+
+    footer.appendChild(prevBtn);
+    footer.appendChild(posLabel);
+    footer.appendChild(nextBtn);
+
+    // Assemble
+    popupEl.appendChild(header);
+    popupEl.appendChild(body);
+    popupEl.appendChild(footer);
+
+    document.body.appendChild(overlayEl);
+    document.body.appendChild(popupEl);
+
+    // ESC to close
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen) closePopup();
+    });
+
+    // Arrow keys to navigate
+    document.addEventListener('keydown', function (e) {
+      if (!isOpen) return;
+      if (e.key === 'ArrowLeft') navigatePopup(-1);
+      if (e.key === 'ArrowRight') navigatePopup(1);
+    });
+  }
+
+  /* -----------------------------------------------------------
+     OPEN / CLOSE
+     ----------------------------------------------------------- */
+  function openPopup(concepts, index) {
+    if (!overlayEl || !popupEl) createPopup();
+
+    conceptList = concepts;
+    currentIndex = index;
+    isOpen = true;
+
+    overlayEl.classList.add('is-visible');
+    popupEl.classList.add('is-visible');
+    document.body.classList.add('concept-popup-open');
+
+    loadConcept(index);
+  }
+
+  function closePopup() {
+    if (overlayEl) overlayEl.classList.remove('is-visible');
+    if (popupEl) popupEl.classList.remove('is-visible');
+    document.body.classList.remove('concept-popup-open');
+    isOpen = false;
+
+    // Clear iframe to stop any ongoing loads
+    if (iframeEl) iframeEl.src = 'about:blank';
+  }
+
+  function loadConcept(index) {
+    if (index < 0 || index >= conceptList.length) return;
+
+    currentIndex = index;
+    var concept = conceptList[index];
+
+    // Update title
+    titleEl.textContent = concept.name;
+
+    // Show loading
+    if (loadingEl) loadingEl.classList.add('is-visible');
+
+    // Load iframe
+    var url = window.location.origin + '/' + concept.path.replace(/ /g, '+');
+    iframeEl.src = url;
+
+    // Update nav state
+    updateNavState();
+  }
+
+  function navigatePopup(direction) {
+    var newIndex = currentIndex + direction;
+    if (newIndex < 0 || newIndex >= conceptList.length) return;
+    loadConcept(newIndex);
+  }
+
+  function updateNavState() {
+    var hasPrev = currentIndex > 0;
+    var hasNext = currentIndex < conceptList.length - 1;
+
+    prevBtn.disabled = !hasPrev;
+    prevBtn.classList.toggle('is-disabled', !hasPrev);
+    nextBtn.disabled = !hasNext;
+    nextBtn.classList.toggle('is-disabled', !hasNext);
+
+    if (conceptList.length > 1) {
+      posLabel.textContent = (currentIndex + 1) + ' of ' + conceptList.length;
+    } else {
+      posLabel.textContent = '';
+    }
+
+    // Update prev/next labels
+    var prevLabel = prevBtn.querySelector('span');
+    var nextLabel = nextBtn.querySelector('span');
+    if (hasPrev && prevLabel) prevLabel.textContent = conceptList[currentIndex - 1].name;
+    if (!hasPrev && prevLabel) prevLabel.textContent = '';
+    if (hasNext && nextLabel) nextLabel.textContent = conceptList[currentIndex + 1].name;
+    if (!hasNext && nextLabel) nextLabel.textContent = '';
+  }
+
+  /* -----------------------------------------------------------
+     GATHER CONCEPT LIST from context
+     ----------------------------------------------------------- */
+  function gatherConceptsFromExamNav() {
+    var items = document.querySelectorAll('.exam-nav__lo-menu-item');
+    var concepts = [];
+    var seen = {};
+    items.forEach(function (link) {
+      var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
+      var path = href.replace(/^\//, '').replace(/\+/g, ' ');
+      if (!path || seen[path]) return;
+      seen[path] = true;
+      var name = path.replace(/^Concepts\//, '');
+      concepts.push({ name: name, path: path });
+    });
+    return concepts;
+  }
+
+  function gatherConceptsFromPageContent() {
+    var content = document.querySelector('.markdown-rendered, .markdown-preview-view, .site-body-center-column');
+    if (!content) return [];
+    var links = content.querySelectorAll('a.internal-link');
+    var concepts = [];
+    var seen = {};
+    links.forEach(function (link) {
+      var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
+      var path = href.replace(/^\//, '').replace(/\+/g, ' ');
+      if (!path.match(/^Concepts\//i)) return;
+      if (seen[path]) return;
+      seen[path] = true;
+      var name = path.replace(/^Concepts\//, '');
+      concepts.push({ name: name, path: path });
+    });
+    return concepts;
+  }
+
+  function gatherConceptsFromConceptNav() {
+    var nav = document.querySelector('.concept-nav[data-current]');
+    if (!nav) return [];
+    var concepts = [];
+
+    var prevRaw = nav.dataset.prev || '';
+    if (prevRaw) {
+      prevRaw.split(',').forEach(function (entry) {
+        var parts = entry.split('|');
+        if (parts.length >= 2) concepts.push({ name: parts[0], path: parts[1] });
+      });
+    }
+
+    var currentName = nav.dataset.current || '';
+    if (currentName) {
+      concepts.push({ name: currentName, path: 'Concepts/' + currentName });
+    }
+
+    var nextRaw = nav.dataset.next || '';
+    if (nextRaw) {
+      nextRaw.split(',').forEach(function (entry) {
+        var parts = entry.split('|');
+        if (parts.length >= 2) concepts.push({ name: parts[0], path: parts[1] });
+      });
+    }
+
+    return concepts;
+  }
+
+  function buildConceptList(clickedPath) {
+    // Try exam-nav first (most structured list)
+    var list = gatherConceptsFromExamNav();
+
+    // Fallback to page content links
+    if (list.length <= 1) {
+      var pageList = gatherConceptsFromPageContent();
+      if (pageList.length > list.length) list = pageList;
+    }
+
+    // Fallback to concept-nav prev/next chain
+    if (list.length <= 1) {
+      var navList = gatherConceptsFromConceptNav();
+      if (navList.length > list.length) list = navList;
+    }
+
+    // If still no list, create single-item list
+    if (list.length === 0) {
+      var name = clickedPath.replace(/^Concepts\//, '');
+      list = [{ name: name, path: clickedPath }];
+    }
+
+    // Ensure clicked concept is in the list
+    var found = false;
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].path === clickedPath || list[i].name === clickedPath.replace(/^Concepts\//, '')) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      var cName = clickedPath.replace(/^Concepts\//, '');
+      list.push({ name: cName, path: clickedPath });
+    }
+
+    return list;
+  }
+
+  function findConceptIndex(list, clickedPath) {
+    var targetName = clickedPath.replace(/^Concepts\//, '');
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].path === clickedPath || list[i].name === targetName) return i;
+    }
+    return 0;
+  }
+
+  /* -----------------------------------------------------------
+     CLICK INTERCEPTOR — capture concept link clicks
+     ----------------------------------------------------------- */
+  function installClickInterceptor() {
+    document.addEventListener('click', function (e) {
+      // Don't intercept if popup is already open (allow iframe navigation)
+      if (isOpen) return;
+
+      var link = e.target.closest('a.internal-link, a[data-href]');
+      if (!link) return;
+
+      var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
+      var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
+
+      // Only intercept concept links
+      if (!path.match(/^Concepts\//i)) return;
+
+      // Don't intercept if inside the popup itself
+      if (link.closest('.concept-popup')) return;
+
+      // Don't intercept learned-badge clicks (number toggles)
+      if (e.target.closest('.exam-nav__lo-menu-num')) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      var list = buildConceptList(path);
+      var idx = findConceptIndex(list, path);
+
+      // Close exam-nav sticky if open
+      var sticky = document.querySelector('.exam-nav__sticky.is-open');
+      if (sticky) sticky.classList.remove('is-open');
+      var backdrop = document.querySelector('.exam-nav-backdrop');
+      if (backdrop) backdrop.classList.remove('is-visible');
+
+      openPopup(list, idx);
+    }, true); // capture phase to intercept before other handlers
+  }
+
+  // Expose for external use
+  window._openConceptPopup = function (conceptPath) {
+    var list = buildConceptList(conceptPath);
+    var idx = findConceptIndex(list, conceptPath);
+    openPopup(list, idx);
+  };
+
+})();
+
+
+/* ===========================================================
    CONCEPT NAVIGATION COMPONENT
    Renders prev → current → next navigation for concept pages,
    with a learning-objective badge that opens a panel showing

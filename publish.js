@@ -164,6 +164,34 @@ window._spaNavigate = function (path) {
 
   loadLearnedConcepts();
 
+  // Expose learned-concept helpers globally for the concept popup
+  window._isConceptLearned = isConceptLearned;
+  window._toggleConceptLearned = function (examId, conceptName) {
+    toggleConceptLearned(examId, conceptName);
+    // Sync all exam-nav badges in the DOM
+    document.querySelectorAll('.exam-nav__lo-menu-num').forEach(function (numEl) {
+      var link = numEl.closest('.exam-nav__lo-menu-item');
+      if (!link) return;
+      var cName = (link.textContent || '').replace(/^\d+/, '').trim();
+      if (cName === conceptName) {
+        numEl.classList.toggle('is-learned', isConceptLearned(examId, conceptName));
+      }
+    });
+    // Sync objective badges
+    document.querySelectorAll('.exam-nav__lo-wrap').forEach(function (wrap) {
+      var badge = wrap.querySelector('.exam-nav__lo-count');
+      if (!badge) return;
+      var items = wrap.querySelectorAll('.exam-nav__lo-menu-item');
+      var allLearned = items.length > 0;
+      items.forEach(function (item) {
+        var cn = (item.textContent || '').replace(/^\d+/, '').trim();
+        if (!isConceptLearned(examId, cn)) allLearned = false;
+      });
+      badge.classList.toggle('is-all-learned', allLearned);
+    });
+  };
+  window._getLearnedConcepts = function () { return learnedConcepts; };
+
   function buildExamNav(container) {
     // Parse data attributes
     const customColor = container.dataset.color;
@@ -2206,9 +2234,10 @@ window._spaNavigate = function (path) {
 
 /* ===========================================================
    CONCEPT POPUP WINDOW
-   Opens a modal popup when any concept link is clicked,
-   rendering the concept page in an iframe with a footer
-   nav bar for prev/next navigation through the concept list.
+   Opens a draggable, resizable popup when any concept link is
+   clicked, rendering the concept page in an iframe with a
+   footer nav bar for prev/next navigation. Overlay darkens
+   only when popup is focused.
    =========================================================== */
 
 (function () {
@@ -2224,16 +2253,32 @@ window._spaNavigate = function (path) {
   var posLabel = null;
   var loadingEl = null;
   var openFullBtn = null;
+  var learnedBtn = null;
 
   /* ---- State ---- */
   var conceptList = [];   // [{ name, path }, …]
   var currentIndex = -1;
   var isOpen = false;
+  var isFocused = true;
+
+  /* ---- Drag state ---- */
+  var isDragging = false;
+  var dragStartX = 0, dragStartY = 0;
+  var popupStartX = 0, popupStartY = 0;
+  var hasMoved = false; // once dragged, stop using centered transform
+
+  /* ---- Resize state ---- */
+  var isResizing = false;
+  var resizeEdge = '';
+  var resizeStartX = 0, resizeStartY = 0;
+  var resizeStartW = 0, resizeStartH = 0;
+  var resizeStartLeft = 0, resizeStartTop = 0;
 
   /* ---- SVGs ---- */
   var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
   var svgNext = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>';
   var svgExternal = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+  var svgCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="20 6 9 17 4 12"/></svg>';
 
   /* ---- Init ---- */
   if (document.readyState === 'loading') {
@@ -2248,21 +2293,43 @@ window._spaNavigate = function (path) {
   }
 
   /* -----------------------------------------------------------
+     DETECT CURRENT EXAM ID from the page
+     ----------------------------------------------------------- */
+  function detectExamId() {
+    var nav = document.querySelector('.exam-nav[data-current]');
+    if (nav) {
+      var raw = nav.dataset.current || '';
+      return raw.split('|')[0].trim();
+    }
+    return '';
+  }
+
+  /* -----------------------------------------------------------
      CREATE POPUP DOM (once)
      ----------------------------------------------------------- */
   function createPopup() {
     if (document.querySelector('.concept-popup-overlay')) return;
 
-    // Overlay
+    // Overlay — starts without is-focused, only darkens on focus
     overlayEl = document.createElement('div');
     overlayEl.className = 'concept-popup-overlay';
-    overlayEl.addEventListener('click', closePopup);
+    overlayEl.addEventListener('click', function () {
+      // Clicking overlay unfocuses (but doesn't close)
+      blurPopup();
+    });
 
     // Main popup container
     popupEl = document.createElement('div');
     popupEl.className = 'concept-popup';
 
-    // Header
+    // Focus popup when clicking on it
+    popupEl.addEventListener('mousedown', function (e) {
+      if (!isFocused) {
+        focusPopup();
+      }
+    });
+
+    // Header (also serves as drag handle)
     var header = document.createElement('div');
     header.className = 'concept-popup__header';
 
@@ -2270,12 +2337,24 @@ window._spaNavigate = function (path) {
     titleEl.className = 'concept-popup__title';
     titleEl.textContent = 'Concept';
 
+    // Learned checkmark button
+    learnedBtn = document.createElement('button');
+    learnedBtn.className = 'concept-popup__learned-btn';
+    learnedBtn.type = 'button';
+    learnedBtn.title = 'Mark as learned';
+    learnedBtn.innerHTML = svgCheck;
+    learnedBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleLearned();
+    });
+
     openFullBtn = document.createElement('button');
     openFullBtn.className = 'concept-popup__open-full';
     openFullBtn.type = 'button';
     openFullBtn.title = 'Open full page';
     openFullBtn.innerHTML = svgExternal;
-    openFullBtn.addEventListener('click', function () {
+    openFullBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
       if (currentIndex >= 0 && currentIndex < conceptList.length) {
         var path = conceptList[currentIndex].path;
         closePopup();
@@ -2287,11 +2366,28 @@ window._spaNavigate = function (path) {
     closeBtn.className = 'concept-popup__close';
     closeBtn.type = 'button';
     closeBtn.innerHTML = '&times;';
-    closeBtn.addEventListener('click', closePopup);
+    closeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      closePopup();
+    });
 
     header.appendChild(titleEl);
+    header.appendChild(learnedBtn);
     header.appendChild(openFullBtn);
     header.appendChild(closeBtn);
+
+    // ── Drag handling on header ──
+    header.addEventListener('mousedown', function (e) {
+      // Only drag from header itself, not buttons
+      if (e.target.closest('button')) return;
+      e.preventDefault();
+      startDrag(e.clientX, e.clientY);
+    });
+    header.addEventListener('touchstart', function (e) {
+      if (e.target.closest('button')) return;
+      var t = e.touches[0];
+      startDrag(t.clientX, t.clientY);
+    }, { passive: true });
 
     // Body (iframe container)
     var body = document.createElement('div');
@@ -2302,12 +2398,19 @@ window._spaNavigate = function (path) {
     iframeEl.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups');
     iframeEl.addEventListener('load', function () {
       if (loadingEl) loadingEl.classList.remove('is-visible');
-      // Try to hide concept-nav/footer inside iframe
+      // Hide redundant elements inside iframe
       try {
         var iDoc = iframeEl.contentDocument || iframeEl.contentWindow.document;
         if (iDoc) {
           var style = iDoc.createElement('style');
-          style.textContent = '.concept-nav, .concept-footer, .exam-nav__sticky, .sidebar-tabs-container, .exam-nav-backdrop { display: none !important; } .page-header { display: none !important; } .publish-renderer { padding-bottom: 0 !important; }';
+          style.textContent =
+            '.concept-nav, .concept-footer, .exam-nav__sticky, .exam-nav-backdrop, ' +
+            '.sidebar-tabs-container, .site-body-left-column, .site-navbar, ' +
+            '.page-header, .site-header, .site-footer ' +
+            '{ display: none !important; } ' +
+            '.publish-renderer, .site-body { padding-bottom: 0 !important; } ' +
+            '.site-body-center-column { margin: 0 auto !important; max-width: 100% !important; } ' +
+            '.published-container { display: block !important; }';
           iDoc.head.appendChild(style);
         }
       } catch (e) { /* cross-origin — skip */ }
@@ -2343,6 +2446,23 @@ window._spaNavigate = function (path) {
     footer.appendChild(posLabel);
     footer.appendChild(nextBtn);
 
+    // ── Resize handles ──
+    ['n','s','e','w','ne','nw','se','sw'].forEach(function (edge) {
+      var handle = document.createElement('div');
+      handle.className = 'concept-popup__resize concept-popup__resize--' + edge;
+      handle.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        startResize(e.clientX, e.clientY, edge);
+      });
+      handle.addEventListener('touchstart', function (e) {
+        e.stopPropagation();
+        var t = e.touches[0];
+        startResize(t.clientX, t.clientY, edge);
+      }, { passive: true });
+      popupEl.appendChild(handle);
+    });
+
     // Assemble
     popupEl.appendChild(header);
     popupEl.appendChild(body);
@@ -2351,6 +2471,16 @@ window._spaNavigate = function (path) {
     document.body.appendChild(overlayEl);
     document.body.appendChild(popupEl);
 
+    // ── Global mouse/touch move & up for drag/resize ──
+    document.addEventListener('mousemove', handlePointerMove);
+    document.addEventListener('mouseup', handlePointerUp);
+    document.addEventListener('touchmove', function (e) {
+      if (!isDragging && !isResizing) return;
+      var t = e.touches[0];
+      handlePointerMove({ clientX: t.clientX, clientY: t.clientY });
+    }, { passive: true });
+    document.addEventListener('touchend', handlePointerUp);
+
     // ESC to close
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && isOpen) closePopup();
@@ -2358,10 +2488,156 @@ window._spaNavigate = function (path) {
 
     // Arrow keys to navigate
     document.addEventListener('keydown', function (e) {
-      if (!isOpen) return;
+      if (!isOpen || !isFocused) return;
       if (e.key === 'ArrowLeft') navigatePopup(-1);
       if (e.key === 'ArrowRight') navigatePopup(1);
     });
+  }
+
+  /* -----------------------------------------------------------
+     DRAG LOGIC
+     ----------------------------------------------------------- */
+  function startDrag(clientX, clientY) {
+    isDragging = true;
+    dragStartX = clientX;
+    dragStartY = clientY;
+
+    var rect = popupEl.getBoundingClientRect();
+    if (!hasMoved) {
+      // First drag — switch from centered transform to absolute positioning
+      hasMoved = true;
+      popupEl.style.left = rect.left + 'px';
+      popupEl.style.top = rect.top + 'px';
+      popupEl.style.transform = 'none';
+      popupEl.classList.add('is-dragged');
+    }
+    popupStartX = rect.left;
+    popupStartY = rect.top;
+
+    // Cover iframe during drag
+    popupEl.classList.add('is-dragging');
+  }
+
+  function handlePointerMove(e) {
+    if (isDragging) {
+      var dx = e.clientX - dragStartX;
+      var dy = e.clientY - dragStartY;
+      popupEl.style.left = (popupStartX + dx) + 'px';
+      popupEl.style.top = (popupStartY + dy) + 'px';
+    } else if (isResizing) {
+      handleResize(e.clientX, e.clientY);
+    }
+  }
+
+  function handlePointerUp() {
+    if (isDragging) {
+      isDragging = false;
+      popupEl.classList.remove('is-dragging');
+    }
+    if (isResizing) {
+      isResizing = false;
+      popupEl.classList.remove('is-dragging');
+    }
+  }
+
+  /* -----------------------------------------------------------
+     RESIZE LOGIC
+     ----------------------------------------------------------- */
+  function startResize(clientX, clientY, edge) {
+    isResizing = true;
+    resizeEdge = edge;
+    resizeStartX = clientX;
+    resizeStartY = clientY;
+
+    var rect = popupEl.getBoundingClientRect();
+    resizeStartW = rect.width;
+    resizeStartH = rect.height;
+
+    if (!hasMoved) {
+      hasMoved = true;
+      popupEl.style.left = rect.left + 'px';
+      popupEl.style.top = rect.top + 'px';
+      popupEl.style.transform = 'none';
+      popupEl.classList.add('is-dragged');
+    }
+    resizeStartLeft = rect.left;
+    resizeStartTop = rect.top;
+
+    popupEl.classList.add('is-dragging');
+  }
+
+  function handleResize(clientX, clientY) {
+    var dx = clientX - resizeStartX;
+    var dy = clientY - resizeStartY;
+    var minW = 360, minH = 280;
+
+    var newW = resizeStartW, newH = resizeStartH;
+    var newLeft = resizeStartLeft, newTop = resizeStartTop;
+
+    if (resizeEdge.indexOf('e') !== -1) {
+      newW = Math.max(minW, resizeStartW + dx);
+    }
+    if (resizeEdge.indexOf('w') !== -1) {
+      var dw = Math.min(dx, resizeStartW - minW);
+      newW = resizeStartW - dw;
+      newLeft = resizeStartLeft + dw;
+    }
+    if (resizeEdge.indexOf('s') !== -1) {
+      newH = Math.max(minH, resizeStartH + dy);
+    }
+    if (resizeEdge.indexOf('n') !== -1) {
+      var dh = Math.min(dy, resizeStartH - minH);
+      newH = resizeStartH - dh;
+      newTop = resizeStartTop + dh;
+    }
+
+    popupEl.style.width = newW + 'px';
+    popupEl.style.height = newH + 'px';
+    popupEl.style.left = newLeft + 'px';
+    popupEl.style.top = newTop + 'px';
+  }
+
+  /* -----------------------------------------------------------
+     FOCUS / BLUR — overlay only darkens when focused
+     ----------------------------------------------------------- */
+  function focusPopup() {
+    isFocused = true;
+    overlayEl.classList.add('is-focused');
+    popupEl.classList.add('is-focused');
+  }
+
+  function blurPopup() {
+    isFocused = false;
+    overlayEl.classList.remove('is-focused');
+    popupEl.classList.remove('is-focused');
+  }
+
+  /* -----------------------------------------------------------
+     LEARNED STATE
+     ----------------------------------------------------------- */
+  function toggleLearned() {
+    if (currentIndex < 0 || currentIndex >= conceptList.length) return;
+    var concept = conceptList[currentIndex];
+    var examId = detectExamId();
+    if (!examId || typeof window._toggleConceptLearned !== 'function') return;
+
+    window._toggleConceptLearned(examId, concept.name);
+    updateLearnedBtn();
+  }
+
+  function updateLearnedBtn() {
+    if (!learnedBtn) return;
+    if (currentIndex < 0 || currentIndex >= conceptList.length) return;
+    var concept = conceptList[currentIndex];
+    var examId = detectExamId();
+    if (!examId || typeof window._isConceptLearned !== 'function') {
+      learnedBtn.style.display = 'none';
+      return;
+    }
+    learnedBtn.style.display = '';
+    var learned = window._isConceptLearned(examId, concept.name);
+    learnedBtn.classList.toggle('is-learned', learned);
+    learnedBtn.title = learned ? 'Mark as not learned' : 'Mark as learned';
   }
 
   /* -----------------------------------------------------------
@@ -2374,18 +2650,35 @@ window._spaNavigate = function (path) {
     currentIndex = index;
     isOpen = true;
 
+    // Reset to centered position
+    hasMoved = false;
+    popupEl.classList.remove('is-dragged');
+    popupEl.style.left = '';
+    popupEl.style.top = '';
+    popupEl.style.width = '';
+    popupEl.style.height = '';
+    popupEl.style.transform = '';
+
     overlayEl.classList.add('is-visible');
     popupEl.classList.add('is-visible');
+    focusPopup();
     document.body.classList.add('concept-popup-open');
 
     loadConcept(index);
   }
 
   function closePopup() {
-    if (overlayEl) overlayEl.classList.remove('is-visible');
-    if (popupEl) popupEl.classList.remove('is-visible');
+    if (overlayEl) {
+      overlayEl.classList.remove('is-visible');
+      overlayEl.classList.remove('is-focused');
+    }
+    if (popupEl) {
+      popupEl.classList.remove('is-visible');
+      popupEl.classList.remove('is-focused');
+    }
     document.body.classList.remove('concept-popup-open');
     isOpen = false;
+    isFocused = false;
 
     // Clear iframe to stop any ongoing loads
     if (iframeEl) iframeEl.src = 'about:blank';
@@ -2399,6 +2692,9 @@ window._spaNavigate = function (path) {
 
     // Update title
     titleEl.textContent = concept.name;
+
+    // Update learned button
+    updateLearnedBtn();
 
     // Show loading
     if (loadingEl) loadingEl.classList.add('is-visible');

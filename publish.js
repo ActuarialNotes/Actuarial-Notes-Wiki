@@ -4713,6 +4713,105 @@ window._spaNavigate = function (path) {
     }
   }
 
+  /** Extract internal links and wikilinks from a fetched HTML document. */
+  function extractLinksFromDoc(doc) {
+    var paths = [];
+    // data-href attributes on internal links
+    var internalLinks = doc.querySelectorAll('a.internal-link[data-href]');
+    for (var i = 0; i < internalLinks.length; i++) {
+      var dh = internalLinks[i].getAttribute('data-href') || '';
+      if (dh) paths.push(dh.replace(/\.md$/, '') + '.md');
+    }
+    // href-based links starting with /
+    var allAnchors = doc.querySelectorAll('a[href]');
+    for (var j = 0; j < allAnchors.length; j++) {
+      var h = allAnchors[j].getAttribute('href') || '';
+      if (h.indexOf('/') === 0 && h.length > 1) {
+        var f = decodeURIComponent(h.replace(/^\//, '').replace(/\+/g, ' '));
+        if (f && f.indexOf('.') === -1 && f.indexOf('http') !== 0) {
+          paths.push(f + '.md');
+        }
+      }
+    }
+    // data-path attributes from nav tree elements
+    var navEls = doc.querySelectorAll('[data-path]');
+    for (var k = 0; k < navEls.length; k++) {
+      var dp = navEls[k].getAttribute('data-path');
+      if (dp) paths.push(dp.replace(/\.md$/, '') + '.md');
+    }
+    // Extract [[wikilinks]] from raw HTML text (catches server-rendered markdown)
+    var html = doc.body ? doc.body.innerHTML : '';
+    if (html.indexOf('[[') !== -1) {
+      var wikiRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
+      var m;
+      while ((m = wikiRe.exec(html)) !== null) {
+        var target = m[1].trim();
+        if (target) paths.push(target.replace(/\.md$/, '') + '.md');
+      }
+    }
+    return paths;
+  }
+
+  /** Crawl all exam pages from TRACKS that have paths.  Exam pages are
+      hub pages that link to most concepts in the wiki, so fetching them
+      reliably populates the "Entire Wiki" index. */
+  function crawlExamPages(examPaths, callback) {
+    // Collect unique exam page paths
+    var pagePaths = [];
+    var pathSeen = {};
+    TRACKS.forEach(function (track) {
+      track.sections.forEach(function (sec) {
+        sec.items.forEach(function (item) {
+          if (item.path && !pathSeen[item.path]) {
+            pathSeen[item.path] = true;
+            pagePaths.push(item.path);
+          }
+        });
+      });
+    });
+
+    if (pagePaths.length === 0) { callback(); return; }
+
+    var pending = pagePaths.length;
+    var allFound = [];
+
+    function oneDone() {
+      pending--;
+      if (pending <= 0) {
+        if (allFound.length > 0) {
+          mergeFilesIntoCache(allFound, examPaths);
+        }
+        callback();
+      }
+    }
+
+    // Also include the homepage
+    pending++;
+    pagePaths.push('');  // empty string = root
+
+    pagePaths.forEach(function (pagePath) {
+      var url = window.location.origin + '/' + pagePath.replace(/ /g, '+');
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.timeout = 8000;
+      xhr.onload = function () {
+        try {
+          if (xhr.status === 200) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(xhr.responseText, 'text/html');
+            var links = extractLinksFromDoc(doc);
+            for (var i = 0; i < links.length; i++) {
+              allFound.push(links[i]);
+            }
+          }
+        } catch (e) {}
+        oneDone();
+      };
+      xhr.onerror = xhr.ontimeout = function () { oneDone(); };
+      xhr.send();
+    });
+  }
+
   function getVaultIndex(callback) {
     if (_vaultIndexCache) {
       if (callback) callback(_vaultIndexCache);
@@ -4749,18 +4848,12 @@ window._spaNavigate = function (path) {
       cbs.forEach(function (cb) { cb(_vaultIndexCache); });
     }
 
-    // Schedule a delayed live-DOM rescan to catch late-loading nav elements
-    setTimeout(function () {
-      rescanLiveDOM(examPaths);
-      notifyCallbacks();
-    }, 1500);
+    _vaultIndexLoading = true;
+    if (callback) _vaultIndexCallbacks.push(callback);
 
-    // Try to fetch full file listing from Obsidian Publish API
+    // Primary strategy: try Obsidian Publish API for full file listing
     var siteId = extractSiteId();
     if (siteId) {
-      _vaultIndexLoading = true;
-      if (callback) _vaultIndexCallbacks.push(callback);
-
       var xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://publish-01.obsidian.md/cache/' + siteId, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
@@ -4769,22 +4862,32 @@ window._spaNavigate = function (path) {
         try {
           if (xhr.status === 200) {
             var data = JSON.parse(xhr.responseText);
-            mergeFilesIntoCache(Object.keys(data), examPaths);
+            var keys = Object.keys(data);
+            if (keys.length > 0) {
+              mergeFilesIntoCache(keys, examPaths);
+              notifyCallbacks();
+              return;
+            }
           }
         } catch (e) {}
-        notifyCallbacks();
+        // API returned nothing useful — fall through to crawl
+        crawlExamPages(examPaths, function () { notifyCallbacks(); });
       };
       xhr.onerror = xhr.ontimeout = function () {
-        // API failed — try homepage fetch as fallback
-        fetchHomepageIndex(function () { notifyCallbacks(); });
+        crawlExamPages(examPaths, function () { notifyCallbacks(); });
       };
       xhr.send(JSON.stringify({ id: siteId }));
     } else {
-      // No siteId — fetch homepage to discover all files
-      _vaultIndexLoading = true;
-      if (callback) _vaultIndexCallbacks.push(callback);
-      fetchHomepageIndex(function () { notifyCallbacks(); });
+      // No siteId — crawl exam pages to discover wiki content
+      crawlExamPages(examPaths, function () { notifyCallbacks(); });
     }
+
+    // Also schedule a delayed live-DOM rescan as additional fallback
+    setTimeout(function () {
+      rescanLiveDOM(examPaths);
+      // Save again after rescan enriches the cache
+      saveDiscoveredFiles(_vaultIndexCache);
+    }, 1500);
 
     return _vaultIndexCache;
   }

@@ -231,6 +231,7 @@ window._spaNavigate = function (path) {
     }
     if (examInfo && examInfo.status === 'in_progress') {
       sticky.classList.add('is-in-progress');
+      if (pageEl) pageEl.classList.add('exam-in-progress');
     }
 
     var stickyBtn = document.createElement('button');
@@ -5622,10 +5623,13 @@ window._spaNavigate = function (path) {
     var sticky = document.querySelector('.exam-nav__sticky');
     if (!sticky) return;
     var info = window._getExamInfoByPage ? window._getExamInfoByPage() : null;
+    var pageEl = document.querySelector('.has-exam-nav');
     if (info && info.status === 'in_progress') {
       sticky.classList.add('is-in-progress');
+      if (pageEl) pageEl.classList.add('exam-in-progress');
     } else {
       sticky.classList.remove('is-in-progress');
+      if (pageEl) pageEl.classList.remove('exam-in-progress');
     }
   }
 

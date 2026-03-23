@@ -4339,6 +4339,21 @@ window._spaNavigate = function (path) {
       if (!sf && window.publish && window.publish.site) {
         sf = window.publish.site.cache || window.publish.site.files;
       }
+      // Deep search: walk top-level properties of window.publish looking
+      // for any object whose keys look like .md file paths
+      if (!sf && window.publish) {
+        var candidates = Object.keys(window.publish);
+        for (var c = 0; c < candidates.length; c++) {
+          var val = window.publish[candidates[c]];
+          if (val && typeof val === 'object' && !Array.isArray(val)) {
+            var vKeys = Object.keys(val);
+            if (vKeys.length > 2 && vKeys.some(function (k) { return /\.md$/.test(k); })) {
+              sf = val;
+              break;
+            }
+          }
+        }
+      }
       return sf;
     } catch (e) { return null; }
   }
@@ -4737,34 +4752,37 @@ window._spaNavigate = function (path) {
     }
   }
 
-  /** Extract internal links and wikilinks from a fetched HTML document. */
-  function extractLinksFromDoc(doc) {
+  /** Extract internal links and wikilinks from a fetched HTML string. */
+  function extractLinksFromHTML(html) {
     var paths = [];
-    // data-href attributes on internal links
-    var internalLinks = doc.querySelectorAll('a.internal-link[data-href]');
-    for (var i = 0; i < internalLinks.length; i++) {
-      var dh = internalLinks[i].getAttribute('data-href') || '';
-      if (dh) paths.push(dh.replace(/\.md$/, '') + '.md');
-    }
-    // href-based links starting with /
-    var allAnchors = doc.querySelectorAll('a[href]');
-    for (var j = 0; j < allAnchors.length; j++) {
-      var h = allAnchors[j].getAttribute('href') || '';
-      if (h.indexOf('/') === 0 && h.length > 1) {
-        var f = decodeURIComponent(h.replace(/^\//, '').replace(/\+/g, ' '));
-        if (f && f.indexOf('.') === -1 && f.indexOf('http') !== 0) {
-          paths.push(f + '.md');
+    try {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      // data-href attributes on internal links
+      var internalLinks = doc.querySelectorAll('a.internal-link[data-href]');
+      for (var i = 0; i < internalLinks.length; i++) {
+        var dh = internalLinks[i].getAttribute('data-href') || '';
+        if (dh) paths.push(dh.replace(/\.md$/, '') + '.md');
+      }
+      // href-based links starting with /
+      var allAnchors = doc.querySelectorAll('a[href]');
+      for (var j = 0; j < allAnchors.length; j++) {
+        var h = allAnchors[j].getAttribute('href') || '';
+        if (h.indexOf('/') === 0 && h.length > 1) {
+          var f = decodeURIComponent(h.replace(/^\//, '').replace(/\+/g, ' '));
+          if (f && f.indexOf('.') === -1 && f.indexOf('http') !== 0) {
+            paths.push(f + '.md');
+          }
         }
       }
-    }
-    // data-path attributes from nav tree elements
-    var navEls = doc.querySelectorAll('[data-path]');
-    for (var k = 0; k < navEls.length; k++) {
-      var dp = navEls[k].getAttribute('data-path');
-      if (dp) paths.push(dp.replace(/\.md$/, '') + '.md');
-    }
-    // Extract [[wikilinks]] from raw HTML text (catches server-rendered markdown)
-    var html = doc.body ? doc.body.innerHTML : '';
+      // data-path attributes from nav tree elements
+      var navEls = doc.querySelectorAll('[data-path]');
+      for (var k = 0; k < navEls.length; k++) {
+        var dp = navEls[k].getAttribute('data-path');
+        if (dp) paths.push(dp.replace(/\.md$/, '') + '.md');
+      }
+    } catch (e) {}
+    // Extract [[wikilinks]] from raw text
     if (html.indexOf('[[') !== -1) {
       var wikiRe = /\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/g;
       var m;
@@ -4776,12 +4794,96 @@ window._spaNavigate = function (path) {
     return paths;
   }
 
-  /** Crawl all exam pages from TRACKS that have paths.  Exam pages are
-      hub pages that link to most concepts in the wiki, so fetching them
-      reliably populates the "Entire Wiki" index. */
-  function crawlExamPages(examPaths, callback) {
-    // Collect unique exam page paths
-    var pagePaths = [];
+  /** Try to extract file paths from the sitemap.xml (Obsidian Publish
+      generates sitemaps for published sites). */
+  function fetchSitemap(callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', window.location.origin + '/sitemap.xml', true);
+    xhr.timeout = 5000;
+    xhr.onload = function () {
+      var paths = [];
+      try {
+        if (xhr.status === 200 && xhr.responseText.indexOf('<url') !== -1) {
+          var locRe = /<loc>([^<]+)<\/loc>/g;
+          var lm;
+          while ((lm = locRe.exec(xhr.responseText)) !== null) {
+            var loc = lm[1].trim();
+            try {
+              var parsed = new URL(loc);
+              var p = decodeURIComponent(parsed.pathname.replace(/^\//, '').replace(/\+/g, ' '));
+              if (p) paths.push(p.replace(/\.md$/, '') + '.md');
+            } catch (e2) {}
+          }
+        }
+      } catch (e) {}
+      callback(paths);
+    };
+    xhr.onerror = xhr.ontimeout = function () { callback([]); };
+    xhr.send();
+  }
+
+  /** Search inline <script> tags and global objects for embedded file
+      cache data (Obsidian Publish embeds site data in the page). */
+  function extractEmbeddedFiles() {
+    var paths = [];
+    try {
+      // Search inline scripts for JSON objects containing .md keys
+      var scripts = document.querySelectorAll('script:not([src])');
+      for (var i = 0; i < scripts.length; i++) {
+        var txt = scripts[i].textContent || '';
+        if (txt.length < 50) continue;
+        // Look for file paths in JSON-like structures
+        var mdRe = /["']([A-Za-z][A-Za-z0-9 \/\-()]*\.md)["']/g;
+        var mm;
+        while ((mm = mdRe.exec(txt)) !== null) {
+          paths.push(mm[1]);
+        }
+      }
+      // Also check for __PUBLISH_CACHE__ or similar globals
+      var globals = ['__PUBLISH_CACHE__', '__OBSIDIAN__', '__NEXT_DATA__'];
+      for (var g = 0; g < globals.length; g++) {
+        var gval = window[globals[g]];
+        if (gval && typeof gval === 'object') {
+          var gkeys = Object.keys(gval);
+          for (var gk = 0; gk < gkeys.length; gk++) {
+            if (/\.md$/.test(gkeys[gk])) paths.push(gkeys[gk]);
+          }
+        }
+      }
+    } catch (e) {}
+    return paths;
+  }
+
+  /** Crawl pages to discover links.  Fetches each URL, parses the HTML
+      response for links/wikilinks, and merges results into the cache.
+      Falls through multiple strategies to maximize discovery. */
+  function discoverWikiFiles(examPaths, callback) {
+    var allFound = [];
+    var strategies = 3;  // sitemap + embedded + page-crawl
+
+    function strategyDone() {
+      strategies--;
+      if (strategies <= 0) {
+        if (allFound.length > 0) {
+          mergeFilesIntoCache(allFound, examPaths);
+        }
+        callback();
+      }
+    }
+
+    // Strategy 1: Sitemap
+    fetchSitemap(function (sitemapPaths) {
+      for (var i = 0; i < sitemapPaths.length; i++) allFound.push(sitemapPaths[i]);
+      strategyDone();
+    });
+
+    // Strategy 2: Embedded script data
+    var embedded = extractEmbeddedFiles();
+    for (var e = 0; e < embedded.length; e++) allFound.push(embedded[e]);
+    strategyDone();
+
+    // Strategy 3: Crawl exam pages + homepage HTML
+    var pagePaths = [''];  // start with homepage
     var pathSeen = {};
     TRACKS.forEach(function (track) {
       track.sections.forEach(function (sec) {
@@ -4794,44 +4896,27 @@ window._spaNavigate = function (path) {
       });
     });
 
-    if (pagePaths.length === 0) { callback(); return; }
-
-    var pending = pagePaths.length;
-    var allFound = [];
-
-    function oneDone() {
-      pending--;
-      if (pending <= 0) {
-        if (allFound.length > 0) {
-          mergeFilesIntoCache(allFound, examPaths);
-        }
-        callback();
-      }
+    var crawlPending = pagePaths.length;
+    function crawlDone() {
+      crawlPending--;
+      if (crawlPending <= 0) strategyDone();
     }
 
-    // Also include the homepage
-    pending++;
-    pagePaths.push('');  // empty string = root
-
     pagePaths.forEach(function (pagePath) {
-      var url = window.location.origin + '/' + pagePath.replace(/ /g, '+');
+      var url = window.location.origin + '/' + encodeURIComponent(pagePath).replace(/%20/g, '+');
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.timeout = 8000;
       xhr.onload = function () {
         try {
           if (xhr.status === 200) {
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(xhr.responseText, 'text/html');
-            var links = extractLinksFromDoc(doc);
-            for (var i = 0; i < links.length; i++) {
-              allFound.push(links[i]);
-            }
+            var links = extractLinksFromHTML(xhr.responseText);
+            for (var i = 0; i < links.length; i++) allFound.push(links[i]);
           }
         } catch (e) {}
-        oneDone();
+        crawlDone();
       };
-      xhr.onerror = xhr.ontimeout = function () { oneDone(); };
+      xhr.onerror = xhr.ontimeout = function () { crawlDone(); };
       xhr.send();
     });
   }
@@ -4894,22 +4979,21 @@ window._spaNavigate = function (path) {
             }
           }
         } catch (e) {}
-        // API returned nothing useful — fall through to crawl
-        crawlExamPages(examPaths, function () { notifyCallbacks(); });
+        // API returned nothing useful — try all other discovery methods
+        discoverWikiFiles(examPaths, function () { notifyCallbacks(); });
       };
       xhr.onerror = xhr.ontimeout = function () {
-        crawlExamPages(examPaths, function () { notifyCallbacks(); });
+        discoverWikiFiles(examPaths, function () { notifyCallbacks(); });
       };
       xhr.send(JSON.stringify({ id: siteId }));
     } else {
-      // No siteId — crawl exam pages to discover wiki content
-      crawlExamPages(examPaths, function () { notifyCallbacks(); });
+      // No siteId — discover wiki files via sitemap, embedded data, and crawling
+      discoverWikiFiles(examPaths, function () { notifyCallbacks(); });
     }
 
     // Also schedule a delayed live-DOM rescan as additional fallback
     setTimeout(function () {
       rescanLiveDOM(examPaths);
-      // Save again after rescan enriches the cache
       saveDiscoveredFiles(_vaultIndexCache);
     }, 1500);
 

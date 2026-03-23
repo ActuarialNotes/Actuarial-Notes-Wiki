@@ -4617,70 +4617,58 @@ h6 a {
    CONCEPT POPUP WINDOW
    =========================================================== */
 
-/* ---- Overlay — only darkens when popup is focused ---- */
-.concept-popup-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0);
-  z-index: 1100;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease, background .25s ease;
-}
-.concept-popup-overlay.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-.concept-popup-overlay.is-visible.is-focused {
-  background: rgba(0, 0, 0, 0.5);
-}
-
-/* ---- Modal panel ---- */
-.concept-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.96);
-  width: min(840px, 94vw);
-  height: min(86vh, 900px);
-  background: var(--bg-elev, #1e1e2e);
-  border: 1px solid var(--muted, #333);
-  border-radius: var(--radius-lg, 12px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-  z-index: 1101;
+/* ---- Split-pane layout for concept navigator ---- */
+.site-body-center-column.concept-split--open {
   display: flex;
   flex-direction: column;
-  opacity: 0;
+  overflow: hidden !important;
+}
+
+.concept-split__top {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.concept-split__handle {
+  height: 6px;
+  cursor: row-resize;
+  background: transparent;
+  flex-shrink: 0;
+  transition: background .15s ease;
+  display: none;
+}
+.concept-split--open .concept-split__handle {
+  display: block;
+}
+.concept-split__handle:hover,
+.concept-split__handle.is-active {
+  background: color-mix(in oklab, var(--brand, #2563eb) 35%, transparent);
+}
+
+body.concept-split-resizing {
+  cursor: row-resize !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+body.concept-split-resizing iframe {
   pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease, box-shadow .25s ease;
+}
+
+.concept-split__bottom {
+  display: none;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 350px;
+  border-top: 1px solid var(--muted, #333);
+  background: var(--bg-elev, #1e1e2e);
   overflow: hidden;
 }
-.concept-popup.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
-}
-.concept-popup.is-visible.is-dragged {
-  transform: none;
-}
-.concept-popup.is-visible.is-focused {
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+.concept-split--open .concept-split__bottom {
+  display: flex;
 }
 
-/* During drag/resize, cover iframe so it doesn't steal events */
-.concept-popup.is-dragging .concept-popup__body::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-}
-
-/* Body scroll lock */
-body.concept-popup-open {
-  overflow: hidden;
-}
-
-/* ---- Header (drag handle) ---- */
+/* ---- Header ---- */
 .concept-popup__header {
   display: flex;
   align-items: center;
@@ -4689,11 +4677,8 @@ body.concept-popup-open {
   border-bottom: 1px solid var(--muted, #333);
   background: var(--bg-elev, #1e1e2e);
   flex-shrink: 0;
-  cursor: grab;
+  cursor: default;
   user-select: none;
-}
-.concept-popup.is-dragging .concept-popup__header {
-  cursor: grabbing;
 }
 .concept-popup__title {
   font-weight: 600;
@@ -4810,19 +4795,6 @@ body.concept-popup-open {
   to { transform: rotate(360deg); }
 }
 
-/* ---- Resize handles ---- */
-.concept-popup__resize {
-  position: absolute;
-  z-index: 5;
-}
-.concept-popup__resize--n { top: -4px; left: 8px; right: 8px; height: 8px; cursor: n-resize; }
-.concept-popup__resize--s { bottom: -4px; left: 8px; right: 8px; height: 8px; cursor: s-resize; }
-.concept-popup__resize--e { top: 8px; right: -4px; bottom: 8px; width: 8px; cursor: e-resize; }
-.concept-popup__resize--w { top: 8px; left: -4px; bottom: 8px; width: 8px; cursor: w-resize; }
-.concept-popup__resize--ne { top: -4px; right: -4px; width: 14px; height: 14px; cursor: ne-resize; }
-.concept-popup__resize--nw { top: -4px; left: -4px; width: 14px; height: 14px; cursor: nw-resize; }
-.concept-popup__resize--se { bottom: -4px; right: -4px; width: 14px; height: 14px; cursor: se-resize; }
-.concept-popup__resize--sw { bottom: -4px; left: -4px; width: 14px; height: 14px; cursor: sw-resize; }
 
 /* ---- Footer nav bar ---- */
 .concept-popup__footer {
@@ -4877,14 +4849,17 @@ body.concept-popup-open {
   flex-shrink: 0;
 }
 
-/* ---- Mobile ---- */
+/* ---- Mobile: full-height bottom pane ---- */
 @media (max-width: 640px) {
-  .concept-popup {
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    border-radius: 0;
-    border: none;
+  .concept-split--open .concept-split__top {
+    display: none;
+  }
+  .concept-split--open .concept-split__handle {
+    display: none;
+  }
+  .concept-split--open .concept-split__bottom {
+    height: 100% !important;
+    flex: 1;
   }
   .concept-popup__nav-btn {
     padding: 7px 10px;
@@ -4899,7 +4874,6 @@ body.concept-popup-open {
   .concept-popup__footer {
     padding: 8px 12px;
   }
-  .concept-popup__resize { display: none; }
 }
 
 

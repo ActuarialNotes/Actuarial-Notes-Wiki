@@ -2233,19 +2233,22 @@ window._spaNavigate = function (path) {
 
 
 /* ===========================================================
-   CONCEPT POPUP WINDOW
-   Opens a draggable, resizable popup when any concept link is
-   clicked, rendering the concept page in an iframe with a
-   footer nav bar for prev/next navigation. Overlay darkens
-   only when popup is focused.
+   CONCEPT SPLIT-PANE NAVIGATOR
+   Opens a docked bottom pane inside .site-body-center-column
+   when any concept link is clicked, rendering the concept page
+   in an iframe with a footer nav bar for prev/next navigation.
+   The pane is resizable via a drag handle between the exam
+   content (top) and the concept viewer (bottom).
    =========================================================== */
 
 (function () {
   'use strict';
 
   /* ---- DOM references ---- */
-  var overlayEl = null;
-  var popupEl = null;
+  var centerCol = null;
+  var topPane = null;
+  var handleEl = null;
+  var bottomPane = null;
   var iframeEl = null;
   var titleEl = null;
   var prevBtn = null;
@@ -2259,20 +2262,7 @@ window._spaNavigate = function (path) {
   var conceptList = [];   // [{ name, path }, …]
   var currentIndex = -1;
   var isOpen = false;
-  var isFocused = true;
-
-  /* ---- Drag state ---- */
-  var isDragging = false;
-  var dragStartX = 0, dragStartY = 0;
-  var popupStartX = 0, popupStartY = 0;
-  var hasMoved = false; // once dragged, stop using centered transform
-
-  /* ---- Resize state ---- */
-  var isResizing = false;
-  var resizeEdge = '';
-  var resizeStartX = 0, resizeStartY = 0;
-  var resizeStartW = 0, resizeStartH = 0;
-  var resizeStartLeft = 0, resizeStartTop = 0;
+  var isInitialized = false;
 
   /* ---- SVGs ---- */
   var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
@@ -2288,7 +2278,7 @@ window._spaNavigate = function (path) {
   }
 
   function init() {
-    createPopup();
+    createSplitPane();
     installClickInterceptor();
   }
 
@@ -2305,31 +2295,32 @@ window._spaNavigate = function (path) {
   }
 
   /* -----------------------------------------------------------
-     CREATE POPUP DOM (once)
+     CREATE SPLIT-PANE DOM (once)
      ----------------------------------------------------------- */
-  function createPopup() {
-    if (document.querySelector('.concept-popup-overlay')) return;
+  function createSplitPane() {
+    centerCol = document.querySelector('.site-body-center-column');
+    if (!centerCol || isInitialized) return;
+    isInitialized = true;
 
-    // Overlay — starts without is-focused, only darkens on focus
-    overlayEl = document.createElement('div');
-    overlayEl.className = 'concept-popup-overlay';
-    overlayEl.addEventListener('click', function () {
-      // Clicking overlay unfocuses (but doesn't close)
-      blurPopup();
-    });
+    // Preserve scroll position before wrapping
+    var savedScroll = centerCol.scrollTop;
 
-    // Main popup container
-    popupEl = document.createElement('div');
-    popupEl.className = 'concept-popup';
+    // Create top pane wrapper and move all existing children into it
+    topPane = document.createElement('div');
+    topPane.className = 'concept-split__top';
+    while (centerCol.firstChild) {
+      topPane.appendChild(centerCol.firstChild);
+    }
 
-    // Focus popup when clicking on it
-    popupEl.addEventListener('mousedown', function (e) {
-      if (!isFocused) {
-        focusPopup();
-      }
-    });
+    // Create resize handle
+    handleEl = document.createElement('div');
+    handleEl.className = 'concept-split__handle';
 
-    // Header (also serves as drag handle)
+    // Create bottom pane
+    bottomPane = document.createElement('div');
+    bottomPane.className = 'concept-split__bottom';
+
+    // Header
     var header = document.createElement('div');
     header.className = 'concept-popup__header';
 
@@ -2357,7 +2348,7 @@ window._spaNavigate = function (path) {
       e.stopPropagation();
       if (currentIndex >= 0 && currentIndex < conceptList.length) {
         var path = conceptList[currentIndex].path;
-        closePopup();
+        closeSplitPane();
         window._spaNavigate(path);
       }
     });
@@ -2368,26 +2359,13 @@ window._spaNavigate = function (path) {
     closeBtn.innerHTML = '&times;';
     closeBtn.addEventListener('click', function (e) {
       e.stopPropagation();
-      closePopup();
+      closeSplitPane();
     });
 
     header.appendChild(titleEl);
     header.appendChild(learnedBtn);
     header.appendChild(openFullBtn);
     header.appendChild(closeBtn);
-
-    // ── Drag handling on header ──
-    header.addEventListener('mousedown', function (e) {
-      // Only drag from header itself, not buttons
-      if (e.target.closest('button')) return;
-      e.preventDefault();
-      startDrag(e.clientX, e.clientY);
-    });
-    header.addEventListener('touchstart', function (e) {
-      if (e.target.closest('button')) return;
-      var t = e.touches[0];
-      startDrag(t.clientX, t.clientY);
-    }, { passive: true });
 
     // Body (iframe container)
     var body = document.createElement('div');
@@ -2446,170 +2424,90 @@ window._spaNavigate = function (path) {
     footer.appendChild(posLabel);
     footer.appendChild(nextBtn);
 
-    // ── Resize handles ──
-    ['n','s','e','w','ne','nw','se','sw'].forEach(function (edge) {
-      var handle = document.createElement('div');
-      handle.className = 'concept-popup__resize concept-popup__resize--' + edge;
-      handle.addEventListener('mousedown', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        startResize(e.clientX, e.clientY, edge);
-      });
-      handle.addEventListener('touchstart', function (e) {
-        e.stopPropagation();
-        var t = e.touches[0];
-        startResize(t.clientX, t.clientY, edge);
-      }, { passive: true });
-      popupEl.appendChild(handle);
-    });
+    // Assemble bottom pane
+    bottomPane.appendChild(header);
+    bottomPane.appendChild(body);
+    bottomPane.appendChild(footer);
 
-    // Assemble
-    popupEl.appendChild(header);
-    popupEl.appendChild(body);
-    popupEl.appendChild(footer);
+    // Assemble center column
+    centerCol.appendChild(topPane);
+    centerCol.appendChild(handleEl);
+    centerCol.appendChild(bottomPane);
 
-    document.body.appendChild(overlayEl);
-    document.body.appendChild(popupEl);
+    // Restore scroll position
+    topPane.scrollTop = savedScroll;
 
-    // ── Global mouse/touch move & up for drag/resize ──
-    document.addEventListener('mousemove', handlePointerMove);
-    document.addEventListener('mouseup', handlePointerUp);
-    document.addEventListener('touchmove', function (e) {
-      if (!isDragging && !isResizing) return;
-      var t = e.touches[0];
-      handlePointerMove({ clientX: t.clientX, clientY: t.clientY });
-    }, { passive: true });
-    document.addEventListener('touchend', handlePointerUp);
+    // Set up resize handle
+    initSplitResize();
 
     // ESC to close
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && isOpen) closePopup();
+      if (e.key === 'Escape' && isOpen) closeSplitPane();
     });
 
     // Arrow keys to navigate
     document.addEventListener('keydown', function (e) {
-      if (!isOpen || !isFocused) return;
+      if (!isOpen) return;
       if (e.key === 'ArrowLeft') navigatePopup(-1);
       if (e.key === 'ArrowRight') navigatePopup(1);
     });
   }
 
   /* -----------------------------------------------------------
-     DRAG LOGIC
+     SPLIT-PANE RESIZE (modeled on initSidebarResize)
      ----------------------------------------------------------- */
-  function startDrag(clientX, clientY) {
-    isDragging = true;
-    dragStartX = clientX;
-    dragStartY = clientY;
+  function initSplitResize() {
+    if (!handleEl || !bottomPane || !centerCol) return;
 
-    var rect = popupEl.getBoundingClientRect();
-    if (!hasMoved) {
-      // First drag — switch from centered transform to absolute positioning
-      hasMoved = true;
-      popupEl.style.left = rect.left + 'px';
-      popupEl.style.top = rect.top + 'px';
-      popupEl.style.transform = 'none';
-      popupEl.classList.add('is-dragged');
-    }
-    popupStartX = rect.left;
-    popupStartY = rect.top;
+    var startY, startH;
 
-    // Cover iframe during drag
-    popupEl.classList.add('is-dragging');
-  }
-
-  function handlePointerMove(e) {
-    if (isDragging) {
-      var dx = e.clientX - dragStartX;
-      var dy = e.clientY - dragStartY;
-      popupEl.style.left = (popupStartX + dx) + 'px';
-      popupEl.style.top = (popupStartY + dy) + 'px';
-    } else if (isResizing) {
-      handleResize(e.clientX, e.clientY);
-    }
-  }
-
-  function handlePointerUp() {
-    if (isDragging) {
-      isDragging = false;
-      popupEl.classList.remove('is-dragging');
-    }
-    if (isResizing) {
-      isResizing = false;
-      popupEl.classList.remove('is-dragging');
-    }
-  }
-
-  /* -----------------------------------------------------------
-     RESIZE LOGIC
-     ----------------------------------------------------------- */
-  function startResize(clientX, clientY, edge) {
-    isResizing = true;
-    resizeEdge = edge;
-    resizeStartX = clientX;
-    resizeStartY = clientY;
-
-    var rect = popupEl.getBoundingClientRect();
-    resizeStartW = rect.width;
-    resizeStartH = rect.height;
-
-    if (!hasMoved) {
-      hasMoved = true;
-      popupEl.style.left = rect.left + 'px';
-      popupEl.style.top = rect.top + 'px';
-      popupEl.style.transform = 'none';
-      popupEl.classList.add('is-dragged');
-    }
-    resizeStartLeft = rect.left;
-    resizeStartTop = rect.top;
-
-    popupEl.classList.add('is-dragging');
-  }
-
-  function handleResize(clientX, clientY) {
-    var dx = clientX - resizeStartX;
-    var dy = clientY - resizeStartY;
-    var minW = 360, minH = 280;
-
-    var newW = resizeStartW, newH = resizeStartH;
-    var newLeft = resizeStartLeft, newTop = resizeStartTop;
-
-    if (resizeEdge.indexOf('e') !== -1) {
-      newW = Math.max(minW, resizeStartW + dx);
-    }
-    if (resizeEdge.indexOf('w') !== -1) {
-      var dw = Math.min(dx, resizeStartW - minW);
-      newW = resizeStartW - dw;
-      newLeft = resizeStartLeft + dw;
-    }
-    if (resizeEdge.indexOf('s') !== -1) {
-      newH = Math.max(minH, resizeStartH + dy);
-    }
-    if (resizeEdge.indexOf('n') !== -1) {
-      var dh = Math.min(dy, resizeStartH - minH);
-      newH = resizeStartH - dh;
-      newTop = resizeStartTop + dh;
+    function onMouseMove(e) {
+      var newH = startH - (e.clientY - startY);
+      var maxH = centerCol.getBoundingClientRect().height * 0.85;
+      if (newH < 150) newH = 150;
+      if (newH > maxH) newH = maxH;
+      bottomPane.style.height = newH + 'px';
     }
 
-    popupEl.style.width = newW + 'px';
-    popupEl.style.height = newH + 'px';
-    popupEl.style.left = newLeft + 'px';
-    popupEl.style.top = newTop + 'px';
-  }
+    function onMouseUp() {
+      document.body.classList.remove('concept-split-resizing');
+      handleEl.classList.remove('is-active');
+      var finalH = parseInt(bottomPane.style.height, 10);
+      if (finalH) localStorage.setItem('concept-split-height', finalH);
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    }
 
-  /* -----------------------------------------------------------
-     FOCUS / BLUR — overlay only darkens when focused
-     ----------------------------------------------------------- */
-  function focusPopup() {
-    isFocused = true;
-    overlayEl.classList.add('is-focused');
-    popupEl.classList.add('is-focused');
-  }
+    handleEl.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      startY = e.clientY;
+      startH = bottomPane.getBoundingClientRect().height;
+      document.body.classList.add('concept-split-resizing');
+      handleEl.classList.add('is-active');
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
 
-  function blurPopup() {
-    isFocused = false;
-    overlayEl.classList.remove('is-focused');
-    popupEl.classList.remove('is-focused');
+    // Touch support
+    handleEl.addEventListener('touchstart', function (e) {
+      var t = e.touches[0];
+      startY = t.clientY;
+      startH = bottomPane.getBoundingClientRect().height;
+      document.body.classList.add('concept-split-resizing');
+      handleEl.classList.add('is-active');
+
+      function onTouchMove(ev) {
+        var tt = ev.touches[0];
+        onMouseMove({ clientY: tt.clientY });
+      }
+      function onTouchEnd() {
+        onMouseUp();
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+      }
+      document.addEventListener('touchmove', onTouchMove, { passive: true });
+      document.addEventListener('touchend', onTouchEnd);
+    }, { passive: true });
   }
 
   /* -----------------------------------------------------------
@@ -2643,42 +2541,31 @@ window._spaNavigate = function (path) {
   /* -----------------------------------------------------------
      OPEN / CLOSE
      ----------------------------------------------------------- */
-  function openPopup(concepts, index) {
-    if (!overlayEl || !popupEl) createPopup();
+  function openSplitPane(concepts, index) {
+    if (!isInitialized) createSplitPane();
+    if (!centerCol) return;
 
     conceptList = concepts;
     currentIndex = index;
     isOpen = true;
 
-    // Reset to centered position
-    hasMoved = false;
-    popupEl.classList.remove('is-dragged');
-    popupEl.style.left = '';
-    popupEl.style.top = '';
-    popupEl.style.width = '';
-    popupEl.style.height = '';
-    popupEl.style.transform = '';
+    // Restore saved height
+    var saved = localStorage.getItem('concept-split-height');
+    if (saved) {
+      var px = parseInt(saved, 10);
+      var maxH = centerCol.getBoundingClientRect().height * 0.85;
+      if (px >= 150 && px <= maxH) {
+        bottomPane.style.height = px + 'px';
+      }
+    }
 
-    overlayEl.classList.add('is-visible');
-    popupEl.classList.add('is-visible');
-    focusPopup();
-    document.body.classList.add('concept-popup-open');
-
+    centerCol.classList.add('concept-split--open');
     loadConcept(index);
   }
 
-  function closePopup() {
-    if (overlayEl) {
-      overlayEl.classList.remove('is-visible');
-      overlayEl.classList.remove('is-focused');
-    }
-    if (popupEl) {
-      popupEl.classList.remove('is-visible');
-      popupEl.classList.remove('is-focused');
-    }
-    document.body.classList.remove('concept-popup-open');
+  function closeSplitPane() {
+    if (centerCol) centerCol.classList.remove('concept-split--open');
     isOpen = false;
-    isFocused = false;
 
     // Clear iframe to stop any ongoing loads
     if (iframeEl) iframeEl.src = 'about:blank';
@@ -2756,7 +2643,7 @@ window._spaNavigate = function (path) {
   }
 
   function gatherConceptsFromPageContent() {
-    var content = document.querySelector('.markdown-rendered, .markdown-preview-view, .site-body-center-column');
+    var content = document.querySelector('.markdown-rendered, .markdown-preview-view, .concept-split__top');
     if (!content) return [];
     var links = content.querySelectorAll('a.internal-link');
     var concepts = [];
@@ -2853,9 +2740,6 @@ window._spaNavigate = function (path) {
      ----------------------------------------------------------- */
   function installClickInterceptor() {
     document.addEventListener('click', function (e) {
-      // Don't intercept if popup is already open (allow iframe navigation)
-      if (isOpen) return;
-
       var link = e.target.closest('a.internal-link, a[data-href]');
       if (!link) return;
 
@@ -2865,8 +2749,8 @@ window._spaNavigate = function (path) {
       // Only intercept concept links
       if (!path.match(/^Concepts\//i)) return;
 
-      // Don't intercept if inside the popup itself
-      if (link.closest('.concept-popup')) return;
+      // Don't intercept if inside the split-pane bottom (iframe links)
+      if (link.closest('.concept-split__bottom')) return;
 
       // Don't intercept learned-badge clicks (number toggles)
       if (e.target.closest('.exam-nav__lo-menu-num')) return;
@@ -2884,7 +2768,13 @@ window._spaNavigate = function (path) {
       var backdrop = document.querySelector('.exam-nav-backdrop');
       if (backdrop) backdrop.classList.remove('is-visible');
 
-      openPopup(list, idx);
+      if (isOpen) {
+        // Already open — just navigate to the new concept in-place
+        conceptList = list;
+        loadConcept(idx);
+      } else {
+        openSplitPane(list, idx);
+      }
     }, true); // capture phase to intercept before other handlers
   }
 
@@ -2892,7 +2782,7 @@ window._spaNavigate = function (path) {
   window._openConceptPopup = function (conceptPath) {
     var list = buildConceptList(conceptPath);
     var idx = findConceptIndex(list, conceptPath);
-    openPopup(list, idx);
+    openSplitPane(list, idx);
   };
 
 })();

@@ -4623,15 +4623,20 @@ h6 a {
   flex-direction: column;
   overflow: hidden !important;
 }
-/* Hide "Powered by Obsidian Publish" footer when split pane is open */
-.concept-split--open ~ .publish-renderer__footer,
-.concept-split--open .publish-renderer__footer,
-.publish-renderer__footer:has(~ .concept-split--open) {
+/* Hide "Powered by Obsidian Publish" footer/badge */
+.publish-renderer__footer,
+.site-footer,
+a.site-footer,
+.obsidian-publish-badge,
+a[href*="obsidian.md"],
+a[aria-label*="Obsidian"],
+.published-container > a[href*="obsidian"],
+div[class*="footer"]:not(.concept-popup__footer):not(.concept-footer) {
   display: none !important;
-}
-/* Also hide it globally — it overlaps the split-pane Next button */
-.publish-renderer__footer {
-  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
 }
 
 .concept-split__top {
@@ -4647,6 +4652,9 @@ h6 a {
   flex-shrink: 0;
   transition: background .15s ease;
   display: none;
+  width: 100%;
+  max-width: 900px;
+  align-self: center;
 }
 .concept-split--open .concept-split__handle {
   display: block;
@@ -4673,6 +4681,10 @@ body.concept-split-resizing iframe {
   border-top: 1px solid var(--muted, #333);
   background: var(--bg-elev, #1e1e2e);
   overflow: hidden;
+  width: 100%;
+  max-width: 900px;
+  align-self: center;
+  border-radius: 0 0 var(--radius, 8px) var(--radius, 8px);
 }
 .concept-split--open .concept-split__bottom {
   display: flex;
@@ -4857,6 +4869,8 @@ body.concept-split-resizing iframe {
   .concept-split--open .concept-split__bottom {
     height: 100% !important;
     flex: 1;
+    max-width: 100%;
+    border-radius: 0;
   }
   .concept-popup__nav-btn {
     padding: 7px 10px;
@@ -4866,10 +4880,22 @@ body.concept-split-resizing iframe {
     display: none;
   }
   .concept-popup__header {
-    padding: 12px 14px;
+    padding: 10px 12px;
+    gap: 6px;
+  }
+  .concept-popup__title {
+    font-size: 0.95rem;
+  }
+  .concept-popup__close {
+    font-size: 1.3rem;
+    padding: 2px 4px;
   }
   .concept-popup__footer {
-    padding: 8px 12px;
+    padding: 8px 10px;
+  }
+  .concept-popup__learned-btn {
+    width: 20px;
+    height: 20px;
   }
 }
 

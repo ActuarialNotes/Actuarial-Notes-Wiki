@@ -4052,6 +4052,7 @@ window._spaNavigate = function (path) {
   var _vaultIndexLoading = false;
   var _vaultIndexCallbacks = [];
   var _knownFileCategories = {};
+  var _currentPagePaths = {};  // tracks items discovered from current page links
 
   function getSiteFiles() {
     try {
@@ -4093,11 +4094,11 @@ window._spaNavigate = function (path) {
     return null;
   }
 
-  function addToIndex(index, seen, name, path, category, color) {
+  function addToIndex(index, seen, name, path, category, color, source) {
     var key = name.toLowerCase();
     if (seen[key]) return;
     seen[key] = true;
-    index.push({ name: name, path: path, category: category, color: color || null });
+    index.push({ name: name, path: path, category: category, color: color || null, source: source || 'global' });
   }
 
   function categorizeFile(filePath) {
@@ -4151,45 +4152,97 @@ window._spaNavigate = function (path) {
     TRACKS.forEach(function (track) {
       track.sections.forEach(function (sec) {
         sec.items.forEach(function (item) {
-          addToIndex(index, seen, item.name, item.path || null, 'exam', item.color);
+          addToIndex(index, seen, item.name, item.path || null, 'exam', item.color, 'global');
           if (item.path) examPaths[item.path.toLowerCase()] = true;
         });
       });
     });
 
-    // 2) Scan Obsidian Publish navigation tree for site-wide file discovery
-    //    Walk folder hierarchy to reconstruct full paths (e.g., "Concepts/Probability")
+    // 2) Scan Obsidian Publish navigation tree (multiple selector strategies)
+    var navFound = 0;
+
+    // Strategy A: elements with data-path attribute
     var navTreeItems = document.querySelectorAll('.nav-file-title[data-path], .tree-item-self[data-path]');
-    if (navTreeItems.length > 0) {
-      for (var n = 0; n < navTreeItems.length; n++) {
-        var navPath = navTreeItems[n].getAttribute('data-path');
-        if (!navPath) continue;
-        var navInfo = categorizeFile(navPath);
-        if (!navInfo.category) continue;
-        if (examPaths[navInfo.path.toLowerCase()]) continue;
-        addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null);
-      }
-    } else {
-      // Fallback: walk folder hierarchy using text content
-      var navFolders = document.querySelectorAll('.nav-folder');
-      for (var f = 0; f < navFolders.length; f++) {
-        var folderTitleEl = navFolders[f].querySelector(':scope > .nav-folder-title, :scope > .tree-item-self');
-        var folderName = folderTitleEl ? (folderTitleEl.textContent || '').trim() : '';
-        var fileEls = navFolders[f].querySelectorAll('.nav-file-title-content, .tree-item-inner');
-        for (var g = 0; g < fileEls.length; g++) {
-          if (fileEls[g].closest('.nav-folder') !== navFolders[f]) continue;
-          var fileName = (fileEls[g].textContent || '').trim();
-          if (!fileName) continue;
-          var fullPath = folderName ? folderName + '/' + fileName : fileName;
-          var fInfo = categorizeFile(fullPath);
-          if (!fInfo.category) continue;
-          if (examPaths[fInfo.path.toLowerCase()]) continue;
-          addToIndex(index, seen, fInfo.name, fInfo.path, fInfo.category, null);
-        }
+    for (var n = 0; n < navTreeItems.length; n++) {
+      var navPath = navTreeItems[n].getAttribute('data-path');
+      if (!navPath) continue;
+      var navInfo = categorizeFile(navPath);
+      if (!navInfo.category) continue;
+      if (examPaths[navInfo.path.toLowerCase()]) continue;
+      addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null, 'global');
+      navFound++;
+    }
+
+    // Strategy B: walk folder/file hierarchy using .nav-folder containers
+    var navFolders = document.querySelectorAll('.nav-folder');
+    for (var f = 0; f < navFolders.length; f++) {
+      var folderTitleEl = navFolders[f].querySelector(':scope > .nav-folder-title, :scope > .tree-item-self');
+      var folderName = folderTitleEl ? (folderTitleEl.textContent || '').trim() : '';
+      var fileEls = navFolders[f].querySelectorAll('.nav-file-title-content, .tree-item-inner');
+      for (var g = 0; g < fileEls.length; g++) {
+        if (fileEls[g].closest('.nav-folder') !== navFolders[f]) continue;
+        var fileName = (fileEls[g].textContent || '').trim();
+        if (!fileName) continue;
+        var fullPath = folderName ? folderName + '/' + fileName : fileName;
+        var fInfo = categorizeFile(fullPath);
+        if (!fInfo.category) continue;
+        if (examPaths[fInfo.path.toLowerCase()]) continue;
+        addToIndex(index, seen, fInfo.name, fInfo.path, fInfo.category, null, 'global');
+        navFound++;
       }
     }
 
-    // 3) Scan DOM for internal links (discovers items not in nav tree)
+    // Strategy C: tree-item based hierarchy (modern Obsidian Publish)
+    if (navFound === 0) {
+      var treeItems = document.querySelectorAll('.tree-item');
+      for (var t = 0; t < treeItems.length; t++) {
+        var selfEl = treeItems[t].querySelector(':scope > .tree-item-self');
+        if (!selfEl) continue;
+        // Check for data-path first
+        var tPath = selfEl.getAttribute('data-path') || '';
+        if (!tPath) {
+          // Reconstruct path from hierarchy: walk up tree-item ancestors
+          var parts = [];
+          var innerEl = selfEl.querySelector('.tree-item-inner');
+          if (innerEl) parts.unshift((innerEl.textContent || '').trim());
+          var ancestor = treeItems[t].parentElement;
+          while (ancestor) {
+            var parentItem = ancestor.closest('.tree-item');
+            if (!parentItem) break;
+            var parentSelf = parentItem.querySelector(':scope > .tree-item-self');
+            if (parentSelf) {
+              var parentInner = parentSelf.querySelector('.tree-item-inner');
+              if (parentInner) parts.unshift((parentInner.textContent || '').trim());
+            }
+            ancestor = parentItem.parentElement;
+          }
+          tPath = parts.filter(Boolean).join('/');
+        }
+        if (!tPath) continue;
+        // Skip folder nodes (they have children)
+        if (treeItems[t].querySelector('.tree-item-children .tree-item')) continue;
+        var tInfo = categorizeFile(tPath);
+        if (!tInfo.category) continue;
+        if (examPaths[tInfo.path.toLowerCase()]) continue;
+        addToIndex(index, seen, tInfo.name, tInfo.path, tInfo.category, null, 'global');
+        navFound++;
+      }
+    }
+
+    // Strategy D: scan all links in the sidebar nav area
+    var sidebarLinks = document.querySelectorAll('.site-body-left-column a[href], .nav-view-outer a[href]');
+    for (var s = 0; s < sidebarLinks.length; s++) {
+      var sHref = sidebarLinks[s].getAttribute('href') || '';
+      var sPath = hrefToPath(sHref);
+      if (!sPath || sPath.indexOf('http') === 0) continue;
+      var sInfo = categorizeFile(sPath);
+      if (!sInfo.category) continue;
+      if (examPaths[sInfo.path.toLowerCase()]) continue;
+      addToIndex(index, seen, sInfo.name, sInfo.path, sInfo.category, null, 'global');
+      navFound++;
+    }
+
+    // 3) Scan current page DOM for internal links (mark as 'page' source)
     var domLinks = document.querySelectorAll('a.internal-link[data-href]');
     for (var i = 0; i < domLinks.length; i++) {
       var linkEl = domLinks[i];
@@ -4201,7 +4254,8 @@ window._spaNavigate = function (path) {
       if (known) info = known;
       if (!info.category) continue;
       if (examPaths[info.path.toLowerCase()]) continue;
-      addToIndex(index, seen, info.name, info.path, info.category, null);
+      _currentPagePaths[info.name.toLowerCase()] = true;
+      addToIndex(index, seen, info.name, info.path, info.category, null, 'page');
     }
 
     // 4) Add files from vault object (if available)
@@ -4213,9 +4267,9 @@ window._spaNavigate = function (path) {
         if (fileKey.charAt(0) === '.' || fileKey.indexOf('/.') !== -1) continue;
         if (fileKey === 'README.md' || fileKey === 'Home.md') continue;
         var fileInfo = categorizeFile(fileKey);
-        if (!fileInfo.category) continue;  // only index Concepts/Resources/Exams
+        if (!fileInfo.category) continue;
         if (examPaths[fileInfo.path.toLowerCase()]) continue;
-        addToIndex(index, seen, fileInfo.name, fileInfo.path, fileInfo.category, null);
+        addToIndex(index, seen, fileInfo.name, fileInfo.path, fileInfo.category, null, 'global');
 
         // Try to extract [[wikilinks]] from content if available
         var entry = sf[fileKey];
@@ -4234,14 +4288,130 @@ window._spaNavigate = function (path) {
               conceptPath = 'Concepts/' + linkTarget;
             }
             if (!examPaths[conceptPath.toLowerCase()]) {
-              addToIndex(index, seen, conceptName, conceptPath, 'concept', null);
+              addToIndex(index, seen, conceptName, conceptPath, 'concept', null, 'global');
             }
           }
         }
       }
     }
 
-    return { index: index, seen: seen };
+    return { index: index, seen: seen, navFound: navFound };
+  }
+
+  /** Merge API/fetched files into the live cache */
+  function mergeFilesIntoCache(files, examPaths) {
+    var apiCategories = {};
+    for (var k = 0; k < files.length; k++) {
+      var fp = files[k];
+      if (fp.charAt(0) === '.' || fp.indexOf('/.') !== -1) continue;
+      if (fp === 'README.md' || fp === 'Home.md' || fp === 'publish.js' || fp === 'publish.css') continue;
+      if (!fp.match(/\.md$/)) continue;
+      var info = categorizeFile(fp);
+      if (!info.category) continue;
+      apiCategories[info.name.toLowerCase()] = info;
+      _knownFileCategories[info.name.toLowerCase()] = info;
+    }
+    // Correct categories of existing entries
+    for (var m = 0; m < _vaultIndexCache.length; m++) {
+      var existing = _vaultIndexCache[m];
+      var apiInfo = apiCategories[existing.name.toLowerCase()];
+      if (apiInfo && apiInfo.category && existing.category !== 'exam') {
+        existing.category = apiInfo.category;
+        existing.path = apiInfo.path;
+      }
+    }
+    // Add new entries
+    var seen = {};
+    _vaultIndexCache.forEach(function (item) { seen[item.name.toLowerCase()] = true; });
+    for (var key in apiCategories) {
+      var entry = apiCategories[key];
+      if (examPaths[entry.path.toLowerCase()]) continue;
+      addToIndex(_vaultIndexCache, seen, entry.name, entry.path, entry.category, null, 'global');
+    }
+  }
+
+  /** Fetch homepage HTML and extract nav links to discover all wiki files */
+  function fetchHomepageIndex(callback) {
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open('GET', window.location.origin + '/', true);
+    xhr2.timeout = 8000;
+    xhr2.onload = function () {
+      try {
+        if (xhr2.status === 200) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(xhr2.responseText, 'text/html');
+
+          var examPaths = {};
+          TRACKS.forEach(function (track) {
+            track.sections.forEach(function (sec) {
+              sec.items.forEach(function (item) {
+                if (item.path) examPaths[item.path.toLowerCase()] = true;
+              });
+            });
+          });
+
+          // Scan data-path attributes from fetched page's nav tree
+          var remotePaths = [];
+          var remoteNavItems = doc.querySelectorAll('[data-path]');
+          for (var r = 0; r < remoteNavItems.length; r++) {
+            var rPath = remoteNavItems[r].getAttribute('data-path');
+            if (rPath) remotePaths.push(rPath.replace(/\.md$/, '') + '.md');
+          }
+
+          // Scan internal links from fetched page
+          var remoteLinks = doc.querySelectorAll('a[href]');
+          for (var q = 0; q < remoteLinks.length; q++) {
+            var rHref = remoteLinks[q].getAttribute('href') || '';
+            if (rHref.indexOf('/') === 0 && rHref.length > 1) {
+              var rFile = decodeURIComponent(rHref.replace(/^\//, '').replace(/\+/g, ' '));
+              if (rFile && rFile.indexOf('.') === -1) {
+                remotePaths.push(rFile + '.md');
+              }
+            }
+          }
+
+          // Walk tree-item hierarchy in fetched HTML
+          var treeItems = doc.querySelectorAll('.tree-item');
+          for (var ti = 0; ti < treeItems.length; ti++) {
+            var tiSelf = treeItems[ti].querySelector(':scope > .tree-item-self');
+            if (!tiSelf) continue;
+            var tiPath = tiSelf.getAttribute('data-path');
+            if (tiPath) {
+              remotePaths.push(tiPath.replace(/\.md$/, '') + '.md');
+              continue;
+            }
+            // Reconstruct path from hierarchy
+            var tiParts = [];
+            var tiInner = tiSelf.querySelector('.tree-item-inner');
+            if (tiInner) tiParts.unshift((tiInner.textContent || '').trim());
+            var tiAnc = treeItems[ti].parentElement;
+            while (tiAnc) {
+              var tiParent = tiAnc.closest('.tree-item');
+              if (!tiParent) break;
+              var tiParSelf = tiParent.querySelector(':scope > .tree-item-self');
+              if (tiParSelf) {
+                var tiParInner = tiParSelf.querySelector('.tree-item-inner');
+                if (tiParInner) tiParts.unshift((tiParInner.textContent || '').trim());
+              }
+              tiAnc = tiParent.parentElement;
+            }
+            var tiJoined = tiParts.filter(Boolean).join('/');
+            if (tiJoined && !treeItems[ti].querySelector('.tree-item-children .tree-item')) {
+              remotePaths.push(tiJoined + '.md');
+            }
+          }
+
+          if (remotePaths.length > 0) {
+            mergeFilesIntoCache(remotePaths, examPaths);
+          }
+        }
+      } catch (e) {}
+      callback(_vaultIndexCache);
+    };
+    xhr2.onerror = xhr2.ontimeout = function () {
+      callback(_vaultIndexCache);
+    };
+    xhr2.send();
   }
 
   function getVaultIndex(callback) {
@@ -4253,9 +4423,30 @@ window._spaNavigate = function (path) {
     var base = buildBaseIndex();
     _vaultIndexCache = base.index;
 
-    // Try to fetch full file listing from Obsidian Publish API (async enhancement)
+    if (_vaultIndexLoading) {
+      if (callback) _vaultIndexCallbacks.push(callback);
+      return _vaultIndexCache;
+    }
+
+    var examPaths = {};
+    TRACKS.forEach(function (track) {
+      track.sections.forEach(function (sec) {
+        sec.items.forEach(function (item) {
+          if (item.path) examPaths[item.path.toLowerCase()] = true;
+        });
+      });
+    });
+
+    function notifyCallbacks() {
+      _vaultIndexLoading = false;
+      var cbs = _vaultIndexCallbacks.slice();
+      _vaultIndexCallbacks = [];
+      cbs.forEach(function (cb) { cb(_vaultIndexCache); });
+    }
+
+    // Try to fetch full file listing from Obsidian Publish API
     var siteId = extractSiteId();
-    if (siteId && !_vaultIndexLoading) {
+    if (siteId) {
       _vaultIndexLoading = true;
       if (callback) _vaultIndexCallbacks.push(callback);
 
@@ -4267,65 +4458,21 @@ window._spaNavigate = function (path) {
         try {
           if (xhr.status === 200) {
             var data = JSON.parse(xhr.responseText);
-            var files = Object.keys(data);
-            var examPaths = {};
-            TRACKS.forEach(function (track) {
-              track.sections.forEach(function (sec) {
-                sec.items.forEach(function (item) {
-                  if (item.path) examPaths[item.path.toLowerCase()] = true;
-                });
-              });
-            });
-
-            // Build a map of authoritative categories from API file paths
-            var apiCategories = {};
-            for (var k = 0; k < files.length; k++) {
-              var fp = files[k];
-              if (fp.charAt(0) === '.' || fp.indexOf('/.') !== -1) continue;
-              if (fp === 'README.md' || fp === 'Home.md' || fp === 'publish.js' || fp === 'publish.css') continue;
-              if (!fp.match(/\.md$/)) continue;
-              var info = categorizeFile(fp);
-              if (!info.category) continue;
-              apiCategories[info.name.toLowerCase()] = info;
-              _knownFileCategories[info.name.toLowerCase()] = info;
-            }
-
-            // Correct categories of existing entries using API data
-            for (var m = 0; m < _vaultIndexCache.length; m++) {
-              var existing = _vaultIndexCache[m];
-              var apiInfo = apiCategories[existing.name.toLowerCase()];
-              if (apiInfo && apiInfo.category && existing.category !== 'exam') {
-                existing.category = apiInfo.category;
-                existing.path = apiInfo.path;
-              }
-            }
-
-            // Add new entries not yet in cache
-            var seen = {};
-            _vaultIndexCache.forEach(function (item) {
-              seen[item.name.toLowerCase()] = true;
-            });
-            for (var key in apiCategories) {
-              var entry = apiCategories[key];
-              if (examPaths[entry.path.toLowerCase()]) continue;
-              addToIndex(_vaultIndexCache, seen, entry.name, entry.path, entry.category, null);
-            }
+            mergeFilesIntoCache(Object.keys(data), examPaths);
           }
         } catch (e) {}
-        _vaultIndexLoading = false;
-        var cbs = _vaultIndexCallbacks.slice();
-        _vaultIndexCallbacks = [];
-        cbs.forEach(function (cb) { cb(_vaultIndexCache); });
+        notifyCallbacks();
       };
       xhr.onerror = xhr.ontimeout = function () {
-        _vaultIndexLoading = false;
-        var cbs = _vaultIndexCallbacks.slice();
-        _vaultIndexCallbacks = [];
-        cbs.forEach(function (cb) { cb(_vaultIndexCache); });
+        // API failed — try homepage fetch as fallback
+        fetchHomepageIndex(function () { notifyCallbacks(); });
       };
       xhr.send(JSON.stringify({ id: siteId }));
     } else {
-      if (callback) callback(_vaultIndexCache);
+      // No siteId — fetch homepage to discover all files
+      _vaultIndexLoading = true;
+      if (callback) _vaultIndexCallbacks.push(callback);
+      fetchHomepageIndex(function () { notifyCallbacks(); });
     }
 
     return _vaultIndexCache;
@@ -4724,11 +4871,55 @@ window._spaNavigate = function (path) {
     window._spaNavigate(path);
   }
 
+  /** Detect current exam page name for scope filtering */
+  function getCurrentExamName() {
+    var path = decodeURIComponent(window.location.pathname.replace(/^\//, '')).replace(/\+/g, ' ');
+    if (!path) return null;
+    // Match "Exam P-1 (SOA)" style pages
+    if (/^exam\s/i.test(path)) return path;
+    // Check if we're on an exam-related page (e.g. concept linked from exam)
+    var container = document.querySelector('.markdown-preview-view[data-exam-page], [data-exam-page]');
+    if (container) return container.getAttribute('data-exam-page');
+    return null;
+  }
+
   function renderSearchPanel(container) {
+    // Scope filter (This Exam / Entire Wiki)
+    var scopeRow = document.createElement('div');
+    scopeRow.className = 'sidebar-tabs__search-scope';
+
+    var scopeExam = document.createElement('button');
+    scopeExam.className = 'sidebar-tabs__scope-btn is-active';
+    scopeExam.type = 'button';
+    scopeExam.textContent = 'This Page';
+    scopeExam.dataset.scope = 'page';
+
+    var scopeAll = document.createElement('button');
+    scopeAll.className = 'sidebar-tabs__scope-btn';
+    scopeAll.type = 'button';
+    scopeAll.textContent = 'Entire Wiki';
+    scopeAll.dataset.scope = 'all';
+
+    scopeRow.appendChild(scopeExam);
+    scopeRow.appendChild(scopeAll);
+    container.appendChild(scopeRow);
+
+    var activeScope = 'page';
+
+    function setScope(scope) {
+      activeScope = scope;
+      scopeExam.classList.toggle('is-active', scope === 'page');
+      scopeAll.classList.toggle('is-active', scope === 'all');
+      performSearch(searchInput.value);
+    }
+
+    scopeExam.addEventListener('click', function () { setScope('page'); });
+    scopeAll.addEventListener('click', function () { setScope('all'); });
+
     // Search input row
     var searchRow = document.createElement('div');
     searchRow.className = 'sidebar-tabs__search-row';
-    searchRow.style.marginTop = '10px';
+    searchRow.style.marginTop = '6px';
 
     var searchIcon = document.createElement('span');
     searchIcon.className = 'sidebar-tabs__search-icon';
@@ -4807,9 +4998,14 @@ window._spaNavigate = function (path) {
 
       for (var i = 0; i < allItems.length; i++) {
         var item = allItems[i];
+        // Scope filter: in 'page' mode, only show items from current page links
+        if (activeScope === 'page' && item.source !== 'page' && item.category !== 'exam') {
+          // Also check _currentPagePaths in case the item was added globally but exists on this page
+          if (!_currentPagePaths[item.name.toLowerCase()]) continue;
+        }
         if (item.name.toLowerCase().indexOf(term) !== -1) {
           var cat = item.category;
-          if (!cat) continue;  // skip uncategorized items
+          if (!cat) continue;
           if (grouped[cat] && grouped[cat].length < MAX_PER_CAT) {
             grouped[cat].push(item);
           }
@@ -4824,7 +5020,9 @@ window._spaNavigate = function (path) {
       if (totalResults === 0) {
         var noResults = document.createElement('div');
         noResults.className = 'sidebar-tabs__search-empty';
-        noResults.textContent = 'No results found';
+        noResults.textContent = activeScope === 'page'
+          ? 'No results on this page. Try "Entire Wiki".'
+          : 'No results found';
         resultsEl.appendChild(noResults);
         return;
       }
@@ -5148,6 +5346,7 @@ window._spaNavigate = function (path) {
   window.addEventListener('popstate', function () {
     _vaultIndexCache = null;
     _vaultIndexLoading = false;
+    _currentPagePaths = {};
     setTimeout(updatePersistentExamNavs, 250);
     setTimeout(updateExamLinkButtons, 300);
   });
@@ -5156,6 +5355,7 @@ window._spaNavigate = function (path) {
     if (link) {
       _vaultIndexCache = null;
       _vaultIndexLoading = false;
+      _currentPagePaths = {};
       setTimeout(updatePersistentExamNavs, 300);
       setTimeout(updatePersistentExamNavs, 600);
       setTimeout(updateExamLinkButtons, 350);

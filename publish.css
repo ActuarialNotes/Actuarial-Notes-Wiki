@@ -1873,6 +1873,38 @@ body.sidebar-resizing iframe { pointer-events: none; }
 }
 
 /* Search row */
+/* Scope filter toggle */
+.sidebar-tabs__search-scope {
+  display: flex;
+  gap: 2px;
+  background: color-mix(in oklab, var(--text) 8%, transparent);
+  border-radius: 8px;
+  padding: 2px;
+  margin-bottom: 8px;
+}
+.sidebar-tabs__scope-btn {
+  flex: 1;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: color-mix(in oklab, var(--text) 55%, transparent);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background .15s, color .15s, box-shadow .15s;
+  line-height: 1.4;
+}
+.sidebar-tabs__scope-btn:hover {
+  color: var(--text);
+}
+.sidebar-tabs__scope-btn.is-active {
+  background: var(--sb-bg, var(--background-primary));
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0,0,0,.12);
+}
+
 .sidebar-tabs__search-row {
   position: relative;
   margin-bottom: 6px;

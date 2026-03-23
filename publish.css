@@ -4652,9 +4652,6 @@ div[class*="footer"]:not(.concept-popup__footer):not(.concept-footer) {
   flex-shrink: 0;
   transition: background .15s ease;
   display: none;
-  width: 100%;
-  max-width: 900px;
-  align-self: center;
 }
 .concept-split--open .concept-split__handle {
   display: block;
@@ -4681,10 +4678,6 @@ body.concept-split-resizing iframe {
   border-top: 1px solid var(--muted, #333);
   background: var(--bg-elev, #1e1e2e);
   overflow: hidden;
-  width: 100%;
-  max-width: 900px;
-  align-self: center;
-  border-radius: 0 0 var(--radius, 8px) var(--radius, 8px);
 }
 .concept-split--open .concept-split__bottom {
   display: flex;
@@ -4859,18 +4852,10 @@ body.concept-split-resizing iframe {
 }
 
 /* ---- Mobile: full-height bottom pane ---- */
+/* ---- Mobile: same split behavior as desktop, default 1/3 height ---- */
 @media (max-width: 640px) {
-  .concept-split--open .concept-split__top {
-    display: none;
-  }
-  .concept-split--open .concept-split__handle {
-    display: none;
-  }
   .concept-split--open .concept-split__bottom {
-    height: 100% !important;
-    flex: 1;
-    max-width: 100%;
-    border-radius: 0;
+    height: 33vh;
   }
   .concept-popup__nav-btn {
     padding: 7px 10px;

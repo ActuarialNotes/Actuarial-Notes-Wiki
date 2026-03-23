@@ -3957,7 +3957,6 @@ window._spaNavigate = function (path) {
         },
         {
           label: 'Required Courses',
-          collapsed: true,
           items: [
             { id: 'FSA-DMAC', name: 'DMAC', path: null, color: 'amber' },
             { id: 'FSA-FAC',  name: 'FAC',  path: null, color: 'slate' }

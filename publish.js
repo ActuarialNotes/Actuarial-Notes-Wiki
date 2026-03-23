@@ -2278,6 +2278,20 @@ window._spaNavigate = function (path) {
   function init() {
     createSplitPane();
     installClickInterceptor();
+    hideObsidianBadge();
+  }
+
+  /* Hide "Powered by Obsidian Publish" badge via JS (covers dynamic injection) */
+  function hideObsidianBadge() {
+    function hide() {
+      document.querySelectorAll('a[href*="obsidian.md"], a[href*="obsidian.md/publish"], .publish-renderer__footer').forEach(function (el) {
+        el.style.display = 'none';
+      });
+    }
+    hide();
+    // Re-run after short delay in case it's injected late
+    setTimeout(hide, 1000);
+    setTimeout(hide, 3000);
   }
 
   /* -----------------------------------------------------------
@@ -2367,12 +2381,29 @@ window._spaNavigate = function (path) {
           style.textContent =
             '.concept-nav, .concept-footer, .exam-nav__sticky, .exam-nav-backdrop, ' +
             '.sidebar-tabs-container, .site-body-left-column, .site-navbar, ' +
-            '.page-header, .site-header, .site-footer, .publish-renderer__footer ' +
+            '.page-header, .site-header, .site-footer, .publish-renderer__footer, ' +
+            '.persistent-exam-navs, .persistent-exam-tab, ' +
+            'a[href*="obsidian.md"], a[aria-label*="Obsidian"] ' +
             '{ display: none !important; } ' +
             '.publish-renderer, .site-body { padding-bottom: 0 !important; } ' +
             '.site-body-center-column { margin: 0 auto !important; max-width: 100% !important; } ' +
             '.published-container { display: block !important; }';
           iDoc.head.appendChild(style);
+
+          // Intercept concept links inside iframe to navigate in-place
+          iDoc.addEventListener('click', function (ev) {
+            var a = ev.target.closest('a.internal-link, a[data-href]');
+            if (!a) return;
+            var href = a.getAttribute('data-href') || a.getAttribute('href') || '';
+            var p = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
+            if (!p.match(/^Concepts\//i)) return;
+            ev.preventDefault();
+            ev.stopPropagation();
+            var list = buildConceptList(p);
+            var idx = findConceptIndex(list, p);
+            conceptList = list;
+            loadConcept(idx);
+          }, true);
         }
       } catch (e) { /* cross-origin — skip */ }
     });

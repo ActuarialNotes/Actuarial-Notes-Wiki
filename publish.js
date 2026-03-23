@@ -2455,6 +2455,11 @@ window._spaNavigate = function (path) {
     // Set up resize handle
     initSplitResize();
 
+    // Re-sync bottom width on resize
+    window.addEventListener('resize', function () {
+      if (isOpen) syncBottomWidth();
+    });
+
     // ESC to close
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && isOpen) closeSplitPane();
@@ -2505,6 +2510,7 @@ window._spaNavigate = function (path) {
 
     // Touch support
     handleEl.addEventListener('touchstart', function (e) {
+      e.preventDefault(); // prevent scroll while dragging
       var t = e.touches[0];
       startY = t.clientY;
       startH = bottomPane.getBoundingClientRect().height;
@@ -2512,6 +2518,7 @@ window._spaNavigate = function (path) {
       handleEl.classList.add('is-active');
 
       function onTouchMove(ev) {
+        ev.preventDefault(); // prevent scroll while dragging
         var tt = ev.touches[0];
         onMouseMove({ clientY: tt.clientY });
       }
@@ -2520,9 +2527,9 @@ window._spaNavigate = function (path) {
         document.removeEventListener('touchmove', onTouchMove);
         document.removeEventListener('touchend', onTouchEnd);
       }
-      document.addEventListener('touchmove', onTouchMove, { passive: true });
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
       document.addEventListener('touchend', onTouchEnd);
-    }, { passive: true });
+    }, { passive: false });
   }
 
   /* -----------------------------------------------------------
@@ -2575,7 +2582,23 @@ window._spaNavigate = function (path) {
     }
 
     centerCol.classList.add('concept-split--open');
+
+    // Match bottom pane width to the top content area
+    syncBottomWidth();
+
     loadConcept(index);
+  }
+
+  function syncBottomWidth() {
+    if (!topPane || !bottomPane || !handleEl) return;
+    // Find the content sizer inside the top pane
+    var sizer = topPane.querySelector('.markdown-preview-sizer');
+    if (!sizer) return;
+    var w = sizer.getBoundingClientRect().width;
+    if (w > 0) {
+      bottomPane.style.maxWidth = w + 'px';
+      handleEl.style.maxWidth = w + 'px';
+    }
   }
 
   function closeSplitPane() {

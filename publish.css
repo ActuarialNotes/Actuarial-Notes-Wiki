@@ -4662,6 +4662,12 @@ div[class*="footer"]:not(.concept-popup__footer):not(.concept-footer) {
   flex-shrink: 0;
   transition: background .15s ease;
   display: none;
+  touch-action: none;
+  /* Larger touch target via padding, visually same size */
+  padding: 8px 0;
+  margin: -8px 0;
+  position: relative;
+  z-index: 2;
 }
 .concept-split--open .concept-split__handle {
   display: block;

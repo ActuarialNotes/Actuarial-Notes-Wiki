@@ -422,20 +422,14 @@ window._spaNavigate = function (path) {
       }
     });
 
-    // Handle internal link clicks — use SPA navigation helper
+    // Close the sticky when an internal link inside it is clicked;
+    // let Obsidian's native SPA router handle the actual navigation.
     sticky.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link');
       if (link) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
         closeSticky();
-        var href = link.getAttribute('href') || link.getAttribute('data-href') || '';
-        if (href) {
-          var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//,'').replace(/\+/g, ' ');
-          window._spaNavigate(path);
-        }
       }
-    }, true);
+    });
 
     sticky.appendChild(stickyBtn);
     sticky.appendChild(stickyContent);
@@ -3847,21 +3841,14 @@ window._spaNavigate = function (path) {
     document.body.appendChild(footer);
     container._footerEl = footer;
 
-    // Handle SPA navigation on internal links in the footer
+    // Close menus when an internal link in the footer is clicked;
+    // let Obsidian's native SPA router handle the actual navigation.
     footer.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link');
       if (link) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        // Close any open menus
         footer.querySelectorAll('.is-open').forEach(function (d) { d.classList.remove('is-open'); });
-        var href = link.getAttribute('href') || link.getAttribute('data-href') || '';
-        if (href) {
-          var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//,'').replace(/\+/g, ' ');
-          window._spaNavigate(path);
-        }
       }
-    }, true);
+    });
 
     // Close footer menus on outside click
     if (!window._conceptFooterCloseRegistered) {
@@ -5338,24 +5325,20 @@ window._spaNavigate = function (path) {
     certBtn.className = 'sidebar-tabs__cert-btn';
     certBtn.title = 'View certification requirements';
     certBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
-    certBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
-      if (track && track.certPath) {
-        window._spaNavigate(track.certPath);
-      }
-    }, true);
     selectRow.appendChild(certBtn);
 
     function updateCertBtn() {
       var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
       if (track && track.certPath) {
         var slug = track.certPath.replace(/ /g, '+');
-        certBtn.href = window.location.origin + '/' + slug;
+        certBtn.href = '/' + slug;
+        certBtn.classList.add('internal-link');
+        certBtn.setAttribute('data-href', track.certPath);
         certBtn.style.display = '';
       } else {
         certBtn.removeAttribute('href');
+        certBtn.classList.remove('internal-link');
+        certBtn.removeAttribute('data-href');
         certBtn.style.display = 'none';
       }
     }
@@ -5449,13 +5432,9 @@ window._spaNavigate = function (path) {
           var nameEl;
           if (item.path) {
             nameEl = document.createElement('a');
-            nameEl.className = 'exams-panel__name';
-            nameEl.href = window.location.origin + '/' + item.path.replace(/ /g, '+');
-            nameEl.addEventListener('click', function (e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              window._spaNavigate(item.path);
-            }, true);
+            nameEl.className = 'exams-panel__name internal-link';
+            nameEl.setAttribute('data-href', item.path);
+            nameEl.href = '/' + item.path.replace(/ /g, '+');
           } else {
             nameEl = document.createElement('span');
             nameEl.className = 'exams-panel__name';
@@ -5682,7 +5661,9 @@ window._spaNavigate = function (path) {
           result.className = 'sidebar-tabs__search-result';
           result.dataset.category = cat;
           if (item.path) {
-            result.href = window.location.origin + '/' + item.path.replace(/ /g, '+');
+            result.href = '/' + item.path.replace(/ /g, '+');
+            result.classList.add('internal-link');
+            result.setAttribute('data-href', item.path);
           }
 
           var iconEl = document.createElement('span');
@@ -5695,17 +5676,18 @@ window._spaNavigate = function (path) {
           nameEl.innerHTML = highlightMatch(item.name, term);
           result.appendChild(nameEl);
 
-          result.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            // Open concepts in the split-pane instead of navigating
-            if (cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
-              var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
-              window._openConceptPopup(conceptPath);
-            } else {
-              navigateToResult(item.path);
-            }
-          }, true);
+          // Only intercept concept clicks (to open in split-pane);
+          // all other clicks fall through to Obsidian's native SPA router.
+          if (cat === 'concept') {
+            result.addEventListener('click', function (e) {
+              if (item.path && typeof window._openConceptPopup === 'function') {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
+                window._openConceptPopup(conceptPath);
+              }
+            }, true);
+          }
 
           result.addEventListener('mouseenter', function () {
             selectedIdx = resultEls.indexOf(result);
@@ -5906,11 +5888,9 @@ window._spaNavigate = function (path) {
       tab.className = 'persistent-exam-tab';
       tab.dataset.examId = exam.id;
       if (exam.path) {
-        tab.href = window.location.origin + '/' + exam.path.replace(/ /g, '+');
-        tab.addEventListener('click', function (e) {
-          e.preventDefault();
-          window._spaNavigate(exam.path);
-        }, true);
+        tab.classList.add('internal-link');
+        tab.setAttribute('data-href', exam.path);
+        tab.href = '/' + exam.path.replace(/ /g, '+');
       } else {
         tab.href = '#';
         tab.addEventListener('click', function (e) { e.preventDefault(); });

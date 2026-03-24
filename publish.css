@@ -3151,17 +3151,22 @@ a.external-link[href*=".pdf#" i]::before {
   border-radius: .25em;
 }
 
-.concept-active-link {
+.markdown-rendered a.concept-active-link,
+.site-body a.concept-active-link,
+a.concept-active-link {
   background: #ffffff;
   color: #000000 !important;
   padding: .1em .3em;
   border-radius: .25em;
   outline: 2px solid #ffffff;
   outline-offset: 1px;
+  text-decoration: none !important;
   transition: background .2s ease, outline-color .2s ease;
 }
 
-.theme-light .concept-active-link {
+.theme-light .markdown-rendered a.concept-active-link,
+.theme-light .site-body a.concept-active-link,
+.theme-light a.concept-active-link {
   background: #000000;
   color: #ffffff !important;
   outline-color: #000000;

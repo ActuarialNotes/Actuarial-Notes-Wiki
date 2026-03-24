@@ -3697,11 +3697,8 @@ figure.right figcaption,
 }
 
 /* Pill accent colour when exam is in-progress */
-.exam-in-progress .callout[data-callout="example"] .callout-concept-count {
-  color: var(--exam-color);
-  background: color-mix(in oklab, var(--exam-color) 12%, transparent);
-}
-.exam-in-progress .callout[data-callout="example"] .callout-badge--pct {
+.has-exam-nav.exam-in-progress .callout[data-callout="example"] .callout-concept-count,
+.has-exam-nav.exam-in-progress .callout[data-callout="example"] .callout-badge--pct {
   color: var(--exam-color);
   background: color-mix(in oklab, var(--exam-color) 12%, transparent);
 }

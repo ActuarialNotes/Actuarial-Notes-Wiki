@@ -4159,6 +4159,7 @@ window._spaNavigate = function (path) {
       }
     } catch (e) { /* ignore */ }
   }
+  loadJourneyState();   // load early so _getExamInfoByPage returns correct status
 
   function saveJourneyState() {
     try { localStorage.setItem(JOURNEY_KEY, JSON.stringify(journeyState)); } catch (e) { /* ignore */ }
@@ -5896,6 +5897,7 @@ window._spaNavigate = function (path) {
     buildSidebarTabs();
     setTimeout(updatePersistentExamNavs, 300);
     setTimeout(updateExamLinkButtons, 350);
+    setTimeout(syncStickyExamNavStatus, 400);
   }
 
   // Expose API for cross-IIFE access
@@ -5926,6 +5928,7 @@ window._spaNavigate = function (path) {
     _currentPagePaths = {};
     setTimeout(updatePersistentExamNavs, 250);
     setTimeout(updateExamLinkButtons, 300);
+    setTimeout(syncStickyExamNavStatus, 350);
   });
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
@@ -5937,6 +5940,8 @@ window._spaNavigate = function (path) {
       setTimeout(updatePersistentExamNavs, 600);
       setTimeout(updateExamLinkButtons, 350);
       setTimeout(updateExamLinkButtons, 650);
+      setTimeout(syncStickyExamNavStatus, 400);
+      setTimeout(syncStickyExamNavStatus, 700);
     }
   });
 

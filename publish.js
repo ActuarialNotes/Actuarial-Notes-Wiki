@@ -2,11 +2,10 @@
 window._spaNavigate = function (path) {
   if (!path) return;
   var slug = path.replace(/ /g, '+');
-  var url = window.location.origin + '/' + slug;
   var a = document.createElement('a');
   a.className = 'internal-link';
   a.setAttribute('data-href', path);
-  a.href = url;
+  a.href = '/' + slug;
   a.style.display = 'none';
   // Append inside the publish content area so Obsidian's SPA router intercepts
   // the click. Falls back to document.body if the content area isn't found.
@@ -15,7 +14,9 @@ window._spaNavigate = function (path) {
           || document.querySelector('.markdown-preview-view')
           || document.body;
   host.appendChild(a);
-  a.click();
+  // Dispatch a real MouseEvent (bubbles + cancelable) for maximum compatibility
+  // with Obsidian Publish's delegated click handler.
+  a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
   // Delay removal so Obsidian's async router can finish processing the event
   setTimeout(function () { if (a.parentNode) a.parentNode.removeChild(a); }, 200);
 };
@@ -429,12 +430,18 @@ window._spaNavigate = function (path) {
       }
     });
 
-    // Close the sticky when an internal link inside it is clicked;
-    // let Obsidian's native SPA router handle the actual navigation.
+    // Handle internal link clicks — use SPA navigation helper
     sticky.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link');
       if (link) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
         closeSticky();
+        var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
+        if (href) {
+          var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//,'').replace(/\+/g, ' ');
+          window._spaNavigate(path);
+        }
       }
     });
 
@@ -3810,14 +3817,20 @@ window._spaNavigate = function (path) {
     document.body.appendChild(footer);
     container._footerEl = footer;
 
-    // Close menus when an internal link in the footer is clicked;
-    // let Obsidian's native SPA router handle the actual navigation.
+    // Handle SPA navigation on internal links in the footer
     footer.addEventListener('click', function (e) {
       var link = e.target.closest('a.internal-link');
       if (link) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
         footer.querySelectorAll('.is-open').forEach(function (d) { d.classList.remove('is-open'); });
+        var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
+        if (href) {
+          var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//,'').replace(/\+/g, ' ');
+          window._spaNavigate(path);
+        }
       }
-    });
+    }, true);
 
     // Close footer menus on outside click
     if (!window._conceptFooterCloseRegistered) {
@@ -5294,6 +5307,14 @@ window._spaNavigate = function (path) {
     certBtn.className = 'sidebar-tabs__cert-btn';
     certBtn.title = 'View certification requirements';
     certBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+    certBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
+      if (track && track.certPath) {
+        window._spaNavigate(track.certPath);
+      }
+    }, true);
     selectRow.appendChild(certBtn);
 
     function updateCertBtn() {
@@ -5404,6 +5425,11 @@ window._spaNavigate = function (path) {
             nameEl.className = 'exams-panel__name internal-link';
             nameEl.setAttribute('data-href', item.path);
             nameEl.href = '/' + item.path.replace(/ /g, '+');
+            nameEl.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              window._spaNavigate(item.path);
+            }, true);
           } else {
             nameEl = document.createElement('span');
             nameEl.className = 'exams-panel__name';
@@ -5645,18 +5671,17 @@ window._spaNavigate = function (path) {
           nameEl.innerHTML = highlightMatch(item.name, term);
           result.appendChild(nameEl);
 
-          // Only intercept concept clicks (to open in split-pane);
-          // all other clicks fall through to Obsidian's native SPA router.
-          if (cat === 'concept') {
-            result.addEventListener('click', function (e) {
-              if (item.path && typeof window._openConceptPopup === 'function') {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
-                window._openConceptPopup(conceptPath);
-              }
-            }, true);
-          }
+          result.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            // Open concepts in the split-pane instead of navigating
+            if (cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
+              var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
+              window._openConceptPopup(conceptPath);
+            } else {
+              window._spaNavigate(item.path);
+            }
+          }, true);
 
           result.addEventListener('mouseenter', function () {
             selectedIdx = resultEls.indexOf(result);
@@ -5869,6 +5894,10 @@ window._spaNavigate = function (path) {
         tab.classList.add('internal-link');
         tab.setAttribute('data-href', exam.path);
         tab.href = '/' + exam.path.replace(/ /g, '+');
+        tab.addEventListener('click', function (e) {
+          e.preventDefault();
+          window._spaNavigate(exam.path);
+        }, true);
       } else {
         tab.href = '#';
         tab.addEventListener('click', function (e) { e.preventDefault(); });

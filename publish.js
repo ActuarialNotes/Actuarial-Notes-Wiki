@@ -6807,6 +6807,10 @@ var SoundFX = (function () {
     attachObserver();
   }
 
+  // Expose for cross-IIFE use (Research Concept 404 workflow)
+  window._getVaultIndex = getVaultIndex;
+  window._extractSiteId = extractSiteId;
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       setTimeout(init, 200);
@@ -6818,91 +6822,531 @@ var SoundFX = (function () {
 
 
 /* ===========================================================
-   CONTRIBUTE+ (NOT FOUND PAGE)
-   Replaces Obsidian's default 404 with a friendly page that
-   encourages users to request or contribute content.
+   RESEARCH CONCEPT (NOT FOUND PAGE)
+   Replaces Obsidian's default 404 with an AI-powered concept
+   research workflow: pick context files, generate a definition.
    =========================================================== */
 (function () {
   'use strict';
 
-  var CONTRIBUTE_CLASS = 'contribute-plus';
-  var GITHUB_REPO = 'https://github.com/ActuarialNotes/Actuarial-Notes-Wiki';
+  var RC = 'research-concept';
+  var INVITE_KEY = 'actuarial-notes-invite-code';
+  var API_URL = 'https://actuarial-notes-wiki-server.vercel.app/api/chat';
+  var MAX_FILES = 8;
+
+  /* ---- State ---- */
+  var state = 'initial'; // initial | invite | select | loading | result
+  var selectedFiles = [];  // [{ name, path }]
+  var resultMarkdown = '';
+  var lastPath = '';
+
+  /* ---- SVG icons ---- */
+  var SVG_SEARCH = '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><line x1="30" y1="30" x2="42" y2="42"/></svg>';
+  var SVG_RESEARCH = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="6"/><line x1="13" y1="13" x2="18" y2="18"/><line x1="8.5" y1="5.5" x2="8.5" y2="11.5"/><line x1="5.5" y1="8.5" x2="11.5" y2="8.5"/></svg>';
+
+  /* ---- Helpers ---- */
+  function esc(s) { return s.replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
   function getPageName() {
-    var path = decodeURIComponent(
-      window.location.pathname.replace(/^\//, '').replace(/\+/g, ' ')
-    );
-    return path || 'Unknown Page';
+    var p = decodeURIComponent(window.location.pathname.replace(/^\//, '').replace(/\+/g, ' '));
+    return p || 'Unknown Page';
   }
 
+  function getConceptName() {
+    var name = getPageName();
+    name = name.replace(/^Concepts\//, '');
+    return name;
+  }
+
+  function getInviteCode() {
+    try { return localStorage.getItem(INVITE_KEY) || ''; } catch (e) { return ''; }
+  }
+
+  function setInviteCode(code) {
+    try { localStorage.setItem(INVITE_KEY, code); } catch (e) {}
+  }
+
+  function extractSiteIdLocal() {
+    if (typeof window._extractSiteId === 'function') return window._extractSiteId();
+    if (window.publish && window.publish.siteId) return window.publish.siteId;
+    return null;
+  }
+
+  function fetchFileContent(filePath) {
+    var siteId = extractSiteIdLocal();
+    if (!siteId) return Promise.resolve(null);
+    var path = filePath;
+    if (!/\.md$/.test(path)) path = path + '.md';
+    var url = 'https://publish-01.obsidian.md/access/' + siteId + '/' + encodeURIComponent(path);
+    return fetch(url).then(function (r) { return r.ok ? r.text() : null; }).catch(function () { return null; });
+  }
+
+  /* ---- Markdown to HTML renderer ---- */
+  function renderMd(md) {
+    var html = md;
+    // Code blocks first (preserve from further processing)
+    var codeBlocks = [];
+    html = html.replace(/```(\w*)\n([\s\S]*?)```/g, function (_, lang, code) {
+      var idx = codeBlocks.length;
+      codeBlocks.push('<pre><code>' + esc(code.trim()) + '</code></pre>');
+      return '\x00CB' + idx + '\x00';
+    });
+    // Display math $$...$$ (multiline)
+    html = html.replace(/\$\$([\s\S]*?)\$\$/g, function (_, m) {
+      return '<div class="math-display">$$' + m + '$$</div>';
+    });
+    // Inline math $...$
+    html = html.replace(/\$([^\$\n]+)\$/g, function (_, m) {
+      return '<span class="math-inline">$' + m + '$</span>';
+    });
+    // Headings
+    html = html.replace(/^######\s+(.+)$/gm, '<h6>$1</h6>');
+    html = html.replace(/^#####\s+(.+)$/gm, '<h5>$1</h5>');
+    html = html.replace(/^####\s+(.+)$/gm, '<h4>$1</h4>');
+    html = html.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^#\s+(.+)$/gm, '<h1>$1</h1>');
+    // Highlights ==text==
+    html = html.replace(/==([^=]+)==/g, '<mark>$1</mark>');
+    // Bold **text**
+    html = html.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
+    // Italic *text*
+    html = html.replace(/(?<!\*)\*([^\*]+)\*(?!\*)/g, '<em>$1</em>');
+    // Inline code `text`
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // Wikilinks [[target|display]] or [[target]]
+    html = html.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, function (_, target, display) {
+      var href = '/' + target.replace(/ /g, '+');
+      return '<a class="internal-link" href="' + href + '">' + display + '</a>';
+    });
+    html = html.replace(/\[\[([^\]]+)\]\]/g, function (_, target) {
+      var href = '/' + target.replace(/ /g, '+');
+      var display = target.replace(/^.*\//, '');
+      return '<a class="internal-link" href="' + href + '">' + display + '</a>';
+    });
+    // Blockquotes (simple, one level)
+    html = html.replace(/^>\s?(.*)$/gm, '<blockquote>$1</blockquote>');
+    html = html.replace(/<\/blockquote>\n<blockquote>/g, '\n');
+    // Unordered lists
+    html = html.replace(/(^[-*]\s+.+(\n|$))+/gm, function (block) {
+      var items = block.trim().split('\n').map(function (line) {
+        return '<li>' + line.replace(/^[-*]\s+/, '') + '</li>';
+      }).join('');
+      return '<ul>' + items + '</ul>';
+    });
+    // Ordered lists
+    html = html.replace(/(^\d+\.\s+.+(\n|$))+/gm, function (block) {
+      var items = block.trim().split('\n').map(function (line) {
+        return '<li>' + line.replace(/^\d+\.\s+/, '') + '</li>';
+      }).join('');
+      return '<ol>' + items + '</ol>';
+    });
+    // Paragraphs: wrap remaining loose lines
+    html = html.replace(/^(?!<[a-z]|[\x00]|\s*$)(.+)$/gm, '<p>$1</p>');
+    // Restore code blocks
+    html = html.replace(/\x00CB(\d+)\x00/g, function (_, idx) {
+      return codeBlocks[parseInt(idx, 10)] || '';
+    });
+    return html;
+  }
+
+  /* ---- System prompt ---- */
+  function buildSystemPrompt(conceptName) {
+    return 'You are an actuarial science expert writing for a study wiki. Generate a concept definition page for "' + conceptName + '" in Obsidian-flavored markdown.\n\n' +
+      'Format:\n' +
+      '# ' + conceptName + '\n\n' +
+      '## Definition\n' +
+      'A concise definition using ==highlights== for key terms.\n\n' +
+      '## Key Properties\n' +
+      'Important properties with LaTeX formulas ($$) where appropriate.\n\n' +
+      '## Example\n' +
+      'A worked example demonstrating the concept.\n\n' +
+      '## Related Concepts\n' +
+      'Bulleted [[wikilinks]] to related concepts.\n\n' +
+      'Rules:\n' +
+      '- Ground your definition in the provided context documents when available\n' +
+      '- Use $$ for display math and $ for inline math\n' +
+      '- Use ==highlights== for key terms in the definition\n' +
+      '- Keep it concise and exam-focused\n' +
+      '- If context is insufficient, provide the best definition you can and note any gaps';
+  }
+
+  /* ---- 404 detection ---- */
   function isNotFound() {
-    if (document.querySelector('.' + CONTRIBUTE_CLASS)) return false;
-
-    var renderer = document.querySelector('.markdown-preview-view')
-                || document.querySelector('.publish-renderer');
+    if (document.querySelector('.' + RC)) return false;
+    var renderer = document.querySelector('.markdown-preview-view') || document.querySelector('.publish-renderer');
     if (!renderer) return false;
-
     var text = renderer.textContent.trim();
     if (text === '' || /page not found/i.test(text)) return true;
-
-    var hasContent = renderer.querySelector(
-      'p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, .callout, pre'
-    );
+    var hasContent = renderer.querySelector('p, h1, h2, h3, h4, h5, h6, ul, ol, table, blockquote, .callout, pre');
     return !hasContent;
   }
 
-  function inject() {
+  /* ---- Render states ---- */
+  function render() {
     if (!isNotFound()) return;
-
-    var renderer = document.querySelector('.markdown-preview-view')
-                || document.querySelector('.publish-renderer');
+    var renderer = document.querySelector('.markdown-preview-view') || document.querySelector('.publish-renderer');
     if (!renderer) return;
 
-    var pageName = getPageName();
+    var currentPath = window.location.pathname;
+    if (currentPath !== lastPath) {
+      state = 'initial';
+      selectedFiles = [];
+      resultMarkdown = '';
+      lastPath = currentPath;
+    }
 
     renderer.innerHTML = '';
     var container = document.createElement('div');
-    container.className = CONTRIBUTE_CLASS;
+    container.className = RC;
 
-    container.innerHTML =
-      '<div class="' + CONTRIBUTE_CLASS + '__icon">' +
-        '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-          '<circle cx="24" cy="24" r="20"/>' +
-          '<line x1="24" y1="16" x2="24" y2="28"/>' +
-          '<circle cx="24" cy="34" r="1.5" fill="currentColor" stroke="none"/>' +
-        '</svg>' +
-      '</div>' +
-      '<h1 class="' + CONTRIBUTE_CLASS + '__title">Page Not Found</h1>' +
-      '<p class="' + CONTRIBUTE_CLASS + '__page-name">' +
-        '<code>' + pageName.replace(/</g, '&lt;') + '</code>' +
-      '</p>' +
-      '<p class="' + CONTRIBUTE_CLASS + '__message">' +
-        'This page doesn\u2019t exist yet \u2014 but you can help change that!' +
-      '</p>' +
-      '<div class="' + CONTRIBUTE_CLASS + '__actions">' +
-        '<a class="' + CONTRIBUTE_CLASS + '__btn ' + CONTRIBUTE_CLASS + '__btn--primary" ' +
-          'href="' + GITHUB_REPO + '/issues/new?title=' + encodeURIComponent('Request: ' + pageName) + '&labels=content-request" ' +
-          'target="_blank" rel="noopener">' +
-          '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><line x1="10" y1="6" x2="10" y2="14"/><line x1="6" y1="10" x2="14" y2="10"/></svg>' +
-          ' Request This Page' +
-        '</a>' +
-        '<a class="' + CONTRIBUTE_CLASS + '__btn ' + CONTRIBUTE_CLASS + '__btn--secondary" ' +
-          'href="' + GITHUB_REPO + '#contributing" ' +
-          'target="_blank" rel="noopener">' +
-          '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3l2 2-9 9H6v-2L15 3z"/><line x1="12" y1="6" x2="14" y2="8"/></svg>' +
-          ' Contribute' +
-        '</a>' +
-      '</div>' +
-      '<p class="' + CONTRIBUTE_CLASS + '__hint">' +
-        'Know about this topic? We\u2019re actively looking for volunteer contributors.' +
-      '</p>';
+    if (state === 'initial') renderInitial(container);
+    else if (state === 'invite') renderInvite(container);
+    else if (state === 'select') renderSelect(container);
+    else if (state === 'loading') renderLoading(container);
+    else if (state === 'result') renderResult(container);
 
     renderer.appendChild(container);
   }
 
+  function renderInitial(el) {
+    var conceptName = getConceptName();
+    el.innerHTML =
+      '<div class="' + RC + '__icon">' + SVG_SEARCH + '</div>' +
+      '<h1 class="' + RC + '__title">Page Not Found</h1>' +
+      '<p class="' + RC + '__page-name"><code>' + esc(getPageName()) + '</code></p>' +
+      '<p class="' + RC + '__message">This concept doesn\u2019t have a page yet.</p>' +
+      '<div class="' + RC + '__actions">' +
+        '<button class="' + RC + '__btn ' + RC + '__btn--primary" data-action="research">' +
+          SVG_RESEARCH + ' Research Concept' +
+        '</button>' +
+      '</div>';
+
+    el.querySelector('[data-action="research"]').addEventListener('click', function () {
+      if (getInviteCode()) {
+        state = 'select';
+      } else {
+        state = 'invite';
+      }
+      render();
+    });
+  }
+
+  function renderInvite(el) {
+    el.innerHTML =
+      '<div class="' + RC + '__icon">' + SVG_SEARCH + '</div>' +
+      '<h1 class="' + RC + '__title">Enter Invite Code</h1>' +
+      '<p class="' + RC + '__message">An invite code is required to use AI research.</p>' +
+      '<div class="' + RC + '__invite">' +
+        '<input class="' + RC + '__input" type="text" placeholder="Invite code" autocomplete="off" />' +
+        '<p class="' + RC + '__error" style="display:none"></p>' +
+        '<button class="' + RC + '__btn ' + RC + '__btn--primary" data-action="submit-code">Continue</button>' +
+        '<button class="' + RC + '__btn ' + RC + '__btn--secondary" data-action="back">Back</button>' +
+      '</div>';
+
+    var input = el.querySelector('.' + RC + '__input');
+    var errorEl = el.querySelector('.' + RC + '__error');
+    var submitBtn = el.querySelector('[data-action="submit-code"]');
+
+    function submit() {
+      var code = input.value.trim();
+      if (!code) {
+        errorEl.textContent = 'Please enter an invite code.';
+        errorEl.style.display = '';
+        return;
+      }
+      setInviteCode(code);
+      state = 'select';
+      render();
+    }
+
+    submitBtn.addEventListener('click', submit);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') submit();
+    });
+    el.querySelector('[data-action="back"]').addEventListener('click', function () {
+      state = 'initial';
+      render();
+    });
+    setTimeout(function () { input.focus(); }, 50);
+  }
+
+  function renderSelect(el) {
+    var conceptName = getConceptName();
+    el.style.alignItems = 'center';
+
+    el.innerHTML =
+      '<h1 class="' + RC + '__title">Research: ' + esc(conceptName) + '</h1>' +
+      '<p class="' + RC + '__message">Select context files to ground the AI definition (max ' + MAX_FILES + ').</p>' +
+      '<div class="' + RC + '__file-picker">' +
+        '<input class="' + RC + '__search-input" type="text" placeholder="Search exams, concepts, documents\u2026" />' +
+        '<div class="' + RC + '__search-results"></div>' +
+        '<div class="' + RC + '__chips"></div>' +
+      '</div>' +
+      '<div class="' + RC + '__actions">' +
+        '<button class="' + RC + '__btn ' + RC + '__btn--primary" data-action="generate" disabled>Generate Definition</button>' +
+        '<button class="' + RC + '__btn ' + RC + '__btn--secondary" data-action="skip">Skip \u2014 Generate Without Context</button>' +
+      '</div>';
+
+    var searchInput = el.querySelector('.' + RC + '__search-input');
+    var resultsEl = el.querySelector('.' + RC + '__search-results');
+    var chipsEl = el.querySelector('.' + RC + '__chips');
+    var generateBtn = el.querySelector('[data-action="generate"]');
+
+    function updateChips() {
+      chipsEl.innerHTML = '';
+      selectedFiles.forEach(function (f, idx) {
+        var chip = document.createElement('span');
+        chip.className = RC + '__chip';
+        chip.innerHTML = esc(f.name) + ' <span class="' + RC + '__chip-x" data-idx="' + idx + '">\u00d7</span>';
+        chipsEl.appendChild(chip);
+      });
+      chipsEl.querySelectorAll('.' + RC + '__chip-x').forEach(function (x) {
+        x.addEventListener('click', function () {
+          selectedFiles.splice(parseInt(x.getAttribute('data-idx'), 10), 1);
+          updateChips();
+          doSearch(searchInput.value);
+        });
+      });
+      generateBtn.disabled = selectedFiles.length === 0;
+    }
+
+    function isSelected(path) {
+      return selectedFiles.some(function (f) { return f.path === path; });
+    }
+
+    function toggleFile(item) {
+      if (isSelected(item.path)) {
+        selectedFiles = selectedFiles.filter(function (f) { return f.path !== item.path; });
+      } else if (selectedFiles.length < MAX_FILES) {
+        selectedFiles.push({ name: item.name, path: item.path });
+      }
+      updateChips();
+      doSearch(searchInput.value);
+    }
+
+    var CAT_ORDER = ['exam', 'concept', 'document'];
+    var CAT_LABELS = { exam: 'Exams', concept: 'Concepts', document: 'Documents' };
+
+    function doSearch(query) {
+      var term = query.trim().toLowerCase();
+      resultsEl.innerHTML = '';
+      if (!term) return;
+
+      var allItems = [];
+      if (typeof window._getVaultIndex === 'function') {
+        allItems = window._getVaultIndex(function (updated) {
+          if (searchInput.value.trim().toLowerCase() === term) {
+            renderSearchResults(updated, term);
+          }
+        });
+      }
+      renderSearchResults(allItems, term);
+    }
+
+    function renderSearchResults(allItems, term) {
+      var grouped = {};
+      CAT_ORDER.forEach(function (c) { grouped[c] = []; });
+      for (var i = 0; i < allItems.length; i++) {
+        var item = allItems[i];
+        if (!item.category || !grouped[item.category]) continue;
+        if (item.name.toLowerCase().indexOf(term) !== -1 && grouped[item.category].length < 15) {
+          grouped[item.category].push(item);
+        }
+      }
+
+      resultsEl.innerHTML = '';
+      var total = 0;
+      CAT_ORDER.forEach(function (cat) {
+        if (grouped[cat].length === 0) return;
+        total += grouped[cat].length;
+        var label = document.createElement('div');
+        label.className = RC + '__search-group-label';
+        label.textContent = CAT_LABELS[cat];
+        resultsEl.appendChild(label);
+        grouped[cat].forEach(function (item) {
+          var row = document.createElement('div');
+          row.className = RC + '__search-item' + (isSelected(item.path) ? ' is-selected' : '');
+          row.innerHTML = '<input type="checkbox"' + (isSelected(item.path) ? ' checked' : '') +
+            (selectedFiles.length >= MAX_FILES && !isSelected(item.path) ? ' disabled' : '') +
+            ' /> ' + esc(item.name);
+          row.addEventListener('click', function (e) {
+            e.preventDefault();
+            toggleFile(item);
+          });
+          resultsEl.appendChild(row);
+        });
+      });
+      if (total === 0 && term) {
+        var empty = document.createElement('div');
+        empty.style.cssText = 'padding:0.8em;color:var(--text-faint);font-size:0.9rem;';
+        empty.textContent = 'No results found';
+        resultsEl.appendChild(empty);
+      }
+    }
+
+    searchInput.addEventListener('input', function () { doSearch(searchInput.value); });
+    setTimeout(function () { searchInput.focus(); }, 50);
+
+    generateBtn.addEventListener('click', function () {
+      state = 'loading';
+      render();
+      doGenerate(false);
+    });
+
+    el.querySelector('[data-action="skip"]').addEventListener('click', function () {
+      selectedFiles = [];
+      state = 'loading';
+      render();
+      doGenerate(true);
+    });
+
+    updateChips();
+  }
+
+  function renderLoading(el) {
+    el.innerHTML =
+      '<div class="' + RC + '__loading">' +
+        '<div class="' + RC + '__spinner"></div>' +
+        '<p class="' + RC + '__progress">Preparing\u2026</p>' +
+      '</div>';
+  }
+
+  function setProgress(msg) {
+    var p = document.querySelector('.' + RC + '__progress');
+    if (p) p.textContent = msg;
+  }
+
+  function doGenerate(skipContext) {
+    var conceptName = getConceptName();
+    var systemPrompt = buildSystemPrompt(conceptName);
+
+    if (skipContext || selectedFiles.length === 0) {
+      callApi(systemPrompt, 'Define the concept: ' + conceptName);
+      return;
+    }
+
+    // Fetch selected files
+    var fetched = [];
+    var total = selectedFiles.length;
+    var done = 0;
+
+    selectedFiles.forEach(function (f, idx) {
+      setProgress('Fetching files (' + (done + 1) + '/' + total + ')\u2026');
+      fetchFileContent(f.path).then(function (content) {
+        fetched[idx] = { name: f.name, content: content };
+        done++;
+        setProgress('Fetching files (' + Math.min(done + 1, total) + '/' + total + ')\u2026');
+        if (done === total) {
+          setProgress('Generating definition\u2026');
+          var contextText = fetched.map(function (f) {
+            return f.content ? '--- ' + f.name + ' ---\n' + f.content : '';
+          }).filter(Boolean).join('\n\n');
+          var userMsg = 'Define the concept: ' + conceptName;
+          if (contextText) {
+            userMsg += '\n\nContext documents:\n\n' + contextText;
+          }
+          callApi(systemPrompt, userMsg);
+        }
+      });
+    });
+  }
+
+  function callApi(systemPrompt, text) {
+    var code = getInviteCode();
+    fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Invite-Code': code
+      },
+      body: JSON.stringify({ text: text, systemPrompt: systemPrompt })
+    })
+    .then(function (r) {
+      if (r.status === 401) {
+        // Bad invite code — clear it and go back
+        setInviteCode('');
+        state = 'invite';
+        render();
+        var errEl = document.querySelector('.' + RC + '__error');
+        if (errEl) {
+          errEl.textContent = 'Invalid invite code. Please try again.';
+          errEl.style.display = '';
+        }
+        return null;
+      }
+      if (r.status === 429) {
+        throw new Error('Rate limit exceeded. Please wait and try again.');
+      }
+      if (!r.ok) throw new Error('AI service error (' + r.status + '). Please try again.');
+      return r.json();
+    })
+    .then(function (data) {
+      if (!data) return; // handled above (401)
+      resultMarkdown = data.text || '';
+      if (!resultMarkdown) throw new Error('Empty response from AI.');
+      state = 'result';
+      render();
+    })
+    .catch(function (err) {
+      state = 'initial';
+      render();
+      // Show error in the initial view
+      var container = document.querySelector('.' + RC);
+      if (container) {
+        var errP = document.createElement('p');
+        errP.className = RC + '__error';
+        errP.textContent = err.message || 'Something went wrong.';
+        container.appendChild(errP);
+      }
+    });
+  }
+
+  function renderResult(el) {
+    el.style.alignItems = 'stretch';
+    el.innerHTML =
+      '<div class="' + RC + '__result">' + renderMd(resultMarkdown) + '</div>' +
+      '<div class="' + RC + '__result-actions">' +
+        '<button class="' + RC + '__btn ' + RC + '__btn--secondary" data-action="copy">' +
+          'Copy Markdown' +
+        '</button>' +
+        '<button class="' + RC + '__btn ' + RC + '__btn--secondary" data-action="restart">' +
+          'Start Over' +
+        '</button>' +
+      '</div>';
+
+    el.querySelector('[data-action="copy"]').addEventListener('click', function () {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(resultMarkdown).then(function () {
+          var btn = el.querySelector('[data-action="copy"]');
+          btn.textContent = 'Copied!';
+          setTimeout(function () { btn.textContent = 'Copy Markdown'; }, 2000);
+        });
+      }
+    });
+
+    el.querySelector('[data-action="restart"]').addEventListener('click', function () {
+      state = 'initial';
+      selectedFiles = [];
+      resultMarkdown = '';
+      render();
+    });
+
+    // Trigger MathJax/KaTeX re-render if available
+    try {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise();
+      } else if (window.renderMathInElement) {
+        var resultEl = el.querySelector('.' + RC + '__result');
+        if (resultEl) window.renderMathInElement(resultEl);
+      }
+    } catch (e) {}
+  }
+
+  /* ---- Navigation detection ---- */
   function check() {
-    setTimeout(inject, 300);
-    setTimeout(inject, 800);
+    setTimeout(render, 300);
+    setTimeout(render, 800);
   }
 
   window.addEventListener('popstate', check);
@@ -6912,12 +7356,11 @@ var SoundFX = (function () {
   });
 
   function attachObserver() {
-    var target = document.querySelector('.markdown-preview-view')
-              || document.querySelector('.publish-renderer');
+    var target = document.querySelector('.markdown-preview-view') || document.querySelector('.publish-renderer');
     if (target) {
       var observer = new MutationObserver(function () {
-        clearTimeout(window._contributePlusTimeout);
-        window._contributePlusTimeout = setTimeout(inject, 300);
+        clearTimeout(window._researchConceptTimeout);
+        window._researchConceptTimeout = setTimeout(render, 300);
       });
       observer.observe(target, { childList: true, subtree: true });
     } else {

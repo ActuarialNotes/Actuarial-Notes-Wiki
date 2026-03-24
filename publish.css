@@ -3152,7 +3152,11 @@ a.external-link[href*=".pdf#" i]::before {
 }
 
 .markdown-rendered a.concept-active-link,
+.markdown-rendered a.concept-active-link:visited,
+.markdown-rendered a.concept-active-link:hover,
 .site-body a.concept-active-link,
+.site-body a.concept-active-link:visited,
+.site-body a.concept-active-link:hover,
 a.concept-active-link {
   background: #ffffff;
   color: #000000 !important;
@@ -3165,7 +3169,11 @@ a.concept-active-link {
 }
 
 .theme-light .markdown-rendered a.concept-active-link,
+.theme-light .markdown-rendered a.concept-active-link:visited,
+.theme-light .markdown-rendered a.concept-active-link:hover,
 .theme-light .site-body a.concept-active-link,
+.theme-light .site-body a.concept-active-link:visited,
+.theme-light .site-body a.concept-active-link:hover,
 .theme-light a.concept-active-link {
   background: #000000;
   color: #ffffff !important;

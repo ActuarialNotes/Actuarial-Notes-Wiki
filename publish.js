@@ -231,7 +231,6 @@ window._spaNavigate = function (path) {
     }
     if (examInfo && examInfo.status === 'in_progress') {
       sticky.classList.add('is-in-progress');
-      if (pageEl) pageEl.classList.add('exam-in-progress');
     }
 
     var stickyBtn = document.createElement('button');
@@ -5793,13 +5792,10 @@ window._spaNavigate = function (path) {
     var sticky = document.querySelector('.exam-nav__sticky');
     if (!sticky) return;
     var info = window._getExamInfoByPage ? window._getExamInfoByPage() : null;
-    var pageEl = document.querySelector('.has-exam-nav');
     if (info && info.status === 'in_progress') {
       sticky.classList.add('is-in-progress');
-      if (pageEl) pageEl.classList.add('exam-in-progress');
     } else {
       sticky.classList.remove('is-in-progress');
-      if (pageEl) pageEl.classList.remove('exam-in-progress');
     }
   }
 
@@ -5907,7 +5903,6 @@ window._spaNavigate = function (path) {
     buildSidebarTabs();
     setTimeout(updatePersistentExamNavs, 300);
     setTimeout(updateExamLinkButtons, 350);
-    setTimeout(syncStickyExamNavStatus, 400);
   }
 
   // Expose API for cross-IIFE access
@@ -5938,7 +5933,6 @@ window._spaNavigate = function (path) {
     _currentPagePaths = {};
     setTimeout(updatePersistentExamNavs, 250);
     setTimeout(updateExamLinkButtons, 300);
-    setTimeout(syncStickyExamNavStatus, 350);
   });
   document.addEventListener('click', function (e) {
     var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
@@ -5950,8 +5944,6 @@ window._spaNavigate = function (path) {
       setTimeout(updatePersistentExamNavs, 600);
       setTimeout(updateExamLinkButtons, 350);
       setTimeout(updateExamLinkButtons, 650);
-      setTimeout(syncStickyExamNavStatus, 400);
-      setTimeout(syncStickyExamNavStatus, 700);
     }
   });
 

@@ -2301,6 +2301,9 @@ window._spaNavigate = function (path) {
   var currentIndex = -1;
   var isOpen = false;
   var isInitialized = false;
+  var paneMode = 'concept'; // 'concept' | 'resource'
+  var tocList = [];          // [{ el, text, level }, …] headings in resource iframe
+  var tocIndex = -1;         // current TOC heading index
 
   /* ---- SVGs ---- */
   var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
@@ -2429,20 +2432,44 @@ window._spaNavigate = function (path) {
             '.published-container { display: block !important; }';
           iDoc.head.appendChild(style);
 
-          // Intercept concept links inside iframe to navigate in-place
+          // Intercept concept and resource links inside iframe to navigate in-place
           iDoc.addEventListener('click', function (ev) {
             var a = ev.target.closest('a.internal-link, a[data-href]');
             if (!a) return;
             var href = a.getAttribute('data-href') || a.getAttribute('href') || '';
             var p = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
-            if (!p.match(/^Concepts\//i)) return;
-            ev.preventDefault();
-            ev.stopPropagation();
-            var list = buildConceptList(p);
-            var idx = findConceptIndex(list, p);
-            conceptList = list;
-            loadConcept(idx);
+
+            if (p.match(/^Concepts\//i)) {
+              ev.preventDefault();
+              ev.stopPropagation();
+              paneMode = 'concept';
+              if (learnedBtn) learnedBtn.style.display = '';
+              var list = buildConceptList(p);
+              var idx = findConceptIndex(list, p);
+              conceptList = list;
+              loadConcept(idx);
+              return;
+            }
+
+            // Resource link detection (year pattern)
+            if (isResourcePath(p)) {
+              ev.preventDefault();
+              ev.stopPropagation();
+              paneMode = 'resource';
+              if (learnedBtn) learnedBtn.style.display = 'none';
+              var rList = buildResourceList(p);
+              var rIdx = findResourceIndex(rList, p);
+              conceptList = rList;
+              loadConcept(rIdx);
+              return;
+            }
           }, true);
+
+          // Apply resource-specific formatting if in resource mode
+          if (paneMode === 'resource') {
+            injectResourceFormatting(iDoc);
+            buildTocFromIframe(iDoc);
+          }
         }
       } catch (e) { /* cross-origin — skip */ }
     });
@@ -2601,13 +2628,19 @@ window._spaNavigate = function (path) {
   /* -----------------------------------------------------------
      OPEN / CLOSE
      ----------------------------------------------------------- */
-  function openSplitPane(concepts, index) {
+  function openSplitPane(concepts, index, mode) {
     if (!isInitialized) createSplitPane();
     if (!centerCol) return;
 
     conceptList = concepts;
     currentIndex = index;
     isOpen = true;
+    paneMode = mode || 'concept';
+    tocList = [];
+    tocIndex = -1;
+
+    // Toggle learned button visibility based on mode
+    if (learnedBtn) learnedBtn.style.display = (paneMode === 'resource') ? 'none' : '';
 
     // Restore saved height
     var saved = localStorage.getItem('concept-split-height');
@@ -2670,11 +2703,19 @@ window._spaNavigate = function (path) {
     // Update nav state
     updateNavState();
 
-    // Highlight the active concept link in the exam syllabus
-    highlightActiveConceptLink();
+    // Highlight the active link in the exam syllabus / sources table
+    if (paneMode === 'resource') {
+      highlightActiveResourceLink();
+    } else {
+      highlightActiveConceptLink();
+    }
   }
 
   function navigatePopup(direction) {
+    if (paneMode === 'resource') {
+      navigateResourceToc(direction);
+      return;
+    }
     var newIndex = currentIndex + direction;
     if (newIndex < 0 || newIndex >= conceptList.length) return;
     loadConcept(newIndex);
@@ -2874,7 +2915,287 @@ window._spaNavigate = function (path) {
   }
 
   /* -----------------------------------------------------------
-     CLICK INTERCEPTOR — capture concept link clicks
+     RESOURCE HELPERS
+     ----------------------------------------------------------- */
+
+  /** Check if a path looks like a resource (year pattern or Resources/ prefix). */
+  function isResourcePath(path) {
+    if (/^Resources\//i.test(path)) return true;
+    if (/^Concepts\//i.test(path)) return false;
+    if (/^Exam[ s]/i.test(path)) return false;
+    // Year pattern in parentheses: "Title (Author - 2019)" or "Title (2019)"
+    if (/\([^)]*\d{4}[^)]*\)/.test(path)) return true;
+    // Variant: "Title - 2008"
+    if (/\s-\s\d{4}$/.test(path)) return true;
+    return false;
+  }
+
+  /** Build resource list from the Sources table on the current page. */
+  function buildResourceList(clickedPath) {
+    var content = topPane || document.querySelector('.markdown-rendered, .markdown-preview-view');
+    if (!content) return [{ name: clickedPath, path: clickedPath }];
+
+    // Find the Sources table: a table preceded by a heading containing "Sources"
+    var tables = content.querySelectorAll('table');
+    var sourcesTable = null;
+    for (var t = 0; t < tables.length; t++) {
+      var prev = tables[t].previousElementSibling;
+      while (prev && !/^H[1-6]$/.test(prev.tagName)) prev = prev.previousElementSibling;
+      if (prev && /sources/i.test(prev.textContent)) { sourcesTable = tables[t]; break; }
+    }
+
+    if (!sourcesTable) return [{ name: clickedPath, path: clickedPath }];
+
+    var rows = sourcesTable.querySelectorAll('tbody tr');
+    var list = [];
+    var seen = {};
+    for (var r = 0; r < rows.length; r++) {
+      var firstCell = rows[r].querySelector('td');
+      if (!firstCell) continue;
+      var link = firstCell.querySelector('a.internal-link');
+      if (!link) continue;
+      var href = link.getAttribute('data-href') || link.textContent.trim();
+      if (seen[href]) continue;
+      seen[href] = true;
+      list.push({ name: href, path: href });
+    }
+
+    // Ensure clicked resource is in the list
+    if (!seen[clickedPath]) {
+      list.push({ name: clickedPath, path: clickedPath });
+    }
+
+    return list.length ? list : [{ name: clickedPath, path: clickedPath }];
+  }
+
+  function findResourceIndex(list, clickedPath) {
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].path === clickedPath || list[i].name === clickedPath) return i;
+    }
+    return 0;
+  }
+
+  /** Inject hero layout (image left, metadata right) into resource iframe. */
+  function injectResourceFormatting(iDoc) {
+    var body = iDoc.querySelector('.markdown-preview-sizer') ||
+               iDoc.querySelector('.markdown-rendered') || iDoc.body;
+    if (!body) return;
+
+    // Find the first image
+    var firstImg = body.querySelector('img');
+    if (!firstImg) return;
+
+    // Parse metadata from page title or first h1
+    var titleText = '';
+    var h1 = body.querySelector('h1');
+    if (h1) {
+      titleText = h1.textContent.trim();
+    } else {
+      // Fallback to document title (strip site suffix)
+      titleText = (iDoc.title || '').replace(/\s*[-–|].*$/, '').trim();
+    }
+
+    var meta = { title: titleText, author: '', year: '', publisher: '' };
+
+    // Try "Title (Author - Year)"
+    var m = titleText.match(/^(.+?)\s*\(([^)]*?)\s*-\s*(\d{4})\)\s*$/);
+    if (m) {
+      meta.title = m[1].trim();
+      meta.author = m[2].trim();
+      meta.year = m[3];
+    } else {
+      // Try "Title - Year"
+      var m2 = titleText.match(/^(.+?)\s*-\s*(\d{4})\s*$/);
+      if (m2) {
+        meta.title = m2[1].trim();
+        meta.year = m2[2];
+      } else {
+        // Try "Title (Year)"
+        var m3 = titleText.match(/^(.+?)\s*\((\d{4})\)\s*$/);
+        if (m3) {
+          meta.title = m3[1].trim();
+          meta.year = m3[2];
+        }
+      }
+    }
+
+    // Check for publisher in content
+    var publisherEl = body.querySelector('.resource-publisher, [data-publisher]');
+    if (publisherEl) meta.publisher = publisherEl.textContent.trim();
+
+    // Get the image's parent container
+    var imgParent = firstImg.closest('p, div.image-embed, span.image-embed') || firstImg.parentNode;
+
+    // Create hero layout
+    var hero = iDoc.createElement('div');
+    hero.className = 'resource-hero';
+
+    var imgWrap = iDoc.createElement('div');
+    imgWrap.className = 'resource-hero__img';
+    imgWrap.appendChild(firstImg.cloneNode(true));
+
+    var metaWrap = iDoc.createElement('div');
+    metaWrap.className = 'resource-hero__meta';
+
+    var titleH = iDoc.createElement('h1');
+    titleH.className = 'resource-hero__title';
+    titleH.textContent = meta.title;
+    metaWrap.appendChild(titleH);
+
+    if (meta.author) {
+      var authorP = iDoc.createElement('p');
+      authorP.className = 'resource-hero__detail';
+      authorP.innerHTML = '<strong>Author</strong> ' + escapeHtml(meta.author);
+      metaWrap.appendChild(authorP);
+    }
+    if (meta.year) {
+      var yearP = iDoc.createElement('p');
+      yearP.className = 'resource-hero__detail';
+      yearP.innerHTML = '<strong>Year</strong> ' + escapeHtml(meta.year);
+      metaWrap.appendChild(yearP);
+    }
+    if (meta.publisher) {
+      var pubP = iDoc.createElement('p');
+      pubP.className = 'resource-hero__detail';
+      pubP.innerHTML = '<strong>Publisher</strong> ' + escapeHtml(meta.publisher);
+      metaWrap.appendChild(pubP);
+    }
+
+    hero.appendChild(imgWrap);
+    hero.appendChild(metaWrap);
+
+    // Remove original image from flow
+    if (imgParent && imgParent !== body) {
+      imgParent.style.display = 'none';
+    } else {
+      firstImg.style.display = 'none';
+    }
+
+    // Hide the original h1 since we show it in the hero
+    if (h1) h1.style.display = 'none';
+
+    // Insert hero at the top of the content
+    body.insertBefore(hero, body.firstChild);
+
+    // Inject hero CSS
+    var heroStyle = iDoc.createElement('style');
+    heroStyle.textContent =
+      '.resource-hero { display: flex; gap: 24px; align-items: flex-start; padding: 20px 0; margin-bottom: 8px; }' +
+      '.resource-hero__img { flex-shrink: 0; width: 40%; max-width: 280px; min-width: 120px; }' +
+      '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; }' +
+      '.resource-hero__meta { flex: 1; min-width: 0; padding-top: 8px; }' +
+      '.resource-hero__title { font-size: 1.5rem; font-weight: 700; margin: 0 0 12px; line-height: 1.3; color: var(--text, #cdd6f4); }' +
+      '.resource-hero__detail { color: var(--text-muted, #888); margin: 6px 0; font-size: 0.95rem; }' +
+      '.resource-hero__detail strong { color: var(--text, #cdd6f4); margin-right: 6px; }' +
+      '@media(max-width:500px) { .resource-hero { flex-direction: column; } .resource-hero__img { width: 60%; max-width: none; } }';
+    iDoc.head.appendChild(heroStyle);
+  }
+
+  /** Simple HTML escape for metadata text. */
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /** Extract headings from the resource iframe to build a TOC navigation list. */
+  function buildTocFromIframe(iDoc) {
+    var body = iDoc.querySelector('.markdown-preview-sizer') ||
+               iDoc.querySelector('.markdown-rendered') || iDoc.body;
+    if (!body) return;
+
+    var headings = body.querySelectorAll('h1, h2, h3');
+    tocList = [];
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      // Skip the resource-hero injected title
+      if (h.closest('.resource-hero')) continue;
+      // Skip hidden headings (the original h1 we hid)
+      if (h.style.display === 'none') continue;
+      tocList.push({ el: h, text: h.textContent.trim(), level: parseInt(h.tagName.charAt(1), 10) });
+    }
+    tocIndex = tocList.length > 0 ? 0 : -1;
+    updateNavStateResource();
+  }
+
+  /** Navigate TOC by scrolling to a heading within the resource iframe. */
+  function navigateResourceToc(direction) {
+    if (tocList.length === 0) return;
+    var newIdx = tocIndex + direction;
+    if (newIdx < 0 || newIdx >= tocList.length) return;
+    tocIndex = newIdx;
+    try {
+      tocList[tocIndex].el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) { /* element may no longer exist */ }
+    updateNavStateResource();
+  }
+
+  /** Update nav buttons/label for resource TOC mode. */
+  function updateNavStateResource() {
+    if (tocList.length === 0) {
+      prevBtn.disabled = true;
+      prevBtn.classList.add('is-disabled');
+      nextBtn.disabled = true;
+      nextBtn.classList.add('is-disabled');
+      posLabel.textContent = '';
+      var pl = prevBtn.querySelector('span');
+      var nl = nextBtn.querySelector('span');
+      if (pl) pl.textContent = '';
+      if (nl) nl.textContent = '';
+      return;
+    }
+
+    var hasPrev = tocIndex > 0;
+    var hasNext = tocIndex < tocList.length - 1;
+
+    prevBtn.disabled = !hasPrev;
+    prevBtn.classList.toggle('is-disabled', !hasPrev);
+    nextBtn.disabled = !hasNext;
+    nextBtn.classList.toggle('is-disabled', !hasNext);
+
+    posLabel.textContent = (tocIndex + 1) + ' of ' + tocList.length;
+
+    var prevLabel = prevBtn.querySelector('span');
+    var nextLabel = nextBtn.querySelector('span');
+    if (prevLabel) prevLabel.textContent = hasPrev ? tocList[tocIndex - 1].text : '';
+    if (nextLabel) nextLabel.textContent = hasNext ? tocList[tocIndex + 1].text : '';
+  }
+
+  /** Highlight the active resource link in the Sources table. */
+  function highlightActiveResourceLink() {
+    clearConceptHighlight();
+
+    if (currentIndex < 0 || currentIndex >= conceptList.length) return;
+    if (!topPane) return;
+
+    var resource = conceptList[currentIndex];
+    var links = topPane.querySelectorAll('a.internal-link');
+    var matchedLink = null;
+    for (var i = 0; i < links.length; i++) {
+      var href = links[i].getAttribute('data-href') || '';
+      if (href === resource.name || href === resource.path) {
+        matchedLink = links[i];
+        break;
+      }
+    }
+    if (!matchedLink) return;
+
+    matchedLink.classList.add('concept-active-link');
+
+    setTimeout(function () {
+      var pane = topPane;
+      var linkRect = matchedLink.getBoundingClientRect();
+      var paneRect = pane.getBoundingClientRect();
+      var buffer = 60;
+
+      if (linkRect.bottom + buffer > paneRect.bottom) {
+        pane.scrollBy({ top: linkRect.bottom - paneRect.bottom + buffer, behavior: 'smooth' });
+      } else if (linkRect.top < paneRect.top) {
+        pane.scrollBy({ top: linkRect.top - paneRect.top - buffer, behavior: 'smooth' });
+      }
+    }, 80);
+  }
+
+  /* -----------------------------------------------------------
+     CLICK INTERCEPTOR — capture concept & resource link clicks
      ----------------------------------------------------------- */
   function installClickInterceptor() {
     // Use window (not document) capture phase so we fire before Obsidian's
@@ -2887,16 +3208,26 @@ window._spaNavigate = function (path) {
       var rawHref = link.getAttribute('href') || '';
       var path = (dataHref || rawHref).replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
 
-      // Only intercept concept links — check both data-href and href
-      // (syllabus links may have data-href="Probability" but href="/Concepts/Probability")
-      if (!path.match(/^Concepts\//i)) {
+      // Determine if this is a concept or resource link
+      var isConcept = false;
+      var isResource = false;
+
+      if (path.match(/^Concepts\//i)) {
+        isConcept = true;
+      } else {
         var altPath = rawHref.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
         if (altPath.match(/^Concepts\//i)) {
           path = altPath;
-        } else {
-          return;
+          isConcept = true;
+        } else if (isResourcePath(path)) {
+          isResource = true;
+        } else if (isResourcePath(altPath)) {
+          path = altPath;
+          isResource = true;
         }
       }
+
+      if (!isConcept && !isResource) return;
 
       // Don't intercept if inside the split-pane bottom (iframe links)
       if (link.closest('.concept-split__bottom')) return;
@@ -2908,21 +3239,36 @@ window._spaNavigate = function (path) {
       e.stopPropagation();
       e.stopImmediatePropagation();
 
-      var list = buildConceptList(path);
-      var idx = findConceptIndex(list, path);
-
       // Close exam-nav sticky if open
       var sticky = document.querySelector('.exam-nav__sticky.is-open');
       if (sticky) sticky.classList.remove('is-open');
       var backdrop = document.querySelector('.exam-nav-backdrop');
       if (backdrop) backdrop.classList.remove('is-visible');
 
-      if (isOpen) {
-        // Already open — just navigate to the new concept in-place
-        conceptList = list;
-        loadConcept(idx);
+      if (isResource) {
+        var rList = buildResourceList(path);
+        var rIdx = findResourceIndex(rList, path);
+        if (isOpen) {
+          paneMode = 'resource';
+          if (learnedBtn) learnedBtn.style.display = 'none';
+          tocList = [];
+          tocIndex = -1;
+          conceptList = rList;
+          loadConcept(rIdx);
+        } else {
+          openSplitPane(rList, rIdx, 'resource');
+        }
       } else {
-        openSplitPane(list, idx);
+        var list = buildConceptList(path);
+        var idx = findConceptIndex(list, path);
+        if (isOpen) {
+          paneMode = 'concept';
+          if (learnedBtn) learnedBtn.style.display = '';
+          conceptList = list;
+          loadConcept(idx);
+        } else {
+          openSplitPane(list, idx, 'concept');
+        }
       }
     }, true); // capture phase to intercept before other handlers
   }
@@ -2931,7 +3277,13 @@ window._spaNavigate = function (path) {
   window._openConceptPopup = function (conceptPath) {
     var list = buildConceptList(conceptPath);
     var idx = findConceptIndex(list, conceptPath);
-    openSplitPane(list, idx);
+    openSplitPane(list, idx, 'concept');
+  };
+
+  window._openResourcePopup = function (resourcePath) {
+    var list = buildResourceList(resourcePath);
+    var idx = findResourceIndex(list, resourcePath);
+    openSplitPane(list, idx, 'resource');
   };
 
 })();

@@ -8,9 +8,16 @@ window._spaNavigate = function (path) {
   a.setAttribute('data-href', path);
   a.href = url;
   a.style.display = 'none';
-  document.body.appendChild(a);
+  // Append inside the publish content area so Obsidian's SPA router intercepts
+  // the click. Falls back to document.body if the content area isn't found.
+  var host = document.querySelector('.publish-renderer')
+          || document.querySelector('.site-body-center-column')
+          || document.querySelector('.markdown-preview-view')
+          || document.body;
+  host.appendChild(a);
   a.click();
-  document.body.removeChild(a);
+  // Delay removal so Obsidian's async router can finish processing the event
+  setTimeout(function () { if (a.parentNode) a.parentNode.removeChild(a); }, 200);
 };
 
 /* ===========================================================
@@ -6001,14 +6008,55 @@ window._spaNavigate = function (path) {
     setTimeout(init, 250);
   }
 
-  // Re-inject if sidebar re-renders (SPA navigation)
+  // Re-inject if sidebar re-renders (SPA navigation).
+  // Instead of rebuilding from scratch (which causes a visible flicker),
+  // preserve the existing sidebar-tabs element and re-append it.
+  var _detachedSidebar = null;
+
   var stObserver = new MutationObserver(function () {
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (!sidebar) return;
+
     if (!document.querySelector('.sidebar-tabs')) {
-      containerEl = null;
-      panelEl = null;
-      barFillEl = null;
-      countEl = null;
-      buildSidebarTabs();
+      if (_detachedSidebar && _detachedSidebar.parentNode !== sidebar) {
+        // Re-attach the preserved sidebar instead of rebuilding
+        sidebar.appendChild(_detachedSidebar);
+        containerEl = _detachedSidebar;
+        panelEl = containerEl.querySelector('.sidebar-tabs__panel');
+        barFillEl = containerEl.querySelector('.sidebar-tabs__progress-fill');
+        countEl = containerEl.querySelector('.sidebar-tabs__progress-count');
+      } else {
+        // First time or element was truly lost — build fresh
+        containerEl = null;
+        panelEl = null;
+        barFillEl = null;
+        countEl = null;
+        buildSidebarTabs();
+        _detachedSidebar = containerEl;
+      }
+    }
+  });
+
+  // Also keep a reference whenever we successfully build the sidebar
+  var _origBuildSidebarTabs = buildSidebarTabs;
+  buildSidebarTabs = function () {
+    _origBuildSidebarTabs();
+    if (containerEl) _detachedSidebar = containerEl;
+  };
+
+  // Before Obsidian wipes the left column, detach our sidebar to preserve it
+  var preNavObserver = new MutationObserver(function (mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      for (var j = 0; j < mutations[i].removedNodes.length; j++) {
+        var removed = mutations[i].removedNodes[j];
+        if (removed === _detachedSidebar ||
+            (removed.nodeType === 1 && removed.querySelector && removed.querySelector('.sidebar-tabs'))) {
+          // Obsidian is removing our sidebar — detach and preserve it
+          if (containerEl && containerEl.parentNode) {
+            _detachedSidebar = containerEl;
+          }
+        }
+      }
     }
   });
 
@@ -6016,6 +6064,7 @@ window._spaNavigate = function (path) {
     var target = document.querySelector('.site-body-left-column');
     if (target) {
       stObserver.observe(target, { childList: true, subtree: true });
+      preNavObserver.observe(target, { childList: true });
     }
   }
 

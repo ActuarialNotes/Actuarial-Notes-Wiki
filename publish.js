@@ -2845,11 +2845,20 @@ window._spaNavigate = function (path) {
       var link = e.target.closest('a.internal-link, a[data-href]');
       if (!link) return;
 
-      var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
-      var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
+      var dataHref = link.getAttribute('data-href') || '';
+      var rawHref = link.getAttribute('href') || '';
+      var path = (dataHref || rawHref).replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
 
-      // Only intercept concept links
-      if (!path.match(/^Concepts\//i)) return;
+      // Only intercept concept links — check both data-href and href
+      // (syllabus links may have data-href="Probability" but href="/Concepts/Probability")
+      if (!path.match(/^Concepts\//i)) {
+        var altPath = rawHref.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
+        if (altPath.match(/^Concepts\//i)) {
+          path = altPath;
+        } else {
+          return;
+        }
+      }
 
       // Don't intercept if inside the split-pane bottom (iframe links)
       if (link.closest('.concept-split__bottom')) return;
@@ -5644,7 +5653,13 @@ window._spaNavigate = function (path) {
           result.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            navigateToResult(item.path);
+            // Open concepts in the split-pane instead of navigating
+            if (cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
+              var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
+              window._openConceptPopup(conceptPath);
+            } else {
+              navigateToResult(item.path);
+            }
           }, true);
 
           result.addEventListener('mouseenter', function () {

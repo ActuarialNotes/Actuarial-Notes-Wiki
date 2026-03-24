@@ -165,6 +165,11 @@ export default async function handler(req, res) {
 
     const wasTruncated = data.stop_reason === 'max_tokens';
 
+    // Custom prompts expect raw text back (e.g. Research Concept workflow)
+    if (hasCustomPrompt) {
+      return res.status(200).json({ text: content, truncated: wasTruncated });
+    }
+
     // Parse JSON — try direct parse first, then strip fences/prose
     let jsonStr = content.trim();
     let parsed;

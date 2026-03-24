@@ -3153,7 +3153,7 @@ a.external-link[href*=".pdf#" i]::before {
 
 .concept-active-link {
   background: #ffffff;
-  color: #000000;
+  color: #000000 !important;
   padding: .1em .3em;
   border-radius: .25em;
   outline: 2px solid #ffffff;
@@ -3163,7 +3163,7 @@ a.external-link[href*=".pdf#" i]::before {
 
 .theme-light .concept-active-link {
   background: #000000;
-  color: #ffffff;
+  color: #ffffff !important;
   outline-color: #000000;
 }
 /* ===========================================================

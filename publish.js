@@ -2465,9 +2465,10 @@ window._spaNavigate = function (path) {
           }, true);
 
           // Apply resource-specific formatting if in resource mode
+          // Obsidian Publish renders content asynchronously after iframe load,
+          // so we must poll until the content (images, headings) is ready.
           if (paneMode === 'resource') {
-            injectResourceFormatting(iDoc);
-            buildTocFromIframe(iDoc);
+            waitForResourceContent(iDoc);
           }
         }
       } catch (e) { /* cross-origin — skip */ }
@@ -2611,6 +2612,11 @@ window._spaNavigate = function (path) {
 
   function updateLearnedBtn() {
     if (!learnedBtn) return;
+    // Never show the learned button in resource mode
+    if (paneMode === 'resource') {
+      learnedBtn.style.display = 'none';
+      return;
+    }
     if (currentIndex < 0 || currentIndex >= conceptList.length) return;
     var concept = conceptList[currentIndex];
     var examId = detectExamId();
@@ -2974,6 +2980,31 @@ window._spaNavigate = function (path) {
     return 0;
   }
 
+  /**
+   * Poll the iframe document until Obsidian Publish finishes rendering
+   * (content sizer exists and at least one image or heading is present),
+   * then inject the resource hero layout and build the TOC.
+   */
+  function waitForResourceContent(iDoc) {
+    var attempts = 0;
+    var maxAttempts = 40; // 40 × 150ms = 6s max wait
+    function check() {
+      if (paneMode !== 'resource') return; // mode changed while waiting
+      attempts++;
+      var body = iDoc.querySelector('.markdown-preview-sizer') ||
+                 iDoc.querySelector('.markdown-rendered') || iDoc.body;
+      var hasContent = body && (body.querySelector('img') || body.querySelector('h1, h2, h3'));
+      if (hasContent) {
+        injectResourceFormatting(iDoc);
+        buildTocFromIframe(iDoc);
+      } else if (attempts < maxAttempts) {
+        setTimeout(check, 150);
+      }
+    }
+    // Start checking after a short initial delay
+    setTimeout(check, 200);
+  }
+
   /** Inject hero layout (image left, metadata right) into resource iframe. */
   function injectResourceFormatting(iDoc) {
     var body = iDoc.querySelector('.markdown-preview-sizer') ||
@@ -2984,38 +3015,72 @@ window._spaNavigate = function (path) {
     var firstImg = body.querySelector('img');
     if (!firstImg) return;
 
-    // Parse metadata from page title or first h1
-    var titleText = '';
+    // Parse metadata from multiple sources (h1, document title, URL, concept list name)
     var h1 = body.querySelector('h1');
-    if (h1) {
-      titleText = h1.textContent.trim();
-    } else {
-      // Fallback to document title (strip site suffix)
-      titleText = (iDoc.title || '').replace(/\s*[-–|].*$/, '').trim();
+    var titleCandidates = [];
+
+    // 1) Current concept list entry name (original wikilink — most reliable)
+    if (currentIndex >= 0 && currentIndex < conceptList.length) {
+      titleCandidates.push(conceptList[currentIndex].name);
     }
+    // 2) iframe URL path (decoded)
+    try {
+      var urlPath = decodeURIComponent(iDoc.location.pathname.replace(/^\//, '')).replace(/\+/g, ' ');
+      if (urlPath) titleCandidates.push(urlPath.replace(/^Resources\//, ''));
+    } catch (e) {}
+    // 3) Document title (strip site suffix)
+    if (iDoc.title) titleCandidates.push(iDoc.title.replace(/\s*[-–|][^(]*$/, '').trim());
+    // 4) h1 text
+    if (h1) titleCandidates.push(h1.textContent.trim());
 
-    var meta = { title: titleText, author: '', year: '', publisher: '' };
+    var meta = { title: '', author: '', year: '', publisher: '' };
+    var parsed = false;
 
-    // Try "Title (Author - Year)"
-    var m = titleText.match(/^(.+?)\s*\(([^)]*?)\s*-\s*(\d{4})\)\s*$/);
-    if (m) {
-      meta.title = m[1].trim();
-      meta.author = m[2].trim();
-      meta.year = m[3];
-    } else {
-      // Try "Title - Year"
-      var m2 = titleText.match(/^(.+?)\s*-\s*(\d{4})\s*$/);
-      if (m2) {
-        meta.title = m2[1].trim();
-        meta.year = m2[2];
+    // Try each candidate until we get a successful metadata parse
+    for (var ci = 0; ci < titleCandidates.length && !parsed; ci++) {
+      var titleText = titleCandidates[ci];
+      if (!titleText) continue;
+
+      // Try "Title (Author - Year)"
+      var m = titleText.match(/^(.+?)\s*\(([^)]*?)\s*-\s*(\d{4})\)\s*$/);
+      if (m) {
+        meta.title = m[1].trim();
+        meta.author = m[2].trim();
+        meta.year = m[3];
+        parsed = true;
       } else {
+        // Try "Title -- Author (Year)" or "Title (Author, Year)"
+        var m1b = titleText.match(/^(.+?)\s*\(([^,)]+),\s*(\d{4})\)\s*$/);
+        if (m1b) {
+          meta.title = m1b[1].trim();
+          meta.author = m1b[2].trim();
+          meta.year = m1b[3];
+          parsed = true;
+        }
+      }
+      if (!parsed) {
+        // Try "Title - Year"
+        var m2 = titleText.match(/^(.+?)\s*-\s*(\d{4})\s*$/);
+        if (m2) {
+          meta.title = m2[1].trim();
+          meta.year = m2[2];
+          parsed = true;
+        }
+      }
+      if (!parsed) {
         // Try "Title (Year)"
         var m3 = titleText.match(/^(.+?)\s*\((\d{4})\)\s*$/);
         if (m3) {
           meta.title = m3[1].trim();
           meta.year = m3[2];
+          parsed = true;
         }
       }
+    }
+
+    // Fallback: use h1 or first candidate as title if nothing parsed
+    if (!meta.title) {
+      meta.title = (h1 ? h1.textContent.trim() : titleCandidates[0] || '').replace(/\s*\([^)]*\)\s*$/, '');
     }
 
     // Check for publisher in content
@@ -3080,8 +3145,8 @@ window._spaNavigate = function (path) {
     var heroStyle = iDoc.createElement('style');
     heroStyle.textContent =
       '.resource-hero { display: flex; gap: 24px; align-items: flex-start; padding: 20px 0; margin-bottom: 8px; }' +
-      '.resource-hero__img { flex-shrink: 0; width: 40%; max-width: 280px; min-width: 120px; }' +
-      '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; }' +
+      '.resource-hero__img { flex-shrink: 0; width: 35%; min-width: 100px; }' +
+      '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; object-fit: contain; }' +
       '.resource-hero__meta { flex: 1; min-width: 0; padding-top: 8px; }' +
       '.resource-hero__title { font-size: 1.5rem; font-weight: 700; margin: 0 0 12px; line-height: 1.3; color: var(--text, #cdd6f4); }' +
       '.resource-hero__detail { color: var(--text-muted, #888); margin: 6px 0; font-size: 0.95rem; }' +

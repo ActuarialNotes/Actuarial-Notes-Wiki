@@ -2602,6 +2602,7 @@ window._spaNavigate = function (path) {
   }
 
   function closeSplitPane() {
+    clearConceptHighlight();
     if (centerCol) centerCol.classList.remove('concept-split--open');
     isOpen = false;
 
@@ -2630,6 +2631,9 @@ window._spaNavigate = function (path) {
 
     // Update nav state
     updateNavState();
+
+    // Highlight the active concept link in the exam syllabus
+    highlightActiveConceptLink();
   }
 
   function navigatePopup(direction) {
@@ -2660,6 +2664,54 @@ window._spaNavigate = function (path) {
     if (!hasPrev && prevLabel) prevLabel.textContent = '';
     if (hasNext && nextLabel) nextLabel.textContent = conceptList[currentIndex + 1].name;
     if (!hasNext && nextLabel) nextLabel.textContent = '';
+  }
+
+  /* -----------------------------------------------------------
+     HIGHLIGHT ACTIVE CONCEPT in exam syllabus
+     ----------------------------------------------------------- */
+  function clearConceptHighlight() {
+    if (!topPane) return;
+    var prev = topPane.querySelectorAll('.concept-active-link');
+    for (var i = 0; i < prev.length; i++) {
+      prev[i].classList.remove('concept-active-link');
+    }
+  }
+
+  function highlightActiveConceptLink() {
+    clearConceptHighlight();
+
+    if (currentIndex < 0 || currentIndex >= conceptList.length) return;
+    if (!topPane) return;
+
+    var concept = conceptList[currentIndex];
+    var targetPath = concept.path; // e.g. "Concepts/Probability"
+
+    // Find matching link in the top pane by data-href
+    var links = topPane.querySelectorAll('a.internal-link');
+    var matchedLink = null;
+    for (var i = 0; i < links.length; i++) {
+      var href = links[i].getAttribute('data-href') || '';
+      var normalised = href.replace(/^\//, '').replace(/\+/g, ' ');
+      if (normalised === targetPath) {
+        matchedLink = links[i];
+        break;
+      }
+    }
+    if (!matchedLink) return;
+
+    // Expand parent callout if collapsed
+    var callout = matchedLink.closest('.callout');
+    if (callout && callout.classList.contains('is-collapsed')) {
+      callout.classList.remove('is-collapsed');
+    }
+
+    // Apply highlight
+    matchedLink.classList.add('concept-active-link');
+
+    // Scroll into view (delay allows callout expansion to render)
+    setTimeout(function () {
+      matchedLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }, 50);
   }
 
   /* -----------------------------------------------------------

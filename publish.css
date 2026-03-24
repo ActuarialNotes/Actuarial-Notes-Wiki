@@ -3150,6 +3150,16 @@ a.external-link[href*=".pdf#" i]::before {
   padding: 0 .2em;
   border-radius: .25em;
 }
+
+.concept-active-link {
+  background: color-mix(in oklab, var(--brand) 24%, transparent);
+  color: inherit;
+  padding: .1em .3em;
+  border-radius: .25em;
+  outline: 2px solid color-mix(in oklab, var(--brand) 40%, transparent);
+  outline-offset: 1px;
+  transition: background .2s ease, outline-color .2s ease;
+}
 /* ===========================================================
    COLLAPSIBLE IMAGES
    Use with: <details class="collapsible-image">

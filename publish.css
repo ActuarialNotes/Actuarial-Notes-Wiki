@@ -3707,11 +3707,15 @@ figure.right figcaption,
   border-color: color-mix(in oklab, var(--exam-color) 15%, var(--muted));
 }
 
-/* Pill accent colour when exam is in-progress */
-body:has(.exam-nav__sticky.is-in-progress) .callout[data-callout="example"] .callout-concept-count,
-body:has(.exam-nav__sticky.is-in-progress) .callout[data-callout="example"] .callout-badge--pct {
-  color: var(--exam-color);
-  background: color-mix(in oklab, var(--exam-color) 12%, transparent);
+/* Pill accent colour on exam pages — uses --exam-pill-color (set by JS when
+   exam is in-progress) with a fallback to the default callout/text colour */
+.has-exam-nav .callout[data-callout="example"] .callout-concept-count {
+  color: var(--exam-pill-color, var(--callout-color));
+  background: color-mix(in oklab, var(--exam-pill-color, var(--callout-color)) 12%, transparent);
+}
+.has-exam-nav .callout[data-callout="example"] .callout-badge--pct {
+  color: var(--exam-pill-color, var(--text));
+  background: color-mix(in oklab, var(--exam-pill-color, var(--text)) 10%, transparent);
 }
 
 /* Exam Track row */

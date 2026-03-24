@@ -204,13 +204,6 @@ window._spaNavigate = function (path) {
     if (pageEl) {
       pageEl.style.setProperty('--exam-color', customColor || 'var(--brand)');
       pageEl.classList.add('has-exam-nav');
-      // Set pill accent when exam is in-progress
-      var statusInfo = typeof window._getExamStatusByName === 'function'
-        ? window._getExamStatusByName(currentData.name)
-        : null;
-      if (statusInfo && statusInfo.status === 'in_progress') {
-        pageEl.style.setProperty('--exam-pill-color', customColor || statusInfo.color || '');
-      }
     }
 
     // Container is now just a hidden sentinel — clear it
@@ -1113,6 +1106,20 @@ window._spaNavigate = function (path) {
 
   const BADGES_RE = /\{([^}]+)\}/g;
   const PCT_RE = /\d+.*%/;
+  const JOURNEY_LS_KEY = 'actuarial-notes-journey';
+
+  // Check in-progress status directly from localStorage — no cross-IIFE dependency
+  function isExamInProgress(name) {
+    try {
+      var raw = JSON.parse(localStorage.getItem(JOURNEY_LS_KEY));
+      if (!raw || !raw.progress) return false;
+      if (raw.progress[name] === 'in_progress') return true;
+      // Strip number suffix: "P-1" → "P", "FM-2" → "FM"
+      var shortId = name.replace(/-\d+$/, '');
+      if (shortId !== name && raw.progress[shortId] === 'in_progress') return true;
+      return false;
+    } catch (e) { return false; }
+  }
 
   let loCounter = 0;
 
@@ -1146,6 +1153,30 @@ window._spaNavigate = function (path) {
         badge.textContent = match[1];
         inner.parentElement.appendChild(badge);
       });
+    });
+
+    // Tint [!example] badges with exam accent colour when exam is in-progress
+    tintExamBadges();
+  }
+
+  function tintExamBadges() {
+    var examNav = document.querySelector('.exam-nav[data-current]');
+    if (!examNav) return;
+
+    var examColor = examNav.dataset.color;
+    if (!examColor) return;
+
+    var currentName = (examNav.dataset.current || '').split('|')[0].trim();
+    if (!currentName || !isExamInProgress(currentName)) return;
+
+    var pageEl = examNav.closest('.markdown-preview-view, .markdown-rendered, .page-container') || examNav.parentElement;
+    if (!pageEl) return;
+
+    pageEl.querySelectorAll('.callout[data-callout="example"] .callout-badge').forEach(function (badge) {
+      if (badge.dataset.examTinted) return;
+      badge.style.color = examColor;
+      badge.style.background = 'color-mix(in oklab, ' + examColor + ' 12%, transparent)';
+      badge.dataset.examTinted = '1';
     });
   }
 
@@ -5819,15 +5850,6 @@ window._spaNavigate = function (path) {
     } else {
       sticky.classList.remove('is-in-progress');
     }
-    // Sync pill accent variable on page element
-    var pageEl = document.querySelector('.has-exam-nav');
-    if (pageEl) {
-      if (info && info.status === 'in_progress') {
-        pageEl.style.setProperty('--exam-pill-color', info.color || getComputedStyle(pageEl).getPropertyValue('--exam-color').trim() || '');
-      } else {
-        pageEl.style.removeProperty('--exam-pill-color');
-      }
-    }
   }
 
   function isOnExamPage(examPath) {
@@ -5950,23 +5972,6 @@ window._spaNavigate = function (path) {
         for (var i = 0; i < items.length; i++) {
           if (items[i].path && (currentPath === items[i].path || currentPath === items[i].path.replace(/ /g, '+'))) {
             return { id: items[i].id, status: getStatus(items[i].id), color: COLOR_HEX[items[i].color] || null };
-          }
-        }
-      }
-    }
-    return null;
-  };
-
-  // Look up exam status by the short name used in data-current (e.g. "P-1", "FM-2")
-  window._getExamStatusByName = function (name) {
-    if (!name) return null;
-    for (var t = 0; t < TRACKS.length; t++) {
-      for (var s = 0; s < TRACKS[t].sections.length; s++) {
-        var items = TRACKS[t].sections[s].items;
-        for (var i = 0; i < items.length; i++) {
-          var trackName = items[i].name.replace(/^Exam /, '');
-          if (trackName === name || items[i].id === name) {
-            return { status: getStatus(items[i].id), color: COLOR_HEX[items[i].color] || null };
           }
         }
       }

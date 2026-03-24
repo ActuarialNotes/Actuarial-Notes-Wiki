@@ -3152,13 +3152,19 @@ a.external-link[href*=".pdf#" i]::before {
 }
 
 .concept-active-link {
-  background: color-mix(in oklab, var(--brand) 24%, transparent);
-  color: inherit;
+  background: #ffffff;
+  color: #000000;
   padding: .1em .3em;
   border-radius: .25em;
-  outline: 2px solid color-mix(in oklab, var(--brand) 40%, transparent);
+  outline: 2px solid #ffffff;
   outline-offset: 1px;
   transition: background .2s ease, outline-color .2s ease;
+}
+
+.theme-light .concept-active-link {
+  background: #000000;
+  color: #ffffff;
+  outline-color: #000000;
 }
 /* ===========================================================
    COLLAPSIBLE IMAGES

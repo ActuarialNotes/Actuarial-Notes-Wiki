@@ -2699,19 +2699,29 @@ window._spaNavigate = function (path) {
     }
     if (!matchedLink) return;
 
-    // Expand parent callout if collapsed
+    // Expand parent callout if collapsed (click title to trigger Obsidian's handler)
     var callout = matchedLink.closest('.callout');
     if (callout && callout.classList.contains('is-collapsed')) {
-      callout.classList.remove('is-collapsed');
+      var titleBtn = callout.querySelector('.callout-title');
+      if (titleBtn) titleBtn.click();
     }
 
     // Apply highlight
     matchedLink.classList.add('concept-active-link');
 
-    // Scroll into view (delay allows callout expansion to render)
+    // Scroll into view with buffer (delay allows callout expansion to render)
     setTimeout(function () {
-      matchedLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    }, 50);
+      var pane = topPane;
+      var linkRect = matchedLink.getBoundingClientRect();
+      var paneRect = pane.getBoundingClientRect();
+      var buffer = 60;
+
+      if (linkRect.bottom + buffer > paneRect.bottom) {
+        pane.scrollBy({ top: linkRect.bottom - paneRect.bottom + buffer, behavior: 'smooth' });
+      } else if (linkRect.top < paneRect.top) {
+        pane.scrollBy({ top: linkRect.top - paneRect.top - buffer, behavior: 'smooth' });
+      }
+    }, 80);
   }
 
   /* -----------------------------------------------------------

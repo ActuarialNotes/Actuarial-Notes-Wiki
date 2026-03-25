@@ -5798,13 +5798,9 @@ window._spaNavigate = function (path) {
       if (track && track.certPath) {
         var slug = track.certPath.replace(/ /g, '+');
         certBtn.href = '/' + slug;
-        certBtn.classList.add('internal-link');
-        certBtn.setAttribute('data-href', track.certPath);
         certBtn.style.display = '';
       } else {
         certBtn.removeAttribute('href');
-        certBtn.classList.remove('internal-link');
-        certBtn.removeAttribute('data-href');
         certBtn.style.display = 'none';
       }
     }
@@ -5898,8 +5894,7 @@ window._spaNavigate = function (path) {
           var nameEl;
           if (item.path) {
             nameEl = document.createElement('a');
-            nameEl.className = 'exams-panel__name internal-link';
-            nameEl.setAttribute('data-href', item.path);
+            nameEl.className = 'exams-panel__name';
             nameEl.href = '/' + item.path.replace(/ /g, '+');
             nameEl.addEventListener('click', function (e) {
               e.preventDefault();
@@ -6134,8 +6129,6 @@ window._spaNavigate = function (path) {
           result.dataset.category = cat;
           if (item.path) {
             result.href = '/' + item.path.replace(/ /g, '+');
-            result.classList.add('internal-link');
-            result.setAttribute('data-href', item.path);
           }
 
           var iconEl = document.createElement('span');
@@ -6360,8 +6353,6 @@ window._spaNavigate = function (path) {
       tab.className = 'persistent-exam-tab';
       tab.dataset.examId = exam.id;
       if (exam.path) {
-        tab.classList.add('internal-link');
-        tab.setAttribute('data-href', exam.path);
         tab.href = '/' + exam.path.replace(/ /g, '+');
         tab.addEventListener('click', function (e) {
           e.preventDefault();

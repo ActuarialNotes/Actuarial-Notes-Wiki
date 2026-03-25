@@ -1,24 +1,28 @@
-/* SPA-safe navigation helper — triggers Obsidian Publish's internal router */
+/* SPA-safe navigation helper — triggers Obsidian Publish's internal router.
+   Uses multiple strategies so navigation works even when Obsidian rejects
+   synthetic (isTrusted:false) click events dispatched via dispatchEvent(). */
 window._spaNavigate = function (path) {
   if (!path) return;
   var slug = path.replace(/ /g, '+');
-  var a = document.createElement('a');
-  a.className = 'internal-link';
-  a.setAttribute('data-href', path);
-  a.href = '/' + slug;
-  a.style.display = 'none';
-  // Append inside the publish content area so Obsidian's SPA router intercepts
-  // the click. Falls back to document.body if the content area isn't found.
-  var host = document.querySelector('.publish-renderer')
-          || document.querySelector('.site-body-center-column')
-          || document.querySelector('.markdown-preview-view')
-          || document.body;
-  host.appendChild(a);
-  // Dispatch a real MouseEvent (bubbles + cancelable) for maximum compatibility
-  // with Obsidian Publish's delegated click handler.
-  a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-  // Delay removal so Obsidian's async router can finish processing the event
-  setTimeout(function () { if (a.parentNode) a.parentNode.removeChild(a); }, 200);
+  var url = '/' + slug;
+
+  // Strategy 1: Click a native Obsidian nav-tree element (trusted click)
+  var escaped = path.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  var nativeEl = document.querySelector(
+    '.nav-file-title[data-path="' + escaped + '"], ' +
+    '.tree-item-self[data-path="' + escaped + '"]'
+  );
+  if (nativeEl) { nativeEl.click(); return; }
+
+  // Strategy 2: Click an existing Obsidian-rendered internal-link in page content
+  var contentLink = document.querySelector(
+    '.publish-renderer a.internal-link[data-href="' + escaped + '"], ' +
+    '.markdown-preview-view a.internal-link[data-href="' + escaped + '"]'
+  );
+  if (contentLink) { contentLink.click(); return; }
+
+  // Strategy 3: Full navigation (always works, loses SPA state)
+  window.location.href = url;
 };
 
 /* ===========================================================
@@ -5534,6 +5538,29 @@ window._spaNavigate = function (path) {
   }
 
   /* ============================================================
+     SIDEBAR COLLAPSE HELPER
+     ============================================================ */
+  function closeSidebar() {
+    // Try Obsidian's native sidebar toggle button
+    var toggleBtn = document.querySelector(
+      '.site-body-left-column-collapse-icon, ' +
+      '.sidebar-toggle-button, ' +
+      '[aria-label="Toggle left sidebar"]'
+    );
+    if (toggleBtn) { toggleBtn.click(); return; }
+    // Fallback: hide sidebar on mobile/tablet and restore on next Obsidian touch
+    var sidebar = document.querySelector('.site-body-left-column');
+    if (sidebar && window.innerWidth < 1000) {
+      sidebar.style.display = 'none';
+      var obs = new MutationObserver(function () {
+        obs.disconnect();
+        sidebar.style.display = '';
+      });
+      obs.observe(sidebar, { attributes: true, childList: true });
+    }
+  }
+
+  /* ============================================================
      DOM REFERENCES & BUILD
      ============================================================ */
   var containerEl = null;
@@ -5761,6 +5788,7 @@ window._spaNavigate = function (path) {
       var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
       if (track && track.certPath) {
         window._spaNavigate(track.certPath);
+        closeSidebar();
       }
     }, true);
     selectRow.appendChild(certBtn);
@@ -5877,6 +5905,7 @@ window._spaNavigate = function (path) {
               e.preventDefault();
               e.stopImmediatePropagation();
               window._spaNavigate(item.path);
+              closeSidebar();
             }, true);
           } else {
             nameEl = document.createElement('span');
@@ -6129,6 +6158,7 @@ window._spaNavigate = function (path) {
             } else {
               window._spaNavigate(item.path);
             }
+            closeSidebar();
           }, true);
 
           result.addEventListener('mouseenter', function () {

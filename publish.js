@@ -5665,6 +5665,15 @@ window._spaNavigate = function (path) {
     containerEl.appendChild(panelEl);
     containerEl.appendChild(utilBar);
 
+    // Collapse sidebar when any link inside it is clicked (delegated)
+    containerEl.addEventListener('click', function (e) {
+      var link = e.target.closest('a.internal-link, a[data-href]');
+      if (link) {
+        // Small delay so the click propagates to Obsidian's router first
+        setTimeout(closeSidebar, 50);
+      }
+    });
+
     sidebar.appendChild(containerEl);
 
     renderActivePanel();
@@ -5782,15 +5791,8 @@ window._spaNavigate = function (path) {
     certBtn.className = 'sidebar-tabs__cert-btn';
     certBtn.title = 'View certification requirements';
     certBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
-    certBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
-      if (track && track.certPath) {
-        window._spaNavigate(track.certPath);
-        closeSidebar();
-      }
-    }, true);
+    // No custom click handler — Obsidian's SPA router handles
+    // a.internal-link[data-href] clicks natively via event delegation.
     selectRow.appendChild(certBtn);
 
     function updateCertBtn() {
@@ -5896,12 +5898,8 @@ window._spaNavigate = function (path) {
             nameEl = document.createElement('a');
             nameEl.className = 'exams-panel__name';
             nameEl.href = '/' + item.path.replace(/ /g, '+');
-            nameEl.addEventListener('click', function (e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              window._spaNavigate(item.path);
-              closeSidebar();
-            }, true);
+            // No custom click handler — Obsidian's SPA router handles
+            // a.internal-link[data-href] clicks natively via event delegation.
           } else {
             nameEl = document.createElement('span');
             nameEl.className = 'exams-panel__name';
@@ -6142,16 +6140,15 @@ window._spaNavigate = function (path) {
           result.appendChild(nameEl);
 
           result.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
             // Open concepts in the split-pane instead of navigating
             if (cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
+              e.preventDefault();
+              e.stopImmediatePropagation();
               var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
               window._openConceptPopup(conceptPath);
-            } else {
-              window._spaNavigate(item.path);
+              closeSidebar();
             }
-            closeSidebar();
+            // Non-concept clicks: let the native a.internal-link handle navigation
           }, true);
 
           result.addEventListener('mouseenter', function () {
@@ -6354,10 +6351,8 @@ window._spaNavigate = function (path) {
       tab.dataset.examId = exam.id;
       if (exam.path) {
         tab.href = '/' + exam.path.replace(/ /g, '+');
-        tab.addEventListener('click', function (e) {
-          e.preventDefault();
-          window._spaNavigate(exam.path);
-        }, true);
+        // No custom click handler — Obsidian's SPA router handles
+        // a.internal-link[data-href] clicks natively.
       } else {
         tab.href = '#';
         tab.addEventListener('click', function (e) { e.preventDefault(); });

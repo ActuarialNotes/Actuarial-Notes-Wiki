@@ -2303,6 +2303,8 @@ window._spaNavigate = function (path) {
   var paneMode = 'concept'; // 'concept' | 'resource'
   var tocList = [];          // [{ el, text, level }, …] headings in resource iframe
   var tocIndex = -1;         // current TOC heading index
+  var resourceObserver = null; // MutationObserver for re-rendering persistence
+  var cachedMeta = null;       // parsed metadata for the current resource
 
   /* ---- SVGs ---- */
   var svgPrev = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
@@ -2634,6 +2636,7 @@ window._spaNavigate = function (path) {
   }
 
   function closeSplitPane() {
+    disconnectResourceObserver();
     clearConceptHighlight();
     if (centerCol) centerCol.classList.remove('concept-split--open');
     isOpen = false;
@@ -2644,6 +2647,7 @@ window._spaNavigate = function (path) {
 
   function loadConcept(index) {
     if (index < 0 || index >= conceptList.length) return;
+    disconnectResourceObserver();
 
     currentIndex = index;
     var concept = conceptList[index];
@@ -2997,82 +3001,112 @@ window._spaNavigate = function (path) {
     }, true);
   }
 
+  /** Disconnect any active resource observer. */
+  function disconnectResourceObserver() {
+    if (resourceObserver) {
+      resourceObserver.disconnect();
+      resourceObserver = null;
+    }
+    cachedMeta = null;
+  }
+
   /**
-   * Poll the iframe document until Obsidian Publish finishes rendering
-   * (content sizer exists and at least one image or heading is present),
-   * then inject the resource hero layout and build the TOC.
+   * Set up a persistent observer on the iframe content that (re-)injects
+   * the resource hero whenever Obsidian Publish re-renders the markdown.
+   * Also does initial polling until the content container appears.
    */
   function waitForResourceContent(expectedSrc) {
+    disconnectResourceObserver();
+
     var attempts = 0;
     var maxAttempts = 40; // 40 × 150ms = 6s max wait
-    var heroInjected = false;
-    var tocBuilt = false;
-    function check() {
-      if (paneMode !== 'resource') return; // mode changed while waiting
-      // If the iframe navigated away, stop polling for the old page
+    var observing = false;
+
+    function poll() {
+      if (paneMode !== 'resource') return;
       if (expectedSrc && iframeEl.src !== expectedSrc) return;
       attempts++;
 
-      // Re-obtain the document each tick — Obsidian Publish may rebuild it
       var iDoc;
       try {
         iDoc = iframeEl.contentDocument || iframeEl.contentWindow.document;
-      } catch (e) { return; } // cross-origin, give up
+      } catch (e) { return; }
       if (!iDoc) {
-        if (attempts < maxAttempts) setTimeout(check, 150);
+        if (attempts < maxAttempts) setTimeout(poll, 150);
         return;
       }
+
+      ensureIframeStyles(iDoc);
 
       var body = iDoc.querySelector('.markdown-preview-sizer') ||
                  iDoc.querySelector('.markdown-rendered') || iDoc.body;
       if (!body) {
-        if (attempts < maxAttempts) setTimeout(check, 150);
+        if (attempts < maxAttempts) setTimeout(poll, 150);
         return;
       }
 
-      // Re-inject hide styles if Obsidian rebuilt the head
-      ensureIframeStyles(iDoc);
+      // Try to apply the hero and build the TOC
+      var heroOk = applyResourceHero(iDoc, body);
+      buildTocFromIframe(iDoc);
 
-      // Build TOC as soon as headings are available
-      if (!tocBuilt && body.querySelector('h1, h2, h3')) {
-        buildTocFromIframe(iDoc);
-        tocBuilt = true;
+      // Set up persistent observer once we have a body (only once)
+      if (!observing) {
+        observeResourceContent(iDoc, body, expectedSrc);
+        observing = true;
       }
 
-      // Inject hero layout once a loaded image is in the DOM
-      // Obsidian may add <img> with only data-src before setting src
-      if (!heroInjected && body.querySelector('img[src]')) {
-        heroInjected = !!injectResourceFormatting(iDoc);
-        if (heroInjected) {
-          // Rebuild TOC after hero injection (it hides the original h1)
-          buildTocFromIframe(iDoc);
-          tocBuilt = true;
-        }
-      }
-
-      // Keep polling if we still need content
-      if ((!heroInjected || !tocBuilt) && attempts < maxAttempts) {
-        setTimeout(check, 150);
+      // If hero isn't applied yet (e.g. image hasn't appeared), keep polling
+      if (!heroOk && attempts < maxAttempts) {
+        setTimeout(poll, 150);
       }
     }
-    // Start checking after a short initial delay
-    setTimeout(check, 200);
+    setTimeout(poll, 200);
   }
 
-  /** Inject hero layout (image left, metadata right) into resource iframe. */
-  function injectResourceFormatting(iDoc) {
-    var body = iDoc.querySelector('.markdown-preview-sizer') ||
-               iDoc.querySelector('.markdown-rendered') || iDoc.body;
-    if (!body) return false;
+  /**
+   * Install a MutationObserver on the markdown body so the hero is
+   * re-injected every time Obsidian Publish re-renders the content.
+   */
+  function observeResourceContent(iDoc, body, expectedSrc) {
+    disconnectResourceObserver();
+    var debounceTimer = null;
 
-    // Guard against double injection
-    if (body.querySelector('.resource-hero')) return true;
+    resourceObserver = new MutationObserver(function () {
+      if (paneMode !== 'resource') { disconnectResourceObserver(); return; }
+      if (expectedSrc && iframeEl.src !== expectedSrc) { disconnectResourceObserver(); return; }
 
-    // Find the first image that has a src (Obsidian may lazy-load via data-src)
-    var firstImg = body.querySelector('img[src]');
-    if (!firstImg) return false;
+      // Debounce — Obsidian may fire many mutations in quick succession
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function () {
+        var curDoc;
+        try {
+          curDoc = iframeEl.contentDocument || iframeEl.contentWindow.document;
+        } catch (e) { return; }
+        if (!curDoc) return;
 
-    // Parse metadata from multiple sources (h1, document title, URL, concept list name)
+        ensureIframeStyles(curDoc);
+
+        var curBody = curDoc.querySelector('.markdown-preview-sizer') ||
+                      curDoc.querySelector('.markdown-rendered') || curDoc.body;
+        if (!curBody) return;
+
+        applyResourceHero(curDoc, curBody);
+        buildTocFromIframe(curDoc);
+      }, 80);
+    });
+
+    // Observe the body for child additions/removals (Obsidian re-renders)
+    resourceObserver.observe(body, { childList: true, subtree: true });
+  }
+
+  /**
+   * Parse metadata from the resource page content. Caches the result in
+   * `cachedMeta` so subsequent re-applies after Obsidian re-renders don't
+   * depend on DOM elements that may have been replaced.
+   */
+  function parseResourceMeta(iDoc, body) {
+    if (cachedMeta) return cachedMeta;
+
     var h1 = body.querySelector('h1');
     var titleCandidates = [];
 
@@ -3093,67 +3127,71 @@ window._spaNavigate = function (path) {
     var meta = { title: '', author: '', year: '', publisher: '' };
     var parsed = false;
 
-    // Try each candidate until we get a successful metadata parse
     for (var ci = 0; ci < titleCandidates.length && !parsed; ci++) {
       var titleText = titleCandidates[ci];
       if (!titleText) continue;
 
-      // Try "Title (Author - Year)"
       var m = titleText.match(/^(.+?)\s*\(([^)]*?)\s*-\s*(\d{4})\)\s*$/);
       if (m) {
-        meta.title = m[1].trim();
-        meta.author = m[2].trim();
-        meta.year = m[3];
-        parsed = true;
+        meta.title = m[1].trim(); meta.author = m[2].trim(); meta.year = m[3]; parsed = true;
       } else {
-        // Try "Title -- Author (Year)" or "Title (Author, Year)"
         var m1b = titleText.match(/^(.+?)\s*\(([^,)]+),\s*(\d{4})\)\s*$/);
-        if (m1b) {
-          meta.title = m1b[1].trim();
-          meta.author = m1b[2].trim();
-          meta.year = m1b[3];
-          parsed = true;
-        }
+        if (m1b) { meta.title = m1b[1].trim(); meta.author = m1b[2].trim(); meta.year = m1b[3]; parsed = true; }
       }
       if (!parsed) {
-        // Try "Title - Year"
         var m2 = titleText.match(/^(.+?)\s*-\s*(\d{4})\s*$/);
-        if (m2) {
-          meta.title = m2[1].trim();
-          meta.year = m2[2];
-          parsed = true;
-        }
+        if (m2) { meta.title = m2[1].trim(); meta.year = m2[2]; parsed = true; }
       }
       if (!parsed) {
-        // Try "Title (Year)"
         var m3 = titleText.match(/^(.+?)\s*\((\d{4})\)\s*$/);
-        if (m3) {
-          meta.title = m3[1].trim();
-          meta.year = m3[2];
-          parsed = true;
-        }
+        if (m3) { meta.title = m3[1].trim(); meta.year = m3[2]; parsed = true; }
       }
     }
 
-    // Fallback: use h1 or first candidate as title if nothing parsed
     if (!meta.title) {
       meta.title = (h1 ? h1.textContent.trim() : titleCandidates[0] || '').replace(/\s*\([^)]*\)\s*$/, '');
     }
 
-    // Check for publisher in content
     var publisherEl = body.querySelector('.resource-publisher, [data-publisher]');
     if (publisherEl) meta.publisher = publisherEl.textContent.trim();
 
-    // Get the image's parent container
-    var imgParent = firstImg.closest('p, div.image-embed, span.image-embed') || firstImg.parentNode;
+    // Also cache the image src so we can rebuild the hero even if the
+    // original <img> element has been replaced by Obsidian.
+    var firstImg = body.querySelector('img[src]');
+    if (firstImg) meta.imgSrc = firstImg.getAttribute('src');
 
-    // Create hero layout
+    cachedMeta = meta;
+    return meta;
+  }
+
+  /**
+   * (Re-)apply the resource hero to the iframe body.
+   * Safe to call repeatedly — skips if hero already exists,
+   * rebuilds it from cached metadata if Obsidian wiped the DOM.
+   */
+  var HERO_STYLE_ID = '__an-resource-hero-css';
+  function applyResourceHero(iDoc, body) {
+    // Already injected and still in the DOM — nothing to do
+    if (body.querySelector('.resource-hero')) return true;
+
+    var meta = parseResourceMeta(iDoc, body);
+    if (!meta || !meta.imgSrc) {
+      // No image found yet — check if one appeared now
+      var img = body.querySelector('img[src]');
+      if (!img) return false;
+      if (meta) meta.imgSrc = img.getAttribute('src');
+      else return false;
+    }
+
+    // Build the hero element
     var hero = iDoc.createElement('div');
     hero.className = 'resource-hero';
 
     var imgWrap = iDoc.createElement('div');
     imgWrap.className = 'resource-hero__img';
-    imgWrap.appendChild(firstImg.cloneNode(true));
+    var heroImg = iDoc.createElement('img');
+    heroImg.src = meta.imgSrc;
+    imgWrap.appendChild(heroImg);
 
     var metaWrap = iDoc.createElement('div');
     metaWrap.className = 'resource-hero__meta';
@@ -3184,33 +3222,45 @@ window._spaNavigate = function (path) {
 
     hero.appendChild(imgWrap);
     hero.appendChild(metaWrap);
-
-    // Remove original image from flow
-    if (imgParent && imgParent !== body) {
-      imgParent.style.display = 'none';
-    } else {
-      firstImg.style.display = 'none';
-    }
-
-    // Hide the original h1 since we show it in the hero
-    if (h1) h1.style.display = 'none';
-
-    // Insert hero at the top of the content
     body.insertBefore(hero, body.firstChild);
 
-    // Inject hero CSS
-    var heroStyle = iDoc.createElement('style');
-    heroStyle.textContent =
-      '.resource-hero { display: flex; gap: 24px; align-items: flex-start; padding: 20px 0; margin-bottom: 8px; }' +
-      '.resource-hero__img { flex-shrink: 0; width: 35%; min-width: 100px; }' +
-      '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; object-fit: contain; }' +
-      '.resource-hero__meta { flex: 1; min-width: 0; padding-top: 8px; }' +
-      '.resource-hero__title { font-size: 1.5rem; font-weight: 700; margin: 0 0 12px; line-height: 1.3; color: var(--text, #cdd6f4); }' +
-      '.resource-hero__detail { color: var(--text-muted, #888); margin: 6px 0; font-size: 0.95rem; }' +
-      '.resource-hero__detail strong { color: var(--text, #cdd6f4); margin-right: 6px; }' +
-      'h1, h2, h3, h4, h5, h6 { scroll-margin-top: 16px; }' +
-      '@media(max-width:500px) { .resource-hero { flex-direction: column; } .resource-hero__img { width: 60%; max-width: none; } }';
-    iDoc.head.appendChild(heroStyle);
+    // Mark the original image and h1 for hiding via CSS.
+    // We mark them each time because Obsidian may replace the DOM nodes.
+    var origImg = body.querySelector('img[src]:not(.resource-hero__img img)');
+    if (origImg) {
+      var origImgParent = origImg.closest('p, div.image-embed, span.image-embed') || origImg.parentNode;
+      if (origImgParent && origImgParent !== body && !origImgParent.closest('.resource-hero')) {
+        origImgParent.setAttribute('data-hero-hidden', '');
+      } else if (!origImg.closest('.resource-hero')) {
+        origImg.setAttribute('data-hero-hidden', '');
+      }
+    }
+    var origH1 = body.querySelector('h1:not(.resource-hero__title)');
+    if (origH1 && !origH1.closest('.resource-hero')) {
+      origH1.setAttribute('data-hero-hidden', '');
+    }
+
+    // Ensure hero CSS is in <head> (use ID so it's not duplicated)
+    if (!iDoc.getElementById(HERO_STYLE_ID)) {
+      var heroStyle = iDoc.createElement('style');
+      heroStyle.id = HERO_STYLE_ID;
+      heroStyle.textContent =
+        // Hero layout
+        '.resource-hero { display: flex; gap: 24px; align-items: flex-start; padding: 20px 0; margin-bottom: 8px; }' +
+        '.resource-hero__img { flex-shrink: 0; width: 35%; min-width: 100px; }' +
+        '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; object-fit: contain; }' +
+        '.resource-hero__meta { flex: 1; min-width: 0; padding-top: 8px; }' +
+        '.resource-hero__title { font-size: 1.5rem; font-weight: 700; margin: 0 0 12px; line-height: 1.3; color: var(--text, #cdd6f4); }' +
+        '.resource-hero__detail { color: var(--text-muted, #888); margin: 6px 0; font-size: 0.95rem; }' +
+        '.resource-hero__detail strong { color: var(--text, #cdd6f4); margin-right: 6px; }' +
+        // Hide originals that have been replaced by the hero
+        '[data-hero-hidden] { display: none !important; }' +
+        // Scroll padding for TOC navigation
+        'h1, h2, h3, h4, h5, h6 { scroll-margin-top: 16px; }' +
+        '@media(max-width:500px) { .resource-hero { flex-direction: column; } .resource-hero__img { width: 60%; max-width: none; } }';
+      iDoc.head.appendChild(heroStyle);
+    }
+
     return true;
   }
 

@@ -4774,6 +4774,23 @@ body.concept-split-resizing iframe {
   border-color: #4ade80;
   background: #4ade80;
 }
+.concept-popup__fullscreen {
+  background: none;
+  border: none;
+  color: var(--text-muted, #888);
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color .15s ease, background .15s ease;
+}
+.concept-popup__fullscreen:hover {
+  color: var(--text, #cdd6f4);
+  background: var(--muted, #333);
+}
 .concept-popup__close {
   background: none;
   border: none;

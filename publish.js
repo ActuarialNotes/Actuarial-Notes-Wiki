@@ -5529,23 +5529,13 @@ window._spaNavigate = function (path) {
      SIDEBAR COLLAPSE HELPER
      ============================================================ */
   function closeSidebar() {
-    // Try Obsidian's native sidebar toggle button
+    // Click Obsidian's native sidebar toggle button to properly collapse
     var toggleBtn = document.querySelector(
       '.site-body-left-column-collapse-icon, ' +
       '.sidebar-toggle-button, ' +
       '[aria-label="Toggle left sidebar"]'
     );
-    if (toggleBtn) { toggleBtn.click(); return; }
-    // Fallback: hide sidebar on mobile/tablet and restore on next Obsidian touch
-    var sidebar = document.querySelector('.site-body-left-column');
-    if (sidebar && window.innerWidth < 1000) {
-      sidebar.style.display = 'none';
-      var obs = new MutationObserver(function () {
-        obs.disconnect();
-        sidebar.style.display = '';
-      });
-      obs.observe(sidebar, { attributes: true, childList: true });
-    }
+    if (toggleBtn) { toggleBtn.click(); }
   }
 
   /* ============================================================

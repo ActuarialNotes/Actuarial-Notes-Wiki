@@ -2988,16 +2988,35 @@ window._spaNavigate = function (path) {
   function waitForResourceContent(iDoc) {
     var attempts = 0;
     var maxAttempts = 40; // 40 × 150ms = 6s max wait
+    var heroInjected = false;
+    var tocBuilt = false;
     function check() {
       if (paneMode !== 'resource') return; // mode changed while waiting
       attempts++;
       var body = iDoc.querySelector('.markdown-preview-sizer') ||
                  iDoc.querySelector('.markdown-rendered') || iDoc.body;
-      var hasContent = body && (body.querySelector('img') || body.querySelector('h1, h2, h3'));
-      if (hasContent) {
-        injectResourceFormatting(iDoc);
+      if (!body) {
+        if (attempts < maxAttempts) setTimeout(check, 150);
+        return;
+      }
+
+      // Build TOC as soon as headings are available
+      if (!tocBuilt && body.querySelector('h1, h2, h3')) {
         buildTocFromIframe(iDoc);
-      } else if (attempts < maxAttempts) {
+        tocBuilt = true;
+      }
+
+      // Inject hero layout once the image is in the DOM
+      if (!heroInjected && body.querySelector('img')) {
+        injectResourceFormatting(iDoc);
+        heroInjected = true;
+        // Rebuild TOC after hero injection (it hides the original h1)
+        buildTocFromIframe(iDoc);
+        tocBuilt = true;
+      }
+
+      // Keep polling if we still need content
+      if ((!heroInjected || !tocBuilt) && attempts < maxAttempts) {
         setTimeout(check, 150);
       }
     }
@@ -3151,6 +3170,7 @@ window._spaNavigate = function (path) {
       '.resource-hero__title { font-size: 1.5rem; font-weight: 700; margin: 0 0 12px; line-height: 1.3; color: var(--text, #cdd6f4); }' +
       '.resource-hero__detail { color: var(--text-muted, #888); margin: 6px 0; font-size: 0.95rem; }' +
       '.resource-hero__detail strong { color: var(--text, #cdd6f4); margin-right: 6px; }' +
+      'h1, h2, h3, h4, h5, h6 { scroll-margin-top: 16px; }' +
       '@media(max-width:500px) { .resource-hero { flex-direction: column; } .resource-hero__img { width: 60%; max-width: none; } }';
     iDoc.head.appendChild(heroStyle);
   }

@@ -2394,6 +2394,16 @@ window._spaNavigate = function (path) {
       toggleLearned();
     });
 
+    var fullscreenBtn = document.createElement('button');
+    fullscreenBtn.className = 'concept-popup__fullscreen';
+    fullscreenBtn.type = 'button';
+    fullscreenBtn.title = 'Toggle fullscreen';
+    fullscreenBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+    fullscreenBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleFullscreen();
+    });
+
     var closeBtn = document.createElement('button');
     closeBtn.className = 'concept-popup__close';
     closeBtn.type = 'button';
@@ -2405,6 +2415,7 @@ window._spaNavigate = function (path) {
 
     header.appendChild(learnedBtn);
     header.appendChild(titleEl);
+    header.appendChild(fullscreenBtn);
     header.appendChild(closeBtn);
 
     // Body (iframe container)
@@ -2483,9 +2494,15 @@ window._spaNavigate = function (path) {
       if (isOpen) syncBottomWidth();
     });
 
-    // ESC to close
+    // ESC to exit fullscreen first, then close
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && isOpen) closeSplitPane();
+      if (e.key === 'Escape' && isOpen) {
+        if (centerCol && centerCol.classList.contains('concept-split--fullscreen')) {
+          toggleFullscreen();
+        } else {
+          closeSplitPane();
+        }
+      }
     });
 
     // Arrow keys to navigate
@@ -2635,11 +2652,39 @@ window._spaNavigate = function (path) {
     }
   }
 
+  function toggleFullscreen() {
+    if (!centerCol) return;
+    var isFullscreen = centerCol.classList.toggle('concept-split--fullscreen');
+    // Update button icon
+    var btn = centerCol.querySelector('.concept-popup__fullscreen');
+    if (btn) {
+      btn.innerHTML = isFullscreen
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+    }
+    // Hide/show handle and top pane in fullscreen
+    if (handleEl) handleEl.style.display = isFullscreen ? 'none' : '';
+    if (topPane) topPane.style.display = isFullscreen ? 'none' : '';
+    if (bottomPane) bottomPane.style.height = isFullscreen ? '100%' : '';
+  }
+
   function closeSplitPane() {
     disconnectResourceObserver();
     clearConceptHighlight();
-    if (centerCol) centerCol.classList.remove('concept-split--open');
+    if (centerCol) {
+      centerCol.classList.remove('concept-split--open');
+      centerCol.classList.remove('concept-split--fullscreen');
+    }
     isOpen = false;
+
+    // Reset fullscreen state
+    if (handleEl) handleEl.style.display = '';
+    if (topPane) topPane.style.display = '';
+    if (bottomPane) bottomPane.style.height = '';
+    var btn = centerCol ? centerCol.querySelector('.concept-popup__fullscreen') : null;
+    if (btn) {
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+    }
 
     // Clear iframe to stop any ongoing loads
     if (iframeEl) iframeEl.src = 'about:blank';

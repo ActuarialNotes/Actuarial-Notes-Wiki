@@ -2414,61 +2414,17 @@ window._spaNavigate = function (path) {
     iframeEl.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups');
     iframeEl.addEventListener('load', function () {
       if (loadingEl) loadingEl.classList.remove('is-visible');
-      // Hide redundant elements inside iframe
       try {
         var iDoc = iframeEl.contentDocument || iframeEl.contentWindow.document;
         if (iDoc) {
-          var style = iDoc.createElement('style');
-          style.textContent =
-            '.concept-nav, .concept-footer, .exam-nav__sticky, .exam-nav-backdrop, ' +
-            '.sidebar-tabs-container, .site-body-left-column, .site-navbar, ' +
-            '.page-header, .site-header, .site-footer, .publish-renderer__footer, ' +
-            '.persistent-exam-navs, .persistent-exam-tab, ' +
-            'a[href*="obsidian.md"], a[aria-label*="Obsidian"] ' +
-            '{ display: none !important; } ' +
-            '.publish-renderer, .site-body { padding-bottom: 0 !important; } ' +
-            '.site-body-center-column { margin: 0 auto !important; max-width: 100% !important; } ' +
-            '.published-container { display: block !important; }';
-          iDoc.head.appendChild(style);
-
-          // Intercept concept and resource links inside iframe to navigate in-place
-          iDoc.addEventListener('click', function (ev) {
-            var a = ev.target.closest('a.internal-link, a[data-href]');
-            if (!a) return;
-            var href = a.getAttribute('data-href') || a.getAttribute('href') || '';
-            var p = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
-
-            if (p.match(/^Concepts\//i)) {
-              ev.preventDefault();
-              ev.stopPropagation();
-              paneMode = 'concept';
-              if (learnedBtn) learnedBtn.style.display = '';
-              var list = buildConceptList(p);
-              var idx = findConceptIndex(list, p);
-              conceptList = list;
-              loadConcept(idx);
-              return;
-            }
-
-            // Resource link detection (year pattern)
-            if (isResourcePath(p)) {
-              ev.preventDefault();
-              ev.stopPropagation();
-              paneMode = 'resource';
-              if (learnedBtn) learnedBtn.style.display = 'none';
-              var rList = buildResourceList(p);
-              var rIdx = findResourceIndex(rList, p);
-              conceptList = rList;
-              loadConcept(rIdx);
-              return;
-            }
-          }, true);
+          ensureIframeStyles(iDoc);
+          installIframeClickInterceptor(iDoc);
 
           // Apply resource-specific formatting if in resource mode
           // Obsidian Publish renders content asynchronously after iframe load,
           // so we must poll until the content (images, headings) is ready.
           if (paneMode === 'resource') {
-            waitForResourceContent(iDoc);
+            waitForResourceContent(iframeEl.src);
           }
         }
       } catch (e) { /* cross-origin — skip */ }
@@ -2981,18 +2937,92 @@ window._spaNavigate = function (path) {
   }
 
   /**
+   * Inject hide-styles into the iframe document. Safe to call repeatedly —
+   * skips if the marker style already exists.
+   */
+  var IFRAME_STYLE_ID = '__an-iframe-hide';
+  function ensureIframeStyles(iDoc) {
+    if (!iDoc || !iDoc.head) return;
+    if (iDoc.getElementById(IFRAME_STYLE_ID)) return;
+    var style = iDoc.createElement('style');
+    style.id = IFRAME_STYLE_ID;
+    style.textContent =
+      '.concept-nav, .concept-footer, .exam-nav__sticky, .exam-nav-backdrop, ' +
+      '.sidebar-tabs-container, .site-body-left-column, .site-navbar, ' +
+      '.page-header, .site-header, .site-footer, .publish-renderer__footer, ' +
+      '.persistent-exam-navs, .persistent-exam-tab, ' +
+      'a[href*="obsidian.md"], a[aria-label*="Obsidian"] ' +
+      '{ display: none !important; } ' +
+      '.publish-renderer, .site-body { padding-bottom: 0 !important; } ' +
+      '.site-body-center-column { margin: 0 auto !important; max-width: 100% !important; } ' +
+      '.published-container { display: block !important; }';
+    iDoc.head.appendChild(style);
+  }
+
+  /** Install link click interceptor inside the iframe document. */
+  var IFRAME_CLICK_KEY = '__anClickInstalled';
+  function installIframeClickInterceptor(iDoc) {
+    if (!iDoc || iDoc[IFRAME_CLICK_KEY]) return;
+    iDoc[IFRAME_CLICK_KEY] = true;
+    iDoc.addEventListener('click', function (ev) {
+      var a = ev.target.closest('a.internal-link, a[data-href]');
+      if (!a) return;
+      var href = a.getAttribute('data-href') || a.getAttribute('href') || '';
+      var p = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
+
+      if (p.match(/^Concepts\//i)) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        paneMode = 'concept';
+        if (learnedBtn) learnedBtn.style.display = '';
+        var list = buildConceptList(p);
+        var idx = findConceptIndex(list, p);
+        conceptList = list;
+        loadConcept(idx);
+        return;
+      }
+
+      // Resource link detection (year pattern)
+      if (isResourcePath(p)) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        paneMode = 'resource';
+        if (learnedBtn) learnedBtn.style.display = 'none';
+        var rList = buildResourceList(p);
+        var rIdx = findResourceIndex(rList, p);
+        conceptList = rList;
+        loadConcept(rIdx);
+        return;
+      }
+    }, true);
+  }
+
+  /**
    * Poll the iframe document until Obsidian Publish finishes rendering
    * (content sizer exists and at least one image or heading is present),
    * then inject the resource hero layout and build the TOC.
    */
-  function waitForResourceContent(iDoc) {
+  function waitForResourceContent(expectedSrc) {
     var attempts = 0;
     var maxAttempts = 40; // 40 × 150ms = 6s max wait
     var heroInjected = false;
     var tocBuilt = false;
     function check() {
       if (paneMode !== 'resource') return; // mode changed while waiting
+      // If the iframe navigated away, stop polling for the old page
+      if (expectedSrc && iframeEl.src !== expectedSrc) return;
       attempts++;
+
+      // Re-obtain the document each tick — Obsidian Publish may rebuild it
+      var iDoc;
+      try {
+        iDoc = iframeEl.contentDocument || iframeEl.contentWindow.document;
+      } catch (e) { return; } // cross-origin, give up
+      if (!iDoc) {
+        if (attempts < maxAttempts) setTimeout(check, 150);
+        return;
+      }
+
       var body = iDoc.querySelector('.markdown-preview-sizer') ||
                  iDoc.querySelector('.markdown-rendered') || iDoc.body;
       if (!body) {
@@ -3000,19 +3030,24 @@ window._spaNavigate = function (path) {
         return;
       }
 
+      // Re-inject hide styles if Obsidian rebuilt the head
+      ensureIframeStyles(iDoc);
+
       // Build TOC as soon as headings are available
       if (!tocBuilt && body.querySelector('h1, h2, h3')) {
         buildTocFromIframe(iDoc);
         tocBuilt = true;
       }
 
-      // Inject hero layout once the image is in the DOM
-      if (!heroInjected && body.querySelector('img')) {
-        injectResourceFormatting(iDoc);
-        heroInjected = true;
-        // Rebuild TOC after hero injection (it hides the original h1)
-        buildTocFromIframe(iDoc);
-        tocBuilt = true;
+      // Inject hero layout once a loaded image is in the DOM
+      // Obsidian may add <img> with only data-src before setting src
+      if (!heroInjected && body.querySelector('img[src]')) {
+        heroInjected = !!injectResourceFormatting(iDoc);
+        if (heroInjected) {
+          // Rebuild TOC after hero injection (it hides the original h1)
+          buildTocFromIframe(iDoc);
+          tocBuilt = true;
+        }
       }
 
       // Keep polling if we still need content
@@ -3028,11 +3063,14 @@ window._spaNavigate = function (path) {
   function injectResourceFormatting(iDoc) {
     var body = iDoc.querySelector('.markdown-preview-sizer') ||
                iDoc.querySelector('.markdown-rendered') || iDoc.body;
-    if (!body) return;
+    if (!body) return false;
 
-    // Find the first image
-    var firstImg = body.querySelector('img');
-    if (!firstImg) return;
+    // Guard against double injection
+    if (body.querySelector('.resource-hero')) return true;
+
+    // Find the first image that has a src (Obsidian may lazy-load via data-src)
+    var firstImg = body.querySelector('img[src]');
+    if (!firstImg) return false;
 
     // Parse metadata from multiple sources (h1, document title, URL, concept list name)
     var h1 = body.querySelector('h1');
@@ -3173,6 +3211,7 @@ window._spaNavigate = function (path) {
       'h1, h2, h3, h4, h5, h6 { scroll-margin-top: 16px; }' +
       '@media(max-width:500px) { .resource-hero { flex-direction: column; } .resource-hero__img { width: 60%; max-width: none; } }';
     iDoc.head.appendChild(heroStyle);
+    return true;
   }
 
   /** Simple HTML escape for metadata text. */

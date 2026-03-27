@@ -5729,6 +5729,17 @@ window._spaNavigate = function (path) {
       '[aria-label="Toggle left sidebar"]'
     );
     if (toggleBtn) { toggleBtn.click(); }
+
+    // Mobile fallback: Obsidian's toggle may not reliably close the sidebar
+    // on narrow viewports, so directly collapse the left column as well.
+    if (window.innerWidth <= 768) {
+      var col = document.querySelector('.site-body-left-column');
+      if (col) {
+        col.style.setProperty('display', 'none', 'important');
+        // Restore after a frame so the native toggle can manage state going forward
+        setTimeout(function () { col.style.removeProperty('display'); }, 300);
+      }
+    }
   }
 
   /* ============================================================
@@ -6315,14 +6326,18 @@ window._spaNavigate = function (path) {
           result.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            // Open concepts in the split-pane instead of navigating
-            if (cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
+            var isMobile = window.innerWidth <= 768;
+            // Open concepts in the split-pane on desktop; on mobile navigate directly
+            if (!isMobile && cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
               var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
               window._openConceptPopup(conceptPath);
             } else {
               window._spaNavigate(item.path);
             }
             closeSidebar();
+            // Retry after a short delay — Obsidian's SPA navigation can
+            // re-render the sidebar, undoing the first close on mobile.
+            if (isMobile) { setTimeout(closeSidebar, 150); }
           }, true);
 
           result.addEventListener('mouseenter', function () {

@@ -391,11 +391,6 @@ window._spaNavigate = function (path) {
         var menuItems = item.querySelectorAll('.exam-nav__lo-menu-item');
         var hasMatch = false;
 
-        // Also match against objective name
-        var objBtn = item.querySelector('.exam-nav__lo-obj-btn');
-        var objName = objBtn ? objBtn.textContent.replace(/\d+$/, '').trim() : '';
-        var objNameMatch = objName.toLowerCase().indexOf(term) !== -1;
-
         menuItems.forEach(function (mi) {
           // Store original name on first search
           if (mi._originalName == null) {
@@ -408,12 +403,12 @@ window._spaNavigate = function (path) {
 
           var cName = mi._originalName;
           var conceptMatch = cName.toLowerCase().indexOf(term) !== -1;
-          if (conceptMatch || objNameMatch) {
+          if (conceptMatch) {
             hasMatch = true;
             mi.classList.remove('is-hidden');
-            // Update display with highlight (only highlight if the concept name itself matches)
+            // Update display with highlight
             var numSpan = mi.querySelector('.exam-nav__lo-menu-num');
-            if (numSpan && conceptMatch) {
+            if (numSpan) {
               while (mi.childNodes.length > 1) mi.removeChild(mi.lastChild);
               var temp = document.createElement('span');
               temp.innerHTML = examHighlight(cName, term);

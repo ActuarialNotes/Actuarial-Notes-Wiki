@@ -3801,8 +3801,7 @@ figure.right figcaption,
 
 /* Example callout tinting on exam pages */
 .has-exam-nav .callout[data-callout="example"] {
-  background: color-mix(in oklab, var(--exam-color) 5%, var(--bg-elev));
-  border-color: color-mix(in oklab, var(--exam-color) 15%, var(--muted));
+  background: color-mix(in oklab, var(--exam-color) 8%, color-mix(in oklab, var(--muted) 65%, var(--bg)));
 }
 
 /* Exam Track row */
@@ -5862,8 +5861,8 @@ body.high-contrast .site-body a:not(.internal-link) {
 /* Callouts — no colour accents */
 body.high-contrast .callout {
   --callout-color: var(--text) !important;
-  background: var(--bg) !important;
-  border-color: var(--text) !important;
+  background: color-mix(in oklab, var(--muted) 65%, var(--bg)) !important;
+  border: none !important;
   box-shadow: none !important;
 }
 body.high-contrast .callout .callout-title,

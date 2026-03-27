@@ -274,6 +274,30 @@ window._spaNavigate = function (path) {
       stickyContent.appendChild(stickyTrack);
     }
 
+    // Search bar for filtering concepts
+    var searchRow = document.createElement('div');
+    searchRow.className = 'exam-nav__search-row';
+
+    var searchIconEl = document.createElement('span');
+    searchIconEl.className = 'exam-nav__search-icon';
+    searchIconEl.innerHTML = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg>';
+    searchRow.appendChild(searchIconEl);
+
+    var examSearchInput = document.createElement('input');
+    examSearchInput.className = 'exam-nav__search-input';
+    examSearchInput.type = 'text';
+    examSearchInput.placeholder = 'Search concepts\u2026';
+    searchRow.appendChild(examSearchInput);
+
+    var examSearchClear = document.createElement('button');
+    examSearchClear.className = 'exam-nav__search-clear';
+    examSearchClear.type = 'button';
+    examSearchClear.title = 'Clear search';
+    examSearchClear.innerHTML = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="14" y2="14"/><line x1="14" y1="6" x2="6" y2="14"/></svg>';
+    searchRow.appendChild(examSearchClear);
+
+    stickyContent.appendChild(searchRow);
+
     // Concepts list in sticky
     var stickyLoSection = document.createElement('div');
     stickyLoSection.className = 'exam-nav__lo-section exam-nav__sticky-lo';
@@ -294,6 +318,150 @@ window._spaNavigate = function (path) {
       }
     }
     setTimeout(loadStickyObjectives, 200);
+
+    // ── Search filtering logic ──────────────────────────
+    var searchEmptyEl = null;
+
+    function escHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function examHighlight(text, term) {
+      if (!term) return escHtml(text);
+      var lower = text.toLowerCase();
+      var idx = lower.indexOf(term);
+      if (idx === -1) return escHtml(text);
+      return escHtml(text.substring(0, idx)) +
+        '<mark>' + escHtml(text.substring(idx, idx + term.length)) + '</mark>' +
+        escHtml(text.substring(idx + term.length));
+    }
+
+    function filterExamConcepts(query) {
+      var term = (query || '').trim().toLowerCase();
+      var items = stickyLoSection.querySelectorAll('.exam-nav__lo-item');
+
+      // Remove previous empty message
+      if (searchEmptyEl) {
+        searchEmptyEl.remove();
+        searchEmptyEl = null;
+      }
+
+      if (!term) {
+        // Reset: show all, collapse all, restore original text
+        items.forEach(function (item) {
+          item.classList.remove('is-hidden');
+          var wrap = item.querySelector('.exam-nav__lo-wrap');
+          if (wrap && wrap._autoExpanded) {
+            wrap.classList.remove('is-open');
+            wrap._autoExpanded = false;
+          }
+          // Restore original concept names
+          var menuItems = item.querySelectorAll('.exam-nav__lo-menu-item');
+          menuItems.forEach(function (mi) {
+            if (mi._originalName != null) {
+              // Restore: keep the number span, replace text node
+              var textNodes = [];
+              mi.childNodes.forEach(function (n) {
+                if (n.nodeType === 3) textNodes.push(n);
+              });
+              // Remove mark elements and extra text nodes
+              var marks = mi.querySelectorAll('mark');
+              marks.forEach(function (m) { m.replaceWith(m.textContent); });
+              // Normalize in case of split text nodes
+              mi.normalize();
+              // Reset innerHTML after the num span
+              var numSpan = mi.querySelector('.exam-nav__lo-menu-num');
+              if (numSpan) {
+                // Rebuild: keep num span + plain text
+                while (mi.childNodes.length > 1) mi.removeChild(mi.lastChild);
+                mi.appendChild(document.createTextNode(mi._originalName));
+              }
+            }
+            mi.classList.remove('is-hidden');
+          });
+        });
+        return;
+      }
+
+      var anyVisible = false;
+
+      items.forEach(function (item) {
+        var wrap = item.querySelector('.exam-nav__lo-wrap');
+        var menuItems = item.querySelectorAll('.exam-nav__lo-menu-item');
+        var hasMatch = false;
+
+        // Also match against objective name
+        var objBtn = item.querySelector('.exam-nav__lo-obj-btn');
+        var objName = objBtn ? objBtn.textContent.replace(/\d+$/, '').trim() : '';
+        var objNameMatch = objName.toLowerCase().indexOf(term) !== -1;
+
+        menuItems.forEach(function (mi) {
+          // Store original name on first search
+          if (mi._originalName == null) {
+            // Get concept name: text content minus the number span
+            var numSpan = mi.querySelector('.exam-nav__lo-menu-num');
+            var fullText = mi.textContent;
+            var numText = numSpan ? numSpan.textContent : '';
+            mi._originalName = fullText.replace(numText, '').trim();
+          }
+
+          var cName = mi._originalName;
+          var conceptMatch = cName.toLowerCase().indexOf(term) !== -1;
+          if (conceptMatch || objNameMatch) {
+            hasMatch = true;
+            mi.classList.remove('is-hidden');
+            // Update display with highlight (only highlight if the concept name itself matches)
+            var numSpan = mi.querySelector('.exam-nav__lo-menu-num');
+            if (numSpan && conceptMatch) {
+              while (mi.childNodes.length > 1) mi.removeChild(mi.lastChild);
+              var temp = document.createElement('span');
+              temp.innerHTML = examHighlight(cName, term);
+              while (temp.firstChild) mi.appendChild(temp.firstChild);
+            }
+          } else {
+            mi.classList.add('is-hidden');
+          }
+        });
+
+        if (hasMatch) {
+          item.classList.remove('is-hidden');
+          anyVisible = true;
+          // Auto-expand to show matching concepts
+          if (wrap && !wrap.classList.contains('is-open')) {
+            wrap.classList.add('is-open');
+            wrap._autoExpanded = true;
+          }
+        } else {
+          item.classList.add('is-hidden');
+          if (wrap && wrap._autoExpanded) {
+            wrap.classList.remove('is-open');
+            wrap._autoExpanded = false;
+          }
+        }
+      });
+
+      if (!anyVisible) {
+        searchEmptyEl = document.createElement('div');
+        searchEmptyEl.className = 'exam-nav__search-empty';
+        searchEmptyEl.textContent = 'No concepts found.';
+        stickyLoSection.appendChild(searchEmptyEl);
+      }
+    }
+
+    examSearchInput.addEventListener('input', function () {
+      var val = examSearchInput.value;
+      examSearchClear.classList.toggle('is-visible', val.length > 0);
+      filterExamConcepts(val);
+    });
+
+    examSearchClear.addEventListener('click', function (e) {
+      e.stopPropagation();
+      examSearchInput.value = '';
+      examSearchClear.classList.remove('is-visible');
+      filterExamConcepts('');
+      examSearchInput.focus();
+    });
 
     // ── Embed download dropdown ─────────────────────────
     var dlEl = pageEl ? pageEl.querySelector('.download-dropdown') : null;

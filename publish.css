@@ -3662,6 +3662,96 @@ figure.right figcaption,
   display: block;
 }
 
+/* ── Exam Nav Search Bar ── */
+.exam-nav__search-row {
+  position: relative;
+  margin: 0 0 8px;
+}
+.exam-nav__search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--muted);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+.exam-nav__search-icon svg {
+  width: 14px;
+  height: 14px;
+}
+.exam-nav__search-input {
+  width: 100%;
+  padding: 7px 30px 7px 32px;
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid color-mix(in oklab, var(--text) 15%, transparent);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 12.5px;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  box-sizing: border-box;
+}
+.exam-nav__search-input:focus {
+  border-color: var(--nav-color, var(--brand));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--nav-color, var(--brand)) 20%, transparent);
+}
+.exam-nav__search-input::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+.exam-nav__search-clear {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.exam-nav__search-clear.is-visible {
+  display: flex;
+}
+.exam-nav__search-clear:hover {
+  color: var(--text);
+}
+.exam-nav__search-clear svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* Filtering states */
+.exam-nav__lo-item.is-hidden {
+  display: none;
+}
+.exam-nav__lo-menu-item.is-hidden {
+  display: none;
+}
+.exam-nav__search-empty {
+  padding: 12px 8px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+.exam-nav__lo-menu-item mark {
+  background: color-mix(in oklab, var(--nav-color, var(--brand)) 30%, transparent);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
 /* ── Mobile: full-screen overlay when open ── */
 @media (max-width: 540px) {
   .exam-nav__sticky {

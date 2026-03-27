@@ -6047,58 +6047,6 @@ body.high-contrast .dl-dropdown__single {
   display: none !important;
 }
 
-/* Speaker button — hidden by default, shown on heading hover */
-.read-aloud-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-dim, #888);
-  opacity: 0;
-  transition: opacity 0.2s ease, color 0.2s ease;
-  padding: 2px;
-  margin-left: 6px;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
-  position: relative;
-  top: -1px;
-}
-
-.read-aloud-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Show on heading hover */
-:is(h1, h2, h3, h4, h5, h6):hover .read-aloud-btn,
-.read-aloud-btn:focus-visible {
-  opacity: 1;
-}
-
-/* Active (currently speaking) — always visible, brand color */
-.read-aloud-btn.is-speaking {
-  opacity: 1;
-  color: var(--brand, #7c3aed);
-}
-
-.read-aloud-btn:hover {
-  color: var(--brand-hover, var(--brand, #7c3aed));
-}
-
-/* Focus ring for keyboard accessibility */
-.read-aloud-btn:focus-visible {
-  outline: 2px solid var(--brand, #7c3aed);
-  outline-offset: 2px;
-  border-radius: 3px;
-}
-
-/* Print: hide read-aloud buttons */
-@media print {
-  .read-aloud-btn { display: none !important; }
-}
 
 
 /* ── Research Concept (Not Found) ────────────────────────── */

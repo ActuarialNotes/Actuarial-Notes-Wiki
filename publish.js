@@ -3128,13 +3128,27 @@ window._spaNavigate = function (path) {
     var INTERNAL_KEYS = { aliases: 1, cssclasses: 1, cssclass: 1, publish: 1, tags: 1 };
 
     // --- Try YAML front matter properties first ---
-    var metaProps = body.querySelectorAll('.metadata-container .metadata-property');
+    // Search the full document (properties may be inside .page-header which is hidden)
+    var searchRoots = [body, iDoc.documentElement];
+    var metaProps = [];
+    for (var ri = 0; ri < searchRoots.length && metaProps.length === 0; ri++) {
+      if (!searchRoots[ri]) continue;
+      // Try multiple selector patterns for Obsidian Publish compatibility
+      metaProps = searchRoots[ri].querySelectorAll('.metadata-container .metadata-property');
+      if (!metaProps.length) metaProps = searchRoots[ri].querySelectorAll('[data-property-key]');
+      if (!metaProps.length) metaProps = searchRoots[ri].querySelectorAll('.metadata-properties .metadata-property');
+    }
     for (var pi = 0; pi < metaProps.length; pi++) {
-      var keyEl = metaProps[pi].querySelector('.metadata-property-key');
-      var valEl = metaProps[pi].querySelector('.metadata-property-value');
-      if (!keyEl || !valEl) continue;
-      var rawKey = keyEl.textContent.trim();
-      var rawVal = valEl.textContent.trim();
+      var propEl = metaProps[pi];
+      // Extract key: from data attribute, or from key element text
+      var rawKey = propEl.getAttribute('data-property-key') || '';
+      if (!rawKey) {
+        var keyEl = propEl.querySelector('.metadata-property-key');
+        if (keyEl) rawKey = keyEl.textContent.trim();
+      }
+      // Extract value: from value element text
+      var valEl = propEl.querySelector('.metadata-property-value');
+      var rawVal = valEl ? valEl.textContent.trim() : '';
       if (!rawKey || !rawVal) continue;
       if (INTERNAL_KEYS[rawKey.toLowerCase()]) continue;
       if (rawKey.toLowerCase() === 'title') { meta.title = rawVal; continue; }
@@ -3253,7 +3267,8 @@ window._spaNavigate = function (path) {
     if (origH1 && !origH1.closest('.resource-hero')) {
       origH1.setAttribute('data-hero-hidden', '');
     }
-    var origMetaContainer = body.querySelector('.metadata-container');
+    var origMetaContainer = body.querySelector('.metadata-container') ||
+      iDoc.querySelector('.page-header .metadata-container');
     if (origMetaContainer) {
       origMetaContainer.setAttribute('data-hero-hidden', '');
     }
@@ -3264,10 +3279,10 @@ window._spaNavigate = function (path) {
       heroStyle.id = HERO_STYLE_ID;
       heroStyle.textContent =
         // Hero layout
-        '.resource-hero { display: flex; gap: 20px; align-items: flex-start; padding: 20px 0; margin-bottom: 8px; }' +
-        '.resource-hero__img { flex-shrink: 0; width: clamp(80px, 25%, 200px); }' +
+        '.resource-hero { display: flex; gap: 20px; align-items: flex-end; padding: 20px 0; margin-bottom: 8px; }' +
+        '.resource-hero__img { flex-shrink: 0; width: clamp(120px, 30%, 250px); }' +
         '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; object-fit: contain; }' +
-        '.resource-hero__meta { flex: 1; min-width: 0; padding-top: 4px; }' +
+        '.resource-hero__meta { flex: 1; min-width: 0; padding-bottom: 4px; }' +
         // Inline metadata details with dot separators
         '.resource-hero__details { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 0; margin: 0; }' +
         '.resource-hero__detail { color: var(--text-muted, #888); font-size: clamp(0.8rem, 2.5vw, 0.95rem); white-space: nowrap; }' +

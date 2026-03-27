@@ -4654,13 +4654,24 @@ h6 a {
 }
 
 /* ---- Fullscreen mode ---- */
+.concept-split--fullscreen .concept-split__top,
+.concept-split--fullscreen .concept-split__handle {
+  display: none !important;
+}
 .concept-split--fullscreen .concept-split__bottom {
-  position: fixed;
-  inset: 0;
-  z-index: 310;
-  height: 100vh !important;
-  height: 100dvh !important;
+  flex: 1;
+  height: auto !important;
   border-top: none;
+}
+/* On mobile, go fixed to cover the exam nav bar */
+@media (max-width: 640px) {
+  .concept-split--fullscreen .concept-split__bottom {
+    position: fixed;
+    inset: 0;
+    z-index: 310;
+    height: 100vh !important;
+    height: 100dvh !important;
+  }
 }
 /* Hide "Powered by Obsidian Publish" footer/badge */
 .publish-renderer__footer,

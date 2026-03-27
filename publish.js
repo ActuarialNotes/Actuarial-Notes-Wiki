@@ -3169,36 +3169,61 @@ window._spaNavigate = function (path) {
     // 4) h1 text
     if (h1) titleCandidates.push(h1.textContent.trim());
 
-    var meta = { title: '', author: '', year: '', publisher: '' };
-    var parsed = false;
+    var meta = { title: '', properties: [] };
+    var INTERNAL_KEYS = { aliases: 1, cssclasses: 1, cssclass: 1, publish: 1, tags: 1 };
 
-    for (var ci = 0; ci < titleCandidates.length && !parsed; ci++) {
-      var titleText = titleCandidates[ci];
-      if (!titleText) continue;
+    // --- Try YAML front matter properties first ---
+    var metaProps = body.querySelectorAll('.metadata-container .metadata-property');
+    for (var pi = 0; pi < metaProps.length; pi++) {
+      var keyEl = metaProps[pi].querySelector('.metadata-property-key');
+      var valEl = metaProps[pi].querySelector('.metadata-property-value');
+      if (!keyEl || !valEl) continue;
+      var rawKey = keyEl.textContent.trim();
+      var rawVal = valEl.textContent.trim();
+      if (!rawKey || !rawVal) continue;
+      if (INTERNAL_KEYS[rawKey.toLowerCase()]) continue;
+      if (rawKey.toLowerCase() === 'title') { meta.title = rawVal; continue; }
+      // Capitalize first letter for display
+      var displayKey = rawKey.charAt(0).toUpperCase() + rawKey.slice(1);
+      meta.properties.push({ key: displayKey, value: rawVal });
+    }
 
-      var m = titleText.match(/^(.+?)\s*\(([^)]*?)\s*-\s*(\d{4})\)\s*$/);
-      if (m) {
-        meta.title = m[1].trim(); meta.author = m[2].trim(); meta.year = m[3]; parsed = true;
-      } else {
-        var m1b = titleText.match(/^(.+?)\s*\(([^,)]+),\s*(\d{4})\)\s*$/);
-        if (m1b) { meta.title = m1b[1].trim(); meta.author = m1b[2].trim(); meta.year = m1b[3]; parsed = true; }
+    // --- Fallback: parse metadata from filename patterns ---
+    if (meta.properties.length === 0) {
+      var parsed = false;
+      var author = '', year = '';
+
+      for (var ci = 0; ci < titleCandidates.length && !parsed; ci++) {
+        var titleText = titleCandidates[ci];
+        if (!titleText) continue;
+
+        var m = titleText.match(/^(.+?)\s*\(([^)]*?)\s*-\s*(\d{4})\)\s*$/);
+        if (m) {
+          meta.title = m[1].trim(); author = m[2].trim(); year = m[3]; parsed = true;
+        } else {
+          var m1b = titleText.match(/^(.+?)\s*\(([^,)]+),\s*(\d{4})\)\s*$/);
+          if (m1b) { meta.title = m1b[1].trim(); author = m1b[2].trim(); year = m1b[3]; parsed = true; }
+        }
+        if (!parsed) {
+          var m2 = titleText.match(/^(.+?)\s*-\s*(\d{4})\s*$/);
+          if (m2) { meta.title = m2[1].trim(); year = m2[2]; parsed = true; }
+        }
+        if (!parsed) {
+          var m3 = titleText.match(/^(.+?)\s*\((\d{4})\)\s*$/);
+          if (m3) { meta.title = m3[1].trim(); year = m3[2]; parsed = true; }
+        }
       }
-      if (!parsed) {
-        var m2 = titleText.match(/^(.+?)\s*-\s*(\d{4})\s*$/);
-        if (m2) { meta.title = m2[1].trim(); meta.year = m2[2]; parsed = true; }
-      }
-      if (!parsed) {
-        var m3 = titleText.match(/^(.+?)\s*\((\d{4})\)\s*$/);
-        if (m3) { meta.title = m3[1].trim(); meta.year = m3[2]; parsed = true; }
-      }
+
+      if (author) meta.properties.push({ key: 'Author', value: author });
+      if (year)   meta.properties.push({ key: 'Year', value: year });
+
+      var publisherEl = body.querySelector('.resource-publisher, [data-publisher]');
+      if (publisherEl) meta.properties.push({ key: 'Publisher', value: publisherEl.textContent.trim() });
     }
 
     if (!meta.title) {
       meta.title = (h1 ? h1.textContent.trim() : titleCandidates[0] || '').replace(/\s*\([^)]*\)\s*$/, '');
     }
-
-    var publisherEl = body.querySelector('.resource-publisher, [data-publisher]');
-    if (publisherEl) meta.publisher = publisherEl.textContent.trim();
 
     // Also cache the image src so we can rebuild the hero even if the
     // original <img> element has been replaced by Obsidian.
@@ -3241,28 +3266,17 @@ window._spaNavigate = function (path) {
     var metaWrap = iDoc.createElement('div');
     metaWrap.className = 'resource-hero__meta';
 
-    var titleH = iDoc.createElement('h1');
-    titleH.className = 'resource-hero__title';
-    titleH.textContent = meta.title;
-    metaWrap.appendChild(titleH);
-
-    if (meta.author) {
-      var authorP = iDoc.createElement('p');
-      authorP.className = 'resource-hero__detail';
-      authorP.innerHTML = '<strong>Author</strong> ' + escapeHtml(meta.author);
-      metaWrap.appendChild(authorP);
-    }
-    if (meta.year) {
-      var yearP = iDoc.createElement('p');
-      yearP.className = 'resource-hero__detail';
-      yearP.innerHTML = '<strong>Year</strong> ' + escapeHtml(meta.year);
-      metaWrap.appendChild(yearP);
-    }
-    if (meta.publisher) {
-      var pubP = iDoc.createElement('p');
-      pubP.className = 'resource-hero__detail';
-      pubP.innerHTML = '<strong>Publisher</strong> ' + escapeHtml(meta.publisher);
-      metaWrap.appendChild(pubP);
+    if (meta.properties.length > 0) {
+      var detailsWrap = iDoc.createElement('div');
+      detailsWrap.className = 'resource-hero__details';
+      for (var di = 0; di < meta.properties.length; di++) {
+        var prop = meta.properties[di];
+        var span = iDoc.createElement('span');
+        span.className = 'resource-hero__detail';
+        span.innerHTML = '<strong>' + escapeHtml(prop.key) + '</strong> ' + escapeHtml(prop.value);
+        detailsWrap.appendChild(span);
+      }
+      metaWrap.appendChild(detailsWrap);
     }
 
     hero.appendChild(imgWrap);
@@ -3280,9 +3294,13 @@ window._spaNavigate = function (path) {
         origImg.setAttribute('data-hero-hidden', '');
       }
     }
-    var origH1 = body.querySelector('h1:not(.resource-hero__title)');
+    var origH1 = body.querySelector('h1');
     if (origH1 && !origH1.closest('.resource-hero')) {
       origH1.setAttribute('data-hero-hidden', '');
+    }
+    var origMetaContainer = body.querySelector('.metadata-container');
+    if (origMetaContainer) {
+      origMetaContainer.setAttribute('data-hero-hidden', '');
     }
 
     // Ensure hero CSS is in <head> (use ID so it's not duplicated)
@@ -3295,8 +3313,10 @@ window._spaNavigate = function (path) {
         '.resource-hero__img { flex-shrink: 0; width: clamp(80px, 25%, 200px); }' +
         '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; object-fit: contain; }' +
         '.resource-hero__meta { flex: 1; min-width: 0; padding-top: 4px; }' +
-        '.resource-hero__title { font-size: clamp(1rem, 3.5vw, 1.5rem); font-weight: 700; margin: 0 0 8px; line-height: 1.3; color: var(--text, #cdd6f4); }' +
-        '.resource-hero__detail { color: var(--text-muted, #888); margin: 4px 0; font-size: clamp(0.8rem, 2.5vw, 0.95rem); }' +
+        // Inline metadata details with dot separators
+        '.resource-hero__details { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 0; margin: 0; }' +
+        '.resource-hero__detail { color: var(--text-muted, #888); font-size: clamp(0.8rem, 2.5vw, 0.95rem); white-space: nowrap; }' +
+        '.resource-hero__detail + .resource-hero__detail::before { content: "\\00b7"; margin: 0 8px; color: var(--text-muted, #888); }' +
         '.resource-hero__detail strong { color: var(--text, #cdd6f4); margin-right: 6px; }' +
         // Hide originals that have been replaced by the hero
         '[data-hero-hidden] { display: none !important; }' +

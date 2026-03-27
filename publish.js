@@ -436,12 +436,30 @@ window._spaNavigate = function (path) {
     document.body.appendChild(sticky);
     container._stickyEl = sticky;
 
+    // Align sticky nav to right edge of content area
+    function alignStickyToContent() {
+      var col = document.querySelector('.site-body-center-column');
+      if (col) {
+        var colRect = col.getBoundingClientRect();
+        var rightOffset = Math.max(window.innerWidth - colRect.right, 0);
+        sticky.style.right = rightOffset + 'px';
+      }
+    }
+    alignStickyToContent();
+    window.addEventListener('resize', alignStickyToContent);
+
     // Offset persistent tabs to sit left of the sticky tab
     function syncPersistentOffset() {
       var stickyRect = stickyBtn.getBoundingClientRect();
       var persistentNav = document.querySelector('.persistent-exam-navs');
       if (persistentNav) {
-        persistentNav.style.right = (stickyRect.width + 6) + 'px';
+        var col = document.querySelector('.site-body-center-column');
+        var baseRight = 16;
+        if (col) {
+          var colRect = col.getBoundingClientRect();
+          baseRight = Math.max(window.innerWidth - colRect.right, 16);
+        }
+        persistentNav.style.right = (baseRight + stickyRect.width + 6) + 'px';
       }
     }
     setTimeout(syncPersistentOffset, 350);
@@ -6535,6 +6553,9 @@ window._spaNavigate = function (path) {
       setTimeout(window._syncPersistentOffset, 50);
     }
 
+    // Align tabs to the right edge of the page content area
+    alignPersistentNavsToContent();
+
     if (!window._persistentNavCloseRegistered) {
       window._persistentNavCloseRegistered = true;
       document.addEventListener('click', function (e) {
@@ -6543,7 +6564,18 @@ window._spaNavigate = function (path) {
           if (c) c.classList.remove('is-expanded');
         }
       });
+      window.addEventListener('resize', alignPersistentNavsToContent);
     }
+  }
+
+  function alignPersistentNavsToContent() {
+    var nav = document.querySelector('.persistent-exam-navs');
+    if (!nav) return;
+    var col = document.querySelector('.site-body-center-column');
+    if (!col) return;
+    var colRect = col.getBoundingClientRect();
+    var rightOffset = window.innerWidth - colRect.right;
+    nav.style.right = Math.max(rightOffset, 16) + 'px';
   }
 
   /* ============================================================

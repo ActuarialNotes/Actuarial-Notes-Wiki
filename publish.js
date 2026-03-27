@@ -438,14 +438,12 @@ window._spaNavigate = function (path) {
 
     // Align sticky nav to right edge of content area
     function alignStickyToContent() {
-      var col = document.querySelector('.site-body-center-column');
-      if (col) {
-        var colRect = col.getBoundingClientRect();
-        var rightOffset = Math.max(window.innerWidth - colRect.right, 0);
-        sticky.style.right = rightOffset + 'px';
+      if (typeof window._getContentRightOffset === 'function') {
+        sticky.style.right = window._getContentRightOffset() + 'px';
       }
     }
     alignStickyToContent();
+    setTimeout(alignStickyToContent, 500);
     window.addEventListener('resize', alignStickyToContent);
 
     // Offset persistent tabs to sit left of the sticky tab
@@ -453,12 +451,8 @@ window._spaNavigate = function (path) {
       var stickyRect = stickyBtn.getBoundingClientRect();
       var persistentNav = document.querySelector('.persistent-exam-navs');
       if (persistentNav) {
-        var col = document.querySelector('.site-body-center-column');
-        var baseRight = 16;
-        if (col) {
-          var colRect = col.getBoundingClientRect();
-          baseRight = Math.max(window.innerWidth - colRect.right, 16);
-        }
+        var baseRight = typeof window._getContentRightOffset === 'function'
+          ? window._getContentRightOffset() : 16;
         persistentNav.style.right = (baseRight + stickyRect.width + 6) + 'px';
       }
     }
@@ -6568,14 +6562,29 @@ window._spaNavigate = function (path) {
     }
   }
 
+  window._getContentRightOffset = function () {
+    // The readable content is constrained to 900px max-width inside
+    // .markdown-preview-view; find the actual right edge of that content.
+    var el = document.querySelector(
+      '.markdown-preview-view > h1, .markdown-preview-view > p'
+    );
+    if (el) {
+      var r = el.getBoundingClientRect();
+      return Math.max(window.innerWidth - r.right, 16);
+    }
+    // Fallback: use center column
+    var col = document.querySelector('.site-body-center-column');
+    if (col) {
+      var colRect = col.getBoundingClientRect();
+      return Math.max(window.innerWidth - colRect.right, 16);
+    }
+    return 16;
+  };
+
   function alignPersistentNavsToContent() {
     var nav = document.querySelector('.persistent-exam-navs');
     if (!nav) return;
-    var col = document.querySelector('.site-body-center-column');
-    if (!col) return;
-    var colRect = col.getBoundingClientRect();
-    var rightOffset = window.innerWidth - colRect.right;
-    nav.style.right = Math.max(rightOffset, 16) + 'px';
+    nav.style.right = window._getContentRightOffset() + 'px';
   }
 
   /* ============================================================

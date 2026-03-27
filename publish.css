@@ -422,12 +422,12 @@ pre code { background: none; border: none; padding: 0; }
 
 .callout {
   --callout-color: var(--brand);
-  background: var(--bg-elev);
-  border: 1px solid color-mix(in oklab, var(--callout-color) 15%, var(--muted));
-  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--muted) 35%, var(--bg));
+  border: none;
+  border-radius: var(--radius-lg);
   padding: 14px 18px;
   margin: 1.25rem 0;
-  box-shadow: var(--shadow-1);
+  box-shadow: none;
 }
 
 /* Callout title */

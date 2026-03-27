@@ -4652,6 +4652,16 @@ h6 a {
   flex-direction: column;
   overflow: hidden !important;
 }
+
+/* ---- Fullscreen mode ---- */
+.concept-split--fullscreen .concept-split__bottom {
+  position: fixed;
+  inset: 0;
+  z-index: 310;
+  height: 100vh !important;
+  height: 100dvh !important;
+  border-top: none;
+}
 /* Hide "Powered by Obsidian Publish" footer/badge */
 .publish-renderer__footer,
 .site-footer,

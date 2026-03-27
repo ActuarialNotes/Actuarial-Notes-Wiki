@@ -3127,34 +3127,23 @@ window._spaNavigate = function (path) {
     var meta = { title: '', properties: [] };
     var INTERNAL_KEYS = { aliases: 1, cssclasses: 1, cssclass: 1, publish: 1, tags: 1 };
 
-    // --- Try YAML front matter properties first ---
-    // Search the full document (properties may be inside .page-header which is hidden)
-    var searchRoots = [body, iDoc.documentElement];
-    var metaProps = [];
-    for (var ri = 0; ri < searchRoots.length && metaProps.length === 0; ri++) {
-      if (!searchRoots[ri]) continue;
-      // Try multiple selector patterns for Obsidian Publish compatibility
-      metaProps = searchRoots[ri].querySelectorAll('.metadata-container .metadata-property');
-      if (!metaProps.length) metaProps = searchRoots[ri].querySelectorAll('[data-property-key]');
-      if (!metaProps.length) metaProps = searchRoots[ri].querySelectorAll('.metadata-properties .metadata-property');
-    }
-    for (var pi = 0; pi < metaProps.length; pi++) {
-      var propEl = metaProps[pi];
-      // Extract key: from data attribute, or from key element text
-      var rawKey = propEl.getAttribute('data-property-key') || '';
-      if (!rawKey) {
-        var keyEl = propEl.querySelector('.metadata-property-key');
-        if (keyEl) rawKey = keyEl.textContent.trim();
+    // --- Try YAML front matter first ---
+    // Obsidian Publish renders YAML as div.mod-frontmatter containing raw text
+    var fmEl = body.querySelector('.mod-frontmatter');
+    if (fmEl) {
+      var fmText = fmEl.textContent || '';
+      var fmLines = fmText.split('\n');
+      for (var fi = 0; fi < fmLines.length; fi++) {
+        var fmMatch = fmLines[fi].match(/^\s*([^:]+?)\s*:\s*(.+?)\s*$/);
+        if (!fmMatch) continue;
+        var rawKey = fmMatch[1].trim();
+        var rawVal = fmMatch[2].replace(/^["']|["']$/g, '').trim();
+        if (!rawKey || !rawVal) continue;
+        if (INTERNAL_KEYS[rawKey.toLowerCase()]) continue;
+        if (rawKey.toLowerCase() === 'title') { meta.title = rawVal; continue; }
+        var displayKey = rawKey.charAt(0).toUpperCase() + rawKey.slice(1);
+        meta.properties.push({ key: displayKey, value: rawVal });
       }
-      // Extract value: from value element text
-      var valEl = propEl.querySelector('.metadata-property-value');
-      var rawVal = valEl ? valEl.textContent.trim() : '';
-      if (!rawKey || !rawVal) continue;
-      if (INTERNAL_KEYS[rawKey.toLowerCase()]) continue;
-      if (rawKey.toLowerCase() === 'title') { meta.title = rawVal; continue; }
-      // Capitalize first letter for display
-      var displayKey = rawKey.charAt(0).toUpperCase() + rawKey.slice(1);
-      meta.properties.push({ key: displayKey, value: rawVal });
     }
 
     // --- Fallback: parse metadata from filename patterns ---
@@ -3267,10 +3256,15 @@ window._spaNavigate = function (path) {
     if (origH1 && !origH1.closest('.resource-hero')) {
       origH1.setAttribute('data-hero-hidden', '');
     }
-    var origMetaContainer = body.querySelector('.metadata-container') ||
-      iDoc.querySelector('.page-header .metadata-container');
-    if (origMetaContainer) {
-      origMetaContainer.setAttribute('data-hero-hidden', '');
+    // Hide the YAML frontmatter block and its header rendered by Obsidian
+    var origFrontmatter = body.querySelector('.mod-frontmatter');
+    if (origFrontmatter) {
+      origFrontmatter.setAttribute('data-hero-hidden', '');
+      // Also hide the preceding .mod-header if it's the "Properties" label
+      var prevSib = origFrontmatter.previousElementSibling;
+      if (prevSib && prevSib.classList.contains('mod-header')) {
+        prevSib.setAttribute('data-hero-hidden', '');
+      }
     }
 
     // Ensure hero CSS is in <head> (use ID so it's not duplicated)

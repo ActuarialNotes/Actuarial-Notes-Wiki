@@ -4824,9 +4824,9 @@ window._spaNavigate = function (path) {
             { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, color: 'fuchsia' },
             { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, color: 'fuchsia' },
             { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, color: 'fuchsia' },
-            { id: 'CAS-5',    name: 'Exam 5',         path: null, color: 'pink' },
+            { id: 'CAS-5',    name: 'Exam 5',        path: 'Exam 5 (CAS)', color: 'pink' },
             { id: 'CAS-PCPA', name: 'PCPA',           path: null, color: 'rose' },
-            { id: 'CAS-6',    name: 'Exam 6',         path: null, color: 'orange' },
+            { id: 'CAS-6',    name: 'Exam 6',         path: 'Exam 6 (CAS)', color: 'orange' },
             { id: 'CAS-APC',  name: 'APC',            path: null, color: 'slate' }
           ]
         }

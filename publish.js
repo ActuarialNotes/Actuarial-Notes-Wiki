@@ -3178,7 +3178,7 @@ window._spaNavigate = function (path) {
         var rawVal = fmMatch[2].replace(/^["']|["']$/g, '').trim();
         if (!rawKey || !rawVal) continue;
         if (INTERNAL_KEYS[rawKey.toLowerCase()]) continue;
-        if (rawKey.toLowerCase() === 'title') { meta.title = rawVal; continue; }
+        if (rawKey.toLowerCase() === 'title') meta.title = rawVal;
         var displayKey = rawKey.charAt(0).toUpperCase() + rawKey.slice(1);
         meta.properties.push({ key: displayKey, value: rawVal });
       }
@@ -3314,7 +3314,7 @@ window._spaNavigate = function (path) {
         '.resource-hero { display: flex; gap: 20px; align-items: flex-end; padding: 20px 0; margin-bottom: 8px; }' +
         '.resource-hero__img { flex-shrink: 0; width: clamp(120px, 30%, 250px); }' +
         '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; object-fit: contain; }' +
-        '.resource-hero__meta { flex: 1; min-width: 0; padding-bottom: 4px; }' +
+        '.resource-hero__meta { flex: 1; min-width: 0; display: flex; align-items: flex-end; padding-bottom: 4px; }' +
         // Inline metadata details with dot separators
         '.resource-hero__details { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 0; margin: 0; }' +
         '.resource-hero__detail { color: var(--text-muted, #888); font-size: clamp(0.8rem, 2.5vw, 0.95rem); white-space: nowrap; }' +

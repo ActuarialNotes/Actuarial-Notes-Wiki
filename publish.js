@@ -5897,17 +5897,32 @@ window._spaNavigate = function (path) {
       '[aria-label="Toggle left sidebar"]'
     );
     if (toggleBtn) { toggleBtn.click(); }
+  }
 
-    // Mobile fallback: Obsidian's toggle may not reliably close the sidebar
-    // on narrow viewports, so directly collapse the left column as well.
-    if (window.innerWidth <= 768) {
-      var col = document.querySelector('.site-body-left-column');
-      if (col) {
-        col.style.setProperty('display', 'none', 'important');
-        // Restore after a frame so the native toggle can manage state going forward
-        setTimeout(function () { col.style.removeProperty('display'); }, 300);
-      }
-    }
+  /**
+   * Navigate via a synthetic internal-link placed inside the sidebar element.
+   * Obsidian Publish auto-closes the mobile sidebar when an internal-link
+   * inside the left column is clicked, so anchoring the link there lets the
+   * framework handle the collapse natively — unlike _spaNavigate which
+   * appends to document.body and bypasses that behaviour.
+   */
+  function sidebarNavigate(path) {
+    if (!path) return;
+    // Dismiss the mobile keyboard before navigating
+    if (document.activeElement) { document.activeElement.blur(); }
+    var slug = path.replace(/ /g, '+');
+    var url = window.location.origin + '/' + slug;
+    var a = document.createElement('a');
+    a.className = 'internal-link';
+    a.setAttribute('data-href', path);
+    a.href = url;
+    a.style.display = 'none';
+    // Append inside the sidebar so Obsidian sees it as a sidebar-link click
+    var sidebar = document.querySelector('.site-body-left-column');
+    var parent = sidebar || document.body;
+    parent.appendChild(a);
+    a.click();
+    parent.removeChild(a);
   }
 
   /* ============================================================
@@ -6137,8 +6152,7 @@ window._spaNavigate = function (path) {
       e.stopImmediatePropagation();
       var track = TRACKS.find(function (t) { return t.key === journeyState.selectedTrack; });
       if (track && track.certPath) {
-        window._spaNavigate(track.certPath);
-        closeSidebar();
+        sidebarNavigate(track.certPath);
       }
     }, true);
     selectRow.appendChild(certBtn);
@@ -6249,8 +6263,7 @@ window._spaNavigate = function (path) {
             nameEl.addEventListener('click', function (e) {
               e.preventDefault();
               e.stopImmediatePropagation();
-              window._spaNavigate(item.path);
-              closeSidebar();
+              sidebarNavigate(item.path);
             }, true);
           } else {
             nameEl = document.createElement('span');
@@ -6499,13 +6512,12 @@ window._spaNavigate = function (path) {
             if (!isMobile && cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
               var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
               window._openConceptPopup(conceptPath);
+              closeSidebar();
             } else {
-              window._spaNavigate(item.path);
+              // Navigate via a link inside the sidebar so Obsidian's
+              // framework auto-closes the mobile sidebar.
+              sidebarNavigate(item.path);
             }
-            closeSidebar();
-            // Retry after a short delay — Obsidian's SPA navigation can
-            // re-render the sidebar, undoing the first close on mobile.
-            if (isMobile) { setTimeout(closeSidebar, 150); }
           }, true);
 
           result.addEventListener('mouseenter', function () {

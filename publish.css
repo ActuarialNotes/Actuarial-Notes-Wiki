@@ -605,18 +605,18 @@ data.callout-obj-num {
   display: none !important;
 }
 
-/* Tablet: 3-col → 2-col */
+/* Tablet: 3-col → 2-col (needs !important to override inline style set by JS) */
 @media (max-width: 768px) {
   .callout-cols-3 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 
-/* Mobile: all → 1-col */
+/* Mobile: all → 1-col (needs !important to override inline style set by JS) */
 @media (max-width: 640px) {
   .callout-cols-2,
   .callout-cols-3 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 }
 

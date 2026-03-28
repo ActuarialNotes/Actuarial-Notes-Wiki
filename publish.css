@@ -686,22 +686,40 @@ data.callout-obj-num {
 .markdown-rendered a.card.internal-link:hover {
   border-color: color-mix(in oklab, var(--brand) 50%, var(--muted)) !important;
 }
-/* All children — suppress underlines and gradient-underline effects */
+/* All children — suppress underlines; use both * and element-type selectors
+   to cover both (0,3,1) and (0,3,2) specificity layers */
 .site-body a.card.internal-link *,
 .markdown-rendered a.card.internal-link * {
   text-decoration: none !important;
+  text-decoration-line: none !important;
   background-image: none !important;
 }
-/* Subtitle — re-enable underline on the full certification title only */
-.site-body a.card.internal-link .act-card__subtitle,
-.markdown-rendered a.card.internal-link .act-card__subtitle {
+.site-body a.card.internal-link h3,
+.site-body a.card.internal-link h4,
+.site-body a.card.internal-link p,
+.site-body a.card.internal-link div,
+.site-body a.card.internal-link span,
+.markdown-rendered a.card.internal-link h3,
+.markdown-rendered a.card.internal-link h4,
+.markdown-rendered a.card.internal-link p,
+.markdown-rendered a.card.internal-link div,
+.markdown-rendered a.card.internal-link span {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  background-image: none !important;
+}
+/* Subtitle — re-enable underline on the full certification title only.
+   p.act-card__subtitle = (0,4,2) beats everything above */
+.site-body a.card.internal-link p.act-card__subtitle,
+.markdown-rendered a.card.internal-link p.act-card__subtitle {
   text-decoration: underline !important;
+  text-decoration-line: underline !important;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
   text-decoration-color: color-mix(in oklab, var(--text-dim) 45%, transparent);
 }
-.site-body a.card.internal-link:hover .act-card__subtitle,
-.markdown-rendered a.card.internal-link:hover .act-card__subtitle {
+.site-body a.card.internal-link:hover p.act-card__subtitle,
+.markdown-rendered a.card.internal-link:hover p.act-card__subtitle {
   text-decoration-color: var(--text-dim);
 }
 /* Pills — enforce dim text color regardless of nested link styling */

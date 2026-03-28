@@ -667,55 +667,56 @@ data.callout-obj-num {
   font-size: 1.35rem;
   letter-spacing: -.01em;
 }
-.act-card__subtitle,
-.markdown-rendered .act-card__subtitle {
+.act-card__subtitle {
   margin: 0 0 16px;
   color: var(--text-dim);
   font-size: 0.95rem;
   line-height: 1.5;
+}
+
+/* Card link behavior — (0,3,1) specificity to beat Obsidian's (0,2,1) a.internal-link rules */
+.site-body a.card.internal-link,
+.markdown-rendered a.card.internal-link {
+  text-decoration: none !important;
+  background-image: none !important;
+  border: 1px solid transparent !important;
+  outline: none !important;
+}
+.site-body a.card.internal-link:hover,
+.markdown-rendered a.card.internal-link:hover {
+  border-color: color-mix(in oklab, var(--brand) 50%, var(--muted)) !important;
+}
+/* All children — suppress underlines and gradient-underline effects */
+.site-body a.card.internal-link *,
+.markdown-rendered a.card.internal-link * {
+  text-decoration: none !important;
+  background-image: none !important;
+}
+/* Subtitle — re-enable underline on the full certification title only */
+.site-body a.card.internal-link .act-card__subtitle,
+.markdown-rendered a.card.internal-link .act-card__subtitle {
   text-decoration: underline !important;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
   text-decoration-color: color-mix(in oklab, var(--text-dim) 45%, transparent);
-  background-image: none !important;
 }
-a.act-card:hover .act-card__subtitle,
-.grid > a.card:hover .act-card__subtitle,
-.markdown-rendered .grid > a.card:hover .act-card__subtitle {
+.site-body a.card.internal-link:hover .act-card__subtitle,
+.markdown-rendered a.card.internal-link:hover .act-card__subtitle {
   text-decoration-color: var(--text-dim);
 }
-
-/* Card link behavior — suppress all link decorations on cards and their children */
-a.act-card, a.act-card:hover, a.act-card:focus, a.act-card:active,
-.grid > a.card, .grid > a.card:hover,
-.markdown-rendered .grid > a.card,
-.markdown-rendered .grid > a.card:hover,
-.markdown-rendered a.act-card,
-.markdown-rendered a.act-card:hover {
-  text-decoration: none !important;
-  background-image: none !important;
-}
-.grid > a.card *:not(.act-card__subtitle),
-a.act-card *:not(.act-card__subtitle),
-.markdown-rendered .grid > a.card *:not(.act-card__subtitle),
-.markdown-rendered a.act-card *:not(.act-card__subtitle) {
-  text-decoration: none !important;
-  background-image: none !important;
-}
-/* Pill override — prevent link styles from leaking into pill badges */
-.grid > a.card .act-pill,
-.grid > a.card .act-pill *,
-a.act-card .act-pill,
-a.act-card .act-pill *,
-.act-pill--meta a,
-.act-pill--meta a.internal-link {
+/* Pills — enforce dim text color regardless of nested link styling */
+.site-body a.card.internal-link .act-pill,
+.site-body a.card.internal-link .act-pill *,
+.markdown-rendered a.card.internal-link .act-pill,
+.markdown-rendered a.card.internal-link .act-pill *,
+.act-pill--meta a, .act-pill--meta a.internal-link {
   color: var(--text-dim) !important;
   text-decoration: none !important;
   background-image: none !important;
 }
-a.act-card:hover .act-card__title,
-.grid > a.card:hover .act-card__title {
-  text-decoration: none !important;
+/* Card title on hover */
+.site-body a.card.internal-link:hover .act-card__title,
+.markdown-rendered a.card.internal-link:hover .act-card__title {
   color: var(--brand-hover);
 }
 

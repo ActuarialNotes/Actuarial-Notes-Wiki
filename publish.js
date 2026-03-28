@@ -1317,13 +1317,18 @@ window._spaNavigate = function (path) {
 
 /* ===========================================================
    CALLOUT COLUMN ARRAYS
-   Obsidian Publish may render callouts as siblings of a wrapper
-   <div> (not children) and may inject empty <p>/<br> elements
-   from blank lines.  This IIFE handles both cases:
-     A) Callouts are siblings → move them into the container
-     B) Callouts are children → just clean up stray nodes
+   Obsidian's markdown parser terminates HTML blocks at blank
+   lines, so a <div class="callout-cols-2"> wrapper ends up
+   empty with callouts rendered as siblings, or with stray <p>
+   elements between them.
 
-   Syntax in markdown (no closing </div> needed):
+   This IIFE:
+     1. Finds .callout-cols-2 / .callout-cols-3 containers
+     2. Collects sibling .callout elements (skipping empty <p>/<br>)
+     3. Moves them inside the container
+     4. Applies grid styles inline (works even without publish.css)
+
+   Markdown syntax — no closing </div> tag needed:
 
      <div class="callout-cols-2"></div>
 
@@ -1337,52 +1342,61 @@ window._spaNavigate = function (path) {
 (function () {
   'use strict';
 
-  // Returns true for elements that are not meaningful content
-  // (empty paragraphs, <br>, whitespace-only text, etc.)
-  function isSkippable(el) {
-    if (!el) return false;
-    var tag = el.tagName;
+  var GRID_COLS = { 'callout-cols-2': 2, 'callout-cols-3': 3 };
+
+  function isEmptyNode(el) {
+    if (!el || !el.tagName) return false;
+    var tag = el.tagName.toUpperCase();
     if (tag === 'BR') return true;
-    if (tag === 'P' && !el.textContent.trim() && !el.querySelector('img, svg, canvas')) return true;
+    if (tag === 'P' && !el.textContent.trim() && !el.querySelector('img,svg,canvas,iframe')) return true;
     return false;
   }
 
+  function applyGridStyles(container, cols) {
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+    container.style.gap = '16px';
+    container.style.alignItems = 'start';
+    container.style.margin = '1.25rem 0';
+  }
+
   function initCalloutArrays() {
-    document.querySelectorAll('.callout-cols-2, .callout-cols-3').forEach(function (container) {
-      // Already processed
-      if (container.dataset.colsReady) return;
-
-      var hasCalloutChildren = container.querySelector(':scope > .callout');
-
-      if (!hasCalloutChildren) {
-        // Case A: callouts are siblings — collect them, skipping empty nodes
+    Object.keys(GRID_COLS).forEach(function (cls) {
+      document.querySelectorAll('.' + cls).forEach(function (container) {
+        if (container.dataset.colsReady) return;
+        var cols = GRID_COLS[cls];
         var callouts = [];
         var junk = [];
-        var sibling = container.nextElementSibling;
 
-        while (sibling) {
-          if (sibling.classList && sibling.classList.contains('callout')) {
-            callouts.push(sibling);
-            sibling = sibling.nextElementSibling;
-          } else if (isSkippable(sibling)) {
-            junk.push(sibling);
-            sibling = sibling.nextElementSibling;
-          } else {
-            break;
+        // Case A: callouts already inside as children (Obsidian parsed them as children)
+        var innerCallouts = Array.from(container.querySelectorAll(':scope > .callout'));
+        if (innerCallouts.length > 0) {
+          callouts = innerCallouts;
+        } else {
+          // Case B: callouts are siblings — collect them, skipping blank <p>/<br> nodes
+          var node = container.nextElementSibling;
+          while (node) {
+            if (node.classList && node.classList.contains('callout')) {
+              callouts.push(node);
+              node = node.nextElementSibling;
+            } else if (isEmptyNode(node)) {
+              junk.push(node);
+              node = node.nextElementSibling;
+            } else {
+              break;
+            }
           }
+          if (callouts.length === 0) return;
+          // Remove stray nodes and move callouts into container
+          junk.forEach(function (el) { el.remove(); });
+          callouts.forEach(function (el) { container.appendChild(el); });
         }
 
-        // Only proceed if we actually found callouts
-        if (callouts.length === 0) return;
-
-        // Remove empty nodes between callouts
-        junk.forEach(function (el) { el.remove(); });
-        // Move callouts into the container
-        callouts.forEach(function (el) { container.appendChild(el); });
-      }
-
-      // Mark as processed
-      container.dataset.colsReady = '1';
+        // Reset callout margins and apply grid inline (works even without CSS file)
+        callouts.forEach(function (el) { el.style.margin = '0'; });
+        applyGridStyles(container, cols);
+        container.dataset.colsReady = '1';
+      });
     });
   }
 

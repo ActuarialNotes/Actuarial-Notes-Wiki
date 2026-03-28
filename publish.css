@@ -578,7 +578,7 @@ data.callout-obj-num {
 /* 2-column callout grid */
 .callout-cols-2 {
   display: grid !important;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr) !important;
   gap: 16px;
   margin: 1.25rem 0;
   align-items: start;
@@ -587,7 +587,7 @@ data.callout-obj-num {
 /* 3-column callout grid */
 .callout-cols-3 {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: 16px;
   margin: 1.25rem 0;
   align-items: start;
@@ -605,18 +605,18 @@ data.callout-obj-num {
   display: none !important;
 }
 
-/* Tablet: 3-col → 2-col */
+/* Tablet: 3-col → 2-col (needs !important to override inline style set by JS) */
 @media (max-width: 768px) {
   .callout-cols-3 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 
-/* Mobile: all → 1-col */
+/* Mobile: all → 1-col (needs !important to override inline style set by JS) */
 @media (max-width: 640px) {
   .callout-cols-2,
   .callout-cols-3 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 }
 

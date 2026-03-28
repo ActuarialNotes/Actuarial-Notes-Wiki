@@ -630,7 +630,7 @@ data.callout-obj-num {
   display: block;
   position: relative;
   background: var(--bg-elev);
-  border: 1px solid var(--muted);
+  border: 1px solid transparent;
   border-radius: var(--act-radius);
   padding: 20px 22px;
   box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 6px 16px rgba(0,0,0,.04);
@@ -710,10 +710,11 @@ data.callout-obj-num {
   color: var(--text-dim);
   font-size: 0.95rem;
   line-height: 1.5;
-  text-decoration: underline;
+  text-decoration: underline !important;
   text-underline-offset: 2px;
   text-decoration-thickness: 1px;
   text-decoration-color: color-mix(in oklab, var(--text-dim) 45%, transparent);
+  background-image: none !important;
 }
 a.act-card:hover .act-card__subtitle,
 .grid > a.card.internal-link:hover .act-card__subtitle {
@@ -729,12 +730,15 @@ a.act-card, a.act-card:hover, a.act-card:focus, a.act-card:active,
 .grid > a.card.internal-link *:not(.act-card__subtitle),
 a.act-card *:not(.act-card__subtitle) {
   text-decoration: none !important;
+  background-image: none !important;
 }
 /* Pill color/decoration override — prevent global a.internal-link styles from leaking in */
 .grid > a.card.internal-link .act-pill,
-a.act-card .act-pill {
+a.act-card .act-pill,
+.act-pill--meta a, .act-pill--meta a.internal-link {
   color: var(--text-dim) !important;
   text-decoration: none !important;
+  background-image: none !important;
 }
 a.act-card:hover .act-card__title,
 .grid > a.card.internal-link:hover .act-card__title {

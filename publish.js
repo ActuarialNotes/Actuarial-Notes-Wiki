@@ -1238,11 +1238,28 @@ window._spaNavigate = function (path) {
     var examNav = document.querySelector('.exam-nav[data-current]');
     if (!examNav) return;
 
+    // Prefer _getExamInfoByPage which resolves color and status via exam ID
+    // (data-color attr may be absent when color comes from TRACKS at runtime,
+    //  and data-current holds a display name not an ID so isExamInProgress
+    //  can't match the localStorage key directly)
     var examColor = examNav.dataset.color;
-    if (!examColor) return;
+    var inProgress = false;
 
-    var currentName = (examNav.dataset.current || '').split('|')[0].trim();
-    if (!currentName || !isExamInProgress(currentName)) return;
+    if (typeof window._getExamInfoByPage === 'function') {
+      var examInfo = window._getExamInfoByPage();
+      if (examInfo) {
+        if (!examColor && examInfo.color) examColor = examInfo.color;
+        inProgress = examInfo.status === 'in_progress';
+      }
+    }
+
+    // Fallback: check localStorage directly using display name
+    if (!inProgress) {
+      var currentName = (examNav.dataset.current || '').split('|')[0].trim();
+      if (currentName) inProgress = isExamInProgress(currentName);
+    }
+
+    if (!examColor || !inProgress) return;
 
     var pageEl = examNav.closest('.markdown-preview-view, .markdown-rendered, .page-container') || examNav.parentElement;
     if (!pageEl) return;

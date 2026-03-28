@@ -1300,38 +1300,72 @@ window._spaNavigate = function (path) {
 
 /* ===========================================================
    CALLOUT COLUMN ARRAYS
-   Obsidian Publish renders callouts as siblings of a wrapper
-   <div>, not as children, so CSS grid on the div has no effect.
-   This moves consecutive .callout siblings into .callout-cols-2
-   and .callout-cols-3 containers after the page renders.
+   Obsidian Publish may render callouts as siblings of a wrapper
+   <div> (not children) and may inject empty <p>/<br> elements
+   from blank lines.  This IIFE handles both cases:
+     A) Callouts are siblings → move them into the container
+     B) Callouts are children → just clean up stray nodes
 
-   Syntax in markdown:
-     <div class="callout-cols-2">
+   Syntax in markdown (no closing </div> needed):
+
+     <div class="callout-cols-2"></div>
 
      > [!example]- Title 1
      > Content
 
      > [!example]- Title 2
      > Content
-
-     </div>
    =========================================================== */
 
 (function () {
   'use strict';
 
+  // Returns true for elements that are not meaningful content
+  // (empty paragraphs, <br>, whitespace-only text, etc.)
+  function isSkippable(el) {
+    if (!el) return false;
+    var tag = el.tagName;
+    if (tag === 'BR') return true;
+    if (tag === 'P' && !el.textContent.trim() && !el.querySelector('img, svg, canvas')) return true;
+    return false;
+  }
+
   function initCalloutArrays() {
     document.querySelectorAll('.callout-cols-2, .callout-cols-3').forEach(function (container) {
-      // Skip if already contains callouts (already processed)
-      if (container.querySelector(':scope > .callout')) return;
+      // Already processed
+      if (container.dataset.colsReady) return;
 
-      // Move consecutive .callout siblings into the container
-      var sibling = container.nextElementSibling;
-      while (sibling && sibling.classList.contains('callout')) {
-        var next = sibling.nextElementSibling;
-        container.appendChild(sibling);
-        sibling = next;
+      var hasCalloutChildren = container.querySelector(':scope > .callout');
+
+      if (!hasCalloutChildren) {
+        // Case A: callouts are siblings — collect them, skipping empty nodes
+        var callouts = [];
+        var junk = [];
+        var sibling = container.nextElementSibling;
+
+        while (sibling) {
+          if (sibling.classList && sibling.classList.contains('callout')) {
+            callouts.push(sibling);
+            sibling = sibling.nextElementSibling;
+          } else if (isSkippable(sibling)) {
+            junk.push(sibling);
+            sibling = sibling.nextElementSibling;
+          } else {
+            break;
+          }
+        }
+
+        // Only proceed if we actually found callouts
+        if (callouts.length === 0) return;
+
+        // Remove empty nodes between callouts
+        junk.forEach(function (el) { el.remove(); });
+        // Move callouts into the container
+        callouts.forEach(function (el) { container.appendChild(el); });
       }
+
+      // Mark as processed
+      container.dataset.colsReady = '1';
     });
   }
 

@@ -632,16 +632,19 @@ data.callout-obj-num {
   margin: 1.25rem 0 2.5rem;
 }
 
-.card, .act-card {
+.card, .act-card,
+.markdown-rendered .card,
+.markdown-rendered .act-card {
   display: block;
   position: relative;
   background: var(--bg-elev);
-  border: 1px solid transparent;
+  border: 1px solid transparent !important;
   border-radius: var(--act-radius);
   padding: 20px 22px;
   box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 6px 16px rgba(0,0,0,.04);
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
   text-decoration: none !important;
+  outline: none !important;
 }
 
 /* Credential badge - top right corner */
@@ -696,10 +699,12 @@ data.callout-obj-num {
   background: #ede9fe;
   color: #6d28d9;
 }
-.card:hover, .act-card:hover {
+.card:hover, .act-card:hover,
+.markdown-rendered .card:hover,
+.markdown-rendered .act-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0,0,0,.08), 0 12px 28px rgba(0,0,0,.08);
-  border-color: color-mix(in oklab, var(--brand) 50%, var(--muted));
+  border-color: color-mix(in oklab, var(--brand) 50%, var(--muted)) !important;
 }
 .act-card:focus-visible { outline: none; box-shadow: var(--act-focus-ring); }
 .card:focus, .card:focus-visible { outline: none; box-shadow: var(--act-focus-ring); }
@@ -711,7 +716,8 @@ data.callout-obj-num {
   font-size: 1.35rem;
   letter-spacing: -.01em;
 }
-.act-card__subtitle {
+.act-card__subtitle,
+.markdown-rendered .act-card__subtitle {
   margin: 0 0 16px;
   color: var(--text-dim);
   font-size: 0.95rem;
@@ -723,31 +729,41 @@ data.callout-obj-num {
   background-image: none !important;
 }
 a.act-card:hover .act-card__subtitle,
-.grid > a.card.internal-link:hover .act-card__subtitle {
+.grid > a.card:hover .act-card__subtitle,
+.markdown-rendered .grid > a.card:hover .act-card__subtitle {
   text-decoration-color: var(--text-dim);
 }
 
-/* Card link behavior */
+/* Card link behavior — suppress all link decorations on cards and their children */
 a.act-card, a.act-card:hover, a.act-card:focus, a.act-card:active,
-.grid > a.card.internal-link, .grid > a.card.internal-link:hover {
+.grid > a.card, .grid > a.card:hover,
+.markdown-rendered .grid > a.card,
+.markdown-rendered .grid > a.card:hover,
+.markdown-rendered a.act-card,
+.markdown-rendered a.act-card:hover {
   text-decoration: none !important;
   background-image: none !important;
 }
-.grid > a.card.internal-link *:not(.act-card__subtitle),
-a.act-card *:not(.act-card__subtitle) {
+.grid > a.card *:not(.act-card__subtitle),
+a.act-card *:not(.act-card__subtitle),
+.markdown-rendered .grid > a.card *:not(.act-card__subtitle),
+.markdown-rendered a.act-card *:not(.act-card__subtitle) {
   text-decoration: none !important;
   background-image: none !important;
 }
-/* Pill color/decoration override — prevent global a.internal-link styles from leaking in */
-.grid > a.card.internal-link .act-pill,
+/* Pill override — prevent link styles from leaking into pill badges */
+.grid > a.card .act-pill,
+.grid > a.card .act-pill *,
 a.act-card .act-pill,
-.act-pill--meta a, .act-pill--meta a.internal-link {
+a.act-card .act-pill *,
+.act-pill--meta a,
+.act-pill--meta a.internal-link {
   color: var(--text-dim) !important;
   text-decoration: none !important;
   background-image: none !important;
 }
 a.act-card:hover .act-card__title,
-.grid > a.card.internal-link:hover .act-card__title {
+.grid > a.card:hover .act-card__title {
   text-decoration: none !important;
   color: var(--brand-hover);
 }
@@ -1298,9 +1314,10 @@ a.act-pill { cursor: pointer; }
 }
 
 /* Meta pill - for requirements/metadata inside cards */
-.act-pill--meta {
-  background: color-mix(in oklab, var(--muted) 50%, var(--bg-elev));
-  color: var(--text-dim);
+.act-pill--meta,
+.markdown-rendered .act-pill--meta {
+  background: color-mix(in oklab, var(--muted) 50%, var(--bg-elev)) !important;
+  color: var(--text-dim) !important;
   font-weight: 500;
   font-size: 0.75rem;
   padding: 4px 10px;

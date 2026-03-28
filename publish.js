@@ -3505,7 +3505,7 @@ window._spaNavigate = function (path) {
         var prop = meta.properties[di];
         var span = iDoc.createElement('span');
         span.className = 'resource-hero__detail';
-        span.innerHTML = '<strong>' + escapeHtml(prop.key) + '</strong> ' + escapeHtml(prop.value);
+        span.innerHTML = '<strong>' + escapeHtml(prop.key) + '</strong> ' + renderMetaValue(prop.value);
         detailsWrap.appendChild(span);
       }
       metaWrap.appendChild(detailsWrap);
@@ -3547,15 +3547,17 @@ window._spaNavigate = function (path) {
       heroStyle.id = HERO_STYLE_ID;
       heroStyle.textContent =
         // Hero layout
-        '.resource-hero { display: flex; gap: 20px; align-items: flex-start; padding: 20px 0; margin-bottom: 8px; }' +
+        '.resource-hero { display: flex; gap: 20px; align-items: center; padding: 20px 0; margin-bottom: 8px; }' +
         '.resource-hero__img { flex-shrink: 0; width: clamp(120px, 30%, 250px); }' +
         '.resource-hero__img img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.25); display: block; object-fit: contain; }' +
         '.resource-hero__meta { flex: 1; min-width: 0; }' +
         // Inline metadata details with dot separators
         '.resource-hero__details { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 0; margin: 0; }' +
-        '.resource-hero__detail { color: var(--text-muted, #888); font-size: clamp(0.8rem, 2.5vw, 0.95rem); white-space: nowrap; }' +
+        '.resource-hero__detail { color: var(--text-muted, #888); font-size: clamp(0.8rem, 2.5vw, 0.95rem); }' +
         '.resource-hero__detail + .resource-hero__detail::before { content: "\\00b7"; margin: 0 8px; color: var(--text-muted, #888); }' +
         '.resource-hero__detail strong { color: var(--text, #cdd6f4); margin-right: 6px; }' +
+        '.resource-hero__detail a { color: var(--text-accent, #7aa2f7); text-decoration: none; }' +
+        '.resource-hero__detail a:hover { text-decoration: underline; }' +
         // Hide originals that have been replaced by the hero
         '[data-hero-hidden] { display: none !important; }' +
         // Scroll padding for TOC navigation
@@ -3569,6 +3571,22 @@ window._spaNavigate = function (path) {
   /** Simple HTML escape for metadata text. */
   function escapeHtml(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /** Render a metadata value, converting markdown links [text](url) to <a> tags. */
+  function renderMetaValue(str) {
+    // Split on markdown link pattern, render links as <a>, escape the rest
+    var parts = [];
+    var re = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
+    var last = 0;
+    var m;
+    while ((m = re.exec(str)) !== null) {
+      if (m.index > last) parts.push(escapeHtml(str.slice(last, m.index)));
+      parts.push('<a href="' + escapeHtml(m[2]) + '" target="_blank" rel="noopener">' + escapeHtml(m[1]) + '</a>');
+      last = re.lastIndex;
+    }
+    if (last < str.length) parts.push(escapeHtml(str.slice(last)));
+    return parts.join('');
   }
 
   /** Extract headings from the resource iframe to build a TOC navigation list. */
@@ -3587,7 +3605,7 @@ window._spaNavigate = function (path) {
       if (h.style.display === 'none') continue;
       tocList.push({ el: h, text: h.textContent.trim(), level: parseInt(h.tagName.charAt(1), 10) });
     }
-    tocIndex = tocList.length > 0 ? 0 : -1;
+    tocIndex = -1;
     updateNavStateResource();
   }
 
@@ -3619,14 +3637,14 @@ window._spaNavigate = function (path) {
     }
 
     var hasPrev = tocIndex > 0;
-    var hasNext = tocIndex < tocList.length - 1;
+    var hasNext = tocIndex + 1 < tocList.length;
 
     prevBtn.disabled = !hasPrev;
     prevBtn.classList.toggle('is-disabled', !hasPrev);
     nextBtn.disabled = !hasNext;
     nextBtn.classList.toggle('is-disabled', !hasNext);
 
-    posLabel.textContent = (tocIndex + 1) + ' of ' + tocList.length;
+    posLabel.textContent = tocIndex >= 0 ? (tocIndex + 1) + ' of ' + tocList.length : '';
 
     var prevLabel = prevBtn.querySelector('span');
     var nextLabel = nextBtn.querySelector('span');

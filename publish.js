@@ -3515,6 +3515,11 @@ window._spaNavigate = function (path) {
     // Use window (not document) capture phase so we fire before Obsidian's
     // own document-level SPA handler and can intercept concept links.
     window.addEventListener('click', function (e) {
+      // On mobile the split-pane popup isn't usable. Skip interception so
+      // Obsidian's own handler fires — it navigates to the page and
+      // auto-closes the sidebar, which is the correct mobile behaviour.
+      if (window.innerWidth <= 768) return;
+
       var link = e.target.closest('a.internal-link, a[data-href]');
       if (!link) return;
 

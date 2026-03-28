@@ -571,6 +571,49 @@ data.callout-obj-num {
   color: rgba(0, 0, 0, 0.35);
 }
 
+/* ===========================================================
+   9b) CALLOUT COLUMN ARRAYS
+   =========================================================== */
+
+/* 2-column callout grid */
+.callout-cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 1.25rem 0;
+  align-items: start;
+}
+
+/* 3-column callout grid */
+.callout-cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 1.25rem 0;
+  align-items: start;
+}
+
+/* Remove default vertical margins on callouts inside arrays */
+.callout-cols-2 .callout,
+.callout-cols-3 .callout {
+  margin: 0;
+}
+
+/* Tablet: 3-col → 2-col */
+@media (max-width: 768px) {
+  .callout-cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: all → 1-col */
+@media (max-width: 640px) {
+  .callout-cols-2,
+  .callout-cols-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 /* ===========================================================
    10) CARDS

@@ -1299,6 +1299,86 @@ window._spaNavigate = function (path) {
 
 
 /* ===========================================================
+   CALLOUT COLUMN ARRAYS
+   Obsidian Publish renders callouts as siblings of a wrapper
+   <div>, not as children, so CSS grid on the div has no effect.
+   This moves consecutive .callout siblings into .callout-cols-2
+   and .callout-cols-3 containers after the page renders.
+
+   Syntax in markdown:
+     <div class="callout-cols-2">
+
+     > [!example]- Title 1
+     > Content
+
+     > [!example]- Title 2
+     > Content
+
+     </div>
+   =========================================================== */
+
+(function () {
+  'use strict';
+
+  function initCalloutArrays() {
+    document.querySelectorAll('.callout-cols-2, .callout-cols-3').forEach(function (container) {
+      // Skip if already contains callouts (already processed)
+      if (container.querySelector(':scope > .callout')) return;
+
+      // Move consecutive .callout siblings into the container
+      var sibling = container.nextElementSibling;
+      while (sibling && sibling.classList.contains('callout')) {
+        var next = sibling.nextElementSibling;
+        container.appendChild(sibling);
+        sibling = next;
+      }
+    });
+  }
+
+  function observePageChanges() {
+    window.addEventListener('popstate', function () { setTimeout(initCalloutArrays, 150); });
+
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self');
+      if (link) {
+        var href = link.getAttribute('href');
+        if (href && !href.startsWith('#')) {
+          setTimeout(initCalloutArrays, 150);
+          setTimeout(initCalloutArrays, 600);
+        }
+      }
+    });
+
+    var observer = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        if (mutations[i].type === 'childList' && mutations[i].addedNodes.length > 0) {
+          clearTimeout(window._calloutColsTimeout);
+          window._calloutColsTimeout = setTimeout(initCalloutArrays, 150);
+          break;
+        }
+      }
+    });
+
+    var root = document.querySelector('.site-body-center-column, .markdown-rendered, main');
+    if (root) {
+      observer.observe(root, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(initCalloutArrays, 150);
+      observePageChanges();
+    });
+  } else {
+    setTimeout(initCalloutArrays, 150);
+    observePageChanges();
+  }
+
+})();
+
+
+/* ===========================================================
    QUESTION BROWSER
    Adds a "?" button to each definition embed that opens a
    modal for browsing questions across exams and concepts.

@@ -3944,6 +3944,21 @@ window._spaNavigate = function (path) {
     // Build the concept-nav footer with back/forward + progress
     buildConceptFooter(container, prevData, nextData, objectives, customColor, currentName);
 
+    // Handle SPA navigation on internal links in the concept-nav header
+    container.addEventListener('click', function (e) {
+      var link = e.target.closest('a.internal-link');
+      if (link) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        closeAllConceptDropdowns();
+        var href = link.getAttribute('data-href') || link.getAttribute('href') || '';
+        if (href) {
+          var path = href.replace(/^https?:\/\/[^/]+\//, '').replace(/^\//, '').replace(/\+/g, ' ');
+          window._spaNavigate(path);
+        }
+      }
+    }, true);
+
     /* ── Global close handlers (registered once) ───────── */
     if (!window._conceptNavCloseRegistered) {
       window._conceptNavCloseRegistered = true;
@@ -3973,6 +3988,7 @@ window._spaNavigate = function (path) {
     if (concepts.length === 1) {
       var link = document.createElement('a');
       link.className = 'concept-nav__arrow-btn internal-link';
+      link.setAttribute('data-href', concepts[0].path || '');
       link.href = concepts[0].path || '#';
       link.innerHTML = svg;
       parent.appendChild(link);
@@ -3992,6 +4008,7 @@ window._spaNavigate = function (path) {
       concepts.forEach(function (c) {
         var item = document.createElement('a');
         item.className = 'concept-nav__arrow-menu-item internal-link';
+        item.setAttribute('data-href', c.path || '');
         item.href = c.path || '#';
         item.textContent = c.name;
         item.addEventListener('click', function () {
@@ -4071,6 +4088,7 @@ window._spaNavigate = function (path) {
       if (result.exam.pagePath) {
         var headerLink = document.createElement('a');
         headerLink.className = 'concept-nav__obj-header-link internal-link';
+        headerLink.setAttribute('data-href', result.exam.pagePath);
         headerLink.href = result.exam.pagePath;
         headerLink.textContent = 'Exam ' + result.exam.code;
         header.appendChild(headerLink);
@@ -4135,6 +4153,7 @@ window._spaNavigate = function (path) {
           objective.concepts.forEach(function (concept, idx) {
             var link = document.createElement('a');
             link.className = 'concept-nav__obj-menu-item internal-link';
+            link.setAttribute('data-href', 'Concepts/' + concept);
             link.href = 'Concepts/' + concept;
             var numSpan = document.createElement('span');
             numSpan.className = 'concept-nav__obj-menu-num';
@@ -4574,6 +4593,7 @@ window._spaNavigate = function (path) {
       if (prevData.length === 1) {
         prevBtn = document.createElement('a');
         prevBtn.className = 'concept-footer__btn concept-footer__btn--prev internal-link';
+        prevBtn.setAttribute('data-href', prevData[0].path || '');
         prevBtn.href = prevData[0].path || '#';
         prevBtn.innerHTML = svgPrev + '<span class="concept-footer__btn-label">' + prevData[0].name.replace(/</g, '&lt;') + '</span>';
       } else {
@@ -4590,6 +4610,7 @@ window._spaNavigate = function (path) {
         prevData.forEach(function (c) {
           var item = document.createElement('a');
           item.className = 'concept-footer__menu-item internal-link';
+          item.setAttribute('data-href', c.path || '');
           item.href = c.path || '#';
           item.textContent = c.name;
           prevMenu.appendChild(item);
@@ -4633,6 +4654,7 @@ window._spaNavigate = function (path) {
       if (nextData.length === 1) {
         nextBtn = document.createElement('a');
         nextBtn.className = 'concept-footer__btn concept-footer__btn--next internal-link';
+        nextBtn.setAttribute('data-href', nextData[0].path || '');
         nextBtn.href = nextData[0].path || '#';
         nextBtn.innerHTML = '<span class="concept-footer__btn-label">' + nextData[0].name.replace(/</g, '&lt;') + '</span>' + svgNext;
       } else {
@@ -4649,6 +4671,7 @@ window._spaNavigate = function (path) {
         nextData.forEach(function (c) {
           var item = document.createElement('a');
           item.className = 'concept-footer__menu-item internal-link';
+          item.setAttribute('data-href', c.path || '');
           item.href = c.path || '#';
           item.textContent = c.name;
           nextMenu.appendChild(item);

@@ -1349,33 +1349,49 @@ window._spaNavigate = function (path) {
         if (container.dataset.colsReady) return;
         var cols = GRID_COLS[cls];
         var callouts = [];
-        var junk = [];
 
-        // Case A: callouts already inside as children (Obsidian parsed them as children)
+        // Case A: callouts already inside as direct children
         var innerCallouts = Array.from(container.querySelectorAll(':scope > .callout'));
         if (innerCallouts.length > 0) {
           callouts = innerCallouts;
         } else {
-          // Case B: callouts are siblings — collect them, skipping blank <p>/<br> nodes
-          var node = container.nextElementSibling;
+          // Case B: Obsidian Publish wraps each block in its own container div,
+          // so the callouts are siblings of the *parent* of .callout-cols-2,
+          // not direct siblings of .callout-cols-2 itself.
+          // Walk up until we find a node that has a next sibling.
+          var pivot = container;
+          while (!pivot.nextElementSibling && pivot.parentElement && pivot.parentElement !== document.body) {
+            pivot = pivot.parentElement;
+          }
+
+          var node = pivot.nextElementSibling;
           while (node) {
+            // The sibling may be the callout itself, or a thin wrapper containing one
+            var calloutEl = null;
             if (node.classList && node.classList.contains('callout')) {
-              callouts.push(node);
+              calloutEl = node;
+            } else {
+              var inner = node.querySelector('.callout');
+              // Only consume the wrapper if the callout is its primary content
+              if (inner && node.textContent.trim() === inner.textContent.trim()) {
+                calloutEl = inner;
+              }
+            }
+
+            if (calloutEl) {
+              callouts.push(calloutEl);
               node = node.nextElementSibling;
             } else if (isEmptyNode(node)) {
-              junk.push(node);
               node = node.nextElementSibling;
             } else {
               break;
             }
           }
+
           if (callouts.length === 0) return;
-          // Remove stray nodes and move callouts into container
-          junk.forEach(function (el) { el.remove(); });
           callouts.forEach(function (el) { container.appendChild(el); });
         }
 
-        // Reset callout margins and apply grid inline (works even without CSS file)
         callouts.forEach(function (el) { el.style.margin = '0'; });
         applyGridStyles(container, cols);
         container.dataset.colsReady = '1';

@@ -653,6 +653,7 @@ data.callout-obj-num {
   border-color: color-mix(in oklab, var(--brand) 50%, var(--muted));
 }
 .act-card:focus-visible { outline: none; box-shadow: var(--act-focus-ring); }
+.card:focus, .card:focus-visible { outline: none; box-shadow: var(--act-focus-ring); }
 
 .card h3, .act-card__title {
   margin: 0 0 6px;
@@ -666,7 +667,14 @@ data.callout-obj-num {
   color: var(--text-dim);
   font-size: 0.95rem;
   line-height: 1.5;
-  text-decoration: none !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklab, var(--text-dim) 45%, transparent);
+}
+a.act-card:hover .act-card__subtitle,
+.grid > a.card.internal-link:hover .act-card__subtitle {
+  text-decoration-color: var(--text-dim);
 }
 
 /* Card link behavior */
@@ -675,7 +683,14 @@ a.act-card, a.act-card:hover, a.act-card:focus, a.act-card:active,
   text-decoration: none !important;
   background-image: none !important;
 }
-.grid > a.card.internal-link *, a.act-card * {
+.grid > a.card.internal-link *:not(.act-card__subtitle),
+a.act-card *:not(.act-card__subtitle) {
+  text-decoration: none !important;
+}
+/* Pill color/decoration override — prevent global a.internal-link styles from leaking in */
+.grid > a.card.internal-link .act-pill,
+a.act-card .act-pill {
+  color: var(--text-dim) !important;
   text-decoration: none !important;
 }
 a.act-card:hover .act-card__title,
@@ -1231,7 +1246,7 @@ a.act-pill { cursor: pointer; }
 
 /* Meta pill - for requirements/metadata inside cards */
 .act-pill--meta {
-  background: color-mix(in oklab, var(--muted) 50%, transparent);
+  background: color-mix(in oklab, var(--muted) 50%, var(--bg-elev));
   color: var(--text-dim);
   font-weight: 500;
   font-size: 0.75rem;

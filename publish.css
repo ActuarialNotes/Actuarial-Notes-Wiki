@@ -577,7 +577,7 @@ data.callout-obj-num {
 
 /* 2-column callout grid */
 .callout-cols-2 {
-  display: grid;
+  display: grid !important;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   margin: 1.25rem 0;
@@ -586,7 +586,7 @@ data.callout-obj-num {
 
 /* 3-column callout grid */
 .callout-cols-3 {
-  display: grid;
+  display: grid !important;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin: 1.25rem 0;
@@ -594,9 +594,15 @@ data.callout-obj-num {
 }
 
 /* Remove default vertical margins on callouts inside arrays */
-.callout-cols-2 .callout,
-.callout-cols-3 .callout {
+.callout-cols-2 > .callout,
+.callout-cols-3 > .callout {
   margin: 0;
+}
+
+/* Hide stray elements (empty <p>, <br>) that Obsidian injects between callouts */
+.callout-cols-2 > :not(.callout),
+.callout-cols-3 > :not(.callout) {
+  display: none !important;
 }
 
 /* Tablet: 3-col → 2-col */

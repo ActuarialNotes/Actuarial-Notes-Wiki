@@ -4923,13 +4923,13 @@ window._spaNavigate = function (path) {
           items: [
             { id: 'MAS-I',    name: 'Exam MAS-I',    path: 'Exam MAS-I (CAS)', color: 'violet' },
             { id: 'MAS-II',   name: 'Exam MAS-II',   path: 'Exam MAS-II (CAS)', color: 'violet' },
-            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, color: 'fuchsia' },
-            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, color: 'fuchsia' },
-            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, color: 'fuchsia' },
+            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, url: 'https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses', color: 'fuchsia' },
+            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, url: 'https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses', color: 'fuchsia' },
+            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, url: 'https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses', color: 'fuchsia' },
             { id: 'CAS-5',    name: 'Exam 5',        path: 'Exam 5 (CAS)', color: 'pink' },
-            { id: 'CAS-PCPA', name: 'PCPA',           path: null, color: 'rose' },
+            { id: 'CAS-PCPA', name: 'PCPA',           path: null, url: 'https://www.casact.org/exam/property-casualty-predictive-analytics-pcpa', color: 'rose' },
             { id: 'CAS-6',    name: 'Exam 6',         path: 'Exam 6 (CAS)', color: 'orange' },
-            { id: 'CAS-APC',  name: 'APC',            path: null, color: 'slate' }
+            { id: 'CAS-APC',  name: 'APC',            path: null, url: 'https://www.casact.org/exams-admissions/exams/acas-exams/course-professionalism', color: 'slate' }
           ]
         }
       ]
@@ -5054,21 +5054,21 @@ window._spaNavigate = function (path) {
             { id: 'FM',     name: 'Exam FM-2',     path: 'Exam FM-2 (SOA)', color: 'indigo' },
             { id: 'MAS-I',  name: 'Exam MAS-I',    path: 'Exam MAS-I (CAS)', color: 'violet' },
             { id: 'MAS-II', name: 'Exam MAS-II',   path: 'Exam MAS-II (CAS)', color: 'violet' },
-            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, color: 'fuchsia' },
-            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, color: 'fuchsia' },
-            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, color: 'fuchsia' },
-            { id: 'CAS-5',    name: 'Exam 5',         path: null, color: 'pink' },
-            { id: 'CAS-PCPA', name: 'PCPA',           path: null, color: 'rose' },
-            { id: 'CAS-6',    name: 'Exam 6',         path: null, color: 'orange' },
-            { id: 'CAS-APC',  name: 'APC',            path: null, color: 'slate' }
+            { id: 'CAS-IA',   name: 'CAS DISC IA',   path: null, url: 'https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses', color: 'fuchsia' },
+            { id: 'CAS-DA',   name: 'CAS DISC DA',   path: null, url: 'https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses', color: 'fuchsia' },
+            { id: 'CAS-RM',   name: 'CAS DISC RM',   path: null, url: 'https://www.casact.org/exams-admissions/exams/acas-exams/cas-data-and-insurance-series-courses', color: 'fuchsia' },
+            { id: 'CAS-5',    name: 'Exam 5',         path: 'Exam 5 (CAS)', color: 'pink' },
+            { id: 'CAS-PCPA', name: 'PCPA',           path: null, url: 'https://www.casact.org/exam/property-casualty-predictive-analytics-pcpa', color: 'rose' },
+            { id: 'CAS-6',    name: 'Exam 6',         path: 'Exam 6 (CAS)', color: 'orange' },
+            { id: 'CAS-APC',  name: 'APC',            path: null, url: 'https://www.casact.org/exams-admissions/exams/acas-exams/course-professionalism', color: 'slate' }
           ]
         },
         {
           label: 'Fellowship Exams',
           items: [
-            { id: 'CAS-7', name: 'Exam 7',   path: null, color: 'lime' },
-            { id: 'CAS-8', name: 'Exam 8',   path: null, color: 'green' },
-            { id: 'CAS-9', name: 'Exam 9',   path: null, color: 'emerald' }
+            { id: 'CAS-7', name: 'Exam 7',   path: null, url: 'https://www.casact.org/exam/exam-7-advanced-estimation-claims-liabilities', color: 'lime' },
+            { id: 'CAS-8', name: 'Exam 8',   path: null, url: 'https://www.casact.org/exam/exam-8-advanced-ratemaking', color: 'green' },
+            { id: 'CAS-9', name: 'Exam 9',   path: null, url: 'https://www.casact.org/exam/exam-9-risk-management-actuaries', color: 'emerald' }
           ]
         }
       ]
@@ -6361,6 +6361,12 @@ window._spaNavigate = function (path) {
               e.stopImmediatePropagation();
               sidebarNavigate(item.path);
             }, true);
+          } else if (item.url) {
+            nameEl = document.createElement('a');
+            nameEl.className = 'exams-panel__name';
+            nameEl.href = item.url;
+            nameEl.target = '_blank';
+            nameEl.rel = 'noopener noreferrer';
           } else {
             nameEl = document.createElement('span');
             nameEl.className = 'exams-panel__name';

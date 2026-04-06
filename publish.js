@@ -6621,7 +6621,7 @@ window._spaNavigate = function (path) {
     return null;
   }
 
-  var SVG_CHEVRON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 4 10 8 6 12"/></svg>';
+  var SVG_FOLDER_CHEVRON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 4 10 8 6 12"/></svg>';
   var SVG_FILTER = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 2.5h13l-5 5.5v4l-3 1.5V8z"/></svg>';
 
   function renderSearchPanel(container) {
@@ -7034,7 +7034,7 @@ window._spaNavigate = function (path) {
         var resourceChevron = document.createElement('span');
         resourceChevron.className = 'sidebar-tabs__folder-chevron';
         if (folderState.document) resourceChevron.classList.add('is-open');
-        resourceChevron.innerHTML = SVG_CHEVRON;
+        resourceChevron.innerHTML = SVG_FOLDER_CHEVRON;
         resourceHeader.appendChild(resourceChevron);
 
         var resourceIcon = document.createElement('span');
@@ -7072,7 +7072,7 @@ window._spaNavigate = function (path) {
             var subChevron = document.createElement('span');
             subChevron.className = 'sidebar-tabs__folder-chevron';
             if (subfolderState[sf]) subChevron.classList.add('is-open');
-            subChevron.innerHTML = SVG_CHEVRON;
+            subChevron.innerHTML = SVG_FOLDER_CHEVRON;
             subHeader.appendChild(subChevron);
 
             var subLabel = document.createElement('span');
@@ -7138,7 +7138,7 @@ window._spaNavigate = function (path) {
       var chevron = document.createElement('span');
       chevron.className = 'sidebar-tabs__folder-chevron';
       if (folderState[cat]) chevron.classList.add('is-open');
-      chevron.innerHTML = SVG_CHEVRON;
+      chevron.innerHTML = SVG_FOLDER_CHEVRON;
       header.appendChild(chevron);
 
       var icon = document.createElement('span');

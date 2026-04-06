@@ -2219,9 +2219,10 @@ body.sidebar-resizing iframe { pointer-events: none; }
   border-color: color-mix(in oklab, var(--text) 30%, transparent);
 }
 .sidebar-tabs__filter-btn.is-active {
-  background: var(--brand);
-  color: #fff;
+  background: var(--bg);
+  color: var(--text);
   border-color: var(--brand);
+  box-shadow: 0 0 0 1.5px var(--brand);
 }
 
 /* ---- Filter dropdown ---- */
@@ -2270,6 +2271,19 @@ body.sidebar-resizing iframe { pointer-events: none; }
   height: 24px;
   margin-bottom: 6px;
 }
+/* Base track drawn on container so both input tracks can be transparent */
+.sidebar-tabs__year-range::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--sb-border);
+  border-radius: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
 .sidebar-tabs__year-input {
   position: absolute;
   width: 100%;
@@ -2282,14 +2296,13 @@ body.sidebar-resizing iframe { pointer-events: none; }
   background: transparent;
   margin: 0;
   height: 24px;
+  z-index: 1;
 }
+/* Both tracks transparent — track is drawn by the ::before above */
 .sidebar-tabs__year-input::-webkit-slider-runnable-track {
   height: 4px;
-  background: var(--sb-border);
-  border-radius: 2px;
-}
-.sidebar-tabs__year-input--min::-webkit-slider-runnable-track {
   background: transparent;
+  border-radius: 2px;
 }
 .sidebar-tabs__year-input::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -2299,29 +2312,27 @@ body.sidebar-resizing iframe { pointer-events: none; }
   border-radius: 50%;
   background: var(--brand);
   border: 2px solid var(--bg);
-  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
   cursor: pointer;
   margin-top: -6px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 .sidebar-tabs__year-input::-moz-range-track {
   height: 4px;
-  background: var(--sb-border);
+  background: transparent;
   border-radius: 2px;
   border: none;
 }
-.sidebar-tabs__year-input--min::-moz-range-track {
-  background: transparent;
-}
 .sidebar-tabs__year-input::-moz-range-thumb {
+  -moz-appearance: none;
   pointer-events: all;
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: var(--brand);
   border: 2px solid var(--bg);
-  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
   cursor: pointer;
 }
 .sidebar-tabs__year-clear {

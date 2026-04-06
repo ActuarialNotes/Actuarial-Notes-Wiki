@@ -5353,6 +5353,16 @@ window._spaNavigate = function (path) {
     } catch (e) {}
   }
 
+  /** Fetch raw markdown content for a file from Obsidian Publish API */
+  function fetchMarkdownContent(filePath) {
+    var siteId = extractSiteId();
+    if (!siteId) return Promise.resolve(null);
+    var path = filePath;
+    if (!/\.md$/.test(path)) path = path + '.md';
+    var url = 'https://publish-01.obsidian.md/access/' + siteId + '/' + encodeURIComponent(path);
+    return fetch(url).then(function (r) { return r.ok ? r.text() : null; }).catch(function () { return null; });
+  }
+
   /** Apply cached frontmatter metadata to vault index items */
   function applyFrontmatterToIndex(index) {
     for (var i = 0; i < index.length; i++) {
@@ -5415,16 +5425,26 @@ window._spaNavigate = function (path) {
       batch.forEach(function (item) {
         var filePath = item.path;
         if (!/\.md$/.test(filePath)) filePath = filePath + '.md';
-        fetchFileContent(filePath).then(function (md) {
-          if (md) {
-            var fm = parseFrontmatter(md);
-            _frontmatterCache[item.path] = fm;
-          } else {
+        try {
+          fetchMarkdownContent(filePath).then(function (md) {
+            if (md) {
+              try { var fm = parseFrontmatter(md); _frontmatterCache[item.path] = fm; }
+              catch (e) { _frontmatterCache[item.path] = {}; }
+            } else {
+              _frontmatterCache[item.path] = {};
+            }
+            pending--;
+            if (pending === 0) fetchBatch();
+          }).catch(function () {
             _frontmatterCache[item.path] = {};
-          }
+            pending--;
+            if (pending === 0) fetchBatch();
+          });
+        } catch (e) {
+          _frontmatterCache[item.path] = {};
           pending--;
           if (pending === 0) fetchBatch();
-        });
+        }
       });
     }
 
@@ -6709,15 +6729,13 @@ window._spaNavigate = function (path) {
         dd.appendChild(item);
       });
 
-      // Position below anchor
+      // Position below anchor relative to filterRow
       var rect = anchorBtn.getBoundingClientRect();
-      var containerRect = container.getBoundingClientRect();
-      dd.style.position = 'absolute';
-      dd.style.top = (rect.bottom - containerRect.top + 4) + 'px';
-      dd.style.left = (rect.left - containerRect.left) + 'px';
+      var parentRect = filterRow.getBoundingClientRect();
+      dd.style.top = (rect.bottom - parentRect.top + 2) + 'px';
+      dd.style.left = (rect.left - parentRect.left) + 'px';
       dd.style.minWidth = '140px';
-      container.style.position = 'relative';
-      container.appendChild(dd);
+      filterRow.appendChild(dd);
       openDropdown = dd;
     }
 
@@ -6794,13 +6812,11 @@ window._spaNavigate = function (path) {
       rangeMax.addEventListener('input', updateYear);
 
       var rect = anchorBtn.getBoundingClientRect();
-      var containerRect = container.getBoundingClientRect();
-      dd.style.position = 'absolute';
-      dd.style.top = (rect.bottom - containerRect.top + 4) + 'px';
-      dd.style.left = (rect.left - containerRect.left) + 'px';
+      var parentRect = filterRow.getBoundingClientRect();
+      dd.style.top = (rect.bottom - parentRect.top + 2) + 'px';
+      dd.style.left = (rect.left - parentRect.left) + 'px';
       dd.style.minWidth = '180px';
-      container.style.position = 'relative';
-      container.appendChild(dd);
+      filterRow.appendChild(dd);
       openDropdown = dd;
     }
 
@@ -6886,8 +6902,15 @@ window._spaNavigate = function (path) {
       createYearDropdown(yearBtn, allItems);
     });
 
-    // Close dropdown on outside click
-    document.addEventListener('click', function () { closeDropdown(); });
+    // Close dropdown on outside click (use container, not document, to avoid interference)
+    container.addEventListener('click', function (e) {
+      if (openDropdown && !openDropdown.contains(e.target) &&
+          e.target !== topicBtn && !topicBtn.contains(e.target) &&
+          e.target !== authorBtn && !authorBtn.contains(e.target) &&
+          e.target !== yearBtn && !yearBtn.contains(e.target)) {
+        closeDropdown();
+      }
+    });
 
     // Results container (inline, not a dropdown)
     var resultsEl = document.createElement('div');
@@ -7224,21 +7247,25 @@ window._spaNavigate = function (path) {
       }
     }
 
+    var _fmFetchScheduled = false;
+
     function showFolderView() {
       searchClear.classList.remove('is-visible');
       var allItems = getVaultIndex(function (updatedItems) {
         if (!searchInput.value.trim()) {
           renderFolderView(updatedItems);
+          // Only fetch frontmatter once we have a populated index
+          if (!_fmFetchScheduled && updatedItems.length > 0) {
+            _fmFetchScheduled = true;
+            fetchFrontmatterForIndex(updatedItems, function () {
+              if (!searchInput.value.trim()) {
+                renderFolderView(getVaultIndex());
+              }
+            });
+          }
         }
       });
       renderFolderView(allItems);
-
-      // Trigger frontmatter fetching in background
-      fetchFrontmatterForIndex(allItems, function () {
-        if (!searchInput.value.trim()) {
-          renderFolderView(getVaultIndex());
-        }
-      });
     }
 
     function performSearch(query) {

@@ -2191,6 +2191,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
   gap: 4px;
   margin-bottom: 6px;
   flex-wrap: wrap;
+  position: relative;
 }
 .sidebar-tabs__filter-btn {
   display: inline-flex;
@@ -2225,6 +2226,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
 
 /* ---- Filter dropdown ---- */
 .sidebar-tabs__filter-dropdown {
+  position: absolute;
   background: var(--bg);
   border: 1px solid var(--sb-border);
   border-radius: 8px;

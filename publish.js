@@ -5309,6 +5309,128 @@ window._spaNavigate = function (path) {
     } catch (e) { return []; }
   }
 
+  /* ---- Frontmatter metadata cache ---- */
+  var _frontmatterCache = {};
+  var SESSION_FM_KEY = 'wiki-search-frontmatter';
+  var _fmFetching = false;
+  var _fmCallbacks = [];
+
+  function parseFrontmatter(markdown) {
+    var match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    if (!match) return {};
+    var result = {};
+    var lines = match[1].split('\n');
+    var currentKey = null;
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      var kvMatch = line.match(/^([A-Za-z_][\w]*)\s*:\s*(.*)$/);
+      if (kvMatch) {
+        currentKey = kvMatch[1].toLowerCase();
+        var val = kvMatch[2].trim().replace(/^["']|["']$/g, '');
+        if (val) {
+          result[currentKey] = val;
+        } else {
+          result[currentKey] = [];
+        }
+      } else if (currentKey && /^\s+-\s+/.test(line)) {
+        if (!Array.isArray(result[currentKey])) result[currentKey] = [result[currentKey]];
+        result[currentKey].push(line.replace(/^\s+-\s+/, '').trim());
+      }
+    }
+    return result;
+  }
+
+  function loadFrontmatterCache() {
+    try {
+      var json = sessionStorage.getItem(SESSION_FM_KEY);
+      if (json) _frontmatterCache = JSON.parse(json);
+    } catch (e) {}
+  }
+
+  function saveFrontmatterCache() {
+    try {
+      sessionStorage.setItem(SESSION_FM_KEY, JSON.stringify(_frontmatterCache));
+    } catch (e) {}
+  }
+
+  /** Apply cached frontmatter metadata to vault index items */
+  function applyFrontmatterToIndex(index) {
+    for (var i = 0; i < index.length; i++) {
+      var item = index[i];
+      if (!item.path) continue;
+      var fm = _frontmatterCache[item.path];
+      if (!fm) continue;
+      if (fm.topic && !item.topic) item.topic = fm.topic;
+      if (fm.author && !item.author) item.author = fm.author;
+      if (fm.year && !item.year) item.year = parseInt(fm.year, 10) || null;
+    }
+  }
+
+  /** Fetch frontmatter for items that don't have cached metadata.
+   *  Fetches in batches to avoid overwhelming the API. */
+  function fetchFrontmatterForIndex(index, callback) {
+    loadFrontmatterCache();
+    applyFrontmatterToIndex(index);
+
+    // Determine which items need fetching (concepts and documents without topic)
+    var toFetch = [];
+    for (var i = 0; i < index.length; i++) {
+      var item = index[i];
+      if (!item.path) continue;
+      if (item.category !== 'concept' && item.category !== 'document') continue;
+      if (_frontmatterCache[item.path]) continue;
+      toFetch.push(item);
+    }
+
+    if (toFetch.length === 0) {
+      if (callback) callback();
+      return;
+    }
+
+    if (_fmFetching) {
+      if (callback) _fmCallbacks.push(callback);
+      return;
+    }
+    _fmFetching = true;
+    if (callback) _fmCallbacks.push(callback);
+
+    var batchSize = 5;
+    var idx = 0;
+
+    function fetchBatch() {
+      if (idx >= toFetch.length) {
+        saveFrontmatterCache();
+        _fmFetching = false;
+        var cbs = _fmCallbacks.slice();
+        _fmCallbacks = [];
+        applyFrontmatterToIndex(index);
+        cbs.forEach(function (cb) { cb(); });
+        return;
+      }
+
+      var batch = toFetch.slice(idx, idx + batchSize);
+      idx += batchSize;
+      var pending = batch.length;
+
+      batch.forEach(function (item) {
+        var filePath = item.path;
+        if (!/\.md$/.test(filePath)) filePath = filePath + '.md';
+        fetchFileContent(filePath).then(function (md) {
+          if (md) {
+            var fm = parseFrontmatter(md);
+            _frontmatterCache[item.path] = fm;
+          } else {
+            _frontmatterCache[item.path] = {};
+          }
+          pending--;
+          if (pending === 0) fetchBatch();
+        });
+      });
+    }
+
+    fetchBatch();
+  }
+
   function getSiteFiles() {
     try {
       var sf = null;
@@ -5364,24 +5486,46 @@ window._spaNavigate = function (path) {
     return null;
   }
 
-  function addToIndex(index, seen, name, path, category, color, source) {
+  function addToIndex(index, seen, name, path, category, color, source, meta) {
     var key = name.toLowerCase();
     if (seen[key]) return;
     seen[key] = true;
-    index.push({ name: name, path: path, category: category, color: color || null, source: source || 'global' });
+    var item = { name: name, path: path, category: category, color: color || null, source: source || 'global' };
+    if (meta) {
+      if (meta.subfolder) item.subfolder = meta.subfolder;
+      if (meta.author) item.author = meta.author;
+      if (meta.year) item.year = meta.year;
+      if (meta.topic) item.topic = meta.topic;
+    }
+    index.push(item);
   }
 
   function categorizeFile(filePath) {
     var baseName = filePath.replace(/\.md$/, '');
     var displayName = baseName;
     var category = null;  // null = skip unless matched
+    var subfolder = null;
+    var author = null;
+    var year = null;
 
     if (filePath.indexOf('Concepts/') === 0) {
       category = 'concept';
       displayName = baseName.replace(/^Concepts\//, '');
+      // Handle nested concept folders: Concepts/SubFolder/Name
+      var conceptParts = displayName.split('/');
+      if (conceptParts.length > 1) {
+        subfolder = conceptParts.slice(0, -1).join('/');
+        displayName = conceptParts[conceptParts.length - 1];
+      }
     } else if (filePath.indexOf('Resources/') === 0) {
       category = 'document';
       displayName = baseName.replace(/^Resources\//, '');
+      // Extract subfolder: Resources/Books/Foo → subfolder "Books", displayName "Foo"
+      var resParts = displayName.split('/');
+      if (resParts.length > 1) {
+        subfolder = resParts.slice(0, -1).join('/');
+        displayName = resParts[resParts.length - 1];
+      }
     } else if (filePath.indexOf('Exams/') === 0) {
       category = 'exam';
       displayName = baseName.replace(/^Exams\//, '');
@@ -5396,7 +5540,29 @@ window._spaNavigate = function (path) {
       }
     }
 
-    return { name: displayName, path: baseName, category: category };
+    // Extract author/year from filename patterns: "Title (Author - Year)" or "Title - Year"
+    if (category === 'document' || category === 'concept') {
+      var m1 = displayName.match(/^(.+?)\s*\(([^)]*?)\s*-\s*(\d{4})\)\s*$/);
+      if (m1) {
+        author = m1[2].trim();
+        year = parseInt(m1[3], 10);
+      } else {
+        var m2 = displayName.match(/^(.+?)\s*\(([^,)]+),\s*(\d{4})\)\s*$/);
+        if (m2) {
+          author = m2[2].trim();
+          year = parseInt(m2[3], 10);
+        } else {
+          var m3 = displayName.match(/^(.+?)\s*-\s*(\d{4})\s*$/);
+          if (m3) year = parseInt(m3[2], 10);
+          else {
+            var m4 = displayName.match(/^(.+?)\s*\((\d{4})\)\s*$/);
+            if (m4) year = parseInt(m4[2], 10);
+          }
+        }
+      }
+    }
+
+    return { name: displayName, path: baseName, category: category, subfolder: subfolder, author: author, year: year };
   }
 
   /** Strip full URL to just the pathname portion (no leading slash). */
@@ -5439,7 +5605,7 @@ window._spaNavigate = function (path) {
       var navInfo = categorizeFile(navPath);
       if (!navInfo.category) continue;
       if (examPaths[navInfo.path.toLowerCase()]) continue;
-      addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null, 'global');
+      addToIndex(index, seen, navInfo.name, navInfo.path, navInfo.category, null, 'global', navInfo);
       navFound++;
     }
 
@@ -5457,7 +5623,7 @@ window._spaNavigate = function (path) {
         var fInfo = categorizeFile(fullPath);
         if (!fInfo.category) continue;
         if (examPaths[fInfo.path.toLowerCase()]) continue;
-        addToIndex(index, seen, fInfo.name, fInfo.path, fInfo.category, null, 'global');
+        addToIndex(index, seen, fInfo.name, fInfo.path, fInfo.category, null, 'global', fInfo);
         navFound++;
       }
     }
@@ -5494,7 +5660,7 @@ window._spaNavigate = function (path) {
         var tInfo = categorizeFile(tPath);
         if (!tInfo.category) continue;
         if (examPaths[tInfo.path.toLowerCase()]) continue;
-        addToIndex(index, seen, tInfo.name, tInfo.path, tInfo.category, null, 'global');
+        addToIndex(index, seen, tInfo.name, tInfo.path, tInfo.category, null, 'global', tInfo);
         navFound++;
       }
     }
@@ -5508,7 +5674,7 @@ window._spaNavigate = function (path) {
       var sInfo = categorizeFile(sPath);
       if (!sInfo.category) continue;
       if (examPaths[sInfo.path.toLowerCase()]) continue;
-      addToIndex(index, seen, sInfo.name, sInfo.path, sInfo.category, null, 'global');
+      addToIndex(index, seen, sInfo.name, sInfo.path, sInfo.category, null, 'global', sInfo);
       navFound++;
     }
 
@@ -5525,7 +5691,7 @@ window._spaNavigate = function (path) {
       if (!info.category) continue;
       if (examPaths[info.path.toLowerCase()]) continue;
       _currentPagePaths[info.name.toLowerCase()] = true;
-      addToIndex(index, seen, info.name, info.path, info.category, null, 'page');
+      addToIndex(index, seen, info.name, info.path, info.category, null, 'page', info);
     }
 
     // 4) Add files from vault object (if available)
@@ -5539,7 +5705,7 @@ window._spaNavigate = function (path) {
         var fileInfo = categorizeFile(fileKey);
         if (!fileInfo.category) continue;
         if (examPaths[fileInfo.path.toLowerCase()]) continue;
-        addToIndex(index, seen, fileInfo.name, fileInfo.path, fileInfo.category, null, 'global');
+        addToIndex(index, seen, fileInfo.name, fileInfo.path, fileInfo.category, null, 'global', fileInfo);
 
         // Try to extract [[wikilinks]] from content if available
         var entry = sf[fileKey];
@@ -5573,7 +5739,7 @@ window._spaNavigate = function (path) {
       var pfInfo = categorizeFile(pfPath);
       if (!pfInfo.category) continue;
       if (examPaths[pfInfo.path.toLowerCase()]) continue;
-      addToIndex(index, seen, pfInfo.name, pfInfo.path, pfInfo.category, null, 'global');
+      addToIndex(index, seen, pfInfo.name, pfInfo.path, pfInfo.category, null, 'global', pfInfo);
     }
 
     return { index: index, seen: seen, navFound: navFound };
@@ -5599,6 +5765,9 @@ window._spaNavigate = function (path) {
       if (apiInfo && apiInfo.category && existing.category !== 'exam') {
         existing.category = apiInfo.category;
         existing.path = apiInfo.path;
+        if (apiInfo.subfolder) existing.subfolder = apiInfo.subfolder;
+        if (apiInfo.author) existing.author = apiInfo.author;
+        if (apiInfo.year) existing.year = apiInfo.year;
       }
     }
     // Add new entries
@@ -5607,7 +5776,7 @@ window._spaNavigate = function (path) {
     for (var key in apiCategories) {
       var entry = apiCategories[key];
       if (examPaths[entry.path.toLowerCase()]) continue;
-      addToIndex(_vaultIndexCache, seen, entry.name, entry.path, entry.category, null, 'global');
+      addToIndex(_vaultIndexCache, seen, entry.name, entry.path, entry.category, null, 'global', entry);
     }
   }
 
@@ -6432,6 +6601,9 @@ window._spaNavigate = function (path) {
     return null;
   }
 
+  var SVG_CHEVRON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 4 10 8 6 12"/></svg>';
+  var SVG_FILTER = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 2.5h13l-5 5.5v4l-3 1.5V8z"/></svg>';
+
   function renderSearchPanel(container) {
     // Scope filter (This Exam / Entire Wiki)
     var scopeRow = document.createElement('div');
@@ -6454,16 +6626,6 @@ window._spaNavigate = function (path) {
     container.appendChild(scopeRow);
 
     var activeScope = 'page';
-
-    function setScope(scope) {
-      activeScope = scope;
-      scopeExam.classList.toggle('is-active', scope === 'page');
-      scopeAll.classList.toggle('is-active', scope === 'all');
-      performSearch(searchInput.value);
-    }
-
-    scopeExam.addEventListener('click', function () { setScope('page'); });
-    scopeAll.addEventListener('click', function () { setScope('all'); });
 
     // Search input row
     var searchRow = document.createElement('div');
@@ -6490,6 +6652,243 @@ window._spaNavigate = function (path) {
 
     container.appendChild(searchRow);
 
+    /* ---- Filter state ---- */
+    var activeFilters = { topic: null, author: null, yearMin: null, yearMax: null };
+    var openDropdown = null; // reference to currently open dropdown element
+
+    /* ---- Filter bar ---- */
+    var filterRow = document.createElement('div');
+    filterRow.className = 'sidebar-tabs__filters';
+
+    // Topic filter button
+    var topicBtn = document.createElement('button');
+    topicBtn.className = 'sidebar-tabs__filter-btn';
+    topicBtn.type = 'button';
+    topicBtn.innerHTML = SVG_FILTER + ' <span>Topic</span>';
+    filterRow.appendChild(topicBtn);
+
+    // Author filter button
+    var authorBtn = document.createElement('button');
+    authorBtn.className = 'sidebar-tabs__filter-btn';
+    authorBtn.type = 'button';
+    authorBtn.innerHTML = SVG_FILTER + ' <span>Author</span>';
+    filterRow.appendChild(authorBtn);
+
+    // Year filter button
+    var yearBtn = document.createElement('button');
+    yearBtn.className = 'sidebar-tabs__filter-btn';
+    yearBtn.type = 'button';
+    yearBtn.innerHTML = SVG_FILTER + ' <span>Year</span>';
+    filterRow.appendChild(yearBtn);
+
+    container.appendChild(filterRow);
+
+    /* ---- Dropdown helper ---- */
+    function closeDropdown() {
+      if (openDropdown) {
+        openDropdown.remove();
+        openDropdown = null;
+      }
+    }
+
+    function createDropdown(anchorBtn, options, currentValue, onSelect) {
+      closeDropdown();
+      var dd = document.createElement('div');
+      dd.className = 'sidebar-tabs__filter-dropdown';
+
+      options.forEach(function (opt) {
+        var item = document.createElement('div');
+        item.className = 'sidebar-tabs__filter-dropdown-item';
+        if (opt.value === currentValue) item.classList.add('is-active');
+        item.textContent = opt.label;
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          onSelect(opt.value);
+          closeDropdown();
+        });
+        dd.appendChild(item);
+      });
+
+      // Position below anchor
+      var rect = anchorBtn.getBoundingClientRect();
+      var containerRect = container.getBoundingClientRect();
+      dd.style.position = 'absolute';
+      dd.style.top = (rect.bottom - containerRect.top + 4) + 'px';
+      dd.style.left = (rect.left - containerRect.left) + 'px';
+      dd.style.minWidth = '140px';
+      container.style.position = 'relative';
+      container.appendChild(dd);
+      openDropdown = dd;
+    }
+
+    /* ---- Year range dropdown ---- */
+    function createYearDropdown(anchorBtn, allItems) {
+      closeDropdown();
+      // Collect year range from items
+      var minY = 9999, maxY = 0;
+      for (var i = 0; i < allItems.length; i++) {
+        if (allItems[i].category === 'document' && allItems[i].year) {
+          if (allItems[i].year < minY) minY = allItems[i].year;
+          if (allItems[i].year > maxY) maxY = allItems[i].year;
+        }
+      }
+      if (minY > maxY) { minY = 2000; maxY = 2026; }
+
+      var dd = document.createElement('div');
+      dd.className = 'sidebar-tabs__filter-dropdown sidebar-tabs__year-dropdown';
+
+      var label = document.createElement('div');
+      label.className = 'sidebar-tabs__year-label';
+      label.textContent = (activeFilters.yearMin || minY) + ' \u2013 ' + (activeFilters.yearMax || maxY);
+      dd.appendChild(label);
+
+      var sliderWrap = document.createElement('div');
+      sliderWrap.className = 'sidebar-tabs__year-range';
+
+      var rangeMin = document.createElement('input');
+      rangeMin.type = 'range';
+      rangeMin.min = minY;
+      rangeMin.max = maxY;
+      rangeMin.value = activeFilters.yearMin || minY;
+      rangeMin.className = 'sidebar-tabs__year-input sidebar-tabs__year-input--min';
+
+      var rangeMax = document.createElement('input');
+      rangeMax.type = 'range';
+      rangeMax.min = minY;
+      rangeMax.max = maxY;
+      rangeMax.value = activeFilters.yearMax || maxY;
+      rangeMax.className = 'sidebar-tabs__year-input sidebar-tabs__year-input--max';
+
+      sliderWrap.appendChild(rangeMin);
+      sliderWrap.appendChild(rangeMax);
+      dd.appendChild(sliderWrap);
+
+      // Clear year filter button
+      var clearBtn = document.createElement('div');
+      clearBtn.className = 'sidebar-tabs__filter-dropdown-item sidebar-tabs__year-clear';
+      clearBtn.textContent = 'Clear year filter';
+      clearBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        activeFilters.yearMin = null;
+        activeFilters.yearMax = null;
+        yearBtn.classList.remove('is-active');
+        yearBtn.querySelector('span').textContent = 'Year';
+        closeDropdown();
+        refreshView();
+      });
+      dd.appendChild(clearBtn);
+
+      function updateYear() {
+        var lo = parseInt(rangeMin.value, 10);
+        var hi = parseInt(rangeMax.value, 10);
+        if (lo > hi) { var tmp = lo; lo = hi; hi = tmp; }
+        activeFilters.yearMin = lo;
+        activeFilters.yearMax = hi;
+        label.textContent = lo + ' \u2013 ' + hi;
+        yearBtn.classList.add('is-active');
+        yearBtn.querySelector('span').textContent = lo + '\u2013' + hi;
+        refreshView();
+      }
+
+      rangeMin.addEventListener('input', updateYear);
+      rangeMax.addEventListener('input', updateYear);
+
+      var rect = anchorBtn.getBoundingClientRect();
+      var containerRect = container.getBoundingClientRect();
+      dd.style.position = 'absolute';
+      dd.style.top = (rect.bottom - containerRect.top + 4) + 'px';
+      dd.style.left = (rect.left - containerRect.left) + 'px';
+      dd.style.minWidth = '180px';
+      container.style.position = 'relative';
+      container.appendChild(dd);
+      openDropdown = dd;
+    }
+
+    /* ---- Collect unique filter values from index ---- */
+    function getFilterValues(allItems) {
+      var topics = {}, authors = {};
+      for (var i = 0; i < allItems.length; i++) {
+        var item = allItems[i];
+        if (item.category !== 'concept' && item.category !== 'document') continue;
+        if (item.topic) {
+          var topicList = Array.isArray(item.topic) ? item.topic : [item.topic];
+          topicList.forEach(function (t) { topics[t] = true; });
+        }
+        if (item.author && item.category === 'document') {
+          authors[item.author] = true;
+        }
+      }
+      return {
+        topics: Object.keys(topics).sort(),
+        authors: Object.keys(authors).sort()
+      };
+    }
+
+    /* ---- Filter matching ---- */
+    function itemMatchesFilters(item) {
+      if (activeFilters.topic) {
+        var topicList = item.topic ? (Array.isArray(item.topic) ? item.topic : [item.topic]) : [];
+        if (topicList.indexOf(activeFilters.topic) === -1) return false;
+      }
+      if (activeFilters.author) {
+        if (item.category !== 'document' || item.author !== activeFilters.author) return false;
+      }
+      if (activeFilters.yearMin != null || activeFilters.yearMax != null) {
+        if (item.category !== 'document' || !item.year) return false;
+        if (activeFilters.yearMin != null && item.year < activeFilters.yearMin) return false;
+        if (activeFilters.yearMax != null && item.year > activeFilters.yearMax) return false;
+      }
+      return true;
+    }
+
+    function itemMatchesScope(item) {
+      if (activeScope === 'page' && item.source !== 'page' && item.category !== 'exam') {
+        if (!_currentPagePaths[item.name.toLowerCase()]) return false;
+      }
+      return true;
+    }
+
+    /* ---- Filter button handlers ---- */
+    topicBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (openDropdown && openDropdown.parentNode) { closeDropdown(); return; }
+      var allItems = getVaultIndex();
+      var vals = getFilterValues(allItems);
+      var options = [{ label: 'All Topics', value: null }];
+      vals.topics.forEach(function (t) { options.push({ label: t, value: t }); });
+      createDropdown(topicBtn, options, activeFilters.topic, function (val) {
+        activeFilters.topic = val;
+        topicBtn.classList.toggle('is-active', !!val);
+        topicBtn.querySelector('span').textContent = val || 'Topic';
+        refreshView();
+      });
+    });
+
+    authorBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (openDropdown && openDropdown.parentNode) { closeDropdown(); return; }
+      var allItems = getVaultIndex();
+      var vals = getFilterValues(allItems);
+      var options = [{ label: 'All Authors', value: null }];
+      vals.authors.forEach(function (a) { options.push({ label: a, value: a }); });
+      createDropdown(authorBtn, options, activeFilters.author, function (val) {
+        activeFilters.author = val;
+        authorBtn.classList.toggle('is-active', !!val);
+        authorBtn.querySelector('span').textContent = val || 'Author';
+        refreshView();
+      });
+    });
+
+    yearBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (openDropdown && openDropdown.parentNode) { closeDropdown(); return; }
+      var allItems = getVaultIndex();
+      createYearDropdown(yearBtn, allItems);
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', function () { closeDropdown(); });
+
     // Results container (inline, not a dropdown)
     var resultsEl = document.createElement('div');
     resultsEl.className = 'sidebar-tabs__search-results';
@@ -6498,12 +6897,9 @@ window._spaNavigate = function (path) {
     var selectedIdx = -1;
     var resultEls = [];
 
-    // Empty state (shown when no query)
-    var emptyState = document.createElement('div');
-    emptyState.className = 'sidebar-tabs__search-hint';
-    emptyState.innerHTML = '<span class="sidebar-tabs__search-hint-icon">' + SVG_SEARCH + '</span>' +
-      '<span>Search across all exams, concepts, and documents</span>';
-    resultsEl.appendChild(emptyState);
+    /* ---- Folder open/closed state ---- */
+    var folderState = { concept: false, document: false };
+    var subfolderState = {}; // keyed by subfolder name
 
     function updateSelected() {
       for (var i = 0; i < resultEls.length; i++) {
@@ -6514,30 +6910,253 @@ window._spaNavigate = function (path) {
       }
     }
 
-    function performSearch(query) {
-      var term = query.trim().toLowerCase();
+    /* ---- Create a clickable item row (shared by folder view and search results) ---- */
+    function createItemRow(item, cat, term) {
+      var result = document.createElement('a');
+      result.className = 'sidebar-tabs__search-result';
+      result.dataset.category = cat;
+      if (item.path) {
+        result.href = '/' + item.path.replace(/ /g, '+');
+      }
+
+      var iconEl = document.createElement('span');
+      iconEl.className = 'sidebar-tabs__search-result-icon';
+      iconEl.innerHTML = CAT_ICONS[cat] || CAT_ICONS.document;
+      result.appendChild(iconEl);
+
+      var nameEl = document.createElement('span');
+      nameEl.className = 'sidebar-tabs__search-result-name';
+      nameEl.innerHTML = term ? highlightMatch(item.name, term) : esc(item.name);
+      result.appendChild(nameEl);
+
+      result.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        var isMobile = window.innerWidth <= 768;
+        if (!isMobile && cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
+          var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
+          window._openConceptPopup(conceptPath);
+          closeSidebar();
+        } else {
+          sidebarNavigate(item.path);
+        }
+      }, true);
+
+      result.addEventListener('mouseenter', function () {
+        selectedIdx = resultEls.indexOf(result);
+        updateSelected();
+      });
+
+      return result;
+    }
+
+    /* ---- Folder browsing view (default when no search query) ---- */
+    function renderFolderView(allItems) {
       resultEls = [];
       selectedIdx = -1;
+      resultsEl.innerHTML = '';
 
-      if (!term) {
-        resultsEl.innerHTML = '';
-        resultsEl.appendChild(emptyState);
-        searchClear.classList.remove('is-visible');
+      // Group items by category, applying scope and filter
+      var concepts = [];
+      var documents = {};  // keyed by subfolder ('' for root)
+
+      for (var i = 0; i < allItems.length; i++) {
+        var item = allItems[i];
+        if (!item.category || item.category === 'exam') continue;
+        if (!itemMatchesScope(item)) continue;
+        if (!itemMatchesFilters(item)) continue;
+
+        if (item.category === 'concept') {
+          concepts.push(item);
+        } else if (item.category === 'document') {
+          var sf = item.subfolder || '';
+          if (!documents[sf]) documents[sf] = [];
+          documents[sf].push(item);
+        }
+      }
+
+      // Sort items alphabetically
+      concepts.sort(function (a, b) { return a.name.localeCompare(b.name); });
+      var subfolders = Object.keys(documents).sort();
+      subfolders.forEach(function (sf) {
+        documents[sf].sort(function (a, b) { return a.name.localeCompare(b.name); });
+      });
+
+      var totalDocs = 0;
+      subfolders.forEach(function (sf) { totalDocs += documents[sf].length; });
+
+      if (concepts.length === 0 && totalDocs === 0) {
+        var empty = document.createElement('div');
+        empty.className = 'sidebar-tabs__search-empty';
+        empty.textContent = activeScope === 'page'
+          ? 'No concepts or resources on this page. Try "Entire Wiki".'
+          : 'No items match the current filters.';
+        resultsEl.appendChild(empty);
         return;
       }
 
-      searchClear.classList.add('is-visible');
+      // Render Concepts folder
+      if (concepts.length > 0) {
+        renderFolder('concept', 'Concepts', concepts, null);
+      }
 
-      // Get index synchronously (returns what's available now)
-      var allItems = getVaultIndex(function (updatedItems) {
-        // Re-render with updated index if query still matches
-        if (searchInput.value.trim().toLowerCase() === term) {
-          renderResults(updatedItems, term);
-        }
-      });
-      renderResults(allItems, term);
+      // Render Resources folder
+      if (totalDocs > 0) {
+        var resourceFolder = document.createElement('div');
+        resourceFolder.className = 'sidebar-tabs__folder';
+
+        var resourceHeader = document.createElement('div');
+        resourceHeader.className = 'sidebar-tabs__folder-header';
+
+        var resourceChevron = document.createElement('span');
+        resourceChevron.className = 'sidebar-tabs__folder-chevron';
+        if (folderState.document) resourceChevron.classList.add('is-open');
+        resourceChevron.innerHTML = SVG_CHEVRON;
+        resourceHeader.appendChild(resourceChevron);
+
+        var resourceIcon = document.createElement('span');
+        resourceIcon.className = 'sidebar-tabs__folder-icon';
+        resourceIcon.innerHTML = CAT_ICONS.document;
+        resourceHeader.appendChild(resourceIcon);
+
+        var resourceLabel = document.createElement('span');
+        resourceLabel.className = 'sidebar-tabs__folder-label';
+        resourceLabel.textContent = 'Resources';
+        resourceHeader.appendChild(resourceLabel);
+
+        var resourceCount = document.createElement('span');
+        resourceCount.className = 'sidebar-tabs__folder-count';
+        resourceCount.textContent = totalDocs;
+        resourceHeader.appendChild(resourceCount);
+
+        resourceFolder.appendChild(resourceHeader);
+
+        var resourceItems = document.createElement('div');
+        resourceItems.className = 'sidebar-tabs__folder-items';
+        if (folderState.document) resourceItems.classList.add('is-open');
+
+        // Render subfolders within Resources
+        subfolders.forEach(function (sf) {
+          var items = documents[sf];
+          if (sf) {
+            // Render as sub-folder
+            var subFolder = document.createElement('div');
+            subFolder.className = 'sidebar-tabs__folder sidebar-tabs__subfolder';
+
+            var subHeader = document.createElement('div');
+            subHeader.className = 'sidebar-tabs__folder-header';
+
+            var subChevron = document.createElement('span');
+            subChevron.className = 'sidebar-tabs__folder-chevron';
+            if (subfolderState[sf]) subChevron.classList.add('is-open');
+            subChevron.innerHTML = SVG_CHEVRON;
+            subHeader.appendChild(subChevron);
+
+            var subLabel = document.createElement('span');
+            subLabel.className = 'sidebar-tabs__folder-label';
+            subLabel.textContent = sf;
+            subHeader.appendChild(subLabel);
+
+            var subCount = document.createElement('span');
+            subCount.className = 'sidebar-tabs__folder-count';
+            subCount.textContent = items.length;
+            subHeader.appendChild(subCount);
+
+            subFolder.appendChild(subHeader);
+
+            var subItems = document.createElement('div');
+            subItems.className = 'sidebar-tabs__folder-items';
+            if (subfolderState[sf]) subItems.classList.add('is-open');
+
+            items.forEach(function (item) {
+              var row = createItemRow(item, 'document', null);
+              subItems.appendChild(row);
+              resultEls.push(row);
+            });
+
+            subFolder.appendChild(subItems);
+
+            subHeader.addEventListener('click', function () {
+              subfolderState[sf] = !subfolderState[sf];
+              subChevron.classList.toggle('is-open');
+              subItems.classList.toggle('is-open');
+            });
+
+            resourceItems.appendChild(subFolder);
+          } else {
+            // Root-level documents
+            items.forEach(function (item) {
+              var row = createItemRow(item, 'document', null);
+              resourceItems.appendChild(row);
+              resultEls.push(row);
+            });
+          }
+        });
+
+        resourceFolder.appendChild(resourceItems);
+
+        resourceHeader.addEventListener('click', function () {
+          folderState.document = !folderState.document;
+          resourceChevron.classList.toggle('is-open');
+          resourceItems.classList.toggle('is-open');
+        });
+
+        resultsEl.appendChild(resourceFolder);
+      }
     }
 
+    function renderFolder(cat, label, items, parentEl) {
+      var folder = document.createElement('div');
+      folder.className = 'sidebar-tabs__folder';
+
+      var header = document.createElement('div');
+      header.className = 'sidebar-tabs__folder-header';
+
+      var chevron = document.createElement('span');
+      chevron.className = 'sidebar-tabs__folder-chevron';
+      if (folderState[cat]) chevron.classList.add('is-open');
+      chevron.innerHTML = SVG_CHEVRON;
+      header.appendChild(chevron);
+
+      var icon = document.createElement('span');
+      icon.className = 'sidebar-tabs__folder-icon';
+      icon.innerHTML = CAT_ICONS[cat] || CAT_ICONS.document;
+      header.appendChild(icon);
+
+      var labelEl = document.createElement('span');
+      labelEl.className = 'sidebar-tabs__folder-label';
+      labelEl.textContent = label;
+      header.appendChild(labelEl);
+
+      var countEl = document.createElement('span');
+      countEl.className = 'sidebar-tabs__folder-count';
+      countEl.textContent = items.length;
+      header.appendChild(countEl);
+
+      folder.appendChild(header);
+
+      var itemsContainer = document.createElement('div');
+      itemsContainer.className = 'sidebar-tabs__folder-items';
+      if (folderState[cat]) itemsContainer.classList.add('is-open');
+
+      items.forEach(function (item) {
+        var row = createItemRow(item, cat, null);
+        itemsContainer.appendChild(row);
+        resultEls.push(row);
+      });
+
+      folder.appendChild(itemsContainer);
+
+      header.addEventListener('click', function () {
+        folderState[cat] = !folderState[cat];
+        chevron.classList.toggle('is-open');
+        itemsContainer.classList.toggle('is-open');
+      });
+
+      resultsEl.appendChild(folder);
+    }
+
+    /* ---- Search results view (when query is active) ---- */
     function renderResults(allItems, term) {
       resultEls = [];
       selectedIdx = -1;
@@ -6547,11 +7166,8 @@ window._spaNavigate = function (path) {
 
       for (var i = 0; i < allItems.length; i++) {
         var item = allItems[i];
-        // Scope filter: in 'page' mode, only show items from current page links
-        if (activeScope === 'page' && item.source !== 'page' && item.category !== 'exam') {
-          // Also check _currentPagePaths in case the item was added globally but exists on this page
-          if (!_currentPagePaths[item.name.toLowerCase()]) continue;
-        }
+        if (!itemMatchesScope(item)) continue;
+        if (!itemMatchesFilters(item)) continue;
         if (item.name.toLowerCase().indexOf(term) !== -1) {
           var cat = item.category;
           if (!cat) continue;
@@ -6589,51 +7205,72 @@ window._spaNavigate = function (path) {
         group.appendChild(label);
 
         items.forEach(function (item) {
-          var result = document.createElement('a');
-          result.className = 'sidebar-tabs__search-result';
-          result.dataset.category = cat;
-          if (item.path) {
-            result.href = '/' + item.path.replace(/ /g, '+');
-          }
-
-          var iconEl = document.createElement('span');
-          iconEl.className = 'sidebar-tabs__search-result-icon';
-          iconEl.innerHTML = CAT_ICONS[cat] || CAT_ICONS.document;
-          result.appendChild(iconEl);
-
-          var nameEl = document.createElement('span');
-          nameEl.className = 'sidebar-tabs__search-result-name';
-          nameEl.innerHTML = highlightMatch(item.name, term);
-          result.appendChild(nameEl);
-
-          result.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            var isMobile = window.innerWidth <= 768;
-            // Open concepts in the split-pane on desktop; on mobile navigate directly
-            if (!isMobile && cat === 'concept' && item.path && typeof window._openConceptPopup === 'function') {
-              var conceptPath = item.path.match(/^Concepts\//i) ? item.path : 'Concepts/' + item.path;
-              window._openConceptPopup(conceptPath);
-              closeSidebar();
-            } else {
-              // Navigate via a link inside the sidebar so Obsidian's
-              // framework auto-closes the mobile sidebar.
-              sidebarNavigate(item.path);
-            }
-          }, true);
-
-          result.addEventListener('mouseenter', function () {
-            selectedIdx = resultEls.indexOf(result);
-            updateSelected();
-          });
-
-          group.appendChild(result);
-          resultEls.push(result);
+          var row = createItemRow(item, cat, term);
+          group.appendChild(row);
+          resultEls.push(row);
         });
 
         resultsEl.appendChild(group);
       });
     }
+
+    /* ---- Main view refresh ---- */
+    function refreshView() {
+      var term = searchInput.value.trim().toLowerCase();
+      if (term) {
+        performSearch(searchInput.value);
+      } else {
+        showFolderView();
+      }
+    }
+
+    function showFolderView() {
+      searchClear.classList.remove('is-visible');
+      var allItems = getVaultIndex(function (updatedItems) {
+        if (!searchInput.value.trim()) {
+          renderFolderView(updatedItems);
+        }
+      });
+      renderFolderView(allItems);
+
+      // Trigger frontmatter fetching in background
+      fetchFrontmatterForIndex(allItems, function () {
+        if (!searchInput.value.trim()) {
+          renderFolderView(getVaultIndex());
+        }
+      });
+    }
+
+    function performSearch(query) {
+      var term = query.trim().toLowerCase();
+      resultEls = [];
+      selectedIdx = -1;
+
+      if (!term) {
+        showFolderView();
+        return;
+      }
+
+      searchClear.classList.add('is-visible');
+
+      var allItems = getVaultIndex(function (updatedItems) {
+        if (searchInput.value.trim().toLowerCase() === term) {
+          renderResults(updatedItems, term);
+        }
+      });
+      renderResults(allItems, term);
+    }
+
+    /* ---- Scope toggle ---- */
+    function setScope(scope) {
+      activeScope = scope;
+      scopeExam.classList.toggle('is-active', scope === 'page');
+      scopeAll.classList.toggle('is-active', scope === 'all');
+      refreshView();
+    }
+
+    scopeExam.addEventListener('click', function () { setScope('page'); });
+    scopeAll.addEventListener('click', function () { setScope('all'); });
 
     searchInput.addEventListener('input', function () {
       performSearch(searchInput.value);
@@ -6663,6 +7300,9 @@ window._spaNavigate = function (path) {
       performSearch('');
       searchInput.focus();
     });
+
+    // Show folder view initially instead of empty state
+    showFolderView();
 
     // Auto-focus the search input when tab opens
     setTimeout(function () { searchInput.focus(); }, 50);

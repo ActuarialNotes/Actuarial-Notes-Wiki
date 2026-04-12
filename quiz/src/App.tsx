@@ -1,0 +1,78 @@
+import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom'
+import Landing from '@/pages/Landing'
+import Auth from '@/pages/Auth'
+import Quiz from '@/pages/Quiz'
+import Review from '@/pages/Review'
+import Dashboard from '@/pages/Dashboard'
+import { useAuth } from '@/hooks/useAuth'
+
+function NavBar() {
+  const { user, signOut } = useAuth()
+  const navigate = useNavigate()
+
+  return (
+    <header className="border-b bg-background/95 backdrop-blur sticky top-0 z-10">
+      <div className="container max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+        <Link to="/" className="font-semibold text-foreground hover:text-primary transition-colors">
+          Actuarial Quiz
+        </Link>
+        <nav className="flex items-center gap-4">
+          {user ? (
+            <>
+              <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Dashboard
+              </Link>
+              <button
+                type="button"
+                onClick={signOut}
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => navigate('/auth')}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Sign in
+            </button>
+          )}
+        </nav>
+      </div>
+    </header>
+  )
+}
+
+function NotFound() {
+  return (
+    <div className="container max-w-md mx-auto px-4 py-16 text-center space-y-4">
+      <h1 className="text-4xl font-bold">404</h1>
+      <p className="text-muted-foreground">Page not found</p>
+      <Link to="/" className="text-primary hover:underline text-sm">
+        ← Back to Home
+      </Link>
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen bg-background text-foreground">
+        <NavBar />
+        <main>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/review" element={<Review />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  )
+}

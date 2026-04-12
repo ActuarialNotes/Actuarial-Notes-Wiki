@@ -1,0 +1,47 @@
+import { cn } from '@/lib/utils'
+
+const WIKI_BASE = 'https://wiki.actuarialnotes.com'
+
+interface ExplanationPanelProps {
+  explanation: string
+  wikiLink: string
+  isCorrect: boolean
+}
+
+export function ExplanationPanel({ explanation, wikiLink, isCorrect }: ExplanationPanelProps) {
+  return (
+    <div
+      className={cn(
+        'rounded-lg border p-4 mt-4 space-y-3',
+        isCorrect
+          ? 'border-green-200 bg-green-50'
+          : 'border-red-200 bg-red-50'
+      )}
+    >
+      <div className="flex items-center gap-2">
+        <span className="text-lg">{isCorrect ? '✓' : '✗'}</span>
+        <span
+          className={cn(
+            'font-semibold',
+            isCorrect ? 'text-green-800' : 'text-red-800'
+          )}
+        >
+          {isCorrect ? 'Correct!' : 'Incorrect'}
+        </span>
+      </div>
+
+      <p className="text-sm text-foreground leading-relaxed">{explanation}</p>
+
+      {wikiLink && (
+        <a
+          href={`${WIKI_BASE}${wikiLink}`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+        >
+          Read more →
+        </a>
+      )}
+    </div>
+  )
+}

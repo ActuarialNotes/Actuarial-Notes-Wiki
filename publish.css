@@ -1859,6 +1859,61 @@ body.sidebar-resizing iframe { pointer-events: none; }
   height: 16px;
 }
 
+/* ---- Sidebar login widget ---- */
+
+/* Wrapper anchored at left edge of the utility bar */
+.sidebar-login {
+  display: flex;
+  align-items: center;
+  margin-right: auto;   /* push theme/sound buttons to the right */
+  min-width: 0;
+}
+
+/* "Sign in" button */
+.sidebar-login__signin {
+  width: auto !important;
+  padding: 0 8px !important;
+  gap: 5px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.sidebar-login__signin:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.sidebar-login__icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.sidebar-login__icon svg {
+  width: 15px;
+  height: 15px;
+}
+.sidebar-login__label {
+  white-space: nowrap;
+}
+
+/* Logged-in chip: email + sign-out button */
+.sidebar-login__chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.sidebar-login__email {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 130px;
+}
+.sidebar-login__signout {
+  flex-shrink: 0;
+}
+
 /* ---- Shared panel components ---- */
 
 /* Section header within panels */

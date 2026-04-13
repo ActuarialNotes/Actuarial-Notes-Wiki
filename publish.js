@@ -8861,7 +8861,6 @@ var SoundFX = (function () {
    CONFIGURATION — set these to match your deployment:
    =========================================================== */
 (function () {
-  'use strict';
 
   /* ---- CONFIGURE ---- */
   var SUPABASE_URL      = 'https://miaftmaxgxlnvrnydiyr.supabase.co';   // e.g. 'https://xyzxyz.supabase.co'
@@ -8960,14 +8959,11 @@ var SoundFX = (function () {
   }
 
   /* ------------------------------------------------------------------ */
-  /* Popup relay — send wiki progress to Supabase on login               */
+  /* Popup relay listener                                                  */
   /* ------------------------------------------------------------------ */
 
   /** Sync all current journey state to Supabase after login */
   function syncJourneyToSupabase() {
-    var userId = getUserId();
-    if (!userId || !SUPABASE_URL) return;
-    // Access the global journey state managed by the SIDEBAR TABS IIFE
     try {
       var raw = localStorage.getItem('actuarial-notes-journey');
       if (!raw) return;
@@ -8981,42 +8977,39 @@ var SoundFX = (function () {
 
   /* Listen for postMessage from quiz popup after successful login */
   window.addEventListener('message', function (event) {
-    // Security: only accept messages from the configured quiz app origin
     if (QUIZ_APP_URL && event.origin !== QUIZ_APP_URL) return;
     if (!event.data || event.data.type !== 'SUPABASE_SESSION') return;
-
     var session = event.data.session;
     if (!session || !session.access_token) return;
-
     writeSession(session);
     syncJourneyToSupabase();
-    refreshLoginUI();
+    renderLoginWidget();
   });
 
   /* ------------------------------------------------------------------ */
-  /* Monkey-patch cycleStatus to sync status changes to Supabase          */
+  /* Sync exam status clicks to Supabase                                  */
+  /* Uses event delegation — no localStorage patching needed              */
   /* ------------------------------------------------------------------ */
 
-  /* We hook into localStorage writes on the journey key so we can react
-     whenever the sidebar TABS IIFE calls saveJourneyState(). */
-  (function patchStorage() {
-    var _origSetItem = localStorage.setItem.bind(localStorage);
-    localStorage.setItem = function (key, value) {
-      _origSetItem(key, value);
-      if (key === 'actuarial-notes-journey' && getUserId()) {
-        try {
-          var journey = JSON.parse(value);
-          var progress = journey.progress || {};
-          EXAM_IDS.forEach(function (id) {
-            if (progress[id]) upsertExamProgress(id, progress[id]);
-          });
-        } catch (e) { /* ignore */ }
-      }
-    };
-  })();
+  document.addEventListener('click', function (e) {
+    var statusBtn = e.target.closest('.exams-panel__status');
+    if (!statusBtn || !getUserId()) return;
+    /* Let the sidebar TABS IIFE update localStorage first, then read it */
+    setTimeout(function () {
+      try {
+        var row = statusBtn.closest('[data-item-id]');
+        var examId = row && row.dataset.itemId;
+        if (!examId) return;
+        var raw = localStorage.getItem('actuarial-notes-journey');
+        if (!raw) return;
+        var progress = JSON.parse(raw).progress || {};
+        if (progress[examId]) upsertExamProgress(examId, progress[examId]);
+      } catch (err) { /* ignore */ }
+    }, 50);
+  }, true);
 
   /* ------------------------------------------------------------------ */
-  /* UI                                                                    */
+  /* UI rendering                                                          */
   /* ------------------------------------------------------------------ */
 
   var loginWrapperEl = null;
@@ -9028,7 +9021,6 @@ var SoundFX = (function () {
     var email = getUserEmail();
 
     if (email) {
-      /* Logged in state */
       var chip = document.createElement('div');
       chip.className = 'sidebar-login__chip';
 
@@ -9051,7 +9043,6 @@ var SoundFX = (function () {
       chip.appendChild(signOutBtn);
       loginWrapperEl.appendChild(chip);
     } else {
-      /* Signed-out state */
       var signInBtn = document.createElement('button');
       signInBtn.type = 'button';
       signInBtn.className = 'sidebar-login__signin sidebar-tabs__utility-btn';
@@ -9069,19 +9060,10 @@ var SoundFX = (function () {
       signInBtn.appendChild(labelSpan);
 
       signInBtn.addEventListener('click', function () {
-        if (!QUIZ_APP_URL) {
-          alert('QUIZ_APP_URL is not configured in publish.js');
-          return;
-        }
         var origin = encodeURIComponent(window.location.origin);
         var url = QUIZ_APP_URL.replace(/\/$/, '') + '/auth?popup=1&origin=' + origin;
         var popup = window.open(url, 'actuarial-login', 'width=480,height=640,resizable=yes,scrollbars=yes');
-        if (!popup) {
-          /* Popup blocked — fall back to redirect */
-          window.open(url, '_blank');
-          return;
-        }
-        /* Change button to "Signing in…" while popup is open */
+        if (!popup) { window.open(url, '_blank'); return; }
         signInBtn.disabled = true;
         labelSpan.textContent = 'Signing in\u2026';
         var pollInterval = setInterval(function () {
@@ -9097,10 +9079,6 @@ var SoundFX = (function () {
     }
   }
 
-  function refreshLoginUI() {
-    renderLoginWidget();
-  }
-
   /* ------------------------------------------------------------------ */
   /* Inject login wrapper into sidebar utility bar                        */
   /* ------------------------------------------------------------------ */
@@ -9108,45 +9086,42 @@ var SoundFX = (function () {
   function injectLoginWidget() {
     var utilBar = document.querySelector('.sidebar-tabs__utility');
     if (!utilBar) return;
-    if (utilBar.querySelector('.sidebar-login')) return; // already injected
-
-    /* If SUPABASE_URL / QUIZ_APP_URL aren't configured, skip the widget */
+    if (utilBar.querySelector('.sidebar-login')) return;
     if (!SUPABASE_URL || !QUIZ_APP_URL) return;
 
     loginWrapperEl = document.createElement('div');
     loginWrapperEl.className = 'sidebar-login';
-
-    /* Insert before the theme/sound buttons so it appears at the left */
     utilBar.insertBefore(loginWrapperEl, utilBar.firstChild);
-
     renderLoginWidget();
   }
 
-  /* Run after the sidebar tabs are built */
-  function init() {
-    /* Wait for the sidebar utility bar to appear */
-    var attempts = 0;
-    function tryInject() {
-      if (document.querySelector('.sidebar-tabs__utility')) {
-        injectLoginWidget();
-      } else if (attempts < 30) {
-        attempts++;
-        setTimeout(tryInject, 200);
-      }
+  /* ------------------------------------------------------------------ */
+  /* Initialisation — MutationObserver waits for the utility bar          */
+  /* ------------------------------------------------------------------ */
+
+  function watchForSidebar() {
+    /* Already present — inject immediately */
+    if (document.querySelector('.sidebar-tabs__utility')) {
+      injectLoginWidget();
+      return;
     }
-    tryInject();
+    /* Watch the whole document for it to appear (handles slow SPA init) */
+    var obs = new MutationObserver(function () {
+      if (document.querySelector('.sidebar-tabs__utility')) {
+        obs.disconnect();
+        injectLoginWidget();
+      }
+    });
+    obs.observe(document.documentElement, { childList: true, subtree: true });
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', watchForSidebar);
   } else {
-    init();
+    watchForSidebar();
   }
 
-  /* Re-inject after SPA navigations */
-  window.addEventListener('popstate', function () { setTimeout(init, 300); });
-  document.addEventListener('click', function (e) {
-    var link = e.target.closest('a[href], .nav-file-title, .tree-item-self');
-    if (link) setTimeout(init, 400);
-  });
+  /* Re-inject after SPA navigations (sidebar may be rebuilt) */
+  window.addEventListener('popstate', function () { setTimeout(watchForSidebar, 300); });
+
 })();

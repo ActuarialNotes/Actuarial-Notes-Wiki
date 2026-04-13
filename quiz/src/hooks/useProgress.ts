@@ -18,20 +18,26 @@ export function useProgress() {
     setLoading(true)
     setError(null)
 
-    supabase
-      .from('quiz_sessions')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('completed_at', { ascending: false })
-      .limit(50)
-      .then(({ data, error: err }: { data: QuizSession[] | null; error: { message: string } | null }) => {
+    const load = async () => {
+      try {
+        const { data, error: err } = (await supabase
+          .from('quiz_sessions')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('completed_at', { ascending: false })
+          .limit(50)) as { data: QuizSession[] | null; error: { message: string } | null }
+
         if (err) {
           setError(err.message)
         } else {
           setSessions(data ?? [])
         }
-      })
-      .finally(() => setLoading(false))
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    void load()
   }, [user?.id])  // key on id — stable across token refreshes
 
   return { sessions, loading, error }

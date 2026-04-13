@@ -32,9 +32,9 @@ export function useExamProgress(): Record<string, string> {
       .from('exam_progress')
       .select('exam_id, status')
       .eq('user_id', user.id)
-      .then(({ data }) => {
+      .then(({ data }: { data: { exam_id: string; status: string }[] | null }) => {
         const map: Record<string, string> = {}
-        data?.forEach(row => {
+        data?.forEach((row: { exam_id: string; status: string }) => {
           map[row.exam_id] = row.status
         })
         setProgress(map)

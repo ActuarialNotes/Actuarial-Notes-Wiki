@@ -2,6 +2,7 @@ const REPO = import.meta.env.VITE_GITHUB_REPO as string
 const BRANCH = import.meta.env.VITE_GITHUB_BRANCH as string
 const TOKEN = import.meta.env.VITE_GITHUB_TOKEN as string | undefined
 const API_BASE = `https://api.github.com/repos/${REPO}/contents`
+const REF = `?ref=${BRANCH}`
 
 const CACHE_KEY = 'actuarial_questions_cache'
 const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
@@ -51,7 +52,7 @@ interface GithubContentItem {
 }
 
 async function listDirectory(apiPath: string): Promise<GithubContentItem[]> {
-  const res = await fetch(`${API_BASE}/${apiPath}`, { headers: authHeaders() })
+  const res = await fetch(`${API_BASE}/${apiPath}${REF}`, { headers: authHeaders() })
   if (!res.ok) throw new Error(`GitHub API error ${res.status} for path: ${apiPath}`)
   return res.json() as Promise<GithubContentItem[]>
 }

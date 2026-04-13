@@ -8864,9 +8864,9 @@ var SoundFX = (function () {
   'use strict';
 
   /* ---- CONFIGURE ---- */
-  var SUPABASE_URL      = '';   // e.g. 'https://xyzxyz.supabase.co'
-  var SUPABASE_ANON_KEY = '';   // Supabase anon/public key
-  var QUIZ_APP_URL      = '';   // e.g. 'https://quiz.actuarialnotes.com'
+  var SUPABASE_URL      = 'https://miaftmaxgxlnvrnydiyr.supabase.co';   // e.g. 'https://xyzxyz.supabase.co'
+  var SUPABASE_ANON_KEY = 'sb_publishable_SWM6SylAvTmRZiMjSuJmWg_kqoSTf1C';   // Supabase anon/public key
+  var QUIZ_APP_URL      = 'https://quiz.actuarialnotes.com';   // e.g. 'https://quiz.actuarialnotes.com'
 
   /* ---- Wiki exam ID → Supabase exam_id mapping ---- */
   var EXAM_IDS = ['P', 'FM'];   // must match publish.js journey keys

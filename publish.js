@@ -9124,4 +9124,12 @@ var SoundFX = (function () {
   /* Re-inject after SPA navigations (sidebar may be rebuilt) */
   window.addEventListener('popstate', function () { setTimeout(watchForSidebar, 300); });
 
+  /* Obsidian Publish uses pushState for click navigation — popstate won't fire */
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self')) {
+      setTimeout(watchForSidebar, 400);
+      setTimeout(watchForSidebar, 800);
+    }
+  });
+
 })();

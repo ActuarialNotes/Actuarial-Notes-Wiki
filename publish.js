@@ -9121,15 +9121,12 @@ var SoundFX = (function () {
     watchForSidebar();
   }
 
-  /* Re-inject after SPA navigations (sidebar may be rebuilt) */
-  window.addEventListener('popstate', function () { setTimeout(watchForSidebar, 300); });
-
-  /* Obsidian Publish uses pushState for click navigation — popstate won't fire */
-  document.addEventListener('click', function (e) {
-    if (e.target.closest('a.internal-link, a[href^="/"], .nav-file-title, .tree-item-self')) {
-      setTimeout(watchForSidebar, 400);
-      setTimeout(watchForSidebar, 800);
+  /* Guard: re-inject whenever the widget goes missing (handles all navigation types) */
+  setInterval(function () {
+    var utilBar = document.querySelector('.sidebar-tabs__utility');
+    if (utilBar && !utilBar.querySelector('.sidebar-login')) {
+      injectLoginWidget();
     }
-  });
+  }, 1000);
 
 })();

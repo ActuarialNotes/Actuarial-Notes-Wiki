@@ -24,11 +24,11 @@ export function useProgress() {
       .eq('user_id', user.id)
       .order('completed_at', { ascending: false })
       .limit(50)
-      .then(({ data, error: err }) => {
+      .then(({ data, error: err }: { data: QuizSession[] | null; error: { message: string } | null }) => {
         if (err) {
           setError(err.message)
         } else {
-          setSessions((data as QuizSession[]) ?? [])
+          setSessions(data ?? [])
         }
       })
       .finally(() => setLoading(false))

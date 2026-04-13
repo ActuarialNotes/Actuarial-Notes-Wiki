@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
+import { useExamProgress, EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuizMode, Difficulty } from '@/lib/parser'
@@ -26,9 +27,28 @@ const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
 export default function Landing() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const examProgress = useExamProgress()
+
+  // Partition exams: in-progress ones first, rest in a collapsible section
+  const inProgressExams = EXAMS.filter(e => {
+    const examId = Object.entries(EXAM_ID_TO_TOPIC).find(([, t]) => t === e.value)?.[0]
+    return examId ? examProgress[examId] === 'in_progress' : false
+  })
+  const otherExams = EXAMS.filter(e => !inProgressExams.includes(e))
+  const hasInProgress = inProgressExams.length > 0
+
   const [topic, setTopic] = useState(EXAMS[0].value)
   const [mode, setMode] = useState<QuizMode>('random')
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
+  const [showOther, setShowOther] = useState(!hasInProgress)
+
+  // Pre-select first in-progress exam when progress loads
+  useEffect(() => {
+    if (inProgressExams.length > 0) {
+      setTopic(inProgressExams[0].value)
+      setShowOther(false)
+    }
+  }, [JSON.stringify(examProgress)])  // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleStart() {
     const params = new URLSearchParams({ topic, mode })
@@ -60,7 +80,7 @@ export default function Landing() {
           <div className="space-y-2">
             <label className="text-sm font-medium">Exam</label>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {EXAMS.map(exam => (
+              {(hasInProgress ? inProgressExams : EXAMS).map(exam => (
                 <button
                   key={exam.value}
                   type="button"
@@ -75,6 +95,48 @@ export default function Landing() {
                 </button>
               ))}
             </div>
+
+            {/* Collapsible "Other exams" section — only shown when there are in-progress exams */}
+            {hasInProgress && otherExams.length > 0 && (
+              <div className="mt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowOther(v => !v)}
+                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`w-3 h-3 transition-transform ${showOther ? 'rotate-90' : ''}`}
+                  >
+                    <polyline points="6 4 12 10 6 16" />
+                  </svg>
+                  Other exams
+                </button>
+                {showOther && (
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-2">
+                    {otherExams.map(exam => (
+                      <button
+                        key={exam.value}
+                        type="button"
+                        onClick={() => setTopic(exam.value)}
+                        className={`px-4 py-3 rounded-lg border text-left text-sm transition-colors ${
+                          topic === exam.value
+                            ? 'border-primary bg-primary/5 text-primary font-medium'
+                            : 'border-input hover:bg-accent'
+                        }`}
+                      >
+                        {exam.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Mode selector */}

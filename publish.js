@@ -8852,3 +8852,301 @@ var SoundFX = (function () {
    Syllabus uploader & document library features have been moved
    to publish-archived-custom-exam.js for future refinement.
    =========================================================== */
+
+/* ===========================================================
+   SIDEBAR AUTH
+   Login widget at the bottom-left of the sidebar.
+   Cross-app SSO via popup relay with the quiz app.
+
+   CONFIGURATION — set these to match your deployment:
+   =========================================================== */
+(function () {
+  'use strict';
+
+  /* ---- CONFIGURE ---- */
+  var SUPABASE_URL      = '';   // e.g. 'https://xyzxyz.supabase.co'
+  var SUPABASE_ANON_KEY = '';   // Supabase anon/public key
+  var QUIZ_APP_URL      = '';   // e.g. 'https://quiz.actuarialnotes.com'
+
+  /* ---- Wiki exam ID → Supabase exam_id mapping ---- */
+  var EXAM_IDS = ['P', 'FM'];   // must match publish.js journey keys
+
+  /* ---- SVG icons ---- */
+  var SVG_USER = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>';
+  var SVG_SIGNOUT = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4"/><polyline points="13 14 17 10 13 6"/><line x1="17" y1="10" x2="7" y2="10"/></svg>';
+
+  /* ------------------------------------------------------------------ */
+  /* Auth helpers — direct Supabase REST, no SDK needed                   */
+  /* ------------------------------------------------------------------ */
+
+  function getStorageKey() {
+    if (!SUPABASE_URL) return null;
+    var m = SUPABASE_URL.match(/https?:\/\/([^.]+)\.supabase\.co/);
+    return m ? 'sb-' + m[1] + '-auth-token' : null;
+  }
+
+  function readSession() {
+    var key = getStorageKey();
+    if (!key) return null;
+    try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; }
+  }
+
+  function writeSession(session) {
+    var key = getStorageKey();
+    if (!key || !session) return;
+    try { localStorage.setItem(key, JSON.stringify(session)); } catch (e) { /* ignore */ }
+  }
+
+  function clearSession() {
+    var key = getStorageKey();
+    if (key) try { localStorage.removeItem(key); } catch (e) { /* ignore */ }
+  }
+
+  function getAccessToken() {
+    var s = readSession();
+    return s && s.access_token ? s.access_token : null;
+  }
+
+  function getUserEmail() {
+    var s = readSession();
+    return (s && s.user && s.user.email) ? s.user.email : null;
+  }
+
+  function getUserId() {
+    var s = readSession();
+    return (s && s.user && s.user.id) ? s.user.id : null;
+  }
+
+  function signOut() {
+    var token = getAccessToken();
+    if (token && SUPABASE_URL) {
+      fetch(SUPABASE_URL + '/auth/v1/logout', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token, 'apikey': SUPABASE_ANON_KEY }
+      }).catch(function () { /* best-effort */ });
+    }
+    clearSession();
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Supabase REST helpers                                                 */
+  /* ------------------------------------------------------------------ */
+
+  function supabaseHeaders(withAuth) {
+    var h = { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY };
+    if (withAuth) {
+      var token = getAccessToken();
+      if (token) h['Authorization'] = 'Bearer ' + token;
+    }
+    return h;
+  }
+
+  /** Upsert a single exam_progress row for the logged-in user */
+  function upsertExamProgress(examId, status) {
+    var userId = getUserId();
+    if (!userId || !SUPABASE_URL) return;
+    fetch(SUPABASE_URL + '/rest/v1/exam_progress', {
+      method: 'POST',
+      headers: Object.assign(supabaseHeaders(true), {
+        'Prefer': 'resolution=merge-duplicates'
+      }),
+      body: JSON.stringify({
+        user_id: userId,
+        exam_id: examId,
+        status: status,
+        updated_at: new Date().toISOString()
+      })
+    }).catch(function () { /* best-effort */ });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Popup relay — send wiki progress to Supabase on login               */
+  /* ------------------------------------------------------------------ */
+
+  /** Sync all current journey state to Supabase after login */
+  function syncJourneyToSupabase() {
+    var userId = getUserId();
+    if (!userId || !SUPABASE_URL) return;
+    // Access the global journey state managed by the SIDEBAR TABS IIFE
+    try {
+      var raw = localStorage.getItem('actuarial-notes-journey');
+      if (!raw) return;
+      var journey = JSON.parse(raw);
+      var progress = journey.progress || {};
+      EXAM_IDS.forEach(function (id) {
+        if (progress[id]) upsertExamProgress(id, progress[id]);
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  /* Listen for postMessage from quiz popup after successful login */
+  window.addEventListener('message', function (event) {
+    // Security: only accept messages from the configured quiz app origin
+    if (QUIZ_APP_URL && event.origin !== QUIZ_APP_URL) return;
+    if (!event.data || event.data.type !== 'SUPABASE_SESSION') return;
+
+    var session = event.data.session;
+    if (!session || !session.access_token) return;
+
+    writeSession(session);
+    syncJourneyToSupabase();
+    refreshLoginUI();
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* Monkey-patch cycleStatus to sync status changes to Supabase          */
+  /* ------------------------------------------------------------------ */
+
+  /* We hook into localStorage writes on the journey key so we can react
+     whenever the sidebar TABS IIFE calls saveJourneyState(). */
+  (function patchStorage() {
+    var _origSetItem = localStorage.setItem.bind(localStorage);
+    localStorage.setItem = function (key, value) {
+      _origSetItem(key, value);
+      if (key === 'actuarial-notes-journey' && getUserId()) {
+        try {
+          var journey = JSON.parse(value);
+          var progress = journey.progress || {};
+          EXAM_IDS.forEach(function (id) {
+            if (progress[id]) upsertExamProgress(id, progress[id]);
+          });
+        } catch (e) { /* ignore */ }
+      }
+    };
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* UI                                                                    */
+  /* ------------------------------------------------------------------ */
+
+  var loginWrapperEl = null;
+
+  function renderLoginWidget() {
+    if (!loginWrapperEl) return;
+    loginWrapperEl.innerHTML = '';
+
+    var email = getUserEmail();
+
+    if (email) {
+      /* Logged in state */
+      var chip = document.createElement('div');
+      chip.className = 'sidebar-login__chip';
+
+      var emailSpan = document.createElement('span');
+      emailSpan.className = 'sidebar-login__email';
+      emailSpan.textContent = email.length > 22 ? email.substring(0, 20) + '\u2026' : email;
+      emailSpan.title = email;
+
+      var signOutBtn = document.createElement('button');
+      signOutBtn.type = 'button';
+      signOutBtn.className = 'sidebar-login__signout sidebar-tabs__utility-btn';
+      signOutBtn.title = 'Sign out';
+      signOutBtn.innerHTML = SVG_SIGNOUT;
+      signOutBtn.addEventListener('click', function () {
+        signOut();
+        renderLoginWidget();
+      });
+
+      chip.appendChild(emailSpan);
+      chip.appendChild(signOutBtn);
+      loginWrapperEl.appendChild(chip);
+    } else {
+      /* Signed-out state */
+      var signInBtn = document.createElement('button');
+      signInBtn.type = 'button';
+      signInBtn.className = 'sidebar-login__signin sidebar-tabs__utility-btn';
+      signInBtn.title = 'Sign in';
+
+      var iconSpan = document.createElement('span');
+      iconSpan.className = 'sidebar-login__icon';
+      iconSpan.innerHTML = SVG_USER;
+
+      var labelSpan = document.createElement('span');
+      labelSpan.className = 'sidebar-login__label';
+      labelSpan.textContent = 'Sign in';
+
+      signInBtn.appendChild(iconSpan);
+      signInBtn.appendChild(labelSpan);
+
+      signInBtn.addEventListener('click', function () {
+        if (!QUIZ_APP_URL) {
+          alert('QUIZ_APP_URL is not configured in publish.js');
+          return;
+        }
+        var origin = encodeURIComponent(window.location.origin);
+        var url = QUIZ_APP_URL.replace(/\/$/, '') + '/auth?popup=1&origin=' + origin;
+        var popup = window.open(url, 'actuarial-login', 'width=480,height=640,resizable=yes,scrollbars=yes');
+        if (!popup) {
+          /* Popup blocked — fall back to redirect */
+          window.open(url, '_blank');
+          return;
+        }
+        /* Change button to "Signing in…" while popup is open */
+        signInBtn.disabled = true;
+        labelSpan.textContent = 'Signing in\u2026';
+        var pollInterval = setInterval(function () {
+          if (popup.closed) {
+            clearInterval(pollInterval);
+            signInBtn.disabled = false;
+            renderLoginWidget();
+          }
+        }, 400);
+      });
+
+      loginWrapperEl.appendChild(signInBtn);
+    }
+  }
+
+  function refreshLoginUI() {
+    renderLoginWidget();
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Inject login wrapper into sidebar utility bar                        */
+  /* ------------------------------------------------------------------ */
+
+  function injectLoginWidget() {
+    var utilBar = document.querySelector('.sidebar-tabs__utility');
+    if (!utilBar) return;
+    if (utilBar.querySelector('.sidebar-login')) return; // already injected
+
+    /* If SUPABASE_URL / QUIZ_APP_URL aren't configured, skip the widget */
+    if (!SUPABASE_URL || !QUIZ_APP_URL) return;
+
+    loginWrapperEl = document.createElement('div');
+    loginWrapperEl.className = 'sidebar-login';
+
+    /* Insert before the theme/sound buttons so it appears at the left */
+    utilBar.insertBefore(loginWrapperEl, utilBar.firstChild);
+
+    renderLoginWidget();
+  }
+
+  /* Run after the sidebar tabs are built */
+  function init() {
+    /* Wait for the sidebar utility bar to appear */
+    var attempts = 0;
+    function tryInject() {
+      if (document.querySelector('.sidebar-tabs__utility')) {
+        injectLoginWidget();
+      } else if (attempts < 30) {
+        attempts++;
+        setTimeout(tryInject, 200);
+      }
+    }
+    tryInject();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  /* Re-inject after SPA navigations */
+  window.addEventListener('popstate', function () { setTimeout(init, 300); });
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href], .nav-file-title, .tree-item-self');
+    if (link) setTimeout(init, 400);
+  });
+})();

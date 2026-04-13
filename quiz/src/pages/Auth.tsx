@@ -27,14 +27,18 @@ export default function Auth() {
   const [submitting, setSubmitting] = useState(false)
   const [signupSuccess, setSignupSuccess] = useState(false)
 
+  const searchParams = new URLSearchParams(location.search)
+  const isPopup = searchParams.get('popup') === '1'
+  const popupOrigin = searchParams.get('origin') ?? ''
+
   const returnTo = (location.state as LocationState)?.from ?? '/dashboard'
 
-  // Redirect if already authenticated
+  // Redirect if already authenticated (skip when in popup mode)
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading && user && !isPopup) {
       navigate(returnTo, { replace: true })
     }
-  }, [user, loading, navigate, returnTo])
+  }, [user, loading, navigate, returnTo, isPopup])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -50,6 +54,16 @@ export default function Auth() {
       if (mode === 'signin') {
         const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
         if (authError) throw authError
+
+        // Popup relay: send session back to the opener (wiki) then close
+        if (isPopup && window.opener) {
+          const { data } = await supabase.auth.getSession()
+          const target = popupOrigin ? decodeURIComponent(popupOrigin) : '*'
+          window.opener.postMessage({ type: 'SUPABASE_SESSION', session: data.session }, target)
+          window.close()
+          return
+        }
+
         navigate(returnTo, { replace: true })
       } else {
         const { error: authError } = await supabase.auth.signUp({ email, password })

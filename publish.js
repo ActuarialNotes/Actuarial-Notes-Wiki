@@ -7597,6 +7597,10 @@ window._spaNavigate = function (path) {
     return null;
   };
 
+  // Expose vault utilities for cross-IIFE use (Research Concept 404 workflow)
+  window._getVaultIndex = getVaultIndex;
+  window._extractSiteId = extractSiteId;
+
   // Re-check persistent navs on SPA navigation + invalidate search cache
   window.addEventListener('popstate', function () {
     _vaultIndexCache = null;
@@ -8275,10 +8279,6 @@ var SoundFX = (function () {
     }
     attachObserver();
   }
-
-  // Expose for cross-IIFE use (Research Concept 404 workflow)
-  window._getVaultIndex = getVaultIndex;
-  window._extractSiteId = extractSiteId;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
@@ -9085,7 +9085,7 @@ var SoundFX = (function () {
 
   function injectLoginWidget() {
     var utilBar = document.querySelector('.sidebar-tabs__utility');
-    if (!utilBar) { console.log('[auth] no utility bar'); return; }
+    if (!utilBar) return;
     if (utilBar.querySelector('.sidebar-login')) return;
     if (!SUPABASE_URL || !QUIZ_APP_URL) return;
 
@@ -9093,7 +9093,6 @@ var SoundFX = (function () {
     loginWrapperEl.className = 'sidebar-login';
     utilBar.insertBefore(loginWrapperEl, utilBar.firstChild);
     renderLoginWidget();
-    console.log('[auth] injected login widget, children:', utilBar.childElementCount);
   }
 
   /* ------------------------------------------------------------------ */
@@ -9133,9 +9132,8 @@ var SoundFX = (function () {
   /* Guard: re-inject whenever the widget goes missing (handles all navigation types) */
   setInterval(function () {
     var utilBar = document.querySelector('.sidebar-tabs__utility');
-    if (!utilBar) { console.log('[auth] interval: no utility bar'); return; }
+    if (!utilBar) return;
     if (utilBar.querySelector('.sidebar-login')) return;
-    console.log('[auth] interval: missing widget, injecting');
     injectLoginWidget();
   }, 1000);
 

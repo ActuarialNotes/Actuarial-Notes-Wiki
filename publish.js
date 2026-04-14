@@ -9121,6 +9121,14 @@ var SoundFX = (function () {
     watchForSidebar();
   }
 
+  /* Fallback: try again at 350ms (just after sidebar IIFE's 250ms build) */
+  setTimeout(function () {
+    var utilBar = document.querySelector('.sidebar-tabs__utility');
+    if (utilBar && !utilBar.querySelector('.sidebar-login')) {
+      injectLoginWidget();
+    }
+  }, 350);
+
   /* Guard: re-inject whenever the widget goes missing (handles all navigation types) */
   setInterval(function () {
     var utilBar = document.querySelector('.sidebar-tabs__utility');

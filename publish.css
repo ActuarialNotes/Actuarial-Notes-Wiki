@@ -2040,37 +2040,52 @@ body.sidebar-resizing iframe { pointer-events: none; }
 .sidebar-tabs__search-scope {
   display: flex;
   border-bottom: 1px solid var(--sb-border);
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 .sidebar-tabs__scope-btn {
   flex: 1;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 0;
-  border-bottom: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 6px 14px;
+  border-top: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+  border-left: 1px solid transparent !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
   margin-bottom: -1px;
-  background: transparent;
-  color: var(--sb-dim);
-  font-size: 12px;
+  background: transparent !important;
+  color: var(--text-dim);
+  font-size: 0.7rem;
   font-weight: 500;
   font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  line-height: 1;
   cursor: pointer;
-  transition: color .15s, border-color .15s, background-color .15s;
-  line-height: 1.4;
+  transition: color .15s ease, border-color .15s ease, background-color .15s ease;
+  user-select: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 .sidebar-tabs__scope-btn:hover {
   color: var(--text);
-  background: color-mix(in oklab, var(--sb-border) 20%, transparent);
+  background: color-mix(in oklab, var(--sb-border) 20%, transparent) !important;
 }
 .sidebar-tabs__scope-btn.is-active {
-  border-bottom-color: var(--brand);
   color: var(--text);
   font-weight: 600;
+  border-bottom-color: var(--brand) !important;
+  border-top-color: var(--sb-border) !important;
+  border-right-color: var(--sb-border) !important;
+  border-left-color: var(--sb-border) !important;
+  background: var(--sb-bg) !important;
 }
 
 .sidebar-tabs__search-row {
   position: relative;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
 }
 .sidebar-tabs__search-icon {
   position: absolute;
@@ -2244,7 +2259,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
 .sidebar-tabs__filters {
   display: flex;
   gap: 4px;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
   position: relative;
 }

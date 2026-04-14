@@ -8,8 +8,9 @@ export function useQuestions(filters: QuestionFilter) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Flatten tags to a stable primitive for the dependency array
+  // Flatten array filters to stable primitives for the dependency array
   const tagsKey = filters.tags?.join(',') ?? ''
+  const subtopicsKey = filters.subtopics?.join(',') ?? ''
 
   useEffect(() => {
     let cancelled = false
@@ -21,11 +22,11 @@ export function useQuestions(filters: QuestionFilter) {
         if (cancelled) return
         const parsed = parseAllQuestions(rawFiles)
         const filtered = filterQuestions(parsed, filters)
-        // Shuffle unless topic mode (topic mode preserves ordered sets)
-        if (filters.mode !== 'topic') {
-          filtered.sort(() => Math.random() - 0.5)
-        }
-        setQuestions(filtered)
+        // Always shuffle questions
+        filtered.sort(() => Math.random() - 0.5)
+        // Limit to requested count if specified
+        const result = filters.count ? filtered.slice(0, filters.count) : filtered
+        setQuestions(result)
       })
       .catch(err => {
         if (!cancelled) {
@@ -38,7 +39,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.topic, filters.subtopic, filters.difficulty, filters.mode, tagsKey])
+  }, [filters.topic, filters.subtopic, filters.difficulty, filters.mode, filters.count, tagsKey, subtopicsKey])
 
   return { questions, loading, error }
 }

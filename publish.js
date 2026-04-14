@@ -9085,7 +9085,7 @@ var SoundFX = (function () {
 
   function injectLoginWidget() {
     var utilBar = document.querySelector('.sidebar-tabs__utility');
-    if (!utilBar) return;
+    if (!utilBar) { console.log('[auth] no utility bar'); return; }
     if (utilBar.querySelector('.sidebar-login')) return;
     if (!SUPABASE_URL || !QUIZ_APP_URL) return;
 
@@ -9093,6 +9093,7 @@ var SoundFX = (function () {
     loginWrapperEl.className = 'sidebar-login';
     utilBar.insertBefore(loginWrapperEl, utilBar.firstChild);
     renderLoginWidget();
+    console.log('[auth] injected login widget, children:', utilBar.childElementCount);
   }
 
   /* ------------------------------------------------------------------ */
@@ -9132,9 +9133,10 @@ var SoundFX = (function () {
   /* Guard: re-inject whenever the widget goes missing (handles all navigation types) */
   setInterval(function () {
     var utilBar = document.querySelector('.sidebar-tabs__utility');
-    if (utilBar && !utilBar.querySelector('.sidebar-login')) {
-      injectLoginWidget();
-    }
+    if (!utilBar) { console.log('[auth] interval: no utility bar'); return; }
+    if (utilBar.querySelector('.sidebar-login')) return;
+    console.log('[auth] interval: missing widget, injecting');
+    injectLoginWidget();
   }, 1000);
 
 })();

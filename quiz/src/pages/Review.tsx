@@ -19,7 +19,7 @@ export default function Review() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const { questions, responses, status, resetQuiz } = useQuizStore()
+  const { questions, responses, mode: storeMode, status, resetQuiz } = useQuizStore()
   const [session, setSession] = useState<CompletedSession | null>(null)
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Review() {
       setSession({
         questions,
         responses,
-        mode: 'random',
+        mode: storeMode,
         correctCount,
         totalQuestions: questions.length,
         timeTakenSeconds: null,
@@ -68,7 +68,9 @@ export default function Review() {
       {/* Score card */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Quiz Complete</CardTitle>
+          <CardTitle className="text-2xl">
+            {session.mode === 'mock-exam' ? 'Mock Exam Complete' : 'Quiz Complete'}
+          </CardTitle>
           <CardDescription>Here are your results</CardDescription>
         </CardHeader>
         <CardContent>

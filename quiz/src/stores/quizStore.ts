@@ -44,7 +44,7 @@ const initialState = {
   questions: [] as Question[],
   currentIndex: 0,
   responses: {} as Record<string, Response>,
-  mode: 'random' as QuizMode,
+  mode: 'quiz' as QuizMode,
   startedAt: null,
   questionStartedAt: null,
   status: 'idle' as QuizStatus,

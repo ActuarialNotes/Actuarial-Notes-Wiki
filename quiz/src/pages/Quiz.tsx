@@ -15,15 +15,23 @@ export default function Quiz() {
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const filters: QuestionFilter = useMemo(() => ({
-    topic: searchParams.get('topic') ?? undefined,
-    subtopic: searchParams.get('subtopic') ?? undefined,
-    difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
-    mode: (searchParams.get('mode') as QuizMode | null) ?? 'random',
-  }), [searchParams])
+  const mode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
+  // reveal='during' shows explanation after each answer; 'end' defers to review
+  const reveal = searchParams.get('reveal') ?? 'during'
+  const countParam = searchParams.get('count')
+
+  const filters: QuestionFilter = useMemo(() => {
+    const subtopicsParam = searchParams.get('subtopics')
+    return {
+      topic: searchParams.get('topic') ?? undefined,
+      subtopics: subtopicsParam ? subtopicsParam.split(',') : undefined,
+      difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
+      mode,
+      count: countParam ? Number(countParam) : undefined,
+    }
+  }, [searchParams])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const { questions, loading, error } = useQuestions(filters)
-  const mode = (searchParams.get('mode') as QuizMode | null) ?? 'random'
 
   const {
     questions: storeQuestions,
@@ -46,7 +54,11 @@ export default function Quiz() {
   const currentQuestion = storeQuestions[currentIndex]
   const selectedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
   const isLastQuestion = currentIndex + 1 >= storeQuestions.length
-  const showExplanation = status === 'reviewing' && mode !== 'exam'
+
+  // Show explanation inline only in quiz mode when user chose to reveal during
+  const showExplanation = status === 'reviewing' && mode === 'quiz' && reveal === 'during'
+  // Show deferred message when answer is locked but explanation is withheld
+  const showDeferredMessage = status === 'reviewing' && !showExplanation
 
   async function handleFinish() {
     await completeQuiz(user?.id ?? null)
@@ -92,7 +104,7 @@ export default function Quiz() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              No questions match your selected filters. Try a different topic or difficulty.
+              No questions match your selected filters. Try different topics or difficulty.
             </p>
             <Button onClick={() => navigate('/')} variant="outline" className="w-full">
               Back to Home
@@ -117,10 +129,15 @@ export default function Quiz() {
       />
 
       {status === 'reviewing' && (
-        <div className="flex justify-end">
+        <div className="flex justify-end items-center gap-4">
+          {showDeferredMessage && (
+            <p className="text-xs text-muted-foreground">
+              {mode === 'mock-exam' ? 'Mock exam — explanations shown at end' : 'Explanations shown at end'}
+            </p>
+          )}
           {isLastQuestion ? (
             <Button onClick={handleFinish} size="lg">
-              Finish Quiz
+              Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
             </Button>
           ) : (
             <Button onClick={nextQuestion} size="lg">
@@ -128,13 +145,6 @@ export default function Quiz() {
             </Button>
           )}
         </div>
-      )}
-
-      {/* Exam mode: show Next without explanation */}
-      {status === 'reviewing' && mode === 'exam' && (
-        <p className="text-xs text-muted-foreground text-center">
-          Explanations will be shown at the end of the quiz
-        </p>
       )}
     </div>
   )

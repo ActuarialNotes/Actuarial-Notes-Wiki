@@ -59,3 +59,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Exam accent colours (outside @layer so they override base layer) ── */
+/* Exam P (Probability) — blue; matches existing defaults */
+html.exam-p       { --primary: 221 83% 53%;  --ring: 221 83% 53%; }
+html.dark.exam-p  { --primary: 217 91% 60%;  --ring: 217 91% 60%; }
+
+/* Exam FM (Financial Mathematics) — indigo */
+html.exam-fm      { --primary: 243 75% 59%;  --ring: 243 75% 59%; }
+html.dark.exam-fm { --primary: 239 84% 67%;  --ring: 239 84% 67%; }

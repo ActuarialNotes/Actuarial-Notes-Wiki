@@ -15,8 +15,8 @@ export function ExplanationPanel({ explanation, wikiLink, isCorrect }: Explanati
       className={cn(
         'rounded-lg border p-4 mt-4 space-y-3',
         isCorrect
-          ? 'border-green-200 bg-green-50'
-          : 'border-red-200 bg-red-50'
+          ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950'
+          : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950'
       )}
     >
       <div className="flex items-center gap-2">
@@ -24,7 +24,7 @@ export function ExplanationPanel({ explanation, wikiLink, isCorrect }: Explanati
         <span
           className={cn(
             'font-semibold',
-            isCorrect ? 'text-green-800' : 'text-red-800'
+            isCorrect ? 'text-green-800 dark:text-green-300' : 'text-red-800 dark:text-red-300'
           )}
         >
           {isCorrect ? 'Correct!' : 'Incorrect'}

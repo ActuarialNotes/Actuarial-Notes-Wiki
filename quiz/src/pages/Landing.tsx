@@ -5,6 +5,7 @@ import { useExamProgress, EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuizMode, Difficulty } from '@/lib/parser'
+import { setExamAccent } from '@/lib/examColors'
 
 const EXAMS = [
   { value: 'Probability', label: 'Exam P — Probability' },
@@ -80,6 +81,11 @@ export default function Landing() {
   // Reset subtopic selection when exam topic changes
   useEffect(() => {
     setSelectedSubtopics([])
+  }, [topic])
+
+  // Apply exam accent colour whenever the selected topic changes
+  useEffect(() => {
+    setExamAccent(topic)
   }, [topic])
 
   function toggleSubtopic(subtopic: string) {

@@ -27,15 +27,15 @@ export function AnswerOption({
       !isDisabled,
 
     // Selected and correct
-    'border-green-500 bg-green-50 text-green-900 cursor-default':
+    'border-green-500 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100 dark:border-green-500 cursor-default':
       isDisabled && isSelected && isCorrect,
 
     // Selected but wrong
-    'border-red-500 bg-red-50 text-red-900 cursor-default':
+    'border-red-500 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100 dark:border-red-500 cursor-default':
       isDisabled && isSelected && !isCorrect,
 
     // Not selected, but this is the correct answer being revealed
-    'border-green-400 bg-green-50/50 text-green-800 cursor-default':
+    'border-green-400 bg-green-50/50 text-green-800 dark:bg-green-950/50 dark:text-green-300 dark:border-green-600 cursor-default':
       isDisabled && !isSelected && isCorrect,
 
     // Not selected, not correct, disabled — muted

@@ -22,6 +22,8 @@ export interface Question {
   points: number
   stem: string         // question body text (above the options list)
   options: AnswerOption[]
+  author?: string
+  year?: number
 }
 
 export interface QuestionFilter {
@@ -32,6 +34,9 @@ export interface QuestionFilter {
   tags?: string[]
   mode?: QuizMode
   count?: number        // max questions to return
+  author?: string       // partial match, case-insensitive
+  year?: number
+  search?: string       // free-text search on stem and id
 }
 
 interface QuestionFrontmatter {
@@ -45,6 +50,8 @@ interface QuestionFrontmatter {
   answer?: unknown
   explanation?: unknown  // kept for backward compat
   points?: unknown
+  author?: unknown
+  year?: unknown
 }
 
 const OPTION_REGEX = /^- ([A-E])\)\s+(.+)/
@@ -100,6 +107,8 @@ export function parseQuestion(raw: string): Question | null {
       points: Number(data.points ?? 1),
       stem,
       options,
+      author: data.author ? String(data.author) : undefined,
+      year: data.year ? Number(data.year) : undefined,
     }
   } catch {
     return null
@@ -123,6 +132,14 @@ export function filterQuestions(questions: Question[], filters: QuestionFilter):
     if (filters.difficulty && q.difficulty !== filters.difficulty) return false
     if (filters.tags?.length) {
       if (!filters.tags.every(t => q.tags.includes(t))) return false
+    }
+    if (filters.author) {
+      if (!q.author?.toLowerCase().includes(filters.author.toLowerCase())) return false
+    }
+    if (filters.year && q.year !== filters.year) return false
+    if (filters.search) {
+      const needle = filters.search.toLowerCase()
+      if (!q.stem.toLowerCase().includes(needle) && !q.id.toLowerCase().includes(needle)) return false
     }
     return true
   })

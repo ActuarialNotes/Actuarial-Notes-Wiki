@@ -5,6 +5,7 @@ import Auth from '@/pages/Auth'
 import Quiz from '@/pages/Quiz'
 import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
+import Browse from '@/pages/Browse'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
 
@@ -20,6 +21,9 @@ function NavBar() {
           Actuarial Quiz
         </Link>
         <nav className="flex items-center gap-4">
+          <Link to="/browse" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            Browse
+          </Link>
           {user ? (
             <>
               <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -84,6 +88,7 @@ export default function App() {
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/review" element={<Review />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/browse" element={<Browse />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

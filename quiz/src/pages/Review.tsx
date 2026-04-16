@@ -7,6 +7,7 @@ import { QuestionCard } from '@/components/QuestionCard'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { setExamAccent } from '@/lib/examColors'
 
 function formatTime(seconds: number | null): string {
   if (seconds === null) return '—'
@@ -47,6 +48,13 @@ export default function Review() {
   // Only run on mount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Restore exam accent colour once session data is available
+  useEffect(() => {
+    if (session && session.questions.length > 0) {
+      setExamAccent(session.questions[0].topic)
+    }
+  }, [session])
 
   if (!session) return null
 

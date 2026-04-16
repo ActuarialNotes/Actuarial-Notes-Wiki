@@ -1,13 +1,16 @@
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { Sun, Moon } from 'lucide-react'
 import Landing from '@/pages/Landing'
 import Auth from '@/pages/Auth'
 import Quiz from '@/pages/Quiz'
 import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
 import { useAuth } from '@/hooks/useAuth'
+import { useTheme } from '@/hooks/useTheme'
 
 function NavBar() {
   const { user, signOut } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
 
   return (
@@ -39,6 +42,18 @@ function NavBar() {
               Sign in
             </button>
           )}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="h-9 w-9 flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </button>
         </nav>
       </div>
     </header>

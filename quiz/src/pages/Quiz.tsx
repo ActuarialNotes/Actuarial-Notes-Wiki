@@ -9,6 +9,7 @@ import { ProgressBar } from '@/components/ProgressBar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
+import { setExamAccent } from '@/lib/examColors'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -50,6 +51,13 @@ export default function Quiz() {
       startQuiz(questions, mode)
     }
   }, [loading, questions, status, mode, startQuiz])
+
+  // Restore exam accent colour (handles direct navigation or hard refresh)
+  useEffect(() => {
+    if (storeQuestions.length > 0) {
+      setExamAccent(storeQuestions[0].topic)
+    }
+  }, [storeQuestions])
 
   const currentQuestion = storeQuestions[currentIndex]
   const selectedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null

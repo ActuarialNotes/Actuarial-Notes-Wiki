@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { LatexText } from '@/components/LatexText'
 
 const WIKI_BASE = 'https://wiki.actuarialnotes.com'
 
@@ -30,7 +31,7 @@ export function ExplanationPanel({ explanation, wikiLink, isCorrect }: Explanati
         </span>
       </div>
 
-      <p className="text-sm text-foreground leading-relaxed">{explanation}</p>
+      <p className="text-sm text-foreground leading-relaxed"><LatexText>{explanation}</LatexText></p>
 
       {wikiLink && (
         <a

@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { LatexText } from '@/components/LatexText'
 
 interface AnswerOptionProps {
   optionKey: string    // "A", "B", "C", "D"
@@ -52,7 +53,7 @@ export function AnswerOption({
       <span className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-current flex items-center justify-center text-xs font-bold">
         {optionKey}
       </span>
-      <span className="flex-1">{text}</span>
+      <span className="flex-1"><LatexText>{text}</LatexText></span>
     </button>
   )
 }

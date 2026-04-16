@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { AnswerOption } from '@/components/AnswerOption'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { TopicBadge } from '@/components/TopicBadge'
+import { LatexText } from '@/components/LatexText'
 import type { Question } from '@/lib/parser'
 
 interface QuestionCardProps {
@@ -25,7 +26,7 @@ export function QuestionCard({
           <TopicBadge label={question.subtopic} variant="tag" />
           <TopicBadge label={question.difficulty} variant="difficulty" />
         </div>
-        <p className="text-base leading-relaxed">{question.stem}</p>
+        <p className="text-base leading-relaxed"><LatexText>{question.stem}</LatexText></p>
       </CardHeader>
 
       <CardContent className="space-y-2">

@@ -4790,6 +4790,7 @@ window._spaNavigate = function (path) {
   /* ---- Storage keys ---- */
   var TAB_KEY = 'actuarial-notes-active-tab';
   var JOURNEY_KEY = 'actuarial-notes-journey';
+  var QUIZ_URL = 'https://quiz.actuarialnotes.com';
 
   /* ---- SVG icons ---- */
   var SVG_CIRCLE = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
@@ -4828,6 +4829,9 @@ window._spaNavigate = function (path) {
   var SVG_CAT_CONCEPT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="6" r="4"/><line x1="6.5" y1="12" x2="9.5" y2="12"/><line x1="7" y1="14" x2="9" y2="14"/><line x1="6.5" y1="10" x2="9.5" y2="10"/></svg>';
 
   var SVG_CAT_DOC = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 1.5h10a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2.5A1 1 0 0 1 3 1.5z"/><line x1="5" y1="5" x2="11" y2="5"/><line x1="5" y1="7.5" x2="11" y2="7.5"/><line x1="5" y1="10" x2="9" y2="10"/></svg>';
+
+  var SVG_QUIZ = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M14.5 2.5a2.121 2.121 0 0 1 3 3L6 17l-4 1 1-4L14.5 2.5z"/></svg>';
 
   var STATUS_ICONS = { not_started: SVG_CIRCLE, in_progress: SVG_PROGRESS, completed: SVG_CHECK };
   var STATUS_CYCLE = { not_started: 'in_progress', in_progress: 'completed', completed: 'not_started' };
@@ -6463,6 +6467,29 @@ window._spaNavigate = function (path) {
     barFillEl = bar; // store reference to the bar container itself
     container.appendChild(bar);
 
+    // Practice Quiz link
+    var quizDivider = document.createElement('div');
+    quizDivider.className = 'sidebar-tabs__panel-divider';
+
+    var quizLink = document.createElement('a');
+    quizLink.className = 'sidebar-tabs__quiz-btn';
+    quizLink.href = QUIZ_URL;
+    quizLink.target = '_blank';
+    quizLink.rel = 'noopener noreferrer';
+    quizLink.title = 'Open Practice Quiz app';
+
+    var quizIcon = document.createElement('span');
+    quizIcon.className = 'sidebar-tabs__quiz-btn__icon';
+    quizIcon.innerHTML = SVG_QUIZ;
+
+    var quizLabel = document.createElement('span');
+    quizLabel.textContent = 'Practice Quiz';
+
+    quizLink.appendChild(quizIcon);
+    quizLink.appendChild(quizLabel);
+    container.appendChild(quizDivider);
+    container.appendChild(quizLink);
+
     // Sections container
     var sectionsEl = document.createElement('div');
     sectionsEl.style.cssText = 'display:flex;flex-direction:column;gap:2px';
@@ -6625,6 +6652,18 @@ window._spaNavigate = function (path) {
   var SVG_FILTER = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 2.5h13l-5 5.5v4l-3 1.5V8z"/></svg>';
 
   function renderSearchPanel(container) {
+    // Search panel header (mirrors Exams panel "Certification Track" header pattern)
+    var searchHeaderRow = document.createElement('div');
+    searchHeaderRow.className = 'sidebar-tabs__panel-header';
+    searchHeaderRow.style.cssText = 'margin-bottom:8px;margin-top:10px';
+
+    var searchTitleSpan = document.createElement('span');
+    searchTitleSpan.className = 'sidebar-tabs__panel-title';
+    searchTitleSpan.textContent = 'Wiki Search';
+
+    searchHeaderRow.appendChild(searchTitleSpan);
+    container.appendChild(searchHeaderRow);
+
     // Scope filter (This Exam / Entire Wiki)
     var scopeRow = document.createElement('div');
     scopeRow.className = 'sidebar-tabs__search-scope';

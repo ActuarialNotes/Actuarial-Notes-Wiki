@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
+import { TopicProgressSection } from '@/components/TopicProgressSection'
+import { EXAM_SYLLABI } from '@/data/examSyllabus'
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, {
@@ -101,11 +103,16 @@ export default function Dashboard() {
         </Card>
       </div>
 
+      {/* Topics progress */}
+      {EXAM_SYLLABI.map(syllabus => (
+        <TopicProgressSection key={syllabus.examId} syllabus={syllabus} sessions={sessions} />
+      ))}
+
       {/* Session history */}
       <Card>
         <CardHeader>
           <CardTitle>Recent Sessions</CardTitle>
-          <CardDescription>Your last {Math.min(sessions.length, 50)} quiz sessions</CardDescription>
+          <CardDescription>Your last {sessions.length} quiz sessions</CardDescription>
         </CardHeader>
         <CardContent>
           {sessionsLoading ? (

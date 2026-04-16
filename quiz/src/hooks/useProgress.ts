@@ -23,7 +23,7 @@ export function useProgress() {
       .select('*')
       .eq('user_id', user.id)
       .order('completed_at', { ascending: false })
-      .limit(50)
+      .limit(1000)
       .then(({ data, error: err }: { data: QuizSession[] | null; error: { message: string } | null }) => {
         if (err) {
           setError(err.message)

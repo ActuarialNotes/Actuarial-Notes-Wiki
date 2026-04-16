@@ -2758,6 +2758,49 @@ a.exams-panel__name:hover {
   padding: 0 6px 0 28px;
 }
 
+/* Practice Quiz link button */
+.sidebar-tabs__panel-divider {
+  height: 1px;
+  background: var(--sb-border);
+  margin: 8px 0 10px;
+}
+
+.sidebar-tabs__quiz-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border: 1px solid color-mix(in oklab, var(--brand) 35%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--brand) 8%, var(--bg));
+  color: var(--brand);
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+  box-sizing: border-box;
+}
+.sidebar-tabs__quiz-btn:hover {
+  background: color-mix(in oklab, var(--brand) 15%, var(--bg));
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.sidebar-tabs__quiz-btn__icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+.sidebar-tabs__quiz-btn__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
 
 /* ---- Responsive ---- */
 @media (max-width: 600px) {

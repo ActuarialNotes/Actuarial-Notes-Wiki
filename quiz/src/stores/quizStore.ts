@@ -173,6 +173,14 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
             { user_id: userId, exam_id: examId, status: 'in_progress', updated_at: new Date().toISOString() },
             { onConflict: 'user_id,exam_id' }
           )
+        // Mirror to quiz-journey localStorage so ExamProgressBar reflects on next render
+        try {
+          const raw = localStorage.getItem('quiz-journey')
+          const journey = raw ? JSON.parse(raw) : { selectedTrack: 'DEFAULT', progress: {} }
+          if (!journey.progress) journey.progress = {}
+          journey.progress[examId] = 'in_progress'
+          localStorage.setItem('quiz-journey', JSON.stringify(journey))
+        } catch { /* ignore */ }
       }
     }
   },

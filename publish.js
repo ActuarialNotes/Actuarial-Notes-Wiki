@@ -7618,7 +7618,10 @@ window._spaNavigate = function (path) {
   // Expose API for cross-IIFE access
   window._updatePersistentExamNavs = updatePersistentExamNavs;
   window._updateExamLinkButtons = updateExamLinkButtons;
-  window._sidebarTabs = { refresh: refreshTab };
+  window._sidebarTabs = {
+    refresh: refreshTab,
+    reload: function () { loadJourneyState(); renderActivePanel(); }
+  };
 
   // Allow exam-nav IIFE to check current page exam status
   window._getExamInfoByPage = function () {
@@ -9014,6 +9017,36 @@ var SoundFX = (function () {
     } catch (e) { /* ignore */ }
   }
 
+  /** Pull exam_progress rows from Supabase and merge into local actuarial-notes-journey */
+  function syncJourneyFromSupabase() {
+    var userId = getUserId();
+    if (!userId || !SUPABASE_URL) return;
+    fetch(SUPABASE_URL + '/rest/v1/exam_progress?select=exam_id,status&user_id=eq.' + encodeURIComponent(userId), {
+      headers: supabaseHeaders(true)
+    })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (rows) {
+        if (!rows || !rows.length) return;
+        try {
+          var raw = localStorage.getItem('actuarial-notes-journey');
+          var journey = raw ? JSON.parse(raw) : { progress: {} };
+          if (!journey.progress) journey.progress = {};
+          /* Supabase is authoritative — overwrite local for each row returned */
+          rows.forEach(function (row) {
+            if (row.exam_id && row.status) {
+              journey.progress[row.exam_id] = row.status;
+            }
+          });
+          localStorage.setItem('actuarial-notes-journey', JSON.stringify(journey));
+          /* Reload journeyState in the TABS IIFE and re-render the exams panel */
+          if (window._sidebarTabs && typeof window._sidebarTabs.reload === 'function') {
+            window._sidebarTabs.reload();
+          }
+        } catch (e) { /* ignore */ }
+      })
+      .catch(function () { /* best-effort */ });
+  }
+
   /* Exchange a refresh token for a fresh session via Supabase REST.
      Writes the new session to localStorage on success; clears it on failure.
      callback(true/false) is optional. */
@@ -9061,7 +9094,7 @@ var SoundFX = (function () {
        then exchange it for a full fresh session in one REST call. */
     writeSession({ access_token: accessToken, refresh_token: refreshToken, token_type: 'bearer' });
     refreshSession(function (ok) {
-      if (ok) { syncJourneyToSupabase(); renderLoginWidget(); }
+      if (ok) { syncJourneyToSupabase(); syncJourneyFromSupabase(); renderLoginWidget(); }
       else { clearSession(); }
     });
   }
@@ -9074,6 +9107,7 @@ var SoundFX = (function () {
     if (!session || !session.access_token) return;
     writeSession(session);
     syncJourneyToSupabase();
+    syncJourneyFromSupabase();
     renderLoginWidget();
   });
 

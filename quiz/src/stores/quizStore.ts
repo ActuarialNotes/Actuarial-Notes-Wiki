@@ -2,6 +2,11 @@ import { create } from 'zustand'
 import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 
+const TOPIC_TO_EXAM_ID: Record<string, string> = {
+  'Probability': 'P',
+  'Financial Mathematics': 'FM',
+}
+
 type QuizStatus = 'idle' | 'loading' | 'active' | 'reviewing' | 'complete'
 
 interface Response {
@@ -149,6 +154,27 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       .insert(responseRows)
 
     if (respError) set({ error: respError.message })
+
+    // Upsert exam_progress: transition not_started → in_progress on first quiz
+    const topic = questions[0]?.topic ?? null
+    const examId = topic ? TOPIC_TO_EXAM_ID[topic] : null
+    if (examId) {
+      const { data: existing } = await supabase
+        .from('exam_progress')
+        .select('status')
+        .eq('user_id', userId)
+        .eq('exam_id', examId)
+        .maybeSingle()
+
+      if (!existing || existing.status === 'not_started') {
+        await supabase
+          .from('exam_progress')
+          .upsert(
+            { user_id: userId, exam_id: examId, status: 'in_progress', updated_at: new Date().toISOString() },
+            { onConflict: 'user_id,exam_id' }
+          )
+      }
+    }
   },
 
   resetQuiz() {

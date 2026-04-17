@@ -10,6 +10,7 @@ import { Loader2 } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
 import { TopicProgressSection } from '@/components/TopicProgressSection'
 import { EXAM_SYLLABI } from '@/data/examSyllabus'
+import { ExamProgressBar } from '@/components/ExamProgressBar'
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, {
@@ -80,6 +81,8 @@ export default function Dashboard() {
           Sign out
         </Button>
       </div>
+
+      <ExamProgressBar />
 
       {/* Summary stats */}
       <div className="grid grid-cols-3 gap-4">

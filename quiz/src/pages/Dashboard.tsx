@@ -9,6 +9,8 @@ import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
 import { TopicProgressSection } from '@/components/TopicProgressSection'
+import { EXAM_SYLLABI } from '@/data/examSyllabus'
+import { ExamProgressBar } from '@/components/ExamProgressBar'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 
 function formatDate(iso: string): string {
@@ -81,6 +83,8 @@ export default function Dashboard() {
           Sign out
         </Button>
       </div>
+
+      <ExamProgressBar />
 
       {/* Summary stats */}
       <div className="grid grid-cols-3 gap-4">

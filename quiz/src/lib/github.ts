@@ -43,7 +43,7 @@ function authHeaders(): Record<string, string> {
   return {}
 }
 
-interface GithubContentItem {
+export interface GithubContentItem {
   type: 'file' | 'dir'
   name: string
   path: string
@@ -52,8 +52,14 @@ interface GithubContentItem {
 }
 
 async function listDirectory(apiPath: string): Promise<GithubContentItem[]> {
-  const res = await fetch(`${API_BASE}/${apiPath}${REF}`, { headers: authHeaders() })
-  if (!res.ok) throw new Error(`GitHub API error ${res.status} for path: ${apiPath}`)
+  return listRepoContents(apiPath)
+}
+
+// List any directory in the repo; omit dirPath to list the root.
+export async function listRepoContents(dirPath?: string): Promise<GithubContentItem[]> {
+  const url = dirPath ? `${API_BASE}/${dirPath}${REF}` : `${API_BASE}${REF}`
+  const res = await fetch(url, { headers: authHeaders() })
+  if (!res.ok) throw new Error(`GitHub API error ${res.status} for path: ${dirPath ?? '(root)'}`)
   return res.json() as Promise<GithubContentItem[]>
 }
 
@@ -87,4 +93,14 @@ export async function fetchAllQuestions(): Promise<string[]> {
 
 export function clearQuestionsCache(): void {
   localStorage.removeItem(CACHE_KEY)
+}
+
+export async function fetchWikiFile(filePath: string): Promise<string> {
+  const encoded = filePath.split('/').map(encodeURIComponent).join('/')
+  const res = await fetch(`${API_BASE}/${encoded}${REF}`, { headers: authHeaders() })
+  if (!res.ok) throw new Error(`GitHub API error ${res.status} for: ${filePath}`)
+  const json = await res.json() as { download_url: string }
+  const raw = await fetch(json.download_url, { headers: authHeaders() })
+  if (!raw.ok) throw new Error(`Failed to download wiki file: ${filePath}`)
+  return raw.text()
 }

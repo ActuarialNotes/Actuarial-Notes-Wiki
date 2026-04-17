@@ -21,6 +21,14 @@ function NavBar() {
           Actuarial Quiz
         </Link>
         <nav className="flex items-center gap-4">
+          <a
+            href="https://wiki.actuarialnotes.com"
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Wiki
+          </a>
           <Link to="/browse" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
             Browse
           </Link>

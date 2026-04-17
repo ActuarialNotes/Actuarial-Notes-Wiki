@@ -89,13 +89,6 @@ window._spaNavigate = function (path) {
       document.querySelectorAll('.exam-nav__sticky:not([data-from-concept])').forEach(function (s) {
         s.remove();
       });
-      // Reset persistent tabs position and trigger update
-      window._syncPersistentOffset = null;
-      var persistentNav = document.querySelector('.persistent-exam-navs');
-      if (persistentNav) persistentNav.style.right = '';
-      if (typeof window._updatePersistentExamNavs === 'function') {
-        setTimeout(window._updatePersistentExamNavs, 100);
-      }
       if (typeof window._updateExamLinkButtons === 'function') {
         setTimeout(window._updateExamLinkButtons, 150);
       }
@@ -508,20 +501,6 @@ window._spaNavigate = function (path) {
     alignStickyToContent();
     setTimeout(alignStickyToContent, 500);
     window.addEventListener('resize', alignStickyToContent);
-
-    // Offset persistent tabs to sit left of the sticky tab
-    function syncPersistentOffset() {
-      var stickyRect = stickyBtn.getBoundingClientRect();
-      var persistentNav = document.querySelector('.persistent-exam-navs');
-      if (persistentNav) {
-        var baseRight = typeof window._getContentRightOffset === 'function'
-          ? window._getContentRightOffset() : 16;
-        persistentNav.style.right = (baseRight + stickyRect.width + 6) + 'px';
-      }
-    }
-    setTimeout(syncPersistentOffset, 350);
-    // Re-sync when persistent navs update
-    window._syncPersistentOffset = syncPersistentOffset;
 
     // Close dropdown when clicking outside
     if (!window._examNavCloseRegistered) {
@@ -3228,7 +3207,6 @@ window._spaNavigate = function (path) {
       '.concept-nav, .concept-footer, .exam-nav__sticky, .exam-nav-backdrop, ' +
       '.sidebar-tabs-container, .site-body-left-column, .site-navbar, ' +
       '.page-header, .site-header, .site-footer, .publish-renderer__footer, ' +
-      '.persistent-exam-navs, .persistent-exam-tab, ' +
       'a[href*="obsidian.md"], a[aria-label*="Obsidian"] ' +
       '{ display: none !important; } ' +
       '.publish-renderer, .site-body { padding-bottom: 0 !important; } ' +
@@ -7398,7 +7376,6 @@ window._spaNavigate = function (path) {
       });
     }
 
-    updatePersistentExamNavs();
     updateExamLinkButtons();
     syncStickyExamNavStatus();
   }
@@ -7449,26 +7426,6 @@ window._spaNavigate = function (path) {
     });
   }
 
-  /* ============================================================
-     PERSISTENT EXAM NAV TABS (right side of viewport)
-     Kept from original code — shows in-progress exams
-     ============================================================ */
-  function getInProgressExams() {
-    var seen = {};
-    var result = [];
-    TRACKS.forEach(function (track) {
-      track.sections.forEach(function (sec) {
-        sec.items.forEach(function (item) {
-          if (!seen[item.id] && getStatus(item.id) === 'in_progress') {
-            seen[item.id] = true;
-            result.push({ id: item.id, name: item.name, path: item.path, color: item.color });
-          }
-        });
-      });
-    });
-    return result;
-  }
-
   function syncStickyExamNavStatus() {
     var sticky = document.querySelector('.exam-nav__sticky');
     if (!sticky) return;
@@ -7477,97 +7434,6 @@ window._spaNavigate = function (path) {
       sticky.classList.add('is-in-progress');
     } else {
       sticky.classList.remove('is-in-progress');
-    }
-  }
-
-  function isOnExamPage(examPath) {
-    if (!examPath) return false;
-    var currentPath = decodeURIComponent(window.location.pathname.replace(/^\//, '').replace(/\+/g, ' '));
-    return currentPath === examPath || currentPath === examPath.replace(/ /g, '+');
-  }
-
-  function updatePersistentExamNavs() {
-    var navContainer = document.querySelector('.persistent-exam-navs');
-    var inProgress = getInProgressExams();
-
-    var filtered = inProgress.filter(function (exam) { return !isOnExamPage(exam.path); });
-
-    var realStickyName = '';
-    var realSticky = document.querySelector('.exam-nav__sticky.is-visible');
-    if (realSticky) {
-      var btn = realSticky.querySelector('.exam-nav__sticky-btn span');
-      if (btn) realStickyName = btn.textContent.trim();
-    }
-    if (realStickyName) {
-      filtered = filtered.filter(function (exam) { return exam.name !== realStickyName; });
-    }
-
-    if (filtered.length === 0) {
-      if (navContainer) navContainer.remove();
-      return;
-    }
-
-    if (!navContainer) {
-      navContainer = document.createElement('div');
-      navContainer.className = 'persistent-exam-navs';
-      document.body.appendChild(navContainer);
-    }
-
-    var currentIds = filtered.map(function (e) { return e.id; }).join(',');
-    if (navContainer.dataset.examIds === currentIds) return;
-    navContainer.dataset.examIds = currentIds;
-    navContainer.innerHTML = '';
-
-    var isStacked = filtered.length >= 2;
-    if (isStacked) navContainer.classList.add('is-stacked');
-    else navContainer.classList.remove('is-stacked');
-
-    filtered.forEach(function (exam, idx) {
-      var tab = document.createElement('a');
-      tab.className = 'persistent-exam-tab';
-      tab.dataset.examId = exam.id;
-      if (exam.path) {
-        tab.href = '/' + exam.path.replace(/ /g, '+');
-        tab.addEventListener('click', function (e) {
-          e.preventDefault();
-          window._spaNavigate(exam.path);
-        }, true);
-      } else {
-        tab.href = '#';
-        tab.addEventListener('click', function (e) { e.preventDefault(); });
-      }
-      tab.style.setProperty('--tab-color', COLOR_HEX[exam.color] || 'var(--brand)');
-      if (isStacked) tab.style.zIndex = String(filtered.length - idx);
-      tab.innerHTML = '<span class="persistent-exam-tab__name">' + esc(exam.name) + '</span>';
-      navContainer.appendChild(tab);
-    });
-
-    if (isStacked) {
-      navContainer.addEventListener('click', function (e) {
-        if (!navContainer.classList.contains('is-expanded')) {
-          e.preventDefault();
-          e.stopPropagation();
-          navContainer.classList.add('is-expanded');
-        }
-      }, true);
-    }
-
-    if (typeof window._syncPersistentOffset === 'function') {
-      setTimeout(window._syncPersistentOffset, 50);
-    }
-
-    // Align tabs to the right edge of the page content area
-    alignPersistentNavsToContent();
-
-    if (!window._persistentNavCloseRegistered) {
-      window._persistentNavCloseRegistered = true;
-      document.addEventListener('click', function (e) {
-        if (!e.target.closest('.persistent-exam-navs')) {
-          var c = document.querySelector('.persistent-exam-navs');
-          if (c) c.classList.remove('is-expanded');
-        }
-      });
-      window.addEventListener('resize', alignPersistentNavsToContent);
     }
   }
 
@@ -7590,12 +7456,6 @@ window._spaNavigate = function (path) {
     return 16;
   };
 
-  function alignPersistentNavsToContent() {
-    var nav = document.querySelector('.persistent-exam-navs');
-    if (!nav) return;
-    nav.style.right = window._getContentRightOffset() + 'px';
-  }
-
   /* ============================================================
      REFRESH — allows other IIFEs to trigger re-renders
      ============================================================ */
@@ -7611,12 +7471,10 @@ window._spaNavigate = function (path) {
     loadJourneyState();
     loadActiveTab();
     buildSidebarTabs();
-    setTimeout(updatePersistentExamNavs, 300);
     setTimeout(updateExamLinkButtons, 350);
   }
 
   // Expose API for cross-IIFE access
-  window._updatePersistentExamNavs = updatePersistentExamNavs;
   window._updateExamLinkButtons = updateExamLinkButtons;
   window._sidebarTabs = {
     refresh: refreshTab,
@@ -7643,12 +7501,11 @@ window._spaNavigate = function (path) {
   window._getVaultIndex = getVaultIndex;
   window._extractSiteId = extractSiteId;
 
-  // Re-check persistent navs on SPA navigation + invalidate search cache
+  // Invalidate search cache + refresh exam link buttons on SPA navigation
   window.addEventListener('popstate', function () {
     _vaultIndexCache = null;
     _vaultIndexLoading = false;
     _currentPagePaths = {};
-    setTimeout(updatePersistentExamNavs, 250);
     setTimeout(updateExamLinkButtons, 300);
   });
   document.addEventListener('click', function (e) {
@@ -7657,8 +7514,6 @@ window._spaNavigate = function (path) {
       _vaultIndexCache = null;
       _vaultIndexLoading = false;
       _currentPagePaths = {};
-      setTimeout(updatePersistentExamNavs, 300);
-      setTimeout(updatePersistentExamNavs, 600);
       setTimeout(updateExamLinkButtons, 350);
       setTimeout(updateExamLinkButtons, 650);
     }

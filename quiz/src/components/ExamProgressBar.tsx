@@ -59,11 +59,11 @@ function useJourneyState() {
       .from('exam_progress')
       .select('exam_id, status')
       .eq('user_id', user.id)
-      .then(({ data }) => {
+      .then(({ data }: { data: { exam_id: string; status: string }[] | null }) => {
         if (!data?.length) return
         setState(prev => {
           const newProgress = { ...prev.progress }
-          data.forEach(row => {
+          data.forEach((row: { exam_id: string; status: string }) => {
             newProgress[row.exam_id] = row.status as ItemStatus
           })
           const next = { ...prev, progress: newProgress }

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useEffect } from 'react'
 
@@ -33,12 +34,22 @@ export default function Auth() {
 
   const returnTo = (location.state as LocationState)?.from ?? '/dashboard'
 
-  // Redirect if already authenticated (skip when in popup mode)
   useEffect(() => {
-    if (!loading && user && !isPopup) {
+    if (loading) return
+
+    if (isPopup && user && window.opener) {
+      supabase.auth.getSession().then(({ data }) => {
+        const target = popupOrigin ? decodeURIComponent(popupOrigin) : '*'
+        window.opener.postMessage({ type: 'SUPABASE_SESSION', session: data.session }, target)
+        window.close()
+      })
+      return
+    }
+
+    if (!isPopup && user) {
       navigate(returnTo, { replace: true })
     }
-  }, [user, loading, navigate, returnTo, isPopup])
+  }, [user, loading, navigate, returnTo, isPopup, popupOrigin])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -54,16 +65,6 @@ export default function Auth() {
       if (mode === 'signin') {
         const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
         if (authError) throw authError
-
-        // Popup relay: send session back to the opener (wiki) then close
-        if (isPopup && window.opener) {
-          const { data } = await supabase.auth.getSession()
-          const target = popupOrigin ? decodeURIComponent(popupOrigin) : '*'
-          window.opener.postMessage({ type: 'SUPABASE_SESSION', session: data.session }, target)
-          window.close()
-          return
-        }
-
         navigate(returnTo, { replace: true })
       } else {
         const { error: authError } = await supabase.auth.signUp({ email, password })
@@ -75,6 +76,18 @@ export default function Auth() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  async function handleOAuthSignIn(provider: 'google' | 'apple') {
+    setError(null)
+    const redirectTo =
+      `${window.location.origin}${window.location.pathname}` +
+      (isPopup ? `?popup=1${popupOrigin ? `&origin=${popupOrigin}` : ''}` : '')
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo },
+    })
+    if (authError) setError(authError.message)
   }
 
   if (signupSuccess) {
@@ -109,6 +122,44 @@ export default function Auth() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="space-y-3 mb-6">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full gap-3"
+              onClick={() => handleOAuthSignIn('google')}
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+                <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z"/>
+                <path fill="#FBBC05" d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332Z"/>
+                <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 6.294C4.672 4.169 6.656 3.58 9 3.58Z"/>
+              </svg>
+              Continue with Google
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full gap-3"
+              onClick={() => handleOAuthSignIn('apple')}
+            >
+              <svg width="16" height="18" viewBox="0 0 814 1000" aria-hidden="true" fill="currentColor">
+                <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-42.3-150.3-109.3c-52.7-78.2-99-201.3-99-320.4 0-199.3 131.2-305.2 261.6-305.2 63.2 0 118.2 43.6 158.1 43.6 38.1 0 98.3-46.3 169.3-46.3 27.4 0 109.7 2.6 166.1 98.4zm-189.5-97.9c-20.8 24.6-54.7 42.6-90.9 42.6-0.3-2.7-0.5-5.4-0.5-8.3 0-49.6 35.7-101.5 63.3-131.7 20.5-23.1 54.4-43.3 90.2-45.8 1.1 3.7 1.5 7.3 1.5 10.6 0 51.9-32.3 102.3-63.6 132.6z"/>
+              </svg>
+              Continue with Apple
+            </Button>
+          </div>
+
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <Separator />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">or</span>
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

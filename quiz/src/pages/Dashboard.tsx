@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
 import { TopicProgressSection } from '@/components/TopicProgressSection'
-import { EXAM_SYLLABI } from '@/data/examSyllabus'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, {
@@ -43,6 +43,7 @@ export default function Dashboard() {
   const navigate = useNavigate()
   const { user, loading: authLoading, signOut } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
+  const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
 
   // Hard redirect if not authenticated
   useEffect(() => {
@@ -104,9 +105,15 @@ export default function Dashboard() {
       </div>
 
       {/* Topics progress */}
-      {EXAM_SYLLABI.map(syllabus => (
-        <TopicProgressSection key={syllabus.examId} syllabus={syllabus} sessions={sessions} />
-      ))}
+      {syllabusLoading ? (
+        <div className="flex items-center justify-center py-4">
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : (
+        syllabi.map(syllabus => (
+          <TopicProgressSection key={syllabus.examTopic} syllabus={syllabus} sessions={sessions} />
+        ))
+      )}
 
       {/* Session history */}
       <Card>

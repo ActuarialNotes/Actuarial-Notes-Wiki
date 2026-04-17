@@ -1,27 +1,26 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { ExamSyllabus } from '@/data/examSyllabus'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { QuizSession } from '@/lib/supabase'
 
-interface SubtopicProgress {
+interface ConceptProgress {
   name: string
   totalQuestions: number
   correctCount: number
-  sessionCount: number
   strengthPct: number
   level: 'not-started' | 'beginner' | 'learning' | 'practiced' | 'strong'
 }
 
-function computeSubtopicProgress(
+function computeConceptProgress(
   sessions: QuizSession[],
-  subtopicName: string,
+  conceptName: string,
   examTopic: string,
-): SubtopicProgress {
+): ConceptProgress {
   const relevant = sessions.filter(
-    s => s.topic === examTopic && s.subtopic === subtopicName,
+    s => s.topic === examTopic && s.subtopic === conceptName,
   )
 
   if (relevant.length === 0) {
-    return { name: subtopicName, totalQuestions: 0, correctCount: 0, sessionCount: 0, strengthPct: 0, level: 'not-started' }
+    return { name: conceptName, totalQuestions: 0, correctCount: 0, strengthPct: 0, level: 'not-started' }
   }
 
   const totalQuestions = relevant.reduce((sum, s) => sum + s.total_questions, 0)
@@ -35,10 +34,10 @@ function computeSubtopicProgress(
     strengthPct >= 60 ? 'practiced' :
     strengthPct >= 40 ? 'learning' : 'beginner'
 
-  return { name: subtopicName, totalQuestions, correctCount, sessionCount: relevant.length, strengthPct, level }
+  return { name: conceptName, totalQuestions, correctCount, strengthPct, level }
 }
 
-const LEVEL_LABEL: Record<SubtopicProgress['level'], string> = {
+const LEVEL_LABEL: Record<ConceptProgress['level'], string> = {
   'not-started': 'Not Started',
   'beginner': 'Beginner',
   'learning': 'Learning',
@@ -46,7 +45,7 @@ const LEVEL_LABEL: Record<SubtopicProgress['level'], string> = {
   'strong': 'Strong',
 }
 
-const LEVEL_BAR_COLOR: Record<SubtopicProgress['level'], string> = {
+const LEVEL_BAR_COLOR: Record<ConceptProgress['level'], string> = {
   'not-started': 'bg-muted-foreground/20',
   'beginner': 'bg-red-400',
   'learning': 'bg-orange-400',
@@ -54,7 +53,7 @@ const LEVEL_BAR_COLOR: Record<SubtopicProgress['level'], string> = {
   'strong': 'bg-green-500',
 }
 
-const LEVEL_TEXT_COLOR: Record<SubtopicProgress['level'], string> = {
+const LEVEL_TEXT_COLOR: Record<ConceptProgress['level'], string> = {
   'not-started': 'text-muted-foreground',
   'beginner': 'text-red-500',
   'learning': 'text-orange-500',
@@ -62,9 +61,9 @@ const LEVEL_TEXT_COLOR: Record<SubtopicProgress['level'], string> = {
   'strong': 'text-green-600',
 }
 
-function StrengthBar({ pct, level }: { pct: number; level: SubtopicProgress['level'] }) {
+function StrengthBar({ pct, level }: { pct: number; level: ConceptProgress['level'] }) {
   return (
-    <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden">
+    <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0">
       <div
         className={`h-full rounded-full transition-all ${LEVEL_BAR_COLOR[level]}`}
         style={{ width: `${pct}%` }}
@@ -74,7 +73,7 @@ function StrengthBar({ pct, level }: { pct: number; level: SubtopicProgress['lev
 }
 
 interface Props {
-  syllabus: ExamSyllabus
+  syllabus: WikiExamSyllabus
   sessions: QuizSession[]
 }
 
@@ -94,14 +93,14 @@ export function TopicProgressSection({ syllabus, sessions }: Props) {
         ) : (
           <div className="space-y-5">
             {syllabus.topics.map(topic => {
-              const subtopicProgressList = topic.subtopics.map(st =>
-                computeSubtopicProgress(sessions, st.name, syllabus.examTopic),
+              const conceptProgressList = topic.concepts.map(c =>
+                computeConceptProgress(sessions, c.name, syllabus.examTopic),
               )
-              const attempted = subtopicProgressList.filter(s => s.level !== 'not-started')
+              const attempted = conceptProgressList.filter(c => c.level !== 'not-started')
               const topicAvg = attempted.length > 0
-                ? Math.round(attempted.reduce((sum, s) => sum + s.strengthPct, 0) / attempted.length)
+                ? Math.round(attempted.reduce((sum, c) => sum + c.strengthPct, 0) / attempted.length)
                 : 0
-              const topicLevel: SubtopicProgress['level'] =
+              const topicLevel: ConceptProgress['level'] =
                 attempted.length === 0 ? 'not-started' :
                 topicAvg >= 80 ? 'strong' :
                 topicAvg >= 60 ? 'practiced' :
@@ -111,32 +110,43 @@ export function TopicProgressSection({ syllabus, sessions }: Props) {
                 <div key={topic.name} className="space-y-2">
                   {/* Top-level topic row */}
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-semibold w-48 shrink-0">{topic.name}</span>
+                    <span className="text-sm font-semibold w-48 shrink-0">
+                      {topic.name}
+                      {topic.weight && (
+                        <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+                          {topic.weight}
+                        </span>
+                      )}
+                    </span>
                     <StrengthBar pct={topicAvg} level={topicLevel} />
                     <span className={`text-xs font-medium w-16 text-right shrink-0 ${LEVEL_TEXT_COLOR[topicLevel]}`}>
                       {topicLevel === 'not-started' ? '—' : `${topicAvg}%`}
                     </span>
                   </div>
 
-                  {/* Subtopic rows */}
-                  <div className="space-y-1.5 pl-3 border-l-2 border-border ml-1">
-                    {subtopicProgressList.map(sp => (
-                      <div key={sp.name} className="flex items-center gap-3">
-                        <span className="text-xs text-muted-foreground w-44 shrink-0">{sp.name}</span>
-                        <StrengthBar pct={sp.strengthPct} level={sp.level} />
-                        <div className="flex items-center gap-1.5 w-36 justify-end shrink-0">
-                          <span className={`text-xs font-medium ${LEVEL_TEXT_COLOR[sp.level]}`}>
-                            {LEVEL_LABEL[sp.level]}
+                  {/* Concept rows */}
+                  {topic.concepts.length > 0 && (
+                    <div className="space-y-1.5 pl-3 border-l-2 border-border ml-1">
+                      {conceptProgressList.map(cp => (
+                        <div key={cp.name} className="flex items-center gap-3">
+                          <span className="text-xs text-muted-foreground w-44 shrink-0 truncate" title={cp.name}>
+                            {cp.name}
                           </span>
-                          {sp.totalQuestions > 0 && (
-                            <span className="text-xs text-muted-foreground">
-                              · {sp.totalQuestions}Q
+                          <StrengthBar pct={cp.strengthPct} level={cp.level} />
+                          <div className="flex items-center gap-1.5 w-36 justify-end shrink-0">
+                            <span className={`text-xs font-medium ${LEVEL_TEXT_COLOR[cp.level]}`}>
+                              {LEVEL_LABEL[cp.level]}
                             </span>
-                          )}
+                            {cp.totalQuestions > 0 && (
+                              <span className="text-xs text-muted-foreground">
+                                · {cp.totalQuestions}Q
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )
             })}

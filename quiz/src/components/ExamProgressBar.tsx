@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
@@ -9,8 +9,13 @@ import {
   getTrackCounts,
   type ItemStatus,
 } from '@/data/tracks'
+import { useAuth } from '@/hooks/useAuth'
+import { supabase } from '@/lib/supabase'
 
 const JOURNEY_LS_KEY = 'quiz-journey'
+
+// Exam IDs that are persisted in Supabase exam_progress (shared with wiki)
+const SUPABASE_EXAM_IDS = new Set(['P', 'FM'])
 
 interface JourneyState {
   selectedTrack: string
@@ -44,7 +49,29 @@ function saveState(state: JourneyState) {
 }
 
 function useJourneyState() {
+  const { user } = useAuth()
   const [state, setState] = useState<JourneyState>(loadState)
+
+  // On login, pull exam_progress from Supabase and merge into local state
+  useEffect(() => {
+    if (!user) return
+    supabase
+      .from('exam_progress')
+      .select('exam_id, status')
+      .eq('user_id', user.id)
+      .then(({ data }) => {
+        if (!data?.length) return
+        setState(prev => {
+          const newProgress = { ...prev.progress }
+          data.forEach(row => {
+            newProgress[row.exam_id] = row.status as ItemStatus
+          })
+          const next = { ...prev, progress: newProgress }
+          saveState(next)
+          return next
+        })
+      })
+  }, [user?.id])  // eslint-disable-line react-hooks/exhaustive-deps
 
   function setSelectedTrack(key: string) {
     setState(prev => {
@@ -56,15 +83,31 @@ function useJourneyState() {
 
   function cycleSegment(ids: string[]) {
     if (ids.length === 0) return
+    const current = state.progress[ids[0]] ?? 'not_started'
+    const nextStatus = STATUS_CYCLE[current]
+
     setState(prev => {
-      const current = prev.progress[ids[0]] ?? 'not_started'
-      const next = STATUS_CYCLE[current]
       const newProgress = { ...prev.progress }
-      for (const id of ids) newProgress[id] = next
+      for (const id of ids) newProgress[id] = nextStatus
       const newState = { ...prev, progress: newProgress }
       saveState(newState)
       return newState
     })
+
+    // Persist Supabase-backed exam IDs for cross-app sync
+    if (user) {
+      ids
+        .filter(id => SUPABASE_EXAM_IDS.has(id))
+        .forEach(id => {
+          supabase
+            .from('exam_progress')
+            .upsert(
+              { user_id: user.id, exam_id: id, status: nextStatus, updated_at: new Date().toISOString() },
+              { onConflict: 'user_id,exam_id' }
+            )
+            .then()
+        })
+    }
   }
 
   return { selectedTrack: state.selectedTrack, progress: state.progress, setSelectedTrack, cycleSegment }

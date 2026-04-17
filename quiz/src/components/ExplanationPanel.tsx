@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { LatexText } from '@/components/LatexText'
-
-const WIKI_BASE = 'https://wiki.actuarialnotes.com'
+import { useAuth } from '@/hooks/useAuth'
+import { buildWikiUrl } from '@/lib/wikiUrl'
 
 interface ExplanationPanelProps {
   explanation: string
@@ -10,6 +10,7 @@ interface ExplanationPanelProps {
 }
 
 export function ExplanationPanel({ explanation, wikiLink, isCorrect }: ExplanationPanelProps) {
+  const { session } = useAuth()
   return (
     <div
       className={cn(
@@ -35,7 +36,7 @@ export function ExplanationPanel({ explanation, wikiLink, isCorrect }: Explanati
 
       {wikiLink && (
         <a
-          href={`${WIKI_BASE}${wikiLink}`}
+          href={buildWikiUrl(wikiLink, session?.access_token, session?.refresh_token)}
           target="_blank"
           rel="noreferrer"
           className="inline-flex items-center gap-1 text-sm text-primary hover:underline"

@@ -9014,6 +9014,36 @@ var SoundFX = (function () {
     } catch (e) { /* ignore */ }
   }
 
+  /* Consume session tokens passed via URL hash from the quiz app.
+     The quiz app appends #access_token=...&refresh_token=... to wiki links
+     when the user is already signed in, mirroring Supabase's own OAuth flow. */
+  function consumeSessionFromHash() {
+    var hash = window.location.hash;
+    if (!hash || hash.indexOf('access_token=') === -1) return;
+    var params = {};
+    hash.replace(/^#/, '').split('&').forEach(function (pair) {
+      var kv = pair.split('=');
+      if (kv.length >= 2) params[decodeURIComponent(kv[0])] = decodeURIComponent(kv.slice(1).join('='));
+    });
+    var accessToken = params['access_token'];
+    var refreshToken = params['refresh_token'];
+    if (!accessToken || !refreshToken) return;
+    /* Remove tokens from the URL without triggering a page reload */
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    /* Fetch user info from Supabase to build a complete session object */
+    fetch(SUPABASE_URL + '/auth/v1/user', {
+      headers: { 'Authorization': 'Bearer ' + accessToken, 'apikey': SUPABASE_ANON_KEY }
+    })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (user) {
+        if (!user || !user.id) return;
+        writeSession({ access_token: accessToken, refresh_token: refreshToken, token_type: 'bearer', user: user });
+        syncJourneyToSupabase();
+        renderLoginWidget();
+      })
+      .catch(function () { /* ignore */ });
+  }
+
   /* Listen for postMessage from quiz popup after successful login */
   window.addEventListener('message', function (event) {
     if (QUIZ_APP_URL && event.origin !== QUIZ_APP_URL) return;
@@ -9153,6 +9183,9 @@ var SoundFX = (function () {
     });
     obs.observe(document.documentElement, { childList: true, subtree: true });
   }
+
+  /* Process auth tokens in the URL hash as early as possible */
+  consumeSessionFromHash();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', watchForSidebar);

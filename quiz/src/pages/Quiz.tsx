@@ -43,7 +43,13 @@ export default function Quiz() {
     answerQuestion,
     nextQuestion,
     completeQuiz,
+    resetQuiz,
   } = useQuizStore()
+
+  // Reset store on every new quiz navigation so filters always take effect
+  useEffect(() => {
+    resetQuiz()
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   // Start the quiz once questions load — guard prevents re-triggering on re-renders
   useEffect(() => {

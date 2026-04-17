@@ -9,7 +9,6 @@ import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
 import { TopicProgressSection } from '@/components/TopicProgressSection'
-import { EXAM_SYLLABI } from '@/data/examSyllabus'
 import { ExamProgressBar } from '@/components/ExamProgressBar'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 

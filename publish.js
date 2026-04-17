@@ -6315,6 +6315,16 @@ window._spaNavigate = function (path) {
     });
     utilBar.appendChild(muteBtn);
 
+    // Settings navigation button
+    var SVG_GEAR = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42"/></svg>';
+    var settingsUtilBtn = document.createElement('button');
+    settingsUtilBtn.className = 'sidebar-tabs__utility-btn';
+    settingsUtilBtn.type = 'button';
+    settingsUtilBtn.title = 'Settings';
+    settingsUtilBtn.innerHTML = SVG_GEAR;
+    settingsUtilBtn.addEventListener('click', function () { sidebarNavigate('Settings'); });
+    utilBar.appendChild(settingsUtilBtn);
+
     containerEl.appendChild(bar);
     containerEl.appendChild(panelEl);
     containerEl.appendChild(utilBar);
@@ -6461,6 +6471,14 @@ window._spaNavigate = function (path) {
 
     container.appendChild(selectRow);
 
+    // "Edit in Settings" hint — status changes are settings-only
+    var editSettingsLink = document.createElement('button');
+    editSettingsLink.className = 'exams-panel__settings-link';
+    editSettingsLink.type = 'button';
+    editSettingsLink.textContent = 'Edit exam status in Settings →';
+    editSettingsLink.addEventListener('click', function () { sidebarNavigate('Settings'); });
+    container.appendChild(editSettingsLink);
+
     // Progress bar (segmented)
     var bar = document.createElement('div');
     bar.className = 'sidebar-tabs__progress-bar';
@@ -6548,24 +6566,9 @@ window._spaNavigate = function (path) {
           row.dataset.itemId = item.id;
           if (item.color) row.dataset.examColor = item.color;
 
-          var statusBtn = document.createElement('button');
+          var statusBtn = document.createElement('span');
           statusBtn.className = 'exams-panel__status';
-          statusBtn.type = 'button';
-          statusBtn.title = 'Click to change status';
           statusBtn.innerHTML = STATUS_ICONS[getStatus(item.id)];
-          statusBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            cycleStatus(item.id);
-            var newStatus = getStatus(item.id);
-            row.dataset.status = newStatus;
-            statusBtn.innerHTML = STATUS_ICONS[newStatus];
-            updateExamsProgress();
-            if (typeof SoundFX !== 'undefined') {
-              if (newStatus === 'in_progress' && SoundFX.inProgress) SoundFX.inProgress();
-              else if (newStatus === 'completed' && SoundFX.complete) SoundFX.complete();
-              else if (SoundFX.click) SoundFX.click();
-            }
-          });
 
           var nameEl;
           if (item.path) {
@@ -9112,28 +9115,6 @@ var SoundFX = (function () {
   });
 
   /* ------------------------------------------------------------------ */
-  /* Sync exam status clicks to Supabase                                  */
-  /* Uses event delegation — no localStorage patching needed              */
-  /* ------------------------------------------------------------------ */
-
-  document.addEventListener('click', function (e) {
-    var statusBtn = e.target.closest('.exams-panel__status');
-    if (!statusBtn || !getUserId()) return;
-    /* Let the sidebar TABS IIFE update localStorage first, then read it */
-    setTimeout(function () {
-      try {
-        var row = statusBtn.closest('[data-item-id]');
-        var examId = row && row.dataset.itemId;
-        if (!examId) return;
-        var raw = localStorage.getItem('actuarial-notes-journey');
-        if (!raw) return;
-        var progress = JSON.parse(raw).progress || {};
-        if (progress[examId]) upsertExamProgress(examId, progress[examId]);
-      } catch (err) { /* ignore */ }
-    }, 50);
-  }, true);
-
-  /* ------------------------------------------------------------------ */
   /* UI rendering                                                          */
   /* ------------------------------------------------------------------ */
 
@@ -9281,5 +9262,660 @@ var SoundFX = (function () {
     if (utilBar.querySelector('.sidebar-login')) return;
     injectLoginWidget();
   }, 1000);
+
+  /* Expose auth helpers for the Settings IIFE */
+  window._wikiAuth = {
+    readSession: readSession,
+    getUserId: getUserId,
+    getUserEmail: getUserEmail,
+    getAccessToken: getAccessToken,
+    supabaseHeaders: supabaseHeaders,
+    signOut: signOut,
+    SUPABASE_URL: SUPABASE_URL,
+    SUPABASE_ANON_KEY: SUPABASE_ANON_KEY,
+    QUIZ_APP_URL: QUIZ_APP_URL,
+    upsertExamProgress: upsertExamProgress,
+  };
+
+})();
+
+/* ===========================================================
+   WIKI SETTINGS PAGE
+   Detects navigation to /Settings and injects a full settings
+   UI into the main content area.  Auth helpers are read from
+   window._wikiAuth (exposed by the SIDEBAR AUTH IIFE above).
+   =========================================================== */
+(function () {
+  'use strict';
+
+  /* ---- helpers ---- */
+  function auth() { return window._wikiAuth || {}; }
+
+  function isSettingsPage() {
+    var path = decodeURIComponent(window.location.pathname.replace(/^\//, '').replace(/\+/g, ' '));
+    return path.toLowerCase() === 'settings';
+  }
+
+  function getContentEl() {
+    return document.querySelector('.markdown-preview-view, .markdown-rendered, .site-body-center-column .markdown-source-view');
+  }
+
+  /* ---- TRACKS data (minimal copy for the settings page) ---- */
+  function getSettingsTracks() { return (typeof TRACKS !== 'undefined') ? TRACKS : []; }
+
+  /* ---- Preset avatar colours ---- */
+  var PRESET_COLORS = ['#2563eb', '#9333ea', '#16a34a', '#ea580c', '#e11d48', '#0d9488'];
+
+  /* ---- Build a labelled field ---- */
+  function buildField(labelText, inputEl) {
+    var wrap = document.createElement('div');
+    wrap.className = 'wiki-settings__field';
+    var lbl = document.createElement('label');
+    lbl.className = 'wiki-settings__label';
+    lbl.textContent = labelText;
+    wrap.appendChild(lbl);
+    wrap.appendChild(inputEl);
+    return wrap;
+  }
+
+  /* ---- Build a text input ---- */
+  function buildInput(type, placeholder) {
+    var inp = document.createElement('input');
+    inp.type = type || 'text';
+    inp.className = 'wiki-settings__input';
+    if (placeholder) inp.placeholder = placeholder;
+    return inp;
+  }
+
+  /* ---- Build a select element ---- */
+  function buildSelect(options, value) {
+    var sel = document.createElement('select');
+    sel.className = 'wiki-settings__select';
+    options.forEach(function (opt) {
+      var o = document.createElement('option');
+      o.value = opt.value;
+      o.textContent = opt.label;
+      if (opt.value === value) o.selected = true;
+      sel.appendChild(o);
+    });
+    return sel;
+  }
+
+  /* ---- Build a save button ---- */
+  function buildSaveBtn(label) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'wiki-settings__save';
+    btn.textContent = label || 'Save';
+    return btn;
+  }
+
+  /* ---- Feedback element ---- */
+  function buildFeedback() {
+    var el = document.createElement('div');
+    el.className = 'wiki-settings__feedback';
+    return el;
+  }
+
+  function setFeedback(el, msg, isError) {
+    el.textContent = msg;
+    el.className = 'wiki-settings__feedback' + (isError ? ' is-error' : ' is-success');
+    if (msg) setTimeout(function () { el.textContent = ''; el.className = 'wiki-settings__feedback'; }, 5000);
+  }
+
+  /* ---- Section: Account ---- */
+  function buildAccountSection() {
+    var sec = document.createElement('div');
+    sec.className = 'wiki-settings__section';
+    var title = document.createElement('h2');
+    title.className = 'wiki-settings__section-title';
+    title.textContent = 'Account';
+    sec.appendChild(title);
+
+    var curPwInp = buildInput('password', 'Current password');
+    var newPwInp = buildInput('password', 'New password');
+    var confirmPwInp = buildInput('password', 'Confirm new password');
+    var saveBtn = buildSaveBtn('Save Password');
+    var feedback = buildFeedback();
+
+    sec.appendChild(buildField('Current password', curPwInp));
+    sec.appendChild(buildField('New password', newPwInp));
+    sec.appendChild(buildField('Confirm new password', confirmPwInp));
+    sec.appendChild(feedback);
+    sec.appendChild(saveBtn);
+
+    saveBtn.addEventListener('click', function () {
+      var a = auth();
+      var email = a.getUserEmail ? a.getUserEmail() : null;
+      if (!email) { setFeedback(feedback, 'You must be signed in.', true); return; }
+      var cur = curPwInp.value.trim();
+      var nw = newPwInp.value;
+      var cnf = confirmPwInp.value;
+      if (!cur) { setFeedback(feedback, 'Current password is required.', true); return; }
+      if (nw.length < 8) { setFeedback(feedback, 'New password must be at least 8 characters.', true); return; }
+      if (nw !== cnf) { setFeedback(feedback, 'Passwords do not match.', true); return; }
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving\u2026';
+      fetch(a.SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: a.SUPABASE_ANON_KEY || '' },
+        body: JSON.stringify({ email: email, password: cur }),
+      }).then(function (r) { return r.json(); }).then(function (data) {
+        if (!data.access_token) {
+          setFeedback(feedback, 'Current password is incorrect.', true);
+          saveBtn.disabled = false; saveBtn.textContent = 'Save Password'; return;
+        }
+        fetch(a.SUPABASE_URL + '/auth/v1/user', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', apikey: a.SUPABASE_ANON_KEY || '', Authorization: 'Bearer ' + data.access_token },
+          body: JSON.stringify({ password: nw }),
+        }).then(function (r2) { return r2.json(); }).then(function (d2) {
+          saveBtn.disabled = false; saveBtn.textContent = 'Save Password';
+          if (d2.error) { setFeedback(feedback, d2.error || 'Error updating password.', true); return; }
+          setFeedback(feedback, 'Password updated successfully.');
+          curPwInp.value = ''; newPwInp.value = ''; confirmPwInp.value = '';
+        });
+      }).catch(function () {
+        saveBtn.disabled = false; saveBtn.textContent = 'Save Password';
+        setFeedback(feedback, 'Network error.', true);
+      });
+    });
+
+    return sec;
+  }
+
+  /* ---- Section: Profile ---- */
+  function buildProfileSection() {
+    var sec = document.createElement('div');
+    sec.className = 'wiki-settings__section';
+    var title = document.createElement('h2');
+    title.className = 'wiki-settings__section-title';
+    title.textContent = 'Profile';
+    sec.appendChild(title);
+
+    var a = auth();
+    var session = a.readSession ? a.readSession() : null;
+    var meta = (session && session.user && session.user.user_metadata) ? session.user.user_metadata : {};
+    var savedAvatar = meta.avatar_url || '';
+    var email = a.getUserEmail ? a.getUserEmail() : '';
+    var displayName = meta.display_name || '';
+    var initials = (displayName || email || '?').slice(0, 2).toUpperCase();
+    var pendingAvatarUrl = '';
+
+    // Avatar preview
+    var avatarRow = document.createElement('div');
+    avatarRow.className = 'wiki-settings__avatar-row';
+    var avatarPreview = document.createElement('div');
+    avatarPreview.className = 'wiki-settings__avatar-preview';
+    avatarPreview.style.cssText = 'width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0';
+    var avatarImg = document.createElement('img');
+    avatarImg.style.cssText = 'display:none;width:100%;height:100%;object-fit:cover';
+    var avatarInitialsEl = document.createElement('span');
+    avatarInitialsEl.style.cssText = 'color:#fff;font-weight:600;font-size:20px';
+    avatarInitialsEl.textContent = initials;
+    avatarPreview.appendChild(avatarImg);
+    avatarPreview.appendChild(avatarInitialsEl);
+
+    if (savedAvatar.charAt(0) === '{') {
+      try { var p = JSON.parse(savedAvatar); if (p.type === 'color') avatarPreview.style.backgroundColor = p.value; } catch (e) {}
+    } else if (savedAvatar) {
+      avatarImg.src = savedAvatar; avatarImg.style.display = 'block'; avatarInitialsEl.style.display = 'none';
+    } else {
+      avatarPreview.style.backgroundColor = '#475569';
+    }
+
+    var swatchRow = document.createElement('div');
+    swatchRow.className = 'wiki-settings__swatches';
+    PRESET_COLORS.forEach(function (hex) {
+      var sw = document.createElement('button');
+      sw.type = 'button'; sw.className = 'wiki-settings__swatch'; sw.style.backgroundColor = hex; sw.title = hex;
+      sw.addEventListener('click', function () {
+        pendingAvatarUrl = JSON.stringify({ type: 'color', value: hex });
+        avatarImg.style.display = 'none'; avatarInitialsEl.style.display = '';
+        avatarPreview.style.backgroundColor = hex;
+        swatchRow.querySelectorAll('.wiki-settings__swatch').forEach(function (s) { s.classList.remove('is-active'); });
+        sw.classList.add('is-active');
+      });
+      swatchRow.appendChild(sw);
+    });
+
+    var uploadLabel = document.createElement('label');
+    uploadLabel.className = 'wiki-settings__upload-label';
+    uploadLabel.textContent = 'Upload photo';
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file'; fileInput.accept = 'image/jpeg,image/png,image/webp'; fileInput.style.display = 'none';
+    fileInput.addEventListener('change', function () {
+      var file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      var a2 = auth();
+      var userId = a2.getUserId ? a2.getUserId() : null;
+      if (!userId) return;
+      var ext = file.name.split('.').pop();
+      var path = userId + '/' + Date.now() + '.' + ext;
+      uploadLabel.textContent = 'Uploading\u2026';
+      fetch(a2.SUPABASE_URL + '/storage/v1/object/avatars/' + path, {
+        method: 'POST',
+        headers: Object.assign(a2.supabaseHeaders ? a2.supabaseHeaders(true) : {}, { 'Content-Type': file.type, 'x-upsert': 'true' }),
+        body: file,
+      }).then(function () {
+        pendingAvatarUrl = a2.SUPABASE_URL + '/storage/v1/object/public/avatars/' + path;
+        avatarImg.src = pendingAvatarUrl; avatarImg.style.display = 'block'; avatarInitialsEl.style.display = 'none';
+        avatarPreview.style.backgroundColor = '';
+        uploadLabel.textContent = 'Upload photo'; fileInput.value = '';
+      }).catch(function () { uploadLabel.textContent = 'Upload photo'; });
+    });
+    uploadLabel.appendChild(fileInput);
+
+    var avatarControls = document.createElement('div');
+    avatarControls.className = 'wiki-settings__avatar-controls';
+    avatarControls.appendChild(swatchRow);
+    avatarControls.appendChild(uploadLabel);
+    avatarRow.appendChild(avatarPreview);
+    avatarRow.appendChild(avatarControls);
+    sec.appendChild(avatarRow);
+
+    var nameInp = buildInput('text', 'Your name'); nameInp.value = displayName;
+    var emailInp = buildInput('email', 'Email address'); emailInp.value = email;
+    var emailHint = document.createElement('p');
+    emailHint.className = 'wiki-settings__hint';
+    emailHint.textContent = 'A confirmation email will be sent to the new address before the change applies.';
+    var saveBtn = buildSaveBtn('Save Profile');
+    var feedback = buildFeedback();
+
+    sec.appendChild(buildField('Display name', nameInp));
+    sec.appendChild(buildField('Email address', emailInp));
+    sec.appendChild(emailHint);
+    sec.appendChild(feedback);
+    sec.appendChild(saveBtn);
+
+    saveBtn.addEventListener('click', function () {
+      var a2 = auth();
+      var token = a2.getAccessToken ? a2.getAccessToken() : null;
+      if (!token) { setFeedback(feedback, 'You must be signed in.', true); return; }
+      saveBtn.disabled = true; saveBtn.textContent = 'Saving\u2026';
+      var payload = { data: { display_name: nameInp.value.trim() } };
+      if (pendingAvatarUrl) payload.data.avatar_url = pendingAvatarUrl;
+      var curEmail = a2.getUserEmail ? a2.getUserEmail() : '';
+      if (emailInp.value.trim() && emailInp.value.trim() !== curEmail) payload.email = emailInp.value.trim();
+      fetch(a2.SUPABASE_URL + '/auth/v1/user', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', apikey: a2.SUPABASE_ANON_KEY || '', Authorization: 'Bearer ' + token },
+        body: JSON.stringify(payload),
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        saveBtn.disabled = false; saveBtn.textContent = 'Save Profile';
+        if (d.error) { setFeedback(feedback, d.error, true); return; }
+        setFeedback(feedback, payload.email ? 'Profile saved. Confirmation email sent.' : 'Profile saved.');
+        pendingAvatarUrl = '';
+      }).catch(function () { saveBtn.disabled = false; saveBtn.textContent = 'Save Profile'; setFeedback(feedback, 'Network error.', true); });
+    });
+
+    return sec;
+  }
+
+  /* ---- Section: Credential Path & Exams ---- */
+  function buildExamsSection() {
+    var sec = document.createElement('div');
+    sec.className = 'wiki-settings__section';
+    var title = document.createElement('h2');
+    title.className = 'wiki-settings__section-title';
+    title.textContent = 'Credential Path & Exams';
+    sec.appendChild(title);
+
+    var tracks = getSettingsTracks();
+    var journeyRaw = '';
+    try { journeyRaw = localStorage.getItem('actuarial-notes-journey') || ''; } catch (e) {}
+    var journey = journeyRaw ? JSON.parse(journeyRaw) : { selectedTrack: 'DEFAULT', progress: {} };
+    if (!journey.progress) journey.progress = {};
+    if (!journey.examDates) journey.examDates = {};
+
+    var trackSel = buildSelect(
+      tracks.map(function (t) { return { value: t.key, label: t.name }; }),
+      journey.selectedTrack
+    );
+    sec.appendChild(buildField('Credential track', trackSel));
+
+    var itemsContainer = document.createElement('div');
+    itemsContainer.className = 'wiki-settings__exams-list';
+    sec.appendChild(itemsContainer);
+
+    var saveBtn = buildSaveBtn('Save Exam Progress');
+    var feedback = buildFeedback();
+    sec.appendChild(feedback);
+    sec.appendChild(saveBtn);
+
+    function renderItems() {
+      itemsContainer.innerHTML = '';
+      var track = tracks.find(function (t) { return t.key === trackSel.value; });
+      if (!track) return;
+      track.sections.forEach(function (section) {
+        var sLabel = document.createElement('p');
+        sLabel.className = 'wiki-settings__exams-section-label';
+        sLabel.textContent = section.label;
+        itemsContainer.appendChild(sLabel);
+        section.items.forEach(function (item) {
+          var row = document.createElement('div');
+          row.className = 'wiki-settings__exam-row';
+          var nameEl = document.createElement('span');
+          nameEl.className = 'wiki-settings__exam-name';
+          nameEl.textContent = item.name;
+          var statusSel = buildSelect([
+            { value: 'not_started', label: 'Not Started' },
+            { value: 'in_progress', label: 'In Progress' },
+            { value: 'completed', label: 'Passed' },
+          ], journey.progress[item.id] || 'not_started');
+          var dateWrap = document.createElement('label');
+          dateWrap.className = 'wiki-settings__date-label';
+          dateWrap.textContent = 'Target date: ';
+          var dateInp = document.createElement('input');
+          dateInp.type = 'date'; dateInp.className = 'wiki-settings__input wiki-settings__date-input';
+          dateInp.value = journey.examDates[item.id] || '';
+          dateWrap.style.display = statusSel.value === 'in_progress' ? '' : 'none';
+          dateWrap.appendChild(dateInp);
+          statusSel.addEventListener('change', function () {
+            journey.progress[item.id] = statusSel.value;
+            dateWrap.style.display = statusSel.value === 'in_progress' ? '' : 'none';
+            if (statusSel.value !== 'in_progress') { dateInp.value = ''; delete journey.examDates[item.id]; }
+          });
+          dateInp.addEventListener('change', function () { journey.examDates[item.id] = dateInp.value; });
+          row.appendChild(nameEl); row.appendChild(statusSel); row.appendChild(dateWrap);
+          itemsContainer.appendChild(row);
+        });
+      });
+    }
+
+    trackSel.addEventListener('change', function () { journey.selectedTrack = trackSel.value; renderItems(); });
+    renderItems();
+
+    saveBtn.addEventListener('click', function () {
+      var a = auth();
+      saveBtn.disabled = true; saveBtn.textContent = 'Saving\u2026';
+      try {
+        var jRaw = localStorage.getItem('actuarial-notes-journey') || '{}';
+        var j = JSON.parse(jRaw);
+        j.selectedTrack = journey.selectedTrack;
+        j.progress = Object.assign(j.progress || {}, journey.progress);
+        j.examDates = Object.assign(j.examDates || {}, journey.examDates);
+        localStorage.setItem('actuarial-notes-journey', JSON.stringify(j));
+      } catch (e) {}
+      var userId = a.getUserId ? a.getUserId() : null;
+      var supabaseExamIds = ['P', 'FM'];
+      var promises = supabaseExamIds.filter(function (id) { return journey.progress[id] && userId; }).map(function (id) {
+        return fetch(a.SUPABASE_URL + '/rest/v1/exam_progress', {
+          method: 'POST',
+          headers: Object.assign(a.supabaseHeaders ? a.supabaseHeaders(true) : {}, { 'Prefer': 'resolution=merge-duplicates' }),
+          body: JSON.stringify({ user_id: userId, exam_id: id, status: journey.progress[id], updated_at: new Date().toISOString(), target_date: journey.examDates[id] || null }),
+        }).catch(function () {});
+      });
+      Promise.all(promises).then(function () {
+        saveBtn.disabled = false; saveBtn.textContent = 'Save Exam Progress';
+        setFeedback(feedback, 'Exam progress saved.');
+        if (window._sidebarTabs && typeof window._sidebarTabs.reload === 'function') window._sidebarTabs.reload();
+      });
+    });
+
+    return sec;
+  }
+
+  /* ---- Section: Appearance ---- */
+  function buildAppearanceSection() {
+    var sec = document.createElement('div');
+    sec.className = 'wiki-settings__section';
+    var title = document.createElement('h2');
+    title.className = 'wiki-settings__section-title';
+    title.textContent = 'Appearance';
+    sec.appendChild(title);
+
+    var row = document.createElement('div');
+    row.className = 'wiki-settings__appearance-row';
+    var isLight = document.body.classList.contains('theme-light');
+
+    var descEl = document.createElement('div');
+    var dTitle = document.createElement('p'); dTitle.className = 'wiki-settings__field-label'; dTitle.textContent = 'Theme';
+    var dSub = document.createElement('p'); dSub.className = 'wiki-settings__hint'; dSub.textContent = 'Currently using ' + (isLight ? 'light' : 'dark') + ' mode';
+    descEl.appendChild(dTitle); descEl.appendChild(dSub);
+
+    var SVG_SUN_S = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="3"/><line x1="10" y1="1" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="19"/><line x1="1" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="19" y2="10"/><line x1="3.64" y1="3.64" x2="5.05" y2="5.05"/><line x1="14.95" y1="14.95" x2="16.36" y2="16.36"/><line x1="3.64" y1="16.36" x2="5.05" y2="14.95"/><line x1="14.95" y1="5.05" x2="16.36" y2="3.64"/></svg>';
+    var SVG_MOON_S = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17.5 12.5A7.5 7.5 0 0 1 7.5 2.5a7.5 7.5 0 1 0 10 10z"/></svg>';
+
+    var toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button'; toggleBtn.className = 'wiki-settings__theme-toggle';
+    toggleBtn.innerHTML = isLight ? SVG_SUN_S : SVG_MOON_S;
+    toggleBtn.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+    toggleBtn.addEventListener('click', function () {
+      isLight = !isLight;
+      document.body.classList.toggle('theme-light', isLight);
+      document.body.classList.toggle('theme-dark', !isLight);
+      toggleBtn.innerHTML = isLight ? SVG_SUN_S : SVG_MOON_S;
+      toggleBtn.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+      dSub.textContent = 'Currently using ' + (isLight ? 'light' : 'dark') + ' mode';
+      try { localStorage.setItem('actuarial-notes-theme', isLight ? 'light' : 'dark'); } catch (e) {}
+    });
+
+    row.appendChild(descEl); row.appendChild(toggleBtn);
+    sec.appendChild(row);
+    var hint = document.createElement('p');
+    hint.className = 'wiki-settings__hint'; hint.style.marginTop = '8px';
+    hint.textContent = 'Theme preference is saved automatically and synced with the quiz app.';
+    sec.appendChild(hint);
+
+    return sec;
+  }
+
+  /* ---- Section: Progress & Data ---- */
+  function buildDataSection() {
+    var sec = document.createElement('div');
+    sec.className = 'wiki-settings__section';
+    var title = document.createElement('h2');
+    title.className = 'wiki-settings__section-title';
+    title.textContent = 'Progress & Data';
+    sec.appendChild(title);
+
+    var feedback = buildFeedback();
+
+    // Session count
+    var statsEl = document.createElement('p');
+    statsEl.className = 'wiki-settings__hint'; statsEl.textContent = 'Loading session count\u2026';
+    sec.appendChild(statsEl);
+
+    var a = auth();
+    var userId = a.getUserId ? a.getUserId() : null;
+    if (userId && a.SUPABASE_URL) {
+      fetch(a.SUPABASE_URL + '/rest/v1/quiz_sessions?select=id&user_id=eq.' + encodeURIComponent(userId), {
+        headers: a.supabaseHeaders ? a.supabaseHeaders(true) : {},
+      }).then(function (r) { return r.json(); }).then(function (rows) {
+        statsEl.textContent = (Array.isArray(rows) ? rows.length : 0) + ' quiz sessions on record.';
+      }).catch(function () { statsEl.textContent = ''; });
+    } else { statsEl.textContent = 'Sign in to view session history.'; }
+
+    var sep1 = document.createElement('hr'); sep1.className = 'wiki-settings__sep'; sec.appendChild(sep1);
+
+    // Reset history
+    var resetRow = document.createElement('div'); resetRow.className = 'wiki-settings__action-row';
+    var resetDescEl = document.createElement('div');
+    var resetT = document.createElement('p'); resetT.className = 'wiki-settings__field-label'; resetT.textContent = 'Reset study history';
+    var resetS = document.createElement('p'); resetS.className = 'wiki-settings__hint'; resetS.textContent = 'Permanently delete all quiz sessions and responses.';
+    resetDescEl.appendChild(resetT); resetDescEl.appendChild(resetS);
+    var resetBtn = document.createElement('button'); resetBtn.type = 'button'; resetBtn.className = 'wiki-settings__save wiki-settings__save--outline'; resetBtn.textContent = 'Reset History';
+    resetRow.appendChild(resetDescEl); resetRow.appendChild(resetBtn); sec.appendChild(resetRow);
+
+    var resetConfirmRow = document.createElement('div'); resetConfirmRow.className = 'wiki-settings__confirm-row'; resetConfirmRow.style.display = 'none';
+    var rcp = document.createElement('p'); rcp.className = 'wiki-settings__hint'; rcp.textContent = 'Are you sure? This cannot be undone.';
+    var resetConfirmBtn = document.createElement('button'); resetConfirmBtn.type = 'button'; resetConfirmBtn.className = 'wiki-settings__save wiki-settings__save--destructive'; resetConfirmBtn.textContent = 'Yes, Reset History';
+    var resetCancelBtn = document.createElement('button'); resetCancelBtn.type = 'button'; resetCancelBtn.className = 'wiki-settings__save wiki-settings__save--ghost'; resetCancelBtn.textContent = 'Cancel';
+    resetConfirmRow.appendChild(rcp); resetConfirmRow.appendChild(resetConfirmBtn); resetConfirmRow.appendChild(resetCancelBtn);
+    sec.appendChild(resetConfirmRow);
+
+    resetBtn.addEventListener('click', function () { resetConfirmRow.style.display = ''; resetBtn.style.display = 'none'; });
+    resetCancelBtn.addEventListener('click', function () { resetConfirmRow.style.display = 'none'; resetBtn.style.display = ''; });
+    resetConfirmBtn.addEventListener('click', function () {
+      var a2 = auth(); var uid = a2.getUserId ? a2.getUserId() : null;
+      if (!uid) { setFeedback(feedback, 'Not signed in.', true); return; }
+      resetConfirmBtn.disabled = true; resetConfirmBtn.textContent = 'Resetting\u2026';
+      fetch(a2.SUPABASE_URL + '/rest/v1/quiz_sessions?user_id=eq.' + encodeURIComponent(uid), {
+        method: 'DELETE', headers: a2.supabaseHeaders ? a2.supabaseHeaders(true) : {},
+      }).then(function () {
+        resetConfirmRow.style.display = 'none'; resetBtn.style.display = '';
+        resetConfirmBtn.disabled = false; resetConfirmBtn.textContent = 'Yes, Reset History';
+        statsEl.textContent = '0 quiz sessions on record.';
+        setFeedback(feedback, 'Study history cleared.');
+      }).catch(function () {
+        resetConfirmBtn.disabled = false; resetConfirmBtn.textContent = 'Yes, Reset History';
+        setFeedback(feedback, 'Network error.', true);
+      });
+    });
+
+    // Export buttons
+    var sep2 = document.createElement('hr'); sep2.className = 'wiki-settings__sep'; sec.appendChild(sep2);
+    var exportRow = document.createElement('div'); exportRow.className = 'wiki-settings__action-row';
+    var exportDescEl = document.createElement('div');
+    var expT = document.createElement('p'); expT.className = 'wiki-settings__field-label'; expT.textContent = 'Export performance data';
+    var expS = document.createElement('p'); expS.className = 'wiki-settings__hint'; expS.textContent = 'Export formats coming soon.';
+    exportDescEl.appendChild(expT); exportDescEl.appendChild(expS);
+    var exportBtns = document.createElement('div'); exportBtns.className = 'wiki-settings__export-btns';
+    ['Export CSV', 'Export PDF'].forEach(function (label) {
+      var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'wiki-settings__save wiki-settings__save--outline'; btn.textContent = label; btn.disabled = true; btn.title = 'Coming soon';
+      exportBtns.appendChild(btn);
+    });
+    exportRow.appendChild(exportDescEl); exportRow.appendChild(exportBtns); sec.appendChild(exportRow);
+    sec.appendChild(feedback);
+
+    // Delete account
+    var sep3 = document.createElement('hr'); sep3.className = 'wiki-settings__sep'; sec.appendChild(sep3);
+    var dangerZone = document.createElement('div'); dangerZone.className = 'wiki-settings__danger-zone';
+    var dangerT = document.createElement('p'); dangerT.className = 'wiki-settings__danger-title'; dangerT.textContent = 'Danger zone';
+    var deleteActionRow = document.createElement('div'); deleteActionRow.className = 'wiki-settings__action-row';
+    var deleteDescEl = document.createElement('div');
+    var delT = document.createElement('p'); delT.className = 'wiki-settings__field-label'; delT.textContent = 'Delete account';
+    var delS = document.createElement('p'); delS.className = 'wiki-settings__hint'; delS.textContent = 'Permanently delete your account and all data. This cannot be undone.';
+    deleteDescEl.appendChild(delT); deleteDescEl.appendChild(delS);
+    var deleteBtn = document.createElement('button'); deleteBtn.type = 'button'; deleteBtn.className = 'wiki-settings__save wiki-settings__save--destructive'; deleteBtn.textContent = 'Delete Account';
+    deleteActionRow.appendChild(deleteDescEl); deleteActionRow.appendChild(deleteBtn);
+    dangerZone.appendChild(dangerT); dangerZone.appendChild(deleteActionRow);
+    sec.appendChild(dangerZone);
+
+    var deleteConfirmRow = document.createElement('div'); deleteConfirmRow.className = 'wiki-settings__confirm-row'; deleteConfirmRow.style.display = 'none';
+    var gdprP = document.createElement('p'); gdprP.className = 'wiki-settings__hint'; gdprP.innerHTML = '<strong>This action is irreversible.</strong> Deleting your account will permanently remove all your data including quiz history and exam progress. In accordance with GDPR/CCPA, all personal data will be erased.';
+    var delTypingLbl = document.createElement('label'); delTypingLbl.className = 'wiki-settings__label'; delTypingLbl.innerHTML = 'Type <strong>DELETE</strong> to confirm:';
+    var delTypingInp = buildInput('text', 'DELETE'); delTypingInp.style.marginTop = '6px';
+    var delConfirmBtn = document.createElement('button'); delConfirmBtn.type = 'button'; delConfirmBtn.className = 'wiki-settings__save wiki-settings__save--destructive'; delConfirmBtn.textContent = 'Permanently Delete Account'; delConfirmBtn.disabled = true;
+    var delCancelBtn = document.createElement('button'); delCancelBtn.type = 'button'; delCancelBtn.className = 'wiki-settings__save wiki-settings__save--ghost'; delCancelBtn.textContent = 'Cancel';
+    delTypingInp.addEventListener('input', function () { delConfirmBtn.disabled = delTypingInp.value !== 'DELETE'; });
+    deleteConfirmRow.appendChild(gdprP); deleteConfirmRow.appendChild(delTypingLbl); deleteConfirmRow.appendChild(delTypingInp); deleteConfirmRow.appendChild(delConfirmBtn); deleteConfirmRow.appendChild(delCancelBtn);
+    sec.appendChild(deleteConfirmRow);
+
+    deleteBtn.addEventListener('click', function () { deleteConfirmRow.style.display = ''; deleteActionRow.style.display = 'none'; });
+    delCancelBtn.addEventListener('click', function () { deleteConfirmRow.style.display = 'none'; deleteActionRow.style.display = ''; delTypingInp.value = ''; delConfirmBtn.disabled = true; });
+    delConfirmBtn.addEventListener('click', function () {
+      var a2 = auth(); var token = a2.getAccessToken ? a2.getAccessToken() : null;
+      if (!token) { setFeedback(feedback, 'Not signed in.', true); return; }
+      delConfirmBtn.disabled = true; delConfirmBtn.textContent = 'Deleting\u2026';
+      fetch(a2.SUPABASE_URL + '/functions/v1/delete-account', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + token, apikey: a2.SUPABASE_ANON_KEY || '' },
+      }).then(function (r) { return r.json(); }).then(function (d) {
+        if (d.success) {
+          if (a2.signOut) a2.signOut();
+          if (window._spaNavigate) window._spaNavigate('');
+          else window.location.href = '/';
+        } else {
+          delConfirmBtn.disabled = false; delConfirmBtn.textContent = 'Permanently Delete Account';
+          setFeedback(feedback, d.error || 'Failed to delete account.', true);
+        }
+      }).catch(function () {
+        delConfirmBtn.disabled = false; delConfirmBtn.textContent = 'Permanently Delete Account';
+        setFeedback(feedback, 'Network error.', true);
+      });
+    });
+
+    return sec;
+  }
+
+  /* ---- Assemble the full settings page ---- */
+  function buildSettingsPage() {
+    var wrap = document.createElement('div');
+    wrap.className = 'wiki-settings';
+    wrap.id = 'wiki-settings-injected';
+
+    var pageTitle = document.createElement('h1');
+    pageTitle.className = 'wiki-settings__page-title';
+    pageTitle.textContent = 'Settings';
+    wrap.appendChild(pageTitle);
+
+    var body = document.createElement('div');
+    body.className = 'wiki-settings__body';
+
+    var NAV_ITEMS = [
+      { id: 'ws-account',    label: 'Account' },
+      { id: 'ws-profile',    label: 'Profile' },
+      { id: 'ws-exams',      label: 'Credential Path & Exams' },
+      { id: 'ws-appearance', label: 'Appearance' },
+      { id: 'ws-data',       label: 'Progress & Data' },
+    ];
+
+    var nav = document.createElement('nav');
+    nav.className = 'wiki-settings__nav';
+    NAV_ITEMS.forEach(function (item) {
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'wiki-settings__nav-btn'; btn.textContent = item.label;
+      btn.addEventListener('click', function () {
+        var target = wrap.querySelector('#' + item.id);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      nav.appendChild(btn);
+    });
+
+    var content = document.createElement('div');
+    content.className = 'wiki-settings__content';
+
+    var sections = [
+      { id: 'ws-account',    el: buildAccountSection() },
+      { id: 'ws-profile',    el: buildProfileSection() },
+      { id: 'ws-exams',      el: buildExamsSection() },
+      { id: 'ws-appearance', el: buildAppearanceSection() },
+      { id: 'ws-data',       el: buildDataSection() },
+    ];
+    sections.forEach(function (s) { s.el.id = s.id; content.appendChild(s.el); });
+
+    body.appendChild(nav);
+    body.appendChild(content);
+    wrap.appendChild(body);
+    return wrap;
+  }
+
+  /* ---- Inject / remove settings UI ---- */
+  var _injected = false;
+
+  function maybeInjectSettings() {
+    var contentEl = getContentEl();
+    if (!contentEl) return;
+    if (isSettingsPage()) {
+      if (contentEl.querySelector('#wiki-settings-injected')) return;
+      contentEl.innerHTML = '';
+      contentEl.appendChild(buildSettingsPage());
+      _injected = true;
+    } else if (_injected) {
+      var existing = contentEl.querySelector('#wiki-settings-injected');
+      if (existing) existing.remove();
+      _injected = false;
+    }
+  }
+
+  window.addEventListener('popstate', function () { setTimeout(maybeInjectSettings, 150); });
+
+  var _obs = null;
+  function startObserver() {
+    if (_obs) return;
+    var target = document.querySelector('.site-body-center-column, body');
+    if (!target) return;
+    _obs = new MutationObserver(function () { setTimeout(maybeInjectSettings, 100); });
+    _obs.observe(target, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { startObserver(); maybeInjectSettings(); });
+  } else {
+    startObserver(); maybeInjectSettings();
+  }
+  setTimeout(maybeInjectSettings, 500);
 
 })();

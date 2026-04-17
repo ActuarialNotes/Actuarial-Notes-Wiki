@@ -9014,9 +9014,36 @@ var SoundFX = (function () {
     } catch (e) { /* ignore */ }
   }
 
+  /* Exchange a refresh token for a fresh session via Supabase REST.
+     Writes the new session to localStorage on success; clears it on failure.
+     callback(true/false) is optional. */
+  function refreshSession(callback) {
+    var s = readSession();
+    if (!s || !s.refresh_token) { if (callback) callback(false); return; }
+    fetch(SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+      body: JSON.stringify({ refresh_token: s.refresh_token })
+    })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (data && data.access_token) {
+          writeSession(data);
+          if (callback) callback(true);
+        } else {
+          clearSession();
+          renderLoginWidget();
+          if (callback) callback(false);
+        }
+      })
+      .catch(function () { if (callback) callback(false); });
+  }
+
   /* Consume session tokens passed via URL hash from the quiz app.
      The quiz app appends #access_token=...&refresh_token=... to wiki links
-     when the user is already signed in, mirroring Supabase's own OAuth flow. */
+     when the user is already signed in, mirroring Supabase's own OAuth flow.
+     Uses the refresh token grant so the session is always fresh, even if the
+     access token that arrived in the hash has already expired. */
   function consumeSessionFromHash() {
     var hash = window.location.hash;
     if (!hash || hash.indexOf('access_token=') === -1) return;
@@ -9030,18 +9057,13 @@ var SoundFX = (function () {
     if (!accessToken || !refreshToken) return;
     /* Remove tokens from the URL without triggering a page reload */
     history.replaceState(null, '', window.location.pathname + window.location.search);
-    /* Fetch user info from Supabase to build a complete session object */
-    fetch(SUPABASE_URL + '/auth/v1/user', {
-      headers: { 'Authorization': 'Bearer ' + accessToken, 'apikey': SUPABASE_ANON_KEY }
-    })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (user) {
-        if (!user || !user.id) return;
-        writeSession({ access_token: accessToken, refresh_token: refreshToken, token_type: 'bearer', user: user });
-        syncJourneyToSupabase();
-        renderLoginWidget();
-      })
-      .catch(function () { /* ignore */ });
+    /* Seed localStorage with the refresh token so refreshSession() can read it,
+       then exchange it for a full fresh session in one REST call. */
+    writeSession({ access_token: accessToken, refresh_token: refreshToken, token_type: 'bearer' });
+    refreshSession(function (ok) {
+      if (ok) { syncJourneyToSupabase(); renderLoginWidget(); }
+      else { clearSession(); }
+    });
   }
 
   /* Listen for postMessage from quiz popup after successful login */
@@ -9184,8 +9206,25 @@ var SoundFX = (function () {
     obs.observe(document.documentElement, { childList: true, subtree: true });
   }
 
+  /* On page load: if the stored session is expired (or expiring within 5 min),
+     refresh it immediately so the login widget and exam tracker work straight away. */
+  function maybeRefreshOnLoad() {
+    var s = readSession();
+    if (!s) return;
+    var now = Math.floor(Date.now() / 1000);
+    var expiresAt = s.expires_at || 0;
+    if (expiresAt && now < expiresAt - 300) return; /* still valid — nothing to do */
+    refreshSession(function () { renderLoginWidget(); });
+  }
+
   /* Process auth tokens in the URL hash as early as possible */
   consumeSessionFromHash();
+
+  /* Refresh an expired/expiring stored session before the widget renders */
+  maybeRefreshOnLoad();
+
+  /* Keep the session alive in long-running wiki sessions (tokens expire at 60 min) */
+  setInterval(function () { refreshSession(null); }, 50 * 60 * 1000);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', watchForSidebar);

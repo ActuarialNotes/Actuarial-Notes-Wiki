@@ -8,9 +8,10 @@ import Dashboard from '@/pages/Dashboard'
 import Browse from '@/pages/Browse'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
+import { buildWikiUrl } from '@/lib/wikiUrl'
 
 function NavBar() {
-  const { user, signOut } = useAuth()
+  const { user, session, signOut } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
 
@@ -22,7 +23,7 @@ function NavBar() {
         </Link>
         <nav className="flex items-center gap-4">
           <a
-            href="https://wiki.actuarialnotes.com"
+            href={buildWikiUrl('', session?.access_token, session?.refresh_token)}
             target="_blank"
             rel="noreferrer"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"

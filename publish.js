@@ -9300,6 +9300,12 @@ var SoundFX = (function () {
     return path.toLowerCase() === 'settings';
   }
 
+  function getContentEl() {
+    return document.querySelector('.markdown-preview-view') ||
+           document.querySelector('.markdown-rendered') ||
+           document.querySelector('.site-body-center-column');
+  }
+
   /* ---- TRACKS data (minimal copy for the settings page) ---- */
   function getSettingsTracks() { return window._wikiTracks || []; }
 
@@ -9887,10 +9893,18 @@ var SoundFX = (function () {
 
   function maybeInjectSettings() {
     if (isSettingsPage()) {
+      if (document.getElementById('wiki-settings-injected')) return;
+      // Prefer the Settings.md placeholder if it exists; otherwise replace the
+      // content area directly (handles the case where Settings.md is not published).
       var root = document.getElementById('wiki-settings-root');
-      if (!root) return;
-      if (root.querySelector('#wiki-settings-injected')) return;
-      root.appendChild(buildSettingsPage());
+      if (root) {
+        root.appendChild(buildSettingsPage());
+      } else {
+        var contentEl = getContentEl();
+        if (!contentEl) return;
+        contentEl.innerHTML = '';
+        contentEl.appendChild(buildSettingsPage());
+      }
       _injected = true;
     } else if (_injected) {
       var existing = document.getElementById('wiki-settings-injected');

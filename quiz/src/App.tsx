@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom'
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Settings2 } from 'lucide-react'
 import Landing from '@/pages/Landing'
 import Auth from '@/pages/Auth'
 import Quiz from '@/pages/Quiz'
 import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
 import Browse from '@/pages/Browse'
+import Settings from '@/pages/Settings'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
 import { buildWikiUrl } from '@/lib/wikiUrl'
@@ -37,6 +38,13 @@ function NavBar() {
             <>
               <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Dashboard
+              </Link>
+              <Link
+                to="/settings"
+                aria-label="Settings"
+                className="h-9 w-9 flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <Settings2 className="h-4 w-4" />
               </Link>
               <button
                 type="button"
@@ -98,6 +106,7 @@ export default function App() {
             <Route path="/review" element={<Review />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/browse" element={<Browse />} />
+            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

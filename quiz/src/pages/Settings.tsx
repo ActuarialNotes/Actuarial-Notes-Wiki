@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useBlocker } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
@@ -127,7 +127,7 @@ export default function Settings() {
   const { sessions } = useProgress()
   const {
     profile, setProfile,
-    examRows, setExamRows,
+    examRows,
     loadingProfile, loadingExams,
     changePassword, updateProfile, uploadAvatar, saveExamRows,
     resetHistory, deleteAccount,

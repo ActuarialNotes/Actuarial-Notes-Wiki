@@ -58,7 +58,7 @@ export function useSettings() {
       .from('exam_progress')
       .select('exam_id, status, target_date')
       .eq('user_id', user.id)
-      .then(({ data }) => {
+      .then(({ data }: { data: ExamProgressRow[] | null }) => {
         if (data) setExamRows(data as ExamProgressRow[])
         setLoadingExams(false)
       })

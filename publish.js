@@ -6685,6 +6685,7 @@ window._spaNavigate = function (path) {
     container.appendChild(scopeRow);
 
     var activeScope = 'page';
+    var activeSort = 'alpha'; // 'alpha' | 'page'
 
     // Search input row
     var searchRow = document.createElement('div');
@@ -6741,6 +6742,24 @@ window._spaNavigate = function (path) {
     filterRow.appendChild(yearBtn);
 
     container.appendChild(filterRow);
+
+    /* ---- Sort / context row ---- */
+    var SVG_SORT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4.5h12M4.5 8h7M7 11.5h2"/></svg>';
+
+    var sortContextRow = document.createElement('div');
+    sortContextRow.className = 'sidebar-tabs__sort-context-row';
+
+    var contextLabel = document.createElement('span');
+    contextLabel.className = 'sidebar-tabs__context-label';
+    sortContextRow.appendChild(contextLabel);
+
+    var sortBtn = document.createElement('button');
+    sortBtn.className = 'sidebar-tabs__sort-btn';
+    sortBtn.type = 'button';
+    sortBtn.innerHTML = SVG_SORT + ' <span>Alphabetical</span>';
+    sortContextRow.appendChild(sortBtn);
+
+    container.appendChild(sortContextRow);
 
     /* ---- Dropdown helper ---- */
     function closeDropdown() {
@@ -7037,8 +7056,10 @@ window._spaNavigate = function (path) {
         }
       }
 
-      // Sort items alphabetically
-      concepts.sort(function (a, b) { return a.name.localeCompare(b.name); });
+      // Sort items (alpha or keep page-discovery order)
+      if (activeSort === 'alpha') {
+        concepts.sort(function (a, b) { return a.name.localeCompare(b.name); });
+      }
       var subfolders = Object.keys(documents).sort();
       subfolders.forEach(function (sf) {
         documents[sf].sort(function (a, b) { return a.name.localeCompare(b.name); });
@@ -7254,9 +7275,22 @@ window._spaNavigate = function (path) {
         return;
       }
 
+      // Apply alphabetical sort within each category
+      if (activeSort === 'alpha') {
+        CAT_ORDER.forEach(function (c) {
+          grouped[c].sort(function (a, b) { return a.name.localeCompare(b.name); });
+        });
+      }
+
       CAT_ORDER.forEach(function (cat) {
         var items = grouped[cat];
         if (!items.length) return;
+
+        // Concepts in "Entire Wiki" mode → group by exam
+        if (cat === 'concept' && activeScope === 'all') {
+          renderConceptsByExam(items, term);
+          return;
+        }
 
         var group = document.createElement('div');
         group.className = 'sidebar-tabs__search-group';
@@ -7327,16 +7361,137 @@ window._spaNavigate = function (path) {
       renderResults(allItems, term);
     }
 
+    /* ---- Context label helpers ---- */
+    function getCurrentPageName() {
+      var path = decodeURIComponent(window.location.pathname.replace(/^\//, '')).replace(/\+/g, ' ');
+      if (!path) return document.title.split('\u2013')[0].split(' - ')[0].trim() || 'This Page';
+      return path.split('/').pop() || path;
+    }
+
+    function updateContextLabel() {
+      contextLabel.textContent = activeScope === 'all' ? 'Wiki' : getCurrentPageName();
+    }
+
+    /* ---- Exam grouping helpers (for "Entire Wiki" concept search) ---- */
+    function buildConceptExamMap() {
+      var map = {};
+      EXAMS.forEach(function (exam) {
+        var cached = conceptsCache[exam.key];
+        if (!cached) return;
+        cached.forEach(function (name) {
+          var key = name.toLowerCase();
+          if (!map[key]) map[key] = exam.key;
+        });
+      });
+      return map;
+    }
+
+    function renderConceptsByExam(items, term) {
+      var conceptExamMap = buildConceptExamMap();
+      var examGroups = {};
+      var uncategorized = [];
+
+      items.forEach(function (item) {
+        var examKey = conceptExamMap[item.name.toLowerCase()];
+        if (examKey) {
+          if (!examGroups[examKey]) examGroups[examKey] = [];
+          examGroups[examKey].push(item);
+        } else {
+          uncategorized.push(item);
+        }
+      });
+
+      var hasGrouped = Object.keys(examGroups).length > 0;
+
+      // Fallback: no cache data yet — show flat list and trigger async load
+      if (!hasGrouped) {
+        var flatGroup = document.createElement('div');
+        flatGroup.className = 'sidebar-tabs__search-group';
+        var flatLabel = document.createElement('div');
+        flatLabel.className = 'sidebar-tabs__search-group-label';
+        flatLabel.textContent = 'Concepts';
+        flatGroup.appendChild(flatLabel);
+        items.forEach(function (item) {
+          var row = createItemRow(item, 'concept', term);
+          flatGroup.appendChild(row);
+          resultEls.push(row);
+        });
+        resultsEl.appendChild(flatGroup);
+
+        // Trigger async load for all exams; refresh when done
+        EXAMS.forEach(function (exam) {
+          if (!conceptsCache[exam.key]) {
+            getConceptsForExam(exam.key).then(function () {
+              if (activeScope === 'all' && searchInput.value.trim()) {
+                renderResults(getVaultIndex(), searchInput.value.trim().toLowerCase());
+              }
+            });
+          }
+        });
+        return;
+      }
+
+      // Parent "Concepts" label
+      var parentLabel = document.createElement('div');
+      parentLabel.className = 'sidebar-tabs__search-group-label';
+      parentLabel.textContent = 'Concepts';
+      resultsEl.appendChild(parentLabel);
+
+      // One sub-group per exam (in EXAMS order)
+      EXAMS.forEach(function (exam) {
+        var examItems = examGroups[exam.key];
+        if (!examItems || !examItems.length) return;
+        var group = document.createElement('div');
+        group.className = 'sidebar-tabs__search-exam-group';
+        var examLabel = document.createElement('div');
+        examLabel.className = 'sidebar-tabs__search-exam-label';
+        examLabel.textContent = exam.name;
+        group.appendChild(examLabel);
+        examItems.forEach(function (item) {
+          var row = createItemRow(item, 'concept', term);
+          group.appendChild(row);
+          resultEls.push(row);
+        });
+        resultsEl.appendChild(group);
+      });
+
+      // Uncategorized concepts (no exam match)
+      if (uncategorized.length) {
+        var otherGroup = document.createElement('div');
+        otherGroup.className = 'sidebar-tabs__search-exam-group';
+        var otherLabel = document.createElement('div');
+        otherLabel.className = 'sidebar-tabs__search-exam-label';
+        otherLabel.textContent = 'Other';
+        otherGroup.appendChild(otherLabel);
+        uncategorized.forEach(function (item) {
+          var row = createItemRow(item, 'concept', term);
+          otherGroup.appendChild(row);
+          resultEls.push(row);
+        });
+        resultsEl.appendChild(otherGroup);
+      }
+    }
+
     /* ---- Scope toggle ---- */
     function setScope(scope) {
       activeScope = scope;
       scopeExam.classList.toggle('is-active', scope === 'page');
       scopeAll.classList.toggle('is-active', scope === 'all');
+      updateContextLabel();
       refreshView();
     }
 
     scopeExam.addEventListener('click', function () { setScope('page'); });
     scopeAll.addEventListener('click', function () { setScope('all'); });
+
+    sortBtn.addEventListener('click', function () {
+      activeSort = activeSort === 'alpha' ? 'page' : 'alpha';
+      sortBtn.querySelector('span').textContent = activeSort === 'alpha' ? 'Alphabetical' : 'Page Order';
+      sortBtn.classList.toggle('is-active', activeSort === 'page');
+      refreshView();
+    });
+
+    updateContextLabel();
 
     searchInput.addEventListener('input', function () {
       performSearch(searchInput.value);

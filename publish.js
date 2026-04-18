@@ -6449,14 +6449,6 @@ window._spaNavigate = function (path) {
 
     container.appendChild(selectRow);
 
-    // "Edit in Settings" hint — status changes are settings-only
-    var editSettingsLink = document.createElement('button');
-    editSettingsLink.className = 'exams-panel__settings-link';
-    editSettingsLink.type = 'button';
-    editSettingsLink.textContent = 'Edit exam status in Settings →';
-    editSettingsLink.addEventListener('click', function () { sidebarNavigate('Settings'); });
-    container.appendChild(editSettingsLink);
-
     // Progress bar (segmented)
     var bar = document.createElement('div');
     bar.className = 'sidebar-tabs__progress-bar';
@@ -7748,6 +7740,8 @@ window._spaNavigate = function (path) {
   } else {
     setTimeout(observeSidebar, 350);
   }
+
+  window._wikiTracks = TRACKS;
 
 })();
 
@@ -9306,12 +9300,8 @@ var SoundFX = (function () {
     return path.toLowerCase() === 'settings';
   }
 
-  function getContentEl() {
-    return document.querySelector('.markdown-preview-view, .markdown-rendered, .site-body-center-column .markdown-source-view');
-  }
-
   /* ---- TRACKS data (minimal copy for the settings page) ---- */
-  function getSettingsTracks() { return (typeof TRACKS !== 'undefined') ? TRACKS : []; }
+  function getSettingsTracks() { return window._wikiTracks || []; }
 
   /* ---- Preset avatar colours ---- */
   var PRESET_COLORS = ['#2563eb', '#9333ea', '#16a34a', '#ea580c', '#e11d48', '#0d9488'];
@@ -9896,15 +9886,14 @@ var SoundFX = (function () {
   var _injected = false;
 
   function maybeInjectSettings() {
-    var contentEl = getContentEl();
-    if (!contentEl) return;
     if (isSettingsPage()) {
-      if (contentEl.querySelector('#wiki-settings-injected')) return;
-      contentEl.innerHTML = '';
-      contentEl.appendChild(buildSettingsPage());
+      var root = document.getElementById('wiki-settings-root');
+      if (!root) return;
+      if (root.querySelector('#wiki-settings-injected')) return;
+      root.appendChild(buildSettingsPage());
       _injected = true;
     } else if (_injected) {
-      var existing = contentEl.querySelector('#wiki-settings-injected');
+      var existing = document.getElementById('wiki-settings-injected');
       if (existing) existing.remove();
       _injected = false;
     }

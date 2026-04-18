@@ -232,6 +232,16 @@ export default function Settings() {
   const [selectedTrack, setSelectedTrack] = useState('DEFAULT')
   const [localExamMap, setLocalExamMap] = useState<Record<string, { status: ItemStatus; targetDate: string }>>({})
 
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('quiz-journey')
+      if (raw) {
+        const j = JSON.parse(raw)
+        if (j.selectedTrack) setSelectedTrack(j.selectedTrack)
+      }
+    } catch { /* ignore */ }
+  }, [])
+
   // Populate localExamMap whenever examRows or selectedTrack changes
   useEffect(() => {
     const track = TRACKS.find(t => t.key === selectedTrack)

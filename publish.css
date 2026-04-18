@@ -2295,6 +2295,71 @@ body.sidebar-resizing iframe { pointer-events: none; }
   box-shadow: 0 0 0 1.5px var(--brand);
 }
 
+/* ---- Sort / context row ---- */
+.sidebar-tabs__sort-context-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4px 0 4px;
+  padding: 0 2px;
+}
+.sidebar-tabs__context-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sb-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+.sidebar-tabs__sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--sb-border);
+  background: var(--bg);
+  color: var(--sb-dim);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  transition: background .15s, color .15s, border-color .15s;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.sidebar-tabs__sort-btn svg {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+}
+.sidebar-tabs__sort-btn:hover {
+  color: var(--text);
+  border-color: color-mix(in oklab, var(--text) 30%, transparent);
+}
+.sidebar-tabs__sort-btn.is-active {
+  color: var(--text);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 1.5px var(--brand);
+}
+
+/* ---- Exam sub-groups within "Entire Wiki" concept results ---- */
+.sidebar-tabs__search-exam-group {
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+.sidebar-tabs__search-exam-label {
+  padding: 3px 4px 3px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--brand);
+}
+
 /* ---- Filter dropdown ---- */
 .sidebar-tabs__filter-dropdown {
   position: absolute;

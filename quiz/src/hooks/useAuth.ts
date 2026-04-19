@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
+import { clearSharedCookie, writeSharedCookie } from '@/lib/sharedAuthCookie'
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
@@ -12,13 +13,21 @@ export function useAuth() {
     supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null)
       setSession(data.session ?? null)
+      if (data.session?.refresh_token) writeSharedCookie(data.session.refresh_token)
       setLoading(false)
     })
 
-    // Subscribe to future auth changes (login, logout, token refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    // Subscribe to future auth changes (login, logout, token refresh).
+    // Keep the cross-subdomain cookie in sync so the wiki can pick up our
+    // session (and the rotated refresh tokens Supabase issues on refresh).
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null)
       setSession(session ?? null)
+      if (event === 'SIGNED_OUT') {
+        clearSharedCookie()
+      } else if (session?.refresh_token) {
+        writeSharedCookie(session.refresh_token)
+      }
     })
 
     return () => subscription.unsubscribe()

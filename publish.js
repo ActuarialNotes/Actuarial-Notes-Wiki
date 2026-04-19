@@ -8967,6 +8967,45 @@ var SoundFX = (function () {
     return m ? 'sb-' + m[1] + '-auth-token' : null;
   }
 
+  /* Shared refresh-token cookie on .actuarialnotes.com so the quiz subdomain
+     can recover a session the wiki established (and vice versa). JS-readable
+     by design; both clients are vanilla/React and need to touch it. */
+  var SHARED_COOKIE_NAME = 'an_auth_rt';
+
+  function sharedCookieDomainAttr() {
+    try {
+      return /(^|\.)actuarialnotes\.com$/i.test(location.hostname) ? '; Domain=.actuarialnotes.com' : '';
+    } catch (e) { return ''; }
+  }
+
+  function writeSharedCookie(refreshToken) {
+    if (!refreshToken) return;
+    try {
+      document.cookie = SHARED_COOKIE_NAME + '=' + encodeURIComponent(refreshToken) +
+        sharedCookieDomainAttr() + '; Path=/; Max-Age=2592000; Secure; SameSite=Lax';
+    } catch (e) { /* ignore */ }
+  }
+
+  function clearSharedCookie() {
+    try {
+      document.cookie = SHARED_COOKIE_NAME + '=' + sharedCookieDomainAttr() +
+        '; Path=/; Max-Age=0; Secure; SameSite=Lax';
+    } catch (e) { /* ignore */ }
+  }
+
+  function readSharedCookie() {
+    try {
+      var all = document.cookie ? document.cookie.split(';') : [];
+      for (var i = 0; i < all.length; i++) {
+        var kv = all[i].trim().split('=');
+        if (kv[0] === SHARED_COOKIE_NAME && kv.length >= 2) {
+          return decodeURIComponent(kv.slice(1).join('=')) || null;
+        }
+      }
+    } catch (e) { /* ignore */ }
+    return null;
+  }
+
   function readSession() {
     var key = getStorageKey();
     if (!key) return null;
@@ -8977,11 +9016,13 @@ var SoundFX = (function () {
     var key = getStorageKey();
     if (!key || !session) return;
     try { localStorage.setItem(key, JSON.stringify(session)); } catch (e) { /* ignore */ }
+    if (session.refresh_token) writeSharedCookie(session.refresh_token);
   }
 
   function clearSession() {
     var key = getStorageKey();
     if (key) try { localStorage.removeItem(key); } catch (e) { /* ignore */ }
+    clearSharedCookie();
   }
 
   function getAccessToken() {
@@ -9093,11 +9134,12 @@ var SoundFX = (function () {
      callback(true/false) is optional. */
   function refreshSession(callback) {
     var s = readSession();
-    if (!s || !s.refresh_token) { if (callback) callback(false); return; }
+    var refreshToken = (s && s.refresh_token) || readSharedCookie();
+    if (!refreshToken) { if (callback) callback(false); return; }
     fetch(SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
-      body: JSON.stringify({ refresh_token: s.refresh_token })
+      body: JSON.stringify({ refresh_token: refreshToken })
     })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (data) {
@@ -9260,10 +9302,18 @@ var SoundFX = (function () {
   }
 
   /* On page load: if the stored session is expired (or expiring within 5 min),
-     refresh it immediately so the login widget and exam tracker work straight away. */
+     refresh it immediately so the login widget and exam tracker work straight away.
+     Also: if localStorage is empty but the shared cross-subdomain cookie has a
+     refresh token (the user signed in on the quiz app), exchange it so the wiki
+     is signed in without requiring another click. */
   function maybeRefreshOnLoad() {
     var s = readSession();
-    if (!s) return;
+    if (!s) {
+      if (readSharedCookie()) {
+        refreshSession(function (ok) { if (ok) { syncJourneyFromSupabase(); } renderLoginWidget(); });
+      }
+      return;
+    }
     var now = Math.floor(Date.now() / 1000);
     var expiresAt = s.expires_at || 0;
     if (expiresAt && now < expiresAt - 300) return; /* still valid — nothing to do */

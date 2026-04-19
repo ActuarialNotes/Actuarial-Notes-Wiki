@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate, useBlocker } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
 import { useProgress } from '@/hooks/useProgress'
@@ -162,11 +162,6 @@ export default function Settings() {
     return () => window.removeEventListener('beforeunload', handler)
   }, [isAnyDirty])
 
-  // In-app navigation blocker
-  const blocker = useBlocker(({ currentLocation, nextLocation }) =>
-    isAnyDirty && currentLocation.pathname !== nextLocation.pathname
-  )
-
   // ---- Account section state ----
   const [currentPw, setCurrentPw] = useState('')
   const [newPw, setNewPw] = useState('')
@@ -320,20 +315,6 @@ export default function Settings() {
 
   return (
     <>
-      {/* Unsaved changes blocker */}
-      {blocker.state === 'blocked' && (
-        <ConfirmModal
-          open
-          title="Unsaved changes"
-          confirmLabel="Leave anyway"
-          onConfirm={() => blocker.proceed?.()}
-          onCancel={() => blocker.reset?.()}
-          destructive
-        >
-          <p>You have unsaved changes. If you leave now, they will be lost.</p>
-        </ConfirmModal>
-      )}
-
       <ConfirmModal
         open={showResetModal}
         title="Reset study history?"

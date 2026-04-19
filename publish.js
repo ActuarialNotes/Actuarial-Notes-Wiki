@@ -6471,10 +6471,31 @@ window._spaNavigate = function (path) {
       var session = wikiAuth.readSession ? wikiAuth.readSession() : null;
       var at = session && session.access_token;
       var rt = session && session.refresh_token;
-      var url = (at && rt)
-        ? QUIZ_URL + '#access_token=' + encodeURIComponent(at) + '&refresh_token=' + encodeURIComponent(rt) + '&token_type=bearer'
-        : QUIZ_URL;
-      window.open(url, '_blank', 'noopener,noreferrer');
+
+      if (at && rt) {
+        var url = QUIZ_URL + '#access_token=' + encodeURIComponent(at) + '&refresh_token=' + encodeURIComponent(rt) + '&token_type=bearer';
+        window.open(url, '_blank', 'noopener,noreferrer');
+      } else {
+        // Not authenticated — open login popup first, then open quiz with tokens
+        var authUrl = QUIZ_URL + 'auth?popup=1&origin=' + encodeURIComponent(window.location.origin);
+        var popup = window.open(authUrl, 'quiz-auth-popup', 'width=480,height=640');
+        if (!popup) {
+          window.open(QUIZ_URL, '_blank', 'noopener,noreferrer');
+          return;
+        }
+        var poll = setInterval(function () {
+          if (!popup || popup.closed) {
+            clearInterval(poll);
+            var freshSession = wikiAuth.readSession ? wikiAuth.readSession() : null;
+            var fat = freshSession && freshSession.access_token;
+            var frt = freshSession && freshSession.refresh_token;
+            var finalUrl = (fat && frt)
+              ? QUIZ_URL + '#access_token=' + encodeURIComponent(fat) + '&refresh_token=' + encodeURIComponent(frt) + '&token_type=bearer'
+              : QUIZ_URL;
+            window.open(finalUrl, '_blank', 'noopener,noreferrer');
+          }
+        }, 500);
+      }
     });
 
     var quizIcon = document.createElement('span');

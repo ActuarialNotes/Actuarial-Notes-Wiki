@@ -6465,6 +6465,17 @@ window._spaNavigate = function (path) {
     quizLink.target = '_blank';
     quizLink.rel = 'noopener noreferrer';
     quizLink.title = 'Open Practice Quiz app';
+    quizLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      var wikiAuth = window._wikiAuth || {};
+      var session = wikiAuth.readSession ? wikiAuth.readSession() : null;
+      var at = session && session.access_token;
+      var rt = session && session.refresh_token;
+      var url = (at && rt)
+        ? QUIZ_URL + '#access_token=' + encodeURIComponent(at) + '&refresh_token=' + encodeURIComponent(rt) + '&token_type=bearer'
+        : QUIZ_URL;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
 
     var quizIcon = document.createElement('span');
     quizIcon.className = 'sidebar-tabs__quiz-btn__icon';

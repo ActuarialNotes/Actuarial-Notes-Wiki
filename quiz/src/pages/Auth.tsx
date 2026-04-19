@@ -65,7 +65,8 @@ export default function Auth() {
       if (mode === 'signin') {
         const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
         if (authError) throw authError
-        navigate(returnTo, { replace: true })
+        // Let the useEffect above handle the transition: in popup mode it posts
+        // the session to window.opener and closes; otherwise it navigates to returnTo.
       } else {
         const { error: authError } = await supabase.auth.signUp({ email, password })
         if (authError) throw authError
@@ -91,6 +92,26 @@ export default function Auth() {
   }
 
   if (signupSuccess) {
+    if (isPopup) {
+      return (
+        <div className="container max-w-md mx-auto px-4 py-12">
+          <Card>
+            <CardHeader>
+              <CardTitle>Check your email</CardTitle>
+              <CardDescription>
+                We sent a confirmation link to <strong>{email}</strong>. Click it to activate your
+                account, then return here and sign in.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="outline" className="w-full" onClick={() => window.close()}>
+                Close
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )
+    }
     return (
       <div className="container max-w-md mx-auto px-4 py-12">
         <Card>

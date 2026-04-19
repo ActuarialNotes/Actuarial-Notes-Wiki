@@ -8491,6 +8491,8 @@ var SoundFX = (function () {
 
   /* ---- 404 detection ---- */
   function isNotFound() {
+    var path = window.location.pathname.replace(/^\//, '').toLowerCase();
+    if (path === 'settings') return false;
     if (document.querySelector('.' + RC)) return false;
     var renderer = document.querySelector('.markdown-preview-view') || document.querySelector('.publish-renderer');
     if (!renderer) return false;

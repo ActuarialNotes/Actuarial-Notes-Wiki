@@ -1,11 +1,12 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Loader2 } from 'lucide-react'
+import { Loader2, X } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
+import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
@@ -23,12 +24,26 @@ export default function Quiz() {
 
   const filters: QuestionFilter = useMemo(() => {
     const subtopicsParam = searchParams.get('subtopics')
+    const idsParam = searchParams.get('ids')
+    const selection = searchParams.get('selection')
+
+    let ids: string[] | undefined
+    if (idsParam) {
+      ids = idsParam.split(',').filter(Boolean)
+    } else if (selection === 'stored') {
+      try {
+        const raw = sessionStorage.getItem('actuarial_selected_ids')
+        if (raw) ids = JSON.parse(raw) as string[]
+      } catch { /* ignore */ }
+    }
+
     return {
       topic: searchParams.get('topic') ?? undefined,
       subtopics: subtopicsParam ? subtopicsParam.split(',') : undefined,
       difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
       mode,
       count: countParam ? Number(countParam) : undefined,
+      ids,
     }
   }, [searchParams])  // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -65,9 +80,17 @@ export default function Quiz() {
     }
   }, [storeQuestions])
 
+  const [showQuitDialog, setShowQuitDialog] = useState(false)
+
   const currentQuestion = storeQuestions[currentIndex]
   const selectedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
   const isLastQuestion = currentIndex + 1 >= storeQuestions.length
+
+  function handleQuit() {
+    try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
+    resetQuiz()
+    navigate('/')
+  }
 
   // Show explanation inline only in quiz mode when user chose to reveal during
   const showExplanation = status === 'reviewing' && mode === 'quiz' && reveal === 'during'
@@ -133,7 +156,27 @@ export default function Quiz() {
 
   return (
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
+      <div className="flex items-center justify-between gap-3">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowQuitDialog(true)}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <X className="h-4 w-4 mr-1" />
+          Quit {mode === 'mock-exam' ? 'exam' : 'quiz'}
+        </Button>
+      </div>
+
       <ProgressBar current={currentIndex + 1} total={storeQuestions.length} />
+
+      {showQuitDialog && (
+        <QuitQuizDialog
+          mode={mode}
+          onCancel={() => setShowQuitDialog(false)}
+          onConfirm={handleQuit}
+        />
+      )}
 
       <QuestionCard
         question={currentQuestion}

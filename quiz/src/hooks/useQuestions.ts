@@ -11,6 +11,7 @@ export function useQuestions(filters: QuestionFilter) {
   // Flatten array filters to stable primitives for the dependency array
   const tagsKey = filters.tags?.join(',') ?? ''
   const subtopicsKey = filters.subtopics?.join(',') ?? ''
+  const idsKey = filters.ids?.join(',') ?? ''
 
   useEffect(() => {
     let cancelled = false
@@ -39,7 +40,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.topic, filters.subtopic, filters.difficulty, filters.mode, filters.count, tagsKey, subtopicsKey])
+  }, [filters.topic, filters.subtopic, filters.difficulty, filters.mode, filters.count, tagsKey, subtopicsKey, idsKey])
 
   return { questions, loading, error }
 }

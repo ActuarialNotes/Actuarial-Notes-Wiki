@@ -45,7 +45,7 @@ export function QuestionCard({
         {showExplanation && selectedAnswer !== null && (
           <ExplanationPanel
             explanation={question.explanation}
-            wikiLink={question.wiki_link}
+            wikiLinks={question.wiki_link}
             isCorrect={selectedAnswer === question.answer}
           />
         )}

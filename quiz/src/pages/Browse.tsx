@@ -293,12 +293,23 @@ export default function Browse() {
           {/* Subtopics — only shown when a specific exam is selected */}
           {topic && (
             <div className="space-y-1.5">
-              <label className="text-sm font-medium">
-                Topics
-                <span className="ml-2 text-xs font-normal text-muted-foreground">
-                  {selectedSubtopics.length === 0 ? '(all)' : `${selectedSubtopics.length} selected`}
-                </span>
-              </label>
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium">
+                  Topics
+                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                    {selectedSubtopics.length === 0 ? '(all)' : `${selectedSubtopics.length} selected`}
+                  </span>
+                </label>
+                {selectedSubtopics.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSubtopics([])}
+                    className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
               {subtopicsLoading && subtopics.length === 0 ? (
                 <p className="text-xs text-muted-foreground">Loading topics…</p>
               ) : subtopics.length === 0 ? (

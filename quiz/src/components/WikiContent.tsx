@@ -6,6 +6,7 @@ import rehypeKatex from 'rehype-katex'
 import { ChevronRight, Loader2, ExternalLink } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { buildWikiUrl } from '@/lib/wikiUrl'
+import { calloutComponents } from '@/components/MarkdownCallout'
 
 interface WikiContentProps {
   link: string
@@ -89,6 +90,7 @@ export function WikiContent({ link }: WikiContentProps) {
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeKatex]}
+                components={calloutComponents}
               >
                 {content}
               </ReactMarkdown>

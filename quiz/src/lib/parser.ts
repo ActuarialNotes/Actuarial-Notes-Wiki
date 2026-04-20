@@ -122,10 +122,16 @@ export function parseQuestion(raw: string): Question | null {
 }
 
 export function parseAllQuestions(rawFiles: string[]): Question[] {
-  return rawFiles.flatMap(raw => {
+  const seen = new Set<string>()
+  const result: Question[] = []
+  for (const raw of rawFiles) {
     const q = parseQuestion(raw)
-    return q ? [q] : []
-  })
+    if (!q) continue
+    if (seen.has(q.id)) continue
+    seen.add(q.id)
+    result.push(q)
+  }
+  return result
 }
 
 export function filterQuestions(questions: Question[], filters: QuestionFilter): Question[] {

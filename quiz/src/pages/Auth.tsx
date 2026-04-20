@@ -38,9 +38,13 @@ export default function Auth() {
     if (loading) return
 
     if (isPopup && user && window.opener) {
+      if (!popupOrigin) {
+        // No trusted origin provided — refuse to broadcast session data.
+        window.close()
+        return
+      }
       supabase.auth.getSession().then(({ data }) => {
-        const target = popupOrigin ? decodeURIComponent(popupOrigin) : '*'
-        window.opener.postMessage({ type: 'SUPABASE_SESSION', session: data.session }, target)
+        window.opener.postMessage({ type: 'SUPABASE_SESSION', session: data.session }, decodeURIComponent(popupOrigin))
         window.close()
       })
       return
@@ -203,7 +207,7 @@ export default function Auth() {
                 onChange={e => setPassword(e.target.value)}
                 required
                 autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
-                minLength={6}
+                minLength={8}
               />
             </div>
 
@@ -217,7 +221,7 @@ export default function Auth() {
                   onChange={e => setConfirmPassword(e.target.value)}
                   required
                   autoComplete="new-password"
-                  minLength={6}
+                  minLength={8}
                 />
               </div>
             )}

@@ -1,6 +1,10 @@
-// Shared refresh-token cookie used for cross-subdomain SSO between the wiki
-// (wiki.actuarialnotes.com) and the quiz app (quiz.actuarialnotes.com). The
-// wiki's publish.js maintains the same cookie with the same attributes.
+// Shared refresh-token cookie for cross-subdomain SSO between wiki.actuarialnotes.com
+// and quiz.actuarialnotes.com. publish.js on the wiki mirrors this cookie.
+//
+// HttpOnly is intentionally NOT set: publish.js is a static client-side bundle with
+// no server proxy, so it must read the cookie via document.cookie to hydrate the
+// Supabase session. The trade-off is XSS exposure of the refresh token; mitigate by
+// keeping the wiki's Content-Security-Policy tight and auditing third-party scripts.
 
 const COOKIE_NAME = 'an_auth_rt'
 

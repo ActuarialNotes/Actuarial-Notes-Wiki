@@ -4,9 +4,10 @@ Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'https://quiz.actuarialnotes.com',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Authorization, Content-Type, apikey',
+        'Vary': 'Origin',
       },
     })
   }
@@ -36,6 +37,6 @@ Deno.serve(async (req: Request) => {
 
   return new Response(JSON.stringify({ success: true }), {
     status: 200,
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'https://quiz.actuarialnotes.com', 'Vary': 'Origin' },
   })
 })

@@ -12,7 +12,7 @@ import { useTheme } from '@/hooks/useTheme'
 import { buildWikiUrl } from '@/lib/wikiUrl'
 
 function NavBar() {
-  const { user, session, signOut } = useAuth()
+  const { user, signOut } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
 
@@ -24,7 +24,7 @@ function NavBar() {
         </Link>
         <nav className="flex items-center gap-4">
           <a
-            href={buildWikiUrl('', session?.access_token, session?.refresh_token)}
+            href={buildWikiUrl('')}
             target="_blank"
             rel="noreferrer"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"

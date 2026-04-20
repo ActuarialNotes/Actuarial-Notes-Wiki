@@ -36,30 +36,11 @@ async function hydrateFromSharedCookie() {
 }
 
 async function bootstrap() {
-  const hash = window.location.hash
-  let consumedHashTokens = false
-  if (hash && hash.includes('access_token=')) {
-    const params = new URLSearchParams(hash.slice(1))
-    const accessToken = params.get('access_token')
-    const refreshToken = params.get('refresh_token')
-    if (accessToken && refreshToken) {
-      try {
-        await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
-        consumedHashTokens = true
-      } catch {
-        // ignore — app will handle unauthenticated state
-      }
-      history.replaceState(null, '', window.location.pathname + window.location.search)
-    }
-  }
-
-  // If no hash tokens were consumed and the SDK has no existing session,
-  // try the shared cross-subdomain cookie set by the wiki.
-  if (!consumedHashTokens) {
-    const { data } = await supabase.auth.getSession()
-    if (!data.session) {
-      await hydrateFromSharedCookie()
-    }
+  // getSession() automatically handles OAuth callbacks (PKCE code exchange /
+  // implicit-flow hash tokens) and cleans up the URL before we render.
+  const { data } = await supabase.auth.getSession()
+  if (!data.session) {
+    await hydrateFromSharedCookie()
   }
 
   const rootElement = document.getElementById('root')

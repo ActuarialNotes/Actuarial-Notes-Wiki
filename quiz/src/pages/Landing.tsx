@@ -60,7 +60,7 @@ export default function Landing() {
   const otherExams = EXAMS.filter(e => !inProgressExams.includes(e))
   const hasInProgress = inProgressExams.length > 0
 
-  const [topic, setTopic] = useState(EXAMS[0].value)
+  const [topic, setTopic] = useState('')
   const [mode, setMode] = useState<QuizMode>('quiz')
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const [showOther, setShowOther] = useState(!hasInProgress)
@@ -113,6 +113,7 @@ export default function Landing() {
   const subtopics = EXAM_SUBTOPICS[topic] ?? []
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
+  const hasTopic = topic !== ''
 
   return (
     <div className="container max-w-2xl mx-auto px-4 py-12 space-y-8">
@@ -131,70 +132,77 @@ export default function Landing() {
       <Card>
         <CardHeader>
           <CardTitle>Configure Your Session</CardTitle>
-          <CardDescription>Choose an exam and mode, then start</CardDescription>
+          <CardDescription>
+            {hasTopic ? 'Choose a mode and options, then start' : 'Choose an exam to begin'}
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Exam selector */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Exam</label>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-              {(hasInProgress ? inProgressExams : EXAMS).map(exam => (
-                <button
-                  key={exam.value}
-                  type="button"
-                  onClick={() => setTopic(exam.value)}
-                  className={`px-4 py-3 rounded-lg border text-left text-sm transition-colors ${
-                    topic === exam.value
-                      ? 'border-primary bg-primary/5 text-primary font-medium'
-                      : 'border-input hover:bg-accent'
-                  }`}
-                >
-                  {exam.label}
-                </button>
-              ))}
-            </div>
-
-            {hasInProgress && otherExams.length > 0 && (
-              <div className="mt-1">
-                <button
-                  type="button"
-                  onClick={() => setShowOther(v => !v)}
-                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <svg
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={`w-3 h-3 transition-transform ${showOther ? 'rotate-90' : ''}`}
+          {!hasTopic && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Exam</label>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {(hasInProgress ? inProgressExams : EXAMS).map(exam => (
+                  <button
+                    key={exam.value}
+                    type="button"
+                    onClick={() => setTopic(exam.value)}
+                    className="px-4 py-3 rounded-lg border border-input text-left text-sm transition-colors hover:bg-accent"
                   >
-                    <polyline points="6 4 12 10 6 16" />
-                  </svg>
-                  Other exams
-                </button>
-                {showOther && (
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-2">
-                    {otherExams.map(exam => (
-                      <button
-                        key={exam.value}
-                        type="button"
-                        onClick={() => setTopic(exam.value)}
-                        className={`px-4 py-3 rounded-lg border text-left text-sm transition-colors ${
-                          topic === exam.value
-                            ? 'border-primary bg-primary/5 text-primary font-medium'
-                            : 'border-input hover:bg-accent'
-                        }`}
-                      >
-                        {exam.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                    {exam.label}
+                  </button>
+                ))}
               </div>
-            )}
-          </div>
+
+              {hasInProgress && otherExams.length > 0 && (
+                <div className="mt-1">
+                  <button
+                    type="button"
+                    onClick={() => setShowOther(v => !v)}
+                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className={`w-3 h-3 transition-transform ${showOther ? 'rotate-90' : ''}`}
+                    >
+                      <polyline points="6 4 12 10 6 16" />
+                    </svg>
+                    Other exams
+                  </button>
+                  {showOther && (
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-2">
+                      {otherExams.map(exam => (
+                        <button
+                          key={exam.value}
+                          type="button"
+                          onClick={() => setTopic(exam.value)}
+                          className="px-4 py-3 rounded-lg border border-input text-left text-sm transition-colors hover:bg-accent"
+                        >
+                          {exam.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {hasTopic && (
+            <>
+              <button
+                type="button"
+                onClick={() => setTopic('')}
+                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <span aria-hidden="true">←</span>
+                <span className="text-foreground font-medium">{examLabel}</span>
+                <span>· change</span>
+              </button>
 
           {/* Mode selector */}
           <div className="space-y-2">
@@ -365,9 +373,11 @@ export default function Landing() {
             </>
           )}
 
-          <Button onClick={handleStart} className="w-full" size="lg">
-            Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
-          </Button>
+              <Button onClick={handleStart} className="w-full" size="lg">
+                Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+              </Button>
+            </>
+          )}
         </CardContent>
       </Card>
 

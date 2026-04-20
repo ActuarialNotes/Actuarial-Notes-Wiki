@@ -1692,9 +1692,15 @@ input[type="search"]:focus, .search-input:focus {
   font-family: var(--font-sans);
   z-index: 10;
   overflow: hidden;
-  height: 100vh;
-  height: 100dvh;
+  /* Inherit height from the parent column rather than pinning to 100vh/100dvh.
+     On mobile, Obsidian Publish opens the sidebar shorter than the viewport
+     (a top navbar consumes some height), and the old 100vh would overflow the
+     drawer and push the utility footer off-screen. */
+  height: 100%;
+  min-height: 0;
 }
+
+.site-body-left-column { min-height: 100%; }
 
 /* ---- Sidebar resize handle (desktop drag-to-resize) ---- */
 .sidebar-resize-handle {
@@ -1721,6 +1727,20 @@ body.sidebar-resizing iframe { pointer-events: none; }
 @media (max-width: 768px) {
   .sidebar-resize-handle { display: none; }
   .sidebar-tabs { height: 100%; }
+  /* The flex column is: tab bar (auto) + panel (flex:1) + utility (auto).
+     Force the panel to be the only growable region and pin the utility
+     footer with sticky bottom so it stays visible regardless of how the
+     mobile drawer sizes the sidebar. */
+  .sidebar-tabs__panel { flex: 1 1 0; min-height: 0; }
+  .sidebar-tabs__utility {
+    position: sticky;
+    bottom: 0;
+    z-index: 11;
+  }
+  /* Touch target bumps */
+  .sidebar-login__user-btn,
+  .sidebar-login__signin { min-height: 48px; }
+  .sidebar-login__menu-item { min-height: 44px; font-size: 0.95rem; }
 }
 
 /* ---- Tab bar (GitHub-style) ---- */
@@ -1822,16 +1842,30 @@ body.sidebar-resizing iframe { pointer-events: none; }
   padding: 10px;
 }
 
-/* ---- Utility bar (bottom) ---- */
+/* ---- Utility bar (bottom) ----
+   Two-row layout: user-menu trigger on top, theme/sound icons beneath.
+   Roughly twice the height of the previous single-row utility strip. */
 .sidebar-tabs__utility {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--sb-border);
+  flex-shrink: 0;
+  background: var(--bg);
+}
+
+.sidebar-tabs__utility-user {
+  display: flex;
+  position: relative;   /* anchor for .sidebar-login__menu */
+}
+
+.sidebar-tabs__utility-icons {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
-  padding: 6px 10px;
-  border-top: 1px solid var(--sb-border);
-  flex-shrink: 0;
-  background: var(--bg);
 }
 
 .sidebar-tabs__utility-btn {
@@ -1862,22 +1896,160 @@ body.sidebar-resizing iframe { pointer-events: none; }
 
 /* ---- Sidebar login widget ---- */
 
-/* Wrapper anchored at left edge of the utility bar */
+/* Wrapper occupies the full width of the user row */
 .sidebar-login {
   display: flex;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+/* Signed-in user-menu trigger button */
+.sidebar-login__user-btn {
+  display: flex;
   align-items: center;
-  margin-right: auto;   /* push theme/sound buttons to the right */
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid var(--sb-border);
+  background: var(--bg-elev, var(--bg));
+  color: var(--text);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background .12s ease, border-color .12s ease;
+}
+.sidebar-login__user-btn:hover {
+  background: var(--sb-hover);
+  border-color: color-mix(in oklab, var(--brand) 35%, var(--sb-border));
+}
+.sidebar-login__user-btn[aria-expanded="true"] {
+  border-color: var(--brand);
+  background: var(--sb-hover);
+}
+
+.sidebar-login__avatar {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.sidebar-login__email {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-login__chevron {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-dim);
+  transition: transform .12s ease;
+}
+.sidebar-login__chevron svg {
+  width: 14px;
+  height: 14px;
+}
+.sidebar-login__user-btn[aria-expanded="true"] .sidebar-login__chevron {
+  transform: rotate(180deg);
+}
+
+/* Dropdown menu (anchored to .sidebar-tabs__utility-user) */
+.sidebar-login__menu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elev, var(--bg));
+  border: 1px solid var(--sb-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .18), 0 2px 6px rgba(0, 0, 0, .08);
+  padding: 4px;
+  z-index: 30;
+}
+
+.sidebar-login__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: none;
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease;
+}
+.sidebar-login__menu-item:hover {
+  background: var(--sb-hover);
+}
+.sidebar-login__menu-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+.sidebar-login__menu-item-icon svg {
+  width: 16px;
+  height: 16px;
+}
+.sidebar-login__menu-item:hover .sidebar-login__menu-item-icon {
+  color: var(--text);
+}
+.sidebar-login__menu-item-label {
+  flex: 1;
   min-width: 0;
 }
 
-/* "Sign in" button */
+/* "Sign in" button — matches user-button sizing for visual consistency */
 .sidebar-login__signin {
-  width: auto !important;
-  padding: 0 8px !important;
-  gap: 5px;
-  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 44px;
+  padding: 6px 12px !important;
+  border: 1px solid var(--sb-border);
+  background: var(--bg-elev, var(--bg));
+  color: var(--text);
+  border-radius: 8px !important;
+  font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.01em;
+  cursor: pointer;
+}
+.sidebar-login__signin:hover {
+  background: var(--sb-hover);
+  border-color: color-mix(in oklab, var(--brand) 35%, var(--sb-border));
 }
 .sidebar-login__signin:disabled {
   opacity: 0.55;
@@ -1889,30 +2061,11 @@ body.sidebar-resizing iframe { pointer-events: none; }
   flex-shrink: 0;
 }
 .sidebar-login__icon svg {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
 }
 .sidebar-login__label {
   white-space: nowrap;
-}
-
-/* Logged-in chip: email + sign-out button */
-.sidebar-login__chip {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
-}
-.sidebar-login__email {
-  font-size: 0.72rem;
-  color: var(--text-dim);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 130px;
-}
-.sidebar-login__signout {
-  flex-shrink: 0;
 }
 
 /* ---- Shared panel components ---- */

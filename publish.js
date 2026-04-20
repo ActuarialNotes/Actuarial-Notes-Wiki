@@ -6191,6 +6191,9 @@ window._spaNavigate = function (path) {
     a.click();
     parent.removeChild(a);
   }
+  // Expose so other IIFEs (e.g. the auth widget's user menu) can navigate
+  // through the same path that auto-closes the mobile sidebar.
+  window.sidebarNavigate = sidebarNavigate;
 
   /* ============================================================
      DOM REFERENCES & BUILD
@@ -6274,8 +6277,6 @@ window._spaNavigate = function (path) {
       themeBtn.title = isLight ? 'Switch to Dark' : 'Switch to Light';
       try { localStorage.setItem('actuarial-notes-theme', isLight ? 'light' : 'dark'); } catch (e) {}
     });
-    utilBar.appendChild(themeBtn);
-
     // Sound mute toggle
     var muteBtn = document.createElement('button');
     muteBtn.className = 'sidebar-tabs__utility-btn';
@@ -6291,17 +6292,19 @@ window._spaNavigate = function (path) {
         muteBtn.innerHTML = isMuted ? SVG_SPEAKER_OFF : SVG_SPEAKER_ON;
       }
     });
-    utilBar.appendChild(muteBtn);
 
-    // Settings navigation button
-    var SVG_GEAR = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42"/></svg>';
-    var settingsUtilBtn = document.createElement('button');
-    settingsUtilBtn.className = 'sidebar-tabs__utility-btn';
-    settingsUtilBtn.type = 'button';
-    settingsUtilBtn.title = 'Settings';
-    settingsUtilBtn.innerHTML = SVG_GEAR;
-    settingsUtilBtn.addEventListener('click', function () { sidebarNavigate('Settings'); });
-    utilBar.appendChild(settingsUtilBtn);
+    // Two-row footer: user menu on top, theme/sound icons beneath.
+    // The login widget gets injected into .sidebar-tabs__utility-user later.
+    var userRow = document.createElement('div');
+    userRow.className = 'sidebar-tabs__utility-user';
+
+    var iconRow = document.createElement('div');
+    iconRow.className = 'sidebar-tabs__utility-icons';
+    iconRow.appendChild(themeBtn);
+    iconRow.appendChild(muteBtn);
+
+    utilBar.appendChild(userRow);
+    utilBar.appendChild(iconRow);
 
     containerEl.appendChild(bar);
     containerEl.appendChild(panelEl);
@@ -8956,6 +8959,9 @@ var SoundFX = (function () {
   /* ---- SVG icons ---- */
   var SVG_USER = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>';
   var SVG_SIGNOUT = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4"/><polyline points="13 14 17 10 13 6"/><line x1="17" y1="10" x2="7" y2="10"/></svg>';
+  // Matches lucide-react `Settings2` used in the quiz app (quiz/src/App.tsx).
+  var SVG_SETTINGS2 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>';
+  var SVG_CHEVRON_UP = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 7 15 12"/></svg>';
 
   /* ------------------------------------------------------------------ */
   /* Auth helpers — direct Supabase REST, no SDK needed                   */
@@ -9199,35 +9205,129 @@ var SoundFX = (function () {
   /* ------------------------------------------------------------------ */
 
   var loginWrapperEl = null;
+  var openMenuCleanup = null;
+
+  function closeUserMenu() {
+    if (typeof openMenuCleanup === 'function') {
+      openMenuCleanup();
+      openMenuCleanup = null;
+    }
+  }
+
+  function openUserMenu(triggerBtn) {
+    closeUserMenu();
+
+    var menu = document.createElement('div');
+    menu.className = 'sidebar-login__menu';
+    menu.setAttribute('role', 'menu');
+
+    function makeItem(label, iconSvg, onClick) {
+      var item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'sidebar-login__menu-item';
+      item.setAttribute('role', 'menuitem');
+
+      var icon = document.createElement('span');
+      icon.className = 'sidebar-login__menu-item-icon';
+      icon.innerHTML = iconSvg;
+
+      var text = document.createElement('span');
+      text.className = 'sidebar-login__menu-item-label';
+      text.textContent = label;
+
+      item.appendChild(icon);
+      item.appendChild(text);
+      item.addEventListener('click', function (e) {
+        e.stopPropagation();
+        closeUserMenu();
+        onClick();
+      });
+      return item;
+    }
+
+    menu.appendChild(makeItem('Settings', SVG_SETTINGS2, function () {
+      if (typeof window.sidebarNavigate === 'function') {
+        window.sidebarNavigate('Settings');
+      } else if (typeof window._spaNavigate === 'function') {
+        window._spaNavigate('Settings');
+      }
+    }));
+    menu.appendChild(makeItem('Logout', SVG_SIGNOUT, function () {
+      signOut();
+      renderLoginWidget();
+    }));
+
+    // Anchor menu to the login wrapper so absolute positioning is relative
+    // to the footer slot (left/right insets in CSS).
+    loginWrapperEl.appendChild(menu);
+    triggerBtn.setAttribute('aria-expanded', 'true');
+
+    function onDocClick(e) {
+      if (menu.contains(e.target) || triggerBtn.contains(e.target)) return;
+      closeUserMenu();
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') closeUserMenu();
+    }
+
+    // Defer attaching the document listener so the click that opened the menu
+    // doesn't immediately close it.
+    setTimeout(function () {
+      document.addEventListener('click', onDocClick, true);
+      document.addEventListener('keydown', onKey, true);
+    }, 0);
+
+    openMenuCleanup = function () {
+      document.removeEventListener('click', onDocClick, true);
+      document.removeEventListener('keydown', onKey, true);
+      if (menu.parentNode) menu.parentNode.removeChild(menu);
+      triggerBtn.setAttribute('aria-expanded', 'false');
+    };
+  }
 
   function renderLoginWidget() {
     if (!loginWrapperEl) return;
+    closeUserMenu();
     loginWrapperEl.innerHTML = '';
 
     var email = getUserEmail();
 
     if (email) {
-      var chip = document.createElement('div');
-      chip.className = 'sidebar-login__chip';
+      var userBtn = document.createElement('button');
+      userBtn.type = 'button';
+      userBtn.className = 'sidebar-login__user-btn';
+      userBtn.setAttribute('aria-haspopup', 'menu');
+      userBtn.setAttribute('aria-expanded', 'false');
+      userBtn.title = email;
+
+      var avatar = document.createElement('span');
+      avatar.className = 'sidebar-login__avatar';
+      avatar.textContent = email.charAt(0).toUpperCase();
+      avatar.setAttribute('aria-hidden', 'true');
 
       var emailSpan = document.createElement('span');
       emailSpan.className = 'sidebar-login__email';
-      emailSpan.textContent = email.length > 22 ? email.substring(0, 20) + '\u2026' : email;
-      emailSpan.title = email;
+      emailSpan.textContent = email.length > 28 ? email.substring(0, 26) + '\u2026' : email;
 
-      var signOutBtn = document.createElement('button');
-      signOutBtn.type = 'button';
-      signOutBtn.className = 'sidebar-login__signout sidebar-tabs__utility-btn';
-      signOutBtn.title = 'Sign out';
-      signOutBtn.innerHTML = SVG_SIGNOUT;
-      signOutBtn.addEventListener('click', function () {
-        signOut();
-        renderLoginWidget();
+      var chevron = document.createElement('span');
+      chevron.className = 'sidebar-login__chevron';
+      chevron.innerHTML = SVG_CHEVRON_UP;
+      chevron.setAttribute('aria-hidden', 'true');
+
+      userBtn.appendChild(avatar);
+      userBtn.appendChild(emailSpan);
+      userBtn.appendChild(chevron);
+
+      userBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (userBtn.getAttribute('aria-expanded') === 'true') {
+          closeUserMenu();
+        } else {
+          openUserMenu(userBtn);
+        }
       });
 
-      chip.appendChild(emailSpan);
-      chip.appendChild(signOutBtn);
-      loginWrapperEl.appendChild(chip);
+      loginWrapperEl.appendChild(userBtn);
     } else {
       var signInBtn = document.createElement('button');
       signInBtn.type = 'button';
@@ -9270,14 +9370,14 @@ var SoundFX = (function () {
   /* ------------------------------------------------------------------ */
 
   function injectLoginWidget() {
-    var utilBar = document.querySelector('.sidebar-tabs__utility');
-    if (!utilBar) return;
-    if (utilBar.querySelector('.sidebar-login')) return;
+    var userRow = document.querySelector('.sidebar-tabs__utility-user');
+    if (!userRow) return;
+    if (userRow.querySelector('.sidebar-login')) return;
     if (!SUPABASE_URL || !QUIZ_APP_URL) return;
 
     loginWrapperEl = document.createElement('div');
     loginWrapperEl.className = 'sidebar-login';
-    utilBar.insertBefore(loginWrapperEl, utilBar.firstChild);
+    userRow.appendChild(loginWrapperEl);
     renderLoginWidget();
   }
 
@@ -9287,13 +9387,13 @@ var SoundFX = (function () {
 
   function watchForSidebar() {
     /* Already present — inject immediately */
-    if (document.querySelector('.sidebar-tabs__utility')) {
+    if (document.querySelector('.sidebar-tabs__utility-user')) {
       injectLoginWidget();
       return;
     }
     /* Watch the whole document for it to appear (handles slow SPA init) */
     var obs = new MutationObserver(function () {
-      if (document.querySelector('.sidebar-tabs__utility')) {
+      if (document.querySelector('.sidebar-tabs__utility-user')) {
         obs.disconnect();
         injectLoginWidget();
       }

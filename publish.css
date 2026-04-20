@@ -2837,7 +2837,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
   background: var(--sb-hover);
 }
 
-/* Status button */
+/* Status button — click to cycle Not Started → In Progress → Passed → Not Started */
 .exams-panel__status {
   width: 20px;
   height: 20px;
@@ -2848,8 +2848,16 @@ body.sidebar-resizing iframe { pointer-events: none; }
   border: none;
   background: none;
   padding: 0;
-  cursor: default;
+  cursor: pointer;
   border-radius: 50%;
+  transition: transform .08s ease, opacity .12s ease;
+}
+.exams-panel__status:hover {
+  transform: scale(1.12);
+}
+.exams-panel__status:focus-visible {
+  outline: 2px solid var(--brand, #2563eb);
+  outline-offset: 2px;
 }
 .exams-panel__status svg {
   width: 16px;
@@ -7150,6 +7158,49 @@ body.high-contrast .dl-dropdown__single {
   width: 120px;
   flex-shrink: 0;
   color: var(--tx-1, var(--text-normal));
+}
+
+/* Circle status button — click to cycle Not Started → In Progress → Passed → Not Started */
+.wiki-settings__status-btn {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  color: var(--text-dim);
+  opacity: .55;
+  transition: opacity .12s ease, color .12s ease, transform .08s ease;
+}
+.wiki-settings__status-btn:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
+.wiki-settings__status-btn:focus-visible {
+  outline: 2px solid var(--brand, #2563eb);
+  outline-offset: 2px;
+}
+.wiki-settings__status-btn svg {
+  width: 18px;
+  height: 18px;
+}
+.wiki-settings__exam-row[data-status="in_progress"] .wiki-settings__status-btn {
+  color: var(--warning, #d97706);
+  opacity: 1;
+}
+.wiki-settings__exam-row[data-status="completed"] .wiki-settings__status-btn {
+  color: var(--success, #16a34a);
+  opacity: 1;
+}
+.wiki-settings__exam-row[data-status="completed"] .wiki-settings__exam-name {
+  color: var(--tx-2, var(--text-muted));
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
 }
 
 .wiki-settings__date-label {

@@ -5058,7 +5058,7 @@ window._spaNavigate = function (path) {
   ];
 
   /* ---- Journey state management ---- */
-  var journeyState = { selectedTrack: 'DEFAULT', progress: {} };
+  var journeyState = { selectedTrack: 'DEFAULT', progress: {}, examDates: {} };
 
   function loadJourneyState() {
     try {
@@ -5067,6 +5067,7 @@ window._spaNavigate = function (path) {
         var parsed = JSON.parse(raw);
         if (parsed && parsed.selectedTrack) journeyState.selectedTrack = parsed.selectedTrack;
         if (parsed && parsed.progress) journeyState.progress = parsed.progress;
+        if (parsed && parsed.examDates) journeyState.examDates = parsed.examDates;
       }
     } catch (e) { /* ignore */ }
   }
@@ -5080,9 +5081,18 @@ window._spaNavigate = function (path) {
     return journeyState.progress[id] || 'not_started';
   }
 
+  function getTargetDate(id) {
+    return (journeyState.examDates && journeyState.examDates[id]) || '';
+  }
+
   function cycleStatus(id) {
     var current = getStatus(id);
-    journeyState.progress[id] = STATUS_CYCLE[current];
+    var next = STATUS_CYCLE[current];
+    journeyState.progress[id] = next;
+    // Target date only applies while in_progress — drop it when cycling off.
+    if (next !== 'in_progress' && journeyState.examDates) {
+      delete journeyState.examDates[id];
+    }
     saveJourneyState();
   }
 
@@ -6573,7 +6583,32 @@ window._spaNavigate = function (path) {
 
           var statusBtn = document.createElement('span');
           statusBtn.className = 'exams-panel__status';
+          statusBtn.setAttribute('role', 'button');
+          statusBtn.setAttribute('tabindex', '0');
+          statusBtn.setAttribute('aria-label', 'Cycle status for ' + item.name);
           statusBtn.innerHTML = STATUS_ICONS[getStatus(item.id)];
+
+          (function (itemId, rowEl, btnEl) {
+            function handleCycle(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              cycleStatus(itemId);
+              var next = getStatus(itemId);
+              rowEl.dataset.status = next;
+              btnEl.innerHTML = STATUS_ICONS[next];
+              updateExamsProgress();
+              var wikiAuth = window._wikiAuth || {};
+              if (typeof wikiAuth.upsertExamProgress === 'function') {
+                // Preserve any target date the user set via the Settings page.
+                wikiAuth.upsertExamProgress(itemId, next, getTargetDate(itemId))
+                  .catch(function () { /* best-effort from sidebar */ });
+              }
+            }
+            btnEl.addEventListener('click', handleCycle);
+            btnEl.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') handleCycle(e);
+            });
+          })(item.id, row, statusBtn);
 
           var nameEl;
           if (item.path) {
@@ -8953,8 +8988,25 @@ var SoundFX = (function () {
   var SUPABASE_ANON_KEY = 'sb_publishable_SWM6SylAvTmRZiMjSuJmWg_kqoSTf1C';   // Supabase anon/public key
   var QUIZ_APP_URL      = 'https://quiz.actuarialnotes.com';   // e.g. 'https://quiz.actuarialnotes.com'
 
-  /* ---- Wiki exam ID → Supabase exam_id mapping ---- */
-  var EXAM_IDS = ['P', 'FM'];   // must match publish.js journey keys
+  /* ---- All known wiki exam IDs — any exam in any track should sync to Supabase ---- */
+  /* (The TRACKS array lives in the SIDEBAR TABS IIFE; use a simple hard-coded
+     union here so this IIFE stays self-contained. Keep in sync with publish.js TRACKS.) */
+  var EXAM_IDS = [
+    'P', 'FM',
+    'VEE-MS', 'VEE-ECON', 'VEE-AF',
+    'PAF', 'FAM', 'SRM', 'ASF', 'PA', 'ALTAM', 'ASTAM', 'ATPA', 'FAP', 'APC',
+    'MAS-I', 'MAS-II',
+    'CAS-IA', 'CAS-DA', 'CAS-RM', 'CAS-5', 'CAS-PCPA', 'CAS-6', 'CAS-APC',
+    'CAS-7', 'CAS-8', 'CAS-9',
+    'FSA-DMAC', 'FSA-FAC',
+    'FSA-CFE101', 'FSA-CFE201',
+    'FSA-GH101', 'FSA-GH201', 'FSA-GH301',
+    'FSA-GI101', 'FSA-GI201', 'FSA-GI301', 'FSA-GI302',
+    'FSA-ILA101', 'FSA-ILA201',
+    'FSA-INV101', 'FSA-INV201',
+    'FSA-RET101', 'FSA-RET201', 'FSA-RET301',
+    'FSA-CP311', 'FSA-CP312', 'FSA-CP321', 'FSA-CP341', 'FSA-CP351'
+  ];
 
   /* ---- SVG icons ---- */
   var SVG_USER = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3.5"/><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>';
@@ -9070,22 +9122,26 @@ var SoundFX = (function () {
     return h;
   }
 
-  /** Upsert a single exam_progress row for the logged-in user */
-  function upsertExamProgress(examId, status) {
+  /** Upsert a single exam_progress row for the logged-in user.
+   *  targetDate is optional — omit or pass null to clear it. Returns the fetch
+   *  Promise so callers that want to surface errors can chain `.then`. */
+  function upsertExamProgress(examId, status, targetDate) {
     var userId = getUserId();
-    if (!userId || !SUPABASE_URL) return;
-    fetch(SUPABASE_URL + '/rest/v1/exam_progress', {
+    if (!userId || !SUPABASE_URL) return Promise.resolve(null);
+    var body = {
+      user_id: userId,
+      exam_id: examId,
+      status: status,
+      updated_at: new Date().toISOString(),
+      target_date: targetDate || null
+    };
+    return fetch(SUPABASE_URL + '/rest/v1/exam_progress', {
       method: 'POST',
       headers: Object.assign(supabaseHeaders(true), {
         'Prefer': 'resolution=merge-duplicates'
       }),
-      body: JSON.stringify({
-        user_id: userId,
-        exam_id: examId,
-        status: status,
-        updated_at: new Date().toISOString()
-      })
-    }).catch(function () { /* best-effort */ });
+      body: JSON.stringify(body)
+    });
   }
 
   /* ------------------------------------------------------------------ */
@@ -9099,8 +9155,12 @@ var SoundFX = (function () {
       if (!raw) return;
       var journey = JSON.parse(raw);
       var progress = journey.progress || {};
-      EXAM_IDS.forEach(function (id) {
-        if (progress[id]) upsertExamProgress(id, progress[id]);
+      var dates = journey.examDates || {};
+      Object.keys(progress).forEach(function (id) {
+        if (progress[id]) {
+          upsertExamProgress(id, progress[id], dates[id] || null)
+            .catch(function () { /* best-effort; surfaced by Settings save path */ });
+        }
       });
     } catch (e) { /* ignore */ }
   }
@@ -9109,7 +9169,7 @@ var SoundFX = (function () {
   function syncJourneyFromSupabase() {
     var userId = getUserId();
     if (!userId || !SUPABASE_URL) return;
-    fetch(SUPABASE_URL + '/rest/v1/exam_progress?select=exam_id,status&user_id=eq.' + encodeURIComponent(userId), {
+    fetch(SUPABASE_URL + '/rest/v1/exam_progress?select=exam_id,status,target_date&user_id=eq.' + encodeURIComponent(userId), {
       headers: supabaseHeaders(true)
     })
       .then(function (r) { return r.ok ? r.json() : null; })
@@ -9117,12 +9177,18 @@ var SoundFX = (function () {
         if (!rows || !rows.length) return;
         try {
           var raw = localStorage.getItem('actuarial-notes-journey');
-          var journey = raw ? JSON.parse(raw) : { progress: {} };
+          var journey = raw ? JSON.parse(raw) : { progress: {}, examDates: {} };
           if (!journey.progress) journey.progress = {};
+          if (!journey.examDates) journey.examDates = {};
           /* Supabase is authoritative — overwrite local for each row returned */
           rows.forEach(function (row) {
             if (row.exam_id && row.status) {
               journey.progress[row.exam_id] = row.status;
+            }
+            if (row.exam_id && row.target_date) {
+              journey.examDates[row.exam_id] = row.target_date;
+            } else if (row.exam_id) {
+              delete journey.examDates[row.exam_id];
             }
           });
           localStorage.setItem('actuarial-notes-journey', JSON.stringify(journey));
@@ -9493,6 +9559,20 @@ var SoundFX = (function () {
   /* ---- TRACKS data (minimal copy for the settings page) ---- */
   function getSettingsTracks() { return window._wikiTracks || []; }
 
+  /* ---- Circle status icons (mirror sidebar STATUS_ICONS for consistency) ---- */
+  var SVG_STATUS_CIRCLE = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/></svg>';
+  var SVG_STATUS_PROGRESS = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/>' +
+    '<path d="M10 2a8 8 0 0 1 0 16" fill="currentColor" opacity=".45"/></svg>';
+  var SVG_STATUS_CHECK = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="10" cy="10" r="8" fill="currentColor" opacity=".2"/>' +
+    '<circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.8"/>' +
+    '<polyline points="6.5 10.5 9 13 14 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var STATUS_ICONS = { not_started: SVG_STATUS_CIRCLE, in_progress: SVG_STATUS_PROGRESS, completed: SVG_STATUS_CHECK };
+  var STATUS_CYCLE = { not_started: 'in_progress', in_progress: 'completed', completed: 'not_started' };
+  var STATUS_LABELS = { not_started: 'Not Started', in_progress: 'In Progress', completed: 'Passed' };
+
   /* ---- Preset avatar colours ---- */
   var PRESET_COLORS = ['#2563eb', '#9333ea', '#16a34a', '#ea580c', '#e11d48', '#0d9488'];
 
@@ -9785,29 +9865,54 @@ var SoundFX = (function () {
         section.items.forEach(function (item) {
           var row = document.createElement('div');
           row.className = 'wiki-settings__exam-row';
+          row.dataset.status = journey.progress[item.id] || 'not_started';
+
+          var statusBtn = document.createElement('button');
+          statusBtn.type = 'button';
+          statusBtn.className = 'wiki-settings__status-btn';
+          var currentStatus = journey.progress[item.id] || 'not_started';
+          statusBtn.innerHTML = STATUS_ICONS[currentStatus];
+          statusBtn.setAttribute('aria-label', STATUS_LABELS[currentStatus] + ' — click to cycle ' + item.name + ' status');
+          statusBtn.title = STATUS_LABELS[currentStatus];
+
           var nameEl = document.createElement('span');
           nameEl.className = 'wiki-settings__exam-name';
           nameEl.textContent = item.name;
-          var statusSel = buildSelect([
-            { value: 'not_started', label: 'Not Started' },
-            { value: 'in_progress', label: 'In Progress' },
-            { value: 'completed', label: 'Passed' },
-          ], journey.progress[item.id] || 'not_started');
+
           var dateWrap = document.createElement('label');
           dateWrap.className = 'wiki-settings__date-label';
           dateWrap.textContent = 'Target date: ';
           var dateInp = document.createElement('input');
-          dateInp.type = 'date'; dateInp.className = 'wiki-settings__input wiki-settings__date-input';
+          dateInp.type = 'date';
+          dateInp.className = 'wiki-settings__input wiki-settings__date-input';
           dateInp.value = journey.examDates[item.id] || '';
-          dateWrap.style.display = statusSel.value === 'in_progress' ? '' : 'none';
+          dateWrap.style.display = currentStatus === 'in_progress' ? '' : 'none';
           dateWrap.appendChild(dateInp);
-          statusSel.addEventListener('change', function () {
-            journey.progress[item.id] = statusSel.value;
-            dateWrap.style.display = statusSel.value === 'in_progress' ? '' : 'none';
-            if (statusSel.value !== 'in_progress') { dateInp.value = ''; delete journey.examDates[item.id]; }
+
+          statusBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            var prev = journey.progress[item.id] || 'not_started';
+            var next = STATUS_CYCLE[prev];
+            journey.progress[item.id] = next;
+            row.dataset.status = next;
+            statusBtn.innerHTML = STATUS_ICONS[next];
+            statusBtn.setAttribute('aria-label', STATUS_LABELS[next] + ' — click to cycle ' + item.name + ' status');
+            statusBtn.title = STATUS_LABELS[next];
+            dateWrap.style.display = next === 'in_progress' ? '' : 'none';
+            if (next !== 'in_progress') {
+              dateInp.value = '';
+              delete journey.examDates[item.id];
+            }
           });
-          dateInp.addEventListener('change', function () { journey.examDates[item.id] = dateInp.value; });
-          row.appendChild(nameEl); row.appendChild(statusSel); row.appendChild(dateWrap);
+
+          dateInp.addEventListener('change', function () {
+            if (dateInp.value) journey.examDates[item.id] = dateInp.value;
+            else delete journey.examDates[item.id];
+          });
+
+          row.appendChild(statusBtn);
+          row.appendChild(nameEl);
+          row.appendChild(dateWrap);
           itemsContainer.appendChild(row);
         });
       });
@@ -9818,6 +9923,7 @@ var SoundFX = (function () {
 
     saveBtn.addEventListener('click', function () {
       var a = auth();
+      journey.selectedTrack = trackSel.value;
       saveBtn.disabled = true; saveBtn.textContent = 'Saving\u2026';
       try {
         var jRaw = localStorage.getItem('actuarial-notes-journey') || '{}';
@@ -9828,18 +9934,41 @@ var SoundFX = (function () {
         localStorage.setItem('actuarial-notes-journey', JSON.stringify(j));
       } catch (e) {}
       var userId = a.getUserId ? a.getUserId() : null;
-      var supabaseExamIds = ['P', 'FM'];
-      var promises = supabaseExamIds.filter(function (id) { return journey.progress[id] && userId; }).map(function (id) {
+      if (!userId) {
+        saveBtn.disabled = false; saveBtn.textContent = 'Save Exam Progress';
+        setFeedback(feedback, 'Saved locally. Sign in to sync with the quiz app.');
+        if (window._sidebarTabs && typeof window._sidebarTabs.reload === 'function') window._sidebarTabs.reload();
+        return;
+      }
+      // Sync every exam the user has set — not just P/FM — so the quiz app sees the full track.
+      var idsToSync = Object.keys(journey.progress).filter(function (id) { return !!journey.progress[id]; });
+      var promises = idsToSync.map(function (id) {
         return fetch(a.SUPABASE_URL + '/rest/v1/exam_progress', {
           method: 'POST',
           headers: Object.assign(a.supabaseHeaders ? a.supabaseHeaders(true) : {}, { 'Prefer': 'resolution=merge-duplicates' }),
-          body: JSON.stringify({ user_id: userId, exam_id: id, status: journey.progress[id], updated_at: new Date().toISOString(), target_date: journey.examDates[id] || null }),
-        }).catch(function () {});
+          body: JSON.stringify({
+            user_id: userId,
+            exam_id: id,
+            status: journey.progress[id],
+            updated_at: new Date().toISOString(),
+            target_date: journey.examDates[id] || null
+          }),
+        }).then(function (r) {
+          if (!r.ok) {
+            return r.text().then(function (body) {
+              throw new Error('Save failed (' + r.status + '): ' + (body || r.statusText));
+            });
+          }
+          return r;
+        });
       });
       Promise.all(promises).then(function () {
         saveBtn.disabled = false; saveBtn.textContent = 'Save Exam Progress';
         setFeedback(feedback, 'Exam progress saved.');
         if (window._sidebarTabs && typeof window._sidebarTabs.reload === 'function') window._sidebarTabs.reload();
+      }).catch(function (err) {
+        saveBtn.disabled = false; saveBtn.textContent = 'Save Exam Progress';
+        setFeedback(feedback, (err && err.message) || 'Failed to save exam progress.', true);
       });
     });
 

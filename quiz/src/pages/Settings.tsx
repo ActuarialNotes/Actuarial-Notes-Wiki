@@ -15,6 +15,45 @@ import { Separator } from '@/components/ui/separator'
 import { Loader2, Sun, Moon, Settings2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+// ---- Exam status cycle & icons ----
+
+const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
+  not_started: 'in_progress',
+  in_progress: 'completed',
+  completed: 'not_started',
+}
+
+const STATUS_LABEL: Record<ItemStatus, string> = {
+  not_started: 'Not Started',
+  in_progress: 'In Progress',
+  completed: 'Passed',
+}
+
+function StatusIcon({ status }: { status: ItemStatus }) {
+  if (status === 'completed') {
+    return (
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="10" cy="10" r="8" fill="currentColor" opacity=".2" />
+        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
+        <polyline points="6.5 10.5 9 13 14 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )
+  }
+  if (status === 'in_progress') {
+    return (
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
+        <path d="M10 2a8 8 0 0 1 0 16" fill="currentColor" opacity=".45" />
+      </svg>
+    )
+  }
+  return (
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  )
+}
+
 // ---- Avatar helpers ----
 
 const PRESET_COLORS = ['#2563eb', '#9333ea', '#16a34a', '#ea580c', '#e11d48', '#0d9488']
@@ -554,18 +593,32 @@ export default function Settings() {
                           <div className="space-y-2">
                             {section.items.map(item => {
                               const row = localExamMap[item.id] ?? { status: 'not_started' as ItemStatus, targetDate: '' }
+                              const statusColor =
+                                row.status === 'completed' ? 'text-green-600 dark:text-green-500 opacity-100' :
+                                row.status === 'in_progress' ? 'text-amber-600 dark:text-amber-500 opacity-100' :
+                                'text-muted-foreground opacity-60'
                               return (
                                 <div key={item.id} className="flex flex-wrap items-center gap-3 py-1">
-                                  <span className="text-sm font-medium w-32 shrink-0">{item.name}</span>
-                                  <select
-                                    value={row.status}
-                                    onChange={e => setExamStatus(item.id, e.target.value as ItemStatus)}
-                                    className="text-sm border border-input rounded-md px-2 py-1 bg-background text-foreground cursor-pointer"
+                                  <button
+                                    type="button"
+                                    onClick={() => setExamStatus(item.id, STATUS_CYCLE[row.status])}
+                                    title={STATUS_LABEL[row.status]}
+                                    aria-label={`${STATUS_LABEL[row.status]} — click to cycle ${item.name} status`}
+                                    className={cn(
+                                      'inline-flex items-center justify-center w-[22px] h-[22px] shrink-0 rounded-full transition-all duration-100 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&>svg]:w-[18px] [&>svg]:h-[18px]',
+                                      statusColor,
+                                    )}
                                   >
-                                    <option value="not_started">Not Started</option>
-                                    <option value="in_progress">In Progress</option>
-                                    <option value="completed">Passed</option>
-                                  </select>
+                                    <StatusIcon status={row.status} />
+                                  </button>
+                                  <span
+                                    className={cn(
+                                      'text-sm font-medium w-32 shrink-0',
+                                      row.status === 'completed' && 'line-through text-muted-foreground',
+                                    )}
+                                  >
+                                    {item.name}
+                                  </span>
                                   {row.status === 'in_progress' && (
                                     <div className="flex items-center gap-2">
                                       <Label htmlFor={`date-${item.id}`} className="text-xs text-muted-foreground whitespace-nowrap">

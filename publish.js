@@ -9132,9 +9132,11 @@ var SoundFX = (function () {
       user_id: userId,
       exam_id: examId,
       status: status,
-      updated_at: new Date().toISOString(),
-      target_date: targetDate || null
+      updated_at: new Date().toISOString()
     };
+    // Only include target_date when the caller provides one — omitting null
+    // avoids PGRST204 schema-cache errors when the column migration is pending.
+    if (targetDate) body.target_date = targetDate;
     return fetch(SUPABASE_URL + '/rest/v1/exam_progress', {
       method: 'POST',
       headers: Object.assign(supabaseHeaders(true), {
@@ -9943,16 +9945,19 @@ var SoundFX = (function () {
       // Sync every exam the user has set — not just P/FM — so the quiz app sees the full track.
       var idsToSync = Object.keys(journey.progress).filter(function (id) { return !!journey.progress[id]; });
       var promises = idsToSync.map(function (id) {
+        var rowBody = {
+          user_id: userId,
+          exam_id: id,
+          status: journey.progress[id],
+          updated_at: new Date().toISOString()
+        };
+        // Only include target_date when the user actually set one — omitting null
+        // avoids PGRST204 schema-cache errors when the column migration is pending.
+        if (journey.examDates[id]) rowBody.target_date = journey.examDates[id];
         return fetch(a.SUPABASE_URL + '/rest/v1/exam_progress', {
           method: 'POST',
           headers: Object.assign(a.supabaseHeaders ? a.supabaseHeaders(true) : {}, { 'Prefer': 'resolution=merge-duplicates' }),
-          body: JSON.stringify({
-            user_id: userId,
-            exam_id: id,
-            status: journey.progress[id],
-            updated_at: new Date().toISOString(),
-            target_date: journey.examDates[id] || null
-          }),
+          body: JSON.stringify(rowBody),
         }).then(function (r) {
           if (!r.ok) {
             return r.text().then(function (body) {

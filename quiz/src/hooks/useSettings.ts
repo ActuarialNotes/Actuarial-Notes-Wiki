@@ -139,8 +139,10 @@ export function useSettings() {
       exam_id: examId,
       status,
       updated_at: new Date().toISOString(),
-      target_date: targetDate ?? null,
     }
+    // Only include target_date when non-null — omitting it avoids schema-cache
+    // errors on instances where the 20260417 migration hasn't been applied yet.
+    if (targetDate != null) payload.target_date = targetDate || null
 
     const { error } = await supabase.from('exam_progress').upsert(payload, { onConflict: 'user_id,exam_id' })
     if (error) {
@@ -156,13 +158,18 @@ export function useSettings() {
     if (!user) return false
     setExamsState({ saving: true, error: null, success: null })
 
-    const payloads = rows.map(r => ({
-      user_id: user.id,
-      exam_id: r.exam_id,
-      status: r.status,
-      updated_at: new Date().toISOString(),
-      target_date: r.target_date ?? null,
-    }))
+    const payloads = rows.map(r => {
+      const row: Record<string, unknown> = {
+        user_id: user.id,
+        exam_id: r.exam_id,
+        status: r.status,
+        updated_at: new Date().toISOString(),
+      }
+      // Only include target_date when explicitly set — omitting null avoids
+      // PGRST204 schema-cache errors when the column migration is pending.
+      if (r.target_date != null) row.target_date = r.target_date || null
+      return row
+    })
 
     const { error } = await supabase.from('exam_progress').upsert(payloads, { onConflict: 'user_id,exam_id' })
     if (error) {

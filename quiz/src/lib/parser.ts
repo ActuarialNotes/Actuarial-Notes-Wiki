@@ -16,7 +16,7 @@ export interface Question {
   difficulty: Difficulty
   type: QuestionType
   tags: string[]
-  wiki_link: string
+  wiki_link: string[]  // normalized to array; single-string frontmatter becomes [string]
   answer: string       // e.g. "B"
   explanation: string
   points: number
@@ -37,6 +37,7 @@ export interface QuestionFilter {
   author?: string       // partial match, case-insensitive
   year?: number
   search?: string       // free-text search on stem and id
+  ids?: string[]        // when set, only return questions whose id is in this list
 }
 
 interface QuestionFrontmatter {
@@ -94,6 +95,11 @@ export function parseQuestion(raw: string): Question | null {
           })
       : []
 
+    const rawLink = data.wiki_link
+    const wikiLinks: string[] = Array.isArray(rawLink)
+      ? (rawLink as unknown[]).map(String).filter(s => s.length > 0)
+      : rawLink ? [String(rawLink)].filter(s => s.length > 0) : []
+
     return {
       id: String(data.id),
       topic: String(data.topic),
@@ -101,7 +107,7 @@ export function parseQuestion(raw: string): Question | null {
       difficulty: data.difficulty as Difficulty,
       type: data.type as QuestionType,
       tags: Array.isArray(data.tags) ? (data.tags as string[]) : [],
-      wiki_link: String(data.wiki_link ?? ''),
+      wiki_link: wikiLinks,
       answer: String(data.answer),
       explanation,
       points: Number(data.points ?? 1),
@@ -124,6 +130,7 @@ export function parseAllQuestions(rawFiles: string[]): Question[] {
 
 export function filterQuestions(questions: Question[], filters: QuestionFilter): Question[] {
   return questions.filter(q => {
+    if (filters.ids?.length) return filters.ids.includes(q.id)
     if (filters.topic && q.topic.toLowerCase() !== filters.topic.toLowerCase()) return false
     if (filters.subtopic && q.subtopic.toLowerCase() !== filters.subtopic.toLowerCase()) return false
     if (filters.subtopics?.length) {

@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils'
 import { LatexText } from '@/components/LatexText'
-import { buildWikiUrl } from '@/lib/wikiUrl'
+import { WikiContent } from '@/components/WikiContent'
 
 interface ExplanationPanelProps {
   explanation: string
-  wikiLink: string
+  wikiLinks: string[]
   isCorrect: boolean
 }
 
-export function ExplanationPanel({ explanation, wikiLink, isCorrect }: ExplanationPanelProps) {
+export function ExplanationPanel({ explanation, wikiLinks, isCorrect }: ExplanationPanelProps) {
   return (
     <div
       className={cn(
@@ -32,15 +32,12 @@ export function ExplanationPanel({ explanation, wikiLink, isCorrect }: Explanati
 
       <p className="text-sm text-foreground leading-relaxed"><LatexText>{explanation}</LatexText></p>
 
-      {wikiLink && (
-        <a
-          href={buildWikiUrl(wikiLink)}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-        >
-          Read more →
-        </a>
+      {wikiLinks.length > 0 && (
+        <div className="space-y-2 pt-1">
+          {wikiLinks.map(link => (
+            <WikiContent key={link} link={link} />
+          ))}
+        </div>
       )}
     </div>
   )

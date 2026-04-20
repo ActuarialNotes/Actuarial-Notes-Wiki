@@ -3,34 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
+import { useSubtopics } from '@/hooks/useSubtopics'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { LatexText } from '@/components/LatexText'
+import { ExplanationPanel } from '@/components/ExplanationPanel'
 
 const EXAMS = [
   { value: '', label: 'All Exams' },
   { value: 'Probability', label: 'Exam P' },
   { value: 'Financial Mathematics', label: 'Exam FM' },
 ]
-
-const EXAM_SUBTOPICS: Record<string, string[]> = {
-  'Probability': [
-    'General Probability',
-    'Bayes Theorem',
-    'Combinatorics',
-    'Univariate Random Variables',
-    'Multivariate Random Variables',
-    'Expected Value',
-    'Common Distributions',
-  ],
-  'Financial Mathematics': [
-    'Time Value of Money',
-    'Interest Rates',
-    'Annuities',
-    'Loans',
-    'Bonds',
-    'Derivatives',
-  ],
-}
 
 const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
   { value: '', label: 'All' },
@@ -45,13 +28,31 @@ const DIFFICULTY_COLORS: Record<Difficulty, string> = {
   hard: 'bg-red-100 text-red-800 border-red-200',
 }
 
-function QuestionRow({ question }: { question: Question }) {
+interface QuestionRowProps {
+  question: Question
+  selected: boolean
+  onToggleSelect: (id: string) => void
+}
+
+function QuestionRow({ question, selected, onToggleSelect }: QuestionRowProps) {
   const [expanded, setExpanded] = useState(false)
+  const [showAnswer, setShowAnswer] = useState(false)
 
   return (
-    <div className="border rounded-lg p-4 space-y-2 hover:bg-accent/30 transition-colors">
+    <div
+      className={`border rounded-lg p-4 space-y-2 transition-colors ${
+        selected ? 'border-primary bg-primary/5' : 'hover:bg-accent/30'
+      }`}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center flex-wrap gap-2 min-w-0">
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={() => onToggleSelect(question.id)}
+            aria-label={`Select question ${question.id}`}
+            className="h-4 w-4 shrink-0 rounded border-input accent-primary cursor-pointer"
+          />
           <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded border shrink-0">
             {question.id}
           </span>
@@ -80,18 +81,60 @@ function QuestionRow({ question }: { question: Question }) {
         </button>
       </div>
 
-      <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-        {expanded ? question.stem : question.stem.slice(0, 160) + (question.stem.length > 160 ? '…' : '')}
-      </p>
+      <div className="text-sm text-muted-foreground leading-relaxed">
+        {expanded ? (
+          <LatexText>{question.stem}</LatexText>
+        ) : (
+          <LatexText>
+            {question.stem.slice(0, 160) + (question.stem.length > 160 ? '…' : '')}
+          </LatexText>
+        )}
+      </div>
 
       {expanded && (
         <div className="pt-2 space-y-1">
-          {question.options.map(opt => (
-            <div key={opt.key} className="flex gap-2 text-sm">
-              <span className="font-medium text-muted-foreground shrink-0">{opt.key})</span>
-              <span>{opt.text}</span>
-            </div>
-          ))}
+          {question.options.map(opt => {
+            const isCorrect = showAnswer && opt.key === question.answer
+            return (
+              <div
+                key={opt.key}
+                className={`flex gap-2 text-sm rounded px-2 py-1 ${
+                  isCorrect ? 'bg-green-100 dark:bg-green-950 text-green-900 dark:text-green-200' : ''
+                }`}
+              >
+                <span className="font-medium text-muted-foreground shrink-0">{opt.key})</span>
+                <span><LatexText>{opt.text}</LatexText></span>
+              </div>
+            )
+          })}
+
+          <div className="pt-2">
+            {!showAnswer ? (
+              <button
+                type="button"
+                onClick={() => setShowAnswer(true)}
+                className="text-xs px-3 py-1 rounded-md border border-input hover:bg-accent transition-colors"
+              >
+                Show answer
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setShowAnswer(false)}
+                className="text-xs px-3 py-1 rounded-md border border-input hover:bg-accent transition-colors"
+              >
+                Hide answer
+              </button>
+            )}
+          </div>
+
+          {showAnswer && (
+            <ExplanationPanel
+              explanation={question.explanation}
+              wikiLinks={question.wiki_link}
+              isCorrect
+            />
+          )}
         </div>
       )}
     </div>
@@ -100,6 +143,7 @@ function QuestionRow({ question }: { question: Question }) {
 
 export default function Browse() {
   const navigate = useNavigate()
+  const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
 
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
@@ -111,6 +155,7 @@ export default function Browse() {
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const [authorSearch, setAuthorSearch] = useState('')
   const [yearSearch, setYearSearch] = useState('')
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     fetchAllQuestions()
@@ -130,6 +175,15 @@ export default function Browse() {
     )
   }
 
+  function toggleSelectQuestion(id: string) {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
   function clearFilters() {
     setSearch('')
     setTopic('')
@@ -137,6 +191,7 @@ export default function Browse() {
     setDifficulty('')
     setAuthorSearch('')
     setYearSearch('')
+    setSelectedIds(new Set())
   }
 
   const parsedYear = yearSearch ? parseInt(yearSearch, 10) : undefined
@@ -151,12 +206,29 @@ export default function Browse() {
     search: search || undefined,
   }), [allQuestions, topic, selectedSubtopics, difficulty, authorSearch, validYear, search])
 
-  const subtopics = topic ? (EXAM_SUBTOPICS[topic] ?? []) : []
+  const subtopics = topic ? (subtopicsByTopic[topic] ?? []) : []
 
   const hasFilters = search || topic || selectedSubtopics.length || difficulty || authorSearch || yearSearch
 
   function handleStartQuiz() {
     const params = new URLSearchParams({ mode: 'quiz', reveal: 'during' })
+
+    if (selectedIds.size > 0) {
+      // Handoff via sessionStorage to avoid URL length issues with large selections
+      const ids = [...selectedIds]
+      const storageTopic = allQuestions.find(q => selectedIds.has(q.id))?.topic ?? 'Probability'
+      try {
+        sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
+      } catch {
+        // fall back to URL when sessionStorage unavailable
+        params.set('ids', ids.join(','))
+      }
+      params.set('selection', 'stored')
+      params.set('topic', storageTopic)
+      navigate(`/quiz?${params.toString()}`)
+      return
+    }
+
     if (topic) params.set('topic', topic)
     else params.set('topic', 'Probability')
     if (selectedSubtopics.length) params.set('subtopics', selectedSubtopics.join(','))
@@ -219,7 +291,7 @@ export default function Browse() {
           </div>
 
           {/* Subtopics — only shown when a specific exam is selected */}
-          {subtopics.length > 0 && (
+          {topic && (
             <div className="space-y-1.5">
               <label className="text-sm font-medium">
                 Topics
@@ -227,22 +299,28 @@ export default function Browse() {
                   {selectedSubtopics.length === 0 ? '(all)' : `${selectedSubtopics.length} selected`}
                 </span>
               </label>
-              <div className="flex flex-wrap gap-2">
-                {subtopics.map(subtopic => (
-                  <button
-                    key={subtopic}
-                    type="button"
-                    onClick={() => toggleSubtopic(subtopic)}
-                    className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
-                      selectedSubtopics.includes(subtopic)
-                        ? 'border-primary bg-primary text-primary-foreground'
-                        : 'border-input hover:bg-accent'
-                    }`}
-                  >
-                    {subtopic}
-                  </button>
-                ))}
-              </div>
+              {subtopicsLoading && subtopics.length === 0 ? (
+                <p className="text-xs text-muted-foreground">Loading topics…</p>
+              ) : subtopics.length === 0 ? (
+                <p className="text-xs text-muted-foreground">No topics available.</p>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {subtopics.map(subtopic => (
+                    <button
+                      key={subtopic}
+                      type="button"
+                      onClick={() => toggleSubtopic(subtopic)}
+                      className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
+                        selectedSubtopics.includes(subtopic)
+                          ? 'border-primary bg-primary text-primary-foreground'
+                          : 'border-input hover:bg-accent'
+                      }`}
+                    >
+                      {subtopic}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -291,9 +369,21 @@ export default function Browse() {
 
       {/* Results */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
             {loading ? 'Loading questions…' : `${filtered.length} question${filtered.length !== 1 ? 's' : ''} found`}
+            {selectedIds.size > 0 && (
+              <span className="ml-2 text-foreground font-medium">
+                · {selectedIds.size} selected
+                <button
+                  type="button"
+                  onClick={() => setSelectedIds(new Set())}
+                  className="ml-2 text-xs text-muted-foreground hover:text-foreground transition-colors font-normal"
+                >
+                  clear
+                </button>
+              </span>
+            )}
           </p>
           {!loading && filtered.length > 0 && (
             <button
@@ -301,7 +391,9 @@ export default function Browse() {
               onClick={handleStartQuiz}
               className="text-xs px-3 py-1.5 rounded-md border border-primary bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              Start quiz with this selection
+              {selectedIds.size > 0
+                ? `Start quiz with ${selectedIds.size} selected`
+                : 'Start quiz with this selection'}
             </button>
           )}
         </div>
@@ -332,7 +424,12 @@ export default function Browse() {
         {!loading && filtered.length > 0 && (
           <div className="space-y-2">
             {filtered.map(q => (
-              <QuestionRow key={q.id} question={q} />
+              <QuestionRow
+                key={q.id}
+                question={q}
+                selected={selectedIds.has(q.id)}
+                onToggleSelect={toggleSelectQuestion}
+              />
             ))}
           </div>
         )}

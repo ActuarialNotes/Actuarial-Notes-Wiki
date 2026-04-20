@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress, EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
+import { useSubtopics } from '@/hooks/useSubtopics'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuizMode, Difficulty } from '@/lib/parser'
@@ -11,27 +12,6 @@ const EXAMS = [
   { value: 'Probability', label: 'Exam P — Probability' },
   { value: 'Financial Mathematics', label: 'Exam FM — Financial Mathematics' },
 ]
-
-// Subtopics per exam, aligned with SOA syllabi
-const EXAM_SUBTOPICS: Record<string, string[]> = {
-  'Probability': [
-    'General Probability',
-    'Bayes Theorem',
-    'Combinatorics',
-    'Univariate Random Variables',
-    'Multivariate Random Variables',
-    'Expected Value',
-    'Common Distributions',
-  ],
-  'Financial Mathematics': [
-    'Time Value of Money',
-    'Interest Rates',
-    'Annuities',
-    'Loans',
-    'Bonds',
-    'Derivatives',
-  ],
-}
 
 // Question counts that mirror each real exam
 const MOCK_EXAM_QUESTIONS: Record<string, number> = {
@@ -52,6 +32,7 @@ export default function Landing() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const examProgress = useExamProgress()
+  const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
 
   const inProgressExams = EXAMS.filter(e => {
     const examId = Object.entries(EXAM_ID_TO_TOPIC).find(([, t]) => t === e.value)?.[0]
@@ -110,7 +91,7 @@ export default function Landing() {
     navigate(`/quiz?${params.toString()}`)
   }
 
-  const subtopics = EXAM_SUBTOPICS[topic] ?? []
+  const subtopics = subtopicsByTopic[topic] ?? []
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
   const hasTopic = topic !== ''
@@ -246,22 +227,26 @@ export default function Landing() {
                     {selectedSubtopics.length === 0 ? '(all included)' : `${selectedSubtopics.length} selected`}
                   </span>
                 </label>
-                <div className="flex flex-wrap gap-2">
-                  {subtopics.map(subtopic => (
-                    <button
-                      key={subtopic}
-                      type="button"
-                      onClick={() => toggleSubtopic(subtopic)}
-                      className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
-                        selectedSubtopics.includes(subtopic)
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-input hover:bg-accent'
-                      }`}
-                    >
-                      {subtopic}
-                    </button>
-                  ))}
-                </div>
+                {subtopicsLoading && subtopics.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">Loading topics…</p>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {subtopics.map(subtopic => (
+                      <button
+                        key={subtopic}
+                        type="button"
+                        onClick={() => toggleSubtopic(subtopic)}
+                        className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
+                          selectedSubtopics.includes(subtopic)
+                            ? 'border-primary bg-primary text-primary-foreground'
+                            : 'border-input hover:bg-accent'
+                        }`}
+                      >
+                        {subtopic}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Number of questions */}

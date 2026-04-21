@@ -14,6 +14,9 @@ interface ConceptPopupState {
   navigate: (delta: number) => void
   jumpTo: (ref: WikiEntryRef) => void
   close: () => void
+  // Closes the popup if the user navigated away from the page that opened it —
+  // called by WikiLayout on every route change to keep the split pane in sync.
+  closeOnNavigation: (pathname: string) => void
 }
 
 export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
@@ -44,4 +47,8 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     }
   },
   close: () => set({ open: false, list: [], index: 0, sourcePath: null }),
+  closeOnNavigation: () => {
+    const { open } = get()
+    if (open) set({ open: false, list: [], index: 0, sourcePath: null })
+  },
 }))

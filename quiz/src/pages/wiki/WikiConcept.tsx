@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
-import { Loader2 } from 'lucide-react'
+import { useParams, useSearchParams, Link } from 'react-router-dom'
+import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { fromSlug } from '@/lib/wikiRoutes'
+import { fromSlug, examIdFromFile } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
@@ -71,11 +71,7 @@ export default function WikiConcept() {
   )
   const examId = useMemo(() => {
     if (fromExam) return fromExam
-    if (activeSyllabus) {
-      // examLabel is like "Exam P" — match to the first exam file that starts the same.
-      const label = activeSyllabus.examLabel.replace(/^Exam\s+/, '')
-      return label.toLowerCase() + '-1'
-    }
+    if (activeSyllabus) return examIdFromFile(activeSyllabus.examLabel)
     return null
   }, [fromExam, activeSyllabus])
 
@@ -104,14 +100,28 @@ export default function WikiConcept() {
         <p className="text-sm text-muted-foreground">Couldn't load {conceptName}.</p>
       )}
 
-      {content !== null && <WikiArticle markdown={content} />}
+      {content !== null && (
+        <WikiArticle markdown={content} sourcePath={`Concepts/${conceptName}.md`} />
+      )}
 
-      {activeSyllabus && (
+      {activeSyllabus ? (
         <ConceptNav
           conceptName={conceptName}
           syllabus={activeSyllabus}
           fromExamId={examId}
         />
+      ) : (
+        <nav
+          className="sticky bottom-0 mt-8 -mx-4 sm:-mx-6 border-t bg-background/95 backdrop-blur px-3 sm:px-4 py-2"
+          aria-label="Concept navigation"
+        >
+          <Link
+            to="/wiki"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <ChevronLeft className="h-4 w-4" /> Back to wiki
+          </Link>
+        </nav>
       )}
     </div>
   )

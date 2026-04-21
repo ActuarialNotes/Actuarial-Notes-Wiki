@@ -91,10 +91,20 @@ export function hrefToEntryRef(href: string): WikiEntryRef | null {
   return { kind: 'concept', name: decoded }
 }
 
-// Parse the exam title (as stored in WikiExamSyllabus.examLabel or the raw
-// filename "Exam P-1 (SOA)") to a short exam id, e.g. "p-1".
-export function examShortId(examFileName: string): string {
-  const m = examFileName.match(/Exam\s+([A-Z]+)(?:-(\d+))?/i)
-  if (!m) return examFileName.toLowerCase()
-  return m[2] ? `${m[1].toLowerCase()}-${m[2]}` : m[1].toLowerCase()
+// Canonical short exam id used as a localStorage key (`actuarial-notes-learned`)
+// and as the `?from=` query param on concept routes. Accepts any of:
+//   "Exam P-1 (SOA)"   (filename)          → "p-1"
+//   "Exam P-1 (SOA).md"                    → "p-1"
+//   "Exam P"           (syllabus label)    → "p-1"   (assumes -1 suffix)
+//   "P-1"              (raw id)            → "p-1"
+// Fills in the -N suffix when missing because publish.js keys always carry it.
+export function examIdFromFile(name: string): string {
+  const cleaned = name
+    .replace(/\.md$/i, '')
+    .replace(/^Exam\s+/i, '')
+    .replace(/\s*\([^)]*\)\s*$/, '')
+    .trim()
+  if (!cleaned) return name.toLowerCase()
+  const withDash = cleaned.includes('-') ? cleaned : `${cleaned}-1`
+  return withDash.toLowerCase()
 }

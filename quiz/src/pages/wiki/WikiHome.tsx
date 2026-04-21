@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { BookMarked, GraduationCap } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { wikiRoute, examShortId } from '@/lib/wikiRoutes'
+import { wikiRoute, examIdFromFile } from '@/lib/wikiRoutes'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 
@@ -43,7 +43,7 @@ export default function WikiHome() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {exams.map(exam => {
-              const match = syllabi.find(s => s.examLabel.replace(/^Exam\s+/, '').toLowerCase() === examShortId(exam.name).split('-')[0])
+              const match = syllabi.find(s => examIdFromFile(s.examLabel) === examIdFromFile(exam.name))
               return (
                 <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })}>
                   <Card className="h-full transition-colors hover:bg-accent/30">

@@ -6,6 +6,11 @@ import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
 import Browse from '@/pages/Browse'
 import Settings from '@/pages/Settings'
+import WikiHome from '@/pages/wiki/WikiHome'
+import WikiExam from '@/pages/wiki/WikiExam'
+import WikiConcept from '@/pages/wiki/WikiConcept'
+import WikiResource from '@/pages/wiki/WikiResource'
+import { WikiLayout } from '@/components/wiki/WikiLayout'
 import Sidebar from '@/components/Sidebar'
 
 function NotFound() {
@@ -34,6 +39,10 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/browse" element={<Browse />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/wiki" element={<WikiLayout><WikiHome /></WikiLayout>} />
+            <Route path="/wiki/exam/:slug" element={<WikiLayout><WikiExam /></WikiLayout>} />
+            <Route path="/wiki/concept/:slug" element={<WikiLayout><WikiConcept /></WikiLayout>} />
+            <Route path="/wiki/resource/:slug" element={<WikiLayout><WikiResource /></WikiLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

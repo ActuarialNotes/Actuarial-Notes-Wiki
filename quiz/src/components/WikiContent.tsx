@@ -1,12 +1,9 @@
 import { useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
-import rehypeKatex from 'rehype-katex'
+import { Link } from 'react-router-dom'
 import { ChevronRight, Loader2, ExternalLink } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { buildWikiUrl } from '@/lib/wikiUrl'
-import { calloutComponents } from '@/components/MarkdownCallout'
+import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
+import { WikiArticle } from '@/components/wiki/WikiArticle'
 
 interface WikiContentProps {
   link: string
@@ -31,6 +28,7 @@ export function WikiContent({ link }: WikiContentProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
 
   const title = linkToTitle(link)
+  const fullPageRoute = wikiRoute(hrefToEntryRef(link) ?? { kind: 'concept', name: title })
 
   async function handleToggle() {
     const nextOpen = !open
@@ -39,9 +37,7 @@ export function WikiContent({ link }: WikiContentProps) {
       setStatus('loading')
       try {
         const raw = await fetchWikiFile(linkToRepoPath(link))
-        // Strip YAML frontmatter if present
-        const stripped = raw.replace(/^---\n[\s\S]*?\n---\n?/, '')
-        setContent(stripped)
+        setContent(raw)
         setStatus('idle')
       } catch {
         setStatus('error')
@@ -74,36 +70,26 @@ export function WikiContent({ link }: WikiContentProps) {
               <p className="text-muted-foreground text-xs">
                 Couldn't load this wiki page.
               </p>
-              <a
-                href={buildWikiUrl(link)}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to={fullPageRoute}
                 className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
               >
-                Open on wiki.actuarialnotes.com
+                Open in wiki
                 <ExternalLink className="h-3 w-3" />
-              </a>
+              </Link>
             </div>
           )}
           {content !== null && (
-            <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:mt-3 prose-headings:mb-1 prose-p:my-2">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm, remarkMath]}
-                rehypePlugins={[rehypeKatex]}
-                components={calloutComponents}
-              >
-                {content}
-              </ReactMarkdown>
-              <a
-                href={buildWikiUrl(link)}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-xs text-primary hover:underline not-prose mt-2"
+            <>
+              <WikiArticle markdown={content} className="prose-sm prose-headings:mt-3 prose-headings:mb-1 prose-p:my-2" />
+              <Link
+                to={fullPageRoute}
+                className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-2"
               >
                 Open full page
                 <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
+              </Link>
+            </>
           )}
         </div>
       )}

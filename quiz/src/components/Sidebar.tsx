@@ -14,7 +14,6 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
-import { buildWikiUrl } from '@/lib/wikiUrl'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
@@ -112,11 +111,10 @@ export default function Sidebar() {
 
       <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
         <SidebarItem
-          to={buildWikiUrl('')}
+          to="/wiki"
           label="Wiki"
           icon={<BookOpen className="h-4 w-4" />}
           collapsed={collapsed}
-          external
         />
         <SidebarItem
           to="/browse"

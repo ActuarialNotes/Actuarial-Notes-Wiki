@@ -63,6 +63,7 @@ export default function WikiResource() {
       {content !== null && (
         <WikiArticle
           markdown={content}
+          sourcePath={`Resources/Books/${resourceName}.md`}
           onWikiLink={(ref, e) => {
             if (ref.kind !== 'concept') return false
             e.preventDefault()

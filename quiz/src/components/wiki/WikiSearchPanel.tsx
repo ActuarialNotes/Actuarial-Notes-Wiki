@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { pathToEntryRef, wikiRoute, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 
 type Scope = 'page' | 'all'
 type Sort = 'alpha' | 'category'
@@ -16,10 +17,12 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
   const [sort, setSort] = useState<Sort>('alpha')
-  const [topic, setTopic] = useState<string>('')      // exam id filter
+  const [topic, setTopic] = useState<string>('')      // exam id filter (e.g. "p-1")
   const [author, setAuthor] = useState<string>('')
   const [yearMin, setYearMin] = useState<number | ''>('')
   const [yearMax, setYearMax] = useState<number | ''>('')
+  const { syllabi } = useWikiSyllabus()
+  const location = useLocation()
 
   useEffect(() => {
     let cancelled = false
@@ -33,18 +36,28 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
     }
   }, [])
 
+  // Route change → reset scope to the default and clear transient query.
+  useEffect(() => {
+    setScope('page')
+    setQuery('')
+  }, [location.pathname])
+
   // If there's nothing referenced on the current page, "This Page" is useless
   // — flip to Entire Wiki automatically.
   useEffect(() => {
     if (pageRefs.length === 0 && scope === 'page') setScope('all')
   }, [pageRefs.length, scope])
 
-  const topics = useMemo(() => {
-    const set = new Set<string>()
+  // Topic options: `{ id, label }` where id is the canonical examId ("p-1").
+  const topicOptions = useMemo(() => {
+    const map = new Map<string, string>()
     for (const item of index) {
-      if (item.category === 'exam') set.add(item.name)
+      if (item.category !== 'exam') continue
+      map.set(examIdFromFile(item.name), item.name)
     }
-    return Array.from(set).sort()
+    return Array.from(map.entries())
+      .map(([id, label]) => ({ id, label }))
+      .sort((a, b) => a.label.localeCompare(b.label))
   }, [index])
 
   const authors = useMemo(() => {
@@ -54,6 +67,20 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
     }
     return Array.from(set).sort()
   }, [index])
+
+  // For the selected topic, the lowercased set of concept names that belong
+  // to its syllabus. When empty (syllabus still loading), the filter is a
+  // no-op so the user still sees entries instead of a blank panel.
+  const topicConceptSet = useMemo(() => {
+    if (!topic) return null
+    const syllabus = syllabi.find(s => examIdFromFile(s.examLabel) === topic)
+    if (!syllabus) return null
+    const set = new Set<string>()
+    for (const t of syllabus.topics) {
+      for (const c of t.concepts) set.add(c.name.toLowerCase())
+    }
+    return set
+  }, [topic, syllabi])
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -69,7 +96,20 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
 
     // Apply filters.
     let filtered = pool
-    if (topic) filtered = filtered.filter(it => it.category !== 'exam' || it.name === topic)
+    if (topic) {
+      filtered = filtered.filter(it => {
+        if (it.category === 'exam') return examIdFromFile(it.name) === topic
+        if (it.category === 'concept') {
+          // If the syllabus hasn't loaded yet, keep concepts visible; once
+          // loaded, restrict to those referenced by the chosen exam.
+          if (!topicConceptSet) return true
+          return topicConceptSet.has(it.name.toLowerCase())
+        }
+        // Resources aren't scoped to a single exam — hide them when a topic
+        // filter is applied so the list stays focused.
+        return false
+      })
+    }
     if (author) filtered = filtered.filter(it => it.category !== 'document' || it.author === author)
     if (yearMin !== '') filtered = filtered.filter(it => (it.year ?? Infinity) >= yearMin)
     if (yearMax !== '') filtered = filtered.filter(it => (it.year ?? -Infinity) <= yearMax)
@@ -95,7 +135,9 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
     }
 
     return sorted
-  }, [index, query, scope, pageRefs, topic, author, yearMin, yearMax, sort])
+  }, [index, query, scope, pageRefs, topic, topicConceptSet, author, yearMin, yearMax, sort])
+
+  const pageDisabled = pageRefs.length === 0
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -110,7 +152,8 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
           <button
             type="button"
             onClick={() => setScope('page')}
-            disabled={pageRefs.length === 0}
+            disabled={pageDisabled}
+            title={pageDisabled ? 'This page has no wiki references' : undefined}
             className={
               'flex-1 px-2 py-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ' +
               (scope === 'page' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent/60')
@@ -158,11 +201,11 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
               value={topic}
               onChange={e => setTopic(e.target.value)}
               className="text-xs rounded-md border bg-background px-1.5 py-1"
-              aria-label="Filter by topic"
+              aria-label="Filter by exam topic"
             >
-              <option value="">All topics</option>
-              {topics.map(t => (
-                <option key={t} value={t}>{t}</option>
+              <option value="">All exams</option>
+              {topicOptions.map(t => (
+                <option key={t.id} value={t.id}>{t.label}</option>
               ))}
             </select>
             <select

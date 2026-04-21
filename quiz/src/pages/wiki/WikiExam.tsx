@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
-import { fromSlug, examShortId } from '@/lib/wikiRoutes'
+import { fromSlug, examIdFromFile } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
@@ -41,7 +41,7 @@ export default function WikiExam() {
   )
 
   useEffect(() => {
-    setExamId(examShortId(examFileName))
+    setExamId(examIdFromFile(examFileName))
     setPageRefs(pageRefs)
   }, [pageRefs, examFileName, setExamId, setPageRefs])
 
@@ -63,6 +63,7 @@ export default function WikiExam() {
       {content !== null && (
         <WikiArticle
           markdown={content}
+          sourcePath={`${examFileName}.md`}
           onWikiLink={(ref, e) => {
             // Concept clicks on an exam page open the concept popup, scoped to
             // the syllabus concept list. Resource/exam links navigate normally.

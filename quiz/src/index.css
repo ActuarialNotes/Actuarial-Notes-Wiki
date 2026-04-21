@@ -68,3 +68,11 @@ html.dark.exam-p  { --primary: 217 91% 60%;  --ring: 217 91% 60%; }
 /* Exam FM (Financial Mathematics) — indigo */
 html.exam-fm      { --primary: 243 75% 59%;  --ring: 243 75% 59%; }
 html.dark.exam-fm { --primary: 239 84% 67%;  --ring: 239 84% 67%; }
+
+/* Wiki: the currently-active concept link on a source page (exam/resource)
+   while the concept popup is open. Tracks theme accent via --primary. */
+.wiki-link--active {
+  background: hsl(var(--primary) / 0.18);
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.45);
+  border-radius: 2px;
+}

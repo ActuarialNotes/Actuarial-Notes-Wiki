@@ -155,39 +155,87 @@ function matchCallout(children: ReactNode): MatchResult | null {
   const childArray = Children.toArray(children)
   if (childArray.length === 0) return null
 
-  const first = childArray[0]
-  if (!isValidElement(first)) return null
-  if ((first as ReactElement).type !== 'p') return null
+  // Exam-page callouts frequently have shape:
+  //   > [!answer]- Title
+  //   >
+  //   > <div>…</div> or a table or list
+  // which react-markdown renders with a leading whitespace text node and/or a
+  // non-<p> first child (table, div, ul, …). We scan forward to find the
+  // first node that contains the `[!type]` header — usually the opening text
+  // of the first <p>, but can be a bare string child too.
 
-  const pChildren = Children.toArray(
-    ((first as ReactElement).props as { children?: ReactNode }).children ?? [],
-  )
-  if (pChildren.length === 0) return null
+  let headerIdx = -1
+  let match: RegExpMatchArray | null = null
+  let headerString: string | null = null
+  let headerInsideP = false
 
-  const firstTextChild = pChildren[0]
-  if (typeof firstTextChild !== 'string') return null
+  for (let i = 0; i < childArray.length; i++) {
+    const child = childArray[i]
 
-  const match = firstTextChild.match(HEADER_RE)
-  if (!match) return null
+    if (typeof child === 'string') {
+      if (child.trim() === '') continue
+      const m = child.match(HEADER_RE)
+      if (m) {
+        headerIdx = i
+        match = m
+        headerString = child
+        headerInsideP = false
+        break
+      }
+      return null
+    }
+
+    if (isValidElement(child) && (child as ReactElement).type === 'p') {
+      const pKids = Children.toArray(
+        ((child as ReactElement).props as { children?: ReactNode }).children ?? [],
+      )
+      if (pKids.length === 0) continue
+      const first = pKids[0]
+      if (typeof first !== 'string') return null
+      if (first.trim() === '' && pKids.length === 1) continue
+      const m = first.match(HEADER_RE)
+      if (!m) return null
+      headerIdx = i
+      match = m
+      headerString = first
+      headerInsideP = true
+      break
+    }
+
+    // First substantive child isn't a string or <p> — not a callout we can parse.
+    return null
+  }
+
+  if (!match || headerString === null) return null
 
   const type = match[1].toLowerCase()
   const fold = (match[2] === '-' || match[2] === '+' ? match[2] : '') as '' | '-' | '+'
   const titleTail = (match[3] ?? '').trim()
 
-  const newlineIdx = firstTextChild.indexOf('\n')
-  const remainingFirstText = newlineIdx >= 0 ? firstTextChild.slice(newlineIdx + 1) : ''
-  const remainingPChildren = pChildren.slice(1)
-
   const body: ReactNode[] = []
 
-  if (remainingFirstText.length > 0 || remainingPChildren.length > 0) {
-    const newPKids: ReactNode[] = []
-    if (remainingFirstText.length > 0) newPKids.push(remainingFirstText)
-    for (const c of remainingPChildren) newPKids.push(c)
-    body.push(<p key="callout-p-0">{newPKids}</p>)
+  if (headerInsideP) {
+    const headerChild = childArray[headerIdx] as ReactElement
+    const pKids = Children.toArray(
+      ((headerChild as ReactElement).props as { children?: ReactNode }).children ?? [],
+    )
+    const newlineIdx = headerString.indexOf('\n')
+    const remainingFirstText = newlineIdx >= 0 ? headerString.slice(newlineIdx + 1) : ''
+    const remainingPKids = pKids.slice(1)
+
+    if (remainingFirstText.length > 0 || remainingPKids.length > 0) {
+      const newPKids: ReactNode[] = []
+      if (remainingFirstText.length > 0) newPKids.push(remainingFirstText)
+      for (const c of remainingPKids) newPKids.push(c)
+      body.push(<p key="callout-p-head">{newPKids}</p>)
+    }
+  } else {
+    const newlineIdx = headerString.indexOf('\n')
+    const remaining = newlineIdx >= 0 ? headerString.slice(newlineIdx + 1) : ''
+    if (remaining.length > 0) body.push(remaining)
   }
 
-  for (let i = 1; i < childArray.length; i++) {
+  for (let i = headerIdx + 1; i < childArray.length; i++) {
     body.push(childArray[i])
   }
 

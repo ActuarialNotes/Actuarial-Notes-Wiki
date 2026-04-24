@@ -77,10 +77,6 @@ interface GitTreeResponse {
   truncated: boolean
 }
 
-async function listDirectory(apiPath: string): Promise<GithubContentItem[]> {
-  return listRepoContents(apiPath)
-}
-
 // List any directory in the repo; omit dirPath to list the root.
 // Pages through the GitHub Contents API so directories with >30 items aren't truncated.
 export async function listRepoContents(dirPath?: string): Promise<GithubContentItem[]> {
@@ -96,19 +92,6 @@ export async function listRepoContents(dirPath?: string): Promise<GithubContentI
     if (items.length < PER_PAGE) break
   }
   return all
-}
-
-async function collectMdUrls(dirPath: string): Promise<string[]> {
-  const items = await listDirectory(dirPath)
-  const urls: string[] = []
-  for (const item of items) {
-    if (item.type === 'dir') {
-      urls.push(...await collectMdUrls(item.path))
-    } else if (item.type === 'file' && item.name.endsWith('.md') && item.download_url) {
-      urls.push(item.download_url)
-    }
-  }
-  return urls
 }
 
 async function collectMdUrlsViaTree(dirPrefix: string): Promise<string[]> {

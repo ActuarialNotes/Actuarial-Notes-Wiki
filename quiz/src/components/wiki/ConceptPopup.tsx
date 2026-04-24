@@ -86,7 +86,7 @@ export function ConceptPopup({ examId = null }: ConceptPopupProps) {
 
   return (
     <aside
-      className="fixed inset-x-0 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
+      className="fixed left-0 right-0 lg:left-72 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
       style={{ height: `min(${height}px, 100vh)` }}
       role="complementary"
       aria-label={`Concept: ${current.name}`}

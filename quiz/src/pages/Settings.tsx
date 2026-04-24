@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
-import { useTheme } from '@/hooks/useTheme'
 import { useProgress } from '@/hooks/useProgress'
 import { useSettings } from '@/hooks/useSettings'
 import { TRACKS } from '@/data/tracks'
@@ -12,7 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Loader2, Sun, Moon, Settings2, ChevronRight } from 'lucide-react'
+import { Loader2, Settings2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 // ---- Exam status cycle & icons ----
@@ -150,10 +149,8 @@ function Feedback({ error, success }: { error: string | null; success: string | 
 // ---- Nav items ----
 
 const NAV_ITEMS = [
-  { id: 'account',    label: 'Account' },
   { id: 'profile',    label: 'Profile' },
   { id: 'exams',      label: 'Credential Path & Exams' },
-  { id: 'appearance', label: 'Appearance' },
   { id: 'data',       label: 'Progress & Data' },
 ]
 
@@ -162,16 +159,21 @@ const NAV_ITEMS = [
 export default function Settings() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
-  const { theme, toggleTheme } = useTheme()
   const { sessions } = useProgress()
   const {
     profile, setProfile,
     examRows,
     loadingProfile, loadingExams,
-    changePassword, updateProfile, uploadAvatar, saveExamRows,
+    changePassword, updateProfile, saveExamRows,
     resetHistory, deleteAccount,
     accountState, profileState, examsState, dataState,
   } = useSettings()
+
+  // Detect OAuth/SSO users (Google, Apple, etc.) — they cannot change their password
+  // or email through our settings since identity is managed externally.
+  const isSSOUser = !!(
+    user?.app_metadata?.provider && user.app_metadata.provider !== 'email'
+  )
 
   // Auth guard
   useEffect(() => {
@@ -187,10 +189,9 @@ export default function Settings() {
   }
 
   // ---- Dirty tracking (per section) ----
-  const [accountDirty, setAccountDirty] = useState(false)
   const [profileDirty, setProfileDirty] = useState(false)
   const [examsDirty, setExamsDirty] = useState(false)
-  const isAnyDirty = accountDirty || profileDirty || examsDirty
+  const isAnyDirty = profileDirty || examsDirty
 
   // beforeunload warning
   useEffect(() => {
@@ -201,7 +202,8 @@ export default function Settings() {
     return () => window.removeEventListener('beforeunload', handler)
   }, [isAnyDirty])
 
-  // ---- Account section state ----
+  // ---- Password change state (hidden behind toggle in Profile section) ----
+  const [showPasswordFields, setShowPasswordFields] = useState(false)
   const [currentPw, setCurrentPw] = useState('')
   const [newPw, setNewPw] = useState('')
   const [confirmPw, setConfirmPw] = useState('')
@@ -215,7 +217,7 @@ export default function Settings() {
     const ok = await changePassword(currentPw, newPw)
     if (ok) {
       setCurrentPw(''); setNewPw(''); setConfirmPw('')
-      setAccountDirty(false)
+      setShowPasswordFields(false)
     }
   }
 
@@ -223,7 +225,6 @@ export default function Settings() {
   const [localDisplayName, setLocalDisplayName] = useState('')
   const [localEmail, setLocalEmail] = useState('')
   const [localAvatarUrl, setLocalAvatarUrl] = useState('')
-  const [avatarUploading, setAvatarUploading] = useState(false)
 
   useEffect(() => {
     setLocalDisplayName(profile.displayName)
@@ -234,26 +235,13 @@ export default function Settings() {
   const handleProfileSave = async () => {
     const ok = await updateProfile({
       displayName: localDisplayName,
-      email: localEmail,
+      email: isSSOUser ? undefined : localEmail,
       avatarUrl: localAvatarUrl,
     })
     if (ok) {
       setProfile(p => ({ ...p, displayName: localDisplayName, email: localEmail, avatarUrl: localAvatarUrl }))
       setProfileDirty(false)
     }
-  }
-
-  const handleAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setAvatarUploading(true)
-    const url = await uploadAvatar(file)
-    if (url) {
-      setLocalAvatarUrl(url)
-      setProfileDirty(true)
-    }
-    setAvatarUploading(false)
-    e.target.value = ''
   }
 
   const handlePresetColor = (hex: string) => {
@@ -422,59 +410,7 @@ export default function Settings() {
           {/* Sections */}
           <div className="flex-1 space-y-8 min-w-0">
 
-            {/* ---- Account ---- */}
-            <section ref={el => { sectionRefs.current.account = el }} id="account">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Account</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="current-pw">Current password</Label>
-                    <Input
-                      id="current-pw"
-                      type="password"
-                      autoComplete="current-password"
-                      value={currentPw}
-                      onChange={e => { setCurrentPw(e.target.value); setAccountDirty(true) }}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-pw">New password</Label>
-                    <Input
-                      id="new-pw"
-                      type="password"
-                      autoComplete="new-password"
-                      value={newPw}
-                      onChange={e => { setNewPw(e.target.value); setAccountDirty(true) }}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-pw">Confirm new password</Label>
-                    <Input
-                      id="confirm-pw"
-                      type="password"
-                      autoComplete="new-password"
-                      value={confirmPw}
-                      onChange={e => { setConfirmPw(e.target.value); setAccountDirty(true) }}
-                    />
-                  </div>
-                  {pwValidErr && (
-                    <Alert className="text-sm border-destructive text-destructive">{pwValidErr}</Alert>
-                  )}
-                  <Feedback error={accountState.error} success={accountState.success} />
-                  <Button
-                    onClick={handlePasswordSave}
-                    disabled={!accountDirty || accountState.saving}
-                    className="w-full sm:w-auto"
-                  >
-                    {accountState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save Password'}
-                  </Button>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* ---- Profile ---- */}
+            {/* ---- Profile (first) ---- */}
             <section ref={el => { sectionRefs.current.profile = el }} id="profile">
               <Card>
                 <CardHeader>
@@ -485,39 +421,25 @@ export default function Settings() {
                     <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
                   ) : (
                     <>
-                      {/* Avatar */}
+                      {/* Avatar color picker */}
                       <div className="flex items-center gap-4">
                         <AvatarPreview url={localAvatarUrl} initials={initials} size={64} />
-                        <div className="space-y-2">
-                          <div className="flex flex-wrap gap-2">
-                            {PRESET_COLORS.map(hex => (
-                              <button
-                                key={hex}
-                                type="button"
-                                title={hex}
-                                onClick={() => handlePresetColor(hex)}
-                                style={{ backgroundColor: hex }}
-                                className={cn(
-                                  'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110',
-                                  localAvatarUrl === JSON.stringify({ type: 'color', value: hex })
-                                    ? 'border-foreground scale-110'
-                                    : 'border-transparent'
-                                )}
-                              />
-                            ))}
-                          </div>
-                          <label className="inline-block">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md border border-input bg-background hover:bg-accent cursor-pointer transition-colors">
-                              {avatarUploading ? <><Loader2 className="h-3 w-3 animate-spin" />Uploading…</> : 'Upload photo'}
-                            </span>
-                            <input
-                              type="file"
-                              accept="image/jpeg,image/png,image/webp"
-                              className="sr-only"
-                              onChange={handleAvatarFile}
-                              disabled={avatarUploading}
+                        <div className="flex flex-wrap gap-2">
+                          {PRESET_COLORS.map(hex => (
+                            <button
+                              key={hex}
+                              type="button"
+                              title={hex}
+                              onClick={() => handlePresetColor(hex)}
+                              style={{ backgroundColor: hex }}
+                              className={cn(
+                                'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110',
+                                localAvatarUrl === JSON.stringify({ type: 'color', value: hex })
+                                  ? 'border-foreground scale-110'
+                                  : 'border-transparent'
+                              )}
                             />
-                          </label>
+                          ))}
                         </div>
                       </div>
 
@@ -535,15 +457,26 @@ export default function Settings() {
 
                       <div className="space-y-2">
                         <Label htmlFor="email">Email address</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={localEmail}
-                          onChange={e => { setLocalEmail(e.target.value); setProfileDirty(true) }}
-                        />
-                        <p className="text-xs text-muted-foreground">
-                          A confirmation email will be sent to the new address before the change applies.
-                        </p>
+                        {isSSOUser ? (
+                          <>
+                            <Input id="email" type="email" value={localEmail} readOnly className="opacity-60 cursor-not-allowed" />
+                            <p className="text-xs text-muted-foreground">
+                              Email is managed by your {user?.app_metadata?.provider === 'google' ? 'Google' : 'linked'} account.
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <Input
+                              id="email"
+                              type="email"
+                              value={localEmail}
+                              onChange={e => { setLocalEmail(e.target.value); setProfileDirty(true) }}
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              A confirmation email will be sent to the new address before the change applies.
+                            </p>
+                          </>
+                        )}
                       </div>
 
                       <Feedback error={profileState.error} success={profileState.success} />
@@ -554,6 +487,75 @@ export default function Settings() {
                       >
                         {profileState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save Profile'}
                       </Button>
+
+                      {/* Password change — hidden by default, not shown for SSO users */}
+                      {!isSSOUser && (
+                        <>
+                          <Separator />
+                          {!showPasswordFields ? (
+                            <button
+                              type="button"
+                              onClick={() => setShowPasswordFields(true)}
+                              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-2 hover:underline"
+                            >
+                              Change my password
+                            </button>
+                          ) : (
+                            <div className="space-y-4">
+                              <p className="text-sm font-medium">Change password</p>
+                              <div className="space-y-2">
+                                <Label htmlFor="current-pw">Current password</Label>
+                                <Input
+                                  id="current-pw"
+                                  type="password"
+                                  autoComplete="current-password"
+                                  value={currentPw}
+                                  onChange={e => setCurrentPw(e.target.value)}
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="new-pw">New password</Label>
+                                <Input
+                                  id="new-pw"
+                                  type="password"
+                                  autoComplete="new-password"
+                                  value={newPw}
+                                  onChange={e => setNewPw(e.target.value)}
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="confirm-pw">Confirm new password</Label>
+                                <Input
+                                  id="confirm-pw"
+                                  type="password"
+                                  autoComplete="new-password"
+                                  value={confirmPw}
+                                  onChange={e => setConfirmPw(e.target.value)}
+                                />
+                              </div>
+                              {pwValidErr && (
+                                <Alert className="text-sm border-destructive text-destructive">{pwValidErr}</Alert>
+                              )}
+                              <Feedback error={accountState.error} success={accountState.success} />
+                              <div className="flex gap-2">
+                                <Button
+                                  onClick={handlePasswordSave}
+                                  disabled={accountState.saving}
+                                  className="w-full sm:w-auto"
+                                >
+                                  {accountState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save Password'}
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  onClick={() => { setShowPasswordFields(false); setCurrentPw(''); setNewPw(''); setConfirmPw(''); setPwValidErr(null) }}
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
                     </>
                   )}
                 </CardContent>
@@ -572,7 +574,16 @@ export default function Settings() {
                     <select
                       id="track-select"
                       value={selectedTrack}
-                      onChange={e => setSelectedTrack(e.target.value)}
+                      onChange={e => {
+                        const newTrack = e.target.value
+                        setSelectedTrack(newTrack)
+                        try {
+                          const raw = localStorage.getItem('quiz-journey')
+                          const journey = raw ? JSON.parse(raw) : { selectedTrack: 'DEFAULT', progress: {} }
+                          journey.selectedTrack = newTrack
+                          localStorage.setItem('quiz-journey', JSON.stringify(journey))
+                        } catch { /* ignore */ }
+                      }}
                       className="w-full sm:w-auto text-sm border border-input rounded-md px-3 py-2 bg-background text-foreground cursor-pointer"
                     >
                       {TRACKS.map(t => (
@@ -650,36 +661,6 @@ export default function Settings() {
                   >
                     {examsState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save Exam Progress'}
                   </Button>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* ---- Appearance ---- */}
-            <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Appearance</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium">Theme</p>
-                      <p className="text-xs text-muted-foreground">
-                        Currently using <span className="font-medium capitalize">{theme}</span> mode
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={toggleTheme}
-                      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-                      className="h-10 w-10 flex items-center justify-center rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors"
-                    >
-                      {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                    </button>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-3">
-                    Theme preference is saved automatically and synced with the wiki.
-                  </p>
                 </CardContent>
               </Card>
             </section>

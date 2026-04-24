@@ -1,0 +1,1 @@
+==Price Risk== is the risk that asset values change due to interest rate movements.

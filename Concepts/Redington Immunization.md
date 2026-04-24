@@ -1,0 +1,1 @@
+==Redington Immunization== is an immunization strategy requiring equal present value, equal duration, and greater asset convexity.

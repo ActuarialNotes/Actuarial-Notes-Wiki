@@ -6,7 +6,7 @@ interface ProgressBarProps {
 }
 
 export function ProgressBar({ current, total }: ProgressBarProps) {
-  const percentage = total > 0 ? (current / total) * 100 : 0
+  const percentage = total > 0 ? Math.min(100, (current / total) * 100) : 0
 
   return (
     <div className="space-y-1">

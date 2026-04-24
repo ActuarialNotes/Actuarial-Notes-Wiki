@@ -14,7 +14,7 @@ const difficultyClasses: Record<string, string> = {
 
 export function TopicBadge({ label, variant = 'topic' }: TopicBadgeProps) {
   if (variant === 'difficulty') {
-    const classes = difficultyClasses[label.toLowerCase()] ?? ''
+    const classes = difficultyClasses[label.toLowerCase()] ?? difficultyClasses.medium
     return (
       <Badge className={cn('capitalize', classes)}>
         {label}

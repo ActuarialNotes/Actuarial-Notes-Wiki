@@ -19,7 +19,7 @@ export function ExplanationPanel({ explanation, wikiLinks, isCorrect }: Explanat
       )}
     >
       <div className="flex items-center gap-2">
-        <span className="text-lg">{isCorrect ? '✓' : '✗'}</span>
+        <span aria-hidden="true" className="text-lg">{isCorrect ? '✓' : '✗'}</span>
         <span
           className={cn(
             'font-semibold',

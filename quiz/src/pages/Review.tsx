@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { setExamAccent } from '@/lib/examColors'
 
 function formatTime(seconds: number | null): string {
-  if (seconds === null) return '—'
+  if (seconds === null || seconds < 0) return '—'
   const m = Math.floor(seconds / 60)
   const s = seconds % 60
   return m > 0 ? `${m}m ${s}s` : `${s}s`
@@ -20,30 +20,18 @@ export default function Review() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const { questions, responses, mode: storeMode, status, resetQuiz } = useQuizStore()
+  const { resetQuiz } = useQuizStore()
   const [session, setSession] = useState<CompletedSession | null>(null)
 
   useEffect(() => {
-    if (status === 'complete') {
-      // Build session from live store
-      const correctCount = questions.filter(q => responses[q.id]?.chosen === q.answer).length
-      setSession({
-        questions,
-        responses,
-        mode: storeMode,
-        correctCount,
-        totalQuestions: questions.length,
-        timeTakenSeconds: null,
-        completedAt: new Date().toISOString(),
-      })
+    // completeQuiz always writes the session to localStorage before navigation,
+    // so this is the single source of truth — including timeTakenSeconds.
+    const last = readLastSession()
+    if (last) {
+      setSession(last)
     } else {
-      // Fallback: try localStorage (handles hard refresh)
-      const last = readLastSession()
-      if (last) {
-        setSession(last)
-      } else {
-        navigate('/', { replace: true })
-      }
+      console.warn('Review: no completed session in localStorage; redirecting to /')
+      navigate('/', { replace: true })
     }
   // Only run on mount
   // eslint-disable-next-line react-hooks/exhaustive-deps

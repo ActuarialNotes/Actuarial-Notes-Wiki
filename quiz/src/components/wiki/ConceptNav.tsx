@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { wikiRoute } from '@/lib/wikiRoutes'
@@ -40,6 +40,30 @@ function flattenConcepts(syllabus: WikiExamSyllabus | null): WikiConcept[] {
 
 export function ConceptNav({ conceptName, syllabus, fromExamId }: ConceptNavProps) {
   const [open, setOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement | null>(null)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
+
+  // Close on Escape or outside click so the menu behaves like a real popover.
+  useEffect(() => {
+    if (!open) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setOpen(false)
+        buttonRef.current?.focus()
+      }
+    }
+    function onClick(e: MouseEvent) {
+      const target = e.target as Node
+      if (menuRef.current?.contains(target) || buttonRef.current?.contains(target)) return
+      setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onClick)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onClick)
+    }
+  }, [open])
 
   const { prev, next, position } = useMemo(() => {
     const pos = findPosition(syllabus, conceptName)
@@ -77,10 +101,12 @@ export function ConceptNav({ conceptName, syllabus, fromExamId }: ConceptNavProp
       {/* Current pill with objectives dropdown */}
       <div className="relative">
         <button
+          ref={buttonRef}
           type="button"
           onClick={() => setOpen(v => !v)}
           disabled={!position}
           aria-expanded={open}
+          aria-haspopup="menu"
           className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border bg-accent/40 text-sm font-medium disabled:cursor-default disabled:opacity-80"
         >
           <span className="truncate max-w-[180px]">{conceptName}</span>
@@ -92,6 +118,7 @@ export function ConceptNav({ conceptName, syllabus, fromExamId }: ConceptNavProp
         </button>
         {open && position && (
           <div
+            ref={menuRef}
             className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-md border bg-popover text-popover-foreground shadow-lg p-1"
             role="menu"
           >

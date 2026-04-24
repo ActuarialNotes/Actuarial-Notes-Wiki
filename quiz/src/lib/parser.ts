@@ -95,6 +95,13 @@ export function parseQuestion(raw: string): Question | null {
           })
       : []
 
+    // Reject malformed questions where the answer key doesn't match any parsed
+    // option — otherwise grading silently treats every response as wrong.
+    const answerKey = String(data.answer)
+    if (options.length === 0 || !options.some(o => o.key === answerKey)) {
+      return null
+    }
+
     const rawLink = data.wiki_link
     const wikiLinks: string[] = Array.isArray(rawLink)
       ? (rawLink as unknown[]).map(String).filter(s => s.length > 0)

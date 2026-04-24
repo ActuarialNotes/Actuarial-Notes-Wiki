@@ -51,18 +51,26 @@ export function useSettings() {
   }, [user])
 
   // Load exam progress rows
+  const userId = user?.id
   useEffect(() => {
-    if (!user) return
+    if (!userId) return
+    let cancelled = false
     setLoadingExams(true)
     supabase
       .from('exam_progress')
       .select('exam_id, status, target_date')
-      .eq('user_id', user.id)
-      .then(({ data }: { data: ExamProgressRow[] | null }) => {
-        if (data) setExamRows(data as ExamProgressRow[])
+      .eq('user_id', userId)
+      .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
+        if (cancelled) return
+        if (error) {
+          console.warn('useSettings: failed to load exam_progress:', error.message)
+        } else if (data) {
+          setExamRows(data)
+        }
         setLoadingExams(false)
       })
-  }, [user])
+    return () => { cancelled = true }
+  }, [userId])
 
   // --- Account: change password ---
   const changePassword = useCallback(async (currentPassword: string, newPassword: string) => {

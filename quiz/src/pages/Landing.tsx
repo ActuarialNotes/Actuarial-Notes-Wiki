@@ -57,12 +57,13 @@ export default function Landing() {
       setTopic(inProgressExams[0].value)
       setShowOther(false)
     }
-  }, [JSON.stringify(examProgress)])  // eslint-disable-line react-hooks/exhaustive-deps
+  }, [examProgress.P, examProgress.FM])  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reset subtopic selection when exam topic changes
+  // Reset subtopic selection when exam topic or mode changes — mock-exam ignores
+  // subtopic filters, so leaving stale chips selected is misleading.
   useEffect(() => {
     setSelectedSubtopics([])
-  }, [topic])
+  }, [topic, mode])
 
   // Apply exam accent colour whenever the selected topic changes
   useEffect(() => {

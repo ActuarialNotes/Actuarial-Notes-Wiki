@@ -84,7 +84,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
       const ref = hrefToEntryRef(href)
       if (!ref) {
         return (
-          <a href={href} target="_blank" rel="noreferrer" {...rest}>
+          <a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
             {children}
           </a>
         )

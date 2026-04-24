@@ -6,8 +6,10 @@ interface Props {
 }
 
 export function LatexText({ children, className }: Props) {
-  // Split on $$...$$ (display math) and $...$ (inline math), keeping delimiters
-  const parts = children.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]*\$)/g)
+  // Split on $$...$$ (display math) and $...$ (inline math), keeping delimiters.
+  // Inline math must contain at least one letter or backslash so currency like
+  // "$5" or "$1,000" isn't accidentally treated as math.
+  const parts = children.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]*[A-Za-z\\][^$\n]*\$)/g)
 
   return (
     <span className={className}>

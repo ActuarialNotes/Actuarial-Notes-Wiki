@@ -63,7 +63,14 @@ const LEVEL_TEXT_COLOR: Record<ConceptProgress['level'], string> = {
 
 function StrengthBar({ pct, level }: { pct: number; level: ConceptProgress['level'] }) {
   return (
-    <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0">
+    <div
+      className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0"
+      role="progressbar"
+      aria-valuenow={Math.round(pct)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={`${LEVEL_LABEL[level]} – ${Math.round(pct)}%`}
+    >
       <div
         className={`h-full rounded-full transition-all ${LEVEL_BAR_COLOR[level]}`}
         style={{ width: `${pct}%` }}

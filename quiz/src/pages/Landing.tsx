@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress, EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { useSubtopics } from '@/hooks/useSubtopics'
+import { useAllQuestions } from '@/hooks/useAllQuestions'
+import { filterQuestions } from '@/lib/parser'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import type { QuizMode, Difficulty } from '@/lib/parser'
-import { setExamAccent } from '@/lib/examColors'
 
 const EXAMS = [
   { value: 'Probability', label: 'Exam P — Probability' },
@@ -18,8 +19,6 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Probability': 30,
   'Financial Mathematics': 35,
 }
-
-const QUESTION_COUNTS: (number | 'all')[] = [5, 10, 20, 'all']
 
 const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
   { value: '', label: 'All Levels' },
@@ -33,6 +32,7 @@ export default function Landing() {
   const { user } = useAuth()
   const examProgress = useExamProgress()
   const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
+  const { questions: allQuestions } = useAllQuestions()
 
   const inProgressExams = EXAMS.filter(e => {
     const examId = Object.entries(EXAM_ID_TO_TOPIC).find(([, t]) => t === e.value)?.[0]
@@ -48,7 +48,7 @@ export default function Landing() {
 
   // Quiz-specific options
   const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
-  const [count, setCount] = useState<number | 'all'>(10)
+  const [count, setCount] = useState<number>(10)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
 
   // Pre-select first in-progress exam when progress loads
@@ -65,10 +65,22 @@ export default function Landing() {
     setSelectedSubtopics([])
   }, [topic, mode])
 
-  // Apply exam accent colour whenever the selected topic changes
+  // Compute available question count for the current filters
+  const availableCount = useMemo(() => {
+    if (!topic) return 0
+    return filterQuestions(allQuestions, {
+      topic,
+      ...(selectedSubtopics.length > 0 && { subtopics: selectedSubtopics }),
+      ...(difficulty && { difficulty }),
+    }).length
+  }, [allQuestions, topic, selectedSubtopics, difficulty])
+
+  // Clamp count when available pool shrinks
   useEffect(() => {
-    setExamAccent(topic)
-  }, [topic])
+    if (availableCount > 0 && count > availableCount) {
+      setCount(availableCount)
+    }
+  }, [availableCount, count])
 
   function toggleSubtopic(subtopic: string) {
     setSelectedSubtopics(prev =>
@@ -82,7 +94,7 @@ export default function Landing() {
 
     if (mode === 'quiz') {
       if (selectedSubtopics.length > 0) params.set('subtopics', selectedSubtopics.join(','))
-      if (count !== 'all') params.set('count', String(count))
+      params.set('count', String(count))
       params.set('reveal', reveal)
     } else {
       // mock-exam: fixed question count mirroring real exam, reveal only at end
@@ -95,6 +107,7 @@ export default function Landing() {
   const subtopics = subtopicsByTopic[topic] ?? []
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
+  const examLabelColor = topic === 'Probability' ? 'text-[hsl(221,83%,53%)]' : 'text-[hsl(243,75%,59%)]'
   const hasTopic = topic !== ''
 
   return (
@@ -112,13 +125,7 @@ export default function Landing() {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Configure Your Session</CardTitle>
-          <CardDescription>
-            {hasTopic ? 'Choose a mode and options, then start' : 'Choose an exam to begin'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 pt-6">
           {!hasTopic && (
             <div className="space-y-2">
               <label className="text-sm font-medium">Exam</label>
@@ -182,7 +189,7 @@ export default function Landing() {
                 className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 <span aria-hidden="true">←</span>
-                <span className="text-foreground font-medium">{examLabel}</span>
+                <span className={`font-medium ${examLabelColor}`}>{examLabel}</span>
                 <span>· change</span>
               </button>
 
@@ -252,23 +259,25 @@ export default function Landing() {
 
               {/* Number of questions */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">Number of Questions</label>
-                <div className="flex gap-2">
-                  {QUESTION_COUNTS.map(c => (
-                    <button
-                      key={String(c)}
-                      type="button"
-                      onClick={() => setCount(c)}
-                      className={`px-4 py-1.5 rounded-md border text-sm transition-colors ${
-                        count === c
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-input hover:bg-accent'
-                      }`}
-                    >
-                      {c === 'all' ? 'All' : c}
-                    </button>
-                  ))}
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium">Number of Questions</label>
+                  <span className="text-sm font-medium tabular-nums">
+                    {availableCount > 0
+                      ? count >= availableCount
+                        ? `All (${availableCount})`
+                        : count
+                      : '—'}
+                  </span>
                 </div>
+                <input
+                  type="range"
+                  min={1}
+                  max={availableCount > 0 ? availableCount : 1}
+                  value={availableCount > 0 ? Math.min(count, availableCount) : 1}
+                  onChange={e => setCount(Number(e.target.value))}
+                  disabled={availableCount === 0}
+                  className="w-full accent-foreground"
+                />
               </div>
 
               {/* Difficulty */}

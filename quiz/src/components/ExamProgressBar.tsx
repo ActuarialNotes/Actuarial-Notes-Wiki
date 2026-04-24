@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import {
   TRACKS,
@@ -87,17 +88,21 @@ export function ExamProgressBar() {
                 {counts.done} / {counts.total}
               </Badge>
             )}
-            <span className="text-sm text-muted-foreground opacity-75 px-2 py-1">
-              {track.name}
-            </span>
+            {!isDefault && (
+              <span className="text-sm text-muted-foreground opacity-75 px-2 py-1">
+                {track.name}
+              </span>
+            )}
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
         {isDefault ? (
-          <p className="text-sm text-muted-foreground text-center py-1">
-            Select a credential track in Settings to track your progress
-          </p>
+          <div className="flex justify-center py-1">
+            <Link to="/settings#exams" className={buttonVariants({ size: 'sm' })}>
+              Choose a Track
+            </Link>
+          </div>
         ) : (
           <div className="flex gap-[1.5px] rounded-full overflow-hidden h-2.5">
             {segments.map((seg, i) => (
@@ -114,11 +119,6 @@ export function ExamProgressBar() {
             ))}
           </div>
         )}
-        <div className="text-right">
-          <Link to="/settings#exams" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-            Edit in Settings →
-          </Link>
-        </div>
       </CardContent>
     </Card>
   )

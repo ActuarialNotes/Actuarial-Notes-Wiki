@@ -4,40 +4,34 @@
 
 The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice questions about probability theory concepts and their application to measuring risk. 
 
-<div class="callout-cols-2">
-
 > [!answer]- 📅 Exam Schedule {2026}
-> 
-> <div class="highlight-upcoming" data-date-col="0"></div>
 > 
 > Dates | Exams 
 > -|-
 > Mar 9 - Mar 20 | P
- >May 8 - May 19 | P
- >Jul 8 - Jul 19 | P
- >Sep 10 - Sep 21 | P
- >Nov 4 - Nov 15 | P
- >
- >- [Register](https://www.soa.org/education/exam-req/registration/edu-registration/) ($275 USD registration fee)
- 
+> May 8 - May 19 | P
+> Jul 8 - Jul 19 | P
+> Sep 10 - Sep 21 | P
+> Nov 4 - Nov 15 | P
+>
+> - [Register](https://www.soa.org/education/exam-req/registration/edu-registration/) ($275 USD registration fee)
+
 > [!answer]- 📄 Download Resources {4 PDFs}
 > - [Exam P-1 Syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-03-exam-p-syllabus.pdf)
 > - [May 2026 Exam P-1 Syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-05-exam-p-syllabus.pdf)
 > - [736 Sample Questions for Exam P (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf)
 > - [Sample Answers](https://www.soa.org/globalassets/assets/files/edu/2025/fall/questions-solutions/2025-10-exam-p-sample-solutions.pdf)
 
-</div>
-
->[!answer]- 📕 Source Material {6 Textbooks}
+> [!answer]- 📕 Source Material {6 Textbooks}
 >
-> | Source                                                                                    | Coverage                                                                                            |
-| ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| [[A First Course in Probability (Ross - 2019)]]                                           | Chapters 1-8^[Excluding 4.8.4, 5.6.2, 5.6.3, 5.6.5, 5.7, 7.2.1, 7.2.2, 7.3, 7.6, 7.7, 7.8, 7.9]<br> |
-| [[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008)]]   | Chapters 1-8^[Exlcuding 2.12, MGF, 4.10, Continuous Multivariate Distributions, 5.10, 7.4]          |
-| [[Probability for Risk Management (Hassett - 2021)]]                                      | Chapters 1-11                                                                                       |
-| [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)]] | Chapters 1-8                                                                                        |
-| [[Probability and Statistical Inference (Hogg - 2020)]]                                   | Chapters 1-5                                                                                        |
-| [[Probability (Leemis - 2018)]]                                                           | Chapters 1-8                                                                                        |
+> | Source | Coverage |
+> | --- | --- |
+> | [[A First Course in Probability (Ross - 2019)]] | Chapters 1-8^[Excluding 4.8.4, 5.6.2, 5.6.3, 5.6.5, 5.7, 7.2.1, 7.2.2, 7.3, 7.6, 7.7, 7.8, 7.9] |
+> | [[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008)]] | Chapters 1-8^[Excluding 2.12, MGF, 4.10, Continuous Multivariate Distributions, 5.10, 7.4] |
+> | [[Probability for Risk Management (Hassett - 2021)]] | Chapters 1-11 |
+> | [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)]] | Chapters 1-8 |
+> | [[Probability and Statistical Inference (Hogg - 2020)]] | Chapters 1-5 |
+> | [[Probability (Leemis - 2018)]] | Chapters 1-8 |
 
 ### Prerequisite knowledge
 Knowledge of the following concepts is expected:
@@ -61,7 +55,7 @@ Knowledge of the following concepts is expected:
 > [!example]- Univariate Random Variables {44-50%}
 > ### Univariate Random Variables
 > Understand [[Discrete Univariate Distributions]] and [[Continuous Univariate Distributions]] and their applications. 
->8. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
+> 8. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
 > 9. Calculate [[Conditional Probability|Conditional Probabilities]].
 > 10. Explain and calculate expected values, including moments, mode, median, and percentiles.
 > 11. Explain and calculate [[Variance]], [[Standard Deviation]], and [[Coefficient of Variation]].
@@ -96,8 +90,3 @@ Knowledge of the following concepts is expected:
 > 7. Calculate [[Probabilities for Linear Combinations]] of independent discrete random variables as well as for continuous normal random variables.
 > 8. Calculate [[Moments for Linear Combinations]] of independent random variables.
 > 9. Apply the [[Central Limit Theorem]] to calculate approximations of probabilities for linear combinations of independent and identically distributed random variables.
-
-
-
-
-

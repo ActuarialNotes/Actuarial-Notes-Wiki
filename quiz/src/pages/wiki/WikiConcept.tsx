@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, useSearchParams, Link } from 'react-router-dom'
-import { ChevronLeft, Loader2 } from 'lucide-react'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { fromSlug, examIdFromFile } from '@/lib/wikiRoutes'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
@@ -104,24 +104,12 @@ export default function WikiConcept() {
         <WikiArticle markdown={content} sourcePath={`Concepts/${conceptName}.md`} />
       )}
 
-      {activeSyllabus ? (
+      {activeSyllabus && (
         <ConceptNav
           conceptName={conceptName}
           syllabus={activeSyllabus}
           fromExamId={examId}
         />
-      ) : (
-        <nav
-          className="sticky bottom-0 mt-8 -mx-4 sm:-mx-6 border-t bg-background/95 backdrop-blur px-3 sm:px-4 py-2"
-          aria-label="Concept navigation"
-        >
-          <Link
-            to="/wiki"
-            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-          >
-            <ChevronLeft className="h-4 w-4" /> Back to wiki
-          </Link>
-        </nav>
       )}
     </div>
   )

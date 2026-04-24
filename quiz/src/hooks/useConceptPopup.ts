@@ -47,8 +47,10 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     }
   },
   close: () => set({ open: false, list: [], index: 0, sourcePath: null }),
-  closeOnNavigation: () => {
-    const { open } = get()
-    if (open) set({ open: false, list: [], index: 0, sourcePath: null })
+  closeOnNavigation: pathname => {
+    const { open, sourcePath } = get()
+    if (open && sourcePath && sourcePath !== pathname) {
+      set({ open: false, list: [], index: 0, sourcePath: null })
+    }
   },
 }))

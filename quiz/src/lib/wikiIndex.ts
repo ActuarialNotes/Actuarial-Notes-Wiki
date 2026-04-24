@@ -3,6 +3,7 @@
 // (/Resources/Books). Cached in localStorage for 6h, matching the TTL
 // used by useWikiSyllabus.
 
+import fm from 'front-matter'
 import { listRepoContents, fetchWikiFile } from '@/lib/github'
 
 export type WikiIndexCategory = 'exam' | 'concept' | 'document'
@@ -55,18 +56,18 @@ function stripExt(name: string): string {
 }
 
 function parseFrontmatter(raw: string): Record<string, string> {
-  const match = raw.match(/^---\n([\s\S]*?)\n---/)
-  if (!match) return {}
-  const out: Record<string, string> = {}
-  for (const line of match[1].split('\n')) {
-    const kv = line.match(/^([A-Za-z][\w\s]*):\s*(.*)$/)
-    if (!kv) continue
-    const key = kv[1].trim()
-    let value = kv[2].trim()
-    if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1)
-    out[key] = value
+  // Delegates to front-matter (already a dep) so quoted values, escaped quotes,
+  // and YAML edge cases are handled correctly. Coerces to string for callers.
+  try {
+    const attrs = fm<Record<string, unknown>>(raw).attributes ?? {}
+    const out: Record<string, string> = {}
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v != null) out[k] = String(v)
+    }
+    return out
+  } catch {
+    return {}
   }
-  return out
 }
 
 export async function buildWikiIndex(): Promise<WikiIndexItem[]> {

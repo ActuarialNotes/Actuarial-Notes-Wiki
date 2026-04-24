@@ -21,25 +21,31 @@ export const TOPIC_TO_EXAM_ID: Record<string, string> = Object.fromEntries(
 export function useExamProgress(): Record<string, string> {
   const { user } = useAuth()
   const [progress, setProgress] = useState<Record<string, string>>({})
+  const userId = user?.id
 
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setProgress({})
       return
     }
 
+    let cancelled = false
     supabase
       .from('exam_progress')
       .select('exam_id, status')
-      .eq('user_id', user.id)
-      .then(({ data }: { data: { exam_id: string; status: string }[] | null }) => {
+      .eq('user_id', userId)
+      .then(({ data, error }: { data: { exam_id: string; status: string }[] | null; error: { message: string } | null }) => {
+        if (cancelled) return
+        if (error) {
+          console.warn('useExamProgress: failed to load exam_progress:', error.message)
+          return
+        }
         const map: Record<string, string> = {}
-        data?.forEach((row: { exam_id: string; status: string }) => {
-          map[row.exam_id] = row.status
-        })
+        data?.forEach(row => { map[row.exam_id] = row.status })
         setProgress(map)
       })
-  }, [user])
+    return () => { cancelled = true }
+  }, [userId])
 
   return progress
 }

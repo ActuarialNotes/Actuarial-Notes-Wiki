@@ -19,7 +19,7 @@ function formatDate(iso: string): string {
 }
 
 function formatTime(seconds: number | null): string {
-  if (seconds === null) return '—'
+  if (seconds === null || seconds < 0) return '—'
   const m = Math.floor(seconds / 60)
   const s = seconds % 60
   return m > 0 ? `${m}m ${s}s` : `${s}s`
@@ -64,11 +64,13 @@ export default function Dashboard() {
   if (!user) return null
 
   const totalSessions = sessions.length
-  const avgScore = totalSessions > 0
-    ? Math.round(sessions.reduce((sum, s) => sum + (s.correct_count / s.total_questions) * 100, 0) / totalSessions)
+  // Skip sessions with total_questions === 0 to avoid Infinity/NaN poisoning the stats
+  const scoredSessions = sessions.filter(s => s.total_questions > 0)
+  const avgScore = scoredSessions.length > 0
+    ? Math.round(scoredSessions.reduce((sum, s) => sum + (s.correct_count / s.total_questions) * 100, 0) / scoredSessions.length)
     : null
-  const bestScore = totalSessions > 0
-    ? Math.round(Math.max(...sessions.map(s => (s.correct_count / s.total_questions) * 100)))
+  const bestScore = scoredSessions.length > 0
+    ? Math.round(Math.max(...scoredSessions.map(s => (s.correct_count / s.total_questions) * 100)))
     : null
 
   return (

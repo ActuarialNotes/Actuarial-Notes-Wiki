@@ -105,7 +105,7 @@ export default async function handler(req, res) {
   // Rate limit
   const ip = getClientIp(req);
   if (!checkRateLimit(ip)) {
-    return res.status(429).json({ error: 'Rate limit exceeded. You can make 5 requests per hour. Please wait and try again.' });
+    return res.status(429).json({ error: `Rate limit exceeded. You can make ${RATE_LIMIT} requests per hour. Please wait and try again.` });
   }
 
   // Validate body
@@ -172,7 +172,7 @@ export default async function handler(req, res) {
 
     // Parse JSON — try direct parse first, then strip fences/prose
     let jsonStr = content.trim();
-    let parsed;
+    let parsed = null;
     try {
       parsed = JSON.parse(jsonStr);
     } catch (e1) {

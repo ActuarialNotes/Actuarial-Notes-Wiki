@@ -164,9 +164,11 @@ export default function Browse() {
       .finally(() => setLoading(false))
   }, [])
 
-  // Reset subtopics when topic changes
+  // Reset subtopics and any in-flight question selection when topic changes —
+  // otherwise "Start quiz" would launch with the previous exam's questions.
   useEffect(() => {
     setSelectedSubtopics([])
+    setSelectedIds(new Set())
   }, [topic])
 
   function toggleSubtopic(subtopic: string) {

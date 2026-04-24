@@ -48,9 +48,10 @@ export function AnswerOption({
       type="button"
       disabled={isDisabled}
       onClick={() => !isDisabled && onClick(optionKey)}
+      aria-label={`Option ${optionKey}: ${text}`}
       className={cn(baseClasses, stateClasses)}
     >
-      <span className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-current flex items-center justify-center text-xs font-bold">
+      <span aria-hidden="true" className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-current flex items-center justify-center text-xs font-bold">
         {optionKey}
       </span>
       <span className="flex-1"><LatexText>{text}</LatexText></span>

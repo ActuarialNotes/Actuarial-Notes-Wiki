@@ -1,0 +1,1 @@
+Read: [[Statistical Rethinking (McElreath)]]

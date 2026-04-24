@@ -1,0 +1,1 @@
+==Cash Flow Matching== is a strategy where asset cash flows exactly match liability cash flows.

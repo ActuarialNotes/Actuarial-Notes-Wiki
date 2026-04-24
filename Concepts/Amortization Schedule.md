@@ -1,0 +1,1 @@
+==Amortization Schedule== is a table showing the breakdown of each loan payment into interest and principal.

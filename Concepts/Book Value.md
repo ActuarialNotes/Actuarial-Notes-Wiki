@@ -1,0 +1,1 @@
+==Book Value== is the value of a bond immediately after a coupon payment.

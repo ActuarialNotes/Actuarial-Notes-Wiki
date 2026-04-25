@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   ChevronsLeft,
+  ClipboardList,
   Compass,
   LayoutDashboard,
   LogIn,
@@ -74,6 +75,8 @@ export default function Sidebar() {
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const profileRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     try {
@@ -83,7 +86,26 @@ export default function Sidebar() {
     }
   }, [collapsed])
 
+  useEffect(() => {
+    if (!profileOpen) return
+    function handleClickOutside(e: MouseEvent) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [profileOpen])
+
   const width = collapsed ? 'w-14' : 'w-64'
+
+  const profileName =
+    (user?.user_metadata?.full_name as string | undefined) ||
+    (user?.user_metadata?.display_name as string | undefined) ||
+    user?.email?.split('@')[0] ||
+    'Profile'
+
+  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
 
   return (
     <aside
@@ -92,10 +114,10 @@ export default function Sidebar() {
       <div className="flex items-center justify-between px-3 h-14 border-b">
         {!collapsed && (
           <Link
-            to="/"
+            to="/dashboard"
             className="font-semibold text-foreground hover:text-primary transition-colors truncate"
           >
-            Actuarial Quiz
+            Actuarial Notes
           </Link>
         )}
         <button
@@ -110,6 +132,14 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
+        {user && (
+          <SidebarItem
+            to="/dashboard"
+            label="Dashboard"
+            icon={<LayoutDashboard className="h-4 w-4" />}
+            collapsed={collapsed}
+          />
+        )}
         <SidebarItem
           to="/wiki"
           label="Wiki"
@@ -117,55 +147,21 @@ export default function Sidebar() {
           collapsed={collapsed}
         />
         <SidebarItem
+          to="/"
+          label="Quiz"
+          icon={<ClipboardList className="h-4 w-4" />}
+          collapsed={collapsed}
+          end
+        />
+        <SidebarItem
           to="/browse"
           label="Browse"
           icon={<Compass className="h-4 w-4" />}
           collapsed={collapsed}
         />
-        {user && (
-          <>
-            <SidebarItem
-              to="/dashboard"
-              label="Dashboard"
-              icon={<LayoutDashboard className="h-4 w-4" />}
-              collapsed={collapsed}
-            />
-            <SidebarItem
-              to="/settings"
-              label="Settings"
-              icon={<Settings2 className="h-4 w-4" />}
-              collapsed={collapsed}
-            />
-          </>
-        )}
       </nav>
 
       <div className="border-t px-2 py-3 space-y-1">
-        {user ? (
-          <button
-            type="button"
-            onClick={signOut}
-            title={collapsed ? 'Sign out' : undefined}
-            className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
-          >
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-              <LogOut className="h-4 w-4" />
-            </span>
-            {!collapsed && <span className="truncate">Sign out</span>}
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => navigate('/auth')}
-            title={collapsed ? 'Sign in' : undefined}
-            className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
-          >
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-              <LogIn className="h-4 w-4" />
-            </span>
-            {!collapsed && <span className="truncate">Sign in</span>}
-          </button>
-        )}
         <button
           type="button"
           onClick={toggleTheme}
@@ -182,6 +178,60 @@ export default function Sidebar() {
             </span>
           )}
         </button>
+
+        {user ? (
+          <div ref={profileRef} className="relative">
+            {profileOpen && (
+              <div className="absolute bottom-full left-0 right-0 mb-1 rounded-md border bg-popover shadow-md py-1 z-50">
+                <button
+                  type="button"
+                  onClick={() => { navigate('/settings'); setProfileOpen(false) }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                >
+                  <Settings2 className="h-4 w-4 shrink-0" />
+                  <span>Settings</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { signOut(); setProfileOpen(false) }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                >
+                  <LogOut className="h-4 w-4 shrink-0" />
+                  <span>Sign out</span>
+                </button>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => setProfileOpen(v => !v)}
+              title={collapsed ? profileName : undefined}
+              className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt={profileName} className="h-5 w-5 rounded-full object-cover" />
+                ) : (
+                  <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium text-primary">
+                    {profileName[0]?.toUpperCase()}
+                  </div>
+                )}
+              </span>
+              {!collapsed && <span className="truncate">{profileName}</span>}
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => navigate('/auth')}
+            title={collapsed ? 'Sign in' : undefined}
+            className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+          >
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+              <LogIn className="h-4 w-4" />
+            </span>
+            {!collapsed && <span className="truncate">Sign in</span>}
+          </button>
+        )}
       </div>
     </aside>
   )

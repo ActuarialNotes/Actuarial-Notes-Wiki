@@ -19,7 +19,7 @@ export interface WikiIndexItem {
   title?: string        // resource display title (overrides name)
 }
 
-const CACHE_KEY = 'actuarial_wiki_index_v1'
+const CACHE_KEY = 'actuarial_wiki_index_v2'
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000
 
 interface CacheEntry {
@@ -117,10 +117,14 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
     })
   items.push(...(await Promise.all(bookMetaPromises)))
 
-  writeCache(items)
+  // Only cache when we got real data — an empty array means all API calls
+  // failed (rate limit, network error) and caching it would block retries
+  // for 6 hours since [] is truthy and would be returned immediately.
+  if (items.length > 0) writeCache(items)
   return items
 }
 
 export function clearWikiIndexCache(): void {
   localStorage.removeItem(CACHE_KEY)
+  localStorage.removeItem('actuarial_wiki_index_v1')  // clear old key
 }

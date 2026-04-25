@@ -14,7 +14,7 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
         <span>Question {current} of {total}</span>
         <span>{Math.round(percentage)}%</span>
       </div>
-      <Progress value={percentage} className="h-2" />
+      <Progress value={percentage} className="h-2 [&>div]:bg-foreground" />
     </div>
   )
 }

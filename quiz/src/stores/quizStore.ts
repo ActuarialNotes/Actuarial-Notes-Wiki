@@ -39,6 +39,7 @@ export interface QuizStore {
   startQuiz: (questions: Question[], mode: QuizMode) => void
   answerQuestion: (questionId: string, chosen: string) => void
   nextQuestion: () => void
+  goToPreviousQuestion: () => void
   completeQuiz: (userId: string | null) => Promise<void>
   resetQuiz: () => void
 }
@@ -82,12 +83,24 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
   },
 
   nextQuestion() {
-    const { currentIndex, questions } = get()
+    const { currentIndex, questions, responses } = get()
     if (currentIndex + 1 >= questions.length) {
       set({ status: 'complete' })
     } else {
-      set({ currentIndex: currentIndex + 1, status: 'active', questionStartedAt: new Date() })
+      const newIndex = currentIndex + 1
+      const nextQ = questions[newIndex]
+      const hasResponse = nextQ !== undefined && responses[nextQ.id] !== undefined
+      set({ currentIndex: newIndex, status: hasResponse ? 'reviewing' : 'active', questionStartedAt: new Date() })
     }
+  },
+
+  goToPreviousQuestion() {
+    const { currentIndex, questions, responses } = get()
+    if (currentIndex <= 0) return
+    const newIndex = currentIndex - 1
+    const prevQ = questions[newIndex]
+    const hasResponse = prevQ !== undefined && responses[prevQ.id] !== undefined
+    set({ currentIndex: newIndex, status: hasResponse ? 'reviewing' : 'active', questionStartedAt: new Date() })
   },
 
   async completeQuiz(userId) {

@@ -9,7 +9,7 @@ interface QuestionCardProps {
   question: Question
   selectedAnswer: string | null
   onAnswer: (key: string) => void
-  showExplanation: boolean  // true when status === 'reviewing'
+  showExplanation: boolean  // true when correct/wrong colours should be revealed
 }
 
 export function QuestionCard({
@@ -37,7 +37,8 @@ export function QuestionCard({
             text={option.text}
             isSelected={selectedAnswer === option.key}
             isCorrect={question.answer === option.key}
-            isDisabled={showExplanation}
+            isDisabled={selectedAnswer !== null}
+            revealAnswer={showExplanation}
             onClick={onAnswer}
           />
         ))}

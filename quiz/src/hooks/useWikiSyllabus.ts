@@ -74,7 +74,9 @@ export function useWikiSyllabus() {
 
     fetchAllExamSyllabi()
       .then(parsed => {
-        writeCache(parsed)
+        // Only cache when we got real results — caching [] would block
+        // retries for 6 hours since [] is truthy and returned immediately.
+        if (parsed.length > 0) writeCache(parsed)
         setSyllabi(parsed)
       })
       .catch(err => setError((err as Error).message))

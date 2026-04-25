@@ -14,6 +14,7 @@ interface WikiSearchPanelProps {
 
 export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
+  const [indexLoading, setIndexLoading] = useState(true)
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
   const [sort, setSort] = useState<Sort>('alpha')
@@ -26,11 +27,11 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
 
   useEffect(() => {
     let cancelled = false
+    setIndexLoading(true)
     buildWikiIndex()
-      .then(items => {
-        if (!cancelled) setIndex(items)
-      })
-      .catch(() => { /* surfaced as empty results */ })
+      .then(items => { if (!cancelled) setIndex(items) })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setIndexLoading(false) })
     return () => {
       cancelled = true
     }
@@ -257,7 +258,9 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
 
       {/* Results list */}
       <div className="flex-1 overflow-y-auto px-2 py-2">
-        {results.length === 0 ? (
+        {indexLoading ? (
+          <p className="text-xs text-muted-foreground px-2 py-3">Loading…</p>
+        ) : results.length === 0 ? (
           <p className="text-xs text-muted-foreground px-2 py-3">No matches.</p>
         ) : (
           <ul className="space-y-0.5">

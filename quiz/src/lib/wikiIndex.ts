@@ -76,8 +76,13 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
 
   const items: WikiIndexItem[] = []
 
+  const [rootItems, conceptItems, bookItems] = await Promise.all([
+    listRepoContents().catch(() => []),
+    listRepoContents('Concepts').catch(() => []),
+    listRepoContents('Resources/Books').catch(() => []),
+  ])
+
   // Repo root — grab exam files.
-  const rootItems = await listRepoContents().catch(() => [])
   for (const it of rootItems) {
     if (it.type !== 'file' || !it.name.endsWith('.md')) continue
     if (!/^Exam\b/i.test(it.name)) continue
@@ -86,14 +91,12 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
   }
 
   // Concepts directory.
-  const conceptItems = await listRepoContents('Concepts').catch(() => [])
   for (const it of conceptItems) {
     if (it.type !== 'file' || !it.name.endsWith('.md')) continue
     items.push({ category: 'concept', name: stripExt(it.name), path: it.path })
   }
 
   // Resources — only Books for now; other subdirs would be added here.
-  const bookItems = await listRepoContents('Resources/Books').catch(() => [])
   const bookMetaPromises = bookItems
     .filter(it => it.type === 'file' && it.name.endsWith('.md'))
     .map(async it => {

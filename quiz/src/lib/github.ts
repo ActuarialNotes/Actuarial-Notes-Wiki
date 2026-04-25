@@ -3,6 +3,7 @@ const BRANCH = import.meta.env.VITE_GITHUB_BRANCH as string
 const TOKEN = import.meta.env.VITE_GITHUB_TOKEN as string | undefined
 const API_BASE = `https://api.github.com/repos/${REPO}/contents`
 const TREES_API = `https://api.github.com/repos/${REPO}/git/trees`
+const RAW_BASE = `https://raw.githubusercontent.com/${REPO}/${BRANCH}`
 const REF = `?ref=${BRANCH}`
 const PER_PAGE = 100  // GitHub max for /contents
 
@@ -136,11 +137,7 @@ export function clearQuestionsCache(): void {
 
 export async function fetchWikiFile(filePath: string): Promise<string> {
   const encoded = filePath.split('/').map(encodeURIComponent).join('/')
-  const res = await fetchWithTimeout(`${API_BASE}/${encoded}${REF}`, { headers: authHeaders() })
-  if (!res.ok) throw new Error(`GitHub API error ${res.status} for: ${filePath}`)
-  const json = await res.json() as { download_url?: string }
-  if (!json.download_url) throw new Error(`Wiki file metadata missing download_url: ${filePath}`)
-  const raw = await fetchWithTimeout(json.download_url, { headers: authHeaders() })
-  if (!raw.ok) throw new Error(`Failed to download wiki file: ${filePath}`)
-  return raw.text()
+  const res = await fetchWithTimeout(`${RAW_BASE}/${encoded}`, { headers: authHeaders() })
+  if (!res.ok) throw new Error(`Failed to download wiki file: ${filePath} (${res.status})`)
+  return res.text()
 }

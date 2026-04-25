@@ -105,14 +105,31 @@ async function collectMdUrlsViaTree(dirPrefix: string): Promise<string[]> {
   }
   return data.tree
     .filter(item => item.type === 'blob' && item.path.startsWith(dirPrefix) && item.path.endsWith('.md'))
-    .map(item => `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${item.path}`)
+    .map(item => `${RAW_BASE}/${item.path}`)
+}
+
+// Fallback for when the git trees API is unavailable: lists the questions/
+// directory via the Contents API, which is served from a different endpoint
+// and has a separate rate-limit budget.  Only works for flat (non-nested)
+// question directories, but that matches the current repo layout.
+async function collectMdUrlsViaContents(dirPath: string): Promise<string[]> {
+  const items = await listRepoContents(dirPath.replace(/\/$/, ''))
+  return items
+    .filter(it => it.type === 'file' && it.name.endsWith('.md'))
+    .map(it => `${RAW_BASE}/${it.path}`)
 }
 
 export async function fetchAllQuestions(): Promise<string[]> {
   const cached = readCache()
   if (cached) return cached
 
-  const urls = await collectMdUrlsViaTree('questions/')
+  let urls: string[]
+  try {
+    urls = await collectMdUrlsViaTree('questions/')
+  } catch (treeErr) {
+    console.warn('fetchAllQuestions: trees API failed, falling back to contents API:', treeErr)
+    urls = await collectMdUrlsViaContents('questions/')
+  }
   // Tolerate individual file failures so one transient 5xx doesn't blank the quiz.
   const settled = await Promise.allSettled(
     urls.map(url => fetchWithTimeout(url, { headers: authHeaders() }).then(r => {

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Loader2, X } from 'lucide-react'
+import { Loader2, X, ChevronLeft } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
@@ -57,6 +57,7 @@ export default function Quiz() {
     startQuiz,
     answerQuestion,
     nextQuestion,
+    goToPreviousQuestion,
     completeQuiz,
     resetQuiz,
   } = useQuizStore()
@@ -185,21 +186,42 @@ export default function Quiz() {
         showExplanation={showExplanation}
       />
 
-      {status === 'reviewing' && (
-        <div className="flex justify-end items-center gap-4">
-          {showDeferredMessage && (
-            <p className="text-xs text-muted-foreground">
-              {mode === 'mock-exam' ? 'Mock exam — explanations shown at end' : 'Explanations shown at end'}
-            </p>
-          )}
-          {isLastQuestion ? (
-            <Button onClick={handleFinish} size="lg">
-              Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
-            </Button>
-          ) : (
-            <Button onClick={nextQuestion} size="lg">
-              Next Question →
-            </Button>
+      {(currentIndex > 0 || status === 'reviewing') && (
+        <div className="flex justify-between items-center">
+          <div>
+            {currentIndex > 0 && (
+              <Button variant="outline" size="lg" onClick={goToPreviousQuestion}>
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Back
+              </Button>
+            )}
+          </div>
+
+          {status === 'reviewing' && (
+            <div className="flex items-center gap-4">
+              {showDeferredMessage && (
+                <p className="text-xs text-muted-foreground">
+                  {mode === 'mock-exam' ? 'Mock exam — explanations shown at end' : 'Explanations shown at end'}
+                </p>
+              )}
+              {isLastQuestion ? (
+                <Button
+                  onClick={handleFinish}
+                  size="lg"
+                  className="bg-foreground text-background hover:bg-foreground/90"
+                >
+                  Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
+                </Button>
+              ) : (
+                <Button
+                  onClick={nextQuestion}
+                  size="lg"
+                  className="bg-foreground text-background hover:bg-foreground/90"
+                >
+                  Next Question →
+                </Button>
+              )}
+            </div>
           )}
         </div>
       )}

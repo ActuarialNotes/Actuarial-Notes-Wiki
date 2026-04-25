@@ -7,6 +7,7 @@ interface AnswerOptionProps {
   isSelected: boolean
   isCorrect: boolean   // is this option the correct answer?
   isDisabled: boolean  // true after any answer is chosen
+  revealAnswer: boolean  // true when correct/wrong should be shown (quiz+reveal=during only)
   onClick: (key: string) => void
 }
 
@@ -16,6 +17,7 @@ export function AnswerOption({
   isSelected,
   isCorrect,
   isDisabled,
+  revealAnswer,
   onClick,
 }: AnswerOptionProps) {
   const baseClasses =
@@ -26,21 +28,25 @@ export function AnswerOption({
     'border-input bg-background hover:bg-accent hover:text-accent-foreground cursor-pointer':
       !isDisabled,
 
-    // Selected and correct
+    // Selected and correct (answer revealed)
     'border-green-500 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100 dark:border-green-500 cursor-default':
-      isDisabled && isSelected && isCorrect,
+      isDisabled && isSelected && isCorrect && revealAnswer,
 
-    // Selected but wrong
+    // Selected but wrong (answer revealed)
     'border-red-500 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100 dark:border-red-500 cursor-default':
-      isDisabled && isSelected && !isCorrect,
+      isDisabled && isSelected && !isCorrect && revealAnswer,
+
+    // Selected, answer not yet revealed (mock exam / end-reveal) — neutral highlight
+    'border-primary bg-primary/15 dark:bg-primary/25 cursor-default':
+      isDisabled && isSelected && !revealAnswer,
 
     // Not selected, but this is the correct answer being revealed
     'border-green-400 bg-green-50/50 text-green-800 dark:bg-green-950/50 dark:text-green-300 dark:border-green-600 cursor-default':
-      isDisabled && !isSelected && isCorrect,
+      isDisabled && !isSelected && isCorrect && revealAnswer,
 
-    // Not selected, not correct, disabled — muted
+    // Not selected, disabled — muted (covers: wrong+disabled, or correct-but-not-revealed)
     'border-input bg-muted/40 text-muted-foreground opacity-60 cursor-default':
-      isDisabled && !isSelected && !isCorrect,
+      isDisabled && !isSelected && (!isCorrect || !revealAnswer),
   })
 
   return (

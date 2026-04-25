@@ -4,6 +4,12 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { WikiSearchPanel } from '@/components/wiki/WikiSearchPanel'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import wikiBundle from 'virtual:wiki-content'
+import { setWikiContentLookup } from '@/lib/github'
+import { setWikiIndexBundle } from '@/lib/wikiIndex'
+
+setWikiContentLookup((path: string) => wikiBundle.files[path])
+setWikiIndexBundle(wikiBundle.index)
 
 // Each wiki page publishes the list of entries it references so the search
 // panel can scope "This Page" results to them. Also lets pages advertise the
@@ -78,3 +84,5 @@ export function WikiLayout({ children }: { children: ReactNode }) {
     </WikiPageContext.Provider>
   )
 }
+
+export default WikiLayout

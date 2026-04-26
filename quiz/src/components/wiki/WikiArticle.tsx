@@ -134,8 +134,13 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
       data-source-page={sourcePath}
       className={
         'prose dark:prose-invert max-w-none ' +
-        'prose-headings:mt-6 prose-headings:mb-2 prose-p:my-3 ' +
+        'prose-headings:mt-6 prose-headings:mb-2 prose-headings:font-semibold ' +
+        'prose-h3:text-base prose-h3:font-medium ' +
+        'prose-p:my-2.5 prose-p:leading-relaxed ' +
         'prose-a:text-primary prose-a:no-underline hover:prose-a:underline ' +
+        'prose-li:my-0.5 prose-ul:my-2 prose-ol:my-2 ' +
+        'prose-strong:font-semibold ' +
+        '[&_li::marker]:text-muted-foreground ' +
         (className ?? '')
       }
     >

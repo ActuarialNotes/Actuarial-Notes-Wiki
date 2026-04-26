@@ -4,7 +4,6 @@
 
 The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastrophe modeling, reinsurance pricing, financial risk management, and enterprise risk management.
 
-<div class="callout-cols-2">
 
 > [!answer]- 📅 Exam Schedule {2026}
 >
@@ -20,7 +19,6 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 > [!answer]- 📄 Download Resources {1 PDF}
 > - [Exam 9 Content Outline](https://www.casact.org/exam/exam-9-risk-management-actuaries)
 
-</div>
 
 >[!answer]- 📕 Source Material {8 Sources}
 >

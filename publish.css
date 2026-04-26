@@ -423,8 +423,11 @@ pre code { background: none; border: none; padding: 0; }
 .callout {
   --callout-color: var(--brand);
   background: color-mix(in oklab, var(--muted) 65%, var(--bg));
-  border: none;
-  border-radius: var(--radius-lg);
+  border-left: 3px solid color-mix(in oklab, var(--callout-color) 55%, transparent);
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
   padding: 14px 18px;
   margin: 1.25rem 0;
   box-shadow: none;
@@ -618,6 +621,15 @@ data.callout-obj-num {
   .callout-cols-3 {
     grid-template-columns: 1fr !important;
   }
+}
+
+/* Compact tables inside callouts */
+.markdown-rendered .callout table {
+  width: 100%;
+}
+.markdown-rendered .callout th,
+.markdown-rendered .callout td {
+  padding: 7px 12px;
 }
 
 

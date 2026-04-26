@@ -4,7 +4,6 @@
 
 The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour computer-based exam testing knowledge of [[Insurance Regulation]], [[Statutory Accounting]], and the professional responsibilities of the [[Appointed Actuary]] in the context of U.S. property and casualty insurance.
 
-<div class="callout-cols-2">
 
 > [!answer]- 📅 Exam Schedule 2026
 >
@@ -22,7 +21,6 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 > - [Content Outline (Fall 2025)](https://www.casact.org/exam/exam-6u-regulation-and-financial-reporting-us) — Domains, tasks, and full reading list
 > - [CAS Exam Registration & Fees](https://www.casact.org/exams-admissions/exam-fees) — Deadlines, fees, and refund policy
 
-</div>
 
 > [!answer]- 📕 Source Material {46 Readings}
 >

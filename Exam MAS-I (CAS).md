@@ -4,7 +4,6 @@
 
 The **Modern Actuarial Statistics I** is a 4-hour computer-based exam covering [[Stochastic Processes]], [[Survival Models]], [[Statistics]], and [[Generalized Linear Models]] as part of the ACAS credentialing pathway.
 
-<div class="callout-cols-2">
 
 > [!answer]- 📅 Exam Schedule 2026
 > 
@@ -24,7 +23,6 @@ The **Modern Actuarial Statistics I** is a 4-hour computer-based exam covering [
 > - [Content Outline (August 2025)](https://www.casact.org/sites/default/files/2025-08/MAS_I_Content_Outline__August_2025_.pdf)
 > - [CAS Exam MAS-I Page](https://www.casact.org/exam/exam-mas-i-modern-actuarial-statistics-i)
 
-</div>
 
 > [!answer]- 📕 Source Material 8 Sources
 > 

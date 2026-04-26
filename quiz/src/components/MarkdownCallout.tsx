@@ -272,21 +272,28 @@ function Callout({ type, fold, title, children }: CalloutProps) {
   const hasBody = Children.count(children) > 0
 
   return (
-    <div className={`not-prose rounded-md border px-3 py-2 my-3 ${style.containerClass}`}>
+    <div className={`not-prose rounded-lg border my-4 overflow-hidden ${style.containerClass}`}>
       {collapsible && hasBody ? (
         <button
           type="button"
           onClick={() => setOpen(v => !v)}
-          className="w-full text-left"
+          className="w-full text-left px-4 py-3"
           aria-expanded={open}
         >
           {header}
         </button>
       ) : (
-        header
+        <div className="px-4 py-3">{header}</div>
       )}
       {hasBody && open && (
-        <div className="mt-2 text-sm text-foreground space-y-2 [&>p]:my-1 [&>ul]:my-1 [&>ol]:my-1">
+        <div className={[
+          'px-4 pb-4 pt-3 text-sm text-foreground border-t border-current/10',
+          'space-y-2 [&>p]:my-1 [&>ul]:my-1 [&>ol]:my-1',
+          '[&_table]:w-full [&_table]:border-collapse [&_table]:text-sm',
+          '[&_th]:py-2 [&_th]:px-3 [&_th]:text-left [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:opacity-60 [&_th]:border-b [&_th]:border-current/20',
+          '[&_td]:py-2 [&_td]:px-3 [&_td]:border-b [&_td]:border-current/10',
+          '[&_tbody_tr:last-child_td]:border-0',
+        ].join(' ')}>
           {children}
         </div>
       )}

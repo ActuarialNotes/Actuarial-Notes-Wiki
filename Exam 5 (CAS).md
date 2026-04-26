@@ -3,7 +3,6 @@
 ## Exam 5 (CAS)
 The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-hour computer-based exam (4.5-hour Pearson VUE appointment) covering [[Ratemaking]] and [[Loss Reserving]] as part of the ACAS credentialing pathway.
 
-<div class="callout-cols-2">
 
 > [!answer]- 📅 Exam Schedule 2026
 > 
@@ -21,7 +20,6 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > - [Content Outline (Spring 2026)](https://www.casact.org/sites/default/files/2026-01/Exam_5_Content_Outline__Spring_2026_.pdf)
 > - [CAS Exam 5 Page](https://www.casact.org/exam/exam-5-basic-ratemaking-and-est-claim-liabilities)
 
-</div>
 
 > [!answer]- 📕 Source Material 6 Sources
 > 

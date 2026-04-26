@@ -3,7 +3,6 @@
 ## Exam FM-2 Syllabus
 The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 30 multiple choice questions about financial mathematics concepts and how they are applied in calculating present and accumulated values for streams of cash flows.
 
-<div class="callout-cols-2">
 
 > [!answer]- 📅 Exam Schedule {2026}
 > 
@@ -24,7 +23,6 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 30 multiple ch
 > - [462 Sample Questions for Exam FM (SOA)](https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-questions.pdf)
 > - [462 Sample Answers for Exam FM](https://www.soa.org/globalassets/assets/files/edu/2018/2018-10-exam-fm-sample-solutions.pdf)
 
-</div>
 
 > [!answer]- 📕 Source Material {5 Textbooks}
 > |Source|Coverage|

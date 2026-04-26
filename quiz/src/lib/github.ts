@@ -152,9 +152,32 @@ export function clearQuestionsCache(): void {
   localStorage.removeItem(CACHE_KEY)
 }
 
+type ContentLookup = (path: string) => string | undefined
+let wikiContentLookup: ContentLookup | null = null
+export function setWikiContentLookup(fn: ContentLookup): void { wikiContentLookup = fn }
+
+const wikiFileMemCache = new Map<string, string>()
+const WIKI_FILE_SS_PREFIX = 'wf_'
+function ssRead(p: string): string | null {
+  try { return sessionStorage.getItem(WIKI_FILE_SS_PREFIX + p) } catch { return null }
+}
+function ssWrite(p: string, v: string): void {
+  try { sessionStorage.setItem(WIKI_FILE_SS_PREFIX + p, v) } catch { /* quota */ }
+}
+
 export async function fetchWikiFile(filePath: string): Promise<string> {
+  if (wikiContentLookup) {
+    const bundled = wikiContentLookup(filePath)
+    if (bundled !== undefined) return bundled
+  }
+  if (wikiFileMemCache.has(filePath)) return wikiFileMemCache.get(filePath)!
+  const ss = ssRead(filePath)
+  if (ss !== null) { wikiFileMemCache.set(filePath, ss); return ss }
   const encoded = filePath.split('/').map(encodeURIComponent).join('/')
   const res = await fetchWithTimeout(`${RAW_BASE}/${encoded}`, { headers: authHeaders() })
   if (!res.ok) throw new Error(`Failed to download wiki file: ${filePath} (${res.status})`)
-  return res.text()
+  const content = await res.text()
+  wikiFileMemCache.set(filePath, content)
+  ssWrite(filePath, content)
+  return content
 }

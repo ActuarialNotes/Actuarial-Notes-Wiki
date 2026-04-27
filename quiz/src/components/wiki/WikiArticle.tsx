@@ -121,10 +121,39 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
     const target = root.querySelector<HTMLElement>(`[data-wikiref="${CSS.escape(refKey(popupCurrent))}"]`)
     if (!target) return
     target.classList.add('wiki-link--active')
-    const rect = target.getBoundingClientRect()
-    const inView = rect.top >= 0 && rect.bottom <= window.innerHeight
-    if (!inView) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+    // Expand any collapsed callout ancestors so the target becomes visible.
+    let expandedAny = false
+    let node: HTMLElement | null = target.parentElement
+    while (node && node !== root) {
+      if (node.dataset.calloutBody !== undefined && node.hidden) {
+        const toggle = node.parentElement?.querySelector<HTMLButtonElement>('[data-callout-toggle]')
+        if (toggle) {
+          toggle.click()
+          expandedAny = true
+        }
+      }
+      node = node.parentElement
+    }
+
+    function doScroll() {
+      // Subtract the popup panel height from the effective viewport bottom.
+      const splitHeightStr = getComputedStyle(document.documentElement)
+        .getPropertyValue('--concept-split-height').trim()
+      const splitHeight = parseFloat(splitHeightStr) || 0
+      const effectiveBottom = window.innerHeight - splitHeight
+      const rect = target!.getBoundingClientRect()
+      const inView = rect.top >= 0 && rect.bottom <= effectiveBottom
+      if (!inView) {
+        target!.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    }
+
+    if (expandedAny) {
+      // Double rAF: wait for React to commit the callout re-render before measuring.
+      requestAnimationFrame(() => requestAnimationFrame(doScroll))
+    } else {
+      doScroll()
     }
   }, [popupOpen, popupIndex, popupSource, popupCurrent, sourcePath])
 
@@ -137,7 +166,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
         'prose-headings:mt-6 prose-headings:mb-2 prose-headings:font-semibold ' +
         'prose-h3:text-base prose-h3:font-medium ' +
         'prose-p:my-2.5 prose-p:leading-relaxed ' +
-        'prose-a:text-primary prose-a:no-underline hover:prose-a:underline ' +
+        'prose-a:text-primary prose-a:underline ' +
         'prose-li:my-0.5 prose-ul:my-2 prose-ol:my-2 ' +
         'prose-strong:font-semibold ' +
         '[&_li::marker]:text-muted-foreground ' +

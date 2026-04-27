@@ -73,6 +73,15 @@ html.dark.exam-fm { --primary: 239 84% 67%;  --ring: 239 84% 67%; }
    while the concept popup is open. Tracks theme accent via --primary. */
 .wiki-link--active {
   background: hsl(var(--primary) / 0.18);
-  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.45);
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.55);
   border-radius: 2px;
+}
+
+/* Dark mode: white chip with black text for maximum contrast regardless of
+   exam theme (default primary is near-white; exam-p primary is blue). */
+.dark .wiki-link--active {
+  background: hsl(0 0% 100%);
+  box-shadow: 0 0 0 2px hsl(0 0% 100% / 0.6);
+  border-radius: 2px;
+  color: hsl(0 0% 9%);
 }

@@ -241,11 +241,11 @@ const CONTENT_CLASSES = [
   'border-t border-border/40 px-4 pb-4 pt-3',
   'text-sm text-foreground leading-relaxed',
   '[&>p]:my-1.5',
-  '[&>ul]:my-1.5 [&>ul]:space-y-0.5 [&>ul]:pl-4',
-  '[&>ol]:my-1.5 [&>ol]:space-y-0.5 [&>ol]:pl-4',
+  '[&>ul]:my-1.5 [&>ul]:space-y-0.5 [&>ul]:pl-4 [&_ul]:list-disc',
+  '[&>ol]:my-1.5 [&>ol]:space-y-0.5 [&>ol]:pl-4 [&_ol]:list-decimal',
   '[&_li::marker]:text-muted-foreground/60',
   '[&_strong]:font-semibold',
-  '[&_a]:text-primary [&_a]:no-underline [&_a:hover]:underline',
+  '[&_a]:text-primary [&_a]:underline',
   '[&_table]:w-full [&_table]:border-collapse [&_table]:mt-2 [&_table]:text-sm',
   '[&_th]:py-2 [&_th]:px-3 [&_th]:text-left [&_th]:text-xs [&_th]:font-medium [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-muted-foreground [&_th]:border-b [&_th]:border-border/60',
   '[&_td]:py-2 [&_td]:px-3 [&_td]:border-b [&_td]:border-border/30 [&_td]:align-top',
@@ -277,6 +277,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
       {collapsible && hasBody ? (
         <button
           type="button"
+          data-callout-toggle
           onClick={() => setOpen(v => !v)}
           className="w-full px-4 py-3 text-left hover:bg-muted/60 transition-colors duration-150"
           aria-expanded={open}
@@ -286,8 +287,8 @@ function Callout({ type, fold, title, children }: CalloutProps) {
       ) : (
         <div className="px-4 py-3">{headerContent}</div>
       )}
-      {hasBody && open && (
-        <div className={CONTENT_CLASSES}>
+      {hasBody && (
+        <div data-callout-body hidden={!open} className={CONTENT_CLASSES}>
           {children}
         </div>
       )}

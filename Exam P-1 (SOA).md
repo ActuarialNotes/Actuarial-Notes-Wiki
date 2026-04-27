@@ -1,5 +1,9 @@
 [[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
 
+<div class="exam-nav"
+     data-current="P-1|Probability"
+</div>
+
 ## Exam P-1 (SOA)
 
 The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice questions about probability theory concepts and their application to measuring risk. 

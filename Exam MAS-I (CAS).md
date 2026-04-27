@@ -1,5 +1,9 @@
 [[Actuarial Notes Wiki|Wiki]] / **MAS-I (CAS)**
 
+<div class="exam-nav"
+     data-current="MAS-I|Modern Actuarial Statistics I"
+</div>
+
 ## MAS-I (CAS)
 
 The **Modern Actuarial Statistics I** is a 4-hour computer-based exam covering [[Stochastic Processes]], [[Survival Models]], [[Statistics]], and [[Generalized Linear Models]] as part of the ACAS credentialing pathway.

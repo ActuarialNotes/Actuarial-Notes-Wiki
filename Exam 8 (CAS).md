@@ -1,5 +1,9 @@
 [[Actuarial Notes Wiki|Wiki]] / **Exam 8 (CAS)**
 
+<div class="exam-nav"
+     data-current="8|Advanced Ratemaking"
+</div>
+
 ## Exam 8 (CAS)
 
 The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ratemaking models and excess, deductible, and individual risk rating systems.

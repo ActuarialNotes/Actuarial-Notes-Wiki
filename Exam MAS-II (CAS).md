@@ -1,5 +1,9 @@
 [[Actuarial Notes Wiki|Wiki]] / **MAS-II (CAS)**
 
+<div class="exam-nav"
+     data-current="MAS-II|Modern Actuarial Statistics II"
+</div>
+
 ## MAS-II (CAS)
 
 The **Modern Actuarial Statistics II** is a 4-hour computer-based exam covering [[Credibility Theory]], [[Linear Mixed Models]], [[Statistical Learning]], and [[Time Series]] as part of the ACAS credentialing pathway.

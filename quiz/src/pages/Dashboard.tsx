@@ -11,6 +11,8 @@ import type { QuizSession } from '@/lib/supabase'
 import { TopicProgressSection } from '@/components/TopicProgressSection'
 import { ExamProgressBar } from '@/components/ExamProgressBar'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { useExamProgress } from '@/hooks/useExamProgress'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, {
@@ -45,6 +47,7 @@ export default function Dashboard() {
   const { user, loading: authLoading, signOut } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
+  const examProgress = useExamProgress()
 
   // Hard redirect if not authenticated
   useEffect(() => {
@@ -109,16 +112,26 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Topics progress */}
+      {/* Topics progress — only for exams the user has marked in_progress */}
       {syllabusLoading ? (
         <div className="flex items-center justify-center py-4">
           <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
         </div>
-      ) : (
-        syllabi.map(syllabus => (
+      ) : (() => {
+        const inProgressSyllabi = syllabi.filter(
+          s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'
+        )
+        if (inProgressSyllabi.length === 0) {
+          return (
+            <p className="text-sm text-muted-foreground text-center py-2">
+              No exams in progress — mark an exam as in progress in Settings to track topics here.
+            </p>
+          )
+        }
+        return inProgressSyllabi.map(syllabus => (
           <TopicProgressSection key={syllabus.examTopic} syllabus={syllabus} sessions={sessions} />
         ))
-      )}
+      })()}
 
       {/* Session history */}
       <Card>

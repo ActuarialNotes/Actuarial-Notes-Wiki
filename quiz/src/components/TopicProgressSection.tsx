@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { ChevronDown, Info } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { QuizSession } from '@/lib/supabase'
@@ -79,6 +81,44 @@ function StrengthBar({ pct, level }: { pct: number; level: ConceptProgress['leve
   )
 }
 
+function InfoPanel() {
+  return (
+    <div className="mt-2 rounded-md border bg-muted/50 p-3 text-xs text-muted-foreground space-y-2">
+      <p className="font-medium text-foreground">How progress is tracked</p>
+      <p>
+        Each topic's <span className="font-medium">strength score</span> combines accuracy (70%) and
+        volume (30%, maxing out at 20 questions attempted).
+      </p>
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <span className="w-20 shrink-0 text-muted-foreground">Not Started</span>
+          <span>No questions attempted yet</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-20 shrink-0 text-red-500 font-medium">Beginner</span>
+          <span>Strength &lt; 40%</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-20 shrink-0 text-orange-500 font-medium">Learning</span>
+          <span>Strength 40–59%</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-20 shrink-0 text-yellow-600 font-medium">Practiced</span>
+          <span>Strength 60–79%</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-20 shrink-0 text-green-600 font-medium">Strong</span>
+          <span>Strength ≥ 80%</span>
+        </div>
+      </div>
+      <p>
+        The topic-level % is the average strength across all <em>attempted</em> concepts in that topic.
+        The exam weight range (e.g. 23–30%) is the SOA's published weighting for that section.
+      </p>
+    </div>
+  )
+}
+
 interface Props {
   syllabus: WikiExamSyllabus
   sessions: QuizSession[]
@@ -86,11 +126,30 @@ interface Props {
 
 export function TopicProgressSection({ syllabus, sessions }: Props) {
   const hasAnySessions = sessions.some(s => s.topic === syllabus.examTopic)
+  const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
+  const [showInfo, setShowInfo] = useState(false)
+
+  const toggle = (name: string) =>
+    setOpenTopics(prev => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
 
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base">{syllabus.examLabel} — Topics Progress</CardTitle>
+        <div className="flex items-center gap-2">
+          <CardTitle className="text-base">{syllabus.examLabel} — Topics Progress</CardTitle>
+          <button
+            onClick={() => setShowInfo(v => !v)}
+            className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+            aria-label="How progress tracking works"
+          >
+            <Info className="h-4 w-4" />
+          </button>
+        </div>
+        {showInfo && <InfoPanel />}
       </CardHeader>
       <CardContent>
         {!hasAnySessions ? (
@@ -98,7 +157,7 @@ export function TopicProgressSection({ syllabus, sessions }: Props) {
             Start practicing to track your progress
           </p>
         ) : (
-          <div className="space-y-5">
+          <div className="space-y-1">
             {syllabus.topics.map(topic => {
               const conceptProgressList = topic.concepts.map(c =>
                 computeConceptProgress(sessions, c.name, syllabus.examTopic),
@@ -113,11 +172,20 @@ export function TopicProgressSection({ syllabus, sessions }: Props) {
                 topicAvg >= 60 ? 'practiced' :
                 topicAvg >= 40 ? 'learning' : 'beginner'
 
+              const isOpen = openTopics.has(topic.name)
+
               return (
-                <div key={topic.name} className="space-y-2">
-                  {/* Top-level topic row */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-semibold w-48 shrink-0">
+                <div key={topic.name}>
+                  {/* Collapsible topic header */}
+                  <button
+                    className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
+                    onClick={() => toggle(topic.name)}
+                    aria-expanded={isOpen}
+                  >
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
+                    />
+                    <span className="text-sm font-semibold min-w-0 truncate">
                       {topic.name}
                       {topic.weight && (
                         <span className="ml-1.5 text-xs font-normal text-muted-foreground">
@@ -126,21 +194,21 @@ export function TopicProgressSection({ syllabus, sessions }: Props) {
                       )}
                     </span>
                     <StrengthBar pct={topicAvg} level={topicLevel} />
-                    <span className={`text-xs font-medium w-16 text-right shrink-0 ${LEVEL_TEXT_COLOR[topicLevel]}`}>
+                    <span className={`text-xs font-medium shrink-0 text-right w-10 ${LEVEL_TEXT_COLOR[topicLevel]}`}>
                       {topicLevel === 'not-started' ? '—' : `${topicAvg}%`}
                     </span>
-                  </div>
+                  </button>
 
-                  {/* Concept rows */}
-                  {topic.concepts.length > 0 && (
-                    <div className="space-y-1.5 pl-3 border-l-2 border-border ml-1">
+                  {/* Concept rows — shown only when expanded */}
+                  {isOpen && topic.concepts.length > 0 && (
+                    <div className="space-y-1.5 pl-5 border-l-2 border-border ml-2 mb-2">
                       {conceptProgressList.map(cp => (
-                        <div key={cp.name} className="flex items-center gap-3">
-                          <span className="text-xs text-muted-foreground w-44 shrink-0 truncate" title={cp.name}>
+                        <div key={cp.name} className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground min-w-0 flex-1 truncate" title={cp.name}>
                             {cp.name}
                           </span>
                           <StrengthBar pct={cp.strengthPct} level={cp.level} />
-                          <div className="flex items-center gap-1.5 w-36 justify-end shrink-0">
+                          <div className="flex items-center gap-1 shrink-0">
                             <span className={`text-xs font-medium ${LEVEL_TEXT_COLOR[cp.level]}`}>
                               {LEVEL_LABEL[cp.level]}
                             </span>

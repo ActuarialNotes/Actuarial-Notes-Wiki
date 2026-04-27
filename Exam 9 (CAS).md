@@ -1,5 +1,9 @@
 [[Actuarial Notes Wiki|Wiki]] / **Exam 9 (CAS)**
 
+<div class="exam-nav"
+     data-current="9|Risk Management for Actuaries"
+</div>
+
 ## Exam 9 (CAS)
 
 The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastrophe modeling, reinsurance pricing, financial risk management, and enterprise risk management.

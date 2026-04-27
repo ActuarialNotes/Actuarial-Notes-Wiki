@@ -10,9 +10,19 @@ export interface WikiTopic {
 }
 
 export interface WikiExamSyllabus {
+  examId: string
   examLabel: string
   examTopic: string
   topics: WikiTopic[]
+}
+
+// Maps a wikiParser examId to the exam_progress table key used in tracks.ts.
+// "P-1" → "P", "FM-2" → "FM", "MAS-I" → "MAS-I", "7" → "CAS-7", "6C" → "CAS-6"
+export function wikiExamIdToProgressKey(examId: string): string {
+  if (examId.startsWith('MAS-')) return examId
+  if (/^[A-Z]+-\d+$/.test(examId)) return examId.replace(/-\d+$/, '')
+  if (/^[A-Z]+$/.test(examId)) return examId
+  return 'CAS-' + examId.replace(/[A-Z]+$/, '')
 }
 
 // Extract all [[Name]] and [[Name|Display]] patterns from text.
@@ -57,6 +67,7 @@ export function parseExamMetadata(
 // become topics; every [[wiki link]] inside becomes a concept.
 export function parseExamSyllabus(
   content: string,
+  examId: string,
   examLabel: string,
   examTopic: string,
 ): WikiExamSyllabus {
@@ -91,5 +102,5 @@ export function parseExamSyllabus(
 
   flush()
 
-  return { examLabel, examTopic, topics }
+  return { examId, examLabel, examTopic, topics }
 }

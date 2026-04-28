@@ -69,7 +69,9 @@ export default function WikiExam() {
             // the syllabus concept list. Resource/exam links navigate normally.
             if (ref.kind !== 'concept') return false
             e.preventDefault()
-            const conceptList = pageRefs.filter(r => r.kind === 'concept')
+            const conceptList = pageRefs
+              .filter(r => r.kind === 'concept')
+              .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
             const idx = conceptList.findIndex(
               r => r.name.toLowerCase() === ref.name.toLowerCase(),
             )

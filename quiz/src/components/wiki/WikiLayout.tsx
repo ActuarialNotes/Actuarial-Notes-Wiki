@@ -13,7 +13,7 @@ setWikiIndexBundle(wikiBundle.index)
 
 // Each wiki page publishes the list of entries it references so the search
 // panel can scope "This Page" results to them. Also lets pages advertise the
-// current exam id, which the popup uses for the learned-concepts store.
+// current exam id for context-aware features.
 interface WikiPageContextValue {
   setPageRefs: (refs: WikiEntryRef[]) => void
   setExamId: (id: string | null) => void
@@ -29,7 +29,7 @@ export function useWikiPage() {
 
 export function WikiLayout({ children }: { children: ReactNode }) {
   const [pageRefs, setPageRefsState] = useState<WikiEntryRef[]>([])
-  const [examId, setExamIdState] = useState<string | null>(null)
+  const [, setExamIdState] = useState<string | null>(null)
   const location = useLocation()
   const mobileDetailsRef = useRef<HTMLDetailsElement | null>(null)
   const closeOnNavigation = useConceptPopup(s => s.closeOnNavigation)

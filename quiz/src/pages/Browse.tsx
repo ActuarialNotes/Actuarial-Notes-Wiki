@@ -6,6 +6,14 @@ import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { useSubtopics } from '@/hooks/useSubtopics'
+
+function linkMatchesConcept(link: string, conceptName: string): boolean {
+  const lower = conceptName.toLowerCase()
+  const ref = hrefToEntryRef(link)
+  if (ref?.name.toLowerCase() === lower) return true
+  const lastSegment = link.split('/').filter(Boolean).pop()
+  return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
+}
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { LatexText } from '@/components/LatexText'
@@ -215,10 +223,7 @@ export default function Browse() {
     })
     if (!conceptFilter) return base
     return base.filter(q =>
-      q.wiki_link.some(link => {
-        const ref = hrefToEntryRef(link)
-        return ref?.name.toLowerCase() === conceptFilter.toLowerCase()
-      })
+      q.wiki_link.some(link => linkMatchesConcept(link, conceptFilter))
     )
   }, [allQuestions, topic, selectedSubtopics, difficulty, authorSearch, validYear, search, conceptFilter])
 

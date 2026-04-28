@@ -8,6 +8,17 @@ import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { LatexText } from '@/components/LatexText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 
+// Matches a raw wiki_link value against a concept name. Handles two formats:
+//   "Concepts/Fund+Accumulation"  (hrefToEntryRef resolves the name directly)
+//   "/probability/combinatorics"  (slug path — last segment, hyphens → spaces)
+function linkMatchesConcept(link: string, conceptName: string): boolean {
+  const lower = conceptName.toLowerCase()
+  const ref = hrefToEntryRef(link)
+  if (ref?.name.toLowerCase() === lower) return true
+  const lastSegment = link.split('/').filter(Boolean).pop()
+  return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
+}
+
 const DIFFICULTY_COLORS: Record<Difficulty, string> = {
   easy: 'bg-green-100 text-green-800 border-green-200',
   medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
@@ -110,10 +121,7 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
         if (cancelled) return
         const all = parseAllQuestions(raw)
         const filtered = all.filter(q =>
-          q.wiki_link.some(link => {
-            const ref = hrefToEntryRef(link)
-            return ref?.name.toLowerCase() === conceptName.toLowerCase()
-          })
+          q.wiki_link.some(link => linkMatchesConcept(link, conceptName))
         )
         setQuestions(filtered)
       })

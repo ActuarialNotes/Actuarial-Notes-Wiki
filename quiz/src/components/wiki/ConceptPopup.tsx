@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { BookOpen, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close } = useConceptPopup()
@@ -13,8 +13,8 @@ export function ConceptPopup() {
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const { height, beginDrag } = useSplitHeight()
-  const routerNavigate = useNavigate()
   const [maximized, setMaximized] = useState(false)
+  const [showQuestions, setShowQuestions] = useState(false)
 
   // Fetch markdown whenever the active ref changes.
   useEffect(() => {
@@ -77,6 +77,7 @@ export function ConceptPopup() {
   const sourcePath = current ? entryRefToRepoPath(current) : undefined
 
   return (
+    <>
     <aside
       className="fixed left-0 right-0 lg:left-72 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
       style={{ height: maximized ? '100vh' : `min(${height}px, 100vh)` }}
@@ -114,10 +115,7 @@ export function ConceptPopup() {
         </button>
         <button
           type="button"
-          onClick={() => {
-            routerNavigate('/browse?concept=' + encodeURIComponent(current.name))
-            close()
-          }}
+          onClick={() => setShowQuestions(true)}
           className="text-muted-foreground hover:text-foreground p-1"
           title="Browse questions for this concept"
           aria-label="Browse questions for this concept"
@@ -186,5 +184,13 @@ export function ConceptPopup() {
         </button>
       </div>
     </aside>
+
+    {showQuestions && (
+      <ConceptQuestionsModal
+        conceptName={current.name}
+        onClose={() => setShowQuestions(false)}
+      />
+    )}
+    </>
   )
 }

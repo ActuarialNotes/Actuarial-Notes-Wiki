@@ -67,10 +67,30 @@ function refKey(ref: WikiEntryRef): string {
   return `${ref.kind}:${ref.name.toLowerCase()}`
 }
 
+// Breadcrumb navigation lines written by Obsidian Publish (first line of every
+// file): [[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
+// or [[Wiki]] / [[Concepts]] / **Concept Name**
+// These are not wanted in the quiz app and add non-existent "concepts" to popup lists.
+const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
+
+// Strip block-level HTML divs that publish.js embeds for metadata / layout.
+// react-markdown renders them as literal text without rehype-raw, so they must
+// be removed before parsing.
+function stripHtmlBlocks(md: string): string {
+  return md
+    // Multi-line block divs at line start (exam-nav, concept-nav, SVG wrappers …)
+    .replace(/^<div\b[\s\S]*?<\/div> *\n?/gm, '')
+    // Single-line divs inside blockquote lines (highlight-upcoming)
+    .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
+}
+
 export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
-  const processed = useMemo(() => rewriteWikilinks(stripFrontmatter(markdown)), [markdown])
+  const processed = useMemo(() => {
+    const stripped = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
+    return stripHtmlBlocks(rewriteWikilinks(stripped))
+  }, [markdown])
 
   const popupOpen = useConceptPopup(s => s.open)
   const popupIndex = useConceptPopup(s => s.index)
@@ -118,7 +138,11 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
     root.querySelectorAll('.wiki-link--active').forEach(el => el.classList.remove('wiki-link--active'))
     if (!popupOpen || !popupCurrent) return
     if (sourcePath && popupSource && sourcePath !== popupSource) return
-    const target = root.querySelector<HTMLElement>(`[data-wikiref="${CSS.escape(refKey(popupCurrent))}"]`)
+    // Use getAttribute comparison instead of CSS.escape to avoid any selector
+    // escaping edge-cases (colons, spaces, quotes in concept names).
+    const key = refKey(popupCurrent)
+    const target = Array.from(root.querySelectorAll<HTMLElement>('[data-wikiref]'))
+      .find(el => el.getAttribute('data-wikiref') === key) ?? null
     if (!target) return
     target.classList.add('wiki-link--active')
 

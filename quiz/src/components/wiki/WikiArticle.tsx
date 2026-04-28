@@ -73,6 +73,16 @@ function refKey(ref: WikiEntryRef): string {
 // These are not wanted in the quiz app and add non-existent "concepts" to popup lists.
 const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
 
+// Insert a blank blockquote line before a numbered-list item that immediately
+// follows a paragraph line in the same blockquote, so remark-gfm creates <ol>
+// instead of treating the number as continuation text.
+function fixBlockquoteOrderedLists(md: string): string {
+  return md.replace(
+    /^(> *(?!\d+\. )[^\n]+)\n(> *\d+\. )/gm,
+    '$1\n>\n$2',
+  )
+}
+
 // Strip block-level HTML divs that publish.js embeds for metadata / layout.
 // react-markdown renders them as literal text without rehype-raw, so they must
 // be removed before parsing.
@@ -89,7 +99,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
   const articleRef = useRef<HTMLDivElement | null>(null)
   const processed = useMemo(() => {
     const stripped = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
-    return stripHtmlBlocks(rewriteWikilinks(stripped))
+    return stripHtmlBlocks(fixBlockquoteOrderedLists(rewriteWikilinks(stripped)))
   }, [markdown])
 
   const popupOpen = useConceptPopup(s => s.open)

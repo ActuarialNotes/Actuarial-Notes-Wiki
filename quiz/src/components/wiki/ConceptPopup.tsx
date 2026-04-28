@@ -1,26 +1,20 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Check, ChevronLeft, ChevronRight, ExternalLink, GripHorizontal, Loader2, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { BookOpen, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { useLearnedConcepts } from '@/hooks/useLearnedConcepts'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 
-interface ConceptPopupProps {
-  // Exam id used for the learned-concepts store; resolved from the source
-  // page (e.g. "p-1"). Learned toggle is hidden when no exam is known.
-  examId?: string | null
-}
-
-export function ConceptPopup({ examId = null }: ConceptPopupProps) {
+export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close } = useConceptPopup()
   const current: WikiEntryRef | undefined = list[index]
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-  const { isLearned, toggle } = useLearnedConcepts(examId)
   const { height, beginDrag } = useSplitHeight()
+  const routerNavigate = useNavigate()
+  const [maximized, setMaximized] = useState(false)
 
   // Fetch markdown whenever the active ref changes.
   useEffect(() => {
@@ -77,17 +71,15 @@ export function ConceptPopup({ examId = null }: ConceptPopupProps) {
 
   if (!open || !current) return null
 
-  const learned = current.kind === 'concept' && isLearned(current.name)
   const canPrev = index > 0
   const canNext = index < list.length - 1
   const position = `${index + 1} of ${list.length}`
-  const fullRoute = wikiRoute(current)
   const sourcePath = current ? entryRefToRepoPath(current) : undefined
 
   return (
     <aside
       className="fixed left-0 right-0 lg:left-72 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
-      style={{ height: `min(${height}px, 100vh)` }}
+      style={{ height: maximized ? '100vh' : `min(${height}px, 100vh)` }}
       role="complementary"
       aria-label={`Concept: ${current.name}`}
     >
@@ -110,31 +102,28 @@ export function ConceptPopup({ examId = null }: ConceptPopupProps) {
 
       {/* Header */}
       <div className="flex items-center gap-2 px-4 h-11 border-b shrink-0">
-        {current.kind === 'concept' && (
-          <button
-            type="button"
-            onClick={() => toggle(current.name)}
-            title={learned ? 'Unmark as learned' : 'Mark as learned'}
-            aria-pressed={learned}
-            className={
-              'h-7 w-7 rounded-full border flex items-center justify-center transition-colors ' +
-              (learned
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent/60')
-            }
-          >
-            <Check className="h-4 w-4" />
-          </button>
-        )}
         <span className="flex-1 truncate font-semibold text-sm">{current.name}</span>
-        <Link
-          to={fullRoute}
-          onClick={close}
+        <button
+          type="button"
+          onClick={() => setMaximized(v => !v)}
           className="text-muted-foreground hover:text-foreground p-1"
-          title="Open full page"
+          title={maximized ? 'Restore size' : 'Maximize'}
+          aria-label={maximized ? 'Restore size' : 'Maximize'}
         >
-          <ExternalLink className="h-4 w-4" />
-        </Link>
+          {maximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            routerNavigate('/browse?concept=' + encodeURIComponent(current.name))
+            close()
+          }}
+          className="text-muted-foreground hover:text-foreground p-1"
+          title="Browse questions for this concept"
+          aria-label="Browse questions for this concept"
+        >
+          <BookOpen className="h-4 w-4" />
+        </button>
         <button
           type="button"
           onClick={close}

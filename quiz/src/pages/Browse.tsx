@@ -1,8 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { X } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
+import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { useSubtopics } from '@/hooks/useSubtopics'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -143,6 +145,7 @@ function QuestionRow({ question, selected, onToggleSelect }: QuestionRowProps) {
 
 export default function Browse() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
 
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
@@ -156,6 +159,7 @@ export default function Browse() {
   const [authorSearch, setAuthorSearch] = useState('')
   const [yearSearch, setYearSearch] = useState('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
 
   useEffect(() => {
     fetchAllQuestions()
@@ -194,23 +198,33 @@ export default function Browse() {
     setAuthorSearch('')
     setYearSearch('')
     setSelectedIds(new Set())
+    setConceptFilter('')
   }
 
   const parsedYear = yearSearch ? parseInt(yearSearch, 10) : undefined
   const validYear = parsedYear && !isNaN(parsedYear) ? parsedYear : undefined
 
-  const filtered = useMemo(() => filterQuestions(allQuestions, {
-    topic: topic || undefined,
-    subtopics: selectedSubtopics.length ? selectedSubtopics : undefined,
-    difficulty: difficulty || undefined,
-    author: authorSearch || undefined,
-    year: validYear,
-    search: search || undefined,
-  }), [allQuestions, topic, selectedSubtopics, difficulty, authorSearch, validYear, search])
+  const filtered = useMemo(() => {
+    const base = filterQuestions(allQuestions, {
+      topic: topic || undefined,
+      subtopics: selectedSubtopics.length ? selectedSubtopics : undefined,
+      difficulty: difficulty || undefined,
+      author: authorSearch || undefined,
+      year: validYear,
+      search: search || undefined,
+    })
+    if (!conceptFilter) return base
+    return base.filter(q =>
+      q.wiki_link.some(link => {
+        const ref = hrefToEntryRef(link)
+        return ref?.name.toLowerCase() === conceptFilter.toLowerCase()
+      })
+    )
+  }, [allQuestions, topic, selectedSubtopics, difficulty, authorSearch, validYear, search, conceptFilter])
 
   const subtopics = topic ? (subtopicsByTopic[topic] ?? []) : []
 
-  const hasFilters = search || topic || selectedSubtopics.length || difficulty || authorSearch || yearSearch
+  const hasFilters = search || topic || selectedSubtopics.length || difficulty || authorSearch || yearSearch || conceptFilter
 
   function handleStartQuiz() {
     const params = new URLSearchParams({ mode: 'quiz', reveal: 'during' })
@@ -261,6 +275,23 @@ export default function Browse() {
           </div>
         </CardHeader>
         <CardContent className="space-y-5">
+          {/* Active concept filter pill */}
+          {conceptFilter && (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Concept</span>
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-primary bg-primary/10 text-primary text-sm">
+                {conceptFilter}
+                <button
+                  type="button"
+                  onClick={() => setConceptFilter('')}
+                  aria-label="Remove concept filter"
+                  className="hover:text-foreground transition-colors"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            </div>
+          )}
           {/* Free text search */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium">Search</label>

@@ -80,7 +80,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
       </div>
-      <ConceptPopup examId={examId} />
+      <ConceptPopup />
     </WikiPageContext.Provider>
   )
 }

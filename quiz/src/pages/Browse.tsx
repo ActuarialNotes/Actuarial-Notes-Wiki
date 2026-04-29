@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { X, Check } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
@@ -39,9 +39,11 @@ interface QuestionRowProps {
   selected: boolean
   onToggleSelect: (id: string) => void
   activeDifficulty: Difficulty | ''
+  activeTopic: string
+  activeSubtopics: string[]
 }
 
-function QuestionRow({ question, selected, onToggleSelect, activeDifficulty }: QuestionRowProps) {
+function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, activeTopic, activeSubtopics }: QuestionRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
 
@@ -68,10 +70,18 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty }: Q
           <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded border shrink-0">
             {question.id}
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-full border bg-background shrink-0">
+          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
+            activeTopic && question.topic === activeTopic
+              ? 'bg-foreground text-background border-foreground'
+              : 'border-input text-muted-foreground bg-background'
+          }`}>
             {question.topic}
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-full border bg-background shrink-0">
+          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
+            activeSubtopics.length > 0 && activeSubtopics.includes(question.subtopic)
+              ? 'bg-foreground text-background border-foreground'
+              : 'border-input text-muted-foreground bg-background'
+          }`}>
             {question.subtopic}
           </span>
           <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize transition-colors ${
@@ -175,9 +185,6 @@ export default function Browse() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
 
-  // Prevents the topic-change effect from wiping restored subtopics/selectedIds
-  const skipNextTopicResetRef = useRef(false)
-
   useEffect(() => {
     fetchAllQuestions()
       .then(raw => setAllQuestions(parseAllQuestions(raw)))
@@ -196,7 +203,6 @@ export default function Browse() {
         difficulty?: Difficulty | ''; authorSearch?: string; yearSearch?: string
         conceptFilter?: string; selectedIds?: string[]
       }
-      if (s.topic) skipNextTopicResetRef.current = true
       if (s.search)              setSearch(s.search)
       if (s.topic)               setTopic(s.topic)
       if (s.selectedSubtopics?.length) setSelectedSubtopics(s.selectedSubtopics)
@@ -207,17 +213,6 @@ export default function Browse() {
       if (s.selectedIds?.length) setSelectedIds(new Set(s.selectedIds))
     } catch { /* ignore */ }
   }, [])
-
-  // Reset subtopics and any in-flight question selection when topic changes —
-  // otherwise "Start quiz" would launch with the previous exam's questions.
-  useEffect(() => {
-    if (skipNextTopicResetRef.current) {
-      skipNextTopicResetRef.current = false
-      return
-    }
-    setSelectedSubtopics([])
-    setSelectedIds(new Set())
-  }, [topic])
 
   function toggleSubtopic(subtopic: string) {
     setSelectedSubtopics(prev =>
@@ -360,7 +355,11 @@ export default function Browse() {
                 <button
                   key={exam.value}
                   type="button"
-                  onClick={() => setTopic(exam.value)}
+                  onClick={() => {
+                    setTopic(exam.value)
+                    setSelectedSubtopics([])
+                    setSelectedIds(new Set())
+                  }}
                   className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
                     topic === exam.value
                       ? 'border-primary bg-primary text-primary-foreground'
@@ -524,6 +523,8 @@ export default function Browse() {
                 selected={selectedIds.has(q.id)}
                 onToggleSelect={toggleSelectQuestion}
                 activeDifficulty={difficulty}
+                activeTopic={topic}
+                activeSubtopics={selectedSubtopics}
               />
             ))}
           </div>

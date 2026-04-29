@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress, EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { useSubtopics } from '@/hooks/useSubtopics'
@@ -29,10 +29,16 @@ const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
 
 export default function Landing() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const examProgress = useExamProgress()
   const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
   const { questions: allQuestions } = useAllQuestions()
+
+  // Allow other surfaces (e.g. the Active Exam Card on the dashboard) to pre-fill
+  // the launcher by linking to /?topic=...&mode=mock-exam.
+  const initialTopic = searchParams.get('topic') ?? ''
+  const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
 
   const inProgressExams = EXAMS.filter(e => {
     const examId = Object.entries(EXAM_ID_TO_TOPIC).find(([, t]) => t === e.value)?.[0]
@@ -41,8 +47,8 @@ export default function Landing() {
   const otherExams = EXAMS.filter(e => !inProgressExams.includes(e))
   const hasInProgress = inProgressExams.length > 0
 
-  const [topic, setTopic] = useState('')
-  const [mode, setMode] = useState<QuizMode>('quiz')
+  const [topic, setTopic] = useState(initialTopic)
+  const [mode, setMode] = useState<QuizMode>(initialMode)
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const [showOther, setShowOther] = useState(!hasInProgress)
 
@@ -51,8 +57,10 @@ export default function Landing() {
   const [count, setCount] = useState<number>(10)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
 
-  // Pre-select first in-progress exam when progress loads
+  // Pre-select first in-progress exam when progress loads — but skip when an
+  // explicit ?topic= URL param already set the selection.
   useEffect(() => {
+    if (initialTopic) return
     if (inProgressExams.length > 0) {
       setTopic(inProgressExams[0].value)
       setShowOther(false)

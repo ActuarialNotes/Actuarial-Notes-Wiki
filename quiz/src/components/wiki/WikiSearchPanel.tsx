@@ -144,7 +144,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
     <div className="flex flex-col h-full min-h-0">
       <div className="px-3 py-3 border-b space-y-2 shrink-0">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold">Wiki Search</span>
+          <span className="text-sm font-semibold">Search Study Guides</span>
           <span className="text-xs text-muted-foreground tabular-nums">{results.length}</span>
         </div>
 
@@ -154,7 +154,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
             type="button"
             onClick={() => setScope('page')}
             disabled={pageDisabled}
-            title={pageDisabled ? 'This page has no wiki references' : undefined}
+            title={pageDisabled ? 'This page has no study guide references' : undefined}
             className={
               'flex-1 px-2 py-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ' +
               (scope === 'page' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent/60')
@@ -170,7 +170,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
               (scope === 'all' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent/60')
             }
           >
-            Entire Wiki
+            All Guides
           </button>
         </div>
 

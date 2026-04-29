@@ -12,7 +12,10 @@ export interface WikiEntryRef {
 // "Expected Value" → "Expected+Value" (matches Obsidian Publish slugs, keeps
 // existing `wiki_link` values in question frontmatter working).
 function toSlug(name: string): string {
-  return encodeURIComponent(name.trim().replace(/\s+/g, '+'))
+  // encodeURIComponent first (encodes special chars), then swap %20 → +.
+  // Doing the space→+ replacement before encodeURIComponent would cause +
+  // to be double-encoded as %2B, breaking fromSlug round-trips.
+  return encodeURIComponent(name.trim()).replace(/%20/g, '+')
 }
 
 export function fromSlug(slug: string): string {

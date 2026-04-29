@@ -171,7 +171,8 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
     }
 
     function doScroll() {
-      // Subtract the popup panel height from the effective viewport bottom.
+      // --concept-split-height is set by ConceptPopup.useEffect which runs in
+      // the same commit. Read it here (inside rAF) so it's already applied.
       const splitHeightStr = getComputedStyle(document.documentElement)
         .getPropertyValue('--concept-split-height').trim()
       const splitHeight = parseFloat(splitHeightStr) || 0
@@ -179,16 +180,16 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
       const rect = target!.getBoundingClientRect()
       const inView = rect.top >= 0 && rect.bottom <= effectiveBottom
       if (!inView) {
-        target!.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        // Center within the visible area above the popup panel, not the full viewport.
+        const scrollBy = rect.top - (effectiveBottom / 2 - rect.height / 2)
+        window.scrollBy({ top: scrollBy, behavior: 'smooth' })
       }
     }
 
-    if (expandedAny) {
-      // Double rAF: wait for React to commit the callout re-render before measuring.
-      requestAnimationFrame(() => requestAnimationFrame(doScroll))
-    } else {
-      doScroll()
-    }
+    // Always defer via double rAF so that:
+    // 1. ConceptPopup.useEffect has run and set --concept-split-height.
+    // 2. Any callout re-renders (expandedAny) have been committed and laid out.
+    requestAnimationFrame(() => requestAnimationFrame(doScroll))
   }, [popupOpen, popupIndex, popupSource, popupCurrent, sourcePath])
 
   return (

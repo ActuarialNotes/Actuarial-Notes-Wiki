@@ -29,6 +29,7 @@ export interface QuizStore {
   questions: Question[]
   currentIndex: number
   responses: Record<string, Response>  // keyed by question.id
+  flaggedIds: string[]
   mode: QuizMode
   startedAt: Date | null
   questionStartedAt: Date | null
@@ -40,6 +41,8 @@ export interface QuizStore {
   answerQuestion: (questionId: string, chosen: string) => void
   nextQuestion: () => void
   goToPreviousQuestion: () => void
+  goToQuestion: (index: number) => void
+  toggleFlag: (questionId: string) => void
   completeQuiz: (userId: string | null) => Promise<void>
   resetQuiz: () => void
 }
@@ -50,6 +53,7 @@ const initialState = {
   questions: [] as Question[],
   currentIndex: 0,
   responses: {} as Record<string, Response>,
+  flaggedIds: [] as string[],
   mode: 'quiz' as QuizMode,
   startedAt: null,
   questionStartedAt: null,
@@ -101,6 +105,22 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     const prevQ = questions[newIndex]
     const hasResponse = prevQ !== undefined && responses[prevQ.id] !== undefined
     set({ currentIndex: newIndex, status: hasResponse ? 'reviewing' : 'active', questionStartedAt: new Date() })
+  },
+
+  goToQuestion(index) {
+    const { questions, responses } = get()
+    if (index < 0 || index >= questions.length) return
+    const q = questions[index]
+    const hasResponse = q !== undefined && responses[q.id] !== undefined
+    set({ currentIndex: index, status: hasResponse ? 'reviewing' : 'active', questionStartedAt: new Date() })
+  },
+
+  toggleFlag(questionId) {
+    set(state => ({
+      flaggedIds: state.flaggedIds.includes(questionId)
+        ? state.flaggedIds.filter(id => id !== questionId)
+        : [...state.flaggedIds, questionId],
+    }))
   },
 
   async completeQuiz(userId) {

@@ -1,12 +1,12 @@
 import { cn } from '@/lib/utils'
-import { LatexText } from '@/components/LatexText'
+import { MarkdownText } from '@/components/MarkdownText'
 
 interface AnswerOptionProps {
   optionKey: string    // "A", "B", "C", "D"
   text: string
   isSelected: boolean
   isCorrect: boolean   // is this option the correct answer?
-  isDisabled: boolean  // true after any answer is chosen
+  isDisabled: boolean  // true after answer is confirmed
   revealAnswer: boolean  // true when correct/wrong should be shown (quiz+reveal=during only)
   onClick: (key: string) => void
 }
@@ -50,17 +50,30 @@ export function AnswerOption({
   })
 
   return (
-    <button
-      type="button"
-      disabled={isDisabled}
+    // div+role instead of button so block-level markdown (tables, paragraphs) is valid HTML
+    <div
+      role="button"
+      tabIndex={isDisabled ? -1 : 0}
+      aria-disabled={isDisabled}
+      aria-label={`Option ${optionKey}`}
       onClick={() => !isDisabled && onClick(optionKey)}
-      aria-label={`Option ${optionKey}: ${text}`}
+      onKeyDown={e => {
+        if (!isDisabled && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault()
+          onClick(optionKey)
+        }
+      }}
       className={cn(baseClasses, stateClasses)}
     >
-      <span aria-hidden="true" className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-current flex items-center justify-center text-xs font-bold">
+      <span aria-hidden="true" className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-current flex items-center justify-center text-xs font-bold mt-0.5">
         {optionKey}
       </span>
-      <span className="flex-1"><LatexText>{text}</LatexText></span>
-    </button>
+      <MarkdownText
+        inline
+        className="flex-1 [&_p]:my-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-3"
+      >
+        {text}
+      </MarkdownText>
+    </div>
   )
 }

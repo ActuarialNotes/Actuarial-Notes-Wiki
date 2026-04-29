@@ -88,3 +88,14 @@ html.dark.exam-fm { --primary: 239 84% 67%;  --ring: 239 84% 67%; }
   border-radius: 2px;
   color: hsl(0 0% 9%) !important;
 }
+
+/* Focus mode: when a concept is active and we're on its source page, dim every
+   block in the article except the one containing the active wikilink. Lets the
+   reader's eye land on the bullet that opened the popup. */
+.concept-focus-mode :is(li, p, h1, h2, h3, h4, h5, h6, blockquote, table) {
+  transition: opacity .25s ease, filter .25s ease;
+}
+.concept-focus-mode :is(li, p, h1, h2, h3, h4, h5, h6, blockquote, table):not(:has(.wiki-link--active)) {
+  opacity: 0.22;
+  filter: blur(1.4px);
+}

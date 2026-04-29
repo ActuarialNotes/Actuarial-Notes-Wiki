@@ -146,6 +146,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
     const root = articleRef.current
     if (!root) return
     root.querySelectorAll('.wiki-link--active').forEach(el => el.classList.remove('wiki-link--active'))
+    root.classList.remove('concept-focus-mode')
     if (!popupOpen || !popupCurrent) return
     if (sourcePath && popupSource && sourcePath !== popupSource) return
     // Use getAttribute comparison instead of CSS.escape to avoid any selector
@@ -155,6 +156,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
       .find(el => el.getAttribute('data-wikiref') === key) ?? null
     if (!target) return
     target.classList.add('wiki-link--active')
+    root.classList.add('concept-focus-mode')
 
     // Expand any collapsed callout ancestors so the target becomes visible.
     let node: HTMLElement | null = target.parentElement

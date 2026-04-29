@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { X } from 'lucide-react'
+import { X, Check } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -32,19 +32,16 @@ const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
   { value: 'hard', label: 'Hard' },
 ]
 
-const DIFFICULTY_COLORS: Record<Difficulty, string> = {
-  easy: 'bg-green-100 text-green-800 border-green-200',
-  medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  hard: 'bg-red-100 text-red-800 border-red-200',
-}
+const BROWSE_STATE_KEY = 'actuarial_browse_state'
 
 interface QuestionRowProps {
   question: Question
   selected: boolean
   onToggleSelect: (id: string) => void
+  activeDifficulty: Difficulty | ''
 }
 
-function QuestionRow({ question, selected, onToggleSelect }: QuestionRowProps) {
+function QuestionRow({ question, selected, onToggleSelect, activeDifficulty }: QuestionRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
 
@@ -56,13 +53,18 @@ function QuestionRow({ question, selected, onToggleSelect }: QuestionRowProps) {
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center flex-wrap gap-2 min-w-0">
-          <input
-            type="checkbox"
-            checked={selected}
-            onChange={() => onToggleSelect(question.id)}
+          <button
+            type="button"
+            onClick={() => onToggleSelect(question.id)}
             aria-label={`Select question ${question.id}`}
-            className="h-4 w-4 shrink-0 rounded border-input accent-primary cursor-pointer"
-          />
+            className={`h-6 w-6 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors cursor-pointer ${
+              selected
+                ? 'bg-primary border-primary text-primary-foreground'
+                : 'border-input hover:border-primary'
+            }`}
+          >
+            {selected && <Check className="h-3.5 w-3.5" />}
+          </button>
           <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded border shrink-0">
             {question.id}
           </span>
@@ -72,7 +74,11 @@ function QuestionRow({ question, selected, onToggleSelect }: QuestionRowProps) {
           <span className="text-xs px-2 py-0.5 rounded-full border bg-background shrink-0">
             {question.subtopic}
           </span>
-          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize ${DIFFICULTY_COLORS[question.difficulty]}`}>
+          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize transition-colors ${
+            activeDifficulty && question.difficulty === activeDifficulty
+              ? 'bg-foreground text-background border-foreground'
+              : 'border-input text-muted-foreground bg-background'
+          }`}>
             {question.difficulty}
           </span>
           {question.author && (
@@ -169,6 +175,9 @@ export default function Browse() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
 
+  // Prevents the topic-change effect from wiping restored subtopics/selectedIds
+  const skipNextTopicResetRef = useRef(false)
+
   useEffect(() => {
     fetchAllQuestions()
       .then(raw => setAllQuestions(parseAllQuestions(raw)))
@@ -176,9 +185,36 @@ export default function Browse() {
       .finally(() => setLoading(false))
   }, [])
 
+  // Restore filter state saved before launching quiz
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(BROWSE_STATE_KEY)
+      if (!raw) return
+      sessionStorage.removeItem(BROWSE_STATE_KEY)
+      const s = JSON.parse(raw) as {
+        search?: string; topic?: string; selectedSubtopics?: string[]
+        difficulty?: Difficulty | ''; authorSearch?: string; yearSearch?: string
+        conceptFilter?: string; selectedIds?: string[]
+      }
+      if (s.topic) skipNextTopicResetRef.current = true
+      if (s.search)              setSearch(s.search)
+      if (s.topic)               setTopic(s.topic)
+      if (s.selectedSubtopics?.length) setSelectedSubtopics(s.selectedSubtopics)
+      if (s.difficulty)          setDifficulty(s.difficulty)
+      if (s.authorSearch)        setAuthorSearch(s.authorSearch)
+      if (s.yearSearch)          setYearSearch(s.yearSearch)
+      if (s.conceptFilter)       setConceptFilter(s.conceptFilter)
+      if (s.selectedIds?.length) setSelectedIds(new Set(s.selectedIds))
+    } catch { /* ignore */ }
+  }, [])
+
   // Reset subtopics and any in-flight question selection when topic changes —
   // otherwise "Start quiz" would launch with the previous exam's questions.
   useEffect(() => {
+    if (skipNextTopicResetRef.current) {
+      skipNextTopicResetRef.current = false
+      return
+    }
     setSelectedSubtopics([])
     setSelectedIds(new Set())
   }, [topic])
@@ -232,7 +268,16 @@ export default function Browse() {
   const hasFilters = search || topic || selectedSubtopics.length || difficulty || authorSearch || yearSearch || conceptFilter
 
   function handleStartQuiz() {
-    const params = new URLSearchParams({ mode: 'quiz', reveal: 'during' })
+    const params = new URLSearchParams({ mode: 'quiz', reveal: 'during', from: 'browse' })
+
+    // Save current browse state so it can be restored when quitting the quiz
+    try {
+      sessionStorage.setItem(BROWSE_STATE_KEY, JSON.stringify({
+        search, topic, selectedSubtopics, difficulty,
+        authorSearch, yearSearch, conceptFilter,
+        selectedIds: [...selectedIds],
+      }))
+    } catch { /* ignore */ }
 
     if (selectedIds.size > 0) {
       // Handoff via sessionStorage to avoid URL length issues with large selections
@@ -478,6 +523,7 @@ export default function Browse() {
                 question={q}
                 selected={selectedIds.has(q.id)}
                 onToggleSelect={toggleSelectQuestion}
+                activeDifficulty={difficulty}
               />
             ))}
           </div>

@@ -184,7 +184,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
 
     // Always defer via double rAF so that:
     // 1. ConceptPopup.useEffect has run and set --concept-split-height.
-    // 2. Any callout re-renders (expandedAny) have been committed and laid out.
+    // 2. Any callout re-renders have been committed and laid out.
     requestAnimationFrame(() => requestAnimationFrame(doScroll))
   }, [popupOpen, popupIndex, popupSource, popupCurrent, sourcePath])
 

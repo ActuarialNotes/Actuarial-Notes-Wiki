@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Loader2, X, ChevronLeft } from 'lucide-react'
+import { Loader2, X, ChevronLeft, Bookmark, BookmarkCheck } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
@@ -53,11 +53,14 @@ export default function Quiz() {
     questions: storeQuestions,
     currentIndex,
     responses,
+    flaggedIds,
     status,
     startQuiz,
     answerQuestion,
     nextQuestion,
     goToPreviousQuestion,
+    goToQuestion,
+    toggleFlag,
     completeQuiz,
     resetQuiz,
   } = useQuizStore()
@@ -82,9 +85,19 @@ export default function Quiz() {
   }, [storeQuestions])
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
+  // Local pre-confirmation selection — not committed to store until "Confirm Answer"
+  const [pendingAnswer, setPendingAnswer] = useState<string | null>(null)
+
+  // Clear pending selection whenever the question changes
+  useEffect(() => {
+    setPendingAnswer(null)
+  }, [currentIndex])
 
   const currentQuestion = storeQuestions[currentIndex]
-  const selectedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
+  const committedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
+  const isLocked = status === 'reviewing'
+  // What to visually highlight: committed answer (locked) or pending selection
+  const displayAnswer = isLocked ? committedAnswer : pendingAnswer
   const isLastQuestion = currentIndex + 1 >= storeQuestions.length
 
   function handleQuit() {
@@ -93,10 +106,18 @@ export default function Quiz() {
     navigate('/')
   }
 
+  function handleSelectAnswer(key: string) {
+    setPendingAnswer(key)
+  }
+
+  function handleConfirmAnswer() {
+    if (pendingAnswer && currentQuestion) {
+      answerQuestion(currentQuestion.id, pendingAnswer)
+    }
+  }
+
   // Show explanation inline only in quiz mode when user chose to reveal during
-  const showExplanation = status === 'reviewing' && mode === 'quiz' && reveal === 'during'
-  // Show deferred message when answer is locked but explanation is withheld
-  const showDeferredMessage = status === 'reviewing' && !showExplanation
+  const showExplanation = isLocked && mode === 'quiz' && reveal === 'during'
 
   async function handleFinish() {
     await completeQuiz(user?.id ?? null)
@@ -155,6 +176,8 @@ export default function Quiz() {
 
   if (!currentQuestion) return null
 
+  const isFlagged = flaggedIds.includes(currentQuestion.id)
+
   return (
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
       <div className="flex items-center justify-between gap-3">
@@ -167,9 +190,28 @@ export default function Quiz() {
           <X className="h-4 w-4 mr-1" />
           Quit {mode === 'mock-exam' ? 'exam' : 'quiz'}
         </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => toggleFlag(currentQuestion.id)}
+          className={isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}
+          aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
+        >
+          {isFlagged
+            ? <BookmarkCheck className="h-4 w-4 mr-1" />
+            : <Bookmark className="h-4 w-4 mr-1" />}
+          {isFlagged ? 'Flagged' : 'Flag'}
+        </Button>
       </div>
 
-      <ProgressBar current={currentIndex + 1} total={storeQuestions.length} />
+      <ProgressBar
+        current={currentIndex + 1}
+        total={storeQuestions.length}
+        onNavigate={goToQuestion}
+        flaggedIds={flaggedIds}
+        questionIds={storeQuestions.map(q => q.id)}
+      />
 
       {showQuitDialog && (
         <QuitQuizDialog
@@ -181,12 +223,13 @@ export default function Quiz() {
 
       <QuestionCard
         question={currentQuestion}
-        selectedAnswer={selectedAnswer}
-        onAnswer={key => answerQuestion(currentQuestion.id, key)}
+        selectedAnswer={displayAnswer}
+        onAnswer={handleSelectAnswer}
         showExplanation={showExplanation}
+        isLocked={isLocked}
       />
 
-      {(currentIndex > 0 || status === 'reviewing') && (
+      {(currentIndex > 0 || status === 'reviewing' || pendingAnswer !== null) && (
         <div className="flex justify-between items-center">
           <div>
             {currentIndex > 0 && (
@@ -197,14 +240,19 @@ export default function Quiz() {
             )}
           </div>
 
-          {status === 'reviewing' && (
-            <div className="flex items-center gap-4">
-              {showDeferredMessage && (
-                <p className="text-xs text-muted-foreground">
-                  {mode === 'mock-exam' ? 'Mock exam — explanations shown at end' : 'Explanations shown at end'}
-                </p>
-              )}
-              {isLastQuestion ? (
+          <div className="flex items-center gap-3">
+            {!isLocked && pendingAnswer !== null && (
+              <Button
+                onClick={handleConfirmAnswer}
+                size="lg"
+                className="bg-foreground text-background hover:bg-foreground/90"
+              >
+                Confirm Answer
+              </Button>
+            )}
+
+            {isLocked && (
+              isLastQuestion ? (
                 <Button
                   onClick={handleFinish}
                   size="lg"
@@ -220,9 +268,9 @@ export default function Quiz() {
                 >
                   Next Question →
                 </Button>
-              )}
-            </div>
-          )}
+              )
+            )}
+          </div>
         </div>
       )}
     </div>

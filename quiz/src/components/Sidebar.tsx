@@ -104,6 +104,8 @@ export default function Sidebar() {
 
   const closeMobile = () => setMobileOpen(false)
 
+  const touchStartX = useRef<number | null>(null)
+
   const profileName =
     (user?.user_metadata?.full_name as string | undefined) ||
     (user?.user_metadata?.display_name as string | undefined) ||
@@ -114,17 +116,23 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile: floating hamburger button, shown only when sidebar is closed */}
-      {!mobileOpen && (
+      {/* Mobile: persistent top header bar housing the hamburger */}
+      <header className="fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-3 px-3 bg-background border-b lg:hidden">
         <button
           type="button"
           onClick={() => setMobileOpen(true)}
           aria-label="Open navigation"
-          className="fixed top-3 left-3 z-40 flex items-center justify-center h-9 w-9 rounded-lg bg-background border shadow-md hover:bg-accent transition-colors lg:hidden"
+          className="flex items-center justify-center h-9 w-9 rounded-lg hover:bg-accent transition-colors"
         >
           <Menu className="h-4 w-4" />
         </button>
-      )}
+        <Link
+          to="/dashboard"
+          className="font-semibold text-foreground text-sm truncate"
+        >
+          Actuarial Notes
+        </Link>
+      </header>
 
       {/* Mobile: backdrop */}
       {mobileOpen && (
@@ -137,6 +145,12 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
+        onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX }}
+        onTouchEnd={(e) => {
+          if (touchStartX.current === null) return
+          if (e.changedTouches[0].clientX - touchStartX.current < -60) closeMobile()
+          touchStartX.current = null
+        }}
         className={[
           'flex flex-col bg-background border-r',
           // Mobile: fixed full-width overlay, slides in/out

@@ -41,7 +41,7 @@ export default function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-background text-foreground flex">
         <Sidebar />
-        <main className="flex-1 min-w-0">
+        <main className="flex-1 min-w-0 pt-14 lg:pt-0">
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />

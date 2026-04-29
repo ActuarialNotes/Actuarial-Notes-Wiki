@@ -157,15 +157,11 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
     target.classList.add('wiki-link--active')
 
     // Expand any collapsed callout ancestors so the target becomes visible.
-    let expandedAny = false
     let node: HTMLElement | null = target.parentElement
     while (node && node !== root) {
       if (node.dataset.calloutBody !== undefined && node.hidden) {
         const toggle = node.parentElement?.querySelector<HTMLButtonElement>('[data-callout-toggle]')
-        if (toggle) {
-          toggle.click()
-          expandedAny = true
-        }
+        toggle?.click()
       }
       node = node.parentElement
     }

@@ -72,7 +72,7 @@ Knowledge of the following concepts is expected:
 > - [[Hypergeometric]]
 > - [[Negative Binomial]]
 > - [[Poisson]]
-> - [[Uniform]]
+> - [[Uniform Discrete|Uniform]]
 >
 > #### Continuous Univariate Distributions 
 > - [[Beta]]
@@ -80,17 +80,17 @@ Knowledge of the following concepts is expected:
 > - [[Gamma]]
 > - [[Lognormal]]
 > - [[Normal]]
-> - [[Uniform]]
+> - [[Uniform Continuous|Uniform]]
 
 > [!example]- Multivariate Random Variables {23-30%}
 > ### Multivariate Random Variables
-> Understand key concepts in the discrete and continuous settings concerning [[Multivariate Distribution]]s, the [[Distribution of Order Statistics]] for [[Independent Random Variables]], and linear combinations of independent random variables, along with associated applications.
+> Understand key concepts in the discrete and continuous settings concerning [[Multivariate Distribution]]s, the [[Order Statistics|Distribution of Order Statistics]] for [[Independent Random Variables]], and linear combinations of independent random variables, along with associated applications.
 > 1. Determine [[Joint Probability Function]]s and [[Joint Cumulative Distribution Function]]s for discrete random variables.
 > 2. Determine [[Conditional Probability Function]] and [[Marginal Probability Function]] for discrete random variables.
 > 3. Calculate [[Moments for Joint Distributions]] for joint, conditional, and marginal discrete distributions.
-> 4. Calculate [[Variance for Conditional Distributions|Variance]] and standard deviation for conditional and marginal probability distributions for discrete random variables.
+> 4. Calculate [[Variance for Conditional and Marginal Distributions|Variance]] and standard deviation for conditional and marginal probability distributions for discrete random variables.
 > 5. Calculate the [[Covariance]] and the [[Correlation Coefficient]] for discrete random variables.
-> 6. Determine the [[Joint Distribution of Order Statistics]] for a set of independent random variables.
+> 6. Determine the [[Order Statistics|Joint Distribution of Order Statistics]] for a set of independent random variables.
 > 7. Calculate [[Probabilities for Linear Combinations]] of independent discrete random variables as well as for continuous normal random variables.
 > 8. Calculate [[Moments for Linear Combinations]] of independent random variables.
 > 9. Apply the [[Central Limit Theorem]] to calculate approximations of probabilities for linear combinations of independent and identically distributed random variables.

@@ -42,14 +42,14 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 30 multiple ch
 > [!example]- Time Value of Money  {5-15%}
 > ### Time Value of Money
 > Understand and be able to perform calculations relating to [[Present Value]], [[Current Value]], and [[Accumulated Value]].
-> 1. Define and recognize the definitions of the following terms: [[Interest Rate]] (rate of interest), [[Simple Interest]], [[Compound Interest]], [[Accumulation Function]], [[Future Value]], current value, present value, [[Net Present Value]], [[Discount Factor]], [[Discount Rate]] (rate of discount), [[Convertible m-thly]], [[Nominal Rate]], [[Effective Rate]], [[Inflation]] and [[Real Rate of Interest]], [[Force of Interest]], [[Equation of Value]].
+> 1. Define and recognize the definitions of the following terms: [[Interest Rate]] (rate of interest), [[Simple Interest]], [[Compound Interest]], [[Accumulation Function]], [[Future Value]], current value, present value, [[Net Present Value]], [[Discount Factor]], [[Discount Rate]] (rate of discount), [[Convertible m-thly]], [[Nominal Interest Rate|Nominal Rate]], [[Effective Rate]], [[Inflation]] and [[Real Rate of Interest]], [[Force of Interest]], [[Equation of Value]].
 > 2. Given any three of **interest rate**, **period of time**, **present value**, and **future value**, calculate the remaining item using **simple** or **compound interest**. Solve [[Time Value of Money Equations]] involving [[Variable Force of Interest]].
 > 3. Given any one of the **effective interest rate**, the [[Nominal Interest Rate Convertible m-thly]], the [[Effective Discount Rate]], the [[Nominal Discount Rate Convertible m-thly]], or the **force of interest**, calculate any of the other items.
 > 4. Write the **equation of value** given a set of **cash flows** and an **interest rate**
 
 > [!example]- Annuities/Cash Flows with Non-Contingent Payments  {20-30%}
 > ### Annuities/Cash Flows with Non-Contingent Payments
-> 1. Define and recognize the definitions of the following terms: [[Annuity-Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing/Decreasing Annuity]], [[Term of Annuity]].
+> 1. Define and recognize the definitions of the following terms: [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing/Decreasing Annuity]], [[Term of Annuity]].
 > 2. For each of the following types of **annuity**/**cash flows**, given sufficient information of **immediate** or **due**, **present value**, **future value**, **current value**, **interest rate**, **payment amount**, and term of annuity, calculate any remaining item.
 >	- [[Level Annuity]], finite term.
 >	- [[Level Perpetuity]]
@@ -71,7 +71,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 30 multiple ch
 > [!example]-  Bonds {15-25%}
 > ### Bonds
 > Understand key concepts concerning [[Bonds]], and how to perform related calculations.
-> 1. Define and recognize the definitions of the following terms: [[Bond Price|Price]], [[Book Value]], [[Market Value]], [[Amortization of Premium]], [[Accumulation of Discount]], [[Redemption Value]], Par Value/[[Face Value]], [[Yield Rate]], [[Coupon]], [[Coupon Rate]], [[Term of Bond]], [[Callable Bond|Callable]]/[[None-Callable Bond|Non-Callable]], [[Call Price]], [[Call Premium]], [[Accumulated Value]] with [[Reinvestment of Coupons]].
+> 1. Define and recognize the definitions of the following terms: [[Bond Price|Price]], [[Book Value]], [[Market Value]], [[Amortization of Premium]], [[Accumulation of Discount]], [[Redemption Value]], Par Value/[[Face Value]], [[Yield Rate]], [[Coupon]], [[Coupon Rate]], [[Term of Bond]], [[Callable Bond|Callable]]/[[Non-Callable Bond|Non-Callable]], [[Call Price]], [[Call Premium]], [[Accumulated Value]] with [[Reinvestment of Coupons]].
 > 2. Given sufficient partial information about the items listed below, calculate any of the remaining items
 > 	- Price, book value, market value, accumulated value with reinvestment of coupons, amortization of premium, accumulation of discount. (Note that valuation of bonds between coupon payment dates will not be covered).
 > 	- Redemption value, face value.
@@ -84,9 +84,9 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 30 multiple ch
 > 
 > ### General Cash Flows, Portfolios, and Asset Liability Management
 > Understand key concepts concerning yield curves, rates of return, measures of duration and convexity, cash flow matching and immunization, and how to perform related calculations.
-> 1. Define and recognize the definitions of the following terms: [[Yield Rate]]/rate of return, [[Current Value]], [[Duration]] and [[Convexity]] ([[Macaulay]] and [[Modified]]), [[Portfolio]], [[Spot Rate]], [[Forward Rate]], [[Yield Curve]], [[Cash Flow]] and [[Duration Matching]], and [[immunization]] (including [[full immunization]] and [[Redington immunization]]).
+> 1. Define and recognize the definitions of the following terms: [[Yield Rate]]/rate of return, [[Current Value]], [[Duration]] and [[Convexity]] ([[Macaulay Duration|Macaulay]] and [[Modified Duration|Modified]]), [[Portfolio]], [[Spot Rate]], [[Forward Rate]], [[Yield Curve]], [[Cash Flow]] and [[Duration Matching]], and [[Immunization]] (including [[Full Immunization]] and [[Redington Immunization]]).
 > 2. Calculate:
-> 	- The [[duration]] and **convexity** of a set of cash flows.
+> 	- The [[Duration]] and **convexity** of a set of cash flows.
 > 	- Either **Macaulay** or **modified duration** given the other.
 > 	- The approximate change in present value due to a change in interest rate,
 > 		- Using [[1st-Order Linear Approximation]] based on modified duration.

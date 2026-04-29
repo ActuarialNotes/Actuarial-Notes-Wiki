@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BookOpen, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, GripHorizontal, HelpCircle, Loader2, Maximize2, Minimize2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -102,8 +102,24 @@ export function ConceptPopup() {
       </div>
 
       {/* Header */}
-      <div className="flex items-center gap-2 px-4 h-11 border-b shrink-0">
-        <span className="flex-1 truncate font-semibold text-sm">{current.name}</span>
+      <div className="flex items-center gap-2 px-3 h-11 border-b shrink-0">
+        <button
+          type="button"
+          onClick={() => setShowQuestions(true)}
+          className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
+          title="Browse questions for this concept"
+          aria-label="Browse questions for this concept"
+        >
+          <HelpCircle className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowQuestions(true)}
+          className="flex-1 min-w-0 truncate font-semibold text-sm text-left hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
+          title="Browse questions for this concept"
+        >
+          {current.name}
+        </button>
         <button
           type="button"
           onClick={() => setMaximized(v => !v)}
@@ -112,15 +128,6 @@ export function ConceptPopup() {
           aria-label={maximized ? 'Restore size' : 'Maximize'}
         >
           {maximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-        </button>
-        <button
-          type="button"
-          onClick={() => setShowQuestions(true)}
-          className="text-muted-foreground hover:text-foreground p-1"
-          title="Browse questions for this concept"
-          aria-label="Browse questions for this concept"
-        >
-          <BookOpen className="h-4 w-4" />
         </button>
         <button
           type="button"
@@ -162,25 +169,27 @@ export function ConceptPopup() {
       </div>
 
       {/* Footer nav */}
-      <div className="flex items-center border-t h-10 px-2 shrink-0 bg-background/60">
+      <div className="flex items-stretch border-t h-14 shrink-0 bg-background/60">
         <button
           type="button"
           disabled={!canPrev}
           onClick={() => navigate(-1)}
-          className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-md hover:bg-accent/60 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex-1 flex items-center justify-center gap-2 px-4 text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          <ChevronLeft className="h-4 w-4" /> Previous
+          <ChevronLeft className="h-5 w-5" />
+          <span>Previous</span>
         </button>
-        <span className="flex-1 text-center text-xs text-muted-foreground tabular-nums">
+        <span className="self-center px-3 text-xs text-muted-foreground tabular-nums shrink-0">
           {position}
         </span>
         <button
           type="button"
           disabled={!canNext}
           onClick={() => navigate(1)}
-          className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-md hover:bg-accent/60 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex-1 flex items-center justify-center gap-2 px-4 text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Next <ChevronRight className="h-4 w-4" />
+          <span>Next</span>
+          <ChevronRight className="h-5 w-5" />
         </button>
       </div>
     </aside>

@@ -88,9 +88,10 @@ export default function Quiz() {
   // Local pre-confirmation selection — not committed to store until "Confirm Answer"
   const [pendingAnswer, setPendingAnswer] = useState<string | null>(null)
 
-  // Clear pending selection whenever the question changes
+  // Clear pending selection and scroll to top whenever the question changes
   useEffect(() => {
     setPendingAnswer(null)
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [currentIndex])
 
   const currentQuestion = storeQuestions[currentIndex]

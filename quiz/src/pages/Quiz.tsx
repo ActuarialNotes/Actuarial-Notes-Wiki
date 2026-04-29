@@ -192,18 +192,30 @@ export default function Quiz() {
           Quit {mode === 'mock-exam' ? 'exam' : 'quiz'}
         </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => toggleFlag(currentQuestion.id)}
-          className={isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}
-          aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
-        >
-          {isFlagged
-            ? <BookmarkCheck className="h-4 w-4 mr-1" />
-            : <Bookmark className="h-4 w-4 mr-1" />}
-          {isFlagged ? 'Flagged' : 'Flag'}
-        </Button>
+        <div className="flex items-center gap-2">
+          <span
+            className={
+              'inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-full border ' +
+              (mode === 'mock-exam'
+                ? 'bg-primary/10 text-primary border-primary/30'
+                : 'bg-muted text-muted-foreground border-border')
+            }
+          >
+            {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => toggleFlag(currentQuestion.id)}
+            className={isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}
+            aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
+          >
+            {isFlagged
+              ? <BookmarkCheck className="h-4 w-4 mr-1" />
+              : <Bookmark className="h-4 w-4 mr-1" />}
+            {isFlagged ? 'Flagged' : 'Flag'}
+          </Button>
+        </div>
       </div>
 
       <ProgressBar

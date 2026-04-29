@@ -206,7 +206,7 @@ export default function Sidebar() {
           )}
           <SidebarItem
             to="/wiki"
-            label="Wiki"
+            label="Study Guides"
             icon={<BookOpen className="h-4 w-4" />}
             collapsed={collapsed}
             onNavigate={closeMobile}

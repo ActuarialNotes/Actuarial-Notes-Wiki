@@ -58,6 +58,7 @@ export default function WikiHome() {
       const orderedExams: WikiIndexItem[] = []
       const seenKeys = new Set<string>()
       for (const section of track.sections) {
+        if (section.collapsed) continue
         for (const item of section.items) {
           if (seenKeys.has(item.id)) continue
           seenKeys.add(item.id)

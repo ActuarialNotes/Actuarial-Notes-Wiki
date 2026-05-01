@@ -11,6 +11,7 @@ interface QuestionCardProps {
   onAnswer: (key: string) => void
   showExplanation: boolean
   isLocked?: boolean   // true once the answer is confirmed and cannot be changed
+  showMeta?: boolean   // show topic/subtopic/difficulty badges; false during live quiz
 }
 
 export function QuestionCard({
@@ -19,15 +20,18 @@ export function QuestionCard({
   onAnswer,
   showExplanation,
   isLocked = false,
+  showMeta = false,
 }: QuestionCardProps) {
   return (
     <Card className="w-full">
       <CardHeader className="pb-3">
-        <div className="flex flex-wrap gap-2 mb-3">
-          <TopicBadge label={question.topic} variant="topic" />
-          <TopicBadge label={question.subtopic} variant="tag" />
-          <TopicBadge label={question.difficulty} variant="difficulty" />
-        </div>
+        {showMeta && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            <TopicBadge label={question.topic} variant="topic" />
+            <TopicBadge label={question.subtopic} variant="tag" />
+            <TopicBadge label={question.difficulty} variant="difficulty" />
+          </div>
+        )}
         <MarkdownText className="text-base leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0">
           {question.stem}
         </MarkdownText>

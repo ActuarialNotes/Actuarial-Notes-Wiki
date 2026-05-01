@@ -1,5 +1,9 @@
 [[Actuarial Notes Wiki|Wiki]] / **6U (CAS)**
 
+<div class="exam-nav"
+     data-current="6U|Regulation and Financial Reporting (US)"
+</div>
+
 ## 6U (CAS)
 
 The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour computer-based exam testing knowledge of [[Insurance Regulation]], [[Statutory Accounting]], and the professional responsibilities of the [[Appointed Actuary]] in the context of U.S. property and casualty insurance.

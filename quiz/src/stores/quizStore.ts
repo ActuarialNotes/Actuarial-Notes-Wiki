@@ -1,10 +1,85 @@
 import { create } from 'zustand'
 import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
+import { applyAnswer, emptyRecord, type ConceptMasteryRecord } from '@/lib/mastery'
+import { hrefToEntryRef } from '@/lib/wikiRoutes'
 
 const TOPIC_TO_EXAM_ID: Record<string, string> = {
   'Probability': 'P',
   'Financial Mathematics': 'FM',
+}
+
+// Resolve a Question's wiki_link[] entries to canonical concept names so that
+// mastery upserts use the same key (concept_slug) regardless of whether the
+// frontmatter spelled the link as "Concepts/X", "/probability/x", or "[[X]]".
+function conceptsForQuestion(q: Question): string[] {
+  const names = new Set<string>()
+  for (const link of q.wiki_link) {
+    const ref = hrefToEntryRef(link)
+    if (ref?.kind === 'concept' && ref.name) {
+      names.add(ref.name)
+    } else {
+      // Fall back to the slug's last segment (matches ConceptQuestionsModal).
+      const last = link.split('/').filter(Boolean).pop()
+      if (last) names.add(last.replace(/-/g, ' '))
+    }
+  }
+  return [...names]
+}
+
+async function upsertMasteryFromResponses(
+  userId: string,
+  questions: Question[],
+  responses: Record<string, { chosen: string }>,
+): Promise<void> {
+  // Group answer events by (exam_id, concept_slug). Within a single quiz a
+  // concept may be touched multiple times — fold them in question order so
+  // streak/state arithmetic is deterministic.
+  const events: Array<{ examId: string; conceptSlug: string; isCorrect: boolean; isHard: boolean }> = []
+  for (const q of questions) {
+    const examId = TOPIC_TO_EXAM_ID[q.topic]
+    if (!examId) continue
+    const chosen = responses[q.id]?.chosen
+    if (chosen === undefined) continue
+    const isCorrect = chosen === q.answer
+    const isHard = q.difficulty === 'hard'
+    for (const conceptSlug of conceptsForQuestion(q)) {
+      events.push({ examId, conceptSlug, isCorrect, isHard })
+    }
+  }
+  if (events.length === 0) return
+
+  const keys = [...new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))]
+
+  const { data: existing } = await supabase
+    .from('concept_mastery')
+    .select('*')
+    .eq('user_id', userId)
+    .in('exam_id', [...new Set(events.map(e => e.examId))])
+    .in('concept_slug', [...new Set(events.map(e => e.conceptSlug))])
+
+  const byKey = new Map<string, ConceptMasteryRecord>()
+  for (const r of (existing ?? []) as ConceptMasteryRecord[]) {
+    byKey.set(`${r.exam_id}::${r.concept_slug}`, r)
+  }
+  for (const key of keys) {
+    if (byKey.has(key)) continue
+    const [examId, conceptSlug] = key.split('::')
+    byKey.set(key, emptyRecord(userId, examId, conceptSlug))
+  }
+
+  const now = new Date()
+  for (const ev of events) {
+    const key = `${ev.examId}::${ev.conceptSlug}`
+    const prev = byKey.get(key)!
+    byKey.set(key, applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now }))
+  }
+
+  const touchedKeys = new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))
+  const rows = [...byKey.entries()]
+    .filter(([key]) => touchedKeys.has(key))
+    .map(([, r]) => ({ ...r, updated_at: now.toISOString() }))
+  await supabase.from('concept_mastery').upsert(rows, { onConflict: 'user_id,exam_id,concept_slug' })
 }
 
 type QuizStatus = 'idle' | 'loading' | 'active' | 'reviewing' | 'complete'
@@ -29,6 +104,7 @@ export interface QuizStore {
   questions: Question[]
   currentIndex: number
   responses: Record<string, Response>  // keyed by question.id
+  flaggedIds: string[]
   mode: QuizMode
   startedAt: Date | null
   questionStartedAt: Date | null
@@ -40,6 +116,8 @@ export interface QuizStore {
   answerQuestion: (questionId: string, chosen: string) => void
   nextQuestion: () => void
   goToPreviousQuestion: () => void
+  goToQuestion: (index: number) => void
+  toggleFlag: (questionId: string) => void
   completeQuiz: (userId: string | null) => Promise<void>
   resetQuiz: () => void
 }
@@ -50,6 +128,7 @@ const initialState = {
   questions: [] as Question[],
   currentIndex: 0,
   responses: {} as Record<string, Response>,
+  flaggedIds: [] as string[],
   mode: 'quiz' as QuizMode,
   startedAt: null,
   questionStartedAt: null,
@@ -103,6 +182,22 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     set({ currentIndex: newIndex, status: hasResponse ? 'reviewing' : 'active', questionStartedAt: new Date() })
   },
 
+  goToQuestion(index) {
+    const { questions, responses } = get()
+    if (index < 0 || index >= questions.length) return
+    const q = questions[index]
+    const hasResponse = q !== undefined && responses[q.id] !== undefined
+    set({ currentIndex: index, status: hasResponse ? 'reviewing' : 'active', questionStartedAt: new Date() })
+  },
+
+  toggleFlag(questionId) {
+    set(state => ({
+      flaggedIds: state.flaggedIds.includes(questionId)
+        ? state.flaggedIds.filter(id => id !== questionId)
+        : [...state.flaggedIds, questionId],
+    }))
+  },
+
   async completeQuiz(userId) {
     const { questions, responses, mode, startedAt } = get()
     set({ status: 'complete' })
@@ -130,6 +225,12 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }
 
     if (!userId) return  // unauthenticated — skip Supabase write
+
+    // Persist concept-level mastery state. Fire-and-forget before the session
+    // insert so a session-save failure never blocks the mastery transition.
+    upsertMasteryFromResponses(userId, questions, responses).catch(err => {
+      console.warn('concept_mastery upsert failed:', err)
+    })
 
     const { data: session, error: sessionError } = await supabase
       .from('quiz_sessions')

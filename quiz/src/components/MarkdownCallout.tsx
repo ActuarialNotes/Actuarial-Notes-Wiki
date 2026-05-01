@@ -266,6 +266,8 @@ const CONTENT_CLASSES = [
   '[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2',
   '[&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-2',
   '[&_li]:my-0.5',
+  '[&>ul]:my-1.5 [&>ul]:space-y-0.5 [&>ul]:pl-4 [&_ul]:list-disc',
+  '[&>ol]:my-1.5 [&>ol]:space-y-0.5 [&>ol]:pl-4 [&_ol]:list-decimal',
   '[&_li::marker]:text-muted-foreground/60',
   '[&_strong]:font-semibold',
   '[&_a]:text-primary [&_a]:underline',
@@ -300,6 +302,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
       {collapsible && hasBody ? (
         <button
           type="button"
+          data-callout-toggle
           onClick={() => setOpen(v => !v)}
           className="w-full px-4 py-3 text-left hover:bg-muted/60 transition-colors duration-150"
           aria-expanded={open}
@@ -309,8 +312,8 @@ function Callout({ type, fold, title, children }: CalloutProps) {
       ) : (
         <div className="px-4 py-3">{headerContent}</div>
       )}
-      {hasBody && open && (
-        <div className={CONTENT_CLASSES}>
+      {hasBody && (
+        <div data-callout-body hidden={!open} className={CONTENT_CLASSES}>
           {children}
         </div>
       )}

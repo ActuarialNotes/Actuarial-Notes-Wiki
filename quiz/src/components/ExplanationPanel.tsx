@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { LatexText } from '@/components/LatexText'
+import { MarkdownText } from '@/components/MarkdownText'
 import { WikiContent } from '@/components/WikiContent'
 
 interface ExplanationPanelProps {
@@ -30,7 +30,9 @@ export function ExplanationPanel({ explanation, wikiLinks, isCorrect }: Explanat
         </span>
       </div>
 
-      <p className="text-sm text-foreground leading-relaxed"><LatexText>{explanation}</LatexText></p>
+      <MarkdownText className="text-sm text-foreground leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-current/20 [&_th]:border [&_th]:border-current/20 [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
+        {explanation}
+      </MarkdownText>
 
       {wikiLinks.length > 0 && (
         <div className="space-y-2 pt-1">

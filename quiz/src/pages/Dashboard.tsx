@@ -4,49 +4,23 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
-import type { QuizSession } from '@/lib/supabase'
 import { TopicProgressSection } from '@/components/TopicProgressSection'
-import { ExamProgressBar } from '@/components/ExamProgressBar'
+import { ActiveExamCard } from '@/components/ActiveExamCard'
+import { SessionHeatmap } from '@/components/SessionHeatmap'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
-    month: 'short', day: 'numeric', year: 'numeric',
-  })
-}
-
-function formatTime(seconds: number | null): string {
-  if (seconds === null || seconds < 0) return '—'
-  const m = Math.floor(seconds / 60)
-  const s = seconds % 60
-  return m > 0 ? `${m}m ${s}s` : `${s}s`
-}
-
-function ScoreBar({ session }: { session: QuizSession }) {
-  const pct = session.total_questions > 0
-    ? Math.round((session.correct_count / session.total_questions) * 100)
-    : 0
-  const color = pct >= 70 ? 'bg-green-500' : pct >= 50 ? 'bg-yellow-500' : 'bg-red-500'
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
-      </div>
-      <span className="text-sm font-medium w-10 text-right">{pct}%</span>
-    </div>
-  )
-}
+import { useExamProgress } from '@/hooks/useExamProgress'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 
 export default function Dashboard() {
   const navigate = useNavigate()
   const { user, loading: authLoading, signOut } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
+  const examProgress = useExamProgress()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
 
-  // Hard redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth', { state: { from: '/dashboard' }, replace: true })
@@ -63,15 +37,7 @@ export default function Dashboard() {
 
   if (!user) return null
 
-  const totalSessions = sessions.length
-  // Skip sessions with total_questions === 0 to avoid Infinity/NaN poisoning the stats
-  const scoredSessions = sessions.filter(s => s.total_questions > 0)
-  const avgScore = scoredSessions.length > 0
-    ? Math.round(scoredSessions.reduce((sum, s) => sum + (s.correct_count / s.total_questions) * 100, 0) / scoredSessions.length)
-    : null
-  const bestScore = scoredSessions.length > 0
-    ? Math.round(Math.max(...scoredSessions.map(s => (s.correct_count / s.total_questions) * 100)))
-    : null
+  const mostRecentSession = sessions[0] ?? null
 
   return (
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
@@ -85,46 +51,44 @@ export default function Dashboard() {
         </Button>
       </div>
 
-      <ExamProgressBar />
+      <ActiveExamCard />
 
-      {/* Summary stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl font-bold">{totalSessions}</div>
-            <div className="text-xs text-muted-foreground mt-1">Sessions</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl font-bold">{avgScore !== null ? `${avgScore}%` : '—'}</div>
-            <div className="text-xs text-muted-foreground mt-1">Avg Score</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl font-bold">{bestScore !== null ? `${bestScore}%` : '—'}</div>
-            <div className="text-xs text-muted-foreground mt-1">Best Score</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Topics progress */}
-      {syllabusLoading ? (
+      {/* Topics progress — only for exams the user has marked in_progress */}
+      {syllabusLoading || masteryLoading ? (
         <div className="flex items-center justify-center py-4">
           <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
         </div>
-      ) : (
-        syllabi.map(syllabus => (
-          <TopicProgressSection key={syllabus.examTopic} syllabus={syllabus} sessions={sessions} />
+      ) : (() => {
+        const inProgressSyllabi = syllabi.filter(
+          s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'
+        )
+        if (inProgressSyllabi.length === 0) {
+          return (
+            <p className="text-sm text-muted-foreground text-center py-2">
+              No exams in progress — mark an exam as in progress to track topics here.
+            </p>
+          )
+        }
+        return inProgressSyllabi.map(syllabus => (
+          <TopicProgressSection
+            key={syllabus.examTopic}
+            syllabus={syllabus}
+            masteryRecords={masteryRecords}
+          />
         ))
-      )}
+      })()}
 
-      {/* Session history */}
+      {/* Session heatmap */}
       <Card>
         <CardHeader>
           <CardTitle>Recent Sessions</CardTitle>
-          <CardDescription>Your last {sessions.length} quiz sessions</CardDescription>
+          <CardDescription>
+            {sessions.length === 0
+              ? 'No quiz sessions yet'
+              : mostRecentSession
+                ? `Last session: ${new Date(mostRecentSession.completed_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                : 'Activity over time'}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {sessionsLoading ? (
@@ -137,36 +101,10 @@ export default function Dashboard() {
               <Button onClick={() => navigate('/')}>Start Your First Quiz</Button>
             </div>
           ) : (
-            <div className="space-y-1">
-              {sessions.map((session, idx) => (
-                <div key={session.id}>
-                  {idx > 0 && <Separator className="my-3" />}
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {session.topic && (
-                          <Badge variant="outline" className="text-xs">{session.topic}</Badge>
-                        )}
-                        <Badge variant="secondary" className="text-xs capitalize">{session.mode}</Badge>
-                      </div>
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span>{session.correct_count}/{session.total_questions} correct</span>
-                        <span>{formatTime(session.time_taken_seconds)}</span>
-                        <span>{formatDate(session.completed_at)}</span>
-                      </div>
-                    </div>
-                    <ScoreBar session={session} />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <SessionHeatmap sessions={sessions} />
           )}
         </CardContent>
       </Card>
-
-      <div className="text-center">
-        <Button onClick={() => navigate('/')}>Start New Quiz</Button>
-      </div>
     </div>
   )
 }

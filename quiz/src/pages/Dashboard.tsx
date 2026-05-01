@@ -1,71 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Loader2, ChevronDown } from 'lucide-react'
-import type { QuizSession } from '@/lib/supabase'
+import { Loader2 } from 'lucide-react'
 import { TopicProgressSection } from '@/components/TopicProgressSection'
 import { ActiveExamCard } from '@/components/ActiveExamCard'
+import { SessionHeatmap } from '@/components/SessionHeatmap'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useExamProgress } from '@/hooks/useExamProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString(undefined, {
-    month: 'short', day: 'numeric', year: 'numeric',
-  })
-}
-
-function formatTime(seconds: number | null): string {
-  if (seconds === null || seconds < 0) return '—'
-  const m = Math.floor(seconds / 60)
-  const s = seconds % 60
-  return m > 0 ? `${m}m ${s}s` : `${s}s`
-}
-
-function ScoreBar({ session }: { session: QuizSession }) {
-  const pct = session.total_questions > 0
-    ? Math.round((session.correct_count / session.total_questions) * 100)
-    : 0
-  const color = pct >= 70 ? 'bg-green-500' : pct >= 50 ? 'bg-yellow-500' : 'bg-red-500'
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
-      </div>
-      <span className="text-sm font-medium w-10 text-right">{pct}%</span>
-    </div>
-  )
-}
-
-function SessionRow({ session, divider }: { session: QuizSession; divider: boolean }) {
-  return (
-    <div>
-      {divider && <Separator className="my-3" />}
-      <div className="space-y-2">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-2">
-            {session.topic && (
-              <Badge variant="outline" className="text-xs">{session.topic}</Badge>
-            )}
-            <Badge variant="secondary" className="text-xs capitalize">{session.mode}</Badge>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span>{session.correct_count}/{session.total_questions} correct</span>
-            <span>{formatTime(session.time_taken_seconds)}</span>
-            <span>{formatDate(session.completed_at)}</span>
-          </div>
-        </div>
-        <ScoreBar session={session} />
-      </div>
-    </div>
-  )
-}
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -74,9 +20,7 @@ export default function Dashboard() {
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
   const examProgress = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
-  const [historyExpanded, setHistoryExpanded] = useState(false)
 
-  // Hard redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/auth', { state: { from: '/dashboard' }, replace: true })
@@ -93,8 +37,7 @@ export default function Dashboard() {
 
   if (!user) return null
 
-  const mostRecent = sessions[0]
-  const hiddenCount = Math.max(0, sessions.length - 1)
+  const mostRecentSession = sessions[0] ?? null
 
   return (
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
@@ -135,16 +78,16 @@ export default function Dashboard() {
         ))
       })()}
 
-      {/* Session history — most recent only by default, expandable */}
+      {/* Session heatmap */}
       <Card>
         <CardHeader>
           <CardTitle>Recent Sessions</CardTitle>
           <CardDescription>
             {sessions.length === 0
               ? 'No quiz sessions yet'
-              : historyExpanded
-                ? `Showing all ${sessions.length} session${sessions.length === 1 ? '' : 's'}`
-                : 'Showing most recent'}
+              : mostRecentSession
+                ? `Last session: ${new Date(mostRecentSession.completed_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                : 'Activity over time'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -158,26 +101,7 @@ export default function Dashboard() {
               <Button onClick={() => navigate('/')}>Start Your First Quiz</Button>
             </div>
           ) : (
-            <div className="space-y-1">
-              {!historyExpanded && mostRecent && (
-                <SessionRow session={mostRecent} divider={false} />
-              )}
-              {historyExpanded && sessions.map((session, idx) => (
-                <SessionRow key={session.id} session={session} divider={idx > 0} />
-              ))}
-              {hiddenCount > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setHistoryExpanded(v => !v)}
-                  className="mt-3 w-full flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors py-2"
-                >
-                  <ChevronDown
-                    className={`h-3.5 w-3.5 transition-transform ${historyExpanded ? 'rotate-180' : ''}`}
-                  />
-                  {historyExpanded ? 'Show less' : `Show ${hiddenCount} more`}
-                </button>
-              )}
-            </div>
+            <SessionHeatmap sessions={sessions} />
           )}
         </CardContent>
       </Card>

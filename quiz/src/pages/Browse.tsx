@@ -15,7 +15,6 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
   return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
 }
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { LatexText } from '@/components/LatexText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 
@@ -176,12 +175,9 @@ export default function Browse() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const [search, setSearch] = useState('')
   const [topic, setTopic] = useState('')
   const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
-  const [authorSearch, setAuthorSearch] = useState('')
-  const [yearSearch, setYearSearch] = useState('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
 
@@ -199,16 +195,12 @@ export default function Browse() {
       if (!raw) return
       sessionStorage.removeItem(BROWSE_STATE_KEY)
       const s = JSON.parse(raw) as {
-        search?: string; topic?: string; selectedSubtopics?: string[]
-        difficulty?: Difficulty | ''; authorSearch?: string; yearSearch?: string
-        conceptFilter?: string; selectedIds?: string[]
+        topic?: string; selectedSubtopics?: string[]
+        difficulty?: Difficulty | ''; conceptFilter?: string; selectedIds?: string[]
       }
-      if (s.search)              setSearch(s.search)
       if (s.topic)               setTopic(s.topic)
       if (s.selectedSubtopics?.length) setSelectedSubtopics(s.selectedSubtopics)
       if (s.difficulty)          setDifficulty(s.difficulty)
-      if (s.authorSearch)        setAuthorSearch(s.authorSearch)
-      if (s.yearSearch)          setYearSearch(s.yearSearch)
       if (s.conceptFilter)       setConceptFilter(s.conceptFilter)
       if (s.selectedIds?.length) setSelectedIds(new Set(s.selectedIds))
     } catch { /* ignore */ }
@@ -230,37 +222,28 @@ export default function Browse() {
   }
 
   function clearFilters() {
-    setSearch('')
     setTopic('')
     setSelectedSubtopics([])
     setDifficulty('')
-    setAuthorSearch('')
-    setYearSearch('')
     setSelectedIds(new Set())
     setConceptFilter('')
   }
-
-  const parsedYear = yearSearch ? parseInt(yearSearch, 10) : undefined
-  const validYear = parsedYear && !isNaN(parsedYear) ? parsedYear : undefined
 
   const filtered = useMemo(() => {
     const base = filterQuestions(allQuestions, {
       topic: topic || undefined,
       subtopics: selectedSubtopics.length ? selectedSubtopics : undefined,
       difficulty: difficulty || undefined,
-      author: authorSearch || undefined,
-      year: validYear,
-      search: search || undefined,
     })
     if (!conceptFilter) return base
     return base.filter(q =>
       q.wiki_link.some(link => linkMatchesConcept(link, conceptFilter))
     )
-  }, [allQuestions, topic, selectedSubtopics, difficulty, authorSearch, validYear, search, conceptFilter])
+  }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter])
 
   const subtopics = topic ? (subtopicsByTopic[topic] ?? []) : []
 
-  const hasFilters = search || topic || selectedSubtopics.length || difficulty || authorSearch || yearSearch || conceptFilter
+  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter
 
   function handleStartQuiz() {
     const params = new URLSearchParams({ mode: 'quiz', reveal: 'during', from: 'browse' })
@@ -268,8 +251,7 @@ export default function Browse() {
     // Save current browse state so it can be restored when quitting the quiz
     try {
       sessionStorage.setItem(BROWSE_STATE_KEY, JSON.stringify({
-        search, topic, selectedSubtopics, difficulty,
-        authorSearch, yearSearch, conceptFilter,
+        topic, selectedSubtopics, difficulty, conceptFilter,
         selectedIds: [...selectedIds],
       }))
     } catch { /* ignore */ }
@@ -298,7 +280,7 @@ export default function Browse() {
   }
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-10 space-y-6">
+    <div className="container max-w-3xl mx-auto px-4 py-10 pb-28 space-y-6">
       <div className="space-y-1">
         <h1 className="text-3xl font-bold tracking-tight">Question Browser</h1>
         <p className="text-muted-foreground">Search and filter all practice questions</p>
@@ -337,16 +319,6 @@ export default function Browse() {
               </span>
             </div>
           )}
-          {/* Free text search */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium">Search</label>
-            <Input
-              placeholder="Search question text or ID…"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-          </div>
-
           {/* Exam */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium">Exam</label>
@@ -438,58 +410,26 @@ export default function Browse() {
             </div>
           </div>
 
-          {/* Author and Year */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">Author</label>
-              <Input
-                placeholder="e.g. SOA"
-                value={authorSearch}
-                onChange={e => setAuthorSearch(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-sm font-medium">Year</label>
-              <Input
-                placeholder="e.g. 2023"
-                value={yearSearch}
-                onChange={e => setYearSearch(e.target.value)}
-              />
-            </div>
-          </div>
         </CardContent>
       </Card>
 
       {/* Results */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-sm text-muted-foreground">
-            {loading ? 'Loading questions…' : `${filtered.length} question${filtered.length !== 1 ? 's' : ''} found`}
-            {selectedIds.size > 0 && (
-              <span className="ml-2 text-foreground font-medium">
-                · {selectedIds.size} selected
-                <button
-                  type="button"
-                  onClick={() => setSelectedIds(new Set())}
-                  className="ml-2 text-xs text-muted-foreground hover:text-foreground transition-colors font-normal"
-                >
-                  clear
-                </button>
-              </span>
-            )}
-          </p>
-          {!loading && filtered.length > 0 && (
-            <button
-              type="button"
-              onClick={handleStartQuiz}
-              className="text-xs px-3 py-1.5 rounded-md border border-primary bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              {selectedIds.size > 0
-                ? `Start quiz with ${selectedIds.size} selected`
-                : 'Start quiz with this selection'}
-            </button>
+        <p className="text-sm text-muted-foreground">
+          {loading ? 'Loading questions…' : `${filtered.length} question${filtered.length !== 1 ? 's' : ''} found`}
+          {selectedIds.size > 0 && (
+            <span className="ml-2 text-foreground font-medium">
+              · {selectedIds.size} selected
+              <button
+                type="button"
+                onClick={() => setSelectedIds(new Set())}
+                className="ml-2 text-xs text-muted-foreground hover:text-foreground transition-colors font-normal"
+              >
+                clear
+              </button>
+            </span>
           )}
-        </div>
+        </p>
 
         {error && (
           <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
@@ -530,6 +470,21 @@ export default function Browse() {
           </div>
         )}
       </div>
+
+      {/* Sticky quiz button */}
+      {!loading && filtered.length > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm border-t border-border">
+          <button
+            type="button"
+            onClick={handleStartQuiz}
+            className="px-6 py-2.5 rounded-full border border-primary bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium shadow-lg"
+          >
+            {selectedIds.size > 0
+              ? `Start quiz with ${selectedIds.size} selected`
+              : 'Start quiz with this selection'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

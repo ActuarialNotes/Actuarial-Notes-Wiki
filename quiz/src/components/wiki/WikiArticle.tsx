@@ -25,6 +25,18 @@ function escapeMarkdownLabel(label: string): string {
   return label.replace(/[\\\[\]()*_`{}]/g, '\\$&')
 }
 
+// CommonMark rule: ordered lists starting with N≠1 cannot interrupt a paragraph.
+// Items like "8. Explain…" directly following a paragraph line get swallowed into
+// that paragraph as plain text. Fix: insert a blank blockquote line (">") before
+// any "> N. " item (N≠1) that immediately follows a non-blank, non-heading,
+// non-list blockquote line.
+export function ensureListSpacing(md: string): string {
+  return md.replace(
+    /^(> (?!#{1,6} )(?!\d+\. )(?![-*+] )[^\n]*\S[^\n]*)\n(> (?!1\. )\d+\. )/gm,
+    '$1\n>\n$2',
+  )
+}
+
 // Preprocess the markdown before react-markdown:
 //   ![[Path/To/Image.png]]  → standard image with a raw.githubusercontent URL
 //   ![[Some Note]]          → "📎 Some Note" link to the wiki route

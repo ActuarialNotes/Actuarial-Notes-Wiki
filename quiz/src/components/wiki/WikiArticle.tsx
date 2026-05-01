@@ -109,10 +109,6 @@ function stripHtmlBlocks(md: string): string {
 export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
-  const processed = useMemo(
-    () => ensureListSpacing(rewriteWikilinks(stripFrontmatter(markdown))),
-    [markdown],
-  )
   const processed = useMemo(() => {
     const stripped = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
     return stripHtmlBlocks(fixBlockquoteOrderedLists(rewriteWikilinks(stripped)))

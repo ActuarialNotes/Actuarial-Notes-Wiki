@@ -56,6 +56,7 @@ async function upsertMasteryFromResponses(
     .select('*')
     .eq('user_id', userId)
     .in('exam_id', [...new Set(events.map(e => e.examId))])
+    .in('concept_slug', [...new Set(events.map(e => e.conceptSlug))])
 
   const byKey = new Map<string, ConceptMasteryRecord>()
   for (const r of (existing ?? []) as ConceptMasteryRecord[]) {
@@ -74,7 +75,10 @@ async function upsertMasteryFromResponses(
     byKey.set(key, applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now }))
   }
 
-  const rows = [...byKey.values()].map(r => ({ ...r, updated_at: now.toISOString() }))
+  const touchedKeys = new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))
+  const rows = [...byKey.entries()]
+    .filter(([key]) => touchedKeys.has(key))
+    .map(([, r]) => ({ ...r, updated_at: now.toISOString() }))
   await supabase.from('concept_mastery').upsert(rows, { onConflict: 'user_id,exam_id,concept_slug' })
 }
 
@@ -222,6 +226,12 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     if (!userId) return  // unauthenticated — skip Supabase write
 
+    // Persist concept-level mastery state. Fire-and-forget before the session
+    // insert so a session-save failure never blocks the mastery transition.
+    upsertMasteryFromResponses(userId, questions, responses).catch(err => {
+      console.warn('concept_mastery upsert failed:', err)
+    })
+
     const { data: session, error: sessionError } = await supabase
       .from('quiz_sessions')
       .insert({
@@ -258,11 +268,6 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       .insert(responseRows)
 
     if (respError) set({ error: respError.message })
-
-    // Persist concept-level mastery state (non-blocking — UI doesn't gate on this)
-    upsertMasteryFromResponses(userId, questions, responses).catch(err => {
-      console.warn('concept_mastery upsert failed:', err)
-    })
 
     // Upsert exam_progress: transition not_started → in_progress on first quiz
     const topic = questions[0]?.topic ?? null

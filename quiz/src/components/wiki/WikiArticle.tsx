@@ -25,6 +25,18 @@ function escapeMarkdownLabel(label: string): string {
   return label.replace(/[\\\[\]()*_`{}]/g, '\\$&')
 }
 
+// CommonMark rule: ordered lists starting with N≠1 cannot interrupt a paragraph.
+// Items like "8. Explain…" directly following a paragraph line get swallowed into
+// that paragraph as plain text. Fix: insert a blank blockquote line (">") before
+// any "> N. " item (N≠1) that immediately follows a non-blank, non-heading,
+// non-list blockquote line.
+export function ensureListSpacing(md: string): string {
+  return md.replace(
+    /^(> (?!#{1,6} )(?!\d+\. )(?![-*+] )[^\n]*\S[^\n]*)\n(> (?!1\. )\d+\. )/gm,
+    '$1\n>\n$2',
+  )
+}
+
 // Preprocess the markdown before react-markdown:
 //   ![[Path/To/Image.png]]  → standard image with a raw.githubusercontent URL
 //   ![[Some Note]]          → "📎 Some Note" link to the wiki route
@@ -70,7 +82,10 @@ function refKey(ref: WikiEntryRef): string {
 export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
-  const processed = useMemo(() => rewriteWikilinks(stripFrontmatter(markdown)), [markdown])
+  const processed = useMemo(
+    () => ensureListSpacing(rewriteWikilinks(stripFrontmatter(markdown))),
+    [markdown],
+  )
 
   const popupOpen = useConceptPopup(s => s.open)
   const popupIndex = useConceptPopup(s => s.index)
@@ -137,7 +152,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
         'prose-headings:mt-6 prose-headings:mb-2 prose-headings:font-semibold ' +
         'prose-h3:text-base prose-h3:font-medium ' +
         'prose-p:my-2.5 prose-p:leading-relaxed ' +
-        'prose-a:text-primary prose-a:no-underline hover:prose-a:underline ' +
+        'prose-a:text-primary prose-a:underline ' +
         'prose-li:my-0.5 prose-ul:my-2 prose-ol:my-2 ' +
         'prose-strong:font-semibold ' +
         '[&_li::marker]:text-muted-foreground ' +

@@ -1,16 +1,17 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { ChevronDown, Info } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { wikiRoute } from '@/lib/wikiRoutes'
 import {
   aggregateForTopic,
   decayIfStale,
   type ConceptMasteryRecord,
   type MasteryState,
 } from '@/lib/mastery'
+import { ConceptSelectorPopup } from '@/components/ConceptSelectorPopup'
+import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
+import { ConceptReadModal } from '@/components/ConceptReadModal'
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New',
@@ -52,6 +53,9 @@ interface Props {
 export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const [showInfo, setShowInfo] = useState(false)
+  const [selectedConcept, setSelectedConcept] = useState<string | null>(null)
+  const [questionsForConcept, setQuestionsForConcept] = useState<string | null>(null)
+  const [readingConcept, setReadingConcept] = useState<string | null>(null)
 
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
@@ -66,92 +70,124 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
     })
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <div className="flex items-center gap-2">
-          <CardTitle className="text-base">{syllabus.examLabel}</CardTitle>
-          <button
-            onClick={() => setShowInfo(v => !v)}
-            className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
-            aria-label="How mastery tracking works"
-          >
-            <Info className="h-4 w-4" />
-          </button>
-        </div>
-        {showInfo && <InfoPanel />}
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-1">
-          {syllabus.topics.map(topic => {
-            const conceptSlugs = topic.concepts.map(c => c.name)
-            const agg = aggregateForTopic(examMastery, conceptSlugs, now)
-            const isOpen = openTopics.has(topic.name)
+    <>
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-base">{syllabus.examLabel}</CardTitle>
+            <button
+              onClick={() => setShowInfo(v => !v)}
+              className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+              aria-label="How mastery tracking works"
+            >
+              <Info className="h-4 w-4" />
+            </button>
+          </div>
+          {showInfo && <InfoPanel />}
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-1">
+            {syllabus.topics.map(topic => {
+              const conceptSlugs = topic.concepts.map(c => c.name)
+              const agg = aggregateForTopic(examMastery, conceptSlugs, now)
+              const isOpen = openTopics.has(topic.name)
 
-            return (
-              <div key={topic.name}>
-                {/* Top-level category header — one bar per topic */}
-                <button
-                  className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
-                  onClick={() => toggle(topic.name)}
-                  aria-expanded={isOpen}
-                >
-                  <ChevronDown
-                    className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
-                  />
-                  <span className="text-sm font-semibold min-w-0 truncate">
-                    {topic.name}
-                    {topic.weight && (
-                      <span className="ml-1.5 text-xs font-normal text-muted-foreground">
-                        {topic.weight}
-                      </span>
-                    )}
-                  </span>
-                  <div
-                    className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0"
-                    role="progressbar"
-                    aria-valuenow={agg.strongPct}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-label={`${agg.strong} of ${agg.total} concepts mastered`}
+              return (
+                <div key={topic.name}>
+                  {/* Top-level category header — one bar per topic */}
+                  <button
+                    className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
+                    onClick={() => toggle(topic.name)}
+                    aria-expanded={isOpen}
                   >
-                    <div
-                      className="h-full rounded-full bg-green-500 transition-all"
-                      style={{ width: `${agg.strongPct}%` }}
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
                     />
-                  </div>
-                  <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">
-                    {agg.strong}/{agg.total}
-                  </span>
-                </button>
+                    <span className="text-sm font-semibold min-w-0 truncate">
+                      {topic.name}
+                      {topic.weight && (
+                        <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+                          {topic.weight}
+                        </span>
+                      )}
+                    </span>
+                    <div
+                      className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0"
+                      role="progressbar"
+                      aria-valuenow={agg.strongPct}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`${agg.strong} of ${agg.total} concepts mastered`}
+                    >
+                      <div
+                        className="h-full rounded-full bg-green-500 transition-all"
+                        style={{ width: `${agg.strongPct}%` }}
+                      />
+                    </div>
+                    <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">
+                      {agg.strong}/{agg.total}
+                    </span>
+                  </button>
 
-                {/* Concept rows — text labels only, no per-concept bars */}
-                {isOpen && topic.concepts.length > 0 && (
-                  <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
-                    {topic.concepts.map(c => {
-                      const rec = recordsBySlug.get(c.name.toLowerCase())
-                      const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
-                      return (
-                        <Link
-                          key={c.name}
-                          to={wikiRoute({ kind: 'concept', name: c.name })}
-                          className="flex items-center gap-2 py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors"
-                        >
-                          <span className="text-xs text-foreground min-w-0 flex-1 truncate" title={c.name}>
-                            {c.name}
-                          </span>
-                          <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>
-                            {STATE_LABEL[state]}
-                          </span>
-                        </Link>
-                      )
-                    })}
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
-      </CardContent>
-    </Card>
+                  {/* Concept rows — clickable buttons that open the selector popup */}
+                  {isOpen && topic.concepts.length > 0 && (
+                    <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
+                      {topic.concepts.map(c => {
+                        const rec = recordsBySlug.get(c.name.toLowerCase())
+                        const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
+                        return (
+                          <button
+                            key={c.name}
+                            type="button"
+                            onClick={() => setSelectedConcept(c.name)}
+                            className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
+                          >
+                            <span className="text-xs text-foreground min-w-0 flex-1 truncate" title={c.name}>
+                              {c.name}
+                            </span>
+                            <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>
+                              {STATE_LABEL[state]}
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {selectedConcept && (
+        <ConceptSelectorPopup
+          conceptName={selectedConcept}
+          onBrowseQuestions={() => {
+            setQuestionsForConcept(selectedConcept)
+            setSelectedConcept(null)
+          }}
+          onReadConcept={() => {
+            setReadingConcept(selectedConcept)
+            setSelectedConcept(null)
+          }}
+          onClose={() => setSelectedConcept(null)}
+        />
+      )}
+
+      {questionsForConcept && (
+        <ConceptQuestionsModal
+          conceptName={questionsForConcept}
+          onClose={() => setQuestionsForConcept(null)}
+        />
+      )}
+
+      {readingConcept && (
+        <ConceptReadModal
+          conceptName={readingConcept}
+          onClose={() => setReadingConcept(null)}
+        />
+      )}
+    </>
   )
 }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
@@ -13,6 +13,9 @@ export default function WikiExam() {
   const examFileName = fromSlug(slug)
   const { setPageRefs, setExamId } = useWikiPage()
   const { openAt } = useConceptPopup()
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const location = useLocation()
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
 
@@ -43,7 +46,23 @@ export default function WikiExam() {
   useEffect(() => {
     setExamId(examIdFromFile(examFileName))
     setPageRefs(pageRefs)
-  }, [pageRefs, examFileName, setExamId, setPageRefs])
+
+    // When arriving from a search result, auto-open the requested concept in
+    // the popup and then clean up the query param from the URL.
+    const conceptToOpen = searchParams.get('openConcept')
+    if (conceptToOpen && pageRefs.length > 0) {
+      const conceptList = pageRefs
+        .filter(r => r.kind === 'concept')
+        .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
+      if (conceptList.length > 0) {
+        const idx = conceptList.findIndex(
+          r => r.name.toLowerCase() === conceptToOpen.toLowerCase(),
+        )
+        openAt(conceptList, idx >= 0 ? idx : 0, `${examFileName}.md`)
+        navigate(location.pathname, { replace: true })
+      }
+    }
+  }, [pageRefs, examFileName, setExamId, setPageRefs, searchParams, navigate, location.pathname, openAt])
 
   return (
     <div className="space-y-4">
@@ -65,8 +84,6 @@ export default function WikiExam() {
           markdown={content}
           sourcePath={`${examFileName}.md`}
           onWikiLink={(ref, e) => {
-            // Concept clicks on an exam page open the concept popup, scoped to
-            // the syllabus concept list. Resource/exam links navigate normally.
             if (ref.kind !== 'concept') return false
             e.preventDefault()
             const conceptList = pageRefs

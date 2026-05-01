@@ -1,12 +1,6 @@
-[[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
-
 <div class="exam-nav"
      data-current="P-1|Probability"
 </div>
-
-## Exam P-1 (SOA)
-
-The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice questions about probability theory concepts and their application to measuring risk. 
 
 > [!answer]- Source Material
 >
@@ -18,6 +12,12 @@ The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice question
 > | [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)]] | Chapters 1-8 |
 > | [[Probability and Statistical Inference (Hogg - 2020)]] | Chapters 1-5 |
 > | [[Probability (Leemis - 2018)]] | Chapters 1-8 |
+
+## Exam P-1 (SOA)
+
+The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice questions about probability theory concepts and their application to measuring risk. 
+
+
 
 ### Prerequisite knowledge
 Knowledge of the following concepts is expected:

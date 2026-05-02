@@ -92,6 +92,13 @@ export default function Sidebar() {
   }, [collapsed])
 
   useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--sidebar-width',
+      collapsed ? '3.5rem' : '16rem'
+    )
+  }, [collapsed])
+
+  useEffect(() => {
     if (!profileOpen) return
     function handleClickOutside(e: MouseEvent) {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {

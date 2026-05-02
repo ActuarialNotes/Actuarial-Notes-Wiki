@@ -10,7 +10,6 @@ import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
-import { setExamAccent } from '@/lib/examColors'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -73,13 +72,6 @@ export default function Quiz() {
       startQuiz(questions, mode)
     }
   }, [loading, questions, status, mode, startQuiz])
-
-  // Restore exam accent colour (handles direct navigation or hard refresh)
-  useEffect(() => {
-    if (storeQuestions.length > 0) {
-      setExamAccent(storeQuestions[0].topic)
-    }
-  }, [storeQuestions])
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
 

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
-import { applyAnswer, emptyRecord, type ConceptMasteryRecord } from '@/lib/mastery'
+import { applyAnswer, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 
 const TOPIC_TO_EXAM_ID: Record<string, string> = {
@@ -82,6 +82,12 @@ async function upsertMasteryFromResponses(
   await supabase.from('concept_mastery').upsert(rows, { onConflict: 'user_id,exam_id,concept_slug' })
 }
 
+export interface MasteryTransition {
+  conceptSlug: string
+  from: MasteryState
+  to: MasteryState
+}
+
 type QuizStatus = 'idle' | 'loading' | 'active' | 'reviewing' | 'complete'
 
 interface Response {
@@ -97,6 +103,7 @@ export interface CompletedSession {
   totalQuestions: number
   timeTakenSeconds: number | null
   completedAt: string
+  masteryTransitions?: MasteryTransition[]
 }
 
 export interface QuizStore {
@@ -114,12 +121,52 @@ export interface QuizStore {
   // Actions
   startQuiz: (questions: Question[], mode: QuizMode) => void
   answerQuestion: (questionId: string, chosen: string) => void
+  clearAnswer: (questionId: string) => void
   nextQuestion: () => void
   goToPreviousQuestion: () => void
   goToQuestion: (index: number) => void
   toggleFlag: (questionId: string) => void
-  completeQuiz: (userId: string | null) => Promise<void>
+  completeQuiz: (userId: string | null, priorMasteryRecords?: ConceptMasteryRecord[]) => Promise<void>
   resetQuiz: () => void
+}
+
+function computeMasteryTransitions(
+  questions: Question[],
+  responses: Record<string, { chosen: string }>,
+  priorRecords: ConceptMasteryRecord[],
+): MasteryTransition[] {
+  const bySlug = new Map<string, ConceptMasteryRecord>()
+  for (const r of priorRecords) {
+    bySlug.set(r.concept_slug.toLowerCase(), r)
+  }
+
+  // Simulate answers in question order, accumulating state per concept
+  const simulated = new Map<string, ConceptMasteryRecord>()
+  const now = new Date()
+
+  for (const q of questions) {
+    const chosen = responses[q.id]?.chosen
+    if (chosen === undefined) continue
+    const examId = TOPIC_TO_EXAM_ID[q.topic]
+    if (!examId) continue
+    const isCorrect = chosen === q.answer
+    const isHard = q.difficulty === 'hard'
+
+    for (const conceptSlug of conceptsForQuestion(q)) {
+      const key = conceptSlug.toLowerCase()
+      const current = simulated.get(key) ?? bySlug.get(key) ?? emptyRecord('', examId, conceptSlug)
+      simulated.set(key, applyAnswer(current, { isCorrect, isHard, at: now }))
+    }
+  }
+
+  const transitions: MasteryTransition[] = []
+  for (const [key, after] of simulated) {
+    const fromState: MasteryState = bySlug.get(key)?.state ?? 'new'
+    if (fromState !== after.state) {
+      transitions.push({ conceptSlug: key, from: fromState, to: after.state })
+    }
+  }
+  return transitions
 }
 
 const LAST_SESSION_KEY = 'actuarial_last_session'
@@ -161,6 +208,13 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }))
   },
 
+  clearAnswer(questionId) {
+    set(state => {
+      const { [questionId]: _removed, ...rest } = state.responses
+      return { responses: rest as Record<string, Response>, status: 'active' }
+    })
+  },
+
   nextQuestion() {
     const { currentIndex, questions, responses } = get()
     if (currentIndex + 1 >= questions.length) {
@@ -198,7 +252,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }))
   },
 
-  async completeQuiz(userId) {
+  async completeQuiz(userId, priorMasteryRecords = []) {
     const { questions, responses, mode, startedAt } = get()
     set({ status: 'complete' })
 
@@ -207,6 +261,8 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       : null
 
     const correctCount = questions.filter(q => responses[q.id]?.chosen === q.answer).length
+
+    const masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
 
     // Persist to localStorage so /review survives a hard refresh
     const completedSession: CompletedSession = {
@@ -217,6 +273,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       totalQuestions: questions.length,
       timeTakenSeconds: totalSeconds,
       completedAt: new Date().toISOString(),
+      masteryTransitions,
     }
     try {
       localStorage.setItem(LAST_SESSION_KEY, JSON.stringify(completedSession))

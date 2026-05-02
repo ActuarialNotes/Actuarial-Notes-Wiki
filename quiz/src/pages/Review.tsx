@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Check, X } from 'lucide-react'
+import { Check, TrendingUp, X } from 'lucide-react'
 import { useQuizStore, readLastSession } from '@/stores/quizStore'
-import type { CompletedSession } from '@/stores/quizStore'
+import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { decayIfStale, type MasteryState, type ConceptMasteryRecord } from '@/lib/mastery'
+import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { QuestionCard } from '@/components/QuestionCard'
 import { TopicCoverageChart } from '@/components/TopicCoverageChart'
 import { Button } from '@/components/ui/button'
@@ -59,10 +62,36 @@ function formatTime(seconds: number | null): string {
   return m > 0 ? `${m}m ${s}s` : `${s}s`
 }
 
+function MasteryLevelUpBadge({ transition, index }: { transition: MasteryTransition; index: number }) {
+  const isStrong = transition.to === 'strong'
+  const badgeClasses = isStrong
+    ? 'bg-green-100 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-800'
+    : 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800'
+  return (
+    <span
+      className={`mastery-level-up inline-flex items-center gap-1 px-2 py-1 rounded-full border text-xs font-medium ${badgeClasses}`}
+      style={{ animationDelay: `${index * 80}ms` }}
+    >
+      <TrendingUp className="h-3 w-3" />
+      {transition.conceptSlug}
+    </span>
+  )
+}
+
+function worstState(states: MasteryState[]): MasteryState | null {
+  if (states.length === 0) return null
+  const order: MasteryState[] = ['forgotten', 'learning', 'new', 'strong']
+  for (const s of order) {
+    if (states.includes(s)) return s
+  }
+  return 'strong'
+}
+
 export default function Review() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { resetQuiz } = useQuizStore()
   const [session, setSession] = useState<CompletedSession | null>(null)
 
@@ -79,6 +108,40 @@ export default function Review() {
   // Only run on mount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const masteryBySubtopic = useMemo((): Map<string, MasteryState> | undefined => {
+    if (!user || masteryLoading || masteryRecords.length === 0 || !session) return undefined
+    const now = new Date()
+
+    const slugsBySubtopic = new Map<string, Set<string>>()
+    for (const q of session.questions) {
+      if (!slugsBySubtopic.has(q.subtopic)) slugsBySubtopic.set(q.subtopic, new Set())
+      const slugSet = slugsBySubtopic.get(q.subtopic)!
+      for (const link of q.wiki_link) {
+        const ref = hrefToEntryRef(link)
+        if (ref?.kind === 'concept' && ref.name) {
+          slugSet.add(ref.name.toLowerCase())
+        } else {
+          const last = link.split('/').filter(Boolean).pop()
+          if (last) slugSet.add(last.replace(/-/g, ' ').toLowerCase())
+        }
+      }
+    }
+
+    const byConceptLower = new Map<string, ConceptMasteryRecord>()
+    for (const r of masteryRecords) byConceptLower.set(r.concept_slug.toLowerCase(), r)
+
+    const result = new Map<string, MasteryState>()
+    for (const [subtopic, slugSet] of slugsBySubtopic) {
+      const states: MasteryState[] = [...slugSet].map(slug => {
+        const rec = byConceptLower.get(slug)
+        return rec ? decayIfStale(rec, now).state : 'new'
+      })
+      const worst = worstState(states)
+      if (worst) result.set(subtopic, worst)
+    }
+    return result
+  }, [user, masteryLoading, masteryRecords, session])
 
   if (!session) return null
 
@@ -141,8 +204,30 @@ export default function Review() {
         </CardContent>
       </Card>
 
+      {/* Mastery level-up badges — only shown when concepts advanced state */}
+      {user && session.masteryTransitions && (() => {
+        const upward = session.masteryTransitions.filter(t => t.to === 'learning' || t.to === 'strong')
+        if (upward.length === 0) return null
+        return (
+          <Card>
+            <CardContent className="pt-4">
+              <h2 className="text-sm font-semibold mb-3">Concepts Leveled Up</h2>
+              <div className="flex flex-wrap gap-2">
+                {upward.map((t, i) => (
+                  <MasteryLevelUpBadge key={t.conceptSlug} transition={t} index={i} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )
+      })()}
+
       {/* Topic coverage bar graph */}
-      <TopicCoverageChart questions={session.questions} responses={session.responses} />
+      <TopicCoverageChart
+        questions={session.questions}
+        responses={session.responses}
+        masteryBySubtopic={masteryBySubtopic}
+      />
 
       {/* Per-question review */}
       <div className="space-y-2">
@@ -161,6 +246,7 @@ export default function Review() {
                 selectedAnswer={chosen}
                 onAnswer={() => {/* read-only in review */}}
                 showExplanation={true}
+                showMeta={true}
               />
             </div>
           )

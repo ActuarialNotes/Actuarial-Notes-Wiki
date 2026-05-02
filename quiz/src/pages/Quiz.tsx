@@ -4,6 +4,7 @@ import { Loader2, X, ChevronLeft, Bookmark, BookmarkCheck } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
@@ -16,6 +17,7 @@ export default function Quiz() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { records: masteryRecords } = useConceptMastery()
 
   const mode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
   // reveal='during' shows explanation after each answer; 'end' defers to review
@@ -57,6 +59,7 @@ export default function Quiz() {
     status,
     startQuiz,
     answerQuestion,
+    clearAnswer,
     nextQuestion,
     goToPreviousQuestion,
     goToQuestion,
@@ -117,11 +120,18 @@ export default function Quiz() {
     }
   }
 
+  function handleChangeAnswer() {
+    if (!currentQuestion) return
+    const previous = committedAnswer
+    clearAnswer(currentQuestion.id)
+    setPendingAnswer(previous)
+  }
+
   // Show explanation inline only in quiz mode when user chose to reveal during
   const showExplanation = isLocked && mode === 'quiz' && reveal === 'during'
 
   async function handleFinish() {
-    await completeQuiz(user?.id ?? null)
+    await completeQuiz(user?.id ?? null, masteryRecords)
     navigate('/review')
   }
 
@@ -265,23 +275,32 @@ export default function Quiz() {
             )}
 
             {isLocked && (
-              isLastQuestion ? (
+              <>
                 <Button
-                  onClick={handleFinish}
+                  variant="outline"
                   size="lg"
-                  className="bg-foreground text-background hover:bg-foreground/90"
+                  onClick={handleChangeAnswer}
                 >
-                  Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
+                  Change Answer
                 </Button>
-              ) : (
-                <Button
-                  onClick={nextQuestion}
-                  size="lg"
-                  className="bg-foreground text-background hover:bg-foreground/90"
-                >
-                  Next Question →
-                </Button>
-              )
+                {isLastQuestion ? (
+                  <Button
+                    onClick={handleFinish}
+                    size="lg"
+                    className="bg-foreground text-background hover:bg-foreground/90"
+                  >
+                    Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={nextQuestion}
+                    size="lg"
+                    className="bg-foreground text-background hover:bg-foreground/90"
+                  >
+                    Next Question →
+                  </Button>
+                )}
+              </>
             )}
           </div>
         </div>

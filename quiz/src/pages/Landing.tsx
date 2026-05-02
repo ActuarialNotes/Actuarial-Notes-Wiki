@@ -4,28 +4,78 @@ import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress, EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { useSubtopics } from '@/hooks/useSubtopics'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { aggregateForTopic } from '@/lib/mastery'
+import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions } from '@/lib/parser'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import type { QuizMode, Difficulty } from '@/lib/parser'
+import type { QuizMode } from '@/lib/parser'
+import type { ConceptMasteryRecord } from '@/lib/mastery'
+import type { Question } from '@/lib/parser'
 
 const EXAMS = [
   { value: 'Probability', label: 'Exam P — Probability' },
   { value: 'Financial Mathematics', label: 'Exam FM — Financial Mathematics' },
 ]
 
+function computeAdaptiveSubtopics(
+  subtopics: string[],
+  allQuestions: Question[],
+  topic: string,
+  masteryRecords: ConceptMasteryRecord[],
+): string[] {
+  if (!topic || masteryRecords.length === 0) return []
+  const now = new Date()
+
+  // Build subtopic → conceptSlugs from all questions for this topic
+  const slugsBySubtopic = new Map<string, string[]>()
+  for (const q of allQuestions) {
+    if (q.topic !== topic) continue
+    const slugs: string[] = []
+    for (const link of q.wiki_link) {
+      const ref = hrefToEntryRef(link)
+      if (ref?.kind === 'concept' && ref.name) {
+        slugs.push(ref.name)
+      } else {
+        const last = link.split('/').filter(Boolean).pop()
+        if (last) slugs.push(last.replace(/-/g, ' '))
+      }
+    }
+    slugsBySubtopic.set(q.subtopic, [...(slugsBySubtopic.get(q.subtopic) ?? []), ...slugs])
+  }
+
+  // Priority: 0=forgotten, 1=learning, 2=new (up to 2), 3=all-strong (skip)
+  interface Scored { subtopic: string; priority: number }
+  const scored: Scored[] = subtopics.map(st => {
+    const slugs = slugsBySubtopic.get(st) ?? []
+    const agg = aggregateForTopic(masteryRecords, slugs, now)
+    let priority: number
+    if (agg.forgotten > 0) priority = 0
+    else if (agg.learning > 0) priority = 1
+    else if (agg.newCount > 0) priority = 2
+    else priority = 3
+    return { subtopic: st, priority }
+  }).sort((a, b) => a.priority - b.priority)
+
+  const selected: string[] = []
+  let newIntroduced = 0
+  for (const { subtopic, priority } of scored) {
+    if (priority <= 1) {
+      selected.push(subtopic)
+    } else if (priority === 2 && newIntroduced < 2) {
+      selected.push(subtopic)
+      newIntroduced++
+    }
+  }
+  return selected
+}
+
 // Question counts that mirror each real exam
 const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Probability': 30,
   'Financial Mathematics': 35,
 }
-
-const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
-  { value: '', label: 'All Levels' },
-  { value: 'easy', label: 'Easy' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'hard', label: 'Hard' },
-]
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -34,6 +84,7 @@ export default function Landing() {
   const examProgress = useExamProgress()
   const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
   const { questions: allQuestions } = useAllQuestions()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
 
   // Allow other surfaces (e.g. the Active Exam Card on the dashboard) to pre-fill
   // the launcher by linking to /?topic=...&mode=mock-exam.
@@ -49,11 +100,11 @@ export default function Landing() {
 
   const [topic, setTopic] = useState(initialTopic)
   const [mode, setMode] = useState<QuizMode>(initialMode)
-  const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const [showOther, setShowOther] = useState(!hasInProgress)
 
   // Quiz-specific options
   const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
+  const [isAdaptive, setIsAdaptive] = useState(false)
   const [count, setCount] = useState<number>(10)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
 
@@ -71,7 +122,21 @@ export default function Landing() {
   // subtopic filters, so leaving stale chips selected is misleading.
   useEffect(() => {
     setSelectedSubtopics([])
+    setIsAdaptive(false)
   }, [topic, mode])
+
+  // Auto-select subtopics based on mastery progress for logged-in users in quiz mode.
+  // Runs after mastery data and subtopics both finish loading.
+  useEffect(() => {
+    if (!user || masteryLoading || subtopicsLoading || mode !== 'quiz' || !topic) return
+    const subtopics = subtopicsByTopic[topic] ?? []
+    const adaptive = computeAdaptiveSubtopics(subtopics, allQuestions, topic, masteryRecords)
+    if (adaptive.length > 0) {
+      setSelectedSubtopics(adaptive)
+      setIsAdaptive(true)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [topic, mode, user?.id, masteryLoading, subtopicsLoading, masteryRecords.length])
 
   // Compute available question count for the current filters
   const availableCount = useMemo(() => {
@@ -79,9 +144,8 @@ export default function Landing() {
     return filterQuestions(allQuestions, {
       topic,
       ...(selectedSubtopics.length > 0 && { subtopics: selectedSubtopics }),
-      ...(difficulty && { difficulty }),
     }).length
-  }, [allQuestions, topic, selectedSubtopics, difficulty])
+  }, [allQuestions, topic, selectedSubtopics])
 
   // Clamp count when available pool shrinks
   useEffect(() => {
@@ -91,6 +155,7 @@ export default function Landing() {
   }, [availableCount, count])
 
   function toggleSubtopic(subtopic: string) {
+    setIsAdaptive(false)
     setSelectedSubtopics(prev =>
       prev.includes(subtopic) ? prev.filter(s => s !== subtopic) : [...prev, subtopic]
     )
@@ -98,7 +163,6 @@ export default function Landing() {
 
   function handleStart() {
     const params = new URLSearchParams({ topic, mode })
-    if (difficulty) params.set('difficulty', difficulty)
 
     if (mode === 'quiz') {
       if (selectedSubtopics.length > 0) params.set('subtopics', selectedSubtopics.join(','))
@@ -240,7 +304,11 @@ export default function Landing() {
                 <label className="text-sm font-medium">
                   Topics
                   <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    {selectedSubtopics.length === 0 ? '(all included)' : `${selectedSubtopics.length} selected`}
+                    {selectedSubtopics.length === 0
+                      ? '(all included)'
+                      : isAdaptive
+                        ? `(${selectedSubtopics.length} auto-selected)`
+                        : `${selectedSubtopics.length} selected`}
                   </span>
                 </label>
                 {subtopicsLoading && subtopics.length === 0 ? (
@@ -288,27 +356,6 @@ export default function Landing() {
                 />
               </div>
 
-              {/* Difficulty */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Difficulty</label>
-                <div className="flex flex-wrap gap-2">
-                  {DIFFICULTIES.map(d => (
-                    <button
-                      key={d.value}
-                      type="button"
-                      onClick={() => setDifficulty(d.value)}
-                      className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
-                        difficulty === d.value
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-input hover:bg-accent'
-                      }`}
-                    >
-                      {d.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* Reveal answers */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Reveal Answers</label>
@@ -344,36 +391,13 @@ export default function Landing() {
 
           {/* ── Mock Exam mode info ────────────────────────────────── */}
           {mode === 'mock-exam' && (
-            <>
-              <div className="rounded-lg border bg-muted/40 px-4 py-3 space-y-1">
-                <p className="text-sm font-medium">{mockExamCount} questions</p>
-                <p className="text-xs text-muted-foreground">
-                  Distributed across all {examLabel} topics to mirror the real exam.
-                  Answers and explanations are revealed at the end.
-                </p>
-              </div>
-
-              {/* Difficulty */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Difficulty</label>
-                <div className="flex flex-wrap gap-2">
-                  {DIFFICULTIES.map(d => (
-                    <button
-                      key={d.value}
-                      type="button"
-                      onClick={() => setDifficulty(d.value)}
-                      className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
-                        difficulty === d.value
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-input hover:bg-accent'
-                      }`}
-                    >
-                      {d.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </>
+            <div className="rounded-lg border bg-muted/40 px-4 py-3 space-y-1">
+              <p className="text-sm font-medium">{mockExamCount} questions</p>
+              <p className="text-xs text-muted-foreground">
+                Distributed across all {examLabel} topics to mirror the real exam.
+                Answers and explanations are revealed at the end.
+              </p>
+            </div>
           )}
 
               <Button onClick={handleStart} className="w-full" size="lg">

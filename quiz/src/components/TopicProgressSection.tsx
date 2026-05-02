@@ -9,9 +9,7 @@ import {
   type ConceptMasteryRecord,
   type MasteryState,
 } from '@/lib/mastery'
-import { ConceptSelectorPopup } from '@/components/ConceptSelectorPopup'
-import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
-import { ConceptReadModal } from '@/components/ConceptReadModal'
+import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New',
@@ -53,9 +51,7 @@ interface Props {
 export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const [showInfo, setShowInfo] = useState(false)
-  const [selectedConcept, setSelectedConcept] = useState<string | null>(null)
-  const [questionsForConcept, setQuestionsForConcept] = useState<string | null>(null)
-  const [readingConcept, setReadingConcept] = useState<string | null>(null)
+  const [selectedConcept, setSelectedConcept] = useState<{ name: string; state: MasteryState } | null>(null)
 
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
@@ -139,7 +135,7 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
                           <button
                             key={c.name}
                             type="button"
-                            onClick={() => setSelectedConcept(c.name)}
+                            onClick={() => setSelectedConcept({ name: c.name, state })}
                             className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
                           >
                             <span className="text-xs text-foreground min-w-0 flex-1 truncate" title={c.name}>
@@ -161,31 +157,10 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
       </Card>
 
       {selectedConcept && (
-        <ConceptSelectorPopup
-          conceptName={selectedConcept}
-          onBrowseQuestions={() => {
-            setQuestionsForConcept(selectedConcept)
-            setSelectedConcept(null)
-          }}
-          onReadConcept={() => {
-            setReadingConcept(selectedConcept)
-            setSelectedConcept(null)
-          }}
+        <ConceptDetailModal
+          conceptName={selectedConcept.name}
+          masteryState={selectedConcept.state}
           onClose={() => setSelectedConcept(null)}
-        />
-      )}
-
-      {questionsForConcept && (
-        <ConceptQuestionsModal
-          conceptName={questionsForConcept}
-          onClose={() => setQuestionsForConcept(null)}
-        />
-      )}
-
-      {readingConcept && (
-        <ConceptReadModal
-          conceptName={readingConcept}
-          onClose={() => setReadingConcept(null)}
         />
       )}
     </>

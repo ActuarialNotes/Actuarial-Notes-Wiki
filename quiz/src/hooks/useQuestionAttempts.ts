@@ -24,7 +24,7 @@ export function useQuestionAttempts(): { byQuestionId: Map<string, QuestionAttem
       .from('question_responses')
       .select('question_id, is_correct')
       .eq('user_id', user.id)
-      .then(({ data }) => {
+      .then(({ data }: { data: { question_id: string; is_correct: boolean }[] | null }) => {
         if (cancelled || !data) return
         const map = new Map<string, QuestionAttemptSummary>()
         for (const row of data) {

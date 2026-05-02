@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Loader2, X, ChevronLeft, Volume2, VolumeX } from 'lucide-react'
+import { Loader2, X, ChevronLeft, Volume2, VolumeX, Bookmark, BookmarkCheck } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
@@ -17,6 +18,7 @@ export default function Quiz() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { records: masteryRecords } = useConceptMastery()
 
   const mode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
   // reveal='during' shows explanation after each answer; 'end' defers to review
@@ -54,11 +56,15 @@ export default function Quiz() {
     questions: storeQuestions,
     currentIndex,
     responses,
+    flaggedIds,
     status,
     startQuiz,
     answerQuestion,
+    clearAnswer,
     nextQuestion,
     goToPreviousQuestion,
+    goToQuestion,
+    toggleFlag,
     completeQuiz,
     resetQuiz,
   } = useQuizStore()
@@ -85,25 +91,52 @@ export default function Quiz() {
   const { enabled: soundEnabled, toggle: toggleSound, play: playSound } = useSoundEffects()
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
+  // Local pre-confirmation selection — not committed to store until "Confirm Answer"
+  const [pendingAnswer, setPendingAnswer] = useState<string | null>(null)
+
+  // Clear pending selection and scroll to top whenever the question changes
+  useEffect(() => {
+    setPendingAnswer(null)
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [currentIndex])
 
   const currentQuestion = storeQuestions[currentIndex]
-  const selectedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
+  const committedAnswer = currentQuestion ? (responses[currentQuestion.id]?.chosen ?? null) : null
+  const isLocked = status === 'reviewing'
+  // What to visually highlight: committed answer (locked) or pending selection
+  const displayAnswer = isLocked ? committedAnswer : pendingAnswer
   const isLastQuestion = currentIndex + 1 >= storeQuestions.length
 
   function handleQuit() {
     try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
     resetQuiz()
-    navigate('/')
+    navigate(searchParams.get('from') === 'browse' ? '/browse' : '/')
+  }
+
+  function handleSelectAnswer(key: string) {
+    setPendingAnswer(key)
+  }
+
+  function handleConfirmAnswer() {
+    if (pendingAnswer && currentQuestion) {
+      playSound(pendingAnswer === currentQuestion.answer ? 'correct' : 'wrong')
+      answerQuestion(currentQuestion.id, pendingAnswer)
+    }
+  }
+
+  function handleChangeAnswer() {
+    if (!currentQuestion) return
+    const previous = committedAnswer
+    clearAnswer(currentQuestion.id)
+    setPendingAnswer(previous)
   }
 
   // Show explanation inline only in quiz mode when user chose to reveal during
-  const showExplanation = status === 'reviewing' && mode === 'quiz' && reveal === 'during'
-  // Show deferred message when answer is locked but explanation is withheld
-  const showDeferredMessage = status === 'reviewing' && !showExplanation
+  const showExplanation = isLocked && mode === 'quiz' && reveal === 'during'
 
   async function handleFinish() {
     playSound('complete')
-    await completeQuiz(user?.id ?? null)
+    await completeQuiz(user?.id ?? null, masteryRecords)
     navigate('/review')
   }
 
@@ -159,6 +192,8 @@ export default function Quiz() {
 
   if (!currentQuestion) return null
 
+  const isFlagged = flaggedIds.includes(currentQuestion.id)
+
   return (
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
       <div className="flex items-center justify-between gap-3">
@@ -171,18 +206,49 @@ export default function Quiz() {
           <X className="h-4 w-4 mr-1" />
           Quit {mode === 'mock-exam' ? 'exam' : 'quiz'}
         </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={toggleSound}
-          aria-label={soundEnabled ? 'Mute sounds' : 'Unmute sounds'}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-        </Button>
+
+        <div className="flex items-center gap-2">
+          <span
+            className={
+              'inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-full border ' +
+              (mode === 'mock-exam'
+                ? 'bg-primary/10 text-primary border-primary/30'
+                : 'bg-muted text-muted-foreground border-border')
+            }
+          >
+            {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => toggleFlag(currentQuestion.id)}
+            className={isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}
+            aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
+          >
+            {isFlagged
+              ? <BookmarkCheck className="h-4 w-4 mr-1" />
+              : <Bookmark className="h-4 w-4 mr-1" />}
+            {isFlagged ? 'Flagged' : 'Flag'}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleSound}
+            aria-label={soundEnabled ? 'Mute sounds' : 'Unmute sounds'}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+          </Button>
+        </div>
       </div>
 
-      <ProgressBar current={currentIndex + 1} total={storeQuestions.length} />
+      <ProgressBar
+        current={currentIndex + 1}
+        total={storeQuestions.length}
+        onNavigate={goToQuestion}
+        flaggedIds={flaggedIds}
+        questionIds={storeQuestions.map(q => q.id)}
+      />
 
       {showQuitDialog && (
         <QuitQuizDialog
@@ -194,15 +260,13 @@ export default function Quiz() {
 
       <QuestionCard
         question={currentQuestion}
-        selectedAnswer={selectedAnswer}
-        onAnswer={key => {
-          playSound(key === currentQuestion.answer ? 'correct' : 'wrong')
-          answerQuestion(currentQuestion.id, key)
-        }}
+        selectedAnswer={displayAnswer}
+        onAnswer={handleSelectAnswer}
         showExplanation={showExplanation}
+        isLocked={isLocked}
       />
 
-      {(currentIndex > 0 || status === 'reviewing') && (
+      {(currentIndex > 0 || status === 'reviewing' || pendingAnswer !== null) && (
         <div className="flex justify-between items-center">
           <div>
             {currentIndex > 0 && (
@@ -213,32 +277,46 @@ export default function Quiz() {
             )}
           </div>
 
-          {status === 'reviewing' && (
-            <div className="flex items-center gap-4">
-              {showDeferredMessage && (
-                <p className="text-xs text-muted-foreground">
-                  {mode === 'mock-exam' ? 'Mock exam — explanations shown at end' : 'Explanations shown at end'}
-                </p>
-              )}
-              {isLastQuestion ? (
+          <div className="flex items-center gap-3">
+            {!isLocked && pendingAnswer !== null && (
+              <Button
+                onClick={handleConfirmAnswer}
+                size="lg"
+                className="bg-foreground text-background hover:bg-foreground/90"
+              >
+                Confirm Answer
+              </Button>
+            )}
+
+            {isLocked && (
+              <>
                 <Button
-                  onClick={handleFinish}
+                  variant="outline"
                   size="lg"
-                  className="bg-foreground text-background hover:bg-foreground/90"
+                  onClick={handleChangeAnswer}
                 >
-                  Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
+                  Change Answer
                 </Button>
-              ) : (
-                <Button
-                  onClick={nextQuestion}
-                  size="lg"
-                  className="bg-foreground text-background hover:bg-foreground/90"
-                >
-                  Next Question →
-                </Button>
-              )}
-            </div>
-          )}
+                {isLastQuestion ? (
+                  <Button
+                    onClick={handleFinish}
+                    size="lg"
+                    className="bg-foreground text-background hover:bg-foreground/90"
+                  >
+                    Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={nextQuestion}
+                    size="lg"
+                    className="bg-foreground text-background hover:bg-foreground/90"
+                  >
+                    Next Question →
+                  </Button>
+                )}
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>

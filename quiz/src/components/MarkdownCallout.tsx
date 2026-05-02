@@ -1,4 +1,4 @@
-import { useState, isValidElement, Children, type ReactNode, type ReactElement, type ComponentType } from 'react'
+import { useState, isValidElement, Children, type ReactNode, type ReactElement, type ComponentType, Fragment } from 'react'
 import {
   ChevronDown,
   Info,
@@ -23,86 +23,74 @@ const HEADER_RE = /^\s*\[!(\w+)\]([-+]?)[ \t]*([^\n]*)/
 
 type CalloutStyle = {
   icon: ComponentType<{ className?: string }>
-  containerClass: string
-  titleClass: string
-  iconClass: string
+  borderClass: string
+  accentClass: string
 }
 
 const DEFAULT_STYLE: CalloutStyle = {
   icon: Pencil,
-  containerClass: 'border-muted-foreground/30 bg-muted/30',
-  titleClass: 'text-foreground',
-  iconClass: 'text-muted-foreground',
+  borderClass: 'border-border',
+  accentClass: 'text-muted-foreground',
 }
 
 const SKY: CalloutStyle = {
   icon: Info,
-  containerClass: 'border-sky-400/40 bg-sky-50 dark:bg-sky-950/40',
-  titleClass: 'text-sky-900 dark:text-sky-200',
-  iconClass: 'text-sky-600 dark:text-sky-400',
+  borderClass: 'border-sky-500/60',
+  accentClass: 'text-sky-600 dark:text-sky-400',
 }
 
 const TEAL: CalloutStyle = {
   icon: Lightbulb,
-  containerClass: 'border-teal-400/40 bg-teal-50 dark:bg-teal-950/40',
-  titleClass: 'text-teal-900 dark:text-teal-200',
-  iconClass: 'text-teal-600 dark:text-teal-400',
+  borderClass: 'border-teal-500/60',
+  accentClass: 'text-teal-600 dark:text-teal-400',
 }
 
 const INDIGO: CalloutStyle = {
   icon: FlaskConical,
-  containerClass: 'border-indigo-400/40 bg-indigo-50 dark:bg-indigo-950/40',
-  titleClass: 'text-indigo-900 dark:text-indigo-200',
-  iconClass: 'text-indigo-600 dark:text-indigo-400',
+  borderClass: 'border-indigo-400/60',
+  accentClass: 'text-indigo-500 dark:text-indigo-400',
 }
 
 const EMERALD: CalloutStyle = {
   icon: CheckCircle2,
-  containerClass: 'border-emerald-400/40 bg-emerald-50 dark:bg-emerald-950/40',
-  titleClass: 'text-emerald-900 dark:text-emerald-200',
-  iconClass: 'text-emerald-600 dark:text-emerald-400',
+  borderClass: 'border-emerald-500/60',
+  accentClass: 'text-emerald-600 dark:text-emerald-400',
 }
 
 const AMBER: CalloutStyle = {
   icon: AlertTriangle,
-  containerClass: 'border-amber-400/40 bg-amber-50 dark:bg-amber-950/40',
-  titleClass: 'text-amber-900 dark:text-amber-200',
-  iconClass: 'text-amber-600 dark:text-amber-400',
+  borderClass: 'border-amber-500/60',
+  accentClass: 'text-amber-600 dark:text-amber-400',
 }
 
 const RED: CalloutStyle = {
   icon: AlertOctagon,
-  containerClass: 'border-red-400/40 bg-red-50 dark:bg-red-950/40',
-  titleClass: 'text-red-900 dark:text-red-200',
-  iconClass: 'text-red-600 dark:text-red-400',
+  borderClass: 'border-red-500/60',
+  accentClass: 'text-red-600 dark:text-red-400',
 }
 
 const YELLOW: CalloutStyle = {
   icon: HelpCircle,
-  containerClass: 'border-yellow-400/40 bg-yellow-50 dark:bg-yellow-950/40',
-  titleClass: 'text-yellow-900 dark:text-yellow-200',
-  iconClass: 'text-yellow-600 dark:text-yellow-400',
+  borderClass: 'border-yellow-500/60',
+  accentClass: 'text-yellow-600 dark:text-yellow-400',
 }
 
 const VIOLET: CalloutStyle = {
   icon: AlertOctagon,
-  containerClass: 'border-violet-400/40 bg-violet-50 dark:bg-violet-950/40',
-  titleClass: 'text-violet-900 dark:text-violet-200',
-  iconClass: 'text-violet-600 dark:text-violet-400',
+  borderClass: 'border-violet-500/60',
+  accentClass: 'text-violet-500 dark:text-violet-400',
 }
 
 const CYAN: CalloutStyle = {
   icon: BookOpen,
-  containerClass: 'border-cyan-400/40 bg-cyan-50 dark:bg-cyan-950/40',
-  titleClass: 'text-cyan-900 dark:text-cyan-200',
-  iconClass: 'text-cyan-600 dark:text-cyan-400',
+  borderClass: 'border-cyan-500/60',
+  accentClass: 'text-cyan-600 dark:text-cyan-400',
 }
 
 const QUOTE_STYLE: CalloutStyle = {
   icon: Quote,
-  containerClass: 'border-muted-foreground/30 bg-muted/30',
-  titleClass: 'text-foreground',
-  iconClass: 'text-muted-foreground',
+  borderClass: 'border-border',
+  accentClass: 'text-muted-foreground',
 }
 
 const STYLE_MAP: Record<string, CalloutStyle> = {
@@ -142,6 +130,28 @@ function getStyle(type: string): CalloutStyle {
 
 function titleCase(s: string): string {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s
+}
+
+// Splits "General Probability {23–30%}" into text + pill badges for each {…}.
+function renderTitle(raw: string): ReactNode {
+  const parts = raw.split(/(\{[^}]+\})/)
+  if (parts.length === 1) return raw
+  return (
+    <Fragment>
+      {parts.map((part, i) =>
+        part.startsWith('{') && part.endsWith('}') ? (
+          <span
+            key={i}
+            className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-normal bg-muted text-muted-foreground align-middle"
+          >
+            {part.slice(1, -1)}
+          </span>
+        ) : (
+          part || null
+        ),
+      )}
+    </Fragment>
+  )
 }
 
 interface MatchResult {
@@ -249,44 +259,61 @@ interface CalloutProps {
   children: ReactNode
 }
 
+const CONTENT_CLASSES = [
+  'border-t border-border/40 px-4 pb-4 pt-3',
+  'text-sm text-foreground leading-relaxed',
+  '[&>p]:my-1.5',
+  '[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2',
+  '[&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-2',
+  '[&_li]:my-0.5',
+  '[&>ul]:my-1.5 [&>ul]:space-y-0.5 [&>ul]:pl-4 [&_ul]:list-disc',
+  '[&>ol]:my-1.5 [&>ol]:space-y-0.5 [&>ol]:pl-4 [&_ol]:list-decimal',
+  '[&_li::marker]:text-muted-foreground/60',
+  '[&_strong]:font-semibold',
+  '[&_a]:text-primary [&_a]:underline',
+  '[&_table]:w-full [&_table]:border-collapse [&_table]:mt-2 [&_table]:text-sm',
+  '[&_th]:py-2 [&_th]:px-3 [&_th]:text-left [&_th]:text-xs [&_th]:font-medium [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-muted-foreground [&_th]:border-b [&_th]:border-border/60',
+  '[&_td]:py-2 [&_td]:px-3 [&_td]:border-b [&_td]:border-border/30 [&_td]:align-top',
+  '[&_tbody_tr:last-child_td]:border-0',
+].join(' ')
+
 function Callout({ type, fold, title, children }: CalloutProps) {
   const collapsible = fold !== ''
   const [open, setOpen] = useState(fold !== '-')
   const style = getStyle(type)
   const Icon = style.icon
   const displayTitle = title || titleCase(type)
+  const hasBody = Children.count(children) > 0
 
-  const header = (
-    <div className={`flex items-center gap-2 ${style.titleClass}`}>
-      {collapsible ? (
+  const headerContent = (
+    <div className="flex items-center gap-3 w-full">
+      <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />
+      <span className="font-medium text-sm text-foreground flex-1 text-left">{renderTitle(displayTitle)}</span>
+      {collapsible && hasBody && (
         <ChevronDown
-          className={`h-4 w-4 shrink-0 transition-transform ${open ? '' : '-rotate-90'} ${style.iconClass}`}
+          className={`h-3.5 w-3.5 shrink-0 text-muted-foreground/50 transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
         />
-      ) : (
-        <Icon className={`h-4 w-4 shrink-0 ${style.iconClass}`} />
       )}
-      <span className="font-semibold text-sm">{displayTitle}</span>
     </div>
   )
 
-  const hasBody = Children.count(children) > 0
-
   return (
-    <div className={`not-prose rounded-md border px-3 py-2 my-3 ${style.containerClass}`}>
+    <div className={`not-prose my-4 border-l-[3px] ${style.borderClass} bg-muted/50 rounded-r-lg overflow-hidden`}>
       {collapsible && hasBody ? (
         <button
           type="button"
+          data-callout-toggle
           onClick={() => setOpen(v => !v)}
-          className="w-full text-left"
+          className="w-full px-4 py-3 text-left hover:bg-muted/60 transition-colors duration-150"
           aria-expanded={open}
         >
-          {header}
+          {headerContent}
         </button>
       ) : (
-        header
+        <div className="px-4 py-3">{headerContent}</div>
       )}
-      {hasBody && open && (
-        <div className="mt-2 text-sm text-foreground space-y-2 [&>p]:my-1 [&>ul]:my-1 [&>ol]:my-1">
+      {hasBody && (
+        <div data-callout-body hidden={!open} className={CONTENT_CLASSES}>
           {children}
         </div>
       )}

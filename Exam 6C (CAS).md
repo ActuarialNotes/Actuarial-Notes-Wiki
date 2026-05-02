@@ -10,7 +10,6 @@
 
 The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam with mixed question types about Canadian insurance regulation, government insurance programs, financial reporting, and solvency.
 
-<div class="callout-cols-2">
 
 > [!answer]- 📅 Exam Schedule {2026}
 >
@@ -27,7 +26,6 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 > - [Exam 6C Content Outline (Spring 2026)](https://www.casact.org/exam/exam-6c-regulation-and-financial-reporting-canada)
 > - [Complete Online Text References](https://www.casact.org/exam/exam-6c-regulation-and-financial-reporting-canada)
 
-</div>
 
 >[!answer]- 📕 Source Material {37 Sources}
 >

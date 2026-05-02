@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Loader2, X, ChevronLeft } from 'lucide-react'
+import { Loader2, X, ChevronLeft, Volume2, VolumeX } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { setExamAccent } from '@/lib/examColors'
+import { useSoundEffects } from '@/hooks/useSoundEffects'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -81,6 +82,8 @@ export default function Quiz() {
     }
   }, [storeQuestions])
 
+  const { enabled: soundEnabled, toggle: toggleSound, play: playSound } = useSoundEffects()
+
   const [showQuitDialog, setShowQuitDialog] = useState(false)
 
   const currentQuestion = storeQuestions[currentIndex]
@@ -99,6 +102,7 @@ export default function Quiz() {
   const showDeferredMessage = status === 'reviewing' && !showExplanation
 
   async function handleFinish() {
+    playSound('complete')
     await completeQuiz(user?.id ?? null)
     navigate('/review')
   }
@@ -167,6 +171,15 @@ export default function Quiz() {
           <X className="h-4 w-4 mr-1" />
           Quit {mode === 'mock-exam' ? 'exam' : 'quiz'}
         </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={toggleSound}
+          aria-label={soundEnabled ? 'Mute sounds' : 'Unmute sounds'}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+        </Button>
       </div>
 
       <ProgressBar current={currentIndex + 1} total={storeQuestions.length} />
@@ -182,7 +195,10 @@ export default function Quiz() {
       <QuestionCard
         question={currentQuestion}
         selectedAnswer={selectedAnswer}
-        onAnswer={key => answerQuestion(currentQuestion.id, key)}
+        onAnswer={key => {
+          playSound(key === currentQuestion.answer ? 'correct' : 'wrong')
+          answerQuestion(currentQuestion.id, key)
+        }}
         showExplanation={showExplanation}
       />
 

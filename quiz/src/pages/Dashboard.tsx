@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
+import { useSubtopics } from '@/hooks/useSubtopics'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -45,6 +46,7 @@ export default function Dashboard() {
   const { user, loading: authLoading, signOut } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
+  const { byTopic: subtopicsByTopic } = useSubtopics()
 
   // Hard redirect if not authenticated
   useEffect(() => {
@@ -116,7 +118,12 @@ export default function Dashboard() {
         </div>
       ) : (
         syllabi.map(syllabus => (
-          <TopicProgressSection key={syllabus.examTopic} syllabus={syllabus} sessions={sessions} />
+          <TopicProgressSection
+            key={syllabus.examTopic}
+            syllabus={syllabus}
+            sessions={sessions}
+            subtopics={subtopicsByTopic[syllabus.examTopic] ?? []}
+          />
         ))
       )}
 

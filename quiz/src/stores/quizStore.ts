@@ -131,6 +131,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     if (!userId) return  // unauthenticated — skip Supabase write
 
+    const allSubtopics = [...new Set(questions.map(q => q.subtopic))]
     const { data: session, error: sessionError } = await supabase
       .from('quiz_sessions')
       .insert({
@@ -140,8 +141,8 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         correct_count: correctCount,
         time_taken_seconds: totalSeconds,
         topic: questions[0]?.topic ?? null,
-        subtopic: questions[0]?.subtopic ?? null,
-        tags: [...new Set(questions.flatMap(q => q.tags))],
+        subtopic: allSubtopics[0] ?? null,
+        tags: [...new Set([...questions.flatMap(q => q.tags), ...allSubtopics])],
       })
       .select()
       .single()

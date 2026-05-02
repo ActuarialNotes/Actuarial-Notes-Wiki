@@ -5,6 +5,7 @@ import type { CompletedSession } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
 import { QuestionCard } from '@/components/QuestionCard'
 import { TopicCoverageChart } from '@/components/TopicCoverageChart'
+import { TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -41,6 +42,19 @@ export default function Review() {
 
   const { correctCount, totalQuestions, timeTakenSeconds } = session
   const percentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0
+
+  // Compute per-subtopic stats for the Concepts Covered card
+  const subtopicStats = new Map<string, { correct: number; total: number }>()
+  for (const q of session.questions) {
+    const key = q.subtopic
+    const existing = subtopicStats.get(key) ?? { correct: 0, total: 0 }
+    existing.total += 1
+    if (session.responses[q.id]?.chosen === q.answer) existing.correct += 1
+    subtopicStats.set(key, existing)
+  }
+  const coveredSubtopics = [...subtopicStats.entries()].sort((a, b) =>
+    a[0].localeCompare(b[0]),
+  )
 
   function handleTryAgain() {
     resetQuiz()
@@ -93,6 +107,33 @@ export default function Review() {
           )}
         </CardContent>
       </Card>
+
+      {/* Concepts covered this session */}
+      {coveredSubtopics.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-primary" />
+              Concepts Covered
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {coveredSubtopics.map(([name, stat]) => (
+                <span
+                  key={name}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-xs font-medium"
+                >
+                  {name}
+                  <span className="text-muted-foreground">
+                    {stat.correct}/{stat.total}
+                  </span>
+                </span>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Topic coverage bar graph */}
       <TopicCoverageChart questions={session.questions} responses={session.responses} />

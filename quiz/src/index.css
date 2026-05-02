@@ -101,6 +101,17 @@ html.dark.exam-fm { --primary: 239 84% 67%;  --ring: 239 84% 67%; }
   animation: score-pip-in 320ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
+/* Mastery level-up badge: bounces in when a concept advances state.
+   Stagger delay is applied via inline style on each badge. */
+@keyframes mastery-level-up {
+  0%   { opacity: 0; transform: scale(0.5) translateY(8px); }
+  65%  { opacity: 1; transform: scale(1.12) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.mastery-level-up {
+  animation: mastery-level-up 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
 /* Concept popup: left edge tracks the sidebar width exactly.
    --sidebar-width is set by Sidebar.tsx (16rem expanded, 3.5rem collapsed).
    On mobile the popup spans full width so we skip this rule. */

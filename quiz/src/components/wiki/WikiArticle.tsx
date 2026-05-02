@@ -25,6 +25,18 @@ function escapeMarkdownLabel(label: string): string {
   return label.replace(/[\\\[\]()*_`{}]/g, '\\$&')
 }
 
+// CommonMark rule: ordered lists starting with N≠1 cannot interrupt a paragraph.
+// Items like "8. Explain…" directly following a paragraph line get swallowed into
+// that paragraph as plain text. Fix: insert a blank blockquote line (">") before
+// any "> N. " item (N≠1) that immediately follows a non-blank, non-heading,
+// non-list blockquote line.
+export function ensureListSpacing(md: string): string {
+  return md.replace(
+    /^(> (?!#{1,6} )(?!\d+\. )(?![-*+] )[^\n]*\S[^\n]*)\n(> (?!1\. )\d+\. )/gm,
+    '$1\n>\n$2',
+  )
+}
+
 // Preprocess the markdown before react-markdown:
 //   ![[Path/To/Image.png]]  → standard image with a raw.githubusercontent URL
 //   ![[Some Note]]          → "📎 Some Note" link to the wiki route
@@ -67,10 +79,40 @@ function refKey(ref: WikiEntryRef): string {
   return `${ref.kind}:${ref.name.toLowerCase()}`
 }
 
+// Breadcrumb navigation lines written by Obsidian Publish (first line of every
+// file): [[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
+// or [[Wiki]] / [[Concepts]] / **Concept Name**
+// These are not wanted in the quiz app and add non-existent "concepts" to popup lists.
+const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
+
+// Insert a blank blockquote line before a numbered-list item that immediately
+// follows a paragraph line in the same blockquote, so remark-gfm creates <ol>
+// instead of treating the number as continuation text.
+function fixBlockquoteOrderedLists(md: string): string {
+  return md.replace(
+    /^(> *(?!\d+\. )[^\n]+)\n(> *\d+\. )/gm,
+    '$1\n>\n$2',
+  )
+}
+
+// Strip block-level HTML divs that publish.js embeds for metadata / layout.
+// react-markdown renders them as literal text without rehype-raw, so they must
+// be removed before parsing.
+function stripHtmlBlocks(md: string): string {
+  return md
+    // Multi-line block divs at line start (exam-nav, concept-nav, SVG wrappers …)
+    .replace(/^<div\b[\s\S]*?<\/div> *\n?/gm, '')
+    // Single-line divs inside blockquote lines (highlight-upcoming)
+    .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
+}
+
 export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
-  const processed = useMemo(() => rewriteWikilinks(stripFrontmatter(markdown)), [markdown])
+  const processed = useMemo(() => {
+    const stripped = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
+    return stripHtmlBlocks(fixBlockquoteOrderedLists(rewriteWikilinks(stripped)))
+  }, [markdown])
 
   const popupOpen = useConceptPopup(s => s.open)
   const popupIndex = useConceptPopup(s => s.index)
@@ -116,16 +158,48 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
     const root = articleRef.current
     if (!root) return
     root.querySelectorAll('.wiki-link--active').forEach(el => el.classList.remove('wiki-link--active'))
+    root.classList.remove('concept-focus-mode')
     if (!popupOpen || !popupCurrent) return
     if (sourcePath && popupSource && sourcePath !== popupSource) return
-    const target = root.querySelector<HTMLElement>(`[data-wikiref="${CSS.escape(refKey(popupCurrent))}"]`)
+    // Use getAttribute comparison instead of CSS.escape to avoid any selector
+    // escaping edge-cases (colons, spaces, quotes in concept names).
+    const key = refKey(popupCurrent)
+    const target = Array.from(root.querySelectorAll<HTMLElement>('[data-wikiref]'))
+      .find(el => el.getAttribute('data-wikiref') === key) ?? null
     if (!target) return
     target.classList.add('wiki-link--active')
-    const rect = target.getBoundingClientRect()
-    const inView = rect.top >= 0 && rect.bottom <= window.innerHeight
-    if (!inView) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    root.classList.add('concept-focus-mode')
+
+    // Expand any collapsed callout ancestors so the target becomes visible.
+    let node: HTMLElement | null = target.parentElement
+    while (node && node !== root) {
+      if (node.dataset.calloutBody !== undefined && node.hidden) {
+        const toggle = node.parentElement?.querySelector<HTMLButtonElement>('[data-callout-toggle]')
+        toggle?.click()
+      }
+      node = node.parentElement
     }
+
+    function doScroll() {
+      // --concept-split-height is set by ConceptPopup.useEffect which runs in
+      // the same commit. Read it here (inside rAF) so it's already applied.
+      const splitHeightStr = getComputedStyle(document.documentElement)
+        .getPropertyValue('--concept-split-height').trim()
+      const splitHeight = parseFloat(splitHeightStr) || 0
+      const effectiveBottom = window.innerHeight - splitHeight
+      const rect = target!.getBoundingClientRect()
+      const inView = rect.top >= 0 && rect.bottom <= effectiveBottom
+      if (!inView) {
+        // Center within the visible area above the popup panel, not the full viewport.
+        const scrollBy = rect.top - (effectiveBottom / 2 - rect.height / 2)
+        window.scrollBy({ top: scrollBy, behavior: 'smooth' })
+      }
+    }
+
+    // Always defer via double rAF so that:
+    // 1. ConceptPopup.useEffect has run and set --concept-split-height.
+    // 2. Any callout re-renders have been committed and laid out.
+    requestAnimationFrame(() => requestAnimationFrame(doScroll))
   }, [popupOpen, popupIndex, popupSource, popupCurrent, sourcePath])
 
   return (
@@ -134,8 +208,13 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
       data-source-page={sourcePath}
       className={
         'prose dark:prose-invert max-w-none ' +
-        'prose-headings:mt-6 prose-headings:mb-2 prose-p:my-3 ' +
-        'prose-a:text-primary prose-a:no-underline hover:prose-a:underline ' +
+        'prose-headings:mt-6 prose-headings:mb-2 prose-headings:font-semibold ' +
+        'prose-h3:text-base prose-h3:font-medium ' +
+        'prose-p:my-2.5 prose-p:leading-relaxed ' +
+        'prose-a:text-primary prose-a:underline ' +
+        'prose-li:my-0.5 prose-ul:my-2 prose-ol:my-2 ' +
+        'prose-strong:font-semibold ' +
+        '[&_li::marker]:text-muted-foreground ' +
         (className ?? '')
       }
     >

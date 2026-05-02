@@ -15,7 +15,7 @@ export interface QuizSession {
   topic: string | null
   subtopic: string | null
   tags: string[] | null
-  mode: 'topic' | 'random' | 'exam'
+  mode: 'quiz' | 'mock-exam'
   total_questions: number
   correct_count: number
   time_taken_seconds: number | null

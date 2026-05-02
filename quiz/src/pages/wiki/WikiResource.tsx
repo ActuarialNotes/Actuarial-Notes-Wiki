@@ -67,7 +67,9 @@ export default function WikiResource() {
           onWikiLink={(ref, e) => {
             if (ref.kind !== 'concept') return false
             e.preventDefault()
-            const conceptList = pageRefs.filter(r => r.kind === 'concept')
+            const conceptList = pageRefs
+              .filter(r => r.kind === 'concept')
+              .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
             const idx = conceptList.findIndex(
               r => r.name.toLowerCase() === ref.name.toLowerCase(),
             )

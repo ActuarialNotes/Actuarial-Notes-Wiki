@@ -8,6 +8,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { aggregateForTopic } from '@/lib/mastery'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions } from '@/lib/parser'
+import { getExamColor } from '@/lib/examColors'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import type { QuizMode } from '@/lib/parser'
@@ -179,7 +180,7 @@ export default function Landing() {
   const subtopics = subtopicsByTopic[topic] ?? []
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
-  const examLabelColor = topic === 'Probability' ? 'text-[hsl(221,83%,53%)]' : 'text-[hsl(243,75%,59%)]'
+  const examColor = getExamColor(topic)
   const hasTopic = topic !== ''
 
   return (
@@ -261,7 +262,7 @@ export default function Landing() {
                 className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 <span aria-hidden="true">←</span>
-                <span className={`font-medium ${examLabelColor}`}>{examLabel}</span>
+                <span className="font-medium" style={examColor ? { color: examColor } : undefined}>{examLabel}</span>
                 <span>· change</span>
               </button>
 

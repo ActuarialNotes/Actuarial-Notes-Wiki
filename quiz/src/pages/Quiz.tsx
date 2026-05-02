@@ -11,7 +11,6 @@ import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
-import { setExamAccent } from '@/lib/examColors'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 
 export default function Quiz() {
@@ -81,14 +80,8 @@ export default function Quiz() {
     }
   }, [loading, questions, status, mode, startQuiz])
 
-  // Restore exam accent colour (handles direct navigation or hard refresh)
-  useEffect(() => {
-    if (storeQuestions.length > 0) {
-      setExamAccent(storeQuestions[0].topic)
-    }
-  }, [storeQuestions])
-
   const { enabled: soundEnabled, toggle: toggleSound, play: playSound } = useSoundEffects()
+
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
   // Local pre-confirmation selection — not committed to store until "Confirm Answer"

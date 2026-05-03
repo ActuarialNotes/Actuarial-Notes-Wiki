@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, CheckCircle2, Loader2, X } from 'lucide-react'
+import { BookOpen, CheckCircle2, ChevronLeft, ChevronRight, Loader2, Play, X } from 'lucide-react'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
@@ -11,6 +11,7 @@ import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { type MasteryState } from '@/lib/mastery'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -33,7 +34,7 @@ const MASTERY_BADGE: Record<MasteryState, { label: string; className: string }> 
   forgotten: { label: 'Forgotten', className: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800 border' },
 }
 
-type TabMode = 'definition' | 'questions'
+type TabMode = 'definition' | 'questions' | 'syllabus'
 type FilterMode = 'all' | 'new' | 'attempted'
 
 function QuestionItem({
@@ -147,9 +148,19 @@ interface Props {
   conceptName: string
   masteryState: MasteryState
   onClose: () => void
+  syllabus?: WikiExamSyllabus
+  allConcepts?: { name: string; state: MasteryState }[]
+  initialConceptIndex?: number
 }
 
-export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props) {
+export function ConceptDetailModal({
+  conceptName,
+  masteryState,
+  onClose,
+  syllabus,
+  allConcepts,
+  initialConceptIndex,
+}: Props) {
   const [content, setContent] = useState<string | null>(null)
   const [contentStatus, setContentStatus] = useState<'loading' | 'error' | 'idle'>('loading')
   const [questions, setQuestions] = useState<Question[]>([])
@@ -157,13 +168,17 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
   const [questionsError, setQuestionsError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<TabMode>('definition')
   const [filter, setFilter] = useState<FilterMode>('all')
+  const [localIndex, setLocalIndex] = useState(initialConceptIndex ?? 0)
   const { byQuestionId } = useQuestionAttempts()
+
+  const currentConceptName = allConcepts?.[localIndex]?.name ?? conceptName
+  const currentMasteryState = allConcepts?.[localIndex]?.state ?? masteryState
 
   useEffect(() => {
     let cancelled = false
     setContentStatus('loading')
     setContent(null)
-    fetchWikiFile(`Concepts/${conceptName}.md`)
+    fetchWikiFile(`Concepts/${currentConceptName}.md`)
       .then(raw => {
         if (cancelled) return
         setContent(raw)
@@ -174,7 +189,7 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
         setContentStatus('error')
       })
     return () => { cancelled = true }
-  }, [conceptName])
+  }, [currentConceptName])
 
   useEffect(() => {
     let cancelled = false
@@ -184,7 +199,7 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
       .then(raw => {
         if (cancelled) return
         const all = parseAllQuestions(raw)
-        setQuestions(all.filter(q => q.wiki_link.some(link => linkMatchesConcept(link, conceptName))))
+        setQuestions(all.filter(q => q.wiki_link.some(link => linkMatchesConcept(link, currentConceptName))))
       })
       .catch(err => {
         if (cancelled) return
@@ -192,7 +207,7 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
       })
       .finally(() => { if (!cancelled) setQuestionsLoading(false) })
     return () => { cancelled = true }
-  }, [conceptName])
+  }, [currentConceptName])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -202,15 +217,30 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
+  useEffect(() => {
+    setActiveTab('definition')
+    setFilter('all')
+  }, [localIndex])
+
   const navigate = useNavigate()
   const openAt = useConceptPopup(s => s.openAt)
-  const badge = MASTERY_BADGE[masteryState]
+  const badge = MASTERY_BADGE[currentMasteryState]
 
   function openInStudyGuide() {
-    openAt([{ kind: 'concept', name: conceptName }], 0, null)
+    openAt([{ kind: 'concept', name: currentConceptName }], 0, null)
     navigate('/wiki')
     onClose()
   }
+
+  const syllabusTopicsForCurrent = syllabus
+    ? syllabus.topics.filter(t =>
+        t.concepts.some(c => c.name.toLowerCase() === currentConceptName.toLowerCase())
+      )
+    : []
+
+  const canPrev = !!allConcepts && localIndex > 0
+  const canNext = !!allConcepts && localIndex < (allConcepts?.length ?? 1) - 1
+  const showFooterNav = !!allConcepts && allConcepts.length > 1
 
   const newCount = questions.filter(q => !byQuestionId.get(q.id)).length
   const attemptedCount = questions.filter(q => !!byQuestionId.get(q.id)).length
@@ -227,27 +257,18 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
       className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
-      aria-label={`Concept: ${conceptName}`}
+      aria-label={`Concept: ${currentConceptName}`}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div className="w-full max-w-2xl bg-card border rounded-xl shadow-2xl flex flex-col my-8">
         {/* Header */}
         <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
           <span className="flex-1 min-w-0 flex items-center gap-2 truncate">
-            <span className="font-semibold text-sm truncate">{conceptName}</span>
+            <span className="font-semibold text-sm truncate">{currentConceptName}</span>
             <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${badge.className}`}>
               {badge.label}
             </span>
           </span>
-          <button
-            type="button"
-            onClick={openInStudyGuide}
-            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 shrink-0 transition-colors"
-            title="Open in Study Guide"
-          >
-            <BookOpen className="h-3 w-3" />
-            Open in Study Guide
-          </button>
           <button
             type="button"
             onClick={onClose}
@@ -260,7 +281,7 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
 
         {/* Tabs */}
         <div className="flex border-b shrink-0">
-          {(['definition', 'questions'] as TabMode[]).map(tab => (
+          {(['definition', 'questions', 'syllabus'] as TabMode[]).map(tab => (
             <button
               key={tab}
               type="button"
@@ -271,7 +292,11 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
                   : 'border-transparent text-muted-foreground hover:text-foreground'
               }`}
             >
-              {tab === 'questions' ? `Questions (${questions.length})` : 'Definition'}
+              {tab === 'questions'
+                ? `Questions (${questions.length})`
+                : tab === 'definition'
+                ? 'Definition'
+                : 'Syllabus'}
             </button>
           ))}
         </div>
@@ -286,13 +311,13 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
             )}
             {contentStatus === 'error' && (
               <p className="text-sm text-muted-foreground py-2">
-                Couldn't load <span className="font-medium">{conceptName}</span>.
+                Couldn't load <span className="font-medium">{currentConceptName}</span>.
               </p>
             )}
             {content !== null && (
               <WikiArticle
                 markdown={content}
-                sourcePath={`Concepts/${conceptName}.md`}
+                sourcePath={`Concepts/${currentConceptName}.md`}
               />
             )}
           </div>
@@ -302,28 +327,43 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
         {activeTab === 'questions' && (
           <div className="p-4 space-y-3">
             {/* Filter row */}
-            <div className="flex items-center justify-end gap-1">
-              {(['all', 'new', 'attempted'] as FilterMode[]).map(mode => {
-                const label = mode === 'all'
-                  ? `All (${questions.length})`
-                  : mode === 'new'
-                  ? `New (${newCount})`
-                  : `Attempted (${attemptedCount})`
-                return (
-                  <button
-                    key={mode}
-                    type="button"
-                    onClick={() => setFilter(mode)}
-                    className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                      filter === mode
-                        ? 'bg-primary text-primary-foreground border-primary'
-                        : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                )
-              })}
+            <div className="flex items-center gap-2">
+              {!questionsLoading && filteredQuestions.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate('/quiz?ids=' + filteredQuestions.map(q => q.id).join(','))
+                    onClose()
+                  }}
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shrink-0"
+                >
+                  <Play className="h-3 w-3" />
+                  Start Quiz
+                </button>
+              )}
+              <div className="flex items-center gap-1 ml-auto">
+                {(['all', 'new', 'attempted'] as FilterMode[]).map(mode => {
+                  const label = mode === 'all'
+                    ? `All (${questions.length})`
+                    : mode === 'new'
+                    ? `New (${newCount})`
+                    : `Attempted (${attemptedCount})`
+                  return (
+                    <button
+                      key={mode}
+                      type="button"
+                      onClick={() => setFilter(mode)}
+                      className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                        filter === mode
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
             {questionsLoading && (
@@ -352,6 +392,90 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
                 attemptSummary={byQuestionId.get(q.id)}
               />
             ))}
+          </div>
+        )}
+
+        {/* Syllabus tab */}
+        {activeTab === 'syllabus' && (
+          <div className="p-4 space-y-4">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs text-muted-foreground">
+                {syllabus ? `${syllabus.examLabel} · ${syllabus.examTopic}` : 'No syllabus available'}
+              </p>
+              <button
+                type="button"
+                onClick={openInStudyGuide}
+                className="text-xs flex items-center gap-1 border rounded-md px-2.5 py-1.5 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
+                title="Open in Study Guide"
+              >
+                <BookOpen className="h-3 w-3" />
+                Open in Study Guide
+              </button>
+            </div>
+
+            {syllabusTopicsForCurrent.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                {syllabus ? 'Concept not found in any syllabus topic.' : 'No syllabus context available.'}
+              </p>
+            )}
+
+            {syllabusTopicsForCurrent.map(topic => (
+              <div key={topic.name} className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-semibold">{topic.name}</h3>
+                  {topic.weight && (
+                    <span className="text-xs text-muted-foreground">{topic.weight}</span>
+                  )}
+                </div>
+                <div className="space-y-1 pl-3 border-l-2 border-border">
+                  {topic.concepts.map(c => {
+                    const isCurrent = c.name.toLowerCase() === currentConceptName.toLowerCase()
+                    return (
+                      <div
+                        key={c.name}
+                        className={`text-sm py-0.5 px-1 rounded ${
+                          isCurrent
+                            ? 'bg-primary/10 text-foreground font-medium'
+                            : 'text-muted-foreground'
+                        }`}
+                      >
+                        {c.name}
+                        {isCurrent && (
+                          <span className="ml-2 text-xs text-primary">(current)</span>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Footer navigation */}
+        {showFooterNav && (
+          <div className="flex items-stretch border-t h-14 shrink-0 bg-background/60 rounded-b-xl overflow-hidden">
+            <button
+              type="button"
+              disabled={!canPrev}
+              onClick={() => setLocalIndex(i => i - 1)}
+              className="flex-1 flex items-center justify-center gap-2 px-4 text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+              <span>Previous</span>
+            </button>
+            <span className="self-center px-3 text-xs text-muted-foreground tabular-nums shrink-0">
+              {localIndex + 1} of {allConcepts!.length}
+            </span>
+            <button
+              type="button"
+              disabled={!canNext}
+              onClick={() => setLocalIndex(i => i + 1)}
+              className="flex-1 flex items-center justify-center gap-2 px-4 text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <span>Next</span>
+              <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
         )}
       </div>

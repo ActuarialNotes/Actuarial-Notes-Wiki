@@ -82,7 +82,7 @@ export default function Landing() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const examProgress = useExamProgress()
+  const { progress: examProgress } = useExamProgress()
   const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()

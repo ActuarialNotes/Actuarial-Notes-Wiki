@@ -14,6 +14,8 @@ export interface WikiExamSyllabus {
   examLabel: string
   examTopic: string
   topics: WikiTopic[]
+  /** Source file name without .md extension, e.g. "Exam FM-2 (SOA)" */
+  fileName?: string
 }
 
 // Maps a wikiParser examId to the exam_progress table key used in tracks.ts.
@@ -70,6 +72,7 @@ export function parseExamSyllabus(
   examId: string,
   examLabel: string,
   examTopic: string,
+  fileName?: string,
 ): WikiExamSyllabus {
   const lines = content.split('\n')
   const topics: WikiTopic[] = []
@@ -102,5 +105,5 @@ export function parseExamSyllabus(
 
   flush()
 
-  return { examId, examLabel, examTopic, topics }
+  return { examId, examLabel, examTopic, topics, fileName }
 }

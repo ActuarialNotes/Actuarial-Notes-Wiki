@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { ChevronDown, Info } from 'lucide-react'
+import { ChevronDown, ChevronRight, Info } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { wikiRoute } from '@/lib/wikiRoutes'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import {
@@ -55,8 +57,26 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
 
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
-  const recordsBySlug = new Map(examMastery.map(r => [r.concept_slug.toLowerCase(), r]))
   const now = new Date()
+
+  // Questions store concept_slug using the concept FILE name (e.g. "Bond Price"),
+  // but the syllabus may display an alias (e.g. [[Bond Price|Price]] → c.name="Price").
+  // Build a map from target (file name) → display name for aliased concepts so that
+  // mastery records written under "Bond Price" are found when looking up "Price".
+  const targetToDisplayName = new Map<string, string>()
+  for (const topic of syllabus.topics) {
+    for (const c of topic.concepts) {
+      const tLow = c.target.toLowerCase()
+      if (tLow !== c.name.toLowerCase()) {
+        targetToDisplayName.set(tLow, c.name)
+      }
+    }
+  }
+  const normalizedMastery = examMastery.map(r => {
+    const display = targetToDisplayName.get(r.concept_slug.toLowerCase())
+    return display ? { ...r, concept_slug: display } : r
+  })
+  const recordsBySlug = new Map(normalizedMastery.map(r => [r.concept_slug.toLowerCase(), r]))
 
   const toggle = (name: string) =>
     setOpenTopics(prev => {
@@ -78,6 +98,15 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
             >
               <Info className="h-4 w-4" />
             </button>
+            {syllabus.fileName && (
+              <Link
+                to={wikiRoute({ kind: 'exam', name: syllabus.fileName })}
+                className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
+              >
+                Study Guide
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
           </div>
           {showInfo && <InfoPanel />}
         </CardHeader>
@@ -85,7 +114,7 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
           <div className="space-y-1">
             {syllabus.topics.map(topic => {
               const conceptSlugs = topic.concepts.map(c => c.name)
-              const agg = aggregateForTopic(examMastery, conceptSlugs, now)
+              const agg = aggregateForTopic(normalizedMastery, conceptSlugs, now)
               const isOpen = openTopics.has(topic.name)
 
               return (

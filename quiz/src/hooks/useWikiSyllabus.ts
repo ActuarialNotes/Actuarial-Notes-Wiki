@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { listRepoContents, fetchWikiFile } from '@/lib/github'
 import { parseExamMetadata, parseExamSyllabus, type WikiExamSyllabus } from '@/lib/wikiParser'
 
-const CACHE_KEY = 'actuarial_wiki_syllabus_v3'
+const CACHE_KEY = 'actuarial_wiki_syllabus_v4'
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000  // 6 hours
 
 interface CacheEntry {
@@ -47,7 +47,8 @@ async function fetchAllExamSyllabi(): Promise<WikiExamSyllabus[]> {
       const content = await fetchWikiFile(item.name)
       const meta = parseExamMetadata(content)
       if (!meta) throw new Error(`No exam metadata in ${item.name}`)
-      return parseExamSyllabus(content, meta.examId, meta.examLabel, meta.examTopic)
+      const fileName = item.name.replace(/\.md$/i, '')
+      return parseExamSyllabus(content, meta.examId, meta.examLabel, meta.examTopic, fileName)
     }),
   )
 

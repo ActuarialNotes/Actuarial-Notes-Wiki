@@ -1,5 +1,3 @@
-[[Actuarial Notes Wiki|Wiki]] / **MAS-I (CAS)**
-
 <div class="exam-nav"
      data-current="MAS-I|Modern Actuarial Statistics I"
 </div>
@@ -28,18 +26,7 @@ The **Modern Actuarial Statistics I** is a 4-hour computer-based exam covering [
 > - [CAS Exam MAS-I Page](https://www.casact.org/exam/exam-mas-i-modern-actuarial-statistics-i)
 
 
-> [!answer]- 📕 Source Material 8 Sources
-> 
-> |Source|Domains / Tasks|
-> |---|---|
-> |[[Poisson Processes and Mixture Distributions (Daniel - 2008)]]|A1–A5|
-> |[[An Introduction to Generalized Linear Models (Dobson - 2018)]]|C1–C9|
-> |[[Introduction to Mathematical Statistics (Hogg et al. - 2018)]]|B1–B8, C1–C9|
-> |[[An Introduction to Statistical Learning (James et al. - 2021)]]|C1–C9|
-> |[[Generalized Linear Models (Larsen - 2015)]]|C1–C9|
-> |[[Introduction to Probability Models (Ross - 2019)]]|A1–A6|
-> |[[Life Contingencies (Struppeck - 2014)]]|A5–A6|
-> |[[Nonlife Actuarial Models (Tse - 2009)]]|B1–B4, B7–B9|
+
 
 ### Learning Objectives
 
@@ -93,3 +80,17 @@ The **Modern Actuarial Statistics I** is a 4-hour computer-based exam covering [
 > 18. Interpret [[Exploratory Data Analysis]] plots for various data types (e.g., box plots, univariate plots, histograms)
 > 
 > **Readings:** Dobson and Barnett · Hogg, McKean, and Craig · James et al. · Larsen
+
+### Source Material
+> [!answer]- Source Material {8 Sources}
+> 
+> |Source|Domains / Tasks|
+> |---|---|
+> |[[Poisson Processes and Mixture Distributions (Daniel - 2008)]]|A1–A5|
+> |[[An Introduction to Generalized Linear Models (Dobson - 2018)]]|C1–C9|
+> |[[Introduction to Mathematical Statistics (Hogg et al. - 2018)]]|B1–B8, C1–C9|
+> |[[An Introduction to Statistical Learning (James et al. - 2021)]]|C1–C9|
+> |[[Generalized Linear Models (Larsen - 2015)]]|C1–C9|
+> |[[Introduction to Probability Models (Ross - 2019)]]|A1–A6|
+> |[[Life Contingencies (Struppeck - 2014)]]|A5–A6|
+> |[[Nonlife Actuarial Models (Tse - 2009)]]|B1–B4, B7–B9|

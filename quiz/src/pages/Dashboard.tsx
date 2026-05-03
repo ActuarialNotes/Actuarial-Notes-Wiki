@@ -109,7 +109,7 @@ export default function Dashboard() {
   const clampedIdx = Math.min(activeExamIdx, Math.max(0, inProgressSyllabi.length - 1))
   const activeSyllabus = inProgressSyllabi[clampedIdx] ?? null
 
-  const hiddenCount = Math.max(0, sessions.length - 1)
+  const hiddenCount = sessions.length
 
   return (
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
@@ -165,7 +165,7 @@ export default function Dashboard() {
               ? 'No quiz sessions yet'
               : historyExpanded
                 ? `Showing all ${sessions.length} session${sessions.length === 1 ? '' : 's'}`
-                : 'Showing most recent'}
+                : `${sessions.length} session${sessions.length === 1 ? '' : 's'} total`}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -180,9 +180,6 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="space-y-1">
-              {!historyExpanded && sessions[0] && (
-                <SessionRow session={sessions[0]} divider={false} />
-              )}
               {historyExpanded && sessions.map((session, idx) => (
                 <SessionRow key={session.id} session={session} divider={idx > 0} />
               ))}
@@ -195,7 +192,7 @@ export default function Dashboard() {
                   <ChevronDown
                     className={`h-3.5 w-3.5 transition-transform ${historyExpanded ? 'rotate-180' : ''}`}
                   />
-                  {historyExpanded ? 'Show less' : `Show ${hiddenCount} more`}
+                  {historyExpanded ? 'Hide quiz history' : `Show quiz history (${hiddenCount} more)`}
                 </button>
               )}
             </div>

@@ -1,42 +1,9 @@
-[[Actuarial Notes Wiki|Wiki]] / **Exam 9 (CAS)**
-
 <div class="exam-nav"
      data-current="9|Risk Management for Actuaries"
 </div>
 
 ## Exam 9 (CAS)
-
 The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastrophe modeling, reinsurance pricing, financial risk management, and enterprise risk management.
-
-
-> [!answer]- 📅 Exam Schedule {2026}
->
-> <div class="highlight-upcoming" data-date-col="0"></div>
->
-> Dates | Exam
-> -|-
-> Apr 14 - Apr 21 | 9
-> Oct 19 - Oct 27 | 9
->
-> - [Register](https://www.casact.org/exams-admissions/exam-registration) ($850 USD registration fee)
-
-> [!answer]- 📄 Download Resources {1 PDF}
-> - [Exam 9 Content Outline](https://www.casact.org/exam/exam-9-risk-management-actuaries)
-
-
->[!answer]- 📕 Source Material {8 Sources}
->
-> | Source | Tasks |
-> | --- | --- |
-> | [[Swiss Re Exposure Curves and the MBBEFD Distribution Class (Bernegger - 1997)]] | A1 |
-> | [[Enterprise Risk Analysis for Property and Liability Insurance Companies (Brehm et al.)]] | D1-D6 |
-> | [[Basics of Reinsurance Pricing (Clark - 2014)]] | A2-A3 |
-> | [[The Economics of Structured Finance (Coval, Jurek, and Stafford - 2009)]] | C5-C6 |
-> | [[Allocation of Capital in the Insurance Industry (Cummins - 2000)]] | C1-C4 |
-> | [[CAT Bonds and Other Risk-Linked Securities (Cummins - 2008)]] | C7 |
-> | [[Catastrophe Modeling: A New Approach to Managing Risk (Grossi and Kunreuther - 2005)]] | A4-A5 |
-> | [[Pricing Insurance Risk: Theory and Practice (Mildenhall and Major - 2022)]] | B1-B5, C1-C4^[Domain B: Chapters 3 (excl. 3.5), 4 (excl. 4.2.6, 4.3.9, 4.4), 5, 6, 8 (§8.5, 8.7), 9 (excl. 9.3, 9.4), 10, 11 (excl. 11.2.3, 11.3.4–11.3.7, 11.6). Domain C: Chapters 2 (§2.1–2.2), 8 (§8.1–8.4, 8.6, 8.9), 12 (excl. 12.4), 13, 14 (excl. 14.4–14.5), 15 (excl. 15.4.3–15.4.4). Proofs and Appendices not tested.] |
-> | [[Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Panning - 2006)]] | C3, C5 |
 
 ### Learning Objectives
 
@@ -86,3 +53,21 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 > 23. Assess effectiveness of risk mitigation strategies.
 >
 > **Readings:** Enterprise Risk Analysis for Property and Liability Insurance Companies
+>
+
+### Source Material
+
+>[!answer]- Source Material {8 Sources}
+>
+> | Source | Tasks |
+> | --- | --- |
+> | [[Swiss Re Exposure Curves and the MBBEFD Distribution Class (Bernegger - 1997)]] | A1 |
+> | [[Enterprise Risk Analysis for Property and Liability Insurance Companies (Brehm et al.)]] | D1-D6 |
+> | [[Basics of Reinsurance Pricing (Clark - 2014)]] | A2-A3 |
+> | [[The Economics of Structured Finance (Coval, Jurek, and Stafford - 2009)]] | C5-C6 |
+> | [[Allocation of Capital in the Insurance Industry (Cummins - 2000)]] | C1-C4 |
+> | [[CAT Bonds and Other Risk-Linked Securities (Cummins - 2008)]] | C7 |
+> | [[Catastrophe Modeling: A New Approach to Managing Risk (Grossi and Kunreuther - 2005)]] | A4-A5 |
+> | [[Pricing Insurance Risk: Theory and Practice (Mildenhall and Major - 2022)]] | B1-B5, C1-C4^[Domain B: Chapters 3 (excl. 3.5), 4 (excl. 4.2.6, 4.3.9, 4.4), 5, 6, 8 (§8.5, 8.7), 9 (excl. 9.3, 9.4), 10, 11 (excl. 11.2.3, 11.3.4–11.3.7, 11.6). Domain C: Chapters 2 (§2.1–2.2), 8 (§8.1–8.4, 8.6, 8.9), 12 (excl. 12.4), 13, 14 (excl. 14.4–14.5), 15 (excl. 15.4.3–15.4.4). Proofs and Appendices not tested.] |
+> | [[Managing Interest Rate Risk: ALM, Franchise Value, and Strategy (Panning - 2006)]] | C3, C5 |
+

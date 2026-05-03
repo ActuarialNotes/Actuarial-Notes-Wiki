@@ -10,10 +10,21 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { aggregateForTopic, decayIfStale } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import type { QuizSession } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
+import type { QuizSession, QuestionResponse } from '@/lib/supabase'
+import { useAuth } from '@/hooks/useAuth'
+import { fetchAllQuestions } from '@/lib/github'
+import { parseAllQuestions } from '@/lib/parser'
+import type { Question } from '@/lib/parser'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 
 // ── Session list helpers ──────────────────────────────────────────────────────
+
+interface SessionDetail {
+  loading: boolean
+  error: string | null
+  items: Array<{ response: QuestionResponse; question: Question | null }>
+}
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, {
@@ -43,7 +54,19 @@ function ScoreBar({ session }: { session: QuizSession }) {
   )
 }
 
-function SessionRow({ session, divider }: { session: QuizSession; divider: boolean }) {
+function SessionRow({
+  session,
+  divider,
+  expanded,
+  detail,
+  onToggle,
+}: {
+  session: QuizSession
+  divider: boolean
+  expanded: boolean
+  detail: SessionDetail | undefined
+  onToggle: () => void
+}) {
   return (
     <div>
       {divider && <Separator className="my-3" />}
@@ -59,9 +82,57 @@ function SessionRow({ session, divider }: { session: QuizSession; divider: boole
             <span>{session.correct_count}/{session.total_questions} correct</span>
             <span>{formatTime(session.time_taken_seconds)}</span>
             <span>{formatDate(session.completed_at)}</span>
+            <button
+              type="button"
+              onClick={onToggle}
+              className="p-0.5 hover:text-foreground transition-colors"
+              aria-label={expanded ? 'Collapse session' : 'Expand session'}
+            >
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition-transform ${expanded ? 'rotate-180' : ''}`}
+              />
+            </button>
           </div>
         </div>
         <ScoreBar session={session} />
+
+        {expanded && (
+          <div className="pt-1 space-y-1">
+            {!detail || detail.loading ? (
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground py-1">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                <span>Loading questions…</span>
+              </div>
+            ) : detail.error ? (
+              <p className="text-xs text-destructive">{detail.error}</p>
+            ) : detail.items.length === 0 ? (
+              <p className="text-xs text-muted-foreground">No question data found.</p>
+            ) : (
+              detail.items.map(({ response, question }) => (
+                <div key={response.id} className="flex items-start gap-2 text-xs">
+                  <span className={`shrink-0 font-bold ${response.is_correct ? 'text-green-500' : 'text-red-500'}`}>
+                    {response.is_correct ? '✓' : '✗'}
+                  </span>
+                  <div className="min-w-0">
+                    <span className="text-foreground/80">
+                      {question
+                        ? question.stem.length > 80
+                          ? question.stem.slice(0, 80) + '…'
+                          : question.stem
+                        : response.question_id}
+                    </span>
+                    {!response.is_correct && (
+                      <div className="text-muted-foreground mt-0.5">
+                        <span>Chose: {response.chosen_answer ?? '—'}</span>
+                        <span className="ml-2">Correct: {response.correct_answer}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -100,8 +171,12 @@ export function ActiveExamCard({
   onTargetDateChange,
 }: Props) {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const { records } = useConceptMastery()
   const [historyExpanded, setHistoryExpanded] = useState(false)
+  const [historyFilter, setHistoryFilter] = useState<string | null>(null)
+  const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set())
+  const [sessionDetails, setSessionDetails] = useState<Map<string, SessionDetail>>(new Map())
 
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
 
@@ -125,7 +200,51 @@ export function ActiveExamCard({
     [sessions, syllabus.examTopic],
   )
 
-  const hiddenCount = Math.max(0, examSessions.length - 1)
+  const displayedSessions = historyFilter
+    ? examSessions.filter(s => s.completed_at.slice(0, 10) === historyFilter)
+    : examSessions
+
+  function handleDayClick(date: string) {
+    setHistoryExpanded(true)
+    setHistoryFilter(date)
+  }
+
+  async function handleSessionToggle(sessionId: string) {
+    if (!user) return
+    const isExpanding = !expandedSessions.has(sessionId)
+    setExpandedSessions(prev => {
+      const next = new Set(prev)
+      isExpanding ? next.add(sessionId) : next.delete(sessionId)
+      return next
+    })
+    if (!isExpanding || sessionDetails.has(sessionId)) return
+
+    setSessionDetails(prev => new Map(prev).set(sessionId, { loading: true, error: null, items: [] }))
+    try {
+      const [responsesResult, rawFiles] = await Promise.all([
+        supabase
+          .from('question_responses')
+          .select('*')
+          .eq('session_id', sessionId)
+          .eq('user_id', user.id)
+          .order('answered_at', { ascending: true }),
+        fetchAllQuestions(),
+      ])
+      if (responsesResult.error) throw new Error(responsesResult.error.message)
+      const questionMap = new Map(parseAllQuestions(rawFiles).map(q => [q.id, q]))
+      const items = (responsesResult.data ?? []).map((r: QuestionResponse) => ({
+        response: r,
+        question: questionMap.get(r.question_id) ?? null,
+      }))
+      setSessionDetails(prev => new Map(prev).set(sessionId, { loading: false, error: null, items }))
+    } catch (err) {
+      setSessionDetails(prev => new Map(prev).set(sessionId, {
+        loading: false,
+        error: err instanceof Error ? err.message : 'Failed to load session details',
+        items: [],
+      }))
+    }
+  }
 
   const topic = EXAM_ID_TO_TOPIC[progressKey]
   const newQuizUrl = topic ? `/?topic=${encodeURIComponent(topic)}` : '/'
@@ -196,6 +315,7 @@ export function ActiveExamCard({
           examProgressKey={progressKey}
           targetDate={targetDate}
           onTargetDateChange={onTargetDateChange}
+          onDayClick={handleDayClick}
         />
 
         {dueCount > 0 && (
@@ -220,15 +340,35 @@ export function ActiveExamCard({
         {/* Quiz history */}
         {examSessions.length > 0 && (
           <div className="border-t pt-3 space-y-1">
-            {!historyExpanded && examSessions[0] && (
-              <SessionRow session={examSessions[0]} divider={false} />
+            {historyExpanded && historyFilter && (
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground pb-1">
+                <span>Filtering by {historyFilter}</span>
+                <button
+                  type="button"
+                  onClick={() => setHistoryFilter(null)}
+                  className="hover:text-foreground transition-colors"
+                  aria-label="Clear filter"
+                >
+                  · Clear ×
+                </button>
+              </div>
             )}
-            {historyExpanded && examSessions.map((session, idx) => (
-              <SessionRow key={session.id} session={session} divider={idx > 0} />
+            {historyExpanded && displayedSessions.map((session, idx) => (
+              <SessionRow
+                key={session.id}
+                session={session}
+                divider={idx > 0}
+                expanded={expandedSessions.has(session.id)}
+                detail={sessionDetails.get(session.id)}
+                onToggle={() => handleSessionToggle(session.id)}
+              />
             ))}
             <button
               type="button"
-              onClick={() => setHistoryExpanded(v => !v)}
+              onClick={() => {
+                if (historyExpanded) setHistoryFilter(null)
+                setHistoryExpanded(v => !v)
+              }}
               className="mt-2 w-full flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors py-1.5"
             >
               <ChevronDown
@@ -236,9 +376,7 @@ export function ActiveExamCard({
               />
               {historyExpanded
                 ? 'Hide quiz history'
-                : hiddenCount > 0
-                  ? `Show quiz history (${hiddenCount} more)`
-                  : 'Show quiz history'}
+                : `Show quiz history (${examSessions.length})`}
             </button>
           </div>
         )}

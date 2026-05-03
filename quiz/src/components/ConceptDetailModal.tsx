@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { CheckCircle2, Loader2, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { BookOpen, CheckCircle2, Loader2, X } from 'lucide-react'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -200,7 +202,15 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
+  const navigate = useNavigate()
+  const openAt = useConceptPopup(s => s.openAt)
   const badge = MASTERY_BADGE[masteryState]
+
+  function openInStudyGuide() {
+    openAt([{ kind: 'concept', name: conceptName }], 0, null)
+    navigate('/wiki')
+    onClose()
+  }
 
   const newCount = questions.filter(q => !byQuestionId.get(q.id)).length
   const attemptedCount = questions.filter(q => !!byQuestionId.get(q.id)).length
@@ -229,6 +239,15 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
               {badge.label}
             </span>
           </span>
+          <button
+            type="button"
+            onClick={openInStudyGuide}
+            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 shrink-0 transition-colors"
+            title="Open in Study Guide"
+          >
+            <BookOpen className="h-3 w-3" />
+            Open in Study Guide
+          </button>
           <button
             type="button"
             onClick={onClose}

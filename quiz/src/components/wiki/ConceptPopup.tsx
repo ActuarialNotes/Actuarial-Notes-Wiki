@@ -80,7 +80,8 @@ export function ConceptPopup() {
     <>
     <aside
       className="concept-popup-aside fixed left-0 right-0 bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
-      style={{ height: maximized ? '100vh' : `min(${height}px, 100vh)` }}
+      data-maximized={maximized}
+      style={{ height: maximized ? undefined : `min(${height}px, 100vh)` }}
       role="complementary"
       aria-label={`Concept: ${current.name}`}
     >

@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 
 type Scope = 'page' | 'all'
 
@@ -18,6 +19,7 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const location = useLocation()
+  const { openAt } = useConceptPopup()
 
   useEffect(() => {
     let cancelled = false
@@ -36,6 +38,11 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
   useEffect(() => {
     if (pageRefs.length === 0 && scope === 'page') setScope('all')
   }, [pageRefs.length, scope])
+
+  const examSourcePath = useMemo(() => {
+    const m = location.pathname.match(/^\/wiki\/exam\/(.+)$/)
+    return m ? `${fromSlug(m[1])}.md` : null
+  }, [location.pathname])
 
   useEffect(() => {
     if (!active) return
@@ -83,6 +90,19 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
 
   const isExpanded = active && hasQuery
 
+  function handleConceptSelect(ref: WikiEntryRef) {
+    dismiss()
+    const conceptList = pageRefs
+      .filter(r => r.kind === 'concept')
+      .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
+    const idx = conceptList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
+    if (idx >= 0 && conceptList.length > 0) {
+      openAt(conceptList, idx, examSourcePath ?? undefined)
+    } else {
+      openAt([ref], 0, undefined)
+    }
+  }
+
   return (
     <>
       {/* Backdrop blur overlay — behind the header (z-40), above page content (z-0) */}
@@ -96,11 +116,11 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
       {/* Floating search header */}
       <div
         ref={containerRef}
-        className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-md"
+        className="sticky top-14 lg:top-0 z-50 border-b bg-background/90 backdrop-blur-md"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Input row */}
-          <div className="flex items-center gap-2 py-2.5">
+          <div className="flex items-center gap-2 h-14">
             <Search className="h-4 w-4 text-muted-foreground shrink-0" />
             <input
               ref={inputRef}
@@ -108,7 +128,7 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
               value={query}
               onChange={e => setQuery(e.target.value)}
               onFocus={() => setActive(true)}
-              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-sm text-foreground placeholder-transparent"
+              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder-transparent"
               aria-label="Search study guides"
               autoComplete="off"
               spellCheck={false}
@@ -164,7 +184,7 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
                 ) : (
                   results.map(item => (
                     <li key={`${item.category}:${item.path}`}>
-                      <SearchResultRow item={item} query={query} onSelect={dismiss} />
+                      <SearchResultRow item={item} query={query} onSelect={dismiss} onConceptSelect={handleConceptSelect} />
                     </li>
                   ))
                 )}
@@ -181,10 +201,12 @@ function SearchResultRow({
   item,
   query,
   onSelect,
+  onConceptSelect,
 }: {
   item: WikiIndexItem
   query: string
   onSelect: () => void
+  onConceptSelect: (ref: WikiEntryRef) => void
 }) {
   const ref = pathToEntryRef(item.path) ?? { kind: 'concept' as const, name: item.name }
   const route = wikiRoute(ref)
@@ -201,7 +223,14 @@ function SearchResultRow({
   return (
     <Link
       to={route}
-      onClick={onSelect}
+      onClick={e => {
+        if (item.category === 'concept') {
+          e.preventDefault()
+          onConceptSelect(ref)
+        } else {
+          onSelect()
+        }
+      }}
       className="flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent/60 transition-colors"
     >
       <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />

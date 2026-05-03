@@ -1,10 +1,13 @@
 [[Actuarial Notes Wiki|Wiki]] / **MAS-II (CAS)**
 
+<div class="exam-nav"
+     data-current="MAS-II|Modern Actuarial Statistics II"
+</div>
+
 ## MAS-II (CAS)
 
 The **Modern Actuarial Statistics II** is a 4-hour computer-based exam covering [[Credibility Theory]], [[Linear Mixed Models]], [[Statistical Learning]], and [[Time Series]] as part of the ACAS credentialing pathway.
 
-<div class="callout-cols-2">
 
 > [!answer]- 📅 Exam Schedule 2026
 > 
@@ -24,7 +27,6 @@ The **Modern Actuarial Statistics II** is a 4-hour computer-based exam covering 
 > - [Content Outline (August 2025)](https://www.casact.org/sites/default/files/2025-08/MAS_II_Content_Outline__August_2025_.pdf)
 > - [CAS Exam MAS-II Page](https://www.casact.org/exam/exam-mas-ii-modern-actuarial-statistics-ii)
 
-</div>
 
 > [!answer]- 📕 Source Material 5 Sources
 > 

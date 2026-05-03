@@ -1,28 +1,8 @@
-[[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
+<div class="exam-nav"
+     data-current="P-1|Probability"
+</div>
 
-## Exam P-1 (SOA)
-
-The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice questions about probability theory concepts and their application to measuring risk. 
-
-> [!answer]- 📅 Exam Schedule {2026}
-> 
-> Dates | Exams 
-> -|-
-> Mar 9 - Mar 20 | P
-> May 8 - May 19 | P
-> Jul 8 - Jul 19 | P
-> Sep 10 - Sep 21 | P
-> Nov 4 - Nov 15 | P
->
-> - [Register](https://www.soa.org/education/exam-req/registration/edu-registration/) ($275 USD registration fee)
-
-> [!answer]- 📄 Download Resources {4 PDFs}
-> - [Exam P-1 Syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-03-exam-p-syllabus.pdf)
-> - [May 2026 Exam P-1 Syllabus](https://www.soa.org/globalassets/assets/files/edu/2026/spring/syllabi/2026-05-exam-p-syllabus.pdf)
-> - [736 Sample Questions for Exam P (SOA)](https://www.soa.org/globalassets/assets/files/edu/2026/spring/questions-solutions/2026-05-exam-p-sample-questions.pdf)
-> - [Sample Answers](https://www.soa.org/globalassets/assets/files/edu/2025/fall/questions-solutions/2025-10-exam-p-sample-solutions.pdf)
-
-> [!answer]- 📕 Source Material {6 Textbooks}
+> [!answer]- Source Material
 >
 > | Source | Coverage |
 > | --- | --- |
@@ -33,6 +13,12 @@ The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice question
 > | [[Probability and Statistical Inference (Hogg - 2020)]] | Chapters 1-5 |
 > | [[Probability (Leemis - 2018)]] | Chapters 1-8 |
 
+## Exam P-1 (SOA)
+
+The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice questions about probability theory concepts and their application to measuring risk. 
+
+
+
 ### Prerequisite knowledge
 Knowledge of the following concepts is expected:
 - [[Calculus]], including series, differentiation, and integration.
@@ -41,7 +27,6 @@ Knowledge of the following concepts is expected:
 ### Learning Objectives
 
 > [!example]- General Probability {23-30%}
-> ### General Probability
 > Understand basic concepts of [[Probability]] and [[Discrete Mathematics]].
 > 1. Define [[Set Function]], [[Venn Diagram]], [[Sample Space]], and [[Event]]. Define **probability** as a set function on a collection of events and state the basic [[Axioms of Probability]].
 > 2. Calculate **probabilities** using [[Combinatorics]], such as [[Combination]] and [[Permutation]].
@@ -53,7 +38,6 @@ Knowledge of the following concepts is expected:
 > 
 
 > [!example]- Univariate Random Variables {44-50%}
-> ### Univariate Random Variables
 > Understand [[Discrete Univariate Distributions]] and [[Continuous Univariate Distributions]] and their applications. 
 > 8. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
 > 9. Calculate [[Conditional Probability|Conditional Probabilities]].
@@ -68,7 +52,7 @@ Knowledge of the following concepts is expected:
 > - [[Hypergeometric]]
 > - [[Negative Binomial]]
 > - [[Poisson]]
-> - [[Uniform]]
+> - [[Uniform Discrete|Uniform]]
 >
 > #### Continuous Univariate Distributions 
 > - [[Beta]]
@@ -76,17 +60,16 @@ Knowledge of the following concepts is expected:
 > - [[Gamma]]
 > - [[Lognormal]]
 > - [[Normal]]
-> - [[Uniform]]
+> - [[Uniform Continuous|Uniform]]
 
 > [!example]- Multivariate Random Variables {23-30%}
-> ### Multivariate Random Variables
-> Understand key concepts in the discrete and continuous settings concerning [[Multivariate Distribution]]s, the [[Distribution of Order Statistics]] for [[Independent Random Variables]], and linear combinations of independent random variables, along with associated applications.
+> Understand key concepts in the discrete and continuous settings concerning [[Multivariate Distribution]]s, the [[Order Statistics|Distribution of Order Statistics]] for [[Independent Random Variables]], and linear combinations of independent random variables, along with associated applications.
 > 1. Determine [[Joint Probability Function]]s and [[Joint Cumulative Distribution Function]]s for discrete random variables.
 > 2. Determine [[Conditional Probability Function]] and [[Marginal Probability Function]] for discrete random variables.
 > 3. Calculate [[Moments for Joint Distributions]] for joint, conditional, and marginal discrete distributions.
-> 4. Calculate [[Variance for Conditional Distributions|Variance]] and standard deviation for conditional and marginal probability distributions for discrete random variables.
+> 4. Calculate [[Variance for Conditional and Marginal Distributions|Variance]] and standard deviation for conditional and marginal probability distributions for discrete random variables.
 > 5. Calculate the [[Covariance]] and the [[Correlation Coefficient]] for discrete random variables.
-> 6. Determine the [[Joint Distribution of Order Statistics]] for a set of independent random variables.
+> 6. Determine the [[Order Statistics|Joint Distribution of Order Statistics]] for a set of independent random variables.
 > 7. Calculate [[Probabilities for Linear Combinations]] of independent discrete random variables as well as for continuous normal random variables.
 > 8. Calculate [[Moments for Linear Combinations]] of independent random variables.
 > 9. Apply the [[Central Limit Theorem]] to calculate approximations of probabilities for linear combinations of independent and identically distributed random variables.

@@ -60,19 +60,68 @@
   }
 }
 
-/* ── Exam accent colours (outside @layer so they override base layer) ── */
-/* Exam P (Probability) — blue; matches existing defaults */
-html.exam-p       { --primary: 221 83% 53%;  --ring: 221 83% 53%; }
-html.dark.exam-p  { --primary: 217 91% 60%;  --ring: 217 91% 60%; }
-
-/* Exam FM (Financial Mathematics) — indigo */
-html.exam-fm      { --primary: 243 75% 59%;  --ring: 243 75% 59%; }
-html.dark.exam-fm { --primary: 239 84% 67%;  --ring: 239 84% 67%; }
-
 /* Wiki: the currently-active concept link on a source page (exam/resource)
-   while the concept popup is open. Tracks theme accent via --primary. */
+   while the concept popup is open.
+   Light mode: solid primary chip (near-black bg, near-white text).
+   Dark mode: white chip with black text (overridden below). */
 .wiki-link--active {
-  background: hsl(var(--primary) / 0.18);
-  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.45);
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground)) !important;
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.6);
   border-radius: 2px;
+}
+
+/* Dark mode: white chip with black text — maximum contrast regardless of
+   exam theme (default primary is near-white; exam-p primary is blue). */
+.dark .wiki-link--active {
+  background: hsl(0 0% 100%);
+  box-shadow: 0 0 0 2px hsl(0 0% 100% / 0.6);
+  border-radius: 2px;
+  color: hsl(0 0% 9%) !important;
+}
+
+/* Score reveal: each question pip on the Review page pops in via stagger.
+   Initial state is hidden (set inline by the component); the animation runs
+   when the .score-pip-in class is added. */
+@keyframes score-pip-in {
+  0%   { opacity: 0; transform: scale(0.4); }
+  60%  { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.score-pip-in {
+  animation: score-pip-in 320ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Mastery level-up badge: bounces in when a concept advances state.
+   Stagger delay is applied via inline style on each badge. */
+@keyframes mastery-level-up {
+  0%   { opacity: 0; transform: scale(0.5) translateY(8px); }
+  65%  { opacity: 1; transform: scale(1.12) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.mastery-level-up {
+  animation: mastery-level-up 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Concept popup: left edge tracks the sidebar width exactly.
+   --sidebar-width is set by Sidebar.tsx (16rem expanded, 3.5rem collapsed).
+   On mobile the popup spans full width so we skip this rule. */
+@media (min-width: 1024px) {
+  .concept-popup-aside {
+    left: var(--sidebar-width, 16rem) !important;
+    transition-property: left;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+}
+
+/* Focus mode: when a concept is active and we're on its source page, dim every
+   block in the article except the one containing the active wikilink. Lets the
+   reader's eye land on the bullet that opened the popup. */
+.concept-focus-mode :is(li, p, h1, h2, h3, h4, h5, h6, blockquote, table) {
+  transition: opacity .25s ease, filter .25s ease;
+}
+.concept-focus-mode :is(li, p, h1, h2, h3, h4, h5, h6, blockquote, table):not(:has(.wiki-link--active)) {
+  opacity: 0.22;
+  filter: blur(1.4px);
 }

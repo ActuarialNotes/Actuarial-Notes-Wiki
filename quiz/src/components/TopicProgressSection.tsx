@@ -1,161 +1,168 @@
+import { useState } from 'react'
+import { ChevronDown, Info } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import type { QuizSession } from '@/lib/supabase'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import {
+  aggregateForTopic,
+  decayIfStale,
+  type ConceptMasteryRecord,
+  type MasteryState,
+} from '@/lib/mastery'
+import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 
-interface ConceptProgress {
-  name: string
-  totalQuestions: number
-  correctCount: number
-  strengthPct: number
-  level: 'not-started' | 'beginner' | 'learning' | 'practiced' | 'strong'
+const STATE_LABEL: Record<MasteryState, string> = {
+  new: 'New',
+  learning: 'Learning',
+  strong: 'Strong',
+  forgotten: 'Forgotten',
 }
 
-// Match a session to a subtopic by checking both the subtopic field and the
-// tags array (which now stores all subtopics from a mixed quiz).
-function computeConceptProgress(
-  sessions: QuizSession[],
-  subtopicName: string,
-  examTopic: string,
-): ConceptProgress {
-  const lower = subtopicName.toLowerCase()
-  const relevant = sessions.filter(
-    s =>
-      s.topic === examTopic &&
-      (s.subtopic?.toLowerCase() === lower ||
-        s.tags?.some(t => t.toLowerCase() === lower)),
-  )
-
-  if (relevant.length === 0) {
-    return { name: subtopicName, totalQuestions: 0, correctCount: 0, strengthPct: 0, level: 'not-started' }
-  }
-
-  const totalQuestions = relevant.reduce((sum, s) => sum + s.total_questions, 0)
-  const correctCount = relevant.reduce((sum, s) => sum + s.correct_count, 0)
-  const accuracy = totalQuestions > 0 ? correctCount / totalQuestions : 0
-  const volumeFactor = Math.min(1, totalQuestions / 20)
-  const strengthPct = Math.round(accuracy * 70 + volumeFactor * 30)
-
-  const level =
-    strengthPct >= 80 ? 'strong' :
-    strengthPct >= 60 ? 'practiced' :
-    strengthPct >= 40 ? 'learning' : 'beginner'
-
-  return { name: subtopicName, totalQuestions, correctCount, strengthPct, level }
+const STATE_TEXT_COLOR: Record<MasteryState, string> = {
+  new: 'text-muted-foreground',
+  learning: 'text-amber-600 dark:text-amber-400',
+  strong: 'text-green-600 dark:text-green-400',
+  forgotten: 'text-red-500',
 }
 
-const LEVEL_LABEL: Record<ConceptProgress['level'], string> = {
-  'not-started': 'New',
-  'beginner': 'Beginner',
-  'learning': 'Learning',
-  'practiced': 'Practiced',
-  'strong': 'Strong',
-}
-
-const LEVEL_BAR_COLOR: Record<ConceptProgress['level'], string> = {
-  'not-started': 'bg-muted-foreground/20',
-  'beginner': 'bg-red-400',
-  'learning': 'bg-orange-400',
-  'practiced': 'bg-yellow-400',
-  'strong': 'bg-green-500',
-}
-
-const LEVEL_TEXT_COLOR: Record<ConceptProgress['level'], string> = {
-  'not-started': 'text-muted-foreground',
-  'beginner': 'text-red-500',
-  'learning': 'text-orange-500',
-  'practiced': 'text-yellow-600',
-  'strong': 'text-green-600',
-}
-
-function StrengthBar({ pct, level }: { pct: number; level: ConceptProgress['level'] }) {
+function InfoPanel() {
   return (
-    <div
-      className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0"
-      role="progressbar"
-      aria-valuenow={Math.round(pct)}
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-label={`${LEVEL_LABEL[level]} – ${Math.round(pct)}%`}
-    >
-      <div
-        className={`h-full rounded-full transition-all ${LEVEL_BAR_COLOR[level]}`}
-        style={{ width: `${pct}%` }}
-      />
+    <div className="mt-2 rounded-md border bg-muted/50 p-3 text-xs text-muted-foreground space-y-2">
+      <p className="font-medium text-foreground">How concept mastery works</p>
+      <p>
+        Each concept tracks one of four states. The bar above each topic is the
+        share of its concepts that are currently <span className="font-medium">Strong</span>.
+      </p>
+      <ul className="space-y-1">
+        <li><span className="font-medium text-muted-foreground">New</span> — never attempted.</li>
+        <li><span className="font-medium text-amber-600 dark:text-amber-400">Learning</span> — at least one correct answer; not yet mastered.</li>
+        <li><span className="font-medium text-green-600 dark:text-green-400">Strong</span> — 3+ corrects including at least one hard question.</li>
+        <li><span className="font-medium text-red-500">Forgotten</span> — 15 days without a correct answer, or 3 wrong in a row.</li>
+      </ul>
     </div>
   )
 }
 
 interface Props {
   syllabus: WikiExamSyllabus
-  sessions: QuizSession[]
-  subtopics: string[]  // all known subtopics for this exam, from useSubtopics()
+  masteryRecords: ConceptMasteryRecord[]
 }
 
-export function TopicProgressSection({ syllabus, sessions, subtopics }: Props) {
-  const hasAnySessions = sessions.some(s => s.topic === syllabus.examTopic)
+export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
+  const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
+  const [showInfo, setShowInfo] = useState(false)
+  const [selectedConcept, setSelectedConcept] = useState<{ name: string; state: MasteryState } | null>(null)
 
-  const progressList = subtopics.map(st =>
-    computeConceptProgress(sessions, st, syllabus.examTopic),
-  )
+  const examKey = wikiExamIdToProgressKey(syllabus.examId)
+  const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
+  const recordsBySlug = new Map(examMastery.map(r => [r.concept_slug.toLowerCase(), r]))
+  const now = new Date()
 
-  const practiced = progressList.filter(c => c.level !== 'not-started')
-  const notStarted = progressList.filter(c => c.level === 'not-started')
+  const toggle = (name: string) =>
+    setOpenTopics(prev => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base">{syllabus.examLabel} — Topics Progress</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {!hasAnySessions ? (
-          <p className="text-sm text-muted-foreground text-center py-4">
-            Start practicing to track your progress
-          </p>
-        ) : (
-          <div className="space-y-4">
-            {practiced.length > 0 && (
-              <div className="space-y-2">
-                {practiced
-                  .sort((a, b) => b.strengthPct - a.strengthPct)
-                  .map(cp => (
-                    <div key={cp.name} className="flex items-center gap-3">
-                      <span className="text-xs text-muted-foreground w-44 shrink-0 truncate" title={cp.name}>
-                        {cp.name}
-                      </span>
-                      <StrengthBar pct={cp.strengthPct} level={cp.level} />
-                      <div className="flex items-center gap-1.5 w-36 justify-end shrink-0">
-                        <span className={`text-xs font-medium ${LEVEL_TEXT_COLOR[cp.level]}`}>
-                          {LEVEL_LABEL[cp.level]}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          · {cp.totalQuestions}Q
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            )}
-
-            {notStarted.length > 0 && (
-              <div className="space-y-1.5">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide pt-1">
-                  Not Started
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {notStarted.map(cp => (
-                    <span
-                      key={cp.name}
-                      className="text-xs text-muted-foreground border border-border rounded px-2 py-0.5"
-                    >
-                      {cp.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+    <>
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-base">{syllabus.examLabel}</CardTitle>
+            <button
+              onClick={() => setShowInfo(v => !v)}
+              className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+              aria-label="How mastery tracking works"
+            >
+              <Info className="h-4 w-4" />
+            </button>
           </div>
-        )}
-      </CardContent>
-    </Card>
+          {showInfo && <InfoPanel />}
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-1">
+            {syllabus.topics.map(topic => {
+              const conceptSlugs = topic.concepts.map(c => c.name)
+              const agg = aggregateForTopic(examMastery, conceptSlugs, now)
+              const isOpen = openTopics.has(topic.name)
+
+              return (
+                <div key={topic.name}>
+                  {/* Top-level category header — one bar per topic */}
+                  <button
+                    className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
+                    onClick={() => toggle(topic.name)}
+                    aria-expanded={isOpen}
+                  >
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
+                    />
+                    <span className="text-sm font-semibold min-w-0 truncate">
+                      {topic.name}
+                      {topic.weight && (
+                        <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+                          {topic.weight}
+                        </span>
+                      )}
+                    </span>
+                    <div
+                      className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0"
+                      role="progressbar"
+                      aria-valuenow={agg.strongPct}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`${agg.strong} of ${agg.total} concepts mastered`}
+                    >
+                      <div
+                        className="h-full rounded-full bg-green-500 transition-all"
+                        style={{ width: `${agg.strongPct}%` }}
+                      />
+                    </div>
+                    <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">
+                      {agg.strong}/{agg.total}
+                    </span>
+                  </button>
+
+                  {/* Concept rows — clickable buttons that open the selector popup */}
+                  {isOpen && topic.concepts.length > 0 && (
+                    <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
+                      {topic.concepts.map(c => {
+                        const rec = recordsBySlug.get(c.name.toLowerCase())
+                        const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
+                        return (
+                          <button
+                            key={c.name}
+                            type="button"
+                            onClick={() => setSelectedConcept({ name: c.name, state })}
+                            className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
+                          >
+                            <span className="text-xs text-foreground min-w-0 flex-1 truncate" title={c.name}>
+                              {c.name}
+                            </span>
+                            <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>
+                              {STATE_LABEL[state]}
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      {selectedConcept && (
+        <ConceptDetailModal
+          conceptName={selectedConcept.name}
+          masteryState={selectedConcept.state}
+          onClose={() => setSelectedConcept(null)}
+        />
+      )}
+    </>
   )
 }

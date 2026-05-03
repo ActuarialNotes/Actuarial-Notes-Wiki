@@ -10,7 +10,6 @@
 
 The **Advanced Estimation of Claims Liabilities (Exam 7)** is a 4 hour exam covering unpaid claim estimation, stochastic reserving methods, and reinsurance reserving.
 
-<div class="callout-cols-2">
 
 > [!answer]- 📅 Exam Schedule {2026}
 >
@@ -26,7 +25,6 @@ The **Advanced Estimation of Claims Liabilities (Exam 7)** is a 4 hour exam cove
 > [!answer]- 📄 Download Resources {1 PDF}
 > - [Exam 7 Content Outline](https://www.casact.org/exam/exam-7-advanced-estimation-claims-liabilities)
 
-</div>
 
 >[!answer]- 📕 Source Material {15 Sources}
 >

@@ -70,7 +70,11 @@ function parseFrontmatter(raw: string): Record<string, string> {
   }
 }
 
+let bundledIndex: WikiIndexItem[] | null = null
+export function setWikiIndexBundle(items: WikiIndexItem[]): void { bundledIndex = items }
+
 export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
+  if (bundledIndex) return bundledIndex
   const cached = readCache()
   if (cached) return cached
 

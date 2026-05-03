@@ -2,17 +2,6 @@
      data-current="P-1|Probability"
 </div>
 
-> [!answer]- Source Material
->
-> | Source | Coverage |
-> | --- | --- |
-> | [[A First Course in Probability (Ross - 2019)]] | Chapters 1-8^[Excluding 4.8.4, 5.6.2, 5.6.3, 5.6.5, 5.7, 7.2.1, 7.2.2, 7.3, 7.6, 7.7, 7.8, 7.9] |
-> | [[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008)]] | Chapters 1-8^[Excluding 2.12, MGF, 4.10, Continuous Multivariate Distributions, 5.10, 7.4] |
-> | [[Probability for Risk Management (Hassett - 2021)]] | Chapters 1-11 |
-> | [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)]] | Chapters 1-8 |
-> | [[Probability and Statistical Inference (Hogg - 2020)]] | Chapters 1-5 |
-> | [[Probability (Leemis - 2018)]] | Chapters 1-8 |
-
 ## Exam P-1 (SOA)
 
 The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice questions about probability theory concepts and their application to measuring risk. 
@@ -73,3 +62,15 @@ Knowledge of the following concepts is expected:
 > 7. Calculate [[Probabilities for Linear Combinations]] of independent discrete random variables as well as for continuous normal random variables.
 > 8. Calculate [[Moments for Linear Combinations]] of independent random variables.
 > 9. Apply the [[Central Limit Theorem]] to calculate approximations of probabilities for linear combinations of independent and identically distributed random variables.
+
+#### Source Material
+> [!answer]- Source Material
+>
+> | Source | Coverage |
+> | --- | --- |
+> | [[A First Course in Probability (Ross - 2019)]] | Chapters 1-8^[Excluding 4.8.4, 5.6.2, 5.6.3, 5.6.5, 5.7, 7.2.1, 7.2.2, 7.3, 7.6, 7.7, 7.8, 7.9] |
+> | [[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008)]] | Chapters 1-8^[Excluding 2.12, MGF, 4.10, Continuous Multivariate Distributions, 5.10, 7.4] |
+> | [[Probability for Risk Management (Hassett - 2021)]] | Chapters 1-11 |
+> | [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)]] | Chapters 1-8 |
+> | [[Probability and Statistical Inference (Hogg - 2020)]] | Chapters 1-5 |
+> | [[Probability (Leemis - 2018)]] | Chapters 1-8 |

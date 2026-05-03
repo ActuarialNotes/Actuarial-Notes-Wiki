@@ -59,7 +59,11 @@ async function upsertMasteryFromResponses(
     .in('exam_id', [...new Set(events.map(e => e.examId))])
     .in('concept_slug', [...new Set(events.map(e => e.conceptSlug))])
 
-  if (selectError) throw new Error(`concept_mastery select: ${selectError.message}`)
+  if (selectError) {
+    // Table may not exist yet (migration not applied to production). Treat as
+    // no prior records so the computation and mergeLocalMastery still run.
+    console.warn('concept_mastery select failed, continuing with empty state:', selectError.message)
+  }
 
   const byKey = new Map<string, ConceptMasteryRecord>()
   for (const r of (existing ?? []) as ConceptMasteryRecord[]) {
@@ -174,7 +178,7 @@ function computeMasteryTransitions(
   for (const [key, after] of simulated) {
     const fromState: MasteryState = bySlug.get(key)?.state ?? 'new'
     if (fromState !== after.state) {
-      transitions.push({ conceptSlug: key, from: fromState, to: after.state })
+      transitions.push({ conceptSlug: after.concept_slug, from: fromState, to: after.state })
     }
   }
   return transitions

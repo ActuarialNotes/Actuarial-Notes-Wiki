@@ -43,7 +43,13 @@ export function useConceptMastery(): UseConceptMasteryResult {
           const dbRecords = data ?? []
           // Keep localStorage in sync with DB so the fallback stays fresh.
           if (dbRecords.length > 0) syncLocalMastery(dbRecords)
-          setRecords(dbRecords)
+          // Supplement DB records with any localStorage entries not yet in the
+          // DB (handles the case where mergeLocalMastery ran but the upsert
+          // subsequently failed, leaving valid state only in localStorage).
+          const localRecords = readLocalMastery(userId)
+          const dbKeys = new Set(dbRecords.map(r => `${r.exam_id}::${r.concept_slug}`))
+          const localOnly = localRecords.filter(r => !dbKeys.has(`${r.exam_id}::${r.concept_slug}`))
+          setRecords([...dbRecords, ...localOnly])
         }
         setLoading(false)
       })

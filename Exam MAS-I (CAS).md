@@ -10,8 +10,6 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based exam cover
 
 > [!example]- A. Probability Models (Stochastic Processes and Survival Models) {20–30%}
 > 
-> ### A. Probability Models (Stochastic Processes and Survival Models)
-> 
 > Candidates should be able to solve problems using [[Stochastic Processes]] and determine the probabilities and distributions associated with these processes.
 > 
 > 1. Model claim frequencies using [[Poisson Process]]es
@@ -24,8 +22,6 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based exam cover
 > **Readings:** Daniel · Ross · Struppeck
 
 > [!example]- B. Statistics {20–30%}
-> 
-> ### B. Statistics
 > 
 > Candidates should be able to apply the concepts typically covered in the second semester of a two-semester undergraduate sequence in [[Probability]] and [[Statistics]].
 > 
@@ -42,8 +38,6 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based exam cover
 > **Readings:** Hogg, McKean, and Craig · Tse
 
 > [!example]- C. Extended Linear Models {45–55%}
-> 
-> ### C. Extended Linear Models
 > 
 > Candidates should be able to solve problems using extended linear models and determine when these models are appropriate to use.
 > 

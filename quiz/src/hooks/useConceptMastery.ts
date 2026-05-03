@@ -36,7 +36,7 @@ export function useConceptMastery(): UseConceptMasteryResult {
       .then(({ data, error }: { data: ConceptMasteryRecord[] | null; error: { message: string } | null }) => {
         if (cancelled) return
         if (error) {
-          console.warn('useConceptMastery: failed to load:', error.message)
+          console.error('useConceptMastery: failed to load:', error.message)
           setRecords([])
         } else {
           setRecords(data ?? [])

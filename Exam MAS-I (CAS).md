@@ -4,29 +4,7 @@
 
 ## MAS-I (CAS)
 
-The **Modern Actuarial Statistics I** is a 4-hour computer-based exam covering [[Stochastic Processes]], [[Survival Models]], [[Statistics]], and [[Generalized Linear Models]] as part of the ACAS credentialing pathway.
-
-
-> [!answer]- 📅 Exam Schedule 2026
-> 
-> <div class="highlight-upcoming" data-date-col="0"></div>
-> 
-> |Dates|Exam|
-> |---|---|
-> |Jan 28 - Feb 3|MAS-I|
-> |Apr 22 - May 1|MAS-I|
-> |Jul 29 - Aug 4|MAS-I|
-> |Oct 28 - Nov 5|MAS-I|
-> 
-> - [Register](https://www.casact.org/exams-admissions/exam-registration) ($550 registration fee)
-
-> [!answer]- 📄 Download Resources 2 PDFs
-> 
-> - [Content Outline (August 2025)](https://www.casact.org/sites/default/files/2025-08/MAS_I_Content_Outline__August_2025_.pdf)
-> - [CAS Exam MAS-I Page](https://www.casact.org/exam/exam-mas-i-modern-actuarial-statistics-i)
-
-
-
+The **Modern Actuarial Statistics I** exam is a 4-hour computer-based exam covering [[Stochastic Processes]], [[Survival Models]], [[Statistics]], and [[Generalized Linear Models]] as part of the ACAS credentialing pathway.
 
 ### Learning Objectives
 

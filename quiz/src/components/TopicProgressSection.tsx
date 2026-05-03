@@ -53,7 +53,7 @@ interface Props {
 export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const [showInfo, setShowInfo] = useState(false)
-  const [selectedConcept, setSelectedConcept] = useState<{ name: string; state: MasteryState } | null>(null)
+  const [selectedConcept, setSelectedConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
 
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
@@ -77,6 +77,14 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
     return display ? { ...r, concept_slug: display } : r
   })
   const recordsBySlug = new Map(normalizedMastery.map(r => [r.concept_slug.toLowerCase(), r]))
+
+  const allConcepts: { name: string; state: MasteryState }[] = syllabus.topics.flatMap(topic =>
+    topic.concepts.map(c => {
+      const rec = recordsBySlug.get(c.name.toLowerCase())
+      const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
+      return { name: c.name, state }
+    })
+  )
 
   const toggle = (name: string) =>
     setOpenTopics(prev => {
@@ -164,7 +172,10 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
                           <button
                             key={c.name}
                             type="button"
-                            onClick={() => setSelectedConcept({ name: c.name, state })}
+                            onClick={() => {
+                            const idx = allConcepts.findIndex(ac => ac.name === c.name)
+                            setSelectedConcept({ name: c.name, state, index: idx === -1 ? 0 : idx })
+                          }}
                             className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
                           >
                             <span className="text-xs text-foreground min-w-0 flex-1 truncate" title={c.name}>
@@ -190,6 +201,9 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
           conceptName={selectedConcept.name}
           masteryState={selectedConcept.state}
           onClose={() => setSelectedConcept(null)}
+          syllabus={syllabus}
+          allConcepts={allConcepts}
+          initialConceptIndex={selectedConcept.index}
         />
       )}
     </>

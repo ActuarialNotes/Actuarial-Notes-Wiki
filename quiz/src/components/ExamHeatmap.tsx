@@ -55,9 +55,11 @@ interface Props {
   targetDate: string | null
   /** Called when user saves a new exam date */
   onTargetDateChange: (date: string | null) => void
+  /** Called when a day cell with sessions is clicked */
+  onDayClick?: (date: string) => void
 }
 
-export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDateChange }: Props) {
+export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDateChange, onDayClick }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
@@ -199,17 +201,23 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
                 col.isExamWeek ? 'ring-1 ring-inset ring-primary/50' : ''
               }`}
             >
-              {col.days.map(cell => (
-                <div
-                  key={cell.key}
-                  title={cell.title}
-                  className={`w-full rounded-[2px] ${
-                    cell.isFuture
-                      ? col.isExamWeek ? 'bg-primary/10 h-[10px]' : 'h-[10px]'
-                      : `h-[10px] ${cellBg(cell.data?.avgScore ?? null)}`
-                  }`}
-                />
-              ))}
+              {col.days.map(cell => {
+                const isClickable = !cell.isFuture && cell.data !== null && onDayClick !== undefined
+                return (
+                  <div
+                    key={cell.key}
+                    title={cell.title}
+                    role={isClickable ? 'button' : undefined}
+                    aria-label={isClickable ? `View sessions for ${cell.key}` : undefined}
+                    onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
+                    className={`w-full rounded-[2px] ${
+                      cell.isFuture
+                        ? col.isExamWeek ? 'bg-primary/10 h-[10px]' : 'h-[10px]'
+                        : `h-[10px] ${cellBg(cell.data?.avgScore ?? null)}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
+                    }`}
+                  />
+                )
+              })}
             </div>
           ))}
         </div>

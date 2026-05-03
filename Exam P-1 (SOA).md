@@ -9,7 +9,6 @@ The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice question
 
 
 ### Prerequisite knowledge
-Knowledge of the following concepts is expected:
 - [[Calculus]], including series, differentiation, and integration.
 - Concepts introduced in [Risk and Insurance](https://www.soa.org/49355c/globalassets/assets/files/edu/p-21-05.pdf)
 

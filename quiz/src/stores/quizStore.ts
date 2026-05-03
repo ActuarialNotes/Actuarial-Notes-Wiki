@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 import { applyAnswer, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
+import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 
 const TOPIC_TO_EXAM_ID: Record<string, string> = {
@@ -51,12 +52,14 @@ async function upsertMasteryFromResponses(
 
   const keys = [...new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))]
 
-  const { data: existing } = await supabase
+  const { data: existing, error: selectError } = await supabase
     .from('concept_mastery')
     .select('*')
     .eq('user_id', userId)
     .in('exam_id', [...new Set(events.map(e => e.examId))])
     .in('concept_slug', [...new Set(events.map(e => e.conceptSlug))])
+
+  if (selectError) throw new Error(`concept_mastery select: ${selectError.message}`)
 
   const byKey = new Map<string, ConceptMasteryRecord>()
   for (const r of (existing ?? []) as ConceptMasteryRecord[]) {
@@ -79,7 +82,15 @@ async function upsertMasteryFromResponses(
   const rows = [...byKey.entries()]
     .filter(([key]) => touchedKeys.has(key))
     .map(([, r]) => ({ ...r, updated_at: now.toISOString() }))
-  await supabase.from('concept_mastery').upsert(rows, { onConflict: 'user_id,exam_id,concept_slug' })
+
+  // Always persist to localStorage first so mastery state survives even if
+  // the Supabase write fails (e.g. table not yet migrated in production).
+  mergeLocalMastery(rows)
+
+  const { error: upsertError } = await supabase
+    .from('concept_mastery')
+    .upsert(rows, { onConflict: 'user_id,exam_id,concept_slug' })
+  if (upsertError) throw new Error(`concept_mastery upsert: ${upsertError.message}`)
 }
 
 export interface MasteryTransition {
@@ -285,11 +296,13 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     const allSubtopics = [...new Set(questions.map(q => q.subtopic))]
 
-    // Persist concept-level mastery state. Fire-and-forget before the session
-    // insert so a session-save failure never blocks the mastery transition.
-    upsertMasteryFromResponses(userId, questions, responses).catch(err => {
-      console.warn('concept_mastery upsert failed:', err)
-    })
+    // Persist concept-level mastery state. Awaited so failures are visible;
+    // errors don't block session save.
+    try {
+      await upsertMasteryFromResponses(userId, questions, responses)
+    } catch (masteryErr) {
+      console.error('concept_mastery upsert failed:', masteryErr)
+    }
     const { data: session, error: sessionError } = await supabase
       .from('quiz_sessions')
       .insert({

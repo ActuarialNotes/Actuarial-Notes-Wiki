@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
+import { readLocalMastery, syncLocalMastery } from '@/lib/localMasteryStore'
 
 export interface UseConceptMasteryResult {
   records: ConceptMasteryRecord[]
@@ -36,10 +37,13 @@ export function useConceptMastery(): UseConceptMasteryResult {
       .then(({ data, error }: { data: ConceptMasteryRecord[] | null; error: { message: string } | null }) => {
         if (cancelled) return
         if (error) {
-          console.warn('useConceptMastery: failed to load:', error.message)
-          setRecords([])
+          console.error('useConceptMastery: DB fetch failed, falling back to localStorage:', error.message)
+          setRecords(readLocalMastery(userId))
         } else {
-          setRecords(data ?? [])
+          const dbRecords = data ?? []
+          // Keep localStorage in sync with DB so the fallback stays fresh.
+          if (dbRecords.length > 0) syncLocalMastery(dbRecords)
+          setRecords(dbRecords)
         }
         setLoading(false)
       })

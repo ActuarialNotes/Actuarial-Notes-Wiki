@@ -1,41 +1,9 @@
-[[Actuarial Notes Wiki|Wiki]] / **Exam 5 (CAS)**
-
 <div class="exam-nav"
      data-current="5|Basic Techniques for Ratemaking and Estimating Claim Liabilities"
 </div>
 
 ## Exam 5 (CAS)
 The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-hour computer-based exam (4.5-hour Pearson VUE appointment) covering [[Ratemaking]] and [[Loss Reserving]] as part of the ACAS credentialing pathway.
-
-
-> [!answer]- 📅 Exam Schedule 2026
-> 
-> <div class="highlight-upcoming" data-date-col="0"></div>
-> 
-> |Dates|Exam|
-> |---|---|
-> |Apr 14 - Apr 21|Exam 5|
-> |Oct 19 - Oct 27|Exam 5|
-> 
-> - [Register](https://www.casact.org/exams-admissions/exam-registration) ($850 registration fee)
-
-> [!answer]- 📄 Download Resources 2 PDFs
-> 
-> - [Content Outline (Spring 2026)](https://www.casact.org/sites/default/files/2026-01/Exam_5_Content_Outline__Spring_2026_.pdf)
-> - [CAS Exam 5 Page](https://www.casact.org/exam/exam-5-basic-ratemaking-and-est-claim-liabilities)
-
-
-> [!answer]- 📕 Source Material 6 Sources
-> 
-> |Source|Domains / Tasks|
-> |---|---|
-> |[[Basic Ratemaking (Werner - 2016)]]|A1–A15, A17|
-> |[[Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)]]|B1–B42|
-> |[[ASOP 12 - Risk Classification (ASB - 2005)]]|A4–A5|
-> |[[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)]]|A4, A8|
-> |[[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)]]|A4, B2|
-> |[[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988)]]|A4, A16|
-
 
 ### Learning Objectives
 
@@ -63,7 +31,12 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > 16. Apply the four principles of ratemaking to a scenario
 > 17. Understand the [[Considerations for Implementing Rates]] to achieve an organization's goals (e.g., non-pricing solutions, minimum premium, rating algorithms)
 > 
-> **Readings:** Werner & Modlin · CAS Ratemaking Principles · ASOP 12 · ASOP 13 · ASOP 43
+> **Readings:**
+> - Werner & Modlin
+> - CAS Ratemaking Principles
+> - ASOP 12
+> - ASOP 13
+> - ASOP 43
 
 > [!example]- B. Estimating Claim Liabilities (Reserving) {45–55%}
 > 
@@ -92,4 +65,18 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > 36. Define and apply [[Reinsurance]] concepts to calculate net, ceded, and gross losses
 > 37. Utilize external information in a reserve analysis
 > 
-> **Readings:** Friedland · ASOP 43
+> **Readings:**
+> - Friedland
+> - ASOP 43
+
+### Source Material
+> [!answer]- Source Material {6 Sources}
+> 
+> |Source|Domains / Tasks|
+> |---|---|
+> |[[Basic Ratemaking (Werner - 2016)]]|A1–A15, A17|
+> |[[Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)]]|B1–B42|
+> |[[ASOP 12 - Risk Classification (ASB - 2005)]]|A4–A5|
+> |[[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)]]|A4, A8|
+> |[[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)]]|A4, B2|
+> |[[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988)]]|A4, A16|

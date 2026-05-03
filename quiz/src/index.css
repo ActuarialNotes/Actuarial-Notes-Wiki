@@ -115,6 +115,22 @@
   }
 }
 
+/* Maximized popup: start below the floating search bar so the header is visible.
+   Desktop (lg+): search bar is sticky top-0 with h-14 = 3.5rem.
+   Mobile (<lg): fixed mobile header (3.5rem) sits above the search bar (also sticky
+   at top-14, h-14 = 3.5rem), so the bottom of the search bar is at 7rem total. */
+.concept-popup-aside[data-maximized="true"] {
+  top: 3.5rem;
+  height: calc(100vh - 3.5rem);
+}
+
+@media (max-width: 1023px) {
+  .concept-popup-aside[data-maximized="true"] {
+    top: 7rem;
+    height: calc(100vh - 7rem);
+  }
+}
+
 /* Focus mode: when a concept is active and we're on its source page, dim every
    block in the article except the one containing the active wikilink. Lets the
    reader's eye land on the bullet that opened the popup. */

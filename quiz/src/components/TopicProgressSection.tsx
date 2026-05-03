@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { ChevronDown, Info } from 'lucide-react'
+import { ChevronDown, ChevronRight, Info } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { wikiRoute } from '@/lib/wikiRoutes'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import {
@@ -78,6 +80,15 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
             >
               <Info className="h-4 w-4" />
             </button>
+            {syllabus.fileName && (
+              <Link
+                to={wikiRoute({ kind: 'exam', name: syllabus.fileName })}
+                className="ml-auto flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
+              >
+                Study Guide
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
           </div>
           {showInfo && <InfoPanel />}
         </CardHeader>

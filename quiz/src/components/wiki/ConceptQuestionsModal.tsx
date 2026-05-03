@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ExternalLink, Loader2, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { BookOpen, Loader2, X } from 'lucide-react'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -143,7 +144,14 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  const browseUrl = '/browse?concept=' + encodeURIComponent(conceptName)
+  const navigate = useNavigate()
+  const openAt = useConceptPopup(s => s.openAt)
+
+  function openInStudyGuide() {
+    openAt([{ kind: 'concept', name: conceptName }], 0, null)
+    navigate('/wiki')
+    onClose()
+  }
 
   return (
     <div
@@ -159,14 +167,15 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
           <span className="flex-1 truncate font-semibold text-sm">
             Questions: {conceptName}
           </span>
-          <Link
-            to={browseUrl}
-            onClick={onClose}
+          <button
+            type="button"
+            onClick={openInStudyGuide}
             className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 shrink-0 transition-colors"
-            title="Open in Question Browser"
+            title="Open in Study Guide"
           >
-            Open in browser <ExternalLink className="h-3 w-3" />
-          </Link>
+            <BookOpen className="h-3 w-3" />
+            Open in Study Guide
+          </button>
           <button
             type="button"
             onClick={onClose}

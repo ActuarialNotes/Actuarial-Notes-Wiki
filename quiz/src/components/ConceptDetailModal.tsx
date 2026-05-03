@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { CheckCircle2, ExternalLink, Loader2, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { BookOpen, CheckCircle2, Loader2, X } from 'lucide-react'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -199,8 +200,15 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
+  const navigate = useNavigate()
+  const openAt = useConceptPopup(s => s.openAt)
   const badge = MASTERY_BADGE[masteryState]
-  const browseUrl = '/browse?concept=' + encodeURIComponent(conceptName)
+
+  function openInStudyGuide() {
+    openAt([{ kind: 'concept', name: conceptName }], 0, null)
+    navigate('/wiki')
+    onClose()
+  }
 
   const newCount = questions.filter(q => !byQuestionId.get(q.id)).length
   const attemptedCount = questions.filter(q => !!byQuestionId.get(q.id)).length
@@ -229,14 +237,15 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
               {badge.label}
             </span>
           </span>
-          <Link
-            to={browseUrl}
-            onClick={onClose}
+          <button
+            type="button"
+            onClick={openInStudyGuide}
             className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 shrink-0 transition-colors"
-            title="Open in Question Browser"
+            title="Open in Study Guide"
           >
-            Open in browser <ExternalLink className="h-3 w-3" />
-          </Link>
+            <BookOpen className="h-3 w-3" />
+            Open in Study Guide
+          </button>
           <button
             type="button"
             onClick={onClose}

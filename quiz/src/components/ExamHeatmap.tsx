@@ -4,7 +4,6 @@ import type { QuizSession } from '@/lib/supabase'
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-const WEEKS = 26
 
 function cellBg(avgScore: number | null): string {
   if (avgScore === null) return 'bg-muted/30'
@@ -50,13 +49,15 @@ interface DayData {
 interface Props {
   /** Sessions already filtered to this exam's topic */
   sessions: QuizSession[]
-  /** e.g. "FM" or "P" — used as the localStorage key for the exam date */
+  /** e.g. "FM" or "P" — used as the localStorage key fallback */
   examProgressKey: string
+  /** Controlled exam date (from Supabase target_date) */
+  targetDate: string | null
+  /** Called when user saves a new exam date */
+  onTargetDateChange: (date: string | null) => void
 }
 
-export function ExamHeatmap({ sessions, examProgressKey }: Props) {
-  const storageKey = `exam-date-${examProgressKey}`
-  const [examDate, setExamDate] = useState<string>(() => localStorage.getItem(storageKey) ?? '')
+export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDateChange }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
@@ -66,13 +67,7 @@ export function ExamHeatmap({ sessions, examProgressKey }: Props) {
   }, [editing])
 
   function saveDate(value: string) {
-    if (value) {
-      localStorage.setItem(storageKey, value)
-      setExamDate(value)
-    } else {
-      localStorage.removeItem(storageKey)
-      setExamDate('')
-    }
+    onTargetDateChange(value || null)
     setEditing(false)
   }
 
@@ -82,7 +77,30 @@ export function ExamHeatmap({ sessions, examProgressKey }: Props) {
     return d
   }, [])
 
-  const gridStart = useMemo(() => addDays(mondayOf(today), -(WEEKS - 1) * 7), [today])
+  // Grid start: Monday of 2 weeks before the earliest session (or 2 weeks before today)
+  const gridStart = useMemo(() => {
+    if (sessions.length === 0) return mondayOf(addDays(today, -14))
+    const earliest = sessions.reduce((min, s) =>
+      s.completed_at < min ? s.completed_at : min, sessions[0].completed_at)
+    const firstDay = new Date(earliest.slice(0, 10) + 'T00:00:00')
+    firstDay.setHours(0, 0, 0, 0)
+    return mondayOf(addDays(firstDay, -14))
+  }, [sessions, today])
+
+  // Grid end: Monday of 2 weeks after exam date (or 4 weeks from today if no exam date)
+  const gridEnd = useMemo(() => {
+    if (targetDate) {
+      const examD = new Date(targetDate + 'T00:00:00')
+      examD.setHours(0, 0, 0, 0)
+      return mondayOf(addDays(examD, 14))
+    }
+    return mondayOf(addDays(today, 28))
+  }, [targetDate, today])
+
+  const totalWeeks = useMemo(() => {
+    const diff = gridEnd.getTime() - gridStart.getTime()
+    return Math.max(4, Math.round(diff / (7 * 86400000)) + 1)
+  }, [gridStart, gridEnd])
 
   const scoreByDay = useMemo(() => {
     const map = new Map<string, { total: number; count: number }>()
@@ -101,17 +119,17 @@ export function ExamHeatmap({ sessions, examProgressKey }: Props) {
   }, [sessions])
 
   const examDateWeekIdx = useMemo(() => {
-    if (!examDate) return -1
-    const examD = new Date(examDate + 'T00:00:00')
+    if (!targetDate) return -1
+    const examD = new Date(targetDate + 'T00:00:00')
     examD.setHours(0, 0, 0, 0)
     const diffMs = mondayOf(examD).getTime() - gridStart.getTime()
     const idx = Math.round(diffMs / (7 * 86400000))
-    return idx >= 0 && idx < WEEKS ? idx : -1
-  }, [examDate, gridStart])
+    return idx >= 0 && idx < totalWeeks ? idx : -1
+  }, [targetDate, gridStart, totalWeeks])
 
   const columns = useMemo(() => {
     let prevMonth = -1
-    return Array.from({ length: WEEKS }, (_, w) => {
+    return Array.from({ length: totalWeeks }, (_, w) => {
       const colStart = addDays(gridStart, w * 7)
       const month = colStart.getMonth()
       const monthLabel = month !== prevMonth ? MONTH_ABBR[month] : null
@@ -132,21 +150,24 @@ export function ExamHeatmap({ sessions, examProgressKey }: Props) {
 
       return { key: isoKey(colStart), monthLabel, isExamWeek: w === examDateWeekIdx, days }
     })
-  }, [gridStart, today, scoreByDay, examDateWeekIdx])
+  }, [gridStart, totalWeeks, today, scoreByDay, examDateWeekIdx])
 
-  const daysLeft = examDate ? daysUntil(examDate) : null
-  const examDateLabel = examDate
-    ? new Date(examDate + 'T00:00:00').toLocaleDateString(undefined, {
+  const daysLeft = targetDate ? daysUntil(targetDate) : null
+  const examDateLabel = targetDate
+    ? new Date(targetDate + 'T00:00:00').toLocaleDateString(undefined, {
         month: 'short', day: 'numeric', year: 'numeric',
       })
     : null
+
+  // Suppress unused-variable warning — examProgressKey reserved for future use
+  void examProgressKey
 
   return (
     <div className="space-y-1.5">
       {/* Month labels */}
       <div className="flex items-end gap-px">
         <div className="shrink-0" style={{ width: 16 }} />
-        <div className="flex-1 flex gap-px">
+        <div className="flex-1 flex gap-px overflow-hidden">
           {columns.map(col => (
             <div key={col.key} className="flex-1 min-w-0 text-[8px] text-muted-foreground leading-none truncate">
               {col.monthLabel ?? ''}
@@ -170,7 +191,7 @@ export function ExamHeatmap({ sessions, examProgressKey }: Props) {
         </div>
 
         {/* Week columns */}
-        <div className="flex-1 flex gap-px">
+        <div className="flex-1 flex gap-px overflow-hidden">
           {columns.map(col => (
             <div
               key={col.key}
@@ -199,7 +220,7 @@ export function ExamHeatmap({ sessions, examProgressKey }: Props) {
         {!editing ? (
           <button
             type="button"
-            onClick={() => { setDraft(examDate); setEditing(true) }}
+            onClick={() => { setDraft(targetDate ?? ''); setEditing(true) }}
             className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
           >
             <Calendar className="h-3 w-3 shrink-0" />
@@ -247,7 +268,7 @@ export function ExamHeatmap({ sessions, examProgressKey }: Props) {
             >
               <X className="h-3 w-3" />
             </button>
-            {examDate && (
+            {targetDate && (
               <button
                 type="button"
                 onClick={() => saveDate('')}

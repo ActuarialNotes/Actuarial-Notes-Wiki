@@ -7,14 +7,14 @@ The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice question
 
 ### Prerequisite knowledge
 - [[Calculus]], including series, differentiation, and integration.
-- Concepts introduced in [Risk and Insurance](https://www.soa.org/49355c/globalassets/assets/files/edu/p-21-05.pdf)
+- Concepts introduced in [Risk and Insurance](https://www.soa.org/globalassets/assets/files/edu/p-21-05.pdf)
 
 ### Learning Objectives
 
 > [!example]- General Probability {23-30%}
 > Understand basic concepts of [[Probability]] and [[Discrete Mathematics]].
-> 1. Define [[Set Function]], [[Venn Diagram]], [[Sample Space]], and [[Event]]. Define **probability** as a set function on a collection of events and state the basic [[Axioms of Probability]].
-> 2. Calculate **probabilities** using [[Combinatorics]], such as [[Combination]] and [[Permutation]].
+> 1. Define [[Set Function]], [[Venn Diagram]], [[Sample Space]], and [[Event]]. Define probability as a set function on a collection of events and state the basic [[Axioms of Probability]].
+> 2. Calculate probabilities using [[Combinatorics]], such as [[Combination]] and [[Permutation]].
 > 3. Define [[Independent Events|Independence]] and calculate probabilities of [[Independent Events]].
 > 4. Calculate probabilities of [[Mutually Exclusive Events]].
 > 5. Calculate probabilities using [[Probability Addition Rule]] and [[Probability Multiplication Rule|Probability Multiplication Rules]].
@@ -65,7 +65,7 @@ The **Probability (P-1) Exam** is a 3 hour exam with 30 multiple choice question
 > - [[A First Course in Probability (Ross - 2019)]]
 >      - Chapters 1-8, Excluding 4.8.4, 5.6.2, 5.6.3, 5.6.5, 5.7, 7.2.1, 7.2.2, 7.3, 7.6, 7.7, 7.8, 7.9
 > - [[Mathematical Statistics with Applications (Wackerly, Mendenhall, & Scheaffer - 2008)]]
->      - Chapters 1-8^[Excluding 2.12, MGF, 4.10, Continuous Multivariate Distributions, 5.10, 7.4] |
+>      - Chapters 1-8, Excluding 2.12, MGF, 4.10, Continuous Multivariate Distributions, 5.10, 7.4
 > - [[Probability for Risk Management (Hassett - 2021)]]
 >      - Chapters 1-11
 > - [[Probability and Statistics with Applications - A Problem Solving Text (Asimow - 2021)]]

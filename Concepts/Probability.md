@@ -8,7 +8,7 @@ A **Probability** $P$ is a [[Set Function]] that assigns to each event $E$ in a 
 
 ---
 
-> [!question]- Probability of a Fair Die {💡 Example}
+> [!example]- Probability of a Fair Die {💡 Example}
 > What is the probability of rolling an even number on a fair, six-sided die?
 > > [!answer]- Answer
 > > $E = \text{even number} = \{2, 4, 6\}$

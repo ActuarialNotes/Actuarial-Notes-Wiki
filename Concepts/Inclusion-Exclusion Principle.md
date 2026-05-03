@@ -1,24 +1,10 @@
-[[Wiki]] / [[Concepts]] / **Inclusion-Exclusion Principle**
+$$ P(A \cup B) = P(A) + P(B) - P(A \cap B) $$
 
-<div class="concept-nav"
-     data-color="#2563eb"
-     data-current="Inclusion-Exclusion Principle"
-     data-prev="Probability Addition Rule|Concepts/Probability Addition Rule,Probability Multiplication Rules|Concepts/Probability Multiplication Rules"
-     data-next="Conditional Probability|Concepts/Conditional Probability"
-     data-objectives="P-1|Probability|1. General Probability|Exam P-1 (SOA)">
-</div>
+The ==Inclusion-Exclusion Principle== is a counting rule used to determine the probability (or size) of the union of overlapping events by alternately adding and subtracting the probabilities of their intersections. For three events the principle extends to $P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$. The signs alternate: add single events, subtract pairwise intersections, add triple intersections, and so on.
 
-# Inclusion-Exclusion Principle
-
-## Definition
-
-An ==Inclusion–Exclusion Principle== is a counting rule used to determine the size of a union of overlapping sets by alternately adding and subtracting the sizes of their intersections.
-
-$$ |A \cup B| = |A| + |B| - |A \cap B| $$
-
-> [!example]- <u>For three sets (A, B, C) the principle extends to:</u>
->$$ |A \cup B \cup C| =
-|A| + |B| + |C|$$
-$$- |A \cap B| - |A \cap C| - |B \cap C|$$
-$$+ |A \cap B \cap C|$$
->The signs alternate: *add* single sets, *subtract* pairwise overlaps, *add* triple overlaps, and so on.
+> [!example]- Probability of At Least One Event Occurring {💡 Example}
+> In a group of insurance claims, $P(A) = 0.5$, $P(B) = 0.4$, and $P(A \cap B) = 0.2$. What is the probability that at least one of $A$ or $B$ occurs?
+>
+> > [!answer]- Answer
+> > "At least one of $A$ or $B$" is the event $A \cup B$. Applying the Inclusion-Exclusion Principle:
+> > $$ P(A \cup B) = P(A) + P(B) - P(A \cap B) = 0.5 + 0.4 - 0.2 = 0.7 $$

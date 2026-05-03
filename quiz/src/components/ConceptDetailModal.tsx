@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { CheckCircle2, ExternalLink, Loader2, X } from 'lucide-react'
+import { CheckCircle2, Loader2, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -32,6 +31,7 @@ const MASTERY_BADGE: Record<MasteryState, { label: string; className: string }> 
   forgotten: { label: 'Forgotten', className: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800 border' },
 }
 
+type TabMode = 'definition' | 'questions'
 type FilterMode = 'all' | 'new' | 'attempted'
 
 function QuestionItem({
@@ -153,6 +153,7 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
   const [questions, setQuestions] = useState<Question[]>([])
   const [questionsLoading, setQuestionsLoading] = useState(true)
   const [questionsError, setQuestionsError] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<TabMode>('definition')
   const [filter, setFilter] = useState<FilterMode>('all')
   const { byQuestionId } = useQuestionAttempts()
 
@@ -200,7 +201,6 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
   }, [onClose])
 
   const badge = MASTERY_BADGE[masteryState]
-  const browseUrl = '/browse?concept=' + encodeURIComponent(conceptName)
 
   const newCount = questions.filter(q => !byQuestionId.get(q.id)).length
   const attemptedCount = questions.filter(q => !!byQuestionId.get(q.id)).length
@@ -229,14 +229,6 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
               {badge.label}
             </span>
           </span>
-          <Link
-            to={browseUrl}
-            onClick={onClose}
-            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 shrink-0 transition-colors"
-            title="Open in Question Browser"
-          >
-            Open in browser <ExternalLink className="h-3 w-3" />
-          </Link>
           <button
             type="button"
             onClick={onClose}
@@ -247,34 +239,51 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
           </button>
         </div>
 
-        {/* Concept content */}
-        <div className="px-4 sm:px-6 py-4 border-b">
-          {contentStatus === 'loading' && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground py-4 justify-center">
-              <Loader2 className="h-4 w-4 animate-spin" /> Loading concept…
-            </div>
-          )}
-          {contentStatus === 'error' && (
-            <p className="text-sm text-muted-foreground py-2">
-              Couldn't load <span className="font-medium">{conceptName}</span>.
-            </p>
-          )}
-          {content !== null && (
-            <WikiArticle
-              markdown={content}
-              sourcePath={`Concepts/${conceptName}.md`}
-            />
-          )}
+        {/* Tabs */}
+        <div className="flex border-b shrink-0">
+          {(['definition', 'questions'] as TabMode[]).map(tab => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2.5 text-sm font-medium capitalize transition-colors border-b-2 -mb-px ${
+                activeTab === tab
+                  ? 'border-primary text-foreground'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {tab === 'questions' ? `Questions (${questions.length})` : 'Definition'}
+            </button>
+          ))}
         </div>
 
-        {/* Questions section */}
-        <div className="p-4 space-y-3">
-          {/* Filter row */}
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              Questions
-            </span>
-            <div className="flex items-center gap-1">
+        {/* Definition tab */}
+        {activeTab === 'definition' && (
+          <div className="px-4 sm:px-6 py-4">
+            {contentStatus === 'loading' && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground py-4 justify-center">
+                <Loader2 className="h-4 w-4 animate-spin" /> Loading concept…
+              </div>
+            )}
+            {contentStatus === 'error' && (
+              <p className="text-sm text-muted-foreground py-2">
+                Couldn't load <span className="font-medium">{conceptName}</span>.
+              </p>
+            )}
+            {content !== null && (
+              <WikiArticle
+                markdown={content}
+                sourcePath={`Concepts/${conceptName}.md`}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Questions tab */}
+        {activeTab === 'questions' && (
+          <div className="p-4 space-y-3">
+            {/* Filter row */}
+            <div className="flex items-center justify-end gap-1">
               {(['all', 'new', 'attempted'] as FilterMode[]).map(mode => {
                 const label = mode === 'all'
                   ? `All (${questions.length})`
@@ -297,35 +306,35 @@ export function ConceptDetailModal({ conceptName, masteryState, onClose }: Props
                 )
               })}
             </div>
-          </div>
 
-          {questionsLoading && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground py-4 justify-center">
-              <Loader2 className="h-4 w-4 animate-spin" /> Loading questions…
-            </div>
-          )}
-          {questionsError && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-              {questionsError}
-            </div>
-          )}
-          {!questionsLoading && !questionsError && filteredQuestions.length === 0 && (
-            <div className="text-center py-6 text-muted-foreground text-sm">
-              {filter === 'all'
-                ? 'No questions found for this concept.'
-                : filter === 'new'
-                ? "No new questions — you've attempted all of them."
-                : 'No attempted questions yet.'}
-            </div>
-          )}
-          {!questionsLoading && filteredQuestions.map(q => (
-            <QuestionItem
-              key={q.id}
-              question={q}
-              attemptSummary={byQuestionId.get(q.id)}
-            />
-          ))}
-        </div>
+            {questionsLoading && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground py-4 justify-center">
+                <Loader2 className="h-4 w-4 animate-spin" /> Loading questions…
+              </div>
+            )}
+            {questionsError && (
+              <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                {questionsError}
+              </div>
+            )}
+            {!questionsLoading && !questionsError && filteredQuestions.length === 0 && (
+              <div className="text-center py-6 text-muted-foreground text-sm">
+                {filter === 'all'
+                  ? 'No questions found for this concept.'
+                  : filter === 'new'
+                  ? "No new questions — you've attempted all of them."
+                  : 'No attempted questions yet.'}
+              </div>
+            )}
+            {!questionsLoading && filteredQuestions.map(q => (
+              <QuestionItem
+                key={q.id}
+                question={q}
+                attemptSummary={byQuestionId.get(q.id)}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

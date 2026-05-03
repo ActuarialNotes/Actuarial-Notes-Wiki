@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 import { applyAnswer, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
+import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 
 const TOPIC_TO_EXAM_ID: Record<string, string> = {
@@ -81,6 +82,11 @@ async function upsertMasteryFromResponses(
   const rows = [...byKey.entries()]
     .filter(([key]) => touchedKeys.has(key))
     .map(([, r]) => ({ ...r, updated_at: now.toISOString() }))
+
+  // Always persist to localStorage first so mastery state survives even if
+  // the Supabase write fails (e.g. table not yet migrated in production).
+  mergeLocalMastery(rows)
+
   const { error: upsertError } = await supabase
     .from('concept_mastery')
     .upsert(rows, { onConflict: 'user_id,exam_id,concept_slug' })

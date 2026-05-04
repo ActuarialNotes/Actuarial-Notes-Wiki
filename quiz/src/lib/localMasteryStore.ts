@@ -3,9 +3,15 @@
 // concept_mastery Supabase table is unavailable (e.g. migration not applied).
 // DB records take precedence when available — localStorage is a cache/backup.
 
-import type { ConceptMasteryRecord } from '@/lib/mastery'
+import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 
 const KEY = 'actuarial_local_mastery_v1'
+
+function migrateState(state: string): MasteryState {
+  if (state === 'learning') return 'level1'
+  if (state === 'strong') return 'level3'
+  return state as MasteryState
+}
 
 type LocalStore = Record<string, ConceptMasteryRecord>
 
@@ -33,7 +39,9 @@ export function mergeLocalMastery(updates: ConceptMasteryRecord[]): void {
 }
 
 export function readLocalMastery(userId: string): ConceptMasteryRecord[] {
-  return Object.values(load()).filter(r => r.user_id === userId)
+  return Object.values(load())
+    .filter(r => r.user_id === userId)
+    .map(r => ({ ...r, state: migrateState(r.state) }))
 }
 
 export function syncLocalMastery(records: ConceptMasteryRecord[]): void {

@@ -22,15 +22,17 @@ import {
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New',
-  learning: 'Learning',
-  strong: 'Strong',
+  level1: 'Level 1',
+  level2: 'Level 2',
+  level3: 'Level 3',
   forgotten: 'Forgotten',
 }
 
 const STATE_TEXT_COLOR: Record<MasteryState, string> = {
   new: 'text-muted-foreground',
-  learning: 'text-amber-600 dark:text-amber-400',
-  strong: 'text-green-600 dark:text-green-400',
+  level1: 'text-amber-500 dark:text-amber-400',
+  level2: 'text-blue-500 dark:text-blue-400',
+  level3: 'text-green-600 dark:text-green-400',
   forgotten: 'text-red-500',
 }
 
@@ -39,13 +41,14 @@ function InfoPanel() {
     <div className="mt-2 rounded-md border bg-muted/50 p-3 text-xs text-muted-foreground space-y-2">
       <p className="font-medium text-foreground">How concept mastery works</p>
       <p>
-        Each concept tracks one of four states. The bar above each topic is the
-        share of its concepts that are currently <span className="font-medium">Strong</span>.
+        Each concept advances through four levels. The bar above each topic is the
+        share of its concepts that have reached <span className="font-medium">Level 3</span>.
       </p>
       <ul className="space-y-1">
         <li><span className="font-medium text-muted-foreground">New</span> — never attempted.</li>
-        <li><span className="font-medium text-amber-600 dark:text-amber-400">Learning</span> — at least one correct answer; not yet mastered.</li>
-        <li><span className="font-medium text-green-600 dark:text-green-400">Strong</span> — 3+ corrects including at least one hard question.</li>
+        <li><span className="font-medium text-amber-500 dark:text-amber-400">Level 1</span> — first correct answer; building familiarity.</li>
+        <li><span className="font-medium text-blue-500 dark:text-blue-400">Level 2</span> — 2+ correct answers; practicing.</li>
+        <li><span className="font-medium text-green-600 dark:text-green-400">Level 3</span> — 3+ corrects including at least one hard question; mastered.</li>
         <li><span className="font-medium text-red-500">Forgotten</span> — 15 days without a correct answer, or 3 wrong in a row.</li>
       </ul>
     </div>
@@ -63,7 +66,7 @@ const PACING_CONFIG: Record<PacingStatus, { label: string; className: string }> 
 }
 
 // Small inline badge for each concept's scheduled date
-function ConceptScheduleBadge({ conceptName, plan }: { conceptName: string; plan: StudyPlan }) {
+export function ConceptScheduleBadge({ conceptName, plan }: { conceptName: string; plan: StudyPlan }) {
   if (isScheduledToday(conceptName, plan)) {
     return (
       <span className="text-xs px-1.5 py-0.5 rounded-full border border-primary/40 bg-primary/10 text-primary font-medium shrink-0">
@@ -274,7 +277,7 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
                             <span className="text-xs text-foreground min-w-0 flex-1 truncate" title={c.name}>
                               {c.name}
                             </span>
-                            {studyPlan && state !== 'strong' && (
+                            {studyPlan && state !== 'level3' && (
                               <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
                             )}
                             <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>

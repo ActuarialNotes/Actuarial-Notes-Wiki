@@ -236,9 +236,11 @@ export function ActiveExamCard({
 
   const strongPct = aggregate.strongPct
   const conceptsTotal = aggregate.total
-  const conceptsStrong = aggregate.strong
-  const conceptsLearning = aggregate.learning
-  const learningPct = conceptsTotal > 0 ? Math.round((conceptsLearning / conceptsTotal) * 100) : 0
+  const conceptsStrong = aggregate.level3
+  const conceptsLevel2 = aggregate.level2
+  const conceptsLevel1 = aggregate.level1
+  const level2Pct = conceptsTotal > 0 ? Math.round((conceptsLevel2 / conceptsTotal) * 100) : 0
+  const level1Pct = conceptsTotal > 0 ? Math.round((conceptsLevel1 / conceptsTotal) * 100) : 0
 
   return (
     <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
@@ -265,21 +267,31 @@ export function ActiveExamCard({
             />
             <div
               className="h-full transition-all"
-              style={{ width: `${learningPct}%`, backgroundColor: 'rgba(34, 197, 94, 0.4)' }}
+              style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }}
+            />
+            <div
+              className="h-full transition-all"
+              style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }}
             />
           </div>
-          {(conceptsStrong > 0 || conceptsLearning > 0) && (
+          {(conceptsStrong > 0 || conceptsLevel2 > 0 || conceptsLevel1 > 0) && (
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
               {conceptsStrong > 0 && (
                 <span className="flex items-center gap-1.5">
                   <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-                  Mastered
+                  Level 3
                 </span>
               )}
-              {conceptsLearning > 0 && (
+              {conceptsLevel2 > 0 && (
                 <span className="flex items-center gap-1.5">
-                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.4)' }} />
-                  In learning
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
+                  Level 2
+                </span>
+              )}
+              {conceptsLevel1 > 0 && (
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
+                  Level 1
                 </span>
               )}
             </div>
@@ -362,13 +374,15 @@ export function ActiveExamCardLoading() {
   )
 }
 
-export function ActiveExamCardEmpty() {
+export function ActiveExamCardEmpty({ onChooseExam }: { onChooseExam?: () => void }) {
   const navigate = useNavigate()
   return (
     <Card>
       <CardContent className="py-8 text-center space-y-3">
         <p className="text-sm text-muted-foreground">No active exam yet.</p>
-        <Button onClick={() => navigate('/settings#exams')}>Choose a Track</Button>
+        <Button onClick={() => onChooseExam ? onChooseExam() : navigate('/settings#exams')}>
+          Choose an Exam
+        </Button>
       </CardContent>
     </Card>
   )

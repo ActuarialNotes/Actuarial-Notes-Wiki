@@ -13,15 +13,17 @@ interface TopicCoverageChartProps {
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New',
-  learning: 'Learning',
-  strong: 'Strong',
+  level1: 'Level 1',
+  level2: 'Level 2',
+  level3: 'Level 3',
   forgotten: 'Forgotten',
 }
 
 const STATE_BADGE_CLASSES: Record<MasteryState, string> = {
-  new: 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:border-gray-700',
-  learning: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800',
-  strong: 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800',
+  new:      'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:border-gray-700',
+  level1:   'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800',
+  level2:   'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800',
+  level3:   'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800',
   forgotten: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800',
 }
 

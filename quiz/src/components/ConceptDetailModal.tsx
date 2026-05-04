@@ -28,9 +28,10 @@ const DIFFICULTY_COLORS: Record<Difficulty, string> = {
 }
 
 const MASTERY_BADGE: Record<MasteryState, { label: string; className: string }> = {
-  new: { label: 'New', className: 'bg-muted text-muted-foreground border' },
-  learning: { label: 'Learning', className: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800 border' },
-  strong: { label: 'Strong', className: 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800 border' },
+  new:      { label: 'New',      className: 'bg-muted text-muted-foreground border' },
+  level1:   { label: 'Level 1',  className: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800 border' },
+  level2:   { label: 'Level 2',  className: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800 border' },
+  level3:   { label: 'Level 3',  className: 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800 border' },
   forgotten: { label: 'Forgotten', className: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800 border' },
 }
 

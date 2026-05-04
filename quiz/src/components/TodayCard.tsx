@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   CheckCircle2,
   Loader2,
+  ChevronDown,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -25,7 +26,26 @@ import {
   type StudyPlanConfig,
 } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import type { MasteryState } from '@/lib/mastery'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import {
+  aggregateForTopic,
+  decayIfStale,
+  type ConceptMasteryRecord,
+  type MasteryState,
+} from '@/lib/mastery'
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+
+const STATE_LABEL: Record<MasteryState, string> = {
+  new: 'New', learning: 'Learning', strong: 'Strong', forgotten: 'Forgotten',
+}
+
+const STATE_TEXT_COLOR: Record<MasteryState, string> = {
+  new: 'text-muted-foreground',
+  learning: 'text-amber-600 dark:text-amber-400',
+  strong: 'text-green-600 dark:text-green-400',
+  forgotten: 'text-red-500',
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -68,6 +88,132 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
   )
 }
 
+// ── Inline study plan tracker (topic + concept list) ──────────────────────────
+
+function StudyPlanTracker({
+  syllabus,
+  masteryRecords,
+}: {
+  syllabus: WikiExamSyllabus
+  masteryRecords: ConceptMasteryRecord[]
+}) {
+  const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
+  const [selectedConcept, setSelectedConcept] = useState<{
+    name: string; state: MasteryState; index: number
+  } | null>(null)
+
+  const examKey = wikiExamIdToProgressKey(syllabus.examId)
+  const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
+  const now = new Date()
+
+  // Handle aliased concepts (display name vs. file target name)
+  const targetToDisplayName = new Map<string, string>()
+  for (const topic of syllabus.topics) {
+    for (const c of topic.concepts) {
+      const tLow = c.target.toLowerCase()
+      if (tLow !== c.name.toLowerCase()) targetToDisplayName.set(tLow, c.name)
+    }
+  }
+  const normalizedMastery = examMastery.map(r => {
+    const display = targetToDisplayName.get(r.concept_slug.toLowerCase())
+    return display ? { ...r, concept_slug: display } : r
+  })
+  const recordsBySlug = new Map(normalizedMastery.map(r => [r.concept_slug.toLowerCase(), r]))
+
+  const allConcepts: { name: string; state: MasteryState }[] = syllabus.topics.flatMap(topic =>
+    topic.concepts.map(c => {
+      const rec = recordsBySlug.get(c.name.toLowerCase())
+      const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
+      return { name: c.name, state }
+    })
+  )
+
+  const toggle = (name: string) =>
+    setOpenTopics(prev => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
+
+  return (
+    <>
+      <div className="space-y-1">
+        {syllabus.topics.map(topic => {
+          const conceptSlugs = topic.concepts.map(c => c.name)
+          const agg = aggregateForTopic(normalizedMastery, conceptSlugs, now)
+          const isOpen = openTopics.has(topic.name)
+
+          return (
+            <div key={topic.name}>
+              <button
+                className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
+                onClick={() => toggle(topic.name)}
+                aria-expanded={isOpen}
+              >
+                <ChevronDown
+                  className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
+                />
+                <span className="text-sm font-semibold min-w-0 truncate">
+                  {topic.name}
+                  {topic.weight && (
+                    <span className="ml-1.5 text-xs font-normal text-muted-foreground">{topic.weight}</span>
+                  )}
+                </span>
+                <div
+                  className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0"
+                  role="progressbar"
+                  aria-valuenow={agg.strongPct}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${agg.strongPct}%` }} />
+                </div>
+                <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">
+                  {agg.strong}/{agg.total}
+                </span>
+              </button>
+
+              {isOpen && topic.concepts.length > 0 && (
+                <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
+                  {topic.concepts.map(c => {
+                    const rec = recordsBySlug.get(c.name.toLowerCase())
+                    const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
+                    const idx = allConcepts.findIndex(ac => ac.name === c.name)
+                    return (
+                      <button
+                        key={c.name}
+                        type="button"
+                        onClick={() => setSelectedConcept({ name: c.name, state, index: idx === -1 ? 0 : idx })}
+                        className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
+                      >
+                        <span className="text-xs text-foreground min-w-0 flex-1 truncate">{c.name}</span>
+                        <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>
+                          {STATE_LABEL[state]}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {selectedConcept && (
+        <ConceptDetailModal
+          conceptName={selectedConcept.name}
+          masteryState={selectedConcept.state}
+          onClose={() => setSelectedConcept(null)}
+          syllabus={syllabus}
+          allConcepts={allConcepts}
+          initialConceptIndex={selectedConcept.index}
+        />
+      )}
+    </>
+  )
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 
 interface Props {
@@ -76,6 +222,7 @@ interface Props {
   loading: boolean
   syllabus: WikiExamSyllabus
   masteryStateByName: Map<string, MasteryState>
+  masteryRecords: ConceptMasteryRecord[]
   examDate: string | null
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
@@ -87,6 +234,7 @@ export function TodayCard({
   loading,
   syllabus,
   masteryStateByName,
+  masteryRecords,
   examDate,
   onConfigChange,
   onRegenerate,
@@ -95,10 +243,16 @@ export function TodayCard({
   const [showConfig, setShowConfig] = useState(false)
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
   const [quizLoading, setQuizLoading] = useState(false)
+  const [planExpanded, setPlanExpanded] = useState(false)
 
   const todaysConcepts = plan?.todaysConcepts ?? []
   const reviewConcepts = plan?.reviewConcepts ?? []
   const displayConcepts = plan?.status === 'review_mode' ? reviewConcepts : todaysConcepts
+
+  const strongCount = displayConcepts.filter(
+    n => masteryStateByName.get(n.toLowerCase()) === 'strong'
+  ).length
+  const allStrong = displayConcepts.length > 0 && strongCount === displayConcepts.length
 
   const allConceptsForModal = displayConcepts.map(name => ({
     name,
@@ -180,11 +334,13 @@ export function TodayCard({
     )
   }
 
+  const showConcepts = !loading && plan && displayConcepts.length > 0 && plan.status !== 'review_mode'
+
   return (
     <>
       <Card className="border-primary/30 ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-3">
-          {/* Date header — visually prominent */}
+          {/* Date header */}
           <div className="flex items-start justify-between gap-2">
             <div>
               <p className="text-base font-semibold">{todayLongDate()}</p>
@@ -208,18 +364,28 @@ export function TodayCard({
             </button>
           </div>
 
-          {/* Heading + concept chips */}
-          <div>
-            <h2 className="text-lg font-semibold">
-              {loading
-                ? 'Preparing your plan…'
-                : plan?.status === 'review_mode'
-                ? 'Review day'
-                : displayConcepts.length === 0
-                ? "You're all caught up!"
-                : `${displayConcepts.length} concept${displayConcepts.length === 1 ? '' : 's'} to study`}
-            </h2>
-            {!loading && displayConcepts.length > 0 && plan?.status !== 'review_mode' && (
+          {/* Heading + completion indicator + concept chips */}
+          {showConcepts ? (
+            <div>
+              <div className="flex items-baseline justify-between gap-2">
+                <h2 className="text-lg font-semibold">
+                  {allStrong
+                    ? 'Done for today ✓'
+                    : `${displayConcepts.length} concept${displayConcepts.length === 1 ? '' : 's'} to study`}
+                </h2>
+                <span className={`text-xs font-medium shrink-0 tabular-nums ${
+                  allStrong
+                    ? 'text-green-600 dark:text-green-400'
+                    : 'text-muted-foreground'
+                }`}>
+                  {strongCount} / {displayConcepts.length} Strong
+                </span>
+              </div>
+              {!allStrong && (
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Bring each to Strong to complete today's session
+                </p>
+              )}
               <div className="flex flex-wrap gap-1.5 mt-1.5">
                 {displayConcepts.map(name => {
                   const state = masteryStateByName.get(name.toLowerCase()) ?? 'new'
@@ -238,8 +404,16 @@ export function TodayCard({
                   )
                 })}
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <h2 className="text-lg font-semibold">
+              {loading
+                ? 'Preparing your plan…'
+                : plan?.status === 'review_mode'
+                ? 'Review day'
+                : "You're all caught up!"}
+            </h2>
+          )}
 
           {loading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground py-1">
@@ -288,6 +462,30 @@ export function TodayCard({
               {plan.config.targetReadyDate
                 ? 'No new concepts scheduled today. Great job keeping up!'
                 : 'Configure a target ready date to get a daily plan.'}
+            </div>
+          )}
+
+          {/* Collapsible study plan */}
+          {!loading && plan && (
+            <div className="border-t pt-2">
+              {planExpanded && (
+                <div className="pb-2 pt-1">
+                  <StudyPlanTracker
+                    syllabus={syllabus}
+                    masteryRecords={masteryRecords}
+                  />
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => setPlanExpanded(v => !v)}
+                className="w-full flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors py-1.5"
+              >
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform ${planExpanded ? 'rotate-180' : ''}`}
+                />
+                {planExpanded ? 'Hide study plan' : 'Show study plan'}
+              </button>
             </div>
           )}
         </CardContent>

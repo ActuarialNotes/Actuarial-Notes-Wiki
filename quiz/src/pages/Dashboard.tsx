@@ -122,6 +122,7 @@ export default function Dashboard() {
           loading={planLoading}
           syllabus={activeSyllabus}
           masteryStateByName={masteryStateByName}
+          masteryRecords={masteryRecords}
           examDate={activeTargetDate}
           onConfigChange={updatePlanConfig}
           onRegenerate={regeneratePlan}

@@ -5,7 +5,7 @@
 // closes and reopens the app.
 
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import type { ConceptMasteryRecord } from '@/lib/mastery'
+import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { decayIfStale } from '@/lib/mastery'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -38,6 +38,7 @@ export interface ConceptAssignment {
   topicName: string
   topicWeight?: string
   scheduledDate: string  // YYYY-MM-DD
+  initialState: MasteryState  // concept's state at scheduling time; used to derive today's target
 }
 
 export type PacingStatus = 'on_track' | 'behind' | 'ahead' | 'review_mode' | 'target_passed'
@@ -262,6 +263,16 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
 
   const MAX_NEW_PER_DAY = 5
 
+  // Spread new/forgotten introductions evenly across available days so that
+  // a small concept count with a long runway isn't front-loaded onto Day 1.
+  const newAndForgottenCount = sortedUnmastered.filter(
+    c => { const s = getState(c.name); return s === 'new' || s === 'forgotten' },
+  ).length
+  const dailyNewLimit = Math.min(
+    MAX_NEW_PER_DAY,
+    Math.max(1, Math.ceil(newAndForgottenCount / daysRemaining)),
+  )
+
   function getEligibleDate(name: string): string {
     const state = getState(name)
     const rec = masteryBySlug.get(name.toLowerCase())
@@ -286,7 +297,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     while (true) {
       const date = addDays(today, dayOffset)
       const count = newIntrosByDay.get(date) ?? 0
-      if (count < MAX_NEW_PER_DAY) {
+      if (count < dailyNewLimit) {
         newIntrosByDay.set(date, count + 1)
         return date
       }
@@ -303,10 +314,11 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
       topicName: c.topicName,
       topicWeight: c.topicWeight,
       scheduledDate: getEligibleDate(c.name),
+      initialState: state,
     })
   }
 
-  // Second: spread new/forgotten introductions, max MAX_NEW_PER_DAY per day
+  // Second: spread new/forgotten introductions evenly across daysRemaining
   for (const c of sortedUnmastered) {
     const state = getState(c.name)
     if (state !== 'new' && state !== 'forgotten') continue
@@ -315,6 +327,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
       topicName: c.topicName,
       topicWeight: c.topicWeight,
       scheduledDate: nextSlotForNewIntro(),
+      initialState: state,
     })
   }
 

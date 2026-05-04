@@ -45,12 +45,12 @@ function isoKey(d: Date): string {
 // Score → Tailwind background class.
 function cellColor(avgScore: number | null): string {
   if (avgScore === null) return 'bg-muted/25'
-  if (avgScore >= 85) return 'bg-green-400 dark:bg-green-500'
-  if (avgScore >= 70) return 'bg-green-600 dark:bg-green-700'
-  if (avgScore >= 60) return 'bg-amber-400 dark:bg-amber-500'
-  if (avgScore >= 50) return 'bg-amber-600 dark:bg-amber-700'
-  if (avgScore >= 30) return 'bg-red-500 dark:bg-red-600'
-  return 'bg-red-800 dark:bg-red-900'
+  if (avgScore >= 85) return 'bg-green-500'
+  if (avgScore >= 70) return 'bg-green-500/75'
+  if (avgScore >= 60) return 'bg-green-500/55'
+  if (avgScore >= 50) return 'bg-green-500/40'
+  if (avgScore >= 30) return 'bg-green-500/28'
+  return 'bg-green-500/18'
 }
 
 // Short month names for column labels.

@@ -110,7 +110,7 @@ export default function Dashboard() {
 
     for (const topic of activeSyllabus.topics) {
       for (const c of topic.concepts) {
-        const rec = bySlug.get(c.name.toLowerCase()) ?? bySlug.get(c.target.toLowerCase())
+        const rec = bySlug.get(c.name.toLowerCase()) ?? bySlug.get(c.target?.toLowerCase() ?? '')
         const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
         map.set(c.name.toLowerCase(), state)
       }

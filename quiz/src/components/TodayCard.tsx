@@ -126,8 +126,8 @@ function StudyPlanTracker({
   const targetToDisplayName = new Map<string, string>()
   for (const topic of syllabus.topics) {
     for (const c of topic.concepts) {
-      const tLow = c.target.toLowerCase()
-      if (tLow !== c.name.toLowerCase()) targetToDisplayName.set(tLow, c.name)
+      const tLow = c.target?.toLowerCase() ?? ''
+      if (tLow && tLow !== c.name.toLowerCase()) targetToDisplayName.set(tLow, c.name)
     }
   }
   const normalizedMastery = examMastery.map(r => {

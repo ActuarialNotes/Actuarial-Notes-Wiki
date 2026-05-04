@@ -80,7 +80,10 @@ export function MascotWidget({ avatarUrl, initials, context = {} }: MascotWidget
   const parsed = parseAvatarUrl(avatarUrl)
   const animalType = parsed.type === 'animal' ? parsed.value : null
 
-  const phrases = animalType ? PHRASES[animalType] : DEFAULT_PHRASES
+  // Cast to allow runtime lookup with potentially unknown animal value
+  const phrases: PhraseFn[] =
+    (animalType ? (PHRASES as Record<string, PhraseFn[] | undefined>)[animalType] : undefined) ??
+    DEFAULT_PHRASES
   const [phraseIdx, setPhraseIdx] = useState(() => Math.floor(Math.random() * phrases.length))
   const [visible, setVisible] = useState(true)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -110,7 +113,8 @@ export function MascotWidget({ avatarUrl, initials, context = {} }: MascotWidget
     advance()
   }
 
-  const currentPhrase = phrases[phraseIdx](context)
+  const safeIdx = phraseIdx < phrases.length ? phraseIdx : 0
+  const currentPhrase = (phrases[safeIdx] ?? phrases[0])?.(context) ?? ''
 
   // Render the character icon — animal SVG or color/initial circle
   const iconSize = 48

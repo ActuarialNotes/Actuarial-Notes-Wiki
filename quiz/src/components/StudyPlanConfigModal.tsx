@@ -4,14 +4,11 @@ import { useState } from 'react'
 import { X, CalendarDays, Target } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
-  QUICK_SET_LABELS,
-  QUICK_SET_PRESETS,
   applyPreset,
   daysBetween,
   todayISO,
   formatReadableDate,
   type StudyPlanConfig,
-  type QuickSetPreset,
   type TargetStrengthLevel,
 } from '@/lib/studyPlan'
 
@@ -27,35 +24,21 @@ interface Props {
 export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onExamDateChange, onClose }: Props) {
   const today = todayISO()
 
-  const [readyDate, setReadyDate]       = useState(config.targetReadyDate ?? '')
-  const [strength, setStrength]         = useState<TargetStrengthLevel>(config.targetStrengthLevel)
+  const [step, setStep] = useState<1 | 2 | 3>(1)
   const [localExamDate, setLocalExamDate] = useState(examDate ?? '')
-  const [activePreset, setActivePreset] = useState<QuickSetPreset | null>(() => {
-    if (!config.targetReadyDate || !examDate) return null
-    for (const p of QUICK_SET_PRESETS) {
-      if (applyPreset(examDate, p) === config.targetReadyDate) return p
-    }
-    return null
+  const [readyDate, setReadyDate] = useState(() => {
+    if (config.targetReadyDate) return config.targetReadyDate
+    const base = examDate
+    if (base) return applyPreset(base, '2w')
+    return ''
   })
-
-  function selectPreset(preset: QuickSetPreset) {
-    const base = localExamDate || examDate
-    if (!base) return
-    const computed = applyPreset(base, preset)
-    setReadyDate(computed)
-    setActivePreset(preset)
-  }
-
-  function handleReadyDateChange(value: string) {
-    setReadyDate(value)
-    setActivePreset(null)
-  }
+  const [strength, setStrength] = useState<TargetStrengthLevel>(config.targetStrengthLevel)
 
   function handleExamDateChange(value: string) {
     setLocalExamDate(value)
-    // Re-apply active preset against new exam date
-    if (activePreset && value) {
-      setReadyDate(applyPreset(value, activePreset))
+    // Keep ready date as 2w before new exam date by default
+    if (value && (!readyDate || readyDate === applyPreset(localExamDate, '2w'))) {
+      setReadyDate(applyPreset(value, '2w'))
     }
   }
 
@@ -67,8 +50,12 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
     onClose()
   }
 
-  const daysOut = readyDate ? daysBetween(today, readyDate) : null
   const examDaysOut = localExamDate ? daysBetween(today, localExamDate) : null
+  const daysOut = readyDate ? daysBetween(today, readyDate) : null
+  const readyDateValid = !readyDate || (daysOut !== null && daysOut > 0)
+  const examDateValid = !localExamDate || (examDaysOut !== null && examDaysOut > 0)
+
+  const STEPS = ['Exam Date', 'Ready Date', 'Study Strategy'] as const
 
   return (
     <div
@@ -93,150 +80,182 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
           </button>
         </div>
 
-        <div className="p-5 space-y-6">
-          {/* Exam date — editable */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
-              <p className="text-sm font-medium">Exam date</p>
-            </div>
-            <input
-              type="date"
-              value={localExamDate}
-              min={today}
-              onChange={e => handleExamDateChange(e.target.value)}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
-            />
-            {examDaysOut !== null && examDaysOut > 0 && (
-              <p className="text-xs text-muted-foreground">{examDaysOut} day{examDaysOut === 1 ? '' : 's'} away</p>
-            )}
-          </div>
-
-          {/* Target ready date */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
-              <p className="text-sm font-medium">Target ready date</p>
-            </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              The date you want to have mastered all concepts — before your{' '}
-              {examLabel} exam
-              {localExamDate ? ` on ${formatReadableDate(localExamDate)}` : ''}.
-            </p>
-
-            {/* Quick-set slider */}
-            {(localExamDate || examDate) && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Quick set</p>
-                  <span className="text-xs font-medium text-foreground">
-                    {activePreset ? QUICK_SET_LABELS[activePreset] : 'Custom date'}
+        {/* Step indicator */}
+        <div className="flex items-center gap-0 px-5 pt-4">
+          {STEPS.map((label, i) => {
+            const s = (i + 1) as 1 | 2 | 3
+            const isActive = step === s
+            const isDone = step > s
+            return (
+              <div key={s} className="flex items-center flex-1 last:flex-none">
+                <div className="flex flex-col items-center gap-1">
+                  <div
+                    className={`h-6 w-6 rounded-full flex items-center justify-center text-xs font-semibold transition-colors ${
+                      isActive
+                        ? 'bg-primary text-primary-foreground'
+                        : isDone
+                        ? 'bg-primary/30 text-primary'
+                        : 'bg-muted text-muted-foreground'
+                    }`}
+                  >
+                    {s}
+                  </div>
+                  <span className={`text-[10px] whitespace-nowrap ${isActive ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                    {label}
                   </span>
                 </div>
-                <input
-                  type="range"
-                  min={0}
-                  max={QUICK_SET_PRESETS.length - 1}
-                  step={1}
-                  value={activePreset !== null ? QUICK_SET_PRESETS.indexOf(activePreset) : 0}
-                  onChange={e => {
-                    const idx = parseInt(e.target.value)
-                    if (idx >= 0 && idx < QUICK_SET_PRESETS.length) selectPreset(QUICK_SET_PRESETS[idx])
-                  }}
-                  className="w-full accent-primary"
-                  aria-label="Quick set target ready date"
-                />
+                {i < STEPS.length - 1 && (
+                  <div className={`flex-1 h-px mx-2 mb-4 ${step > s ? 'bg-primary/40' : 'bg-border'}`} />
+                )}
               </div>
-            )}
+            )
+          })}
+        </div>
 
-            {/* Manual date picker */}
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                Or pick a date
+        <div className="p-5 pt-4 space-y-4">
+          {/* Step 1: Exam Date */}
+          {step === 1 && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
+                <p className="text-sm font-medium">When is your exam?</p>
+              </div>
+              <input
+                type="date"
+                value={localExamDate}
+                min={today}
+                onChange={e => handleExamDateChange(e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+              />
+              {examDaysOut !== null && examDaysOut > 0 && (
+                <p className="text-xs text-muted-foreground">{examDaysOut} day{examDaysOut === 1 ? '' : 's'} away</p>
+              )}
+              {localExamDate && examDaysOut !== null && examDaysOut <= 0 && (
+                <p className="text-xs text-destructive">Date must be in the future</p>
+              )}
+            </div>
+          )}
+
+          {/* Step 2: Target Ready Date */}
+          {step === 2 && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
+                <p className="text-sm font-medium">Target ready date</p>
+              </div>
+              {localExamDate && (
+                <p className="text-xs text-muted-foreground">
+                  {examLabel} exam on {formatReadableDate(localExamDate)}
+                  {examDaysOut !== null && examDaysOut > 0 ? ` · ${examDaysOut} days away` : ''}
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                The date you want to have mastered all concepts, before your exam.
               </p>
               <input
                 type="date"
                 value={readyDate}
                 min={today}
                 max={localExamDate || examDate || undefined}
-                onChange={e => handleReadyDateChange(e.target.value)}
+                onChange={e => setReadyDate(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
               />
               {daysOut !== null && daysOut > 0 && (
                 <p className="text-xs text-muted-foreground">
                   {daysOut} day{daysOut === 1 ? '' : 's'} from today
-                  {examDaysOut !== null && examDaysOut > 0
-                    ? ` · ${examDaysOut - daysOut} day${Math.abs(examDaysOut - daysOut) === 1 ? '' : 's'} before exam`
-                    : ''}
                 </p>
               )}
-              {daysOut !== null && daysOut <= 0 && (
-                <p className="text-xs text-destructive">
-                  Date must be in the future
-                </p>
+              {readyDate && daysOut !== null && daysOut <= 0 && (
+                <p className="text-xs text-destructive">Date must be in the future</p>
               )}
             </div>
-          </div>
+          )}
 
-          {/* Strength level */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-muted-foreground shrink-0" />
-              <p className="text-sm font-medium">Strength goal</p>
-            </div>
+          {/* Step 3: Study Strategy */}
+          {step === 3 && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-muted-foreground shrink-0" />
+                <p className="text-sm font-medium">Study strategy</p>
+              </div>
 
-            <div className="space-y-2">
-              {([
-                {
-                  value: 'strong_all' as TargetStrengthLevel,
-                  label: 'Master everything',
-                  desc: 'Aim to fully master every concept before the ready date.',
-                },
-                {
-                  value: 'strong_key' as TargetStrengthLevel,
-                  label: 'Focus on key topics',
-                  desc: 'Heavier exam topics get scheduled first; lighter topics are covered as time allows.',
-                },
-              ] as const).map(opt => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => setStrength(opt.value)}
-                  className={`w-full text-left rounded-lg border p-3 transition-colors ${
-                    strength === opt.value
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:bg-accent/50'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`h-3.5 w-3.5 rounded-full border-2 shrink-0 ${
-                        strength === opt.value
-                          ? 'border-primary bg-primary'
-                          : 'border-muted-foreground'
-                      }`}
-                    />
-                    <span className="text-sm font-medium">{opt.label}</span>
-                  </div>
-                  <p className="mt-1 pl-5.5 text-xs text-muted-foreground">{opt.desc}</p>
-                </button>
-              ))}
+              <div className="space-y-2">
+                {([
+                  {
+                    value: 'strong_all' as TargetStrengthLevel,
+                    label: 'Master everything',
+                    desc: 'Aim to fully master every concept before the ready date. Learn concepts in sequence, one-by-one.',
+                  },
+                  {
+                    value: 'strong_key' as TargetStrengthLevel,
+                    label: 'Focus on key topics',
+                    desc: 'Learn the key topics first, then fill in the details of less common concepts as time allows.',
+                  },
+                ] as const).map(opt => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setStrength(opt.value)}
+                    className={`w-full text-left rounded-lg border p-3 transition-colors ${
+                      strength === opt.value
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:bg-accent/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`h-3.5 w-3.5 rounded-full border-2 shrink-0 ${
+                          strength === opt.value
+                            ? 'border-primary bg-primary'
+                            : 'border-muted-foreground'
+                        }`}
+                      />
+                      <span className="text-sm font-medium">{opt.label}</span>
+                    </div>
+                    <p className="mt-1 pl-5.5 text-xs text-muted-foreground">{opt.desc}</p>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Footer */}
-        <div className="px-5 pb-5 flex gap-2 justify-end">
-          <Button variant="outline" size="sm" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            size="sm"
-            onClick={handleSave}
-            disabled={!!readyDate && (daysOut === null || daysOut <= 0)}
-          >
-            Save plan
-          </Button>
+        <div className="px-5 pb-5 flex gap-2 justify-between">
+          <div>
+            {step > 1 && (
+              <Button variant="outline" size="sm" onClick={() => setStep((step - 1) as 1 | 2 | 3)}>
+                Back
+              </Button>
+            )}
+          </div>
+          <div className="flex gap-2">
+            {step === 1 && (
+              <Button variant="outline" size="sm" onClick={onClose}>
+                Cancel
+              </Button>
+            )}
+            {step < 3 ? (
+              <Button
+                size="sm"
+                onClick={() => setStep((step + 1) as 2 | 3)}
+                disabled={
+                  (step === 1 && (!localExamDate || !examDateValid)) ||
+                  (step === 2 && !!readyDate && !readyDateValid)
+                }
+              >
+                Next
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                onClick={handleSave}
+                disabled={!!readyDate && !readyDateValid}
+              >
+                Save plan
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -85,6 +85,7 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [examsOpen, setExamsOpen] = useState(false)
+  const [signOutConfirm, setSignOutConfirm] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -103,7 +104,10 @@ export default function Sidebar() {
   }, [collapsed])
 
   useEffect(() => {
-    if (!profileOpen) return
+    if (!profileOpen) {
+      setSignOutConfirm(false)
+      return
+    }
     function handleClickOutside(e: MouseEvent) {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
         setProfileOpen(false)
@@ -146,10 +150,10 @@ export default function Sidebar() {
         </Link>
       </header>
 
-      {/* Mobile: backdrop */}
+      {/* Mobile: backdrop — z-[55] so it covers the sticky search bar (z-50) */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-[55] bg-black/50 lg:hidden"
           onClick={closeMobile}
           aria-hidden="true"
         />
@@ -165,8 +169,9 @@ export default function Sidebar() {
         }}
         className={[
           'flex flex-col bg-background border-r',
-          // Mobile: fixed full-width overlay, slides in/out
-          'fixed inset-y-0 left-0 z-50 w-full',
+          // Mobile: fixed full-width overlay, slides in/out — z-[60] so it sits
+          // above the sticky wiki search bar (z-50) and the backdrop (z-[55])
+          'fixed inset-y-0 left-0 z-[60] w-full',
           'transition-transform duration-300',
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
           // Desktop: sticky sidebar in document flow
@@ -276,14 +281,36 @@ export default function Sidebar() {
                     <GraduationCap className="h-4 w-4 shrink-0" />
                     <span>Exams</span>
                   </button>
+                  {signOutConfirm ? (
+                    <div className="px-3 py-2 space-y-2">
+                      <p className="text-xs text-muted-foreground">Sign out?</p>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => { signOut(); setProfileOpen(false); setSignOutConfirm(false); closeMobile() }}
+                          className="flex-1 rounded-md bg-destructive text-destructive-foreground text-xs py-1.5 font-medium hover:bg-destructive/90 transition-colors"
+                        >
+                          Sign out
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSignOutConfirm(false)}
+                          className="flex-1 rounded-md border bg-background text-xs py-1.5 font-medium hover:bg-accent transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
                   <button
                     type="button"
-                    onClick={() => { signOut(); setProfileOpen(false); closeMobile() }}
+                    onClick={() => setSignOutConfirm(true)}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                   >
                     <LogOut className="h-4 w-4 shrink-0" />
                     <span>Sign out</span>
                   </button>
+                  )}
                 </div>
               )}
               <button

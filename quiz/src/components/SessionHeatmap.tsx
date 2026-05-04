@@ -42,15 +42,10 @@ function isoKey(d: Date): string {
   return d.toISOString().slice(0, 10)
 }
 
-// Score → Tailwind background class.
-function cellColor(avgScore: number | null): string {
-  if (avgScore === null) return 'bg-muted/25'
-  if (avgScore >= 85) return 'bg-green-500'
-  if (avgScore >= 70) return 'bg-green-500/75'
-  if (avgScore >= 60) return 'bg-green-500/55'
-  if (avgScore >= 50) return 'bg-green-500/40'
-  if (avgScore >= 30) return 'bg-green-500/28'
-  return 'bg-green-500/18'
+function cellStyle(avgScore: number | null): { backgroundColor: string } | undefined {
+  if (avgScore === null) return undefined
+  const opacity = +(0.2 + 0.8 * (avgScore / 100)).toFixed(2)
+  return { backgroundColor: `rgba(34, 197, 94, ${opacity})` }
 }
 
 // Short month names for column labels.
@@ -167,7 +162,6 @@ function HeatmapGrid({ scoreByDay, weeks }: HeatmapGridProps) {
               const cell = col.days[dayIdx]
               if (!cell) return <div key={col.key} className="w-4 h-3 shrink-0" />
               const { data, isFuture, key } = cell
-              const bg = isFuture ? 'bg-transparent' : cellColor(data?.avgScore ?? null)
               const title = isFuture
                 ? key
                 : data
@@ -177,7 +171,8 @@ function HeatmapGrid({ scoreByDay, weeks }: HeatmapGridProps) {
                 <div
                   key={key}
                   title={title}
-                  className={`w-3.5 h-3 rounded-sm shrink-0 mx-px ${bg}`}
+                  style={!isFuture ? cellStyle(data?.avgScore ?? null) : undefined}
+                  className={`w-3.5 h-3 rounded-sm shrink-0 mx-px ${!isFuture && data === null ? 'bg-muted/25' : ''}`}
                 />
               )
             })}
@@ -188,7 +183,11 @@ function HeatmapGrid({ scoreByDay, weeks }: HeatmapGridProps) {
         <div className="flex items-center gap-2 mt-3 ml-6">
           <span className="text-[9px] text-muted-foreground">Less</span>
           {[null, 20, 55, 65, 75, 90].map((score, i) => (
-            <div key={i} className={`w-3 h-3 rounded-sm ${cellColor(score)}`} />
+            <div
+              key={i}
+              style={cellStyle(score)}
+              className={`w-3 h-3 rounded-sm ${score === null ? 'bg-muted/25' : ''}`}
+            />
           ))}
           <span className="text-[9px] text-muted-foreground">More</span>
         </div>

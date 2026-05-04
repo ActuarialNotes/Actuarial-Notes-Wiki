@@ -10,8 +10,6 @@ import {
   Settings2,
   AlertTriangle,
   CheckCircle2,
-  TrendingUp,
-  RefreshCw,
   Loader2,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
@@ -25,40 +23,11 @@ import {
   formatReadableDate,
   type StudyPlan,
   type StudyPlanConfig,
-  type PacingStatus,
 } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { MasteryState } from '@/lib/mastery'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-
-const STATUS_CONFIG: Record<PacingStatus, { label: string; className: string; icon: React.FC<{ className?: string }> }> = {
-  on_track: {
-    label: 'On track',
-    className: 'border-green-200 text-green-700 dark:border-green-800 dark:text-green-400',
-    icon: CheckCircle2,
-  },
-  ahead: {
-    label: 'Ahead of pace',
-    className: 'border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-400',
-    icon: TrendingUp,
-  },
-  behind: {
-    label: 'Behind pace',
-    className: 'border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-400',
-    icon: AlertTriangle,
-  },
-  target_passed: {
-    label: 'Ready date passed',
-    className: 'border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-400',
-    icon: AlertTriangle,
-  },
-  review_mode: {
-    label: 'Review mode',
-    className: 'border-purple-200 text-purple-700 dark:border-purple-800 dark:text-purple-400',
-    icon: RefreshCw,
-  },
-}
 
 function todayLongDate(): string {
   return new Date().toLocaleDateString(undefined, {
@@ -67,17 +36,6 @@ function todayLongDate(): string {
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-
-function PacingBadge({ status }: { status: PacingStatus }) {
-  const cfg = STATUS_CONFIG[status]
-  const Icon = cfg.icon
-  return (
-    <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${cfg.className}`}>
-      <Icon className="h-3 w-3" />
-      {cfg.label}
-    </span>
-  )
-}
 
 function BehindWarning({ plan }: { plan: StudyPlan }) {
   return (
@@ -142,7 +100,6 @@ export function TodayCard({
   const reviewConcepts = plan?.reviewConcepts ?? []
   const displayConcepts = plan?.status === 'review_mode' ? reviewConcepts : todaysConcepts
 
-  // Build the allConcepts list needed for ConceptDetailModal navigation
   const allConceptsForModal = displayConcepts.map(name => ({
     name,
     state: masteryStateByName.get(name.toLowerCase()) ?? 'new' as MasteryState,
@@ -158,7 +115,6 @@ export function TodayCard({
       const raw = await fetchAllQuestions()
       const all = parseAllQuestions(raw)
 
-      // Filter to questions linked to today's concepts
       const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
       let filtered = all.filter(q =>
         q.wiki_link.some(link => {
@@ -168,21 +124,16 @@ export function TodayCard({
         })
       )
 
-      // If strong_key, weight toward high-exam-weight topics (already handled by plan sorting)
-      // Additionally, for quiz: also include questions on in-progress concepts from today
-      // Sort: hard/medium questions first, then by match to today's concepts
       filtered.sort((a, b) => {
         const diffOrder: Record<string, number> = { hard: 0, medium: 1, easy: 2 }
         return (diffOrder[a.difficulty] ?? 1) - (diffOrder[b.difficulty] ?? 1)
       })
 
       if (filtered.length === 0) {
-        // Fallback: quiz on the exam topic
         navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}`)
         return
       }
 
-      // Cap at a manageable set (mix of all difficulties)
       const cap = Math.min(filtered.length, 20)
       const ids = filtered.slice(0, cap).map(q => q.id).join(',')
       navigate(`/quiz?ids=${ids}`)
@@ -201,10 +152,8 @@ export function TodayCard({
           <CardContent className="p-5 space-y-3">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                  Today · {todayLongDate()}
-                </p>
-                <h2 className="text-lg font-semibold mt-0.5">Set up your study plan</h2>
+                <p className="text-base font-semibold">{todayLongDate()}</p>
+                <h2 className="text-lg font-semibold mt-1">Set up your study plan</h2>
               </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -234,30 +183,20 @@ export function TodayCard({
   return (
     <>
       <Card className="border-primary/30 ring-1 ring-primary/10 shadow-sm">
-        <CardContent className="p-5 space-y-4">
-          {/* Header row */}
+        <CardContent className="p-5 space-y-3">
+          {/* Date header — visually prominent */}
           <div className="flex items-start justify-between gap-2">
             <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                Today · {todayLongDate()}
-              </p>
-              <h2 className="text-lg font-semibold mt-0.5">
-                {loading
-                  ? 'Preparing your plan…'
-                  : plan?.status === 'review_mode'
-                  ? 'Review day'
-                  : displayConcepts.length === 0
-                  ? "You're all caught up!"
-                  : `${displayConcepts.length} concept${displayConcepts.length === 1 ? '' : 's'} to study`}
-              </h2>
-              {!loading && plan && displayConcepts.length > 0 && plan.status !== 'review_mode' && (
+              <p className="text-base font-semibold">{todayLongDate()}</p>
+              {!loading && plan && plan.status !== 'review_mode' && plan.daysRemaining > 0 && (
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {displayConcepts.slice(0, 2).join(', ')}
-                  {displayConcepts.length > 2 && ` +${displayConcepts.length - 2} more`}
+                  Day {plan.dayNumber} of {plan.totalDays}
+                  {' · '}
+                  {plan.daysRemaining} day{plan.daysRemaining === 1 ? '' : 's'} until{' '}
+                  {formatReadableDate(plan.effectiveReadyDate)}
                 </p>
               )}
             </div>
-
             <button
               type="button"
               onClick={() => setShowConfig(true)}
@@ -269,25 +208,43 @@ export function TodayCard({
             </button>
           </div>
 
+          {/* Heading + concept chips */}
+          <div>
+            <h2 className="text-lg font-semibold">
+              {loading
+                ? 'Preparing your plan…'
+                : plan?.status === 'review_mode'
+                ? 'Review day'
+                : displayConcepts.length === 0
+                ? "You're all caught up!"
+                : `${displayConcepts.length} concept${displayConcepts.length === 1 ? '' : 's'} to study`}
+            </h2>
+            {!loading && displayConcepts.length > 0 && plan?.status !== 'review_mode' && (
+              <div className="flex flex-wrap gap-1.5 mt-1.5">
+                {displayConcepts.map(name => {
+                  const state = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                  const stateColor =
+                    state === 'strong'    ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/30 dark:text-green-300' :
+                    state === 'learning'  ? 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-300' :
+                    state === 'forgotten' ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-300' :
+                                           'border-border bg-muted/40 text-muted-foreground'
+                  return (
+                    <span
+                      key={name}
+                      className={`inline-block text-xs px-2 py-0.5 rounded-full border ${stateColor}`}
+                    >
+                      {name}
+                    </span>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
           {loading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground py-1">
               <Loader2 className="h-4 w-4 animate-spin" />
               Building your plan…
-            </div>
-          )}
-
-          {/* Pacing indicator */}
-          {!loading && plan && (
-            <div className="flex items-center gap-2 flex-wrap">
-              <PacingBadge status={plan.status} />
-              {plan.status !== 'review_mode' && plan.daysRemaining > 0 && (
-                <span className="text-xs text-muted-foreground">
-                  Day {plan.dayNumber} of {plan.totalDays}
-                  {' · '}
-                  {plan.daysRemaining} day{plan.daysRemaining === 1 ? '' : 's'} until{' '}
-                  {formatReadableDate(plan.effectiveReadyDate)}
-                </span>
-              )}
             </div>
           )}
 
@@ -326,29 +283,6 @@ export function TodayCard({
             </div>
           )}
 
-          {/* Concept chips — quick preview */}
-          {!loading && displayConcepts.length > 0 && plan?.status !== 'review_mode' && (
-            <div className="flex flex-wrap gap-1.5 pt-0.5">
-              {displayConcepts.map(name => {
-                const state = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                const stateColor =
-                  state === 'strong'   ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/30 dark:text-green-300' :
-                  state === 'learning' ? 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-300' :
-                  state === 'forgotten'? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-300' :
-                                        'border-border bg-muted/40 text-muted-foreground'
-                return (
-                  <span
-                    key={name}
-                    className={`inline-block text-xs px-2 py-0.5 rounded-full border ${stateColor}`}
-                  >
-                    {name}
-                  </span>
-                )
-              })}
-            </div>
-          )}
-
-          {/* No concepts today / all done */}
           {!loading && plan && displayConcepts.length === 0 && plan.status !== 'review_mode' && (
             <div className="text-sm text-muted-foreground text-center py-2">
               {plan.config.targetReadyDate
@@ -359,7 +293,6 @@ export function TodayCard({
         </CardContent>
       </Card>
 
-      {/* Concept read modal */}
       {conceptModalOpen && displayConcepts.length > 0 && (
         <ConceptDetailModal
           conceptName={displayConcepts[0]}
@@ -371,7 +304,6 @@ export function TodayCard({
         />
       )}
 
-      {/* Config modal */}
       {showConfig && (
         <StudyPlanConfigModal
           config={config}
@@ -394,7 +326,7 @@ export function TodayCardLoading() {
   return (
     <Card>
       <CardContent className="p-5 space-y-3">
-        <div className="h-4 w-32 rounded bg-muted animate-pulse" />
+        <div className="h-5 w-40 rounded bg-muted animate-pulse" />
         <div className="h-6 w-48 rounded bg-muted animate-pulse" />
         <div className="h-9 w-full rounded bg-muted animate-pulse" />
       </CardContent>

@@ -9,6 +9,7 @@ import Dashboard from '@/pages/Dashboard'
 import Browse from '@/pages/Browse'
 import Settings from '@/pages/Settings'
 import Sidebar from '@/components/Sidebar'
+import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 
 const WikiLayout  = lazy(() => import('@/components/wiki/WikiLayout'))
 const WikiHome    = lazy(() => import('@/pages/wiki/WikiHome'))
@@ -39,6 +40,7 @@ function NotFound() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ExamProgressProvider>
       <div className="min-h-screen bg-background text-foreground flex">
         <Sidebar />
         <main className="flex-1 min-w-0 pt-14 lg:pt-0">
@@ -74,6 +76,7 @@ export default function App() {
           </Routes>
         </main>
       </div>
+      </ExamProgressProvider>
     </BrowserRouter>
   )
 }

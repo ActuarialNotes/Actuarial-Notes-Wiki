@@ -63,11 +63,14 @@ function ScoreBar({ session }: { session: QuizSession }) {
   const pct = session.total_questions > 0
     ? Math.round((session.correct_count / session.total_questions) * 100)
     : 0
-  const color = pct >= 70 ? 'bg-green-500' : pct >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+  const opacity = 0.2 + 0.8 * (pct / 100)
   return (
     <div className="flex items-center gap-2">
       <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
+        <div
+          className="h-full rounded-full"
+          style={{ width: `${pct}%`, backgroundColor: `rgba(34, 197, 94, ${opacity})` }}
+        />
       </div>
       <span className="text-sm font-medium w-10 text-right">{pct}%</span>
     </div>

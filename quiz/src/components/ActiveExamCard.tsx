@@ -43,11 +43,14 @@ function ScoreBar({ session }: { session: QuizSession }) {
   const pct = session.total_questions > 0
     ? Math.round((session.correct_count / session.total_questions) * 100)
     : 0
-  const color = pct >= 70 ? 'bg-green-500' : pct >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+  const opacity = 0.2 + 0.8 * (pct / 100)
   return (
     <div className="flex items-center gap-2">
       <div className="flex-1 h-2 rounded-full bg-secondary overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
+        <div
+          className="h-full rounded-full"
+          style={{ width: `${pct}%`, backgroundColor: `rgba(34, 197, 94, ${opacity})` }}
+        />
       </div>
       <span className="text-sm font-medium w-10 text-right">{pct}%</span>
     </div>
@@ -252,6 +255,8 @@ export function ActiveExamCard({
   const strongPct = aggregate.strongPct
   const conceptsTotal = aggregate.total
   const conceptsStrong = aggregate.strong
+  const conceptsLearning = aggregate.learning
+  const learningPct = conceptsTotal > 0 ? Math.round((conceptsLearning / conceptsTotal) * 100) : 0
 
   return (
     <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
@@ -301,12 +306,32 @@ export function ActiveExamCard({
               <span className="text-muted-foreground font-normal ml-1.5">({strongPct}%)</span>
             </span>
           </div>
-          <div className="h-2.5 rounded-full bg-secondary overflow-hidden">
+          <div className="h-2.5 rounded-full bg-secondary overflow-hidden flex">
             <div
-              className="h-full rounded-full bg-green-500 transition-all"
-              style={{ width: `${strongPct}%` }}
+              className="h-full transition-all"
+              style={{ width: `${strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }}
+            />
+            <div
+              className="h-full transition-all"
+              style={{ width: `${learningPct}%`, backgroundColor: 'rgba(34, 197, 94, 0.4)' }}
             />
           </div>
+          {(conceptsStrong > 0 || conceptsLearning > 0) && (
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              {conceptsStrong > 0 && (
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
+                  Mastered
+                </span>
+              )}
+              {conceptsLearning > 0 && (
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.4)' }} />
+                  In learning
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Activity heatmap */}

@@ -24,6 +24,7 @@ import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import {
   formatReadableDate,
+  todayISO,
   type StudyPlan,
   type StudyPlanConfig,
 } from '@/lib/studyPlan'
@@ -41,6 +42,16 @@ import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/daily
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
+}
+
+// Maps a concept's initial state to the level it should reach today
+const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
+  new: 'level1', forgotten: 'level1',
+  level1: 'level2', level2: 'level3',
+}
+
+const STATE_ORDER: Record<MasteryState, number> = {
+  new: 0, forgotten: 0, level1: 1, level2: 2, level3: 3,
 }
 
 const STATE_BADGE: Record<MasteryState, string> = {
@@ -267,10 +278,32 @@ export function TodayCard({
   const reviewConcepts = plan?.reviewConcepts ?? []
   const displayConcepts = plan?.status === 'review_mode' ? reviewConcepts : todaysConcepts
 
-  const strongCount = displayConcepts.filter(
-    n => masteryStateByName.get(n.toLowerCase()) === 'level3'
-  ).length
-  const allStrong = displayConcepts.length > 0 && strongCount === displayConcepts.length
+  // Build a per-concept target map from today's scheduled assignments.
+  // Each concept's daily goal is one level above its state at scheduling time.
+  const targetByName = new Map<string, MasteryState>()
+  if (plan) {
+    const today = todayISO()
+    for (const a of plan.assignments) {
+      if (a.scheduledDate === today) {
+        targetByName.set(a.conceptName.toLowerCase(), NEXT_STATE[a.initialState] ?? 'level1')
+      }
+    }
+  }
+
+  // A concept is "on target" for today when it has reached or exceeded its target state.
+  const onTargetCount = displayConcepts.filter(n => {
+    const target = targetByName.get(n.toLowerCase()) ?? 'level1'
+    const current = masteryStateByName.get(n.toLowerCase()) ?? 'new'
+    return STATE_ORDER[current] >= STATE_ORDER[target]
+  }).length
+  const allOnTarget = displayConcepts.length > 0 && onTargetCount === displayConcepts.length
+
+  // Derive a label for the counter ("Level 1", "Level 2", "Level 3", or "target" if mixed)
+  const targetLevels = new Set(
+    displayConcepts.map(n => targetByName.get(n.toLowerCase()) ?? 'level1')
+  )
+  const uniformTarget = targetLevels.size === 1 ? [...targetLevels][0] : null
+  const targetLabel = uniformTarget ? STATE_LABEL[uniformTarget] : 'target'
 
   const allConceptsForModal = displayConcepts.map(name => ({
     name,
@@ -388,21 +421,21 @@ export function TodayCard({
             <div>
               <div className="flex items-baseline justify-between gap-2">
                 <h2 className="text-lg font-semibold">
-                  {allStrong
+                  {allOnTarget
                     ? 'Done for today ✓'
                     : `${displayConcepts.length} concept${displayConcepts.length === 1 ? '' : 's'} to study`}
                 </h2>
                 <span className={`text-xs font-medium shrink-0 tabular-nums ${
-                  allStrong
+                  allOnTarget
                     ? 'text-green-600 dark:text-green-400'
                     : 'text-muted-foreground'
                 }`}>
-                  {strongCount} / {displayConcepts.length} Level 3
+                  {onTargetCount} / {displayConcepts.length} {targetLabel}
                 </span>
               </div>
-              {!allStrong && (
+              {!allOnTarget && (
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Bring each to Level 3 to complete today's session
+                  Bring each to {targetLabel} to complete today's session
                 </p>
               )}
               <div className="flex flex-wrap gap-1.5 mt-1.5">

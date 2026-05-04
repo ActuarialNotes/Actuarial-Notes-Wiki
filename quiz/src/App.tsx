@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, Component, type ReactNode, type ErrorInfo } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import Landing from '@/pages/Landing'
@@ -25,6 +25,49 @@ function WikiFallback() {
   )
 }
 
+interface ErrorBoundaryState { error: Error | null }
+
+class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryState> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { error: null }
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { error }
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('Dashboard error boundary caught:', error, info)
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="container max-w-2xl mx-auto px-4 py-16 space-y-4">
+          <h1 className="text-2xl font-bold text-destructive">Something went wrong</h1>
+          <p className="text-sm text-muted-foreground">
+            The dashboard crashed with the following error. Please report this to the team.
+          </p>
+          <pre className="text-xs bg-muted rounded p-4 overflow-auto whitespace-pre-wrap break-all">
+            {this.state.error.message}
+            {'\n\n'}
+            {this.state.error.stack}
+          </pre>
+          <button
+            type="button"
+            onClick={() => this.setState({ error: null })}
+            className="text-sm text-primary hover:underline"
+          >
+            Try again
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
 function NotFound() {
   return (
     <div className="container max-w-md mx-auto px-4 py-16 text-center space-y-4">
@@ -49,7 +92,7 @@ export default function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/review" element={<Review />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
             <Route path="/browse" element={<Browse />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/wiki" element={

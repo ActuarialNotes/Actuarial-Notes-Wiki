@@ -109,8 +109,8 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
   const targetToDisplayName = new Map<string, string>()
   for (const topic of syllabus.topics) {
     for (const c of topic.concepts) {
-      const tLow = c.target.toLowerCase()
-      if (tLow !== c.name.toLowerCase()) {
+      const tLow = c.target?.toLowerCase() ?? ''
+      if (tLow && tLow !== c.name.toLowerCase()) {
         targetToDisplayName.set(tLow, c.name)
       }
     }

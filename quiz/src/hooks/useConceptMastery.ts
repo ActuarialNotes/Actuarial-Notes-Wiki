@@ -56,6 +56,30 @@ export function useConceptMastery(): UseConceptMasteryResult {
     return () => { cancelled = true }
   }, [userId, version])
 
+  // Supabase realtime — reflects quiz completions from other devices instantly
+  useEffect(() => {
+    if (!userId) return
+    const channel = supabase
+      .channel(`concept_mastery:${userId}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'concept_mastery', filter: `user_id=eq.${userId}` },
+        () => { refresh() },
+      )
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [userId, refresh])
+
+  // Refetch when tab regains focus (handles mobile ↔ desktop, cross-browser)
+  useEffect(() => {
+    if (!userId) return
+    const handleVisible = () => {
+      if (document.visibilityState === 'visible') refresh()
+    }
+    document.addEventListener('visibilitychange', handleVisible)
+    return () => document.removeEventListener('visibilitychange', handleVisible)
+  }, [userId, refresh])
+
   const byConcept = new Map<string, ConceptMasteryRecord>()
   for (const r of records) {
     byConcept.set(`${r.exam_id}::${r.concept_slug.toLowerCase()}`, r)

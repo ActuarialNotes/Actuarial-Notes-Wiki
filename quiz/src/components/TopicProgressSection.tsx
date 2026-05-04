@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronRight, Info } from 'lucide-react'
+import { ChevronDown, ChevronRight, Info, CalendarDays, BookMarked } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { wikiRoute } from '@/lib/wikiRoutes'
@@ -12,6 +12,14 @@ import {
   type MasteryState,
 } from '@/lib/mastery'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
+import {
+  getScheduledDate,
+  isScheduledToday,
+  daysUntilScheduled,
+  todayISO,
+  type StudyPlan,
+  type PacingStatus,
+} from '@/lib/studyPlan'
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New',
@@ -45,12 +53,45 @@ function InfoPanel() {
   )
 }
 
+// ── Plan status badge ─────────────────────────────────────────────────────────
+
+const PACING_CONFIG: Record<PacingStatus, { label: string; className: string }> = {
+  on_track:     { label: 'On track',         className: 'border-green-200 text-green-700 dark:border-green-800 dark:text-green-400' },
+  ahead:        { label: 'Ahead of pace',    className: 'border-blue-200 text-blue-700 dark:border-blue-800 dark:text-blue-400' },
+  behind:       { label: 'Behind pace',      className: 'border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-400' },
+  target_passed:{ label: 'Ready date passed',className: 'border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-400' },
+  review_mode:  { label: 'Review mode',      className: 'border-purple-200 text-purple-700 dark:border-purple-800 dark:text-purple-400' },
+}
+
+// Small inline badge for each concept's scheduled date
+function ConceptScheduleBadge({ conceptName, plan }: { conceptName: string; plan: StudyPlan }) {
+  if (isScheduledToday(conceptName, plan)) {
+    return (
+      <span className="text-xs px-1.5 py-0.5 rounded-full border border-primary/40 bg-primary/10 text-primary font-medium shrink-0">
+        Today
+      </span>
+    )
+  }
+  const days = daysUntilScheduled(conceptName, plan)
+  if (days === null) return null
+  if (days < 0) return null  // past
+  if (days <= 6) {
+    return (
+      <span className="text-xs text-muted-foreground shrink-0 tabular-nums">
+        in {days}d
+      </span>
+    )
+  }
+  return null
+}
+
 interface Props {
   syllabus: WikiExamSyllabus
   masteryRecords: ConceptMasteryRecord[]
+  studyPlan?: StudyPlan | null
 }
 
-export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
+export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Props) {
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const [showInfo, setShowInfo] = useState(false)
   const [selectedConcept, setSelectedConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
@@ -93,6 +134,18 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
       return next
     })
 
+  // Derive plan summary data
+  const today = todayISO()
+  const todaysConcepts = studyPlan?.todaysConcepts ?? []
+  const thisWeekAssignments = studyPlan?.assignments.filter(a => {
+    const diff = Math.round(
+      (new Date(a.scheduledDate + 'T12:00:00').getTime() - new Date(today + 'T12:00:00').getTime())
+      / (1000 * 60 * 60 * 24)
+    )
+    return diff > 0 && diff <= 6
+  }) ?? []
+  const thisWeekConcepts = [...new Set(thisWeekAssignments.map(a => a.conceptName))]
+
   return (
     <>
       <Card>
@@ -106,6 +159,11 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
             >
               <Info className="h-4 w-4" />
             </button>
+            {studyPlan && (
+              <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${PACING_CONFIG[studyPlan.status].className}`}>
+                {PACING_CONFIG[studyPlan.status].label}
+              </span>
+            )}
             {syllabus.fileName && (
               <Link
                 to={wikiRoute({ kind: 'exam', name: syllabus.fileName })}
@@ -117,6 +175,42 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
             )}
           </div>
           {showInfo && <InfoPanel />}
+
+          {/* Today's plan summary */}
+          {studyPlan && studyPlan.config.targetReadyDate && studyPlan.status !== 'review_mode' && (
+            <div className="mt-2 rounded-md border bg-muted/30 p-3 text-xs space-y-2">
+              {todaysConcepts.length > 0 && (
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 font-medium text-foreground">
+                    <CalendarDays className="h-3.5 w-3.5 text-primary shrink-0" />
+                    Today ({todaysConcepts.length} concept{todaysConcepts.length === 1 ? '' : 's'})
+                  </div>
+                  <div className="flex flex-wrap gap-1 pl-5">
+                    {todaysConcepts.map(name => (
+                      <span key={name} className="px-1.5 py-0.5 rounded-full border border-primary/40 bg-primary/10 text-primary">
+                        {name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {thisWeekConcepts.length > 0 && (
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1.5 font-medium text-muted-foreground">
+                    <BookMarked className="h-3.5 w-3.5 shrink-0" />
+                    On deck this week ({thisWeekConcepts.length})
+                  </div>
+                  <p className="text-muted-foreground pl-5 leading-relaxed">
+                    {thisWeekConcepts.slice(0, 4).join(', ')}
+                    {thisWeekConcepts.length > 4 ? ` +${thisWeekConcepts.length - 4} more` : ''}
+                  </p>
+                </div>
+              )}
+              {todaysConcepts.length === 0 && thisWeekConcepts.length === 0 && (
+                <p className="text-muted-foreground">No concepts scheduled in the near term.</p>
+              )}
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           <div className="space-y-1">
@@ -181,6 +275,9 @@ export function TopicProgressSection({ syllabus, masteryRecords }: Props) {
                             <span className="text-xs text-foreground min-w-0 flex-1 truncate" title={c.name}>
                               {c.name}
                             </span>
+                            {studyPlan && state !== 'strong' && (
+                              <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
+                            )}
                             <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>
                               {STATE_LABEL[state]}
                             </span>

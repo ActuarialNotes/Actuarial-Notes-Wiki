@@ -1,14 +1,19 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { Loader2 } from 'lucide-react'
 import { ActiveExamCard, ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { TopicProgressSection } from '@/components/TopicProgressSection'
+import { TodayCard, TodayCardLoading } from '@/components/TodayCard'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useExamProgress } from '@/hooks/useExamProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { decayIfStale } from '@/lib/mastery'
+import type { MasteryState } from '@/lib/mastery'
+
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
@@ -53,6 +58,28 @@ export default function Dashboard() {
     setActiveExamIdx(i => (i + 1) % inProgressSyllabi.length)
   }, [inProgressSyllabi.length])
 
+  // ── Study plan ─────────────────────────────────────────────────────────────
+  const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan } =
+    useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate)
+
+  // Build a fast masteryState lookup (conceptName → MasteryState) for TodayCard chips
+  const masteryStateByName = useMemo(() => {
+    const now = new Date()
+    const map = new Map<string, MasteryState>()
+    if (!activeSyllabus || !activeProgressKey) return map
+    const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
+    const bySlug = new Map(examRecords.map(r => [r.concept_slug.toLowerCase(), r]))
+
+    for (const topic of activeSyllabus.topics) {
+      for (const c of topic.concepts) {
+        const rec = bySlug.get(c.name.toLowerCase()) ?? bySlug.get(c.target.toLowerCase())
+        const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
+        map.set(c.name.toLowerCase(), state)
+      }
+    }
+    return map
+  }, [activeSyllabus, activeProgressKey, masteryRecords])
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -71,6 +98,22 @@ export default function Dashboard() {
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
       {/* Header */}
       <h1 className="text-2xl font-bold">{displayName}'s Actuarial Notes</h1>
+
+      {/* Today card — only shown when there is an active exam */}
+      {syllabusLoading || masteryLoading ? (
+        <TodayCardLoading />
+      ) : activeSyllabus ? (
+        <TodayCard
+          plan={studyPlan}
+          config={planConfig}
+          loading={planLoading}
+          syllabus={activeSyllabus}
+          masteryStateByName={masteryStateByName}
+          examDate={activeTargetDate}
+          onConfigChange={updatePlanConfig}
+          onRegenerate={regeneratePlan}
+        />
+      ) : null}
 
       {/* Active exam card */}
       {syllabusLoading || sessionsLoading ? (
@@ -102,6 +145,7 @@ export default function Dashboard() {
           key={activeSyllabus.examTopic}
           syllabus={activeSyllabus}
           masteryRecords={masteryRecords}
+          studyPlan={studyPlan}
         />
       ) : null}
     </div>

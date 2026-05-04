@@ -37,7 +37,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
   function handleExamDateChange(value: string) {
     setLocalExamDate(value)
     // Keep ready date as 2w before new exam date by default
-    if (value && (!readyDate || readyDate === applyPreset(localExamDate, '2w'))) {
+    if (value && (!readyDate || (localExamDate && readyDate === applyPreset(localExamDate, '2w')))) {
       setReadyDate(applyPreset(value, '2w'))
     }
   }

@@ -5,14 +5,10 @@ import type { QuizSession } from '@/lib/supabase'
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
-function cellBg(avgScore: number | null): string {
-  if (avgScore === null) return 'bg-muted/30'
-  if (avgScore >= 85) return 'bg-green-500'
-  if (avgScore >= 70) return 'bg-green-500/75'
-  if (avgScore >= 60) return 'bg-green-500/55'
-  if (avgScore >= 50) return 'bg-green-500/40'
-  if (avgScore >= 30) return 'bg-green-500/28'
-  return 'bg-green-500/18'
+function cellStyle(avgScore: number | null): { backgroundColor: string } | undefined {
+  if (avgScore === null) return undefined
+  const opacity = +(0.2 + 0.8 * (avgScore / 100)).toFixed(2)
+  return { backgroundColor: `rgba(34, 197, 94, ${opacity})` }
 }
 
 function mondayOf(d: Date): Date {
@@ -210,10 +206,11 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
                     role={isClickable ? 'button' : undefined}
                     aria-label={isClickable ? `View sessions for ${cell.key}` : undefined}
                     onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
+                    style={!cell.isFuture ? cellStyle(cell.data?.avgScore ?? null) : undefined}
                     className={`w-full rounded-[2px] ${
                       cell.isFuture
                         ? col.isExamWeek ? 'bg-primary/10 h-[10px]' : 'h-[10px]'
-                        : `h-[10px] ${cellBg(cell.data?.avgScore ?? null)}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
+                        : `h-[10px] ${cell.data === null ? 'bg-muted/30' : ''}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
                     }`}
                   />
                 )

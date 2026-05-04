@@ -10,7 +10,6 @@ import {
   BookOpen,
   Quote,
   Pencil,
-  FlaskConical,
 } from 'lucide-react'
 import type { Components } from 'react-markdown'
 
@@ -22,9 +21,10 @@ import type { Components } from 'react-markdown'
 const HEADER_RE = /^\s*\[!(\w+)\]([-+]?)[ \t]*([^\n]*)/
 
 type CalloutStyle = {
-  icon: ComponentType<{ className?: string }>
+  icon: ComponentType<{ className?: string }> | null
   borderClass: string
   accentClass: string
+  roundLeft?: boolean
 }
 
 const DEFAULT_STYLE: CalloutStyle = {
@@ -45,10 +45,11 @@ const TEAL: CalloutStyle = {
   accentClass: 'text-teal-600 dark:text-teal-400',
 }
 
-const INDIGO: CalloutStyle = {
-  icon: FlaskConical,
-  borderClass: 'border-indigo-400/60',
-  accentClass: 'text-indigo-500 dark:text-indigo-400',
+const EXAMPLE_STYLE: CalloutStyle = {
+  icon: null,
+  borderClass: 'border-slate-200 dark:border-slate-600',
+  accentClass: 'text-slate-400 dark:text-slate-500',
+  roundLeft: true,
 }
 
 const EMERALD: CalloutStyle = {
@@ -100,7 +101,7 @@ const STYLE_MAP: Record<string, CalloutStyle> = {
   tip: TEAL,
   hint: TEAL,
   important: VIOLET,
-  example: INDIGO,
+  example: EXAMPLE_STYLE,
   answer: EMERALD,
   success: EMERALD,
   check: EMERALD,
@@ -287,8 +288,8 @@ function Callout({ type, fold, title, children }: CalloutProps) {
 
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
-      <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />
-      <span className="font-medium text-sm text-foreground flex-1 text-left">{renderTitle(displayTitle)}</span>
+      {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
+      <span className={`font-medium text-sm flex-1 text-left ${Icon ? 'text-foreground' : style.accentClass}`}>{renderTitle(displayTitle)}</span>
       {collapsible && hasBody && (
         <ChevronDown
           className={`h-3.5 w-3.5 shrink-0 text-muted-foreground/50 transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
@@ -297,8 +298,10 @@ function Callout({ type, fold, title, children }: CalloutProps) {
     </div>
   )
 
+  const roundClass = style.roundLeft ? 'rounded-lg' : 'rounded-r-lg'
+
   return (
-    <div className={`not-prose my-4 border-l-[3px] ${style.borderClass} bg-muted/50 rounded-r-lg overflow-hidden`}>
+    <div className={`not-prose my-4 border-l-[3px] ${style.borderClass} bg-muted/50 ${roundClass} overflow-hidden`}>
       {collapsible && hasBody ? (
         <button
           type="button"

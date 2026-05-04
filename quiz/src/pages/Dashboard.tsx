@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
-import { ChevronLeft, ChevronRight, Loader2, PlusCircle } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle } from 'lucide-react'
 import { ActiveExamCard, ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { TodayCard, TodayCardLoading } from '@/components/TodayCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -17,6 +17,28 @@ import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
+function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
+  return (
+    <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+      <div className="pointer-events-auto bg-card border rounded-2xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
+        <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-1">
+          <LogIn className="h-6 w-6 text-primary" />
+        </div>
+        <p className="text-base font-semibold text-foreground text-center">Sign in to view your dashboard</p>
+        <p className="text-sm text-muted-foreground text-center">Track your progress, study plans, and exam readiness.</p>
+        <button
+          type="button"
+          onClick={onSignIn}
+          className="mt-1 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors"
+        >
+          <LogIn className="h-4 w-4" />
+          Sign In
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export default function Dashboard() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
@@ -28,13 +50,6 @@ export default function Dashboard() {
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
   const touchStartX = useRef<number>(0)
-
-  // Hard redirect if not authenticated
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/auth', { state: { from: '/dashboard' }, replace: true })
-    }
-  }, [user, authLoading, navigate])
 
   // Re-fetch mastery after a quiz completes so masteryStateByName reflects
   // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
@@ -110,19 +125,30 @@ export default function Dashboard() {
     )
   }
 
-  if (!user) return null
-
-  const displayName = (user.user_metadata?.display_name as string | undefined)
-    ?? user.email?.split('@')[0]
-    ?? 'You'
+  const isGuest = !user
+  const displayName = isGuest
+    ? 'Actuarial Student'
+    : (user.user_metadata?.display_name as string | undefined)
+        ?? user.email?.split('@')[0]
+        ?? 'You'
 
   const multiExam = inProgressSyllabi.length > 1
 
   return (
+    <div className="relative">
+      {/* Blur overlay for logged-out users — covers only the dashboard content, not the nav */}
+      {isGuest && (
+        <SignInOverlay onSignIn={() => navigate('/auth', { state: { from: '/dashboard' } })} />
+      )}
+      <div
+        className={isGuest ? 'pointer-events-none select-none blur-sm opacity-40' : undefined}
+        aria-hidden={isGuest}
+      >
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-bold flex-1">{displayName}'s Actuarial Notes</h1>
+        {!isGuest && (
         <button
           type="button"
           onClick={() => setExamsOpen(true)}
@@ -132,6 +158,7 @@ export default function Dashboard() {
         >
           <PlusCircle className="h-5 w-5" />
         </button>
+        )}
       </div>
 
       {/* Exam navigation dots */}
@@ -216,7 +243,9 @@ export default function Dashboard() {
         />
       ) : null}
 
-      <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />
+      {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
+    </div>
+    </div>
     </div>
   )
 }

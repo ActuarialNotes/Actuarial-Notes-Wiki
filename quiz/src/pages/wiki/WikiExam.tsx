@@ -65,9 +65,20 @@ export default function WikiExam() {
           markdown={content}
           sourcePath={`${examFileName}.md`}
           onWikiLink={(ref, e) => {
-            // Concept clicks on an exam page open the concept popup, scoped to
-            // the syllabus concept list. Resource/exam links navigate normally.
+            // Resource/exam links with explicit kind navigate normally.
             if (ref.kind !== 'concept') return false
+
+            // Source material references use short names like
+            // "A First Course in Probability (Ross - 2019)" which lack the
+            // "Resources/Books/" prefix and therefore resolve as concepts by
+            // default. Detect them by the "(Author - Year)" suffix pattern and
+            // open them in the popup as resources instead.
+            if (/ \([^)]*\d{4}\)$/.test(ref.name)) {
+              e.preventDefault()
+              openAt([{ kind: 'resource', name: ref.name }], 0, undefined)
+              return true
+            }
+
             e.preventDefault()
             const conceptList = pageRefs
               .filter(r => r.kind === 'concept')

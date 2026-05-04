@@ -268,9 +268,11 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   const newAndForgottenCount = sortedUnmastered.filter(
     c => { const s = getState(c.name); return s === 'new' || s === 'forgotten' },
   ).length
+  // Reserve 3 days at the end for the last introduced concept to complete its
+  // full path (intro→level1 on D, level1→level2 on D+1, level2→level3 on D+3).
   const dailyNewLimit = Math.min(
     MAX_NEW_PER_DAY,
-    Math.max(1, Math.ceil(newAndForgottenCount / daysRemaining)),
+    Math.max(1, Math.ceil(newAndForgottenCount / Math.max(1, daysRemaining - 3))),
   )
 
   function getEligibleDate(name: string): string {
@@ -305,35 +307,69 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     }
   }
 
-  // First: schedule level1/level2 on their eligible date (spacing enforced)
+  // First: schedule level1/level2 on their eligible date (spacing enforced),
+  // then pre-schedule the subsequent stage so the full pipeline is visible.
   for (const c of sortedUnmastered) {
     const state = getState(c.name)
     if (state !== 'level1' && state !== 'level2') continue
+    const eligibleDate = getEligibleDate(c.name)
     assignments.push({
       conceptName: c.name,
       topicName: c.topicName,
       topicWeight: c.topicWeight,
-      scheduledDate: getEligibleDate(c.name),
+      scheduledDate: eligibleDate,
       initialState: state,
     })
+    if (state === 'level1') {
+      // level2→level3 requires a 2-day gap from when level2 is earned
+      assignments.push({
+        conceptName: c.name,
+        topicName: c.topicName,
+        topicWeight: c.topicWeight,
+        scheduledDate: addDays(eligibleDate, 2),
+        initialState: 'level2',
+      })
+    }
   }
 
-  // Second: spread new/forgotten introductions evenly across daysRemaining
+  // Second: spread new/forgotten introductions evenly, then pre-schedule
+  // all three pipeline stages so the true workload is visible from day one.
   for (const c of sortedUnmastered) {
     const state = getState(c.name)
     if (state !== 'new' && state !== 'forgotten') continue
+    const introDate = nextSlotForNewIntro()
+    // Stage 1: introduce (new/forgotten → level1)
     assignments.push({
       conceptName: c.name,
       topicName: c.topicName,
       topicWeight: c.topicWeight,
-      scheduledDate: nextSlotForNewIntro(),
+      scheduledDate: introDate,
       initialState: state,
+    })
+    // Stage 2: level1 → level2 (requires 1-day gap)
+    assignments.push({
+      conceptName: c.name,
+      topicName: c.topicName,
+      topicWeight: c.topicWeight,
+      scheduledDate: addDays(introDate, 1),
+      initialState: 'level1',
+    })
+    // Stage 3: level2 → level3 (requires 2-day gap from level2 earn date)
+    assignments.push({
+      conceptName: c.name,
+      topicName: c.topicName,
+      topicWeight: c.topicWeight,
+      scheduledDate: addDays(introDate, 3),
+      initialState: 'level2',
     })
   }
 
-  const todaysConcepts = assignments
-    .filter(a => a.scheduledDate === today)
-    .map(a => a.conceptName)
+  // Deduplicate todaysConcepts — a concept should appear at most once today
+  const todaysConcepts = [...new Set(
+    assignments
+      .filter(a => a.scheduledDate === today)
+      .map(a => a.conceptName)
+  )]
 
   // conceptsPerDay = largest single-day assignment count (for pacing display)
   const dailyCounts = new Map<string, number>()
@@ -402,10 +438,13 @@ export function getScheduledDate(
   plan: StudyPlan | null,
 ): string | null {
   if (!plan) return null
-  const a = plan.assignments.find(
-    x => x.conceptName.toLowerCase() === conceptName.toLowerCase(),
-  )
-  return a?.scheduledDate ?? null
+  const today = todayISO()
+  const dates = plan.assignments
+    .filter(x => x.conceptName.toLowerCase() === conceptName.toLowerCase())
+    .map(x => x.scheduledDate)
+    .sort()
+  // Return the earliest upcoming date (today or future); fall back to the last known date
+  return dates.find(d => d >= today) ?? dates[dates.length - 1] ?? null
 }
 
 export function isScheduledToday(conceptName: string, plan: StudyPlan | null): boolean {

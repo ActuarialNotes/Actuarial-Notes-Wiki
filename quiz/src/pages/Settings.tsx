@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSettings } from '@/hooks/useSettings'
+import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { TRACKS } from '@/data/tracks'
 import type { ItemStatus, TrackItem } from '@/data/tracks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -251,18 +252,9 @@ export default function Settings() {
   }
 
   // ---- Exams section state ----
-  const [selectedTrack, setSelectedTrack] = useState('DEFAULT')
+  const { selectedTrack, setSelectedTrack } = useExamProgress()
   const [localExamMap, setLocalExamMap] = useState<Record<string, { status: ItemStatus; targetDate: string }>>({})
 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem('quiz-journey')
-      if (raw) {
-        const j = JSON.parse(raw)
-        if (j.selectedTrack) setSelectedTrack(j.selectedTrack)
-      }
-    } catch { /* ignore */ }
-  }, [])
 
   // Populate localExamMap whenever examRows or selectedTrack changes
   useEffect(() => {
@@ -574,16 +566,7 @@ export default function Settings() {
                     <select
                       id="track-select"
                       value={selectedTrack}
-                      onChange={e => {
-                        const newTrack = e.target.value
-                        setSelectedTrack(newTrack)
-                        try {
-                          const raw = localStorage.getItem('quiz-journey')
-                          const journey = raw ? JSON.parse(raw) : { selectedTrack: 'DEFAULT', progress: {} }
-                          journey.selectedTrack = newTrack
-                          localStorage.setItem('quiz-journey', JSON.stringify(journey))
-                        } catch { /* ignore */ }
-                      }}
+                      onChange={e => setSelectedTrack(e.target.value)}
                       className="w-full sm:w-auto text-sm border border-input rounded-md px-3 py-2 bg-background text-foreground cursor-pointer"
                     >
                       {TRACKS.map(t => (

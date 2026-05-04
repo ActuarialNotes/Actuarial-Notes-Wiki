@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
+import { useExamProgress, type ExamProgressRow } from '@/contexts/ExamProgressContext'
 import type { ItemStatus } from '@/data/tracks'
 
-export interface ExamProgressRow {
-  exam_id: string
-  status: ItemStatus
-  target_date: string | null
-}
+export type { ExamProgressRow }
+export type { ItemStatus }
 
 export interface ProfileData {
   displayName: string
@@ -27,15 +25,13 @@ function initSection(): SectionState {
 
 export function useSettings() {
   const { user } = useAuth()
+  const { examRows, setExamRows, loadingExams, saveExamRows, examsState } = useExamProgress()
 
   const [profile, setProfile] = useState<ProfileData>({ displayName: '', email: '', avatarUrl: '' })
-  const [examRows, setExamRows] = useState<ExamProgressRow[]>([])
   const [loadingProfile, setLoadingProfile] = useState(true)
-  const [loadingExams, setLoadingExams] = useState(true)
 
   const [accountState, setAccountState] = useState<SectionState>(initSection)
   const [profileState, setProfileState] = useState<SectionState>(initSection)
-  const [examsState, setExamsState] = useState<SectionState>(initSection)
   const [dataState, setDataState] = useState<SectionState>(initSection)
 
   // Load profile from user metadata
@@ -50,33 +46,10 @@ export function useSettings() {
     setLoadingProfile(false)
   }, [user])
 
-  // Load exam progress rows
-  const userId = user?.id
-  useEffect(() => {
-    if (!userId) return
-    let cancelled = false
-    setLoadingExams(true)
-    supabase
-      .from('exam_progress')
-      .select('exam_id, status, target_date')
-      .eq('user_id', userId)
-      .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
-        if (cancelled) return
-        if (error) {
-          console.warn('useSettings: failed to load exam_progress:', error.message)
-        } else if (data) {
-          setExamRows(data)
-        }
-        setLoadingExams(false)
-      })
-    return () => { cancelled = true }
-  }, [userId])
-
   // --- Account: change password ---
   const changePassword = useCallback(async (currentPassword: string, newPassword: string) => {
     if (!user?.email) return
     setAccountState({ saving: true, error: null, success: null })
-    // Re-authenticate first
     const { error: signInErr } = await supabase.auth.signInWithPassword({
       email: user.email,
       password: currentPassword,
@@ -137,67 +110,6 @@ export function useSettings() {
     return urlData.publicUrl
   }, [user])
 
-  // --- Exams: update a single exam row ---
-  const updateExamRow = useCallback(async (examId: string, status: ItemStatus, targetDate: string | null) => {
-    if (!user) return false
-    setExamsState({ saving: true, error: null, success: null })
-
-    const payload: Record<string, unknown> = {
-      user_id: user.id,
-      exam_id: examId,
-      status,
-      updated_at: new Date().toISOString(),
-    }
-    // Only include target_date when non-null — omitting it avoids schema-cache
-    // errors on instances where the 20260417 migration hasn't been applied yet.
-    if (targetDate != null) payload.target_date = targetDate || null
-
-    const { error } = await supabase.from('exam_progress').upsert(payload, { onConflict: 'user_id,exam_id' })
-    if (error) {
-      setExamsState({ saving: false, error: error.message, success: null })
-      return false
-    }
-    setExamsState({ saving: false, error: null, success: null })
-    return true
-  }, [user])
-
-  // --- Exams: batch save all rows ---
-  const saveExamRows = useCallback(async (rows: ExamProgressRow[]) => {
-    if (!user) return false
-    setExamsState({ saving: true, error: null, success: null })
-
-    const payloads = rows.map(r => {
-      const row: Record<string, unknown> = {
-        user_id: user.id,
-        exam_id: r.exam_id,
-        status: r.status,
-        updated_at: new Date().toISOString(),
-      }
-      // Only include target_date when explicitly set — omitting null avoids
-      // PGRST204 schema-cache errors when the column migration is pending.
-      if (r.target_date != null) row.target_date = r.target_date || null
-      return row
-    })
-
-    const { error } = await supabase.from('exam_progress').upsert(payloads, { onConflict: 'user_id,exam_id' })
-    if (error) {
-      setExamsState({ saving: false, error: error.message, success: null })
-      return false
-    }
-
-    // Mirror to localStorage quiz-journey for ExamProgressBar display
-    try {
-      const raw = localStorage.getItem('quiz-journey')
-      const journey = raw ? JSON.parse(raw) : { selectedTrack: 'DEFAULT', progress: {} }
-      rows.forEach(r => { journey.progress[r.exam_id] = r.status })
-      localStorage.setItem('quiz-journey', JSON.stringify(journey))
-    } catch { /* ignore */ }
-
-    setExamRows(rows)
-    setExamsState({ saving: false, error: null, success: 'Exam progress saved.' })
-    return true
-  }, [user])
-
   // --- Data: reset study history ---
   const resetHistory = useCallback(async () => {
     if (!user) return false
@@ -233,7 +145,6 @@ export function useSettings() {
     changePassword,
     updateProfile,
     uploadAvatar,
-    updateExamRow,
     saveExamRows,
     resetHistory,
     deleteAccount,

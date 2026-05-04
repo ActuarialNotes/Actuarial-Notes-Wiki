@@ -5,6 +5,7 @@ import {
   ChevronsLeft,
   ClipboardList,
   Compass,
+  GraduationCap,
   LayoutDashboard,
   LogIn,
   LogOut,
@@ -16,6 +17,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
+import ExamsPopout from '@/components/ExamsPopout'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
@@ -81,6 +83,7 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
+  const [examsOpen, setExamsOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -265,6 +268,14 @@ export default function Sidebar() {
                   </button>
                   <button
                     type="button"
+                    onClick={() => { setExamsOpen(true); setProfileOpen(false); closeMobile() }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                  >
+                    <GraduationCap className="h-4 w-4 shrink-0" />
+                    <span>Exams</span>
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => { signOut(); setProfileOpen(false); closeMobile() }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                   >
@@ -306,6 +317,8 @@ export default function Sidebar() {
           )}
         </div>
       </aside>
+
+      <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />
     </>
   )
 }

@@ -66,11 +66,9 @@ describe('level1 state', () => {
   }
 
   it('stays level1 on correct below level2 threshold', () => {
-    const r = level1Rec({ correct_count: 1 })
-    // correct_count becomes 2 = LEVEL2_CORRECT_THRESHOLD → advances to level2
-    // So test with count that stays below threshold after increment
-    const r2 = level1Rec({ correct_count: 0 })
-    expect(correct(r2).state).toBe('level1')
+    // correct_count 0 → 1 after correct, still below LEVEL2_CORRECT_THRESHOLD (2)
+    const r = level1Rec({ correct_count: 0 })
+    expect(correct(r).state).toBe('level1')
   })
 
   it('transitions to level2 when correct_count reaches LEVEL2_CORRECT_THRESHOLD', () => {

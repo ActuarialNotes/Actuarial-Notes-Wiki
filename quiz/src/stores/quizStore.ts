@@ -280,16 +280,9 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     const masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
 
-    // Write upward transitions to the daily level-up store for TodayCard
     const upward = masteryTransitions.filter(
       t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
     )
-    appendTodayLevelUps(upward.map(t => ({
-      conceptSlug: t.conceptSlug,
-      from: t.from,
-      to: t.to,
-      at: new Date().toISOString(),
-    })))
 
     // Persist to localStorage so /review survives a hard refresh
     const completedSession: CompletedSession = {
@@ -308,7 +301,17 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       // quota exceeded — continue
     }
 
-    if (!userId) return  // unauthenticated — skip Supabase write
+    if (!userId) {
+      // Unauthenticated: no DB write, fire level-up event immediately so
+      // TodayCard reflects progress based on the localStorage-only session.
+      appendTodayLevelUps(upward.map(t => ({
+        conceptSlug: t.conceptSlug,
+        from: t.from,
+        to: t.to,
+        at: new Date().toISOString(),
+      })))
+      return
+    }
 
     const allSubtopics = [...new Set(questions.map(q => q.subtopic))]
 
@@ -319,6 +322,15 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     } catch (masteryErr) {
       console.error('concept_mastery upsert failed:', masteryErr)
     }
+
+    // Fire level-up event AFTER mastery is written to localStorage + DB so
+    // Dashboard's refresh() call sees up-to-date records immediately.
+    appendTodayLevelUps(upward.map(t => ({
+      conceptSlug: t.conceptSlug,
+      from: t.from,
+      to: t.to,
+      at: new Date().toISOString(),
+    })))
     const { data: session, error: sessionError } = await supabase
       .from('quiz_sessions')
       .insert({

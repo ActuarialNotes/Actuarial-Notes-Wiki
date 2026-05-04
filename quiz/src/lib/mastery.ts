@@ -66,11 +66,20 @@ export function applyAnswer(
   }
 
   if (isCorrect) {
+    // A concept may only advance one level per calendar day. If the concept
+    // was already answered correctly today (last_correct_at is today's date),
+    // it already used its daily advance — lock the state until tomorrow.
+    // new/forgotten→level1 is always allowed because last_correct_at is null
+    // or stale, never today.
+    const prevCorrectDate = decayed.last_correct_at?.slice(0, 10)
+    const todayDate = at.toISOString().slice(0, 10)
+    const alreadyAdvancedToday = prevCorrectDate === todayDate
+
     next.correct_count = decayed.correct_count + 1
     next.incorrect_streak = 0
     next.hard_correct_count = decayed.hard_correct_count + (isHard ? 1 : 0)
     next.last_correct_at = atIso
-    next.state = nextStateOnCorrect(decayed.state, next.correct_count, next.hard_correct_count)
+    next.state = nextStateOnCorrect(decayed.state, next.correct_count, next.hard_correct_count, alreadyAdvancedToday)
   } else {
     next.incorrect_streak = decayed.incorrect_streak + 1
     if (next.incorrect_streak >= FORGET_FAIL_STREAK && decayed.state !== 'new') {
@@ -85,8 +94,14 @@ function nextStateOnCorrect(
   state: MasteryState,
   correctCount: number,
   hardCorrectCount: number,
+  alreadyAdvancedToday: boolean,
 ): MasteryState {
+  // new/forgotten always promote to level1 (last_correct_at was null/stale so
+  // alreadyAdvancedToday is guaranteed false here, but be explicit for clarity).
   if (state === 'new' || state === 'forgotten') return 'level1'
+  // Enforce one-level-per-day: if the concept was already answered correctly
+  // today it already used its single daily advance.
+  if (alreadyAdvancedToday) return state
   if (state === 'level1') {
     if (correctCount >= LEVEL2_CORRECT_THRESHOLD) return 'level2'
     return 'level1'

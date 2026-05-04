@@ -13,6 +13,7 @@ import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale } from '@/lib/mastery'
 import type { MasteryState } from '@/lib/mastery'
+import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
@@ -22,7 +23,7 @@ export default function Dashboard() {
   const { sessions, loading: sessionsLoading } = useProgress()
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
   const { progress: examProgress, targetDates, updateTargetDate } = useExamProgress()
-  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
+  const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
 
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
@@ -34,6 +35,14 @@ export default function Dashboard() {
       navigate('/auth', { state: { from: '/dashboard' }, replace: true })
     }
   }, [user, authLoading, navigate])
+
+  // Re-fetch mastery after a quiz completes so masteryStateByName reflects
+  // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
+  // with the "Completed today" list).
+  useEffect(() => {
+    window.addEventListener(LEVELUP_EVENT, refreshMastery)
+    return () => window.removeEventListener(LEVELUP_EVENT, refreshMastery)
+  }, [refreshMastery])
 
   // All exams that are marked in_progress and have a known syllabus
   const inProgressSyllabi = syllabi.filter(

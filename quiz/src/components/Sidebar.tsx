@@ -18,6 +18,7 @@ import {
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
 import ExamsPopout from '@/components/ExamsPopout'
+import { AvatarDisplay } from '@/components/AvatarDisplay'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
@@ -122,7 +123,8 @@ export default function Sidebar() {
     user?.email?.split('@')[0] ||
     'Profile'
 
-  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined
+  const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
+  const profileInitials = profileName.slice(0, 2).toUpperCase()
 
   return (
     <>
@@ -291,13 +293,7 @@ export default function Sidebar() {
                 className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
               >
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt={profileName} className="h-5 w-5 rounded-full object-cover" />
-                  ) : (
-                    <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium text-primary">
-                      {profileName[0]?.toUpperCase()}
-                    </div>
-                  )}
+                  <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
                 </span>
                 <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>{profileName}</span>
               </button>

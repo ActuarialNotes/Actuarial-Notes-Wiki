@@ -14,6 +14,14 @@ import { Alert } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
 import { Loader2, Settings2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import {
+  AvatarDisplay,
+  AvatarUploadButton,
+  ANIMAL_TYPES,
+  ANIMAL_LABELS,
+  parseAvatarUrl,
+  serializeAvatar,
+} from '@/components/AvatarDisplay'
 
 // ---- Exam status cycle & icons ----
 
@@ -57,42 +65,6 @@ function StatusIcon({ status }: { status: ItemStatus }) {
 // ---- Avatar helpers ----
 
 const PRESET_COLORS = ['#2563eb', '#9333ea', '#16a34a', '#ea580c', '#e11d48', '#0d9488']
-
-function parseAvatarUrl(url: string): { type: 'image' | 'color'; value: string } {
-  if (!url) return { type: 'color', value: '#475569' }
-  if (url.startsWith('{')) {
-    try {
-      const parsed = JSON.parse(url)
-      if (parsed.type === 'color') return { type: 'color', value: parsed.value }
-    } catch { /* fall through */ }
-  }
-  return { type: 'image', value: url }
-}
-
-function AvatarPreview({ url, initials, size = 64 }: { url: string; initials: string; size?: number }) {
-  const parsed = parseAvatarUrl(url)
-  if (parsed.type === 'image') {
-    return (
-      <img
-        src={parsed.value}
-        alt="Avatar"
-        style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' }}
-      />
-    )
-  }
-  return (
-    <div
-      style={{
-        width: size, height: size, borderRadius: '50%',
-        backgroundColor: parsed.value,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: '#fff', fontWeight: 600, fontSize: size * 0.35,
-      }}
-    >
-      {initials}
-    </div>
-  )
-}
 
 // ---- Simple inline modal ----
 
@@ -165,7 +137,7 @@ export default function Settings() {
     profile, setProfile,
     examRows,
     loadingProfile, loadingExams,
-    changePassword, updateProfile, saveExamRows,
+    changePassword, updateProfile, uploadAvatar, saveExamRows,
     resetHistory, deleteAccount,
     accountState, profileState, examsState, dataState,
   } = useSettings()
@@ -245,10 +217,26 @@ export default function Settings() {
     }
   }
 
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
+
   const handlePresetColor = (hex: string) => {
-    const val = JSON.stringify({ type: 'color', value: hex })
-    setLocalAvatarUrl(val)
+    setLocalAvatarUrl(serializeAvatar({ type: 'color', value: hex }))
     setProfileDirty(true)
+  }
+
+  const handleAnimalSelect = (animal: typeof ANIMAL_TYPES[number]) => {
+    setLocalAvatarUrl(serializeAvatar({ type: 'animal', value: animal }))
+    setProfileDirty(true)
+  }
+
+  const handleAvatarUpload = async (file: File) => {
+    setUploadingAvatar(true)
+    const url = await uploadAvatar(file)
+    setUploadingAvatar(false)
+    if (url) {
+      setLocalAvatarUrl(serializeAvatar({ type: 'custom', value: url }))
+      setProfileDirty(true)
+    }
   }
 
   // ---- Exams section state ----
@@ -413,25 +401,58 @@ export default function Settings() {
                     <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
                   ) : (
                     <>
-                      {/* Avatar color picker */}
-                      <div className="flex items-center gap-4">
-                        <AvatarPreview url={localAvatarUrl} initials={initials} size={64} />
-                        <div className="flex flex-wrap gap-2">
-                          {PRESET_COLORS.map(hex => (
-                            <button
-                              key={hex}
-                              type="button"
-                              title={hex}
-                              onClick={() => handlePresetColor(hex)}
-                              style={{ backgroundColor: hex }}
-                              className={cn(
-                                'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110',
-                                localAvatarUrl === JSON.stringify({ type: 'color', value: hex })
-                                  ? 'border-foreground scale-110'
-                                  : 'border-transparent'
-                              )}
+                      {/* Avatar picker */}
+                      <div className="flex items-start gap-4">
+                        <AvatarDisplay avatarUrl={localAvatarUrl} initials={initials} size={64} />
+                        <div className="space-y-2">
+                          {/* Color options */}
+                          <div className="flex flex-wrap gap-2">
+                            {PRESET_COLORS.map(hex => {
+                              const isSelected = localAvatarUrl === serializeAvatar({ type: 'color', value: hex })
+                              return (
+                                <button
+                                  key={hex}
+                                  type="button"
+                                  title={hex}
+                                  onClick={() => handlePresetColor(hex)}
+                                  style={{ backgroundColor: hex }}
+                                  className={cn(
+                                    'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110',
+                                    isSelected ? 'border-foreground scale-110' : 'border-transparent'
+                                  )}
+                                />
+                              )
+                            })}
+                          </div>
+                          {/* Animal options */}
+                          <div className="flex flex-wrap gap-2">
+                            {ANIMAL_TYPES.map(animal => {
+                              const isSelected = localAvatarUrl === serializeAvatar({ type: 'animal', value: animal })
+                              return (
+                                <button
+                                  key={animal}
+                                  type="button"
+                                  title={ANIMAL_LABELS[animal]}
+                                  onClick={() => handleAnimalSelect(animal)}
+                                  className={cn(
+                                    'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110 overflow-hidden p-0',
+                                    isSelected ? 'border-foreground scale-110' : 'border-transparent'
+                                  )}
+                                >
+                                  <AvatarDisplay avatarUrl={serializeAvatar({ type: 'animal', value: animal })} initials="" size={28} />
+                                </button>
+                              )
+                            })}
+                            {/* Upload custom */}
+                            <AvatarUploadButton
+                              onUpload={handleAvatarUpload}
+                              uploading={uploadingAvatar}
+                              size={28}
                             />
-                          ))}
+                          </div>
+                          {parseAvatarUrl(localAvatarUrl).type === 'custom' && (
+                            <p className="text-xs text-muted-foreground">Custom image uploaded</p>
+                          )}
                         </div>
                       </div>
 

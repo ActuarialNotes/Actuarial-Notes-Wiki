@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle } from 'lucide-re
 import { ActiveExamCard, ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { TodayCard, TodayCardLoading } from '@/components/TodayCard'
 import ExamsPopout from '@/components/ExamsPopout'
+import { MascotWidget } from '@/components/MascotWidget'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useExamProgress } from '@/hooks/useExamProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -132,6 +133,21 @@ export default function Dashboard() {
         ?? user.email?.split('@')[0]
         ?? 'You'
 
+  const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
+  const initials = displayName.slice(0, 2).toUpperCase()
+
+  // Mascot context — summarise mastery for the active exam
+  const mascotContext = useMemo(() => {
+    if (!activeSyllabus || !activeProgressKey) return {}
+    const totalTopics = activeSyllabus.topics.reduce((n, t) => n + t.concepts.length, 0)
+    const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
+    const topicsMastered = examRecords.filter(r =>
+      r.state === 'level3' || r.state === 'level2'
+    ).length
+    const daysRemaining = studyPlan?.daysRemaining ?? null
+    return { daysRemaining, topicsMastered, totalTopics }
+  }, [activeSyllabus, activeProgressKey, masteryRecords, studyPlan])
+
   const multiExam = inProgressSyllabi.length > 1
 
   return (
@@ -160,6 +176,15 @@ export default function Dashboard() {
         </button>
         )}
       </div>
+
+      {/* Mascot widget — only shown for logged-in users with an animal avatar */}
+      {!isGuest && (
+        <MascotWidget
+          avatarUrl={avatarUrl}
+          initials={initials}
+          context={mascotContext}
+        />
+      )}
 
       {/* Exam navigation dots */}
       {multiExam && (

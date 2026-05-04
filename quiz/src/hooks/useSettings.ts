@@ -50,6 +50,17 @@ export function useSettings() {
   const changePassword = useCallback(async (currentPassword: string, newPassword: string) => {
     if (!user?.email) return
     setAccountState({ saving: true, error: null, success: null })
+
+    // Ensure we have a live session before mutating auth state
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      const { error: refreshErr } = await supabase.auth.refreshSession()
+      if (refreshErr) {
+        setAccountState({ saving: false, error: 'Session expired. Please sign in again.', success: null })
+        return false
+      }
+    }
+
     const { error: signInErr } = await supabase.auth.signInWithPassword({
       email: user.email,
       password: currentPassword,
@@ -70,6 +81,17 @@ export function useSettings() {
   // --- Profile: update display name / email / avatar URL ---
   const updateProfile = useCallback(async (data: Partial<ProfileData>) => {
     setProfileState({ saving: true, error: null, success: null })
+
+    // Ensure we have a live session before mutating auth state
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      const { error: refreshErr } = await supabase.auth.refreshSession()
+      if (refreshErr) {
+        setProfileState({ saving: false, error: 'Session expired. Please refresh the page and sign in again.', success: null })
+        return false
+      }
+    }
+
     const updatePayload: Parameters<typeof supabase.auth.updateUser>[0] = {}
 
     if (data.email && data.email !== user?.email) {

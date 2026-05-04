@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { ItemStatus } from '@/data/tracks'
@@ -23,6 +23,12 @@ interface ExamProgressContextValue {
   setSelectedTrack: (track: string) => void
   saveExamRows: (rows: ExamProgressRow[]) => Promise<boolean>
   examsState: SectionState
+  /** Derived: status keyed by exam_id, e.g. { FM: 'in_progress' } */
+  progress: Record<string, string>
+  /** Derived: target date keyed by exam_id */
+  targetDates: Record<string, string | null>
+  /** Persist an updated exam target date */
+  updateTargetDate: (examId: string, date: string | null) => Promise<boolean>
 }
 
 const ExamProgressContext = createContext<ExamProgressContextValue | null>(null)
@@ -55,6 +61,23 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const userId = user?.id
+
+  const fetchExamRows = useCallback(() => {
+    if (!userId) return
+    supabase
+      .from('exam_progress')
+      .select('exam_id, status, target_date')
+      .eq('user_id', userId)
+      .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
+        if (error) {
+          console.warn('ExamProgressContext: failed to load exam_progress:', error.message)
+        } else if (data) {
+          setExamRows(data)
+        }
+      })
+  }, [userId])
+
+  // Initial load
   useEffect(() => {
     if (!userId) { setLoadingExams(false); return }
     let cancelled = false
@@ -74,6 +97,30 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       })
     return () => { cancelled = true }
   }, [userId])
+
+  // Supabase realtime subscription — picks up changes from other devices/browsers
+  useEffect(() => {
+    if (!userId) return
+    const channel = supabase
+      .channel(`exam_progress:${userId}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'exam_progress', filter: `user_id=eq.${userId}` },
+        () => { fetchExamRows() },
+      )
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [userId, fetchExamRows])
+
+  // Refetch when the tab regains focus (covers cross-browser / mobile ↔ desktop)
+  useEffect(() => {
+    if (!userId) return
+    const handleVisible = () => {
+      if (document.visibilityState === 'visible') fetchExamRows()
+    }
+    document.addEventListener('visibilitychange', handleVisible)
+    return () => document.removeEventListener('visibilitychange', handleVisible)
+  }, [userId, fetchExamRows])
 
   const saveExamRows = useCallback(async (rows: ExamProgressRow[]) => {
     if (!user) return false
@@ -108,11 +155,41 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     return true
   }, [user])
 
+  const updateTargetDate = useCallback(async (examId: string, date: string | null): Promise<boolean> => {
+    if (!userId) return false
+    const payload: Record<string, unknown> = {
+      user_id: userId,
+      exam_id: examId,
+      updated_at: new Date().toISOString(),
+    }
+    if (date != null) payload.target_date = date || null
+    const { error } = await supabase.from('exam_progress').upsert(payload, { onConflict: 'user_id,exam_id' })
+    if (error) {
+      console.warn('updateTargetDate: failed:', error.message)
+      return false
+    }
+    setExamRows(prev => prev.map(r => r.exam_id === examId ? { ...r, target_date: date } : r))
+    return true
+  }, [userId])
+
+  const progress = useMemo(() => {
+    const p: Record<string, string> = {}
+    examRows.forEach(r => { p[r.exam_id] = r.status })
+    return p
+  }, [examRows])
+
+  const targetDates = useMemo(() => {
+    const d: Record<string, string | null> = {}
+    examRows.forEach(r => { d[r.exam_id] = r.target_date ?? null })
+    return d
+  }, [examRows])
+
   return (
     <ExamProgressContext.Provider value={{
       examRows, setExamRows, loadingExams,
       selectedTrack, setSelectedTrack,
       saveExamRows, examsState,
+      progress, targetDates, updateTargetDate,
     }}>
       {children}
     </ExamProgressContext.Provider>

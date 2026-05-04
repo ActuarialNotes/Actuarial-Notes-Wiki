@@ -5,7 +5,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { aggregateForTopic, decayIfStale } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
@@ -16,6 +15,7 @@ import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
+import type { ConceptMasteryRecord } from '@/lib/mastery'
 
 // ── Session list helpers ──────────────────────────────────────────────────────
 
@@ -151,6 +151,8 @@ interface Props {
   targetDate: string | null
   /** Called when the user saves a new exam date from the heatmap picker. */
   onTargetDateChange: (date: string | null) => void
+  /** Mastery records passed down from Dashboard (avoids duplicate Supabase channel). */
+  masteryRecords: ConceptMasteryRecord[]
 }
 
 export function ActiveExamCard({
@@ -158,9 +160,10 @@ export function ActiveExamCard({
   sessions,
   targetDate,
   onTargetDateChange,
+  masteryRecords,
 }: Props) {
   const { user } = useAuth()
-  const { records } = useConceptMastery()
+  const records = masteryRecords
   const [historyExpanded, setHistoryExpanded] = useState(false)
   const [historyFilter, setHistoryFilter] = useState<string | null>(null)
   const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set())

@@ -234,6 +234,7 @@ export default function Dashboard() {
               sessions={sessions}
               targetDate={activeTargetDate}
               onTargetDateChange={handleTargetDateChange}
+              masteryRecords={masteryRecords}
             />
           )}
         </div>

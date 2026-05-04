@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { applyAnswer, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import { appendTodayLevelUps } from '@/lib/dailyProgressStore'
 
 const TOPIC_TO_EXAM_ID: Record<string, string> = {
   'Probability': 'P',
@@ -278,6 +279,17 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     const correctCount = questions.filter(q => responses[q.id]?.chosen === q.answer).length
 
     const masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
+
+    // Write upward transitions to the daily level-up store for TodayCard
+    const upward = masteryTransitions.filter(
+      t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
+    )
+    appendTodayLevelUps(upward.map(t => ({
+      conceptSlug: t.conceptSlug,
+      from: t.from,
+      to: t.to,
+      at: new Date().toISOString(),
+    })))
 
     // Persist to localStorage so /review survives a hard refresh
     const completedSession: CompletedSession = {

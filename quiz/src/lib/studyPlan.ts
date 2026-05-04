@@ -243,8 +243,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   const daysRemaining = Math.max(1, daysBetween(today, effectiveReadyDate!))
 
   // ── Sort unmastered concepts by priority ──────────────────────────────────
-  // level1/level2 (partially learned) are higher priority than new concepts;
-  // forgotten is highest priority since it must be re-learned.
+  // forgotten > level1 > level2 > new (partially-learned beats brand-new)
   const stateOrder: Record<string, number> = { forgotten: 0, level1: 1, level2: 2, new: 3 }
 
   const sortedUnmastered = [...unmastered].sort((a, b) => {
@@ -254,97 +253,98 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     return (stateOrder[getState(a.name)] ?? 3) - (stateOrder[getState(b.name)] ?? 3)
   })
 
-  // ── Incremental scheduling: each concept needs multiple visits ────────────
-  // A concept at 'new' needs 3 visits (new→l1, l1→l2, l2→l3).
-  // A concept at 'level1' needs 2 more visits; 'level2' needs 1 more visit.
-  function visitsNeeded(name: string): number {
+  // ── Spacing-aware scheduling ──────────────────────────────────────────────
+  // Rules:
+  //   - new/forgotten: introduce up to MAX_NEW_PER_DAY per calendar day
+  //   - level1 → level2: earliest after 1 day gap from last_correct_at
+  //   - level2 → level3: earliest after 2 day gap from last_correct_at
+  //   - max 1 level advance per concept per session (enforced by mastery.ts)
+
+  const MAX_NEW_PER_DAY = 5
+
+  function getEligibleDate(name: string): string {
     const state = getState(name)
-    if (state === 'level2') return 1
-    if (state === 'level1') return 2
-    return 3  // new or forgotten
-  }
-
-  // Build expanded task list: each entry is a visit slot for a concept.
-  // We spread visits for the same concept across different days so they're
-  // not all crammed into day 1.
-  interface VisitTask { concept: ConceptEntry; visitIndex: number }
-  const tasks: VisitTask[] = []
-  for (const c of sortedUnmastered) {
-    const n = visitsNeeded(c.name)
-    for (let v = 0; v < n; v++) {
-      tasks.push({ concept: c, visitIndex: v })
+    const rec = masteryBySlug.get(name.toLowerCase())
+    if (state === 'level1') {
+      if (!rec?.last_correct_at) return today
+      const eligible = addDays(rec.last_correct_at.slice(0, 10), 1)
+      return eligible > today ? eligible : today
     }
+    if (state === 'level2') {
+      if (!rec?.last_correct_at) return today
+      const eligible = addDays(rec.last_correct_at.slice(0, 10), 2)
+      return eligible > today ? eligible : today
+    }
+    return today  // new / forgotten
   }
 
-  // Concepts per day is now based on total visit tasks (not unique concepts)
-  const conceptsPerDay = Math.max(1, Math.ceil(tasks.length / daysRemaining))
-
-  // Assign tasks to days. Each day gets at most conceptsPerDay tasks.
-  // A concept can appear at most once per day even if it has multiple visits.
   const assignments: ConceptAssignment[] = []
-  const dayConceptSet: Map<string, Set<string>> = new Map()  // date → set of concept names
+  const newIntrosByDay = new Map<string, number>()  // date → count of new introductions
 
-  let taskIdx = 0
-  for (let dayOffset = 0; dayOffset < daysRemaining && taskIdx < tasks.length; dayOffset++) {
-    const date = addDays(today, dayOffset)
-    const usedToday = dayConceptSet.get(date) ?? new Set<string>()
-    dayConceptSet.set(date, usedToday)
-    let slotsUsed = 0
-    let scan = taskIdx
-
-    while (slotsUsed < conceptsPerDay && scan < tasks.length) {
-      const task = tasks[scan]
-      if (!usedToday.has(task.concept.name)) {
-        usedToday.add(task.concept.name)
-        assignments.push({
-          conceptName: task.concept.name,
-          topicName: task.concept.topicName,
-          topicWeight: task.concept.topicWeight,
-          scheduledDate: date,
-        })
-        tasks.splice(scan, 1)  // remove assigned task
-        slotsUsed++
-      } else {
-        scan++
+  function nextSlotForNewIntro(): string {
+    let dayOffset = 0
+    while (true) {
+      const date = addDays(today, dayOffset)
+      const count = newIntrosByDay.get(date) ?? 0
+      if (count < MAX_NEW_PER_DAY) {
+        newIntrosByDay.set(date, count + 1)
+        return date
       }
+      dayOffset++
     }
   }
 
-  // Remaining overflow tasks: append to last day
-  for (const task of tasks) {
-    const date = addDays(today, daysRemaining - 1)
+  // First: schedule level1/level2 on their eligible date (spacing enforced)
+  for (const c of sortedUnmastered) {
+    const state = getState(c.name)
+    if (state !== 'level1' && state !== 'level2') continue
     assignments.push({
-      conceptName: task.concept.name,
-      topicName: task.concept.topicName,
-      topicWeight: task.concept.topicWeight,
-      scheduledDate: date,
+      conceptName: c.name,
+      topicName: c.topicName,
+      topicWeight: c.topicWeight,
+      scheduledDate: getEligibleDate(c.name),
+    })
+  }
+
+  // Second: spread new/forgotten introductions, max MAX_NEW_PER_DAY per day
+  for (const c of sortedUnmastered) {
+    const state = getState(c.name)
+    if (state !== 'new' && state !== 'forgotten') continue
+    assignments.push({
+      conceptName: c.name,
+      topicName: c.topicName,
+      topicWeight: c.topicWeight,
+      scheduledDate: nextSlotForNewIntro(),
     })
   }
 
   const todaysConcepts = assignments
     .filter(a => a.scheduledDate === today)
     .map(a => a.conceptName)
-    .filter((name, i, arr) => arr.indexOf(name) === i)  // de-duplicate
+
+  // conceptsPerDay = largest single-day assignment count (for pacing display)
+  const dailyCounts = new Map<string, number>()
+  for (const a of assignments) {
+    dailyCounts.set(a.scheduledDate, (dailyCounts.get(a.scheduledDate) ?? 0) + 1)
+  }
+  const conceptsPerDay = Math.max(1, ...[...dailyCounts.values()])
 
   // ── Pacing status ─────────────────────────────────────────────────────────
+  // A schedule is "behind" when unmastered concepts can't fit in the remaining
+  // days at a reasonable pace (more than 8 concepts on the busiest day).
   let status: PacingStatus = 'on_track'
   if (targetPassedFallback) {
     status = 'target_passed'
+  } else if (conceptsPerDay > 8) {
+    status = 'behind'
   } else {
-    // Compare concepts needed per day vs a comfortable pace
-    const needed = sortedUnmastered.length / daysRemaining
-    if (needed > conceptsPerDay * 1.5) {
-      status = 'behind'
-    } else {
-      // ahead if mastered >70% and >40% days remain
-      const planStartDate = config.planStartDate ?? today
-      const totalDaysFromStart = Math.max(1, daysBetween(planStartDate, effectiveReadyDate!))
-      const daysElapsed = totalDaysFromStart - daysRemaining
-      const expectedMasteredFraction = daysElapsed / totalDaysFromStart
-      const actualMasteredFraction = mastered.length / allConcepts.length
-      if (daysElapsed > 2 && actualMasteredFraction > expectedMasteredFraction + 0.15) {
-        status = 'ahead'
-      }
+    const planStartDate = config.planStartDate ?? today
+    const totalDaysFromStart = Math.max(1, daysBetween(planStartDate, effectiveReadyDate!))
+    const daysElapsed = totalDaysFromStart - daysRemaining
+    const expectedMasteredFraction = daysElapsed / totalDaysFromStart
+    const actualMasteredFraction = mastered.length / allConcepts.length
+    if (daysElapsed > 2 && actualMasteredFraction > expectedMasteredFraction + 0.15) {
+      status = 'ahead'
     }
   }
 

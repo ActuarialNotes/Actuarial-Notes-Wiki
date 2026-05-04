@@ -118,6 +118,18 @@ export default function Dashboard() {
     return map
   }, [activeSyllabus, activeProgressKey, masteryRecords])
 
+  // Mascot context — summarise mastery for the active exam
+  const mascotContext = useMemo(() => {
+    if (!activeSyllabus || !activeProgressKey) return {}
+    const totalTopics = activeSyllabus.topics.reduce((n, t) => n + t.concepts.length, 0)
+    const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
+    const topicsMastered = examRecords.filter(r =>
+      r.state === 'level3' || r.state === 'level2'
+    ).length
+    const daysRemaining = studyPlan?.daysRemaining ?? null
+    return { daysRemaining, topicsMastered, totalTopics }
+  }, [activeSyllabus, activeProgressKey, masteryRecords, studyPlan])
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -135,18 +147,6 @@ export default function Dashboard() {
 
   const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
   const initials = displayName.slice(0, 2).toUpperCase()
-
-  // Mascot context — summarise mastery for the active exam
-  const mascotContext = useMemo(() => {
-    if (!activeSyllabus || !activeProgressKey) return {}
-    const totalTopics = activeSyllabus.topics.reduce((n, t) => n + t.concepts.length, 0)
-    const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
-    const topicsMastered = examRecords.filter(r =>
-      r.state === 'level3' || r.state === 'level2'
-    ).length
-    const daysRemaining = studyPlan?.daysRemaining ?? null
-    return { daysRemaining, topicsMastered, totalTopics }
-  }, [activeSyllabus, activeProgressKey, masteryRecords, studyPlan])
 
   const multiExam = inProgressSyllabi.length > 1
 

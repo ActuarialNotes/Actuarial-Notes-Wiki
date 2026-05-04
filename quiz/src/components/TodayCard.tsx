@@ -280,12 +280,17 @@ export function TodayCard({
 
   // Build a per-concept target map from today's scheduled assignments.
   // Each concept's daily goal is one level above its state at scheduling time.
+  // Keep the highest target if a concept somehow has multiple assignments today.
   const targetByName = new Map<string, MasteryState>()
   if (plan) {
     const today = todayISO()
     for (const a of plan.assignments) {
       if (a.scheduledDate === today) {
-        targetByName.set(a.conceptName.toLowerCase(), NEXT_STATE[a.initialState] ?? 'level1')
+        const target = NEXT_STATE[a.initialState] ?? 'level1'
+        const existing = targetByName.get(a.conceptName.toLowerCase())
+        if (!existing || STATE_ORDER[target] > STATE_ORDER[existing]) {
+          targetByName.set(a.conceptName.toLowerCase(), target)
+        }
       }
     }
   }

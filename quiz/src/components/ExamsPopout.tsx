@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { X, Loader2, GraduationCap } from 'lucide-react'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { TRACKS } from '@/data/tracks'

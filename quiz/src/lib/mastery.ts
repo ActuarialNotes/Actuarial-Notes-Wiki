@@ -6,7 +6,7 @@
 // runs of three failures both flip back to `forgotten`, which then re-enters
 // the Learning track on the next correct answer — Strong must be re-earned.
 
-export type MasteryState = 'new' | 'learning' | 'strong' | 'forgotten'
+export type MasteryState = 'new' | 'level1' | 'level2' | 'level3' | 'forgotten'
 
 export interface ConceptMasteryRecord {
   user_id: string
@@ -21,7 +21,8 @@ export interface ConceptMasteryRecord {
 }
 
 export const FORGET_AFTER_DAYS = 15
-export const STRONG_CORRECT_THRESHOLD = 3
+export const LEVEL2_CORRECT_THRESHOLD = 2
+export const LEVEL3_CORRECT_THRESHOLD = 3
 export const FORGET_FAIL_STREAK = 3
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000
@@ -85,13 +86,16 @@ function nextStateOnCorrect(
   correctCount: number,
   hardCorrectCount: number,
 ): MasteryState {
-  if (state === 'new') return 'learning'
-  if (state === 'forgotten') return 'learning'
-  if (state === 'learning') {
-    if (correctCount >= STRONG_CORRECT_THRESHOLD && hardCorrectCount >= 1) return 'strong'
-    return 'learning'
+  if (state === 'new' || state === 'forgotten') return 'level1'
+  if (state === 'level1') {
+    if (correctCount >= LEVEL2_CORRECT_THRESHOLD) return 'level2'
+    return 'level1'
   }
-  return state // strong stays strong
+  if (state === 'level2') {
+    if (correctCount >= LEVEL3_CORRECT_THRESHOLD && hardCorrectCount >= 1) return 'level3'
+    return 'level2'
+  }
+  return state // level3 stays level3
 }
 
 export function decayIfStale(
@@ -107,11 +111,14 @@ export function decayIfStale(
 
 export interface TopicAggregate {
   total: number
-  strong: number
-  learning: number
+  strong: number    // level3 count (alias for backwards compat)
+  learning: number  // level1+level2 count (alias for backwards compat)
+  level1: number
+  level2: number
+  level3: number
   newCount: number
   forgotten: number
-  /** Percentage of concepts in the topic that are currently Strong (0-100). */
+  /** Percentage of concepts in the topic that are at level3 (0-100). */
   strongPct: number
 }
 
@@ -121,18 +128,19 @@ export function aggregateForTopic(
   now: Date,
 ): TopicAggregate {
   const byConcept = new Map(records.map(r => [r.concept_slug.toLowerCase(), r]))
-  let strong = 0, learning = 0, forgotten = 0, newCount = 0
+  let level1 = 0, level2 = 0, level3 = 0, forgotten = 0, newCount = 0
 
   for (const slug of conceptSlugs) {
     const rec = byConcept.get(slug.toLowerCase())
     const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
-    if (state === 'strong') strong++
-    else if (state === 'learning') learning++
+    if (state === 'level3') level3++
+    else if (state === 'level2') level2++
+    else if (state === 'level1') level1++
     else if (state === 'forgotten') forgotten++
     else newCount++
   }
 
   const total = conceptSlugs.length
-  const strongPct = total > 0 ? Math.round((strong / total) * 100) : 0
-  return { total, strong, learning, newCount, forgotten, strongPct }
+  const strongPct = total > 0 ? Math.round((level3 / total) * 100) : 0
+  return { total, strong: level3, learning: level1 + level2, level1, level2, level3, newCount, forgotten, strongPct }
 }

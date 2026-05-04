@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
-import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2, PlusCircle } from 'lucide-react'
 import { ActiveExamCard, ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { TodayCard, TodayCardLoading } from '@/components/TodayCard'
+import { ExamsPopout } from '@/components/ExamsPopout'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useExamProgress } from '@/hooks/useExamProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -24,6 +25,7 @@ export default function Dashboard() {
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
 
   const [activeExamIdx, setActiveExamIdx] = useState(0)
+  const [examsOpen, setExamsOpen] = useState(false)
   const touchStartX = useRef<number>(0)
 
   // Hard redirect if not authenticated
@@ -110,24 +112,18 @@ export default function Dashboard() {
   return (
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
       {/* Header */}
-      <h1 className="text-2xl font-bold">{displayName}'s Actuarial Notes</h1>
-
-      {/* Today card — only shown when there is an active exam */}
-      {syllabusLoading || masteryLoading ? (
-        <TodayCardLoading />
-      ) : activeSyllabus ? (
-        <TodayCard
-          plan={studyPlan}
-          config={planConfig}
-          loading={planLoading}
-          syllabus={activeSyllabus}
-          masteryStateByName={masteryStateByName}
-          masteryRecords={masteryRecords}
-          examDate={activeTargetDate}
-          onConfigChange={updatePlanConfig}
-          onRegenerate={regeneratePlan}
-        />
-      ) : null}
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-bold flex-1">{displayName}'s Actuarial Notes</h1>
+        <button
+          type="button"
+          onClick={() => setExamsOpen(true)}
+          className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+          aria-label="Add or manage exams"
+          title="Add or manage exams"
+        >
+          <PlusCircle className="h-5 w-5" />
+        </button>
+      </div>
 
       {/* Exam navigation dots */}
       {multiExam && (
@@ -170,7 +166,7 @@ export default function Dashboard() {
           {syllabusLoading || sessionsLoading ? (
             <ActiveExamCardLoading />
           ) : !activeSyllabus ? (
-            <ActiveExamCardEmpty />
+            <ActiveExamCardEmpty onChooseExam={() => setExamsOpen(true)} />
           ) : (
             <ActiveExamCard
               syllabus={activeSyllabus}
@@ -192,6 +188,26 @@ export default function Dashboard() {
           </button>
         )}
       </div>
+
+      {/* Today card — only shown when there is an active exam */}
+      {syllabusLoading || masteryLoading ? (
+        <TodayCardLoading />
+      ) : activeSyllabus ? (
+        <TodayCard
+          plan={studyPlan}
+          config={planConfig}
+          loading={planLoading}
+          syllabus={activeSyllabus}
+          masteryStateByName={masteryStateByName}
+          masteryRecords={masteryRecords}
+          examDate={activeTargetDate}
+          onConfigChange={updatePlanConfig}
+          onRegenerate={regeneratePlan}
+          onExamDateChange={handleTargetDateChange}
+        />
+      ) : null}
+
+      <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />
     </div>
   )
 }

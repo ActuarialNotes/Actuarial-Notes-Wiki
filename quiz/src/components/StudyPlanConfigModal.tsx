@@ -1,4 +1,4 @@
-// Modal for configuring the study plan: targetReadyDate and targetStrengthLevel.
+// Modal for configuring the study plan: targetReadyDate, targetStrengthLevel, and exam date.
 
 import { useState } from 'react'
 import { X, CalendarDays, Target } from 'lucide-react'
@@ -20,16 +20,17 @@ interface Props {
   examDate: string | null
   examLabel: string
   onSave: (next: Partial<StudyPlanConfig>) => void
+  onExamDateChange?: (date: string | null) => void
   onClose: () => void
 }
 
-export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onClose }: Props) {
+export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onExamDateChange, onClose }: Props) {
   const today = todayISO()
 
-  const [readyDate, setReadyDate]     = useState(config.targetReadyDate ?? '')
-  const [strength, setStrength]       = useState<TargetStrengthLevel>(config.targetStrengthLevel)
+  const [readyDate, setReadyDate]       = useState(config.targetReadyDate ?? '')
+  const [strength, setStrength]         = useState<TargetStrengthLevel>(config.targetStrengthLevel)
+  const [localExamDate, setLocalExamDate] = useState(examDate ?? '')
   const [activePreset, setActivePreset] = useState<QuickSetPreset | null>(() => {
-    // Detect which preset matches the current targetReadyDate, if any
     if (!config.targetReadyDate || !examDate) return null
     for (const p of QUICK_SET_PRESETS) {
       if (applyPreset(examDate, p) === config.targetReadyDate) return p
@@ -38,24 +39,36 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onCl
   })
 
   function selectPreset(preset: QuickSetPreset) {
-    if (!examDate) return
-    const computed = applyPreset(examDate, preset)
+    const base = localExamDate || examDate
+    if (!base) return
+    const computed = applyPreset(base, preset)
     setReadyDate(computed)
     setActivePreset(preset)
   }
 
-  function handleDateChange(value: string) {
+  function handleReadyDateChange(value: string) {
     setReadyDate(value)
-    setActivePreset(null)  // manual pick clears preset highlight
+    setActivePreset(null)
+  }
+
+  function handleExamDateChange(value: string) {
+    setLocalExamDate(value)
+    // Re-apply active preset against new exam date
+    if (activePreset && value) {
+      setReadyDate(applyPreset(value, activePreset))
+    }
   }
 
   function handleSave() {
     onSave({ targetReadyDate: readyDate || null, targetStrengthLevel: strength })
+    if (onExamDateChange) {
+      onExamDateChange(localExamDate || null)
+    }
     onClose()
   }
 
   const daysOut = readyDate ? daysBetween(today, readyDate) : null
-  const examDaysOut = examDate ? daysBetween(today, examDate) : null
+  const examDaysOut = localExamDate ? daysBetween(today, localExamDate) : null
 
   return (
     <div
@@ -69,7 +82,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onCl
         {/* Header */}
         <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
           <Target className="h-4 w-4 text-primary shrink-0" />
-          <span className="flex-1 font-semibold text-sm">Study Plan Settings</span>
+          <span className="flex-1 font-semibold text-sm">Study Plan</span>
           <button
             type="button"
             onClick={onClose}
@@ -81,6 +94,24 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onCl
         </div>
 
         <div className="p-5 space-y-6">
+          {/* Exam date — editable */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
+              <p className="text-sm font-medium">Exam date</p>
+            </div>
+            <input
+              type="date"
+              value={localExamDate}
+              min={today}
+              onChange={e => handleExamDateChange(e.target.value)}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+            />
+            {examDaysOut !== null && examDaysOut > 0 && (
+              <p className="text-xs text-muted-foreground">{examDaysOut} day{examDaysOut === 1 ? '' : 's'} away</p>
+            )}
+          </div>
+
           {/* Target ready date */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
@@ -90,39 +121,31 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onCl
             <p className="text-xs text-muted-foreground leading-relaxed">
               The date you want to have mastered all concepts — before your{' '}
               {examLabel} exam
-              {examDate ? ` on ${formatReadableDate(examDate)}` : ''}.
+              {localExamDate ? ` on ${formatReadableDate(localExamDate)}` : ''}.
             </p>
 
-            {/* Quick-set presets */}
-            {examDate && (
+            {/* Quick-set slider */}
+            {(localExamDate || examDate) && (
               <div className="space-y-2">
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                  Quick set
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {QUICK_SET_PRESETS.map(preset => {
-                    const computed = applyPreset(examDate, preset)
-                    const inFuture = daysBetween(today, computed) > 0
-                    return (
-                      <button
-                        key={preset}
-                        type="button"
-                        disabled={!inFuture}
-                        onClick={() => selectPreset(preset)}
-                        className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                          activePreset === preset
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : inFuture
-                            ? 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'
-                            : 'border-border text-muted-foreground/40 cursor-not-allowed'
-                        }`}
-                        title={inFuture ? formatReadableDate(computed) : 'Date has already passed'}
-                      >
-                        {QUICK_SET_LABELS[preset]}
-                      </button>
-                    )
-                  })}
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Quick set</p>
+                  <span className="text-xs font-medium text-foreground">
+                    {activePreset ? QUICK_SET_LABELS[activePreset] : 'Custom date'}
+                  </span>
                 </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={QUICK_SET_PRESETS.length - 1}
+                  step={1}
+                  value={activePreset !== null ? QUICK_SET_PRESETS.indexOf(activePreset) : 0}
+                  onChange={e => {
+                    const idx = parseInt(e.target.value)
+                    if (idx >= 0 && idx < QUICK_SET_PRESETS.length) selectPreset(QUICK_SET_PRESETS[idx])
+                  }}
+                  className="w-full accent-primary"
+                  aria-label="Quick set target ready date"
+                />
               </div>
             )}
 
@@ -135,8 +158,8 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onCl
                 type="date"
                 value={readyDate}
                 min={today}
-                max={examDate ?? undefined}
-                onChange={e => handleDateChange(e.target.value)}
+                max={localExamDate || examDate || undefined}
+                onChange={e => handleReadyDateChange(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
               />
               {daysOut !== null && daysOut > 0 && (
@@ -166,12 +189,12 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onCl
               {([
                 {
                   value: 'strong_all' as TargetStrengthLevel,
-                  label: 'Strong in everything',
+                  label: 'Master everything',
                   desc: 'Aim to fully master every concept before the ready date.',
                 },
                 {
                   value: 'strong_key' as TargetStrengthLevel,
-                  label: 'Prioritise high-weight topics',
+                  label: 'Focus on key topics',
                   desc: 'Heavier exam topics get scheduled first; lighter topics are covered as time allows.',
                 },
               ] as const).map(opt => (

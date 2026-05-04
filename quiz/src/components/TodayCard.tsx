@@ -17,6 +17,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
+import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
@@ -37,13 +38,14 @@ import {
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const STATE_LABEL: Record<MasteryState, string> = {
-  new: 'New', learning: 'Learning', strong: 'Strong', forgotten: 'Forgotten',
+  new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
 }
 
 const STATE_TEXT_COLOR: Record<MasteryState, string> = {
   new: 'text-muted-foreground',
-  learning: 'text-amber-600 dark:text-amber-400',
-  strong: 'text-green-600 dark:text-green-400',
+  level1: 'text-amber-500 dark:text-amber-400',
+  level2: 'text-blue-500 dark:text-blue-400',
+  level3: 'text-green-600 dark:text-green-400',
   forgotten: 'text-red-500',
 }
 
@@ -93,9 +95,11 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
 function StudyPlanTracker({
   syllabus,
   masteryRecords,
+  studyPlan,
 }: {
   syllabus: WikiExamSyllabus
   masteryRecords: ConceptMasteryRecord[]
+  studyPlan?: StudyPlan | null
 }) {
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const [selectedConcept, setSelectedConcept] = useState<{
@@ -169,7 +173,7 @@ function StudyPlanTracker({
                   <div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${agg.strongPct}%` }} />
                 </div>
                 <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">
-                  {agg.strong}/{agg.total}
+                  {agg.level3}/{agg.total}
                 </span>
               </button>
 
@@ -187,6 +191,9 @@ function StudyPlanTracker({
                         className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
                       >
                         <span className="text-xs text-foreground min-w-0 flex-1 truncate">{c.name}</span>
+                        {studyPlan && state !== 'level3' && (
+                          <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
+                        )}
                         <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>
                           {STATE_LABEL[state]}
                         </span>
@@ -226,6 +233,7 @@ interface Props {
   examDate: string | null
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
+  onExamDateChange?: (date: string | null) => void
 }
 
 export function TodayCard({
@@ -238,6 +246,7 @@ export function TodayCard({
   examDate,
   onConfigChange,
   onRegenerate,
+  onExamDateChange,
 }: Props) {
   const navigate = useNavigate()
   const [showConfig, setShowConfig] = useState(false)
@@ -250,7 +259,7 @@ export function TodayCard({
   const displayConcepts = plan?.status === 'review_mode' ? reviewConcepts : todaysConcepts
 
   const strongCount = displayConcepts.filter(
-    n => masteryStateByName.get(n.toLowerCase()) === 'strong'
+    n => masteryStateByName.get(n.toLowerCase()) === 'level3'
   ).length
   const allStrong = displayConcepts.length > 0 && strongCount === displayConcepts.length
 
@@ -327,6 +336,7 @@ export function TodayCard({
             examDate={examDate}
             examLabel={syllabus.examLabel}
             onSave={onConfigChange}
+            onExamDateChange={onExamDateChange}
             onClose={() => setShowConfig(false)}
           />
         )}
@@ -378,20 +388,21 @@ export function TodayCard({
                     ? 'text-green-600 dark:text-green-400'
                     : 'text-muted-foreground'
                 }`}>
-                  {strongCount} / {displayConcepts.length} Strong
+                  {strongCount} / {displayConcepts.length} Level 3
                 </span>
               </div>
               {!allStrong && (
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Bring each to Strong to complete today's session
+                  Bring each to Level 3 to complete today's session
                 </p>
               )}
               <div className="flex flex-wrap gap-1.5 mt-1.5">
                 {displayConcepts.map(name => {
                   const state = masteryStateByName.get(name.toLowerCase()) ?? 'new'
                   const stateColor =
-                    state === 'strong'    ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/30 dark:text-green-300' :
-                    state === 'learning'  ? 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-300' :
+                    state === 'level3'   ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/30 dark:text-green-300' :
+                    state === 'level2'   ? 'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/30 dark:text-blue-300' :
+                    state === 'level1'   ? 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-300' :
                     state === 'forgotten' ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-300' :
                                            'border-border bg-muted/40 text-muted-foreground'
                   return (
@@ -473,6 +484,7 @@ export function TodayCard({
                   <StudyPlanTracker
                     syllabus={syllabus}
                     masteryRecords={masteryRecords}
+                    studyPlan={plan}
                   />
                 </div>
               )}
@@ -511,6 +523,7 @@ export function TodayCard({
             onConfigChange(next)
             onRegenerate()
           }}
+          onExamDateChange={onExamDateChange}
           onClose={() => setShowConfig(false)}
         />
       )}

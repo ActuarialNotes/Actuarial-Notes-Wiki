@@ -63,8 +63,12 @@ function formatTime(seconds: number | null): string {
 }
 
 function MasteryLevelUpBadge({ transition, index }: { transition: MasteryTransition; index: number }) {
-  const isStrong = transition.to === 'strong'
-  const badgeClasses = isStrong
+  const isLevel3 = transition.to === 'level3'
+  const label =
+    transition.to === 'level3' ? `${transition.conceptSlug} → Level 3` :
+    transition.to === 'level2' ? `${transition.conceptSlug} → Level 2` :
+    `${transition.conceptSlug} → Level 1`
+  const badgeClasses = isLevel3
     ? 'bg-green-100 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-800'
     : 'bg-green-500/20 text-green-800 border-green-300/60 dark:bg-green-500/20 dark:text-green-300 dark:border-green-800/60'
   return (
@@ -73,18 +77,18 @@ function MasteryLevelUpBadge({ transition, index }: { transition: MasteryTransit
       style={{ animationDelay: `${index * 80}ms` }}
     >
       <TrendingUp className="h-3 w-3" />
-      {transition.conceptSlug}
+      {label}
     </span>
   )
 }
 
 function worstState(states: MasteryState[]): MasteryState | null {
   if (states.length === 0) return null
-  const order: MasteryState[] = ['forgotten', 'learning', 'new', 'strong']
+  const order: MasteryState[] = ['forgotten', 'level1', 'level2', 'new', 'level3']
   for (const s of order) {
     if (states.includes(s)) return s
   }
-  return 'strong'
+  return 'level3'
 }
 
 export default function Review() {
@@ -206,7 +210,7 @@ export default function Review() {
 
       {/* Mastery level-up badges — only shown when concepts advanced state */}
       {user && session.masteryTransitions && (() => {
-        const upward = session.masteryTransitions.filter(t => t.to === 'learning' || t.to === 'strong')
+        const upward = session.masteryTransitions.filter(t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3')
         if (upward.length === 0) return null
         return (
           <Card>

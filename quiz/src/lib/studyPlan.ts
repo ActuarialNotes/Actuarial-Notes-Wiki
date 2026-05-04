@@ -12,9 +12,10 @@ import { decayIfStale } from '@/lib/mastery'
 
 export type TargetStrengthLevel = 'strong_all' | 'strong_key'
 
-export type QuickSetPreset = '1w' | '2w' | '1m' | '2m' | '3m' | '6m' | '8m'
+export type QuickSetPreset = '1d' | '1w' | '2w' | '1m' | '2m' | '3m' | '6m' | '8m'
 
 export const QUICK_SET_LABELS: Record<QuickSetPreset, string> = {
+  '1d': '1 day before',
   '1w': '1 week before',
   '2w': '2 weeks before',
   '1m': '1 month before',
@@ -24,7 +25,7 @@ export const QUICK_SET_LABELS: Record<QuickSetPreset, string> = {
   '8m': '8 months before',
 }
 
-export const QUICK_SET_PRESETS: QuickSetPreset[] = ['1w', '2w', '1m', '2m', '3m', '6m', '8m']
+export const QUICK_SET_PRESETS: QuickSetPreset[] = ['1d', '1w', '2w', '1m', '2m', '3m', '6m', '8m']
 
 export interface StudyPlanConfig {
   targetReadyDate: string | null   // YYYY-MM-DD; null = unconfigured
@@ -78,6 +79,7 @@ export function daysBetween(from: string, to: string): number {
 export function applyPreset(examDate: string, preset: QuickSetPreset): string {
   const d = new Date(examDate + 'T12:00:00')
   switch (preset) {
+    case '1d':  d.setDate(d.getDate() - 1);    break
     case '1w':  d.setDate(d.getDate() - 7);    break
     case '2w':  d.setDate(d.getDate() - 14);   break
     case '1m':  d.setMonth(d.getMonth() - 1);  break
@@ -187,10 +189,10 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     return rec ? decayIfStale(rec, now).state : 'new'
   }
 
-  const mastered   = allConcepts.filter(c => getState(c.name) === 'strong')
-  const unmastered = allConcepts.filter(c => getState(c.name) !== 'strong')
+  const mastered   = allConcepts.filter(c => getState(c.name) === 'level3')
+  const unmastered = allConcepts.filter(c => getState(c.name) !== 'level3')
 
-  // ── Review mode: every concept already strong ─────────────────────────────
+  // ── Review mode: every concept already level3 ────────────────────────────
   if (unmastered.length === 0) {
     const reviewConcepts = [...mastered]
       .sort((a, b) => {
@@ -241,44 +243,95 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   const daysRemaining = Math.max(1, daysBetween(today, effectiveReadyDate!))
 
   // ── Sort unmastered concepts by priority ──────────────────────────────────
-  const stateOrder: Record<string, number> = { forgotten: 0, learning: 1, new: 2 }
+  // level1/level2 (partially learned) are higher priority than new concepts;
+  // forgotten is highest priority since it must be re-learned.
+  const stateOrder: Record<string, number> = { forgotten: 0, level1: 1, level2: 2, new: 3 }
 
   const sortedUnmastered = [...unmastered].sort((a, b) => {
     if (config.targetStrengthLevel === 'strong_key') {
       if (b.numericWeight !== a.numericWeight) return b.numericWeight - a.numericWeight
     }
-    return (stateOrder[getState(a.name)] ?? 2) - (stateOrder[getState(b.name)] ?? 2)
+    return (stateOrder[getState(a.name)] ?? 3) - (stateOrder[getState(b.name)] ?? 3)
   })
 
-  // ── Distribute across days ────────────────────────────────────────────────
-  const conceptsPerDay = Math.max(1, Math.ceil(sortedUnmastered.length / daysRemaining))
+  // ── Incremental scheduling: each concept needs multiple visits ────────────
+  // A concept at 'new' needs 3 visits (new→l1, l1→l2, l2→l3).
+  // A concept at 'level1' needs 2 more visits; 'level2' needs 1 more visit.
+  function visitsNeeded(name: string): number {
+    const state = getState(name)
+    if (state === 'level2') return 1
+    if (state === 'level1') return 2
+    return 3  // new or forgotten
+  }
 
-  const assignments: ConceptAssignment[] = []
-  let idx = 0
-  for (let dayOffset = 0; dayOffset < daysRemaining && idx < sortedUnmastered.length; dayOffset++) {
-    const date = addDays(today, dayOffset)
-    const batchSize = Math.min(conceptsPerDay, sortedUnmastered.length - idx)
-    for (let i = 0; i < batchSize; i++) {
-      const c = sortedUnmastered[idx++]
-      assignments.push({
-        conceptName: c.name,
-        topicName: c.topicName,
-        topicWeight: c.topicWeight,
-        scheduledDate: date,
-      })
+  // Build expanded task list: each entry is a visit slot for a concept.
+  // We spread visits for the same concept across different days so they're
+  // not all crammed into day 1.
+  interface VisitTask { concept: ConceptEntry; visitIndex: number }
+  const tasks: VisitTask[] = []
+  for (const c of sortedUnmastered) {
+    const n = visitsNeeded(c.name)
+    for (let v = 0; v < n; v++) {
+      tasks.push({ concept: c, visitIndex: v })
     }
+  }
+
+  // Concepts per day is now based on total visit tasks (not unique concepts)
+  const conceptsPerDay = Math.max(1, Math.ceil(tasks.length / daysRemaining))
+
+  // Assign tasks to days. Each day gets at most conceptsPerDay tasks.
+  // A concept can appear at most once per day even if it has multiple visits.
+  const assignments: ConceptAssignment[] = []
+  const dayConceptSet: Map<string, Set<string>> = new Map()  // date → set of concept names
+
+  let taskIdx = 0
+  for (let dayOffset = 0; dayOffset < daysRemaining && taskIdx < tasks.length; dayOffset++) {
+    const date = addDays(today, dayOffset)
+    const usedToday = dayConceptSet.get(date) ?? new Set<string>()
+    dayConceptSet.set(date, usedToday)
+    let slotsUsed = 0
+    let scan = taskIdx
+
+    while (slotsUsed < conceptsPerDay && scan < tasks.length) {
+      const task = tasks[scan]
+      if (!usedToday.has(task.concept.name)) {
+        usedToday.add(task.concept.name)
+        assignments.push({
+          conceptName: task.concept.name,
+          topicName: task.concept.topicName,
+          topicWeight: task.concept.topicWeight,
+          scheduledDate: date,
+        })
+        tasks.splice(scan, 1)  // remove assigned task
+        slotsUsed++
+      } else {
+        scan++
+      }
+    }
+  }
+
+  // Remaining overflow tasks: append to last day
+  for (const task of tasks) {
+    const date = addDays(today, daysRemaining - 1)
+    assignments.push({
+      conceptName: task.concept.name,
+      topicName: task.concept.topicName,
+      topicWeight: task.concept.topicWeight,
+      scheduledDate: date,
+    })
   }
 
   const todaysConcepts = assignments
     .filter(a => a.scheduledDate === today)
     .map(a => a.conceptName)
+    .filter((name, i, arr) => arr.indexOf(name) === i)  // de-duplicate
 
   // ── Pacing status ─────────────────────────────────────────────────────────
   let status: PacingStatus = 'on_track'
   if (targetPassedFallback) {
     status = 'target_passed'
   } else {
-    // Compare concepts needed per day vs a comfortable pace (1-2/day)
+    // Compare concepts needed per day vs a comfortable pace
     const needed = sortedUnmastered.length / daysRemaining
     if (needed > conceptsPerDay * 1.5) {
       status = 'behind'

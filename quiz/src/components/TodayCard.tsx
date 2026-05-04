@@ -2,7 +2,7 @@
 // a "Read Today's Concepts" action (opens concept modal), and a "Start Quiz"
 // action (navigates to a quiz pre-filtered to today's concepts).
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   BookOpen,
@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Loader2,
   ChevronDown,
+  TrendingUp,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -34,6 +35,7 @@ import {
   type ConceptMasteryRecord,
   type MasteryState,
 } from '@/lib/mastery'
+import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -41,12 +43,12 @@ const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
 }
 
-const STATE_TEXT_COLOR: Record<MasteryState, string> = {
-  new: 'text-muted-foreground',
-  level1: 'text-amber-500 dark:text-amber-400',
-  level2: 'text-blue-500 dark:text-blue-400',
-  level3: 'text-green-600 dark:text-green-400',
-  forgotten: 'text-red-500',
+const STATE_BADGE: Record<MasteryState, string> = {
+  new:      'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:border-gray-700',
+  level1:   'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800',
+  level2:   'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800',
+  level3:   'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800',
+  forgotten: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800',
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -96,15 +98,14 @@ function StudyPlanTracker({
   syllabus,
   masteryRecords,
   studyPlan,
+  onConceptSelect,
 }: {
   syllabus: WikiExamSyllabus
   masteryRecords: ConceptMasteryRecord[]
   studyPlan?: StudyPlan | null
+  onConceptSelect: (concept: { name: string; state: MasteryState; index: number }) => void
 }) {
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
-  const [selectedConcept, setSelectedConcept] = useState<{
-    name: string; state: MasteryState; index: number
-  } | null>(null)
 
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
@@ -140,84 +141,71 @@ function StudyPlanTracker({
     })
 
   return (
-    <>
-      <div className="space-y-1">
-        {syllabus.topics.map(topic => {
-          const conceptSlugs = topic.concepts.map(c => c.name)
-          const agg = aggregateForTopic(normalizedMastery, conceptSlugs, now)
-          const isOpen = openTopics.has(topic.name)
+    <div className="space-y-1">
+      {syllabus.topics.map(topic => {
+        const conceptSlugs = topic.concepts.map(c => c.name)
+        const agg = aggregateForTopic(normalizedMastery, conceptSlugs, now)
+        const isOpen = openTopics.has(topic.name)
 
-          return (
-            <div key={topic.name}>
-              <button
-                className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
-                onClick={() => toggle(topic.name)}
-                aria-expanded={isOpen}
+        return (
+          <div key={topic.name}>
+            <button
+              className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
+              onClick={() => toggle(topic.name)}
+              aria-expanded={isOpen}
+            >
+              <ChevronDown
+                className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
+              />
+              <span className="text-sm font-semibold min-w-0 truncate">
+                {topic.name}
+                {topic.weight && (
+                  <span className="ml-1.5 text-xs font-normal text-muted-foreground">{topic.weight}</span>
+                )}
+              </span>
+              <div
+                className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0"
+                role="progressbar"
+                aria-valuenow={agg.strongPct}
+                aria-valuemin={0}
+                aria-valuemax={100}
               >
-                <ChevronDown
-                  className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`}
-                />
-                <span className="text-sm font-semibold min-w-0 truncate">
-                  {topic.name}
-                  {topic.weight && (
-                    <span className="ml-1.5 text-xs font-normal text-muted-foreground">{topic.weight}</span>
-                  )}
-                </span>
-                <div
-                  className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0"
-                  role="progressbar"
-                  aria-valuenow={agg.strongPct}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                >
-                  <div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${agg.strongPct}%` }} />
-                </div>
-                <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">
-                  {agg.level3}/{agg.total}
-                </span>
-              </button>
+                <div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${agg.strongPct}%` }} />
+              </div>
+              <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">
+                {agg.level3}/{agg.total}
+              </span>
+            </button>
 
-              {isOpen && topic.concepts.length > 0 && (
-                <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
-                  {topic.concepts.map(c => {
-                    const rec = recordsBySlug.get(c.name.toLowerCase())
-                    const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
-                    const idx = allConcepts.findIndex(ac => ac.name === c.name)
-                    return (
-                      <button
-                        key={c.name}
-                        type="button"
-                        onClick={() => setSelectedConcept({ name: c.name, state, index: idx === -1 ? 0 : idx })}
-                        className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
-                      >
-                        <span className="text-xs text-foreground min-w-0 flex-1 truncate">{c.name}</span>
-                        {studyPlan && state !== 'level3' && (
-                          <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
-                        )}
-                        <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>
-                          {STATE_LABEL[state]}
-                        </span>
-                      </button>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          )
-        })}
-      </div>
-
-      {selectedConcept && (
-        <ConceptDetailModal
-          conceptName={selectedConcept.name}
-          masteryState={selectedConcept.state}
-          onClose={() => setSelectedConcept(null)}
-          syllabus={syllabus}
-          allConcepts={allConcepts}
-          initialConceptIndex={selectedConcept.index}
-        />
-      )}
-    </>
+            {isOpen && topic.concepts.length > 0 && (
+              <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
+                {topic.concepts.map(c => {
+                  const rec = recordsBySlug.get(c.name.toLowerCase())
+                  const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
+                  const idx = allConcepts.findIndex(ac => ac.name === c.name)
+                  return (
+                    <button
+                      key={c.name}
+                      type="button"
+                      onClick={() => onConceptSelect({ name: c.name, state, index: idx === -1 ? 0 : idx })}
+                      className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
+                    >
+                      <span className="text-xs text-foreground min-w-0 flex-1 truncate">{c.name}</span>
+                      {studyPlan && state !== 'level3' && (
+                        <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
+                      )}
+                      <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded border text-[10px] font-medium ${STATE_BADGE[state]}`}>
+                        {STATE_LABEL[state]}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
   )
 }
 
@@ -253,6 +241,27 @@ export function TodayCard({
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
   const [quizLoading, setQuizLoading] = useState(false)
   const [planExpanded, setPlanExpanded] = useState(false)
+  const [trackerConcept, setTrackerConcept] = useState<{
+    name: string; state: MasteryState; index: number
+  } | null>(null)
+  const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
+
+  // Load today's level-ups and keep in sync with quiz completions
+  useEffect(() => {
+    setCompletedToday(readTodayLevelUps())
+    function handleLevelUp(e: Event) {
+      setCompletedToday((e as CustomEvent<DailyLevelUp[]>).detail)
+    }
+    function handleStorage() {
+      setCompletedToday(readTodayLevelUps())
+    }
+    window.addEventListener(LEVELUP_EVENT, handleLevelUp)
+    window.addEventListener('storage', handleStorage)
+    return () => {
+      window.removeEventListener(LEVELUP_EVENT, handleLevelUp)
+      window.removeEventListener('storage', handleStorage)
+    }
+  }, [])
 
   const todaysConcepts = plan?.todaysConcepts ?? []
   const reviewConcepts = plan?.reviewConcepts ?? []
@@ -476,6 +485,25 @@ export function TodayCard({
             </div>
           )}
 
+          {/* Completed Today */}
+          {completedToday.length > 0 && (
+            <div className="rounded-md border border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/20 px-3 py-2.5 space-y-1.5">
+              <div className="flex items-center gap-1.5 text-xs font-medium text-green-700 dark:text-green-400">
+                <TrendingUp className="h-3.5 w-3.5 shrink-0" />
+                Completed today
+              </div>
+              <ul className="space-y-0.5">
+                {completedToday.map((lu, i) => (
+                  <li key={i} className="flex items-center gap-1.5 text-xs text-green-700 dark:text-green-400">
+                    <span className="font-medium">{lu.conceptSlug}</span>
+                    <span className="text-green-500/70">→</span>
+                    <span>{STATE_LABEL[lu.to]}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Collapsible study plan */}
           {!loading && plan && (
             <div className="border-t pt-2">
@@ -485,6 +513,7 @@ export function TodayCard({
                     syllabus={syllabus}
                     masteryRecords={masteryRecords}
                     studyPlan={plan}
+                    onConceptSelect={setTrackerConcept}
                   />
                 </div>
               )}
@@ -511,6 +540,22 @@ export function TodayCard({
           syllabus={syllabus}
           allConcepts={allConceptsForModal}
           initialConceptIndex={0}
+        />
+      )}
+
+      {trackerConcept && (
+        <ConceptDetailModal
+          conceptName={trackerConcept.name}
+          masteryState={trackerConcept.state}
+          onClose={() => setTrackerConcept(null)}
+          syllabus={syllabus}
+          allConcepts={syllabus.topics.flatMap(t =>
+            t.concepts.map(c => ({
+              name: c.name,
+              state: masteryStateByName.get(c.name.toLowerCase()) ?? 'new' as MasteryState,
+            }))
+          )}
+          initialConceptIndex={trackerConcept.index}
         />
       )}
 

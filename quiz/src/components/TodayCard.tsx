@@ -16,7 +16,6 @@ import {
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { fetchAllQuestions } from '@/lib/github'
@@ -24,7 +23,6 @@ import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import {
   formatReadableDate,
-  todayISO,
   type StudyPlan,
   type StudyPlanConfig,
   type PacingStatus,
@@ -60,14 +58,6 @@ const STATUS_CONFIG: Record<PacingStatus, { label: string; className: string; ic
     className: 'border-purple-200 text-purple-700 dark:border-purple-800 dark:text-purple-400',
     icon: RefreshCw,
   },
-}
-
-function linkMatchesConcept(link: string, conceptName: string): boolean {
-  const lower = conceptName.toLowerCase()
-  const ref = hrefToEntryRef(link)
-  if (ref?.name.toLowerCase() === lower) return true
-  const last = link.split('/').filter(Boolean).pop()
-  return !!last && last.replace(/-/g, ' ').toLowerCase() === lower
 }
 
 function todayLongDate(): string {
@@ -148,7 +138,6 @@ export function TodayCard({
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
   const [quizLoading, setQuizLoading] = useState(false)
 
-  const today = todayISO()
   const todaysConcepts = plan?.todaysConcepts ?? []
   const reviewConcepts = plan?.reviewConcepts ?? []
   const displayConcepts = plan?.status === 'review_mode' ? reviewConcepts : todaysConcepts

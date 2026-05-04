@@ -13,7 +13,6 @@ import {
 } from '@/lib/mastery'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import {
-  getScheduledDate,
   isScheduledToday,
   daysUntilScheduled,
   todayISO,

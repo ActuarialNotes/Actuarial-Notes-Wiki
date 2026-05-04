@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
-import { Loader2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import { ActiveExamCard, ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
-import { TopicProgressSection } from '@/components/TopicProgressSection'
 import { TodayCard, TodayCardLoading } from '@/components/TodayCard'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useExamProgress } from '@/hooks/useExamProgress'
@@ -25,6 +24,7 @@ export default function Dashboard() {
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
 
   const [activeExamIdx, setActiveExamIdx] = useState(0)
+  const touchStartX = useRef<number>(0)
 
   // Hard redirect if not authenticated
   useEffect(() => {
@@ -57,6 +57,17 @@ export default function Dashboard() {
   const handleNext = useCallback(() => {
     setActiveExamIdx(i => (i + 1) % inProgressSyllabi.length)
   }, [inProgressSyllabi.length])
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? handleNext() : handlePrev()
+    }
+  }
 
   // ── Study plan ─────────────────────────────────────────────────────────────
   const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan } =
@@ -94,6 +105,8 @@ export default function Dashboard() {
     ?? user.email?.split('@')[0]
     ?? 'You'
 
+  const multiExam = inProgressSyllabi.length > 1
+
   return (
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
       {/* Header */}
@@ -115,39 +128,69 @@ export default function Dashboard() {
         />
       ) : null}
 
-      {/* Active exam card */}
-      {syllabusLoading || sessionsLoading ? (
-        <ActiveExamCardLoading />
-      ) : !activeSyllabus ? (
-        <ActiveExamCardEmpty />
-      ) : (
-        <ActiveExamCard
-          syllabus={activeSyllabus}
-          sessions={sessions}
-          hasPrev={inProgressSyllabi.length > 1}
-          hasNext={inProgressSyllabi.length > 1}
-          onPrev={handlePrev}
-          onNext={handleNext}
-          examIndex={clampedIdx}
-          totalExams={inProgressSyllabi.length}
-          targetDate={activeTargetDate}
-          onTargetDateChange={handleTargetDateChange}
-        />
+      {/* Exam navigation dots */}
+      {multiExam && (
+        <div className="flex justify-center gap-2" aria-label="Exam navigation">
+          {inProgressSyllabi.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActiveExamIdx(i)}
+              aria-label={`Exam ${i + 1} of ${inProgressSyllabi.length}`}
+              aria-current={i === clampedIdx ? 'true' : undefined}
+              className={`h-2 rounded-full transition-all ${
+                i === clampedIdx
+                  ? 'w-5 bg-primary'
+                  : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60'
+              }`}
+            />
+          ))}
+        </div>
       )}
 
-      {/* Per-topic concept breakdown for the active exam */}
-      {syllabusLoading || masteryLoading ? (
-        <div className="flex items-center justify-center py-4">
-          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      {/* Active exam card with external navigation */}
+      <div
+        className="flex items-center gap-2"
+        onTouchStart={multiExam ? handleTouchStart : undefined}
+        onTouchEnd={multiExam ? handleTouchEnd : undefined}
+      >
+        {multiExam && (
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+            aria-label="Previous exam"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+        )}
+
+        <div className="flex-1 min-w-0">
+          {syllabusLoading || sessionsLoading ? (
+            <ActiveExamCardLoading />
+          ) : !activeSyllabus ? (
+            <ActiveExamCardEmpty />
+          ) : (
+            <ActiveExamCard
+              syllabus={activeSyllabus}
+              sessions={sessions}
+              targetDate={activeTargetDate}
+              onTargetDateChange={handleTargetDateChange}
+            />
+          )}
         </div>
-      ) : activeSyllabus ? (
-        <TopicProgressSection
-          key={activeSyllabus.examTopic}
-          syllabus={activeSyllabus}
-          masteryRecords={masteryRecords}
-          studyPlan={studyPlan}
-        />
-      ) : null}
+
+        {multiExam && (
+          <button
+            type="button"
+            onClick={handleNext}
+            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+            aria-label="Next exam"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        )}
+      </div>
     </div>
   )
 }

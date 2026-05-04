@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronDown, ChevronLeft, ChevronRight, Loader2, Play, Timer } from 'lucide-react'
+import { ChevronDown, ChevronRight, Loader2, Play, Timer } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -148,13 +148,6 @@ interface Props {
   syllabus: WikiExamSyllabus
   /** All quiz sessions (will be filtered by exam topic internally). */
   sessions: QuizSession[]
-  /** Navigation — only rendered when more than one in-progress exam exists. */
-  hasPrev: boolean
-  hasNext: boolean
-  onPrev: () => void
-  onNext: () => void
-  examIndex: number
-  totalExams: number
   /** Controlled exam target date from Supabase (null if unset). */
   targetDate: string | null
   /** Called when the user saves a new exam date from the heatmap picker. */
@@ -164,12 +157,6 @@ interface Props {
 export function ActiveExamCard({
   syllabus,
   sessions,
-  hasPrev,
-  hasNext,
-  onPrev,
-  onNext,
-  examIndex,
-  totalExams,
   targetDate,
   onTargetDateChange,
 }: Props) {
@@ -263,37 +250,7 @@ export function ActiveExamCard({
       <CardContent className="p-5 space-y-4">
         {/* Header row */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-2 min-w-0">
-            {/* Nav arrows — only shown when multiple active exams */}
-            {totalExams > 1 && (
-              <button
-                type="button"
-                onClick={onPrev}
-                disabled={!hasPrev}
-                className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors shrink-0"
-                aria-label="Previous exam"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-            )}
-            <div className="min-w-0">
-              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Active Exam{totalExams > 1 ? ` · ${examIndex + 1} of ${totalExams}` : ''}
-              </div>
-              <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
-            </div>
-            {totalExams > 1 && (
-              <button
-                type="button"
-                onClick={onNext}
-                disabled={!hasNext}
-                className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors shrink-0"
-                aria-label="Next exam"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            )}
-          </div>
+          <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
         </div>
 
         {/* Mastery progress bar */}

@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ChevronDown, ChevronRight, Loader2, Play, Timer } from 'lucide-react'
+import { ChevronDown, Loader2, Timer } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { aggregateForTopic, decayIfStale } from '@/lib/mastery'
@@ -160,7 +159,6 @@ export function ActiveExamCard({
   targetDate,
   onTargetDateChange,
 }: Props) {
-  const navigate = useNavigate()
   const { user } = useAuth()
   const { records } = useConceptMastery()
   const [historyExpanded, setHistoryExpanded] = useState(false)
@@ -236,9 +234,6 @@ export function ActiveExamCard({
     }
   }
 
-  const topic = EXAM_ID_TO_TOPIC[progressKey]
-  const newQuizUrl = topic ? `/?topic=${encodeURIComponent(topic)}` : '/'
-  const mockExamUrl = topic ? `/?topic=${encodeURIComponent(topic)}&mode=mock-exam` : '/?mode=mock-exam'
   const strongPct = aggregate.strongPct
   const conceptsTotal = aggregate.total
   const conceptsStrong = aggregate.strong
@@ -306,18 +301,6 @@ export function ActiveExamCard({
             {dueCount} concept{dueCount === 1 ? '' : 's'} due for review
           </Badge>
         )}
-
-        {/* Action buttons */}
-        <div className="grid grid-cols-2 gap-2 pt-1">
-          <Button onClick={() => navigate(newQuizUrl)} className="gap-1">
-            <Play className="h-4 w-4" />
-            Start Quiz
-          </Button>
-          <Button variant="outline" onClick={() => navigate(mockExamUrl)} className="gap-1">
-            Mock Exam
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
 
         {/* Quiz history */}
         {examSessions.length > 0 && (

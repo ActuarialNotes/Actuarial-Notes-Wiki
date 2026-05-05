@@ -137,18 +137,20 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
         const d = addDays(colStart, i)
         const key = isoKey(d)
         const isFuture = d > today
+        const isToday = key === isoKey(today)
+        const isExamDay = !!targetDate && key === targetDate
         const data = scoreByDay.get(key) ?? null
         const title = isFuture
           ? key
           : data
             ? `${key}: avg ${Math.round(data.avgScore)}% (${data.count} session${data.count !== 1 ? 's' : ''})`
             : `${key}: no activity`
-        return { key, data, isFuture, title }
+        return { key, data, isFuture, isToday, isExamDay, title }
       })
 
       return { key: isoKey(colStart), monthLabel, isExamWeek: w === examDateWeekIdx, days }
     })
-  }, [gridStart, totalWeeks, today, scoreByDay, examDateWeekIdx])
+  }, [gridStart, totalWeeks, today, scoreByDay, examDateWeekIdx, targetDate])
 
   const daysLeft = targetDate ? daysUntil(targetDate) : null
   const examDateLabel = targetDate
@@ -209,9 +211,11 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
                     style={!cell.isFuture ? cellStyle(cell.data?.avgScore ?? null) : undefined}
                     className={`w-full rounded-[2px] ${
                       cell.isFuture
-                        ? col.isExamWeek ? 'bg-primary/10 h-[10px]' : 'h-[10px]'
+                        ? cell.isExamDay
+                          ? 'bg-primary/30 h-[10px] ring-1 ring-inset ring-primary'
+                          : col.isExamWeek ? 'bg-primary/10 h-[10px]' : 'h-[10px]'
                         : `h-[10px] ${cell.data === null ? 'bg-muted/30' : ''}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
-                    }`}
+                    }${cell.isToday ? ' ring-1 ring-inset ring-white/80' : ''}`}
                   />
                 )
               })}

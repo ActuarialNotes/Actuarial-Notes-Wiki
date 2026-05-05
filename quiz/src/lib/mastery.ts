@@ -8,6 +8,16 @@
 
 export type MasteryState = 'new' | 'level1' | 'level2' | 'level3' | 'forgotten'
 
+const VALID_MASTERY_STATES = new Set<string>(['new', 'level1', 'level2', 'level3', 'forgotten'])
+
+/** Coerce legacy or unknown state values from storage/DB to a valid MasteryState. */
+export function sanitizeMasteryState(state: string): MasteryState {
+  if (state === 'learning') return 'level1'
+  if (state === 'strong') return 'level3'
+  if (VALID_MASTERY_STATES.has(state)) return state as MasteryState
+  return 'new'
+}
+
 export interface ConceptMasteryRecord {
   user_id: string
   exam_id: string

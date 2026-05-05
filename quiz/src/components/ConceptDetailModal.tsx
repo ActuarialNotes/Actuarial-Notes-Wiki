@@ -225,7 +225,7 @@ export function ConceptDetailModal({
 
   const navigate = useNavigate()
   const openAt = useConceptPopup(s => s.openAt)
-  const badge = MASTERY_BADGE[currentMasteryState]
+  const badge = MASTERY_BADGE[currentMasteryState] ?? MASTERY_BADGE.new
 
   function openInStudyGuide() {
     openAt([{ kind: 'concept', name: currentConceptName }], 0, null)

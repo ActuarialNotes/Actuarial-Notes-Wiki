@@ -162,8 +162,8 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
               <Info className="h-4 w-4" />
             </button>
             {studyPlan && (
-              <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${PACING_CONFIG[studyPlan.status].className}`}>
-                {PACING_CONFIG[studyPlan.status].label}
+              <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${(PACING_CONFIG[studyPlan.status] ?? PACING_CONFIG.on_track).className}`}>
+                {(PACING_CONFIG[studyPlan.status] ?? PACING_CONFIG.on_track).label}
               </span>
             )}
             {syllabus.fileName && (

@@ -30,9 +30,9 @@ const STATE_LABEL: Record<MasteryState, string> = {
 
 const STATE_TEXT_COLOR: Record<MasteryState, string> = {
   new: 'text-muted-foreground',
-  level1: 'text-amber-500 dark:text-amber-400',
-  level2: 'text-blue-500 dark:text-blue-400',
-  level3: 'text-green-600 dark:text-green-400',
+  level1: 'text-green-600 dark:text-green-500',
+  level2: 'text-green-700 dark:text-green-400',
+  level3: 'text-green-800 dark:text-green-300',
   forgotten: 'text-red-500',
 }
 
@@ -46,9 +46,9 @@ function InfoPanel() {
       </p>
       <ul className="space-y-1">
         <li><span className="font-medium text-muted-foreground">New</span> — never attempted.</li>
-        <li><span className="font-medium text-amber-500 dark:text-amber-400">Level 1</span> — first correct answer; building familiarity.</li>
-        <li><span className="font-medium text-blue-500 dark:text-blue-400">Level 2</span> — 2+ correct answers; practicing.</li>
-        <li><span className="font-medium text-green-600 dark:text-green-400">Level 3</span> — 3+ corrects including at least one hard question; mastered.</li>
+        <li><span className="font-medium text-green-600 dark:text-green-500">Level 1</span> — first correct answer; building familiarity.</li>
+        <li><span className="font-medium text-green-700 dark:text-green-400">Level 2</span> — 2+ correct answers; practicing.</li>
+        <li><span className="font-medium text-green-800 dark:text-green-300">Level 3</span> — 3+ corrects including at least one hard question; mastered.</li>
         <li><span className="font-medium text-red-500">Forgotten</span> — 15 days without a correct answer, or 3 wrong in a row.</li>
       </ul>
     </div>

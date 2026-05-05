@@ -52,7 +52,7 @@ export interface StudyPlan {
   dayNumber: number              // 1-indexed position in the overall plan
   totalDays: number              // total planned days from planStartDate → targetReadyDate
   daysRemaining: number          // days left from today → effectiveReadyDate
-  conceptsPerDay: number         // how many concepts are assigned per day
+  conceptsPerDay: number         // average new concepts to introduce per day to stay on pace
   status: PacingStatus
   reviewConcepts: string[]       // weakest mastered concepts for spaced review
   effectiveReadyDate: string     // may differ from config if target has passed
@@ -371,12 +371,11 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
       .map(a => a.conceptName)
   )]
 
-  // conceptsPerDay = largest single-day assignment count (for pacing display)
-  const dailyCounts = new Map<string, number>()
-  for (const a of assignments) {
-    dailyCounts.set(a.scheduledDate, (dailyCounts.get(a.scheduledDate) ?? 0) + 1)
-  }
-  const conceptsPerDay = Math.max(1, ...[...dailyCounts.values()])
+  // conceptsPerDay = average daily new-concept introductions needed to stay on pace.
+  // Using neededNewPerDay (uncapped) so the displayed number reflects the true required
+  // rate, not the peak pipeline count which inflates due to staged assignments converging.
+  const neededNewPerDay = Math.ceil(newAndForgottenCount / Math.max(1, daysRemaining - 3))
+  const conceptsPerDay = Math.max(1, neededNewPerDay)
 
   // ── Pacing status ─────────────────────────────────────────────────────────
   // A schedule is "behind" when unmastered concepts can't fit in the remaining
@@ -384,7 +383,7 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   let status: PacingStatus = 'on_track'
   if (targetPassedFallback) {
     status = 'target_passed'
-  } else if (conceptsPerDay > 8) {
+  } else if (neededNewPerDay > MAX_NEW_PER_DAY) {
     status = 'behind'
   } else {
     const planStartDate = config.planStartDate ?? today

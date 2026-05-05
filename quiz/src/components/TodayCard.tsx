@@ -56,9 +56,9 @@ const STATE_ORDER: Record<MasteryState, number> = {
 
 const STATE_BADGE: Record<MasteryState, string> = {
   new:      'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:border-gray-700',
-  level1:   'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-400 dark:border-amber-800',
-  level2:   'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800',
-  level3:   'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800',
+  level1:   'bg-green-50 text-green-600 border-green-200 dark:bg-green-950/20 dark:text-green-500 dark:border-green-900',
+  level2:   'bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800',
+  level3:   'bg-green-200 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-700',
   forgotten: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800',
 }
 
@@ -440,16 +440,18 @@ export function TodayCard({
               </div>
               {!allOnTarget && (
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Bring each to {targetLabel} to complete today's session
+                  {onTargetCount > 0
+                    ? `${displayConcepts.length - onTargetCount} remaining — bring each to ${targetLabel} to complete today's session`
+                    : `Bring each to ${targetLabel} to complete today's session`}
                 </p>
               )}
               <div className="flex flex-wrap gap-1.5 mt-1.5">
                 {displayConcepts.map(name => {
                   const state = masteryStateByName.get(name.toLowerCase()) ?? 'new'
                   const stateColor =
-                    state === 'level3'   ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/30 dark:text-green-300' :
-                    state === 'level2'   ? 'border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950/30 dark:text-blue-300' :
-                    state === 'level1'   ? 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-300' :
+                    state === 'level3'    ? 'border-green-300 bg-green-200 text-green-800 dark:border-green-700 dark:bg-green-950 dark:text-green-300' :
+                    state === 'level2'    ? 'border-green-200 bg-green-100 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400' :
+                    state === 'level1'    ? 'border-green-200 bg-green-50 text-green-600 dark:border-green-900 dark:bg-green-950/20 dark:text-green-500' :
                     state === 'forgotten' ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-300' :
                                            'border-border bg-muted/40 text-muted-foreground'
                   return (

@@ -4,11 +4,14 @@ import { useState } from 'react'
 import { X, CalendarDays, Target } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
+  QUICK_SET_LABELS,
+  QUICK_SET_PRESETS,
   applyPreset,
   daysBetween,
   todayISO,
   formatReadableDate,
   type StudyPlanConfig,
+  type QuickSetPreset,
   type TargetStrengthLevel,
 } from '@/lib/studyPlan'
 
@@ -33,11 +36,31 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
     return ''
   })
   const [strength, setStrength] = useState<TargetStrengthLevel>(config.targetStrengthLevel)
+  const [activePreset, setActivePreset] = useState<QuickSetPreset | null>(() => {
+    if (!config.targetReadyDate || !examDate) return null
+    for (const p of QUICK_SET_PRESETS) {
+      if (applyPreset(examDate, p) === config.targetReadyDate) return p
+    }
+    return null
+  })
+
+  function selectPreset(preset: QuickSetPreset) {
+    const base = localExamDate || examDate
+    if (!base) return
+    setReadyDate(applyPreset(base, preset))
+    setActivePreset(preset)
+  }
+
+  function handleReadyDateChange(value: string) {
+    setReadyDate(value)
+    setActivePreset(null)
+  }
 
   function handleExamDateChange(value: string) {
     setLocalExamDate(value)
-    // Keep ready date as 2w before new exam date by default
-    if (value && (!readyDate || (localExamDate && readyDate === applyPreset(localExamDate, '2w')))) {
+    if (activePreset && value) {
+      setReadyDate(applyPreset(value, activePreset))
+    } else if (value && (!readyDate || (localExamDate && readyDate === applyPreset(localExamDate, '2w')))) {
       setReadyDate(applyPreset(value, '2w'))
     }
   }
@@ -125,7 +148,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
                 value={localExamDate}
                 min={today}
                 onChange={e => handleExamDateChange(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+                className="block w-full min-w-0 max-w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
               />
               {examDaysOut !== null && examDaysOut > 0 && (
                 <p className="text-xs text-muted-foreground">{examDaysOut} day{examDaysOut === 1 ? '' : 's'} away</p>
@@ -152,17 +175,49 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
               <p className="text-xs text-muted-foreground leading-relaxed">
                 The date you want to have mastered all concepts, before your exam.
               </p>
-              <input
-                type="date"
-                value={readyDate}
-                min={today}
-                max={localExamDate || examDate || undefined}
-                onChange={e => setReadyDate(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
-              />
+
+              {/* Quick-set slider */}
+              {localExamDate && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Quick set</p>
+                    <span className="text-xs font-medium text-foreground">
+                      {activePreset ? QUICK_SET_LABELS[activePreset] : 'Custom date'}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={QUICK_SET_PRESETS.length - 1}
+                    step={1}
+                    value={activePreset !== null ? QUICK_SET_PRESETS.indexOf(activePreset) : 0}
+                    onChange={e => {
+                      const idx = parseInt(e.target.value)
+                      if (idx >= 0 && idx < QUICK_SET_PRESETS.length) selectPreset(QUICK_SET_PRESETS[idx])
+                    }}
+                    className="w-full accent-primary"
+                    aria-label="Quick set target ready date"
+                  />
+                </div>
+              )}
+
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Or pick a date</p>
+                <input
+                  type="date"
+                  value={readyDate}
+                  min={today}
+                  max={localExamDate || examDate || undefined}
+                  onChange={e => handleReadyDateChange(e.target.value)}
+                  className="block w-full min-w-0 max-w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
+                />
+              </div>
               {daysOut !== null && daysOut > 0 && (
                 <p className="text-xs text-muted-foreground">
                   {daysOut} day{daysOut === 1 ? '' : 's'} from today
+                  {examDaysOut !== null && examDaysOut > 0
+                    ? ` · ${examDaysOut - daysOut} day${Math.abs(examDaysOut - daysOut) === 1 ? '' : 's'} before exam`
+                    : ''}
                 </p>
               )}
               {readyDate && daysOut !== null && daysOut <= 0 && (

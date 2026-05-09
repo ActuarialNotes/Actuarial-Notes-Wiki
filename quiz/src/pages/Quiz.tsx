@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Loader2, X, ChevronLeft, Volume2, VolumeX, Bookmark, BookmarkCheck } from 'lucide-react'
+import { Loader2, X, ChevronLeft, Volume2, VolumeX, Bookmark, BookmarkCheck, AlertCircle } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
@@ -84,6 +84,8 @@ export default function Quiz() {
 
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   // Local pre-confirmation selection — not committed to store until "Confirm Answer"
   const [pendingAnswer, setPendingAnswer] = useState<string | null>(null)
 
@@ -128,9 +130,17 @@ export default function Quiz() {
   const showExplanation = isLocked && mode === 'quiz' && reveal === 'during'
 
   async function handleFinish() {
-    playSound('complete')
-    await completeQuiz(user?.id ?? null, masteryRecords)
-    navigate('/review')
+    if (isSubmitting) return
+    setIsSubmitting(true)
+    setSubmitError(null)
+    try {
+      playSound('complete')
+      await completeQuiz(user?.id ?? null, masteryRecords)
+      navigate(`/review?${searchParams.toString()}`)
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Failed to save quiz. Please try again.')
+      setIsSubmitting(false)
+    }
   }
 
   // ── Loading state ────────────────────────────────────────────────────
@@ -259,6 +269,13 @@ export default function Quiz() {
         isLocked={isLocked}
       />
 
+      {submitError && (
+        <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3">
+          <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          {submitError}
+        </div>
+      )}
+
       {(currentIndex > 0 || status === 'reviewing' || pendingAnswer !== null) && (
         <div className="flex justify-between items-center">
           <div>
@@ -294,8 +311,10 @@ export default function Quiz() {
                   <Button
                     onClick={handleFinish}
                     size="lg"
+                    disabled={isSubmitting}
                     className="bg-foreground text-background hover:bg-foreground/90"
                   >
+                    {isSubmitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
                     Finish {mode === 'mock-exam' ? 'Exam' : 'Quiz'}
                   </Button>
                 ) : (

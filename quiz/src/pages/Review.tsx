@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Check, TrendingUp, X } from 'lucide-react'
+import { Check, Loader2, TrendingUp, X } from 'lucide-react'
 import { useQuizStore, readLastSession } from '@/stores/quizStore'
 import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
@@ -147,7 +147,13 @@ export default function Review() {
     return result
   }, [user, masteryLoading, masteryRecords, session])
 
-  if (!session) return null
+  if (!session) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
 
   const { correctCount, totalQuestions, timeTakenSeconds } = session
   const percentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0
@@ -251,6 +257,7 @@ export default function Review() {
                 onAnswer={() => {/* read-only in review */}}
                 showExplanation={true}
                 showMeta={true}
+                isLocked={true}
               />
             </div>
           )

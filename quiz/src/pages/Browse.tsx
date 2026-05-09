@@ -6,6 +6,9 @@ import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { useSubtopics } from '@/hooks/useSubtopics'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { LatexText } from '@/components/LatexText'
+import { ExplanationPanel } from '@/components/ExplanationPanel'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -14,9 +17,6 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lastSegment = link.split('/').filter(Boolean).pop()
   return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
 }
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { LatexText } from '@/components/LatexText'
-import { ExplanationPanel } from '@/components/ExplanationPanel'
 
 const EXAMS = [
   { value: '', label: 'All Exams' },
@@ -174,6 +174,7 @@ export default function Browse() {
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [retryCount, setRetryCount] = useState(0)
 
   const [topic, setTopic] = useState('')
   const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
@@ -182,11 +183,13 @@ export default function Browse() {
   const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
 
   useEffect(() => {
+    setLoading(true)
+    setError(null)
     fetchAllQuestions()
       .then(raw => setAllQuestions(parseAllQuestions(raw)))
       .catch(err => setError(err instanceof Error ? err.message : 'Failed to load questions'))
       .finally(() => setLoading(false))
-  }, [])
+  }, [retryCount])
 
   // Restore filter state saved before launching quiz
   useEffect(() => {
@@ -331,6 +334,7 @@ export default function Browse() {
                     setTopic(exam.value)
                     setSelectedSubtopics([])
                     setSelectedIds(new Set())
+                    setConceptFilter('')
                   }}
                   className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
                     topic === exam.value
@@ -432,8 +436,15 @@ export default function Browse() {
         </p>
 
         {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-            {error}
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-center justify-between gap-4">
+            <span>{error}</span>
+            <button
+              type="button"
+              onClick={() => setRetryCount(c => c + 1)}
+              className="shrink-0 text-xs font-medium underline underline-offset-2 hover:no-underline"
+            >
+              Try again
+            </button>
           </div>
         )}
 

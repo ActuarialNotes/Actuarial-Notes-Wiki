@@ -160,7 +160,7 @@ export default function Dashboard() {
         className={isGuest ? 'pointer-events-none select-none blur-sm opacity-40' : undefined}
         aria-hidden={isGuest}
       >
-    <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
+    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-bold flex-1">{displayName}'s Actuarial Notes</h1>

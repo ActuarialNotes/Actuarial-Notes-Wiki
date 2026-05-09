@@ -45,7 +45,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
       <div className="min-h-screen flex flex-col">
         <WikiFloatingSearch pageRefs={pageRefs} />
         <div
-          className="flex-1 px-4 sm:px-6 py-6 max-w-4xl mx-auto w-full"
+          className="flex-1 px-4 sm:px-6 py-8 max-w-4xl mx-auto w-full"
           style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
         >
           {children}

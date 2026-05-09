@@ -188,7 +188,7 @@ export default function Quiz() {
   const isFlagged = flaggedIds.includes(currentQuestion.id)
 
   return (
-    <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
+    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       <div className="flex items-center justify-between gap-3">
         <Button
           variant="ghost"

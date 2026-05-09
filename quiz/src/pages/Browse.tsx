@@ -280,7 +280,7 @@ export default function Browse() {
   }
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-10 pb-28 space-y-6">
+    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
       <div className="space-y-1">
         <h1 className="text-3xl font-bold tracking-tight">Question Browser</h1>
         <p className="text-muted-foreground">Search and filter all practice questions</p>

@@ -50,6 +50,22 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     } catch { /* ignore */ }
   }, [])
 
+  // When the user's session loads, override localStorage with the server-stored
+  // track so the setting syncs across devices.
+  useEffect(() => {
+    if (!user) return
+    const serverTrack = (user.user_metadata as Record<string, unknown>)?.selected_track as string | undefined
+    if (serverTrack) {
+      setSelectedTrackState(serverTrack)
+      try {
+        const raw = localStorage.getItem('quiz-journey')
+        const journey = raw ? JSON.parse(raw) : { selectedTrack: serverTrack, progress: {} }
+        journey.selectedTrack = serverTrack
+        localStorage.setItem('quiz-journey', JSON.stringify(journey))
+      } catch { /* ignore */ }
+    }
+  }, [user])
+
   const setSelectedTrack = useCallback((track: string) => {
     setSelectedTrackState(track)
     try {
@@ -58,7 +74,11 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       journey.selectedTrack = track
       localStorage.setItem('quiz-journey', JSON.stringify(journey))
     } catch { /* ignore */ }
-  }, [])
+    // Persist to Supabase user metadata so the selection syncs across devices
+    if (user) {
+      supabase.auth.updateUser({ data: { selected_track: track } }).catch(() => { /* best-effort */ })
+    }
+  }, [user])
 
   const userId = user?.id
 
@@ -133,7 +153,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
         status: r.status,
         updated_at: new Date().toISOString(),
       }
-      if (r.target_date != null) row.target_date = r.target_date || null
+      row.target_date = r.target_date ?? null
       return row
     })
 
@@ -162,7 +182,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       exam_id: examId,
       updated_at: new Date().toISOString(),
     }
-    if (date != null) payload.target_date = date || null
+    payload.target_date = date
     const { error } = await supabase.from('exam_progress').upsert(payload, { onConflict: 'user_id,exam_id' })
     if (error) {
       console.warn('updateTargetDate: failed:', error.message)

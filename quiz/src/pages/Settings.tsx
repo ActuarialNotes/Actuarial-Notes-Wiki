@@ -14,6 +14,7 @@ import { Alert } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
 import { Loader2, Settings2, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ExamSittingsList } from '@/components/ExamSittingsList'
 import {
   AvatarDisplay,
   AvatarUploadButton,
@@ -635,16 +636,23 @@ export default function Settings() {
                                     {item.name}
                                   </span>
                                   {row.status === 'in_progress' && (
-                                    <div className="flex items-center gap-2">
-                                      <Label htmlFor={`date-${item.id}`} className="text-xs text-muted-foreground whitespace-nowrap">
-                                        Target date
-                                      </Label>
-                                      <input
-                                        id={`date-${item.id}`}
-                                        type="date"
-                                        value={row.targetDate}
-                                        onChange={e => setExamDate(item.id, e.target.value)}
-                                        className="text-sm border border-input rounded-md px-2 py-1 bg-background text-foreground"
+                                    <div className="flex flex-col gap-2">
+                                      <div className="flex items-center gap-2">
+                                        <Label htmlFor={`date-${item.id}`} className="text-xs text-muted-foreground whitespace-nowrap">
+                                          Target date
+                                        </Label>
+                                        <input
+                                          id={`date-${item.id}`}
+                                          type="date"
+                                          value={row.targetDate}
+                                          onChange={e => setExamDate(item.id, e.target.value)}
+                                          className="text-sm border border-input rounded-md px-2 py-1 bg-background text-foreground"
+                                        />
+                                      </div>
+                                      <ExamSittingsList
+                                        examId={item.id}
+                                        selectedDate={row.targetDate}
+                                        onSelect={date => setExamDate(item.id, date)}
                                       />
                                     </div>
                                   )}

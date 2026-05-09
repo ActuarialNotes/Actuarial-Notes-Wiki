@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { X, CalendarDays, Target } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ExamSittingsList } from '@/components/ExamSittingsList'
+import { isValidSittingDate, getSittingsForExam } from '@/data/examSittings'
 import {
   QUICK_SET_LABELS,
   QUICK_SET_PRESETS,
@@ -19,12 +21,13 @@ interface Props {
   config: StudyPlanConfig
   examDate: string | null
   examLabel: string
+  examId?: string
   onSave: (next: Partial<StudyPlanConfig>) => void
   onExamDateChange?: (date: string | null) => void
   onClose: () => void
 }
 
-export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onExamDateChange, onClose }: Props) {
+export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSave, onExamDateChange, onClose }: Props) {
   const today = todayISO()
 
   const [step, setStep] = useState<1 | 2 | 3>(1)
@@ -79,6 +82,9 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
   const daysOut = readyDate ? daysBetween(today, readyDate) : null
   const readyDateValid = !readyDate || (daysOut !== null && daysOut > 0)
   const examDateValid = !localExamDate || (examDaysOut !== null && examDaysOut > 0)
+
+  const hasSittings = examId ? getSittingsForExam(examId).length > 0 : false
+  const dateMatchesSitting = !examId || !localExamDate || !hasSittings || isValidSittingDate(examId, localExamDate)
 
   const STEPS = ['Exam Date', 'Ready Date', 'Study Strategy'] as const
 
@@ -145,20 +151,35 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
                 <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
                 <p className="text-sm font-medium">When is your exam?</p>
               </div>
-              <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
-                <input
-                  type="date"
-                  value={localExamDate}
-                  min={today}
-                  onChange={e => handleExamDateChange(e.target.value)}
-                  className="block w-full bg-background px-3 py-2 text-sm transition-colors focus:outline-none"
+              {examId && (
+                <ExamSittingsList
+                  examId={examId}
+                  selectedDate={localExamDate}
+                  onSelect={handleExamDateChange}
                 />
+              )}
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground mb-1">
+                  {hasSittings ? 'Or enter a custom date' : 'Select a date'}
+                </p>
+                <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
+                  <input
+                    type="date"
+                    value={localExamDate}
+                    min={today}
+                    onChange={e => handleExamDateChange(e.target.value)}
+                    className="block w-full bg-background px-3 py-2 text-sm transition-colors focus:outline-none"
+                  />
+                </div>
               </div>
               {examDaysOut !== null && examDaysOut > 0 && (
                 <p className="text-xs text-muted-foreground">{examDaysOut} day{examDaysOut === 1 ? '' : 's'} away</p>
               )}
               {localExamDate && examDaysOut !== null && examDaysOut <= 0 && (
                 <p className="text-xs text-destructive">Date must be in the future</p>
+              )}
+              {localExamDate && examDaysOut !== null && examDaysOut > 0 && !dateMatchesSitting && (
+                <p className="text-xs text-muted-foreground">This date doesn't match a known sitting window</p>
               )}
             </div>
           )}

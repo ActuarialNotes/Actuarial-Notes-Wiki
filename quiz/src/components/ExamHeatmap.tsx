@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Calendar, Check, X } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
+import { ExamSittingsList } from '@/components/ExamSittingsList'
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -248,44 +249,51 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
             )}
           </button>
         ) : (
-          <div className="flex items-center gap-1.5">
-            <Calendar className="h-3 w-3 text-muted-foreground shrink-0" />
-            <input
-              ref={inputRef}
-              type="date"
-              value={draft}
-              onChange={e => setDraft(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') saveDate(draft)
-                if (e.key === 'Escape') setEditing(false)
-              }}
-              className="text-[11px] bg-background border rounded px-1 py-0.5 text-foreground"
-            />
-            <button
-              type="button"
-              onClick={() => saveDate(draft)}
-              className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
-              aria-label="Save"
-            >
-              <Check className="h-3 w-3" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setEditing(false)}
-              className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
-              aria-label="Cancel"
-            >
-              <X className="h-3 w-3" />
-            </button>
-            {targetDate && (
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5">
+              <Calendar className="h-3 w-3 text-muted-foreground shrink-0" />
+              <input
+                ref={inputRef}
+                type="date"
+                value={draft}
+                onChange={e => setDraft(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') saveDate(draft)
+                  if (e.key === 'Escape') setEditing(false)
+                }}
+                className="text-[11px] bg-background border rounded px-1 py-0.5 text-foreground"
+              />
               <button
                 type="button"
-                onClick={() => saveDate('')}
-                className="text-[11px] text-muted-foreground hover:text-destructive transition-colors"
+                onClick={() => saveDate(draft)}
+                className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
+                aria-label="Save"
               >
-                Clear
+                <Check className="h-3 w-3" />
               </button>
-            )}
+              <button
+                type="button"
+                onClick={() => setEditing(false)}
+                className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
+                aria-label="Cancel"
+              >
+                <X className="h-3 w-3" />
+              </button>
+              {targetDate && (
+                <button
+                  type="button"
+                  onClick={() => saveDate('')}
+                  className="text-[11px] text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            <ExamSittingsList
+              examId={examProgressKey}
+              selectedDate={draft}
+              onSelect={d => { setDraft(d); saveDate(d) }}
+            />
           </div>
         )}
       </div>

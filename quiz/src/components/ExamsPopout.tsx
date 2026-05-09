@@ -4,6 +4,7 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { TRACKS } from '@/data/tracks'
 import type { ItemStatus, TrackItem } from '@/data/tracks'
 import { cn } from '@/lib/utils'
+import { ExamSittingsList } from '@/components/ExamSittingsList'
 
 const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
   not_started: 'in_progress',
@@ -234,16 +235,23 @@ export default function ExamsPopout({ open, onClose }: Props) {
                             {item.name}
                           </span>
                           {row.status === 'in_progress' && (
-                            <div className="flex items-center gap-1.5 ml-auto">
-                              <label htmlFor={`pop-date-${item.id}`} className="text-xs text-muted-foreground whitespace-nowrap">
-                                Target date
-                              </label>
-                              <input
-                                id={`pop-date-${item.id}`}
-                                type="date"
-                                value={row.targetDate}
-                                onChange={e => setExamDate(item.id, e.target.value)}
-                                className="text-xs border border-input rounded-md px-2 py-1 bg-background text-foreground"
+                            <div className="w-full flex flex-col gap-1.5 mt-1 pl-7">
+                              <div className="flex items-center gap-1.5">
+                                <label htmlFor={`pop-date-${item.id}`} className="text-xs text-muted-foreground whitespace-nowrap">
+                                  Target date
+                                </label>
+                                <input
+                                  id={`pop-date-${item.id}`}
+                                  type="date"
+                                  value={row.targetDate}
+                                  onChange={e => setExamDate(item.id, e.target.value)}
+                                  className="text-xs border border-input rounded-md px-2 py-1 bg-background text-foreground"
+                                />
+                              </div>
+                              <ExamSittingsList
+                                examId={item.id}
+                                selectedDate={row.targetDate}
+                                onSelect={date => setExamDate(item.id, date)}
                               />
                             </div>
                           )}

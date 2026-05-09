@@ -418,6 +418,7 @@ export function TodayCard({
             config={config}
             examDate={examDate}
             examLabel={syllabus.examLabel}
+            examId={progressKey}
             onSave={onConfigChange}
             onExamDateChange={onExamDateChange}
             onClose={() => setShowConfig(false)}
@@ -632,6 +633,7 @@ export function TodayCard({
           config={config}
           examDate={examDate}
           examLabel={syllabus.examLabel}
+          examId={progressKey}
           onSave={next => {
             onConfigChange(next)
             onRegenerate()

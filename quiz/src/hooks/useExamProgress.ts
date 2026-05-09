@@ -69,7 +69,7 @@ export function useExamProgress(): ExamProgressResult {
       exam_id: examId,
       updated_at: new Date().toISOString(),
     }
-    if (date != null) payload.target_date = date || null
+    payload.target_date = date
     const { error } = await supabase
       .from('exam_progress')
       .upsert(payload, { onConflict: 'user_id,exam_id' })

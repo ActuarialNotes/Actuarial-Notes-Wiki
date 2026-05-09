@@ -5,7 +5,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import { hrefToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { LatexText } from '@/components/LatexText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
@@ -229,15 +229,17 @@ export function ConceptDetailModal({
 
   function openInStudyGuide() {
     openAt([{ kind: 'concept', name: currentConceptName }], 0, null)
-    navigate('/wiki')
+    navigate(syllabus?.fileName
+      ? wikiRoute({ kind: 'exam', name: syllabus.fileName })
+      : '/wiki'
+    )
     onClose()
   }
 
-  const syllabusTopicsForCurrent = syllabus
-    ? syllabus.topics.filter(t =>
-        t.concepts.some(c => c.name.toLowerCase() === currentConceptName.toLowerCase())
-      )
-    : []
+  const syllabusTopics = syllabus?.topics ?? []
+  const conceptInSyllabus = syllabusTopics.some(t =>
+    t.concepts.some(c => c.name.toLowerCase() === currentConceptName.toLowerCase())
+  )
 
   const canPrev = !!allConcepts && localIndex > 0
   const canNext = !!allConcepts && localIndex < (allConcepts?.length ?? 1) - 1
@@ -414,13 +416,14 @@ export function ConceptDetailModal({
               </button>
             </div>
 
-            {syllabusTopicsForCurrent.length === 0 && (
-              <p className="text-sm text-muted-foreground">
-                {syllabus ? 'Concept not found in any syllabus topic.' : 'No syllabus context available.'}
-              </p>
+            {!syllabus && (
+              <p className="text-sm text-muted-foreground">No syllabus context available.</p>
+            )}
+            {syllabus && !conceptInSyllabus && (
+              <p className="text-sm text-muted-foreground">Concept not found in any syllabus topic.</p>
             )}
 
-            {syllabusTopicsForCurrent.map(topic => (
+            {syllabusTopics.map(topic => (
               <div key={topic.name} className="space-y-2">
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-semibold">{topic.name}</h3>
@@ -443,6 +446,9 @@ export function ConceptDetailModal({
                         {c.name}
                         {isCurrent && (
                           <span className="ml-2 text-xs text-primary">(current)</span>
+                        )}
+                        {isCurrent && c.excerpt && (
+                          <p className="text-xs text-muted-foreground mt-0.5 italic leading-snug font-normal">{c.excerpt}</p>
                         )}
                       </div>
                     )

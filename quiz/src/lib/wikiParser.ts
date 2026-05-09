@@ -1,6 +1,7 @@
 export interface WikiConcept {
-  name: string    // display name shown in UI
-  target: string  // raw [[target]] before the | alias
+  name: string     // display name shown in UI
+  target: string   // raw [[target]] before the | alias
+  excerpt?: string // cleaned text of the syllabus line that mentions this concept
 }
 
 export interface WikiTopic {
@@ -25,6 +26,14 @@ export function wikiExamIdToProgressKey(examId: string): string {
   if (/^[A-Z]+-\d+$/.test(examId)) return examId.replace(/-\d+$/, '')
   if (/^[A-Z]+$/.test(examId)) return examId
   return 'CAS-' + examId.replace(/[A-Z]+$/, '')
+}
+
+// Strip [[wiki links]] from text, keeping only display names, for use as excerpts.
+function cleanWikiLinks(text: string): string {
+  return text
+    .replace(/\[\[[^\]|]+\|([^\]]+)\]\]/g, '$1')
+    .replace(/\[\[([^\]]+)\]\]/g, (_, t) =>
+      t.includes('/') ? (t.split('/').pop() ?? t) : t)
 }
 
 // Extract all [[Name]] and [[Name|Display]] patterns from text.
@@ -82,11 +91,19 @@ export function parseExamSyllabus(
 
   const flush = () => {
     if (!current) return
-    topics.push({
-      name: current.name,
-      weight: current.weight,
-      concepts: extractWikiLinks(current.lines.join('\n')),
-    })
+    const concepts: WikiConcept[] = []
+    const seen = new Set<string>()
+    for (const line of current.lines) {
+      const lineLinks = extractWikiLinks(line)
+      const excerpt = cleanWikiLinks(line).trim()
+      for (const link of lineLinks) {
+        if (!seen.has(link.name.toLowerCase())) {
+          seen.add(link.name.toLowerCase())
+          concepts.push({ ...link, excerpt })
+        }
+      }
+    }
+    topics.push({ name: current.name, weight: current.weight, concepts })
     current = null
   }
 

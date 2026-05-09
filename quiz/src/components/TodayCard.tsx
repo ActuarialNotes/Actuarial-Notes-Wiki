@@ -23,7 +23,6 @@ import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import {
-  formatReadableDate,
   todayISO,
   type StudyPlan,
   type StudyPlanConfig,
@@ -360,10 +359,11 @@ export function TodayCard({
       <>
         <Card className="border-dashed">
           <CardContent className="p-5 space-y-3">
+            <h2 className="text-xl font-semibold">Study Plan</h2>
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-base font-semibold">{todayLongDate()}</p>
-                <h2 className="text-lg font-semibold mt-1">Set up your study plan</h2>
+                <p className="text-sm font-semibold mt-1">Set up your study plan</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -374,8 +374,44 @@ export function TodayCard({
               <Settings2 className="h-3.5 w-3.5" />
               Configure study plan
             </Button>
+            <div className="border-t pt-2">
+              {planExpanded && (
+                <div className="pb-2 pt-1">
+                  <StudyPlanTracker
+                    syllabus={syllabus}
+                    masteryRecords={masteryRecords}
+                    studyPlan={null}
+                    onConceptSelect={setTrackerConcept}
+                  />
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => setPlanExpanded(v => !v)}
+                className="w-full flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors py-1.5"
+              >
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${planExpanded ? 'rotate-180' : ''}`} />
+                {planExpanded ? 'Hide study plan' : 'Show study plan'}
+              </button>
+            </div>
           </CardContent>
         </Card>
+
+        {trackerConcept && (
+          <ConceptDetailModal
+            conceptName={trackerConcept.name}
+            masteryState={trackerConcept.state}
+            onClose={() => setTrackerConcept(null)}
+            syllabus={syllabus}
+            allConcepts={syllabus.topics.flatMap(t =>
+              t.concepts.map(c => ({
+                name: c.name,
+                state: masteryStateByName.get(c.name.toLowerCase()) ?? 'new' as MasteryState,
+              }))
+            )}
+            initialConceptIndex={trackerConcept.index}
+          />
+        )}
 
         {showConfig && (
           <StudyPlanConfigModal
@@ -397,19 +433,9 @@ export function TodayCard({
     <>
       <Card className="border-primary/30 ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-3">
-          {/* Date header */}
+          {/* Title + settings */}
           <div className="flex items-start justify-between gap-2">
-            <div>
-              <p className="text-base font-semibold">{todayLongDate()}</p>
-              {!loading && plan && plan.status !== 'review_mode' && plan.daysRemaining > 0 && (
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Day {plan.dayNumber} of {plan.totalDays}
-                  {' · '}
-                  {plan.daysRemaining} day{plan.daysRemaining === 1 ? '' : 's'} until{' '}
-                  {formatReadableDate(plan.effectiveReadyDate)}
-                </p>
-              )}
-            </div>
+            <h2 className="text-xl font-semibold">Study Plan</h2>
             <button
               type="button"
               onClick={() => setShowConfig(true)}
@@ -420,6 +446,8 @@ export function TodayCard({
               <Settings2 className="h-4 w-4" />
             </button>
           </div>
+          {/* Date header */}
+          <p className="text-base font-semibold">{todayLongDate()}</p>
 
           {/* Heading + completion indicator + concept chips */}
           {showConcepts ? (

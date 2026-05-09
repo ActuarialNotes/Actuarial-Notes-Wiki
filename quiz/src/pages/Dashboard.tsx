@@ -186,9 +186,17 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Exam navigation dots */}
+      {/* Exam navigation dots + arrows */}
       {multiExam && (
-        <div className="flex justify-center gap-2" aria-label="Exam navigation">
+        <div className="flex items-center justify-center gap-2" aria-label="Exam navigation">
+          <button
+            type="button"
+            onClick={handlePrev}
+            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+            aria-label="Previous exam"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
           {inProgressSyllabi.map((_, i) => (
             <button
               key={i}
@@ -203,43 +211,6 @@ export default function Dashboard() {
               }`}
             />
           ))}
-        </div>
-      )}
-
-      {/* Active exam card with external navigation */}
-      <div
-        className="flex items-center gap-2"
-        onTouchStart={multiExam ? handleTouchStart : undefined}
-        onTouchEnd={multiExam ? handleTouchEnd : undefined}
-      >
-        {multiExam && (
-          <button
-            type="button"
-            onClick={handlePrev}
-            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-            aria-label="Previous exam"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-        )}
-
-        <div className="flex-1 min-w-0">
-          {syllabusLoading || sessionsLoading ? (
-            <ActiveExamCardLoading />
-          ) : !activeSyllabus ? (
-            <ActiveExamCardEmpty onChooseExam={() => setExamsOpen(true)} />
-          ) : (
-            <ActiveExamCard
-              syllabus={activeSyllabus}
-              sessions={sessions}
-              targetDate={activeTargetDate}
-              onTargetDateChange={handleTargetDateChange}
-              masteryRecords={masteryRecords}
-            />
-          )}
-        </div>
-
-        {multiExam && (
           <button
             type="button"
             onClick={handleNext}
@@ -248,6 +219,26 @@ export default function Dashboard() {
           >
             <ChevronRight className="h-5 w-5" />
           </button>
+        </div>
+      )}
+
+      {/* Active exam card */}
+      <div
+        onTouchStart={multiExam ? handleTouchStart : undefined}
+        onTouchEnd={multiExam ? handleTouchEnd : undefined}
+      >
+        {syllabusLoading || sessionsLoading ? (
+          <ActiveExamCardLoading />
+        ) : !activeSyllabus ? (
+          <ActiveExamCardEmpty onChooseExam={() => setExamsOpen(true)} />
+        ) : (
+          <ActiveExamCard
+            syllabus={activeSyllabus}
+            sessions={sessions}
+            targetDate={activeTargetDate}
+            onTargetDateChange={handleTargetDateChange}
+            masteryRecords={masteryRecords}
+          />
         )}
       </div>
 

@@ -8,7 +8,9 @@ tags:
   - exam-p
   - central-limit-theorem
   - percentiles
-wiki_link: Concepts/Central+Limit+Theorem
+wiki_link:
+  - Concepts/Central+Limit+Theorem
+  - Concepts/Percentile
 answer: C
 points: 1
 ---

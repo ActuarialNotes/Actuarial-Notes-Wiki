@@ -8,7 +8,10 @@ tags:
   - exam-p
   - binomial-distribution
   - mutually-exclusive
-wiki_link: Concepts/Independent+Random+Variables
+wiki_link:
+  - Concepts/Independent+Random+Variables
+  - Concepts/Binomial
+  - Concepts/Mutually+Exclusive+Events
 answer: E
 points: 1
 ---

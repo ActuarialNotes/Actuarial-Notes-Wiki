@@ -8,7 +8,9 @@ tags:
   - exam-p
   - continuous-distributions
   - conditional-probability
-wiki_link: Concepts/Conditional+Probability
+wiki_link:
+  - Concepts/Conditional+Probability
+  - Concepts/Continuous+Univariate+Distributions
 answer: A
 points: 1
 ---

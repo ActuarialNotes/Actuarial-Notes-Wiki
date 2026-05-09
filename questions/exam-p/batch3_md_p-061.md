@@ -9,7 +9,10 @@ tags:
   - exponential-distribution
   - percentiles
   - policy-limits
-wiki_link: Concepts/Percentiles
+wiki_link:
+  - Concepts/Percentiles
+  - Concepts/Exponential
+  - Concepts/Percentile
 answer: C
 points: 1
 ---

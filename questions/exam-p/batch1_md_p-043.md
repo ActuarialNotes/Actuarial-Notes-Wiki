@@ -8,7 +8,9 @@ tags:
   - exam-p
   - expected-value
   - continuous-distributions
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Continuous+Univariate+Distributions
 answer: D
 points: 1
 ---

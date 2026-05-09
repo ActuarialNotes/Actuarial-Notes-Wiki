@@ -9,7 +9,10 @@ tags:
   - poisson-distribution
   - variance
   - policy-limits
-wiki_link: Concepts/Standard+Deviation
+wiki_link:
+  - Concepts/Standard+Deviation
+  - Concepts/Poisson
+  - Concepts/Variance
 answer: B
 points: 1
 ---

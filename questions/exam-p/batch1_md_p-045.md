@@ -9,7 +9,10 @@ tags:
   - expected-value
   - exponential-distribution
   - continuous-distributions
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Exponential
+  - Concepts/Continuous+Univariate+Distributions
 answer: D
 points: 1
 ---

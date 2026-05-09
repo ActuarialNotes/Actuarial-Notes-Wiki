@@ -8,7 +8,10 @@ tags:
   - exam-p
   - poisson-distribution
   - expected-value
-wiki_link: Concepts/Poisson+Distribution
+wiki_link:
+  - Concepts/Poisson+Distribution
+  - Concepts/Poisson
+  - Concepts/Expected+Value
 answer: C
 points: 1
 ---

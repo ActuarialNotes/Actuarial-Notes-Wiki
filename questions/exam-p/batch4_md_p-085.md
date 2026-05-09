@@ -8,7 +8,9 @@ tags:
   - exam-p
   - arithmetic-progression
   - discrete-distributions
-wiki_link: Concepts/Discrete+Univariate+Distributions
+wiki_link:
+  - Concepts/Discrete+Univariate+Distributions
+  - Concepts/Arithmetic+Progression
 answer: C
 points: 1
 ---

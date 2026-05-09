@@ -8,7 +8,9 @@ tags:
   - exam-p
   - deductibles
   - expected-value
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Deductibles
 answer: C
 points: 1
 ---

@@ -8,7 +8,9 @@ tags:
   - exam-p
   - set-theory
   - mutually-exclusive
-wiki_link: Concepts/Set+Theory
+wiki_link:
+  - Concepts/Set+Theory
+  - Concepts/Mutually+Exclusive+Events
 answer: B
 points: 1
 ---

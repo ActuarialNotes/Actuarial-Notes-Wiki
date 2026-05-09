@@ -8,7 +8,9 @@ tags:
   - exam-p
   - binomial
   - multinomial
-wiki_link: Concepts/Binomial+Distribution
+wiki_link:
+  - Concepts/Binomial+Distribution
+  - Concepts/Binomial
 answer: D
 points: 1
 ---

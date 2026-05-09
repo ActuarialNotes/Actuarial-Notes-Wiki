@@ -8,7 +8,10 @@ tags:
   - exam-p
   - discrete-distributions
   - marginal-distribution
-wiki_link: Concepts/Marginal+Distribution
+wiki_link:
+  - Concepts/Marginal+Distribution
+  - Concepts/Discrete+Univariate+Distributions
+  - Concepts/Variance+for+Conditional+and+Marginal+Distributions
 answer: B
 points: 1
 ---

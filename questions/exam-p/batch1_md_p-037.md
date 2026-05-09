@@ -7,7 +7,9 @@ type: multiple-choice
 tags:
   - exam-p
   - binomial-distribution
-wiki_link: Concepts/Binomial+Distribution
+wiki_link:
+  - Concepts/Binomial+Distribution
+  - Concepts/Binomial
 answer: E
 points: 1
 ---

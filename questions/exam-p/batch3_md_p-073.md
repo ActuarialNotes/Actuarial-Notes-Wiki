@@ -8,7 +8,9 @@ tags:
   - exam-p
   - exponential-distribution
   - independent-variables
-wiki_link: Concepts/Independent+Random+Variables
+wiki_link:
+  - Concepts/Independent+Random+Variables
+  - Concepts/Exponential
 answer: C
 points: 1
 ---

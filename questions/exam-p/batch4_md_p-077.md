@@ -8,7 +8,10 @@ tags:
   - exam-p
   - independent-variables
   - variance
-wiki_link: Concepts/Linear+Combinations+of+Random+Variables
+wiki_link:
+  - Concepts/Linear+Combinations+of+Random+Variables
+  - Concepts/Independent+Random+Variables
+  - Concepts/Variance
 answer: D
 points: 1
 ---

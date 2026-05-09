@@ -8,7 +8,9 @@ tags:
   - exam-p
   - geometric-distribution
   - conditional-expectation
-wiki_link: Concepts/Conditional+Probability
+wiki_link:
+  - Concepts/Conditional+Probability
+  - Concepts/Geometric
 answer: D
 points: 1
 ---

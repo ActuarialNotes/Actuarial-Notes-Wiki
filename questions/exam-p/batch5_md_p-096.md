@@ -8,7 +8,9 @@ tags:
   - exam-p
   - negative-binomial-distribution
   - mode
-wiki_link: Concepts/Negative+Binomial+Distribution
+wiki_link:
+  - Concepts/Negative+Binomial+Distribution
+  - Concepts/Negative+Binomial
 answer: B
 points: 1
 ---

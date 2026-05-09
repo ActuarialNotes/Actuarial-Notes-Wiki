@@ -9,7 +9,10 @@ tags:
   - exponential-distribution
   - percentiles
   - deductibles
-wiki_link: Concepts/Conditional+Probability
+wiki_link:
+  - Concepts/Conditional+Probability
+  - Concepts/Exponential
+  - Concepts/Percentile
 answer: E
 points: 1
 ---

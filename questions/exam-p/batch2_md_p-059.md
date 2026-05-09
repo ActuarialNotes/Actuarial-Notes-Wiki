@@ -9,7 +9,9 @@ tags:
   - uniform-distribution
   - deductibles
   - standard-deviation
-wiki_link: Concepts/Standard+Deviation
+wiki_link:
+  - Concepts/Standard+Deviation
+  - Concepts/Deductibles
 answer: B
 points: 1
 ---

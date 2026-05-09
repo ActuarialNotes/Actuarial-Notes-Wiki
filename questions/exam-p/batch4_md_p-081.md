@@ -8,7 +8,9 @@ tags:
   - exam-p
   - conditional-probability
   - mutually-exclusive
-wiki_link: Concepts/Conditional+Probability
+wiki_link:
+  - Concepts/Conditional+Probability
+  - Concepts/Mutually+Exclusive+Events
 answer: E
 points: 1
 ---

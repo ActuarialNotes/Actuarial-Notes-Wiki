@@ -8,7 +8,9 @@ tags:
   - exam-p
   - conditional-probability
   - expected-value
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Conditional+Probability
 answer: B
 points: 1
 ---

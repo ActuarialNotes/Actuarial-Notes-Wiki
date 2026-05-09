@@ -8,7 +8,9 @@ tags:
   - exam-p
   - central-limit-theorem
   - covariance
-wiki_link: Concepts/Central+Limit+Theorem
+wiki_link:
+  - Concepts/Central+Limit+Theorem
+  - Concepts/Covariance
 answer: B
 points: 1
 ---

@@ -8,7 +8,9 @@ tags:
   - exam-p
   - uniform-distribution
   - deductibles
-wiki_link: Concepts/Uniform+Continuous+Distribution
+wiki_link:
+  - Concepts/Uniform+Continuous+Distribution
+  - Concepts/Deductibles
 answer: C
 points: 1
 ---

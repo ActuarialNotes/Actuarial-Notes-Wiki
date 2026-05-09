@@ -8,7 +8,9 @@ tags:
   - exam-p
   - binomial-distribution
   - expected-value
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Binomial
 answer: E
 points: 1
 ---

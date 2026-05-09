@@ -8,7 +8,9 @@ tags:
   - exam-p
   - discrete-distributions
   - standard-deviation
-wiki_link: Concepts/Standard+Deviation
+wiki_link:
+  - Concepts/Standard+Deviation
+  - Concepts/Discrete+Univariate+Distributions
 answer: A
 points: 1
 ---

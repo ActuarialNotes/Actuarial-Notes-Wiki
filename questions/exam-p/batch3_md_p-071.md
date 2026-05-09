@@ -8,7 +8,9 @@ tags:
   - exam-p
   - conditional-probability
   - central-limit-theorem
-wiki_link: Concepts/Central+Limit+Theorem
+wiki_link:
+  - Concepts/Central+Limit+Theorem
+  - Concepts/Conditional+Probability
 answer: E
 points: 1
 ---

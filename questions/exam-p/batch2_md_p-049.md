@@ -8,7 +8,10 @@ tags:
   - exam-p
   - discrete-distributions
   - deductibles
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Discrete+Univariate+Distributions
+  - Concepts/Deductibles
 answer: A
 points: 1
 ---

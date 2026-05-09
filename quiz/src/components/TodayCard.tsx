@@ -295,11 +295,17 @@ export function TodayCard({
     }
   }
 
-  // A concept is "on target" for today when it has reached or exceeded its target state.
+  // A concept is "on target" for today when it has reached or exceeded its target state,
+  // OR when it was advanced at all today. The latter handles the case where reconfiguring
+  // the plan regenerates assignments using current mastery, raising the target bar above
+  // what the user already achieved in the same day.
   const onTargetCount = displayConcepts.filter(n => {
     const target = targetByName.get(n.toLowerCase()) ?? 'level1'
     const current = masteryStateByName.get(n.toLowerCase()) ?? 'new'
-    return STATE_ORDER[current] >= STATE_ORDER[target]
+    const advancedToday = completedToday.some(
+      lu => lu.conceptSlug.toLowerCase() === n.toLowerCase()
+    )
+    return STATE_ORDER[current] >= STATE_ORDER[target] || advancedToday
   }).length
   const allOnTarget = displayConcepts.length > 0 && onTargetCount === displayConcepts.length
 
@@ -368,7 +374,8 @@ export function TodayCard({
         return gd !== 0 ? gd : (diffOrder[a.difficulty] ?? 1) - (diffOrder[b.difficulty] ?? 1)
       })
 
-      const cap = Math.min(filtered.length, displayConcepts.length)
+      const remaining = displayConcepts.length - onTargetCount
+      const cap = Math.min(filtered.length, Math.max(1, remaining))
       const ids = filtered.slice(0, cap).map(q => q.id).join(',')
       navigate(`/quiz?ids=${ids}`)
     } catch {
@@ -583,21 +590,27 @@ export function TodayCard({
             </div>
           )}
 
-          {/* Completed Today */}
-          {completedToday.length > 0 && (
+          {/* Completed Today — only show level-ups for concepts in today's plan */}
+          {completedToday.filter(lu =>
+            displayConcepts.some(n => n.toLowerCase() === lu.conceptSlug.toLowerCase())
+          ).length > 0 && (
             <div className="rounded-md border border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/20 px-3 py-2.5 space-y-1.5">
               <div className="flex items-center gap-1.5 text-xs font-medium text-green-700 dark:text-green-400">
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
                 Completed today
               </div>
               <ul className="space-y-0.5">
-                {completedToday.map((lu, i) => (
-                  <li key={i} className="flex items-center gap-1.5 text-xs text-green-700 dark:text-green-400">
-                    <span className="font-medium">{lu.conceptSlug}</span>
-                    <span className="text-green-500/70">→</span>
-                    <span>{STATE_LABEL[lu.to]}</span>
-                  </li>
-                ))}
+                {completedToday
+                  .filter(lu =>
+                    displayConcepts.some(n => n.toLowerCase() === lu.conceptSlug.toLowerCase())
+                  )
+                  .map((lu, i) => (
+                    <li key={i} className="flex items-center gap-1.5 text-xs text-green-700 dark:text-green-400">
+                      <span className="font-medium">{lu.conceptSlug}</span>
+                      <span className="text-green-500/70">→</span>
+                      <span>{STATE_LABEL[lu.to]}</span>
+                    </li>
+                  ))}
               </ul>
             </div>
           )}

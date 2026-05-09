@@ -37,11 +37,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
   })
   const [strength, setStrength] = useState<TargetStrengthLevel>(config.targetStrengthLevel)
   const [activePreset, setActivePreset] = useState<QuickSetPreset | null>(() => {
-    if (!config.targetReadyDate || !examDate) return null
-    for (const p of QUICK_SET_PRESETS) {
-      if (applyPreset(examDate, p) === config.targetReadyDate) return p
+    if (config.targetReadyDate && examDate) {
+      for (const p of QUICK_SET_PRESETS) {
+        if (applyPreset(examDate, p) === config.targetReadyDate) return p
+      }
+      return null  // saved date doesn't match any preset → custom
     }
-    return null
+    return '2w'  // default: 2 weeks before
   })
 
   function selectPreset(preset: QuickSetPreset) {
@@ -143,13 +145,15 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
                 <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
                 <p className="text-sm font-medium">When is your exam?</p>
               </div>
-              <input
-                type="date"
-                value={localExamDate}
-                min={today}
-                onChange={e => handleExamDateChange(e.target.value)}
-                className="block w-full min-w-0 max-w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
-              />
+              <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
+                <input
+                  type="date"
+                  value={localExamDate}
+                  min={today}
+                  onChange={e => handleExamDateChange(e.target.value)}
+                  className="block w-full bg-background px-3 py-2 text-sm transition-colors focus:outline-none"
+                />
+              </div>
               {examDaysOut !== null && examDaysOut > 0 && (
                 <p className="text-xs text-muted-foreground">{examDaysOut} day{examDaysOut === 1 ? '' : 's'} away</p>
               )}
@@ -203,14 +207,16 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, onSave, onEx
 
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Or pick a date</p>
-                <input
-                  type="date"
-                  value={readyDate}
-                  min={today}
-                  max={localExamDate || examDate || undefined}
-                  onChange={e => handleReadyDateChange(e.target.value)}
-                  className="block w-full min-w-0 max-w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-ring"
-                />
+                <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
+                  <input
+                    type="date"
+                    value={readyDate}
+                    min={today}
+                    max={localExamDate || examDate || undefined}
+                    onChange={e => handleReadyDateChange(e.target.value)}
+                    className="block w-full bg-background px-3 py-2 text-sm transition-colors focus:outline-none"
+                  />
+                </div>
               </div>
               {daysOut !== null && daysOut > 0 && (
                 <p className="text-xs text-muted-foreground">

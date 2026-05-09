@@ -10,6 +10,7 @@ import {
   Settings2,
   AlertTriangle,
   CheckCircle2,
+  Check,
   Loader2,
   ChevronDown,
   TrendingUp,
@@ -325,17 +326,22 @@ export function TodayCard({
       const all = parseAllQuestions(raw)
 
       const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
-      let filtered = all.filter(q =>
-        q.wiki_link.some(link => {
-          const ref = hrefToEntryRef(link)
-          const name = ref?.name ?? link.split('/').filter(Boolean).pop() ?? ''
-          return todaySet.has(name.replace(/-/g, ' ').toLowerCase())
-        })
-      )
 
-      filtered.sort((a, b) => {
-        const diffOrder: Record<string, number> = { hard: 0, medium: 1, easy: 2 }
-        return (diffOrder[a.difficulty] ?? 1) - (diffOrder[b.difficulty] ?? 1)
+      function linkToName(link: string): string {
+        const ref = hrefToEntryRef(link)
+        const r = ref?.name ?? link.split('/').filter(Boolean).pop() ?? ''
+        return r.replace(/-/g, ' ').toLowerCase()
+      }
+
+      // Include a question only when it has ≥1 today-concept AND every
+      // non-today concept is already at level1+ (not new/forgotten).
+      const filtered = all.filter(q => {
+        const names = q.wiki_link.map(linkToName)
+        if (!names.some(n => todaySet.has(n))) return false
+        return !names.some(n => {
+          if (todaySet.has(n)) return false
+          return STATE_ORDER[masteryStateByName.get(n) ?? 'new'] < 1
+        })
       })
 
       if (filtered.length === 0) {
@@ -343,7 +349,26 @@ export function TodayCard({
         return
       }
 
-      const cap = Math.min(filtered.length, 20)
+      // Sort: forgotten concepts first (attempted/incorrect), then new, then
+      // others (already in progress). Within each group: easy → medium → hard.
+      const diffOrder: Record<string, number> = { easy: 0, medium: 1, hard: 2 }
+      function conceptGroup(q: { wiki_link: string[] }): number {
+        for (const link of q.wiki_link) {
+          const n = linkToName(link)
+          if (!todaySet.has(n)) continue
+          const s = masteryStateByName.get(n) ?? 'new'
+          if (s === 'forgotten') return 0
+          if (s === 'new')       return 1
+          return 2
+        }
+        return 2
+      }
+      filtered.sort((a, b) => {
+        const gd = conceptGroup(a) - conceptGroup(b)
+        return gd !== 0 ? gd : (diffOrder[a.difficulty] ?? 1) - (diffOrder[b.difficulty] ?? 1)
+      })
+
+      const cap = Math.min(filtered.length, displayConcepts.length)
       const ids = filtered.slice(0, cap).map(q => q.id).join(',')
       navigate(`/quiz?ids=${ids}`)
     } catch {
@@ -351,7 +376,7 @@ export function TodayCard({
     } finally {
       setQuizLoading(false)
     }
-  }, [displayConcepts, navigate, syllabus.examTopic])
+  }, [displayConcepts, navigate, syllabus.examTopic, masteryStateByName])
 
   // Unconfigured state — prompt to set up
   if (!loading && !plan?.config.targetReadyDate) {
@@ -483,11 +508,15 @@ export function TodayCard({
                     state === 'level1'    ? 'border-green-200 bg-green-50 text-green-600 dark:border-green-900 dark:bg-green-950/20 dark:text-green-500' :
                     state === 'forgotten' ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-300' :
                                            'border-border bg-muted/40 text-muted-foreground'
+                  const levelled = completedToday.some(
+                    lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()
+                  )
                   return (
                     <span
                       key={name}
-                      className={`inline-block text-xs px-2 py-0.5 rounded-full border ${stateColor}`}
+                      className={`inline-flex items-center gap-0.5 text-xs px-2 py-0.5 rounded-full border ${stateColor}`}
                     >
+                      {levelled && <Check className="h-2.5 w-2.5 shrink-0" />}
                       {name}
                     </span>
                   )

@@ -9,7 +9,9 @@ tags:
   - continuous-distributions
   - conditional-probability
   - transformations
-wiki_link: Concepts/Conditional+Probability
+wiki_link:
+  - Concepts/Conditional+Probability
+  - Concepts/Continuous+Univariate+Distributions
 answer: B
 points: 1
 ---

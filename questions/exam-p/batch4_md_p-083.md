@@ -8,7 +8,10 @@ tags:
   - exam-p
   - discrete-distributions
   - conditional-variance
-wiki_link: Concepts/Conditional+Probability+Function
+wiki_link:
+  - Concepts/Conditional+Probability+Function
+  - Concepts/Discrete+Univariate+Distributions
+  - Concepts/Variance+for+Conditional+and+Marginal+Distributions
 answer: D
 points: 1
 ---

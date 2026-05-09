@@ -9,7 +9,9 @@ tags:
   - uniform-distribution
   - central-limit-theorem
   - deductibles
-wiki_link: Concepts/Central+Limit+Theorem
+wiki_link:
+  - Concepts/Central+Limit+Theorem
+  - Concepts/Deductibles
 answer: D
 points: 1
 ---

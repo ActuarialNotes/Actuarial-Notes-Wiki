@@ -8,7 +8,9 @@ tags:
   - exam-p
   - discrete-distributions
   - expected-value
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Discrete+Univariate+Distributions
 answer: E
 points: 1
 ---

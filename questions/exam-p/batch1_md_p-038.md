@@ -8,7 +8,9 @@ tags:
   - exam-p
   - deductibles
   - transformations
-wiki_link: Concepts/Transformations+of+Random+Variables
+wiki_link:
+  - Concepts/Transformations+of+Random+Variables
+  - Concepts/Deductibles
 answer: B
 points: 1
 ---

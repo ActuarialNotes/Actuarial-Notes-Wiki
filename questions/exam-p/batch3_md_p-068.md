@@ -8,7 +8,10 @@ tags:
   - exam-p
   - normal-distribution
   - central-limit-theorem
-wiki_link: Concepts/Linear+Combinations+of+Random+Variables
+wiki_link:
+  - Concepts/Linear+Combinations+of+Random+Variables
+  - Concepts/Normal
+  - Concepts/Central+Limit+Theorem
 answer: B
 points: 1
 ---

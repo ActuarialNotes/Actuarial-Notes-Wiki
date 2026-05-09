@@ -8,7 +8,9 @@ tags:
   - exam-p
   - poisson-distribution
   - central-limit-theorem
-wiki_link: Concepts/Central+Limit+Theorem
+wiki_link:
+  - Concepts/Central+Limit+Theorem
+  - Concepts/Poisson
 answer: B
 points: 1
 ---

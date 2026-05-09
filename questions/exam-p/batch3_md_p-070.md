@@ -8,7 +8,9 @@ tags:
   - exam-p
   - exponential-distribution
   - central-limit-theorem
-wiki_link: Concepts/Central+Limit+Theorem
+wiki_link:
+  - Concepts/Central+Limit+Theorem
+  - Concepts/Exponential
 answer: B
 points: 1
 ---

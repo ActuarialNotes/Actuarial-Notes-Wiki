@@ -8,7 +8,10 @@ tags:
   - exam-p
   - exponential-distribution
   - variance
-wiki_link: Concepts/Independent+Random+Variables
+wiki_link:
+  - Concepts/Independent+Random+Variables
+  - Concepts/Exponential
+  - Concepts/Variance
 answer: E
 points: 1
 ---

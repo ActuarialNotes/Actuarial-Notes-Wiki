@@ -8,7 +8,10 @@ tags:
   - exam-p
   - continuous-distributions
   - percentiles
-wiki_link: Concepts/Percentiles
+wiki_link:
+  - Concepts/Percentiles
+  - Concepts/Continuous+Univariate+Distributions
+  - Concepts/Percentile
 answer: B
 points: 1
 ---

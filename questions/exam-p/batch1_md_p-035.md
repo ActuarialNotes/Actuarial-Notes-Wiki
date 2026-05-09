@@ -9,7 +9,9 @@ tags:
   - exponential-distribution
   - expected-value
   - insurance-payments
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Exponential
 answer: D
 points: 1
 ---

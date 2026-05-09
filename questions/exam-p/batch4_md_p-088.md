@@ -9,7 +9,10 @@ tags:
   - conditional-probability
   - coinsurance-percentages
   - deductibles
-wiki_link: Concepts/Conditional+Probability
+wiki_link:
+  - Concepts/Conditional+Probability
+  - Concepts/Coinsurance+Percentages
+  - Concepts/Deductibles
 answer: B
 points: 1
 ---

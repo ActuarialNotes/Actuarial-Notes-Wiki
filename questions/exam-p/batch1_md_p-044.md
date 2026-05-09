@@ -9,7 +9,9 @@ tags:
   - exponential-distribution
   - expected-value
   - max-function
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Exponential
 answer: D
 points: 1
 ---

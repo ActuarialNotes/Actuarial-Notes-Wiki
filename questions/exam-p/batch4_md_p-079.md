@@ -9,7 +9,10 @@ tags:
   - order-statistics
   - independent-variables
   - exponential-distribution
-wiki_link: Concepts/Order+Statistics
+wiki_link:
+  - Concepts/Order+Statistics
+  - Concepts/Independent+Random+Variables
+  - Concepts/Exponential
 answer: E
 points: 1
 ---

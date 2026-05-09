@@ -8,7 +8,9 @@ tags:
   - exam-p
   - order-statistics
   - expected-value
-wiki_link: Concepts/Order+Statistics
+wiki_link:
+  - Concepts/Order+Statistics
+  - Concepts/Expected+Value
 answer: A
 points: 1
 ---

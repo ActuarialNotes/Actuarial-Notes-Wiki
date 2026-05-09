@@ -8,7 +8,9 @@ tags:
   - exam-p
   - normal-distribution
   - sample-mean
-wiki_link: Concepts/Linear+Combinations+of+Random+Variables
+wiki_link:
+  - Concepts/Linear+Combinations+of+Random+Variables
+  - Concepts/Normal
 answer: C
 points: 1
 ---

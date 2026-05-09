@@ -7,7 +7,9 @@ type: multiple-choice
 tags:
   - exam-p
   - negative-binomial-distribution
-wiki_link: Concepts/Negative+Binomial+Distribution
+wiki_link:
+  - Concepts/Negative+Binomial+Distribution
+  - Concepts/Negative+Binomial
 answer: D
 points: 1
 ---

@@ -8,7 +8,9 @@ tags:
   - exam-p
   - covariance
   - variance
-wiki_link: Concepts/Covariance
+wiki_link:
+  - Concepts/Covariance
+  - Concepts/Variance
 answer: A
 points: 1
 ---

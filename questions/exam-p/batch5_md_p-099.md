@@ -8,7 +8,9 @@ tags:
   - exam-p
   - set-theory
   - probability-rules
-wiki_link: Concepts/Set+Theory
+wiki_link:
+  - Concepts/Set+Theory
+  - Concepts/Probability
 answer: E
 points: 1
 ---

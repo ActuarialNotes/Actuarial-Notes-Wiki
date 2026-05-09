@@ -9,7 +9,10 @@ tags:
   - conditional-probability
   - exponential-distribution
   - law-of-total-probability
-wiki_link: Concepts/The+Law+of+Total+Probability
+wiki_link:
+  - Concepts/The+Law+of+Total+Probability
+  - Concepts/Conditional+Probability
+  - Concepts/Exponential
 answer: C
 points: 1
 ---

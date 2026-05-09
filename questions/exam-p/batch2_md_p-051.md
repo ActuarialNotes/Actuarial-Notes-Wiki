@@ -8,7 +8,9 @@ tags:
   - exam-p
   - mixed-distributions
   - deductibles
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Deductibles
 answer: B
 points: 1
 ---

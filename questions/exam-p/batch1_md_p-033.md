@@ -8,7 +8,9 @@ tags:
   - exam-p
   - continuous-distributions
   - power-rule
-wiki_link: Concepts/Continuous+Probability
+wiki_link:
+  - Concepts/Continuous+Probability
+  - Concepts/Continuous+Univariate+Distributions
 answer: C
 points: 1
 ---

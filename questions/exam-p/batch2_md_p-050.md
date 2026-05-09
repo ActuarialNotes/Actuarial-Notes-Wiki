@@ -8,7 +8,9 @@ tags:
   - exam-p
   - continuous-distributions
   - policy-limits
-wiki_link: Concepts/Expected+Value
+wiki_link:
+  - Concepts/Expected+Value
+  - Concepts/Continuous+Univariate+Distributions
 answer: D
 points: 1
 ---

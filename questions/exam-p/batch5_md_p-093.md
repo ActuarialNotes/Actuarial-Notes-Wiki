@@ -9,7 +9,10 @@ tags:
   - poisson-distribution
   - uniform-distribution
   - conditional-variance
-wiki_link: Concepts/Variance
+wiki_link:
+  - Concepts/Variance
+  - Concepts/Poisson
+  - Concepts/Variance+for+Conditional+and+Marginal+Distributions
 answer: E
 points: 1
 ---

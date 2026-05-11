@@ -4,7 +4,6 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle } from 'lucide-react'
 import { ActiveExamCard, ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
-import { TodayCard, TodayCardLoading } from '@/components/TodayCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
 import { MascotWidget } from '@/components/MascotWidget'
@@ -230,26 +229,14 @@ export default function Dashboard() {
           masteryRecords={masteryRecords}
           plan={studyPlan}
           masteryStateByName={masteryStateByName}
-        />
-      )}
-
-      {/* Today card — only shown when there is an active exam */}
-      {syllabusLoading || masteryLoading ? (
-        <TodayCardLoading />
-      ) : activeSyllabus ? (
-        <TodayCard
-          plan={studyPlan}
           config={planConfig}
           loading={planLoading}
-          syllabus={activeSyllabus}
-          masteryStateByName={masteryStateByName}
-          masteryRecords={masteryRecords}
           examDate={activeTargetDate}
           onConfigChange={updatePlanConfig}
           onRegenerate={regeneratePlan}
           onExamDateChange={handleTargetDateChange}
         />
-      ) : null}
+      )}
 
       {/* Active exam card */}
       <div

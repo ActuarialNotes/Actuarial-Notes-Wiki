@@ -223,31 +223,13 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Active exam card */}
-      <div
-        onTouchStart={multiExam ? handleTouchStart : undefined}
-        onTouchEnd={multiExam ? handleTouchEnd : undefined}
-      >
-        {syllabusLoading || sessionsLoading ? (
-          <ActiveExamCardLoading />
-        ) : !activeSyllabus ? (
-          <ActiveExamCardEmpty onChooseExam={() => setExamsOpen(true)} />
-        ) : (
-          <ActiveExamCard
-            syllabus={activeSyllabus}
-            sessions={sessions}
-            targetDate={activeTargetDate}
-            onTargetDateChange={handleTargetDateChange}
-            masteryRecords={masteryRecords}
-          />
-        )}
-      </div>
-
       {/* Readiness card — only shown when there is an active exam */}
       {!syllabusLoading && !masteryLoading && activeSyllabus && (
         <ReadinessCard
           syllabus={activeSyllabus}
           masteryRecords={masteryRecords}
+          plan={studyPlan}
+          masteryStateByName={masteryStateByName}
         />
       )}
 
@@ -268,6 +250,26 @@ export default function Dashboard() {
           onExamDateChange={handleTargetDateChange}
         />
       ) : null}
+
+      {/* Active exam card */}
+      <div
+        onTouchStart={multiExam ? handleTouchStart : undefined}
+        onTouchEnd={multiExam ? handleTouchEnd : undefined}
+      >
+        {syllabusLoading || sessionsLoading ? (
+          <ActiveExamCardLoading />
+        ) : !activeSyllabus ? (
+          <ActiveExamCardEmpty onChooseExam={() => setExamsOpen(true)} />
+        ) : (
+          <ActiveExamCard
+            syllabus={activeSyllabus}
+            sessions={sessions}
+            targetDate={activeTargetDate}
+            onTargetDateChange={handleTargetDateChange}
+            masteryRecords={masteryRecords}
+          />
+        )}
+      </div>
 
       {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
     </div>

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { aggregateForTopic, decayIfStale } from '@/lib/mastery'
+import { decayIfStale } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { supabase } from '@/lib/supabase'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'
@@ -171,12 +171,6 @@ export function ActiveExamCard({
 
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
 
-  const aggregate = useMemo(() => {
-    const examMastery = records.filter(r => r.exam_id === progressKey)
-    const allConceptSlugs = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
-    return aggregateForTopic(examMastery, allConceptSlugs, new Date())
-  }, [syllabus, records, progressKey])
-
   const dueCount = useMemo(() => {
     const now = new Date()
     return records
@@ -237,68 +231,12 @@ export function ActiveExamCard({
     }
   }
 
-  const strongPct = aggregate.strongPct
-  const conceptsTotal = aggregate.total
-  const conceptsStrong = aggregate.level3
-  const conceptsLevel2 = aggregate.level2
-  const conceptsLevel1 = aggregate.level1
-  const level2Pct = conceptsTotal > 0 ? Math.round((conceptsLevel2 / conceptsTotal) * 100) : 0
-  const level1Pct = conceptsTotal > 0 ? Math.round((conceptsLevel1 / conceptsTotal) * 100) : 0
-
   return (
     <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
       <CardContent className="p-5 space-y-4">
         {/* Header row */}
         <div className="flex items-start justify-between gap-3">
           <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
-        </div>
-
-        {/* Mastery progress bar */}
-        <div className="space-y-1.5">
-          <div className="flex items-baseline justify-between text-sm">
-            <span className="text-muted-foreground">Topics mastered</span>
-            <span className="font-semibold">
-              {conceptsStrong}
-              <span className="text-muted-foreground font-normal">/{conceptsTotal}</span>
-              <span className="text-muted-foreground font-normal ml-1.5">({strongPct}%)</span>
-            </span>
-          </div>
-          <div className="h-2.5 rounded-full bg-secondary overflow-hidden flex">
-            <div
-              className="h-full transition-all"
-              style={{ width: `${strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }}
-            />
-            <div
-              className="h-full transition-all"
-              style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }}
-            />
-            <div
-              className="h-full transition-all"
-              style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }}
-            />
-          </div>
-          {(conceptsStrong > 0 || conceptsLevel2 > 0 || conceptsLevel1 > 0) && (
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              {conceptsStrong > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-                  Level 3
-                </span>
-              )}
-              {conceptsLevel2 > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
-                  Level 2
-                </span>
-              )}
-              {conceptsLevel1 > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
-                  Level 1
-                </span>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Quiz History heatmap */}

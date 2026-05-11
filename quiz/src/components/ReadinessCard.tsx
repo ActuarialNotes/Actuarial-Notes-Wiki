@@ -1,6 +1,6 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, Play, Loader2 } from 'lucide-react'
+import { BookOpen, Check, Circle, Play, Loader2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
@@ -13,6 +13,7 @@ import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan } from '@/lib/studyPlan'
+import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
 
 // ── Radial donut chart ─────────────────────────────────────────────────────────
 //
@@ -129,6 +130,15 @@ const STATE_ORDER: Record<MasteryState, number> = {
   new: 0, forgotten: 0, level1: 1, level2: 2, level3: 3,
 }
 
+const STATE_LABEL: Record<MasteryState, string> = {
+  new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
+}
+
+const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
+  new: 'level1', forgotten: 'level1',
+  level1: 'level2', level2: 'level3',
+}
+
 interface Props {
   syllabus: WikiExamSyllabus
   masteryRecords: ConceptMasteryRecord[]
@@ -139,10 +149,28 @@ interface Props {
 export function ReadinessCard({ syllabus, masteryRecords, plan, masteryStateByName }: Props) {
   const navigate = useNavigate()
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
+  const [selectedConceptIdx, setSelectedConceptIdx] = useState<number | null>(null)
   const [quizLoading, setQuizLoading] = useState(false)
   // activeSection: set by hover (desktop) or click (touch/toggle)
   const [hoveredSection, setHoveredSection] = useState<number | null>(null)
   const [pinnedSection, setPinnedSection] = useState<number | null>(null)
+  const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
+
+  useEffect(() => {
+    setCompletedToday(readTodayLevelUps())
+    function handleLevelUp(e: Event) {
+      setCompletedToday((e as CustomEvent<DailyLevelUp[]>).detail)
+    }
+    function handleStorage() {
+      setCompletedToday(readTodayLevelUps())
+    }
+    window.addEventListener(LEVELUP_EVENT, handleLevelUp)
+    window.addEventListener('storage', handleStorage)
+    return () => {
+      window.removeEventListener(LEVELUP_EVENT, handleLevelUp)
+      window.removeEventListener('storage', handleStorage)
+    }
+  }, [])
 
   const activeSection = hoveredSection ?? pinnedSection
 
@@ -206,6 +234,35 @@ export function ReadinessCard({ syllabus, masteryRecords, plan, masteryStateByNa
     }
     return { sectionName, today, upcoming }
   }, [activeSection, sections, syllabus, plan])
+
+  // Today's checklist concepts
+  const displayConcepts = plan?.status === 'review_mode'
+    ? (plan?.reviewConcepts ?? [])
+    : (plan?.todaysConcepts ?? [])
+
+  const targetByName = useMemo(() => {
+    const map = new Map<string, MasteryState>()
+    if (!plan) return map
+    const today = todayISO()
+    for (const a of plan.assignments) {
+      if (a.scheduledDate === today) {
+        const target = NEXT_STATE[a.initialState] ?? 'level1'
+        const existing = map.get(a.conceptName.toLowerCase())
+        if (!existing || STATE_ORDER[target] > STATE_ORDER[existing]) {
+          map.set(a.conceptName.toLowerCase(), target)
+        }
+      }
+    }
+    return map
+  }, [plan])
+
+  const studyPlanConceptsForModal = useMemo(() =>
+    displayConcepts.map(name => ({
+      name,
+      state: masteryStateByName.get(name.toLowerCase()) ?? 'new' as MasteryState,
+    })),
+    [displayConcepts, masteryStateByName]
+  )
 
   function handleSectionHover(i: number | null) {
     setHoveredSection(i)
@@ -401,6 +458,34 @@ export function ReadinessCard({ syllabus, masteryRecords, plan, masteryStateByNa
             </div>
           )}
 
+          {/* Today's study plan checklist */}
+          {displayConcepts.length > 0 && (
+            <div className="space-y-0.5">
+              {displayConcepts.map((name, idx) => {
+                const isCompleted = completedToday.some(
+                  lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()
+                )
+                const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => setSelectedConceptIdx(idx)}
+                    className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                  >
+                    {isCompleted
+                      ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                      : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                    <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
+                      {name}
+                    </span>
+                    <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
           {/* Action buttons */}
           <div className="grid grid-cols-2 gap-2 pt-1">
             <Button
@@ -428,14 +513,31 @@ export function ReadinessCard({ syllabus, masteryRecords, plan, masteryStateByNa
         </CardContent>
       </Card>
 
+      {/* "Read concepts" button opens from the beginning of today's concepts if available */}
       {conceptModalOpen && allConcepts.length > 0 && (
         <ConceptDetailModal
-          conceptName={allConcepts[0].name}
-          masteryState={allConcepts[0].state}
+          conceptName={studyPlanConceptsForModal.length > 0 ? studyPlanConceptsForModal[0].name : allConcepts[0].name}
+          masteryState={studyPlanConceptsForModal.length > 0 ? studyPlanConceptsForModal[0].state : allConcepts[0].state}
           onClose={() => setConceptModalOpen(false)}
           syllabus={syllabus}
           allConcepts={allConcepts}
+          studyPlanConcepts={studyPlanConceptsForModal.length > 0 ? studyPlanConceptsForModal : undefined}
           initialConceptIndex={0}
+          initialFilter={studyPlanConceptsForModal.length > 0 ? 'study-plan' : 'entire-syllabus'}
+        />
+      )}
+
+      {/* Checklist item click — opens at that concept in study plan view */}
+      {selectedConceptIdx !== null && studyPlanConceptsForModal.length > 0 && (
+        <ConceptDetailModal
+          conceptName={studyPlanConceptsForModal[selectedConceptIdx].name}
+          masteryState={studyPlanConceptsForModal[selectedConceptIdx].state}
+          onClose={() => setSelectedConceptIdx(null)}
+          syllabus={syllabus}
+          allConcepts={allConcepts}
+          studyPlanConcepts={studyPlanConceptsForModal}
+          initialConceptIndex={selectedConceptIdx}
+          initialFilter="study-plan"
         />
       )}
     </>

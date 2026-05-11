@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, CheckCircle2, ChevronLeft, ChevronRight, Loader2, Play, X } from 'lucide-react'
+import { BookOpen, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Loader2, Play, X } from 'lucide-react'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
@@ -37,6 +37,7 @@ const MASTERY_BADGE: Record<MasteryState, { label: string; className: string }> 
 
 type TabMode = 'definition' | 'questions' | 'syllabus'
 type FilterMode = 'all' | 'new' | 'attempted'
+type ConceptFilter = 'study-plan' | 'entire-syllabus'
 
 function QuestionItem({
   question,
@@ -151,7 +152,9 @@ interface Props {
   onClose: () => void
   syllabus?: WikiExamSyllabus
   allConcepts?: { name: string; state: MasteryState }[]
+  studyPlanConcepts?: { name: string; state: MasteryState }[]
   initialConceptIndex?: number
+  initialFilter?: ConceptFilter
 }
 
 export function ConceptDetailModal({
@@ -160,7 +163,9 @@ export function ConceptDetailModal({
   onClose,
   syllabus,
   allConcepts,
+  studyPlanConcepts,
   initialConceptIndex,
+  initialFilter,
 }: Props) {
   const [content, setContent] = useState<string | null>(null)
   const [contentStatus, setContentStatus] = useState<'loading' | 'error' | 'idle'>('loading')
@@ -169,11 +174,18 @@ export function ConceptDetailModal({
   const [questionsError, setQuestionsError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<TabMode>('definition')
   const [filter, setFilter] = useState<FilterMode>('all')
+  const [conceptFilter, setConceptFilter] = useState<ConceptFilter>(
+    initialFilter ?? (studyPlanConcepts ? 'study-plan' : 'entire-syllabus')
+  )
   const [localIndex, setLocalIndex] = useState(initialConceptIndex ?? 0)
   const { byQuestionId } = useQuestionAttempts()
 
-  const currentConceptName = allConcepts?.[localIndex]?.name ?? conceptName
-  const currentMasteryState = allConcepts?.[localIndex]?.state ?? masteryState
+  const effectiveConcepts = conceptFilter === 'study-plan'
+    ? (studyPlanConcepts ?? allConcepts)
+    : allConcepts
+
+  const currentConceptName = effectiveConcepts?.[localIndex]?.name ?? conceptName
+  const currentMasteryState = effectiveConcepts?.[localIndex]?.state ?? masteryState
 
   useEffect(() => {
     let cancelled = false
@@ -223,6 +235,14 @@ export function ConceptDetailModal({
     setFilter('all')
   }, [localIndex])
 
+  useEffect(() => {
+    const newList = conceptFilter === 'study-plan' ? (studyPlanConcepts ?? allConcepts) : allConcepts
+    const idx = newList?.findIndex(c => c.name.toLowerCase() === currentConceptName.toLowerCase()) ?? -1
+    setLocalIndex(Math.max(0, idx))
+  // conceptFilter change is the trigger; currentConceptName captured at switch time
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [conceptFilter])
+
   const navigate = useNavigate()
   const openAt = useConceptPopup(s => s.openAt)
   const badge = MASTERY_BADGE[currentMasteryState] ?? MASTERY_BADGE.new
@@ -241,9 +261,9 @@ export function ConceptDetailModal({
     t.concepts.some(c => c.name.toLowerCase() === currentConceptName.toLowerCase())
   )
 
-  const canPrev = !!allConcepts && localIndex > 0
-  const canNext = !!allConcepts && localIndex < (allConcepts?.length ?? 1) - 1
-  const showFooterNav = !!allConcepts && allConcepts.length > 1
+  const canPrev = !!effectiveConcepts && localIndex > 0
+  const canNext = !!effectiveConcepts && localIndex < (effectiveConcepts?.length ?? 1) - 1
+  const showFooterNav = !!effectiveConcepts && effectiveConcepts.length > 1
 
   const newCount = questions.filter(q => !byQuestionId.get(q.id)).length
   const attemptedCount = questions.filter(q => !!byQuestionId.get(q.id)).length
@@ -281,6 +301,29 @@ export function ConceptDetailModal({
             <X className="h-4 w-4" />
           </button>
         </div>
+
+        {/* Study plan / syllabus filter — only shown when study plan concepts are available */}
+        {studyPlanConcepts && (
+          <div className="flex items-center gap-2 px-4 py-2 border-b bg-muted/20 shrink-0">
+            <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
+            <div className="relative">
+              <select
+                value={conceptFilter}
+                onChange={e => setConceptFilter(e.target.value as ConceptFilter)}
+                className="appearance-none text-xs border rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
+              >
+                <option value="study-plan">
+                  Study Plan — {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
+                </option>
+                <option value="entire-syllabus">Entire Syllabus</option>
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+            </div>
+            <span className="text-xs text-muted-foreground ml-auto tabular-nums">
+              {effectiveConcepts?.length ?? 0} concepts
+            </span>
+          </div>
+        )}
 
         {/* Tabs */}
         <div className="flex border-b shrink-0">
@@ -472,7 +515,7 @@ export function ConceptDetailModal({
               <span>Previous</span>
             </button>
             <span className="self-center px-3 text-xs text-muted-foreground tabular-nums shrink-0">
-              {localIndex + 1} of {allConcepts!.length}
+              {localIndex + 1} of {effectiveConcepts!.length}
             </span>
             <button
               type="button"

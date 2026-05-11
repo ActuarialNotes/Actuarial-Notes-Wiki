@@ -2,15 +2,13 @@
 // a "Read Today's Concepts" action (opens concept modal), and a "Start Quiz"
 // action (navigates to a quiz pre-filtered to today's concepts).
 
-import { useState, useCallback, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useMemo } from 'react'
 import {
-  BookOpen,
-  Play,
   Settings2,
   AlertTriangle,
   CheckCircle2,
   Check,
+  Circle,
   Loader2,
   ChevronDown,
   TrendingUp,
@@ -20,9 +18,6 @@ import { Button } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
-import { fetchAllQuestions } from '@/lib/github'
-import { parseAllQuestions } from '@/lib/parser'
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import {
   todayISO,
   type StudyPlan,
@@ -247,10 +242,8 @@ export function TodayCard({
   onRegenerate,
   onExamDateChange,
 }: Props) {
-  const navigate = useNavigate()
   const [showConfig, setShowConfig] = useState(false)
-  const [conceptModalOpen, setConceptModalOpen] = useState(false)
-  const [quizLoading, setQuizLoading] = useState(false)
+  const [selectedStudyPlanIdx, setSelectedStudyPlanIdx] = useState<number | null>(null)
   const [planExpanded, setPlanExpanded] = useState(false)
   const [trackerConcept, setTrackerConcept] = useState<{
     name: string; state: MasteryState; index: number
@@ -309,81 +302,21 @@ export function TodayCard({
   }).length
   const allOnTarget = displayConcepts.length > 0 && onTargetCount === displayConcepts.length
 
-  // Derive a label for the counter ("Level 1", "Level 2", "Level 3", or "target" if mixed)
-  const targetLevels = new Set(
-    displayConcepts.map(n => targetByName.get(n.toLowerCase()) ?? 'level1')
-  )
-  const uniformTarget = targetLevels.size === 1 ? [...targetLevels][0] : null
-  const targetLabel = uniformTarget ? STATE_LABEL[uniformTarget] : 'target'
-
-  const allConceptsForModal = displayConcepts.map(name => ({
+  const studyPlanConceptsForModal = displayConcepts.map(name => ({
     name,
     state: masteryStateByName.get(name.toLowerCase()) ?? 'new' as MasteryState,
   }))
 
-  const handleStartQuiz = useCallback(async () => {
-    if (displayConcepts.length === 0) {
-      navigate('/')
-      return
-    }
-    setQuizLoading(true)
-    try {
-      const raw = await fetchAllQuestions()
-      const all = parseAllQuestions(raw)
+  const allSyllabusConceptsForModal = useMemo(() =>
+    syllabus.topics.flatMap(t =>
+      t.concepts.map(c => ({
+        name: c.name,
+        state: masteryStateByName.get(c.name.toLowerCase()) ?? 'new' as MasteryState,
+      }))
+    ),
+    [syllabus, masteryStateByName]
+  )
 
-      const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
-
-      function linkToName(link: string): string {
-        const ref = hrefToEntryRef(link)
-        const r = ref?.name ?? link.split('/').filter(Boolean).pop() ?? ''
-        return r.replace(/-/g, ' ').toLowerCase()
-      }
-
-      // Include a question only when it has ≥1 today-concept AND every
-      // non-today concept is already at level1+ (not new/forgotten).
-      const filtered = all.filter(q => {
-        const names = q.wiki_link.map(linkToName)
-        if (!names.some(n => todaySet.has(n))) return false
-        return !names.some(n => {
-          if (todaySet.has(n)) return false
-          return STATE_ORDER[masteryStateByName.get(n) ?? 'new'] < 1
-        })
-      })
-
-      if (filtered.length === 0) {
-        navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}`)
-        return
-      }
-
-      // Sort: forgotten concepts first (attempted/incorrect), then new, then
-      // others (already in progress). Within each group: easy → medium → hard.
-      const diffOrder: Record<string, number> = { easy: 0, medium: 1, hard: 2 }
-      function conceptGroup(q: { wiki_link: string[] }): number {
-        for (const link of q.wiki_link) {
-          const n = linkToName(link)
-          if (!todaySet.has(n)) continue
-          const s = masteryStateByName.get(n) ?? 'new'
-          if (s === 'forgotten') return 0
-          if (s === 'new')       return 1
-          return 2
-        }
-        return 2
-      }
-      filtered.sort((a, b) => {
-        const gd = conceptGroup(a) - conceptGroup(b)
-        return gd !== 0 ? gd : (diffOrder[a.difficulty] ?? 1) - (diffOrder[b.difficulty] ?? 1)
-      })
-
-      const remaining = displayConcepts.length - onTargetCount
-      const cap = Math.min(filtered.length, Math.max(1, remaining))
-      const ids = filtered.slice(0, cap).map(q => q.id).join(',')
-      navigate(`/quiz?ids=${ids}`)
-    } catch {
-      navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}`)
-    } finally {
-      setQuizLoading(false)
-    }
-  }, [displayConcepts, navigate, syllabus.examTopic, masteryStateByName])
 
   // Unconfigured state — prompt to set up
   if (!loading && !plan?.config.targetReadyDate) {
@@ -435,12 +368,7 @@ export function TodayCard({
             masteryState={trackerConcept.state}
             onClose={() => setTrackerConcept(null)}
             syllabus={syllabus}
-            allConcepts={syllabus.topics.flatMap(t =>
-              t.concepts.map(c => ({
-                name: c.name,
-                state: masteryStateByName.get(c.name.toLowerCase()) ?? 'new' as MasteryState,
-              }))
-            )}
+            allConcepts={allSyllabusConceptsForModal}
             initialConceptIndex={trackerConcept.index}
           />
         )}
@@ -482,54 +410,11 @@ export function TodayCard({
           {/* Date header */}
           <p className="text-base font-semibold">{todayLongDate()}</p>
 
-          {/* Heading + completion indicator + concept chips */}
+          {/* Heading */}
           {showConcepts ? (
-            <div>
-              <div className="flex items-baseline justify-between gap-2">
-                <h2 className="text-lg font-semibold">
-                  {allOnTarget
-                    ? 'Done for today ✓'
-                    : `${displayConcepts.length} concept${displayConcepts.length === 1 ? '' : 's'} to study`}
-                </h2>
-                <span className={`text-xs font-medium shrink-0 tabular-nums ${
-                  allOnTarget
-                    ? 'text-green-600 dark:text-green-400'
-                    : 'text-muted-foreground'
-                }`}>
-                  {onTargetCount} / {displayConcepts.length} {targetLabel}
-                </span>
-              </div>
-              {!allOnTarget && (
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {onTargetCount > 0
-                    ? `${displayConcepts.length - onTargetCount} remaining — bring each to ${targetLabel} to complete today's session`
-                    : `Bring each to ${targetLabel} to complete today's session`}
-                </p>
-              )}
-              <div className="flex flex-wrap gap-1.5 mt-1.5">
-                {displayConcepts.map(name => {
-                  const state = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                  const stateColor =
-                    state === 'level3'    ? 'border-green-300 bg-green-200 text-green-800 dark:border-green-700 dark:bg-green-950 dark:text-green-300' :
-                    state === 'level2'    ? 'border-green-200 bg-green-100 text-green-700 dark:border-green-800 dark:bg-green-950/40 dark:text-green-400' :
-                    state === 'level1'    ? 'border-green-200 bg-green-50 text-green-600 dark:border-green-900 dark:bg-green-950/20 dark:text-green-500' :
-                    state === 'forgotten' ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-300' :
-                                           'border-border bg-muted/40 text-muted-foreground'
-                  const levelled = completedToday.some(
-                    lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()
-                  )
-                  return (
-                    <span
-                      key={name}
-                      className={`inline-flex items-center gap-0.5 text-xs px-2 py-0.5 rounded-full border ${stateColor}`}
-                    >
-                      {levelled && <Check className="h-2.5 w-2.5 shrink-0" />}
-                      {name}
-                    </span>
-                  )
-                })}
-              </div>
-            </div>
+            <h2 className="text-lg font-semibold">
+              {allOnTarget ? 'Done for today ✓' : "Today's concepts"}
+            </h2>
           ) : (
             <h2 className="text-lg font-semibold">
               {loading
@@ -538,6 +423,35 @@ export function TodayCard({
                 ? 'Review day'
                 : "You're all caught up!"}
             </h2>
+          )}
+
+          {/* Concept checklist */}
+          {showConcepts && (
+            <ul className="space-y-0.5">
+              {displayConcepts.map((name, idx) => {
+                const isCompleted = completedToday.some(
+                  lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()
+                )
+                const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                return (
+                  <li key={name}>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedStudyPlanIdx(idx)}
+                      className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                    >
+                      {isCompleted
+                        ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                        : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                      <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
+                        {name}
+                      </span>
+                      <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
           )}
 
           {loading && (
@@ -553,33 +467,6 @@ export function TodayCard({
           )}
           {!loading && plan?.status === 'review_mode' && (
             <ReviewModeNote concepts={reviewConcepts} />
-          )}
-
-          {/* Action buttons */}
-          {!loading && (
-            <div className="grid grid-cols-2 gap-2 pt-1">
-              <Button
-                variant="outline"
-                onClick={() => setConceptModalOpen(true)}
-                disabled={displayConcepts.length === 0}
-                className="gap-1.5 text-sm"
-              >
-                <BookOpen className="h-4 w-4" />
-                Read concepts
-              </Button>
-              <Button
-                onClick={handleStartQuiz}
-                disabled={quizLoading}
-                className="gap-1.5 text-sm"
-              >
-                {quizLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Play className="h-4 w-4" />
-                )}
-                Start Quiz
-              </Button>
-            </div>
           )}
 
           {!loading && plan && displayConcepts.length === 0 && plan.status !== 'review_mode' && (
@@ -643,14 +530,16 @@ export function TodayCard({
         </CardContent>
       </Card>
 
-      {conceptModalOpen && displayConcepts.length > 0 && (
+      {selectedStudyPlanIdx !== null && studyPlanConceptsForModal.length > 0 && (
         <ConceptDetailModal
-          conceptName={displayConcepts[0]}
-          masteryState={masteryStateByName.get(displayConcepts[0].toLowerCase()) ?? 'new'}
-          onClose={() => setConceptModalOpen(false)}
+          conceptName={studyPlanConceptsForModal[selectedStudyPlanIdx].name}
+          masteryState={studyPlanConceptsForModal[selectedStudyPlanIdx].state}
+          onClose={() => setSelectedStudyPlanIdx(null)}
           syllabus={syllabus}
-          allConcepts={allConceptsForModal}
-          initialConceptIndex={0}
+          allConcepts={allSyllabusConceptsForModal}
+          studyPlanConcepts={studyPlanConceptsForModal}
+          initialConceptIndex={selectedStudyPlanIdx}
+          initialFilter="study-plan"
         />
       )}
 
@@ -660,12 +549,7 @@ export function TodayCard({
           masteryState={trackerConcept.state}
           onClose={() => setTrackerConcept(null)}
           syllabus={syllabus}
-          allConcepts={syllabus.topics.flatMap(t =>
-            t.concepts.map(c => ({
-              name: c.name,
-              state: masteryStateByName.get(c.name.toLowerCase()) ?? 'new' as MasteryState,
-            }))
-          )}
+          allConcepts={allSyllabusConceptsForModal}
           initialConceptIndex={trackerConcept.index}
         />
       )}

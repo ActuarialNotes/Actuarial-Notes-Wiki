@@ -128,10 +128,6 @@ function ReadinessDonut({ sections, overallPct, activeSection, onSectionHover, o
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
-function todayLongDate(): string {
-  return new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })
-}
-
 // ── Study-plan sub-components ──────────────────────────────────────────────────
 
 function BehindWarning({ plan }: { plan: StudyPlan }) {
@@ -360,34 +356,6 @@ export function ReadinessCard({
     [syllabus, examRecords],
   )
 
-  // Derive today's concepts and upcoming concepts for the active section
-  const activeSectionInfo = useMemo(() => {
-    if (activeSection === null || !sections[activeSection]) return null
-    const sectionName = sections[activeSection].name
-    const topic = syllabus.topics.find(t => t.name === sectionName)
-    if (!topic) return null
-    const conceptSet = new Set(topic.concepts.map(c => c.name.toLowerCase()))
-
-    const displayConcepts = plan?.status === 'review_mode'
-      ? (plan?.reviewConcepts ?? [])
-      : (plan?.todaysConcepts ?? [])
-
-    const today = displayConcepts.filter(n => conceptSet.has(n.toLowerCase()))
-
-    const todayDate = todayISO()
-    const seen = new Set(today.map(n => n.toLowerCase()))
-    const upcoming: string[] = []
-    for (const a of plan?.assignments ?? []) {
-      if (a.scheduledDate <= todayDate) continue
-      if (!conceptSet.has(a.conceptName.toLowerCase())) continue
-      if (seen.has(a.conceptName.toLowerCase())) continue
-      seen.add(a.conceptName.toLowerCase())
-      upcoming.push(a.conceptName)
-      if (upcoming.length >= 3) break
-    }
-    return { sectionName, today, upcoming }
-  }, [activeSection, sections, syllabus, plan])
-
   // Today's checklist concepts
   const displayConcepts = plan?.status === 'review_mode'
     ? (plan?.reviewConcepts ?? [])
@@ -498,10 +466,8 @@ export function ReadinessCard({
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
               <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
-              <p className="text-sm text-muted-foreground">{todayLongDate()}</p>
             </div>
             <div className="flex items-center gap-1 shrink-0">
-              <span className="text-sm text-muted-foreground">Exam Readiness</span>
               <button
                 type="button"
                 onClick={() => setShowConfig(true)}
@@ -601,30 +567,6 @@ export function ReadinessCard({
               ))}
             </div>
           </div>
-
-          {/* Today's concepts panel for active section */}
-          {activeSectionInfo && (activeSectionInfo.today.length > 0 || activeSectionInfo.upcoming.length > 0) && (
-            <div className="rounded-lg border border-border bg-muted/30 px-3 py-2.5 text-xs space-y-1.5">
-              <p className="font-medium text-foreground truncate">{activeSectionInfo.sectionName}</p>
-              {activeSectionInfo.today.length > 0 && (
-                <div>
-                  <span className="text-muted-foreground">Today: </span>
-                  <span>{activeSectionInfo.today.join(', ')}</span>
-                </div>
-              )}
-              {activeSectionInfo.upcoming.length > 0 && (
-                <div>
-                  <span className="text-muted-foreground">Coming up: </span>
-                  <span>{activeSectionInfo.upcoming.join(', ')}</span>
-                </div>
-              )}
-            </div>
-          )}
-          {activeSectionInfo && activeSectionInfo.today.length === 0 && activeSectionInfo.upcoming.length === 0 && (
-            <div className="rounded-lg border border-border bg-muted/30 px-3 py-2.5 text-xs text-muted-foreground">
-              No concepts scheduled in <span className="font-medium text-foreground">{activeSectionInfo.sectionName}</span> yet.
-            </div>
-          )}
 
           {/* Today's study plan checklist */}
           {displayConcepts.length > 0 && (

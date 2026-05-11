@@ -1,15 +1,15 @@
 # Concepts Without Review Questions
 
-> Generated 2026-05-09. **68 of 266 concepts (25.6%)** have at least one linked question.
+> Generated 2026-05-11. **111 of 266 concepts (41.7%)** have at least one linked question.
 
 ## Summary
 
 | Category | With Questions | Without Questions | Total |
 |---|---|---|---|
 | Exam P | 27 | 31 | 58 |
-| Exam FM | 35 | 41 | 76 |
-| Other Exams & Topics | 6 | 126 | 132 |
-| **Total** | **68** | **198** | **266** |
+| Exam FM | 76 | 0 | 76 |
+| Other Exams & Topics | 8 | 124 | 132 |
+| **Total** | **111** | **155** | **266** |
 
 ---
 
@@ -53,47 +53,7 @@
 
 *Concepts in the Exam FM syllabus with no linked questions*
 
-- 1st-Order Linear Approximation
-- Accumulation of Discount
-- Annuity Immediate
-- Asset-Liability Portfolio
-- Balloon Payment
-- Call Premium
-- Call Price
-- Cash Flow
-- Convertible m-thly
-- Convexity
-- Coupon
-- Coupon Rate
-- Current Value
-- Discount Factor
-- Discount Rate
-- Drop Payment
-- Duration Matching
-- Effective Discount Rate
-- Effective Rate
-- Face Value
-- Final Payment
-- Future Value
-- Geometric Progression
-- Level Payment Annuity
-- Level Perpetuity
-- Market Value
-- Nominal Interest Rate Convertible m-thly
-- Non-Callable Bond
-- Non-level Annuities
-- Payable Continuously
-- Payable m-thly
-- Portfolio
-- Principal
-- Real Rate of Interest
-- Redemption Value
-- Redington Immunization
-- Reinvestment of Coupons
-- Term of Annuity
-- Term of Bond
-- Term of Loan
-- Yield Curve
+*All concepts in this category have at least one linked question.*
 
 ## Other Exams & Topics — Not Yet Covered
 
@@ -158,7 +118,6 @@
 - Deductible Recovery
 - Deferred Annuity
 - Development Factor
-- Discount
 - Discount Function
 - Net Losses
 - Occurrence Coverage
@@ -171,7 +130,6 @@
 - Policy Provision Changes
 - Policy Year
 - Poset
-- Premium
 - Premium Trend
 - Price Risk
 - Principles of Ratemaking

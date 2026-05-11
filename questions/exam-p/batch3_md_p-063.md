@@ -13,6 +13,7 @@ wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Exponential
   - Concepts/Percentile
+  - Concepts/Deductibles
 answer: E
 points: 1
 ---

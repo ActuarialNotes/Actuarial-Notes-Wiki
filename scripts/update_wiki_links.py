@@ -198,11 +198,11 @@ def process_file(path: Path) -> None:
     existing = parse_wiki_links(fm_text)
     tags = parse_tags(fm_text)
 
-    # Build link list: keep existing first, add from tags up to 3 total
+    # Build link list: keep existing first, add from tags up to 8 total
     links: list[str] = list(existing)
     added: list[str] = []
     for tag in tags:
-        if len(links) >= 3:
+        if len(links) >= 8:
             break
         candidate = tag_to_link(tag)
         if candidate and candidate not in links:

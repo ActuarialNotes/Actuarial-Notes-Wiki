@@ -9,6 +9,7 @@ import Dashboard from '@/pages/Dashboard'
 import Browse from '@/pages/Browse'
 import Settings from '@/pages/Settings'
 import Sidebar from '@/components/Sidebar'
+import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 
 const WikiLayout  = lazy(() => import('@/components/wiki/WikiLayout'))
@@ -83,43 +84,45 @@ function NotFound() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ExamProgressProvider>
-      <div className="min-h-screen bg-background text-foreground flex">
-        <Sidebar />
-        <main className="flex-1 min-w-0 pt-14 lg:pt-0">
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/quiz" element={<Quiz />} />
-            <Route path="/review" element={<Review />} />
-            <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
-            <Route path="/browse" element={<Browse />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/wiki" element={
-              <Suspense fallback={<WikiFallback />}>
-                <WikiLayout><WikiHome /></WikiLayout>
-              </Suspense>
-            } />
-            <Route path="/wiki/exam/:slug" element={
-              <Suspense fallback={<WikiFallback />}>
-                <WikiLayout><WikiExam /></WikiLayout>
-              </Suspense>
-            } />
-            <Route path="/wiki/concept/:slug" element={
-              <Suspense fallback={<WikiFallback />}>
-                <WikiLayout><WikiConcept /></WikiLayout>
-              </Suspense>
-            } />
-            <Route path="/wiki/resource/:slug" element={
-              <Suspense fallback={<WikiFallback />}>
-                <WikiLayout><WikiResource /></WikiLayout>
-              </Suspense>
-            } />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-      </div>
-      </ExamProgressProvider>
+      <AuthProvider>
+        <ExamProgressProvider>
+          <div className="min-h-screen bg-background text-foreground flex">
+            <Sidebar />
+            <main className="flex-1 min-w-0 pt-14 lg:pt-0">
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/quiz" element={<Quiz />} />
+                <Route path="/review" element={<Review />} />
+                <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
+                <Route path="/browse" element={<Browse />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/wiki" element={
+                  <Suspense fallback={<WikiFallback />}>
+                    <WikiLayout><WikiHome /></WikiLayout>
+                  </Suspense>
+                } />
+                <Route path="/wiki/exam/:slug" element={
+                  <Suspense fallback={<WikiFallback />}>
+                    <WikiLayout><WikiExam /></WikiLayout>
+                  </Suspense>
+                } />
+                <Route path="/wiki/concept/:slug" element={
+                  <Suspense fallback={<WikiFallback />}>
+                    <WikiLayout><WikiConcept /></WikiLayout>
+                  </Suspense>
+                } />
+                <Route path="/wiki/resource/:slug" element={
+                  <Suspense fallback={<WikiFallback />}>
+                    <WikiLayout><WikiResource /></WikiLayout>
+                  </Suspense>
+                } />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+          </div>
+        </ExamProgressProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

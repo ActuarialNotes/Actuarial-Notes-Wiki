@@ -5,6 +5,7 @@ import { useProgress } from '@/hooks/useProgress'
 import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle } from 'lucide-react'
 import { ActiveExamCard, ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { TodayCard, TodayCardLoading } from '@/components/TodayCard'
+import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
 import { MascotWidget } from '@/components/MascotWidget'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -241,6 +242,14 @@ export default function Dashboard() {
           />
         )}
       </div>
+
+      {/* Readiness card — only shown when there is an active exam */}
+      {!syllabusLoading && !masteryLoading && activeSyllabus && (
+        <ReadinessCard
+          syllabus={activeSyllabus}
+          masteryRecords={masteryRecords}
+        />
+      )}
 
       {/* Today card — only shown when there is an active exam */}
       {syllabusLoading || masteryLoading ? (

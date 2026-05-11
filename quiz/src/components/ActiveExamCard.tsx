@@ -301,7 +301,8 @@ export function ActiveExamCard({
           )}
         </div>
 
-        {/* Activity heatmap */}
+        {/* Quiz History heatmap */}
+        <p className="text-sm font-medium text-muted-foreground">Quiz History</p>
         <ExamHeatmap
           sessions={examSessions}
           examProgressKey={progressKey}

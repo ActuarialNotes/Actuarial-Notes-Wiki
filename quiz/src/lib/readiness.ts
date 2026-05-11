@@ -1,0 +1,71 @@
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import type { ConceptMasteryRecord } from '@/lib/mastery'
+import { decayIfStale } from '@/lib/mastery'
+
+// Exam readiness scoring
+//
+// A topic is exam-ready when its mastery state === 'level3'. Because level3
+// decays naturally via the SR system (30-day threshold), no separate recency
+// calculation is needed — the level itself already reflects current retention.
+//
+//   Section Readiness = topics at level3 / total topics in section
+//   Overall Readiness = Σ (section readiness × section syllabus weight)
+//
+// Syllabus weight = midpoint of the section's exam weighting range.
+//   e.g. "General Probability 23–30%" → weight = 26.5
+// Sections with no weight tag receive weight = 1 (equal contribution).
+// Adjust DECAY_DAYS_LEVEL3 in mastery.ts to tune how quickly level3 expires.
+
+function parseSectionWeight(weight?: string): number {
+  if (!weight) return 1
+  const range = weight.match(/(\d+)\s*[-–]\s*(\d+)%/)
+  if (range) return (parseInt(range[1]) + parseInt(range[2])) / 2
+  const single = weight.match(/(\d+)%/)
+  return single ? parseInt(single[1]) : 1
+}
+
+export interface SectionReadiness {
+  name: string
+  weight: number       // syllabus midpoint weight (e.g. 26.5 for "23–30%")
+  level3Count: number
+  total: number
+  readinessPct: number // 0–100
+}
+
+export interface ReadinessResult {
+  overallPct: number           // 0–100, weighted average across sections
+  sections: SectionReadiness[]
+}
+
+export function computeReadiness(
+  syllabus: WikiExamSyllabus,
+  records: ConceptMasteryRecord[],
+  now: Date,
+): ReadinessResult {
+  const bySlug = new Map(records.map(r => [r.concept_slug.toLowerCase(), r]))
+  const sections: SectionReadiness[] = []
+  let weightedSum = 0
+  let totalWeight = 0
+
+  for (const topic of syllabus.topics) {
+    const weight = parseSectionWeight(topic.weight)
+    let level3Count = 0
+    const total = topic.concepts.length
+
+    for (const concept of topic.concepts) {
+      const rec =
+        bySlug.get(concept.name.toLowerCase()) ??
+        bySlug.get(concept.target.toLowerCase())
+      const state = rec ? decayIfStale(rec, now).state : 'new'
+      if (state === 'level3') level3Count++
+    }
+
+    const readinessPct = total > 0 ? (level3Count / total) * 100 : 0
+    sections.push({ name: topic.name, weight, level3Count, total, readinessPct })
+    weightedSum += readinessPct * weight
+    totalWeight += weight
+  }
+
+  const overallPct = totalWeight > 0 ? weightedSum / totalWeight : 0
+  return { overallPct, sections }
+}

@@ -399,7 +399,8 @@ export function ReadinessCard({
     const today = todayISO()
     for (const a of plan.assignments) {
       if (a.scheduledDate === today) {
-        const target = NEXT_STATE[a.initialState] ?? 'level1'
+        const currentState = masteryStateByName.get(a.conceptName.toLowerCase()) ?? a.initialState
+        const target: MasteryState = currentState === 'level3' ? 'level3' : (NEXT_STATE[currentState] ?? 'level1')
         const existing = map.get(a.conceptName.toLowerCase())
         if (!existing || STATE_ORDER[target] > STATE_ORDER[existing]) {
           map.set(a.conceptName.toLowerCase(), target)
@@ -407,7 +408,7 @@ export function ReadinessCard({
       }
     }
     return map
-  }, [plan])
+  }, [plan, masteryStateByName])
 
   const studyPlanConceptsForModal = useMemo(() =>
     displayConcepts.map(name => ({
@@ -629,10 +630,11 @@ export function ReadinessCard({
           {displayConcepts.length > 0 && (
             <div className="space-y-0.5">
               {displayConcepts.map((name, idx) => {
-                const isCompleted = completedToday.some(
-                  lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()
-                )
                 const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                const isCompleted =
+                  completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                  STATE_ORDER[currentState] >= STATE_ORDER[target]
                 return (
                   <button
                     key={name}

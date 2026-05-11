@@ -356,34 +356,6 @@ export function ReadinessCard({
     [syllabus, examRecords],
   )
 
-  // Derive today's concepts and upcoming concepts for the active section
-  const activeSectionInfo = useMemo(() => {
-    if (activeSection === null || !sections[activeSection]) return null
-    const sectionName = sections[activeSection].name
-    const topic = syllabus.topics.find(t => t.name === sectionName)
-    if (!topic) return null
-    const conceptSet = new Set(topic.concepts.map(c => c.name.toLowerCase()))
-
-    const displayConcepts = plan?.status === 'review_mode'
-      ? (plan?.reviewConcepts ?? [])
-      : (plan?.todaysConcepts ?? [])
-
-    const today = displayConcepts.filter(n => conceptSet.has(n.toLowerCase()))
-
-    const todayDate = todayISO()
-    const seen = new Set(today.map(n => n.toLowerCase()))
-    const upcoming: string[] = []
-    for (const a of plan?.assignments ?? []) {
-      if (a.scheduledDate <= todayDate) continue
-      if (!conceptSet.has(a.conceptName.toLowerCase())) continue
-      if (seen.has(a.conceptName.toLowerCase())) continue
-      seen.add(a.conceptName.toLowerCase())
-      upcoming.push(a.conceptName)
-      if (upcoming.length >= 3) break
-    }
-    return { sectionName, today, upcoming }
-  }, [activeSection, sections, syllabus, plan])
-
   // Today's checklist concepts
   const displayConcepts = plan?.status === 'review_mode'
     ? (plan?.reviewConcepts ?? [])

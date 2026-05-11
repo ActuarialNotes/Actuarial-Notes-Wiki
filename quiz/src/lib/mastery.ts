@@ -2,9 +2,22 @@
 //
 // States advance as a learner answers questions. The Learning→Strong transition
 // requires at least one hard-difficulty correct answer to prevent grinding
-// easy questions to mastery. Stale concepts (15+ days since last correct) and
-// runs of three failures both flip back to `forgotten`, which then re-enters
-// the Learning track on the next correct answer — Strong must be re-earned.
+// easy questions to mastery. Stale concepts and runs of three failures both
+// flip back toward `forgotten`, which then re-enters the Learning track on the
+// next correct answer — Strong must be re-earned.
+//
+// Decay ladder (Ebbinghaus expanding-interval principle — SM-2):
+//   Each successful recall strengthens the memory trace, so the interval before
+//   the next review can safely grow. Decay therefore steps down one level at a
+//   time with widening gaps:
+//
+//   Level 3 → Level 2  if no correct answer in 30 days
+//   Level 2 → Level 1  if no correct answer in 14 days  (44 cumulative from L3)
+//   Level 1 → Forgotten if no correct answer in  7 days  (51 cumulative from L3)
+//
+//   A fully mastered topic thus takes 51 days of total neglect to reach
+//   Forgotten, reflecting that well-recalled material is genuinely more durable.
+//   Adjust DECAY_DAYS_* below to tune the intervals.
 
 export type MasteryState = 'new' | 'level1' | 'level2' | 'level3' | 'forgotten'
 
@@ -30,7 +43,14 @@ export interface ConceptMasteryRecord {
   last_attempted_at: string | null
 }
 
-export const FORGET_AFTER_DAYS = 15
+// Days without a correct answer before each level steps down one rung.
+export const DECAY_DAYS_LEVEL3 = 30  // level3 → level2
+export const DECAY_DAYS_LEVEL2 = 14  // level2 → level1
+export const DECAY_DAYS_LEVEL1 = 7   // level1 → forgotten
+
+/** @deprecated Use DECAY_DAYS_LEVEL1. Kept for any existing imports. */
+export const FORGET_AFTER_DAYS = DECAY_DAYS_LEVEL1
+
 export const LEVEL2_CORRECT_THRESHOLD = 2
 export const LEVEL3_CORRECT_THRESHOLD = 3
 export const FORGET_FAIL_STREAK = 3
@@ -129,9 +149,35 @@ export function decayIfStale(
 ): ConceptMasteryRecord {
   if (record.state === 'new' || record.state === 'forgotten') return record
   if (!record.last_correct_at) return record
-  const ageMs = now.getTime() - new Date(record.last_correct_at).getTime()
-  if (ageMs < FORGET_AFTER_DAYS * MS_PER_DAY) return record
-  return { ...record, state: 'forgotten', incorrect_streak: 0 }
+
+  // Age in fractional days since the last correct answer.
+  const ageDays = (now.getTime() - new Date(record.last_correct_at).getTime()) / MS_PER_DAY
+
+  // Step down one level at a time. If enough time has passed to cross
+  // multiple thresholds (e.g. 44 days at level3 crosses both the 30-day
+  // and 14-day boundaries), cascade through intermediate levels so a
+  // returning user lands at the correct state immediately.
+  let state: MasteryState = record.state
+
+  if (state === 'level3') {
+    if (ageDays < DECAY_DAYS_LEVEL3) return record
+    state = 'level2'
+    const remaining = ageDays - DECAY_DAYS_LEVEL3
+    if (remaining >= DECAY_DAYS_LEVEL2) {
+      state = 'level1'
+      if (remaining - DECAY_DAYS_LEVEL2 >= DECAY_DAYS_LEVEL1) state = 'forgotten'
+    }
+  } else if (state === 'level2') {
+    if (ageDays < DECAY_DAYS_LEVEL2) return record
+    state = 'level1'
+    if (ageDays - DECAY_DAYS_LEVEL2 >= DECAY_DAYS_LEVEL1) state = 'forgotten'
+  } else {
+    // level1
+    if (ageDays < DECAY_DAYS_LEVEL1) return record
+    state = 'forgotten'
+  }
+
+  return { ...record, state, incorrect_streak: 0 }
 }
 
 export interface TopicAggregate {

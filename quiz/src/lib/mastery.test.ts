@@ -5,6 +5,9 @@ import {
   aggregateForTopic,
   emptyRecord,
   FORGET_AFTER_DAYS,
+  DECAY_DAYS_LEVEL1,
+  DECAY_DAYS_LEVEL2,
+  DECAY_DAYS_LEVEL3,
   LEVEL2_CORRECT_THRESHOLD,
   LEVEL3_CORRECT_THRESHOLD,
   FORGET_FAIL_STREAK,
@@ -12,8 +15,15 @@ import {
 } from './mastery'
 
 const NOW = new Date('2026-05-01T12:00:00Z')
-const RECENT = new Date('2026-04-25T12:00:00Z').toISOString()  // 6 days ago — not stale
-const STALE = new Date('2026-04-01T12:00:00Z').toISOString()   // 30 days ago — stale
+const RECENT = new Date('2026-04-25T12:00:00Z').toISOString()  // 6 days ago — inside all decay windows
+
+// Stale dates scoped to each level's threshold in the decay ladder.
+// level1 decays at 7d, level2 at 14d, level3 at 30d.
+const STALE_L1 = new Date(NOW.getTime() -  8 * 24 * 60 * 60 * 1000).toISOString()  //  8d — past level1 threshold only
+const STALE_L2 = new Date(NOW.getTime() - 15 * 24 * 60 * 60 * 1000).toISOString()  // 15d — past level2 threshold
+const STALE_L3 = new Date(NOW.getTime() - 31 * 24 * 60 * 60 * 1000).toISOString()  // 31d — past level3 threshold (→ level2)
+// 52 days crosses all cumulative thresholds (30+14+7=51), cascading level3 → forgotten.
+const STALE = new Date(NOW.getTime() - 52 * 24 * 60 * 60 * 1000).toISOString()
 
 function rec(overrides: Partial<ConceptMasteryRecord> = {}): ConceptMasteryRecord {
   return { ...emptyRecord('u1', 'P', 'Expected Value'), ...overrides }
@@ -175,9 +185,9 @@ describe('forgotten state', () => {
 // ── decayIfStale ─────────────────────────────────────────────────────────────
 
 describe('decayIfStale', () => {
-  it('does not decay new state (no last_correct_at)', () => {
-    const r = rec({ state: 'new' })
-    expect(decayIfStale(r, NOW).state).toBe('new')
+  // ── States that never decay ────────────────────────────────────────────────
+  it('does not decay new state', () => {
+    expect(decayIfStale(rec({ state: 'new' }), NOW).state).toBe('new')
   })
 
   it('does not decay forgotten state', () => {
@@ -185,41 +195,87 @@ describe('decayIfStale', () => {
     expect(decayIfStale(r, NOW).state).toBe('forgotten')
   })
 
-  it('decays level1 to forgotten when last_correct_at is older than FORGET_AFTER_DAYS', () => {
-    const r = rec({ state: 'level1', last_correct_at: STALE })
-    expect(decayIfStale(r, NOW).state).toBe('forgotten')
+  // ── Nothing decays within the safe window ─────────────────────────────────
+  it('does not decay level1 when last_correct_at is recent (6 days)', () => {
+    expect(decayIfStale(rec({ state: 'level1', last_correct_at: RECENT }), NOW).state).toBe('level1')
   })
 
-  it('decays level3 to forgotten when last_correct_at is older than FORGET_AFTER_DAYS', () => {
-    const r = rec({ state: 'level3', last_correct_at: STALE })
-    expect(decayIfStale(r, NOW).state).toBe('forgotten')
+  it('does not decay level2 when last_correct_at is recent (6 days)', () => {
+    expect(decayIfStale(rec({ state: 'level2', last_correct_at: RECENT }), NOW).state).toBe('level2')
   })
 
-  it('does not decay level1 when last_correct_at is recent', () => {
-    const r = rec({ state: 'level1', last_correct_at: RECENT })
-    expect(decayIfStale(r, NOW).state).toBe('level1')
+  it('does not decay level3 when last_correct_at is recent (6 days)', () => {
+    expect(decayIfStale(rec({ state: 'level3', last_correct_at: RECENT }), NOW).state).toBe('level3')
   })
 
-  it('does not decay level3 when last_correct_at is recent', () => {
-    const r = rec({ state: 'level3', last_correct_at: RECENT })
-    expect(decayIfStale(r, NOW).state).toBe('level3')
+  // ── Level 1 threshold: 7 days ──────────────────────────────────────────────
+  it('decays level1 → forgotten at exactly DECAY_DAYS_LEVEL1 boundary', () => {
+    const exactly = new Date(NOW.getTime() - DECAY_DAYS_LEVEL1 * 24 * 60 * 60 * 1000).toISOString()
+    expect(decayIfStale(rec({ state: 'level1', last_correct_at: exactly }), NOW).state).toBe('forgotten')
   })
 
-  it('resets incorrect_streak to 0 on decay', () => {
-    const r = rec({ state: 'level1', last_correct_at: STALE, incorrect_streak: 2 })
+  it('does not decay level1 one ms before the 7-day boundary', () => {
+    const notYet = new Date(NOW.getTime() - DECAY_DAYS_LEVEL1 * 24 * 60 * 60 * 1000 + 1).toISOString()
+    expect(decayIfStale(rec({ state: 'level1', last_correct_at: notYet }), NOW).state).toBe('level1')
+  })
+
+  it('decays level1 → forgotten when 8 days stale', () => {
+    expect(decayIfStale(rec({ state: 'level1', last_correct_at: STALE_L1 }), NOW).state).toBe('forgotten')
+  })
+
+  // ── Level 2 threshold: 14 days ─────────────────────────────────────────────
+  it('does not decay level2 when only 8 days stale (below 14-day threshold)', () => {
+    expect(decayIfStale(rec({ state: 'level2', last_correct_at: STALE_L1 }), NOW).state).toBe('level2')
+  })
+
+  it('decays level2 → level1 at exactly DECAY_DAYS_LEVEL2 boundary', () => {
+    const exactly = new Date(NOW.getTime() - DECAY_DAYS_LEVEL2 * 24 * 60 * 60 * 1000).toISOString()
+    expect(decayIfStale(rec({ state: 'level2', last_correct_at: exactly }), NOW).state).toBe('level1')
+  })
+
+  it('decays level2 → level1 when 15 days stale', () => {
+    expect(decayIfStale(rec({ state: 'level2', last_correct_at: STALE_L2 }), NOW).state).toBe('level1')
+  })
+
+  it('decays level2 → forgotten when 21+ days stale (14+7 cascade)', () => {
+    const twentyTwo = new Date(NOW.getTime() - 22 * 24 * 60 * 60 * 1000).toISOString()
+    expect(decayIfStale(rec({ state: 'level2', last_correct_at: twentyTwo }), NOW).state).toBe('forgotten')
+  })
+
+  // ── Level 3 threshold: 30 days ─────────────────────────────────────────────
+  it('does not decay level3 when only 15 days stale (below 30-day threshold)', () => {
+    expect(decayIfStale(rec({ state: 'level3', last_correct_at: STALE_L2 }), NOW).state).toBe('level3')
+  })
+
+  it('decays level3 → level2 at exactly DECAY_DAYS_LEVEL3 boundary', () => {
+    const exactly = new Date(NOW.getTime() - DECAY_DAYS_LEVEL3 * 24 * 60 * 60 * 1000).toISOString()
+    expect(decayIfStale(rec({ state: 'level3', last_correct_at: exactly }), NOW).state).toBe('level2')
+  })
+
+  it('decays level3 → level2 when 31 days stale (no further cascade)', () => {
+    // 31 days crosses level3 threshold (30d) but not level2 cumulative (44d)
+    expect(decayIfStale(rec({ state: 'level3', last_correct_at: STALE_L3 }), NOW).state).toBe('level2')
+  })
+
+  it('decays level3 → level1 when 44+ days stale (30+14 cascade)', () => {
+    const fortyfive = new Date(NOW.getTime() - 45 * 24 * 60 * 60 * 1000).toISOString()
+    expect(decayIfStale(rec({ state: 'level3', last_correct_at: fortyfive }), NOW).state).toBe('level1')
+  })
+
+  it('decays level3 → forgotten after 51+ days of total neglect (30+14+7 cascade)', () => {
+    // STALE = 52 days — crosses all cumulative thresholds
+    expect(decayIfStale(rec({ state: 'level3', last_correct_at: STALE }), NOW).state).toBe('forgotten')
+  })
+
+  // ── Side effects ───────────────────────────────────────────────────────────
+  it('resets incorrect_streak to 0 on any decay', () => {
+    const r = rec({ state: 'level1', last_correct_at: STALE_L1, incorrect_streak: 2 })
     expect(decayIfStale(r, NOW).incorrect_streak).toBe(0)
   })
 
-  it(`decays exactly at ${FORGET_AFTER_DAYS} days boundary`, () => {
-    const exactlyStale = new Date(NOW.getTime() - FORGET_AFTER_DAYS * 24 * 60 * 60 * 1000).toISOString()
-    const r = rec({ state: 'level1', last_correct_at: exactlyStale })
-    expect(decayIfStale(r, NOW).state).toBe('forgotten')
-  })
-
-  it('does not decay one ms before boundary', () => {
-    const notQuite = new Date(NOW.getTime() - FORGET_AFTER_DAYS * 24 * 60 * 60 * 1000 + 1).toISOString()
-    const r = rec({ state: 'level1', last_correct_at: notQuite })
-    expect(decayIfStale(r, NOW).state).toBe('level1')
+  // FORGET_AFTER_DAYS is kept as a deprecated alias for DECAY_DAYS_LEVEL1 (= 7)
+  it('FORGET_AFTER_DAYS equals DECAY_DAYS_LEVEL1 (backward-compat alias)', () => {
+    expect(FORGET_AFTER_DAYS).toBe(DECAY_DAYS_LEVEL1)
   })
 })
 

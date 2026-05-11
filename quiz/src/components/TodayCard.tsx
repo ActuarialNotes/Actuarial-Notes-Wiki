@@ -272,14 +272,16 @@ export function TodayCard({
   const displayConcepts = plan?.status === 'review_mode' ? reviewConcepts : todaysConcepts
 
   // Build a per-concept target map from today's scheduled assignments.
-  // Each concept's daily goal is one level above its state at scheduling time.
+  // Use the current mastery state (not the cached initialState) so the target
+  // stays accurate after same-day quiz progress or decay changes.
   // Keep the highest target if a concept somehow has multiple assignments today.
   const targetByName = new Map<string, MasteryState>()
   if (plan) {
     const today = todayISO()
     for (const a of plan.assignments) {
       if (a.scheduledDate === today) {
-        const target = NEXT_STATE[a.initialState] ?? 'level1'
+        const currentState = masteryStateByName.get(a.conceptName.toLowerCase()) ?? a.initialState
+        const target: MasteryState = currentState === 'level3' ? 'level3' : (NEXT_STATE[currentState] ?? 'level1')
         const existing = targetByName.get(a.conceptName.toLowerCase())
         if (!existing || STATE_ORDER[target] > STATE_ORDER[existing]) {
           targetByName.set(a.conceptName.toLowerCase(), target)
@@ -429,10 +431,11 @@ export function TodayCard({
           {showConcepts && (
             <ul className="space-y-0.5">
               {displayConcepts.map((name, idx) => {
-                const isCompleted = completedToday.some(
-                  lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()
-                )
                 const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                const isCompleted =
+                  completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                  STATE_ORDER[currentState] >= STATE_ORDER[target]
                 return (
                   <li key={name}>
                     <button

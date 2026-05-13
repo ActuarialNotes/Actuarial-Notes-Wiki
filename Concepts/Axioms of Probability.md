@@ -1,14 +1,10 @@
-$$P(A) \geq 0 \quad \text{for every event } A$$
-$$P(S) = 1$$
-$$ P\!\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)  \quad \text{where } A_1, A_2, \ldots \text{are mutually exclusive}$$
-
 The Axioms of Probability (Kolmogorov's axioms) are three foundational rules that any valid [[Concepts/Probability]] $P$ must satisfy:
 
-1. **Non-negativity**: Probability is > 0
-2. **Normalization**: The probability of the sample space is 1.
-3. **Countable Additivity**: The probability of the union of mutually exclusive events is the sum of the probability of each event.
-
----
+| Axiom | Mathematical Statement | The "Plain English" Translation |
+| :--- | :--- | :--- |
+| **1. Total Probability** | $P(S) = 1$ | **Something must happen.** The probability of the entire sample space is 100%. |
+| **2. Non-negativity** | $P(E) \geq 0$ | **No negative odds.** You cannot have a less-than-zero chance of an event occurring. |
+| **3. Additivity** | $P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$ | **No overlap? Just add.** If events are [[Concepts/Mutually Exclusive Events]], the probability of "one or the other" is the sum of their individual probabilities. |
 
 > [!example]- Axioms satisfied? {💡 Example}
 > A probability model assigns $P(A) = 0.3$, $P(B) = 0.5$, and $P(A \cup B) = 0.9$ where $A$ and $B$ are mutually exclusive. Does this violate the axioms of probability?

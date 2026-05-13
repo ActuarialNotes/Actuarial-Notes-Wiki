@@ -1,6 +1,6 @@
 A **Venn Diagram** is a visual tool used to represent the relationships between different sets. In actuarial probability, they are indispensable for calculating the intersections and unions of multiple events.
 
-![[Media/Venn_Diagram_Example.png]]
+![[Media/Venn_Diagram_Example.png|300]]
 
 ### Core Components
 * **Universal Set ($S$):** The rectangle representing every possible outcome (Total Probability = 1).

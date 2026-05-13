@@ -1,5 +1,9 @@
 A **Venn Diagram** is a visual tool used to represent the relationships between different sets. In actuarial probability, they are indispensable for calculating the intersections and unions of multiple events.
 
+The most common calculation derived from a Venn Diagram is finding the probability of the Union. Because the intersection is counted twice if you simply add $P(A)$ and $P(B)$, we must subtract it once:
+
+$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+
 ![[Media/Venn_Diagram_Example.png|300]]
 
 * **Universal Set ($S$):** The rectangle representing every possible outcome (Total Probability = 1).
@@ -7,7 +11,7 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 * **The Intersection ($A \cap B$):** The overlapping region where *both* events occur.
 * **The Union ($A \cup B$):** The total area covered by both circles.
 
-### How to Solve Problems
+### How to Solve Problems with a Venn Diagram
 Actuarial exams often use specific phrasing that maps directly to regions of a Venn Diagram.
 
 
@@ -19,9 +23,6 @@ Actuarial exams often use specific phrasing that maps directly to regions of a V
 | "$A$ but not $B$" | $A \setminus B$ | The "crescent moon" of $A$ only. |
 | "Exactly one of $A$ or $B$" | $(A \setminus B) \cup (B \setminus A)$ | Both crescent moons (no overlap). |
 
-The most common calculation derived from a Venn Diagram is finding the probability of the Union. Because the intersection is counted twice if you simply add $P(A)$ and $P(B)$, we must subtract it once:
-
-$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 
 > [!example]- The Insurance Policyholder {💡 Example}
 > 

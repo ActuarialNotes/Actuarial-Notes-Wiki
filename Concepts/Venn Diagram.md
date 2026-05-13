@@ -1,5 +1,6 @@
 A **Venn Diagram** is a visual tool used to represent the relationships between different sets. In actuarial probability, they are indispensable for calculating the intersections and unions of multiple events.
 
+<div align="center">
 <svg width="400" height="250" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
   <rect x="10" y="10" width="380" height="230" rx="10" fill="none" stroke="#666" stroke-width="2" />
   <text x="25" y="35" font-family="Arial, sans-serif" font-size="16" fill="#666" font-style="italic">S</text>
@@ -12,6 +13,7 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 
   <text x="200" y="135" font-family="serif" font-size="14" fill="#333" text-anchor="middle" font-weight="bold">A ∩ B</text>
 </svg>
+</div>
 
 ### Core Components
 * **Universal Set ($S$):** The rectangle representing every possible outcome (Total Probability = 1).

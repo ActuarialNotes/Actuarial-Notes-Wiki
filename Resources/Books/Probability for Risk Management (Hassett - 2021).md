@@ -6,7 +6,7 @@ Edition: 3e
 Publisher: ACTEX
 ISBN: 978-1-64756-322-6
 ---
-![[Probability-for-Risk-Management-Hassett-2021-Cover.jpg]]
+![[Media/Attachments/Probability-for-Risk-Management-Hassett-2021-Cover.jpg]]
 
 ## 1 Probability: A Tool for Risk Management
 

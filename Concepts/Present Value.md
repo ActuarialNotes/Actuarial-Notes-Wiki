@@ -7,7 +7,7 @@ $$PV = FV \cdot (1+i)^{-n} = FV \cdot v^n$$
 For multiple cash flows $C_t$ at various times $t$, the total present value is $\displaystyle PV = \sum_t C_t\, v^t$. Present value is the fundamental building block of [[Annuity Immediate|annuity]], [[Net Present Value|NPV]], and [[Deferred Annuity|deferred annuity]] calculations.
 
 > [!example]- Present Value of a Lump Sum {💡 Example}
-> An investor will receive $\$5{,}000$ in 6 years. If the effective annual interest rate is $i = 7\%$, what is the present value of this payment?
+> An investor will receive $\$5000$ in 6 years. If the effective annual interest rate is $i = 7\%$, what is the present value of this payment?
 >
 > > [!answer]- Answer
 > > $$PV = \frac{5{,}000}{(1.07)^{6}} = 5{,}000 \times v^6 = \frac{5{,}000}{1.500730} \approx \$3{,}332.11$$

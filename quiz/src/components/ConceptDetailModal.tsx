@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BookOpen, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Loader2, Play, X } from 'lucide-react'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -12,6 +12,7 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { type MasteryState } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { useQuizStore } from '@/stores/quizStore'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -42,9 +43,13 @@ type ConceptFilter = 'study-plan' | 'entire-syllabus'
 function QuestionItem({
   question,
   attemptSummary,
+  selected,
+  onToggle,
 }: {
   question: Question
   attemptSummary: QuestionAttemptSummary | undefined
+  selected: boolean
+  onToggle: () => void
 }) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
@@ -54,60 +59,81 @@ function QuestionItem({
 
   return (
     <div
-      className={`border rounded-lg p-4 space-y-2 transition-colors hover:bg-accent/30 ${
-        hasAttempted
+      className={`border rounded-lg p-4 space-y-2 transition-colors cursor-pointer ${
+        selected
+          ? 'border-primary/60 bg-primary/5'
+          : hasAttempted
           ? hasCorrect
-            ? 'border-green-200 dark:border-green-800'
-            : 'border-orange-200 dark:border-orange-800'
-          : ''
+            ? 'border-green-200 dark:border-green-800 hover:bg-accent/30'
+            : 'border-orange-200 dark:border-orange-800 hover:bg-accent/30'
+          : 'hover:bg-accent/30'
       }`}
+      onClick={onToggle}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center flex-wrap gap-2 min-w-0">
-          <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded border shrink-0">
-            {question.id}
-          </span>
-          <span className="text-xs px-2 py-0.5 rounded-full border bg-background shrink-0">
-            {question.subtopic}
-          </span>
-          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize ${DIFFICULTY_COLORS[question.difficulty]}`}>
-            {question.difficulty}
-          </span>
-          {hasAttempted && (
-            <span
-              title={hasCorrect ? `Correct (${attemptSummary.correct_count}/${attemptSummary.attempt_count} attempts)` : `Attempted (${attemptSummary.attempt_count}× — not yet correct)`}
-              className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border shrink-0 ${
-                hasCorrect
-                  ? 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
-                  : 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
-              }`}
-            >
-              {hasCorrect && <CheckCircle2 className="h-3 w-3" />}
-              {hasCorrect ? 'Correct' : 'Attempted'}
-            </span>
-          )}
+      <div className="flex items-start gap-3">
+        {/* Checkbox */}
+        <div className="mt-0.5 shrink-0">
+          <div
+            className={`h-4 w-4 rounded border-2 flex items-center justify-center transition-colors ${
+              selected ? 'bg-primary border-primary' : 'border-input bg-background'
+            }`}
+          >
+            {selected && (
+              <svg className="h-2.5 w-2.5 text-primary-foreground" fill="currentColor" viewBox="0 0 12 12">
+                <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              </svg>
+            )}
+          </div>
         </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center flex-wrap gap-2 min-w-0">
+            <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded border shrink-0">
+              {question.id}
+            </span>
+            <span className="text-xs px-2 py-0.5 rounded-full border bg-background shrink-0">
+              {question.subtopic}
+            </span>
+            <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize ${DIFFICULTY_COLORS[question.difficulty]}`}>
+              {question.difficulty}
+            </span>
+            {hasAttempted && (
+              <span
+                title={hasCorrect ? `Correct (${attemptSummary.correct_count}/${attemptSummary.attempt_count} attempts)` : `Attempted (${attemptSummary.attempt_count}× — not yet correct)`}
+                className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border shrink-0 ${
+                  hasCorrect
+                    ? 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                    : 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
+                }`}
+              >
+                {hasCorrect && <CheckCircle2 className="h-3 w-3" />}
+                {hasCorrect ? 'Correct' : 'Attempted'}
+              </span>
+            )}
+          </div>
+
+          <div className="text-sm text-muted-foreground leading-relaxed mt-2">
+            {expanded ? (
+              <LatexText>{question.stem}</LatexText>
+            ) : (
+              <LatexText>
+                {question.stem.slice(0, 160) + (question.stem.length > 160 ? '…' : '')}
+              </LatexText>
+            )}
+          </div>
+        </div>
+
         <button
           type="button"
-          onClick={() => setExpanded(v => !v)}
+          onClick={e => { e.stopPropagation(); setExpanded(v => !v) }}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
         >
           {expanded ? 'Collapse' : 'Expand'}
         </button>
       </div>
 
-      <div className="text-sm text-muted-foreground leading-relaxed">
-        {expanded ? (
-          <LatexText>{question.stem}</LatexText>
-        ) : (
-          <LatexText>
-            {question.stem.slice(0, 160) + (question.stem.length > 160 ? '…' : '')}
-          </LatexText>
-        )}
-      </div>
-
       {expanded && (
-        <div className="pt-2 space-y-1">
+        <div className="pt-2 space-y-1 pl-7" onClick={e => e.stopPropagation()}>
           {question.options.map(opt => {
             const isCorrect = showAnswer && opt.key === question.answer
             return (
@@ -178,7 +204,9 @@ export function ConceptDetailModal({
     initialFilter ?? (studyPlanConcepts ? 'study-plan' : 'entire-syllabus')
   )
   const [localIndex, setLocalIndex] = useState(initialConceptIndex ?? 0)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const { byQuestionId } = useQuestionAttempts()
+  const startQuiz = useQuizStore(s => s.startQuiz)
 
   const effectiveConcepts = conceptFilter === 'study-plan'
     ? (studyPlanConcepts ?? allConcepts)
@@ -233,6 +261,7 @@ export function ConceptDetailModal({
   useEffect(() => {
     setActiveTab('definition')
     setFilter('all')
+    setSelectedIds(new Set())
   }, [localIndex])
 
   useEffect(() => {
@@ -275,6 +304,46 @@ export function ConceptDetailModal({
     return true
   })
 
+  // Sync selected IDs when filtered questions change (select all by default)
+  useEffect(() => {
+    if (!questionsLoading) {
+      setSelectedIds(new Set(filteredQuestions.map(q => q.id)))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionsLoading, filter, currentConceptName])
+
+  const allSelected = filteredQuestions.length > 0 && filteredQuestions.every(q => selectedIds.has(q.id))
+  const someSelected = filteredQuestions.some(q => selectedIds.has(q.id)) && !allSelected
+
+  const toggleSelectAll = () => {
+    if (allSelected || someSelected) {
+      setSelectedIds(new Set())
+    } else {
+      setSelectedIds(new Set(filteredQuestions.map(q => q.id)))
+    }
+  }
+
+  const toggleQuestion = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const selectedQuestions = useMemo(
+    () => filteredQuestions.filter(q => selectedIds.has(q.id)),
+    [filteredQuestions, selectedIds],
+  )
+
+  function handleStartQuiz() {
+    if (selectedQuestions.length === 0) return
+    startQuiz(selectedQuestions, 'quiz')
+    onClose()
+    navigate('/quiz')
+  }
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
@@ -284,6 +353,30 @@ export function ConceptDetailModal({
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div className="w-full max-w-2xl bg-card border rounded-xl shadow-2xl flex flex-col my-8">
+        {/* Viewing filter — always at the very top */}
+        <div className="flex items-center gap-2 px-4 py-2 border-b bg-muted/20 shrink-0 rounded-t-xl">
+          <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
+          <div className="relative">
+            <select
+              value={studyPlanConcepts ? conceptFilter : 'entire-syllabus'}
+              onChange={e => studyPlanConcepts && setConceptFilter(e.target.value as ConceptFilter)}
+              disabled={!studyPlanConcepts}
+              className="appearance-none text-xs border rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-default disabled:opacity-80"
+            >
+              {studyPlanConcepts && (
+                <option value="study-plan">
+                  Study Plan — {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
+                </option>
+              )}
+              <option value="entire-syllabus">Entire Syllabus</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+          </div>
+          <span className="text-xs text-muted-foreground ml-auto tabular-nums">
+            {effectiveConcepts?.length ?? 0} concepts
+          </span>
+        </div>
+
         {/* Header */}
         <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
           <span className="flex-1 min-w-0 flex items-center gap-2 truncate">
@@ -301,29 +394,6 @@ export function ConceptDetailModal({
             <X className="h-4 w-4" />
           </button>
         </div>
-
-        {/* Study plan / syllabus filter — only shown when study plan concepts are available */}
-        {studyPlanConcepts && (
-          <div className="flex items-center gap-2 px-4 py-2 border-b bg-muted/20 shrink-0">
-            <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
-            <div className="relative">
-              <select
-                value={conceptFilter}
-                onChange={e => setConceptFilter(e.target.value as ConceptFilter)}
-                className="appearance-none text-xs border rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
-              >
-                <option value="study-plan">
-                  Study Plan — {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
-                </option>
-                <option value="entire-syllabus">Entire Syllabus</option>
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
-            </div>
-            <span className="text-xs text-muted-foreground ml-auto tabular-nums">
-              {effectiveConcepts?.length ?? 0} concepts
-            </span>
-          </div>
-        )}
 
         {/* Tabs */}
         <div className="flex border-b shrink-0">
@@ -346,6 +416,33 @@ export function ConceptDetailModal({
             </button>
           ))}
         </div>
+
+        {/* Previous / Next navigation — just below tabs */}
+        {showFooterNav && (
+          <div className="flex items-stretch border-b h-10 shrink-0 bg-muted/10">
+            <button
+              type="button"
+              disabled={!canPrev}
+              onClick={() => setLocalIndex(i => i - 1)}
+              className="flex items-center justify-center gap-1.5 px-4 text-xs font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+              <span>Previous</span>
+            </button>
+            <span className="flex-1 flex items-center justify-center text-xs text-muted-foreground tabular-nums">
+              {localIndex + 1} of {effectiveConcepts!.length}
+            </span>
+            <button
+              type="button"
+              disabled={!canNext}
+              onClick={() => setLocalIndex(i => i + 1)}
+              className="flex items-center justify-center gap-1.5 px-4 text-xs font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <span>Next</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
 
         {/* Definition tab */}
         {activeTab === 'definition' && (
@@ -372,45 +469,75 @@ export function ConceptDetailModal({
         {/* Questions tab */}
         {activeTab === 'questions' && (
           <div className="p-4 space-y-3">
-            {/* Filter row */}
-            <div className="flex items-center gap-2">
+            {/* Toolbar: filter pills + select-all + start quiz */}
+            <div className="flex items-center gap-2 flex-wrap">
               {!questionsLoading && filteredQuestions.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate('/quiz?ids=' + filteredQuestions.map(q => q.id).join(','))
-                    onClose()
-                  }}
-                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shrink-0"
-                >
-                  <Play className="h-3 w-3" />
-                  Start Quiz
-                </button>
+                <>
+                  <button
+                    type="button"
+                    onClick={handleStartQuiz}
+                    disabled={selectedIds.size === 0}
+                    className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+                  >
+                    <Play className="h-3 w-3" />
+                    Start Quiz
+                  </button>
+                  <div className="flex items-center gap-1 ml-auto flex-wrap">
+                    {(['all', 'new', 'attempted'] as FilterMode[]).map(mode => {
+                      const label = mode === 'all'
+                        ? `All (${questions.length})`
+                        : mode === 'new'
+                        ? `New (${newCount})`
+                        : `Attempted (${attemptedCount})`
+                      return (
+                        <button
+                          key={mode}
+                          type="button"
+                          onClick={() => setFilter(mode)}
+                          className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                            filter === mode
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </>
               )}
-              <div className="flex items-center gap-1 ml-auto">
-                {(['all', 'new', 'attempted'] as FilterMode[]).map(mode => {
-                  const label = mode === 'all'
-                    ? `All (${questions.length})`
-                    : mode === 'new'
-                    ? `New (${newCount})`
-                    : `Attempted (${attemptedCount})`
-                  return (
-                    <button
-                      key={mode}
-                      type="button"
-                      onClick={() => setFilter(mode)}
-                      className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                        filter === mode
-                          ? 'bg-primary text-primary-foreground border-primary'
-                          : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  )
-                })}
-              </div>
             </div>
+
+            {/* Select-all toolbar */}
+            {!questionsLoading && filteredQuestions.length > 0 && (
+              <div className="flex items-center gap-3 py-0.5">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <div
+                    role="checkbox"
+                    aria-checked={allSelected ? true : someSelected ? 'mixed' : false}
+                    tabIndex={0}
+                    onClick={toggleSelectAll}
+                    onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') toggleSelectAll() }}
+                    className={`h-4 w-4 rounded border-2 flex items-center justify-center transition-colors cursor-pointer ${
+                      allSelected || someSelected ? 'bg-primary border-primary' : 'border-input bg-background'
+                    }`}
+                  >
+                    {allSelected && (
+                      <svg className="h-2.5 w-2.5 text-primary-foreground" fill="currentColor" viewBox="0 0 12 12">
+                        <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                      </svg>
+                    )}
+                    {someSelected && (
+                      <div className="h-0.5 w-2 bg-primary-foreground rounded" />
+                    )}
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {selectedIds.size} / {filteredQuestions.length} selected
+                  </span>
+                </label>
+              </div>
+            )}
 
             {questionsLoading && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground py-4 justify-center">
@@ -436,6 +563,8 @@ export function ConceptDetailModal({
                 key={q.id}
                 question={q}
                 attemptSummary={byQuestionId.get(q.id)}
+                selected={selectedIds.has(q.id)}
+                onToggle={() => toggleQuestion(q.id)}
               />
             ))}
           </div>
@@ -502,32 +631,6 @@ export function ConceptDetailModal({
           </div>
         )}
 
-        {/* Footer navigation */}
-        {showFooterNav && (
-          <div className="flex items-stretch border-t h-14 shrink-0 bg-background/60 rounded-b-xl overflow-hidden">
-            <button
-              type="button"
-              disabled={!canPrev}
-              onClick={() => setLocalIndex(i => i - 1)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="h-5 w-5" />
-              <span>Previous</span>
-            </button>
-            <span className="self-center px-3 text-xs text-muted-foreground tabular-nums shrink-0">
-              {localIndex + 1} of {effectiveConcepts!.length}
-            </span>
-            <button
-              type="button"
-              disabled={!canNext}
-              onClick={() => setLocalIndex(i => i + 1)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <span>Next</span>
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-        )}
       </div>
     </div>
   )

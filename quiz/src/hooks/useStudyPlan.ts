@@ -1,4 +1,12 @@
 // Hook that owns study plan state: config CRUD, daily regeneration, caching.
+//
+// Config persistence priority (highest wins):
+//   1. Supabase exam_progress.study_plan_config  (cross-device, synced via realtime)
+//   2. localStorage actuarial_study_plan_config_v1_{examId}  (anonymous / offline fallback)
+//
+// Cross-tab sync (same browser, different tabs) happens via:
+//   - Supabase realtime updating examRows → effect re-reads config from updated row
+//   - localStorage 'storage' event as a fast path when realtime is slow/unavailable
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
@@ -14,6 +22,7 @@ import {
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { useExamProgress } from '@/contexts/ExamProgressContext'
 
 export interface UseStudyPlanResult {
   plan: StudyPlan | null
@@ -23,25 +32,57 @@ export interface UseStudyPlanResult {
   regenerate: () => void
 }
 
+const DEFAULT_CONFIG: StudyPlanConfig = {
+  targetReadyDate: null,
+  targetStrengthLevel: 'strong_all',
+  planStartDate: null,
+}
+
 export function useStudyPlan(
   syllabus: WikiExamSyllabus | null,
   masteryRecords: ConceptMasteryRecord[],
   examDate: string | null,
 ): UseStudyPlanResult {
   const examId = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
+  const { examRows, updateStudyPlanConfig } = useExamProgress()
 
   const [config, setConfig] = useState<StudyPlanConfig>(() =>
-    examId ? loadStudyPlanConfig(examId) : { targetReadyDate: null, targetStrengthLevel: 'strong_all', planStartDate: null }
+    examId ? loadStudyPlanConfig(examId) : DEFAULT_CONFIG
   )
   const [plan, setPlan] = useState<StudyPlan | null>(null)
   const [loading, setLoading] = useState(true)
   const [tick, setTick] = useState(0)
 
-  // Reload config when the active exam changes
+  // Sync config from DB whenever exam rows update (realtime or initial fetch).
+  // DB config takes precedence over localStorage so changes from other sessions
+  // are reflected immediately when the realtime event arrives.
   useEffect(() => {
     if (!examId) return
-    const saved = loadStudyPlanConfig(examId)
-    setConfig(saved)
+    const row = examRows.find(r => r.exam_id === examId)
+    const dbConfig = row?.study_plan_config ?? null
+    if (dbConfig) {
+      setConfig(dbConfig)
+      // Keep localStorage in sync so offline / anonymous fallback stays fresh
+      saveStudyPlanConfig(examId, dbConfig)
+    } else {
+      // No DB config yet — load from localStorage
+      setConfig(loadStudyPlanConfig(examId))
+    }
+  }, [examId, examRows])
+
+  // Cross-tab fast path: pick up config written by another tab before the
+  // realtime event arrives (storage events fire in all tabs except the writer).
+  useEffect(() => {
+    if (!examId) return
+    const key = `actuarial_study_plan_config_v1_${examId}`
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key !== key || !e.newValue) return
+      try {
+        setConfig(JSON.parse(e.newValue) as StudyPlanConfig)
+      } catch { /* ignore */ }
+    }
+    window.addEventListener('storage', handleStorage)
+    return () => window.removeEventListener('storage', handleStorage)
   }, [examId])
 
   // Generate (or load cached) plan whenever inputs change
@@ -52,13 +93,11 @@ export function useStudyPlan(
       return
     }
 
-    // Skip plan generation until mastery data is at least available (may be empty array)
     setLoading(true)
 
     // Try cache first (same-day stability)
     const cached = loadCachedStudyPlan(examId)
     if (cached && cached.generatedDate === todayISO()) {
-      // Use cache, but honour latest config
       if (
         cached.config.targetReadyDate === config.targetReadyDate &&
         cached.config.targetStrengthLevel === config.targetStrengthLevel
@@ -83,19 +122,21 @@ export function useStudyPlan(
       const merged: StudyPlanConfig = {
         ...prev,
         ...next,
-        // Set planStartDate on first real configuration
         planStartDate: prev.planStartDate ?? (next.targetReadyDate ? todayISO() : null),
       }
+      // Write to localStorage immediately (fast local update + offline fallback)
       saveStudyPlanConfig(examId, merged)
+      // Persist to DB asynchronously for cross-device / cross-browser sync.
+      // The realtime subscription will propagate the change to other open sessions.
+      updateStudyPlanConfig(examId, merged).catch(() => { /* best-effort */ })
       return merged
     })
-  }, [examId])
+  }, [examId, updateStudyPlanConfig])
 
   const regenerate = useCallback(() => {
     setTick(t => t + 1)
   }, [])
 
-  // useMemo ensures referential stability of the returned plan when nothing changed
   const stablePlan = useMemo(() => plan, [plan])
 
   return { plan: stablePlan, config, loading, updateConfig, regenerate }

@@ -2,11 +2,13 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo, t
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { ItemStatus } from '@/data/tracks'
+import type { StudyPlanConfig } from '@/lib/studyPlan'
 
 export interface ExamProgressRow {
   exam_id: string
   status: ItemStatus
   target_date: string | null
+  study_plan_config?: StudyPlanConfig | null
 }
 
 interface SectionState {
@@ -29,6 +31,8 @@ interface ExamProgressContextValue {
   targetDates: Record<string, string | null>
   /** Persist an updated exam target date */
   updateTargetDate: (examId: string, date: string | null) => Promise<boolean>
+  /** Persist an updated study plan config for a given exam */
+  updateStudyPlanConfig: (examId: string, config: StudyPlanConfig) => Promise<boolean>
 }
 
 const ExamProgressContext = createContext<ExamProgressContextValue | null>(null)
@@ -86,7 +90,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     if (!userId) return
     supabase
       .from('exam_progress')
-      .select('exam_id, status, target_date')
+      .select('exam_id, status, target_date, study_plan_config')
       .eq('user_id', userId)
       .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
         if (error) {
@@ -104,7 +108,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     setLoadingExams(true)
     supabase
       .from('exam_progress')
-      .select('exam_id, status, target_date')
+      .select('exam_id, status, target_date, study_plan_config')
       .eq('user_id', userId)
       .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
         if (cancelled) return
@@ -141,6 +145,20 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     document.addEventListener('visibilitychange', handleVisible)
     return () => document.removeEventListener('visibilitychange', handleVisible)
   }, [userId, fetchExamRows])
+
+  // Sync selectedTrack across tabs in the same browser via the storage event
+  // (storage events fire in all tabs *except* the one that made the write).
+  useEffect(() => {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key !== 'quiz-journey' || !e.newValue) return
+      try {
+        const j = JSON.parse(e.newValue)
+        if (j.selectedTrack) setSelectedTrackState(j.selectedTrack)
+      } catch { /* ignore */ }
+    }
+    window.addEventListener('storage', handleStorage)
+    return () => window.removeEventListener('storage', handleStorage)
+  }, [])
 
   const saveExamRows = useCallback(async (rows: ExamProgressRow[]) => {
     if (!user) return false
@@ -192,6 +210,20 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     return true
   }, [userId])
 
+  const updateStudyPlanConfig = useCallback(async (examId: string, config: StudyPlanConfig): Promise<boolean> => {
+    if (!userId) return false
+    const { error } = await supabase.from('exam_progress').upsert(
+      { user_id: userId, exam_id: examId, study_plan_config: config, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,exam_id' },
+    )
+    if (error) {
+      console.warn('updateStudyPlanConfig: failed:', error.message)
+      return false
+    }
+    setExamRows(prev => prev.map(r => r.exam_id === examId ? { ...r, study_plan_config: config } : r))
+    return true
+  }, [userId])
+
   const progress = useMemo(() => {
     const p: Record<string, string> = {}
     examRows.forEach(r => { p[r.exam_id] = r.status })
@@ -209,7 +241,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       examRows, setExamRows, loadingExams,
       selectedTrack, setSelectedTrack,
       saveExamRows, examsState,
-      progress, targetDates, updateTargetDate,
+      progress, targetDates, updateTargetDate, updateStudyPlanConfig,
     }}>
       {children}
     </ExamProgressContext.Provider>

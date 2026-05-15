@@ -256,8 +256,9 @@ export function TodayCard({
     function handleLevelUp(e: Event) {
       setCompletedToday((e as CustomEvent<DailyLevelUp[]>).detail)
     }
-    function handleStorage() {
-      setCompletedToday(readTodayLevelUps())
+    const levelUpKey = 'actuarial_daily_levelups_' + new Date().toISOString().slice(0, 10)
+    function handleStorage(e: StorageEvent) {
+      if (e.key === levelUpKey) setCompletedToday(readTodayLevelUps())
     }
     window.addEventListener(LEVELUP_EVENT, handleLevelUp)
     window.addEventListener('storage', handleStorage)

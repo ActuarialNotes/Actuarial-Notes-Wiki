@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Calendar, Check, X } from 'lucide-react'
+import { Calendar, X } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 
@@ -52,22 +52,46 @@ interface Props {
   targetDate: string | null
   /** Called when user saves a new exam date */
   onTargetDateChange: (date: string | null) => void
+  /** Target ready date from study plan config */
+  targetReadyDate?: string | null
+  /** Called when user saves a new target ready date */
+  onTargetReadyDateChange?: (date: string | null) => void
   /** Called when a day cell with sessions is clicked */
   onDayClick?: (date: string) => void
 }
 
-export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDateChange, onDayClick }: Props) {
+export function ExamHeatmap({
+  sessions,
+  examProgressKey,
+  targetDate,
+  onTargetDateChange,
+  targetReadyDate,
+  onTargetReadyDateChange,
+  onDayClick,
+}: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
+  const [editingReady, setEditingReady] = useState(false)
+  const [draftReady, setDraftReady] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+  const inputReadyRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (editing) inputRef.current?.focus()
   }, [editing])
 
+  useEffect(() => {
+    if (editingReady) inputReadyRef.current?.focus()
+  }, [editingReady])
+
   function saveDate(value: string) {
     onTargetDateChange(value || null)
     setEditing(false)
+  }
+
+  function saveReadyDate(value: string) {
+    if (onTargetReadyDateChange) onTargetReadyDateChange(value || null)
+    setEditingReady(false)
   }
 
   const today = useMemo(() => {
@@ -126,6 +150,15 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
     return idx >= 0 && idx < totalWeeks ? idx : -1
   }, [targetDate, gridStart, totalWeeks])
 
+  const targetReadyDateWeekIdx = useMemo(() => {
+    if (!targetReadyDate) return -1
+    const readyD = new Date(targetReadyDate + 'T00:00:00')
+    readyD.setHours(0, 0, 0, 0)
+    const diffMs = mondayOf(readyD).getTime() - gridStart.getTime()
+    const idx = Math.round(diffMs / (7 * 86400000))
+    return idx >= 0 && idx < totalWeeks ? idx : -1
+  }, [targetReadyDate, gridStart, totalWeeks])
+
   const columns = useMemo(() => {
     let prevMonth = -1
     return Array.from({ length: totalWeeks }, (_, w) => {
@@ -140,22 +173,36 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
         const isFuture = d > today
         const isToday = key === isoKey(today)
         const isExamDay = !!targetDate && key === targetDate
+        const isReadyDay = !!targetReadyDate && key === targetReadyDate
         const data = scoreByDay.get(key) ?? null
         const title = isFuture
           ? key
           : data
             ? `${key}: avg ${Math.round(data.avgScore)}% (${data.count} session${data.count !== 1 ? 's' : ''})`
             : `${key}: no activity`
-        return { key, data, isFuture, isToday, isExamDay, title }
+        return { key, data, isFuture, isToday, isExamDay, isReadyDay, title }
       })
 
-      return { key: isoKey(colStart), monthLabel, isExamWeek: w === examDateWeekIdx, days }
+      return {
+        key: isoKey(colStart),
+        monthLabel,
+        isExamWeek: w === examDateWeekIdx,
+        isTargetReadyWeek: w === targetReadyDateWeekIdx && w !== examDateWeekIdx,
+        days,
+      }
     })
-  }, [gridStart, totalWeeks, today, scoreByDay, examDateWeekIdx, targetDate])
+  }, [gridStart, totalWeeks, today, scoreByDay, examDateWeekIdx, targetReadyDateWeekIdx, targetDate, targetReadyDate])
 
   const daysLeft = targetDate ? daysUntil(targetDate) : null
   const examDateLabel = targetDate
     ? new Date(targetDate + 'T00:00:00').toLocaleDateString(undefined, {
+        month: 'short', day: 'numeric', year: 'numeric',
+      })
+    : null
+
+  const readyDaysLeft = targetReadyDate ? daysUntil(targetReadyDate) : null
+  const readyDateLabel = targetReadyDate
+    ? new Date(targetReadyDate + 'T00:00:00').toLocaleDateString(undefined, {
         month: 'short', day: 'numeric', year: 'numeric',
       })
     : null
@@ -197,7 +244,11 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
             <div
               key={col.key}
               className={`flex-1 flex flex-col gap-px rounded-sm ${
-                col.isExamWeek ? 'ring-1 ring-inset ring-primary/50' : ''
+                col.isExamWeek
+                  ? 'ring-1 ring-inset ring-primary/50'
+                  : col.isTargetReadyWeek
+                    ? 'ring-1 ring-inset ring-amber-400/60'
+                    : ''
               }`}
             >
               {col.days.map(cell => {
@@ -214,7 +265,11 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
                       cell.isFuture
                         ? cell.isExamDay
                           ? 'bg-primary/30 h-[10px] ring-1 ring-inset ring-primary'
-                          : col.isExamWeek ? 'bg-primary/10 h-[10px]' : 'h-[10px]'
+                          : cell.isReadyDay
+                            ? 'bg-amber-400/30 h-[10px] ring-1 ring-inset ring-amber-400'
+                            : col.isExamWeek ? 'bg-primary/10 h-[10px]'
+                            : col.isTargetReadyWeek ? 'bg-amber-400/10 h-[10px]'
+                            : 'h-[10px]'
                         : `h-[10px] ${cell.data === null ? 'bg-muted/30' : ''}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
                     }${cell.isToday ? ' ring-1 ring-inset ring-white/80' : ''}`}
                   />
@@ -225,75 +280,137 @@ export function ExamHeatmap({ sessions, examProgressKey, targetDate, onTargetDat
         </div>
       </div>
 
-      {/* Exam date row */}
-      <div className="flex items-center gap-1.5 pt-0.5">
-        {!editing ? (
-          <button
-            type="button"
-            onClick={() => { setDraft(targetDate ?? ''); setEditing(true) }}
-            className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Calendar className="h-3 w-3 shrink-0" />
-            {examDateLabel ? (
-              <>
-                <span>Exam: {examDateLabel}</span>
-                {daysLeft !== null && daysLeft > 0 && (
-                  <span className="opacity-60">{daysLeft}d away</span>
-                )}
-                {daysLeft !== null && daysLeft <= 0 && (
-                  <span className="opacity-60">passed</span>
-                )}
-              </>
-            ) : (
-              <span>Set exam date</span>
-            )}
-          </button>
-        ) : (
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="h-3 w-3 text-muted-foreground shrink-0" />
-              <input
-                ref={inputRef}
-                type="date"
-                value={draft}
-                onChange={e => setDraft(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') saveDate(draft)
-                  if (e.key === 'Escape') setEditing(false)
-                }}
-                className="text-[11px] bg-background border rounded px-1 py-0.5 text-foreground"
-              />
-              <button
-                type="button"
-                onClick={() => saveDate(draft)}
-                className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
-                aria-label="Save"
-              >
-                <Check className="h-3 w-3" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setEditing(false)}
-                className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
-                aria-label="Cancel"
-              >
-                <X className="h-3 w-3" />
-              </button>
-              {targetDate && (
+      {/* Date rows */}
+      <div className="flex flex-col gap-1 pt-0.5">
+        {/* Exam date */}
+        <div className="flex items-center gap-1.5">
+          {!editing ? (
+            <button
+              type="button"
+              onClick={() => { setDraft(targetDate ?? ''); setEditing(true) }}
+              className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Calendar className="h-3 w-3 shrink-0" />
+              {examDateLabel ? (
+                <>
+                  <span>Exam: {examDateLabel}</span>
+                  {daysLeft !== null && daysLeft > 0 && (
+                    <span className="opacity-60">{daysLeft}d away</span>
+                  )}
+                  {daysLeft !== null && daysLeft <= 0 && (
+                    <span className="opacity-60">passed</span>
+                  )}
+                </>
+              ) : (
+                <span>Set exam date</span>
+              )}
+            </button>
+          ) : (
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="h-3 w-3 text-muted-foreground shrink-0" />
+                <input
+                  ref={inputRef}
+                  type="date"
+                  value={draft}
+                  onChange={e => {
+                    const val = e.target.value
+                    setDraft(val)
+                    if (val) saveDate(val)
+                  }}
+                  onKeyDown={e => {
+                    if (e.key === 'Escape') setEditing(false)
+                  }}
+                  className="text-[11px] bg-background border rounded px-1 py-0.5 text-foreground"
+                />
                 <button
                   type="button"
-                  onClick={() => saveDate('')}
-                  className="text-[11px] text-muted-foreground hover:text-destructive transition-colors"
+                  onClick={() => setEditing(false)}
+                  className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
+                  aria-label="Cancel"
                 >
-                  Clear
+                  <X className="h-3 w-3" />
                 </button>
-              )}
+                {targetDate && (
+                  <button
+                    type="button"
+                    onClick={() => saveDate('')}
+                    className="text-[11px] text-muted-foreground hover:text-destructive transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              <ExamSittingsList
+                examId={examProgressKey}
+                selectedDate={draft}
+                onSelect={d => { setDraft(d); saveDate(d) }}
+              />
             </div>
-            <ExamSittingsList
-              examId={examProgressKey}
-              selectedDate={draft}
-              onSelect={d => { setDraft(d); saveDate(d) }}
-            />
+          )}
+        </div>
+
+        {/* Target ready date (only shown if callback provided) */}
+        {onTargetReadyDateChange !== undefined && (
+          <div className="flex items-center gap-1.5">
+            {!editingReady ? (
+              <button
+                type="button"
+                onClick={() => { setDraftReady(targetReadyDate ?? ''); setEditingReady(true) }}
+                className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Calendar className="h-3 w-3 shrink-0 text-amber-500" />
+                {readyDateLabel ? (
+                  <>
+                    <span>Target ready: {readyDateLabel}</span>
+                    {readyDaysLeft !== null && readyDaysLeft > 0 && (
+                      <span className="opacity-60">{readyDaysLeft}d away</span>
+                    )}
+                    {readyDaysLeft !== null && readyDaysLeft <= 0 && (
+                      <span className="opacity-60">passed</span>
+                    )}
+                  </>
+                ) : (
+                  <span>Set target ready date</span>
+                )}
+              </button>
+            ) : (
+              <div className="flex items-center gap-1.5">
+                <Calendar className="h-3 w-3 text-amber-500 shrink-0" />
+                <input
+                  ref={inputReadyRef}
+                  type="date"
+                  value={draftReady}
+                  max={targetDate ?? undefined}
+                  onChange={e => {
+                    const val = e.target.value
+                    setDraftReady(val)
+                    if (val) saveReadyDate(val)
+                  }}
+                  onKeyDown={e => {
+                    if (e.key === 'Escape') setEditingReady(false)
+                  }}
+                  className="text-[11px] bg-background border rounded px-1 py-0.5 text-foreground"
+                />
+                <button
+                  type="button"
+                  onClick={() => setEditingReady(false)}
+                  className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
+                  aria-label="Cancel"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+                {targetReadyDate && (
+                  <button
+                    type="button"
+                    onClick={() => saveReadyDate('')}
+                    className="text-[11px] text-muted-foreground hover:text-destructive transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
+import { ExamHeatmap } from '@/components/ExamHeatmap'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
@@ -16,12 +17,9 @@ import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
+import type { QuizSession } from '@/lib/supabase'
 
 // ── Radial donut chart ─────────────────────────────────────────────────────────
-//
-// Each section occupies an arc proportional to its syllabus weight.
-// The arc's opacity encodes readiness: 0.12 (0%) → 1.0 (100%).
-// A 2-degree gap separates adjacent arcs for clarity, including the wrap-around.
 
 const CX = 80
 const CY = 80
@@ -32,7 +30,7 @@ const GAP_DEG = 2
 function degreesToRadians(deg: number) { return (deg * Math.PI) / 180 }
 
 function polarToCart(cx: number, cy: number, r: number, angleDeg: number) {
-  const a = degreesToRadians(angleDeg - 90) // start at 12 o'clock
+  const a = degreesToRadians(angleDeg - 90)
   return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) }
 }
 
@@ -65,8 +63,6 @@ function ReadinessDonut({ sections, overallPct, activeSection, onSectionHover, o
     let cursor = 0
     return sections.map((sec) => {
       const span = (sec.weight / totalWeight) * 360
-      // Apply gap uniformly to all arcs (including first and last) so the
-      // wrap-around boundary between the last and first section has a gap too.
       const startDeg = cursor + GAP_DEG / 2
       const endDeg = cursor + span - GAP_DEG / 2
       cursor += span
@@ -86,7 +82,6 @@ function ReadinessDonut({ sections, overallPct, activeSection, onSectionHover, o
         role="img"
         aria-label="Section readiness donut chart"
       >
-        {/* Track ring */}
         <circle
           cx={CX} cy={CY}
           r={(R_OUTER + R_INNER) / 2}
@@ -108,7 +103,6 @@ function ReadinessDonut({ sections, overallPct, activeSection, onSectionHover, o
         ))}
       </svg>
 
-      {/* Centre label */}
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
         {activeSec ? (
           <>
@@ -125,8 +119,6 @@ function ReadinessDonut({ sections, overallPct, activeSection, onSectionHover, o
     </div>
   )
 }
-
-// ── Helpers ────────────────────────────────────────────────────────────────────
 
 // ── Study-plan sub-components ──────────────────────────────────────────────────
 
@@ -280,6 +272,7 @@ const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
 interface Props {
   syllabus: WikiExamSyllabus
   masteryRecords: ConceptMasteryRecord[]
+  sessions: QuizSession[]
   plan: StudyPlan | null
   masteryStateByName: Map<string, MasteryState>
   config: StudyPlanConfig
@@ -291,7 +284,7 @@ interface Props {
 }
 
 export function ReadinessCard({
-  syllabus, masteryRecords, plan, masteryStateByName,
+  syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onExamDateChange,
 }: Props) {
   const navigate = useNavigate()
@@ -301,7 +294,6 @@ export function ReadinessCard({
   const [hoveredSection, setHoveredSection] = useState<number | null>(null)
   const [pinnedSection, setPinnedSection] = useState<number | null>(null)
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
-  const [planExpanded, setPlanExpanded] = useState(false)
   const [trackerConcept, setTrackerConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
   const [showConfig, setShowConfig] = useState(false)
 
@@ -326,6 +318,11 @@ export function ReadinessCard({
   const now = useMemo(() => new Date(), [])
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
 
+  const examSessions = useMemo(
+    () => sessions.filter(s => s.topic === syllabus.examTopic),
+    [sessions, syllabus.examTopic],
+  )
+
   const examRecords = useMemo(
     () => masteryRecords.filter(r => r.exam_id === progressKey),
     [masteryRecords, progressKey],
@@ -336,7 +333,6 @@ export function ReadinessCard({
     [syllabus, examRecords, now],
   )
 
-  // Progress bar aggregate (same computation as ActiveExamCard)
   const aggregate = useMemo(() => {
     const allSlugs = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
     return aggregateForTopic(examRecords, allSlugs, now)
@@ -356,7 +352,6 @@ export function ReadinessCard({
     [syllabus, examRecords],
   )
 
-  // Today's checklist concepts
   const displayConcepts = plan?.status === 'review_mode'
     ? (plan?.reviewConcepts ?? [])
     : (plan?.todaysConcepts ?? [])
@@ -394,7 +389,6 @@ export function ReadinessCard({
     setPinnedSection(prev => (prev === i ? null : i))
   }
 
-  // Start quiz filtered to today's concepts (same logic as TodayCard)
   const handleStartQuiz = useCallback(async () => {
     const displayConcepts = plan?.status === 'review_mode'
       ? (plan?.reviewConcepts ?? [])
@@ -460,6 +454,7 @@ export function ReadinessCard({
 
   return (
     <>
+      {/* Primary exam card */}
       <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-4">
           {/* Header */}
@@ -479,6 +474,16 @@ export function ReadinessCard({
               </button>
             </div>
           </div>
+
+          {/* Heatmap */}
+          <ExamHeatmap
+            sessions={examSessions}
+            examProgressKey={progressKey}
+            targetDate={examDate}
+            onTargetDateChange={onExamDateChange ?? (() => {})}
+            targetReadyDate={config.targetReadyDate}
+            onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
+          />
 
           {/* Topics mastered progress bar */}
           <div className="space-y-1.5">
@@ -528,17 +533,8 @@ export function ReadinessCard({
             )}
           </div>
 
-          {/* Body: score + donut + legend */}
+          {/* Radial progress + section legend */}
           <div className="flex items-center gap-6">
-            {/* Overall score */}
-            <div className="flex flex-col items-center justify-center gap-1 shrink-0">
-              <span className="text-4xl font-bold tabular-nums leading-none">
-                {Math.round(overallPct)}%
-              </span>
-              <span className="text-xs text-muted-foreground">overall</span>
-            </div>
-
-            {/* Radial widget */}
             <ReadinessDonut
               sections={sections}
               overallPct={overallPct}
@@ -547,7 +543,6 @@ export function ReadinessCard({
               onSectionClick={handleSectionClick}
             />
 
-            {/* Section legend */}
             <div className="flex flex-col gap-1.5 min-w-0 flex-1">
               {sections.map((sec, i) => (
                 <div
@@ -604,60 +599,48 @@ export function ReadinessCard({
           {!loading && plan?.status === 'review_mode' && (
             <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
           )}
-
-          {/* Action buttons */}
-          <div className="grid grid-cols-2 gap-2 pt-1">
-            <Button
-              variant="outline"
-              onClick={() => setConceptModalOpen(true)}
-              disabled={allConcepts.length === 0}
-              className="gap-1.5 text-sm"
-            >
-              <BookOpen className="h-4 w-4" />
-              Read concepts
-            </Button>
-            <Button
-              onClick={handleStartQuiz}
-              disabled={quizLoading}
-              className="gap-1.5 text-sm"
-            >
-              {quizLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Play className="h-4 w-4" />
-              )}
-              Start Quiz
-            </Button>
-          </div>
-
-          {/* Collapsible full study plan */}
-          {plan && (
-            <div className="border-t pt-2">
-              {planExpanded && (
-                <div className="pb-2 pt-1">
-                  <StudyPlanTracker
-                    syllabus={syllabus}
-                    masteryRecords={masteryRecords}
-                    studyPlan={plan}
-                    allConceptsForNav={allConcepts}
-                    onConceptSelect={setTrackerConcept}
-                  />
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => setPlanExpanded(v => !v)}
-                className="w-full flex items-center justify-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors py-1.5"
-              >
-                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${planExpanded ? 'rotate-180' : ''}`} />
-                {planExpanded ? 'Hide study plan' : 'Show study plan'}
-              </button>
-            </div>
-          )}
         </CardContent>
       </Card>
 
-      {/* "Read concepts" button opens from the beginning of today's concepts if available */}
+      {/* Action buttons — outside the card */}
+      <div className="grid grid-cols-2 gap-2">
+        <Button
+          variant="outline"
+          onClick={() => setConceptModalOpen(true)}
+          disabled={allConcepts.length === 0}
+          className="gap-1.5 text-sm"
+        >
+          <BookOpen className="h-4 w-4" />
+          Read concepts
+        </Button>
+        <Button
+          onClick={handleStartQuiz}
+          disabled={quizLoading}
+          className="gap-1.5 text-sm"
+        >
+          {quizLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Play className="h-4 w-4" />
+          )}
+          Start Quiz
+        </Button>
+      </div>
+
+      {/* Study plan card — standalone */}
+      <Card>
+        <CardContent className="p-5">
+          <StudyPlanTracker
+            syllabus={syllabus}
+            masteryRecords={masteryRecords}
+            studyPlan={plan}
+            allConceptsForNav={allConcepts}
+            onConceptSelect={setTrackerConcept}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Modals */}
       {conceptModalOpen && allConcepts.length > 0 && (
         <ConceptDetailModal
           conceptName={studyPlanConceptsForModal.length > 0 ? studyPlanConceptsForModal[0].name : allConcepts[0].name}
@@ -671,7 +654,6 @@ export function ReadinessCard({
         />
       )}
 
-      {/* Checklist item click — opens at that concept in study plan view */}
       {selectedConceptIdx !== null && studyPlanConceptsForModal.length > 0 && (
         <ConceptDetailModal
           conceptName={studyPlanConceptsForModal[selectedConceptIdx].name}
@@ -685,7 +667,6 @@ export function ReadinessCard({
         />
       )}
 
-      {/* Tracker concept click */}
       {trackerConcept && (
         <ConceptDetailModal
           conceptName={trackerConcept.name}
@@ -697,7 +678,6 @@ export function ReadinessCard({
         />
       )}
 
-      {/* Study plan config */}
       {showConfig && (
         <StudyPlanConfigModal
           config={config}

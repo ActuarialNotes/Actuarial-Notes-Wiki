@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle } from 'lucide-react'
-import { ActiveExamCard, ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
+import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
 import { MascotWidget } from '@/components/MascotWidget'
@@ -223,37 +223,27 @@ export default function Dashboard() {
       )}
 
       {/* Readiness card — only shown when there is an active exam */}
-      {!syllabusLoading && !masteryLoading && activeSyllabus && (
-        <ReadinessCard
-          syllabus={activeSyllabus}
-          masteryRecords={masteryRecords}
-          plan={studyPlan}
-          masteryStateByName={masteryStateByName}
-          config={planConfig}
-          loading={planLoading}
-          examDate={activeTargetDate}
-          onConfigChange={updatePlanConfig}
-          onRegenerate={regeneratePlan}
-          onExamDateChange={handleTargetDateChange}
-        />
-      )}
-
-      {/* Active exam card */}
       <div
         onTouchStart={multiExam ? handleTouchStart : undefined}
         onTouchEnd={multiExam ? handleTouchEnd : undefined}
       >
-        {syllabusLoading || sessionsLoading ? (
+        {syllabusLoading || sessionsLoading || masteryLoading ? (
           <ActiveExamCardLoading />
         ) : !activeSyllabus ? (
           <ActiveExamCardEmpty onChooseExam={() => setExamsOpen(true)} />
         ) : (
-          <ActiveExamCard
+          <ReadinessCard
             syllabus={activeSyllabus}
-            sessions={sessions}
-            targetDate={activeTargetDate}
-            onTargetDateChange={handleTargetDateChange}
             masteryRecords={masteryRecords}
+            sessions={sessions}
+            plan={studyPlan}
+            masteryStateByName={masteryStateByName}
+            config={planConfig}
+            loading={planLoading}
+            examDate={activeTargetDate}
+            onConfigChange={updatePlanConfig}
+            onRegenerate={regeneratePlan}
+            onExamDateChange={handleTargetDateChange}
           />
         )}
       </div>

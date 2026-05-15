@@ -12,7 +12,6 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { type MasteryState } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import { useQuizStore } from '@/stores/quizStore'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -206,7 +205,6 @@ export function ConceptDetailModal({
   const [localIndex, setLocalIndex] = useState(initialConceptIndex ?? 0)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const { byQuestionId } = useQuestionAttempts()
-  const startQuiz = useQuizStore(s => s.startQuiz)
 
   const effectiveConcepts = conceptFilter === 'study-plan'
     ? (studyPlanConcepts ?? allConcepts)
@@ -339,9 +337,11 @@ export function ConceptDetailModal({
 
   function handleStartQuiz() {
     if (selectedQuestions.length === 0) return
-    startQuiz(selectedQuestions, 'quiz')
+    try {
+      sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selectedQuestions.map(q => q.id)))
+    } catch { /* ignore */ }
     onClose()
-    navigate('/quiz')
+    navigate('/quiz?selection=stored')
   }
 
   return (

@@ -7,7 +7,6 @@ import type { Question, Difficulty } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { LatexText } from '@/components/LatexText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
-import { useQuizStore } from '@/stores/quizStore'
 
 // Matches a raw wiki_link value against a concept name. Handles two formats:
 //   "Concepts/Fund+Accumulation"  (hrefToEntryRef resolves the name directly)
@@ -180,7 +179,6 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
   }, [onClose])
 
   const navigate = useNavigate()
-  const startQuiz = useQuizStore(s => s.startQuiz)
 
   const allSelected = questions.length > 0 && selectedIds.size === questions.length
   const someSelected = selectedIds.size > 0 && !allSelected
@@ -209,9 +207,11 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
 
   function handleStartQuiz() {
     if (selectedQuestions.length === 0) return
-    startQuiz(selectedQuestions, 'quiz')
+    try {
+      sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selectedQuestions.map(q => q.id)))
+    } catch { /* ignore */ }
     onClose()
-    navigate('/quiz')
+    navigate('/quiz?selection=stored')
   }
 
   return (

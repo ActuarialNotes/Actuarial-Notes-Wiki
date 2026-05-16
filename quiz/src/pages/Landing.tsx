@@ -6,6 +6,8 @@ import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { useSubtopics } from '@/hooks/useSubtopics'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { aggregateForTopic } from '@/lib/mastery'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions } from '@/lib/parser'
@@ -30,7 +32,6 @@ function computeAdaptiveSubtopics(
   if (!topic || masteryRecords.length === 0) return []
   const now = new Date()
 
-  // Build subtopic → conceptSlugs from all questions for this topic
   const slugsBySubtopic = new Map<string, string[]>()
   for (const q of allQuestions) {
     if (q.topic !== topic) continue
@@ -47,7 +48,6 @@ function computeAdaptiveSubtopics(
     slugsBySubtopic.set(q.subtopic, [...(slugsBySubtopic.get(q.subtopic) ?? []), ...slugs])
   }
 
-  // Priority: 0=forgotten, 1=learning, 2=new (up to 2), 3=all-strong (skip)
   interface Scored { subtopic: string; priority: number }
   const scored: Scored[] = subtopics.map(st => {
     const slugs = slugsBySubtopic.get(st) ?? []
@@ -79,17 +79,18 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Financial Mathematics': 35,
 }
 
+const QUICK_COUNTS = [3, 5, 10]
+
 export default function Landing() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const { progress: examProgress } = useExamProgress()
+  const { progress: examProgress, targetDates } = useExamProgress()
   const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
+  const { syllabi } = useWikiSyllabus()
 
-  // Allow other surfaces (e.g. the Active Exam Card on the dashboard) to pre-fill
-  // the launcher by linking to /?topic=...&mode=mock-exam.
   const initialTopic = searchParams.get('topic') ?? ''
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
 
@@ -109,9 +110,9 @@ export default function Landing() {
   const [isAdaptive, setIsAdaptive] = useState(false)
   const [count, setCount] = useState<number>(10)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
+  const [showAllTopics, setShowAllTopics] = useState(false)
 
-  // Pre-select first in-progress exam when progress loads — but skip when an
-  // explicit ?topic= URL param already set the selection.
+  // Pre-select first in-progress exam when progress loads
   useEffect(() => {
     if (initialTopic) return
     if (inProgressExams.length > 0) {
@@ -120,25 +121,95 @@ export default function Landing() {
     }
   }, [examProgress.P, examProgress.FM])  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reset subtopic selection when exam topic or mode changes — mock-exam ignores
-  // subtopic filters, so leaving stale chips selected is misleading.
+  // Reset subtopic selection and show-all state when exam topic or mode changes
   useEffect(() => {
     setSelectedSubtopics([])
     setIsAdaptive(false)
+    setShowAllTopics(false)
   }, [topic, mode])
 
-  // Auto-select subtopics based on mastery progress for logged-in users in quiz mode.
-  // Runs after mastery data and subtopics both finish loading.
+  // --- Syllabus-derived data ---
+
+  const syllabusForTopic = useMemo(
+    () => syllabi.find(s => s.examTopic === topic) ?? null,
+    [syllabi, topic],
+  )
+
+  const examIdForPlan = useMemo(
+    () => Object.entries(EXAM_ID_TO_TOPIC).find(([, t]) => t === topic)?.[0] ?? null,
+    [topic],
+  )
+  const examDateForPlan = examIdForPlan ? (targetDates[examIdForPlan] ?? null) : null
+
+  const { plan, loading: planLoading } = useStudyPlan(
+    syllabusForTopic,
+    masteryRecords,
+    examDateForPlan,
+  )
+
+  // Subtopics sorted by their position in the exam syllabus
+  const orderedSubtopics = useMemo(() => {
+    const sts = subtopicsByTopic[topic] ?? []
+    if (!syllabusForTopic) return sts
+
+    const conceptToIdx = new Map<string, number>()
+    syllabusForTopic.topics.forEach((t, idx) => {
+      conceptToIdx.set(t.name.toLowerCase(), idx)
+      t.concepts.forEach(c => conceptToIdx.set(c.name.toLowerCase(), idx))
+    })
+
+    const getIdx = (st: string): number => {
+      const exact = conceptToIdx.get(st.toLowerCase())
+      if (exact !== undefined) return exact
+      const stLower = st.toLowerCase()
+      for (const [key, idx] of conceptToIdx) {
+        if (stLower.includes(key) || key.includes(stLower)) return idx
+      }
+      return Number.MAX_SAFE_INTEGER
+    }
+
+    return [...sts].sort((a, b) => {
+      const diff = getIdx(a) - getIdx(b)
+      return diff !== 0 ? diff : a.localeCompare(b)
+    })
+  }, [subtopicsByTopic, topic, syllabusForTopic])
+
+  // Subtopics that have questions covering today's planned concepts
+  const todaySubtopics = useMemo(() => {
+    if (!plan?.todaysConcepts?.length) return new Set<string>()
+    const todaySet = new Set(plan.todaysConcepts.map(c => c.toLowerCase()))
+    const result = new Set<string>()
+    for (const q of allQuestions) {
+      if (q.topic !== topic) continue
+      for (const link of q.wiki_link) {
+        const ref = hrefToEntryRef(link)
+        const name = ref?.name ?? (link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '')
+        if (todaySet.has(name.toLowerCase())) {
+          result.add(q.subtopic)
+          break
+        }
+      }
+    }
+    return result
+  }, [plan, allQuestions, topic])
+
+  // Auto-select: prefer today's study plan topics; fall back to mastery-based selection
   useEffect(() => {
-    if (!user || masteryLoading || subtopicsLoading || mode !== 'quiz' || !topic) return
-    const subtopics = subtopicsByTopic[topic] ?? []
-    const adaptive = computeAdaptiveSubtopics(subtopics, allQuestions, topic, masteryRecords)
-    if (adaptive.length > 0) {
-      setSelectedSubtopics(adaptive)
+    if (!user || masteryLoading || subtopicsLoading || planLoading || mode !== 'quiz' || !topic) return
+
+    if (todaySubtopics.size > 0) {
+      setSelectedSubtopics([...todaySubtopics])
       setIsAdaptive(true)
+    } else {
+      const sts = subtopicsByTopic[topic] ?? []
+      const adaptive = computeAdaptiveSubtopics(sts, allQuestions, topic, masteryRecords)
+      if (adaptive.length > 0) {
+        setSelectedSubtopics(adaptive)
+        setIsAdaptive(true)
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic, mode, user?.id, masteryLoading, subtopicsLoading, masteryRecords.length])
+  }, [topic, mode, user?.id, masteryLoading, subtopicsLoading, planLoading, todaySubtopics.size])
 
   // Compute available question count for the current filters
   const availableCount = useMemo(() => {
@@ -171,7 +242,6 @@ export default function Landing() {
       params.set('count', String(count))
       params.set('reveal', reveal)
     } else {
-      // mock-exam: fixed question count mirroring real exam, reveal only at end
       params.set('count', String(MOCK_EXAM_QUESTIONS[topic] ?? 30))
     }
 
@@ -183,6 +253,20 @@ export default function Landing() {
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
   const examColor = getExamColor(topic)
   const hasTopic = topic !== ''
+
+  // Topics visible in the bubble list
+  const hasShowAllToggle = todaySubtopics.size > 0 && orderedSubtopics.length > todaySubtopics.size
+  const displayedSubtopics = showAllTopics || todaySubtopics.size === 0
+    ? orderedSubtopics
+    : orderedSubtopics.filter(s => todaySubtopics.has(s))
+
+  const topicsLabel = selectedSubtopics.length === 0
+    ? '(all included)'
+    : isAdaptive && todaySubtopics.size > 0
+      ? `(${todaySubtopics.size} from today's plan)`
+      : isAdaptive
+        ? `(${selectedSubtopics.length} auto-selected)`
+        : `${selectedSubtopics.length} selected`
 
   return (
     <div className="container max-w-2xl mx-auto px-4 py-12 space-y-8">
@@ -267,140 +351,171 @@ export default function Landing() {
                 <span>· change</span>
               </button>
 
-          {/* Mode selector */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Mode</label>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setMode('quiz')}
-                className={`px-3 py-3 rounded-lg border text-left text-sm transition-colors ${
-                  mode === 'quiz'
-                    ? 'border-primary bg-primary/5 text-primary font-medium'
-                    : 'border-input hover:bg-accent'
-                }`}
-              >
-                <div className="font-medium">Quiz</div>
-                <div className="text-xs text-muted-foreground mt-0.5">Choose topics, count &amp; reveal</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode('mock-exam')}
-                className={`px-3 py-3 rounded-lg border text-left text-sm transition-colors ${
-                  mode === 'mock-exam'
-                    ? 'border-primary bg-primary/5 text-primary font-medium'
-                    : 'border-input hover:bg-accent'
-                }`}
-              >
-                <div className="font-medium">Mock Exam</div>
-                <div className="text-xs text-muted-foreground mt-0.5">Mirrors real exam, answers at end</div>
-              </button>
-            </div>
-          </div>
-
-          {/* ── Quiz mode options ──────────────────────────────────── */}
-          {mode === 'quiz' && (
-            <>
-              {/* Topics */}
+              {/* Mode selector */}
               <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  Topics
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    {selectedSubtopics.length === 0
-                      ? '(all included)'
-                      : isAdaptive
-                        ? `(${selectedSubtopics.length} auto-selected)`
-                        : `${selectedSubtopics.length} selected`}
-                  </span>
-                </label>
-                {subtopicsLoading && subtopics.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">Loading topics…</p>
-                ) : (
-                  <div className="flex flex-wrap gap-2">
-                    {subtopics.map(subtopic => (
-                      <button
-                        key={subtopic}
-                        type="button"
-                        onClick={() => toggleSubtopic(subtopic)}
-                        className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
-                          selectedSubtopics.includes(subtopic)
-                            ? 'border-primary bg-primary text-primary-foreground'
-                            : 'border-input hover:bg-accent'
-                        }`}
-                      >
-                        {subtopic}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Number of questions */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium">Number of Questions</label>
-                  <span className="text-sm font-medium tabular-nums">
-                    {availableCount > 0
-                      ? count >= availableCount
-                        ? `All (${availableCount})`
-                        : count
-                      : '—'}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={1}
-                  max={availableCount > 0 ? availableCount : 1}
-                  value={availableCount > 0 ? Math.min(count, availableCount) : 1}
-                  onChange={e => setCount(Number(e.target.value))}
-                  disabled={availableCount === 0}
-                  className="w-full accent-foreground"
-                />
-              </div>
-
-              {/* Reveal answers */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Reveal Answers</label>
+                <label className="text-sm font-medium">Mode</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => setReveal('during')}
-                    className={`px-3 py-2.5 rounded-lg border text-left text-sm transition-colors ${
-                      reveal === 'during'
+                    onClick={() => setMode('quiz')}
+                    className={`px-3 py-3 rounded-lg border text-left text-sm transition-colors ${
+                      mode === 'quiz'
                         ? 'border-primary bg-primary/5 text-primary font-medium'
                         : 'border-input hover:bg-accent'
                     }`}
                   >
-                    <div className="font-medium text-sm">After each question</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">See explanation immediately</div>
+                    <div className="font-medium">Quiz</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">Choose topics, count &amp; reveal</div>
                   </button>
                   <button
                     type="button"
-                    onClick={() => setReveal('end')}
-                    className={`px-3 py-2.5 rounded-lg border text-left text-sm transition-colors ${
-                      reveal === 'end'
+                    onClick={() => setMode('mock-exam')}
+                    className={`px-3 py-3 rounded-lg border text-left text-sm transition-colors ${
+                      mode === 'mock-exam'
                         ? 'border-primary bg-primary/5 text-primary font-medium'
                         : 'border-input hover:bg-accent'
                     }`}
                   >
-                    <div className="font-medium text-sm">At the end</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">Review all after finishing</div>
+                    <div className="font-medium">Mock Exam</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">Mirrors real exam, answers at end</div>
                   </button>
                 </div>
               </div>
-            </>
-          )}
 
-          {/* ── Mock Exam mode info ────────────────────────────────── */}
-          {mode === 'mock-exam' && (
-            <div className="rounded-lg border bg-muted/40 px-4 py-3 space-y-1">
-              <p className="text-sm font-medium">{mockExamCount} questions</p>
-              <p className="text-xs text-muted-foreground">
-                Distributed across all {examLabel} topics to mirror the real exam.
-                Answers and explanations are revealed at the end.
-              </p>
-            </div>
-          )}
+              {/* ── Quiz mode options ──────────────────────────────────── */}
+              {mode === 'quiz' && (
+                <>
+                  {/* Topics */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-sm font-medium">
+                        Topics
+                        <span className="ml-2 text-xs font-normal text-muted-foreground">
+                          {topicsLabel}
+                        </span>
+                      </label>
+                      {hasShowAllToggle && (
+                        <button
+                          type="button"
+                          onClick={() => setShowAllTopics(v => !v)}
+                          className="shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          {showAllTopics ? 'Show less' : 'Show all topics'}
+                        </button>
+                      )}
+                    </div>
+                    {subtopicsLoading && subtopics.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">Loading topics…</p>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {displayedSubtopics.map(subtopic => {
+                          const isSelected = selectedSubtopics.includes(subtopic)
+                          const isToday = todaySubtopics.has(subtopic)
+                          return (
+                            <button
+                              key={subtopic}
+                              type="button"
+                              onClick={() => toggleSubtopic(subtopic)}
+                              className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
+                                isSelected
+                                  ? 'border-primary bg-primary text-primary-foreground'
+                                  : showAllTopics && isToday
+                                    ? 'border-primary/50 bg-primary/10 text-primary hover:bg-primary/20'
+                                    : 'border-input hover:bg-accent'
+                              }`}
+                            >
+                              {subtopic}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Number of questions */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium">Number of Questions</label>
+                      <span className="text-sm font-medium tabular-nums">
+                        {availableCount > 0
+                          ? count >= availableCount
+                            ? `All (${availableCount})`
+                            : count
+                          : '—'}
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min={1}
+                      max={availableCount > 0 ? availableCount : 1}
+                      value={availableCount > 0 ? Math.min(count, availableCount) : 1}
+                      onChange={e => setCount(Number(e.target.value))}
+                      disabled={availableCount === 0}
+                      className="w-full accent-foreground"
+                    />
+                    {/* Quick-select presets */}
+                    <div className="flex gap-2">
+                      {QUICK_COUNTS.map(n => (
+                        <button
+                          key={n}
+                          type="button"
+                          onClick={() => setCount(Math.min(n, availableCount > 0 ? availableCount : n))}
+                          disabled={availableCount === 0}
+                          className={`px-3 py-1 rounded-md border text-xs font-medium transition-colors ${
+                            count === n && availableCount >= n
+                              ? 'border-primary bg-primary text-primary-foreground'
+                              : 'border-input hover:bg-accent text-muted-foreground'
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Reveal answers */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Reveal Answers</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setReveal('during')}
+                        className={`px-3 py-2.5 rounded-lg border text-left text-sm transition-colors ${
+                          reveal === 'during'
+                            ? 'border-primary bg-primary/5 text-primary font-medium'
+                            : 'border-input hover:bg-accent'
+                        }`}
+                      >
+                        <div className="font-medium text-sm">After each question</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">See explanation immediately</div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setReveal('end')}
+                        className={`px-3 py-2.5 rounded-lg border text-left text-sm transition-colors ${
+                          reveal === 'end'
+                            ? 'border-primary bg-primary/5 text-primary font-medium'
+                            : 'border-input hover:bg-accent'
+                        }`}
+                      >
+                        <div className="font-medium text-sm">At the end</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">Review all after finishing</div>
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* ── Mock Exam mode info ────────────────────────────────── */}
+              {mode === 'mock-exam' && (
+                <div className="rounded-lg border bg-muted/40 px-4 py-3 space-y-1">
+                  <p className="text-sm font-medium">{mockExamCount} questions</p>
+                  <p className="text-xs text-muted-foreground">
+                    Distributed across all {examLabel} topics to mirror the real exam.
+                    Answers and explanations are revealed at the end.
+                  </p>
+                </div>
+              )}
 
               <Button onClick={handleStart} className="w-full" size="lg">
                 Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}

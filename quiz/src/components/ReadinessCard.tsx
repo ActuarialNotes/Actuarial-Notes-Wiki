@@ -454,6 +454,65 @@ export function ReadinessCard({
 
   return (
     <div className="space-y-4">
+      {/* Today's Study Plan card — first */}
+      {displayConcepts.length > 0 && (
+        <Card>
+          <CardContent className="p-5 space-y-3">
+            <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+            <div className="space-y-0.5">
+              {displayConcepts.map((name, idx) => {
+                const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                const isCompleted =
+                  completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                  STATE_ORDER[currentState] >= STATE_ORDER[target]
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => setSelectedConceptIdx(idx)}
+                    className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                  >
+                    {isCompleted
+                      ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                      : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                    <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
+                      {name}
+                    </span>
+                    <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Action buttons */}
+      <div className="grid grid-cols-2 gap-2">
+        <Button
+          variant="outline"
+          onClick={() => setConceptModalOpen(true)}
+          disabled={allConcepts.length === 0}
+          className="gap-1.5 text-sm"
+        >
+          <BookOpen className="h-4 w-4" />
+          Read concepts
+        </Button>
+        <Button
+          onClick={handleStartQuiz}
+          disabled={quizLoading}
+          className="gap-1.5 text-sm"
+        >
+          {quizLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Play className="h-4 w-4" />
+          )}
+          Start Quiz
+        </Button>
+      </div>
+
       {/* Primary exam card */}
       <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-4">
@@ -572,90 +631,6 @@ export function ReadinessCard({
           )}
         </CardContent>
       </Card>
-
-      {/* Today's Study Plan card */}
-      {displayConcepts.length > 0 && (
-        <Card>
-          <CardContent className="p-5 space-y-3">
-            <h3 className="text-sm font-semibold">Today's Study Plan</h3>
-            <div className="space-y-0.5">
-              {displayConcepts.map((name, idx) => {
-                const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                const isCompleted =
-                  completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-                  STATE_ORDER[currentState] >= STATE_ORDER[target]
-                return (
-                  <button
-                    key={name}
-                    type="button"
-                    onClick={() => setSelectedConceptIdx(idx)}
-                    className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
-                  >
-                    {isCompleted
-                      ? <Check className="h-4 w-4 text-green-500 shrink-0" />
-                      : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
-                    <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
-                      {name}
-                    </span>
-                    <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
-                  </button>
-                )
-              })}
-            </div>
-            <div className="grid grid-cols-2 gap-2 pt-1">
-              <Button
-                variant="outline"
-                onClick={() => setConceptModalOpen(true)}
-                disabled={allConcepts.length === 0}
-                className="gap-1.5 text-sm"
-              >
-                <BookOpen className="h-4 w-4" />
-                Read concepts
-              </Button>
-              <Button
-                onClick={handleStartQuiz}
-                disabled={quizLoading}
-                className="gap-1.5 text-sm"
-              >
-                {quizLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Play className="h-4 w-4" />
-                )}
-                Start Quiz
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Action buttons — shown when no study plan concepts */}
-      {displayConcepts.length === 0 && (
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setConceptModalOpen(true)}
-            disabled={allConcepts.length === 0}
-            className="gap-1.5 text-sm"
-          >
-            <BookOpen className="h-4 w-4" />
-            Read concepts
-          </Button>
-          <Button
-            onClick={handleStartQuiz}
-            disabled={quizLoading}
-            className="gap-1.5 text-sm"
-          >
-            {quizLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Play className="h-4 w-4" />
-            )}
-            Start Quiz
-          </Button>
-        </div>
-      )}
 
       {/* Study plan card — standalone */}
       <Card>

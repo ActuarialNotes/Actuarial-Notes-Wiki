@@ -412,14 +412,9 @@ export function ReadinessCard({
         return r.replace(/-/g, ' ').toLowerCase()
       }
 
-      const filtered = all.filter(q => {
-        const names = q.wiki_link.map(linkToName)
-        if (!names.some(n => todaySet.has(n))) return false
-        return !names.some(n => {
-          if (todaySet.has(n)) return false
-          return STATE_ORDER[masteryStateByName.get(n) ?? 'new'] < 1
-        })
-      })
+      const filtered = all.filter(q =>
+        q.wiki_link.map(linkToName).some(n => todaySet.has(n))
+      )
 
       if (filtered.length === 0) {
         navigate(`/quiz?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz&from=dashboard`)

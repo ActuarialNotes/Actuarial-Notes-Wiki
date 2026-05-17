@@ -108,6 +108,7 @@ export default function Quiz() {
     const from = searchParams.get('from')
     if (from === 'browse') navigate('/browse')
     else if (from === 'dashboard') navigate('/dashboard')
+    else if (from && from.startsWith('/')) navigate(from)
     else navigate('/')
   }
 

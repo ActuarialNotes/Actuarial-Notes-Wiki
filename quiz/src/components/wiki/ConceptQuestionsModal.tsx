@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Loader2, Play, X } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
@@ -145,6 +145,7 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const location = useLocation()
 
   useEffect(() => {
     let cancelled = false
@@ -210,8 +211,9 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selectedQuestions.map(q => q.id)))
     } catch { /* ignore */ }
+    const returnTo = location.pathname + location.search
     onClose()
-    navigate('/quiz?selection=stored')
+    navigate(`/quiz?selection=stored&from=${encodeURIComponent(returnTo)}`)
   }
 
   return (

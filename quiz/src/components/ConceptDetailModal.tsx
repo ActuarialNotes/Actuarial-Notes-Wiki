@@ -180,6 +180,7 @@ interface Props {
   studyPlanConcepts?: { name: string; state: MasteryState }[]
   initialConceptIndex?: number
   initialFilter?: ConceptFilter
+  quizFrom?: string
 }
 
 export function ConceptDetailModal({
@@ -191,6 +192,7 @@ export function ConceptDetailModal({
   studyPlanConcepts,
   initialConceptIndex,
   initialFilter,
+  quizFrom,
 }: Props) {
   const [content, setContent] = useState<string | null>(null)
   const [contentStatus, setContentStatus] = useState<'loading' | 'error' | 'idle'>('loading')
@@ -341,7 +343,7 @@ export function ConceptDetailModal({
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selectedQuestions.map(q => q.id)))
     } catch { /* ignore */ }
     onClose()
-    navigate('/quiz?selection=stored')
+    navigate('/quiz?selection=stored' + (quizFrom ? `&from=${quizFrom}` : ''))
   }
 
   return (

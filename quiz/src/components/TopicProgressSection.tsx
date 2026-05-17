@@ -303,6 +303,7 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
           syllabus={syllabus}
           allConcepts={allConcepts}
           initialConceptIndex={selectedConcept.index}
+          quizFrom="dashboard"
         />
       )}
     </>

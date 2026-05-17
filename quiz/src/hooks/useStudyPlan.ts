@@ -95,12 +95,17 @@ export function useStudyPlan(
 
     setLoading(true)
 
+    // Read config directly from localStorage so a transient DEFAULT_CONFIG in React
+    // state (set when examId was null on first render) never causes a false cache miss.
+    // The `config` dependency below still triggers re-generation on user config changes.
+    const effectiveConfig = loadStudyPlanConfig(examId)
+
     // Try cache first (same-day stability)
     const cached = loadCachedStudyPlan(examId)
     if (cached && cached.generatedDate === todayISO()) {
       if (
-        cached.config.targetReadyDate === config.targetReadyDate &&
-        cached.config.targetStrengthLevel === config.targetStrengthLevel
+        cached.config.targetReadyDate === effectiveConfig.targetReadyDate &&
+        cached.config.targetStrengthLevel === effectiveConfig.targetStrengthLevel
       ) {
         setPlan(cached)
         setLoading(false)
@@ -109,7 +114,7 @@ export function useStudyPlan(
     }
 
     // Generate fresh
-    const fresh = generateStudyPlan({ examId, syllabus, masteryRecords, config, examDate })
+    const fresh = generateStudyPlan({ examId, syllabus, masteryRecords, config: effectiveConfig, examDate })
     saveCachedStudyPlan(fresh)
     setPlan(fresh)
     setLoading(false)

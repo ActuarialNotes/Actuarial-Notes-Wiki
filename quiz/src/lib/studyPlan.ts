@@ -101,7 +101,7 @@ export function formatReadableDate(iso: string): string {
 // ── localStorage helpers ──────────────────────────────────────────────────────
 
 const CONFIG_KEY = 'actuarial_study_plan_config_v1_'
-const PLAN_KEY   = 'actuarial_study_plan_v1_'
+const PLAN_KEY   = 'actuarial_study_plan_v2_'
 
 export function loadStudyPlanConfig(examId: string): StudyPlanConfig {
   try {

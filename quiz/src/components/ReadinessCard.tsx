@@ -453,7 +453,7 @@ export function ReadinessCard({
   }, [plan, navigate, syllabus.examTopic, masteryStateByName])
 
   return (
-    <>
+    <div className="space-y-4">
       {/* Primary exam card */}
       <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-4">
@@ -563,8 +563,21 @@ export function ReadinessCard({
             </div>
           </div>
 
-          {/* Today's study plan checklist */}
-          {displayConcepts.length > 0 && (
+          {/* Warnings */}
+          {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
+            <BehindWarning plan={plan} />
+          )}
+          {!loading && plan?.status === 'review_mode' && (
+            <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Today's Study Plan card */}
+      {displayConcepts.length > 0 && (
+        <Card>
+          <CardContent className="p-5 space-y-3">
+            <h3 className="text-sm font-semibold">Today's Study Plan</h3>
             <div className="space-y-0.5">
               {displayConcepts.map((name, idx) => {
                 const target = targetByName.get(name.toLowerCase()) ?? 'level1'
@@ -590,42 +603,59 @@ export function ReadinessCard({
                 )
               })}
             </div>
-          )}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <Button
+                variant="outline"
+                onClick={() => setConceptModalOpen(true)}
+                disabled={allConcepts.length === 0}
+                className="gap-1.5 text-sm"
+              >
+                <BookOpen className="h-4 w-4" />
+                Read concepts
+              </Button>
+              <Button
+                onClick={handleStartQuiz}
+                disabled={quizLoading}
+                className="gap-1.5 text-sm"
+              >
+                {quizLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Play className="h-4 w-4" />
+                )}
+                Start Quiz
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
-          {/* Warnings */}
-          {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
-            <BehindWarning plan={plan} />
-          )}
-          {!loading && plan?.status === 'review_mode' && (
-            <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Action buttons — outside the card */}
-      <div className="grid grid-cols-2 gap-2">
-        <Button
-          variant="outline"
-          onClick={() => setConceptModalOpen(true)}
-          disabled={allConcepts.length === 0}
-          className="gap-1.5 text-sm"
-        >
-          <BookOpen className="h-4 w-4" />
-          Read concepts
-        </Button>
-        <Button
-          onClick={handleStartQuiz}
-          disabled={quizLoading}
-          className="gap-1.5 text-sm"
-        >
-          {quizLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Play className="h-4 w-4" />
-          )}
-          Start Quiz
-        </Button>
-      </div>
+      {/* Action buttons — shown when no study plan concepts */}
+      {displayConcepts.length === 0 && (
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setConceptModalOpen(true)}
+            disabled={allConcepts.length === 0}
+            className="gap-1.5 text-sm"
+          >
+            <BookOpen className="h-4 w-4" />
+            Read concepts
+          </Button>
+          <Button
+            onClick={handleStartQuiz}
+            disabled={quizLoading}
+            className="gap-1.5 text-sm"
+          >
+            {quizLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
+            Start Quiz
+          </Button>
+        </div>
+      )}
 
       {/* Study plan card — standalone */}
       <Card>
@@ -692,6 +722,6 @@ export function ReadinessCard({
           onClose={() => setShowConfig(false)}
         />
       )}
-    </>
+    </div>
   )
 }

@@ -395,7 +395,7 @@ export function ReadinessCard({
       : (plan?.todaysConcepts ?? [])
 
     if (!plan || displayConcepts.length === 0) {
-      navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}`)
+      navigate(`/quiz?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz&from=dashboard`)
       return
     }
 
@@ -422,7 +422,7 @@ export function ReadinessCard({
       })
 
       if (filtered.length === 0) {
-        navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}`)
+        navigate(`/quiz?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz&from=dashboard`)
         return
       }
 
@@ -444,9 +444,9 @@ export function ReadinessCard({
       })
 
       const ids = filtered.map(q => q.id).join(',')
-      navigate(`/quiz?ids=${ids}`)
+      navigate(`/quiz?ids=${ids}&from=dashboard`)
     } catch {
-      navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}`)
+      navigate(`/quiz?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz&from=dashboard`)
     } finally {
       setQuizLoading(false)
     }
@@ -656,6 +656,7 @@ export function ReadinessCard({
           studyPlanConcepts={studyPlanConceptsForModal.length > 0 ? studyPlanConceptsForModal : undefined}
           initialConceptIndex={0}
           initialFilter={studyPlanConceptsForModal.length > 0 ? 'study-plan' : 'entire-syllabus'}
+          quizFrom="dashboard"
         />
       )}
 
@@ -669,6 +670,7 @@ export function ReadinessCard({
           studyPlanConcepts={studyPlanConceptsForModal}
           initialConceptIndex={selectedConceptIdx}
           initialFilter="study-plan"
+          quizFrom="dashboard"
         />
       )}
 
@@ -680,6 +682,7 @@ export function ReadinessCard({
           syllabus={syllabus}
           allConcepts={allConcepts}
           initialConceptIndex={trackerConcept.index}
+          quizFrom="dashboard"
         />
       )}
 

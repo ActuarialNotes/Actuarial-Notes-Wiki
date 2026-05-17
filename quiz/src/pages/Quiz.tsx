@@ -105,7 +105,10 @@ export default function Quiz() {
   function handleQuit() {
     try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
     resetQuiz()
-    navigate(searchParams.get('from') === 'browse' ? '/browse' : '/')
+    const from = searchParams.get('from')
+    if (from === 'browse') navigate('/browse')
+    else if (from === 'dashboard') navigate('/dashboard')
+    else navigate('/')
   }
 
   function handleSelectAnswer(key: string) {

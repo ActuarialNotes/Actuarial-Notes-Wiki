@@ -373,6 +373,7 @@ export function TodayCard({
             syllabus={syllabus}
             allConcepts={allSyllabusConceptsForModal}
             initialConceptIndex={trackerConcept.index}
+            quizFrom="dashboard"
           />
         )}
 
@@ -544,6 +545,7 @@ export function TodayCard({
           studyPlanConcepts={studyPlanConceptsForModal}
           initialConceptIndex={selectedStudyPlanIdx}
           initialFilter="study-plan"
+          quizFrom="dashboard"
         />
       )}
 
@@ -555,6 +557,7 @@ export function TodayCard({
           syllabus={syllabus}
           allConcepts={allSyllabusConceptsForModal}
           initialConceptIndex={trackerConcept.index}
+          quizFrom="dashboard"
         />
       )}
 

@@ -54,6 +54,7 @@ export default function Dashboard() {
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
+  const [startQuizCounter, setStartQuizCounter] = useState(0)
 
   // Re-fetch mastery after a quiz completes so masteryStateByName reflects
   // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
@@ -102,11 +103,19 @@ export default function Dashboard() {
   // Handle navigation state from header pill quick-actions
   useEffect(() => {
     const st = location.state as Record<string, unknown> | null
-    if (!st?.openConceptsFor) return
-    const key = st.openConceptsFor as string
-    const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
-    if (idx >= 0) setActiveExamIdx(idx)
-    setConceptsOpenCounter(c => c + 1)
+    if (!st?.openConceptsFor && !st?.autoStartQuiz) return
+    if (st.openConceptsFor) {
+      const key = st.openConceptsFor as string
+      const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
+      if (idx >= 0) setActiveExamIdx(idx)
+      setConceptsOpenCounter(c => c + 1)
+    }
+    if (st.autoStartQuiz) {
+      const key = st.autoStartQuiz as string
+      const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
+      if (idx >= 0) setActiveExamIdx(idx)
+      setStartQuizCounter(c => c + 1)
+    }
     navigate(location.pathname, { state: null, replace: true })
   }, [location.state, location.pathname, navigate, inProgressSyllabi])
 
@@ -268,6 +277,7 @@ export default function Dashboard() {
             onRegenerate={regeneratePlan}
             onExamDateChange={handleTargetDateChange}
             openConceptsTrigger={conceptsOpenCounter}
+            startQuizTrigger={startQuizCounter}
           />
         )}
       </div>

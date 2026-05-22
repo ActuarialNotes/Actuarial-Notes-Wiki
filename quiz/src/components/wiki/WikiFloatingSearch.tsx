@@ -1,11 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { fetchAllQuestions } from '@/lib/github'
+import { parseAllQuestions, filterQuestions } from '@/lib/parser'
+import type { Question } from '@/lib/parser'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { QuestionSearchRow } from '@/components/QuestionSearchRow'
 
 type Scope = 'page' | 'all'
+type ContentMode = 'concepts' | 'questions'
 
 interface WikiFloatingSearchProps {
   pageRefs: WikiEntryRef[]
@@ -15,10 +20,15 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
+  const [contentMode, setContentMode] = useState<ContentMode>('concepts')
   const [active, setActive] = useState(false)
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const questionsFetchedRef = useRef(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const location = useLocation()
+  const navigate = useNavigate()
   const { openAt } = useConceptPopup()
 
   useEffect(() => {
@@ -29,10 +39,23 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
     return () => { cancelled = true }
   }, [])
 
+  // Lazy-load questions only when the user first switches to Questions mode
+  useEffect(() => {
+    if (contentMode !== 'questions' || questionsFetchedRef.current) return
+    questionsFetchedRef.current = true
+    let cancelled = false
+    fetchAllQuestions()
+      .then(raw => { if (!cancelled) setQuestions(parseAllQuestions(raw)) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [contentMode])
+
   useEffect(() => {
     setQuery('')
     setScope('page')
+    setContentMode('concepts')
     setActive(false)
+    setSelectedIds(new Set())
   }, [location.pathname])
 
   useEffect(() => {
@@ -61,12 +84,32 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
     inputRef.current?.blur()
   }
 
+  function toggleSelect(id: string) {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  function handleStartQuiz() {
+    const ids = [...selectedIds]
+    const storageTopic = questions.find(q => selectedIds.has(q.id))?.topic ?? 'Probability'
+    try {
+      sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
+    } catch { /* ignore */ }
+    navigate(`/quiz?mode=quiz&selection=stored&topic=${encodeURIComponent(storageTopic)}&reveal=during&from=browse`)
+    setSelectedIds(new Set())
+    dismiss()
+  }
+
   const hasQuery = query.trim().length > 0
   const pageDisabled = pageRefs.length === 0
 
-  const results = useMemo(() => {
+  const conceptResults = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return []
+    if (!q || contentMode !== 'concepts') return []
 
     let pool: WikiIndexItem[]
     if (scope === 'page') {
@@ -86,7 +129,13 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
       })
       .sort((a, b) => (a.title ?? a.name).localeCompare(b.title ?? b.name))
       .slice(0, 30)
-  }, [index, query, scope, pageRefs])
+  }, [index, query, scope, pageRefs, contentMode])
+
+  const questionResults = useMemo(() => {
+    const q = query.trim()
+    if (!q || contentMode !== 'questions') return []
+    return filterQuestions(questions, { search: q }).slice(0, 20)
+  }, [questions, query, contentMode])
 
   const isExpanded = active && hasQuery
 
@@ -105,7 +154,6 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
 
   return (
     <>
-      {/* Backdrop blur overlay — behind the header (z-40), above page content (z-0) */}
       {isExpanded && (
         <div
           className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm"
@@ -113,7 +161,6 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
         />
       )}
 
-      {/* Floating search header */}
       <div
         ref={containerRef}
         className="sticky top-14 lg:top-0 z-50 border-b bg-background/90 backdrop-blur-md"
@@ -145,50 +192,114 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
             )}
           </div>
 
-          {/* Scope toggle + results — only when query is non-empty */}
+          {/* Dropdown — only when query is non-empty */}
           {isExpanded && (
             <div className="border-t pb-3">
-              {/* Scope toggle pills */}
-              <div className="flex gap-1.5 py-2.5">
+              {/* Filter pills row */}
+              <div className="flex flex-wrap gap-1.5 py-2.5">
+                {/* Scope pills — only for Concepts mode */}
+                {contentMode === 'concepts' && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setScope('page')}
+                      disabled={pageDisabled}
+                      className={
+                        'px-3 py-1 rounded-full text-xs font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed ' +
+                        (scope === 'page'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-accent hover:bg-accent/80 text-foreground')
+                      }
+                    >
+                      This Page
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setScope('all')}
+                      className={
+                        'px-3 py-1 rounded-full text-xs font-medium transition-colors ' +
+                        (scope === 'all'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-accent hover:bg-accent/80 text-foreground')
+                      }
+                    >
+                      Everywhere
+                    </button>
+                    <span className="w-px bg-border mx-0.5 self-stretch" />
+                  </>
+                )}
+                {/* Content mode pills */}
                 <button
                   type="button"
-                  onClick={() => setScope('page')}
-                  disabled={pageDisabled}
+                  onClick={() => setContentMode('concepts')}
                   className={
-                    'px-3 py-1 rounded-full text-xs font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed ' +
-                    (scope === 'page'
+                    'px-3 py-1 rounded-full text-xs font-medium transition-colors ' +
+                    (contentMode === 'concepts'
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-accent hover:bg-accent/80 text-foreground')
                   }
                 >
-                  This Page
+                  Concepts
                 </button>
                 <button
                   type="button"
-                  onClick={() => setScope('all')}
+                  onClick={() => setContentMode('questions')}
                   className={
                     'px-3 py-1 rounded-full text-xs font-medium transition-colors ' +
-                    (scope === 'all'
+                    (contentMode === 'questions'
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-accent hover:bg-accent/80 text-foreground')
                   }
                 >
-                  Everywhere
+                  Questions
                 </button>
               </div>
 
-              {/* Results list */}
-              <ul className="space-y-0.5 max-h-[60vh] overflow-y-auto">
-                {results.length === 0 ? (
-                  <li className="text-xs text-muted-foreground px-2 py-2">No matches.</li>
-                ) : (
-                  results.map(item => (
-                    <li key={`${item.category}:${item.path}`}>
-                      <SearchResultRow item={item} query={query} onSelect={dismiss} onConceptSelect={handleConceptSelect} />
-                    </li>
-                  ))
-                )}
-              </ul>
+              {/* Results */}
+              {contentMode === 'concepts' ? (
+                <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
+                  {conceptResults.length === 0 ? (
+                    <li className="text-xs text-muted-foreground px-2 py-2">No matches.</li>
+                  ) : (
+                    conceptResults.map(item => (
+                      <li key={`${item.category}:${item.path}`}>
+                        <ConceptResultRow item={item} query={query} onSelect={dismiss} onConceptSelect={handleConceptSelect} />
+                      </li>
+                    ))
+                  )}
+                </ul>
+              ) : (
+                <div className="space-y-2 max-h-[50vh] overflow-y-auto">
+                  {questionResults.length === 0 ? (
+                    <p className="text-xs text-muted-foreground px-2 py-2">
+                      {questions.length === 0 ? 'Loading questions…' : 'No questions found.'}
+                    </p>
+                  ) : (
+                    questionResults.map(q => (
+                      <QuestionSearchRow
+                        key={q.id}
+                        question={q}
+                        query={query}
+                        selected={selectedIds.has(q.id)}
+                        onToggleSelect={toggleSelect}
+                      />
+                    ))
+                  )}
+                </div>
+              )}
+
+              {/* Start Quiz button — shown when questions are selected */}
+              {selectedIds.size > 0 && (
+                <div className="border-t mt-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={handleStartQuiz}
+                    className="w-full px-4 py-2 rounded-md border border-primary bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+                  >
+                    Start Quiz with {selectedIds.size} selected →
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -197,7 +308,7 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
   )
 }
 
-function SearchResultRow({
+function ConceptResultRow({
   item,
   query,
   onSelect,

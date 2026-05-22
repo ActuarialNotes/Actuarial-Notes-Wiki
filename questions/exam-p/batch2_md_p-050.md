@@ -1,13 +1,9 @@
 ---
 id: p-050
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - continuous-distributions
-  - policy-limits
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Continuous+Univariate+Distributions

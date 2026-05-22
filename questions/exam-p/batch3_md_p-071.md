@@ -1,13 +1,9 @@
 ---
 id: p-071
-topic: Multivariate Random Variables
-subtopic: Central Limit Theorem
+exam: Probability
+topic: Central Limit Theorem
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - conditional-probability
-  - central-limit-theorem
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Conditional+Probability

@@ -1,13 +1,9 @@
 ---
 id: p-047
-topic: Univariate Random Variables
-subtopic: Discrete Univariate Distributions
+exam: Probability
+topic: Discrete Univariate Distributions
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - poisson-distribution
-  - expected-value
 wiki_link:
   - Concepts/Poisson+Distribution
   - Concepts/Poisson

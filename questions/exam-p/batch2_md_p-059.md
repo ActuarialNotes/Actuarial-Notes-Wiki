@@ -1,14 +1,9 @@
 ---
 id: p-059
-topic: Univariate Random Variables
-subtopic: Variance and Standard Deviation
+exam: Probability
+topic: Variance and Standard Deviation
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - uniform-distribution
-  - deductibles
-  - standard-deviation
 wiki_link:
   - Concepts/Standard+Deviation
   - Concepts/Deductibles

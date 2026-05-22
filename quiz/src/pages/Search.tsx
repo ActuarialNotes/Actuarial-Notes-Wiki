@@ -5,7 +5,7 @@ import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
-import { useSubtopics } from '@/hooks/useSubtopics'
+import { useTopics } from '@/hooks/useTopics'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LatexText } from '@/components/LatexText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
@@ -31,7 +31,7 @@ const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
   { value: 'hard', label: 'Hard' },
 ]
 
-const BROWSE_STATE_KEY = 'actuarial_browse_state'
+const SEARCH_STATE_KEY = 'actuarial_search_state'
 
 interface QuestionRowProps {
   question: Question
@@ -70,18 +70,18 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
             {question.id}
           </span>
           <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
-            activeTopic && question.topic === activeTopic
+            activeTopic && question.exam === activeTopic
+              ? 'bg-foreground text-background border-foreground'
+              : 'border-input text-muted-foreground bg-background'
+          }`}>
+            {question.exam}
+          </span>
+          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
+            activeSubtopics.length > 0 && activeSubtopics.includes(question.topic)
               ? 'bg-foreground text-background border-foreground'
               : 'border-input text-muted-foreground bg-background'
           }`}>
             {question.topic}
-          </span>
-          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
-            activeSubtopics.length > 0 && activeSubtopics.includes(question.subtopic)
-              ? 'bg-foreground text-background border-foreground'
-              : 'border-input text-muted-foreground bg-background'
-          }`}>
-            {question.subtopic}
           </span>
           <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize transition-colors ${
             activeDifficulty && question.difficulty === activeDifficulty
@@ -166,10 +166,10 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
   )
 }
 
-export default function Browse() {
+export default function Search() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
+  const { byExam: subtopicsByTopic, loading: subtopicsLoading } = useTopics()
 
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
@@ -194,9 +194,9 @@ export default function Browse() {
   // Restore filter state saved before launching quiz
   useEffect(() => {
     try {
-      const raw = sessionStorage.getItem(BROWSE_STATE_KEY)
+      const raw = sessionStorage.getItem(SEARCH_STATE_KEY)
       if (!raw) return
-      sessionStorage.removeItem(BROWSE_STATE_KEY)
+      sessionStorage.removeItem(SEARCH_STATE_KEY)
       const s = JSON.parse(raw) as {
         topic?: string; selectedSubtopics?: string[]
         difficulty?: Difficulty | ''; conceptFilter?: string; selectedIds?: string[]
@@ -234,8 +234,8 @@ export default function Browse() {
 
   const filtered = useMemo(() => {
     const base = filterQuestions(allQuestions, {
-      topic: topic || undefined,
-      subtopics: selectedSubtopics.length ? selectedSubtopics : undefined,
+      exam: topic || undefined,
+      topics: selectedSubtopics.length ? selectedSubtopics : undefined,
       difficulty: difficulty || undefined,
     })
     if (!conceptFilter) return base
@@ -249,11 +249,11 @@ export default function Browse() {
   const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter
 
   function handleStartQuiz() {
-    const params = new URLSearchParams({ mode: 'quiz', reveal: 'during', from: 'browse' })
+    const params = new URLSearchParams({ mode: 'quiz', reveal: 'during', from: 'search' })
 
     // Save current browse state so it can be restored when quitting the quiz
     try {
-      sessionStorage.setItem(BROWSE_STATE_KEY, JSON.stringify({
+      sessionStorage.setItem(SEARCH_STATE_KEY, JSON.stringify({
         topic, selectedSubtopics, difficulty, conceptFilter,
         selectedIds: [...selectedIds],
       }))
@@ -262,7 +262,7 @@ export default function Browse() {
     if (selectedIds.size > 0) {
       // Handoff via sessionStorage to avoid URL length issues with large selections
       const ids = [...selectedIds]
-      const storageTopic = allQuestions.find(q => selectedIds.has(q.id))?.topic ?? 'Probability'
+      const storageExam = allQuestions.find(q => selectedIds.has(q.id))?.exam ?? 'Probability'
       try {
         sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
       } catch {
@@ -270,14 +270,14 @@ export default function Browse() {
         params.set('ids', ids.join(','))
       }
       params.set('selection', 'stored')
-      params.set('topic', storageTopic)
+      params.set('exam', storageExam)
       navigate(`/quiz?${params.toString()}`)
       return
     }
 
-    if (topic) params.set('topic', topic)
-    else params.set('topic', 'Probability')
-    if (selectedSubtopics.length) params.set('subtopics', selectedSubtopics.join(','))
+    if (topic) params.set('exam', topic)
+    else params.set('exam', 'Probability')
+    if (selectedSubtopics.length) params.set('topics', selectedSubtopics.join(','))
     if (difficulty) params.set('difficulty', difficulty)
     navigate(`/quiz?${params.toString()}`)
   }
@@ -285,7 +285,7 @@ export default function Browse() {
   return (
     <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
       <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">Question Browser</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Search Questions</h1>
         <p className="text-muted-foreground">Search and filter all practice questions</p>
       </div>
 

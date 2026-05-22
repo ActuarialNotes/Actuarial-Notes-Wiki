@@ -1,13 +1,9 @@
 ---
 id: p-033
-topic: Univariate Random Variables
-subtopic: Continuous Univariate Distributions
+exam: Probability
+topic: Continuous Univariate Distributions
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - continuous-distributions
-  - power-rule
 wiki_link:
   - Concepts/Continuous+Probability
   - Concepts/Continuous+Univariate+Distributions

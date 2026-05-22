@@ -1,13 +1,9 @@
 ---
 id: p-056
-topic: Univariate Random Variables
-subtopic: Variance and Standard Deviation
+exam: Probability
+topic: Variance and Standard Deviation
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - mixed-distributions
-  - variance
 wiki_link: Concepts/Variance
 answer: C
 points: 1

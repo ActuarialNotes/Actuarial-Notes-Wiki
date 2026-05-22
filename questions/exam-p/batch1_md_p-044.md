@@ -1,14 +1,9 @@
 ---
 id: p-044
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - exponential-distribution
-  - expected-value
-  - max-function
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Exponential

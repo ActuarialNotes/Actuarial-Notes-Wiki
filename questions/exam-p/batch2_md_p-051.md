@@ -1,13 +1,9 @@
 ---
 id: p-051
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - mixed-distributions
-  - deductibles
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Deductibles

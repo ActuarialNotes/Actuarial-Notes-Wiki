@@ -1,13 +1,9 @@
 ---
 id: p-077
-topic: Multivariate Random Variables
-subtopic: Linear Combinations of Random Variables
+exam: Probability
+topic: Linear Combinations of Random Variables
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - independent-variables
-  - variance
 wiki_link:
   - Concepts/Linear+Combinations+of+Random+Variables
   - Concepts/Independent+Random+Variables

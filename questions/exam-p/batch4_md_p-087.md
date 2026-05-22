@@ -1,13 +1,9 @@
 ---
 id: p-087
-topic: General Probability
-subtopic: Set Theory and Venn Diagrams
+exam: Probability
+topic: Set Theory and Venn Diagrams
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - set-theory
-  - mutually-exclusive
 wiki_link:
   - Concepts/Set+Theory
   - Concepts/Mutually+Exclusive+Events

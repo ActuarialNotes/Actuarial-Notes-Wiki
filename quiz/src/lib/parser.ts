@@ -11,11 +11,10 @@ export interface AnswerOption {
 
 export interface Question {
   id: string
+  exam: string
   topic: string
-  subtopic: string
   difficulty: Difficulty
   type: QuestionType
-  tags: string[]
   wiki_link: string[]  // normalized to array; single-string frontmatter becomes [string]
   answer: string       // e.g. "B"
   explanation: string
@@ -27,11 +26,10 @@ export interface Question {
 }
 
 export interface QuestionFilter {
+  exam?: string
   topic?: string
-  subtopic?: string
-  subtopics?: string[]  // multi-select subtopic filter
+  topics?: string[]  // multi-select topic filter
   difficulty?: Difficulty
-  tags?: string[]
   mode?: QuizMode
   count?: number        // max questions to return
   author?: string       // partial match, case-insensitive
@@ -42,11 +40,10 @@ export interface QuestionFilter {
 
 interface QuestionFrontmatter {
   id?: unknown
+  exam?: unknown
   topic?: unknown
-  subtopic?: unknown
   difficulty?: unknown
   type?: unknown
-  tags?: unknown
   wiki_link?: unknown
   answer?: unknown
   explanation?: unknown  // kept for backward compat
@@ -64,7 +61,7 @@ export function parseQuestion(raw: string): Question | null {
     const content = parsed.body
 
     // Validate required fields (explanation is now in the body, not required in YAML)
-    if (!data.id || !data.topic || !data.subtopic || !data.difficulty ||
+    if (!data.id || !data.exam || !data.topic || !data.difficulty ||
         !data.type || !data.answer) {
       return null
     }
@@ -109,11 +106,10 @@ export function parseQuestion(raw: string): Question | null {
 
     return {
       id: String(data.id),
+      exam: String(data.exam),
       topic: String(data.topic),
-      subtopic: String(data.subtopic),
       difficulty: data.difficulty as Difficulty,
       type: data.type as QuestionType,
-      tags: Array.isArray(data.tags) ? (data.tags as string[]) : [],
       wiki_link: wikiLinks,
       answer: String(data.answer),
       explanation,
@@ -144,15 +140,12 @@ export function parseAllQuestions(rawFiles: string[]): Question[] {
 export function filterQuestions(questions: Question[], filters: QuestionFilter): Question[] {
   return questions.filter(q => {
     if (filters.ids?.length) return filters.ids.includes(q.id)
+    if (filters.exam && q.exam.toLowerCase() !== filters.exam.toLowerCase()) return false
     if (filters.topic && q.topic.toLowerCase() !== filters.topic.toLowerCase()) return false
-    if (filters.subtopic && q.subtopic.toLowerCase() !== filters.subtopic.toLowerCase()) return false
-    if (filters.subtopics?.length) {
-      if (!filters.subtopics.some(s => q.subtopic.toLowerCase() === s.toLowerCase())) return false
+    if (filters.topics?.length) {
+      if (!filters.topics.some(s => q.topic.toLowerCase() === s.toLowerCase())) return false
     }
     if (filters.difficulty && q.difficulty !== filters.difficulty) return false
-    if (filters.tags?.length) {
-      if (!filters.tags.every(t => q.tags.includes(t))) return false
-    }
     if (filters.author) {
       if (!q.author?.toLowerCase().includes(filters.author.toLowerCase())) return false
     }

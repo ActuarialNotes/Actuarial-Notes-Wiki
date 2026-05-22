@@ -1,14 +1,9 @@
 ---
 id: p-086
-topic: Multivariate Random Variables
-subtopic: Central Limit Theorem
+exam: Probability
+topic: Central Limit Theorem
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - uniform-distribution
-  - central-limit-theorem
-  - deductibles
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Deductibles

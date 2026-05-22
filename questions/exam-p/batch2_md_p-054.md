@@ -1,13 +1,9 @@
 ---
 id: p-054
-topic: Univariate Random Variables
-subtopic: Percentiles
+exam: Probability
+topic: Percentiles
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - continuous-distributions
-  - percentiles
 wiki_link:
   - Concepts/Percentiles
   - Concepts/Continuous+Univariate+Distributions

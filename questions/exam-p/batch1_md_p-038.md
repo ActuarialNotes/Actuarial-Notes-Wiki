@@ -1,13 +1,9 @@
 ---
 id: p-038
-topic: Univariate Random Variables
-subtopic: Transformations of Random Variables
+exam: Probability
+topic: Transformations of Random Variables
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - deductibles
-  - transformations
 wiki_link:
   - Concepts/Transformations+of+Random+Variables
   - Concepts/Deductibles

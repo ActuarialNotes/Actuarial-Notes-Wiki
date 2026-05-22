@@ -113,14 +113,14 @@ export default function Review() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const masteryBySubtopic = useMemo((): Map<string, MasteryState> | undefined => {
+  const masteryByTopic = useMemo((): Map<string, MasteryState> | undefined => {
     if (!user || masteryLoading || masteryRecords.length === 0 || !session) return undefined
     const now = new Date()
 
     const slugsBySubtopic = new Map<string, Set<string>>()
     for (const q of session.questions) {
-      if (!slugsBySubtopic.has(q.subtopic)) slugsBySubtopic.set(q.subtopic, new Set())
-      const slugSet = slugsBySubtopic.get(q.subtopic)!
+      if (!slugsBySubtopic.has(q.topic)) slugsBySubtopic.set(q.topic, new Set())
+      const slugSet = slugsBySubtopic.get(q.topic)!
       for (const link of q.wiki_link) {
         const ref = hrefToEntryRef(link)
         if (ref?.kind === 'concept' && ref.name) {
@@ -236,7 +236,7 @@ export default function Review() {
       <TopicCoverageChart
         questions={session.questions}
         responses={session.responses}
-        masteryBySubtopic={masteryBySubtopic}
+        masteryByTopic={masteryByTopic}
       />
 
       {/* Per-question review */}

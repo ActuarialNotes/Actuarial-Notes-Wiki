@@ -6,7 +6,7 @@ import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { appendTodayLevelUps } from '@/lib/dailyProgressStore'
 
-const TOPIC_TO_EXAM_ID: Record<string, string> = {
+const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Probability': 'P',
   'Financial Mathematics': 'FM',
 }
@@ -39,7 +39,7 @@ async function upsertMasteryFromResponses(
   // streak/state arithmetic is deterministic.
   const events: Array<{ examId: string; conceptSlug: string; isCorrect: boolean; isHard: boolean }> = []
   for (const q of questions) {
-    const examId = TOPIC_TO_EXAM_ID[q.topic]
+    const examId = EXAM_LABEL_TO_ID[q.exam]
     if (!examId) continue
     const chosen = responses[q.id]?.chosen
     if (chosen === undefined) continue
@@ -163,7 +163,7 @@ function computeMasteryTransitions(
   for (const q of questions) {
     const chosen = responses[q.id]?.chosen
     if (chosen === undefined) continue
-    const examId = TOPIC_TO_EXAM_ID[q.topic]
+    const examId = EXAM_LABEL_TO_ID[q.exam]
     if (!examId) continue
     const isCorrect = chosen === q.answer
     const isHard = q.difficulty === 'hard'
@@ -313,8 +313,6 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       return
     }
 
-    const allSubtopics = [...new Set(questions.map(q => q.subtopic))]
-
     // Persist concept-level mastery state. Awaited so failures are visible;
     // errors don't block session save.
     try {
@@ -339,9 +337,8 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         total_questions: questions.length,
         correct_count: correctCount,
         time_taken_seconds: totalSeconds,
+        exam: questions[0]?.exam ?? null,
         topic: questions[0]?.topic ?? null,
-        subtopic: allSubtopics[0] ?? null,
-        tags: [...new Set([...questions.flatMap(q => q.tags), ...allSubtopics])],
       })
       .select()
       .single()
@@ -369,8 +366,8 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     if (respError) set({ error: respError.message })
 
     // Upsert exam_progress: transition not_started → in_progress on first quiz
-    const topic = questions[0]?.topic ?? null
-    const examId = topic ? TOPIC_TO_EXAM_ID[topic] : null
+    const examLabel = questions[0]?.exam ?? null
+    const examId = examLabel ? EXAM_LABEL_TO_ID[examLabel] : null
     if (examId) {
       const { data: existing } = await supabase
         .from('exam_progress')

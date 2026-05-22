@@ -5,6 +5,7 @@ import {
   BookOpen,
   ChevronsLeft,
   ClipboardList,
+  Compass,
   GraduationCap,
   LayoutDashboard,
   LogIn,
@@ -354,6 +355,13 @@ export default function Sidebar() {
             icon={<ClipboardList className="h-4 w-4" />}
             collapsed={collapsed}
             end
+            onNavigate={closeMobile}
+          />
+          <SidebarItem
+            to="/search"
+            label="Search"
+            icon={<Compass className="h-4 w-4" />}
+            collapsed={collapsed}
             onNavigate={closeMobile}
           />
         </nav>

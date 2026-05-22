@@ -1,14 +1,9 @@
 ---
 id: p-060
-topic: Univariate Random Variables
-subtopic: Variance and Standard Deviation
+exam: Probability
+topic: Variance and Standard Deviation
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - poisson-distribution
-  - variance
-  - policy-limits
 wiki_link:
   - Concepts/Standard+Deviation
   - Concepts/Poisson

@@ -12,9 +12,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 export interface QuizSession {
   id: string
   user_id: string
+  exam: string | null
   topic: string | null
-  subtopic: string | null
-  tags: string[] | null
   mode: 'quiz' | 'mock-exam'
   total_questions: number
   correct_count: number

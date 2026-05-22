@@ -181,7 +181,7 @@ export function ActiveExamCard({
 
   // Sessions filtered to this exam's topic
   const examSessions = useMemo(
-    () => sessions.filter(s => s.topic === syllabus.examTopic),
+    () => sessions.filter(s => s.exam === syllabus.examTopic),
     [sessions, syllabus.examTopic],
   )
 

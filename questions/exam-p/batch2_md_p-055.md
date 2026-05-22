@@ -1,13 +1,9 @@
 ---
 id: p-055
-topic: Univariate Random Variables
-subtopic: Variance and Standard Deviation
+exam: Probability
+topic: Variance and Standard Deviation
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - variance
-  - transformations
 wiki_link: Concepts/Variance
 answer: E
 points: 1

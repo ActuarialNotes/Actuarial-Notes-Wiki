@@ -1,14 +1,9 @@
 ---
 id: p-063
-topic: Univariate Random Variables
-subtopic: Conditional Probability
+exam: Probability
+topic: Conditional Probability
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - exponential-distribution
-  - percentiles
-  - deductibles
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Exponential

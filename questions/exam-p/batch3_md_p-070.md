@@ -1,13 +1,9 @@
 ---
 id: p-070
-topic: Multivariate Random Variables
-subtopic: Central Limit Theorem
+exam: Probability
+topic: Central Limit Theorem
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - exponential-distribution
-  - central-limit-theorem
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Exponential

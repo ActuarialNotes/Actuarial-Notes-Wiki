@@ -1,13 +1,9 @@
 ---
 id: p-042
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - expected-value
-  - discrete-distributions
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Discrete+Univariate+Distributions

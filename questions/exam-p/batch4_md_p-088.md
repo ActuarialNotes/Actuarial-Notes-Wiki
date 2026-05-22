@@ -1,14 +1,9 @@
 ---
 id: p-088
-topic: Univariate Random Variables
-subtopic: Conditional Probability
+exam: Probability
+topic: Conditional Probability
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - conditional-probability
-  - coinsurance-percentages
-  - deductibles
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Coinsurance+Percentages

@@ -2,15 +2,15 @@ import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 
-// Maps wiki exam IDs to quiz topic values
+// Maps wiki exam IDs to the exam label stored in question.exam
 export const EXAM_ID_TO_TOPIC: Record<string, string> = {
   P: 'Probability',
   FM: 'Financial Mathematics',
 }
 
-// Maps quiz topic values back to wiki exam IDs
+// Maps question.exam labels back to wiki exam IDs
 export const TOPIC_TO_EXAM_ID: Record<string, string> = Object.fromEntries(
-  Object.entries(EXAM_ID_TO_TOPIC).map(([id, topic]) => [topic, id])
+  Object.entries(EXAM_ID_TO_TOPIC).map(([id, label]) => [label, id])
 )
 
 export interface ExamProgressResult {

@@ -354,9 +354,9 @@ export function ConceptDetailModal({
       aria-label={`Concept: ${currentConceptName}`}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-2xl bg-card border rounded-xl shadow-2xl flex flex-col my-8">
-        {/* Viewing filter — always at the very top */}
-        <div className="flex items-center gap-2 px-4 py-2 border-b bg-muted/20 shrink-0 rounded-t-xl">
+      <div className="w-full max-w-2xl flex flex-col gap-2 my-8">
+        {/* Viewing filter — floats above the card */}
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/40 border border-border/50 shrink-0">
           <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
           <div className="relative">
             <select
@@ -379,10 +379,13 @@ export function ConceptDetailModal({
           </span>
         </div>
 
+        {/* Card */}
+        <div className="w-full bg-card border rounded-xl shadow-2xl flex flex-col">
+
         {/* Header */}
         <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
           <span className="flex-1 min-w-0 flex items-center gap-2 truncate">
-            <span className="font-semibold text-sm truncate">{currentConceptName}</span>
+            <span className="font-semibold text-base truncate">{currentConceptName}</span>
             <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${badge.className}`}>
               {badge.label}
             </span>
@@ -404,7 +407,7 @@ export function ConceptDetailModal({
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2.5 text-sm font-medium capitalize transition-colors border-b-2 -mb-px ${
+              className={`px-4 py-3 text-sm font-medium capitalize transition-colors border-b-2 -mb-px ${
                 activeTab === tab
                   ? 'border-primary text-foreground'
                   : 'border-transparent text-muted-foreground hover:text-foreground'
@@ -419,36 +422,9 @@ export function ConceptDetailModal({
           ))}
         </div>
 
-        {/* Previous / Next navigation — just below tabs */}
-        {showFooterNav && (
-          <div className="flex items-stretch border-b h-10 shrink-0 bg-muted/10">
-            <button
-              type="button"
-              disabled={!canPrev}
-              onClick={() => setLocalIndex(i => i - 1)}
-              className="flex items-center justify-center gap-1.5 px-4 text-xs font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="h-3.5 w-3.5" />
-              <span>Previous</span>
-            </button>
-            <span className="flex-1 flex items-center justify-center text-xs text-muted-foreground tabular-nums">
-              {localIndex + 1} of {effectiveConcepts!.length}
-            </span>
-            <button
-              type="button"
-              disabled={!canNext}
-              onClick={() => setLocalIndex(i => i + 1)}
-              className="flex items-center justify-center gap-1.5 px-4 text-xs font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <span>Next</span>
-              <ChevronRight className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        )}
-
         {/* Definition tab */}
         {activeTab === 'definition' && (
-          <div className="px-4 sm:px-6 py-4">
+          <div className="px-4 sm:px-6 pt-5 pb-6">
             {contentStatus === 'loading' && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground py-4 justify-center">
                 <Loader2 className="h-4 w-4 animate-spin" /> Loading concept…
@@ -633,6 +609,34 @@ export function ConceptDetailModal({
           </div>
         )}
 
+        {/* Previous / Next navigation — bottom of card */}
+        {showFooterNav && (
+          <div className="flex items-stretch border-t h-10 shrink-0 bg-muted/10 mt-auto">
+            <button
+              type="button"
+              disabled={!canPrev}
+              onClick={() => setLocalIndex(i => i - 1)}
+              className="flex items-center justify-center gap-1.5 px-4 text-xs font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+              <span>Previous</span>
+            </button>
+            <span className="flex-1 flex items-center justify-center text-xs text-muted-foreground tabular-nums">
+              {localIndex + 1} of {effectiveConcepts!.length}
+            </span>
+            <button
+              type="button"
+              disabled={!canNext}
+              onClick={() => setLocalIndex(i => i + 1)}
+              className="flex items-center justify-center gap-1.5 px-4 text-xs font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <span>Next</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
+
+        </div>
       </div>
     </div>
   )

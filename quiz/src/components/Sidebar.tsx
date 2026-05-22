@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
@@ -90,14 +91,24 @@ interface ExamPillProps {
 
 function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
   const navigate = useNavigate()
-  const ref = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
   const shortLabel = syllabus.examLabel.replace(/^Exam\s+/i, '')
 
   useEffect(() => {
+    if (!isOpen || !buttonRef.current) return
+    const rect = buttonRef.current.getBoundingClientRect()
+    setDropdownPos({ top: rect.bottom + 4, left: rect.left })
+  }, [isOpen])
+
+  useEffect(() => {
     if (!isOpen) return
     function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose()
+      const inButton = buttonRef.current?.contains(e.target as Node)
+      const inDropdown = dropdownRef.current?.contains(e.target as Node)
+      if (!inButton && !inDropdown) onClose()
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -114,16 +125,21 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
   }
 
   return (
-    <div ref={ref} className="relative shrink-0">
+    <>
       <button
+        ref={buttonRef}
         type="button"
         onClick={onToggle}
-        className="rounded-full bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 hover:bg-primary/20 transition-colors"
+        className="rounded-full bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 hover:bg-primary/20 transition-colors shrink-0"
       >
         {shortLabel}
       </button>
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-1 rounded-md border bg-popover shadow-md py-1 z-[70] min-w-[152px]">
+      {isOpen && dropdownPos && createPortal(
+        <div
+          ref={dropdownRef}
+          style={{ position: 'fixed', top: dropdownPos.top, left: dropdownPos.left, zIndex: 9999 }}
+          className="rounded-md border bg-popover shadow-md py-1 min-w-[152px]"
+        >
           <button
             type="button"
             onClick={handleReadConcepts}
@@ -140,9 +156,10 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
             <Play className="h-4 w-4 shrink-0" />
             <span>Start Quiz</span>
           </button>
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   )
 }
 

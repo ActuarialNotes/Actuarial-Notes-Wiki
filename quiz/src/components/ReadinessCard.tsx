@@ -281,11 +281,13 @@ interface Props {
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
   onExamDateChange?: (date: string | null) => void
+  openConceptsTrigger?: number
 }
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onExamDateChange,
+  openConceptsTrigger,
 }: Props) {
   const navigate = useNavigate()
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
@@ -296,6 +298,10 @@ export function ReadinessCard({
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [trackerConcept, setTrackerConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
   const [showConfig, setShowConfig] = useState(false)
+
+  useEffect(() => {
+    if (openConceptsTrigger) setConceptModalOpen(true)
+  }, [openConceptsTrigger])
 
   useEffect(() => {
     setCompletedToday(readTodayLevelUps())

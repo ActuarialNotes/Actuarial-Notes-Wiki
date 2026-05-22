@@ -47,8 +47,8 @@ const TEAL: CalloutStyle = {
 
 const EXAMPLE_STYLE: CalloutStyle = {
   icon: null,
-  borderClass: 'border-slate-200 dark:border-slate-600',
-  accentClass: 'text-slate-400 dark:text-slate-500',
+  borderClass: 'border-slate-300 dark:border-slate-500',
+  accentClass: 'text-foreground',
   roundLeft: true,
 }
 
@@ -143,7 +143,7 @@ function renderTitle(raw: string): ReactNode {
         part.startsWith('{') && part.endsWith('}') ? (
           <span
             key={i}
-            className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-normal bg-muted text-muted-foreground align-middle"
+            className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium border border-primary/30 bg-primary/10 text-primary align-middle"
           >
             {part.slice(1, -1)}
           </span>
@@ -264,11 +264,12 @@ const CONTENT_CLASSES = [
   'border-t border-border/40 px-4 pb-4 pt-3',
   'text-sm text-foreground leading-relaxed',
   '[&>p]:my-1.5',
+  '[&>p:first-of-type]:text-muted-foreground [&>p:first-of-type]:italic [&>p:first-of-type]:mb-3',
   '[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2',
   '[&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-2',
-  '[&_li]:my-0.5',
-  '[&>ul]:my-1.5 [&>ul]:space-y-0.5 [&>ul]:pl-4 [&_ul]:list-disc',
-  '[&>ol]:my-1.5 [&>ol]:space-y-0.5 [&>ol]:pl-4 [&_ol]:list-decimal',
+  '[&_li]:my-1',
+  '[&>ul]:my-1.5 [&>ul]:pl-4 [&_ul]:list-disc',
+  '[&>ol]:my-1.5 [&>ol]:pl-4 [&_ol]:list-decimal',
   '[&_li::marker]:text-muted-foreground/60',
   '[&_strong]:font-semibold',
   '[&_a]:text-primary [&_a]:underline',
@@ -292,7 +293,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
       <span className={`font-medium text-sm flex-1 text-left ${Icon ? 'text-foreground' : style.accentClass}`}>{renderTitle(displayTitle)}</span>
       {collapsible && hasBody && (
         <ChevronDown
-          className={`h-3.5 w-3.5 shrink-0 text-muted-foreground/50 transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+          className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
         />
       )}
     </div>

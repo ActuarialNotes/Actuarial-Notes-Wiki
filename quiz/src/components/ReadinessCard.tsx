@@ -281,11 +281,14 @@ interface Props {
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
   onExamDateChange?: (date: string | null) => void
+  openConceptsTrigger?: number
+  startQuizTrigger?: number
 }
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onExamDateChange,
+  openConceptsTrigger, startQuizTrigger,
 }: Props) {
   const navigate = useNavigate()
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
@@ -296,6 +299,10 @@ export function ReadinessCard({
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [trackerConcept, setTrackerConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
   const [showConfig, setShowConfig] = useState(false)
+
+  useEffect(() => {
+    if (openConceptsTrigger) setConceptModalOpen(true)
+  }, [openConceptsTrigger])
 
   useEffect(() => {
     setCompletedToday(readTodayLevelUps())
@@ -451,6 +458,10 @@ export function ReadinessCard({
       setQuizLoading(false)
     }
   }, [plan, navigate, syllabus.examTopic, masteryStateByName])
+
+  useEffect(() => {
+    if (startQuizTrigger) handleStartQuiz()
+  }, [startQuizTrigger, handleStartQuiz])
 
   return (
     <div className="space-y-4">

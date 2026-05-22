@@ -1,5 +1,5 @@
 import { lazy, Suspense, Component, type ReactNode, type ErrorInfo } from 'react'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import Landing from '@/pages/Landing'
 import Auth from '@/pages/Auth'
@@ -96,6 +96,7 @@ export default function App() {
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
                 <Route path="/search" element={<Search />} />
+                <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>

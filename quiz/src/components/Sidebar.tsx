@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
@@ -11,12 +12,17 @@ import {
   LogOut,
   Menu,
   Moon,
+  Play,
   Settings2,
   Sun,
   X,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useTheme } from '@/hooks/useTheme'
+import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 
@@ -77,15 +83,102 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate }: 
   )
 }
 
+interface ExamPillProps {
+  syllabus: WikiExamSyllabus
+  isOpen: boolean
+  onToggle: () => void
+  onClose: () => void
+}
+
+function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
+  const navigate = useNavigate()
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
+  const progressKey = wikiExamIdToProgressKey(syllabus.examId)
+  const shortLabel = syllabus.examLabel.replace(/^Exam\s+/i, '')
+
+  // Compute position before paint so there's no layout flash.
+  // Guard against width=0: hidden elements (lg:hidden) return zero DOMRects —
+  // without this, both the mobile-header and sidebar-header pills would render
+  // a portal, causing the duplicate dropdown.
+  useLayoutEffect(() => {
+    if (!isOpen || !buttonRef.current) { setDropdownPos(null); return }
+    const rect = buttonRef.current.getBoundingClientRect()
+    if (rect.width === 0) { setDropdownPos(null); return }
+    setDropdownPos({ top: rect.bottom + 4, left: rect.left })
+  }, [isOpen])
+
+  function handleReadConcepts() {
+    onClose()
+    navigate('/dashboard', { state: { openConceptsFor: progressKey } })
+  }
+
+  function handleStartQuiz() {
+    onClose()
+    navigate('/dashboard', { state: { autoStartQuiz: progressKey } })
+  }
+
+  return (
+    <>
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={onToggle}
+        className="rounded-full bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 hover:bg-primary/20 transition-colors shrink-0"
+      >
+        {shortLabel}
+      </button>
+      {isOpen && dropdownPos && createPortal(
+        <>
+          {/* Full-screen backdrop — any tap outside the menu closes it */}
+          <div
+            style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
+            onClick={onClose}
+            aria-hidden="true"
+          />
+          <div
+            style={{ position: 'fixed', top: dropdownPos.top, left: dropdownPos.left, zIndex: 9999 }}
+            className="rounded-md border bg-popover shadow-md py-1 min-w-[152px]"
+          >
+            <button
+              type="button"
+              onClick={handleReadConcepts}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+            >
+              <BookOpen className="h-4 w-4 shrink-0" />
+              <span>Read Concepts</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleStartQuiz}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+            >
+              <Play className="h-4 w-4 shrink-0" />
+              <span>Start Quiz</span>
+            </button>
+          </div>
+        </>,
+        document.body
+      )}
+    </>
+  )
+}
+
 export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
+  const { progress: examProgress } = useExamProgress()
+  const { syllabi } = useWikiSyllabus()
+  const inProgressSyllabi = syllabi.filter(
+    s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'
+  )
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [examsOpen, setExamsOpen] = useState(false)
   const [signOutConfirm, setSignOutConfirm] = useState(false)
+  const [openExamDropdown, setOpenExamDropdown] = useState<string | null>(null)
   const profileRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -138,16 +231,30 @@ export default function Sidebar() {
           type="button"
           onClick={() => setMobileOpen(true)}
           aria-label="Open navigation"
-          className="flex items-center justify-center h-9 w-9 rounded-lg hover:bg-accent transition-colors"
+          className="flex items-center justify-center h-9 w-9 rounded-lg hover:bg-accent transition-colors shrink-0"
         >
           <Menu className="h-4 w-4" />
         </button>
-        <Link
-          to="/dashboard"
-          className="font-semibold text-foreground text-sm truncate"
-        >
-          Actuarial Notes
-        </Link>
+        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+          <Link
+            to="/dashboard"
+            className="font-semibold text-foreground text-sm truncate shrink-0"
+          >
+            Actuarial Notes
+          </Link>
+          {user && inProgressSyllabi.map(s => {
+            const key = wikiExamIdToProgressKey(s.examId)
+            return (
+              <ExamPill
+                key={key}
+                syllabus={s}
+                isOpen={openExamDropdown === key}
+                onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
+                onClose={() => setOpenExamDropdown(null)}
+              />
+            )
+          })}
+        </div>
       </header>
 
       {/* Mobile: backdrop — z-[55] so it covers the sticky search bar (z-50) */}
@@ -183,13 +290,27 @@ export default function Sidebar() {
       >
         {/* Header */}
         <div className="flex items-center h-14 border-b px-3 gap-2">
-          <Link
-            to="/dashboard"
-            onClick={closeMobile}
-            className={`flex-1 font-semibold text-foreground hover:text-primary transition-colors truncate ${collapsed ? 'lg:hidden' : ''}`}
-          >
-            Actuarial Notes
-          </Link>
+          <div className={`flex items-center gap-1.5 flex-1 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
+            <Link
+              to="/dashboard"
+              onClick={closeMobile}
+              className="font-semibold text-foreground hover:text-primary transition-colors truncate shrink-0"
+            >
+              Actuarial Notes
+            </Link>
+            {user && inProgressSyllabi.map(s => {
+              const key = wikiExamIdToProgressKey(s.examId)
+              return (
+                <ExamPill
+                  key={key}
+                  syllabus={s}
+                  isOpen={openExamDropdown === key}
+                  onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
+                  onClose={() => setOpenExamDropdown(null)}
+                />
+              )
+            })}
+          </div>
           {/* Desktop: collapse/expand toggle */}
           <button
             type="button"

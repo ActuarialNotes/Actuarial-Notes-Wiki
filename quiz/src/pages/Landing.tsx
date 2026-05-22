@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
@@ -269,6 +270,8 @@ export default function Landing() {
         : `${selectedSubtopics.length} selected`
 
   return (
+    <>
+    <QuizFloatingSearch />
     <div className="container max-w-2xl mx-auto px-4 py-12 space-y-8">
       <div className="text-center space-y-3">
         <h1 className="text-4xl font-bold tracking-tight">Actuarial Quiz</h1>
@@ -533,5 +536,6 @@ export default function Landing() {
         </div>
       )}
     </div>
+    </>
   )
 }

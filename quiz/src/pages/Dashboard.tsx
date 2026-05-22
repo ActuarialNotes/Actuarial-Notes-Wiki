@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle } from 'lucide-react'
@@ -15,6 +15,8 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale } from '@/lib/mastery'
 import type { MasteryState } from '@/lib/mastery'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+
+const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
@@ -42,6 +44,7 @@ function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
 
 export default function Dashboard() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { user, loading: authLoading } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
@@ -50,7 +53,8 @@ export default function Dashboard() {
 
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
-  const touchStartX = useRef<number>(0)
+  const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
+  const [startQuizCounter, setStartQuizCounter] = useState(0)
 
   // Re-fetch mastery after a quiz completes so masteryStateByName reflects
   // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
@@ -61,9 +65,24 @@ export default function Dashboard() {
   }, [refreshMastery])
 
   // All exams that are marked in_progress and have a known syllabus
-  const inProgressSyllabi = syllabi.filter(
-    s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress',
+  const inProgressSyllabi = useMemo(
+    () => syllabi.filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'),
+    [syllabi, examProgress],
   )
+
+  // Restore active exam from localStorage once syllabi are loaded
+  const restoredRef = useRef(false)
+  useEffect(() => {
+    if (restoredRef.current || inProgressSyllabi.length === 0) return
+    restoredRef.current = true
+    try {
+      const savedId = localStorage.getItem(ACTIVE_EXAM_KEY)
+      if (savedId) {
+        const idx = inProgressSyllabi.findIndex(s => s.examId === savedId)
+        if (idx >= 0) setActiveExamIdx(idx)
+      }
+    } catch { /* ignore */ }
+  }, [inProgressSyllabi])
 
   // Continuous (wrap-around) index
   const clampedIdx = inProgressSyllabi.length > 0
@@ -72,6 +91,33 @@ export default function Dashboard() {
   const activeSyllabus = inProgressSyllabi[clampedIdx] ?? null
   const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
   const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
+
+  // Persist active exam to localStorage when it changes
+  useEffect(() => {
+    if (!activeSyllabus) return
+    try {
+      localStorage.setItem(ACTIVE_EXAM_KEY, activeSyllabus.examId)
+    } catch { /* ignore */ }
+  }, [activeSyllabus])
+
+  // Handle navigation state from header pill quick-actions
+  useEffect(() => {
+    const st = location.state as Record<string, unknown> | null
+    if (!st?.openConceptsFor && !st?.autoStartQuiz) return
+    if (st.openConceptsFor) {
+      const key = st.openConceptsFor as string
+      const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
+      if (idx >= 0) setActiveExamIdx(idx)
+      setConceptsOpenCounter(c => c + 1)
+    }
+    if (st.autoStartQuiz) {
+      const key = st.autoStartQuiz as string
+      const idx = inProgressSyllabi.findIndex(s => wikiExamIdToProgressKey(s.examId) === key)
+      if (idx >= 0) setActiveExamIdx(idx)
+      setStartQuizCounter(c => c + 1)
+    }
+    navigate(location.pathname, { state: null, replace: true })
+  }, [location.state, location.pathname, navigate, inProgressSyllabi])
 
   const handleTargetDateChange = useCallback((date: string | null) => {
     if (activeProgressKey) updateTargetDate(activeProgressKey, date)
@@ -84,17 +130,6 @@ export default function Dashboard() {
   const handleNext = useCallback(() => {
     setActiveExamIdx(i => (i + 1) % inProgressSyllabi.length)
   }, [inProgressSyllabi.length])
-
-  function handleTouchStart(e: React.TouchEvent) {
-    touchStartX.current = e.touches[0].clientX
-  }
-
-  function handleTouchEnd(e: React.TouchEvent) {
-    const diff = touchStartX.current - e.changedTouches[0].clientX
-    if (Math.abs(diff) > 50) {
-      diff > 0 ? handleNext() : handlePrev()
-    }
-  }
 
   // ── Study plan ─────────────────────────────────────────────────────────────
   const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan } =
@@ -223,10 +258,7 @@ export default function Dashboard() {
       )}
 
       {/* Readiness card — only shown when there is an active exam */}
-      <div
-        onTouchStart={multiExam ? handleTouchStart : undefined}
-        onTouchEnd={multiExam ? handleTouchEnd : undefined}
-      >
+      <div>
         {syllabusLoading || sessionsLoading || masteryLoading ? (
           <ActiveExamCardLoading />
         ) : !activeSyllabus ? (
@@ -244,6 +276,8 @@ export default function Dashboard() {
             onConfigChange={updatePlanConfig}
             onRegenerate={regeneratePlan}
             onExamDateChange={handleTargetDateChange}
+            openConceptsTrigger={conceptsOpenCounter}
+            startQuizTrigger={startQuizCounter}
           />
         )}
       </div>

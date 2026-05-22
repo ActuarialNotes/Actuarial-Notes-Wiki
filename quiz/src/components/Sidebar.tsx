@@ -96,10 +96,14 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
   const shortLabel = syllabus.examLabel.replace(/^Exam\s+/i, '')
 
-  // Compute position before paint so there's no layout flash
+  // Compute position before paint so there's no layout flash.
+  // Guard against width=0: hidden elements (lg:hidden) return zero DOMRects —
+  // without this, both the mobile-header and sidebar-header pills would render
+  // a portal, causing the duplicate dropdown.
   useLayoutEffect(() => {
     if (!isOpen || !buttonRef.current) { setDropdownPos(null); return }
     const rect = buttonRef.current.getBoundingClientRect()
+    if (rect.width === 0) { setDropdownPos(null); return }
     setDropdownPos({ top: rect.bottom + 4, left: rect.left })
   }, [isOpen])
 
@@ -110,7 +114,7 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
 
   function handleStartQuiz() {
     onClose()
-    navigate(`/quiz?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz&from=dashboard`)
+    navigate('/dashboard', { state: { autoStartQuiz: progressKey } })
   }
 
   return (

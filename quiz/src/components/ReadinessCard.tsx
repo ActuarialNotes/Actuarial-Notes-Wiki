@@ -282,12 +282,13 @@ interface Props {
   onRegenerate: () => void
   onExamDateChange?: (date: string | null) => void
   openConceptsTrigger?: number
+  startQuizTrigger?: number
 }
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onExamDateChange,
-  openConceptsTrigger,
+  openConceptsTrigger, startQuizTrigger,
 }: Props) {
   const navigate = useNavigate()
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
@@ -457,6 +458,10 @@ export function ReadinessCard({
       setQuizLoading(false)
     }
   }, [plan, navigate, syllabus.examTopic, masteryStateByName])
+
+  useEffect(() => {
+    if (startQuizTrigger) handleStartQuiz()
+  }, [startQuizTrigger, handleStartQuiz])
 
   return (
     <div className="space-y-4">

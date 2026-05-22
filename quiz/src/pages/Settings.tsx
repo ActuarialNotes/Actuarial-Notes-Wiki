@@ -17,10 +17,8 @@ import { cn } from '@/lib/utils'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import {
   AvatarDisplay,
-  AvatarUploadButton,
   ANIMAL_TYPES,
   ANIMAL_LABELS,
-  parseAvatarUrl,
   serializeAvatar,
 } from '@/components/AvatarDisplay'
 
@@ -62,10 +60,6 @@ function StatusIcon({ status }: { status: ItemStatus }) {
     </svg>
   )
 }
-
-// ---- Avatar helpers ----
-
-const PRESET_COLORS = ['#2563eb', '#9333ea', '#16a34a', '#ea580c', '#e11d48', '#0d9488']
 
 // ---- Simple inline modal ----
 
@@ -138,7 +132,7 @@ export default function Settings() {
     profile, setProfile,
     examRows,
     loadingProfile, loadingExams,
-    changePassword, updateProfile, uploadAvatar, saveExamRows,
+    changePassword, updateProfile, saveExamRows,
     resetHistory, deleteAccount,
     accountState, profileState, examsState, dataState,
   } = useSettings()
@@ -218,26 +212,9 @@ export default function Settings() {
     }
   }
 
-  const [uploadingAvatar, setUploadingAvatar] = useState(false)
-
-  const handlePresetColor = (hex: string) => {
-    setLocalAvatarUrl(serializeAvatar({ type: 'color', value: hex }))
-    setProfileDirty(true)
-  }
-
   const handleAnimalSelect = (animal: typeof ANIMAL_TYPES[number]) => {
     setLocalAvatarUrl(serializeAvatar({ type: 'animal', value: animal }))
     setProfileDirty(true)
-  }
-
-  const handleAvatarUpload = async (file: File) => {
-    setUploadingAvatar(true)
-    const url = await uploadAvatar(file)
-    setUploadingAvatar(false)
-    if (url) {
-      setLocalAvatarUrl(serializeAvatar({ type: 'custom', value: url }))
-      setProfileDirty(true)
-    }
   }
 
   // ---- Exams section state ----
@@ -406,25 +383,6 @@ export default function Settings() {
                       <div className="flex items-start gap-4">
                         <AvatarDisplay avatarUrl={localAvatarUrl} initials={initials} size={64} />
                         <div className="space-y-2">
-                          {/* Color options */}
-                          <div className="flex flex-wrap gap-2">
-                            {PRESET_COLORS.map(hex => {
-                              const isSelected = localAvatarUrl === serializeAvatar({ type: 'color', value: hex })
-                              return (
-                                <button
-                                  key={hex}
-                                  type="button"
-                                  title={hex}
-                                  onClick={() => handlePresetColor(hex)}
-                                  style={{ backgroundColor: hex }}
-                                  className={cn(
-                                    'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110',
-                                    isSelected ? 'border-foreground scale-110' : 'border-transparent'
-                                  )}
-                                />
-                              )
-                            })}
-                          </div>
                           {/* Animal options */}
                           <div className="flex flex-wrap gap-2">
                             {ANIMAL_TYPES.map(animal => {
@@ -444,16 +402,7 @@ export default function Settings() {
                                 </button>
                               )
                             })}
-                            {/* Upload custom */}
-                            <AvatarUploadButton
-                              onUpload={handleAvatarUpload}
-                              uploading={uploadingAvatar}
-                              size={28}
-                            />
                           </div>
-                          {parseAvatarUrl(localAvatarUrl).type === 'custom' && (
-                            <p className="text-xs text-muted-foreground">Custom image uploaded</p>
-                          )}
                         </div>
                       </div>
 

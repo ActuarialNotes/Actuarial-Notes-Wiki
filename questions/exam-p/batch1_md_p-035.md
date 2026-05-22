@@ -1,14 +1,9 @@
 ---
 id: p-035
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - exponential-distribution
-  - expected-value
-  - insurance-payments
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Exponential

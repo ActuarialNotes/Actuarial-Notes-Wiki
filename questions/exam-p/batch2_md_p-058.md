@@ -1,13 +1,9 @@
 ---
 id: p-058
-topic: Univariate Random Variables
-subtopic: Variance and Standard Deviation
+exam: Probability
+topic: Variance and Standard Deviation
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - discrete-distributions
-  - standard-deviation
 wiki_link:
   - Concepts/Standard+Deviation
   - Concepts/Discrete+Univariate+Distributions

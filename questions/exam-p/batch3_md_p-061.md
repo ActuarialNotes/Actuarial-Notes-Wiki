@@ -1,14 +1,9 @@
 ---
 id: p-061
-topic: Univariate Random Variables
-subtopic: Percentiles
+exam: Probability
+topic: Percentiles
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - exponential-distribution
-  - percentiles
-  - policy-limits
 wiki_link:
   - Concepts/Percentiles
   - Concepts/Exponential

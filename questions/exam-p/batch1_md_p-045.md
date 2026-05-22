@@ -1,14 +1,9 @@
 ---
 id: p-045
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - expected-value
-  - exponential-distribution
-  - continuous-distributions
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Exponential

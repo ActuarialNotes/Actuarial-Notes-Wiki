@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
-import { useSubtopics } from '@/hooks/useSubtopics'
+import { useTopics } from '@/hooks/useTopics'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -34,7 +34,7 @@ function computeAdaptiveSubtopics(
 
   const slugsBySubtopic = new Map<string, string[]>()
   for (const q of allQuestions) {
-    if (q.topic !== topic) continue
+    if (q.exam !== topic) continue
     const slugs: string[] = []
     for (const link of q.wiki_link) {
       const ref = hrefToEntryRef(link)
@@ -45,7 +45,7 @@ function computeAdaptiveSubtopics(
         if (last) slugs.push(last.replace(/-/g, ' '))
       }
     }
-    slugsBySubtopic.set(q.subtopic, [...(slugsBySubtopic.get(q.subtopic) ?? []), ...slugs])
+    slugsBySubtopic.set(q.topic, [...(slugsBySubtopic.get(q.topic) ?? []), ...slugs])
   }
 
   interface Scored { subtopic: string; priority: number }
@@ -86,7 +86,7 @@ export default function Landing() {
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const { progress: examProgress, targetDates } = useExamProgress()
-  const { byTopic: subtopicsByTopic, loading: subtopicsLoading } = useSubtopics()
+  const { byExam: subtopicsByTopic, loading: subtopicsLoading } = useTopics()
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
@@ -180,12 +180,12 @@ export default function Landing() {
     const todaySet = new Set(plan.todaysConcepts.map(c => c.toLowerCase()))
     const result = new Set<string>()
     for (const q of allQuestions) {
-      if (q.topic !== topic) continue
+      if (q.exam !== topic) continue
       for (const link of q.wiki_link) {
         const ref = hrefToEntryRef(link)
         const name = ref?.name ?? (link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '')
         if (todaySet.has(name.toLowerCase())) {
-          result.add(q.subtopic)
+          result.add(q.topic)
           break
         }
       }
@@ -215,8 +215,8 @@ export default function Landing() {
   const availableCount = useMemo(() => {
     if (!topic) return 0
     return filterQuestions(allQuestions, {
-      topic,
-      ...(selectedSubtopics.length > 0 && { subtopics: selectedSubtopics }),
+      exam: topic,
+      ...(selectedSubtopics.length > 0 && { topics: selectedSubtopics }),
     }).length
   }, [allQuestions, topic, selectedSubtopics])
 
@@ -235,10 +235,10 @@ export default function Landing() {
   }
 
   function handleStart() {
-    const params = new URLSearchParams({ topic, mode })
+    const params = new URLSearchParams({ exam: topic, mode })
 
     if (mode === 'quiz') {
-      if (selectedSubtopics.length > 0) params.set('subtopics', selectedSubtopics.join(','))
+      if (selectedSubtopics.length > 0) params.set('topics', selectedSubtopics.join(','))
       params.set('count', String(count))
       params.set('reveal', reveal)
     } else {

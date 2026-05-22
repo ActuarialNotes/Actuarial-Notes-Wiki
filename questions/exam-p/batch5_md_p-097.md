@@ -1,12 +1,9 @@
 ---
 id: p-097
-topic: General Probability
-subtopic: Combinatorics
+exam: Probability
+topic: Combinatorics
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - combinatorics
 wiki_link: Concepts/Combinatorics
 answer: C
 points: 1

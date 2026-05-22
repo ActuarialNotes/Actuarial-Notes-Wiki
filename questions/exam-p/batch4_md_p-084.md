@@ -1,14 +1,9 @@
 ---
 id: p-084
-topic: Multivariate Random Variables
-subtopic: Law of Total Probability
+exam: Probability
+topic: Law of Total Probability
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - conditional-probability
-  - exponential-distribution
-  - law-of-total-probability
 wiki_link:
   - Concepts/The+Law+of+Total+Probability
   - Concepts/Conditional+Probability

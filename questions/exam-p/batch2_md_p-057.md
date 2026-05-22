@@ -1,14 +1,9 @@
 ---
 id: p-057
-topic: Univariate Random Variables
-subtopic: Variance and Standard Deviation
+exam: Probability
+topic: Variance and Standard Deviation
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - uniform-distribution
-  - variance
-  - censored-distributions
 wiki_link: Concepts/Variance
 answer: C
 points: 1

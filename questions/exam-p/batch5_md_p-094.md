@@ -1,13 +1,9 @@
 ---
 id: p-094
-topic: Univariate Random Variables
-subtopic: Conditional Probability
+exam: Probability
+topic: Conditional Probability
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - geometric-distribution
-  - conditional-expectation
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Geometric

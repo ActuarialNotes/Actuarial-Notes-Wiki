@@ -319,7 +319,7 @@ export function ReadinessCard({
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
 
   const examSessions = useMemo(
-    () => sessions.filter(s => s.topic === syllabus.examTopic),
+    () => sessions.filter(s => s.exam === syllabus.examTopic),
     [sessions, syllabus.examTopic],
   )
 

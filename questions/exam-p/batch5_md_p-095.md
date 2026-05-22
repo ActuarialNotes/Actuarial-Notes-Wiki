@@ -1,13 +1,9 @@
 ---
 id: p-095
-topic: Multivariate Random Variables
-subtopic: Conditional Probability
+exam: Probability
+topic: Conditional Probability
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - continuous-distributions
-  - conditional-expectation
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Continuous+Univariate+Distributions

@@ -1,13 +1,9 @@
 ---
 id: p-069
-topic: Multivariate Random Variables
-subtopic: Central Limit Theorem
+exam: Probability
+topic: Central Limit Theorem
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - central-limit-theorem
-  - covariance
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Covariance

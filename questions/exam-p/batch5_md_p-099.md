@@ -1,13 +1,9 @@
 ---
 id: p-099
-topic: General Probability
-subtopic: Set Theory and Venn Diagrams
+exam: Probability
+topic: Set Theory and Venn Diagrams
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - set-theory
-  - probability-rules
 wiki_link:
   - Concepts/Set+Theory
   - Concepts/Probability

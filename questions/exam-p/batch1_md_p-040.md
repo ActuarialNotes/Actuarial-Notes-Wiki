@@ -1,13 +1,9 @@
 ---
 id: p-040
-topic: Multivariate Random Variables
-subtopic: Linear Combinations of Random Variables
+exam: Probability
+topic: Linear Combinations of Random Variables
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - normal-distribution
-  - linear-combinations
 wiki_link:
   - Concepts/Linear+Combinations+of+Random+Variables
   - Concepts/Normal

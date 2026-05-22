@@ -1,13 +1,9 @@
 ---
 id: p-096
-topic: Univariate Random Variables
-subtopic: Discrete Univariate Distributions
+exam: Probability
+topic: Discrete Univariate Distributions
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - negative-binomial-distribution
-  - mode
 wiki_link:
   - Concepts/Negative+Binomial+Distribution
   - Concepts/Negative+Binomial

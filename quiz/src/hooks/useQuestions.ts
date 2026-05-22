@@ -10,8 +10,7 @@ export function useQuestions(filters: QuestionFilter) {
 
   // Flatten array filters to stable primitives for the dependency array.
   // Sort first so reordered-but-equivalent inputs don't refetch.
-  const tagsKey = filters.tags ? [...filters.tags].sort().join(',') : ''
-  const subtopicsKey = filters.subtopics ? [...filters.subtopics].sort().join(',') : ''
+  const topicsKey = filters.topics ? [...filters.topics].sort().join(',') : ''
   const idsKey = filters.ids ? [...filters.ids].sort().join(',') : ''
 
   useEffect(() => {
@@ -44,7 +43,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.topic, filters.subtopic, filters.difficulty, filters.mode, filters.count, tagsKey, subtopicsKey, idsKey])
+  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, topicsKey, idsKey])
 
   return { questions, loading, error }
 }

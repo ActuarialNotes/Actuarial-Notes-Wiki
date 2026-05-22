@@ -1,13 +1,9 @@
 ---
 id: p-067
-topic: Multivariate Random Variables
-subtopic: Central Limit Theorem
+exam: Probability
+topic: Central Limit Theorem
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - poisson-distribution
-  - central-limit-theorem
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Poisson

@@ -1,13 +1,9 @@
 ---
 id: p-073
-topic: Multivariate Random Variables
-subtopic: Independent Random Variables
+exam: Probability
+topic: Independent Random Variables
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - exponential-distribution
-  - independent-variables
 wiki_link:
   - Concepts/Independent+Random+Variables
   - Concepts/Exponential

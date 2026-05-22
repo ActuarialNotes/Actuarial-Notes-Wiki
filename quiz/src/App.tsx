@@ -6,7 +6,7 @@ import Auth from '@/pages/Auth'
 import Quiz from '@/pages/Quiz'
 import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
-import Browse from '@/pages/Browse'
+import Search from '@/pages/Search'
 import Settings from '@/pages/Settings'
 import Sidebar from '@/components/Sidebar'
 import { AuthProvider } from '@/contexts/AuthContext'
@@ -95,7 +95,7 @@ export default function App() {
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
-                <Route path="/browse" element={<Browse />} />
+                <Route path="/search" element={<Search />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>

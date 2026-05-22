@@ -1,13 +1,9 @@
 ---
 id: p-065
-topic: Multivariate Random Variables
-subtopic: Central Limit Theorem
+exam: Probability
+topic: Central Limit Theorem
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - central-limit-theorem
-  - percentiles
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Percentile

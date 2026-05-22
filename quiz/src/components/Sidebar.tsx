@@ -237,8 +237,8 @@ export default function Sidebar() {
             onNavigate={closeMobile}
           />
           <SidebarItem
-            to="/browse"
-            label="Browse"
+            to="/search"
+            label="Search"
             icon={<Compass className="h-4 w-4" />}
             collapsed={collapsed}
             onNavigate={closeMobile}

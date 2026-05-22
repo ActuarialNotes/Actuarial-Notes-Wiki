@@ -1,13 +1,9 @@
 ---
 id: p-049
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - discrete-distributions
-  - deductibles
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Discrete+Univariate+Distributions

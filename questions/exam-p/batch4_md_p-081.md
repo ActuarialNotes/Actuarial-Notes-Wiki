@@ -1,13 +1,9 @@
 ---
 id: p-081
-topic: General Probability
-subtopic: Conditional Probability
+exam: Probability
+topic: Conditional Probability
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - conditional-probability
-  - mutually-exclusive
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Mutually+Exclusive+Events

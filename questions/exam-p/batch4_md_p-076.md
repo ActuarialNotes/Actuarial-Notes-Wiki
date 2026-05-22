@@ -1,13 +1,9 @@
 ---
 id: p-076
-topic: Multivariate Random Variables
-subtopic: Variance and Standard Deviation
+exam: Probability
+topic: Variance and Standard Deviation
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - discrete-distributions
-  - marginal-distribution
 wiki_link:
   - Concepts/Marginal+Distribution
   - Concepts/Discrete+Univariate+Distributions

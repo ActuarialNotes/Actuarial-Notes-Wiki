@@ -1,14 +1,9 @@
 ---
 id: p-079
-topic: Multivariate Random Variables
-subtopic: Distribution of Order Statistics
+exam: Probability
+topic: Distribution of Order Statistics
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - order-statistics
-  - independent-variables
-  - exponential-distribution
 wiki_link:
   - Concepts/Order+Statistics
   - Concepts/Independent+Random+Variables

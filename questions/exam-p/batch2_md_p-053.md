@@ -1,13 +1,9 @@
 ---
 id: p-053
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - uniform-distribution
-  - deductibles
 wiki_link:
   - Concepts/Uniform+Continuous+Distribution
   - Concepts/Deductibles

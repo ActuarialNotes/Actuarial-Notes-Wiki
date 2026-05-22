@@ -1,13 +1,9 @@
 ---
 id: p-052
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - continuous-distributions
-  - expected-value
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Continuous+Univariate+Distributions

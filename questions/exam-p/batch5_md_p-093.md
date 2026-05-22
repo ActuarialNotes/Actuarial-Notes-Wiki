@@ -1,14 +1,9 @@
 ---
 id: p-093
-topic: Multivariate Random Variables
-subtopic: Variance and Standard Deviation
+exam: Probability
+topic: Variance and Standard Deviation
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - poisson-distribution
-  - uniform-distribution
-  - conditional-variance
 wiki_link:
   - Concepts/Variance
   - Concepts/Poisson

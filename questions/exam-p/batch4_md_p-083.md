@@ -1,13 +1,9 @@
 ---
 id: p-083
-topic: Multivariate Random Variables
-subtopic: Conditional Probability Function
+exam: Probability
+topic: Conditional Probability Function
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - discrete-distributions
-  - conditional-variance
 wiki_link:
   - Concepts/Conditional+Probability+Function
   - Concepts/Discrete+Univariate+Distributions

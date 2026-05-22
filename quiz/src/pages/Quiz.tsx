@@ -25,7 +25,7 @@ export default function Quiz() {
   const countParam = searchParams.get('count')
 
   const filters: QuestionFilter = useMemo(() => {
-    const subtopicsParam = searchParams.get('subtopics')
+    const topicsParam = searchParams.get('topics')
     const idsParam = searchParams.get('ids')
     const selection = searchParams.get('selection')
 
@@ -40,8 +40,8 @@ export default function Quiz() {
     }
 
     return {
-      topic: searchParams.get('topic') ?? undefined,
-      subtopics: subtopicsParam ? subtopicsParam.split(',') : undefined,
+      exam: searchParams.get('exam') ?? undefined,
+      topics: topicsParam ? topicsParam.split(',') : undefined,
       difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
       mode,
       count: countParam ? Number(countParam) : undefined,
@@ -106,7 +106,7 @@ export default function Quiz() {
     try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
     resetQuiz()
     const from = searchParams.get('from')
-    if (from === 'browse') navigate('/browse')
+    if (from === 'search') navigate('/search')
     else if (from === 'dashboard') navigate('/dashboard')
     else navigate('/')
   }

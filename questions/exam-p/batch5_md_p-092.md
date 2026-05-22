@@ -1,12 +1,9 @@
 ---
 id: p-092
-topic: General Probability
-subtopic: Probability Rules
+exam: Probability
+topic: Probability Rules
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - probability-rules
 wiki_link: Concepts/Probability
 answer: C
 points: 1

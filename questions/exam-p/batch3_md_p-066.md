@@ -1,13 +1,9 @@
 ---
 id: p-066
-topic: Multivariate Random Variables
-subtopic: Linear Combinations of Random Variables
+exam: Probability
+topic: Linear Combinations of Random Variables
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - normal-distribution
-  - sample-mean
 wiki_link:
   - Concepts/Linear+Combinations+of+Random+Variables
   - Concepts/Normal

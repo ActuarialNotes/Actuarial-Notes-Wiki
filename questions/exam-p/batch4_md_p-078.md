@@ -1,13 +1,9 @@
 ---
 id: p-078
-topic: Multivariate Random Variables
-subtopic: Independent Random Variables
+exam: Probability
+topic: Independent Random Variables
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - exponential-distribution
-  - variance
 wiki_link:
   - Concepts/Independent+Random+Variables
   - Concepts/Exponential

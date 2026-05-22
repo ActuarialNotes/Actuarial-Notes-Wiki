@@ -1,12 +1,9 @@
 ---
 id: p-037
-topic: Univariate Random Variables
-subtopic: Discrete Univariate Distributions
+exam: Probability
+topic: Discrete Univariate Distributions
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - binomial-distribution
 wiki_link:
   - Concepts/Binomial+Distribution
   - Concepts/Binomial

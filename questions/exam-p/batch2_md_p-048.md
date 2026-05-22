@@ -1,13 +1,9 @@
 ---
 id: p-048
-topic: Univariate Random Variables
-subtopic: Continuous Univariate Distributions
+exam: Probability
+topic: Continuous Univariate Distributions
 difficulty: hard
 type: multiple-choice
-tags:
-  - exam-p
-  - deductibles
-  - expected-value
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Deductibles

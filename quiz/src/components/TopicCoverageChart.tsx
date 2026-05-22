@@ -8,7 +8,7 @@ interface Response {
 interface TopicCoverageChartProps {
   questions: Question[]
   responses: Record<string, Response>
-  masteryBySubtopic?: Map<string, MasteryState>
+  masteryByTopic?: Map<string, MasteryState>
 }
 
 const STATE_LABEL: Record<MasteryState, string> = {
@@ -33,11 +33,11 @@ interface SubtopicStat {
   total: number
 }
 
-export function TopicCoverageChart({ questions, responses, masteryBySubtopic }: TopicCoverageChartProps) {
+export function TopicCoverageChart({ questions, responses, masteryByTopic }: TopicCoverageChartProps) {
   const statsBySubtopic = new Map<string, SubtopicStat>()
 
   for (const q of questions) {
-    const key = q.subtopic
+    const key = q.topic
     if (!statsBySubtopic.has(key)) {
       statsBySubtopic.set(key, { name: key, correct: 0, total: 0 })
     }
@@ -62,8 +62,8 @@ export function TopicCoverageChart({ questions, responses, masteryBySubtopic }: 
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="text-foreground truncate">{stat.name}</span>
-                  {masteryBySubtopic?.has(stat.name) && (() => {
-                    const state = masteryBySubtopic.get(stat.name)!
+                  {masteryByTopic?.has(stat.name) && (() => {
+                    const state = masteryByTopic.get(stat.name)!
                     return (
                       <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded border text-[10px] font-medium ${STATE_BADGE_CLASSES[state]}`}>
                         {STATE_LABEL[state]}

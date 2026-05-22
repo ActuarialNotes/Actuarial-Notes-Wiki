@@ -1,13 +1,9 @@
 ---
 id: p-032
-topic: Univariate Random Variables
-subtopic: Conditional Probability
+exam: Probability
+topic: Conditional Probability
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - continuous-distributions
-  - conditional-probability
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Continuous+Univariate+Distributions

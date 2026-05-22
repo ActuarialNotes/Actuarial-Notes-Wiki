@@ -1,13 +1,9 @@
 ---
 id: p-080
-topic: Multivariate Random Variables
-subtopic: Covariance and Correlation
+exam: Probability
+topic: Covariance and Correlation
 difficulty: medium
 type: multiple-choice
-tags:
-  - exam-p
-  - covariance
-  - variance
 wiki_link:
   - Concepts/Covariance
   - Concepts/Variance

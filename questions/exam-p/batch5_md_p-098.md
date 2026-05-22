@@ -1,12 +1,9 @@
 ---
 id: p-098
-topic: Univariate Random Variables
-subtopic: Expected Value
+exam: Probability
+topic: Expected Value
 difficulty: easy
 type: multiple-choice
-tags:
-  - exam-p
-  - expected-value
 wiki_link: Concepts/Expected+Value
 answer: B
 points: 1

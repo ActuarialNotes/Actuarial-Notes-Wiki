@@ -64,8 +64,9 @@ export default function Dashboard() {
   }, [refreshMastery])
 
   // All exams that are marked in_progress and have a known syllabus
-  const inProgressSyllabi = syllabi.filter(
-    s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress',
+  const inProgressSyllabi = useMemo(
+    () => syllabi.filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'),
+    [syllabi, examProgress],
   )
 
   // Restore active exam from localStorage once syllabi are loaded

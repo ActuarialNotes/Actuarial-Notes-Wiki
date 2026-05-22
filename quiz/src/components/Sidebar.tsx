@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import {
@@ -92,27 +92,16 @@ interface ExamPillProps {
 function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
   const navigate = useNavigate()
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const dropdownRef = useRef<HTMLDivElement>(null)
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
   const shortLabel = syllabus.examLabel.replace(/^Exam\s+/i, '')
 
-  useEffect(() => {
-    if (!isOpen || !buttonRef.current) return
+  // Compute position before paint so there's no layout flash
+  useLayoutEffect(() => {
+    if (!isOpen || !buttonRef.current) { setDropdownPos(null); return }
     const rect = buttonRef.current.getBoundingClientRect()
     setDropdownPos({ top: rect.bottom + 4, left: rect.left })
   }, [isOpen])
-
-  useEffect(() => {
-    if (!isOpen) return
-    function handleClickOutside(e: MouseEvent) {
-      const inButton = buttonRef.current?.contains(e.target as Node)
-      const inDropdown = dropdownRef.current?.contains(e.target as Node)
-      if (!inButton && !inDropdown) onClose()
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isOpen, onClose])
 
   function handleReadConcepts() {
     onClose()
@@ -135,28 +124,35 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
         {shortLabel}
       </button>
       {isOpen && dropdownPos && createPortal(
-        <div
-          ref={dropdownRef}
-          style={{ position: 'fixed', top: dropdownPos.top, left: dropdownPos.left, zIndex: 9999 }}
-          className="rounded-md border bg-popover shadow-md py-1 min-w-[152px]"
-        >
-          <button
-            type="button"
-            onClick={handleReadConcepts}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+        <>
+          {/* Full-screen backdrop — any tap outside the menu closes it */}
+          <div
+            style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
+            onClick={onClose}
+            aria-hidden="true"
+          />
+          <div
+            style={{ position: 'fixed', top: dropdownPos.top, left: dropdownPos.left, zIndex: 9999 }}
+            className="rounded-md border bg-popover shadow-md py-1 min-w-[152px]"
           >
-            <BookOpen className="h-4 w-4 shrink-0" />
-            <span>Read Concepts</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleStartQuiz}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
-          >
-            <Play className="h-4 w-4 shrink-0" />
-            <span>Start Quiz</span>
-          </button>
-        </div>,
+            <button
+              type="button"
+              onClick={handleReadConcepts}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+            >
+              <BookOpen className="h-4 w-4 shrink-0" />
+              <span>Read Concepts</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleStartQuiz}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+            >
+              <Play className="h-4 w-4 shrink-0" />
+              <span>Start Quiz</span>
+            </button>
+          </div>
+        </>,
         document.body
       )}
     </>

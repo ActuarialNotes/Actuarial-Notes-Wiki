@@ -454,7 +454,48 @@ export function ReadinessCard({
 
   return (
     <div className="space-y-4">
-      {/* Today's Study Plan card — first */}
+      {/* Primary exam card — first */}
+      <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
+        <CardContent className="p-5 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
+            </div>
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowConfig(true)}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                aria-label="Study plan settings"
+                title="Study plan settings"
+              >
+                <Settings2 className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Heatmap */}
+          <ExamHeatmap
+            sessions={examSessions}
+            examProgressKey={progressKey}
+            targetDate={examDate}
+            onTargetDateChange={onExamDateChange ?? (() => {})}
+            targetReadyDate={config.targetReadyDate}
+            onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
+          />
+
+          {/* Warnings */}
+          {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
+            <BehindWarning plan={plan} />
+          )}
+          {!loading && plan?.status === 'review_mode' && (
+            <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Today's Study Plan card */}
       {displayConcepts.length > 0 && (
         <Card>
           <CardContent className="p-5 space-y-3">
@@ -513,37 +554,9 @@ export function ReadinessCard({
         </Button>
       </div>
 
-      {/* Primary exam card */}
-      <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
+      {/* Study plan card — standalone */}
+      <Card>
         <CardContent className="p-5 space-y-4">
-          {/* Header */}
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
-            </div>
-            <div className="flex items-center gap-1 shrink-0">
-              <button
-                type="button"
-                onClick={() => setShowConfig(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                aria-label="Study plan settings"
-                title="Study plan settings"
-              >
-                <Settings2 className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Heatmap */}
-          <ExamHeatmap
-            sessions={examSessions}
-            examProgressKey={progressKey}
-            targetDate={examDate}
-            onTargetDateChange={onExamDateChange ?? (() => {})}
-            targetReadyDate={config.targetReadyDate}
-            onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
-          />
-
           {/* Topics mastered progress bar */}
           <div className="space-y-1.5">
             <div className="flex items-baseline justify-between text-sm">
@@ -622,19 +635,6 @@ export function ReadinessCard({
             </div>
           </div>
 
-          {/* Warnings */}
-          {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
-            <BehindWarning plan={plan} />
-          )}
-          {!loading && plan?.status === 'review_mode' && (
-            <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Study plan card — standalone */}
-      <Card>
-        <CardContent className="p-5">
           <StudyPlanTracker
             syllabus={syllabus}
             masteryRecords={masteryRecords}

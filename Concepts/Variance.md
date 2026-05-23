@@ -1,7 +1,6 @@
 
-- **Variance** $\sigma^2$ is the expected squared deviation of a random variable $X$ from its mean $\mu$.
+- **Variance** $\sigma^2$ measures the spread or dispersion of its distribution.
 - $$\text{Var}(X) = E\left[(X - \mu)^2\right]$$
-- It measures the spread or dispersion of its distribution.
 - Efficient computation formula: $$\text{Var}(X) = E[X^2] - \mu^2$$ where $\mu = E[X]$
 - Key properties:
   - $\text{Var}(aX + b) = a^2 \text{Var}(X)$

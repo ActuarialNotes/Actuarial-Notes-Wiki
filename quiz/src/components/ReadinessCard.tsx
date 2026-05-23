@@ -18,7 +18,11 @@ import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
-import type { QuizSession } from '@/lib/supabase'
+import type { QuizSession, QuestionResponse } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
+import type { Question } from '@/lib/parser'
+import { useAuth } from '@/hooks/useAuth'
+import { SessionRow, type SessionDetail } from '@/components/SessionRow'
 
 // ── Radial donut chart ─────────────────────────────────────────────────────────
 
@@ -292,6 +296,7 @@ export function ReadinessCard({
   isPremium = true,
 }: Props) {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
   const [selectedConceptIdx, setSelectedConceptIdx] = useState<number | null>(null)
   const [quizLoading, setQuizLoading] = useState(false)
@@ -302,12 +307,53 @@ export function ReadinessCard({
   const [showConfig, setShowConfig] = useState(false)
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
 
+  // Quiz history state
+  const [selectedDay, setSelectedDay] = useState<string | null>(null)
+  const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set())
+  const [sessionDetails, setSessionDetails] = useState<Map<string, SessionDetail>>(new Map())
+
   const toggleTopic = (name: string) =>
     setOpenTopics(prev => {
       const next = new Set(prev)
       next.has(name) ? next.delete(name) : next.add(name)
       return next
     })
+
+  async function handleSessionToggle(sessionId: string) {
+    if (!user) return
+    const isExpanding = !expandedSessions.has(sessionId)
+    setExpandedSessions(prev => {
+      const next = new Set(prev)
+      isExpanding ? next.add(sessionId) : next.delete(sessionId)
+      return next
+    })
+    if (!isExpanding || sessionDetails.has(sessionId)) return
+    setSessionDetails(prev => new Map(prev).set(sessionId, { loading: true, error: null, items: [] }))
+    try {
+      const [responsesResult, rawFiles] = await Promise.all([
+        supabase
+          .from('question_responses')
+          .select('*')
+          .eq('session_id', sessionId)
+          .eq('user_id', user.id)
+          .order('answered_at', { ascending: true }),
+        fetchAllQuestions(),
+      ])
+      if (responsesResult.error) throw new Error(responsesResult.error.message)
+      const questionMap = new Map(parseAllQuestions(rawFiles).map((q: Question) => [q.id, q]))
+      const items = (responsesResult.data ?? []).map((r: QuestionResponse) => ({
+        response: r,
+        question: questionMap.get(r.question_id) ?? null,
+      }))
+      setSessionDetails(prev => new Map(prev).set(sessionId, { loading: false, error: null, items }))
+    } catch (err) {
+      setSessionDetails(prev => new Map(prev).set(sessionId, {
+        loading: false,
+        error: err instanceof Error ? err.message : 'Failed to load session details',
+        items: [],
+      }))
+    }
+  }
 
   useEffect(() => {
     if (openConceptsTrigger) setConceptModalOpen(true)
@@ -520,7 +566,43 @@ export function ReadinessCard({
             onTargetDateChange={onExamDateChange ?? (() => {})}
             targetReadyDate={config.targetReadyDate}
             onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
+            onOpenStudyPlan={() => setShowConfig(true)}
+            onDayClick={date => { setSelectedDay(date); setExpandedSessions(new Set()); setSessionDetails(new Map()) }}
           />
+
+          {/* Quiz history panel — shown when a heatmap day is clicked */}
+          {selectedDay && (() => {
+            const daySessions = examSessions.filter(s => s.completed_at.slice(0, 10) === selectedDay)
+            return (
+              <div className="border-t pt-3 space-y-1 mt-1">
+                <div className="flex items-center justify-between text-xs text-muted-foreground pb-1">
+                  <span className="font-medium">Sessions on {selectedDay}</span>
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedDay(null); setExpandedSessions(new Set()); setSessionDetails(new Map()) }}
+                    className="hover:text-foreground transition-colors"
+                    aria-label="Clear day filter"
+                  >
+                    ✕
+                  </button>
+                </div>
+                {daySessions.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">No sessions on this date.</p>
+                ) : (
+                  daySessions.map((session, idx) => (
+                    <SessionRow
+                      key={session.id}
+                      session={session}
+                      divider={idx > 0}
+                      expanded={expandedSessions.has(session.id)}
+                      detail={sessionDetails.get(session.id)}
+                      onToggle={() => handleSessionToggle(session.id)}
+                    />
+                  ))
+                )}
+              </div>
+            )
+          })()}
 
           {/* Warnings */}
           {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (

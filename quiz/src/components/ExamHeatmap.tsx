@@ -58,6 +58,8 @@ interface Props {
   onTargetReadyDateChange?: (date: string | null) => void
   /** Called when a day cell with sessions is clicked */
   onDayClick?: (date: string) => void
+  /** When provided, clicking the exam/ready date labels opens this instead of inline editing */
+  onOpenStudyPlan?: () => void
 }
 
 export function ExamHeatmap({
@@ -68,6 +70,7 @@ export function ExamHeatmap({
   targetReadyDate,
   onTargetReadyDateChange,
   onDayClick,
+  onOpenStudyPlan,
 }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
@@ -213,9 +216,9 @@ export function ExamHeatmap({
   return (
     <div className="space-y-1.5">
       {/* Month labels */}
-      <div className="flex items-end gap-px">
+      <div className="flex items-end gap-[2px]">
         <div className="shrink-0" style={{ width: 16 }} />
-        <div className="flex-1 flex gap-px overflow-hidden">
+        <div className="flex-1 flex gap-[2px] overflow-hidden">
           {columns.map(col => (
             <div key={col.key} className="flex-1 min-w-0 text-[8px] text-muted-foreground leading-none truncate">
               {col.monthLabel ?? ''}
@@ -225,13 +228,13 @@ export function ExamHeatmap({
       </div>
 
       {/* Day rows × week columns */}
-      <div className="flex items-stretch gap-px">
+      <div className="flex items-stretch gap-[2px]">
         {/* Day labels */}
-        <div className="flex flex-col gap-px shrink-0" style={{ width: 16 }}>
+        <div className="flex flex-col gap-[2px] shrink-0" style={{ width: 16 }}>
           {DAY_LABELS.map((label, i) => (
             <div
               key={i}
-              className="h-[10px] flex items-center justify-end pr-0.5 text-[8px] text-muted-foreground leading-none select-none"
+              className="h-[14px] flex items-center justify-end pr-0.5 text-[8px] text-muted-foreground leading-none select-none"
             >
               {i % 2 === 0 ? label : ''}
             </div>
@@ -239,11 +242,11 @@ export function ExamHeatmap({
         </div>
 
         {/* Week columns */}
-        <div className="flex-1 flex gap-px overflow-hidden">
+        <div className="flex-1 flex gap-[2px] overflow-hidden">
           {columns.map(col => (
             <div
               key={col.key}
-              className={`flex-1 flex flex-col gap-px rounded-sm ${
+              className={`flex-1 flex flex-col gap-[2px] rounded-sm ${
                 col.isExamWeek
                   ? 'ring-1 ring-inset ring-primary/50'
                   : col.isTargetReadyWeek
@@ -264,14 +267,14 @@ export function ExamHeatmap({
                     className={`w-full rounded-[2px] ${
                       cell.isFuture
                         ? cell.isExamDay
-                          ? 'bg-primary/30 h-[10px] ring-1 ring-inset ring-primary'
+                          ? 'bg-primary/30 h-[14px] ring-1 ring-inset ring-primary'
                           : cell.isReadyDay
-                            ? 'bg-amber-400/30 h-[10px] ring-1 ring-inset ring-amber-400'
-                            : col.isExamWeek ? 'bg-primary/10 h-[10px]'
-                            : col.isTargetReadyWeek ? 'bg-amber-400/10 h-[10px]'
-                            : 'h-[10px]'
-                        : `h-[10px] ${cell.data === null ? 'bg-muted/30' : ''}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
-                    }${cell.isToday ? ' ring-1 ring-inset ring-white/80' : ''}`}
+                            ? 'bg-amber-400/30 h-[14px] ring-1 ring-inset ring-amber-400'
+                            : col.isExamWeek ? 'bg-primary/10 h-[14px]'
+                            : col.isTargetReadyWeek ? 'bg-amber-400/10 h-[14px]'
+                            : 'h-[14px] bg-muted/20'
+                        : `h-[14px] ${cell.data === null ? 'bg-muted/30' : ''}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
+                    }${cell.isToday ? ' ring-1 ring-inset ring-foreground/70 dark:ring-white/80' : ''}`}
                   />
                 )
               })}
@@ -284,10 +287,10 @@ export function ExamHeatmap({
       <div className="flex flex-col gap-1 pt-0.5">
         {/* Exam date */}
         <div className="flex items-center gap-1.5">
-          {!editing ? (
+          {!editing || onOpenStudyPlan ? (
             <button
               type="button"
-              onClick={() => { setDraft(targetDate ?? ''); setEditing(true) }}
+              onClick={() => onOpenStudyPlan ? onOpenStudyPlan() : (setDraft(targetDate ?? ''), setEditing(true))}
               className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
             >
               <Calendar className="h-3 w-3 shrink-0" />
@@ -353,10 +356,10 @@ export function ExamHeatmap({
         {/* Target ready date (only shown if callback provided) */}
         {onTargetReadyDateChange !== undefined && (
           <div className="flex items-center gap-1.5">
-            {!editingReady ? (
+            {!editingReady || onOpenStudyPlan ? (
               <button
                 type="button"
-                onClick={() => { setDraftReady(targetReadyDate ?? ''); setEditingReady(true) }}
+                onClick={() => onOpenStudyPlan ? onOpenStudyPlan() : (setDraftReady(targetReadyDate ?? ''), setEditingReady(true))}
                 className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Calendar className="h-3 w-3 shrink-0 text-amber-500" />

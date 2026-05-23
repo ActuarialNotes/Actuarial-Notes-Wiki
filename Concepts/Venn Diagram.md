@@ -1,17 +1,18 @@
-A **Venn Diagram** is a visual tool used to represent the relationships between different sets. In actuarial probability, they are indispensable for calculating the intersections and unions of multiple events.
-
-The most common calculation derived from a Venn Diagram is finding the probability of the Union. Because the intersection is counted twice if you simply add $P(A)$ and $P(B)$, we must subtract it once:
+- A **Venn Diagram** is a visual tool used to represent the relationships between different sets.
+- They are used for calculating the intersections and unions of multiple events.
+- The most common calculation derived from a Venn Diagram is finding the probability of the Union.
 
 $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 
 ![[Media/Venn_Diagram_Example.png|300]]
 
+## Notation
 * **Universal Set ($S$):** The rectangle representing every possible outcome (Total Probability = 1).
 * **Sets ($A, B$):** The circles representing specific events.
 * **The Intersection ($A \cap B$):** The overlapping region where *both* events occur.
 * **The Union ($A \cup B$):** The total area covered by both circles.
 
-### How to Solve Problems with a Venn Diagram
+## How to Solve Problems with a Venn Diagram
 Actuarial exams often use specific phrasing that maps directly to regions of a Venn Diagram.
 
 
@@ -24,17 +25,15 @@ Actuarial exams often use specific phrasing that maps directly to regions of a V
 | "Exactly one of $A$ or $B$" | $(A \setminus B) \cup (B \setminus A)$ | Both crescent moons (no overlap). |
 
 
-> [!example]- The Insurance Policyholder {💡 Example}
+> [!example]- The Insurance Policyholder {Example}
 > 
 > ### The Big Idea
 > We are looking for the "empty space" in the universal rectangle. To find it, we first need to find the total "footprint" of the policyholders (the Union) and subtract that from the total probability of 1.
 > 
-> ### The Setup
 > * $P(A) = 0.70$
 > * $P(H) = 0.40$
 > * $P(A \cap H) = 0.20$
 > 
-> ### The Solve
 > **Step 1: Find the Union (Anyone with at least one policy)**
 > $$P(A \cup H) = 0.70 + 0.40 - 0.20 = \mathbf{0.90}$$
 > 

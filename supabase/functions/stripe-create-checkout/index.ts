@@ -22,22 +22,22 @@ Deno.serve(async (req: Request) => {
     return new Response(null, { headers: CORS_HEADERS })
   }
 
-  const authHeader = req.headers.get('Authorization')
-  if (!authHeader) return json({ error: 'Unauthorized' }, 401)
-  const token = authHeader.replace(/^Bearer\s+/i, '')
-
-  const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-  const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')!
-  const priceId = Deno.env.get('STRIPE_PREMIUM_PRICE_ID')!
-
-  const admin = createClient(supabaseUrl, serviceRoleKey)
-  const { data: { user }, error: userErr } = await admin.auth.getUser(token)
-  if (userErr || !user) return json({ error: 'Unauthorized' }, 401)
-
-  const stripe = new Stripe(stripeSecret, { apiVersion: '2024-06-20' })
-
   try {
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) return json({ error: 'Unauthorized' }, 401)
+    const token = authHeader.replace(/^Bearer\s+/i, '')
+
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')!
+    const priceId = Deno.env.get('STRIPE_PREMIUM_PRICE_ID')!
+
+    const admin = createClient(supabaseUrl, serviceRoleKey)
+    const { data: { user }, error: userErr } = await admin.auth.getUser(token)
+    if (userErr || !user) return json({ error: 'Unauthorized' }, 401)
+
+    const stripe = new Stripe(stripeSecret, { apiVersion: '2024-06-20' })
+
     // Reuse existing Stripe customer if we have one; otherwise create one and
     // persist it so subsequent checkouts/portal sessions can be opened against
     // the same customer record.

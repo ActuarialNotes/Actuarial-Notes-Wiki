@@ -3,6 +3,7 @@
 // action (navigates to a quiz pre-filtered to today's concepts).
 
 import { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Settings2,
   AlertTriangle,
@@ -12,9 +13,10 @@ import {
   Loader2,
   ChevronDown,
   TrendingUp,
+  Lock,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
@@ -228,6 +230,8 @@ interface Props {
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
   onExamDateChange?: (date: string | null) => void
+  /** When false, the Study Plan card is locked behind a Premium upgrade CTA. Defaults to true. */
+  isPremium?: boolean
 }
 
 export function TodayCard({
@@ -241,6 +245,7 @@ export function TodayCard({
   onConfigChange,
   onRegenerate,
   onExamDateChange,
+  isPremium = true,
 }: Props) {
   const [showConfig, setShowConfig] = useState(false)
   const [selectedStudyPlanIdx, setSelectedStudyPlanIdx] = useState<number | null>(null)
@@ -320,6 +325,49 @@ export function TodayCard({
     [syllabus, masteryStateByName]
   )
 
+
+  // Locked state — free users see a preview of the card with an upgrade CTA.
+  if (!isPremium) {
+    const previewConcepts = displayConcepts.length > 0
+      ? displayConcepts.slice(0, 3)
+      : syllabus.topics[0]?.concepts.slice(0, 3).map(c => c.name) ?? []
+    return (
+      <Card className="border-primary/30 ring-1 ring-primary/10 shadow-sm relative overflow-hidden">
+        <CardContent className="p-5 space-y-3" aria-hidden="true">
+          <div className="flex items-start justify-between gap-2">
+            <h2 className="text-xl font-semibold">Study Plan</h2>
+            <Settings2 className="h-4 w-4 text-muted-foreground" />
+          </div>
+          <p className="text-base font-semibold">{todayLongDate()}</p>
+          <h2 className="text-lg font-semibold">Today's concepts</h2>
+          <ul className="space-y-0.5">
+            {previewConcepts.map((name, i) => (
+              <li key={i} className="flex items-center gap-2.5 px-2 py-1.5">
+                <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-sm flex-1 min-w-0 truncate">{name}</span>
+                <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+        {/* Lock overlay */}
+        <div className="absolute inset-0 backdrop-blur-sm bg-background/70 flex flex-col items-center justify-center gap-3 p-5 text-center">
+          <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10 text-primary">
+            <Lock className="h-5 w-5" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-base font-semibold">Custom Study Plan is Premium</h3>
+            <p className="text-sm text-muted-foreground max-w-xs">
+              Get a daily plan tailored to your target date, paced to your strength level.
+            </p>
+          </div>
+          <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
+            Upgrade — $10/mo
+          </Link>
+        </div>
+      </Card>
+    )
+  }
 
   // Unconfigured state — prompt to set up
   if (!loading && !plan?.config.targetReadyDate) {

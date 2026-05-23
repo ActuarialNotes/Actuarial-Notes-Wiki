@@ -8,6 +8,8 @@ import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
 import Search from '@/pages/Search'
 import Settings from '@/pages/Settings'
+import Upgrade from '@/pages/Upgrade'
+import Store from '@/pages/Store'
 import Sidebar from '@/components/Sidebar'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
@@ -98,6 +100,8 @@ export default function App() {
                 <Route path="/search" element={<Search />} />
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/upgrade" element={<Upgrade />} />
+                <Route path="/store" element={<Store />} />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>
                     <WikiLayout><WikiHome /></WikiLayout>

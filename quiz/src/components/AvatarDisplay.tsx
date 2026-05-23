@@ -1,10 +1,11 @@
 import { useRef } from 'react'
+import { getAnimalPalette, type AnimalPalette } from '@/lib/cosmetics'
 
 // ---- Avatar type system ----
 
 export type AvatarData =
   | { type: 'color'; value: string }
-  | { type: 'animal'; value: AnimalType }
+  | { type: 'animal'; value: AnimalType; variant?: string }
   | { type: 'custom'; value: string }
   | { type: 'image'; value: string }
 
@@ -18,7 +19,13 @@ export function parseAvatarUrl(url: string): AvatarData {
     try {
       const parsed = JSON.parse(url)
       if (parsed.type === 'color') return { type: 'color', value: parsed.value }
-      if (parsed.type === 'animal') return { type: 'animal', value: parsed.value as AnimalType }
+      if (parsed.type === 'animal') {
+        return {
+          type: 'animal',
+          value: parsed.value as AnimalType,
+          variant: typeof parsed.variant === 'string' ? parsed.variant : undefined,
+        }
+      }
       if (parsed.type === 'custom') return { type: 'custom', value: parsed.value }
     } catch { /* fall through */ }
   }
@@ -27,14 +34,18 @@ export function parseAvatarUrl(url: string): AvatarData {
 
 export function serializeAvatar(data: AvatarData): string {
   if (data.type === 'color') return JSON.stringify({ type: 'color', value: data.value })
-  if (data.type === 'animal') return JSON.stringify({ type: 'animal', value: data.value })
+  if (data.type === 'animal') {
+    const payload: { type: 'animal'; value: AnimalType; variant?: string } = { type: 'animal', value: data.value }
+    if (data.variant) payload.variant = data.variant
+    return JSON.stringify(payload)
+  }
   if (data.type === 'custom') return JSON.stringify({ type: 'custom', value: data.value })
   return data.value
 }
 
 // ---- Animal SVG illustrations ----
 
-function FoxSvg({ size }: { size: number }) {
+function FoxSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
@@ -42,16 +53,16 @@ function FoxSvg({ size }: { size: number }) {
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
-      <circle cx="16" cy="16" r="16" fill="#D9622C" />
+      <circle cx="16" cy="16" r="16" fill={palette.primary} />
       <g clipPath="url(#av-clip-fox)">
         {/* Left ear */}
-        <polygon points="7,18 4,0 15,10" fill="#D9622C" />
-        <polygon points="8,16 6,4 13,10" fill="#F8A07A" />
+        <polygon points="7,18 4,0 15,10" fill={palette.primary} />
+        <polygon points="8,16 6,4 13,10" fill={palette.secondary} />
         {/* Right ear */}
-        <polygon points="25,18 28,0 17,10" fill="#D9622C" />
-        <polygon points="24,16 26,4 19,10" fill="#F8A07A" />
+        <polygon points="25,18 28,0 17,10" fill={palette.primary} />
+        <polygon points="24,16 26,4 19,10" fill={palette.secondary} />
         {/* Muzzle */}
-        <ellipse cx="16" cy="23" rx="8" ry="6" fill="#F5DEB3" />
+        <ellipse cx="16" cy="23" rx="8" ry="6" fill={palette.belly} />
         {/* Eyes */}
         <circle cx="11" cy="17" r="2.8" fill="#1C1B1B" />
         <circle cx="21" cy="17" r="2.8" fill="#1C1B1B" />
@@ -64,7 +75,7 @@ function FoxSvg({ size }: { size: number }) {
   )
 }
 
-function KoalaSvg({ size }: { size: number }) {
+function KoalaSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
@@ -72,18 +83,18 @@ function KoalaSvg({ size }: { size: number }) {
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
-      <circle cx="16" cy="16" r="16" fill="#7A9BB5" />
+      <circle cx="16" cy="16" r="16" fill={palette.primary} />
       <g clipPath="url(#av-clip-koala)">
         {/* Left ear */}
-        <circle cx="5" cy="10" r="7" fill="#6389A6" />
-        <circle cx="5" cy="10" r="4.5" fill="#A8C4D8" />
+        <circle cx="5" cy="10" r="7" fill={palette.secondary} />
+        <circle cx="5" cy="10" r="4.5" fill={palette.belly} />
         {/* Right ear */}
-        <circle cx="27" cy="10" r="7" fill="#6389A6" />
-        <circle cx="27" cy="10" r="4.5" fill="#A8C4D8" />
+        <circle cx="27" cy="10" r="7" fill={palette.secondary} />
+        <circle cx="27" cy="10" r="4.5" fill={palette.belly} />
         {/* Face */}
-        <circle cx="16" cy="16" r="16" fill="#7A9BB5" />
+        <circle cx="16" cy="16" r="16" fill={palette.primary} />
         {/* Muzzle */}
-        <ellipse cx="16" cy="22" rx="7" ry="5" fill="#9DBDD4" />
+        <ellipse cx="16" cy="22" rx="7" ry="5" fill={palette.belly} />
         {/* Nose */}
         <ellipse cx="16" cy="19" rx="3.5" ry="2.5" fill="#2D3A42" />
         {/* Eyes */}
@@ -96,7 +107,7 @@ function KoalaSvg({ size }: { size: number }) {
   )
 }
 
-function FrogSvg({ size }: { size: number }) {
+function FrogSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
@@ -104,13 +115,13 @@ function FrogSvg({ size }: { size: number }) {
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
-      <circle cx="16" cy="16" r="16" fill="#3E9C6A" />
+      <circle cx="16" cy="16" r="16" fill={palette.primary} />
       <g clipPath="url(#av-clip-frog)">
         {/* Eye bumps at top */}
-        <circle cx="9" cy="10" r="6" fill="#3E9C6A" />
-        <circle cx="23" cy="10" r="6" fill="#3E9C6A" />
+        <circle cx="9" cy="10" r="6" fill={palette.primary} />
+        <circle cx="23" cy="10" r="6" fill={palette.primary} />
         {/* White belly */}
-        <ellipse cx="16" cy="23" rx="9" ry="7" fill="#C8EDD8" />
+        <ellipse cx="16" cy="23" rx="9" ry="7" fill={palette.belly} />
         {/* Eyes */}
         <circle cx="9" cy="10" r="4" fill="#F5F5F0" />
         <circle cx="23" cy="10" r="4" fill="#F5F5F0" />
@@ -119,13 +130,13 @@ function FrogSvg({ size }: { size: number }) {
         <circle cx="9.8" cy="9.2" r="0.9" fill="white" />
         <circle cx="23.8" cy="9.2" r="0.9" fill="white" />
         {/* Smile */}
-        <path d="M11 21 Q16 25 21 21" stroke="#2D7A50" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+        <path d="M11 21 Q16 25 21 21" stroke={palette.secondary} strokeWidth="1.5" strokeLinecap="round" fill="none" />
       </g>
     </svg>
   )
 }
 
-function OwlSvg({ size }: { size: number }) {
+function OwlSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
@@ -133,13 +144,13 @@ function OwlSvg({ size }: { size: number }) {
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
-      <circle cx="16" cy="16" r="16" fill="#7C5C2E" />
+      <circle cx="16" cy="16" r="16" fill={palette.primary} />
       <g clipPath="url(#av-clip-owl)">
         {/* Ear tufts */}
-        <polygon points="10,14 8,2 14,10" fill="#5C3E18" />
-        <polygon points="22,14 24,2 18,10" fill="#5C3E18" />
+        <polygon points="10,14 8,2 14,10" fill={palette.secondary} />
+        <polygon points="22,14 24,2 18,10" fill={palette.secondary} />
         {/* Face disc */}
-        <ellipse cx="16" cy="20" rx="11" ry="13" fill="#C8A876" />
+        <ellipse cx="16" cy="20" rx="11" ry="13" fill={palette.belly} />
         {/* Large eyes */}
         <circle cx="11" cy="17" r="4.5" fill="#F5F0E8" />
         <circle cx="21" cy="17" r="4.5" fill="#F5F0E8" />
@@ -159,7 +170,7 @@ function OwlSvg({ size }: { size: number }) {
   )
 }
 
-function WolfSvg({ size }: { size: number }) {
+function WolfSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
@@ -167,16 +178,16 @@ function WolfSvg({ size }: { size: number }) {
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
-      <circle cx="16" cy="16" r="16" fill="#5B6E8A" />
+      <circle cx="16" cy="16" r="16" fill={palette.primary} />
       <g clipPath="url(#av-clip-wolf)">
         {/* Left ear */}
-        <polygon points="7,16 4,0 15,9" fill="#5B6E8A" />
-        <polygon points="8,14 6,3 13,9" fill="#8AABCC" />
+        <polygon points="7,16 4,0 15,9" fill={palette.primary} />
+        <polygon points="8,14 6,3 13,9" fill={palette.secondary} />
         {/* Right ear */}
-        <polygon points="25,16 28,0 17,9" fill="#5B6E8A" />
-        <polygon points="24,14 26,3 19,9" fill="#8AABCC" />
+        <polygon points="25,16 28,0 17,9" fill={palette.primary} />
+        <polygon points="24,14 26,3 19,9" fill={palette.secondary} />
         {/* Muzzle */}
-        <ellipse cx="16" cy="22" rx="7" ry="5.5" fill="#8AABCC" />
+        <ellipse cx="16" cy="22" rx="7" ry="5.5" fill={palette.belly} />
         {/* Eyes */}
         <circle cx="11.5" cy="17" r="2.8" fill="#1C1B1B" />
         <circle cx="20.5" cy="17" r="2.8" fill="#1C1B1B" />
@@ -194,7 +205,7 @@ function WolfSvg({ size }: { size: number }) {
   )
 }
 
-function OctopusSvg({ size }: { size: number }) {
+function OctopusSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
@@ -202,16 +213,16 @@ function OctopusSvg({ size }: { size: number }) {
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
-      <circle cx="16" cy="16" r="16" fill="#7C3AED" />
+      <circle cx="16" cy="16" r="16" fill={palette.primary} />
       <g clipPath="url(#av-clip-octopus)">
         {/* Tentacles */}
-        <path d="M7 24 Q5 30 7 34" stroke="#6025C0" strokeWidth="3" strokeLinecap="round" fill="none" />
-        <path d="M11 26 Q10 32 12 36" stroke="#6025C0" strokeWidth="3" strokeLinecap="round" fill="none" />
-        <path d="M16 27 Q16 33 16 37" stroke="#6025C0" strokeWidth="3" strokeLinecap="round" fill="none" />
-        <path d="M21 26 Q22 32 20 36" stroke="#6025C0" strokeWidth="3" strokeLinecap="round" fill="none" />
-        <path d="M25 24 Q27 30 25 34" stroke="#6025C0" strokeWidth="3" strokeLinecap="round" fill="none" />
+        <path d="M7 24 Q5 30 7 34" stroke={palette.secondary} strokeWidth="3" strokeLinecap="round" fill="none" />
+        <path d="M11 26 Q10 32 12 36" stroke={palette.secondary} strokeWidth="3" strokeLinecap="round" fill="none" />
+        <path d="M16 27 Q16 33 16 37" stroke={palette.secondary} strokeWidth="3" strokeLinecap="round" fill="none" />
+        <path d="M21 26 Q22 32 20 36" stroke={palette.secondary} strokeWidth="3" strokeLinecap="round" fill="none" />
+        <path d="M25 24 Q27 30 25 34" stroke={palette.secondary} strokeWidth="3" strokeLinecap="round" fill="none" />
         {/* Body */}
-        <ellipse cx="16" cy="16" rx="12" ry="13" fill="#9D5FF5" />
+        <ellipse cx="16" cy="16" rx="12" ry="13" fill={palette.belly} />
         {/* Eyes */}
         <circle cx="11.5" cy="15" r="3.5" fill="#F5F0FF" />
         <circle cx="20.5" cy="15" r="3.5" fill="#F5F0FF" />
@@ -220,13 +231,13 @@ function OctopusSvg({ size }: { size: number }) {
         <circle cx="12.2" cy="14.2" r="0.7" fill="white" />
         <circle cx="21.2" cy="14.2" r="0.7" fill="white" />
         {/* Smile */}
-        <path d="M13 19.5 Q16 22 19 19.5" stroke="#6025C0" strokeWidth="1.4" strokeLinecap="round" fill="none" />
+        <path d="M13 19.5 Q16 22 19 19.5" stroke={palette.secondary} strokeWidth="1.4" strokeLinecap="round" fill="none" />
       </g>
     </svg>
   )
 }
 
-const ANIMAL_SVGS: Record<AnimalType, React.FC<{ size: number }>> = {
+const ANIMAL_SVGS: Record<AnimalType, React.FC<{ size: number; palette: AnimalPalette }>> = {
   fox: FoxSvg,
   koala: KoalaSvg,
   frog: FrogSvg,
@@ -258,12 +269,13 @@ export function AvatarDisplay({ avatarUrl, initials, size = 32, className }: Ava
 
   if (parsed.type === 'animal') {
     const AnimalSvg = ANIMAL_SVGS[parsed.value]
+    const palette = getAnimalPalette(parsed.value, parsed.variant)
     return (
       <span
         className={className}
         style={{ display: 'inline-flex', width: size, height: size, borderRadius: '50%', overflow: 'hidden', flexShrink: 0 }}
       >
-        <AnimalSvg size={size} />
+        <AnimalSvg size={size} palette={palette} />
       </span>
     )
   }

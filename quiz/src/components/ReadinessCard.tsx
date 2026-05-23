@@ -401,14 +401,9 @@ export function ReadinessCard({
     setPinnedSection(prev => (prev === i ? null : i))
     const topicName = sections[i]?.name
     if (topicName) {
-      const willOpen = !openTopics.has(topicName)
-      toggleTopic(topicName)
-      if (willOpen) {
-        setTimeout(() => {
-          const el = document.querySelector<HTMLElement>(`[data-topic="${CSS.escape(topicName)}"]`)
-          el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-        }, 50)
-      }
+      setOpenTopics(prev =>
+        prev.has(topicName) ? new Set() : new Set([topicName])
+      )
     }
   }
 

@@ -26,7 +26,10 @@ export default function Upgrade() {
         'stripe-create-checkout',
         { body: {} },
       )
-      if (invokeError) throw new Error(invokeError.message)
+      if (invokeError) {
+        console.error('upgrade: invoke error:', invokeError)
+        throw new Error(invokeError.message)
+      }
       if (data?.error) throw new Error(data.error)
       if (!data?.url) throw new Error('Missing checkout URL')
       window.location.assign(data.url)

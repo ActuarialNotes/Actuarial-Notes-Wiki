@@ -5,7 +5,9 @@
 ## Exam P-1 (SOA)
 
 > [!info] Probability (P-1) Exam
-> **3 hours** · **30 multiple choice questions** · Probability theory and its application to measuring risk.
+> **3 hours** · **30 multiple choice questions** ·
+
+The Exam Probability (P-1) Exam covers probability concepts and their application to measuring risk.
 
 ### Prerequisite knowledge
 - [[Calculus]], including series, differentiation, and integration.

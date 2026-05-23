@@ -365,6 +365,13 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     if (respError) set({ error: respError.message })
 
+    // Award 1 gem per correct answer. Failure here is non-fatal: gem rewards
+    // are nice-to-have and shouldn't block session save.
+    if (correctCount > 0) {
+      const { error: gemError } = await supabase.rpc('award_gems', { p_amount: correctCount })
+      if (gemError) console.warn('award_gems failed:', gemError.message)
+    }
+
     // Upsert exam_progress: transition not_started → in_progress on first quiz
     const examLabel = questions[0]?.exam ?? null
     const examId = examLabel ? EXAM_LABEL_TO_ID[examLabel] : null

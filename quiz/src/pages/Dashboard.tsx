@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
+import { useSubscription } from '@/hooks/useSubscription'
 import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
@@ -50,6 +51,7 @@ export default function Dashboard() {
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
   const { progress: examProgress, targetDates, updateTargetDate } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
+  const { isPremium } = useSubscription()
 
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
@@ -278,6 +280,7 @@ export default function Dashboard() {
             onExamDateChange={handleTargetDateChange}
             openConceptsTrigger={conceptsOpenCounter}
             startQuizTrigger={startQuizCounter}
+            isPremium={isPremium}
           />
         )}
       </div>

@@ -1,8 +1,9 @@
 import { useMemo, useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Play, Loader2, Settings2 } from 'lucide-react'
+import { AlertTriangle, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Play, Loader2, Lock, Settings2 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
@@ -280,12 +281,15 @@ interface Props {
   onExamDateChange?: (date: string | null) => void
   openConceptsTrigger?: number
   startQuizTrigger?: number
+  /** Whether the user has access to the custom Study Plan. Defaults to true. */
+  isPremium?: boolean
 }
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onExamDateChange,
   openConceptsTrigger, startQuizTrigger,
+  isPremium = true,
 }: Props) {
   const navigate = useNavigate()
   const [conceptModalOpen, setConceptModalOpen] = useState(false)
@@ -490,15 +494,26 @@ export function ReadinessCard({
               <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
             </div>
             <div className="flex items-center gap-1 shrink-0">
-              <button
-                type="button"
-                onClick={() => setShowConfig(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                aria-label="Study plan settings"
-                title="Study plan settings"
-              >
-                <Settings2 className="h-4 w-4" />
-              </button>
+              {isPremium ? (
+                <button
+                  type="button"
+                  onClick={() => setShowConfig(true)}
+                  className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                  aria-label="Study plan settings"
+                  title="Study plan settings"
+                >
+                  <Settings2 className="h-4 w-4" />
+                </button>
+              ) : (
+                <Link
+                  to="/upgrade"
+                  className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                  aria-label="Upgrade to access study plan settings"
+                  title="Upgrade to Premium to customize your study plan"
+                >
+                  <Lock className="h-4 w-4" />
+                </Link>
+              )}
             </div>
           </div>
 
@@ -523,36 +538,67 @@ export function ReadinessCard({
       </Card>
 
       {/* Today's Study Plan card */}
-      {displayConcepts.length > 0 && (
-        <Card>
-          <CardContent className="p-5 space-y-3">
+      {isPremium ? (
+        displayConcepts.length > 0 && (
+          <Card>
+            <CardContent className="p-5 space-y-3">
+              <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+              <div className="space-y-0.5">
+                {displayConcepts.map((name, idx) => {
+                  const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                  const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                  const isCompleted =
+                    completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                    STATE_ORDER[currentState] >= STATE_ORDER[target]
+                  return (
+                    <button
+                      key={name}
+                      type="button"
+                      onClick={() => setSelectedConceptIdx(idx)}
+                      className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                    >
+                      {isCompleted
+                        ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                        : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                      <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
+                        {name}
+                      </span>
+                      <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )
+      ) : (
+        <Card className="relative overflow-hidden">
+          <CardContent className="p-5 space-y-3" aria-hidden="true">
             <h3 className="text-sm font-semibold">Today's Study Plan</h3>
             <div className="space-y-0.5">
-              {displayConcepts.map((name, idx) => {
-                const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                const isCompleted =
-                  completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-                  STATE_ORDER[currentState] >= STATE_ORDER[target]
-                return (
-                  <button
-                    key={name}
-                    type="button"
-                    onClick={() => setSelectedConceptIdx(idx)}
-                    className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
-                  >
-                    {isCompleted
-                      ? <Check className="h-4 w-4 text-green-500 shrink-0" />
-                      : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
-                    <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
-                      {name}
-                    </span>
-                    <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
-                  </button>
-                )
-              })}
+              {(syllabus.topics[0]?.concepts ?? []).slice(0, 2).map((c, i) => (
+                <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
+                  <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
+                  <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
+                </div>
+              ))}
             </div>
           </CardContent>
+          <div className="absolute inset-0 backdrop-blur-sm bg-background/75 flex flex-col items-center justify-center gap-2 p-5 text-center">
+            <div className="flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 text-primary">
+              <Lock className="h-4 w-4" />
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-sm font-semibold">Custom Study Plan is Premium</p>
+              <p className="text-xs text-muted-foreground max-w-xs">
+                Get a daily plan tailored to your target date and strength level.
+              </p>
+            </div>
+            <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
+              Upgrade — $10/mo
+            </Link>
+          </div>
         </Card>
       )}
 

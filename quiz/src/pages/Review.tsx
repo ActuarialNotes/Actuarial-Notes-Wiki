@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Check, Loader2, TrendingUp, X } from 'lucide-react'
+import { Check, Gem, Loader2, TrendingUp, X } from 'lucide-react'
 import { useQuizStore, readLastSession } from '@/stores/quizStore'
 import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
@@ -195,6 +195,15 @@ export default function Review() {
                 <div className="text-4xl font-bold">{formatTime(timeTakenSeconds)}</div>
                 <div className="text-sm text-muted-foreground mt-1">Time</div>
               </div>
+              {user && correctCount > 0 && (
+                <div className="text-center">
+                  <div className="text-4xl font-bold inline-flex items-center gap-1 text-emerald-500">
+                    +{correctCount}
+                    <Gem className="h-7 w-7" />
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">Gems earned</div>
+                </div>
+              )}
             </div>
           </div>
 

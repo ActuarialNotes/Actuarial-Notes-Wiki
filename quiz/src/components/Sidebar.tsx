@@ -6,6 +6,7 @@ import {
   ChevronsLeft,
   ClipboardList,
   Compass,
+  Gem,
   GraduationCap,
   LayoutDashboard,
   LogIn,
@@ -14,10 +15,12 @@ import {
   Moon,
   Play,
   Settings2,
+  ShoppingBag,
   Sun,
   X,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useGems } from '@/hooks/useGems'
 import { useTheme } from '@/hooks/useTheme'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -166,6 +169,7 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
 
 export default function Sidebar() {
   const { user, signOut } = useAuth()
+  const { balance: gemBalance } = useGems()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const { progress: examProgress } = useExamProgress()
@@ -364,6 +368,32 @@ export default function Sidebar() {
             collapsed={collapsed}
             onNavigate={closeMobile}
           />
+          {user && (
+            <NavLink
+              to="/store"
+              title={collapsed ? `Store — ${gemBalance} gems` : undefined}
+              onClick={closeMobile}
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors border-l-2 ${
+                  isActive
+                    ? 'bg-accent text-foreground border-l-primary font-medium'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-accent/60'
+                }`
+              }
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                <ShoppingBag className="h-4 w-4" />
+              </span>
+              <span className={`truncate flex-1 ${collapsed ? 'lg:hidden' : ''}`}>Store</span>
+              <span
+                className={`inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 ${collapsed ? 'lg:hidden' : ''}`}
+                aria-label={`${gemBalance} gems`}
+              >
+                <Gem className="h-3 w-3" />
+                {gemBalance}
+              </span>
+            </NavLink>
+          )}
         </nav>
 
         <div className="border-t px-2 py-3 space-y-1">

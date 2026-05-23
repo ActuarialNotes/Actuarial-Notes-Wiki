@@ -19,8 +19,11 @@ import {
   AvatarDisplay,
   ANIMAL_TYPES,
   ANIMAL_LABELS,
+  parseAvatarUrl,
   serializeAvatar,
 } from '@/components/AvatarDisplay'
+import { COSMETICS } from '@/lib/cosmetics'
+import { supabase } from '@/lib/supabase'
 
 // ---- Exam status cycle & icons ----
 
@@ -217,6 +220,35 @@ export default function Settings() {
     setProfileDirty(true)
   }
 
+  // Owned cosmetics — extends the avatar picker with unlocked color variants.
+  const [ownedCosmetics, setOwnedCosmetics] = useState<Set<string>>(new Set())
+  useEffect(() => {
+    if (!user?.id) { setOwnedCosmetics(new Set()); return }
+    let cancelled = false
+    supabase
+      .from('user_cosmetics')
+      .select('cosmetic_id')
+      .eq('user_id', user.id)
+      .then(({ data, error }: { data: { cosmetic_id: string }[] | null; error: { message: string } | null }) => {
+        if (cancelled) return
+        if (error) {
+          console.warn('Settings: failed to load cosmetics:', error.message)
+          return
+        }
+        setOwnedCosmetics(new Set((data ?? []).map(r => r.cosmetic_id)))
+      })
+    return () => { cancelled = true }
+  }, [user?.id])
+
+  const handleVariantSelect = (animal: typeof ANIMAL_TYPES[number], variantKey: string) => {
+    setLocalAvatarUrl(serializeAvatar({ type: 'animal', value: animal, variant: variantKey }))
+    setProfileDirty(true)
+  }
+
+  const currentAvatar = parseAvatarUrl(localAvatarUrl)
+  const currentAnimal = currentAvatar.type === 'animal' ? currentAvatar.value : null
+  const currentVariant = currentAvatar.type === 'animal' ? currentAvatar.variant ?? null : null
+
   // ---- Exams section state ----
   const { selectedTrack, setSelectedTrack } = useExamProgress()
   const [localExamMap, setLocalExamMap] = useState<Record<string, { status: ItemStatus; targetDate: string }>>({})
@@ -383,10 +415,10 @@ export default function Settings() {
                       <div className="flex items-start gap-4">
                         <AvatarDisplay avatarUrl={localAvatarUrl} initials={initials} size={64} />
                         <div className="space-y-2">
-                          {/* Animal options */}
+                          {/* Default animal swatches */}
                           <div className="flex flex-wrap gap-2">
                             {ANIMAL_TYPES.map(animal => {
-                              const isSelected = localAvatarUrl === serializeAvatar({ type: 'animal', value: animal })
+                              const isSelected = currentAnimal === animal && !currentVariant
                               return (
                                 <button
                                   key={animal}
@@ -403,6 +435,35 @@ export default function Settings() {
                               )
                             })}
                           </div>
+                          {/* Owned cosmetic variants */}
+                          {ownedCosmetics.size > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                              {COSMETICS.filter(c => ownedCosmetics.has(c.id)).map(c => {
+                                const isSelected = currentAnimal === c.animal && currentVariant === c.variantKey
+                                return (
+                                  <button
+                                    key={c.id}
+                                    type="button"
+                                    title={c.variantName}
+                                    onClick={() => handleVariantSelect(c.animal, c.variantKey)}
+                                    className={cn(
+                                      'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110 overflow-hidden p-0',
+                                      isSelected ? 'border-foreground scale-110' : 'border-transparent'
+                                    )}
+                                  >
+                                    <AvatarDisplay
+                                      avatarUrl={serializeAvatar({ type: 'animal', value: c.animal, variant: c.variantKey })}
+                                      initials=""
+                                      size={28}
+                                    />
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          )}
+                          <Link to="/store" className="text-xs text-primary hover:underline inline-block">
+                            + Unlock more in the Store
+                          </Link>
                         </div>
                       </div>
 

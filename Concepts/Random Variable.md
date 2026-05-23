@@ -1,7 +1,5 @@
 - A **Random Variable** **$X$** is a function that assigns a real number to each outcome in a sample space $S$
-
-$$X : S \to \mathbb{R}$$
-
+- $$X : S \to \mathbb{R}$$
 - They enable numerical analysis of random experiments.
 - Random variables are classified as discrete or continuous:
   - Discrete r.v.'s have a countable range of outcomes

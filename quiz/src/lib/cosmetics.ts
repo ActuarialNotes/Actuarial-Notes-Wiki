@@ -7,13 +7,15 @@ export interface AnimalPalette {
 }
 
 export interface Cosmetic {
-  id: string                 // '<animal>:<variantKey>'
-  animal: AnimalType
-  variantKey: string
+  id: string
+  type: 'variant' | 'badge'
+  animal?: AnimalType
+  variantKey?: string
   variantName: string
-  palette: AnimalPalette
+  palette?: AnimalPalette
   priceGems: number
-  tier: 'basic' | 'rare'    // basic = 10 gems, rare = 50 gems
+  tier?: 'basic' | 'rare'    // basic = 10 gems, rare = 50 gems
+  premiumOnly?: boolean
 }
 
 // Default palettes match the original AvatarDisplay colors so existing avatars
@@ -32,52 +34,55 @@ export const DEFAULT_PALETTES: Record<AnimalType, AnimalPalette> = {
 // rare  (50 gems) = distinctive subspecies or separate species
 export const COSMETICS: Cosmetic[] = [
   // Fox
-  { id: 'fox:crimson',   animal: 'fox',     variantKey: 'crimson',   variantName: 'Red Fox',
+  { id: 'fox:crimson',   type: 'variant', animal: 'fox',     variantKey: 'crimson',   variantName: 'Red Fox',
     palette: { primary: '#C0392B', secondary: '#E74C3C', belly: '#FECACA' },
     priceGems: 10, tier: 'basic' },
-  { id: 'fox:arctic',    animal: 'fox',     variantKey: 'arctic',    variantName: 'Arctic Fox',
+  { id: 'fox:arctic',    type: 'variant', animal: 'fox',     variantKey: 'arctic',    variantName: 'Arctic Fox',
     palette: { primary: '#E5E7EB', secondary: '#FFFFFF', belly: '#F3F4F6' },
     priceGems: 50, tier: 'rare' },
 
   // Koala
-  { id: 'koala:rose',    animal: 'koala',   variantKey: 'rose',      variantName: 'Northern Koala',
+  { id: 'koala:rose',    type: 'variant', animal: 'koala',   variantKey: 'rose',      variantName: 'Northern Koala',
     palette: { primary: '#9E7B5C', secondary: '#7A5C42', belly: '#D4B99A' },
     priceGems: 10, tier: 'basic' },
-  { id: 'koala:slate',   animal: 'koala',   variantKey: 'slate',     variantName: 'White Koala',
+  { id: 'koala:slate',   type: 'variant', animal: 'koala',   variantKey: 'slate',     variantName: 'White Koala',
     palette: { primary: '#F0EDE8', secondary: '#CBBFB2', belly: '#FAF8F5' },
     priceGems: 50, tier: 'rare' },
 
   // Frog
-  { id: 'frog:azure',    animal: 'frog',    variantKey: 'azure',     variantName: 'Dart Frog',
+  { id: 'frog:azure',    type: 'variant', animal: 'frog',    variantKey: 'azure',     variantName: 'Dart Frog',
     palette: { primary: '#0EA5E9', secondary: '#0369A1', belly: '#BAE6FD' },
     priceGems: 10, tier: 'basic' },
-  { id: 'frog:tropical', animal: 'frog',    variantKey: 'tropical',  variantName: 'Tomato Frog',
+  { id: 'frog:tropical', type: 'variant', animal: 'frog',    variantKey: 'tropical',  variantName: 'Tomato Frog',
     palette: { primary: '#DC4E20', secondary: '#AE3010', belly: '#FBCAB2' },
     priceGems: 50, tier: 'rare' },
 
   // Owl
-  { id: 'owl:emerald',   animal: 'owl',     variantKey: 'emerald',   variantName: 'Barn Owl',
+  { id: 'owl:emerald',   type: 'variant', animal: 'owl',     variantKey: 'emerald',   variantName: 'Barn Owl',
     palette: { primary: '#C8963A', secondary: '#6B4A20', belly: '#F5EDD3' },
     priceGems: 10, tier: 'basic' },
-  { id: 'owl:snowy',     animal: 'owl',     variantKey: 'snowy',     variantName: 'Snowy Owl',
+  { id: 'owl:snowy',     type: 'variant', animal: 'owl',     variantKey: 'snowy',     variantName: 'Snowy Owl',
     palette: { primary: '#F8FAFC', secondary: '#CBD5E1', belly: '#FFFFFF' },
     priceGems: 50, tier: 'rare' },
 
   // Wolf
-  { id: 'wolf:shadow',   animal: 'wolf',    variantKey: 'shadow',    variantName: 'Timber Wolf',
+  { id: 'wolf:shadow',   type: 'variant', animal: 'wolf',    variantKey: 'shadow',    variantName: 'Timber Wolf',
     palette: { primary: '#6B7280', secondary: '#4B5563', belly: '#E5E7EB' },
     priceGems: 10, tier: 'basic' },
-  { id: 'wolf:ivory',    animal: 'wolf',    variantKey: 'ivory',     variantName: 'Arctic Wolf',
+  { id: 'wolf:ivory',    type: 'variant', animal: 'wolf',    variantKey: 'ivory',     variantName: 'Arctic Wolf',
     palette: { primary: '#F1F5F9', secondary: '#CBD5E1', belly: '#FFFFFF' },
     priceGems: 50, tier: 'rare' },
 
   // Octopus
-  { id: 'octopus:coral', animal: 'octopus', variantKey: 'coral',     variantName: 'Giant Pacific',
+  { id: 'octopus:coral', type: 'variant', animal: 'octopus', variantKey: 'coral',     variantName: 'Giant Pacific',
     palette: { primary: '#9B2335', secondary: '#6B1521', belly: '#D4806A' },
     priceGems: 10, tier: 'basic' },
-  { id: 'octopus:abyss', animal: 'octopus', variantKey: 'abyss',     variantName: 'Blue-ringed',
+  { id: 'octopus:abyss', type: 'variant', animal: 'octopus', variantKey: 'abyss',     variantName: 'Blue-ringed',
     palette: { primary: '#D97706', secondary: '#1D4ED8', belly: '#FEF9C3' },
     priceGems: 50, tier: 'rare' },
+
+  // Premium-only
+  { id: 'badge:custom', type: 'badge', variantName: 'Custom Badge', priceGems: 100, premiumOnly: true },
 ]
 
 // Alias kept for any code that imports PAINTS
@@ -96,7 +101,7 @@ export function getCosmeticsForAnimal(animal: AnimalType): Cosmetic[] {
 export function getAnimalPalette(animal: AnimalType, variantKey?: string): AnimalPalette {
   if (variantKey) {
     const c = COSMETICS_BY_ID.get(`${animal}:${variantKey}`)
-    if (c) return c.palette
+    if (c?.palette) return c.palette
   }
   return DEFAULT_PALETTES[animal]
 }

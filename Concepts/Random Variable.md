@@ -1,10 +1,14 @@
+- A **Random Variable** **$X$** is a function that assigns a real number to each outcome in a sample space $S$
+
 $$X : S \to \mathbb{R}$$
 
-A Random Variable ($X$) is a function that assigns a real number to each outcome in a sample space $S$, enabling numerical analysis of random experiments.
+- They enable numerical analysis of random experiments.
+- Random variables are classified as discrete or continuous:
+  - Discrete r.v.'s have a countable range of outcomes
+  - Continuous r.v.'s have an uncountable range of outcomes
+- They are fully characterized by their probability distribution, which describes how probability is spread across their possible values.
 
-Random variables are classified as discrete (countable range) or continuous (uncountable range). They are fully characterized by their probability distribution, which describes how probability is spread across their possible values.
-
-> [!example]- Defining a Random Variable for Coin Flips {💡 Example}
+> [!example]- Defining a Random Variable for Coin Flips {Example}
 > Two fair coins are flipped. Define a random variable $X$ as the number of heads. List the values $X$ can take and their probabilities.
 >
 > > [!answer]- Answer

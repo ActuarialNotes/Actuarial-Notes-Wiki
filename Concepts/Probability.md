@@ -13,7 +13,7 @@ For any probability measure $P$ to be mathematically valid, it must satisfy thes
 | **2. Non-negativity** | $P(E) \geq 0$ | **No negative odds.** You cannot have a less-than-zero chance of an event occurring. |
 | **3. Additivity** | $P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$ | **No overlap? Just add.** If events are [[Concepts/Mutually Exclusive Events]], the probability of "one or the other" is the sum of their individual probabilities. |
 
-> [!example]- Probability of a Fair Die {💡 Example}
+> [!example]- Probability of a Fair Die? {Example}
 > 
 > ### The Big Idea
 > We want to find the probability of a subset (even numbers) within the full universe of a die roll (1 through 6). Since the outcomes are mutually exclusive (you can't roll a 2 and a 4 at the same time), we can simply add their individual probabilities.

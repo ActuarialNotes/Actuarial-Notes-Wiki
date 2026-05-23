@@ -1,9 +1,10 @@
 // Modal for configuring the study plan: targetReadyDate, targetStrengthLevel, and exam date.
 
 import { useState } from 'react'
-import { X, CalendarDays, Target } from 'lucide-react'
+import { X, CalendarDays, Target, Info, Sparkles, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
+import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { isValidSittingDate, getSittingsForExam } from '@/data/examSittings'
 import {
   QUICK_SET_LABELS,
@@ -16,6 +17,8 @@ import {
   type QuickSetPreset,
   type TargetStrengthLevel,
 } from '@/lib/studyPlan'
+
+const HEADLINE_PRESETS: QuickSetPreset[] = ['1w', '2w', '1m']
 
 interface Props {
   config: StudyPlanConfig
@@ -48,6 +51,11 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
     }
     return '2w'  // default: 2 weeks before
   })
+  const [showCustomReady, setShowCustomReady] = useState<boolean>(() => {
+    if (!config.targetReadyDate || !examDate) return false
+    return !HEADLINE_PRESETS.some(p => applyPreset(examDate, p) === config.targetReadyDate)
+  })
+  const [showInfo, setShowInfo] = useState(false)
 
   function selectPreset(preset: QuickSetPreset) {
     const base = localExamDate || examDate
@@ -87,6 +95,11 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
   const dateMatchesSitting = !examId || !localExamDate || !hasSittings || isValidSittingDate(examId, localExamDate)
 
   const STEPS = ['Exam Date', 'Ready Date', 'Study Strategy'] as const
+  const STEP_HEADLINES: Record<1 | 2 | 3, string> = {
+    1: "Let's lock in your exam date — this anchors everything.",
+    2: "When do you want to feel ready? We'll pace the rest.",
+    3: 'Pick the study style that fits your brain.',
+  }
 
   return (
     <div
@@ -112,18 +125,18 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
         </div>
 
         {/* Step indicator */}
-        <div className="flex items-center gap-0 px-5 pt-4">
+        <div className="flex items-center gap-0 px-5 pt-5">
           {STEPS.map((label, i) => {
             const s = (i + 1) as 1 | 2 | 3
             const isActive = step === s
             const isDone = step > s
             return (
               <div key={s} className="flex items-center flex-1 last:flex-none">
-                <div className="flex flex-col items-center gap-1">
+                <div className="flex flex-col items-center gap-1.5">
                   <div
-                    className={`h-6 w-6 rounded-full flex items-center justify-center text-xs font-semibold transition-colors ${
+                    className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
                       isActive
-                        ? 'bg-primary text-primary-foreground'
+                        ? 'bg-primary text-primary-foreground scale-110 ring-2 ring-primary/30'
                         : isDone
                         ? 'bg-primary/30 text-primary'
                         : 'bg-muted text-muted-foreground'
@@ -131,19 +144,24 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                   >
                     {s}
                   </div>
-                  <span className={`text-[10px] whitespace-nowrap ${isActive ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                  <span className={`text-[10px] whitespace-nowrap transition-colors ${isActive ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>
                     {label}
                   </span>
                 </div>
                 {i < STEPS.length - 1 && (
-                  <div className={`flex-1 h-px mx-2 mb-4 ${step > s ? 'bg-primary/40' : 'bg-border'}`} />
+                  <div className={`flex-1 h-0.5 mx-2 mb-5 rounded-full transition-colors ${step > s ? 'bg-primary/50' : 'bg-border'}`} />
                 )}
               </div>
             )
           })}
         </div>
 
-        <div className="p-5 pt-4 space-y-4">
+        {/* Mascot-style headline */}
+        <p className="px-5 pt-4 text-sm text-foreground/80 leading-snug">
+          {STEP_HEADLINES[step]}
+        </p>
+
+        <div className="p-5 pt-3 space-y-4">
           {/* Step 1: Exam Date */}
           {step === 1 && (
             <div className="space-y-3">
@@ -197,48 +215,85 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                   {examDaysOut !== null && examDaysOut > 0 ? ` · ${examDaysOut} days away` : ''}
                 </p>
               )}
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                The date you want to have mastered all concepts, before your exam.
-              </p>
 
-              {/* Quick-set slider */}
-              {localExamDate && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Quick set</p>
-                    <span className="text-xs font-medium text-foreground">
-                      {activePreset ? QUICK_SET_LABELS[activePreset] : 'Custom date'}
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={QUICK_SET_PRESETS.length - 1}
-                    step={1}
-                    value={activePreset !== null ? QUICK_SET_PRESETS.indexOf(activePreset) : 0}
-                    onChange={e => {
-                      const idx = parseInt(e.target.value)
-                      if (idx >= 0 && idx < QUICK_SET_PRESETS.length) selectPreset(QUICK_SET_PRESETS[idx])
-                    }}
-                    className="w-full accent-primary"
-                    aria-label="Quick set target ready date"
-                  />
+              {/* Headline preset cards */}
+              {localExamDate && !showCustomReady && (
+                <div className="grid grid-cols-3 gap-2 pt-1">
+                  {HEADLINE_PRESETS.map(p => {
+                    const isActive = activePreset === p
+                    const targetDate = applyPreset(localExamDate, p)
+                    return (
+                      <button
+                        key={p}
+                        type="button"
+                        onClick={() => selectPreset(p)}
+                        className={`rounded-lg border p-3 text-left transition-all duration-200 ${
+                          isActive
+                            ? 'border-primary bg-primary/10 shadow-sm scale-[1.02]'
+                            : 'border-border hover:bg-accent/50 hover:border-border'
+                        }`}
+                      >
+                        <p className="text-sm font-semibold">{QUICK_SET_LABELS[p]}</p>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                          {formatReadableDate(targetDate)}
+                        </p>
+                      </button>
+                    )
+                  })}
                 </div>
               )}
 
-              <div className="space-y-1">
-                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Or pick a date</p>
-                <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
-                  <input
-                    type="date"
-                    value={readyDate}
-                    min={today}
-                    max={localExamDate || examDate || undefined}
-                    onChange={e => handleReadyDateChange(e.target.value)}
-                    className="block w-full bg-background px-3 py-2 text-sm transition-colors focus:outline-none"
-                  />
+              {/* Custom toggle / panel */}
+              {localExamDate && (
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomReady(v => !v)}
+                    className="text-xs font-medium text-primary hover:underline transition-colors"
+                  >
+                    {showCustomReady ? '← Use a preset' : 'Or pick a custom date →'}
+                  </button>
+                  {showCustomReady && (
+                    <div className="space-y-3 rounded-lg border border-border/60 bg-muted/20 p-3">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Quick set</p>
+                          <span className="text-xs font-medium text-foreground">
+                            {activePreset ? QUICK_SET_LABELS[activePreset] : 'Custom date'}
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min={0}
+                          max={QUICK_SET_PRESETS.length - 1}
+                          step={1}
+                          value={activePreset !== null ? QUICK_SET_PRESETS.indexOf(activePreset) : 0}
+                          onChange={e => {
+                            const idx = parseInt(e.target.value)
+                            if (idx >= 0 && idx < QUICK_SET_PRESETS.length) selectPreset(QUICK_SET_PRESETS[idx])
+                          }}
+                          className="w-full accent-primary"
+                          aria-label="Quick set target ready date"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Or pick a date</p>
+                        <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
+                          <input
+                            type="date"
+                            value={readyDate}
+                            min={today}
+                            max={localExamDate || examDate || undefined}
+                            onChange={e => handleReadyDateChange(e.target.value)}
+                            className="block w-full bg-background px-3 py-2 text-sm transition-colors focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
+              )}
+
               {daysOut !== null && daysOut > 0 && (
                 <p className="text-xs text-muted-foreground">
                   {daysOut} day{daysOut === 1 ? '' : 's'} from today
@@ -258,7 +313,16 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Target className="h-4 w-4 text-muted-foreground shrink-0" />
-                <p className="text-sm font-medium">Study strategy</p>
+                <p className="text-sm font-medium flex-1">Study strategy</p>
+                <button
+                  type="button"
+                  onClick={() => setShowInfo(true)}
+                  className="text-muted-foreground hover:text-foreground transition-colors p-1 -mr-1"
+                  aria-label="How custom study plans work"
+                  title="How custom study plans work"
+                >
+                  <Info className="h-4 w-4" />
+                </button>
               </div>
 
               <div className="space-y-2">
@@ -267,36 +331,46 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                     value: 'strong_all' as TargetStrengthLevel,
                     label: 'Master everything',
                     desc: 'Aim to fully master every concept before the ready date. Learn concepts in sequence, one-by-one.',
+                    icon: BookOpen,
                   },
                   {
                     value: 'strong_key' as TargetStrengthLevel,
                     label: 'Focus on key topics',
                     desc: 'Learn the key topics first, then fill in the details of less common concepts as time allows.',
+                    icon: Sparkles,
                   },
-                ] as const).map(opt => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setStrength(opt.value)}
-                    className={`w-full text-left rounded-lg border p-3 transition-colors ${
-                      strength === opt.value
-                        ? 'border-primary bg-primary/5'
-                        : 'border-border hover:bg-accent/50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div
-                        className={`h-3.5 w-3.5 rounded-full border-2 shrink-0 ${
-                          strength === opt.value
-                            ? 'border-primary bg-primary'
-                            : 'border-muted-foreground'
-                        }`}
-                      />
-                      <span className="text-sm font-medium">{opt.label}</span>
-                    </div>
-                    <p className="mt-1 pl-5.5 text-xs text-muted-foreground">{opt.desc}</p>
-                  </button>
-                ))}
+                ] as const).map(opt => {
+                  const Icon = opt.icon
+                  const isActive = strength === opt.value
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setStrength(opt.value)}
+                      className={`w-full text-left rounded-lg border p-4 transition-all duration-200 ${
+                        isActive
+                          ? 'border-primary bg-primary/10 shadow-sm scale-[1.01]'
+                          : 'border-border hover:bg-accent/50'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div
+                          className={`h-9 w-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                            isActive
+                              ? 'bg-primary text-primary-foreground'
+                              : 'bg-muted text-muted-foreground'
+                          }`}
+                        >
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold">{opt.label}</p>
+                          <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{opt.desc}</p>
+                        </div>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
             </div>
           )}
@@ -334,12 +408,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                 onClick={handleSave}
                 disabled={!!readyDate && !readyDateValid}
               >
-                Save plan
+                Lock in plan
               </Button>
             )}
           </div>
         </div>
       </div>
+      <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
     </div>
   )
 }

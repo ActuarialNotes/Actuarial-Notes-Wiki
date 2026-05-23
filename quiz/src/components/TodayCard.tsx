@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Settings2,
+  Info,
   AlertTriangle,
   CheckCircle2,
   Check,
@@ -19,6 +20,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
+import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import {
   todayISO,
@@ -248,6 +250,7 @@ export function TodayCard({
   isPremium = true,
 }: Props) {
   const [showConfig, setShowConfig] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
   const [selectedStudyPlanIdx, setSelectedStudyPlanIdx] = useState<number | null>(null)
   const [planExpanded, setPlanExpanded] = useState(false)
   const [trackerConcept, setTrackerConcept] = useState<{
@@ -436,6 +439,7 @@ export function TodayCard({
             onClose={() => setShowConfig(false)}
           />
         )}
+        <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
       </>
     )
   }
@@ -449,15 +453,26 @@ export function TodayCard({
           {/* Title + settings */}
           <div className="flex items-start justify-between gap-2">
             <h2 className="text-xl font-semibold">Study Plan</h2>
-            <button
-              type="button"
-              onClick={() => setShowConfig(true)}
-              className="text-muted-foreground hover:text-foreground transition-colors p-1 shrink-0"
-              aria-label="Study plan settings"
-              title="Study plan settings"
-            >
-              <Settings2 className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-0.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowInfo(true)}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                aria-label="How custom study plans work"
+                title="How custom study plans work"
+              >
+                <Info className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowConfig(true)}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                aria-label="Study plan settings"
+                title="Study plan settings"
+              >
+                <Settings2 className="h-4 w-4" />
+              </button>
+            </div>
           </div>
           {/* Date header */}
           <p className="text-base font-semibold">{todayLongDate()}</p>
@@ -623,6 +638,7 @@ export function TodayCard({
           onClose={() => setShowConfig(false)}
         />
       )}
+      <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
     </>
   )
 }

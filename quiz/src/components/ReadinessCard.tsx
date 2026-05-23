@@ -1,11 +1,12 @@
 import { useMemo, useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Play, Loader2, Lock, Settings2, Trophy } from 'lucide-react'
+import { AlertTriangle, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Loader2, Lock, Settings2, Trophy } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
+import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
@@ -305,6 +306,7 @@ export function ReadinessCard({
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [trackerConcept, setTrackerConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
   const [showConfig, setShowConfig] = useState(false)
+  const [showInfo, setShowInfo] = useState(false)
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
 
   // Quiz history state
@@ -535,6 +537,15 @@ export function ReadinessCard({
               <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
             </div>
             <div className="flex items-center gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowInfo(true)}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                aria-label="How custom study plans work"
+                title="How custom study plans work"
+              >
+                <Info className="h-4 w-4" />
+              </button>
               {isPremium ? (
                 <button
                   type="button"
@@ -930,6 +941,7 @@ export function ReadinessCard({
           onClose={() => setShowConfig(false)}
         />
       )}
+      <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
     </div>
   )
 }

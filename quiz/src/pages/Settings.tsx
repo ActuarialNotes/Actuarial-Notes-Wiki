@@ -12,8 +12,9 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Loader2, Settings2, ChevronRight } from 'lucide-react'
+import { Loader2, Settings2, ChevronRight, Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useSubscription } from '@/hooks/useSubscription'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import {
   AvatarDisplay,
@@ -121,6 +122,7 @@ function Feedback({ error, success }: { error: string | null; success: string | 
 
 const NAV_ITEMS = [
   { id: 'profile',    label: 'Profile' },
+  { id: 'premium',    label: 'Premium' },
   { id: 'exams',      label: 'Credential Path & Exams' },
   { id: 'data',       label: 'Progress & Data' },
 ]
@@ -130,6 +132,7 @@ const NAV_ITEMS = [
 export default function Settings() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
+  const { isPremium, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
   const { sessions } = useProgress()
   const {
     profile, setProfile,
@@ -172,6 +175,25 @@ export default function Settings() {
     window.addEventListener('beforeunload', handler)
     return () => window.removeEventListener('beforeunload', handler)
   }, [isAnyDirty])
+
+  // ---- Premium: manage subscription via Stripe portal ----
+  const [portalLoading, setPortalLoading] = useState(false)
+  const [portalError, setPortalError] = useState<string | null>(null)
+
+  const handleManageSubscription = async () => {
+    setPortalLoading(true)
+    setPortalError(null)
+    try {
+      const { data, error } = await supabase.functions.invoke('stripe-create-portal', {
+        body: { return_url: window.location.href },
+      })
+      if (error || !data?.url) throw new Error(error?.message ?? 'Could not open billing portal.')
+      window.location.href = data.url
+    } catch (err) {
+      setPortalError(err instanceof Error ? err.message : 'Something went wrong.')
+      setPortalLoading(false)
+    }
+  }
 
   // ---- Password change state (hidden behind toggle in Profile section) ----
   const [showPasswordFields, setShowPasswordFields] = useState(false)
@@ -580,6 +602,71 @@ export default function Settings() {
                           )}
                         </>
                       )}
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* ---- Premium ---- */}
+            <section ref={el => { sectionRefs.current.premium = el }} id="premium">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Premium</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {subLoading ? (
+                    <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
+                  ) : isPremium && isBetaTester ? (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-violet-500/15 text-violet-600 dark:text-violet-400">
+                          <Star className="h-3 w-3 fill-current" />
+                          Beta Tester
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        You have Premium access via a beta tester code. Thank you for helping us build Actuarial Notes!
+                      </p>
+                    </>
+                  ) : isPremium ? (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center text-xs font-semibold px-2 py-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                          Premium
+                        </span>
+                      </div>
+                      {currentPeriodEnd && (
+                        <p className="text-sm text-muted-foreground">
+                          Renews {new Date(currentPeriodEnd).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                        </p>
+                      )}
+                      <div>
+                        <Button
+                          variant="outline"
+                          onClick={handleManageSubscription}
+                          disabled={portalLoading}
+                        >
+                          {portalLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Opening…</> : 'Manage Subscription'}
+                        </Button>
+                        {portalError && (
+                          <p className="text-sm text-destructive mt-2">{portalError}</p>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center text-xs font-semibold px-2 py-1 rounded-full bg-muted text-muted-foreground">
+                          Free
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        Upgrade to Premium for a custom study plan and exclusive features.
+                      </p>
+                      <Link to="/upgrade">
+                        <Button variant="default">Upgrade to Premium →</Button>
+                      </Link>
                     </>
                   )}
                 </CardContent>

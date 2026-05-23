@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
-import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -57,6 +57,16 @@ export default function Dashboard() {
   const [examsOpen, setExamsOpen] = useState(false)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
+  const [showUpgradedBanner, setShowUpgradedBanner] = useState(
+    () => new URLSearchParams(location.search).get('upgraded') === '1',
+  )
+
+  useEffect(() => {
+    if (new URLSearchParams(location.search).get('upgraded') === '1') {
+      navigate('/dashboard', { replace: true })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Re-fetch mastery after a quiz completes so masteryStateByName reflects
   // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
@@ -213,6 +223,29 @@ export default function Dashboard() {
         </button>
         )}
       </div>
+
+      {/* Congratulations banner — shown after returning from Stripe checkout */}
+      {showUpgradedBanner && (
+        <div className="rounded-lg border border-green-500/40 bg-green-500/10 px-4 py-3 flex items-start justify-between gap-3">
+          <div className="flex items-start gap-2">
+            <Sparkles className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Welcome to Premium!</p>
+              <p className="text-xs text-green-600 dark:text-green-500 mt-0.5">
+                Your subscription is confirmed. Premium features are activating now.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowUpgradedBanner(false)}
+            className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 shrink-0 mt-0.5"
+            aria-label="Dismiss"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       {/* Mascot widget — only shown for logged-in users with an animal avatar */}
       {!isGuest && (

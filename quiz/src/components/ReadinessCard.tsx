@@ -662,31 +662,6 @@ export function ReadinessCard({
             </Card>
           )}
 
-          {/* Action buttons */}
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setConceptModalOpen(true)}
-              disabled={allConcepts.length === 0}
-              className="gap-1.5 text-sm"
-            >
-              <BookOpen className="h-4 w-4" />
-              Read concepts
-            </Button>
-            <Button
-              onClick={handleStartQuiz}
-              disabled={quizLoading}
-              className="gap-1.5 text-sm"
-            >
-              {quizLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Play className="h-4 w-4" />
-              )}
-              Start Quiz
-            </Button>
-          </div>
-
           {/* Topics mastered + tracker */}
           <Card>
             <CardContent className="p-5 space-y-4">
@@ -797,18 +772,6 @@ export function ReadinessCard({
               </CardContent>
             </Card>
 
-            {/* Action buttons preview */}
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" disabled className="gap-1.5 text-sm">
-                <BookOpen className="h-4 w-4" />
-                Read concepts
-              </Button>
-              <Button disabled className="gap-1.5 text-sm">
-                <Play className="h-4 w-4" />
-                Start Quiz
-              </Button>
-            </div>
-
             {/* Topics mastered preview */}
             <Card>
               <CardContent className="p-5 space-y-4">
@@ -885,6 +848,31 @@ export function ReadinessCard({
           </div>
         </div>
       )}
+
+      {/* Action buttons – visible to all users */}
+      <div className="grid grid-cols-2 gap-2">
+        <Button
+          variant="outline"
+          onClick={() => setConceptModalOpen(true)}
+          disabled={allConcepts.length === 0}
+          className="gap-1.5 text-sm"
+        >
+          <BookOpen className="h-4 w-4" />
+          Read concepts
+        </Button>
+        <Button
+          onClick={handleStartQuiz}
+          disabled={quizLoading}
+          className="gap-1.5 text-sm"
+        >
+          {quizLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Play className="h-4 w-4" />
+          )}
+          Start Quiz
+        </Button>
+      </div>
 
       {/* Modals */}
       {conceptModalOpen && allConcepts.length > 0 && (

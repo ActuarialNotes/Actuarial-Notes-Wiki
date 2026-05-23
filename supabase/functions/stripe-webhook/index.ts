@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno'
 
+// Comments
 // Stripe webhooks come from Stripe's servers, not the browser — no CORS, no
 // user auth header. We verify authenticity via the signature header.
 

@@ -3,7 +3,7 @@
 - $$\text{Var}(X) = E\left[(X - \mu)^2\right]$$
 - It measures the spread or dispersion of its distribution.
 - Efficient computation formula: $$\text{Var}(X) = E[X^2] - \mu^2$$ where $\mu = E[X]$
-- Key properties include:
+- Key properties:
   - $\text{Var}(aX + b) = a^2 \text{Var}(X)$
   - $\text{Var}(X) \geq 0$, with equality only if $X$ is constant.
 

@@ -167,14 +167,17 @@ function StudyPlanTracker({
   studyPlan,
   allConceptsForNav,
   onConceptSelect,
+  openTopics,
+  onToggle,
 }: {
   syllabus: WikiExamSyllabus
   masteryRecords: ConceptMasteryRecord[]
   studyPlan?: StudyPlan | null
   allConceptsForNav: { name: string; state: MasteryState }[]
   onConceptSelect: (concept: { name: string; state: MasteryState; index: number }) => void
+  openTopics: Set<string>
+  onToggle: (name: string) => void
 }) {
-  const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
   const now = new Date()
@@ -192,13 +195,6 @@ function StudyPlanTracker({
   })
   const recordsBySlug = new Map(normalizedMastery.map(r => [r.concept_slug.toLowerCase(), r]))
 
-  const toggle = (name: string) =>
-    setOpenTopics(prev => {
-      const next = new Set(prev)
-      next.has(name) ? next.delete(name) : next.add(name)
-      return next
-    })
-
   return (
     <div className="space-y-1">
       {syllabus.topics.map(topic => {
@@ -208,8 +204,9 @@ function StudyPlanTracker({
         return (
           <div key={topic.name}>
             <button
+              data-topic={topic.name}
               className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
-              onClick={() => toggle(topic.name)}
+              onClick={() => onToggle(topic.name)}
               aria-expanded={isOpen}
             >
               <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
@@ -299,6 +296,14 @@ export function ReadinessCard({
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [trackerConcept, setTrackerConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
   const [showConfig, setShowConfig] = useState(false)
+  const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
+
+  const toggleTopic = (name: string) =>
+    setOpenTopics(prev => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
 
   useEffect(() => {
     if (openConceptsTrigger) setConceptModalOpen(true)
@@ -394,6 +399,17 @@ export function ReadinessCard({
 
   function handleSectionClick(i: number) {
     setPinnedSection(prev => (prev === i ? null : i))
+    const topicName = sections[i]?.name
+    if (topicName) {
+      const willOpen = !openTopics.has(topicName)
+      toggleTopic(topicName)
+      if (willOpen) {
+        setTimeout(() => {
+          const el = document.querySelector<HTMLElement>(`[data-topic="${CSS.escape(topicName)}"]`)
+          el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        }, 50)
+      }
+    }
   }
 
   const handleStartQuiz = useCallback(async () => {
@@ -652,6 +668,8 @@ export function ReadinessCard({
             studyPlan={plan}
             allConceptsForNav={allConcepts}
             onConceptSelect={setTrackerConcept}
+            openTopics={openTopics}
+            onToggle={toggleTopic}
           />
         </CardContent>
       </Card>

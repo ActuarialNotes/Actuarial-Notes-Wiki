@@ -30,7 +30,7 @@
 > 9. Calculate [[Conditional Probability|Conditional Probabilities]].
 > 10. Explain and calculate expected values, including moments, mode, median, and percentiles.
 > 11. Explain and calculate [[Variance]], [[Standard Deviation]], and [[Coefficient of Variation]].
-> 12. Calculate the amount that an insurance company pays to a policyholder for a claim given [[Policy Information]], including [[Deductibles]], [[Coinsurance Percentages]], and [[Benefit Limits]], as well as other factors, such as [[Inflation]].
+> 12. Calculate the amount that an insurance company pays to a policyholder for a claim given [[Policy Information]], including [[Deductible]]s, [[Coinsurance Percentage]]s, and [[Benefit Limit]]s, as well as other factors, such as [[Inflation]].
 > 13. Calculate the [[Expected Value]], [[Variance]], and [[Standard Deviation]] of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]].
 >
 > #### Discrete Univariate Distributions 

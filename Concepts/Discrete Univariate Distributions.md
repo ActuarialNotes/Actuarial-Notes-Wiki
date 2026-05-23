@@ -1,10 +1,12 @@
-$$P(X = k) = f(k), \quad k \in \{x_1, x_2, \ldots\}$$
+- A **Discrete Univariate Distribution** describes the probability law of a single random variable $X$ that takes on a countable set of values.
+- The probability mass function (PMF) $f(k)$  specifies the probability that the variable will take on a particular, distinct value $k$.
+- $$P(X = k) = f(k), \quad k \in \{x_1, x_2, \ldots\}$$
+- The PMF must satisfy $f(k) \geq 0$ for all $k$
+- and the PMF must satisfy $\sum_{k} f(k) = 1$.
+- The cumulative distribution function specifices the probability that the variable will be less than or equal to a specific value $x$.
+- $F(x) = P(X \leq x) = \sum_{k \leq x} f(k)$.
 
-A Discrete Univariate Distribution describes the probability law of a single random variable $X$ that takes on a countable (finite or countably infinite) set of values.
-
-The probability mass function (PMF) $f(k) = P(X = k)$ must satisfy $f(k) \geq 0$ for all $k$ and $\sum_{k} f(k) = 1$. The cumulative distribution function is $F(x) = P(X \leq x) = \sum_{k \leq x} f(k)$.
-
-> [!example]- PMF Verification for a Simple Discrete Distribution {💡 Example}
+> [!example]- PMF Verification for a Simple Discrete Distribution {Example}
 > A random variable $X$ has PMF $f(k) = c \cdot k$ for $k = 1, 2, 3, 4$. Find $c$ and compute $P(X \leq 3)$.
 >
 > > [!answer]- Answer

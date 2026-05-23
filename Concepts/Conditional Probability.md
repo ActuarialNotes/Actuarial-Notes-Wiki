@@ -1,10 +1,13 @@
-$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$
+- **Conditional Probability** $P(A \mid B)$ is the probability that event $A$ occurs given that event $B$ is known to have occurred.
+- A conditional proibability restricts the sample space to $B$.
+- $$P(A \mid B) = \frac{P(A \cap B)}{P(B)}, \quad P(B) > 0$$
+- If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$.
+- Conditional probability is foundational to
+  - [[Bayes' Theorem]]
+  - [[Law of total probability]]
+  - Vrious insurance and actuarial calculations
 
-Conditional Probability $P(A \mid B)$ is the probability that event $A$ occurs given that event $B$ is known to have occurred, effectively restricting the sample space to $B$.
-
-If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$. Conditional probability is foundational to Bayes' Theorem, the law of total probability, and many insurance and actuarial calculations.
-
-> [!example]- Claim Severity Given Deductible Threshold {💡 Example}
+> [!example]- Claim Severity Given Deductible Threshold {Example}
 > A loss $X$ is uniformly distributed on $(0, 1000)$. Given that the loss exceeds 400, what is the probability it also exceeds 700?
 >
 > > [!answer]- Answer

@@ -10,6 +10,7 @@ interface AnswerOptionProps {
   isDisabled: boolean  // true after answer is confirmed
   revealAnswer: boolean
   onClick: (key: string) => void
+  onNext?: () => void  // when locked, clicking any option advances to next question
 }
 
 export function AnswerOption({
@@ -20,6 +21,7 @@ export function AnswerOption({
   isDisabled,
   revealAnswer,
   onClick,
+  onNext,
 }: AnswerOptionProps) {
   // Prevent accidental selection when the user is scrolling over an option.
   // We track vertical movement: if the pointer/touch moves more than 8px
@@ -29,6 +31,8 @@ export function AnswerOption({
 
   const baseClasses =
     'w-full text-left px-4 py-3 rounded-lg border text-sm font-medium transition-colors flex items-start gap-3'
+
+  const isNavigable = isDisabled && !!onNext
 
   const stateClasses = cn({
     // Pending selection (chosen but not yet confirmed) — clear highlight
@@ -40,24 +44,31 @@ export function AnswerOption({
       !isDisabled && !isSelected,
 
     // Confirmed correct
-    'border-green-500 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100 dark:border-green-500 cursor-default':
+    'border-green-500 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100 dark:border-green-500':
       isDisabled && isSelected && isCorrect && revealAnswer,
 
     // Confirmed wrong
-    'border-red-500 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100 dark:border-red-500 cursor-default':
+    'border-red-500 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100 dark:border-red-500':
       isDisabled && isSelected && !isCorrect && revealAnswer,
 
     // Confirmed, answer not yet revealed (mock exam / end-reveal)
-    'border-primary bg-primary/15 dark:bg-primary/25 cursor-default':
+    'border-primary bg-primary/15 dark:bg-primary/25':
       isDisabled && isSelected && !revealAnswer,
 
     // Not selected, but correct (revealed)
-    'border-green-400 bg-green-50/50 text-green-800 dark:bg-green-950/50 dark:text-green-300 dark:border-green-600 cursor-default':
+    'border-green-400 bg-green-50/50 text-green-800 dark:bg-green-950/50 dark:text-green-300 dark:border-green-600':
       isDisabled && !isSelected && isCorrect && revealAnswer,
 
     // Not selected, disabled — muted
-    'border-input bg-muted/40 text-muted-foreground opacity-60 cursor-default':
+    'border-input bg-muted/40 text-muted-foreground opacity-60':
       isDisabled && !isSelected && (!isCorrect || !revealAnswer),
+
+    // Cursor: pointer when interactive
+    'cursor-pointer': !isDisabled || isNavigable,
+    'cursor-default': isDisabled && !isNavigable,
+
+    // Subtle hover/active feedback when locked but clickable to navigate
+    'hover:opacity-80 active:opacity-60': isNavigable,
   })
 
   function handlePointerDown(e: React.PointerEvent) {
@@ -72,7 +83,11 @@ export function AnswerOption({
   }
 
   function handleClick() {
-    if (isDisabled || scrolling.current) return
+    if (scrolling.current) return
+    if (isDisabled) {
+      onNext?.()
+      return
+    }
     onClick(optionKey)
   }
 
@@ -80,16 +95,20 @@ export function AnswerOption({
     // div+role instead of button so block-level markdown (tables, paragraphs) is valid HTML
     <div
       role="button"
-      tabIndex={isDisabled ? -1 : 0}
-      aria-disabled={isDisabled}
+      tabIndex={isDisabled && !isNavigable ? -1 : 0}
+      aria-disabled={isDisabled && !isNavigable}
       aria-label={`Option ${optionKey}`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onClick={handleClick}
       onKeyDown={e => {
-        if (!isDisabled && (e.key === 'Enter' || e.key === ' ')) {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          onClick(optionKey)
+          if (isDisabled) {
+            onNext?.()
+          } else {
+            onClick(optionKey)
+          }
         }
       }}
       className={cn(baseClasses, stateClasses)}

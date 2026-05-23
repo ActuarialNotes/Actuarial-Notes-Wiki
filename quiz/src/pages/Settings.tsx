@@ -467,14 +467,14 @@ export default function Settings() {
                                     key={c.id}
                                     type="button"
                                     title={c.variantName}
-                                    onClick={() => handleVariantSelect(c.animal, c.variantKey)}
+                                    onClick={() => handleVariantSelect(c.animal!, c.variantKey!)}
                                     className={cn(
                                       'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110 overflow-hidden p-0',
                                       isSelected ? 'border-foreground scale-110' : 'border-transparent'
                                     )}
                                   >
                                     <AvatarDisplay
-                                      avatarUrl={serializeAvatar({ type: 'animal', value: c.animal, variant: c.variantKey })}
+                                      avatarUrl={serializeAvatar({ type: 'animal', value: c.animal!, variant: c.variantKey! })}
                                       initials=""
                                       size={28}
                                     />

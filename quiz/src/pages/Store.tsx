@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Check, Gem, Loader2, Lock } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Check, Gem, Loader2, Lock, Star } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useGems } from '@/hooks/useGems'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -134,11 +134,11 @@ export default function Store() {
     setBusyId(cosmetic.id); setError(null)
     const { error: updateError } = await supabase.auth.updateUser({
       data: {
-        avatar_url: serializeAvatar({ type: 'animal', value: cosmetic.animal, variant: cosmetic.variantKey }),
+        avatar_url: serializeAvatar({ type: 'animal', value: cosmetic.animal!, variant: cosmetic.variantKey! }),
       },
     })
     if (updateError) { setError(updateError.message); setBusyId(null); return }
-    setEquippedAnimal(cosmetic.animal)
+    setEquippedAnimal(cosmetic.animal!)
     setEquippedPaint(cosmetic.id)
     setBusyId(null)
   }
@@ -201,27 +201,6 @@ export default function Store() {
     await handleEquipBanner({ id: 'custom', text })
   }
 
-  // ── Render helpers ─────────────────────────────────────────────────────────
-
-  function PremiumGate({ children }: { children: React.ReactNode }) {
-    if (!actionsReady) return (
-      <Button size="sm" variant="outline" disabled className="w-full">
-        <Loader2 className="h-4 w-4 animate-spin" />
-      </Button>
-    )
-    if (!user) return (
-      <Button size="sm" variant="outline" onClick={() => navigate('/auth', { state: { from: '/store' } })} className="w-full gap-1.5">
-        <Lock className="h-3.5 w-3.5" />Sign in
-      </Button>
-    )
-    if (!isPremium) return (
-      <Button size="sm" variant="outline" onClick={() => navigate('/upgrade')} className="w-full gap-1.5">
-        <Lock className="h-3.5 w-3.5" />Upgrade to buy
-      </Button>
-    )
-    return <>{children}</>
-  }
-
   // ── Main render ────────────────────────────────────────────────────────────
 
   return (
@@ -241,14 +220,6 @@ export default function Store() {
       <p className="text-sm text-muted-foreground">
         Earn 1 gem for every correct answer. Unlock characters, paints, and banners.
       </p>
-
-      {actionsReady && user && !isPremium && (
-        <div className="rounded-md border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-700 dark:text-amber-400">
-          You&apos;re on the free plan.{' '}
-          <Link to="/upgrade" className="underline font-medium">Upgrade to Premium</Link>
-          {' '}to spend gems in the store.
-        </div>
-      )}
 
       {error && (
         <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive flex items-center justify-between gap-2">
@@ -309,21 +280,25 @@ export default function Store() {
                       <Button size="sm" variant="outline" onClick={() => handleEquipCharacter(char.animal)} disabled={isBusy} className="w-full">
                         {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Equip'}
                       </Button>
-                    ) : (
-                      <PremiumGate>
-                        {canAfford ? (
-                          <Button size="sm" onClick={() => handleBuyCharacter(char)} disabled={isBusy} className="w-full gap-1.5">
-                            {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                              <>Buy — {char.priceGems} <Gem className="h-3.5 w-3.5" /></>
-                            )}
-                          </Button>
-                        ) : (
-                          <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
-                            <Lock className="h-3.5 w-3.5" />
-                            Need {char.priceGems - balance} more
-                          </Button>
+                    ) : !actionsReady ? (
+                      <Button size="sm" variant="outline" disabled className="w-full">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </Button>
+                    ) : !user ? (
+                      <Button size="sm" variant="outline" onClick={() => navigate('/auth', { state: { from: '/store' } })} className="w-full gap-1.5">
+                        <Lock className="h-3.5 w-3.5" />Sign in to buy
+                      </Button>
+                    ) : canAfford ? (
+                      <Button size="sm" onClick={() => handleBuyCharacter(char)} disabled={isBusy} className="w-full gap-1.5">
+                        {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+                          <>Buy — {char.priceGems} <Gem className="h-3.5 w-3.5" /></>
                         )}
-                      </PremiumGate>
+                      </Button>
+                    ) : (
+                      <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
+                        <Lock className="h-3.5 w-3.5" />
+                        Need {char.priceGems - balance} more
+                      </Button>
                     )}
                   </CardContent>
                 </Card>
@@ -345,22 +320,38 @@ export default function Store() {
               const isEquipped = equippedPaint === cosmetic.id
               const isBusy = busyId === cosmetic.id
               const canAfford = balance >= cosmetic.priceGems
-              const previewUrl = serializeAvatar({ type: 'animal', value: cosmetic.animal, variant: cosmetic.variantKey })
+              const previewUrl = cosmetic.type === 'variant'
+                ? serializeAvatar({ type: 'animal', value: cosmetic.animal!, variant: cosmetic.variantKey! })
+                : ''
 
               return (
                 <Card key={cosmetic.id}>
                   <CardContent className="p-4 flex flex-col items-center gap-3">
-                    <AvatarDisplay avatarUrl={previewUrl} initials="" size={72} />
+                    {cosmetic.type === 'badge' ? (
+                      <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-amber-400/15">
+                        <Star className="h-9 w-9 text-amber-500" />
+                      </div>
+                    ) : (
+                      <AvatarDisplay avatarUrl={previewUrl} initials="" size={72} />
+                    )}
                     <div className="text-center space-y-0.5">
                       <p className="text-sm font-semibold">{cosmetic.variantName}</p>
-                      <p className="text-xs text-muted-foreground">{ANIMAL_LABELS[cosmetic.animal]}</p>
-                      <p className="text-xs text-muted-foreground/70">
-                        {cosmetic.tier === 'basic' ? '10 gems — basic' : '50 gems — rare'}
+                      <p className="text-xs text-muted-foreground">
+                        {cosmetic.type === 'badge' ? 'Profile badge' : ANIMAL_LABELS[cosmetic.animal!]}
                       </p>
+                      {cosmetic.type === 'variant' && (
+                        <p className="text-xs text-muted-foreground/70">
+                          {cosmetic.tier === 'basic' ? '10 gems — basic' : '50 gems — rare'}
+                        </p>
+                      )}
                     </div>
 
                     {isOwned ? (
-                      isEquipped ? (
+                      cosmetic.type === 'badge' ? (
+                        <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
+                          <Check className="h-4 w-4" />Unlocked
+                        </Button>
+                      ) : isEquipped ? (
                         <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
                           <Check className="h-4 w-4" />Equipped
                         </Button>
@@ -369,21 +360,29 @@ export default function Store() {
                           {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Equip'}
                         </Button>
                       )
-                    ) : (
-                      <PremiumGate>
-                        {canAfford ? (
-                          <Button size="sm" onClick={() => handleBuyPaint(cosmetic)} disabled={isBusy} className="w-full gap-1.5">
-                            {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                              <>Buy — {cosmetic.priceGems} <Gem className="h-3.5 w-3.5" /></>
-                            )}
-                          </Button>
-                        ) : (
-                          <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
-                            <Lock className="h-3.5 w-3.5" />
-                            Need {cosmetic.priceGems - balance} more
-                          </Button>
+                    ) : !actionsReady ? (
+                      <Button size="sm" variant="outline" disabled className="w-full">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </Button>
+                    ) : !user ? (
+                      <Button size="sm" variant="outline" onClick={() => navigate('/auth', { state: { from: '/store' } })} className="w-full gap-1.5">
+                        <Lock className="h-3.5 w-3.5" />Sign in to buy
+                      </Button>
+                    ) : cosmetic.premiumOnly && !isPremium ? (
+                      <Button size="sm" variant="outline" onClick={() => navigate('/upgrade')} className="w-full gap-1.5">
+                        <Lock className="h-3.5 w-3.5" />Upgrade to buy
+                      </Button>
+                    ) : canAfford ? (
+                      <Button size="sm" onClick={() => handleBuyPaint(cosmetic)} disabled={isBusy} className="w-full gap-1.5">
+                        {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+                          <>Buy — {cosmetic.priceGems} <Gem className="h-3.5 w-3.5" /></>
                         )}
-                      </PremiumGate>
+                      </Button>
+                    ) : (
+                      <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
+                        <Lock className="h-3.5 w-3.5" />
+                        Need {cosmetic.priceGems - balance} more
+                      </Button>
                     )}
                   </CardContent>
                 </Card>
@@ -604,27 +603,23 @@ export default function Store() {
                           }
                         </Button>
                       )
+                    ) : balance >= CUSTOM_BANNER_PRICE ? (
+                      <Button
+                        size="sm"
+                        onClick={handleBuyCustomBanner}
+                        disabled={busyId === CUSTOM_BANNER_PURCHASE_ID || !customBannerText.trim()}
+                        className="w-full gap-1.5"
+                      >
+                        {busyId === CUSTOM_BANNER_PURCHASE_ID
+                          ? <Loader2 className="h-4 w-4 animate-spin" />
+                          : <><span>Buy — {CUSTOM_BANNER_PRICE}</span> <Gem className="h-3.5 w-3.5" /></>
+                        }
+                      </Button>
                     ) : (
-                      <PremiumGate>
-                        {balance >= CUSTOM_BANNER_PRICE ? (
-                          <Button
-                            size="sm"
-                            onClick={handleBuyCustomBanner}
-                            disabled={busyId === CUSTOM_BANNER_PURCHASE_ID || !customBannerText.trim()}
-                            className="w-full gap-1.5"
-                          >
-                            {busyId === CUSTOM_BANNER_PURCHASE_ID
-                              ? <Loader2 className="h-4 w-4 animate-spin" />
-                              : <><span>Buy — {CUSTOM_BANNER_PRICE}</span> <Gem className="h-3.5 w-3.5" /></>
-                            }
-                          </Button>
-                        ) : (
-                          <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
-                            <Lock className="h-3.5 w-3.5" />
-                            Need {CUSTOM_BANNER_PRICE - balance} more
-                          </Button>
-                        )}
-                      </PremiumGate>
+                      <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
+                        <Lock className="h-3.5 w-3.5" />
+                        Need {CUSTOM_BANNER_PRICE - balance} more
+                      </Button>
                     )}
                   </CardContent>
                 </Card>

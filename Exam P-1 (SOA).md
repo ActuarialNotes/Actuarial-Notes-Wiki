@@ -7,7 +7,7 @@ The Exam Probability (P-1) is a 3 hour, 30 multiple choice quetion exam that cov
 
 ### Prerequisite knowledge
 - [[Calculus]], including series, differentiation, and integration.
-- Concepts introduced in [Risk and Insurance](https://www.soa.org/globalassets/assets/files/edu/p-21-05.pdf)
+- Concepts introduced in [[Risk and Insurance (SOA)]]
 
 ### Learning Objectives
 

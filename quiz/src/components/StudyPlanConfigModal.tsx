@@ -95,11 +95,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
   const dateMatchesSitting = !examId || !localExamDate || !hasSittings || isValidSittingDate(examId, localExamDate)
 
   const STEPS = ['Exam Date', 'Ready Date', 'Study Strategy'] as const
-  const STEP_HEADLINES: Record<1 | 2 | 3, string> = {
-    1: "Let's lock in your exam date — this anchors everything.",
-    2: "When do you want to feel ready? We'll pace the rest.",
-    3: 'Pick the study style that fits your brain.',
-  }
 
   return (
     <div
@@ -156,15 +151,16 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
           })}
         </div>
 
-        {/* Mascot-style headline */}
-        <p className="px-5 pt-4 text-sm text-foreground/80 leading-snug">
-          {STEP_HEADLINES[step]}
-        </p>
-
-        <div className="p-5 pt-3 space-y-4">
+        <div className="p-5 pt-4 space-y-4">
           {/* Step 1: Exam Date */}
           {step === 1 && (
             <div className="space-y-3">
+              {examDaysOut !== null && examDaysOut > 0 && (
+                <div className="text-center py-1">
+                  <p className="text-5xl font-bold tabular-nums tracking-tight">{examDaysOut}</p>
+                  <p className="text-sm text-muted-foreground mt-1">day{examDaysOut === 1 ? '' : 's'} away</p>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
                 <p className="text-sm font-medium">When is your exam?</p>
@@ -190,9 +186,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                   />
                 </div>
               </div>
-              {examDaysOut !== null && examDaysOut > 0 && (
-                <p className="text-xs text-muted-foreground">{examDaysOut} day{examDaysOut === 1 ? '' : 's'} away</p>
-              )}
               {localExamDate && examDaysOut !== null && examDaysOut <= 0 && (
                 <p className="text-xs text-destructive">Date must be in the future</p>
               )}
@@ -205,6 +198,17 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
           {/* Step 2: Target Ready Date */}
           {step === 2 && (
             <div className="space-y-3">
+              {daysOut !== null && daysOut > 0 && (
+                <div className="text-center py-1">
+                  <p className="text-5xl font-bold tabular-nums tracking-tight">{daysOut}</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    day{daysOut === 1 ? '' : 's'} from today
+                    {examDaysOut !== null && examDaysOut > 0
+                      ? ` · ${examDaysOut - daysOut} day${Math.abs(examDaysOut - daysOut) === 1 ? '' : 's'} before exam`
+                      : ''}
+                  </p>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
                 <p className="text-sm font-medium">Target ready date</p>
@@ -294,14 +298,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                 </div>
               )}
 
-              {daysOut !== null && daysOut > 0 && (
-                <p className="text-xs text-muted-foreground">
-                  {daysOut} day{daysOut === 1 ? '' : 's'} from today
-                  {examDaysOut !== null && examDaysOut > 0
-                    ? ` · ${examDaysOut - daysOut} day${Math.abs(examDaysOut - daysOut) === 1 ? '' : 's'} before exam`
-                    : ''}
-                </p>
-              )}
               {readyDate && daysOut !== null && daysOut <= 0 && (
                 <p className="text-xs text-destructive">Date must be in the future</p>
               )}

@@ -20,6 +20,7 @@ jobs:
       - name: Deploy edge functions
         run: |
           supabase functions deploy stripe-create-checkout --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+          supabase functions deploy stripe-create-portal --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
           supabase functions deploy stripe-webhook --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
           supabase functions deploy delete-account --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
           supabase functions deploy redeem-beta-code --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}

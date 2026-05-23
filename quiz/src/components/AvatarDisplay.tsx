@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useId, useRef } from 'react'
 import { getAnimalPalette, type AnimalPalette } from '@/lib/cosmetics'
 
 // ---- Avatar type system ----
@@ -46,15 +46,16 @@ export function serializeAvatar(data: AvatarData): string {
 // ---- Animal SVG illustrations ----
 
 function FoxSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
+  const uid = useId()
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <clipPath id="av-clip-fox">
+        <clipPath id={`${uid}-fox`}>
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
       <circle cx="16" cy="16" r="16" fill={palette.primary} />
-      <g clipPath="url(#av-clip-fox)">
+      <g clipPath={`url(#${uid}-fox)`}>
         {/* Left ear */}
         <polygon points="7,18 4,0 15,10" fill={palette.primary} />
         <polygon points="8,16 6,4 13,10" fill={palette.secondary} />
@@ -76,15 +77,16 @@ function FoxSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
 }
 
 function KoalaSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
+  const uid = useId()
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <clipPath id="av-clip-koala">
+        <clipPath id={`${uid}-koala`}>
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
       <circle cx="16" cy="16" r="16" fill={palette.primary} />
-      <g clipPath="url(#av-clip-koala)">
+      <g clipPath={`url(#${uid}-koala)`}>
         {/* Left ear */}
         <circle cx="5" cy="10" r="7" fill={palette.secondary} />
         <circle cx="5" cy="10" r="4.5" fill={palette.belly} />
@@ -108,15 +110,16 @@ function KoalaSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
 }
 
 function FrogSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
+  const uid = useId()
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <clipPath id="av-clip-frog">
+        <clipPath id={`${uid}-frog`}>
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
       <circle cx="16" cy="16" r="16" fill={palette.primary} />
-      <g clipPath="url(#av-clip-frog)">
+      <g clipPath={`url(#${uid}-frog)`}>
         {/* Eye bumps at top */}
         <circle cx="9" cy="10" r="6" fill={palette.primary} />
         <circle cx="23" cy="10" r="6" fill={palette.primary} />
@@ -137,15 +140,16 @@ function FrogSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
 }
 
 function OwlSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
+  const uid = useId()
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <clipPath id="av-clip-owl">
+        <clipPath id={`${uid}-owl`}>
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
       <circle cx="16" cy="16" r="16" fill={palette.primary} />
-      <g clipPath="url(#av-clip-owl)">
+      <g clipPath={`url(#${uid}-owl)`}>
         {/* Ear tufts */}
         <polygon points="10,14 8,2 14,10" fill={palette.secondary} />
         <polygon points="22,14 24,2 18,10" fill={palette.secondary} />
@@ -171,15 +175,16 @@ function OwlSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
 }
 
 function WolfSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
+  const uid = useId()
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <clipPath id="av-clip-wolf">
+        <clipPath id={`${uid}-wolf`}>
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
       <circle cx="16" cy="16" r="16" fill={palette.primary} />
-      <g clipPath="url(#av-clip-wolf)">
+      <g clipPath={`url(#${uid}-wolf)`}>
         {/* Left ear */}
         <polygon points="7,16 4,0 15,9" fill={palette.primary} />
         <polygon points="8,14 6,3 13,9" fill={palette.secondary} />
@@ -206,15 +211,16 @@ function WolfSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
 }
 
 function OctopusSvg({ size, palette }: { size: number; palette: AnimalPalette }) {
+  const uid = useId()
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <clipPath id="av-clip-octopus">
+        <clipPath id={`${uid}-octopus`}>
           <circle cx="16" cy="16" r="16" />
         </clipPath>
       </defs>
       <circle cx="16" cy="16" r="16" fill={palette.primary} />
-      <g clipPath="url(#av-clip-octopus)">
+      <g clipPath={`url(#${uid}-octopus)`}>
         {/* Tentacles */}
         <path d="M7 24 Q5 30 7 34" stroke={palette.secondary} strokeWidth="3" strokeLinecap="round" fill="none" />
         <path d="M11 26 Q10 32 12 36" stroke={palette.secondary} strokeWidth="3" strokeLinecap="round" fill="none" />

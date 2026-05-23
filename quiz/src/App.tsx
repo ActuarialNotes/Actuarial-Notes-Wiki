@@ -1,6 +1,7 @@
 import { lazy, Suspense, Component, type ReactNode, type ErrorInfo } from 'react'
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
+import type { Session } from '@supabase/supabase-js'
 import Landing from '@/pages/Landing'
 import Auth from '@/pages/Auth'
 import Quiz from '@/pages/Quiz'
@@ -83,10 +84,10 @@ function NotFound() {
   )
 }
 
-export default function App() {
+export default function App({ initialSession }: { initialSession: Session | null }) {
   return (
     <BrowserRouter>
-      <AuthProvider>
+      <AuthProvider initialSession={initialSession}>
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />

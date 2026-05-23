@@ -13,17 +13,19 @@ interface AuthContextValue {
 
 export const AuthContext = createContext<AuthContextValue | null>(null)
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState(true)
+export function AuthProvider({ children, initialSession }: { children: ReactNode; initialSession: Session | null }) {
+  const [user, setUser] = useState<User | null>(initialSession?.user ?? null)
+  const [session, setSession] = useState<Session | null>(initialSession)
+  // Auth is pre-seeded from main.tsx's bootstrap getSession() call, so loading
+  // is always false — no transient null-user state on the first render.
+  const loading = false
 
   useEffect(() => {
+    // Re-fetch in case the token was refreshed between bootstrap and first render.
     supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null)
       setSession(data.session ?? null)
       if (data.session?.refresh_token) writeSharedCookie(data.session.refresh_token)
-      setLoading(false)
     })
 
     // Single subscription for the entire app. Previously useAuth() was called

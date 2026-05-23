@@ -33,7 +33,14 @@ export default function Upgrade() {
         'redeem-beta-code',
         { body: { code } },
       )
-      if (invokeError) throw new Error(invokeError.message)
+      if (invokeError) {
+        let msg = invokeError.message
+        const ctx = (invokeError as { context?: Response }).context
+        if (ctx) {
+          try { const body = await ctx.json(); if (typeof body?.error === 'string') msg = body.error } catch {}
+        }
+        throw new Error(msg)
+      }
       if (data?.error) throw new Error(data.error)
       if (!data?.success) throw new Error('Redemption failed')
       setBetaSuccess(true)
@@ -57,8 +64,13 @@ export default function Upgrade() {
         { body: {} },
       )
       if (invokeError) {
+        let msg = invokeError.message
+        const ctx = (invokeError as { context?: Response }).context
+        if (ctx) {
+          try { const body = await ctx.json(); if (typeof body?.error === 'string') msg = body.error } catch {}
+        }
         console.error('upgrade: invoke error:', invokeError)
-        throw new Error(invokeError.message)
+        throw new Error(msg)
       }
       if (data?.error) throw new Error(data.error)
       if (!data?.url) throw new Error('Missing checkout URL')

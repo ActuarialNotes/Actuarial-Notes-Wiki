@@ -90,7 +90,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     if (!userId) return
     supabase
       .from('exam_progress')
-      .select('exam_id, status, target_date, study_plan_config')
+      .select('*')
       .eq('user_id', userId)
       .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
         if (error) {
@@ -108,7 +108,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     setLoadingExams(true)
     supabase
       .from('exam_progress')
-      .select('exam_id, status, target_date, study_plan_config')
+      .select('*')
       .eq('user_id', userId)
       .then(({ data, error }: { data: ExamProgressRow[] | null; error: { message: string } | null }) => {
         if (cancelled) return

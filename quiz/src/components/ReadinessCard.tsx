@@ -532,61 +532,239 @@ export function ReadinessCard({
         </CardContent>
       </Card>
 
-      {/* Today's Study Plan card */}
+      {/* Premium-gated content */}
       {isPremium ? (
-        displayConcepts.length > 0 && (
+        <>
+          {/* Today's Study Plan card */}
+          {displayConcepts.length > 0 && (
+            <Card>
+              <CardContent className="p-5 space-y-3">
+                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                <div className="space-y-0.5">
+                  {displayConcepts.map((name, idx) => {
+                    const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                    const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                    const isCompleted =
+                      completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                      STATE_ORDER[currentState] >= STATE_ORDER[target]
+                    return (
+                      <button
+                        key={name}
+                        type="button"
+                        onClick={() => setSelectedConceptIdx(idx)}
+                        className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                      >
+                        {isCompleted
+                          ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                          : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                        <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
+                          {name}
+                        </span>
+                        <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Action buttons */}
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setConceptModalOpen(true)}
+              disabled={allConcepts.length === 0}
+              className="gap-1.5 text-sm"
+            >
+              <BookOpen className="h-4 w-4" />
+              Read concepts
+            </Button>
+            <Button
+              onClick={handleStartQuiz}
+              disabled={quizLoading}
+              className="gap-1.5 text-sm"
+            >
+              {quizLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Play className="h-4 w-4" />
+              )}
+              Start Quiz
+            </Button>
+          </div>
+
+          {/* Topics mastered + tracker */}
           <Card>
-            <CardContent className="p-5 space-y-3">
-              <h3 className="text-sm font-semibold">Today's Study Plan</h3>
-              <div className="space-y-0.5">
-                {displayConcepts.map((name, idx) => {
-                  const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                  const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                  const isCompleted =
-                    completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-                    STATE_ORDER[currentState] >= STATE_ORDER[target]
-                  return (
-                    <button
-                      key={name}
-                      type="button"
-                      onClick={() => setSelectedConceptIdx(idx)}
-                      className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
-                    >
-                      {isCompleted
-                        ? <Check className="h-4 w-4 text-green-500 shrink-0" />
-                        : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
-                      <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
-                        {name}
+            <CardContent className="p-5 space-y-4">
+              <div className="space-y-1.5">
+                <div className="flex items-baseline justify-between text-sm">
+                  <span className="text-muted-foreground">Topics mastered</span>
+                  <span className="font-semibold">
+                    {aggregate.level3}
+                    <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
+                    <span className="text-muted-foreground font-normal ml-1.5">({aggregate.strongPct}%)</span>
+                  </span>
+                </div>
+                <div className="h-2.5 rounded-full bg-secondary overflow-hidden flex">
+                  <div
+                    className="h-full transition-all"
+                    style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }}
+                  />
+                  <div
+                    className="h-full transition-all"
+                    style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }}
+                  />
+                  <div
+                    className="h-full transition-all"
+                    style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }}
+                  />
+                </div>
+                {(aggregate.level3 > 0 || aggregate.level2 > 0 || aggregate.level1 > 0) && (
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    {aggregate.level3 > 0 && (
+                      <span className="flex items-center gap-1.5">
+                        <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
+                        Level 3
                       </span>
-                      <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
-                    </button>
-                  )
-                })}
+                    )}
+                    {aggregate.level2 > 0 && (
+                      <span className="flex items-center gap-1.5">
+                        <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
+                        Level 2
+                      </span>
+                    )}
+                    {aggregate.level1 > 0 && (
+                      <span className="flex items-center gap-1.5">
+                        <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
+                        Level 1
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
+
+              <div className="flex items-center gap-6">
+                <ReadinessDonut
+                  sections={sections}
+                  overallPct={overallPct}
+                  activeSection={activeSection}
+                  onSectionHover={handleSectionHover}
+                  onSectionClick={handleSectionClick}
+                />
+                <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+                  {sections.map((sec, i) => (
+                    <div
+                      key={sec.name}
+                      className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
+                      onMouseEnter={() => handleSectionHover(i)}
+                      onMouseLeave={() => handleSectionHover(null)}
+                      onClick={() => handleSectionClick(i)}
+                    >
+                      <span
+                        className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
+                      />
+                      <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
+                      <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <StudyPlanTracker
+                syllabus={syllabus}
+                masteryRecords={masteryRecords}
+                studyPlan={plan}
+                allConceptsForNav={allConcepts}
+                onConceptSelect={setTrackerConcept}
+                openTopics={openTopics}
+                onToggle={toggleTopic}
+              />
             </CardContent>
           </Card>
-        )
+        </>
       ) : (
-        <Card className="relative overflow-hidden">
-          <CardContent className="p-5 space-y-3" aria-hidden="true">
-            <h3 className="text-sm font-semibold">Today's Study Plan</h3>
-            <div className="space-y-0.5">
-              {(syllabus.topics[0]?.concepts ?? []).slice(0, 2).map((c, i) => (
-                <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
-                  <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-                  <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
-                  <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
+        <div className="relative rounded-xl overflow-hidden">
+          {/* Blurred preview of premium content */}
+          <div className="space-y-4 pointer-events-none select-none" aria-hidden="true">
+            {/* Today's Study Plan preview */}
+            <Card>
+              <CardContent className="p-5 space-y-3">
+                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                <div className="space-y-0.5">
+                  {(syllabus.topics[0]?.concepts ?? []).slice(0, 3).map((c, i) => (
+                    <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
+                      <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
+                      <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </CardContent>
+            </Card>
+
+            {/* Action buttons preview */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="outline" disabled className="gap-1.5 text-sm">
+                <BookOpen className="h-4 w-4" />
+                Read concepts
+              </Button>
+              <Button disabled className="gap-1.5 text-sm">
+                <Play className="h-4 w-4" />
+                Start Quiz
+              </Button>
             </div>
-          </CardContent>
-          <div className="absolute inset-0 backdrop-blur-sm bg-background/75 flex flex-col items-center justify-center gap-2 p-5 text-center">
-            <div className="flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 text-primary">
-              <Lock className="h-4 w-4" />
+
+            {/* Topics mastered preview */}
+            <Card>
+              <CardContent className="p-5 space-y-4">
+                <div className="space-y-1.5">
+                  <div className="flex items-baseline justify-between text-sm">
+                    <span className="text-muted-foreground">Topics mastered</span>
+                    <span className="font-semibold text-muted-foreground">0/{aggregate.total} (0%)</span>
+                  </div>
+                  <div className="h-2.5 rounded-full bg-secondary" />
+                </div>
+                <div className="flex items-center gap-6">
+                  <svg width="160" height="160" viewBox="0 0 160 160" aria-hidden="true">
+                    <circle cx="80" cy="80" r="55" fill="none" strokeWidth="22" stroke="rgba(34,197,94,0.06)" />
+                  </svg>
+                  <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+                    {(syllabus.topics ?? []).slice(0, 5).map((t, i) => (
+                      <div key={i} className="flex items-center gap-2 min-w-0">
+                        <span className="inline-block h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: 'rgba(34,197,94,0.12)' }} />
+                        <span className="text-xs text-muted-foreground truncate flex-1">{t.name}</span>
+                        <span className="text-xs font-medium tabular-nums shrink-0">0%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  {(syllabus.topics ?? []).slice(0, 3).map((t, i) => (
+                    <div key={i} className="flex items-center gap-2 w-full py-2 px-1">
+                      <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground -rotate-90" />
+                      <span className="text-sm font-semibold min-w-0 truncate">
+                        {t.name}
+                        {t.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{t.weight}</span>}
+                      </span>
+                      <div className="flex-1 h-1.5 rounded-full bg-secondary" />
+                      <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">0/{t.concepts.length}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Lock overlay */}
+          <div className="absolute inset-0 backdrop-blur-md bg-background/80 flex flex-col items-center justify-center gap-3 p-6 text-center">
+            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
+              <Lock className="h-5 w-5" />
             </div>
-            <div className="space-y-0.5">
-              <p className="text-sm font-semibold">Custom Study Plan is Premium</p>
-              <p className="text-xs text-muted-foreground max-w-xs">
+            <div className="space-y-1">
+              <p className="text-base font-semibold">Custom Study Plan is Premium</p>
+              <p className="text-xs text-muted-foreground max-w-[220px]">
                 Get a daily plan tailored to your target date and strength level.
               </p>
             </div>
@@ -594,126 +772,8 @@ export function ReadinessCard({
               Upgrade — $10/mo
             </Link>
           </div>
-        </Card>
+        </div>
       )}
-
-      {/* Action buttons */}
-      <div className="grid grid-cols-2 gap-2">
-        <Button
-          variant="outline"
-          onClick={() => setConceptModalOpen(true)}
-          disabled={allConcepts.length === 0}
-          className="gap-1.5 text-sm"
-        >
-          <BookOpen className="h-4 w-4" />
-          Read concepts
-        </Button>
-        <Button
-          onClick={handleStartQuiz}
-          disabled={quizLoading}
-          className="gap-1.5 text-sm"
-        >
-          {quizLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Play className="h-4 w-4" />
-          )}
-          Start Quiz
-        </Button>
-      </div>
-
-      {/* Study plan card — standalone */}
-      <Card>
-        <CardContent className="p-5 space-y-4">
-          {/* Topics mastered progress bar */}
-          <div className="space-y-1.5">
-            <div className="flex items-baseline justify-between text-sm">
-              <span className="text-muted-foreground">Topics mastered</span>
-              <span className="font-semibold">
-                {aggregate.level3}
-                <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
-                <span className="text-muted-foreground font-normal ml-1.5">({aggregate.strongPct}%)</span>
-              </span>
-            </div>
-            <div className="h-2.5 rounded-full bg-secondary overflow-hidden flex">
-              <div
-                className="h-full transition-all"
-                style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }}
-              />
-              <div
-                className="h-full transition-all"
-                style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }}
-              />
-              <div
-                className="h-full transition-all"
-                style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }}
-              />
-            </div>
-            {(aggregate.level3 > 0 || aggregate.level2 > 0 || aggregate.level1 > 0) && (
-              <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                {aggregate.level3 > 0 && (
-                  <span className="flex items-center gap-1.5">
-                    <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-                    Level 3
-                  </span>
-                )}
-                {aggregate.level2 > 0 && (
-                  <span className="flex items-center gap-1.5">
-                    <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
-                    Level 2
-                  </span>
-                )}
-                {aggregate.level1 > 0 && (
-                  <span className="flex items-center gap-1.5">
-                    <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
-                    Level 1
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Radial progress + section legend */}
-          <div className="flex items-center gap-6">
-            <ReadinessDonut
-              sections={sections}
-              overallPct={overallPct}
-              activeSection={activeSection}
-              onSectionHover={handleSectionHover}
-              onSectionClick={handleSectionClick}
-            />
-
-            <div className="flex flex-col gap-1.5 min-w-0 flex-1">
-              {sections.map((sec, i) => (
-                <div
-                  key={sec.name}
-                  className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
-                  onMouseEnter={() => handleSectionHover(i)}
-                  onMouseLeave={() => handleSectionHover(null)}
-                  onClick={() => handleSectionClick(i)}
-                >
-                  <span
-                    className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
-                    style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
-                  />
-                  <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
-                  <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <StudyPlanTracker
-            syllabus={syllabus}
-            masteryRecords={masteryRecords}
-            studyPlan={plan}
-            allConceptsForNav={allConcepts}
-            onConceptSelect={setTrackerConcept}
-            openTopics={openTopics}
-            onToggle={toggleTopic}
-          />
-        </CardContent>
-      </Card>
 
       {/* Modals */}
       {conceptModalOpen && allConcepts.length > 0 && (

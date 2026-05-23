@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 
@@ -21,6 +21,10 @@ const DEFAULT: Omit<GemState, 'refresh'> = {
 export function useGems(): GemState {
   const { user } = useAuth()
   const userId = user?.id
+  // Each hook instance gets its own channel name to avoid the Supabase error
+  // "cannot add postgres_changes callbacks after subscribe()" when multiple
+  // components (e.g. Sidebar + Store) hold concurrent subscriptions.
+  const channelId = useRef(`gems-${Math.random().toString(36).slice(2)}`)
   const [state, setState] = useState<Omit<GemState, 'refresh'>>(DEFAULT)
 
   const fetchRow = useCallback(async () => {
@@ -56,7 +60,7 @@ export function useGems(): GemState {
     void fetchRow().then(() => { if (cancelled) return })
 
     const channel = supabase
-      .channel(`user_gems:${userId}`)
+      .channel(`user_gems:${userId}:${channelId.current}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'user_gems', filter: `user_id=eq.${userId}` },

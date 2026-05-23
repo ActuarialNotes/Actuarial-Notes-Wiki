@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { ChevronDown, Check } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -111,7 +112,7 @@ export default function Landing() {
   const [isAdaptive, setIsAdaptive] = useState(false)
   const [count, setCount] = useState<number>(10)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
-  const [showAllTopics, setShowAllTopics] = useState(false)
+  const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
 
   // Pre-select first in-progress exam when progress loads
   useEffect(() => {
@@ -122,11 +123,11 @@ export default function Landing() {
     }
   }, [examProgress.P, examProgress.FM])  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reset subtopic selection and show-all state when exam topic or mode changes
+  // Reset subtopic selection and accordion state when exam topic or mode changes
   useEffect(() => {
     setSelectedSubtopics([])
     setIsAdaptive(false)
-    setShowAllTopics(false)
+    setOpenTopicGroups(new Set())
   }, [topic, mode])
 
   // --- Syllabus-derived data ---
@@ -175,6 +176,39 @@ export default function Landing() {
     })
   }, [subtopicsByTopic, topic, syllabusForTopic])
 
+  // Group orderedSubtopics under their parent learning objectives from the syllabus
+  const groupedSubtopics = useMemo(() => {
+    if (!syllabusForTopic) {
+      return [{ name: 'All Topics', weight: undefined as string | undefined, subtopics: orderedSubtopics }]
+    }
+    const subtopicToIdx = new Map<string, number>()
+    syllabusForTopic.topics.forEach((wt, idx) => {
+      for (const st of orderedSubtopics) {
+        if (subtopicToIdx.has(st)) continue
+        const stL = st.toLowerCase()
+        if (stL === wt.name.toLowerCase()) { subtopicToIdx.set(st, idx); continue }
+        for (const c of wt.concepts) {
+          const cL = c.name.toLowerCase()
+          if (stL === cL || stL.includes(cL) || cL.includes(stL)) {
+            subtopicToIdx.set(st, idx); break
+          }
+        }
+      }
+    })
+    const groups = syllabusForTopic.topics.map(t => ({
+      name: t.name, weight: t.weight as string | undefined, subtopics: [] as string[]
+    }))
+    const ungrouped: string[] = []
+    for (const st of orderedSubtopics) {
+      const idx = subtopicToIdx.get(st)
+      if (idx !== undefined) groups[idx].subtopics.push(st)
+      else ungrouped.push(st)
+    }
+    const result = groups.filter(g => g.subtopics.length > 0)
+    if (ungrouped.length > 0) result.push({ name: 'Other', weight: undefined, subtopics: ungrouped })
+    return result
+  }, [syllabusForTopic, orderedSubtopics])
+
   // Subtopics that have questions covering today's planned concepts
   const todaySubtopics = useMemo(() => {
     if (!plan?.todaysConcepts?.length) return new Set<string>()
@@ -212,6 +246,17 @@ export default function Landing() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic, mode, user?.id, masteryLoading, subtopicsLoading, planLoading, todaySubtopics.size])
 
+  // Auto-expand sections that contain selected subtopics
+  useEffect(() => {
+    if (selectedSubtopics.length === 0) return
+    const toOpen = new Set<string>()
+    for (const group of groupedSubtopics) {
+      if (group.subtopics.some(s => selectedSubtopics.includes(s))) toOpen.add(group.name)
+    }
+    setOpenTopicGroups(toOpen)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSubtopics.join(','), groupedSubtopics])
+
   // Compute available question count for the current filters
   const availableCount = useMemo(() => {
     if (!topic) return 0
@@ -235,6 +280,25 @@ export default function Landing() {
     )
   }
 
+  function toggleTopicGroup(groupName: string) {
+    setOpenTopicGroups(prev => {
+      const next = new Set(prev)
+      next.has(groupName) ? next.delete(groupName) : next.add(groupName)
+      return next
+    })
+  }
+
+  function selectAllInGroup(group: { subtopics: string[] }, e: React.MouseEvent) {
+    e.stopPropagation()
+    setIsAdaptive(false)
+    const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
+    setSelectedSubtopics(prev =>
+      allSelected
+        ? prev.filter(s => !group.subtopics.includes(s))
+        : [...new Set([...prev, ...group.subtopics])]
+    )
+  }
+
   function handleStart() {
     const params = new URLSearchParams({ exam: topic, mode })
 
@@ -249,17 +313,10 @@ export default function Landing() {
     navigate(`/quiz?${params.toString()}`)
   }
 
-  const subtopics = subtopicsByTopic[topic] ?? []
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
   const examColor = getExamColor(topic)
   const hasTopic = topic !== ''
-
-  // Topics visible in the bubble list
-  const hasShowAllToggle = todaySubtopics.size > 0 && orderedSubtopics.length > todaySubtopics.size
-  const displayedSubtopics = showAllTopics || todaySubtopics.size === 0
-    ? orderedSubtopics
-    : orderedSubtopics.filter(s => todaySubtopics.has(s))
 
   const topicsLabel = selectedSubtopics.length === 0
     ? '(all included)'
@@ -390,45 +447,76 @@ export default function Landing() {
                 <>
                   {/* Topics */}
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <label className="text-sm font-medium">
-                        Topics
-                        <span className="ml-2 text-xs font-normal text-muted-foreground">
-                          {topicsLabel}
-                        </span>
-                      </label>
-                      {hasShowAllToggle && (
-                        <button
-                          type="button"
-                          onClick={() => setShowAllTopics(v => !v)}
-                          className="shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          {showAllTopics ? 'Show less' : 'Show all topics'}
-                        </button>
-                      )}
-                    </div>
-                    {subtopicsLoading && subtopics.length === 0 ? (
+                    <label className="text-sm font-medium">
+                      Topics
+                      <span className="ml-2 text-xs font-normal text-muted-foreground">
+                        {topicsLabel}
+                      </span>
+                    </label>
+                    {subtopicsLoading && orderedSubtopics.length === 0 ? (
                       <p className="text-xs text-muted-foreground">Loading topics…</p>
                     ) : (
-                      <div className="flex flex-wrap gap-2">
-                        {displayedSubtopics.map(subtopic => {
-                          const isSelected = selectedSubtopics.includes(subtopic)
-                          const isToday = todaySubtopics.has(subtopic)
+                      <div className="rounded-lg border divide-y">
+                        {groupedSubtopics.map(group => {
+                          const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
+                          const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
+                          const isOpen = openTopicGroups.has(group.name)
+                          const hasToday = group.subtopics.some(s => todaySubtopics.has(s))
                           return (
-                            <button
-                              key={subtopic}
-                              type="button"
-                              onClick={() => toggleSubtopic(subtopic)}
-                              className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
-                                isSelected
-                                  ? 'border-primary bg-primary text-primary-foreground'
-                                  : showAllTopics && isToday
-                                    ? 'border-primary/50 bg-primary/10 text-primary hover:bg-primary/20'
-                                    : 'border-input hover:bg-accent'
-                              }`}
-                            >
-                              {subtopic}
-                            </button>
+                            <div key={group.name}>
+                              <button
+                                type="button"
+                                onClick={() => toggleTopicGroup(group.name)}
+                                className="flex items-center gap-2 w-full py-2.5 px-3 text-left hover:bg-muted/40 transition-colors"
+                                aria-expanded={isOpen}
+                              >
+                                <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
+                                <span className="text-sm font-semibold flex-1 min-w-0 truncate">
+                                  {group.name}
+                                  {group.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{group.weight}</span>}
+                                </span>
+                                {hasToday && <span className="text-[10px] text-primary/70 shrink-0">today</span>}
+                                <button
+                                  type="button"
+                                  onClick={e => selectAllInGroup(group, e)}
+                                  className={`shrink-0 ml-1 px-2 py-0.5 rounded border text-[11px] transition-colors ${
+                                    allSelected
+                                      ? 'bg-primary text-primary-foreground border-primary'
+                                      : someSelected
+                                        ? 'bg-primary/10 text-primary border-primary/30'
+                                        : 'border-input text-muted-foreground hover:bg-accent'
+                                  }`}
+                                >
+                                  {allSelected ? 'All ✓' : someSelected ? 'Some' : 'Select all'}
+                                </button>
+                              </button>
+                              {isOpen && (
+                                <div className="pb-2 px-3 pl-9 space-y-0.5 bg-muted/20">
+                                  {group.subtopics.map(subtopic => {
+                                    const isSelected = selectedSubtopics.includes(subtopic)
+                                    const isToday = todaySubtopics.has(subtopic)
+                                    return (
+                                      <button
+                                        key={subtopic}
+                                        type="button"
+                                        onClick={() => toggleSubtopic(subtopic)}
+                                        className="flex items-center gap-2 w-full py-1 text-left text-xs rounded hover:bg-muted/40 transition-colors"
+                                      >
+                                        <div className={`h-3.5 w-3.5 shrink-0 rounded border flex items-center justify-center ${
+                                          isSelected ? 'bg-primary border-primary' : 'border-input bg-background'
+                                        }`}>
+                                          {isSelected && <Check className="h-2 w-2 text-primary-foreground" />}
+                                        </div>
+                                        <span className={`flex-1 truncate ${isSelected ? 'font-medium text-primary' : isToday ? 'text-primary/80' : ''}`}>
+                                          {subtopic}
+                                        </span>
+                                        {isToday && <span className="text-[10px] text-primary/60 shrink-0">today</span>}
+                                      </button>
+                                    )
+                                  })}
+                                </div>
+                              )}
+                            </div>
                           )
                         })}
                       </div>

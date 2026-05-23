@@ -29,8 +29,10 @@ Deno.serve(async (req: Request) => {
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')!
-    const priceId = Deno.env.get('STRIPE_PREMIUM_PRICE_ID')!
+    const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY')
+    const priceId = Deno.env.get('STRIPE_PREMIUM_PRICE_ID')
+    if (!stripeSecret) return json({ error: 'Configuration error: STRIPE_SECRET_KEY is not set' }, 500)
+    if (!priceId) return json({ error: 'Configuration error: STRIPE_PREMIUM_PRICE_ID is not set' }, 500)
 
     const admin = createClient(supabaseUrl, serviceRoleKey)
     const { data: { user }, error: userErr } = await admin.auth.getUser(token)

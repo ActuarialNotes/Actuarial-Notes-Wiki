@@ -1,4 +1,5 @@
-- The **Probability Addition Rule** (Inclusion-Exclusion) gives the probability that at least one of two events $A$ or $B$ occurs.
+- The **Probability Addition Rule** gives the probability that at least one of two events $A$ or $B$ occurs.
+- Also known as the Inclusion-Exclusion Principle
 - The rule corrects for the double-counting of outcomes in their intersection.
 - $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 - For three events the rule extends to $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$

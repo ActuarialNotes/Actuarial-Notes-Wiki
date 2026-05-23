@@ -5,14 +5,6 @@
   - $$P(A) = \frac{|A|}{|S|}$$
 - For any probability measure $P$ to be mathematically valid, it must satisfy the [[Axioms of Probability]]
 
-## The Axioms of Probability
-
-| Axiom | Mathematical Statement | Description |
-| :--- | :--- | :--- |
-| **1. Total Probability** | $P(S) = 1$ | **Something must happen.** The probability of the entire sample space is 100%. |
-| **2. Non-negativity** | $P(E) \geq 0$ | **No negative odds.** You cannot have a less-than-zero chance of an event occurring. |
-| **3. Additivity** | $P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$ | **Add if no overlap.** If events are [[Concepts/Mutually Exclusive Events]], the probability of "one or the other" is the sum of their individual probabilities. |
-
 > [!example]- Probability of a Fair Die? {Example}
 > 
 > ### The Big Idea

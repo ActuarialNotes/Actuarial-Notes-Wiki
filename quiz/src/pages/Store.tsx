@@ -16,12 +16,16 @@ export default function Store() {
   const { isPremium, loading: subLoading } = useSubscription()
   const { balance, loading: gemsLoading, refresh: refreshGems } = useGems()
   const [owned, setOwned] = useState<Set<string>>(new Set())
-  const [equipped, setEquipped] = useState<string | null>(null) // cosmetic_id of the currently equipped avatar
+  const [equipped, setEquipped] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const userId = user?.id
 
-  // Derive currently equipped cosmetic from user_metadata.avatar_url.
+  // True once we know auth state AND (if logged in) subscription state.
+  // While this is false, we render a spinner only inside each card button
+  // so the item grid is always visible with no layout flash.
+  const actionsReady = !authLoading && (!user || !subLoading)
+
   useEffect(() => {
     const raw = user?.user_metadata?.avatar_url as string | undefined
     if (!raw || !raw.startsWith('{')) { setEquipped(null); return }
@@ -91,14 +95,6 @@ export default function Store() {
     setBusyId(null)
   }
 
-  if (authLoading || (user && subLoading)) {
-    return (
-      <div className="container max-w-3xl mx-auto px-4 py-8 flex items-center justify-center min-h-[40vh]">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    )
-  }
-
   return (
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
       <div className="flex items-center justify-between gap-3">
@@ -115,7 +111,8 @@ export default function Store() {
         Earn 1 gem for every correct answer. Spend them here on color variants of your favorite animal.
       </p>
 
-      {user && !isPremium && (
+      {/* Only show the free-plan banner once we know for sure they're not premium */}
+      {actionsReady && user && !isPremium && (
         <div className="rounded-md border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-700 dark:text-amber-400">
           You&apos;re on the free plan.{' '}
           <Link to="/upgrade" className="underline font-medium">Upgrade to Premium</Link>
@@ -145,7 +142,13 @@ export default function Store() {
                   <p className="text-sm font-semibold">{cosmetic.variantName}</p>
                   <p className="text-xs text-muted-foreground">{ANIMAL_LABELS[cosmetic.animal]}</p>
                 </div>
-                {!user ? (
+
+                {/* Render a neutral disabled button while auth/subscription is still resolving */}
+                {!actionsReady ? (
+                  <Button size="sm" variant="outline" disabled className="w-full">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </Button>
+                ) : !user ? (
                   <Button
                     size="sm"
                     variant="outline"

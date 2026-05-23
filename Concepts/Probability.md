@@ -1,9 +1,8 @@
 - **Probability** $P$ is a measure of how likely an event is to occur.
 
-> If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space.
-> 
 > $$P(A) = \frac{|A|}{|S|}$$
 
+- If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space.
 - Probability is a [[Set Function]] that maps events in a sample space to a real number between 0 and 1.
 - To be a probability, $P$ must satisfy the [[Axioms of Probability]]
 

@@ -3,7 +3,7 @@
 - If all outcomes in a finite sample space $S$ are equally likely, then
   - the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space:
   - $$P(A) = \frac{|A|}{|S|}$$
-- For any probability measure $P$ to be mathematically valid, it must satisfy the [[Axioms of Probability]]
+- To be a probability, $P$ must satisfy the [[Axioms of Probability]]
 
 > [!example]- Probability of a Fair Die? {Example}
 > 

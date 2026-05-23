@@ -1,17 +1,17 @@
-**Probability** is a measure of how likely an event is to occur. It is a [[Set Function]] that maps events in a sample space to a real number between 0 and 1.
+- **Probability** is a measure of how likely an event is to occur.
+- It is a [[Set Function]] that maps events in a sample space to a real number between 0 and 1.
+- If all outcomes in a finite sample space $S$ are equally likely, then
+  - the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space:
+  - $$P(A) = \frac{|A|}{|S|}$$
+- For any probability measure $P$ to be mathematically valid, it must satisfy the [[Axioms of Probability]]
 
-If all outcomes in a finite sample space $S$ are equally likely, the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space:
+## The Axioms of Probability
 
-$$P(A) = \frac{|A|}{|S|}$$
-
-### The Three Axioms of Probability
-For any probability measure $P$ to be mathematically valid, it must satisfy these three [[Axioms of Probability]]:
-
-| Axiom | Mathematical Statement | The "Plain English" Translation |
+| Axiom | Mathematical Statement | Description |
 | :--- | :--- | :--- |
 | **1. Total Probability** | $P(S) = 1$ | **Something must happen.** The probability of the entire sample space is 100%. |
 | **2. Non-negativity** | $P(E) \geq 0$ | **No negative odds.** You cannot have a less-than-zero chance of an event occurring. |
-| **3. Additivity** | $P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$ | **No overlap? Just add.** If events are [[Concepts/Mutually Exclusive Events]], the probability of "one or the other" is the sum of their individual probabilities. |
+| **3. Additivity** | $P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$ | **Add if no overlap.** If events are [[Concepts/Mutually Exclusive Events]], the probability of "one or the other" is the sum of their individual probabilities. |
 
 > [!example]- Probability of a Fair Die? {Example}
 > 

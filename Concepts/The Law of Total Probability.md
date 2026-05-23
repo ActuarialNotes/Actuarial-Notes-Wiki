@@ -3,7 +3,7 @@
 
 - **The Law of Total Probability** states that if $\{A_1, \ldots, A_n\}$ is a partition of the sample space $S$, then the probability of any event $B$ can be expressed as a weighted average of its conditional probabilities given each $A_i$.
 - $$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\ \dot P(A_i)$$
-- $${A_1, A_2, \ldots, A_n\}$$ is a partition of $$S$$.
+- $$\{A_1, A_2, \ldots, A_n\}$$ is a partition of $$S$$.
 - $\{A_1, \ldots, A_n\}$ must be mutually exclusive and exhaustive events to partition $S$.
 - Used for:
   -  Computing the denominator $P(E)$ in Bayes' Theorem

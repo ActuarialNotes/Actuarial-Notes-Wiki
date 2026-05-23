@@ -1,10 +1,18 @@
 import { useState, useEffect, useCallback } from 'react'
-import { X, Loader2, GraduationCap } from 'lucide-react'
+import { X, Loader2, GraduationCap, Play } from 'lucide-react'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { TRACKS } from '@/data/tracks'
 import type { ItemStatus, TrackItem } from '@/data/tracks'
 import { cn } from '@/lib/utils'
-import { ExamSittingsList } from '@/components/ExamSittingsList'
+import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
+import {
+  loadStudyPlanConfig,
+  saveStudyPlanConfig,
+  todayISO,
+  type StudyPlanConfig,
+} from '@/lib/studyPlan'
+
+const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
 const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
   not_started: 'in_progress',
@@ -79,10 +87,19 @@ function useDesktopLeft() {
 }
 
 export default function ExamsPopout({ open, onClose }: Props) {
-  const { examRows, loadingExams, selectedTrack, setSelectedTrack, saveExamRows, examsState } = useExamProgress()
+  const { examRows, loadingExams, selectedTrack, setSelectedTrack, saveExamRows, examsState, updateStudyPlanConfig, updateTargetDate } = useExamProgress()
   const [localExamMap, setLocalExamMap] = useState<Record<string, { status: ItemStatus; targetDate: string }>>({})
   const [dirty, setDirty] = useState(false)
   const desktopLeft = useDesktopLeft()
+
+  // Study Plan wizard state — must live outside the popout's `open` gate so it
+  // remains mounted when the popout closes during onboarding.
+  const [onboarding, setOnboarding] = useState<null | {
+    examId: string
+    examLabel: string
+    examDate: string | null
+    config: StudyPlanConfig
+  }>(null)
 
   const currentTrack = TRACKS.find(t => t.key === selectedTrack) ?? TRACKS[0]
 
@@ -118,11 +135,6 @@ export default function ExamsPopout({ open, onClose }: Props) {
     setDirty(true)
   }
 
-  const setExamDate = (examId: string, targetDate: string) => {
-    setLocalExamMap(prev => ({ ...prev, [examId]: { ...prev[examId], targetDate } }))
-    setDirty(true)
-  }
-
   const handleSave = async () => {
     const rows = Object.entries(localExamMap).map(([exam_id, v]) => ({
       exam_id,
@@ -131,12 +143,54 @@ export default function ExamsPopout({ open, onClose }: Props) {
     }))
     const ok = await saveExamRows(rows)
     if (ok) setDirty(false)
+    return ok
   }
 
-  if (!open) return null
+  const handleStartOnboarding = async (item: TrackItem) => {
+    // Persist any pending checklist changes so the in-progress status survives.
+    if (dirty) await handleSave()
+    // Promote this exam to be the user's active dashboard exam.
+    try { localStorage.setItem(ACTIVE_EXAM_KEY, item.id) } catch { /* ignore */ }
+    const row = localExamMap[item.id]
+    setOnboarding({
+      examId: item.id,
+      examLabel: item.name,
+      examDate: row?.targetDate || null,
+      config: loadStudyPlanConfig(item.id),
+    })
+    onClose()
+  }
+
+  // Mirrors useStudyPlan.updateConfig: localStorage + Supabase persistence.
+  const handleOnboardingConfigSave = (next: Partial<StudyPlanConfig>) => {
+    if (!onboarding) return
+    const merged: StudyPlanConfig = {
+      ...onboarding.config,
+      ...next,
+      planStartDate: onboarding.config.planStartDate ?? (next.targetReadyDate ? todayISO() : null),
+    }
+    saveStudyPlanConfig(onboarding.examId, merged)
+    updateStudyPlanConfig(onboarding.examId, merged).catch(() => { /* best-effort */ })
+    setOnboarding(prev => prev ? { ...prev, config: merged } : prev)
+  }
+
+  const handleOnboardingExamDateChange = (date: string | null) => {
+    if (!onboarding) return
+    updateTargetDate(onboarding.examId, date).catch(() => { /* best-effort */ })
+    setLocalExamMap(prev => ({
+      ...prev,
+      [onboarding.examId]: {
+        status: prev[onboarding.examId]?.status ?? 'in_progress',
+        targetDate: date ?? '',
+      },
+    }))
+    setOnboarding(prev => prev ? { ...prev, examDate: date } : prev)
+  }
 
   return (
     <>
+      {open && (
+        <>
       {/* Mobile backdrop */}
       <div
         className="fixed inset-0 z-[55] bg-black/40 lg:hidden"
@@ -234,27 +288,21 @@ export default function ExamsPopout({ open, onClose }: Props) {
                           >
                             {item.name}
                           </span>
-                          {row.status === 'in_progress' && (
-                            <div className="w-full flex flex-col gap-1.5 mt-1 pl-7">
-                              <div className="flex items-center gap-1.5">
-                                <label htmlFor={`pop-date-${item.id}`} className="text-xs text-muted-foreground whitespace-nowrap">
-                                  Target date
-                                </label>
-                                <input
-                                  id={`pop-date-${item.id}`}
-                                  type="date"
-                                  value={row.targetDate}
-                                  onChange={e => setExamDate(item.id, e.target.value)}
-                                  className="text-xs border border-input rounded-md px-2 py-1 bg-background text-foreground"
-                                />
+                          {row.status === 'in_progress' && (() => {
+                            const hasPlan = !!loadStudyPlanConfig(item.id).planStartDate
+                            return (
+                              <div className="w-full mt-1 pl-7">
+                                <button
+                                  type="button"
+                                  onClick={() => handleStartOnboarding(item)}
+                                  className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                                >
+                                  <Play className="h-3 w-3 fill-current" />
+                                  {hasPlan ? 'Continue Onboarding' : 'Start Onboarding'}
+                                </button>
                               </div>
-                              <ExamSittingsList
-                                examId={item.id}
-                                selectedDate={row.targetDate}
-                                onSelect={date => setExamDate(item.id, date)}
-                              />
-                            </div>
-                          )}
+                            )
+                          })()}
                         </div>
                       )
                     })}
@@ -287,6 +335,20 @@ export default function ExamsPopout({ open, onClose }: Props) {
           </button>
         </div>
       </div>
+        </>
+      )}
+
+      {onboarding && (
+        <StudyPlanConfigModal
+          config={onboarding.config}
+          examDate={onboarding.examDate}
+          examLabel={onboarding.examLabel}
+          examId={onboarding.examId}
+          onSave={handleOnboardingConfigSave}
+          onExamDateChange={handleOnboardingExamDateChange}
+          onClose={() => setOnboarding(null)}
+        />
+      )}
     </>
   )
 }

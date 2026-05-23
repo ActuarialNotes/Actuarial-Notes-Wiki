@@ -5,7 +5,7 @@ const APP_ORIGIN = 'https://quiz.actuarialnotes.com'
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': APP_ORIGIN,
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Authorization, Content-Type, apikey',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Vary': 'Origin',
 }
 

@@ -83,8 +83,8 @@ export default function Store() {
       supabase.from('user_cosmetics').select('cosmetic_id').eq('user_id', userId),
       supabase.from('user_banners').select('banner_id').eq('user_id', userId),
     ])
-    if (!cosmResult.error) setOwnedIds(new Set((cosmResult.data ?? []).map(r => r.cosmetic_id)))
-    if (!bannerResult.error) setOwnedBanners(new Set((bannerResult.data ?? []).map(r => r.banner_id)))
+    if (!cosmResult.error) setOwnedIds(new Set((cosmResult.data ?? []).map((r: { cosmetic_id: string }) => r.cosmetic_id)))
+    if (!bannerResult.error) setOwnedBanners(new Set((bannerResult.data ?? []).map((r: { banner_id: string }) => r.banner_id)))
   }, [userId])
 
   useEffect(() => { void fetchOwned() }, [fetchOwned])

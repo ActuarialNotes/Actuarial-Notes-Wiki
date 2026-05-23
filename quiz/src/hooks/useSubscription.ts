@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 
@@ -33,6 +33,10 @@ function isActivePremium(tier: string, status: string, periodEnd: string | null)
 export function useSubscription(): SubscriptionState {
   const { user } = useAuth()
   const userId = user?.id
+  // Each hook instance gets its own channel name to avoid the Supabase error
+  // "cannot add postgres_changes callbacks after subscribe()" that fires when
+  // multiple mounted components share the same channel topic.
+  const channelId = useRef(`sub-${Math.random().toString(36).slice(2)}`)
   // Start in loading state — we don't know premium status until the DB resolves.
   const [state, setState] = useState<SubscriptionState>({ ...DEFAULT, loading: true })
 
@@ -91,7 +95,7 @@ export function useSubscription(): SubscriptionState {
     })
 
     const subChannel = supabase
-      .channel(`user_subscriptions:${userId}`)
+      .channel(`user_subscriptions:${userId}:${channelId.current}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'user_subscriptions', filter: `user_id=eq.${userId}` },
@@ -118,7 +122,7 @@ export function useSubscription(): SubscriptionState {
       .subscribe()
 
     const betaChannel = supabase
-      .channel(`beta_code_redemptions:${userId}`)
+      .channel(`beta_code_redemptions:${userId}:${channelId.current}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'beta_code_redemptions', filter: `user_id=eq.${userId}` },

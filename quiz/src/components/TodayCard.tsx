@@ -356,13 +356,13 @@ export function TodayCard({
             <Lock className="h-5 w-5" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-base font-semibold">Custom Study Plan is Premium</h3>
+            <h3 className="text-base font-semibold">Custom Study Plan</h3>
             <p className="text-sm text-muted-foreground max-w-xs">
-              Get a daily plan tailored to your target date, paced to your strength level.
+              A daily plan tailored to you
             </p>
           </div>
           <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
-            Upgrade — $10/mo
+            Actuarial Notes Premium
           </Link>
         </div>
       </Card>

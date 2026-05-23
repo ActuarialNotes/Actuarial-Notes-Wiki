@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Play, Loader2, Lock, Settings2 } from 'lucide-react'
+import { AlertTriangle, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Play, Loader2, Lock, Settings2, Trophy } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -763,14 +763,32 @@ export function ReadinessCard({
               <Lock className="h-5 w-5" />
             </div>
             <div className="space-y-1">
-              <p className="text-base font-semibold">Custom Study Plan is Premium</p>
+              <p className="text-base font-semibold">Custom Study Plan</p>
               <p className="text-xs text-muted-foreground max-w-[220px]">
-                Get a daily plan tailored to your target date and strength level.
+                A daily plan tailored to you
               </p>
             </div>
             <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
-              Upgrade — $10/mo
+              Actuarial Notes Premium
             </Link>
+            <div className="grid grid-cols-3 gap-2 w-full max-w-xs mt-1">
+              <div className="flex flex-col items-center gap-1.5 rounded-xl border bg-background/60 p-3 text-center">
+                <CalendarCheck className="h-5 w-5 text-primary" />
+                <p className="text-xs font-semibold">Daily Challenges</p>
+                <p className="text-[10px] text-muted-foreground leading-snug">Learn and practice target concepts each day</p>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 rounded-xl border bg-background/60 p-3 text-center">
+                <Gem className="h-5 w-5 text-primary" />
+                <p className="text-xs font-semibold">Earn Gems</p>
+                <p className="text-[10px] text-muted-foreground leading-snug">Collect a gem for each correct question</p>
+              </div>
+              <div className="flex flex-col items-center gap-1.5 rounded-xl border bg-background/60 p-3 text-center">
+                <Trophy className="h-5 w-5 text-primary" />
+                <p className="text-xs font-semibold">Compete</p>
+                <p className="text-[10px] text-muted-foreground leading-snug">Rank up on the leaderboard</p>
+                <span className="text-[9px] bg-muted rounded-full px-1.5 py-0.5 text-muted-foreground">Coming Soon</span>
+              </div>
+            </div>
           </div>
         </div>
       )}

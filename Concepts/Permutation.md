@@ -1,11 +1,16 @@
-$$P(n, k) = \frac{n!}{(n-k)!} = n \times (n-1) \times \cdots \times (n-k+1)$$
-$$\text{where } n = \text{total objects},\quad k = \text{objects arranged}$$
+- A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ objects from $n$ distinct objects in a specific order
+- Permutations assume without replacement. You can't select the same object twice.
+- $$P(n, k) = \frac{n!}{(n-k)!}$$
+- $$\frac{n!}{(n-k)!} = n \times (n-1) \times \cdots \times (n-k+1)$$
+- $n$ is the total number of objects and
+- $k$ is the number of objects selected and arranged
+- Permutations differ from combinations by a factor of $k!$: the number of ways to order the selected objects.
+- Use permutations when sequence matters
+  - Ranking
+  - Scheduling
+  - Assigning distinct roles
 
-A Permutation $P(n, k)$ counts the number of ways to select and **arrange** $k$ objects from $n$ distinct objects in a specific order, without replacement.
-
-Permutations differ from combinations by a factor of $k!$ — the number of ways to order the selected objects. Use permutations when sequence matters (e.g., ranking, scheduling, assigning distinct roles) and combinations when only membership matters.
-
-> [!example]- Assigning Ranked Prizes to Adjusters {💡 Example}
+> [!example]- Assigning Ranked Prizes to Adjusters {Example}
 > From 8 adjusters, an insurer awards a 1st, 2nd, and 3rd place performance bonus. How many distinct award outcomes are possible?
 >
 > > [!answer]- Answer

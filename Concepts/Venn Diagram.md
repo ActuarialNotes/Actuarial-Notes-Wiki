@@ -1,16 +1,15 @@
 - A **Venn Diagram** is a visual tool used to represent the relationships between different sets.
 - They are used for calculating the intersections and unions of multiple events.
 - The most common calculation derived from a Venn Diagram is finding the probability of the Union.
-
-$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+- **$$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$**
 
 ![[Media/Venn_Diagram_Example.png|300]]
 
 ## Notation
-* **Universal Set ($S$):** The rectangle representing every possible outcome (Total Probability = 1).
-* **Sets ($A, B$):** The circles representing specific events.
-* **The Intersection ($A \cap B$):** The overlapping region where *both* events occur.
-* **The Union ($A \cup B$):** The total area covered by both circles.
+- **$S$**: Universal Set. The rectangle representing every possible outcome (Total Probability = 1).
+- **$A, B$**: Sets A and B. The circles representing specific events.
+- **$A \cap B$**: Intersection. The overlapping region where *both* events occur.
+- **$A \cup B$**: Union. The total area covered by both circles.
 
 ## How to Solve Problems with a Venn Diagram
 Actuarial exams often use specific phrasing that maps directly to regions of a Venn Diagram.

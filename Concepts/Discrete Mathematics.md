@@ -1,10 +1,10 @@
-**Discrete Mathematics** is the branch of mathematics concerned with countable, distinct structures like "sets" as opposed to continuous quantities studied in calculus.
-
-In probability and actuarial science, discrete mathematics provides the language and tools for counting outcomes, defining events, and reasoning about logical relationships between them.
-
-For example, a [[Power Set]]  $\mathcal{P}(S)$ is the set of all subsets of S.
-
-$$|\mathcal{P}(S)| = 2^{|S|}$$
+- **Discrete Mathematics** is the branch of mathematics concerned with countable, distinct structures like [[set]]s as opposed to continuous quantities studied in calculus.
+- Discrete mathematics provides the language and tools for:
+  - counting outcomes
+  - defining events
+  - reasoning about logical relationships between outcomes and event
+- For example, a [[Power Set]]  $\mathcal{P}(S)$ is the set of all subsets of S.
+- Thie size of a power set is $$|\mathcal{P}(S)| = 2^{|S|}$$
 
 > [!example]- Counting Subsets of a Risk Portfolio {Example}
 > An insurer has 4 distinct risk categories: Fire, Flood, Theft, and Liability. How many distinct subsets of these risks could be included in a policy?

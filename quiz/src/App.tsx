@@ -42,7 +42,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('Dashboard error boundary caught:', error, info)
+    console.error('Error boundary caught:', error, info)
   }
 
   render() {
@@ -102,7 +102,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/upgrade" element={<Upgrade />} />
-                <Route path="/store" element={<Store />} />
+                <Route path="/store" element={<ErrorBoundary><Store /></ErrorBoundary>} />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>
                     <WikiLayout><WikiHome /></WikiLayout>

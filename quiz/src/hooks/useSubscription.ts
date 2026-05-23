@@ -29,14 +29,12 @@ function isActivePremium(tier: string, status: string, periodEnd: string | null)
 }
 
 export function useSubscription(): SubscriptionState {
-  const { user, loading: authLoading } = useAuth()
+  const { user } = useAuth()
   const userId = user?.id
-  // Start in loading state — we don't know premium status until auth + DB resolve.
+  // Start in loading state — we don't know premium status until the DB resolves.
   const [state, setState] = useState<SubscriptionState>({ ...DEFAULT, loading: true })
 
   useEffect(() => {
-    // Wait for auth to finish before deciding what to fetch.
-    if (authLoading) return
     if (!userId) {
       setState(DEFAULT)
       return
@@ -94,7 +92,7 @@ export function useSubscription(): SubscriptionState {
       cancelled = true
       supabase.removeChannel(channel)
     }
-  }, [userId, authLoading])
+  }, [userId])
 
   return state
 }

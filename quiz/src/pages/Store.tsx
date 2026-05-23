@@ -12,7 +12,7 @@ import { Card, CardContent } from '@/components/ui/card'
 
 export default function Store() {
   const navigate = useNavigate()
-  const { user, loading: authLoading } = useAuth()
+  const { user } = useAuth()
   const { isPremium, loading: subLoading } = useSubscription()
   const { balance, loading: gemsLoading, refresh: refreshGems } = useGems()
   const [owned, setOwned] = useState<Set<string>>(new Set())
@@ -21,10 +21,9 @@ export default function Store() {
   const [error, setError] = useState<string | null>(null)
   const userId = user?.id
 
-  // True once we know auth state AND (if logged in) subscription state.
-  // While this is false, we render a spinner only inside each card button
-  // so the item grid is always visible with no layout flash.
-  const actionsReady = !authLoading && (!user || !subLoading)
+  // Subscription still loads async after auth is pre-seeded; defer button
+  // actions until we know premium status to avoid a brief wrong-state flash.
+  const actionsReady = !subLoading
 
   useEffect(() => {
     const raw = user?.user_metadata?.avatar_url as string | undefined

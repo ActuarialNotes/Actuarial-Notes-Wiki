@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Check, Loader2, Sparkles } from 'lucide-react'
+import { Check, Loader2, Sparkles, Tag } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 
 export default function Upgrade() {
   const navigate = useNavigate()
@@ -13,6 +14,35 @@ export default function Upgrade() {
   const { isPremium, loading: subLoading } = useSubscription()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [betaCode, setBetaCode] = useState('')
+  const [betaSubmitting, setBetaSubmitting] = useState(false)
+  const [betaError, setBetaError] = useState<string | null>(null)
+  const [betaSuccess, setBetaSuccess] = useState(false)
+
+  async function handleBetaCode() {
+    if (!user) {
+      navigate('/auth', { state: { from: '/upgrade' } })
+      return
+    }
+    const code = betaCode.trim()
+    if (!code) return
+    setBetaSubmitting(true)
+    setBetaError(null)
+    try {
+      const { data, error: invokeError } = await supabase.functions.invoke<{ success?: boolean; error?: string }>(
+        'redeem-beta-code',
+        { body: { code } },
+      )
+      if (invokeError) throw new Error(invokeError.message)
+      if (data?.error) throw new Error(data.error)
+      if (!data?.success) throw new Error('Redemption failed')
+      setBetaSuccess(true)
+    } catch (err) {
+      setBetaError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+    } finally {
+      setBetaSubmitting(false)
+    }
+  }
 
   async function handleUpgrade() {
     if (!user) {
@@ -116,6 +146,47 @@ export default function Upgrade() {
           </p>
         </CardContent>
       </Card>
+
+      {!isPremium && !subLoading && (
+        <Card className="border-dashed">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Tag className="h-4 w-4 text-muted-foreground" />
+              Have a beta tester code?
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {betaSuccess ? (
+              <div className="rounded-md border border-green-500/40 bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+                Code redeemed! You now have Premium access. Welcome aboard.
+              </div>
+            ) : (
+              <>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Enter code"
+                    value={betaCode}
+                    onChange={e => setBetaCode(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleBetaCode()}
+                    disabled={betaSubmitting}
+                    className="font-mono"
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={handleBetaCode}
+                    disabled={betaSubmitting || !betaCode.trim()}
+                  >
+                    {betaSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Redeem'}
+                  </Button>
+                </div>
+                {betaError && (
+                  <p className="text-sm text-destructive">{betaError}</p>
+                )}
+              </>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

@@ -9,13 +9,12 @@ export interface AnimalPalette {
 export interface Cosmetic {
   id: string                 // '<animal>:<variantKey>'
   animal: AnimalType
-  variantKey: string         // e.g. 'crimson'
-  variantName: string        // 'Crimson'
+  variantKey: string
+  variantName: string
   palette: AnimalPalette
   priceGems: number
+  tier: 'basic' | 'rare'    // basic = 10 gems, rare = 50 gems
 }
-
-const DEFAULT_PRICE = 50
 
 // Default palettes match the original AvatarDisplay colors so existing avatars
 // continue to render identically when no variant is selected.
@@ -28,39 +27,61 @@ export const DEFAULT_PALETTES: Record<AnimalType, AnimalPalette> = {
   octopus: { primary: '#7C3AED', secondary: '#6025C0', belly: '#9D5FF5' },
 }
 
-// 2 variants per animal — the launch catalog. Add more rows here to expand
-// the Store without touching the schema.
+// All variants are based on real-world animal types, subspecies, or color morphs.
+// basic (10 gems) = common real-world color morph
+// rare  (50 gems) = distinctive subspecies or separate species
 export const COSMETICS: Cosmetic[] = [
-  { id: 'fox:crimson',   animal: 'fox', variantKey: 'crimson',   variantName: 'Crimson Fox',
-    palette: { primary: '#B91C1C', secondary: '#F87171', belly: '#FECACA' }, priceGems: DEFAULT_PRICE },
-  { id: 'fox:arctic',    animal: 'fox', variantKey: 'arctic',    variantName: 'Arctic Fox',
-    palette: { primary: '#E5E7EB', secondary: '#FFFFFF', belly: '#F3F4F6' }, priceGems: DEFAULT_PRICE },
+  // Fox
+  { id: 'fox:crimson',   animal: 'fox',     variantKey: 'crimson',   variantName: 'Red Fox',
+    palette: { primary: '#C0392B', secondary: '#E74C3C', belly: '#FECACA' },
+    priceGems: 10, tier: 'basic' },
+  { id: 'fox:arctic',    animal: 'fox',     variantKey: 'arctic',    variantName: 'Arctic Fox',
+    palette: { primary: '#E5E7EB', secondary: '#FFFFFF', belly: '#F3F4F6' },
+    priceGems: 50, tier: 'rare' },
 
-  { id: 'koala:rose',    animal: 'koala', variantKey: 'rose',    variantName: 'Rose Koala',
-    palette: { primary: '#BE6188', secondary: '#9C3F69', belly: '#E8B2CE' }, priceGems: DEFAULT_PRICE },
-  { id: 'koala:slate',   animal: 'koala', variantKey: 'slate',   variantName: 'Slate Koala',
-    palette: { primary: '#475569', secondary: '#334155', belly: '#94A3B8' }, priceGems: DEFAULT_PRICE },
+  // Koala
+  { id: 'koala:rose',    animal: 'koala',   variantKey: 'rose',      variantName: 'Northern Koala',
+    palette: { primary: '#9E7B5C', secondary: '#7A5C42', belly: '#D4B99A' },
+    priceGems: 10, tier: 'basic' },
+  { id: 'koala:slate',   animal: 'koala',   variantKey: 'slate',     variantName: 'White Koala',
+    palette: { primary: '#F0EDE8', secondary: '#CBBFB2', belly: '#FAF8F5' },
+    priceGems: 50, tier: 'rare' },
 
-  { id: 'frog:tropical', animal: 'frog', variantKey: 'tropical', variantName: 'Tropical Frog',
-    palette: { primary: '#10B981', secondary: '#047857', belly: '#FCD34D' }, priceGems: DEFAULT_PRICE },
-  { id: 'frog:azure',    animal: 'frog', variantKey: 'azure',    variantName: 'Azure Frog',
-    palette: { primary: '#0EA5E9', secondary: '#0369A1', belly: '#BAE6FD' }, priceGems: DEFAULT_PRICE },
+  // Frog
+  { id: 'frog:azure',    animal: 'frog',    variantKey: 'azure',     variantName: 'Dart Frog',
+    palette: { primary: '#0EA5E9', secondary: '#0369A1', belly: '#BAE6FD' },
+    priceGems: 10, tier: 'basic' },
+  { id: 'frog:tropical', animal: 'frog',    variantKey: 'tropical',  variantName: 'Tomato Frog',
+    palette: { primary: '#DC4E20', secondary: '#AE3010', belly: '#FBCAB2' },
+    priceGems: 50, tier: 'rare' },
 
-  { id: 'owl:snowy',     animal: 'owl', variantKey: 'snowy',     variantName: 'Snowy Owl',
-    palette: { primary: '#F8FAFC', secondary: '#CBD5E1', belly: '#FFFFFF' }, priceGems: DEFAULT_PRICE },
-  { id: 'owl:emerald',   animal: 'owl', variantKey: 'emerald',   variantName: 'Emerald Owl',
-    palette: { primary: '#065F46', secondary: '#022C22', belly: '#A7F3D0' }, priceGems: DEFAULT_PRICE },
+  // Owl
+  { id: 'owl:emerald',   animal: 'owl',     variantKey: 'emerald',   variantName: 'Barn Owl',
+    palette: { primary: '#C8963A', secondary: '#6B4A20', belly: '#F5EDD3' },
+    priceGems: 10, tier: 'basic' },
+  { id: 'owl:snowy',     animal: 'owl',     variantKey: 'snowy',     variantName: 'Snowy Owl',
+    palette: { primary: '#F8FAFC', secondary: '#CBD5E1', belly: '#FFFFFF' },
+    priceGems: 50, tier: 'rare' },
 
-  { id: 'wolf:shadow',   animal: 'wolf', variantKey: 'shadow',   variantName: 'Shadow Wolf',
-    palette: { primary: '#1F2937', secondary: '#374151', belly: '#6B7280' }, priceGems: DEFAULT_PRICE },
-  { id: 'wolf:ivory',    animal: 'wolf', variantKey: 'ivory',    variantName: 'Ivory Wolf',
-    palette: { primary: '#E7E5E4', secondary: '#A8A29E', belly: '#FAFAF9' }, priceGems: DEFAULT_PRICE },
+  // Wolf
+  { id: 'wolf:shadow',   animal: 'wolf',    variantKey: 'shadow',    variantName: 'Timber Wolf',
+    palette: { primary: '#6B7280', secondary: '#4B5563', belly: '#E5E7EB' },
+    priceGems: 10, tier: 'basic' },
+  { id: 'wolf:ivory',    animal: 'wolf',    variantKey: 'ivory',     variantName: 'Arctic Wolf',
+    palette: { primary: '#F1F5F9', secondary: '#CBD5E1', belly: '#FFFFFF' },
+    priceGems: 50, tier: 'rare' },
 
-  { id: 'octopus:coral', animal: 'octopus', variantKey: 'coral', variantName: 'Coral Octopus',
-    palette: { primary: '#F97316', secondary: '#C2410C', belly: '#FDBA74' }, priceGems: DEFAULT_PRICE },
-  { id: 'octopus:abyss', animal: 'octopus', variantKey: 'abyss', variantName: 'Abyss Octopus',
-    palette: { primary: '#1E3A8A', secondary: '#0B1E54', belly: '#3B82F6' }, priceGems: DEFAULT_PRICE },
+  // Octopus
+  { id: 'octopus:coral', animal: 'octopus', variantKey: 'coral',     variantName: 'Giant Pacific',
+    palette: { primary: '#9B2335', secondary: '#6B1521', belly: '#D4806A' },
+    priceGems: 10, tier: 'basic' },
+  { id: 'octopus:abyss', animal: 'octopus', variantKey: 'abyss',     variantName: 'Blue-ringed',
+    palette: { primary: '#D97706', secondary: '#1D4ED8', belly: '#FEF9C3' },
+    priceGems: 50, tier: 'rare' },
 ]
+
+// Alias kept for any code that imports PAINTS
+export const PAINTS = COSMETICS
 
 const COSMETICS_BY_ID = new Map(COSMETICS.map(c => [c.id, c]))
 

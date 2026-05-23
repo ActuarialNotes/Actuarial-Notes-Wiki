@@ -1,7 +1,5 @@
-- A **Continuous Univariate Distribution** describes the probability law of a single random variable $X$ that can take any value in a continuous interval^[or union of continuous intervals].
-
-$$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$
-
+- A **Continuous Univariate Distribution** describes the probability law of a single random variable $X$ that can take any value in a continuous interval or union of continuous intervals.
+- $$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$
 - The probability density function (PDF) $f(x)$ must satisfy $f(x) \geq 0$
 - and $\int_{-\infty}^{\infty} f(x)\,dx = 1$.
 - Individual point probabilities are zero.

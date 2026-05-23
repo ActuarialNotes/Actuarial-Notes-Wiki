@@ -112,7 +112,20 @@ export default function Quiz() {
   }
 
   function handleSelectAnswer(key: string) {
-    setPendingAnswer(key)
+    if (key === pendingAnswer) {
+      // Second tap on already-selected answer confirms it
+      handleConfirmAnswer()
+    } else {
+      setPendingAnswer(key)
+    }
+  }
+
+  function handleNextFromAnswer() {
+    if (isLastQuestion) {
+      handleFinish()
+    } else {
+      nextQuestion()
+    }
   }
 
   function handleConfirmAnswer() {
@@ -270,6 +283,7 @@ export default function Quiz() {
         onAnswer={handleSelectAnswer}
         showExplanation={showExplanation}
         isLocked={isLocked}
+        onNext={isLocked ? handleNextFromAnswer : undefined}
       />
 
       {submitError && (

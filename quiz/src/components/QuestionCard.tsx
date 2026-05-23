@@ -12,6 +12,7 @@ interface QuestionCardProps {
   showExplanation: boolean
   isLocked?: boolean   // true once the answer is confirmed and cannot be changed
   showMeta?: boolean   // show exam/topic/difficulty badges; false during live quiz
+  onNext?: () => void  // when provided, clicking any locked answer advances
 }
 
 export function QuestionCard({
@@ -21,6 +22,7 @@ export function QuestionCard({
   showExplanation,
   isLocked = false,
   showMeta = false,
+  onNext,
 }: QuestionCardProps) {
   return (
     <Card className="w-full">
@@ -48,8 +50,15 @@ export function QuestionCard({
             isDisabled={isLocked}
             revealAnswer={showExplanation}
             onClick={onAnswer}
+            onNext={isLocked ? onNext : undefined}
           />
         ))}
+
+        {isLocked && onNext && (
+          <p className="text-xs text-center text-muted-foreground pt-1 select-none">
+            Tap any answer to continue →
+          </p>
+        )}
 
         {showExplanation && selectedAnswer !== null && (
           <ExplanationPanel

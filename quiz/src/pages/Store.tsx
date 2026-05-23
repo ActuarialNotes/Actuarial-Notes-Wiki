@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Check, Gem, Loader2, Lock } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useGems } from '@/hooks/useGems'
+import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
 import { AvatarDisplay, serializeAvatar, ANIMAL_LABELS } from '@/components/AvatarDisplay'
 import { COSMETICS, type Cosmetic } from '@/lib/cosmetics'
@@ -12,6 +13,7 @@ import { Card, CardContent } from '@/components/ui/card'
 export default function Store() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { isPremium } = useSubscription()
   const { balance, loading: gemsLoading, refresh: refreshGems } = useGems()
   const [owned, setOwned] = useState<Set<string>>(new Set())
   const [equipped, setEquipped] = useState<string | null>(null) // cosmetic_id of the currently equipped avatar
@@ -89,29 +91,29 @@ export default function Store() {
     setBusyId(null)
   }
 
-  if (!user) {
-    return (
-      <div className="container max-w-2xl mx-auto px-4 py-12 text-center space-y-4">
-        <h1 className="text-2xl font-bold">Store</h1>
-        <p className="text-muted-foreground">Sign in to spend gems on cosmetics.</p>
-        <Button onClick={() => navigate('/auth', { state: { from: '/store' } })}>Sign In</Button>
-      </div>
-    )
-  }
-
   return (
     <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
       <div className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-bold">Store</h1>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-semibold">
-          <Gem className="h-4 w-4" />
-          {gemsLoading ? '—' : balance.toLocaleString()}
-        </div>
+        {user && (
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-semibold">
+            <Gem className="h-4 w-4" />
+            {gemsLoading ? '—' : balance.toLocaleString()}
+          </div>
+        )}
       </div>
 
       <p className="text-sm text-muted-foreground">
         Earn 1 gem for every correct answer. Spend them here on color variants of your favorite animal.
       </p>
+
+      {user && !isPremium && (
+        <div className="rounded-md border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-amber-700 dark:text-amber-400">
+          You&apos;re on the free plan.{' '}
+          <Link to="/upgrade" className="underline font-medium">Upgrade to Premium</Link>
+          {' '}to spend your gems in the store.
+        </div>
+      )}
 
       {error && (
         <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -135,7 +137,46 @@ export default function Store() {
                   <p className="text-sm font-semibold">{cosmetic.variantName}</p>
                   <p className="text-xs text-muted-foreground">{ANIMAL_LABELS[cosmetic.animal]}</p>
                 </div>
-                {isOwned ? (
+                {!user ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => navigate('/auth', { state: { from: '/store' } })}
+                    className="w-full gap-1.5"
+                  >
+                    <Lock className="h-3.5 w-3.5" />
+                    Sign in to buy
+                  </Button>
+                ) : !isPremium ? (
+                  isOwned ? (
+                    isEquipped ? (
+                      <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
+                        <Check className="h-4 w-4" />
+                        Equipped
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleEquip(cosmetic)}
+                        disabled={isBusy}
+                        className="w-full"
+                      >
+                        {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Equip'}
+                      </Button>
+                    )
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => navigate('/upgrade')}
+                      className="w-full gap-1.5"
+                    >
+                      <Lock className="h-3.5 w-3.5" />
+                      Upgrade to buy
+                    </Button>
+                  )
+                ) : isOwned ? (
                   isEquipped ? (
                     <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
                       <Check className="h-4 w-4" />

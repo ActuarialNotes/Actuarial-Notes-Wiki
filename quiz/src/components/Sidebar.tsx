@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useGems } from '@/hooks/useGems'
+import { useSubscription } from '@/hooks/useSubscription'
 import { useTheme } from '@/hooks/useTheme'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -170,6 +171,7 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
 export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { balance: gemBalance } = useGems()
+  const { isPremium, isBetaTester } = useSubscription()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const { progress: examProgress } = useExamProgress()
@@ -473,7 +475,17 @@ export default function Sidebar() {
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center">
                   <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
                 </span>
-                <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>{profileName}</span>
+                <span className={`flex items-center gap-1.5 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
+                  <span className="truncate">{profileName}</span>
+                  {isPremium && (
+                    <span
+                      title={isBetaTester ? 'Beta Tester' : undefined}
+                      className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none"
+                    >
+                      {isBetaTester ? '★ Premium' : 'Premium'}
+                    </span>
+                  )}
+                </span>
               </button>
             </div>
           ) : (

@@ -12,8 +12,8 @@ import { Card, CardContent } from '@/components/ui/card'
 
 export default function Store() {
   const navigate = useNavigate()
-  const { user } = useAuth()
-  const { isPremium } = useSubscription()
+  const { user, loading: authLoading } = useAuth()
+  const { isPremium, loading: subLoading } = useSubscription()
   const { balance, loading: gemsLoading, refresh: refreshGems } = useGems()
   const [owned, setOwned] = useState<Set<string>>(new Set())
   const [equipped, setEquipped] = useState<string | null>(null) // cosmetic_id of the currently equipped avatar
@@ -89,6 +89,14 @@ export default function Store() {
     }
     setEquipped(cosmetic.id)
     setBusyId(null)
+  }
+
+  if (authLoading || (user && subLoading)) {
+    return (
+      <div className="container max-w-3xl mx-auto px-4 py-8 flex items-center justify-center min-h-[40vh]">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   return (

@@ -5,6 +5,10 @@ import App from './App'
 import { supabase } from './lib/supabase'
 import { hydrateFromSharedCookie } from './lib/hydrateSession'
 import type { Session } from '@supabase/supabase-js'
+import bundledQuestions from 'virtual:questions-content'
+import { setBundledQuestions } from './lib/github'
+
+setBundledQuestions(bundledQuestions)
 
 async function bootstrap() {
   // getSession() automatically handles OAuth callbacks (PKCE code exchange /

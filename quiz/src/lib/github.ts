@@ -108,18 +108,28 @@ async function collectMdUrlsViaTree(dirPrefix: string): Promise<string[]> {
     .map(item => `${RAW_BASE}/${item.path}`)
 }
 
-// Fallback for when the git trees API is unavailable: lists the questions/
-// directory via the Contents API, which is served from a different endpoint
-// and has a separate rate-limit budget.  Only works for flat (non-nested)
-// question directories, but that matches the current repo layout.
+// Fallback for when the git trees API is unavailable: recursively lists the
+// questions/ directory via the Contents API, which hits a separate rate-limit
+// bucket from the Trees API.
 async function collectMdUrlsViaContents(dirPath: string): Promise<string[]> {
   const items = await listRepoContents(dirPath.replace(/\/$/, ''))
-  return items
-    .filter(it => it.type === 'file' && it.name.endsWith('.md'))
-    .map(it => `${RAW_BASE}/${it.path}`)
+  const urls: string[] = []
+  for (const it of items) {
+    if (it.type === 'file' && it.name.endsWith('.md')) {
+      urls.push(`${RAW_BASE}/${it.path}`)
+    } else if (it.type === 'dir') {
+      const sub = await collectMdUrlsViaContents(it.path)
+      urls.push(...sub)
+    }
+  }
+  return urls
 }
 
+let bundledQuestions: string[] | null = null
+export function setBundledQuestions(questions: string[]): void { bundledQuestions = questions }
+
 export async function fetchAllQuestions(): Promise<string[]> {
+  if (bundledQuestions) return bundledQuestions
   const cached = readCache()
   if (cached) return cached
 

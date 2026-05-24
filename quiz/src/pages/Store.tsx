@@ -25,7 +25,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 
-type StoreTab = 'characters' | 'banners'
+type StoreTab = 'characters' | 'skins' | 'banners'
 
 type AnyRarity = CharacterRarity | CosmeticRarity
 
@@ -53,6 +53,7 @@ export default function Store() {
   const { progress } = useExamProgress()
 
   const [activeTab, setActiveTab] = useState<StoreTab>('characters')
+  const [skinAnimalFilter, setSkinAnimalFilter] = useState<AnimalType | null>(null)
 
   // All owned IDs from user_cosmetics (characters + paints + banner:custom)
   const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set())
@@ -247,7 +248,7 @@ export default function Store() {
 
       {/* Tab bar */}
       <div className="flex border-b border-border">
-        {(['characters', 'banners'] as StoreTab[]).map(tab => (
+        {(['characters', 'skins', 'banners'] as StoreTab[]).map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -258,81 +259,117 @@ export default function Store() {
                 : 'border-transparent text-muted-foreground hover:text-foreground',
             )}
           >
-            {tab === 'characters' ? 'Characters' : 'Banners'}
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </div>
 
-      {/* ── Characters + Skins ─────────────────────────────────────────────── */}
+      {/* ── Characters ────────────────────────────────────────────────────────── */}
       {activeTab === 'characters' && (
-        <div className="space-y-10">
+        <div className="space-y-4">
+          <div>
+            <h2 className="font-semibold">Characters</h2>
+            <p className="text-sm text-muted-foreground">Fox, Koala, and Frog are free. Rare characters cost 50 gems.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {CHARACTERS.map(char => {
+              const isOwned = char.free || ownedIds.has(char.purchaseId)
+              const isEquipped = equippedAnimal === char.animal && !equippedPaint
+              const isBusy = busyId === char.purchaseId || busyId === `equip-char:${char.animal}`
+              const canAfford = balance >= char.priceGems
+              const previewUrl = serializeAvatar({ type: 'animal', value: char.animal })
 
-          {/* Base characters */}
-          <section className="space-y-4">
-            <div>
-              <h2 className="font-semibold">Characters</h2>
-              <p className="text-sm text-muted-foreground">Fox, Koala, and Frog are free. Rare characters cost 50 gems.</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {CHARACTERS.map(char => {
-                const isOwned = char.free || ownedIds.has(char.purchaseId)
-                const isEquipped = equippedAnimal === char.animal && !equippedPaint
-                const isBusy = busyId === char.purchaseId || busyId === `equip-char:${char.animal}`
-                const canAfford = balance >= char.priceGems
-                const previewUrl = serializeAvatar({ type: 'animal', value: char.animal })
+              return (
+                <Card key={char.animal}>
+                  <CardContent className="p-4 flex flex-col items-center gap-3">
+                    <AvatarDisplay avatarUrl={previewUrl} initials="" size={72} />
+                    <div className="text-center space-y-1.5">
+                      <p className="text-sm font-semibold">{char.label}</p>
+                      <RarityBadge rarity={char.rarity} />
+                      <p className="text-xs text-muted-foreground italic leading-snug">"{char.quote}"</p>
+                    </div>
 
-                return (
-                  <Card key={char.animal}>
-                    <CardContent className="p-4 flex flex-col items-center gap-3">
-                      <AvatarDisplay avatarUrl={previewUrl} initials="" size={72} />
-                      <div className="text-center space-y-1.5">
-                        <p className="text-sm font-semibold">{char.label}</p>
-                        <RarityBadge rarity={char.rarity} />
-                        <p className="text-xs text-muted-foreground italic leading-snug">"{char.quote}"</p>
-                      </div>
+                    {isEquipped ? (
+                      <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
+                        <Check className="h-4 w-4" />Equipped
+                      </Button>
+                    ) : isOwned ? (
+                      <Button size="sm" variant="outline" onClick={() => handleEquipCharacter(char.animal)} disabled={isBusy} className="w-full">
+                        {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Equip'}
+                      </Button>
+                    ) : !actionsReady ? (
+                      <Button size="sm" variant="outline" disabled className="w-full">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </Button>
+                    ) : !user ? (
+                      <Button size="sm" variant="outline" onClick={() => navigate('/auth', { state: { from: '/store' } })} className="w-full gap-1.5">
+                        <Lock className="h-3.5 w-3.5" />Sign in to buy
+                      </Button>
+                    ) : canAfford ? (
+                      <Button size="sm" onClick={() => handleBuyCharacter(char)} disabled={isBusy} className="w-full gap-1.5">
+                        {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+                          <>{char.priceGems} <Gem className="h-3.5 w-3.5" /></>
+                        )}
+                      </Button>
+                    ) : (
+                      <Button size="sm" disabled className="w-full gap-1.5 opacity-35">
+                        {char.priceGems} <Gem className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
-                      {isEquipped ? (
-                        <Button size="sm" variant="outline" disabled className="w-full gap-1.5">
-                          <Check className="h-4 w-4" />Equipped
-                        </Button>
-                      ) : isOwned ? (
-                        <Button size="sm" variant="outline" onClick={() => handleEquipCharacter(char.animal)} disabled={isBusy} className="w-full">
-                          {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Equip'}
-                        </Button>
-                      ) : !actionsReady ? (
-                        <Button size="sm" variant="outline" disabled className="w-full">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        </Button>
-                      ) : !user ? (
-                        <Button size="sm" variant="outline" onClick={() => navigate('/auth', { state: { from: '/store' } })} className="w-full gap-1.5">
-                          <Lock className="h-3.5 w-3.5" />Sign in to buy
-                        </Button>
-                      ) : canAfford ? (
-                        <Button size="sm" onClick={() => handleBuyCharacter(char)} disabled={isBusy} className="w-full gap-1.5">
-                          {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                            <>{char.priceGems} <Gem className="h-3.5 w-3.5" /></>
-                          )}
-                        </Button>
-                      ) : (
-                        <Button size="sm" disabled className="w-full gap-1.5 opacity-35">
-                          {char.priceGems} <Gem className="h-3.5 w-3.5" />
-                        </Button>
-                      )}
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          </section>
+      {/* ── Skins ─────────────────────────────────────────────────────────────── */}
+      {activeTab === 'skins' && (
+        <div className="space-y-6">
+          <p className="text-sm text-muted-foreground">Real-world color variants. Common skins cost 10 gems; Rare cost 50.</p>
 
-          {/* Skins */}
-          <section className="space-y-4">
-            <div>
-              <h2 className="font-semibold">Skins</h2>
-              <p className="text-sm text-muted-foreground">Real-world color variants. Common skins cost 10 gems; Rare cost 50.</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {COSMETICS.map(cosmetic => {
+          {/* Character filter bubbles */}
+          <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+            <button
+              onClick={() => setSkinAnimalFilter(null)}
+              className={cn(
+                'shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
+                skinAnimalFilter === null
+                  ? 'bg-foreground text-background border-foreground'
+                  : 'border-border text-muted-foreground hover:text-foreground hover:border-foreground/50',
+              )}
+            >
+              All
+            </button>
+            {CHARACTERS.map(char => {
+              const isCharOwned = char.free || ownedIds.has(char.purchaseId)
+              const isActive = skinAnimalFilter === char.animal
+              const previewUrl = serializeAvatar({ type: 'animal', value: char.animal })
+              return (
+                <button
+                  key={char.animal}
+                  onClick={() => setSkinAnimalFilter(isActive ? null : char.animal)}
+                  className={cn(
+                    'shrink-0 flex flex-col items-center gap-1 p-2 rounded-xl border transition-colors',
+                    isActive
+                      ? 'bg-foreground/10 border-foreground'
+                      : 'border-border hover:border-foreground/50',
+                    !isCharOwned && 'opacity-40',
+                  )}
+                >
+                  <AvatarDisplay avatarUrl={previewUrl} initials="" size={36} />
+                  <span className="text-[10px] font-medium leading-none">{char.label}</span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Skins grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {COSMETICS
+              .filter(c => skinAnimalFilter ? c.animal === skinAnimalFilter : true)
+              .map(cosmetic => {
                 const isOwned = ownedIds.has(cosmetic.id)
                 const isEquipped = equippedPaint === cosmetic.id
                 const isBusy = busyId === cosmetic.id
@@ -340,6 +377,8 @@ export default function Store() {
                 const previewUrl = cosmetic.type === 'variant'
                   ? serializeAvatar({ type: 'animal', value: cosmetic.animal!, variant: cosmetic.variantKey! })
                   : ''
+                const charDef = CHARACTERS.find(c => c.animal === cosmetic.animal)
+                const isCharOwned = charDef ? (charDef.free || ownedIds.has(charDef.purchaseId)) : true
 
                 return (
                   <Card key={cosmetic.id}>
@@ -381,6 +420,10 @@ export default function Store() {
                         <Button size="sm" variant="outline" onClick={() => navigate('/auth', { state: { from: '/store' } })} className="w-full gap-1.5">
                           <Lock className="h-3.5 w-3.5" />Sign in to buy
                         </Button>
+                      ) : !isCharOwned ? (
+                        <Button size="sm" variant="outline" onClick={() => setActiveTab('characters')} className="w-full gap-1.5 text-xs">
+                          <Lock className="h-3.5 w-3.5" />Get {charDef?.label} first
+                        </Button>
                       ) : cosmetic.premiumOnly && !isPremium ? (
                         <Button size="sm" variant="outline" onClick={() => navigate('/upgrade')} className="w-full gap-1.5">
                           <Lock className="h-3.5 w-3.5" />Upgrade to buy
@@ -400,9 +443,7 @@ export default function Store() {
                   </Card>
                 )
               })}
-            </div>
-          </section>
-
+          </div>
         </div>
       )}
 

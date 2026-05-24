@@ -50,6 +50,14 @@ export function useGems(): GemState {
     })
   }, [userId])
 
+  // Re-fetch when the quiz store awards gems (fallback for when realtime lags).
+  useEffect(() => {
+    if (!userId) return
+    const handler = () => { void fetchRow() }
+    window.addEventListener('gems-awarded', handler)
+    return () => window.removeEventListener('gems-awarded', handler)
+  }, [userId, fetchRow])
+
   useEffect(() => {
     if (!userId) {
       setState(DEFAULT)

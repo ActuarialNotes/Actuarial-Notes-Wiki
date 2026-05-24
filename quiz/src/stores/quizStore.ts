@@ -369,7 +369,13 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     // are nice-to-have and shouldn't block session save.
     if (correctCount > 0) {
       const { error: gemError } = await supabase.rpc('award_gems', { p_amount: correctCount })
-      if (gemError) console.warn('award_gems failed:', gemError.message)
+      if (gemError) {
+        console.warn('award_gems failed:', gemError.message)
+      } else {
+        // Notify useGems subscribers to re-fetch immediately (Supabase realtime
+        // may lag or be blocked by RLS on RPC-triggered writes).
+        window.dispatchEvent(new CustomEvent('gems-awarded', { detail: { amount: correctCount } }))
+      }
     }
 
     // Upsert exam_progress: transition not_started → in_progress on first quiz

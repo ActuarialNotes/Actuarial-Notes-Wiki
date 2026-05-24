@@ -188,6 +188,37 @@ export default function Sidebar() {
   const [openExamDropdown, setOpenExamDropdown] = useState<string | null>(null)
   const profileRef = useRef<HTMLDivElement>(null)
 
+  // Gem animation: tracks unseen increases and fires when the badge is visible.
+  const prevGemBalance = useRef<number | null>(null)
+  const pendingGemAnim = useRef(false)
+  const [gemAnimKey, setGemAnimKey] = useState(0)
+
+  const fireGemAnim = () => {
+    if (!pendingGemAnim.current) return
+    pendingGemAnim.current = false
+    setGemAnimKey(k => k + 1)
+  }
+
+  // Mark pending when balance grows (runs before the visibility effects below).
+  useEffect(() => {
+    if (prevGemBalance.current !== null && gemBalance > prevGemBalance.current) {
+      pendingGemAnim.current = true
+    }
+    prevGemBalance.current = gemBalance
+  }, [gemBalance])
+
+  // Fire immediately if the desktop gem badge is already visible.
+  useEffect(() => {
+    if (!collapsed) fireGemAnim()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gemBalance, collapsed])
+
+  // Fire when the mobile drawer opens and a balance increase was missed.
+  useEffect(() => {
+    if (mobileOpen) fireGemAnim()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileOpen])
+
   useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, collapsed ? '1' : '0')
@@ -399,7 +430,8 @@ export default function Sidebar() {
               </span>
               <span className={`truncate flex-1 ${collapsed ? 'lg:hidden' : ''}`}>Store</span>
               <span
-                className={`inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 ${collapsed ? 'lg:hidden' : ''}`}
+                key={gemAnimKey}
+                className={`inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 ${collapsed ? 'lg:hidden' : ''} ${gemAnimKey > 0 ? 'gem-celebrate' : ''}`}
                 aria-label={`${gemBalance} gems`}
               >
                 <Gem className="h-3 w-3" />

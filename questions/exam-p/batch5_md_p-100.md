@@ -1,13 +1,15 @@
 ---
-id: p-100
-exam: Probability
-topic: Set Theory and Venn Diagrams
+id: "p-100"
+exam: "Probability"
+topic: "Set Theory and Venn Diagrams"
+learning_objective: "General Probability"
 difficulty: medium
 type: multiple-choice
 wiki_link:
+  - Concepts/Set+Theory+and+Venn+Diagrams
   - Concepts/Set+Theory
   - Concepts/Inclusion-Exclusion+Principle
-answer: B
+answer: "B"
 points: 1
 ---
 

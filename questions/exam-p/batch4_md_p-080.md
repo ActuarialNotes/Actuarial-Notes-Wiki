@@ -1,13 +1,15 @@
 ---
-id: p-080
-exam: Probability
-topic: Covariance and Correlation
+id: "p-080"
+exam: "Probability"
+topic: "Covariance and Correlation Coefficient"
+learning_objective: "Multivariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
+  - Concepts/Covariance+and+Correlation+Coefficient
   - Concepts/Covariance
   - Concepts/Variance
-answer: A
+answer: "A"
 points: 1
 ---
 

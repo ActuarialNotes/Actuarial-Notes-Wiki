@@ -1,11 +1,14 @@
 ---
-id: p-057
-exam: Probability
-topic: Variance and Standard Deviation
+id: "p-057"
+exam: "Probability"
+topic: "Variance and Standard Deviation"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
-wiki_link: Concepts/Variance
-answer: C
+wiki_link:
+  - Concepts/Variance+and+Standard+Deviation
+  - Concepts/Variance
+answer: "C"
 points: 1
 ---
 

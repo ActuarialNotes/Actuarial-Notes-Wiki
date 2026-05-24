@@ -13,6 +13,7 @@ export interface Question {
   id: string
   exam: string
   topic: string
+  learning_objective: string  // syllabus learning-objective name, e.g. "Univariate Random Variables"
   difficulty: Difficulty
   type: QuestionType
   wiki_link: string[]  // normalized to array; single-string frontmatter becomes [string]
@@ -29,6 +30,8 @@ export interface QuestionFilter {
   exam?: string
   topic?: string
   topics?: string[]  // multi-select topic filter
+  learningObjective?: string
+  learningObjectives?: string[]  // multi-select learning-objective filter
   difficulty?: Difficulty
   mode?: QuizMode
   count?: number        // max questions to return
@@ -42,6 +45,7 @@ interface QuestionFrontmatter {
   id?: unknown
   exam?: unknown
   topic?: unknown
+  learning_objective?: unknown
   difficulty?: unknown
   type?: unknown
   wiki_link?: unknown
@@ -108,6 +112,7 @@ export function parseQuestion(raw: string): Question | null {
       id: String(data.id),
       exam: String(data.exam),
       topic: String(data.topic),
+      learning_objective: data.learning_objective ? String(data.learning_objective) : '',
       difficulty: data.difficulty as Difficulty,
       type: data.type as QuestionType,
       wiki_link: wikiLinks,
@@ -144,6 +149,10 @@ export function filterQuestions(questions: Question[], filters: QuestionFilter):
     if (filters.topic && q.topic.toLowerCase() !== filters.topic.toLowerCase()) return false
     if (filters.topics?.length) {
       if (!filters.topics.some(s => q.topic.toLowerCase() === s.toLowerCase())) return false
+    }
+    if (filters.learningObjective && q.learning_objective.toLowerCase() !== filters.learningObjective.toLowerCase()) return false
+    if (filters.learningObjectives?.length) {
+      if (!filters.learningObjectives.some(s => q.learning_objective.toLowerCase() === s.toLowerCase())) return false
     }
     if (filters.difficulty && q.difficulty !== filters.difficulty) return false
     if (filters.author) {

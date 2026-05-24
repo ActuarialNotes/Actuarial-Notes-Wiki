@@ -1,13 +1,14 @@
 ---
-id: p-066
-exam: Probability
-topic: Linear Combinations of Random Variables
+id: "p-066"
+exam: "Probability"
+topic: "Linear Combinations of Random Variables"
+learning_objective: "Multivariate Random Variables"
 difficulty: easy
 type: multiple-choice
 wiki_link:
   - Concepts/Linear+Combinations+of+Random+Variables
   - Concepts/Normal
-answer: C
+answer: "C"
 points: 1
 ---
 

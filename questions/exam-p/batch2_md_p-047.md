@@ -1,14 +1,16 @@
 ---
-id: p-047
-exam: Probability
-topic: Discrete Univariate Distributions
+id: "p-047"
+exam: "Probability"
+topic: "Discrete Univariate Distributions"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
+  - Concepts/Discrete+Univariate+Distributions
   - Concepts/Poisson+Distribution
   - Concepts/Poisson
   - Concepts/Expected+Value
-answer: C
+answer: "C"
 points: 1
 ---
 

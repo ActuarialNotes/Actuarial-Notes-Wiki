@@ -1,13 +1,14 @@
 ---
-id: p-052
-exam: Probability
-topic: Expected Value
+id: "p-052"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Continuous+Univariate+Distributions
-answer: C
+answer: "C"
 points: 1
 ---
 

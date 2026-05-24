@@ -1,14 +1,15 @@
 ---
-id: p-079
-exam: Probability
-topic: Distribution of Order Statistics
+id: "p-079"
+exam: "Probability"
+topic: "Order Statistics"
+learning_objective: "Multivariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Order+Statistics
   - Concepts/Independent+Random+Variables
   - Concepts/Exponential
-answer: E
+answer: "E"
 points: 1
 ---
 

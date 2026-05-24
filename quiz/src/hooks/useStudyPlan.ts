@@ -45,7 +45,17 @@ export function useStudyPlan(
   masteryLoading: boolean = false,
 ): UseStudyPlanResult {
   const examId = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
-  const { examRows, updateStudyPlanConfig } = useExamProgress()
+  const { examRows, updateStudyPlanConfig, updateStudyPlanCache } = useExamProgress()
+
+  // Server-persisted plan for this exam (authoritative cross-device source).
+  const serverPlan = examId
+    ? examRows.find(r => r.exam_id === examId)?.study_plan_cache ?? null
+    : null
+  // Stable identity so the generation effect only re-runs when the server plan
+  // meaningfully changes — not on every realtime row refresh.
+  const serverPlanKey = serverPlan
+    ? `${serverPlan.generatedDate}|${serverPlan.config.targetReadyDate}|${serverPlan.config.targetStrengthLevel}`
+    : ''
 
   const [config, setConfig] = useState<StudyPlanConfig>(() =>
     examId ? loadStudyPlanConfig(examId) : DEFAULT_CONFIG
@@ -53,6 +63,8 @@ export function useStudyPlan(
   const [plan, setPlan] = useState<StudyPlan | null>(null)
   const [loading, setLoading] = useState(true)
   const [tick, setTick] = useState(0)
+  // Set by regenerate() so the next run skips all caches and rebuilds the plan.
+  const forceRegenRef = useRef(false)
 
   // Keep a stable ref so plan generation always uses the latest mastery snapshot
   // without masteryRecords being a reactive dependency (plan must stay stable within a day).
@@ -110,26 +122,43 @@ export function useStudyPlan(
 
     setLoading(true)
 
-    // Try cache first (same-day stability)
-    const cached = loadCachedStudyPlan(examId)
-    if (cached && cached.generatedDate === todayISO()) {
-      if (
-        cached.config.targetReadyDate === config.targetReadyDate &&
-        cached.config.targetStrengthLevel === config.targetStrengthLevel
-      ) {
-        setPlan(cached)
-        setLoading(false)
-        return
-      }
+    const today = todayISO()
+    const configMatches = (c: StudyPlanConfig) =>
+      c.targetReadyDate === config.targetReadyDate &&
+      c.targetStrengthLevel === config.targetStrengthLevel
+
+    // Explicit regenerate() bypasses every cache and rebuilds from scratch.
+    const force = forceRegenRef.current
+    forceRegenRef.current = false
+
+    // 1. Server plan wins — it's the cross-device source of truth. Mirror it to
+    //    localStorage so offline refreshes stay consistent with other devices.
+    if (!force && serverPlan && serverPlan.generatedDate === today && configMatches(serverPlan.config)) {
+      saveCachedStudyPlan(serverPlan)
+      setPlan(serverPlan)
+      setLoading(false)
+      return
     }
 
-    // Generate fresh using the latest mastery snapshot (via ref, not reactive dep)
+    // 2. Local cache (same-day stability when the server has no plan yet).
+    //    Push it up so other devices converge on this plan.
+    const cached = loadCachedStudyPlan(examId)
+    if (!force && cached && cached.generatedDate === today && configMatches(cached.config)) {
+      setPlan(cached)
+      setLoading(false)
+      updateStudyPlanCache(examId, cached).catch(() => { /* best-effort */ })
+      return
+    }
+
+    // 3. Generate fresh using the latest mastery snapshot (via ref, not reactive
+    //    dep) and persist to both localStorage and the server.
     const fresh = generateStudyPlan({ examId, syllabus, masteryRecords: masteryRef.current, config, examDate })
     saveCachedStudyPlan(fresh)
+    updateStudyPlanCache(examId, fresh).catch(() => { /* best-effort */ })
     setPlan(fresh)
     setLoading(false)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examId, syllabus?.examId, masteryLoading, config, examDate, tick])
+  }, [examId, syllabus?.examId, masteryLoading, config, examDate, tick, serverPlanKey])
 
   const updateConfig = useCallback((next: Partial<StudyPlanConfig>) => {
     if (!examId) return
@@ -149,6 +178,7 @@ export function useStudyPlan(
   }, [examId, updateStudyPlanConfig])
 
   const regenerate = useCallback(() => {
+    forceRegenRef.current = true
     setTick(t => t + 1)
   }, [])
 

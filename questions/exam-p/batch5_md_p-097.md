@@ -1,11 +1,13 @@
 ---
-id: p-097
-exam: Probability
-topic: Combinatorics
+id: "p-097"
+exam: "Probability"
+topic: "Combinatorics"
+learning_objective: "General Probability"
 difficulty: medium
 type: multiple-choice
-wiki_link: Concepts/Combinatorics
-answer: C
+wiki_link:
+  - Concepts/Combinatorics
+answer: "C"
 points: 1
 ---
 

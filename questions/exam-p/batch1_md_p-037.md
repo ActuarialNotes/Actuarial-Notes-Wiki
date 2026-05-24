@@ -1,13 +1,15 @@
 ---
-id: p-037
-exam: Probability
-topic: Discrete Univariate Distributions
+id: "p-037"
+exam: "Probability"
+topic: "Discrete Univariate Distributions"
+learning_objective: "Univariate Random Variables"
 difficulty: easy
 type: multiple-choice
 wiki_link:
+  - Concepts/Discrete+Univariate+Distributions
   - Concepts/Binomial+Distribution
   - Concepts/Binomial
-answer: E
+answer: "E"
 points: 1
 ---
 

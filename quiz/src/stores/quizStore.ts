@@ -329,6 +329,31 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       to: t.to,
       at: new Date().toISOString(),
     })))
+
+    // Also persist the level-ups to daily_completions so the "completed today"
+    // checkmark syncs across devices (localStorage above is device-local only).
+    const completionExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? '']
+    if (completionExamId && upward.length > 0) {
+      const day = new Date().toISOString().slice(0, 10)
+      const nowIso = new Date().toISOString()
+      const completionRows = upward.map(t => ({
+        user_id: userId,
+        exam_id: completionExamId,
+        concept_slug: t.conceptSlug,
+        day,
+        from_state: t.from,
+        to_state: t.to,
+        at: nowIso,
+      }))
+      const { error: completionError } = await supabase
+        .from('daily_completions')
+        .upsert(completionRows, { onConflict: 'user_id,exam_id,concept_slug,day' })
+      if (completionError) {
+        // Table may not be migrated yet — the local signal still works.
+        console.warn('daily_completions upsert failed:', completionError.message)
+      }
+    }
+
     const { data: session, error: sessionError } = await supabase
       .from('quiz_sessions')
       .insert({

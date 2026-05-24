@@ -1,14 +1,15 @@
 ---
-id: p-049
-exam: Probability
-topic: Expected Value
+id: "p-049"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Discrete+Univariate+Distributions
   - Concepts/Deductibles
-answer: A
+answer: "A"
 points: 1
 ---
 

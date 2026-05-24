@@ -17,6 +17,7 @@ export interface WikiIndexItem {
   author?: string
   year?: number
   title?: string        // resource display title (overrides name)
+  questionCount?: number // number of questions whose wiki_link points here
 }
 
 const CACHE_KEY = 'actuarial_wiki_index_v2'

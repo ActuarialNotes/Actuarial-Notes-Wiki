@@ -1,13 +1,14 @@
 ---
-id: p-095
-exam: Probability
-topic: Conditional Probability
+id: "p-095"
+exam: "Probability"
+topic: "Conditional Probability"
+learning_objective: "General Probability"
 difficulty: hard
 type: multiple-choice
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Continuous+Univariate+Distributions
-answer: B
+answer: "B"
 points: 1
 ---
 

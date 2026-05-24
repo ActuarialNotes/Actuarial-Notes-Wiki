@@ -1,14 +1,16 @@
 ---
-id: p-076
-exam: Probability
-topic: Variance and Standard Deviation
+id: "p-076"
+exam: "Probability"
+topic: "Variance and Standard Deviation"
+learning_objective: "Univariate Random Variables"
 difficulty: easy
 type: multiple-choice
 wiki_link:
+  - Concepts/Variance+and+Standard+Deviation
   - Concepts/Marginal+Distribution
   - Concepts/Discrete+Univariate+Distributions
   - Concepts/Variance+for+Conditional+and+Marginal+Distributions
-answer: B
+answer: "B"
 points: 1
 ---
 

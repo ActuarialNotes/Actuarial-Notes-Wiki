@@ -1,13 +1,14 @@
 ---
-id: p-089
-exam: Probability
-topic: Conditional Probability Function
+id: "p-089"
+exam: "Probability"
+topic: "Conditional Probability Function"
+learning_objective: "Multivariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Conditional+Probability+Function
   - Concepts/Geometric
-answer: E
+answer: "E"
 points: 1
 ---
 

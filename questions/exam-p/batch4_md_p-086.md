@@ -1,13 +1,14 @@
 ---
-id: p-086
-exam: Probability
-topic: Central Limit Theorem
+id: "p-086"
+exam: "Probability"
+topic: "Central Limit Theorem"
+learning_objective: "Multivariate Random Variables"
 difficulty: hard
 type: multiple-choice
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Deductibles
-answer: D
+answer: "D"
 points: 1
 ---
 

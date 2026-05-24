@@ -1,13 +1,15 @@
 ---
-id: p-048
-exam: Probability
-topic: Continuous Univariate Distributions
+id: "p-048"
+exam: "Probability"
+topic: "Continuous Univariate Distributions"
+learning_objective: "Univariate Random Variables"
 difficulty: hard
 type: multiple-choice
 wiki_link:
+  - Concepts/Continuous+Univariate+Distributions
   - Concepts/Expected+Value
   - Concepts/Deductibles
-answer: C
+answer: "C"
 points: 1
 ---
 

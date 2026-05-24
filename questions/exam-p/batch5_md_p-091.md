@@ -1,13 +1,14 @@
 ---
-id: p-091
-exam: Probability
-topic: Expected Value
+id: "p-091"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Conditional+Probability
-answer: B
+answer: "B"
 points: 1
 ---
 

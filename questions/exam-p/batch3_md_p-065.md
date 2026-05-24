@@ -1,13 +1,14 @@
 ---
-id: p-065
-exam: Probability
-topic: Central Limit Theorem
+id: "p-065"
+exam: "Probability"
+topic: "Central Limit Theorem"
+learning_objective: "Multivariate Random Variables"
 difficulty: easy
 type: multiple-choice
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Percentile
-answer: C
+answer: "C"
 points: 1
 ---
 

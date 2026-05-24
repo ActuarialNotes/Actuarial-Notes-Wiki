@@ -1,13 +1,15 @@
 ---
-id: p-099
-exam: Probability
-topic: Set Theory and Venn Diagrams
+id: "p-099"
+exam: "Probability"
+topic: "Set Theory and Venn Diagrams"
+learning_objective: "General Probability"
 difficulty: easy
 type: multiple-choice
 wiki_link:
+  - Concepts/Set+Theory+and+Venn+Diagrams
   - Concepts/Set+Theory
   - Concepts/Probability
-answer: E
+answer: "E"
 points: 1
 ---
 

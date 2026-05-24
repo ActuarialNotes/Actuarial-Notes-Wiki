@@ -1,11 +1,13 @@
 ---
-id: p-098
-exam: Probability
-topic: Expected Value
+id: "p-098"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: easy
 type: multiple-choice
-wiki_link: Concepts/Expected+Value
-answer: B
+wiki_link:
+  - Concepts/Expected+Value
+answer: "B"
 points: 1
 ---
 

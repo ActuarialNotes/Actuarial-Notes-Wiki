@@ -623,6 +623,33 @@ export function ReadinessCard({
         </CardContent>
       </Card>
 
+      {/* Action buttons – premium users, directly below heatmap */}
+      {isPremium && (
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setConceptModalOpen(true)}
+            disabled={allConcepts.length === 0}
+            className="gap-1.5 text-sm"
+          >
+            <BookOpen className="h-4 w-4" />
+            Read concepts
+          </Button>
+          <Button
+            onClick={handleStartQuiz}
+            disabled={quizLoading}
+            className="gap-1.5 text-sm"
+          >
+            {quizLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
+            Start Quiz
+          </Button>
+        </div>
+      )}
+
       {/* Premium-gated content */}
       {isPremium ? (
         <>
@@ -928,33 +955,6 @@ export function ReadinessCard({
           </div>
         </div>
         </>
-      )}
-
-      {/* Action buttons – premium users */}
-      {isPremium && (
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setConceptModalOpen(true)}
-            disabled={allConcepts.length === 0}
-            className="gap-1.5 text-sm"
-          >
-            <BookOpen className="h-4 w-4" />
-            Read concepts
-          </Button>
-          <Button
-            onClick={handleStartQuiz}
-            disabled={quizLoading}
-            className="gap-1.5 text-sm"
-          >
-            {quizLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Play className="h-4 w-4" />
-            )}
-            Start Quiz
-          </Button>
-        </div>
       )}
 
       {/* Modals */}

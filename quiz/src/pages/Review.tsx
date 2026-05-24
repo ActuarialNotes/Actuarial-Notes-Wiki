@@ -1,17 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Check, Gem, Loader2, TrendingUp, X } from 'lucide-react'
+import { Check, Circle, Gem, Loader2, X } from 'lucide-react'
 import { useQuizStore, readLastSession } from '@/stores/quizStore'
 import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
-import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { decayIfStale, type MasteryState, type ConceptMasteryRecord } from '@/lib/mastery'
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import { loadCachedStudyPlan } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
-import { TopicCoverageChart } from '@/components/TopicCoverageChart'
+import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+
+const EXAM_LABEL_TO_ID: Record<string, string> = {
+  'Probability': 'P',
+  'Financial Mathematics': 'FM',
+}
 
 // Sequentially animate per-question check/cross marks. Pips are rendered with
 // opacity:0 and the .score-pip-in keyframe class is added on a stagger so each
@@ -64,38 +67,84 @@ function formatTime(seconds: number | null): string {
 
 function MasteryLevelUpBadge({ transition, index }: { transition: MasteryTransition; index: number }) {
   const isLevel3 = transition.to === 'level3'
+  const isLevel2 = transition.to === 'level2'
   const label =
     transition.to === 'level3' ? `${transition.conceptSlug} → Level 3` :
     transition.to === 'level2' ? `${transition.conceptSlug} → Level 2` :
     `${transition.conceptSlug} → Level 1`
+
   const badgeClasses = isLevel3
-    ? 'bg-green-100 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-800'
+    ? 'bg-amber-100 text-amber-900 border-amber-400 dark:bg-amber-900/40 dark:text-amber-200 dark:border-amber-500 level3-shimmer'
+    : isLevel2
+    ? 'bg-green-100 text-green-800 border-green-400 dark:bg-green-900/50 dark:text-green-200 dark:border-green-600'
     : 'bg-green-500/20 text-green-800 border-green-300/60 dark:bg-green-500/20 dark:text-green-300 dark:border-green-800/60'
+
   return (
     <span
-      className={`mastery-level-up inline-flex items-center gap-1 px-2 py-1 rounded-full border text-xs font-medium ${badgeClasses}`}
+      className={`mastery-level-up inline-flex items-center px-4 py-2 rounded-2xl border text-sm font-bold ${badgeClasses}`}
       style={{ animationDelay: `${index * 80}ms` }}
     >
-      <TrendingUp className="h-3 w-3" />
       {label}
     </span>
   )
 }
 
-function worstState(states: MasteryState[]): MasteryState | null {
-  if (states.length === 0) return null
-  const order: MasteryState[] = ['forgotten', 'level1', 'level2', 'new', 'level3']
-  for (const s of order) {
-    if (states.includes(s)) return s
+// ─── Study Plan Checklist ─────────────────────────────────────────────────────
+
+interface StudyPlanChecklistProps {
+  todaysConcepts: string[]
+  completedSlugs: Set<string>
+}
+
+function StudyPlanChecklist({ todaysConcepts, completedSlugs }: StudyPlanChecklistProps) {
+  if (todaysConcepts.length === 0) return null
+
+  const STATE_LABELS: Record<string, string> = {
+    new: 'Level 1', forgotten: 'Level 1',
+    level1: 'Level 2', level2: 'Level 3',
   }
-  return 'level3'
+
+  return (
+    <div className="mt-4 pt-4 border-t space-y-2">
+      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+        Today's Study Plan
+      </p>
+      <ul className="space-y-1">
+        {todaysConcepts.map((name, idx) => {
+          const done = completedSlugs.has(name.toLowerCase())
+          return (
+            <li
+              key={name}
+              className="flex items-center gap-2.5 px-1 py-1"
+            >
+              {done ? (
+                <span
+                  className="study-plan-check-in shrink-0"
+                  style={{ animationDelay: `${idx * 120}ms` }}
+                >
+                  <Check className="h-4 w-4 text-green-500" />
+                </span>
+              ) : (
+                <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+              )}
+              <span className={`text-sm flex-1 min-w-0 truncate ${done ? 'line-through text-muted-foreground' : ''}`}>
+                {name}
+              </span>
+              <span className="text-xs text-muted-foreground shrink-0">
+                → {STATE_LABELS['new']}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
 }
 
 export default function Review() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { resetQuiz } = useQuizStore()
   const [session, setSession] = useState<CompletedSession | null>(null)
 
@@ -113,39 +162,24 @@ export default function Review() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const masteryByTopic = useMemo((): Map<string, MasteryState> | undefined => {
-    if (!user || masteryLoading || masteryRecords.length === 0 || !session) return undefined
-    const now = new Date()
 
-    const slugsBySubtopic = new Map<string, Set<string>>()
-    for (const q of session.questions) {
-      if (!slugsBySubtopic.has(q.topic)) slugsBySubtopic.set(q.topic, new Set())
-      const slugSet = slugsBySubtopic.get(q.topic)!
-      for (const link of q.wiki_link) {
-        const ref = hrefToEntryRef(link)
-        if (ref?.kind === 'concept' && ref.name) {
-          slugSet.add(ref.name.toLowerCase())
-        } else {
-          const last = link.split('/').filter(Boolean).pop()
-          if (last) slugSet.add(last.replace(/-/g, ' ').toLowerCase())
-        }
+  // Load today's study plan from localStorage cache to show checklist
+  const studyPlan = useMemo(() => {
+    if (!session) return null
+    const examId = EXAM_LABEL_TO_ID[session.questions[0]?.exam ?? ''] ?? null
+    return examId ? loadCachedStudyPlan(examId) : null
+  }, [session])
+
+  // Build set of completed concept slugs from this quiz's mastery transitions
+  const completedSlugs = useMemo(() => {
+    const slugs = new Set<string>()
+    for (const t of session?.masteryTransitions ?? []) {
+      if (t.to === 'level1' || t.to === 'level2' || t.to === 'level3') {
+        slugs.add(t.conceptSlug.toLowerCase())
       }
     }
-
-    const byConceptLower = new Map<string, ConceptMasteryRecord>()
-    for (const r of masteryRecords) byConceptLower.set(r.concept_slug.toLowerCase(), r)
-
-    const result = new Map<string, MasteryState>()
-    for (const [subtopic, slugSet] of slugsBySubtopic) {
-      const states: MasteryState[] = [...slugSet].map(slug => {
-        const rec = byConceptLower.get(slug)
-        return rec ? decayIfStale(rec, now).state : 'new'
-      })
-      const worst = worstState(states)
-      if (worst) result.set(subtopic, worst)
-    }
-    return result
-  }, [user, masteryLoading, masteryRecords, session])
+    return slugs
+  }, [session])
 
   if (!session) {
     return (
@@ -168,6 +202,14 @@ export default function Review() {
     resetQuiz()
     navigate('/')
   }
+
+  const upwardTransitions = session.masteryTransitions?.filter(
+    t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3'
+  ) ?? []
+
+  const todaysConcepts = studyPlan?.status === 'review_mode'
+    ? studyPlan.reviewConcepts
+    : studyPlan?.todaysConcepts ?? []
 
   return (
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
@@ -223,29 +265,36 @@ export default function Review() {
         </CardContent>
       </Card>
 
-      {/* Mastery level-up badges — only shown when concepts advanced state */}
-      {user && session.masteryTransitions && (() => {
-        const upward = session.masteryTransitions.filter(t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3')
-        if (upward.length === 0) return null
-        return (
-          <Card>
-            <CardContent className="pt-4">
-              <h2 className="text-sm font-semibold mb-3">Concepts Leveled Up</h2>
-              <div className="flex flex-wrap gap-2">
-                {upward.map((t, i) => (
-                  <MasteryLevelUpBadge key={t.conceptSlug} transition={t} index={i} />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )
-      })()}
+      {/* Mastery level-up badges + study plan checklist */}
+      {user && (upwardTransitions.length > 0 || todaysConcepts.length > 0) && (
+        <Card>
+          <CardContent className="pt-5">
+            {upwardTransitions.length > 0 && (
+              <>
+                <h2 className="text-sm font-semibold mb-4">Concepts Leveled Up</h2>
+                <div className="flex flex-wrap gap-3">
+                  {upwardTransitions.map((t, i) => (
+                    <MasteryLevelUpBadge key={t.conceptSlug} transition={t} index={i} />
+                  ))}
+                </div>
+              </>
+            )}
 
-      {/* Topic coverage bar graph */}
-      <TopicCoverageChart
+            {todaysConcepts.length > 0 && (
+              <StudyPlanChecklist
+                todaysConcepts={todaysConcepts}
+                completedSlugs={completedSlugs}
+              />
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Concept coverage section */}
+      <ConceptCoverageSection
         questions={session.questions}
         responses={session.responses}
-        masteryByTopic={masteryByTopic}
+        isLoggedIn={!!user}
       />
 
       {/* Per-question review */}

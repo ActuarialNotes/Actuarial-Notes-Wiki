@@ -218,7 +218,7 @@ export default function Dashboard() {
     <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <h1 className="text-2xl font-bold flex-1">{displayName}'s Actuarial Notes</h1>
+        <h1 className="text-3xl font-bold tracking-tight flex-1">{displayName}'s Actuarial Notes</h1>
         {!isGuest && (
         <button
           type="button"

@@ -225,7 +225,7 @@ export default function Store() {
 
       {/* Header */}
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">Store</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Store</h1>
         {user && (
           <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-semibold">
             <Gem className="h-4 w-4" />
@@ -234,7 +234,7 @@ export default function Store() {
         )}
       </div>
 
-      <p className="text-sm text-muted-foreground">
+      <p className="text-muted-foreground">
         Earn 1 gem for every correct answer. Unlock characters, skins, and banners.
       </p>
 

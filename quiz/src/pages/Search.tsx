@@ -1,12 +1,17 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { X, Check, Search as SearchIcon, BookMarked, FileText, GraduationCap } from 'lucide-react'
+import { X, Check, Search as SearchIcon, BookMarked, FileText, GraduationCap, ChevronDown, CalendarCheck, Lock } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
 import { hrefToEntryRef, pathToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { useTopics } from '@/hooks/useTopics'
+import { useAuth } from '@/hooks/useAuth'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { useStudyPlan } from '@/hooks/useStudyPlan'
+import { useSubscription } from '@/hooks/useSubscription'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LatexText } from '@/components/LatexText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
@@ -223,6 +228,10 @@ export default function Search() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { byExam: subtopicsByTopic, loading: subtopicsLoading } = useTopics()
+  const { user } = useAuth()
+  const { syllabi } = useWikiSyllabus()
+  const { isPremium } = useSubscription()
+  const { records: masteryRecords } = useConceptMastery()
 
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
@@ -240,6 +249,8 @@ export default function Search() {
   const [difficulty, setDifficulty] = useState<Difficulty | ''>('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [conceptFilter, setConceptFilter] = useState(() => searchParams.get('concept') ?? '')
+  const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
+  const [useTodaysPlan, setUseTodaysPlan] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -280,8 +291,28 @@ export default function Search() {
   }, [])
 
   function toggleSubtopic(subtopic: string) {
+    setUseTodaysPlan(false)
     setSelectedSubtopics(prev =>
       prev.includes(subtopic) ? prev.filter(s => s !== subtopic) : [...prev, subtopic]
+    )
+  }
+
+  function toggleTopicGroup(groupName: string) {
+    setOpenTopicGroups(prev => {
+      const next = new Set(prev)
+      next.has(groupName) ? next.delete(groupName) : next.add(groupName)
+      return next
+    })
+  }
+
+  function selectAllInGroup(group: { subtopics: string[] }, e: React.MouseEvent) {
+    e.stopPropagation()
+    setUseTodaysPlan(false)
+    const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
+    setSelectedSubtopics(prev =>
+      allSelected
+        ? prev.filter(s => !group.subtopics.includes(s))
+        : [...new Set([...prev, ...group.subtopics])]
     )
   }
 
@@ -301,20 +332,35 @@ export default function Search() {
     setSelectedIds(new Set())
     setConceptFilter('')
     setTextQuery('')
+    setUseTodaysPlan(false)
+    setOpenTopicGroups(new Set())
   }
 
   const filtered = useMemo(() => {
-    const base = filterQuestions(allQuestions, {
+    let result = filterQuestions(allQuestions, {
       exam: topic || undefined,
       topics: selectedSubtopics.length ? selectedSubtopics : undefined,
       difficulty: difficulty || undefined,
       search: textQuery.trim() || undefined,
     })
-    if (!conceptFilter) return base
-    return base.filter(q =>
-      q.wiki_link.some(link => linkMatchesConcept(link, conceptFilter))
-    )
-  }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter, textQuery])
+    if (conceptFilter) {
+      result = result.filter(q =>
+        q.wiki_link.some(link => linkMatchesConcept(link, conceptFilter))
+      )
+    }
+    if (useTodaysPlan && plan) {
+      const displayConcepts = plan.status === 'review_mode'
+        ? (plan.reviewConcepts ?? [])
+        : plan.todaysConcepts
+      const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
+      result = result.filter(q => q.wiki_link.some(link => {
+        const ref = hrefToEntryRef(link)
+        const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
+        return todaySet.has(n)
+      }))
+    }
+    return result
+  }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter, textQuery, useTodaysPlan, plan])
 
   const wikiResults = useMemo(() => {
     if (searchType === 'questions') return []
@@ -330,12 +376,97 @@ export default function Search() {
 
   const subtopics = topic ? (subtopicsByTopic[topic] ?? []) : []
 
+  const syllabusForTopic = useMemo(
+    () => syllabi.find(s => s.examTopic === topic) ?? null,
+    [syllabi, topic],
+  )
+
+  const orderedSubtopics = useMemo(() => {
+    if (!syllabusForTopic) return subtopics
+    const conceptToIdx = new Map<string, number>()
+    syllabusForTopic.topics.forEach((t, idx) => {
+      conceptToIdx.set(t.name.toLowerCase(), idx)
+      t.concepts.forEach(c => conceptToIdx.set(c.name.toLowerCase(), idx))
+    })
+    const getIdx = (st: string): number => {
+      const exact = conceptToIdx.get(st.toLowerCase())
+      if (exact !== undefined) return exact
+      const stLower = st.toLowerCase()
+      for (const [key, idx] of conceptToIdx) {
+        if (stLower.includes(key) || key.includes(stLower)) return idx
+      }
+      return Number.MAX_SAFE_INTEGER
+    }
+    return [...subtopics].sort((a, b) => {
+      const diff = getIdx(a) - getIdx(b)
+      return diff !== 0 ? diff : a.localeCompare(b)
+    })
+  }, [subtopics, syllabusForTopic])
+
+  const groupedSubtopics = useMemo(() => {
+    if (!syllabusForTopic) {
+      return [{ name: 'All Topics', weight: undefined as string | undefined, subtopics: orderedSubtopics }]
+    }
+    const subtopicToIdx = new Map<string, number>()
+    syllabusForTopic.topics.forEach((wt, idx) => {
+      for (const st of orderedSubtopics) {
+        if (subtopicToIdx.has(st)) continue
+        const stL = st.toLowerCase()
+        if (stL === wt.name.toLowerCase()) { subtopicToIdx.set(st, idx); continue }
+        for (const c of wt.concepts) {
+          const cL = c.name.toLowerCase()
+          if (stL === cL || stL.includes(cL) || cL.includes(stL)) {
+            subtopicToIdx.set(st, idx); break
+          }
+        }
+      }
+    })
+    const groups = syllabusForTopic.topics.map(t => ({
+      name: t.name, weight: t.weight as string | undefined, subtopics: [] as string[]
+    }))
+    const ungrouped: string[] = []
+    for (const st of orderedSubtopics) {
+      const idx = subtopicToIdx.get(st)
+      if (idx !== undefined) groups[idx].subtopics.push(st)
+      else ungrouped.push(st)
+    }
+    const result = groups.filter(g => g.subtopics.length > 0)
+    if (ungrouped.length > 0) result.push({ name: 'Other', weight: undefined, subtopics: ungrouped })
+    return result
+  }, [syllabusForTopic, orderedSubtopics])
+
+  const { plan } = useStudyPlan(syllabusForTopic, masteryRecords, null)
+
+  const todaySubtopics = useMemo(() => {
+    if (!plan?.todaysConcepts?.length) return new Set<string>()
+    const todaySet = new Set(plan.todaysConcepts.map(c => c.toLowerCase()))
+    const result = new Set<string>()
+    for (const q of allQuestions) {
+      if (q.exam !== topic) continue
+      for (const link of q.wiki_link) {
+        const ref = hrefToEntryRef(link)
+        const name = ref?.name ?? (link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '')
+        if (todaySet.has(name.toLowerCase())) {
+          result.add(q.topic)
+          break
+        }
+      }
+    }
+    return result
+  }, [plan, allQuestions, topic])
+
+  const planConceptCount = useMemo(() => {
+    if (!plan) return 0
+    return plan.status === 'review_mode'
+      ? (plan.reviewConcepts?.length ?? 0)
+      : plan.todaysConcepts.length
+  }, [plan])
+
   const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || textQuery
 
   function handleStartQuiz() {
     const params = new URLSearchParams({ mode: 'quiz', reveal: 'during', from: 'search' })
 
-    // Save current browse state so it can be restored when quitting the quiz
     try {
       sessionStorage.setItem(SEARCH_STATE_KEY, JSON.stringify({
         topic, selectedSubtopics, difficulty, conceptFilter,
@@ -344,19 +475,43 @@ export default function Search() {
     } catch { /* ignore */ }
 
     if (selectedIds.size > 0) {
-      // Handoff via sessionStorage to avoid URL length issues with large selections
       const ids = [...selectedIds]
       const storageExam = allQuestions.find(q => selectedIds.has(q.id))?.exam ?? 'Probability'
       try {
         sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(ids))
       } catch {
-        // fall back to URL when sessionStorage unavailable
         params.set('ids', ids.join(','))
       }
       params.set('selection', 'stored')
       params.set('exam', storageExam)
       navigate(`/quiz?${params.toString()}`)
       return
+    }
+
+    if (useTodaysPlan && plan) {
+      const displayConcepts = plan.status === 'review_mode'
+        ? (plan.reviewConcepts ?? [])
+        : plan.todaysConcepts
+      if (displayConcepts.length > 0) {
+        const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
+        const todayQs = allQuestions.filter(q => {
+          if (q.exam !== topic) return false
+          return q.wiki_link.some(link => {
+            const ref = hrefToEntryRef(link)
+            const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
+            return todaySet.has(n)
+          })
+        })
+        if (todayQs.length > 0) {
+          try {
+            sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(todayQs.map(q => q.id)))
+          } catch { /* ignore */ }
+          params.set('selection', 'stored')
+          params.set('exam', topic)
+          navigate(`/quiz?${params.toString()}`)
+          return
+        }
+      }
     }
 
     if (topic) params.set('exam', topic)
@@ -473,6 +628,8 @@ export default function Search() {
                         setSelectedSubtopics([])
                         setSelectedIds(new Set())
                         setConceptFilter('')
+                        setUseTodaysPlan(false)
+                        setOpenTopicGroups(new Set())
                       }}
                       className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
                         topic === exam.value
@@ -488,44 +645,121 @@ export default function Search() {
 
               {/* Subtopics — only shown when a specific exam is selected */}
               {topic && (
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">
-                      Topics
-                      <span className="ml-2 text-xs font-normal text-muted-foreground">
-                        {selectedSubtopics.length === 0 ? '(all)' : `${selectedSubtopics.length} selected`}
-                      </span>
-                    </label>
-                    {selectedSubtopics.length > 0 && (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">
+                    Topics
+                    <span className="ml-2 text-xs font-normal text-muted-foreground">
+                      {useTodaysPlan && planConceptCount > 0
+                        ? `${planConceptCount} concept${planConceptCount !== 1 ? 's' : ''} · today's plan`
+                        : selectedSubtopics.length === 0
+                          ? '(all)'
+                          : `${selectedSubtopics.length} selected`}
+                    </span>
+                  </label>
+
+                  {/* Today's Study Plan quick-select */}
+                  {user && (
+                    isPremium && plan && planConceptCount > 0 ? (
                       <button
                         type="button"
-                        onClick={() => setSelectedSubtopics([])}
-                        className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        onClick={() => {
+                          const next = !useTodaysPlan
+                          setUseTodaysPlan(next)
+                          if (next) setSelectedSubtopics([])
+                        }}
+                        className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
+                          useTodaysPlan
+                            ? 'border-primary bg-primary/5 text-primary font-medium'
+                            : 'border-input hover:bg-accent text-foreground'
+                        }`}
                       >
-                        Clear
+                        <CalendarCheck className="h-4 w-4 shrink-0" />
+                        <span className="flex-1 text-left">Today's Study Plan</span>
+                        {useTodaysPlan && <Check className="h-3.5 w-3.5 shrink-0" />}
+                        <span className={`text-xs shrink-0 ${useTodaysPlan ? 'text-primary/70' : 'text-muted-foreground'}`}>
+                          {planConceptCount} concept{planConceptCount !== 1 ? 's' : ''}
+                        </span>
                       </button>
-                    )}
-                  </div>
+                    ) : !isPremium ? (
+                      <Link
+                        to="/upgrade"
+                        className="flex items-center gap-2 w-full px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 text-sm text-muted-foreground hover:bg-muted/30 transition-colors"
+                      >
+                        <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
+                        <span className="flex-1 text-left">Today's Study Plan</span>
+                        <span className="text-xs text-muted-foreground/60 shrink-0">Premium</span>
+                      </Link>
+                    ) : null
+                  )}
+
                   {subtopicsLoading && subtopics.length === 0 ? (
                     <p className="text-xs text-muted-foreground">Loading topics…</p>
                   ) : subtopics.length === 0 ? (
                     <p className="text-xs text-muted-foreground">No topics available.</p>
                   ) : (
-                    <div className="flex flex-wrap gap-2">
-                      {subtopics.map(subtopic => (
-                        <button
-                          key={subtopic}
-                          type="button"
-                          onClick={() => toggleSubtopic(subtopic)}
-                          className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
-                            selectedSubtopics.includes(subtopic)
-                              ? 'border-primary bg-primary text-primary-foreground'
-                              : 'border-input hover:bg-accent'
-                          }`}
-                        >
-                          {subtopic}
-                        </button>
-                      ))}
+                    <div className={`rounded-lg border divide-y transition-opacity ${useTodaysPlan ? 'opacity-50' : ''}`}>
+                      {groupedSubtopics.map(group => {
+                        const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
+                        const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
+                        const isOpen = openTopicGroups.has(group.name)
+                        const hasToday = group.subtopics.some(s => todaySubtopics.has(s))
+                        return (
+                          <div key={group.name}>
+                            <button
+                              type="button"
+                              onClick={() => toggleTopicGroup(group.name)}
+                              className="flex items-center gap-2 w-full py-3.5 px-4 text-left hover:bg-muted/40 transition-colors"
+                              aria-expanded={isOpen}
+                            >
+                              <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
+                              <span className="text-sm font-semibold flex-1 min-w-0 truncate">
+                                {group.name}
+                                {group.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{group.weight}</span>}
+                              </span>
+                              {hasToday && <span className="text-[10px] text-primary/70 shrink-0">today</span>}
+                              <button
+                                type="button"
+                                onClick={e => selectAllInGroup(group, e)}
+                                className={`shrink-0 ml-1 px-3 py-1.5 rounded border text-xs transition-colors ${
+                                  allSelected
+                                    ? 'bg-primary text-primary-foreground border-primary'
+                                    : someSelected
+                                      ? 'bg-primary/10 text-primary border-primary/30'
+                                      : 'border-input text-muted-foreground hover:bg-accent'
+                                }`}
+                              >
+                                {allSelected ? 'All ✓' : someSelected ? 'Some' : 'Select all'}
+                              </button>
+                            </button>
+                            {isOpen && (
+                              <div className="pb-2 px-4 pl-11 space-y-0.5 bg-muted/20">
+                                {group.subtopics.map(subtopic => {
+                                  const isSelected = selectedSubtopics.includes(subtopic)
+                                  const isToday = todaySubtopics.has(subtopic)
+                                  return (
+                                    <button
+                                      key={subtopic}
+                                      type="button"
+                                      onClick={() => toggleSubtopic(subtopic)}
+                                      className="flex items-center gap-2.5 w-full py-2.5 text-left text-sm rounded hover:bg-muted/40 transition-colors"
+                                    >
+                                      <div className={`h-5 w-5 shrink-0 rounded border flex items-center justify-center ${
+                                        isSelected ? 'bg-primary border-primary' : 'border-input bg-background'
+                                      }`}>
+                                        {isSelected && <Check className="h-3 w-3 text-primary-foreground" />}
+                                      </div>
+                                      <span className={`flex-1 truncate ${isSelected ? 'font-medium text-primary' : isToday ? 'text-primary/80' : ''}`}>
+                                        {subtopic}
+                                      </span>
+                                      {isToday && <span className="text-xs text-primary/60 shrink-0">today</span>}
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
                   )}
                 </div>

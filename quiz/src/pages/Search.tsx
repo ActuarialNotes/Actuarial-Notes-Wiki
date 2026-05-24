@@ -336,44 +336,6 @@ export default function Search() {
     setOpenTopicGroups(new Set())
   }
 
-  const filtered = useMemo(() => {
-    let result = filterQuestions(allQuestions, {
-      exam: topic || undefined,
-      topics: selectedSubtopics.length ? selectedSubtopics : undefined,
-      difficulty: difficulty || undefined,
-      search: textQuery.trim() || undefined,
-    })
-    if (conceptFilter) {
-      result = result.filter(q =>
-        q.wiki_link.some(link => linkMatchesConcept(link, conceptFilter))
-      )
-    }
-    if (useTodaysPlan && plan) {
-      const displayConcepts = plan.status === 'review_mode'
-        ? (plan.reviewConcepts ?? [])
-        : plan.todaysConcepts
-      const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
-      result = result.filter(q => q.wiki_link.some(link => {
-        const ref = hrefToEntryRef(link)
-        const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
-        return todaySet.has(n)
-      }))
-    }
-    return result
-  }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter, textQuery, useTodaysPlan, plan])
-
-  const wikiResults = useMemo(() => {
-    if (searchType === 'questions') return []
-    const q = textQuery.trim().toLowerCase()
-    if (!q) return []
-    const cats = searchType === 'concepts' ? ['exam', 'concept'] : ['document']
-    return wikiIndex
-      .filter(it => cats.includes(it.category))
-      .filter(it => [it.title, it.name, it.author].filter(Boolean).join(' ').toLowerCase().includes(q))
-      .sort((a, b) => (a.title ?? a.name).localeCompare(b.title ?? b.name))
-      .slice(0, 30)
-  }, [wikiIndex, textQuery, searchType])
-
   const subtopics = topic ? (subtopicsByTopic[topic] ?? []) : []
 
   const syllabusForTopic = useMemo(
@@ -461,6 +423,44 @@ export default function Search() {
       ? (plan.reviewConcepts?.length ?? 0)
       : plan.todaysConcepts.length
   }, [plan])
+
+  const filtered = useMemo(() => {
+    let result = filterQuestions(allQuestions, {
+      exam: topic || undefined,
+      topics: selectedSubtopics.length ? selectedSubtopics : undefined,
+      difficulty: difficulty || undefined,
+      search: textQuery.trim() || undefined,
+    })
+    if (conceptFilter) {
+      result = result.filter(q =>
+        q.wiki_link.some(link => linkMatchesConcept(link, conceptFilter))
+      )
+    }
+    if (useTodaysPlan && plan) {
+      const displayConcepts = plan.status === 'review_mode'
+        ? (plan.reviewConcepts ?? [])
+        : plan.todaysConcepts
+      const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
+      result = result.filter(q => q.wiki_link.some(link => {
+        const ref = hrefToEntryRef(link)
+        const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
+        return todaySet.has(n)
+      }))
+    }
+    return result
+  }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter, textQuery, useTodaysPlan, plan])
+
+  const wikiResults = useMemo(() => {
+    if (searchType === 'questions') return []
+    const q = textQuery.trim().toLowerCase()
+    if (!q) return []
+    const cats = searchType === 'concepts' ? ['exam', 'concept'] : ['document']
+    return wikiIndex
+      .filter(it => cats.includes(it.category))
+      .filter(it => [it.title, it.name, it.author].filter(Boolean).join(' ').toLowerCase().includes(q))
+      .sort((a, b) => (a.title ?? a.name).localeCompare(b.title ?? b.name))
+      .slice(0, 30)
+  }, [wikiIndex, textQuery, searchType])
 
   const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || textQuery
 

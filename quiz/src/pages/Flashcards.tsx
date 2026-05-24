@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BookOpen, ChevronLeft, ChevronRight, Loader2, Trash2, X } from 'lucide-react'
 import { useFlashcards } from '@/hooks/useFlashcards'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { LatexText } from '@/components/LatexText'
 
 function extractFirstBullet(markdown: string): string {
   const match = markdown.match(/^[-*]\s+(.+)/m)
@@ -99,7 +101,9 @@ function FlashcardStudy({
               <p className="text-sm text-destructive">Couldn't load content.</p>
             )}
             {definition && (
-              <p className="text-base leading-relaxed">{definition}</p>
+              <p className="text-base leading-relaxed">
+                <LatexText>{definition}</LatexText>
+              </p>
             )}
 
             {!expanded && markdown && (
@@ -146,10 +150,15 @@ function FlashcardStudy({
 
 export default function Flashcards() {
   const { cards, removeCard } = useFlashcards()
+  const openAt = useConceptPopup(s => s.openAt)
   const [studying, setStudying] = useState(false)
 
   if (studying && cards.length > 0) {
     return <FlashcardStudy cards={cards} onDone={() => setStudying(false)} />
+  }
+
+  function openCard(index: number) {
+    openAt(cards, index)
   }
 
   return (
@@ -190,17 +199,21 @@ export default function Flashcards() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {cards.map(card => (
+          {cards.map((card, i) => (
             <div
               key={card.name}
-              className="group relative rounded-xl border bg-card text-card-foreground p-5 flex items-center justify-between gap-3 hover:shadow-md transition-shadow"
+              className="group relative rounded-xl border bg-card text-card-foreground p-5 flex items-center justify-between gap-3 hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => openCard(i)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(i) } }}
             >
               <span className="font-medium text-sm leading-snug flex-1 min-w-0 truncate">
                 {card.name}
               </span>
               <button
                 type="button"
-                onClick={() => removeCard(card.name)}
+                onClick={e => { e.stopPropagation(); removeCard(card.name) }}
                 aria-label={`Remove ${card.name}`}
                 className="shrink-0 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
               >

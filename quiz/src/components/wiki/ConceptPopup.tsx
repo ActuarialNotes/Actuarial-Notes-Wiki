@@ -120,11 +120,10 @@ export function ConceptPopup() {
 
       {/* Header */}
       <div className="flex items-center gap-2 px-3 h-11 border-b shrink-0">
-        <span className="flex-1 min-w-0 truncate font-semibold text-sm">
-          {current.name}
-        </span>
-        {/* Play button + mini menu */}
-        <div className="relative" ref={playMenuRef}>
+        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+          <span className="truncate font-semibold text-sm min-w-0">{current.name}</span>
+          {/* Play button + mini menu — immediately right of the concept name */}
+          <div className="relative shrink-0" ref={playMenuRef}>
           <button
             type="button"
             onClick={() => setShowPlayMenu(v => !v)}
@@ -146,7 +145,7 @@ export function ConceptPopup() {
               </button>
               <button
                 type="button"
-                onClick={() => { addCard(current); setShowPlayMenu(false) }}
+                onClick={() => { addCard(current) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
@@ -156,6 +155,7 @@ export function ConceptPopup() {
               </button>
             </div>
           )}
+          </div>
         </div>
         <button
           type="button"

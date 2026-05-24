@@ -484,11 +484,7 @@ export function ReadinessCard({
 
       const filtered = all.filter(q => {
         const names = q.wiki_link.map(linkToName)
-        if (!names.some(n => todaySet.has(n))) return false
-        return !names.some(n => {
-          if (todaySet.has(n)) return false
-          return STATE_ORDER[masteryStateByName.get(n) ?? 'new'] < 1
-        })
+        return names.some(n => todaySet.has(n))
       })
 
       if (filtered.length === 0) {

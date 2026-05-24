@@ -308,6 +308,8 @@ export function ReadinessCard({
   const [showConfig, setShowConfig] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
+  const [featurePanelIndex, setFeaturePanelIndex] = useState(0)
+  const [swipeTouchStart, setSwipeTouchStart] = useState(0)
 
   // Quiz history state
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
@@ -877,24 +879,50 @@ export function ReadinessCard({
               </p>
             </div>
             <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
-              Actuarial Notes Premium
+              Upgrade to Actuarial Notes Premium
             </Link>
-            <div className="grid grid-cols-3 gap-2 w-full max-w-xs mt-1">
-              <div className="flex flex-col items-center gap-1.5 rounded-xl border bg-background/60 p-3 text-center">
-                <CalendarCheck className="h-5 w-5 text-primary" />
-                <p className="text-xs font-semibold">Daily Challenges</p>
-                <p className="text-[10px] text-muted-foreground leading-snug">Learn and practice target concepts each day</p>
+            <div className="w-full max-w-xs mt-1">
+              <div
+                className="overflow-hidden rounded-xl"
+                onTouchStart={e => setSwipeTouchStart(e.touches[0].clientX)}
+                onTouchEnd={e => {
+                  const diff = swipeTouchStart - e.changedTouches[0].clientX
+                  if (Math.abs(diff) > 40) {
+                    if (diff > 0 && featurePanelIndex < 2) setFeaturePanelIndex(i => i + 1)
+                    if (diff < 0 && featurePanelIndex > 0) setFeaturePanelIndex(i => i - 1)
+                  }
+                }}
+              >
+                <div
+                  className="flex transition-transform duration-300 ease-in-out"
+                  style={{ transform: `translateX(-${featurePanelIndex * 100}%)` }}
+                >
+                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-6 text-center">
+                    <CalendarCheck className="h-10 w-10 text-primary" />
+                    <p className="text-base font-semibold">Daily Challenges</p>
+                    <p className="text-sm text-muted-foreground leading-snug">Learn and practice target concepts each day</p>
+                  </div>
+                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-6 text-center">
+                    <Gem className="h-10 w-10 text-primary" />
+                    <p className="text-base font-semibold">Earn Gems</p>
+                    <p className="text-sm text-muted-foreground leading-snug">Collect a gem for each correct question</p>
+                  </div>
+                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-6 text-center">
+                    <Trophy className="h-10 w-10 text-primary" />
+                    <p className="text-base font-semibold">Compete</p>
+                    <p className="text-sm text-muted-foreground leading-snug">Rank up on the leaderboard</p>
+                    <span className="text-xs bg-muted rounded-full px-2 py-0.5 text-muted-foreground">Coming Soon</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col items-center gap-1.5 rounded-xl border bg-background/60 p-3 text-center">
-                <Gem className="h-5 w-5 text-primary" />
-                <p className="text-xs font-semibold">Earn Gems</p>
-                <p className="text-[10px] text-muted-foreground leading-snug">Collect a gem for each correct question</p>
-              </div>
-              <div className="flex flex-col items-center gap-1.5 rounded-xl border bg-background/60 p-3 text-center">
-                <Trophy className="h-5 w-5 text-primary" />
-                <p className="text-xs font-semibold">Compete</p>
-                <p className="text-[10px] text-muted-foreground leading-snug">Rank up on the leaderboard</p>
-                <span className="text-[9px] bg-muted rounded-full px-1.5 py-0.5 text-muted-foreground">Coming Soon</span>
+              <div className="flex items-center justify-center gap-2 mt-3">
+                {[0, 1, 2].map(i => (
+                  <button
+                    key={i}
+                    onClick={() => setFeaturePanelIndex(i)}
+                    className={`h-2 rounded-full transition-all ${featurePanelIndex === i ? 'w-5 bg-primary' : 'w-2 bg-muted-foreground/30'}`}
+                  />
+                ))}
               </div>
             </div>
           </div>

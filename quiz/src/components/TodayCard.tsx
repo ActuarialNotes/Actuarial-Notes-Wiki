@@ -365,7 +365,7 @@ export function TodayCard({
             </p>
           </div>
           <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
-            Actuarial Notes Premium
+            Upgrade to Actuarial Notes Premium
           </Link>
         </div>
       </Card>

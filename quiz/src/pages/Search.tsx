@@ -1,14 +1,17 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { X, Check } from 'lucide-react'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { X, Check, Search as SearchIcon, BookMarked, FileText, GraduationCap } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import { hrefToEntryRef, pathToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
+import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { useTopics } from '@/hooks/useTopics'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LatexText } from '@/components/LatexText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
+
+type SearchType = 'concepts' | 'questions' | 'resources'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -29,6 +32,12 @@ const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
   { value: 'easy', label: 'Easy' },
   { value: 'medium', label: 'Medium' },
   { value: 'hard', label: 'Hard' },
+]
+
+const SEARCH_TYPES: { value: SearchType; label: string }[] = [
+  { value: 'concepts', label: 'Concepts' },
+  { value: 'questions', label: 'Questions' },
+  { value: 'resources', label: 'Resources' },
 ]
 
 const SEARCH_STATE_KEY = 'actuarial_search_state'
@@ -166,6 +175,53 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
   )
 }
 
+function highlight(text: string, query: string) {
+  const q = query.trim()
+  if (!q) return text
+  const idx = text.toLowerCase().indexOf(q.toLowerCase())
+  if (idx < 0) return text
+  return (
+    <>
+      {text.slice(0, idx)}
+      <mark className="bg-primary/20 text-foreground rounded px-0.5">
+        {text.slice(idx, idx + q.length)}
+      </mark>
+      {text.slice(idx + q.length)}
+    </>
+  )
+}
+
+function ConceptResultRow({ item, query }: { item: WikiIndexItem; query: string }) {
+  const ref = pathToEntryRef(item.path) ?? { kind: 'concept' as const, name: item.name }
+  const route = wikiRoute(ref)
+  const Icon =
+    item.category === 'exam' ? GraduationCap :
+    item.category === 'concept' ? FileText :
+    BookMarked
+  const iconColor =
+    item.category === 'exam' ? 'text-teal-500' :
+    item.category === 'concept' ? 'text-violet-500' :
+    'text-muted-foreground'
+  const display = item.title ?? item.name
+
+  return (
+    <Link
+      to={route}
+      className="flex items-start gap-3 px-4 py-3 hover:bg-accent/60 transition-colors"
+    >
+      <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
+      <div className="min-w-0 flex-1">
+        <div className="text-sm truncate">{highlight(display, query)}</div>
+        {(item.author || item.year) && (
+          <div className="text-[11px] text-muted-foreground truncate mt-0.5">
+            {[item.author, item.year].filter(Boolean).join(' · ')}
+          </div>
+        )}
+      </div>
+    </Link>
+  )
+}
+
 export default function Search() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -175,6 +231,12 @@ export default function Search() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [retryCount, setRetryCount] = useState(0)
+
+  const [searchType, setSearchType] = useState<SearchType>('questions')
+  const [textQuery, setTextQuery] = useState('')
+  const [wikiIndex, setWikiIndex] = useState<WikiIndexItem[]>([])
+  const [wikiLoading, setWikiLoading] = useState(false)
+  const wikiIndexFetchedRef = useRef(false)
 
   const [topic, setTopic] = useState('')
   const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
@@ -190,6 +252,17 @@ export default function Search() {
       .catch(err => setError(err instanceof Error ? err.message : 'Failed to load questions'))
       .finally(() => setLoading(false))
   }, [retryCount])
+
+  useEffect(() => {
+    if (searchType === 'questions') return
+    if (wikiIndexFetchedRef.current) return
+    wikiIndexFetchedRef.current = true
+    setWikiLoading(true)
+    buildWikiIndex()
+      .then(items => setWikiIndex(items))
+      .catch(() => {})
+      .finally(() => setWikiLoading(false))
+  }, [searchType])
 
   // Restore filter state saved before launching quiz
   useEffect(() => {
@@ -230,6 +303,7 @@ export default function Search() {
     setDifficulty('')
     setSelectedIds(new Set())
     setConceptFilter('')
+    setTextQuery('')
   }
 
   const filtered = useMemo(() => {
@@ -237,16 +311,29 @@ export default function Search() {
       exam: topic || undefined,
       topics: selectedSubtopics.length ? selectedSubtopics : undefined,
       difficulty: difficulty || undefined,
+      search: textQuery.trim() || undefined,
     })
     if (!conceptFilter) return base
     return base.filter(q =>
       q.wiki_link.some(link => linkMatchesConcept(link, conceptFilter))
     )
-  }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter])
+  }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter, textQuery])
+
+  const wikiResults = useMemo(() => {
+    if (searchType === 'questions') return []
+    const q = textQuery.trim().toLowerCase()
+    if (!q) return []
+    const cats = searchType === 'concepts' ? ['exam', 'concept'] : ['document']
+    return wikiIndex
+      .filter(it => cats.includes(it.category))
+      .filter(it => [it.title, it.name, it.author].filter(Boolean).join(' ').toLowerCase().includes(q))
+      .sort((a, b) => (a.title ?? a.name).localeCompare(b.title ?? b.name))
+      .slice(0, 30)
+  }, [wikiIndex, textQuery, searchType])
 
   const subtopics = topic ? (subtopicsByTopic[topic] ?? []) : []
 
-  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter
+  const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || textQuery
 
   function handleStartQuiz() {
     const params = new URLSearchParams({ mode: 'quiz', reveal: 'during', from: 'search' })
@@ -282,11 +369,37 @@ export default function Search() {
     navigate(`/quiz?${params.toString()}`)
   }
 
+  const searchPlaceholder =
+    searchType === 'questions' ? 'Search question text…' :
+    searchType === 'concepts' ? 'Search concepts and exams…' :
+    'Search resources…'
+
   return (
     <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 pb-28 space-y-6">
       <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">Search Questions</h1>
-        <p className="text-muted-foreground">Search and filter all practice questions</p>
+        <h1 className="text-3xl font-bold tracking-tight">Search</h1>
+        <p className="text-muted-foreground">Search questions, concepts, and resources</p>
+      </div>
+
+      {/* Search type toggle */}
+      <div className="flex gap-2 flex-wrap">
+        {SEARCH_TYPES.map(({ value, label }) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => {
+              setSearchType(value)
+              setTextQuery('')
+            }}
+            className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
+              searchType === value
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-input hover:bg-accent'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
       <Card>
@@ -305,185 +418,248 @@ export default function Search() {
           </div>
         </CardHeader>
         <CardContent className="space-y-5">
-          {/* Active concept filter pill */}
-          {conceptFilter && (
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">Concept</span>
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-primary bg-primary/10 text-primary text-sm">
-                {conceptFilter}
-                <button
-                  type="button"
-                  onClick={() => setConceptFilter('')}
-                  aria-label="Remove concept filter"
-                  className="hover:text-foreground transition-colors"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </span>
-            </div>
-          )}
-          {/* Exam */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium">Exam</label>
-            <div className="flex flex-wrap gap-2">
-              {EXAMS.map(exam => (
-                <button
-                  key={exam.value}
-                  type="button"
-                  onClick={() => {
-                    setTopic(exam.value)
-                    setSelectedSubtopics([])
-                    setSelectedIds(new Set())
-                    setConceptFilter('')
-                  }}
-                  className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
-                    topic === exam.value
-                      ? 'border-primary bg-primary text-primary-foreground'
-                      : 'border-input hover:bg-accent'
-                  }`}
-                >
-                  {exam.label}
-                </button>
-              ))}
-            </div>
+          {/* Text search input */}
+          <div className="flex items-center gap-2 border border-input rounded-md px-3 py-2">
+            <SearchIcon className="h-4 w-4 text-muted-foreground shrink-0" />
+            <input
+              type="text"
+              value={textQuery}
+              onChange={e => setTextQuery(e.target.value)}
+              placeholder={searchPlaceholder}
+              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-sm text-foreground placeholder:text-muted-foreground"
+              autoComplete="off"
+              spellCheck={false}
+            />
+            {textQuery && (
+              <button
+                type="button"
+                onClick={() => setTextQuery('')}
+                aria-label="Clear search"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
-          {/* Subtopics — only shown when a specific exam is selected */}
-          {topic && (
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-medium">
-                  Topics
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
-                    {selectedSubtopics.length === 0 ? '(all)' : `${selectedSubtopics.length} selected`}
-                  </span>
-                </label>
-                {selectedSubtopics.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedSubtopics([])}
-                    className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    Clear
-                  </button>
-                )}
-              </div>
-              {subtopicsLoading && subtopics.length === 0 ? (
-                <p className="text-xs text-muted-foreground">Loading topics…</p>
-              ) : subtopics.length === 0 ? (
-                <p className="text-xs text-muted-foreground">No topics available.</p>
-              ) : (
-                <div className="flex flex-wrap gap-2">
-                  {subtopics.map(subtopic => (
+          {/* Question-specific filters */}
+          {searchType === 'questions' && (
+            <>
+              {/* Active concept filter pill */}
+              {conceptFilter && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium">Concept</span>
+                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-primary bg-primary/10 text-primary text-sm">
+                    {conceptFilter}
                     <button
-                      key={subtopic}
                       type="button"
-                      onClick={() => toggleSubtopic(subtopic)}
-                      className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
-                        selectedSubtopics.includes(subtopic)
+                      onClick={() => setConceptFilter('')}
+                      aria-label="Remove concept filter"
+                      className="hover:text-foreground transition-colors"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                </div>
+              )}
+
+              {/* Exam */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Exam</label>
+                <div className="flex flex-wrap gap-2">
+                  {EXAMS.map(exam => (
+                    <button
+                      key={exam.value}
+                      type="button"
+                      onClick={() => {
+                        setTopic(exam.value)
+                        setSelectedSubtopics([])
+                        setSelectedIds(new Set())
+                        setConceptFilter('')
+                      }}
+                      className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
+                        topic === exam.value
                           ? 'border-primary bg-primary text-primary-foreground'
                           : 'border-input hover:bg-accent'
                       }`}
                     >
-                      {subtopic}
+                      {exam.label}
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Subtopics — only shown when a specific exam is selected */}
+              {topic && (
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium">
+                      Topics
+                      <span className="ml-2 text-xs font-normal text-muted-foreground">
+                        {selectedSubtopics.length === 0 ? '(all)' : `${selectedSubtopics.length} selected`}
+                      </span>
+                    </label>
+                    {selectedSubtopics.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedSubtopics([])}
+                        className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                  {subtopicsLoading && subtopics.length === 0 ? (
+                    <p className="text-xs text-muted-foreground">Loading topics…</p>
+                  ) : subtopics.length === 0 ? (
+                    <p className="text-xs text-muted-foreground">No topics available.</p>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {subtopics.map(subtopic => (
+                        <button
+                          key={subtopic}
+                          type="button"
+                          onClick={() => toggleSubtopic(subtopic)}
+                          className={`px-3 py-1.5 rounded-full border text-xs transition-colors ${
+                            selectedSubtopics.includes(subtopic)
+                              ? 'border-primary bg-primary text-primary-foreground'
+                              : 'border-input hover:bg-accent'
+                          }`}
+                        >
+                          {subtopic}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
-            </div>
+
+              {/* Difficulty */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Difficulty</label>
+                <div className="flex flex-wrap gap-2">
+                  {DIFFICULTIES.map(d => (
+                    <button
+                      key={d.value}
+                      type="button"
+                      onClick={() => setDifficulty(d.value)}
+                      className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
+                        difficulty === d.value
+                          ? 'border-primary bg-primary text-primary-foreground'
+                          : 'border-input hover:bg-accent'
+                      }`}
+                    >
+                      {d.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
           )}
-
-          {/* Difficulty */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium">Difficulty</label>
-            <div className="flex flex-wrap gap-2">
-              {DIFFICULTIES.map(d => (
-                <button
-                  key={d.value}
-                  type="button"
-                  onClick={() => setDifficulty(d.value)}
-                  className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
-                    difficulty === d.value
-                      ? 'border-primary bg-primary text-primary-foreground'
-                      : 'border-input hover:bg-accent'
-                  }`}
-                >
-                  {d.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
         </CardContent>
       </Card>
 
       {/* Results */}
       <div className="space-y-3">
-        <p className="text-sm text-muted-foreground">
-          {loading ? 'Loading questions…' : `${filtered.length} question${filtered.length !== 1 ? 's' : ''} found`}
-          {selectedIds.size > 0 && (
-            <span className="ml-2 text-foreground font-medium">
-              · {selectedIds.size} selected
-              <button
-                type="button"
-                onClick={() => setSelectedIds(new Set())}
-                className="ml-2 text-xs text-muted-foreground hover:text-foreground transition-colors font-normal"
-              >
-                clear
-              </button>
-            </span>
-          )}
-        </p>
+        {searchType === 'questions' ? (
+          <>
+            <p className="text-sm text-muted-foreground">
+              {loading ? 'Loading questions…' : `${filtered.length} question${filtered.length !== 1 ? 's' : ''} found`}
+              {selectedIds.size > 0 && (
+                <span className="ml-2 text-foreground font-medium">
+                  · {selectedIds.size} selected
+                  <button
+                    type="button"
+                    onClick={() => setSelectedIds(new Set())}
+                    className="ml-2 text-xs text-muted-foreground hover:text-foreground transition-colors font-normal"
+                  >
+                    clear
+                  </button>
+                </span>
+              )}
+            </p>
 
-        {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-center justify-between gap-4">
-            <span>{error}</span>
-            <button
-              type="button"
-              onClick={() => setRetryCount(c => c + 1)}
-              className="shrink-0 text-xs font-medium underline underline-offset-2 hover:no-underline"
-            >
-              Try again
-            </button>
-          </div>
-        )}
-
-        {loading && (
-          <div className="space-y-2">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="border rounded-lg p-4 animate-pulse">
-                <div className="h-4 bg-muted rounded w-3/4" />
-                <div className="h-3 bg-muted rounded w-1/2 mt-2" />
+            {error && (
+              <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-center justify-between gap-4">
+                <span>{error}</span>
+                <button
+                  type="button"
+                  onClick={() => setRetryCount(c => c + 1)}
+                  className="shrink-0 text-xs font-medium underline underline-offset-2 hover:no-underline"
+                >
+                  Try again
+                </button>
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        {!loading && filtered.length === 0 && !error && (
-          <div className="text-center py-12 text-muted-foreground text-sm">
-            No questions match your filters.
-          </div>
-        )}
+            {loading && (
+              <div className="space-y-2">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="border rounded-lg p-4 animate-pulse">
+                    <div className="h-4 bg-muted rounded w-3/4" />
+                    <div className="h-3 bg-muted rounded w-1/2 mt-2" />
+                  </div>
+                ))}
+              </div>
+            )}
 
-        {!loading && filtered.length > 0 && (
-          <div className="space-y-2">
-            {filtered.map(q => (
-              <QuestionRow
-                key={q.id}
-                question={q}
-                selected={selectedIds.has(q.id)}
-                onToggleSelect={toggleSelectQuestion}
-                activeDifficulty={difficulty}
-                activeTopic={topic}
-                activeSubtopics={selectedSubtopics}
-              />
-            ))}
-          </div>
+            {!loading && filtered.length === 0 && !error && (
+              <div className="text-center py-12 text-muted-foreground text-sm">
+                No questions match your filters.
+              </div>
+            )}
+
+            {!loading && filtered.length > 0 && (
+              <div className="space-y-2">
+                {filtered.map(q => (
+                  <QuestionRow
+                    key={q.id}
+                    question={q}
+                    selected={selectedIds.has(q.id)}
+                    onToggleSelect={toggleSelectQuestion}
+                    activeDifficulty={difficulty}
+                    activeTopic={topic}
+                    activeSubtopics={selectedSubtopics}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {!textQuery.trim() ? (
+              <p className="text-sm text-muted-foreground">Enter a search term above.</p>
+            ) : wikiLoading ? (
+              <div className="space-y-2">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="border rounded-lg p-4 animate-pulse">
+                    <div className="h-4 bg-muted rounded w-3/4" />
+                    <div className="h-3 bg-muted rounded w-1/2 mt-2" />
+                  </div>
+                ))}
+              </div>
+            ) : wikiResults.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground text-sm">
+                No matches found.
+              </div>
+            ) : (
+              <>
+                <p className="text-sm text-muted-foreground">
+                  {wikiResults.length} result{wikiResults.length !== 1 ? 's' : ''} found
+                </p>
+                <div className="border rounded-lg divide-y overflow-hidden">
+                  {wikiResults.map(item => (
+                    <ConceptResultRow key={`${item.category}:${item.path}`} item={item} query={textQuery} />
+                  ))}
+                </div>
+              </>
+            )}
+          </>
         )}
       </div>
 
-      {/* Sticky quiz button */}
-      {!loading && filtered.length > 0 && (
+      {/* Sticky quiz button — Questions mode only */}
+      {searchType === 'questions' && !loading && filtered.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm border-t border-border">
           <button
             type="button"

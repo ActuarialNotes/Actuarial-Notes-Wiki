@@ -25,6 +25,9 @@ type CalloutStyle = {
   borderClass: string
   accentClass: string
   roundLeft?: boolean
+  noBorder?: boolean
+  bgClass?: string
+  contentClass?: string
 }
 
 const DEFAULT_STYLE: CalloutStyle = {
@@ -50,6 +53,9 @@ const EXAMPLE_STYLE: CalloutStyle = {
   borderClass: 'border-slate-300 dark:border-slate-500',
   accentClass: 'text-foreground',
   roundLeft: true,
+  noBorder: true,
+  bgClass: 'bg-muted/70',
+  contentClass: 'text-base text-muted-foreground',
 }
 
 const EMERALD: CalloutStyle = {
@@ -260,9 +266,9 @@ interface CalloutProps {
   children: ReactNode
 }
 
-const CONTENT_CLASSES = [
+const CONTENT_CLASSES_SHARED = [
   'border-t border-border/40 px-4 pb-4 pt-3',
-  'text-sm text-foreground leading-relaxed',
+  'leading-relaxed',
   '[&>p]:my-1.5',
   '[&>p:first-of-type]:text-muted-foreground [&>p:first-of-type]:italic [&>p:first-of-type]:mb-3',
   '[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-2',
@@ -279,6 +285,8 @@ const CONTENT_CLASSES = [
   '[&_tbody_tr:last-child_td]:border-0',
 ].join(' ')
 
+const CONTENT_CLASSES = `text-sm text-foreground ${CONTENT_CLASSES_SHARED}`
+
 function Callout({ type, fold, title, children }: CalloutProps) {
   const collapsible = fold !== ''
   const [open, setOpen] = useState(fold !== '-')
@@ -290,7 +298,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
-      <span className={`font-medium text-sm flex-1 text-left ${Icon ? 'text-foreground' : style.accentClass}`}>{renderTitle(displayTitle)}</span>
+      <span className={`font-medium flex-1 text-left ${style.noBorder ? 'text-base' : 'text-sm'} ${Icon ? 'text-foreground' : style.accentClass}`}>{renderTitle(displayTitle)}</span>
       {collapsible && hasBody && (
         <ChevronDown
           className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
@@ -300,9 +308,14 @@ function Callout({ type, fold, title, children }: CalloutProps) {
   )
 
   const roundClass = style.roundLeft ? 'rounded-lg' : 'rounded-r-lg'
+  const borderClasses = style.noBorder ? '' : `border-l-[3px] ${style.borderClass}`
+  const bgClass = style.bgClass ?? 'bg-muted/50'
+  const contentClasses = style.contentClass
+    ? `${style.contentClass} ${CONTENT_CLASSES_SHARED}`
+    : CONTENT_CLASSES
 
   return (
-    <div className={`not-prose my-4 border-l-[3px] ${style.borderClass} bg-muted/50 ${roundClass} overflow-hidden`}>
+    <div className={`not-prose my-4 ${borderClasses} ${bgClass} ${roundClass} overflow-hidden`}>
       {collapsible && hasBody ? (
         <button
           type="button"
@@ -317,7 +330,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
         <div className="px-4 py-3">{headerContent}</div>
       )}
       {hasBody && (
-        <div data-callout-body hidden={!open} className={CONTENT_CLASSES}>
+        <div data-callout-body hidden={!open} className={contentClasses}>
           {children}
         </div>
       )}

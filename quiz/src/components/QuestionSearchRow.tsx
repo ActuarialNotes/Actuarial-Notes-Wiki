@@ -31,7 +31,8 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
 
-  const previewText = question.stem.slice(0, 160) + (question.stem.length > 160 ? '…' : '')
+  const words = question.stem.trim().split(/\s+/)
+  const previewText = words.length <= 6 ? question.stem : words.slice(0, 6).join(' ') + '…'
 
   return (
     <div
@@ -53,9 +54,6 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
           >
             {selected && <Check className="h-3 w-3" />}
           </button>
-          <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded border shrink-0">
-            {question.id}
-          </span>
           <span className="text-xs px-2 py-0.5 rounded-full border border-input text-muted-foreground bg-background shrink-0">
             {question.exam}
           </span>

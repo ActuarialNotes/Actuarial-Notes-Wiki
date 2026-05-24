@@ -75,9 +75,6 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
           >
             {selected && <Check className="h-3.5 w-3.5" />}
           </button>
-          <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded border shrink-0">
-            {question.id}
-          </span>
           <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
             activeTopic && question.exam === activeTopic
               ? 'bg-foreground text-background border-foreground'
@@ -120,7 +117,7 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
           <LatexText>{question.stem}</LatexText>
         ) : (
           <LatexText>
-            {question.stem.slice(0, 160) + (question.stem.length > 160 ? '…' : '')}
+            {(() => { const w = question.stem.trim().split(/\s+/); return w.length <= 6 ? question.stem : w.slice(0, 6).join(' ') + '…' })()}
           </LatexText>
         )}
       </div>

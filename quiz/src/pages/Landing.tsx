@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronDown, Check } from 'lucide-react'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
+import { CalendarCheck, ChevronDown, Check, Lock } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -10,6 +10,7 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
+import { useSubscription } from '@/hooks/useSubscription'
 import { aggregateForTopic } from '@/lib/mastery'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions } from '@/lib/parser'
@@ -92,6 +93,7 @@ export default function Landing() {
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
+  const { isPremium, loading: subLoading } = useSubscription()
 
   const initialTopic = searchParams.get('topic') ?? ''
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
@@ -110,6 +112,7 @@ export default function Landing() {
   // Quiz-specific options
   const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
   const [isAdaptive, setIsAdaptive] = useState(false)
+  const [useTodaysPlan, setUseTodaysPlan] = useState(false)
   const [count, setCount] = useState<number>(10)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
   const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
@@ -127,6 +130,7 @@ export default function Landing() {
   useEffect(() => {
     setSelectedSubtopics([])
     setIsAdaptive(false)
+    setUseTodaysPlan(false)
     setOpenTopicGroups(new Set())
   }, [topic, mode])
 
@@ -209,7 +213,7 @@ export default function Landing() {
     return result
   }, [syllabusForTopic, orderedSubtopics])
 
-  // Subtopics that have questions covering today's planned concepts
+  // Subtopics that have questions covering today's planned concepts (used for "today" badges only)
   const todaySubtopics = useMemo(() => {
     if (!plan?.todaysConcepts?.length) return new Set<string>()
     const todaySet = new Set(plan.todaysConcepts.map(c => c.toLowerCase()))
@@ -228,14 +232,42 @@ export default function Landing() {
     return result
   }, [plan, allQuestions, topic])
 
-  // Auto-select: prefer today's study plan topics; fall back to mastery-based selection
-  useEffect(() => {
-    if (!user || masteryLoading || subtopicsLoading || planLoading || mode !== 'quiz' || !topic) return
+  // Number of concepts in today's plan (handles review_mode)
+  const planConceptCount = useMemo(() => {
+    if (!plan) return 0
+    return plan.status === 'review_mode'
+      ? (plan.reviewConcepts?.length ?? 0)
+      : plan.todaysConcepts.length
+  }, [plan])
 
-    if (todaySubtopics.size > 0) {
-      setSelectedSubtopics([...todaySubtopics])
-      setIsAdaptive(true)
+  // Questions available for today's study plan concepts
+  const todayAvailableCount = useMemo(() => {
+    if (!plan || !topic) return 0
+    const displayConcepts = plan.status === 'review_mode'
+      ? (plan.reviewConcepts ?? [])
+      : plan.todaysConcepts
+    if (!displayConcepts.length) return 0
+    const todaySet = new Set(displayConcepts.map(c => c.toLowerCase()))
+    return allQuestions.filter(q => {
+      if (q.exam !== topic) return false
+      return q.wiki_link.some(link => {
+        const ref = hrefToEntryRef(link)
+        const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
+        return todaySet.has(n)
+      })
+    }).length
+  }, [plan, allQuestions, topic])
+
+  // Auto-select: activate study plan for premium users with today's concepts; fall back to mastery-based
+  useEffect(() => {
+    if (!user || masteryLoading || subtopicsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
+
+    if (isPremium && plan && planConceptCount > 0) {
+      setUseTodaysPlan(true)
+      setSelectedSubtopics([])
+      setIsAdaptive(false)
     } else {
+      setUseTodaysPlan(false)
       const sts = subtopicsByTopic[topic] ?? []
       const adaptive = computeAdaptiveSubtopics(sts, allQuestions, topic, masteryRecords)
       if (adaptive.length > 0) {
@@ -244,7 +276,7 @@ export default function Landing() {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic, mode, user?.id, masteryLoading, subtopicsLoading, planLoading, todaySubtopics.size])
+  }, [topic, mode, user?.id, masteryLoading, subtopicsLoading, planLoading, subLoading, isPremium, planConceptCount])
 
   // Auto-expand sections that contain selected subtopics
   useEffect(() => {
@@ -266,15 +298,19 @@ export default function Landing() {
     }).length
   }, [allQuestions, topic, selectedSubtopics])
 
+  // When study plan is active, use its question pool size; otherwise use subtopic-filtered count
+  const effectiveAvailableCount = useTodaysPlan ? todayAvailableCount : availableCount
+
   // Clamp count when available pool shrinks
   useEffect(() => {
-    if (availableCount > 0 && count > availableCount) {
-      setCount(availableCount)
+    if (effectiveAvailableCount > 0 && count > effectiveAvailableCount) {
+      setCount(effectiveAvailableCount)
     }
-  }, [availableCount, count])
+  }, [effectiveAvailableCount, count])
 
   function toggleSubtopic(subtopic: string) {
     setIsAdaptive(false)
+    setUseTodaysPlan(false)
     setSelectedSubtopics(prev =>
       prev.includes(subtopic) ? prev.filter(s => s !== subtopic) : [...prev, subtopic]
     )
@@ -291,6 +327,7 @@ export default function Landing() {
   function selectAllInGroup(group: { subtopics: string[] }, e: React.MouseEvent) {
     e.stopPropagation()
     setIsAdaptive(false)
+    setUseTodaysPlan(false)
     const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
     setSelectedSubtopics(prev =>
       allSelected
@@ -300,8 +337,32 @@ export default function Landing() {
   }
 
   function handleStart() {
-    const params = new URLSearchParams({ exam: topic, mode })
+    // Today's study plan mode: filter by concept names, not subtopic tags
+    if (useTodaysPlan && plan) {
+      const displayConcepts = plan.status === 'review_mode'
+        ? (plan.reviewConcepts ?? [])
+        : plan.todaysConcepts
+      if (displayConcepts.length > 0) {
+        const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
+        const todayQs = allQuestions.filter(q => {
+          if (q.exam !== topic) return false
+          return q.wiki_link.some(link => {
+            const ref = hrefToEntryRef(link)
+            const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
+            return todaySet.has(n)
+          })
+        })
+        if (todayQs.length > 0) {
+          try {
+            sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(todayQs.map(q => q.id)))
+          } catch { /* ignore */ }
+          navigate(`/quiz?selection=stored&mode=quiz&reveal=${reveal}&count=${count}&from=home`)
+          return
+        }
+      }
+    }
 
+    const params = new URLSearchParams({ exam: topic, mode })
     if (mode === 'quiz') {
       if (selectedSubtopics.length > 0) params.set('topics', selectedSubtopics.join(','))
       params.set('count', String(count))
@@ -309,7 +370,6 @@ export default function Landing() {
     } else {
       params.set('count', String(MOCK_EXAM_QUESTIONS[topic] ?? 30))
     }
-
     navigate(`/quiz?${params.toString()}`)
   }
 
@@ -318,10 +378,10 @@ export default function Landing() {
   const examColor = getExamColor(topic)
   const hasTopic = topic !== ''
 
-  const topicsLabel = selectedSubtopics.length === 0
-    ? '(all included)'
-    : isAdaptive && todaySubtopics.size > 0
-      ? `(${todaySubtopics.size} from today's plan)`
+  const topicsLabel = useTodaysPlan && planConceptCount > 0
+    ? `${planConceptCount} concept${planConceptCount !== 1 ? 's' : ''} · today's plan`
+    : selectedSubtopics.length === 0
+      ? '(all included)'
       : isAdaptive
         ? `(${selectedSubtopics.length} auto-selected)`
         : `${selectedSubtopics.length} selected`
@@ -453,10 +513,49 @@ export default function Landing() {
                         {topicsLabel}
                       </span>
                     </label>
+
+                    {/* Today's Study Plan quick-select */}
+                    {user && (
+                      isPremium && plan && planConceptCount > 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const next = !useTodaysPlan
+                            setUseTodaysPlan(next)
+                            if (next) {
+                              setSelectedSubtopics([])
+                              setIsAdaptive(false)
+                            }
+                          }}
+                          className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
+                            useTodaysPlan
+                              ? 'border-primary bg-primary/5 text-primary font-medium'
+                              : 'border-input hover:bg-accent text-foreground'
+                          }`}
+                        >
+                          <CalendarCheck className="h-4 w-4 shrink-0" />
+                          <span className="flex-1 text-left">Today's Study Plan</span>
+                          {useTodaysPlan && <Check className="h-3.5 w-3.5 shrink-0" />}
+                          <span className={`text-xs shrink-0 ${useTodaysPlan ? 'text-primary/70' : 'text-muted-foreground'}`}>
+                            {planConceptCount} concept{planConceptCount !== 1 ? 's' : ''}
+                          </span>
+                        </button>
+                      ) : !isPremium ? (
+                        <Link
+                          to="/upgrade"
+                          className="flex items-center gap-2 w-full px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 text-sm text-muted-foreground hover:bg-muted/30 transition-colors"
+                        >
+                          <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
+                          <span className="flex-1 text-left">Today's Study Plan</span>
+                          <span className="text-xs text-muted-foreground/60 shrink-0">Premium</span>
+                        </Link>
+                      ) : null
+                    )}
+
                     {subtopicsLoading && orderedSubtopics.length === 0 ? (
                       <p className="text-xs text-muted-foreground">Loading topics…</p>
                     ) : (
-                      <div className="rounded-lg border divide-y">
+                      <div className={`rounded-lg border divide-y transition-opacity ${useTodaysPlan ? 'opacity-50' : ''}`}>
                         {groupedSubtopics.map(group => {
                           const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
                           const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
@@ -528,9 +627,9 @@ export default function Landing() {
                     <div className="flex items-center justify-between">
                       <label className="text-sm font-medium">Number of Questions</label>
                       <span className="text-sm font-medium tabular-nums">
-                        {availableCount > 0
-                          ? count >= availableCount
-                            ? `All (${availableCount})`
+                        {effectiveAvailableCount > 0
+                          ? count >= effectiveAvailableCount
+                            ? `All (${effectiveAvailableCount})`
                             : count
                           : '—'}
                       </span>
@@ -538,10 +637,10 @@ export default function Landing() {
                     <input
                       type="range"
                       min={1}
-                      max={availableCount > 0 ? availableCount : 1}
-                      value={availableCount > 0 ? Math.min(count, availableCount) : 1}
+                      max={effectiveAvailableCount > 0 ? effectiveAvailableCount : 1}
+                      value={effectiveAvailableCount > 0 ? Math.min(count, effectiveAvailableCount) : 1}
                       onChange={e => setCount(Number(e.target.value))}
-                      disabled={availableCount === 0}
+                      disabled={effectiveAvailableCount === 0}
                       className="w-full accent-foreground"
                     />
                     {/* Quick-select presets */}
@@ -550,10 +649,10 @@ export default function Landing() {
                         <button
                           key={n}
                           type="button"
-                          onClick={() => setCount(Math.min(n, availableCount > 0 ? availableCount : n))}
-                          disabled={availableCount === 0}
+                          onClick={() => setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n))}
+                          disabled={effectiveAvailableCount === 0}
                           className={`px-3 py-1 rounded-md border text-xs font-medium transition-colors ${
-                            count === n && availableCount >= n
+                            count === n && effectiveAvailableCount >= n
                               ? 'border-primary bg-primary text-primary-foreground'
                               : 'border-input hover:bg-accent text-muted-foreground'
                           }`}

@@ -82,7 +82,7 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
 
       if (levelResult.error) throw new Error(levelResult.error.message)
 
-      const levelEvents: LevelEvent[] = (levelResult.data ?? []).map(r => ({
+      const levelEvents: LevelEvent[] = (levelResult.data ?? []).map((r: { from_state: string; to_state: string; at: string }) => ({
         at: new Date(r.at),
         from: sanitizeMasteryState(r.from_state),
         to: sanitizeMasteryState(r.to_state),
@@ -107,7 +107,7 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         if (cancelled) return
         if (responseError) throw new Error(responseError.message)
 
-        attemptDots = (responseData ?? []).map(r => {
+        attemptDots = (responseData ?? []).map((r: { question_id: string; is_correct: boolean; answered_at: string }) => {
           const at = new Date(r.answered_at)
           return {
             at,

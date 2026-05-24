@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { X, Check, Search, BookMarked, FileText, GraduationCap } from 'lucide-react'
+import { X, Check, Search as SearchIcon, BookMarked, FileText, GraduationCap } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -420,7 +420,7 @@ export default function Search() {
         <CardContent className="space-y-5">
           {/* Text search input */}
           <div className="flex items-center gap-2 border border-input rounded-md px-3 py-2">
-            <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+            <SearchIcon className="h-4 w-4 text-muted-foreground shrink-0" />
             <input
               type="text"
               value={textQuery}

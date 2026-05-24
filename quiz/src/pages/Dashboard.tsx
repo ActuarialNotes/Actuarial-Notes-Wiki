@@ -9,10 +9,12 @@ import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveE
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
 import { MascotWidget } from '@/components/MascotWidget'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale } from '@/lib/mastery'
 import type { MasteryState } from '@/lib/mastery'
@@ -54,6 +56,9 @@ export default function Dashboard() {
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
   const { isPremium } = useSubscription()
 
+  const popupOpen = useConceptPopup(s => s.open)
+  const closePopup = useConceptPopup(s => s.close)
+
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
@@ -75,6 +80,19 @@ export default function Dashboard() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Close the concept popup when navigating away from the dashboard.
+  useEffect(() => {
+    return () => closePopup()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Close the concept popup when the user switches active exams.
+  useEffect(() => {
+    if (popupOpen) closePopup()
+  // Only trigger on exam index change, not on every popupOpen toggle.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeExamIdx])
 
   // Re-fetch mastery after a quiz completes so masteryStateByName reflects
   // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
@@ -206,6 +224,7 @@ export default function Dashboard() {
   const multiExam = inProgressSyllabi.length > 1
 
   return (
+    <>
     <div className="relative">
       {/* Blur overlay for logged-out users — covers only the dashboard content, not the nav */}
       {isGuest && (
@@ -215,7 +234,10 @@ export default function Dashboard() {
         className={isGuest ? 'pointer-events-none select-none blur-sm opacity-40' : undefined}
         aria-hidden={isGuest}
       >
-    <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <div
+      className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6"
+      style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
+    >
       {/* Header */}
       <div className="flex items-center gap-2">
         <h1 className="text-3xl font-bold tracking-tight flex-1">{displayName}'s Actuarial Notes</h1>
@@ -330,5 +352,7 @@ export default function Dashboard() {
     </div>
     </div>
     </div>
+    <ConceptPopup />
+    </>
   )
 }

@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Loader2, Lock, Settings2, Trophy } from 'lucide-react'
+import { AlertTriangle, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, Trophy } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -16,7 +16,7 @@ import { aggregateForTopic, decayIfStale } from '@/lib/mastery'
 import { computeReadiness, type SectionReadiness } from '@/lib/readiness'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
-import { hrefToEntryRef, type WikiEntryRef } from '@/lib/wikiRoutes'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'
@@ -301,7 +301,7 @@ export function ReadinessCard({
   const openDashboard = useConceptPopup(s => s.openDashboard)
   const toRefs = (arr: { name: string }[]): WikiEntryRef[] =>
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
-  const [quizLoading, setQuizLoading] = useState(false)
+  const [topicsMasteredOpen, setTopicsMasteredOpen] = useState(false)
   const [hoveredSection, setHoveredSection] = useState<number | null>(null)
   const [pinnedSection, setPinnedSection] = useState<number | null>(null)
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
@@ -456,6 +456,36 @@ export function ReadinessCard({
     [displayConcepts, masteryStateByName]
   )
 
+  const todayStr = todayISO()
+
+  const todayQuestionsAnswered = useMemo(() =>
+    examSessions
+      .filter(s => s.completed_at.slice(0, 10) === todayStr)
+      .reduce((sum, s) => sum + s.total_questions, 0),
+    [examSessions, todayStr]
+  )
+
+  const todayGemsEarned = useMemo(() =>
+    examSessions
+      .filter(s => s.completed_at.slice(0, 10) === todayStr)
+      .reduce((sum, s) => sum + s.correct_count, 0),
+    [examSessions, todayStr]
+  )
+
+  const todayLevelUps = completedToday.length
+
+  const allConceptsDone = useMemo(() =>
+    displayConcepts.length > 0 && displayConcepts.every(name => {
+      const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+      const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+      return (
+        completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+        STATE_ORDER[currentState] >= STATE_ORDER[target]
+      )
+    }),
+    [displayConcepts, completedToday, targetByName, masteryStateByName]
+  )
+
   function handleSectionHover(i: number | null) {
     setHoveredSection(i)
   }
@@ -470,64 +500,9 @@ export function ReadinessCard({
     }
   }
 
-  const handleStartQuiz = useCallback(async () => {
-    const displayConcepts = plan?.status === 'review_mode'
-      ? (plan?.reviewConcepts ?? [])
-      : (plan?.todaysConcepts ?? [])
-
-    if (!plan || displayConcepts.length === 0) {
-      navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz`)
-      return
-    }
-
-    setQuizLoading(true)
-    try {
-      const raw = await fetchAllQuestions()
-      const all = parseAllQuestions(raw)
-
-      const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
-
-      function linkToName(link: string): string {
-        const ref = hrefToEntryRef(link)
-        const r = ref?.name ?? link.split('/').filter(Boolean).pop() ?? ''
-        return r.replace(/-/g, ' ').toLowerCase()
-      }
-
-      const filtered = all.filter(q => {
-        const names = q.wiki_link.map(linkToName)
-        return names.some(n => todaySet.has(n))
-      })
-
-      if (filtered.length === 0) {
-        navigate(`/quiz?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz&from=dashboard`)
-        return
-      }
-
-      const diffOrder: Record<string, number> = { easy: 0, medium: 1, hard: 2 }
-      function conceptGroup(q: { wiki_link: string[] }): number {
-        for (const link of q.wiki_link) {
-          const n = linkToName(link)
-          if (!todaySet.has(n)) continue
-          const s = masteryStateByName.get(n) ?? 'new'
-          if (s === 'forgotten') return 0
-          if (s === 'new')       return 1
-          return 2
-        }
-        return 2
-      }
-      filtered.sort((a, b) => {
-        const gd = conceptGroup(a) - conceptGroup(b)
-        return gd !== 0 ? gd : (diffOrder[a.difficulty] ?? 1) - (diffOrder[b.difficulty] ?? 1)
-      })
-
-      const ids = filtered.map(q => q.id).join(',')
-      navigate(`/quiz?ids=${ids}&from=dashboard`)
-    } catch {
-      navigate(`/quiz?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz&from=dashboard`)
-    } finally {
-      setQuizLoading(false)
-    }
-  }, [plan, navigate, syllabus.examTopic, masteryStateByName])
+  const handleStartQuiz = useCallback(() => {
+    navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz`)
+  }, [navigate, syllabus.examTopic])
 
   useEffect(() => {
     if (startQuizTrigger) handleStartQuiz()
@@ -654,14 +629,9 @@ export function ReadinessCard({
           </Button>
           <Button
             onClick={handleStartQuiz}
-            disabled={quizLoading}
             className="gap-1.5 text-sm"
           >
-            {quizLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Play className="h-4 w-4" />
-            )}
+            <Play className="h-4 w-4" />
             Start Quiz
           </Button>
         </div>
@@ -670,6 +640,36 @@ export function ReadinessCard({
       {/* Premium-gated content */}
       {isPremium ? (
         <>
+          {/* Countdown numbers — premium users */}
+          {(examDate || config.targetReadyDate) && (
+            <div className="grid grid-cols-2 gap-3">
+              {examDate && (() => {
+                const now = new Date(); now.setHours(0, 0, 0, 0)
+                const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
+                return (
+                  <div className="rounded-xl border bg-card p-4 text-center">
+                    <p className={`text-5xl font-bold tabular-nums ${days <= 14 ? 'text-destructive' : days <= 30 ? 'text-yellow-500' : ''}`}>
+                      {Math.max(days, 0)}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
+                  </div>
+                )
+              })()}
+              {config.targetReadyDate && (() => {
+                const now = new Date(); now.setHours(0, 0, 0, 0)
+                const days = Math.ceil((new Date(config.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
+                return (
+                  <div className="rounded-xl border bg-card p-4 text-center">
+                    <p className={`text-5xl font-bold tabular-nums ${days <= 7 ? 'text-destructive' : days <= 14 ? 'text-yellow-500' : ''}`}>
+                      {Math.max(days, 0)}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days to prepare</p>
+                  </div>
+                )
+              })()}
+            </div>
+          )}
+
           {/* Today's Study Plan card */}
           {displayConcepts.length > 0 && (
             <Card>
@@ -700,6 +700,32 @@ export function ReadinessCard({
                     )
                   })}
                 </div>
+
+                {allConceptsDone ? (
+                  <div className="flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2.5 text-green-600 dark:text-green-400">
+                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                    <span className="text-sm font-semibold">Done for Today!</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 flex-wrap text-xs text-muted-foreground px-1">
+                    <span>{todayQuestionsAnswered} questions answered</span>
+                    {todayLevelUps > 0 && (
+                      <>
+                        <span>·</span>
+                        <span>{todayLevelUps} levelled up</span>
+                      </>
+                    )}
+                    {todayGemsEarned > 0 && (
+                      <>
+                        <span>·</span>
+                        <span className="flex items-center gap-0.5">
+                          <Gem className="h-3 w-3" />
+                          {todayGemsEarned} gems earned
+                        </span>
+                      </>
+                    )}
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}
@@ -707,90 +733,104 @@ export function ReadinessCard({
           {/* Topics mastered + tracker */}
           <Card>
             <CardContent className="p-5 space-y-4">
-              <div className="space-y-1.5">
-                <div className="flex items-baseline justify-between text-sm">
-                  <span className="text-muted-foreground">Topics mastered</span>
-                  <span className="font-semibold">
-                    {aggregate.level3}
-                    <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
-                    <span className="text-muted-foreground font-normal ml-1.5">({aggregate.strongPct}%)</span>
-                  </span>
-                </div>
-                <div className="h-2.5 rounded-full bg-secondary overflow-hidden flex">
-                  <div
-                    className="h-full transition-all"
-                    style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }}
-                  />
-                  <div
-                    className="h-full transition-all"
-                    style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }}
-                  />
-                  <div
-                    className="h-full transition-all"
-                    style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }}
-                  />
-                </div>
-                {(aggregate.level3 > 0 || aggregate.level2 > 0 || aggregate.level1 > 0) && (
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                    {aggregate.level3 > 0 && (
-                      <span className="flex items-center gap-1.5">
-                        <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-                        Level 3
+              <button
+                type="button"
+                onClick={() => setTopicsMasteredOpen(prev => !prev)}
+                className="w-full"
+                aria-expanded={topicsMasteredOpen}
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Topics mastered</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">
+                        {aggregate.level3}
+                        <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
+                        <span className="text-muted-foreground font-normal ml-1.5">({aggregate.strongPct}%)</span>
                       </span>
-                    )}
-                    {aggregate.level2 > 0 && (
-                      <span className="flex items-center gap-1.5">
-                        <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
-                        Level 2
-                      </span>
-                    )}
-                    {aggregate.level1 > 0 && (
-                      <span className="flex items-center gap-1.5">
-                        <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
-                        Level 1
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex items-center gap-6">
-                <ReadinessDonut
-                  sections={sections}
-                  overallPct={overallPct}
-                  activeSection={activeSection}
-                  onSectionHover={handleSectionHover}
-                  onSectionClick={handleSectionClick}
-                />
-                <div className="flex flex-col gap-1.5 min-w-0 flex-1">
-                  {sections.map((sec, i) => (
-                    <div
-                      key={sec.name}
-                      className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
-                      onMouseEnter={() => handleSectionHover(i)}
-                      onMouseLeave={() => handleSectionHover(null)}
-                      onClick={() => handleSectionClick(i)}
-                    >
-                      <span
-                        className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
-                        style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
-                      />
-                      <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
-                      <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
+                      <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
                     </div>
-                  ))}
+                  </div>
+                  <div className="h-2.5 rounded-full bg-secondary overflow-hidden flex">
+                    <div
+                      className="h-full transition-all"
+                      style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }}
+                    />
+                    <div
+                      className="h-full transition-all"
+                      style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }}
+                    />
+                    <div
+                      className="h-full transition-all"
+                      style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }}
+                    />
+                  </div>
+                  {(aggregate.level3 > 0 || aggregate.level2 > 0 || aggregate.level1 > 0) && (
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      {aggregate.level3 > 0 && (
+                        <span className="flex items-center gap-1.5">
+                          <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
+                          Level 3
+                        </span>
+                      )}
+                      {aggregate.level2 > 0 && (
+                        <span className="flex items-center gap-1.5">
+                          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
+                          Level 2
+                        </span>
+                      )}
+                      {aggregate.level1 > 0 && (
+                        <span className="flex items-center gap-1.5">
+                          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
+                          Level 1
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
-              </div>
+              </button>
 
-              <StudyPlanTracker
-                syllabus={syllabus}
-                masteryRecords={masteryRecords}
-                studyPlan={plan}
-                allConceptsForNav={allConcepts}
-                onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
-                openTopics={openTopics}
-                onToggle={toggleTopic}
-              />
+              {topicsMasteredOpen && (
+                <>
+                  <div className="flex items-center gap-6">
+                    <ReadinessDonut
+                      sections={sections}
+                      overallPct={overallPct}
+                      activeSection={activeSection}
+                      onSectionHover={handleSectionHover}
+                      onSectionClick={handleSectionClick}
+                    />
+                    <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+                      {sections.map((sec, i) => (
+                        <div
+                          key={sec.name}
+                          className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
+                          onMouseEnter={() => handleSectionHover(i)}
+                          onMouseLeave={() => handleSectionHover(null)}
+                          onClick={() => handleSectionClick(i)}
+                        >
+                          <span
+                            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+                            style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
+                          />
+                          <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
+                          <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <StudyPlanTracker
+                    syllabus={syllabus}
+                    masteryRecords={masteryRecords}
+                    studyPlan={plan}
+                    allConceptsForNav={allConcepts}
+                    onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
+                    openTopics={openTopics}
+                    onToggle={toggleTopic}
+                  />
+                </>
+              )}
             </CardContent>
           </Card>
         </>
@@ -817,14 +857,9 @@ export function ReadinessCard({
             </Button>
             <Button
               onClick={handleStartQuiz}
-              disabled={quizLoading}
               className="gap-1.5 text-sm"
             >
-              {quizLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Play className="h-4 w-4" />
-              )}
+              <Play className="h-4 w-4" />
               Start Quiz
             </Button>
           </div>

@@ -63,6 +63,7 @@ export default function Landing() {
   const [count, setCount] = useState<number>(10)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
   const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
+  const [showStudyPlanModal, setShowStudyPlanModal] = useState(false)
 
   // Pre-select first in-progress exam when progress loads
   useEffect(() => {
@@ -497,14 +498,15 @@ export default function Landing() {
                           </span>
                         </button>
                       ) : !isPremium ? (
-                        <Link
-                          to="/upgrade"
+                        <button
+                          type="button"
+                          onClick={() => setShowStudyPlanModal(true)}
                           className="flex items-center gap-2 w-full px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 text-sm text-muted-foreground hover:bg-muted/30 transition-colors"
                         >
                           <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
                           <span className="flex-1 text-left">Today's Study Plan</span>
                           <span className="text-xs text-muted-foreground/60 shrink-0">Premium</span>
-                        </Link>
+                        </button>
                       ) : null
                     )}
 
@@ -679,6 +681,41 @@ export default function Landing() {
         </div>
       )}
     </div>
+
+    {showStudyPlanModal && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+        onClick={() => setShowStudyPlanModal(false)}
+      >
+        <div
+          className="bg-background rounded-xl border shadow-lg p-6 mx-4 max-w-sm w-full"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <CalendarCheck className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-semibold">Today's Study Plan</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Study Plans are a Premium feature. Get a personalized daily study schedule based on your exam date and mastery progress.
+          </p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setShowStudyPlanModal(false)}
+              className="flex-1 px-4 py-2 rounded-lg border text-sm hover:bg-accent transition-colors"
+            >
+              Maybe later
+            </button>
+            <Link
+              to="/upgrade"
+              className="flex-1 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium text-center hover:bg-primary/90 transition-colors"
+            >
+              Upgrade
+            </Link>
+          </div>
+        </div>
+      </div>
+    )}
     </>
   )
 }

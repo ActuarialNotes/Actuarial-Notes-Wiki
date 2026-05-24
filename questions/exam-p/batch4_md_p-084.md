@@ -1,14 +1,15 @@
 ---
-id: p-084
-exam: Probability
-topic: Law of Total Probability
+id: "p-084"
+exam: "Probability"
+topic: "The Law of Total Probability"
+learning_objective: "General Probability"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/The+Law+of+Total+Probability
   - Concepts/Conditional+Probability
   - Concepts/Exponential
-answer: C
+answer: "C"
 points: 1
 ---
 

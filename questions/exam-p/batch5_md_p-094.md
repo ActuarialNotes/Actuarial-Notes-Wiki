@@ -1,13 +1,14 @@
 ---
-id: p-094
-exam: Probability
-topic: Conditional Probability
+id: "p-094"
+exam: "Probability"
+topic: "Conditional Probability"
+learning_objective: "General Probability"
 difficulty: hard
 type: multiple-choice
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Geometric
-answer: D
+answer: "D"
 points: 1
 ---
 

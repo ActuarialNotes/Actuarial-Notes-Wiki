@@ -1,14 +1,15 @@
 ---
-id: p-061
-exam: Probability
-topic: Percentiles
+id: "p-061"
+exam: "Probability"
+topic: "Percentile"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Percentiles
   - Concepts/Exponential
   - Concepts/Percentile
-answer: C
+answer: "C"
 points: 1
 ---
 

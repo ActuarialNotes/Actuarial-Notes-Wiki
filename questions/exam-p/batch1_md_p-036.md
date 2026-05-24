@@ -1,13 +1,14 @@
 ---
-id: p-036
-exam: Probability
-topic: Conditional Probability
+id: "p-036"
+exam: "Probability"
+topic: "Conditional Probability"
+learning_objective: "General Probability"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Conditional+Probability
   - Concepts/Continuous+Univariate+Distributions
-answer: A
+answer: "A"
 points: 1
 ---
 

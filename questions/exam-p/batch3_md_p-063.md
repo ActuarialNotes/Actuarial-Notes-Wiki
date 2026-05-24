@@ -1,7 +1,8 @@
 ---
-id: p-063
-exam: Probability
-topic: Conditional Probability
+id: "p-063"
+exam: "Probability"
+topic: "Conditional Probability"
+learning_objective: "General Probability"
 difficulty: hard
 type: multiple-choice
 wiki_link:
@@ -9,7 +10,7 @@ wiki_link:
   - Concepts/Exponential
   - Concepts/Percentile
   - Concepts/Deductibles
-answer: E
+answer: "E"
 points: 1
 ---
 

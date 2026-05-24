@@ -1,13 +1,14 @@
 ---
-id: p-069
-exam: Probability
-topic: Central Limit Theorem
+id: "p-069"
+exam: "Probability"
+topic: "Central Limit Theorem"
+learning_objective: "Multivariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Central+Limit+Theorem
   - Concepts/Covariance
-answer: B
+answer: "B"
 points: 1
 ---
 

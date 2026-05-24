@@ -2,13 +2,14 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo, t
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { ItemStatus } from '@/data/tracks'
-import type { StudyPlanConfig } from '@/lib/studyPlan'
+import type { StudyPlan, StudyPlanConfig } from '@/lib/studyPlan'
 
 export interface ExamProgressRow {
   exam_id: string
   status: ItemStatus
   target_date: string | null
   study_plan_config?: StudyPlanConfig | null
+  study_plan_cache?: StudyPlan | null
 }
 
 interface SectionState {
@@ -33,6 +34,8 @@ interface ExamProgressContextValue {
   updateTargetDate: (examId: string, date: string | null) => Promise<boolean>
   /** Persist an updated study plan config for a given exam */
   updateStudyPlanConfig: (examId: string, config: StudyPlanConfig) => Promise<boolean>
+  /** Persist the generated study plan so it syncs across devices */
+  updateStudyPlanCache: (examId: string, plan: StudyPlan) => Promise<boolean>
 }
 
 const ExamProgressContext = createContext<ExamProgressContextValue | null>(null)
@@ -224,6 +227,20 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     return true
   }, [userId])
 
+  const updateStudyPlanCache = useCallback(async (examId: string, plan: StudyPlan): Promise<boolean> => {
+    if (!userId) return false
+    const { error } = await supabase.from('exam_progress').upsert(
+      { user_id: userId, exam_id: examId, study_plan_cache: plan, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,exam_id' },
+    )
+    if (error) {
+      console.warn('updateStudyPlanCache: failed:', error.message)
+      return false
+    }
+    setExamRows(prev => prev.map(r => r.exam_id === examId ? { ...r, study_plan_cache: plan } : r))
+    return true
+  }, [userId])
+
   const progress = useMemo(() => {
     const p: Record<string, string> = {}
     examRows.forEach(r => { p[r.exam_id] = r.status })
@@ -241,7 +258,7 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
       examRows, setExamRows, loadingExams,
       selectedTrack, setSelectedTrack,
       saveExamRows, examsState,
-      progress, targetDates, updateTargetDate, updateStudyPlanConfig,
+      progress, targetDates, updateTargetDate, updateStudyPlanConfig, updateStudyPlanCache,
     }}>
       {children}
     </ExamProgressContext.Provider>

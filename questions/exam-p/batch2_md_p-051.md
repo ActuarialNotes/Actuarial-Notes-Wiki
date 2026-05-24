@@ -1,13 +1,14 @@
 ---
-id: p-051
-exam: Probability
-topic: Expected Value
+id: "p-051"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: hard
 type: multiple-choice
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Deductibles
-answer: B
+answer: "B"
 points: 1
 ---
 

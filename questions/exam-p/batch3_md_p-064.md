@@ -1,13 +1,14 @@
 ---
-id: p-064
-exam: Probability
-topic: Distribution of Order Statistics
+id: "p-064"
+exam: "Probability"
+topic: "Order Statistics"
+learning_objective: "Multivariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Order+Statistics
   - Concepts/Expected+Value
-answer: A
+answer: "A"
 points: 1
 ---
 

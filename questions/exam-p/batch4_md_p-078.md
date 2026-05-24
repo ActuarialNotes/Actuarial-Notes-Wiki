@@ -1,14 +1,15 @@
 ---
-id: p-078
-exam: Probability
-topic: Independent Random Variables
+id: "p-078"
+exam: "Probability"
+topic: "Independent Random Variables"
+learning_objective: "Multivariate Random Variables"
 difficulty: easy
 type: multiple-choice
 wiki_link:
   - Concepts/Independent+Random+Variables
   - Concepts/Exponential
   - Concepts/Variance
-answer: E
+answer: "E"
 points: 1
 ---
 

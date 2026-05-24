@@ -1,13 +1,14 @@
 ---
-id: p-038
-exam: Probability
-topic: Transformations of Random Variables
+id: "p-038"
+exam: "Probability"
+topic: "Transformations of Random Variables"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Transformations+of+Random+Variables
   - Concepts/Deductibles
-answer: B
+answer: "B"
 points: 1
 ---
 

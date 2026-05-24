@@ -1,13 +1,14 @@
 ---
-id: p-074
-exam: Probability
-topic: Expected Value
+id: "p-074"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Binomial
-answer: E
+answer: "E"
 points: 1
 ---
 

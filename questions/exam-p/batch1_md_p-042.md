@@ -1,13 +1,14 @@
 ---
-id: p-042
-exam: Probability
-topic: Expected Value
+id: "p-042"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: easy
 type: multiple-choice
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Discrete+Univariate+Distributions
-answer: C
+answer: "C"
 points: 1
 ---
 

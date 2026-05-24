@@ -1,13 +1,14 @@
 ---
-id: p-033
-exam: Probability
-topic: Continuous Univariate Distributions
+id: "p-033"
+exam: "Probability"
+topic: "Continuous Univariate Distributions"
+learning_objective: "Univariate Random Variables"
 difficulty: easy
 type: multiple-choice
 wiki_link:
   - Concepts/Continuous+Probability
   - Concepts/Continuous+Univariate+Distributions
-answer: C
+answer: "C"
 points: 1
 ---
 

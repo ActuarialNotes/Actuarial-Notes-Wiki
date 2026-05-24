@@ -1,11 +1,14 @@
 ---
-id: p-092
-exam: Probability
-topic: Probability Rules
+id: "p-092"
+exam: "Probability"
+topic: "Probability Rules"
+learning_objective: "General Probability"
 difficulty: easy
 type: multiple-choice
-wiki_link: Concepts/Probability
-answer: C
+wiki_link:
+  - Concepts/Probability+Rules
+  - Concepts/Probability
+answer: "C"
 points: 1
 ---
 

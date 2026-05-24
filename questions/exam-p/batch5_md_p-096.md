@@ -1,13 +1,15 @@
 ---
-id: p-096
-exam: Probability
-topic: Discrete Univariate Distributions
+id: "p-096"
+exam: "Probability"
+topic: "Discrete Univariate Distributions"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
+  - Concepts/Discrete+Univariate+Distributions
   - Concepts/Negative+Binomial+Distribution
   - Concepts/Negative+Binomial
-answer: B
+answer: "B"
 points: 1
 ---
 

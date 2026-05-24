@@ -1,13 +1,14 @@
 ---
-id: p-046
-exam: Probability
-topic: Expected Value
+id: "p-046"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Discrete+Univariate+Distributions
-answer: E
+answer: "E"
 points: 1
 ---
 

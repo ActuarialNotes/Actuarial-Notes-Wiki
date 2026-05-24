@@ -1,13 +1,14 @@
 ---
-id: p-040
-exam: Probability
-topic: Linear Combinations of Random Variables
+id: "p-040"
+exam: "Probability"
+topic: "Linear Combinations of Random Variables"
+learning_objective: "Multivariate Random Variables"
 difficulty: hard
 type: multiple-choice
 wiki_link:
   - Concepts/Linear+Combinations+of+Random+Variables
   - Concepts/Normal
-answer: D
+answer: "D"
 points: 1
 ---
 

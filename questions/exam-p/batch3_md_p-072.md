@@ -1,11 +1,13 @@
 ---
-id: p-072
-exam: Probability
-topic: Central Limit Theorem
+id: "p-072"
+exam: "Probability"
+topic: "Central Limit Theorem"
+learning_objective: "Multivariate Random Variables"
 difficulty: medium
 type: multiple-choice
-wiki_link: Concepts/Central+Limit+Theorem
-answer: D
+wiki_link:
+  - Concepts/Central+Limit+Theorem
+answer: "D"
 points: 1
 ---
 

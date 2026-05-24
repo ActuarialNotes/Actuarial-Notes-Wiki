@@ -1,13 +1,14 @@
 ---
-id: p-035
-exam: Probability
-topic: Expected Value
+id: "p-035"
+exam: "Probability"
+topic: "Expected Value"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Expected+Value
   - Concepts/Exponential
-answer: D
+answer: "D"
 points: 1
 ---
 

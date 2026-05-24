@@ -233,6 +233,11 @@ function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query
           </div>
         )}
       </div>
+      {item.questionCount ? (
+        <span className="shrink-0 text-[11px] text-muted-foreground self-center tabular-nums">
+          {item.questionCount} {item.questionCount === 1 ? 'question' : 'questions'}
+        </span>
+      ) : null}
     </Link>
   )
 }
@@ -463,17 +468,73 @@ export default function Search() {
     return result
   }, [allQuestions, topic, selectedSubtopics, difficulty, conceptFilter, textQuery, useTodaysPlan, plan])
 
+  // How many questions link to each concept, keyed by canonical concept name.
+  // This is the wiki_link concept graph that drives concept search.
+  const conceptQuestionCounts = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const question of allQuestions) {
+      const seen = new Set<string>()
+      for (const link of question.wiki_link) {
+        const ref = hrefToEntryRef(link)
+        const name = ref?.kind === 'concept' && ref.name
+          ? ref.name
+          : (link.split('/').filter(Boolean).pop() ?? '').replace(/-/g, ' ')
+        const key = name.toLowerCase()
+        if (!key || seen.has(key)) continue
+        seen.add(key)
+        counts.set(key, (counts.get(key) ?? 0) + 1)
+      }
+    }
+    return counts
+  }, [allQuestions])
+
   const wikiResults = useMemo(() => {
     if (searchType === 'questions') return []
     const q = textQuery.trim().toLowerCase()
     if (!q) return []
-    const cats = searchType === 'concepts' ? ['exam', 'concept'] : ['document']
-    return wikiIndex
-      .filter(it => cats.includes(it.category))
+
+    if (searchType === 'resources') {
+      return wikiIndex
+        .filter(it => it.category === 'document')
+        .filter(it => [it.title, it.name, it.author].filter(Boolean).join(' ').toLowerCase().includes(q))
+        .sort((a, b) => (a.title ?? a.name).localeCompare(b.title ?? b.name))
+        .slice(0, 30)
+    }
+
+    // Concepts: surface the concepts referenced by question wiki_links. Start
+    // from the indexed exam/concept pages, attach a question count, then add any
+    // wiki_link concept that has no page yet so it's still discoverable.
+    const items: WikiIndexItem[] = wikiIndex
+      .filter(it => it.category === 'exam' || it.category === 'concept')
+      .map(it => it.category === 'concept'
+        ? { ...it, questionCount: conceptQuestionCounts.get(it.name.toLowerCase()) ?? 0 }
+        : it)
+
+    const indexedConcepts = new Set(
+      items.filter(it => it.category === 'concept').map(it => it.name.toLowerCase()),
+    )
+    for (const [key, count] of conceptQuestionCounts) {
+      if (indexedConcepts.has(key)) continue
+      const display = allQuestions
+        .flatMap(qq => qq.wiki_link)
+        .map(l => hrefToEntryRef(l))
+        .find(r => r?.kind === 'concept' && r.name.toLowerCase() === key)?.name
+      if (!display) continue
+      items.push({ category: 'concept', name: display, path: `Concepts/${display}.md`, questionCount: count })
+    }
+
+    return items
       .filter(it => [it.title, it.name, it.author].filter(Boolean).join(' ').toLowerCase().includes(q))
-      .sort((a, b) => (a.title ?? a.name).localeCompare(b.title ?? b.name))
+      .sort((a, b) => {
+        // Concepts that have questions rank first, by descending question count.
+        const ca = a.questionCount ?? 0
+        const cb = b.questionCount ?? 0
+        if ((cb > 0 ? 1 : 0) !== (ca > 0 ? 1 : 0)) return (cb > 0 ? 1 : 0) - (ca > 0 ? 1 : 0)
+        if (cb !== ca) return cb - ca
+        return (a.title ?? a.name).localeCompare(b.title ?? b.name)
+      })
       .slice(0, 30)
-  }, [wikiIndex, textQuery, searchType])
+  }, [wikiIndex, textQuery, searchType, conceptQuestionCounts, allQuestions])
 
   const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || textQuery
 

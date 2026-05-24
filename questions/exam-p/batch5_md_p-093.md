@@ -1,14 +1,16 @@
 ---
-id: p-093
-exam: Probability
-topic: Variance and Standard Deviation
+id: "p-093"
+exam: "Probability"
+topic: "Variance and Standard Deviation"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
+  - Concepts/Variance+and+Standard+Deviation
   - Concepts/Variance
   - Concepts/Poisson
   - Concepts/Variance+for+Conditional+and+Marginal+Distributions
-answer: E
+answer: "E"
 points: 1
 ---
 

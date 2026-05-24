@@ -1,14 +1,16 @@
 ---
-id: p-060
-exam: Probability
-topic: Variance and Standard Deviation
+id: "p-060"
+exam: "Probability"
+topic: "Variance and Standard Deviation"
+learning_objective: "Univariate Random Variables"
 difficulty: hard
 type: multiple-choice
 wiki_link:
+  - Concepts/Variance+and+Standard+Deviation
   - Concepts/Standard+Deviation
   - Concepts/Poisson
   - Concepts/Variance
-answer: B
+answer: "B"
 points: 1
 ---
 

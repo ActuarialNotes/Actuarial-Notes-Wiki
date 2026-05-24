@@ -1,14 +1,15 @@
 ---
-id: p-054
-exam: Probability
-topic: Percentiles
+id: "p-054"
+exam: "Probability"
+topic: "Percentile"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Percentiles
   - Concepts/Continuous+Univariate+Distributions
   - Concepts/Percentile
-answer: B
+answer: "B"
 points: 1
 ---
 

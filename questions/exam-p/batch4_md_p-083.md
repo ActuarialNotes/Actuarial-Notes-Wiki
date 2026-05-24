@@ -1,14 +1,15 @@
 ---
-id: p-083
-exam: Probability
-topic: Conditional Probability Function
+id: "p-083"
+exam: "Probability"
+topic: "Conditional Probability Function"
+learning_objective: "Multivariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Conditional+Probability+Function
   - Concepts/Discrete+Univariate+Distributions
   - Concepts/Variance+for+Conditional+and+Marginal+Distributions
-answer: D
+answer: "D"
 points: 1
 ---
 

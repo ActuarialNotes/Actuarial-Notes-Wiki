@@ -1,13 +1,14 @@
 ---
-id: p-085
-exam: Probability
-topic: Discrete Univariate Distributions
+id: "p-085"
+exam: "Probability"
+topic: "Discrete Univariate Distributions"
+learning_objective: "Univariate Random Variables"
 difficulty: hard
 type: multiple-choice
 wiki_link:
   - Concepts/Discrete+Univariate+Distributions
   - Concepts/Arithmetic+Progression
-answer: C
+answer: "C"
 points: 1
 ---
 

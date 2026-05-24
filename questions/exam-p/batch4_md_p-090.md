@@ -1,13 +1,15 @@
 ---
-id: p-090
-exam: Probability
-topic: Discrete Univariate Distributions
+id: "p-090"
+exam: "Probability"
+topic: "Discrete Univariate Distributions"
+learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
+  - Concepts/Discrete+Univariate+Distributions
   - Concepts/Hypergeometric+Distribution
   - Concepts/Hypergeometric
-answer: C
+answer: "C"
 points: 1
 ---
 

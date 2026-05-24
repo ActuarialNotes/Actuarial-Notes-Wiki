@@ -29,6 +29,7 @@ import {
 } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { wikiRoute } from '@/lib/wikiRoutes'
 import {
   aggregateForTopic,
   decayIfStale,
@@ -36,6 +37,7 @@ import {
   type MasteryState,
 } from '@/lib/mastery'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
+import { useDailyCompletions } from '@/hooks/useDailyCompletions'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -215,6 +217,24 @@ function StudyPlanTracker({
           </div>
         )
       })}
+
+      {syllabus.resources.length > 0 && (
+        <div className="pt-2 mt-1 border-t">
+          <p className="text-sm font-semibold py-2">Resources</p>
+          <ul className="space-y-1 pl-5 border-l-2 border-border ml-2">
+            {syllabus.resources.map(r => (
+              <li key={r.name}>
+                <Link
+                  to={wikiRoute({ kind: 'resource', name: r.name })}
+                  className="text-xs text-foreground hover:underline block py-1 truncate"
+                >
+                  {r.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }
@@ -256,17 +276,17 @@ export function TodayCard({
   const [trackerConcept, setTrackerConcept] = useState<{
     name: string; state: MasteryState; index: number
   } | null>(null)
-  const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
+  const [localCompletedToday, setLocalCompletedToday] = useState<DailyLevelUp[]>([])
 
-  // Load today's level-ups and keep in sync with quiz completions
+  // Load today's level-ups (this device) and keep in sync with quiz completions
   useEffect(() => {
-    setCompletedToday(readTodayLevelUps())
+    setLocalCompletedToday(readTodayLevelUps())
     function handleLevelUp(e: Event) {
-      setCompletedToday((e as CustomEvent<DailyLevelUp[]>).detail)
+      setLocalCompletedToday((e as CustomEvent<DailyLevelUp[]>).detail)
     }
     const levelUpKey = 'actuarial_daily_levelups_' + new Date().toISOString().slice(0, 10)
     function handleStorage(e: StorageEvent) {
-      if (e.key === levelUpKey) setCompletedToday(readTodayLevelUps())
+      if (e.key === levelUpKey) setLocalCompletedToday(readTodayLevelUps())
     }
     window.addEventListener(LEVELUP_EVENT, handleLevelUp)
     window.addEventListener('storage', handleStorage)
@@ -275,6 +295,21 @@ export function TodayCard({
       window.removeEventListener('storage', handleStorage)
     }
   }, [])
+
+  // Merge this device's level-ups with the cross-device signal from Supabase so
+  // a quiz finished on another device still checks the item off here.
+  const serverCompletedToday = useDailyCompletions(wikiExamIdToProgressKey(syllabus.examId))
+  const completedToday = useMemo(() => {
+    const merged: DailyLevelUp[] = []
+    const seen = new Set<string>()
+    for (const lu of [...localCompletedToday, ...serverCompletedToday]) {
+      const key = `${lu.conceptSlug.toLowerCase()}::${lu.to}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      merged.push(lu)
+    }
+    return merged
+  }, [localCompletedToday, serverCompletedToday, syllabus.examId])
 
   const todaysConcepts = plan?.todaysConcepts ?? []
   const reviewConcepts = plan?.reviewConcepts ?? []

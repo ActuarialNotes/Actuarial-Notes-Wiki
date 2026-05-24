@@ -1,13 +1,14 @@
 ---
-id: p-073
-exam: Probability
-topic: Independent Random Variables
+id: "p-073"
+exam: "Probability"
+topic: "Independent Random Variables"
+learning_objective: "Multivariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
   - Concepts/Independent+Random+Variables
   - Concepts/Exponential
-answer: C
+answer: "C"
 points: 1
 ---
 

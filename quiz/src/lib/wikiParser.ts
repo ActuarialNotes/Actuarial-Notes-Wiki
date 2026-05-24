@@ -10,11 +10,18 @@ export interface WikiTopic {
   concepts: WikiConcept[]
 }
 
+export interface WikiResource {
+  name: string     // display name, e.g. "A First Course in Probability (Ross - 2019)"
+  target: string   // raw [[target]] (path or name) used to build the wiki route
+}
+
 export interface WikiExamSyllabus {
   examId: string
   examLabel: string
   examTopic: string
   topics: WikiTopic[]
+  /** Source-material books, parsed from the `[!answer]` callout. */
+  resources: WikiResource[]
   /** Source file name without .md extension, e.g. "Exam FM-2 (SOA)" */
   fileName?: string
 }
@@ -74,8 +81,11 @@ export function parseExamMetadata(
 }
 
 // Parse an exam markdown file and extract Learning Objectives as a
-// WikiExamSyllabus. Callout blocks (`> [!example]- TopicName {weight}`)
-// become topics; every [[wiki link]] inside becomes a concept.
+// WikiExamSyllabus. `[!example]` callouts (`> [!example]- TopicName {weight}`)
+// become topics; every [[wiki link]] inside becomes a concept. Any other
+// callout (e.g. `[!answer]- Source Material`) ends the current topic; the
+// book links inside the `[!answer]` block are collected as resources so they
+// don't get folded into the last learning objective.
 export function parseExamSyllabus(
   content: string,
   examId: string,
@@ -88,6 +98,8 @@ export function parseExamSyllabus(
 
   interface Acc { name: string; weight?: string; lines: string[] }
   let current: Acc | null = null
+  let inResource = false
+  const resourceLines: string[] = []
 
   const flush = () => {
     if (!current) return
@@ -108,19 +120,37 @@ export function parseExamSyllabus(
   }
 
   for (const line of lines) {
-    // Callout header: > [!example]- TopicName {weight}
-    const header = line.match(/^>\s*\[!example\]-?\s+([^{}\n]+?)(?:\s*\{([^}]+)\})?\s*$/)
+    // Any callout header: > [!type]- Title {weight}
+    const header = line.match(/^>\s*\[!(\w+)\]-?\s*([^{}\n]*?)(?:\s*\{([^}]+)\})?\s*$/)
     if (header) {
       flush()
-      current = { name: header[1].trim(), weight: header[2]?.trim(), lines: [] }
-    } else if (current && line.startsWith('>')) {
-      // Strip leading "> " and accumulate content
-      current.lines.push(line.replace(/^>\s?/, ''))
+      if (header[1].toLowerCase() === 'example') {
+        inResource = false
+        current = { name: header[2].trim(), weight: header[3]?.trim(), lines: [] }
+      } else {
+        // Non-example callout (e.g. Source Material) — its body holds resources.
+        inResource = true
+      }
+    } else if (line.startsWith('>')) {
+      const body = line.replace(/^>\s?/, '')
+      if (current) current.lines.push(body)
+      else if (inResource) resourceLines.push(body)
     }
     // Blank lines and non-callout lines outside a block are ignored
   }
 
   flush()
 
-  return { examId, examLabel, examTopic, topics, fileName }
+  const resources: WikiResource[] = []
+  const seenResources = new Set<string>()
+  for (const line of resourceLines) {
+    for (const link of extractWikiLinks(line)) {
+      if (!seenResources.has(link.name.toLowerCase())) {
+        seenResources.add(link.name.toLowerCase())
+        resources.push({ name: link.name, target: link.target })
+      }
+    }
+  }
+
+  return { examId, examLabel, examTopic, topics, resources, fileName }
 }

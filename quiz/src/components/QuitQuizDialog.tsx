@@ -5,9 +5,10 @@ interface QuitQuizDialogProps {
   mode: 'quiz' | 'mock-exam'
   onCancel: () => void
   onConfirm: () => void
+  onFinish?: () => void
 }
 
-export function QuitQuizDialog({ mode, onCancel, onConfirm }: QuitQuizDialogProps) {
+export function QuitQuizDialog({ mode, onCancel, onConfirm, onFinish }: QuitQuizDialogProps) {
   const label = mode === 'mock-exam' ? 'mock exam' : 'quiz'
 
   useEffect(() => {
@@ -39,6 +40,11 @@ export function QuitQuizDialog({ mode, onCancel, onConfirm }: QuitQuizDialogProp
           <Button variant="outline" size="sm" onClick={onCancel}>
             Cancel
           </Button>
+          {onFinish && (
+            <Button variant="default" size="sm" onClick={onFinish}>
+              Finish {label}
+            </Button>
+          )}
           <Button variant="destructive" size="sm" onClick={onConfirm}>
             Quit {label}
           </Button>

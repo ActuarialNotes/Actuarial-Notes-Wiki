@@ -274,6 +274,7 @@ export default function Quiz() {
           mode={mode}
           onCancel={() => setShowQuitDialog(false)}
           onConfirm={handleQuit}
+          onFinish={Object.keys(responses).length > 0 ? handleFinish : undefined}
         />
       )}
 

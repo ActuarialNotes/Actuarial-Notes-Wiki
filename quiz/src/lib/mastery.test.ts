@@ -54,6 +54,17 @@ describe('new state', () => {
     expect(r.state).toBe('new')
   })
 
+  it('stays level1 (not forgotten) when promoted within the same session then failed 3 times', () => {
+    // Concept starts new, gets one correct (→ level1, last_correct_at = today),
+    // then hits the streak threshold. Because level1 was earned today it cannot
+    // immediately be forgotten — that would let a never-learned concept skip to
+    // forgotten without ever being genuinely consolidated.
+    let r = correct(rec())
+    expect(r.state).toBe('level1')
+    for (let i = 0; i < FORGET_FAIL_STREAK; i++) r = wrong(r)
+    expect(r.state).toBe('level1')
+  })
+
   it('increments correct_count on correct answer', () => {
     expect(correct(rec()).correct_count).toBe(1)
   })

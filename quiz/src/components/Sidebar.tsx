@@ -8,6 +8,7 @@ import {
   Compass,
   Gem,
   GraduationCap,
+  Layers,
   LayoutDashboard,
   LogIn,
   LogOut,
@@ -403,6 +404,13 @@ export default function Sidebar() {
             icon={<ClipboardList className="h-4 w-4" />}
             collapsed={collapsed}
             end
+            onNavigate={closeMobile}
+          />
+          <SidebarItem
+            to="/flashcards"
+            label="Flashcards"
+            icon={<Layers className="h-4 w-4" />}
+            collapsed={collapsed}
             onNavigate={closeMobile}
           />
           <SidebarItem

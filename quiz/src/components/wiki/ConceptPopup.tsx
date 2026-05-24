@@ -1,20 +1,24 @@
-import { useEffect, useState } from 'react'
-import { ChevronLeft, ChevronRight, GripHorizontal, HelpCircle, Loader2, Maximize2, Minimize2, X } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, Play, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close } = useConceptPopup()
+  const { addCard, hasCard } = useFlashcards()
   const current: WikiEntryRef | undefined = list[index]
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const { height, beginDrag } = useSplitHeight()
   const [maximized, setMaximized] = useState(false)
   const [showQuestions, setShowQuestions] = useState(false)
+  const [showPlayMenu, setShowPlayMenu] = useState(false)
+  const playMenuRef = useRef<HTMLDivElement>(null)
 
   // Fetch markdown whenever the active ref changes.
   useEffect(() => {
@@ -51,6 +55,18 @@ export function ConceptPopup() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open, close, navigate])
+
+  // Close play menu when clicking outside of it.
+  useEffect(() => {
+    if (!showPlayMenu) return
+    function onPointerDown(e: PointerEvent) {
+      if (playMenuRef.current && !playMenuRef.current.contains(e.target as Node)) {
+        setShowPlayMenu(false)
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [showPlayMenu])
 
   // Publish the pane's height to the layout so it can reserve space below
   // the main column. Cleaned up on close.
@@ -104,23 +120,43 @@ export function ConceptPopup() {
 
       {/* Header */}
       <div className="flex items-center gap-2 px-3 h-11 border-b shrink-0">
-        <button
-          type="button"
-          onClick={() => setShowQuestions(true)}
-          className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
-          title="Browse questions for this concept"
-          aria-label="Browse questions for this concept"
-        >
-          <HelpCircle className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => setShowQuestions(true)}
-          className="flex-1 min-w-0 truncate font-semibold text-sm text-left hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
-          title="Browse questions for this concept"
-        >
+        <span className="flex-1 min-w-0 truncate font-semibold text-sm">
           {current.name}
-        </button>
+        </span>
+        {/* Play button + mini menu */}
+        <div className="relative" ref={playMenuRef}>
+          <button
+            type="button"
+            onClick={() => setShowPlayMenu(v => !v)}
+            className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
+            title="Start Quiz or Add to Flashcards"
+            aria-label="Start Quiz or Add to Flashcards"
+          >
+            <Play className="h-4 w-4" />
+          </button>
+          {showPlayMenu && (
+            <div className="absolute right-0 top-full mt-1 w-48 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1">
+              <button
+                type="button"
+                onClick={() => { setShowQuestions(true); setShowPlayMenu(false) }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+              >
+                <Play className="h-3.5 w-3.5 shrink-0" />
+                Start Quiz
+              </button>
+              <button
+                type="button"
+                onClick={() => { addCard(current); setShowPlayMenu(false) }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+              >
+                <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
+                  {hasCard(current.name) ? '✓' : '+'}
+                </span>
+                {hasCard(current.name) ? 'Added to Flashcards' : 'Add to Flashcards'}
+              </button>
+            </div>
+          )}
+        </div>
         <button
           type="button"
           onClick={() => setMaximized(v => !v)}

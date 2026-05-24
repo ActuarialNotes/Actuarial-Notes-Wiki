@@ -7,6 +7,7 @@ import Auth from '@/pages/Auth'
 import Quiz from '@/pages/Quiz'
 import Review from '@/pages/Review'
 import Dashboard from '@/pages/Dashboard'
+import Flashcards from '@/pages/Flashcards'
 import Search from '@/pages/Search'
 import Settings from '@/pages/Settings'
 import Upgrade from '@/pages/Upgrade'
@@ -99,6 +100,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
                 <Route path="/search" element={<Search />} />
+                <Route path="/flashcards" element={<Flashcards />} />
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/upgrade" element={<Upgrade />} />

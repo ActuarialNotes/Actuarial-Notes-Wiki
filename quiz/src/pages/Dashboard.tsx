@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
+import { supabase } from '@/lib/supabase'
 import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
@@ -62,7 +63,14 @@ export default function Dashboard() {
   )
 
   useEffect(() => {
-    if (new URLSearchParams(location.search).get('upgraded') === '1') {
+    const params = new URLSearchParams(location.search)
+    if (params.get('upgraded') === '1') {
+      const sessionId = params.get('session_id')
+      if (sessionId) {
+        // Fire-and-forget: sync subscription from Stripe. The useSubscription
+        // real-time channel will pick up the DB update automatically.
+        supabase.functions.invoke('stripe-sync-session', { body: { sessionId } })
+      }
       navigate('/dashboard', { replace: true })
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

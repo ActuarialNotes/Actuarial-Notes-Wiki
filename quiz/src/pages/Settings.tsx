@@ -179,6 +179,26 @@ export default function Settings() {
   // ---- Premium: manage subscription via Stripe portal ----
   const [portalLoading, setPortalLoading] = useState(false)
   const [portalError, setPortalError] = useState<string | null>(null)
+  const [restoreLoading, setRestoreLoading] = useState(false)
+  const [restoreMessage, setRestoreMessage] = useState<string | null>(null)
+
+  const handleRestorePurchase = async () => {
+    setRestoreLoading(true)
+    setRestoreMessage(null)
+    try {
+      const { data, error } = await supabase.functions.invoke('stripe-sync-session', { body: {} })
+      if (error) throw new Error(error.message)
+      if (data?.synced && data?.tier === 'premium') {
+        setRestoreMessage('Premium restored! Your features should appear shortly.')
+      } else {
+        setRestoreMessage('No active subscription found. If you believe this is an error, contact support.')
+      }
+    } catch (err) {
+      setRestoreMessage(err instanceof Error ? err.message : 'Something went wrong.')
+    } finally {
+      setRestoreLoading(false)
+    }
+  }
 
   const handleManageSubscription = async () => {
     setPortalLoading(true)
@@ -664,9 +684,21 @@ export default function Settings() {
                       <p className="text-sm text-muted-foreground">
                         Upgrade to Premium for a custom study plan and exclusive features.
                       </p>
-                      <Link to="/upgrade">
-                        <Button variant="default">Upgrade to Premium →</Button>
-                      </Link>
+                      <div className="flex flex-wrap gap-3">
+                        <Link to="/upgrade">
+                          <Button variant="default">Upgrade to Premium →</Button>
+                        </Link>
+                        <Button
+                          variant="outline"
+                          onClick={handleRestorePurchase}
+                          disabled={restoreLoading}
+                        >
+                          {restoreLoading ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Checking…</> : 'Restore Purchase'}
+                        </Button>
+                      </div>
+                      {restoreMessage && (
+                        <p className="text-sm text-muted-foreground">{restoreMessage}</p>
+                      )}
                     </>
                   )}
                 </CardContent>

@@ -4499,9 +4499,20 @@ figure.right figcaption,
   }
 }
 
-/* Example callout tinting on exam pages */
+/* Learning Objectives callout styling on exam pages */
 .has-exam-nav .callout[data-callout="example"] {
-  background: color-mix(in oklab, var(--exam-color) 8%, color-mix(in oklab, var(--muted) 65%, var(--bg)));
+  border-left: none;
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--exam-color) 8%, color-mix(in oklab, var(--muted) 78%, var(--bg)));
+}
+
+.has-exam-nav .callout[data-callout="example"] .callout-title {
+  font-size: inherit;
+}
+
+.has-exam-nav .callout[data-callout="example"] .callout-content {
+  color: var(--text-dim);
+  font-size: inherit;
 }
 
 /* Exam Track row */

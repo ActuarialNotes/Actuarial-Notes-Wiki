@@ -109,6 +109,7 @@ export default function Landing() {
     syllabusForTopic,
     masteryRecords,
     examDateForPlan,
+    masteryLoading,
   )
 
   // Subtopics sorted by their position in the exam syllabus

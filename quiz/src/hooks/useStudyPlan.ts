@@ -8,7 +8,7 @@
 //   - Supabase realtime updating examRows → effect re-reads config from updated row
 //   - localStorage 'storage' event as a fast path when realtime is slow/unavailable
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   generateStudyPlan,
   loadCachedStudyPlan,
@@ -42,6 +42,7 @@ export function useStudyPlan(
   syllabus: WikiExamSyllabus | null,
   masteryRecords: ConceptMasteryRecord[],
   examDate: string | null,
+  masteryLoading: boolean = false,
 ): UseStudyPlanResult {
   const examId = syllabus ? wikiExamIdToProgressKey(syllabus.examId) : null
   const { examRows, updateStudyPlanConfig } = useExamProgress()
@@ -52,6 +53,11 @@ export function useStudyPlan(
   const [plan, setPlan] = useState<StudyPlan | null>(null)
   const [loading, setLoading] = useState(true)
   const [tick, setTick] = useState(0)
+
+  // Keep a stable ref so plan generation always uses the latest mastery snapshot
+  // without masteryRecords being a reactive dependency (plan must stay stable within a day).
+  const masteryRef = useRef(masteryRecords)
+  useEffect(() => { masteryRef.current = masteryRecords }, [masteryRecords])
 
   // Sync config from DB whenever exam rows update (realtime or initial fetch).
   // DB config takes precedence over localStorage so changes from other sessions
@@ -85,11 +91,20 @@ export function useStudyPlan(
     return () => window.removeEventListener('storage', handleStorage)
   }, [examId])
 
-  // Generate (or load cached) plan whenever inputs change
+  // Generate (or load cached) plan whenever inputs change.
+  // masteryRecords is intentionally NOT a dependency — the plan is frozen for
+  // the day once generated; only config/date changes or a new day re-trigger it.
+  // masteryLoading gates generation so we never cache a plan built from
+  // partial/empty records (the primary cause of inconsistent daily plans).
   useEffect(() => {
     if (!syllabus || !examId) {
       setPlan(null)
       setLoading(false)
+      return
+    }
+
+    if (masteryLoading) {
+      setLoading(true)
       return
     }
 
@@ -108,13 +123,13 @@ export function useStudyPlan(
       }
     }
 
-    // Generate fresh
-    const fresh = generateStudyPlan({ examId, syllabus, masteryRecords, config, examDate })
+    // Generate fresh using the latest mastery snapshot (via ref, not reactive dep)
+    const fresh = generateStudyPlan({ examId, syllabus, masteryRecords: masteryRef.current, config, examDate })
     saveCachedStudyPlan(fresh)
     setPlan(fresh)
     setLoading(false)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examId, syllabus?.examId, masteryRecords, config, examDate, tick])
+  }, [examId, syllabus?.examId, masteryLoading, config, examDate, tick])
 
   const updateConfig = useCallback((next: Partial<StudyPlanConfig>) => {
     if (!examId) return

@@ -29,6 +29,7 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
@@ -228,6 +229,16 @@ export default function Sidebar() {
 
   const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
   const profileInitials = profileName.slice(0, 2).toUpperCase()
+
+  const equippedBanner = parseBanner(user?.user_metadata?.banner_data as string | undefined)
+  const designationBanner = DESIGNATION_BANNERS.find(b => b.id === equippedBanner?.id)
+  const bannerLabel = equippedBanner?.id === 'custom'
+    ? (equippedBanner.text ?? '').slice(0, 10) || null
+    : equippedBanner?.id === 'beta_tester'
+    ? 'Beta'
+    : equippedBanner
+    ? equippedBanner.id.toUpperCase()
+    : null
 
   return (
     <>
@@ -477,6 +488,18 @@ export default function Sidebar() {
                 </span>
                 <span className={`flex items-center gap-1.5 min-w-0 ${collapsed ? 'lg:hidden' : ''}`}>
                   <span className="truncate">{profileName}</span>
+                  {bannerLabel && (
+                    <span
+                      className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded-sm tracking-widest leading-none border"
+                      style={{
+                        background: designationBanner?.colors.bg ?? (equippedBanner?.id === 'beta_tester' ? '#d1fae5' : '#ede9fe'),
+                        color: designationBanner?.colors.text ?? (equippedBanner?.id === 'beta_tester' ? '#065f46' : '#4c1d95'),
+                        borderColor: designationBanner?.colors.border ?? (equippedBanner?.id === 'beta_tester' ? '#6ee7b7' : '#c4b5fd'),
+                      }}
+                    >
+                      {bannerLabel}
+                    </span>
+                  )}
                   {isPremium && (
                     <span
                       title={isBetaTester ? 'Beta Tester' : undefined}

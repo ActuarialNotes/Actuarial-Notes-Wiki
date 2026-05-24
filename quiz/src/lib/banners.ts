@@ -70,28 +70,28 @@ export const DESIGNATION_BANNERS: DesignationBanner[] = [
     label: 'ACAS',
     fullName: 'Associate of the Casualty Actuarial Society',
     requirements: ACAS_REQS,
-    colors: { bg: '#EFF6FF', text: '#1E40AF', border: '#BFDBFE' },
+    colors: { bg: '#dde8f5', text: '#1a3668', border: '#b0c4e0' },
   },
   {
     id: 'asa',
     label: 'ASA',
     fullName: 'Associate of the Society of Actuaries',
     requirements: ASA_REQS,
-    colors: { bg: '#F0FDF4', text: '#166534', border: '#BBF7D0' },
+    colors: { bg: '#ddeee4', text: '#1a4a2a', border: '#a8cdb5' },
   },
   {
     id: 'fcas',
     label: 'FCAS',
     fullName: 'Fellow of the Casualty Actuarial Society',
     requirements: [...ACAS_REQS, 'CAS-7', 'CAS-8', 'CAS-9'],
-    colors: { bg: '#FFFBEB', text: '#92400E', border: '#FDE68A' },
+    colors: { bg: '#f3e8d0', text: '#6b3a00', border: '#d4b078' },
   },
   {
     id: 'fsa',
     label: 'FSA',
     fullName: 'Fellow of the Society of Actuaries',
     requirements: [...ASA_REQS, 'FSA-DMAC', 'FSA-FAC'],
-    colors: { bg: '#FFF7ED', text: '#9A3412', border: '#FED7AA' },
+    colors: { bg: '#f3e0d8', text: '#6b1a00', border: '#d4907a' },
   },
 ]
 

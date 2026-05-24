@@ -64,9 +64,6 @@ function QuestionItem({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center flex-wrap gap-2 min-w-0">
-            <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded border shrink-0">
-              {question.id}
-            </span>
             <span className="text-xs px-2 py-0.5 rounded-full border bg-background shrink-0">
               {question.topic}
             </span>
@@ -80,7 +77,7 @@ function QuestionItem({
               <LatexText>{question.stem}</LatexText>
             ) : (
               <LatexText>
-                {question.stem.slice(0, 160) + (question.stem.length > 160 ? '…' : '')}
+                {(() => { const w = question.stem.trim().split(/\s+/); return w.length <= 6 ? question.stem : w.slice(0, 6).join(' ') + '…' })()}
               </LatexText>
             )}
           </div>
@@ -140,11 +137,19 @@ interface ConceptQuestionsModalProps {
   onClose: () => void
 }
 
+const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
+  { value: '', label: 'All' },
+  { value: 'easy', label: 'Easy' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'hard', label: 'Hard' },
+]
+
 export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestionsModalProps) {
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [difficultyFilter, setDifficultyFilter] = useState<Difficulty | ''>('')
 
   useEffect(() => {
     let cancelled = false
@@ -180,14 +185,23 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
 
   const navigate = useNavigate()
 
-  const allSelected = questions.length > 0 && selectedIds.size === questions.length
-  const someSelected = selectedIds.size > 0 && !allSelected
+  const visibleQuestions = useMemo(
+    () => difficultyFilter ? questions.filter(q => q.difficulty === difficultyFilter) : questions,
+    [questions, difficultyFilter],
+  )
+
+  const allSelected = visibleQuestions.length > 0 && visibleQuestions.every(q => selectedIds.has(q.id))
+  const someSelected = visibleQuestions.some(q => selectedIds.has(q.id)) && !allSelected
 
   const toggleSelectAll = () => {
     if (allSelected || someSelected) {
-      setSelectedIds(new Set())
+      setSelectedIds(prev => {
+        const next = new Set(prev)
+        visibleQuestions.forEach(q => next.delete(q.id))
+        return next
+      })
     } else {
-      setSelectedIds(new Set(questions.map(q => q.id)))
+      setSelectedIds(prev => new Set([...prev, ...visibleQuestions.map(q => q.id)]))
     }
   }
 
@@ -258,6 +272,24 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
           )}
           {!loading && questions.length > 0 && (
             <>
+              {/* Difficulty filter */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {DIFFICULTIES.map(d => (
+                  <button
+                    key={d.value}
+                    type="button"
+                    onClick={() => setDifficultyFilter(d.value)}
+                    className={`px-3 py-1 rounded-full border text-xs transition-colors ${
+                      difficultyFilter === d.value
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-input hover:bg-accent'
+                    }`}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
+
               {/* Toolbar: select-all + count + start quiz */}
               <div className="flex items-center gap-3 py-1">
                 <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -283,7 +315,7 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
                     )}
                   </div>
                   <span className="text-xs text-muted-foreground">
-                    {selectedIds.size} / {questions.length} selected
+                    {visibleQuestions.filter(q => selectedIds.has(q.id)).length} / {visibleQuestions.length} selected
                   </span>
                 </label>
 
@@ -300,7 +332,12 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
                 </button>
               </div>
 
-              {questions.map(q => (
+              {visibleQuestions.length === 0 && (
+                <div className="text-center py-6 text-muted-foreground text-sm">
+                  No {difficultyFilter} questions for this concept.
+                </div>
+              )}
+              {visibleQuestions.map(q => (
                 <QuestionItem
                   key={q.id}
                   question={q}

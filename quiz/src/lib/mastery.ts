@@ -90,6 +90,7 @@ export function applyAnswer(
   const decayed = decayIfStale(prev, at)
 
   const atIso = at.toISOString()
+  const todayDate = atIso.slice(0, 10)
   const next: ConceptMasteryRecord = {
     ...decayed,
     last_attempted_at: atIso,
@@ -102,7 +103,6 @@ export function applyAnswer(
     // new/forgotten→level1 is always allowed because last_correct_at is null
     // or stale, never today.
     const prevCorrectDate = decayed.last_correct_at?.slice(0, 10)
-    const todayDate = at.toISOString().slice(0, 10)
     const alreadyAdvancedToday = prevCorrectDate === todayDate
 
     next.correct_count = decayed.correct_count + 1
@@ -112,7 +112,16 @@ export function applyAnswer(
     next.state = nextStateOnCorrect(decayed.state, next.correct_count, next.hard_correct_count, alreadyAdvancedToday)
   } else {
     next.incorrect_streak = decayed.incorrect_streak + 1
-    if (next.incorrect_streak >= FORGET_FAIL_STREAK && decayed.state !== 'new') {
+    // Only forget a concept that was learned on a previous day. If last_correct_at
+    // is today the level came from the current session — a concept that was 'new'
+    // before this quiz cannot skip straight to 'forgotten' just because the user
+    // answered correctly once and then failed the streak threshold.
+    const lastCorrectDate = decayed.last_correct_at?.slice(0, 10)
+    if (
+      next.incorrect_streak >= FORGET_FAIL_STREAK &&
+      decayed.state !== 'new' &&
+      lastCorrectDate !== todayDate
+    ) {
       next.state = 'forgotten'
     }
   }

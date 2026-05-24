@@ -412,33 +412,6 @@ export default function Sidebar() {
             collapsed={collapsed}
             onNavigate={closeMobile}
           />
-          {user && (
-            <NavLink
-              to="/store"
-              title={collapsed ? `Store — ${gemBalance} gems` : undefined}
-              onClick={closeMobile}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors border-l-2 ${
-                  isActive
-                    ? 'bg-accent text-foreground border-l-primary font-medium'
-                    : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-accent/60'
-                }`
-              }
-            >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-                <ShoppingBag className="h-4 w-4" />
-              </span>
-              <span className={`truncate flex-1 ${collapsed ? 'lg:hidden' : ''}`}>Store</span>
-              <span
-                key={gemAnimKey}
-                className={`inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 ${collapsed ? 'lg:hidden' : ''} ${gemAnimKey > 0 ? 'gem-celebrate' : ''}`}
-                aria-label={`${gemBalance} gems`}
-              >
-                <Gem className="h-3 w-3" />
-                {gemBalance}
-              </span>
-            </NavLink>
-          )}
         </nav>
 
         <div className="border-t px-2 py-3 space-y-1">
@@ -463,11 +436,19 @@ export default function Sidebar() {
                 <div className="absolute bottom-full left-0 right-0 mb-1 rounded-md border bg-popover shadow-md py-1 z-50">
                   <button
                     type="button"
-                    onClick={() => { navigate('/settings'); setProfileOpen(false); closeMobile() }}
+                    onClick={() => { navigate('/store'); setProfileOpen(false); closeMobile() }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                   >
-                    <Settings2 className="h-4 w-4 shrink-0" />
-                    <span>Settings</span>
+                    <ShoppingBag className="h-4 w-4 shrink-0" />
+                    <span className="flex-1">Store</span>
+                    <span
+                      key={gemAnimKey}
+                      className={`inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 ${gemAnimKey > 0 ? 'gem-celebrate' : ''}`}
+                      aria-label={`${gemBalance} gems`}
+                    >
+                      <Gem className="h-3 w-3" />
+                      {gemBalance}
+                    </span>
                   </button>
                   <button
                     type="button"
@@ -476,6 +457,14 @@ export default function Sidebar() {
                   >
                     <GraduationCap className="h-4 w-4 shrink-0" />
                     <span>Exams</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/settings'); setProfileOpen(false); closeMobile() }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                  >
+                    <Settings2 className="h-4 w-4 shrink-0" />
+                    <span>Settings</span>
                   </button>
                   {signOutConfirm ? (
                     <div className="px-3 py-2 space-y-2">

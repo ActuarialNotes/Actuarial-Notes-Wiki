@@ -81,8 +81,38 @@ function wikiContentPlugin(): Plugin {
   }
 }
 
+async function collectQuestions(): Promise<string[]> {
+  const rawFiles: string[] = []
+  const questionsDir = path.join(REPO_ROOT, 'questions')
+  const examDirs = await readdir(questionsDir).catch(() => [] as string[])
+  for (const examDir of examDirs) {
+    const examPath = path.join(questionsDir, examDir)
+    const files = await readdir(examPath).catch(() => [] as string[])
+    for (const name of files) {
+      if (!name.endsWith('.md')) continue
+      const text = await readFile(path.join(examPath, name), 'utf-8').catch(() => null)
+      if (text != null) rawFiles.push(text)
+    }
+  }
+  return rawFiles
+}
+
+function questionsContentPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:questions-content'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'questions-content',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      const questions = await collectQuestions()
+      return `export default ${JSON.stringify(questions)}`
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin()],
+  plugins: [react(), wikiContentPlugin(), questionsContentPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

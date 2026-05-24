@@ -5,3 +5,8 @@ declare module 'virtual:wiki-content' {
   const content: { files: Record<string, string>; index: WikiIndexItem[] }
   export default content
 }
+
+declare module 'virtual:questions-content' {
+  const questions: string[]
+  export default questions
+}

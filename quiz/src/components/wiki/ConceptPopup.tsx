@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, Play, X } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, Play, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -7,6 +7,7 @@ import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
+import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
@@ -17,6 +18,7 @@ export function ConceptPopup() {
   const { height, beginDrag } = useSplitHeight()
   const [maximized, setMaximized] = useState(false)
   const [showQuestions, setShowQuestions] = useState(false)
+  const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
   const playMenuRef = useRef<HTMLDivElement>(null)
@@ -188,6 +190,14 @@ export function ConceptPopup() {
                 </span>
                 {hasCard(current.name) ? 'Added to Flashcards' : 'Add to Flashcards'}
               </button>
+              <button
+                type="button"
+                onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+              >
+                <TrendingUp className="h-3.5 w-3.5 shrink-0" />
+                Learning Progress
+              </button>
             </div>
           )}
           </div>
@@ -270,6 +280,12 @@ export function ConceptPopup() {
       <ConceptQuestionsModal
         conceptName={current.name}
         onClose={() => setShowQuestions(false)}
+      />
+    )}
+    {showLearningProgress && (
+      <LearningProgressModal
+        conceptName={current.name}
+        onClose={() => setShowLearningProgress(false)}
       />
     )}
     </>

@@ -4,13 +4,31 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 // An ordered list of concept/resource refs plus the current index — drives
 // the popup's prev/next footer and keyboard arrows.
 
+type DashboardFilter = 'study-plan' | 'entire-syllabus'
+
+interface DashboardContext {
+  studyPlanList: WikiEntryRef[] | null
+  fullList: WikiEntryRef[]
+  filter: DashboardFilter
+}
+
 interface ConceptPopupState {
   open: boolean
   list: WikiEntryRef[]
   index: number
   // What triggered the popup — used by "This Page" search to compute scope.
   sourcePath: string | null
+  // Set when opened from the dashboard to support the Viewing filter bar.
+  dashboardContext: DashboardContext | null
   openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null) => void
+  // Opens the popup from the dashboard with optional study-plan/entire-syllabus filter.
+  openDashboard: (
+    fullList: WikiEntryRef[],
+    studyPlanList: WikiEntryRef[] | null,
+    filter: DashboardFilter,
+    initialIndex: number,
+  ) => void
+  setDashboardFilter: (filter: DashboardFilter) => void
   navigate: (delta: number) => void
   jumpTo: (ref: WikiEntryRef) => void
   close: () => void
@@ -24,8 +42,32 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   list: [],
   index: 0,
   sourcePath: null,
+  dashboardContext: null,
   openAt: (list, index, sourcePath = null) =>
     set({ open: true, list, index: Math.max(0, Math.min(index, list.length - 1)), sourcePath }),
+  openDashboard: (fullList, studyPlanList, filter, initialIndex) => {
+    const list = filter === 'study-plan' && studyPlanList ? studyPlanList : fullList
+    set({
+      open: true,
+      list,
+      index: Math.max(0, Math.min(initialIndex, list.length - 1)),
+      sourcePath: null,
+      dashboardContext: { studyPlanList, fullList, filter },
+    })
+  },
+  setDashboardFilter: filter => {
+    const { list, index, dashboardContext } = get()
+    if (!dashboardContext) return
+    const currentName = list[index]?.name.toLowerCase()
+    const newList =
+      filter === 'study-plan' && dashboardContext.studyPlanList
+        ? dashboardContext.studyPlanList
+        : dashboardContext.fullList
+    const newIndex = currentName
+      ? Math.max(0, newList.findIndex(r => r.name.toLowerCase() === currentName))
+      : 0
+    set({ list: newList, index: newIndex, dashboardContext: { ...dashboardContext, filter } })
+  },
   navigate: delta => {
     const { list, index } = get()
     if (!list.length) return
@@ -46,11 +88,11 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       set({ list: next, index: next.length - 1 })
     }
   },
-  close: () => set({ open: false, list: [], index: 0, sourcePath: null }),
+  close: () => set({ open: false, list: [], index: 0, sourcePath: null, dashboardContext: null }),
   closeOnNavigation: pathname => {
     const { open, sourcePath } = get()
     if (open && sourcePath && sourcePath !== pathname) {
-      set({ open: false, list: [], index: 0, sourcePath: null })
+      set({ open: false, list: [], index: 0, sourcePath: null, dashboardContext: null })
     }
   },
 }))

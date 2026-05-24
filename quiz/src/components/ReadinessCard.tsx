@@ -4,7 +4,7 @@ import { AlertTriangle, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDow
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { ConceptDetailModal } from '@/components/ConceptDetailModal'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
@@ -16,7 +16,7 @@ import { aggregateForTopic, decayIfStale } from '@/lib/mastery'
 import { computeReadiness, type SectionReadiness } from '@/lib/readiness'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import { hrefToEntryRef, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'
@@ -298,13 +298,13 @@ export function ReadinessCard({
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const [conceptModalOpen, setConceptModalOpen] = useState(false)
-  const [selectedConceptIdx, setSelectedConceptIdx] = useState<number | null>(null)
+  const openDashboard = useConceptPopup(s => s.openDashboard)
+  const toRefs = (arr: { name: string }[]): WikiEntryRef[] =>
+    arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const [quizLoading, setQuizLoading] = useState(false)
   const [hoveredSection, setHoveredSection] = useState<number | null>(null)
   const [pinnedSection, setPinnedSection] = useState<number | null>(null)
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
-  const [trackerConcept, setTrackerConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
   const [showConfig, setShowConfig] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
@@ -360,7 +360,16 @@ export function ReadinessCard({
   }
 
   useEffect(() => {
-    if (openConceptsTrigger) setConceptModalOpen(true)
+    if (openConceptsTrigger && allConcepts.length > 0) {
+      const hasStudyPlan = studyPlanConceptsForModal.length > 0
+      openDashboard(
+        toRefs(allConcepts),
+        hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
+        hasStudyPlan ? 'study-plan' : 'entire-syllabus',
+        0,
+      )
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openConceptsTrigger])
 
   useEffect(() => {
@@ -628,7 +637,15 @@ export function ReadinessCard({
         <div className="grid grid-cols-2 gap-2">
           <Button
             variant="outline"
-            onClick={() => setConceptModalOpen(true)}
+            onClick={() => {
+              const hasStudyPlan = studyPlanConceptsForModal.length > 0
+              openDashboard(
+                toRefs(allConcepts),
+                hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
+                hasStudyPlan ? 'study-plan' : 'entire-syllabus',
+                0,
+              )
+            }}
             disabled={allConcepts.length === 0}
             className="gap-1.5 text-sm"
           >
@@ -669,7 +686,7 @@ export function ReadinessCard({
                       <button
                         key={name}
                         type="button"
-                        onClick={() => setSelectedConceptIdx(idx)}
+                        onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', idx)}
                         className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
                       >
                         {isCompleted
@@ -770,7 +787,7 @@ export function ReadinessCard({
                 masteryRecords={masteryRecords}
                 studyPlan={plan}
                 allConceptsForNav={allConcepts}
-                onConceptSelect={setTrackerConcept}
+                onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
                 openTopics={openTopics}
                 onToggle={toggleTopic}
               />
@@ -783,7 +800,15 @@ export function ReadinessCard({
           <div className="grid grid-cols-2 gap-2">
             <Button
               variant="outline"
-              onClick={() => setConceptModalOpen(true)}
+              onClick={() => {
+                const hasStudyPlan = studyPlanConceptsForModal.length > 0
+                openDashboard(
+                  toRefs(allConcepts),
+                  hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
+                  hasStudyPlan ? 'study-plan' : 'entire-syllabus',
+                  0,
+                )
+              }}
               disabled={allConcepts.length === 0}
               className="gap-1.5 text-sm"
             >
@@ -955,47 +980,6 @@ export function ReadinessCard({
           </div>
         </div>
         </>
-      )}
-
-      {/* Modals */}
-      {conceptModalOpen && allConcepts.length > 0 && (
-        <ConceptDetailModal
-          conceptName={studyPlanConceptsForModal.length > 0 ? studyPlanConceptsForModal[0].name : allConcepts[0].name}
-          masteryState={studyPlanConceptsForModal.length > 0 ? studyPlanConceptsForModal[0].state : allConcepts[0].state}
-          onClose={() => setConceptModalOpen(false)}
-          syllabus={syllabus}
-          allConcepts={allConcepts}
-          studyPlanConcepts={studyPlanConceptsForModal.length > 0 ? studyPlanConceptsForModal : undefined}
-          initialConceptIndex={0}
-          initialFilter={studyPlanConceptsForModal.length > 0 ? 'study-plan' : 'entire-syllabus'}
-          quizFrom="dashboard"
-        />
-      )}
-
-      {selectedConceptIdx !== null && studyPlanConceptsForModal.length > 0 && (
-        <ConceptDetailModal
-          conceptName={studyPlanConceptsForModal[selectedConceptIdx].name}
-          masteryState={studyPlanConceptsForModal[selectedConceptIdx].state}
-          onClose={() => setSelectedConceptIdx(null)}
-          syllabus={syllabus}
-          allConcepts={allConcepts}
-          studyPlanConcepts={studyPlanConceptsForModal}
-          initialConceptIndex={selectedConceptIdx}
-          initialFilter="study-plan"
-          quizFrom="dashboard"
-        />
-      )}
-
-      {trackerConcept && (
-        <ConceptDetailModal
-          conceptName={trackerConcept.name}
-          masteryState={trackerConcept.state}
-          onClose={() => setTrackerConcept(null)}
-          syllabus={syllabus}
-          allConcepts={allConcepts}
-          initialConceptIndex={trackerConcept.index}
-          quizFrom="dashboard"
-        />
       )}
 
       {showConfig && (

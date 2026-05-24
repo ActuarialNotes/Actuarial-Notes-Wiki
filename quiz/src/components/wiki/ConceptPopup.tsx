@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, Play, X } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, Play, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -9,7 +9,7 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 
 export function ConceptPopup() {
-  const { open, list, index, navigate, jumpTo, close } = useConceptPopup()
+  const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const { addCard, hasCard } = useFlashcards()
   const current: WikiEntryRef | undefined = list[index]
   const [content, setContent] = useState<string | null>(null)
@@ -18,7 +18,9 @@ export function ConceptPopup() {
   const [maximized, setMaximized] = useState(false)
   const [showQuestions, setShowQuestions] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
+  const [menuAlignRight, setMenuAlignRight] = useState(false)
   const playMenuRef = useRef<HTMLDivElement>(null)
+  const playBtnRef = useRef<HTMLButtonElement>(null)
 
   // Fetch markdown whenever the active ref changes.
   useEffect(() => {
@@ -101,6 +103,32 @@ export function ConceptPopup() {
       role="complementary"
       aria-label={`Concept: ${current.name}`}
     >
+      {/* Viewing filter — only shown when opened from the dashboard */}
+      {dashboardContext && (
+        <div className="flex items-center gap-2 px-3 py-1.5 border-b shrink-0">
+          <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
+          <div className="relative">
+            <select
+              value={dashboardContext.studyPlanList ? dashboardContext.filter : 'entire-syllabus'}
+              onChange={e => dashboardContext.studyPlanList && setDashboardFilter(e.target.value as 'study-plan' | 'entire-syllabus')}
+              disabled={!dashboardContext.studyPlanList}
+              className="appearance-none text-xs border rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-default disabled:opacity-80"
+            >
+              {dashboardContext.studyPlanList && (
+                <option value="study-plan">
+                  Study Plan — {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
+                </option>
+              )}
+              <option value="entire-syllabus">Entire Syllabus</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+          </div>
+          <span className="text-xs text-muted-foreground ml-auto tabular-nums shrink-0">
+            {list.length} concepts
+          </span>
+        </div>
+      )}
+
       {/* Drag handle — hidden on mobile where the pane goes full-width */}
       <div
         role="separator"
@@ -125,8 +153,15 @@ export function ConceptPopup() {
           {/* Play button + mini menu — immediately right of the concept name */}
           <div className="relative shrink-0" ref={playMenuRef}>
           <button
+            ref={playBtnRef}
             type="button"
-            onClick={() => setShowPlayMenu(v => !v)}
+            onClick={() => {
+              if (!showPlayMenu && playBtnRef.current) {
+                const rect = playBtnRef.current.getBoundingClientRect()
+                setMenuAlignRight(window.innerWidth - rect.right < 200)
+              }
+              setShowPlayMenu(v => !v)
+            }}
             className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
             title="Start Quiz or Add to Flashcards"
             aria-label="Start Quiz or Add to Flashcards"
@@ -134,7 +169,7 @@ export function ConceptPopup() {
             <Play className="h-4 w-4" />
           </button>
           {showPlayMenu && (
-            <div className="absolute right-0 top-full mt-1 w-48 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1">
+            <div className={`absolute top-full mt-1 w-48 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
               <button
                 type="button"
                 onClick={() => { setShowQuestions(true); setShowPlayMenu(false) }}

@@ -95,12 +95,34 @@
 /* Mastery level-up badge: bounces in when a concept advances state.
    Stagger delay is applied via inline style on each badge. */
 @keyframes mastery-level-up {
-  0%   { opacity: 0; transform: scale(0.5) translateY(8px); }
-  65%  { opacity: 1; transform: scale(1.12) translateY(-2px); }
+  0%   { opacity: 0; transform: scale(0.5) translateY(10px); }
+  60%  { opacity: 1; transform: scale(1.08) translateY(-3px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 .mastery-level-up {
-  animation: mastery-level-up 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: mastery-level-up 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Level 3 badge shimmer: a subtle highlight sweep after the bounce-in. */
+@keyframes level3-shimmer {
+  0%, 70%    { box-shadow: none; }
+  80%  { box-shadow: 0 0 0 3px rgb(251 191 36 / 0.5), 0 0 12px 2px rgb(251 191 36 / 0.35); }
+  100% { box-shadow: 0 0 0 2px rgb(251 191 36 / 0.25); }
+}
+.level3-shimmer {
+  animation: mastery-level-up 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both,
+             level3-shimmer 900ms 400ms ease-out both;
+}
+
+/* Study plan checklist: check icon bounces in when a concept is completed. */
+@keyframes study-plan-check-in {
+  0%   { opacity: 0; transform: scale(0.4) rotate(-15deg); }
+  60%  { opacity: 1; transform: scale(1.2) rotate(5deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+.study-plan-check-in {
+  display: inline-flex;
+  animation: study-plan-check-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 /* Gem balance: pops and sparkles when the balance increases. Applied by

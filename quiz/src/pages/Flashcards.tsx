@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 import { BookOpen, ChevronLeft, ChevronRight, Loader2, Trash2, X } from 'lucide-react'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -7,17 +11,33 @@ import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
-import { LatexText } from '@/components/LatexText'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 
+// Extracts the first bullet point, including any indented continuation lines.
 function extractFirstBullet(markdown: string): string {
-  const match = markdown.match(/^[-*]\s+(.+)/m)
-  if (match) return match[1]
-  return (
-    markdown.split('\n').find(l => {
-      const t = l.trim()
-      return t && !t.startsWith('#')
-    })?.trim() ?? ''
-  )
+  const lines = markdown.split('\n')
+  let result = ''
+  let inBullet = false
+  for (const line of lines) {
+    if (!inBullet) {
+      const match = line.match(/^[-*]\s+(.+)/)
+      if (match) {
+        result = match[1]
+        inBullet = true
+      }
+    } else {
+      // Continuation lines are indented (2+ spaces or tab) and non-empty
+      if (/^[ \t]{2,}\S/.test(line)) {
+        result += ' ' + line.trim()
+      } else {
+        break
+      }
+    }
+  }
+  if (!result) {
+    result = lines.find(l => { const t = l.trim(); return t && !t.startsWith('#') })?.trim() ?? ''
+  }
+  return result
 }
 
 function FlashcardStudy({
@@ -101,9 +121,14 @@ function FlashcardStudy({
               <p className="text-sm text-destructive">Couldn't load content.</p>
             )}
             {definition && (
-              <p className="text-base leading-relaxed">
-                <LatexText>{definition}</LatexText>
-              </p>
+              <div className="text-base leading-relaxed prose dark:prose-invert prose-sm max-w-none">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm, remarkMath]}
+                  rehypePlugins={[rehypeKatex]}
+                >
+                  {definition}
+                </ReactMarkdown>
+              </div>
             )}
 
             {!expanded && markdown && (
@@ -151,10 +176,16 @@ function FlashcardStudy({
 export default function Flashcards() {
   const { cards, removeCard } = useFlashcards()
   const openAt = useConceptPopup(s => s.openAt)
+  const popupOpen = useConceptPopup(s => s.open)
   const [studying, setStudying] = useState(false)
 
   if (studying && cards.length > 0) {
-    return <FlashcardStudy cards={cards} onDone={() => setStudying(false)} />
+    return (
+      <>
+        <FlashcardStudy cards={cards} onDone={() => setStudying(false)} />
+        <ConceptPopup />
+      </>
+    )
   }
 
   function openCard(index: number) {
@@ -162,67 +193,73 @@ export default function Flashcards() {
   }
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 py-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Flashcards</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            {cards.length === 0
-              ? 'No flashcards yet.'
-              : `${cards.length} concept${cards.length === 1 ? '' : 's'} saved`}
-          </p>
-        </div>
-        <button
-          type="button"
-          disabled={cards.length === 0}
-          onClick={() => setStudying(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        >
-          Study
-        </button>
-      </div>
-
-      {cards.length === 0 ? (
-        <div className="rounded-xl border bg-card text-card-foreground p-12 text-center space-y-3">
-          <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50" />
-          <p className="text-sm text-muted-foreground">
-            Open a concept in the Study Guide, click the{' '}
-            <span className="font-medium">▷ Play</span> button, and choose{' '}
-            <span className="font-medium">Add to Flashcards</span>.
-          </p>
-          <Link
-            to="/wiki"
-            className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+    <>
+      <div
+        className="container max-w-3xl mx-auto px-4 py-8 space-y-6"
+        style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold">Flashcards</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              {cards.length === 0
+                ? 'No flashcards yet.'
+                : `${cards.length} concept${cards.length === 1 ? '' : 's'} saved`}
+            </p>
+          </div>
+          <button
+            type="button"
+            disabled={cards.length === 0}
+            onClick={() => setStudying(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
-            <BookOpen className="h-4 w-4" /> Go to Study Guides
-          </Link>
+            Study
+          </button>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {cards.map((card, i) => (
-            <div
-              key={card.name}
-              className="group relative rounded-xl border bg-card text-card-foreground p-5 flex items-center justify-between gap-3 hover:shadow-md transition-shadow cursor-pointer"
-              onClick={() => openCard(i)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(i) } }}
+
+        {cards.length === 0 ? (
+          <div className="rounded-xl border bg-card text-card-foreground p-12 text-center space-y-3">
+            <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50" />
+            <p className="text-sm text-muted-foreground">
+              Open a concept in the Study Guide, click the{' '}
+              <span className="font-medium">▷ Play</span> button, and choose{' '}
+              <span className="font-medium">Add to Flashcards</span>.
+            </p>
+            <Link
+              to="/wiki"
+              className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
             >
-              <span className="font-medium text-sm leading-snug flex-1 min-w-0 truncate">
-                {card.name}
-              </span>
-              <button
-                type="button"
-                onClick={e => { e.stopPropagation(); removeCard(card.name) }}
-                aria-label={`Remove ${card.name}`}
-                className="shrink-0 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+              <BookOpen className="h-4 w-4" /> Go to Study Guides
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {cards.map((card, i) => (
+              <div
+                key={card.name}
+                className="group relative rounded-xl border bg-card text-card-foreground p-5 flex items-center justify-between gap-3 hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => openCard(i)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(i) } }}
               >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+                <span className="font-medium text-sm leading-snug flex-1 min-w-0 truncate">
+                  {card.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={e => { e.stopPropagation(); removeCard(card.name) }}
+                  aria-label={`Remove ${card.name}`}
+                  className="shrink-0 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <ConceptPopup />
+    </>
   )
 }

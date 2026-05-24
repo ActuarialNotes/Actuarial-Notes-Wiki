@@ -19,7 +19,7 @@ export function useConceptMastery(): UseConceptMasteryResult {
   const { user } = useAuth()
   const userId = user?.id
   const [records, setRecords] = useState<ConceptMasteryRecord[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [version, setVersion] = useState(0)
 
   const refresh = useCallback(() => setVersion(v => v + 1), [])
@@ -27,6 +27,7 @@ export function useConceptMastery(): UseConceptMasteryResult {
   useEffect(() => {
     if (!userId) {
       setRecords([])
+      setLoading(false)
       return
     }
     let cancelled = false

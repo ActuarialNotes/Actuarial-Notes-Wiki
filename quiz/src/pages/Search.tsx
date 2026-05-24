@@ -231,7 +231,7 @@ export default function Search() {
   const { user } = useAuth()
   const { syllabi } = useWikiSyllabus()
   const { isPremium } = useSubscription()
-  const { records: masteryRecords } = useConceptMastery()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
 
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
@@ -397,7 +397,7 @@ export default function Search() {
     return result
   }, [syllabusForTopic, orderedSubtopics])
 
-  const { plan } = useStudyPlan(syllabusForTopic, masteryRecords, null)
+  const { plan } = useStudyPlan(syllabusForTopic, masteryRecords, null, masteryLoading)
 
   const todaySubtopics = useMemo(() => {
     if (!plan?.todaysConcepts?.length) return new Set<string>()

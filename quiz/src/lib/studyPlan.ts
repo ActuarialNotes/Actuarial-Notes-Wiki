@@ -251,7 +251,9 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     if (config.targetStrengthLevel === 'strong_key') {
       if (b.numericWeight !== a.numericWeight) return b.numericWeight - a.numericWeight
     }
-    return (stateOrder[getState(a.name)] ?? 3) - (stateOrder[getState(b.name)] ?? 3)
+    const stateDiff = (stateOrder[getState(a.name)] ?? 3) - (stateOrder[getState(b.name)] ?? 3)
+    if (stateDiff !== 0) return stateDiff
+    return a.name.localeCompare(b.name)
   })
 
   // ── Spacing-aware scheduling ──────────────────────────────────────────────

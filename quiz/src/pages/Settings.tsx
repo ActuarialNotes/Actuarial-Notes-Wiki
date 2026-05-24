@@ -24,6 +24,7 @@ import {
   serializeAvatar,
 } from '@/components/AvatarDisplay'
 import { COSMETICS } from '@/lib/cosmetics'
+import { FREE_ANIMALS } from '@/lib/characters'
 import { supabase } from '@/lib/supabase'
 
 // ---- Exam status cycle & icons ----
@@ -459,7 +460,9 @@ export default function Settings() {
                         <div className="space-y-2">
                           {/* Default animal swatches */}
                           <div className="flex flex-wrap gap-2">
-                            {ANIMAL_TYPES.map(animal => {
+                            {ANIMAL_TYPES.filter(animal =>
+                              FREE_ANIMALS.has(animal) || ownedCosmetics.has(`character:${animal}`)
+                            ).map(animal => {
                               const isSelected = currentAnimal === animal && !currentVariant
                               return (
                                 <button

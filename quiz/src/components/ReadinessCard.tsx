@@ -465,7 +465,7 @@ export function ReadinessCard({
       : (plan?.todaysConcepts ?? [])
 
     if (!plan || displayConcepts.length === 0) {
-      navigate(`/quiz?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz&from=dashboard`)
+      navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz`)
       return
     }
 

@@ -11,70 +11,17 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
-import { aggregateForTopic } from '@/lib/mastery'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions } from '@/lib/parser'
-import { getExamColor } from '@/lib/examColors'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import type { QuizMode } from '@/lib/parser'
-import type { ConceptMasteryRecord } from '@/lib/mastery'
-import type { Question } from '@/lib/parser'
 
 const EXAMS = [
   { value: 'Probability', label: 'Exam P — Probability' },
   { value: 'Financial Mathematics', label: 'Exam FM — Financial Mathematics' },
 ]
 
-function computeAdaptiveSubtopics(
-  subtopics: string[],
-  allQuestions: Question[],
-  topic: string,
-  masteryRecords: ConceptMasteryRecord[],
-): string[] {
-  if (!topic || masteryRecords.length === 0) return []
-  const now = new Date()
-
-  const slugsBySubtopic = new Map<string, string[]>()
-  for (const q of allQuestions) {
-    if (q.exam !== topic) continue
-    const slugs: string[] = []
-    for (const link of q.wiki_link) {
-      const ref = hrefToEntryRef(link)
-      if (ref?.kind === 'concept' && ref.name) {
-        slugs.push(ref.name)
-      } else {
-        const last = link.split('/').filter(Boolean).pop()
-        if (last) slugs.push(last.replace(/-/g, ' '))
-      }
-    }
-    slugsBySubtopic.set(q.topic, [...(slugsBySubtopic.get(q.topic) ?? []), ...slugs])
-  }
-
-  interface Scored { subtopic: string; priority: number }
-  const scored: Scored[] = subtopics.map(st => {
-    const slugs = slugsBySubtopic.get(st) ?? []
-    const agg = aggregateForTopic(masteryRecords, slugs, now)
-    let priority: number
-    if (agg.forgotten > 0) priority = 0
-    else if (agg.learning > 0) priority = 1
-    else if (agg.newCount > 0) priority = 2
-    else priority = 3
-    return { subtopic: st, priority }
-  }).sort((a, b) => a.priority - b.priority)
-
-  const selected: string[] = []
-  let newIntroduced = 0
-  for (const { subtopic, priority } of scored) {
-    if (priority <= 1) {
-      selected.push(subtopic)
-    } else if (priority === 2 && newIntroduced < 2) {
-      selected.push(subtopic)
-      newIntroduced++
-    }
-  }
-  return selected
-}
 
 // Question counts that mirror each real exam
 const MOCK_EXAM_QUESTIONS: Record<string, number> = {
@@ -126,12 +73,22 @@ export default function Landing() {
     }
   }, [examProgress.P, examProgress.FM])  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reset subtopic selection and accordion state when exam topic or mode changes
+  // Reset state and restore saved topic selections when exam topic or mode changes
   useEffect(() => {
-    setSelectedSubtopics([])
     setIsAdaptive(false)
     setUseTodaysPlan(false)
     setOpenTopicGroups(new Set())
+    if (topic && mode === 'quiz') {
+      try {
+        const saved = localStorage.getItem(`actuarial_quiz_topics_v1_${topic}`)
+        const parsed = saved ? JSON.parse(saved) : null
+        setSelectedSubtopics(Array.isArray(parsed) ? parsed : [])
+      } catch {
+        setSelectedSubtopics([])
+      }
+    } else {
+      setSelectedSubtopics([])
+    }
   }, [topic, mode])
 
   // --- Syllabus-derived data ---
@@ -258,7 +215,7 @@ export default function Landing() {
     }).length
   }, [plan, allQuestions, topic])
 
-  // Auto-select: activate study plan for premium users with today's concepts; fall back to mastery-based
+  // Auto-activate today's study plan for premium users when it has concepts
   useEffect(() => {
     if (!user || masteryLoading || subtopicsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
 
@@ -266,17 +223,17 @@ export default function Landing() {
       setUseTodaysPlan(true)
       setSelectedSubtopics([])
       setIsAdaptive(false)
-    } else {
-      setUseTodaysPlan(false)
-      const sts = subtopicsByTopic[topic] ?? []
-      const adaptive = computeAdaptiveSubtopics(sts, allQuestions, topic, masteryRecords)
-      if (adaptive.length > 0) {
-        setSelectedSubtopics(adaptive)
-        setIsAdaptive(true)
-      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic, mode, user?.id, masteryLoading, subtopicsLoading, planLoading, subLoading, isPremium, planConceptCount])
+
+  // Persist manual topic selections to localStorage
+  useEffect(() => {
+    if (!topic || mode !== 'quiz' || isAdaptive || useTodaysPlan) return
+    try {
+      localStorage.setItem(`actuarial_quiz_topics_v1_${topic}`, JSON.stringify(selectedSubtopics))
+    } catch { /* ignore */ }
+  }, [selectedSubtopics, topic, mode, isAdaptive, useTodaysPlan])
 
   // Auto-expand sections that contain selected subtopics
   useEffect(() => {
@@ -375,7 +332,6 @@ export default function Landing() {
 
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
-  const examColor = getExamColor(topic)
   const hasTopic = topic !== ''
 
   const topicsLabel = useTodaysPlan && planConceptCount > 0
@@ -467,7 +423,7 @@ export default function Landing() {
                 className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 <span aria-hidden="true">←</span>
-                <span className="font-medium" style={examColor ? { color: examColor } : undefined}>{examLabel}</span>
+                <span className="font-medium">{examLabel}</span>
                 <span>· change</span>
               </button>
 
@@ -478,26 +434,26 @@ export default function Landing() {
                   <button
                     type="button"
                     onClick={() => setMode('quiz')}
-                    className={`px-3 py-3 rounded-lg border text-left text-sm transition-colors ${
+                    className={`px-4 py-4 rounded-lg border text-left transition-colors ${
                       mode === 'quiz'
                         ? 'border-primary bg-primary/5 text-primary font-medium'
                         : 'border-input hover:bg-accent'
                     }`}
                   >
-                    <div className="font-medium">Quiz</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">Choose topics, count &amp; reveal</div>
+                    <div className="font-semibold text-base">Quiz</div>
+                    <div className="text-sm text-muted-foreground mt-0.5">Choose topics, count &amp; reveal</div>
                   </button>
                   <button
                     type="button"
                     onClick={() => setMode('mock-exam')}
-                    className={`px-3 py-3 rounded-lg border text-left text-sm transition-colors ${
+                    className={`px-4 py-4 rounded-lg border text-left transition-colors ${
                       mode === 'mock-exam'
                         ? 'border-primary bg-primary/5 text-primary font-medium'
                         : 'border-input hover:bg-accent'
                     }`}
                   >
-                    <div className="font-medium">Mock Exam</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">Mirrors real exam, answers at end</div>
+                    <div className="font-semibold text-base">Mock Exam</div>
+                    <div className="text-sm text-muted-foreground mt-0.5">Mirrors real exam, answers at end</div>
                   </button>
                 </div>
               </div>
@@ -566,10 +522,10 @@ export default function Landing() {
                               <button
                                 type="button"
                                 onClick={() => toggleTopicGroup(group.name)}
-                                className="flex items-center gap-2 w-full py-2.5 px-3 text-left hover:bg-muted/40 transition-colors"
+                                className="flex items-center gap-2 w-full py-3.5 px-4 text-left hover:bg-muted/40 transition-colors"
                                 aria-expanded={isOpen}
                               >
-                                <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
+                                <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
                                 <span className="text-sm font-semibold flex-1 min-w-0 truncate">
                                   {group.name}
                                   {group.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{group.weight}</span>}
@@ -578,7 +534,7 @@ export default function Landing() {
                                 <button
                                   type="button"
                                   onClick={e => selectAllInGroup(group, e)}
-                                  className={`shrink-0 ml-1 px-2 py-0.5 rounded border text-[11px] transition-colors ${
+                                  className={`shrink-0 ml-1 px-3 py-1.5 rounded border text-xs transition-colors ${
                                     allSelected
                                       ? 'bg-primary text-primary-foreground border-primary'
                                       : someSelected
@@ -590,7 +546,7 @@ export default function Landing() {
                                 </button>
                               </button>
                               {isOpen && (
-                                <div className="pb-2 px-3 pl-9 space-y-0.5 bg-muted/20">
+                                <div className="pb-2 px-4 pl-11 space-y-0.5 bg-muted/20">
                                   {group.subtopics.map(subtopic => {
                                     const isSelected = selectedSubtopics.includes(subtopic)
                                     const isToday = todaySubtopics.has(subtopic)
@@ -599,17 +555,17 @@ export default function Landing() {
                                         key={subtopic}
                                         type="button"
                                         onClick={() => toggleSubtopic(subtopic)}
-                                        className="flex items-center gap-2 w-full py-1 text-left text-xs rounded hover:bg-muted/40 transition-colors"
+                                        className="flex items-center gap-2.5 w-full py-2.5 text-left text-sm rounded hover:bg-muted/40 transition-colors"
                                       >
-                                        <div className={`h-3.5 w-3.5 shrink-0 rounded border flex items-center justify-center ${
+                                        <div className={`h-5 w-5 shrink-0 rounded border flex items-center justify-center ${
                                           isSelected ? 'bg-primary border-primary' : 'border-input bg-background'
                                         }`}>
-                                          {isSelected && <Check className="h-2 w-2 text-primary-foreground" />}
+                                          {isSelected && <Check className="h-3 w-3 text-primary-foreground" />}
                                         </div>
                                         <span className={`flex-1 truncate ${isSelected ? 'font-medium text-primary' : isToday ? 'text-primary/80' : ''}`}>
                                           {subtopic}
                                         </span>
-                                        {isToday && <span className="text-[10px] text-primary/60 shrink-0">today</span>}
+                                        {isToday && <span className="text-xs text-primary/60 shrink-0">today</span>}
                                       </button>
                                     )
                                   })}
@@ -651,7 +607,7 @@ export default function Landing() {
                           type="button"
                           onClick={() => setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n))}
                           disabled={effectiveAvailableCount === 0}
-                          className={`px-3 py-1 rounded-md border text-xs font-medium transition-colors ${
+                          className={`px-4 py-2.5 rounded-md border text-sm font-medium transition-colors ${
                             count === n && effectiveAvailableCount >= n
                               ? 'border-primary bg-primary text-primary-foreground'
                               : 'border-input hover:bg-accent text-muted-foreground'
@@ -670,7 +626,7 @@ export default function Landing() {
                       <button
                         type="button"
                         onClick={() => setReveal('during')}
-                        className={`px-3 py-2.5 rounded-lg border text-left text-sm transition-colors ${
+                        className={`px-4 py-4 rounded-lg border text-left text-sm transition-colors ${
                           reveal === 'during'
                             ? 'border-primary bg-primary/5 text-primary font-medium'
                             : 'border-input hover:bg-accent'
@@ -682,7 +638,7 @@ export default function Landing() {
                       <button
                         type="button"
                         onClick={() => setReveal('end')}
-                        className={`px-3 py-2.5 rounded-lg border text-left text-sm transition-colors ${
+                        className={`px-4 py-4 rounded-lg border text-left text-sm transition-colors ${
                           reveal === 'end'
                             ? 'border-primary bg-primary/5 text-primary font-medium'
                             : 'border-input hover:bg-accent'

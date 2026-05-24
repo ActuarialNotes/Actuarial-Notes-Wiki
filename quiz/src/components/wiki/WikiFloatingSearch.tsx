@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 
 type Scope = 'page' | 'all'
 
@@ -19,7 +20,9 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const location = useLocation()
+  const navigate = useNavigate()
   const { openAt } = useConceptPopup()
+  const { syllabi } = useWikiSyllabus()
 
   useEffect(() => {
     let cancelled = false
@@ -96,10 +99,27 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
       .filter(r => r.kind === 'concept')
       .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
     const idx = conceptList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
+
     if (idx >= 0 && conceptList.length > 0) {
+      // Concept is on the current exam page — open popup here.
       openAt(conceptList, idx, examSourcePath ?? undefined)
     } else {
-      openAt([ref], 0, undefined)
+      // Concept is not on the current page — navigate to its exam study guide.
+      const needle = ref.name.toLowerCase()
+      const examSyllabus = syllabi.find(s =>
+        s.topics.some(t => t.concepts.some(c => {
+          if (c.name.toLowerCase() === needle) return true
+          const targetBase = c.target.split('/').pop()?.replace(/\.md$/i, '').toLowerCase()
+          return targetBase === needle
+        }))
+      )
+      if (examSyllabus) {
+        const examName = examSyllabus.fileName ?? examSyllabus.examLabel
+        navigate(`${wikiRoute({ kind: 'exam', name: examName })}?concept=${encodeURIComponent(ref.name)}`)
+      } else {
+        // Fallback: open popup in place if we can't find the exam.
+        openAt([ref], 0, undefined)
+      }
     }
   }
 

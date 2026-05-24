@@ -1,11 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
-import { BookOpen, ChevronLeft, ChevronRight, Loader2, Trash2, X } from 'lucide-react'
-import { useFlashcards } from '@/hooks/useFlashcards'
+import {
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  GripVertical,
+  Loader2,
+  Trash2,
+  X,
+} from 'lucide-react'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { useFlashcards, type FlashCard } from '@/hooks/useFlashcards'
+import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
@@ -13,7 +37,8 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 
-// Extracts the first bullet point, including any indented continuation lines.
+type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
+
 function extractFirstBullet(markdown: string): string {
   const lines = markdown.split('\n')
   let result = ''
@@ -26,7 +51,6 @@ function extractFirstBullet(markdown: string): string {
         inBullet = true
       }
     } else {
-      // Continuation lines are indented (2+ spaces or tab) and non-empty
       if (/^[ \t]{2,}\S/.test(line)) {
         result += ' ' + line.trim()
       } else {
@@ -40,13 +64,7 @@ function extractFirstBullet(markdown: string): string {
   return result
 }
 
-function FlashcardStudy({
-  cards,
-  onDone,
-}: {
-  cards: WikiEntryRef[]
-  onDone: () => void
-}) {
+function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () => void }) {
   const [index, setIndex] = useState(0)
   const [flipped, setFlipped] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -81,7 +99,6 @@ function FlashcardStudy({
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-background px-4 py-8">
-      {/* Top bar */}
       <div className="w-full max-w-xl flex items-center justify-between mb-8">
         <span className="text-sm text-muted-foreground">
           {index + 1} / {cards.length}
@@ -95,7 +112,6 @@ function FlashcardStudy({
         </button>
       </div>
 
-      {/* Card */}
       <div
         className="w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer select-none transition-all"
         onClick={handleFlip}
@@ -122,15 +138,11 @@ function FlashcardStudy({
             )}
             {definition && (
               <div className="text-base leading-relaxed prose dark:prose-invert prose-sm max-w-none">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm, remarkMath]}
-                  rehypePlugins={[rehypeKatex]}
-                >
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
                   {definition}
                 </ReactMarkdown>
               </div>
             )}
-
             {!expanded && markdown && (
               <button
                 type="button"
@@ -140,7 +152,6 @@ function FlashcardStudy({
                 Expand
               </button>
             )}
-
             {expanded && markdown && (
               <div className="border-t pt-4 overflow-y-auto max-h-96">
                 <WikiArticle markdown={markdown} sourcePath={entryRefToRepoPath(current)} />
@@ -150,7 +161,6 @@ function FlashcardStudy({
         )}
       </div>
 
-      {/* Nav */}
       <div className="flex items-center gap-6 mt-8">
         <button
           type="button"
@@ -173,24 +183,235 @@ function FlashcardStudy({
   )
 }
 
+function SortableCard({
+  card,
+  index,
+  isSelected,
+  isDraggable,
+  onToggleSelect,
+  onOpen,
+  onRemove,
+}: {
+  card: FlashCard
+  index: number
+  isSelected: boolean
+  isDraggable: boolean
+  onToggleSelect: (name: string) => void
+  onOpen: (index: number) => void
+  onRemove: (name: string) => void
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: card.name,
+    disabled: !isDraggable,
+  })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 50 : undefined,
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="group relative rounded-xl border bg-card text-card-foreground flex items-center gap-2 hover:shadow-md transition-shadow"
+    >
+      {/* Checkbox */}
+      <button
+        type="button"
+        aria-label={isSelected ? `Deselect ${card.name}` : `Select ${card.name}`}
+        onClick={e => { e.stopPropagation(); onToggleSelect(card.name) }}
+        className="shrink-0 flex items-center justify-center w-10 h-full pl-3 py-5 text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <div
+          className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+            isSelected
+              ? 'bg-primary border-primary'
+              : 'border-muted-foreground/50 group-hover:border-muted-foreground'
+          }`}
+        >
+          {isSelected && (
+            <svg className="w-2.5 h-2.5 text-primary-foreground" viewBox="0 0 10 10" fill="none">
+              <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          )}
+        </div>
+      </button>
+
+      {/* Card name — click to open popup */}
+      <button
+        type="button"
+        className="flex-1 min-w-0 py-5 text-left"
+        onClick={() => onOpen(index)}
+      >
+        <span className="font-medium text-sm leading-snug truncate block">{card.name}</span>
+      </button>
+
+      {/* Drag handle (custom mode only) */}
+      {isDraggable && (
+        <button
+          type="button"
+          className="shrink-0 flex items-center justify-center px-2 py-5 text-muted-foreground/40 hover:text-muted-foreground cursor-grab active:cursor-grabbing touch-none"
+          aria-label="Drag to reorder"
+          {...listeners}
+          {...attributes}
+        >
+          <GripVertical className="h-4 w-4" />
+        </button>
+      )}
+
+      {/* Delete */}
+      <button
+        type="button"
+        onClick={e => { e.stopPropagation(); onRemove(card.name) }}
+        aria-label={`Remove ${card.name}`}
+        className="shrink-0 flex items-center justify-center px-3 py-5 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
+    </div>
+  )
+}
+
 export default function Flashcards() {
-  const { cards, removeCard } = useFlashcards()
+  const { cards, removeCard, customOrder, setCustomOrder } = useFlashcards()
+  const { syllabi } = useWikiSyllabus()
   const openAt = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
-  const [studying, setStudying] = useState(false)
 
-  if (studying && cards.length > 0) {
+  const [studying, setStudying] = useState(false)
+  const [studyCards, setStudyCards] = useState<WikiEntryRef[]>([])
+  const [groupBy, setGroupBy] = useState<GroupBy>('exam')
+  const [selectedNames, setSelectedNames] = useState<Set<string>>(new Set())
+
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
+
+  // Build concept → exam label map from syllabi
+  const conceptToExam = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const s of syllabi) {
+      for (const topic of s.topics) {
+        for (const c of topic.concepts) {
+          map.set(c.name.toLowerCase(), s.examLabel)
+        }
+      }
+    }
+    return map
+  }, [syllabi])
+
+  // Sync customOrder when cards change (ensure all cards are present in custom order)
+  useEffect(() => {
+    const cardNames = cards.map(c => c.name)
+    const inOrder = new Set(customOrder.map(n => n.toLowerCase()))
+    const missing = cardNames.filter(n => !inOrder.has(n.toLowerCase()))
+    if (missing.length > 0) {
+      setCustomOrder([...customOrder, ...missing])
+    }
+  }, [cards, customOrder, setCustomOrder])
+
+  // Compute ordered cards for the current groupBy
+  const orderedCards = useMemo((): FlashCard[] => {
+    if (groupBy === 'date') {
+      return [...cards].sort((a, b) => b.addedAt - a.addedAt)
+    }
+    if (groupBy === 'alpha') {
+      return [...cards].sort((a, b) => a.name.localeCompare(b.name))
+    }
+    if (groupBy === 'custom') {
+      const nameToCard = new Map(cards.map(c => [c.name.toLowerCase(), c]))
+      const ordered: FlashCard[] = []
+      for (const name of customOrder) {
+        const card = nameToCard.get(name.toLowerCase())
+        if (card) ordered.push(card)
+      }
+      // append any not yet in customOrder
+      for (const card of cards) {
+        if (!ordered.some(c => c.name.toLowerCase() === card.name.toLowerCase())) {
+          ordered.push(card)
+        }
+      }
+      return ordered
+    }
+    // 'exam' — grouped, but we still return a flat list for single-card indexing
+    return [...cards].sort((a, b) => a.name.localeCompare(b.name))
+  }, [cards, customOrder, groupBy])
+
+  // Group cards by exam for 'exam' mode
+  const examGroups = useMemo((): { label: string; cards: FlashCard[] }[] => {
+    if (groupBy !== 'exam') return []
+    const groups = new Map<string, FlashCard[]>()
+    for (const card of orderedCards) {
+      const label = conceptToExam.get(card.name.toLowerCase()) ?? 'Other'
+      if (!groups.has(label)) groups.set(label, [])
+      groups.get(label)!.push(card)
+    }
+    // Sort groups: known exams first (alphabetical), then "Other"
+    const sorted = [...groups.entries()].sort(([a], [b]) => {
+      if (a === 'Other') return 1
+      if (b === 'Other') return -1
+      return a.localeCompare(b)
+    })
+    return sorted.map(([label, groupCards]) => ({ label, cards: groupCards }))
+  }, [groupBy, orderedCards, conceptToExam])
+
+  function toggleSelect(name: string) {
+    setSelectedNames(prev => {
+      const next = new Set(prev)
+      if (next.has(name)) next.delete(name)
+      else next.add(name)
+      return next
+    })
+  }
+
+  function selectAll() {
+    setSelectedNames(new Set(cards.map(c => c.name)))
+  }
+
+  function deselectAll() {
+    setSelectedNames(new Set())
+  }
+
+  function openCard(card: FlashCard) {
+    openAt(orderedCards, orderedCards.findIndex(c => c.name === card.name))
+  }
+
+  function handleStudy() {
+    const targets = selectedNames.size > 0
+      ? orderedCards.filter(c => selectedNames.has(c.name))
+      : orderedCards
+    setStudyCards(targets)
+    setStudying(true)
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+    const oldIndex = orderedCards.findIndex(c => c.name === active.id)
+    const newIndex = orderedCards.findIndex(c => c.name === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+    const reordered = arrayMove(orderedCards, oldIndex, newIndex)
+    setCustomOrder(reordered.map(c => c.name))
+  }
+
+  if (studying && studyCards.length > 0) {
     return (
       <>
-        <FlashcardStudy cards={cards} onDone={() => setStudying(false)} />
+        <FlashcardStudy cards={studyCards} onDone={() => setStudying(false)} />
         <ConceptPopup />
       </>
     )
   }
 
-  function openCard(index: number) {
-    openAt(cards, index)
-  }
+  const groupLabels: { key: GroupBy; label: string }[] = [
+    { key: 'exam', label: 'Group by Exam' },
+    { key: 'date', label: 'Date Added' },
+    { key: 'alpha', label: 'Alphabetical' },
+    { key: 'custom', label: 'Custom' },
+  ]
+
+  const allSelected = cards.length > 0 && selectedNames.size === cards.length
 
   return (
     <>
@@ -198,6 +419,7 @@ export default function Flashcards() {
         className="container max-w-3xl mx-auto px-4 py-8 space-y-6"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
+        {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Flashcards</h1>
@@ -210,10 +432,10 @@ export default function Flashcards() {
           <button
             type="button"
             disabled={cards.length === 0}
-            onClick={() => setStudying(true)}
+            onClick={handleStudy}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
-            Study
+            {selectedNames.size > 0 ? `Study Selected (${selectedNames.size})` : 'Study'}
           </button>
         </div>
 
@@ -233,30 +455,120 @@ export default function Flashcards() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {cards.map((card, i) => (
-              <div
-                key={card.name}
-                className="group relative rounded-xl border bg-card text-card-foreground p-5 flex items-center justify-between gap-3 hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => openCard(i)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(i) } }}
-              >
-                <span className="font-medium text-sm leading-snug flex-1 min-w-0 truncate">
-                  {card.name}
-                </span>
-                <button
-                  type="button"
-                  onClick={e => { e.stopPropagation(); removeCard(card.name) }}
-                  aria-label={`Remove ${card.name}`}
-                  className="shrink-0 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+          <>
+            {/* Grouping selector + select all */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-1 p-1 rounded-lg bg-muted/50 border">
+                {groupLabels.map(({ key, label }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setGroupBy(key)}
+                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                      groupBy === key
+                        ? 'bg-background text-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
+              <button
+                type="button"
+                onClick={allSelected ? deselectAll : selectAll}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {allSelected ? 'Deselect all' : 'Select all'}
+              </button>
+            </div>
+
+            {/* Custom mode hint */}
+            {groupBy === 'custom' && (
+              <p className="text-xs text-muted-foreground -mt-2">
+                Drag the <GripVertical className="inline h-3 w-3" /> handle to reorder. Order saves automatically.
+              </p>
+            )}
+
+            {/* Card list */}
+            {groupBy === 'exam' ? (
+              <div className="space-y-6">
+                {examGroups.length === 0 && syllabi.length === 0 ? (
+                  // Syllabi still loading
+                  <div className="flex flex-col gap-3">
+                    {orderedCards.map((card, i) => (
+                      <SortableCard
+                        key={card.name}
+                        card={card}
+                        index={i}
+                        isSelected={selectedNames.has(card.name)}
+                        isDraggable={false}
+                        onToggleSelect={toggleSelect}
+                        onOpen={() => openCard(card)}
+                        onRemove={removeCard}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  examGroups.map(({ label, cards: groupCards }) => (
+                    <div key={label} className="space-y-2">
+                      <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
+                        {label}
+                      </h2>
+                      <div className="flex flex-col gap-2">
+                        {groupCards.map((card) => (
+                          <SortableCard
+                            key={card.name}
+                            card={card}
+                            index={orderedCards.findIndex(c => c.name === card.name)}
+                            isSelected={selectedNames.has(card.name)}
+                            isDraggable={false}
+                            onToggleSelect={toggleSelect}
+                            onOpen={() => openCard(card)}
+                            onRemove={removeCard}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            ) : groupBy === 'custom' ? (
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={orderedCards.map(c => c.name)} strategy={rectSortingStrategy}>
+                  <div className="flex flex-col gap-2">
+                    {orderedCards.map((card, i) => (
+                      <SortableCard
+                        key={card.name}
+                        card={card}
+                        index={i}
+                        isSelected={selectedNames.has(card.name)}
+                        isDraggable={true}
+                        onToggleSelect={toggleSelect}
+                        onOpen={() => openCard(card)}
+                        onRemove={removeCard}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {orderedCards.map((card, i) => (
+                  <SortableCard
+                    key={card.name}
+                    card={card}
+                    index={i}
+                    isSelected={selectedNames.has(card.name)}
+                    isDraggable={false}
+                    onToggleSelect={toggleSelect}
+                    onOpen={() => openCard(card)}
+                    onRemove={removeCard}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
       <ConceptPopup />

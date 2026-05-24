@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
@@ -10,11 +10,14 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 
 export default function WikiExam() {
   const { slug = '' } = useParams()
+  const [searchParams] = useSearchParams()
+  const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
   const { setPageRefs, setExamId } = useWikiPage()
   const { openAt } = useConceptPopup()
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const popupOpenedRef = useRef(false)
 
   useEffect(() => {
     let cancelled = false
@@ -44,6 +47,25 @@ export default function WikiExam() {
     setExamId(examIdFromFile(examFileName))
     setPageRefs(pageRefs)
   }, [pageRefs, examFileName, setExamId, setPageRefs])
+
+  // Reset the opened flag whenever the exam or the requested concept changes.
+  useEffect(() => {
+    popupOpenedRef.current = false
+  }, [examFileName, conceptParam])
+
+  // When arriving from search with ?concept=, open the popup once pageRefs load.
+  useEffect(() => {
+    if (!conceptParam || pageRefs.length === 0 || popupOpenedRef.current) return
+    popupOpenedRef.current = true
+    const conceptList = pageRefs
+      .filter(r => r.kind === 'concept')
+      .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
+    const idx = conceptList.findIndex(
+      r => r.name.toLowerCase() === conceptParam.toLowerCase(),
+    )
+    const openList = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptParam }]
+    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`)
+  }, [conceptParam, pageRefs, examFileName, openAt])
 
   return (
     <div className="space-y-4">

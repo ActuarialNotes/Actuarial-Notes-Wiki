@@ -9,6 +9,7 @@ import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { useTopics } from '@/hooks/useTopics'
 import { useAuth } from '@/hooks/useAuth'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -193,9 +194,21 @@ function highlight(text: string, query: string) {
   )
 }
 
-function ConceptResultRow({ item, query }: { item: WikiIndexItem; query: string }) {
+function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query: string; syllabi: WikiExamSyllabus[] }) {
   const ref = pathToEntryRef(item.path) ?? { kind: 'concept' as const, name: item.name }
-  const route = wikiRoute(ref)
+
+  let route = wikiRoute(ref)
+  if (item.category === 'concept' && syllabi.length > 0) {
+    const needle = item.name.toLowerCase()
+    const examSyllabus = syllabi.find(s =>
+      s.topics.some(t => t.concepts.some(c => c.name.toLowerCase() === needle))
+    )
+    if (examSyllabus) {
+      const examRoute = wikiRoute({ kind: 'exam', name: examSyllabus.fileName ?? examSyllabus.examLabel })
+      route = `${examRoute}?concept=${encodeURIComponent(item.name)}`
+    }
+  }
+
   const Icon =
     item.category === 'exam' ? GraduationCap :
     item.category === 'concept' ? FileText :
@@ -880,7 +893,7 @@ export default function Search() {
                 </p>
                 <div className="border rounded-lg divide-y overflow-hidden">
                   {wikiResults.map(item => (
-                    <ConceptResultRow key={`${item.category}:${item.path}`} item={item} query={textQuery} />
+                    <ConceptResultRow key={`${item.category}:${item.path}`} item={item} query={textQuery} syllabi={syllabi} />
                   ))}
                 </div>
               </>

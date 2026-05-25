@@ -17,6 +17,7 @@ import {
   Play,
   Settings2,
   ShoppingBag,
+  Sparkles,
   Sun,
   X,
 } from 'lucide-react'
@@ -474,6 +475,16 @@ export default function Sidebar() {
                     <Settings2 className="h-4 w-4 shrink-0" />
                     <span>Settings</span>
                   </button>
+                  {!isPremium && (
+                    <button
+                      type="button"
+                      onClick={() => { navigate('/upgrade'); setProfileOpen(false); closeMobile() }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors"
+                    >
+                      <Sparkles className="h-4 w-4 shrink-0" />
+                      <span>Upgrade to Premium</span>
+                    </button>
+                  )}
                   {signOutConfirm ? (
                     <div className="px-3 py-2 space-y-2">
                       <p className="text-xs text-muted-foreground">Sign out?</p>

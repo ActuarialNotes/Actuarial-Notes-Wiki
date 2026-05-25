@@ -664,8 +664,8 @@ export default function Flashcards() {
         className="container max-w-5xl mx-auto px-4 py-8 space-y-6"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between">
+        {/* Sticky Header */}
+        <div className="sticky top-14 lg:top-0 z-10 bg-background border-b -mx-4 px-4 py-3 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Flashcards</h1>
             <p className="text-sm text-muted-foreground mt-1">
@@ -678,7 +678,7 @@ export default function Flashcards() {
             type="button"
             disabled={cards.length === 0}
             onClick={handleStudy}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
           >
             {selectedNames.size > 0 ? `Study Selected (${selectedNames.size})` : 'Study'}
           </button>

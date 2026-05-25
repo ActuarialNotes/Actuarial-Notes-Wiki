@@ -1,14 +1,16 @@
-$$Y = \alpha\,\min\!\bigl((X-d)_+,\; u\bigr)$$
-$$\text{where } d = \text{deductible},\; u = \text{benefit limit},\; \alpha = \text{coinsurance}$$
+The **Payment Random Variable** ($Y$) is the amount the insurer actually pays on a claim, derived from the [[Loss Random Variable]] $X$ after applying all policy provisions — [[Deductible]], [[Coinsurance Percentages|coinsurance]], and [[Benefit Limits|benefit limit]].
 
-The Payment Random Variable ($Y$) is the amount the insurer actually pays on a claim, derived from the loss random variable $X$ after applying all policy provisions (deductible, coinsurance, and benefit limit).
+> $$Y = \alpha\,\min\!\bigl((X-d)_+,\; u\bigr)$$
+>
+> $$\text{where } d = \text{deductible},\; u = \text{benefit limit},\; \alpha = \text{coinsurance}$$
 
-$Y$ is a transformed version of $X$ and has a mixed distribution: a probability mass at $Y = 0$ (when $X \leq d$) and a continuous or discrete component for positive payments. Its mean and variance differ from those of $X$ due to the truncation and censoring imposed by the policy.
+- $Y$ has a mixed distribution: a probability mass at $Y = 0$ (when $X \leq d$) and a continuous or discrete component for positive payments
+- Its mean and variance differ from those of $X$ due to the truncation and censoring imposed by the policy
 
-> [!example]- Full Payment Function with Three Provisions {💡 Example}
+> [!example]- Full Payment Function with Three Provisions {Example}
 > A policy has deductible $d = 200$, coinsurance $\alpha = 0.75$, and benefit limit $u = 900$. If $X = 1500$, find the payment $Y$.
 >
-> > [!answer]- Answer
+> > [!answer]-
 > > Step 1 — Apply deductible: $X - d = 1500 - 200 = 1300$.
 > > Step 2 — Apply benefit limit: $\min(1300, 900) = 900$.
 > > Step 3 — Apply coinsurance:

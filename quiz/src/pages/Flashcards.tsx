@@ -64,23 +64,23 @@ function MasteryPill({ state }: { state: MasteryState }) {
   )
 }
 
-function extractFirstBullet(markdown: string): string {
+function extractFirstParagraph(markdown: string): string {
   const lines = markdown.split('\n')
-  let result = ''
-  let inBullet = false
+  const paragraphLines: string[] = []
+  let started = false
   for (const line of lines) {
-    if (!inBullet) {
-      const match = line.match(/^[-*]\s+(.+)/)
-      if (match) { result = match[1]; inBullet = true }
+    const trimmed = line.trim()
+    if (!started) {
+      if (trimmed && !trimmed.startsWith('#') && !trimmed.startsWith('-') && !trimmed.startsWith('*') && !trimmed.startsWith('>')) {
+        started = true
+        paragraphLines.push(trimmed)
+      }
     } else {
-      if (/^[ \t]{2,}\S/.test(line)) result += ' ' + line.trim()
-      else break
+      if (trimmed === '') break
+      paragraphLines.push(trimmed)
     }
   }
-  if (!result) {
-    result = lines.find(l => { const t = l.trim(); return t && !t.startsWith('#') })?.trim() ?? ''
-  }
-  return result
+  return paragraphLines.join(' ')
 }
 
 function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () => void }) {
@@ -110,7 +110,7 @@ function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () =
     }
   }
 
-  const definition = markdown ? extractFirstBullet(markdown) : null
+  const definition = markdown ? extractFirstParagraph(markdown) : null
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-background px-4 py-8">

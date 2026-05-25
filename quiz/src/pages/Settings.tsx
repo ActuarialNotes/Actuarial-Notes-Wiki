@@ -721,7 +721,7 @@ export default function Settings() {
                       id="track-select"
                       value={selectedTrack}
                       onChange={e => setSelectedTrack(e.target.value)}
-                      className="w-full sm:w-auto text-sm border border-input rounded-md px-3 py-2 bg-background text-foreground cursor-pointer"
+                      className="w-full sm:w-auto text-base border border-input rounded-md px-3 py-2 bg-background text-foreground cursor-pointer"
                     >
                       {TRACKS.map(t => (
                         <option key={t.key} value={t.key}>{t.name}</option>
@@ -778,7 +778,7 @@ export default function Settings() {
                                           type="date"
                                           value={row.targetDate}
                                           onChange={e => setExamDate(item.id, e.target.value)}
-                                          className="text-sm border border-input rounded-md px-2 py-1 bg-background text-foreground"
+                                          className="text-base border border-input rounded-md px-2 py-1 bg-background text-foreground"
                                         />
                                       </div>
                                       <ExamSittingsList

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
@@ -178,6 +178,7 @@ function SortableCard({
   onToggleSelect,
   onOpen,
   onRemove,
+  isFlashing,
 }: {
   card: FlashCard
   isSelected: boolean
@@ -185,6 +186,7 @@ function SortableCard({
   onToggleSelect: (name: string) => void
   onOpen: () => void
   onRemove: (name: string) => void
+  isFlashing: boolean
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name })
 
@@ -199,9 +201,10 @@ function SortableCard({
     <div
       ref={setNodeRef}
       style={style}
+      data-card-name={card.name}
       {...listeners}
       {...attributes}
-      className="group relative rounded-xl border bg-card text-card-foreground flex flex-col min-h-[148px] cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow select-none"
+      className={`group relative rounded-xl border bg-card text-card-foreground flex flex-col min-h-[148px] cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow select-none${isFlashing ? ' flashcard-highlight' : ''}`}
     >
       {/* Top row: checkbox + delete */}
       <div className="flex items-center justify-between px-3 pt-3">
@@ -257,6 +260,10 @@ export default function Flashcards() {
   const { records: masteryRecords } = useConceptMastery()
   const openAt = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const highlightName = searchParams.get('highlight')
+  const [flashingCard, setFlashingCard] = useState<string | null>(null)
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const [studying, setStudying] = useState(false)
   const [studyCards, setStudyCards] = useState<WikiEntryRef[]>([])
@@ -267,6 +274,30 @@ export default function Flashcards() {
     useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
   )
+
+  // Scroll to and flash a card when arriving via the "view" link in the popup menu.
+  useEffect(() => {
+    if (!highlightName) return
+    const timerId = setTimeout(() => {
+      const all = document.querySelectorAll('[data-card-name]')
+      const el = Array.from(all).find(
+        el => el.getAttribute('data-card-name')?.toLowerCase() === highlightName.toLowerCase()
+      ) as HTMLElement | null
+      if (!el) return
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      setFlashingCard(highlightName)
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
+      flashTimerRef.current = setTimeout(() => {
+        setFlashingCard(null)
+        setSearchParams(prev => {
+          const next = new URLSearchParams(prev)
+          next.delete('highlight')
+          return next
+        }, { replace: true })
+      }, 1700)
+    }, 200)
+    return () => clearTimeout(timerId)
+  }, [highlightName])
 
   // concept name → exam label
   const conceptToExam = useMemo(() => {
@@ -401,6 +432,7 @@ export default function Flashcards() {
         onToggleSelect={toggleSelect}
         onOpen={() => openAt(orderedCards, orderedCards.findIndex(c => c.name === card.name))}
         onRemove={removeCard}
+        isFlashing={flashingCard?.toLowerCase() === card.name.toLowerCase()}
       />
     )
   }

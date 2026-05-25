@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, Play, TrendingUp, X } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, Play, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { entryRefToRepoPath, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
@@ -12,6 +13,9 @@ import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const { addCard, hasCard } = useFlashcards()
+  const location = useLocation()
+  const routerNavigate = useNavigate()
+  const isOnWiki = location.pathname.startsWith('/wiki/')
   const current: WikiEntryRef | undefined = list[index]
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
@@ -171,7 +175,7 @@ export function ConceptPopup() {
             <Play className="h-4 w-4" />
           </button>
           {showPlayMenu && (
-            <div className={`absolute top-full mt-1 w-48 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+            <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
               <button
                 type="button"
                 onClick={() => { setShowQuestions(true); setShowPlayMenu(false) }}
@@ -180,16 +184,38 @@ export function ConceptPopup() {
                 <Play className="h-3.5 w-3.5 shrink-0" />
                 Start Quiz
               </button>
-              <button
-                type="button"
-                onClick={() => { addCard(current) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
-                  {hasCard(current.name) ? '✓' : '+'}
-                </span>
-                {hasCard(current.name) ? 'Added to Flashcards' : 'Add to Flashcards'}
-              </button>
+              {current.kind === 'concept' && (
+                <button
+                  type="button"
+                  disabled={isOnWiki}
+                  onClick={() => { routerNavigate(wikiRoute(current)); setShowPlayMenu(false) }}
+                  className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${isOnWiki ? 'opacity-40 cursor-not-allowed' : 'hover:bg-accent'}`}
+                >
+                  <BookOpen className="h-3.5 w-3.5 shrink-0" />
+                  Open in Study Guide
+                </button>
+              )}
+              <div className="flex items-center hover:bg-accent transition-colors">
+                <button
+                  type="button"
+                  onClick={() => { addCard(current) }}
+                  className="flex-1 flex items-center gap-2 px-3 py-2 text-sm"
+                >
+                  <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
+                    {hasCard(current.name) ? '✓' : '+'}
+                  </span>
+                  {hasCard(current.name) ? 'Added to Flashcards' : 'Add to Flashcards'}
+                </button>
+                {hasCard(current.name) && (
+                  <Link
+                    to={`/flashcards?highlight=${encodeURIComponent(current.name)}`}
+                    onClick={() => setShowPlayMenu(false)}
+                    className="text-xs text-primary hover:underline pr-3 shrink-0"
+                  >
+                    view
+                  </Link>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}

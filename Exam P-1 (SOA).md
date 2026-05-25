@@ -2,14 +2,14 @@
      data-current="P-1|Probability"
 </div>
 
-## Exam P-1 (SOA)
+# Exam P-1 (SOA)
 The Exam Probability (P-1) is a 3 hour, 30 multiple choice quetion exam that covers probability concepts and applications for measuring risk.
 
-### Prerequisite knowledge
+## Prerequisite knowledge
 - [[Calculus]], including series, differentiation, and integration.
 - Concepts introduced in [[Risk and Insurance (SOA)]]
 
-### Learning Objectives
+## Learning Objectives
 
 > [!example]- General Probability {23-30%}
 > Understand basic concepts of [[Probability]] and [[Discrete Mathematics]].
@@ -24,14 +24,14 @@ The Exam Probability (P-1) is a 3 hour, 30 multiple choice quetion exam that cov
 
 > [!example]- Univariate Random Variables {44-50%}
 > Understand [[Discrete Univariate Distributions]] and [[Continuous Univariate Distributions]] and their applications. 
-> 8. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
-> 9. Calculate [[Conditional Probability|Conditional Probabilities]].
-> 10. Explain and calculate expected values, including moments, mode, median, and percentiles.
-> 11. Explain and calculate [[Variance]], [[Standard Deviation]], and [[Coefficient of Variation]].
-> 12. Calculate the amount that an insurance company pays to a policyholder for a claim given [[Policy Information]], including [[Deductible]]s, [[Coinsurance Percentage]]s, and [[Benefit Limit]]s, as well as other factors, such as [[Inflation]].
-> 13. Calculate the [[Expected Value]], [[Variance]], and [[Standard Deviation]] of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]].
+> 1. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
+> 2. Calculate [[Conditional Probability|Conditional Probabilities]].
+> 3. Explain and calculate expected values, including moments, mode, median, and percentiles.
+> 4. Explain and calculate [[Variance]], [[Standard Deviation]], and [[Coefficient of Variation]].
+> 5. Calculate the amount that an insurance company pays to a policyholder for a claim given [[Policy Information]], including [[Deductible]]s, [[Coinsurance Percentage]]s, and [[Benefit Limit]]s, as well as other factors, such as [[Inflation]].
+> 6. Calculate the [[Expected Value]], [[Variance]], and [[Standard Deviation]] of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]].
 >
-> #### Discrete Univariate Distributions 
+> ### Discrete Univariate Distributions 
 > - [[Binomial]]
 > - [[Geometric]]
 > - [[Hypergeometric]]
@@ -39,7 +39,7 @@ The Exam Probability (P-1) is a 3 hour, 30 multiple choice quetion exam that cov
 > - [[Poisson]]
 > - [[Uniform Discrete|Uniform]]
 >
-> #### Continuous Univariate Distributions 
+> ### Continuous Univariate Distributions 
 > - [[Beta]]
 > - [[Exponential]]
 > - [[Gamma]]
@@ -59,7 +59,7 @@ The Exam Probability (P-1) is a 3 hour, 30 multiple choice quetion exam that cov
 > 8. Calculate [[Moments for Linear Combinations]] of independent random variables.
 > 9. Apply the [[Central Limit Theorem]] to calculate approximations of probabilities for linear combinations of independent and identically distributed random variables.
 
-#### Source Material
+## Source Material
 > [!answer]- Source Material
 >
 > - [[A First Course in Probability (Ross - 2019)]]

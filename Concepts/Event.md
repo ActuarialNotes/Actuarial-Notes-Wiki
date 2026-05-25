@@ -1,4 +1,4 @@
-- An **event** $E$ is any subset of the [[Sample Space]] $S$.
+An **event** $E$ is any subset of the [[Sample Space]] $S$.
 - Events are the objects to which probabilities are assigned.
 - A **simple event** contains exactly one outcome.
 - A **compound event** contains two or more outcomes.

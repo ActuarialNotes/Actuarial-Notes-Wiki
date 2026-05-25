@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Loader2, Lock } from 'lucide-react'
+import { Gem, Loader2, Lock } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { useConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import { useSubscription } from '@/hooks/useSubscription'
 import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
 import type { Question } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Response {
   chosen: string | null
@@ -18,6 +21,26 @@ interface ConceptStat {
   correct: number
   total: number
   questionIndices: number[]
+}
+
+export interface ScoreSummary {
+  mode: 'quiz' | 'mock-exam'
+  percentage: number
+  correctCount: number
+  totalQuestions: number
+  timeTakenSeconds: number | null
+  gemsEarned: number
+  isLoggedIn: boolean
+  onSignIn: () => void
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatTime(seconds: number | null): string {
+  if (seconds === null || seconds < 0) return '—'
+  const m = Math.floor(seconds / 60)
+  const s = seconds % 60
+  return m > 0 ? `${m}m ${s}s` : `${s}s`
 }
 
 function resolveConceptName(link: string): string | null {
@@ -87,72 +110,125 @@ function QuizCoverageRadial({
   totalQ,
   questionIndices,
   outcomes,
+  selectedQuestion,
+  onQuestionClick,
 }: {
   totalQ: number
   questionIndices: number[]
   outcomes: boolean[]
+  selectedQuestion: number | null
+  onQuestionClick: (idx: number | null) => void
 }) {
   const [hovered, setHovered] = useState<number | null>(null)
   const linked = new Set(questionIndices)
   const segDeg = 360 / totalQ
   const correctCount = questionIndices.filter(i => outcomes[i]).length
 
+  // active is the segment to label (selected takes priority over hovered)
+  const active = selectedQuestion ?? hovered
+
   return (
     <div className="flex flex-col items-center gap-4">
       <svg
         viewBox={`0 0 ${VB} ${VB}`}
-        className="w-full max-w-[220px]"
+        className="w-full max-w-[220px] cursor-pointer"
         style={{ overflow: 'visible' }}
       >
         {Array.from({ length: totalQ }, (_, i) => {
           const startDeg = i * segDeg + GAP_DEG / 2
           const endDeg = (i + 1) * segDeg - GAP_DEG / 2
           const isLinked = linked.has(i)
+          const isSelected = selectedQuestion === i
           const isHovered = hovered === i
+
+          // Opacity logic: when something is selected, dim everything else
+          let opacity: number
+          if (selectedQuestion !== null) {
+            opacity = isSelected ? 1 : (isLinked ? 0.3 : 0.06)
+          } else {
+            opacity = isLinked ? (isHovered ? 1 : 0.85) : (isHovered ? 0.22 : 0.1)
+          }
+
           const fill = isLinked
             ? outcomes[i] ? '#22c55e' : '#ef4444'
             : 'currentColor'
-          const opacity = isLinked ? (isHovered ? 1 : 0.85) : (isHovered ? 0.25 : 0.1)
-          const scale = isHovered ? 1.04 : 1
-          const midDeg = (startDeg + endDeg) / 2
-          const midRad = ((midDeg - 90) * Math.PI) / 180
-          const ox = CX + (OUTER_R + INNER_R) / 2 * Math.cos(midRad) * (scale - 1)
-          const oy = CY + (OUTER_R + INNER_R) / 2 * Math.sin(midRad) * (scale - 1)
 
           return (
-            <path
-              key={i}
-              d={arcPath(startDeg, endDeg, OUTER_R, INNER_R)}
-              fill={fill}
-              opacity={opacity}
-              style={{ transform: isHovered ? `translate(${ox * 0}px, ${oy * 0}px) scale(${scale})` : undefined, transformOrigin: `${CX}px ${CY}px`, transition: 'opacity 120ms, transform 120ms' }}
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-            />
+            <g key={i}>
+              <path
+                d={arcPath(startDeg, endDeg, OUTER_R, INNER_R)}
+                fill={fill}
+                opacity={opacity}
+                style={{ transition: 'opacity 150ms, transform 150ms', transformOrigin: `${CX}px ${CY}px`,
+                  transform: isSelected ? 'scale(1.07)' : isHovered ? 'scale(1.03)' : 'scale(1)' }}
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+                onClick={() => onQuestionClick(selectedQuestion === i ? null : i)}
+              />
+              {/* White highlight ring on selected segment */}
+              {isSelected && (
+                <path
+                  d={arcPath(startDeg, endDeg, OUTER_R + 3, INNER_R - 3)}
+                  fill="none"
+                  stroke={outcomes[i] ? '#22c55e' : '#ef4444'}
+                  strokeWidth={2.5}
+                  opacity={0.7}
+                  style={{ transform: 'scale(1.07)', transformOrigin: `${CX}px ${CY}px` }}
+                  pointerEvents="none"
+                />
+              )}
+            </g>
           )
         })}
 
-        {/* Hover tooltip: Q# label near arc */}
-        {hovered !== null && (() => {
-          const midDeg = (hovered * segDeg + GAP_DEG / 2 + (hovered + 1) * segDeg - GAP_DEG / 2) / 2
+        {/* Q# label outside the active segment */}
+        {active !== null && (() => {
+          const midDeg = active * segDeg + segDeg / 2
           const midRad = ((midDeg - 90) * Math.PI) / 180
-          const labelR = OUTER_R + 14
+          const labelR = OUTER_R + 16
           const lx = CX + labelR * Math.cos(midRad)
           const ly = CY + labelR * Math.sin(midRad)
           return (
-            <text x={lx} y={ly + 4} textAnchor="middle" fontSize={10} fill="currentColor" fontWeight="600">
-              Q{hovered + 1}
+            <text
+              x={lx} y={ly + 4}
+              textAnchor="middle"
+              fontSize={11}
+              fill="currentColor"
+              fontWeight="700"
+              opacity={0.9}
+              pointerEvents="none"
+            >
+              Q{active + 1}
             </text>
           )
         })()}
 
-        {/* Center label */}
-        <text x={CX} y={CY - 8} textAnchor="middle" fontSize={26} fontWeight="bold" fill="currentColor">
-          {correctCount}/{questionIndices.length}
-        </text>
-        <text x={CX} y={CY + 14} textAnchor="middle" fontSize={11} fill="currentColor" opacity={0.5}>
-          correct
-        </text>
+        {/* Center: show selected question outcome, or overall score */}
+        {selectedQuestion !== null ? (
+          <>
+            <text x={CX} y={CY - 10} textAnchor="middle" fontSize={13} fill="currentColor" opacity={0.5}>
+              Q{selectedQuestion + 1}
+            </text>
+            <text
+              x={CX} y={CY + 16}
+              textAnchor="middle"
+              fontSize={22}
+              fontWeight="bold"
+              fill={outcomes[selectedQuestion] ? '#22c55e' : '#ef4444'}
+            >
+              {outcomes[selectedQuestion] ? '✓' : '✗'}
+            </text>
+          </>
+        ) : (
+          <>
+            <text x={CX} y={CY - 8} textAnchor="middle" fontSize={26} fontWeight="bold" fill="currentColor">
+              {correctCount}/{questionIndices.length}
+            </text>
+            <text x={CX} y={CY + 14} textAnchor="middle" fontSize={11} fill="currentColor" opacity={0.5}>
+              correct
+            </text>
+          </>
+        )}
       </svg>
 
       <div className="flex items-center gap-5 text-xs text-muted-foreground">
@@ -169,11 +245,17 @@ function QuizCoverageRadial({
           Other question
         </span>
       </div>
+
+      {selectedQuestion !== null && (
+        <p className="text-xs text-muted-foreground">
+          Click again to deselect · scroll down to see the question
+        </p>
+      )}
     </div>
   )
 }
 
-// ─── Learning Progress tab (isolated component so hook is always called) ──────
+// ─── Learning Progress tab ────────────────────────────────────────────────────
 
 function LearningProgressTab({ conceptName }: { conceptName: string }) {
   const { levelEvents, attemptDots, currentLevel, loading, error } = useConceptLearningHistory(conceptName)
@@ -311,71 +393,139 @@ interface ConceptCoverageSectionProps {
   questions: Question[]
   responses: Record<string, Response>
   isLoggedIn: boolean
+  score: ScoreSummary
+  selectedQuestion: number | null
+  onQuestionSelect: (idx: number | null) => void
 }
 
-export function ConceptCoverageSection({ questions, responses, isLoggedIn }: ConceptCoverageSectionProps) {
+export function ConceptCoverageSection({
+  questions,
+  responses,
+  isLoggedIn,
+  score,
+  selectedQuestion,
+  onQuestionSelect,
+}: ConceptCoverageSectionProps) {
   const stats = buildConceptStats(questions, responses)
   const outcomes = questions.map(q => responses[q.id]?.chosen === q.answer)
 
   const [selectedName, setSelectedName] = useState<string>(() => stats[0]?.name ?? '')
   const [tab, setTab] = useState<Tab>('quiz')
 
-  if (stats.length === 0) return null
-
   const selected = stats.find(s => s.name === selectedName) ?? stats[0]
 
-  return (
-    <div className="space-y-3">
-      <h2 className="text-lg font-semibold">Concept Coverage</h2>
+  // Score header colors
+  const pctColor =
+    score.percentage >= 70 ? 'text-green-500' :
+    score.percentage >= 50 ? 'text-amber-500' :
+    'text-red-500'
 
-      {/* Concept chip selector */}
-      <div className="flex flex-wrap gap-2">
-        {stats.map(stat => (
-          <ConceptChip
-            key={stat.name}
-            stat={stat}
-            isSelected={stat.name === selected.name}
-            onSelect={() => setSelectedName(stat.name)}
-          />
-        ))}
+  return (
+    <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+
+      {/* ── Score summary header ─────────────────────────────────── */}
+      <div className="px-5 pt-5 pb-4 border-b">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold">
+              {score.mode === 'mock-exam' ? 'Mock Exam Complete' : 'Quiz Complete'}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-0.5">Here are your results</p>
+          </div>
+          <div className={`text-4xl font-black tabular-nums leading-none ${pctColor}`}>
+            {score.percentage}%
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-6 mt-4">
+          <div>
+            <span className="text-2xl font-bold tabular-nums">{score.correctCount}</span>
+            <span className="text-lg text-muted-foreground">/{score.totalQuestions}</span>
+            <p className="text-xs text-muted-foreground mt-0.5">Correct</p>
+          </div>
+          <div>
+            <span className="text-2xl font-bold tabular-nums">{formatTime(score.timeTakenSeconds)}</span>
+            <p className="text-xs text-muted-foreground mt-0.5">Time</p>
+          </div>
+          {score.isLoggedIn && score.gemsEarned > 0 && (
+            <div>
+              <span className="text-2xl font-bold tabular-nums text-emerald-500 inline-flex items-center gap-1">
+                +{score.gemsEarned} <Gem className="h-5 w-5" />
+              </span>
+              <p className="text-xs text-muted-foreground mt-0.5">Gems earned</p>
+            </div>
+          )}
+        </div>
+
+        {/* Sign-in prompt */}
+        {!score.isLoggedIn && (
+          <div className="mt-4 rounded-lg border bg-muted/40 px-4 py-3 text-sm flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+            <span className="text-muted-foreground">Sign in to save your results and track progress</span>
+            <Button size="sm" variant="outline" onClick={score.onSignIn}>
+              Sign In
+            </Button>
+          </div>
+        )}
       </div>
 
-      {/* Single graph panel */}
-      <div className="rounded-xl border overflow-hidden">
-        {/* Tab bar */}
-        <div className="flex border-b">
-          <button
-            type="button"
-            onClick={() => setTab('quiz')}
-            className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${tab === 'quiz' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-          >
-            Quiz Coverage
-          </button>
-          {isLoggedIn && (
+      {/* ── Concept chip selector ────────────────────────────────── */}
+      {stats.length > 0 && (
+        <div className="px-5 py-3 border-b">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+            Concept Coverage
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {stats.map(stat => (
+              <ConceptChip
+                key={stat.name}
+                stat={stat}
+                isSelected={stat.name === selected.name}
+                onSelect={() => setSelectedName(stat.name)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Graph panel with tabs ────────────────────────────────── */}
+      {stats.length > 0 && (
+        <>
+          {/* Tab bar */}
+          <div className="flex border-b">
             <button
               type="button"
-              onClick={() => setTab('history')}
-              className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${tab === 'history' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              onClick={() => setTab('quiz')}
+              className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${tab === 'quiz' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
             >
-              Learning Progress
+              Quiz Coverage
             </button>
-          )}
-        </div>
+            {isLoggedIn && (
+              <button
+                type="button"
+                onClick={() => setTab('history')}
+                className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${tab === 'history' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              >
+                Learning Progress
+              </button>
+            )}
+          </div>
 
-        {/* Graph area */}
-        <div className="p-4">
-          {tab === 'quiz' ? (
-            <QuizCoverageRadial
-              key={selected.name}
-              totalQ={questions.length}
-              questionIndices={selected.questionIndices}
-              outcomes={outcomes}
-            />
-          ) : (
-            <LearningProgressGated key={selected.name} conceptName={selected.name} />
-          )}
-        </div>
-      </div>
+          <div className="p-4">
+            {tab === 'quiz' ? (
+              <QuizCoverageRadial
+                key={selected.name}
+                totalQ={questions.length}
+                questionIndices={selected.questionIndices}
+                outcomes={outcomes}
+                selectedQuestion={selectedQuestion}
+                onQuestionClick={onQuestionSelect}
+              />
+            ) : (
+              <LearningProgressGated key={selected.name} conceptName={selected.name} />
+            )}
+          </div>
+        </>
+      )}
     </div>
   )
 }

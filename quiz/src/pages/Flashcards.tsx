@@ -6,8 +6,11 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import {
   BookOpen,
+  CalendarDays,
+  Check,
   ChevronLeft,
   ChevronRight,
+  ChevronsUpDown,
   Loader2,
   Trash2,
   X,
@@ -32,10 +35,13 @@ import { useFlashcards, type FlashCard } from '@/hooks/useFlashcards'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useStudyPlan } from '@/hooks/useStudyPlan'
+import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 
@@ -215,12 +221,12 @@ function SortableCard({
           onClick={e => { e.stopPropagation(); onToggleSelect(card.name) }}
           className="flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
         >
-          <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
             isSelected ? 'bg-primary border-primary' : 'border-muted-foreground/40 group-hover:border-muted-foreground/70'
           }`}>
             {isSelected && (
-              <svg className="w-2.5 h-2.5 text-primary-foreground" viewBox="0 0 10 10" fill="none">
-                <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <svg className="w-3.5 h-3.5 text-primary-foreground" viewBox="0 0 10 10" fill="none">
+                <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             )}
           </div>
@@ -250,6 +256,170 @@ function SortableCard({
       <div className="flex justify-center pb-3">
         <MasteryPill state={masteryState} />
       </div>
+    </div>
+  )
+}
+
+function TodayStudyPlanSection() {
+  const { syllabi } = useWikiSyllabus()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
+  const { progress: examProgress, targetDates } = useExamProgress()
+  const { addCard, hasCard } = useFlashcards()
+  const [collapsed, setCollapsed] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState<Set<string>>(new Set())
+
+  const inProgressSyllabi = useMemo(
+    () => syllabi.filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'),
+    [syllabi, examProgress],
+  )
+
+  const primarySyllabus = inProgressSyllabi[0] ?? null
+  const primaryProgressKey = primarySyllabus ? wikiExamIdToProgressKey(primarySyllabus.examId) : null
+  const primaryTargetDate = primaryProgressKey ? (targetDates[primaryProgressKey] ?? null) : null
+
+  const { plan: studyPlan, loading: planLoading } = useStudyPlan(
+    primarySyllabus,
+    masteryRecords,
+    primaryTargetDate,
+    masteryLoading,
+  )
+
+  const displayConcepts = useMemo(() => {
+    if (!studyPlan) return []
+    return studyPlan.status === 'review_mode' ? studyPlan.reviewConcepts : studyPlan.todaysConcepts
+  }, [studyPlan])
+
+  const notYetAdded = displayConcepts.filter(name => !hasCard(name))
+  const allAdded = displayConcepts.length > 0 && notYetAdded.length === 0
+
+  function togglePlanSelect(name: string) {
+    setSelectedPlan(prev => {
+      const next = new Set(prev)
+      if (next.has(name)) next.delete(name); else next.add(name)
+      return next
+    })
+  }
+
+  function handleAddSelected() {
+    const toAdd = selectedPlan.size > 0
+      ? displayConcepts.filter(n => selectedPlan.has(n) && !hasCard(n))
+      : notYetAdded
+    for (const name of toAdd) {
+      addCard({ kind: 'concept', name })
+    }
+    setSelectedPlan(new Set())
+  }
+
+  const todayLabel = new Date().toLocaleDateString(undefined, {
+    weekday: 'long', month: 'long', day: 'numeric',
+  })
+
+  const isLoading = planLoading || masteryLoading
+
+  return (
+    <div className="rounded-xl border bg-card text-card-foreground">
+      <div className="flex items-center justify-between px-4 py-3 border-b">
+        <div className="flex items-center gap-2">
+          <CalendarDays className="h-4 w-4 text-primary shrink-0" />
+          <div>
+            <span className="font-semibold text-sm">Today's Study Plan</span>
+            {!isLoading && primarySyllabus && (
+              <span className="text-xs text-muted-foreground ml-2">{primarySyllabus.examLabel} · {todayLabel}</span>
+            )}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={() => setCollapsed(v => !v)}
+          className="text-muted-foreground hover:text-foreground p-1 transition-colors"
+          aria-label={collapsed ? 'Expand study plan' : 'Collapse study plan'}
+        >
+          <ChevronsUpDown className="h-4 w-4" />
+        </button>
+      </div>
+
+      {!collapsed && (
+        <div className="px-4 py-3 space-y-3">
+          {isLoading && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+              <Loader2 className="h-4 w-4 animate-spin" /> Loading study plan…
+            </div>
+          )}
+
+          {!isLoading && !primarySyllabus && (
+            <p className="text-sm text-muted-foreground py-2">
+              Add an exam in progress from the{' '}
+              <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+              to see today's study plan here.
+            </p>
+          )}
+
+          {!isLoading && primarySyllabus && !studyPlan?.config.targetReadyDate && (
+            <p className="text-sm text-muted-foreground py-2">
+              Set up your study plan on the{' '}
+              <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+              to see today's concepts here.
+            </p>
+          )}
+
+          {!isLoading && displayConcepts.length > 0 && (
+            <>
+              <ul className="space-y-1">
+                {displayConcepts.map(name => {
+                  const added = hasCard(name)
+                  const checked = selectedPlan.has(name)
+                  return (
+                    <li key={name} className="flex items-center gap-2.5 py-1">
+                      <button
+                        type="button"
+                        onClick={() => !added && togglePlanSelect(name)}
+                        disabled={added}
+                        aria-label={added ? `${name} already in flashcards` : checked ? `Deselect ${name}` : `Select ${name}`}
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                          added
+                            ? 'bg-green-500/20 border-green-500 cursor-default'
+                            : checked
+                              ? 'bg-primary border-primary'
+                              : 'border-muted-foreground/40 hover:border-muted-foreground/70'
+                        }`}
+                      >
+                        {(added || checked) && (
+                          <svg className={`w-3 h-3 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
+                            <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </button>
+                      <span className={`text-sm flex-1 min-w-0 truncate ${added ? 'text-muted-foreground' : ''}`}>{name}</span>
+                      {added && (
+                        <span className="text-xs text-green-600 dark:text-green-400 shrink-0 flex items-center gap-1">
+                          <Check className="h-3 w-3" /> In gallery
+                        </span>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+
+              {!allAdded && (
+                <button
+                  type="button"
+                  onClick={handleAddSelected}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
+                >
+                  {selectedPlan.size > 0
+                    ? `Add ${selectedPlan.size} to Flashcards`
+                    : `Add All ${notYetAdded.length} to Flashcards`}
+                </button>
+              )}
+              {allAdded && (
+                <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                  <Check className="h-3.5 w-3.5" /> All today's concepts are in your flashcard gallery
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -498,6 +668,9 @@ export default function Flashcards() {
             {selectedNames.size > 0 ? `Study Selected (${selectedNames.size})` : 'Study'}
           </button>
         </div>
+
+        {/* Today's Study Plan — always shown */}
+        <TodayStudyPlanSection />
 
         {cards.length === 0 ? (
           <div className="rounded-xl border bg-card text-card-foreground p-12 text-center space-y-3">

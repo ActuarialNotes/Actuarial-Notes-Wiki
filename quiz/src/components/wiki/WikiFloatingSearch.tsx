@@ -138,7 +138,7 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Input row */}
-          <div className="flex items-center gap-2 h-14">
+          <div className="flex items-center gap-2 h-[calc(3.5rem-1px)]">
             <Search className="h-4 w-4 text-muted-foreground shrink-0" />
             <input
               ref={inputRef}

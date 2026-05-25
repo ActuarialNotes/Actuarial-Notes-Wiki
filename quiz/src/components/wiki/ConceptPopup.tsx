@@ -149,7 +149,7 @@ export function ConceptPopup() {
       </div>
 
       {/* Header */}
-      <div className="flex items-center gap-2 px-3 h-11 border-b shrink-0">
+      <div className="flex items-center gap-2 px-3 h-14 border-b shrink-0">
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <span className="truncate font-semibold text-sm min-w-0">{current.name}</span>
           {/* Play button + mini menu — immediately right of the concept name */}
@@ -251,27 +251,27 @@ export function ConceptPopup() {
       </div>
 
       {/* Footer nav */}
-      <div className="flex items-stretch border-t h-14 shrink-0 bg-background/60">
+      <div className="flex items-stretch border-t h-16 shrink-0 bg-background/60">
         <button
           type="button"
           disabled={!canPrev}
           onClick={() => navigate(-1)}
-          className="flex-1 flex items-center justify-center gap-2 px-4 text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
           <span>Previous</span>
         </button>
-        <span className="self-center px-3 text-xs text-muted-foreground tabular-nums shrink-0">
+        <span className="self-center px-3 text-sm sm:text-xs text-muted-foreground tabular-nums shrink-0">
           {position}
         </span>
         <button
           type="button"
           disabled={!canNext}
           onClick={() => navigate(1)}
-          className="flex-1 flex items-center justify-center gap-2 px-4 text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           <span>Next</span>
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
         </button>
       </div>
     </aside>

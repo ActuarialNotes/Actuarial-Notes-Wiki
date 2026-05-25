@@ -4,12 +4,14 @@
 2. $D_{Mac}(A) = D_{Mac}(L)$ — asset and liability [[Macaulay Duration|Macaulay durations]] are equal
 3. $\text{Convexity}(A) > \text{Convexity}(L)$ — asset [[Convexity]] exceeds liability convexity
 
-When all three hold, a small change $\Delta j$ in the yield rate causes the asset value to increase (or decrease less than liabilities), so $S \geq 0$ after the shift. This works because the second-order (convexity) term dominates: $\Delta S \approx \tfrac{1}{2}(C_A - C_L) \cdot V \cdot (\Delta j)^2 \geq 0$. Redington immunization only protects against small, parallel rate shifts and must be rebalanced as time passes and rates change. It is less restrictive than [[Cash Flow Matching]] since exact cash flow timing is not required.
+- When all three hold, a small change $\Delta j$ causes $S \geq 0$ because the convexity term dominates: $\Delta S \approx \tfrac{1}{2}(C_A - C_L) \cdot V \cdot (\Delta j)^2 \geq 0$
+- Redington immunization only protects against small, parallel rate shifts and must be rebalanced as time passes and rates change
+- Less restrictive than [[Cash Flow Matching]] since exact cash flow timing is not required
 
-> [!example]- Verifying Redington Immunization {💡 Example}
+> [!example]- Verifying Redington Immunization {Example}
 > A company has a single liability of $\$10{,}000$ due in 4 years. It immunizes using two zero-coupon bonds: Bond A maturing in 2 years and Bond B maturing in 6 years. The current yield rate is $5\%$. Find the face values of the two bonds that satisfy the first two Redington conditions, and verify the third.
 >
-> > [!answer]- Answer
+> > [!answer]-
 > > Let $X$ = face of 2-year bond, $Y$ = face of 6-year bond, $v = 1/1.05$.
 > >
 > > **Condition 1** ($PV_A = PV_L$):

@@ -148,7 +148,7 @@ export function ConceptPopup() {
         </div>
       )}
 
-      {/* Drag handle — hidden on mobile where the pane goes full-width */}
+      {/* Drag handle — visible on all devices including mobile */}
       <div
         role="separator"
         aria-orientation="horizontal"
@@ -160,7 +160,7 @@ export function ConceptPopup() {
         onTouchStart={e => {
           if (e.touches[0]) beginDrag(e.touches[0].clientY)
         }}
-        className="hidden sm:flex h-3 items-center justify-center cursor-row-resize hover:bg-accent/60 transition-colors select-none"
+        className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
       >
         <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
       </div>
@@ -255,7 +255,16 @@ export function ConceptPopup() {
         </div>
         <button
           type="button"
-          onClick={() => setMaximized(v => !v)}
+          onClick={() => {
+            if (!maximized) {
+              const topBar = document.querySelector('[data-floating-search]') as HTMLElement | null
+              const offset = topBar
+                ? topBar.getBoundingClientRect().bottom
+                : window.innerWidth >= 1024 ? 56 : 112
+              document.documentElement.style.setProperty('--popup-max-top', `${Math.round(offset)}px`)
+            }
+            setMaximized(v => !v)
+          }}
           className="text-muted-foreground hover:text-foreground p-1"
           title={maximized ? 'Restore size' : 'Maximize'}
           aria-label={maximized ? 'Restore size' : 'Maximize'}

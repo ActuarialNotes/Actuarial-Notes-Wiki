@@ -264,6 +264,8 @@ export default function Flashcards() {
   const highlightName = searchParams.get('highlight')
   const [flashingCard, setFlashingCard] = useState<string | null>(null)
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Always-current snapshot of orderedCards for use inside timer closures.
+  const orderedCardsRef = useRef<FlashCard[]>([])
 
   const [studying, setStudying] = useState(false)
   const [studyCards, setStudyCards] = useState<WikiEntryRef[]>([])
@@ -275,7 +277,11 @@ export default function Flashcards() {
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
   )
 
-  // Scroll to and flash a card when arriving via the "view" link in the popup menu.
+  // Keep ref in sync so timer closures always see the latest orderedCards.
+  orderedCardsRef.current = orderedCards
+
+  // Scroll to and flash a card when arriving via the "view" link in the popup menu,
+  // then open the concept popup after the flash animation completes.
   useEffect(() => {
     if (!highlightName) return
     const timerId = setTimeout(() => {
@@ -294,6 +300,13 @@ export default function Flashcards() {
           next.delete('highlight')
           return next
         }, { replace: true })
+        // Open popup after flash so it doesn't cover the animation.
+        const latest = orderedCardsRef.current
+        const idx = latest.findIndex(c => c.name.toLowerCase() === highlightName.toLowerCase())
+        openAt(
+          idx >= 0 ? latest : [{ kind: 'concept', name: highlightName }],
+          idx >= 0 ? idx : 0,
+        )
       }, 1700)
     }, 200)
     return () => clearTimeout(timerId)

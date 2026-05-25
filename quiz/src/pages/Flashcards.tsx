@@ -433,8 +433,10 @@ function scrollCardIntoView(el: HTMLElement, popupOpen: boolean) {
       ) || window.innerHeight * 0.5)
     : 0
   const visibleHeight = window.innerHeight - popupHeight
-  const elCenter = rect.top + window.scrollY + rect.height / 2
-  window.scrollTo({ top: elCenter - visibleHeight / 2, behavior: 'smooth' })
+  // Use scrollBy (relative delta) to avoid reading window.scrollY, which can
+  // be out of sync with getBoundingClientRect during an in-progress smooth scroll.
+  const idealTop = visibleHeight / 2 - rect.height / 2
+  window.scrollBy({ top: rect.top - idealTop, behavior: 'smooth' })
 }
 
 export default function Flashcards() {

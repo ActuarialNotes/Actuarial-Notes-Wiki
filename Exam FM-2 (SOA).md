@@ -2,10 +2,10 @@
      data-current="FM-2|Financial Mathematics"
 </div>
 
-## Exam FM-2 Syllabus
+# Exam FM-2 Syllabus
 The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 35 multiple choice questions about financial mathematics concepts and how they are applied in calculating present and accumulated values for streams of cash flows.
 
-### Learning Objectives
+## Learning Objectives
 
 > [!example]- Time Value of Money  {5-15%}
 > Understand and be able to perform calculations relating to [[Present Value]], [[Current Value]], and [[Accumulated Value]].
@@ -15,7 +15,6 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 35 multiple ch
 > 4. Write the **equation of value** given a set of **cash flows** and an **interest rate**
 
 > [!example]- Annuities/Cash Flows with Non-Contingent Payments  {20-30%}
-> ### Annuities/Cash Flows with Non-Contingent Payments
 > 1. Define and recognize the definitions of the following terms: [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing/Decreasing Annuity]], [[Term of Annuity]].
 > 2. For each of the following types of **annuity**/**cash flows**, given sufficient information of **immediate** or **due**, **present value**, **future value**, **current value**, **interest rate**, **payment amount**, and term of annuity, calculate any remaining item.
 >	- [[Level Annuity]], finite term.
@@ -60,13 +59,16 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 35 multiple ch
 > 	- Exactly match a set of liability cash flows
 
 
-### Source Material
+## Source Material
 
 > [!answer]- Source Material
-> |Source|Coverage|
-> |---|---|
-> |[[Mathematics of Investment and Credit (Broverman, S.A. – 2024)]]|Chapters 1–7^[excluding 1.2.1, 1.8; 2.3.1.2, 2.4.2, 2.4.3, 2.4.5; 3.2.1, 3.2.2, 3.3, 3.4; 4.1.3, 4.1.4, 4.4 (background only); 5.2, investment year method portion of 5.3.1, 5.3.2–5.3.4; 6.2, 6.4; 7.1.3, 7.3]|
-> |[[Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019)]]|Chapters 1–6, 8–9^[excluding 1.13–1.16; 2.6; 3.10, 3.12, investment year method portion of 3.13; 5.3; 6.6–6.7, example 6.8.1, 6.10; Ch. 8: 8.3 only; 9.4, 9.5, 9.7]|
-> |[[Financial Mathematics: Theory and Practice (Brown, R. and Kopp, S. – 2024)]]|Chapters 1–9^[Ch. 2: sections 1–3 only; Ch. 4: sections 1, 3–5 only; Ch. 7: sections 1–2 only]|
-> |[[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022)]]|Chapters 1–16^[excluding 14.04 and 14.05]|
-> |[[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022)]]|Chapters 1–8^[excluding 2.4; 3.5; 4.2, 4.5; 5.3; 6.4; 8.6, 8.7, 8.8]|
+> - [[Mathematics of Investment and Credit (Broverman, S.A. – 2024)]]
+>      - Chapters 1–7^[excluding 1.2.1, 1.8; 2.3.1.2, 2.4.2, 2.4.3, 2.4.5; 3.2.1, 3.2.2, 3.3, 3.4; 4.1.3, 4.1.4, 4.4 (background only); 5.2, investment year method portion of 5.3.1, 5.3.2–5.3.4; 6.2, 6.4; 7.1.3, 7.3]|
+> - [[Mathematical Interest Theory (Vaaler, L.J.F., Harper, S.K., and Daniel, J.W. – 2019)]]
+>      - Chapters 1–6, 8–9^[excluding 1.13–1.16; 2.6; 3.10, 3.12, investment year method portion of 3.13; 5.3; 6.6–6.7, example 6.8.1, 6.10; Ch. 8: 8.3 only; 9.4, 9.5, 9.7]|
+> - [[Financial Mathematics: Theory and Practice (Brown, R. and Kopp, S. – 2024)]]
+>      - Chapters 1–9, Ch. 2: sections 1–3 only; Ch. 4: sections 1, 3–5 only; Ch. 7: sections 1–2 only
+> -[[Interest Theory – Financial Mathematics and Deterministic Valuation (Francis, J. and Ruckman, C. – 2022)]]
+>      - Chapters 1–16 excluding 14.04 and 14.05
+> - [[Financial Mathematics for Actuaries (Chan, Wai-Sum, and Tse, Yiu-Kuen – 2022)]]
+>      - Chapters 1–8 excluding 2.4; 3.5; 4.2, 4.5; 5.3; 6.4; 8.6, 8.7, 8.8

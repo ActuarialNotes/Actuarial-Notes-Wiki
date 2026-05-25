@@ -395,8 +395,8 @@ export function ReadinessCard({
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
 
   useEffect(() => {
-    if (!selectedDay) { setSelectedDayLevelUps([]); return }
-    if (selectedDay === todayISO()) { setSelectedDayLevelUps(completedToday); return }
+    const today = todayISO()
+    if (!selectedDay || selectedDay === today) { setSelectedDayLevelUps([]); return }
     if (!user) { setSelectedDayLevelUps([]); return }
     let cancelled = false
     supabase
@@ -416,7 +416,12 @@ export function ReadinessCard({
       })
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDay, user, completedToday, progressKey])
+  }, [selectedDay, user, progressKey])
+
+  // Keep the today panel in sync with live level-up events.
+  useEffect(() => {
+    if (selectedDay === todayISO()) setSelectedDayLevelUps(completedToday)
+  }, [selectedDay, completedToday])
 
   const examSessions = useMemo(
     () => sessions.filter(s => s.exam === syllabus.examTopic),

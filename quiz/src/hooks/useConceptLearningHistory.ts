@@ -4,8 +4,14 @@ import { supabase } from '@/lib/supabase'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
-import { sanitizeMasteryState } from '@/lib/mastery'
-import type { MasteryState } from '@/lib/mastery'
+import {
+  sanitizeMasteryState,
+  decayIfStale,
+  DECAY_DAYS_LEVEL1,
+  DECAY_DAYS_LEVEL2,
+  DECAY_DAYS_LEVEL3,
+} from '@/lib/mastery'
+import type { MasteryState, ConceptMasteryRecord } from '@/lib/mastery'
 
 export interface LevelEvent {
   at: Date
@@ -27,6 +33,13 @@ export interface ConceptLearningHistory {
   error: string | null
 }
 
+const MS_PER_DAY = 24 * 60 * 60 * 1000
+
+// Numeric rank for picking the "best" state when multiple exam records exist.
+const STATE_RANK: Record<MasteryState, number> = {
+  level3: 4, level2: 3, level1: 2, new: 1, forgotten: 0,
+}
+
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
   const ref = hrefToEntryRef(link)
@@ -42,6 +55,42 @@ function levelAtTime(time: Date, levelEvents: LevelEvent[]): MasteryState {
     else break
   }
   return state
+}
+
+/**
+ * Compute the synthetic downward level events caused by time-based decay.
+ * Mirrors the cascade logic in decayIfStale() so the graph line drops at
+ * exactly the same point that the state machine would.
+ */
+function syntheticDecayEvents(
+  lastLevel: MasteryState,
+  lastCorrectAt: Date,
+  now: Date,
+): LevelEvent[] {
+  const events: LevelEvent[] = []
+  let state = lastLevel
+  let origin = lastCorrectAt.getTime()
+
+  if (state === 'level3') {
+    const at = new Date(origin + DECAY_DAYS_LEVEL3 * MS_PER_DAY)
+    if (at > now) return events
+    events.push({ at, from: 'level3', to: 'level2' })
+    state = 'level2'
+    origin = at.getTime()
+  }
+  if (state === 'level2') {
+    const at = new Date(origin + DECAY_DAYS_LEVEL2 * MS_PER_DAY)
+    if (at > now) return events
+    events.push({ at, from: 'level2', to: 'level1' })
+    state = 'level1'
+    origin = at.getTime()
+  }
+  if (state === 'level1') {
+    const at = new Date(origin + DECAY_DAYS_LEVEL1 * MS_PER_DAY)
+    if (at > now) return events
+    events.push({ at, from: 'level1', to: 'forgotten' })
+  }
+  return events
 }
 
 const EMPTY: ConceptLearningHistory = {
@@ -67,8 +116,10 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
     setResult(prev => ({ ...prev, loading: true, error: null }))
 
     async function load() {
-      // Fetch level events + question bank in parallel
-      const [levelResult, allQuestionsRaw] = await Promise.all([
+      const now = new Date()
+
+      // Fetch level events, question bank, and current mastery records in parallel
+      const [levelResult, allQuestionsRaw, masteryResult] = await Promise.all([
         supabase
           .from('daily_completions')
           .select('from_state, to_state, at')
@@ -76,6 +127,11 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
           .ilike('concept_slug', conceptName)
           .order('at', { ascending: true }),
         fetchAllQuestions(),
+        supabase
+          .from('concept_mastery')
+          .select('state, last_correct_at, last_attempted_at, incorrect_streak, correct_count, hard_correct_count, user_id, exam_id, concept_slug')
+          .eq('user_id', userId)
+          .ilike('concept_slug', conceptName),
       ])
 
       if (cancelled) return
@@ -117,10 +173,91 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         })
       }
 
-      const currentLevel = levelEvents.length > 0 ? levelEvents[levelEvents.length - 1].to : 'new'
+      // Compute the true current level from concept_mastery with decay applied.
+      // Falls back to the last daily_completions event if no mastery record exists.
+      const rawMasteryRows: ConceptMasteryRecord[] = (masteryResult.data ?? []).map(
+        (r: ConceptMasteryRecord) => ({ ...r, state: sanitizeMasteryState(r.state) }),
+      )
+
+      let currentLevel: MasteryState
+      let finalLevelEvents = levelEvents
+
+      if (rawMasteryRows.length === 0) {
+        // No mastery record yet — fall back to last level event
+        currentLevel = levelEvents.length > 0 ? levelEvents[levelEvents.length - 1].to : 'new'
+      } else {
+        // Apply decay to each row and pick the one with the highest resulting state.
+        // (Mirrors the exam-agnostic approach used for daily_completions.)
+        const decayedRows = rawMasteryRows.map(r => decayIfStale(r, now))
+        const canonical = decayedRows.reduce((best, r) => {
+          const rankB = STATE_RANK[best.state]
+          const rankR = STATE_RANK[r.state]
+          if (rankR > rankB) return r
+          if (rankR === rankB) {
+            // Prefer most recently attempted as tiebreaker
+            const bTime = best.last_attempted_at ? new Date(best.last_attempted_at).getTime() : 0
+            const rTime = r.last_attempted_at ? new Date(r.last_attempted_at).getTime() : 0
+            return rTime > bTime ? r : best
+          }
+          return best
+        })
+        currentLevel = canonical.state
+
+        // Augment levelEvents with synthetic decay/forget events so the graph
+        // line drops at the correct time rather than staying flat.
+        const lastLevelEvent = levelEvents[levelEvents.length - 1]
+        if (
+          lastLevelEvent &&
+          currentLevel !== lastLevelEvent.to &&
+          lastLevelEvent.to !== 'new' &&
+          lastLevelEvent.to !== 'forgotten'
+        ) {
+          // Find the raw (pre-decay) mastery record that best corresponds to the
+          // last known upward level so we can anchor decay from last_correct_at.
+          const anchorRaw = rawMasteryRows.reduce((best, r) => {
+            return STATE_RANK[r.state] >= STATE_RANK[best.state] ? r : best
+          })
+
+          if (anchorRaw.last_correct_at) {
+            const lastCorrectAt = new Date(anchorRaw.last_correct_at)
+            const decayEvts = syntheticDecayEvents(lastLevelEvent.to, lastCorrectAt, now)
+            if (decayEvts.length > 0) {
+              finalLevelEvents = [...levelEvents, ...decayEvts]
+            }
+          } else if (anchorRaw.state === 'forgotten' && anchorRaw.last_attempted_at) {
+            // Forgotten via fail-streak (no last_correct_at means new→forgotten path
+            // which shouldn't happen, but guard anyway). Use last_attempted_at as
+            // an approximation of when forgetting occurred.
+            const at = new Date(anchorRaw.last_attempted_at)
+            finalLevelEvents = [
+              ...levelEvents,
+              { at, from: lastLevelEvent.to, to: 'forgotten' as MasteryState },
+            ]
+          }
+        }
+
+        // Fail-streak forgetting: mastery record shows forgotten but time-based
+        // decay from last_correct_at wouldn't have triggered yet. Add a synthetic
+        // forget event at last_attempted_at (time of the 3rd consecutive failure).
+        if (
+          currentLevel === 'forgotten' &&
+          lastLevelEvent &&
+          lastLevelEvent.to !== 'forgotten' &&
+          finalLevelEvents === levelEvents // no decay events were added above
+        ) {
+          const anchorRaw = rawMasteryRows.find(r => r.state === 'forgotten')
+          if (anchorRaw?.last_attempted_at) {
+            const at = new Date(anchorRaw.last_attempted_at)
+            finalLevelEvents = [
+              ...levelEvents,
+              { at, from: lastLevelEvent.to, to: 'forgotten' as MasteryState },
+            ]
+          }
+        }
+      }
 
       if (!cancelled) {
-        setResult({ levelEvents, attemptDots, currentLevel, loading: false, error: null })
+        setResult({ levelEvents: finalLevelEvents, attemptDots, currentLevel, loading: false, error: null })
       }
     }
 

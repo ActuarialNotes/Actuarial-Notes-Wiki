@@ -424,6 +424,19 @@ function TodayStudyPlanSection() {
   )
 }
 
+// Scroll el to the center of the area above the concept popup (if open).
+function scrollCardIntoView(el: HTMLElement, popupOpen: boolean) {
+  const rect = el.getBoundingClientRect()
+  const popupHeight = popupOpen
+    ? (parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--concept-split-height')
+      ) || window.innerHeight * 0.5)
+    : 0
+  const visibleHeight = window.innerHeight - popupHeight
+  const elCenter = rect.top + window.scrollY + rect.height / 2
+  window.scrollTo({ top: elCenter - visibleHeight / 2, behavior: 'smooth' })
+}
+
 export default function Flashcards() {
   const { cards, removeCard, customOrder, setCustomOrder } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
@@ -460,7 +473,7 @@ export default function Flashcards() {
         el => el.getAttribute('data-card-name')?.toLowerCase() === highlightName.toLowerCase()
       ) as HTMLElement | null
       if (!el) return
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      scrollCardIntoView(el, false)
       setFlashingCard(highlightName)
       if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
       flashTimerRef.current = setTimeout(() => {
@@ -496,7 +509,7 @@ export default function Flashcards() {
       el => el.getAttribute('data-card-name')?.toLowerCase() === popupCurrentName.toLowerCase()
     ) as HTMLElement | null
     if (!el) return
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    scrollCardIntoView(el, popupOpen)
     setFlashingCard(popupCurrentName)
     const clearId = setTimeout(() => setFlashingCard(null), 1700)
     return () => clearTimeout(clearId)

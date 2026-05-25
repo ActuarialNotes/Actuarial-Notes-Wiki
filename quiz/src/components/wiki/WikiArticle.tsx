@@ -63,16 +63,42 @@ export function rewriteWikilinks(md: string): string {
   })
 }
 
-export function extractImages(markdown: string): Array<{ src: string; alt: string }> {
-  const processed = stripHtmlBlocks(fixBlockquoteOrderedLists(
-    rewriteWikilinks(stripFrontmatter(markdown).replace(BREADCRUMB_RE, ''))
-  ))
-  const results: Array<{ src: string; alt: string }> = []
-  const re = /!\[([^\]]*)\]\(([^)]+)\)/g
-  let m: RegExpExecArray | null
-  while ((m = re.exec(processed)) !== null) {
-    results.push({ alt: m[1], src: m[2] })
+export function extractImages(markdown: string): Array<{ src: string; alt: string; caption: string }> {
+  const raw = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
+  const lines = raw.split('\n')
+  const re = /!\[\[([^\]|]+?)(?:\|([^\]]+?))?\]\][ \t]*(.*)/
+  const results: Array<{ src: string; alt: string; caption: string }> = []
+
+  for (let i = 0; i < lines.length; i++) {
+    const m = re.exec(lines[i])
+    if (!m) continue
+    const target = m[1].trim()
+    if (!IMAGE_EXT_RE.test(target)) continue
+    const display = m[2]?.trim() ?? ''
+    const alt = display || (target.includes('/') ? target.split('/').pop()! : target)
+    const src = rawGithubUrl(target)
+    let caption = m[3].trim()
+    // If no inline caption, check the very next line for plain-text caption
+    if (!caption && i + 1 < lines.length) {
+      const next = lines[i + 1].trim()
+      if (
+        next &&
+        !next.startsWith('#') &&
+        !next.startsWith('![[') &&
+        !next.startsWith('[[') &&
+        !next.startsWith('```') &&
+        !next.startsWith('>') &&
+        !next.startsWith('---') &&
+        !/^[-*+] /.test(next) &&
+        !/^\d+\. /.test(next)
+      ) {
+        // Strip surrounding emphasis markers commonly used for captions
+        caption = next.replace(/^\*(.+)\*$/, '$1').replace(/^_(.+)_$/, '$1')
+      }
+    }
+    results.push({ src, alt, caption })
   }
+
   return results
 }
 

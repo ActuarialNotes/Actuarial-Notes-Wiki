@@ -1,31 +1,24 @@
-**Probability** $P$ is a measure of how likely an event is to occur.
+**Probability** $P$ is a measure of how likely an event is to occur. It is a [[Set Function]] that maps events in a sample space to a real number between 0 and 1, and must satisfy the [[Axioms of Probability]].
+- If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space.
 
 $$P(A) = \frac{|A|}{|S|}$$
 
-- If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space.
-- Probability is a [[Set Function]] that maps events in a sample space to a real number between 0 and 1.
-- To be a probability, $P$ must satisfy the [[Axioms of Probability]]
+$$=\frac{\text{number of outcomes in A}}{\text{number of possible outcomes}}$$
 
 > [!example]- Probability of a Fair Die? {Example}
 > 
-> What is the probability of a subset (even numbers) within the full universe of a die roll (1 through 6)?
+> What is the probability of a rolling an even number on a fair 6-sided die?
 > 
-> Since the outcomes are mutually exclusive (you can't roll a 2 and a 4 at the same time), we can simply add their individual probabilities.
-> 
-> ### The Setup
-> * **Sample Space ($S$):** $\{1, 2, 3, 4, 5, 6\}$
-> * **Event ($E$):** Rolling an even number $\rightarrow \{2, 4, 6\}$
-> 
-> ### The Solve
-> Using **Axiom 3**, we sum the probabilities of each distinct successful outcome:
-> 
-> $$P(E) = P(\{2\}) + P(\{4\}) + P(\{6\})$$
-> 
-> Since the die is fair, each face has a probability of $\frac{1}{6}$:
-> 
-> $$P(E) = \frac{1}{6} + \frac{1}{6} + \frac{1}{6} = \frac{3}{6} = \mathbf{50\%}$$
-> 
-> > [!tip] Common Trap
-> > Always verify the sample space first.
-> > - If the problem said "a die is rolled and the result is greater than 2," your $|S|$ would change from 6 to 4.
-> > - This changes the denominator of every subsequent calculation!
+> > [!answer]-
+> >  
+> > - **Sample Space ($S$):** $\{1, 2, 3, 4, 5, 6\}$
+> > - **Event ($E$):** Rolling an even number $\rightarrow \{2, 4, 6\}$
+> >
+> > The size of the set $S$ is 6 (there are 6 possible outcomes)
+> > The size of the set $E$ is 3 (there are 3 even numbers)
+> > 
+> > $$P(E) = \frac{|E|}{|S|} = \frac{3}{6} = 50\%$$
+> >
+> > > [!tip] Common Trap
+> > > Always verify the sample space first.
+> > > If the problem said "a die is rolled and the result is greater than 2," your $|S|$ would change from 6 to 4

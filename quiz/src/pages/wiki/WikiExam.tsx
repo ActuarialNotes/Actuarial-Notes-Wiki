@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
-import { fromSlug, examIdFromFile } from '@/lib/wikiRoutes'
+import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
@@ -14,7 +14,7 @@ export default function WikiExam() {
   const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
   const { setPageRefs, setExamId } = useWikiPage()
-  const { openAt } = useConceptPopup()
+  const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const popupOpenedRef = useRef(false)
@@ -47,6 +47,26 @@ export default function WikiExam() {
     setExamId(examIdFromFile(examFileName))
     setPageRefs(pageRefs)
   }, [pageRefs, examFileName, setExamId, setPageRefs])
+
+  const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (ref.kind !== 'concept') return false
+    if (/ \([^)]*\d{4}\)$/.test(ref.name)) {
+      e.preventDefault()
+      openAt([{ kind: 'resource', name: ref.name }], 0, undefined)
+      return true
+    }
+    e.preventDefault()
+    const conceptList = pageRefs
+      .filter(r => r.kind === 'concept')
+      .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
+    const idx = conceptList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
+    openAt(
+      conceptList.length > 0 ? conceptList : [ref],
+      idx >= 0 ? idx : 0,
+      `${examFileName}.md`,
+    )
+    return true
+  }, [pageRefs, examFileName, openAt])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
@@ -86,35 +106,7 @@ export default function WikiExam() {
         <WikiArticle
           markdown={content}
           sourcePath={`${examFileName}.md`}
-          onWikiLink={(ref, e) => {
-            // Resource/exam links with explicit kind navigate normally.
-            if (ref.kind !== 'concept') return false
-
-            // Source material references use short names like
-            // "A First Course in Probability (Ross - 2019)" which lack the
-            // "Resources/Books/" prefix and therefore resolve as concepts by
-            // default. Detect them by the "(Author - Year)" suffix pattern and
-            // open them in the popup as resources instead.
-            if (/ \([^)]*\d{4}\)$/.test(ref.name)) {
-              e.preventDefault()
-              openAt([{ kind: 'resource', name: ref.name }], 0, undefined)
-              return true
-            }
-
-            e.preventDefault()
-            const conceptList = pageRefs
-              .filter(r => r.kind === 'concept')
-              .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
-            const idx = conceptList.findIndex(
-              r => r.name.toLowerCase() === ref.name.toLowerCase(),
-            )
-            openAt(
-              conceptList.length > 0 ? conceptList : [ref],
-              idx >= 0 ? idx : 0,
-              `${examFileName}.md`,
-            )
-            return true
-          }}
+          onWikiLink={onWikiLink}
         />
       )}
     </div>

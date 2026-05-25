@@ -450,6 +450,21 @@ export default function Flashcards() {
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
   )
 
+  function scrollCardIntoView(el: HTMLElement) {
+    const splitHeightStr = getComputedStyle(document.documentElement)
+      .getPropertyValue('--concept-split-height').trim()
+    const splitHeight = parseFloat(splitHeightStr) || 0
+    const effectiveBottom = window.innerHeight - splitHeight
+    const stickyOffset = 56
+    const rect = el.getBoundingClientRect()
+    const inView = rect.top >= stickyOffset && rect.bottom <= effectiveBottom
+    if (!inView) {
+      const visibleHeight = effectiveBottom - stickyOffset
+      const scrollBy = rect.top - stickyOffset - (visibleHeight / 2 - rect.height / 2)
+      window.scrollBy({ top: scrollBy, behavior: 'smooth' })
+    }
+  }
+
   // Scroll to and flash a card when arriving via the "view" link in the popup menu,
   // then open the concept popup after the flash animation completes.
   useEffect(() => {
@@ -460,7 +475,7 @@ export default function Flashcards() {
         el => el.getAttribute('data-card-name')?.toLowerCase() === highlightName.toLowerCase()
       ) as HTMLElement | null
       if (!el) return
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      scrollCardIntoView(el)
       setFlashingCard(highlightName)
       if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
       flashTimerRef.current = setTimeout(() => {
@@ -496,7 +511,7 @@ export default function Flashcards() {
       el => el.getAttribute('data-card-name')?.toLowerCase() === popupCurrentName.toLowerCase()
     ) as HTMLElement | null
     if (!el) return
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollCardIntoView(el)))
     setFlashingCard(popupCurrentName)
     const clearId = setTimeout(() => setFlashingCard(null), 1700)
     return () => clearTimeout(clearId)

@@ -170,7 +170,7 @@ export default function Dashboard() {
   }, [inProgressSyllabi.length])
 
   // ── Study plan ─────────────────────────────────────────────────────────────
-  const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan } =
+  const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan, replaceTodaysConcepts } =
     useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate)
 
   // Build a fast masteryState lookup (conceptName → MasteryState) for TodayCard chips
@@ -340,6 +340,7 @@ export default function Dashboard() {
             examDate={activeTargetDate}
             onConfigChange={updatePlanConfig}
             onRegenerate={regeneratePlan}
+            onReplaceConcepts={replaceTodaysConcepts}
             onExamDateChange={handleTargetDateChange}
             openConceptsTrigger={conceptsOpenCounter}
             startQuizTrigger={startQuizCounter}

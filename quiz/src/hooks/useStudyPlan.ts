@@ -23,6 +23,7 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { readTodayLevelUps } from '@/lib/dailyProgressStore'
 
 export interface UseStudyPlanResult {
   plan: StudyPlan | null
@@ -30,6 +31,7 @@ export interface UseStudyPlanResult {
   loading: boolean
   updateConfig: (next: Partial<StudyPlanConfig>) => void
   regenerate: () => void
+  replaceTodaysConcepts: (concepts: string[]) => void
 }
 
 const DEFAULT_CONFIG: StudyPlanConfig = {
@@ -154,7 +156,8 @@ export function useStudyPlan(
 
     // 3. Generate fresh using the latest mastery snapshot (via ref, not reactive
     //    dep) and persist to both localStorage and the server.
-    const fresh = generateStudyPlan({ examId, syllabus, masteryRecords: masteryRef.current, config, examDate })
+    const todaysLevelUps = readTodayLevelUps().map(lu => lu.conceptSlug)
+    const fresh = generateStudyPlan({ examId, syllabus, masteryRecords: masteryRef.current, config, examDate, todaysLevelUps })
     saveCachedStudyPlan(fresh)
     updateStudyPlanCache(examId, fresh).catch(() => { /* best-effort */ })
     setPlan(fresh)
@@ -184,7 +187,15 @@ export function useStudyPlan(
     setTick(t => t + 1)
   }, [])
 
+  const replaceTodaysConcepts = useCallback((newConcepts: string[]) => {
+    if (!plan || !examId) return
+    const updated: StudyPlan = { ...plan, todaysConcepts: newConcepts }
+    setPlan(updated)
+    saveCachedStudyPlan(updated)
+    updateStudyPlanCache(examId, updated).catch(() => { /* best-effort */ })
+  }, [plan, examId, updateStudyPlanCache])
+
   const stablePlan = useMemo(() => plan, [plan])
 
-  return { plan: stablePlan, config, loading, updateConfig, regenerate }
+  return { plan: stablePlan, config, loading, updateConfig, regenerate, replaceTodaysConcepts }
 }

@@ -283,6 +283,7 @@ interface Props {
   examDate: string | null
   onConfigChange: (next: Partial<StudyPlanConfig>) => void
   onRegenerate: () => void
+  onReplaceConcepts?: (concepts: string[]) => void
   onExamDateChange?: (date: string | null) => void
   openConceptsTrigger?: number
   startQuizTrigger?: number
@@ -292,7 +293,7 @@ interface Props {
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
-  config, loading, examDate, onConfigChange, onRegenerate, onExamDateChange,
+  config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger,
   isPremium = true,
 }: Props) {
@@ -307,6 +308,21 @@ export function ReadinessCard({
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [showConfig, setShowConfig] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
+  const [showBonusInfo, setShowBonusInfo] = useState(false)
+  const [bonusClaimed, setBonusClaimed] = useState<boolean>(() => {
+    try {
+      const key = `actuarial_daily_bonus_${wikiExamIdToProgressKey(syllabus.examId)}_${todayISO()}`
+      const raw = localStorage.getItem(key)
+      return raw ? !!(JSON.parse(raw) as { amount?: number }).amount : false
+    } catch { return false }
+  })
+  const [claimedBonusAmount, setClaimedBonusAmount] = useState<number>(() => {
+    try {
+      const key = `actuarial_daily_bonus_${wikiExamIdToProgressKey(syllabus.examId)}_${todayISO()}`
+      const raw = localStorage.getItem(key)
+      return raw ? ((JSON.parse(raw) as { amount?: number }).amount ?? 0) : 0
+    } catch { return 0 }
+  })
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const [featurePanelIndex, setFeaturePanelIndex] = useState(0)
   const [swipeTouchStart, setSwipeTouchStart] = useState(0)
@@ -515,6 +531,56 @@ export function ReadinessCard({
     }),
     [displayConcepts, completedToday, targetByName, masteryStateByName]
   )
+
+  // Concepts levelled up today that weren't in the original plan
+  const bonusConcepts = useMemo(() =>
+    completedToday.filter(lu =>
+      !displayConcepts.some(n => n.toLowerCase() === lu.conceptSlug.toLowerCase())
+    ),
+    [completedToday, displayConcepts]
+  )
+
+  // Originally planned concepts that are not yet completed
+  const incompleteOriginalConcepts = useMemo(() =>
+    displayConcepts.filter(name => {
+      const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+      const current = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+      return (
+        !completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) &&
+        STATE_ORDER[current] < STATE_ORDER[target]
+      )
+    }),
+    [displayConcepts, completedToday, targetByName, masteryStateByName]
+  )
+
+  const showReplaceButton = bonusConcepts.length > 0 && incompleteOriginalConcepts.length > 0
+
+  function handleReplace() {
+    const seen = new Set<string>()
+    const newConcepts = completedToday
+      .map(lu => lu.conceptSlug)
+      .filter(s => { const k = s.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true })
+    onReplaceConcepts?.(newConcepts)
+  }
+
+  // Auto-claim the 2× daily bonus when all plan concepts are done
+  useEffect(() => {
+    if (!allConceptsDone || bonusClaimed || todayGemsEarned === 0 || !user) return
+    const amount = todayGemsEarned
+    supabase.rpc('award_gems', { p_amount: amount })
+      .then(({ error }: { error: { message: string } | null }) => {
+        if (!error) {
+          setBonusClaimed(true)
+          setClaimedBonusAmount(amount)
+          localStorage.setItem(
+            `actuarial_daily_bonus_${progressKey}_${todayISO()}`,
+            JSON.stringify({ amount })
+          )
+          window.dispatchEvent(new CustomEvent('gems-awarded', { detail: { amount } }))
+        }
+      })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allConceptsDone, bonusClaimed, todayGemsEarned, user, progressKey])
 
   function handleSectionHover(i: number | null) {
     setHoveredSection(i)
@@ -752,7 +818,44 @@ export function ReadinessCard({
                       </button>
                     )
                   })}
+
+                  {/* Bonus concepts — levelled up today but not in the original plan */}
+                  {bonusConcepts.length > 0 && (
+                    <>
+                      <div className="flex items-center gap-2 pt-1">
+                        <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
+                        <span className="text-xs text-muted-foreground shrink-0">Also completed today</span>
+                        <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
+                      </div>
+                      {bonusConcepts.map(lu => (
+                        <div key={lu.conceptSlug} className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg">
+                          <Check className="h-4 w-4 text-green-500 shrink-0" />
+                          <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
+                            {lu.conceptSlug}
+                          </span>
+                          <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
+                            → {STATE_LABEL[lu.to]}
+                          </span>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </div>
+
+                {/* Replace button — swap incomplete plan items with today's completed concepts */}
+                {showReplaceButton && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleReplace}
+                    className="w-full gap-1.5 text-xs h-8"
+                  >
+                    Replace
+                    <span className="text-muted-foreground font-normal">
+                      — use today's completed concepts
+                    </span>
+                  </Button>
+                )}
 
                 {allConceptsDone ? (
                   <div className="flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2.5 text-green-600 dark:text-green-400">
@@ -779,6 +882,46 @@ export function ReadinessCard({
                     )}
                   </div>
                 )}
+
+                {/* Daily Bonus — locked until plan is complete */}
+                <button
+                  type="button"
+                  onClick={() => setShowBonusInfo(true)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors text-left ${
+                    allConceptsDone
+                      ? 'bg-cyan-500/10 border-cyan-500/30 hover:bg-cyan-500/15'
+                      : 'border-dashed border-muted-foreground/30 hover:bg-muted/20'
+                  }`}
+                >
+                  <div className={`flex items-center justify-center h-8 w-8 rounded-full shrink-0 ${allConceptsDone ? 'bg-cyan-500/20' : 'bg-muted/50'}`}>
+                    {allConceptsDone
+                      ? <Gem className="h-4 w-4 text-cyan-400" />
+                      : <Lock className="h-3.5 w-3.5 text-muted-foreground" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    {allConceptsDone && bonusClaimed ? (
+                      <>
+                        <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+                          +{claimedBonusAmount} bonus gems earned!
+                        </p>
+                        <p className="text-xs text-cyan-600/70 dark:text-cyan-400/70">Daily plan bonus claimed</p>
+                      </>
+                    ) : allConceptsDone ? (
+                      <>
+                        <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+                          2× Daily Gems Bonus unlocked!
+                        </p>
+                        <p className="text-xs text-cyan-600/70 dark:text-cyan-400/70">Awarding +{todayGemsEarned} gems…</p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-sm font-medium text-muted-foreground">2× Daily Gems Bonus</p>
+                        <p className="text-xs text-muted-foreground/70">Complete today's plan to unlock</p>
+                      </>
+                    )}
+                  </div>
+                  <Info className="h-4 w-4 text-muted-foreground/60 shrink-0" />
+                </button>
               </CardContent>
             </Card>
           )}
@@ -1085,6 +1228,71 @@ export function ReadinessCard({
         />
       )}
       <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
+      <DailyBonusInfoPanel open={showBonusInfo} onClose={() => setShowBonusInfo(false)} />
+    </div>
+  )
+}
+
+// ── Daily Bonus Info Panel ────────────────────────────────────────────────────
+
+function DailyBonusInfoPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) return null
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Daily study plan bonus"
+      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div className="w-full max-w-sm bg-card border rounded-xl shadow-2xl flex flex-col my-16">
+        <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
+          <Gem className="h-4 w-4 text-cyan-400 shrink-0" />
+          <span className="flex-1 font-semibold text-sm">Daily Study Plan Bonus</span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
+            aria-label="Close"
+          >
+            <span className="text-lg leading-none">×</span>
+          </button>
+        </div>
+        <div className="p-5 space-y-4 text-sm leading-relaxed">
+          <div className="flex items-center justify-center gap-3 py-2">
+            <div className="flex items-center justify-center h-14 w-14 rounded-full bg-muted/50 border">
+              <Lock className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <span className="text-2xl text-muted-foreground">→</span>
+            <div className="flex items-center justify-center h-14 w-14 rounded-full bg-cyan-500/20 border border-cyan-500/30">
+              <Gem className="h-6 w-6 text-cyan-400" />
+            </div>
+          </div>
+          <p className="text-muted-foreground">
+            Complete every concept in today's study plan and we'll double the gems you earned today from quizzes.
+          </p>
+          <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1">
+            <p className="text-xs font-semibold">How it works</p>
+            <ul className="text-xs text-muted-foreground space-y-1">
+              <li>· Earn gems by answering questions correctly (1 gem each)</li>
+              <li>· Finish all of today's planned concepts</li>
+              <li>· Receive a bonus equal to your gems earned today</li>
+            </ul>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Tip: if today's plan doesn't reflect what you actually studied, use the <strong>Replace</strong> button to swap in the concepts you completed today.
+          </p>
+        </div>
+        <div className="px-5 pb-5 flex justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            Got it
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

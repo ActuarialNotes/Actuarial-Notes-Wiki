@@ -158,10 +158,13 @@ interface GenerateInput {
   masteryRecords: ConceptMasteryRecord[]
   config: StudyPlanConfig
   examDate: string | null
+  /** Concept slugs levelled up today — used to keep today's plan grounded in actual quiz progress
+   *  even when the plan regenerates mid-day (e.g. after a config change). */
+  todaysLevelUps?: string[]
 }
 
 export function generateStudyPlan(input: GenerateInput): StudyPlan {
-  const { examId, syllabus, masteryRecords, config, examDate } = input
+  const { examId, syllabus, masteryRecords, config, examDate, todaysLevelUps } = input
   const today = todayISO()
   const now = new Date()
 
@@ -367,11 +370,26 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   }
 
   // Deduplicate todaysConcepts — a concept should appear at most once today
-  const todaysConcepts = [...new Set(
+  let todaysConcepts = [...new Set(
     assignments
       .filter(a => a.scheduledDate === today)
       .map(a => a.conceptName)
   )]
+
+  // If concepts were already levelled up today, prefer them over fresh unlearned ones.
+  // This keeps today's plan grounded in actual quiz progress when the plan regenerates
+  // mid-day (e.g. after a config change): the user sees what they actually worked on,
+  // not a list of brand-new concepts they haven't touched yet.
+  if (todaysLevelUps && todaysLevelUps.length > 0) {
+    const leveledUpSet = new Set(todaysLevelUps.map(s => s.toLowerCase()))
+    const originalCount = todaysConcepts.length
+    if (todaysLevelUps.length >= originalCount) {
+      todaysConcepts = todaysLevelUps.slice(0, originalCount)
+    } else {
+      const fresh = todaysConcepts.filter(n => !leveledUpSet.has(n.toLowerCase()))
+      todaysConcepts = [...todaysLevelUps, ...fresh].slice(0, originalCount)
+    }
+  }
 
   // conceptsPerDay = average daily new-concept introductions needed to stay on pace.
   // Using neededNewPerDay (uncapped) so the displayed number reflects the true required

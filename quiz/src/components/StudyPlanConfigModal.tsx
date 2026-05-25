@@ -182,7 +182,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                     value={localExamDate}
                     min={today}
                     onChange={e => handleExamDateChange(e.target.value)}
-                    className="block w-full bg-background px-3 py-2 text-sm transition-colors focus:outline-none"
+                    className="block w-full bg-background px-3 py-2 text-base transition-colors focus:outline-none"
                   />
                 </div>
               </div>
@@ -289,7 +289,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                             min={today}
                             max={localExamDate || examDate || undefined}
                             onChange={e => handleReadyDateChange(e.target.value)}
-                            className="block w-full bg-background px-3 py-2 text-sm transition-colors focus:outline-none"
+                            className="block w-full bg-background px-3 py-2 text-base transition-colors focus:outline-none"
                           />
                         </div>
                       </div>

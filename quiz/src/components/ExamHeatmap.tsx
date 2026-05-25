@@ -324,7 +324,7 @@ export function ExamHeatmap({
                   onKeyDown={e => {
                     if (e.key === 'Escape') setEditing(false)
                   }}
-                  className="text-[11px] bg-background border rounded px-1 py-0.5 text-foreground"
+                  className="text-[16px] bg-background border rounded px-1 py-0.5 text-foreground"
                 />
                 <button
                   type="button"
@@ -393,7 +393,7 @@ export function ExamHeatmap({
                   onKeyDown={e => {
                     if (e.key === 'Escape') setEditingReady(false)
                   }}
-                  className="text-[11px] bg-background border rounded px-1 py-0.5 text-foreground"
+                  className="text-[16px] bg-background border rounded px-1 py-0.5 text-foreground"
                 />
                 <button
                   type="button"

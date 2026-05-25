@@ -181,7 +181,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search exams, concepts…"
-            className="w-full pl-8 pr-8 py-1.5 text-sm rounded-md border bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full pl-8 pr-8 py-1.5 text-base rounded-md border bg-background focus:outline-none focus:ring-2 focus:ring-ring"
           />
           {query && (
             <button
@@ -201,7 +201,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
             <select
               value={topic}
               onChange={e => setTopic(e.target.value)}
-              className="text-xs rounded-md border bg-background px-1.5 py-1"
+              className="text-base rounded-md border bg-background px-1.5 py-1"
               aria-label="Filter by exam topic"
             >
               <option value="">All exams</option>
@@ -212,7 +212,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
             <select
               value={author}
               onChange={e => setAuthor(e.target.value)}
-              className="text-xs rounded-md border bg-background px-1.5 py-1"
+              className="text-base rounded-md border bg-background px-1.5 py-1"
               aria-label="Filter by author"
             >
               <option value="">All authors</option>
@@ -225,7 +225,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
               placeholder="Year ≥"
               value={yearMin}
               onChange={e => setYearMin(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
-              className="text-xs rounded-md border bg-background px-1.5 py-1"
+              className="text-base rounded-md border bg-background px-1.5 py-1"
               aria-label="Minimum year"
             />
             <input
@@ -233,7 +233,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
               placeholder="Year ≤"
               value={yearMax}
               onChange={e => setYearMax(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
-              className="text-xs rounded-md border bg-background px-1.5 py-1"
+              className="text-base rounded-md border bg-background px-1.5 py-1"
               aria-label="Maximum year"
             />
           </div>

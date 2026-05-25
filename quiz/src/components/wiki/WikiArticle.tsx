@@ -73,6 +73,8 @@ export interface WikiArticleProps {
   // highlighted and scrolled into view.
   sourcePath?: string
   className?: string
+  /** Optional node rendered inline after the H1 title (e.g. an exam status badge). */
+  titleBadge?: React.ReactNode
 }
 
 function refKey(ref: WikiEntryRef): string {
@@ -106,7 +108,7 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, className, titleBadge }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const processed = useMemo(() => {
@@ -121,6 +123,15 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
 
   const components = useMemo<Components>(() => ({
     ...calloutComponents,
+    h1({ children, ...rest }) {
+      if (!titleBadge) return <h1 {...rest}>{children}</h1>
+      return (
+        <h1 {...rest} className="flex items-center gap-2 flex-wrap">
+          <span>{children}</span>
+          {titleBadge}
+        </h1>
+      )
+    },
     a({ href, children, ...rest }) {
       if (!href) return <a {...rest}>{children}</a>
       const ref = hrefToEntryRef(href)
@@ -149,7 +160,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
         </a>
       )
     },
-  }), [navigate, onWikiLink])
+  }), [navigate, onWikiLink, titleBadge])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

@@ -10,6 +10,7 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { useExamProgress, type ExamProgressRow } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { loadStudyPlanConfig } from '@/lib/studyPlan'
 import type { ItemStatus } from '@/data/tracks'
 
 const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
@@ -81,6 +82,34 @@ function ExamStatusBadge({ progressKey }: { progressKey: string }) {
   )
 }
 
+function ExamDaysPill({
+  count,
+  explanation,
+  className,
+}: {
+  count: number
+  explanation: string
+  className?: string
+}) {
+  const [open, setOpen] = useState(false)
+  return (
+    <span className="relative inline-flex not-prose">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className={`inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold leading-none cursor-pointer select-none ${className ?? ''}`}
+      >
+        {count}
+      </button>
+      {open && (
+        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 z-50 w-max max-w-52 rounded-lg bg-popover border text-popover-foreground shadow-md px-3 py-2 text-xs font-normal leading-snug whitespace-normal text-center">
+          {explanation}
+        </span>
+      )}
+    </span>
+  )
+}
+
 export default function WikiExam() {
   const { slug = '' } = useParams()
   const [searchParams] = useSearchParams()
@@ -100,7 +129,38 @@ export default function WikiExam() {
     return wikiExamIdToProgressKey(cleaned)
   }, [examFileName])
 
-  const titleBadge = useMemo(() => <ExamStatusBadge progressKey={progressKey} />, [progressKey])
+  const { examRows } = useExamProgress()
+
+  const { daysToPrepare, daysUntilExam } = useMemo(() => {
+    const row = examRows.find(r => r.exam_id === progressKey)
+    const examDate = row?.target_date ?? null
+    const targetReadyDate = row?.study_plan_config?.targetReadyDate
+      ?? loadStudyPlanConfig(progressKey).targetReadyDate
+    const now = new Date(); now.setHours(0, 0, 0, 0)
+    const calcDays = (date: string | null) =>
+      date ? Math.max(Math.ceil((new Date(date + 'T00:00:00').getTime() - now.getTime()) / 86400000), 0) : null
+    return { daysToPrepare: calcDays(targetReadyDate), daysUntilExam: calcDays(examDate) }
+  }, [examRows, progressKey])
+
+  const titleBadge = useMemo(() => (
+    <span className="inline-flex items-center gap-2 not-prose">
+      <ExamStatusBadge progressKey={progressKey} />
+      {daysToPrepare !== null && (
+        <ExamDaysPill
+          count={daysToPrepare}
+          explanation={`${daysToPrepare} days to prepare until your target study-ready date`}
+          className="bg-amber-400/20 text-amber-400 ring-1 ring-inset ring-amber-400/40"
+        />
+      )}
+      {daysUntilExam !== null && (
+        <ExamDaysPill
+          count={daysUntilExam}
+          explanation={`${daysUntilExam} days until your scheduled exam`}
+          className="bg-muted text-foreground ring-1 ring-inset ring-border"
+        />
+      )}
+    </span>
+  ), [progressKey, daysToPrepare, daysUntilExam])
 
   useEffect(() => {
     let cancelled = false

@@ -696,27 +696,27 @@ export function ReadinessCard({
           {/* Countdown numbers — premium users */}
           {(examDate || config.targetReadyDate) && (
             <div className="grid grid-cols-2 gap-3">
-              {examDate && (() => {
-                const now = new Date(); now.setHours(0, 0, 0, 0)
-                const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
-                return (
-                  <div className="rounded-xl border bg-card p-4 text-center">
-                    <p className={`text-5xl font-bold tabular-nums ${days <= 14 ? 'text-destructive' : days <= 30 ? 'text-yellow-500' : ''}`}>
-                      {Math.max(days, 0)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
-                  </div>
-                )
-              })()}
               {config.targetReadyDate && (() => {
                 const now = new Date(); now.setHours(0, 0, 0, 0)
                 const days = Math.ceil((new Date(config.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
                 return (
                   <div className="rounded-xl border bg-card p-4 text-center">
-                    <p className={`text-5xl font-bold tabular-nums ${days <= 7 ? 'text-destructive' : days <= 14 ? 'text-yellow-500' : ''}`}>
+                    <p className="text-5xl font-bold tabular-nums text-amber-400">
                       {Math.max(days, 0)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5 font-medium">days to prepare</p>
+                  </div>
+                )
+              })()}
+              {examDate && (() => {
+                const now = new Date(); now.setHours(0, 0, 0, 0)
+                const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
+                return (
+                  <div className="rounded-xl border bg-card p-4 text-center">
+                    <p className="text-5xl font-bold tabular-nums">
+                      {Math.max(days, 0)}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
                   </div>
                 )
               })()}
@@ -920,27 +920,27 @@ export function ReadinessCard({
           {/* Countdown numbers */}
           {(examDate || config.targetReadyDate) && (
             <div className="grid grid-cols-2 gap-3">
-              {examDate && (() => {
-                const now = new Date(); now.setHours(0, 0, 0, 0)
-                const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
-                return (
-                  <div className="rounded-xl border bg-card p-4 text-center">
-                    <p className={`text-5xl font-bold tabular-nums ${days <= 14 ? 'text-destructive' : days <= 30 ? 'text-yellow-500' : ''}`}>
-                      {Math.max(days, 0)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
-                  </div>
-                )
-              })()}
               {config.targetReadyDate && (() => {
                 const now = new Date(); now.setHours(0, 0, 0, 0)
                 const days = Math.ceil((new Date(config.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
                 return (
                   <div className="rounded-xl border bg-card p-4 text-center">
-                    <p className={`text-5xl font-bold tabular-nums ${days <= 7 ? 'text-destructive' : days <= 14 ? 'text-yellow-500' : ''}`}>
+                    <p className="text-5xl font-bold tabular-nums text-amber-400">
                       {Math.max(days, 0)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5 font-medium">days to prepare</p>
+                  </div>
+                )
+              })()}
+              {examDate && (() => {
+                const now = new Date(); now.setHours(0, 0, 0, 0)
+                const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
+                return (
+                  <div className="rounded-xl border bg-card p-4 text-center">
+                    <p className="text-5xl font-bold tabular-nums">
+                      {Math.max(days, 0)}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
                   </div>
                 )
               })()}

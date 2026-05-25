@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
-import { applyAnswer, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
+import { applyAnswer, decayIfStale, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { appendTodayLevelUps } from '@/lib/dailyProgressStore'
@@ -177,7 +177,13 @@ function computeMasteryTransitions(
 
   const transitions: MasteryTransition[] = []
   for (const [key, after] of simulated) {
-    const fromState: MasteryState = bySlug.get(key)?.state ?? 'new'
+    // Apply decay so that a concept stored as e.g. level1 but displayed as
+    // forgotten (due to elapsed time) produces fromState='forgotten', not
+    // 'level1'. Without this, a stale concept answered correctly would compute
+    // level1→level1 (no change) and the transition would be silently dropped,
+    // causing daily_completions and TodayCard to miss the re-earning event.
+    const rawRecord = bySlug.get(key)
+    const fromState: MasteryState = rawRecord ? decayIfStale(rawRecord, now).state : 'new'
     if (fromState !== after.state) {
       transitions.push({ conceptSlug: after.concept_slug, from: fromState, to: after.state })
     }

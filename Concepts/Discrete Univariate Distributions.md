@@ -1,12 +1,12 @@
 - A **Discrete Univariate Distribution** describes the probability law of a single random variable $X$ that takes on a countable set of values.
 
-![[Media/Binomial_distribution_pmf.svg]]
+![[Media/Binomial_distribution_pmf.svg]]Binomial Distribution - Probability Mass Function
 - The probability mass function (PMF) $f(k)$  specifies the probability that the variable will take on a particular, distinct value $k$.
 - $$P(X = k) = f(k), \quad k \in \{x_1, x_2, \ldots\}$$
 - The PMF must satisfy $f(k) \geq 0$ for all $k$
 - and the PMF must satisfy $\sum_{k} f(k) = 1$.
 
-![[Media/Binomial_distribution_cdf.svg]]
+![[Media/Binomial_distribution_cdf.svg]]Binomial Distribution - Cumulative Distribution Function
 - The cumulative distribution function specifices the probability that the variable will be less than or equal to a specific value $x$.
 - $F(x) = P(X \leq x) = \sum_{k \leq x} f(k)$.
 

@@ -88,6 +88,8 @@ export interface WikiArticleProps {
   // When true, images are not rendered inline (used when a gallery button is shown instead).
   hideImages?: boolean
   className?: string
+  /** Optional node rendered inline after the H1 title (e.g. an exam status badge). */
+  titleBadge?: React.ReactNode
 }
 
 function refKey(ref: WikiEntryRef): string {
@@ -121,7 +123,7 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const processed = useMemo(() => {
@@ -136,6 +138,15 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
 
   const components = useMemo<Components>(() => ({
     ...calloutComponents,
+    h1({ children, ...rest }) {
+      if (!titleBadge) return <h1 {...rest}>{children}</h1>
+      return (
+        <h1 {...rest} className="flex items-center gap-2 flex-wrap">
+          <span>{children}</span>
+          {titleBadge}
+        </h1>
+      )
+    },
     img({ src, alt }) {
       if (hideImages) return null
       return <img src={src} alt={alt ?? ''} className="max-w-full" />
@@ -168,7 +179,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [navigate, onWikiLink, hideImages])
+  }), [navigate, onWikiLink, hideImages, titleBadge])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

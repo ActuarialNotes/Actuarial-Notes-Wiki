@@ -100,7 +100,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/review" element={<Review />} />
                 <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
                 <Route path="/search" element={<Search />} />
-                <Route path="/flashcards" element={<Flashcards />} />
+                <Route path="/flashcards" element={<ErrorBoundary><Flashcards /></ErrorBoundary>} />
                 <Route path="/browse" element={<Navigate to="/search" replace />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/upgrade" element={<Upgrade />} />

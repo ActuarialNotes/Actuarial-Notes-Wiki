@@ -354,7 +354,7 @@ function TodayStudyPlanSection() {
             </p>
           )}
 
-          {!isLoading && primarySyllabus && !studyPlan?.config.targetReadyDate && (
+          {!isLoading && primarySyllabus && !studyPlan?.config?.targetReadyDate && (
             <p className="text-sm text-muted-foreground py-2">
               Set up your study plan on the{' '}
               <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}

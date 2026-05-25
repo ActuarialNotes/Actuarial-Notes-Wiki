@@ -53,8 +53,10 @@ export function useStudyPlan(
     : null
   // Stable identity so the generation effect only re-runs when the server plan
   // meaningfully changes — not on every realtime row refresh.
+  // Use optional chaining in case a plan cached before the `config` field existed
+  // has config: undefined at runtime — accessing it directly would crash on render.
   const serverPlanKey = serverPlan
-    ? `${serverPlan.generatedDate}|${serverPlan.config.targetReadyDate}|${serverPlan.config.targetStrengthLevel}`
+    ? `${serverPlan.generatedDate}|${serverPlan.config?.targetReadyDate ?? ''}|${serverPlan.config?.targetStrengthLevel ?? ''}`
     : ''
 
   const [config, setConfig] = useState<StudyPlanConfig>(() =>
@@ -133,7 +135,7 @@ export function useStudyPlan(
 
     // 1. Server plan wins — it's the cross-device source of truth. Mirror it to
     //    localStorage so offline refreshes stay consistent with other devices.
-    if (!force && serverPlan && serverPlan.generatedDate === today && configMatches(serverPlan.config)) {
+    if (!force && serverPlan && serverPlan.generatedDate === today && serverPlan.config && configMatches(serverPlan.config)) {
       saveCachedStudyPlan(serverPlan)
       setPlan(serverPlan)
       setLoading(false)
@@ -143,7 +145,7 @@ export function useStudyPlan(
     // 2. Local cache (same-day stability when the server has no plan yet).
     //    Push it up so other devices converge on this plan.
     const cached = loadCachedStudyPlan(examId)
-    if (!force && cached && cached.generatedDate === today && configMatches(cached.config)) {
+    if (!force && cached && cached.generatedDate === today && cached.config && configMatches(cached.config)) {
       setPlan(cached)
       setLoading(false)
       updateStudyPlanCache(examId, cached).catch(() => { /* best-effort */ })

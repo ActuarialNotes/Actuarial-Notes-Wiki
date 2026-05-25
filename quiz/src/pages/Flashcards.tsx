@@ -260,12 +260,15 @@ export default function Flashcards() {
   const { records: masteryRecords } = useConceptMastery()
   const openAt = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
+  const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
   const [searchParams, setSearchParams] = useSearchParams()
   const highlightName = searchParams.get('highlight')
   const [flashingCard, setFlashingCard] = useState<string | null>(null)
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   // Always-current snapshot of orderedCards for use inside timer closures.
   const orderedCardsRef = useRef<FlashCard[]>([])
+  // Track previous popup concept so we only flash on actual navigation changes.
+  const prevPopupNameRef = useRef<string | null>(null)
 
   const [studying, setStudying] = useState(false)
   const [studyCards, setStudyCards] = useState<WikiEntryRef[]>([])
@@ -308,6 +311,26 @@ export default function Flashcards() {
     }, 200)
     return () => clearTimeout(timerId)
   }, [highlightName])
+
+  // Reset the tracked name when the popup closes so the next open always flashes.
+  useEffect(() => {
+    if (!popupOpen) prevPopupNameRef.current = null
+  }, [popupOpen])
+
+  // Flash and scroll the grid card whenever the popup navigates to a new concept.
+  useEffect(() => {
+    if (!popupCurrentName || popupCurrentName === prevPopupNameRef.current) return
+    prevPopupNameRef.current = popupCurrentName
+    const all = document.querySelectorAll('[data-card-name]')
+    const el = Array.from(all).find(
+      el => el.getAttribute('data-card-name')?.toLowerCase() === popupCurrentName.toLowerCase()
+    ) as HTMLElement | null
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    setFlashingCard(popupCurrentName)
+    const clearId = setTimeout(() => setFlashingCard(null), 1700)
+    return () => clearTimeout(clearId)
+  }, [popupCurrentName])
 
   // concept name → exam label
   const conceptToExam = useMemo(() => {

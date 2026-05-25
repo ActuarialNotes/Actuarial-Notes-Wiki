@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BookOpen, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Loader2, Play, X } from 'lucide-react'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -273,13 +272,11 @@ export function ConceptDetailModal({
   }, [conceptFilter])
 
   const navigate = useNavigate()
-  const openAt = useConceptPopup(s => s.openAt)
   const badge = MASTERY_BADGE[currentMasteryState] ?? MASTERY_BADGE.new
 
   function openInStudyGuide() {
-    openAt([{ kind: 'concept', name: currentConceptName }], 0, null)
     navigate(syllabus?.fileName
-      ? wikiRoute({ kind: 'exam', name: syllabus.fileName })
+      ? `${wikiRoute({ kind: 'exam', name: syllabus.fileName })}?concept=${encodeURIComponent(currentConceptName)}`
       : '/wiki'
     )
     onClose()

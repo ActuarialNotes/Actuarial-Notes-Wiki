@@ -26,7 +26,7 @@ export function ConceptPopup() {
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
-  const [images, setImages] = useState<Array<{ src: string; alt: string }>>([])
+  const [images, setImages] = useState<Array<{ src: string; alt: string; caption: string }>>([])
   const [showGallery, setShowGallery] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
   const playMenuRef = useRef<HTMLDivElement>(null)

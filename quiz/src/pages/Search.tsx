@@ -652,7 +652,7 @@ export default function Search() {
               value={textQuery}
               onChange={e => setTextQuery(e.target.value)}
               placeholder={searchPlaceholder}
-              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-sm text-foreground placeholder:text-muted-foreground"
+              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-base text-foreground placeholder:text-muted-foreground"
               autoComplete="off"
               spellCheck={false}
             />

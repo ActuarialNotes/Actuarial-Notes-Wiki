@@ -100,6 +100,8 @@ export default function WikiExam() {
     return wikiExamIdToProgressKey(cleaned)
   }, [examFileName])
 
+  const titleBadge = useMemo(() => <ExamStatusBadge progressKey={progressKey} />, [progressKey])
+
   useEffect(() => {
     let cancelled = false
     setStatus('loading')
@@ -188,7 +190,7 @@ export default function WikiExam() {
           markdown={content}
           sourcePath={`${examFileName}.md`}
           onWikiLink={onWikiLink}
-          titleBadge={<ExamStatusBadge progressKey={progressKey} />}
+          titleBadge={titleBadge}
         />
       )}
     </div>

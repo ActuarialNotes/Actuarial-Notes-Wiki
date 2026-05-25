@@ -2,8 +2,8 @@
      data-current="FM-2|Financial Mathematics"
 </div>
 
-# Exam FM-2 Syllabus
-The **Financial Mathematics (FM-2) Exam** is a 2.5 hour exam with 35 multiple choice questions about financial mathematics concepts and how they are applied in calculating present and accumulated values for streams of cash flows.
+# Exam FM-2
+The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multiple choice questions about financial mathematics concepts and how they are applied in calculating present and accumulated values for streams of cash flows.
 
 ## Learning Objectives
 

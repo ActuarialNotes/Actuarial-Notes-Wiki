@@ -473,6 +473,19 @@ export function ReadinessCard({
     [syllabus, examRecords],
   )
 
+  // Set of concept names belonging to this exam — used to scope today's level-ups
+  // so that completing an Exam P concept never shows up in an Exam FM plan.
+  const syllabusConceptNames = useMemo(() =>
+    new Set(syllabus.topics.flatMap(t => t.concepts.map(c => c.name.toLowerCase()))),
+    [syllabus]
+  )
+
+  // Today's level-ups scoped to this exam's syllabus only
+  const examCompletedToday = useMemo(() =>
+    completedToday.filter(lu => syllabusConceptNames.has(lu.conceptSlug.toLowerCase())),
+    [completedToday, syllabusConceptNames]
+  )
+
   const displayConcepts = plan?.status === 'review_mode'
     ? (plan?.reviewConcepts ?? [])
     : (plan?.todaysConcepts ?? [])
@@ -518,48 +531,61 @@ export function ReadinessCard({
     [examSessions, todayStr]
   )
 
-  const todayLevelUps = completedToday.length
+  const todayLevelUps = examCompletedToday.length
 
   const allConceptsDone = useMemo(() =>
     displayConcepts.length > 0 && displayConcepts.every(name => {
       const target = targetByName.get(name.toLowerCase()) ?? 'level1'
       const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
       return (
-        completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+        examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
         STATE_ORDER[currentState] >= STATE_ORDER[target]
       )
     }),
-    [displayConcepts, completedToday, targetByName, masteryStateByName]
+    [displayConcepts, examCompletedToday, targetByName, masteryStateByName]
   )
 
-  // Concepts levelled up today that weren't in the original plan
+  // Concepts levelled up today for this exam that weren't in the original plan
   const bonusConcepts = useMemo(() =>
-    completedToday.filter(lu =>
+    examCompletedToday.filter(lu =>
       !displayConcepts.some(n => n.toLowerCase() === lu.conceptSlug.toLowerCase())
     ),
-    [completedToday, displayConcepts]
+    [examCompletedToday, displayConcepts]
   )
 
-  // Originally planned concepts that are not yet completed
+  // Originally planned concepts that are not yet completed (for this exam)
   const incompleteOriginalConcepts = useMemo(() =>
     displayConcepts.filter(name => {
       const target = targetByName.get(name.toLowerCase()) ?? 'level1'
       const current = masteryStateByName.get(name.toLowerCase()) ?? 'new'
       return (
-        !completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) &&
+        !examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) &&
         STATE_ORDER[current] < STATE_ORDER[target]
       )
     }),
-    [displayConcepts, completedToday, targetByName, masteryStateByName]
+    [displayConcepts, examCompletedToday, targetByName, masteryStateByName]
   )
 
   const showReplaceButton = bonusConcepts.length > 0 && incompleteOriginalConcepts.length > 0
 
   function handleReplace() {
+    // One-for-one swap: each bonus concept replaces exactly one incomplete planned concept.
+    // Completed originals stay. Incomplete originals beyond the bonus count also stay.
+    const completedOriginal = displayConcepts.filter(name =>
+      !incompleteOriginalConcepts.some(n => n.toLowerCase() === name.toLowerCase())
+    )
+    const bonusSlugs = bonusConcepts.map(lu => lu.conceptSlug)
+    // Incomplete concepts not covered by a bonus slot remain in the plan
+    const remainingIncomplete = incompleteOriginalConcepts.slice(bonusSlugs.length)
+    const merged = [...completedOriginal, ...bonusSlugs, ...remainingIncomplete]
+    // Deduplicate while preserving order
     const seen = new Set<string>()
-    const newConcepts = completedToday
-      .map(lu => lu.conceptSlug)
-      .filter(s => { const k = s.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true })
+    const newConcepts = merged.filter(n => {
+      const k = n.toLowerCase()
+      if (seen.has(k)) return false
+      seen.add(k)
+      return true
+    })
     onReplaceConcepts?.(newConcepts)
   }
 
@@ -799,7 +825,7 @@ export function ReadinessCard({
                     const target = targetByName.get(name.toLowerCase()) ?? 'level1'
                     const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
                     const isCompleted =
-                      completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                      examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
                       STATE_ORDER[currentState] >= STATE_ORDER[target]
                     return (
                       <button

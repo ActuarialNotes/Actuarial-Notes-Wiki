@@ -30,6 +30,13 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
   const canPrev = index > 0
   const canNext = index < images.length - 1
 
+  // Lock body scroll while gallery is open
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [])
+
   function resetView() {
     setZoom(1)
     setPan({ x: 0, y: 0 })
@@ -76,6 +83,7 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
 
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
     if (e.button !== 0) return
+    e.preventDefault()
     e.currentTarget.setPointerCapture(e.pointerId)
     dragState.current = { sx: e.clientX, sy: e.clientY, px: pan.x, py: pan.y }
     hasMoved.current = false
@@ -85,6 +93,7 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
 
   function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
     if (!dragState.current) return
+    e.preventDefault()
     const dx = e.clientX - dragState.current.sx
     const dy = e.clientY - dragState.current.sy
     if (Math.abs(dx) > 4 || Math.abs(dy) > 4) hasMoved.current = true
@@ -111,16 +120,56 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
   const current = images[index]
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-black/92">
-      {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 shrink-0">
-        <span className="text-sm text-white/60 tabular-nums">
+    <div
+      className="fixed inset-0 z-50 flex flex-col bg-black/95"
+      onWheel={e => e.stopPropagation()}
+    >
+      {/* Custom slider thumb styles */}
+      <style>{`
+        .gallery-slider {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 100%;
+          height: 8px;
+          border-radius: 4px;
+          background: rgba(255,255,255,0.2);
+          outline: none;
+          cursor: pointer;
+        }
+        .gallery-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: white;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .gallery-slider::-moz-range-thumb {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: white;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .gallery-slider::-webkit-slider-runnable-track {
+          height: 8px;
+          border-radius: 4px;
+        }
+      `}</style>
+
+      {/* Top bar — dimmed chrome */}
+      <div className="flex items-center justify-between px-4 py-2 shrink-0 opacity-30 hover:opacity-70 transition-opacity">
+        <span className="text-sm text-white tabular-nums">
           {index + 1} / {images.length}
         </span>
         <button
           type="button"
           onClick={onClose}
-          className="text-white/60 hover:text-white p-1.5 rounded transition-colors"
+          className="text-white p-1.5 rounded"
           aria-label="Close gallery"
         >
           <X className="h-5 w-5" />
@@ -134,17 +183,18 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
             type="button"
             onPointerDown={e => e.stopPropagation()}
             onClick={() => goTo(index - 1)}
-            className="absolute left-2 sm:left-4 text-white/60 hover:text-white p-2.5 rounded-full bg-black/40 hover:bg-black/70 transition-colors z-10 shrink-0"
+            className="absolute left-2 sm:left-4 text-white/30 hover:text-white/80 p-2.5 rounded-full hover:bg-black/40 transition-colors z-10 shrink-0"
             aria-label="Previous image"
           >
             <ChevronLeft className="h-6 w-6" />
           </button>
         )}
 
+        {/* Image container — touch-action: none kills background scroll on mobile */}
         <div
           ref={containerRef}
           className="h-full w-full flex items-center justify-center overflow-hidden select-none"
-          style={{ cursor }}
+          style={{ cursor, touchAction: 'none' }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -169,7 +219,7 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
             type="button"
             onPointerDown={e => e.stopPropagation()}
             onClick={() => goTo(index + 1)}
-            className="absolute right-2 sm:right-4 text-white/60 hover:text-white p-2.5 rounded-full bg-black/40 hover:bg-black/70 transition-colors z-10 shrink-0"
+            className="absolute right-2 sm:right-4 text-white/30 hover:text-white/80 p-2.5 rounded-full hover:bg-black/40 transition-colors z-10 shrink-0"
             aria-label="Next image"
           >
             <ChevronRight className="h-6 w-6" />
@@ -177,16 +227,16 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
         )}
       </div>
 
-      {/* Caption */}
+      {/* Caption — dimmed */}
       {current.caption && (
-        <div className="shrink-0 text-center px-8 pt-2 pb-1">
-          <span className="text-sm text-white/70 italic">{current.caption}</span>
+        <div className="shrink-0 text-center px-8 pt-2 pb-0 opacity-40">
+          <span className="text-sm text-white italic">{current.caption}</span>
         </div>
       )}
 
-      {/* Zoom slider */}
-      <div className="shrink-0 flex items-center gap-3 px-6 py-3">
-        <span className="text-xs text-white/40 tabular-nums w-6 shrink-0">1×</span>
+      {/* Zoom slider — full brightness, large thumb */}
+      <div className="shrink-0 flex items-center gap-4 px-6 py-4">
+        <span className="text-xs text-white/50 tabular-nums w-6 shrink-0">1×</span>
         <input
           type="range"
           min={MIN_ZOOM}
@@ -194,35 +244,34 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           step={0.05}
           value={zoom}
           onChange={e => applyZoom(parseFloat(e.target.value))}
-          className="flex-1 cursor-pointer"
-          style={{ accentColor: 'white', height: '6px' }}
+          className="gallery-slider flex-1"
           aria-label="Zoom"
         />
-        <span className="text-xs text-white/40 tabular-nums w-6 shrink-0 text-right">4×</span>
-        <span className="text-sm text-white/70 tabular-nums w-10 text-right shrink-0 font-medium">
+        <span className="text-xs text-white/50 tabular-nums w-6 shrink-0 text-right">4×</span>
+        <span className="text-base text-white tabular-nums w-12 text-right shrink-0 font-semibold">
           {zoom.toFixed(1)}×
         </span>
         {zoom > MIN_ZOOM && (
           <button
             type="button"
             onClick={resetView}
-            className="text-xs text-white/40 hover:text-white/80 transition-colors shrink-0 ml-1"
+            className="text-xs text-white/50 hover:text-white transition-colors shrink-0"
           >
             reset
           </button>
         )}
       </div>
 
-      {/* Thumbnail strip */}
+      {/* Thumbnail strip — full brightness */}
       {images.length > 1 && (
-        <div className="shrink-0 flex items-center gap-2 px-4 pb-3 overflow-x-auto">
+        <div className="shrink-0 flex items-center gap-2 px-4 pb-4 overflow-x-auto">
           {images.map((img, i) => (
             <button
               key={img.src}
               type="button"
               onClick={() => goTo(i)}
               className={`shrink-0 h-14 w-14 rounded border-2 overflow-hidden transition-colors ${
-                i === index ? 'border-white' : 'border-white/20 hover:border-white/50'
+                i === index ? 'border-white' : 'border-white/20 hover:border-white/60'
               }`}
               aria-label={`View image ${i + 1}`}
             >

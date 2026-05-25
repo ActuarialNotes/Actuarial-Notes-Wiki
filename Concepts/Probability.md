@@ -1,9 +1,9 @@
-**Probability** $P$ is a measure of how likely an event is to occur. It is a [[Set Function]] that maps events in a sample space to a real number between 0 and 1, and must satisfy the [[Axioms of Probability]].
-- If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space.
-
 $$P(A) = \frac{|A|}{|S|}$$
 
 $$=\frac{\text{number of outcomes in A}}{\text{number of possible outcomes}}$$
+
+**Probability** $P$ is a measure of how likely an event is to occur. It is a [[Set Function]] that maps events in a sample space to a real number between 0 and 1, and must satisfy the [[Axioms of Probability]].
+- If all outcomes in a finite sample space $S$ are equally likely, then the probability of an event $A$ is the ratio of the "size" of the event to the "size" of the total space.
 
 > [!example]- Probability of a Fair Die? {Example}
 > 

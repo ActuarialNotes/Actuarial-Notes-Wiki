@@ -187,11 +187,15 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
         .getPropertyValue('--concept-split-height').trim()
       const splitHeight = parseFloat(splitHeightStr) || 0
       const effectiveBottom = window.innerHeight - splitHeight
+      // Account for the sticky floating search bar (h-14 = 56px) so concepts
+      // near the top of the page aren't treated as "in view" when hidden behind it.
+      const stickyOffset = 56
       const rect = target!.getBoundingClientRect()
-      const inView = rect.top >= 0 && rect.bottom <= effectiveBottom
+      const inView = rect.top >= stickyOffset && rect.bottom <= effectiveBottom
       if (!inView) {
-        // Center within the visible area above the popup panel, not the full viewport.
-        const scrollBy = rect.top - (effectiveBottom / 2 - rect.height / 2)
+        // Center within the visible area between the sticky bar and popup panel.
+        const visibleHeight = effectiveBottom - stickyOffset
+        const scrollBy = rect.top - stickyOffset - (visibleHeight / 2 - rect.height / 2)
         window.scrollBy({ top: scrollBy, behavior: 'smooth' })
       }
     }

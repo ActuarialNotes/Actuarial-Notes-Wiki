@@ -71,6 +71,7 @@ export function useSplitHeight(): SplitHeightApi {
       onMove(e.clientY)
     }
     function onTouchMove(e: TouchEvent) {
+      e.preventDefault()
       if (e.touches[0]) onMove(e.touches[0].clientY)
     }
     function onUp() {
@@ -94,7 +95,7 @@ export function useSplitHeight(): SplitHeightApi {
     document.body.style.userSelect = 'none'
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onUp)
-    window.addEventListener('touchmove', onTouchMove, { passive: true })
+    window.addEventListener('touchmove', onTouchMove, { passive: false })
     window.addEventListener('touchend', onUp)
   }, [height])
 

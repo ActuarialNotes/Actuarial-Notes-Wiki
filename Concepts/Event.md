@@ -1,4 +1,4 @@
-- An **event** $E$ is any subset of the [[Sample Space]] $S$.
+An **event** $E$ is any subset of the [[Sample Space]] $S$.
 - Events are the objects to which probabilities are assigned.
 - A **simple event** contains exactly one outcome.
 - A **compound event** contains two or more outcomes.
@@ -7,6 +7,6 @@
 > [!example]- Rolling a Die {Example}
 > A fair six-sided die is rolled. The sample space is $S = \{1,2,3,4,5,6\}$.
 >
-> > [!answer]- Answer
+> > [!answer]-
 > > Let $E = \{2, 4, 6\}$ be the event "an even number is rolled." This is a compound event containing 3 outcomes.
 > > $$P(E) = \frac{|E|}{|S|} = \frac{3}{6} = 0.5$$

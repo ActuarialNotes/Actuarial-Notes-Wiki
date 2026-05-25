@@ -1,14 +1,16 @@
-- The **Probability Addition Rule** gives the probability that at least one of two events $A$ or $B$ occurs.
+The **Probability Addition Rule** gives the probability that at least one of two events $A$ or $B$ occurs, correcting for the double-counting of outcomes in their intersection.
 - Also known as the Inclusion-Exclusion Principle
-- The rule corrects for the double-counting of outcomes in their intersection.
-- $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
-- For three events the rule extends to $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$
-- Tip: When events are mutually exclusive, $P(A \cap B) = 0$ and the rule reduces to simple addition.
+- When events are [[Mutually Exclusive Events|mutually exclusive]], $P(A \cap B) = 0$ and the rule reduces to simple addition
+- For three events the rule extends to include all pairwise and triple intersections:
+
+> $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+>
+> $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$
 
 > [!example]- Probability of at Least One Coverage Trigger {Example}
 > For a commercial policy, the probability of a fire loss is 0.05, a flood loss is 0.03, and both losses in the same year is 0.01. What is the probability of at least one loss?
 >
-> > [!answer]- Answer
+> > [!answer]-
 > > Let $F$ = fire and $L$ = flood. Applying the addition rule:
 > > $$P(F \cup L) = P(F) + P(L) - P(F \cap L) = 0.05 + 0.03 - 0.01 = 0.07$$
 > > There is a 7% probability of experiencing at least one loss in the year.

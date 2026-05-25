@@ -63,6 +63,19 @@ export function rewriteWikilinks(md: string): string {
   })
 }
 
+export function extractImages(markdown: string): Array<{ src: string; alt: string }> {
+  const processed = stripHtmlBlocks(fixBlockquoteOrderedLists(
+    rewriteWikilinks(stripFrontmatter(markdown).replace(BREADCRUMB_RE, ''))
+  ))
+  const results: Array<{ src: string; alt: string }> = []
+  const re = /!\[([^\]]*)\]\(([^)]+)\)/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(processed)) !== null) {
+    results.push({ alt: m[1], src: m[2] })
+  }
+  return results
+}
+
 export interface WikiArticleProps {
   markdown: string
   // Called for every internal wiki link click — return true to suppress the
@@ -72,6 +85,8 @@ export interface WikiArticleProps {
   // is open with a matching `sourcePath`, the active wikilink on this page is
   // highlighted and scrolled into view.
   sourcePath?: string
+  // When true, images are not rendered inline (used when a gallery button is shown instead).
+  hideImages?: boolean
   className?: string
 }
 
@@ -106,7 +121,7 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
   const processed = useMemo(() => {
@@ -121,6 +136,10 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
 
   const components = useMemo<Components>(() => ({
     ...calloutComponents,
+    img({ src, alt }) {
+      if (hideImages) return null
+      return <img src={src} alt={alt ?? ''} className="max-w-full" />
+    },
     a({ href, children, ...rest }) {
       if (!href) return <a {...rest}>{children}</a>
       const ref = hrefToEntryRef(href)
@@ -149,7 +168,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, className }: Wik
         </a>
       )
     },
-  }), [navigate, onWikiLink])
+  }), [navigate, onWikiLink, hideImages])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

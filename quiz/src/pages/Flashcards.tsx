@@ -277,9 +277,6 @@ export default function Flashcards() {
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
   )
 
-  // Keep ref in sync so timer closures always see the latest orderedCards.
-  orderedCardsRef.current = orderedCards
-
   // Scroll to and flash a card when arriving via the "view" link in the popup menu,
   // then open the concept popup after the flash animation completes.
   useEffect(() => {
@@ -377,6 +374,9 @@ export default function Flashcards() {
       return a.name.localeCompare(b.name)
     })
   }, [cards, customOrder, groupBy, conceptToExam])
+
+  // Keep ref in sync so timer closures always see the latest orderedCards.
+  orderedCardsRef.current = orderedCards
 
   // Exam groups derived from orderedCards order (preserves group sort order)
   const examGroups = useMemo(() => {

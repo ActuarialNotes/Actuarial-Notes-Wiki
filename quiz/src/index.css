@@ -167,6 +167,28 @@
   }
 }
 
+/* Flashcard highlight: scrolls to and rings the card in high-contrast when
+   navigating from the concept popup "view" link. Uses --primary which is
+   near-black in light mode and near-white in dark mode for max contrast.
+   The fill-mode `both` keeps the final state until the class is removed. */
+@keyframes flashcard-highlight {
+  0%, 15% {
+    box-shadow: 0 0 0 3px hsl(var(--primary)), 0 0 24px hsl(var(--primary) / 0.4);
+    background-color: hsl(var(--primary) / 0.18);
+  }
+  70% {
+    box-shadow: 0 0 0 1.5px hsl(var(--primary) / 0.4);
+    background-color: hsl(var(--card));
+  }
+  100% {
+    box-shadow: none;
+    background-color: hsl(var(--card));
+  }
+}
+.flashcard-highlight {
+  animation: flashcard-highlight 1.6s ease-out both;
+}
+
 /* Focus mode: when a concept is active and we're on its source page, dim every
    block in the article except the one containing the active wikilink. Lets the
    reader's eye land on the bullet that opened the popup. */

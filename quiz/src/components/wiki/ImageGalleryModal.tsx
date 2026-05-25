@@ -130,11 +130,15 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           -webkit-appearance: none;
           appearance: none;
           width: 100%;
+          height: 40px;
+          background: transparent;
+          outline: none;
+          cursor: pointer;
+        }
+        .gallery-slider::-webkit-slider-runnable-track {
           height: 8px;
           border-radius: 4px;
           background: rgba(255,255,255,0.2);
-          outline: none;
-          cursor: pointer;
         }
         .gallery-slider::-webkit-slider-thumb {
           -webkit-appearance: none;
@@ -145,6 +149,12 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           background: white;
           cursor: pointer;
           box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+          margin-top: -16px;
+        }
+        .gallery-slider::-moz-range-track {
+          height: 8px;
+          border-radius: 4px;
+          background: rgba(255,255,255,0.2);
         }
         .gallery-slider::-moz-range-thumb {
           width: 40px;
@@ -154,10 +164,6 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           cursor: pointer;
           border: none;
           box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        }
-        .gallery-slider::-webkit-slider-runnable-track {
-          height: 8px;
-          border-radius: 4px;
         }
       `}</style>
 

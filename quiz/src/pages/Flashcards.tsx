@@ -15,7 +15,8 @@ import {
 import {
   DndContext,
   closestCenter,
-  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -262,7 +263,10 @@ export default function Flashcards() {
   const [groupBy, setGroupBy] = useState<GroupBy>('exam')
   const [selectedNames, setSelectedNames] = useState<Set<string>>(new Set())
 
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
+  )
 
   // concept name → exam label
   const conceptToExam = useMemo(() => {

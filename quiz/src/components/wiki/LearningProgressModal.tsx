@@ -135,13 +135,13 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
               </div>
 
               {/* Legend */}
-              <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1.5">
-                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-500" />
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <span className="flex items-center gap-2">
+                  <span className="inline-block h-3 w-3 rounded-full bg-green-500 shrink-0" />
                   Correct attempt
                 </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-500" />
+                <span className="flex items-center gap-2">
+                  <span className="inline-block h-3 w-3 rounded-full bg-red-500 shrink-0" />
                   Incorrect attempt
                 </span>
               </div>

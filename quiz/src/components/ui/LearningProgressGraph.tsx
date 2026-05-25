@@ -8,11 +8,11 @@ import type { MasteryState } from '@/lib/mastery'
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 export const VB_W = 500
-export const VB_H = 180
+export const VB_H = 240
 export const PAD_LEFT = 42
 export const PAD_RIGHT = 16
 export const PAD_TOP = 16
-export const PAD_BOTTOM = 30
+export const PAD_BOTTOM = 36
 export const CHART_W = VB_W - PAD_LEFT - PAD_RIGHT
 export const CHART_H = VB_H - PAD_TOP - PAD_BOTTOM
 
@@ -157,7 +157,7 @@ export function ProgressGraph({ levelEvents, attemptDots, onHoverLevel }: GraphP
             />
             <text
               x={PAD_LEFT - 5} y={cy + 4}
-              textAnchor="end" fontSize={9}
+              textAnchor="end" fontSize={11}
               fill="currentColor" opacity={0.5}
             >
               {Y_LABELS[i]}
@@ -168,7 +168,7 @@ export function ProgressGraph({ levelEvents, attemptDots, onHoverLevel }: GraphP
 
       {/* X-axis date labels */}
       {xLabels.map(({ label, x }) => (
-        <text key={label} x={x} y={VB_H - 6} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.4}>
+        <text key={label} x={x} y={VB_H - 8} textAnchor="middle" fontSize={12} fill="currentColor" opacity={0.4}>
           {label}
         </text>
       ))}
@@ -189,10 +189,10 @@ export function ProgressGraph({ levelEvents, attemptDots, onHoverLevel }: GraphP
           key={idx}
           cx={xScale(dot.at)}
           cy={yScale(stateToYIndex(dot.levelAtTime))}
-          r={4}
+          r={5.5}
           fill={dot.isCorrect ? '#22c55e' : '#ef4444'}
           stroke="white"
-          strokeWidth={1.5}
+          strokeWidth={2}
           opacity={0.9}
         />
       ))}

@@ -338,26 +338,31 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     // Also persist the level-ups to daily_completions so the "completed today"
     // checkmark syncs across devices (localStorage above is device-local only).
-    const completionExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? '']
-    if (completionExamId && upward.length > 0) {
-      const day = new Date().toISOString().slice(0, 10)
-      const nowIso = new Date().toISOString()
-      const completionRows = upward.map(t => ({
-        user_id: userId,
-        exam_id: completionExamId,
-        concept_slug: t.conceptSlug,
-        day,
-        from_state: t.from,
-        to_state: t.to,
-        at: nowIso,
-      }))
-      const { error: completionError } = await supabase
-        .from('daily_completions')
-        .upsert(completionRows, { onConflict: 'user_id,exam_id,concept_slug,day' })
-      if (completionError) {
-        // Table may not be migrated yet — the local signal still works.
-        console.warn('daily_completions upsert failed:', completionError.message)
+    // Wrapped in try-catch so any failure here cannot abort the quiz_sessions insert below.
+    try {
+      const completionExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? '']
+      if (completionExamId && upward.length > 0) {
+        const day = new Date().toISOString().slice(0, 10)
+        const nowIso = new Date().toISOString()
+        const completionRows = upward.map(t => ({
+          user_id: userId,
+          exam_id: completionExamId,
+          concept_slug: t.conceptSlug,
+          day,
+          from_state: t.from,
+          to_state: t.to,
+          at: nowIso,
+        }))
+        const { error: completionError } = await supabase
+          .from('daily_completions')
+          .upsert(completionRows, { onConflict: 'user_id,exam_id,concept_slug,day' })
+        if (completionError) {
+          // Table may not be migrated yet — the local signal still works.
+          console.warn('daily_completions upsert failed:', completionError.message)
+        }
       }
+    } catch (err) {
+      console.warn('daily_completions upsert threw:', err)
     }
 
     const { data: session, error: sessionError } = await supabase
@@ -378,6 +383,10 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       set({ error: sessionError?.message ?? 'Failed to save session' })
       return
     }
+
+    // Signal useProgress (same tab) to refetch immediately — Supabase Realtime
+    // doesn't fire for quiz_sessions because it's not in the realtime publication.
+    window.dispatchEvent(new CustomEvent('quiz-session-saved'))
 
     // Build all response rows and bulk-insert in a single call
     const responseRows = questions.map(q => ({

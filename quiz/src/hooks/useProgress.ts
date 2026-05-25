@@ -51,6 +51,16 @@ export function useProgress() {
     return () => { supabase.removeChannel(channel) }
   }, [user?.id, fetchSessions])
 
+  // Refetch immediately when a quiz is saved on this device (Supabase Realtime
+  // won't fire because quiz_sessions is not in the realtime publication).
+  useEffect(() => {
+    if (!user?.id) return
+    const uid = user.id
+    const handleSaved = () => fetchSessions(uid)
+    window.addEventListener('quiz-session-saved', handleSaved)
+    return () => window.removeEventListener('quiz-session-saved', handleSaved)
+  }, [user?.id, fetchSessions])
+
   // Refetch when tab regains focus
   useEffect(() => {
     if (!user?.id) return

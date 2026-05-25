@@ -348,11 +348,11 @@ export default function Landing() {
     <>
     <QuizFloatingSearch />
     <div className="container max-w-2xl mx-auto px-4 py-12 space-y-8">
-      <div className="sticky top-14 lg:top-0 z-10 bg-background border-b -mx-4 px-4 py-3 flex items-center justify-between gap-4">
+      <div className="sticky top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 py-3 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Quiz</h1>
           <p className="text-sm text-muted-foreground">
-            Practice questions for SOA Exam P and Exam FM
+            Practice questions for actuarial exams
           </p>
           {!user && (
             <p className="text-xs text-muted-foreground">

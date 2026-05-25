@@ -52,7 +52,7 @@ export default function Dashboard() {
   const { user, loading: authLoading } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
-  const { progress: examProgress, targetDates, updateTargetDate } = useExamProgress()
+  const { progress: examProgress, targetDates, updateTargetDate, loadingExams } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
   const { isPremium } = useSubscription()
 
@@ -324,7 +324,7 @@ export default function Dashboard() {
 
       {/* Readiness card — only shown when there is an active exam */}
       <div>
-        {syllabusLoading || sessionsLoading || masteryLoading ? (
+        {syllabusLoading || sessionsLoading || masteryLoading || loadingExams ? (
           <ActiveExamCardLoading />
         ) : !activeSyllabus ? (
           <ActiveExamCardEmpty onChooseExam={() => setExamsOpen(true)} />

@@ -156,7 +156,14 @@ export function useStudyPlan(
 
     // 3. Generate fresh using the latest mastery snapshot (via ref, not reactive
     //    dep) and persist to both localStorage and the server.
-    const todaysLevelUps = readTodayLevelUps().map(lu => lu.conceptSlug)
+    // Scope level-ups to this exam's syllabus so concepts from a different exam
+    // never pollute today's plan during generation.
+    const syllabusConceptSet = new Set(
+      syllabus.topics.flatMap(t => t.concepts.map(c => c.name.toLowerCase()))
+    )
+    const todaysLevelUps = readTodayLevelUps()
+      .filter(lu => syllabusConceptSet.has(lu.conceptSlug.toLowerCase()))
+      .map(lu => lu.conceptSlug)
     const fresh = generateStudyPlan({ examId, syllabus, masteryRecords: masteryRef.current, config, examDate, todaysLevelUps })
     saveCachedStudyPlan(fresh)
     updateStudyPlanCache(examId, fresh).catch(() => { /* best-effort */ })

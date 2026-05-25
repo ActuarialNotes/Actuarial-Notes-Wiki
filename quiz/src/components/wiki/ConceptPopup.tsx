@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Loader2, Maximize2, Minimize2, Play, TrendingUp, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Images, Loader2, Maximize2, Minimize2, Play, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
-import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { WikiArticle, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
+import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
@@ -25,6 +26,9 @@ export function ConceptPopup() {
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
+  const [images, setImages] = useState<Array<{ src: string; alt: string }>>([])
+  const [showGallery, setShowGallery] = useState(false)
+  const [galleryIndex, setGalleryIndex] = useState(0)
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
 
@@ -34,10 +38,13 @@ export function ConceptPopup() {
     let cancelled = false
     setStatus('loading')
     setContent(null)
+    setImages([])
     fetchWikiFile(entryRefToRepoPath(current))
       .then(raw => {
         if (cancelled) return
         setContent(raw)
+        setImages(extractImages(raw))
+        setShowGallery(false)
         setStatus('idle')
       })
       .catch(() => {
@@ -227,6 +234,18 @@ export function ConceptPopup() {
             </div>
           )}
           </div>
+          {images.length > 0 && (
+            <button
+              type="button"
+              onClick={() => { setGalleryIndex(0); setShowGallery(true) }}
+              className="inline-flex items-center justify-center h-8 w-8 rounded-md shrink-0"
+              style={{ background: 'linear-gradient(to right, #3b82f6, #a855f7, #ef4444)' }}
+              title={`View ${images.length} image${images.length !== 1 ? 's' : ''}`}
+              aria-label="Open image gallery"
+            >
+              <Images className="h-4 w-4 text-white" />
+            </button>
+          )}
         </div>
         <button
           type="button"
@@ -267,6 +286,7 @@ export function ConceptPopup() {
           <WikiArticle
             markdown={content}
             sourcePath={sourcePath}
+            hideImages
             onWikiLink={ref => {
               // Stay inside the popup: swap the body instead of navigating.
               jumpTo(ref)
@@ -312,6 +332,13 @@ export function ConceptPopup() {
       <LearningProgressModal
         conceptName={current.name}
         onClose={() => setShowLearningProgress(false)}
+      />
+    )}
+    {showGallery && (
+      <ImageGalleryModal
+        images={images}
+        initialIndex={galleryIndex}
+        onClose={() => setShowGallery(false)}
       />
     )}
     </>

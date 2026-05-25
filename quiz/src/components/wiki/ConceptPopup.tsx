@@ -31,6 +31,12 @@ export function ConceptPopup() {
   const [galleryIndex, setGalleryIndex] = useState(0)
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
+  const bodyRef = useRef<HTMLDivElement>(null)
+
+  // Scroll the body back to top whenever the viewed concept changes.
+  useEffect(() => {
+    if (bodyRef.current) bodyRef.current.scrollTop = 0
+  }, [current?.name])
 
   // Fetch markdown whenever the active ref changes.
   useEffect(() => {
@@ -270,6 +276,7 @@ export function ConceptPopup() {
       {/* Body — only this scrolls; wheel events don't propagate to the page
           behind because the pane isn't transparent and covers the bottom. */}
       <div
+        ref={bodyRef}
         className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4"
       >
         {status === 'loading' && (

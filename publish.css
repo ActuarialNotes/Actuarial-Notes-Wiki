@@ -1514,7 +1514,7 @@ input[type="search"]:focus, .search-input:focus {
   border: 1px solid var(--sb-border);
   background: var(--bg-elev);
   color: var(--text);
-  font-size: 0.9rem;
+  font-size: 1rem;
   outline: none;
   transition: border-color .15s ease, box-shadow .15s ease;
   margin: 12px 0;
@@ -2277,7 +2277,7 @@ body.sidebar-resizing iframe { pointer-events: none; }
   border: 1px solid var(--sb-border);
   background: var(--bg);
   color: var(--text);
-  font-size: 13px;
+  font-size: 16px;
   outline: none;
   transition: border-color .15s ease, box-shadow .15s ease;
   box-sizing: border-box;
@@ -4390,7 +4390,7 @@ figure.right figcaption,
   border: 1px solid color-mix(in oklab, var(--text) 15%, transparent);
   background: var(--bg);
   color: var(--text);
-  font-size: 12.5px;
+  font-size: 16px;
   font-family: var(--font-sans);
   outline: none;
   transition: border-color .15s, box-shadow .15s;
@@ -6739,7 +6739,7 @@ body.high-contrast .dl-dropdown__single {
   border: 1px solid var(--background-modifier-border);
   background: var(--background-primary);
   color: var(--text-normal);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-family: inherit;
   text-align: center;
   outline: none;
@@ -6768,7 +6768,7 @@ body.high-contrast .dl-dropdown__single {
   border: 1px solid var(--background-modifier-border);
   background: var(--background-primary);
   color: var(--text-normal);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-family: inherit;
   outline: none;
   transition: border-color 0.15s;
@@ -7004,7 +7004,7 @@ body.high-contrast .dl-dropdown__single {
   border-radius: 6px;
   background: var(--bg-1, var(--background-primary));
   color: var(--tx-1, var(--text-normal));
-  font-size: 0.875rem;
+  font-size: 1rem;
   box-sizing: border-box;
 }
 .wiki-settings__input:focus {

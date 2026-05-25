@@ -356,7 +356,7 @@
   border: 1px solid var(--muted);
   border-radius: var(--radius-sm);
   color: var(--text);
-  font: 400 14px/1.4 var(--font-mono);
+  font: 400 16px/1.4 var(--font-mono);
   outline: none;
   transition: border-color 0.15s ease;
 }
@@ -370,7 +370,7 @@
 }
 .custom-exam__input--inline {
   padding: 6px 10px;
-  font-size: 13px;
+  font-size: 16px;
   font-family: var(--font-sans);
 }
 .custom-exam__input--small {

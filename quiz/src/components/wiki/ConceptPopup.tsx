@@ -216,7 +216,7 @@ export function ConceptPopup() {
                 {hasCard(current.name) && (
                   <Link
                     to={`/flashcards?highlight=${encodeURIComponent(current.name)}`}
-                    onClick={() => setShowPlayMenu(false)}
+                    onClick={() => { setShowPlayMenu(false); close() }}
                     className="text-xs text-primary hover:underline pr-3 shrink-0"
                   >
                     view

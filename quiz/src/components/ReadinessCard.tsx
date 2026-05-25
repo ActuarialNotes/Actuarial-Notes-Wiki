@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, Trophy } from 'lucide-react'
+import { AlertTriangle, ArrowUp, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, Trophy } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -12,7 +12,7 @@ import { ExamHeatmap } from '@/components/ExamHeatmap'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
-import { aggregateForTopic, decayIfStale } from '@/lib/mastery'
+import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
 import { computeReadiness, type SectionReadiness } from '@/lib/readiness'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
@@ -315,6 +315,7 @@ export function ReadinessCard({
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
   const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set())
   const [sessionDetails, setSessionDetails] = useState<Map<string, SessionDetail>>(new Map())
+  const [selectedDayLevelUps, setSelectedDayLevelUps] = useState<DailyLevelUp[]>([])
 
   const toggleTopic = (name: string) =>
     setOpenTopics(prev => {
@@ -392,6 +393,30 @@ export function ReadinessCard({
 
   const now = useMemo(() => new Date(), [])
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
+
+  useEffect(() => {
+    if (!selectedDay) { setSelectedDayLevelUps([]); return }
+    if (selectedDay === todayISO()) { setSelectedDayLevelUps(completedToday); return }
+    if (!user) { setSelectedDayLevelUps([]); return }
+    let cancelled = false
+    supabase
+      .from('daily_completions')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('day', selectedDay)
+      .eq('exam_id', progressKey)
+      .then(({ data }: { data: Array<{ concept_slug: string; from_state: string; to_state: string; at: string }> | null }) => {
+        if (cancelled) return
+        setSelectedDayLevelUps((data ?? []).map(r => ({
+          conceptSlug: r.concept_slug,
+          from: sanitizeMasteryState(r.from_state),
+          to: sanitizeMasteryState(r.to_state),
+          at: r.at,
+        })))
+      })
+    return () => { cancelled = true }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDay, user, completedToday, progressKey])
 
   const examSessions = useMemo(
     () => sessions.filter(s => s.exam === syllabus.examTopic),
@@ -566,6 +591,9 @@ export function ReadinessCard({
           {/* Quiz history panel — shown when a heatmap day is clicked */}
           {selectedDay && (() => {
             const daySessions = examSessions.filter(s => s.completed_at.slice(0, 10) === selectedDay)
+            const dayTotal = daySessions.reduce((s, r) => s + r.total_questions, 0)
+            const dayCorrect = daySessions.reduce((s, r) => s + r.correct_count, 0)
+            const dayLevelUps = selectedDayLevelUps.length
             return (
               <div className="border-t pt-3 space-y-1 mt-1">
                 <div className="flex items-center justify-between text-xs text-muted-foreground pb-1">
@@ -582,16 +610,36 @@ export function ReadinessCard({
                 {daySessions.length === 0 ? (
                   <p className="text-xs text-muted-foreground">No sessions on this date.</p>
                 ) : (
-                  daySessions.map((session, idx) => (
-                    <SessionRow
-                      key={session.id}
-                      session={session}
-                      divider={idx > 0}
-                      expanded={expandedSessions.has(session.id)}
-                      detail={sessionDetails.get(session.id)}
-                      onToggle={() => handleSessionToggle(session.id)}
-                    />
-                  ))
+                  <>
+                    <div className="flex items-center gap-2 flex-wrap pb-2">
+                      <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                        <Check className="h-3 w-3 text-green-500" />
+                        {dayCorrect}/{dayTotal} correct
+                      </span>
+                      {dayCorrect > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                          <Gem className="h-3 w-3 text-cyan-400" />
+                          {dayCorrect} gems
+                        </span>
+                      )}
+                      {dayLevelUps > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                          <ArrowUp className="h-3 w-3 text-primary" />
+                          {dayLevelUps} levelled up
+                        </span>
+                      )}
+                    </div>
+                    {daySessions.map((session, idx) => (
+                      <SessionRow
+                        key={session.id}
+                        session={session}
+                        divider={idx > 0}
+                        expanded={expandedSessions.has(session.id)}
+                        detail={sessionDetails.get(session.id)}
+                        onToggle={() => handleSessionToggle(session.id)}
+                      />
+                    ))}
+                  </>
                 )}
               </div>
             )
@@ -707,22 +755,22 @@ export function ReadinessCard({
                     <span className="text-sm font-semibold">Done for Today!</span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-1.5 flex-wrap text-xs text-muted-foreground px-1">
-                    <span>{todayQuestionsAnswered} questions answered</span>
-                    {todayLevelUps > 0 && (
-                      <>
-                        <span>·</span>
-                        <span>{todayLevelUps} levelled up</span>
-                      </>
-                    )}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                      <Check className="h-3 w-3 text-green-500" />
+                      {todayGemsEarned}/{todayQuestionsAnswered} correct
+                    </span>
                     {todayGemsEarned > 0 && (
-                      <>
-                        <span>·</span>
-                        <span className="flex items-center gap-0.5">
-                          <Gem className="h-3 w-3" />
-                          {todayGemsEarned} gems earned
-                        </span>
-                      </>
+                      <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                        <Gem className="h-3 w-3 text-cyan-400" />
+                        {todayGemsEarned} gems
+                      </span>
+                    )}
+                    {todayLevelUps > 0 && (
+                      <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                        <ArrowUp className="h-3 w-3 text-primary" />
+                        {todayLevelUps} levelled up
+                      </span>
                     )}
                   </div>
                 )}

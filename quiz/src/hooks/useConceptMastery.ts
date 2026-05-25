@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
@@ -18,6 +18,10 @@ export interface UseConceptMasteryResult {
 export function useConceptMastery(): UseConceptMasteryResult {
   const { user } = useAuth()
   const userId = user?.id
+  // Each hook instance gets its own channel name to avoid the Supabase error
+  // "cannot add postgres_changes callbacks after subscribe()" when multiple
+  // components hold concurrent subscriptions.
+  const channelId = useRef(`concept-mastery-${Math.random().toString(36).slice(2)}`)
   const [records, setRecords] = useState<ConceptMasteryRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [version, setVersion] = useState(0)
@@ -62,7 +66,7 @@ export function useConceptMastery(): UseConceptMasteryResult {
   useEffect(() => {
     if (!userId) return
     const channel = supabase
-      .channel(`concept_mastery:${userId}`)
+      .channel(`concept_mastery:${userId}:${channelId.current}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'concept_mastery', filter: `user_id=eq.${userId}` },

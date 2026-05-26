@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Images, Loader2, Maximize2, Minimize2, Play, TrendingUp, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Images, Loader2, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
-import { WikiArticle, extractImages } from '@/components/wiki/WikiArticle'
+import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
+import { MathViewContext } from '@/contexts/MathViewContext'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
@@ -29,6 +30,7 @@ export function ConceptPopup() {
   const [images, setImages] = useState<Array<{ src: string; alt: string; caption: string }>>([])
   const [showGallery, setShowGallery] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
+  const [mathView, setMathView] = useState(false)
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -105,6 +107,16 @@ export function ConceptPopup() {
       delete root.dataset.conceptSplitOpen
     }
   }, [open, height])
+
+  // Reset math view when popup closes.
+  useEffect(() => {
+    if (!open) setMathView(false)
+  }, [open])
+
+  const mathBlocks = useMemo(() => {
+    if (!content) return []
+    return extractMathBlockquotes(content)
+  }, [content])
 
   if (!open || !current) return null
 
@@ -231,6 +243,14 @@ export function ConceptPopup() {
               </div>
               <button
                 type="button"
+                onClick={() => { setMathView(true); setShowPlayMenu(false) }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+              >
+                <Sigma className="h-3.5 w-3.5 shrink-0" />
+                Math View
+              </button>
+              <button
+                type="button"
                 onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
@@ -240,6 +260,18 @@ export function ConceptPopup() {
             </div>
           )}
           </div>
+          {/* Sigma icon — visible only while in Math View; clicking exits it */}
+          {mathView && (
+            <button
+              type="button"
+              onClick={() => setMathView(false)}
+              className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
+              title="Exit Math View"
+              aria-label="Exit Math View"
+            >
+              <Sigma className="h-4 w-4" />
+            </button>
+          )}
           {images.length > 0 && (
             <button
               type="button"
@@ -284,33 +316,50 @@ export function ConceptPopup() {
 
       {/* Body — only this scrolls; wheel events don't propagate to the page
           behind because the pane isn't transparent and covers the bottom. */}
-      <div
-        ref={bodyRef}
-        className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4"
-      >
-        {status === 'loading' && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Loading…
-          </div>
-        )}
-        {status === 'error' && (
-          <div className="text-sm text-muted-foreground">
-            Couldn't load <span className="font-medium">{current.name}</span>.
-          </div>
-        )}
-        {content !== null && (
-          <WikiArticle
-            markdown={content}
-            sourcePath={sourcePath}
-            hideImages
-            onWikiLink={ref => {
-              // Stay inside the popup: swap the body instead of navigating.
-              jumpTo(ref)
-              return true
-            }}
-          />
-        )}
-      </div>
+      <MathViewContext.Provider value={{ active: mathView, enter: () => setMathView(true) }}>
+        <div
+          ref={bodyRef}
+          className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4"
+        >
+          {status === 'loading' && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" /> Loading…
+            </div>
+          )}
+          {status === 'error' && (
+            <div className="text-sm text-muted-foreground">
+              Couldn't load <span className="font-medium">{current.name}</span>.
+            </div>
+          )}
+          {content !== null && (
+            mathView ? (
+              mathBlocks.length > 0 ? (
+                <div className="space-y-4">
+                  {mathBlocks.map((block, i) => (
+                    <WikiArticle key={i} markdown={block} sourcePath={sourcePath} hideImages />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
+                  <Sigma className="h-8 w-8 opacity-30" />
+                  <span className="text-sm">No equations in this concept.</span>
+                </div>
+              )
+            ) : (
+              <WikiArticle
+                markdown={content}
+                sourcePath={sourcePath}
+                hideImages
+                onWikiLink={ref => {
+                  // Stay inside the popup: swap the body instead of navigating.
+                  jumpTo(ref)
+                  return true
+                }}
+              />
+            )
+          )}
+        </div>
+      </MathViewContext.Provider>
 
       {/* Footer nav */}
       <div className="flex items-stretch border-t h-16 shrink-0 bg-background/60">

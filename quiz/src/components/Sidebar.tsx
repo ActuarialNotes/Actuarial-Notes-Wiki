@@ -402,7 +402,7 @@ export default function Sidebar() {
           <SidebarItem
             to="/"
             label="Quiz"
-            icon={<ClipboardList className="h-4 w-4" />}
+            icon={<Play className="h-4 w-4" />}
             collapsed={collapsed}
             end
             onNavigate={closeMobile}

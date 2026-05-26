@@ -2,11 +2,11 @@
      data-current="MAS-I|Modern Actuarial Statistics I"
 </div>
 
-## MAS-I (CAS)
+# MAS-I (CAS)
 
-The **Modern Actuarial Statistics I** exam is a 4-hour computer-based exam covering [[Stochastic Processes]], [[Survival Models]], [[Statistics]], and [[Generalized Linear Models]] as part of the ACAS credentialing pathway.
+The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam covering [[Stochastic Processes]], [[Survival Models]], [[Statistics]], and [[Generalized Linear Models]] as part of the ACAS credentialing pathway.
 
-### Learning Objectives
+## Learning Objectives
 
 > [!example]- A. Probability Models (Stochastic Processes and Survival Models) {20–30%}
 > 
@@ -53,16 +53,22 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based exam cover
 > 
 > **Readings:** Dobson and Barnett · Hogg, McKean, and Craig · James et al. · Larsen
 
-### Source Material
+## Source Material
 > [!answer]- Source Material {8 Sources}
 > 
-> |Source|Domains / Tasks|
-> |---|---|
-> |[[Poisson Processes and Mixture Distributions (Daniel - 2008)]]|A1–A5|
-> |[[An Introduction to Generalized Linear Models (Dobson - 2018)]]|C1–C9|
-> |[[Introduction to Mathematical Statistics (Hogg et al. - 2018)]]|B1–B8, C1–C9|
-> |[[An Introduction to Statistical Learning (James et al. - 2021)]]|C1–C9|
-> |[[Generalized Linear Models (Larsen - 2015)]]|C1–C9|
-> |[[Introduction to Probability Models (Ross - 2019)]]|A1–A6|
-> |[[Life Contingencies (Struppeck - 2014)]]|A5–A6|
-> |[[Nonlife Actuarial Models (Tse - 2009)]]|B1–B4, B7–B9|
+> - [[Poisson Processes and Mixture Distributions (Daniel - 2008)]]
+>      - A1–A5
+> -[[An Introduction to Generalized Linear Models (Dobson - 2018)]]
+>      - C1–C9
+> - [[Introduction to Mathematical Statistics (Hogg et al. - 2018)]]
+>      - B1–B8, C1–C9
+> - |[[An Introduction to Statistical Learning (James et al. - 2021)]]
+>      - C1–C9
+> - [[Generalized Linear Models (Larsen - 2015)]]
+>      - C1–C9
+> - [[Introduction to Probability Models (Ross - 2019)]]
+>      - A1–A6
+> - [[Life Contingencies (Struppeck - 2014)]]
+>      - A5–A6
+> - [[Nonlife Actuarial Models (Tse - 2009)]]
+>      - B1–B4, B7–B9

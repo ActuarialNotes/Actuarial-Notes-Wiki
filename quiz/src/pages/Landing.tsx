@@ -348,27 +348,81 @@ export default function Landing() {
     <>
     <QuizFloatingSearch />
     <div className="container max-w-2xl mx-auto px-4 py-12 space-y-8">
-      <div className="sticky top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 py-3 flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Quiz</h1>
-          <p className="text-sm text-muted-foreground">
-            Practice questions for actuarial exams
-          </p>
-          {!user && (
-            <p className="text-xs text-muted-foreground">
-              <a href="/auth" className="text-primary hover:underline">Sign in</a> to save your progress
+      <div className="sticky top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Quiz</h1>
+            <p className="text-sm text-muted-foreground">
+              Practice questions for actuarial exams
             </p>
-          )}
+            {!user && (
+              <p className="text-xs text-muted-foreground">
+                <a href="/auth" className="text-primary hover:underline">Sign in</a> to save your progress
+              </p>
+            )}
+          </div>
+          <button
+            type="button"
+            disabled={!hasTopic}
+            onClick={handleStart}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+          >
+            <Play className="h-4 w-4" />
+            Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+          </button>
         </div>
-        <button
-          type="button"
-          disabled={!hasTopic}
-          onClick={handleStart}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
-        >
-          <Play className="h-4 w-4" />
-          Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
-        </button>
+
+        {hasTopic && (
+          <div className="space-y-3">
+            {mode === 'quiz' && (
+              <div className="flex items-center gap-3">
+                <input
+                  type="range"
+                  min={1}
+                  max={effectiveAvailableCount > 0 ? effectiveAvailableCount : 1}
+                  value={effectiveAvailableCount > 0 ? Math.min(count, effectiveAvailableCount) : 1}
+                  onChange={e => setCount(Number(e.target.value))}
+                  disabled={effectiveAvailableCount === 0}
+                  className="quiz-count-slider flex-1"
+                />
+                <span className="text-xl font-bold tabular-nums w-16 text-right shrink-0">
+                  {effectiveAvailableCount > 0
+                    ? count >= effectiveAvailableCount
+                      ? `All (${effectiveAvailableCount})`
+                      : count
+                    : '—'}
+                </span>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              {QUICK_COUNTS.map(n => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => { setMode('quiz'); setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n)) }}
+                  className={`w-14 h-14 rounded-full border text-base font-bold transition-colors ${
+                    mode === 'quiz' && count === n && effectiveAvailableCount >= n
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'border-input hover:bg-accent text-foreground'
+                  }`}
+                >
+                  {n}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setMode('mock-exam')}
+                className={`flex-1 h-14 rounded-full border text-sm font-bold transition-colors ${
+                  mode === 'mock-exam'
+                    ? 'border-primary bg-primary text-primary-foreground'
+                    : 'border-input hover:bg-accent text-foreground'
+                }`}
+              >
+                Mock Exam
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <Card>
@@ -439,37 +493,6 @@ export default function Landing() {
                 <span className="font-medium">{examLabel}</span>
                 <span>· change</span>
               </button>
-
-              {/* Mode selector */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Mode</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setMode('quiz')}
-                    className={`px-4 py-4 rounded-lg border text-left transition-colors ${
-                      mode === 'quiz'
-                        ? 'border-primary bg-primary/5 text-primary font-medium'
-                        : 'border-input hover:bg-accent'
-                    }`}
-                  >
-                    <div className="font-semibold text-base">Quiz</div>
-                    <div className="text-sm text-muted-foreground mt-0.5">Choose topics, count &amp; reveal</div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMode('mock-exam')}
-                    className={`px-4 py-4 rounded-lg border text-left transition-colors ${
-                      mode === 'mock-exam'
-                        ? 'border-primary bg-primary/5 text-primary font-medium'
-                        : 'border-input hover:bg-accent'
-                    }`}
-                  >
-                    <div className="font-semibold text-base">Mock Exam</div>
-                    <div className="text-sm text-muted-foreground mt-0.5">Mirrors real exam, answers at end</div>
-                  </button>
-                </div>
-              </div>
 
               {/* ── Quiz mode options ──────────────────────────────────── */}
               {mode === 'quiz' && (
@@ -590,47 +613,6 @@ export default function Landing() {
                         })}
                       </div>
                     )}
-                  </div>
-
-                  {/* Number of questions */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium">Number of Questions</label>
-                      <span className="text-sm font-medium tabular-nums">
-                        {effectiveAvailableCount > 0
-                          ? count >= effectiveAvailableCount
-                            ? `All (${effectiveAvailableCount})`
-                            : count
-                          : '—'}
-                      </span>
-                    </div>
-                    <input
-                      type="range"
-                      min={1}
-                      max={effectiveAvailableCount > 0 ? effectiveAvailableCount : 1}
-                      value={effectiveAvailableCount > 0 ? Math.min(count, effectiveAvailableCount) : 1}
-                      onChange={e => setCount(Number(e.target.value))}
-                      disabled={effectiveAvailableCount === 0}
-                      className="w-full accent-foreground"
-                    />
-                    {/* Quick-select presets */}
-                    <div className="flex gap-2">
-                      {QUICK_COUNTS.map(n => (
-                        <button
-                          key={n}
-                          type="button"
-                          onClick={() => setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n))}
-                          disabled={effectiveAvailableCount === 0}
-                          className={`px-4 py-2.5 rounded-md border text-sm font-medium transition-colors ${
-                            count === n && effectiveAvailableCount >= n
-                              ? 'border-primary bg-primary text-primary-foreground'
-                              : 'border-input hover:bg-accent text-muted-foreground'
-                          }`}
-                        >
-                          {n}
-                        </button>
-                      ))}
-                    </div>
                   </div>
 
                   {/* Reveal answers */}

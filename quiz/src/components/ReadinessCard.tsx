@@ -307,6 +307,7 @@ export function ReadinessCard({
   const [pinnedSection, setPinnedSection] = useState<number | null>(null)
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [showConfig, setShowConfig] = useState(false)
+  const [configInitialStep, setConfigInitialStep] = useState<1 | 2 | 3>(1)
   const [showInfo, setShowInfo] = useState(false)
   const [showBonusInfo, setShowBonusInfo] = useState(false)
   const [bonusClaimed, setBonusClaimed] = useState<boolean>(() => {
@@ -681,7 +682,7 @@ export function ReadinessCard({
             onTargetDateChange={onExamDateChange ?? (() => {})}
             targetReadyDate={config.targetReadyDate}
             onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
-            onOpenStudyPlan={() => setShowConfig(true)}
+            onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
             onDayClick={date => { setSelectedDay(date); setExpandedSessions(new Set()); setSessionDetails(new Map()) }}
           />
 
@@ -1245,6 +1246,7 @@ export function ReadinessCard({
           examDate={examDate}
           examLabel={syllabus.examLabel}
           examId={wikiExamIdToProgressKey(syllabus.examId)}
+          initialStep={configInitialStep}
           onSave={next => {
             onConfigChange(next)
             onRegenerate()

@@ -25,15 +25,16 @@ interface Props {
   examDate: string | null
   examLabel: string
   examId?: string
+  initialStep?: 1 | 2 | 3
   onSave: (next: Partial<StudyPlanConfig>) => void
   onExamDateChange?: (date: string | null) => void
   onClose: () => void
 }
 
-export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSave, onExamDateChange, onClose }: Props) {
+export function StudyPlanConfigModal({ config, examDate, examLabel, examId, initialStep, onSave, onExamDateChange, onClose }: Props) {
   const today = todayISO()
 
-  const [step, setStep] = useState<1 | 2 | 3>(1)
+  const [step, setStep] = useState<1 | 2 | 3>(initialStep ?? 1)
   const [localExamDate, setLocalExamDate] = useState(examDate ?? '')
   const [readyDate, setReadyDate] = useState(() => {
     if (config.targetReadyDate) return config.targetReadyDate
@@ -127,14 +128,20 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
             const isDone = step > s
             return (
               <div key={s} className="flex items-center flex-1 last:flex-none">
-                <div className="flex flex-col items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setStep(s)}
+                  className="flex flex-col items-center gap-1.5 focus:outline-none"
+                  aria-label={`Go to step ${s}: ${label}`}
+                  aria-current={isActive ? 'step' : undefined}
+                >
                   <div
                     className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
                       isActive
                         ? 'bg-primary text-primary-foreground scale-110 ring-2 ring-primary/30'
                         : isDone
-                        ? 'bg-primary/30 text-primary'
-                        : 'bg-muted text-muted-foreground'
+                        ? 'bg-primary/30 text-primary hover:bg-primary/50 cursor-pointer'
+                        : 'bg-muted text-muted-foreground hover:bg-muted/80 cursor-pointer'
                     }`}
                   >
                     {s}
@@ -142,7 +149,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, onSa
                   <span className={`text-[10px] whitespace-nowrap transition-colors ${isActive ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>
                     {label}
                   </span>
-                </div>
+                </button>
                 {i < STEPS.length - 1 && (
                   <div className={`flex-1 h-0.5 mx-2 mb-5 rounded-full transition-colors ${step > s ? 'bg-primary/50' : 'bg-border'}`} />
                 )}

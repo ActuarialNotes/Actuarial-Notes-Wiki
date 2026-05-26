@@ -59,7 +59,7 @@ interface Props {
   /** Called when a day cell with sessions is clicked */
   onDayClick?: (date: string) => void
   /** When provided, clicking the exam/ready date labels opens this instead of inline editing */
-  onOpenStudyPlan?: () => void
+  onOpenStudyPlan?: (step?: 1 | 2 | 3) => void
 }
 
 export function ExamHeatmap({
@@ -359,7 +359,7 @@ export function ExamHeatmap({
             {!editingReady || onOpenStudyPlan ? (
               <button
                 type="button"
-                onClick={() => onOpenStudyPlan ? onOpenStudyPlan() : (setDraftReady(targetReadyDate ?? ''), setEditingReady(true))}
+                onClick={() => onOpenStudyPlan ? onOpenStudyPlan(2) : (setDraftReady(targetReadyDate ?? ''), setEditingReady(true))}
                 className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Calendar className="h-3 w-3 shrink-0 text-amber-500" />

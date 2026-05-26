@@ -292,3 +292,32 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
 export function stripFrontmatter(raw: string): string {
   return raw.replace(/^---\n[\s\S]*?\n---\n?/, '')
 }
+
+const CALLOUT_TYPE_RE = /^\s*\[!/
+
+export function extractMathBlockquotes(raw: string): string[] {
+  const md = stripFrontmatter(raw).replace(BREADCRUMB_RE, '')
+  const lines = md.split('\n')
+  const result: string[] = []
+  let blockLines: string[] = []
+
+  function flush() {
+    if (blockLines.length === 0) return
+    const stripped = blockLines.map(l => l.replace(/^>[ \t]?/, '')).join('\n')
+    if (!CALLOUT_TYPE_RE.test(stripped) && stripped.includes('$$')) {
+      result.push(blockLines.join('\n'))
+    }
+    blockLines = []
+  }
+
+  for (const line of lines) {
+    if (line.startsWith('>')) {
+      blockLines.push(line)
+    } else {
+      flush()
+    }
+  }
+  flush()
+
+  return result
+}

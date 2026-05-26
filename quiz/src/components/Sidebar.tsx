@@ -4,7 +4,6 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   ChevronsLeft,
-  ClipboardList,
   Compass,
   Gem,
   GraduationCap,
@@ -402,7 +401,7 @@ export default function Sidebar() {
           <SidebarItem
             to="/"
             label="Quiz"
-            icon={<ClipboardList className="h-4 w-4" />}
+            icon={<Play className="h-4 w-4" />}
             collapsed={collapsed}
             end
             onNavigate={closeMobile}

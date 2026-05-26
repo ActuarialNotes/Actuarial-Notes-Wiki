@@ -468,25 +468,6 @@ export function ConceptCoverageSection({
         )}
       </div>
 
-      {/* ── Concept chip selector ────────────────────────────────── */}
-      {stats.length > 0 && (
-        <div className="px-5 py-3 border-b">
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-            Concept Coverage
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {stats.map(stat => (
-              <ConceptChip
-                key={stat.name}
-                stat={stat}
-                isSelected={stat.name === selectedName}
-                onSelect={() => setSelectedName(selectedName === stat.name ? null : stat.name)}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* ── Graph panel with tabs ────────────────────────────────── */}
       {stats.length > 0 && (
         <>
@@ -528,6 +509,25 @@ export function ConceptCoverageSection({
             )}
           </div>
         </>
+      )}
+
+      {/* ── Concept chip selector ────────────────────────────────── */}
+      {stats.length > 0 && (
+        <div className="px-5 py-3 border-t">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+            Concept Coverage
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {stats.map(stat => (
+              <ConceptChip
+                key={stat.name}
+                stat={stat}
+                isSelected={stat.name === selectedName}
+                onSelect={() => setSelectedName(selectedName === stat.name ? null : stat.name)}
+              />
+            ))}
+          </div>
+        </div>
       )}
     </div>
   )

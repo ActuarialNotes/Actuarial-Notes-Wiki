@@ -286,13 +286,12 @@ mark a:hover, span.highlight a:hover, span.cm-highlight a:hover {
    =========================================================== */
 
 blockquote {
-  background: color-mix(in oklab, var(--muted) 65%, var(--bg)) !important;
-  border: none !important;
+  background: var(--bg-elev) !important;
+  border: 1.5px solid var(--brand) !important;
   border-radius: var(--radius-md) !important;
   padding: 14px 18px !important;
-  margin: 1.25rem auto !important;
-  box-shadow: none !important;
-  text-align: center !important;
+  margin: 1.25rem 0 !important;
+  box-shadow: var(--shadow-1) !important;
 }
 blockquote > :first-child { margin-top: 0; }
 blockquote > :last-child { margin-bottom: 0; }

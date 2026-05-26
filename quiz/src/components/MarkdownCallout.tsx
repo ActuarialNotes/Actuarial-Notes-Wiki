@@ -343,7 +343,14 @@ export const calloutComponents: Components = {
     const { children, ...rest } = props
     const match = matchCallout(children)
     if (!match) {
-      return <blockquote {...rest}>{children}</blockquote>
+      return (
+        <blockquote
+          {...rest}
+          className="not-prose my-4 bg-muted/70 rounded-lg px-6 py-4 text-center [&_p]:m-0"
+        >
+          {children}
+        </blockquote>
+      )
     }
     return (
       <Callout type={match.type} fold={match.fold} title={match.title}>

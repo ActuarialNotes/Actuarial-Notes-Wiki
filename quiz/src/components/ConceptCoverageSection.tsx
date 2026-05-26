@@ -409,10 +409,10 @@ export function ConceptCoverageSection({
   const stats = buildConceptStats(questions, responses)
   const outcomes = questions.map(q => responses[q.id]?.chosen === q.answer)
 
-  const [selectedName, setSelectedName] = useState<string>(() => stats[0]?.name ?? '')
+  const [selectedName, setSelectedName] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('quiz')
 
-  const selected = stats.find(s => s.name === selectedName) ?? stats[0]
+  const selected = selectedName !== null ? (stats.find(s => s.name === selectedName) ?? null) : null
 
   // Score header colors
   const pctColor =
@@ -479,8 +479,8 @@ export function ConceptCoverageSection({
               <ConceptChip
                 key={stat.name}
                 stat={stat}
-                isSelected={stat.name === selected.name}
-                onSelect={() => setSelectedName(stat.name)}
+                isSelected={stat.name === selectedName}
+                onSelect={() => setSelectedName(selectedName === stat.name ? null : stat.name)}
               />
             ))}
           </div>
@@ -513,15 +513,18 @@ export function ConceptCoverageSection({
           <div className="p-4">
             {tab === 'quiz' ? (
               <QuizCoverageRadial
-                key={selected.name}
+                key={selectedName ?? '__all__'}
                 totalQ={questions.length}
-                questionIndices={selected.questionIndices}
+                questionIndices={selected ? selected.questionIndices : questions.map((_, i) => i)}
                 outcomes={outcomes}
                 selectedQuestion={selectedQuestion}
                 onQuestionClick={onQuestionSelect}
               />
             ) : (
-              <LearningProgressGated key={selected.name} conceptName={selected.name} />
+              <LearningProgressGated
+                key={selectedName ?? stats[0]?.name}
+                conceptName={selected?.name ?? stats[0]?.name ?? ''}
+              />
             )}
           </div>
         </>

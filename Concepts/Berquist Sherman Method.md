@@ -1,111 +1,18 @@
----
-aliases:
-  - Berquist-Sherman
-  - B-S Method
----
+**Berquist-Sherman Method** is a triangle adjustment technique that restates historical development data to remove distortions caused by changes in claims handling practices — specifically changes in **case reserve adequacy** or **claim settlement rates** — so that chain ladder factors reflect current conditions rather than a mix of old and new practices.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Berquist-Sherman Method**
+- **Case reserve adjustment**: if case reserves have been systematically strengthened (or weakened) over time, historical incurred losses are restated to the current adequacy level before computing development factors
+- **Settlement rate adjustment**: if claims are being closed faster (or slower) than historically, the paid loss triangle is restated to reflect a uniform settlement rate across all accident years
+- Applied when raw development factors show a systematic diagonal trend — each successive calendar year's factors are all higher or all lower — signaling a change in practice rather than a change in underlying losses
+- Without adjustment, the chain ladder produces a biased ultimate: too high if reserves were recently strengthened, too low if they were weakened
 
-## Definition
-==Berquist-Sherman Method== is an adjustment technique that modifies development triangles to account for changes in case reserve adequacy levels over time, removing the distortion caused by systematic shifts in case reserving practices.
-
-## Purpose
-Addresses the problem when case reserve adequacy has changed:
-- More conservative now than in past
-- Less adequate now than in past
-- Systematic change distorts development patterns
-
-## Methodology
-
-### Step 1: Quantify Case Adequacy Change
-```
-Analyze historical case development to measure:
-- How much cases are developing beyond initial reserves
-- Whether this pattern is changing over time
-- Magnitude of inadequacy/redundancy
-```
-
-### Step 2: Adjust Historical Data
-```
-Adjust prior year losses to "as-if" current adequacy:
-
-Adjusted Loss = Historical Loss × Adequacy Adjustment Factor
-
-Example:
-If current cases 10% more adequate than 2 years ago:
-Adjust 2-year-old data upward by 10%
-```
-
-### Step 3: Develop Adjusted Triangle
-```
-Use standard methods on adjusted triangle:
-- Apply chain ladder to adjusted data
-- Calculate adjusted LDFs
-- Project ultimate from adjusted current losses
-```
-
-### Step 4: Project Ultimate
-```
-Ultimate = Current Reported × Adjusted LDF
-```
-
-## Example
-```
-Situation: Case reserves have become 15% more adequate over 3 years
-
-Original Triangle:
-AY      12mo    24mo    36mo
-2021    1,000   1,400   1,540
-2022    1,050   1,470
-2023    1,100
-
-Case adequacy analysis shows:
-2021 cases were 15% low
-2022 cases were 7% low  
-2023 cases are adequate
-
-Adjusted Triangle (as-if current adequacy):
-AY      12mo    24mo    36mo
-2021    1,150   1,610   1,771
-2022    1,124   1,573
-2023    1,100
-
-Now development factors reflect current adequacy:
-12-24: 1.400 (vs 1.400 original)
-24-36: 1.100 (vs 1.100 original)
-Patterns now consistent
-```
-
-## When to Use
-
-**Appropriate when:**
-- Known changes in case reserve philosophy
-- New claims system affecting reserves
-- Systematic change in reserve adequacy
-- Development patterns appear inconsistent
-
-**Signs you may need B-S:**
-- Decreasing development factors over time
-- Known case reserve strengthening
-- Claims department policy changes
-- Acquisition/system changes
-
-## Advantages
-- Removes distortion from case changes
-- Produces more reliable LDFs
-- Reflects current reserve adequacy
-- Better ultimate estimates
-
-## Disadvantages
-- Complex to implement
-- Requires judgment on adequacy changes
-- Needs detailed historical case data
-- May be difficult to quantify adjustment
-
-## Related Concepts
-- [[Case Reserves#Definition]]
-- [[Chain Ladder Method#Definition]]
-- [[Case Adequacy#Definition]]
-
-## References
-- Friedland, Chapter 7
+> [!example]- Berquist-Sherman Case Reserve Adjustment {Example}
+> The incurred triangle shows 12-month values rising faster than expected. Analysis reveals case reserves have been strengthened by approximately 10% per year for two years. Original and restated 12-month values ($000s):
+>
+> | AY | Original @ 12 mo | Adj. Factor | Restated @ 12 mo |
+> |----|-----------------|-------------|-----------------|
+> | 2022 | 1,000 | 1.21 | 1,210 |
+> | 2023 | 1,050 | 1.10 | 1,155 |
+> | 2024 | 1,100 | 1.00 | 1,100 |
+>
+> > [!answer]-
+> > After restating, all three years reflect current-year case adequacy. Development factors from the restated triangle are lower (cases were already adequately set in each year), producing a smaller CDF and a more accurate ultimate — the original triangle overstated early incurred losses in older years, inflating the apparent 12-to-24-month factor.

@@ -1,64 +1,22 @@
----
-aliases:
-  - CDF
-  - Loss Development Factor
----
+**Cumulative Development Factor** (CDF, also called loss development factor or LDF) is the product of all age-to-age factors from a given maturity age to ultimate, representing the total development expected from that point forward.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Cumulative Development Factor**
+> $$\text{CDF}_{n \to \text{ult}} = f_{n \to n{+}1} \times f_{n{+}1 \to n{+}2} \times \cdots \times \text{Tail Factor}$$
 
-## Definition
-==Cumulative Development Factor (CDF)== is the product of all age-to-age factors from a given age to ultimate, representing the total development expected from that age.
+> $$\text{Ultimate} = \text{Reported at age }n \;\times\; \text{CDF}_{n \to \text{ult}}$$
 
-## Formula
-```
-CDF_{age n to ultimate} = Product of all age-to-age factors from n to ultimate
+- CDF $\geq 1.0$ for all lines where losses do not decrease; $\%$ reported $= 1/\text{CDF}$ and $\%$ unreported $= 1 - 1/\text{CDF}$, which are used directly in the [[Bornhuetter Ferguson Method]] and [[Cape Cod Method]]
+- CDFs decrease monotonically with age — a 12-month CDF is always larger than a 24-month CDF for the same line, as more of the ultimate is already captured
+- The [[Tail Factor]] is the final multiplier from the last observable triangle age to ultimate; omitting it (setting tail $= 1.0$) understates the CDF for long-tail lines
+- CDFs are often presented as a table from each age to ultimate, computed by multiplying backward from the tail
 
-Example:
-Age-to-age factors:
-12-24: 1.500
-24-36: 1.167
-36-48: 1.057
-48-Ult: 1.020
-
-CDF 12-Ult = 1.500 × 1.167 × 1.057 × 1.020 = 1.896
-```
-
-## Calculation Table
-```
-Age    Age-to-Age    CDF to Ultimate
-12     1.500         1.896
-24     1.167         1.264
-36     1.057         1.084
-48     1.020         1.033
-Ult    1.000         1.000
-```
-
-## Uses
-
-### Project Ultimate Losses
-```
-Ultimate = Reported Losses × CDF
-
-Example:
-Reported @ 12 months: $600,000
-12-Ult CDF: 1.896
-Ultimate: $600,000 × 1.896 = $1,137,600
-```
-
-### Calculate % Reported
-```
-% Reported = 1 / CDF
-
-Example:
-12-Ult CDF: 1.896
-% Reported @ 12 months: 1/1.896 = 52.7%
-% Unreported: 1 - 0.527 = 47.3%
-```
-
-## Related Concepts
-- [[Age-to-Age Factor#Definition]]
-- [[Development Factor#Definition]]
-- [[Chain Ladder Method#Definition]]
-
-## References
-- Friedland, Chapter 4
+> [!example]- CDF Calculation and Use {Example}
+> Selected age-to-age factors: $f_{12\text{-}24} = 1.500$, $f_{24\text{-}36} = 1.200$, $f_{36\text{-}48} = 1.050$, tail $= 1.020$.
+>
+> > [!answer]-
+> > $\text{CDF}_{12\text{-ult}} = 1.500 \times 1.200 \times 1.050 \times 1.020 = 1.928$
+> >
+> > $\text{CDF}_{24\text{-ult}} = 1.200 \times 1.050 \times 1.020 = 1.285$
+> >
+> > $\text{CDF}_{36\text{-ult}} = 1.050 \times 1.020 = 1.071$
+> >
+> > AY with $\$600{,}000$ reported at 12 months: Ultimate $= 600{,}000 \times 1.928 = \$1{,}156{,}800$; $\%$ unreported $= 1 - 1/1.928 = 48.1\%$

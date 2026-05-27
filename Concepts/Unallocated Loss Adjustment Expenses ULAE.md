@@ -1,108 +1,18 @@
----
-aliases:
-  - ULAE  
-  - General Claims Expenses
----
+**Unallocated Loss Adjustment Expenses** (ULAE) are overhead claims-handling costs that cannot be attributed to specific individual claims — such as claims staff salaries, office rent, and IT systems — as distinguished from [[Allocated Loss Adjustment Expenses ALAE]], which are directly tied to individual claims.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Unallocated Loss Adjustment Expenses (ULAE)**
+> $$\text{ULAE Reserve} = \text{Unpaid Losses} \times \text{ULAE Ratio}$$
 
-## Definition
-==Unallocated Loss Adjustment Expenses ULAE== ULAE (Unallocated Loss Adjustment Expenses) are claim adjustment costs that cannot be attributed to specific individual claims.
+- The **paid-to-incurred ratio method** (Kittel adjustment) estimates ULAE by weighting current-period ULAE against both paid and incurred losses, recognizing that ULAE is incurred partly when a claim opens and partly as it develops and closes
+- Typical ULAE ratios as a percent of losses: workers compensation $5\text{–}8\%$, auto liability $4\text{–}6\%$, general liability $3\text{–}5\%$, property $2\text{–}4\%$
+- Unlike ALAE, ULAE is not included in individual case reserves; it is estimated in bulk and added as a separate loading to the loss reserve
+- In ratemaking, ULAE may be included in the loss ratio or treated as a fixed expense ratio component, depending on company convention
 
-## Components
-- Claims staff salaries
-- Claims office rent
-- Technology and systems
-- File storage
-- Training and development
-- Overhead allocation
-- General administration
-
-## Characteristics
-
-### Aggregate Estimation
-- Not claim-specific
-- Estimated in bulk
-- Applied as ratio or formula
-- Not in case reserves
-
-### Treatment in Reserving
-```
-Total Reserves = (Losses + ALAE) + ULAE
-
-ULAE often estimated as:
-ULAE = (Losses + ALAE) × ULAE Ratio
-```
-
-## Typical ULAE Ratios
-
-By line of business (ULAE as % of losses):
-```
-Workers Compensation: 5-8%
-Auto Liability: 4-6%
-General Liability: 3-5%
-Property: 2-4%
-```
-
-## Estimation Methods
-
-### Historical Ratio
-```
-ULAE Ratio = Historical ULAE / Historical Losses
-
-Apply to unpaid losses:
-ULAE Reserve = Unpaid Losses × ULAE Ratio
-```
-
-### Budget Method
-```
-ULAE = Expected Annual ULAE Budget / Expected Claims
-
-Allocated to reserves proportionally
-```
-
-### Per Claim Method
-```
-ULAE = Open Claim Count × Average Cost per Claim
-```
-
-## Example
-```
-Reserve Calculation:
-
-Unpaid Losses + ALAE: $10,000,000
-Historical ULAE ratio: 5%
-
-ULAE Reserve:
-= $10,000,000 × 0.05
-= $500,000
-
-Total Reserve:
-= $10,000,000 + $500,000
-= $10,500,000
-```
-
-## Ratemaking Treatment
-
-### Combined with ALAE
-```
-Total LAE = ALAE + ULAE
-
-Loss & LAE Ratio = (Losses + ALAE + ULAE) / Premium
-```
-
-### Separate Expense Item
-```
-Underwriting expenses include ULAE
-
-Fixed expense ratio includes ULAE component
-```
-
-## Related Concepts
-- [[Loss Adjustment Expenses (LAE)]]
-- [[Allocated Loss Adjustment Expenses (ALAE)]]
-- [[Fixed Expenses]]
-
-## References
-- Werner & Modlin, Chapter 5
-- Friedland, Chapter 10
+> [!example]- ULAE Reserve Calculation {Example}
+> An insurer has unpaid losses and ALAE of $\$10{,}000{,}000$. Historical ULAE has averaged $5\%$ of losses. Under the Kittel method, calendar-year ULAE paid $= \$480{,}000$; paid losses $= \$4{,}000{,}000$; incurred losses $= \$8{,}000{,}000$.
+>
+> > [!answer]-
+> > Historical ratio method: ULAE Reserve $= 10{,}000{,}000 \times 0.05 = \$500{,}000$
+> >
+> > Kittel ULAE ratio $= 480{,}000 / [(4{,}000{,}000 + 8{,}000{,}000)/2] = 480{,}000/6{,}000{,}000 = 8.0\%$
+> >
+> > Kittel reserve $= 10{,}000{,}000 \times 0.08 = \$800{,}000$; the higher Kittel estimate suggests the simple ratio understates future ULAE relative to current claim activity

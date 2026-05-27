@@ -1,48 +1,16 @@
----
-aliases:
-  - A vs E
-  - A/E Analysis
----
+**Actual vs. expected analysis** compares observed loss development (actual) to what was projected (expected) based on prior reserve selections, identifying whether development is emerging faster or slower than assumed.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Actual vs Expected Analysis**
+> $$\text{A/E Ratio} = \frac{\text{Actual Incurred (current period)}}{\text{Expected Incurred (prior ultimate estimate)}}$$
 
-## Definition
-==Actual vs Expected Analysis== is a diagnostic technique comparing actual loss emergence to expected patterns to identify reserve strengthening/weakening and development trends.
+- A/E ratios near $1.0$ indicate stable development consistent with prior assumptions; ratios consistently above $1.0$ signal reserve deficiency; ratios below $1.0$ signal redundancy
+- Analysis is applied period-by-period across all accident years and development ages to pinpoint specific sources of reserve error — e.g., whether deficiency is concentrated in recent or older accident years
+- Systematic A/E patterns should trigger revision of age-to-age factors, tail factors, or [[Expected Loss Method|expected loss ratios]]; a single outlier year may not warrant a change
+- A/E analysis on [[Paid Losses|paid]] vs. [[Incurred Losses|incurred]] separately can reveal whether deviations stem from payment timing (paid) or case reserving changes (incurred minus paid)
 
-## Methodology
-```
-A/E Ratio = Actual Incurred / Expected Incurred
-
-Calculation:
-Expected = Prior Ultimate Estimate
-Actual = Current Incurred
-
-A/E > 1.0: Adverse development
-A/E < 1.0: Favorable development
-A/E = 1.0: As expected
-```
-
-## Uses
-- Monitor reserve adequacy
-- Identify development trends
-- Validate methods
-- Track actual vs projected
-
-## Example
-```
-AY 2022 @ 12/31/2023:
-
-Prior estimate (12/31/2022): $1,000,000
-Current incurred (12/31/2023): $1,050,000
-
-A/E = $1,050,000 / $1,000,000 = 1.05 or 105%
-
-5% adverse development
-```
-
-## Related Concepts
-- [[Reserve Adequacy#Definition]]
-- [[Roll Forward Analysis#Definition]]
-
-## References
-- Friedland, Chapter 11
+> [!example]- Calculating an A/E Ratio {Example}
+> At 12/31/2023, AY 2022 was estimated at $\$1{,}000{,}000$ (the "expected"). At 12/31/2024, AY 2022 incurred losses are $\$1{,}080{,}000$ (the "actual"). Compute the A/E ratio and interpret.
+>
+> > [!answer]-
+> > $$\text{A/E} = \frac{\$1{,}080{,}000}{\$1{,}000{,}000} = 1.08$$
+> >
+> > Development is 8% adverse — losses emerged $\$80{,}000$ more than expected. If this pattern repeats across multiple accident years, the actuary should increase development factors or the selected [[IBNR]] for future valuations.

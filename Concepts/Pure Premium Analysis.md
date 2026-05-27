@@ -1,67 +1,19 @@
----
-aliases:
-  - Pure Premium Review
----
+**Pure Premium Analysis** is the examination of expected loss and LAE per unit of exposure — decomposed into frequency and severity components — used to assess pricing adequacy, detect cost trends, and compare relativities across classes or territories.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Pure Premium Analysis**
+> $$\text{Pure Premium} = \frac{\text{Losses + LAE}}{\text{Earned Exposures}} = \text{Frequency} \times \text{Severity}$$
 
-## Definition
-==Pure Premium Analysis== is the examination of expected losses per exposure unit, calculated as total losses divided by exposures, used to assess pricing adequacy and identify trends.
+- Pure premiums are compared to the rate-implied pure premium (= Current Rate × PLR) to assess adequacy; a ratio above 1.0 signals inadequacy
+- The frequency-severity decomposition identifies whether adverse results are driven by more claims (frequency increase) or higher average costs (severity increase), guiding different corrective actions
+- Territory, class, and coverage pure premiums are used to compute relativities for classification ratemaking
 
-## Formula
-```
-Pure Premium = Total Losses / Total Exposures
-
-Or equivalently:
-Pure Premium = Frequency × Severity
-```
-
-## Uses
-
-### Diagnostic Tool
-```
-Track pure premiums by:
-- Accident year
-- Territory
-- Class
-- Coverage
-
-Identify:
-- Pricing adequacy
-- Emerging trends
-- Mix changes
-```
-
-### Comparison to Rates
-```
-Rate Adequacy Ratio = Pure Premium / (Rate × Permissible Loss Ratio)
-
-Example:
-Pure Premium: $250
-Current Rate: $350
-Target Loss Ratio: 65%
-
-Expected Pure Premium: $350 × 0.65 = $227.50
-Ratio: $250 / $227.50 = 1.10 (10% inadequate)
-```
-
-## Example
-```
-Territory Analysis:
-
-Territory    Exposures    Losses        Pure Premium
-Urban        5,000        $1,500,000    $300
-Suburban     8,000        $1,760,000    $220
-Rural        3,000        $450,000      $150
-
-Urban is twice as costly as Rural
-Relativities: Urban 2.00, Suburban 1.47, Rural 1.00
-```
-
-## Related Concepts
-- [[Pure Premium Method#Definition]]
-- [[Frequency Analysis#Definition]]
-- [[Severity Analysis#Definition]]
-
-## References
-- Werner & Modlin, Chapter 5
+> [!example]- Territory Pure Premium Relativities {Example}
+> Three territories: Urban — $1{,}500{,}000$ losses / $5{,}000$ exposures; Suburban — $1{,}760{,}000$ / $8{,}000$; Rural — $450{,}000$ / $3{,}000$.
+>
+> > [!answer]-
+> > | Territory | Losses | Exposures | Pure Premium | Relativity |
+> > |---|---|---|---|---|
+> > | Urban | $1{,}500{,}000$ | $5{,}000$ | $\$300$ | $2.00$ |
+> > | Suburban | $1{,}760{,}000$ | $8{,}000$ | $\$220$ | $1.47$ |
+> > | Rural | $450{,}000$ | $3{,}000$ | $\$150$ | $1.00$ |
+> >
+> > Urban losses are twice as expensive per exposure as Rural; these relativities feed directly into territorial rate differentials.

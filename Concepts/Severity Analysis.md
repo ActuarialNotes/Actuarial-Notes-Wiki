@@ -1,87 +1,14 @@
----
-aliases:
-  - Average Severity
-  - Claim Severity
----
+**Severity Analysis** is the examination of average claim cost — total losses divided by claim count — across accident years, development ages, territories, or coverage types to quantify loss cost trends and diagnose reserve changes.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Severity Analysis**
+> $$\text{Average Severity} = \frac{\text{Total Losses}}{\text{Number of Claims}} \qquad \text{Annual Trend} = \left(\frac{\text{Current Severity}}{\text{Base Severity}}\right)^{1/n} - 1$$
 
-## Definition
-==Severity Analysis== is the examination of average claim costs (total losses divided by claim counts) to understand trends in claim size and identify changes in the cost per claim.
+- Severity trend reflects medical cost inflation, wage inflation, social/legal environment changes, and shifts in claim mix; it is the primary driver of loss trend in most long-tail lines
+- Combined with [[Frequency]] (claims per exposure), severity produces the pure premium: $\text{PP} = \text{Frequency} \times \text{Severity}$
+- Severity is also used as a reserving diagnostic: if reported severity is developing faster than expected, case reserves may be inadequate
 
-## Formula
-```
-Average Severity = Total Incurred Losses / Number of Claims
-
-Can analyze:
-- By accident year
-- By development age
-- By coverage type
-- By geography
-```
-
-## Uses
-
-### Trend Analysis
-```
-Track severity changes over time:
-- Medical cost inflation
-- Wage inflation  
-- Social inflation
-- Coverage limits impact
-
-Annual Severity Trend = (Current Severity / Prior Severity)^(1/years) - 1
-```
-
-### Reserve Testing
-```
-Projected Ultimate Severity × Projected Ultimate Counts = Ultimate Losses
-
-Consistency check:
-- Do severity trends match expectations?
-- Are counts developing reasonably?
-- Does product match total loss estimates?
-```
-
-## Example
-```
-Auto Bodily Injury Analysis:
-
-AY    Claims    Losses        Avg Severity
-2021  1,000     $5,000,000    $5,000
-2022  1,050     $5,775,000    $5,500
-2023  1,100     $6,600,000    $6,000
-
-Severity trend: 
-= ($6,000 / $5,000)^(1/2) - 1
-= 1.0954 - 1 = 9.5% annually
-```
-
-## Factors Affecting Severity
-
-### Inflation
-- Medical costs
-- Repair costs
-- Wage inflation
-- General price levels
-
-### Social/Legal
-- Jury awards increasing
-- Attorney involvement
-- Regulatory changes
-- Coverage interpretations
-
-### Mix of Business
-- Higher/lower limits
-- Different territories
-- Industry changes
-- Exposure mix
-
-## Related Concepts
-- [[Frequency Analysis#Definition]]
-- [[Frequency-Severity Method#Definition]]
-- [[Loss Trend#Definition]]
-
-## References
-- Friedland, Chapter 8
-- Werner & Modlin, Chapter 8
+> [!example]- Auto BI Severity Trend {Example}
+> Auto bodily injury AY losses and claims: AY 2021 — $5{,}000{,}000$ / $1{,}000$ claims; AY 2023 — $6{,}600{,}000$ / $1{,}100$ claims.
+>
+> > [!answer]-
+> > $$\text{Severity}_{2021} = \frac{5{,}000{,}000}{1{,}000} = \$5{,}000 \qquad \text{Severity}_{2023} = \frac{6{,}600{,}000}{1{,}100} = \$6{,}000$$
+> > $$\text{Annual Trend} = \left(\frac{6{,}000}{5{,}000}\right)^{1/2} - 1 = 1.0954 - 1 = 9.5\%$$

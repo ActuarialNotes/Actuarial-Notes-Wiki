@@ -1,101 +1,20 @@
----
-aliases:
-  - ALAE
-  - Defense and Cost Containment
----
+**Allocated Loss Adjustment Expenses** (ALAE) are claim adjustment costs that can be directly attributed to specific individual claims — such as defense attorney fees, expert witness fees, and court costs — as distinguished from [[Unallocated Loss Adjustment Expenses ULAE]], which are overhead costs not assignable to specific claims.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Allocated Loss Adjustment Expenses (ALAE)**
+> $$\text{Total Incurred} = \text{Indemnity} + \text{ALAE}$$
 
-## Definition
-==Allocated Loss Adjustment Expenses ALAE== ALAE (Allocated Loss Adjustment Expenses) are claim adjustment costs that can be directly attributed to specific individual claims.
+> $$\text{Pure Premium} = \frac{\text{Losses} + \text{ALAE}}{\text{Exposures}}$$
 
-## Components
-- Defense attorney fees
-- Court costs  
-- Expert witness fees
-- Independent adjuster fees
-- Medical examinations
-- Engineering reports
-- Surveillance costs
-- Appraisal fees
+- ALAE is included in case reserves and reported losses, so standard loss development triangles often include ALAE combined with indemnity; this simplifies analysis but assumes similar development patterns
+- ALAE development can differ from indemnity: defense costs tend to be concentrated before settlement and may peak earlier, implying different tail factors in some lines
+- Typical ALAE ratios as a percent of indemnity: professional liability $30\text{–}50\%$, general liability $15\text{–}25\%$, workers compensation $10\text{–}20\%$, auto liability $10\text{–}15\%$
+- In ratemaking, losses and ALAE are combined into a single loss cost; the loss ratio in the experience period should include ALAE to be consistent with the loss cost being priced
 
-## Characteristics
-
-### Claim-Specific
-- Trackable to individual claims
-- Vary by claim
-- Included in case reserves
-- Developed with losses
-
-### Treatment in Reserving
-```
-Case Reserve = Indemnity Reserve + ALAE Reserve
-
-Reported Losses = Paid + Case Reserves (including ALAE)
-```
-
-## Typical ALAE Ratios
-
-By line of business (ALAE as % of losses):
-```
-Professional Liability: 30-50%
-General Liability: 15-25%
-Workers Compensation: 10-20%
-Auto Liability: 10-15%
-Property: 5-10%
-```
-
-## ALAE Development
-
-### Separate Development
-ALAE may develop differently than indemnity:
-- Defense costs concentrated before settlement
-- Can peak earlier than indemnity payments
-- Different tail factors may apply
-
-### Combined Development
-Often developed with losses:
-```
-Development Triangle: Losses + ALAE combined
-
-Simplifies analysis but assumes similar patterns
-```
-
-## Example
-```
-General Liability Claim:
-
-Indemnity payments: $100,000
-
-ALAE:
-Defense attorney: $25,000
-Expert witness: $8,000
-Court costs: $2,000
-Total ALAE: $35,000
-
-Total Incurred: $135,000
-ALAE Ratio: $35,000 / $100,000 = 35%
-```
-
-## Ratemaking Treatment
-
-### Include in Loss Costs
-```
-Total Loss Cost = Losses + ALAE
-
-Pure Premium = (Losses + ALAE) / Exposures
-```
-
-### Separate Loading
-```
-Rate = Loss Cost × (1 + ALAE%)
-```
-
-## Related Concepts
-- [[Loss Adjustment Expenses (LAE)]]
-- [[Unallocated Loss Adjustment Expenses (ULAE)]]
-- [[Case Reserves]]
-
-## References
-- Werner & Modlin, Chapters 4-5
-- Friedland, Chapter 10
+> [!example]- ALAE in a GL Claim {Example}
+> A general liability claim closes with indemnity payments of $\$100{,}000$. ALAE incurred during litigation: defense attorney $\$25{,}000$, expert witness $\$8{,}000$, court costs $\$2{,}000$.
+>
+> > [!answer]-
+> > Total ALAE $= \$35{,}000$; total incurred $= \$100{,}000 + \$35{,}000 = \$135{,}000$
+> >
+> > ALAE ratio $= 35{,}000/100{,}000 = 35\%$, consistent with the typical GL range
+> >
+> > This claim would appear in a combined loss+ALAE triangle at $\$135{,}000$, or separately in an ALAE-only triangle if the actuary develops the two components independently

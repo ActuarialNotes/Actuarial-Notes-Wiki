@@ -1,90 +1,22 @@
----
-aliases:
-  - Link Ratio
-  - LDF
-  - Age-to-Age Factor
----
+**Development Factor** (link ratio or age-to-age factor) is the ratio used to project cumulative losses from one maturity age to the next, forming the building blocks of the [[Chain Ladder Method]]; chaining them together produces the [[Cumulative Development Factor]] to ultimate.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Development Factor**
+> $$f_{n \to n{+}1} = \frac{\text{Losses at age }n{+}1}{\text{Losses at age }n} \qquad \text{(for a single accident year)}$$
 
-## Definition
-==Development Factor== A development factor (or link ratio) represents the factor by which losses are expected to increase as they mature from one evaluation point to another.
+- **Simple average**: unweighted mean of all individual year factors — treats each accident year equally regardless of size
+- **Volume-weighted average**: $\Sigma(\text{col }n{+}1) / \Sigma(\text{col }n)$ — gives more credibility to larger accident years; the standard default selection
+- **Latest-$k$-year average**: uses only the most recent $k$ accident years — reduces the influence of older, potentially unrepresentative data
+- **Medial average**: drops the highest and lowest individual factors before averaging — reduces the impact of outliers without discarding recent years
 
-## Types
-
-### Age-to-Age Factor
-```
-Factor_{n to n+k} = Losses at age n+k / Losses at age n
-
-Example:
-12-24 month factor = Losses @ 24mo / Losses @ 12mo
-```
-
-### Cumulative Development Factor (CDF)
-```
-CDF_{n to ultimate} = Ultimate Losses / Losses at age n
-
-Example:
-12-to-ultimate CDF = Ultimate / Losses @ 12mo
-```
-
-## Calculating Development Factors
-
-### From Triangle
-```
-         Age (months)
-AY       12      24      36
-2021     500     750     875
-2022     550     825     950
-2023     600     900
-
-12-24 factors:
-2021: 750/500 = 1.500
-2022: 825/550 = 1.500
-2023: 900/600 = 1.500
-
-Selected 12-24: 1.500
-```
-
-### Volume Weighted
-```
-Weighted Factor = Σ(Age n+1) / Σ(Age n)
-
-For 12-24:
-= (750 + 825 + 900) / (500 + 550 + 600)
-= 2,475 / 1,650
-= 1.500
-```
-
-## Cumulative Factors
-
-### Calculation
-```
-CDF = Product of age-to-age factors
-
-If:
-12-24: 1.500
-24-36: 1.167
-36-48: 1.057
-48-Ult: 1.020 (tail)
-
-Then:
-12-Ult CDF = 1.500 × 1.167 × 1.057 × 1.020
-           = 1.896
-```
-
-## Tail Factor
-The development factor from the end of the triangle to ultimate:
-- Based on industry data
-- Actuarial judgment  
-- Curve fitting
-- Varies significantly by line
-
-## Related Concepts
-- [[Loss Development Triangle]]
-- [[Chain Ladder Method]]
-- [[Cumulative Development Factor]]
-- [[Tail Factor]]
-
-## References
-- Friedland, Chapters 3-4
+> [!example]- Factor Selection Methods {Example}
+> 12-to-24-month individual factors: AY 2020: 1.450, AY 2021: 1.550, AY 2022: 1.480, AY 2023: 1.520. Column sums: age-24 $= 9{,}900$, age-12 $= 6{,}600$ (in $000s).
+>
+> > [!answer]-
+> > Simple average: $(1.450 + 1.550 + 1.480 + 1.520)/4 = 1.500$
+> >
+> > Volume-weighted: $9{,}900 / 6{,}600 = 1.500$
+> >
+> > Latest 2-year average: $(1.480 + 1.520)/2 = 1.500$
+> >
+> > Medial (drop high 1.550 and low 1.450): $(1.480 + 1.520)/2 = 1.500$
+> >
+> > In this case all methods agree; in practice they diverge when individual year factors are non-uniform, and the actuary selects based on data stability and recency

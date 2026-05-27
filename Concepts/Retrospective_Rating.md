@@ -1,31 +1,11 @@
----
-aliases:
-  - Retro Rating
-  - Retrospective Premium
----
+**Retrospective Rating** is a commercial lines premium adjustment mechanism where the final premium is recalculated after the policy period based on the insured's actual loss experience, subject to a guaranteed minimum and maximum premium.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Retrospective Rating**
+- The retro premium formula is $\text{Retro Premium} = (\text{Basic Premium} + \text{Converted Losses} \times \text{LCF}) \times \text{Tax Multiplier}$, where converted losses are actual losses capped by a per-occurrence loss limitation and the loss conversion factor (LCF) loads for LAE
+- The **minimum premium** (typically $25$–$75\%$ of standard) protects the insurer against very favorable experience; the **maximum premium** (typically $125$–$200\%$ of standard) protects the insured against catastrophic experience — together they create a risk-sharing band
+- Retro rating is used for **large commercial accounts** (workers compensation, general liability) where the insured has enough volume for its own experience to be credible and where risk-sharing provides a claims-control incentive
 
-## Definition
-==Retrospective Rating== is a premium adjustment mechanism where the final premium is determined after the policy period based on actual losses incurred, subject to minimum and maximum limits.
-
-## Formula
-```
-Retro Premium = (Losses × Loss Conversion Factor + Fixed Costs) × Tax Multiplier
-
-Subject to:
-Minimum Premium (usually 25-75% of standard)
-Maximum Premium (usually 125-200% of standard)
-```
-
-## Uses
-- Large commercial risks
-- Workers compensation
-- Self-insured retentions
-- Risk-sharing arrangements
-
-## Related Concepts
-- [[Experience Rating#Definition]]
-
-## References
-- Werner & Modlin, Chapter 12
+> [!example]- Retrospective Premium Calculation {Example}
+> A workers compensation policy has a standard premium of $\$500{,}000$. The retro parameters are: basic premium $= \$100{,}000$, LCF $= 1.10$, tax multiplier $= 1.03$, minimum $= \$300{,}000$, maximum $= \$800{,}000$. Actual converted losses are $\$350{,}000$.
+>
+> > [!answer]-
+> > $\text{Retro Premium} = (\$100{,}000 + \$350{,}000 \times 1.10) \times 1.03 = (\$100{,}000 + \$385{,}000) \times 1.03 = \$485{,}000 \times 1.03 = \$499{,}550$. This falls between the minimum $\$300{,}000$ and maximum $\$800{,}000$, so the final retro premium is $\$499{,}550$.

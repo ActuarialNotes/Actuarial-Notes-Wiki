@@ -1,79 +1,18 @@
----
-aliases:
-  - Case Outstanding
-  - Outstanding Reserves
----
+**Case reserves** (also called case outstanding) are claim-specific estimates of the expected future payments on individual reported claims, established by claims adjusters based on the known facts of each loss.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Case Reserves**
+> $$\text{Reported (Incurred) Losses} = \text{Paid Losses} + \text{Case Reserves}$$
+> $$\text{IBNR} = \text{Ultimate Losses} - \text{Reported Losses}$$
 
-## Definition
-==Case Reserves== Case reserves are claim-specific estimates of the ultimate cost of reported claims, established by claims adjusters for individual known losses.
+- Case reserves reflect the adjuster's current best estimate and are updated as new information emerges — medical reports, legal proceedings, settlement negotiations
+- Changes in case reserving adequacy over time (systematic strengthening or weakening) distort development triangle patterns; the [[Berquist Sherman Method|Berquist-Sherman]] adjustment restates historical triangles to current reserve levels
+- Total unpaid claim liability = Case Reserves + IBNR; case reserves cover known claims while IBNR covers unreported claims and development on known claims
 
-## Components
-```
-Reported Losses = Paid Losses + Case Reserves
-
-Case Reserves represent:
-- Expected future payments on known claims
-- Indemnity payments
-- ALAE (allocated loss adjustment expenses)
-```
-
-## Setting Case Reserves
-
-### Initial Reserve
-When claim is first reported:
-- Based on initial information
-- May be formula-driven
-- Often conservative
-
-### Reserve Updates
-As claim develops:
-- New medical reports
-- Legal developments
-- Settlement negotiations
-- Expert opinions
-
-## Case Reserve Development
-
-### Adequate Reserves
-```
-If reserves are adequate:
-- Paid claims match reserves
-- Little development over time
-- Stable ultimate estimates
-```
-
-### Inadequate Reserves
-```
-If reserves are deficient:
-- Payments exceed reserves
-- Positive development
-- Increasing ultimates
-Signs:
-- Paid-to-incurred ratios increasing
-- Development factors > expected
-```
-
-## Impact on Reserving
-
-### Case Outstanding Development Method
-Projects ultimate based on case reserve development:
-```
-Ultimate = Paid + (Case × Case Development Factor)
-```
-
-### IBNR Calculation
-```
-Total Reserves = Case + IBNR
-
-IBNR = Ultimate - (Paid + Case)
-```
-
-## Related Concepts
-- [[IBNR Reserves]]
-- [[Case Outstanding Development Method]]
-- [[Reported Losses]]
-
-## References
-- Friedland, Chapter 6
+> [!example]- Case Reserves in the Incurred Triangle {Example}
+> At 12-month evaluation, AY 2023 has $\$400{,}000$ paid and $\$600{,}000$ in case reserves. The 12-to-ultimate CDF is $1.50$.
+>
+> > [!answer]-
+> > Reported (incurred) at 12 months $= 400{,}000 + 600{,}000 = \$1{,}000{,}000$
+> >
+> > Chain ladder ultimate $= 1{,}000{,}000 \times 1.50 = \$1{,}500{,}000$
+> >
+> > IBNR $= 1{,}500{,}000 - 1{,}000{,}000 = \$500{,}000$

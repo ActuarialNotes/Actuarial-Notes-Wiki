@@ -1,26 +1,16 @@
-[[Actuarial Notes Wiki|Wiki]] / [[Actuarial Math]] / ==Credibility Theory==
+**Credibility Theory** provides the framework for weighting observed experience data against prior or external expectations, balancing the statistical reliability of an individual group's data with the stability of broader pooled data.
 
-> ==Credibility Theory== is used to determine the appropriate weight to give to different sources of data.
+- **Classical (limited fluctuation) credibility** assigns full credibility ($Z = 1$) when a dataset meets a minimum size standard; below that threshold, the square-root rule $Z = \sqrt{n / n_0}$ applies
+- **Bühlmann (greatest accuracy) credibility** derives $Z$ from the ratio of between-group variance to total variance — see [[Bühlmann Credibility]] for the full model; it minimizes mean squared error rather than satisfying a probability bound
+- Both models produce: $\text{Estimate} = Z \times \text{Observed} + (1-Z) \times \text{Expected}$, where the complement may be a class mean, industry data, or manual rate
 
-Credibility methods are used when calculating premiums, reserves, and risk. In insurance, actuaries need to balance historical data from a specific policyholder (or group) with broader industry or external data to improve the accuracy of predictions.
-
-## Models
-
-There are two main models of credibility, [[Classical Credibility]] and [[Bayesian Credibility]]. Both methods assign a credibility factor "Z" to a set of data, a number between 0 and 1 which weights credible data higher.
-
-==Classical credibility== is founded on frequentist statistical theory. It calculates estimates that are within a specified margin of error with high probability. The credibility factor Z is calculated as:
-
-$$
-Z = \sqrt{\frac{n}{n_o}}
-$$
-Where n is the number of observations in the dataset and $n_0$ is the "standard for full credibility". This standard is based on assumptions about the data's underlying distribution.
-
-==Bayesian credibility== is founded on Bayesian statistical theory, in which prior beliefs (parameters) are updated with observed data to form a posterior distribution. A common Bayesian credibility model is the [[Bühlmann Model]], which defines the credibility factor Z as:
-$$
-Z = \frac{v}{v+\sigma^2}
-$$
-
-Where $v$ is the variance in group means, and $\sigma^2$ is the process variance (within-group variance).
-
-
-
+> [!example]- Classical vs. Bühlmann Credibility {Example}
+> A rating class has $n = 300$ claims. The full-credibility standard for frequency is $n_0 = 1{,}082$ claims.
+>
+> > [!answer]-
+> > **Classical:** $Z = \sqrt{300 / 1{,}082} = \sqrt{0.277} = 0.527$
+> >
+> > **Bühlmann** (if between-group variance $v = 0.10$, process variance $\sigma^2 = 0.20$):
+> > $$Z = \frac{v}{v + \sigma^2/n} = \frac{0.10}{0.10 + 0.20/300} = \frac{0.10}{0.1007} \approx 0.993$$
+> >
+> > The two methods yield very different credibilities because Bühlmann accounts for variance structure; classical only uses count relative to the full-credibility threshold.

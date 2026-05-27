@@ -1,77 +1,11 @@
----
-aliases:
-  - PY
----
+**Policy Year** (PY) is a data organization method that groups all premiums and losses for policies whose effective dates fall within a given calendar year, tracking those policies through their full coverage and claim-settlement periods.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Policy Year**
+- Policy year requires the longest development period of any data organization method: the full policy term (typically 12 months) plus the entire claim tail, which can exceed 10 years for long-tail lines
+- Because a PY cohort is closed — every dollar of premium and every loss belongs to exactly one policy year — it provides the most complete and accurate measure of underwriting profitability
+- PY data is less timely than [[Accident Year]] data, so it is less common in ratemaking but well suited for experience rating and retrospective rating programs
 
-## Definition
-==Policy Year== Policy year is a data organization method where all premiums, losses, and expenses are grouped by the year in which the policy became effective, tracked throughout the entire policy period.
-
-## Key Features
-
-### Complete Policy View
-- Includes all transactions for policies effective in a given year
-- Follows policies from inception through expiration and claim settlement
-- Provides most complete profitability picture
-
-### Development Period
-Policy year data requires the longest development period:
-- Policy term (typically 12 months)
-- Plus claim settlement period (varies by line)
-- Long-tail lines may take 10+ years to fully develop
-
-## Uses
-
-**Profitability Analysis**
-- True underwriting profitability
-- Management performance evaluation
-- Line of business assessment
-
-**Experience Rating**
-- Individual risk evaluation
-- Retrospective rating calculations
-- Large deductible programs
-
-## Advantages
-1. Matches premium with corresponding losses
-2. Best measure of underwriting profitability
-3. Useful for homogeneous exposure groups
-4. Clear beginning and end of exposure period
-
-## Disadvantages
-1. Longest development period
-2. Complex data requirements
-3. Delayed availability for rate indications
-4. Requires sophisticated tracking systems
-
-## Example
-
-```
-Policy effective 7/1/2024 (12-month term):
-
-Policy Year 2024 includes:
-- Full premium for 7/1/2024 - 6/30/2025 policy
-- All losses occurring 7/1/2024 - 6/30/2025
-- Development continues until all claims settled
-
-Development timeline:
-- 7/1/2024: Policy effective
-- 6/30/2025: Policy expires
-- 2026-2030+: Claims settle
-- Full maturity: When all claims closed
-```
-
-## Conversion Between Methods
-Policy year can be converted to accident year:
-- 12-month policies: PY → 2 AY (partial overlap)
-- Parallelogram method used for conversion
-
-## Related Concepts
-- [[Ratemaking Data Organization]]
-- [[Accident Year]]
-- [[Calendar Year]]
-- [[Experience Rating]]
-
-## References
-- Werner & Modlin, Chapter 3
+> [!example]- Policy Year Development Timeline {Example}
+> A $12$-month policy is effective $7/1/2024$. Describe its policy year assignment and development.
+>
+> > [!answer]-
+> > The policy belongs to **Policy Year 2024**. Premium and all losses occurring $7/1/2024$–$6/30/2025$ are assigned to PY 2024. The data will not be fully mature until every claim from that policy is closed — potentially years after $6/30/2025$. By contrast, those same losses split across **Accident Years 2024 and 2025** under the AY method.

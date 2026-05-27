@@ -1,75 +1,28 @@
----
-aliases:
-  - Count Triangle
----
+**Claim Count Triangle** is a development triangle that organizes cumulative reported claim counts (rather than dollar losses) by accident year and development age, used to analyze claim frequency development separately from severity and to validate or supplement dollar loss triangles.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Claim Count Triangle**
+> $$\text{Ultimate Claim Count} = \text{Reported Count at age }n \times \text{CDF}_{\text{count}, n \to \text{ult}}$$
 
-## Definition
-==Claim Count Triangle== is a development triangle displaying the number of claims (rather than dollar amounts) by accident year and development age, used to analyze claim frequency patterns and development.
+> $$\text{Ultimate Severity} = \frac{\text{Ultimate Losses}}{\text{Ultimate Claim Count}}$$
 
-## Structure
-```
-Example Claim Count Triangle:
+- Count CDFs are developed exactly like loss CDFs using age-to-age factors; count factors are typically smaller than loss factors because counts mature faster (claims are reported before all payments are made)
+- The frequency-severity approach projects counts and average severity independently, then multiplies: Ultimate Losses $=$ Ultimate Count $\times$ Ultimate Severity; useful when severity trends differ from frequency trends
+- Claim count triangles also serve as diagnostics: a diagonal shift in count factors signals a change in reporting speed or claims department processing practices
+- Closed claim count triangles (rather than reported) are used to monitor settlement rates and detect changes in closure patterns that would distort paid loss development
 
-Development Age (months)
-AY      12    24    36    48    60
-2020    450   520   545   552   555
-2021    475   550   580   590
-2022    500   575   610
-2023    525   605
-2024    550
-```
-
-## Uses
-
-### Frequency Analysis
-- Track claim reporting patterns
-- Identify changes in claim frequency
-- Support frequency-severity methods
-- Validate loss triangles
-
-### Diagnostic Tool
-```
-Closed Claim Counts:
-- Monitor settlement rates
-- Assess claims department efficiency
-- Identify changes in closing patterns
-
-Reported Claim Counts:
-- Analyze reporting lags
-- Detect operational changes
-- Project ultimate claim counts
-```
-
-### Combined with Loss Triangles
-```
-Average Severity = Loss Amount / Claim Count
-
-Can develop separately:
-- Frequency (claim counts)
-- Severity (average per claim)
-- Multiply for ultimate losses
-```
-
-## Development Patterns
-```
-Count development factors typically:
-- Develop less than loss amounts
-- More stable over time
-- Lower tail factors
-- Mature faster
-
-Example:
-12-24 count factor: 1.155
-12-24 loss factor: 1.600
-(Severity increasing as claims develop)
-```
-
-## Related Concepts
-- [[Loss Development Triangle#Definition]]
-- [[Frequency-Severity Method#Definition]]
-- [[Frequency Analysis#Definition]]
-
-## References
-- Friedland, Chapter 8
+> [!example]- Count Triangle Development {Example}
+> Cumulative reported claim counts:
+>
+> | AY | 12 mo | 24 mo | 36 mo |
+> |----|-------|-------|-------|
+> | 2021 | 450 | 520 | 545 |
+> | 2022 | 475 | 550 | — |
+> | 2023 | 500 | — | — |
+>
+> > [!answer]-
+> > 12-to-24 factors: $520/450 = 1.156$; $550/475 = 1.158$; selected $= 1.157$
+> >
+> > 24-to-36 factor: $545/520 = 1.048$; selected $= 1.048$; tail $= 1.010$
+> >
+> > Count CDF at 12 mo $= 1.157 \times 1.048 \times 1.010 = 1.224$
+> >
+> > AY 2023 ultimate count $= 500 \times 1.224 = 612$ claims; if ultimate losses $= \$612{,}000$, ultimate severity $= \$1{,}000$ per claim

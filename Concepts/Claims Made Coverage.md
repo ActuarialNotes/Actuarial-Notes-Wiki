@@ -1,83 +1,14 @@
----
-aliases:
-  - Claims-Made Form
-  - Claims-Made Basis
----
+**Claims-made coverage** is a policy trigger under which coverage applies to claims **reported** during the policy period (subject to a retroactive date), regardless of when the underlying loss occurred. This contrasts with [[Occurrence Coverage|occurrence coverage]], where the trigger is the date of the loss event.
 
-[[Actuarial Notes Wiki|Wiki]] / [[Exam 5 (CAS)]] / **Claims-Made Coverage**
+- A **retroactive date** limits coverage to occurrences after a specified date; a **discovery period (ERP)** can extend coverage for claims reported after expiration for occurrences during the policy period
+- Claims-made policies develop much faster than occurrence policies — because coverage closes at expiration, IBNR is smaller and [[Report Year]] is the natural data organization basis
+- Common in professional liability (D&O, E&O, medical malpractice) and other long-tail lines where occurrence-based IBNR would be difficult to price and reserve
+- Ratemaking uses on-level earned premium matched to report-year losses; the permissible loss ratio accounts for shorter development relative to occurrence policies
 
-## Definition
-==Claims Made Coverage== Claims-made coverage is an insurance policy form that covers claims that are reported during the policy period, regardless of when the loss occurred (subject to retroactive date).
-
-## Key Features
-
-### Coverage Trigger
-Claim must be **reported** during policy period:
-- Report date within policy term
-- May require occurrence after retroactive date
-- Immediate coverage cutoff at expiration
-- Extended reporting period (ERP) available
-
-### Example
-```
-Policy Period: 1/1/2024 - 12/31/2024
-Retroactive Date: 1/1/2020
-Loss occurs: 6/15/2023
-Claim reported: 9/1/2024
-
-Result: COVERED
-(occurred after retro date, reported during policy)
-```
-
-## Retroactive Date
-Earliest date of loss that can be covered:
-- Establishes coverage boundary
-- Typically policy inception date for first year
-- Carried forward in renewal
-- Creates "gap" coverage without proper transition
-
-## Extended Reporting Period (ERP)
-Coverage for claims reported after expiration:
-- Also called "tail coverage"
-- Covers occurrences during policy period
-- Reported after expiration
-- Purchased at additional premium
-
-## Advantages
-- Lower initial premium
-- Limits insurer's tail exposure
-- Faster claim closure
-- Better matched premium/losses
-
-## Disadvantages
-- Need continuous coverage
-- Gap risk if lapse
-- ERP cost at cancellation
-- More complex to understand
-
-## Ratemaking Implications
-
-### Data Organization
-**Report year** is natural:
-- Matches coverage trigger
-- Shorter development
-- Faster emergence
-
-### Reserve Development
-- Shorter tail
-- Lower IBNR percentage
-- Quicker settlement
-
-## Common Lines
-- Professional liability (D&O, E&O)
-- Medical malpractice  
-- Environmental liability
-- Products liability (some)
-
-## Related Concepts
-- [[Occurrence Coverage]]
-- [[Report Year]]
-- [[IBNR Reserves]]
-
-## References
-- Werner & Modlin, Chapter 3
+> [!example]- Claims-Made Coverage Trigger {Example}
+> Policy: $1/1/2024$–$12/31/2024$; retroactive date $1/1/2020$. A loss occurs on $6/15/2023$ and is reported on $9/1/2024$.
+>
+> > [!answer]-
+> > **Covered.** The occurrence date ($6/15/2023$) is after the retroactive date ($1/1/2020$), and the report date ($9/1/2024$) falls within the policy period ($2024$). Both conditions are satisfied.
+> >
+> > If the same loss were reported on $1/15/2025$ (after expiration with no ERP), it would **not** be covered under the claims-made form, even though the occurrence was during the retroactive window.

@@ -1,0 +1,21 @@
+**Ratemaking** is the process of determining the appropriate price (the **rate**) to charge for insurance coverage. It is a prospective process that uses historical data and actuarial projections to ensure the premium collected is sufficient to cover future losses, administrative expenses, and a margin for profit, while remaining competitive and regulatory-compliant.
+
+- The fundamental ratemaking equation for the **Indication** (the change needed in current rates) is:
+
+> $$\text{Indicated Rate Change} = \frac{\text{Expected Loss Ratio} + \text{Expense Ratio}}{1 - \text{Target Profit Provision}} - 1$$
+
+> [!example]- Calculating a Pure Premium {Example}
+> 
+> An actuary expects a fleet of 1,000 delivery vans to incur $250,000 in total losses over the next year. If the administrative expenses are estimated at $50$ per van, what is the **Pure Premium**?
+> 
+> > [!answer]-
+> > 
+> > - **Projected Losses ($L$):** $250,000
+> > - **Exposure Units ($N$):** $1,000$ vans
+> > 
+> > The **Pure Premium** ($PP$) represents the portion of the rate required to pay for losses and loss adjustment expenses:
+> > 
+> > $$PP = \frac{L}{N} = \frac{250,000}{1,000} = \$250$$
+> > 
+> > > [!tip] The "Gross" Difference
+> > > The Pure Premium is **not** the final price the customer pays. To get the **Gross Premium**, you must "load" the Pure Premium for taxes, commissions, and profit.

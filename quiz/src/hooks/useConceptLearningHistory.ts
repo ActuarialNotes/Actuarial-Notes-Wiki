@@ -203,6 +203,27 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         })
         currentLevel = canonical.state
 
+        // If the mastery record is 'new' but level events show the concept was
+        // advanced, the mastery row may be stale (e.g. the upsert failed while
+        // daily_completions succeeded). Derive the current level from the last
+        // level event with decay applied so the pill matches the graph.
+        if (currentLevel === 'new' && levelEvents.length > 0) {
+          const lastEvent = levelEvents[levelEvents.length - 1]
+          if (lastEvent.to !== 'new' && lastEvent.to !== 'forgotten') {
+            const tempRecord: ConceptMasteryRecord = {
+              user_id: '', exam_id: '', concept_slug: '',
+              state: lastEvent.to,
+              correct_count: 0, incorrect_streak: 0, hard_correct_count: 0,
+              last_correct_at: lastEvent.at.toISOString(),
+              last_attempted_at: lastEvent.at.toISOString(),
+            }
+            const decayedState = decayIfStale(tempRecord, now).state
+            if (STATE_RANK[decayedState] > STATE_RANK.new) {
+              currentLevel = decayedState
+            }
+          }
+        }
+
         // Augment levelEvents with synthetic decay/forget events so the graph
         // line drops at the correct time rather than staying flat.
         const lastLevelEvent = levelEvents[levelEvents.length - 1]

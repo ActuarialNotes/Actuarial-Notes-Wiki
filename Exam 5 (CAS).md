@@ -52,7 +52,7 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > 23. Build and analyze [[Development Triangle]]s (e.g., loss, count, [[Allocated Loss Adjustment Expense]] (ALAE))
 > 24. Apply a [[Tail Factor]]
 > 25. Use development triangles as diagnostic tools to identify changes and trends (e.g., loss and claim count, ratio of losses to premium, severity, ratios of loss and claim counts)
-> 26. Calculate and evaluate unpaid loss estimation techniques (i.e., [[Chain Ladder Method]], case outstanding development, [[Expected Loss Method]], [[Bornhuetter-Ferguson Method]], [[Cape Cod Method]], frequency-severity, [[Berquist-Sherman]], [[Benktander Method]])
+> 26. Calculate and evaluate unpaid loss estimation techniques (i.e., [[Chain Ladder Method]], case outstanding development, [[Expected Loss Method]], [[Bornhuetter-Ferguson Method]], [[Cape Cod Method]], frequency-severity, [[Berquist-Sherman Method|Berquist-Sherman]], [[Benktander Method]])
 > 27. Assess the influence of operating changes on the estimation of unpaid losses (e.g., claims coding, claims processing, underwriting and policy provisions, marketing, reinsurance, treatment of recoveries such as deductibles, salvage and subrogation)
 > 28. Adjust data and/or estimation techniques for changes in the internal and external environment (e.g., shift in adequacy of case outstanding or settlement rates, change in mix of business, change in rate level, inflationary or legal environment)
 > 29. Consider the impact of and adjust for the presence of large losses in a reserving analysis

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, ChevronDown, Check, Lock, Play } from 'lucide-react'
+import { CalendarCheck, Check, Lock, Play } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -62,7 +62,6 @@ export default function Landing() {
   const [useTodaysPlan, setUseTodaysPlan] = useState(false)
   const [count, setCount] = useState<number>(10)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
-  const [openTopicGroups, setOpenTopicGroups] = useState<Set<string>>(new Set())
   const [showStudyPlanModal, setShowStudyPlanModal] = useState(false)
 
   // Pre-select first in-progress exam when progress loads
@@ -78,7 +77,6 @@ export default function Landing() {
   useEffect(() => {
     setIsAdaptive(false)
     setUseTodaysPlan(false)
-    setOpenTopicGroups(new Set())
     if (topic && mode === 'quiz') {
       try {
         const saved = localStorage.getItem(`actuarial_quiz_topics_v1_${topic}`)
@@ -237,17 +235,6 @@ export default function Landing() {
     } catch { /* ignore */ }
   }, [selectedSubtopics, topic, mode, isAdaptive, useTodaysPlan])
 
-  // Auto-expand sections that contain selected subtopics
-  useEffect(() => {
-    if (selectedSubtopics.length === 0) return
-    const toOpen = new Set<string>()
-    for (const group of groupedSubtopics) {
-      if (group.subtopics.some(s => selectedSubtopics.includes(s))) toOpen.add(group.name)
-    }
-    setOpenTopicGroups(toOpen)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSubtopics.join(','), groupedSubtopics])
-
   // Compute available question count for the current filters
   const availableCount = useMemo(() => {
     if (!topic) return 0
@@ -273,14 +260,6 @@ export default function Landing() {
     setSelectedSubtopics(prev =>
       prev.includes(subtopic) ? prev.filter(s => s !== subtopic) : [...prev, subtopic]
     )
-  }
-
-  function toggleTopicGroup(groupName: string) {
-    setOpenTopicGroups(prev => {
-      const next = new Set(prev)
-      next.has(groupName) ? next.delete(groupName) : next.add(groupName)
-      return next
-    })
   }
 
   function selectAllInGroup(group: { subtopics: string[] }, e: React.MouseEvent) {
@@ -421,6 +400,32 @@ export default function Landing() {
                 Mock Exam
               </button>
             </div>
+            {mode === 'quiz' && (
+              <div className="flex rounded-full border border-input bg-muted/30 p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setReveal('during')}
+                  className={`flex-1 py-2 rounded-full text-xs font-semibold transition-colors ${
+                    reveal === 'during'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  After each question
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setReveal('end')}
+                  className={`flex-1 py-2 rounded-full text-xs font-semibold transition-colors ${
+                    reveal === 'end'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  At the end
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -548,66 +553,49 @@ export default function Landing() {
                     {subtopicsLoading && orderedSubtopics.length === 0 ? (
                       <p className="text-xs text-muted-foreground">Loading topics…</p>
                     ) : (
-                      <div className={`rounded-lg border divide-y transition-opacity ${useTodaysPlan ? 'opacity-50' : ''}`}>
+                      <div className={`space-y-5 transition-opacity ${useTodaysPlan ? 'opacity-50 pointer-events-none' : ''}`}>
                         {groupedSubtopics.map(group => {
                           const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
-                          const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
-                          const isOpen = openTopicGroups.has(group.name)
-                          const hasToday = group.subtopics.some(s => todaySubtopics.has(s))
                           return (
                             <div key={group.name}>
-                              <button
-                                type="button"
-                                onClick={() => toggleTopicGroup(group.name)}
-                                className="flex items-center gap-2 w-full py-3.5 px-4 text-left hover:bg-muted/40 transition-colors"
-                                aria-expanded={isOpen}
-                              >
-                                <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
-                                <span className="text-sm font-semibold flex-1 min-w-0 truncate">
+                              <div className="flex items-center justify-between mb-2.5">
+                                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                                   {group.name}
-                                  {group.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{group.weight}</span>}
+                                  {group.weight && <span className="ml-1 normal-case font-normal">· {group.weight}</span>}
                                 </span>
-                                {hasToday && <span className="text-[10px] text-primary/70 shrink-0">today</span>}
                                 <button
                                   type="button"
                                   onClick={e => selectAllInGroup(group, e)}
-                                  className={`shrink-0 ml-1 px-3 py-1.5 rounded border text-xs transition-colors ${
-                                    allSelected
-                                      ? 'bg-primary text-primary-foreground border-primary'
-                                      : someSelected
-                                        ? 'bg-primary/10 text-primary border-primary/30'
-                                        : 'border-input text-muted-foreground hover:bg-accent'
-                                  }`}
+                                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                                 >
-                                  {allSelected ? 'All ✓' : someSelected ? 'Some' : 'Select all'}
+                                  {allSelected ? 'Deselect all' : 'Select all'}
                                 </button>
-                              </button>
-                              {isOpen && (
-                                <div className="pb-2 px-4 pl-11 space-y-0.5 bg-muted/20">
-                                  {group.subtopics.map(subtopic => {
-                                    const isSelected = selectedSubtopics.includes(subtopic)
-                                    const isToday = todaySubtopics.has(subtopic)
-                                    return (
-                                      <button
-                                        key={subtopic}
-                                        type="button"
-                                        onClick={() => toggleSubtopic(subtopic)}
-                                        className="flex items-center gap-2.5 w-full py-2.5 text-left text-sm rounded hover:bg-muted/40 transition-colors"
-                                      >
-                                        <div className={`h-5 w-5 shrink-0 rounded border flex items-center justify-center ${
-                                          isSelected ? 'bg-primary border-primary' : 'border-input bg-background'
-                                        }`}>
-                                          {isSelected && <Check className="h-3 w-3 text-primary-foreground" />}
-                                        </div>
-                                        <span className={`flex-1 truncate ${isSelected ? 'font-medium text-primary' : isToday ? 'text-primary/80' : ''}`}>
-                                          {subtopic}
+                              </div>
+                              <div className="grid grid-cols-2 gap-2">
+                                {group.subtopics.map(subtopic => {
+                                  const isSelected = selectedSubtopics.includes(subtopic)
+                                  const isToday = todaySubtopics.has(subtopic)
+                                  return (
+                                    <button
+                                      key={subtopic}
+                                      type="button"
+                                      onClick={() => toggleSubtopic(subtopic)}
+                                      className={`py-3 px-4 rounded-xl border text-sm font-medium text-left transition-colors ${
+                                        isSelected
+                                          ? 'bg-primary text-primary-foreground border-primary'
+                                          : 'border-input hover:bg-accent text-foreground'
+                                      }`}
+                                    >
+                                      <span className="block leading-snug">{subtopic}</span>
+                                      {isToday && (
+                                        <span className={`text-[10px] font-normal ${isSelected ? 'text-primary-foreground/70' : 'text-primary/60'}`}>
+                                          today
                                         </span>
-                                        {isToday && <span className="text-xs text-primary/60 shrink-0">today</span>}
-                                      </button>
-                                    )
-                                  })}
-                                </div>
-                              )}
+                                      )}
+                                    </button>
+                                  )
+                                })}
+                              </div>
                             </div>
                           )
                         })}
@@ -615,36 +603,6 @@ export default function Landing() {
                     )}
                   </div>
 
-                  {/* Reveal answers */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Reveal Answers</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setReveal('during')}
-                        className={`px-4 py-4 rounded-lg border text-left text-sm transition-colors ${
-                          reveal === 'during'
-                            ? 'border-primary bg-primary/5 text-primary font-medium'
-                            : 'border-input hover:bg-accent'
-                        }`}
-                      >
-                        <div className="font-medium text-sm">After each question</div>
-                        <div className="text-xs text-muted-foreground mt-0.5">See explanation immediately</div>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setReveal('end')}
-                        className={`px-4 py-4 rounded-lg border text-left text-sm transition-colors ${
-                          reveal === 'end'
-                            ? 'border-primary bg-primary/5 text-primary font-medium'
-                            : 'border-input hover:bg-accent'
-                        }`}
-                      >
-                        <div className="font-medium text-sm">At the end</div>
-                        <div className="text-xs text-muted-foreground mt-0.5">Review all after finishing</div>
-                      </button>
-                    </div>
-                  </div>
                 </>
               )}
 

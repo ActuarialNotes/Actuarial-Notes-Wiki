@@ -1,0 +1,24 @@
+**Loss Reserving** is the process of estimating the amount of money an insurer must set aside to pay for claims that have already occurred but have not yet been settled. It is a [[Retrospective Analysis]] that accounts for the "long tail" of insurance liabilities, ensuring the company's balance sheet accurately reflects its future obligations.
+
+- The Total Loss Reserve is generally the sum of Case Reserves and IBNR:
+
+> $$\text{Total Reserve} = \text{Case Reserves} + \text{IBNR}$$
+>
+> $$\text{IBNR} = \text{Incurred But Not Reported} + \text{Incurred But Not Enough Reported (IBNER)}$$
+
+> [!example]- Estimating IBNR {Example}
+> 
+> An insurance company has a total of $10$ million in "Incurred Losses" (Paid + Case Reserves) for the 2025 accident year. Actuarial models suggest the "Ultimate Loss" will actually be $13$ million. What is the **IBNR** reserve required?
+> 
+> > [!answer]-
+> > 
+> > - **Estimated Ultimate Losses:** $13,000,000
+> > - **Reported Incurred Losses:** $10,000,000
+> > 
+> > The **IBNR** (Incurred But Not Reported) is the "plug" figure representing the development still to come:
+> > 
+> > $$\text{IBNR} = \text{Ultimate} - \text{Incurred}$$
+> > $$\text{IBNR} = 13,000,000 - 10,000,000 = \$3,000,000$$
+> > 
+> > > [!tip] Solvency Importance
+> > > Underestimating reserves is a leading cause of insurance company insolvency. If the reserve is too low, the company's surplus (equity) is artificially inflated, hiding financial distress.

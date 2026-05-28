@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle, Sparkles, X } fr
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
+import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { MascotWidget } from '@/components/MascotWidget'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -61,6 +62,7 @@ export default function Dashboard() {
 
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
+  const [onboardingOpen, setOnboardingOpen] = useState(false)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
@@ -342,6 +344,7 @@ export default function Dashboard() {
             onRegenerate={regeneratePlan}
             onReplaceConcepts={replaceTodaysConcepts}
             onExamDateChange={handleTargetDateChange}
+            onOpenOnboarding={() => setOnboardingOpen(true)}
             openConceptsTrigger={conceptsOpenCounter}
             startQuizTrigger={startQuizCounter}
             isPremium={isPremium}
@@ -350,6 +353,17 @@ export default function Dashboard() {
       </div>
 
       {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
+      {!isGuest && onboardingOpen && activeSyllabus && (
+        <StudyPlanConfigModal
+          config={planConfig}
+          examDate={activeTargetDate}
+          examLabel={activeSyllabus.examLabel}
+          examId={activeSyllabus.examId}
+          onSave={updatePlanConfig}
+          onExamDateChange={handleTargetDateChange}
+          onClose={() => setOnboardingOpen(false)}
+        />
+      )}
     </div>
     </div>
     </div>

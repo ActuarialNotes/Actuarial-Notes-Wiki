@@ -288,6 +288,7 @@ interface Props {
   onRegenerate: () => void
   onReplaceConcepts?: (concepts: string[]) => void
   onExamDateChange?: (date: string | null) => void
+  onOpenOnboarding?: () => void
   openConceptsTrigger?: number
   startQuizTrigger?: number
   /** Whether the user has access to the custom Study Plan. Defaults to true. */
@@ -297,6 +298,7 @@ interface Props {
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
+  onOpenOnboarding,
   openConceptsTrigger, startQuizTrigger,
   isPremium = true,
 }: Props) {
@@ -830,24 +832,32 @@ export function ReadinessCard({
                 const now = new Date(); now.setHours(0, 0, 0, 0)
                 const days = Math.ceil((new Date(config.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
                 return (
-                  <div className="rounded-xl border bg-card p-4 text-center">
+                  <button
+                    type="button"
+                    onClick={onOpenOnboarding}
+                    className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
+                  >
                     <p className="text-5xl font-bold tabular-nums text-amber-400">
                       {Math.max(days, 0)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5 font-medium">days to prepare</p>
-                  </div>
+                  </button>
                 )
               })()}
               {examDate && (() => {
                 const now = new Date(); now.setHours(0, 0, 0, 0)
                 const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
                 return (
-                  <div className="rounded-xl border bg-card p-4 text-center">
+                  <button
+                    type="button"
+                    onClick={onOpenOnboarding}
+                    className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
+                  >
                     <p className="text-5xl font-bold tabular-nums">
                       {Math.max(days, 0)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
-                  </div>
+                  </button>
                 )
               })()}
             </div>
@@ -1142,24 +1152,32 @@ export function ReadinessCard({
                 const now = new Date(); now.setHours(0, 0, 0, 0)
                 const days = Math.ceil((new Date(config.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
                 return (
-                  <div className="rounded-xl border bg-card p-4 text-center">
+                  <button
+                    type="button"
+                    onClick={onOpenOnboarding}
+                    className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
+                  >
                     <p className="text-5xl font-bold tabular-nums text-amber-400">
                       {Math.max(days, 0)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5 font-medium">days to prepare</p>
-                  </div>
+                  </button>
                 )
               })()}
               {examDate && (() => {
                 const now = new Date(); now.setHours(0, 0, 0, 0)
                 const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
                 return (
-                  <div className="rounded-xl border bg-card p-4 text-center">
+                  <button
+                    type="button"
+                    onClick={onOpenOnboarding}
+                    className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
+                  >
                     <p className="text-5xl font-bold tabular-nums">
                       {Math.max(days, 0)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
-                  </div>
+                  </button>
                 )
               })()}
             </div>

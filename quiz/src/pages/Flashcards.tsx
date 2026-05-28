@@ -104,7 +104,7 @@ function TodayStudyPlanSection() {
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, targetDates } = useExamProgress()
   const { addCard, hasCard } = useFlashcards()
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const [selectedPlan, setSelectedPlan] = useState<Set<string>>(new Set())
 
   const inProgressSyllabi = useMemo(
@@ -165,14 +165,32 @@ function TodayStudyPlanSection() {
             )}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setCollapsed(v => !v)}
-          className="text-muted-foreground hover:text-foreground p-1 transition-colors"
-          aria-label={collapsed ? 'Expand study plan' : 'Collapse study plan'}
-        >
-          <ChevronsUpDown className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1">
+          {/* Add all / done indicator — visible even when collapsed */}
+          {!isLoading && displayConcepts.length > 0 && (
+            allAdded ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-green-600 dark:text-green-400">
+                <Check className="h-3.5 w-3.5" /> Done
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={handleAddSelected}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
+              >
+                Add all
+              </button>
+            )
+          )}
+          <button
+            type="button"
+            onClick={() => setCollapsed(v => !v)}
+            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
+            aria-label={collapsed ? 'Expand study plan' : 'Collapse study plan'}
+          >
+            <ChevronsUpDown className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {!collapsed && (
@@ -482,12 +500,6 @@ function GalleryPanel({
             <X className="h-4 w-4" />
           </button>
         </div>
-        {groupBy === 'custom' && (
-          <p className="px-4 pb-2 text-xs text-muted-foreground">Drag cards to reorder</p>
-        )}
-        {groupBy !== 'custom' && (
-          <p className="px-4 pb-2 text-xs text-muted-foreground">Switch to Custom to drag and reorder</p>
-        )}
       </div>
 
       {/* Scrollable content */}

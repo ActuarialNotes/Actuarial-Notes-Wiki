@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Images, Loader2, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -11,6 +11,8 @@ import { MathViewContext } from '@/contexts/MathViewContext'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
+import { useAuth } from '@/hooks/useAuth'
+import { useSubscription } from '@/hooks/useSubscription'
 
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
@@ -34,6 +36,11 @@ export function ConceptPopup() {
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
+  const viewingRef = useRef<HTMLDivElement>(null)
+  const { user } = useAuth()
+  const { isPremium } = useSubscription()
+  const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
+  const [showPremiumInfo, setShowPremiumInfo] = useState(false)
 
   // Scroll the body back to top whenever the viewed concept changes.
   useEffect(() => {
@@ -91,6 +98,19 @@ export function ConceptPopup() {
     return () => document.removeEventListener('pointerdown', onPointerDown)
   }, [showPlayMenu])
 
+  // Close viewing dropdown / premium info when clicking outside.
+  useEffect(() => {
+    if (!viewingDropdownOpen && !showPremiumInfo) return
+    function onPointerDown(e: PointerEvent) {
+      if (viewingRef.current && !viewingRef.current.contains(e.target as Node)) {
+        setViewingDropdownOpen(false)
+        setShowPremiumInfo(false)
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [viewingDropdownOpen, showPremiumInfo])
+
   // Publish the pane's height to the layout so it can reserve space below
   // the main column. Cleaned up on close.
   useEffect(() => {
@@ -124,6 +144,10 @@ export function ConceptPopup() {
   const canNext = index < list.length - 1
   const position = `${index + 1} of ${list.length}`
   const sourcePath = current ? entryRefToRepoPath(current) : undefined
+  const hasStudyPlan = !!(dashboardContext?.studyPlanList?.length)
+  const isLoggedInPremium = !!user && isPremium
+  const currentFilter = dashboardContext?.filter ?? 'entire-syllabus'
+  const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
 
   return (
     <>
@@ -134,31 +158,83 @@ export function ConceptPopup() {
       role="complementary"
       aria-label={`Concept: ${current.name}`}
     >
-      {/* Viewing filter — only shown when opened from the dashboard */}
-      {dashboardContext && (
-        <div className="flex items-center gap-2 px-3 py-1.5 border-b shrink-0">
-          <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
-          <div className="relative">
-            <select
-              value={dashboardContext.studyPlanList ? dashboardContext.filter : 'entire-syllabus'}
-              onChange={e => dashboardContext.studyPlanList && setDashboardFilter(e.target.value as 'study-plan' | 'entire-syllabus')}
-              disabled={!dashboardContext.studyPlanList}
-              className="appearance-none text-xs border rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-default disabled:opacity-80"
-            >
-              {dashboardContext.studyPlanList && (
-                <option value="study-plan">
-                  Study Plan — {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
-                </option>
+      {/* Viewing filter — always shown */}
+      <div className="flex items-center gap-2 px-3 py-2.5 border-b shrink-0">
+        <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
+        <div className="relative" ref={viewingRef}>
+          <button
+            type="button"
+            onClick={() => { setViewingDropdownOpen(v => !v); setShowPremiumInfo(false) }}
+            className="appearance-none text-xs border rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
+          >
+            {currentFilter === 'study-plan' ? todayLabel : 'Entire Syllabus'}
+          </button>
+          <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+
+          {viewingDropdownOpen && (
+            <div className="absolute top-full mt-1 left-0 z-50 w-56 rounded-md border bg-popover text-popover-foreground shadow-md py-1">
+              {hasStudyPlan ? (
+                <button
+                  type="button"
+                  onClick={() => { setDashboardFilter('study-plan'); setViewingDropdownOpen(false) }}
+                  className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'study-plan' ? 'font-medium' : ''}`}
+                >
+                  {todayLabel}
+                </button>
+              ) : isLoggedInPremium ? (
+                <Link
+                  to="/dashboard"
+                  onClick={() => { close(); setViewingDropdownOpen(false) }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
+                >
+                  Set up Study Plan →
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => { setShowPremiumInfo(v => !v); setViewingDropdownOpen(false) }}
+                  className="w-full flex items-center gap-1.5 px-3 py-2 text-xs opacity-50 hover:opacity-70 transition-opacity text-left"
+                >
+                  <Lock className="h-3 w-3 shrink-0" />
+                  {todayLabel}
+                </button>
               )}
-              <option value="entire-syllabus">Entire Syllabus</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
-          </div>
-          <span className="text-xs text-muted-foreground ml-auto tabular-nums shrink-0">
-            {list.length} concepts
-          </span>
+              <button
+                type="button"
+                onClick={() => { setDashboardFilter('entire-syllabus'); setViewingDropdownOpen(false) }}
+                className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'entire-syllabus' ? 'font-medium' : ''}`}
+              >
+                Entire Syllabus
+              </button>
+            </div>
+          )}
+
+          {showPremiumInfo && (
+            <div className="absolute top-full mt-1 left-0 z-50 w-60 rounded-md border bg-popover text-popover-foreground shadow-md p-3">
+              <div className="flex items-center gap-1.5 mb-1.5 text-xs font-medium">
+                <Lock className="h-3 w-3 shrink-0" />
+                Premium feature
+              </div>
+              <p className="text-xs text-muted-foreground mb-2.5">
+                {user
+                  ? 'Upgrade to Premium to access personalised daily Study Plans.'
+                  : 'Sign in and upgrade to Premium to access personalised daily Study Plans.'
+                }
+              </p>
+              <Link
+                to={user ? '/upgrade' : '/auth'}
+                onClick={() => setShowPremiumInfo(false)}
+                className="text-xs text-primary hover:underline"
+              >
+                {user ? 'Upgrade to Premium →' : 'Sign in →'}
+              </Link>
+            </div>
+          )}
         </div>
-      )}
+        <span className="text-xs text-muted-foreground ml-auto tabular-nums shrink-0">
+          {list.length} concepts
+        </span>
+      </div>
 
       {/* Drag handle — visible on all devices including mobile */}
       <div

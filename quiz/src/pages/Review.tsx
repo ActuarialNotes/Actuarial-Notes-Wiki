@@ -43,6 +43,30 @@ function StudyPlanChecklist({
   bonusConcepts: MasteryTransition[]
 }) {
   const openAt = useConceptPopup(s => s.openAt)
+  const popupOpen = useConceptPopup(s => s.open)
+  const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
+  const prevPopupNameRef = useRef<string | null>(null)
+  const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!popupOpen) prevPopupNameRef.current = null
+  }, [popupOpen])
+
+  useEffect(() => {
+    if (!popupCurrentName || popupCurrentName === prevPopupNameRef.current) return
+    prevPopupNameRef.current = popupCurrentName
+    const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const popupHeight = popupOpen
+      ? (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--concept-split-height')) || window.innerHeight * 0.5)
+      : 0
+    const visibleHeight = window.innerHeight - popupHeight
+    window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
+    setFlashingConcept(popupCurrentName)
+    const id = setTimeout(() => setFlashingConcept(null), 1400)
+    return () => clearTimeout(id)
+  }, [popupCurrentName])
 
   if (todaysConcepts.length === 0 && bonusConcepts.length === 0) return null
 
@@ -72,8 +96,9 @@ function StudyPlanChecklist({
             <button
               key={name}
               type="button"
+              data-study-concept={name.toLowerCase()}
               onClick={() => openAt(allRefs, idx)}
-              className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+              className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
             >
               {done ? (
                 <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${delay}ms` }}>
@@ -101,8 +126,9 @@ function StudyPlanChecklist({
               <button
                 key={t.conceptSlug}
                 type="button"
+                data-study-concept={t.conceptSlug.toLowerCase()}
                 onClick={() => openAt(allRefs, todaysConcepts.length + i)}
-                className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === t.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
               >
                 <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${(bonusStartIdx + i) * 120}ms` }}>
                   <Check className="h-4 w-4 text-green-500" />

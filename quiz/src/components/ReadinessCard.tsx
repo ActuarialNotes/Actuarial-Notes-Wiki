@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect } from 'react'
+import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, ArrowUp, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, Trophy } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -300,8 +300,12 @@ export function ReadinessCard({
   const navigate = useNavigate()
   const { user } = useAuth()
   const openDashboard = useConceptPopup(s => s.openDashboard)
+  const popupOpen = useConceptPopup(s => s.open)
+  const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
   const toRefs = (arr: { name: string }[]): WikiEntryRef[] =>
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
+  const prevPopupConceptRef = useRef<string | null>(null)
+  const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [topicsMasteredOpen, setTopicsMasteredOpen] = useState(false)
   const [hoveredSection, setHoveredSection] = useState<number | null>(null)
   const [pinnedSection, setPinnedSection] = useState<number | null>(null)
@@ -631,6 +635,26 @@ export function ReadinessCard({
     if (startQuizTrigger) handleStartQuiz()
   }, [startQuizTrigger, handleStartQuiz])
 
+  useEffect(() => {
+    if (!popupOpen) prevPopupConceptRef.current = null
+  }, [popupOpen])
+
+  useEffect(() => {
+    if (!popupCurrentName || popupCurrentName === prevPopupConceptRef.current) return
+    prevPopupConceptRef.current = popupCurrentName
+    const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const popupHeight = popupOpen
+      ? (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--concept-split-height')) || window.innerHeight * 0.5)
+      : 0
+    const visibleHeight = window.innerHeight - popupHeight
+    window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
+    setFlashingConcept(popupCurrentName)
+    const id = setTimeout(() => setFlashingConcept(null), 1400)
+    return () => clearTimeout(id)
+  }, [popupCurrentName])
+
   return (
     <div className="space-y-4">
       {/* Primary exam card — first */}
@@ -832,8 +856,9 @@ export function ReadinessCard({
                       <button
                         key={name}
                         type="button"
+                        data-study-concept={name.toLowerCase()}
                         onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', idx)}
-                        className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                        className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
                       >
                         {isCompleted
                           ? <Check className="h-4 w-4 text-green-500 shrink-0" />
@@ -860,8 +885,9 @@ export function ReadinessCard({
                           <button
                             key={lu.conceptSlug}
                             type="button"
+                            data-study-concept={lu.conceptSlug.toLowerCase()}
                             onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
-                            className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                            className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
                           >
                             <Check className="h-4 w-4 text-green-500 shrink-0" />
                             <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">

@@ -2,7 +2,7 @@
 // a "Read Today's Concepts" action (opens concept modal), and a "Start Quiz"
 // action (navigates to a quiz pre-filtered to today's concepts).
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Settings2,
@@ -36,8 +36,9 @@ import {
   type ConceptMasteryRecord,
   type MasteryState,
 } from '@/lib/mastery'
-import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
+import { readTodayLevelUps, LEVELUP_EVENT, getDailyGems, type DailyLevelUp } from '@/lib/dailyProgressStore'
 import { useDailyCompletions } from '@/hooks/useDailyCompletions'
+import { StudyPlanCompletionCeremony } from '@/components/StudyPlanCompletionCeremony'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -277,6 +278,9 @@ export function TodayCard({
     name: string; state: MasteryState; index: number
   } | null>(null)
   const [localCompletedToday, setLocalCompletedToday] = useState<DailyLevelUp[]>([])
+  const [showCeremony, setShowCeremony] = useState(false)
+  const [ceremonyGems, setCeremonyGems] = useState(0)
+  const prevAllOnTarget = useRef(false)
 
   // Load today's level-ups (this device) and keep in sync with quiz completions
   useEffect(() => {
@@ -363,6 +367,20 @@ export function TodayCard({
     [syllabus, masteryStateByName]
   )
 
+
+  // Fire the completion ceremony the first time all today's concepts are on-target.
+  // Must come after allOnTarget is computed but before any early returns.
+  useEffect(() => {
+    if (loading) return
+    const alreadyShown = localStorage.getItem(`actuarial_ceremony_shown_${todayISO()}`) === '1'
+    if (allOnTarget && !prevAllOnTarget.current && !alreadyShown && completedToday.length > 0) {
+      try { localStorage.setItem(`actuarial_ceremony_shown_${todayISO()}`, '1') } catch { /* ignore */ }
+      setCeremonyGems(getDailyGems())
+      setShowCeremony(true)
+    }
+    prevAllOnTarget.current = allOnTarget
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allOnTarget, loading])
 
   // Locked state — free users see a preview of the card with an upgrade CTA.
   if (!isPremium) {
@@ -674,6 +692,17 @@ export function TodayCard({
         />
       )}
       <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
+
+      {showCeremony && (
+        <StudyPlanCompletionCeremony
+          concepts={displayConcepts.map(name => ({
+            name,
+            target: targetByName.get(name.toLowerCase()) ?? 'level1',
+          }))}
+          gemsEarnedToday={ceremonyGems}
+          onClose={() => setShowCeremony(false)}
+        />
+      )}
     </>
   )
 }

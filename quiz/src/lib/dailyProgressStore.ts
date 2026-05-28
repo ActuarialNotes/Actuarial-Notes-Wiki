@@ -25,6 +25,23 @@ export function readTodayLevelUps(): DailyLevelUp[] {
   }
 }
 
+function todayGemsKey(): string {
+  return 'actuarial_daily_gems_' + new Date().toISOString().slice(0, 10)
+}
+
+export function getDailyGems(): number {
+  try {
+    return parseInt(localStorage.getItem(todayGemsKey()) ?? '0', 10) || 0
+  } catch { return 0 }
+}
+
+export function addDailyGems(amount: number): void {
+  if (amount <= 0) return
+  try {
+    localStorage.setItem(todayGemsKey(), String(getDailyGems() + amount))
+  } catch { /* quota exceeded */ }
+}
+
 export function appendTodayLevelUps(levelUps: DailyLevelUp[]): void {
   if (levelUps.length === 0) return
   try {

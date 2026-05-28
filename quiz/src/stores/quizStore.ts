@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
-import { appendTodayLevelUps } from '@/lib/dailyProgressStore'
+import { appendTodayLevelUps, addDailyGems } from '@/lib/dailyProgressStore'
 
 const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Probability': 'P',
@@ -472,6 +472,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         // Notify useGems subscribers to re-fetch immediately (Supabase realtime
         // may lag or be blocked by RLS on RPC-triggered writes).
         window.dispatchEvent(new CustomEvent('gems-awarded', { detail: { amount: correctCount } }))
+        addDailyGems(correctCount)
       }
     }
 

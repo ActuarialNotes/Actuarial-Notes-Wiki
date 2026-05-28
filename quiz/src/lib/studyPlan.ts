@@ -31,6 +31,7 @@ export interface StudyPlanConfig {
   targetReadyDate: string | null   // YYYY-MM-DD; null = unconfigured
   targetStrengthLevel: TargetStrengthLevel
   planStartDate: string | null     // YYYY-MM-DD; set on first save, used for day numbering
+  examVariant?: string | null      // regional variant ID for localized exams (e.g. 'US', 'CA', 'INT')
 }
 
 export interface ConceptAssignment {

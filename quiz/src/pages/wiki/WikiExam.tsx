@@ -131,17 +131,6 @@ export default function WikiExam() {
 
   const { examRows } = useExamProgress()
 
-  const studyPlanRefs = useMemo(() => {
-    const row = examRows.find(r => r.exam_id === progressKey)
-    const cache = row?.study_plan_cache
-    if (!cache || cache.generatedDate !== todayISO() || !cache.todaysConcepts?.length) return null
-    const planSet = new Set(cache.todaysConcepts.map(n => n.toLowerCase()))
-    const refs = pageRefs
-      .filter(r => r.kind === 'concept' && !/ \([^)]*\d{4}\)$/.test(r.name))
-      .filter(r => planSet.has(r.name.toLowerCase()))
-    return refs.length > 0 ? refs : null
-  }, [examRows, progressKey, pageRefs])
-
   const { daysToPrepare, daysUntilExam } = useMemo(() => {
     const row = examRows.find(r => r.exam_id === progressKey)
     const examDate = row?.target_date ?? null
@@ -196,6 +185,17 @@ export default function WikiExam() {
     () => (content ? extractWikiLinksFromText(content) : []),
     [content],
   )
+
+  const studyPlanRefs = useMemo(() => {
+    const row = examRows.find(r => r.exam_id === progressKey)
+    const cache = row?.study_plan_cache
+    if (!cache || cache.generatedDate !== todayISO() || !cache.todaysConcepts?.length) return null
+    const planSet = new Set(cache.todaysConcepts.map(n => n.toLowerCase()))
+    const refs = pageRefs
+      .filter(r => r.kind === 'concept' && !/ \([^)]*\d{4}\)$/.test(r.name))
+      .filter(r => planSet.has(r.name.toLowerCase()))
+    return refs.length > 0 ? refs : null
+  }, [examRows, progressKey, pageRefs])
 
   useEffect(() => {
     setExamId(examIdFromFile(examFileName))

@@ -12,6 +12,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
 import type { MasteryState } from '@/lib/mastery'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Probability': 'P',
@@ -40,6 +42,8 @@ function StudyPlanChecklist({
   targetByName: Map<string, MasteryState>
   bonusConcepts: MasteryTransition[]
 }) {
+  const openAt = useConceptPopup(s => s.openAt)
+
   if (todaysConcepts.length === 0 && bonusConcepts.length === 0) return null
 
   // Precompute animation delays: only newly-completed items animate, staggered in order
@@ -51,16 +55,26 @@ function StudyPlanChecklist({
   })
   const bonusStartIdx = animIdx
 
+  const allRefs: WikiEntryRef[] = [
+    ...todaysConcepts.map(name => ({ kind: 'concept' as const, name })),
+    ...bonusConcepts.map(t => ({ kind: 'concept' as const, name: t.conceptSlug })),
+  ]
+
   return (
     <div className="space-y-0.5">
       <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
         Today's Study Plan
       </p>
       <div className="space-y-0.5">
-        {items.map(({ name, done, delay }) => {
+        {items.map(({ name, done, delay }, idx) => {
           const target = targetByName.get(name.toLowerCase()) ?? 'level1'
           return (
-            <div key={name} className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg">
+            <button
+              key={name}
+              type="button"
+              onClick={() => openAt(allRefs, idx)}
+              className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+            >
               {done ? (
                 <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${delay}ms` }}>
                   <Check className="h-4 w-4 text-green-500" />
@@ -72,7 +86,7 @@ function StudyPlanChecklist({
                 {name}
               </span>
               <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
-            </div>
+            </button>
           )
         })}
 
@@ -84,7 +98,12 @@ function StudyPlanChecklist({
               <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
             </div>
             {bonusConcepts.map((t, i) => (
-              <div key={t.conceptSlug} className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg">
+              <button
+                key={t.conceptSlug}
+                type="button"
+                onClick={() => openAt(allRefs, todaysConcepts.length + i)}
+                className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+              >
                 <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${(bonusStartIdx + i) * 120}ms` }}>
                   <Check className="h-4 w-4 text-green-500" />
                 </span>
@@ -94,7 +113,7 @@ function StudyPlanChecklist({
                 <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
                   → {STATE_LABEL[t.to]}
                 </span>
-              </div>
+              </button>
             ))}
           </>
         )}

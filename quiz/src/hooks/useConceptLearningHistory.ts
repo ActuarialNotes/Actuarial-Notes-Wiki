@@ -277,8 +277,18 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         }
       }
 
+      // Recompute each dot's y-position using finalLevelEvents (which includes
+      // synthetic decay/forget events). The dots were initially computed with the
+      // raw daily_completions levelEvents, which don't include those synthetic
+      // events — causing dots to float above the graph line when the concept had
+      // decayed between the last level event and the attempt timestamp.
+      const finalAttemptDots = attemptDots.map(dot => ({
+        ...dot,
+        levelAtTime: levelAtTime(dot.at, finalLevelEvents),
+      }))
+
       if (!cancelled) {
-        setResult({ levelEvents: finalLevelEvents, attemptDots, currentLevel, loading: false, error: null })
+        setResult({ levelEvents: finalLevelEvents, attemptDots: finalAttemptDots, currentLevel, loading: false, error: null })
       }
     }
 

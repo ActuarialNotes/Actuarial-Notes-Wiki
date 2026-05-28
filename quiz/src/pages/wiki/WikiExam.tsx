@@ -10,7 +10,7 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { useExamProgress, type ExamProgressRow } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { loadStudyPlanConfig } from '@/lib/studyPlan'
+import { loadStudyPlanConfig, todayISO } from '@/lib/studyPlan'
 import type { ItemStatus } from '@/data/tracks'
 
 const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
@@ -131,6 +131,17 @@ export default function WikiExam() {
 
   const { examRows } = useExamProgress()
 
+  const studyPlanRefs = useMemo(() => {
+    const row = examRows.find(r => r.exam_id === progressKey)
+    const cache = row?.study_plan_cache
+    if (!cache || cache.generatedDate !== todayISO() || !cache.todaysConcepts?.length) return null
+    const planSet = new Set(cache.todaysConcepts.map(n => n.toLowerCase()))
+    const refs = pageRefs
+      .filter(r => r.kind === 'concept' && !/ \([^)]*\d{4}\)$/.test(r.name))
+      .filter(r => planSet.has(r.name.toLowerCase()))
+    return refs.length > 0 ? refs : null
+  }, [examRows, progressKey, pageRefs])
+
   const { daysToPrepare, daysUntilExam } = useMemo(() => {
     const row = examRows.find(r => r.exam_id === progressKey)
     const examDate = row?.target_date ?? null
@@ -207,9 +218,10 @@ export default function WikiExam() {
       conceptList.length > 0 ? conceptList : [ref],
       idx >= 0 ? idx : 0,
       `${examFileName}.md`,
+      studyPlanRefs,
     )
     return true
-  }, [pageRefs, examFileName, openAt])
+  }, [pageRefs, examFileName, openAt, studyPlanRefs])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
@@ -227,8 +239,8 @@ export default function WikiExam() {
       r => r.name.toLowerCase() === conceptParam.toLowerCase(),
     )
     const openList = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptParam }]
-    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`)
-  }, [conceptParam, pageRefs, examFileName, openAt])
+    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs)
+  }, [conceptParam, pageRefs, examFileName, openAt, studyPlanRefs])
 
   return (
     <div className="space-y-4">

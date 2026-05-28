@@ -175,6 +175,7 @@ function StudyPlanTracker({
   onConceptSelect,
   openTopics,
   onToggle,
+  flashingConcept,
 }: {
   syllabus: WikiExamSyllabus
   masteryRecords: ConceptMasteryRecord[]
@@ -183,6 +184,7 @@ function StudyPlanTracker({
   onConceptSelect: (concept: { name: string; state: MasteryState; index: number }) => void
   openTopics: Set<string>
   onToggle: (name: string) => void
+  flashingConcept?: string | null
 }) {
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
@@ -235,8 +237,9 @@ function StudyPlanTracker({
                     <button
                       key={c.name}
                       type="button"
+                      data-study-concept={c.name.toLowerCase()}
                       onClick={() => onConceptSelect({ name: c.name, state, index: idx === -1 ? 0 : idx })}
-                      className="flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left"
+                      className={`flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left${flashingConcept?.toLowerCase() === c.name.toLowerCase() ? ' concept-row-highlight' : ''}`}
                     >
                       <span className="text-xs text-foreground min-w-0 flex-1 truncate">{c.name}</span>
                       {studyPlan && state !== 'level3' && (
@@ -642,17 +645,27 @@ export function ReadinessCard({
   useEffect(() => {
     if (!popupCurrentName || popupCurrentName === prevPopupConceptRef.current) return
     prevPopupConceptRef.current = popupCurrentName
-    const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const popupHeight = popupOpen
-      ? (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--concept-split-height')) || window.innerHeight * 0.5)
-      : 0
-    const visibleHeight = window.innerHeight - popupHeight
-    window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
+    // Auto-expand the topic that contains this concept so the row is visible
+    const ownerTopic = syllabus.topics.find(t =>
+      t.concepts.some(c => c.name.toLowerCase() === popupCurrentName.toLowerCase())
+    )
+    if (ownerTopic) {
+      setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
+    }
+    // Wait one tick for the DOM to reflect the expanded topic before scrolling
+    const scrollId = setTimeout(() => {
+      const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const popupHeight = popupOpen
+        ? (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--concept-split-height')) || window.innerHeight * 0.5)
+        : 0
+      const visibleHeight = window.innerHeight - popupHeight
+      window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
+    }, 50)
     setFlashingConcept(popupCurrentName)
-    const id = setTimeout(() => setFlashingConcept(null), 1400)
-    return () => clearTimeout(id)
+    const clearId = setTimeout(() => setFlashingConcept(null), 1400)
+    return () => { clearTimeout(scrollId); clearTimeout(clearId) }
   }, [popupCurrentName])
 
   return (
@@ -1085,6 +1098,7 @@ export function ReadinessCard({
                     onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
                     openTopics={openTopics}
                     onToggle={toggleTopic}
+                    flashingConcept={flashingConcept}
                   />
                 </>
               )}

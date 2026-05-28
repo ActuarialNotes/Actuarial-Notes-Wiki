@@ -14,6 +14,7 @@ import { Loader2 } from 'lucide-react'
 import type { MasteryState } from '@/lib/mastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 
 const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Probability': 'P',
@@ -238,6 +239,8 @@ export default function Review() {
     : session.questions
 
   return (
+    <>
+    <ConceptPopup />
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
 
       {/* ── First card: score header + concept coverage ──────────── */}
@@ -324,5 +327,6 @@ export default function Review() {
         </Button>
       </div>
     </div>
+    </>
   )
 }

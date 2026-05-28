@@ -42,7 +42,7 @@ import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { WikiArticle, stripFrontmatter, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
@@ -64,8 +64,11 @@ function MasteryPill({ state }: { state: MasteryState }) {
   )
 }
 
+const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
+
 function extractFirstParagraph(markdown: string): string {
-  const lines = markdown.split('\n')
+  const cleaned = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
+  const lines = cleaned.split('\n')
   const paragraphLines: string[] = []
   let started = false
   for (const line of lines) {
@@ -111,6 +114,7 @@ function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () =
   }
 
   const definition = markdown ? extractFirstParagraph(markdown) : null
+  const firstEquation = markdown ? (extractMathBlockquotes(markdown)[0] ?? null) : null
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-background px-4 py-8">
@@ -146,6 +150,13 @@ function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () =
               <div className="text-base leading-relaxed prose dark:prose-invert prose-sm max-w-none">
                 <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
                   {definition}
+                </ReactMarkdown>
+              </div>
+            )}
+            {firstEquation && (
+              <div className="prose dark:prose-invert prose-sm max-w-none">
+                <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+                  {firstEquation}
                 </ReactMarkdown>
               </div>
             )}

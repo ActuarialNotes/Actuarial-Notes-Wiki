@@ -854,17 +854,25 @@ export function ReadinessCard({
                         <span className="text-xs text-muted-foreground shrink-0">Also completed today</span>
                         <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
                       </div>
-                      {bonusConcepts.map(lu => (
-                        <div key={lu.conceptSlug} className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg">
-                          <Check className="h-4 w-4 text-green-500 shrink-0" />
-                          <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
-                            {lu.conceptSlug}
-                          </span>
-                          <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
-                            → {STATE_LABEL[lu.to]}
-                          </span>
-                        </div>
-                      ))}
+                      {bonusConcepts.map(lu => {
+                        const globalIdx = allConcepts.findIndex(ac => ac.name.toLowerCase() === lu.conceptSlug.toLowerCase())
+                        return (
+                          <button
+                            key={lu.conceptSlug}
+                            type="button"
+                            onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
+                            className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors"
+                          >
+                            <Check className="h-4 w-4 text-green-500 shrink-0" />
+                            <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
+                              {lu.conceptSlug}
+                            </span>
+                            <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
+                              → {STATE_LABEL[lu.to]}
+                            </span>
+                          </button>
+                        )
+                      })}
                     </>
                   )}
                 </div>

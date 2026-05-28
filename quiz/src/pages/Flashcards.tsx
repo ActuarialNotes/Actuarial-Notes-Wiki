@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import remarkMath from 'remark-math'
-import rehypeKatex from 'rehype-katex'
 import {
   BookOpen,
   CalendarDays,
@@ -85,7 +81,7 @@ function extractFirstParagraph(markdown: string): string {
   for (const line of lines) {
     const trimmed = line.trim()
     if (!started) {
-      if (trimmed && !trimmed.startsWith('#') && !trimmed.startsWith('-') && !trimmed.startsWith('*') && !trimmed.startsWith('>')) {
+      if (trimmed && !trimmed.startsWith('#') && !/^[*+-] /.test(trimmed) && !/^\d+\. /.test(trimmed) && !trimmed.startsWith('>')) {
         started = true
         paragraphLines.push(trimmed)
       }
@@ -94,7 +90,7 @@ function extractFirstParagraph(markdown: string): string {
       paragraphLines.push(trimmed)
     }
   }
-  return paragraphLines.join(' ')
+  return paragraphLines.join('\n')
 }
 
 // ─── Today's Study Plan ───────────────────────────────────────────────────────
@@ -545,6 +541,7 @@ function FlashcardStudyArea({
   const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
     new Set<ReverseCardSection>(['definition']),
   )
+  const { jumpTo } = useConceptPopup()
 
   const current = cards[index]
 
@@ -670,18 +667,15 @@ function FlashcardStudyArea({
               <p className="text-sm text-destructive">Couldn't load content.</p>
             )}
             {reverseCardModes.has('definition') && definition && (
-              <div className="text-base leading-relaxed prose dark:prose-invert prose-sm max-w-none">
-                <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-                  {definition}
-                </ReactMarkdown>
-              </div>
+              <WikiArticle
+                markdown={definition}
+                onWikiLink={ref => { jumpTo(ref); return true }}
+              />
             )}
             {reverseCardModes.has('math') && allEquations.length > 0 && (
-              <div className="space-y-3 prose dark:prose-invert prose-sm max-w-none">
+              <div className="space-y-3">
                 {allEquations.map((eq, i) => (
-                  <ReactMarkdown key={i} remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-                    {eq}
-                  </ReactMarkdown>
+                  <WikiArticle key={i} markdown={eq} />
                 ))}
               </div>
             )}
@@ -708,7 +702,11 @@ function FlashcardStudyArea({
             )}
             {expanded && markdown && (
               <div className="border-t pt-4 overflow-y-auto max-h-96">
-                <WikiArticle markdown={markdown} sourcePath={entryRefToRepoPath(current)} />
+                <WikiArticle
+                  markdown={markdown}
+                  sourcePath={entryRefToRepoPath(current)}
+                  onWikiLink={ref => { jumpTo(ref); return true }}
+                />
               </div>
             )}
           </div>

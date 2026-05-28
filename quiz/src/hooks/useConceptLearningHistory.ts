@@ -105,6 +105,27 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
   const { user } = useAuth()
   const userId = user?.id
   const [result, setResult] = useState<ConceptLearningHistory>({ ...EMPTY, loading: true })
+  const [version, setVersion] = useState(0)
+
+  // Re-fetch when concept mastery or question responses change so the modal
+  // stays accurate after a quiz completes without requiring a close/reopen.
+  useEffect(() => {
+    if (!userId) return
+    const channel = supabase
+      .channel(`concept-learning-history:${userId}:${conceptName}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'concept_mastery', filter: `user_id=eq.${userId}` },
+        () => setVersion(v => v + 1),
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'question_responses', filter: `user_id=eq.${userId}` },
+        () => setVersion(v => v + 1),
+      )
+      .subscribe()
+    return () => { supabase.removeChannel(channel) }
+  }, [userId, conceptName])
 
   useEffect(() => {
     if (!userId) {
@@ -303,7 +324,7 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
     })
 
     return () => { cancelled = true }
-  }, [userId, conceptName])
+  }, [userId, conceptName, version])
 
   return result
 }

@@ -436,6 +436,14 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     // doesn't fire for quiz_sessions because it's not in the realtime publication.
     window.dispatchEvent(new CustomEvent('quiz-session-saved'))
 
+    // Use a JS timestamp for answered_at rather than the DB DEFAULT now().
+    // daily_completions.at is also a JS timestamp set earlier in this function,
+    // so using JS time here guarantees answered_at > daily_completions.at even
+    // when the Supabase server clock lags the client clock. Without this, clock
+    // skew can place dots before their level-up events, making levelAtTime()
+    // return the pre-correction level and rendering dots below the graph line.
+    const answeredAt = new Date().toISOString()
+
     // Build all response rows and bulk-insert in a single call
     const responseRows = questions.map(q => ({
       session_id: (session as { id: string }).id,
@@ -445,6 +453,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       correct_answer: q.answer,
       is_correct: responses[q.id]?.chosen === q.answer,
       time_spent_seconds: responses[q.id]?.timeSpent ?? null,
+      answered_at: answeredAt,
     }))
 
     const { error: respError } = await supabase

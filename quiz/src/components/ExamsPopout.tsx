@@ -267,7 +267,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                           ? 'text-amber-600 dark:text-amber-500 opacity-100'
                           : 'text-muted-foreground opacity-60'
                       return (
-                        <div key={item.id} className="flex flex-wrap items-center gap-2 py-0.5">
+                        <div key={item.id} className="flex items-center gap-2 py-0.5">
                           <button
                             type="button"
                             onClick={() => setExamStatus(item.id, STATUS_CYCLE[row.status])}
@@ -282,7 +282,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                           </button>
                           <span
                             className={cn(
-                              'text-sm font-medium w-28 shrink-0',
+                              'text-sm font-medium flex-1 min-w-0 truncate',
                               row.status === 'completed' && 'line-through text-muted-foreground',
                             )}
                           >
@@ -291,16 +291,14 @@ export default function ExamsPopout({ open, onClose }: Props) {
                           {row.status === 'in_progress' && (() => {
                             const hasPlan = !!loadStudyPlanConfig(item.id).planStartDate
                             return (
-                              <div className="w-full mt-1 pl-7">
-                                <button
-                                  type="button"
-                                  onClick={() => handleStartOnboarding(item)}
-                                  className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-                                >
-                                  <Play className="h-3 w-3 fill-current" />
-                                  {hasPlan ? 'Continue Onboarding' : 'Start Onboarding'}
-                                </button>
-                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleStartOnboarding(item)}
+                                className="shrink-0 inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                              >
+                                <Play className="h-3 w-3 fill-current" />
+                                {hasPlan ? 'Continue Onboarding' : 'Start Onboarding'}
+                              </button>
                             )
                           })()}
                         </div>

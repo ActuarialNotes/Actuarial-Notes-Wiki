@@ -160,6 +160,20 @@ export function isValidSittingDate(examId: string, date: string): boolean {
   })
 }
 
+export interface ExamVariant {
+  id: string
+  label: string
+}
+
+/** Exams that have regional variants the user must choose between during onboarding. */
+export const LOCALIZED_EXAMS: Record<string, ExamVariant[]> = {
+  'CAS-6': [
+    { id: 'US',  label: 'United States' },
+    { id: 'CA',  label: 'Canada' },
+    { id: 'INT', label: 'International' },
+  ],
+}
+
 /** Formats a sitting's date range for display, e.g. "Jul 8–19, 2026" or "Jul 27, 2026" */
 export function formatSittingDate(sitting: ExamSitting): string {
   const start = new Date(sitting.startDate + 'T00:00:00')

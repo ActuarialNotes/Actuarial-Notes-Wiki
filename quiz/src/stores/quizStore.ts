@@ -33,7 +33,7 @@ async function upsertMasteryFromResponses(
   userId: string,
   questions: Question[],
   responses: Record<string, { chosen: string }>,
-): Promise<void> {
+): Promise<MasteryTransition[]> {
   // Group answer events by (exam_id, concept_slug). Within a single quiz a
   // concept may be touched multiple times — fold them in question order so
   // streak/state arithmetic is deterministic.
@@ -49,7 +49,7 @@ async function upsertMasteryFromResponses(
       events.push({ examId, conceptSlug, isCorrect, isHard })
     }
   }
-  if (events.length === 0) return
+  if (events.length === 0) return []
 
   const keys = [...new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))]
 
@@ -77,13 +77,25 @@ async function upsertMasteryFromResponses(
   }
 
   const now = new Date()
+  const touchedKeys = new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))
+
+  // Capture the decay-adjusted pre-answer state for each touched concept so
+  // transitions reflect what the user actually experienced (e.g. a level1
+  // concept that decayed to forgotten before this quiz produces from:'forgotten',
+  // not from:'level1'). This must use the fresh DB fetch, NOT caller-provided
+  // priorMasteryRecords which may be stale if the React hook hasn't re-fetched
+  // since a previous quiz in the same session.
+  const preStates = new Map<string, MasteryState>()
+  for (const key of touchedKeys) {
+    preStates.set(key, decayIfStale(byKey.get(key)!, now).state)
+  }
+
   for (const ev of events) {
     const key = `${ev.examId}::${ev.conceptSlug}`
     const prev = byKey.get(key)!
     byKey.set(key, applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now }))
   }
 
-  const touchedKeys = new Set(events.map(e => `${e.examId}::${e.conceptSlug}`))
   const rows = [...byKey.entries()]
     .filter(([key]) => touchedKeys.has(key))
     .map(([, r]) => ({ ...r, updated_at: now.toISOString() }))
@@ -96,6 +108,17 @@ async function upsertMasteryFromResponses(
     .from('concept_mastery')
     .upsert(rows, { onConflict: 'user_id,exam_id,concept_slug' })
   if (upsertError) throw new Error(`concept_mastery upsert: ${upsertError.message}`)
+
+  // Return DB-accurate transitions for daily_completions and session summary.
+  const transitions: MasteryTransition[] = []
+  for (const key of touchedKeys) {
+    const fromState = preStates.get(key)!
+    const afterRecord = byKey.get(key)!
+    if (fromState !== afterRecord.state) {
+      transitions.push({ conceptSlug: afterRecord.concept_slug, from: fromState, to: afterRecord.state })
+    }
+  }
+  return transitions
 }
 
 export interface MasteryTransition {
@@ -284,7 +307,52 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     const correctCount = questions.filter(q => responses[q.id]?.chosen === q.answer).length
 
-    const masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
+    if (!userId) {
+      // Unauthenticated: no DB to fetch from, so compute transitions from the
+      // caller-provided priorMasteryRecords (localStorage). Fire the level-up
+      // event so TodayCard reflects progress, then return early.
+      const masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
+      const upward = masteryTransitions.filter(
+        t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
+      )
+      const completedSession: CompletedSession = {
+        questions,
+        responses,
+        mode,
+        correctCount,
+        totalQuestions: questions.length,
+        timeTakenSeconds: totalSeconds,
+        completedAt: new Date().toISOString(),
+        masteryTransitions,
+      }
+      try {
+        localStorage.setItem(LAST_SESSION_KEY, JSON.stringify(completedSession))
+      } catch {
+        // quota exceeded — continue
+      }
+      appendTodayLevelUps(upward.map(t => ({
+        conceptSlug: t.conceptSlug,
+        from: t.from,
+        to: t.to,
+        at: new Date().toISOString(),
+      })))
+      return
+    }
+
+    // Authenticated: persist mastery to DB first and get DB-accurate transitions.
+    // Using the transitions returned here (rather than computing them from the
+    // caller-provided priorMasteryRecords) ensures daily_completions records the
+    // correct from/to states even when the hook's cached records are stale — e.g.
+    // when a prior quiz already changed the concept's state in this session.
+    let masteryTransitions: MasteryTransition[]
+    try {
+      masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses)
+    } catch (masteryErr) {
+      console.error('concept_mastery upsert failed:', masteryErr)
+      // Fall back to stale computation so the session record and daily_completions
+      // still carry approximate data rather than being empty.
+      masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
+    }
 
     const upward = masteryTransitions.filter(
       t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
@@ -305,26 +373,6 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       localStorage.setItem(LAST_SESSION_KEY, JSON.stringify(completedSession))
     } catch {
       // quota exceeded — continue
-    }
-
-    if (!userId) {
-      // Unauthenticated: no DB write, fire level-up event immediately so
-      // TodayCard reflects progress based on the localStorage-only session.
-      appendTodayLevelUps(upward.map(t => ({
-        conceptSlug: t.conceptSlug,
-        from: t.from,
-        to: t.to,
-        at: new Date().toISOString(),
-      })))
-      return
-    }
-
-    // Persist concept-level mastery state. Awaited so failures are visible;
-    // errors don't block session save.
-    try {
-      await upsertMasteryFromResponses(userId, questions, responses)
-    } catch (masteryErr) {
-      console.error('concept_mastery upsert failed:', masteryErr)
     }
 
     // Fire level-up event AFTER mastery is written to localStorage + DB so

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   BookOpen,
   CalendarDays,
@@ -10,8 +10,10 @@ import {
   Images,
   LayoutGrid,
   Loader2,
+  Play,
   Sigma,
   Trash2,
+  TrendingUp,
   X,
 } from 'lucide-react'
 import {
@@ -37,12 +39,14 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { fetchWikiFile } from '@/lib/github'
-import { entryRefToRepoPath } from '@/lib/wikiRoutes'
+import { entryRefToRepoPath, wikiRoute } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
+import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
+import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
 type ReverseCardSection = 'definition' | 'math' | 'images'
@@ -539,12 +543,12 @@ function FlashcardStudyArea({
   cards,
   index,
   onIndexChange,
-  onOpenWiki,
+  isFlashing,
 }: {
   cards: WikiEntryRef[]
   index: number
   onIndexChange: (i: number) => void
-  onOpenWiki: () => void
+  isFlashing?: boolean
 }) {
   const [flipped, setFlipped] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -554,6 +558,14 @@ function FlashcardStudyArea({
     new Set<ReverseCardSection>(['definition']),
   )
   const { jumpTo } = useConceptPopup()
+  const { addCard, hasCard } = useFlashcards()
+  const routerNavigate = useNavigate()
+  const [showPlayMenu, setShowPlayMenu] = useState(false)
+  const [menuAlignRight, setMenuAlignRight] = useState(false)
+  const [showQuestions, setShowQuestions] = useState(false)
+  const [showLearningProgress, setShowLearningProgress] = useState(false)
+  const playMenuRef = useRef<HTMLDivElement>(null)
+  const playBtnRef = useRef<HTMLButtonElement>(null)
 
   const current = cards[index]
 
@@ -562,7 +574,18 @@ function FlashcardStudyArea({
     setExpanded(false)
     setMarkdown(null)
     setLoadStatus('idle')
+    setShowPlayMenu(false)
   }, [index])
+
+  useEffect(() => {
+    function handleOutside(e: MouseEvent) {
+      if (playMenuRef.current && !playMenuRef.current.contains(e.target as Node)) {
+        setShowPlayMenu(false)
+      }
+    }
+    if (showPlayMenu) document.addEventListener('mousedown', handleOutside)
+    return () => document.removeEventListener('mousedown', handleOutside)
+  }, [showPlayMenu])
 
   function handleFlip() {
     if (!flipped) {
@@ -644,7 +667,7 @@ function FlashcardStudyArea({
 
       {/* Flip card */}
       <div
-        className="w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer select-none transition-all"
+        className={`w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer select-none transition-all${isFlashing ? ' flashcard-highlight' : ''}`}
         onClick={handleFlip}
         role="button"
         tabIndex={0}
@@ -657,18 +680,78 @@ function FlashcardStudyArea({
             <span className="text-xs text-muted-foreground mt-2">click to flip</span>
           </div>
         ) : (
-          <div className="flex-1 flex flex-col p-6 gap-4" onClick={e => e.stopPropagation()}>
+          <div className="flex-1 flex flex-col p-6 gap-4">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-muted-foreground">{current.name}</p>
-              <button
-                type="button"
-                onClick={e => { e.stopPropagation(); onOpenWiki() }}
-                className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors"
-                title="Open in wiki"
-              >
-                <BookOpen className="h-3.5 w-3.5" />
-                <span>Wiki</span>
-              </button>
+              {/* Play menu */}
+              <div className="relative shrink-0" ref={playMenuRef} onClick={e => e.stopPropagation()}>
+                <button
+                  ref={playBtnRef}
+                  type="button"
+                  onClick={() => {
+                    if (!showPlayMenu && playBtnRef.current) {
+                      const rect = playBtnRef.current.getBoundingClientRect()
+                      setMenuAlignRight(window.innerWidth - rect.right < 200)
+                    }
+                    setShowPlayMenu(v => !v)
+                  }}
+                  className="inline-flex items-center justify-center h-7 w-7 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
+                  title="Quiz, Study Guide, and more"
+                  aria-label="Quiz, Study Guide, and more"
+                >
+                  <Play className="h-3.5 w-3.5" />
+                </button>
+                {showPlayMenu && (
+                  <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+                    <button
+                      type="button"
+                      onClick={() => { setShowQuestions(true); setShowPlayMenu(false) }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                    >
+                      <Play className="h-3.5 w-3.5 shrink-0" />
+                      Start Quiz
+                    </button>
+                    {current.kind === 'concept' && (
+                      <button
+                        type="button"
+                        onClick={() => { routerNavigate(wikiRoute(current)); setShowPlayMenu(false) }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                      >
+                        <BookOpen className="h-3.5 w-3.5 shrink-0" />
+                        Open in Study Guide
+                      </button>
+                    )}
+                    <div className="flex items-center hover:bg-accent transition-colors">
+                      <button
+                        type="button"
+                        onClick={() => { addCard(current) }}
+                        className="flex-1 flex items-center gap-2 px-3 py-2 text-sm"
+                      >
+                        <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
+                          {hasCard(current.name) ? '✓' : '+'}
+                        </span>
+                        {hasCard(current.name) ? 'Added to Flashcards' : 'Add to Flashcards'}
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => { setReverseCardModes(new Set(['math'])); setShowPlayMenu(false) }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                    >
+                      <Sigma className="h-3.5 w-3.5 shrink-0" />
+                      Math View
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                    >
+                      <TrendingUp className="h-3.5 w-3.5 shrink-0" />
+                      Learning Progress
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
             {loadStatus === 'loading' && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
@@ -706,14 +789,14 @@ function FlashcardStudyArea({
             {!expanded && markdown && (
               <button
                 type="button"
-                onClick={() => setExpanded(true)}
+                onClick={e => { e.stopPropagation(); setExpanded(true) }}
                 className="self-start text-xs text-primary hover:underline mt-1"
               >
                 Expand
               </button>
             )}
             {expanded && markdown && (
-              <div className="border-t pt-4 overflow-y-auto max-h-96">
+              <div className="border-t pt-4 overflow-y-auto max-h-96" onClick={e => e.stopPropagation()}>
                 <WikiArticle
                   markdown={markdown}
                   sourcePath={entryRefToRepoPath(current)}
@@ -744,6 +827,19 @@ function FlashcardStudyArea({
           Next <ChevronRight className="h-4 w-4" />
         </button>
       </div>
+
+      {showQuestions && (
+        <ConceptQuestionsModal
+          conceptName={current.name}
+          onClose={() => setShowQuestions(false)}
+        />
+      )}
+      {showLearningProgress && (
+        <LearningProgressModal
+          conceptName={current.name}
+          onClose={() => setShowLearningProgress(false)}
+        />
+      )}
     </div>
   )
 }
@@ -754,7 +850,6 @@ export default function Flashcards() {
   const { cards, removeCard, customOrder, setCustomOrder } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords } = useConceptMastery()
-  const openAt = useConceptPopup(s => s.openAt)
   const popupOpen = useConceptPopup(s => s.open)
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -784,6 +879,9 @@ export default function Flashcards() {
   // Navigate to and flash a card when arriving via the ?highlight= URL param
   useEffect(() => {
     if (!highlightName) return
+    const latest = orderedCardsRef.current
+    const idx = latest.findIndex(c => c.name.toLowerCase() === highlightName.toLowerCase())
+    if (idx >= 0) setActiveIndex(idx)
     const timerId = setTimeout(() => {
       setFlashingCard(highlightName)
       if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
@@ -794,15 +892,8 @@ export default function Flashcards() {
           next.delete('highlight')
           return next
         }, { replace: true })
-        const latest = orderedCardsRef.current
-        const idx = latest.findIndex(c => c.name.toLowerCase() === highlightName.toLowerCase())
-        if (idx >= 0) setActiveIndex(idx)
-        openAt(
-          idx >= 0 ? latest : [{ kind: 'concept', name: highlightName }],
-          idx >= 0 ? idx : 0,
-        )
       }, 1700)
-    }, 200)
+    }, 100)
     return () => clearTimeout(timerId)
   }, [highlightName])
 
@@ -915,12 +1006,6 @@ export default function Flashcards() {
     if (activeIndex === oldIdx) setActiveIndex(newIdx)
   }
 
-  function handleOpenWiki() {
-    const card = orderedCards[activeIndex]
-    if (!card) return
-    openAt(orderedCards, activeIndex)
-  }
-
   // Empty state
   if (cards.length === 0) {
     return (
@@ -991,7 +1076,7 @@ export default function Flashcards() {
           cards={orderedCards}
           index={activeIndex}
           onIndexChange={setActiveIndex}
-          onOpenWiki={handleOpenWiki}
+          isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
         />
       </div>
 

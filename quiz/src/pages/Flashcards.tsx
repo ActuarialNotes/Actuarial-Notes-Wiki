@@ -11,7 +11,9 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
+  Images,
   Loader2,
+  Sigma,
   Trash2,
   X,
 } from 'lucide-react'
@@ -42,10 +44,11 @@ import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { WikiArticle, stripFrontmatter, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
+import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
+type ReverseCardSection = 'definition' | 'math' | 'images'
 
 const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string }> = {
   new:      { label: 'New',      className: 'bg-muted text-muted-foreground' },
@@ -92,6 +95,7 @@ function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () =
   const [expanded, setExpanded] = useState(false)
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(new Set<ReverseCardSection>(['definition']))
 
   const current = cards[index]
 
@@ -113,15 +117,68 @@ function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () =
     }
   }
 
+  function toggleMode(mode: ReverseCardSection) {
+    setReverseCardModes(prev => {
+      const next = new Set(prev)
+      if (next.has(mode)) next.delete(mode); else next.add(mode)
+      return next
+    })
+  }
+
   const definition = markdown ? extractFirstParagraph(markdown) : null
-  const firstEquation = markdown ? (extractMathBlockquotes(markdown)[0] ?? null) : null
+  const allEquations = markdown ? extractMathBlockquotes(markdown) : []
+  const cardImages = markdown ? extractImages(markdown) : []
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-background px-4 py-8">
-      <div className="w-full max-w-xl flex items-center justify-between mb-8">
+      <div className="w-full max-w-xl flex items-center justify-between mb-4">
         <span className="text-sm text-muted-foreground">{index + 1} / {cards.length}</span>
         <button type="button" onClick={onDone} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
           <X className="h-4 w-4" /> Done
+        </button>
+      </div>
+
+      {/* Reverse card content selectors */}
+      <div className="w-full max-w-xl flex items-center gap-2 mb-4">
+        <span className="text-xs text-muted-foreground">Back:</span>
+        <button
+          type="button"
+          onClick={() => toggleMode('definition')}
+          className={`inline-flex items-center justify-center h-8 w-8 rounded-md border text-sm font-serif italic font-bold transition-colors ${
+            reverseCardModes.has('definition')
+              ? 'bg-primary text-primary-foreground border-primary'
+              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+          }`}
+          title="Show definition"
+          aria-pressed={reverseCardModes.has('definition')}
+        >
+          D
+        </button>
+        <button
+          type="button"
+          onClick={() => toggleMode('math')}
+          className={`inline-flex items-center justify-center h-8 w-8 rounded-md border transition-colors ${
+            reverseCardModes.has('math')
+              ? 'bg-primary text-primary-foreground border-primary'
+              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+          }`}
+          title="Show math equations"
+          aria-pressed={reverseCardModes.has('math')}
+        >
+          <Sigma className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => toggleMode('images')}
+          className={`inline-flex items-center justify-center h-8 w-8 rounded-md border transition-colors ${
+            reverseCardModes.has('images')
+              ? 'bg-primary text-primary-foreground border-primary'
+              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+          }`}
+          title="Show images"
+          aria-pressed={reverseCardModes.has('images')}
+        >
+          <Images className="h-4 w-4" />
         </button>
       </div>
 
@@ -129,7 +186,7 @@ function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () =
         className="w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer select-none transition-all"
         onClick={handleFlip}
         role="button" tabIndex={0}
-        aria-label={flipped ? 'Click to flip back' : 'Click to reveal definition'}
+        aria-label={flipped ? 'Click to flip back' : 'Click to reveal'}
         onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFlip() } }}
       >
         {!flipped ? (
@@ -146,18 +203,30 @@ function FlashcardStudy({ cards, onDone }: { cards: WikiEntryRef[]; onDone: () =
               </div>
             )}
             {loadStatus === 'error' && <p className="text-sm text-destructive">Couldn't load content.</p>}
-            {definition && (
+            {reverseCardModes.has('definition') && definition && (
               <div className="text-base leading-relaxed prose dark:prose-invert prose-sm max-w-none">
                 <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
                   {definition}
                 </ReactMarkdown>
               </div>
             )}
-            {firstEquation && (
-              <div className="prose dark:prose-invert prose-sm max-w-none">
-                <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-                  {firstEquation}
-                </ReactMarkdown>
+            {reverseCardModes.has('math') && allEquations.length > 0 && (
+              <div className="space-y-3 prose dark:prose-invert prose-sm max-w-none">
+                {allEquations.map((eq, i) => (
+                  <ReactMarkdown key={i} remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+                    {eq}
+                  </ReactMarkdown>
+                ))}
+              </div>
+            )}
+            {reverseCardModes.has('images') && cardImages.length > 0 && (
+              <div className="space-y-3">
+                {cardImages.map((img, i) => (
+                  <figure key={i} className="flex flex-col items-center gap-1">
+                    <img src={img.src} alt={img.alt} className="max-w-full max-h-48 object-contain rounded" />
+                    {img.caption && <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>}
+                  </figure>
+                ))}
               </div>
             )}
             {!expanded && markdown && (

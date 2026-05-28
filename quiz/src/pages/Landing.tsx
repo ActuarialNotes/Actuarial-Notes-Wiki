@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, Check, Lock, Play } from 'lucide-react'
+import { CalendarCheck, Check, ChevronDown, Lock, Play } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -14,7 +14,6 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions } from '@/lib/parser'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import type { QuizMode } from '@/lib/parser'
 
 const EXAMS = [
@@ -30,6 +29,96 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
 }
 
 const QUICK_COUNTS = [3, 5, 10]
+
+// ─── Collapsible learning-objective group (mirrors example callout style) ─────
+
+function GroupSection({
+  group,
+  selectedSubtopics,
+  todaySubtopics,
+  onToggle,
+  onSelectAll,
+}: {
+  group: { name: string; weight?: string; subtopics: string[] }
+  selectedSubtopics: string[]
+  todaySubtopics: Set<string>
+  onToggle: (subtopic: string) => void
+  onSelectAll: (group: { subtopics: string[] }, e: React.MouseEvent) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
+  const selectedCount = group.subtopics.filter(s => selectedSubtopics.includes(s)).length
+
+  return (
+    <div className="bg-muted/70 rounded-lg overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className="w-full px-4 py-3 text-left hover:bg-muted/60 transition-colors duration-150"
+        aria-expanded={open}
+      >
+        <div className="flex items-center gap-3 w-full">
+          <span className="font-medium flex-1 text-base text-left text-foreground">
+            {group.name}
+            {group.weight && (
+              <span className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium border border-primary/30 bg-primary/10 text-primary align-middle">
+                {group.weight}
+              </span>
+            )}
+          </span>
+          {selectedCount > 0 && (
+            <span className="text-xs text-muted-foreground shrink-0">
+              {selectedCount}/{group.subtopics.length}
+            </span>
+          )}
+          <ChevronDown
+            className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+          />
+        </div>
+      </button>
+      <div hidden={!open} className="border-t border-border/40 px-4 pb-4 pt-3">
+        <div className="flex justify-end mb-3">
+          <button
+            type="button"
+            onClick={e => onSelectAll(group, e)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {allSelected ? 'Deselect all' : 'Select all'}
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {group.subtopics.map(subtopic => {
+            const isSelected = selectedSubtopics.includes(subtopic)
+            const isToday = todaySubtopics.has(subtopic)
+            return (
+              <button
+                key={subtopic}
+                type="button"
+                onClick={() => onToggle(subtopic)}
+                className={`relative rounded-xl border flex flex-col min-h-[96px] transition-colors ${
+                  isSelected
+                    ? 'bg-primary/10 border-primary'
+                    : 'bg-card border-border hover:shadow-md'
+                }`}
+              >
+                <span className={`flex-1 flex items-center justify-center px-3 py-2 text-center font-semibold text-sm leading-snug ${isSelected ? 'text-primary' : 'text-card-foreground'}`}>
+                  {subtopic}
+                </span>
+                {isToday && (
+                  <div className="flex justify-center pb-2.5">
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${isSelected ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary/70'}`}>
+                      today
+                    </span>
+                  </div>
+                )}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -313,6 +402,7 @@ export default function Landing() {
 
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
+  const examShortLabel = topic === 'Probability' ? 'P' : topic === 'Financial Mathematics' ? 'FM' : null
   const hasTopic = topic !== ''
 
   const topicsLabel = useTodaysPlan && planConceptCount > 0
@@ -330,7 +420,14 @@ export default function Landing() {
       <div className="sticky top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Quiz</h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-3xl font-bold tracking-tight">Quiz</h1>
+              {hasTopic && examShortLabel && (
+                <span className="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold border border-primary/30 bg-primary/10 text-primary">
+                  {examShortLabel}
+                </span>
+              )}
+            </div>
             <p className="text-sm text-muted-foreground">
               Practice questions for actuarial exams
             </p>
@@ -430,8 +527,7 @@ export default function Landing() {
         )}
       </div>
 
-      <Card>
-        <CardContent className="space-y-6 pt-6">
+      <div className="space-y-6">
           {!hasTopic && (
             <div className="space-y-2">
               <label className="text-sm font-medium">Exam</label>
@@ -553,52 +649,17 @@ export default function Landing() {
                     {subtopicsLoading && orderedSubtopics.length === 0 ? (
                       <p className="text-xs text-muted-foreground">Loading topics…</p>
                     ) : (
-                      <div className={`space-y-5 transition-opacity ${useTodaysPlan ? 'opacity-50 pointer-events-none' : ''}`}>
-                        {groupedSubtopics.map(group => {
-                          const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
-                          return (
-                            <div key={group.name}>
-                              <div className="flex items-center justify-between mb-2.5">
-                                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                                  {group.name}
-                                  {group.weight && <span className="ml-1 normal-case font-normal">· {group.weight}</span>}
-                                </span>
-                                <button
-                                  type="button"
-                                  onClick={e => selectAllInGroup(group, e)}
-                                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                                >
-                                  {allSelected ? 'Deselect all' : 'Select all'}
-                                </button>
-                              </div>
-                              <div className="grid grid-cols-2 gap-2">
-                                {group.subtopics.map(subtopic => {
-                                  const isSelected = selectedSubtopics.includes(subtopic)
-                                  const isToday = todaySubtopics.has(subtopic)
-                                  return (
-                                    <button
-                                      key={subtopic}
-                                      type="button"
-                                      onClick={() => toggleSubtopic(subtopic)}
-                                      className={`py-3 px-4 rounded-xl border text-sm font-medium text-left transition-colors ${
-                                        isSelected
-                                          ? 'bg-primary text-primary-foreground border-primary'
-                                          : 'border-input hover:bg-accent text-foreground'
-                                      }`}
-                                    >
-                                      <span className="block leading-snug">{subtopic}</span>
-                                      {isToday && (
-                                        <span className={`text-[10px] font-normal ${isSelected ? 'text-primary-foreground/70' : 'text-primary/60'}`}>
-                                          today
-                                        </span>
-                                      )}
-                                    </button>
-                                  )
-                                })}
-                              </div>
-                            </div>
-                          )
-                        })}
+                      <div className={`space-y-2 transition-opacity ${useTodaysPlan ? 'opacity-50 pointer-events-none' : ''}`}>
+                        {groupedSubtopics.map(group => (
+                          <GroupSection
+                            key={group.name}
+                            group={group}
+                            selectedSubtopics={selectedSubtopics}
+                            todaySubtopics={todaySubtopics}
+                            onToggle={toggleSubtopic}
+                            onSelectAll={selectAllInGroup}
+                          />
+                        ))}
                       </div>
                     )}
                   </div>
@@ -619,8 +680,7 @@ export default function Landing() {
 
             </>
           )}
-        </CardContent>
-      </Card>
+      </div>
 
       {user && (
         <div className="text-center">

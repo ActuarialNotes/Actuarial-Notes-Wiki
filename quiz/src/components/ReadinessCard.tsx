@@ -288,7 +288,7 @@ interface Props {
   onRegenerate: () => void
   onReplaceConcepts?: (concepts: string[]) => void
   onExamDateChange?: (date: string | null) => void
-  onOpenOnboarding?: () => void
+  onOpenOnboarding?: (step?: 1 | 2 | 3) => void
   openConceptsTrigger?: number
   startQuizTrigger?: number
   /** Whether the user has access to the custom Study Plan. Defaults to true. */
@@ -834,7 +834,7 @@ export function ReadinessCard({
                 return (
                   <button
                     type="button"
-                    onClick={onOpenOnboarding}
+                    onClick={() => onOpenOnboarding?.(2)}
                     className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
                   >
                     <p className="text-5xl font-bold tabular-nums text-amber-400">
@@ -850,7 +850,7 @@ export function ReadinessCard({
                 return (
                   <button
                     type="button"
-                    onClick={onOpenOnboarding}
+                    onClick={() => onOpenOnboarding?.(1)}
                     className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
                   >
                     <p className="text-5xl font-bold tabular-nums">
@@ -1154,7 +1154,7 @@ export function ReadinessCard({
                 return (
                   <button
                     type="button"
-                    onClick={onOpenOnboarding}
+                    onClick={() => onOpenOnboarding?.(2)}
                     className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
                   >
                     <p className="text-5xl font-bold tabular-nums text-amber-400">
@@ -1170,7 +1170,7 @@ export function ReadinessCard({
                 return (
                   <button
                     type="button"
-                    onClick={onOpenOnboarding}
+                    onClick={() => onOpenOnboarding?.(1)}
                     className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
                   >
                     <p className="text-5xl font-bold tabular-nums">

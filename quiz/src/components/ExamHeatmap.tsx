@@ -6,10 +6,24 @@ import { ExamSittingsList } from '@/components/ExamSittingsList'
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
-function cellStyle(avgScore: number | null): { backgroundColor: string } | undefined {
-  if (avgScore === null) return undefined
-  const opacity = +(0.2 + 0.8 * (avgScore / 100)).toFixed(2)
+function cellStyle(pct: number | null): { backgroundColor: string } | undefined {
+  if (pct === null) return undefined
+  const opacity = +(0.2 + 0.8 * (pct / 100)).toFixed(2)
   return { backgroundColor: `rgba(34, 197, 94, ${opacity})` }
+}
+
+function resolvedPct(
+  key: string,
+  data: DayData | null,
+  dayPlanPct: Map<string, number> | undefined,
+): number | null {
+  if (dayPlanPct !== undefined) {
+    // Plan mode: use completion % if available; dim green for sessions with no plan assignment
+    if (dayPlanPct.has(key)) return dayPlanPct.get(key)!
+    return data !== null ? 15 : null
+  }
+  // No plan: full green for any session activity
+  return data !== null ? 100 : null
 }
 
 function mondayOf(d: Date): Date {
@@ -60,6 +74,10 @@ interface Props {
   onDayClick?: (date: string) => void
   /** When provided, clicking the exam/ready date labels opens this instead of inline editing */
   onOpenStudyPlan?: (step?: 1 | 2 | 3) => void
+  /** When provided, overrides session-score-based heatmap color with plan completion %.
+   *  Keys are YYYY-MM-DD; values are 0–100 (capped). Days absent fall back to dim green
+   *  (15%) if a session exists, or no color if no session. */
+  dayPlanPct?: Map<string, number>
 }
 
 export function ExamHeatmap({
@@ -71,6 +89,7 @@ export function ExamHeatmap({
   onTargetReadyDateChange,
   onDayClick,
   onOpenStudyPlan,
+  dayPlanPct,
 }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
@@ -263,7 +282,7 @@ export function ExamHeatmap({
                     role={isClickable ? 'button' : undefined}
                     aria-label={isClickable ? `View sessions for ${cell.key}` : undefined}
                     onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
-                    style={!cell.isFuture ? cellStyle(cell.data?.avgScore ?? null) : undefined}
+                    style={!cell.isFuture ? cellStyle(resolvedPct(cell.key, cell.data, dayPlanPct)) : undefined}
                     className={`w-full rounded-[2px] ${
                       cell.isFuture
                         ? cell.isExamDay

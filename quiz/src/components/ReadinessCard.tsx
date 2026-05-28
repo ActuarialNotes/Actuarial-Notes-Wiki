@@ -9,21 +9,19 @@ import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
+import { QuizSessionCard } from '@/components/QuizSessionCard'
+import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
 import { computeReadiness, type SectionReadiness } from '@/lib/readiness'
-import { fetchAllQuestions } from '@/lib/github'
-import { parseAllQuestions } from '@/lib/parser'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
-import type { QuizSession, QuestionResponse } from '@/lib/supabase'
+import type { QuizSession } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
-import type { Question } from '@/lib/parser'
 import { useAuth } from '@/hooks/useAuth'
-import { SessionRow, type SessionDetail } from '@/components/SessionRow'
 
 // ── Radial donut chart ─────────────────────────────────────────────────────────
 
@@ -337,9 +335,10 @@ export function ReadinessCard({
 
   // Quiz history state
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
-  const [expandedSessions, setExpandedSessions] = useState<Set<string>>(new Set())
-  const [sessionDetails, setSessionDetails] = useState<Map<string, SessionDetail>>(new Map())
   const [selectedDayLevelUps, setSelectedDayLevelUps] = useState<DailyLevelUp[]>([])
+  const [viewingSession, setViewingSession] = useState<QuizSession | null>(null)
+  const [allDailyCompletions, setAllDailyCompletions] = useState<Array<{ day: string; concept_slug: string }>>([])
+  const savedScrollY = useRef(0)
 
   const toggleTopic = (name: string) =>
     setOpenTopics(prev => {
@@ -347,42 +346,6 @@ export function ReadinessCard({
       next.has(name) ? next.delete(name) : next.add(name)
       return next
     })
-
-  async function handleSessionToggle(sessionId: string) {
-    if (!user) return
-    const isExpanding = !expandedSessions.has(sessionId)
-    setExpandedSessions(prev => {
-      const next = new Set(prev)
-      isExpanding ? next.add(sessionId) : next.delete(sessionId)
-      return next
-    })
-    if (!isExpanding || sessionDetails.has(sessionId)) return
-    setSessionDetails(prev => new Map(prev).set(sessionId, { loading: true, error: null, items: [] }))
-    try {
-      const [responsesResult, rawFiles] = await Promise.all([
-        supabase
-          .from('question_responses')
-          .select('*')
-          .eq('session_id', sessionId)
-          .eq('user_id', user.id)
-          .order('answered_at', { ascending: true }),
-        fetchAllQuestions(),
-      ])
-      if (responsesResult.error) throw new Error(responsesResult.error.message)
-      const questionMap = new Map(parseAllQuestions(rawFiles).map((q: Question) => [q.id, q]))
-      const items = (responsesResult.data ?? []).map((r: QuestionResponse) => ({
-        response: r,
-        question: questionMap.get(r.question_id) ?? null,
-      }))
-      setSessionDetails(prev => new Map(prev).set(sessionId, { loading: false, error: null, items }))
-    } catch (err) {
-      setSessionDetails(prev => new Map(prev).set(sessionId, {
-        loading: false,
-        error: err instanceof Error ? err.message : 'Failed to load session details',
-        items: [],
-      }))
-    }
-  }
 
   useEffect(() => {
     if (openConceptsTrigger && allConcepts.length > 0) {
@@ -417,6 +380,22 @@ export function ReadinessCard({
 
   const now = useMemo(() => new Date(), [])
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
+
+  // Fetch all daily_completions for this exam — used for heatmap plan-completion coloring
+  useEffect(() => {
+    if (!user) { setAllDailyCompletions([]); return }
+    let cancelled = false
+    supabase
+      .from('daily_completions')
+      .select('day, concept_slug')
+      .eq('user_id', user.id)
+      .eq('exam_id', progressKey)
+      .then(({ data }: { data: Array<{ day: string; concept_slug: string }> | null }) => {
+        if (!cancelled) setAllDailyCompletions(data ?? [])
+      })
+    return () => { cancelled = true }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, progressKey])
 
   useEffect(() => {
     const today = todayISO()
@@ -576,6 +555,45 @@ export function ReadinessCard({
 
   const showReplaceButton = bonusConcepts.length > 0 && incompleteOriginalConcepts.length > 0
 
+  // Compute per-day plan completion % for heatmap coloring.
+  // When a plan exists: color = concepts_completed_that_day / conceptsPerDay (capped at 100%).
+  // When no plan: undefined → ExamHeatmap falls back to session-score coloring.
+  const dayPlanPct = useMemo((): Map<string, number> | undefined => {
+    if (!user || !plan) return undefined
+    const cpd = plan.conceptsPerDay
+    const today = todayISO()
+    const result = new Map<string, number>()
+
+    // Build per-day slug sets from historical daily_completions
+    const countByDay = new Map<string, Set<string>>()
+    for (const row of allDailyCompletions) {
+      if (!countByDay.has(row.day)) countByDay.set(row.day, new Set())
+      countByDay.get(row.day)!.add(row.concept_slug.toLowerCase())
+    }
+    // Also incorporate today's live level-up data
+    if (examCompletedToday.length > 0) {
+      if (!countByDay.has(today)) countByDay.set(today, new Set())
+      const todaySet = countByDay.get(today)!
+      for (const lu of examCompletedToday) todaySet.add(lu.conceptSlug.toLowerCase())
+    }
+
+    for (const [day, slugs] of countByDay) {
+      if (day === today && displayConcepts.length > 0) {
+        // Today: use exact plan completion ratio
+        const completed = displayConcepts.filter(name =>
+          slugs.has(name.toLowerCase()) ||
+          STATE_ORDER[masteryStateByName.get(name.toLowerCase()) ?? 'new'] >= STATE_ORDER[targetByName.get(name.toLowerCase()) ?? 'level1']
+        )
+        result.set(day, (completed.length / displayConcepts.length) * 100)
+      } else {
+        // Past days: estimate via conceptsPerDay quota
+        const pct = cpd > 0 ? Math.min((slugs.size / cpd) * 100, 100) : (slugs.size > 0 ? 100 : 0)
+        result.set(day, pct)
+      }
+    }
+    return result
+  }, [user, plan, allDailyCompletions, examCompletedToday, displayConcepts, masteryStateByName, targetByName])
+
   function handleReplace() {
     // One-for-one swap: each bonus concept replaces exactly one incomplete planned concept.
     // Completed originals stay. Incomplete originals beyond the bonus count also stay.
@@ -675,8 +693,14 @@ export function ReadinessCard({
         <CardContent className="p-5 space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
+            <div className="min-w-0 flex items-center gap-2 flex-wrap">
               <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
+              {isPremium && plan && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 text-[10px] font-semibold shrink-0">
+                  <CalendarCheck className="h-3 w-3" />
+                  Study Plan
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-1 shrink-0">
               <button
@@ -720,65 +744,267 @@ export function ReadinessCard({
             targetReadyDate={config.targetReadyDate}
             onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
             onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
-            onDayClick={date => { setSelectedDay(date); setExpandedSessions(new Set()); setSessionDetails(new Map()) }}
+            onDayClick={date => { setSelectedDay(date) }}
+            dayPlanPct={dayPlanPct}
           />
 
-          {/* Quiz history panel — shown when a heatmap day is clicked */}
+          {/* Day panel — shown when a heatmap day is clicked */}
           {selectedDay && (() => {
             const daySessions = examSessions.filter(s => s.completed_at.slice(0, 10) === selectedDay)
             const dayTotal = daySessions.reduce((s, r) => s + r.total_questions, 0)
             const dayCorrect = daySessions.reduce((s, r) => s + r.correct_count, 0)
             const dayLevelUps = selectedDayLevelUps.length
+            const dayLabel = new Date(selectedDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+            const isFutureDay = selectedDay > todayStr
             return (
-              <div className="border-t pt-3 space-y-1 mt-1">
-                <div className="flex items-center justify-between text-xs text-muted-foreground pb-1">
-                  <span className="font-medium">Sessions on {selectedDay}</span>
+              <div className="border-t pt-4 mt-1 space-y-4">
+                {/* Header row */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold">{dayLabel}</span>
                   <button
                     type="button"
-                    onClick={() => { setSelectedDay(null); setExpandedSessions(new Set()); setSessionDetails(new Map()) }}
-                    className="hover:text-foreground transition-colors"
+                    onClick={() => setSelectedDay(null)}
+                    className="text-muted-foreground hover:text-foreground transition-colors text-sm"
                     aria-label="Clear day filter"
                   >
                     ✕
                   </button>
                 </div>
-                {daySessions.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">No sessions on this date.</p>
-                ) : (
-                  <>
-                    <div className="flex items-center gap-2 flex-wrap pb-2">
-                      <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                        <Check className="h-3 w-3 text-green-500" />
-                        {dayCorrect}/{dayTotal} correct
+
+                {/* Large stats */}
+                {daySessions.length > 0 && (
+                  <div className="flex items-center gap-5 flex-wrap">
+                    <div className="flex flex-col items-center">
+                      <span className="text-2xl font-bold tabular-nums leading-none">
+                        {dayCorrect}
+                        <span className="text-muted-foreground text-lg font-normal">/{dayTotal}</span>
                       </span>
-                      {dayCorrect > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                          <Gem className="h-3 w-3 text-cyan-400" />
-                          {dayCorrect} gems
-                        </span>
-                      )}
-                      {dayLevelUps > 0 && (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                          <ArrowUp className="h-3 w-3 text-primary" />
-                          {dayLevelUps} levelled up
-                        </span>
-                      )}
+                      <span className="text-[10px] text-muted-foreground mt-0.5">correct</span>
                     </div>
-                    {daySessions.map((session, idx) => (
-                      <SessionRow
+                    {dayCorrect > 0 && (
+                      <div className="flex flex-col items-center">
+                        <span className="text-2xl font-bold tabular-nums leading-none text-cyan-500 inline-flex items-center gap-1">
+                          {dayCorrect} <Gem className="h-5 w-5" />
+                        </span>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">gems</span>
+                      </div>
+                    )}
+                    {dayLevelUps > 0 && (
+                      <div className="flex flex-col items-center">
+                        <span className="text-2xl font-bold tabular-nums leading-none text-primary inline-flex items-center gap-1">
+                          {dayLevelUps} <ArrowUp className="h-5 w-5" />
+                        </span>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">levelled up</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Session flashcard grid */}
+                {daySessions.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">{isFutureDay ? 'No sessions yet — this day is in the future.' : 'No sessions on this date.'}</p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2">
+                    {daySessions.map(session => (
+                      <QuizSessionCard
                         key={session.id}
                         session={session}
-                        divider={idx > 0}
-                        expanded={expandedSessions.has(session.id)}
-                        detail={sessionDetails.get(session.id)}
-                        onToggle={() => handleSessionToggle(session.id)}
+                        onClick={() => {
+                          savedScrollY.current = window.scrollY
+                          setViewingSession(session)
+                        }}
                       />
                     ))}
-                  </>
+                  </div>
                 )}
+
+                {/* Study plan for this day */}
+                {isPremium && (() => {
+                  if (selectedDay === todayStr) {
+                    // Today: show live plan inline (moved below)
+                    return null
+                  }
+                  if (isFutureDay && plan) {
+                    const futureConcepts = plan.assignments.filter(a => a.scheduledDate === selectedDay)
+                    if (futureConcepts.length === 0) return null
+                    return (
+                      <div className="border-t pt-3 space-y-1">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
+                        {futureConcepts.map(a => (
+                          <div key={a.conceptName} className="flex items-center gap-2.5 px-2 py-1.5">
+                            <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                            <span className="text-sm flex-1 min-w-0 truncate">{a.conceptName}</span>
+                            <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[NEXT_STATE[masteryStateByName.get(a.conceptName.toLowerCase()) ?? 'new'] ?? 'level1']}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )
+                  }
+                  // Past day: show level-ups
+                  if (selectedDayLevelUps.length > 0) {
+                    return (
+                      <div className="border-t pt-3 space-y-1">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Concepts mastered</p>
+                        {selectedDayLevelUps.map(lu => (
+                          <div key={lu.conceptSlug + lu.at} className="flex items-center gap-2.5 px-2 py-1.5">
+                            <Check className="h-4 w-4 text-green-500 shrink-0" />
+                            <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">{lu.conceptSlug}</span>
+                            <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {STATE_LABEL[lu.to]}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )
+                  }
+                  return null
+                })()}
               </div>
             )
           })()}
+
+          {/* Today's Study Plan — inline in heatmap card when no day selected (or today selected) */}
+          {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
+            <div className="border-t pt-4 space-y-3">
+              <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+              <div className="space-y-0.5">
+                {displayConcepts.map((name, idx) => {
+                  const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                  const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                  const isCompleted =
+                    examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                    STATE_ORDER[currentState] >= STATE_ORDER[target]
+                  return (
+                    <button
+                      key={name}
+                      type="button"
+                      data-study-concept={name.toLowerCase()}
+                      onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', idx)}
+                      className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
+                    >
+                      {isCompleted
+                        ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                        : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                      <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
+                        {name}
+                      </span>
+                      <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                    </button>
+                  )
+                })}
+
+                {/* Bonus concepts */}
+                {bonusConcepts.length > 0 && (
+                  <>
+                    <div className="flex items-center gap-2 pt-1">
+                      <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
+                      <span className="text-xs text-muted-foreground shrink-0">Also completed today</span>
+                      <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
+                    </div>
+                    {bonusConcepts.map(lu => {
+                      const globalIdx = allConcepts.findIndex(ac => ac.name.toLowerCase() === lu.conceptSlug.toLowerCase())
+                      return (
+                        <button
+                          key={lu.conceptSlug}
+                          type="button"
+                          data-study-concept={lu.conceptSlug.toLowerCase()}
+                          onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
+                          className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
+                        >
+                          <Check className="h-4 w-4 text-green-500 shrink-0" />
+                          <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
+                            {lu.conceptSlug}
+                          </span>
+                          <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
+                            → {STATE_LABEL[lu.to]}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </>
+                )}
+              </div>
+
+              {/* Replace button */}
+              {showReplaceButton && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleReplace}
+                  className="w-full gap-1.5 text-xs h-8"
+                >
+                  Replace
+                  <span className="text-muted-foreground font-normal">
+                    — use today's completed concepts
+                  </span>
+                </Button>
+              )}
+
+              {allConceptsDone ? (
+                <div className="flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2.5 text-green-600 dark:text-green-400">
+                  <CheckCircle2 className="h-4 w-4 shrink-0" />
+                  <span className="text-sm font-semibold">Done for Today!</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                    <Check className="h-3 w-3 text-green-500" />
+                    {todayGemsEarned}/{todayQuestionsAnswered} correct
+                  </span>
+                  {todayGemsEarned > 0 && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                      <Gem className="h-3 w-3 text-cyan-400" />
+                      {todayGemsEarned} gems
+                    </span>
+                  )}
+                  {todayLevelUps > 0 && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                      <ArrowUp className="h-3 w-3 text-primary" />
+                      {todayLevelUps} levelled up
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Daily Bonus */}
+              <button
+                type="button"
+                onClick={() => setShowBonusInfo(true)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors text-left ${
+                  allConceptsDone
+                    ? 'bg-cyan-500/10 border-cyan-500/30 hover:bg-cyan-500/15'
+                    : 'border-dashed border-muted-foreground/30 hover:bg-muted/20'
+                }`}
+              >
+                <div className={`flex items-center justify-center h-8 w-8 rounded-full shrink-0 ${allConceptsDone ? 'bg-cyan-500/20' : 'bg-muted/50'}`}>
+                  {allConceptsDone
+                    ? <Gem className="h-4 w-4 text-cyan-400" />
+                    : <Lock className="h-3.5 w-3.5 text-muted-foreground" />}
+                </div>
+                <div className="flex-1 min-w-0">
+                  {allConceptsDone && bonusClaimed ? (
+                    <>
+                      <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+                        +{claimedBonusAmount} bonus gems earned!
+                      </p>
+                      <p className="text-xs text-cyan-600/70 dark:text-cyan-400/70">Daily plan bonus claimed</p>
+                    </>
+                  ) : allConceptsDone ? (
+                    <>
+                      <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+                        2× Daily Gems Bonus unlocked!
+                      </p>
+                      <p className="text-xs text-cyan-600/70 dark:text-cyan-400/70">Awarding +{todayGemsEarned} gems…</p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-sm font-medium text-muted-foreground">2× Daily Gems Bonus</p>
+                      <p className="text-xs text-muted-foreground/70">Complete today's plan to unlock</p>
+                    </>
+                  )}
+                </div>
+                <Info className="h-4 w-4 text-muted-foreground/60 shrink-0" />
+              </button>
+            </div>
+          )}
 
           {/* Warnings */}
           {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
@@ -851,153 +1077,6 @@ export function ReadinessCard({
                 )
               })()}
             </div>
-          )}
-
-          {/* Today's Study Plan card */}
-          {displayConcepts.length > 0 && (
-            <Card>
-              <CardContent className="p-5 space-y-3">
-                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
-                <div className="space-y-0.5">
-                  {displayConcepts.map((name, idx) => {
-                    const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                    const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                    const isCompleted =
-                      examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-                      STATE_ORDER[currentState] >= STATE_ORDER[target]
-                    return (
-                      <button
-                        key={name}
-                        type="button"
-                        data-study-concept={name.toLowerCase()}
-                        onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', idx)}
-                        className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
-                      >
-                        {isCompleted
-                          ? <Check className="h-4 w-4 text-green-500 shrink-0" />
-                          : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
-                        <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
-                          {name}
-                        </span>
-                        <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
-                      </button>
-                    )
-                  })}
-
-                  {/* Bonus concepts — levelled up today but not in the original plan */}
-                  {bonusConcepts.length > 0 && (
-                    <>
-                      <div className="flex items-center gap-2 pt-1">
-                        <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-                        <span className="text-xs text-muted-foreground shrink-0">Also completed today</span>
-                        <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-                      </div>
-                      {bonusConcepts.map(lu => {
-                        const globalIdx = allConcepts.findIndex(ac => ac.name.toLowerCase() === lu.conceptSlug.toLowerCase())
-                        return (
-                          <button
-                            key={lu.conceptSlug}
-                            type="button"
-                            data-study-concept={lu.conceptSlug.toLowerCase()}
-                            onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
-                            className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
-                          >
-                            <Check className="h-4 w-4 text-green-500 shrink-0" />
-                            <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
-                              {lu.conceptSlug}
-                            </span>
-                            <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
-                              → {STATE_LABEL[lu.to]}
-                            </span>
-                          </button>
-                        )
-                      })}
-                    </>
-                  )}
-                </div>
-
-                {/* Replace button — swap incomplete plan items with today's completed concepts */}
-                {showReplaceButton && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleReplace}
-                    className="w-full gap-1.5 text-xs h-8"
-                  >
-                    Replace
-                    <span className="text-muted-foreground font-normal">
-                      — use today's completed concepts
-                    </span>
-                  </Button>
-                )}
-
-                {allConceptsDone ? (
-                  <div className="flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2.5 text-green-600 dark:text-green-400">
-                    <CheckCircle2 className="h-4 w-4 shrink-0" />
-                    <span className="text-sm font-semibold">Done for Today!</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                      <Check className="h-3 w-3 text-green-500" />
-                      {todayGemsEarned}/{todayQuestionsAnswered} correct
-                    </span>
-                    {todayGemsEarned > 0 && (
-                      <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                        <Gem className="h-3 w-3 text-cyan-400" />
-                        {todayGemsEarned} gems
-                      </span>
-                    )}
-                    {todayLevelUps > 0 && (
-                      <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                        <ArrowUp className="h-3 w-3 text-primary" />
-                        {todayLevelUps} levelled up
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {/* Daily Bonus — locked until plan is complete */}
-                <button
-                  type="button"
-                  onClick={() => setShowBonusInfo(true)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors text-left ${
-                    allConceptsDone
-                      ? 'bg-cyan-500/10 border-cyan-500/30 hover:bg-cyan-500/15'
-                      : 'border-dashed border-muted-foreground/30 hover:bg-muted/20'
-                  }`}
-                >
-                  <div className={`flex items-center justify-center h-8 w-8 rounded-full shrink-0 ${allConceptsDone ? 'bg-cyan-500/20' : 'bg-muted/50'}`}>
-                    {allConceptsDone
-                      ? <Gem className="h-4 w-4 text-cyan-400" />
-                      : <Lock className="h-3.5 w-3.5 text-muted-foreground" />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    {allConceptsDone && bonusClaimed ? (
-                      <>
-                        <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
-                          +{claimedBonusAmount} bonus gems earned!
-                        </p>
-                        <p className="text-xs text-cyan-600/70 dark:text-cyan-400/70">Daily plan bonus claimed</p>
-                      </>
-                    ) : allConceptsDone ? (
-                      <>
-                        <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
-                          2× Daily Gems Bonus unlocked!
-                        </p>
-                        <p className="text-xs text-cyan-600/70 dark:text-cyan-400/70">Awarding +{todayGemsEarned} gems…</p>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-sm font-medium text-muted-foreground">2× Daily Gems Bonus</p>
-                        <p className="text-xs text-muted-foreground/70">Complete today's plan to unlock</p>
-                      </>
-                    )}
-                  </div>
-                  <Info className="h-4 w-4 text-muted-foreground/60 shrink-0" />
-                </button>
-              </CardContent>
-            </Card>
           )}
 
           {/* Topics mastered + tracker */}
@@ -1305,6 +1384,18 @@ export function ReadinessCard({
       )}
       <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
       <DailyBonusInfoPanel open={showBonusInfo} onClose={() => setShowBonusInfo(false)} />
+
+      {/* Session completion overlay */}
+      {viewingSession && (
+        <SessionCompletionOverlay
+          session={viewingSession}
+          isLoggedIn={!!user}
+          onClose={() => {
+            setViewingSession(null)
+            requestAnimationFrame(() => window.scrollTo({ top: savedScrollY.current, behavior: 'instant' }))
+          }}
+        />
+      )}
     </div>
   )
 }

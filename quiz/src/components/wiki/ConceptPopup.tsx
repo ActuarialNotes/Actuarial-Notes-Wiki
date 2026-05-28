@@ -8,7 +8,6 @@ import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
 import { MathViewContext } from '@/contexts/MathViewContext'
-import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { useAuth } from '@/hooks/useAuth'
@@ -25,7 +24,6 @@ export function ConceptPopup() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const { height, beginDrag } = useSplitHeight()
   const [maximized, setMaximized] = useState(false)
-  const [showQuestions, setShowQuestions] = useState(false)
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
@@ -158,84 +156,6 @@ export function ConceptPopup() {
       role="complementary"
       aria-label={`Concept: ${current.name}`}
     >
-      {/* Viewing filter — always shown */}
-      <div className="flex items-center gap-2 px-3 py-2.5 border-b shrink-0">
-        <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
-        <div className="relative" ref={viewingRef}>
-          <button
-            type="button"
-            onClick={() => { setViewingDropdownOpen(v => !v); setShowPremiumInfo(false) }}
-            className="appearance-none text-xs border rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
-          >
-            {currentFilter === 'study-plan' ? todayLabel : 'Entire Syllabus'}
-          </button>
-          <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
-
-          {viewingDropdownOpen && (
-            <div className="absolute top-full mt-1 left-0 z-50 w-56 rounded-md border bg-popover text-popover-foreground shadow-md py-1">
-              {hasStudyPlan ? (
-                <button
-                  type="button"
-                  onClick={() => { setDashboardFilter('study-plan'); setViewingDropdownOpen(false) }}
-                  className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'study-plan' ? 'font-medium' : ''}`}
-                >
-                  {todayLabel}
-                </button>
-              ) : isLoggedInPremium ? (
-                <Link
-                  to="/dashboard"
-                  onClick={() => { close(); setViewingDropdownOpen(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
-                >
-                  Set up Study Plan →
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => { setShowPremiumInfo(v => !v); setViewingDropdownOpen(false) }}
-                  className="w-full flex items-center gap-1.5 px-3 py-2 text-xs opacity-50 hover:opacity-70 transition-opacity text-left"
-                >
-                  <Lock className="h-3 w-3 shrink-0" />
-                  {todayLabel}
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => { setDashboardFilter('entire-syllabus'); setViewingDropdownOpen(false) }}
-                className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'entire-syllabus' ? 'font-medium' : ''}`}
-              >
-                Entire Syllabus
-              </button>
-            </div>
-          )}
-
-          {showPremiumInfo && (
-            <div className="absolute top-full mt-1 left-0 z-50 w-60 rounded-md border bg-popover text-popover-foreground shadow-md p-3">
-              <div className="flex items-center gap-1.5 mb-1.5 text-xs font-medium">
-                <Lock className="h-3 w-3 shrink-0" />
-                Premium feature
-              </div>
-              <p className="text-xs text-muted-foreground mb-2.5">
-                {user
-                  ? 'Upgrade to Premium to access personalised daily Study Plans.'
-                  : 'Sign in and upgrade to Premium to access personalised daily Study Plans.'
-                }
-              </p>
-              <Link
-                to={user ? '/upgrade' : '/auth'}
-                onClick={() => setShowPremiumInfo(false)}
-                className="text-xs text-primary hover:underline"
-              >
-                {user ? 'Upgrade to Premium →' : 'Sign in →'}
-              </Link>
-            </div>
-          )}
-        </div>
-        <span className="text-xs text-muted-foreground ml-auto tabular-nums shrink-0">
-          {list.length} concepts
-        </span>
-      </div>
-
       {/* Drag handle — visible on all devices including mobile */}
       <div
         role="separator"
@@ -256,7 +176,7 @@ export function ConceptPopup() {
       {/* Header */}
       <div className="flex items-center gap-2 px-3 h-14 border-b shrink-0">
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
-          <span className="truncate font-semibold text-sm min-w-0">{current.name}</span>
+          <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
           {/* Play button + mini menu — immediately right of the concept name */}
           <div className="relative shrink-0" ref={playMenuRef}>
           <button
@@ -276,10 +196,10 @@ export function ConceptPopup() {
             <Play className="h-4 w-4" />
           </button>
           {showPlayMenu && (
-            <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+            <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-72 overflow-y-auto ${menuAlignRight ? 'right-0' : 'left-0'}`}>
               <button
                 type="button"
-                onClick={() => { setShowQuestions(true); setShowPlayMenu(false) }}
+                onClick={() => { routerNavigate(`/search?concept=${encodeURIComponent(current.name)}`); setShowPlayMenu(false); close() }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <Play className="h-3.5 w-3.5 shrink-0" />
@@ -300,7 +220,7 @@ export function ConceptPopup() {
                 <button
                   type="button"
                   onClick={() => { addCard(current) }}
-                  className="flex-1 flex items-center gap-2 px-3 py-2 text-sm"
+                  className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
                 >
                   <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
                     {hasCard(current.name) ? '✓' : '+'}
@@ -448,9 +368,79 @@ export function ConceptPopup() {
           <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
           <span>Previous</span>
         </button>
-        <span className="self-center px-3 text-sm sm:text-xs text-muted-foreground tabular-nums shrink-0">
-          {position}
-        </span>
+        <div className="self-center flex flex-col items-center gap-0.5 px-2 shrink-0" ref={viewingRef}>
+          <span className="text-sm sm:text-xs text-muted-foreground tabular-nums">{position}</span>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => { setViewingDropdownOpen(v => !v); setShowPremiumInfo(false) }}
+              className="appearance-none text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-0.5"
+            >
+              {currentFilter === 'study-plan' ? todayLabel : 'Entire Syllabus'}
+              <ChevronDown className="h-2.5 w-2.5 shrink-0" />
+            </button>
+
+            {viewingDropdownOpen && (
+              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-56 rounded-md border bg-popover text-popover-foreground shadow-md py-1">
+                {hasStudyPlan ? (
+                  <button
+                    type="button"
+                    onClick={() => { setDashboardFilter('study-plan'); setViewingDropdownOpen(false) }}
+                    className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'study-plan' ? 'font-medium' : ''}`}
+                  >
+                    {todayLabel}
+                  </button>
+                ) : isLoggedInPremium ? (
+                  <Link
+                    to="/dashboard"
+                    onClick={() => { close(); setViewingDropdownOpen(false) }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-accent transition-colors"
+                  >
+                    Set up Study Plan →
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => { setShowPremiumInfo(v => !v); setViewingDropdownOpen(false) }}
+                    className="w-full flex items-center gap-1.5 px-3 py-2 text-xs opacity-50 hover:opacity-70 transition-opacity text-left"
+                  >
+                    <Lock className="h-3 w-3 shrink-0" />
+                    {todayLabel}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => { setDashboardFilter('entire-syllabus'); setViewingDropdownOpen(false) }}
+                  className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'entire-syllabus' ? 'font-medium' : ''}`}
+                >
+                  Entire Syllabus
+                </button>
+              </div>
+            )}
+
+            {showPremiumInfo && (
+              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-60 rounded-md border bg-popover text-popover-foreground shadow-md p-3">
+                <div className="flex items-center gap-1.5 mb-1.5 text-xs font-medium">
+                  <Lock className="h-3 w-3 shrink-0" />
+                  Premium feature
+                </div>
+                <p className="text-xs text-muted-foreground mb-2.5">
+                  {user
+                    ? 'Upgrade to Premium to access personalised daily Study Plans.'
+                    : 'Sign in and upgrade to Premium to access personalised daily Study Plans.'
+                  }
+                </p>
+                <Link
+                  to={user ? '/upgrade' : '/auth'}
+                  onClick={() => setShowPremiumInfo(false)}
+                  className="text-xs text-primary hover:underline"
+                >
+                  {user ? 'Upgrade to Premium →' : 'Sign in →'}
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
         <button
           type="button"
           disabled={!canNext}
@@ -463,12 +453,6 @@ export function ConceptPopup() {
       </div>
     </aside>
 
-    {showQuestions && (
-      <ConceptQuestionsModal
-        conceptName={current.name}
-        onClose={() => setShowQuestions(false)}
-      />
-    )}
     {showLearningProgress && (
       <LearningProgressModal
         conceptName={current.name}

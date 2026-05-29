@@ -13,7 +13,6 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { Button } from '@/components/ui/button'
-import { useSoundContext } from '@/contexts/SoundContext'
 import type { QuizMode } from '@/lib/parser'
 
 const EXAMS = [
@@ -164,7 +163,6 @@ function GroupSection({
 export default function Landing() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { play } = useSoundContext()
   const { user } = useAuth()
   const { progress: examProgress, targetDates } = useExamProgress()
   const { byExam: conceptsByExam, loading: conceptsLoading } = useConcepts()
@@ -435,7 +433,6 @@ export default function Landing() {
   }
 
   function handleStart() {
-    play('start')
     if (selectedConcept) {
       const params = new URLSearchParams({ concept: selectedConcept, mode: 'quiz', reveal, from: 'home' })
       if (count < conceptAvailableCount) params.set('count', String(count))
@@ -443,9 +440,7 @@ export default function Landing() {
       return
     }
 
-
     // Today's study plan mode: filter by concept names, prioritize multi-concept questions
-
     if (useTodaysPlan && plan) {
       const displayConcepts = plan.status === 'review_mode'
         ? (plan.reviewConcepts ?? [])
@@ -582,7 +577,7 @@ export default function Landing() {
                 <button
                   key={n}
                   type="button"
-                  onClick={() => { play('click'); setMode('quiz'); setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n)) }}
+                  onClick={() => { setMode('quiz'); setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n)) }}
                   className={`w-14 h-14 rounded-full border text-base font-bold transition-colors ${
                     mode === 'quiz' && count === n && effectiveAvailableCount >= n
                       ? 'border-primary bg-primary text-primary-foreground'
@@ -594,7 +589,7 @@ export default function Landing() {
               ))}
               <button
                 type="button"
-                onClick={() => { play('click'); setMode('mock-exam') }}
+                onClick={() => setMode('mock-exam')}
                 className={`flex-1 h-14 rounded-full border text-sm font-bold transition-colors ${
                   mode === 'mock-exam'
                     ? 'border-primary bg-primary text-primary-foreground'
@@ -608,7 +603,7 @@ export default function Landing() {
               <div className="flex rounded-full border border-input bg-muted/30 p-0.5">
                 <button
                   type="button"
-                  onClick={() => { play('click'); setReveal('during') }}
+                  onClick={() => setReveal('during')}
                   className={`flex-1 py-2 rounded-full text-xs font-semibold transition-colors ${
                     reveal === 'during'
                       ? 'bg-primary text-primary-foreground'
@@ -619,7 +614,7 @@ export default function Landing() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => { play('click'); setReveal('end') }}
+                  onClick={() => setReveal('end')}
                   className={`flex-1 py-2 rounded-full text-xs font-semibold transition-colors ${
                     reveal === 'end'
                       ? 'bg-primary text-primary-foreground'
@@ -643,7 +638,7 @@ export default function Landing() {
                   <button
                     key={exam.value}
                     type="button"
-                    onClick={() => { play('click'); setTopic(exam.value) }}
+                    onClick={() => setTopic(exam.value)}
                     className="px-4 py-3 rounded-lg border border-input text-left text-sm transition-colors hover:bg-accent"
                   >
                     {exam.label}
@@ -655,7 +650,7 @@ export default function Landing() {
                 <div className="mt-1">
                   <button
                     type="button"
-                    onClick={() => { play('click'); setShowOther(v => !v) }}
+                    onClick={() => setShowOther(v => !v)}
                     className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <svg
@@ -677,7 +672,7 @@ export default function Landing() {
                         <button
                           key={exam.value}
                           type="button"
-                          onClick={() => { play('click'); setTopic(exam.value) }}
+                          onClick={() => setTopic(exam.value)}
                           className="px-4 py-3 rounded-lg border border-input text-left text-sm transition-colors hover:bg-accent"
                         >
                           {exam.label}
@@ -694,7 +689,7 @@ export default function Landing() {
             <>
               <button
                 type="button"
-                onClick={() => { play('click'); setTopic('') }}
+                onClick={() => setTopic('')}
                 className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 <span aria-hidden="true">←</span>
@@ -720,7 +715,6 @@ export default function Landing() {
                         <button
                           type="button"
                           onClick={() => {
-                            play('click')
                             const next = !useTodaysPlan
                             setUseTodaysPlan(next)
                             if (next) {
@@ -794,7 +788,7 @@ export default function Landing() {
 
       {user && (
         <div className="text-center">
-          <Button variant="outline" onClick={() => { play('click'); navigate('/dashboard') }}>
+          <Button variant="outline" onClick={() => navigate('/dashboard')}>
             View Dashboard
           </Button>
         </div>

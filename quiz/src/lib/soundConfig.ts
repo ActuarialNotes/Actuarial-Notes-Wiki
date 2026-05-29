@@ -1,14 +1,13 @@
-export type SoundEvent = 'correct' | 'wrong' | 'complete' | 'click' | 'start'
+export type SoundEvent = 'correct' | 'wrong' | 'complete'
 
-// To replace any sound, drop an audio file into quiz/public/sounds/ using the
-// filename shown below (e.g. click.mp3). If the file is missing the built-in
-// synthesized sound plays as a fallback — no code changes needed.
+// To replace a built-in synthesized sound with your own audio file:
+//   1. Drop the file into quiz/public/sounds/  (e.g. correct.mp3)
+//   2. Set the matching path below, e.g.:  correct: '/sounds/correct.mp3'
+// null = use the default Web Audio API synthesized sound.
 export const SOUND_PATHS: Record<SoundEvent, string | null> = {
-  correct:  '/sounds/correct.mp3',
-  wrong:    '/sounds/wrong.mp3',
-  complete: '/sounds/complete.mp3',
-  click:    '/sounds/click.mp3',
-  start:    '/sounds/start.mp3',
+  correct: null,
+  wrong: null,
+  complete: null,
 }
 
 export const SOUND_VOLUME = 0.6

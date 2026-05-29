@@ -7,7 +7,7 @@ The **Exponential Distribution** $X \sim \text{Exp}(\theta)$ is a continuous dis
 - $E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$
 - Its defining property is **memorylessness**: $P(X > s + t \mid X > s) = P(X > t)$, making it the unique continuous distribution with no aging effect
 
-![Exponential distribution PDF for several rate values](https://commons.wikimedia.org/wiki/Special:FilePath/Exponential_pdf.svg)
+![[Media/Exponential_pdf.svg|500]]
 
 > [!example]- Probability a Loss Exceeds the Deductible {Example}
 > Ground-up losses follow $X \sim \text{Exp}(\theta = 500)$. A deductible of $d = 300$ applies. What proportion of losses result in a claim payment?

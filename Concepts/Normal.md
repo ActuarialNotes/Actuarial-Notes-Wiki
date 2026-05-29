@@ -7,7 +7,7 @@ The **Normal Distribution** $X \sim N(\mu, \sigma^2)$ is a symmetric, bell-shape
 - Its CDF has no closed form and is evaluated via the standard normal $Z = (X - \mu)/\sigma \sim N(0,1)$ using $\Phi$ tables
 - By the [[Central Limit Theorem]], sums of many independent random variables are approximately normal, making it foundational for aggregate loss models
 
-![Normal distribution PDF for several (μ, σ²) pairs](https://commons.wikimedia.org/wiki/Special:FilePath/Normal_Distribution_PDF.svg)
+![[Media/Normal_distribution_pdf.svg|500]]
 
 > [!example]- Probability that Aggregate Losses Exceed a Threshold {Example}
 > Annual aggregate losses $S \sim N(\mu = 50{,}000,\, \sigma^2 = 40{,}000{,}000)$. Find $P(S > 55{,}000)$.

@@ -8,7 +8,7 @@ The **Gamma Distribution** $X \sim \text{Gamma}(\alpha, \theta)$ is a flexible c
 - Special cases: exponential ($\alpha = 1$) and chi-squared ($\alpha = n/2$, $\theta = 2$)
 - The sum of $n$ independent $\text{Exp}(\theta)$ variables follows $\text{Gamma}(n, \theta)$
 
-![Gamma distribution PDF for several shape (α) and scale values](https://commons.wikimedia.org/wiki/Special:FilePath/Gamma_distribution_pdf.svg)
+![[Media/Gamma_distribution_pdf.svg|500]]
 
 > [!example]- Mean and Variance of Aggregate Claim Severity {Example}
 > Individual losses follow $\text{Gamma}(\alpha = 4, \theta = 250)$. Find $E[X]$, $\text{Var}(X)$, and the coefficient of variation.

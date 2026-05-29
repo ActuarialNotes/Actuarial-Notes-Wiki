@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Check, Loader2, Sparkles, Tag } from 'lucide-react'
+import { Check, Info, Loader2, Sparkles, Tag } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
@@ -90,7 +90,7 @@ export default function Upgrade() {
         </div>
         <h1 className="text-3xl font-bold">Actuarial Notes Premium</h1>
         <p className="text-muted-foreground">
-          Unlock the custom Study Plan and support continued development.
+          Unlock custom Study Plans and support continued development.
         </p>
       </div>
 
@@ -99,17 +99,22 @@ export default function Upgrade() {
           <CardTitle className="flex items-baseline gap-2">
             <span className="text-4xl font-bold">$10</span>
             <span className="text-muted-foreground text-sm">/ month</span>
-            <span className="ml-2 text-xs text-muted-foreground line-through">$20</span>
+            <span className="ml-2 text-2xl text-muted-foreground line-through">$20</span>
           </CardTitle>
           <CardDescription>Cancel anytime.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="flex items-start gap-2 rounded-md border border-amber-500/40 bg-amber-50 dark:bg-amber-950/20 px-3 py-2 text-xs">
+            <Info className="h-3.5 w-3.5 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+            <span className="text-amber-700 dark:text-amber-300">
+              <strong>Launch discount:</strong> 50% off, locked in forever. Offer valid until June 30, 2026.
+            </span>
+          </div>
           <ul className="space-y-2 text-sm">
             <li className="flex items-start gap-2">
               <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
               <span>
-                <span className="font-medium">Custom Study Plan</span> — a daily concept list paced
-                to your exam date and target strength level.
+                <span className="font-medium">Custom Study Plans</span>
               </span>
             </li>
             <li className="flex items-start gap-2">

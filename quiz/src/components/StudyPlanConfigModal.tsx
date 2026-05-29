@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { X, CalendarDays, Target, Info, Sparkles, BookOpen, Globe } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { X, CalendarDays, Target, Info, Sparkles, BookOpen, Globe, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
@@ -24,12 +25,13 @@ interface Props {
   examLabel: string
   examId?: string
   initialStep?: number
+  isPremium?: boolean
   onSave: (next: Partial<StudyPlanConfig>) => void
   onExamDateChange?: (date: string | null) => void
   onClose: () => void
 }
 
-export function StudyPlanConfigModal({ config, examDate, examLabel, examId, initialStep, onSave, onExamDateChange, onClose }: Props) {
+export function StudyPlanConfigModal({ config, examDate, examLabel, examId, initialStep, isPremium = true, onSave, onExamDateChange, onClose }: Props) {
   const today = todayISO()
 
   const variants = examId ? (LOCALIZED_EXAMS[examId] ?? null) : null
@@ -155,30 +157,40 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
             const s = i + 1
             const isActive = step === s
             const isDone = step > s
+            const isStrategyLocked = s === STRATEGY_STEP && !isPremium
             return (
               <div key={s} className="flex items-center flex-1 last:flex-none">
-                <button
-                  type="button"
-                  onClick={() => setStep(s)}
-                  className="flex flex-col items-center gap-1.5 focus:outline-none"
-                  aria-label={`Go to step ${s}: ${label}`}
-                  aria-current={isActive ? 'step' : undefined}
-                >
-                  <div
-                    className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground scale-110 ring-2 ring-primary/30'
-                        : isDone
-                        ? 'bg-primary/30 text-primary hover:bg-primary/50 cursor-pointer'
-                        : 'bg-muted text-muted-foreground hover:bg-muted/80 cursor-pointer'
-                    }`}
-                  >
-                    {s}
+                {isStrategyLocked ? (
+                  <div className="flex flex-col items-center gap-1.5">
+                    <div className="h-8 w-8 rounded-full flex items-center justify-center bg-muted/50 text-muted-foreground/40 cursor-not-allowed border border-dashed border-muted-foreground/20">
+                      <Lock className="h-3.5 w-3.5" />
+                    </div>
+                    <span className="text-[10px] whitespace-nowrap text-muted-foreground/40">{label}</span>
                   </div>
-                  <span className={`text-[10px] whitespace-nowrap transition-colors ${isActive ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>
-                    {label}
-                  </span>
-                </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setStep(s)}
+                    className="flex flex-col items-center gap-1.5 focus:outline-none"
+                    aria-label={`Go to step ${s}: ${label}`}
+                    aria-current={isActive ? 'step' : undefined}
+                  >
+                    <div
+                      className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
+                        isActive
+                          ? 'bg-primary text-primary-foreground scale-110 ring-2 ring-primary/30'
+                          : isDone
+                          ? 'bg-primary/30 text-primary hover:bg-primary/50 cursor-pointer'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/80 cursor-pointer'
+                      }`}
+                    >
+                      {s}
+                    </div>
+                    <span className={`text-[10px] whitespace-nowrap transition-colors ${isActive ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>
+                      {label}
+                    </span>
+                  </button>
+                )}
                 {i < STEP_LABELS.length - 1 && (
                   <div className={`flex-1 h-0.5 mx-2 mb-5 rounded-full transition-colors ${step > s ? 'bg-primary/50' : 'bg-border'}`} />
                 )}
@@ -375,6 +387,17 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
               {readyDate && daysOut !== null && daysOut <= 0 && (
                 <p className="text-xs text-destructive">Date must be in the future</p>
               )}
+
+              {!isPremium && (
+                <div className="flex items-start gap-2 rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+                  <Lock className="h-3.5 w-3.5 shrink-0 mt-0.5 text-primary/60" />
+                  <span>
+                    Study strategy customization is a{' '}
+                    <Link to="/upgrade" className="underline text-primary hover:text-primary/80">Premium</Link>{' '}
+                    feature.
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
@@ -461,7 +484,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                 Cancel
               </Button>
             )}
-            {step < TOTAL_STEPS ? (
+            {step < TOTAL_STEPS && !(step === READY_DATE_STEP && !isPremium) ? (
               <Button
                 size="sm"
                 onClick={() => setStep(step + 1)}

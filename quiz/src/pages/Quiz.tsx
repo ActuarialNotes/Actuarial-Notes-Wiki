@@ -46,6 +46,7 @@ export default function Quiz() {
       mode,
       count: countParam ? Number(countParam) : undefined,
       ids,
+      concept: searchParams.get('concept') ?? undefined,
     }
   }, [searchParams])  // eslint-disable-line react-hooks/exhaustive-deps
 

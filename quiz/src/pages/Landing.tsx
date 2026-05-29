@@ -4,13 +4,12 @@ import { CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Lock, Play } f
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
-import { useTopics } from '@/hooks/useTopics'
+import { useConcepts } from '@/hooks/useConcepts'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions } from '@/lib/parser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { Button } from '@/components/ui/button'
@@ -166,7 +165,7 @@ export default function Landing() {
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const { progress: examProgress, targetDates } = useExamProgress()
-  const { byExam: subtopicsByTopic, loading: subtopicsLoading } = useTopics()
+  const { byExam: conceptsByExam, loading: conceptsLoading } = useConcepts()
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
@@ -187,7 +186,7 @@ export default function Landing() {
   const [showOther, setShowOther] = useState(!hasInProgress)
 
   // Quiz-specific options
-  const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
+  const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [isAdaptive, setIsAdaptive] = useState(false)
   const [useTodaysPlan, setUseTodaysPlan] = useState(false)
   const [count, setCount] = useState<number>(10)
@@ -209,14 +208,14 @@ export default function Landing() {
     setUseTodaysPlan(false)
     if (topic && mode === 'quiz') {
       try {
-        const saved = localStorage.getItem(`actuarial_quiz_topics_v1_${topic}`)
+        const saved = localStorage.getItem(`actuarial_quiz_concepts_v1_${topic}`)
         const parsed = saved ? JSON.parse(saved) : null
-        setSelectedSubtopics(Array.isArray(parsed) ? parsed : [])
+        setSelectedConcepts(Array.isArray(parsed) ? parsed : [])
       } catch {
-        setSelectedSubtopics([])
+        setSelectedConcepts([])
       }
     } else {
-      setSelectedSubtopics([])
+      setSelectedConcepts([])
     }
   }, [topic, mode])
 
@@ -240,48 +239,52 @@ export default function Landing() {
     masteryLoading,
   )
 
-  // Subtopics sorted by their position in the exam syllabus
-  const orderedSubtopics = useMemo(() => {
-    const sts = subtopicsByTopic[topic] ?? []
-    if (!syllabusForTopic) return sts
+  // Concepts sorted by their position in the exam syllabus
+  const orderedConcepts = useMemo(() => {
+    const cs = conceptsByExam[topic] ?? []
+    if (!syllabusForTopic) return cs
 
     const conceptToIdx = new Map<string, number>()
     syllabusForTopic.topics.forEach((t, idx) => {
       conceptToIdx.set(t.name.toLowerCase(), idx)
-      t.concepts.forEach(c => conceptToIdx.set(c.name.toLowerCase(), idx))
+      t.concepts.forEach(c => {
+        conceptToIdx.set(c.name.toLowerCase(), idx)
+        if (c.target) conceptToIdx.set(c.target.toLowerCase().replace(/\+/g, ' '), idx)
+      })
     })
 
-    const getIdx = (st: string): number => {
-      const exact = conceptToIdx.get(st.toLowerCase())
+    const getIdx = (c: string): number => {
+      const exact = conceptToIdx.get(c.toLowerCase())
       if (exact !== undefined) return exact
-      const stLower = st.toLowerCase()
+      const cLower = c.toLowerCase()
       for (const [key, idx] of conceptToIdx) {
-        if (stLower.includes(key) || key.includes(stLower)) return idx
+        if (cLower.includes(key) || key.includes(cLower)) return idx
       }
       return Number.MAX_SAFE_INTEGER
     }
 
-    return [...sts].sort((a, b) => {
+    return [...cs].sort((a, b) => {
       const diff = getIdx(a) - getIdx(b)
       return diff !== 0 ? diff : a.localeCompare(b)
     })
-  }, [subtopicsByTopic, topic, syllabusForTopic])
+  }, [conceptsByExam, topic, syllabusForTopic])
 
-  // Group orderedSubtopics under their parent learning objectives from the syllabus
-  const groupedSubtopics = useMemo(() => {
+  // Group orderedConcepts under their parent learning objectives from the syllabus
+  const groupedConcepts = useMemo(() => {
     if (!syllabusForTopic) {
-      return [{ name: 'All Topics', weight: undefined as string | undefined, subtopics: orderedSubtopics }]
+      return [{ name: 'All Concepts', weight: undefined as string | undefined, subtopics: orderedConcepts }]
     }
-    const subtopicToIdx = new Map<string, number>()
+    const conceptToGroupIdx = new Map<string, number>()
     syllabusForTopic.topics.forEach((wt, idx) => {
-      for (const st of orderedSubtopics) {
-        if (subtopicToIdx.has(st)) continue
-        const stL = st.toLowerCase()
-        if (stL === wt.name.toLowerCase()) { subtopicToIdx.set(st, idx); continue }
-        for (const c of wt.concepts) {
-          const cL = c.name.toLowerCase()
-          if (stL === cL || stL.includes(cL) || cL.includes(stL)) {
-            subtopicToIdx.set(st, idx); break
+      for (const c of orderedConcepts) {
+        if (conceptToGroupIdx.has(c)) continue
+        const cL = c.toLowerCase()
+        for (const sylConcept of wt.concepts) {
+          const sL = sylConcept.name.toLowerCase()
+          const tL = sylConcept.target?.toLowerCase().replace(/\+/g, ' ') ?? ''
+          if (cL === sL || cL === tL || sL.includes(cL) || cL.includes(sL)) {
+            conceptToGroupIdx.set(c, idx)
+            break
           }
         }
       }
@@ -290,67 +293,40 @@ export default function Landing() {
       name: t.name, weight: t.weight as string | undefined, subtopics: [] as string[]
     }))
     const ungrouped: string[] = []
-    for (const st of orderedSubtopics) {
-      const idx = subtopicToIdx.get(st)
-      if (idx !== undefined) groups[idx].subtopics.push(st)
-      else ungrouped.push(st)
+    for (const c of orderedConcepts) {
+      const idx = conceptToGroupIdx.get(c)
+      if (idx !== undefined) groups[idx].subtopics.push(c)
+      else ungrouped.push(c)
     }
     const result = groups.filter(g => g.subtopics.length > 0)
     if (ungrouped.length > 0) result.push({ name: 'Other', weight: undefined, subtopics: ungrouped })
     return result
-  }, [syllabusForTopic, orderedSubtopics])
+  }, [syllabusForTopic, orderedConcepts])
 
-  // For premium users: map each subtopic to its concept mastery level
-  const subtopicConceptLevelMap = useMemo(() => {
-    if (!examIdForPlan || !syllabusForTopic) return new Map<string, MasteryState>()
+  // For premium users: map each concept name to its mastery level
+  const conceptLevelMap = useMemo(() => {
+    if (!examIdForPlan) return new Map<string, MasteryState>()
     const now = new Date()
     const examRecords = masteryRecords.filter(r => r.exam_id === examIdForPlan)
     const recordsBySlug = new Map(examRecords.map(r => [r.concept_slug.toLowerCase(), r]))
 
     const result = new Map<string, MasteryState>()
-    for (const st of orderedSubtopics) {
-      const stL = st.toLowerCase()
-      const directRec = recordsBySlug.get(stL)
-      if (directRec) {
-        result.set(st, decayIfStale(directRec, now).state)
-        continue
-      }
-      let found = false
-      for (const topicGroup of syllabusForTopic.topics) {
-        for (const c of topicGroup.concepts) {
-          const cL = c.name.toLowerCase()
-          if (stL === cL || stL.includes(cL) || cL.includes(stL)) {
-            const cRec = recordsBySlug.get(cL)
-            result.set(st, cRec ? decayIfStale(cRec, now).state : 'new')
-            found = true
-            break
-          }
-        }
-        if (found) break
-      }
-      if (!found) result.set(st, 'new')
+    for (const c of orderedConcepts) {
+      const cL = c.toLowerCase()
+      const rec = recordsBySlug.get(cL)
+      result.set(c, rec ? decayIfStale(rec, now).state : 'new')
     }
     return result
-  }, [examIdForPlan, masteryRecords, orderedSubtopics, syllabusForTopic])
+  }, [examIdForPlan, masteryRecords, orderedConcepts])
 
-  // Subtopics that have questions covering today's planned concepts (used for "today" badges only)
-  const todaySubtopics = useMemo(() => {
+  // Concepts from today's study plan (used for "today" badges on concept cards)
+  const todayConcepts = useMemo(() => {
     if (!plan?.todaysConcepts?.length) return new Set<string>()
-    const todaySet = new Set(plan.todaysConcepts.map(c => c.toLowerCase()))
-    const result = new Set<string>()
-    for (const q of allQuestions) {
-      if (q.exam !== topic) continue
-      for (const link of q.wiki_link) {
-        const ref = hrefToEntryRef(link)
-        const name = ref?.name ?? (link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '')
-        if (todaySet.has(name.toLowerCase())) {
-          result.add(q.topic)
-          break
-        }
-      }
-    }
-    return result
-  }, [plan, allQuestions, topic])
+    const displayConcepts = plan.status === 'review_mode'
+      ? (plan.reviewConcepts ?? [])
+      : plan.todaysConcepts
+    return new Set(displayConcepts.map(c => c.toLowerCase()))
+  }, [plan])
 
   // Number of concepts in today's plan (handles review_mode)
   const planConceptCount = useMemo(() => {
@@ -371,8 +347,8 @@ export default function Landing() {
     return allQuestions.filter(q => {
       if (q.exam !== topic) return false
       return q.wiki_link.some(link => {
-        const ref = hrefToEntryRef(link)
-        const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
+        const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
+        const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
         return todaySet.has(n)
       })
     }).length
@@ -380,32 +356,32 @@ export default function Landing() {
 
   // Auto-activate today's study plan for premium users when it has concepts
   useEffect(() => {
-    if (!user || masteryLoading || subtopicsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
+    if (!user || masteryLoading || conceptsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
 
     if (isPremium && plan && planConceptCount > 0) {
       setUseTodaysPlan(true)
-      setSelectedSubtopics([])
+      setSelectedConcepts([])
       setIsAdaptive(false)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic, mode, user?.id, masteryLoading, subtopicsLoading, planLoading, subLoading, isPremium, planConceptCount])
+  }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, planConceptCount])
 
-  // Persist manual topic selections to localStorage
+  // Persist manual concept selections to localStorage
   useEffect(() => {
     if (!topic || mode !== 'quiz' || isAdaptive || useTodaysPlan) return
     try {
-      localStorage.setItem(`actuarial_quiz_topics_v1_${topic}`, JSON.stringify(selectedSubtopics))
+      localStorage.setItem(`actuarial_quiz_concepts_v1_${topic}`, JSON.stringify(selectedConcepts))
     } catch { /* ignore */ }
-  }, [selectedSubtopics, topic, mode, isAdaptive, useTodaysPlan])
+  }, [selectedConcepts, topic, mode, isAdaptive, useTodaysPlan])
 
   // Compute available question count for the current filters
   const availableCount = useMemo(() => {
     if (!topic) return 0
     return filterQuestions(allQuestions, {
       exam: topic,
-      ...(selectedSubtopics.length > 0 && { topics: selectedSubtopics }),
+      ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
     }).length
-  }, [allQuestions, topic, selectedSubtopics])
+  }, [allQuestions, topic, selectedConcepts])
 
   // When study plan is active, use its question pool size; otherwise use subtopic-filtered count
   const effectiveAvailableCount = useTodaysPlan ? todayAvailableCount : availableCount
@@ -417,11 +393,11 @@ export default function Landing() {
     }
   }, [effectiveAvailableCount, count])
 
-  function toggleSubtopic(subtopic: string) {
+  function toggleConcept(concept: string) {
     setIsAdaptive(false)
     setUseTodaysPlan(false)
-    setSelectedSubtopics(prev =>
-      prev.includes(subtopic) ? prev.filter(s => s !== subtopic) : [...prev, subtopic]
+    setSelectedConcepts(prev =>
+      prev.includes(concept) ? prev.filter(s => s !== concept) : [...prev, concept]
     )
   }
 
@@ -429,16 +405,25 @@ export default function Landing() {
     e.stopPropagation()
     setIsAdaptive(false)
     setUseTodaysPlan(false)
-    const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
-    setSelectedSubtopics(prev =>
+    const allSelected = group.subtopics.every(s => selectedConcepts.includes(s))
+    setSelectedConcepts(prev =>
       allSelected
         ? prev.filter(s => !group.subtopics.includes(s))
         : [...new Set([...prev, ...group.subtopics])]
     )
   }
 
+  // Score a question by how many plan concepts it covers
+  function conceptCoverageScore(q: { wiki_link: string[] }, planSet: Set<string>): number {
+    return q.wiki_link.filter(link => {
+      const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
+      const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
+      return planSet.has(n)
+    }).length
+  }
+
   function handleStart() {
-    // Today's study plan mode: filter by concept names, not subtopic tags
+    // Today's study plan mode: filter by concept names, prioritize multi-concept questions
     if (useTodaysPlan && plan) {
       const displayConcepts = plan.status === 'review_mode'
         ? (plan.reviewConcepts ?? [])
@@ -448,14 +433,20 @@ export default function Landing() {
         const todayQs = allQuestions.filter(q => {
           if (q.exam !== topic) return false
           return q.wiki_link.some(link => {
-            const ref = hrefToEntryRef(link)
-            const n = (ref?.name ?? link.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') ?? '').toLowerCase()
+            const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
+            const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
             return todaySet.has(n)
           })
         })
         if (todayQs.length > 0) {
+          // Sort by number of plan concepts covered (descending), then cap the
+          // pool at count*3 so the quiz shuffle draws preferentially from the
+          // highest-coverage questions rather than the full unfiltered list.
+          const scored = todayQs.map(q => ({ q, score: conceptCoverageScore(q, todaySet) }))
+          scored.sort((a, b) => b.score - a.score)
+          const poolIds = scored.slice(0, Math.min(count * 3, scored.length)).map(x => x.q.id)
           try {
-            sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(todayQs.map(q => q.id)))
+            sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(poolIds))
           } catch { /* ignore */ }
           navigate(`/quiz?selection=stored&mode=quiz&reveal=${reveal}&count=${count}&from=home`)
           return
@@ -465,7 +456,7 @@ export default function Landing() {
 
     const params = new URLSearchParams({ exam: topic, mode })
     if (mode === 'quiz') {
-      if (selectedSubtopics.length > 0) params.set('topics', selectedSubtopics.join(','))
+      if (selectedConcepts.length > 0) params.set('concepts', selectedConcepts.join(','))
       params.set('count', String(count))
       params.set('reveal', reveal)
     } else {
@@ -479,13 +470,13 @@ export default function Landing() {
   const examShortLabel = topic === 'Probability' ? 'P' : topic === 'Financial Mathematics' ? 'FM' : null
   const hasTopic = topic !== ''
 
-  const topicsLabel = useTodaysPlan && planConceptCount > 0
+  const conceptsLabel = useTodaysPlan && planConceptCount > 0
     ? `${planConceptCount} concept${planConceptCount !== 1 ? 's' : ''} · today's plan`
-    : selectedSubtopics.length === 0
+    : selectedConcepts.length === 0
       ? '(all included)'
       : isAdaptive
-        ? `(${selectedSubtopics.length} auto-selected)`
-        : `${selectedSubtopics.length} selected`
+        ? `(${selectedConcepts.length} auto-selected)`
+        : `${selectedConcepts.length} selected`
 
   return (
     <>
@@ -671,12 +662,12 @@ export default function Landing() {
               {/* ── Quiz mode options ──────────────────────────────────── */}
               {mode === 'quiz' && (
                 <>
-                  {/* Topics */}
+                  {/* Concepts */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium">
-                      Topics
+                      Concepts
                       <span className="ml-2 text-xs font-normal text-muted-foreground">
-                        {topicsLabel}
+                        {conceptsLabel}
                       </span>
                     </label>
 
@@ -689,7 +680,7 @@ export default function Landing() {
                             const next = !useTodaysPlan
                             setUseTodaysPlan(next)
                             if (next) {
-                              setSelectedSubtopics([])
+                              setSelectedConcepts([])
                               setIsAdaptive(false)
                             }
                           }}
@@ -719,19 +710,19 @@ export default function Landing() {
                       ) : null
                     )}
 
-                    {subtopicsLoading && orderedSubtopics.length === 0 ? (
-                      <p className="text-xs text-muted-foreground">Loading topics…</p>
+                    {conceptsLoading && orderedConcepts.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">Loading concepts…</p>
                     ) : (
                       <div className={`space-y-2 transition-opacity ${useTodaysPlan ? 'opacity-50 pointer-events-none' : ''}`}>
-                        {groupedSubtopics.map(group => (
+                        {groupedConcepts.map(group => (
                           <GroupSection
                             key={group.name}
                             group={group}
-                            selectedSubtopics={selectedSubtopics}
-                            todaySubtopics={todaySubtopics}
-                            onToggle={toggleSubtopic}
+                            selectedSubtopics={selectedConcepts}
+                            todaySubtopics={todayConcepts}
+                            onToggle={toggleConcept}
                             onSelectAll={selectAllInGroup}
-                            conceptLevelMap={isPremium ? subtopicConceptLevelMap : undefined}
+                            conceptLevelMap={isPremium ? conceptLevelMap : undefined}
                             isPremium={isPremium}
                           />
                         ))}

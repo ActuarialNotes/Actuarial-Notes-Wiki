@@ -7,6 +7,8 @@ The **Beta Distribution** $X \sim \text{Beta}(\alpha, \beta)$ is a continuous di
 - $E[X] = \alpha/(\alpha + \beta)$ and $\text{Var}(X) = \alpha\beta / [(\alpha+\beta)^2(\alpha+\beta+1)]$
 - When $\alpha = \beta = 1$ it reduces to the continuous uniform distribution on $(0,1)$
 
+![Beta distribution PDF for several (α, β) parameter pairs](https://commons.wikimedia.org/wiki/Special:FilePath/Beta_distribution_pdf.svg)
+
 > [!example]- Expected Loss Ratio from a Beta Model {Example}
 > An insurer models its loss ratio $X \sim \text{Beta}(3, 2)$. Find the mean and variance of $X$.
 >

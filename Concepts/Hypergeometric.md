@@ -6,6 +6,8 @@ The **Hypergeometric Distribution** models the number of successes in a sample o
 
 > $$E[X] = \frac{nK}{N}, \qquad \text{Var}(X) = \frac{nK(N-K)(N-n)}{N^2(N-1)}$$
 
+![[Media/Hypergeometric_pmf.svg|500]]
+
 > [!example]- Drawing Defective Items {Example}
 > A box contains 10 insurance policies: 4 with errors and 6 without. An auditor selects 3 at random without replacement. Find the probability exactly 2 have errors.
 >

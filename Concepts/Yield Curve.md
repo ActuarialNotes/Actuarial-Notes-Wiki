@@ -7,7 +7,7 @@ The **yield curve** is a graph plotting the [[Spot Rate]] $s_t$ (or yield to mat
 - A **flat** yield curve has roughly equal rates across all maturities
 - The yield curve is bootstrapped from observed market prices of coupon bonds to extract the implied spot rates $s_1, s_2, \ldots, s_n$
 
-![The three main yield curve shapes: normal (upward-sloping), flat, and inverted](https://commons.wikimedia.org/wiki/Special:FilePath/Yield_curve_types.png)
+![[Media/Yield_curve_types.svg|500]]
 
 > [!example]- Reading and Using a Yield Curve {Example}
 > The yield curve gives $s_1 = 3\%$, $s_2 = 4\%$, $s_3 = 4.5\%$. Price a 3-year $\$1{,}000$ bond paying annual coupons of $\$50$.

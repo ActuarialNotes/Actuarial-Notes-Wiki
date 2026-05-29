@@ -8,7 +8,7 @@ The **Lognormal Distribution** $X \sim \text{Lognormal}(\mu, \sigma^2)$ applies 
 >
 > $$F(x) = \Phi\!\left(\frac{\ln x - \mu}{\sigma}\right)$$
 
-![Lognormal distribution PDF showing right-skewed shape for several parameter pairs](https://commons.wikimedia.org/wiki/Special:FilePath/Log-normal_distribution_PDF.svg)
+![[Media/Lognormal_distribution_pdf.svg|500]]
 
 > [!example]- Probability a Loss Exceeds a Threshold {Example}
 > Losses follow $X \sim \text{Lognormal}(\mu = 6,\, \sigma = 1.5)$. Find $P(X > 1000)$.

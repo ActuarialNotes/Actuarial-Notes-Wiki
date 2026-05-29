@@ -6,6 +6,8 @@ The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the n
 
 > $$E[X] = \frac{r}{p}, \qquad \text{Var}(X) = \frac{r(1-p)}{p^2}$$
 
+![[Media/Negative_binomial_pmf.svg|500]]
+
 > [!example]- Claims Until Third Large Loss {Example}
 > Each claim has a 25% probability of being a large loss. Find the probability the 3rd large loss occurs on the 7th claim.
 >

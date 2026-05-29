@@ -39,7 +39,8 @@ export interface QuestionFilter {
   year?: number
   search?: string       // free-text search on stem and id
   ids?: string[]        // when set, only return questions whose id is in this list
-  concept?: string      // filter by wiki_link concept name
+  concept?: string      // filter by wiki_link concept name (single)
+  concepts?: string[]   // filter by wiki_link concept names (multi-select)
 }
 
 interface QuestionFrontmatter {
@@ -170,6 +171,15 @@ export function filterQuestions(questions: Question[], filters: QuestionFilter):
         const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
         const lastSegment = clean.split('/').filter(Boolean).pop() ?? ''
         return lastSegment.toLowerCase() === needle
+      })
+      if (!matches) return false
+    }
+    if (filters.concepts?.length) {
+      const needles = new Set(filters.concepts.map(c => c.toLowerCase()))
+      const matches = q.wiki_link.some(link => {
+        const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
+        const lastSegment = clean.split('/').filter(Boolean).pop() ?? ''
+        return needles.has(lastSegment.toLowerCase())
       })
       if (!matches) return false
     }

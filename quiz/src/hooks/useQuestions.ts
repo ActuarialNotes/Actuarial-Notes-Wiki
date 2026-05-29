@@ -12,6 +12,7 @@ export function useQuestions(filters: QuestionFilter) {
   // Sort first so reordered-but-equivalent inputs don't refetch.
   const topicsKey = filters.topics ? [...filters.topics].sort().join(',') : ''
   const idsKey = filters.ids ? [...filters.ids].sort().join(',') : ''
+  const conceptsKey = filters.concepts ? [...filters.concepts].sort().join(',') : ''
 
   useEffect(() => {
     let cancelled = false
@@ -43,7 +44,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, topicsKey, idsKey, filters.concept])
+  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, topicsKey, idsKey, filters.concept, conceptsKey])
 
   return { questions, loading, error }
 }

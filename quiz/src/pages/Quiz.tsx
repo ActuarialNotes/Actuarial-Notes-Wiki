@@ -39,9 +39,11 @@ export default function Quiz() {
       } catch { /* ignore */ }
     }
 
+    const conceptsParam = searchParams.get('concepts')
     return {
       exam: searchParams.get('exam') ?? undefined,
       topics: topicsParam ? topicsParam.split(',') : undefined,
+      concepts: conceptsParam ? conceptsParam.split(',') : undefined,
       difficulty: (searchParams.get('difficulty') as Difficulty | null) ?? undefined,
       mode,
       count: countParam ? Number(countParam) : undefined,

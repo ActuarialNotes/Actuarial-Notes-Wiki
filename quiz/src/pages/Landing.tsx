@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Lock, Play } from 'lucide-react'
+import { CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Lock, Play, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
@@ -174,6 +174,7 @@ export default function Landing() {
 
   const initialTopic = searchParams.get('topic') ?? ''
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
+  const initialConcept = searchParams.get('concept') ?? ''
 
   const inProgressExams = EXAMS.filter(e => {
     const examId = Object.entries(EXAM_ID_TO_TOPIC).find(([, t]) => t === e.value)?.[0]
@@ -185,6 +186,8 @@ export default function Landing() {
   const [topic, setTopic] = useState(initialTopic)
   const [mode, setMode] = useState<QuizMode>(initialMode)
   const [showOther, setShowOther] = useState(!hasInProgress)
+
+  const [selectedConcept, setSelectedConcept] = useState(initialConcept)
 
   // Quiz-specific options
   const [selectedSubtopics, setSelectedSubtopics] = useState<string[]>([])
@@ -407,8 +410,15 @@ export default function Landing() {
     }).length
   }, [allQuestions, topic, selectedSubtopics])
 
+  const conceptAvailableCount = useMemo(() => {
+    if (!selectedConcept) return 0
+    return filterQuestions(allQuestions, { concept: selectedConcept }).length
+  }, [allQuestions, selectedConcept])
+
   // When study plan is active, use its question pool size; otherwise use subtopic-filtered count
-  const effectiveAvailableCount = useTodaysPlan ? todayAvailableCount : availableCount
+  const effectiveAvailableCount = selectedConcept
+    ? conceptAvailableCount
+    : useTodaysPlan ? todayAvailableCount : availableCount
 
   // Clamp count when available pool shrinks
   useEffect(() => {
@@ -438,6 +448,13 @@ export default function Landing() {
   }
 
   function handleStart() {
+    if (selectedConcept) {
+      const params = new URLSearchParams({ concept: selectedConcept, mode: 'quiz', reveal, from: 'home' })
+      if (count < conceptAvailableCount) params.set('count', String(count))
+      navigate(`/quiz?${params.toString()}`)
+      return
+    }
+
     // Today's study plan mode: filter by concept names, not subtopic tags
     if (useTodaysPlan && plan) {
       const displayConcepts = plan.status === 'review_mode'
@@ -478,6 +495,7 @@ export default function Landing() {
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
   const examShortLabel = topic === 'Probability' ? 'P' : topic === 'Financial Mathematics' ? 'FM' : null
   const hasTopic = topic !== ''
+  const hasSelection = hasTopic || selectedConcept !== ''
 
   const topicsLabel = useTodaysPlan && planConceptCount > 0
     ? `${planConceptCount} concept${planConceptCount !== 1 ? 's' : ''} · today's plan`
@@ -512,7 +530,7 @@ export default function Landing() {
           </div>
           <button
             type="button"
-            disabled={!hasTopic}
+            disabled={!hasSelection}
             onClick={handleStart}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
           >
@@ -521,7 +539,27 @@ export default function Landing() {
           </button>
         </div>
 
-        {hasTopic && (
+        {selectedConcept && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Concept:</span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary px-3 py-1 text-sm font-medium">
+              {selectedConcept}
+              <button
+                type="button"
+                onClick={() => setSelectedConcept('')}
+                className="hover:text-primary/70 transition-colors"
+                aria-label="Remove concept filter"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </span>
+            {conceptAvailableCount > 0 && (
+              <span className="text-xs text-muted-foreground">{conceptAvailableCount} question{conceptAvailableCount !== 1 ? 's' : ''}</span>
+            )}
+          </div>
+        )}
+
+        {(hasTopic || selectedConcept) && (
           <div className="space-y-3">
             {mode === 'quiz' && (
               <div className="flex items-center gap-3">

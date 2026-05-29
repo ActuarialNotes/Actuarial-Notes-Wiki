@@ -199,7 +199,7 @@ export function ConceptPopup() {
             <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-72 overflow-y-auto ${menuAlignRight ? 'right-0' : 'left-0'}`}>
               <button
                 type="button"
-                onClick={() => { routerNavigate(`/quiz?concept=${encodeURIComponent(current.name)}&mode=quiz&reveal=during&from=concept`); setShowPlayMenu(false); close() }}
+                onClick={() => { routerNavigate(`/?concept=${encodeURIComponent(current.name)}`); setShowPlayMenu(false); close() }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <Play className="h-3.5 w-3.5 shrink-0" />

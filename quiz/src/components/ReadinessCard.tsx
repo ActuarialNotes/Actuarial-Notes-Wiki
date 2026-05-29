@@ -1251,14 +1251,20 @@ export function ReadinessCard({
             </div>
           )}
 
-          <div className="relative rounded-xl overflow-hidden">
-          {/* Blurred preview of Today's Study Plan */}
-          <div className="pointer-events-none select-none" aria-hidden="true">
-            <Card>
-              <CardContent className="p-5 space-y-3">
-                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+          {/* Locked study plan section — blurred card background + overlay */}
+          <div className="relative rounded-xl overflow-hidden" style={{ minHeight: '520px' }}>
+            {/* Blurred background: Custom Study Plan card */}
+            <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50" aria-hidden="true">
+              <div className="h-full bg-card rounded-xl border p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                  <Settings2 className="h-4 w-4 text-muted-foreground" />
+                </div>
                 <div className="space-y-0.5">
-                  {(syllabus.topics[0]?.concepts ?? []).slice(0, 3).map((c, i) => (
+                  {[
+                    ...(syllabus.topics[0]?.concepts ?? []).slice(0, 4),
+                    ...(syllabus.topics[1]?.concepts ?? []).slice(0, 3),
+                  ].map((c, i) => (
                     <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
                       <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
                       <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
@@ -1266,74 +1272,80 @@ export function ReadinessCard({
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </div>
 
-          {/* Lock overlay */}
-          <div className="absolute inset-0 backdrop-blur-md bg-background/80 flex flex-col items-center justify-center gap-3 p-6 text-center">
-            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
-              <Lock className="h-5 w-5" />
-            </div>
-            <div className="space-y-1">
-              <p className="text-base font-semibold">Custom Study Plan</p>
-              <p className="text-xs text-muted-foreground max-w-[220px]">
-                A daily plan tailored to you
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
+            {/* Lock overlay */}
+            <div className="absolute inset-0 backdrop-blur-md bg-background/75 flex flex-col items-center px-6 pt-6 pb-5 text-center">
+              {/* Lock icon + title */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
+                  <Lock className="h-5 w-5" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-base font-semibold">Custom Study Plan</p>
+                  <p className="text-xs text-muted-foreground max-w-[220px]">
+                    A daily plan tailored to you
+                  </p>
+                </div>
+              </div>
+
+              {/* Premium pill — extra space above to separate from title */}
+              <span className="mt-5 inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
                 Actuarial Notes Premium
               </span>
-              <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
+
+              {/* Info panels */}
+              <div className="w-full max-w-xs mt-4">
+                <div
+                  className="overflow-hidden rounded-xl"
+                  onTouchStart={e => setSwipeTouchStart(e.touches[0].clientX)}
+                  onTouchEnd={e => {
+                    const diff = swipeTouchStart - e.changedTouches[0].clientX
+                    if (Math.abs(diff) > 40) {
+                      if (diff > 0 && featurePanelIndex < 2) setFeaturePanelIndex(i => i + 1)
+                      if (diff < 0 && featurePanelIndex > 0) setFeaturePanelIndex(i => i - 1)
+                    }
+                  }}
+                >
+                  <div
+                    className="flex transition-transform duration-300 ease-in-out"
+                    style={{ transform: `translateX(-${featurePanelIndex * 100}%)` }}
+                  >
+                    <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
+                      <Repeat className="h-9 w-9 text-primary" />
+                      <p className="text-sm font-semibold">Spaced Repetition</p>
+                      <p className="text-xs text-muted-foreground leading-snug">Revisit each concept at growing intervals — short gaps at first, then longer as it sticks.</p>
+                    </div>
+                    <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
+                      <TrendingDown className="h-9 w-9 text-primary" />
+                      <p className="text-sm font-semibold">The Forgetting Curve</p>
+                      <p className="text-xs text-muted-foreground leading-snug">Without practice, concepts decay over time. Your plan re-injects them before they're lost.</p>
+                    </div>
+                    <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
+                      <Sparkles className="h-9 w-9 text-primary" />
+                      <p className="text-sm font-semibold">Concept Levelling</p>
+                      <p className="text-xs text-muted-foreground leading-snug">Concepts progress New → Level 1 → Level 2 → Level 3 as you answer correctly across days.</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center gap-2 mt-3">
+                  {[0, 1, 2].map(i => (
+                    <button
+                      key={i}
+                      onClick={() => setFeaturePanelIndex(i)}
+                      className={`h-2 rounded-full transition-all ${featurePanelIndex === i ? 'w-5 bg-primary' : 'w-2 bg-muted-foreground/30'}`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Upgrade button pinned to bottom */}
+              <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5 mt-auto w-full max-w-xs'}>
                 Upgrade
               </Link>
             </div>
-            <div className="w-full max-w-xs mt-1">
-              <div
-                className="overflow-hidden rounded-xl"
-                onTouchStart={e => setSwipeTouchStart(e.touches[0].clientX)}
-                onTouchEnd={e => {
-                  const diff = swipeTouchStart - e.changedTouches[0].clientX
-                  if (Math.abs(diff) > 40) {
-                    if (diff > 0 && featurePanelIndex < 2) setFeaturePanelIndex(i => i + 1)
-                    if (diff < 0 && featurePanelIndex > 0) setFeaturePanelIndex(i => i - 1)
-                  }
-                }}
-              >
-                <div
-                  className="flex transition-transform duration-300 ease-in-out"
-                  style={{ transform: `translateX(-${featurePanelIndex * 100}%)` }}
-                >
-                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
-                    <Repeat className="h-9 w-9 text-primary" />
-                    <p className="text-sm font-semibold">Spaced Repetition</p>
-                    <p className="text-xs text-muted-foreground leading-snug">Revisit each concept at growing intervals — short gaps at first, then longer as it sticks.</p>
-                  </div>
-                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
-                    <TrendingDown className="h-9 w-9 text-primary" />
-                    <p className="text-sm font-semibold">The Forgetting Curve</p>
-                    <p className="text-xs text-muted-foreground leading-snug">Without practice, concepts decay over time. Your plan re-injects them before they're lost.</p>
-                  </div>
-                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
-                    <Sparkles className="h-9 w-9 text-primary" />
-                    <p className="text-sm font-semibold">Concept Levelling</p>
-                    <p className="text-xs text-muted-foreground leading-snug">Concepts progress New → Level 1 → Level 2 → Level 3 as you answer correctly across days.</p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-2 mt-3">
-                {[0, 1, 2].map(i => (
-                  <button
-                    key={i}
-                    onClick={() => setFeaturePanelIndex(i)}
-                    className={`h-2 rounded-full transition-all ${featurePanelIndex === i ? 'w-5 bg-primary' : 'w-2 bg-muted-foreground/30'}`}
-                  />
-                ))}
-              </div>
-            </div>
           </div>
-        </div>
 
           {/* Topics Mastery card — visible for free users, progress bar greyed out */}
           <Card>

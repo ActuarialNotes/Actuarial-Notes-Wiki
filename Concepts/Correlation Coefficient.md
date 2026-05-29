@@ -5,7 +5,7 @@ The **Correlation Coefficient** (Pearson's $\rho$) is the standardized measure o
 - It satisfies $-1 \leq \rho \leq 1$
 - $\rho = \pm 1$ indicates a perfect linear relationship; $\rho = 0$ indicates no linear association
 
-![Scatter plots illustrating correlation coefficients from −1 to +1](https://commons.wikimedia.org/wiki/Special:FilePath/Correlation_examples2.svg)
+![[Media/Correlation_examples.svg|650]]
 
 > [!example]- Computing the Correlation Coefficient from Variances {Example}
 > If $\text{Cov}(X,Y) = 6$, $\text{Var}(X) = 9$, and $\text{Var}(Y) = 16$, what is $\rho$?

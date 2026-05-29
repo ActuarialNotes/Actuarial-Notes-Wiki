@@ -8,7 +8,7 @@ The **Poisson Distribution** $X \sim \text{Poi}(\lambda)$ models the number of e
 - It arises as the limit of $\text{Bin}(n, p)$ as $n \to \infty$ and $p \to 0$ with $np = \lambda$ fixed
 - It is the standard model for claim counts in actuarial science
 
-![Poisson PMF for several values of λ](https://commons.wikimedia.org/wiki/Special:FilePath/Poisson_pmf.svg)
+![[Media/Poisson_pmf.svg|500]]
 
 > [!example]- Probability of Zero Claims in a Month {Example}
 > Claims arrive at an average rate of $\lambda = 3$ per month. What is the probability of receiving no claims in a given month?

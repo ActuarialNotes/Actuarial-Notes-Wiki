@@ -5,6 +5,8 @@ The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of suc
 
 - $E[X] = np$ and $\text{Var}(X) = np(1-p)$
 
+![[Media/Binomial_distribution_pmf.svg|450]]
+
 > [!example]- Number of Claims in a Group Policy {Example}
 > A group of 10 policyholders each independently file a claim with probability 0.3. Find the probability that exactly 4 file claims.
 >

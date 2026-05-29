@@ -278,14 +278,16 @@ export default function Quiz() {
         />
       )}
 
-      <QuestionCard
-        question={currentQuestion}
-        selectedAnswer={displayAnswer}
-        onAnswer={handleSelectAnswer}
-        showExplanation={showExplanation}
-        isLocked={isLocked}
-        onNext={isLocked ? handleNextFromAnswer : undefined}
-      />
+      <div className="mt-4">
+        <QuestionCard
+          question={currentQuestion}
+          selectedAnswer={displayAnswer}
+          onAnswer={handleSelectAnswer}
+          showExplanation={showExplanation}
+          isLocked={isLocked}
+          onNext={isLocked ? handleNextFromAnswer : undefined}
+        />
+      </div>
 
       {submitError && (
         <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3">

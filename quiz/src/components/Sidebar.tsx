@@ -18,10 +18,13 @@ import {
   ShoppingBag,
   Sparkles,
   Sun,
+  Volume2,
+  VolumeX,
   X,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useFlashcards } from '@/hooks/useFlashcards'
+import { useSoundContext } from '@/contexts/SoundContext'
 import { useGems } from '@/hooks/useGems'
 import { getDailyQuizStats, DAILY_QUIZ_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -57,10 +60,16 @@ type ItemProps = {
 }
 
 function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge }: ItemProps) {
+  const { play } = useSoundContext()
   const base =
     'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors border-l-2 border-transparent'
   const inactive = 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
   const active = 'bg-accent text-foreground border-l-primary font-medium'
+
+  function handleClick() {
+    play('click')
+    onNavigate?.()
+  }
 
   if (external) {
     return (
@@ -70,7 +79,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
         rel="noreferrer"
         title={collapsed ? label : undefined}
         className={`${base} ${inactive}`}
-        onClick={onNavigate}
+        onClick={handleClick}
       >
         <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
         <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
@@ -85,7 +94,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
       end={end}
       title={collapsed ? label : undefined}
       className={({ isActive }) => `${base} ${isActive ? active : inactive}`}
-      onClick={onNavigate}
+      onClick={handleClick}
     >
       <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
       <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
@@ -180,6 +189,7 @@ export default function Sidebar() {
   const { balance: gemBalance } = useGems()
   const { isPremium, isBetaTester } = useSubscription()
   const { theme, toggleTheme } = useTheme()
+  const { enabled: soundEnabled, toggle: toggleSound, play } = useSoundContext()
   const navigate = useNavigate()
   const { progress: examProgress } = useExamProgress()
   const { syllabi } = useWikiSyllabus()
@@ -466,12 +476,27 @@ export default function Sidebar() {
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             title={collapsed ? (theme === 'dark' ? 'Light mode' : 'Dark mode') : undefined}
             className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+            onPointerDown={() => play('click')}
           >
             <span className="flex h-5 w-5 shrink-0 items-center justify-center">
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </span>
             <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>
               {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={toggleSound}
+            aria-label={soundEnabled ? 'Mute sound effects' : 'Enable sound effects'}
+            title={collapsed ? (soundEnabled ? 'Sound on' : 'Sound off') : undefined}
+            className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+          >
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+              {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+            </span>
+            <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>
+              {soundEnabled ? 'Sound on' : 'Sound off'}
             </span>
           </button>
 
@@ -481,7 +506,7 @@ export default function Sidebar() {
                 <div className="absolute bottom-full left-0 right-0 mb-1 rounded-md border bg-popover shadow-md py-1 z-50">
                   <button
                     type="button"
-                    onClick={() => { navigate('/store'); setProfileOpen(false); closeMobile() }}
+                    onClick={() => { play('click'); navigate('/store'); setProfileOpen(false); closeMobile() }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                   >
                     <ShoppingBag className="h-4 w-4 shrink-0" />
@@ -497,7 +522,7 @@ export default function Sidebar() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => { setExamsOpen(true); setProfileOpen(false); closeMobile() }}
+                    onClick={() => { play('click'); setExamsOpen(true); setProfileOpen(false); closeMobile() }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                   >
                     <GraduationCap className="h-4 w-4 shrink-0" />
@@ -505,7 +530,7 @@ export default function Sidebar() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => { navigate('/settings'); setProfileOpen(false); closeMobile() }}
+                    onClick={() => { play('click'); navigate('/settings'); setProfileOpen(false); closeMobile() }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                   >
                     <Settings2 className="h-4 w-4 shrink-0" />
@@ -514,7 +539,7 @@ export default function Sidebar() {
                   {!isPremium && (
                     <button
                       type="button"
-                      onClick={() => { navigate('/upgrade'); setProfileOpen(false); closeMobile() }}
+                      onClick={() => { play('click'); navigate('/upgrade'); setProfileOpen(false); closeMobile() }}
                       className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors"
                     >
                       <Sparkles className="h-4 w-4 shrink-0" />
@@ -527,7 +552,7 @@ export default function Sidebar() {
                       <div className="flex gap-2">
                         <button
                           type="button"
-                          onClick={() => { signOut(); setProfileOpen(false); setSignOutConfirm(false); closeMobile() }}
+                          onClick={() => { play('click'); signOut(); setProfileOpen(false); setSignOutConfirm(false); closeMobile() }}
                           className="flex-1 rounded-md bg-destructive text-destructive-foreground text-xs py-1.5 font-medium hover:bg-destructive/90 transition-colors"
                         >
                           Sign out
@@ -544,7 +569,7 @@ export default function Sidebar() {
                   ) : (
                   <button
                     type="button"
-                    onClick={() => setSignOutConfirm(true)}
+                    onClick={() => { play('click'); setSignOutConfirm(true) }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                   >
                     <LogOut className="h-4 w-4 shrink-0" />

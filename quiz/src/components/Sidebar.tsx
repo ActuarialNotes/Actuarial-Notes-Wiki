@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import {
@@ -21,7 +21,9 @@ import {
   X,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useFlashcards } from '@/hooks/useFlashcards'
 import { useGems } from '@/hooks/useGems'
+import { getDailyQuizStats, DAILY_QUIZ_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useTheme } from '@/hooks/useTheme'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -51,9 +53,10 @@ type ItemProps = {
   external?: boolean
   end?: boolean
   onNavigate?: () => void
+  badge?: React.ReactNode
 }
 
-function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate }: ItemProps) {
+function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge }: ItemProps) {
   const base =
     'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors border-l-2 border-transparent'
   const inactive = 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
@@ -70,7 +73,8 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate }: 
         onClick={onNavigate}
       >
         <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
-        <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
+        <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
+        {badge && <span className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>{badge}</span>}
       </a>
     )
   }
@@ -84,7 +88,8 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate }: 
       onClick={onNavigate}
     >
       <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
-      <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
+      <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
+      {badge && <span className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>{badge}</span>}
     </NavLink>
   )
 }
@@ -181,6 +186,36 @@ export default function Sidebar() {
   const inProgressSyllabi = syllabi.filter(
     s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'
   )
+  const { cards } = useFlashcards()
+  const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
+
+  // Keep daily quiz stats fresh after each quiz completion.
+  useEffect(() => {
+    const refresh = () => setDailyQuizStats(getDailyQuizStats())
+    window.addEventListener(DAILY_QUIZ_EVENT, refresh)
+    window.addEventListener('quiz-session-saved', refresh)
+    return () => {
+      window.removeEventListener(DAILY_QUIZ_EVENT, refresh)
+      window.removeEventListener('quiz-session-saved', refresh)
+    }
+  }, [])
+
+  const flashcardBadge = useMemo(() =>
+    cards.length > 0 ? (
+      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
+        {cards.length}
+      </span>
+    ) : null,
+  [cards.length])
+
+  const quizBadge = useMemo(() =>
+    dailyQuizStats.total > 0 ? (
+      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
+        {dailyQuizStats.correct}/{dailyQuizStats.total}
+      </span>
+    ) : null,
+  [dailyQuizStats.correct, dailyQuizStats.total])
+
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -405,6 +440,7 @@ export default function Sidebar() {
             collapsed={collapsed}
             end
             onNavigate={closeMobile}
+            badge={quizBadge}
           />
           <SidebarItem
             to="/flashcards"
@@ -412,6 +448,7 @@ export default function Sidebar() {
             icon={<Layers className="h-4 w-4" />}
             collapsed={collapsed}
             onNavigate={closeMobile}
+            badge={flashcardBadge}
           />
           <SidebarItem
             to="/search"

@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
-import { appendTodayLevelUps, addDailyGems } from '@/lib/dailyProgressStore'
+import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dailyProgressStore'
 
 const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Probability': 'P',
@@ -336,6 +336,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         to: t.to,
         at: new Date().toISOString(),
       })))
+      addDailyQuizStats(correctCount, questions.length)
       return
     }
 
@@ -374,6 +375,8 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     } catch {
       // quota exceeded — continue
     }
+
+    addDailyQuizStats(correctCount, questions.length)
 
     // Fire level-up event AFTER mastery is written to localStorage + DB so
     // Dashboard's refresh() call sees up-to-date records immediately.

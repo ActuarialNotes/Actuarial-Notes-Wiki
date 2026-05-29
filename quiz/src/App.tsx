@@ -15,6 +15,7 @@ import Store from '@/pages/Store'
 import Sidebar from '@/components/Sidebar'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
+import { SoundProvider } from '@/contexts/SoundContext'
 
 const WikiLayout  = lazy(() => import('@/components/wiki/WikiLayout'))
 const WikiHome    = lazy(() => import('@/pages/wiki/WikiHome'))
@@ -89,6 +90,7 @@ export default function App({ initialSession }: { initialSession: Session | null
   return (
     <BrowserRouter>
       <AuthProvider initialSession={initialSession}>
+        <SoundProvider>
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />
@@ -130,6 +132,7 @@ export default function App({ initialSession }: { initialSession: Session | null
             </main>
           </div>
         </ExamProgressProvider>
+        </SoundProvider>
       </AuthProvider>
     </BrowserRouter>
   )

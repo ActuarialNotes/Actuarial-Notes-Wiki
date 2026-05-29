@@ -11,7 +11,7 @@ import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
-import { useSoundEffects } from '@/hooks/useSoundEffects'
+import { useSoundContext } from '@/contexts/SoundContext'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -83,7 +83,7 @@ export default function Quiz() {
     }
   }, [loading, questions, status, mode, startQuiz])
 
-  const { enabled: soundEnabled, toggle: toggleSound, play: playSound } = useSoundEffects()
+  const { enabled: soundEnabled, toggle: toggleSound, play: playSound } = useSoundContext()
 
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
@@ -222,7 +222,7 @@ export default function Quiz() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => setShowQuitDialog(true)}
+          onClick={() => { playSound('click'); setShowQuitDialog(true) }}
           className="text-muted-foreground hover:text-foreground"
         >
           <X className="h-4 w-4 mr-1" />
@@ -243,7 +243,7 @@ export default function Quiz() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => toggleFlag(currentQuestion.id)}
+            onClick={() => { playSound('click'); toggleFlag(currentQuestion.id) }}
             className={isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}
             aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
           >
@@ -303,7 +303,7 @@ export default function Quiz() {
         <div className="flex justify-between items-center">
           <div>
             {currentIndex > 0 && (
-              <Button variant="outline" size="lg" onClick={goToPreviousQuestion}>
+              <Button variant="outline" size="lg" onClick={() => { playSound('click'); goToPreviousQuestion() }}>
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Back
               </Button>
@@ -326,7 +326,7 @@ export default function Quiz() {
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={handleChangeAnswer}
+                  onClick={() => { playSound('click'); handleChangeAnswer() }}
                 >
                   Change Answer
                 </Button>
@@ -342,7 +342,7 @@ export default function Quiz() {
                   </Button>
                 ) : (
                   <Button
-                    onClick={nextQuestion}
+                    onClick={() => { playSound('click'); nextQuestion() }}
                     size="lg"
                     className="bg-foreground text-background hover:bg-foreground/90"
                   >

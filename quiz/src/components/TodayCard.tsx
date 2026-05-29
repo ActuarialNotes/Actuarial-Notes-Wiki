@@ -417,9 +417,14 @@ export function TodayCard({
               A daily plan tailored to you
             </p>
           </div>
-          <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
-            Upgrade to Actuarial Notes Premium
-          </Link>
+          <div className="flex flex-col items-center gap-2">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
+              Actuarial Notes Premium
+            </span>
+            <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
+              Upgrade
+            </Link>
+          </div>
         </div>
       </Card>
     )

@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, Trophy } from 'lucide-react'
+import { AlertTriangle, ArrowUp, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Repeat, Settings2, Sparkles, TrendingDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -714,26 +714,15 @@ export function ReadinessCard({
               >
                 <Info className="h-4 w-4" />
               </button>
-              {isPremium ? (
-                <button
-                  type="button"
-                  onClick={() => setShowConfig(true)}
-                  className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                  aria-label="Study plan settings"
-                  title="Study plan settings"
-                >
-                  <Settings2 className="h-4 w-4" />
-                </button>
-              ) : (
-                <Link
-                  to="/upgrade"
-                  className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                  aria-label="Upgrade to access study plan settings"
-                  title="Upgrade to Premium to customize your study plan"
-                >
-                  <Lock className="h-4 w-4" />
-                </Link>
-              )}
+              <button
+                type="button"
+                onClick={() => { setConfigInitialStep(1); setShowConfig(true) }}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                aria-label="Study plan settings"
+                title="Study plan settings"
+              >
+                <Settings2 className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
@@ -1263,9 +1252,8 @@ export function ReadinessCard({
           )}
 
           <div className="relative rounded-xl overflow-hidden">
-          {/* Blurred preview of premium content */}
-          <div className="space-y-4 pointer-events-none select-none" aria-hidden="true">
-            {/* Today's Study Plan preview */}
+          {/* Blurred preview of Today's Study Plan */}
+          <div className="pointer-events-none select-none" aria-hidden="true">
             <Card>
               <CardContent className="p-5 space-y-3">
                 <h3 className="text-sm font-semibold">Today's Study Plan</h3>
@@ -1275,46 +1263,6 @@ export function ReadinessCard({
                       <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
                       <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
                       <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Topics mastered preview */}
-            <Card>
-              <CardContent className="p-5 space-y-4">
-                <div className="space-y-1.5">
-                  <div className="flex items-baseline justify-between text-sm">
-                    <span className="text-muted-foreground">Topics mastered</span>
-                    <span className="font-semibold text-muted-foreground">0/{aggregate.total} (0%)</span>
-                  </div>
-                  <div className="h-2.5 rounded-full bg-secondary" />
-                </div>
-                <div className="flex items-center gap-6">
-                  <svg width="160" height="160" viewBox="0 0 160 160" aria-hidden="true">
-                    <circle cx="80" cy="80" r="55" fill="none" strokeWidth="22" stroke="rgba(34,197,94,0.06)" />
-                  </svg>
-                  <div className="flex flex-col gap-1.5 min-w-0 flex-1">
-                    {(syllabus.topics ?? []).slice(0, 5).map((t, i) => (
-                      <div key={i} className="flex items-center gap-2 min-w-0">
-                        <span className="inline-block h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: 'rgba(34,197,94,0.12)' }} />
-                        <span className="text-xs text-muted-foreground truncate flex-1">{t.name}</span>
-                        <span className="text-xs font-medium tabular-nums shrink-0">0%</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  {(syllabus.topics ?? []).slice(0, 3).map((t, i) => (
-                    <div key={i} className="flex items-center gap-2 w-full py-2 px-1">
-                      <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground -rotate-90" />
-                      <span className="text-sm font-semibold min-w-0 truncate">
-                        {t.name}
-                        {t.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{t.weight}</span>}
-                      </span>
-                      <div className="flex-1 h-1.5 rounded-full bg-secondary" />
-                      <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">0/{t.concepts.length}</span>
                     </div>
                   ))}
                 </div>
@@ -1333,9 +1281,14 @@ export function ReadinessCard({
                 A daily plan tailored to you
               </p>
             </div>
-            <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
-              Upgrade to Actuarial Notes Premium
-            </Link>
+            <div className="flex flex-col items-center gap-2">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
+                Actuarial Notes Premium
+              </span>
+              <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>
+                Upgrade
+              </Link>
+            </div>
             <div className="w-full max-w-xs mt-1">
               <div
                 className="overflow-hidden rounded-xl"
@@ -1352,21 +1305,20 @@ export function ReadinessCard({
                   className="flex transition-transform duration-300 ease-in-out"
                   style={{ transform: `translateX(-${featurePanelIndex * 100}%)` }}
                 >
-                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-6 text-center">
-                    <CalendarCheck className="h-10 w-10 text-primary" />
-                    <p className="text-base font-semibold">Daily Challenges</p>
-                    <p className="text-sm text-muted-foreground leading-snug">Learn and practice target concepts each day</p>
+                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
+                    <Repeat className="h-9 w-9 text-primary" />
+                    <p className="text-sm font-semibold">Spaced Repetition</p>
+                    <p className="text-xs text-muted-foreground leading-snug">Revisit each concept at growing intervals — short gaps at first, then longer as it sticks.</p>
                   </div>
-                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-6 text-center">
-                    <Gem className="h-10 w-10 text-primary" />
-                    <p className="text-base font-semibold">Earn Gems</p>
-                    <p className="text-sm text-muted-foreground leading-snug">Collect a gem for each correct question</p>
+                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
+                    <TrendingDown className="h-9 w-9 text-primary" />
+                    <p className="text-sm font-semibold">The Forgetting Curve</p>
+                    <p className="text-xs text-muted-foreground leading-snug">Without practice, concepts decay over time. Your plan re-injects them before they're lost.</p>
                   </div>
-                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-6 text-center">
-                    <Trophy className="h-10 w-10 text-primary" />
-                    <p className="text-base font-semibold">Compete</p>
-                    <p className="text-sm text-muted-foreground leading-snug">Rank up on the leaderboard</p>
-                    <span className="text-xs bg-muted rounded-full px-2 py-0.5 text-muted-foreground">Coming Soon</span>
+                  <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
+                    <Sparkles className="h-9 w-9 text-primary" />
+                    <p className="text-sm font-semibold">Concept Levelling</p>
+                    <p className="text-xs text-muted-foreground leading-snug">Concepts progress New → Level 1 → Level 2 → Level 3 as you answer correctly across days.</p>
                   </div>
                 </div>
               </div>
@@ -1382,6 +1334,25 @@ export function ReadinessCard({
             </div>
           </div>
         </div>
+
+          {/* Topics Mastery card — visible for free users, progress bar greyed out */}
+          <Card>
+            <CardContent className="p-5 space-y-3">
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Topics mastered</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-semibold text-muted-foreground">0/{aggregate.total}</span>
+                    <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+                  </div>
+                </div>
+                <div className="h-2.5 rounded-full bg-secondary" />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                <Link to="/upgrade" className="underline hover:text-foreground">Upgrade to Premium</Link> to track your concept mastery progress.
+              </p>
+            </CardContent>
+          </Card>
         </>
       )}
 
@@ -1392,6 +1363,7 @@ export function ReadinessCard({
           examLabel={syllabus.examLabel}
           examId={wikiExamIdToProgressKey(syllabus.examId)}
           initialStep={configInitialStep}
+          isPremium={isPremium}
           onSave={next => {
             onConfigChange(next)
             onRegenerate()

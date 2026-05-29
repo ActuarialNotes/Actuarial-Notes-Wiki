@@ -63,6 +63,7 @@ export default function Dashboard() {
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
   const [onboardingOpen, setOnboardingOpen] = useState(false)
+  const [onboardingStep, setOnboardingStep] = useState<1 | 2 | 3>(1)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
@@ -344,7 +345,7 @@ export default function Dashboard() {
             onRegenerate={regeneratePlan}
             onReplaceConcepts={replaceTodaysConcepts}
             onExamDateChange={handleTargetDateChange}
-            onOpenOnboarding={() => setOnboardingOpen(true)}
+            onOpenOnboarding={(step = 1) => { setOnboardingStep(step); setOnboardingOpen(true) }}
             openConceptsTrigger={conceptsOpenCounter}
             startQuizTrigger={startQuizCounter}
             isPremium={isPremium}
@@ -359,6 +360,7 @@ export default function Dashboard() {
           examDate={activeTargetDate}
           examLabel={activeSyllabus.examLabel}
           examId={activeSyllabus.examId}
+          initialStep={onboardingStep}
           onSave={updatePlanConfig}
           onExamDateChange={handleTargetDateChange}
           onClose={() => setOnboardingOpen(false)}

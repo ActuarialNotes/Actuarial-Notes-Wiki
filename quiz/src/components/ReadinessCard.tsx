@@ -7,6 +7,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
+import { HeatmapInfoPanel } from '@/components/HeatmapInfoPanel'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
@@ -317,6 +318,7 @@ export function ReadinessCard({
   const [configInitialStep, setConfigInitialStep] = useState<1 | 2 | 3>(1)
   const [showInfo, setShowInfo] = useState(false)
   const [showBonusInfo, setShowBonusInfo] = useState(false)
+  const [showHeatmapInfo, setShowHeatmapInfo] = useState(false)
   const [bonusClaimed, setBonusClaimed] = useState<boolean>(() => {
     try {
       const key = `actuarial_daily_bonus_${wikiExamIdToProgressKey(syllabus.examId)}_${todayISO()}`
@@ -707,10 +709,10 @@ export function ReadinessCard({
             <div className="flex items-center gap-1 shrink-0">
               <button
                 type="button"
-                onClick={() => setShowInfo(true)}
+                onClick={() => setShowHeatmapInfo(true)}
                 className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                aria-label="How custom study plans work"
-                title="How custom study plans work"
+                aria-label="Exam heatmap info"
+                title="Exam heatmap info"
               >
                 <Info className="h-4 w-4" />
               </button>
@@ -855,7 +857,18 @@ export function ReadinessCard({
           {/* Today's Study Plan — inline in heatmap card when no day selected (or today selected) */}
           {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
             <div className="border-t pt-4 space-y-3">
-              <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                <button
+                  type="button"
+                  onClick={() => setShowInfo(true)}
+                  className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                  aria-label="How custom study plans work"
+                  title="How custom study plans work"
+                >
+                  <Info className="h-3.5 w-3.5" />
+                </button>
+              </div>
               <div className="space-y-0.5">
                 {displayConcepts.map((name, idx) => {
                   const target = targetByName.get(name.toLowerCase()) ?? 'level1'
@@ -1373,6 +1386,7 @@ export function ReadinessCard({
         />
       )}
       <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
+      <HeatmapInfoPanel open={showHeatmapInfo} onClose={() => setShowHeatmapInfo(false)} />
       <DailyBonusInfoPanel open={showBonusInfo} onClose={() => setShowBonusInfo(false)} />
 
       {/* Session completion overlay */}

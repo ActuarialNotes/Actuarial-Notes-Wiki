@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, Check, ChevronDown, Lock, Play } from 'lucide-react'
+import { CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Lock, Play } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -13,6 +13,7 @@ import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { filterQuestions } from '@/lib/parser'
+import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { Button } from '@/components/ui/button'
 import type { QuizMode } from '@/lib/parser'
 
@@ -30,6 +31,24 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
 
 const QUICK_COUNTS = [3, 5, 10]
 
+// ─── Mastery level labels and badge styles ────────────────────────────────────
+
+const STATE_LABEL: Record<MasteryState, string> = {
+  new:      'New',
+  level1:   'Level 1',
+  level2:   'Level 2',
+  level3:   'Level 3',
+  forgotten: 'Forgotten',
+}
+
+const STATE_BADGE: Record<MasteryState, string> = {
+  new:       'border-border text-muted-foreground bg-muted/50',
+  level1:    'border-green-200 text-green-600 bg-green-50 dark:border-green-800 dark:text-green-400 dark:bg-green-950/40',
+  level2:    'border-green-300 text-green-700 bg-green-100 dark:border-green-700 dark:text-green-300 dark:bg-green-950/60',
+  level3:    'border-green-400 text-green-800 bg-green-200 dark:border-green-600 dark:text-green-200 dark:bg-green-950/80',
+  forgotten: 'border-red-200 text-red-600 bg-red-50 dark:border-red-800 dark:text-red-400 dark:bg-red-950/40',
+}
+
 // ─── Collapsible learning-objective group (mirrors example callout style) ─────
 
 function GroupSection({
@@ -38,58 +57,75 @@ function GroupSection({
   todaySubtopics,
   onToggle,
   onSelectAll,
+  conceptLevelMap,
+  isPremium,
 }: {
   group: { name: string; weight?: string; subtopics: string[] }
   selectedSubtopics: string[]
   todaySubtopics: Set<string>
   onToggle: (subtopic: string) => void
   onSelectAll: (group: { subtopics: string[] }, e: React.MouseEvent) => void
+  conceptLevelMap?: Map<string, MasteryState>
+  isPremium?: boolean
 }) {
   const [open, setOpen] = useState(false)
   const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
+  const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
   const selectedCount = group.subtopics.filter(s => selectedSubtopics.includes(s)).length
 
   return (
     <div className="bg-muted/70 rounded-lg overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setOpen(v => !v)}
-        className="w-full px-4 py-3 text-left hover:bg-muted/60 transition-colors duration-150"
-        aria-expanded={open}
-      >
-        <div className="flex items-center gap-3 w-full">
-          <span className="font-medium flex-1 text-base text-left text-foreground">
-            {group.name}
-            {group.weight && (
-              <span className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium border border-primary/30 bg-primary/10 text-primary align-middle">
-                {group.weight}
+      <div className="flex items-stretch">
+        {/* Select-all checkmark circle */}
+        <button
+          type="button"
+          onClick={e => onSelectAll(group, e)}
+          className="flex items-center justify-center px-3 hover:bg-muted/60 transition-colors duration-150 shrink-0"
+          aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
+        >
+          {allSelected ? (
+            <CheckCircle2 className="h-5 w-5 text-primary" />
+          ) : someSelected ? (
+            <CheckCircle2 className="h-5 w-5 text-primary/40" />
+          ) : (
+            <Circle className="h-5 w-5 text-muted-foreground/60" />
+          )}
+        </button>
+
+        {/* Expand/collapse button */}
+        <button
+          type="button"
+          onClick={() => setOpen(v => !v)}
+          className="flex-1 py-3 pr-4 text-left hover:bg-muted/60 transition-colors duration-150"
+          aria-expanded={open}
+        >
+          <div className="flex items-center gap-3 w-full">
+            <span className="font-medium flex-1 text-base text-left text-foreground">
+              {group.name}
+              {group.weight && (
+                <span className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium border border-primary/30 bg-primary/10 text-primary align-middle">
+                  {group.weight}
+                </span>
+              )}
+            </span>
+            {selectedCount > 0 && (
+              <span className="text-xs text-muted-foreground shrink-0">
+                {selectedCount}/{group.subtopics.length}
               </span>
             )}
-          </span>
-          {selectedCount > 0 && (
-            <span className="text-xs text-muted-foreground shrink-0">
-              {selectedCount}/{group.subtopics.length}
-            </span>
-          )}
-          <ChevronDown
-            className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
-          />
-        </div>
-      </button>
+            <ChevronDown
+              className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+            />
+          </div>
+        </button>
+      </div>
+
       <div hidden={!open} className="border-t border-border/40 px-4 pb-4 pt-3">
-        <div className="flex justify-end mb-3">
-          <button
-            type="button"
-            onClick={e => onSelectAll(group, e)}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {allSelected ? 'Deselect all' : 'Select all'}
-          </button>
-        </div>
         <div className="grid grid-cols-2 gap-2">
           {group.subtopics.map(subtopic => {
             const isSelected = selectedSubtopics.includes(subtopic)
             const isToday = todaySubtopics.has(subtopic)
+            const conceptLevel = conceptLevelMap?.get(subtopic)
             return (
               <button
                 key={subtopic}
@@ -104,13 +140,19 @@ function GroupSection({
                 <span className={`flex-1 flex items-center justify-center px-3 py-2 text-center font-semibold text-sm leading-snug ${isSelected ? 'text-primary' : 'text-card-foreground'}`}>
                   {subtopic}
                 </span>
-                {isToday && (
+                {isPremium && conceptLevel !== undefined ? (
+                  <div className="flex justify-center pb-2.5">
+                    <span className={`inline-flex items-center rounded border px-1.5 py-0.5 text-[10px] font-medium ${STATE_BADGE[conceptLevel]}`}>
+                      {STATE_LABEL[conceptLevel]}
+                    </span>
+                  </div>
+                ) : isToday ? (
                   <div className="flex justify-center pb-2.5">
                     <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${isSelected ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary/70'}`}>
                       today
                     </span>
                   </div>
-                )}
+                ) : null}
               </button>
             )
           })}
@@ -258,6 +300,39 @@ export default function Landing() {
     if (ungrouped.length > 0) result.push({ name: 'Other', weight: undefined, subtopics: ungrouped })
     return result
   }, [syllabusForTopic, orderedSubtopics])
+
+  // For premium users: map each subtopic to its concept mastery level
+  const subtopicConceptLevelMap = useMemo(() => {
+    if (!examIdForPlan || !syllabusForTopic) return new Map<string, MasteryState>()
+    const now = new Date()
+    const examRecords = masteryRecords.filter(r => r.exam_id === examIdForPlan)
+    const recordsBySlug = new Map(examRecords.map(r => [r.concept_slug.toLowerCase(), r]))
+
+    const result = new Map<string, MasteryState>()
+    for (const st of orderedSubtopics) {
+      const stL = st.toLowerCase()
+      const directRec = recordsBySlug.get(stL)
+      if (directRec) {
+        result.set(st, decayIfStale(directRec, now).state)
+        continue
+      }
+      let found = false
+      for (const topicGroup of syllabusForTopic.topics) {
+        for (const c of topicGroup.concepts) {
+          const cL = c.name.toLowerCase()
+          if (stL === cL || stL.includes(cL) || cL.includes(stL)) {
+            const cRec = recordsBySlug.get(cL)
+            result.set(st, cRec ? decayIfStale(cRec, now).state : 'new')
+            found = true
+            break
+          }
+        }
+        if (found) break
+      }
+      if (!found) result.set(st, 'new')
+    }
+    return result
+  }, [examIdForPlan, masteryRecords, orderedSubtopics, syllabusForTopic])
 
   // Subtopics that have questions covering today's planned concepts (used for "today" badges only)
   const todaySubtopics = useMemo(() => {
@@ -658,6 +733,8 @@ export default function Landing() {
                             todaySubtopics={todaySubtopics}
                             onToggle={toggleSubtopic}
                             onSelectAll={selectAllInGroup}
+                            conceptLevelMap={isPremium ? subtopicConceptLevelMap : undefined}
+                            isPremium={isPremium}
                           />
                         ))}
                       </div>

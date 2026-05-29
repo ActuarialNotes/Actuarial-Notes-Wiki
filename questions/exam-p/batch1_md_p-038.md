@@ -1,12 +1,12 @@
 ---
 id: "p-038"
 exam: "Probability"
-topic: "Transformations of Random Variables"
+topic: "Continuous Univariate Distributions"
 learning_objective: "Univariate Random Variables"
 difficulty: medium
 type: multiple-choice
 wiki_link:
-  - Concepts/Transformations+of+Random+Variables
+  - Concepts/Continuous+Univariate+Distributions
   - Concepts/Deductibles
 answer: "B"
 points: 1

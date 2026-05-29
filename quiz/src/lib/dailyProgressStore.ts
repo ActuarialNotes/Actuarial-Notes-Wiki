@@ -42,6 +42,39 @@ export function addDailyGems(amount: number): void {
   } catch { /* quota exceeded */ }
 }
 
+// Daily quiz stats (correct / total) — device-local, reset per calendar day.
+const DAILY_QUIZ_EVENT = 'actuarial_daily_quiz_stats'
+
+interface DailyQuizStats {
+  correct: number
+  total: number
+}
+
+function todayQuizStatsKey(): string {
+  return 'actuarial_daily_quiz_stats_' + new Date().toISOString().slice(0, 10)
+}
+
+export function getDailyQuizStats(): DailyQuizStats {
+  try {
+    const raw = localStorage.getItem(todayQuizStatsKey())
+    return raw ? (JSON.parse(raw) as DailyQuizStats) : { correct: 0, total: 0 }
+  } catch {
+    return { correct: 0, total: 0 }
+  }
+}
+
+export function addDailyQuizStats(correct: number, total: number): void {
+  if (total <= 0) return
+  try {
+    const prev = getDailyQuizStats()
+    const next = { correct: prev.correct + correct, total: prev.total + total }
+    localStorage.setItem(todayQuizStatsKey(), JSON.stringify(next))
+    window.dispatchEvent(new CustomEvent(DAILY_QUIZ_EVENT, { detail: next }))
+  } catch { /* quota exceeded */ }
+}
+
+export { DAILY_QUIZ_EVENT }
+
 export function appendTodayLevelUps(levelUps: DailyLevelUp[]): void {
   if (levelUps.length === 0) return
   try {

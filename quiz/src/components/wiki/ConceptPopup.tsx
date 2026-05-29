@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
-import { fetchWikiFile } from '@/lib/github'
+import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
@@ -15,7 +16,8 @@ import { useSubscription } from '@/hooks/useSubscription'
 
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
-  const { addCard, hasCard } = useFlashcards()
+  const { addCard, hasCard, cards } = useFlashcards()
+  const [conceptQuestionCount, setConceptQuestionCount] = useState<number | null>(null)
   const location = useLocation()
   const routerNavigate = useNavigate()
   const isOnWiki = location.pathname.startsWith('/wiki/')
@@ -131,6 +133,24 @@ export function ConceptPopup() {
     if (!open) setMathView(false)
   }, [open])
 
+  // Fetch question count for the current concept (uses cached question list).
+  useEffect(() => {
+    if (!open || !current || current.kind !== 'concept') {
+      setConceptQuestionCount(null)
+      return
+    }
+    let cancelled = false
+    fetchAllQuestions()
+      .then(rawFiles => {
+        if (cancelled) return
+        const all = parseAllQuestions(rawFiles)
+        const filtered = filterQuestions(all, { concept: current.name })
+        setConceptQuestionCount(filtered.length)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [open, current?.kind, current?.name])
+
   const mathBlocks = useMemo(() => {
     if (!content) return []
     return extractMathBlockquotes(content)
@@ -203,7 +223,12 @@ export function ConceptPopup() {
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <Play className="h-3.5 w-3.5 shrink-0" />
-                Start Quiz
+                <span className="flex-1 text-left">Start Quiz</span>
+                {conceptQuestionCount !== null && conceptQuestionCount > 0 && (
+                  <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary tabular-nums">
+                    {conceptQuestionCount}
+                  </span>
+                )}
               </button>
               {current.kind === 'concept' && (
                 <button
@@ -225,7 +250,12 @@ export function ConceptPopup() {
                   <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
                     {hasCard(current.name) ? '✓' : '+'}
                   </span>
-                  {hasCard(current.name) ? 'Added to Flashcards' : 'Add to Flashcards'}
+                  <span className="flex-1">{hasCard(current.name) ? 'Added to Flashcards' : 'Add to Flashcards'}</span>
+                  {hasCard(current.name) && cards.length > 0 && (
+                    <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
+                      {cards.length}
+                    </span>
+                  )}
                 </button>
                 {hasCard(current.name) && (
                   <Link

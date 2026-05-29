@@ -175,6 +175,7 @@ function StudyPlanTracker({
   openTopics,
   onToggle,
   flashingConcept,
+  showMastery = true,
 }: {
   syllabus: WikiExamSyllabus
   masteryRecords: ConceptMasteryRecord[]
@@ -184,6 +185,7 @@ function StudyPlanTracker({
   openTopics: Set<string>
   onToggle: (name: string) => void
   flashingConcept?: string | null
+  showMastery?: boolean
 }) {
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
@@ -221,10 +223,14 @@ function StudyPlanTracker({
                 {topic.name}
                 {topic.weight && <span className="ml-1.5 text-xs font-normal text-muted-foreground">{topic.weight}</span>}
               </span>
-              <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0" role="progressbar" aria-valuenow={agg.strongPct} aria-valuemin={0} aria-valuemax={100}>
-                <div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${agg.strongPct}%` }} />
-              </div>
-              <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">{agg.level3}/{agg.total}</span>
+              {showMastery && (
+                <>
+                  <div className="flex-1 h-1.5 rounded-full bg-secondary overflow-hidden min-w-0" role="progressbar" aria-valuenow={agg.strongPct} aria-valuemin={0} aria-valuemax={100}>
+                    <div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${agg.strongPct}%` }} />
+                  </div>
+                  <span className="text-xs font-medium shrink-0 text-right w-12 tabular-nums text-muted-foreground">{agg.level3}/{agg.total}</span>
+                </>
+              )}
             </button>
             {isOpen && topic.concepts.length > 0 && (
               <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
@@ -241,12 +247,14 @@ function StudyPlanTracker({
                       className={`flex items-center gap-2 w-full py-1 px-1 -mx-1 rounded hover:bg-muted/40 transition-colors text-left${flashingConcept?.toLowerCase() === c.name.toLowerCase() ? ' concept-row-highlight' : ''}`}
                     >
                       <span className="text-xs text-foreground min-w-0 flex-1 truncate">{c.name}</span>
-                      {studyPlan && state !== 'level3' && (
+                      {showMastery && studyPlan && state !== 'level3' && (
                         <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
                       )}
-                      <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded border text-[10px] font-medium ${STATE_BADGE[state]}`}>
-                        {STATE_LABEL[state]}
-                      </span>
+                      {showMastery && (
+                        <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded border text-[10px] font-medium ${STATE_BADGE[state]}`}>
+                          {STATE_LABEL[state]}
+                        </span>
+                      )}
                     </button>
                   )
                 })}
@@ -1265,9 +1273,9 @@ export function ReadinessCard({
           )}
 
           {/* Locked study plan section — blurred card background + overlay */}
-          <div className="relative rounded-xl overflow-hidden" style={{ minHeight: '520px' }}>
+          <div className="relative rounded-xl overflow-hidden">
             {/* Blurred background: Custom Study Plan card */}
-            <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50" aria-hidden="true">
+            <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50 rounded-xl" aria-hidden="true">
               <div className="h-full bg-card rounded-xl border p-5 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-semibold">Today's Study Plan</h3>
@@ -1288,8 +1296,8 @@ export function ReadinessCard({
               </div>
             </div>
 
-            {/* Lock overlay */}
-            <div className="absolute inset-0 backdrop-blur-md bg-background/75 flex flex-col items-center px-6 pt-6 pb-5 text-center">
+            {/* Lock overlay — in normal flow so parent sizes to content */}
+            <div className="relative z-10 backdrop-blur-md bg-background/75 flex flex-col items-center px-6 pt-6 pb-5 text-center rounded-xl">
               {/* Lock icon + title */}
               <div className="flex flex-col items-center gap-2">
                 <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
@@ -1353,28 +1361,73 @@ export function ReadinessCard({
                 </div>
               </div>
 
-              {/* Upgrade button pinned to bottom */}
-              <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5 mt-auto w-full max-w-xs'}>
+              {/* Upgrade button */}
+              <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5 mt-6 w-full max-w-xs'}>
                 Upgrade
               </Link>
             </div>
           </div>
 
-          {/* Topics Mastery card — visible for free users, progress bar greyed out */}
+          {/* Syllabus card — free users can browse topics and open concept popouts */}
           <Card>
-            <CardContent className="p-5 space-y-3">
-              <div className="space-y-1.5">
+            <CardContent className="p-5 space-y-4">
+              <button
+                type="button"
+                onClick={() => setTopicsMasteredOpen(prev => !prev)}
+                className="w-full text-left"
+                aria-expanded={topicsMasteredOpen}
+              >
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Topics mastered</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-semibold text-muted-foreground">0/{aggregate.total}</span>
-                    <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-                  </div>
+                  <span className="font-semibold">Syllabus</span>
+                  <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
                 </div>
-                <div className="h-2.5 rounded-full bg-secondary" />
-              </div>
+              </button>
+
+              {topicsMasteredOpen && (
+                <>
+                  <div className="flex items-center gap-6">
+                    <ReadinessDonut
+                      sections={sections}
+                      overallPct={overallPct}
+                      activeSection={activeSection}
+                      onSectionHover={handleSectionHover}
+                      onSectionClick={handleSectionClick}
+                    />
+                    <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+                      {sections.map((sec, i) => (
+                        <div
+                          key={sec.name}
+                          className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
+                          onMouseEnter={() => handleSectionHover(i)}
+                          onMouseLeave={() => handleSectionHover(null)}
+                          onClick={() => handleSectionClick(i)}
+                        >
+                          <span
+                            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+                            style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
+                          />
+                          <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
+                          <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <StudyPlanTracker
+                    syllabus={syllabus}
+                    masteryRecords={masteryRecords}
+                    studyPlan={null}
+                    allConceptsForNav={allConcepts}
+                    onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
+                    openTopics={openTopics}
+                    onToggle={toggleTopic}
+                    showMastery={false}
+                  />
+                </>
+              )}
+
               <p className="text-xs text-muted-foreground">
-                <Link to="/upgrade" className="underline hover:text-foreground">Upgrade to Premium</Link> to track your concept mastery progress.
+                <Link to="/upgrade" className="underline hover:text-foreground">Upgrade to Premium</Link> to unlock concept mastery tracking.
               </p>
             </CardContent>
           </Card>

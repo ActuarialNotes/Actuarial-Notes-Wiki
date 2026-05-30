@@ -459,6 +459,8 @@ export function ReadinessCard({
   const toRefs = (arr: { name: string }[]): WikiEntryRef[] =>
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
+  const openedFromRadialRef = useRef(false)
+  const studyGuideCardRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [recentlyCompletedConcepts, setRecentlyCompletedConcepts] = useState<Set<string>>(new Set())
   const prevCompletedRef = useRef<Set<string>>(new Set())
@@ -831,28 +833,40 @@ export function ReadinessCard({
   }, [startQuizTrigger, handleStartQuiz])
 
   useEffect(() => {
-    if (!popupOpen) prevPopupConceptRef.current = null
+    if (!popupOpen) {
+      prevPopupConceptRef.current = null
+      openedFromRadialRef.current = false
+    }
   }, [popupOpen])
 
   useEffect(() => {
     if (!popupCurrentName || popupCurrentName === prevPopupConceptRef.current) return
     prevPopupConceptRef.current = popupCurrentName
-    // Auto-expand the topic that contains this concept so the row is visible
-    const ownerTopic = syllabus.topics.find(t =>
-      t.concepts.some(c => c.name.toLowerCase() === popupCurrentName.toLowerCase())
-    )
-    if (ownerTopic) {
-      setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
+    const fromRadial = openedFromRadialRef.current
+    if (!fromRadial) {
+      // Auto-expand the topic that contains this concept so the row is visible
+      const ownerTopic = syllabus.topics.find(t =>
+        t.concepts.some(c => c.name.toLowerCase() === popupCurrentName.toLowerCase())
+      )
+      if (ownerTopic) {
+        setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
+      }
     }
-    // Wait one tick for the DOM to reflect the expanded topic before scrolling
     const scrollId = setTimeout(() => {
-      const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
-      if (!el) return
-      const rect = el.getBoundingClientRect()
       const popupHeight = popupOpen
         ? (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--concept-split-height')) || window.innerHeight * 0.5)
         : 0
       const visibleHeight = window.innerHeight - popupHeight
+      if (fromRadial && studyGuideCardRef.current) {
+        // Keep the radial graph card centered in the visible area above the popup
+        const rect = studyGuideCardRef.current.getBoundingClientRect()
+        window.scrollBy({ top: rect.top + rect.height / 2 - visibleHeight / 2, behavior: 'smooth' })
+        return
+      }
+      // Default: center the concept row in the visible area
+      const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
+      if (!el) return
+      const rect = el.getBoundingClientRect()
       window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
     }, 50)
     setFlashingConcept(popupCurrentName)
@@ -1210,7 +1224,7 @@ export function ReadinessCard({
       {/* RIGHT COLUMN: Study Guide (premium only) */}
       {isPremium && (
         <div className="space-y-3">
-          <Card className="border bg-card">
+          <Card ref={studyGuideCardRef} className="border bg-card">
             <CardContent className="p-4 space-y-4">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Study Guide</p>
 
@@ -1222,6 +1236,7 @@ export function ReadinessCard({
                 totalCount={aggregate.total}
                 onConceptClick={name => {
                   const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+                  openedFromRadialRef.current = true
                   openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx)
                 }}
               />

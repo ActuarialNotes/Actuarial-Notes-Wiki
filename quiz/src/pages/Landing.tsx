@@ -48,6 +48,135 @@ const STATE_BADGE: Record<MasteryState, string> = {
   forgotten: 'border-red-200 text-red-600 bg-red-50 dark:border-red-800 dark:text-red-400 dark:bg-red-950/40',
 }
 
+// ─── Today's Study Plan collapsible (mirrors GroupSection style) ──────────────
+
+function TodayStudyPlanSection({
+  isSelected,
+  onSelect,
+  concepts,
+  planConceptCount,
+  isPremium,
+}: {
+  isSelected: boolean
+  onSelect: () => void
+  concepts: string[]
+  planConceptCount: number
+  isPremium: boolean
+}) {
+  const [open, setOpen] = useState(isSelected)
+
+  return (
+    <div className="bg-muted/70 rounded-lg overflow-hidden">
+      <div className="flex items-stretch">
+        <button
+          type="button"
+          onClick={isPremium ? onSelect : undefined}
+          className={`flex items-center justify-center px-3 transition-colors duration-150 shrink-0 ${isPremium ? 'hover:bg-muted/60' : 'opacity-50 cursor-default'}`}
+          aria-label={isSelected ? "Deselect Today's Study Plan" : "Select Today's Study Plan"}
+        >
+          {isSelected ? (
+            <CheckCircle2 className="h-5 w-5 text-primary" />
+          ) : (
+            <Circle className="h-5 w-5 text-muted-foreground/60" />
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={() => setOpen(v => !v)}
+          className="flex-1 py-3 pr-4 text-left hover:bg-muted/60 transition-colors duration-150"
+          aria-expanded={open}
+        >
+          <div className="flex items-center gap-2 w-full">
+            <CalendarCheck className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <span className="font-medium flex-1 text-base text-foreground">Today's Study Plan</span>
+            {isPremium && planConceptCount > 0 && (
+              <span className="text-xs text-muted-foreground shrink-0">
+                ✓ {planConceptCount} concept{planConceptCount !== 1 ? 's' : ''}
+              </span>
+            )}
+            {!isPremium && <Lock className="h-3.5 w-3.5 shrink-0 text-amber-500" />}
+            <ChevronDown
+              className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+            />
+          </div>
+        </button>
+      </div>
+
+      <div hidden={!open} className="border-t border-border/40 pb-1 pt-1">
+        {!isPremium ? (
+          <div className="flex items-center gap-2 px-3 py-2.5">
+            <span className="flex-1 text-sm text-muted-foreground">Unlock personalized daily study schedules.</span>
+            <Link
+              to="/upgrade"
+              className="shrink-0 px-2.5 py-1 rounded-md bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 transition-colors"
+              onClick={e => e.stopPropagation()}
+            >
+              Go Pro
+            </Link>
+          </div>
+        ) : concepts.length === 0 ? (
+          <div className="px-3 py-2.5 text-sm text-muted-foreground">No concepts scheduled for today.</div>
+        ) : (
+          <div className="flex flex-col">
+            {concepts.map(concept => (
+              <div key={concept} className="flex items-center gap-2.5 px-3 py-2.5 text-card-foreground">
+                <Check className="h-4 w-4 shrink-0 text-primary/60" />
+                <span className="flex-1 text-sm font-medium leading-snug">{concept}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Custom concepts collapsible ──────────────────────────────────────────────
+
+function CustomSection({
+  isSelected,
+  onSelect,
+  selectedCount,
+  children,
+}: {
+  isSelected: boolean
+  onSelect: () => void
+  selectedCount: number
+  children: React.ReactNode
+}) {
+  return (
+    <div className="space-y-2">
+      <div className="bg-muted/70 rounded-lg overflow-hidden">
+        <button
+          type="button"
+          onClick={onSelect}
+          className="flex items-stretch w-full text-left hover:bg-muted/60 transition-colors duration-150"
+        >
+          <div className="flex items-center justify-center px-3 shrink-0">
+            {isSelected ? (
+              <CheckCircle2 className="h-5 w-5 text-primary" />
+            ) : (
+              <Circle className="h-5 w-5 text-muted-foreground/60" />
+            )}
+          </div>
+          <div className="flex-1 py-3 pr-4">
+            <div className="flex items-center gap-3 w-full">
+              <span className="font-medium flex-1 text-base text-foreground">Custom</span>
+              {selectedCount > 0 && (
+                <span className="text-xs text-muted-foreground shrink-0">{selectedCount} selected</span>
+              )}
+              <ChevronDown
+                className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isSelected ? '' : '-rotate-90'}`}
+              />
+            </div>
+          </div>
+        </button>
+      </div>
+      {isSelected && <div className="space-y-2">{children}</div>}
+    </div>
+  )
+}
+
 // ─── Collapsible learning-objective group (mirrors example callout style) ─────
 
 function GroupSection({
@@ -191,8 +320,8 @@ export default function Landing() {
   // Quiz-specific options
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [isAdaptive, setIsAdaptive] = useState(false)
-  const [useTodaysPlan, setUseTodaysPlan] = useState(false)
-  const [count, setCount] = useState<number>(10)
+  const [conceptMode, setConceptMode] = useState<'today' | 'custom'>('custom')
+  const [count, setCount] = useState<number>(3)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
   const [showStudyPlanModal, setShowStudyPlanModal] = useState(false)
 
@@ -208,7 +337,7 @@ export default function Landing() {
   // Reset state and restore saved topic selections when exam topic or mode changes
   useEffect(() => {
     setIsAdaptive(false)
-    setUseTodaysPlan(false)
+    setConceptMode('custom')
     if (topic && mode === 'quiz') {
       try {
         const saved = localStorage.getItem(`actuarial_quiz_concepts_v1_${topic}`)
@@ -357,12 +486,23 @@ export default function Landing() {
     }).length
   }, [plan, allQuestions, topic])
 
+  // Derived: whether today's plan is the active filter
+  const useTodaysPlan = conceptMode === 'today' && isPremium && !!plan && planConceptCount > 0
+
+  // Display names for concepts in today's plan (used in dropdown)
+  const todayConceptDisplayNames = useMemo(() => {
+    if (!plan) return []
+    return plan.status === 'review_mode'
+      ? (plan.reviewConcepts ?? [])
+      : plan.todaysConcepts
+  }, [plan])
+
   // Auto-activate today's study plan for premium users when it has concepts
   useEffect(() => {
     if (!user || masteryLoading || conceptsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
 
     if (isPremium && plan && planConceptCount > 0) {
-      setUseTodaysPlan(true)
+      setConceptMode('today')
       setSelectedConcepts([])
       setIsAdaptive(false)
     }
@@ -371,11 +511,11 @@ export default function Landing() {
 
   // Persist manual concept selections to localStorage
   useEffect(() => {
-    if (!topic || mode !== 'quiz' || isAdaptive || useTodaysPlan) return
+    if (!topic || mode !== 'quiz' || isAdaptive || conceptMode === 'today') return
     try {
       localStorage.setItem(`actuarial_quiz_concepts_v1_${topic}`, JSON.stringify(selectedConcepts))
     } catch { /* ignore */ }
-  }, [selectedConcepts, topic, mode, isAdaptive, useTodaysPlan])
+  }, [selectedConcepts, topic, mode, isAdaptive, conceptMode])
 
   // Compute available question count for the current filters
   const availableCount = useMemo(() => {
@@ -405,7 +545,7 @@ export default function Landing() {
 
   function toggleConcept(concept: string) {
     setIsAdaptive(false)
-    setUseTodaysPlan(false)
+    setConceptMode('custom')
     setSelectedConcepts(prev =>
       prev.includes(concept) ? prev.filter(s => s !== concept) : [...prev, concept]
     )
@@ -414,7 +554,7 @@ export default function Landing() {
   function selectAllInGroup(group: { subtopics: string[] }, e: React.MouseEvent) {
     e.stopPropagation()
     setIsAdaptive(false)
-    setUseTodaysPlan(false)
+    setConceptMode('custom')
     const allSelected = group.subtopics.every(s => selectedConcepts.includes(s))
     setSelectedConcepts(prev =>
       allSelected
@@ -516,11 +656,20 @@ export default function Landing() {
   const searchFilter = useMemo(() => {
     if (selectedConcept) return { concept: selectedConcept }
     if (!topic) return {}
+    if (useTodaysPlan && plan) {
+      const displayConcepts = plan.status === 'review_mode'
+        ? (plan.reviewConcepts ?? [])
+        : plan.todaysConcepts
+      return {
+        exam: topic,
+        ...(displayConcepts.length > 0 && { concepts: displayConcepts }),
+      }
+    }
     return {
       exam: topic,
       ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
     }
-  }, [topic, selectedConcept, selectedConcepts])
+  }, [topic, selectedConcept, selectedConcepts, useTodaysPlan, plan])
 
   // Active filter chips shown in the search dropdown so the user can see and
   // remove concept filters without leaving the search panel.
@@ -612,31 +761,30 @@ export default function Landing() {
               </button>
             </div>
             {mode === 'quiz' && (
-              <div className="flex items-center justify-between py-0.5">
+              <div className="flex items-center gap-2.5 py-0.5">
                 <span className="text-sm font-medium">Show answers</span>
-                <div className="flex items-center gap-2">
-                  <span className={`text-xs transition-colors ${reveal === 'during' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                    After each
-                  </span>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={reveal === 'end'}
-                    onClick={() => setReveal(reveal === 'during' ? 'end' : 'during')}
-                    className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                      reveal === 'end' ? 'bg-primary' : 'bg-input'
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={reveal === 'end'}
+                  onClick={() => setReveal(reveal === 'during' ? 'end' : 'during')}
+                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    reveal === 'end' ? 'bg-primary' : 'bg-input'
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-background shadow-lg ring-0 transition-transform ${
+                      reveal === 'end' ? 'translate-x-4' : 'translate-x-0'
                     }`}
-                  >
-                    <span
-                      className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                        reveal === 'end' ? 'translate-x-4' : 'translate-x-0'
-                      }`}
-                    />
-                  </button>
-                  <span className={`text-xs transition-colors ${reveal === 'end' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                    At end
-                  </span>
-                </div>
+                  />
+                </button>
+                <span className={`text-xs transition-colors ${reveal === 'during' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                  After each
+                </span>
+                <span className="text-xs text-muted-foreground">/</span>
+                <span className={`text-xs transition-colors ${reveal === 'end' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                  At end
+                </span>
               </div>
             )}
           </div>
@@ -723,52 +871,31 @@ export default function Landing() {
                       </span>
                     </label>
 
-                    {/* Today's Study Plan quick-select */}
+                    {/* Today's Study Plan option */}
                     {user && (
-                      isPremium && plan && planConceptCount > 0 ? (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const next = !useTodaysPlan
-                            setUseTodaysPlan(next)
-                            if (next) {
-                              setSelectedConcepts([])
-                              setIsAdaptive(false)
-                            }
-                          }}
-                          className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
-                            useTodaysPlan
-                              ? 'border-primary bg-primary/5 text-primary font-medium'
-                              : 'border-input hover:bg-accent text-foreground'
-                          }`}
-                        >
-                          <CalendarCheck className="h-4 w-4 shrink-0" />
-                          <span className="flex-1 text-left">Today's Study Plan</span>
-                          {useTodaysPlan && <Check className="h-3.5 w-3.5 shrink-0" />}
-                          <span className={`text-xs shrink-0 ${useTodaysPlan ? 'text-primary/70' : 'text-muted-foreground'}`}>
-                            {planConceptCount} concept{planConceptCount !== 1 ? 's' : ''}
-                          </span>
-                        </button>
-                      ) : !isPremium ? (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-400/40 dark:border-amber-600/30 bg-amber-50/60 dark:bg-amber-950/20">
-                          <Lock className="h-3.5 w-3.5 shrink-0 text-amber-500" />
-                          <span className="flex-1 text-sm text-foreground">Unlock Today's Study Plan</span>
-                          <Link
-                            to="/upgrade"
-                            className="shrink-0 px-2.5 py-1 rounded-md bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 transition-colors"
-                            onClick={e => e.stopPropagation()}
-                          >
-                            Go Pro
-                          </Link>
-                        </div>
-                      ) : null
+                      <TodayStudyPlanSection
+                        isSelected={conceptMode === 'today' && isPremium && planConceptCount > 0}
+                        onSelect={() => {
+                          setConceptMode('today')
+                          setSelectedConcepts([])
+                          setIsAdaptive(false)
+                        }}
+                        concepts={todayConceptDisplayNames}
+                        planConceptCount={planConceptCount}
+                        isPremium={isPremium}
+                      />
                     )}
 
-                    {conceptsLoading && orderedConcepts.length === 0 ? (
-                      <p className="text-xs text-muted-foreground">Loading concepts…</p>
-                    ) : (
-                      <div className={`space-y-2 transition-opacity ${useTodaysPlan ? 'opacity-50 pointer-events-none' : ''}`}>
-                        {groupedConcepts.map(group => (
+                    {/* Custom option — expands to show concept groups */}
+                    <CustomSection
+                      isSelected={!user || conceptMode === 'custom'}
+                      onSelect={() => setConceptMode('custom')}
+                      selectedCount={selectedConcepts.length}
+                    >
+                      {conceptsLoading && orderedConcepts.length === 0 ? (
+                        <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>
+                      ) : (
+                        groupedConcepts.map(group => (
                           <GroupSection
                             key={group.name}
                             group={group}
@@ -779,9 +906,9 @@ export default function Landing() {
                             conceptLevelMap={isPremium ? conceptLevelMap : undefined}
                             isPremium={isPremium}
                           />
-                        ))}
-                      </div>
-                    )}
+                        ))
+                      )}
+                    </CustomSection>
                   </div>
 
                 </>

@@ -12,6 +12,7 @@ import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
+import { RadialGauge } from '@/components/RadialGauge'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
@@ -23,6 +24,7 @@ import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/daily
 import type { QuizSession } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 // ── Radial donut chart ─────────────────────────────────────────────────────────
 
@@ -159,11 +161,11 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
 }
 
 const STATE_BADGE: Record<MasteryState, string> = {
-  new:      'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:border-gray-700',
-  level1:   'bg-green-50 text-green-600 border-green-200 dark:bg-green-950/20 dark:text-green-500 dark:border-green-900',
-  level2:   'bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800',
-  level3:   'bg-green-200 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-700',
-  forgotten: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800',
+  new:       'bg-muted text-muted-foreground border-transparent',
+  level1:    'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40',
+  level2:    'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/40',
+  level3:    'bg-green-500/15 text-green-700 dark:text-green-300 border-green-500/40',
+  forgotten: 'bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/40',
 }
 
 function StudyPlanTracker({
@@ -214,7 +216,7 @@ function StudyPlanTracker({
           <div key={topic.name}>
             <button
               data-topic={topic.name}
-              className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
+              className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors sticky top-0 z-10 bg-card/95 backdrop-blur-sm"
               onClick={() => onToggle(topic.name)}
               aria-expanded={isOpen}
             >
@@ -311,6 +313,7 @@ export function ReadinessCard({
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const isMobile = useIsMobile()
   const openDashboard = useConceptPopup(s => s.openDashboard)
   const popupOpen = useConceptPopup(s => s.open)
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
@@ -318,6 +321,8 @@ export function ReadinessCard({
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
+  const [recentlyCompletedConcepts, setRecentlyCompletedConcepts] = useState<Set<string>>(new Set())
+  const prevCompletedRef = useRef<Set<string>>(new Set())
   const [topicsMasteredOpen, setTopicsMasteredOpen] = useState(false)
   const [hoveredSection, setHoveredSection] = useState<number | null>(null)
   const [pinnedSection, setPinnedSection] = useState<number | null>(null)
@@ -387,6 +392,26 @@ export function ReadinessCard({
       window.removeEventListener('storage', handleStorage)
     }
   }, [])
+
+  // Flash a concept row green when it transitions to completed for the first time today.
+  const markConceptComplete = useCallback((slug: string) => {
+    setRecentlyCompletedConcepts(prev => new Set([...prev, slug]))
+    setTimeout(() => {
+      setRecentlyCompletedConcepts(prev => {
+        const next = new Set(prev); next.delete(slug); return next
+      })
+    }, 800)
+  }, [])
+
+  useEffect(() => {
+    const nowCompleted = new Set(
+      completedToday.map(lu => lu.conceptSlug.toLowerCase())
+    )
+    for (const slug of nowCompleted) {
+      if (!prevCompletedRef.current.has(slug)) markConceptComplete(slug)
+    }
+    prevCompletedRef.current = nowCompleted
+  }, [completedToday, markConceptComplete])
 
   const activeSection = hoveredSection ?? pinnedSection
 
@@ -700,7 +725,9 @@ export function ReadinessCard({
 
   return (
     <div className="space-y-4">
-      {/* Primary exam card — first */}
+      {/* Bento grid: left = heatmap + plan, right = gauges + actions (md+) */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_256px] gap-4 items-start">
+      {/* Primary exam card — left column */}
       <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-4">
           {/* Header */}
@@ -747,6 +774,7 @@ export function ReadinessCard({
             onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
             onDayClick={date => { setSelectedDay(date) }}
             dayPlanPct={dayPlanPct}
+            mobileMonthOnly={isMobile}
           />
 
           {/* Day panel — shown when a heatmap day is clicked */}
@@ -877,6 +905,20 @@ export function ReadinessCard({
                   <Info className="h-3.5 w-3.5" />
                 </button>
               </div>
+
+              {/* Primary CTA */}
+              <button
+                type="button"
+                onClick={handleStartQuiz}
+                className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-sm font-semibold transition-colors"
+              >
+                <Play className="h-4 w-4 shrink-0" />
+                <span className="flex-1 text-left">
+                  {todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz"}
+                </span>
+                <span className="text-xs opacity-70">{displayConcepts.length} concepts</span>
+              </button>
+
               <div className="space-y-0.5">
                 {displayConcepts.map((name, idx) => {
                   const target = targetByName.get(name.toLowerCase()) ?? 'level1'
@@ -890,7 +932,7 @@ export function ReadinessCard({
                       type="button"
                       data-study-concept={name.toLowerCase()}
                       onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', idx)}
-                      className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
+                      className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}
                     >
                       {isCompleted
                         ? <Check className="h-4 w-4 text-green-500 shrink-0" />
@@ -1028,42 +1070,28 @@ export function ReadinessCard({
         </CardContent>
       </Card>
 
-      {/* Action buttons – premium users, directly below heatmap */}
+      {/* RIGHT COLUMN: RadialGauges + countdown + action buttons (premium only) */}
       {isPremium && (
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="outline"
-            onClick={() => {
-              const hasStudyPlan = studyPlanConceptsForModal.length > 0
-              openDashboard(
-                toRefs(allConcepts),
-                hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
-                hasStudyPlan ? 'study-plan' : 'entire-syllabus',
-                0,
-              )
-            }}
-            disabled={allConcepts.length === 0}
-            className="gap-1.5 text-sm"
-          >
-            <BookOpen className="h-4 w-4" />
-            Read concepts
-          </Button>
-          <Button
-            onClick={handleStartQuiz}
-            className="gap-1.5 text-sm"
-          >
-            <Play className="h-4 w-4" />
-            Start Quiz
-          </Button>
-        </div>
-      )}
+        <div className="space-y-3">
+          {/* Three per-domain radial gauges — always visible */}
+          {sections.length > 0 && (
+            <div className="rounded-xl border bg-card p-4">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Progress by Domain</p>
+              <div className="grid grid-cols-3 gap-2">
+                {sections.map(sec => (
+                  <RadialGauge
+                    key={sec.name}
+                    pct={sec.readinessPct}
+                    label={sec.name}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
-      {/* Premium-gated content */}
-      {isPremium ? (
-        <>
-          {/* Countdown numbers — premium users */}
+          {/* Countdown tiles */}
           {(examDate || config.targetReadyDate) && (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-2">
               {config.targetReadyDate && (() => {
                 const now = new Date(); now.setHours(0, 0, 0, 0)
                 const days = Math.ceil((new Date(config.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
@@ -1073,7 +1101,7 @@ export function ReadinessCard({
                     onClick={() => onOpenOnboarding?.(2)}
                     className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
                   >
-                    <p className="text-5xl font-bold tabular-nums text-amber-400">
+                    <p className="text-3xl font-bold tabular-nums text-amber-400">
                       {Math.max(days, 0)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5 font-medium">days to prepare</p>
@@ -1089,7 +1117,7 @@ export function ReadinessCard({
                     onClick={() => onOpenOnboarding?.(1)}
                     className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
                   >
-                    <p className="text-5xl font-bold tabular-nums">
+                    <p className="text-3xl font-bold tabular-nums">
                       {Math.max(days, 0)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
@@ -1099,7 +1127,40 @@ export function ReadinessCard({
             </div>
           )}
 
-          {/* Topics mastered + tracker */}
+          {/* Action buttons */}
+          <div className="flex flex-col gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                const hasStudyPlan = studyPlanConceptsForModal.length > 0
+                openDashboard(
+                  toRefs(allConcepts),
+                  hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
+                  hasStudyPlan ? 'study-plan' : 'entire-syllabus',
+                  0,
+                )
+              }}
+              disabled={allConcepts.length === 0}
+              className="gap-1.5 text-sm w-full"
+            >
+              <BookOpen className="h-4 w-4" />
+              Read concepts
+            </Button>
+            <Button
+              onClick={handleStartQuiz}
+              className="gap-1.5 text-sm w-full"
+            >
+              <Play className="h-4 w-4" />
+              Start Quiz
+            </Button>
+          </div>
+        </div>
+      )}
+      </div>{/* end bento grid */}
+
+      {/* Topics mastered — full width below bento grid (premium only) */}
+      {isPremium ? (
+        <>
           <Card>
             <CardContent className="p-5 space-y-4">
               <button
@@ -1160,35 +1221,7 @@ export function ReadinessCard({
               </button>
 
               {topicsMasteredOpen && (
-                <>
-                  <div className="flex items-center gap-6">
-                    <ReadinessDonut
-                      sections={sections}
-                      overallPct={overallPct}
-                      activeSection={activeSection}
-                      onSectionHover={handleSectionHover}
-                      onSectionClick={handleSectionClick}
-                    />
-                    <div className="flex flex-col gap-1.5 min-w-0 flex-1">
-                      {sections.map((sec, i) => (
-                        <div
-                          key={sec.name}
-                          className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
-                          onMouseEnter={() => handleSectionHover(i)}
-                          onMouseLeave={() => handleSectionHover(null)}
-                          onClick={() => handleSectionClick(i)}
-                        >
-                          <span
-                            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
-                          />
-                          <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
-                          <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
+                <div className="max-h-96 overflow-y-auto">
                   <StudyPlanTracker
                     syllabus={syllabus}
                     masteryRecords={masteryRecords}
@@ -1199,7 +1232,7 @@ export function ReadinessCard({
                     onToggle={toggleTopic}
                     flashingConcept={flashingConcept}
                   />
-                </>
+                </div>
               )}
             </CardContent>
           </Card>

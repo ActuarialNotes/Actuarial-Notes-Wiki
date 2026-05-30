@@ -57,11 +57,11 @@ const STATE_ORDER: Record<MasteryState, number> = {
 }
 
 const STATE_BADGE: Record<MasteryState, string> = {
-  new:      'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:border-gray-700',
-  level1:   'bg-green-50 text-green-600 border-green-200 dark:bg-green-950/20 dark:text-green-500 dark:border-green-900',
-  level2:   'bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800',
-  level3:   'bg-green-200 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-700',
-  forgotten: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800',
+  new:       'bg-muted text-muted-foreground border-transparent',
+  level1:    'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40',
+  level2:    'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/40',
+  level3:    'bg-green-500/15 text-green-700 dark:text-green-300 border-green-500/40',
+  forgotten: 'bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/40',
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -154,6 +154,7 @@ function StudyPlanTracker({
     })
 
   return (
+    <div className="max-h-96 overflow-y-auto">
     <div className="space-y-1">
       {syllabus.topics.map(topic => {
         const conceptSlugs = topic.concepts.map(c => c.name)
@@ -163,7 +164,7 @@ function StudyPlanTracker({
         return (
           <div key={topic.name}>
             <button
-              className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors"
+              className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors sticky top-0 z-10 bg-card/95 backdrop-blur-sm"
               onClick={() => toggle(topic.name)}
               aria-expanded={isOpen}
             >
@@ -236,6 +237,7 @@ function StudyPlanTracker({
           </ul>
         </div>
       )}
+    </div>
     </div>
   )
 }

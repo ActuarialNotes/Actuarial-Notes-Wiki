@@ -11,6 +11,7 @@ import ExamsPopout from '@/components/ExamsPopout'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
 import { MascotWidget } from '@/components/MascotWidget'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
+import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -20,6 +21,7 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale } from '@/lib/mastery'
 import type { MasteryState } from '@/lib/mastery'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import { computeReadiness } from '@/lib/readiness'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -206,6 +208,22 @@ export default function Dashboard() {
     return { daysRemaining, topicsMastered, totalTopics }
   }, [activeSyllabus, activeProgressKey, masteryRecords, studyPlan])
 
+  const overallPct = useMemo(() => {
+    if (!activeSyllabus || !activeProgressKey) return null
+    const examRecords = masteryRecords
+      .filter(r => r.exam_id === activeProgressKey)
+      .map(r => decayIfStale(r, new Date()))
+    return Math.round(computeReadiness(activeSyllabus, examRecords, new Date()).overallPct)
+  }, [activeSyllabus, activeProgressKey, masteryRecords])
+
+  const daysUntilExam = useMemo(() => {
+    if (!activeTargetDate) return null
+    const now = new Date(); now.setHours(0, 0, 0, 0)
+    return Math.max(0, Math.ceil(
+      (new Date(activeTargetDate + 'T00:00:00').getTime() - now.getTime()) / 86400000
+    ))
+  }, [activeTargetDate])
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -242,18 +260,34 @@ export default function Dashboard() {
       style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
       {/* Header */}
-      <div className="flex items-center gap-2">
-        <h1 className="text-3xl font-bold tracking-tight flex-1">{displayName}'s Actuarial Notes</h1>
+      <div className="flex items-center gap-3">
+        {!isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
+        <div className="flex-1 min-w-0">
+          <h1 className="text-base font-bold truncate leading-tight">{displayName}</h1>
+          <p className="text-xs text-muted-foreground leading-tight">Actuarial Notes</p>
+        </div>
+        {overallPct !== null && activeSyllabus && (
+          <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-primary/10 border border-primary/20 shrink-0">
+            <span className="text-base font-bold tabular-nums leading-none">{overallPct}%</span>
+            <span className="text-[9px] text-muted-foreground mt-0.5">Readiness</span>
+          </div>
+        )}
+        {daysUntilExam !== null && (
+          <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-card border shrink-0">
+            <span className="text-base font-bold tabular-nums leading-none">{daysUntilExam}</span>
+            <span className="text-[9px] text-muted-foreground mt-0.5">days left</span>
+          </div>
+        )}
         {!isGuest && (
-        <button
-          type="button"
-          onClick={() => setExamsOpen(true)}
-          className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-          aria-label="Add or manage exams"
-          title="Add or manage exams"
-        >
-          <PlusCircle className="h-5 w-5" />
-        </button>
+          <button
+            type="button"
+            onClick={() => setExamsOpen(true)}
+            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+            aria-label="Add or manage exams"
+            title="Add or manage exams"
+          >
+            <PlusCircle className="h-5 w-5" />
+          </button>
         )}
       </div>
 

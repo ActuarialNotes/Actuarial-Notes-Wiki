@@ -13,6 +13,7 @@ import Settings from '@/pages/Settings'
 import Upgrade from '@/pages/Upgrade'
 import Store from '@/pages/Store'
 import Sidebar from '@/components/Sidebar'
+import BottomNav from '@/components/BottomNav'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 
@@ -92,7 +93,7 @@ export default function App({ initialSession }: { initialSession: Session | null
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />
-            <main className="flex-1 min-w-0 pt-14 lg:pt-0">
+            <main className="flex-1 min-w-0 pt-14 lg:pt-0 pb-16 md:pb-0">
               <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/auth" element={<Auth />} />
@@ -128,6 +129,7 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
+            <BottomNav />
           </div>
         </ExamProgressProvider>
       </AuthProvider>

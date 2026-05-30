@@ -196,6 +196,16 @@
   }
 }
 
+/* Gallery panel: respect sidebar width on desktop so the sidebar stays visible. */
+@media (min-width: 1024px) {
+  .gallery-panel {
+    left: var(--sidebar-width, 16rem);
+    transition-property: left;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+}
+
 /* Maximized popup: start below the floating search bar.
    --popup-max-top is measured dynamically by ConceptPopup when entering maximized
    state (getBoundingClientRect of the search bar). Fallback: 0 desktop (no fixed

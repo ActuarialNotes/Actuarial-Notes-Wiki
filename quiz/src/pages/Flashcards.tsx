@@ -147,49 +147,42 @@ function TodayStudyPlanSection() {
     setSelectedPlan(new Set())
   }
 
-  const todayLabel = new Date().toLocaleDateString(undefined, {
-    weekday: 'long', month: 'long', day: 'numeric',
-  })
-
   const isLoading = planLoading || masteryLoading
 
   return (
-    <div className="rounded-xl border bg-card text-card-foreground">
-      <div className="flex items-center justify-between px-4 py-3 border-b">
-        <div className="flex items-center gap-2">
-          <CalendarDays className="h-4 w-4 text-primary shrink-0" />
-          <div>
-            <span className="font-semibold text-sm">Today's Study Plan</span>
-            {!isLoading && primarySyllabus && (
-              <span className="text-xs text-muted-foreground ml-2">{primarySyllabus.examLabel} · {todayLabel}</span>
-            )}
-          </div>
+    <div className="rounded-lg border bg-card text-card-foreground">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => setCollapsed(v => !v)}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCollapsed(v => !v) } }}
+        className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-accent/40 transition-colors rounded-lg"
+        aria-expanded={!collapsed}
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <CalendarDays className="h-3.5 w-3.5 text-primary shrink-0" />
+          <span className="font-medium text-xs">Today's Study Plan</span>
+          {!isLoading && primarySyllabus && (
+            <span className="text-xs text-muted-foreground truncate">{primarySyllabus.examLabel}</span>
+          )}
         </div>
-        <div className="flex items-center gap-1">
-          {/* Add all / done indicator — visible even when collapsed */}
+        <div className="flex items-center gap-1 shrink-0">
           {!isLoading && displayConcepts.length > 0 && (
             allAdded ? (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-green-600 dark:text-green-400">
-                <Check className="h-3.5 w-3.5" /> Done
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600 dark:text-green-400">
+                <Check className="h-3 w-3" /> Done
               </span>
             ) : (
               <button
                 type="button"
-                onClick={handleAddSelected}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
+                onClick={e => { e.stopPropagation(); handleAddSelected() }}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
               >
                 Add all
               </button>
             )
           )}
-          <button
-            type="button"
-            onClick={() => setCollapsed(v => !v)}
-            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
-            aria-label={collapsed ? 'Expand study plan' : 'Collapse study plan'}
-          >
-            <ChevronsUpDown className="h-4 w-4" />
-          </button>
+          <ChevronsUpDown className="h-3.5 w-3.5 text-muted-foreground ml-1" />
         </div>
       </div>
 
@@ -351,6 +344,7 @@ function SortableCard({
   onRemove,
   isFlashing,
   isActive,
+  reverseCardModes,
 }: {
   card: FlashCard
   masteryState: MasteryState
@@ -358,13 +352,11 @@ function SortableCard({
   onRemove: (name: string) => void
   isFlashing: boolean
   isActive: boolean
+  reverseCardModes: Set<ReverseCardSection>
 }) {
   const [flipped, setFlipped] = useState(false)
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-  const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
-    new Set<ReverseCardSection>(['definition']),
-  )
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name })
 
@@ -385,14 +377,6 @@ function SortableCard({
     }
   }
 
-  function toggleMode(mode: ReverseCardSection) {
-    setReverseCardModes(prev => {
-      const next = new Set(prev)
-      if (next.has(mode)) next.delete(mode); else next.add(mode)
-      return next
-    })
-  }
-
   const definition = markdown ? extractFirstParagraph(markdown) : null
   const allEquations = markdown ? extractMathBlockquotes(markdown) : []
   const cardImages = markdown ? extractImages(markdown) : []
@@ -408,64 +392,31 @@ function SortableCard({
         ref={setNodeRef}
         style={style}
         data-card-name={card.name}
-        className={`${baseClass} ${colorClass}`}
+        onClick={() => setFlipped(false)}
+        className={`${baseClass} ${colorClass} cursor-pointer`}
       >
-        {/* Header: name + mode toggles + delete */}
+        {/* Header: name + delete + study shortcut */}
         <div className="flex items-center gap-1 px-2.5 pt-2 pb-1.5 border-b">
           <span className="text-xs font-medium text-muted-foreground truncate flex-1 min-w-0">{card.name}</span>
-          <div className="flex items-center gap-0.5 shrink-0">
-            <button
-              type="button"
-              onPointerDown={e => e.stopPropagation()}
-              onClick={e => { e.stopPropagation(); toggleMode('definition') }}
-              title="Definition"
-              aria-pressed={reverseCardModes.has('definition')}
-              className={`inline-flex items-center justify-center h-6 w-6 rounded border text-xs font-serif italic font-bold transition-colors ${
-                reverseCardModes.has('definition')
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-              }`}
-            >D</button>
-            <button
-              type="button"
-              onPointerDown={e => e.stopPropagation()}
-              onClick={e => { e.stopPropagation(); toggleMode('math') }}
-              title="Math equations"
-              aria-pressed={reverseCardModes.has('math')}
-              className={`inline-flex items-center justify-center h-6 w-6 rounded border transition-colors ${
-                reverseCardModes.has('math')
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-              }`}
-            ><Sigma className="h-3 w-3" /></button>
-            <button
-              type="button"
-              onPointerDown={e => e.stopPropagation()}
-              onClick={e => { e.stopPropagation(); toggleMode('images') }}
-              title="Images"
-              aria-pressed={reverseCardModes.has('images')}
-              className={`inline-flex items-center justify-center h-6 w-6 rounded border transition-colors ${
-                reverseCardModes.has('images')
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-              }`}
-            ><Images className="h-3 w-3" /></button>
-            <button
-              type="button"
-              onPointerDown={e => e.stopPropagation()}
-              onClick={e => { e.stopPropagation(); onRemove(card.name) }}
-              aria-label={`Remove ${card.name}`}
-              className="text-muted-foreground hover:text-destructive h-6 w-6 flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-colors"
-            ><Trash2 className="h-3 w-3" /></button>
-          </div>
+          <button
+            type="button"
+            onPointerDown={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); onSelect() }}
+            className="text-[10px] text-primary hover:underline shrink-0"
+          >
+            study →
+          </button>
+          <button
+            type="button"
+            onPointerDown={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); onRemove(card.name) }}
+            aria-label={`Remove ${card.name}`}
+            className="text-muted-foreground hover:text-destructive h-6 w-6 flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-colors"
+          ><Trash2 className="h-3 w-3" /></button>
         </div>
 
-        {/* Back content */}
-        <div
-          className="flex-1 px-3 py-2 overflow-hidden"
-          onPointerDown={e => e.stopPropagation()}
-          onClick={e => e.stopPropagation()}
-        >
+        {/* Back content — grows to fit, no scrollbar */}
+        <div className="px-3 py-2">
           {loadStatus === 'loading' && (
             <div className="flex items-center gap-1 text-xs text-muted-foreground py-2">
               <Loader2 className="h-3 w-3 animate-spin" /> Loading…
@@ -475,22 +426,20 @@ function SortableCard({
             <p className="text-xs text-destructive py-1">Couldn't load content.</p>
           )}
           {reverseCardModes.has('definition') && definition && (
-            <div className="text-sm max-h-40 overflow-y-auto">
-              <WikiArticle markdown={definition} />
-            </div>
+            <WikiArticle markdown={definition} />
           )}
           {reverseCardModes.has('math') && allEquations.length > 0 && (
-            <div className="space-y-2 max-h-40 overflow-y-auto">
+            <div className="space-y-2">
               {allEquations.map((eq, i) => (
                 <WikiArticle key={i} markdown={eq} />
               ))}
             </div>
           )}
           {reverseCardModes.has('images') && cardImages.length > 0 && (
-            <div className="space-y-2 max-h-40 overflow-y-auto">
+            <div className="space-y-2">
               {cardImages.map((img, i) => (
                 <figure key={i} className="flex flex-col items-center gap-1">
-                  <img src={img.src} alt={img.alt} className="max-w-full max-h-28 object-contain rounded" />
+                  <img src={img.src} alt={img.alt} className="max-w-full object-contain rounded" />
                   {img.caption && (
                     <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
                   )}
@@ -498,26 +447,6 @@ function SortableCard({
               ))}
             </div>
           )}
-        </div>
-
-        {/* Footer: flip back + jump to study */}
-        <div className="flex items-center justify-between border-t px-2.5 py-1.5">
-          <button
-            type="button"
-            onPointerDown={e => e.stopPropagation()}
-            onClick={e => { e.stopPropagation(); setFlipped(false) }}
-            className="text-[10px] text-muted-foreground hover:text-foreground transition-colors"
-          >
-            flip back
-          </button>
-          <button
-            type="button"
-            onPointerDown={e => e.stopPropagation()}
-            onClick={e => { e.stopPropagation(); onSelect() }}
-            className="text-[10px] text-primary hover:underline"
-          >
-            study →
-          </button>
         </div>
       </div>
     )
@@ -597,6 +526,18 @@ function GalleryPanel({
   onClose: () => void
   conceptMasteryMap: Map<string, MasteryState>
 }) {
+  const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
+    new Set<ReverseCardSection>(['definition']),
+  )
+
+  function toggleMode(mode: ReverseCardSection) {
+    setReverseCardModes(prev => {
+      const next = new Set(prev)
+      if (next.has(mode)) next.delete(mode); else next.add(mode)
+      return next
+    })
+  }
+
   function handleCardSelect(card: FlashCard) {
     const idx = orderedCards.findIndex(c => c.name === card.name)
     onSelect(idx >= 0 ? idx : 0)
@@ -614,6 +555,7 @@ function GalleryPanel({
         onRemove={onRemove}
         isFlashing={flashingCard?.toLowerCase() === card.name.toLowerCase()}
         isActive={overallIdx === activeIndex}
+        reverseCardModes={reverseCardModes}
       />
     )
   }
@@ -641,6 +583,44 @@ function GalleryPanel({
                 {label}
               </button>
             ))}
+          </div>
+
+          {/* Shared back-side mode toggles */}
+          <div className="flex items-center gap-0.5 shrink-0">
+            <span className="text-xs text-muted-foreground mr-1 hidden sm:inline">Back:</span>
+            <button
+              type="button"
+              onClick={() => toggleMode('definition')}
+              title="Show definition"
+              aria-pressed={reverseCardModes.has('definition')}
+              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border text-xs font-serif italic font-bold transition-colors ${
+                reverseCardModes.has('definition')
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            >D</button>
+            <button
+              type="button"
+              onClick={() => toggleMode('math')}
+              title="Show math equations"
+              aria-pressed={reverseCardModes.has('math')}
+              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border transition-colors ${
+                reverseCardModes.has('math')
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            ><Sigma className="h-3.5 w-3.5" /></button>
+            <button
+              type="button"
+              onClick={() => toggleMode('images')}
+              title="Show images"
+              aria-pressed={reverseCardModes.has('images')}
+              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border transition-colors ${
+                reverseCardModes.has('images')
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            ><Images className="h-3.5 w-3.5" /></button>
           </div>
 
           <button

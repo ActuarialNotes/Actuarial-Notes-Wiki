@@ -866,10 +866,8 @@ export function ReadinessCard({
       }
     }
     const scrollId = setTimeout(() => {
-      const popupHeight = popupOpen
-        ? (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--concept-split-height')) || window.innerHeight * 0.5)
-        : 0
-      const visibleHeight = window.innerHeight - popupHeight
+      const popupEl = document.querySelector<HTMLElement>('.concept-popup-aside')
+      const visibleHeight = popupEl ? popupEl.getBoundingClientRect().top : window.innerHeight
       if (fromRadial && studyGuideCardRef.current) {
         // Keep the radial graph card centered in the visible area above the popup
         const rect = studyGuideCardRef.current.getBoundingClientRect()

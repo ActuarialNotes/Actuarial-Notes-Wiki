@@ -173,6 +173,7 @@ function StudyGuideRadial({
   onConceptClick,
   masteredCount,
   totalCount,
+  selectedConcept,
 }: {
   syllabus: WikiExamSyllabus
   examRecords: ConceptMasteryRecord[]
@@ -180,6 +181,7 @@ function StudyGuideRadial({
   onConceptClick?: (name: string) => void
   masteredCount: number
   totalCount: number
+  selectedConcept?: string | null
 }) {
   const [hovered, setHovered] = useState<SGSegment | null>(null)
 
@@ -211,7 +213,13 @@ function StudyGuideRadial({
     return result
   }, [syllabus, examRecords, now])
 
+  const selected = useMemo(
+    () => selectedConcept ? (segments.find(s => s.conceptName.toLowerCase() === selectedConcept.toLowerCase()) ?? null) : null,
+    [segments, selectedConcept],
+  )
+
   const pctText = totalCount > 0 ? `${Math.round((masteredCount / totalCount) * 100)}%` : '0%'
+  const centerSeg = hovered ?? selected
 
   return (
     <div className="flex flex-col items-center gap-3">
@@ -223,34 +231,39 @@ function StudyGuideRadial({
           strokeWidth={SG_OUTER_R - SG_INNER_R}
           stroke="rgba(34,197,94,0.06)"
         />
-        {segments.map((seg, i) => (
-          <path
-            key={i}
-            d={sgArc(seg.startDeg, seg.endDeg, SG_OUTER_R, SG_INNER_R)}
-            fill={LEVEL_FILL[seg.state]}
-            opacity={hovered && hovered !== seg ? 0.35 : 1}
-            style={{
-              transition: 'opacity 100ms, transform 100ms',
-              transformOrigin: `${SG_CX}px ${SG_CY}px`,
-              transform: hovered === seg ? 'scale(1.04)' : 'scale(1)',
-            }}
-            onMouseEnter={() => setHovered(seg)}
-            onMouseLeave={() => setHovered(null)}
-            onClick={() => onConceptClick?.(seg.conceptName)}
-            className="cursor-pointer"
-          />
-        ))}
+        {segments.map((seg, i) => {
+          const isActive = hovered === seg || selected === seg
+          return (
+            <path
+              key={i}
+              d={sgArc(seg.startDeg, seg.endDeg, SG_OUTER_R, SG_INNER_R)}
+              fill={LEVEL_FILL[seg.state]}
+              opacity={(hovered || selected) && !isActive ? 0.35 : 1}
+              stroke={selected === seg && hovered !== seg ? 'rgba(255,255,255,0.55)' : 'none'}
+              strokeWidth={selected === seg && hovered !== seg ? 1 : 0}
+              style={{
+                transition: 'opacity 100ms, transform 100ms',
+                transformOrigin: `${SG_CX}px ${SG_CY}px`,
+                transform: isActive ? 'scale(1.04)' : 'scale(1)',
+              }}
+              onMouseEnter={() => setHovered(seg)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => onConceptClick?.(seg.conceptName)}
+              className="cursor-pointer"
+            />
+          )
+        })}
 
-        {hovered ? (
+        {centerSeg ? (
           <>
             <text x={SG_CX} y={SG_CY - 18} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.45} fontStyle="italic">
-              {hovered.topicName.length > 24 ? hovered.topicName.slice(0, 22) + '…' : hovered.topicName}
+              {centerSeg.topicName.length > 24 ? centerSeg.topicName.slice(0, 22) + '…' : centerSeg.topicName}
             </text>
             <text x={SG_CX} y={SG_CY + 2} textAnchor="middle" fontSize={11} fill="currentColor" fontWeight="700">
-              {hovered.conceptName.length > 20 ? hovered.conceptName.slice(0, 18) + '…' : hovered.conceptName}
+              {centerSeg.conceptName.length > 20 ? centerSeg.conceptName.slice(0, 18) + '…' : centerSeg.conceptName}
             </text>
-            <text x={SG_CX} y={SG_CY + 18} textAnchor="middle" fontSize={10} fill={hovered.state === 'level3' ? '#22c55e' : 'currentColor'} opacity={hovered.state === 'level3' ? 1 : 0.65}>
-              {hovered.state === 'new' ? 'New' : hovered.state === 'level1' ? 'Level 1' : hovered.state === 'level2' ? 'Level 2' : hovered.state === 'level3' ? 'Level 3' : 'Forgotten'}
+            <text x={SG_CX} y={SG_CY + 18} textAnchor="middle" fontSize={10} fill={centerSeg.state === 'level3' ? '#22c55e' : 'currentColor'} opacity={centerSeg.state === 'level3' ? 1 : 0.65}>
+              {centerSeg.state === 'new' ? 'New' : centerSeg.state === 'level1' ? 'Level 1' : centerSeg.state === 'level2' ? 'Level 2' : centerSeg.state === 'level3' ? 'Level 3' : 'Forgotten'}
             </text>
           </>
         ) : (
@@ -1234,6 +1247,7 @@ export function ReadinessCard({
                 now={now}
                 masteredCount={aggregate.level3}
                 totalCount={aggregate.total}
+                selectedConcept={openedFromRadialRef.current ? popupCurrentName : null}
                 onConceptClick={name => {
                   const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
                   openedFromRadialRef.current = true

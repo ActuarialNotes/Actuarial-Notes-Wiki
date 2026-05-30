@@ -672,7 +672,7 @@ export default function Landing() {
   return (
     <>
     <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
-    <div className={`container max-w-2xl mx-auto px-4 pt-12 space-y-8 ${hasSelection ? 'pb-32' : 'pb-12'}`}>
+    <div className={`container max-w-2xl mx-auto px-4 pt-0 space-y-8 ${hasSelection ? 'pb-32' : 'pb-12'}`}>
       <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
         {hasTopic && (
           <button
@@ -914,8 +914,8 @@ export default function Landing() {
     </div>
 
     {hasSelection && (
-      <div className="fixed bottom-16 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm">
-        <div className="container max-w-2xl mx-auto px-4 pt-3 pb-3">
+      <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm">
+        <div className="container max-w-2xl mx-auto px-4 pt-4 pb-4">
           <button
             type="button"
             onClick={handleStart}

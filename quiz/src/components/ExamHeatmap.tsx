@@ -78,6 +78,9 @@ interface Props {
    *  Keys are YYYY-MM-DD; values are 0–100 (capped). Days absent fall back to dim green
    *  (15%) if a session exists, or no color if no session. */
   dayPlanPct?: Map<string, number>
+  /** When true, restricts the visible columns to the current calendar month only.
+   *  Prevents horizontal overflow on narrow mobile screens. */
+  mobileMonthOnly?: boolean
 }
 
 export function ExamHeatmap({
@@ -90,6 +93,7 @@ export function ExamHeatmap({
   onDayClick,
   onOpenStudyPlan,
   dayPlanPct,
+  mobileMonthOnly = false,
 }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
@@ -215,6 +219,20 @@ export function ExamHeatmap({
     })
   }, [gridStart, totalWeeks, today, scoreByDay, examDateWeekIdx, targetReadyDateWeekIdx, targetDate, targetReadyDate])
 
+  // On mobile, restrict to the current month only to avoid horizontal overflow.
+  const visibleColumns = useMemo(() => {
+    if (!mobileMonthOnly) return columns
+    const now = new Date()
+    const thisMonth = now.getMonth()
+    const thisYear = now.getFullYear()
+    return columns.filter(col =>
+      col.days.some(d => {
+        const date = new Date(d.key + 'T00:00:00')
+        return date.getMonth() === thisMonth && date.getFullYear() === thisYear
+      })
+    )
+  }, [columns, mobileMonthOnly])
+
   const daysLeft = targetDate ? daysUntil(targetDate) : null
   const examDateLabel = targetDate
     ? new Date(targetDate + 'T00:00:00').toLocaleDateString(undefined, {
@@ -238,7 +256,7 @@ export function ExamHeatmap({
       <div className="flex items-end gap-[2px]">
         <div className="shrink-0" style={{ width: 16 }} />
         <div className="flex-1 flex gap-[2px] overflow-hidden">
-          {columns.map(col => (
+          {visibleColumns.map(col => (
             <div key={col.key} className="flex-1 min-w-0 text-[8px] text-muted-foreground leading-none truncate">
               {col.monthLabel ?? ''}
             </div>
@@ -262,7 +280,7 @@ export function ExamHeatmap({
 
         {/* Week columns */}
         <div className="flex-1 flex gap-[2px] overflow-hidden">
-          {columns.map(col => (
+          {visibleColumns.map(col => (
             <div
               key={col.key}
               className={`flex-1 flex flex-col gap-[2px] rounded-sm ${

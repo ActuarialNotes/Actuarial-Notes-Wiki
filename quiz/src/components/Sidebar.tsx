@@ -275,7 +275,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile: persistent top header bar housing the hamburger */}
-      <header className="fixed top-0 left-0 right-0 h-14 z-30 flex items-center gap-3 px-3 bg-background border-b lg:hidden">
+      <header className="fixed top-0 left-0 right-0 h-14 z-30 hidden md:flex items-center gap-3 px-3 bg-background border-b lg:hidden">
         <button
           type="button"
           onClick={() => setMobileOpen(true)}

@@ -319,3 +319,14 @@
   opacity: 0.35;
   cursor: not-allowed;
 }
+
+/* Brief green flash when a study-plan concept transitions to completed */
+@keyframes concept-success {
+  0%   { background-color: hsl(142 72% 50% / 0.18); transform: scale(1); }
+  25%  { background-color: hsl(142 72% 50% / 0.30); transform: scale(1.015); }
+  70%  { background-color: hsl(142 72% 50% / 0.10); transform: scale(1.005); }
+  100% { background-color: transparent; transform: scale(1); }
+}
+.concept-success {
+  animation: concept-success 800ms ease-out both;
+}

@@ -264,14 +264,20 @@ export function ExamHeatmap({
           ))}
         </div>
         {mobileMonthOnly && (
-          <button
-            type="button"
-            onClick={() => setShowFullTimeline(v => !v)}
-            className="shrink-0 ml-1.5 text-[9px] text-primary font-semibold hover:underline transition-colors leading-none self-center"
-            title={showFullTimeline ? 'Show current month only' : 'Show full timeline to exam date'}
-          >
-            {showFullTimeline ? 'Month' : 'Timeline'}
-          </button>
+          <div className="shrink-0 ml-2 flex items-center gap-1.5 self-center">
+            <span className={`text-[11px] leading-none ${!showFullTimeline ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>Month</span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={showFullTimeline}
+              onClick={() => setShowFullTimeline(v => !v)}
+              title={showFullTimeline ? 'Show current month only' : 'Show full timeline to exam date'}
+              className={`relative inline-flex h-[22px] w-10 shrink-0 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${showFullTimeline ? 'bg-primary' : 'bg-muted'}`}
+            >
+              <span className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${showFullTimeline ? 'translate-x-5' : 'translate-x-[3px]'}`} />
+            </button>
+            <span className={`text-[11px] leading-none ${showFullTimeline ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>Timeline</span>
+          </div>
         )}
       </div>
 
@@ -339,12 +345,12 @@ export function ExamHeatmap({
             <button
               type="button"
               onClick={() => onOpenStudyPlan ? onOpenStudyPlan() : (setDraft(targetDate ?? ''), setEditing(true))}
-              className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              <Calendar className="h-3 w-3 shrink-0" />
+              <Calendar className="h-3.5 w-3.5 shrink-0" />
               {examDateLabel ? (
                 <>
-                  <span>Exam: {examDateLabel}</span>
+                  <span className="font-medium">Exam: {examDateLabel}</span>
                   {daysLeft !== null && daysLeft > 0 && (
                     <span className="opacity-60">{daysLeft}d away</span>
                   )}
@@ -408,12 +414,12 @@ export function ExamHeatmap({
               <button
                 type="button"
                 onClick={() => onOpenStudyPlan ? onOpenStudyPlan(2) : (setDraftReady(targetReadyDate ?? ''), setEditingReady(true))}
-                className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Calendar className="h-3 w-3 shrink-0 text-amber-500" />
+                <Calendar className="h-3.5 w-3.5 shrink-0 text-amber-500" />
                 {readyDateLabel ? (
                   <>
-                    <span>Target ready: {readyDateLabel}</span>
+                    <span className="font-medium">Target ready: {readyDateLabel}</span>
                     {readyDaysLeft !== null && readyDaysLeft > 0 && (
                       <span className="opacity-60">{readyDaysLeft}d away</span>
                     )}

@@ -287,16 +287,26 @@ export default function Dashboard() {
             </div>
           )}
           {daysToReady !== null && (
-            <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 shrink-0">
+            <button
+              type="button"
+              onClick={() => { setOnboardingStep(3); setOnboardingOpen(true) }}
+              className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 shrink-0 hover:bg-amber-500/20 transition-colors"
+              title="Edit target ready date"
+            >
               <span className="text-sm font-bold tabular-nums leading-none text-amber-600 dark:text-amber-400">{daysToReady}</span>
               <span className="text-[9px] text-muted-foreground mt-0.5">to prepare</span>
-            </div>
+            </button>
           )}
           {daysUntilExam !== null && (
-            <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-card border shrink-0">
+            <button
+              type="button"
+              onClick={() => { setOnboardingStep(2); setOnboardingOpen(true) }}
+              className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-card border shrink-0 hover:bg-muted transition-colors"
+              title="Edit exam date"
+            >
               <span className="text-sm font-bold tabular-nums leading-none">{daysUntilExam}</span>
               <span className="text-[9px] text-muted-foreground mt-0.5">until exam</span>
-            </div>
+            </button>
           )}
         </div>
         {multiExam && (

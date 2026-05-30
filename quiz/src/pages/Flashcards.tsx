@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
+  FlipHorizontal,
   Images,
   LayoutGrid,
   Loader2,
@@ -345,6 +346,7 @@ function SortableCard({
   isFlashing,
   isActive,
   reverseCardModes,
+  globalFlip,
 }: {
   card: FlashCard
   masteryState: MasteryState
@@ -353,10 +355,12 @@ function SortableCard({
   isFlashing: boolean
   isActive: boolean
   reverseCardModes: Set<ReverseCardSection>
+  globalFlip: boolean
 }) {
-  const [flipped, setFlipped] = useState(false)
+  const [flipped, setFlipped] = useState(globalFlip)
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const { jumpTo } = useConceptPopup()
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name })
 
@@ -366,6 +370,17 @@ function SortableCard({
     opacity: isDragging ? 0.4 : 1,
     zIndex: isDragging ? 50 : undefined,
   }
+
+  // Sync to global flip/unflip action
+  useEffect(() => {
+    setFlipped(globalFlip)
+    if (globalFlip && markdown === null && loadStatus === 'idle') {
+      setLoadStatus('loading')
+      fetchWikiFile(entryRefToRepoPath(card))
+        .then(raw => { setMarkdown(raw); setLoadStatus('idle') })
+        .catch(() => setLoadStatus('error'))
+    }
+  }, [globalFlip]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleFlipOpen() {
     setFlipped(true)
@@ -426,12 +441,15 @@ function SortableCard({
             <p className="text-xs text-destructive py-1">Couldn't load content.</p>
           )}
           {reverseCardModes.has('definition') && definition && (
-            <WikiArticle markdown={definition} />
+            <WikiArticle
+              markdown={definition}
+              onWikiLink={ref => { jumpTo(ref); return true }}
+            />
           )}
           {reverseCardModes.has('math') && allEquations.length > 0 && (
             <div className="space-y-2">
               {allEquations.map((eq, i) => (
-                <WikiArticle key={i} markdown={eq} />
+                <WikiArticle key={i} markdown={eq} onWikiLink={ref => { jumpTo(ref); return true }} />
               ))}
             </div>
           )}
@@ -529,6 +547,7 @@ function GalleryPanel({
   const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
     new Set<ReverseCardSection>(['definition']),
   )
+  const [globalFlip, setGlobalFlip] = useState(false)
 
   function toggleMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {
@@ -556,6 +575,7 @@ function GalleryPanel({
         isFlashing={flashingCard?.toLowerCase() === card.name.toLowerCase()}
         isActive={overallIdx === activeIndex}
         reverseCardModes={reverseCardModes}
+        globalFlip={globalFlip}
       />
     )
   }
@@ -584,6 +604,20 @@ function GalleryPanel({
               </button>
             ))}
           </div>
+
+          {/* Flip all toggle */}
+          <button
+            type="button"
+            onClick={() => setGlobalFlip(v => !v)}
+            title={globalFlip ? 'Show all fronts' : 'Flip all to back'}
+            className={`inline-flex items-center justify-center h-7 w-7 rounded-md border transition-colors shrink-0 ${
+              globalFlip
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+            }`}
+          >
+            <FlipHorizontal className="h-3.5 w-3.5" />
+          </button>
 
           {/* Shared back-side mode toggles */}
           <div className="flex items-center gap-0.5 shrink-0">

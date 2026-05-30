@@ -12,13 +12,12 @@ import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
-import { RadialGauge } from '@/components/RadialGauge'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
-import { computeReadiness, type SectionReadiness } from '@/lib/readiness'
+import { computeReadiness, parseSectionWeight, type SectionReadiness } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
@@ -123,6 +122,156 @@ function ReadinessDonut({ sections, overallPct, activeSection, onSectionHover, o
             <span className="text-[9px] text-muted-foreground mt-0.5 leading-tight">overall</span>
           </>
         )}
+      </div>
+    </div>
+  )
+}
+
+// ── Study Guide Radial ─────────────────────────────────────────────────────────
+
+const SG_VB = 280
+const SG_CX = SG_VB / 2
+const SG_CY = SG_VB / 2
+const SG_OUTER_R = 126
+const SG_INNER_R = 74
+const SG_CONCEPT_GAP = 1.5
+
+const LEVEL_FILL: Record<MasteryState, string> = {
+  new:       'rgba(34,197,94,0.10)',
+  level1:    'rgba(34,197,94,0.28)',
+  level2:    'rgba(34,197,94,0.62)',
+  level3:    '#22c55e',
+  forgotten: 'rgba(239,68,68,0.45)',
+}
+
+interface SGSegment {
+  startDeg: number
+  endDeg: number
+  conceptName: string
+  topicName: string
+  state: MasteryState
+}
+
+function sgPolar(angleDeg: number, r: number) {
+  const rad = ((angleDeg - 90) * Math.PI) / 180
+  return { x: SG_CX + r * Math.cos(rad), y: SG_CY + r * Math.sin(rad) }
+}
+
+function sgArc(startDeg: number, endDeg: number, ro: number, ri: number) {
+  const s1 = sgPolar(startDeg, ro)
+  const e1 = sgPolar(endDeg, ro)
+  const s2 = sgPolar(endDeg, ri)
+  const e2 = sgPolar(startDeg, ri)
+  const lg = endDeg - startDeg > 180 ? 1 : 0
+  return `M${s1.x} ${s1.y} A${ro} ${ro} 0 ${lg} 1 ${e1.x} ${e1.y} L${s2.x} ${s2.y} A${ri} ${ri} 0 ${lg} 0 ${e2.x} ${e2.y}Z`
+}
+
+function StudyGuideRadial({
+  syllabus,
+  examRecords,
+  now,
+  onConceptClick,
+  masteredCount,
+  totalCount,
+}: {
+  syllabus: WikiExamSyllabus
+  examRecords: ConceptMasteryRecord[]
+  now: Date
+  onConceptClick?: (name: string) => void
+  masteredCount: number
+  totalCount: number
+}) {
+  const [hovered, setHovered] = useState<SGSegment | null>(null)
+
+  const segments = useMemo(() => {
+    const normalized = normalizeMasteryToDisplayNames(examRecords, syllabus)
+    const bySlug = new Map(normalized.map(r => [r.concept_slug.toLowerCase(), r]))
+    const totalWeight = syllabus.topics.reduce((s, t) => s + parseSectionWeight(t.weight), 0) || 1
+    const result: SGSegment[] = []
+    let cursor = 0
+
+    for (const topic of syllabus.topics) {
+      const topicWeight = parseSectionWeight(topic.weight)
+      const topicDeg = (topicWeight / totalWeight) * 360
+      const n = topic.concepts.length
+      if (n === 0) { cursor += topicDeg; continue }
+      const slotDeg = topicDeg / n
+
+      for (const concept of topic.concepts) {
+        const rec = bySlug.get(concept.name.toLowerCase())
+        const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
+        const startDeg = cursor + SG_CONCEPT_GAP / 2
+        const endDeg = cursor + slotDeg - SG_CONCEPT_GAP / 2
+        if (endDeg > startDeg + 0.5) {
+          result.push({ startDeg, endDeg, conceptName: concept.name, topicName: topic.name, state })
+        }
+        cursor += slotDeg
+      }
+    }
+    return result
+  }, [syllabus, examRecords, now])
+
+  const pctText = totalCount > 0 ? `${Math.round((masteredCount / totalCount) * 100)}%` : '0%'
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <svg viewBox={`0 0 ${SG_VB} ${SG_VB}`} className="w-full max-w-[260px]" style={{ overflow: 'visible' }}>
+        <circle
+          cx={SG_CX} cy={SG_CY}
+          r={(SG_OUTER_R + SG_INNER_R) / 2}
+          fill="none"
+          strokeWidth={SG_OUTER_R - SG_INNER_R}
+          stroke="rgba(34,197,94,0.06)"
+        />
+        {segments.map((seg, i) => (
+          <path
+            key={i}
+            d={sgArc(seg.startDeg, seg.endDeg, SG_OUTER_R, SG_INNER_R)}
+            fill={LEVEL_FILL[seg.state]}
+            opacity={hovered && hovered !== seg ? 0.35 : 1}
+            style={{
+              transition: 'opacity 100ms, transform 100ms',
+              transformOrigin: `${SG_CX}px ${SG_CY}px`,
+              transform: hovered === seg ? 'scale(1.04)' : 'scale(1)',
+            }}
+            onMouseEnter={() => setHovered(seg)}
+            onMouseLeave={() => setHovered(null)}
+            onClick={() => onConceptClick?.(seg.conceptName)}
+            className="cursor-pointer"
+          />
+        ))}
+
+        {hovered ? (
+          <>
+            <text x={SG_CX} y={SG_CY - 18} textAnchor="middle" fontSize={9} fill="currentColor" opacity={0.45} fontStyle="italic">
+              {hovered.topicName.length > 24 ? hovered.topicName.slice(0, 22) + '…' : hovered.topicName}
+            </text>
+            <text x={SG_CX} y={SG_CY + 2} textAnchor="middle" fontSize={11} fill="currentColor" fontWeight="700">
+              {hovered.conceptName.length > 20 ? hovered.conceptName.slice(0, 18) + '…' : hovered.conceptName}
+            </text>
+            <text x={SG_CX} y={SG_CY + 18} textAnchor="middle" fontSize={10} fill={hovered.state === 'level3' ? '#22c55e' : 'currentColor'} opacity={hovered.state === 'level3' ? 1 : 0.65}>
+              {hovered.state === 'new' ? 'New' : hovered.state === 'level1' ? 'Level 1' : hovered.state === 'level2' ? 'Level 2' : hovered.state === 'level3' ? 'Level 3' : 'Forgotten'}
+            </text>
+          </>
+        ) : (
+          <>
+            <text x={SG_CX} y={SG_CY + 10} textAnchor="middle" fontSize={30} fontWeight="800" fill="currentColor">
+              {pctText}
+            </text>
+            <text x={SG_CX} y={SG_CY + 24} textAnchor="middle" fontSize={10} fill="currentColor" opacity={0.4}>
+              mastered
+            </text>
+          </>
+        )}
+      </svg>
+
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
+        {(['level3', 'level2', 'level1', 'new'] as MasteryState[]).map(s => (
+          <span key={s} className="flex items-center gap-1">
+            <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: LEVEL_FILL[s] }} />
+            {s === 'new' ? 'New' : s === 'level1' ? 'Level 1' : s === 'level2' ? 'Level 2' : 'Level 3'}
+          </span>
+        ))}
       </div>
     </div>
   )
@@ -714,7 +863,7 @@ export function ReadinessCard({
   return (
     <div className="space-y-4">
       {/* Bento grid: left = heatmap + plan, right = gauges + actions (md+) */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_256px] gap-4 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
       {/* Primary exam card — left column */}
       <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-4">
@@ -1058,136 +1207,99 @@ export function ReadinessCard({
         </CardContent>
       </Card>
 
-      {/* RIGHT COLUMN: RadialGauges + countdown + action buttons (premium only) */}
+      {/* RIGHT COLUMN: Study Guide (premium only) */}
       {isPremium && (
         <div className="space-y-3">
-          {/* Three per-domain radial gauges — always visible */}
-          {sections.length > 0 && (
-            <div className="rounded-xl border bg-card p-4">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Progress by Domain</p>
-              <div className="grid grid-cols-3 gap-2">
-                {sections.map(sec => (
-                  <RadialGauge
-                    key={sec.name}
-                    pct={sec.readinessPct}
-                    label={sec.name}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          <Card className="border bg-card">
+            <CardContent className="p-4 space-y-4">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Study Guide</p>
 
-          {/* Action buttons */}
-          <div className="flex flex-col gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                const hasStudyPlan = studyPlanConceptsForModal.length > 0
-                openDashboard(
-                  toRefs(allConcepts),
-                  hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
-                  hasStudyPlan ? 'study-plan' : 'entire-syllabus',
-                  0,
-                )
-              }}
-              disabled={allConcepts.length === 0}
-              className="gap-1.5 text-sm w-full"
-            >
-              <BookOpen className="h-4 w-4" />
-              Read concepts
-            </Button>
-            <Button
-              onClick={handleStartQuiz}
-              className="gap-1.5 text-sm w-full"
-            >
-              <Play className="h-4 w-4" />
-              Start Quiz
-            </Button>
-          </div>
+              <StudyGuideRadial
+                syllabus={syllabus}
+                examRecords={examRecords}
+                now={now}
+                masteredCount={aggregate.level3}
+                totalCount={aggregate.total}
+                onConceptClick={name => {
+                  const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+                  openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx)
+                }}
+              />
+
+              <div className="flex flex-col gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    const hasStudyPlan = studyPlanConceptsForModal.length > 0
+                    openDashboard(
+                      toRefs(allConcepts),
+                      hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
+                      hasStudyPlan ? 'study-plan' : 'entire-syllabus',
+                      0,
+                    )
+                  }}
+                  disabled={allConcepts.length === 0}
+                  className="gap-1.5 text-sm w-full"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  Read concepts
+                </Button>
+                <Button onClick={handleStartQuiz} className="gap-1.5 text-sm w-full">
+                  <Play className="h-4 w-4" />
+                  Start Quiz
+                </Button>
+              </div>
+
+              {/* Topics mastered collapsible */}
+              <div className="border-t pt-3 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => setTopicsMasteredOpen(prev => !prev)}
+                  className="w-full"
+                  aria-expanded={topicsMasteredOpen}
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Topics mastered</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold">
+                          {aggregate.level3}
+                          <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
+                          <span className="text-muted-foreground font-normal ml-1.5">({aggregate.strongPct}%)</span>
+                        </span>
+                        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
+                      </div>
+                    </div>
+                    <div className="h-2 rounded-full bg-secondary overflow-hidden flex">
+                      <div className="h-full transition-all" style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
+                      <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
+                      <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
+                    </div>
+                  </div>
+                </button>
+
+                {topicsMasteredOpen && (
+                  <div className="max-h-80 overflow-y-auto">
+                    <StudyPlanTracker
+                      syllabus={syllabus}
+                      masteryRecords={masteryRecords}
+                      studyPlan={plan}
+                      allConceptsForNav={allConcepts}
+                      onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
+                      openTopics={openTopics}
+                      onToggle={toggleTopic}
+                      flashingConcept={flashingConcept}
+                    />
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
       </div>{/* end bento grid */}
 
-      {/* Topics mastered — full width below bento grid (premium only) */}
-      {isPremium ? (
-        <>
-          <Card>
-            <CardContent className="p-5 space-y-4">
-              <button
-                type="button"
-                onClick={() => setTopicsMasteredOpen(prev => !prev)}
-                className="w-full"
-                aria-expanded={topicsMasteredOpen}
-              >
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Topics mastered</span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold">
-                        {aggregate.level3}
-                        <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
-                        <span className="text-muted-foreground font-normal ml-1.5">({aggregate.strongPct}%)</span>
-                      </span>
-                      <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
-                    </div>
-                  </div>
-                  <div className="h-2.5 rounded-full bg-secondary overflow-hidden flex">
-                    <div
-                      className="h-full transition-all"
-                      style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }}
-                    />
-                    <div
-                      className="h-full transition-all"
-                      style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }}
-                    />
-                    <div
-                      className="h-full transition-all"
-                      style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }}
-                    />
-                  </div>
-                  {(aggregate.level3 > 0 || aggregate.level2 > 0 || aggregate.level1 > 0) && (
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      {aggregate.level3 > 0 && (
-                        <span className="flex items-center gap-1.5">
-                          <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-                          Level 3
-                        </span>
-                      )}
-                      {aggregate.level2 > 0 && (
-                        <span className="flex items-center gap-1.5">
-                          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
-                          Level 2
-                        </span>
-                      )}
-                      {aggregate.level1 > 0 && (
-                        <span className="flex items-center gap-1.5">
-                          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
-                          Level 1
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </button>
-
-              {topicsMasteredOpen && (
-                <div className="max-h-96 overflow-y-auto">
-                  <StudyPlanTracker
-                    syllabus={syllabus}
-                    masteryRecords={masteryRecords}
-                    studyPlan={plan}
-                    allConceptsForNav={allConcepts}
-                    onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
-                    openTopics={openTopics}
-                    onToggle={toggleTopic}
-                    flashingConcept={flashingConcept}
-                  />
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </>
-      ) : (
+      {!isPremium && (
         <>
           {/* Study Guide — collapsible, above action buttons */}
           <Card>

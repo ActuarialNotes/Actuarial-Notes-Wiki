@@ -5,7 +5,7 @@ interface RadialGaugeProps {
   color?: string
 }
 
-export function RadialGauge({ pct, label, size = 60, color = 'hsl(221, 83%, 53%)' }: RadialGaugeProps) {
+export function RadialGauge({ pct, label, size = 60, color = 'hsl(142, 71%, 45%)' }: RadialGaugeProps) {
   const cx = size / 2
   const cy = size / 2
   const r = size * 0.4

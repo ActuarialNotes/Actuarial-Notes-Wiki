@@ -160,11 +160,12 @@ interface MascotWidgetProps {
   avatarUrl: string
   initials: string
   context?: PhraseContext
+  compact?: boolean
 }
 
 const CYCLE_MS = 7000
 
-export function MascotWidget({ avatarUrl, initials, context = {} }: MascotWidgetProps) {
+export function MascotWidget({ avatarUrl, initials, context = {}, compact = false }: MascotWidgetProps) {
   const parsed = parseAvatarUrl(avatarUrl)
   const animalType = parsed.type === 'animal' ? parsed.value : null
   const variant = parsed.type === 'animal' ? parsed.variant : undefined
@@ -178,8 +179,10 @@ export function MascotWidget({ avatarUrl, initials, context = {} }: MascotWidget
   const [phraseIdx, setPhraseIdx] = useState(() => Math.floor(Math.random() * phrases.length))
   const [visible, setVisible] = useState(true)
   const [showName, setShowName] = useState(false)
+  const [showBubble, setShowBubble] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const nameTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const bubbleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const advance = useCallback(() => {
     setVisible(false)
@@ -204,6 +207,14 @@ export function MascotWidget({ avatarUrl, initials, context = {} }: MascotWidget
   }, [phraseIdx, advance, showName])
 
   const handleClick = () => {
+    if (compact) {
+      if (timerRef.current) clearTimeout(timerRef.current)
+      if (bubbleTimerRef.current) clearTimeout(bubbleTimerRef.current)
+      advance()
+      setShowBubble(true)
+      bubbleTimerRef.current = setTimeout(() => setShowBubble(false), 3500)
+      return
+    }
     if (timerRef.current) clearTimeout(timerRef.current)
     if (nameTimerRef.current) clearTimeout(nameTimerRef.current)
     setVisible(false)
@@ -231,7 +242,7 @@ export function MascotWidget({ avatarUrl, initials, context = {} }: MascotWidget
   const displayText = showName ? skinName : currentPhrase
 
   // Render the character icon — animal SVG or color/initial circle
-  const iconSize = 48
+  const iconSize = compact ? 36 : 48
   const icon = (() => {
     if (parsed.type === 'animal') {
       return null // handled below via MascotAnimalIcon
@@ -266,6 +277,54 @@ export function MascotWidget({ avatarUrl, initials, context = {} }: MascotWidget
       </span>
     )
   })()
+
+  // Compact mode: small avatar button with a floating speech bubble on click
+  if (compact) {
+    return (
+      <div className="relative shrink-0">
+        <button
+          type="button"
+          onClick={handleClick}
+          aria-label="Mascot — click for a message"
+          className="rounded-full transition-transform duration-150 active:scale-90 outline-none focus-visible:ring-2 focus-visible:ring-primary block"
+        >
+          {parsed.type === 'animal'
+            ? <MascotAnimalIcon animal={parsed.value} variant={variant} size={iconSize} />
+            : icon}
+        </button>
+        {showBubble && (
+          <div
+            className="absolute z-50 bottom-full left-1/2 mb-2 pointer-events-none"
+            style={{ transform: 'translateX(-50%)' }}
+          >
+            <div
+              className="rounded-xl border bg-card px-3 py-2 shadow-lg text-xs leading-snug text-foreground whitespace-normal"
+              style={{
+                maxWidth: 200,
+                minWidth: 120,
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0) scale(1)' : 'translateY(4px) scale(0.97)',
+                transition: 'opacity 250ms ease, transform 250ms ease',
+              }}
+            >
+              {currentPhrase}
+            </div>
+            <div
+              className="absolute left-1/2 top-full"
+              style={{
+                transform: 'translateX(-50%)',
+                width: 0,
+                height: 0,
+                borderLeft: '5px solid transparent',
+                borderRight: '5px solid transparent',
+                borderTop: '5px solid hsl(var(--border))',
+              }}
+            />
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <button

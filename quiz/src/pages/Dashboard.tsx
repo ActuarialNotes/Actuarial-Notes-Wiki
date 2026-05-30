@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { ChevronLeft, ChevronRight, Loader2, LogIn, PlusCircle, Sparkles, X } from 'lucide-react'
+import { Loader2, LogIn, PlusCircle, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -166,14 +166,6 @@ export default function Dashboard() {
     if (activeProgressKey) updateTargetDate(activeProgressKey, date)
   }, [activeProgressKey, updateTargetDate])
 
-  const handlePrev = useCallback(() => {
-    setActiveExamIdx(i => ((i - 1) + inProgressSyllabi.length) % inProgressSyllabi.length)
-  }, [inProgressSyllabi.length])
-
-  const handleNext = useCallback(() => {
-    setActiveExamIdx(i => (i + 1) % inProgressSyllabi.length)
-  }, [inProgressSyllabi.length])
-
   // ── Study plan ─────────────────────────────────────────────────────────────
   const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan, replaceTodaysConcepts } =
     useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate)
@@ -224,6 +216,14 @@ export default function Dashboard() {
     ))
   }, [activeTargetDate])
 
+  const daysToReady = useMemo(() => {
+    if (!planConfig.targetReadyDate) return null
+    const now = new Date(); now.setHours(0, 0, 0, 0)
+    return Math.max(0, Math.ceil(
+      (new Date(planConfig.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000
+    ))
+  }, [planConfig.targetReadyDate])
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -260,34 +260,63 @@ export default function Dashboard() {
       style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
       {/* Header */}
-      <div className="flex items-center gap-3">
-        {!isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
-        <div className="flex-1 min-w-0">
-          <h1 className="text-base font-bold truncate leading-tight">{displayName}</h1>
-          <p className="text-xs text-muted-foreground leading-tight">Actuarial Notes</p>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="text-xl font-bold tracking-tight">Actuarial Notes</h1>
+          {!isGuest && (
+            <button
+              type="button"
+              onClick={() => setExamsOpen(true)}
+              className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+              aria-label="Add or manage exams"
+              title="Add or manage exams"
+            >
+              <PlusCircle className="h-5 w-5" />
+            </button>
+          )}
         </div>
-        {overallPct !== null && activeSyllabus && (
-          <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-primary/10 border border-primary/20 shrink-0">
-            <span className="text-base font-bold tabular-nums leading-none">{overallPct}%</span>
-            <span className="text-[9px] text-muted-foreground mt-0.5">Readiness</span>
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {!isGuest && (
+            <MascotWidget compact avatarUrl={avatarUrl} initials={initials} context={mascotContext} />
+          )}
+          {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
+          <span className="text-sm font-semibold truncate min-w-0 flex-1">{displayName}</span>
+          {overallPct !== null && activeSyllabus && (
+            <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-primary/10 border border-primary/20 shrink-0">
+              <span className="text-sm font-bold tabular-nums leading-none">{overallPct}%</span>
+              <span className="text-[9px] text-muted-foreground mt-0.5">Readiness</span>
+            </div>
+          )}
+          {daysToReady !== null && (
+            <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 shrink-0">
+              <span className="text-sm font-bold tabular-nums leading-none text-amber-600 dark:text-amber-400">{daysToReady}</span>
+              <span className="text-[9px] text-muted-foreground mt-0.5">to prepare</span>
+            </div>
+          )}
+          {daysUntilExam !== null && (
+            <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-card border shrink-0">
+              <span className="text-sm font-bold tabular-nums leading-none">{daysUntilExam}</span>
+              <span className="text-[9px] text-muted-foreground mt-0.5">until exam</span>
+            </div>
+          )}
+        </div>
+        {multiExam && (
+          <div className="flex gap-1.5 flex-wrap">
+            {inProgressSyllabi.map((s, i) => (
+              <button
+                key={s.examId}
+                type="button"
+                onClick={() => setActiveExamIdx(i)}
+                className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
+                  i === clampedIdx
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-transparent border-border text-muted-foreground hover:text-foreground hover:border-foreground/30'
+                }`}
+              >
+                {s.examLabel}
+              </button>
+            ))}
           </div>
-        )}
-        {daysUntilExam !== null && (
-          <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-card border shrink-0">
-            <span className="text-base font-bold tabular-nums leading-none">{daysUntilExam}</span>
-            <span className="text-[9px] text-muted-foreground mt-0.5">days left</span>
-          </div>
-        )}
-        {!isGuest && (
-          <button
-            type="button"
-            onClick={() => setExamsOpen(true)}
-            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-            aria-label="Add or manage exams"
-            title="Add or manage exams"
-          >
-            <PlusCircle className="h-5 w-5" />
-          </button>
         )}
       </div>
 
@@ -310,51 +339,6 @@ export default function Dashboard() {
             aria-label="Dismiss"
           >
             <X className="h-4 w-4" />
-          </button>
-        </div>
-      )}
-
-      {/* Mascot widget — only shown for logged-in users with an animal avatar */}
-      {!isGuest && (
-        <MascotWidget
-          avatarUrl={avatarUrl}
-          initials={initials}
-          context={mascotContext}
-        />
-      )}
-
-      {/* Exam navigation dots + arrows */}
-      {multiExam && (
-        <div className="flex items-center justify-center gap-2" aria-label="Exam navigation">
-          <button
-            type="button"
-            onClick={handlePrev}
-            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-            aria-label="Previous exam"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          {inProgressSyllabi.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setActiveExamIdx(i)}
-              aria-label={`Exam ${i + 1} of ${inProgressSyllabi.length}`}
-              aria-current={i === clampedIdx ? 'true' : undefined}
-              className={`h-2 rounded-full transition-all ${
-                i === clampedIdx
-                  ? 'w-5 bg-primary'
-                  : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/60'
-              }`}
-            />
-          ))}
-          <button
-            type="button"
-            onClick={handleNext}
-            className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-            aria-label="Next exam"
-          >
-            <ChevronRight className="h-5 w-5" />
           </button>
         </div>
       )}

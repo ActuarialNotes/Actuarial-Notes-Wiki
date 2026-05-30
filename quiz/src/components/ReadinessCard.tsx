@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2 } from 'lucide-react'
+import { AlertTriangle, ArrowUp, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -896,31 +896,16 @@ export function ReadinessCard({
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2 flex-wrap">
               <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
-              {isPremium && plan && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 text-[10px] font-semibold shrink-0">
-                  <CalendarCheck className="h-3 w-3" />
-                  Study Plan
-                </span>
-              )}
             </div>
             <div className="flex items-center gap-1 shrink-0">
               <button
                 type="button"
                 onClick={() => setShowHeatmapInfo(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                className="text-muted-foreground hover:text-foreground transition-colors p-1.5"
                 aria-label="Exam heatmap info"
                 title="Exam heatmap info"
               >
-                <Info className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => { setConfigInitialStep(1); setShowConfig(true) }}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                aria-label="Study plan settings"
-                title="Study plan settings"
-              >
-                <Settings2 className="h-4 w-4" />
+                <Info className="h-5 w-5" />
               </button>
             </div>
           </div>
@@ -1060,13 +1045,37 @@ export function ReadinessCard({
                 <button
                   type="button"
                   onClick={() => setShowInfo(true)}
-                  className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                  className="text-muted-foreground hover:text-foreground transition-colors p-1.5"
                   aria-label="How custom study plans work"
                   title="How custom study plans work"
                 >
-                  <Info className="h-3.5 w-3.5" />
+                  <Info className="h-5 w-5" />
                 </button>
               </div>
+
+              {/* Compact daily gems bonus — just below heading */}
+              <button
+                type="button"
+                onClick={() => setShowBonusInfo(true)}
+                className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md border text-xs text-left transition-colors ${
+                  allConceptsDone
+                    ? 'bg-cyan-500/10 border-cyan-500/30 hover:bg-cyan-500/15'
+                    : 'border-dashed border-muted-foreground/30 hover:bg-muted/20'
+                }`}
+              >
+                {allConceptsDone
+                  ? <Gem className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
+                  : <Lock className="h-3.5 w-3.5 text-muted-foreground shrink-0" />}
+                <span className={`flex-1 font-medium ${allConceptsDone ? 'text-cyan-600 dark:text-cyan-400' : 'text-muted-foreground'}`}>
+                  {allConceptsDone && bonusClaimed
+                    ? `+${claimedBonusAmount} bonus gems earned!`
+                    : allConceptsDone
+                    ? '2× Daily Gems Bonus unlocked!'
+                    : '2× Daily Gems Bonus'}
+                </span>
+                {!allConceptsDone && <span className="text-muted-foreground/60 shrink-0">Complete plan to unlock</span>}
+                <Info className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" />
+              </button>
 
               {/* Primary CTA */}
               <button
@@ -1180,45 +1189,6 @@ export function ReadinessCard({
                 </div>
               )}
 
-              {/* Daily Bonus */}
-              <button
-                type="button"
-                onClick={() => setShowBonusInfo(true)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors text-left ${
-                  allConceptsDone
-                    ? 'bg-cyan-500/10 border-cyan-500/30 hover:bg-cyan-500/15'
-                    : 'border-dashed border-muted-foreground/30 hover:bg-muted/20'
-                }`}
-              >
-                <div className={`flex items-center justify-center h-8 w-8 rounded-full shrink-0 ${allConceptsDone ? 'bg-cyan-500/20' : 'bg-muted/50'}`}>
-                  {allConceptsDone
-                    ? <Gem className="h-4 w-4 text-cyan-400" />
-                    : <Lock className="h-3.5 w-3.5 text-muted-foreground" />}
-                </div>
-                <div className="flex-1 min-w-0">
-                  {allConceptsDone && bonusClaimed ? (
-                    <>
-                      <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
-                        +{claimedBonusAmount} bonus gems earned!
-                      </p>
-                      <p className="text-xs text-cyan-600/70 dark:text-cyan-400/70">Daily plan bonus claimed</p>
-                    </>
-                  ) : allConceptsDone ? (
-                    <>
-                      <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400">
-                        2× Daily Gems Bonus unlocked!
-                      </p>
-                      <p className="text-xs text-cyan-600/70 dark:text-cyan-400/70">Awarding +{todayGemsEarned} gems…</p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="text-sm font-medium text-muted-foreground">2× Daily Gems Bonus</p>
-                      <p className="text-xs text-muted-foreground/70">Complete today's plan to unlock</p>
-                    </>
-                  )}
-                </div>
-                <Info className="h-4 w-4 text-muted-foreground/60 shrink-0" />
-              </button>
             </div>
           )}
 
@@ -1237,7 +1207,7 @@ export function ReadinessCard({
         <div className="space-y-3">
           <Card ref={studyGuideCardRef} className="border bg-card">
             <CardContent className="p-4 space-y-4">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Study Guide</p>
+              <h3 className="text-sm font-semibold">Study Guide</h3>
 
               <StudyGuideRadial
                 syllabus={syllabus}
@@ -1328,96 +1298,80 @@ export function ReadinessCard({
 
       {!isPremium && (
         <>
-          {/* Study Guide — collapsible, above action buttons */}
-          <Card>
-            <CardContent className="p-5 space-y-4">
-              <button
-                type="button"
-                onClick={() => setTopicsMasteredOpen(prev => !prev)}
-                className="w-full text-left"
-                aria-expanded={topicsMasteredOpen}
-              >
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold">Study Guide</span>
-                  <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
+          {/* Study Guide — same card as premium, all concepts shown as "New" */}
+          <div className="space-y-3">
+            <Card className="border bg-card">
+              <CardContent className="p-4 space-y-4">
+                <h3 className="text-sm font-semibold">Study Guide</h3>
+
+                <StudyGuideRadial
+                  syllabus={syllabus}
+                  examRecords={[]}
+                  now={now}
+                  masteredCount={0}
+                  totalCount={aggregate.total}
+                  onConceptClick={name => {
+                    const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+                    openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx)
+                  }}
+                />
+
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)}
+                    disabled={allConcepts.length === 0}
+                    className="gap-1.5 text-sm w-full"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    Read concepts
+                  </Button>
+                  <Button onClick={handleStartQuiz} className="gap-1.5 text-sm w-full">
+                    <Play className="h-4 w-4" />
+                    Start Quiz
+                  </Button>
                 </div>
-              </button>
 
-              {topicsMasteredOpen && (
-                <>
-                  <div className="flex items-center gap-6">
-                    <ReadinessDonut
-                      sections={sections}
-                      overallPct={overallPct}
-                      activeSection={activeSection}
-                      onSectionHover={handleSectionHover}
-                      onSectionClick={handleSectionClick}
-                    />
-                    <div className="flex flex-col gap-1.5 min-w-0 flex-1">
-                      {sections.map((sec, i) => (
-                        <div
-                          key={sec.name}
-                          className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
-                          onMouseEnter={() => handleSectionHover(i)}
-                          onMouseLeave={() => handleSectionHover(null)}
-                          onClick={() => handleSectionClick(i)}
-                        >
-                          <span
-                            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
-                          />
-                          <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
-                          <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
+                {/* Topics mastered collapsible */}
+                <div className="border-t pt-3 space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => setTopicsMasteredOpen(prev => !prev)}
+                    className="w-full"
+                    aria-expanded={topicsMasteredOpen}
+                  >
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Topics mastered</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold">
+                            0<span className="text-muted-foreground font-normal">/{aggregate.total}</span>
+                            <span className="text-muted-foreground font-normal ml-1.5">(0%)</span>
+                          </span>
+                          <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
                         </div>
-                      ))}
+                      </div>
+                      <div className="h-2 rounded-full bg-secondary overflow-hidden" />
                     </div>
-                  </div>
+                  </button>
 
-                  <StudyPlanTracker
-                    syllabus={syllabus}
-                    masteryRecords={masteryRecords}
-                    studyPlan={null}
-                    allConceptsForNav={allConcepts}
-                    onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
-                    openTopics={openTopics}
-                    onToggle={toggleTopic}
-                    showMastery={false}
-                  />
-                </>
-              )}
-
-              <p className="text-xs text-muted-foreground">
-                <Link to="/upgrade" className="underline hover:text-foreground">Upgrade to Premium</Link> to unlock concept mastery tracking.
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Action buttons – free users */}
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                const hasStudyPlan = studyPlanConceptsForModal.length > 0
-                openDashboard(
-                  toRefs(allConcepts),
-                  hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
-                  hasStudyPlan ? 'study-plan' : 'entire-syllabus',
-                  0,
-                )
-              }}
-              disabled={allConcepts.length === 0}
-              className="gap-1.5 text-sm"
-            >
-              <BookOpen className="h-4 w-4" />
-              Read concepts
-            </Button>
-            <Button
-              onClick={handleStartQuiz}
-              className="gap-1.5 text-sm"
-            >
-              <Play className="h-4 w-4" />
-              Start Quiz
-            </Button>
+                  {topicsMasteredOpen && (
+                    <div className="max-h-80 overflow-y-auto">
+                      <StudyPlanTracker
+                        syllabus={syllabus}
+                        masteryRecords={masteryRecords}
+                        studyPlan={null}
+                        allConceptsForNav={allConcepts}
+                        onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
+                        openTopics={openTopics}
+                        onToggle={toggleTopic}
+                        showMastery={false}
+                      />
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Locked study plan section — blurred card background + overlay */}

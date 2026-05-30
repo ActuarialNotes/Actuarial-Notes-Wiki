@@ -514,11 +514,11 @@ export function TodayCard({
               <button
                 type="button"
                 onClick={() => setShowInfo(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                className="text-muted-foreground hover:text-foreground transition-colors p-1.5"
                 aria-label="How custom study plans work"
                 title="How custom study plans work"
               >
-                <Info className="h-4 w-4" />
+                <Info className="h-5 w-5" />
               </button>
               <button
                 type="button"

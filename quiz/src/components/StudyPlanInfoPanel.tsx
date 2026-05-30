@@ -147,10 +147,10 @@ export function StudyPlanInfoPanel({ open, onClose }: Props) {
           <button
             type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
+            className="text-muted-foreground hover:text-foreground p-2 transition-colors rounded-md hover:bg-muted/50"
             aria-label="Close"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
@@ -172,10 +172,10 @@ export function StudyPlanInfoPanel({ open, onClose }: Props) {
             type="button"
             onClick={prev}
             disabled={slide === 0}
-            className="p-1.5 rounded-md text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
+            className="p-2.5 rounded-md text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors hover:bg-muted/50"
             aria-label="Previous"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-6 w-6" />
           </button>
           <div className="flex gap-1.5 items-center">
             {Array.from({ length: total }).map((_, i) => (
@@ -192,10 +192,10 @@ export function StudyPlanInfoPanel({ open, onClose }: Props) {
             <button
               type="button"
               onClick={next}
-              className="p-1.5 rounded-md text-muted-foreground hover:text-foreground transition-colors"
+              className="p-2.5 rounded-md text-muted-foreground hover:text-foreground transition-colors hover:bg-muted/50"
               aria-label="Next"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-6 w-6" />
             </button>
           ) : (
             <button

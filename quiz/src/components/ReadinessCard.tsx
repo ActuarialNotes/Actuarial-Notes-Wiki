@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Repeat, Settings2, Sparkles, TrendingDown } from 'lucide-react'
+import { AlertTriangle, ArrowUp, BookOpen, CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -346,8 +346,6 @@ export function ReadinessCard({
     } catch { return 0 }
   })
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
-  const [featurePanelIndex, setFeaturePanelIndex] = useState(0)
-  const [swipeTouchStart, setSwipeTouchStart] = useState(0)
 
   // Quiz history state
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
@@ -1200,7 +1198,71 @@ export function ReadinessCard({
         </>
       ) : (
         <>
-          {/* Action buttons – free users, above locked content */}
+          {/* Study Guide — collapsible, above action buttons */}
+          <Card>
+            <CardContent className="p-5 space-y-4">
+              <button
+                type="button"
+                onClick={() => setTopicsMasteredOpen(prev => !prev)}
+                className="w-full text-left"
+                aria-expanded={topicsMasteredOpen}
+              >
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-semibold">Study Guide</span>
+                  <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
+                </div>
+              </button>
+
+              {topicsMasteredOpen && (
+                <>
+                  <div className="flex items-center gap-6">
+                    <ReadinessDonut
+                      sections={sections}
+                      overallPct={overallPct}
+                      activeSection={activeSection}
+                      onSectionHover={handleSectionHover}
+                      onSectionClick={handleSectionClick}
+                    />
+                    <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+                      {sections.map((sec, i) => (
+                        <div
+                          key={sec.name}
+                          className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
+                          onMouseEnter={() => handleSectionHover(i)}
+                          onMouseLeave={() => handleSectionHover(null)}
+                          onClick={() => handleSectionClick(i)}
+                        >
+                          <span
+                            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+                            style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
+                          />
+                          <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
+                          <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <StudyPlanTracker
+                    syllabus={syllabus}
+                    masteryRecords={masteryRecords}
+                    studyPlan={null}
+                    allConceptsForNav={allConcepts}
+                    onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
+                    openTopics={openTopics}
+                    onToggle={toggleTopic}
+                    showMastery={false}
+                  />
+                </>
+              )}
+
+              <p className="text-xs text-muted-foreground">
+                <Link to="/upgrade" className="underline hover:text-foreground">Upgrade to Premium</Link> to unlock concept mastery tracking.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Action buttons – free users */}
           <div className="grid grid-cols-2 gap-2">
             <Button
               variant="outline"
@@ -1267,55 +1329,21 @@ export function ReadinessCard({
                 </div>
               </div>
 
-              {/* Premium pill — extra space above to separate from title */}
+              {/* Premium pill */}
               <span className="mt-5 inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
                 Actuarial Notes Premium
               </span>
 
-              {/* Info panels */}
-              <div className="w-full max-w-xs mt-4">
-                <div
-                  className="overflow-hidden rounded-xl"
-                  onTouchStart={e => setSwipeTouchStart(e.touches[0].clientX)}
-                  onTouchEnd={e => {
-                    const diff = swipeTouchStart - e.changedTouches[0].clientX
-                    if (Math.abs(diff) > 40) {
-                      if (diff > 0 && featurePanelIndex < 2) setFeaturePanelIndex(i => i + 1)
-                      if (diff < 0 && featurePanelIndex > 0) setFeaturePanelIndex(i => i - 1)
-                    }
-                  }}
-                >
-                  <div
-                    className="flex transition-transform duration-300 ease-in-out"
-                    style={{ transform: `translateX(-${featurePanelIndex * 100}%)` }}
-                  >
-                    <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
-                      <Repeat className="h-9 w-9 text-primary" />
-                      <p className="text-sm font-semibold">Spaced Repetition</p>
-                      <p className="text-xs text-muted-foreground leading-snug">Revisit each concept at growing intervals — short gaps at first, then longer as it sticks.</p>
-                    </div>
-                    <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
-                      <TrendingDown className="h-9 w-9 text-primary" />
-                      <p className="text-sm font-semibold">The Forgetting Curve</p>
-                      <p className="text-xs text-muted-foreground leading-snug">Without practice, concepts decay over time. Your plan re-injects them before they're lost.</p>
-                    </div>
-                    <div className="w-full shrink-0 flex flex-col items-center gap-3 border bg-background/60 p-5 text-center">
-                      <Sparkles className="h-9 w-9 text-primary" />
-                      <p className="text-sm font-semibold">Concept Levelling</p>
-                      <p className="text-xs text-muted-foreground leading-snug">Concepts progress New → Level 1 → Level 2 → Level 3 as you answer correctly across days.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-center gap-2 mt-3">
-                  {[0, 1, 2].map(i => (
-                    <button
-                      key={i}
-                      onClick={() => setFeaturePanelIndex(i)}
-                      className={`h-2 rounded-full transition-all ${featurePanelIndex === i ? 'w-5 bg-primary' : 'w-2 bg-muted-foreground/30'}`}
-                    />
-                  ))}
-                </div>
-              </div>
+              {/* Info icon — opens study plan info panel */}
+              <button
+                type="button"
+                onClick={() => setShowInfo(true)}
+                className="mt-5 flex items-center justify-center h-14 w-14 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 hover:bg-primary/20 transition-colors"
+                aria-label="How custom study plans work"
+                title="How custom study plans work"
+              >
+                <Info className="h-7 w-7" />
+              </button>
 
               {/* Upgrade button */}
               <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5 mt-6 w-full max-w-xs'}>
@@ -1323,70 +1351,6 @@ export function ReadinessCard({
               </Link>
             </div>
           </div>
-
-          {/* Syllabus card — free users can browse topics and open concept popouts */}
-          <Card>
-            <CardContent className="p-5 space-y-4">
-              <button
-                type="button"
-                onClick={() => setTopicsMasteredOpen(prev => !prev)}
-                className="w-full text-left"
-                aria-expanded={topicsMasteredOpen}
-              >
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold">Syllabus</span>
-                  <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
-                </div>
-              </button>
-
-              {topicsMasteredOpen && (
-                <>
-                  <div className="flex items-center gap-6">
-                    <ReadinessDonut
-                      sections={sections}
-                      overallPct={overallPct}
-                      activeSection={activeSection}
-                      onSectionHover={handleSectionHover}
-                      onSectionClick={handleSectionClick}
-                    />
-                    <div className="flex flex-col gap-1.5 min-w-0 flex-1">
-                      {sections.map((sec, i) => (
-                        <div
-                          key={sec.name}
-                          className="flex items-center gap-2 min-w-0 cursor-pointer rounded px-1 -mx-1 transition-colors hover:bg-muted/50"
-                          onMouseEnter={() => handleSectionHover(i)}
-                          onMouseLeave={() => handleSectionHover(null)}
-                          onClick={() => handleSectionClick(i)}
-                        >
-                          <span
-                            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: `rgba(34,197,94,${(0.12 + 0.88 * (sec.readinessPct / 100)).toFixed(2)})` }}
-                          />
-                          <span className="text-xs text-muted-foreground truncate flex-1">{sec.name}</span>
-                          <span className="text-xs font-medium tabular-nums shrink-0">{Math.round(sec.readinessPct)}%</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <StudyPlanTracker
-                    syllabus={syllabus}
-                    masteryRecords={masteryRecords}
-                    studyPlan={null}
-                    allConceptsForNav={allConcepts}
-                    onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
-                    openTopics={openTopics}
-                    onToggle={toggleTopic}
-                    showMastery={false}
-                  />
-                </>
-              )}
-
-              <p className="text-xs text-muted-foreground">
-                <Link to="/upgrade" className="underline hover:text-foreground">Upgrade to Premium</Link> to unlock concept mastery tracking.
-              </p>
-            </CardContent>
-          </Card>
         </>
       )}
 

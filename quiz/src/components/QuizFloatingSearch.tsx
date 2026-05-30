@@ -2,10 +2,16 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, X } from 'lucide-react'
 import { filterQuestions } from '@/lib/parser'
+import type { QuestionFilter } from '@/lib/parser'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
 
-export function QuizFloatingSearch() {
+interface QuizFloatingSearchProps {
+  /** When provided, results are pre-filtered to this pool (e.g. current exam + concepts). */
+  filter?: QuestionFilter
+}
+
+export function QuizFloatingSearch({ filter }: QuizFloatingSearchProps = {}) {
   const navigate = useNavigate()
   const { questions: allQuestions } = useAllQuestions()
   const [query, setQuery] = useState('')
@@ -56,11 +62,14 @@ export function QuizFloatingSearch() {
 
   const questionResults = useMemo(() => {
     const q = query.trim()
-    // Show all questions (capped for performance) when no query so users can
-    // preview the full pool; filter normally when a query is present.
-    if (!q) return allQuestions.slice(0, 100)
-    return filterQuestions(allQuestions, { search: q }).slice(0, 50)
-  }, [allQuestions, query])
+    const hasFilter = filter && Object.keys(filter).length > 0
+    // Merge the quiz filter with any free-text query, then cap for performance.
+    if (!q) {
+      const base = hasFilter ? filterQuestions(allQuestions, filter!) : allQuestions
+      return base.slice(0, 100)
+    }
+    return filterQuestions(allQuestions, { ...filter, search: q }).slice(0, 50)
+  }, [allQuestions, query, filter])
 
   const selectedQuestions = useMemo(
     () => allQuestions.filter(q => selectedIds.has(q.id)),

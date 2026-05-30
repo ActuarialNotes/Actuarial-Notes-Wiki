@@ -7,7 +7,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
-  FlipHorizontal,
   GraduationCap,
   Images,
   LayoutGrid,
@@ -310,6 +309,17 @@ function FlashcardPacksSection() {
                 </div>
               </div>
 
+              {/* Add all button — visible even when concept list is collapsed */}
+              {!isLoading && !allAdded && displayConcepts.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleAddSelected}
+                  className="inline-flex items-center gap-1 px-2 py-1 rounded bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
+                >
+                  {selectedConcepts.size > 0 ? `Add ${selectedConcepts.size}` : `Add all ${notYetAdded.length}`}
+                </button>
+              )}
+
               {conceptsExpanded && (
                 <div className="space-y-2">
                   {isLoading && selectedPack.type === 'study_plan' && (
@@ -335,53 +345,42 @@ function FlashcardPacksSection() {
                   )}
 
                   {!isLoading && displayConcepts.length > 0 && (
-                    <>
-                      <ul
-                        className="space-y-0.5 overflow-y-auto"
-                        style={{ maxHeight: '14rem' }}
-                      >
-                        {displayConcepts.map(name => {
-                          const added = hasCard(name)
-                          const checked = selectedConcepts.has(name)
-                          return (
-                            <li key={name} className="flex items-center gap-2 py-0.5">
-                              <button
-                                type="button"
-                                onClick={() => !added && toggleConceptSelect(name)}
-                                disabled={added}
-                                aria-label={added ? `${name} already in gallery` : checked ? `Deselect ${name}` : `Select ${name}`}
-                                className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors ${
-                                  added
-                                    ? 'bg-green-500/20 border-green-500 cursor-default'
-                                    : checked
-                                      ? 'bg-primary border-primary'
-                                      : 'border-muted-foreground/40 hover:border-muted-foreground/70'
-                                }`}
-                              >
-                                {(added || checked) && (
-                                  <svg className={`w-2.5 h-2.5 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
-                                    <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                )}
-                              </button>
-                              <span className={`text-xs flex-1 min-w-0 truncate ${added ? 'text-muted-foreground' : ''}`}>{name}</span>
-                              {added && (
-                                <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In gallery</span>
+                    <ul
+                      className="space-y-0.5 overflow-y-auto"
+                      style={{ maxHeight: '14rem' }}
+                    >
+                      {displayConcepts.map(name => {
+                        const added = hasCard(name)
+                        const checked = selectedConcepts.has(name)
+                        return (
+                          <li key={name} className="flex items-center gap-2 py-0.5">
+                            <button
+                              type="button"
+                              onClick={() => !added && toggleConceptSelect(name)}
+                              disabled={added}
+                              aria-label={added ? `${name} already in gallery` : checked ? `Deselect ${name}` : `Select ${name}`}
+                              className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                                added
+                                  ? 'bg-green-500/20 border-green-500 cursor-default'
+                                  : checked
+                                    ? 'bg-primary border-primary'
+                                    : 'border-muted-foreground/40 hover:border-muted-foreground/70'
+                              }`}
+                            >
+                              {(added || checked) && (
+                                <svg className={`w-2.5 h-2.5 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
+                                  <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
                               )}
-                            </li>
-                          )
-                        })}
-                      </ul>
-                      {!allAdded && (
-                        <button
-                          type="button"
-                          onClick={handleAddSelected}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
-                        >
-                          {selectedConcepts.size > 0 ? `Add ${selectedConcepts.size}` : `Add all ${notYetAdded.length}`}
-                        </button>
-                      )}
-                    </>
+                            </button>
+                            <span className={`text-xs flex-1 min-w-0 truncate ${added ? 'text-muted-foreground' : ''}`}>{name}</span>
+                            {added && (
+                              <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In gallery</span>
+                            )}
+                          </li>
+                        )
+                      })}
+                    </ul>
                   )}
                 </div>
               )}
@@ -711,7 +710,8 @@ function GalleryPanel({
     <div className="gallery-panel fixed inset-0 z-40 flex flex-col bg-background" style={{ top: '3.5rem' }}>
       {/* Panel header */}
       <div className="sticky top-0 z-10 bg-background border-b">
-        <div className="flex items-center justify-between gap-2 px-4 py-3">
+        {/* Row 1: count, sort tabs, close */}
+        <div className="flex items-center justify-between gap-2 px-4 pt-3 pb-2">
           {/* Card count + remove-all */}
           <div className="flex items-center gap-2 shrink-0">
             <span className="font-semibold text-sm">{cards.length} card{cards.length === 1 ? '' : 's'}</span>
@@ -759,29 +759,46 @@ function GalleryPanel({
             ))}
           </div>
 
-          {/* Flip all toggle */}
           <button
             type="button"
-            onClick={() => setGlobalFlip(v => !v)}
-            title={globalFlip ? 'Show all fronts' : 'Flip all to back'}
-            className={`inline-flex items-center justify-center h-7 w-7 rounded-md border transition-colors shrink-0 ${
-              globalFlip
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-            }`}
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
+            aria-label="Close gallery"
           >
-            <FlipHorizontal className="h-3.5 w-3.5" />
+            <X className="h-4 w-4" />
           </button>
+        </div>
 
-          {/* Shared back-side mode toggles */}
-          <div className="flex items-center gap-0.5 shrink-0">
-            <span className="text-xs text-muted-foreground mr-1 hidden sm:inline">Back:</span>
+        {/* Row 2: flip switch + back-side mode toggles */}
+        <div className="flex items-center justify-between gap-3 px-4 pb-3">
+          {/* Front/Back toggle switch */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs text-muted-foreground">Flip all</span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={globalFlip}
+              onClick={() => setGlobalFlip(v => !v)}
+              title={globalFlip ? 'Show all fronts' : 'Flip all to back'}
+              className={`relative inline-flex h-7 w-12 sm:h-5 sm:w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ${
+                globalFlip ? 'bg-primary' : 'bg-muted-foreground/30'
+              }`}
+            >
+              <span className={`pointer-events-none block h-5 w-5 sm:h-4 sm:w-4 rounded-full bg-background shadow-lg ring-0 transition-transform ${
+                globalFlip ? 'translate-x-6 sm:translate-x-4' : 'translate-x-0'
+              }`} />
+            </button>
+          </div>
+
+          {/* Back-side mode toggles */}
+          <div className="flex items-center gap-1 shrink-0">
+            <span className="text-xs text-muted-foreground mr-1">Back:</span>
             <button
               type="button"
               onClick={() => toggleMode('definition')}
               title="Show definition"
               aria-pressed={reverseCardModes.has('definition')}
-              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border text-xs font-serif italic font-bold transition-colors ${
+              className={`inline-flex items-center justify-center h-10 w-10 sm:h-7 sm:w-7 rounded-md border text-sm sm:text-xs font-serif italic font-bold transition-colors ${
                 reverseCardModes.has('definition')
                   ? 'bg-primary text-primary-foreground border-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -792,33 +809,24 @@ function GalleryPanel({
               onClick={() => toggleMode('math')}
               title="Show math equations"
               aria-pressed={reverseCardModes.has('math')}
-              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border transition-colors ${
+              className={`inline-flex items-center justify-center h-10 w-10 sm:h-7 sm:w-7 rounded-md border transition-colors ${
                 reverseCardModes.has('math')
                   ? 'bg-primary text-primary-foreground border-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
-            ><Sigma className="h-3.5 w-3.5" /></button>
+            ><Sigma className="h-5 w-5 sm:h-3.5 sm:w-3.5" /></button>
             <button
               type="button"
               onClick={() => toggleMode('images')}
               title="Show images"
               aria-pressed={reverseCardModes.has('images')}
-              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border transition-colors ${
+              className={`inline-flex items-center justify-center h-10 w-10 sm:h-7 sm:w-7 rounded-md border transition-colors ${
                 reverseCardModes.has('images')
                   ? 'bg-primary text-primary-foreground border-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
-            ><Images className="h-3.5 w-3.5" /></button>
+            ><Images className="h-5 w-5 sm:h-3.5 sm:w-3.5" /></button>
           </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
-            aria-label="Close gallery"
-          >
-            <X className="h-4 w-4" />
-          </button>
         </div>
       </div>
 
@@ -1330,8 +1338,9 @@ export default function Flashcards() {
   if (cards.length === 0) {
     return (
       <>
-        <div className="container max-w-5xl mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold mb-6">Flashcards</h1>
+        <div className="container max-w-xl mx-auto px-4 py-8 space-y-6">
+          <h1 className="text-2xl font-bold">Flashcards</h1>
+          <FlashcardPacksSection />
           <div className="rounded-xl border bg-card text-card-foreground p-12 text-center space-y-3">
             <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50" />
             <p className="text-sm text-muted-foreground">

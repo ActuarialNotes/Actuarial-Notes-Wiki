@@ -74,6 +74,7 @@ function StudyGuideRadial({
   masteredCount,
   totalCount,
   selectedConcept,
+  flashRadial,
 }: {
   syllabus: WikiExamSyllabus
   examRecords: ConceptMasteryRecord[]
@@ -82,6 +83,7 @@ function StudyGuideRadial({
   masteredCount: number
   totalCount: number
   selectedConcept?: string | null
+  flashRadial?: boolean
 }) {
   const [hovered, setHovered] = useState<SGSegment | null>(null)
 
@@ -168,10 +170,16 @@ function StudyGuideRadial({
           </>
         ) : (
           <>
-            <text x={SG_CX} y={SG_CY + 10} textAnchor="middle" fontSize={30} fontWeight="800" fill="currentColor">
+            <text x={SG_CX} y={SG_CY + 10} textAnchor="middle" fontSize={30} fontWeight="800"
+              fill={flashRadial ? '#22c55e' : 'currentColor'}
+              style={{ transition: 'fill 0.8s ease-out' }}
+            >
               {pctText}
             </text>
-            <text x={SG_CX} y={SG_CY + 24} textAnchor="middle" fontSize={10} fill="currentColor" opacity={0.4}>
+            <text x={SG_CX} y={SG_CY + 24} textAnchor="middle" fontSize={10} fill="currentColor"
+              opacity={flashRadial ? 0.9 : 0.4}
+              style={{ transition: 'opacity 0.8s ease-out' }}
+            >
               mastered
             </text>
           </>
@@ -353,6 +361,7 @@ interface Props {
   onOpenOnboarding?: (step?: 1 | 2 | 3) => void
   openConceptsTrigger?: number
   startQuizTrigger?: number
+  scrollToRadialTrigger?: number
   /** Whether the user has access to the custom Study Plan. Defaults to true. */
   isPremium?: boolean
 }
@@ -360,7 +369,7 @@ interface Props {
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
-  openConceptsTrigger, startQuizTrigger,
+  openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
   isPremium = true,
 }: Props) {
   const navigate = useNavigate()
@@ -375,6 +384,7 @@ export function ReadinessCard({
   const openedFromRadialRef = useRef(false)
   const studyGuideCardRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
+  const [flashRadial, setFlashRadial] = useState(false)
   const [recentlyCompletedConcepts, setRecentlyCompletedConcepts] = useState<Set<string>>(new Set())
   const prevCompletedRef = useRef<Set<string>>(new Set())
   const [topicsMasteredOpen, setTopicsMasteredOpen] = useState(false)
@@ -723,6 +733,14 @@ export function ReadinessCard({
   }, [startQuizTrigger, handleStartQuiz])
 
   useEffect(() => {
+    if (!scrollToRadialTrigger) return
+    studyGuideCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    setFlashRadial(true)
+    const t = setTimeout(() => setFlashRadial(false), 1200)
+    return () => clearTimeout(t)
+  }, [scrollToRadialTrigger])
+
+  useEffect(() => {
     if (!popupOpen) {
       prevPopupConceptRef.current = null
       openedFromRadialRef.current = false
@@ -917,42 +935,38 @@ export function ReadinessCard({
           {/* Today's Study Plan — inline in heatmap card when no day selected (or today selected) */}
           {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
             <div className="border-t pt-4 space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
                 <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                {/* Inline gems bonus pill */}
+                <button
+                  type="button"
+                  onClick={() => setShowBonusInfo(true)}
+                  title="Daily gems bonus info"
+                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border text-[10px] font-medium shrink-0 transition-colors ${
+                    allConceptsDone
+                      ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20'
+                      : 'border-dashed border-muted-foreground/30 text-muted-foreground hover:bg-muted/30'
+                  }`}
+                >
+                  {allConceptsDone
+                    ? <Gem className="h-2.5 w-2.5 shrink-0" />
+                    : <Lock className="h-2.5 w-2.5 shrink-0" />}
+                  <span>
+                    {allConceptsDone && bonusClaimed
+                      ? `+${claimedBonusAmount} earned`
+                      : '2× Bonus'}
+                  </span>
+                </button>
                 <button
                   type="button"
                   onClick={() => setShowInfo(true)}
-                  className="text-muted-foreground hover:text-foreground transition-colors p-1.5"
+                  className="ml-auto text-muted-foreground hover:text-foreground transition-colors p-1.5"
                   aria-label="How custom study plans work"
                   title="How custom study plans work"
                 >
                   <Info className="h-5 w-5" />
                 </button>
               </div>
-
-              {/* Compact daily gems bonus — just below heading */}
-              <button
-                type="button"
-                onClick={() => setShowBonusInfo(true)}
-                className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-md border text-xs text-left transition-colors ${
-                  allConceptsDone
-                    ? 'bg-cyan-500/10 border-cyan-500/30 hover:bg-cyan-500/15'
-                    : 'border-dashed border-muted-foreground/30 hover:bg-muted/20'
-                }`}
-              >
-                {allConceptsDone
-                  ? <Gem className="h-3.5 w-3.5 text-cyan-400 shrink-0" />
-                  : <Lock className="h-3.5 w-3.5 text-muted-foreground shrink-0" />}
-                <span className={`flex-1 font-medium ${allConceptsDone ? 'text-cyan-600 dark:text-cyan-400' : 'text-muted-foreground'}`}>
-                  {allConceptsDone && bonusClaimed
-                    ? `+${claimedBonusAmount} bonus gems earned!`
-                    : allConceptsDone
-                    ? '2× Daily Gems Bonus unlocked!'
-                    : '2× Daily Gems Bonus'}
-                </span>
-                {!allConceptsDone && <span className="text-muted-foreground/60 shrink-0">Complete plan to unlock</span>}
-                <Info className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" />
-              </button>
 
               {/* Primary CTA */}
               <button
@@ -1093,6 +1107,7 @@ export function ReadinessCard({
                 masteredCount={aggregate.level3}
                 totalCount={aggregate.total}
                 selectedConcept={openedFromRadialRef.current ? popupCurrentName : null}
+                flashRadial={flashRadial}
                 onConceptClick={name => {
                   const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
                   openedFromRadialRef.current = true
@@ -1100,29 +1115,23 @@ export function ReadinessCard({
                 }}
               />
 
-              <div className="flex flex-col gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    const hasStudyPlan = studyPlanConceptsForModal.length > 0
-                    openDashboard(
-                      toRefs(allConcepts),
-                      hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
-                      hasStudyPlan ? 'study-plan' : 'entire-syllabus',
-                      0,
-                    )
-                  }}
-                  disabled={allConcepts.length === 0}
-                  className="gap-1.5 text-sm w-full"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  Read concepts
-                </Button>
-                <Button onClick={handleStartQuiz} className="gap-1.5 text-sm w-full">
-                  <Play className="h-4 w-4" />
-                  Start Quiz
-                </Button>
-              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  const hasStudyPlan = studyPlanConceptsForModal.length > 0
+                  openDashboard(
+                    toRefs(allConcepts),
+                    hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
+                    hasStudyPlan ? 'study-plan' : 'entire-syllabus',
+                    0,
+                  )
+                }}
+                disabled={allConcepts.length === 0}
+                className="gap-1.5 text-sm w-full"
+              >
+                <BookOpen className="h-4 w-4" />
+                Read concepts
+              </Button>
 
               {/* Topics mastered collapsible */}
               <div className="border-t pt-3 space-y-2">
@@ -1177,7 +1186,7 @@ export function ReadinessCard({
         <>
           {/* Study Guide — same card as premium, all concepts shown as "New" */}
           <div className="space-y-3">
-            <Card className="border bg-card">
+            <Card ref={studyGuideCardRef} className="border bg-card">
               <CardContent className="p-4 space-y-4">
                 <h3 className="text-sm font-semibold">Study Guide</h3>
 
@@ -1187,27 +1196,22 @@ export function ReadinessCard({
                   now={now}
                   masteredCount={0}
                   totalCount={aggregate.total}
+                  flashRadial={flashRadial}
                   onConceptClick={name => {
                     const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
                     openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx)
                   }}
                 />
 
-                <div className="flex flex-col gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)}
-                    disabled={allConcepts.length === 0}
-                    className="gap-1.5 text-sm w-full"
-                  >
-                    <BookOpen className="h-4 w-4" />
-                    Read concepts
-                  </Button>
-                  <Button onClick={handleStartQuiz} className="gap-1.5 text-sm w-full">
-                    <Play className="h-4 w-4" />
-                    Start Quiz
-                  </Button>
-                </div>
+                <Button
+                  variant="outline"
+                  onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)}
+                  disabled={allConcepts.length === 0}
+                  className="gap-1.5 text-sm w-full"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  Read concepts
+                </Button>
 
                 {/* Topics mastered collapsible */}
                 <div className="border-t pt-3 space-y-2">

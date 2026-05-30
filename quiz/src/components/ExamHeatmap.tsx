@@ -264,7 +264,7 @@ export function ExamHeatmap({
           ))}
         </div>
         {mobileMonthOnly && (
-          <div className="shrink-0 ml-2 flex items-center gap-1.5 self-center">
+          <div className="shrink-0 ml-3 flex items-center gap-3 self-center">
             <span className={`text-[11px] leading-none ${!showFullTimeline ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>Month</span>
             <button
               type="button"
@@ -274,7 +274,7 @@ export function ExamHeatmap({
               title={showFullTimeline ? 'Show current month only' : 'Show full timeline to exam date'}
               className={`relative inline-flex h-[22px] w-10 shrink-0 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${showFullTimeline ? 'bg-primary' : 'bg-muted'}`}
             >
-              <span className={`pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${showFullTimeline ? 'translate-x-5' : 'translate-x-[3px]'}`} />
+              <span className={`pointer-events-none inline-block h-4 w-4 rounded-full shadow-sm transition-transform ${showFullTimeline ? 'translate-x-5 bg-slate-300 dark:bg-slate-500' : 'translate-x-[3px] bg-white'}`} />
             </button>
             <span className={`text-[11px] leading-none ${showFullTimeline ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>Timeline</span>
           </div>

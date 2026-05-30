@@ -48,6 +48,7 @@ interface FlashcardsState {
   customOrder: string[]
   addCard: (ref: WikiEntryRef) => void
   removeCard: (name: string) => void
+  clearCards: () => void
   hasCard: (name: string) => boolean
   setCustomOrder: (names: string[]) => void
 }
@@ -72,6 +73,11 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     save(nextCards)
     saveOrder(nextOrder)
     set({ cards: nextCards, customOrder: nextOrder })
+  },
+  clearCards: () => {
+    save([])
+    saveOrder([])
+    set({ cards: [], customOrder: [] })
   },
   hasCard: (name) =>
     get().cards.some(c => c.name.toLowerCase() === name.toLowerCase()),

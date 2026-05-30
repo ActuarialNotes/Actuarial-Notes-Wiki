@@ -71,7 +71,11 @@ export default function Auth() {
         // Let the useEffect above handle the transition: in popup mode it posts
         // the session to window.opener and closes; otherwise it navigates to returnTo.
       } else {
-        const { error: authError } = await supabase.auth.signUp({ email, password })
+        const { error: authError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+        })
         if (authError) throw authError
         setSignupSuccess(true)
       }

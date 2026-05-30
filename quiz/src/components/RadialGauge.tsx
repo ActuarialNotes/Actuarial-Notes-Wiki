@@ -10,12 +10,15 @@ export function RadialGauge({ pct, label, size = 60, color = 'hsl(221, 83%, 53%)
   const cy = size / 2
   const r = size * 0.4
   const circumference = 2 * Math.PI * r
-  const clampedPct = Math.max(0, Math.min(100, pct))
+  // Guard against NaN/Infinity so strokeDashoffset stays a valid number and the
+  // ring renders (Math.min/max propagate NaN otherwise).
+  const safePct = Number.isFinite(pct) ? pct : 0
+  const clampedPct = Math.max(0, Math.min(100, safePct))
   const offset = circumference * (1 - clampedPct / 100)
 
   return (
     <div className="flex flex-col items-center gap-1 min-w-0">
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={`${label}: ${Math.round(pct)}%`}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={`${label}: ${Math.round(clampedPct)}%`}>
         {/* Track ring */}
         <circle
           cx={cx}
@@ -49,7 +52,7 @@ export function RadialGauge({ pct, label, size = 60, color = 'hsl(221, 83%, 53%)
           fill="currentColor"
           className="font-bold tabular-nums"
         >
-          {Math.round(pct)}%
+          {Math.round(clampedPct)}%
         </text>
       </svg>
       <p className="text-[9px] text-muted-foreground leading-tight text-center max-w-[64px] line-clamp-2">

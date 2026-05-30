@@ -36,6 +36,7 @@ import {
   type ConceptMasteryRecord,
   type MasteryState,
 } from '@/lib/mastery'
+import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
 import { readTodayLevelUps, LEVELUP_EVENT, getDailyGems, type DailyLevelUp } from '@/lib/dailyProgressStore'
 import { useDailyCompletions } from '@/hooks/useDailyCompletions'
 import { StudyPlanCompletionCeremony } from '@/components/StudyPlanCompletionCeremony'
@@ -125,17 +126,7 @@ function StudyPlanTracker({
   const now = new Date()
 
   // Handle aliased concepts (display name vs. file target name)
-  const targetToDisplayName = new Map<string, string>()
-  for (const topic of syllabus.topics) {
-    for (const c of topic.concepts) {
-      const tLow = c.target?.toLowerCase() ?? ''
-      if (tLow && tLow !== c.name.toLowerCase()) targetToDisplayName.set(tLow, c.name)
-    }
-  }
-  const normalizedMastery = examMastery.map(r => {
-    const display = targetToDisplayName.get(r.concept_slug.toLowerCase())
-    return display ? { ...r, concept_slug: display } : r
-  })
+  const normalizedMastery = normalizeMasteryToDisplayNames(examMastery, syllabus)
   const recordsBySlug = new Map(normalizedMastery.map(r => [r.concept_slug.toLowerCase(), r]))
 
   const allConcepts: { name: string; state: MasteryState }[] = syllabus.topics.flatMap(topic =>

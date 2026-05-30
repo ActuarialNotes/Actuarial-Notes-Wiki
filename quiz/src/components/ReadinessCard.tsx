@@ -17,6 +17,7 @@ import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
+import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
 import { computeReadiness, type SectionReadiness } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
@@ -193,17 +194,7 @@ function StudyPlanTracker({
   const examMastery = masteryRecords.filter(r => r.exam_id === examKey)
   const now = new Date()
 
-  const targetToDisplayName = new Map<string, string>()
-  for (const topic of syllabus.topics) {
-    for (const c of topic.concepts) {
-      const tLow = c.target?.toLowerCase() ?? ''
-      if (tLow && tLow !== c.name.toLowerCase()) targetToDisplayName.set(tLow, c.name)
-    }
-  }
-  const normalizedMastery = examMastery.map(r => {
-    const display = targetToDisplayName.get(r.concept_slug.toLowerCase())
-    return display ? { ...r, concept_slug: display } : r
-  })
+  const normalizedMastery = normalizeMasteryToDisplayNames(examMastery, syllabus)
   const recordsBySlug = new Map(normalizedMastery.map(r => [r.concept_slug.toLowerCase(), r]))
 
   return (

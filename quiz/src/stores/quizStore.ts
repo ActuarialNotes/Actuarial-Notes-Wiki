@@ -3,7 +3,7 @@ import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dailyProgressStore'
 
 const EXAM_LABEL_TO_ID: Record<string, string> = {
@@ -17,14 +17,8 @@ const EXAM_LABEL_TO_ID: Record<string, string> = {
 function conceptsForQuestion(q: Question): string[] {
   const names = new Set<string>()
   for (const link of q.wiki_link) {
-    const ref = hrefToEntryRef(link)
-    if (ref?.kind === 'concept' && ref.name) {
-      names.add(ref.name)
-    } else {
-      // Fall back to the slug's last segment (matches ConceptQuestionsModal).
-      const last = link.split('/').filter(Boolean).pop()
-      if (last) names.add(last.replace(/-/g, ' '))
-    }
+    const slug = slugForLink(link)
+    if (slug) names.add(slug)
   }
   return [...names]
 }

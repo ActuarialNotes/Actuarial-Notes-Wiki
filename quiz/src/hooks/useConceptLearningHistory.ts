@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import { slugForLink } from '@/lib/conceptMatch'
 import {
   sanitizeMasteryState,
   decayIfStale,
@@ -139,20 +140,45 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
     async function load() {
       const now = new Date()
 
-      // Fetch level events, question bank, and current mastery records in parallel
-      const [levelResult, allQuestionsRaw, masteryResult] = await Promise.all([
+      // Resolve the set of stored concept_slug values for this concept BEFORE
+      // querying. Mastery rows are written under the slug that slugForLink()
+      // produces from a question's wiki_link (the file/base name), which may
+      // differ from the display name passed here (aliases). Deriving the slugs
+      // from the linked questions keeps the read self-consistent with the write
+      // path; querying by the display name alone misses aliased concepts and
+      // returns a blank graph.
+      const allQuestionsRaw = await fetchAllQuestions()
+      if (cancelled) return
+      const allQuestions = parseAllQuestions(allQuestionsRaw)
+
+      const matchingQuestions = allQuestions.filter(q =>
+        q.wiki_link.some(link => linkMatchesConcept(link, conceptName)),
+      )
+      const questionIds = matchingQuestions.map(q => q.id)
+
+      const slugSet = new Set<string>([conceptName])
+      for (const q of matchingQuestions) {
+        for (const link of q.wiki_link) {
+          if (!linkMatchesConcept(link, conceptName)) continue
+          const slug = slugForLink(link)
+          if (slug) slugSet.add(slug)
+        }
+      }
+      const slugs = [...slugSet]
+
+      // Fetch level events and current mastery records for those slugs in parallel.
+      const [levelResult, masteryResult] = await Promise.all([
         supabase
           .from('daily_completions')
           .select('from_state, to_state, at')
           .eq('user_id', userId)
-          .ilike('concept_slug', conceptName)
+          .in('concept_slug', slugs)
           .order('at', { ascending: true }),
-        fetchAllQuestions(),
         supabase
           .from('concept_mastery')
           .select('state, last_correct_at, last_attempted_at, incorrect_streak, correct_count, hard_correct_count, user_id, exam_id, concept_slug')
           .eq('user_id', userId)
-          .ilike('concept_slug', conceptName),
+          .in('concept_slug', slugs),
       ])
 
       if (cancelled) return
@@ -164,12 +190,6 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         from: sanitizeMasteryState(r.from_state),
         to: sanitizeMasteryState(r.to_state),
       }))
-
-      // Resolve question IDs linked to this concept
-      const allQuestions = parseAllQuestions(allQuestionsRaw)
-      const questionIds = allQuestions
-        .filter(q => q.wiki_link.some(link => linkMatchesConcept(link, conceptName)))
-        .map(q => q.id)
 
       let attemptDots: AttemptDot[] = []
 

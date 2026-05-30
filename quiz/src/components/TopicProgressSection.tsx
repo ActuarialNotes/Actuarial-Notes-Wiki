@@ -11,6 +11,7 @@ import {
   type ConceptMasteryRecord,
   type MasteryState,
 } from '@/lib/mastery'
+import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import {
   isScheduledToday,
@@ -104,21 +105,9 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
 
   // Questions store concept_slug using the concept FILE name (e.g. "Bond Price"),
   // but the syllabus may display an alias (e.g. [[Bond Price|Price]] → c.name="Price").
-  // Build a map from target (file name) → display name for aliased concepts so that
-  // mastery records written under "Bond Price" are found when looking up "Price".
-  const targetToDisplayName = new Map<string, string>()
-  for (const topic of syllabus.topics) {
-    for (const c of topic.concepts) {
-      const tLow = c.target?.toLowerCase() ?? ''
-      if (tLow && tLow !== c.name.toLowerCase()) {
-        targetToDisplayName.set(tLow, c.name)
-      }
-    }
-  }
-  const normalizedMastery = examMastery.map(r => {
-    const display = targetToDisplayName.get(r.concept_slug.toLowerCase())
-    return display ? { ...r, concept_slug: display } : r
-  })
+  // normalizeMasteryToDisplayNames re-keys records so a record written under
+  // "Bond Price" is found when looking up the display name "Price".
+  const normalizedMastery = normalizeMasteryToDisplayNames(examMastery, syllabus)
   const recordsBySlug = new Map(normalizedMastery.map(r => [r.concept_slug.toLowerCase(), r]))
 
   const allConcepts: { name: string; state: MasteryState }[] = syllabus.topics.flatMap(topic =>

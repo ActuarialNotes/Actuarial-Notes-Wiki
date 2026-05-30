@@ -359,6 +359,13 @@ function SortableCard({
   isFlashing: boolean
   isActive: boolean
 }) {
+  const [flipped, setFlipped] = useState(false)
+  const [markdown, setMarkdown] = useState<string | null>(null)
+  const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
+    new Set<ReverseCardSection>(['definition']),
+  )
+
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name })
 
   const style = {
@@ -368,6 +375,154 @@ function SortableCard({
     zIndex: isDragging ? 50 : undefined,
   }
 
+  function handleFlipOpen() {
+    setFlipped(true)
+    if (markdown === null && loadStatus === 'idle') {
+      setLoadStatus('loading')
+      fetchWikiFile(entryRefToRepoPath(card))
+        .then(raw => { setMarkdown(raw); setLoadStatus('idle') })
+        .catch(() => setLoadStatus('error'))
+    }
+  }
+
+  function toggleMode(mode: ReverseCardSection) {
+    setReverseCardModes(prev => {
+      const next = new Set(prev)
+      if (next.has(mode)) next.delete(mode); else next.add(mode)
+      return next
+    })
+  }
+
+  const definition = markdown ? extractFirstParagraph(markdown) : null
+  const allEquations = markdown ? extractMathBlockquotes(markdown) : []
+  const cardImages = markdown ? extractImages(markdown) : []
+
+  const baseClass = `group relative rounded-xl border flex flex-col select-none transition-shadow${isFlashing ? ' flashcard-highlight' : ''}`
+  const colorClass = isActive
+    ? 'bg-primary/10 border-primary shadow-sm'
+    : 'bg-card text-card-foreground'
+
+  if (flipped) {
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        data-card-name={card.name}
+        className={`${baseClass} ${colorClass}`}
+      >
+        {/* Header: name + mode toggles + delete */}
+        <div className="flex items-center gap-1 px-2.5 pt-2 pb-1.5 border-b">
+          <span className="text-xs font-medium text-muted-foreground truncate flex-1 min-w-0">{card.name}</span>
+          <div className="flex items-center gap-0.5 shrink-0">
+            <button
+              type="button"
+              onPointerDown={e => e.stopPropagation()}
+              onClick={e => { e.stopPropagation(); toggleMode('definition') }}
+              title="Definition"
+              aria-pressed={reverseCardModes.has('definition')}
+              className={`inline-flex items-center justify-center h-6 w-6 rounded border text-xs font-serif italic font-bold transition-colors ${
+                reverseCardModes.has('definition')
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            >D</button>
+            <button
+              type="button"
+              onPointerDown={e => e.stopPropagation()}
+              onClick={e => { e.stopPropagation(); toggleMode('math') }}
+              title="Math equations"
+              aria-pressed={reverseCardModes.has('math')}
+              className={`inline-flex items-center justify-center h-6 w-6 rounded border transition-colors ${
+                reverseCardModes.has('math')
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            ><Sigma className="h-3 w-3" /></button>
+            <button
+              type="button"
+              onPointerDown={e => e.stopPropagation()}
+              onClick={e => { e.stopPropagation(); toggleMode('images') }}
+              title="Images"
+              aria-pressed={reverseCardModes.has('images')}
+              className={`inline-flex items-center justify-center h-6 w-6 rounded border transition-colors ${
+                reverseCardModes.has('images')
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            ><Images className="h-3 w-3" /></button>
+            <button
+              type="button"
+              onPointerDown={e => e.stopPropagation()}
+              onClick={e => { e.stopPropagation(); onRemove(card.name) }}
+              aria-label={`Remove ${card.name}`}
+              className="text-muted-foreground hover:text-destructive h-6 w-6 flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-colors"
+            ><Trash2 className="h-3 w-3" /></button>
+          </div>
+        </div>
+
+        {/* Back content */}
+        <div
+          className="flex-1 px-3 py-2 overflow-hidden"
+          onPointerDown={e => e.stopPropagation()}
+          onClick={e => e.stopPropagation()}
+        >
+          {loadStatus === 'loading' && (
+            <div className="flex items-center gap-1 text-xs text-muted-foreground py-2">
+              <Loader2 className="h-3 w-3 animate-spin" /> Loading…
+            </div>
+          )}
+          {loadStatus === 'error' && (
+            <p className="text-xs text-destructive py-1">Couldn't load content.</p>
+          )}
+          {reverseCardModes.has('definition') && definition && (
+            <div className="text-sm max-h-40 overflow-y-auto">
+              <WikiArticle markdown={definition} />
+            </div>
+          )}
+          {reverseCardModes.has('math') && allEquations.length > 0 && (
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              {allEquations.map((eq, i) => (
+                <WikiArticle key={i} markdown={eq} />
+              ))}
+            </div>
+          )}
+          {reverseCardModes.has('images') && cardImages.length > 0 && (
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              {cardImages.map((img, i) => (
+                <figure key={i} className="flex flex-col items-center gap-1">
+                  <img src={img.src} alt={img.alt} className="max-w-full max-h-28 object-contain rounded" />
+                  {img.caption && (
+                    <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer: flip back + jump to study */}
+        <div className="flex items-center justify-between border-t px-2.5 py-1.5">
+          <button
+            type="button"
+            onPointerDown={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); setFlipped(false) }}
+            className="text-[10px] text-muted-foreground hover:text-foreground transition-colors"
+          >
+            flip back
+          </button>
+          <button
+            type="button"
+            onPointerDown={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); onSelect() }}
+            className="text-[10px] text-primary hover:underline"
+          >
+            study →
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       ref={setNodeRef}
@@ -375,11 +530,7 @@ function SortableCard({
       data-card-name={card.name}
       {...listeners}
       {...attributes}
-      className={`group relative rounded-xl border flex flex-col min-h-[120px] cursor-grab active:cursor-grabbing transition-shadow select-none ${
-        isActive
-          ? 'bg-primary/10 border-primary shadow-sm'
-          : 'bg-card text-card-foreground hover:shadow-md'
-      }${isFlashing ? ' flashcard-highlight' : ''}`}
+      className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing hover:shadow-md`}
     >
       {/* Delete button */}
       <div className="flex items-center justify-end px-2 pt-2">
@@ -394,16 +545,17 @@ function SortableCard({
         </button>
       </div>
 
-      {/* Name — click to select & study */}
+      {/* Name — click to flip */}
       <button
         type="button"
         onPointerDown={e => e.stopPropagation()}
-        onClick={e => { e.stopPropagation(); onSelect() }}
-        className={`flex-1 flex items-center justify-center px-3 py-2 text-center transition-colors ${
+        onClick={e => { e.stopPropagation(); handleFlipOpen() }}
+        className={`flex-1 flex flex-col items-center justify-center px-3 py-2 text-center gap-1 transition-colors ${
           isActive ? 'text-primary' : 'hover:text-primary'
         }`}
       >
-        <span className="font-semibold text-xs leading-snug">{card.name}</span>
+        <span className="font-semibold text-sm leading-snug">{card.name}</span>
+        <span className="text-[10px] text-muted-foreground">tap to flip</span>
       </button>
 
       {/* Mastery pill */}
@@ -467,7 +619,7 @@ function GalleryPanel({
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex flex-col bg-background" style={{ top: '3.5rem' }}>
+    <div className="gallery-panel fixed inset-0 z-40 flex flex-col bg-background" style={{ top: '3.5rem' }}>
       {/* Panel header */}
       <div className="sticky top-0 z-10 bg-background border-b">
         <div className="flex items-center justify-between gap-2 px-4 py-3">

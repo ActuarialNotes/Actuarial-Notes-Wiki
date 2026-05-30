@@ -1089,44 +1089,6 @@ export function ReadinessCard({
             </div>
           )}
 
-          {/* Countdown tiles */}
-          {(examDate || config.targetReadyDate) && (
-            <div className="grid grid-cols-1 gap-2">
-              {config.targetReadyDate && (() => {
-                const now = new Date(); now.setHours(0, 0, 0, 0)
-                const days = Math.ceil((new Date(config.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
-                return (
-                  <button
-                    type="button"
-                    onClick={() => onOpenOnboarding?.(2)}
-                    className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
-                  >
-                    <p className="text-3xl font-bold tabular-nums text-amber-400">
-                      {Math.max(days, 0)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days to prepare</p>
-                  </button>
-                )
-              })()}
-              {examDate && (() => {
-                const now = new Date(); now.setHours(0, 0, 0, 0)
-                const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
-                return (
-                  <button
-                    type="button"
-                    onClick={() => onOpenOnboarding?.(1)}
-                    className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
-                  >
-                    <p className="text-3xl font-bold tabular-nums">
-                      {Math.max(days, 0)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
-                  </button>
-                )
-              })()}
-            </div>
-          )}
-
           {/* Action buttons */}
           <div className="flex flex-col gap-2">
             <Button
@@ -1266,44 +1228,6 @@ export function ReadinessCard({
               Start Quiz
             </Button>
           </div>
-
-          {/* Countdown numbers */}
-          {(examDate || config.targetReadyDate) && (
-            <div className="grid grid-cols-2 gap-3">
-              {config.targetReadyDate && (() => {
-                const now = new Date(); now.setHours(0, 0, 0, 0)
-                const days = Math.ceil((new Date(config.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
-                return (
-                  <button
-                    type="button"
-                    onClick={() => onOpenOnboarding?.(2)}
-                    className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
-                  >
-                    <p className="text-5xl font-bold tabular-nums text-amber-400">
-                      {Math.max(days, 0)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days to prepare</p>
-                  </button>
-                )
-              })()}
-              {examDate && (() => {
-                const now = new Date(); now.setHours(0, 0, 0, 0)
-                const days = Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000)
-                return (
-                  <button
-                    type="button"
-                    onClick={() => onOpenOnboarding?.(1)}
-                    className="rounded-xl border bg-card p-4 text-center w-full hover:bg-muted/50 transition-colors cursor-pointer"
-                  >
-                    <p className="text-5xl font-bold tabular-nums">
-                      {Math.max(days, 0)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1.5 font-medium">days until exam</p>
-                  </button>
-                )
-              })()}
-            </div>
-          )}
 
           {/* Locked study plan section — blurred card background + overlay */}
           <div className="relative rounded-xl overflow-hidden">

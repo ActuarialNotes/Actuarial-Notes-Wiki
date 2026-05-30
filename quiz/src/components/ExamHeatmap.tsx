@@ -99,6 +99,7 @@ export function ExamHeatmap({
   const [draft, setDraft] = useState('')
   const [editingReady, setEditingReady] = useState(false)
   const [draftReady, setDraftReady] = useState('')
+  const [showFullTimeline, setShowFullTimeline] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const inputReadyRef = useRef<HTMLInputElement>(null)
 
@@ -221,7 +222,7 @@ export function ExamHeatmap({
 
   // On mobile, restrict to the current month only to avoid horizontal overflow.
   const visibleColumns = useMemo(() => {
-    if (!mobileMonthOnly) return columns
+    if (!mobileMonthOnly || showFullTimeline) return columns
     const now = new Date()
     const thisMonth = now.getMonth()
     const thisYear = now.getFullYear()
@@ -231,7 +232,7 @@ export function ExamHeatmap({
         return date.getMonth() === thisMonth && date.getFullYear() === thisYear
       })
     )
-  }, [columns, mobileMonthOnly])
+  }, [columns, mobileMonthOnly, showFullTimeline])
 
   const daysLeft = targetDate ? daysUntil(targetDate) : null
   const examDateLabel = targetDate
@@ -262,6 +263,16 @@ export function ExamHeatmap({
             </div>
           ))}
         </div>
+        {mobileMonthOnly && (
+          <button
+            type="button"
+            onClick={() => setShowFullTimeline(v => !v)}
+            className="shrink-0 ml-1.5 text-[9px] text-primary font-semibold hover:underline transition-colors leading-none self-center"
+            title={showFullTimeline ? 'Show current month only' : 'Show full timeline to exam date'}
+          >
+            {showFullTimeline ? 'Month' : 'Timeline'}
+          </button>
+        )}
       </div>
 
       {/* Day rows × week columns */}

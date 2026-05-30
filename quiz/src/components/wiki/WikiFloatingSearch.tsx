@@ -135,7 +135,7 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
       <div
         ref={containerRef}
         data-floating-search
-        className="sticky top-14 lg:top-0 z-50 border-b bg-background/90 backdrop-blur-md"
+        className="sticky top-0 md:top-14 lg:top-0 z-50 border-b bg-background/90 backdrop-blur-md"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           {/* Input row */}

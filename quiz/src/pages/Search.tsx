@@ -965,7 +965,7 @@ export default function Search() {
 
       {/* Sticky quiz button — Questions mode only */}
       {searchType === 'questions' && !loading && filtered.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm border-t border-border">
+        <div className="fixed bottom-16 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm border-t border-border">
           <button
             type="button"
             onClick={handleStartQuiz}

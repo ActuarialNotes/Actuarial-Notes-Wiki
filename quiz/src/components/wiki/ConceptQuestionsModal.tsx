@@ -5,8 +5,7 @@ import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
-import { LatexText } from '@/components/LatexText'
-import { ExplanationPanel } from '@/components/ExplanationPanel'
+import { QuestionSearchRow } from '@/components/QuestionSearchRow'
 
 // Matches a raw wiki_link value against a concept name. Handles two formats:
 //   "Concepts/Fund+Accumulation"  (hrefToEntryRef resolves the name directly)
@@ -17,119 +16,6 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
   if (ref?.name.toLowerCase() === lower) return true
   const lastSegment = link.split('/').filter(Boolean).pop()
   return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
-}
-
-const DIFFICULTY_COLORS: Record<Difficulty, string> = {
-  easy: 'bg-green-100 text-green-800 border-green-200',
-  medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  hard: 'bg-red-100 text-red-800 border-red-200',
-}
-
-function QuestionItem({
-  question,
-  selected,
-  onToggle,
-}: {
-  question: Question
-  selected: boolean
-  onToggle: () => void
-}) {
-  const [expanded, setExpanded] = useState(false)
-  const [showAnswer, setShowAnswer] = useState(false)
-
-  return (
-    <div
-      className={`border rounded-lg p-4 space-y-2 transition-colors cursor-pointer ${
-        selected ? 'border-primary/60 bg-primary/5' : 'hover:bg-accent/30'
-      }`}
-      onClick={onToggle}
-    >
-      <div className="flex items-start gap-3">
-        {/* Checkbox */}
-        <div className="mt-0.5 shrink-0">
-          <div
-            className={`h-4 w-4 rounded border-2 flex items-center justify-center transition-colors ${
-              selected
-                ? 'bg-primary border-primary'
-                : 'border-input bg-background'
-            }`}
-          >
-            {selected && (
-              <svg className="h-2.5 w-2.5 text-primary-foreground" fill="currentColor" viewBox="0 0 12 12">
-                <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              </svg>
-            )}
-          </div>
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center flex-wrap gap-2 min-w-0">
-            <span className="text-xs px-2 py-0.5 rounded-full border bg-background shrink-0">
-              {question.topic}
-            </span>
-            <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize ${DIFFICULTY_COLORS[question.difficulty]}`}>
-              {question.difficulty}
-            </span>
-          </div>
-
-          <div className="text-sm text-muted-foreground leading-relaxed mt-2">
-            {expanded ? (
-              <LatexText>{question.stem}</LatexText>
-            ) : (
-              <LatexText>
-                {(() => { const w = question.stem.trim().split(/\s+/); return w.length <= 6 ? question.stem : w.slice(0, 6).join(' ') + '…' })()}
-              </LatexText>
-            )}
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={e => { e.stopPropagation(); setExpanded(v => !v) }}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
-        >
-          {expanded ? 'Collapse' : 'Expand'}
-        </button>
-      </div>
-
-      {expanded && (
-        <div className="pt-2 space-y-1 pl-7" onClick={e => e.stopPropagation()}>
-          {question.options.map(opt => {
-            const isCorrect = showAnswer && opt.key === question.answer
-            return (
-              <div
-                key={opt.key}
-                className={`flex gap-2 text-sm rounded px-2 py-1 ${
-                  isCorrect ? 'bg-green-100 dark:bg-green-950 text-green-900 dark:text-green-200' : ''
-                }`}
-              >
-                <span className="font-medium text-muted-foreground shrink-0">{opt.key})</span>
-                <span><LatexText>{opt.text}</LatexText></span>
-              </div>
-            )
-          })}
-
-          <div className="pt-2">
-            <button
-              type="button"
-              onClick={() => setShowAnswer(v => !v)}
-              className="text-xs px-3 py-1 rounded-md border border-input hover:bg-accent transition-colors"
-            >
-              {showAnswer ? 'Hide answer' : 'Show answer'}
-            </button>
-          </div>
-
-          {showAnswer && (
-            <ExplanationPanel
-              explanation={question.explanation}
-              wikiLinks={question.wiki_link}
-              isCorrect
-            />
-          )}
-        </div>
-      )}
-    </div>
-  )
 }
 
 interface ConceptQuestionsModalProps {
@@ -338,11 +224,12 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
                 </div>
               )}
               {visibleQuestions.map(q => (
-                <QuestionItem
+                <QuestionSearchRow
                   key={q.id}
                   question={q}
+                  query=""
                   selected={selectedIds.has(q.id)}
-                  onToggle={() => toggleQuestion(q.id)}
+                  onToggleSelect={toggleQuestion}
                 />
               ))}
             </>

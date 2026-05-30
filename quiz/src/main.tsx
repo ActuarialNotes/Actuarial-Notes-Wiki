@@ -11,6 +11,11 @@ import { setBundledQuestions } from './lib/github'
 setBundledQuestions(bundledQuestions)
 
 async function bootstrap() {
+  // Detect email confirmation before getSession() strips the hash.
+  if (window.location.hash.includes('type=signup')) {
+    sessionStorage.setItem('show_welcome', '1')
+  }
+
   // getSession() automatically handles OAuth callbacks (PKCE code exchange /
   // implicit-flow hash tokens) and cleans up the URL before we render.
   const { data } = await supabase.auth.getSession()

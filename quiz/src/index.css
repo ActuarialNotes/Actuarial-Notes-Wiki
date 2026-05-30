@@ -274,58 +274,6 @@
   filter: blur(1.4px);
 }
 
-/* Quiz landing: big grab-friendly range slider */
-.quiz-count-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 6px;
-  border-radius: 999px;
-  background: hsl(var(--muted));
-  outline: none;
-  cursor: pointer;
-}
-.quiz-count-slider::-webkit-slider-runnable-track {
-  height: 6px;
-  border-radius: 999px;
-  background: hsl(var(--muted));
-}
-.quiz-count-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: hsl(var(--foreground));
-  cursor: pointer;
-  margin-top: -11px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  transition: transform 100ms ease;
-}
-.quiz-count-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-}
-.quiz-count-slider::-webkit-slider-thumb:active {
-  transform: scale(1.15);
-}
-.quiz-count-slider::-moz-range-track {
-  height: 6px;
-  border-radius: 999px;
-  background: hsl(var(--muted));
-}
-.quiz-count-slider::-moz-range-thumb {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: hsl(var(--foreground));
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
-.quiz-count-slider:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
 
 /* Brief green flash when a study-plan concept transitions to completed */
 @keyframes concept-success {

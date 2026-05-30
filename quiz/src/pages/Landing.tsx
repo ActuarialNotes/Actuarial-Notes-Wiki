@@ -119,8 +119,8 @@ function GroupSection({
         </button>
       </div>
 
-      <div hidden={!open} className="border-t border-border/40 px-4 pb-4 pt-3">
-        <div className="grid grid-cols-2 gap-2">
+      <div hidden={!open} className="border-t border-border/40 pb-1 pt-1">
+        <div className="flex flex-col">
           {group.subtopics.map(subtopic => {
             const isSelected = selectedSubtopics.includes(subtopic)
             const isToday = todaySubtopics.has(subtopic)
@@ -130,27 +130,26 @@ function GroupSection({
                 key={subtopic}
                 type="button"
                 onClick={() => onToggle(subtopic)}
-                className={`relative rounded-xl border flex flex-col min-h-[96px] transition-colors ${
-                  isSelected
-                    ? 'bg-primary/10 border-primary'
-                    : 'bg-card border-border hover:shadow-md'
+                className={`flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors ${
+                  isSelected ? 'text-primary' : 'text-card-foreground hover:bg-muted/50'
                 }`}
               >
-                <span className={`flex-1 flex items-center justify-center px-3 py-2 text-center font-semibold text-sm leading-snug ${isSelected ? 'text-primary' : 'text-card-foreground'}`}>
+                {isSelected ? (
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                ) : (
+                  <Circle className="h-4 w-4 shrink-0 text-muted-foreground/40" />
+                )}
+                <span className={`flex-1 text-sm font-medium leading-snug ${isSelected ? 'text-primary' : ''}`}>
                   {subtopic}
                 </span>
                 {isPremium && conceptLevel !== undefined ? (
-                  <div className="flex justify-center pb-2.5">
-                    <span className={`inline-flex items-center rounded border px-1.5 py-0.5 text-[10px] font-medium ${STATE_BADGE[conceptLevel]}`}>
-                      {STATE_LABEL[conceptLevel]}
-                    </span>
-                  </div>
+                  <span className={`inline-flex items-center rounded border px-1.5 py-0.5 text-[10px] font-medium shrink-0 ${STATE_BADGE[conceptLevel]}`}>
+                    {STATE_LABEL[conceptLevel]}
+                  </span>
                 ) : isToday ? (
-                  <div className="flex justify-center pb-2.5">
-                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${isSelected ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary/70'}`}>
-                      today
-                    </span>
-                  </div>
+                  <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium shrink-0 ${isSelected ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary/70'}`}>
+                    today
+                  </span>
                 ) : null}
               </button>
             )
@@ -497,12 +496,27 @@ export default function Landing() {
         ? `(${selectedConcepts.length} auto-selected)`
         : `${selectedConcepts.length} selected`
 
+  const summaryText = useMemo(() => {
+    if (!hasTopic) return ''
+    if (mode === 'mock-exam') {
+      return `${mockExamCount} questions · All topics · Answers at end`
+    }
+    const qCount = effectiveAvailableCount > 0 ? Math.min(count, effectiveAvailableCount) : count
+    const conceptPart = useTodaysPlan && planConceptCount > 0
+      ? `${planConceptCount} concept${planConceptCount !== 1 ? 's' : ''} · today's plan`
+      : selectedConcepts.length === 0
+        ? 'All concepts'
+        : `${selectedConcepts.length} concept${selectedConcepts.length !== 1 ? 's' : ''} selected`
+    const revealPart = reveal === 'during' ? 'Answers after each' : 'Answers at end'
+    return `${qCount} question${qCount !== 1 ? 's' : ''} · ${conceptPart} · ${revealPart}`
+  }, [mode, count, mockExamCount, effectiveAvailableCount, useTodaysPlan, planConceptCount, selectedConcepts, reveal, hasTopic])
+
   return (
     <>
     <QuizFloatingSearch />
-    <div className="container max-w-2xl mx-auto px-4 py-12 space-y-8">
+    <div className={`container max-w-2xl mx-auto px-4 pt-12 space-y-8 ${hasSelection ? 'pb-32' : 'pb-12'}`}>
       <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-3xl font-bold tracking-tight">Quiz</h1>
@@ -521,15 +535,6 @@ export default function Landing() {
               </p>
             )}
           </div>
-          <button
-            type="button"
-            disabled={!hasSelection}
-            onClick={handleStart}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
-          >
-            <Play className="h-4 w-4" />
-            Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
-          </button>
         </div>
 
         {selectedConcept && (
@@ -554,36 +559,16 @@ export default function Landing() {
 
         {(hasTopic || selectedConcept) && (
           <div className="space-y-3">
-            {mode === 'quiz' && (
-              <div className="flex items-center gap-3">
-                <input
-                  type="range"
-                  min={1}
-                  max={effectiveAvailableCount > 0 ? effectiveAvailableCount : 1}
-                  value={effectiveAvailableCount > 0 ? Math.min(count, effectiveAvailableCount) : 1}
-                  onChange={e => setCount(Number(e.target.value))}
-                  disabled={effectiveAvailableCount === 0}
-                  className="quiz-count-slider flex-1"
-                />
-                <span className="text-xl font-bold tabular-nums w-16 text-right shrink-0">
-                  {effectiveAvailableCount > 0
-                    ? count >= effectiveAvailableCount
-                      ? `All (${effectiveAvailableCount})`
-                      : count
-                    : '—'}
-                </span>
-              </div>
-            )}
-            <div className="flex items-center gap-2">
+            <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
               {QUICK_COUNTS.map(n => (
                 <button
                   key={n}
                   type="button"
                   onClick={() => { setMode('quiz'); setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n)) }}
-                  className={`w-14 h-14 rounded-full border text-base font-bold transition-colors ${
+                  className={`flex-1 h-10 rounded-lg text-sm font-bold transition-colors ${
                     mode === 'quiz' && count === n && effectiveAvailableCount >= n
-                      ? 'border-primary bg-primary text-primary-foreground'
-                      : 'border-input hover:bg-accent text-foreground'
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
                   }`}
                 >
                   {n}
@@ -592,39 +577,41 @@ export default function Landing() {
               <button
                 type="button"
                 onClick={() => setMode('mock-exam')}
-                className={`flex-1 h-14 rounded-full border text-sm font-bold transition-colors ${
+                className={`flex-[2] h-10 rounded-lg text-sm font-bold transition-colors px-2 ${
                   mode === 'mock-exam'
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-input hover:bg-accent text-foreground'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
                 }`}
               >
                 Mock Exam
               </button>
             </div>
             {mode === 'quiz' && (
-              <div className="flex rounded-full border border-input bg-muted/30 p-0.5">
-                <button
-                  type="button"
-                  onClick={() => setReveal('during')}
-                  className={`flex-1 py-2 rounded-full text-xs font-semibold transition-colors ${
-                    reveal === 'during'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  After each question
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setReveal('end')}
-                  className={`flex-1 py-2 rounded-full text-xs font-semibold transition-colors ${
-                    reveal === 'end'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  At the end
-                </button>
+              <div className="flex items-center justify-between py-0.5">
+                <span className="text-sm font-medium">Show answers</span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-xs transition-colors ${reveal === 'during' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                    After each
+                  </span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={reveal === 'end'}
+                    onClick={() => setReveal(reveal === 'during' ? 'end' : 'during')}
+                    className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                      reveal === 'end' ? 'bg-primary' : 'bg-input'
+                    }`}
+                  >
+                    <span
+                      className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-background shadow-lg ring-0 transition-transform ${
+                        reveal === 'end' ? 'translate-x-4' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                  <span className={`text-xs transition-colors ${reveal === 'end' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+                    At end
+                  </span>
+                </div>
               </div>
             )}
           </div>
@@ -738,15 +725,17 @@ export default function Landing() {
                           </span>
                         </button>
                       ) : !isPremium ? (
-                        <button
-                          type="button"
-                          onClick={() => setShowStudyPlanModal(true)}
-                          className="flex items-center gap-2 w-full px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 text-sm text-muted-foreground hover:bg-muted/30 transition-colors"
-                        >
-                          <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
-                          <span className="flex-1 text-left">Today's Study Plan</span>
-                          <span className="text-xs text-muted-foreground/60 shrink-0">Premium</span>
-                        </button>
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-400/40 dark:border-amber-600/30 bg-amber-50/60 dark:bg-amber-950/20">
+                          <Lock className="h-3.5 w-3.5 shrink-0 text-amber-500" />
+                          <span className="flex-1 text-sm text-foreground">Unlock Today's Study Plan</span>
+                          <Link
+                            to="/upgrade"
+                            className="shrink-0 px-2.5 py-1 rounded-md bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 transition-colors"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            Go Pro
+                          </Link>
+                        </div>
                       ) : null
                     )}
 
@@ -796,6 +785,22 @@ export default function Landing() {
         </div>
       )}
     </div>
+
+    {hasSelection && (
+      <div className="fixed bottom-16 left-0 right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm">
+        <div className="container max-w-2xl mx-auto px-4 pt-3 pb-3">
+          <p className="text-xs text-center text-muted-foreground mb-2.5">{summaryText}</p>
+          <button
+            type="button"
+            onClick={handleStart}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+          >
+            <Play className="h-4 w-4" />
+            Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+          </button>
+        </div>
+      </div>
+    )}
 
     {showStudyPlanModal && (
       <div

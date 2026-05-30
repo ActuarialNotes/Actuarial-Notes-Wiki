@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { X, CalendarDays, Target, Info, Sparkles, BookOpen, Globe, Lock } from 'lucide-react'
+import { X, CalendarDays, Target, Info, Sparkles, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
@@ -69,6 +69,8 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     return '2w'
   })
   const [showInfo, setShowInfo] = useState(false)
+  const readyDateInputRef = useRef<HTMLInputElement>(null)
+  const examDateInputRef = useRef<HTMLInputElement>(null)
 
   function selectPreset(preset: QuickSetPreset) {
     const base = localExamDate || examDate
@@ -204,10 +206,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
           {/* Step: Version selection (localized exams only) */}
           {step === 1 && hasVariants && (
             <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4 text-muted-foreground shrink-0" />
-                <p className="text-sm font-medium">Which version are you taking?</p>
-              </div>
+              <p className="text-base font-semibold">Which version are you taking?</p>
               <div className="space-y-2">
                 {variants!.map(v => (
                   <button
@@ -230,16 +229,29 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
           {/* Exam Date step */}
           {step === EXAM_DATE_STEP && (
             <div className="space-y-3">
-              {examDaysOut !== null && examDaysOut > 0 && (
-                <div className="text-center py-1">
-                  <p className="text-5xl font-bold tabular-nums tracking-tight">{examDaysOut}</p>
-                  <p className="text-sm text-muted-foreground mt-1">day{examDaysOut === 1 ? '' : 's'} away</p>
+              <p className="text-base font-semibold">When is your exam?</p>
+
+              {localExamDate && examDaysOut !== null && examDaysOut > 0 && (
+                <div className="flex items-center gap-2">
+                  <p className="text-3xl font-bold">{formatReadableDate(localExamDate)}</p>
+                  <button
+                    type="button"
+                    onClick={() => { examDateInputRef.current?.showPicker?.() ?? examDateInputRef.current?.click() }}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Pick exam date"
+                  >
+                    <CalendarDays className="h-5 w-5" />
+                  </button>
+                  <input
+                    ref={examDateInputRef}
+                    type="date"
+                    value={localExamDate}
+                    min={today}
+                    onChange={e => handleExamDateChange(e.target.value)}
+                    className="sr-only"
+                  />
                 </div>
               )}
-              <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
-                <p className="text-sm font-medium">When is your exam?</p>
-              </div>
 
               {hasSittings ? (
                 <>
@@ -250,7 +262,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                       onSelect={handleExamDateChange}
                     />
                   )}
-                  {/* For range sittings, let the user pick their specific day within the window */}
                   {selectedSitting && selectedSitting.endDate && (
                     <div className="space-y-1">
                       <p className="text-xs text-muted-foreground">Your specific exam day:</p>
@@ -267,7 +278,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     </div>
                   )}
                 </>
-              ) : (
+              ) : !localExamDate ? (
                 <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
                   <input
                     type="date"
@@ -277,7 +288,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     className="block w-full bg-background px-3 py-2 text-base transition-colors focus:outline-none"
                   />
                 </div>
-              )}
+              ) : null}
 
               {localExamDate && examDaysOut !== null && examDaysOut <= 0 && (
                 <p className="text-xs text-destructive">Date must be in the future</p>
@@ -288,31 +299,30 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
           {/* Ready Date step */}
           {step === READY_DATE_STEP && (
             <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-muted-foreground shrink-0" />
-                <p className="text-sm font-medium">When do you want to be 100% ready for your exam?</p>
-              </div>
+              <p className="text-base font-semibold">When do you want to be 100% ready for your exam?</p>
 
-              {/* Selected ready date + days info, right under the question */}
+              {/* Selected ready date + calendar icon trigger */}
               {readyDate && (
-                <div>
-                  <p className="text-2xl font-bold">{formatReadableDate(readyDate)}</p>
-                  {daysOut !== null && daysOut > 0 && (
-                    <p className="text-sm text-muted-foreground mt-0.5">
-                      {daysOut} day{daysOut === 1 ? '' : 's'} from today
-                      {examDaysOut !== null && examDaysOut > 0
-                        ? ` · ${examDaysOut - daysOut} day${Math.abs(examDaysOut - daysOut) === 1 ? '' : 's'} before exam`
-                        : ''}
-                    </p>
-                  )}
+                <div className="flex items-center gap-2">
+                  <p className="text-3xl font-bold">{formatReadableDate(readyDate)}</p>
+                  <button
+                    type="button"
+                    onClick={() => { readyDateInputRef.current?.showPicker?.() ?? readyDateInputRef.current?.click() }}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Pick a ready date"
+                  >
+                    <CalendarDays className="h-5 w-5" />
+                  </button>
+                  <input
+                    ref={readyDateInputRef}
+                    type="date"
+                    value={readyDate}
+                    min={today}
+                    max={localExamDate || examDate || undefined}
+                    onChange={e => handleReadyDateChange(e.target.value)}
+                    className="sr-only"
+                  />
                 </div>
-              )}
-
-              {localExamDate && (
-                <p className="text-xs text-muted-foreground">
-                  {examLabel} on {formatReadableDate(localExamDate)}
-                  {examDaysOut !== null && examDaysOut > 0 ? ` · ${examDaysOut} days away` : ''}
-                </p>
               )}
 
               {/* Preset cards */}
@@ -339,48 +349,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                       </button>
                     )
                   })}
-                </div>
-              )}
-
-              {/* Slider — always visible */}
-              {localExamDate && (
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Quick set</p>
-                    <span className="text-xs font-medium text-foreground">
-                      {activePreset ? QUICK_SET_LABELS[activePreset] : 'Custom date'}
-                    </span>
-                  </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={QUICK_SET_PRESETS.length - 1}
-                    step={1}
-                    value={activePreset !== null ? QUICK_SET_PRESETS.indexOf(activePreset) : 0}
-                    onChange={e => {
-                      const idx = parseInt(e.target.value)
-                      if (idx >= 0 && idx < QUICK_SET_PRESETS.length) selectPreset(QUICK_SET_PRESETS[idx])
-                    }}
-                    className="w-full accent-primary"
-                    aria-label="Quick set target ready date"
-                  />
-                </div>
-              )}
-
-              {/* Custom date picker */}
-              {localExamDate && (
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Or pick a date</p>
-                  <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
-                    <input
-                      type="date"
-                      value={readyDate}
-                      min={today}
-                      max={localExamDate || examDate || undefined}
-                      onChange={e => handleReadyDateChange(e.target.value)}
-                      className="block w-full bg-background px-3 py-2 text-base transition-colors focus:outline-none"
-                    />
-                  </div>
                 </div>
               )}
 

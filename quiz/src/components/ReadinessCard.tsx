@@ -17,7 +17,7 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
-import { computeReadiness, parseSectionWeight, type SectionReadiness } from '@/lib/readiness'
+import { parseSectionWeight } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
@@ -26,106 +26,6 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { useIsMobile } from '@/hooks/useIsMobile'
 
-// ── Radial donut chart ─────────────────────────────────────────────────────────
-
-const CX = 80
-const CY = 80
-const R_OUTER = 66
-const R_INNER = 44
-const GAP_DEG = 2
-
-function degreesToRadians(deg: number) { return (deg * Math.PI) / 180 }
-
-function polarToCart(cx: number, cy: number, r: number, angleDeg: number) {
-  const a = degreesToRadians(angleDeg - 90)
-  return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) }
-}
-
-function arcPath(startDeg: number, endDeg: number, rOuter: number, rInner: number): string {
-  const largeArc = endDeg - startDeg > 180 ? 1 : 0
-  const o1 = polarToCart(CX, CY, rOuter, startDeg)
-  const o2 = polarToCart(CX, CY, rOuter, endDeg)
-  const i1 = polarToCart(CX, CY, rInner, endDeg)
-  const i2 = polarToCart(CX, CY, rInner, startDeg)
-  return [
-    `M ${o1.x} ${o1.y}`,
-    `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${o2.x} ${o2.y}`,
-    `L ${i1.x} ${i1.y}`,
-    `A ${rInner} ${rInner} 0 ${largeArc} 0 ${i2.x} ${i2.y}`,
-    'Z',
-  ].join(' ')
-}
-
-interface DonutProps {
-  sections: SectionReadiness[]
-  overallPct: number
-  activeSection: number | null
-  onSectionHover: (i: number | null) => void
-  onSectionClick: (i: number) => void
-}
-
-function ReadinessDonut({ sections, overallPct, activeSection, onSectionHover, onSectionClick }: DonutProps) {
-  const totalWeight = sections.reduce((s, sec) => s + sec.weight, 0) || 1
-  const arcs = useMemo(() => {
-    let cursor = 0
-    return sections.map((sec) => {
-      const span = (sec.weight / totalWeight) * 360
-      const startDeg = cursor + GAP_DEG / 2
-      const endDeg = cursor + span - GAP_DEG / 2
-      cursor += span
-      const opacity = 0.12 + 0.88 * (sec.readinessPct / 100)
-      return { sec, startDeg, endDeg, opacity }
-    })
-  }, [sections, totalWeight])
-
-  const activeSec = activeSection !== null ? arcs[activeSection]?.sec : null
-
-  return (
-    <div className="relative flex items-center justify-center">
-      <svg
-        width={CX * 2}
-        height={CY * 2}
-        viewBox={`0 0 ${CX * 2} ${CY * 2}`}
-        role="img"
-        aria-label="Section readiness donut chart"
-      >
-        <circle
-          cx={CX} cy={CY}
-          r={(R_OUTER + R_INNER) / 2}
-          fill="none"
-          strokeWidth={R_OUTER - R_INNER}
-          stroke="rgba(34,197,94,0.06)"
-        />
-        {arcs.map(({ sec, startDeg, endDeg, opacity }, i) => (
-          <path
-            key={sec.name}
-            d={arcPath(startDeg, endDeg, R_OUTER, R_INNER)}
-            fill={`rgba(34,197,94,${opacity.toFixed(2)})`}
-            onMouseEnter={() => onSectionHover(i)}
-            onMouseLeave={() => onSectionHover(null)}
-            onClick={() => onSectionClick(i)}
-            className="cursor-pointer transition-opacity"
-            style={{ opacity: activeSection !== null && activeSection !== i ? 0.5 : 1 }}
-          />
-        ))}
-      </svg>
-
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-        {activeSec ? (
-          <>
-            <span className="text-lg font-bold leading-none">{Math.round(activeSec.readinessPct)}%</span>
-            <span className="text-[9px] text-muted-foreground mt-0.5 max-w-[60px] leading-tight">{activeSec.name}</span>
-          </>
-        ) : (
-          <>
-            <span className="text-lg font-bold leading-none">{Math.round(overallPct)}%</span>
-            <span className="text-[9px] text-muted-foreground mt-0.5 leading-tight">overall</span>
-          </>
-        )}
-      </div>
-    </div>
-  )
-}
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
 
@@ -478,8 +378,6 @@ export function ReadinessCard({
   const [recentlyCompletedConcepts, setRecentlyCompletedConcepts] = useState<Set<string>>(new Set())
   const prevCompletedRef = useRef<Set<string>>(new Set())
   const [topicsMasteredOpen, setTopicsMasteredOpen] = useState(false)
-  const [hoveredSection, setHoveredSection] = useState<number | null>(null)
-  const [pinnedSection, setPinnedSection] = useState<number | null>(null)
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [showConfig, setShowConfig] = useState(false)
   const [configInitialStep, setConfigInitialStep] = useState<1 | 2 | 3>(1)
@@ -565,8 +463,6 @@ export function ReadinessCard({
     prevCompletedRef.current = nowCompleted
   }, [completedToday, markConceptComplete])
 
-  const activeSection = hoveredSection ?? pinnedSection
-
   const now = useMemo(() => new Date(), [])
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
 
@@ -623,11 +519,6 @@ export function ReadinessCard({
   const examRecords = useMemo(
     () => masteryRecords.filter(r => r.exam_id === progressKey),
     [masteryRecords, progressKey],
-  )
-
-  const { overallPct, sections } = useMemo(
-    () => computeReadiness(syllabus, examRecords, now),
-    [syllabus, examRecords, now],
   )
 
   const aggregate = useMemo(() => {
@@ -822,20 +713,6 @@ export function ReadinessCard({
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allConceptsDone, bonusClaimed, todayGemsEarned, user, progressKey])
-
-  function handleSectionHover(i: number | null) {
-    setHoveredSection(i)
-  }
-
-  function handleSectionClick(i: number) {
-    setPinnedSection(prev => (prev === i ? null : i))
-    const topicName = sections[i]?.name
-    if (topicName) {
-      setOpenTopics(prev =>
-        prev.has(topicName) ? new Set() : new Set([topicName])
-      )
-    }
-  }
 
   const handleStartQuiz = useCallback(() => {
     navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz`)

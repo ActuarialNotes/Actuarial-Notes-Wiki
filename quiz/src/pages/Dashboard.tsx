@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { Loader2, LogIn, PlusCircle, Sparkles, X } from 'lucide-react'
+import { GraduationCap, Loader2, LogIn, PlusCircle, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -26,6 +26,53 @@ import { computeReadiness } from '@/lib/readiness'
 import { LOCALIZED_EXAMS } from '@/data/examSittings'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
+
+// ── Welcome Modal ─────────────────────────────────────────────────────────────
+
+function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="relative bg-card border rounded-2xl shadow-2xl max-w-sm w-full p-6 flex flex-col gap-4">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+          aria-label="Dismiss"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="flex items-center justify-center h-14 w-14 rounded-2xl bg-primary/10 mx-auto">
+          <GraduationCap className="h-7 w-7 text-primary" />
+        </div>
+
+        <div className="text-center space-y-1.5">
+          <h2 className="text-xl font-bold tracking-tight">Welcome to Actuarial Notes!</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Your account is confirmed. Start by adding the exam you&apos;re studying for — we&apos;ll build a personalized study plan around it.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={onAddExam}
+          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-semibold hover:bg-primary/90 transition-colors"
+        >
+          <PlusCircle className="h-4 w-4" />
+          Add an exam
+        </button>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          I&apos;ll do this later
+        </button>
+      </div>
+    </div>
+  )
+}
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
@@ -67,12 +114,21 @@ export default function Dashboard() {
   const [activeExamIdx, setActiveExamIdx] = useState(0)
   const [examsOpen, setExamsOpen] = useState(false)
   const [onboardingOpen, setOnboardingOpen] = useState(false)
+  const [showWelcomeModal, setShowWelcomeModal] = useState(
+    () => sessionStorage.getItem('show_welcome') === '1',
+  )
   const [onboardingStep, setOnboardingStep] = useState<1 | 2 | 3>(1)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
     () => new URLSearchParams(location.search).get('upgraded') === '1',
   )
+
+  useEffect(() => {
+    if (showWelcomeModal) sessionStorage.removeItem('show_welcome')
+  // Only run once on mount.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -402,6 +458,12 @@ export default function Dashboard() {
     </div>
     </div>
     <ConceptPopup />
+    {!isGuest && showWelcomeModal && (
+      <WelcomeModal
+        onAddExam={() => { setShowWelcomeModal(false); setExamsOpen(true) }}
+        onClose={() => setShowWelcomeModal(false)}
+      />
+    )}
     </>
   )
 }

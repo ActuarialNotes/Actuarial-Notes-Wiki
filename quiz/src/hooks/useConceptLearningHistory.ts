@@ -8,17 +8,12 @@ import { slugForLink } from '@/lib/conceptMatch'
 import {
   sanitizeMasteryState,
   decayIfStale,
-  DECAY_DAYS_LEVEL1,
-  DECAY_DAYS_LEVEL2,
-  DECAY_DAYS_LEVEL3,
 } from '@/lib/mastery'
 import type { MasteryState, ConceptMasteryRecord } from '@/lib/mastery'
+import { syntheticDecayEvents } from '@/lib/learningHistory'
+import type { LevelEvent } from '@/lib/learningHistory'
 
-export interface LevelEvent {
-  at: Date
-  from: MasteryState
-  to: MasteryState
-}
+export type { LevelEvent } from '@/lib/learningHistory'
 
 export interface AttemptDot {
   at: Date
@@ -34,8 +29,6 @@ export interface ConceptLearningHistory {
   error: string | null
 }
 
-const MS_PER_DAY = 24 * 60 * 60 * 1000
-
 // Numeric rank for picking the "best" state when multiple exam records exist.
 const STATE_RANK: Record<MasteryState, number> = {
   level3: 4, level2: 3, level1: 2, new: 1, forgotten: 0,
@@ -50,48 +43,12 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
 }
 
 function levelAtTime(time: Date, levelEvents: LevelEvent[]): MasteryState {
-  let state: MasteryState = 'new'
+  let state: MasteryState = levelEvents[0]?.from ?? 'new'
   for (const ev of levelEvents) {
     if (ev.at <= time) state = ev.to
     else break
   }
   return state
-}
-
-/**
- * Compute the synthetic downward level events caused by time-based decay.
- * Mirrors the cascade logic in decayIfStale() so the graph line drops at
- * exactly the same point that the state machine would.
- */
-function syntheticDecayEvents(
-  lastLevel: MasteryState,
-  lastCorrectAt: Date,
-  now: Date,
-): LevelEvent[] {
-  const events: LevelEvent[] = []
-  let state = lastLevel
-  let origin = lastCorrectAt.getTime()
-
-  if (state === 'level3') {
-    const at = new Date(origin + DECAY_DAYS_LEVEL3 * MS_PER_DAY)
-    if (at > now) return events
-    events.push({ at, from: 'level3', to: 'level2' })
-    state = 'level2'
-    origin = at.getTime()
-  }
-  if (state === 'level2') {
-    const at = new Date(origin + DECAY_DAYS_LEVEL2 * MS_PER_DAY)
-    if (at > now) return events
-    events.push({ at, from: 'level2', to: 'level1' })
-    state = 'level1'
-    origin = at.getTime()
-  }
-  if (state === 'level1') {
-    const at = new Date(origin + DECAY_DAYS_LEVEL1 * MS_PER_DAY)
-    if (at > now) return events
-    events.push({ at, from: 'level1', to: 'forgotten' })
-  }
-  return events
 }
 
 const EMPTY: ConceptLearningHistory = {

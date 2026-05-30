@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { generateStudyPlan, todayISO, addDays, PLAN_CACHE_VERSION } from './studyPlan'
+import { generateStudyPlan, todayISO, addDays, daysBetween, PLAN_CACHE_VERSION } from './studyPlan'
 import { emptyRecord, type ConceptMasteryRecord } from './mastery'
 import type { WikiExamSyllabus } from './wikiParser'
 
@@ -33,6 +33,46 @@ const config = {
   targetReadyDate: addDays(todayISO(), 30),
   targetStrengthLevel: 'strong_all' as const,
   planStartDate: todayISO(),
+}
+
+// Weighted syllabus with two topics to test strong_key strategy.
+const weightedSyllabus = {
+  examId: 'FM-2',
+  examLabel: 'Exam FM',
+  examTopic: 'Financial Mathematics',
+  resources: [],
+  topics: [
+    {
+      name: 'Low Weight Topic',
+      weight: '5-10%',
+      concepts: [{ name: 'Low Concept', target: 'Low Concept' }],
+    },
+    {
+      name: 'High Weight Topic',
+      weight: '40-50%',
+      concepts: [{ name: 'High Concept', target: 'High Concept' }],
+    },
+  ],
+} as unknown as WikiExamSyllabus
+
+// Large flat syllabus used to trigger "behind" pacing status.
+function largeSyllabus(conceptCount: number): WikiExamSyllabus {
+  return {
+    examId: 'FM-2',
+    examLabel: 'Exam FM',
+    examTopic: 'Financial Mathematics',
+    resources: [],
+    topics: [
+      {
+        name: 'Big Topic',
+        weight: '100%',
+        concepts: Array.from({ length: conceptCount }, (_, i) => ({
+          name: `Concept ${i + 1}`,
+          target: `Concept ${i + 1}`,
+        })),
+      },
+    ],
+  } as unknown as WikiExamSyllabus
 }
 
 describe('generateStudyPlan — aliased concept mastery', () => {
@@ -87,5 +127,315 @@ describe('generateStudyPlan — aliased concept mastery', () => {
       examDate: addDays(todayISO(), 40),
     })
     expect(plan.planVersion).toBe(PLAN_CACHE_VERSION)
+  })
+})
+
+// ── addDays / daysBetween ─────────────────────────────────────────────────────
+
+describe('addDays', () => {
+  it('adds a positive number of days', () => {
+    expect(addDays('2026-01-01', 10)).toBe('2026-01-11')
+  })
+
+  it('adds zero days (identity)', () => {
+    expect(addDays('2026-01-15', 0)).toBe('2026-01-15')
+  })
+
+  it('subtracts days with a negative argument', () => {
+    expect(addDays('2026-01-11', -10)).toBe('2026-01-01')
+  })
+
+  it('crosses month boundaries correctly', () => {
+    expect(addDays('2026-01-31', 1)).toBe('2026-02-01')
+  })
+})
+
+describe('daysBetween', () => {
+  it('returns the positive day count when "to" is after "from"', () => {
+    expect(daysBetween('2026-01-01', '2026-01-11')).toBe(10)
+  })
+
+  it('returns 0 for the same date', () => {
+    expect(daysBetween('2026-06-01', '2026-06-01')).toBe(0)
+  })
+
+  it('returns a negative count when "to" is before "from"', () => {
+    expect(daysBetween('2026-01-11', '2026-01-01')).toBe(-10)
+  })
+
+  it('is the inverse of addDays', () => {
+    const from = '2026-03-15'
+    const to = addDays(from, 17)
+    expect(daysBetween(from, to)).toBe(17)
+  })
+})
+
+// ── Pacing status ─────────────────────────────────────────────────────────────
+
+describe('generateStudyPlan — pacing status', () => {
+  it('returns "behind" when needed new concepts per day exceeds MAX_NEW_PER_DAY (5)', () => {
+    // 30 concepts, 3 days remaining: neededNewPerDay = ceil(30 / max(1, 3-3)) = 30 > 5
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: largeSyllabus(30),
+      masteryRecords: [],
+      config: { ...config, targetReadyDate: addDays(todayISO(), 3) },
+      examDate: addDays(todayISO(), 60),
+    })
+    expect(plan.status).toBe('behind')
+  })
+
+  it('returns "on_track" for a comfortable pace', () => {
+    // 2 concepts, 30 days remaining: neededNewPerDay = ceil(2/27) = 1 ≤ 5
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    expect(plan.status).toBe('on_track')
+  })
+
+  it('returns "ahead" when mastered fraction is more than 15% ahead of expected pace', () => {
+    // 20-day plan (started 14 days ago, 6 days remain): elapsed fraction = 14/20 = 70%.
+    // Mastering 11 of 12 concepts = 91.7% > 70% + 15% = 85% → "ahead".
+    const planStartDate = addDays(todayISO(), -14)
+    const targetReadyDate = addDays(todayISO(), 6)
+    const bigSyllabus = largeSyllabus(12)
+    const masteredRecords = Array.from({ length: 11 }, (_, i) =>
+      rec(`Concept ${i + 1}`, { state: 'level3', last_correct_at: NOW_ISO }),
+    )
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: bigSyllabus,
+      masteryRecords: masteredRecords,
+      config: {
+        targetReadyDate,
+        targetStrengthLevel: 'strong_all',
+        planStartDate,
+      },
+      examDate: addDays(todayISO(), 60),
+    })
+    expect(plan.status).toBe('ahead')
+  })
+
+  it('returns "target_passed" when targetReadyDate is in the past but exam date is future', () => {
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config: {
+        targetReadyDate: addDays(todayISO(), -5),
+        targetStrengthLevel: 'strong_all',
+        planStartDate: addDays(todayISO(), -10),
+      },
+      examDate: addDays(todayISO(), 30),
+    })
+    expect(plan.status).toBe('target_passed')
+    expect(plan.effectiveReadyDate).toBe(addDays(todayISO(), 30))
+  })
+})
+
+// ── Spacing: eligible dates ───────────────────────────────────────────────────
+
+describe('generateStudyPlan — spacing for partially-learned concepts', () => {
+  it('schedules a level1 concept today when its eligible date (last_correct_at + 1) is in the past', () => {
+    // last_correct_at was 3 days ago → eligible 2 days ago → today is fine
+    const lastCorrectAt = addDays(todayISO(), -3) + 'T12:00:00Z'
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [
+        rec('Coupon Rate', { state: 'level1', correct_count: 1, last_correct_at: lastCorrectAt }),
+      ],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    const assignment = plan.assignments.find(
+      a => a.conceptName === 'Coupon Rate' && a.initialState === 'level1',
+    )
+    expect(assignment?.scheduledDate).toBe(todayISO())
+  })
+
+  it('schedules a level2 concept at last_correct_at + 2 when that date is in the future', () => {
+    // last_correct_at was yesterday → eligible in 1 day from now (yesterday + 2)
+    const lastCorrectDate = addDays(todayISO(), -1)
+    const lastCorrectAt = lastCorrectDate + 'T12:00:00Z'
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [
+        rec('Coupon Rate', { state: 'level2', correct_count: 2, last_correct_at: lastCorrectAt }),
+      ],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    const assignment = plan.assignments.find(
+      a => a.conceptName === 'Coupon Rate' && a.initialState === 'level2',
+    )
+    expect(assignment?.scheduledDate).toBe(addDays(lastCorrectDate, 2))
+  })
+})
+
+// ── New concept pipeline: 3 staged assignments ────────────────────────────────
+
+describe('generateStudyPlan — new concept pipeline', () => {
+  it('generates exactly 3 assignments for a new concept (intro, level1→level2, level2→level3)', () => {
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    const couponAssignments = plan.assignments.filter(a => a.conceptName === 'Coupon Rate')
+    expect(couponAssignments.length).toBe(3)
+    const states = couponAssignments.map(a => a.initialState).sort()
+    expect(states).toEqual(['level1', 'level2', 'new'].sort())
+  })
+
+  it('stages intro on D, level1→level2 on D+1, level2→level3 on D+3', () => {
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    const couponAssignments = plan.assignments.filter(a => a.conceptName === 'Coupon Rate')
+    const introDate = couponAssignments.find(a => a.initialState === 'new')?.scheduledDate
+    const l1Date = couponAssignments.find(a => a.initialState === 'level1')?.scheduledDate
+    const l2Date = couponAssignments.find(a => a.initialState === 'level2')?.scheduledDate
+    expect(introDate).toBeDefined()
+    expect(l1Date).toBe(addDays(introDate!, 1))
+    expect(l2Date).toBe(addDays(introDate!, 3))
+  })
+
+  it('does not schedule the same concept more than once per day in todaysConcepts', () => {
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    const unique = new Set(plan.todaysConcepts)
+    expect(unique.size).toBe(plan.todaysConcepts.length)
+  })
+})
+
+// ── todaysLevelUps grounding ──────────────────────────────────────────────────
+
+describe('generateStudyPlan — todaysLevelUps grounding', () => {
+  it('surfaces leveled-up concepts first in todaysConcepts', () => {
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+      todaysLevelUps: ['Coupon Rate'],
+    })
+    if (plan.todaysConcepts.length > 0) {
+      expect(plan.todaysConcepts[0]).toBe('Coupon Rate')
+    }
+  })
+
+  it('caps todaysConcepts at the original count when todaysLevelUps exceeds it', () => {
+    const baselineCount = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+    }).todaysConcepts.length
+
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+      todaysLevelUps: ['Price', 'Coupon Rate', 'Extra Concept', 'Another One'],
+    })
+    expect(plan.todaysConcepts.length).toBe(baselineCount)
+  })
+})
+
+// ── strong_key strategy ───────────────────────────────────────────────────────
+
+describe('generateStudyPlan — strong_key strategy', () => {
+  it('schedules high-weight topic concepts before low-weight concepts', () => {
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: weightedSyllabus,
+      masteryRecords: [],
+      config: { ...config, targetStrengthLevel: 'strong_key' },
+      examDate: addDays(todayISO(), 40),
+    })
+    const todayAssignments = plan.assignments
+      .filter(a => a.scheduledDate === todayISO())
+      .map(a => a.conceptName)
+    // "High Concept" (weight 45%) should appear before "Low Concept" (weight 7.5%)
+    const highIdx = todayAssignments.indexOf('High Concept')
+    const lowIdx = todayAssignments.indexOf('Low Concept')
+    if (highIdx >= 0 && lowIdx >= 0) {
+      expect(highIdx).toBeLessThan(lowIdx)
+    } else {
+      // At minimum, high-weight concept must be scheduled
+      expect(todayAssignments).toContain('High Concept')
+    }
+  })
+})
+
+// ── Review concepts: oldest-first sorting ─────────────────────────────────────
+
+describe('generateStudyPlan — reviewConcepts order', () => {
+  it('sorts review concepts oldest last_correct_at first in review_mode', () => {
+    const oldDate = addDays(todayISO(), -20) + 'T12:00:00Z'
+    const newDate = addDays(todayISO(), -2) + 'T12:00:00Z'
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [
+        rec('Bond Price', { state: 'level3', last_correct_at: newDate }),
+        rec('Coupon Rate', { state: 'level3', last_correct_at: oldDate }),
+      ],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    expect(plan.status).toBe('review_mode')
+    // Oldest (Coupon Rate) should appear first in reviewConcepts
+    expect(plan.reviewConcepts[0]).toBe('Coupon Rate')
+  })
+
+  it('caps reviewConcepts at 5 in review_mode', () => {
+    const bigSyllabus = largeSyllabus(10)
+    const masteredAll = Array.from({ length: 10 }, (_, i) =>
+      rec(`Concept ${i + 1}`, { state: 'level3', last_correct_at: NOW_ISO }),
+    )
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: bigSyllabus,
+      masteryRecords: masteredAll,
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    expect(plan.status).toBe('review_mode')
+    expect(plan.reviewConcepts.length).toBeLessThanOrEqual(5)
+  })
+
+  it('caps reviewConcepts at 3 in normal (non-review) mode', () => {
+    // Only one concept mastered, one unmastered → not review_mode
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [rec('Bond Price', { state: 'level3', last_correct_at: NOW_ISO })],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    expect(plan.status).not.toBe('review_mode')
+    expect(plan.reviewConcepts.length).toBeLessThanOrEqual(3)
   })
 })

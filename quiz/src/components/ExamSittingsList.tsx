@@ -29,7 +29,7 @@ export function ExamSittingsList({ examId, selectedDate, onSelect }: Props) {
         <CalendarCheck className="h-3 w-3" />
         Upcoming sittings
       </p>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         {sittings.map((s, i) => {
           const active = isSelected(s, selectedDate)
           const selectDate = s.endDate ?? s.startDate
@@ -38,24 +38,24 @@ export function ExamSittingsList({ examId, selectedDate, onSelect }: Props) {
               key={i}
               type="button"
               onClick={() => onSelect(selectDate)}
-              className={`w-full text-left rounded-md px-2.5 py-1.5 text-xs transition-colors border ${
+              className={`w-full text-left rounded-lg px-3 py-2.5 transition-all duration-150 border ${
                 active
-                  ? 'border-primary bg-primary/10 text-foreground'
-                  : 'border-border hover:border-primary/40 hover:bg-accent/50 text-muted-foreground hover:text-foreground'
+                  ? 'border-primary bg-primary/10 text-foreground shadow-sm'
+                  : 'border-border hover:border-primary/50 hover:bg-accent/60 text-muted-foreground hover:text-foreground'
               }`}
             >
               <div className="flex items-center justify-between gap-2">
-                <span className="font-medium">{formatSittingDate(s)}</span>
-                <span className={`shrink-0 rounded px-1 py-px text-[10px] font-semibold tracking-wide ${
+                <span className="text-sm font-semibold">{formatSittingDate(s)}</span>
+                <span className={`shrink-0 rounded px-1.5 py-0.5 text-xs font-semibold tracking-wide ${
                   s.format === 'CBT'
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
-                    : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
+                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
+                    : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
                 }`}>
                   {s.format}
                 </span>
               </div>
               {s.registrationDeadline && (
-                <p className="mt-0.5 text-[10px] text-muted-foreground">
+                <p className="mt-0.5 text-xs text-muted-foreground">
                   Reg. deadline: {formatSittingDate({ ...s, startDate: s.registrationDeadline, endDate: null })}
                 </p>
               )}

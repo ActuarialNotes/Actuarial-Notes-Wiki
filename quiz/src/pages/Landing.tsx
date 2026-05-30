@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -13,7 +13,6 @@ import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
-import { Button } from '@/components/ui/button'
 import type { QuizMode } from '@/lib/parser'
 
 const EXAMS = [
@@ -636,21 +635,6 @@ export default function Landing() {
         ? `(${selectedConcepts.length} auto-selected)`
         : `${selectedConcepts.length} selected`
 
-  const summaryText = useMemo(() => {
-    if (!hasTopic) return ''
-    if (mode === 'mock-exam') {
-      return `${mockExamCount} questions · All topics · Answers at end`
-    }
-    const qCount = effectiveAvailableCount > 0 ? Math.min(count, effectiveAvailableCount) : count
-    const conceptPart = useTodaysPlan && planConceptCount > 0
-      ? `${planConceptCount} concept${planConceptCount !== 1 ? 's' : ''} · today's plan`
-      : selectedConcepts.length === 0
-        ? 'All concepts'
-        : `${selectedConcepts.length} concept${selectedConcepts.length !== 1 ? 's' : ''} selected`
-    const revealPart = reveal === 'during' ? 'Answers after each' : 'Answers at end'
-    return `${qCount} question${qCount !== 1 ? 's' : ''} · ${conceptPart} · ${revealPart}`
-  }, [mode, count, mockExamCount, effectiveAvailableCount, useTodaysPlan, planConceptCount, selectedConcepts, reveal, hasTopic])
-
   // Filter reflecting the current quiz configuration — passed to the search
   // bar so it only previews questions from the active pool.
   const searchFilter = useMemo(() => {
@@ -690,6 +674,17 @@ export default function Landing() {
     <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
     <div className={`container max-w-2xl mx-auto px-4 pt-12 space-y-8 ${hasSelection ? 'pb-32' : 'pb-12'}`}>
       <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
+        {hasTopic && (
+          <button
+            type="button"
+            onClick={() => setTopic('')}
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span className="font-medium">{examLabel}</span>
+            <span>· change</span>
+          </button>
+        )}
         <div className="flex items-center gap-4">
           <div>
             <div className="flex items-center gap-2">
@@ -700,9 +695,6 @@ export default function Landing() {
                 </span>
               )}
             </div>
-            <p className="text-sm text-muted-foreground">
-              Practice questions for actuarial exams
-            </p>
             {!user && (
               <p className="text-xs text-muted-foreground">
                 <a href="/auth" className="text-primary hover:underline">Sign in</a> to save your progress
@@ -849,16 +841,6 @@ export default function Landing() {
 
           {hasTopic && (
             <>
-              <button
-                type="button"
-                onClick={() => setTopic('')}
-                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <span aria-hidden="true">←</span>
-                <span className="font-medium">{examLabel}</span>
-                <span>· change</span>
-              </button>
-
               {/* ── Quiz mode options ──────────────────────────────────── */}
               {mode === 'quiz' && (
                 <>
@@ -929,19 +911,11 @@ export default function Landing() {
           )}
       </div>
 
-      {user && (
-        <div className="text-center">
-          <Button variant="outline" onClick={() => navigate('/dashboard')}>
-            View Dashboard
-          </Button>
-        </div>
-      )}
     </div>
 
     {hasSelection && (
       <div className="fixed bottom-16 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm">
         <div className="container max-w-2xl mx-auto px-4 pt-3 pb-3">
-          <p className="text-xs text-center text-muted-foreground mb-2.5">{summaryText}</p>
           <button
             type="button"
             onClick={handleStart}

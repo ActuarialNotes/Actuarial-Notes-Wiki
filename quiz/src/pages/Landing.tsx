@@ -787,7 +787,7 @@ export default function Landing() {
     </div>
 
     {hasSelection && (
-      <div className="fixed bottom-16 left-0 right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm">
+      <div className="fixed bottom-16 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm">
         <div className="container max-w-2xl mx-auto px-4 pt-3 pb-3">
           <p className="text-xs text-center text-muted-foreground mb-2.5">{summaryText}</p>
           <button

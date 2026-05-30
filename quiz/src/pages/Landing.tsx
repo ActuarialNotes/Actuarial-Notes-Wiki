@@ -511,9 +511,20 @@ export default function Landing() {
     return `${qCount} question${qCount !== 1 ? 's' : ''} · ${conceptPart} · ${revealPart}`
   }, [mode, count, mockExamCount, effectiveAvailableCount, useTodaysPlan, planConceptCount, selectedConcepts, reveal, hasTopic])
 
+  // Filter reflecting the current quiz configuration — passed to the search
+  // bar so it only previews questions from the active pool.
+  const searchFilter = useMemo(() => {
+    if (selectedConcept) return { concept: selectedConcept }
+    if (!topic) return {}
+    return {
+      exam: topic,
+      ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
+    }
+  }, [topic, selectedConcept, selectedConcepts])
+
   return (
     <>
-    <QuizFloatingSearch />
+    <QuizFloatingSearch filter={searchFilter} />
     <div className={`container max-w-2xl mx-auto px-4 pt-12 space-y-8 ${hasSelection ? 'pb-32' : 'pb-12'}`}>
       <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
         <div className="flex items-center gap-4">

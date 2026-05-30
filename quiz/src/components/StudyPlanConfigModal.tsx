@@ -93,6 +93,14 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     }
   }
 
+  function handleExamSittingSelect(value: string) {
+    if (value === localExamDate) {
+      if (step < TOTAL_STEPS) setStep(step + 1)
+    } else {
+      handleExamDateChange(value)
+    }
+  }
+
   function handleSave() {
     onSave({
       targetReadyDate: readyDate || null,
@@ -172,7 +180,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                 ) : (
                   <button
                     type="button"
-                    onClick={() => setStep(s)}
+                    onClick={() => {
+                      if (s === step) {
+                        if (step < TOTAL_STEPS && !isNextDisabled()) setStep(step + 1)
+                      } else {
+                        setStep(s)
+                      }
+                    }}
                     className="flex flex-col items-center gap-1.5 focus:outline-none"
                     aria-label={`Go to step ${s}: ${label}`}
                     aria-current={isActive ? 'step' : undefined}
@@ -246,9 +260,10 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     ref={examDateInputRef}
                     type="date"
                     value={localExamDate}
-                    min={today}
+                    min={selectedSitting?.startDate ?? today}
+                    max={selectedSitting?.endDate ?? undefined}
                     onChange={e => handleExamDateChange(e.target.value)}
-                    className="sr-only"
+                    className="sr-only dark:[color-scheme:dark]"
                   />
                 </div>
               )}
@@ -259,23 +274,8 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     <ExamSittingsList
                       examId={examId}
                       selectedDate={localExamDate}
-                      onSelect={handleExamDateChange}
+                      onSelect={handleExamSittingSelect}
                     />
-                  )}
-                  {selectedSitting && selectedSitting.endDate && (
-                    <div className="space-y-1">
-                      <p className="text-xs text-muted-foreground">Your specific exam day:</p>
-                      <div className="overflow-hidden rounded-md border border-input shadow-sm focus-within:ring-1 focus-within:ring-ring">
-                        <input
-                          type="date"
-                          value={localExamDate}
-                          min={selectedSitting.startDate}
-                          max={selectedSitting.endDate}
-                          onChange={e => handleExamDateChange(e.target.value)}
-                          className="block w-full bg-background px-3 py-2 text-base transition-colors focus:outline-none"
-                        />
-                      </div>
-                    </div>
                   )}
                 </>
               ) : !localExamDate ? (
@@ -320,7 +320,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     min={today}
                     max={localExamDate || examDate || undefined}
                     onChange={e => handleReadyDateChange(e.target.value)}
-                    className="sr-only"
+                    className="sr-only dark:[color-scheme:dark]"
                   />
                 </div>
               )}

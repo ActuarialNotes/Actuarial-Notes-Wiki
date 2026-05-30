@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, Loader2 } from 'lucide-react'
+import { ArrowLeft, Loader2, X } from 'lucide-react'
 import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
+import { QuestionCard } from '@/components/QuestionCard'
+import { Separator } from '@/components/ui/separator'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { fetchAllQuestions } from '@/lib/github'
@@ -127,23 +129,68 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
         )}
 
         {loadState.status === 'done' && (
-          <ConceptCoverageSection
-            questions={loadState.questions}
-            responses={loadState.responses}
-            isLoggedIn={isLoggedIn}
-            score={{
-              mode: session.mode,
-              percentage: pct,
-              correctCount: session.correct_count,
-              totalQuestions: session.total_questions,
-              timeTakenSeconds: session.time_taken_seconds,
-              gemsEarned: session.correct_count,
-              isLoggedIn,
-              onSignIn: () => {},
-            }}
-            selectedQuestion={selectedQuestion}
-            onQuestionSelect={setSelectedQuestion}
-          />
+          <>
+            <ConceptCoverageSection
+              questions={loadState.questions}
+              responses={loadState.responses}
+              isLoggedIn={isLoggedIn}
+              score={{
+                mode: session.mode,
+                percentage: pct,
+                correctCount: session.correct_count,
+                totalQuestions: session.total_questions,
+                timeTakenSeconds: session.time_taken_seconds,
+                gemsEarned: session.correct_count,
+                isLoggedIn,
+                onSignIn: () => {},
+              }}
+              selectedQuestion={selectedQuestion}
+              onQuestionSelect={setSelectedQuestion}
+            />
+
+            <div className="space-y-2 scroll-mt-6 mt-6">
+              <div className="flex items-center gap-3">
+                <h2 className="text-lg font-semibold">Question Review</h2>
+                {selectedQuestion !== null && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+                    Q{selectedQuestion + 1}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedQuestion(null)}
+                      className="hover:opacity-70 transition-opacity"
+                      aria-label="Clear filter"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                )}
+              </div>
+              <Separator />
+            </div>
+
+            <div className="space-y-4 mt-4">
+              {(selectedQuestion !== null
+                ? loadState.questions.filter((_, i) => i === selectedQuestion)
+                : loadState.questions
+              ).map((question) => {
+                const idx = loadState.questions.indexOf(question)
+                const chosen = loadState.responses[question.id]?.chosen ?? null
+                return (
+                  <div key={question.id} className="space-y-1">
+                    <p className="text-xs text-muted-foreground font-medium">Question {idx + 1}</p>
+                    <QuestionCard
+                      question={question}
+                      selectedAnswer={chosen}
+                      onAnswer={() => {}}
+                      showExplanation={true}
+                      showMeta={true}
+                      isLocked={true}
+                    />
+                  </div>
+                )
+              })}
+            </div>
+          </>
         )}
       </div>
     </div>

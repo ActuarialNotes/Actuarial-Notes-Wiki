@@ -1338,8 +1338,8 @@ export default function Flashcards() {
   if (cards.length === 0) {
     return (
       <>
-        <div className="container max-w-xl mx-auto px-4 py-8 space-y-6">
-          <h1 className="text-2xl font-bold">Flashcards</h1>
+        <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+          <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
           <FlashcardPacksSection />
           <div className="rounded-xl border bg-card text-card-foreground p-12 text-center space-y-3">
             <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50" />
@@ -1381,13 +1381,13 @@ export default function Flashcards() {
       )}
 
       <div
-        className="container max-w-xl mx-auto px-0 sm:px-4"
+        className="container max-w-4xl mx-auto"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Sticky header: title + gallery strip */}
-        <div className="sticky top-0 md:top-14 lg:top-0 z-10 bg-background border-b px-4 pt-3">
+        <div className="sticky top-0 md:top-14 lg:top-0 z-10 bg-background border-b px-4 sm:px-6 pt-3">
           <div className="flex items-center justify-between mb-1">
-            <h1 className="text-lg font-bold">Flashcards</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
             <span className="text-xs text-muted-foreground">
               {cards.length} card{cards.length === 1 ? '' : 's'}
             </span>

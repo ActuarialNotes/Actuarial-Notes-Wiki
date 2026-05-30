@@ -51,14 +51,21 @@ export function QuizFloatingSearch() {
     closeDropdown()
   }
 
-  const hasQuery = query.trim().length > 0
-  const isExpanded = active && hasQuery
+  // Expand whenever the search bar is active (focus), regardless of query
+  const isExpanded = active
 
   const questionResults = useMemo(() => {
     const q = query.trim()
-    if (!q) return []
-    return filterQuestions(allQuestions, { search: q }).slice(0, 20)
+    // Show all questions (capped for performance) when no query so users can
+    // preview the full pool; filter normally when a query is present.
+    if (!q) return allQuestions.slice(0, 100)
+    return filterQuestions(allQuestions, { search: q }).slice(0, 50)
   }, [allQuestions, query])
+
+  const selectedQuestions = useMemo(
+    () => allQuestions.filter(q => selectedIds.has(q.id)),
+    [allQuestions, selectedIds],
+  )
 
   return (
     <>
@@ -89,11 +96,11 @@ export function QuizFloatingSearch() {
               autoComplete="off"
               spellCheck={false}
             />
-            {query && (
+            {(query || active) && (
               <button
                 type="button"
-                onClick={closeDropdown}
-                aria-label="Clear search"
+                onClick={query ? () => setQuery('') : closeDropdown}
+                aria-label={query ? 'Clear query' : 'Close search'}
                 className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
               >
                 <X className="h-4 w-4" />
@@ -126,10 +133,36 @@ export function QuizFloatingSearch() {
             </div>
           )}
 
-          {/* Dropdown — only when query is non-empty */}
+          {/* Dropdown — shown whenever search is active */}
           {isExpanded && (
-            <div className="border-t pb-3">
-              <div className="space-y-2 max-h-[50vh] overflow-y-auto pt-2">
+            <div
+              className="border-t flex flex-col"
+              style={{ height: 'calc(100dvh - 3.5rem)' }}
+            >
+              {/* Selected question tags */}
+              {selectedIds.size > 0 && (
+                <div className="flex flex-wrap gap-1.5 px-0.5 py-2 flex-shrink-0 border-b">
+                  {selectedQuestions.map(q => (
+                    <span
+                      key={q.id}
+                      className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-medium"
+                    >
+                      <span className="max-w-[160px] truncate">{q.id}</span>
+                      <button
+                        type="button"
+                        onClick={e => { e.stopPropagation(); toggleSelect(q.id) }}
+                        aria-label={`Remove ${q.id}`}
+                        className="hover:text-primary/70 transition-colors ml-0.5 shrink-0"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Results list — fills remaining vertical space */}
+              <div className="flex-1 overflow-y-auto py-2 space-y-2 min-h-0">
                 {questionResults.length === 0 ? (
                   <p className="text-xs text-muted-foreground px-2 py-2">No questions found.</p>
                 ) : (
@@ -147,7 +180,7 @@ export function QuizFloatingSearch() {
 
               {/* Start Quiz button — shown when questions are selected */}
               {selectedIds.size > 0 && (
-                <div className="border-t mt-2 pt-2">
+                <div className="flex-shrink-0 border-t pt-2 pb-3">
                   <button
                     type="button"
                     onClick={handleStartQuiz}

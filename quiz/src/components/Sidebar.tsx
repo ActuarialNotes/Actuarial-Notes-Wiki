@@ -32,6 +32,7 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
@@ -219,7 +220,7 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
-  const [examsOpen, setExamsOpen] = useState(false)
+  const { open: examsOpen, openExams, closeExams } = useExamsPopout()
   const [signOutConfirm, setSignOutConfirm] = useState(false)
   const [openExamDropdown, setOpenExamDropdown] = useState<string | null>(null)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -497,7 +498,7 @@ export default function Sidebar() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => { setExamsOpen(true); setProfileOpen(false); closeMobile() }}
+                    onClick={() => { openExams(); setProfileOpen(false); closeMobile() }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
                   >
                     <GraduationCap className="h-4 w-4 shrink-0" />
@@ -603,7 +604,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />
+      <ExamsPopout open={examsOpen} onClose={closeExams} />
     </>
   )
 }

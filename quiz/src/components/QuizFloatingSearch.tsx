@@ -155,73 +155,77 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
               className="border-t flex flex-col"
               style={{ height: 'calc(100dvh - 3.5rem)' }}
             >
-              {/* Selected question tags */}
-              {selectedIds.size > 0 && (
-                <div className="flex flex-wrap gap-1.5 px-0.5 py-2 flex-shrink-0 border-b">
-                  {selectedQuestions.map(q => (
-                    <span
-                      key={q.id}
-                      className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-medium"
-                    >
-                      <span className="max-w-[160px] truncate">{q.id}</span>
-                      <button
-                        type="button"
-                        onClick={e => { e.stopPropagation(); toggleSelect(q.id) }}
-                        aria-label={`Remove ${q.id}`}
-                        className="hover:text-primary/70 transition-colors ml-0.5 shrink-0"
+              {/* Single scrollable region: tags → filter pills → results.
+                  Everything scrolls together so tags don't push results off screen. */}
+              <div className="flex-1 overflow-y-auto min-h-0">
+                {/* Selected question tags */}
+                {selectedIds.size > 0 && (
+                  <div className="flex flex-wrap gap-1.5 px-0.5 py-2 border-b">
+                    {selectedQuestions.map(q => (
+                      <span
+                        key={q.id}
+                        className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-medium"
                       >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </span>
-                  ))}
+                        <span className="max-w-[160px] truncate">{q.id}</span>
+                        <button
+                          type="button"
+                          onClick={e => { e.stopPropagation(); toggleSelect(q.id) }}
+                          aria-label={`Remove ${q.id}`}
+                          className="hover:text-primary/70 transition-colors ml-0.5 shrink-0"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Filter pills + result count */}
+                <div className="flex flex-wrap items-center gap-1.5 px-0.5 py-2 border-b">
+                  {filterPills && filterPills.length > 0 ? (
+                    filterPills.map(pill => (
+                      <span
+                        key={pill.label}
+                        className="inline-flex items-center gap-1 rounded-full border border-border bg-muted text-foreground px-2.5 py-0.5 text-xs font-medium"
+                      >
+                        {pill.label}
+                        <button
+                          type="button"
+                          onClick={e => { e.stopPropagation(); pill.onRemove() }}
+                          aria-label={`Remove filter ${pill.label}`}
+                          className="hover:text-muted-foreground transition-colors ml-0.5 shrink-0"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-xs text-muted-foreground">All questions</span>
+                  )}
+                  <span className="ml-auto text-xs font-medium text-muted-foreground shrink-0">
+                    {totalCount} question{totalCount !== 1 ? 's' : ''}
+                  </span>
                 </div>
-              )}
 
-              {/* Filter pills + result count */}
-              <div className="flex flex-wrap items-center gap-1.5 px-0.5 py-2 flex-shrink-0 border-b">
-                {filterPills && filterPills.length > 0 ? (
-                  filterPills.map(pill => (
-                    <span
-                      key={pill.label}
-                      className="inline-flex items-center gap-1 rounded-full border border-border bg-muted text-foreground px-2.5 py-0.5 text-xs font-medium"
-                    >
-                      {pill.label}
-                      <button
-                        type="button"
-                        onClick={e => { e.stopPropagation(); pill.onRemove() }}
-                        aria-label={`Remove filter ${pill.label}`}
-                        className="hover:text-muted-foreground transition-colors ml-0.5 shrink-0"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </span>
-                  ))
-                ) : (
-                  <span className="text-xs text-muted-foreground">All questions</span>
-                )}
-                <span className="ml-auto text-xs font-medium text-muted-foreground shrink-0">
-                  {totalCount} question{totalCount !== 1 ? 's' : ''}
-                </span>
+                {/* Results list */}
+                <div className="py-2 space-y-2">
+                  {questionResults.length === 0 ? (
+                    <p className="text-xs text-muted-foreground px-2 py-2">No questions found.</p>
+                  ) : (
+                    questionResults.map(q => (
+                      <QuestionSearchRow
+                        key={q.id}
+                        question={q}
+                        query={query}
+                        selected={selectedIds.has(q.id)}
+                        onToggleSelect={toggleSelect}
+                      />
+                    ))
+                  )}
+                </div>
               </div>
 
-              {/* Results list — fills remaining vertical space */}
-              <div className="flex-1 overflow-y-auto py-2 space-y-2 min-h-0">
-                {questionResults.length === 0 ? (
-                  <p className="text-xs text-muted-foreground px-2 py-2">No questions found.</p>
-                ) : (
-                  questionResults.map(q => (
-                    <QuestionSearchRow
-                      key={q.id}
-                      question={q}
-                      query={query}
-                      selected={selectedIds.has(q.id)}
-                      onToggleSelect={toggleSelect}
-                    />
-                  ))
-                )}
-              </div>
-
-              {/* Start Quiz button — shown when questions are selected */}
+              {/* Start Quiz button — pinned at bottom */}
               {selectedIds.size > 0 && (
                 <div className="flex-shrink-0 border-t pt-2 pb-3">
                   <button

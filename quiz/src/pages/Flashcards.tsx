@@ -7,7 +7,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
-  FlipHorizontal,
   GraduationCap,
   Images,
   LayoutGrid,

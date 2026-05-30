@@ -522,9 +522,23 @@ export default function Landing() {
     }
   }, [topic, selectedConcept, selectedConcepts])
 
+  // Active filter chips shown in the search dropdown so the user can see and
+  // remove concept filters without leaving the search panel.
+  const filterPills = useMemo(() => {
+    const pills: { label: string; onRemove: () => void }[] = []
+    if (selectedConcept) {
+      pills.push({ label: selectedConcept, onRemove: () => setSelectedConcept('') })
+    }
+    selectedConcepts.forEach(c => {
+      pills.push({ label: c, onRemove: () => toggleConcept(c) })
+    })
+    return pills
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedConcept, selectedConcepts])
+
   return (
     <>
-    <QuizFloatingSearch filter={searchFilter} />
+    <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
     <div className={`container max-w-2xl mx-auto px-4 pt-12 space-y-8 ${hasSelection ? 'pb-32' : 'pb-12'}`}>
       <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
         <div className="flex items-center gap-4">

@@ -147,10 +147,6 @@ function TodayStudyPlanSection() {
     setSelectedPlan(new Set())
   }
 
-  const todayLabel = new Date().toLocaleDateString(undefined, {
-    weekday: 'long', month: 'long', day: 'numeric',
-  })
-
   const isLoading = planLoading || masteryLoading
 
   return (

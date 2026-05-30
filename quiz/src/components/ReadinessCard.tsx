@@ -307,7 +307,6 @@ interface Props {
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
-  onOpenOnboarding,
   openConceptsTrigger, startQuizTrigger,
   isPremium = true,
 }: Props) {

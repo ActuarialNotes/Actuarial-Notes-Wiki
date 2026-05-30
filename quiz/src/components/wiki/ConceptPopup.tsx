@@ -11,6 +11,7 @@ import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components
 import { MathViewContext } from '@/contexts/MathViewContext'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
+import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 
@@ -27,6 +28,7 @@ export function ConceptPopup() {
   const { height, beginDrag } = useSplitHeight()
   const [maximized, setMaximized] = useState(false)
   const [showLearningProgress, setShowLearningProgress] = useState(false)
+  const [showQuestionsModal, setShowQuestionsModal] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
   const [images, setImages] = useState<Array<{ src: string; alt: string; caption: string }>>([])
@@ -219,7 +221,7 @@ export function ConceptPopup() {
             <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-72 overflow-y-auto ${menuAlignRight ? 'right-0' : 'left-0'}`}>
               <button
                 type="button"
-                onClick={() => { routerNavigate(`/?concept=${encodeURIComponent(current.name)}`); setShowPlayMenu(false); close() }}
+                onClick={() => { setShowQuestionsModal(true); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <Play className="h-3.5 w-3.5 shrink-0" />
@@ -487,6 +489,12 @@ export function ConceptPopup() {
       <LearningProgressModal
         conceptName={current.name}
         onClose={() => setShowLearningProgress(false)}
+      />
+    )}
+    {showQuestionsModal && (
+      <ConceptQuestionsModal
+        conceptName={current.name}
+        onClose={() => setShowQuestionsModal(false)}
       />
     )}
     {showGallery && (

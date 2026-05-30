@@ -208,7 +208,14 @@
   height: calc(100dvh - var(--popup-max-top, 0rem));
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
+  .concept-popup-aside[data-maximized="true"] {
+    top: var(--popup-max-top, 3.5rem);
+    height: calc(100dvh - var(--popup-max-top, 3.5rem) - 3.5rem);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
   .concept-popup-aside[data-maximized="true"] {
     top: var(--popup-max-top, 3.5rem);
     height: calc(100dvh - var(--popup-max-top, 3.5rem));

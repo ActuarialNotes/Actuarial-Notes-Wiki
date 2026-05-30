@@ -1055,7 +1055,7 @@ export default function Flashcards() {
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Sticky header: title + gallery strip */}
-        <div className="sticky top-14 lg:top-0 z-10 bg-background border-b px-4 pt-3">
+        <div className="sticky top-0 md:top-14 lg:top-0 z-10 bg-background border-b px-4 pt-3">
           <div className="flex items-center justify-between mb-1">
             <h1 className="text-lg font-bold">Flashcards</h1>
             <span className="text-xs text-muted-foreground">

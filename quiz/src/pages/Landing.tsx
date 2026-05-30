@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, Check, CheckCircle2, ChevronDown, Circle, Lock, Play, X } from 'lucide-react'
+import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
@@ -498,8 +499,9 @@ export default function Landing() {
 
   return (
     <>
+    <QuizFloatingSearch />
     <div className="container max-w-2xl mx-auto px-4 py-12 space-y-8">
-      <div className="sticky top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
+      <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
         <div className="flex items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">

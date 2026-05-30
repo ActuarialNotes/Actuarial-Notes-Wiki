@@ -6,12 +6,19 @@ import type { QuestionFilter } from '@/lib/parser'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
 
+interface FilterPill {
+  label: string
+  onRemove: () => void
+}
+
 interface QuizFloatingSearchProps {
   /** When provided, results are pre-filtered to this pool (e.g. current exam + concepts). */
   filter?: QuestionFilter
+  /** Active filter chips shown at the top of the dropdown with × to remove. */
+  filterPills?: FilterPill[]
 }
 
-export function QuizFloatingSearch({ filter }: QuizFloatingSearchProps = {}) {
+export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchProps = {}) {
   const navigate = useNavigate()
   const { questions: allQuestions } = useAllQuestions()
   const [query, setQuery] = useState('')
@@ -60,16 +67,16 @@ export function QuizFloatingSearch({ filter }: QuizFloatingSearchProps = {}) {
   // Expand whenever the search bar is active (focus), regardless of query
   const isExpanded = active
 
-  const questionResults = useMemo(() => {
-    const q = query.trim()
+  // Full filtered pool (used for count); sliced separately for rendering
+  const basePool = useMemo(() => {
     const hasFilter = filter && Object.keys(filter).length > 0
-    // Merge the quiz filter with any free-text query, then cap for performance.
-    if (!q) {
-      const base = hasFilter ? filterQuestions(allQuestions, filter!) : allQuestions
-      return base.slice(0, 100)
-    }
-    return filterQuestions(allQuestions, { ...filter, search: q }).slice(0, 50)
+    const q = query.trim()
+    if (!q) return hasFilter ? filterQuestions(allQuestions, filter!) : allQuestions
+    return filterQuestions(allQuestions, { ...filter, search: q })
   }, [allQuestions, query, filter])
+
+  const questionResults = useMemo(() => basePool.slice(0, 100), [basePool])
+  const totalCount = basePool.length
 
   const selectedQuestions = useMemo(
     () => allQuestions.filter(q => selectedIds.has(q.id)),
@@ -169,6 +176,33 @@ export function QuizFloatingSearch({ filter }: QuizFloatingSearchProps = {}) {
                   ))}
                 </div>
               )}
+
+              {/* Filter pills + result count */}
+              <div className="flex flex-wrap items-center gap-1.5 px-0.5 py-2 flex-shrink-0 border-b">
+                {filterPills && filterPills.length > 0 ? (
+                  filterPills.map(pill => (
+                    <span
+                      key={pill.label}
+                      className="inline-flex items-center gap-1 rounded-full border border-border bg-muted text-foreground px-2.5 py-0.5 text-xs font-medium"
+                    >
+                      {pill.label}
+                      <button
+                        type="button"
+                        onClick={e => { e.stopPropagation(); pill.onRemove() }}
+                        aria-label={`Remove filter ${pill.label}`}
+                        className="hover:text-muted-foreground transition-colors ml-0.5 shrink-0"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-xs text-muted-foreground">All questions</span>
+                )}
+                <span className="ml-auto text-xs font-medium text-muted-foreground shrink-0">
+                  {totalCount} question{totalCount !== 1 ? 's' : ''}
+                </span>
+              </div>
 
               {/* Results list — fills remaining vertical space */}
               <div className="flex-1 overflow-y-auto py-2 space-y-2 min-h-0">

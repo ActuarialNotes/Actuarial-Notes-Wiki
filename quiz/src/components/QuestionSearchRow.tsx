@@ -27,6 +27,12 @@ function highlightStem(text: string, query: string): React.ReactNode {
   )
 }
 
+function conceptLabel(link: string): string {
+  const clean = link.replace(/\.md$/i, '').replace(/\+/g, ' ')
+  const segment = clean.split('/').filter(Boolean).pop() ?? link
+  return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+}
+
 export function QuestionSearchRow({ question, query, selected, onToggleSelect }: QuestionSearchRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
@@ -57,9 +63,14 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
           <span className="text-xs px-2 py-0.5 rounded-full border border-input text-muted-foreground bg-background shrink-0">
             {question.exam}
           </span>
-          <span className="text-xs px-2 py-0.5 rounded-full border border-input text-muted-foreground bg-background shrink-0">
-            {question.topic}
-          </span>
+          {question.wiki_link.map(link => (
+            <span
+              key={link}
+              className="text-xs px-2 py-0.5 rounded-full border border-input text-muted-foreground bg-background shrink-0"
+            >
+              {conceptLabel(link)}
+            </span>
+          ))}
           <span className="text-xs px-2 py-0.5 rounded-full border border-input text-muted-foreground bg-background shrink-0 capitalize">
             {question.difficulty}
           </span>

@@ -16,7 +16,7 @@ import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 // Sections with no weight tag receive weight = 1 (equal contribution).
 // Adjust DECAY_DAYS_LEVEL3 in mastery.ts to tune how quickly level3 expires.
 
-function parseSectionWeight(weight?: string): number {
+export function parseSectionWeight(weight?: string): number {
   if (!weight) return 1
   const range = weight.match(/(\d+)\s*[-–]\s*(\d+)%/)
   if (range) return (parseInt(range[1]) + parseInt(range[2])) / 2

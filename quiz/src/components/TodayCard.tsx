@@ -411,7 +411,13 @@ export function TodayCard({
             </p>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-neutral-900 text-white dark:bg-white dark:text-neutral-900">
+            <span
+              className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase border border-white text-white"
+              style={{
+                background: '#111',
+                boxShadow: '0 0 10px rgba(255,100,100,0.35), 0 0 20px rgba(255,200,50,0.25), 0 0 30px rgba(100,200,255,0.2), 0 0 40px rgba(150,80,255,0.18)',
+              }}
+            >
               Actuarial Notes Premium
             </span>
             <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5'}>

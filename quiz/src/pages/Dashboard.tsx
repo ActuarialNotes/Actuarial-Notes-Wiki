@@ -120,6 +120,7 @@ export default function Dashboard() {
   const [onboardingStep, setOnboardingStep] = useState<1 | 2 | 3>(1)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
+  const [scrollToRadialTrigger, setScrollToRadialTrigger] = useState(0)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
     () => new URLSearchParams(location.search).get('upgraded') === '1',
   )
@@ -342,10 +343,15 @@ export default function Dashboard() {
           {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
           <span className="text-sm font-semibold truncate min-w-0 flex-1">{displayName}</span>
           {overallPct !== null && activeSyllabus && (
-            <div className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-primary/10 border border-primary/20 shrink-0">
+            <button
+              type="button"
+              onClick={() => setScrollToRadialTrigger(v => v + 1)}
+              className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-primary/10 border border-primary/20 shrink-0 hover:bg-primary/20 transition-colors"
+              title="Scroll to study guide"
+            >
               <span className="text-sm font-bold tabular-nums leading-none">{overallPct}%</span>
               <span className="text-[9px] text-muted-foreground mt-0.5">Readiness</span>
-            </div>
+            </button>
           )}
           {daysToReady !== null && (
             <button
@@ -436,6 +442,7 @@ export default function Dashboard() {
             onOpenOnboarding={(step = 1) => { setOnboardingStep(step); setOnboardingOpen(true) }}
             openConceptsTrigger={conceptsOpenCounter}
             startQuizTrigger={startQuizCounter}
+            scrollToRadialTrigger={scrollToRadialTrigger}
             isPremium={isPremium}
           />
         )}

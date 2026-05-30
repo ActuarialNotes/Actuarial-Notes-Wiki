@@ -7,22 +7,17 @@ import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
-import { useExamProgress, type ExamProgressRow } from '@/contexts/ExamProgressContext'
+import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { loadStudyPlanConfig, todayISO } from '@/lib/studyPlan'
+import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 
-const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
-  not_started: 'in_progress',
-  in_progress: 'completed',
-  completed: 'not_started',
-}
-
 const STATUS_TITLE: Record<ItemStatus, string> = {
-  not_started: 'Not started — click to mark as In Progress',
-  in_progress: 'In Progress — click to mark as Passed',
-  completed: 'Passed — click to reset',
+  not_started: 'Not started — click to update exam status',
+  in_progress: 'In Progress — click to update exam status',
+  completed: 'Passed — click to update exam status',
 }
 
 function ExamStatusIcon({ status }: { status: ItemStatus }) {
@@ -54,25 +49,14 @@ function ExamStatusIcon({ status }: { status: ItemStatus }) {
 
 function ExamStatusBadge({ progressKey }: { progressKey: string }) {
   const { user } = useAuth()
-  const { progress, examRows, saveExamRows } = useExamProgress()
+  const { progress } = useExamProgress()
   const currentStatus = ((progress[progressKey] as ItemStatus) ?? 'not_started')
-
-  const handleClick = async () => {
-    if (!user) return
-    const nextStatus = STATUS_CYCLE[currentStatus]
-    const existing = examRows.find((r: ExamProgressRow) => r.exam_id === progressKey)
-    const updatedRow: ExamProgressRow = {
-      exam_id: progressKey,
-      status: nextStatus,
-      target_date: existing?.target_date ?? null,
-    }
-    await saveExamRows([...examRows.filter((r: ExamProgressRow) => r.exam_id !== progressKey), updatedRow])
-  }
+  const openExams = useExamsPopout(s => s.openExams)
 
   return (
     <button
       type="button"
-      onClick={handleClick}
+      onClick={() => { if (user) openExams() }}
       title={user ? STATUS_TITLE[currentStatus] : 'Sign in to track progress'}
       aria-label={user ? STATUS_TITLE[currentStatus] : 'Sign in to track progress'}
       className="inline-flex items-center justify-center shrink-0 rounded-full transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring not-prose"
@@ -129,7 +113,8 @@ export default function WikiExam() {
     return wikiExamIdToProgressKey(cleaned)
   }, [examFileName])
 
-  const { examRows } = useExamProgress()
+  const { examRows, progress } = useExamProgress()
+  const examStatus = ((progress[progressKey] as ItemStatus) ?? 'not_started')
 
   const { daysToPrepare, daysUntilExam } = useMemo(() => {
     const row = examRows.find(r => r.exam_id === progressKey)
@@ -145,14 +130,14 @@ export default function WikiExam() {
   const titleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-2 not-prose">
       <ExamStatusBadge progressKey={progressKey} />
-      {daysToPrepare !== null && (
+      {examStatus !== 'completed' && daysToPrepare !== null && (
         <ExamDaysPill
           count={daysToPrepare}
           explanation={`${daysToPrepare} days to prepare until your target study-ready date`}
           className="bg-amber-400/20 text-amber-400 ring-1 ring-inset ring-amber-400/40"
         />
       )}
-      {daysUntilExam !== null && (
+      {examStatus !== 'completed' && daysUntilExam !== null && (
         <ExamDaysPill
           count={daysUntilExam}
           explanation={`${daysUntilExam} days until your scheduled exam`}
@@ -160,7 +145,7 @@ export default function WikiExam() {
         />
       )}
     </span>
-  ), [progressKey, daysToPrepare, daysUntilExam])
+  ), [progressKey, examStatus, daysToPrepare, daysUntilExam])
 
   useEffect(() => {
     let cancelled = false

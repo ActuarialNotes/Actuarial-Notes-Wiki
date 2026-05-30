@@ -113,7 +113,7 @@ export default function Auth() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button variant="outline" className="w-full" onClick={() => setMode('signin')}>
+            <Button variant="outline" className="w-full" onClick={() => { setSignupSuccess(false); setMode('signin') }}>
               Back to Sign In
             </Button>
           </CardContent>

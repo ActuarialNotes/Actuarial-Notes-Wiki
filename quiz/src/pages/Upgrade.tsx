@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Check, Info, Loader2, Sparkles, Tag } from 'lucide-react'
+import { Check, Info, Loader2, Tag } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
@@ -85,10 +85,14 @@ export default function Upgrade() {
   return (
     <div className="container max-w-xl mx-auto px-4 py-12 space-y-6">
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary">
-          <Sparkles className="h-6 w-6" />
-        </div>
-        <h1 className="text-3xl font-bold">Actuarial Notes Premium</h1>
+        <h1
+          className="text-3xl font-bold"
+          style={{
+            textShadow: '0 0 20px rgba(255,100,100,0.5), 0 0 30px rgba(255,200,50,0.4), 0 0 40px rgba(100,200,255,0.35), 0 0 50px rgba(150,80,255,0.3)',
+          }}
+        >
+          Actuarial Notes Premium
+        </h1>
         <p className="text-muted-foreground">
           Unlock custom Study Plans and support continued development.
         </p>

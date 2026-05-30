@@ -42,24 +42,25 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
 
   return (
     <div
-      className={`border rounded-lg p-3 space-y-2 transition-colors ${
+      className={`border rounded-lg p-3 space-y-2 transition-colors cursor-pointer ${
         selected ? 'border-primary bg-primary/5' : 'hover:bg-accent/30'
       }`}
+      onClick={() => onToggleSelect(question.id)}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center flex-wrap gap-2 min-w-0">
-          <button
-            type="button"
-            onClick={() => onToggleSelect(question.id)}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 overflow-x-auto flex-1 min-w-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div
+            role="checkbox"
+            aria-checked={selected}
             aria-label={`Select question ${question.id}`}
-            className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors cursor-pointer ${
+            className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors ${
               selected
                 ? 'bg-primary border-primary text-primary-foreground'
-                : 'border-input hover:border-primary'
+                : 'border-input'
             }`}
           >
             {selected && <Check className="h-3 w-3" />}
-          </button>
+          </div>
           <span className="text-xs px-2 py-0.5 rounded-full border border-input text-muted-foreground bg-background shrink-0">
             {question.exam}
           </span>
@@ -77,7 +78,7 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
         </div>
         <button
           type="button"
-          onClick={() => setExpanded(v => !v)}
+          onClick={e => { e.stopPropagation(); setExpanded(v => !v) }}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
         >
           {expanded ? 'Collapse' : 'Expand'}
@@ -93,7 +94,7 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
       </div>
 
       {expanded && (
-        <div className="pt-1 space-y-1">
+        <div className="pt-1 space-y-1" onClick={e => e.stopPropagation()}>
           {question.options.map(opt => {
             const isCorrect = showAnswer && opt.key === question.answer
             return (

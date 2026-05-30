@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, Play, X } from 'lucide-react'
+import { ChevronDown, Loader2, Play, X } from 'lucide-react'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
-import type { Question, Difficulty } from '@/lib/parser'
+import type { Question } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { QuestionSearchRow } from '@/components/QuestionSearchRow'
 
@@ -18,24 +18,102 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
   return !!lastSegment && lastSegment.replace(/-/g, ' ').toLowerCase() === lower
 }
 
+function conceptLabel(link: string): string {
+  const clean = link.replace(/\.md$/i, '').replace(/\+/g, ' ')
+  const segment = clean.split('/').filter(Boolean).pop() ?? link
+  return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+}
+
 interface ConceptQuestionsModalProps {
   conceptName: string
   onClose: () => void
 }
 
-const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [
-  { value: '', label: 'All' },
+const DIFFICULTY_OPTIONS = [
   { value: 'easy', label: 'Easy' },
   { value: 'medium', label: 'Medium' },
   { value: 'hard', label: 'Hard' },
 ]
+
+function MultiSelectDropdown({
+  label,
+  options,
+  selected,
+  onToggle,
+}: {
+  label: string
+  options: { value: string; label: string }[]
+  selected: Set<string>
+  onToggle: (value: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  const displayLabel =
+    selected.size === 0
+      ? label
+      : selected.size === options.length
+        ? `${label}: All`
+        : `${label} (${selected.size})`
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs transition-colors whitespace-nowrap ${
+          selected.size > 0
+            ? 'border-primary bg-primary/10 text-primary'
+            : 'border-input bg-background hover:bg-accent'
+        }`}
+      >
+        <span>{displayLabel}</span>
+        <ChevronDown className={`h-3 w-3 transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-1 z-20 bg-card border rounded-lg shadow-lg min-w-[160px] py-1 max-h-60 overflow-y-auto">
+          {options.map(opt => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => onToggle(opt.value)}
+              className="flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-accent transition-colors text-left"
+            >
+              <div
+                className={`h-3.5 w-3.5 rounded border flex items-center justify-center shrink-0 ${
+                  selected.has(opt.value) ? 'bg-primary border-primary' : 'border-input bg-background'
+                }`}
+              >
+                {selected.has(opt.value) && (
+                  <svg className="h-2 w-2 text-primary-foreground" fill="none" viewBox="0 0 10 10">
+                    <path d="M2 5L4 7L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </div>
+              <span className="capitalize">{opt.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestionsModalProps) {
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const [difficultyFilter, setDifficultyFilter] = useState<Difficulty | ''>('')
+  const [difficultyFilters, setDifficultyFilters] = useState<Set<string>>(new Set())
+  const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     let cancelled = false
@@ -71,10 +149,32 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
 
   const navigate = useNavigate()
 
-  const visibleQuestions = useMemo(
-    () => difficultyFilter ? questions.filter(q => q.difficulty === difficultyFilter) : questions,
-    [questions, difficultyFilter],
-  )
+  const relatedConcepts = useMemo(() => {
+    const seen = new Set<string>()
+    questions.forEach(q => {
+      q.wiki_link.forEach(link => {
+        if (!linkMatchesConcept(link, conceptName)) {
+          seen.add(conceptLabel(link))
+        }
+      })
+    })
+    return Array.from(seen)
+      .sort()
+      .map(name => ({ value: name, label: name }))
+  }, [questions, conceptName])
+
+  const visibleQuestions = useMemo(() => {
+    let filtered = questions
+    if (difficultyFilters.size > 0) {
+      filtered = filtered.filter(q => difficultyFilters.has(q.difficulty))
+    }
+    if (conceptFilters.size > 0) {
+      filtered = filtered.filter(q =>
+        q.wiki_link.some(link => conceptFilters.has(conceptLabel(link)))
+      )
+    }
+    return filtered
+  }, [questions, difficultyFilters, conceptFilters])
 
   const allSelected = visibleQuestions.length > 0 && visibleQuestions.every(q => selectedIds.has(q.id))
   const someSelected = visibleQuestions.some(q => selectedIds.has(q.id)) && !allSelected
@@ -116,13 +216,13 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-label={`Questions for ${conceptName}`}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-2xl bg-card border rounded-xl shadow-2xl flex flex-col my-8">
+      <div className="relative w-full max-w-2xl bg-card border rounded-xl shadow-2xl flex flex-col my-8 mx-4 max-h-[calc(100vh-4rem)]">
         {/* Header */}
         <div className="flex items-center gap-3 px-4 h-12 border-b shrink-0">
           <span className="flex-1 truncate font-semibold text-sm">
@@ -139,8 +239,8 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
           </button>
         </div>
 
-        {/* Body */}
-        <div className="p-4 space-y-3">
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
           {loading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground py-4 justify-center">
               <Loader2 className="h-4 w-4 animate-spin" /> Loading questions…
@@ -158,25 +258,35 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
           )}
           {!loading && questions.length > 0 && (
             <>
-              {/* Difficulty filter */}
+              {/* Filter dropdowns */}
               <div className="flex items-center gap-2 flex-wrap">
-                {DIFFICULTIES.map(d => (
-                  <button
-                    key={d.value}
-                    type="button"
-                    onClick={() => setDifficultyFilter(d.value)}
-                    className={`px-3 py-1 rounded-full border text-xs transition-colors ${
-                      difficultyFilter === d.value
-                        ? 'border-primary bg-primary text-primary-foreground'
-                        : 'border-input hover:bg-accent'
-                    }`}
-                  >
-                    {d.label}
-                  </button>
-                ))}
+                <MultiSelectDropdown
+                  label="Difficulty"
+                  options={DIFFICULTY_OPTIONS}
+                  selected={difficultyFilters}
+                  onToggle={d => setDifficultyFilters(prev => {
+                    const next = new Set(prev)
+                    if (next.has(d)) next.delete(d)
+                    else next.add(d)
+                    return next
+                  })}
+                />
+                {relatedConcepts.length > 0 && (
+                  <MultiSelectDropdown
+                    label="Concepts"
+                    options={relatedConcepts}
+                    selected={conceptFilters}
+                    onToggle={c => setConceptFilters(prev => {
+                      const next = new Set(prev)
+                      if (next.has(c)) next.delete(c)
+                      else next.add(c)
+                      return next
+                    })}
+                  />
+                )}
               </div>
 
-              {/* Toolbar: select-all + count + start quiz */}
+              {/* Toolbar: select-all + count */}
               <div className="flex items-center gap-3 py-1">
                 <label className="flex items-center gap-2 cursor-pointer select-none">
                   <div
@@ -204,23 +314,11 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
                     {visibleQuestions.filter(q => selectedIds.has(q.id)).length} / {visibleQuestions.length} selected
                   </span>
                 </label>
-
-                <div className="flex-1" />
-
-                <button
-                  type="button"
-                  onClick={handleStartQuiz}
-                  disabled={selectedIds.size === 0}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                >
-                  <Play className="h-3 w-3" />
-                  Start Quiz
-                </button>
               </div>
 
               {visibleQuestions.length === 0 && (
                 <div className="text-center py-6 text-muted-foreground text-sm">
-                  No {difficultyFilter} questions for this concept.
+                  No questions match the selected filters.
                 </div>
               )}
               {visibleQuestions.map(q => (
@@ -235,6 +333,21 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
             </>
           )}
         </div>
+
+        {/* Floating Start Quiz button */}
+        {!loading && questions.length > 0 && (
+          <div className="shrink-0 px-4 py-3 border-t bg-card rounded-b-xl">
+            <button
+              type="button"
+              onClick={handleStartQuiz}
+              disabled={selectedIds.size === 0}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <Play className="h-4 w-4" />
+              Start Quiz ({selectedQuestions.length})
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

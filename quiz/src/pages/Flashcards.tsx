@@ -117,8 +117,9 @@ function FlashcardPacksSection() {
   const { progress: examProgress, targetDates } = useExamProgress()
   const { addCard, hasCard } = useFlashcards()
 
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null)
+  const [conceptsExpanded, setConceptsExpanded] = useState(false)
   const [selectedConcepts, setSelectedConcepts] = useState<Set<string>>(new Set())
 
   const inProgressSyllabi = useMemo(
@@ -160,16 +161,10 @@ function FlashcardPacksSection() {
     return result
   }, [inProgressSyllabi, primarySyllabus])
 
-  // Auto-select first pack once packs are available
-  useEffect(() => {
-    if (packs.length > 0 && selectedPackId === null) {
-      setSelectedPackId(packs[0].id)
-    }
-  }, [packs, selectedPackId])
-
-  // Reset per-concept selection when switching packs
+  // Reset concept state when switching packs
   useEffect(() => {
     setSelectedConcepts(new Set())
+    setConceptsExpanded(false)
   }, [selectedPackId])
 
   const selectedPack = packs.find(p => p.id === selectedPackId) ?? null
@@ -289,84 +284,106 @@ function FlashcardPacksSection() {
 
           {/* Selected pack concept list */}
           {selectedPack && (
-            <div className="space-y-2 border-t pt-3">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-medium text-muted-foreground truncate">{selectedPack.label}</span>
-                {!allAdded && displayConcepts.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={handleAddSelected}
-                    className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
-                  >
-                    {selectedConcepts.size > 0 ? `Add ${selectedConcepts.size}` : `Add all ${notYetAdded.length}`}
-                  </button>
-                )}
-                {allAdded && (
-                  <span className="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-green-600 dark:text-green-400">
-                    <Check className="h-3 w-3" /> All added
-                  </span>
-                )}
+            <div className="border-t pt-2 space-y-2">
+              {/* Concept list header — acts as collapse toggle */}
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => setConceptsExpanded(v => !v)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setConceptsExpanded(v => !v) } }}
+                className="flex items-center justify-between gap-2 cursor-pointer hover:bg-accent/40 rounded px-1 py-1 transition-colors"
+                aria-expanded={conceptsExpanded}
+              >
+                <span className="text-xs font-medium text-muted-foreground truncate">
+                  {selectedPack.label}
+                  {!isLoading && displayConcepts.length > 0 && (
+                    <span className="ml-1 font-normal">· {displayConcepts.length}</span>
+                  )}
+                </span>
+                <div className="flex items-center gap-1 shrink-0">
+                  {!isLoading && allAdded && (
+                    <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-green-600 dark:text-green-400">
+                      <Check className="h-2.5 w-2.5" /> All added
+                    </span>
+                  )}
+                  <ChevronsUpDown className="h-3 w-3 text-muted-foreground" />
+                </div>
               </div>
 
-              {isLoading && selectedPack.type === 'study_plan' && (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading study plan…
-                </div>
-              )}
+              {conceptsExpanded && (
+                <div className="space-y-2">
+                  {isLoading && selectedPack.type === 'study_plan' && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading study plan…
+                    </div>
+                  )}
 
-              {!isLoading && selectedPack.type === 'study_plan' && !primarySyllabus && (
-                <p className="text-xs text-muted-foreground py-1">
-                  Add an exam in progress from the{' '}
-                  <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
-                  to see today's study plan.
-                </p>
-              )}
+                  {!isLoading && selectedPack.type === 'study_plan' && !primarySyllabus && (
+                    <p className="text-xs text-muted-foreground py-1">
+                      Add an exam in progress from the{' '}
+                      <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+                      to see today's study plan.
+                    </p>
+                  )}
 
-              {!isLoading && selectedPack.type === 'study_plan' && primarySyllabus && !studyPlan?.config?.targetReadyDate && (
-                <p className="text-xs text-muted-foreground py-1">
-                  Set up your study plan on the{' '}
-                  <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
-                  to see today's concepts.
-                </p>
-              )}
+                  {!isLoading && selectedPack.type === 'study_plan' && primarySyllabus && !studyPlan?.config?.targetReadyDate && (
+                    <p className="text-xs text-muted-foreground py-1">
+                      Set up your study plan on the{' '}
+                      <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+                      to see today's concepts.
+                    </p>
+                  )}
 
-              {!isLoading && displayConcepts.length > 0 && (
-                <ul
-                  className="space-y-0.5 overflow-y-auto"
-                  style={{ maxHeight: '14rem' }}
-                >
-                  {displayConcepts.map(name => {
-                    const added = hasCard(name)
-                    const checked = selectedConcepts.has(name)
-                    return (
-                      <li key={name} className="flex items-center gap-2 py-0.5">
+                  {!isLoading && displayConcepts.length > 0 && (
+                    <>
+                      <ul
+                        className="space-y-0.5 overflow-y-auto"
+                        style={{ maxHeight: '14rem' }}
+                      >
+                        {displayConcepts.map(name => {
+                          const added = hasCard(name)
+                          const checked = selectedConcepts.has(name)
+                          return (
+                            <li key={name} className="flex items-center gap-2 py-0.5">
+                              <button
+                                type="button"
+                                onClick={() => !added && toggleConceptSelect(name)}
+                                disabled={added}
+                                aria-label={added ? `${name} already in gallery` : checked ? `Deselect ${name}` : `Select ${name}`}
+                                className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                                  added
+                                    ? 'bg-green-500/20 border-green-500 cursor-default'
+                                    : checked
+                                      ? 'bg-primary border-primary'
+                                      : 'border-muted-foreground/40 hover:border-muted-foreground/70'
+                                }`}
+                              >
+                                {(added || checked) && (
+                                  <svg className={`w-2.5 h-2.5 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
+                                    <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                  </svg>
+                                )}
+                              </button>
+                              <span className={`text-xs flex-1 min-w-0 truncate ${added ? 'text-muted-foreground' : ''}`}>{name}</span>
+                              {added && (
+                                <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In gallery</span>
+                              )}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                      {!allAdded && (
                         <button
                           type="button"
-                          onClick={() => !added && toggleConceptSelect(name)}
-                          disabled={added}
-                          aria-label={added ? `${name} already in gallery` : checked ? `Deselect ${name}` : `Select ${name}`}
-                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors ${
-                            added
-                              ? 'bg-green-500/20 border-green-500 cursor-default'
-                              : checked
-                                ? 'bg-primary border-primary'
-                                : 'border-muted-foreground/40 hover:border-muted-foreground/70'
-                          }`}
+                          onClick={handleAddSelected}
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
                         >
-                          {(added || checked) && (
-                            <svg className={`w-2.5 h-2.5 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
-                              <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          )}
+                          {selectedConcepts.size > 0 ? `Add ${selectedConcepts.size}` : `Add all ${notYetAdded.length}`}
                         </button>
-                        <span className={`text-xs flex-1 min-w-0 truncate ${added ? 'text-muted-foreground' : ''}`}>{name}</span>
-                        {added && (
-                          <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In gallery</span>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
+                      )}
+                    </>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -632,6 +649,7 @@ function GalleryPanel({
   activeIndex,
   onSelect,
   onRemove,
+  onRemoveAll,
   onDragEnd,
   sensors,
   onClose,
@@ -646,6 +664,7 @@ function GalleryPanel({
   activeIndex: number
   onSelect: (index: number) => void
   onRemove: (name: string) => void
+  onRemoveAll: () => void
   onDragEnd: (e: DragEndEvent) => void
   sensors: ReturnType<typeof useSensors>
   onClose: () => void
@@ -655,6 +674,7 @@ function GalleryPanel({
     new Set<ReverseCardSection>(['definition']),
   )
   const [globalFlip, setGlobalFlip] = useState(false)
+  const [confirmRemoveAll, setConfirmRemoveAll] = useState(false)
 
   function toggleMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {
@@ -692,7 +712,34 @@ function GalleryPanel({
       {/* Panel header */}
       <div className="sticky top-0 z-10 bg-background border-b">
         <div className="flex items-center justify-between gap-2 px-4 py-3">
-          <span className="font-semibold text-sm shrink-0">{cards.length} card{cards.length === 1 ? '' : 's'}</span>
+          {/* Card count + remove-all */}
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="font-semibold text-sm">{cards.length} card{cards.length === 1 ? '' : 's'}</span>
+            {confirmRemoveAll ? (
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-muted-foreground whitespace-nowrap">Remove all?</span>
+                <button
+                  type="button"
+                  onClick={() => { onRemoveAll(); onClose(); setConfirmRemoveAll(false) }}
+                  className="px-2 py-0.5 rounded text-xs font-medium bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                >Yes</button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmRemoveAll(false)}
+                  className="px-2 py-0.5 rounded text-xs font-medium border hover:bg-accent transition-colors"
+                >Cancel</button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirmRemoveAll(true)}
+                title="Remove all cards"
+                className="inline-flex items-center justify-center h-6 w-6 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
 
           {/* Sort tabs */}
           <div className="flex items-center gap-0.5 p-1 rounded-lg bg-muted/60 border flex-1 justify-center max-w-xs">
@@ -784,14 +831,14 @@ function GalleryPanel({
             {groupBy === 'exam' ? (
               <div className="space-y-6">
                 {examGroups.length === 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     {orderedCards.map(renderCard)}
                   </div>
                 ) : (
                   examGroups.map(({ label, cards: groupCards }) => (
                     <div key={label} className="space-y-2">
                       <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{label}</h2>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                         {groupCards.map(renderCard)}
                       </div>
                     </div>
@@ -799,7 +846,7 @@ function GalleryPanel({
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {orderedCards.map(renderCard)}
               </div>
             )}
@@ -1120,7 +1167,7 @@ function FlashcardStudyArea({
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function Flashcards() {
-  const { cards, removeCard, customOrder, setCustomOrder } = useFlashcards()
+  const { cards, removeCard, clearCards, customOrder, setCustomOrder } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords } = useConceptMastery()
   const popupOpen = useConceptPopup(s => s.open)
@@ -1316,6 +1363,7 @@ export default function Flashcards() {
           activeIndex={activeIndex}
           onSelect={idx => { setActiveIndex(idx) }}
           onRemove={removeCard}
+          onRemoveAll={clearCards}
           onDragEnd={handleDragEnd}
           sensors={sensors}
           onClose={() => setGalleryExpanded(false)}

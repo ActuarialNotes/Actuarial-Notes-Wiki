@@ -20,6 +20,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale } from '@/lib/mastery'
 import type { MasteryState } from '@/lib/mastery'
+import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
 
@@ -168,7 +169,7 @@ export default function Dashboard() {
 
   // ── Study plan ─────────────────────────────────────────────────────────────
   const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan, replaceTodaysConcepts } =
-    useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate)
+    useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate, masteryLoading)
 
   // Build a fast masteryState lookup (conceptName → MasteryState) for TodayCard chips
   const masteryStateByName = useMemo(() => {
@@ -176,13 +177,11 @@ export default function Dashboard() {
     const map = new Map<string, MasteryState>()
     if (!activeSyllabus || !activeProgressKey) return map
     const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
-    const bySlug = new Map(examRecords.map(r => [r.concept_slug.toLowerCase(), r]))
+    const lookup = buildMasteryLookup(examRecords)
 
     for (const topic of activeSyllabus.topics) {
       for (const c of topic.concepts) {
-        const rec = bySlug.get(c.name.toLowerCase()) ?? bySlug.get(c.target?.toLowerCase() ?? '')
-        const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
-        map.set(c.name.toLowerCase(), state)
+        map.set(c.name.toLowerCase(), resolveConceptState(lookup, c, now))
       }
     }
     return map

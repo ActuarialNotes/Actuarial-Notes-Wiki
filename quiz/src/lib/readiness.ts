@@ -1,6 +1,6 @@
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
-import { decayIfStale } from '@/lib/mastery'
+import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 
 // Exam readiness scoring
 //
@@ -42,7 +42,7 @@ export function computeReadiness(
   records: ConceptMasteryRecord[],
   now: Date,
 ): ReadinessResult {
-  const bySlug = new Map(records.map(r => [r.concept_slug.toLowerCase(), r]))
+  const lookup = buildMasteryLookup(records)
   const sections: SectionReadiness[] = []
   let weightedSum = 0
   let totalWeight = 0
@@ -53,11 +53,7 @@ export function computeReadiness(
     const total = topic.concepts.length
 
     for (const concept of topic.concepts) {
-      const rec =
-        bySlug.get(concept.name.toLowerCase()) ??
-        bySlug.get(concept.target.toLowerCase())
-      const state = rec ? decayIfStale(rec, now).state : 'new'
-      if (state === 'level3') level3Count++
+      if (resolveConceptState(lookup, concept, now) === 'level3') level3Count++
     }
 
     const readinessPct = total > 0 ? (level3Count / total) * 100 : 0

@@ -38,16 +38,19 @@ export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[])
   ]
   const now = Date.now()
   const tMin = allTimes.length > 0 ? Math.min(...allTimes) - 12 * 3600_000 : now - 7 * 86400_000
-  const tMax = now + 12 * 3600_000
+  // Guard against a zero (or inverted) span so xScale can never divide by zero
+  // and emit NaN coordinates into the SVG path.
+  const tMax = Math.max(now + 12 * 3600_000, tMin + 86400_000)
+  const tSpan = tMax - tMin
 
   function xScale(t: Date): number {
-    return PAD_LEFT + ((t.getTime() - tMin) / (tMax - tMin)) * CHART_W
+    return PAD_LEFT + ((t.getTime() - tMin) / tSpan) * CHART_W
   }
 
   function xInverse(px: number, svgWidth: number): Date {
     const scaledX = (px / svgWidth) * VB_W
     const ratio = (scaledX - PAD_LEFT) / CHART_W
-    return new Date(tMin + ratio * (tMax - tMin))
+    return new Date(tMin + ratio * tSpan)
   }
 
   function yScale(yIndex: number): number {

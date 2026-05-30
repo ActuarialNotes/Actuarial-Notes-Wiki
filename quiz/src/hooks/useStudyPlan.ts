@@ -16,6 +16,7 @@ import {
   saveCachedStudyPlan,
   saveStudyPlanConfig,
   todayISO,
+  PLAN_CACHE_VERSION,
   type StudyPlan,
   type StudyPlanConfig,
 } from '@/lib/studyPlan'
@@ -137,7 +138,7 @@ export function useStudyPlan(
 
     // 1. Server plan wins — it's the cross-device source of truth. Mirror it to
     //    localStorage so offline refreshes stay consistent with other devices.
-    if (!force && serverPlan && serverPlan.generatedDate === today && serverPlan.config && configMatches(serverPlan.config)) {
+    if (!force && serverPlan && serverPlan.planVersion === PLAN_CACHE_VERSION && serverPlan.generatedDate === today && serverPlan.config && configMatches(serverPlan.config)) {
       saveCachedStudyPlan(serverPlan)
       setPlan(serverPlan)
       setLoading(false)

@@ -23,6 +23,7 @@ import type { MasteryState } from '@/lib/mastery'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
+import { LOCALIZED_EXAMS } from '@/data/examSittings'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -135,6 +136,10 @@ export default function Dashboard() {
   const activeSyllabus = inProgressSyllabi[clampedIdx] ?? null
   const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
   const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
+
+  const activeHasVariants = activeSyllabus ? (LOCALIZED_EXAMS[activeSyllabus.examId]?.length ?? 0) > 0 : false
+  const examDateStep = activeHasVariants ? 2 : 1
+  const readyDateStep = activeHasVariants ? 3 : 2
 
   // Persist active exam to localStorage when it changes
   useEffect(() => {
@@ -289,7 +294,7 @@ export default function Dashboard() {
           {daysToReady !== null && (
             <button
               type="button"
-              onClick={() => { setOnboardingStep(3); setOnboardingOpen(true) }}
+              onClick={() => { setOnboardingStep(readyDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
               className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 shrink-0 hover:bg-amber-500/20 transition-colors"
               title="Edit target ready date"
             >
@@ -300,7 +305,7 @@ export default function Dashboard() {
           {daysUntilExam !== null && (
             <button
               type="button"
-              onClick={() => { setOnboardingStep(2); setOnboardingOpen(true) }}
+              onClick={() => { setOnboardingStep(examDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
               className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-card border shrink-0 hover:bg-muted transition-colors"
               title="Edit exam date"
             >

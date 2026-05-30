@@ -2,7 +2,8 @@
 // Used by LearningProgressModal and ConceptCoverageSection.
 
 import { useRef, useState } from 'react'
-import type { LevelEvent, AttemptDot } from '@/hooks/useConceptLearningHistory'
+import type { LevelEvent } from '@/lib/learningHistory'
+import type { AttemptDot } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -16,18 +17,18 @@ export const PAD_BOTTOM = 36
 export const CHART_W = VB_W - PAD_LEFT - PAD_RIGHT
 export const CHART_H = VB_H - PAD_TOP - PAD_BOTTOM
 
-export const Y_LEVELS: MasteryState[] = ['new', 'level1', 'level2', 'level3']
-export const Y_LABELS = ['New', '1', '2', '3']
+export const Y_LEVELS: MasteryState[] = ['forgotten', 'new', 'level1', 'level2', 'level3']
+export const Y_LABELS = ['Forgotten', 'New', '1', '2', '3']
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 export function stateToYIndex(state: MasteryState): number {
   switch (state) {
-    case 'level3':    return 3
-    case 'level2':    return 2
-    case 'level1':    return 1
+    case 'level3':    return 4
+    case 'level2':    return 3
+    case 'level1':    return 2
+    case 'new':       return 1
     case 'forgotten': return 0
-    default:          return 0
   }
 }
 
@@ -54,7 +55,7 @@ export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[])
   }
 
   function yScale(yIndex: number): number {
-    return PAD_TOP + CHART_H - (yIndex / 3) * CHART_H
+    return PAD_TOP + CHART_H - (yIndex / 4) * CHART_H
   }
 
   function buildXLabels(): { label: string; x: number }[] {
@@ -73,7 +74,8 @@ export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[])
   }
 
   function buildStepPath(): string {
-    const startY = yScale(0)
+    const initialState = levelEvents[0]?.from ?? 'new'
+    const startY = yScale(stateToYIndex(initialState))
     const startX = xScale(new Date(tMin))
     if (levelEvents.length === 0) {
       return `M ${startX} ${startY} H ${xScale(new Date(tMax))}`
@@ -91,7 +93,7 @@ export function makeScales(levelEvents: LevelEvent[], attemptDots: AttemptDot[])
 }
 
 export function levelAtTime(time: Date, levelEvents: LevelEvent[]): MasteryState {
-  let state: MasteryState = 'new'
+  let state: MasteryState = levelEvents[0]?.from ?? 'new'
   for (const ev of levelEvents) {
     if (ev.at <= time) state = ev.to
     else break

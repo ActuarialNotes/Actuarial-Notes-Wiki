@@ -1452,33 +1452,22 @@ export function ReadinessCard({
                   <Lock className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-base font-semibold">Custom Study Plan</p>
+                  <div className="flex items-center justify-center gap-1.5">
+                    <p className="text-base font-semibold">Custom Study Plan</p>
+                    <button
+                      type="button"
+                      onClick={() => setShowInfo(true)}
+                      className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 hover:bg-primary/20 transition-colors shrink-0"
+                      aria-label="How custom study plans work"
+                      title="How custom study plans work"
+                    >
+                      <Info className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                   <p className="text-xs text-muted-foreground max-w-[220px]">
                     A daily plan tailored to you
                   </p>
                 </div>
-              </div>
-
-              {/* Premium pill + inline info button */}
-              <div className="mt-5 flex items-center gap-2">
-                <span
-                  className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase border border-white text-white"
-                  style={{
-                    background: '#111',
-                    boxShadow: '0 0 10px rgba(255,100,100,0.35), 0 0 20px rgba(255,200,50,0.25), 0 0 30px rgba(100,200,255,0.2), 0 0 40px rgba(150,80,255,0.18)',
-                  }}
-                >
-                  Actuarial Notes Premium
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShowInfo(true)}
-                  className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 hover:bg-primary/20 transition-colors shrink-0"
-                  aria-label="How custom study plans work"
-                  title="How custom study plans work"
-                >
-                  <Info className="h-3.5 w-3.5" />
-                </button>
               </div>
 
               {/* Upgrade button */}

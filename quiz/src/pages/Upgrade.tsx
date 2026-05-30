@@ -18,6 +18,7 @@ export default function Upgrade() {
   const [betaSubmitting, setBetaSubmitting] = useState(false)
   const [betaError, setBetaError] = useState<string | null>(null)
   const [betaSuccess, setBetaSuccess] = useState(false)
+  const [showDiscountInfo, setShowDiscountInfo] = useState(false)
 
   async function handleBetaCode() {
     if (!user) {
@@ -85,16 +86,11 @@ export default function Upgrade() {
   return (
     <div className="container max-w-xl mx-auto px-4 py-12 space-y-6">
       <div className="text-center space-y-3">
-        <h1
-          className="text-3xl font-bold"
-          style={{
-            textShadow: '0 0 20px rgba(255,100,100,0.5), 0 0 30px rgba(255,200,50,0.4), 0 0 40px rgba(100,200,255,0.35), 0 0 50px rgba(150,80,255,0.3)',
-          }}
-        >
+        <h1 className="text-xl font-semibold">
           Actuarial Notes Premium
         </h1>
         <p className="text-muted-foreground">
-          Unlock custom Study Plans and support continued development.
+          Unlock custom Study Plans.
         </p>
       </div>
 
@@ -108,11 +104,25 @@ export default function Upgrade() {
           <CardDescription>Cancel anytime.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-start gap-2 rounded-md border border-amber-500/40 bg-amber-50 dark:bg-amber-950/20 px-3 py-2 text-xs">
-            <Info className="h-3.5 w-3.5 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
-            <span className="text-amber-700 dark:text-amber-300">
-              <strong>Launch discount:</strong> 50% off, locked in forever. Offer valid until June 30, 2026.
-            </span>
+          <div className="relative">
+            <div className="flex items-center gap-2 rounded-md border border-green-500/40 bg-green-50 dark:bg-green-950/20 px-3 py-2 text-xs">
+              <span className="flex-1 text-green-700 dark:text-green-300">
+                <strong>Launch discount:</strong> Offer valid until June 30, 2026.
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowDiscountInfo(v => !v)}
+                className="flex items-center justify-center h-5 w-5 rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/70 transition-colors shrink-0"
+                aria-label="About this discount"
+              >
+                <Info className="h-3 w-3" />
+              </button>
+            </div>
+            {showDiscountInfo && (
+              <div className="mt-1.5 rounded-md border border-green-500/30 bg-green-50 dark:bg-green-950/30 px-3 py-2 text-xs text-green-700 dark:text-green-300">
+                If you subscribe before the offer expires, your price is locked in at $10/month forever — even after the launch discount ends.
+              </div>
+            )}
           </div>
           <ul className="space-y-2 text-sm">
             <li className="flex items-start gap-2">

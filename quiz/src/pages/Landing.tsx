@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
@@ -324,6 +324,19 @@ export default function Landing() {
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
   const [showStudyPlanModal, setShowStudyPlanModal] = useState(false)
 
+  // Concept override passed from dashboard when user deselects some plan concepts
+  const conceptOverrideRef = useRef<string[] | null>(null)
+  const didApplyOverrideRef = useRef(false)
+  if (!didApplyOverrideRef.current && conceptOverrideRef.current === null) {
+    try {
+      const raw = sessionStorage.getItem('actuarial_quiz_concept_override')
+      if (raw) {
+        sessionStorage.removeItem('actuarial_quiz_concept_override')
+        conceptOverrideRef.current = JSON.parse(raw) as string[]
+      }
+    } catch { /* ignore */ }
+  }
+
   // Pre-select first in-progress exam when progress loads
   useEffect(() => {
     if (initialTopic) return
@@ -496,11 +509,21 @@ export default function Landing() {
       : plan.todaysConcepts
   }, [plan])
 
-  // Auto-activate today's study plan for premium users when it has concepts
+  // Auto-activate today's study plan for premium users when it has concepts.
+  // If the dashboard passed a custom concept selection (some deselected), apply that instead.
   useEffect(() => {
     if (!user || masteryLoading || conceptsLoading || planLoading || subLoading || mode !== 'quiz' || !topic) return
 
-    if (isPremium && plan && planConceptCount > 0) {
+    if (!didApplyOverrideRef.current && conceptOverrideRef.current) {
+      didApplyOverrideRef.current = true
+      setSelectedConcepts(conceptOverrideRef.current)
+      conceptOverrideRef.current = null
+      setConceptMode('custom')
+      setIsAdaptive(false)
+      return
+    }
+
+    if (!didApplyOverrideRef.current && isPremium && plan && planConceptCount > 0) {
       setConceptMode('today')
       setSelectedConcepts([])
       setIsAdaptive(false)

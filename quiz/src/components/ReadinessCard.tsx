@@ -410,6 +410,9 @@ export function ReadinessCard({
     } catch { return 0 }
   })
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
+  const [deselectedConcepts, setDeselectedConcepts] = useState<Set<string>>(new Set())
+  const [highlightedTopicIdx, setHighlightedTopicIdx] = useState<number | null>(null)
+  const [planTopicsOpen, setPlanTopicsOpen] = useState<Set<string>>(new Set())
 
   // Quiz history state
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
@@ -437,6 +440,27 @@ export function ReadinessCard({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openConceptsTrigger])
+
+  // Auto-open plan topic groups (uncollapsed by default) when the plan loads
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (groupedPlanConcepts.length === 0) return
+    setPlanTopicsOpen(new Set(groupedPlanConcepts.map(g => g.topicName)))
+  }, [groupedPlanConcepts.map(g => g.topicName).join('|')])
+
+  // Auto-expand Topics Mastered section and relevant topics when study plan is active
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (displayConcepts.length === 0) return
+    setTopicsMasteredOpen(true)
+    const planTopicNames = new Set(groupedPlanConcepts.map(g => g.topicName))
+    setOpenTopics(prev => {
+      if (planTopicNames.size === 0) return prev
+      const next = new Set(prev)
+      planTopicNames.forEach(n => next.add(n))
+      return next
+    })
+  }, [displayConcepts.join('|')])
 
   useEffect(() => {
     setCompletedToday(readTodayLevelUps())
@@ -567,6 +591,18 @@ export function ReadinessCard({
   const displayConcepts = plan?.status === 'review_mode'
     ? (plan?.reviewConcepts ?? [])
     : (plan?.todaysConcepts ?? [])
+
+  // Group today's plan concepts by their parent syllabus topic
+  const groupedPlanConcepts = useMemo(() => {
+    if (displayConcepts.length === 0) return []
+    const dcSet = new Set(displayConcepts.map(c => c.toLowerCase()))
+    return syllabus.topics
+      .map(t => ({
+        topicName: t.name,
+        concepts: t.concepts.filter(c => dcSet.has(c.name.toLowerCase())).map(c => c.name),
+      }))
+      .filter(g => g.concepts.length > 0)
+  }, [syllabus, displayConcepts])
 
   const targetByName = useMemo(() => {
     const map = new Map<string, MasteryState>()
@@ -725,9 +761,55 @@ export function ReadinessCard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allConceptsDone, bonusClaimed, todayGemsEarned, user, progressKey])
 
+  const togglePlanConceptSelection = useCallback((name: string) => {
+    setDeselectedConcepts(prev => {
+      const next = new Set(prev)
+      if (next.has(name.toLowerCase())) next.delete(name.toLowerCase())
+      else next.add(name.toLowerCase())
+      return next
+    })
+  }, [])
+
+  const togglePlanTopicSelection = useCallback((topicName: string, concepts: string[]) => {
+    setDeselectedConcepts(prev => {
+      const allDeselected = concepts.every(c => prev.has(c.toLowerCase()))
+      const next = new Set(prev)
+      if (allDeselected) {
+        concepts.forEach(c => next.delete(c.toLowerCase()))
+      } else {
+        concepts.forEach(c => next.add(c.toLowerCase()))
+      }
+      return next
+    })
+  }, [])
+
+  const togglePlanTopicOpen = useCallback((topicName: string) => {
+    setPlanTopicsOpen(prev => {
+      const next = new Set(prev)
+      if (next.has(topicName)) next.delete(topicName)
+      else next.add(topicName)
+      return next
+    })
+  }, [])
+
   const handleStartQuiz = useCallback(() => {
-    navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz`)
-  }, [navigate, syllabus.examTopic])
+    // Sequentially highlight each topic group before navigating
+    groupedPlanConcepts.forEach((_group, idx) => {
+      setTimeout(() => setHighlightedTopicIdx(idx), idx * 220)
+    })
+    const totalDelay = Math.max(groupedPlanConcepts.length * 220 + 150, 300)
+
+    setTimeout(() => {
+      setHighlightedTopicIdx(null)
+      const selectedConceptNames = displayConcepts.filter(c => !deselectedConcepts.has(c.toLowerCase()))
+      if (selectedConceptNames.length > 0 && selectedConceptNames.length < displayConcepts.length) {
+        try {
+          sessionStorage.setItem('actuarial_quiz_concept_override', JSON.stringify(selectedConceptNames))
+        } catch { /* ignore */ }
+      }
+      navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz`)
+    }, totalDelay)
+  }, [navigate, syllabus.examTopic, groupedPlanConcepts, displayConcepts, deselectedConcepts])
 
   useEffect(() => {
     if (startQuizTrigger) handleStartQuiz()
@@ -1011,29 +1093,92 @@ export function ReadinessCard({
                 </span>
               </button>
 
-              <div className="space-y-0.5">
-                {displayConcepts.map((name, idx) => {
-                  const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                  const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                  const isCompleted =
-                    examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-                    STATE_ORDER[currentState] >= STATE_ORDER[target]
+              {/* Grouped concept list — topics uncollapsed by default, each concept is toggleable */}
+              <div className="space-y-1.5">
+                {groupedPlanConcepts.map((group, groupIdx) => {
+                  const isHighlighted = highlightedTopicIdx === groupIdx
+                  const allDeselected = group.concepts.every(c => deselectedConcepts.has(c.toLowerCase()))
+                  const someDeselected = group.concepts.some(c => deselectedConcepts.has(c.toLowerCase()))
+                  const isOpen = planTopicsOpen.has(group.topicName)
                   return (
-                    <button
-                      key={name}
-                      type="button"
-                      data-study-concept={name.toLowerCase()}
-                      onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', idx)}
-                      className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}
+                    <div
+                      key={group.topicName}
+                      className={`rounded-lg border transition-all duration-200 ${isHighlighted ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'border-border/60'}`}
                     >
-                      {isCompleted
-                        ? <Check className="h-4 w-4 text-green-500 shrink-0" />
-                        : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
-                      <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
-                        {name}
-                      </span>
-                      <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
-                    </button>
+                      {/* Topic header row */}
+                      <div className="flex items-center gap-1.5 px-2 py-1.5">
+                        {/* Topic-level toggle */}
+                        <button
+                          type="button"
+                          onClick={() => togglePlanTopicSelection(group.topicName, group.concepts)}
+                          className="shrink-0 transition-colors text-muted-foreground hover:text-foreground"
+                          aria-label={allDeselected ? `Include ${group.topicName}` : `Exclude ${group.topicName}`}
+                          title={allDeselected ? 'Click to include this topic' : 'Click to exclude this topic'}
+                        >
+                          {allDeselected
+                            ? <Circle className="h-4 w-4" />
+                            : someDeselected
+                              ? <CheckCircle2 className="h-4 w-4 text-primary/50" />
+                              : <CheckCircle2 className="h-4 w-4 text-primary" />}
+                        </button>
+                        {/* Topic name + expand/collapse */}
+                        <button
+                          type="button"
+                          onClick={() => togglePlanTopicOpen(group.topicName)}
+                          className="flex-1 flex items-center gap-1 text-left"
+                          aria-expanded={isOpen}
+                        >
+                          <span className={`text-xs font-semibold truncate ${allDeselected ? 'text-muted-foreground/50' : 'text-foreground'}`}>
+                            {group.topicName}
+                          </span>
+                          <ChevronDown className={`h-3 w-3 text-muted-foreground shrink-0 transition-transform duration-150 ${isOpen ? '' : '-rotate-90'}`} />
+                        </button>
+                      </div>
+                      {/* Concepts list */}
+                      {isOpen && (
+                        <div className="border-t border-border/40 px-2 pb-1.5 pt-1 space-y-0.5">
+                          {group.concepts.map(name => {
+                            const isDeselected = deselectedConcepts.has(name.toLowerCase())
+                            const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                            const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                            const isCompleted =
+                              examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                              STATE_ORDER[currentState] >= STATE_ORDER[target]
+                            const planIdx = displayConcepts.indexOf(name)
+                            return (
+                              <div key={name} className={`flex items-center gap-1.5 w-full${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
+                                {/* Concept toggle */}
+                                <button
+                                  type="button"
+                                  onClick={() => togglePlanConceptSelection(name)}
+                                  className={`shrink-0 transition-colors ${isDeselected ? 'text-muted-foreground/30' : 'text-muted-foreground hover:text-foreground'}`}
+                                  aria-label={isDeselected ? `Include ${name}` : `Exclude ${name}`}
+                                  title={isDeselected ? 'Click to include' : 'Click to exclude'}
+                                >
+                                  {isDeselected
+                                    ? <Circle className="h-3.5 w-3.5" />
+                                    : isCompleted
+                                      ? <Check className="h-3.5 w-3.5 text-green-500" />
+                                      : <Circle className="h-3.5 w-3.5" />}
+                                </button>
+                                {/* Concept name — opens popup */}
+                                <button
+                                  type="button"
+                                  data-study-concept={name.toLowerCase()}
+                                  onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', planIdx === -1 ? 0 : planIdx)}
+                                  className={`flex-1 text-left text-xs py-0.5 truncate transition-colors hover:text-foreground/80 ${isDeselected ? 'text-muted-foreground/30 line-through' : isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                                >
+                                  {name}
+                                </button>
+                                {!isDeselected && (
+                                  <span className="text-[10px] text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                                )}
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
                   )
                 })}
 

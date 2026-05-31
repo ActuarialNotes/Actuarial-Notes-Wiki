@@ -612,7 +612,7 @@ function SortableCard({
   const [flipped, setFlipped] = useState(globalFlip)
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-  const { jumpTo } = useConceptPopup()
+  const { openAt } = useConceptPopup()
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name })
 
@@ -662,9 +662,16 @@ function SortableCard({
         onClick={() => setFlipped(false)}
         className={`${baseClass} ${colorClass} cursor-pointer`}
       >
-        {/* Header: name + delete + study shortcut */}
+        {/* Header: name + play + study shortcut + delete */}
         <div className="flex items-center gap-1 px-2.5 pt-2 pb-1.5 border-b">
           <span className="text-xs font-medium text-muted-foreground truncate flex-1 min-w-0">{card.name}</span>
+          <button
+            type="button"
+            onPointerDown={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); openAt([card], 0) }}
+            aria-label={`Open ${card.name}`}
+            className="text-muted-foreground hover:text-primary h-5 w-5 flex items-center justify-center transition-colors shrink-0"
+          ><Play className="h-3 w-3" /></button>
           <button
             type="button"
             onPointerDown={e => e.stopPropagation()}
@@ -695,13 +702,21 @@ function SortableCard({
           {reverseCardModes.has('definition') && definition && (
             <WikiArticle
               markdown={definition}
-              onWikiLink={ref => { jumpTo(ref); return true }}
+              onWikiLink={ref => {
+                const { open, jumpTo } = useConceptPopup.getState()
+                if (open) jumpTo(ref); else openAt([ref], 0)
+                return true
+              }}
             />
           )}
           {reverseCardModes.has('math') && allEquations.length > 0 && (
             <div className="space-y-2">
               {allEquations.map((eq, i) => (
-                <WikiArticle key={i} markdown={eq} onWikiLink={ref => { jumpTo(ref); return true }} />
+                <WikiArticle key={i} markdown={eq} onWikiLink={ref => {
+                  const { open, jumpTo } = useConceptPopup.getState()
+                  if (open) jumpTo(ref); else openAt([ref], 0)
+                  return true
+                }} />
               ))}
             </div>
           )}

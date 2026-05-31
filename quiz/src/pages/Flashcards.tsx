@@ -17,7 +17,6 @@ import {
   Target,
   Trash2,
   TrendingUp,
-  X,
 } from 'lucide-react'
 import {
   DndContext,
@@ -852,97 +851,78 @@ function GalleryPanel({
 
   return (
     <div className="gallery-panel fixed inset-0 z-40 flex flex-col bg-background" style={{ top: '3.5rem' }}>
-      {/* Panel header */}
+      {/* Panel header — single row */}
       <div className="sticky top-0 z-10 bg-background border-b">
-        {/* Row 1: count, sort tabs, close */}
-        <div className="flex items-center justify-between gap-2 px-4 pt-3 pb-2">
+        <div className="flex items-center gap-2 px-4 py-2">
           {/* Card count + remove-all */}
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="font-semibold text-sm">{cards.length} card{cards.length === 1 ? '' : 's'}</span>
+          <div className="flex items-center gap-1 shrink-0">
+            <span className="text-xs text-muted-foreground">{cards.length} card{cards.length === 1 ? '' : 's'}</span>
             {confirmRemoveAll ? (
               <div className="flex items-center gap-1">
                 <span className="text-xs text-muted-foreground whitespace-nowrap">Remove all?</span>
                 <button
                   type="button"
                   onClick={() => { onRemoveAll(); onClose(); setConfirmRemoveAll(false) }}
-                  className="px-2 py-0.5 rounded text-xs font-medium bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                  className="px-1.5 py-0.5 rounded text-xs font-medium bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
                 >Yes</button>
                 <button
                   type="button"
                   onClick={() => setConfirmRemoveAll(false)}
-                  className="px-2 py-0.5 rounded text-xs font-medium border hover:bg-accent transition-colors"
-                >Cancel</button>
+                  className="px-1.5 py-0.5 rounded text-xs font-medium border hover:bg-accent transition-colors"
+                >No</button>
               </div>
             ) : (
               <button
                 type="button"
                 onClick={() => setConfirmRemoveAll(true)}
                 title="Remove all cards"
-                className="inline-flex items-center justify-center h-6 w-6 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
+                className="inline-flex items-center justify-center h-5 w-5 rounded text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 className="h-3 w-3" />
               </button>
             )}
           </div>
 
-          {/* Sort tabs */}
-          <div className="flex items-center gap-0.5 p-1 rounded-lg bg-muted/60 border flex-1 justify-center max-w-xs">
-            {GROUP_LABELS.map(({ key, label }) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => onGroupByChange(key)}
-                className={`flex-1 px-2 py-1 rounded-md text-xs font-medium transition-colors ${
-                  groupBy === key
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
-            aria-label="Close gallery"
+          {/* Sort dropdown */}
+          <select
+            value={groupBy}
+            onChange={e => onGroupByChange(e.target.value as GroupBy)}
+            className="h-7 rounded-md border bg-muted/60 px-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-ring shrink-0"
           >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+            {GROUP_LABELS.map(({ key, label }) => (
+              <option key={key} value={key}>{label}</option>
+            ))}
+          </select>
 
-        {/* Row 2: flip switch + back-side mode toggles */}
-        <div className="flex items-center justify-between gap-3 px-4 pb-3">
-          {/* Front/Back toggle switch */}
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-xs text-muted-foreground">Flip all</span>
+          <div className="flex-1" />
+
+          {/* Flip all toggle */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-xs text-muted-foreground">Flip</span>
             <button
               type="button"
               role="switch"
               aria-checked={globalFlip}
               onClick={() => setGlobalFlip(v => !v)}
               title={globalFlip ? 'Show all fronts' : 'Flip all to back'}
-              className={`relative inline-flex h-7 w-12 sm:h-5 sm:w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ${
+              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ${
                 globalFlip ? 'bg-primary' : 'bg-muted-foreground/30'
               }`}
             >
-              <span className={`pointer-events-none block h-5 w-5 sm:h-4 sm:w-4 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                globalFlip ? 'translate-x-6 sm:translate-x-4' : 'translate-x-0'
+              <span className={`pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0 transition-transform ${
+                globalFlip ? 'translate-x-4' : 'translate-x-0'
               }`} />
             </button>
           </div>
 
           {/* Back-side mode toggles */}
-          <div className="flex items-center gap-1 shrink-0">
-            <span className="text-xs text-muted-foreground mr-1">Back:</span>
+          <div className="flex items-center gap-0.5 shrink-0">
             <button
               type="button"
               onClick={() => toggleMode('definition')}
               title="Show definition"
               aria-pressed={reverseCardModes.has('definition')}
-              className={`inline-flex items-center justify-center h-10 w-10 sm:h-7 sm:w-7 rounded-md border text-sm sm:text-xs font-serif italic font-bold transition-colors ${
+              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border text-xs font-serif italic font-bold transition-colors ${
                 reverseCardModes.has('definition')
                   ? 'bg-primary text-primary-foreground border-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -953,23 +933,23 @@ function GalleryPanel({
               onClick={() => toggleMode('math')}
               title="Show math equations"
               aria-pressed={reverseCardModes.has('math')}
-              className={`inline-flex items-center justify-center h-10 w-10 sm:h-7 sm:w-7 rounded-md border transition-colors ${
+              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border transition-colors ${
                 reverseCardModes.has('math')
                   ? 'bg-primary text-primary-foreground border-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
-            ><Sigma className="h-5 w-5 sm:h-3.5 sm:w-3.5" /></button>
+            ><Sigma className="h-3.5 w-3.5" /></button>
             <button
               type="button"
               onClick={() => toggleMode('images')}
               title="Show images"
               aria-pressed={reverseCardModes.has('images')}
-              className={`inline-flex items-center justify-center h-10 w-10 sm:h-7 sm:w-7 rounded-md border transition-colors ${
+              className={`inline-flex items-center justify-center h-7 w-7 rounded-md border transition-colors ${
                 reverseCardModes.has('images')
                   ? 'bg-primary text-primary-foreground border-primary'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
-            ><Images className="h-5 w-5 sm:h-3.5 sm:w-3.5" /></button>
+            ><Images className="h-3.5 w-3.5" /></button>
           </div>
         </div>
       </div>

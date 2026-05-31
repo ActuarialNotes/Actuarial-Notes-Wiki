@@ -1129,9 +1129,9 @@ export function ReadinessCard({
                   )
                 }}
                 disabled={allConcepts.length === 0}
-                className="gap-1.5 text-sm w-full"
+                className="gap-3 text-base w-full h-auto py-4"
               >
-                <BookOpen className="h-4 w-4" />
+                <BookOpen className="h-5 w-5" />
                 Read concepts
               </Button>
 
@@ -1209,9 +1209,9 @@ export function ReadinessCard({
                   variant="outline"
                   onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)}
                   disabled={allConcepts.length === 0}
-                  className="gap-1.5 text-sm w-full"
+                  className="gap-3 text-base w-full h-auto py-4"
                 >
-                  <BookOpen className="h-4 w-4" />
+                  <BookOpen className="h-5 w-5" />
                   Read concepts
                 </Button>
 

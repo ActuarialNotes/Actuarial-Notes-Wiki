@@ -35,6 +35,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useFlashcards, type FlashCard } from '@/hooks/useFlashcards'
+import { useAuth } from '@/hooks/useAuth'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -45,6 +46,7 @@ import { entryRefToRepoPath, wikiRoute } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
@@ -179,6 +181,17 @@ const STUDY_PLAN_COLOR = {
   selIcon: 'text-amber-200',
 } as const
 
+const SAVED_PACK_COLOR = {
+  card: 'bg-purple-500/10 border-purple-400/40 hover:bg-purple-500/15',
+  cardText: 'text-purple-700 dark:text-purple-300',
+  cardSub: 'text-purple-600/70 dark:text-purple-400/60',
+  cardIcon: 'text-purple-500',
+  selCard: 'bg-purple-600 border-purple-600',
+  selText: 'text-white',
+  selSub: 'text-purple-100/80',
+  selIcon: 'text-purple-200',
+} as const
+
 function MasteryPill({ state }: { state: MasteryState }) {
   const { label, className } = MASTERY_CONFIG[state]
   return (
@@ -216,7 +229,7 @@ interface FlashcardPack {
   id: string
   label: string
   sublabel?: string
-  type: 'study_plan' | 'exam' | 'learning_objective'
+  type: 'study_plan' | 'exam' | 'learning_objective' | 'saved'
   concepts: string[]
   colorIndex?: number
 }
@@ -225,7 +238,7 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, targetDates } = useExamProgress()
-  const { addCard, hasCard } = useFlashcards()
+  const { addCard, hasCard, savedPacks, deleteSavedPack } = useFlashcards()
 
   const [collapsed, setCollapsed] = useState(false)
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null)
@@ -270,8 +283,11 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
         }
       }
     }
+    for (const sp of savedPacks) {
+      result.push({ id: sp.id, label: sp.label, type: 'saved', concepts: sp.concepts })
+    }
     return result
-  }, [inProgressSyllabi, primarySyllabus])
+  }, [inProgressSyllabi, primarySyllabus, savedPacks])
 
   // Reset concept state when switching packs
   useEffect(() => {
@@ -359,51 +375,72 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
                 const isLO = pack.type === 'learning_objective'
                 const isStudyPlan = pack.type === 'study_plan'
                 const palette = !isStudyPlan ? PACK_COLOR_PALETTE[pack.colorIndex ?? 0] : null
+                const isSaved = pack.type === 'saved'
                 const cardCls = isStudyPlan
                   ? (isSelected ? `${STUDY_PLAN_COLOR.selCard} ${STUDY_PLAN_COLOR.selText}` : `${STUDY_PLAN_COLOR.card} ${STUDY_PLAN_COLOR.cardText}`)
-                  : isLO
-                    ? (isSelected ? `${palette!.loSelCard} text-white` : `${palette!.loCard} ${palette!.loCardText}`)
-                    : (isSelected ? `${palette!.selCard} ${palette!.selText}` : `${palette!.card} ${palette!.cardText}`)
+                  : isSaved
+                    ? (isSelected ? `${SAVED_PACK_COLOR.selCard} ${SAVED_PACK_COLOR.selText}` : `${SAVED_PACK_COLOR.card} ${SAVED_PACK_COLOR.cardText}`)
+                    : isLO
+                      ? (isSelected ? `${palette!.loSelCard} text-white` : `${palette!.loCard} ${palette!.loCardText}`)
+                      : (isSelected ? `${palette!.selCard} ${palette!.selText}` : `${palette!.card} ${palette!.cardText}`)
                 const iconCls = isStudyPlan
                   ? (isSelected ? STUDY_PLAN_COLOR.selIcon : STUDY_PLAN_COLOR.cardIcon)
-                  : isLO
-                    ? (isSelected ? palette!.selIcon : palette!.loCardIcon)
-                    : (isSelected ? palette!.selIcon : palette!.cardIcon)
+                  : isSaved
+                    ? (isSelected ? SAVED_PACK_COLOR.selIcon : SAVED_PACK_COLOR.cardIcon)
+                    : isLO
+                      ? (isSelected ? palette!.selIcon : palette!.loCardIcon)
+                      : (isSelected ? palette!.selIcon : palette!.cardIcon)
                 const subCls = isStudyPlan
                   ? (isSelected ? STUDY_PLAN_COLOR.selSub : STUDY_PLAN_COLOR.cardSub)
-                  : isLO
-                    ? (isSelected ? palette!.selSub : palette!.loCardSub)
-                    : (isSelected ? palette!.selSub : palette!.cardSub)
+                  : isSaved
+                    ? (isSelected ? SAVED_PACK_COLOR.selSub : SAVED_PACK_COLOR.cardSub)
+                    : isLO
+                      ? (isSelected ? palette!.selSub : palette!.loCardSub)
+                      : (isSelected ? palette!.selSub : palette!.cardSub)
                 return (
-                  <button
-                    key={pack.id}
-                    type="button"
-                    onClick={() => setSelectedPackId(prev => prev === pack.id ? null : pack.id)}
-                    className={`shrink-0 flex flex-col items-start gap-0.5 px-3 py-2 rounded-lg border text-left transition-colors min-w-[110px] max-w-[160px] ${cardCls}`}
-                  >
-                    <div className="flex items-center gap-1.5 w-full">
-                      {pack.type === 'study_plan' && (
-                        <CalendarDays className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                  <div key={pack.id} className="relative shrink-0 group/chip">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPackId(prev => prev === pack.id ? null : pack.id)}
+                      className={`flex flex-col items-start gap-0.5 px-3 py-2 rounded-lg border text-left transition-colors min-w-[110px] max-w-[160px] w-full ${isSaved ? 'pr-7' : ''} ${cardCls}`}
+                    >
+                      <div className="flex items-center gap-1.5 w-full">
+                        {pack.type === 'study_plan' && (
+                          <CalendarDays className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                        )}
+                        {pack.type === 'exam' && (
+                          <GraduationCap className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                        )}
+                        {pack.type === 'learning_objective' && (
+                          <Target className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                        )}
+                        {pack.type === 'saved' && (
+                          <LayoutGrid className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                        )}
+                        <span className="text-xs font-medium truncate flex-1 min-w-0">{pack.label}</span>
+                      </div>
+                      {pack.sublabel && (
+                        <span className={`text-[10px] truncate w-full ${subCls}`}>
+                          {pack.sublabel}
+                        </span>
                       )}
-                      {pack.type === 'exam' && (
-                        <GraduationCap className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                      {(total > 0 || pack.type !== 'study_plan') && (
+                        <span className={`text-[10px] tabular-nums ${subCls}`}>
+                          {isLoading && pack.type === 'study_plan' ? '…' : `${inGallery}/${total} added`}
+                        </span>
                       )}
-                      {pack.type === 'learning_objective' && (
-                        <Target className={`h-3 w-3 shrink-0 ${iconCls}`} />
-                      )}
-                      <span className="text-xs font-medium truncate flex-1 min-w-0">{pack.label}</span>
-                    </div>
-                    {pack.sublabel && (
-                      <span className={`text-[10px] truncate w-full ${subCls}`}>
-                        {pack.sublabel}
-                      </span>
+                    </button>
+                    {isSaved && (
+                      <button
+                        type="button"
+                        onClick={() => deleteSavedPack(pack.id)}
+                        aria-label={`Delete ${pack.label} pack`}
+                        className="absolute top-1 right-1 h-5 w-5 rounded flex items-center justify-center text-muted-foreground opacity-0 group-hover/chip:opacity-100 focus:opacity-100 hover:text-destructive transition-all"
+                      >
+                        <Trash2 className="h-2.5 w-2.5" />
+                      </button>
                     )}
-                    {(total > 0 || pack.type !== 'study_plan') && (
-                      <span className={`text-[10px] tabular-nums ${subCls}`}>
-                        {isLoading && pack.type === 'study_plan' ? '…' : `${inGallery}/${total} added`}
-                      </span>
-                    )}
-                  </button>
+                  </div>
                 )
               })}
             </div>
@@ -689,7 +726,7 @@ function SortableCard({
         </div>
 
         {/* Back content — grows to fit, no scrollbar */}
-        <div className="px-3 py-2">
+        <div className="px-3 py-2" onClick={e => e.stopPropagation()}>
           {loadStatus === 'loading' && (
             <div className="flex items-center gap-1 text-xs text-muted-foreground py-2">
               <Loader2 className="h-3 w-3 animate-spin" /> Loading…
@@ -779,6 +816,93 @@ function SortableCard({
   )
 }
 
+// ─── Remove All / Save Pack Dialog ───────────────────────────────────────────
+
+function FlashcardsManageDialog({
+  cardCount,
+  cardNames,
+  canSave,
+  onCancel,
+  onRemoveAll,
+}: {
+  cardCount: number
+  cardNames: string[]
+  canSave: boolean
+  onCancel: () => void
+  onRemoveAll: () => void
+}) {
+  const { addSavedPack } = useFlashcards()
+  const [packName, setPackName] = useState('')
+  const [saved, setSaved] = useState(false)
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onCancel() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onCancel])
+
+  function handleSave() {
+    const name = packName.trim() || `My Pack`
+    addSavedPack(name, cardNames)
+    setSaved(true)
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+      onClick={onCancel}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="w-full max-w-sm rounded-lg border bg-card text-card-foreground shadow-lg p-5 space-y-4"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="space-y-1">
+          <h2 className="text-base font-semibold">{cardCount} card{cardCount === 1 ? '' : 's'}</h2>
+          <p className="text-sm text-muted-foreground">
+            {cardCount === 0 ? 'Your flashcard deck is empty.' : 'Manage your current flashcard deck.'}
+          </p>
+        </div>
+
+        {canSave && cardCount > 0 && (
+          <div className="rounded-md border p-3 space-y-2">
+            <p className="text-sm font-medium">Save as pack</p>
+            {saved ? (
+              <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-1.5">
+                <Check className="h-4 w-4" /> Saved to your packs
+              </p>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={packName}
+                  onChange={e => setPackName(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') handleSave() }}
+                  placeholder="Pack name…"
+                  className="flex-1 h-8 rounded-md border bg-background px-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                />
+                <Button size="sm" onClick={handleSave}>Save</Button>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" size="sm" onClick={onCancel}>
+            Cancel
+          </Button>
+          {cardCount > 0 && (
+            <Button variant="destructive" size="sm" onClick={onRemoveAll}>
+              Remove all
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Gallery Panel (expanded overlay) ────────────────────────────────────────
 
 function GalleryPanel({
@@ -812,11 +936,12 @@ function GalleryPanel({
   onClose: () => void
   conceptMasteryMap: Map<string, MasteryState>
 }) {
+  const { user } = useAuth()
   const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
     new Set<ReverseCardSection>(['definition']),
   )
   const [globalFlip, setGlobalFlip] = useState(false)
-  const [confirmRemoveAll, setConfirmRemoveAll] = useState(false)
+  const [showManageDialog, setShowManageDialog] = useState(false)
 
   function toggleMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {
@@ -854,33 +979,23 @@ function GalleryPanel({
       {/* Panel header — single row */}
       <div className="sticky top-0 z-10 bg-background border-b">
         <div className="flex items-center gap-2 px-4 py-2">
-          {/* Card count + remove-all */}
+          {/* Card count + manage button */}
           <div className="flex items-center gap-1 shrink-0">
-            <span className="text-xs text-muted-foreground">{cards.length} card{cards.length === 1 ? '' : 's'}</span>
-            {confirmRemoveAll ? (
-              <div className="flex items-center gap-1">
-                <span className="text-xs text-muted-foreground whitespace-nowrap">Remove all?</span>
-                <button
-                  type="button"
-                  onClick={() => { onRemoveAll(); onClose(); setConfirmRemoveAll(false) }}
-                  className="px-1.5 py-0.5 rounded text-xs font-medium bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
-                >Yes</button>
-                <button
-                  type="button"
-                  onClick={() => setConfirmRemoveAll(false)}
-                  className="px-1.5 py-0.5 rounded text-xs font-medium border hover:bg-accent transition-colors"
-                >No</button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setConfirmRemoveAll(true)}
-                title="Remove all cards"
-                className="inline-flex items-center justify-center h-5 w-5 rounded text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
-              >
-                <Trash2 className="h-3 w-3" />
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => setShowManageDialog(true)}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {cards.length} card{cards.length === 1 ? '' : 's'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowManageDialog(true)}
+              title="Manage cards"
+              className="inline-flex items-center justify-center h-5 w-5 rounded text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
+            >
+              <Trash2 className="h-3 w-3" />
+            </button>
           </div>
 
           {/* Sort dropdown */}
@@ -985,6 +1100,16 @@ function GalleryPanel({
           </SortableContext>
         </DndContext>
       </div>
+
+      {showManageDialog && (
+        <FlashcardsManageDialog
+          cardCount={cards.length}
+          cardNames={cards.map(c => c.name)}
+          canSave={!!user}
+          onCancel={() => setShowManageDialog(false)}
+          onRemoveAll={() => { onRemoveAll(); onClose(); setShowManageDialog(false) }}
+        />
+      )}
     </div>
   )
 }
@@ -1133,14 +1258,16 @@ function FlashcardStudyArea({
           </div>
         ) : (
           <div className="flex-1 flex flex-col p-6 gap-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <p className="text-sm font-medium text-muted-foreground">{current.name}</p>
-              {/* Play menu */}
+              {/* Play menu — left-aligned right after the name */}
               <div className="relative shrink-0" ref={playMenuRef} onClick={e => e.stopPropagation()}>
                 <button
                   ref={playBtnRef}
                   type="button"
-                  onClick={() => {
+                  onPointerDown={e => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation()
                     if (!showPlayMenu && playBtnRef.current) {
                       const rect = playBtnRef.current.getBoundingClientRect()
                       setMenuAlignRight(window.innerWidth - rect.right < 200)
@@ -1214,20 +1341,22 @@ function FlashcardStudyArea({
               <p className="text-sm text-destructive">Couldn't load content.</p>
             )}
             {reverseCardModes.has('definition') && definition && (
-              <WikiArticle
-                markdown={definition}
-                onWikiLink={ref => { jumpTo(ref); return true }}
-              />
+              <div onClick={e => e.stopPropagation()}>
+                <WikiArticle
+                  markdown={definition}
+                  onWikiLink={ref => { jumpTo(ref); return true }}
+                />
+              </div>
             )}
             {reverseCardModes.has('math') && allEquations.length > 0 && (
-              <div className="space-y-3">
+              <div className="space-y-3" onClick={e => e.stopPropagation()}>
                 {allEquations.map((eq, i) => (
                   <WikiArticle key={i} markdown={eq} />
                 ))}
               </div>
             )}
             {reverseCardModes.has('images') && cardImages.length > 0 && (
-              <div className="space-y-3">
+              <div className="space-y-3" onClick={e => e.stopPropagation()}>
                 {cardImages.map((img, i) => (
                   <figure key={i} className="flex flex-col items-center gap-1">
                     <img src={img.src} alt={img.alt} className="max-w-full max-h-48 object-contain rounded" />

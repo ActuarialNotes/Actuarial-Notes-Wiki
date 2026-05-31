@@ -770,7 +770,7 @@ export function ReadinessCard({
     })
   }, [])
 
-  const togglePlanTopicSelection = useCallback((topicName: string, concepts: string[]) => {
+  const togglePlanTopicSelection = useCallback((_topicName: string, concepts: string[]) => {
     setDeselectedConcepts(prev => {
       const allDeselected = concepts.every(c => prev.has(c.toLowerCase()))
       const next = new Set(prev)

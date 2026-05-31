@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigationType } from 'react-router-dom'
 import { BookMarked, CheckCircle2, GraduationCap } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
@@ -50,6 +50,25 @@ export default function WikiHome() {
   const { progress: examProgress, targetDates, selectedTrack } = useExamProgress()
   const { byConcept } = useConceptMastery()
   const [index, setIndex] = useState<WikiIndexItem[]>([])
+  const location = useLocation()
+  const navigationType = useNavigationType()
+
+  // Restore scroll when returning from an exam page; scroll to top on fresh visits
+  const shouldRestore = useRef(navigationType === 'POP' || !!(location.state as { fromExam?: boolean } | null)?.fromExam)
+  useEffect(() => {
+    if (shouldRestore.current) {
+      const saved = sessionStorage.getItem('wiki-home:scroll')
+      if (saved !== null) {
+        const top = parseInt(saved, 10)
+        requestAnimationFrame(() => window.scrollTo({ top, behavior: 'instant' }))
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+  }, [])
+  useEffect(() => {
+    return () => { sessionStorage.setItem('wiki-home:scroll', String(window.scrollY)) }
+  }, [])
 
   // Default to the user's current track body; user can override with the control
   const [filterOverride, setFilterOverride] = useState<BodyFilter | null>(null)

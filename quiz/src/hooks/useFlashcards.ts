@@ -5,8 +5,16 @@ export interface FlashCard extends WikiEntryRef {
   addedAt: number
 }
 
+export interface SavedFlashcardPack {
+  id: string
+  label: string
+  concepts: string[]
+  savedAt: number
+}
+
 const STORAGE_KEY = 'actuarial_flashcards'
 const ORDER_KEY = 'actuarial_flashcards_order'
+const SAVED_PACKS_KEY = 'actuarial_saved_flashcard_packs'
 
 function load(): FlashCard[] {
   try {
@@ -43,19 +51,38 @@ function saveOrder(order: string[]) {
   } catch { /* ignore */ }
 }
 
+function loadSavedPacks(): SavedFlashcardPack[] {
+  try {
+    const raw = localStorage.getItem(SAVED_PACKS_KEY)
+    return raw ? (JSON.parse(raw) as SavedFlashcardPack[]) : []
+  } catch {
+    return []
+  }
+}
+
+function persistSavedPacks(packs: SavedFlashcardPack[]) {
+  try {
+    localStorage.setItem(SAVED_PACKS_KEY, JSON.stringify(packs))
+  } catch { /* ignore */ }
+}
+
 interface FlashcardsState {
   cards: FlashCard[]
   customOrder: string[]
+  savedPacks: SavedFlashcardPack[]
   addCard: (ref: WikiEntryRef) => void
   removeCard: (name: string) => void
   clearCards: () => void
   hasCard: (name: string) => boolean
   setCustomOrder: (names: string[]) => void
+  addSavedPack: (label: string, concepts: string[]) => void
+  deleteSavedPack: (id: string) => void
 }
 
 export const useFlashcards = create<FlashcardsState>((set, get) => ({
   cards: load(),
   customOrder: loadOrder(),
+  savedPacks: loadSavedPacks(),
   addCard: (ref) => {
     const { cards, customOrder } = get()
     if (cards.some(c => c.name.toLowerCase() === ref.name.toLowerCase())) return
@@ -84,5 +111,21 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
   setCustomOrder: (names) => {
     saveOrder(names)
     set({ customOrder: names })
+  },
+  addSavedPack: (label, concepts) => {
+    const newPack: SavedFlashcardPack = {
+      id: `saved_${Date.now()}`,
+      label,
+      concepts,
+      savedAt: Date.now(),
+    }
+    const next = [...get().savedPacks, newPack]
+    persistSavedPacks(next)
+    set({ savedPacks: next })
+  },
+  deleteSavedPack: (id) => {
+    const next = get().savedPacks.filter(p => p.id !== id)
+    persistSavedPacks(next)
+    set({ savedPacks: next })
   },
 }))

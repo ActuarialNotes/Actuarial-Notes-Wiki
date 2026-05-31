@@ -55,9 +55,12 @@ async function upsertMasteryFromResponses(
     .in('concept_slug', [...new Set(events.map(e => e.conceptSlug))])
 
   if (selectError) {
-    // Table may not exist yet (migration not applied to production). Treat as
-    // no prior records so the computation and mergeLocalMastery still run.
-    console.warn('concept_mastery select failed, continuing with empty state:', selectError.message)
+    // Throw so the caller falls back to computeMasteryTransitions with the
+    // hook's cached records. Continuing with empty records is dangerous:
+    // it overwrites real progress (e.g. level1 with correct_count=1) back to
+    // new/correct_count=0, silently resetting the mastery state machine and
+    // preventing concepts from ever advancing past Level 1.
+    throw new Error(`concept_mastery select failed: ${selectError.message}`)
   }
 
   const byKey = new Map<string, ConceptMasteryRecord>()

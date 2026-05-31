@@ -919,9 +919,9 @@ export default function Landing() {
           <button
             type="button"
             onClick={handleStart}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+            className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl bg-primary text-primary-foreground text-base font-semibold hover:bg-primary/90 active:bg-primary/80 transition-colors"
           >
-            <Play className="h-4 w-4" />
+            <Play className="h-5 w-5" />
             Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
           </button>
         </div>

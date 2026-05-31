@@ -252,7 +252,7 @@ export function ExamHeatmap({
   void examProgressKey
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-3">
       {/* Month labels */}
       <div className="flex items-end gap-[2px]">
         <div className="shrink-0" style={{ width: 16 }} />
@@ -351,9 +351,6 @@ export function ExamHeatmap({
               {examDateLabel ? (
                 <>
                   <span className="font-medium">Exam: {examDateLabel}</span>
-                  {daysLeft !== null && daysLeft > 0 && (
-                    <span className="opacity-60">{daysLeft}d away</span>
-                  )}
                   {daysLeft !== null && daysLeft <= 0 && (
                     <span className="opacity-60">passed</span>
                   )}
@@ -420,9 +417,6 @@ export function ExamHeatmap({
                 {readyDateLabel ? (
                   <>
                     <span className="font-medium">Target ready: {readyDateLabel}</span>
-                    {readyDaysLeft !== null && readyDaysLeft > 0 && (
-                      <span className="opacity-60">{readyDaysLeft}d away</span>
-                    )}
                     {readyDaysLeft !== null && readyDaysLeft <= 0 && (
                       <span className="opacity-60">passed</span>
                     )}

@@ -125,6 +125,14 @@ function StudyGuideRadial({
 
   return (
     <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
+        {(['level3', 'level2', 'level1', 'new'] as MasteryState[]).map(s => (
+          <span key={s} className="flex items-center gap-1">
+            <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: LEVEL_FILL[s] }} />
+            {s === 'new' ? 'New' : s === 'level1' ? 'Level 1' : s === 'level2' ? 'Level 2' : 'Level 3'}
+          </span>
+        ))}
+      </div>
       <svg viewBox={`0 0 ${SG_VB} ${SG_VB}`} className="w-full max-w-[260px]" style={{ overflow: 'visible' }}>
         <circle
           cx={SG_CX} cy={SG_CY}
@@ -186,14 +194,6 @@ function StudyGuideRadial({
         )}
       </svg>
 
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
-        {(['level3', 'level2', 'level1', 'new'] as MasteryState[]).map(s => (
-          <span key={s} className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: LEVEL_FILL[s] }} />
-            {s === 'new' ? 'New' : s === 'level1' ? 'Level 1' : s === 'level2' ? 'Level 2' : 'Level 3'}
-          </span>
-        ))}
-      </div>
     </div>
   )
 }
@@ -968,17 +968,38 @@ export function ReadinessCard({
                 </button>
               </div>
 
+              {/* Progress pills — shown when there's activity today */}
+              {todayQuestionsAnswered > 0 && !allConceptsDone && (
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                    <Check className="h-3 w-3 text-green-500" />
+                    {todayGemsEarned}/{todayQuestionsAnswered} correct
+                  </span>
+                  {todayGemsEarned > 0 && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                      <Gem className="h-3 w-3 text-cyan-400" />
+                      {todayGemsEarned} gems
+                    </span>
+                  )}
+                  {todayLevelUps > 0 && (
+                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
+                      <ArrowUp className="h-3 w-3 text-primary" />
+                      {todayLevelUps} levelled up
+                    </span>
+                  )}
+                </div>
+              )}
+
               {/* Primary CTA */}
               <button
                 type="button"
                 onClick={handleStartQuiz}
-                className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-sm font-semibold transition-colors"
+                className="w-full flex items-center gap-3 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-colors"
               >
-                <Play className="h-4 w-4 shrink-0" />
+                <Play className="h-5 w-5 shrink-0" />
                 <span className="flex-1 text-left">
                   {todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz"}
                 </span>
-                <span className="text-xs opacity-70">{displayConcepts.length} concepts</span>
               </button>
 
               <div className="space-y-0.5">
@@ -1054,29 +1075,10 @@ export function ReadinessCard({
                 </Button>
               )}
 
-              {allConceptsDone ? (
+              {allConceptsDone && (
                 <div className="flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2.5 text-green-600 dark:text-green-400">
                   <CheckCircle2 className="h-4 w-4 shrink-0" />
                   <span className="text-sm font-semibold">Done for Today!</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                    <Check className="h-3 w-3 text-green-500" />
-                    {todayGemsEarned}/{todayQuestionsAnswered} correct
-                  </span>
-                  {todayGemsEarned > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                      <Gem className="h-3 w-3 text-cyan-400" />
-                      {todayGemsEarned} gems
-                    </span>
-                  )}
-                  {todayLevelUps > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-md bg-muted/60 px-2.5 py-1 text-xs font-medium">
-                      <ArrowUp className="h-3 w-3 text-primary" />
-                      {todayLevelUps} levelled up
-                    </span>
-                  )}
                 </div>
               )}
 

@@ -1108,7 +1108,7 @@ export function ReadinessCard({
       {/* RIGHT COLUMN: Study Guide (premium only) */}
       {isPremium && (
         <div className="space-y-3">
-          <Card ref={studyGuideCardRef} className="border bg-card">
+          <Card ref={studyGuideCardRef} className="bg-card">
             <CardContent className="p-4 space-y-4">
               <h3 className="text-sm font-semibold">Study Guide</h3>
 
@@ -1198,7 +1198,7 @@ export function ReadinessCard({
         <>
           {/* Study Guide — same card as premium, all concepts shown as "New" */}
           <div className="space-y-3">
-            <Card ref={studyGuideCardRef} className="border bg-card">
+            <Card ref={studyGuideCardRef} className="bg-card">
               <CardContent className="p-4 space-y-4">
                 <h3 className="text-sm font-semibold">Study Guide</h3>
 

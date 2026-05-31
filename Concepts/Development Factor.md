@@ -1,6 +1,8 @@
 **Development Factor** (link ratio or age-to-age factor) is the ratio used to project cumulative losses from one maturity age to the next, forming the building blocks of the [[Chain Ladder Method]]; chaining them together produces the [[Cumulative Development Factor]] to ultimate.
 
-> $$f_{n \to n{+}1} = \frac{\text{Losses at age }n{+}1}{\text{Losses at age }n} \qquad \text{(for a single accident year)}$$
+> $$f_{n \to n{+}1} = \frac{\text{Losses at age }n{+}1}{\text{Losses at age }n}$$
+>
+> $$\text{(for a single accident year)}$$
 
 - **Simple average**: unweighted mean of all individual year factors — treats each accident year equally regardless of size
 - **Volume-weighted average**: $\Sigma(\text{col }n{+}1) / \Sigma(\text{col }n)$ — gives more credibility to larger accident years; the standard default selection

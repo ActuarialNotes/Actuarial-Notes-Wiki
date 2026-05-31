@@ -2,7 +2,9 @@
 
 > $$X' = (1 + r)\,X$$
 >
-> $$\text{where } r = \text{annual inflation rate},\quad X = \text{original ground-up loss}$$
+> $$\text{where } r = \text{annual inflation rate}$$
+>
+> $$X = \text{original ground-up loss}$$
 
 - Unlike uniform scaling, inflation interacts non-linearly with fixed deductibles and benefit limits
 - The same dollar deductible covers a smaller share of an inflated loss, and more claims breach the deductible — this effect is called the **leveraged impact of inflation**

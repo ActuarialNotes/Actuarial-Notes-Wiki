@@ -1,6 +1,8 @@
 **R-Squared** ($R^2$), also called the **coefficient of determination**, measures the proportion of total variance in the response variable $Y$ that is explained by the model.
 
-> $$R^2 = 1 - \frac{\text{SS}_\text{Res}}{\text{SS}_\text{Tot}} = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}$$
+> $$R^2 = 1 - \frac{\text{SS}_\text{Res}}{\text{SS}_\text{Tot}}$$
+>
+> $$= 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}$$
 
 - $R^2 \in [0, 1]$; a value of 1 means the model explains all variability; 0 means it explains none
 - $R^2$ **always increases** (or stays the same) when predictors are added, even if they are irrelevant

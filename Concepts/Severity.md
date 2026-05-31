@@ -1,6 +1,8 @@
 **Severity** in insurance is the average cost per claim — total dollars paid or incurred divided by the number of claims — measuring how costly individual losses are on average.
 
-> $$\text{Severity} = \frac{\text{Total Losses}}{\text{Number of Claims}}$$
+> $$\text{Severity}$$
+>
+> $$= \frac{\text{Total Losses}}{\text{Number of Claims}}$$
 
 - Combined with [[Frequency]] (claims per exposure unit), severity determines the pure premium: $\text{Pure Premium} = \text{Frequency} \times \text{Severity}$
 - Severity trends upward over time due to medical cost inflation, wage inflation, legal environment changes, and increases in litigation rates; selecting a severity trend is a key actuarial judgment

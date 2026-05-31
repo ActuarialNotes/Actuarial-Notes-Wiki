@@ -3,7 +3,11 @@ In the context of annuities, a **geometric progression** refers to a sequence of
 - This is the basis of the [[Geometric Increasing Annuity]].
 - The present value for $n$ payments (annuity-immediate):
 
-> $$\text{PV} = \frac{1}{1+i} \cdot \frac{1-\left(\frac{1+g}{1+i}\right)^n}{1 - \frac{1+g}{1+i}} = \frac{1-(1+g)^n(1+i)^{-n}}{i-g}, \quad i \neq g$$
+> $$\text{PV} = \frac{1}{1+i} \cdot \frac{1-\left(\frac{1+g}{1+i}\right)^n}{1 - \frac{1+g}{1+i}}$$
+>
+> $$= \frac{1-(1+g)^n(1+i)^{-n}}{i-g}$$
+>
+> $$i \neq g$$
 
 - For a geometric [[Perpetuity]] ($i > g$): $\text{PV} = 1/(i-g)$.
 

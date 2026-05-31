@@ -1,6 +1,12 @@
 **Pure Premium Method** is a ratemaking approach that derives the indicated rate directly from expected losses and LAE per exposure unit, then loads for expenses and profit.
 
-> $$\text{Pure Premium} = \frac{\text{Losses + LAE}}{\text{Exposures}} \qquad \text{Indicated Rate} = \frac{\text{Pure Premium}}{1 - V - Q} = \frac{\text{Pure Premium}}{\text{PLR}}$$
+> $$\text{Pure Premium}$$
+>
+> $$= \frac{\text{Losses + LAE}}{\text{Exposures}}$$
+>
+> $$\text{Indicated Rate}$$
+>
+> $$= \frac{\text{Pure Premium}}{1 - V - Q} = \frac{\text{Pure Premium}}{\text{PLR}}$$
 
 - Losses are developed to ultimate and trended to the future rating period; exposures are similarly trended (unlike the loss ratio method, which trends losses only)
 - The permissible loss ratio $\text{PLR} = 1 - V - Q$ where $V$ = variable expense ratio and $Q$ = fixed expense and profit provision as a percent of premium

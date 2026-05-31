@@ -1,6 +1,12 @@
 **Overall Rate Level Indication** is the calculated percentage change in rates suggested by ratemaking analysis, measuring how much current rates must change to achieve rate adequacy.
 
-> $$\text{Indicated Change (LR)} = \frac{\text{Projected Loss Ratio}}{\text{Permissible Loss Ratio}} - 1 \qquad \text{Indicated Change (PP)} = \frac{\text{Indicated Rate}}{\text{Current Rate}} - 1$$
+> $$\text{Indicated Change (LR)}$$
+>
+> $$= \frac{\text{Projected Loss Ratio}}{\text{Permissible Loss Ratio}} - 1$$
+>
+> $$\text{Indicated Change (PP)}$$
+>
+> $$= \frac{\text{Indicated Rate}}{\text{Current Rate}} - 1$$
 
 - Under the [[Loss Ratio Method]], the projected loss ratio uses on-level, trended, developed losses divided by on-level earned premium; the permissible loss ratio is $1 - V - Q$
 - Under the [[Pure Premium Method]], the indicated rate equals trended ultimate pure premium divided by the permissible loss ratio

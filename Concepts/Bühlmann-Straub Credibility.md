@@ -2,7 +2,11 @@
 
 > $$\text{Estimate} = Z \cdot \bar{X}_w + (1-Z) \cdot \mu$$
 >
-> $$Z = \frac{m}{m + k}, \quad \bar{X}_w = \frac{\sum_{i=1}^n m_i X_i}{\sum_{i=1}^n m_i}, \quad m = \sum_{i=1}^n m_i$$
+> $$Z = \frac{m}{m + k}$$
+>
+> $$\bar{X}_w = \frac{\sum_{i=1}^n m_i X_i}{\sum_{i=1}^n m_i}$$
+>
+> $$m = \sum_{i=1}^n m_i$$
 
 **Variance components** (same definitions as [[Bühlmann Credibility]]):
 $$k = \frac{v}{a}, \quad v = E[\sigma^2(\theta)], \quad a = \text{Var}(\mu(\theta))$$

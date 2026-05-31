@@ -1,6 +1,12 @@
 **On-Level Premium** is historical earned premium restated at the current rate level, removing the distortion caused by rate changes during the experience period so that historical loss ratios are comparable across years.
 
-> $$\text{On-Level Factor} = \frac{\text{Current Rate Level Index}}{\text{Historical Average Rate Level Index}} \qquad \text{On-Level Premium} = \text{Historical EP} \times \text{On-Level Factor}$$
+> $$\text{On-Level Factor}$$
+>
+> $$= \frac{\text{Current Rate Level Index}}{\text{Historical Average Rate Level Index}}$$
+>
+> $$\text{On-Level Premium}$$
+>
+> $$= \text{Historical EP} \times \text{On-Level Factor}$$
 
 - Rate level indices are built multiplicatively: each rate change compounds on the prior index, and the historical average index is a weighted average over the portion of the year at each rate level
 - On-level premium is required for the [[Loss Ratio Method]] to produce a valid loss ratio comparison; without it, a year with lower rates will appear to have a worse loss ratio than it truly does

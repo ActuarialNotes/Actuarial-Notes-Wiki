@@ -3,7 +3,9 @@ A **Hierarchical Model** (also called a **multilevel model** or **nested model**
 > **Two-level hierarchical model:**
 > $$Y_{ij} = \beta_0 + \beta_1 x_{ij} + u_j + \varepsilon_{ij}$$
 >
-> $$u_j \sim N(0, \sigma_u^2), \quad \varepsilon_{ij} \sim N(0, \sigma_\varepsilon^2)$$
+> $$u_j \sim N(0, \sigma_u^2)$$
+>
+> $$\varepsilon_{ij} \sim N(0, \sigma_\varepsilon^2)$$
 
 - **Level 1**: individual observations $i$ within group $j$ (e.g., claims within a policyholder)
 - **Level 2**: groups $j$ (e.g., policyholders within a territory)

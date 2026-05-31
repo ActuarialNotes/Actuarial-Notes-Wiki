@@ -1,6 +1,8 @@
 **K-Means Clustering** is a partition-based [[Clustering]] algorithm that partitions $n$ observations into $K$ non-overlapping clusters by minimizing **total within-cluster variance** (the within-cluster sum of squares, WCSS).
 
-> $$\text{WCSS} = \sum_{k=1}^K \sum_{i \in C_k} \sum_{j=1}^p (x_{ij} - \bar{x}_{kj})^2 = \sum_{k=1}^K |C_k| \cdot \text{Var}(C_k)$$
+> $$\text{WCSS} = \sum_{k=1}^K \sum_{i \in C_k} \sum_{j=1}^p (x_{ij} - \bar{x}_{kj})^2$$
+>
+> $$= \sum_{k=1}^K |C_k| \cdot \text{Var}(C_k)$$
 
 **K-Means algorithm (Lloyd's algorithm):**
 1. **Initialize**: randomly assign each observation to one of $K$ clusters

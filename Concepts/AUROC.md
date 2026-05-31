@@ -2,7 +2,9 @@ The **AUROC** (Area Under the Receiver Operating Characteristic Curve) is a mode
 
 > **ROC Curve**: plot of **True Positive Rate (Sensitivity)** vs. **False Positive Rate (1 − Specificity)** as the threshold varies.
 >
-> $$\text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}, \quad \text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}$$
+> $$\text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+>
+> $$\text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}$$
 >
 > $$\text{AUROC} = \int_0^1 \text{TPR}(\text{FPR})\,d(\text{FPR})$$
 

@@ -1,6 +1,8 @@
 The **Beta Distribution** $X \sim \text{Beta}(\alpha, \beta)$ is a continuous distribution on $(0, 1)$ parameterized by shape parameters $\alpha > 0$ and $\beta > 0$. It is commonly used to model rates, proportions, and probabilities.
 
-> $$f(x) = \frac{x^{\alpha - 1}(1-x)^{\beta - 1}}{B(\alpha,\, \beta)}, \quad 0 < x < 1$$
+> $$f(x) = \frac{x^{\alpha - 1}(1-x)^{\beta - 1}}{B(\alpha,\, \beta)}$$
+>
+> $$0 < x < 1$$
 >
 > $$\text{where } B(\alpha, \beta) = \frac{\Gamma(\alpha)\,\Gamma(\beta)}{\Gamma(\alpha + \beta)}$$
 

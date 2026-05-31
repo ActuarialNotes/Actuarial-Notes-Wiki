@@ -1,7 +1,9 @@
 The **Binomial Distribution** $X \sim \text{Bin}(n, p)$ models the number of successes in $n$ independent Bernoulli trials, each with probability of success $p$.
 - Requires trials to be independent, each trial to have exactly two outcomes, and $p$ to be constant across trials
 
-> $$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n$$
+> $$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$
+>
+> $$k = 0, 1, \ldots, n$$
 
 - $E[X] = np$ and $\text{Var}(X) = np(1-p)$
 

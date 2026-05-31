@@ -1,6 +1,8 @@
 **Bornhuetter-Ferguson Method** (BF) is a loss reserving technique that estimates IBNR by blending actual reported losses with an a priori expected loss estimate, weighted by the proportion of losses still unreported.
 
-> $$\text{Ultimate} = \text{Reported} + \underbrace{\text{ELR} \times \text{EP} \times \left(1 - \tfrac{1}{\text{CDF}}\right)}_{\text{IBNR}}$$
+> $$\text{Ultimate}$$
+>
+> $$= \text{Reported} + \underbrace{\text{ELR} \times \text{EP} \times \left(1 - \tfrac{1}{\text{CDF}}\right)}_{\text{IBNR}}$$
 
 - The "percent unreported" $\left(1 - 1/\text{CDF}\right)$ comes from the development triangle; expected losses $= \text{ELR} \times \text{Earned Premium}$
 - BF is preferred for **immature accident years** (less credible actual emergence); for mature years, the [[Chain Ladder Method]] is preferred

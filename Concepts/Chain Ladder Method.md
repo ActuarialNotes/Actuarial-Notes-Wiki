@@ -1,6 +1,8 @@
 **Chain Ladder Method** (also called the development method or link ratio method) is a loss reserving technique that projects cumulative losses to ultimate by multiplying each accident year's latest reported losses by a cumulative development factor (CDF) derived from historical age-to-age patterns.
 
-> $$\text{Ultimate} = \text{Latest Reported} \times \text{CDF}_{\text{age} \to \text{ult}}$$
+> $$\text{Ultimate}$$
+>
+> $$= \text{Latest Reported} \times \text{CDF}_{\text{age} \to \text{ult}}$$
 
 > $$\text{IBNR} = \text{Ultimate} - \text{Reported}$$
 

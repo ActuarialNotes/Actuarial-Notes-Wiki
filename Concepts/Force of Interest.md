@@ -1,6 +1,8 @@
 The **force of interest** $\delta$ is the continuously compounded [[Interest Rate]] — the limiting case of a [[Nominal Interest Rate]] [[Convertible m-thly]] as $m \to \infty$:
 
-> $$\delta = \ln(1+i) \qquad \Longleftrightarrow \qquad i = e^\delta - 1$$
+> $$\delta = \ln(1+i)$$
+>
+> $$\Longleftrightarrow \qquad i = e^\delta - 1$$
 
 - Under a constant force of interest, the [[Accumulation Function]] is:
 

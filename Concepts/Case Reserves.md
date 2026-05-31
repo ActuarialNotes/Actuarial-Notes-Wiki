@@ -1,6 +1,8 @@
 **Case reserves** (also called case outstanding) are claim-specific estimates of the expected future payments on individual reported claims, established by claims adjusters based on the known facts of each loss.
 
-> $$\text{Reported (Incurred) Losses} = \text{Paid Losses} + \text{Case Reserves}$$
+> $$\text{Reported (Incurred) Losses}$$
+>
+> $$= \text{Paid Losses} + \text{Case Reserves}$$
 > $$\text{IBNR} = \text{Ultimate Losses} - \text{Reported Losses}$$
 
 - Case reserves reflect the adjuster's current best estimate and are updated as new information emerges — medical reports, legal proceedings, settlement negotiations

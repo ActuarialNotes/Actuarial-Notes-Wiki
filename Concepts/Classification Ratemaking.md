@@ -1,6 +1,10 @@
 **Classification Ratemaking** is the process of segmenting risks into homogeneous groups and developing relativities that reflect each class's expected loss cost relative to a base class.
 
-> $$\text{Class Relativity} = \frac{\text{Class Loss Cost (pure premium)}}{\text{Base Class Loss Cost}} \qquad \text{Class Rate} = \text{Base Rate} \times \text{Relativity}$$
+> $$\text{Class Relativity}$$
+>
+> $$= \frac{\text{Class Loss Cost (pure premium)}}{\text{Base Class Loss Cost}}$$
+>
+> $$\text{Class Rate} = \text{Base Rate} \times \text{Relativity}$$
 
 - Relativities are credibility-weighted against the current structure when class data is thin: $Z \times \text{Indicated} + (1-Z) \times \text{Current}$
 - After relativities are selected they are balanced back to the overall rate level so that the aggregate indicated change is preserved

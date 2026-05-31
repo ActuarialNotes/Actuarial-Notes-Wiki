@@ -1,8 +1,12 @@
 **Cumulative Development Factor** (CDF, also called loss development factor or LDF) is the product of all age-to-age factors from a given maturity age to ultimate, representing the total development expected from that point forward.
 
-> $$\text{CDF}_{n \to \text{ult}} = f_{n \to n{+}1} \times f_{n{+}1 \to n{+}2} \times \cdots \times \text{Tail Factor}$$
+> $$\text{CDF}_{n \to \text{ult}}$$
+>
+> $$= f_{n \to n{+}1} \times f_{n{+}1 \to n{+}2} \times \cdots \times \text{Tail Factor}$$
 
-> $$\text{Ultimate} = \text{Reported at age }n \;\times\; \text{CDF}_{n \to \text{ult}}$$
+> $$\text{Ultimate}$$
+>
+> $$= \text{Reported at age }n \;\times\; \text{CDF}_{n \to \text{ult}}$$
 
 - CDF $\geq 1.0$ for all lines where losses do not decrease; $\%$ reported $= 1/\text{CDF}$ and $\%$ unreported $= 1 - 1/\text{CDF}$, which are used directly in the [[Bornhuetter Ferguson Method]] and [[Cape Cod Method]]
 - CDFs decrease monotonically with age — a 12-month CDF is always larger than a 24-month CDF for the same line, as more of the ultimate is already captured

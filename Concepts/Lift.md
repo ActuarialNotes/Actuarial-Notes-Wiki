@@ -1,8 +1,12 @@
 **Lift** is a model performance metric used to evaluate how much better a predictive model performs relative to a random baseline when targeting a fraction of the population. It is commonly used in insurance for fraud detection, marketing, and pricing model validation.
 
-> $$\text{Lift at decile } d = \frac{\text{Response rate in top-}d\text{ decile}}{\text{Overall response rate}}$$
+> $$\text{Lift at decile } d$$
 >
-> $$\text{Cumulative Lift} = \frac{\text{Responses captured in top fraction}}{\text{Expected responses if random}}$$
+> $$= \frac{\text{Response rate in top-}d\text{ decile}}{\text{Overall response rate}}$$
+>
+> $$\text{Cumulative Lift}$$
+>
+> $$= \frac{\text{Responses captured in top fraction}}{\text{Expected responses if random}}$$
 
 **Lift chart (gains chart) construction:**
 1. Score all observations using the model

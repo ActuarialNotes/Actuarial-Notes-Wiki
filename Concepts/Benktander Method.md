@@ -1,6 +1,8 @@
 **Benktander Method** (GB, or iterated BF) is a loss reserving technique that uses the BF ultimate as the new "expected losses" for one additional BF iteration, producing an estimate that lies between the [[Bornhuetter Ferguson Method]] and the [[Chain Ladder Method]].
 
-> $$\text{Ultimate}_{\text{GB}} = \text{Reported} + \underbrace{\left(\text{Ultimate}_{\text{BF}} - \text{Reported}\right)}_{\text{BF IBNR}} \times \left(1 - \tfrac{1}{\text{CDF}}\right)$$
+> $$\text{Ultimate}_{\text{GB}}$$
+>
+> $$= \text{Reported} + \underbrace{\left(\text{Ultimate}_{\text{BF}} - \text{Reported}\right)}_{\text{BF IBNR}} \times \left(1 - \tfrac{1}{\text{CDF}}\right)$$
 
 - Iterating the BF formula to convergence yields the chain ladder; the Benktander is the result after exactly **two total iterations** (one BF + one refinement)
 - GB gives **more weight to actual emergence** than BF while remaining more stable than the chain ladder — most useful for moderately mature accident years (roughly 24–48 months)

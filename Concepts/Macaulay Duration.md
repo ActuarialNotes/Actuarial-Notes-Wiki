@@ -1,6 +1,8 @@
 **Macaulay duration** $D_{Mac}$ is the weighted-average time to receipt of a bond's cash flows, where each cash flow is weighted by its [[Present Value]] as a fraction of total price:
 
-> $$D_{Mac} = \frac{\displaystyle\sum_{t=1}^{n} t \cdot C_t \cdot v^t}{\displaystyle\sum_{t=1}^{n} C_t \cdot v^t} = \frac{\displaystyle\sum_{t} t \cdot \text{PV}(C_t)}{P}$$
+> $$D_{Mac} = \frac{\displaystyle\sum_{t=1}^{n} t \cdot C_t \cdot v^t}{\displaystyle\sum_{t=1}^{n} C_t \cdot v^t}$$
+>
+> $$= \frac{\displaystyle\sum_{t} t \cdot \text{PV}(C_t)}{P}$$
 
 - where $v = 1/(1+j)$ and $P$ is the bond price; Macaulay duration is measured in time units (years)
 - The relationship to [[Modified Duration]] is $D_{Mod} = D_{Mac}/(1+j)$

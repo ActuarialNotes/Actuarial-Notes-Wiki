@@ -1,10 +1,14 @@
 The **Hypergeometric Distribution** models the number of successes in a sample of size $n$ drawn **without replacement** from a finite population of $N$ items, $K$ of which are successes. Unlike the [[Binomial]], trials are not independent.
 
-> $$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}, \quad k = \max(0,\,n+K-N),\ldots,\min(n,K)$$
+> $$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$
+>
+> $$k = \max(0,\,n+K-N),\ldots,\min(n,K)$$
 >
 > $$\text{where } N = \text{population size},\; K = \text{successes in population},\; n = \text{sample size}$$
 
-> $$E[X] = \frac{nK}{N}, \qquad \text{Var}(X) = \frac{nK(N-K)(N-n)}{N^2(N-1)}$$
+> $$E[X] = \frac{nK}{N},$$
+>
+> $$\text{Var}(X) = \frac{nK(N-K)(N-n)}{N^2(N-1)}$$
 
 ![[Media/Hypergeometric_pmf.svg|500]]
 

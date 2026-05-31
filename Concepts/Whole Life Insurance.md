@@ -1,8 +1,12 @@
 **Whole Life Insurance** is a life insurance policy that pays a benefit of 1 (one unit) at the moment of the insured's death, regardless of when death occurs. The **net single premium** (expected present value of the benefit) is denoted $\bar{A}_x$ for a life aged $x$.
 
-> $$\bar{A}_x = E\!\left[e^{-\delta T_x}\right] = \int_0^\infty e^{-\delta t} \, {_t}p_x \, \mu_{x+t}\,dt$$
+> $$\bar{A}_x = E\!\left[e^{-\delta T_x}\right]$$
 >
-> $$\text{Var}\!\left(e^{-\delta T_x}\right) = {}^{2}\!\bar{A}_x - \left(\bar{A}_x\right)^2$$
+> $$= \int_0^\infty e^{-\delta t} \, {_t}p_x \, \mu_{x+t}\,dt$$
+>
+> $$\text{Var}\!\left(e^{-\delta T_x}\right)$$
+>
+> $$= {}^{2}\!\bar{A}_x - \left(\bar{A}_x\right)^2$$
 
 - $\delta$ is the **force of interest** (continuous discounting); under discrete discounting at rate $i$, the benefit is paid at end of year of death with APV $A_x = \sum_{k=0}^\infty v^{k+1} {_k}p_x\, q_{x+k}$
 - **Recursion:** $A_x = v\,q_x + v\,p_x\,A_{x+1}$

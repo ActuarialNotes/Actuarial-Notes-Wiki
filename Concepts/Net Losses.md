@@ -1,6 +1,8 @@
 **Net losses** are an insurer's retained losses after subtracting all recoveries — reinsurance, salvage, subrogation, and deductible recoveries — from gross losses, representing the amount the insurer ultimately bears.
 
-> $$\text{Net Losses} = \text{Gross Losses} - \text{Ceded Losses} - \text{Salvage \& Subrogation} - \text{Deductible Recoveries}$$
+> $$\text{Net Losses}$$
+>
+> $$= \text{Gross Losses} - \text{Ceded Losses} - \text{Salvage \& Subrogation} - \text{Deductible Recoveries}$$
 
 - Ratemaking and reserving can be performed on a gross or net basis; net is more common because it reflects the insurer's actual retained risk and avoids reinsurance pricing distortions
 - Each recovery component typically has its own development pattern and should be projected separately before subtracting from gross

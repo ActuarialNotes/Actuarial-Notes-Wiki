@@ -1,7 +1,15 @@
 **Rate change** is the percentage modification to an insurance rate, either the actuarially indicated change (derived from ratemaking analysis) or the implemented change (approved and put into effect after business judgment and regulatory constraints).
 
-> $$\text{Indicated Change} = \frac{\text{Indicated Rate}}{\text{Current Rate}} - 1 \qquad \text{(Pure Premium Method)}$$
-> $$\text{Indicated Change} = \frac{\text{Projected Loss Ratio}}{\text{Permissible Loss Ratio}} - 1 \qquad \text{(Loss Ratio Method)}$$
+> $$\text{Indicated Change}$$
+>
+> $$= \frac{\text{Indicated Rate}}{\text{Current Rate}} - 1$$
+>
+> $$\text{(Pure Premium Method)}$$
+> $$\text{Indicated Change}$$
+>
+> $$= \frac{\text{Projected Loss Ratio}}{\text{Permissible Loss Ratio}} - 1$$
+>
+> $$\text{(Loss Ratio Method)}$$
 
 - The **indicated change** is the actuarial result before credibility weighting, operational constraints, or regulatory limitations; the **implemented change** reflects these practical adjustments
 - Historical rate changes must be tracked to compute [[On Level Premium|on-level premiums]]: the cumulative rate level index converts past premiums to their equivalent at the current rate level

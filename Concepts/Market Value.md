@@ -1,6 +1,8 @@
 The **market value** of a bond (or any financial asset) is its current price in the open market, determined by supply and demand. For bonds, market value equals the [[Present Value]] of all future cash flows discounted at the prevailing market [[Yield Rate]]:
 
-> $$\text{Market Value} = Fr \cdot a_{\overline{n}|j} + C \cdot v^n_j$$
+> $$\text{Market Value}$$
+>
+> $$= Fr \cdot a_{\overline{n}|j} + C \cdot v^n_j$$
 
 - Market value differs from [[Book Value]] (the amortized carrying value) and [[Face Value]] (the principal).
 - When market yield exceeds the coupon rate, market value is below face (discount bond).

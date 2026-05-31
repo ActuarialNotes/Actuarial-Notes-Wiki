@@ -1,6 +1,8 @@
 The **Residual Sum of Squares (RSS)** (also called the **Sum of Squared Errors, SSE**) measures the total unexplained variability in a regression model — the sum of squared differences between observed and fitted values.
 
-> $$\text{RSS} = \sum_{i=1}^n (y_i - \hat{y}_i)^2 = \sum_{i=1}^n e_i^2$$
+> $$\text{RSS} = \sum_{i=1}^n (y_i - \hat{y}_i)^2$$
+>
+> $$= \sum_{i=1}^n e_i^2$$
 >
 > $$\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_{i1} + \cdots + \hat{\beta}_p x_{ip}$$
 

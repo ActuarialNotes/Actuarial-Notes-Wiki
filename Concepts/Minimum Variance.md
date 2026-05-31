@@ -1,7 +1,9 @@
 **Minimum Variance** is a criterion for comparing estimators: among all estimators in a given class (typically unbiased), the one with the **smallest variance** is preferred, as it produces estimates closest to the true parameter on average.
 
 > **Cramér–Rao Lower Bound (CRLB):** For any unbiased estimator $\hat{\theta}$,
-> $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)} = \frac{1}{n \cdot I_1(\theta)}$$
+> $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
+>
+> $$= \frac{1}{n \cdot I_1(\theta)}$$
 >
 > $$\text{where } I_1(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\ln f(X \mid \theta)\right)^2\right] \text{ is the Fisher information}$$
 

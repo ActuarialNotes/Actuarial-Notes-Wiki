@@ -125,7 +125,7 @@ function StudyGuideRadial({
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[12px] text-muted-foreground">
         {(['level3', 'level2', 'level1', 'new'] as MasteryState[]).map(s => (
           <span key={s} className="flex items-center gap-1">
             <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: LEVEL_FILL[s] }} />

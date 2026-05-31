@@ -1,6 +1,8 @@
 **Loss Ratio Method** is a ratemaking approach that derives the indicated rate change by comparing the projected (ultimate, trended) loss ratio to the permissible loss ratio, without separately calculating a pure premium or trended exposures.
 
-> $$\text{Indicated Change} = \frac{\text{Projected Loss Ratio}}{\text{Permissible Loss Ratio}} - 1$$
+> $$\text{Indicated Change}$$
+>
+> $$= \frac{\text{Projected Loss Ratio}}{\text{Permissible Loss Ratio}} - 1$$
 
 - Unlike the [[Pure Premium Method]], the loss ratio method trends only losses (not exposures separately), making it simpler when reliable exposure counts are unavailable
 - The projected loss ratio uses on-level earned premium as the denominator, so current rate level adjustments must be applied to historical premiums

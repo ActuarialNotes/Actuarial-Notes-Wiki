@@ -1,6 +1,8 @@
 **Ultimate Loss** is the total projected cost of all claims for a given accident year (or policy year) once all claims are fully developed, reported, and paid — including amounts already paid, case reserves, and IBNR; it is the quantity that all reserving methods seek to estimate.
 
-> $$\text{Ultimate} = \text{Paid} + \text{Case Reserves} + \text{IBNR} = \text{Reported} + \text{IBNR}$$
+> $$\text{Ultimate}$$
+>
+> $$= \text{Paid} + \text{Case Reserves} + \text{IBNR} = \text{Reported} + \text{IBNR}$$
 
 - Every reserving method is just a different approach to estimating the unknown IBNR component: the [[Chain Ladder Method]] multiplies reported by a CDF; the [[Bornhuetter Ferguson Method]] anchors the unreported portion to an a priori expected loss ratio
 - Ultimate losses drive the loss ratio ($= \text{Ultimate}/\text{EP}$), which is the primary input to loss reserve adequacy testing and ratemaking indications

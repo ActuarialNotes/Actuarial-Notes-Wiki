@@ -1,6 +1,8 @@
 The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the number of independent Bernoulli trials needed to achieve exactly $r$ successes. When $r = 1$ it reduces to the [[Geometric]] distribution.
 
-> $$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}, \quad k = r, r+1, r+2, \ldots$$
+> $$P(X = k) = \binom{k-1}{r-1}p^r(1-p)^{k-r}$$
+>
+> $$k = r, r+1, r+2, \ldots$$
 >
 > $$\text{where } r = \text{number of successes required},\; p = \text{success probability}$$
 

@@ -4,7 +4,11 @@ The **nominal interest rate** $i^{(m)}$ is a quoted annual rate convertible (com
 
 - The two-way relationship with the effective annual rate $i$ is:
 
-> $$\left(1 + \frac{i^{(m)}}{m}\right)^m = 1 + i \qquad \Longleftrightarrow \qquad i^{(m)} = m\left[(1+i)^{1/m} - 1\right]$$
+> $$\left(1 + \frac{i^{(m)}}{m}\right)^m = 1 + i$$
+>
+> $$\Longleftrightarrow$$
+>
+> $$i^{(m)} = m\left[(1+i)^{1/m} - 1\right]$$
 
 - As $m \to \infty$ the nominal rate converges to the [[Force of Interest]]: $\displaystyle\lim_{m\to\infty} i^{(m)} = \delta = \ln(1+i)$.
 - For a fixed effective rate, $i^{(m)}$ is a decreasing function of $m$ — more frequent compounding requires a smaller stated rate to achieve the same year-end accumulation.

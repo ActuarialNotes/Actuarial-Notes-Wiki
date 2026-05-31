@@ -1,6 +1,12 @@
 **Territory Ratemaking** is the process of developing geographic rate differentials that reflect variations in expected loss costs across locations, using the same relativity framework as [[Classification Ratemaking]].
 
-> $$\text{Territory Relativity} = \frac{\text{Territory Loss Cost}}{\text{Base Territory Loss Cost}} \qquad \text{Territory Rate} = \text{Base Rate} \times \text{Territory Relativity}$$
+> $$\text{Territory Relativity}$$
+>
+> $$= \frac{\text{Territory Loss Cost}}{\text{Base Territory Loss Cost}}$$
+>
+> $$\text{Territory Rate}$$
+>
+> $$= \text{Base Rate} \times \text{Territory Relativity}$$
 
 - Geographic cost drivers include population density, traffic patterns, crime rates, weather exposure, repair costs, and local legal environment
 - Relativities are credibility-weighted and then balanced back to the overall rate level, just as in class ratemaking

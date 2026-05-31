@@ -1,6 +1,8 @@
 The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **overall accuracy** by combining both variance (spread) and bias (systematic error):
 
-> $$\text{MSE}(\hat{\theta}) = E\!\left[(\hat{\theta} - \theta)^2\right] = \text{Var}(\hat{\theta}) + \left(\text{Bias}(\hat{\theta})\right)^2$$
+> $$\text{MSE}(\hat{\theta})$$
+>
+> $$= E\!\left[(\hat{\theta} - \theta)^2\right] = \text{Var}(\hat{\theta}) + \left(\text{Bias}(\hat{\theta})\right)^2$$
 >
 > $$\text{where } \text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$$
 

@@ -1,6 +1,8 @@
 An **equation of value** equates the [[Present Value]] (or [[Accumulated Value]]) of all obligations to the present value of all payments at a chosen **comparison date** (also called the valuation date). It is the fundamental tool for solving time-value-of-money problems:
 
-> $$\text{PV of inflows} = \text{PV of outflows at the comparison date}$$
+> $$\text{PV of inflows}$$
+>
+> $$= \text{PV of outflows at the comparison date}$$
 
 - All cash flows must be moved to the same point in time using the same [[Interest Rate]] before comparing.
 - A different choice of comparison date gives a different equation but the same solution for the unknown.

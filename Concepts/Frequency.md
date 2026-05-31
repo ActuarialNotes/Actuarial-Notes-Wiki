@@ -1,6 +1,8 @@
 **Frequency** in insurance is the average number of claims per unit of exposure, measuring how often losses occur within a given period or cohort of policies.
 
-> $$\text{Frequency} = \frac{\text{Number of Claims}}{\text{Exposure Units}}$$
+> $$\text{Frequency}$$
+>
+> $$= \frac{\text{Number of Claims}}{\text{Exposure Units}}$$
 
 - Combined with [[Severity]] (average cost per claim), frequency determines the pure premium: $\text{Pure Premium} = \text{Frequency} \times \text{Severity}$
 - Exposure units vary by line: car-years (auto), $\$100$ of payroll (workers comp), house-years (homeowners); frequency must be stated relative to its exposure base

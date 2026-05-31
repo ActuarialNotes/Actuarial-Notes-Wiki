@@ -43,7 +43,9 @@ $$\frac{\partial f}{\partial x}(x,y) \quad \text{holds } y \text{ fixed}$$
 ### Integration
 The **definite integral** gives the net signed area under $f$ from $a$ to $b$:
 
-> $$\int_a^b f(x)\,dx = F(b) - F(a), \quad \text{where } F'(x) = f(x)$$
+> $$\int_a^b f(x)\,dx = F(b) - F(a)$$
+>
+> $$\text{where } F'(x) = f(x)$$
 
 This result is the **Fundamental Theorem of Calculus**.
 

@@ -2,7 +2,9 @@ The **interest rate** (or rate of interest) $i$ is the amount of interest earned
 
 - The interest rate connects [[Present Value]] and [[Future Value]]:
 
-> $$\text{FV} = \text{PV} \cdot (1+i)^n \qquad \Longleftrightarrow \qquad \text{PV} = \frac{\text{FV}}{(1+i)^n}$$
+> $$\text{FV} = \text{PV} \cdot (1+i)^n$$
+>
+> $$\Longleftrightarrow \qquad \text{PV} = \frac{\text{FV}}{(1+i)^n}$$
 
 - The **effective annual interest rate** refers to the rate compounded once per year.
 - Related measures include the [[Nominal Interest Rate|nominal rate]] convertible $m$-thly, the [[Discount Rate]], and the [[Force of Interest]].

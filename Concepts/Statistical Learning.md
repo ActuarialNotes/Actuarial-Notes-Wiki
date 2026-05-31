@@ -2,7 +2,9 @@
 
 > $$Y = f(\mathbf{X}) + \varepsilon$$
 >
-> $$\text{Expected prediction error} = \text{Bias}^2(\hat{f}) + \text{Var}(\hat{f}) + \sigma_\varepsilon^2$$
+> $$\text{Expected prediction error}$$
+>
+> $$= \text{Bias}^2(\hat{f}) + \text{Var}(\hat{f}) + \sigma_\varepsilon^2$$
 
 **Supervised vs. Unsupervised:**
 - **Supervised learning**: a labeled response $Y$ is available (e.g., regression, classification)

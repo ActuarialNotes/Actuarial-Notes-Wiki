@@ -1,6 +1,10 @@
 **Catastrophe Loss** is a loss arising from a single event or series of related events — such as a hurricane, earthquake, or wildfire — that produces many simultaneous claims with large aggregate severity, making it too volatile to include in standard ratemaking experience without adjustment.
 
-> $$\text{Total Rate} = \text{Non-CAT Rate} + \text{CAT Loading} \qquad \text{CAT Loading} = \frac{\text{Expected Annual CAT Losses}}{\text{Exposures}}$$
+> $$\text{Total Rate} = \text{Non-CAT Rate} + \text{CAT Loading}$$
+>
+> $$\text{CAT Loading}$$
+>
+> $$= \frac{\text{Expected Annual CAT Losses}}{\text{Exposures}}$$
 
 - CAT losses are excluded from the historical loss experience used to derive base rates because their low frequency and extreme severity distort the pure premium; instead, a separate CAT provision is added
 - The CAT load is typically derived from catastrophe models (e.g., AIR, RMS) or long-run historical averages, reflecting the probability and severity of events over a full catastrophe cycle

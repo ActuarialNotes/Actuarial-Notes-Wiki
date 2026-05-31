@@ -1,6 +1,8 @@
 **Salvage and Subrogation** (S&S) are loss recoveries that reduce an insurer's net ultimate losses: salvage is the value recovered from the sale of damaged property (e.g., totaled vehicles), while subrogation is the recovery of amounts paid from a liable third party (e.g., an at-fault driver).
 
-> $$\text{Net Ultimate} = \text{Gross Ultimate} - \text{S\&S Ultimate}$$
+> $$\text{Net Ultimate}$$
+>
+> $$= \text{Gross Ultimate} - \text{S\&S Ultimate}$$
 
 - S&S recoveries are developed separately using their own triangles because recovery patterns typically lag behind loss payments — subrogation especially can take years to collect from third parties
 - Gross CDFs are applied to gross reported losses; S&S CDFs are applied to reported S&S recoveries; net losses $=$ gross $-$ S&S at the ultimate level

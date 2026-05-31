@@ -1,6 +1,8 @@
 **Earned Exposure** is the portion of total written exposure units that has been consumed during the experience period, providing coverage for that time, and serves as the denominator in pure premium calculations.
 
-> $$\text{Earned Exposure} = \text{Written Exposure} - \Delta\text{Unearned Exposure}$$
+> $$\text{Earned Exposure}$$
+>
+> $$= \text{Written Exposure} - \Delta\text{Unearned Exposure}$$
 
 - Earned exposure is the exposure analogue of [[Earned Premium]]: just as premium is earned pro-rata over the policy period, exposure units are earned as coverage is provided
 - For annual policies written uniformly throughout a calendar year, earned exposure for that year approximates written exposure (each policy contributes on average 6 months)

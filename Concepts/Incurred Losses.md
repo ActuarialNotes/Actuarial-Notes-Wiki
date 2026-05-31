@@ -1,6 +1,8 @@
 **Incurred losses** (also called reported losses) are the total estimated cost of claims at a given valuation date, equal to cumulative [[Paid Losses|paid losses]] plus outstanding case reserves on open claims — the standard basis for loss reserve development analysis.
 
-> $$\text{Incurred Losses} = \text{Paid Losses} + \text{Case Reserves}$$
+> $$\text{Incurred Losses}$$
+>
+> $$= \text{Paid Losses} + \text{Case Reserves}$$
 
 - Incurred loss [[Development Triangle|triangles]] develop faster than paid triangles at early maturities because reserves are established when claims are reported, before payment
 - Development on incurred triangles reflects both actual claim payments and changes in case reserve estimates, making them sensitive to reserve adequacy shifts

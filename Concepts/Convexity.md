@@ -1,6 +1,8 @@
 **Convexity** measures the curvature of the price–yield relationship for a bond or portfolio. While [[Modified Duration]] gives the first-order approximation of price sensitivity to yield changes, convexity captures the second-order effect:
 
-> $$\text{Convexity} = \frac{1}{P} \cdot \frac{d^2P}{dj^2} = \frac{\displaystyle\sum_{t=1}^{n} t(t+1) \cdot C_t \cdot v^{t+2}}{P}$$
+> $$\text{Convexity}$$
+>
+> $$= \frac{1}{P} \cdot \frac{d^2P}{dj^2} = \frac{\displaystyle\sum_{t=1}^{n} t(t+1) \cdot C_t \cdot v^{t+2}}{P}$$
 >
 > $$\frac{\Delta P}{P} \approx -D_{Mod} \cdot \Delta j + \tfrac{1}{2} \cdot \text{Convexity} \cdot (\Delta j)^2$$
 

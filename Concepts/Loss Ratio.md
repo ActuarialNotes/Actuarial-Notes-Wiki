@@ -1,6 +1,8 @@
 **Loss Ratio** is the ratio of incurred losses (and often loss adjustment expenses) to earned premium, measuring what fraction of premium revenue is consumed by claims and the cost of settling them.
 
-> $$\text{Loss Ratio} = \frac{\text{Losses (+ LAE)}}{\text{Earned Premium}}$$
+> $$\text{Loss Ratio}$$
+>
+> $$= \frac{\text{Losses (+ LAE)}}{\text{Earned Premium}}$$
 
 - The loss ratio is the primary profitability metric in property-casualty insurance; combined with the expense ratio it forms the [[Combined Ratio]]
 - If the actual loss ratio exceeds the [[Permissible Loss Ratio]], rates are inadequate and a rate increase is indicated

@@ -1,6 +1,8 @@
 **Fixed Expenses** are underwriting expenses that do not vary proportionally with premium—they are incurred on a per-policy or per-exposure basis regardless of premium size—and must be recovered through a per-exposure loading rather than a percentage-of-premium loading.
 
-> $$\text{Fixed Expense Load per Exposure} = \frac{\text{Total Fixed Expenses}}{\text{Number of Exposures}}$$
+> $$\text{Fixed Expense Load per Exposure}$$
+>
+> $$= \frac{\text{Total Fixed Expenses}}{\text{Number of Exposures}}$$
 
 - Examples include policy issuance costs, inspection fees, state filing fees, and a portion of agent commissions that are flat per policy rather than percentage-based
 - Contrast with [[Variable Expenses]], which are expressed as a constant percentage of premium (e.g., premium taxes, variable commissions); fixed expenses create a dollar amount added per exposure unit

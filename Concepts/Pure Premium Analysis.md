@@ -1,6 +1,8 @@
 **Pure Premium Analysis** is the examination of expected loss and LAE per unit of exposure — decomposed into frequency and severity components — used to assess pricing adequacy, detect cost trends, and compare relativities across classes or territories.
 
-> $$\text{Pure Premium} = \frac{\text{Losses + LAE}}{\text{Earned Exposures}} = \text{Frequency} \times \text{Severity}$$
+> $$\text{Pure Premium}$$
+>
+> $$= \frac{\text{Losses + LAE}}{\text{Earned Exposures}} = \text{Frequency} \times \text{Severity}$$
 
 - Pure premiums are compared to the rate-implied pure premium (= Current Rate × PLR) to assess adequacy; a ratio above 1.0 signals inadequacy
 - The frequency-severity decomposition identifies whether adverse results are driven by more claims (frequency increase) or higher average costs (severity increase), guiding different corrective actions

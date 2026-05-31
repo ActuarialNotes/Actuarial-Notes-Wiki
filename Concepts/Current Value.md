@@ -1,6 +1,8 @@
 The **current value** of a cash flow stream is its value at a specified reference point in time — not necessarily today (present) or at the end (future). It is computed by discounting future cash flows and accumulating past cash flows to the reference date using the applicable [[Interest Rate]] or [[Accumulation Function]].
 
-> $$\text{Current Value at time } t = \sum_{k} C_k \cdot \frac{a(t)}{a(t_k)}$$
+> $$\text{Current Value at time } t$$
+>
+> $$= \sum_{k} C_k \cdot \frac{a(t)}{a(t_k)}$$
 
 - $a(t)$ is the [[Accumulation Function]] and $C_k$ is the cash flow at time $t_k$.
 

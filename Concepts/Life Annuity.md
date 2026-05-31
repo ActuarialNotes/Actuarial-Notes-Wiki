@@ -1,6 +1,8 @@
 A **Life Annuity** pays periodic benefits contingent on the survival of one or more lives. The **whole life annuity** pays 1 continuously per unit time for as long as the insured lives. Its expected present value (EPV) for a life aged $x$ is $\bar{a}_x$.
 
-> $$\bar{a}_x = E\!\left[\bar{a}_{\overline{T_x}|}\right] = \int_0^\infty e^{-\delta t}\,{_t}p_x\,dt$$
+> $$\bar{a}_x = E\!\left[\bar{a}_{\overline{T_x}|}\right]$$
+>
+> $$= \int_0^\infty e^{-\delta t}\,{_t}p_x\,dt$$
 >
 > $$\bar{a}_x = \frac{1 - \bar{A}_x}{\delta}$$
 

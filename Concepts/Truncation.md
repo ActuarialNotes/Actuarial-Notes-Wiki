@@ -1,7 +1,11 @@
 **Truncation** occurs when observations below (or above) a threshold are **not recorded at all** — unlike [[Censoring]], which records that an unobserved value exists. In insurance, **left-truncation** arises with deductibles: only losses exceeding the deductible $d$ are reported.
 
 > **Left-truncated likelihood contribution** (only losses $X > d$ are observed):
-> $$L_i(\theta) = \frac{f(x \mid \theta)}{S(d \mid \theta)} = \frac{f(x \mid \theta)}{P(X > d \mid \theta)}, \quad x > d$$
+> $$L_i(\theta) = \frac{f(x \mid \theta)}{S(d \mid \theta)}$$
+>
+> $$= \frac{f(x \mid \theta)}{P(X > d \mid \theta)}$$
+>
+> $$x > d$$
 
 - Under left-truncation at $d$, the effective distribution is the **conditional** distribution $X \mid X > d$
 - Failing to adjust for truncation leads to **upward bias** in estimated means (only the larger claims are seen)

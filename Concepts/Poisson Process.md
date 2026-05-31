@@ -1,6 +1,8 @@
 A **Poisson Process** $\{N(t), t \geq 0\}$ is a counting process that models the number of events occurring in a time interval when events arrive independently at a constant average rate $\lambda > 0$.
 
-> $$P(N(t) = k) = \frac{e^{-\lambda t}(\lambda t)^k}{k!}, \quad k = 0, 1, 2, \ldots$$
+> $$P(N(t) = k) = \frac{e^{-\lambda t}(\lambda t)^k}{k!}$$
+>
+> $$k = 0, 1, 2, \ldots$$
 >
 > $$E[N(t)] = \text{Var}(N(t)) = \lambda t$$
 

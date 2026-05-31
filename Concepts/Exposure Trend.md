@@ -1,6 +1,8 @@
 **Exposure Trend** is the systematic annual change in the average value of the exposure base over time, relevant when the exposure base is denominated in dollars (e.g., payroll, sales receipts, insured property values) and is therefore subject to economic inflation; in the [[Pure Premium Method]], both losses and exposures must be trended.
 
-> $$\text{Trended Exposure} = \text{Historical Exposure} \times (1 + t_E)^{n}$$
+> $$\text{Trended Exposure}$$
+>
+> $$= \text{Historical Exposure} \times (1 + t_E)^{n}$$
 
 - If exposures grow due to inflation but losses also grow due to the same inflation, the exposure trend partially offsets the [[Loss Trend]], reducing the net pure premium trend
 - Failure to trend dollar-denominated exposures causes the denominator to be understated in historical terms, overstating the historical pure premium and indicating an unnecessarily large rate increase

@@ -2,7 +2,9 @@
 
 - The premium amortized in period $t$ equals the excess coupon over the yield earned:
 
-> $$\text{Premium amortized in period } t = (Fr - Cj) \cdot v^{n-t+1}$$
+> $$\text{Premium amortized in period } t$$
+>
+> $$= (Fr - Cj) \cdot v^{n-t+1}$$
 
 - Where $F$ = face, $r$ = coupon rate per period, $C$ = redemption value, $j$ = yield rate.
 - The [[Book Value]] decreases each period toward $C$ at maturity.

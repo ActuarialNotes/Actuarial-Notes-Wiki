@@ -1,6 +1,8 @@
 **Case Outstanding Development Method** is a reserving technique that projects ultimate losses by applying development factors to case reserves (open claim outstanding amounts) rather than to total incurred losses, isolating the development of reserves already established by the claims department.
 
-> $$\text{Ultimate} = \text{Paid} + \text{Case Reserves} \times f_{\text{case}}$$
+> $$\text{Ultimate}$$
+>
+> $$= \text{Paid} + \text{Case Reserves} \times f_{\text{case}}$$
 
 > $$\text{IBNR} = \text{Case Reserves} \times (f_{\text{case}} - 1)$$
 

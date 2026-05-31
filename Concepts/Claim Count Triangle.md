@@ -1,8 +1,12 @@
 **Claim Count Triangle** is a development triangle that organizes cumulative reported claim counts (rather than dollar losses) by accident year and development age, used to analyze claim frequency development separately from severity and to validate or supplement dollar loss triangles.
 
-> $$\text{Ultimate Claim Count} = \text{Reported Count at age }n \times \text{CDF}_{\text{count}, n \to \text{ult}}$$
+> $$\text{Ultimate Claim Count}$$
+>
+> $$= \text{Reported Count at age }n \times \text{CDF}_{\text{count}, n \to \text{ult}}$$
 
-> $$\text{Ultimate Severity} = \frac{\text{Ultimate Losses}}{\text{Ultimate Claim Count}}$$
+> $$\text{Ultimate Severity}$$
+>
+> $$= \frac{\text{Ultimate Losses}}{\text{Ultimate Claim Count}}$$
 
 - Count CDFs are developed exactly like loss CDFs using age-to-age factors; count factors are typically smaller than loss factors because counts mature faster (claims are reported before all payments are made)
 - The frequency-severity approach projects counts and average severity independently, then multiplies: Ultimate Losses $=$ Ultimate Count $\times$ Ultimate Severity; useful when severity trends differ from frequency trends

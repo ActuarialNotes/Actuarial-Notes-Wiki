@@ -5,7 +5,9 @@ The **effective discount rate** $d$ is the interest paid at the **beginning** of
 - $i$ is the effective [[Interest Rate]] and $v$ is the [[Discount Factor]].
 - The relationship between $i$ and $d$ is:
 
-> $$1 - d = v = \frac{1}{1+i} \qquad \Longleftrightarrow \qquad i = \frac{d}{1-d}$$
+> $$1 - d = v = \frac{1}{1+i}$$
+>
+> $$\Longleftrightarrow \qquad i = \frac{d}{1-d}$$
 
 - Under discount, $1$ today accumulates to $\frac{1}{1-d}$ after one period.
 

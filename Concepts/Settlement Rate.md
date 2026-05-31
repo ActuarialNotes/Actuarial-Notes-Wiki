@@ -1,6 +1,8 @@
 **Settlement rate** (claim closure rate) is the proportion of reported claims that have been closed or finalized by a given development age, measuring how quickly the claims department resolves open files.
 
-> $$\text{Closure Rate at Age } n = \frac{\text{Cumulative Closed Claims at Age } n}{\text{Ultimate Claim Count}}$$
+> $$\text{Closure Rate at Age } n$$
+>
+> $$= \frac{\text{Cumulative Closed Claims at Age } n}{\text{Ultimate Claim Count}}$$
 
 - An increase in settlement rates (faster closure) shifts losses from reported-but-open to paid, causing the paid loss triangle to develop faster than historical patterns suggest — if undetected, this leads to reserve underestimation using paid development methods
 - The [[Berquist Sherman Method|Berquist-Sherman]] adjustment for settlement rate changes restates the paid loss triangle to reflect a constant closure rate, removing the distortion before applying development factors

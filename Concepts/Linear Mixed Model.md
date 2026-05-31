@@ -2,7 +2,11 @@ A **Linear Mixed Model (LMM)** extends ordinary linear regression by including b
 
 > $$\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\mathbf{u} + \boldsymbol{\varepsilon}$$
 >
-> $$\mathbf{u} \sim N(\mathbf{0}, \mathbf{G}), \quad \boldsymbol{\varepsilon} \sim N(\mathbf{0}, \mathbf{R}), \quad \mathbf{u} \perp \boldsymbol{\varepsilon}$$
+> $$\mathbf{u} \sim N(\mathbf{0}, \mathbf{G})$$
+>
+> $$\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \mathbf{R})$$
+>
+> $$\mathbf{u} \perp \boldsymbol{\varepsilon}$$
 
 **Model components:**
 

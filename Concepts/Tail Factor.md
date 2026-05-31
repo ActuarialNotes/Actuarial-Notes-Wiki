@@ -1,6 +1,8 @@
 **Tail Factor** is a development factor applied beyond the last observable age in the loss triangle, accounting for losses that will continue to emerge after the data window ends; it is the final multiplier in the CDF chain from the last triangle age to ultimate.
 
-> $$\text{CDF}_{\text{last age} \to \text{ult}} = f_{\text{last observable}} \times \text{Tail Factor}$$
+> $$\text{CDF}_{\text{last age} \to \text{ult}}$$
+>
+> $$= f_{\text{last observable}} \times \text{Tail Factor}$$
 
 - Sources for selecting the tail: industry benchmark data (ISO, rating bureaus), curve-fitting the observed age-to-age factor pattern to extrapolate (exponential or inverse power decay), the **Bondy method** (tail $\approx$ last observable factor), or actuarial judgment based on line-of-business settlement characteristics
 - The tail is most significant for **long-tail lines** (workers compensation, general liability, medical malpractice) and near 1.000 for short-tail lines (auto physical damage, property)

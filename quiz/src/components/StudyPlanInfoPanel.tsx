@@ -18,19 +18,19 @@ const LEVELS: { key: string; label: string; desc: string; color: string }[] = [
     key: 'level1',
     label: 'Level 1',
     desc: 'First correct answer — fragile, needs reinforcement soon.',
-    color: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40',
+    color: 'bg-green-50 text-green-600 border-green-200 dark:bg-green-950/20 dark:text-green-500 dark:border-green-900',
   },
   {
     key: 'level2',
     label: 'Level 2',
     desc: 'Several correct answers across at least two days.',
-    color: 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/40',
+    color: 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800',
   },
   {
     key: 'level3',
     label: 'Level 3',
     desc: 'Mastered — including at least one hard question.',
-    color: 'bg-green-500/15 text-green-700 dark:text-green-300 border-green-500/40',
+    color: 'bg-green-200 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-700',
   },
   {
     key: 'forgotten',
@@ -69,6 +69,16 @@ function ForgettingCurveSlide() {
         <li>· Level 2 → Level 1 after {DECAY_DAYS_LEVEL2} more days</li>
         <li>· Level 1 → Forgotten after {DECAY_DAYS_LEVEL1} more days</li>
       </ul>
+      <svg viewBox="0 0 200 60" className="w-full h-14 mt-1" aria-hidden="true">
+        <path
+          d="M 2 8 C 30 14, 50 38, 90 48 S 160 58, 198 58"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          className="text-primary/60"
+        />
+        <line x1="2" y1="58" x2="198" y2="58" stroke="currentColor" strokeWidth="0.5" className="text-border" />
+      </svg>
     </div>
   )
 }

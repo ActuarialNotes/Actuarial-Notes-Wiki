@@ -100,12 +100,13 @@ function StudyGuideRadial({
       const n = topic.concepts.length
       if (n === 0) { cursor += topicDeg; continue }
       const slotDeg = topicDeg / n
+      const gap = Math.min(SG_CONCEPT_GAP, slotDeg * 0.5)
 
       for (const concept of topic.concepts) {
         const rec = bySlug.get(concept.name.toLowerCase())
         const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
-        const startDeg = cursor + SG_CONCEPT_GAP / 2
-        const endDeg = cursor + slotDeg - SG_CONCEPT_GAP / 2
+        const startDeg = cursor + gap / 2
+        const endDeg = cursor + slotDeg - gap / 2
         if (endDeg > startDeg + 0.5) {
           result.push({ startDeg, endDeg, conceptName: concept.name, topicName: topic.name, state })
         }

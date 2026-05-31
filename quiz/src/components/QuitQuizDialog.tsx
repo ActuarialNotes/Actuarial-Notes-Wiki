@@ -36,7 +36,7 @@ export function QuitQuizDialog({ mode, onCancel, onConfirm, onFinish }: QuitQuiz
             Your progress in this session will be lost. This can't be undone.
           </p>
         </div>
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-wrap justify-end gap-2">
           <Button variant="outline" size="sm" onClick={onCancel}>
             Cancel
           </Button>

@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { GraduationCap, Loader2, LogIn, PlusCircle, Sparkles, X } from 'lucide-react'
+import { Gem, GraduationCap, Loader2, LogIn, LogOut, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -24,6 +24,7 @@ import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
 import { LOCALIZED_EXAMS } from '@/data/examSittings'
+import { useGems } from '@/hooks/useGems'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -101,12 +102,13 @@ function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
 export default function Dashboard() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { user, loading: authLoading } = useAuth()
+  const { user, loading: authLoading, signOut } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
   const { progress: examProgress, targetDates, updateTargetDate, loadingExams } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
   const { isPremium } = useSubscription()
+  const { balance: gemBalance } = useGems()
 
   const popupOpen = useConceptPopup(s => s.open)
   const closePopup = useConceptPopup(s => s.close)
@@ -124,6 +126,9 @@ export default function Dashboard() {
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
     () => new URLSearchParams(location.search).get('upgraded') === '1',
   )
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [signOutConfirm, setSignOutConfirm] = useState(false)
+  const profileRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (showWelcomeModal) sessionStorage.removeItem('show_welcome')
@@ -165,6 +170,20 @@ export default function Dashboard() {
     window.addEventListener(LEVELUP_EVENT, refreshMastery)
     return () => window.removeEventListener(LEVELUP_EVENT, refreshMastery)
   }, [refreshMastery])
+
+  useEffect(() => {
+    if (!profileOpen) {
+      setSignOutConfirm(false)
+      return
+    }
+    function handleClickOutside(e: MouseEvent) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [profileOpen])
 
   // All exams that are marked in_progress and have a known syllabus
   const inProgressSyllabi = useMemo(
@@ -337,11 +356,96 @@ export default function Dashboard() {
           )}
         </div>
         <div className="flex items-center gap-2.5 flex-wrap">
-          {!isGuest && (
-            <MascotWidget compact avatarUrl={avatarUrl} initials={initials} context={mascotContext} />
-          )}
-          {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
-          <span className="text-sm font-semibold truncate min-w-0 flex-1">{displayName}</span>
+          {/* Avatar + name — clicking opens the profile dropdown (same as desktop sidebar) */}
+          <div
+            ref={profileRef}
+            className="relative flex items-center gap-2.5 flex-1 min-w-0"
+            onClick={() => !isGuest && setProfileOpen(v => !v)}
+            style={{ cursor: isGuest ? 'default' : 'pointer' }}
+          >
+            {!isGuest && (
+              <MascotWidget compact avatarUrl={avatarUrl} initials={initials} context={mascotContext} />
+            )}
+            {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
+            <span className="text-sm font-semibold truncate min-w-0">{displayName}</span>
+
+            {/* Profile dropdown */}
+            {profileOpen && !isGuest && (
+              <div
+                className="absolute top-full left-0 mt-1 z-50 min-w-[180px] rounded-md border bg-popover shadow-md py-1"
+                onClick={e => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => { navigate('/store'); setProfileOpen(false) }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                >
+                  <ShoppingBag className="h-4 w-4 shrink-0" />
+                  <span className="flex-1 text-left">Store</span>
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                    <Gem className="h-3 w-3" />
+                    {gemBalance}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setExamsOpen(true); setProfileOpen(false) }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                >
+                  <GraduationCap className="h-4 w-4 shrink-0" />
+                  <span>Exams</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { navigate('/settings'); setProfileOpen(false) }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                >
+                  <Settings2 className="h-4 w-4 shrink-0" />
+                  <span>Settings</span>
+                </button>
+                {!isPremium && (
+                  <button
+                    type="button"
+                    onClick={() => { navigate('/upgrade'); setProfileOpen(false) }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors"
+                  >
+                    <Sparkles className="h-4 w-4 shrink-0" />
+                    <span>Upgrade to Premium</span>
+                  </button>
+                )}
+                {signOutConfirm ? (
+                  <div className="px-3 py-2 space-y-2">
+                    <p className="text-xs text-muted-foreground">Sign out?</p>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => { signOut(); setProfileOpen(false); setSignOutConfirm(false) }}
+                        className="flex-1 rounded-md bg-destructive text-destructive-foreground text-xs py-1.5 font-medium hover:bg-destructive/90 transition-colors"
+                      >
+                        Sign out
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSignOutConfirm(false)}
+                        className="flex-1 rounded-md border bg-background text-xs py-1.5 font-medium hover:bg-accent transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setSignOutConfirm(true)}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
+                  >
+                    <LogOut className="h-4 w-4 shrink-0" />
+                    <span>Sign out</span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
           {overallPct !== null && activeSyllabus && (
             <button
               type="button"

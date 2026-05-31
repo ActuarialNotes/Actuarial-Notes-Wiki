@@ -92,9 +92,13 @@ export default function Quiz() {
   // Local pre-confirmation selection — not committed to store until "Confirm Answer"
   const [pendingAnswer, setPendingAnswer] = useState<string | null>(null)
 
+  // Tracks whether the user clicked "Change Answer" on the current question
+  const [isChangingAnswer, setIsChangingAnswer] = useState(false)
+
   // Clear pending selection and scroll to top whenever the question changes
   useEffect(() => {
     setPendingAnswer(null)
+    setIsChangingAnswer(false)
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [currentIndex])
 
@@ -133,8 +137,11 @@ export default function Quiz() {
 
   function handleConfirmAnswer() {
     if (pendingAnswer && currentQuestion) {
-      playSound(pendingAnswer === currentQuestion.answer ? 'correct' : 'wrong')
+      if (!isChangingAnswer) {
+        playSound(pendingAnswer === currentQuestion.answer ? 'correct' : 'wrong')
+      }
       answerQuestion(currentQuestion.id, pendingAnswer)
+      setIsChangingAnswer(false)
     }
   }
 
@@ -143,6 +150,7 @@ export default function Quiz() {
     const previous = committedAnswer
     clearAnswer(currentQuestion.id)
     setPendingAnswer(previous)
+    setIsChangingAnswer(true)
   }
 
   // Show explanation inline only in quiz mode when user chose to reveal during
@@ -264,13 +272,15 @@ export default function Quiz() {
         </div>
       </div>
 
-      <ProgressBar
-        current={currentIndex + 1}
-        total={storeQuestions.length}
-        onNavigate={goToQuestion}
-        flaggedIds={flaggedIds}
-        questionIds={storeQuestions.map(q => q.id)}
-      />
+      <div className="pb-2">
+        <ProgressBar
+          current={currentIndex + 1}
+          total={storeQuestions.length}
+          onNavigate={goToQuestion}
+          flaggedIds={flaggedIds}
+          questionIds={storeQuestions.map(q => q.id)}
+        />
+      </div>
 
       {showQuitDialog && (
         <QuitQuizDialog
@@ -300,7 +310,7 @@ export default function Quiz() {
       )}
 
       {(currentIndex > 0 || status === 'reviewing' || pendingAnswer !== null) && (
-        <div className="flex justify-between items-center">
+        <div className="flex flex-wrap justify-between items-center gap-2">
           <div>
             {currentIndex > 0 && (
               <Button variant="outline" size="lg" onClick={goToPreviousQuestion}>
@@ -310,7 +320,7 @@ export default function Quiz() {
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
             {!isLocked && pendingAnswer !== null && (
               <Button
                 onClick={handleConfirmAnswer}

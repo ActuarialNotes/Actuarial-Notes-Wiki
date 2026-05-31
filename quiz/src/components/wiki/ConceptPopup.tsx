@@ -39,6 +39,7 @@ export function ConceptPopup() {
   const playBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
   const viewingRef = useRef<HTMLDivElement>(null)
+  const gallerySeekDirection = useRef<0 | 1 | -1>(0)
   const { user } = useAuth()
   const { isPremium } = useSubscription()
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
@@ -59,10 +60,27 @@ export function ConceptPopup() {
     fetchWikiFile(entryRefToRepoPath(current))
       .then(raw => {
         if (cancelled) return
+        const imgs = extractImages(raw)
         setContent(raw)
-        setImages(extractImages(raw))
-        setShowGallery(false)
+        setImages(imgs)
         setStatus('idle')
+        const seeking = gallerySeekDirection.current
+        if (seeking !== 0) {
+          if (imgs.length > 0) {
+            gallerySeekDirection.current = 0
+            setGalleryIndex(0)
+            setShowGallery(true)
+          } else {
+            const nextIdx = index + seeking
+            if (nextIdx >= 0 && nextIdx < list.length) {
+              navigate(seeking)
+            } else {
+              gallerySeekDirection.current = 0
+            }
+          }
+        } else {
+          setShowGallery(false)
+        }
       })
       .catch(() => {
         if (cancelled) return
@@ -394,7 +412,13 @@ export function ConceptPopup() {
         <button
           type="button"
           disabled={!canPrev}
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            if (showGallery) {
+              setShowGallery(false)
+              gallerySeekDirection.current = -1
+            }
+            navigate(-1)
+          }}
           className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
@@ -476,7 +500,13 @@ export function ConceptPopup() {
         <button
           type="button"
           disabled={!canNext}
-          onClick={() => navigate(1)}
+          onClick={() => {
+            if (showGallery) {
+              setShowGallery(false)
+              gallerySeekDirection.current = 1
+            }
+            navigate(1)
+          }}
           className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           <span>Next</span>

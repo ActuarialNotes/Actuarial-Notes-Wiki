@@ -26,16 +26,12 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
   const containerRef = useRef<HTMLDivElement>(null)
   const dragState = useRef<{ sx: number; sy: number; px: number; py: number } | null>(null)
   const hasMoved = useRef(false)
+  const activePointers = useRef<Map<number, { x: number; y: number }>>(new Map())
+  const pinchState = useRef<{ initialDist: number; initialZoom: number } | null>(null)
+  const wasPinching = useRef(false)
 
   const canPrev = index > 0
   const canNext = index < images.length - 1
-
-  // Lock body scroll while gallery is open
-  useEffect(() => {
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = prev }
-  }, [])
 
   function resetView() {
     setZoom(1)
@@ -81,50 +77,86 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
     return () => window.removeEventListener('keydown', onKey)
   }, [index, canPrev, canNext, onClose])
 
+  function getPinchDist() {
+    const pts = Array.from(activePointers.current.values())
+    if (pts.length < 2) return 0
+    return Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y)
+  }
+
   function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if (e.button !== 0) return
+    if (e.button !== 0 && e.pointerType !== 'touch') return
     e.preventDefault()
     e.currentTarget.setPointerCapture(e.pointerId)
-    dragState.current = { sx: e.clientX, sy: e.clientY, px: pan.x, py: pan.y }
-    hasMoved.current = false
-    setIsDragging(true)
-    if (zoom > MIN_ZOOM) setCursor('grabbing')
+    activePointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+    if (activePointers.current.size === 2) {
+      wasPinching.current = true
+      pinchState.current = { initialDist: getPinchDist(), initialZoom: zoom }
+      dragState.current = null
+    } else {
+      dragState.current = { sx: e.clientX, sy: e.clientY, px: pan.x, py: pan.y }
+      hasMoved.current = false
+      setIsDragging(true)
+      if (zoom > MIN_ZOOM) setCursor('grabbing')
+    }
   }
 
   function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    if (!dragState.current) return
+    activePointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
     e.preventDefault()
+
+    if (activePointers.current.size === 2 && pinchState.current) {
+      const dist = getPinchDist()
+      applyZoom(pinchState.current.initialZoom * (dist / pinchState.current.initialDist))
+      return
+    }
+
+    if (!dragState.current) return
     const dx = e.clientX - dragState.current.sx
     const dy = e.clientY - dragState.current.sy
     if (Math.abs(dx) > 4 || Math.abs(dy) > 4) hasMoved.current = true
     if (zoom > MIN_ZOOM && hasMoved.current) {
-      const newPan = clampPan(
+      setPan(clampPan(
         dragState.current.px + dx / zoom,
         dragState.current.py + dy / zoom,
         zoom,
-      )
-      setPan(newPan)
+      ))
     }
   }
 
   function onPointerUp(e: React.PointerEvent<HTMLDivElement>) {
     e.currentTarget.releasePointerCapture(e.pointerId)
-    const wasDrag = hasMoved.current
-    dragState.current = null
-    hasMoved.current = false
-    setIsDragging(false)
-    setCursor(zoom > MIN_ZOOM ? 'grab' : 'pointer')
-    if (!wasDrag) onClose()
+    activePointers.current.delete(e.pointerId)
+
+    if (activePointers.current.size === 1) {
+      // One finger lifted during pinch — reset to single-touch state
+      pinchState.current = null
+      dragState.current = null
+      hasMoved.current = false
+      return
+    }
+
+    if (activePointers.current.size === 0) {
+      const wasDrag = hasMoved.current
+      const wasPinch = wasPinching.current
+      wasPinching.current = false
+      pinchState.current = null
+      dragState.current = null
+      hasMoved.current = false
+      setIsDragging(false)
+      setCursor(zoom > MIN_ZOOM ? 'grab' : 'pointer')
+      if (!wasDrag && !wasPinch) onClose()
+    }
   }
 
   const current = images[index]
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col bg-black/95"
+      className="fixed inset-x-0 top-0 bottom-[7.5rem] md:bottom-16 z-50 flex flex-col bg-black/95"
       onWheel={e => e.stopPropagation()}
     >
-      {/* Custom slider thumb styles */}
+      {/* Custom slider styles */}
       <style>{`
         .gallery-slider {
           -webkit-appearance: none;
@@ -136,8 +168,8 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           cursor: pointer;
         }
         .gallery-slider::-webkit-slider-runnable-track {
-          height: 8px;
-          border-radius: 4px;
+          height: 14px;
+          border-radius: 7px;
           background: rgba(255,255,255,0.2);
         }
         .gallery-slider::-webkit-slider-thumb {
@@ -149,11 +181,11 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           background: white;
           cursor: pointer;
           box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-          margin-top: -16px;
+          margin-top: -13px;
         }
         .gallery-slider::-moz-range-track {
-          height: 8px;
-          border-radius: 4px;
+          height: 14px;
+          border-radius: 7px;
           background: rgba(255,255,255,0.2);
         }
         .gallery-slider::-moz-range-thumb {
@@ -196,7 +228,7 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           </button>
         )}
 
-        {/* Image container — touch-action: none kills background scroll on mobile */}
+        {/* Image container — touch-action: none lets pointer events handle all gestures */}
         <div
           ref={containerRef}
           className="h-full w-full flex items-center justify-center overflow-hidden select-none"
@@ -240,9 +272,9 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
         </div>
       )}
 
-      {/* Zoom slider — full brightness, large thumb */}
+      {/* Zoom slider */}
       <div className="shrink-0 flex items-center gap-4 px-6 py-4">
-        <span className="text-xs text-white/50 tabular-nums w-6 shrink-0">1×</span>
+        <span className="text-base text-white/50 tabular-nums w-8 shrink-0">1×</span>
         <input
           type="range"
           min={MIN_ZOOM}
@@ -253,7 +285,7 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           className="gallery-slider flex-1"
           aria-label="Zoom"
         />
-        <span className="text-xs text-white/50 tabular-nums w-6 shrink-0 text-right">4×</span>
+        <span className="text-base text-white/50 tabular-nums w-8 shrink-0 text-right">4×</span>
         <span className="text-base text-white tabular-nums w-12 text-right shrink-0 font-semibold">
           {zoom.toFixed(1)}×
         </span>
@@ -268,7 +300,7 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
         )}
       </div>
 
-      {/* Thumbnail strip — full brightness */}
+      {/* Thumbnail strip */}
       {images.length > 1 && (
         <div className="shrink-0 flex items-center gap-2 px-4 pb-4 overflow-x-auto">
           {images.map((img, i) => (

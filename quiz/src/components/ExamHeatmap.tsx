@@ -81,6 +81,8 @@ interface Props {
   /** When true, restricts the visible columns to the current calendar month only.
    *  Prevents horizontal overflow on narrow mobile screens. */
   mobileMonthOnly?: boolean
+  /** When provided, draws a white ring around the matching calendar cell. */
+  highlightedDay?: string | null
 }
 
 export function ExamHeatmap({
@@ -94,12 +96,20 @@ export function ExamHeatmap({
   onOpenStudyPlan,
   dayPlanPct,
   mobileMonthOnly = false,
+  highlightedDay,
 }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
   const [editingReady, setEditingReady] = useState(false)
   const [draftReady, setDraftReady] = useState('')
-  const [showFullTimeline, setShowFullTimeline] = useState(false)
+  const [showFullTimeline, setShowFullTimeline] = useState(() => {
+    try {
+      const stored = localStorage.getItem('actuarial_heatmap_timeline')
+      return stored !== null ? stored === '1' : true
+    } catch {
+      return true
+    }
+  })
   const inputRef = useRef<HTMLInputElement>(null)
   const inputReadyRef = useRef<HTMLInputElement>(null)
 
@@ -256,10 +266,14 @@ export function ExamHeatmap({
       {/* Month labels */}
       <div className="flex items-end gap-[2px]">
         <div className="shrink-0" style={{ width: 16 }} />
-        <div className="flex-1 flex gap-[2px] overflow-hidden">
+        <div className="flex-1 flex gap-[2px]" style={{ height: 12 }}>
           {visibleColumns.map(col => (
-            <div key={col.key} className="flex-1 min-w-0 text-[10px] text-muted-foreground leading-none truncate">
-              {col.monthLabel ?? ''}
+            <div key={col.key} className="flex-1 relative">
+              {col.monthLabel && (
+                <span className="absolute left-0 bottom-0 text-[10px] text-muted-foreground leading-none whitespace-nowrap">
+                  {col.monthLabel}
+                </span>
+              )}
             </div>
           ))}
         </div>
@@ -270,11 +284,15 @@ export function ExamHeatmap({
               type="button"
               role="switch"
               aria-checked={showFullTimeline}
-              onClick={() => setShowFullTimeline(v => !v)}
+              onClick={() => {
+                const next = !showFullTimeline
+                setShowFullTimeline(next)
+                try { localStorage.setItem('actuarial_heatmap_timeline', next ? '1' : '0') } catch {}
+              }}
               title={showFullTimeline ? 'Show current month only' : 'Show full timeline to exam date'}
-              className={`relative inline-flex h-[22px] w-10 shrink-0 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${showFullTimeline ? 'bg-primary' : 'bg-muted'}`}
+              className={`relative inline-flex h-[22px] w-10 shrink-0 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${showFullTimeline ? 'bg-muted-foreground/40' : 'bg-muted'}`}
             >
-              <span className={`pointer-events-none inline-block h-4 w-4 rounded-full shadow-sm transition-transform ${showFullTimeline ? 'translate-x-5 bg-slate-300 dark:bg-slate-500' : 'translate-x-[3px] bg-white'}`} />
+              <span className={`pointer-events-none inline-block h-4 w-4 rounded-full shadow-sm transition-transform ${showFullTimeline ? 'translate-x-5 bg-background' : 'translate-x-[3px] bg-muted-foreground/50'}`} />
             </button>
             <span className={`text-[11px] leading-none ${showFullTimeline ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>Timeline</span>
           </div>
@@ -328,7 +346,7 @@ export function ExamHeatmap({
                             : col.isTargetReadyWeek ? 'bg-amber-400/10 h-[14px]'
                             : 'h-[14px] bg-muted/20'
                         : `h-[14px] ${cell.data === null ? 'bg-muted/30' : ''}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
-                    }${cell.isToday ? ' ring-1 ring-inset ring-foreground/70 dark:ring-white/80' : ''}`}
+                    }${cell.key === highlightedDay ? ' ring-2 ring-white/90' : cell.isToday ? ' ring-1 ring-inset ring-foreground/70 dark:ring-white/80' : ''}`}
                   />
                 )
               })}

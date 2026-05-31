@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2 } from 'lucide-react'
+import { AlertTriangle, ArrowUp, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -785,8 +785,10 @@ export function ReadinessCard({
     <div className="space-y-4">
       {/* Bento grid: left = heatmap + plan, right = gauges + actions (md+) */}
       <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
-      {/* Primary exam card — left column */}
-      <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
+      {/* Left column: heatmap card + study plan card */}
+      <div className="space-y-4">
+      {/* Heatmap card */}
+      <Card className="border-0 shadow-none">
         <CardContent className="p-5 space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between gap-3">
@@ -818,6 +820,7 @@ export function ReadinessCard({
             onDayClick={date => { setSelectedDay(date) }}
             dayPlanPct={dayPlanPct}
             mobileMonthOnly={isMobile}
+            highlightedDay={selectedDay}
           />
 
           {/* Day panel — shown when a heatmap day is clicked */}
@@ -836,10 +839,10 @@ export function ReadinessCard({
                   <button
                     type="button"
                     onClick={() => setSelectedDay(null)}
-                    className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+                    className="flex items-center justify-center h-8 w-8 rounded-full border border-border bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                     aria-label="Clear day filter"
                   >
-                    ✕
+                    <X className="h-4 w-4" />
                   </button>
                 </div>
 
@@ -933,9 +936,14 @@ export function ReadinessCard({
             )
           })()}
 
-          {/* Today's Study Plan — inline in heatmap card when no day selected (or today selected) */}
-          {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
-            <div className="border-t pt-4 space-y-3">
+        </CardContent>
+      </Card>
+
+      {/* Today's Study Plan card */}
+      {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
+        <Card>
+          <CardContent className="p-5 space-y-3">
+            <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-semibold">Today's Study Plan</h3>
                 {/* Inline gems bonus pill */}
@@ -1084,17 +1092,18 @@ export function ReadinessCard({
               )}
 
             </div>
-          )}
+          </CardContent>
+        </Card>
+      )}
 
-          {/* Warnings */}
-          {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
-            <BehindWarning plan={plan} />
-          )}
-          {!loading && plan?.status === 'review_mode' && (
-            <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
-          )}
-        </CardContent>
-      </Card>
+      {/* Warnings */}
+      {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
+        <BehindWarning plan={plan} />
+      )}
+      {!loading && plan?.status === 'review_mode' && (
+        <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
+      )}
+      </div>{/* end left column */}
 
       {/* RIGHT COLUMN: Study Guide (premium only) */}
       {isPremium && (

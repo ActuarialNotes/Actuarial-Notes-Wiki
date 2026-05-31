@@ -12,7 +12,9 @@ import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/
 // already-cached plans (local + server), forcing one clean regeneration even
 // within the same calendar day. v2: fixed plans generated from empty mastery
 // records / aliased-concept lookups that left mastered concepts looking 'new'.
-export const PLAN_CACHE_VERSION = 2
+// v3: concept names now use the canonical page name instead of the syllabus
+// display alias (e.g. "Callable Bond" not "Callable").
+export const PLAN_CACHE_VERSION = 3
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

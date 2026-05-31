@@ -1,5 +1,5 @@
 export interface WikiConcept {
-  name: string     // display name shown in UI
+  name: string     // canonical concept page name (last path segment of target)
   target: string   // raw [[target]] before the | alias
   excerpt?: string // cleaned text of the syllabus line that mentions this concept
 }
@@ -44,8 +44,9 @@ function cleanWikiLinks(text: string): string {
 }
 
 // Extract all [[Name]] and [[Name|Display]] patterns from text.
-// Uses display text when present; falls back to the last segment of the path.
-// Deduplicates by lowercased name.
+// Always uses the last path segment of the target as the concept name so that
+// aliased links like [[Callable Bond|Callable]] produce name="Callable Bond",
+// not the syllabus shorthand "Callable". Deduplicates by lowercased name.
 function extractWikiLinks(text: string): WikiConcept[] {
   const regex = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g
   const seen = new Set<string>()
@@ -54,9 +55,8 @@ function extractWikiLinks(text: string): WikiConcept[] {
 
   while ((match = regex.exec(text)) !== null) {
     const target = match[1].trim()
-    const display = match[2]?.trim()
     const baseName = target.includes('/') ? target.split('/').pop()! : target
-    const name = display || baseName
+    const name = baseName
 
     if (!seen.has(name.toLowerCase())) {
       seen.add(name.toLowerCase())

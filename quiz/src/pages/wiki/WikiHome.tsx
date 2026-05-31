@@ -26,6 +26,9 @@ const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA']
 const SOA_TRACK_KEYS = new Set(['ASA', 'FSA'])
 const CAS_TRACK_KEYS = new Set(['ACAS', 'FCAS'])
 
+// WikiFloatingSearch height: h-[calc(3.5rem-1px)] + 1px border = 56px (sticky top-0 on mobile)
+const SEARCH_BAR_H = 56
+
 // Mirrors PACK_COLOR_PALETTE in Flashcards.tsx so in-progress exams share the same colour across tabs
 const PACK_COLORS = [
   { bg: 'bg-blue-500/10 border-blue-400/40',      bar: 'bg-blue-500',    text: 'text-blue-600 dark:text-blue-400' },
@@ -147,7 +150,8 @@ export default function WikiHome() {
         {/* ── Sticky block: Exams heading + filter + in-progress pills ── */}
         <div
           ref={examsHeaderRef}
-          className="sticky top-0 z-20 -mx-4 px-4 pt-3 pb-3 bg-background/95 backdrop-blur-sm border-b mb-4"
+          className="sticky z-20 -mx-4 px-4 pt-3 pb-3 bg-background/95 backdrop-blur-sm border-b mb-4"
+          style={{ top: `${SEARCH_BAR_H}px` }}
         >
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -204,7 +208,7 @@ export default function WikiHome() {
                 {/* Sticky track header — sits just below the sticky Exams block */}
                 <div
                   className="sticky z-10 -mx-4 px-4 py-1.5 mb-3 bg-background/95 backdrop-blur-sm border-b"
-                  style={{ top: `${headerHeight}px` }}
+                  style={{ top: `${SEARCH_BAR_H + headerHeight}px` }}
                 >
                   <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
                     {track.name}
@@ -222,10 +226,11 @@ export default function WikiHome() {
                     const isCompleted = status === 'completed'
                     const targetDate = targetDates[examId]
 
-                    // Colour mirrors Flashcards tab assignment by in-progress order
-                    const inProgressIdx = match
-                      ? inProgressSyllabi.findIndex(s => s.examId === match.examId)
-                      : -1
+                    // Colour mirrors Flashcards tab assignment; key-based so it works
+                    // even when examIdFromFile can't match the syllabus label to exam.name
+                    const inProgressIdx = inProgressSyllabi.findIndex(
+                      s => wikiExamIdToProgressKey(s.examId) === examId,
+                    )
                     const colorEntry = isInProgress && inProgressIdx >= 0
                       ? PACK_COLORS[inProgressIdx % PACK_COLORS.length]
                       : null

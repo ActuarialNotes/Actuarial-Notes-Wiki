@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
-import { applyAnswer, decayIfStale, emptyRecord, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
+import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dailyProgressStore'
@@ -27,6 +27,7 @@ async function upsertMasteryFromResponses(
   userId: string,
   questions: Question[],
   responses: Record<string, { chosen: string }>,
+  fallbackRecords: ConceptMasteryRecord[] = [],
 ): Promise<MasteryTransition[]> {
   // Group answer events by (exam_id, concept_slug). Within a single quiz a
   // concept may be touched multiple times — fold them in question order so
@@ -55,22 +56,36 @@ async function upsertMasteryFromResponses(
     .in('concept_slug', [...new Set(events.map(e => e.conceptSlug))])
 
   if (selectError) {
-    // Throw so the caller falls back to computeMasteryTransitions with the
-    // hook's cached records. Continuing with empty records is dangerous:
-    // it overwrites real progress (e.g. level1 with correct_count=1) back to
-    // new/correct_count=0, silently resetting the mastery state machine and
-    // preventing concepts from ever advancing past Level 1.
-    throw new Error(`concept_mastery select failed: ${selectError.message}`)
+    // Log but do not throw — falling back to fallbackRecords (the hook's cached
+    // records) lets the upsert still run with the best available starting state.
+    // Throwing here would skip the DB write entirely; using empty records here
+    // would reset correct_count to 0 and overwrite real progress, preventing
+    // concepts from ever advancing past Level 1.
+    console.warn('concept_mastery select failed, using cached records:', selectError.message)
+  }
+
+  // Index fallback records for O(1) lookup. These are the hook's last-known
+  // records — potentially stale if a prior quiz in the same session already
+  // advanced the concept — but far better than starting from zero when the
+  // DB SELECT returns nothing.
+  const fallbackByKey = new Map<string, ConceptMasteryRecord>()
+  for (const r of fallbackRecords) {
+    fallbackByKey.set(`${r.exam_id}::${r.concept_slug}`, { ...r, state: sanitizeMasteryState(r.state) })
   }
 
   const byKey = new Map<string, ConceptMasteryRecord>()
-  for (const r of (existing ?? []) as ConceptMasteryRecord[]) {
+  for (const r of (!selectError && existing ? existing : []) as ConceptMasteryRecord[]) {
     byKey.set(`${r.exam_id}::${r.concept_slug}`, r)
   }
   for (const key of keys) {
     if (byKey.has(key)) continue
-    const [examId, conceptSlug] = key.split('::')
-    byKey.set(key, emptyRecord(userId, examId, conceptSlug))
+    // Prefer the hook's cached record over a blank emptyRecord. A cached record
+    // preserves the real correct_count from the last session; emptyRecord resets
+    // it to 0, causing the upsert to write count=1 (new→level1) and permanently
+    // prevent the concept from accumulating the count=2 needed for Level 2.
+    const [examId, ...rest] = key.split('::')
+    const conceptSlug = rest.join('::')
+    byKey.set(key, fallbackByKey.get(key) ?? emptyRecord(userId, examId, conceptSlug))
   }
 
   const now = new Date()
@@ -344,7 +359,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     // when a prior quiz already changed the concept's state in this session.
     let masteryTransitions: MasteryTransition[]
     try {
-      masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses)
+      masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords)
     } catch (masteryErr) {
       console.error('concept_mastery upsert failed:', masteryErr)
       // Fall back to stale computation so the session record and daily_completions

@@ -12,7 +12,7 @@ function HeatmapOverviewSlide() {
       <p className="text-muted-foreground">
         Each square represents one day of study. The color reflects your quiz activity for that day:
       </p>
-      <div className="space-y-2 text-xs text-muted-foreground">
+      <div className="space-y-2 text-sm text-muted-foreground">
         <div className="flex items-center gap-2.5">
           <span className="inline-block h-4 w-4 rounded-[2px] shrink-0" style={{ backgroundColor: 'rgba(34,197,94,0.25)' }} />
           <span>Some activity — lower average score</span>
@@ -30,44 +30,31 @@ function HeatmapOverviewSlide() {
           <span>No activity</span>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground">
-        Tap any past square to see your quiz sessions and concept level-ups for that day.
-        When a study plan is active, colors shift to reflect plan completion rather than score.
-      </p>
     </div>
   )
 }
 
 function ExamDatesSlide() {
   return (
-    <div className="space-y-4">
-      <div className="space-y-3">
-        <div className="rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5 space-y-1.5">
-          <div className="flex items-center gap-2 text-xs font-semibold">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary/70 shrink-0" />
-            Exam Date <span className="text-muted-foreground font-normal">(blue highlight)</span>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            The actual date of your exam sitting. The heatmap grid extends around this date and
-            the countdown shows days remaining. Tap the <span className="font-medium text-foreground">Exam:</span> label
-            below the heatmap to set or change it.
-          </p>
+    <div className="space-y-3">
+      <div className="rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5 space-y-1.5">
+        <div className="flex items-center gap-2 text-sm font-semibold">
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary/70 shrink-0" />
+          Exam Date <span className="text-muted-foreground font-normal">(blue highlight)</span>
         </div>
-        <div className="rounded-lg border border-amber-400/30 bg-amber-400/5 px-3 py-2.5 space-y-1.5">
-          <div className="flex items-center gap-2 text-xs font-semibold">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-amber-400 shrink-0" />
-            Target Ready Date <span className="text-muted-foreground font-normal">(amber highlight)</span>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            The date you want to feel fully prepared by — typically a few weeks before the exam
-            to leave time for final review. Your study plan paces all concepts to fit before
-            this date. Tap <span className="font-medium text-foreground">Target ready:</span> to set it.
-          </p>
-        </div>
+        <p className="text-sm text-muted-foreground">
+          The actual date of your exam sitting.
+        </p>
       </div>
-      <p className="text-xs text-muted-foreground">
-        Setting both dates unlocks the countdown timers and lets the study plan pace itself optimally.
-      </p>
+      <div className="rounded-lg border border-amber-400/30 bg-amber-400/5 px-3 py-2.5 space-y-1.5">
+        <div className="flex items-center gap-2 text-sm font-semibold">
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-amber-400 shrink-0" />
+          Target Ready Date <span className="text-muted-foreground font-normal">(amber highlight)</span>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          The date you want to feel fully prepared by — typically a few weeks before your exam.
+        </p>
+      </div>
     </div>
   )
 }
@@ -78,26 +65,16 @@ function RegistrationSlide() {
       <p className="text-muted-foreground">
         Actuarial exams are offered at fixed sittings throughout the year through the SOA and CAS.
       </p>
-      <div className="space-y-2.5 text-xs">
+      <div className="space-y-2.5 text-sm">
         <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1">
           <p className="font-semibold">SOA Exams (P, FM, IFM, LTAM, STAM, SRM, PA)</p>
-          <p className="text-muted-foreground">
-            Register at <span className="font-medium text-foreground">soa.org</span> → Candidates → Exam Registration.
-            Most exams have multiple sittings per year. Registration typically opens about 3 months before each window.
-          </p>
+          <p className="text-muted-foreground">Register at soa.org — most exams have multiple sittings per year.</p>
         </div>
         <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1">
           <p className="font-semibold">CAS Exams (Exams 1–9)</p>
-          <p className="text-muted-foreground">
-            Register at <span className="font-medium text-foreground">casact.org</span>.
-            Check the CAS exam calendar for sitting dates and registration deadlines.
-          </p>
+          <p className="text-muted-foreground">Register at casact.org — check the exam calendar for dates.</p>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground">
-        Fees vary by exam — early registration can save money. Once registered, set your exam date
-        here to unlock the countdown and study plan pacing.
-      </p>
     </div>
   )
 }

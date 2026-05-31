@@ -44,21 +44,16 @@ function SpacedRepetitionSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">
-        Instead of cramming, we revisit each concept at growing intervals — short gaps at first,
-        then longer ones as the concept sticks. Every successful recall strengthens the memory,
-        so the next review can safely wait longer.
+        Instead of cramming, we revisit each concept at growing intervals — short gaps at first, then longer ones as the concept sticks.
       </p>
       <div className="flex items-center gap-1.5 flex-wrap">
         {['Day 1', 'Day 3', 'Day 7', 'Day 14', 'Day 30'].map((d, i, arr) => (
           <span key={d} className="flex items-center gap-1.5">
-            <span className="text-xs font-medium px-2 py-0.5 rounded-md border bg-muted/40">{d}</span>
-            {i < arr.length - 1 && <span className="text-muted-foreground text-xs">›</span>}
+            <span className="text-sm font-medium px-2 py-0.5 rounded-md border bg-muted/40">{d}</span>
+            {i < arr.length - 1 && <span className="text-muted-foreground text-sm">›</span>}
           </span>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground">
-        Your study plan automatically schedules each concept at the right interval based on how well you know it.
-      </p>
     </div>
   )
 }
@@ -67,27 +62,13 @@ function ForgettingCurveSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">
-        Without practice, recall drops sharply at first and then more slowly. If a concept goes
-        untouched, its level decays one rung at a time:
+        Without practice, recall drops over time. If a concept goes untouched, its level decays one rung at a time:
       </p>
-      <ul className="text-xs text-muted-foreground space-y-1 pl-1">
+      <ul className="text-sm text-muted-foreground space-y-1 pl-1">
         <li>· Level 3 → Level 2 after {DECAY_DAYS_LEVEL3} days without a correct answer</li>
         <li>· Level 2 → Level 1 after {DECAY_DAYS_LEVEL2} more days</li>
         <li>· Level 1 → Forgotten after {DECAY_DAYS_LEVEL1} more days</li>
       </ul>
-      <svg viewBox="0 0 200 60" className="w-full h-14 mt-1" aria-hidden="true">
-        <path
-          d="M 2 8 C 30 14, 50 38, 90 48 S 160 58, 198 58"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          className="text-primary/60"
-        />
-        <line x1="2" y1="58" x2="198" y2="58" stroke="currentColor" strokeWidth="0.5" className="text-border" />
-      </svg>
-      <p className="text-xs text-muted-foreground">
-        Your study plan re-injects forgotten and fragile concepts at the right moment to flatten the curve.
-      </p>
     </div>
   )
 }
@@ -96,9 +77,7 @@ function LevellingSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">
-        Each concept moves through a ladder of states. Answering questions correctly — and across
-        multiple days, including at least one hard one — promotes a concept upward. Wrong streaks
-        or disuse send it back down.
+        Each concept moves through a ladder of states based on your quiz performance.
       </p>
       <div className="space-y-1.5">
         {LEVELS.map(l => (
@@ -106,7 +85,7 @@ function LevellingSlide() {
             <span className={`text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-md border shrink-0 mt-0.5 ${l.color}`}>
               {l.label}
             </span>
-            <span className="text-xs text-muted-foreground">{l.desc}</span>
+            <span className="text-sm text-muted-foreground">{l.desc}</span>
           </div>
         ))}
       </div>

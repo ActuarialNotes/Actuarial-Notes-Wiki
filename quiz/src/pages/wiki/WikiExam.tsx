@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams, Link, useSearchParams } from 'react-router-dom'
+import { useParams, Link, useSearchParams, useNavigationType } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
@@ -104,6 +104,14 @@ export default function WikiExam() {
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const popupOpenedRef = useRef(false)
+  const navigationType = useNavigationType()
+
+  // Scroll to top on forward navigation; don't override browser's own restoration on back/forward
+  useEffect(() => {
+    if (navigationType !== 'POP') {
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+  }, [])
 
   const progressKey = useMemo(() => {
     const cleaned = examFileName
@@ -229,7 +237,7 @@ export default function WikiExam() {
 
   return (
     <div className="space-y-4">
-      <Link to="/wiki" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+      <Link to="/wiki" state={{ fromExam: true }} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
         <ChevronLeft className="h-4 w-4" /> All exams
       </Link>
 

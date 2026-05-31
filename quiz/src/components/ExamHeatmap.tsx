@@ -258,7 +258,7 @@ export function ExamHeatmap({
         <div className="shrink-0" style={{ width: 16 }} />
         <div className="flex-1 flex gap-[2px] overflow-hidden">
           {visibleColumns.map(col => (
-            <div key={col.key} className="flex-1 min-w-0 text-[8px] text-muted-foreground leading-none truncate">
+            <div key={col.key} className="flex-1 min-w-0 text-[10px] text-muted-foreground leading-none truncate">
               {col.monthLabel ?? ''}
             </div>
           ))}
@@ -288,7 +288,7 @@ export function ExamHeatmap({
           {DAY_LABELS.map((label, i) => (
             <div
               key={i}
-              className="h-[14px] flex items-center justify-end pr-0.5 text-[8px] text-muted-foreground leading-none select-none"
+              className="h-[14px] flex items-center justify-end pr-0.5 text-[10px] text-muted-foreground leading-none select-none"
             >
               {i % 2 === 0 ? label : ''}
             </div>

@@ -145,7 +145,7 @@ function HeatmapGrid({ scoreByDay, weeks }: HeatmapGridProps) {
           {columns.map((col, i) => {
             const mark = monthMarks.find(m => m.col === i)
             return (
-              <div key={col.key} className="w-4 shrink-0 text-[9px] text-muted-foreground leading-none">
+              <div key={col.key} className="w-4 shrink-0 text-[11px] text-muted-foreground leading-none">
                 {mark ? mark.month : ''}
               </div>
             )
@@ -155,7 +155,7 @@ function HeatmapGrid({ scoreByDay, weeks }: HeatmapGridProps) {
         {/* Grid rows (Mon–Sun) */}
         {DAY_LABELS.map((label, dayIdx) => (
           <div key={dayIdx} className="flex items-center gap-0 mb-0.5">
-            <span className="w-5 text-[9px] text-muted-foreground text-right pr-1 shrink-0 leading-none select-none">
+            <span className="w-5 text-[11px] text-muted-foreground text-right pr-1 shrink-0 leading-none select-none">
               {dayIdx % 2 === 0 ? label : ''}
             </span>
             {columns.map(col => {
@@ -181,7 +181,7 @@ function HeatmapGrid({ scoreByDay, weeks }: HeatmapGridProps) {
 
         {/* Legend */}
         <div className="flex items-center gap-2 mt-3 ml-6">
-          <span className="text-[9px] text-muted-foreground">Less</span>
+          <span className="text-[11px] text-muted-foreground">Less</span>
           {[null, 20, 55, 65, 75, 90].map((score, i) => (
             <div
               key={i}
@@ -189,7 +189,7 @@ function HeatmapGrid({ scoreByDay, weeks }: HeatmapGridProps) {
               className={`w-3 h-3 rounded-sm ${score === null ? 'bg-muted/25' : ''}`}
             />
           ))}
-          <span className="text-[9px] text-muted-foreground">More</span>
+          <span className="text-[11px] text-muted-foreground">More</span>
         </div>
       </div>
     </div>

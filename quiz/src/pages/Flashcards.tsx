@@ -69,6 +69,117 @@ const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; d
   forgotten: { label: 'Forgotten', className: 'bg-rose-500/20 text-rose-600 dark:text-rose-400',   dotClass: 'bg-rose-500' },
 }
 
+// Color palette for exam packs — one entry per exam in rotation
+const PACK_COLOR_PALETTE = [
+  // Blue
+  {
+    card: 'bg-blue-500/10 border-blue-400/40 hover:bg-blue-500/15',
+    cardText: 'text-blue-700 dark:text-blue-300',
+    cardSub: 'text-blue-600/70 dark:text-blue-400/60',
+    cardIcon: 'text-blue-500',
+    selCard: 'bg-blue-600 border-blue-600',
+    selText: 'text-white',
+    selSub: 'text-blue-100/80',
+    selIcon: 'text-blue-200',
+    loCard: 'bg-blue-500/5 border-blue-400/25 hover:bg-blue-500/10',
+    loCardText: 'text-blue-700/80 dark:text-blue-400/80',
+    loCardSub: 'text-blue-600/60 dark:text-blue-400/50',
+    loCardIcon: 'text-blue-400',
+    loSelCard: 'bg-blue-500 border-blue-500',
+  },
+  // Emerald
+  {
+    card: 'bg-emerald-500/10 border-emerald-400/40 hover:bg-emerald-500/15',
+    cardText: 'text-emerald-700 dark:text-emerald-300',
+    cardSub: 'text-emerald-600/70 dark:text-emerald-400/60',
+    cardIcon: 'text-emerald-500',
+    selCard: 'bg-emerald-600 border-emerald-600',
+    selText: 'text-white',
+    selSub: 'text-emerald-100/80',
+    selIcon: 'text-emerald-200',
+    loCard: 'bg-emerald-500/5 border-emerald-400/25 hover:bg-emerald-500/10',
+    loCardText: 'text-emerald-700/80 dark:text-emerald-400/80',
+    loCardSub: 'text-emerald-600/60 dark:text-emerald-400/50',
+    loCardIcon: 'text-emerald-400',
+    loSelCard: 'bg-emerald-500 border-emerald-500',
+  },
+  // Violet
+  {
+    card: 'bg-violet-500/10 border-violet-400/40 hover:bg-violet-500/15',
+    cardText: 'text-violet-700 dark:text-violet-300',
+    cardSub: 'text-violet-600/70 dark:text-violet-400/60',
+    cardIcon: 'text-violet-500',
+    selCard: 'bg-violet-600 border-violet-600',
+    selText: 'text-white',
+    selSub: 'text-violet-100/80',
+    selIcon: 'text-violet-200',
+    loCard: 'bg-violet-500/5 border-violet-400/25 hover:bg-violet-500/10',
+    loCardText: 'text-violet-700/80 dark:text-violet-400/80',
+    loCardSub: 'text-violet-600/60 dark:text-violet-400/50',
+    loCardIcon: 'text-violet-400',
+    loSelCard: 'bg-violet-500 border-violet-500',
+  },
+  // Orange
+  {
+    card: 'bg-orange-500/10 border-orange-400/40 hover:bg-orange-500/15',
+    cardText: 'text-orange-700 dark:text-orange-300',
+    cardSub: 'text-orange-600/70 dark:text-orange-400/60',
+    cardIcon: 'text-orange-500',
+    selCard: 'bg-orange-600 border-orange-600',
+    selText: 'text-white',
+    selSub: 'text-orange-100/80',
+    selIcon: 'text-orange-200',
+    loCard: 'bg-orange-500/5 border-orange-400/25 hover:bg-orange-500/10',
+    loCardText: 'text-orange-700/80 dark:text-orange-400/80',
+    loCardSub: 'text-orange-600/60 dark:text-orange-400/50',
+    loCardIcon: 'text-orange-400',
+    loSelCard: 'bg-orange-500 border-orange-500',
+  },
+  // Rose
+  {
+    card: 'bg-rose-500/10 border-rose-400/40 hover:bg-rose-500/15',
+    cardText: 'text-rose-700 dark:text-rose-300',
+    cardSub: 'text-rose-600/70 dark:text-rose-400/60',
+    cardIcon: 'text-rose-500',
+    selCard: 'bg-rose-600 border-rose-600',
+    selText: 'text-white',
+    selSub: 'text-rose-100/80',
+    selIcon: 'text-rose-200',
+    loCard: 'bg-rose-500/5 border-rose-400/25 hover:bg-rose-500/10',
+    loCardText: 'text-rose-700/80 dark:text-rose-400/80',
+    loCardSub: 'text-rose-600/60 dark:text-rose-400/50',
+    loCardIcon: 'text-rose-400',
+    loSelCard: 'bg-rose-500 border-rose-500',
+  },
+  // Cyan
+  {
+    card: 'bg-cyan-500/10 border-cyan-400/40 hover:bg-cyan-500/15',
+    cardText: 'text-cyan-700 dark:text-cyan-300',
+    cardSub: 'text-cyan-600/70 dark:text-cyan-400/60',
+    cardIcon: 'text-cyan-500',
+    selCard: 'bg-cyan-600 border-cyan-600',
+    selText: 'text-white',
+    selSub: 'text-cyan-100/80',
+    selIcon: 'text-cyan-200',
+    loCard: 'bg-cyan-500/5 border-cyan-400/25 hover:bg-cyan-500/10',
+    loCardText: 'text-cyan-700/80 dark:text-cyan-400/80',
+    loCardSub: 'text-cyan-600/60 dark:text-cyan-400/50',
+    loCardIcon: 'text-cyan-400',
+    loSelCard: 'bg-cyan-500 border-cyan-500',
+  },
+] as const
+
+const STUDY_PLAN_COLOR = {
+  card: 'bg-amber-500/10 border-amber-400/40 hover:bg-amber-500/15',
+  cardText: 'text-amber-700 dark:text-amber-300',
+  cardSub: 'text-amber-600/70 dark:text-amber-400/60',
+  cardIcon: 'text-amber-500',
+  selCard: 'bg-amber-600 border-amber-600',
+  selText: 'text-white',
+  selSub: 'text-amber-100/80',
+  selIcon: 'text-amber-200',
+} as const
+
 function MasteryPill({ state }: { state: MasteryState }) {
   const { label, className } = MASTERY_CONFIG[state]
   return (
@@ -108,15 +219,16 @@ interface FlashcardPack {
   sublabel?: string
   type: 'study_plan' | 'exam' | 'learning_objective'
   concepts: string[]
+  colorIndex?: number
 }
 
-function FlashcardPacksSection() {
+function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, targetDates } = useExamProgress()
   const { addCard, hasCard } = useFlashcards()
 
-  const [collapsed, setCollapsed] = useState(true)
+  const [collapsed, setCollapsed] = useState(false)
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null)
   const [conceptsExpanded, setConceptsExpanded] = useState(false)
   const [selectedConcepts, setSelectedConcepts] = useState<Set<string>>(new Set())
@@ -142,9 +254,10 @@ function FlashcardPacksSection() {
     if (primarySyllabus) {
       result.push({ id: 'study_plan', label: "Today's Study Plan", type: 'study_plan', concepts: [] })
     }
-    for (const syllabus of inProgressSyllabi) {
+    for (const [i, syllabus] of inProgressSyllabi.entries()) {
+      const colorIdx = i % PACK_COLOR_PALETTE.length
       const allConcepts = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
-      result.push({ id: `exam_${syllabus.examId}`, label: syllabus.examLabel, type: 'exam', concepts: allConcepts })
+      result.push({ id: `exam_${syllabus.examId}`, label: syllabus.examLabel, type: 'exam', concepts: allConcepts, colorIndex: colorIdx })
       for (const topic of syllabus.topics) {
         if (topic.concepts.length > 0) {
           result.push({
@@ -153,6 +266,7 @@ function FlashcardPacksSection() {
             sublabel: syllabus.examLabel,
             type: 'learning_objective',
             concepts: topic.concepts.map(c => c.name),
+            colorIndex: colorIdx,
           })
         }
       }
@@ -195,6 +309,7 @@ function FlashcardPacksSection() {
       : notYetAdded
     for (const name of toAdd) addCard({ kind: 'concept', name })
     setSelectedConcepts(new Set())
+    if (toAdd.length > 0) onCardsAdded?.()
   }
 
   function packCounts(pack: FlashcardPack): { inGallery: number; total: number } {
@@ -242,36 +357,50 @@ function FlashcardPacksSection() {
               {packs.map(pack => {
                 const { inGallery, total } = packCounts(pack)
                 const isSelected = pack.id === selectedPackId
+                const isLO = pack.type === 'learning_objective'
+                const isStudyPlan = pack.type === 'study_plan'
+                const palette = !isStudyPlan ? PACK_COLOR_PALETTE[pack.colorIndex ?? 0] : null
+                const cardCls = isStudyPlan
+                  ? (isSelected ? `${STUDY_PLAN_COLOR.selCard} ${STUDY_PLAN_COLOR.selText}` : `${STUDY_PLAN_COLOR.card} ${STUDY_PLAN_COLOR.cardText}`)
+                  : isLO
+                    ? (isSelected ? `${palette!.loSelCard} text-white` : `${palette!.loCard} ${palette!.loCardText}`)
+                    : (isSelected ? `${palette!.selCard} ${palette!.selText}` : `${palette!.card} ${palette!.cardText}`)
+                const iconCls = isStudyPlan
+                  ? (isSelected ? STUDY_PLAN_COLOR.selIcon : STUDY_PLAN_COLOR.cardIcon)
+                  : isLO
+                    ? (isSelected ? palette!.selIcon : palette!.loCardIcon)
+                    : (isSelected ? palette!.selIcon : palette!.cardIcon)
+                const subCls = isStudyPlan
+                  ? (isSelected ? STUDY_PLAN_COLOR.selSub : STUDY_PLAN_COLOR.cardSub)
+                  : isLO
+                    ? (isSelected ? palette!.selSub : palette!.loCardSub)
+                    : (isSelected ? palette!.selSub : palette!.cardSub)
                 return (
                   <button
                     key={pack.id}
                     type="button"
                     onClick={() => setSelectedPackId(prev => prev === pack.id ? null : pack.id)}
-                    className={`shrink-0 flex flex-col items-start gap-0.5 px-3 py-2 rounded-lg border text-left transition-colors min-w-[110px] max-w-[160px] ${
-                      isSelected
-                        ? 'bg-primary text-primary-foreground border-primary'
-                        : 'bg-background border-border hover:bg-accent'
-                    }`}
+                    className={`shrink-0 flex flex-col items-start gap-0.5 px-3 py-2 rounded-lg border text-left transition-colors min-w-[110px] max-w-[160px] ${cardCls}`}
                   >
                     <div className="flex items-center gap-1.5 w-full">
                       {pack.type === 'study_plan' && (
-                        <CalendarDays className={`h-3 w-3 shrink-0 ${isSelected ? 'text-primary-foreground/70' : 'text-primary'}`} />
+                        <CalendarDays className={`h-3 w-3 shrink-0 ${iconCls}`} />
                       )}
                       {pack.type === 'exam' && (
-                        <GraduationCap className={`h-3 w-3 shrink-0 ${isSelected ? 'text-primary-foreground/70' : 'text-muted-foreground'}`} />
+                        <GraduationCap className={`h-3 w-3 shrink-0 ${iconCls}`} />
                       )}
                       {pack.type === 'learning_objective' && (
-                        <Target className={`h-3 w-3 shrink-0 ${isSelected ? 'text-primary-foreground/70' : 'text-muted-foreground'}`} />
+                        <Target className={`h-3 w-3 shrink-0 ${iconCls}`} />
                       )}
                       <span className="text-xs font-medium truncate flex-1 min-w-0">{pack.label}</span>
                     </div>
                     {pack.sublabel && (
-                      <span className={`text-[10px] truncate w-full ${isSelected ? 'text-primary-foreground/60' : 'text-muted-foreground'}`}>
+                      <span className={`text-[10px] truncate w-full ${subCls}`}>
                         {pack.sublabel}
                       </span>
                     )}
                     {(total > 0 || pack.type !== 'study_plan') && (
-                      <span className={`text-[10px] tabular-nums ${isSelected ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+                      <span className={`text-[10px] tabular-nums ${subCls}`}>
                         {isLoading && pack.type === 'study_plan' ? '…' : `${inGallery}/${total} added`}
                       </span>
                     )}
@@ -314,7 +443,7 @@ function FlashcardPacksSection() {
                 <button
                   type="button"
                   onClick={handleAddSelected}
-                  className="inline-flex items-center gap-1 px-2 py-1 rounded bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
                 >
                   {selectedConcepts.size > 0 ? `Add ${selectedConcepts.size}` : `Add all ${notYetAdded.length}`}
                 </button>
@@ -346,20 +475,20 @@ function FlashcardPacksSection() {
 
                   {!isLoading && displayConcepts.length > 0 && (
                     <ul
-                      className="space-y-0.5 overflow-y-auto"
-                      style={{ maxHeight: '14rem' }}
+                      className="overflow-y-auto"
+                      style={{ maxHeight: '18rem' }}
                     >
                       {displayConcepts.map(name => {
                         const added = hasCard(name)
                         const checked = selectedConcepts.has(name)
                         return (
-                          <li key={name} className="flex items-center gap-2 py-0.5">
+                          <li key={name} className="flex items-center gap-3 py-1.5">
                             <button
                               type="button"
                               onClick={() => !added && toggleConceptSelect(name)}
                               disabled={added}
                               aria-label={added ? `${name} already in gallery` : checked ? `Deselect ${name}` : `Select ${name}`}
-                              className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                              className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
                                 added
                                   ? 'bg-green-500/20 border-green-500 cursor-default'
                                   : checked
@@ -368,7 +497,7 @@ function FlashcardPacksSection() {
                               }`}
                             >
                               {(added || checked) && (
-                                <svg className={`w-2.5 h-2.5 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
+                                <svg className={`w-3 h-3 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
                                   <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                               )}
@@ -1340,7 +1469,7 @@ export default function Flashcards() {
       <>
         <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
           <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
-          <FlashcardPacksSection />
+          <FlashcardPacksSection onCardsAdded={() => setGalleryExpanded(true)} />
           <div className="rounded-xl border bg-card text-card-foreground p-12 text-center space-y-3">
             <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50" />
             <p className="text-sm text-muted-foreground">

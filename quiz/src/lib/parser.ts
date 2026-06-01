@@ -1,12 +1,23 @@
 import fm from 'front-matter'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
-export type QuestionType = 'multiple-choice'
+export type QuestionType = 'multiple-choice' | 'free-entry' | 'multi-part'
 export type QuizMode = 'quiz' | 'mock-exam'
 
 export interface AnswerOption {
   key: string   // "A", "B", "C", "D"
   text: string
+}
+
+export interface Part {
+  label: string              // "a", "b", "c", "d", "e"
+  points: number
+  stem: string
+  type: 'multiple-choice' | 'free-entry'
+  options: AnswerOption[]    // empty for free-entry
+  answer: string             // correct answer value
+  explanation: string
+  examiner_report?: string
 }
 
 export interface Question {
@@ -17,11 +28,13 @@ export interface Question {
   difficulty: Difficulty
   type: QuestionType
   wiki_link: string[]  // normalized to array; single-string frontmatter becomes [string]
-  answer: string       // e.g. "B"
-  explanation: string
+  answer: string       // '' for multi-part (answers live in parts[])
+  explanation: string  // '' for multi-part
   points: number
-  stem: string         // question body text (above the options list)
-  options: AnswerOption[]
+  stem: string         // question body text; shared preamble for multi-part
+  options: AnswerOption[]  // [] for free-entry and multi-part
+  parts?: Part[]           // populated for multi-part questions
+  examiner_report?: string // examiner's notes for single-part question types
   author?: string
   year?: number
 }
@@ -60,27 +73,221 @@ interface QuestionFrontmatter {
 
 const OPTION_REGEX = /^- ([A-E])\)\s+(.+)/
 
+// Normalize a free-entry answer for comparison: strip whitespace; if parseable
+// as a number, round to 4 decimal places so "3.670" and "3.67" compare equal.
+export function normalizeAnswerText(s: string): string {
+  const trimmed = s.trim()
+  const num = Number(trimmed)
+  if (!isNaN(num) && trimmed !== '') {
+    return String(Math.round(num * 10000) / 10000)
+  }
+  return trimmed.toLowerCase()
+}
+
+// Single grading function that works for all question types.
+export function isAnswerCorrect(question: Question, chosen: string): boolean {
+  if (question.type === 'multiple-choice') {
+    return chosen === question.answer
+  }
+  if (question.type === 'free-entry') {
+    return normalizeAnswerText(chosen) === normalizeAnswerText(question.answer)
+  }
+  if (question.type === 'multi-part') {
+    try {
+      const chosenParts = JSON.parse(chosen) as Record<string, string>
+      const parts = question.parts ?? []
+      if (parts.length === 0) return false
+      return parts.every(part => {
+        const partChosen = chosenParts[part.label] ?? ''
+        if (part.type === 'multiple-choice') return partChosen === part.answer
+        return normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)
+      })
+    } catch {
+      return false
+    }
+  }
+  return false
+}
+
+// Parse the content within a single Part block into its sub-sections.
+function parsePartSections(content: string): {
+  stem: string
+  answer: string
+  explanation: string
+  examiner_report?: string
+  options: AnswerOption[]
+} {
+  const sectionBlocks = content.split(/^### /m)
+  const rawStem = sectionBlocks[0].trim()
+
+  let answer = ''
+  let explanation = ''
+  let examiner_report: string | undefined
+
+  for (let i = 1; i < sectionBlocks.length; i++) {
+    const block = sectionBlocks[i]
+    const newlineIdx = block.indexOf('\n')
+    const heading = (newlineIdx >= 0 ? block.slice(0, newlineIdx) : block).trim().toLowerCase()
+    const body = (newlineIdx >= 0 ? block.slice(newlineIdx + 1) : '').trim()
+
+    if (heading === 'answer') {
+      answer = body.split('\n')[0].trim()
+    } else if (heading === 'explanation') {
+      explanation = body
+    } else if (heading === 'examiner report') {
+      examiner_report = body
+    }
+  }
+
+  // Detect option lines within the stem (supports mixed MC/free-entry multi-part)
+  const stemLines = rawStem.split('\n')
+  const optionStartIdx = stemLines.findIndex(l => OPTION_REGEX.test(l))
+  let stem = rawStem
+  let options: AnswerOption[] = []
+
+  if (optionStartIdx >= 0) {
+    stem = stemLines.slice(0, optionStartIdx).join('\n').trim()
+    options = stemLines
+      .slice(optionStartIdx)
+      .filter(l => OPTION_REGEX.test(l))
+      .map(l => {
+        const match = l.match(OPTION_REGEX)!
+        return { key: match[1], text: match[2].trim() }
+      })
+  }
+
+  return { stem, answer, explanation, examiner_report, options }
+}
+
+// Parse the body of a multi-part question into an array of Parts.
+// Format:
+//   ## Part a (0.25 points)
+//   [stem text]
+//   ### Answer
+//   4.5
+//   ### Explanation
+//   [text]
+//   ### Examiner Report
+//   [text]
+function parseMultiPartBody(body: string): Part[] | null {
+  const PART_HEADING_RE = /^## Part ([A-Ea-e])(?:\s*\(([0-9.]+)\s*points?\))?[^\n]*/gm
+  const matches = [...body.matchAll(PART_HEADING_RE)]
+  if (matches.length === 0) return null
+
+  const parts: Part[] = []
+  for (let i = 0; i < matches.length; i++) {
+    const match = matches[i]
+    const label = match[1].toLowerCase()
+    const points = match[2] ? parseFloat(match[2]) : 0
+
+    const startIdx = match.index! + match[0].length
+    const endIdx = i + 1 < matches.length ? matches[i + 1].index! : body.length
+    const partContent = body.slice(startIdx, endIdx).trim()
+
+    const { stem, answer, explanation, examiner_report, options } = parsePartSections(partContent)
+    const type: 'multiple-choice' | 'free-entry' = options.length > 0 ? 'multiple-choice' : 'free-entry'
+
+    // Skip malformed MC parts where the answer key has no matching option
+    if (type === 'multiple-choice' && answer && !options.some(o => o.key === answer)) {
+      continue
+    }
+
+    parts.push({ label, points, stem, type, options, answer, explanation, examiner_report })
+  }
+
+  return parts.length > 0 ? parts : null
+}
+
 export function parseQuestion(raw: string): Question | null {
   try {
     const parsed = fm<QuestionFrontmatter>(raw)
     const data = parsed.attributes
     const content = parsed.body
+    const type = data.type as QuestionType
 
-    // Validate required fields (explanation is now in the body, not required in YAML)
-    if (!data.id || !data.exam || !data.topic || !data.difficulty ||
-        !data.type || !data.answer) {
+    if (!data.id || !data.exam || !data.topic || !data.difficulty || !data.type) {
+      return null
+    }
+    // multi-part stores answers in parts[], not in frontmatter
+    if (type !== 'multi-part' && !data.answer) {
       return null
     }
 
-    // Split body at "## Explanation" section
+    const rawLink = data.wiki_link
+    const wikiLinks: string[] = Array.isArray(rawLink)
+      ? (rawLink as unknown[]).map(String).filter(s => s.length > 0)
+      : rawLink ? [String(rawLink)].filter(s => s.length > 0) : []
+
+    const base = {
+      id: String(data.id),
+      exam: String(data.exam),
+      topic: String(data.topic),
+      learning_objective: data.learning_objective ? String(data.learning_objective) : '',
+      difficulty: data.difficulty as Difficulty,
+      type,
+      wiki_link: wikiLinks,
+      points: Number(data.points ?? 1),
+      author: data.author ? String(data.author) : undefined,
+      year: data.year ? Number(data.year) : undefined,
+    }
+
+    // ── multi-part ──────────────────────────────────────────────────────────
+    if (type === 'multi-part') {
+      const firstPartIdx = content.search(/^## Part /m)
+      const stem = firstPartIdx >= 0
+        ? content.slice(0, firstPartIdx).trim()
+        : content.trim()
+
+      const parts = parseMultiPartBody(content)
+      if (!parts) return null
+
+      return { ...base, stem, options: [], answer: '', explanation: '', parts }
+    }
+
+    // ── free-entry and multiple-choice ──────────────────────────────────────
+    // Split off "## Explanation" section
     const bodyParts = content.split(/^## Explanation\s*$/m)
     const bodyBeforeExplanation = bodyParts[0]
-    const explanationFromBody = bodyParts.length > 1 ? bodyParts[1].trim() : null
+    const rawExplanation = bodyParts.length > 1 ? bodyParts[1].trim() : null
 
-    // Fall back to YAML explanation for backward compatibility
-    const explanation = explanationFromBody ?? String(data.explanation ?? '')
+    // Split off "## Examiner Report" from whichever section it appears in
+    let explanation: string
+    let examiner_report: string | undefined
 
-    // Split stem from options — options start with "- A)" pattern
+    if (rawExplanation !== null) {
+      const expParts = rawExplanation.split(/^## Examiner Report\s*$/m)
+      explanation = expParts[0].trim()
+      examiner_report = expParts.length > 1 ? expParts[1].trim() : undefined
+    } else {
+      // Backward compat: explanation in YAML frontmatter
+      explanation = String(data.explanation ?? '')
+    }
+
+    // Also check body-before-explanation for an Examiner Report block
+    if (!examiner_report) {
+      const bodyExParts = bodyBeforeExplanation.split(/^## Examiner Report\s*$/m)
+      if (bodyExParts.length > 1) {
+        examiner_report = bodyExParts[1].split(/^## /m)[0].trim() || undefined
+      }
+    }
+
+    // ── free-entry ──────────────────────────────────────────────────────────
+    if (type === 'free-entry') {
+      const stemContent = bodyBeforeExplanation
+        .split(/^## Examiner Report\s*$/m)[0]
+        .trim()
+
+      return {
+        ...base,
+        stem: stemContent,
+        options: [],
+        answer: String(data.answer),
+        explanation,
+        examiner_report,
+      }
+    }
+
+    // ── multiple-choice ─────────────────────────────────────────────────────
     const lines = bodyBeforeExplanation.trim().split('\n')
     const optionStartIdx = lines.findIndex(l => OPTION_REGEX.test(l))
 
@@ -98,33 +305,18 @@ export function parseQuestion(raw: string): Question | null {
           })
       : []
 
-    // Reject malformed questions where the answer key doesn't match any parsed
-    // option — otherwise grading silently treats every response as wrong.
     const answerKey = String(data.answer)
     if (options.length === 0 || !options.some(o => o.key === answerKey)) {
       return null
     }
 
-    const rawLink = data.wiki_link
-    const wikiLinks: string[] = Array.isArray(rawLink)
-      ? (rawLink as unknown[]).map(String).filter(s => s.length > 0)
-      : rawLink ? [String(rawLink)].filter(s => s.length > 0) : []
-
     return {
-      id: String(data.id),
-      exam: String(data.exam),
-      topic: String(data.topic),
-      learning_objective: data.learning_objective ? String(data.learning_objective) : '',
-      difficulty: data.difficulty as Difficulty,
-      type: data.type as QuestionType,
-      wiki_link: wikiLinks,
-      answer: String(data.answer),
-      explanation,
-      points: Number(data.points ?? 1),
+      ...base,
       stem,
       options,
-      author: data.author ? String(data.author) : undefined,
-      year: data.year ? Number(data.year) : undefined,
+      answer: answerKey,
+      explanation,
+      examiner_report,
     }
   } catch {
     return null

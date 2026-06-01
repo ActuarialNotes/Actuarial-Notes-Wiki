@@ -1674,7 +1674,7 @@ export default function Flashcards() {
       <ConceptPopup />
 
       {/* Fixed controls footer — always at bottom, above mobile nav */}
-      <div className="fixed bottom-14 md:bottom-0 left-0 right-0 z-[46]">
+      <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
         <FlashcardControlsBar
           galleryOpen={galleryExpanded}
           onGalleryToggle={() => setGalleryExpanded(v => !v)}

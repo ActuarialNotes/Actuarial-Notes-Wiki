@@ -1,5 +1,6 @@
 import { lazy, Suspense, Component, type ReactNode, type ErrorInfo } from 'react'
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
+import { usePageTracking } from '@/hooks/usePageTracking'
 import { Loader2 } from 'lucide-react'
 import type { Session } from '@supabase/supabase-js'
 import Landing from '@/pages/Landing'
@@ -87,9 +88,15 @@ function NotFound() {
   )
 }
 
+function PageTracker() {
+  usePageTracking()
+  return null
+}
+
 export default function App({ initialSession }: { initialSession: Session | null }) {
   return (
     <BrowserRouter>
+      <PageTracker />
       <AuthProvider initialSession={initialSession}>
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">

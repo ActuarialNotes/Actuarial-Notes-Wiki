@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Loader2, Settings2, ChevronRight, Star } from 'lucide-react'
+import { Loader2, Settings2, ChevronRight, Star, Sun, Moon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useSubscription } from '@/hooks/useSubscription'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
@@ -26,6 +26,7 @@ import {
 import { COSMETICS } from '@/lib/cosmetics'
 import { FREE_ANIMALS } from '@/lib/characters'
 import { supabase } from '@/lib/supabase'
+import { useTheme } from '@/hooks/useTheme'
 
 // ---- Exam status cycle & icons ----
 
@@ -121,7 +122,7 @@ function Feedback({ error, success }: { error: string | null; success: string | 
 
 // ---- Nav items ----
 
-const NAV_ITEMS = [
+const BASE_NAV_ITEMS = [
   { id: 'profile',    label: 'Profile' },
   { id: 'premium',    label: 'Premium' },
   { id: 'exams',      label: 'Credential Path & Exams' },
@@ -133,6 +134,7 @@ const NAV_ITEMS = [
 export default function Settings() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const { isPremium, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
   const { sessions } = useProgress()
   const {
@@ -150,12 +152,10 @@ export default function Settings() {
     user?.app_metadata?.provider && user.app_metadata.provider !== 'email'
   )
 
-  // Auth guard
-  useEffect(() => {
-    if (!authLoading && !user) {
-      navigate('/auth', { state: { from: '/settings' }, replace: true })
-    }
-  }, [user, authLoading, navigate])
+  const navItems = [
+    { id: 'appearance', label: 'Appearance' },
+    ...(user ? BASE_NAV_ITEMS : []),
+  ]
 
   // ---- Section refs for scroll-nav ----
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
@@ -369,7 +369,6 @@ export default function Settings() {
       </div>
     )
   }
-  if (!user) return null
 
   const currentTrack = TRACKS.find(t => t.key === selectedTrack) ?? TRACKS[0]
 
@@ -418,14 +417,14 @@ export default function Settings() {
             <Settings2 className="h-6 w-6" />
             Settings
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">{user.email}</p>
+          {user && <p className="text-sm text-muted-foreground mt-1">{user.email}</p>}
         </div>
 
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar nav */}
           <nav className="md:w-44 shrink-0">
             <ul className="flex md:flex-col gap-1 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 sticky top-20">
-              {NAV_ITEMS.map(item => (
+              {navItems.map(item => (
                 <li key={item.id}>
                   <button
                     type="button"
@@ -442,6 +441,59 @@ export default function Settings() {
 
           {/* Sections */}
           <div className="flex-1 space-y-8 min-w-0">
+
+            {/* ---- Appearance ---- */}
+            <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Appearance</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <p className="text-sm text-muted-foreground">Choose how Actuarial Notes looks to you.</p>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => theme !== 'light' && toggleTheme()}
+                        className={cn(
+                          'flex items-center gap-2 px-4 py-2 rounded-md border text-sm font-medium transition-colors',
+                          theme === 'light'
+                            ? 'bg-primary text-primary-foreground border-primary'
+                            : 'bg-background text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground'
+                        )}
+                      >
+                        <Sun className="h-4 w-4" />
+                        Light
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => theme !== 'dark' && toggleTheme()}
+                        className={cn(
+                          'flex items-center gap-2 px-4 py-2 rounded-md border text-sm font-medium transition-colors',
+                          theme === 'dark'
+                            ? 'bg-primary text-primary-foreground border-primary'
+                            : 'bg-background text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground'
+                        )}
+                      >
+                        <Moon className="h-4 w-4" />
+                        Dark
+                      </button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* ---- Authenticated sections ---- */}
+            {!user && (
+              <div className="text-center py-6 text-sm text-muted-foreground">
+                <Link to="/auth" state={{ from: '/settings' }} className="text-primary hover:underline underline-offset-2">
+                  Sign in
+                </Link>{' '}to manage your profile, exams, and progress.
+              </div>
+            )}
+
+            {user && <>
 
             {/* ---- Profile (first) ---- */}
             <section ref={el => { sectionRefs.current.profile = el }} id="profile">
@@ -888,6 +940,8 @@ export default function Settings() {
                 </CardContent>
               </Card>
             </section>
+
+            </> /* end user && */}
 
             <div className="text-center pt-2">
               <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">

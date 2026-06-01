@@ -55,7 +55,7 @@ const EXAMPLE_STYLE: CalloutStyle = {
   accentClass: 'text-foreground',
   roundLeft: true,
   noBorder: true,
-  bgClass: 'bg-muted/70',
+  bgClass: 'bg-card',
   contentClass: 'text-base text-muted-foreground',
 }
 
@@ -325,7 +325,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
 
   const roundClass = style.roundLeft ? 'rounded-lg' : 'rounded-r-lg'
   const borderClasses = style.noBorder ? '' : `border-l-[3px] ${style.borderClass}`
-  const bgClass = style.bgClass ?? 'bg-muted/50'
+  const bgClass = style.bgClass ?? 'bg-card'
   const contentClasses = style.contentClass
     ? `${style.contentClass} ${CONTENT_CLASSES_SHARED}`
     : CONTENT_CLASSES
@@ -336,7 +336,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
         <div className="relative">
           {/* Grey bar fills to exam coverage % when collapsed, full width when expanded */}
           <div
-            className="absolute inset-y-0 left-0 bg-muted/70 transition-all duration-300"
+            className="absolute inset-y-0 left-0 bg-accent/60 transition-all duration-300"
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
           {collapsible && hasBody ? (
@@ -344,7 +344,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
               type="button"
               data-callout-toggle
               onClick={() => setOpen(v => !v)}
-              className="relative z-10 w-full px-4 py-3 text-left hover:bg-muted/20 transition-colors duration-150"
+              className="relative z-10 w-full px-4 py-3 text-left hover:bg-accent/30 transition-colors duration-150"
               aria-expanded={open}
             >
               {headerContent}
@@ -354,7 +354,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
           )}
         </div>
         {hasBody && (
-          <div data-callout-body hidden={!open} className={`bg-muted/70 ${contentClasses}`}>
+          <div data-callout-body hidden={!open} className={`bg-card ${contentClasses}`}>
             {children}
           </div>
         )}
@@ -369,7 +369,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
           type="button"
           data-callout-toggle
           onClick={() => setOpen(v => !v)}
-          className="w-full px-4 py-3 text-left hover:bg-muted/60 transition-colors duration-150"
+          className="w-full px-4 py-3 text-left hover:bg-accent/50 transition-colors duration-150"
           aria-expanded={open}
         >
           {headerContent}

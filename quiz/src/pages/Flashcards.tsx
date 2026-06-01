@@ -575,51 +575,54 @@ function FlashcardControlsBar({
   onFlipToggle: () => void
 }) {
   return (
-    <div className="flex items-center justify-center gap-3 px-4 py-2.5 border-t bg-background">
+    <div className="flex items-center justify-center gap-4 px-4 py-3.5 border-t bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
       <button
         type="button"
         onClick={onGalleryToggle}
-        title={galleryOpen ? 'Close gallery' : 'Open gallery'}
+        title={galleryOpen ? 'Back to study' : 'Open gallery'}
         aria-pressed={galleryOpen}
-        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
+        className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${
           galleryOpen
             ? 'bg-primary text-primary-foreground border-primary'
             : 'text-muted-foreground hover:text-foreground hover:bg-accent border-border'
         }`}
       >
-        <LayoutGrid className="h-3.5 w-3.5" />
-        <span>Gallery</span>
+        {galleryOpen
+          ? <BookOpen className="h-4 w-4" />
+          : <LayoutGrid className="h-4 w-4" />
+        }
+        <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
       </button>
 
-      <div className="w-px h-5 bg-border shrink-0" />
+      <div className="w-px h-7 bg-border shrink-0" />
 
-      <div className="flex items-center gap-1.5 shrink-0">
-        <span className="text-xs text-muted-foreground">Flip</span>
+      <div className="flex items-center gap-2 shrink-0">
+        <span className="text-sm text-muted-foreground">Flip</span>
         <button
           type="button"
           role="switch"
           aria-checked={flip}
           onClick={onFlipToggle}
           title={flip ? 'Show fronts by default' : 'Show backs by default'}
-          className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ${
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ${
             flip ? 'bg-primary' : 'bg-muted-foreground/30'
           }`}
         >
-          <span className={`pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-            flip ? 'translate-x-4' : 'translate-x-0'
+          <span className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
+            flip ? 'translate-x-5' : 'translate-x-0'
           }`} />
         </button>
       </div>
 
-      <div className="w-px h-5 bg-border shrink-0" />
+      <div className="w-px h-7 bg-border shrink-0" />
 
-      <div className="flex items-center gap-0.5 shrink-0">
+      <div className="flex items-center gap-1 shrink-0">
         <button
           type="button"
           onClick={() => onToggleMode('definition')}
           title="Show definition on back"
           aria-pressed={reverseCardModes.has('definition')}
-          className={`inline-flex items-center justify-center h-8 w-8 rounded-md border text-sm font-serif italic font-bold transition-colors ${
+          className={`inline-flex items-center justify-center h-10 w-10 rounded-md border text-base font-serif italic font-bold transition-colors ${
             reverseCardModes.has('definition')
               ? 'bg-primary text-primary-foreground border-primary'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -630,23 +633,23 @@ function FlashcardControlsBar({
           onClick={() => onToggleMode('math')}
           title="Show math on back"
           aria-pressed={reverseCardModes.has('math')}
-          className={`inline-flex items-center justify-center h-8 w-8 rounded-md border transition-colors ${
+          className={`inline-flex items-center justify-center h-10 w-10 rounded-md border transition-colors ${
             reverseCardModes.has('math')
               ? 'bg-primary text-primary-foreground border-primary'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'
           }`}
-        ><Sigma className="h-4 w-4" /></button>
+        ><Sigma className="h-5 w-5" /></button>
         <button
           type="button"
           onClick={() => onToggleMode('images')}
           title="Show images on back"
           aria-pressed={reverseCardModes.has('images')}
-          className={`inline-flex items-center justify-center h-8 w-8 rounded-md border transition-colors ${
+          className={`inline-flex items-center justify-center h-10 w-10 rounded-md border transition-colors ${
             reverseCardModes.has('images')
               ? 'bg-primary text-primary-foreground border-primary'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'
           }`}
-        ><Images className="h-4 w-4" /></button>
+        ><Images className="h-5 w-5" /></button>
       </div>
     </div>
   )
@@ -1004,9 +1007,7 @@ function GalleryPanel({
   onClose,
   conceptMasteryMap,
   reverseCardModes,
-  onToggleMode,
   globalFlip,
-  onFlipToggle,
 }: {
   cards: FlashCard[]
   orderedCards: FlashCard[]
@@ -1023,9 +1024,7 @@ function GalleryPanel({
   onClose: () => void
   conceptMasteryMap: Map<string, MasteryState>
   reverseCardModes: Set<ReverseCardSection>
-  onToggleMode: (mode: ReverseCardSection) => void
   globalFlip: boolean
-  onFlipToggle: () => void
 }) {
   const { user } = useAuth()
   const [showManageDialog, setShowManageDialog] = useState(false)
@@ -1103,7 +1102,7 @@ function GalleryPanel({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6 pb-24 md:pb-20">
         <FlashcardPacksSection />
 
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -1133,16 +1132,6 @@ function GalleryPanel({
           </SortableContext>
         </DndContext>
       </div>
-
-      {/* Controls footer */}
-      <FlashcardControlsBar
-        galleryOpen={true}
-        onGalleryToggle={onClose}
-        reverseCardModes={reverseCardModes}
-        onToggleMode={onToggleMode}
-        flip={globalFlip}
-        onFlipToggle={onFlipToggle}
-      />
 
       {showManageDialog && (
         <FlashcardsManageDialog
@@ -1646,14 +1635,12 @@ export default function Flashcards() {
           onClose={() => setGalleryExpanded(false)}
           conceptMasteryMap={conceptMasteryMap}
           reverseCardModes={reverseCardModes}
-          onToggleMode={toggleReverseMode}
           globalFlip={globalFlip}
-          onFlipToggle={() => setGlobalFlip(v => !v)}
         />
       )}
 
       <div
-        className="container max-w-4xl mx-auto"
+        className="container max-w-4xl mx-auto pb-24 md:pb-20"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Sticky header: title + gallery strip */}
@@ -1682,8 +1669,12 @@ export default function Flashcards() {
           onSetModes={setReverseCardModes}
           defaultFlipped={globalFlip}
         />
+      </div>
 
-        {/* Controls footer */}
+      <ConceptPopup />
+
+      {/* Fixed controls footer — always at bottom, above mobile nav */}
+      <div className="fixed bottom-14 md:bottom-0 left-0 right-0 z-[46]">
         <FlashcardControlsBar
           galleryOpen={galleryExpanded}
           onGalleryToggle={() => setGalleryExpanded(v => !v)}
@@ -1693,8 +1684,6 @@ export default function Flashcards() {
           onFlipToggle={() => setGlobalFlip(v => !v)}
         />
       </div>
-
-      <ConceptPopup />
     </>
   )
 }

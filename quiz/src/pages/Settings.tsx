@@ -123,6 +123,7 @@ function Feedback({ error, success }: { error: string | null; success: string | 
 // ---- Inline auth form (shown on You tab when logged out) ----
 
 function InlineAuthForm() {
+  const navigate = useNavigate()
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -143,6 +144,7 @@ function InlineAuthForm() {
       if (mode === 'signin') {
         const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
         if (authError) throw authError
+        navigate('/dashboard', { replace: true })
       } else {
         const { error: authError } = await supabase.auth.signUp({
           email,

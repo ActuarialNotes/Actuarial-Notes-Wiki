@@ -15,7 +15,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 > 4. Write the **equation of value** given a set of **cash flows** and an **interest rate**
 
 > [!example]- Annuities/Cash Flows with Non-Contingent Payments  {20-30%}
-> 1. Define and recognize the definitions of the following terms: [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing/Decreasing Annuity]], [[Term of Annuity]].
+> 1. Define and recognize the definitions of the following terms: [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing Annuity|Geometric Increasing/Decreasing Annuity]], [[Term of Annuity]].
 > 2. For each of the following types of **annuity**/**cash flows**, given sufficient information of **immediate** or **due**, **present value**, **future value**, **current value**, **interest rate**, **payment amount**, and term of annuity, calculate any remaining item.
 >	- [[Level Annuity]], finite term.
 >	- [[Level Perpetuity]]
@@ -26,7 +26,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 
 > [!example]- Loans {15-25%}
 > Understand key concepts concerning [[Loans]] and how to perform related calculations.
-> 1. Define and recognize the definitions of the following terms: [[Principal]], [[Interest]], [[Term of Loan]], [[Outstanding Balance]], [[Final Payment]], [[Drop Payment]], [[Balloon Payment]][[Amortization]]
+> 1. Define and recognize the definitions of the following terms: [[Principal]], [[Interest]], [[Term of Loan]], [[Outstanding Balance]], [[Final Payment]], [[Drop Payment]], [[Balloon Payment]], [[Amortization]]
 > 2. Calculate:
 > 	- The missing item, given any four of: **term of loan**,** interest rate**, **payment amount**, **payment period**, **principal**.
 > 	- The **outstanding balance** at any point in time.
@@ -46,9 +46,9 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 
 > [!example]- General Cash Flows, Portfolios, and Asset Liability Management {20-30%}
 > Understand key concepts concerning yield curves, rates of return, measures of duration and convexity, cash flow matching and immunization, and how to perform related calculations.
-> 1. Define and recognize the definitions of the following terms: [[Yield Rate]]/rate of return, [[Current Value]], [[Duration]] and [[Convexity]] ([[Macaulay Duration|Macaulay]] and [[Modified Duration|Modified]]), [[Portfolio]], [[Spot Rate]], [[Forward Rate]], [[Yield Curve]], [[Cash Flow]] and [[Duration Matching]], and [[Immunization]] (including [[Full Immunization]] and [[Redington Immunization]]).
+> 1. Define and recognize the definitions of the following terms: **Yield Rate**/rate of return, **Current Value**, [[Duration]] and [[Convexity]] ([[Macaulay Duration|Macaulay]] and [[Modified Duration|Modified]]), [[Portfolio]], [[Spot Rate]], [[Forward Rate]], [[Yield Curve]], [[Cash Flow]] and [[Duration Matching]], and [[Immunization]] (including [[Full Immunization]] and [[Redington Immunization]]).
 > 2. Calculate:
-> 	- The [[Duration]] and convexity of a set of cash flows.
+> 	- The **Duration** and convexity of a set of cash flows.
 > 	- Either Macaulay or modified duration given the other.
 > 	- The approximate change in present value due to a change in interest rate,
 > 		- Using [[1st-Order Linear Approximation]] based on modified duration.

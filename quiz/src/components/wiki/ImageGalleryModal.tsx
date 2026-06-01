@@ -249,6 +249,7 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
               transition: isDragging ? 'none' : 'transform 0.15s ease-out',
             }}
             draggable={false}
+            onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
           />
         </div>
 
@@ -318,6 +319,7 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
                 alt={img.alt}
                 className="h-full w-full object-cover"
                 draggable={false}
+                onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
               />
             </button>
           ))}

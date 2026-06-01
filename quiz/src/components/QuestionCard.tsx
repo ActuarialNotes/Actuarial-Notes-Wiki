@@ -26,9 +26,10 @@ interface FreeEntryInputProps {
   correctAnswer: string
   showExplanation: boolean
   onSubmit: (value: string) => void
+  autoSubmit?: boolean
 }
 
-function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit }: FreeEntryInputProps) {
+function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false }: FreeEntryInputProps) {
   const [text, setText] = useState(answer)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -40,8 +41,14 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
   const isAnswered = isLocked && answer !== ''
   const isRight = isAnswered && normalizeAnswerText(answer) === normalizeAnswerText(correctAnswer)
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value
+    setText(val)
+    if (autoSubmit) onSubmit(val)
+  }
+
   function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Enter' && text.trim()) {
+    if (e.key === 'Enter' && !autoSubmit && text.trim()) {
       onSubmit(text.trim())
     }
   }
@@ -53,7 +60,7 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
           ref={inputRef}
           type="text"
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={handleChange}
           onKeyDown={handleKeyDown}
           disabled={isLocked}
           placeholder="Enter your answer…"
@@ -65,7 +72,7 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
             isAnswered && !isRight ? 'border-red-400 dark:border-red-600' : '',
           ].join(' ')}
         />
-        {!isLocked && (
+        {!isLocked && !autoSubmit && (
           <Button
             size="sm"
             variant="outline"
@@ -150,6 +157,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer }:
           correctAnswer={part.answer}
           showExplanation={showExplanation && isAnswered}
           onSubmit={val => onPartAnswer(part.label, val)}
+          autoSubmit={true}
         />
       )}
 
@@ -218,13 +226,11 @@ export function QuestionCard({
   function handlePartAnswer(label: string, value: string) {
     const updated = { ...partAnswers, [label]: value }
     setPartAnswers(updated)
-    // Call onAnswer with JSON once all parts have a value — Quiz page then
-    // shows the Confirm button, user confirms to lock.
     const parts = question.parts ?? []
     const allFilled = parts.every(p => (updated[p.label] ?? '').trim() !== '')
-    if (allFilled) {
-      onAnswer(JSON.stringify(updated))
-    }
+    // Signal all-filled state on every change so the page-level Confirm button
+    // appears/disappears live as the user types across parts.
+    onAnswer(allFilled ? JSON.stringify(updated) : '')
   }
 
   // ── multiple-choice ──────────────────────────────────────────────────────

@@ -332,7 +332,7 @@ function Callout({ type, fold, title, children }: CalloutProps) {
 
   if (isBarGraph) {
     return (
-      <div className="not-prose my-4 rounded-lg overflow-hidden">
+      <div className="not-prose my-4 rounded-lg overflow-hidden bg-card">
         <div className="relative">
           {/* Grey bar fills to exam coverage % when collapsed, full width when expanded */}
           <div

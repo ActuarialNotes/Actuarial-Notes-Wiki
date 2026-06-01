@@ -575,10 +575,7 @@ export default function Settings() {
             {/* ---- Appearance ---- */}
             <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">
               <Card>
-                <CardHeader>
-                  <CardTitle>Appearance</CardTitle>
-                </CardHeader>
-                <CardContent>
+                <CardContent className="pt-4">
                   <div className="flex gap-2">
                       <button
                         type="button"

@@ -147,7 +147,8 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
               value={query}
               onChange={e => setQuery(e.target.value)}
               onFocus={() => setActive(true)}
-              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder-transparent"
+              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder:text-muted-foreground"
+              placeholder="Search concepts"
               aria-label="Search study guides"
               autoComplete="off"
               spellCheck={false}

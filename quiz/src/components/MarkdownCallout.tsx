@@ -332,11 +332,11 @@ function Callout({ type, fold, title, children }: CalloutProps) {
 
   if (isBarGraph) {
     return (
-      <div className="not-prose my-4 rounded-lg overflow-hidden bg-card">
+      <div className="not-prose my-4 rounded-lg overflow-hidden bg-background border border-border">
         <div className="relative">
           {/* Grey bar fills to exam coverage % when collapsed, full width when expanded */}
           <div
-            className="absolute inset-y-0 left-0 bg-accent/60 transition-all duration-300"
+            className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
           {collapsible && hasBody ? (

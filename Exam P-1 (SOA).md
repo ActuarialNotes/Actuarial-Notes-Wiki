@@ -24,12 +24,12 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 
 > [!example]- Univariate Random Variables {44-50%}
 > Understand [[Discrete Univariate Distributions]] and [[Continuous Univariate Distributions]] and their applications. 
-> 1. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
+> 1. Explain and apply the concepts of **Probability**, [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
 > 2. Calculate [[Conditional Probability|Conditional Probabilities]].
 > 3. Explain and calculate expected values, including moments, mode, median, and percentiles.
 > 4. Explain and calculate [[Variance]], [[Standard Deviation]], and [[Coefficient of Variation]].
 > 5. Calculate the amount that an insurance company pays to a policyholder for a claim given [[Policy Information]], including [[Deductible]]s, [[Coinsurance Percentage]]s, and [[Benefit Limit]]s, as well as other factors, such as [[Inflation]].
-> 6. Calculate the [[Expected Value]], [[Variance]], and [[Standard Deviation]] of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]].
+> 6. Calculate the [[Expected Value]], **Variance**, and **Standard Deviation** of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]].
 >
 > ### Discrete Univariate Distributions 
 > - [[Binomial]]

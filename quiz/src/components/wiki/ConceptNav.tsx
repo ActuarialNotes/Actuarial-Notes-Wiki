@@ -107,7 +107,7 @@ export function ConceptNav({ conceptName, syllabus, fromExamId }: ConceptNavProp
           disabled={!position}
           aria-expanded={open}
           aria-haspopup="menu"
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border bg-accent/40 text-sm font-medium disabled:cursor-default disabled:opacity-80"
+          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-accent/40 text-sm font-medium disabled:cursor-default disabled:opacity-80"
         >
           <span className="truncate max-w-[180px]">{conceptName}</span>
           {position && (

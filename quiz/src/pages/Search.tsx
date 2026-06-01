@@ -81,24 +81,24 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
           >
             {selected && <Check className="h-3.5 w-3.5" />}
           </button>
-          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
+          <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 transition-colors ${
             activeTopic && question.exam === activeTopic
-              ? 'bg-foreground text-background border-foreground'
-              : 'border-input text-muted-foreground bg-background'
+              ? 'bg-foreground text-background'
+              : 'text-muted-foreground bg-muted'
           }`}>
             {question.exam}
           </span>
-          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 transition-colors ${
+          <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 transition-colors ${
             activeSubtopics.length > 0 && activeSubtopics.includes(question.topic)
-              ? 'bg-foreground text-background border-foreground'
-              : 'border-input text-muted-foreground bg-background'
+              ? 'bg-foreground text-background'
+              : 'text-muted-foreground bg-muted'
           }`}>
             {question.topic}
           </span>
-          <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize transition-colors ${
+          <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 capitalize transition-colors ${
             activeDifficulty && question.difficulty === activeDifficulty
-              ? 'bg-foreground text-background border-foreground'
-              : 'border-input text-muted-foreground bg-background'
+              ? 'bg-foreground text-background'
+              : 'text-muted-foreground bg-muted'
           }`}>
             {question.difficulty}
           </span>
@@ -617,10 +617,10 @@ export default function Search() {
               setSearchType(value)
               setTextQuery('')
             }}
-            className={`px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               searchType === value
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'border-input hover:bg-accent'
+                ? 'bg-primary text-primary-foreground'
+                : 'hover:bg-accent'
             }`}
           >
             {label}
@@ -675,7 +675,7 @@ export default function Search() {
               {conceptFilter && (
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">Concept</span>
-                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-primary bg-primary/10 text-primary text-sm">
+                  <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
                     {conceptFilter}
                     <button
                       type="button"
@@ -705,10 +705,10 @@ export default function Search() {
                         setUseTodaysPlan(false)
                         setOpenTopicGroups(new Set())
                       }}
-                      className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
+                      className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
                         topic === exam.value
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-input hover:bg-accent'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'hover:bg-accent'
                       }`}
                     >
                       {exam.label}
@@ -848,10 +848,10 @@ export default function Search() {
                       key={d.value}
                       type="button"
                       onClick={() => setDifficulty(d.value)}
-                      className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
+                      className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
                         difficulty === d.value
-                          ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-input hover:bg-accent'
+                          ? 'bg-primary text-primary-foreground'
+                          : 'hover:bg-accent'
                       }`}
                     >
                       {d.label}

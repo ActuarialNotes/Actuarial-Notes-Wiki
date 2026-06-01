@@ -29,7 +29,7 @@ const LEVEL_LABELS: Record<MasteryState, string> = {
 
 function LevelPill({ level }: { level: MasteryState }) {
   return (
-    <span className={`inline-flex items-center px-5 py-2 rounded-full text-base font-bold tracking-wide border ${LEVEL_COLORS[level]}`}>
+    <span className={`inline-flex items-center px-5 py-2 rounded-full text-base font-bold tracking-wide ${LEVEL_COLORS[level]}`}>
       {LEVEL_LABELS[level]}
     </span>
   )

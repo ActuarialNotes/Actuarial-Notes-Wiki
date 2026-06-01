@@ -334,10 +334,10 @@ export default function Store() {
             <button
               onClick={() => setSkinAnimalFilter(null)}
               className={cn(
-                'shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
+                'shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors',
                 skinAnimalFilter === null
-                  ? 'bg-foreground text-background border-foreground'
-                  : 'border-border text-muted-foreground hover:text-foreground hover:border-foreground/50',
+                  ? 'bg-foreground text-background'
+                  : 'text-muted-foreground hover:text-foreground',
               )}
             >
               All

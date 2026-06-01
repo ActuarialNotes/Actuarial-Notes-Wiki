@@ -70,7 +70,7 @@ const PACING_CONFIG: Record<PacingStatus, { label: string; className: string }> 
 export function ConceptScheduleBadge({ conceptName, plan }: { conceptName: string; plan: StudyPlan }) {
   if (isScheduledToday(conceptName, plan)) {
     return (
-      <span className="text-xs px-1.5 py-0.5 rounded-full border border-primary/40 bg-primary/10 text-primary font-medium shrink-0">
+      <span className="text-xs px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium shrink-0">
         Today
       </span>
     )
@@ -151,7 +151,7 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
               <Info className="h-4 w-4" />
             </button>
             {studyPlan && (
-              <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${(PACING_CONFIG[studyPlan.status] ?? PACING_CONFIG.on_track).className}`}>
+              <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${(PACING_CONFIG[studyPlan.status] ?? PACING_CONFIG.on_track).className}`}>
                 {(PACING_CONFIG[studyPlan.status] ?? PACING_CONFIG.on_track).label}
               </span>
             )}
@@ -178,7 +178,7 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
                   </div>
                   <div className="flex flex-wrap gap-1 pl-5">
                     {todaysConcepts.map(name => (
-                      <span key={name} className="px-1.5 py-0.5 rounded-full border border-primary/40 bg-primary/10 text-primary">
+                      <span key={name} className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">
                         {name}
                       </span>
                     ))}

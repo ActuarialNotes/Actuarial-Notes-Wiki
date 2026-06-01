@@ -142,14 +142,14 @@ export default function WikiExam() {
         <ExamDaysPill
           count={daysToPrepare}
           explanation={`${daysToPrepare} days to prepare until your target study-ready date`}
-          className="bg-amber-400/20 text-amber-400 ring-1 ring-inset ring-amber-400/40"
+          className="bg-amber-400/20 text-amber-400"
         />
       )}
       {examStatus !== 'completed' && daysUntilExam !== null && (
         <ExamDaysPill
           count={daysUntilExam}
           explanation={`${daysUntilExam} days until your scheduled exam`}
-          className="bg-muted text-foreground ring-1 ring-inset ring-border"
+          className="bg-muted text-foreground"
         />
       )}
     </span>

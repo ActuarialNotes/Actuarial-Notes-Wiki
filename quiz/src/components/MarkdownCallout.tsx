@@ -150,7 +150,7 @@ function renderTitle(raw: string): ReactNode {
         part.startsWith('{') && part.endsWith('}') ? (
           <span
             key={i}
-            className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium border border-primary/30 bg-primary/10 text-primary align-middle"
+            className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-primary/10 text-primary align-middle"
           >
             {part.slice(1, -1)}
           </span>

@@ -1165,6 +1165,7 @@ function FlashcardStudyArea({
   onIndexChange,
   isFlashing,
   reverseCardModes,
+  onSetModes,
   defaultFlipped,
 }: {
   cards: WikiEntryRef[]
@@ -1172,6 +1173,7 @@ function FlashcardStudyArea({
   onIndexChange: (i: number) => void
   isFlashing?: boolean
   reverseCardModes: Set<ReverseCardSection>
+  onSetModes: (modes: Set<ReverseCardSection>) => void
   defaultFlipped: boolean
 }) {
   const [flipped, setFlipped] = useState(defaultFlipped)
@@ -1315,7 +1317,7 @@ function FlashcardStudyArea({
                     </div>
                     <button
                       type="button"
-                      onClick={() => { setReverseCardModes(new Set(['math'])); setShowPlayMenu(false) }}
+                      onClick={() => { onSetModes(new Set(['math'])); setShowPlayMenu(false) }}
                       className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
                     >
                       <Sigma className="h-3.5 w-3.5 shrink-0" />
@@ -1677,6 +1679,7 @@ export default function Flashcards() {
           onIndexChange={setActiveIndex}
           isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
           reverseCardModes={reverseCardModes}
+          onSetModes={setReverseCardModes}
           defaultFlipped={globalFlip}
         />
 

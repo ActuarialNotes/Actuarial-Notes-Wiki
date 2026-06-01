@@ -28,14 +28,14 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 > Understand key concepts concerning [[Loans]] and how to perform related calculations.
 > 1. Define and recognize the definitions of the following terms: [[Principal]], [[Interest]], [[Term of Loan]], [[Outstanding Balance]], [[Final Payment]], [[Drop Payment]], [[Balloon Payment]][[Amortization]]
 > 2. Calculate:
-> 	- The missing item, given any four of: term of loan, interest rate, payment amount, payment period, principal.
-> 	- The outstanding balance at any point in time.
-> 	- The amount of interest and principal repayment in a given payment.
+> 	- The missing item, given any four of: **term of loan**,** interest rate**, **payment amount**, **payment period**, **principal**.
+> 	- The **outstanding balance** at any point in time.
+> 	- The amount of **interest** and **principal repayment** in a given payment.
 > 	- Similar calculations to the above when refinancing is involved.
 
 > [!example]-  Bonds {15-25%}
 > Understand key concepts concerning [[Bonds]], and how to perform related calculations.
-> 1. Define and recognize the definitions of the following terms: [[Bond Price|Price]], [[Book Value]], [[Market Value]], [[Amortization of Premium]], [[Accumulation of Discount]], [[Redemption Value]], Par Value/[[Face Value]], [[Yield Rate]], [[Coupon]], [[Coupon Rate]], [[Term of Bond]], [[Callable Bond|Callable]]/[[Non-Callable Bond|Non-Callable]], [[Call Price]], [[Call Premium]], [[Accumulated Value]] with [[Reinvestment of Coupons]].
+> 1. Define and recognize the definitions of the following terms: [[Bond Price|Price]], [[Book Value]], [[Market Value]], [[Amortization of Premium]], [[Accumulation of Discount]], [[Redemption Value]], Par Value/[[Face Value]], [[Yield Rate]], [[Coupon]], [[Coupon Rate]], [[Term of Bond]], [[Callable Bond|Callable]]/[[Non-Callable Bond|Non-Callable]], [[Call Price]], [[Call Premium]], **Accumulated Value** with [[Reinvestment of Coupons]].
 > 2. Given sufficient partial information about the items listed below, calculate any of the remaining items
 > 	- Price, book value, market value, accumulated value with reinvestment of coupons, amortization of premium, accumulation of discount. (Note that valuation of bonds between coupon payment dates will not be covered).
 > 	- Redemption value, face value.

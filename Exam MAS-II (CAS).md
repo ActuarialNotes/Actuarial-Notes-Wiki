@@ -2,19 +2,17 @@
      data-current="MAS-II|Modern Actuarial Statistics II"
 </div>
 
-## MAS-II (CAS)
+# MAS-II (CAS)
 The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam covering [[Credibility Theory]], [[Linear Mixed Models]], [[Statistical Learning]], and [[Time Series]] as part of the ACAS credentialing pathway.
 
-### Prerequisite knowledge
+## Prerequisite knowledge
 - [[Calculus]] and [[Concepts/Probability]] at a thorough level.
 - [[Linear Algebra]] at the level assumed as a prerequisite for an undergraduate regression course.
 - All concepts from [[MAS-I (CAS)]], including [[Generalized Linear Model]]s and [[Statistical Learning]] fundamentals.
 
-### Learning Objectives
+## Learning Objectives
 
 > [!example]- A. Introduction to Credibility {15–25%}
-> 
-> ### A. Introduction to Credibility
 > 
 > Candidates should understand and be able to calculate credibility-weighted estimates.
 > 
@@ -24,8 +22,6 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > **Readings:** Tse
 
 > [!example]- B. Linear Mixed Models {10–20%}
-> 
-> ### B. Linear Mixed Models
 > 
 > Candidates should understand the structure of [[Linear Mixed Model]]s, including how to accommodate models with correlated observations or models where the variance is either not assumed to be constant or a function of the mean.
 > 
@@ -37,8 +33,6 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > **Readings:** West
 
 > [!example]- C. Statistical Learning {40–50%}
-> 
-> ### C. Statistical Learning
 > 
 > Candidates should understand the mechanics of the algorithms identified in the tasks below and recognize their inherent strengths and weaknesses to select the most appropriate procedure for the learning task at hand.
 > 
@@ -58,8 +52,6 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 
 > [!example]- D. Time Series with Constant Variance {15–25%}
 > 
-> ### D. Time Series with Constant Variance
-> 
 > Candidates should understand the basic applications of the [[ARIMA]] (Auto Regressive Integrated Moving Average) time series model.
 > 
 > 12. Model relationships of current and past values of a statistic/metric
@@ -70,7 +62,7 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > **Readings:** Cowpertwait
 
 
-### Source Material
+## Source Material
 > [!answer]- Source Material {5 Sources}
 > 
 > |Source|Domains / Tasks|

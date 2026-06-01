@@ -120,6 +120,11 @@ export default function Quiz() {
   }
 
   function handleSelectAnswer(key: string) {
+    if (!key) {
+      // Empty string signals "not all parts filled yet" from multi-part questions
+      setPendingAnswer(null)
+      return
+    }
     if (key === pendingAnswer) {
       // Second tap on already-selected answer confirms it
       handleConfirmAnswer()

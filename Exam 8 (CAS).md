@@ -2,10 +2,10 @@
      data-current="8|Advanced Ratemaking"
 </div>
 
-## Exam 8 (CAS)
+# Exam 8 (CAS)
 The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ratemaking models and excess, deductible, and individual risk rating systems.
 
-### Learning Objectives
+## Learning Objectives
 
 > [!example]- A. Classification Ratemaking {60-80%}
 > ### A. Classification Ratemaking
@@ -37,9 +37,9 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 >
 > **Readings:** Distributions for Actuaries · Individual Risk Rating Study Note · Individual Risk Rating Case Study · CGL Experience and Schedule Rating Plan · Experience Rating Plan Manual · Retrospective Rating Plan Manual
 
-### Source Material
+## Source Material
 
->[!answer]- 📕 Source Material {11 Sources}
+>[!answer]- Source Material {11 Sources}
 >
 > | Source | Tasks |
 > | --- | --- |

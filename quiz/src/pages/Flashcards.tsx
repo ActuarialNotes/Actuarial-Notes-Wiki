@@ -1110,14 +1110,14 @@ function GalleryPanel({
             {groupBy === 'exam' ? (
               <div className="space-y-6">
                 {examGroups.length === 0 ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                     {orderedCards.map(renderCard)}
                   </div>
                 ) : (
                   examGroups.map(({ label, cards: groupCards }) => (
                     <div key={label} className="space-y-2">
                       <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{label}</h2>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                         {groupCards.map(renderCard)}
                       </div>
                     </div>
@@ -1125,7 +1125,7 @@ function GalleryPanel({
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {orderedCards.map(renderCard)}
               </div>
             )}
@@ -1674,7 +1674,7 @@ export default function Flashcards() {
       <ConceptPopup />
 
       {/* Fixed controls footer — always at bottom, above mobile nav */}
-      <div className="fixed bottom-14 md:bottom-0 left-0 right-0 z-[46]">
+      <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
         <FlashcardControlsBar
           galleryOpen={galleryExpanded}
           onGalleryToggle={() => setGalleryExpanded(v => !v)}

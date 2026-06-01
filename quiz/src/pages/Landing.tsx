@@ -16,8 +16,9 @@ import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuizMode } from '@/lib/parser'
 
 const EXAMS = [
-  { value: 'Probability', label: 'Exam P — Probability' },
-  { value: 'Financial Mathematics', label: 'Exam FM — Financial Mathematics' },
+  { value: 'Probability', label: 'Exam P-1 (SOA)' },
+  { value: 'Financial Mathematics', label: 'Exam FM-2 (SOA)' },
+  { value: 'Exam 5', label: 'Exam 5 (CAS)' },
 ]
 
 
@@ -25,6 +26,7 @@ const EXAMS = [
 const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Probability': 30,
   'Financial Mathematics': 35,
+  'Exam 5': 25,
 }
 
 const QUICK_COUNTS = [3, 5, 10]

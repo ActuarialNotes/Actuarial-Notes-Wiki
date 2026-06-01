@@ -29,8 +29,9 @@ function linkMatchesConcept(link: string, conceptName: string): boolean {
 
 const EXAMS = [
   { value: '', label: 'All Exams' },
-  { value: 'Probability', label: 'Exam P' },
-  { value: 'Financial Mathematics', label: 'Exam FM' },
+  { value: 'Probability', label: 'Exam P-1 (SOA)' },
+  { value: 'Financial Mathematics', label: 'Exam FM-2 (SOA)' },
+  { value: 'Exam 5', label: 'Exam 5 (CAS)' },
 ]
 
 const DIFFICULTIES: { value: Difficulty | ''; label: string }[] = [

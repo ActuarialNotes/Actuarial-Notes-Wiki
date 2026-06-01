@@ -31,12 +31,12 @@ const SEARCH_BAR_H = 56
 
 // Mirrors PACK_COLOR_PALETTE in Flashcards.tsx so in-progress exams share the same colour across tabs
 const PACK_COLORS = [
-  { bg: 'bg-blue-500/10 border-blue-400/40',      bar: 'bg-blue-500',    text: 'text-blue-600 dark:text-blue-400' },
-  { bg: 'bg-emerald-500/10 border-emerald-400/40', bar: 'bg-emerald-500', text: 'text-emerald-600 dark:text-emerald-400' },
-  { bg: 'bg-violet-500/10 border-violet-400/40',   bar: 'bg-violet-500',  text: 'text-violet-600 dark:text-violet-400' },
-  { bg: 'bg-orange-500/10 border-orange-400/40',   bar: 'bg-orange-500',  text: 'text-orange-600 dark:text-orange-400' },
-  { bg: 'bg-rose-500/10 border-rose-400/40',       bar: 'bg-rose-500',    text: 'text-rose-600 dark:text-rose-400' },
-  { bg: 'bg-cyan-500/10 border-cyan-400/40',       bar: 'bg-cyan-500',    text: 'text-cyan-600 dark:text-cyan-400' },
+  { bg: 'bg-blue-500/10 border-blue-400/40',      hover: 'hover:bg-blue-500/25 hover:border-blue-400/70',      bar: 'bg-blue-500',    text: 'text-blue-600 dark:text-blue-400' },
+  { bg: 'bg-emerald-500/10 border-emerald-400/40', hover: 'hover:bg-emerald-500/25 hover:border-emerald-400/70', bar: 'bg-emerald-500', text: 'text-emerald-600 dark:text-emerald-400' },
+  { bg: 'bg-violet-500/10 border-violet-400/40',   hover: 'hover:bg-violet-500/25 hover:border-violet-400/70',   bar: 'bg-violet-500',  text: 'text-violet-600 dark:text-violet-400' },
+  { bg: 'bg-orange-500/10 border-orange-400/40',   hover: 'hover:bg-orange-500/25 hover:border-orange-400/70',   bar: 'bg-orange-500',  text: 'text-orange-600 dark:text-orange-400' },
+  { bg: 'bg-rose-500/10 border-rose-400/40',       hover: 'hover:bg-rose-500/25 hover:border-rose-400/70',       bar: 'bg-rose-500',    text: 'text-rose-600 dark:text-rose-400' },
+  { bg: 'bg-cyan-500/10 border-cyan-400/40',       hover: 'hover:bg-cyan-500/25 hover:border-cyan-400/70',       bar: 'bg-cyan-500',    text: 'text-cyan-600 dark:text-cyan-400' },
 ] as const
 
 function formatTargetDate(dateStr: string): string {
@@ -267,11 +267,14 @@ export default function WikiHome() {
                       <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })}>
                         <Card
                           className={cn(
-                            'h-full transition-colors hover:bg-accent/30 overflow-hidden',
-                            // Completed: green border only, no filled background
-                            isCompleted && 'border-emerald-500/50',
-                            // In-progress: coloured background
+                            'h-full transition-all duration-150 overflow-hidden',
+                            // Default (new) exam hover
+                            !colorEntry && !isCompleted && 'hover:bg-accent/30',
+                            // Completed: green border only, subtle hover
+                            isCompleted && 'border-emerald-500/50 hover:bg-emerald-500/10 hover:border-emerald-500/70',
+                            // In-progress: coloured background + vibrant on hover
                             colorEntry && colorEntry.bg,
+                            colorEntry && colorEntry.hover,
                           )}
                         >
                           <CardHeader className="pb-3">
@@ -341,7 +344,7 @@ export default function WikiHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {books.map(book => (
               <Link key={book.path} to={wikiRoute({ kind: 'resource', name: book.name })}>
-                <Card className="h-full transition-colors hover:bg-accent/30">
+                <Card className="h-full transition-all duration-150 hover:bg-accent/40">
                   <CardHeader className="pb-1">
                     <CardTitle className="text-sm leading-snug">
                       {book.title ?? book.name}

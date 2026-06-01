@@ -175,7 +175,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     },
     img({ src, alt }) {
       if (hideImages) return null
-      return <img src={src} alt={alt ?? ''} className="max-w-full" />
+      return <img src={src} alt={alt ?? ''} className="max-w-full" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
     },
     a({ href, children, ...rest }) {
       if (!href) return <a {...rest}>{children}</a>

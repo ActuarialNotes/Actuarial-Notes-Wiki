@@ -760,7 +760,7 @@ function SortableCard({
             <div className="space-y-2">
               {cardImages.map((img, i) => (
                 <figure key={i} className="flex flex-col items-center gap-1">
-                  <img src={img.src} alt={img.alt} className="max-w-full object-contain rounded" />
+                  <img src={img.src} alt={img.alt} className="max-w-full object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
                   {img.caption && (
                     <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
                   )}
@@ -1359,7 +1359,7 @@ function FlashcardStudyArea({
               <div className="space-y-3" onClick={e => e.stopPropagation()}>
                 {cardImages.map((img, i) => (
                   <figure key={i} className="flex flex-col items-center gap-1">
-                    <img src={img.src} alt={img.alt} className="max-w-full max-h-48 object-contain rounded" />
+                    <img src={img.src} alt={img.alt} className="max-w-full max-h-48 object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
                     {img.caption && (
                       <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
                     )}

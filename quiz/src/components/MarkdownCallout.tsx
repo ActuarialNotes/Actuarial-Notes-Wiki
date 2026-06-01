@@ -162,6 +162,18 @@ function renderTitle(raw: string): ReactNode {
   )
 }
 
+// Extracts the average percentage from a title containing {5-15%} or {15%}.
+function parseExamPercentage(title: string): number | null {
+  const match = title.match(/\{([^}]+)\}/)
+  if (!match) return null
+  const content = match[1].trim()
+  const rangeMatch = content.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*%/)
+  if (rangeMatch) return (parseFloat(rangeMatch[1]) + parseFloat(rangeMatch[2])) / 2
+  const singleMatch = content.match(/(\d+(?:\.\d+)?)\s*%/)
+  if (singleMatch) return parseFloat(singleMatch[1])
+  return null
+}
+
 interface MatchResult {
   type: string
   fold: '' | '-' | '+'
@@ -296,6 +308,9 @@ function Callout({ type, fold, title, children }: CalloutProps) {
   const displayTitle = title || titleCase(type)
   const hasBody = Children.count(children) > 0
 
+  const examPercentage = type === 'example' ? parseExamPercentage(title) : null
+  const isBarGraph = examPercentage !== null
+
   const headerContent = (
     <div className="flex items-center gap-3 w-full">
       {Icon && <Icon className={`h-4 w-4 shrink-0 ${style.accentClass}`} />}
@@ -314,6 +329,38 @@ function Callout({ type, fold, title, children }: CalloutProps) {
   const contentClasses = style.contentClass
     ? `${style.contentClass} ${CONTENT_CLASSES_SHARED}`
     : CONTENT_CLASSES
+
+  if (isBarGraph) {
+    return (
+      <div className="not-prose my-4 rounded-lg overflow-hidden">
+        <div className="relative">
+          {/* Grey bar fills to exam coverage % when collapsed, full width when expanded */}
+          <div
+            className="absolute inset-y-0 left-0 bg-muted/70 transition-all duration-300"
+            style={{ width: open ? '100%' : `${examPercentage}%` }}
+          />
+          {collapsible && hasBody ? (
+            <button
+              type="button"
+              data-callout-toggle
+              onClick={() => setOpen(v => !v)}
+              className="relative z-10 w-full px-4 py-3 text-left hover:bg-muted/20 transition-colors duration-150"
+              aria-expanded={open}
+            >
+              {headerContent}
+            </button>
+          ) : (
+            <div className="relative z-10 px-4 py-3">{headerContent}</div>
+          )}
+        </div>
+        {hasBody && (
+          <div data-callout-body hidden={!open} className={`bg-muted/70 ${contentClasses}`}>
+            {children}
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className={`not-prose my-4 ${borderClasses} ${bgClass} ${roundClass} overflow-hidden`}>

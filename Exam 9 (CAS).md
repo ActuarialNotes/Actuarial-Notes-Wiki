@@ -2,10 +2,10 @@
      data-current="9|Risk Management for Actuaries"
 </div>
 
-## Exam 9 (CAS)
+# Exam 9 (CAS)
 The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastrophe modeling, reinsurance pricing, financial risk management, and enterprise risk management.
 
-### Learning Objectives
+## Learning Objectives
 
 > [!example]- A. Catastrophe and Reinsurance {25-35%}
 > ### A. Catastrophe and Reinsurance
@@ -55,7 +55,7 @@ The **Risk Management for Actuaries (Exam 9)** is a 4 hour exam covering catastr
 > **Readings:** Enterprise Risk Analysis for Property and Liability Insurance Companies
 >
 
-### Source Material
+## Source Material
 
 >[!answer]- Source Material {8 Sources}
 >

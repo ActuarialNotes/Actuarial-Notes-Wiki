@@ -1,83 +1,11 @@
-[[Actuarial Notes Wiki|Wiki]] / **6U (CAS)**
-
 <div class="exam-nav"
      data-current="6U|Regulation and Financial Reporting (US)"
 </div>
 
-## 6U (CAS)
-
+# Exam 6U (CAS)
 The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour computer-based exam testing knowledge of [[Insurance Regulation]], [[Statutory Accounting]], and the professional responsibilities of the [[Appointed Actuary]] in the context of U.S. property and casualty insurance.
 
-
-> [!answer]- 📅 Exam Schedule 2026
->
-> <div class="highlight-upcoming" data-date-col="0"></div>
->
-> Dates | Exam | Registration Deadline
-> -|-|-
-> Apr. 14 – Apr. 21, 2026 | 6U | ~~Mar. 25, 2026~~ (closed)
-> Oct. 19 – Oct. 27, 2026 | 6U | TBD
->
-> - [Register](https://www.casact.org/exams-admissions/exam-registration) ($850 registration fee; $680 full-time student)
-
-> [!answer]- 📄 Download Resources 2 PDFs
->
-> - [Content Outline (Fall 2025)](https://www.casact.org/exam/exam-6u-regulation-and-financial-reporting-us) — Domains, tasks, and full reading list
-> - [CAS Exam Registration & Fees](https://www.casact.org/exams-admissions/exam-fees) — Deadlines, fees, and refund policy
-
-
-> [!answer]- 📕 Source Material {46 Readings}
->
-> | Reading | Domains/Tasks |
-> |---|---|
-> | [[Actuarial Standard of Practice No. 20 Discounting of Property Casualty Claim Estimates (ASB - 2023)]] | C6, C7 |
-> | [[Actuarial Standard of Practice No. 36 Statements of Actuarial Opinion on P&C Loss Reserves (ASB - 2024)]] | C7 |
-> | [[Actuarial Standard of Practice No. 41 Actuarial Communications (ASB - 2010)]] | C6 |
-> | [[Actuarial Standard of Practice No. 43 Property Casualty Unpaid Claim Estimates (ASB - 2007)]] | C6 |
-> | [[Estimating the Uncollectible Reinsurance Reserve for PC Companies New GAAP Requirements (AAA - 2019)]] | D1, D3–D4 |
-> | [[Retained Property Casualty Insurance Related Risk Interaction of Actuarial Analysis and Accounting (AAA - 2018)]] | C4, C7 |
-> | [[Materiality Concepts on Professionalism (AAA - 2006)]] | C7 |
-> | [[Risk of Material Adverse Deviation Study Note (Brandt & Maxwell - 2023)]] | C7 |
-> | [[Regulatory Review of Predictive Models White Paper (CASTF - 2020)]] | A5 |
-> | [[Reinsurance Accounting and Strategy for the Actuary (Cedar & Thompson - 2020)]] | D1, D4 |
-> | [[Nuclear Verdicts Tort Liability and Legislative Responses (Cole & Marzen - 2023)]] | A3, A6–A7 |
-> | [[Statements of Actuarial Opinion on Property and Casualty Loss Reserves Practice Note (COPLFR - 2024)]] | C5–C9 |
-> | [[Personal Insurance (Cook - 2013)]] | B1–B3 |
-> | [[2024 Excess and Surplus Lines Laws Manual (Emmanuel & Lerner - 2024)]] | A3 |
-> | [[Annual Report on the Insurance Industry Dodd-Frank (FIO - 2024)]] | A3 |
-> | [[Rating Agencies (Feldblum - 2011)]] | A2 |
-> | [[Statutory Surplus Computation Pricing and Valuation (Feldblum - 2003)]] | C1–C2 |
-> | [[Accounting Standards Codification 944 Financial Guarantee Insurance Contracts (FASB - 2011)]] | D2 |
-> | [[FHCF 2024 Annual Report (SBA Florida - 2024)]] | B1–B3 |
-> | [[Common Pitfalls and Practical Considerations in Risk Transfer Analysis (Freihaut & Vendetti - 2009)]] | D2 |
-> | [[Government Insurers Study Note (Germani et al. - 2017)]] | B1–B3 |
-> | [[Private Flood Insurance and the National Flood Insurance Program (Horn & Webel - 2023)]] | B1–B3 |
-> | [[Reinsurance Commutation (Klann - 2013)]] | D3 |
-> | [[NAIC Public Hearing on Credit-Based Insurance Scores (Kucera - 2009)]] | A3 |
-> | [[Testimony on the Impact of Credit-Based Insurance Scoring (McCarty - 2008)]] | A3 |
-> | [[2025 Annual Statement Instructions Insurance Expense Exhibit (NAIC - 2025)]] | C3 |
-> | [[The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative (NAIC - 2013)]] | A2, A4, C3 |
-> | [[Accounting Practices and Procedures Manual Preamble (NAIC - 2025)]] | A2, C2, C4 |
-> | [[SSAP 5R Liabilities Contingencies and Impairment of Assets (NAIC - 2024)]] | C1–C2 |
-> | [[SSAP 9 Subsequent Events (NAIC - 2024)]] | C5 |
-> | [[SSAP 53 Property Casualty Contracts Premiums (NAIC - 2024)]] | C1–C7 |
-> | [[SSAP 55 Unpaid Claims Losses and Loss Adjustment Expenses (NAIC - 2024)]] | C1–C2 |
-> | [[SSAP 62R Property and Casualty Reinsurance (NAIC - 2024)]] | C1–C2, D2–D3, D5 |
-> | [[SSAP 63 Underwriting Pools (NAIC - 2024)]] | C1–C2 |
-> | [[SSAP 65 Property and Casualty Contracts (NAIC - 2024)]] | C1–C2 |
-> | [[SSAP 66 Retrospectively Rated Contracts (NAIC - 2024)]] | D2 |
-> | [[NAIC Insurance Regulatory Information System IRIS Ratios Manual (NAIC - 2024)]] | A2, C3, C7 |
-> | [[Official 2024 NAIC Annual Statement Blanks Property and Casualty (NAIC - 2024)]] | C1–C2 |
-> | [[NAIC Annual Statement Examples Allstate Liberty Mutual (NAIC - 2024)]] | C1 |
-> | [[Price Optimization White Paper (NAIC - 2015)]] | A5 |
-> | [[Risk Retention Groups (NAIC - 2023)]] | A3 |
-> | [[Financial Reporting Through the Lens of a Property Casualty Actuary (Odomirok et al. - 2020)]] | A2, C1–C7, C9–C10 |
-> | [[Insurance Regulation Chapters 2-8 (Porter - 2008)]] | A1–A2 |
-> | [[Insurance Regulation Chapter 12 (Porter - 2008)]] | A2, B1 |
-> | [[The Economic Crisis and Lessons from U.S. Insurance Regulation (Vaughn - 2009)]] | A2, A4 |
-> | [[Terrorism Risk Insurance Overview and Issue Analysis (Webel - 2019)]] | B1–B2 |
-
-### Learning Objectives
+## Learning Objectives
 
 > [!example]- A. United States Laws and Regulations 10–20%
 > ### A. United States Laws and Regulations
@@ -131,3 +59,54 @@ The **United States Regulation and Financial Reporting Exam 6U** is a 4-hour com
 > 25. Evaluate the health of an insurance entity using [[Schedule F]].
 >
 > **Readings:** AAA CECL · ASC 944-020-15 · Cedar & Thompson · Freihaut & Vendetti · Klann · NAIC SSAP 62R · NAIC SSAP 66
+
+> [!answer]- Source Material {46 Readings}
+>
+> | Reading | Domains/Tasks |
+> |---|---|
+> | [[Actuarial Standard of Practice No. 20 Discounting of Property Casualty Claim Estimates (ASB - 2023)]] | C6, C7 |
+> | [[Actuarial Standard of Practice No. 36 Statements of Actuarial Opinion on P&C Loss Reserves (ASB - 2024)]] | C7 |
+> | [[Actuarial Standard of Practice No. 41 Actuarial Communications (ASB - 2010)]] | C6 |
+> | [[Actuarial Standard of Practice No. 43 Property Casualty Unpaid Claim Estimates (ASB - 2007)]] | C6 |
+> | [[Estimating the Uncollectible Reinsurance Reserve for PC Companies New GAAP Requirements (AAA - 2019)]] | D1, D3–D4 |
+> | [[Retained Property Casualty Insurance Related Risk Interaction of Actuarial Analysis and Accounting (AAA - 2018)]] | C4, C7 |
+> | [[Materiality Concepts on Professionalism (AAA - 2006)]] | C7 |
+> | [[Risk of Material Adverse Deviation Study Note (Brandt & Maxwell - 2023)]] | C7 |
+> | [[Regulatory Review of Predictive Models White Paper (CASTF - 2020)]] | A5 |
+> | [[Reinsurance Accounting and Strategy for the Actuary (Cedar & Thompson - 2020)]] | D1, D4 |
+> | [[Nuclear Verdicts Tort Liability and Legislative Responses (Cole & Marzen - 2023)]] | A3, A6–A7 |
+> | [[Statements of Actuarial Opinion on Property and Casualty Loss Reserves Practice Note (COPLFR - 2024)]] | C5–C9 |
+> | [[Personal Insurance (Cook - 2013)]] | B1–B3 |
+> | [[2024 Excess and Surplus Lines Laws Manual (Emmanuel & Lerner - 2024)]] | A3 |
+> | [[Annual Report on the Insurance Industry Dodd-Frank (FIO - 2024)]] | A3 |
+> | [[Rating Agencies (Feldblum - 2011)]] | A2 |
+> | [[Statutory Surplus Computation Pricing and Valuation (Feldblum - 2003)]] | C1–C2 |
+> | [[Accounting Standards Codification 944 Financial Guarantee Insurance Contracts (FASB - 2011)]] | D2 |
+> | [[FHCF 2024 Annual Report (SBA Florida - 2024)]] | B1–B3 |
+> | [[Common Pitfalls and Practical Considerations in Risk Transfer Analysis (Freihaut & Vendetti - 2009)]] | D2 |
+> | [[Government Insurers Study Note (Germani et al. - 2017)]] | B1–B3 |
+> | [[Private Flood Insurance and the National Flood Insurance Program (Horn & Webel - 2023)]] | B1–B3 |
+> | [[Reinsurance Commutation (Klann - 2013)]] | D3 |
+> | [[NAIC Public Hearing on Credit-Based Insurance Scores (Kucera - 2009)]] | A3 |
+> | [[Testimony on the Impact of Credit-Based Insurance Scoring (McCarty - 2008)]] | A3 |
+> | [[2025 Annual Statement Instructions Insurance Expense Exhibit (NAIC - 2025)]] | C3 |
+> | [[The U.S. National State-Based System of Insurance Regulation and the Solvency Modernization Initiative (NAIC - 2013)]] | A2, A4, C3 |
+> | [[Accounting Practices and Procedures Manual Preamble (NAIC - 2025)]] | A2, C2, C4 |
+> | [[SSAP 5R Liabilities Contingencies and Impairment of Assets (NAIC - 2024)]] | C1–C2 |
+> | [[SSAP 9 Subsequent Events (NAIC - 2024)]] | C5 |
+> | [[SSAP 53 Property Casualty Contracts Premiums (NAIC - 2024)]] | C1–C7 |
+> | [[SSAP 55 Unpaid Claims Losses and Loss Adjustment Expenses (NAIC - 2024)]] | C1–C2 |
+> | [[SSAP 62R Property and Casualty Reinsurance (NAIC - 2024)]] | C1–C2, D2–D3, D5 |
+> | [[SSAP 63 Underwriting Pools (NAIC - 2024)]] | C1–C2 |
+> | [[SSAP 65 Property and Casualty Contracts (NAIC - 2024)]] | C1–C2 |
+> | [[SSAP 66 Retrospectively Rated Contracts (NAIC - 2024)]] | D2 |
+> | [[NAIC Insurance Regulatory Information System IRIS Ratios Manual (NAIC - 2024)]] | A2, C3, C7 |
+> | [[Official 2024 NAIC Annual Statement Blanks Property and Casualty (NAIC - 2024)]] | C1–C2 |
+> | [[NAIC Annual Statement Examples Allstate Liberty Mutual (NAIC - 2024)]] | C1 |
+> | [[Price Optimization White Paper (NAIC - 2015)]] | A5 |
+> | [[Risk Retention Groups (NAIC - 2023)]] | A3 |
+> | [[Financial Reporting Through the Lens of a Property Casualty Actuary (Odomirok et al. - 2020)]] | A2, C1–C7, C9–C10 |
+> | [[Insurance Regulation Chapters 2-8 (Porter - 2008)]] | A1–A2 |
+> | [[Insurance Regulation Chapter 12 (Porter - 2008)]] | A2, B1 |
+> | [[The Economic Crisis and Lessons from U.S. Insurance Regulation (Vaughn - 2009)]] | A2, A4 |
+> | [[Terrorism Risk Insurance Overview and Issue Analysis (Webel - 2019)]] | B1–B2 |

@@ -441,27 +441,6 @@ export function ReadinessCard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openConceptsTrigger])
 
-  // Auto-open plan topic groups (uncollapsed by default) when the plan loads
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (groupedPlanConcepts.length === 0) return
-    setPlanTopicsOpen(new Set(groupedPlanConcepts.map(g => g.topicName)))
-  }, [groupedPlanConcepts.map(g => g.topicName).join('|')])
-
-  // Auto-expand Topics Mastered section and relevant topics when study plan is active
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (displayConcepts.length === 0) return
-    setTopicsMasteredOpen(true)
-    const planTopicNames = new Set(groupedPlanConcepts.map(g => g.topicName))
-    setOpenTopics(prev => {
-      if (planTopicNames.size === 0) return prev
-      const next = new Set(prev)
-      planTopicNames.forEach(n => next.add(n))
-      return next
-    })
-  }, [displayConcepts.join('|')])
-
   useEffect(() => {
     setCompletedToday(readTodayLevelUps())
     function handleLevelUp(e: Event) {
@@ -628,6 +607,27 @@ export function ReadinessCard({
     })),
     [displayConcepts, masteryStateByName]
   )
+
+  // Auto-open plan topic groups (uncollapsed by default) when the plan loads
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (groupedPlanConcepts.length === 0) return
+    setPlanTopicsOpen(new Set(groupedPlanConcepts.map(g => g.topicName)))
+  }, [groupedPlanConcepts.map(g => g.topicName).join('|')])
+
+  // Auto-expand Topics Mastered section and relevant topics when study plan is active
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (displayConcepts.length === 0) return
+    setTopicsMasteredOpen(true)
+    const planTopicNames = new Set(groupedPlanConcepts.map(g => g.topicName))
+    setOpenTopics(prev => {
+      if (planTopicNames.size === 0) return prev
+      const next = new Set(prev)
+      planTopicNames.forEach(n => next.add(n))
+      return next
+    })
+  }, [displayConcepts.join('|')])
 
   const todayStr = todayISO()
 

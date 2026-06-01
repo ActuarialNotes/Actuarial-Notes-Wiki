@@ -56,7 +56,7 @@ function ExamStatusBadge({ progressKey }: { progressKey: string }) {
   return (
     <button
       type="button"
-      onClick={() => { if (user) openExams() }}
+      onClick={openExams}
       title={user ? STATUS_TITLE[currentStatus] : 'Sign in to track progress'}
       aria-label={user ? STATUS_TITLE[currentStatus] : 'Sign in to track progress'}
       className="inline-flex items-center justify-center shrink-0 rounded-full transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring not-prose"

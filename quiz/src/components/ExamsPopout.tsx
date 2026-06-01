@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
-import { X, Loader2, GraduationCap, Play } from 'lucide-react'
+import { X, Loader2, GraduationCap, Play, LogIn } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
+import { useAuth } from '@/hooks/useAuth'
 import { TRACKS } from '@/data/tracks'
 import type { ItemStatus, TrackItem } from '@/data/tracks'
 import { cn } from '@/lib/utils'
@@ -87,6 +89,8 @@ function useDesktopLeft() {
 }
 
 export default function ExamsPopout({ open, onClose }: Props) {
+  const { user } = useAuth()
+  const navigate = useNavigate()
   const { examRows, loadingExams, selectedTrack, setSelectedTrack, saveExamRows, examsState, updateStudyPlanConfig, updateTargetDate } = useExamProgress()
   const [localExamMap, setLocalExamMap] = useState<Record<string, { status: ItemStatus; targetDate: string }>>({})
   const [dirty, setDirty] = useState(false)
@@ -228,109 +232,134 @@ export default function ExamsPopout({ open, onClose }: Props) {
           </button>
         </div>
 
-        {/* Track selector */}
-        <div className="px-4 pt-3 pb-2 shrink-0">
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground whitespace-nowrap">Credential track</span>
-            <select
-              value={selectedTrack}
-              onChange={e => setSelectedTrack(e.target.value)}
-              className="flex-1 text-base border border-input rounded-md px-2 py-1.5 bg-background text-foreground cursor-pointer"
-            >
-              {TRACKS.map(t => (
-                <option key={t.key} value={t.key}>{t.name}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Exam list — scrollable */}
-        <div className="flex-1 overflow-y-auto px-4 pb-2">
-          {loadingExams ? (
-            <div className="flex justify-center py-6">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        {/* Body — blurred when signed out */}
+        <div className="relative flex flex-col flex-1 min-h-0">
+          <div className={cn('flex flex-col flex-1 min-h-0', !user && 'blur-sm pointer-events-none select-none')}>
+            {/* Track selector */}
+            <div className="px-4 pt-3 pb-2 shrink-0">
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-muted-foreground whitespace-nowrap">Credential track</span>
+                <select
+                  value={selectedTrack}
+                  onChange={e => setSelectedTrack(e.target.value)}
+                  className="flex-1 text-base border border-input rounded-md px-2 py-1.5 bg-background text-foreground cursor-pointer"
+                >
+                  {TRACKS.map(t => (
+                    <option key={t.key} value={t.key}>{t.name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-          ) : (
-            <div className="space-y-4">
-              {currentTrack.sections.map(section => (
-                <div key={section.label}>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                    {section.label}
-                  </p>
-                  <div className="space-y-1.5">
-                    {section.items.map(item => {
-                      const row = localExamMap[item.id] ?? { status: 'not_started' as ItemStatus, targetDate: '' }
-                      const statusColor =
-                        row.status === 'completed'
-                          ? 'text-green-600 dark:text-green-500 opacity-100'
-                          : row.status === 'in_progress'
-                          ? 'text-amber-600 dark:text-amber-500 opacity-100'
-                          : 'text-muted-foreground opacity-60'
-                      return (
-                        <div key={item.id} className="flex items-center gap-2 py-0.5">
-                          <button
-                            type="button"
-                            onClick={() => setExamStatus(item.id, STATUS_CYCLE[row.status])}
-                            title={STATUS_LABEL[row.status]}
-                            aria-label={`${STATUS_LABEL[row.status]} — click to cycle ${item.name} status`}
-                            className={cn(
-                              'inline-flex items-center justify-center w-[22px] h-[22px] shrink-0 rounded-full transition-all duration-100 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&>svg]:w-[18px] [&>svg]:h-[18px]',
-                              statusColor,
-                            )}
-                          >
-                            <StatusIcon status={row.status} />
-                          </button>
-                          <span
-                            className={cn(
-                              'text-sm font-medium flex-1 min-w-0 truncate',
-                              row.status === 'completed' && 'line-through text-muted-foreground',
-                            )}
-                          >
-                            {item.name}
-                          </span>
-                          {row.status === 'in_progress' && (() => {
-                            const hasPlan = !!loadStudyPlanConfig(item.id).planStartDate
-                            return (
+
+            {/* Exam list — scrollable */}
+            <div className="flex-1 overflow-y-auto px-4 pb-2">
+              {loadingExams ? (
+                <div className="flex justify-center py-6">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {currentTrack.sections.map(section => (
+                    <div key={section.label}>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                        {section.label}
+                      </p>
+                      <div className="space-y-1.5">
+                        {section.items.map(item => {
+                          const row = localExamMap[item.id] ?? { status: 'not_started' as ItemStatus, targetDate: '' }
+                          const statusColor =
+                            row.status === 'completed'
+                              ? 'text-green-600 dark:text-green-500 opacity-100'
+                              : row.status === 'in_progress'
+                              ? 'text-amber-600 dark:text-amber-500 opacity-100'
+                              : 'text-muted-foreground opacity-60'
+                          return (
+                            <div key={item.id} className="flex items-center gap-2 py-0.5">
                               <button
                                 type="button"
-                                onClick={() => handleStartOnboarding(item)}
-                                className="shrink-0 inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                                onClick={() => setExamStatus(item.id, STATUS_CYCLE[row.status])}
+                                title={STATUS_LABEL[row.status]}
+                                aria-label={`${STATUS_LABEL[row.status]} — click to cycle ${item.name} status`}
+                                className={cn(
+                                  'inline-flex items-center justify-center w-[22px] h-[22px] shrink-0 rounded-full transition-all duration-100 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&>svg]:w-[18px] [&>svg]:h-[18px]',
+                                  statusColor,
+                                )}
                               >
-                                <Play className="h-3 w-3 fill-current" />
-                                {hasPlan ? 'Continue Onboarding' : 'Start Onboarding'}
+                                <StatusIcon status={row.status} />
                               </button>
-                            )
-                          })()}
-                        </div>
-                      )
-                    })}
-                  </div>
+                              <span
+                                className={cn(
+                                  'text-sm font-medium flex-1 min-w-0 truncate',
+                                  row.status === 'completed' && 'line-through text-muted-foreground',
+                                )}
+                              >
+                                {item.name}
+                              </span>
+                              {row.status === 'in_progress' && (() => {
+                                const hasPlan = !!loadStudyPlanConfig(item.id).planStartDate
+                                return (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleStartOnboarding(item)}
+                                    className="shrink-0 inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                                  >
+                                    <Play className="h-3 w-3 fill-current" />
+                                    {hasPlan ? 'Continue Onboarding' : 'Start Onboarding'}
+                                  </button>
+                                )
+                              })()}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t px-4 py-3 shrink-0 space-y-2">
+              {(examsState.error || examsState.success) && (
+                <p className={cn(
+                  'text-xs',
+                  examsState.error ? 'text-destructive' : 'text-green-600 dark:text-green-400',
+                )}>
+                  {examsState.error ?? examsState.success}
+                </p>
+              )}
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={!dirty || examsState.saving}
+                className="w-full flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {examsState.saving ? (
+                  <><Loader2 className="h-4 w-4 animate-spin" />Saving…</>
+                ) : 'Save Exam Progress'}
+              </button>
+            </div>
+          </div>
+
+          {/* Sign-in overlay */}
+          {!user && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center">
+              <div className="bg-card border rounded-2xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-1">
+                  <LogIn className="h-6 w-6 text-primary" />
+                </div>
+                <p className="text-base font-semibold text-foreground text-center">Sign in to track exam progress</p>
+                <button
+                  type="button"
+                  onClick={() => navigate('/auth', { state: { from: '/dashboard' } })}
+                  className="mt-1 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Sign In
+                </button>
+              </div>
             </div>
           )}
-        </div>
-
-        {/* Footer */}
-        <div className="border-t px-4 py-3 shrink-0 space-y-2">
-          {(examsState.error || examsState.success) && (
-            <p className={cn(
-              'text-xs',
-              examsState.error ? 'text-destructive' : 'text-green-600 dark:text-green-400',
-            )}>
-              {examsState.error ?? examsState.success}
-            </p>
-          )}
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={!dirty || examsState.saving}
-            className="w-full flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {examsState.saving ? (
-              <><Loader2 className="h-4 w-4 animate-spin" />Saving…</>
-            ) : 'Save Exam Progress'}
-          </button>
         </div>
       </div>
         </>

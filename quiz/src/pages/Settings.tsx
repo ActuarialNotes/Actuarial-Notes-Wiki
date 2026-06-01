@@ -6,11 +6,11 @@ import { useSettings } from '@/hooks/useSettings'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { TRACKS } from '@/data/tracks'
 import type { ItemStatus, TrackItem } from '@/data/tracks'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Alert } from '@/components/ui/alert'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
 import { Loader2, Settings2, ChevronRight, Star, Sun, Moon } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -117,6 +117,134 @@ function Feedback({ error, success }: { error: string | null; success: string | 
     <Alert className={cn('mt-3 text-sm', error ? 'border-destructive text-destructive' : 'border-green-500 text-green-700 dark:text-green-400')}>
       {error ?? success}
     </Alert>
+  )
+}
+
+// ---- Inline auth form (shown on You tab when logged out) ----
+
+function InlineAuthForm() {
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [signupSuccess, setSignupSuccess] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    if (mode === 'signup' && password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+    setSubmitting(true)
+    try {
+      if (mode === 'signin') {
+        const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+        if (authError) throw authError
+      } else {
+        const { error: authError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+        })
+        if (authError) throw authError
+        setSignupSuccess(true)
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Authentication failed')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (signupSuccess) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Check your email</CardTitle>
+          <CardDescription>
+            We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant="outline" className="w-full" onClick={() => { setSignupSuccess(false); setMode('signin') }}>
+            Back to Sign In
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{mode === 'signin' ? 'Sign In' : 'Create Account'}</CardTitle>
+        <CardDescription>
+          {mode === 'signin' ? 'Sign in to track your quiz progress' : 'Create an account to save results'}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="inline-email">Email</Label>
+            <Input id="inline-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="inline-password">Password</Label>
+            <Input
+              id="inline-password"
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+              minLength={8}
+            />
+          </div>
+          {mode === 'signup' && (
+            <div className="space-y-2">
+              <Label htmlFor="inline-confirm-password">Confirm Password</Label>
+              <Input
+                id="inline-confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+                minLength={8}
+              />
+            </div>
+          )}
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          <Button type="submit" className="w-full" disabled={submitting}>
+            {submitting ? 'Please wait…' : mode === 'signin' ? 'Sign In' : 'Create Account'}
+          </Button>
+        </form>
+        <div className="mt-4 text-center text-sm text-muted-foreground">
+          {mode === 'signin' ? (
+            <>
+              Don&apos;t have an account?{' '}
+              <button type="button" className="text-primary hover:underline" onClick={() => { setMode('signup'); setError(null) }}>
+                Sign up
+              </button>
+            </>
+          ) : (
+            <>
+              Already have an account?{' '}
+              <button type="button" className="text-primary hover:underline" onClick={() => { setMode('signin'); setError(null) }}>
+                Sign in
+              </button>
+            </>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
@@ -449,9 +577,7 @@ export default function Settings() {
                   <CardTitle>Appearance</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    <p className="text-sm text-muted-foreground">Choose how Actuarial Notes looks to you.</p>
-                    <div className="flex gap-2">
+                  <div className="flex gap-2">
                       <button
                         type="button"
                         onClick={() => theme !== 'light' && toggleTheme()}
@@ -478,20 +604,13 @@ export default function Settings() {
                         <Moon className="h-4 w-4" />
                         Dark
                       </button>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
             </section>
 
-            {/* ---- Authenticated sections ---- */}
-            {!user && (
-              <div className="text-center py-6 text-sm text-muted-foreground">
-                <Link to="/auth" state={{ from: '/settings' }} className="text-primary hover:underline underline-offset-2">
-                  Sign in
-                </Link>{' '}to manage your profile, exams, and progress.
-              </div>
-            )}
+            {/* ---- Inline login (logged out) ---- */}
+            {!user && <InlineAuthForm />}
 
             {user && <>
 

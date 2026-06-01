@@ -10,6 +10,7 @@ import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { isAnswerCorrect } from '@/lib/parser'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 
@@ -138,7 +139,7 @@ export default function Quiz() {
   function handleConfirmAnswer() {
     if (pendingAnswer && currentQuestion) {
       if (!isChangingAnswer) {
-        playSound(pendingAnswer === currentQuestion.answer ? 'correct' : 'wrong')
+        playSound(isAnswerCorrect(currentQuestion, pendingAnswer) ? 'correct' : 'wrong')
       }
       answerQuestion(currentQuestion.id, pendingAnswer)
       setIsChangingAnswer(false)

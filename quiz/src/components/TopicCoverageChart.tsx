@@ -1,3 +1,4 @@
+import { isAnswerCorrect } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
 
@@ -44,7 +45,7 @@ export function TopicCoverageChart({ questions, responses, masteryByTopic }: Top
     const stat = statsBySubtopic.get(key)!
     stat.total += 1
     const resp = responses[q.id]
-    if (resp?.chosen === q.answer) stat.correct += 1
+    if (resp?.chosen !== undefined && resp.chosen !== null && isAnswerCorrect(q, resp.chosen)) stat.correct += 1
   }
 
   const stats = [...statsBySubtopic.values()].sort((a, b) => a.name.localeCompare(b.name))

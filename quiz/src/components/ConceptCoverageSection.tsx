@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { useConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import { useSubscription } from '@/hooks/useSubscription'
 import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
+import { isAnswerCorrect } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
 
@@ -57,7 +58,8 @@ function buildConceptStats(
   const map = new Map<string, ConceptStat>()
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i]
-    const isCorrect = responses[q.id]?.chosen === q.answer
+    const chosen = responses[q.id]?.chosen
+    const isCorrect = chosen != null && isAnswerCorrect(q, chosen)
     const names = new Set<string>()
     for (const link of q.wiki_link) {
       const name = resolveConceptName(link)
@@ -407,7 +409,7 @@ export function ConceptCoverageSection({
   onQuestionSelect,
 }: ConceptCoverageSectionProps) {
   const stats = buildConceptStats(questions, responses)
-  const outcomes = questions.map(q => responses[q.id]?.chosen === q.answer)
+  const outcomes = questions.map(q => { const c = responses[q.id]?.chosen; return c != null && isAnswerCorrect(q, c) })
 
   const [selectedName, setSelectedName] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('quiz')

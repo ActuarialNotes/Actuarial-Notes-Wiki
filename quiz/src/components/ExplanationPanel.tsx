@@ -6,9 +6,10 @@ interface ExplanationPanelProps {
   explanation: string
   wikiLinks: string[]
   isCorrect: boolean
+  examinerReport?: string
 }
 
-export function ExplanationPanel({ explanation, wikiLinks, isCorrect }: ExplanationPanelProps) {
+export function ExplanationPanel({ explanation, wikiLinks, isCorrect, examinerReport }: ExplanationPanelProps) {
   return (
     <div
       className={cn(
@@ -30,9 +31,22 @@ export function ExplanationPanel({ explanation, wikiLinks, isCorrect }: Explanat
         </span>
       </div>
 
-      <MarkdownText className="text-sm text-foreground leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-current/20 [&_th]:border [&_th]:border-current/20 [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
-        {explanation}
-      </MarkdownText>
+      {explanation && (
+        <MarkdownText className="text-sm text-foreground leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-current/20 [&_th]:border [&_th]:border-current/20 [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1">
+          {explanation}
+        </MarkdownText>
+      )}
+
+      {examinerReport && (
+        <div className="pt-2 border-t border-current/10">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">
+            Examiner&apos;s Notes
+          </p>
+          <MarkdownText className="text-sm text-foreground leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0">
+            {examinerReport}
+          </MarkdownText>
+        </div>
+      )}
 
       {wikiLinks.length > 0 && (
         <div className="space-y-2 pt-1">

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { isAnswerCorrect } from '@/lib/parser'
 import type { Question, QuizMode } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
@@ -38,7 +39,7 @@ async function upsertMasteryFromResponses(
     if (!examId) continue
     const chosen = responses[q.id]?.chosen
     if (chosen === undefined) continue
-    const isCorrect = chosen === q.answer
+    const isCorrect = isAnswerCorrect(q, chosen)
     const isHard = q.difficulty === 'hard'
     for (const conceptSlug of conceptsForQuestion(q)) {
       events.push({ examId, conceptSlug, isCorrect, isHard })
@@ -200,7 +201,7 @@ function computeMasteryTransitions(
     if (chosen === undefined) continue
     const examId = EXAM_LABEL_TO_ID[q.exam]
     if (!examId) continue
-    const isCorrect = chosen === q.answer
+    const isCorrect = isAnswerCorrect(q, chosen)
     const isHard = q.difficulty === 'hard'
 
     for (const conceptSlug of conceptsForQuestion(q)) {
@@ -317,7 +318,10 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       ? Math.round((Date.now() - startedAt.getTime()) / 1000)
       : null
 
-    const correctCount = questions.filter(q => responses[q.id]?.chosen === q.answer).length
+    const correctCount = questions.filter(q => {
+      const chosen = responses[q.id]?.chosen
+      return chosen !== undefined && isAnswerCorrect(q, chosen)
+    }).length
 
     if (!userId) {
       // Unauthenticated: no DB to fetch from, so compute transitions from the
@@ -466,7 +470,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       question_id: q.id,
       chosen_answer: responses[q.id]?.chosen ?? null,
       correct_answer: q.answer,
-      is_correct: responses[q.id]?.chosen === q.answer,
+      is_correct: (() => { const c = responses[q.id]?.chosen; return c !== undefined && isAnswerCorrect(q, c) })(),
       time_spent_seconds: responses[q.id]?.timeSpent ?? null,
       answered_at: answeredAt,
     }))

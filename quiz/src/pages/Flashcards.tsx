@@ -691,10 +691,10 @@ function GalleryStrip({
               ref={isActive ? activeChipRef : undefined}
               type="button"
               onClick={() => onSelect(i)}
-              className={`flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors ${
+              className={`flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 isActive
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'bg-card text-card-foreground border-border hover:bg-accent'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-card text-card-foreground hover:bg-accent'
               }`}
             >
               <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? 'bg-primary-foreground/70' : dotClass}`} />

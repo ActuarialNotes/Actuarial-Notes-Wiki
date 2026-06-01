@@ -315,7 +315,7 @@ function StudyPlanTracker({
                         <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
                       )}
                       {showMastery && (
-                        <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded border text-[10px] font-medium ${STATE_BADGE[state]}`}>
+                        <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${STATE_BADGE[state]}`}>
                           {STATE_LABEL[state]}
                         </span>
                       )}
@@ -1033,10 +1033,10 @@ export function ReadinessCard({
                   type="button"
                   onClick={() => setShowBonusInfo(true)}
                   title="Daily gems bonus info"
-                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border text-[10px] font-medium shrink-0 transition-colors ${
+                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium shrink-0 transition-colors ${
                     allConceptsDone
-                      ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20'
-                      : 'border-dashed border-muted-foreground/30 text-muted-foreground hover:bg-muted/30'
+                      ? 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20'
+                      : 'text-muted-foreground hover:bg-muted/30'
                   }`}
                 >
                   {allConceptsDone

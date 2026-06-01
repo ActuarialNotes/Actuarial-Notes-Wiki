@@ -199,7 +199,7 @@ function StudyPlanTracker({
                       {studyPlan && state !== 'level3' && (
                         <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
                       )}
-                      <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded border text-[10px] font-medium ${STATE_BADGE[state]}`}>
+                      <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${STATE_BADGE[state]}`}>
                         {STATE_LABEL[state]}
                       </span>
                     </button>

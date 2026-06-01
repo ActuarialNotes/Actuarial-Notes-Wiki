@@ -567,11 +567,10 @@ export default function Sidebar() {
                   <span className="truncate">{profileName}</span>
                   {bannerLabel && (
                     <span
-                      className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded-sm tracking-widest leading-none border"
+                      className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded-sm tracking-widest leading-none"
                       style={{
                         background: designationBanner?.colors.bg ?? (equippedBanner?.id === 'beta_tester' ? '#d1fae5' : '#ede9fe'),
                         color: designationBanner?.colors.text ?? (equippedBanner?.id === 'beta_tester' ? '#065f46' : '#4c1d95'),
-                        borderColor: designationBanner?.colors.border ?? (equippedBanner?.id === 'beta_tester' ? '#6ee7b7' : '#c4b5fd'),
                       }}
                     >
                       {bannerLabel}

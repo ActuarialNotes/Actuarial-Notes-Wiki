@@ -271,7 +271,7 @@ function GroupSection({
                   {subtopic}
                 </span>
                 {isPremium && conceptLevel !== undefined ? (
-                  <span className={`inline-flex items-center rounded border px-1.5 py-0.5 text-[10px] font-medium shrink-0 ${STATE_BADGE[conceptLevel]}`}>
+                  <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium shrink-0 ${STATE_BADGE[conceptLevel]}`}>
                     {STATE_LABEL[conceptLevel]}
                   </span>
                 ) : isToday ? (

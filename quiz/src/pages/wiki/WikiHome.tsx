@@ -201,7 +201,7 @@ export default function WikiHome() {
                   <Link key={syllabus.examId} to={wikiRoute({ kind: 'exam', name: item.name })}>
                     <span
                       className={cn(
-                        'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium border transition-opacity hover:opacity-80',
+                        'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium transition-opacity hover:opacity-80',
                         color.bg,
                         color.text,
                       )}
@@ -294,16 +294,16 @@ export default function WikiHome() {
                                 {isInProgress ? (
                                   <span
                                     className={cn(
-                                      'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium border',
+                                      'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium',
                                       targetDate
-                                        ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-400/30'
-                                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-400/30',
+                                        ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
                                     )}
                                   >
                                     {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
                                   </span>
                                 ) : (
-                                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium border bg-muted text-muted-foreground border-border/60">
+                                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-muted text-muted-foreground">
                                     New
                                   </span>
                                 )}

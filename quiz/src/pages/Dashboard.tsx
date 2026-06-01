@@ -487,10 +487,10 @@ export default function Dashboard() {
                 key={s.examId}
                 type="button"
                 onClick={() => setActiveExamIdx(i)}
-                className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
+                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   i === clampedIdx
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-transparent border-border text-muted-foreground hover:text-foreground hover:border-foreground/30'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-transparent text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {s.examLabel}

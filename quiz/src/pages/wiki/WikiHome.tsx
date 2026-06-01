@@ -160,9 +160,6 @@ export default function WikiHome() {
     <div className="space-y-10">
       <header>
         <h1 className="text-2xl font-bold tracking-tight">Study Guides</h1>
-        <p className="text-muted-foreground mt-1">
-          Concepts, learning objectives, and resources for the actuarial exams.
-        </p>
       </header>
 
       <section>

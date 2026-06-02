@@ -75,119 +75,119 @@ const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; d
 const PACK_COLOR_PALETTE = [
   // Blue
   {
-    card: 'bg-blue-500/10 border-blue-400/40 hover:bg-blue-500/15',
+    card: 'bg-blue-500/10 hover:bg-blue-500/15',
     cardText: 'text-blue-700 dark:text-blue-300',
     cardSub: 'text-blue-600/70 dark:text-blue-400/60',
     cardIcon: 'text-blue-500',
-    selCard: 'bg-blue-600 border-blue-600',
+    selCard: 'bg-blue-600',
     selText: 'text-white',
     selSub: 'text-blue-100/80',
     selIcon: 'text-blue-200',
-    loCard: 'bg-blue-500/5 border-blue-400/25 hover:bg-blue-500/10',
+    loCard: 'bg-blue-500/5 hover:bg-blue-500/10',
     loCardText: 'text-blue-700/80 dark:text-blue-400/80',
     loCardSub: 'text-blue-600/60 dark:text-blue-400/50',
     loCardIcon: 'text-blue-400',
-    loSelCard: 'bg-blue-500 border-blue-500',
+    loSelCard: 'bg-blue-500',
   },
   // Emerald
   {
-    card: 'bg-emerald-500/10 border-emerald-400/40 hover:bg-emerald-500/15',
+    card: 'bg-emerald-500/10 hover:bg-emerald-500/15',
     cardText: 'text-emerald-700 dark:text-emerald-300',
     cardSub: 'text-emerald-600/70 dark:text-emerald-400/60',
     cardIcon: 'text-emerald-500',
-    selCard: 'bg-emerald-600 border-emerald-600',
+    selCard: 'bg-emerald-600',
     selText: 'text-white',
     selSub: 'text-emerald-100/80',
     selIcon: 'text-emerald-200',
-    loCard: 'bg-emerald-500/5 border-emerald-400/25 hover:bg-emerald-500/10',
+    loCard: 'bg-emerald-500/5 hover:bg-emerald-500/10',
     loCardText: 'text-emerald-700/80 dark:text-emerald-400/80',
     loCardSub: 'text-emerald-600/60 dark:text-emerald-400/50',
     loCardIcon: 'text-emerald-400',
-    loSelCard: 'bg-emerald-500 border-emerald-500',
+    loSelCard: 'bg-emerald-500',
   },
   // Violet
   {
-    card: 'bg-violet-500/10 border-violet-400/40 hover:bg-violet-500/15',
+    card: 'bg-violet-500/10 hover:bg-violet-500/15',
     cardText: 'text-violet-700 dark:text-violet-300',
     cardSub: 'text-violet-600/70 dark:text-violet-400/60',
     cardIcon: 'text-violet-500',
-    selCard: 'bg-violet-600 border-violet-600',
+    selCard: 'bg-violet-600',
     selText: 'text-white',
     selSub: 'text-violet-100/80',
     selIcon: 'text-violet-200',
-    loCard: 'bg-violet-500/5 border-violet-400/25 hover:bg-violet-500/10',
+    loCard: 'bg-violet-500/5 hover:bg-violet-500/10',
     loCardText: 'text-violet-700/80 dark:text-violet-400/80',
     loCardSub: 'text-violet-600/60 dark:text-violet-400/50',
     loCardIcon: 'text-violet-400',
-    loSelCard: 'bg-violet-500 border-violet-500',
+    loSelCard: 'bg-violet-500',
   },
   // Orange
   {
-    card: 'bg-orange-500/10 border-orange-400/40 hover:bg-orange-500/15',
+    card: 'bg-orange-500/10 hover:bg-orange-500/15',
     cardText: 'text-orange-700 dark:text-orange-300',
     cardSub: 'text-orange-600/70 dark:text-orange-400/60',
     cardIcon: 'text-orange-500',
-    selCard: 'bg-orange-600 border-orange-600',
+    selCard: 'bg-orange-600',
     selText: 'text-white',
     selSub: 'text-orange-100/80',
     selIcon: 'text-orange-200',
-    loCard: 'bg-orange-500/5 border-orange-400/25 hover:bg-orange-500/10',
+    loCard: 'bg-orange-500/5 hover:bg-orange-500/10',
     loCardText: 'text-orange-700/80 dark:text-orange-400/80',
     loCardSub: 'text-orange-600/60 dark:text-orange-400/50',
     loCardIcon: 'text-orange-400',
-    loSelCard: 'bg-orange-500 border-orange-500',
+    loSelCard: 'bg-orange-500',
   },
   // Rose
   {
-    card: 'bg-rose-500/10 border-rose-400/40 hover:bg-rose-500/15',
+    card: 'bg-rose-500/10 hover:bg-rose-500/15',
     cardText: 'text-rose-700 dark:text-rose-300',
     cardSub: 'text-rose-600/70 dark:text-rose-400/60',
     cardIcon: 'text-rose-500',
-    selCard: 'bg-rose-600 border-rose-600',
+    selCard: 'bg-rose-600',
     selText: 'text-white',
     selSub: 'text-rose-100/80',
     selIcon: 'text-rose-200',
-    loCard: 'bg-rose-500/5 border-rose-400/25 hover:bg-rose-500/10',
+    loCard: 'bg-rose-500/5 hover:bg-rose-500/10',
     loCardText: 'text-rose-700/80 dark:text-rose-400/80',
     loCardSub: 'text-rose-600/60 dark:text-rose-400/50',
     loCardIcon: 'text-rose-400',
-    loSelCard: 'bg-rose-500 border-rose-500',
+    loSelCard: 'bg-rose-500',
   },
   // Cyan
   {
-    card: 'bg-cyan-500/10 border-cyan-400/40 hover:bg-cyan-500/15',
+    card: 'bg-cyan-500/10 hover:bg-cyan-500/15',
     cardText: 'text-cyan-700 dark:text-cyan-300',
     cardSub: 'text-cyan-600/70 dark:text-cyan-400/60',
     cardIcon: 'text-cyan-500',
-    selCard: 'bg-cyan-600 border-cyan-600',
+    selCard: 'bg-cyan-600',
     selText: 'text-white',
     selSub: 'text-cyan-100/80',
     selIcon: 'text-cyan-200',
-    loCard: 'bg-cyan-500/5 border-cyan-400/25 hover:bg-cyan-500/10',
+    loCard: 'bg-cyan-500/5 hover:bg-cyan-500/10',
     loCardText: 'text-cyan-700/80 dark:text-cyan-400/80',
     loCardSub: 'text-cyan-600/60 dark:text-cyan-400/50',
     loCardIcon: 'text-cyan-400',
-    loSelCard: 'bg-cyan-500 border-cyan-500',
+    loSelCard: 'bg-cyan-500',
   },
 ] as const
 
 const STUDY_PLAN_COLOR = {
-  card: 'bg-amber-500/10 border-amber-400/40 hover:bg-amber-500/15',
+  card: 'bg-amber-500/10 hover:bg-amber-500/15',
   cardText: 'text-amber-700 dark:text-amber-300',
   cardSub: 'text-amber-600/70 dark:text-amber-400/60',
   cardIcon: 'text-amber-500',
-  selCard: 'bg-amber-600 border-amber-600',
+  selCard: 'bg-amber-600',
   selText: 'text-white',
   selSub: 'text-amber-100/80',
   selIcon: 'text-amber-200',
 } as const
 
 const SAVED_PACK_COLOR = {
-  card: 'bg-purple-500/10 border-purple-400/40 hover:bg-purple-500/15',
+  card: 'bg-purple-500/10 hover:bg-purple-500/15',
   cardText: 'text-purple-700 dark:text-purple-300',
   cardSub: 'text-purple-600/70 dark:text-purple-400/60',
   cardIcon: 'text-purple-500',
-  selCard: 'bg-purple-600 border-purple-600',
+  selCard: 'bg-purple-600',
   selText: 'text-white',
   selSub: 'text-purple-100/80',
   selIcon: 'text-purple-200',
@@ -236,7 +236,7 @@ interface FlashcardPack {
 }
 
 function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
-  const { syllabi } = useWikiSyllabus()
+  const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, targetDates } = useExamProgress()
   const { addCard, hasCard, savedPacks, deleteSavedPack } = useFlashcards()
@@ -267,20 +267,33 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
     if (primarySyllabus) {
       result.push({ id: 'study_plan', label: "Today's Study Plan", type: 'study_plan', concepts: [] })
     }
-    for (const [i, syllabus] of inProgressSyllabi.entries()) {
-      const colorIdx = i % PACK_COLOR_PALETTE.length
-      const allConcepts = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
-      result.push({ id: `exam_${syllabus.examId}`, label: syllabus.examLabel, type: 'exam', concepts: allConcepts, colorIndex: colorIdx })
-      for (const topic of syllabus.topics) {
-        if (topic.concepts.length > 0) {
-          result.push({
-            id: `lo_${syllabus.examId}_${topic.name}`,
-            label: topic.name,
-            sublabel: syllabus.examLabel,
-            type: 'learning_objective',
-            concepts: topic.concepts.map(c => c.name),
-            colorIndex: colorIdx,
-          })
+    if (inProgressSyllabi.length === 0) {
+      // Show fallback packs for P and FM when no exam is in progress
+      const fallbackIds = ['P-1', 'FM-2']
+      let colorIdx = 0
+      for (const examId of fallbackIds) {
+        const syllabus = syllabi.find(s => s.examId === examId)
+        if (!syllabus) continue
+        if (examProgress[wikiExamIdToProgressKey(syllabus.examId)] === 'completed') continue
+        const allConcepts = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
+        result.push({ id: `exam_${syllabus.examId}`, label: syllabus.examLabel, type: 'exam', concepts: allConcepts, colorIndex: colorIdx++ })
+      }
+    } else {
+      for (const [i, syllabus] of inProgressSyllabi.entries()) {
+        const colorIdx = i % PACK_COLOR_PALETTE.length
+        const allConcepts = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
+        result.push({ id: `exam_${syllabus.examId}`, label: syllabus.examLabel, type: 'exam', concepts: allConcepts, colorIndex: colorIdx })
+        for (const topic of syllabus.topics) {
+          if (topic.concepts.length > 0) {
+            result.push({
+              id: `lo_${syllabus.examId}_${topic.name}`,
+              label: topic.name,
+              sublabel: syllabus.examLabel,
+              type: 'learning_objective',
+              concepts: topic.concepts.map(c => c.name),
+              colorIndex: colorIdx,
+            })
+          }
         }
       }
     }
@@ -288,7 +301,7 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
       result.push({ id: sp.id, label: sp.label, type: 'saved', concepts: sp.concepts })
     }
     return result
-  }, [inProgressSyllabi, primarySyllabus, savedPacks])
+  }, [inProgressSyllabi, primarySyllabus, savedPacks, syllabi, examProgress])
 
   // Reset concept state when switching packs
   useEffect(() => {
@@ -333,7 +346,7 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
     return { inGallery: concepts.filter(n => hasCard(n)).length, total: concepts.length }
   }
 
-  const isLoading = planLoading || masteryLoading
+  const isLoading = planLoading || masteryLoading || syllabiLoading
 
   if (!isLoading && packs.length === 0) return null
 
@@ -345,21 +358,21 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
         tabIndex={0}
         onClick={() => setCollapsed(v => !v)}
         onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCollapsed(v => !v) } }}
-        className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-accent/40 transition-colors rounded-lg"
+        className="flex items-center justify-between px-4 py-3.5 cursor-pointer hover:bg-accent/40 transition-colors rounded-lg"
         aria-expanded={!collapsed}
       >
         <div className="flex items-center gap-2">
-          <Layers className="h-3.5 w-3.5 text-primary shrink-0" />
-          <span className="font-medium text-xs">Flashcard Packs</span>
+          <Layers className="h-4 w-4 text-primary shrink-0" />
+          <span className="font-medium text-sm">Flashcard Packs</span>
           {packs.length > 0 && (
-            <span className="text-xs text-muted-foreground">{packs.length} pack{packs.length === 1 ? '' : 's'}</span>
+            <span className="text-sm text-muted-foreground">{packs.length} pack{packs.length === 1 ? '' : 's'}</span>
           )}
         </div>
-        <ChevronsUpDown className="h-3.5 w-3.5 text-muted-foreground" />
+        <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
       </div>
 
       {!collapsed && (
-        <div className="px-3 pb-3 space-y-3">
+        <div className="px-4 pb-4 space-y-3">
           {/* Horizontal scrollable pack chips */}
           {isLoading && packs.length === 0 ? (
             <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
@@ -403,30 +416,30 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
                     <button
                       type="button"
                       onClick={() => setSelectedPackId(prev => prev === pack.id ? null : pack.id)}
-                      className={`flex flex-col items-start gap-0.5 px-3 py-2 rounded-lg border text-left transition-colors min-w-[110px] max-w-[160px] w-full ${isSaved ? 'pr-7' : ''} ${cardCls}`}
+                      className={`flex flex-col items-start gap-1 px-3.5 py-3 rounded-xl text-left transition-colors min-w-[130px] max-w-[175px] w-full h-full ${isSaved ? 'pr-7' : ''} ${cardCls}`}
                     >
                       <div className="flex items-center gap-1.5 w-full">
                         {pack.type === 'study_plan' && (
-                          <CalendarDays className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                          <CalendarDays className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
                         )}
                         {pack.type === 'exam' && (
-                          <GraduationCap className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                          <GraduationCap className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
                         )}
                         {pack.type === 'learning_objective' && (
-                          <Target className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                          <Target className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
                         )}
                         {pack.type === 'saved' && (
-                          <LayoutGrid className={`h-3 w-3 shrink-0 ${iconCls}`} />
+                          <LayoutGrid className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
                         )}
-                        <span className="text-xs font-medium truncate flex-1 min-w-0">{pack.label}</span>
+                        <span className="text-xs font-semibold truncate flex-1 min-w-0">{pack.label}</span>
                       </div>
                       {pack.sublabel && (
-                        <span className={`text-[10px] truncate w-full ${subCls}`}>
+                        <span className={`text-[11px] truncate w-full ${subCls}`}>
                           {pack.sublabel}
                         </span>
                       )}
                       {(total > 0 || pack.type !== 'study_plan') && (
-                        <span className={`text-[10px] tabular-nums ${subCls}`}>
+                        <span className={`text-[11px] tabular-nums ${subCls}`}>
                           {isLoading && pack.type === 'study_plan' ? '…' : `${inGallery}/${total} added`}
                         </span>
                       )}

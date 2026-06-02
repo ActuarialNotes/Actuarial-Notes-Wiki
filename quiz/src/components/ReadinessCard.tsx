@@ -380,6 +380,7 @@ export function ReadinessCard({
   const popupOpen = useConceptPopup(s => s.open)
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
   const popupFromRadial = useConceptPopup(s => s.dashboardContext?.fromRadial ?? false)
+  const popupDashboardFilter = useConceptPopup(s => s.dashboardContext?.filter ?? 'entire-syllabus')
   const toRefs = (arr: { name: string }[]): WikiEntryRef[] =>
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
@@ -857,25 +858,32 @@ export function ReadinessCard({
       return () => clearTimeout(scrollId)
     }
 
-    // Non-radial: auto-expand the topic containing this concept, then scroll its row into view.
+    // Non-radial: auto-expand the topic containing this concept in the topics mastered list.
     const ownerTopic = syllabus.topics.find(t =>
       t.concepts.some(c => c.name.toLowerCase() === popupCurrentName.toLowerCase())
     )
     if (ownerTopic) {
       setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
     }
-    const scrollId = setTimeout(() => {
-      const popupEl = document.querySelector<HTMLElement>('.concept-popup-aside')
-      const visibleHeight = popupEl ? popupEl.getBoundingClientRect().top : window.innerHeight
-      const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
-    }, 50)
+    // Only scroll the window when in study-plan filter — the querySelector finds study-plan
+    // rows first (they're higher in the DOM), so scrolling is correct in that context.
+    // For entire-syllabus, the same selector would land on study-plan rows instead of the
+    // topics-mastered list, scrolling the page away from the radial graph.
+    let scrollId: ReturnType<typeof setTimeout> | undefined
+    if (popupDashboardFilter === 'study-plan') {
+      scrollId = setTimeout(() => {
+        const popupEl = document.querySelector<HTMLElement>('.concept-popup-aside')
+        const visibleHeight = popupEl ? popupEl.getBoundingClientRect().top : window.innerHeight
+        const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
+      }, 50)
+    }
     setFlashingConcept(popupCurrentName)
     const clearId = setTimeout(() => setFlashingConcept(null), 1400)
-    return () => { clearTimeout(scrollId); clearTimeout(clearId) }
-  }, [popupCurrentName])
+    return () => { if (scrollId !== undefined) clearTimeout(scrollId); clearTimeout(clearId) }
+  }, [popupCurrentName, popupFromRadial, popupDashboardFilter])
 
   return (
     <div className="space-y-4">

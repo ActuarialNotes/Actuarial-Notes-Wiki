@@ -194,7 +194,7 @@ export default function Landing() {
   const [isAdaptive, setIsAdaptive] = useState(false)
   const [conceptMode, setConceptMode] = useState<'today' | 'custom'>('custom')
   const [count, setCount] = useState<number>(3)
-  const [reveal, setReveal] = useState<'during' | 'end'>('during')
+  const reveal = 'during' as const
 
   // Concept override passed from dashboard when user deselects some plan concepts
   const conceptOverrideRef = useRef<string[] | null>(null)

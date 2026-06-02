@@ -379,10 +379,10 @@ export function ReadinessCard({
   const openDashboard = useConceptPopup(s => s.openDashboard)
   const popupOpen = useConceptPopup(s => s.open)
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
+  const popupFromRadial = useConceptPopup(s => s.dashboardContext?.fromRadial ?? false)
   const toRefs = (arr: { name: string }[]): WikiEntryRef[] =>
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
-  const openedFromRadialRef = useRef(false)
   const studyGuideCardRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [flashRadial, setFlashRadial] = useState(false)
@@ -600,12 +600,14 @@ export function ReadinessCard({
     return map
   }, [plan, masteryStateByName])
 
+  // Order matches the visual display order (syllabus topic order) so that
+  // prev/next in the popup navigates in the same order the user sees on screen.
   const studyPlanConceptsForModal = useMemo(() =>
-    displayConcepts.map(name => ({
+    groupedPlanConcepts.flatMap(g => g.concepts.map(name => ({
       name,
       state: masteryStateByName.get(name.toLowerCase()) ?? 'new' as MasteryState,
-    })),
-    [displayConcepts, masteryStateByName]
+    }))),
+    [groupedPlanConcepts, masteryStateByName]
   )
 
   // Auto-open plan topic groups (uncollapsed by default) when the plan loads
@@ -826,14 +828,13 @@ export function ReadinessCard({
   useEffect(() => {
     if (!popupOpen) {
       prevPopupConceptRef.current = null
-      openedFromRadialRef.current = false
     }
   }, [popupOpen])
 
   useEffect(() => {
     if (!popupCurrentName || popupCurrentName === prevPopupConceptRef.current) return
     prevPopupConceptRef.current = popupCurrentName
-    const fromRadial = openedFromRadialRef.current
+    const fromRadial = popupFromRadial
     if (!fromRadial) {
       // Auto-expand the topic that contains this concept so the row is visible
       const ownerTopic = syllabus.topics.find(t =>
@@ -1144,7 +1145,7 @@ export function ReadinessCard({
                             const isCompleted =
                               examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
                               STATE_ORDER[currentState] >= STATE_ORDER[target]
-                            const planIdx = displayConcepts.indexOf(name)
+                            const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
                             return (
                               <div key={name} className={`flex items-center gap-1.5 w-full${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
                                 {/* Concept toggle */}
@@ -1263,12 +1264,11 @@ export function ReadinessCard({
                 now={now}
                 masteredCount={aggregate.level3}
                 totalCount={aggregate.total}
-                selectedConcept={openedFromRadialRef.current ? popupCurrentName : null}
+                selectedConcept={popupFromRadial ? popupCurrentName : null}
                 flashRadial={flashRadial}
                 onConceptClick={name => {
                   const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-                  openedFromRadialRef.current = true
-                  openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx)
+                  openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx, { circular: true, fromRadial: true })
                 }}
               />
 
@@ -1356,7 +1356,7 @@ export function ReadinessCard({
                   flashRadial={flashRadial}
                   onConceptClick={name => {
                     const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-                    openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx)
+                    openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx, { circular: true, fromRadial: true })
                   }}
                 />
 

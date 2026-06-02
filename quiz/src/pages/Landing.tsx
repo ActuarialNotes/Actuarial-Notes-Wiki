@@ -49,135 +49,6 @@ const STATE_BADGE: Record<MasteryState, string> = {
   forgotten: 'border-red-200 text-red-600 bg-red-50 dark:border-red-800 dark:text-red-400 dark:bg-red-950/40',
 }
 
-// ─── Today's Study Plan collapsible (mirrors GroupSection style) ──────────────
-
-function TodayStudyPlanSection({
-  isSelected,
-  onSelect,
-  concepts,
-  planConceptCount,
-  isPremium,
-}: {
-  isSelected: boolean
-  onSelect: () => void
-  concepts: string[]
-  planConceptCount: number
-  isPremium: boolean
-}) {
-  const [open, setOpen] = useState(isSelected)
-
-  return (
-    <div className="bg-muted/70 rounded-lg overflow-hidden">
-      <div className="flex items-stretch">
-        <button
-          type="button"
-          onClick={isPremium ? onSelect : undefined}
-          className={`flex items-center justify-center px-3 transition-colors duration-150 shrink-0 ${isPremium ? 'hover:bg-muted/60' : 'opacity-50 cursor-default'}`}
-          aria-label={isSelected ? "Deselect Today's Study Plan" : "Select Today's Study Plan"}
-        >
-          {isSelected ? (
-            <CheckCircle2 className="h-5 w-5 text-primary" />
-          ) : (
-            <Circle className="h-5 w-5 text-muted-foreground/60" />
-          )}
-        </button>
-        <button
-          type="button"
-          onClick={() => setOpen(v => !v)}
-          className="flex-1 py-3 pr-4 text-left hover:bg-muted/60 transition-colors duration-150"
-          aria-expanded={open}
-        >
-          <div className="flex items-center gap-2 w-full">
-            <CalendarCheck className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <span className="font-medium flex-1 text-base text-foreground">Today's Study Plan</span>
-            {isPremium && planConceptCount > 0 && (
-              <span className="text-xs text-muted-foreground shrink-0">
-                ✓ {planConceptCount} concept{planConceptCount !== 1 ? 's' : ''}
-              </span>
-            )}
-            {!isPremium && <Lock className="h-3.5 w-3.5 shrink-0 text-amber-500" />}
-            <ChevronDown
-              className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
-            />
-          </div>
-        </button>
-      </div>
-
-      <div hidden={!open} className="border-t border-border/40 pb-1 pt-1">
-        {!isPremium ? (
-          <div className="flex items-center gap-2 px-3 py-2.5">
-            <span className="flex-1 text-sm text-muted-foreground">Unlock personalized daily study schedules.</span>
-            <Link
-              to="/upgrade"
-              className="shrink-0 px-2.5 py-1 rounded-md bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 transition-colors"
-              onClick={e => e.stopPropagation()}
-            >
-              Go Pro
-            </Link>
-          </div>
-        ) : concepts.length === 0 ? (
-          <div className="px-3 py-2.5 text-sm text-muted-foreground">No concepts scheduled for today.</div>
-        ) : (
-          <div className="flex flex-col">
-            {concepts.map(concept => (
-              <div key={concept} className="flex items-center gap-2.5 px-3 py-2.5 text-card-foreground">
-                <Check className="h-4 w-4 shrink-0 text-primary/60" />
-                <span className="flex-1 text-sm font-medium leading-snug">{concept}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-// ─── Custom concepts collapsible ──────────────────────────────────────────────
-
-function CustomSection({
-  isSelected,
-  onSelect,
-  selectedCount,
-  children,
-}: {
-  isSelected: boolean
-  onSelect: () => void
-  selectedCount: number
-  children: React.ReactNode
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="bg-muted/70 rounded-lg overflow-hidden">
-        <button
-          type="button"
-          onClick={onSelect}
-          className="flex items-stretch w-full text-left hover:bg-muted/60 transition-colors duration-150"
-        >
-          <div className="flex items-center justify-center px-3 shrink-0">
-            {isSelected ? (
-              <CheckCircle2 className="h-5 w-5 text-primary" />
-            ) : (
-              <Circle className="h-5 w-5 text-muted-foreground/60" />
-            )}
-          </div>
-          <div className="flex-1 py-3 pr-4">
-            <div className="flex items-center gap-3 w-full">
-              <span className="font-medium flex-1 text-base text-foreground">Custom</span>
-              {selectedCount > 0 && (
-                <span className="text-xs text-muted-foreground shrink-0">{selectedCount} selected</span>
-              )}
-              <ChevronDown
-                className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${isSelected ? '' : '-rotate-90'}`}
-              />
-            </div>
-          </div>
-        </button>
-      </div>
-      {isSelected && <div className="space-y-2">{children}</div>}
-    </div>
-  )
-}
-
 // ─── Collapsible learning-objective group (mirrors example callout style) ─────
 
 function GroupSection({
@@ -324,7 +195,6 @@ export default function Landing() {
   const [conceptMode, setConceptMode] = useState<'today' | 'custom'>('custom')
   const [count, setCount] = useState<number>(3)
   const [reveal, setReveal] = useState<'during' | 'end'>('during')
-  const [showStudyPlanModal, setShowStudyPlanModal] = useState(false)
 
   // Concept override passed from dashboard when user deselects some plan concepts
   const conceptOverrideRef = useRef<string[] | null>(null)
@@ -868,37 +738,92 @@ export default function Landing() {
             <>
               {/* ── Quiz mode options ──────────────────────────────────── */}
               {mode === 'quiz' && (
-                <>
-                  {/* Concepts */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">
-                      Concepts
-                      <span className="ml-2 text-xs font-normal text-muted-foreground">
-                        {conceptsLabel}
-                      </span>
-                    </label>
+                <div className="space-y-3">
+                  <label className="text-sm font-medium">
+                    Concepts
+                    <span className="ml-2 text-xs font-normal text-muted-foreground">
+                      {conceptsLabel}
+                    </span>
+                  </label>
 
-                    {/* Today's Study Plan option */}
-                    {user && (
-                      <TodayStudyPlanSection
-                        isSelected={conceptMode === 'today' && isPremium && planConceptCount > 0}
-                        onSelect={() => {
+                  {/* Today's Plan / By Topic segmented control */}
+                  {user && (
+                    <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
+                      <button
+                        type="button"
+                        onClick={() => {
                           setConceptMode('today')
-                          setSelectedConcepts([])
-                          setIsAdaptive(false)
+                          if (isPremium) {
+                            setSelectedConcepts([])
+                            setIsAdaptive(false)
+                          }
                         }}
-                        concepts={todayConceptDisplayNames}
-                        planConceptCount={planConceptCount}
-                        isPremium={isPremium}
-                      />
-                    )}
+                        className={`flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg text-sm font-medium transition-colors ${
+                          conceptMode === 'today'
+                            ? 'bg-primary text-primary-foreground shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
+                        }`}
+                      >
+                        <CalendarCheck className="h-3.5 w-3.5 shrink-0" />
+                        <span>Today's Plan</span>
+                        {!isPremium && <Lock className="h-3 w-3 shrink-0 text-amber-500" />}
+                        {isPremium && planConceptCount > 0 && (
+                          <span className="text-xs opacity-75">· {planConceptCount}</span>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setConceptMode('custom')}
+                        className={`flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg text-sm font-medium transition-colors ${
+                          conceptMode === 'custom'
+                            ? 'bg-primary text-primary-foreground shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
+                        }`}
+                      >
+                        <span>By Topic</span>
+                        {conceptMode === 'custom' && selectedConcepts.length > 0 && (
+                          <span className="text-xs opacity-75">· {selectedConcepts.length}</span>
+                        )}
+                      </button>
+                    </div>
+                  )}
 
-                    {/* Custom option — expands to show concept groups */}
-                    <CustomSection
-                      isSelected={!user || conceptMode === 'custom'}
-                      onSelect={() => setConceptMode('custom')}
-                      selectedCount={selectedConcepts.length}
-                    >
+                  {/* Today's Plan content */}
+                  {user && conceptMode === 'today' && (
+                    !isPremium ? (
+                      <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 flex items-start gap-3">
+                        <div className="flex-1 space-y-1">
+                          <p className="text-sm font-medium">Personalized daily study plan</p>
+                          <p className="text-xs text-muted-foreground">Get a daily study schedule tailored to your exam date and mastery progress.</p>
+                        </div>
+                        <Link
+                          to="/upgrade"
+                          className="shrink-0 px-3 py-1.5 rounded-md bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 transition-colors mt-0.5"
+                        >
+                          Go Pro
+                        </Link>
+                      </div>
+                    ) : planConceptCount === 0 ? (
+                      <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+                        No concepts scheduled for today. Set your exam date in the dashboard to generate a study plan.
+                      </div>
+                    ) : (
+                      <div className="rounded-lg border border-border/60 bg-muted/30 overflow-hidden">
+                        <div className="divide-y divide-border/30">
+                          {todayConceptDisplayNames.map(concept => (
+                            <div key={concept} className="flex items-center gap-2.5 px-3 py-2.5">
+                              <Check className="h-4 w-4 shrink-0 text-primary/60" />
+                              <span className="flex-1 text-sm font-medium leading-snug">{concept}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  )}
+
+                  {/* By Topic concept groups */}
+                  {(!user || conceptMode === 'custom') && (
+                    <div className="space-y-2">
                       {conceptsLoading && orderedConcepts.length === 0 ? (
                         <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>
                       ) : (
@@ -915,10 +840,9 @@ export default function Landing() {
                           />
                         ))
                       )}
-                    </CustomSection>
-                  </div>
-
-                </>
+                    </div>
+                  )}
+                </div>
               )}
 
               {/* ── Mock Exam mode info ────────────────────────────────── */}
@@ -953,40 +877,6 @@ export default function Landing() {
       </div>
     )}
 
-    {showStudyPlanModal && (
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-        onClick={() => setShowStudyPlanModal(false)}
-      >
-        <div
-          className="bg-background rounded-xl border shadow-lg p-6 mx-4 max-w-sm w-full"
-          onClick={e => e.stopPropagation()}
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <CalendarCheck className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold">Today's Study Plan</h2>
-          </div>
-          <p className="text-sm text-muted-foreground mb-4">
-            Study Plans are a Premium feature. Get a personalized daily study schedule based on your exam date and mastery progress.
-          </p>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setShowStudyPlanModal(false)}
-              className="flex-1 px-4 py-2 rounded-lg border text-sm hover:bg-accent transition-colors"
-            >
-              Maybe later
-            </button>
-            <Link
-              to="/upgrade"
-              className="flex-1 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium text-center hover:bg-primary/90 transition-colors"
-            >
-              Upgrade
-            </Link>
-          </div>
-        </div>
-      </div>
-    )}
     </>
   )
 }

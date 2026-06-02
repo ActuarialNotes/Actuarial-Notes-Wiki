@@ -184,3 +184,59 @@ describe('parseQuestion — multi-part', () => {
     expect(isAnswerCorrect(q, 'not-json')).toBe(false)
   })
 })
+
+// ── multi-part with essay part ────────────────────────────────────────────────
+
+const MULTI_PART_ESSAY_RAW = `---
+id: "test-mp-essay"
+exam: "Exam 5"
+topic: "Exposure Base"
+learning_objective: "Ratemaking Data Organization"
+difficulty: medium
+type: multi-part
+points: 1.25
+wiki_link: Concepts/Exposure+Base
+---
+
+Preamble text.
+
+## Part a (0.25 points)
+
+Calculate the written exposures.
+
+### Answer
+4.5
+
+### Explanation
+$0.5 \\times 9 = 4.5$
+
+## Part b (1 point)
+
+Identify two criteria of an exposure base and evaluate miles driven against them.
+
+### Explanation
+Any two criteria may apply: proportional to expected losses, practical, considerate of historical precedence.
+
+### Examiner Report
+Common mistake: stating a conclusion without an explanation.
+`
+
+describe('parseQuestion — multi-part with essay part', () => {
+  const q = parseQuestion(MULTI_PART_ESSAY_RAW)!
+
+  it('parses successfully', () => expect(q).not.toBeNull())
+  it('has 2 parts', () => expect(q.parts).toHaveLength(2))
+
+  it('part a is graded (answer is set)', () => expect(q.parts![0].answer).toBe('4.5'))
+  it('part b is essay (answer is empty)', () => expect(q.parts![1].answer).toBe(''))
+
+  it('isAnswerCorrect ignores essay part — only graded parts matter', () => {
+    const chosen = JSON.stringify({ a: '4.5' })
+    expect(isAnswerCorrect(q, chosen)).toBe(true)
+  })
+
+  it('isAnswerCorrect wrong graded part still fails', () => {
+    const chosen = JSON.stringify({ a: '99' })
+    expect(isAnswerCorrect(q, chosen)).toBe(false)
+  })
+})

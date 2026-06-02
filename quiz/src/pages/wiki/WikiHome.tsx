@@ -344,13 +344,13 @@ export default function WikiHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {books.map(book => (
               <Link key={book.path} to={wikiRoute({ kind: 'resource', name: book.name })}>
-                <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-col">
+                <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
                   {book.coverImage && (
-                    <div className="px-3 pt-3">
+                    <div className="flex-shrink-0 p-2 flex items-center">
                       <img
                         src={book.coverImage}
                         alt={book.title ?? book.name}
-                        className="w-full rounded-lg object-contain max-h-52 bg-muted/20"
+                        className="w-16 sm:w-20 rounded-md object-contain max-h-28 bg-muted/20"
                         loading="lazy"
                         onError={(e) => {
                           const p = e.currentTarget.parentElement

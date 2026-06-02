@@ -53,6 +53,15 @@ const STATE_BADGE: Record<MasteryState, string> = {
 
 // ─── Collapsible learning-objective group (mirrors example callout style) ─────
 
+function parseGroupWeight(weight?: string): number | null {
+  if (!weight) return null
+  const rangeMatch = weight.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*%/)
+  if (rangeMatch) return (parseFloat(rangeMatch[1]) + parseFloat(rangeMatch[2])) / 2
+  const singleMatch = weight.match(/(\d+(?:\.\d+)?)\s*%/)
+  if (singleMatch) return parseFloat(singleMatch[1])
+  return null
+}
+
 function GroupSection({
   group,
   selectedSubtopics,
@@ -74,55 +83,65 @@ function GroupSection({
   const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
   const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
   const selectedCount = group.subtopics.filter(s => selectedSubtopics.includes(s)).length
+  const examPercentage = parseGroupWeight(group.weight)
 
   return (
-    <div className="bg-muted/70 rounded-lg overflow-hidden">
-      <div className="flex items-stretch">
-        {/* Select-all checkmark circle */}
-        <button
-          type="button"
-          onClick={e => onSelectAll(group, e)}
-          className="flex items-center justify-center px-3 hover:bg-muted/60 transition-colors duration-150 shrink-0"
-          aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
-        >
-          {allSelected ? (
-            <CheckCircle2 className="h-5 w-5 text-primary" />
-          ) : someSelected ? (
-            <CheckCircle2 className="h-5 w-5 text-primary/40" />
-          ) : (
-            <Circle className="h-5 w-5 text-muted-foreground/60" />
-          )}
-        </button>
+    <div className="rounded-lg overflow-hidden bg-background border border-border">
+      <div className="relative">
+        {/* Bar fill – proportional to exam weight when collapsed, full width when expanded */}
+        {examPercentage !== null && (
+          <div
+            className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
+            style={{ width: open ? '100%' : `${examPercentage}%` }}
+          />
+        )}
+        <div className="relative z-10 flex items-stretch">
+          {/* Select-all checkmark circle */}
+          <button
+            type="button"
+            onClick={e => onSelectAll(group, e)}
+            className="flex items-center justify-center px-3 hover:bg-accent/30 transition-colors duration-150 shrink-0"
+            aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
+          >
+            {allSelected ? (
+              <CheckCircle2 className="h-5 w-5 text-primary" />
+            ) : someSelected ? (
+              <CheckCircle2 className="h-5 w-5 text-primary/40" />
+            ) : (
+              <Circle className="h-5 w-5 text-muted-foreground/60" />
+            )}
+          </button>
 
-        {/* Expand/collapse button */}
-        <button
-          type="button"
-          onClick={() => setOpen(v => !v)}
-          className="flex-1 py-3 pr-4 text-left hover:bg-muted/60 transition-colors duration-150"
-          aria-expanded={open}
-        >
-          <div className="flex items-center gap-3 w-full">
-            <span className="font-medium flex-1 text-base text-left text-foreground">
-              {group.name}
-              {group.weight && (
-                <span className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium border border-primary/30 bg-primary/10 text-primary align-middle">
-                  {group.weight}
+          {/* Expand/collapse button */}
+          <button
+            type="button"
+            onClick={() => setOpen(v => !v)}
+            className="flex-1 py-3 pr-4 text-left hover:bg-accent/30 transition-colors duration-150"
+            aria-expanded={open}
+          >
+            <div className="flex items-center gap-3 w-full">
+              <span className="font-medium flex-1 text-base text-left text-foreground">
+                {group.name}
+                {group.weight && (
+                  <span className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-primary/10 text-primary align-middle">
+                    {group.weight}
+                  </span>
+                )}
+              </span>
+              {selectedCount > 0 && (
+                <span className="text-xs text-muted-foreground shrink-0">
+                  {selectedCount}/{group.subtopics.length}
                 </span>
               )}
-            </span>
-            {selectedCount > 0 && (
-              <span className="text-xs text-muted-foreground shrink-0">
-                {selectedCount}/{group.subtopics.length}
-              </span>
-            )}
-            <ChevronDown
-              className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
-            />
-          </div>
-        </button>
+              <ChevronDown
+                className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+              />
+            </div>
+          </button>
+        </div>
       </div>
 
-      <div hidden={!open} className="border-t border-border/40 pb-1 pt-1">
+      <div hidden={!open} className="border-t border-border/40 pb-1 pt-1 bg-card">
         <div className="flex flex-col">
           {group.subtopics.map(subtopic => {
             const isSelected = selectedSubtopics.includes(subtopic)
@@ -564,7 +583,7 @@ export default function Landing() {
   }
 
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
-  const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
+  const examLabel = EXAMS.find(e => e.value === topic)?.label ?? topic
   const hasTopic = topic !== ''
   const hasSelection = hasTopic || selectedConcept !== ''
 
@@ -606,7 +625,7 @@ export default function Landing() {
     <>
     <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
     <div className={`container max-w-2xl mx-auto px-4 pt-0 space-y-8 ${hasSelection ? 'pb-56' : 'pb-12'}`}>
-      <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background border-b -mx-4 px-4 pt-3 pb-4 space-y-3">
+      <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background -mx-4 px-4 pt-3 pb-4 space-y-3">
         {hasTopic && (
           <button
             type="button"
@@ -614,14 +633,13 @@ export default function Landing() {
             className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="font-medium">{examLabel}</span>
-            <span>· change</span>
+            <span>change exam</span>
           </button>
         )}
         <div className="flex items-center gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold tracking-tight">Quiz</h1>
+              <h1 className="text-3xl font-bold tracking-tight">{hasTopic ? examLabel : 'Quiz'}</h1>
             </div>
             {!user && (
               <p className="text-xs text-muted-foreground">

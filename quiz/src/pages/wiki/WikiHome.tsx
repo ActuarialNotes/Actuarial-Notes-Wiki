@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigationType } from 'react-router-dom'
 import { BookMarked, CheckCircle2, GraduationCap } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
-import { wikiRoute, examIdFromFile } from '@/lib/wikiRoutes'
+import { wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -235,15 +235,14 @@ export default function WikiHome() {
                   {trackExams.map(exam => {
                     const examId = examNameToTrackKey(exam.name)
                     const match = syllabi.find(
-                      s => examIdFromFile(s.examLabel) === examIdFromFile(exam.name),
+                      s => wikiExamIdToProgressKey(s.examId) === examNameToTrackKey(exam.name),
                     )
                     const status = examProgress[examId]
                     const isInProgress = status === 'in_progress'
                     const isCompleted = status === 'completed'
                     const targetDate = targetDates[examId]
 
-                    // Colour mirrors Flashcards tab assignment; key-based so it works
-                    // even when examIdFromFile can't match the syllabus label to exam.name
+                    // Colour mirrors Flashcards tab assignment; key-based so colour indices align
                     const inProgressIdx = inProgressSyllabi.findIndex(
                       s => wikiExamIdToProgressKey(s.examId) === examId,
                     )
@@ -270,8 +269,7 @@ export default function WikiHome() {
                             'h-full transition-all duration-150 overflow-hidden',
                             // Default (new) exam hover
                             !colorEntry && !isCompleted && 'hover:bg-accent/30',
-                            // Completed: green border only, subtle hover
-                            isCompleted && 'border-emerald-500/50 hover:bg-emerald-500/10 hover:border-emerald-500/70',
+                            isCompleted && 'hover:bg-accent/30',
                             // In-progress: coloured background + vibrant on hover
                             colorEntry && colorEntry.bg,
                             colorEntry && colorEntry.hover,

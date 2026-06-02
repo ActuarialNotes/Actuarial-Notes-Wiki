@@ -891,7 +891,6 @@ function SortableCard({
         }`}
       >
         <span className="font-semibold text-sm leading-snug">{card.name}</span>
-        <span className="text-[10px] text-muted-foreground">tap to flip</span>
       </button>
 
       {/* Mastery pill */}
@@ -1102,7 +1101,7 @@ function GalleryPanel({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6 pb-24 md:pb-20">
+      <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-6 pb-24 md:pb-20">
         <FlashcardPacksSection />
 
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -1246,7 +1245,6 @@ function FlashcardStudyArea({
         {!flipped ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 gap-3">
             <span className="text-3xl font-bold text-center leading-tight">{current.name}</span>
-            <span className="text-xs text-muted-foreground mt-2">click to flip</span>
           </div>
         ) : (
           <div className="flex-1 flex flex-col p-6 gap-4">
@@ -1440,6 +1438,15 @@ export default function Flashcards() {
     new Set<ReverseCardSection>(['definition']),
   )
   const [globalFlip, setGlobalFlip] = useState(false)
+
+  useEffect(() => {
+    if (galleryExpanded) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [galleryExpanded])
 
   function toggleReverseMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {

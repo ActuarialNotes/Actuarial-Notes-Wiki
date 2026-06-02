@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigationType } from 'react-router-dom'
 import { BookMarked, CheckCircle2, GraduationCap } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -110,10 +110,15 @@ export default function WikiHome() {
     return map
   }, [exams])
 
+  const effectiveStatus = useCallback(
+    (id: string) => examProgress[id] ?? (id !== 'P' && id !== 'FM' ? 'in_progress' : 'not_started'),
+    [examProgress],
+  )
+
   // In-progress syllabi in the same order as Flashcards tab so colour indices align
   const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'),
-    [syllabi, examProgress],
+    () => syllabi.filter(s => effectiveStatus(wikiExamIdToProgressKey(s.examId)) === 'in_progress'),
+    [syllabi, effectiveStatus],
   )
 
   // Pill data for all in-progress exams (shown regardless of active body filter)
@@ -237,7 +242,7 @@ export default function WikiHome() {
                     const match = syllabi.find(
                       s => wikiExamIdToProgressKey(s.examId) === examNameToTrackKey(exam.name),
                     )
-                    const status = examProgress[examId]
+                    const status = effectiveStatus(examId)
                     const isInProgress = status === 'in_progress'
                     const isCompleted = status === 'completed'
                     const targetDate = targetDates[examId]

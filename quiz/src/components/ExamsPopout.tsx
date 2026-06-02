@@ -113,7 +113,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
     const map: Record<string, { status: ItemStatus; targetDate: string }> = {}
     allItems.forEach(item => {
       const saved = examRows.find(r => r.exam_id === item.id)
-      map[item.id] = { status: saved?.status ?? 'not_started', targetDate: saved?.target_date ?? '' }
+      map[item.id] = { status: saved?.status ?? (item.id !== 'P' && item.id !== 'FM' ? 'in_progress' : 'not_started'), targetDate: saved?.target_date ?? '' }
     })
     setLocalExamMap(map)
     setDirty(false)
@@ -266,7 +266,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                       </p>
                       <div className="space-y-1.5">
                         {section.items.map(item => {
-                          const row = localExamMap[item.id] ?? { status: 'not_started' as ItemStatus, targetDate: '' }
+                          const row = localExamMap[item.id] ?? { status: (item.id !== 'P' && item.id !== 'FM' ? 'in_progress' : 'not_started') as ItemStatus, targetDate: '' }
                           const statusColor =
                             row.status === 'completed'
                               ? 'text-green-600 dark:text-green-500 opacity-100'

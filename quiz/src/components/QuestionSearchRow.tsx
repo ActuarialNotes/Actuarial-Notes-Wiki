@@ -79,7 +79,7 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
         <button
           type="button"
           onClick={e => { e.stopPropagation(); setExpanded(v => !v) }}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
+          className="text-sm px-3 py-1.5 rounded-md border border-input hover:bg-accent transition-colors shrink-0"
         >
           {expanded ? 'Collapse' : 'Expand'}
         </button>
@@ -114,7 +114,7 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
             <button
               type="button"
               onClick={() => setShowAnswer(v => !v)}
-              className="text-xs px-3 py-1 rounded-md border border-input hover:bg-accent transition-colors"
+              className="text-sm px-4 py-2 rounded-md border border-input hover:bg-accent transition-colors"
             >
               {showAnswer ? 'Hide answer' : 'Show answer'}
             </button>

@@ -35,12 +35,27 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const setExamId = useCallback((id: string | null) => setExamIdState(id), [])
 
   useEffect(() => {
+    // Detect if this is a return to the same wiki page (e.g. coming back from another tab).
+    // Read before saving so we can compare the previous location against the current one.
+    let isReturn = false
+    try {
+      const stored = sessionStorage.getItem('wiki:last-path') || ''
+      isReturn = stored.split('?')[0] === location.pathname
+    } catch { /* ignore */ }
+
     try {
       sessionStorage.setItem('wiki:last-path', location.pathname + location.search)
     } catch { /* ignore */ }
+
     setPageRefsState([])
     setExamIdState(null)
-    closeOnNavigation(location.pathname)
+
+    // Only close the popup when genuinely navigating to a different page within
+    // the wiki. On a return visit (same pathname, component remounted) the popup
+    // was already open and should stay that way.
+    if (!isReturn) {
+      closeOnNavigation(location.pathname)
+    }
   }, [location.pathname, location.search, closeOnNavigation])
 
   return (

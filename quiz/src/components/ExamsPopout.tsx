@@ -344,15 +344,15 @@ export default function ExamsPopout({ open, onClose }: Props) {
           {/* Sign-in overlay */}
           {!user && (
             <div className="absolute inset-0 z-10 flex items-center justify-center">
-              <div className="bg-card border rounded-2xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
-                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-1">
-                  <LogIn className="h-6 w-6 text-primary" />
+              <div className="bg-card border rounded-2xl shadow-2xl px-10 py-10 flex flex-col items-center gap-5 max-w-xs w-full mx-4">
+                <div className="flex items-center justify-center h-14 w-14 rounded-full bg-primary/10 mb-2">
+                  <LogIn className="h-7 w-7 text-primary" />
                 </div>
                 <p className="text-base font-semibold text-foreground text-center">Sign in to track exam progress</p>
                 <button
                   type="button"
                   onClick={() => { onClose(); navigate('/auth', { state: { from: '/dashboard' } }); }}
-                  className="mt-1 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors"
+                  className="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-3 text-sm font-medium hover:bg-primary/90 transition-colors"
                 >
                   <LogIn className="h-4 w-4" />
                   Sign In

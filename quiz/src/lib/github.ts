@@ -78,6 +78,12 @@ interface GitTreeResponse {
   truncated: boolean
 }
 
+export function rawGithubUrl(path: string): string {
+  const clean = path.replace(/^\/+/, '')
+  const encoded = clean.split('/').map(encodeURIComponent).join('/')
+  return `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${encoded}`
+}
+
 // List any directory in the repo; omit dirPath to list the root.
 // Pages through the GitHub Contents API so directories with >30 items aren't truncated.
 export async function listRepoContents(dirPath?: string): Promise<GithubContentItem[]> {

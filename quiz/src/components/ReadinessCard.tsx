@@ -837,38 +837,36 @@ export function ReadinessCard({
     if (!popupCurrentName || popupCurrentName === prevPopupConceptRef.current) return
     prevPopupConceptRef.current = popupCurrentName
     const fromRadial = popupFromRadial
-    if (!fromRadial) {
-      // Auto-expand the topic that contains this concept so the row is visible
-      const ownerTopic = syllabus.topics.find(t =>
-        t.concepts.some(c => c.name.toLowerCase() === popupCurrentName.toLowerCase())
-      )
-      if (ownerTopic) {
-        setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
-      }
-    }
-    // For radial: only scroll once when the popup first opens. On prev/next navigation the
-    // radial already highlights the new segment reactively — re-scrolling on every concept
-    // change causes compounding jumps because smooth scrolls stack on each other.
-    if (fromRadial && radialScrollDoneRef.current) {
-      setFlashingConcept(popupCurrentName)
-      const clearId = setTimeout(() => setFlashingConcept(null), 1400)
-      return () => clearTimeout(clearId)
-    }
-    const scrollId = setTimeout(() => {
-      const popupEl = document.querySelector<HTMLElement>('.concept-popup-aside')
-      const visibleHeight = popupEl ? popupEl.getBoundingClientRect().top : window.innerHeight
-      if (fromRadial && studyGuideCardRef.current) {
-        radialScrollDoneRef.current = true
-        // Scroll so the top of the study guide card sits near the top of the visible
-        // area. Centering the whole card pushes the radial (at the top of the card)
-        // too far up when the card is tall. Skip if already in view.
+
+    if (fromRadial) {
+      // Radial segment highlighting is reactive — no need to flash a plan row or
+      // re-scroll on every navigation. Only scroll once when the popup first opens,
+      // and set the flag synchronously so rapid prev/next clicks can't slip through
+      // the 50ms window and retrigger the scroll.
+      if (radialScrollDoneRef.current) return
+      radialScrollDoneRef.current = true
+      const scrollId = setTimeout(() => {
+        if (!studyGuideCardRef.current) return
+        const popupEl = document.querySelector<HTMLElement>('.concept-popup-aside')
+        const visibleHeight = popupEl ? popupEl.getBoundingClientRect().top : window.innerHeight
         const rect = studyGuideCardRef.current.getBoundingClientRect()
         if (rect.top < 0 || rect.top > visibleHeight - 80) {
           window.scrollBy({ top: rect.top - 16, behavior: 'smooth' })
         }
-        return
-      }
-      // Default: center the concept row in the visible area
+      }, 50)
+      return () => clearTimeout(scrollId)
+    }
+
+    // Non-radial: auto-expand the topic containing this concept, then scroll its row into view.
+    const ownerTopic = syllabus.topics.find(t =>
+      t.concepts.some(c => c.name.toLowerCase() === popupCurrentName.toLowerCase())
+    )
+    if (ownerTopic) {
+      setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
+    }
+    const scrollId = setTimeout(() => {
+      const popupEl = document.querySelector<HTMLElement>('.concept-popup-aside')
+      const visibleHeight = popupEl ? popupEl.getBoundingClientRect().top : window.innerHeight
       const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
       if (!el) return
       const rect = el.getBoundingClientRect()

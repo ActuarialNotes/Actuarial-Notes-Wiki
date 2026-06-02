@@ -214,22 +214,24 @@ export function ConceptPopup() {
       role="complementary"
       aria-label={`Concept: ${current.name}`}
     >
-      {/* Drag handle — visible on all devices including mobile */}
-      <div
-        role="separator"
-        aria-orientation="horizontal"
-        aria-label="Resize concept panel"
-        onMouseDown={e => {
-          e.preventDefault()
-          beginDrag(e.clientY)
-        }}
-        onTouchStart={e => {
-          if (e.touches[0]) beginDrag(e.touches[0].clientY)
-        }}
-        className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
-      >
-        <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
-      </div>
+      {/* Drag handle — hidden in fullscreen, visible otherwise */}
+      {!maximized && (
+        <div
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label="Resize concept panel"
+          onMouseDown={e => {
+            e.preventDefault()
+            beginDrag(e.clientY)
+          }}
+          onTouchStart={e => {
+            if (e.touches[0]) beginDrag(e.touches[0].clientY)
+          }}
+          className="flex h-4 items-center justify-center cursor-row-resize hover:bg-accent/60 active:bg-accent/80 transition-colors select-none touch-none"
+        >
+          <GripHorizontal className="h-3 w-6 text-muted-foreground/60" />
+        </div>
+      )}
 
       {/* Header */}
       <div className="flex items-center gap-2 px-3 h-14 border-b shrink-0">
@@ -393,12 +395,13 @@ export function ConceptPopup() {
         </button>
       </div>
 
-      {/* Body — only this scrolls; wheel events don't propagate to the page
-          behind because the pane isn't transparent and covers the bottom. */}
+      {/* Body — overflow-y:scroll (not auto) keeps this a scroll container even when
+          content is short, so overscroll-contain traps wheel events and the dashboard
+          behind never scrolls. Scrollbar is hidden via CSS. */}
       <MathViewContext.Provider value={{ active: mathView, enter: () => setMathView(true) }}>
         <div
           ref={bodyRef}
-          className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4"
+          className="flex-1 min-h-0 overflow-y-scroll overscroll-contain px-4 sm:px-6 py-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
         >
           {status === 'loading' && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">

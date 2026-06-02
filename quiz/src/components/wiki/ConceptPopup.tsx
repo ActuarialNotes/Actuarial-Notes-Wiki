@@ -178,8 +178,9 @@ export function ConceptPopup() {
 
   if (!open || !current) return null
 
-  const canPrev = index > 0
-  const canNext = index < list.length - 1
+  const isCircular = !!(dashboardContext?.circular)
+  const canPrev = isCircular || index > 0
+  const canNext = isCircular || index < list.length - 1
   const position = `${index + 1} of ${list.length}`
   const sourcePath = current ? entryRefToRepoPath(current) : undefined
   const hasStudyPlan = !!(dashboardContext?.studyPlanList?.length)

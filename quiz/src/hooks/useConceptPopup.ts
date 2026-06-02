@@ -10,6 +10,8 @@ interface DashboardContext {
   studyPlanList: WikiEntryRef[] | null
   fullList: WikiEntryRef[]
   filter: DashboardFilter
+  circular: boolean
+  fromRadial: boolean
 }
 
 interface ConceptPopupState {
@@ -27,6 +29,7 @@ interface ConceptPopupState {
     studyPlanList: WikiEntryRef[] | null,
     filter: DashboardFilter,
     initialIndex: number,
+    options?: { circular?: boolean; fromRadial?: boolean },
   ) => void
   setDashboardFilter: (filter: DashboardFilter) => void
   navigate: (delta: number) => void
@@ -51,14 +54,20 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       sourcePath,
       dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: list, filter: 'entire-syllabus' },
     }),
-  openDashboard: (fullList, studyPlanList, filter, initialIndex) => {
+  openDashboard: (fullList, studyPlanList, filter, initialIndex, options = {}) => {
     const list = filter === 'study-plan' && studyPlanList ? studyPlanList : fullList
     set({
       open: true,
       list,
       index: Math.max(0, Math.min(initialIndex, list.length - 1)),
       sourcePath: null,
-      dashboardContext: { studyPlanList, fullList, filter },
+      dashboardContext: {
+        studyPlanList,
+        fullList,
+        filter,
+        circular: options.circular ?? false,
+        fromRadial: options.fromRadial ?? false,
+      },
     })
   },
   setDashboardFilter: filter => {
@@ -75,9 +84,11 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     set({ list: newList, index: newIndex, dashboardContext: { ...dashboardContext, filter } })
   },
   navigate: delta => {
-    const { list, index } = get()
+    const { list, index, dashboardContext } = get()
     if (!list.length) return
-    const next = Math.max(0, Math.min(list.length - 1, index + delta))
+    const next = dashboardContext?.circular
+      ? ((index + delta) % list.length + list.length) % list.length
+      : Math.max(0, Math.min(list.length - 1, index + delta))
     set({ index: next })
   },
   jumpTo: ref => {

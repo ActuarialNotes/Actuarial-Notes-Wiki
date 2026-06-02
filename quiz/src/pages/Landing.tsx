@@ -518,17 +518,8 @@ export default function Landing() {
 
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = topic === 'Probability' ? 'Exam P' : 'Exam FM'
-  const examShortLabel = topic === 'Probability' ? 'P' : topic === 'Financial Mathematics' ? 'FM' : null
   const hasTopic = topic !== ''
   const hasSelection = hasTopic || selectedConcept !== ''
-
-  const conceptsLabel = useTodaysPlan && planConceptCount > 0
-    ? `${planConceptCount} concept${planConceptCount !== 1 ? 's' : ''} · today's plan`
-    : selectedConcepts.length === 0
-      ? '(all included)'
-      : isAdaptive
-        ? `(${selectedConcepts.length} auto-selected)`
-        : `${selectedConcepts.length} selected`
 
   // Filter reflecting the current quiz configuration — passed to the search
   // bar so it only previews questions from the active pool.
@@ -584,11 +575,6 @@ export default function Landing() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-3xl font-bold tracking-tight">Quiz</h1>
-              {hasTopic && examShortLabel && (
-                <span className="inline-flex items-center rounded-md px-2 py-1 text-sm font-semibold border border-primary/30 bg-primary/10 text-primary">
-                  {examShortLabel}
-                </span>
-              )}
             </div>
             {!user && (
               <p className="text-xs text-muted-foreground">
@@ -681,13 +667,6 @@ export default function Landing() {
               {/* ── Quiz mode options ──────────────────────────────────── */}
               {mode === 'quiz' && (
                 <div className="space-y-3">
-                  <label className="text-sm font-medium">
-                    Concepts
-                    <span className="ml-2 text-xs font-normal text-muted-foreground">
-                      {conceptsLabel}
-                    </span>
-                  </label>
-
                   {/* Today's Plan / By Topic segmented control */}
                   {user && (
                     <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
@@ -834,33 +813,6 @@ export default function Landing() {
               Mock Exam
             </button>
           </div>
-          {mode === 'quiz' && (
-            <div className="flex items-center gap-2.5 py-0.5">
-              <span className="text-sm font-medium">Show answers</span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={reveal === 'end'}
-                onClick={() => setReveal(reveal === 'during' ? 'end' : 'during')}
-                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                  reveal === 'end' ? 'bg-primary' : 'bg-input'
-                }`}
-              >
-                <span
-                  className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-background shadow-lg ring-0 transition-transform ${
-                    reveal === 'end' ? 'translate-x-4' : 'translate-x-0'
-                  }`}
-                />
-              </button>
-              <span className={`text-xs transition-colors ${reveal === 'during' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                After each
-              </span>
-              <span className="text-xs text-muted-foreground">/</span>
-              <span className={`text-xs transition-colors ${reveal === 'end' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                At end
-              </span>
-            </div>
-          )}
           <button
             type="button"
             onClick={handleStart}

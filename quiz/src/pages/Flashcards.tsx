@@ -904,7 +904,7 @@ function SortableCard({
           isActive ? 'text-primary' : 'hover:text-primary'
         }`}
       >
-        <span className="font-semibold text-sm leading-snug">{card.name}</span>
+        <span className="font-semibold text-base leading-snug">{card.name}</span>
       </button>
 
       {/* Mastery pill */}
@@ -1066,7 +1066,7 @@ function GalleryPanel({
   }
 
   return (
-    <div className="gallery-panel fixed inset-0 z-40 flex flex-col bg-background" style={{ top: '3.5rem' }}>
+    <div className="gallery-panel fixed inset-0 z-40 flex flex-col bg-background">
       {/* Panel header — card count, filters */}
       <div className="sticky top-0 z-10 bg-background border-b">
         <div className="flex items-center gap-3 px-4 py-3">

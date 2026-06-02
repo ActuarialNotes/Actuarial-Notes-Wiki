@@ -384,7 +384,6 @@ export function ReadinessCard({
   const toRefs = (arr: { name: string }[]): WikiEntryRef[] =>
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
-  const radialScrollDoneRef = useRef(false)
   const studyGuideCardRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [flashRadial, setFlashRadial] = useState(false)
@@ -830,7 +829,6 @@ export function ReadinessCard({
   useEffect(() => {
     if (!popupOpen) {
       prevPopupConceptRef.current = null
-      radialScrollDoneRef.current = false
     }
   }, [popupOpen])
 
@@ -840,12 +838,10 @@ export function ReadinessCard({
     const fromRadial = popupFromRadial
 
     if (fromRadial) {
-      // Radial segment highlighting is reactive — no need to flash a plan row or
-      // re-scroll on every navigation. Only scroll once when the popup first opens,
-      // and set the flag synchronously so rapid prev/next clicks can't slip through
-      // the 50ms window and retrigger the scroll.
-      if (radialScrollDoneRef.current) return
-      radialScrollDoneRef.current = true
+      // On every concept change, re-check whether the study guide card is still
+      // visible above the popup. If it has scrolled out of view, bring it back.
+      // The effect cleanup cancels a pending timeout on re-run, so rapid Next/Prev
+      // clicks naturally debounce down to a single scroll at the end.
       const scrollId = setTimeout(() => {
         if (!studyGuideCardRef.current) return
         const popupEl = document.querySelector<HTMLElement>('.concept-popup-aside')
@@ -858,17 +854,20 @@ export function ReadinessCard({
       return () => clearTimeout(scrollId)
     }
 
-    // Non-radial: auto-expand the topic containing this concept in the topics mastered list.
+    // Non-radial: for entire-syllabus mode expand the owning topic in topics-mastered
+    // so the concept row becomes visible there. For study-plan mode the plan topics are
+    // already auto-expanded and we don't want to cause a layout shift below.
     const ownerTopic = syllabus.topics.find(t =>
       t.concepts.some(c => c.name.toLowerCase() === popupCurrentName.toLowerCase())
     )
-    if (ownerTopic) {
+    if (popupDashboardFilter === 'entire-syllabus' && ownerTopic) {
       setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
     }
-    // Only scroll the window when in study-plan filter — the querySelector finds study-plan
-    // rows first (they're higher in the DOM), so scrolling is correct in that context.
-    // For entire-syllabus, the same selector would land on study-plan rows instead of the
-    // topics-mastered list, scrolling the page away from the radial graph.
+    // For study-plan mode scroll to the active concept row in the study plan card.
+    // The querySelector finds study-plan rows first (higher in the DOM), so the target
+    // is always the correct element. For entire-syllabus we do not scroll the window —
+    // the topics-mastered section is in its own overflow container and scrolling would
+    // jump to the study-plan section instead.
     let scrollId: ReturnType<typeof setTimeout> | undefined
     if (popupDashboardFilter === 'study-plan') {
       scrollId = setTimeout(() => {

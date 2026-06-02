@@ -40,11 +40,13 @@ function MultiSelectDropdown({
   options,
   selected,
   onToggle,
+  getCount,
 }: {
   label: string
   options: { value: string; label: string }[]
   selected: Set<string>
   onToggle: (value: string) => void
+  getCount?: (value: string) => number
 }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -69,38 +71,46 @@ function MultiSelectDropdown({
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs transition-colors whitespace-nowrap ${
+        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors whitespace-nowrap ${
           selected.size > 0
             ? 'border-primary bg-primary/10 text-primary'
             : 'border-input bg-background hover:bg-accent'
         }`}
       >
         <span>{displayLabel}</span>
-        <ChevronDown className={`h-3 w-3 transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`h-4 w-4 transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="absolute top-full left-0 mt-1 z-20 bg-card border rounded-lg shadow-lg min-w-[160px] py-1 max-h-60 overflow-y-auto">
-          {options.map(opt => (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => onToggle(opt.value)}
-              className="flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-accent transition-colors text-left"
-            >
-              <div
-                className={`h-3.5 w-3.5 rounded border flex items-center justify-center shrink-0 ${
-                  selected.has(opt.value) ? 'bg-primary border-primary' : 'border-input bg-background'
-                }`}
+        <div className="absolute top-full left-0 mt-1 z-20 bg-card border rounded-lg shadow-lg min-w-[200px] py-1.5 max-h-72 overflow-y-auto">
+          {options.map(opt => {
+            const count = getCount?.(opt.value)
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => onToggle(opt.value)}
+                className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-accent transition-colors text-left"
               >
-                {selected.has(opt.value) && (
-                  <svg className="h-2 w-2 text-primary-foreground" fill="none" viewBox="0 0 10 10">
-                    <path d="M2 5L4 7L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                <div
+                  className={`h-4 w-4 rounded border flex items-center justify-center shrink-0 ${
+                    selected.has(opt.value) ? 'bg-primary border-primary' : 'border-input bg-background'
+                  }`}
+                >
+                  {selected.has(opt.value) && (
+                    <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 10 10">
+                      <path d="M2 5L4 7L8 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </div>
+                <span className="capitalize flex-1">{opt.label}</span>
+                {count !== undefined && (
+                  <span className="ml-2 text-xs bg-muted text-muted-foreground rounded-full px-2 py-0.5 min-w-[1.5rem] text-center font-medium">
+                    {count}
+                  </span>
                 )}
-              </div>
-              <span className="capitalize">{opt.label}</span>
-            </button>
-          ))}
+              </button>
+            )
+          })}
         </div>
       )}
     </div>
@@ -175,6 +185,33 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
     }
     return filtered
   }, [questions, difficultyFilters, conceptFilters])
+
+  const difficultyOptionCounts = useMemo(() => {
+    let filtered = questions
+    if (conceptFilters.size > 0) {
+      filtered = filtered.filter(q =>
+        q.wiki_link.some(link => conceptFilters.has(conceptLabel(link)))
+      )
+    }
+    const counts: Record<string, number> = {}
+    filtered.forEach(q => { counts[q.difficulty] = (counts[q.difficulty] ?? 0) + 1 })
+    return counts
+  }, [questions, conceptFilters])
+
+  const conceptOptionCounts = useMemo(() => {
+    let filtered = questions
+    if (difficultyFilters.size > 0) {
+      filtered = filtered.filter(q => difficultyFilters.has(q.difficulty))
+    }
+    const counts: Record<string, number> = {}
+    filtered.forEach(q => {
+      q.wiki_link.forEach(link => {
+        const lbl = conceptLabel(link)
+        counts[lbl] = (counts[lbl] ?? 0) + 1
+      })
+    })
+    return counts
+  }, [questions, difficultyFilters])
 
   const allSelected = visibleQuestions.length > 0 && visibleQuestions.every(q => selectedIds.has(q.id))
   const someSelected = visibleQuestions.some(q => selectedIds.has(q.id)) && !allSelected
@@ -270,6 +307,7 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
                     else next.add(d)
                     return next
                   })}
+                  getCount={v => difficultyOptionCounts[v] ?? 0}
                 />
                 {relatedConcepts.length > 0 && (
                   <MultiSelectDropdown
@@ -282,35 +320,36 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
                       else next.add(c)
                       return next
                     })}
+                    getCount={v => conceptOptionCounts[v] ?? 0}
                   />
                 )}
               </div>
 
               {/* Toolbar: select-all + count */}
               <div className="flex items-center gap-3 py-1">
-                <label className="flex items-center gap-2 cursor-pointer select-none">
+                <label className="flex items-center gap-3 cursor-pointer select-none">
                   <div
                     role="checkbox"
                     aria-checked={allSelected ? true : someSelected ? 'mixed' : false}
                     tabIndex={0}
                     onClick={toggleSelectAll}
                     onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') toggleSelectAll() }}
-                    className={`h-4 w-4 rounded border-2 flex items-center justify-center transition-colors cursor-pointer ${
+                    className={`h-6 w-6 rounded border-2 flex items-center justify-center transition-colors cursor-pointer ${
                       allSelected || someSelected
                         ? 'bg-primary border-primary'
                         : 'border-input bg-background'
                     }`}
                   >
                     {allSelected && (
-                      <svg className="h-2.5 w-2.5 text-primary-foreground" fill="currentColor" viewBox="0 0 12 12">
+                      <svg className="h-3.5 w-3.5 text-primary-foreground" fill="currentColor" viewBox="0 0 12 12">
                         <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                       </svg>
                     )}
                     {someSelected && (
-                      <div className="h-0.5 w-2 bg-primary-foreground rounded" />
+                      <div className="h-0.5 w-3 bg-primary-foreground rounded" />
                     )}
                   </div>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     {visibleQuestions.filter(q => selectedIds.has(q.id)).length} / {visibleQuestions.length} selected
                   </span>
                 </label>

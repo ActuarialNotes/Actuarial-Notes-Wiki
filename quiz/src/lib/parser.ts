@@ -97,7 +97,10 @@ export function isAnswerCorrect(question: Question, chosen: string): boolean {
       const chosenParts = JSON.parse(chosen) as Record<string, string>
       const parts = question.parts ?? []
       if (parts.length === 0) return false
-      return parts.every(part => {
+      // Essay parts (answer === '') are ungraded — exclude from correctness check.
+      const gradedParts = parts.filter(p => p.answer !== '')
+      if (gradedParts.length === 0) return true
+      return gradedParts.every(part => {
         const partChosen = chosenParts[part.label] ?? ''
         if (part.type === 'multiple-choice') return partChosen === part.answer
         return normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)

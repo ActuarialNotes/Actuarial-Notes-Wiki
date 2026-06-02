@@ -108,8 +108,9 @@ interface PartCardProps {
 }
 
 function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer }: PartCardProps) {
-  const isAnswered = isLocked && partAnswer !== ''
-  const isRight = isAnswered && (
+  const isEssay = part.answer === ''
+  const isAnswered = isLocked && (isEssay || partAnswer !== '')
+  const isRight = !isEssay && isAnswered && (
     part.type === 'multiple-choice'
       ? partAnswer === part.answer
       : normalizeAnswerText(partAnswer) === normalizeAnswerText(part.answer)
@@ -124,7 +125,10 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer }:
             <span className="ml-1 font-normal">({part.points} pt{part.points !== 1 ? 's' : ''})</span>
           )}
         </span>
-        {isAnswered && (
+        {isEssay && (
+          <span className="text-xs text-muted-foreground italic">Written response</span>
+        )}
+        {!isEssay && isAnswered && (
           <span className={isRight ? 'text-green-600 dark:text-green-400 text-xs font-medium' : 'text-red-600 dark:text-red-400 text-xs font-medium'}>
             {isRight ? '✓ Correct' : '✗ Incorrect'}
           </span>
@@ -135,7 +139,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer }:
         {part.stem}
       </MarkdownText>
 
-      {part.type === 'multiple-choice' ? (
+      {isEssay ? null : part.type === 'multiple-choice' ? (
         <div className="space-y-2">
           {part.options.map(option => (
             <AnswerOption
@@ -161,14 +165,22 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer }:
         />
       )}
 
-      {showExplanation && isAnswered && (part.explanation || part.examiner_report) && (
+      {/* Essay: always show sample answer. Graded: show after answering when explanation is revealed. */}
+      {(isEssay || (showExplanation && isAnswered)) && (part.explanation || part.examiner_report) && (
         <div className={[
           'rounded-md border p-3 space-y-2 text-sm',
-          isRight
-            ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950'
-            : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950',
+          isEssay
+            ? 'border-border bg-muted/40'
+            : isRight
+              ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950'
+              : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950',
         ].join(' ')}>
-          {!isRight && part.answer && (
+          {isEssay && (
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              Sample Answer
+            </p>
+          )}
+          {!isEssay && !isRight && part.answer && (
             <p className="text-muted-foreground text-xs">
               Correct answer: <span className="font-semibold text-foreground">{part.answer}</span>
             </p>
@@ -226,8 +238,10 @@ export function QuestionCard({
   function handlePartAnswer(label: string, value: string) {
     const updated = { ...partAnswers, [label]: value }
     setPartAnswers(updated)
+    // Essay parts (answer === '') need no user input — skip them when deciding
+    // whether all graded parts are filled.
     const parts = question.parts ?? []
-    const allFilled = parts.every(p => (updated[p.label] ?? '').trim() !== '')
+    const allFilled = parts.every(p => p.answer === '' || (updated[p.label] ?? '').trim() !== '')
     // Signal all-filled state on every change so the page-level Confirm button
     // appears/disappears live as the user types across parts.
     onAnswer(allFilled ? JSON.stringify(updated) : '')
@@ -328,7 +342,8 @@ export function QuestionCard({
 
   // ── multi-part ───────────────────────────────────────────────────────────
   const parts = question.parts ?? []
-  const allPartsAnswered = parts.every(p => (partAnswers[p.label] ?? '').trim() !== '')
+  // Essay parts (answer === '') require no user input
+  const allPartsAnswered = parts.every(p => p.answer === '' || (partAnswers[p.label] ?? '').trim() !== '')
 
   return (
     <Card className="w-full">

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Check, Circle, X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { useQuizStore, readLastSession } from '@/stores/quizStore'
 import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
@@ -69,19 +69,17 @@ function StudyPlanChecklist({
     return () => clearTimeout(id)
   }, [popupCurrentName])
 
-  if (todaysConcepts.length === 0 && bonusConcepts.length === 0) return null
-
-  // Precompute animation delays: only newly-completed items animate, staggered in order
+  // Only show concepts levelled up today (checked off)
   let animIdx = 0
-  const items = todaysConcepts.map(name => {
-    const done = newlyCompletedSlugs.has(name.toLowerCase())
-    const delay = done ? animIdx++ * 120 : 0
-    return { name, done, delay }
-  })
+  const items = todaysConcepts
+    .filter(name => newlyCompletedSlugs.has(name.toLowerCase()))
+    .map(name => ({ name, delay: animIdx++ * 120 }))
   const bonusStartIdx = animIdx
 
+  if (items.length === 0 && bonusConcepts.length === 0) return null
+
   const allRefs: WikiEntryRef[] = [
-    ...todaysConcepts.map(name => ({ kind: 'concept' as const, name })),
+    ...items.map(({ name }) => ({ kind: 'concept' as const, name })),
     ...bonusConcepts.map(t => ({ kind: 'concept' as const, name: t.conceptSlug })),
   ]
 
@@ -91,7 +89,7 @@ function StudyPlanChecklist({
         Today's Study Plan
       </p>
       <div className="space-y-0.5">
-        {items.map(({ name, done, delay }, idx) => {
+        {items.map(({ name, delay }, idx) => {
           const target = targetByName.get(name.toLowerCase()) ?? 'level1'
           return (
             <button
@@ -101,17 +99,13 @@ function StudyPlanChecklist({
               onClick={() => openAt(allRefs, idx)}
               className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
             >
-              {done ? (
-                <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${delay}ms` }}>
-                  <Check className="h-4 w-4 text-green-500" />
-                </span>
-              ) : (
-                <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-              )}
-              <span className={`text-sm flex-1 min-w-0 truncate ${done ? 'text-muted-foreground line-through' : ''}`}>
+              <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${delay}ms` }}>
+                <Check className="h-4 w-4 text-green-500" />
+              </span>
+              <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
                 {name}
               </span>
-              <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {STATE_LABEL[target]}</span>
             </button>
           )
         })}
@@ -128,7 +122,7 @@ function StudyPlanChecklist({
                 key={t.conceptSlug}
                 type="button"
                 data-study-concept={t.conceptSlug.toLowerCase()}
-                onClick={() => openAt(allRefs, todaysConcepts.length + i)}
+                onClick={() => openAt(allRefs, items.length + i)}
                 className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === t.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
               >
                 <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${(bonusStartIdx + i) * 120}ms` }}>

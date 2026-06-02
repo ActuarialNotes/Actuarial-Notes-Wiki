@@ -6,8 +6,8 @@
 
 @layer base {
   :root {
-    --shadow-card: 0 1px 4px 0 rgba(0,0,0,0.12), 0 2px 12px 0 rgba(0,0,0,0.09);
-    --background: 0 0% 100%;
+    --shadow-card: 0 1px 4px 0 rgba(0,0,0,0.08), 0 2px 12px 0 rgba(0,0,0,0.06);
+    --background: 220 15% 95%;
     --foreground: 0 0% 7%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 7%;

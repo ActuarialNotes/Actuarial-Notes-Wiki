@@ -52,7 +52,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       list,
       index: Math.max(0, Math.min(index, list.length - 1)),
       sourcePath,
-      dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: list, filter: 'entire-syllabus' },
+      dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: list, filter: 'entire-syllabus', circular: false, fromRadial: false },
     }),
   openDashboard: (fullList, studyPlanList, filter, initialIndex, options = {}) => {
     const list = filter === 'study-plan' && studyPlanList ? studyPlanList : fullList

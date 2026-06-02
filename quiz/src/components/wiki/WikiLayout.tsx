@@ -35,10 +35,13 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const setExamId = useCallback((id: string | null) => setExamIdState(id), [])
 
   useEffect(() => {
+    try {
+      sessionStorage.setItem('wiki:last-path', location.pathname + location.search)
+    } catch { /* ignore */ }
     setPageRefsState([])
     setExamIdState(null)
     closeOnNavigation(location.pathname)
-  }, [location.pathname, closeOnNavigation])
+  }, [location.pathname, location.search, closeOnNavigation])
 
   return (
     <WikiPageContext.Provider value={{ setPageRefs, setExamId }}>

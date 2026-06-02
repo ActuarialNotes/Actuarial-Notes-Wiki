@@ -411,7 +411,7 @@ export const calloutComponents: Components = {
       return (
         <blockquote
           {...rest}
-          className={`not-prose my-4 bg-muted/70 rounded-lg px-6 py-4 text-center [&_p]:m-0${
+          className={`not-prose my-4 bg-background rounded-lg px-6 py-4 text-center [&_p]:m-0${
             isMathBlock && mathCtx && !mathCtx.active
               ? ' cursor-pointer hover:ring-2 hover:ring-primary/40 transition-shadow'
               : ''

@@ -1,10 +1,26 @@
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { readdir, readFile } from 'fs/promises'
 import fm from 'front-matter'
 
 const REPO_ROOT = path.resolve(__dirname, '..')
+
+const _buildEnv = loadEnv('', __dirname, 'VITE_')
+const GITHUB_REPO = _buildEnv.VITE_GITHUB_REPO || 'ActuarialNotes/Actuarial-Notes-Wiki'
+const GITHUB_BRANCH = _buildEnv.VITE_GITHUB_BRANCH || 'main'
+
+const IMAGE_EXT_RE = /\.(png|jpe?g|gif|svg|webp|avif)$/i
+
+function extractCoverImageUrl(content: string): string | undefined {
+  const m = /!\[\[([^\]]+)\]\]/.exec(content)
+  if (!m) return undefined
+  const imagePath = m[1].trim()
+  if (!IMAGE_EXT_RE.test(imagePath)) return undefined
+  const resolved = imagePath.includes('/') ? imagePath : `Media/Attachments/${imagePath}`
+  const encoded = resolved.replace(/^\/+/, '').split('/').map(encodeURIComponent).join('/')
+  return `https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${encoded}`
+}
 
 interface WikiIndexItem {
   category: 'exam' | 'concept' | 'document'
@@ -14,6 +30,9 @@ interface WikiIndexItem {
   author?: string
   year?: number
   title?: string
+  edition?: string
+  publisher?: string
+  coverImage?: string
 }
 
 interface WikiBundleData {
@@ -58,9 +77,12 @@ async function collectWikiContent(): Promise<WikiBundleData> {
       category: 'document',
       name: name.replace(/\.md$/i, ''),
       path: `Resources/Books/${name}`,
-      author: attrs['Author'] ? String(attrs['Author']) : undefined,
+      author: (attrs['Authors'] || attrs['Author']) ? String(attrs['Authors'] || attrs['Author']) : undefined,
       year: Number.isFinite(yearNum) ? yearNum : undefined,
       title: attrs['Title'] ? String(attrs['Title']) : undefined,
+      edition: attrs['Edition'] ? String(attrs['Edition']) : undefined,
+      publisher: attrs['Publisher'] ? String(attrs['Publisher']) : undefined,
+      coverImage: extractCoverImageUrl(text),
     })
   }
 

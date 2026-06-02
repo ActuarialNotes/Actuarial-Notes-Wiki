@@ -1241,13 +1241,6 @@ function FlashcardStudyArea({
 
   return (
     <div className="flex flex-col items-center gap-5 px-4 py-6">
-      {/* Counter row */}
-      <div className="w-full max-w-xl flex items-center gap-4">
-        <span className="text-sm text-muted-foreground tabular-nums">
-          {index + 1} / {cards.length}
-        </span>
-      </div>
-
       {/* Flip card */}
       <div
         className={`w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer select-none transition-all${isFlashing ? ' flashcard-highlight' : ''}`}
@@ -1392,26 +1385,6 @@ function FlashcardStudyArea({
             )}
           </div>
         )}
-      </div>
-
-      {/* Prev / Next */}
-      <div className="flex items-center gap-6">
-        <button
-          type="button"
-          disabled={index === 0}
-          onClick={() => onIndexChange(index - 1)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border text-sm font-medium hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        >
-          <ChevronLeft className="h-4 w-4" /> Previous
-        </button>
-        <button
-          type="button"
-          disabled={index === cards.length - 1}
-          onClick={() => onIndexChange(index + 1)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border text-sm font-medium hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-        >
-          Next <ChevronRight className="h-4 w-4" />
-        </button>
       </div>
 
       {showQuestions && (
@@ -1662,7 +1635,7 @@ export default function Flashcards() {
       )}
 
       <div
-        className="container max-w-4xl mx-auto pb-24 md:pb-20"
+        className="container max-w-4xl mx-auto pb-40 md:pb-36"
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Sticky header: title + gallery strip — hidden when gallery overlay is open */}
@@ -1696,6 +1669,34 @@ export default function Flashcards() {
 
       {/* Fixed controls footer — always at bottom, above mobile nav */}
       <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
+        {/* Prev / Next nav footer — only in study mode */}
+        {!galleryExpanded && (
+          <div className="flex items-stretch border-t h-16 shrink-0 bg-background">
+            <button
+              type="button"
+              disabled={activeIndex === 0}
+              onClick={() => setActiveIndex(activeIndex - 1)}
+              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
+              <span>Previous</span>
+            </button>
+            <div className="self-center px-4 shrink-0">
+              <span className="text-sm text-muted-foreground tabular-nums">
+                {activeIndex + 1} / {orderedCards.length}
+              </span>
+            </div>
+            <button
+              type="button"
+              disabled={activeIndex === orderedCards.length - 1}
+              onClick={() => setActiveIndex(activeIndex + 1)}
+              className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <span>Next</span>
+              <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
+            </button>
+          </div>
+        )}
         <FlashcardControlsBar
           galleryOpen={galleryExpanded}
           onGalleryToggle={() => setGalleryExpanded(v => !v)}

@@ -336,11 +336,11 @@ export default function Dashboard() {
         aria-hidden={isGuest}
       >
     <div
-      className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6"
+      className="container max-w-4xl mx-auto px-5 sm:px-8 py-8 space-y-8"
       style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
       {/* Header */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-2xl font-bold tracking-tight">Actuarial Notes</h1>
           {!isGuest && (

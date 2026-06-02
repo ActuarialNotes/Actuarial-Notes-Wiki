@@ -885,7 +885,7 @@ export function ReadinessCard({
       <div className="space-y-4">
       {/* Heatmap card */}
       <Card className="border-0 shadow-none">
-        <CardContent className="p-5 space-y-4">
+        <CardContent className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2 flex-wrap">
@@ -1038,8 +1038,8 @@ export function ReadinessCard({
       {/* Today's Study Plan card */}
       {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
         <Card>
-          <CardContent className="p-5 space-y-3">
-            <div className="space-y-3">
+          <CardContent className="p-6 space-y-4">
+            <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-semibold">Today's Study Plan</h3>
                 {/* Inline gems bonus pill */}
@@ -1268,7 +1268,7 @@ export function ReadinessCard({
       {isPremium && (
         <div className="space-y-3">
           <Card ref={studyGuideCardRef} className="bg-card">
-            <CardContent className="p-4 space-y-4">
+            <CardContent className="p-5 space-y-4">
               <h3 className="text-sm font-semibold">Study Guide</h3>
 
               <StudyGuideRadial
@@ -1357,7 +1357,7 @@ export function ReadinessCard({
           {/* Study Guide — same card as premium, all concepts shown as "New" */}
           <div className="space-y-3">
             <Card ref={studyGuideCardRef} className="bg-card">
-              <CardContent className="p-4 space-y-4">
+              <CardContent className="p-5 space-y-4">
                 <h3 className="text-sm font-semibold">Study Guide</h3>
 
                 <StudyGuideRadial

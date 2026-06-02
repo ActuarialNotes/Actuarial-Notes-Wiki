@@ -51,6 +51,7 @@ import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } 
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
+import { trackFlashcardReviewed } from '@/lib/analytics'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
 type ReverseCardSection = 'definition' | 'math' | 'images'
@@ -1208,6 +1209,7 @@ function FlashcardStudyArea({
   function handleFlip() {
     if (!flipped) {
       setFlipped(true)
+      trackFlashcardReviewed({ concept: current.name, kind: current.kind })
       if (markdown === null && loadStatus === 'idle') {
         setLoadStatus('loading')
         fetchWikiFile(entryRefToRepoPath(current))

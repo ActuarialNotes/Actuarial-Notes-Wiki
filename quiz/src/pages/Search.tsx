@@ -16,6 +16,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LatexText } from '@/components/LatexText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
+import { trackSearchQuery } from '@/lib/analytics'
 
 type SearchType = 'concepts' | 'questions' | 'resources'
 
@@ -540,6 +541,7 @@ export default function Search() {
   const hasFilters = topic || selectedSubtopics.length || difficulty || conceptFilter || textQuery
 
   function handleStartQuiz() {
+    trackSearchQuery({ query: textQuery.trim(), exam: topic, difficulty: difficulty })
     const params = new URLSearchParams({ mode: 'quiz', reveal: 'during', from: 'search' })
 
     try {

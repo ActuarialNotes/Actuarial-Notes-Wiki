@@ -383,6 +383,7 @@ export function ReadinessCard({
   const toRefs = (arr: { name: string }[]): WikiEntryRef[] =>
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
+  const radialScrollDoneRef = useRef(false)
   const studyGuideCardRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [flashRadial, setFlashRadial] = useState(false)
@@ -828,6 +829,7 @@ export function ReadinessCard({
   useEffect(() => {
     if (!popupOpen) {
       prevPopupConceptRef.current = null
+      radialScrollDoneRef.current = false
     }
   }, [popupOpen])
 
@@ -844,13 +846,26 @@ export function ReadinessCard({
         setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
       }
     }
+    // For radial: only scroll once when the popup first opens. On prev/next navigation the
+    // radial already highlights the new segment reactively — re-scrolling on every concept
+    // change causes compounding jumps because smooth scrolls stack on each other.
+    if (fromRadial && radialScrollDoneRef.current) {
+      setFlashingConcept(popupCurrentName)
+      const clearId = setTimeout(() => setFlashingConcept(null), 1400)
+      return () => clearTimeout(clearId)
+    }
     const scrollId = setTimeout(() => {
       const popupEl = document.querySelector<HTMLElement>('.concept-popup-aside')
       const visibleHeight = popupEl ? popupEl.getBoundingClientRect().top : window.innerHeight
       if (fromRadial && studyGuideCardRef.current) {
-        // Keep the radial graph card centered in the visible area above the popup
+        radialScrollDoneRef.current = true
+        // Scroll so the top of the study guide card sits near the top of the visible
+        // area. Centering the whole card pushes the radial (at the top of the card)
+        // too far up when the card is tall. Skip if already in view.
         const rect = studyGuideCardRef.current.getBoundingClientRect()
-        window.scrollBy({ top: rect.top + rect.height / 2 - visibleHeight / 2, behavior: 'smooth' })
+        if (rect.top < 0 || rect.top > visibleHeight - 80) {
+          window.scrollBy({ top: rect.top - 16, behavior: 'smooth' })
+        }
         return
       }
       // Default: center the concept row in the visible area

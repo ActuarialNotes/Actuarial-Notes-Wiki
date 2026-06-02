@@ -234,9 +234,9 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
 
 const STATE_BADGE: Record<MasteryState, string> = {
   new:       'bg-muted text-muted-foreground border-transparent',
-  level1:    'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40',
-  level2:    'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/40',
-  level3:    'bg-green-500/15 text-green-700 dark:text-green-300 border-green-500/40',
+  level1:    'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/25',
+  level2:    'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/35',
+  level3:    'bg-green-500/30 text-green-800 dark:text-green-300 border-green-500/50',
   forgotten: 'bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/40',
 }
 

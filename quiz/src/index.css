@@ -198,6 +198,18 @@
   }
 }
 
+/* Gallery panel: mobile has no top header so start at top:0; tablet has a fixed
+   h-14 header so offset by 3.5rem; desktop uses sidebar offset instead. */
+.gallery-panel {
+  top: 0;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .gallery-panel {
+    top: 3.5rem;
+  }
+}
+
 /* Gallery panel: respect sidebar width on desktop so the sidebar stays visible. */
 @media (min-width: 1024px) {
   .gallery-panel {

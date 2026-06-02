@@ -14,6 +14,8 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuizMode } from '@/lib/parser'
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 const EXAMS = [
   { value: 'Probability', label: 'Exam P-1 (SOA)' },
@@ -158,6 +160,42 @@ function GroupSection({
         </div>
       </div>
     </div>
+  )
+}
+
+function ExamOptionCard({
+  exam,
+  onClick,
+  questionCount,
+}: {
+  exam: { value: string; label: string }
+  onClick: () => void
+  questionCount: number
+}) {
+  const isExam5 = exam.value === 'Exam 5'
+  const description = isExam5 ? null : exam.value
+
+  return (
+    <button type="button" onClick={onClick} className="text-left w-full">
+      <Card className={cn('h-full transition-all duration-150 overflow-hidden hover:bg-accent/30')}>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
+          {description && (
+            <CardDescription className="mt-0.5">{description}</CardDescription>
+          )}
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-muted text-muted-foreground">
+              {questionCount} question{questionCount !== 1 ? 's' : ''}
+            </span>
+            {isExam5 && (
+              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                In Development
+              </span>
+            )}
+          </div>
+        </CardHeader>
+      </Card>
+    </button>
   )
 }
 
@@ -411,6 +449,15 @@ export default function Landing() {
     } catch { /* ignore */ }
   }, [selectedConcepts, topic, mode, isAdaptive, conceptMode])
 
+  // Question counts per exam (for the exam selection cards)
+  const questionCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const exam of EXAMS) {
+      counts[exam.value] = filterQuestions(allQuestions, { exam: exam.value }).length
+    }
+    return counts
+  }, [allQuestions])
+
   // Compute available question count for the current filters
   const availableCount = useMemo(() => {
     if (!topic) return 0
@@ -612,14 +659,12 @@ export default function Landing() {
               <label className="text-sm font-medium">Exam</label>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {(hasInProgress ? inProgressExams : EXAMS).map(exam => (
-                  <button
+                  <ExamOptionCard
                     key={exam.value}
-                    type="button"
+                    exam={exam}
                     onClick={() => setTopic(exam.value)}
-                    className="px-4 py-3 rounded-lg border border-input text-left text-sm transition-colors hover:bg-accent"
-                  >
-                    {exam.label}
-                  </button>
+                    questionCount={questionCounts[exam.value] ?? 0}
+                  />
                 ))}
               </div>
 
@@ -646,14 +691,12 @@ export default function Landing() {
                   {showOther && (
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-2">
                       {otherExams.map(exam => (
-                        <button
+                        <ExamOptionCard
                           key={exam.value}
-                          type="button"
+                          exam={exam}
                           onClick={() => setTopic(exam.value)}
-                          className="px-4 py-3 rounded-lg border border-input text-left text-sm transition-colors hover:bg-accent"
-                        >
-                          {exam.label}
-                        </button>
+                          questionCount={questionCounts[exam.value] ?? 0}
+                        />
                       ))}
                     </div>
                   )}

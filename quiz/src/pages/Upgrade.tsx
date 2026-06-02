@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { trackUpgradeClicked } from '@/lib/analytics'
 
 export default function Upgrade() {
   const navigate = useNavigate()
@@ -57,6 +58,7 @@ export default function Upgrade() {
       navigate('/auth', { state: { from: '/upgrade' } })
       return
     }
+    trackUpgradeClicked()
     setSubmitting(true)
     setError(null)
     try {

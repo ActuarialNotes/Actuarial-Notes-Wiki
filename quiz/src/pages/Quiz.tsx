@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { isAnswerCorrect } from '@/lib/parser'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
+import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted } from '@/lib/analytics'
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -81,6 +82,7 @@ export default function Quiz() {
   useEffect(() => {
     if (!loading && questions.length > 0 && status === 'idle') {
       startQuiz(questions, mode)
+      trackQuizStarted({ mode, exam: questions[0]?.exam ?? 'Unknown', question_count: questions.length })
     }
   }, [loading, questions, status, mode, startQuiz])
 
@@ -143,11 +145,13 @@ export default function Quiz() {
 
   function handleConfirmAnswer() {
     if (pendingAnswer && currentQuestion) {
+      const correct = isAnswerCorrect(currentQuestion, pendingAnswer)
       if (!isChangingAnswer) {
-        playSound(isAnswerCorrect(currentQuestion, pendingAnswer) ? 'correct' : 'wrong')
+        playSound(correct ? 'correct' : 'wrong')
       }
       answerQuestion(currentQuestion.id, pendingAnswer)
       setIsChangingAnswer(false)
+      trackQuestionAnswered({ question_id: currentQuestion.id, is_correct: correct, exam: currentQuestion.exam, mode })
     }
   }
 
@@ -167,6 +171,11 @@ export default function Quiz() {
     setIsSubmitting(true)
     setSubmitError(null)
     try {
+      const correctCount = storeQuestions.filter(q => {
+        const r = responses[q.id]
+        return r && isAnswerCorrect(q, r.chosen)
+      }).length
+      trackQuizCompleted({ mode, exam: storeQuestions[0]?.exam ?? 'Unknown', question_count: storeQuestions.length, correct_count: correctCount })
       playSound('complete')
       await completeQuiz(user?.id ?? null, masteryRecords)
       navigate(`/review?${searchParams.toString()}`)

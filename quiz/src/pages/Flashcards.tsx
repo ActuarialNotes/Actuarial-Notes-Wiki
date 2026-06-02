@@ -1164,7 +1164,6 @@ function GalleryPanel({
 function FlashcardStudyArea({
   cards,
   index,
-  onIndexChange,
   isFlashing,
   reverseCardModes,
   onSetModes,
@@ -1172,7 +1171,6 @@ function FlashcardStudyArea({
 }: {
   cards: WikiEntryRef[]
   index: number
-  onIndexChange: (i: number) => void
   isFlashing?: boolean
   reverseCardModes: Set<ReverseCardSection>
   onSetModes: (modes: Set<ReverseCardSection>) => void
@@ -1657,7 +1655,6 @@ export default function Flashcards() {
         <FlashcardStudyArea
           cards={orderedCards}
           index={activeIndex}
-          onIndexChange={setActiveIndex}
           isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
           reverseCardModes={reverseCardModes}
           onSetModes={setReverseCardModes}

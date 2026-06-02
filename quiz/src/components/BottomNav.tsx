@@ -1,7 +1,11 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, LayoutDashboard, Layers, Play } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
+
+function getLastWikiPath(): string {
+  try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
+}
 
 const NAV_ITEMS = [
   { to: '/wiki',       label: 'Guides',     icon: BookOpen,        end: false, authRequired: false },
@@ -12,6 +16,8 @@ const NAV_ITEMS = [
 
 export default function BottomNav() {
   const { user } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const profileName =
     (user?.user_metadata?.full_name as string | undefined) ||
@@ -27,6 +33,24 @@ export default function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-[45] flex md:hidden bg-background/95 backdrop-blur-md border-t border-border h-14">
       {items.map(item => {
         const Icon = item.icon
+
+        if (item.to === '/wiki') {
+          const isActive = location.pathname.startsWith('/wiki')
+          return (
+            <button
+              key={item.to}
+              type="button"
+              onClick={() => navigate(getLastWikiPath())}
+              className={`flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
+                isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Icon className="h-5 w-5 shrink-0" />
+              <span className="text-[10px] font-medium">{item.label}</span>
+            </button>
+          )
+        }
+
         return (
           <NavLink
             key={item.to}

@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   ChevronsLeft,
@@ -37,6 +37,10 @@ import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
+function getLastWikiPath(): string {
+  try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
+}
+
 function getInitialCollapsed(): boolean {
   if (typeof window === 'undefined') return false
   try {
@@ -55,9 +59,10 @@ type ItemProps = {
   end?: boolean
   onNavigate?: () => void
   badge?: React.ReactNode
+  forceActive?: boolean
 }
 
-function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge }: ItemProps) {
+function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge, forceActive }: ItemProps) {
   const base =
     'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors border-l-2 border-transparent'
   const inactive = 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
@@ -85,7 +90,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
       to={to}
       end={end}
       title={collapsed ? label : undefined}
-      className={({ isActive }) => `${base} ${isActive ? active : inactive}`}
+      className={({ isActive }) => `${base} ${(isActive || forceActive) ? active : inactive}`}
       onClick={onNavigate}
     >
       <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
@@ -182,6 +187,7 @@ export default function Sidebar() {
   const { isPremium, isBetaTester } = useSubscription()
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
+  const location = useLocation()
   const { progress: examProgress } = useExamProgress()
   const { syllabi } = useWikiSyllabus()
   const inProgressSyllabi = syllabi.filter(
@@ -428,11 +434,12 @@ export default function Sidebar() {
             />
           )}
           <SidebarItem
-            to="/wiki"
+            to={getLastWikiPath()}
             label="Study Guides"
             icon={<BookOpen className="h-4 w-4" />}
             collapsed={collapsed}
             onNavigate={closeMobile}
+            forceActive={location.pathname.startsWith('/wiki')}
           />
           <SidebarItem
             to="/"

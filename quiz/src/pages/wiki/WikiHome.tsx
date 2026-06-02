@@ -344,12 +344,48 @@ export default function WikiHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {books.map(book => (
               <Link key={book.path} to={wikiRoute({ kind: 'resource', name: book.name })}>
-                <Card className="h-full transition-all duration-150 hover:bg-accent/40">
-                  <CardHeader className="pb-1">
-                    <CardTitle className="text-sm leading-snug">
-                      {book.title ?? book.name}
-                    </CardTitle>
-                  </CardHeader>
+                <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-col">
+                  {book.coverImage && (
+                    <div className="px-3 pt-3">
+                      <img
+                        src={book.coverImage}
+                        alt={book.title ?? book.name}
+                        className="w-full rounded-lg object-contain max-h-52 bg-muted/20"
+                        loading="lazy"
+                        onError={(e) => {
+                          const p = e.currentTarget.parentElement
+                          if (p) p.style.display = 'none'
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div className="p-4 flex flex-col gap-2 flex-1">
+                    <p className="text-sm font-semibold leading-snug">{book.title ?? book.name}</p>
+                    {(book.author || book.year || book.edition || book.publisher) && (
+                      <div className="flex flex-wrap gap-1">
+                        {book.author && (
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                            {book.author}
+                          </span>
+                        )}
+                        {book.year && (
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                            {book.year}
+                          </span>
+                        )}
+                        {book.edition && (
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                            {book.edition} ed.
+                          </span>
+                        )}
+                        {book.publisher && (
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                            {book.publisher}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </Card>
               </Link>
             ))}

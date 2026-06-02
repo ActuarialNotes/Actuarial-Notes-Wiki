@@ -4,7 +4,7 @@
 // used by useWikiSyllabus.
 
 import fm from 'front-matter'
-import { listRepoContents, fetchWikiFile } from '@/lib/github'
+import { listRepoContents, fetchWikiFile, rawGithubUrl } from '@/lib/github'
 
 export type WikiIndexCategory = 'exam' | 'concept' | 'document'
 
@@ -18,9 +18,12 @@ export interface WikiIndexItem {
   year?: number
   title?: string        // resource display title (overrides name)
   questionCount?: number // number of questions whose wiki_link points here
+  coverImage?: string   // full GitHub raw URL to cover image
+  edition?: string
+  publisher?: string
 }
 
-const CACHE_KEY = 'actuarial_wiki_index_v2'
+const CACHE_KEY = 'actuarial_wiki_index_v3'
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000
 
 interface CacheEntry {
@@ -54,6 +57,18 @@ function writeCache(data: WikiIndexItem[]): void {
 
 function stripExt(name: string): string {
   return name.replace(/\.md$/i, '')
+}
+
+const IMAGE_EXT_RE = /\.(png|jpe?g|gif|svg|webp|avif)$/i
+
+function extractCoverImageUrl(content: string): string | undefined {
+  const m = /!\[\[([^\]]+)\]\]/.exec(content)
+  if (!m) return undefined
+  const imagePath = m[1].trim()
+  if (!IMAGE_EXT_RE.test(imagePath)) return undefined
+  // Short filenames (no directory) live under Media/Attachments/ by convention
+  const resolved = imagePath.includes('/') ? imagePath : `Media/Attachments/${imagePath}`
+  return rawGithubUrl(resolved)
 }
 
 function parseFrontmatter(raw: string): Record<string, string> {
@@ -102,21 +117,26 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
   const bookMetaPromises = bookItems
     .filter(it => it.type === 'file' && it.name.endsWith('.md'))
     .map(async it => {
-      let fm: Record<string, string> = {}
+      let fmData: Record<string, string> = {}
+      let coverImage: string | undefined
       try {
         const raw = await fetchWikiFile(it.path)
-        fm = parseFrontmatter(raw)
+        fmData = parseFrontmatter(raw)
+        coverImage = extractCoverImageUrl(raw)
       } catch {
         /* ignore — keep item with filename-derived display */
       }
-      const yearNum = fm['Year'] ? parseInt(fm['Year'], 10) : undefined
+      const yearNum = fmData['Year'] ? parseInt(fmData['Year'], 10) : undefined
       const item: WikiIndexItem = {
         category: 'document',
         name: stripExt(it.name),
         path: it.path,
-        author: fm['Author'] || undefined,
+        author: fmData['Authors'] || fmData['Author'] || undefined,
         year: Number.isFinite(yearNum) ? yearNum : undefined,
-        title: fm['Title'] || undefined,
+        title: fmData['Title'] || undefined,
+        edition: fmData['Edition'] || undefined,
+        publisher: fmData['Publisher'] || undefined,
+        coverImage,
       }
       return item
     })
@@ -131,5 +151,6 @@ export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
 
 export function clearWikiIndexCache(): void {
   localStorage.removeItem(CACHE_KEY)
-  localStorage.removeItem('actuarial_wiki_index_v1')  // clear old key
+  localStorage.removeItem('actuarial_wiki_index_v2')
+  localStorage.removeItem('actuarial_wiki_index_v1')
 }

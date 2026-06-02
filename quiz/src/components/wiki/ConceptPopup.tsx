@@ -14,6 +14,15 @@ import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { decayIfStale, type MasteryState } from '@/lib/mastery'
+
+const MASTERY_PILL: Partial<Record<MasteryState, { label: string; className: string }>> = {
+  level1:   { label: '1', className: 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-300' },
+  level2:   { label: '2', className: 'bg-green-200 text-green-800 dark:bg-green-900/60 dark:text-green-200' },
+  level3:   { label: '3', className: 'bg-green-400 text-green-950 dark:bg-green-800 dark:text-green-100' },
+  forgotten: { label: 'F', className: 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300' },
+}
 
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
@@ -42,6 +51,14 @@ export function ConceptPopup() {
   const gallerySeekDirection = useRef<0 | 1 | -1>(0)
   const { user } = useAuth()
   const { isPremium } = useSubscription()
+  const { records: masteryRecords } = useConceptMastery()
+  const masteryState = useMemo<MasteryState | null>(() => {
+    if (!current) return null
+    const lower = current.name.toLowerCase()
+    const record = masteryRecords.find(r => r.concept_slug.toLowerCase() === lower)
+    if (!record) return null
+    return decayIfStale(record, new Date()).state
+  }, [masteryRecords, current?.name])
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
   const [showPremiumInfo, setShowPremiumInfo] = useState(false)
 
@@ -218,6 +235,11 @@ export function ConceptPopup() {
       <div className="flex items-center gap-2 px-3 h-14 border-b shrink-0">
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
+          {masteryState && MASTERY_PILL[masteryState] && (
+            <span className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full tabular-nums ${MASTERY_PILL[masteryState]!.className}`}>
+              {MASTERY_PILL[masteryState]!.label}
+            </span>
+          )}
           {/* Play button + mini menu — immediately right of the concept name */}
           <div className="relative shrink-0" ref={playMenuRef}>
           <button

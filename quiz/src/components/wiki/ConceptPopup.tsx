@@ -236,9 +236,14 @@ export function ConceptPopup() {
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
           {masteryState && MASTERY_PILL[masteryState] && (
-            <span className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full tabular-nums ${MASTERY_PILL[masteryState]!.className}`}>
+            <button
+              type="button"
+              onClick={() => setShowLearningProgress(true)}
+              title="Learning Progress"
+              className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${MASTERY_PILL[masteryState]!.className}`}
+            >
               {MASTERY_PILL[masteryState]!.label}
-            </span>
+            </button>
           )}
           {/* Play button + mini menu — immediately right of the concept name */}
           <div className="relative shrink-0" ref={playMenuRef}>
@@ -324,7 +329,12 @@ export function ConceptPopup() {
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
-                Learning Progress
+                <span className="flex-1 text-left">Learning Progress</span>
+                {masteryState && MASTERY_PILL[masteryState] && (
+                  <span className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full tabular-nums ${MASTERY_PILL[masteryState]!.className}`}>
+                    {MASTERY_PILL[masteryState]!.label}
+                  </span>
+                )}
               </button>
             </div>
           )}

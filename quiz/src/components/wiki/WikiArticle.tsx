@@ -216,7 +216,11 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     root.querySelectorAll('.wiki-link--active').forEach(el => el.classList.remove('wiki-link--active'))
     root.classList.remove('concept-focus-mode')
     if (!popupOpen || !popupCurrent) return
-    if (sourcePath && popupSource && sourcePath !== popupSource) return
+    // Focus mode only applies when the popup was opened from a specific wiki
+    // page (popupSource is set). If null (e.g. opened from Dashboard or
+    // Flashcards), no article should receive concept-focus-mode.
+    if (!popupSource) return
+    if (sourcePath && sourcePath !== popupSource) return
     // Use getAttribute comparison instead of CSS.escape to avoid any selector
     // escaping edge-cases (colons, spaces, quotes in concept names).
     const key = refKey(popupCurrent)

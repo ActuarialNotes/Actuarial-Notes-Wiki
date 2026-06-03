@@ -6,7 +6,7 @@ Type: Study Note
 Code: P-21-18
 Available from: "[soa.org](https://www.soa.org/education/exam-req/edu-exam-p-detail/)"
 ---
-
+![[Risk and Insurance - SOA - Cover.png]]
 ## 1 Risk
 
 - 1.1 [[Risk|What is Risk?]]

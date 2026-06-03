@@ -7,7 +7,7 @@ Publisher: American Mathematical Society
 ISBN: 978-1-4704-4393-1
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/mathematical-interest-theory-vaaler)"
 ---
-
+![[Mathematical Interest Theory - Vaaler - Cover.png]]
 ## 0 An Introduction to the Texas Instruments BA II Plus
 
 - 0.1 Basic Operations

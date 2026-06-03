@@ -1695,53 +1695,24 @@ export default function Flashcards() {
 
   return (
     <>
-      {/* Focus mode overlay */}
+      {/* Focus mode backdrop — clicking it closes focus mode */}
       {focusMode && (
-        <div className="fixed inset-0 z-[60] bg-black flex flex-col">
-          <div className="flex justify-end px-4 pt-3 pb-1 shrink-0">
-            <button
-              type="button"
-              onClick={() => setFocusMode(false)}
-              className="text-white/30 hover:text-white/70 transition-colors"
-              title="Exit focus mode (Esc)"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto">
-            <FlashcardStudyArea
-              cards={orderedCards}
-              index={activeIndex}
-              isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
-              reverseCardModes={reverseCardModes}
-              onSetModes={setReverseCardModes}
-              defaultFlipped={globalFlip}
-            />
-          </div>
-          <div className="flex items-stretch h-14 shrink-0 border-t border-white/10">
-            <button
-              type="button"
-              disabled={activeIndex === 0}
-              onClick={() => setActiveIndex(activeIndex - 1)}
-              className="flex-1 flex items-center justify-center gap-2 text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 active:bg-white/10 disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
-            >
-              <ChevronLeft className="h-5 w-5" />
-              <span>Previous</span>
-            </button>
-            <div className="self-center px-4 shrink-0">
-              <span className="text-xs text-white/30 tabular-nums">{activeIndex + 1} / {orderedCards.length}</span>
-            </div>
-            <button
-              type="button"
-              disabled={activeIndex === orderedCards.length - 1}
-              onClick={() => setActiveIndex(activeIndex + 1)}
-              className="flex-1 flex items-center justify-center gap-2 text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 active:bg-white/10 disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
-            >
-              <span>Next</span>
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
+        <div
+          className="fixed inset-0 z-[55] bg-black"
+          onClick={() => setFocusMode(false)}
+        />
+      )}
+
+      {/* Focus mode close button */}
+      {focusMode && (
+        <button
+          type="button"
+          onClick={() => setFocusMode(false)}
+          className="fixed top-3 right-4 z-[60] flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors"
+          title="Exit focus mode (Esc)"
+        >
+          <X className="h-5 w-5" />
+        </button>
       )}
 
       {/* Expanded gallery overlay */}
@@ -1767,12 +1738,12 @@ export default function Flashcards() {
       )}
 
       <div
-        className="container max-w-4xl mx-auto pb-40 md:pb-36"
+        className={`container max-w-4xl mx-auto pb-40 md:pb-36${focusMode ? ' relative z-[56] pointer-events-none' : ''}`}
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Sticky header: title + gallery strip — hidden when gallery overlay is open */}
         {!galleryExpanded && (
-          <div className="sticky top-0 md:top-14 lg:top-0 z-10 bg-background border-b px-4 sm:px-6 pt-3">
+          <div className={`sticky top-0 md:top-14 lg:top-0 z-10 bg-background border-b px-4 sm:px-6 pt-3${focusMode ? ' invisible' : ''}`}>
             <div className="mb-1">
               <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
             </div>
@@ -1786,20 +1757,22 @@ export default function Flashcards() {
         )}
 
         {/* Study area */}
-        <FlashcardStudyArea
-          cards={orderedCards}
-          index={activeIndex}
-          isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
-          reverseCardModes={reverseCardModes}
-          onSetModes={setReverseCardModes}
-          defaultFlipped={globalFlip}
-        />
+        <div className={focusMode ? 'pointer-events-auto' : undefined}>
+          <FlashcardStudyArea
+            cards={orderedCards}
+            index={activeIndex}
+            isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
+            reverseCardModes={reverseCardModes}
+            onSetModes={setReverseCardModes}
+            defaultFlipped={globalFlip}
+          />
+        </div>
       </div>
 
       <ConceptPopup />
 
       {/* Fixed controls footer — always at bottom, above mobile nav */}
-      <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
+      <div className={`fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 ${focusMode ? 'z-[57]' : 'z-[46]'}`}>
         {/* Prev / Next nav footer — only in study mode */}
         {!galleryExpanded && (
           <div className="flex items-stretch border-t h-16 shrink-0 bg-background">

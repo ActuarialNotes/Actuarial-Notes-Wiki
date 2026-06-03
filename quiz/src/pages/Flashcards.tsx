@@ -1553,7 +1553,7 @@ export default function Flashcards() {
     }, 100)
     return () => clearTimeout(timerId)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [highlightName, orderedCards])
+  }, [highlightName, cards])
 
   // Reset tracked popup name when popup closes
   useEffect(() => {

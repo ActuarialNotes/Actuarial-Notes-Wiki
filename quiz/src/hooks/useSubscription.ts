@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 
@@ -30,7 +30,7 @@ function isActivePremium(tier: string, status: string, periodEnd: string | null)
   return new Date(periodEnd).getTime() > Date.now()
 }
 
-export function useSubscription(): SubscriptionState {
+export function useSubscription(): SubscriptionState & { refresh: () => void } {
   const { user } = useAuth()
   const userId = user?.id
   // Each hook instance gets its own channel name to avoid the Supabase error
@@ -39,7 +39,9 @@ export function useSubscription(): SubscriptionState {
   const channelId = useRef(`sub-${Math.random().toString(36).slice(2)}`)
   // Start in loading state — we don't know premium status until the DB resolves.
   const [state, setState] = useState<SubscriptionState>({ ...DEFAULT, loading: true })
+  const [refreshCount, setRefreshCount] = useState(0)
 
+  // Fetch subscription from DB. Runs on mount, userId change, and explicit refresh.
   useEffect(() => {
     if (!userId) {
       setState(DEFAULT)
@@ -49,11 +51,27 @@ export function useSubscription(): SubscriptionState {
     let cancelled = false
     setState(prev => ({ ...prev, loading: true }))
 
-    const applyRow = (
-      row: { tier: string; status: string; current_period_end: string | null } | null,
-      isBetaTester: boolean,
-    ) => {
+    Promise.all([
+      supabase
+        .from('user_subscriptions')
+        .select('tier, status, current_period_end')
+        .eq('user_id', userId)
+        .maybeSingle(),
+      supabase
+        .from('beta_code_redemptions')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle(),
+    ]).then(([subResult, betaResult]) => {
       if (cancelled) return
+      if (subResult.error) {
+        console.warn('useSubscription: failed to load subscription:', subResult.error.message)
+      }
+      if (betaResult.error) {
+        console.warn('useSubscription: failed to load beta status:', betaResult.error.message)
+      }
+      const isBetaTester = !!betaResult.data
+      const row = subResult.data ?? null
       if (!row) {
         setState({ ...DEFAULT, isBetaTester, loading: false })
         return
@@ -70,29 +88,14 @@ export function useSubscription(): SubscriptionState {
         currentPeriodEnd: row.current_period_end,
         loading: false,
       })
-    }
-
-    Promise.all([
-      supabase
-        .from('user_subscriptions')
-        .select('tier, status, current_period_end')
-        .eq('user_id', userId)
-        .maybeSingle(),
-      supabase
-        .from('beta_code_redemptions')
-        .select('id')
-        .eq('user_id', userId)
-        .maybeSingle(),
-    ]).then(([subResult, betaResult]) => {
-      if (subResult.error) {
-        console.warn('useSubscription: failed to load subscription:', subResult.error.message)
-      }
-      if (betaResult.error) {
-        console.warn('useSubscription: failed to load beta status:', betaResult.error.message)
-      }
-      const isBetaTester = !!betaResult.data
-      applyRow(subResult.data ?? null, isBetaTester)
     })
+
+    return () => { cancelled = true }
+  }, [userId, refreshCount])
+
+  // Realtime channels — set up once per userId, independent of refresh.
+  useEffect(() => {
+    if (!userId) return
 
     const subChannel = supabase
       .channel(`user_subscriptions:${userId}:${channelId.current}`)
@@ -134,11 +137,12 @@ export function useSubscription(): SubscriptionState {
       .subscribe()
 
     return () => {
-      cancelled = true
       supabase.removeChannel(subChannel)
       supabase.removeChannel(betaChannel)
     }
   }, [userId])
 
-  return state
+  const refresh = useCallback(() => setRefreshCount(c => c + 1), [])
+
+  return { ...state, refresh }
 }

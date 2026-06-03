@@ -107,7 +107,7 @@ export default function Dashboard() {
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
   const { progress: examProgress, targetDates, updateTargetDate, loadingExams } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
-  const { isPremium } = useSubscription()
+  const { isPremium, refresh: refreshSubscription } = useSubscription()
   const { balance: gemBalance } = useGems()
 
   const popupOpen = useConceptPopup(s => s.open)
@@ -140,12 +140,19 @@ export default function Dashboard() {
     const params = new URLSearchParams(location.search)
     if (params.get('upgraded') === '1') {
       const sessionId = params.get('session_id')
-      if (sessionId) {
-        // Fire-and-forget: sync subscription from Stripe. The useSubscription
-        // real-time channel will pick up the DB update automatically.
-        supabase.functions.invoke('stripe-sync-session', { body: { sessionId } })
-      }
       navigate('/dashboard', { replace: true })
+      if (sessionId) {
+        supabase.functions
+          .invoke('stripe-sync-session', { body: { sessionId } })
+          .then(({ error }) => {
+            if (error) {
+              console.error('stripe-sync-session failed:', error)
+            }
+            // Refresh regardless — Realtime may have already updated state, but an
+            // explicit re-fetch ensures the hook reflects the new tier immediately.
+            refreshSubscription()
+          })
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

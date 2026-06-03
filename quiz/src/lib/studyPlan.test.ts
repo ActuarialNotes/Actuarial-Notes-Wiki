@@ -85,9 +85,11 @@ describe('generateStudyPlan — aliased concept mastery', () => {
       examDate: addDays(todayISO(), 40),
     })
 
-    // "Price" is mastered → it must not be scheduled today or appear as an assignment.
+    // "Price" is mastered → it must not be scheduled today as a new/review concept.
+    // (It may appear as a future maintenance assignment if its decay window falls
+    // within the study period, but that assignment will have initialState 'level3'.)
     expect(plan.todaysConcepts).not.toContain('Price')
-    expect(plan.assignments.some(a => a.conceptName === 'Price')).toBe(false)
+    expect(plan.assignments.some(a => a.conceptName === 'Price' && a.initialState !== 'level3')).toBe(false)
     // The plain unmastered concept should be scheduled.
     expect(plan.todaysConcepts).toContain('Coupon Rate')
   })
@@ -386,6 +388,65 @@ describe('generateStudyPlan — strong_key strategy', () => {
       // At minimum, high-weight concept must be scheduled
       expect(todayAssignments).toContain('High Concept')
     }
+  })
+})
+
+// ── Proactive maintenance for level3 concepts approaching decay ───────────────
+
+describe('generateStudyPlan — level3 decay prevention', () => {
+  it('schedules a maintenance review within 7 days before a level3 concept decays', () => {
+    // last_correct_at was 24 days ago → decays in 6 days → deadline = today + 5
+    const lastCorrectDate = addDays(todayISO(), -24)
+    const lastCorrectAt = lastCorrectDate + 'T12:00:00Z'
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [
+        rec('Bond Price', { state: 'level3', correct_count: 3, last_correct_at: lastCorrectAt }),
+      ],
+      config,  // targetReadyDate = today + 30
+      examDate: addDays(todayISO(), 40),
+    })
+    const maintenanceAssignment = plan.assignments.find(
+      a => a.conceptName === 'Price' && a.initialState === 'level3',
+    )
+    expect(maintenanceAssignment).toBeDefined()
+    // Must be scheduled no later than the day before decay (today + 5)
+    expect(maintenanceAssignment!.scheduledDate <= addDays(todayISO(), 5)).toBe(true)
+  })
+
+  it('does not schedule maintenance for a level3 concept that decays on or after the target date', () => {
+    // last_correct_at = today → decays in 30 days = exactly on the target date → skip
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus,
+      masteryRecords: [rec('Bond Price', { state: 'level3', correct_count: 3, last_correct_at: NOW_ISO })],
+      config,  // targetReadyDate = today + 30
+      examDate: addDays(todayISO(), 40),
+    })
+    expect(plan.assignments.some(a => a.conceptName === 'Price' && a.initialState === 'level3')).toBe(false)
+  })
+
+  it('schedules the most urgent level3 concept first when multiple approach decay', () => {
+    const urgent = addDays(todayISO(), -27) + 'T12:00:00Z'   // decays in 3 days
+    const lessSo = addDays(todayISO(), -22) + 'T12:00:00Z'   // decays in 8 days
+    const bigSyllabus = largeSyllabus(2)
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: bigSyllabus,
+      masteryRecords: [
+        rec('Concept 1', { state: 'level3', correct_count: 3, last_correct_at: urgent }),
+        rec('Concept 2', { state: 'level3', correct_count: 3, last_correct_at: lessSo }),
+      ],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    const a1 = plan.assignments.find(a => a.conceptName === 'Concept 1' && a.initialState === 'level3')
+    const a2 = plan.assignments.find(a => a.conceptName === 'Concept 2' && a.initialState === 'level3')
+    expect(a1).toBeDefined()
+    expect(a2).toBeDefined()
+    // The more urgent concept must be scheduled no later than the less urgent one
+    expect(a1!.scheduledDate <= a2!.scheduledDate).toBe(true)
   })
 })
 

@@ -6,6 +6,7 @@
 
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
+import { DECAY_DAYS_LEVEL3 } from '@/lib/mastery'
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
 
 // Bump when the generation logic changes in a way that should invalidate
@@ -14,7 +15,9 @@ import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/
 // records / aliased-concept lookups that left mastered concepts looking 'new'.
 // v3: concept names now use the canonical page name instead of the syllabus
 // display alias (e.g. "Callable Bond" not "Callable").
-export const PLAN_CACHE_VERSION = 3
+// v4: even daily-load distribution; proactive scheduling for level3 concepts
+// approaching the decay threshold.
+export const PLAN_CACHE_VERSION = 4
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -207,6 +210,31 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
 
   // ── Review mode: every concept already level3 ────────────────────────────
   if (unmastered.length === 0) {
+    const effective = examDate ?? addDays(today, 30)
+    const rmDaysRemaining = Math.max(1, daysBetween(today, effective))
+
+    // Identify level3 concepts that will decay strictly before the target date,
+    // sorted by urgency so the soonest-to-decay surface first.
+    const rmMaintenance = mastered
+      .flatMap(c => {
+        const rec = lookupConceptRecord(masteryBySlug, c)
+        if (!rec?.last_correct_at) return []
+        const daysSinceCorrect = daysBetween(rec.last_correct_at.slice(0, 10), today)
+        const daysUntilDecay = DECAY_DAYS_LEVEL3 - daysSinceCorrect
+        if (daysUntilDecay <= 0 || daysUntilDecay >= rmDaysRemaining) return []
+        return [{ c, daysUntilDecay }]
+      })
+      .sort((a, b) => a.daysUntilDecay - b.daysUntilDecay)
+
+    const maintenanceAssignments: ConceptAssignment[] = rmMaintenance.map(({ c, daysUntilDecay }) => ({
+      conceptName: c.name,
+      topicName: c.topicName,
+      topicWeight: c.topicWeight,
+      // Open the review window 7 days before decay; show it immediately if urgent.
+      scheduledDate: addDays(today, Math.max(0, daysUntilDecay - 7)),
+      initialState: 'level3' as MasteryState,
+    }))
+
     const reviewConcepts = [...mastered]
       .sort((a, b) => {
         const ra = lookupConceptRecord(masteryBySlug, a)
@@ -218,14 +246,19 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
       .slice(0, Math.min(5, mastered.length))
       .map(c => c.name)
 
-    const effective = examDate ?? addDays(today, 30)
+    // Today: urgent maintenance concepts first, then stalest-review suggestions.
+    const urgentToday = rmMaintenance
+      .filter(({ daysUntilDecay }) => daysUntilDecay <= 7)
+      .map(({ c }) => c.name)
+    const todaysConcepts = [...new Set([...urgentToday, ...reviewConcepts])]
+
     return {
       examId,
       planVersion: PLAN_CACHE_VERSION,
       generatedDate: today,
       config,
-      todaysConcepts: reviewConcepts,
-      assignments: [],
+      todaysConcepts,
+      assignments: maintenanceAssignments,
       dayNumber: 1,
       totalDays: 1,
       daysRemaining: Math.max(0, daysBetween(today, effective)),
@@ -309,16 +342,32 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   const assignments: ConceptAssignment[] = []
   const newIntrosByDay = new Map<string, number>()  // date → count of new introductions
 
-  // Compute how many total sessions (intro + each review stage) remain across all
-  // unmastered concepts, then cap each day at that average to prevent pile-ups when
-  // many concepts converge to the same eligible date.
+  // Level3 concepts that will cross the decay threshold before the target date must
+  // be scheduled for a refresher before they slip. Sort by urgency so the soonest-
+  // to-decay concepts claim the nearest available slots first.
+  const maintenanceCandidates = mastered
+    .flatMap(c => {
+      const rec = lookupConceptRecord(masteryBySlug, c)
+      if (!rec?.last_correct_at) return []
+      const daysSinceCorrect = daysBetween(rec.last_correct_at.slice(0, 10), today)
+      const daysUntilDecay = DECAY_DAYS_LEVEL3 - daysSinceCorrect
+      // Only schedule if the concept decays strictly before the target date.
+      // A concept that decays on or after the target day doesn't need early intervention.
+      if (daysUntilDecay <= 0 || daysUntilDecay >= daysRemaining) return []
+      return [{ c, daysUntilDecay }]
+    })
+    .sort((a, b) => a.daysUntilDecay - b.daysUntilDecay)
+
+  // Compute how many total sessions (intro + each review stage + maintenance) remain,
+  // then cap each day at that average to prevent pile-ups when many concepts converge
+  // to the same eligible date.
   const totalSessions = sortedUnmastered.reduce((sum, c) => {
     const s = getState(c)
     if (s === 'new' || s === 'forgotten') return sum + 3
     if (s === 'level1') return sum + 2
     if (s === 'level2') return sum + 1
     return sum
-  }, 0)
+  }, maintenanceCandidates.length)
   const targetDailyLoad = Math.ceil(totalSessions / Math.max(1, daysRemaining))
   const sessionsByDay = new Map<string, number>()  // date → total sessions scheduled that day
 
@@ -335,6 +384,24 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
     }
   }
 
+  // Find the earliest available slot in the window [startFrom, deadline]. Reviews are
+  // not shown until they enter their window so concepts with distant deadlines don't
+  // crowd today's plan unnecessarily. If every day in the window is at capacity,
+  // exceed the cap on the deadline — the review must happen before decay regardless.
+  function findMaintenanceSlot(startFrom: string, deadline: string): string {
+    let d = startFrom
+    while (d <= deadline) {
+      const count = sessionsByDay.get(d) ?? 0
+      if (count < targetDailyLoad) {
+        sessionsByDay.set(d, count + 1)
+        return d
+      }
+      d = addDays(d, 1)
+    }
+    sessionsByDay.set(deadline, (sessionsByDay.get(deadline) ?? 0) + 1)
+    return deadline
+  }
+
   function nextSlotForNewIntro(): string {
     let dayOffset = 0
     while (true) {
@@ -348,6 +415,22 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
       }
       dayOffset++
     }
+  }
+
+  // Zero: schedule pre-emptive refreshers for level3 concepts that will decay
+  // before the target date, urgency-first so the soonest-to-decay get the
+  // nearest open slots.
+  for (const { c, daysUntilDecay } of maintenanceCandidates) {
+    const deadline = addDays(today, daysUntilDecay - 1)
+    const windowStart = addDays(today, Math.max(0, daysUntilDecay - 7))
+    const scheduledDate = findMaintenanceSlot(windowStart, deadline)
+    assignments.push({
+      conceptName: c.name,
+      topicName: c.topicName,
+      topicWeight: c.topicWeight,
+      scheduledDate,
+      initialState: 'level3',
+    })
   }
 
   // First: schedule level1/level2 on their earliest available slot (respecting the

@@ -1262,6 +1262,65 @@ export function ReadinessCard({
         </Card>
       )}
 
+      {/* Locked study plan — non-premium only, shown in left column */}
+      {!isPremium && (
+        <div className="relative rounded-xl overflow-hidden">
+          {/* Blurred background: Custom Study Plan card */}
+          <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50 rounded-xl" aria-hidden="true">
+            <div className="h-full bg-card rounded-xl border p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">Today's Study Plan</h3>
+                <Settings2 className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="space-y-0.5">
+                {[
+                  ...(syllabus.topics[0]?.concepts ?? []).slice(0, 4),
+                  ...(syllabus.topics[1]?.concepts ?? []).slice(0, 3),
+                ].map((c, i) => (
+                  <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
+                    <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
+                    <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Lock overlay — in normal flow so parent sizes to content */}
+          <div className="relative z-10 backdrop-blur-md bg-background/75 flex flex-col items-center px-6 pt-6 pb-5 text-center rounded-xl">
+            {/* Lock icon + title */}
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
+                <Lock className="h-5 w-5" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-1.5">
+                  <p className="text-base font-semibold">Custom Study Plan</p>
+                  <button
+                    type="button"
+                    onClick={() => setShowInfo(true)}
+                    className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 hover:bg-primary/20 transition-colors shrink-0"
+                    aria-label="How custom study plans work"
+                    title="How custom study plans work"
+                  >
+                    <Info className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground max-w-[220px]">
+                  A daily plan tailored to you
+                </p>
+              </div>
+            </div>
+
+            {/* Upgrade button */}
+            <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5 mt-6 w-full max-w-xs'}>
+              Upgrade
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Warnings */}
       {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
         <BehindWarning plan={plan} />
@@ -1271,30 +1330,30 @@ export function ReadinessCard({
       )}
       </div>{/* end left column */}
 
-      {/* RIGHT COLUMN: Study Guide (premium only) */}
-      {isPremium && (
-        <div className="space-y-3">
-          <Card ref={studyGuideCardRef} className="bg-card">
-            <CardContent className="p-5 space-y-4">
-              <h3 className="text-sm font-semibold">Study Guide</h3>
+      {/* RIGHT COLUMN: Study Guide */}
+      <div className="space-y-3">
+        <Card ref={studyGuideCardRef} className="bg-card">
+          <CardContent className="p-5 space-y-4">
+            <h3 className="text-sm font-semibold">Study Guide</h3>
 
-              <StudyGuideRadial
-                syllabus={syllabus}
-                examRecords={examRecords}
-                now={now}
-                masteredCount={aggregate.level3}
-                totalCount={aggregate.total}
-                selectedConcept={popupFromRadial ? popupCurrentName : null}
-                flashRadial={flashRadial}
-                onConceptClick={name => {
-                  const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-                  openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx, { circular: true, fromRadial: true })
-                }}
-              />
+            <StudyGuideRadial
+              syllabus={syllabus}
+              examRecords={isPremium ? examRecords : []}
+              now={now}
+              masteredCount={isPremium ? aggregate.level3 : 0}
+              totalCount={aggregate.total}
+              selectedConcept={isPremium && popupFromRadial ? popupCurrentName : null}
+              flashRadial={flashRadial}
+              onConceptClick={name => {
+                const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+                openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx, { circular: true, fromRadial: true })
+              }}
+            />
 
-              <Button
-                variant="outline"
-                onClick={() => {
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (isPremium) {
                   const hasStudyPlan = studyPlanConceptsForModal.length > 0
                   openDashboard(
                     toRefs(allConcepts),
@@ -1302,194 +1361,69 @@ export function ReadinessCard({
                     hasStudyPlan ? 'study-plan' : 'entire-syllabus',
                     0,
                   )
-                }}
-                disabled={allConcepts.length === 0}
-                className="gap-3 text-base w-full h-auto py-4"
-              >
-                <BookOpen className="h-5 w-5" />
-                Read concepts
-              </Button>
+                } else {
+                  openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)
+                }
+              }}
+              disabled={allConcepts.length === 0}
+              className="gap-3 text-base w-full h-auto py-4"
+            >
+              <BookOpen className="h-5 w-5" />
+              Read concepts
+            </Button>
 
-              {/* Topics mastered collapsible */}
-              <div className="border-t pt-3 space-y-2">
-                <button
-                  type="button"
-                  onClick={() => setTopicsMasteredOpen(prev => !prev)}
-                  className="w-full"
-                  aria-expanded={topicsMasteredOpen}
-                >
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Topics mastered</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">
-                          {aggregate.level3}
-                          <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
-                          <span className="text-muted-foreground font-normal ml-1.5">({aggregate.strongPct}%)</span>
-                        </span>
-                        <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
-                      </div>
+            {/* Topics mastered collapsible */}
+            <div className="border-t pt-3 space-y-2">
+              <button
+                type="button"
+                onClick={() => setTopicsMasteredOpen(prev => !prev)}
+                className="w-full"
+                aria-expanded={topicsMasteredOpen}
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Topics mastered</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">
+                        {isPremium ? aggregate.level3 : 0}
+                        <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
+                        <span className="text-muted-foreground font-normal ml-1.5">({isPremium ? aggregate.strongPct : 0}%)</span>
+                      </span>
+                      <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
                     </div>
+                  </div>
+                  {isPremium ? (
                     <div className="h-2 rounded-full bg-secondary overflow-hidden flex">
                       <div className="h-full transition-all" style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
                       <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
                       <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
                     </div>
-                  </div>
-                </button>
-
-                {topicsMasteredOpen && (
-                  <div className="max-h-80 overflow-y-auto">
-                    <StudyPlanTracker
-                      syllabus={syllabus}
-                      masteryRecords={masteryRecords}
-                      studyPlan={plan}
-                      allConceptsForNav={allConcepts}
-                      onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
-                      openTopics={openTopics}
-                      onToggle={toggleTopic}
-                      flashingConcept={flashingConcept}
-                    />
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-      </div>{/* end bento grid */}
-
-      {!isPremium && (
-        <>
-          {/* Study Guide — same card as premium, all concepts shown as "New" */}
-          <div className="space-y-3">
-            <Card ref={studyGuideCardRef} className="bg-card">
-              <CardContent className="p-5 space-y-4">
-                <h3 className="text-sm font-semibold">Study Guide</h3>
-
-                <StudyGuideRadial
-                  syllabus={syllabus}
-                  examRecords={[]}
-                  now={now}
-                  masteredCount={0}
-                  totalCount={aggregate.total}
-                  flashRadial={flashRadial}
-                  onConceptClick={name => {
-                    const idx = allConcepts.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-                    openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx, { circular: true, fromRadial: true })
-                  }}
-                />
-
-                <Button
-                  variant="outline"
-                  onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)}
-                  disabled={allConcepts.length === 0}
-                  className="gap-3 text-base w-full h-auto py-4"
-                >
-                  <BookOpen className="h-5 w-5" />
-                  Read concepts
-                </Button>
-
-                {/* Topics mastered collapsible */}
-                <div className="border-t pt-3 space-y-2">
-                  <button
-                    type="button"
-                    onClick={() => setTopicsMasteredOpen(prev => !prev)}
-                    className="w-full"
-                    aria-expanded={topicsMasteredOpen}
-                  >
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Topics mastered</span>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold">
-                            0<span className="text-muted-foreground font-normal">/{aggregate.total}</span>
-                            <span className="text-muted-foreground font-normal ml-1.5">(0%)</span>
-                          </span>
-                          <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
-                        </div>
-                      </div>
-                      <div className="h-2 rounded-full bg-secondary overflow-hidden" />
-                    </div>
-                  </button>
-
-                  {topicsMasteredOpen && (
-                    <div className="max-h-80 overflow-y-auto">
-                      <StudyPlanTracker
-                        syllabus={syllabus}
-                        masteryRecords={masteryRecords}
-                        studyPlan={null}
-                        allConceptsForNav={allConcepts}
-                        onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
-                        openTopics={openTopics}
-                        onToggle={toggleTopic}
-                        showMastery={false}
-                      />
-                    </div>
+                  ) : (
+                    <div className="h-2 rounded-full bg-secondary overflow-hidden" />
                   )}
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </button>
 
-          {/* Locked study plan section — blurred card background + overlay */}
-          <div className="relative rounded-xl overflow-hidden">
-            {/* Blurred background: Custom Study Plan card */}
-            <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50 rounded-xl" aria-hidden="true">
-              <div className="h-full bg-card rounded-xl border p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold">Today's Study Plan</h3>
-                  <Settings2 className="h-4 w-4 text-muted-foreground" />
+              {topicsMasteredOpen && (
+                <div className="max-h-80 overflow-y-auto">
+                  <StudyPlanTracker
+                    syllabus={syllabus}
+                    masteryRecords={masteryRecords}
+                    studyPlan={isPremium ? plan : null}
+                    allConceptsForNav={allConcepts}
+                    onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
+                    openTopics={openTopics}
+                    onToggle={toggleTopic}
+                    flashingConcept={isPremium ? flashingConcept : undefined}
+                    showMastery={isPremium ? undefined : false}
+                  />
                 </div>
-                <div className="space-y-0.5">
-                  {[
-                    ...(syllabus.topics[0]?.concepts ?? []).slice(0, 4),
-                    ...(syllabus.topics[1]?.concepts ?? []).slice(0, 3),
-                  ].map((c, i) => (
-                    <div key={i} className="w-full flex items-center gap-2.5 px-2 py-1.5">
-                      <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-                      <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>
-                      <span className="text-xs text-muted-foreground shrink-0">→ Level 1</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              )}
             </div>
-
-            {/* Lock overlay — in normal flow so parent sizes to content */}
-            <div className="relative z-10 backdrop-blur-md bg-background/75 flex flex-col items-center px-6 pt-6 pb-5 text-center rounded-xl">
-              {/* Lock icon + title */}
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">
-                  <Lock className="h-5 w-5" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex items-center justify-center gap-1.5">
-                    <p className="text-base font-semibold">Custom Study Plan</p>
-                    <button
-                      type="button"
-                      onClick={() => setShowInfo(true)}
-                      className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 hover:bg-primary/20 transition-colors shrink-0"
-                      aria-label="How custom study plans work"
-                      title="How custom study plans work"
-                    >
-                      <Info className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                  <p className="text-xs text-muted-foreground max-w-[220px]">
-                    A daily plan tailored to you
-                  </p>
-                </div>
-              </div>
-
-              {/* Upgrade button */}
-              <Link to="/upgrade" className={buttonVariants({ size: 'sm' }) + ' gap-1.5 mt-6 w-full max-w-xs'}>
-                Upgrade
-              </Link>
-            </div>
-          </div>
-        </>
-      )}
+          </CardContent>
+        </Card>
+      </div>
+      </div>{/* end bento grid */}
 
       {showConfig && (
         <StudyPlanConfigModal

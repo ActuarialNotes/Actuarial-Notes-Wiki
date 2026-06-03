@@ -58,7 +58,7 @@ export const TRACKS: Track[] = [
   },
   {
     key: 'ASA',
-    name: 'ASA (SOA)',
+    name: 'ASA | Associate of the Society of Actuaries',
     certPath: 'Exams/Certifications/Associate of the Society of Actuaries (ASA)',
     sections: [
       {
@@ -95,7 +95,7 @@ export const TRACKS: Track[] = [
   },
   {
     key: 'ACAS',
-    name: 'ACAS (CAS)',
+    name: 'ACAS | Associate of the Casualty Actuarial Society',
     certPath: 'Exams/Certifications/Associate of the Casualty Actuarial Society (ACAS)',
     sections: [
       {
@@ -130,7 +130,7 @@ export const TRACKS: Track[] = [
   },
   {
     key: 'FSA',
-    name: 'FSA (SOA)',
+    name: 'FSA | Fellow of the Society of Actuaries',
     certPath: 'Exams/Certifications/Fellow of the Society of Actuaries (FSA)',
     sections: [
       {
@@ -228,7 +228,7 @@ export const TRACKS: Track[] = [
   },
   {
     key: 'FCAS',
-    name: 'FCAS (CAS)',
+    name: 'FCAS | Fellow of the Casualty Actuarial Society',
     certPath: 'Exams/Certifications/Fellow of the Casualty Actuarial Society (FCAS)',
     sections: [
       {

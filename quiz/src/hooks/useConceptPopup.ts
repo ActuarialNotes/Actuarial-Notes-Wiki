@@ -23,7 +23,7 @@ interface ConceptPopupState {
   sourcePath: string | null
   // Set when opened from the dashboard to support the Viewing filter bar.
   dashboardContext: DashboardContext | null
-  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null) => void
+  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[] }) => void
   // Opens the popup from the dashboard with optional study-plan/entire-syllabus filter.
   openDashboard: (
     fullList: WikiEntryRef[],
@@ -47,13 +47,13 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   index: 0,
   sourcePath: null,
   dashboardContext: null,
-  openAt: (list, index, sourcePath = null, studyPlanList, resourceList) =>
+  openAt: (list, index, sourcePath = null, studyPlanList, resourceList, options) =>
     set({
       open: true,
       list,
       index: Math.max(0, Math.min(index, list.length - 1)),
       sourcePath,
-      dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: list, resourceList: resourceList ?? null, filter: 'entire-syllabus', circular: false, fromRadial: false },
+      dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: options?.fullList ?? list, resourceList: resourceList ?? null, filter: options?.initialFilter ?? 'entire-syllabus', circular: false, fromRadial: false },
     }),
   openDashboard: (fullList, studyPlanList, filter, initialIndex, options = {}) => {
     const list = filter === 'study-plan' && studyPlanList ? studyPlanList : fullList

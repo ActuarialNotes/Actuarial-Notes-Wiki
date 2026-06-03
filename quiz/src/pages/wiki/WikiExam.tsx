@@ -212,15 +212,17 @@ export default function WikiExam() {
 
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind !== 'concept') return false
-    if (/ \([^)]*\d{4}\)$/.test(ref.name)) {
-      e.preventDefault()
-      openAt([{ kind: 'resource', name: ref.name }], 0, undefined)
-      return true
-    }
-    e.preventDefault()
     const conceptList = pageRefs
       .filter(r => r.kind === 'concept')
       .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
+    if (/ \([^)]*\d{4}\)$/.test(ref.name)) {
+      e.preventDefault()
+      const resList = resourceRefs ?? [{ kind: 'resource' as const, name: ref.name }]
+      const resIdx = resList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
+      openAt(resList, resIdx >= 0 ? resIdx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList })
+      return true
+    }
+    e.preventDefault()
     const idx = conceptList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
     openAt(
       conceptList.length > 0 ? conceptList : [ref],

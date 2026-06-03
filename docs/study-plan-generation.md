@@ -51,6 +51,64 @@ For every brand-new or forgotten concept, the plan pre-schedules all three maste
 
 The plan reserves 3 days at the end of the runway so the last-introduced concept has room to complete this three-stage pipeline before the target date.
 
+#### Even daily load distribution
+
+Each session (introduction or review) is counted toward a target daily load, computed as:
+
+```
+targetDailyLoad = ceil(totalRemainingSessions / daysRemaining)
+```
+
+Sessions are spread so that no day exceeds this target. A concept is assigned to the **earliest available day on or after its eligible date** that still has capacity, rather than always landing on the first eligible day.
+
+**Example — convergence pile-up avoided**
+
+You answered 20 Level 2 concepts correctly on the same day. Without spreading, all 20 would become eligible two days later and all pile onto a single study session.
+
+With even distribution (61 days remaining):
+```
+totalRemainingSessions = 20    (one L2 → L3 stage each)
+targetDailyLoad = ceil(20 / 61) = 1
+```
+Instead of 20 concepts on one day, the plan assigns one per day across 20 consecutive days — the same total work, but at a steady, manageable pace.
+
+#### Proactive Level 3 maintenance reviews
+
+Mastered (Level 3) concepts decay if left unreviewed for 30 days. The plan detects any Level 3 concept that will cross this threshold **before the target ready date** and pre-schedules a refresher review in advance.
+
+The review is placed in a 7-day window ending the day before the concept would decay:
+
+```
+windowStart = daysUntilDecay - 7   (or today, whichever is later)
+deadline    = daysUntilDecay - 1
+```
+
+**Example — single concept nearing decay**
+
+You mastered "Duration" 27 days ago. It will decay in 3 days (on day 30).
+
+```
+daysUntilDecay = 3
+windowStart    = max(0, 3 - 7) = today
+deadline       = today + 2
+```
+A maintenance review is scheduled within the next two days. Answering it correctly resets the 30-day clock, so Duration stays Level 3 without any manual intervention.
+
+**Example — concept with time to spare**
+
+You mastered "Immunization" 20 days ago (decays in 10 days) and your target ready date is 61 days away.
+
+```
+daysUntilDecay = 10
+windowStart    = today + 3    (10 - 7)
+deadline       = today + 9
+```
+The plan schedules the refresher somewhere between days 3 and 9. You won't see it in today's list — it appears as a future assignment and surfaces naturally when its window opens.
+
+**Example — concept safe until after the target date**
+
+You mastered "Bond Price" today. It won't decay for 30 days, and your target ready date is also 30 days away. Because the decay date is on or after the target, no maintenance review is scheduled — the concept will still be Level 3 on the day that matters.
+
 ### Step 4 — Determine today's concepts
 
 Today's concepts are the deduplicated list of everything scheduled for the current date. If you have already levelled up some concepts earlier in the day (in a prior quiz session), those levelled-up concepts are preserved at the top of the list. Fresh unlearned concepts fill remaining slots. This keeps the plan grounded in what you actually practised rather than replacing it with concepts you haven't touched yet.
@@ -69,7 +127,9 @@ The plan tells you how your pace compares to what's needed:
 
 ## Review Mode
 
-When all concepts are mastered, the plan switches to review mode. It picks the 5 concepts whose last correct answer is oldest and makes those today's concepts. This keeps fading memories refreshed without requiring any manual configuration.
+When all concepts are mastered, the plan switches to review mode. Any concept that will decay before the target ready date is flagged and scheduled for a maintenance review (using the same decay-window logic described above). Concepts expiring within 7 days appear in today's list immediately; those with more time appear as future assignments.
+
+If no concepts are close to decaying, the plan falls back to surfacing the 5 concepts whose last correct answer is oldest, keeping fading memories refreshed without any manual configuration.
 
 When not in review mode, the plan also surfaces a short list of up to 3 mastered concepts that are getting stale, in case you want to review them proactively before they decay.
 

@@ -201,6 +201,7 @@ export function ConceptPopup() {
   const position = `${index + 1} of ${list.length}`
   const sourcePath = current ? entryRefToRepoPath(current) : undefined
   const hasStudyPlan = !!(dashboardContext?.studyPlanList?.length)
+  const hasSourceMaterial = !!(dashboardContext?.resourceList?.length)
   const isLoggedInPremium = !!user && isPremium
   const currentFilter = dashboardContext?.filter ?? 'entire-syllabus'
   const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
@@ -468,7 +469,7 @@ export function ConceptPopup() {
               onClick={() => { setViewingDropdownOpen(v => !v); setShowPremiumInfo(false) }}
               className="appearance-none text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer focus:outline-none inline-flex items-center gap-0.5"
             >
-              {currentFilter === 'study-plan' ? todayLabel : 'Entire Syllabus'}
+              {currentFilter === 'study-plan' ? todayLabel : currentFilter === 'source-material' ? 'Source Material' : 'Entire Syllabus'}
               <ChevronDown className="h-2.5 w-2.5 shrink-0" />
             </button>
 
@@ -507,6 +508,15 @@ export function ConceptPopup() {
                 >
                   Entire Syllabus
                 </button>
+                {hasSourceMaterial && (
+                  <button
+                    type="button"
+                    onClick={() => { setDashboardFilter('source-material'); setViewingDropdownOpen(false) }}
+                    className={`w-full flex items-center px-3 py-2 text-xs hover:bg-accent transition-colors text-left ${currentFilter === 'source-material' ? 'font-medium' : ''}`}
+                  >
+                    Source Material
+                  </button>
+                )}
               </div>
             )}
 

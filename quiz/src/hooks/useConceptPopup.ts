@@ -4,11 +4,12 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 // An ordered list of concept/resource refs plus the current index — drives
 // the popup's prev/next footer and keyboard arrows.
 
-type DashboardFilter = 'study-plan' | 'entire-syllabus'
+type DashboardFilter = 'study-plan' | 'entire-syllabus' | 'source-material'
 
 interface DashboardContext {
   studyPlanList: WikiEntryRef[] | null
   fullList: WikiEntryRef[]
+  resourceList: WikiEntryRef[] | null
   filter: DashboardFilter
   circular: boolean
   fromRadial: boolean
@@ -22,7 +23,7 @@ interface ConceptPopupState {
   sourcePath: string | null
   // Set when opened from the dashboard to support the Viewing filter bar.
   dashboardContext: DashboardContext | null
-  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null) => void
+  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null) => void
   // Opens the popup from the dashboard with optional study-plan/entire-syllabus filter.
   openDashboard: (
     fullList: WikiEntryRef[],
@@ -46,13 +47,13 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   index: 0,
   sourcePath: null,
   dashboardContext: null,
-  openAt: (list, index, sourcePath = null, studyPlanList) =>
+  openAt: (list, index, sourcePath = null, studyPlanList, resourceList) =>
     set({
       open: true,
       list,
       index: Math.max(0, Math.min(index, list.length - 1)),
       sourcePath,
-      dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: list, filter: 'entire-syllabus', circular: false, fromRadial: false },
+      dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: list, resourceList: resourceList ?? null, filter: 'entire-syllabus', circular: false, fromRadial: false },
     }),
   openDashboard: (fullList, studyPlanList, filter, initialIndex, options = {}) => {
     const list = filter === 'study-plan' && studyPlanList ? studyPlanList : fullList
@@ -64,6 +65,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
       dashboardContext: {
         studyPlanList,
         fullList,
+        resourceList: null,
         filter,
         circular: options.circular ?? false,
         fromRadial: options.fromRadial ?? false,
@@ -77,6 +79,8 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     const newList =
       filter === 'study-plan' && dashboardContext.studyPlanList
         ? dashboardContext.studyPlanList
+        : filter === 'source-material' && dashboardContext.resourceList
+        ? dashboardContext.resourceList
         : dashboardContext.fullList
     const newIndex = currentName
       ? Math.max(0, newList.findIndex(r => r.name.toLowerCase() === currentName))

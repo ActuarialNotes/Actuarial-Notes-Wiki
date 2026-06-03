@@ -2,7 +2,9 @@ A **linear combination** of independent random variables $L = c_1 X_1 + c_2 X_2 
 
 > $$L = c_1 X_1 + \cdots + c_n X_n \sim N\!\left(\sum_i c_i\mu_i,\ \sum_i c_i^2\sigma_i^2\right)$$
 >
-> $$\text{where } X_1, \ldots, X_n \text{ are independent normal random variables}$$
+> $$\text{where } X_1, \ldots, X_n \text{ are independent}$$
+> $$\text{normal}$$
+> $$\text{random variables}$$
 
 - For non-normal independent random variables, the [[Central Limit Theorem]] provides an approximation for large $n$
 

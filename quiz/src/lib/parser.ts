@@ -326,6 +326,42 @@ export function parseQuestion(raw: string): Question | null {
   }
 }
 
+const STOP_WORDS = new Set([
+  'the', 'and', 'that', 'this', 'with', 'for', 'are', 'was', 'were', 'been',
+  'have', 'has', 'had', 'will', 'would', 'could', 'should', 'may', 'might',
+  'shall', 'can', 'does', 'did', 'not', 'but', 'from', 'they', 'their',
+  'there', 'when', 'where', 'which', 'who', 'what', 'how', 'its', 'also',
+  'more', 'than', 'some', 'such', 'each', 'into', 'about', 'over', 'does',
+  'only', 'very', 'even', 'most', 'both', 'your', 'our', 'any', 'all',
+])
+
+export function estimateEssayScore(
+  userAnswer: string,
+  sampleAnswer: string,
+): { matched: number; total: number; pct: number } {
+  if (!userAnswer.trim() || !sampleAnswer.trim()) return { matched: 0, total: 0, pct: 0 }
+
+  const tokenize = (text: string) =>
+    new Set(
+      text
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .split(/\s+/)
+        .filter(w => w.length > 3 && !STOP_WORDS.has(w)),
+    )
+
+  const sampleWords = tokenize(sampleAnswer)
+  if (sampleWords.size === 0) return { matched: 0, total: 0, pct: 0 }
+
+  const userWords = tokenize(userAnswer)
+  let matched = 0
+  for (const w of sampleWords) {
+    if (userWords.has(w)) matched++
+  }
+
+  return { matched, total: sampleWords.size, pct: Math.round((matched / sampleWords.size) * 100) }
+}
+
 export function parseAllQuestions(rawFiles: string[]): Question[] {
   const seen = new Set<string>()
   const result: Question[] = []

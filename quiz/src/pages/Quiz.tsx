@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { QuestionCard } from '@/components/QuestionCard'
+import type { SelfGrade } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { Button } from '@/components/ui/button'
@@ -95,6 +96,18 @@ export default function Quiz() {
   // Local pre-confirmation selection — not committed to store until "Confirm Answer"
   const [pendingAnswer, setPendingAnswer] = useState<string | null>(null)
 
+  // Self-grading screen for reveal='end' (mock exam) with written questions
+  const [showSelfGradeScreen, setShowSelfGradeScreen] = useState(false)
+  // keyed by `${questionId}__${partLabel}`
+  const [essaySelfGrades, setEssaySelfGrades] = useState<Record<string, SelfGrade>>({})
+
+  const essayQuestions = useMemo(
+    () => storeQuestions.filter(q =>
+      q.type === 'multi-part' && (q.parts ?? []).some(p => p.answer === '')
+    ),
+    [storeQuestions],
+  )
+
   // Tracks whether the user clicked "Change Answer" on the current question
   const [isChangingAnswer, setIsChangingAnswer] = useState(false)
 
@@ -166,7 +179,7 @@ export default function Quiz() {
   // Show explanation inline only in quiz mode when user chose to reveal during
   const showExplanation = isLocked && mode === 'quiz' && reveal === 'during'
 
-  async function handleFinish() {
+  async function submitQuiz() {
     if (isSubmitting) return
     setIsSubmitting(true)
     setSubmitError(null)
@@ -182,6 +195,14 @@ export default function Quiz() {
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to save quiz. Please try again.')
       setIsSubmitting(false)
+    }
+  }
+
+  function handleFinish() {
+    if (reveal === 'end' && essayQuestions.length > 0) {
+      setShowSelfGradeScreen(true)
+    } else {
+      submitQuiz()
     }
   }
 
@@ -238,6 +259,81 @@ export default function Quiz() {
   if (!currentQuestion) return null
 
   const isFlagged = flaggedIds.includes(currentQuestion.id)
+
+  // ── Self-grading screen (reveal='end' with written questions) ────────────
+  if (showSelfGradeScreen) {
+    const totalEssayParts = essayQuestions.reduce(
+      (n, q) => n + (q.parts ?? []).filter(p => p.answer === '').length,
+      0,
+    )
+    const gradedCount = Object.keys(essaySelfGrades).length
+
+    return (
+      <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold">Self-Grade Written Responses</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              Review each written response and grade yourself before seeing your results.
+            </p>
+          </div>
+          <span className="text-sm text-muted-foreground shrink-0">
+            {gradedCount}/{totalEssayParts} graded
+          </span>
+        </div>
+
+        <div className="space-y-8">
+          {essayQuestions.map(q => {
+            const qGrades: Record<string, SelfGrade> = {}
+            for (const [key, grade] of Object.entries(essaySelfGrades)) {
+              const sep = key.indexOf('__')
+              if (sep >= 0 && key.slice(0, sep) === q.id) {
+                qGrades[key.slice(sep + 2)] = grade
+              }
+            }
+            return (
+              <QuestionCard
+                key={q.id}
+                question={q}
+                selectedAnswer={responses[q.id]?.chosen ?? null}
+                onAnswer={() => {}}
+                showExplanation={true}
+                isLocked={true}
+                showMeta={true}
+                essaySelfGrades={qGrades}
+                onEssaySelfGrade={(partLabel, grade) =>
+                  setEssaySelfGrades(prev => ({ ...prev, [`${q.id}__${partLabel}`]: grade }))
+                }
+              />
+            )
+          })}
+        </div>
+
+        {submitError && (
+          <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            {submitError}
+          </div>
+        )}
+
+        <div className="flex justify-between items-center pt-2">
+          <Button variant="outline" size="lg" onClick={() => setShowSelfGradeScreen(false)}>
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Back to Quiz
+          </Button>
+          <Button
+            onClick={submitQuiz}
+            size="lg"
+            disabled={isSubmitting}
+            className="bg-foreground text-background hover:bg-foreground/90"
+          >
+            {isSubmitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+            {mode === 'mock-exam' ? 'Submit Exam' : 'Finish Quiz'}
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -302,7 +398,7 @@ export default function Quiz() {
           mode={mode}
           onCancel={() => setShowQuitDialog(false)}
           onConfirm={handleQuit}
-          onFinish={Object.keys(responses).length > 0 ? handleFinish : undefined}
+          onFinish={Object.keys(responses).length > 0 ? submitQuiz : undefined}
         />
       )}
 

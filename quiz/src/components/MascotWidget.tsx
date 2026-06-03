@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { parseAvatarUrl, type AnimalType, ANIMAL_LABELS } from '@/components/AvatarDisplay'
-import { getAnimalPalette, getCosmetic, type AnimalPalette } from '@/lib/cosmetics'
+import { useNavigate } from 'react-router-dom'
+import { X, Lock } from 'lucide-react'
+import { parseAvatarUrl, serializeAvatar, type AnimalType, ANIMAL_TYPES, ANIMAL_LABELS } from '@/components/AvatarDisplay'
+import { getAnimalPalette, COSMETICS, type AnimalPalette } from '@/lib/cosmetics'
+import { FREE_ANIMALS } from '@/lib/characters'
+import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/hooks/useAuth'
+import { cn } from '@/lib/utils'
 
 // ── Per-character phrase lists ────────────────────────────────────────────────
 
@@ -178,11 +184,8 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
 
   const [phraseIdx, setPhraseIdx] = useState(() => Math.floor(Math.random() * phrases.length))
   const [visible, setVisible] = useState(true)
-  const [showName, setShowName] = useState(false)
-  const [showBubble, setShowBubble] = useState(false)
+  const [showSelector, setShowSelector] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const nameTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const bubbleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const advance = useCallback(() => {
     setVisible(false)
@@ -192,61 +195,29 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
     }, 250)
   }, [phrases.length])
 
-  // Reset phrase index and name state if avatar/variant changes
+  // Reset phrase index if avatar/variant changes
   useEffect(() => {
     setPhraseIdx(Math.floor(Math.random() * phrases.length))
-    setShowName(false)
     setVisible(true)
   }, [animalType, variantId, phrases.length])
 
-  // Auto-cycle (paused while showing name)
+  // Auto-cycle phrases
   useEffect(() => {
-    if (showName) return
     timerRef.current = setTimeout(advance, CYCLE_MS)
     return () => { if (timerRef.current) clearTimeout(timerRef.current) }
-  }, [phraseIdx, advance, showName])
+  }, [phraseIdx, advance])
 
-  const handleClick = () => {
-    if (compact) {
-      if (timerRef.current) clearTimeout(timerRef.current)
-      if (bubbleTimerRef.current) clearTimeout(bubbleTimerRef.current)
-      advance()
-      setShowBubble(true)
-      bubbleTimerRef.current = setTimeout(() => setShowBubble(false), 3500)
-      return
-    }
-    if (timerRef.current) clearTimeout(timerRef.current)
-    if (nameTimerRef.current) clearTimeout(nameTimerRef.current)
-    setVisible(false)
-    setTimeout(() => {
-      setShowName(true)
-      setVisible(true)
-    }, 250)
-    nameTimerRef.current = setTimeout(() => {
-      setVisible(false)
-      setTimeout(() => {
-        setShowName(false)
-        setVisible(true)
-      }, 250)
-    }, 2500)
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowSelector(true)
   }
-
-  const skinName = (() => {
-    if (!animalType) return ''
-    if (variantId) return getCosmetic(variantId)?.variantName ?? ANIMAL_LABELS[animalType]
-    return ANIMAL_LABELS[animalType]
-  })()
 
   const safeIdx = phraseIdx < phrases.length ? phraseIdx : 0
   const currentPhrase = (phrases[safeIdx] ?? phrases[0])?.(context) ?? ''
-  const displayText = showName ? skinName : currentPhrase
 
-  // Render the character icon — animal SVG or color/initial circle
   const iconSize = compact ? 36 : 48
   const icon = (() => {
-    if (parsed.type === 'animal') {
-      return null // handled below via MascotAnimalIcon
-    }
+    if (parsed.type === 'animal') return null
     if (parsed.type === 'image' || parsed.type === 'custom') {
       return (
         <img
@@ -256,7 +227,6 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
         />
       )
     }
-    // color
     return (
       <span
         style={{
@@ -278,95 +248,294 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
     )
   })()
 
-  // Compact mode: small avatar button with a floating speech bubble on click
   if (compact) {
     return (
       <div className="relative shrink-0">
         <button
           type="button"
           onClick={handleClick}
-          aria-label="Mascot — click for a message"
+          aria-label="Change character or skin"
           className="rounded-full transition-transform duration-150 active:scale-90 outline-none focus-visible:ring-2 focus-visible:ring-primary block"
         >
           {parsed.type === 'animal'
             ? <MascotAnimalIcon animal={parsed.value} variant={variant} size={iconSize} />
             : icon}
         </button>
-        {showBubble && (
-          <div
-            className="absolute z-50 bottom-full left-1/2 mb-2 pointer-events-none"
-            style={{ transform: 'translateX(-50%)' }}
-          >
-            <div
-              className="rounded-xl border bg-card px-3 py-2 shadow-lg text-xs leading-snug text-foreground whitespace-normal"
-              style={{
-                maxWidth: 200,
-                minWidth: 120,
-                opacity: visible ? 1 : 0,
-                transform: visible ? 'translateY(0) scale(1)' : 'translateY(4px) scale(0.97)',
-                transition: 'opacity 250ms ease, transform 250ms ease',
-              }}
-            >
-              {currentPhrase}
-            </div>
-            <div
-              className="absolute left-1/2 top-full"
-              style={{
-                transform: 'translateX(-50%)',
-                width: 0,
-                height: 0,
-                borderLeft: '5px solid transparent',
-                borderRight: '5px solid transparent',
-                borderTop: '5px solid hsl(var(--border))',
-              }}
-            />
-          </div>
+        {showSelector && (
+          <CharacterSkinSelector
+            currentAvatarUrl={avatarUrl}
+            onClose={() => setShowSelector(false)}
+          />
         )}
       </div>
     )
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      aria-label="Mascot — click to see name"
-      className="flex items-center gap-3 group outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl"
-    >
-      {/* Character icon */}
-      <div className="relative shrink-0 transition-transform duration-150 group-active:scale-90">
-        {parsed.type === 'animal'
-          ? <MascotAnimalIcon animal={parsed.value} variant={variant} size={iconSize} />
-          : icon}
-      </div>
+    <>
+      <button
+        type="button"
+        onClick={handleClick}
+        aria-label="Change character or skin"
+        className="flex items-center gap-3 group outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl"
+      >
+        <div className="relative shrink-0 transition-transform duration-150 group-active:scale-90">
+          {parsed.type === 'animal'
+            ? <MascotAnimalIcon animal={parsed.value} variant={variant} size={iconSize} />
+            : icon}
+        </div>
 
-      {/* Speech bubble */}
-      <div className="relative flex items-center">
-        {/* Tail pointing left */}
-        <div
-          className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0"
-          style={{
-            borderTop: '6px solid transparent',
-            borderBottom: '6px solid transparent',
-            borderRight: '8px solid',
-            borderRightColor: 'hsl(var(--card))',
-            filter: 'drop-shadow(-1px 0 0 hsl(var(--border)))',
-          }}
+        <div className="relative flex items-center">
+          <div
+            className="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0"
+            style={{
+              borderTop: '6px solid transparent',
+              borderBottom: '6px solid transparent',
+              borderRight: '8px solid',
+              borderRightColor: 'hsl(var(--card))',
+              filter: 'drop-shadow(-1px 0 0 hsl(var(--border)))',
+            }}
+          />
+          <div
+            className="rounded-2xl border bg-card px-3 py-2 shadow-sm max-w-[220px] text-left"
+            style={{
+              transition: 'opacity 250ms ease, transform 250ms ease',
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0) scale(1)' : 'translateY(4px) scale(0.97)',
+            }}
+          >
+            <p className="text-xs leading-snug text-foreground">{currentPhrase}</p>
+          </div>
+        </div>
+      </button>
+      {showSelector && (
+        <CharacterSkinSelector
+          currentAvatarUrl={avatarUrl}
+          onClose={() => setShowSelector(false)}
         />
-        <div
-          className="rounded-2xl border bg-card px-3 py-2 shadow-sm max-w-[220px] text-left"
-          style={{
-            transition: 'opacity 250ms ease, transform 250ms ease',
-            opacity: visible ? 1 : 0,
-            transform: visible ? 'translateY(0) scale(1)' : 'translateY(4px) scale(0.97)',
-          }}
-        >
-          <p className={`text-xs leading-snug ${showName ? 'text-muted-foreground font-medium' : 'text-foreground'}`}>
-            {displayText}
-          </p>
+      )}
+    </>
+  )
+}
+
+// ── Character & Skin Selector Popup ──────────────────────────────────────────
+
+interface CharacterSkinSelectorProps {
+  currentAvatarUrl: string
+  onClose: () => void
+}
+
+function CharacterSkinSelector({ currentAvatarUrl, onClose }: CharacterSkinSelectorProps) {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [ownedCosmetics, setOwnedCosmetics] = useState<Set<string>>(new Set())
+  const [saving, setSaving] = useState(false)
+
+  const parsed = parseAvatarUrl(currentAvatarUrl)
+  const initAnimal: AnimalType = parsed.type === 'animal' ? parsed.value : 'fox'
+  const initVariant: string | null = parsed.type === 'animal' ? (parsed.variant ?? null) : null
+
+  // Optimistic local state so selection feels instant
+  const [equippedAnimal, setEquippedAnimal] = useState<AnimalType>(initAnimal)
+  const [equippedVariant, setEquippedVariant] = useState<string | null>(initVariant)
+
+  // Sync with parent prop when supabase auth propagates the update back
+  useEffect(() => {
+    const p = parseAvatarUrl(currentAvatarUrl)
+    if (p.type === 'animal') {
+      setEquippedAnimal(p.value)
+      setEquippedVariant(p.variant ?? null)
+    }
+  }, [currentAvatarUrl])
+
+  useEffect(() => {
+    if (!user?.id) return
+    let cancelled = false
+    supabase
+      .from('user_cosmetics')
+      .select('cosmetic_id')
+      .eq('user_id', user.id)
+      .then(({ data, error }: { data: { cosmetic_id: string }[] | null; error: unknown }) => {
+        if (cancelled || error || !data) return
+        setOwnedCosmetics(new Set(data.map(r => r.cosmetic_id)))
+      })
+    return () => { cancelled = true }
+  }, [user?.id])
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  const isCharacterOwned = (animal: AnimalType) =>
+    FREE_ANIMALS.has(animal) || ownedCosmetics.has(`character:${animal}`)
+
+  const isSkinOwned = (animal: AnimalType, variantKey: string) =>
+    ownedCosmetics.has(`${animal}:${variantKey}`)
+
+  const equipAvatar = async (animal: AnimalType, variantKey: string | null) => {
+    if (saving) return
+    setEquippedAnimal(animal)
+    setEquippedVariant(variantKey)
+    const url = variantKey
+      ? serializeAvatar({ type: 'animal', value: animal, variant: variantKey })
+      : serializeAvatar({ type: 'animal', value: animal })
+    setSaving(true)
+    try {
+      await supabase.auth.updateUser({ data: { avatar_url: url } })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleCharacterClick = (animal: AnimalType) => {
+    if (!isCharacterOwned(animal)) {
+      navigate('/store')
+      onClose()
+      return
+    }
+    if (animal === equippedAnimal && equippedVariant === null) return
+    equipAvatar(animal, null)
+  }
+
+  const handleSkinClick = (variantKey: string | null) => {
+    if (variantKey && !isSkinOwned(equippedAnimal, variantKey)) {
+      navigate('/store')
+      onClose()
+      return
+    }
+    if (equippedVariant === variantKey) return
+    equipAvatar(equippedAnimal, variantKey)
+  }
+
+  const skinVariants = COSMETICS.filter(c => c.type === 'variant' && c.animal === equippedAnimal)
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 z-[65] bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Popup — centered on all screen sizes */}
+      <div
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[340px] bg-card border rounded-2xl shadow-2xl p-4 outline-none"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Choose character and skin"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-semibold text-sm">Your Character</span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground p-1 rounded-md hover:bg-muted transition-colors"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Characters grid */}
+        <div className="grid grid-cols-3 gap-2 mb-4">
+          {ANIMAL_TYPES.map(animal => {
+            const owned = isCharacterOwned(animal)
+            const active = equippedAnimal === animal
+            return (
+              <button
+                key={animal}
+                type="button"
+                onClick={() => handleCharacterClick(animal)}
+                className={cn(
+                  'relative flex flex-col items-center gap-1 py-2.5 px-1 rounded-xl border-2 transition-colors',
+                  active
+                    ? 'border-primary bg-primary/5'
+                    : 'border-transparent hover:bg-muted',
+                  !owned && 'opacity-60'
+                )}
+              >
+                <MascotAnimalIcon animal={animal} size={40} />
+                <span className="text-[10px] leading-none text-muted-foreground mt-0.5">
+                  {ANIMAL_LABELS[animal]}
+                </span>
+                {!owned && (
+                  <span className="absolute top-1.5 right-1.5">
+                    <Lock className="h-3 w-3 text-muted-foreground" />
+                  </span>
+                )}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Skins section */}
+        <div className="space-y-2">
+          <div className="text-xs font-medium text-muted-foreground">
+            Skins — {ANIMAL_LABELS[equippedAnimal]}
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {/* Default / base skin */}
+            <button
+              type="button"
+              onClick={() => handleSkinClick(null)}
+              className={cn(
+                'flex flex-col items-center gap-1 py-2.5 px-2 rounded-xl border-2 transition-colors',
+                equippedVariant === null
+                  ? 'border-primary bg-primary/5'
+                  : 'border-transparent hover:bg-muted'
+              )}
+            >
+              <MascotAnimalIcon animal={equippedAnimal} size={36} />
+              <span className="text-[10px] leading-none text-muted-foreground">Default</span>
+            </button>
+
+            {/* Variant skins */}
+            {skinVariants.map(cosmetic => {
+              const owned = isSkinOwned(equippedAnimal, cosmetic.variantKey!)
+              const active = equippedVariant === cosmetic.variantKey
+              return (
+                <button
+                  key={cosmetic.id}
+                  type="button"
+                  onClick={() => handleSkinClick(cosmetic.variantKey!)}
+                  className={cn(
+                    'relative flex flex-col items-center gap-1 py-2.5 px-2 rounded-xl border-2 transition-colors',
+                    active
+                      ? 'border-primary bg-primary/5'
+                      : 'border-transparent hover:bg-muted',
+                    !owned && 'opacity-60'
+                  )}
+                >
+                  <MascotAnimalIcon animal={equippedAnimal} variant={cosmetic.variantKey} size={36} />
+                  <span className="text-[10px] leading-none text-muted-foreground">{cosmetic.variantName}</span>
+                  {!owned && (
+                    <span className="absolute top-1.5 right-1.5">
+                      <Lock className="h-3 w-3 text-muted-foreground" />
+                    </span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Store link */}
+        <div className="mt-3 pt-3 border-t">
+          <button
+            type="button"
+            onClick={() => { navigate('/store'); onClose() }}
+            className="text-xs text-primary hover:underline"
+          >
+            + Unlock more in the Store
+          </button>
         </div>
       </div>
-    </button>
+    </>
   )
 }
 

@@ -2,7 +2,8 @@ A **Coinsurance Percentage** ($\alpha$) is the fraction of the covered loss (aft
 
 > $$Y = \alpha \cdot (X - d)_+$$
 >
-> $$\text{where } \alpha \in (0,1] = \text{coinsurance percentage (insurer's share)}$$
+> $$\text{where } \alpha \in (0,1] = \text{coinsurance percentage}$$
+> $$\text{(insurer's share)}$$
 
 - When $\alpha = 1$ the insurer covers 100% of the excess; lower values mean the insured co-pays a portion
 - It scales the expected payment by $\alpha$ and the variance by $\alpha^2$

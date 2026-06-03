@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigationType } from 'react-router-dom'
 import { BookMarked, CheckCircle2, GraduationCap } from 'lucide-react'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -110,15 +110,10 @@ export default function WikiHome() {
     return map
   }, [exams])
 
-  const effectiveStatus = useCallback(
-    (id: string) => examProgress[id] ?? (id !== 'P' && id !== 'FM' ? 'in_progress' : 'not_started'),
-    [examProgress],
-  )
-
   // In-progress syllabi in the same order as Flashcards tab so colour indices align
   const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => effectiveStatus(wikiExamIdToProgressKey(s.examId)) === 'in_progress'),
-    [syllabi, effectiveStatus],
+    () => syllabi.filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'),
+    [syllabi, examProgress],
   )
 
   // Pill data for all in-progress exams (shown regardless of active body filter)
@@ -242,7 +237,7 @@ export default function WikiHome() {
                     const match = syllabi.find(
                       s => wikiExamIdToProgressKey(s.examId) === examNameToTrackKey(exam.name),
                     )
-                    const status = effectiveStatus(examId)
+                    const status = examProgress[examId]
                     const isInProgress = status === 'in_progress'
                     const isCompleted = status === 'completed'
                     const targetDate = targetDates[examId]
@@ -304,6 +299,10 @@ export default function WikiHome() {
                                     )}
                                   >
                                     {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
+                                  </span>
+                                ) : examId !== 'P' && examId !== 'FM' ? (
+                                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                                    In Development
                                   </span>
                                 ) : (
                                   <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-muted text-muted-foreground">

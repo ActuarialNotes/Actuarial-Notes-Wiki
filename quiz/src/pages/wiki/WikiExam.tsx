@@ -190,6 +190,21 @@ export default function WikiExam() {
     return refs.length > 0 ? refs : null
   }, [examRows, progressKey, pageRefs])
 
+  const resourceRefs = useMemo(() => {
+    const seen = new Set<string>()
+    const refs: WikiEntryRef[] = []
+    for (const r of pageRefs) {
+      if (r.kind === 'resource' || (r.kind === 'concept' && / \([^)]*\d{4}\)$/.test(r.name))) {
+        const key = r.name.toLowerCase()
+        if (!seen.has(key)) {
+          seen.add(key)
+          refs.push({ kind: 'resource', name: r.name })
+        }
+      }
+    }
+    return refs.length > 0 ? refs : null
+  }, [pageRefs])
+
   useEffect(() => {
     setExamId(examIdFromFile(examFileName))
     setPageRefs(pageRefs)
@@ -212,9 +227,10 @@ export default function WikiExam() {
       idx >= 0 ? idx : 0,
       `${examFileName}.md`,
       studyPlanRefs,
+      resourceRefs,
     )
     return true
-  }, [pageRefs, examFileName, openAt, studyPlanRefs])
+  }, [pageRefs, examFileName, openAt, studyPlanRefs, resourceRefs])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
@@ -232,8 +248,8 @@ export default function WikiExam() {
       r => r.name.toLowerCase() === conceptParam.toLowerCase(),
     )
     const openList = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptParam }]
-    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs)
-  }, [conceptParam, pageRefs, examFileName, openAt, studyPlanRefs])
+    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs)
+  }, [conceptParam, pageRefs, examFileName, openAt, studyPlanRefs, resourceRefs])
 
   return (
     <div className="space-y-4">

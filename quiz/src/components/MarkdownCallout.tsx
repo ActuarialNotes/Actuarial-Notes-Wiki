@@ -63,6 +63,8 @@ const EMERALD: CalloutStyle = {
   icon: CheckCircle2,
   borderClass: 'border-emerald-500/60',
   accentClass: 'text-emerald-600 dark:text-emerald-400',
+  roundLeft: true,
+  noBorder: true,
 }
 
 const AMBER: CalloutStyle = {

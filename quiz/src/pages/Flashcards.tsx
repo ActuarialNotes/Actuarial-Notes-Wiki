@@ -12,11 +12,13 @@ import {
   LayoutGrid,
   Layers,
   Loader2,
+  Maximize2,
   Play,
   Sigma,
   Target,
   Trash2,
   TrendingUp,
+  X,
 } from 'lucide-react'
 import {
   DndContext,
@@ -580,6 +582,8 @@ function FlashcardControlsBar({
   onToggleMode,
   flip,
   onFlipToggle,
+  focusMode,
+  onFocusToggle,
 }: {
   galleryOpen: boolean
   onGalleryToggle: () => void
@@ -587,56 +591,58 @@ function FlashcardControlsBar({
   onToggleMode: (mode: ReverseCardSection) => void
   flip: boolean
   onFlipToggle: () => void
+  focusMode: boolean
+  onFocusToggle: () => void
 }) {
   return (
-    <div className="flex items-center justify-center gap-4 sm:gap-6 px-4 py-4 sm:py-5 border-t bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
+    <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 py-3 sm:py-4 border-t bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
       <button
         type="button"
         onClick={onGalleryToggle}
         title={galleryOpen ? 'Back to study' : 'Open gallery'}
         aria-pressed={galleryOpen}
-        className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border text-sm sm:text-base font-medium transition-colors ${
+        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-colors ${
           galleryOpen
             ? 'bg-primary text-primary-foreground border-primary'
             : 'text-muted-foreground hover:text-foreground hover:bg-accent border-border'
         }`}
       >
         {galleryOpen
-          ? <BookOpen className="h-5 w-5" />
-          : <LayoutGrid className="h-5 w-5" />
+          ? <BookOpen className="h-4 w-4" />
+          : <LayoutGrid className="h-4 w-4" />
         }
         <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
       </button>
 
-      <div className="w-px h-9 sm:h-10 bg-border shrink-0" />
+      <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
 
       <div className="flex items-center gap-2 shrink-0">
-        <span className="text-sm sm:text-base text-muted-foreground">Flip</span>
+        <span className="text-xs sm:text-sm text-muted-foreground">Flip</span>
         <button
           type="button"
           role="switch"
           aria-checked={flip}
           onClick={onFlipToggle}
           title={flip ? 'Show fronts by default' : 'Show backs by default'}
-          className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ${
+          className={`relative inline-flex h-6 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ${
             flip ? 'bg-primary' : 'bg-muted-foreground/30'
           }`}
         >
-          <span className={`pointer-events-none block h-6 w-6 rounded-full bg-background shadow-lg ring-0 transition-transform ${
-            flip ? 'translate-x-7' : 'translate-x-0'
+          <span className={`pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform ${
+            flip ? 'translate-x-6' : 'translate-x-0'
           }`} />
         </button>
       </div>
 
-      <div className="w-px h-9 sm:h-10 bg-border shrink-0" />
+      <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
 
-      <div className="flex items-center gap-1.5 shrink-0">
+      <div className="flex items-center gap-1 shrink-0">
         <button
           type="button"
           onClick={() => onToggleMode('definition')}
           title="Show definition on back"
           aria-pressed={reverseCardModes.has('definition')}
-          className={`inline-flex items-center justify-center h-11 w-11 sm:h-12 sm:w-12 rounded-md border text-base sm:text-lg font-serif italic font-bold transition-colors ${
+          className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border text-sm sm:text-base font-serif italic font-bold transition-colors ${
             reverseCardModes.has('definition')
               ? 'bg-primary text-primary-foreground border-primary'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -647,24 +653,38 @@ function FlashcardControlsBar({
           onClick={() => onToggleMode('math')}
           title="Show math on back"
           aria-pressed={reverseCardModes.has('math')}
-          className={`inline-flex items-center justify-center h-11 w-11 sm:h-12 sm:w-12 rounded-md border transition-colors ${
+          className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border transition-colors ${
             reverseCardModes.has('math')
               ? 'bg-primary text-primary-foreground border-primary'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'
           }`}
-        ><Sigma className="h-5 w-5 sm:h-6 sm:w-6" /></button>
+        ><Sigma className="h-4 w-4 sm:h-5 sm:w-5" /></button>
         <button
           type="button"
           onClick={() => onToggleMode('images')}
           title="Show images on back"
           aria-pressed={reverseCardModes.has('images')}
-          className={`inline-flex items-center justify-center h-11 w-11 sm:h-12 sm:w-12 rounded-md border transition-colors ${
+          className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border transition-colors ${
             reverseCardModes.has('images')
               ? 'bg-primary text-primary-foreground border-primary'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'
           }`}
-        ><Images className="h-5 w-5 sm:h-6 sm:w-6" /></button>
+        ><Images className="h-4 w-4 sm:h-5 sm:w-5" /></button>
       </div>
+
+      <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
+
+      <button
+        type="button"
+        onClick={onFocusToggle}
+        title={focusMode ? 'Exit focus mode' : 'Focus mode'}
+        aria-pressed={focusMode}
+        className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border transition-colors ${
+          focusMode
+            ? 'bg-primary text-primary-foreground border-primary'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+        }`}
+      ><Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
     </div>
   )
 }
@@ -1419,6 +1439,7 @@ export default function Flashcards() {
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [galleryExpanded, setGalleryExpanded] = useState(false)
+  const [focusMode, setFocusMode] = useState(false)
   const [groupBy, setGroupBy] = useState<GroupBy>('exam')
   const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
     new Set<ReverseCardSection>(['definition']),
@@ -1426,13 +1447,21 @@ export default function Flashcards() {
   const [globalFlip, setGlobalFlip] = useState(false)
 
   useEffect(() => {
-    if (galleryExpanded) {
+    if (galleryExpanded || focusMode) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
     }
     return () => { document.body.style.overflow = '' }
-  }, [galleryExpanded])
+  }, [galleryExpanded, focusMode])
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && focusMode) setFocusMode(false)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [focusMode])
 
   function toggleReverseMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {
@@ -1608,8 +1637,62 @@ export default function Flashcards() {
     )
   }
 
+  function handleFocusToggle() {
+    setFocusMode(v => !v)
+    setGalleryExpanded(false)
+  }
+
   return (
     <>
+      {/* Focus mode overlay */}
+      {focusMode && (
+        <div className="fixed inset-0 z-[60] bg-black flex flex-col">
+          <div className="flex justify-end px-4 pt-3 pb-1 shrink-0">
+            <button
+              type="button"
+              onClick={() => setFocusMode(false)}
+              className="text-white/30 hover:text-white/70 transition-colors"
+              title="Exit focus mode (Esc)"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            <FlashcardStudyArea
+              cards={orderedCards}
+              index={activeIndex}
+              isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
+              reverseCardModes={reverseCardModes}
+              onSetModes={setReverseCardModes}
+              defaultFlipped={globalFlip}
+            />
+          </div>
+          <div className="flex items-stretch h-14 shrink-0 border-t border-white/10">
+            <button
+              type="button"
+              disabled={activeIndex === 0}
+              onClick={() => setActiveIndex(activeIndex - 1)}
+              className="flex-1 flex items-center justify-center gap-2 text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 active:bg-white/10 disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+              <span>Previous</span>
+            </button>
+            <div className="self-center px-4 shrink-0">
+              <span className="text-xs text-white/30 tabular-nums">{activeIndex + 1} / {orderedCards.length}</span>
+            </div>
+            <button
+              type="button"
+              disabled={activeIndex === orderedCards.length - 1}
+              onClick={() => setActiveIndex(activeIndex + 1)}
+              className="flex-1 flex items-center justify-center gap-2 text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 active:bg-white/10 disabled:opacity-25 disabled:cursor-not-allowed transition-colors"
+            >
+              <span>Next</span>
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Expanded gallery overlay */}
       {galleryExpanded && (
         <GalleryPanel
@@ -1701,6 +1784,8 @@ export default function Flashcards() {
           onToggleMode={toggleReverseMode}
           flip={globalFlip}
           onFlipToggle={() => setGlobalFlip(v => !v)}
+          focusMode={focusMode}
+          onFocusToggle={handleFocusToggle}
         />
       </div>
     </>

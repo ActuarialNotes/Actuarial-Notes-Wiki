@@ -389,6 +389,57 @@ describe('generateStudyPlan — strong_key strategy', () => {
   })
 })
 
+// ── Even daily load distribution ─────────────────────────────────────────────
+
+describe('generateStudyPlan — even load distribution', () => {
+  it('spreads converging level2 concepts across days instead of piling them on one day', () => {
+    // 10 concepts all at level2 with the same last_correct_at 2 days ago → all eligible today.
+    // With 30 days remaining and 10 sessions total, targetDailyLoad = ceil(10/30) = 1.
+    // Each should be assigned to a different day rather than all landing on today.
+    const lastCorrectAt = addDays(todayISO(), -2) + 'T12:00:00Z'
+    const bigSyllabus = largeSyllabus(10)
+    const masteryRecords = Array.from({ length: 10 }, (_, i) =>
+      rec(`Concept ${i + 1}`, { state: 'level2', correct_count: 2, last_correct_at: lastCorrectAt }),
+    )
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: bigSyllabus,
+      masteryRecords,
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    const countByDay = new Map<string, number>()
+    for (const a of plan.assignments) {
+      countByDay.set(a.scheduledDate, (countByDay.get(a.scheduledDate) ?? 0) + 1)
+    }
+    const maxOnAnyDay = Math.max(...countByDay.values())
+    // With 10 concepts spread across 30 days, no day should have more than 2 sessions
+    expect(maxOnAnyDay).toBeLessThanOrEqual(2)
+    // All 10 concepts must still be scheduled
+    expect(plan.assignments.length).toBe(10)
+  })
+
+  it('does not assign more sessions per day than targetDailyLoad for new concepts', () => {
+    // 20 new concepts, 30 days remaining → totalSessions = 60, targetDailyLoad = 2
+    const bigSyllabus = largeSyllabus(20)
+    const plan = generateStudyPlan({
+      examId: 'FM',
+      syllabus: bigSyllabus,
+      masteryRecords: [],
+      config,
+      examDate: addDays(todayISO(), 40),
+    })
+    const countByDay = new Map<string, number>()
+    for (const a of plan.assignments) {
+      countByDay.set(a.scheduledDate, (countByDay.get(a.scheduledDate) ?? 0) + 1)
+    }
+    const targetDailyLoad = Math.ceil((20 * 3) / 30)
+    for (const [, count] of countByDay) {
+      expect(count).toBeLessThanOrEqual(targetDailyLoad)
+    }
+  })
+})
+
 // ── Review concepts: oldest-first sorting ─────────────────────────────────────
 
 describe('generateStudyPlan — reviewConcepts order', () => {

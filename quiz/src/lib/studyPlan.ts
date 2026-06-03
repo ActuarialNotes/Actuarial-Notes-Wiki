@@ -309,39 +309,69 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   const assignments: ConceptAssignment[] = []
   const newIntrosByDay = new Map<string, number>()  // date → count of new introductions
 
+  // Compute how many total sessions (intro + each review stage) remain across all
+  // unmastered concepts, then cap each day at that average to prevent pile-ups when
+  // many concepts converge to the same eligible date.
+  const totalSessions = sortedUnmastered.reduce((sum, c) => {
+    const s = getState(c)
+    if (s === 'new' || s === 'forgotten') return sum + 3
+    if (s === 'level1') return sum + 2
+    if (s === 'level2') return sum + 1
+    return sum
+  }, 0)
+  const targetDailyLoad = Math.ceil(totalSessions / Math.max(1, daysRemaining))
+  const sessionsByDay = new Map<string, number>()  // date → total sessions scheduled that day
+
+  // Find the earliest date >= earliestDate that hasn't hit the daily session cap.
+  function nextReviewSlot(earliestDate: string): string {
+    let d = earliestDate
+    while (true) {
+      const count = sessionsByDay.get(d) ?? 0
+      if (count < targetDailyLoad) {
+        sessionsByDay.set(d, count + 1)
+        return d
+      }
+      d = addDays(d, 1)
+    }
+  }
+
   function nextSlotForNewIntro(): string {
     let dayOffset = 0
     while (true) {
       const date = addDays(today, dayOffset)
-      const count = newIntrosByDay.get(date) ?? 0
-      if (count < dailyNewLimit) {
-        newIntrosByDay.set(date, count + 1)
+      const newCount = newIntrosByDay.get(date) ?? 0
+      const sessionCount = sessionsByDay.get(date) ?? 0
+      if (newCount < dailyNewLimit && sessionCount < targetDailyLoad) {
+        newIntrosByDay.set(date, newCount + 1)
+        sessionsByDay.set(date, sessionCount + 1)
         return date
       }
       dayOffset++
     }
   }
 
-  // First: schedule level1/level2 on their eligible date (spacing enforced),
-  // then pre-schedule the subsequent stage so the full pipeline is visible.
+  // First: schedule level1/level2 on their earliest available slot (respecting the
+  // minimum gap), then pre-schedule the next pipeline stage.
   for (const c of sortedUnmastered) {
     const state = getState(c)
     if (state !== 'level1' && state !== 'level2') continue
     const eligibleDate = getEligibleDate(c)
+    const scheduledDate = nextReviewSlot(eligibleDate)
     assignments.push({
       conceptName: c.name,
       topicName: c.topicName,
       topicWeight: c.topicWeight,
-      scheduledDate: eligibleDate,
+      scheduledDate,
       initialState: state,
     })
     if (state === 'level1') {
       // level2→level3 requires a 2-day gap from when level2 is earned
+      const l3Date = nextReviewSlot(addDays(scheduledDate, 2))
       assignments.push({
         conceptName: c.name,
         topicName: c.topicName,
         topicWeight: c.topicWeight,
-        scheduledDate: addDays(eligibleDate, 2),
+        scheduledDate: l3Date,
         initialState: 'level2',
       })
     }
@@ -362,19 +392,21 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
       initialState: state,
     })
     // Stage 2: level1 → level2 (requires 1-day gap)
+    const l2Date = nextReviewSlot(addDays(introDate, 1))
     assignments.push({
       conceptName: c.name,
       topicName: c.topicName,
       topicWeight: c.topicWeight,
-      scheduledDate: addDays(introDate, 1),
+      scheduledDate: l2Date,
       initialState: 'level1',
     })
     // Stage 3: level2 → level3 (requires 2-day gap from level2 earn date)
+    const l3Date = nextReviewSlot(addDays(l2Date, 2))
     assignments.push({
       conceptName: c.name,
       topicName: c.topicName,
       topicWeight: c.topicWeight,
-      scheduledDate: addDays(introDate, 3),
+      scheduledDate: l3Date,
       initialState: 'level2',
     })
   }

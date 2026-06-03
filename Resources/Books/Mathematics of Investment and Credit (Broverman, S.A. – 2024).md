@@ -7,7 +7,7 @@ Publisher: ACTEX Learning
 ISBN: 979-8-8901-6016-4
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/mathematics-of-investment-and-credit-broverman)"
 ---
-
+![[Mathematics of Investment and Credit - Broverman - Cover.png]]
 ## 1 Interest Rate Measurement
 
 - 1.1 Interest Accumulation and [[Effective Rate|Effective Rates of Interest]]

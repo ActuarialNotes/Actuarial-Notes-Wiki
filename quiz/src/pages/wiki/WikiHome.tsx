@@ -166,7 +166,7 @@ export default function WikiHome() {
         {/* ── Sticky block: Exams heading + filter + in-progress pills ── */}
         <div
           ref={examsHeaderRef}
-          className="sticky z-20 -mx-4 px-4 pt-3 pb-3 bg-background/95 backdrop-blur-sm border-b mb-4"
+          className="sticky z-20 -mx-4 px-4 pt-3 pb-3 bg-background/95 backdrop-blur-sm mb-4"
           style={{ top: `${SEARCH_BAR_H}px` }}
         >
           <div className="flex items-center justify-between mb-2">
@@ -180,7 +180,7 @@ export default function WikiHome() {
                   key={tab}
                   onClick={() => setFilterOverride(tab)}
                   className={cn(
-                    'px-3 py-1 rounded-md text-xs font-medium transition-colors',
+                    'px-5 py-2 rounded-md text-sm font-medium transition-colors',
                     filter === tab
                       ? 'bg-background text-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground',

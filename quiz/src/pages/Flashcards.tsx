@@ -4,6 +4,7 @@ import {
   BookOpen,
   CalendarDays,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
@@ -575,6 +576,87 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
 
 // ─── Controls Footer (shared between study and gallery views) ─────────────────
 
+function ViewModeDropdown({
+  reverseCardModes,
+  onToggleMode,
+}: {
+  reverseCardModes: Set<ReverseCardSection>
+  onToggleMode: (mode: ReverseCardSection) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handleOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleOutside)
+    return () => document.removeEventListener('mousedown', handleOutside)
+  }, [open])
+
+  const hasActive = reverseCardModes.size > 0
+
+  return (
+    <div className="relative shrink-0" ref={ref}>
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        title="Back content"
+        className={`inline-flex items-center gap-1 px-2 h-9 sm:h-10 rounded-md border transition-colors ${
+          hasActive
+            ? 'bg-primary text-primary-foreground border-primary'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent border-border'
+        }`}
+      >
+        {hasActive ? (
+          <span className="inline-flex items-center gap-0.5">
+            {reverseCardModes.has('definition') && (
+              <span className="font-serif italic font-bold text-sm leading-none">D</span>
+            )}
+            {reverseCardModes.has('math') && <Sigma className="h-3.5 w-3.5" />}
+            {reverseCardModes.has('images') && <Images className="h-3.5 w-3.5" />}
+          </span>
+        ) : (
+          <span className="text-xs font-medium">Back</span>
+        )}
+        <ChevronDown className={`h-3 w-3 opacity-60 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-background border rounded-xl shadow-lg p-1.5 flex flex-col gap-0.5 min-w-[148px] z-50">
+          {(
+            [
+              { mode: 'definition', label: 'Definition', icon: <span className="font-serif italic font-bold text-sm w-4 text-center leading-none">D</span> },
+              { mode: 'math', label: 'Math', icon: <Sigma className="h-4 w-4" /> },
+              { mode: 'images', label: 'Images', icon: <Images className="h-4 w-4" /> },
+            ] as const
+          ).map(({ mode, label, icon }) => {
+            const active = reverseCardModes.has(mode)
+            return (
+              <button
+                key={mode}
+                type="button"
+                onClick={() => onToggleMode(mode)}
+                aria-pressed={active}
+                className={`inline-flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${
+                  active
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                }`}
+              >
+                {icon}
+                <span>{label}</span>
+                {active && <Check className="h-3.5 w-3.5 ml-auto" />}
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function FlashcardControlsBar({
   galleryOpen,
   onGalleryToggle,
@@ -636,41 +718,7 @@ function FlashcardControlsBar({
 
       <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
 
-      <div className="flex items-center gap-1 shrink-0">
-        <button
-          type="button"
-          onClick={() => onToggleMode('definition')}
-          title="Show definition on back"
-          aria-pressed={reverseCardModes.has('definition')}
-          className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border text-sm sm:text-base font-serif italic font-bold transition-colors ${
-            reverseCardModes.has('definition')
-              ? 'bg-primary text-primary-foreground border-primary'
-              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-          }`}
-        >D</button>
-        <button
-          type="button"
-          onClick={() => onToggleMode('math')}
-          title="Show math on back"
-          aria-pressed={reverseCardModes.has('math')}
-          className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border transition-colors ${
-            reverseCardModes.has('math')
-              ? 'bg-primary text-primary-foreground border-primary'
-              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-          }`}
-        ><Sigma className="h-4 w-4 sm:h-5 sm:w-5" /></button>
-        <button
-          type="button"
-          onClick={() => onToggleMode('images')}
-          title="Show images on back"
-          aria-pressed={reverseCardModes.has('images')}
-          className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border transition-colors ${
-            reverseCardModes.has('images')
-              ? 'bg-primary text-primary-foreground border-primary'
-              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-          }`}
-        ><Images className="h-4 w-4 sm:h-5 sm:w-5" /></button>
-      </div>
+      <ViewModeDropdown reverseCardModes={reverseCardModes} onToggleMode={onToggleMode} />
 
       <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
 

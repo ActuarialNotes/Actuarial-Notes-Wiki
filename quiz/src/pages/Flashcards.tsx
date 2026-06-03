@@ -1483,12 +1483,14 @@ export default function Flashcards() {
     }
   }, [cards.length, activeIndex])
 
-  // Navigate to and flash a card when arriving via the ?highlight= URL param
+  // Navigate to and flash a card when arriving via the ?highlight= URL param.
+  // Depends on orderedCards so the effect re-runs once cards finish loading.
   useEffect(() => {
     if (!highlightName) return
     const latest = orderedCardsRef.current
     const idx = latest.findIndex(c => c.name.toLowerCase() === highlightName.toLowerCase())
-    if (idx >= 0) setActiveIndex(idx)
+    if (idx < 0) return // card not found yet; will retry when orderedCards updates
+    setActiveIndex(idx)
     const timerId = setTimeout(() => {
       setFlashingCard(highlightName)
       if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
@@ -1502,7 +1504,8 @@ export default function Flashcards() {
       }, 1700)
     }, 100)
     return () => clearTimeout(timerId)
-  }, [highlightName])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [highlightName, orderedCards])
 
   // Reset tracked popup name when popup closes
   useEffect(() => {

@@ -625,7 +625,7 @@ export default function Landing() {
     <>
     <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
     <div className={`container max-w-2xl mx-auto px-4 pt-0 space-y-8 ${hasSelection ? 'pb-56' : 'pb-12'}`}>
-      <div className="sticky top-14 md:top-28 lg:top-14 z-10 bg-background -mx-4 px-4 pt-3 pb-4 space-y-3">
+      <div className="sticky top-14 md:top-28 lg:top-14 z-20 bg-background -mx-4 px-4 pt-3 pb-4 space-y-3">
         {hasTopic && (
           <button
             type="button"

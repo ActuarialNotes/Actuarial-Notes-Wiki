@@ -8,6 +8,8 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
+import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
+import { parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ListenView } from '@/components/wiki/ListenView'
 import { MathViewContext } from '@/contexts/MathViewContext'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
@@ -194,6 +196,17 @@ export function ConceptPopup() {
     if (!content) return []
     return extractMathBlockquotes(content)
   }, [content])
+
+  const resourceMeta = useMemo(() => {
+    if (!content || current?.kind !== 'resource') return null
+    return parseResourceMeta(content)
+  }, [content, current?.kind])
+
+  const processedContent = useMemo(() => {
+    if (!content) return content
+    if (current?.kind !== 'resource') return content
+    return preprocessResourceMarkdown(content)
+  }, [content, current?.kind])
 
   if (!open || !current) return null
 
@@ -453,16 +466,19 @@ export function ConceptPopup() {
                 </div>
               )
             ) : (
-              <WikiArticle
-                markdown={content}
-                sourcePath={sourcePath}
-                hideImages
-                onWikiLink={ref => {
-                  // Stay inside the popup: swap the body instead of navigating.
-                  jumpTo(ref)
-                  return true
-                }}
-              />
+              <>
+                {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact />}
+                <WikiArticle
+                  markdown={processedContent ?? content}
+                  sourcePath={sourcePath}
+                  hideImages
+                  onWikiLink={ref => {
+                    // Stay inside the popup: swap the body instead of navigating.
+                    jumpTo(ref)
+                    return true
+                  }}
+                />
+              </>
             )
           )}
         </div>

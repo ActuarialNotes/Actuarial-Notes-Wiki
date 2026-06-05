@@ -23,4 +23,4 @@
 > >
 > > $\text{CDF}_{36\text{-ult}} = 1.050 \times 1.020 = 1.071$
 > >
-> > AY with $\$600{,}000$ reported at 12 months: Ultimate $= 600{,}000 \times 1.928 = \$1{,}156{,}800$; $\%$ unreported $= 1 - 1/1.928 = 48.1\%$
+> > AY with \$$600{,}000$ reported at 12 months: Ultimate $= 600{,}000 \times 1.928 = \$1{,}156{,}800$; $\%$ unreported $= 1 - 1/1.928 = 48.1\%$

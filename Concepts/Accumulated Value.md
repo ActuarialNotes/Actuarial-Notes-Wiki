@@ -10,7 +10,7 @@ The **accumulated value** (AV) is the value at a future time $t$ of a cash flow 
 - Under compound interest at rate $i$, this equals $(1+i)^{t-s}$.
 
 > [!example]- Accumulated Value of a Savings Plan {Example}
-> An investor deposits $\$500$ today and $\$800$ two years from now into an account earning $i = 5\%$ per year effective. What is the total accumulated value at the end of 4 years?
+> An investor deposits \$$500$ today and \$$800$ two years from now into an account earning $i = 5\%$ per year effective. What is the total accumulated value at the end of 4 years?
 >
 > > [!answer]-
 > > Accumulate each deposit to time 4:

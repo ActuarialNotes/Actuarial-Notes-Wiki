@@ -11,7 +11,7 @@
 - Rating variables must be actuarially justified, objectively measurable, and not unfairly discriminatory under [[Principles of Ratemaking]]
 
 > [!example]- Two-Class Relativity Calculation {Example}
-> Base class: $10{,}000$ exposures, $\$2{,}000{,}000$ losses. Class A: $5{,}000$ exposures, $\$1{,}500{,}000$ losses. Target loss ratio $= 60\%$.
+> Base class: $10{,}000$ exposures, \$$2{,}000{,}000$ losses. Class A: $5{,}000$ exposures, \$$1{,}500{,}000$ losses. Target loss ratio $= 60\%$.
 >
 > > [!answer]-
 > > $$\text{Base pure premium} = 2{,}000{,}000 / 10{,}000 = \$200 \quad \Rightarrow \quad \text{Base rate} = 200/0.60 = \$333$$

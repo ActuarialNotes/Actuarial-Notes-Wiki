@@ -10,7 +10,7 @@
 - Large individual losses (shock losses) can distort average severity; actuaries often cap or remove these before fitting severity trends, then add them back explicitly
 
 > [!example]- Projecting Ultimate Average Severity {Example}
-> An accident year has $600$ reported claims and $\$4{,}200{,}000$ in reported losses at 24 months. The 24-to-ultimate severity development factor is $1.20$.
+> An accident year has $600$ reported claims and \$$4{,}200{,}000$ in reported losses at 24 months. The 24-to-ultimate severity development factor is $1.20$.
 >
 > > [!answer]-
 > > $$\text{Current Average Severity} = \frac{\$4{,}200{,}000}{600} = \$7{,}000 \text{ per claim}$$

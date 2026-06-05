@@ -12,11 +12,11 @@
 - In ratemaking, losses and ALAE are combined into a single loss cost; the loss ratio in the experience period should include ALAE to be consistent with the loss cost being priced
 
 > [!example]- ALAE in a GL Claim {Example}
-> A general liability claim closes with indemnity payments of $\$100{,}000$. ALAE incurred during litigation: defense attorney $\$25{,}000$, expert witness $\$8{,}000$, court costs $\$2{,}000$.
+> A general liability claim closes with indemnity payments of \$$100{,}000$. ALAE incurred during litigation: defense attorney \$$25{,}000$, expert witness \$$8{,}000$, court costs \$$2{,}000$.
 >
 > > [!answer]-
 > > Total ALAE $= \$35{,}000$; total incurred $= \$100{,}000 + \$35{,}000 = \$135{,}000$
 > >
 > > ALAE ratio $= 35{,}000/100{,}000 = 35\%$, consistent with the typical GL range
 > >
-> > This claim would appear in a combined loss+ALAE triangle at $\$135{,}000$, or separately in an ALAE-only triangle if the actuary develops the two components independently
+> > This claim would appear in a combined loss+ALAE triangle at \$$135{,}000$, or separately in an ALAE-only triangle if the actuary develops the two components independently

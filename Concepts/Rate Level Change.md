@@ -9,7 +9,7 @@
 - In reserving, rate level shifts affect the expected loss ratio used as the a priori in [[Bornhuetter Ferguson Method|BF]] and [[Cape Cod Method|Cape Cod]] methods
 
 > [!example]- On-Level Factor Application {Example}
-> A line had $+10\%$ rate changes on $1/1/2022$ and $+6\%$ on $1/1/2024$. Historical earned premium in AY 2022 was $\$5{,}000{,}000$. What is the on-level earned premium?
+> A line had $+10\%$ rate changes on $1/1/2022$ and $+6\%$ on $1/1/2024$. Historical earned premium in AY 2022 was \$$5{,}000{,}000$. What is the on-level earned premium?
 >
 > > [!answer]-
 > > Current rate level $= 1.10 \times 1.06 = 1.166$

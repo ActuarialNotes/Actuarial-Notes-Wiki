@@ -9,7 +9,7 @@ The **coupon rate** $r$ is the rate applied to the face value $F$ of a bond to d
 - The coupon rate determines the size of the coupon cash flows; the yield rate determines how those cash flows are discounted.
 
 > [!example]- Identifying the Coupon Rate {Example}
-> A bond with face value $\$1{,}000$ pays annual coupons of $\$45$. What is the annual coupon rate, and is the bond trading at a premium or discount if the yield rate is $5\%$?
+> A bond with face value \$$1{,}000$ pays annual coupons of \$$45$. What is the annual coupon rate, and is the bond trading at a premium or discount if the yield rate is $5\%$?
 >
 > > [!answer]-
 > > $$r = \frac{45}{1000} = 4.5\%$$

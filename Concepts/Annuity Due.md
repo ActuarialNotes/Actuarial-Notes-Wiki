@@ -10,7 +10,7 @@ An **annuity-due** is a series of $n$ level payments of 1 made at the **beginnin
 - Annuities-due arise naturally when payments are made at the start of a period, such as lease payments, insurance premiums paid in advance, or tuition fees.
 
 > [!example]- Present Value of a 4-Year Annuity-Due {Example}
-> A lease requires payments of $\$800$ at the **beginning** of each year for 4 years. The effective annual rate is $i = 5\%$. Find the present value.
+> A lease requires payments of \$$800$ at the **beginning** of each year for 4 years. The effective annual rate is $i = 5\%$. Find the present value.
 >
 > > [!answer]-
 > > $$\ddot{a}_{\overline{4}|0.05} = (1.05)\,a_{\overline{4}|0.05} = (1.05)\cdot\frac{1-(1.05)^{-4}}{0.05}$$

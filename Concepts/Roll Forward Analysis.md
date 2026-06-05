@@ -10,9 +10,9 @@
 - Roll forward results feed directly into [[Actual vs Expected Analysis|actual-vs.-expected analysis]] and are disclosed in Schedule P (Part 2) of statutory filings
 
 > [!example]- Rolling Forward Reserves for One Year {Example}
-> Beginning reserves (12/31/2023): $\$10{,}000{,}000$. During 2024: new claims incurred = $\$2{,}500{,}000$; payments made = $\$3{,}200{,}000$; adverse development on prior years = $\$400{,}000$. Find ending reserves.
+> Beginning reserves (12/31/2023): \$$10{,}000{,}000$. During 2024: new claims incurred = \$$2{,}500{,}000$; payments made = \$$3{,}200{,}000$; adverse development on prior years = \$$400{,}000$. Find ending reserves.
 >
 > > [!answer]-
 > > $$\text{Ending Reserve} = \$10{,}000{,}000 + \$2{,}500{,}000 - \$3{,}200{,}000 + \$400{,}000 = \$9{,}700{,}000$$
 > >
-> > The $\$400{,}000$ of adverse prior-year development indicates that reserves held at 12/31/2023 were deficient by that amount, requiring strengthening in 2024.
+> > The \$$400{,}000$ of adverse prior-year development indicates that reserves held at 12/31/2023 were deficient by that amount, requiring strengthening in 2024.

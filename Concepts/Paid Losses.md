@@ -10,7 +10,7 @@
 - Paid ultimates from the [[Chain Ladder Method|chain ladder]] and paid ultimates from incurred methods should be reconciled; large differences signal reserve adequacy changes
 
 > [!example]- Paid vs. Incurred at an Early Maturity {Example}
-> At 12 months, accident year 2023 shows paid losses of $\$200{,}000$ and case reserves of $\$350{,}000$. The volume-weighted 12-to-ultimate paid LDF is $4.50$.
+> At 12 months, accident year 2023 shows paid losses of \$$200{,}000$ and case reserves of \$$350{,}000$. The volume-weighted 12-to-ultimate paid LDF is $4.50$.
 >
 > > [!answer]-
 > > $$\text{Incurred (Reported)} = \$200{,}000 + \$350{,}000 = \$550{,}000$$

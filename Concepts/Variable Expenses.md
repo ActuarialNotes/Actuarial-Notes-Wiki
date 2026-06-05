@@ -5,7 +5,7 @@
 - A shift in distribution channel (e.g., moving from agent-driven to direct-to-consumer) will reduce the variable expense ratio and, all else equal, lower the indicated rate; actuaries must reflect such structural changes prospectively
 
 > [!example]- Variable Expense Ratio in Ratemaking {Example}
-> A personal auto insurer has commissions of $15\%$, premium taxes of $2\%$, and other variable acquisition costs of $3\%$. The pure premium is $\$300$, fixed expense per policy is $\$40$, average premium is $\$800$, and the profit provision is $5\%$.
+> A personal auto insurer has commissions of $15\%$, premium taxes of $2\%$, and other variable acquisition costs of $3\%$. The pure premium is \$$300$, fixed expense per policy is \$$40$, average premium is \$$800$, and the profit provision is $5\%$.
 >
 > > [!answer]-
 > > Variable expense ratio $V = 15\% + 2\% + 3\% = 20\%$. Fixed expense ratio $= \$40 / \$800 = 5\%$. $\text{PLR} = 1 - 0.20 - 0.05 - 0.05 = 0.70$. Indicated rate $= \$300 / 0.70 = \$428.57$.

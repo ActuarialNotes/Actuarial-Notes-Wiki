@@ -8,8 +8,8 @@
 - Long-tail lines carry far larger IBNR relative to reported losses than short-tail lines; see [[Long Tail Lines]]
 
 > [!example]- Calculating IBNR for an Accident Year {Example}
-> An accident year has estimated ultimate losses of $\$1{,}200{,}000$ and reported losses (paid + case reserves) of $\$800{,}000$. Calculate the required IBNR reserve.
+> An accident year has estimated ultimate losses of \$$1{,}200{,}000$ and reported losses (paid + case reserves) of \$$800{,}000$. Calculate the required IBNR reserve.
 >
 > > [!answer]-
 > > $$IBNR = \$1{,}200{,}000 - \$800{,}000 = \$400{,}000$$
-> > The insurer must hold $\$400{,}000$ in IBNR reserves to cover claims not yet reported.
+> > The insurer must hold \$$400{,}000$ in IBNR reserves to cover claims not yet reported.

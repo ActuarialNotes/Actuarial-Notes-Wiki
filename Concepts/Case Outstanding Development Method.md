@@ -21,4 +21,4 @@
 > >
 > > Traditional incurred method (for comparison): $1{,}300{,}000 \times 1.350 = \$1{,}755{,}000$
 > >
-> > IBNR (case method) $= 1{,}800{,}000 - 1{,}300{,}000 = \$500{,}000$; the $\$45{,}000$ difference reflects the case method's explicit recognition that current cases will develop beyond their stated amounts
+> > IBNR (case method) $= 1{,}800{,}000 - 1{,}300{,}000 = \$500{,}000$; the \$$45{,}000$ difference reflects the case method's explicit recognition that current cases will develop beyond their stated amounts

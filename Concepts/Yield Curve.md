@@ -10,7 +10,7 @@ The **yield curve** is a graph plotting the [[Spot Rate]] $s_t$ (or yield to mat
 ![[Media/Yield_curve_types.svg|500]]
 
 > [!example]- Reading and Using a Yield Curve {Example}
-> The yield curve gives $s_1 = 3\%$, $s_2 = 4\%$, $s_3 = 4.5\%$. Price a 3-year $\$1{,}000$ bond paying annual coupons of $\$50$.
+> The yield curve gives $s_1 = 3\%$, $s_2 = 4\%$, $s_3 = 4.5\%$. Price a 3-year \$$1{,}000$ bond paying annual coupons of \$$50$.
 >
 > > [!answer]-
 > > $$P = \frac{50}{1.03} + \frac{50}{1.04^2} + \frac{1050}{1.045^3}$$

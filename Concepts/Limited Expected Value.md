@@ -21,4 +21,4 @@ The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is th
 >
 > > [!answer]-
 > > $$E[X \wedge 2{,}000] = 1{,}000\left(1 - e^{-2{,}000/1{,}000}\right) = 1{,}000(1 - e^{-2}) \approx 1{,}000(0.8647) = 864.7$$
-> > The insurer expects to pay $\$864.70$ per loss.
+> > The insurer expects to pay \$$864.70$ per loss.

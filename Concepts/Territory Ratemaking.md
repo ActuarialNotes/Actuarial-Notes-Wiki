@@ -13,10 +13,10 @@
 - Territory boundaries should reflect actuarially distinct risk levels; overly granular territories reduce data credibility while overly broad ones mask real cost differences
 
 > [!example]- Territory Differential Calculation {Example}
-> Base territory: $10{,}000$ exposures, $\$2{,}000{,}000$ losses. Urban territory: $4{,}000$ exposures, $\$1{,}200{,}000$ losses.
+> Base territory: $10{,}000$ exposures, \$$2{,}000{,}000$ losses. Urban territory: $4{,}000$ exposures, \$$1{,}200{,}000$ losses.
 >
 > > [!answer]-
 > > $$\text{Base loss cost} = 2{,}000{,}000 / 10{,}000 = \$200$$
 > > $$\text{Urban loss cost} = 1{,}200{,}000 / 4{,}000 = \$300$$
 > > $$\text{Urban relativity} = 300/200 = 1.50$$
-> > If the base rate is $\$400$, the urban rate $= \$400 \times 1.50 = \$600$.
+> > If the base rate is \$$400$, the urban rate $= \$400 \times 1.50 = \$600$.

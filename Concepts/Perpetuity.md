@@ -10,7 +10,7 @@ A **perpetuity** is an annuity that pays 1 per period forever. For a **perpetuit
 - Perpetuities model instruments such as consols, preferred stock with fixed dividends, or endowments intended to last indefinitely.
 
 > [!example]- Endowment Fund Perpetuity {Example}
-> A university endowment must pay $\$50{,}000$ per year in perpetuity, with the first payment one year from now. If the fund earns $i = 4\%$ per year, how much must be deposited today?
+> A university endowment must pay \$$50{,}000$ per year in perpetuity, with the first payment one year from now. If the fund earns $i = 4\%$ per year, how much must be deposited today?
 >
 > > [!answer]-
 > > This is a perpetuity-immediate, so:

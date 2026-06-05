@@ -5,7 +5,7 @@
 > $$= \frac{\text{Number of Claims}}{\text{Exposure Units}}$$
 
 - Combined with [[Severity]] (average cost per claim), frequency determines the pure premium: $\text{Pure Premium} = \text{Frequency} \times \text{Severity}$
-- Exposure units vary by line: car-years (auto), $\$100$ of payroll (workers comp), house-years (homeowners); frequency must be stated relative to its exposure base
+- Exposure units vary by line: car-years (auto), \$$100$ of payroll (workers comp), house-years (homeowners); frequency must be stated relative to its exposure base
 - In reserving, separate claim count [[Development Triangle|triangles]] track how the number of reported claims grows over time, enabling the [[Frequency-Severity Method]] to isolate count-driven reserve changes from cost-driven ones
 - Rising frequency can signal adverse claim environment, increased litigation, or a shift in policy mix; distinguishing it from severity trends is critical for accurate reserve selection
 
@@ -14,4 +14,4 @@
 >
 > > [!answer]-
 > > $$\text{Frequency} = \frac{1{,}750}{25{,}000} = 0.070 \text{ claims per employee-year}$$
-> > If average [[Severity]] is projected at $\$18{,}000$, then: $\text{Pure Premium} = 0.070 \times \$18{,}000 = \$1{,}260$ per employee-year.
+> > If average [[Severity]] is projected at \$$18{,}000$, then: $\text{Pure Premium} = 0.070 \times \$18{,}000 = \$1{,}260$ per employee-year.

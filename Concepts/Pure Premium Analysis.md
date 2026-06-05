@@ -14,8 +14,8 @@
 > > [!answer]-
 > > | Territory | Losses | Exposures | Pure Premium | Relativity |
 > > |---|---|---|---|---|
-> > | Urban | $1{,}500{,}000$ | $5{,}000$ | $\$300$ | $2.00$ |
-> > | Suburban | $1{,}760{,}000$ | $8{,}000$ | $\$220$ | $1.47$ |
-> > | Rural | $450{,}000$ | $3{,}000$ | $\$150$ | $1.00$ |
+> > | Urban | $1{,}500{,}000$ | $5{,}000$ | \$$300$ | $2.00$ |
+> > | Suburban | $1{,}760{,}000$ | $8{,}000$ | \$$220$ | $1.47$ |
+> > | Rural | $450{,}000$ | $3{,}000$ | \$$150$ | $1.00$ |
 > >
 > > Urban losses are twice as expensive per exposure as Rural; these relativities feed directly into territorial rate differentials.

@@ -11,7 +11,7 @@
 - Regulators and rating bureaus may define CAT events by industry loss thresholds (e.g., PCS designations) or by event type; consistent identification across years is essential for comparability
 
 > [!example]- Catastrophe Loading in a Homeowners Rate {Example}
-> Historical losses over 5 years total $\$50{,}000{,}000$, of which $\$8{,}000{,}000$ is from a single hurricane. Annual exposures $= 10{,}000$. CAT model indicates expected annual CAT loss $= \$600{,}000$.
+> Historical losses over 5 years total \$$50{,}000{,}000$, of which \$$8{,}000{,}000$ is from a single hurricane. Annual exposures $= 10{,}000$. CAT model indicates expected annual CAT loss $= \$600{,}000$.
 >
 > > [!answer]-
 > > Remove the hurricane from base experience:

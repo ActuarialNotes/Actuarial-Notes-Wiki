@@ -5,7 +5,7 @@
 - Because schedule rating relies on underwriter judgment rather than statistical credibility, it is subject to consistency concerns; regulators review schedule rating to ensure credits and debits are not used as a disguised form of competitive discounting
 
 > [!example]- Schedule Rating Modification {Example}
-> A commercial general liability risk has a manual premium of $\$20{,}000$. The underwriter assigns a $-10\%$ credit for an excellent safety program and a $+5\%$ debit for older building condition.
+> A commercial general liability risk has a manual premium of \$$20{,}000$. The underwriter assigns a $-10\%$ credit for an excellent safety program and a $+5\%$ debit for older building condition.
 >
 > > [!answer]-
-> > Net schedule modification $= -10\% + 5\% = -5\%$. Modified premium $= \$20{,}000 \times (1 - 0.05) = \$19{,}000$. If the insured also qualifies for an experience modification of $0.90$, the experience modification is then applied to the schedule-rated premium: $\$19{,}000 \times 0.90 = \$17{,}100$.
+> > Net schedule modification $= -10\% + 5\% = -5\%$. Modified premium $= \$20{,}000 \times (1 - 0.05) = \$19{,}000$. If the insured also qualifies for an experience modification of $0.90$, the experience modification is then applied to the schedule-rated premium: \$$19{,}000 \times 0.90 = \$17{,}100$.

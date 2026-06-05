@@ -12,7 +12,7 @@
 
 **Shipping  Insurance**: In the First Babylonian Empire, [[The Code of Hammurabi]] law (**1750 BCE**) stipulated the rules for loan repayment. In particular for *charter parties*, a.k.a "ship for hires". 
 
-The concept of *bottomry* was invented to transfer risk. Bottomry works in a similar way as modern [[Catastrophe Bond|catastrophe bonds]].^[If you issue a catastrophe bond, you pay regular interest (\$) and the principal ($\$\$) to the buyer of the bond *unless* a disaster occurs.] ^[[Wikipedia - Bottomry](https://en.wikipedia.org/wiki/Bottomry)]  This was a last resort security for the master of the ship, in case anything went wrong on the journey. If urgent repairs were needed, they could dock at the nearest port and be reimbursed the costs.
+The concept of *bottomry* was invented to transfer risk. Bottomry works in a similar way as modern [[Catastrophe Bond|catastrophe bonds]].^[If you issue a catastrophe bond, you pay regular interest and the principal to the buyer of the bond *unless* a disaster occurs.] ^[[Wikipedia - Bottomry](https://en.wikipedia.org/wiki/Bottomry)]  This was a last resort security for the master of the ship, in case anything went wrong on the journey. If urgent repairs were needed, they could dock at the nearest port and be reimbursed the costs.
 
 
 ![[Ancient-Babylon.jpg]]

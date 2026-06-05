@@ -16,8 +16,8 @@
 - **[[Truncation]]**: only observations exceeding a threshold $d$ are recorded; condition on $X > d$, contributing $f(x \mid \theta)/S(d \mid \theta)$
 
 > [!example]- MLE for an Exponential Distribution {Example}
-> Five claim sizes (in $\$1{,}000$s) are: $2, 3, 5, 4, 6$. Assuming $X_i \sim \text{Exp}(\theta)$, find the MLE of $\theta$.
+> Five claim sizes (in \$$1{,}000$s) are: $2, 3, 5, 4, 6$. Assuming $X_i \sim \text{Exp}(\theta)$, find the MLE of $\theta$.
 >
 > > [!answer]-
 > > For $\text{Exp}(\theta)$: $f(x) = \frac{1}{\theta}e^{-x/\theta}$, so $\ell(\theta) = -n\ln\theta - \frac{1}{\theta}\sum x_i$.
-> > Setting $\ell'(\theta) = -\frac{n}{\theta} + \frac{\sum x_i}{\theta^2} = 0$ gives $\hat{\theta} = \bar{x} = \frac{2+3+5+4+6}{5} = 4$ (i.e., $\$4{,}000$).
+> > Setting $\ell'(\theta) = -\frac{n}{\theta} + \frac{\sum x_i}{\theta^2} = 0$ gives $\hat{\theta} = \bar{x} = \frac{2+3+5+4+6}{5} = 4$ (i.e., \$$4{,}000$).

@@ -11,7 +11,7 @@ An **amortization schedule** is a table that breaks every loan payment into its 
 The principal portions form a geometric sequence: $PR_k = PR_1 \cdot (1+i)^{k-1}$. The interest portions decrease by the same factor. The schedule ends when $OB_n = 0$.
 
 > [!example]- 3-Payment Amortization Schedule {💡 Example}
-> A $\$3{,}000$ loan is repaid with 3 level annual payments at $i = 10\%$. Construct the full amortization schedule.
+> A \$$3{,}000$ loan is repaid with 3 level annual payments at $i = 10\%$. Construct the full amortization schedule.
 >
 > > [!answer]- Answer
 > > Payment: $P = 3000 / a_{\overline{3}|10\%} = 3000 / 2.4869 = \$1{,}206.34$

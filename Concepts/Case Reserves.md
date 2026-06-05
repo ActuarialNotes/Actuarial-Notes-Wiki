@@ -10,7 +10,7 @@
 - Total unpaid claim liability = Case Reserves + IBNR; case reserves cover known claims while IBNR covers unreported claims and development on known claims
 
 > [!example]- Case Reserves in the Incurred Triangle {Example}
-> At 12-month evaluation, AY 2023 has $\$400{,}000$ paid and $\$600{,}000$ in case reserves. The 12-to-ultimate CDF is $1.50$.
+> At 12-month evaluation, AY 2023 has \$$400{,}000$ paid and \$$600{,}000$ in case reserves. The 12-to-ultimate CDF is $1.50$.
 >
 > > [!answer]-
 > > Reported (incurred) at 12 months $= 400{,}000 + 600{,}000 = \$1{,}000{,}000$

@@ -10,7 +10,7 @@
 - Average severity triangles can be sensitive to large individual losses; capping or excluding shock losses before projecting is common practice
 
 > [!example]- Projecting Ultimates via Frequency-Severity {Example}
-> An accident year has an earned exposure of $10{,}000$ car-years. The projected ultimate claim frequency is $0.08$ claims per car-year, and the projected ultimate average severity is $\$12{,}500$. Estimate ultimate losses.
+> An accident year has an earned exposure of $10{,}000$ car-years. The projected ultimate claim frequency is $0.08$ claims per car-year, and the projected ultimate average severity is \$$12{,}500$. Estimate ultimate losses.
 >
 > > [!answer]-
 > > $$\text{Ultimate Claim Count} = 10{,}000 \times 0.08 = 800 \text{ claims}$$

@@ -9,7 +9,7 @@
 - Less restrictive than [[Cash Flow Matching]] since exact cash flow timing is not required
 
 > [!example]- Verifying Redington Immunization {Example}
-> A company has a single liability of $\$10{,}000$ due in 4 years. It immunizes using two zero-coupon bonds: Bond A maturing in 2 years and Bond B maturing in 6 years. The current yield rate is $5\%$. Find the face values of the two bonds that satisfy the first two Redington conditions, and verify the third.
+> A company has a single liability of \$$10{,}000$ due in 4 years. It immunizes using two zero-coupon bonds: Bond A maturing in 2 years and Bond B maturing in 6 years. The current yield rate is $5\%$. Find the face values of the two bonds that satisfy the first two Redington conditions, and verify the third.
 >
 > > [!answer]-
 > > Let $X$ = face of 2-year bond, $Y$ = face of 6-year bond, $v = 1/1.05$.

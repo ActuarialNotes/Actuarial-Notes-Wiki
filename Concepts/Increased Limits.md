@@ -12,4 +12,4 @@
 >
 > > [!answer]-
 > > $$\text{Rate at } \$500K = \$800 \times ILF(500K) = \$800 \times 1.35 = \$1{,}080$$
-> > The $200K–$500K excess layer alone costs $\$800 \times (1.35 - 1.25) = \$80$.
+> > The $200K–$500K excess layer alone costs \$$800 \times (1.35 - 1.25) = \$80$.

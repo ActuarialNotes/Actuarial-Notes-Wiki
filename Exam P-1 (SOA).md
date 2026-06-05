@@ -32,20 +32,20 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > 6. Calculate the [[Expected Value]], **Variance**, and **Standard Deviation** of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]].
 >
 > ### Discrete Univariate Distributions 
-> - [[Binomial]]
-> - [[Geometric]]
-> - [[Hypergeometric]]
-> - [[Negative Binomial]]
-> - [[Poisson]]
-> - [[Uniform Discrete|Uniform]]
+> - [[Binomial Distribution]]
+> - [[Geometric Distribution]]
+> - [[Hypergeometric Distribution]]
+> - [[Negative Binomial Distribution]]
+> - [[Poisson Distribution]]
+> - [[Uniform Discrete Distribution|Uniform]]
 >
 > ### Continuous Univariate Distributions 
 > - [[Beta]]
-> - [[Exponential]]
+> - [[Exponential Distribution]]
 > - [[Gamma]]
-> - [[Lognormal]]
-> - [[Normal]]
-> - [[Uniform Continuous|Uniform]]
+> - [[Lognormal Distribution]]
+> - [[Normal Distribution]]
+> - [[Uniform Continuous Distribution|Uniform]]
 
 > [!example]- Multivariate Random Variables {23-30%}
 > Understand key concepts in the discrete and continuous settings concerning [[Multivariate Distribution|Multivariate Distributions]], the [[Order Statistics|Distribution of Order Statistics]] for [[Independent Random Variables]], and linear combinations of independent random variables, along with associated applications.

@@ -126,7 +126,7 @@ function refKey(ref: WikiEntryRef): string {
 // file): [[Actuarial Notes Wiki|Wiki]] / **Exam P-1 (SOA)**
 // or [[Wiki]] / [[Concepts]] / **Concept Name**
 // These are not wanted in the quiz app and add non-existent "concepts" to popup lists.
-const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
+export const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
 
 // Insert a blank blockquote line before a numbered-list item that immediately
 // follows a paragraph line in the same blockquote, so remark-gfm creates <ol>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -8,6 +8,7 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
+import { ListenView } from '@/components/wiki/ListenView'
 import { MathViewContext } from '@/contexts/MathViewContext'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
@@ -44,6 +45,7 @@ export function ConceptPopup() {
   const [showGallery, setShowGallery] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
   const [mathView, setMathView] = useState(false)
+  const [listenView, setListenView] = useState(false)
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -165,9 +167,9 @@ export function ConceptPopup() {
     }
   }, [open, height])
 
-  // Reset math view when popup closes.
+  // Reset math / listen view when popup closes.
   useEffect(() => {
-    if (!open) setMathView(false)
+    if (!open) { setMathView(false); setListenView(false) }
   }, [open])
 
   // Fetch question count for the current concept (uses cached question list).
@@ -320,11 +322,19 @@ export function ConceptPopup() {
               </div>
               <button
                 type="button"
-                onClick={() => { setMathView(true); setShowPlayMenu(false) }}
+                onClick={() => { setMathView(true); setListenView(false); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <Sigma className="h-3.5 w-3.5 shrink-0" />
                 Math View
+              </button>
+              <button
+                type="button"
+                onClick={() => { setListenView(true); setMathView(false); setShowPlayMenu(false) }}
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+              >
+                <Headphones className="h-3.5 w-3.5 shrink-0" />
+                Listen
               </button>
               <button
                 type="button"
@@ -352,6 +362,18 @@ export function ConceptPopup() {
               aria-label="Exit Math View"
             >
               <Sigma className="h-4 w-4" />
+            </button>
+          )}
+          {/* Headphones icon — visible only while in Listen view; clicking exits it */}
+          {listenView && (
+            <button
+              type="button"
+              onClick={() => setListenView(false)}
+              className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
+              title="Exit Listen"
+              aria-label="Exit Listen"
+            >
+              <Headphones className="h-4 w-4" />
             </button>
           )}
           {images.length > 0 && (
@@ -415,7 +437,9 @@ export function ConceptPopup() {
             </div>
           )}
           {content !== null && (
-            mathView ? (
+            listenView ? (
+              <ListenView key={current.name} markdown={content} />
+            ) : mathView ? (
               mathBlocks.length > 0 ? (
                 <div className="space-y-4">
                   {mathBlocks.map((block, i) => (

@@ -36,7 +36,7 @@ export function wikiExamIdToProgressKey(examId: string): string {
 }
 
 // Strip [[wiki links]] from text, keeping only display names, for use as excerpts.
-function cleanWikiLinks(text: string): string {
+export function cleanWikiLinks(text: string): string {
   return text
     .replace(/\[\[[^\]|]+\|([^\]]+)\]\]/g, '$1')
     .replace(/\[\[([^\]]+)\]\]/g, (_, t) =>

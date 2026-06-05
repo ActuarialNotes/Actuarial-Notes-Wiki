@@ -16,6 +16,7 @@ import Upgrade from '@/pages/Upgrade'
 import Store from '@/pages/Store'
 import Sidebar from '@/components/Sidebar'
 import BottomNav from '@/components/BottomNav'
+import OnboardingTour from '@/components/OnboardingTour'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 
@@ -139,6 +140,7 @@ export default function App({ initialSession }: { initialSession: Session | null
               </Routes>
             </main>
             <BottomNav />
+            <OnboardingTour />
           </div>
         </ExamProgressProvider>
       </AuthProvider>

@@ -83,10 +83,14 @@
 }
 
 /* Listen view: the word/equation currently being spoken by text-to-speech.
-   .tts-tok carries the transition; .tts-tok--active is the highlight. */
+   .tts-tok carries the transition; .tts-tok--active is the highlight.
+   scroll-margin keeps the active word clear of the sticky toolbar at the top
+   and gives it breathing room above the bottom edge when auto-scrolling. */
 .tts-tok {
   border-radius: 3px;
   transition: background-color 120ms ease, color 120ms ease;
+  scroll-margin-top: 4rem;
+  scroll-margin-bottom: 6rem;
 }
 .tts-tok--active {
   background: hsl(var(--primary) / 0.18);

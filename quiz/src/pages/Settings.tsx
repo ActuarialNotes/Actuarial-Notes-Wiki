@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Loader2, Settings2, ChevronRight, Star, Sun, Moon, GraduationCap } from 'lucide-react'
+import { Loader2, User, ChevronRight, Star, Sun, Moon, GraduationCap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
@@ -286,7 +286,7 @@ export default function Settings() {
   const navItems = [
     { id: 'support', label: 'Support' },
     { id: 'appearance', label: 'Appearance' },
-    ...(user ? BASE_NAV_ITEMS : []),
+    ...(user ? BASE_NAV_ITEMS : [{ id: 'signin', label: 'Sign In' }]),
   ]
 
   // ---- Onboarding tour (replayable from Support) ----
@@ -549,8 +549,8 @@ export default function Settings() {
       <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8">
         <div className="mb-6">
           <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            <Settings2 className="h-6 w-6" />
-            Settings
+            <User className="h-6 w-6" />
+            You
           </h1>
           {user && <p className="text-sm text-muted-foreground mt-1">{user.email}</p>}
         </div>
@@ -607,7 +607,10 @@ export default function Settings() {
             {/* ---- Appearance ---- */}
             <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">
               <Card>
-                <CardContent className="pt-4">
+                <CardHeader>
+                  <CardTitle>Appearance</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div className="flex gap-2">
                       <button
                         type="button"
@@ -641,7 +644,11 @@ export default function Settings() {
             </section>
 
             {/* ---- Inline login (logged out) ---- */}
-            {!user && <InlineAuthForm />}
+            {!user && (
+              <section ref={el => { sectionRefs.current.signin = el }} id="signin">
+                <InlineAuthForm />
+              </section>
+            )}
 
             {user && <>
 

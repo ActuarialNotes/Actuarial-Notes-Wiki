@@ -94,10 +94,16 @@ export function setWikiIndexBundle(items: WikiIndexItem[]): void { bundledIndex 
 // incorrectly styled as missing during hydration).
 export function isInWikiIndex(kind: string, name: string): boolean {
   if (!bundledIndex) return true
-  const expectedCategory = kind === 'resource' ? 'document' : kind
   const nameLower = name.toLowerCase()
+  // 'resource' maps to 'document' in the index. 'concept' also checks 'document'
+  // because bare [[Name]] wikilinks default to kind 'concept' even when the
+  // target is a resource/book entry.
+  const categories =
+    kind === 'resource' ? ['document'] :
+    kind === 'concept' ? ['concept', 'document'] :
+    [kind]
   return bundledIndex.some(
-    item => item.category === expectedCategory && item.name.toLowerCase() === nameLower
+    item => categories.includes(item.category) && item.name.toLowerCase() === nameLower
   )
 }
 

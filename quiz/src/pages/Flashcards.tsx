@@ -863,13 +863,15 @@ function SortableCard({
         ref={setNodeRef}
         style={style}
         data-card-name={card.name}
+        {...listeners}
+        {...attributes}
         onClick={(e) => {
           const target = e.target as HTMLElement
           if (!target.closest('a, button, [role="button"], input, select, textarea')) {
             setFlipped(false)
           }
         }}
-        className={`${baseClass} ${colorClass} cursor-pointer`}
+        className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
         {/* Header: name + play + study shortcut + delete */}
         <div className="flex items-center gap-1 px-2.5 pt-2 pb-1.5 border-b">

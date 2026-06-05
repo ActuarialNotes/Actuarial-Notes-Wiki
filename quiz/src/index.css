@@ -120,6 +120,24 @@
   .onboarding-roll-in { animation: none; }
 }
 
+/* Onboarding tour: pulsing emerald spotlight ring drawn around the element the
+   user is being asked to tap. pointer-events:none so the target stays tappable. */
+@keyframes onboarding-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px hsl(160 84% 39%), 0 0 0 5px hsl(160 84% 39% / 0.35); }
+  50%      { box-shadow: 0 0 0 3px hsl(160 84% 39%), 0 0 0 11px hsl(160 84% 39% / 0.12); }
+}
+.onboarding-spotlight {
+  position: fixed;
+  z-index: 60;
+  pointer-events: none;
+  border-radius: 12px;
+  animation: onboarding-pulse 1.4s ease-in-out infinite;
+  transition: top 140ms ease, left 140ms ease, width 140ms ease, height 140ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-spotlight { animation: none; box-shadow: 0 0 0 3px hsl(160 84% 39%); }
+}
+
 /* Score reveal: each question pip on the Review page pops in via stagger.
    Initial state is hidden (set inline by the component); the animation runs
    when the .score-pip-in class is added. */

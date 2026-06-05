@@ -13,7 +13,7 @@
 - In ratemaking, historical losses are adjusted to ultimate, trended to the future rating period, and loaded for both ALAE and ULAE before dividing by earned exposures or premium
 
 > [!example]- Combined Loss + LAE Ratio {Example}
-> AY 2023: ultimate losses $\$650{,}000$, ALAE $\$78{,}000$, ULAE loading $\$26{,}000$, earned premium $\$1{,}200{,}000$.
+> AY 2023: ultimate losses \$$650{,}000$, ALAE \$$78{,}000$, ULAE loading \$$26{,}000$, earned premium \$$1{,}200{,}000$.
 >
 > > [!answer]-
 > > Total Loss + LAE $= 650{,}000 + 78{,}000 + 26{,}000 = \$754{,}000$

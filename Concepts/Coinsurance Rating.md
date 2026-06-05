@@ -9,7 +9,7 @@ where $c$ is the insurer's coinsurance percentage (e.g., $c = 0.80$ for an 80/20
 - In property insurance, "coinsurance" can alternatively refer to a **penalty clause** requiring the insured to carry coverage equal to a minimum percentage of replacement value; the rating adjustment here is a separate concept
 
 > [!example]- Coinsurance Rate Calculation {Example}
-> A full-coverage health policy has a manual rate of $\$1{,}200$/year. The insurer offers an 80/20 coinsurance plan (insurer pays 80%). What is the coinsurance rate?
+> A full-coverage health policy has a manual rate of \$$1{,}200$/year. The insurer offers an 80/20 coinsurance plan (insurer pays 80%). What is the coinsurance rate?
 >
 > > [!answer]-
 > > $$\text{Coinsurance Rate} = 1{,}200 \times 0.80 = \$960\text{/year}$$

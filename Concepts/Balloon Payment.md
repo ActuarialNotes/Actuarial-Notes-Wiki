@@ -10,7 +10,7 @@ A **balloon payment** is a final loan payment that is larger than the regular pe
 - Or equivalently, $B$ is the [[Outstanding Balance]] $OB_{n-1}$ accumulated one more period: $B = OB_{n-1}(1+i)$.
 
 > [!example]- Balloon Payment on a Loan {Example}
-> A borrower takes a $\$10{,}000$ loan at $8\%$ annual interest. The borrower makes payments of $\$1{,}500$ at the end of each year for 9 years, then clears the loan with a balloon payment at the end of year 10. Find the balloon payment.
+> A borrower takes a \$$10{,}000$ loan at $8\%$ annual interest. The borrower makes payments of \$$1{,}500$ at the end of each year for 9 years, then clears the loan with a balloon payment at the end of year 10. Find the balloon payment.
 >
 > > [!answer]-
 > > First find the outstanding balance after 9 payments using the retrospective method:
@@ -19,4 +19,4 @@ A **balloon payment** is a final loan payment that is larger than the regular pe
 > > $$OB_9 = 10000(1.9990) - 1500(12.4876) = 19990 - 18731.40 = \$1{,}258.60$$
 > > The balloon payment at time 10 is:
 > > $$B = OB_9(1.08) = 1258.60(1.08) = \$1{,}359.29$$
-> > This exceeds the regular payment of $\$1{,}500$? No — $\$1{,}359.29 < \$1{,}500$, making this actually a **drop payment**. To get a true balloon, the regular payment must be set even lower, e.g., $\$1{,}200$: $OB_9 = 19990 - 1200(12.4876) = 19990 - 14985.12 = \$5{,}004.88$, giving balloon $= 5004.88(1.08) = \$5{,}405.27 \gg \$1{,}200$.
+> > This exceeds the regular payment of \$$1{,}500$? No — \$$1{,}359.29 < \$1{,}500$, making this actually a **drop payment**. To get a true balloon, the regular payment must be set even lower, e.g., \$$1{,}200$: $OB_9 = 19990 - 1200(12.4876) = 19990 - 14985.12 = \$5{,}004.88$, giving balloon $= 5004.88(1.08) = \$5{,}405.27 \gg \$1{,}200$.

@@ -11,7 +11,7 @@
 - Written premium is used for production metrics, market share analysis, and agent commission calculations, but [[On Level Premium]] (which adjusts earned premium) is used for ratemaking
 
 > [!example]- Written vs. Earned Premium {Example}
-> A $12$-month policy is written $10/1/2024$ for $\$1{,}200$. What are CY 2024 written and earned premiums?
+> A $12$-month policy is written $10/1/2024$ for \$$1{,}200$. What are CY 2024 written and earned premiums?
 >
 > > [!answer]-
 > > $$\text{CY 2024 written premium} = \$1{,}200 \quad \text{(full premium booked on } 10/1/2024\text{)}$$

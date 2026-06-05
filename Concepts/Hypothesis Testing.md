@@ -20,8 +20,8 @@
 - Reject $H_0$ when p-value $< \alpha$
 
 > [!example]- One-Sample Z-Test for a Mean {Example}
-> A claims adjuster believes average claim size is $\$5{,}000$. A sample of $n = 100$ claims has $\bar{x} = 5{,}200$ and $\sigma = 800$. Test $H_0: \mu = 5{,}000$ vs. $H_1: \mu > 5{,}000$ at $\alpha = 0.05$.
+> A claims adjuster believes average claim size is \$$5{,}000$. A sample of $n = 100$ claims has $\bar{x} = 5{,}200$ and $\sigma = 800$. Test $H_0: \mu = 5{,}000$ vs. $H_1: \mu > 5{,}000$ at $\alpha = 0.05$.
 >
 > > [!answer]-
 > > $$Z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}} = \frac{5{,}200 - 5{,}000}{800 / \sqrt{100}} = \frac{200}{80} = 2.50$$
-> > The critical value for a one-sided test at $\alpha = 0.05$ is $z_{0.05} = 1.645$. Since $2.50 > 1.645$, **reject $H_0$**. There is sufficient evidence that the mean claim size exceeds $\$5{,}000$.
+> > The critical value for a one-sided test at $\alpha = 0.05$ is $z_{0.05} = 1.645$. Since $2.50 > 1.645$, **reject $H_0$**. There is sufficient evidence that the mean claim size exceeds \$$5{,}000$.

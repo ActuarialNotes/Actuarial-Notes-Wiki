@@ -10,11 +10,11 @@
 - Tail factor $= 1.000$ means all development is captured within the observable triangle; any value $> 1.000$ implies additional emergence beyond the last age
 
 > [!example]- Tail Factor Impact {Example}
-> Last observable age is 120 months. Reported at 120 months: $\$2{,}000{,}000$. Two tail estimates are under consideration: 1.030 and 1.050.
+> Last observable age is 120 months. Reported at 120 months: \$$2{,}000{,}000$. Two tail estimates are under consideration: 1.030 and 1.050.
 >
 > > [!answer]-
 > > With tail $= 1.030$: Ultimate $= 2{,}000{,}000 \times 1.030 = \$2{,}060{,}000$; IBNR $= \$60{,}000$
 > >
 > > With tail $= 1.050$: Ultimate $= 2{,}000{,}000 \times 1.050 = \$2{,}100{,}000$; IBNR $= \$100{,}000$
 > >
-> > The $\$40{,}000$ difference illustrates that even a 2-point tail uncertainty translates directly into reserve uncertainty — especially material when aggregated across many accident years
+> > The \$$40{,}000$ difference illustrates that even a 2-point tail uncertainty translates directly into reserve uncertainty — especially material when aggregated across many accident years

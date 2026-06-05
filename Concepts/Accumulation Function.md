@@ -15,7 +15,7 @@ The **accumulation function** $a(t)$ gives the accumulated value at time $t \geq
 - The **amount function** $A(t) = k \cdot a(t)$ gives the accumulated value of an initial investment of $k$.
 
 > [!example]- Accumulated Value Under Simple vs. Compound Interest {Example}
-> An investor deposits $\$1{,}000$ at time 0. Compare the accumulated values at $t = 5$ years under (a) simple interest at $8\%$ and (b) compound interest at $8\%$.
+> An investor deposits \$$1{,}000$ at time 0. Compare the accumulated values at $t = 5$ years under (a) simple interest at $8\%$ and (b) compound interest at $8\%$.
 >
 > > [!answer]-
 > > **(a) Simple interest:** $A(5) = 1{,}000 \times (1 + 0.08 \times 5) = 1{,}000 \times 1.40 = \$1{,}400.00$

@@ -13,7 +13,7 @@
 - A 10/1/2024 six-month policy contributes three months of earned premium to CY 2024 and three months to CY 2025
 
 > [!example]- Calendar Year Earned Premium {Example}
-> A $12$-month policy is written $7/1/2024$ for $\$1{,}200$ premium. What is CY 2024 earned premium?
+> A $12$-month policy is written $7/1/2024$ for \$$1{,}200$ premium. What is CY 2024 earned premium?
 >
 > > [!answer]-
 > > Coverage runs $7/1/2024$–$6/30/2025$. Six of twelve months fall in CY 2024.

@@ -7,8 +7,8 @@
 - In the property insurance context, a **coinsurance clause** can instead refer to a penalty applied when the insured carries less coverage than a required percentage of replacement value
 
 > [!example]- Coinsurance Payment {Example}
-> A health policy has a $\$200$ deductible and $70\%$ coinsurance. A covered loss is $\$1{,}200$.
+> A health policy has a \$$200$ deductible and $70\%$ coinsurance. A covered loss is \$$1{,}200$.
 >
 > > [!answer]-
 > > $$\text{Insurer payment} = 0.70 \times (1{,}200 - 200) = 0.70 \times 1{,}000 = \$700$$
-> > The policyholder pays $\$200$ (deductible) $+ \$300$ (30% coinsurance share) $= \$500$ total.
+> > The policyholder pays \$$200$ (deductible) $+ \$300$ (30% coinsurance share) $= \$500$ total.

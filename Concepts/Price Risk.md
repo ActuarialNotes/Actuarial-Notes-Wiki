@@ -3,7 +3,7 @@ $$\frac{\Delta P}{P} \approx -D_{Mod} \cdot \Delta j$$
 Bonds with longer [[Macaulay Duration]] have higher price risk: a 1% rise in yield causes a much larger percentage price drop for a 20-year bond than for a 2-year bond. Price risk is the complement of [[Reinvestment Risk]]: strategies that reduce one typically increase the other. [[Redington Immunization]] and [[Cash Flow Matching]] are portfolio strategies that manage price risk (and reinvestment risk) for institutions with known future liabilities.
 
 > [!example]- Price Risk and Duration {💡 Example}
-> Portfolio A has modified duration 10 years; Portfolio B has modified duration 2 years. Both are worth $\$1{,}000{,}000$. Yields rise by 0.5% ($\Delta j = 0.005$). Estimate the loss in value for each portfolio.
+> Portfolio A has modified duration 10 years; Portfolio B has modified duration 2 years. Both are worth \$$1{,}000{,}000$. Yields rise by 0.5% ($\Delta j = 0.005$). Estimate the loss in value for each portfolio.
 >
 > > [!answer]- Answer
 > > $$\Delta P_A \approx -D_{Mod} \cdot P \cdot \Delta j = -(10)(1{,}000{,}000)(0.005) = -\$50{,}000$$

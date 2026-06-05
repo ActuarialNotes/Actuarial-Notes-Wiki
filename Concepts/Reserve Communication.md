@@ -6,11 +6,11 @@
 - ASOP 43 requires disclosure of significant limitations, material uncertainties, and whether the estimate represents a range, a point estimate, or a best estimate
 
 > [!example]- Communicating a Reserve Strengthening {Example}
-> An actuary's reserve for general liability increased by $\$8{,}000{,}000$ from last year. How should this be communicated to management?
+> An actuary's reserve for general liability increased by \$$8{,}000{,}000$ from last year. How should this be communicated to management?
 >
 > > [!answer]-
 > > The communication should state:
-> > - **Amount**: reserves increased by $\$8{,}000{,}000$ (e.g., from $\$42M$ to $\$50M$)
+> > - **Amount**: reserves increased by \$$8{,}000{,}000$ (e.g., from \$$42M$ to \$$50M$)
 > > - **Cause**: adverse development on AY 2021–2023 driven by higher-than-expected severity on litigated claims
 > > - **Method change**: if the actuary shifted weight from chain ladder to BF for immature years, explain why
-> > - **Uncertainty**: the range of reasonable estimates spans $\$46M$–$\$55M$; the point estimate of $\$50M$ is the actuary's best estimate
+> > - **Uncertainty**: the range of reasonable estimates spans \$$46M$–\$$55M$; the point estimate of \$$50M$ is the actuary's best estimate

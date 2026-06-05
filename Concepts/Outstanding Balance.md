@@ -13,7 +13,7 @@
 - Note that the formula $OB_k = L - P\,a_{\overline{k}|i}$ is **incorrect** in general; it would only apply if interest were zero.
 
 > [!example]- Outstanding Balance After 3 Payments {Example}
-> A $\$20{,}000$ loan is repaid with level annual payments over 6 years at $i = 8\%$. Find the outstanding balance immediately after the 3rd payment using both methods.
+> A \$$20{,}000$ loan is repaid with level annual payments over 6 years at $i = 8\%$. Find the outstanding balance immediately after the 3rd payment using both methods.
 >
 > > [!answer]-
 > > **Payment**: $P = 20000 / a_{\overline{6}|8\%} = 20000 / 4.6229 = \$4{,}326.40$

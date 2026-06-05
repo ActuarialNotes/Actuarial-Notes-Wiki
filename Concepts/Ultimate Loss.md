@@ -19,4 +19,4 @@
 > >
 > > BF Ultimate $= 500{,}000 + 1{,}000{,}000 \times 0.583 = \$1{,}083{,}000$
 > >
-> > The actuary might select $\$1{,}140{,}000$ (a blend), implying IBNR $= 1{,}140{,}000 - 500{,}000 = \$640{,}000$
+> > The actuary might select \$$1{,}140{,}000$ (a blend), implying IBNR $= 1{,}140{,}000 - 500{,}000 = \$640{,}000$

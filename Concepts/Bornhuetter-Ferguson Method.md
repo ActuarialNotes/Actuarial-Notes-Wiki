@@ -19,4 +19,4 @@
 > >
 > > Ultimate $= 600{,}000 + 613{,}600 = \$1{,}213{,}600$
 > >
-> > Chain Ladder comparison: $600{,}000 \times 1.896 = \$1{,}137{,}600$ — BF is $\$76{,}000$ higher because the a priori expectation exceeds what the early emergence implies
+> > Chain Ladder comparison: $600{,}000 \times 1.896 = \$1{,}137{,}600$ — BF is \$$76{,}000$ higher because the a priori expectation exceeds what the early emergence implies

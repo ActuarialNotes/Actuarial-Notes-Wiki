@@ -15,7 +15,7 @@
 - Book value is used in the [[Amortization Schedule]] for bonds: each coupon period the investor earns $j \cdot BV_{k-1}$ in yield, and the difference between the coupon $Fr$ and the yield $j \cdot BV_{k-1}$ is the write-down (premium) or write-up (discount) of the book value.
 
 > [!example]- Book Value of a Premium Bond {Example}
-> A $\$1{,}000$ face value 3-year annual-coupon bond has coupon rate $8\%$ and yield rate $6\%$. Find the book value after the 2nd coupon.
+> A \$$1{,}000$ face value 3-year annual-coupon bond has coupon rate $8\%$ and yield rate $6\%$. Find the book value after the 2nd coupon.
 >
 > > [!answer]-
 > > First find the price: $P = 80\,a_{\overline{3}|6\%} + 1000\,v^3 = 80(2.6730) + 1000(0.8396) = 213.84 + 839.62 = \$1{,}053.46$.
@@ -24,4 +24,4 @@
 > >
 > > **Retrospective**: $BV_2 = 1053.46(1.06)^2 - 80\,s_{\overline{2}|6\%} = 1053.46(1.1236) - 80(2.0600) = 1183.56 - 164.80 = \$1{,}018.76$
 > >
-> > (Rounding difference; both methods agree.) The book value has moved from $\$1{,}053.46$ at time 0 toward $\$1{,}000$ at maturity, as expected for a premium bond.
+> > (Rounding difference; both methods agree.) The book value has moved from \$$1{,}053.46$ at time 0 toward \$$1{,}000$ at maturity, as expected for a premium bond.

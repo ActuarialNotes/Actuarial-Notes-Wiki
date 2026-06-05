@@ -6,7 +6,7 @@
 - ASOP 43 governs the actuary's communication obligations: scope, methods, assumptions, uncertainty, and any significant limitations must be disclosed
 
 > [!example]- Communicating Adverse Reserve Development {Example}
-> Year-end reserves were $\$50{,}000{,}000$. At the next evaluation, $\$5{,}000{,}000$ in adverse development has emerged. How should this be communicated to management vs. regulators?
+> Year-end reserves were \$$50{,}000{,}000$. At the next evaluation, \$$5{,}000{,}000$ in adverse development has emerged. How should this be communicated to management vs. regulators?
 >
 > > [!answer]-
 > > **Management**: Present the $5M adverse development by accident year and cause (e.g., higher-than-expected severity in AY 2022 GL claims), compare to prior projections, and recommend whether the current reserve selection should be strengthened.

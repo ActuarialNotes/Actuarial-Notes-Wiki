@@ -10,7 +10,7 @@
 - Experience rating creates incentive for loss control: insureds with good safety practices earn lower mods and pay less premium
 
 > [!example]- Computing an Experience Modification {Example}
-> An insured has expected losses $E = \$200{,}000$, actual losses $A = \$280{,}000$, and credibility $Z = 0.60$. What is the experience mod and adjusted premium if the manual premium is $\$100{,}000$?
+> An insured has expected losses $E = \$200{,}000$, actual losses $A = \$280{,}000$, and credibility $Z = 0.60$. What is the experience mod and adjusted premium if the manual premium is \$$100{,}000$?
 >
 > > [!answer]-
 > > $$\text{Mod} = 0.60 \times \frac{\$280{,}000}{\$200{,}000} + 0.40 \times 1.0 = 0.60 \times 1.40 + 0.40 = 0.84 + 0.40 = 1.24$$

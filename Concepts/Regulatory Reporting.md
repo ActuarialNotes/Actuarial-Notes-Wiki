@@ -5,7 +5,7 @@
 - Regulators use Schedule P data to monitor reserve adequacy across the industry and identify companies with deteriorating development patterns that signal potential insolvency
 
 > [!example]- Statement of Actuarial Opinion Requirement {Example}
-> An insurer's chain ladder ultimates are $\$40{,}000{,}000$ but its carried reserves are $\$36{,}000{,}000$. Can the actuary sign a clean opinion?
+> An insurer's chain ladder ultimates are \$$40{,}000{,}000$ but its carried reserves are \$$36{,}000{,}000$. Can the actuary sign a clean opinion?
 >
 > > [!answer]-
-> > Not without qualification. If the actuary's range of reasonable estimates is $\$38{,}000{,}000$–$\$44{,}000{,}000$ and the carried reserve of $\$36{,}000{,}000$ falls **below** this range, the actuary must issue a **deficient** (adverse) opinion under ASOP 43, disclosing the estimated deficiency and its drivers. The actuary cannot simply adopt the carried reserves as the point estimate if they fall outside the reasonable range.
+> > Not without qualification. If the actuary's range of reasonable estimates is \$$38{,}000{,}000$–\$$44{,}000{,}000$ and the carried reserve of \$$36{,}000{,}000$ falls **below** this range, the actuary must issue a **deficient** (adverse) opinion under ASOP 43, disclosing the estimated deficiency and its drivers. The actuary cannot simply adopt the carried reserves as the point estimate if they fall outside the reasonable range.

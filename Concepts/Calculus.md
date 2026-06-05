@@ -89,7 +89,7 @@ A **series** is the sum of the terms of a sequence. Two families appear constant
 | $(1+x)^k$ | $\displaystyle\sum_{n=0}^{\infty} \binom{k}{n} x^n$, \quad $|x| < 1$ |
 
 > [!example]- Geometric Series: Present Value of a Perpetuity {Example}
-> An annuity pays $\$1$ at the end of each year forever at effective annual rate $i$. Find the present value.
+> An annuity pays \$$1$ at the end of each year forever at effective annual rate $i$. Find the present value.
 >
 > > [!answer]-
 > > Let $v = \dfrac{1}{1+i}$. The present value is:

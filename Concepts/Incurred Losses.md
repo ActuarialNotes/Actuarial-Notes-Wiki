@@ -10,9 +10,9 @@
 - At ultimate maturity, incurred losses converge to paid losses as all case reserves are closed; [[IBNR]] is the gap between incurred and ultimate
 
 > [!example]- Incurred Loss Development {Example}
-> Accident year 2022 has incurred losses of $\$800{,}000$ at 24 months. The selected 24-to-ultimate incurred LDF is $1.35$. Estimate the [[IBNR]].
+> Accident year 2022 has incurred losses of \$$800{,}000$ at 24 months. The selected 24-to-ultimate incurred LDF is $1.35$. Estimate the [[IBNR]].
 >
 > > [!answer]-
 > > $$\text{Ultimate} = \$800{,}000 \times 1.35 = \$1{,}080{,}000$$
 > > $$IBNR = \$1{,}080{,}000 - \$800{,}000 = \$280{,}000$$
-> > This $\$280{,}000$ represents development expected on both unreported claims and reserve strengthening on open claims.
+> > This \$$280{,}000$ represents development expected on both unreported claims and reserve strengthening on open claims.

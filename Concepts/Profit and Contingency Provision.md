@@ -5,7 +5,7 @@
 - The provision must be set with reference to investment income — lines with longer payment tails generate more investment income, so they can support a lower underwriting profit provision while still achieving an adequate total return on equity
 
 > [!example]- Rate Derivation with Profit Provision {Example}
-> A line of business has an indicated pure premium of $\$250$, variable expense ratio of $20\%$, fixed expense ratio of $10\%$, and a profit and contingency provision of $5\%$.
+> A line of business has an indicated pure premium of \$$250$, variable expense ratio of $20\%$, fixed expense ratio of $10\%$, and a profit and contingency provision of $5\%$.
 >
 > > [!answer]-
-> > $\text{PLR} = 1 - 0.20 - 0.10 - 0.05 = 0.65$. Indicated rate $= \$250 / 0.65 = \$384.62$. The target combined ratio is $1 - 0.05 = 95\%$, meaning the insurer expects to pay out $\$0.95$ in losses and expenses for every $\$1.00$ of premium collected.
+> > $\text{PLR} = 1 - 0.20 - 0.10 - 0.05 = 0.65$. Indicated rate $= \$250 / 0.65 = \$384.62$. The target combined ratio is $1 - 0.05 = 95\%$, meaning the insurer expects to pay out \$$0.95$ in losses and expenses for every \$$1.00$ of premium collected.

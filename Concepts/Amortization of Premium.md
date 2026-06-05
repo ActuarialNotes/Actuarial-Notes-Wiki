@@ -10,7 +10,7 @@
 - The [[Book Value]] decreases each period toward $C$ at maturity.
 
 > [!example]- Premium Bond Amortization {Example}
-> A $1{,}000$ face bond with 8% annual coupons is bought at 7% yield for 5 years (price = $\$1041.00$). Find the premium amortized in year 1.
+> A $1{,}000$ face bond with 8% annual coupons is bought at 7% yield for 5 years (price = \$$1041.00$). Find the premium amortized in year 1.
 >
 > > [!answer]-
 > > Coupon $= 80$. Interest earned $= 0.07 \times 1041.00 = 72.87$. Premium amortized $= 80 - 72.87 = 7.13$. Book value after year 1: $1041.00 - 7.13 = 1033.87$.

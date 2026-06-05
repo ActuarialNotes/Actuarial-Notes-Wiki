@@ -10,9 +10,9 @@
 - Causes of deficiency include inadequate tail factors, rising severity trends, case reserve under-reporting, or a shift in [[Types of Insurance|line of business]] mix toward longer-tailed coverage
 
 > [!example]- Identifying a Reserve Deficiency {Example}
-> At year-end 2023, an actuary estimated AY 2022 ultimate losses at $\$4{,}000{,}000$. At year-end 2024, the same accident year is now estimated at $\$4{,}600{,}000$ based on continued adverse development.
+> At year-end 2023, an actuary estimated AY 2022 ultimate losses at \$$4{,}000{,}000$. At year-end 2024, the same accident year is now estimated at \$$4{,}600{,}000$ based on continued adverse development.
 >
 > > [!answer]-
 > > $$\text{Adverse Development} = \$4{,}600{,}000 - \$4{,}000{,}000 = \$600{,}000$$
 > >
-> > The 2023 reserve was deficient by $\$600{,}000$. If this pattern repeats across multiple accident years, the actuary should revisit development factors and tail assumptions to improve future reserve adequacy.
+> > The 2023 reserve was deficient by \$$600{,}000$. If this pattern repeats across multiple accident years, the actuary should revisit development factors and tail assumptions to improve future reserve adequacy.

@@ -10,9 +10,9 @@
 - A/E analysis on [[Paid Losses|paid]] vs. [[Incurred Losses|incurred]] separately can reveal whether deviations stem from payment timing (paid) or case reserving changes (incurred minus paid)
 
 > [!example]- Calculating an A/E Ratio {Example}
-> At 12/31/2023, AY 2022 was estimated at $\$1{,}000{,}000$ (the "expected"). At 12/31/2024, AY 2022 incurred losses are $\$1{,}080{,}000$ (the "actual"). Compute the A/E ratio and interpret.
+> At 12/31/2023, AY 2022 was estimated at \$$1{,}000{,}000$ (the "expected"). At 12/31/2024, AY 2022 incurred losses are \$$1{,}080{,}000$ (the "actual"). Compute the A/E ratio and interpret.
 >
 > > [!answer]-
 > > $$\text{A/E} = \frac{\$1{,}080{,}000}{\$1{,}000{,}000} = 1.08$$
 > >
-> > Development is 8% adverse — losses emerged $\$80{,}000$ more than expected. If this pattern repeats across multiple accident years, the actuary should increase development factors or the selected [[IBNR]] for future valuations.
+> > Development is 8% adverse — losses emerged \$$80{,}000$ more than expected. If this pattern repeats across multiple accident years, the actuary should increase development factors or the selected [[IBNR]] for future valuations.

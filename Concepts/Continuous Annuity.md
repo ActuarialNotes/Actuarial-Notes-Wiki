@@ -9,7 +9,7 @@ Comparing with the [[Annuity Immediate|annuity-immediate]] $a_{\overline{n}|} = 
 $$\bar{s}_{\overline{n}|} = \int_0^n e^{\delta(n-t)}\,dt = \frac{e^{\delta n}-1}{\delta} = \frac{(1+i)^n - 1}{\delta}$$
 
 > [!example]- Present Value of a Continuous Annuity {💡 Example}
-> Payments flow continuously at a rate of $\$1{,}000$ per year for 10 years. The force of interest is $\delta = 0.06$. Find the present value.
+> Payments flow continuously at a rate of \$$1{,}000$ per year for 10 years. The force of interest is $\delta = 0.06$. Find the present value.
 >
 > > [!answer]- Answer
 > > $$\bar{a}_{\overline{10}|} = \frac{1 - e^{-0.06 \times 10}}{0.06} = \frac{1 - e^{-0.6}}{0.06}$$

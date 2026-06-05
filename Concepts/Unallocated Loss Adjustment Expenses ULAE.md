@@ -10,7 +10,7 @@
 - In ratemaking, ULAE may be included in the loss ratio or treated as a fixed expense ratio component, depending on company convention
 
 > [!example]- ULAE Reserve Calculation {Example}
-> An insurer has unpaid losses and ALAE of $\$10{,}000{,}000$. Historical ULAE has averaged $5\%$ of losses. Under the Kittel method, calendar-year ULAE paid $= \$480{,}000$; paid losses $= \$4{,}000{,}000$; incurred losses $= \$8{,}000{,}000$.
+> An insurer has unpaid losses and ALAE of \$$10{,}000{,}000$. Historical ULAE has averaged $5\%$ of losses. Under the Kittel method, calendar-year ULAE paid $= \$480{,}000$; paid losses $= \$4{,}000{,}000$; incurred losses $= \$8{,}000{,}000$.
 >
 > > [!answer]-
 > > Historical ratio method: ULAE Reserve $= 10{,}000{,}000 \times 0.05 = \$500{,}000$

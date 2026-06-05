@@ -5,7 +5,7 @@
 - Retro rating is used for **large commercial accounts** (workers compensation, general liability) where the insured has enough volume for its own experience to be credible and where risk-sharing provides a claims-control incentive
 
 > [!example]- Retrospective Premium Calculation {Example}
-> A workers compensation policy has a standard premium of $\$500{,}000$. The retro parameters are: basic premium $= \$100{,}000$, LCF $= 1.10$, tax multiplier $= 1.03$, minimum $= \$300{,}000$, maximum $= \$800{,}000$. Actual converted losses are $\$350{,}000$.
+> A workers compensation policy has a standard premium of \$$500{,}000$. The retro parameters are: basic premium $= \$100{,}000$, LCF $= 1.10$, tax multiplier $= 1.03$, minimum $= \$300{,}000$, maximum $= \$800{,}000$. Actual converted losses are \$$350{,}000$.
 >
 > > [!answer]-
-> > $\text{Retro Premium} = (\$100{,}000 + \$350{,}000 \times 1.10) \times 1.03 = (\$100{,}000 + \$385{,}000) \times 1.03 = \$485{,}000 \times 1.03 = \$499{,}550$. This falls between the minimum $\$300{,}000$ and maximum $\$800{,}000$, so the final retro premium is $\$499{,}550$.
+> > $\text{Retro Premium} = (\$100{,}000 + \$350{,}000 \times 1.10) \times 1.03 = (\$100{,}000 + \$385{,}000) \times 1.03 = \$485{,}000 \times 1.03 = \$499{,}550$. This falls between the minimum \$$300{,}000$ and maximum \$$800{,}000$, so the final retro premium is \$$499{,}550$.

@@ -8,8 +8,8 @@
 - The ELR is typically derived from prior years' experience, pricing indications, or industry benchmarks
 
 > [!example]- Applying the Expected Loss Method {Example}
-> An accident year is only 3 months old. Earned premium is $\$2{,}000{,}000$ and the selected ELR is $65\%$. Actual reported losses are $\$50{,}000$. Estimate ultimate losses.
+> An accident year is only 3 months old. Earned premium is \$$2{,}000{,}000$ and the selected ELR is $65\%$. Actual reported losses are \$$50{,}000$. Estimate ultimate losses.
 >
 > > [!answer]-
 > > $$\text{Ultimate} = 0.65 \times \$2{,}000{,}000 = \$1{,}300{,}000$$
-> > The $\$50{,}000$ of actual emergence is ignored entirely — too immature to be credible at 3 months.
+> > The \$$50{,}000$ of actual emergence is ignored entirely — too immature to be credible at 3 months.

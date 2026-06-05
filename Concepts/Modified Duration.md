@@ -15,4 +15,4 @@
 >
 > > [!answer]-
 > > $D_{Mod} = 7.5/1.06 = 7.075$ years.
-> > $\Delta P/P \approx -7.075 \times 0.005 = -3.54\%$. A $100{,}000$ face bond would lose approximately $\$3{,}540$ in value.
+> > $\Delta P/P \approx -7.075 \times 0.005 = -3.54\%$. A $100{,}000$ face bond would lose approximately \$$3{,}540$ in value.

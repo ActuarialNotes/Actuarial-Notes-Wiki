@@ -5,7 +5,7 @@
 - In ratemaking, the target underwriting profit provision is set to produce a total return (underwriting profit plus investment income) adequate to compensate capital providers, so the target combined ratio is typically below $100\%$ but the magnitude depends on the line's payment tail
 
 > [!example]- Combined Ratio and Underwriting Profit {Example}
-> An insurer reports earned premium of $\$10{,}000{,}000$, incurred losses and LAE of $\$6{,}800{,}000$, and underwriting expenses of $\$3{,}000{,}000$.
+> An insurer reports earned premium of \$$10{,}000{,}000$, incurred losses and LAE of \$$6{,}800{,}000$, and underwriting expenses of \$$3{,}000{,}000$.
 >
 > > [!answer]-
 > > Underwriting profit $= \$10{,}000{,}000 - \$6{,}800{,}000 - \$3{,}000{,}000 = \$200{,}000$. Underwriting profit margin $= \$200{,}000 / \$10{,}000{,}000 = 2\%$. Combined ratio $= (68\% + 30\%) = 98\%$, confirming $1 - 98\% = 2\%$ underwriting profit margin.

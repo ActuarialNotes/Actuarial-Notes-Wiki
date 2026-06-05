@@ -8,9 +8,9 @@ A **coupon** is the periodic interest payment made by a bond issuer to the bondh
 - Coupons represent the income component of a bond's return; the other component is any capital gain or loss at redemption.
 
 > [!example]- Coupon Payment Amount {Example}
-> A $\$5{,}000$ face value bond pays semi-annual coupons at an annual coupon rate of $6\%$. What is each coupon payment?
+> A \$$5{,}000$ face value bond pays semi-annual coupons at an annual coupon rate of $6\%$. What is each coupon payment?
 >
 > > [!answer]-
 > > The coupon rate per semi-annual period is $r = 6\%/2 = 3\%$.
 > > $$\text{Coupon} = Fr = 5000(0.03) = \$150$$
-> > The bondholder receives $\$150$ every six months for the life of the bond.
+> > The bondholder receives \$$150$ every six months for the life of the bond.

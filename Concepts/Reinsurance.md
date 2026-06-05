@@ -6,7 +6,7 @@
 - Reserve uncertainty is amplified for ceded and net positions because reinsurance contracts introduce coverage disputes, commutations, and potential reinsurer insolvency
 
 > [!example]- Calculating Net Losses Under Quota Share {Example}
-> A cedent has gross ultimate losses of $\$5{,}000{,}000$ for an accident year. It has a 40% quota share treaty (reinsurer takes 40% of all losses). Calculate net ultimate losses.
+> A cedent has gross ultimate losses of \$$5{,}000{,}000$ for an accident year. It has a 40% quota share treaty (reinsurer takes 40% of all losses). Calculate net ultimate losses.
 >
 > > [!answer]-
 > > $$\text{Ceded Ultimate} = 0.40 \times \$5{,}000{,}000 = \$2{,}000{,}000$$

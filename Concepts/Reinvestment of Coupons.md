@@ -9,7 +9,7 @@
 - This analysis motivates [[Reinvestment Risk]] as an important practical concern for coupon bonds.
 
 > [!example]- Accumulated Value with Coupon Reinvestment {Example}
-> A $\$1{,}000$ face value 4-year bond pays 7% annual coupons and is redeemed at par. Coupons are reinvested at 4% per year. Find the total accumulated value at the end of 4 years and the realized annual yield.
+> A \$$1{,}000$ face value 4-year bond pays 7% annual coupons and is redeemed at par. Coupons are reinvested at 4% per year. Find the total accumulated value at the end of 4 years and the realized annual yield.
 >
 > > [!answer]-
 > > Coupon $= Fr = 1000 \times 0.07 = \$70$ per year. $s_{\overline{4}|4\%} = \dfrac{(1.04)^4 - 1}{0.04} = \dfrac{1.1699 - 1}{0.04} = 4.2465$.

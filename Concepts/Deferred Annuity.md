@@ -11,7 +11,7 @@ $${}_{k|}\ddot{a}_{\overline{n}|} = v^k \cdot \ddot{a}_{\overline{n}|}$$
 Deferred annuities are common in retirement planning, where contributions accumulate during a working phase and payments begin at a future date.
 
 > [!example]- Present Value of a 3-Year Deferred Annuity {💡 Example}
-> An annuity pays $\$2{,}000$ at the end of each year for 5 years, with the first payment 4 years from now (i.e., deferred 3 years). The effective annual rate is $i = 5\%$. Find the present value today.
+> An annuity pays \$$2{,}000$ at the end of each year for 5 years, with the first payment 4 years from now (i.e., deferred 3 years). The effective annual rate is $i = 5\%$. Find the present value today.
 >
 > > [!answer]- Answer
 > > $${}_{3|}a_{\overline{5}|0.05} = v^3 \cdot a_{\overline{5}|0.05}$$

@@ -7,7 +7,7 @@ The **net present value** (NPV) is the sum of the present values of all cash flo
 - The **internal rate of return** (IRR) is the rate $i^*$ at which $NPV = 0$.
 
 > [!example]- Comparing Two Investment Projects {Example}
-> Project A requires an outlay of $\$10{,}000$ today and returns $\$4{,}000$ at the end of each of the next 3 years. Project B requires $\$10{,}000$ today and returns $\$12{,}500$ at the end of year 3 only. Using $i = 6\%$, which project has the higher NPV?
+> Project A requires an outlay of \$$10{,}000$ today and returns \$$4{,}000$ at the end of each of the next 3 years. Project B requires \$$10{,}000$ today and returns \$$12{,}500$ at the end of year 3 only. Using $i = 6\%$, which project has the higher NPV?
 >
 > > [!answer]-
 > > **Project A:**
@@ -18,4 +18,4 @@ The **net present value** (NPV) is the sum of the present values of all cash flo
 > > **Project B:**
 > > $$NPV_B = -10{,}000 + 12{,}500\,(1.06)^{-3} = -10{,}000 + 12{,}500 \times 0.83962 \approx -10{,}000 + 10{,}495 = \$495$$
 > >
-> > Project A has the higher NPV ($\$692 > \$495$), so Project A is preferred at a 6% discount rate.
+> > Project A has the higher NPV (\$$692 > \$495$), so Project A is preferred at a 6% discount rate.

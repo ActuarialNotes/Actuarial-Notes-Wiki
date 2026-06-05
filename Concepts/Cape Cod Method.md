@@ -9,7 +9,7 @@
 - Cape Cod converges to the chain ladder as accident years mature ($\%$ reported $\to 1$) and to the expected loss method for very immature years
 
 > [!example]- Cape Cod Reserve {Example}
-> Three AYs: CDF at 12 mo $= 1.896$ ($\%$ reported $= 52.7\%$), at 24 mo $= 1.265$ ($79.1\%$), at 36 mo $= 1.084$ ($92.3\%$). EP: $\$6{,}000$, $\$6{,}500$, $\$7{,}000$ (000s). Reported: $\$2{,}850$, $\$2{,}600$, $\$1{,}750$ (000s).
+> Three AYs: CDF at 12 mo $= 1.896$ ($\%$ reported $= 52.7\%$), at 24 mo $= 1.265$ ($79.1\%$), at 36 mo $= 1.084$ ($92.3\%$). EP: \$$6{,}000$, \$$6{,}500$, \$$7{,}000$ (000s). Reported: \$$2{,}850$, \$$2{,}600$, \$$1{,}750$ (000s).
 >
 > > [!answer]-
 > > Used-up premium: $6{,}000 \times 0.923 = 5{,}538$; $\;6{,}500 \times 0.791 = 5{,}142$; $\;7{,}000 \times 0.527 = 3{,}689$

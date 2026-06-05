@@ -6,7 +6,7 @@
 - Classification also influences method selection: the [[Bornhuetter-Ferguson Method|BF method]] and [[Expected Loss Method]] are preferred for immature long-tail years; the [[Chain Ladder Method|chain ladder]] works well for mature short-tail lines
 
 > [!example]- Comparing Reserve Uncertainty by Line {Example}
-> Two lines each have $\$1{,}000{,}000$ in reported losses. Auto physical damage is 95% developed; medical malpractice is 30% developed. Compare the IBNR needed for each.
+> Two lines each have \$$1{,}000{,}000$ in reported losses. Auto physical damage is 95% developed; medical malpractice is 30% developed. Compare the IBNR needed for each.
 >
 > > [!answer]-
 > > Auto physical damage: $\text{Ultimate} \approx \$1{,}000{,}000 / 0.95 = \$1{,}052{,}600$; $IBNR \approx \$52{,}600$

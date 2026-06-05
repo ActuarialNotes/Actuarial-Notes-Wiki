@@ -11,7 +11,7 @@
 - Administrative expense savings from fewer small claims may partially offset the full LER, so some raters apply a smaller-than-LER credit; moral hazard at higher deductibles can reduce the effective savings
 
 > [!example]- Deductible Credit Using LER {Example}
-> Full-coverage pure premium $= \$300$. Analysis of the loss distribution shows that a $\$500$ deductible eliminates $25\%$ of total losses. Full-coverage rate $= \$460$.
+> Full-coverage pure premium $= \$300$. Analysis of the loss distribution shows that a \$$500$ deductible eliminates $25\%$ of total losses. Full-coverage rate $= \$460$.
 >
 > > [!answer]-
 > > $$\text{LER}(\$500) = 0.25$$

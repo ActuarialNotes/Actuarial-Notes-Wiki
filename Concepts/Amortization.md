@@ -9,7 +9,7 @@
 - Outstanding balance after payment $k$: $OB_k = P \cdot a_{\overline{n-k}|i}$
 
 > [!example]- Amortizing a Loan {Example}
-> A $\$10{,}000$ loan is repaid with level annual payments over 4 years at $i = 5\%$ per year. Find the annual payment and the interest and principal portions of the first payment.
+> A \$$10{,}000$ loan is repaid with level annual payments over 4 years at $i = 5\%$ per year. Find the annual payment and the interest and principal portions of the first payment.
 >
 > > [!answer]-
 > > $$P = \frac{10000}{a_{\overline{4}|5\%}} = \frac{10000}{3.5460} = \$2{,}820.12$$

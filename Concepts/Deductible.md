@@ -18,8 +18,8 @@ A **Deductible** is the initial amount of a loss that the policyholder must pay 
 > > The insurer expects to pay approximately \$818.73 per loss (including the zero payments when $X \leq 200$).
 
 > [!example]- Insurer Payment at Different Loss Levels {Example}
-> Under a policy with a $\$500$ deductible, what does the insurer pay on losses of $\$300$ and $\$2{,}000$?
+> Under a policy with a \$$500$ deductible, what does the insurer pay on losses of \$$300$ and \$$2{,}000$?
 >
 > > [!answer]-
-> > - For a $\$300$ loss: $(300 - 500)^+ = 0$. The insurer pays nothing.
-> > - For a $\$2{,}000$ loss: $(2000 - 500)^+ = 1500$. The insurer pays $\$1{,}500$.
+> > - For a \$$300$ loss: $(300 - 500)^+ = 0$. The insurer pays nothing.
+> > - For a \$$2{,}000$ loss: $(2000 - 500)^+ = 1500$. The insurer pays \$$1{,}500$.

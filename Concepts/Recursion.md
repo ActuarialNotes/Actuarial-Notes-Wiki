@@ -11,7 +11,7 @@ $$a_{\overline{n}|} = 1 \cdot v + v \cdot a_{\overline{n-1}|} \qquad \Longleftri
 Recursion is particularly useful for building amortisation schedules, verifying annuity formulas by induction, and computing prospective/retrospective loan balances without evaluating long sums directly.
 
 > [!example]- Outstanding Loan Balance After 2 Payments {💡 Example}
-> A loan of $\$5{,}000$ is repaid with level annual payments over 4 years at $i = 8\%$. Find the outstanding balance after the 2nd payment using recursion.
+> A loan of \$$5{,}000$ is repaid with level annual payments over 4 years at $i = 8\%$. Find the outstanding balance after the 2nd payment using recursion.
 >
 > > [!answer]- Answer
 > > First find the level payment $P$:
@@ -21,4 +21,4 @@ Recursion is particularly useful for building amortisation schedules, verifying 
 > > $$B_1 = 5{,}000(1.08) - 1{,}509.60 = 5{,}400 - 1{,}509.60 = \$3{,}890.40$$
 > > $$B_2 = 3{,}890.40(1.08) - 1{,}509.60 = 4{,}201.63 - 1{,}509.60 = \$2{,}692.03$$
 > >
-> > The outstanding balance after 2 payments is approximately $\$2{,}692.03$.
+> > The outstanding balance after 2 payments is approximately \$$2{,}692.03$.

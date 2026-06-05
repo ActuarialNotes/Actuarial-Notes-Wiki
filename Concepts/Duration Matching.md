@@ -11,4 +11,4 @@
 > A liability of $10{,}000$ is due in 5 years. At $i=6\%$, $PV = 7472.58$ and Macaulay duration $= 5$ years. What asset portfolio should be constructed?
 >
 > > [!answer]-
-> > Purchase bonds with total market value $\$7{,}472.58$ and weighted Macaulay duration of exactly 5 years, ensuring the portfolio's value moves in tandem with the liability under small rate changes.
+> > Purchase bonds with total market value \$$7{,}472.58$ and weighted Macaulay duration of exactly 5 years, ensuring the portfolio's value moves in tandem with the liability under small rate changes.

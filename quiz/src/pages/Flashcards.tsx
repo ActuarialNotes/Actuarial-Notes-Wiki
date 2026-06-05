@@ -220,7 +220,7 @@ function extractFirstParagraph(markdown: string): string {
         paragraphLines.push(trimmed)
       }
     } else {
-      if (trimmed === '') break
+      if (trimmed === '' || /^[*+-] /.test(trimmed) || /^\d+\. /.test(trimmed) || trimmed.startsWith('>') || trimmed.startsWith('#')) break
       paragraphLines.push(trimmed)
     }
   }

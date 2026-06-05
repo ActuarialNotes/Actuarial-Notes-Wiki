@@ -82,6 +82,20 @@
   color: hsl(0 0% 9%) !important;
 }
 
+/* Listen view: the word/equation currently being spoken by text-to-speech.
+   .tts-tok carries the transition; .tts-tok--active is the highlight. */
+.tts-tok {
+  border-radius: 3px;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.tts-tok--active {
+  background: hsl(var(--primary) / 0.18);
+  color: hsl(var(--primary));
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.18);
+}
+/* Highlight KaTeX equations as a single unit when their token is active. */
+.tts-tok--active .katex { color: hsl(var(--primary)); }
+
 /* Score reveal: each question pip on the Review page pops in via stagger.
    Initial state is hidden (set inline by the component); the animation runs
    when the .score-pip-in class is added. */

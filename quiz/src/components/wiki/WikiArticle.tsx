@@ -224,8 +224,20 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     // Use getAttribute comparison instead of CSS.escape to avoid any selector
     // escaping edge-cases (colons, spaces, quotes in concept names).
     const key = refKey(popupCurrent)
+    // Source-material links in exam markdown are parsed as 'concept' kind by
+    // hrefToEntryRef (bare names default to concept), but the popup stores them
+    // as 'resource'. Check both keys so the highlight still finds the DOM node.
+    const altKey =
+      popupCurrent.kind === 'resource'
+        ? `concept:${popupCurrent.name.toLowerCase()}`
+        : popupCurrent.kind === 'concept'
+        ? `resource:${popupCurrent.name.toLowerCase()}`
+        : null
     const target = Array.from(root.querySelectorAll<HTMLElement>('[data-wikiref]'))
-      .find(el => el.getAttribute('data-wikiref') === key) ?? null
+      .find(el => {
+        const attr = el.getAttribute('data-wikiref')
+        return attr === key || (altKey !== null && attr === altKey)
+      }) ?? null
     if (!target) return
     target.classList.add('wiki-link--active')
     root.classList.add('concept-focus-mode')

@@ -852,7 +852,7 @@ function SortableCard({
   const allEquations = markdown ? extractMathBlockquotes(markdown) : []
   const cardImages = markdown ? extractImages(markdown) : []
 
-  const baseClass = `group relative rounded-xl border flex flex-col select-none transition-shadow min-h-[150px]${isFlashing ? ' flashcard-highlight' : ''}`
+  const baseClass = `group relative rounded-xl border flex flex-col transition-shadow min-h-[150px]${isFlashing ? ' flashcard-highlight' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 border-primary shadow-sm'
     : 'bg-card text-card-foreground'
@@ -863,7 +863,12 @@ function SortableCard({
         ref={setNodeRef}
         style={style}
         data-card-name={card.name}
-        onClick={() => setFlipped(false)}
+        onClick={(e) => {
+          const target = e.target as HTMLElement
+          if (!target.closest('a, button, [role="button"], input, select, textarea')) {
+            setFlipped(false)
+          }
+        }}
         className={`${baseClass} ${colorClass} cursor-pointer`}
       >
         {/* Header: name + play + study shortcut + delete */}
@@ -894,7 +899,7 @@ function SortableCard({
         </div>
 
         {/* Back content — grows to fit, no scrollbar */}
-        <div className="px-3 py-2" onClick={e => e.stopPropagation()}>
+        <div className="px-3 py-2">
           {loadStatus === 'loading' && (
             <div className="flex items-center gap-1 text-xs text-muted-foreground py-2">
               <Loader2 className="h-3 w-3 animate-spin" /> Loading…
@@ -948,7 +953,7 @@ function SortableCard({
       data-card-name={card.name}
       {...listeners}
       {...attributes}
-      className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing hover:shadow-md`}
+      className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing hover:shadow-md select-none`}
     >
       {/* Delete button */}
       <div className="flex items-center justify-end px-2 pt-2">
@@ -1309,12 +1314,19 @@ function FlashcardStudyArea({
     <div className="flex flex-col items-center gap-5 px-4 py-6">
       {/* Flip card */}
       <div
-        className={`w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer select-none transition-all${isFlashing ? ' flashcard-highlight' : ''}`}
-        onClick={handleFlip}
-        role="button"
-        tabIndex={0}
-        aria-label={flipped ? 'Click to flip back' : 'Click to reveal'}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFlip() } }}
+        className={`w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer transition-all${flipped ? '' : ' select-none'}${isFlashing ? ' flashcard-highlight' : ''}`}
+        onClick={(e) => {
+          if (!flipped) { handleFlip(); return }
+          // When showing back: flip only if click wasn't on an interactive element
+          const target = e.target as HTMLElement
+          if (!target.closest('a, button, [role="button"], input, select, textarea')) {
+            handleFlip()
+          }
+        }}
+        role={flipped ? undefined : 'button'}
+        tabIndex={flipped ? undefined : 0}
+        aria-label={flipped ? undefined : 'Click to reveal'}
+        onKeyDown={e => { if (!flipped && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleFlip() } }}
       >
         {!flipped ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 gap-3">
@@ -1405,7 +1417,7 @@ function FlashcardStudyArea({
               <p className="text-sm text-destructive">Couldn't load content.</p>
             )}
             {reverseCardModes.has('definition') && definition && (
-              <div onClick={e => e.stopPropagation()}>
+              <div>
                 <WikiArticle
                   markdown={definition}
                   onWikiLink={ref => { jumpTo(ref); return true }}
@@ -1413,14 +1425,14 @@ function FlashcardStudyArea({
               </div>
             )}
             {reverseCardModes.has('math') && allEquations.length > 0 && (
-              <div className="space-y-3" onClick={e => e.stopPropagation()}>
+              <div className="space-y-3">
                 {allEquations.map((eq, i) => (
-                  <WikiArticle key={i} markdown={eq} />
+                  <WikiArticle key={i} markdown={eq} onWikiLink={ref => { jumpTo(ref); return true }} />
                 ))}
               </div>
             )}
             {reverseCardModes.has('images') && cardImages.length > 0 && (
-              <div className="space-y-3" onClick={e => e.stopPropagation()}>
+              <div className="space-y-3">
                 {cardImages.map((img, i) => (
                   <figure key={i} className="flex flex-col items-center gap-1">
                     <img src={img.src} alt={img.alt} className="max-w-full max-h-48 object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
@@ -1441,7 +1453,7 @@ function FlashcardStudyArea({
               </button>
             )}
             {expanded && markdown && (
-              <div className="border-t pt-4 overflow-y-auto max-h-96" onClick={e => e.stopPropagation()}>
+              <div className="border-t pt-4 overflow-y-auto max-h-96">
                 <WikiArticle
                   markdown={markdown}
                   sourcePath={entryRefToRepoPath(current)}

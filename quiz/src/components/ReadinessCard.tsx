@@ -385,6 +385,7 @@ export function ReadinessCard({
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
   const studyGuideCardRef = useRef<HTMLDivElement>(null)
+  const topicsMasteredContainerRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [flashRadial, setFlashRadial] = useState(false)
   const [recentlyCompletedConcepts, setRecentlyCompletedConcepts] = useState<Set<string>>(new Set())
@@ -862,12 +863,12 @@ export function ReadinessCard({
     )
     if (popupDashboardFilter === 'entire-syllabus' && ownerTopic) {
       setOpenTopics(prev => prev.has(ownerTopic.name) ? prev : new Set([...prev, ownerTopic.name]))
+      setTopicsMasteredOpen(true)
     }
     // For study-plan mode scroll to the active concept row in the study plan card.
     // The querySelector finds study-plan rows first (higher in the DOM), so the target
-    // is always the correct element. For entire-syllabus we do not scroll the window —
-    // the topics-mastered section is in its own overflow container and scrolling would
-    // jump to the study-plan section instead.
+    // is always the correct element. For entire-syllabus, scroll within the overflow
+    // container rather than the window to avoid jumping to the wrong section.
     let scrollId: ReturnType<typeof setTimeout> | undefined
     if (popupDashboardFilter === 'study-plan') {
       scrollId = setTimeout(() => {
@@ -878,6 +879,14 @@ export function ReadinessCard({
         const rect = el.getBoundingClientRect()
         window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
       }, 50)
+    } else if (popupDashboardFilter === 'entire-syllabus') {
+      scrollId = setTimeout(() => {
+        const container = topicsMasteredContainerRef.current
+        if (!container) return
+        const el = container.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
+        if (!el) return
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }, 100)
     }
     setFlashingConcept(popupCurrentName)
     const clearId = setTimeout(() => setFlashingConcept(null), 1400)
@@ -1149,7 +1158,7 @@ export function ReadinessCard({
                           className="flex-1 flex items-center gap-1 text-left"
                           aria-expanded={isOpen}
                         >
-                          <span className={`text-xs font-semibold truncate ${allDeselected ? 'text-muted-foreground/50' : 'text-foreground'}`}>
+                          <span className={`text-xs font-semibold truncate min-w-0 ${allDeselected ? 'text-muted-foreground/50' : 'text-foreground'}`}>
                             {group.topicName}
                           </span>
                           <ChevronDown className={`h-3 w-3 text-muted-foreground shrink-0 transition-transform duration-150 ${isOpen ? '' : '-rotate-90'}`} />
@@ -1405,7 +1414,7 @@ export function ReadinessCard({
               </button>
 
               {topicsMasteredOpen && (
-                <div className="max-h-80 overflow-y-auto">
+                <div className="max-h-80 overflow-y-auto" ref={topicsMasteredContainerRef}>
                   <StudyPlanTracker
                     syllabus={syllabus}
                     masteryRecords={masteryRecords}

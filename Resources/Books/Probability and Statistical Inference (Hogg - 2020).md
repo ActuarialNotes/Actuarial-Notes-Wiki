@@ -15,7 +15,7 @@ ISBN: 978-0135189399
 - 1.2 [[Methods of Enumeration]]
 - 1.3 [[Concepts/Conditional Probability]]
 - 1.4 [[Concepts/Independent Events]]
-- 1.5 [[Bayes' Theorem]]
+- 1.5 [[Bayes Theorem]]
 
 ## 2 Discrete Distributions
 
@@ -23,7 +23,7 @@ ISBN: 978-0135189399
 - 2.2 [[Mathematical Expectation]]
 - 2.3 Special [[Mathematical Expectation]]s
 - 2.4 The [[Binomial Distribution]]
-- 2.5 The [[Hypergeometric Distribution]]
+- 2.5 The [[Hypergeometric]]
 - 2.6 The [[Negative Binomial Distribution]]
 - 2.7 The [[Poisson Distribution]]
 
@@ -61,8 +61,8 @@ ISBN: 978-0135189399
 - 6.3 [[Order Statistics]]
 - 6.4 [[Maximum Likelihood Estimation|Maximum Likelihood]] and [[Method of Moments]] Estimation
 - 6.5 A Simple [[Regression]] Problem
-- 6.6 [[Asymptotic Distribution]]s of [[Maximum Likelihood Estimator]]s
-- 6.7 [[Sufficient Statistics]]
+- 6.6 [[Asymptotic Distribution]]s of [[Maximum Likelihood Estimation]]s
+- 6.7 [[Sufficient Statistic]]
 - 6.8 [[Bayesian Estimation]]
 
 ## 7 Interval Estimation
@@ -103,7 +103,7 @@ ISBN: 978-0135189399
 - C Answers to Odd-Numbered Exercises
 - D Review of Selected Mathematical Techniques
     - D.1 [[Algebra of Sets]]
-    - D.2 Mathematical Tools for the [[Hypergeometric Distribution]]
+    - D.2 Mathematical Tools for the [[Hypergeometric]]
     - D.3 [[Limits]]
     - D.4 [[Infinite Series]]
     - D.5 [[Integration]]

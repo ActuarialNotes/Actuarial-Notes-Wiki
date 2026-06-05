@@ -6,7 +6,7 @@
 
 - Without on-level adjustment, comparing loss ratios across years with different rate levels will produce misleading trend and adequacy signals — a 10% rate increase makes the loss ratio appear to drop even if underlying costs are unchanged
 - Rate level changes also affect the mix of business through anti-selection: a large rate increase on a subgroup causes preferred risks to leave, worsening the remaining portfolio's experience
-- In reserving, rate level shifts affect the expected loss ratio used as the a priori in [[Bornhuetter Ferguson Method|BF]] and [[Cape Cod Method|Cape Cod]] methods
+- In reserving, rate level shifts affect the expected loss ratio used as the a priori in [[Bornhuetter-Ferguson Method|BF]] and [[Cape Cod Method|Cape Cod]] methods
 
 > [!example]- On-Level Factor Application {Example}
 > A line had $+10\%$ rate changes on $1/1/2022$ and $+6\%$ on $1/1/2024$. Historical earned premium in AY 2022 was $\$5{,}000{,}000$. What is the on-level earned premium?

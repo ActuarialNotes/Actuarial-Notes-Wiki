@@ -31,7 +31,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 ## 3 Conditional Probability and Independence
   - 3.1 Introduction
   - 3.2 [[Conditional Probability|Conditional Probabilities]]
-  - 3.3 [[Bayes' Theorem|Bayes’s Formula]]
+  - 3.3 [[Bayes Theorem|Bayes’s Formula]]
   - 3.4 [[Independent Events]]
   - 3.5 P(·|F) Is a Probability
 
@@ -49,7 +49,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
   - 4.8 Other Discrete Probability Distributions
     - 4.8.1 The [[Geometric Distribution|Geometric Random Variable]]
     - 4.8.2 [[Negative Binomial Distribution|Negative Binomial Random Variable]]
-    - 4.8.3 [[Hypergeometric Distribution|Hypergeometric Random Variable]]
+    - 4.8.3 [[Hypergeometric|Hypergeometric Random Variable]]
     - 4.8.4 [[Zipf's Law|Zeta (Zipf) Distribution]]
   - 4.9 Expected Value of Sums of Random Variables
   - 4.10 Properties of the Cumulative Distribution Function
@@ -116,7 +116,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 ## 9 Additional Topics in Probability
   - 9.1 [[Poisson Process]]
   - 9.2 [[Markov Chain|Markov Chains]]
-  - 9.3 [[Entropy (information theory)|Entropy]]
+  - 9.3 [[Entropy|Entropy]]
   - 9.4 Coding Theory and Entropy
 
 ## 10 Simulation

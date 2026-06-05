@@ -1,7 +1,7 @@
 **Occurrence Coverage** is a policy trigger under which coverage applies if the loss event takes place during the policy period, regardless of when the claim is subsequently reported to the insurer.
 
 - Because claims for policy-period occurrences may be reported months or years after the policy expires, occurrence policies generate significant **IBNR** — the actuary must estimate not only development on known claims but also claims not yet reported; [[Accident Year]] is the natural data organization for occurrence-based ratemaking
-- Contrast with [[Claims-Made Coverage]], where coverage is triggered by the report date: occurrence policies carry automatic "tail" coverage (no separate extended reporting endorsement needed), but this makes occurrence premiums higher and loss development periods longer
+- Contrast with [[Claims Made Coverage]], where coverage is triggered by the report date: occurrence policies carry automatic "tail" coverage (no separate extended reporting endorsement needed), but this makes occurrence premiums higher and loss development periods longer
 - General liability, auto liability, and workers compensation are predominantly written on an occurrence basis; the longer payment tails in these lines mean larger reserve balances, more investment income, and greater sensitivity to loss development assumptions
 
 > [!example]- Occurrence vs. Claims-Made Coverage Trigger {Example}

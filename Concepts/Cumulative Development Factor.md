@@ -8,7 +8,7 @@
 >
 > $$= \text{Reported at age }n \;\times\; \text{CDF}_{n \to \text{ult}}$$
 
-- CDF $\geq 1.0$ for all lines where losses do not decrease; $\%$ reported $= 1/\text{CDF}$ and $\%$ unreported $= 1 - 1/\text{CDF}$, which are used directly in the [[Bornhuetter Ferguson Method]] and [[Cape Cod Method]]
+- CDF $\geq 1.0$ for all lines where losses do not decrease; $\%$ reported $= 1/\text{CDF}$ and $\%$ unreported $= 1 - 1/\text{CDF}$, which are used directly in the [[Bornhuetter-Ferguson Method]] and [[Cape Cod Method]]
 - CDFs decrease monotonically with age — a 12-month CDF is always larger than a 24-month CDF for the same line, as more of the ultimate is already captured
 - The [[Tail Factor]] is the final multiplier from the last observable triangle age to ultimate; omitting it (setting tail $= 1.0$) understates the CDF for long-tail lines
 - CDFs are often presented as a table from each age to ultimate, computed by multiplying backward from the tail

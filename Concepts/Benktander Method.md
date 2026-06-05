@@ -1,4 +1,4 @@
-**Benktander Method** (GB, or iterated BF) is a loss reserving technique that uses the BF ultimate as the new "expected losses" for one additional BF iteration, producing an estimate that lies between the [[Bornhuetter Ferguson Method]] and the [[Chain Ladder Method]].
+**Benktander Method** (GB, or iterated BF) is a loss reserving technique that uses the BF ultimate as the new "expected losses" for one additional BF iteration, producing an estimate that lies between the [[Bornhuetter-Ferguson Method]] and the [[Chain Ladder Method]].
 
 > $$\text{Ultimate}_{\text{GB}}$$
 >

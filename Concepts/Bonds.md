@@ -6,7 +6,7 @@ A **bond** is a fixed-income debt instrument in which an issuer (borrower) promi
 | [[Coupon Rate]] | Annual interest rate applied to face value to set coupon payments |
 | [[Coupon]] | Periodic interest payment = Face Value × Coupon Rate / payments per year |
 | [[Yield Rate]] | Rate of return actually earned by the bondholder (may differ from coupon rate) |
-| [[Bond Price\|Price]] | Present value of all future cash flows at the yield rate |
+| [[Bond Price|Price]] | Present value of all future cash flows at the yield rate |
 | [[Term of Bond]] | Time from issue to maturity |
 | [[Book Value]] | Amortized value of the bond at any point during its term |
 

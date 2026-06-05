@@ -1,4 +1,4 @@
-**Cape Cod Method** (also called Stanard-Bühlmann) is a loss reserving technique that derives the expected loss ratio (ELR) from the data itself rather than from an external a priori estimate, then uses that ELR exactly as in the [[Bornhuetter Ferguson Method]] to compute IBNR.
+**Cape Cod Method** (also called Stanard-Bühlmann) is a loss reserving technique that derives the expected loss ratio (ELR) from the data itself rather than from an external a priori estimate, then uses that ELR exactly as in the [[Bornhuetter-Ferguson Method]] to compute IBNR.
 
 > $$\text{ELR} = \frac{\sum \text{Reported}_i}{\sum \text{EP}_i \times (1/\text{CDF}_i)}$$
 

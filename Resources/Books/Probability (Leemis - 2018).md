@@ -16,7 +16,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 - 1.4 [[Permutation|Permutations]] and [[Combination|Combinations]]
 - 1.5 [[Conditional Probability]]
 - 1.6 [[Independent Events|Independence]]
-- 1.7 [[Bayes' Theorem]] and [[The Law of Total Probability]]
+- 1.7 [[Bayes Theorem]] and [[The Law of Total Probability]]
 
 ## 2 Random Variables
 

@@ -8,7 +8,7 @@
 
 - Key steps: build a cumulative loss triangle, calculate age-to-age factors, select factors (simple average, volume-weighted, or latest $n$-year), chain them into CDFs, then multiply each accident year's diagonal by its CDF
 - The method assumes **historical development patterns are stable** — it is purely data-driven with no external adjustment for expected losses
-- Best suited for **mature accident years** with credible reported emergence; for immature years, the [[Bornhuetter Ferguson Method]] is preferred because actual data is thin
+- Best suited for **mature accident years** with credible reported emergence; for immature years, the [[Bornhuetter-Ferguson Method]] is preferred because actual data is thin
 - The volume-weighted factor $f = \Sigma(\text{losses at age }n{+}1) / \Sigma(\text{losses at age }n)$ gives more credibility to larger accident years
 
 > [!example]- Chain Ladder Projection {Example}

@@ -25,7 +25,7 @@ The **Advanced Estimation of Claims Liabilities (Exam 7)** is a 4 hour exam cove
 > [!example]- Unpaid Claim Stochastic Distributions
 > ### Unpaid Claim Stochastic Distributions
 > 6. Estimate parameters of [[Unpaid Claims Distributions]]
-> 7. Calculate the [[Moments]] and [[Percentiles]] of unpaid claim distributions
+> 7. Calculate the [[Moments]] and [[Percentile]] of unpaid claim distributions
 > 8. Simulate parameter percentiles and unpaid claims percentiles
 > 9. Calculate the mean and [[Prediction Error]] of a reserve
 > 10. Derive [[Predictive Distributions]] using stochastic methods

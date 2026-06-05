@@ -1,4 +1,4 @@
-The **loss random variable** $X$ represents the ground-up loss amount before any policy modifications such as [[Deductible]]s, [[Coinsurance Percentages]], or [[Benefit Limits]] are applied.
+The **loss random variable** $X$ represents the ground-up loss amount before any policy modifications such as [[Deductible]]s, [[Coinsurance Percentage]], or [[Benefit Limit]] are applied.
 - The [[Expected Value]] and [[Variance]] of the corresponding [[Payment Random Variable]] $Y$ differ from those of $X$ because of the truncation and censoring imposed by policy terms
 
 > $$Y = \begin{cases} 0 & X \leq d \\ X - d & X > d \end{cases}$$

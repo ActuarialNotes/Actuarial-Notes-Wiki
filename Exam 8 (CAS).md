@@ -17,7 +17,7 @@ The **Advanced Ratemaking (Exam 8)** is a 4 hour exam covering classification ra
 > 5. Evaluate classification ratemaking models (e.g., benchmark, recalibrate variables, implementation).
 > 6. Describe approaches to stripping out [[Rating Factors]] using [[Predictive Models]] for further analysis (e.g., territorial).
 > 7. Describe approaches to modeling with high dimensional variables (e.g., vehicle make and model, workers compensation classes).
-> 8. Evaluate combinations of ratemaking component models (e.g., [[Frequency-Severity Models|frequency/severity]]).
+> 8. Evaluate combinations of ratemaking component models (e.g., [[Frequency-Severity Method|frequency/severity]]).
 >
 > **Readings:** Actuarial Standard of Practice No. 12 · Bailey and Simon · Couret and Venter · Generalized Linear Models for Insurance Rating · Mahler
 

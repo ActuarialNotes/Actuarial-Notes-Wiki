@@ -78,7 +78,7 @@ In **820 CE**, inheritance mathematics were solved by Persian polymath Al-Khwari
 
 **Probability Theory**: In **1654**, Blaise Pascal corresponds with Fermat about gambling problems. Dutch mathematician Christian Huygens, having learned of the topic from Pascal and Fermat, publishes the foundational work on  [[Probability Theory]] in **1657**. ^[[History of the Actuarial Profession](https://web.archive.org/web/20080404072019/http://www.actuaries.org.uk/knowledge/actuarial_history/history_of_profession)]
 
-**Mortality Tables**: In **1662**, John Graunt does a Statistical Analysis of the London Bills of [[Mortality]] and demonstrates patterns in life and death of groups of people.^[IBID] In **1693**, Edmond Halley analyzes deaths in 1687-1691 Breslau Germany by age. This analysis was used to calculate the price of a [[Life-Annuity]] at different ages.^[IBID]
+**Mortality Tables**: In **1662**, John Graunt does a Statistical Analysis of the London Bills of [[Mortality]] and demonstrates patterns in life and death of groups of people.^[IBID] In **1693**, Edmond Halley analyzes deaths in 1687-1691 Breslau Germany by age. This analysis was used to calculate the price of a [[Life Annuity]] at different ages.^[IBID]
 
 
 **First Insurance Company**: In **1676**, Hamburger Feuerkasse is founded as the first insurance company. They provide fire insurance.
@@ -121,7 +121,7 @@ In **820 CE**, inheritance mathematics were solved by Persian polymath Al-Khwari
 
 ***Statistics***: In the 1850's, Florence Nightingale invents the [[Coxcomb Chart]] to analyze health and mortality data. 
 
-Ronald A. Fisher invents [[ANOVA]], [[Maximum Likelihood Estimation (MLE)]], Tukey's Exploratory Data Analysis (EDA)
+Ronald A. Fisher invents [[ANOVA]], [[Maximum Likelihood Estimation]], Tukey's Exploratory Data Analysis (EDA)
 
 In **1927**, Anders Hald expands actuarial science by incorporating statistical methods into insurance and risk management.
 

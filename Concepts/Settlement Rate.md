@@ -5,7 +5,7 @@
 > $$= \frac{\text{Cumulative Closed Claims at Age } n}{\text{Ultimate Claim Count}}$$
 
 - An increase in settlement rates (faster closure) shifts losses from reported-but-open to paid, causing the paid loss triangle to develop faster than historical patterns suggest — if undetected, this leads to reserve underestimation using paid development methods
-- The [[Berquist Sherman Method|Berquist-Sherman]] adjustment for settlement rate changes restates the paid loss triangle to reflect a constant closure rate, removing the distortion before applying development factors
+- The [[Berquist-Sherman Method|Berquist-Sherman]] adjustment for settlement rate changes restates the paid loss triangle to reflect a constant closure rate, removing the distortion before applying development factors
 - Drivers of settlement rate changes: staffing levels, settlement authority limits, litigation strategy, economic conditions, and legal environment
 
 > [!example]- Settlement Rate Shift Diagnosis {Example}

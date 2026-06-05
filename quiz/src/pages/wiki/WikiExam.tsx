@@ -103,7 +103,7 @@ export default function WikiExam() {
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
-  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setIsInDevelopment } = useWikiPage()
+  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setIsInDevelopment, setIsBeta } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -189,6 +189,7 @@ export default function WikiExam() {
   }, [content])
 
   const isExamInDevelopment = progressKey !== 'P' && progressKey !== 'FM'
+  const isExamBeta = progressKey === 'P' || progressKey === 'FM'
 
   useEffect(() => {
     let cancelled = false
@@ -248,7 +249,8 @@ export default function WikiExam() {
   useEffect(() => {
     setPageTitle(extractedTitle)
     setIsInDevelopment(isExamInDevelopment)
-  }, [extractedTitle, isExamInDevelopment, setPageTitle, setIsInDevelopment])
+    setIsBeta(isExamBeta)
+  }, [extractedTitle, isExamInDevelopment, isExamBeta, setPageTitle, setIsInDevelopment, setIsBeta])
 
   useEffect(() => {
     setPageTitleBadge(smallTitleBadge)

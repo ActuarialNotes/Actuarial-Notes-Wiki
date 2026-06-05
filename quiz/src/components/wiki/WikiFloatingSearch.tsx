@@ -13,9 +13,10 @@ interface WikiFloatingSearchProps {
   pageTitle?: string | null
   pageTitleBadge?: React.ReactNode
   isInDevelopment?: boolean
+  isBeta?: boolean
 }
 
-export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDevelopment }: WikiFloatingSearchProps) {
+export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
@@ -224,10 +225,15 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
           )}
         </div>
 
-        {/* "In Development" banner — thin, full-width, hidden while search dropdown is open */}
+        {/* Status banner — thin, full-width, hidden while search dropdown is open */}
         {pageTitle && isInDevelopment && !isExpanded && (
           <div className="border-t bg-amber-500/10 py-1.5 text-center text-amber-600 dark:text-amber-400 text-[11px] font-medium tracking-wide">
             In Development
+          </div>
+        )}
+        {pageTitle && isBeta && !isExpanded && (
+          <div className="border-t bg-emerald-500/10 py-1.5 text-center text-emerald-600 dark:text-emerald-400 text-[11px] font-medium tracking-wide">
+            Beta
           </div>
         )}
       </div>

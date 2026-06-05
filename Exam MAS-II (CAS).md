@@ -65,10 +65,13 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 ## Source Material
 > [!answer]- Source Material {5 Sources}
 > 
-> |Source|Domains / Tasks|
-> |---|---|
-> |[[Introductory Time Series with R (Cowpertwait - 2009)]]|D1–D4|
-> |[[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)]]|C10–C11|
-> |[[An Introduction to Statistical Learning (James et al. - 2021)]]|C1–C9|
-> |[[Nonlife Actuarial Models (Tse - 2009)]]|A1–A2|
-> |[[Linear Mixed Models (West et al. - 2022)]]|B1–B4|
+> - [[Introductory Time Series with R (Cowpertwait - 2009)]]
+>      - D1–D4
+> - [[Generalized Linear Models for Insurance Rating (Goldburd et al. - 2020)]]
+>      - C10–C11
+> - [[An Introduction to Statistical Learning (James et al. - 2021)]]
+>      - C1–C9
+> - [[Nonlife Actuarial Models (Tse - 2009)]]
+>      - A1–A2
+> - [[Linear Mixed Models (West et al. - 2022)]]
+>      - B1–B4

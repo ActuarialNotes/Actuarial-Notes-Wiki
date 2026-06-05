@@ -48,21 +48,34 @@ The **Advanced Estimation of Claims Liabilities (Exam 7)** is a 4 hour exam cove
 
 >[!answer]- Source Material {15 Sources}
 >
-> | Source | Tasks |
-> | --- | --- |
-> | [[Loss Development Using Credibility (Brosius - 1993)]] | A1-A3, A6, A11 |
-> | [[LDF Curve Fitting and Stochastic Reserving (Clark - 2003)]] | A2-A3, A6-A8, A11 |
-> | [[Reserving for Reinsurance (Friedland - 2022)]] | A15-A17 |
-> | [[Credible Loss Ratio Claims Reserves (Hurlimann - 2009)]] | A1-A3, A6, A11 |
-> | [[Measuring the Variability of Chain Ladder Reserve Estimates (Mack - 1994)]] | A2, A6-A8 |
-> | [[Credible Claims Reserve: The Benktander Method (Mack - 2000)]] | A1-A3, A9, A11-A12 |
-> | [[A Framework for Assessing Risk Margins (Marshall et al. - 2008)]] | A14 |
-> | [[Stochastic Loss Reserving Using Bayesian MCMC Models (Meyers)]] | A9-A10 |
-> | [[Claims Development by Layer (Sahasrabuddhe - 2010)]] | A4 |
-> | [[Using the ODP Bootstrap Model (Shapland)]] | A1, A9-A10, A13 |
-> | [[A Model for Reserving Workers Compensation High Deductibles (Siewert - 1996)]] | A4 |
-> | [[Stochastic Loss Reserving Using Generalized Linear Models (Taylor)]] | A9-A10 |
-> | [[Estimating the Premium Asset on Retrospectively Rated Policies (Teng and Perkins - 1996)]] | A5 |
-> | [[Testing the Assumptions of Age-to-Age Factors (Venter - 1998)]] | A2, A6, A12 |
-> | [[Obtaining Predictive Distributions for Reserves Which Incorporate Expert Opinion (Verrall - 2007)]] | A9, A13 |
+> - [[Loss Development Using Credibility (Brosius - 1993)]]
+>      - A1-A3, A6, A11
+> - [[LDF Curve Fitting and Stochastic Reserving (Clark - 2003)]]
+>      - A2-A3, A6-A8, A11
+> - [[Reserving for Reinsurance (Friedland - 2022)]]
+>      - A15-A17
+> - [[Credible Loss Ratio Claims Reserves (Hurlimann - 2009)]]
+>      - A1-A3, A6, A11
+> - [[Measuring the Variability of Chain Ladder Reserve Estimates (Mack - 1994)]]
+>      - A2, A6-A8
+> - [[Credible Claims Reserve: The Benktander Method (Mack - 2000)]]
+>      - A1-A3, A9, A11-A12
+> - [[A Framework for Assessing Risk Margins (Marshall et al. - 2008)]]
+>      - A14
+> - [[Stochastic Loss Reserving Using Bayesian MCMC Models (Meyers)]]
+>      - A9-A10
+> - [[Claims Development by Layer (Sahasrabuddhe - 2010)]]
+>      - A4
+> - [[Using the ODP Bootstrap Model (Shapland)]]
+>      - A1, A9-A10, A13
+> - [[A Model for Reserving Workers Compensation High Deductibles (Siewert - 1996)]]
+>      - A4
+> - [[Stochastic Loss Reserving Using Generalized Linear Models (Taylor)]]
+>      - A9-A10
+> - [[Estimating the Premium Asset on Retrospectively Rated Policies (Teng and Perkins - 1996)]]
+>      - A5
+> - [[Testing the Assumptions of Age-to-Age Factors (Venter - 1998)]]
+>      - A2, A6, A12
+> - [[Obtaining Predictive Distributions for Reserves Which Incorporate Expert Opinion (Verrall - 2007)]]
+>      - A9, A13
 

@@ -41,67 +41,127 @@ The **Canada Regulation and Financial Reporting (6C) Exam** is a 4 hour exam wit
 
 >[!answer]- Source Material {37 Sources}
 >
-> | Source | Domains/Tasks |
-> | --- | --- |
-> | [[Alberta Auto Reform]] | A1 |
-> | [[Baer and Rendall]] | A2 |
-> | [[CCIR Instructions]] | C1 |
-> | [[CIA Appointed Actuary]] | C1 |
-> | [[CIA Bias]] | A1 |
-> | [[CIA CSOP]] | A1, C1-C5 |
-> | [[CIA Discount Rates]] | C1, C2 |
-> | [[CIA Duration]] | C1, C5 |
-> | [[CIA FCT 1]] | C4, C5 |
-> | [[CIA FCT 2]] | C4, C5 |
-> | [[CIA IFRS 1]] | C1-C3 |
-> | [[CIA IFRS 17 - Comparison]] | C1 |
-> | [[CIA IFRS 17 - LRC]] | C1, C2 |
-> | [[CIA IFRS 2]] | C1-C3 |
-> | [[CIA Materiality]] | C1, C5 |
-> | [[CIA Models]] | C5 |
-> | [[CIA PAA]] | C1, C2 |
-> | [[CIA Reinsurance Treatment]] | C1, C3 |
-> | [[CIA Runoff]] | C1, C5 |
-> | [[CIA Subsequent Events]] | C1, C5 |
-> | [[CIA Territories]] | A1 |
-> | [[CIA Valuation]] | C1-C5 |
-> | [[Agricultural Programs]] | B1-B3 |
-> | [[CAS Financial Reporting]] | C4, C5 |
-> | [[Davidson]] | A2 |
-> | [[Dutil]] | B1-B3 |
-> | [[Feldblum]] | C2-C4 |
-> | [[Freihaut and Vendetti]] | C1, C3 |
-> | [[GOC Flood Risks]] | B1-B3 |
-> | [[Government Insurers Study Note]] | B1-B3 |
-> | [[Harris]] | A2 |
-> | [[IAA Climate]] | C4 |
-> | [[IBC Code of Conduct]] | A1 |
-> | [[IFOA]] | C4 |
-> | [[Landmark Legal]] | A2 |
-> | [[Marshall]] | A1 |
-> | [[McDonald]] | A2 |
-> | [[Morneau Shepell]] | B1-B3 |
-> | [[MSA Legend]] | C4 |
-> | [[Ontario Reg. 664]] | A1 |
-> | [[OSFI AA]] | C5 |
-> | [[OSFI Annual Return]] | C1-C4 |
-> | [[OSFI Climate]] | C4, C5 |
-> | [[OSFI Concentration]] | C5 |
-> | [[OSFI Core Return]] | C1-C4 |
-> | [[OSFI Corporate Governance]] | C4, C5 |
-> | [[OSFI Earthquake]] | C1, C5 |
-> | [[OSFI MCT]] | C2-C4 |
-> | [[OSFI Memorandum]] | C1, C5 |
-> | [[OSFI Minimum Capital]] | C1-C4 |
-> | [[OSFI ORSA]] | C2-C4 |
-> | [[OSFI Quarterly Return]] | C1-C4 |
-> | [[OSFI Reinsurance]] | C5 |
-> | [[OSFI Stress Testing]] | C2-C4 |
-> | [[OSFI Target Capital]] | C2-C4 |
-> | [[PACICC]] | B1-B3 |
-> | [[FSCO Coverages]] | A1 |
-> | [[FSCO Private Auto]] | A1 |
-> | [[FSCO Tech Notes]] | A1 |
-> | [[FSRA Risk Management]] | A1 |
-> | [[KPMG PACICC]] | A1, C5 |
-> | [[KPMG Regulatory Oversight]] | A1 |
+> - [[Alberta Auto Reform]]
+>      - A1
+> - [[Baer and Rendall]]
+>      - A2
+> - [[CCIR Instructions]]
+>      - C1
+> - [[CIA Appointed Actuary]]
+>      - C1
+> - [[CIA Bias]]
+>      - A1
+> - [[CIA CSOP]]
+>      - A1, C1-C5
+> - [[CIA Discount Rates]]
+>      - C1, C2
+> - [[CIA Duration]]
+>      - C1, C5
+> - [[CIA FCT 1]]
+>      - C4, C5
+> - [[CIA FCT 2]]
+>      - C4, C5
+> - [[CIA IFRS 1]]
+>      - C1-C3
+> - [[CIA IFRS 17 - Comparison]]
+>      - C1
+> - [[CIA IFRS 17 - LRC]]
+>      - C1, C2
+> - [[CIA IFRS 2]]
+>      - C1-C3
+> - [[CIA Materiality]]
+>      - C1, C5
+> - [[CIA Models]]
+>      - C5
+> - [[CIA PAA]]
+>      - C1, C2
+> - [[CIA Reinsurance Treatment]]
+>      - C1, C3
+> - [[CIA Runoff]]
+>      - C1, C5
+> - [[CIA Subsequent Events]]
+>      - C1, C5
+> - [[CIA Territories]]
+>      - A1
+> - [[CIA Valuation]]
+>      - C1-C5
+> - [[Agricultural Programs]]
+>      - B1-B3
+> - [[CAS Financial Reporting]]
+>      - C4, C5
+> - [[Davidson]]
+>      - A2
+> - [[Dutil]]
+>      - B1-B3
+> - [[Feldblum]]
+>      - C2-C4
+> - [[Freihaut and Vendetti]]
+>      - C1, C3
+> - [[GOC Flood Risks]]
+>      - B1-B3
+> - [[Government Insurers Study Note]]
+>      - B1-B3
+> - [[Harris]]
+>      - A2
+> - [[IAA Climate]]
+>      - C4
+> - [[IBC Code of Conduct]]
+>      - A1
+> - [[IFOA]]
+>      - C4
+> - [[Landmark Legal]]
+>      - A2
+> - [[Marshall]]
+>      - A1
+> - [[McDonald]]
+>      - A2
+> - [[Morneau Shepell]]
+>      - B1-B3
+> - [[MSA Legend]]
+>      - C4
+> - [[Ontario Reg. 664]]
+>      - A1
+> - [[OSFI AA]]
+>      - C5
+> - [[OSFI Annual Return]]
+>      - C1-C4
+> - [[OSFI Climate]]
+>      - C4, C5
+> - [[OSFI Concentration]]
+>      - C5
+> - [[OSFI Core Return]]
+>      - C1-C4
+> - [[OSFI Corporate Governance]]
+>      - C4, C5
+> - [[OSFI Earthquake]]
+>      - C1, C5
+> - [[OSFI MCT]]
+>      - C2-C4
+> - [[OSFI Memorandum]]
+>      - C1, C5
+> - [[OSFI Minimum Capital]]
+>      - C1-C4
+> - [[OSFI ORSA]]
+>      - C2-C4
+> - [[OSFI Quarterly Return]]
+>      - C1-C4
+> - [[OSFI Reinsurance]]
+>      - C5
+> - [[OSFI Stress Testing]]
+>      - C2-C4
+> - [[OSFI Target Capital]]
+>      - C2-C4
+> - [[PACICC]]
+>      - B1-B3
+> - [[FSCO Coverages]]
+>      - A1
+> - [[FSCO Private Auto]]
+>      - A1
+> - [[FSCO Tech Notes]]
+>      - A1
+> - [[FSRA Risk Management]]
+>      - A1
+> - [[KPMG PACICC]]
+>      - A1, C5
+> - [[KPMG Regulatory Oversight]]
+>      - A1

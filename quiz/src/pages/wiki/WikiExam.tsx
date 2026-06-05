@@ -20,10 +20,11 @@ const STATUS_TITLE: Record<ItemStatus, string> = {
   completed: 'Passed — click to update exam status',
 }
 
-function ExamStatusIcon({ status }: { status: ItemStatus }) {
+function ExamStatusIcon({ status, size = 'md' }: { status: ItemStatus; size?: 'sm' | 'md' }) {
+  const cls = size === 'sm' ? 'h-5 w-5' : 'h-7 w-7'
   if (status === 'completed') {
     return (
-      <svg className="h-7 w-7 text-green-500" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <svg className={`${cls} text-green-500`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <circle cx="10" cy="10" r="8" fill="currentColor" opacity=".2" />
         <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
         <polyline points="6.5 10.5 9 13 14 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -32,14 +33,14 @@ function ExamStatusIcon({ status }: { status: ItemStatus }) {
   }
   if (status === 'in_progress') {
     return (
-      <svg className="h-7 w-7 text-amber-500" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <svg className={`${cls} text-amber-500`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
         <path d="M10 2a8 8 0 0 1 0 16" fill="currentColor" opacity=".45" />
       </svg>
     )
   }
   return (
-    <svg className="h-7 w-7 text-muted-foreground/50" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+    <svg className={`${cls} text-muted-foreground/50`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
       <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3 1.5" />
       <line x1="10" y1="7" x2="10" y2="13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       <line x1="7" y1="10" x2="13" y2="10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -47,7 +48,7 @@ function ExamStatusIcon({ status }: { status: ItemStatus }) {
   )
 }
 
-function ExamStatusBadge({ progressKey }: { progressKey: string }) {
+function ExamStatusBadge({ progressKey, size = 'md' }: { progressKey: string; size?: 'sm' | 'md' }) {
   const { user } = useAuth()
   const { progress } = useExamProgress()
   const currentStatus = ((progress[progressKey] as ItemStatus) ?? 'not_started')
@@ -61,7 +62,7 @@ function ExamStatusBadge({ progressKey }: { progressKey: string }) {
       aria-label={user ? STATUS_TITLE[currentStatus] : 'Sign in to track progress'}
       className="inline-flex items-center justify-center shrink-0 rounded-full transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring not-prose"
     >
-      <ExamStatusIcon status={currentStatus} />
+      <ExamStatusIcon status={currentStatus} size={size} />
     </button>
   )
 }
@@ -70,18 +71,21 @@ function ExamDaysPill({
   count,
   explanation,
   className,
+  size = 'md',
 }: {
   count: number
   explanation: string
   className?: string
+  size?: 'sm' | 'md'
 }) {
   const [open, setOpen] = useState(false)
+  const sizeCls = size === 'sm' ? 'px-1.5 py-0.5 text-[10px]' : 'px-2 py-0.5 text-xs'
   return (
     <span className="relative inline-flex not-prose">
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className={`inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold leading-none cursor-pointer select-none ${className ?? ''}`}
+        className={`inline-flex items-center justify-center rounded-full ${sizeCls} font-bold leading-none cursor-pointer select-none ${className ?? ''}`}
       >
         {count}
       </button>
@@ -99,7 +103,7 @@ export default function WikiExam() {
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
-  const { setPageRefs, setExamId } = useWikiPage()
+  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setIsInDevelopment } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -155,6 +159,37 @@ export default function WikiExam() {
     </span>
   ), [progressKey, examStatus, daysToPrepare, daysUntilExam])
 
+  const smallTitleBadge = useMemo(() => (
+    <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
+      <ExamStatusBadge progressKey={progressKey} size="sm" />
+      {examStatus !== 'completed' && daysToPrepare !== null && (
+        <ExamDaysPill
+          count={daysToPrepare}
+          explanation={`${daysToPrepare} days to prepare until your target study-ready date`}
+          className="bg-amber-400/20 text-amber-400"
+          size="sm"
+        />
+      )}
+      {examStatus !== 'completed' && daysUntilExam !== null && (
+        <ExamDaysPill
+          count={daysUntilExam}
+          explanation={`${daysUntilExam} days until your scheduled exam`}
+          className="bg-muted text-foreground"
+          size="sm"
+        />
+      )}
+    </span>
+  ), [progressKey, examStatus, daysToPrepare, daysUntilExam])
+
+  const extractedTitle = useMemo(() => {
+    if (!content) return null
+    const withoutFm = content.replace(/^---\n[\s\S]*?\n---\n?/, '')
+    const match = withoutFm.match(/^#\s+(.+)$/m)
+    return match ? match[1].trim() : null
+  }, [content])
+
+  const isExamInDevelopment = progressKey !== 'P' && progressKey !== 'FM'
+
   useEffect(() => {
     let cancelled = false
     setStatus('loading')
@@ -209,6 +244,15 @@ export default function WikiExam() {
     setExamId(examIdFromFile(examFileName))
     setPageRefs(pageRefs)
   }, [pageRefs, examFileName, setExamId, setPageRefs])
+
+  useEffect(() => {
+    setPageTitle(extractedTitle)
+    setIsInDevelopment(isExamInDevelopment)
+  }, [extractedTitle, isExamInDevelopment, setPageTitle, setIsInDevelopment])
+
+  useEffect(() => {
+    setPageTitleBadge(smallTitleBadge)
+  }, [smallTitleBadge, setPageTitleBadge])
 
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind === 'exam') return false

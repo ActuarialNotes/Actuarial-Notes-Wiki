@@ -14,6 +14,9 @@ setWikiIndexBundle(wikiBundle.index)
 interface WikiPageContextValue {
   setPageRefs: (refs: WikiEntryRef[]) => void
   setExamId: (id: string | null) => void
+  setPageTitle: (title: string | null) => void
+  setPageTitleBadge: (badge: ReactNode) => void
+  setIsInDevelopment: (v: boolean) => void
 }
 
 const WikiPageContext = createContext<WikiPageContextValue | null>(null)
@@ -27,12 +30,18 @@ export function useWikiPage() {
 export function WikiLayout({ children }: { children: ReactNode }) {
   const [pageRefs, setPageRefsState] = useState<WikiEntryRef[]>([])
   const [, setExamIdState] = useState<string | null>(null)
+  const [pageTitle, setPageTitleState] = useState<string | null>(null)
+  const [pageTitleBadge, setPageTitleBadgeState] = useState<ReactNode>(null)
+  const [isInDevelopment, setIsInDevelopmentState] = useState(false)
   const location = useLocation()
   const closeOnNavigation = useConceptPopup(s => s.closeOnNavigation)
   const popupOpen = useConceptPopup(s => s.open)
 
   const setPageRefs = useCallback((refs: WikiEntryRef[]) => setPageRefsState(refs), [])
   const setExamId = useCallback((id: string | null) => setExamIdState(id), [])
+  const setPageTitle = useCallback((title: string | null) => setPageTitleState(title), [])
+  const setPageTitleBadge = useCallback((badge: ReactNode) => setPageTitleBadgeState(badge), [])
+  const setIsInDevelopment = useCallback((v: boolean) => setIsInDevelopmentState(v), [])
 
   useEffect(() => {
     // Detect if this is a return to the same wiki page (e.g. coming back from another tab).
@@ -49,6 +58,9 @@ export function WikiLayout({ children }: { children: ReactNode }) {
 
     setPageRefsState([])
     setExamIdState(null)
+    setPageTitleState(null)
+    setPageTitleBadgeState(null)
+    setIsInDevelopmentState(false)
 
     // Only close the popup when genuinely navigating to a different page within
     // the wiki. On a return visit (same pathname, component remounted) the popup
@@ -59,9 +71,14 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   }, [location.pathname, location.search, closeOnNavigation])
 
   return (
-    <WikiPageContext.Provider value={{ setPageRefs, setExamId }}>
+    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setIsInDevelopment }}>
       <div className="min-h-screen flex flex-col">
-        <WikiFloatingSearch pageRefs={pageRefs} />
+        <WikiFloatingSearch
+          pageRefs={pageRefs}
+          pageTitle={pageTitle}
+          pageTitleBadge={pageTitleBadge}
+          isInDevelopment={isInDevelopment}
+        />
         <div
           className="flex-1 px-4 sm:px-6 py-8 max-w-4xl mx-auto w-full"
           style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}

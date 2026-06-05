@@ -4,7 +4,6 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   ChevronsLeft,
-  Compass,
   Gem,
   GraduationCap,
   Layers,
@@ -457,13 +456,6 @@ export default function Sidebar() {
             collapsed={collapsed}
             onNavigate={closeMobile}
             badge={flashcardBadge}
-          />
-          <SidebarItem
-            to="/search"
-            label="Search"
-            icon={<Compass className="h-4 w-4" />}
-            collapsed={collapsed}
-            onNavigate={closeMobile}
           />
         </nav>
 

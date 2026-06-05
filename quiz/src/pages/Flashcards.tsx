@@ -9,6 +9,7 @@ import {
   ChevronRight,
   ChevronsUpDown,
   GraduationCap,
+  Headphones,
   Images,
   LayoutGrid,
   Layers,
@@ -816,9 +817,28 @@ function SortableCard({
   const [flipped, setFlipped] = useState(globalFlip)
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const [showPlayMenu, setShowPlayMenu] = useState(false)
+  const [menuAlignRight, setMenuAlignRight] = useState(false)
+  const [showQuestionsModal, setShowQuestionsModal] = useState(false)
+  const [showLearningProgress, setShowLearningProgress] = useState(false)
   const { openAt } = useConceptPopup()
+  const { addCard, hasCard, cards } = useFlashcards()
+  const routerNavigate = useNavigate()
+  const playMenuRef = useRef<HTMLDivElement>(null)
+  const playBtnRef = useRef<HTMLButtonElement>(null)
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name })
+
+  useEffect(() => {
+    if (!showPlayMenu) return
+    function handleClickOutside(e: MouseEvent) {
+      if (playMenuRef.current && !playMenuRef.current.contains(e.target as Node)) {
+        setShowPlayMenu(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showPlayMenu])
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -874,15 +894,108 @@ function SortableCard({
         className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
         {/* Header: name + play + study shortcut + delete */}
-        <div className="flex items-center gap-1 px-2.5 pt-2 pb-1.5 border-b">
-          <span className="text-xs font-medium text-muted-foreground truncate flex-1 min-w-0">{card.name}</span>
-          <button
-            type="button"
-            onPointerDown={e => e.stopPropagation()}
-            onClick={e => { e.stopPropagation(); openAt([card], 0) }}
-            aria-label={`Open ${card.name}`}
-            className="text-muted-foreground hover:text-primary h-5 w-5 flex items-center justify-center transition-colors shrink-0"
-          ><Play className="h-3 w-3" /></button>
+        <div className="flex items-center gap-1 px-3 py-2 border-b">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            <span className="text-sm font-medium text-muted-foreground truncate min-w-0">{card.name}</span>
+            <div className="relative shrink-0" ref={playMenuRef}>
+              <button
+                ref={playBtnRef}
+                type="button"
+                onPointerDown={e => e.stopPropagation()}
+                onClick={e => {
+                  e.stopPropagation()
+                  if (!showPlayMenu && playBtnRef.current) {
+                    const rect = playBtnRef.current.getBoundingClientRect()
+                    setMenuAlignRight(window.innerWidth - rect.right < 210)
+                  }
+                  setShowPlayMenu(v => !v)
+                }}
+                aria-label={`Actions for ${card.name}`}
+                className="text-muted-foreground hover:text-primary h-6 w-6 flex items-center justify-center transition-colors"
+              >
+                <Play className="h-3.5 w-3.5" />
+              </button>
+              {showPlayMenu && (
+                <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+                  <button
+                    type="button"
+                    onPointerDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); setShowQuestionsModal(true); setShowPlayMenu(false) }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                  >
+                    <Play className="h-3.5 w-3.5 shrink-0" />
+                    Start Quiz
+                  </button>
+                  {card.kind === 'concept' && (
+                    <button
+                      type="button"
+                      onPointerDown={e => e.stopPropagation()}
+                      onClick={e => { e.stopPropagation(); routerNavigate(wikiRoute(card)); setShowPlayMenu(false) }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                    >
+                      <BookOpen className="h-3.5 w-3.5 shrink-0" />
+                      Open in Study Guide
+                    </button>
+                  )}
+                  <div className="flex items-center hover:bg-accent transition-colors">
+                    <button
+                      type="button"
+                      onPointerDown={e => e.stopPropagation()}
+                      onClick={e => { e.stopPropagation(); addCard(card) }}
+                      className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
+                    >
+                      <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
+                        {hasCard(card.name) ? '✓' : '+'}
+                      </span>
+                      <span className="flex-1">{hasCard(card.name) ? 'Added to Flashcards' : 'Add to Flashcards'}</span>
+                      {hasCard(card.name) && cards.length > 0 && (
+                        <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
+                          {cards.length}
+                        </span>
+                      )}
+                    </button>
+                    {hasCard(card.name) && (
+                      <Link
+                        to={`/flashcards?highlight=${encodeURIComponent(card.name)}`}
+                        onPointerDown={e => e.stopPropagation()}
+                        onClick={() => setShowPlayMenu(false)}
+                        className="text-xs text-primary hover:underline pr-3 shrink-0"
+                      >
+                        view
+                      </Link>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onPointerDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); openAt([card], 0); setShowPlayMenu(false) }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                  >
+                    <Sigma className="h-3.5 w-3.5 shrink-0" />
+                    Math View
+                  </button>
+                  <button
+                    type="button"
+                    onPointerDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); openAt([card], 0); setShowPlayMenu(false) }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                  >
+                    <Headphones className="h-3.5 w-3.5 shrink-0" />
+                    Listen
+                  </button>
+                  <button
+                    type="button"
+                    onPointerDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); setShowLearningProgress(true); setShowPlayMenu(false) }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
+                  >
+                    <TrendingUp className="h-3.5 w-3.5 shrink-0" />
+                    Learning Progress
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
           <button
             type="button"
             onPointerDown={e => e.stopPropagation()}
@@ -899,6 +1012,12 @@ function SortableCard({
             className="text-muted-foreground hover:text-destructive h-6 w-6 flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-colors"
           ><Trash2 className="h-3 w-3" /></button>
         </div>
+        {showQuestionsModal && (
+          <ConceptQuestionsModal conceptName={card.name} onClose={() => setShowQuestionsModal(false)} />
+        )}
+        {showLearningProgress && (
+          <LearningProgressModal conceptName={card.name} onClose={() => setShowLearningProgress(false)} />
+        )}
 
         {/* Back content — grows to fit, no scrollbar */}
         <div className="px-3 py-2">

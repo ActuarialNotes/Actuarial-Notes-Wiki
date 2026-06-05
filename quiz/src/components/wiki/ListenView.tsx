@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import katex from 'katex'
-import { Loader2, Pause, Play, SkipBack, Sparkles, Volume2 } from 'lucide-react'
+import { Loader2, Pause, Play, SkipBack, SkipForward, Sparkles, Volume2 } from 'lucide-react'
 import { buildListenContent, toSegments, type InlineToken, type ListenBlock } from '@/lib/listenTokens'
 import { useListenSpeech } from '@/hooks/useListenSpeech'
 
@@ -14,7 +14,7 @@ export function ListenView({ markdown }: Props) {
   const { blocks, tokens } = useMemo(() => buildListenContent(markdown), [markdown])
   const segments = useMemo(() => toSegments(blocks), [blocks])
   const [rate, setRate] = useState(1)
-  const { status, activeIndex, engine, play, pause, resume, rewind, restartCurrent } = useListenSpeech(segments, rate)
+  const { status, activeIndex, engine, play, pause, resume, rewind, restartCurrent, skipForward } = useListenSpeech(segments, rate)
   const containerRef = useRef<HTMLDivElement>(null)
   const didMountRef = useRef(false)
 
@@ -89,6 +89,15 @@ export function ListenView({ markdown }: Props) {
           aria-label="Previous paragraph"
         >
           <SkipBack className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => skipForward()}
+          className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
+          title="Next paragraph"
+          aria-label="Next paragraph"
+        >
+          <SkipForward className="h-4 w-4" />
         </button>
         <div className="flex items-center gap-1 ml-1">
           {RATES.map(r => (

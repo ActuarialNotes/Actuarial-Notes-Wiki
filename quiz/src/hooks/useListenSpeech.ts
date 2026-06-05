@@ -18,6 +18,8 @@ export interface ListenSpeech {
   rewind: () => void
   /** Replay from the start of the paragraph currently being read. */
   restartCurrent: () => void
+  /** Skip to the start of the next paragraph. */
+  skipForward: () => void
 }
 
 const MAX_SSML_CHARS = 4000
@@ -226,6 +228,7 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
   const play = useCallback(() => begin(0), [begin])
   const restartCurrent = useCallback(() => begin(currentSegmentIndex()), [begin, currentSegmentIndex])
   const rewind = useCallback(() => begin(currentSegmentIndex() - 1), [begin, currentSegmentIndex])
+  const skipForward = useCallback(() => begin(currentSegmentIndex() + 1), [begin, currentSegmentIndex])
 
   const pause = useCallback(() => {
     if (engine === 'premium') audioRef.current?.pause()
@@ -248,5 +251,5 @@ export function useListenSpeech(segments: SpeechSegment[], rate: number): Listen
   // Stop any audio when the hook unmounts (popup close / mode exit / navigation).
   useEffect(() => () => { hardStop() }, [hardStop])
 
-  return { status, activeIndex, engine, play, pause, resume, stop, rewind, restartCurrent }
+  return { status, activeIndex, engine, play, pause, resume, stop, rewind, restartCurrent, skipForward }
 }

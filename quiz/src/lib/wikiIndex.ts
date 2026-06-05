@@ -89,6 +89,18 @@ function parseFrontmatter(raw: string): Record<string, string> {
 let bundledIndex: WikiIndexItem[] | null = null
 export function setWikiIndexBundle(items: WikiIndexItem[]): void { bundledIndex = items }
 
+// Synchronous check against the bundled index. Returns true when the entry
+// exists or when the index hasn't been loaded yet (fail-open so links aren't
+// incorrectly styled as missing during hydration).
+export function isInWikiIndex(kind: string, name: string): boolean {
+  if (!bundledIndex) return true
+  const expectedCategory = kind === 'resource' ? 'document' : kind
+  const nameLower = name.toLowerCase()
+  return bundledIndex.some(
+    item => item.category === expectedCategory && item.name.toLowerCase() === nameLower
+  )
+}
+
 export async function buildWikiIndex(): Promise<WikiIndexItem[]> {
   if (bundledIndex) return bundledIndex
   const cached = readCache()

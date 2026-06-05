@@ -12,9 +12,10 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Loader2, Settings2, ChevronRight, Star, Sun, Moon } from 'lucide-react'
+import { Loader2, Settings2, ChevronRight, Star, Sun, Moon, GraduationCap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useSubscription } from '@/hooks/useSubscription'
+import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import {
   AvatarDisplay,
@@ -283,9 +284,13 @@ export default function Settings() {
   )
 
   const navItems = [
+    { id: 'support', label: 'Support' },
     { id: 'appearance', label: 'Appearance' },
     ...(user ? BASE_NAV_ITEMS : []),
   ]
+
+  // ---- Onboarding tour (replayable from Support) ----
+  const restartTour = useOnboardingTour(s => s.restart)
 
   // ---- Section refs for scroll-nav ----
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
@@ -571,6 +576,33 @@ export default function Settings() {
 
           {/* Sections */}
           <div className="flex-1 space-y-8 min-w-0">
+
+            {/* ---- Support (first) ---- */}
+            <section ref={el => { sectionRefs.current.support = el }} id="support">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Support</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">Take the tour</p>
+                      <p className="text-xs text-muted-foreground">
+                        Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes and more.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => restartTour()}
+                      className="shrink-0"
+                    >
+                      <GraduationCap className="h-4 w-4 mr-2" />
+                      Start tour
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
 
             {/* ---- Appearance ---- */}
             <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">

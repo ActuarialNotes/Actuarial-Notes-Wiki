@@ -438,7 +438,7 @@ export function ConceptPopup() {
           )}
           {content !== null && (
             listenView ? (
-              <ListenView key={current.name} markdown={content} />
+              <ListenView markdown={content} />
             ) : mathView ? (
               mathBlocks.length > 0 ? (
                 <div className="space-y-4">

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import katex from 'katex'
-import { Loader2, Pause, Play, RotateCcw, Sparkles, Volume2 } from 'lucide-react'
+import { Loader2, Pause, Play, SkipBack, Sparkles, Volume2 } from 'lucide-react'
 import { buildListenContent, toSegments, type InlineToken, type ListenBlock } from '@/lib/listenTokens'
 import { useListenSpeech } from '@/hooks/useListenSpeech'
 
@@ -14,8 +14,9 @@ export function ListenView({ markdown }: Props) {
   const { blocks, tokens } = useMemo(() => buildListenContent(markdown), [markdown])
   const segments = useMemo(() => toSegments(blocks), [blocks])
   const [rate, setRate] = useState(1)
-  const { status, activeIndex, engine, play, pause, resume } = useListenSpeech(segments, rate)
+  const { status, activeIndex, engine, play, pause, resume, rewind, restartCurrent } = useListenSpeech(segments, rate)
   const containerRef = useRef<HTMLDivElement>(null)
+  const didMountRef = useRef(false)
 
   // Pre-render KaTeX HTML for every math token once.
   const mathHtml = useMemo(() => {
@@ -28,10 +29,18 @@ export function ListenView({ markdown }: Props) {
     return map
   }, [tokens])
 
-  // Auto-play whenever the concept (its segments) changes or the speed changes.
+  // Auto-play from the top whenever the concept (its segments) changes.
   useEffect(() => {
     play()
-  }, [segments, rate, play])
+  }, [segments, play])
+
+  // Changing speed continues from the current paragraph (Web Speech can't
+  // re-rate a live utterance, so we replay the current one at the new speed).
+  // Skip the initial mount so this doesn't double-trigger with the segments effect.
+  useEffect(() => {
+    if (!didMountRef.current) { didMountRef.current = true; return }
+    restartCurrent()
+  }, [rate, restartCurrent])
 
   // Keep the spoken word in view.
   useEffect(() => {
@@ -58,7 +67,7 @@ export function ListenView({ markdown }: Props) {
   return (
     <div>
       {/* Control bar */}
-      <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-3 flex items-center gap-2 border-b bg-card/95 backdrop-blur">
+      <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 -mt-4 px-4 sm:px-6 py-2 mb-3 flex items-center gap-2 border-b bg-card/95 backdrop-blur">
         <button
           type="button"
           onClick={onToggle}
@@ -74,12 +83,12 @@ export function ListenView({ markdown }: Props) {
         </button>
         <button
           type="button"
-          onClick={() => play()}
+          onClick={() => rewind()}
           className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
-          title="Restart"
-          aria-label="Restart"
+          title="Previous paragraph"
+          aria-label="Previous paragraph"
         >
-          <RotateCcw className="h-4 w-4" />
+          <SkipBack className="h-4 w-4" />
         </button>
         <div className="flex items-center gap-1 ml-1">
           {RATES.map(r => (

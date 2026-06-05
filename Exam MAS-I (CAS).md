@@ -62,7 +62,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 >      - C1–C9
 > - [[Introduction to Mathematical Statistics (Hogg et al. - 2018)]]
 >      - B1–B8, C1–C9
-> - |[[An Introduction to Statistical Learning (James et al. - 2021)]]
+> - [[An Introduction to Statistical Learning (James et al. - 2021)]]
 >      - C1–C9
 > - [[Generalized Linear Models (Larsen - 2015)]]
 >      - C1–C9

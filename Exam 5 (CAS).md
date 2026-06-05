@@ -72,11 +72,15 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 ## Source Material
 > [!answer]- Source Material {6 Sources}
 > 
-> |Source|Domains / Tasks|
-> |---|---|
-> |[[Basic Ratemaking (Werner - 2016)]]|A1–A15, A17|
-> |[[Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)]]|B1–B42|
-> |[[ASOP 12 - Risk Classification (ASB - 2005)]]|A4–A5|
-> |[[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)]]|A4, A8|
-> |[[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)]]|A4, B2|
-> |[[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988)]]|A4, A16|
+> - [[Basic Ratemaking (Werner - 2016)]]
+>      - A1–A15, A17
+> - [[Estimating Unpaid Claims Using Basic Techniques (Friedland - 2010)]]
+>      - B1–B42
+> - [[ASOP 12 - Risk Classification (ASB - 2005)]]
+>      - A4–A5
+> - [[ASOP 13 - Trending Procedures in Property Casualty Insurance (ASB - 2009)]]
+>      - A4, A8
+> - [[ASOP 43 - Property Casualty Unpaid Claim Estimates (ASB - 2007)]]
+>      - A4, B2
+> - [[Statement of Principles Regarding Property and Casualty Insurance Ratemaking (CAS - 1988)]]
+>      - A4, A16

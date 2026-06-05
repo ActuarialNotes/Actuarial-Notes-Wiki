@@ -7,6 +7,7 @@ import rehypeKatex from 'rehype-katex'
 import type { Components } from 'react-markdown'
 import { calloutComponents } from '@/components/MarkdownCallout'
 import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { isInWikiIndex } from '@/lib/wikiIndex'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 
 const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO as string
@@ -188,11 +189,13 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         )
       }
       const route = wikiRoute(ref)
+      const exists = isInWikiIndex(ref.kind, ref.name)
       return (
         <a
           href={route}
           data-wikiref={refKey(ref)}
           {...rest}
+          style={exists ? undefined : { textDecorationLine: 'none' }}
           onClick={e => {
             if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
             e.preventDefault()

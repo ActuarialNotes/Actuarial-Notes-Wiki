@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
@@ -10,9 +10,12 @@ type Scope = 'page' | 'all'
 
 interface WikiFloatingSearchProps {
   pageRefs: WikiEntryRef[]
+  pageTitle?: string | null
+  pageTitleBadge?: React.ReactNode
+  isInDevelopment?: boolean
 }
 
-export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
+export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDevelopment }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
@@ -165,6 +168,14 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
             )}
           </div>
 
+          {/* Exam title strip — same height as search bar */}
+          {pageTitle && (
+            <div className="flex items-center gap-2.5 h-[calc(3.5rem-1px)] border-t">
+              <span className="font-semibold text-sm truncate flex-1 min-w-0">{pageTitle}</span>
+              {pageTitleBadge && <span className="shrink-0">{pageTitleBadge}</span>}
+            </div>
+          )}
+
           {/* Dropdown — only when query is non-empty */}
           {isExpanded && (
             <div className="border-t pb-3">
@@ -212,6 +223,13 @@ export function WikiFloatingSearch({ pageRefs }: WikiFloatingSearchProps) {
             </div>
           )}
         </div>
+
+        {/* "In Development" banner — thin, full-width, hidden while search dropdown is open */}
+        {pageTitle && isInDevelopment && !isExpanded && (
+          <div className="border-t bg-amber-500/10 py-1.5 text-center text-amber-600 dark:text-amber-400 text-[11px] font-medium tracking-wide">
+            In Development
+          </div>
+        )}
       </div>
     </>
   )

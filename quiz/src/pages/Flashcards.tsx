@@ -602,6 +602,7 @@ function ViewModeDropdown({
     <div className="relative shrink-0" ref={ref}>
       <button
         type="button"
+        data-tour="card-content"
         onClick={() => setOpen(v => !v)}
         title="Back content"
         className={`inline-flex items-center gap-1 px-2 h-9 sm:h-10 rounded-md border transition-colors ${
@@ -1435,6 +1436,7 @@ function FlashcardStudyArea({
     <div className="flex flex-col items-center gap-5 px-4 py-6">
       {/* Flip card */}
       <div
+        data-tour="flip-card"
         className={`w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer transition-all${flipped ? '' : ' select-none'}${isFlashing ? ' flashcard-highlight' : ''}`}
         onClick={(e) => {
           if (!flipped) { handleFlip(); return }

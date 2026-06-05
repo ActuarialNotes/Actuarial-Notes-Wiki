@@ -195,7 +195,7 @@ function ExamOptionCard({
   const description = isExam5 ? null : exam.value
 
   return (
-    <button type="button" onClick={onClick} className="text-left w-full">
+    <button type="button" data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined} onClick={onClick} className="text-left w-full">
       <Card className={cn('h-full transition-all duration-150 overflow-hidden hover:bg-accent/30')}>
         <CardHeader className="pb-3">
           <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
@@ -881,6 +881,7 @@ export default function Landing() {
           </div>
           <button
             type="button"
+            data-tour="start-quiz"
             onClick={handleStart}
             className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl bg-primary text-primary-foreground text-base font-semibold hover:bg-primary/90 active:bg-primary/80 transition-colors"
           >

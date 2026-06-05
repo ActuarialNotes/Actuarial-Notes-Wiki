@@ -453,6 +453,7 @@ export default function Quiz() {
                 </Button>
                 {isLastQuestion ? (
                   <Button
+                    data-tour="finish-quiz"
                     onClick={handleFinish}
                     size="lg"
                     disabled={isSubmitting}

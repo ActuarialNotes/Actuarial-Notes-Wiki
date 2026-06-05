@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   ChevronsLeft,
+  ChevronsRight,
   Gem,
   GraduationCap,
   Layers,
@@ -328,8 +329,9 @@ export default function Sidebar() {
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <Link
             to="/dashboard"
-            className="font-semibold text-foreground text-sm truncate shrink-0"
+            className="flex items-center gap-1.5 font-semibold text-foreground text-sm truncate shrink-0"
           >
+            <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0" style={{ filter: 'brightness(0) invert(1)' }} />
             Actuarial Notes
           </Link>
           {user && inProgressSyllabi.map(s => {
@@ -384,8 +386,9 @@ export default function Sidebar() {
             <Link
               to="/dashboard"
               onClick={closeMobile}
-              className="font-semibold text-foreground hover:text-primary transition-colors truncate shrink-0"
+              className="flex items-center gap-1.5 font-semibold text-foreground hover:text-primary transition-colors truncate shrink-0"
             >
+              <img src="/favicon.png" alt="" className="h-5 w-5 shrink-0" style={{ filter: 'brightness(0) invert(1)' }} />
               Actuarial Notes
             </Link>
             {user && inProgressSyllabi.map(s => {
@@ -401,15 +404,24 @@ export default function Sidebar() {
               )
             })}
           </div>
+          {/* Desktop: collapsed icon-only logo */}
+          {collapsed && (
+            <Link
+              to="/dashboard"
+              className="hidden lg:flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent transition-colors mx-auto"
+            >
+              <img src="/favicon.png" alt="Actuarial Notes" className="h-5 w-5" style={{ filter: 'brightness(0) invert(1)' }} />
+            </Link>
+          )}
           {/* Desktop: collapse/expand toggle */}
           <button
             type="button"
             onClick={() => setCollapsed(v => !v)}
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className={`hidden lg:flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors text-muted-foreground ${collapsed ? 'mx-auto' : 'ml-auto'}`}
+            className={`hidden lg:flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground transition-colors text-muted-foreground ${collapsed ? '' : 'ml-auto'}`}
           >
-            {collapsed ? <Menu className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
+            {collapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
           </button>
           {/* Mobile: close button */}
           <button

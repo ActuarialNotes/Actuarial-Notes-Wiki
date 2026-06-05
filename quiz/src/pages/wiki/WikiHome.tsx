@@ -263,7 +263,7 @@ export default function WikiHome() {
                       : 0
 
                     return (
-                      <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })}>
+                      <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={examId === 'P' ? 'exam-p' : undefined}>
                         <Card
                           className={cn(
                             'h-full transition-all duration-150 overflow-hidden',

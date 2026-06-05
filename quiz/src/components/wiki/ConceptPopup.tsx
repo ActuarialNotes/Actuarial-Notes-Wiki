@@ -268,6 +268,7 @@ export function ConceptPopup() {
           <button
             ref={playBtnRef}
             type="button"
+            data-tour="concept-action"
             onClick={() => {
               if (!showPlayMenu && playBtnRef.current) {
                 const rect = playBtnRef.current.getBoundingClientRect()
@@ -310,6 +311,7 @@ export function ConceptPopup() {
               <div className="flex items-center hover:bg-accent transition-colors">
                 <button
                   type="button"
+                  data-tour="add-flashcard"
                   onClick={() => { addCard(current) }}
                   className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
                 >
@@ -326,6 +328,7 @@ export function ConceptPopup() {
                 {hasCard(current.name) && (
                   <Link
                     to={`/flashcards?highlight=${encodeURIComponent(current.name)}`}
+                    data-tour="view-flashcards"
                     onClick={() => { setShowPlayMenu(false); close() }}
                     className="text-xs text-primary hover:underline pr-3 shrink-0"
                   >

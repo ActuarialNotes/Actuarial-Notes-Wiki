@@ -5,5 +5,7 @@ Year: "2015"
 Edition: 2e
 Publisher: ACTEX
 ISBN: 978-1-64756-322-6
+Exams:
+  - "Exam P-1 (SOA)"
 ---
 ![[Probability and Statistics with Applications - A Problem-Solving Text - Cover.png]]

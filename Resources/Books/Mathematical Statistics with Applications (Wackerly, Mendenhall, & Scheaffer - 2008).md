@@ -5,6 +5,8 @@ Year: "2008"
 Edition: 7e
 Publisher: Thomson Brooks/Cole
 ISBN: 978-0495110811
+Exams:
+  - "Exam P-1 (SOA)"
 ---
 
 

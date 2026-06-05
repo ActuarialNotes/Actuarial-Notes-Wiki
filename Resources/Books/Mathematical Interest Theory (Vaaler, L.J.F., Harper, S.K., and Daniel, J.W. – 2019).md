@@ -6,6 +6,8 @@ Edition: 3rd
 Publisher: American Mathematical Society
 ISBN: 978-1-4704-4393-1
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/mathematical-interest-theory-vaaler)"
+Exams:
+  - "Exam FM-2 (SOA)"
 ---
 ![[Mathematical Interest Theory - Vaaler - Cover.png]]
 ## 0 An Introduction to the Texas Instruments BA II Plus

@@ -102,6 +102,7 @@ export default function WikiExam() {
   const { slug = '' } = useParams()
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
+  const resourceParam = searchParams.get('resource')
   const examFileName = fromSlug(slug)
   const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setIsInDevelopment } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
@@ -279,10 +280,10 @@ export default function WikiExam() {
     return true
   }, [pageRefs, examFileName, openAt, studyPlanRefs, resourceRefs])
 
-  // Reset the opened flag whenever the exam or the requested concept changes.
+  // Reset the opened flag whenever the exam or requested concept/resource changes.
   useEffect(() => {
     popupOpenedRef.current = false
-  }, [examFileName, conceptParam])
+  }, [examFileName, conceptParam, resourceParam])
 
   // When arriving from search with ?concept=, open the popup once pageRefs load.
   useEffect(() => {
@@ -297,6 +298,25 @@ export default function WikiExam() {
     const openList = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptParam }]
     openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs)
   }, [conceptParam, pageRefs, examFileName, openAt, studyPlanRefs, resourceRefs])
+
+  // When arriving with ?resource=, open the source-material popup once pageRefs load.
+  useEffect(() => {
+    if (!resourceParam || pageRefs.length === 0 || popupOpenedRef.current) return
+    popupOpenedRef.current = true
+    const conceptList = pageRefs
+      .filter(r => r.kind === 'concept')
+      .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
+    const resList = resourceRefs ?? [{ kind: 'resource' as const, name: resourceParam }]
+    const resIdx = resList.findIndex(r => r.name.toLowerCase() === resourceParam.toLowerCase())
+    openAt(
+      resList,
+      resIdx >= 0 ? resIdx : 0,
+      `${examFileName}.md`,
+      studyPlanRefs,
+      resourceRefs,
+      { initialFilter: 'source-material', fullList: conceptList },
+    )
+  }, [resourceParam, pageRefs, examFileName, openAt, studyPlanRefs, resourceRefs])
 
   return (
     <div className="space-y-4">

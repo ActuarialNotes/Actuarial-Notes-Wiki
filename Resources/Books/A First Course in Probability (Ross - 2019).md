@@ -6,6 +6,8 @@ Edition: 10th
 Publisher: Pearson
 ISBN: 978-0134753119
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/1023819820)"
+Exams:
+  - "Exam P-1 (SOA)"
 ---
 
 

@@ -1,9 +1,33 @@
-import { ExternalLink } from 'lucide-react'
+import { BookOpen, ExternalLink } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { wikiRoute } from '@/lib/wikiRoutes'
 import type { ResourceMeta } from '@/lib/resourceMeta'
 
-export function ResourceMetaCard({ meta, compact }: { meta: ResourceMeta; compact?: boolean }) {
+function examDisplayLabel(examFileName: string): string {
+  // "Exam P-1 (SOA)" → "Exam P"
+  // "Exam FM-2 (SOA)" → "Exam FM"
+  return examFileName
+    .replace(/\s*\([^)]*\)\s*$/, '')
+    .replace(/-\d+$/, '')
+    .trim()
+}
+
+function examUrl(examFileName: string, resourceName: string): string {
+  const slug = (name: string) => encodeURIComponent(name.trim()).replace(/%20/g, '+')
+  return `${wikiRoute({ kind: 'exam', name: examFileName })}?resource=${slug(resourceName)}`
+}
+
+export function ResourceMetaCard({
+  meta,
+  resourceName,
+  compact,
+}: {
+  meta: ResourceMeta
+  resourceName?: string
+  compact?: boolean
+}) {
   return (
     <div className={cn('flex gap-4 rounded-lg border bg-card p-4 not-prose', compact ? 'mb-3' : 'mb-4')}>
       {meta.coverImageUrl && (
@@ -36,17 +60,29 @@ export function ResourceMetaCard({ meta, compact }: { meta: ResourceMeta; compac
             {[meta.type, meta.code].filter(Boolean).join(' · ')}
           </p>
         )}
-        {meta.getCopyUrl && (
-          <div className="mt-auto pt-1">
-            <a
-              href={meta.getCopyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
-            >
-              <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-              Get a Copy
-            </a>
+        {(meta.getCopyUrl || (meta.exams && meta.exams.length > 0 && resourceName)) && (
+          <div className="mt-auto pt-1 flex flex-wrap gap-2">
+            {meta.getCopyUrl && (
+              <a
+                href={meta.getCopyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+              >
+                <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                Get a Copy
+              </a>
+            )}
+            {meta.exams && resourceName && meta.exams.map(exam => (
+              <Link
+                key={exam}
+                to={examUrl(exam, resourceName)}
+                className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+              >
+                <BookOpen className="h-3.5 w-3.5 mr-1.5" />
+                Open in {examDisplayLabel(exam)}
+              </Link>
+            ))}
           </div>
         )}
       </div>

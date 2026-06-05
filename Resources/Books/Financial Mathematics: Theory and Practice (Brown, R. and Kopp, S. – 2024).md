@@ -6,6 +6,8 @@ Edition: 3rd
 Publisher: ACTEX Learning
 ISBN: 978-1-63588-035-2
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/financial-mathematics-theory-and-practice-brown-kopp)"
+Exams:
+  - "Exam FM-2 (SOA)"
 ---
 ![[Financial Mathematics Theory and Practice - Cover.png]]
 ## 1 The Time Value of Money

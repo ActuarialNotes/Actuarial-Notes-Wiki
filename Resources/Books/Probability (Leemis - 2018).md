@@ -6,6 +6,8 @@ Edition: 2nd
 Publisher: Lightning Source
 ISBN: 978-0-9829174-7-3
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/1014735226)"
+Exams:
+  - "Exam P-1 (SOA)"
 ---
 ![[Probability - Leemis - Cover.png]]
 ## 1 Introduction

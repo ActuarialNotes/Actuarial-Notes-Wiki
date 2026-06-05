@@ -14,6 +14,7 @@ export interface ResourceMeta {
   code?: string
   coverImageUrl?: string
   getCopyUrl?: string
+  exams?: string[]
 }
 
 function extractUrl(value: string): string | undefined {
@@ -44,6 +45,11 @@ export function parseResourceMeta(raw: string): ResourceMeta {
     }
   }
 
+  const examsRaw = attrs['Exams']
+  const exams: string[] = Array.isArray(examsRaw)
+    ? examsRaw.map(e => String(e).trim()).filter(Boolean)
+    : examsRaw ? [String(examsRaw).trim()] : []
+
   return {
     title: str(attrs['Title']),
     author: str(attrs['Authors']) ?? str(attrs['Author']),
@@ -55,6 +61,7 @@ export function parseResourceMeta(raw: string): ResourceMeta {
     code: str(attrs['Code']),
     coverImageUrl,
     getCopyUrl,
+    exams: exams.length > 0 ? exams : undefined,
   }
 }
 

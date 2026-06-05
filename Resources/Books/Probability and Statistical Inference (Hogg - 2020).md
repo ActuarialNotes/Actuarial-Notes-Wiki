@@ -7,6 +7,8 @@ Year: "2020"
 Edition: 10e
 Publisher: Prentice Hall
 ISBN: 978-0135189399
+Exams:
+  - "Exam P-1 (SOA)"
 ---
 ![[Probability and Statistical Inference (Hogg - 2020) - Cover.png]]
 ## 1 Probability

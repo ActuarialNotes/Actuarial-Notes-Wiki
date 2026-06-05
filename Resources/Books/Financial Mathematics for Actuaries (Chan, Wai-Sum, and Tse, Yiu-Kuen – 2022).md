@@ -6,6 +6,8 @@ Edition: 3rd
 Publisher: World Scientific
 ISBN: 978-981-124-327-1
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/financial-mathematics-for-actuaries-chan-tse)"
+Exams:
+  - "Exam FM-2 (SOA)"
 ---
 ![[Financial Mathematics for Actuaries - Cover.png]]
 ## 1 Interest Accumulation and Time Value of Money

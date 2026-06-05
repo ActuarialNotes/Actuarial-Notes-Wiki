@@ -467,7 +467,7 @@ export function ConceptPopup() {
               )
             ) : (
               <>
-                {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact />}
+                {resourceMeta && <ResourceMetaCard meta={resourceMeta} resourceName={current.name} compact />}
                 <WikiArticle
                   markdown={processedContent ?? content}
                   sourcePath={sourcePath}

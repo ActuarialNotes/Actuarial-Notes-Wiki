@@ -69,7 +69,7 @@ export default function WikiResource() {
         <p className="text-sm text-muted-foreground">Couldn't load {resourceName}.</p>
       )}
 
-      {meta && <ResourceMetaCard meta={meta} />}
+      {meta && <ResourceMetaCard meta={meta} resourceName={resourceName} />}
 
       {processedContent !== null && (
         <WikiArticle

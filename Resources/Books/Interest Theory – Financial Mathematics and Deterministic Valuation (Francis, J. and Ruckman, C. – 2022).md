@@ -6,6 +6,8 @@ Edition: 3rd
 Publisher: ActuarialBrew
 ISBN: 978-0-9981604-4-3
 Find at your local library at: "[worldcat.org](https://search.worldcat.org/title/interest-theory-francis-ruckman)"
+Exams:
+  - "Exam FM-2 (SOA)"
 ---
 ![[Interest Theory - Francis Ruckman - Cover.png]]
 ## 1 Setting the Stage

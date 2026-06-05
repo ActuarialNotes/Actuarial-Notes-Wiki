@@ -5,6 +5,8 @@ Year: "2021"
 Edition: 3e
 Publisher: ACTEX
 ISBN: 978-1-64756-322-6
+Exams:
+  - "Exam P-1 (SOA)"
 ---
 ![[Media/Attachments/Probability-for-Risk-Management-Hassett-2021-Cover.jpg]]
 

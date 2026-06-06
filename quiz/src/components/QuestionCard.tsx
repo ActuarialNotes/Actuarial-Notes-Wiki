@@ -381,7 +381,7 @@ export function QuestionCard({
           </MarkdownText>
         </CardHeader>
 
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-2" data-tour="answer-options">
           {question.options.map(option => (
             <AnswerOption
               key={option.key}

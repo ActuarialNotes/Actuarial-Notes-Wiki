@@ -639,6 +639,7 @@ function ViewModeDropdown({
               <button
                 key={mode}
                 type="button"
+                data-tour={mode === 'math' ? 'card-math' : undefined}
                 onClick={() => onToggleMode(mode)}
                 aria-pressed={active}
                 className={`inline-flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors ${

@@ -127,11 +127,19 @@ const BASE_STEPS: TourStep[] = [
     target: '[data-tour="card-math"]',
     advance: 'tap',
   },
+  {
+    icon: FlipHorizontal,
+    title: 'There\'s the math',
+    body: 'The equations now show on the back of your card. Ready to test yourself? Tap the Quiz tab.',
+    match: p => p.startsWith('/flashcards'),
+    target: '[data-tour="nav-quiz"]',
+    advance: 'tap',
+  },
   // ── Quiz ──
   {
     icon: Play,
     title: 'Start a quiz',
-    body: 'Now for the Quiz tab — tap Exam P-1 to choose your topics.',
+    body: 'Tap Exam P-1 to choose your topics.',
     path: '/',
     match: p => p === '/',
     target: '[data-tour="quiz-exam-p"]',
@@ -280,7 +288,14 @@ export default function OnboardingTour() {
 
     const poll = () => {
       if (cancelled) return
-      const found = document.querySelector<HTMLElement>(current.target!)
+      // An anchor may exist in more than one layout (e.g. the Quiz tab lives in
+      // both the desktop sidebar and the mobile bottom nav). Pick the first
+      // candidate that's actually visible (non-zero box).
+      let found: HTMLElement | null = null
+      for (const c of document.querySelectorAll<HTMLElement>(current.target!)) {
+        const r = c.getBoundingClientRect()
+        if (r.width > 0 && r.height > 0) { found = c; break }
+      }
       if (found) {
         el = found
         if (!isWatch) found.addEventListener('click', onTap, true)
@@ -309,7 +324,6 @@ export default function OnboardingTour() {
 
   const Icon = current.icon
   const isGuided = current.advance === 'tap' || current.advance === 'watch'
-  const hint = current.advance === 'watch' ? 'Answer to continue' : 'Tap the highlight'
   const primaryLabel = isLast ? current.cta ?? 'Done' : 'Next'
 
   // Place the card opposite the highlighted element so it never covers it.
@@ -399,16 +413,13 @@ export default function OnboardingTour() {
                 </button>
               )}
               {isGuided ? (
-                <span className="inline-flex items-center gap-2">
-                  <span className="text-[12px] font-medium text-emerald-50/80">{hint}</span>
-                  <button
-                    type="button"
-                    onClick={() => (isLast ? finish() : next())}
-                    className="rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-emerald-50/70 transition-colors hover:bg-white/10 hover:text-white"
-                  >
-                    Skip
-                  </button>
-                </span>
+                <button
+                  type="button"
+                  onClick={() => (isLast ? finish() : next())}
+                  className="rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-emerald-50/70 transition-colors hover:bg-white/10 hover:text-white"
+                >
+                  Skip
+                </button>
               ) : (
                 <button
                   type="button"

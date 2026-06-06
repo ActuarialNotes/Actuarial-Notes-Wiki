@@ -11,11 +11,13 @@ import {
   MousePointerClick,
   Play,
   RotateCcw,
+  Sigma,
   SlidersHorizontal,
   X,
 } from 'lucide-react'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { useAuth } from '@/hooks/useAuth'
+import { useQuizStore } from '@/stores/quizStore'
 import { wikiRoute } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
 
@@ -33,9 +35,13 @@ interface TourStep {
   match?: (pathname: string) => boolean
   // CSS selector for the element to spotlight and wait for a tap on.
   target?: string
-  // 'tap' steps advance when the user taps the highlighted element.
-  // 'manual' steps advance via the Next / primary button.
-  advance: 'tap' | 'manual'
+  // 'tap'    — advance when the user taps the highlighted element.
+  // 'watch'  — spotlight the target but advance when `watch()` becomes true
+  //            (e.g. the user has actually answered a question).
+  // 'manual' — advance via the Next / primary button.
+  advance: 'tap' | 'watch' | 'manual'
+  // Polled predicate for 'watch' steps.
+  watch?: () => boolean
   // Primary button label for manual steps (defaults to "Next").
   cta?: string
   // Where the final primary button sends the user.
@@ -108,16 +114,24 @@ const BASE_STEPS: TourStep[] = [
   {
     icon: SlidersHorizontal,
     title: 'Change what\'s on the card',
-    body: 'Tap “Back content” to switch between showing the definition, equations, or images on the back of each card.',
+    body: 'Tap “Back content” to open the options for the back of each card.',
     match: p => p.startsWith('/flashcards'),
     target: '[data-tour="card-content"]',
+    advance: 'tap',
+  },
+  {
+    icon: Sigma,
+    title: 'Show the math',
+    body: 'Tap “Math” to put the key equations on the back of your cards.',
+    match: p => p.startsWith('/flashcards'),
+    target: '[data-tour="card-math"]',
     advance: 'tap',
   },
   // ── Quiz ──
   {
     icon: Play,
     title: 'Start a quiz',
-    body: 'Tap Exam P-1 to choose your topics.',
+    body: 'Now for the Quiz tab — tap Exam P-1 to choose your topics.',
     path: '/',
     match: p => p === '/',
     target: '[data-tour="quiz-exam-p"]',
@@ -126,18 +140,35 @@ const BASE_STEPS: TourStep[] = [
   {
     icon: Play,
     title: 'Start the quiz',
-    body: 'Select a question count, then tap Start Quiz.',
+    body: 'Pick a question count, then tap Start Quiz.',
     match: p => p === '/',
     target: '[data-tour="start-quiz"]',
     advance: 'tap',
   },
   {
-    icon: RotateCcw,
+    icon: MousePointerClick,
     title: 'Answer a question',
-    body: 'Pick an answer — you\'ll get an instant worked explanation. Then tap Finish Quiz.',
+    body: 'Choose an answer and confirm it — you\'ll get an instant worked explanation.',
     match: p => p === '/quiz',
     path: '/quiz',
-    target: '[data-tour="finish-quiz"]',
+    target: '[data-tour="answer-options"]',
+    advance: 'watch',
+    watch: () => Object.keys(useQuizStore.getState().responses).length > 0,
+  },
+  {
+    icon: X,
+    title: 'Quit the quiz',
+    body: 'In a real session you\'d keep going — for now, tap Quit quiz to wrap up.',
+    match: p => p === '/quiz',
+    target: '[data-tour="quit-quiz"]',
+    advance: 'tap',
+  },
+  {
+    icon: RotateCcw,
+    title: 'Finish & grade',
+    body: 'Tap Finish quiz to grade what you answered and see your results.',
+    match: p => p === '/quiz',
+    target: '[data-tour="dialog-finish"]',
     advance: 'tap',
   },
   // ── Log in ──
@@ -188,26 +219,43 @@ export default function OnboardingTour() {
       return
     }
 
-    if (!current.target) {
-      setTargetRect(null)
-      return
-    }
+    // Drop any highlight from the previous step so a stale ring never lingers
+    // over the wrong element while we hunt for this step's target.
+    setTargetRect(null)
+
+    if (!current.target) return
 
     let cancelled = false
     let pollTimer = 0
+    let watchTimer = 0
     let raf = 0
     let el: HTMLElement | null = null
     let lastRect: DOMRect | null = null
 
-    const onTap = () => {
-      if (!cancelled) next()
+    const isLastStep = safeStep >= steps.length - 1
+    const isWatch = current.advance === 'watch'
+    const advance = () => {
+      if (cancelled) return
+      if (isLastStep) finish()
+      else next()
+    }
+    const onTap = () => advance()
+
+    // 'watch' steps advance on a polled condition rather than a tap.
+    if (isWatch && current.watch) {
+      const checkWatch = () => {
+        if (cancelled) return
+        if (current.watch!()) advance()
+        else watchTimer = window.setTimeout(checkWatch, 200)
+      }
+      checkWatch()
     }
 
     const loop = () => {
       if (cancelled) return
       if (el && !document.body.contains(el)) {
         // Element went away (e.g. menu closed) — drop it and resume polling.
-        el.removeEventListener('click', onTap, true)
+        if (!isWatch) el.removeEventListener('click', onTap, true)
         el = null
         lastRect = null
         setTargetRect(null)
@@ -235,7 +283,7 @@ export default function OnboardingTour() {
       const found = document.querySelector<HTMLElement>(current.target!)
       if (found) {
         el = found
-        found.addEventListener('click', onTap, true)
+        if (!isWatch) found.addEventListener('click', onTap, true)
         const r = found.getBoundingClientRect()
         if (r.top < 64 || r.bottom > window.innerHeight - 64) {
           found.scrollIntoView({ block: 'center', behavior: 'smooth' })
@@ -250,8 +298,9 @@ export default function OnboardingTour() {
     return () => {
       cancelled = true
       clearTimeout(pollTimer)
+      clearTimeout(watchTimer)
       cancelAnimationFrame(raf)
-      if (el) el.removeEventListener('click', onTap, true)
+      if (el && !isWatch) el.removeEventListener('click', onTap, true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, safeStep, location.pathname])
@@ -259,7 +308,8 @@ export default function OnboardingTour() {
   if (!active || !current) return null
 
   const Icon = current.icon
-  const isTap = current.advance === 'tap'
+  const isGuided = current.advance === 'tap' || current.advance === 'watch'
+  const hint = current.advance === 'watch' ? 'Answer to continue' : 'Tap the highlight'
   const primaryLabel = isLast ? current.cta ?? 'Done' : 'Next'
 
   // Place the card opposite the highlighted element so it never covers it.
@@ -348,12 +398,12 @@ export default function OnboardingTour() {
                   Back
                 </button>
               )}
-              {isTap ? (
+              {isGuided ? (
                 <span className="inline-flex items-center gap-2">
-                  <span className="text-[12px] font-medium text-emerald-50/80">Tap the highlight</span>
+                  <span className="text-[12px] font-medium text-emerald-50/80">{hint}</span>
                   <button
                     type="button"
-                    onClick={next}
+                    onClick={() => (isLast ? finish() : next())}
                     className="rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-emerald-50/70 transition-colors hover:bg-white/10 hover:text-white"
                   >
                     Skip

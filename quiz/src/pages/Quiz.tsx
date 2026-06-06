@@ -341,6 +341,7 @@ export default function Quiz() {
         <Button
           variant="ghost"
           size="sm"
+          data-tour="quit-quiz"
           onClick={() => setShowQuitDialog(true)}
           className="text-muted-foreground hover:text-foreground"
         >
@@ -453,7 +454,6 @@ export default function Quiz() {
                 </Button>
                 {isLastQuestion ? (
                   <Button
-                    data-tour="finish-quiz"
                     onClick={handleFinish}
                     size="lg"
                     disabled={isSubmitting}

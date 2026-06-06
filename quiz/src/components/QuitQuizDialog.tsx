@@ -41,7 +41,7 @@ export function QuitQuizDialog({ mode, onCancel, onConfirm, onFinish }: QuitQuiz
             Cancel
           </Button>
           {onFinish && (
-            <Button variant="default" size="sm" onClick={onFinish}>
+            <Button variant="default" size="sm" data-tour="dialog-finish" onClick={onFinish}>
               Finish {label}
             </Button>
           )}

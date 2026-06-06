@@ -234,9 +234,9 @@ export default function WikiHome() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {trackExams.map(exam => {
                     const examId = examNameToTrackKey(exam.name)
-                    const match = syllabi.find(
-                      s => wikiExamIdToProgressKey(s.examId) === examNameToTrackKey(exam.name),
-                    )
+                    const examIdCleaned = exam.name.replace(/^Exam\s+/i, '').replace(/\s*\([^)]*\)\s*$/, '').trim()
+                    const match = syllabi.find(s => s.examId === examIdCleaned)
+                      ?? syllabi.find(s => wikiExamIdToProgressKey(s.examId) === examNameToTrackKey(exam.name))
                     const status = examProgress[examId]
                     const isInProgress = status === 'in_progress'
                     const isCompleted = status === 'completed'

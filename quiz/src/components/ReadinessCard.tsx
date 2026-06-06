@@ -1166,7 +1166,7 @@ export function ReadinessCard({
                       </div>
                       {/* Concepts list */}
                       {isOpen && (
-                        <div className="border-t border-border/40 px-2 pb-1.5 pt-1 space-y-0.5">
+                        <div className="border-t border-border/40 px-2 pb-2 pt-1.5 space-y-1">
                           {group.concepts.map(name => {
                             const isDeselected = deselectedConcepts.has(name.toLowerCase())
                             const target = targetByName.get(name.toLowerCase()) ?? 'level1'
@@ -1176,7 +1176,7 @@ export function ReadinessCard({
                               STATE_ORDER[currentState] >= STATE_ORDER[target]
                             const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
                             return (
-                              <div key={name} className={`flex items-center gap-1.5 w-full${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
+                              <div key={name} className={`flex items-center gap-2 w-full${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
                                 {/* Concept toggle */}
                                 <button
                                   type="button"
@@ -1186,22 +1186,22 @@ export function ReadinessCard({
                                   title={isDeselected ? 'Click to include' : 'Click to exclude'}
                                 >
                                   {isDeselected
-                                    ? <Circle className="h-3.5 w-3.5" />
+                                    ? <Circle className="h-4 w-4" />
                                     : isCompleted
-                                      ? <Check className="h-3.5 w-3.5 text-green-500" />
-                                      : <Circle className="h-3.5 w-3.5" />}
+                                      ? <Check className="h-4 w-4 text-green-500" />
+                                      : <Circle className="h-4 w-4" />}
                                 </button>
                                 {/* Concept name — opens popup */}
                                 <button
                                   type="button"
                                   data-study-concept={name.toLowerCase()}
                                   onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', planIdx === -1 ? 0 : planIdx)}
-                                  className={`flex-1 text-left text-xs py-0.5 truncate transition-colors hover:text-foreground/80 ${isDeselected ? 'text-muted-foreground/30 line-through' : isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                                  className={`flex-1 text-left text-xs py-1 truncate transition-colors hover:text-foreground/80 ${isDeselected ? 'text-muted-foreground/30 line-through' : isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
                                 >
                                   {name}
                                 </button>
                                 {!isDeselected && (
-                                  <span className="text-[10px] text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                                  <span className={`text-xs shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {STATE_LABEL[target]}</span>
                                 )}
                               </div>
                             )
@@ -1228,10 +1228,10 @@ export function ReadinessCard({
                           type="button"
                           data-study-concept={lu.conceptSlug.toLowerCase()}
                           onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'entire-syllabus', globalIdx === -1 ? 0 : globalIdx)}
-                          className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
+                          className={`w-full flex items-center gap-2 text-left transition-colors${flashingConcept?.toLowerCase() === lu.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
                         >
                           <Check className="h-4 w-4 text-green-500 shrink-0" />
-                          <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
+                          <span className="text-xs py-1 flex-1 min-w-0 truncate text-muted-foreground line-through hover:text-foreground/80">
                             {lu.conceptSlug}
                           </span>
                           <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">

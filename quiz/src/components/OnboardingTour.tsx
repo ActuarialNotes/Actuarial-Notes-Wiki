@@ -294,7 +294,13 @@ export default function OnboardingTour() {
       let found: HTMLElement | null = null
       for (const c of document.querySelectorAll<HTMLElement>(current.target!)) {
         const r = c.getBoundingClientRect()
-        if (r.width > 0 && r.height > 0) { found = c; break }
+        const midX = (r.left + r.right) / 2
+        const midY = (r.top + r.bottom) / 2
+        if (
+          r.width > 0 && r.height > 0 &&
+          midX >= 0 && midX <= window.innerWidth &&
+          midY >= 0 && midY <= window.innerHeight
+        ) { found = c; break }
       }
       if (found) {
         el = found

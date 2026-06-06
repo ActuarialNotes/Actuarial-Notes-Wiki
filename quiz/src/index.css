@@ -109,12 +109,12 @@
 /* Onboarding tour: the green welcome card rolls up from below the screen edge
    with a gentle overshoot, settling above the mobile tab bar. */
 @keyframes onboarding-roll-in {
-  0%   { opacity: 0; transform: translateY(140%) rotate(-1.5deg); }
-  70%  { opacity: 1; transform: translateY(-5%) rotate(0.4deg); }
-  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  0%   { opacity: 0; transform: translateY(110%); }
+  65%  { opacity: 1; transform: translateY(-2%); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 .onboarding-roll-in {
-  animation: onboarding-roll-in 520ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation: onboarding-roll-in 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
   .onboarding-roll-in { animation: none; }
@@ -124,15 +124,19 @@
    user is being asked to tap. pointer-events:none so the target stays tappable. */
 @keyframes onboarding-pulse {
   0%, 100% { box-shadow: 0 0 0 2px hsl(160 84% 39%), 0 0 0 5px hsl(160 84% 39% / 0.35); }
-  50%      { box-shadow: 0 0 0 3px hsl(160 84% 39%), 0 0 0 11px hsl(160 84% 39% / 0.12); }
+  50%      { box-shadow: 0 0 0 3px hsl(160 84% 39%), 0 0 0 12px hsl(160 84% 39% / 0.10); }
 }
 .onboarding-spotlight {
   position: fixed;
   z-index: 60;
   pointer-events: none;
   border-radius: 12px;
-  animation: onboarding-pulse 1.4s ease-in-out infinite;
-  transition: top 140ms ease, left 140ms ease, width 140ms ease, height 140ms ease;
+  animation: onboarding-pulse 1.8s ease-in-out infinite;
+  transition:
+    top 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    left 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    width 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    height 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 @media (prefers-reduced-motion: reduce) {
   .onboarding-spotlight { animation: none; box-shadow: 0 0 0 3px hsl(160 84% 39%); }

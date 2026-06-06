@@ -1,5 +1,5 @@
 <div class="exam-nav"
-     data-current="6U|Regulation and Financial Reporting (US)"
+     data-current="6U|Regulation and Financial Reporting (United States)"
 </div>
 
 # Exam 6U (CAS)

@@ -9,7 +9,6 @@ import {
   GraduationCap,
   Layers,
   LayoutDashboard,
-  LogIn,
   LogOut,
   Menu,
   Moon,

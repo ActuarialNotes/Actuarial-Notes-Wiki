@@ -9,7 +9,6 @@ import {
   GraduationCap,
   Layers,
   LayoutDashboard,
-  LogIn,
   LogOut,
   Menu,
   Moon,
@@ -444,6 +443,14 @@ export default function Sidebar() {
             forceActive={location.pathname.startsWith('/wiki')}
           />
           <SidebarItem
+            to="/flashcards"
+            label="Flashcards"
+            icon={<Layers className="h-4 w-4" />}
+            collapsed={collapsed}
+            onNavigate={closeMobile}
+            badge={flashcardBadge}
+          />
+          <SidebarItem
             to="/"
             label="Quiz"
             icon={<Play className="h-4 w-4" />}
@@ -451,14 +458,6 @@ export default function Sidebar() {
             end
             onNavigate={closeMobile}
             badge={quizBadge}
-          />
-          <SidebarItem
-            to="/flashcards"
-            label="Flashcards"
-            icon={<Layers className="h-4 w-4" />}
-            collapsed={collapsed}
-            onNavigate={closeMobile}
-            badge={flashcardBadge}
           />
         </nav>
 
@@ -592,14 +591,16 @@ export default function Sidebar() {
           ) : (
             <button
               type="button"
-              onClick={() => { navigate('/auth'); closeMobile() }}
-              title={collapsed ? 'Sign in' : undefined}
+              onClick={() => { navigate('/settings'); closeMobile() }}
+              title={collapsed ? 'You' : undefined}
               className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
             >
               <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-                <LogIn className="h-4 w-4" />
+                <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
+                  <circle cx="10" cy="10" r="8.25" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3.5 2.5" />
+                </svg>
               </span>
-              <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>Sign in</span>
+              <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>You</span>
             </button>
           )}
         </div>

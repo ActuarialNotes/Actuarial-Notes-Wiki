@@ -58,7 +58,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'Open a study guide',
     body: 'Tap the Exam P-1 study guide to see the concepts it covers.',
     path: '/wiki',
-    target: '[data-tour=”exam-p”]',
+    target: '[data-tour="exam-p"]',
     advance: 'tap',
   },
   // ── Concept popup ──
@@ -68,7 +68,7 @@ const BASE_STEPS: TourStep[] = [
     body: 'Tap “Calculus” to open its explanation in a popup.',
     path: EXAM_P_ROUTE,
     match: onExam,
-    target: '[data-wikiref=”concept:calculus”]',
+    target: '[data-wikiref="concept:calculus"]',
     advance: 'tap',
   },
   {
@@ -76,7 +76,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'Open the actions menu',
     body: 'Tap the action button next to the concept name.',
     match: onExam,
-    target: '[data-tour=”concept-action”]',
+    target: '[data-tour="concept-action"]',
     advance: 'tap',
   },
   {
@@ -84,7 +84,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'Add it to your flashcards',
     body: 'Tap “Add to Flashcards” to save this concept so you can review it later.',
     match: onExam,
-    target: '[data-tour=”add-flashcard”]',
+    target: '[data-tour="add-flashcard"]',
     advance: 'tap',
   },
   {
@@ -92,7 +92,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'View your flashcards',
     body: 'Tap “view” to jump to your flashcard deck.',
     match: onExam,
-    target: '[data-tour=”view-flashcards”]',
+    target: '[data-tour="view-flashcards"]',
     advance: 'tap',
   },
   // ── Flashcards ──
@@ -102,7 +102,7 @@ const BASE_STEPS: TourStep[] = [
     body: 'Tap the card to flip it and reveal the full explanation on the back.',
     path: '/flashcards',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour=”flip-card”]',
+    target: '[data-tour="flip-card"]',
     advance: 'tap',
   },
   {
@@ -110,7 +110,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'Change what\'s on the card',
     body: 'Tap “Back content” to switch between showing the definition, equations, or images on the back of each card.',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour=”card-content”]',
+    target: '[data-tour="card-content"]',
     advance: 'tap',
   },
   // ── Quiz ──
@@ -120,7 +120,7 @@ const BASE_STEPS: TourStep[] = [
     body: 'Tap Exam P-1 to choose your topics.',
     path: '/',
     match: p => p === '/',
-    target: '[data-tour=”quiz-exam-p”]',
+    target: '[data-tour="quiz-exam-p"]',
     advance: 'tap',
   },
   {
@@ -128,7 +128,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'Start the quiz',
     body: 'Select a question count, then tap Start Quiz.',
     match: p => p === '/',
-    target: '[data-tour=”start-quiz”]',
+    target: '[data-tour="start-quiz"]',
     advance: 'tap',
   },
   {
@@ -137,7 +137,7 @@ const BASE_STEPS: TourStep[] = [
     body: 'Pick an answer — you\'ll get an instant worked explanation. Then tap Finish Quiz.',
     match: p => p === '/quiz',
     path: '/quiz',
-    target: '[data-tour=”finish-quiz”]',
+    target: '[data-tour="finish-quiz"]',
     advance: 'tap',
   },
   // ── Log in ──

@@ -60,9 +60,10 @@ type ItemProps = {
   onNavigate?: () => void
   badge?: React.ReactNode
   forceActive?: boolean
+  dataTour?: string
 }
 
-function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge, forceActive }: ItemProps) {
+function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge, forceActive, dataTour }: ItemProps) {
   const base =
     'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors'
   const inactive = 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
@@ -77,6 +78,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
         title={collapsed ? label : undefined}
         className={`${base} ${inactive}`}
         onClick={onNavigate}
+        data-tour={dataTour}
       >
         <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
         <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
@@ -92,6 +94,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
       title={collapsed ? label : undefined}
       className={({ isActive }) => `${base} ${(isActive || forceActive) ? active : inactive}`}
       onClick={onNavigate}
+      data-tour={dataTour}
     >
       <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
       <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
@@ -460,6 +463,7 @@ export default function Sidebar() {
             end
             onNavigate={closeMobile}
             badge={quizBadge}
+            dataTour="nav-quiz"
           />
           <SidebarItem
             to="/flashcards"

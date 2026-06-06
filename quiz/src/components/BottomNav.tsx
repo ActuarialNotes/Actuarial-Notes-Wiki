@@ -56,6 +56,7 @@ export default function BottomNav() {
             key={item.to}
             to={item.to}
             end={item.end}
+            data-tour={item.to === '/' ? 'nav-quiz' : undefined}
             className={({ isActive }) =>
               `flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
                 isActive

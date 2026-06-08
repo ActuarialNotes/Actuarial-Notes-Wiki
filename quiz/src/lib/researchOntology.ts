@@ -83,6 +83,11 @@ export function agentMeta(id: string): AgentMeta | undefined {
   return AGENTS_BY_ID.get(id)
 }
 
+/** All known agents, in seed order — for building filter pickers, legends, etc. */
+export function allAgents(): readonly AgentMeta[] {
+  return AGENTS
+}
+
 /** Active agents that are authoritative for a given regulatory domain. */
 export function authoritativeAgents(domain: RegulatoryDomain): string[] {
   return AGENTS.filter(a => a.jurisdiction.domains.includes(domain)).map(a => a.id)

@@ -133,7 +133,6 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
             <ConceptCoverageSection
               questions={loadState.questions}
               responses={loadState.responses}
-              isLoggedIn={isLoggedIn}
               score={{
                 mode: session.mode,
                 percentage: pct,

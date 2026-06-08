@@ -1,15 +1,9 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Gem, Loader2, Lock } from 'lucide-react'
+import { Gem } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
-import { buttonVariants } from '@/components/ui/button'
 import { Button } from '@/components/ui/button'
-import { useConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
-import { useSubscription } from '@/hooks/useSubscription'
-import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
 import { isAnswerCorrect } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
-import type { MasteryState } from '@/lib/mastery'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -31,6 +25,7 @@ export interface ScoreSummary {
   totalQuestions: number
   timeTakenSeconds: number | null
   gemsEarned: number
+  conceptsLevelledUp?: number
   isLoggedIn: boolean
   onSignIn: () => void
 }
@@ -257,99 +252,6 @@ function QuizCoverageRadial({
   )
 }
 
-// ─── Learning Progress tab ────────────────────────────────────────────────────
-
-function LearningProgressTab({ conceptName }: { conceptName: string }) {
-  const { levelEvents, attemptDots, currentLevel, loading, error } = useConceptLearningHistory(conceptName)
-  const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
-
-  if (loading) {
-    return (
-      <div className="flex items-center gap-2 text-sm text-muted-foreground py-10 justify-center">
-        <Loader2 className="h-4 w-4 animate-spin" /> Loading history…
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-        {error}
-      </div>
-    )
-  }
-
-  const isEmpty = levelEvents.length === 0 && attemptDots.length === 0
-  if (isEmpty) {
-    return (
-      <div className="text-center py-10 text-muted-foreground text-sm">
-        No prior history for this concept yet.
-      </div>
-    )
-  }
-
-  const displayLevel = hoveredLevel ?? currentLevel
-  const LEVEL_LABELS: Record<MasteryState, string> = {
-    new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
-  }
-
-  return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between text-xs">
-        <span className="text-muted-foreground">{hoveredLevel ? 'Level at selected time' : 'Current level'}</span>
-        <span className="font-semibold">{LEVEL_LABELS[displayLevel]}</span>
-      </div>
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-          Correct attempt
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2 w-2 rounded-full bg-red-500" />
-          Incorrect attempt
-        </span>
-      </div>
-      <div className="rounded-lg border bg-muted/30 p-2">
-        <ProgressGraph levelEvents={levelEvents} attemptDots={attemptDots} onHoverLevel={setHoveredLevel} />
-      </div>
-      <p className="text-[10px] text-muted-foreground text-center">
-        Hover the graph to explore your level at any point in time
-      </p>
-    </div>
-  )
-}
-
-function LearningProgressGated({ conceptName }: { conceptName: string }) {
-  const { isPremium, isBetaTester, loading } = useSubscription()
-
-  if (loading) {
-    return (
-      <div className="flex items-center gap-2 text-sm text-muted-foreground py-10 justify-center">
-        <Loader2 className="h-4 w-4 animate-spin" />
-      </div>
-    )
-  }
-
-  if (!isPremium && !isBetaTester) {
-    return (
-      <div className="flex flex-col items-center gap-3 py-10 text-center">
-        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-          <Lock className="h-4 w-4 text-primary" />
-        </div>
-        <div>
-          <p className="font-semibold text-sm">Learning Progress</p>
-          <p className="text-xs text-muted-foreground mt-0.5">Track your mastery journey over time</p>
-        </div>
-        <Link to="/upgrade" className={buttonVariants({ size: 'sm' })}>
-          Upgrade to Premium
-        </Link>
-      </div>
-    )
-  }
-
-  return <LearningProgressTab conceptName={conceptName} />
-}
-
 // ─── Concept chip / tag ───────────────────────────────────────────────────────
 
 function ConceptChip({
@@ -389,12 +291,9 @@ function ConceptChip({
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 
-type Tab = 'quiz' | 'history'
-
 interface ConceptCoverageSectionProps {
   questions: Question[]
   responses: Record<string, Response>
-  isLoggedIn: boolean
   score: ScoreSummary
   selectedQuestion: number | null
   onQuestionSelect: (idx: number | null) => void
@@ -403,7 +302,6 @@ interface ConceptCoverageSectionProps {
 export function ConceptCoverageSection({
   questions,
   responses,
-  isLoggedIn,
   score,
   selectedQuestion,
   onQuestionSelect,
@@ -412,7 +310,6 @@ export function ConceptCoverageSection({
   const outcomes = questions.map(q => { const c = responses[q.id]?.chosen; return c != null && isAnswerCorrect(q, c) })
 
   const [selectedName, setSelectedName] = useState<string | null>(null)
-  const [tab, setTab] = useState<Tab>('quiz')
 
   const selected = selectedName !== null ? (stats.find(s => s.name === selectedName) ?? null) : null
 
@@ -423,111 +320,95 @@ export function ConceptCoverageSection({
     'text-red-500'
 
   return (
-    <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+    <div className="space-y-4">
 
-      {/* ── Score summary header ─────────────────────────────────── */}
-      <div className="px-5 pt-5 pb-4 border-b">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold">
-              {score.mode === 'mock-exam' ? 'Mock Exam Complete' : 'Quiz Complete'}
-            </h1>
-            <p className="text-sm text-muted-foreground mt-0.5">Here are your results</p>
-          </div>
-          <div className={`text-4xl font-black tabular-nums leading-none ${pctColor}`}>
-            {score.percentage}%
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-6 mt-4">
-          <div>
-            <span className="text-2xl font-bold tabular-nums">{score.correctCount}</span>
-            <span className="text-lg text-muted-foreground">/{score.totalQuestions}</span>
-            <p className="text-xs text-muted-foreground mt-0.5">Correct</p>
-          </div>
-          <div>
-            <span className="text-2xl font-bold tabular-nums">{formatTime(score.timeTakenSeconds)}</span>
-            <p className="text-xs text-muted-foreground mt-0.5">Time</p>
-          </div>
-          {score.isLoggedIn && score.gemsEarned > 0 && (
+      {/* ── Quiz complete card: score summary ─────────────────────── */}
+      <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+        <div className="px-5 pt-5 pb-4">
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <span className="text-2xl font-bold tabular-nums text-emerald-500 inline-flex items-center gap-1">
-                +{score.gemsEarned} <Gem className="h-5 w-5" />
-              </span>
-              <p className="text-xs text-muted-foreground mt-0.5">Gems earned</p>
+              <h1 className="text-xl font-bold">
+                {score.mode === 'mock-exam' ? 'Mock Exam Complete' : 'Quiz Complete'}
+              </h1>
+              <p className="text-sm text-muted-foreground mt-0.5">Here are your results</p>
+            </div>
+            <div className={`text-4xl font-black tabular-nums leading-none ${pctColor}`}>
+              {score.percentage}%
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-6 mt-4">
+            <div>
+              <span className="text-2xl font-bold tabular-nums">{score.correctCount}</span>
+              <span className="text-lg text-muted-foreground">/{score.totalQuestions}</span>
+              <p className="text-xs text-muted-foreground mt-0.5">Correct</p>
+            </div>
+            <div>
+              <span className="text-2xl font-bold tabular-nums">{formatTime(score.timeTakenSeconds)}</span>
+              <p className="text-xs text-muted-foreground mt-0.5">Time</p>
+            </div>
+            {score.isLoggedIn && score.gemsEarned > 0 && (
+              <div>
+                <span className="text-2xl font-bold tabular-nums text-emerald-500 inline-flex items-center gap-1">
+                  +{score.gemsEarned} <Gem className="h-5 w-5" />
+                </span>
+                <p className="text-xs text-muted-foreground mt-0.5">Gems earned</p>
+              </div>
+            )}
+            {score.conceptsLevelledUp !== undefined && score.conceptsLevelledUp > 0 && (
+              <div>
+                <span className="text-2xl font-bold tabular-nums">{score.conceptsLevelledUp}</span>
+                <p className="text-xs text-muted-foreground mt-0.5">Concepts levelled up</p>
+              </div>
+            )}
+          </div>
+
+          {/* Sign-in prompt */}
+          {!score.isLoggedIn && (
+            <div className="mt-4 rounded-lg border bg-muted/40 px-4 py-3 text-sm flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+              <span className="text-muted-foreground">Sign in to save your results and track progress</span>
+              <Button size="sm" variant="outline" onClick={score.onSignIn}>
+                Sign In
+              </Button>
             </div>
           )}
         </div>
-
-        {/* Sign-in prompt */}
-        {!score.isLoggedIn && (
-          <div className="mt-4 rounded-lg border bg-muted/40 px-4 py-3 text-sm flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
-            <span className="text-muted-foreground">Sign in to save your results and track progress</span>
-            <Button size="sm" variant="outline" onClick={score.onSignIn}>
-              Sign In
-            </Button>
-          </div>
-        )}
       </div>
 
-      {/* ── Graph panel with tabs ────────────────────────────────── */}
+      {/* ── Quiz coverage card: graph + concept chips ─────────────── */}
       {stats.length > 0 && (
-        <>
-          {/* Tab bar */}
-          <div className="flex border-b">
-            <button
-              type="button"
-              onClick={() => setTab('quiz')}
-              className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${tab === 'quiz' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-            >
+        <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+          <div className="px-5 py-3 border-b">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Quiz Coverage
-            </button>
-            {isLoggedIn && (
-              <button
-                type="button"
-                onClick={() => setTab('history')}
-                className={`flex-1 py-2.5 text-xs font-semibold transition-colors ${tab === 'history' ? 'border-b-2 border-primary text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-              >
-                Learning Progress
-              </button>
-            )}
+            </p>
           </div>
 
           <div className="p-4">
-            {tab === 'quiz' ? (
-              <QuizCoverageRadial
-                key={selectedName ?? '__all__'}
-                totalQ={questions.length}
-                questionIndices={selected ? selected.questionIndices : questions.map((_, i) => i)}
-                outcomes={outcomes}
-                selectedQuestion={selectedQuestion}
-                onQuestionClick={onQuestionSelect}
-              />
-            ) : (
-              <LearningProgressGated
-                key={selectedName ?? stats[0]?.name}
-                conceptName={selected?.name ?? stats[0]?.name ?? ''}
-              />
-            )}
+            <QuizCoverageRadial
+              key={selectedName ?? '__all__'}
+              totalQ={questions.length}
+              questionIndices={selected ? selected.questionIndices : questions.map((_, i) => i)}
+              outcomes={outcomes}
+              selectedQuestion={selectedQuestion}
+              onQuestionClick={onQuestionSelect}
+            />
           </div>
-        </>
-      )}
 
-      {/* ── Concept chip selector ────────────────────────────────── */}
-      {stats.length > 0 && (
-        <div className="px-5 py-3 border-t">
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-            Concept Coverage
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {stats.map(stat => (
-              <ConceptChip
-                key={stat.name}
-                stat={stat}
-                isSelected={stat.name === selectedName}
-                onSelect={() => setSelectedName(selectedName === stat.name ? null : stat.name)}
-              />
-            ))}
+          <div className="px-5 py-3 border-t">
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+              Concept Coverage
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {stats.map(stat => (
+                <ConceptChip
+                  key={stat.name}
+                  stat={stat}
+                  isSelected={stat.name === selectedName}
+                  onSelect={() => setSelectedName(selectedName === stat.name ? null : stat.name)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}

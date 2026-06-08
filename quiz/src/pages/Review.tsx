@@ -4,7 +4,7 @@ import { ArrowUp, Check, X } from 'lucide-react'
 import { useQuizStore, readLastSession } from '@/stores/quizStore'
 import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
-import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
+import { loadCachedStudyPlan } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
 import { Button } from '@/components/ui/button'
@@ -22,12 +22,7 @@ const EXAM_LABEL_TO_ID: Record<string, string> = {
 }
 
 const STATE_LABEL: Record<MasteryState, string> = {
-  new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
-}
-
-const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
-  new: 'level1', forgotten: 'level1',
-  level1: 'level2', level2: 'level3',
+  new: 'New', level1: '1', level2: '2', level3: '3', forgotten: 'F',
 }
 
 // ─── Study Plan Checklist ─────────────────────────────────────────────────────
@@ -35,12 +30,12 @@ const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
 function StudyPlanChecklist({
   todaysConcepts,
   newlyCompletedSlugs,
-  targetByName,
+  transitionBySlug,
   bonusConcepts,
 }: {
   todaysConcepts: string[]
   newlyCompletedSlugs: Set<string>
-  targetByName: Map<string, MasteryState>
+  transitionBySlug: Map<string, MasteryTransition>
   bonusConcepts: MasteryTransition[]
 }) {
   const openAt = useConceptPopup(s => s.openAt)
@@ -84,61 +79,69 @@ function StudyPlanChecklist({
   ]
 
   return (
-    <div className="space-y-0.5">
-      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
-        Today's Study Plan
+    <div className="space-y-4">
+      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+        Learning Progress
       </p>
-      <div className="space-y-0.5">
-        {items.map(({ name, delay }, idx) => {
-          const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-          return (
-            <button
-              key={name}
-              type="button"
-              data-study-concept={name.toLowerCase()}
-              onClick={() => openAt(allRefs, idx)}
-              className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
-            >
-              <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${delay}ms` }}>
-                <Check className="h-4 w-4 text-green-500" />
-              </span>
-              <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
-                {name}
-              </span>
-              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {STATE_LABEL[target]}</span>
-            </button>
-          )
-        })}
 
-        {bonusConcepts.length > 0 && (
-          <>
-            <div className="flex items-center gap-2 pt-1">
-              <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-              <span className="text-xs text-muted-foreground shrink-0">Also completed today</span>
-              <div className="flex-1 border-t border-dashed border-muted-foreground/30" />
-            </div>
-            {bonusConcepts.map((t, i) => (
+      {items.length > 0 && (
+        <div className="space-y-0.5">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+            Today's Study Plan
+          </p>
+          {items.map(({ name, delay }, idx) => {
+            const transition = transitionBySlug.get(name.toLowerCase())
+            return (
               <button
-                key={t.conceptSlug}
+                key={name}
                 type="button"
-                data-study-concept={t.conceptSlug.toLowerCase()}
-                onClick={() => openAt(allRefs, items.length + i)}
-                className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === t.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
+                data-study-concept={name.toLowerCase()}
+                onClick={() => openAt(allRefs, idx)}
+                className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
               >
-                <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${(bonusStartIdx + i) * 120}ms` }}>
+                <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${delay}ms` }}>
                   <Check className="h-4 w-4 text-green-500" />
                 </span>
                 <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
-                  {t.conceptSlug}
+                  {name}
                 </span>
-                <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
-                  → {STATE_LABEL[t.to]}
-                </span>
+                {transition && (
+                  <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
+                    {STATE_LABEL[transition.from]} → {STATE_LABEL[transition.to]}
+                  </span>
+                )}
               </button>
-            ))}
-          </>
-        )}
-      </div>
+            )
+          })}
+        </div>
+      )}
+
+      {bonusConcepts.length > 0 && (
+        <div className="space-y-0.5">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
+            Other Concepts Learned
+          </p>
+          {bonusConcepts.map((t, i) => (
+            <button
+              key={t.conceptSlug}
+              type="button"
+              data-study-concept={t.conceptSlug.toLowerCase()}
+              onClick={() => openAt(allRefs, items.length + i)}
+              className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === t.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
+            >
+              <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${(bonusStartIdx + i) * 120}ms` }}>
+                <Check className="h-4 w-4 text-green-500" />
+              </span>
+              <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
+                {t.conceptSlug}
+              </span>
+              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
+                {STATE_LABEL[t.from]} → {STATE_LABEL[t.to]}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -188,19 +191,6 @@ export default function Review() {
     return slugs
   }, [session])
 
-  const targetByName = useMemo(() => {
-    const map = new Map<string, MasteryState>()
-    if (!studyPlan) return map
-    const today = todayISO()
-    for (const a of studyPlan.assignments) {
-      if (a.scheduledDate === today) {
-        const target: MasteryState = a.initialState === 'level3' ? 'level3' : (NEXT_STATE[a.initialState] ?? 'level1')
-        map.set(a.conceptName.toLowerCase(), target)
-      }
-    }
-    return map
-  }, [studyPlan])
-
   // When user clicks a radial segment, select it and scroll to the question review
   function handleQuestionSelect(idx: number | null) {
     setSelectedQuestion(idx)
@@ -234,6 +224,11 @@ export default function Review() {
   const todaysConceptsLower = new Set(todaysConcepts.map(n => n.toLowerCase()))
   const bonusConcepts = upwardTransitions.filter(t => !todaysConceptsLower.has(t.conceptSlug.toLowerCase()))
 
+  const transitionBySlug = new Map<string, MasteryTransition>()
+  for (const t of upwardTransitions) {
+    transitionBySlug.set(t.conceptSlug.toLowerCase(), t)
+  }
+
   // Which questions to show in the review list
   const visibleQuestions = selectedQuestion !== null
     ? session.questions.filter((_, i) => i === selectedQuestion)
@@ -248,7 +243,6 @@ export default function Review() {
       <ConceptCoverageSection
         questions={session.questions}
         responses={session.responses}
-        isLoggedIn={!!user}
         score={{
           mode: session.mode,
           percentage,
@@ -256,6 +250,7 @@ export default function Review() {
           totalQuestions,
           timeTakenSeconds,
           gemsEarned: correctCount,
+          conceptsLevelledUp: upwardTransitions.length,
           isLoggedIn: !!user,
           onSignIn: () => navigate('/auth', { state: { from: '/review' } }),
         }}
@@ -270,7 +265,7 @@ export default function Review() {
             <StudyPlanChecklist
               todaysConcepts={todaysConcepts}
               newlyCompletedSlugs={newlyCompletedSlugs}
-              targetByName={targetByName}
+              transitionBySlug={transitionBySlug}
               bonusConcepts={bonusConcepts}
             />
           </CardContent>

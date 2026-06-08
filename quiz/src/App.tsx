@@ -20,6 +20,8 @@ import OnboardingTour from '@/components/OnboardingTour'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 
+const Research    = lazy(() => import('@/pages/Research'))
+
 const WikiLayout  = lazy(() => import('@/components/wiki/WikiLayout'))
 const WikiHome    = lazy(() => import('@/pages/wiki/WikiHome'))
 const WikiExam    = lazy(() => import('@/pages/wiki/WikiExam'))
@@ -116,6 +118,13 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/upgrade" element={<Upgrade />} />
                 <Route path="/store" element={<ErrorBoundary><Store /></ErrorBoundary>} />
+                <Route path="/research" element={
+                  <ErrorBoundary>
+                    <Suspense fallback={<WikiFallback />}>
+                      <Research />
+                    </Suspense>
+                  </ErrorBoundary>
+                } />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>
                     <WikiLayout><WikiHome /></WikiLayout>

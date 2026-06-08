@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  Microscope,
   Moon,
   Play,
   Settings2,
@@ -444,6 +445,13 @@ export default function Sidebar() {
             collapsed={collapsed}
             onNavigate={closeMobile}
             forceActive={location.pathname.startsWith('/wiki')}
+          />
+          <SidebarItem
+            to="/research"
+            label="Research"
+            icon={<Microscope className="h-4 w-4" />}
+            collapsed={collapsed}
+            onNavigate={closeMobile}
           />
           <SidebarItem
             to="/flashcards"

@@ -3,66 +3,67 @@ Title: Risk and Insurance
 Author: Society of Actuaries
 Publisher: Society of Actuaries
 Type: Study Note
-Code: P-21-18
+Code: P-21-05
 Available from: "[soa.org](https://www.soa.org/education/exam-req/edu-exam-p-detail/)"
 ---
 ![[Risk and Insurance - SOA - Cover.png]]
-## 1 Risk
+## I. Introduction
 
-- 1.1 [[Risk|What is Risk?]]
-- 1.2 [[Pure Risk]] and [[Speculative Risk]]
-- 1.3 Objective and Subjective Risk
-- 1.4 Diversifiable and Non-Diversifiable Risk
-- 1.5 Burden of Risk on Individuals and Society
-- 1.6 Methods of Handling Risk
+- Economic [[Risk]] as the possibility of losing economic security
+- [[Standard Deviation|Standard deviation]] of outcomes as a measure of risk
+- Pooling: from informal community arrangements to formal [[Insurance]]
 
-## 2 Insurance and Risk
+## II. How Insurance Works
 
-- 2.1 [[Insurance|What is Insurance?]]
-- 2.2 The Requisites of an Insurable Risk
-- 2.3 The [[Law of Large Numbers (LLN)]] as the Basis for Insurance
-- 2.4 [[Risk Pooling|Risk Pooling and the Law of Large Numbers]]
-- 2.5 The Principle of Indemnity
-- 2.6 Benefits and Costs of Insurance
+- The insurance agreement: [[Insurance Premium|premiums]], claim payments, and benefits
+- Insurer, [[Insurance Premium|policyholder]], policy, perils, and hazards
+- Transferring [[Risk]] from the policyholder to the insurer
 
-## 3 Types of Insurance
+## III. A Mathematical Explanation
 
-- 3.1 [[Life Insurance]]
-- 3.2 [[Health Insurance]]
-- 3.3 [[Property and Casualty Insurance (P&C)|Property and Liability Insurance]]
-- 3.4 Social Insurance
+- Frequency and severity distributions combine to form the [[Loss Random Variable|loss distribution]]
+- [[Expected Value]] and [[Variance]] of a loss random variable $X$
+- Pooling independent risks: $E[S_n] = n\mu$ and $Var[S_n] = n\sigma^2$ ([[Law of Large Numbers (LLN)|the basis for risk pooling]])
+- [[Coefficient of Variation]] as a measure of relative variability
+- [[Insurance Premium|Net (benefit) premium]] versus gross premium
 
-## 4 Insurance Company Operations
+## IV. Characteristics of an Insurable Risk
 
-- 4.1 [[Underwriting]]
-- 4.2 [[Ratemaking|Rate Making]]
-- 4.3 Loss Settlement and Claims
-- 4.4 [[Reinsurance]]
-- 4.5 Investments and Capital
+- The potential loss must be significant enough to justify [[Insurance Premium|insurance]]
+- The loss must be well-defined and outside the policyholder's control
+- Covered losses should be reasonably independent
 
-## 5 Insurance Policy Provisions
+## V. Examples of Insurance
 
-- 5.1 The [[Insurance Premium|Pure Premium]]
-- 5.2 [[Deductible|Deductibles]] (Ordinary and Franchise)
-- 5.3 [[Benefit Limit|Policy Limits]]
-- 5.4 [[Coinsurance Percentage|Coinsurance]]
-- 5.5 Maximum Covered Loss
-- 5.6 Effects of [[Inflation]] on Losses
+- Auto: liability, collision, and other-than-collision coverage ([[Property and Casualty Insurance (P&C)]])
+- Homeowners coverage for the residence and its contents
+- [[Life Insurance]] and annuities
+- Disability income insurance and [[Health Insurance]]
 
-## 6 Loss Random Variables
+## VI. Limits on Policy Benefits
 
-- 6.1 The [[Loss Random Variable|Ground-Up Loss Random Variable]] $X$
-- 6.2 The [[Payment Random Variable]] $Y$
-- 6.3 [[Expected Value]] of the Payment Variable
-- 6.4 [[Variance]] of the Payment Variable
-- 6.5 [[Policy Information|Combined Coverage Modifications]]
+- [[Coinsurance Percentage|Coinsurance]]: the policyholder retains part of each loss
+- [[Deductible|Deductibles]]: reasons for, and problems with, deductibles
+- [[Benefit Limit|Benefit limits]]: capping the insurer's maximum payment
 
-## 7 Risk Management
+## VII. Inflation
 
-- 7.1 The Risk Management Process
-- 7.2 Risk Identification
-- 7.3 Risk Evaluation and Measurement
-- 7.4 Risk Avoidance
-- 7.5 Risk Reduction
-- 7.6 Risk Retention
-- 7.7 [[Reinsurance|Risk Transfer]]
+- Effects of [[Inflation]] on losses and claim payments
+- How fixed [[Deductible|deductibles]] and [[Benefit Limit|benefit limits]] distort the impact of inflation over time
+
+## VIII. A Continuous Severity Example
+
+- A continuous severity distribution for hospital charges
+- [[Expected Value]], [[Variance]], and [[Coefficient of Variation]] of the [[Payment Random Variable|claim payment variable]] $Y$ with a [[Deductible|deductible]] and partial reimbursement
+- Aggregating claim payments across an insurance pool
+
+## IX. The Role of the Actuary
+
+- Estimating frequency and severity distributions from past experience
+- Developing [[Insurance Premium|net and gross premiums]]
+- Projecting assets, cash flows, and the insurer's future financial position
+
+## X. Conclusion
+
+- This study note as an introduction to actuarial concepts via insurance examples
+- Topics covered in later exams: investment earnings, frequency/severity/aggregate loss models, survival models, fitting models to data, and credibility

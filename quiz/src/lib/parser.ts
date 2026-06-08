@@ -112,6 +112,19 @@ export function isAnswerCorrect(question: Question, chosen: string): boolean {
   return false
 }
 
+// Whether every graded part of a multi-part question has a non-empty answer
+// (essay parts with answer === '' need no user input and are skipped).
+export function isMultiPartAnswerComplete(question: Question, chosen: string): boolean {
+  const parts = question.parts ?? []
+  if (parts.length === 0) return true
+  try {
+    const chosenParts = JSON.parse(chosen) as Record<string, string>
+    return parts.every(p => p.answer === '' || (chosenParts[p.label] ?? '').trim() !== '')
+  } catch {
+    return false
+  }
+}
+
 // Parse the content within a single Part block into its sub-sections.
 function parsePartSections(content: string): {
   stem: string

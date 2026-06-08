@@ -9,9 +9,10 @@ import { QuestionCard } from '@/components/QuestionCard'
 import type { SelfGrade } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
+import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { isAnswerCorrect } from '@/lib/parser'
+import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted } from '@/lib/analytics'
@@ -91,6 +92,7 @@ export default function Quiz() {
 
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
+  const [showIncompletePartsDialog, setShowIncompletePartsDialog] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   // Local pre-confirmation selection — not committed to store until "Confirm Answer"
@@ -124,6 +126,9 @@ export default function Quiz() {
   // What to visually highlight: committed answer (locked) or pending selection
   const displayAnswer = isLocked ? committedAnswer : pendingAnswer
   const isLastQuestion = currentIndex + 1 >= storeQuestions.length
+  // Multi-part questions show the Confirm button immediately (no need to wait
+  // for a pending selection) — incomplete submissions are caught with a confirm dialog
+  const showConfirmButton = !isLocked && (pendingAnswer !== null || currentQuestion?.type === 'multi-part')
 
   function handleQuit() {
     try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
@@ -135,11 +140,6 @@ export default function Quiz() {
   }
 
   function handleSelectAnswer(key: string) {
-    if (!key) {
-      // Empty string signals "not all parts filled yet" from multi-part questions
-      setPendingAnswer(null)
-      return
-    }
     if (key === pendingAnswer) {
       // Second tap on already-selected answer confirms it
       handleConfirmAnswer()
@@ -157,15 +157,30 @@ export default function Quiz() {
   }
 
   function handleConfirmAnswer() {
-    if (pendingAnswer && currentQuestion) {
-      const correct = isAnswerCorrect(currentQuestion, pendingAnswer)
-      if (!isChangingAnswer) {
-        playSound(correct ? 'correct' : 'wrong')
+    if (!currentQuestion) return
+
+    if (currentQuestion.type === 'multi-part') {
+      const answer = pendingAnswer ?? '{}'
+      if (!isMultiPartAnswerComplete(currentQuestion, answer)) {
+        setShowIncompletePartsDialog(true)
+        return
       }
-      answerQuestion(currentQuestion.id, pendingAnswer)
-      setIsChangingAnswer(false)
-      trackQuestionAnswered({ question_id: currentQuestion.id, is_correct: correct, exam: currentQuestion.exam, mode })
+      commitAnswer(answer)
+      return
     }
+
+    if (pendingAnswer) commitAnswer(pendingAnswer)
+  }
+
+  function commitAnswer(answer: string) {
+    if (!currentQuestion) return
+    const correct = isAnswerCorrect(currentQuestion, answer)
+    if (!isChangingAnswer) {
+      playSound(correct ? 'correct' : 'wrong')
+    }
+    answerQuestion(currentQuestion.id, answer)
+    setIsChangingAnswer(false)
+    trackQuestionAnswered({ question_id: currentQuestion.id, is_correct: correct, exam: currentQuestion.exam, mode })
   }
 
   function handleChangeAnswer() {
@@ -403,6 +418,16 @@ export default function Quiz() {
         />
       )}
 
+      {showIncompletePartsDialog && (
+        <IncompletePartsDialog
+          onCancel={() => setShowIncompletePartsDialog(false)}
+          onConfirm={() => {
+            setShowIncompletePartsDialog(false)
+            commitAnswer(pendingAnswer ?? '{}')
+          }}
+        />
+      )}
+
       <div className="mt-4">
         <QuestionCard
           question={currentQuestion}
@@ -421,7 +446,7 @@ export default function Quiz() {
         </div>
       )}
 
-      {(currentIndex > 0 || status === 'reviewing' || pendingAnswer !== null) && (
+      {(currentIndex > 0 || status === 'reviewing' || showConfirmButton) && (
         <div className="flex flex-wrap justify-between items-center gap-2">
           <div>
             {currentIndex > 0 && (
@@ -433,7 +458,7 @@ export default function Quiz() {
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            {!isLocked && pendingAnswer !== null && (
+            {showConfirmButton && (
               <Button
                 onClick={handleConfirmAnswer}
                 size="lg"

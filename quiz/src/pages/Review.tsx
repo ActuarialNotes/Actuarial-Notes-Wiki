@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowUp, Check, X } from 'lucide-react'
-import { useQuizStore, readLastSession } from '@/stores/quizStore'
+import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
 import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
@@ -152,11 +153,13 @@ export default function Review() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { resetQuiz } = useQuizStore()
   const [session, setSession] = useState<CompletedSession | null>(null)
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
   const [showBackToTop, setShowBackToTop] = useState(false)
   const questionReviewRef = useRef<HTMLDivElement>(null)
+  const syncingRef = useRef(false)
 
   useEffect(() => {
     const onScroll = () => setShowBackToTop(window.scrollY > 400)
@@ -174,6 +177,21 @@ export default function Review() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // If this quiz was completed while signed out (session.needsCloudSync), and
+  // the user has since signed in or created an account from this screen's
+  // "Sign In" prompt, persist it to their account now — same DB writes as if
+  // they'd been logged in when they finished the quiz.
+  useEffect(() => {
+    if (!user || !session?.needsCloudSync || masteryLoading || syncingRef.current) return
+    syncingRef.current = true
+    syncPendingSessionToCloud(user.id, masteryRecords)
+      .then(synced => {
+        if (synced) setSession(readLastSession())
+      })
+      .catch(err => console.error('Failed to sync pending quiz session:', err))
+      .finally(() => { syncingRef.current = false })
+  }, [user, session, masteryLoading, masteryRecords])
 
   const studyPlan = useMemo(() => {
     if (!session) return null

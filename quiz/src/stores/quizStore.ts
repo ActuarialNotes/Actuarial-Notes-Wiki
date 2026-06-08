@@ -156,6 +156,10 @@ export interface CompletedSession {
   timeTakenSeconds: number | null
   completedAt: string
   masteryTransitions?: MasteryTransition[]
+  // True when this session was completed while signed out, meaning it was
+  // only written to localStorage and still needs to be persisted to Supabase
+  // once the user signs in (see syncPendingSessionToCloud).
+  needsCloudSync?: boolean
 }
 
 export interface QuizStore {
@@ -228,6 +232,147 @@ function computeMasteryTransitions(
 }
 
 const LAST_SESSION_KEY = 'actuarial_last_session'
+
+interface PersistableSession {
+  questions: Question[]
+  responses: Record<string, Response>
+  mode: QuizMode
+  correctCount: number
+  totalSeconds: number | null
+  masteryTransitions: MasteryTransition[]
+}
+
+// Writes a completed quiz to Supabase: quiz_sessions, question_responses,
+// daily_completions, gem rewards and exam_progress. Shared by completeQuiz
+// (for users who were already signed in) and syncPendingSessionToCloud (for
+// sessions completed while signed out and persisted retroactively after the
+// user signs in).
+async function persistSessionToCloud(userId: string, params: PersistableSession): Promise<{ error: string | null }> {
+  const { questions, responses, mode, correctCount, totalSeconds, masteryTransitions } = params
+  const upward = masteryTransitions.filter(
+    t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
+  )
+
+  // Persist the level-ups to daily_completions so the "completed today"
+  // checkmark syncs across devices (localStorage above is device-local only).
+  // Wrapped in try-catch so any failure here cannot abort the quiz_sessions insert below.
+  try {
+    const completionExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? '']
+    if (completionExamId && upward.length > 0) {
+      const day = new Date().toISOString().slice(0, 10)
+      const nowIso = new Date().toISOString()
+      const completionRows = upward.map(t => ({
+        user_id: userId,
+        exam_id: completionExamId,
+        concept_slug: t.conceptSlug,
+        day,
+        from_state: t.from,
+        to_state: t.to,
+        at: nowIso,
+      }))
+      const { error: completionError } = await supabase
+        .from('daily_completions')
+        .upsert(completionRows, { onConflict: 'user_id,exam_id,concept_slug,day' })
+      if (completionError) {
+        // Table may not be migrated yet — the local signal still works.
+        console.warn('daily_completions upsert failed:', completionError.message)
+      }
+    }
+  } catch (err) {
+    console.warn('daily_completions upsert threw:', err)
+  }
+
+  const { data: session, error: sessionError } = await supabase
+    .from('quiz_sessions')
+    .insert({
+      user_id: userId,
+      mode,
+      total_questions: questions.length,
+      correct_count: correctCount,
+      time_taken_seconds: totalSeconds,
+      exam: questions[0]?.exam ?? null,
+      topic: questions[0]?.topic ?? null,
+    })
+    .select()
+    .single()
+
+  if (sessionError || !session) {
+    return { error: sessionError?.message ?? 'Failed to save session' }
+  }
+
+  // Signal useProgress (same tab) to refetch immediately — Supabase Realtime
+  // doesn't fire for quiz_sessions because it's not in the realtime publication.
+  window.dispatchEvent(new CustomEvent('quiz-session-saved'))
+
+  // Use a JS timestamp for answered_at rather than the DB DEFAULT now().
+  // daily_completions.at is also a JS timestamp set earlier in this function,
+  // so using JS time here guarantees answered_at > daily_completions.at even
+  // when the Supabase server clock lags the client clock. Without this, clock
+  // skew can place dots before their level-up events, making levelAtTime()
+  // return the pre-correction level and rendering dots below the graph line.
+  const answeredAt = new Date().toISOString()
+
+  // Build all response rows and bulk-insert in a single call
+  const responseRows = questions.map(q => ({
+    session_id: (session as { id: string }).id,
+    user_id: userId,
+    question_id: q.id,
+    chosen_answer: responses[q.id]?.chosen ?? null,
+    correct_answer: q.answer,
+    is_correct: (() => { const c = responses[q.id]?.chosen; return c !== undefined && isAnswerCorrect(q, c) })(),
+    time_spent_seconds: responses[q.id]?.timeSpent ?? null,
+    answered_at: answeredAt,
+  }))
+
+  const { error: respError } = await supabase
+    .from('question_responses')
+    .insert(responseRows)
+
+  // Award 1 gem per correct answer. Failure here is non-fatal: gem rewards
+  // are nice-to-have and shouldn't block session save.
+  if (correctCount > 0) {
+    const { error: gemError } = await supabase.rpc('award_gems', { p_amount: correctCount })
+    if (gemError) {
+      console.warn('award_gems failed:', gemError.message)
+    } else {
+      // Notify useGems subscribers to re-fetch immediately (Supabase realtime
+      // may lag or be blocked by RLS on RPC-triggered writes).
+      window.dispatchEvent(new CustomEvent('gems-awarded', { detail: { amount: correctCount } }))
+      addDailyGems(correctCount)
+    }
+  }
+
+  // Upsert exam_progress: transition not_started → in_progress on first quiz
+  const examLabel = questions[0]?.exam ?? null
+  const examId = examLabel ? EXAM_LABEL_TO_ID[examLabel] : null
+  if (examId) {
+    const { data: existing } = await supabase
+      .from('exam_progress')
+      .select('status')
+      .eq('user_id', userId)
+      .eq('exam_id', examId)
+      .maybeSingle()
+
+    if (!existing || existing.status === 'not_started') {
+      await supabase
+        .from('exam_progress')
+        .upsert(
+          { user_id: userId, exam_id: examId, status: 'in_progress', updated_at: new Date().toISOString() },
+          { onConflict: 'user_id,exam_id' }
+        )
+      // Mirror to quiz-journey localStorage so ExamProgressBar reflects on next render
+      try {
+        const raw = localStorage.getItem('quiz-journey')
+        const journey = raw ? JSON.parse(raw) : { selectedTrack: 'DEFAULT', progress: {} }
+        if (!journey.progress) journey.progress = {}
+        journey.progress[examId] = 'in_progress'
+        localStorage.setItem('quiz-journey', JSON.stringify(journey))
+      } catch { /* ignore */ }
+    }
+  }
+
+  return { error: respError ? respError.message : null }
+}
 
 const initialState = {
   questions: [] as Question[],
@@ -340,6 +485,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         timeTakenSeconds: totalSeconds,
         completedAt: new Date().toISOString(),
         masteryTransitions,
+        needsCloudSync: true,
       }
       try {
         localStorage.setItem(LAST_SESSION_KEY, JSON.stringify(completedSession))
@@ -403,126 +549,15 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       at: new Date().toISOString(),
     })))
 
-    // Also persist the level-ups to daily_completions so the "completed today"
-    // checkmark syncs across devices (localStorage above is device-local only).
-    // Wrapped in try-catch so any failure here cannot abort the quiz_sessions insert below.
-    try {
-      const completionExamId = EXAM_LABEL_TO_ID[questions[0]?.exam ?? '']
-      if (completionExamId && upward.length > 0) {
-        const day = new Date().toISOString().slice(0, 10)
-        const nowIso = new Date().toISOString()
-        const completionRows = upward.map(t => ({
-          user_id: userId,
-          exam_id: completionExamId,
-          concept_slug: t.conceptSlug,
-          day,
-          from_state: t.from,
-          to_state: t.to,
-          at: nowIso,
-        }))
-        const { error: completionError } = await supabase
-          .from('daily_completions')
-          .upsert(completionRows, { onConflict: 'user_id,exam_id,concept_slug,day' })
-        if (completionError) {
-          // Table may not be migrated yet — the local signal still works.
-          console.warn('daily_completions upsert failed:', completionError.message)
-        }
-      }
-    } catch (err) {
-      console.warn('daily_completions upsert threw:', err)
-    }
-
-    const { data: session, error: sessionError } = await supabase
-      .from('quiz_sessions')
-      .insert({
-        user_id: userId,
-        mode,
-        total_questions: questions.length,
-        correct_count: correctCount,
-        time_taken_seconds: totalSeconds,
-        exam: questions[0]?.exam ?? null,
-        topic: questions[0]?.topic ?? null,
-      })
-      .select()
-      .single()
-
-    if (sessionError || !session) {
-      set({ error: sessionError?.message ?? 'Failed to save session' })
-      return
-    }
-
-    // Signal useProgress (same tab) to refetch immediately — Supabase Realtime
-    // doesn't fire for quiz_sessions because it's not in the realtime publication.
-    window.dispatchEvent(new CustomEvent('quiz-session-saved'))
-
-    // Use a JS timestamp for answered_at rather than the DB DEFAULT now().
-    // daily_completions.at is also a JS timestamp set earlier in this function,
-    // so using JS time here guarantees answered_at > daily_completions.at even
-    // when the Supabase server clock lags the client clock. Without this, clock
-    // skew can place dots before their level-up events, making levelAtTime()
-    // return the pre-correction level and rendering dots below the graph line.
-    const answeredAt = new Date().toISOString()
-
-    // Build all response rows and bulk-insert in a single call
-    const responseRows = questions.map(q => ({
-      session_id: (session as { id: string }).id,
-      user_id: userId,
-      question_id: q.id,
-      chosen_answer: responses[q.id]?.chosen ?? null,
-      correct_answer: q.answer,
-      is_correct: (() => { const c = responses[q.id]?.chosen; return c !== undefined && isAnswerCorrect(q, c) })(),
-      time_spent_seconds: responses[q.id]?.timeSpent ?? null,
-      answered_at: answeredAt,
-    }))
-
-    const { error: respError } = await supabase
-      .from('question_responses')
-      .insert(responseRows)
-
-    if (respError) set({ error: respError.message })
-
-    // Award 1 gem per correct answer. Failure here is non-fatal: gem rewards
-    // are nice-to-have and shouldn't block session save.
-    if (correctCount > 0) {
-      const { error: gemError } = await supabase.rpc('award_gems', { p_amount: correctCount })
-      if (gemError) {
-        console.warn('award_gems failed:', gemError.message)
-      } else {
-        // Notify useGems subscribers to re-fetch immediately (Supabase realtime
-        // may lag or be blocked by RLS on RPC-triggered writes).
-        window.dispatchEvent(new CustomEvent('gems-awarded', { detail: { amount: correctCount } }))
-        addDailyGems(correctCount)
-      }
-    }
-
-    // Upsert exam_progress: transition not_started → in_progress on first quiz
-    const examLabel = questions[0]?.exam ?? null
-    const examId = examLabel ? EXAM_LABEL_TO_ID[examLabel] : null
-    if (examId) {
-      const { data: existing } = await supabase
-        .from('exam_progress')
-        .select('status')
-        .eq('user_id', userId)
-        .eq('exam_id', examId)
-        .maybeSingle()
-
-      if (!existing || existing.status === 'not_started') {
-        await supabase
-          .from('exam_progress')
-          .upsert(
-            { user_id: userId, exam_id: examId, status: 'in_progress', updated_at: new Date().toISOString() },
-            { onConflict: 'user_id,exam_id' }
-          )
-        // Mirror to quiz-journey localStorage so ExamProgressBar reflects on next render
-        try {
-          const raw = localStorage.getItem('quiz-journey')
-          const journey = raw ? JSON.parse(raw) : { selectedTrack: 'DEFAULT', progress: {} }
-          if (!journey.progress) journey.progress = {}
-          journey.progress[examId] = 'in_progress'
-          localStorage.setItem('quiz-journey', JSON.stringify(journey))
-        } catch { /* ignore */ }
-      }
-    }
+    const { error } = await persistSessionToCloud(userId, {
+      questions,
+      responses,
+      mode,
+      correctCount,
+      totalSeconds,
+      masteryTransitions,
+    })
+    if (error) set({ error })
   },
 
   resetQuiz() {
@@ -539,4 +574,52 @@ export function readLastSession(): CompletedSession | null {
   } catch {
     return null
   }
+}
+
+// Persists a quiz that was completed while signed out to the user's account
+// once they sign in (or create an account) from the results screen. Reads the
+// pending session straight from localStorage — rather than the live store,
+// which may have already been reset — and runs the same DB writes completeQuiz
+// performs for an authenticated user (mastery, quiz_sessions, responses, gems,
+// exam progress). Returns true once the session is saved (or was already saved).
+export async function syncPendingSessionToCloud(
+  userId: string,
+  priorMasteryRecords: ConceptMasteryRecord[] = [],
+): Promise<boolean> {
+  const session = readLastSession()
+  if (!session?.needsCloudSync) return false
+
+  const { questions, responses, mode, correctCount, timeTakenSeconds } = session
+
+  let masteryTransitions: MasteryTransition[]
+  try {
+    masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords)
+  } catch (masteryErr) {
+    console.error('concept_mastery upsert failed during pending session sync:', masteryErr)
+    masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
+  }
+
+  const { error } = await persistSessionToCloud(userId, {
+    questions,
+    responses,
+    mode,
+    correctCount,
+    totalSeconds: timeTakenSeconds,
+    masteryTransitions,
+  })
+  if (error) {
+    console.error('Failed to save pending quiz session after sign-in:', error)
+    return false
+  }
+
+  // Mark as synced so a later visit to /review (or a re-render of this one)
+  // doesn't insert a duplicate quiz_sessions row. Keep the rest of the session
+  // intact — it's still what /review renders.
+  try {
+    localStorage.setItem(LAST_SESSION_KEY, JSON.stringify({ ...session, needsCloudSync: false }))
+  } catch {
+    // quota exceeded — continue
+  }
+
+  return true
 }

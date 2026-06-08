@@ -10,7 +10,7 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { loadStudyPlanConfig, todayISO } from '@/lib/studyPlan'
+import { todayISO } from '@/lib/studyPlan'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
 
@@ -69,31 +69,17 @@ function ExamStatusBadge({ progressKey, size = 'md' }: { progressKey: string; si
 
 function ExamDaysPill({
   count,
-  explanation,
   className,
   size = 'md',
 }: {
   count: number
-  explanation: string
   className?: string
   size?: 'sm' | 'md'
 }) {
-  const [open, setOpen] = useState(false)
   const sizeCls = size === 'sm' ? 'px-1.5 py-0.5 text-[10px]' : 'px-2 py-0.5 text-xs'
   return (
-    <span className="relative inline-flex not-prose">
-      <button
-        type="button"
-        onClick={() => setOpen(v => !v)}
-        className={`inline-flex items-center justify-center rounded-full ${sizeCls} font-bold leading-none cursor-pointer select-none ${className ?? ''}`}
-      >
-        {count}
-      </button>
-      {open && (
-        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 z-50 w-max max-w-52 rounded-lg bg-popover border text-popover-foreground shadow-md px-3 py-2 text-xs font-normal leading-snug whitespace-normal text-center">
-          {explanation}
-        </span>
-      )}
+    <span className={`inline-flex items-center justify-center rounded-full ${sizeCls} font-bold leading-none not-prose ${className ?? ''}`}>
+      {count} days until exam
     </span>
   )
 }
@@ -127,59 +113,41 @@ export default function WikiExam() {
 
   const { examRows, progress } = useExamProgress()
   const examStatus = ((progress[progressKey] as ItemStatus) ?? 'not_started')
+  const { user } = useAuth()
 
-  const { daysToPrepare, daysUntilExam } = useMemo(() => {
+  const daysUntilExam = useMemo(() => {
     const row = examRows.find(r => r.exam_id === progressKey)
     const examDate = row?.target_date ?? null
-    const targetReadyDate = row?.study_plan_config?.targetReadyDate
-      ?? loadStudyPlanConfig(progressKey).targetReadyDate
     const now = new Date(); now.setHours(0, 0, 0, 0)
-    const calcDays = (date: string | null) =>
-      date ? Math.max(Math.ceil((new Date(date + 'T00:00:00').getTime() - now.getTime()) / 86400000), 0) : null
-    return { daysToPrepare: calcDays(targetReadyDate), daysUntilExam: calcDays(examDate) }
+    return examDate
+      ? Math.max(Math.ceil((new Date(examDate + 'T00:00:00').getTime() - now.getTime()) / 86400000), 0)
+      : null
   }, [examRows, progressKey])
 
   const titleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-2 not-prose">
       <ExamStatusBadge progressKey={progressKey} />
-      {examStatus !== 'completed' && daysToPrepare !== null && (
-        <ExamDaysPill
-          count={daysToPrepare}
-          explanation={`${daysToPrepare} days to prepare until your target study-ready date`}
-          className="bg-amber-400/20 text-amber-400"
-        />
-      )}
-      {examStatus !== 'completed' && daysUntilExam !== null && (
+      {user && examStatus !== 'completed' && daysUntilExam !== null && (
         <ExamDaysPill
           count={daysUntilExam}
-          explanation={`${daysUntilExam} days until your scheduled exam`}
           className="bg-muted text-foreground"
         />
       )}
     </span>
-  ), [progressKey, examStatus, daysToPrepare, daysUntilExam])
+  ), [progressKey, examStatus, daysUntilExam, user])
 
   const smallTitleBadge = useMemo(() => (
     <span className="inline-flex items-center gap-1.5 not-prose shrink-0">
       <ExamStatusBadge progressKey={progressKey} size="sm" />
-      {examStatus !== 'completed' && daysToPrepare !== null && (
-        <ExamDaysPill
-          count={daysToPrepare}
-          explanation={`${daysToPrepare} days to prepare until your target study-ready date`}
-          className="bg-amber-400/20 text-amber-400"
-          size="sm"
-        />
-      )}
-      {examStatus !== 'completed' && daysUntilExam !== null && (
+      {user && examStatus !== 'completed' && daysUntilExam !== null && (
         <ExamDaysPill
           count={daysUntilExam}
-          explanation={`${daysUntilExam} days until your scheduled exam`}
           className="bg-muted text-foreground"
           size="sm"
         />
       )}
     </span>
-  ), [progressKey, examStatus, daysToPrepare, daysUntilExam])
+  ), [progressKey, examStatus, daysUntilExam, user])
 
   const extractedTitle = useMemo(() => {
     if (!content) return null

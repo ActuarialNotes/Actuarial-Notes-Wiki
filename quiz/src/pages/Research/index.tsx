@@ -1,5 +1,6 @@
 import { useResearchStore, type ResearchTab } from '@/stores/researchStore'
 import { allAgents } from '@/lib/researchOntology'
+import { CorpusScorecard } from '@/components/research/CorpusScorecard'
 import MonitorView from './MonitorView'
 import ResearchView from './ResearchView'
 import BenchmarkView from './BenchmarkView'
@@ -120,6 +121,8 @@ export default function Research() {
           questions over the corpus — every claim cites a document and page.
         </p>
       </div>
+
+      <CorpusScorecard />
 
       <div className="flex border-b">
         {TABS.map(t => (

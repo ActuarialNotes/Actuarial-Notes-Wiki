@@ -16,6 +16,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { extractStructuredData } from '../_shared/research-adapters/extract.ts'
 import { fetchOsfiUpdates } from '../_shared/research-adapters/osfi.ts'
+import { fetchOsfiFindata } from '../_shared/research-adapters/osfi-findata.ts'
 import { fetchFsraUpdates } from '../_shared/research-adapters/fsra.ts'
 import { fetchAirbUpdates } from '../_shared/research-adapters/airb.ts'
 import { fetchAmfUpdates } from '../_shared/research-adapters/amf.ts'
@@ -72,6 +73,7 @@ interface AdapterRun {
 
 const ADAPTERS: AdapterRun[] = [
   { name: 'osfi', run: fetchOsfiUpdates },
+  { name: 'osfi-findata', run: fetchOsfiFindata },
   { name: 'fsra', run: fetchFsraUpdates },
   { name: 'airb', run: fetchAirbUpdates },
   { name: 'amf', run: fetchAmfUpdates },

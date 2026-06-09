@@ -1,6 +1,8 @@
 // Research-tool ontology: maps Canadian P&C insurance "agents" (regulators,
 // industry bureaus, insurers) to their display/jurisdiction metadata, and
 // resolves structural relationships between them and exam syllabus tags.
+// Also defines the canonical line-of-business (LOB) slugs used in
+// research_metrics.line_of_business and research_documents.line_of_business.
 //
 // Mirrors the static, pure-function style of conceptMatch.ts: small named
 // exports over a static reference table, no classes, no DB calls. The
@@ -47,6 +49,36 @@ export interface AgentMeta {
   jurisdiction: AgentJurisdiction
   parentId?: string
 }
+
+// ── Lines of business ─────────────────────────────────────────────────────────
+
+export interface LobMeta {
+  /** Canonical slug stored in research_metrics.line_of_business. */
+  slug: string
+  /** Full display label. */
+  label: string
+}
+
+export const LINES_OF_BUSINESS: readonly LobMeta[] = [
+  { slug: 'personal_auto',       label: 'Personal auto' },
+  { slug: 'commercial_auto',     label: 'Commercial auto' },
+  { slug: 'personal_property',   label: 'Personal property' },
+  { slug: 'commercial_property', label: 'Commercial property' },
+  { slug: 'liability',           label: 'Liability' },
+  { slug: 'accident_sickness',   label: 'A&S' },
+]
+
+const LOBS_BY_SLUG = new Map(LINES_OF_BUSINESS.map(l => [l.slug, l]))
+
+export function lobMeta(slug: string): LobMeta | undefined {
+  return LOBS_BY_SLUG.get(slug)
+}
+
+export function allLinesOfBusiness(): readonly LobMeta[] {
+  return LINES_OF_BUSINESS
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 /** A research document, as far as the ontology layer needs to see it. */
 export interface ResearchDocument {

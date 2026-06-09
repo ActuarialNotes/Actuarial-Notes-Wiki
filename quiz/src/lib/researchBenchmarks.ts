@@ -8,6 +8,7 @@ export interface MetricRow {
   agent_id: string
   value: number
   period: string
+  line_of_business: string | null
 }
 
 export interface ChartPoint {

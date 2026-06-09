@@ -6,6 +6,7 @@ export interface ResearchFilters {
   agentIds: string[]
   docTypes: string[]
   provinces: string[]
+  linesOfBusiness: string[]
   dateFrom: string | null
   dateTo: string | null
 }
@@ -14,6 +15,7 @@ const EMPTY_FILTERS: ResearchFilters = {
   agentIds: [],
   docTypes: [],
   provinces: [],
+  linesOfBusiness: [],
   dateFrom: null,
   dateTo: null,
 }
@@ -29,6 +31,7 @@ interface ResearchState {
   toggleAgent: (agentId: string) => void
   toggleDocType: (docType: string) => void
   toggleProvince: (province: string) => void
+  toggleLineOfBusiness: (lob: string) => void
   setDateRange: (from: string | null, to: string | null) => void
   resetFilters: () => void
 }
@@ -48,6 +51,9 @@ export const useResearchStore = create<ResearchState>((set) => ({
   })),
   toggleProvince: (province) => set(state => ({
     filters: { ...state.filters, provinces: toggle(state.filters.provinces, province) },
+  })),
+  toggleLineOfBusiness: (lob) => set(state => ({
+    filters: { ...state.filters, linesOfBusiness: toggle(state.filters.linesOfBusiness, lob) },
   })),
   setDateRange: (dateFrom, dateTo) => set(state => ({
     filters: { ...state.filters, dateFrom, dateTo },

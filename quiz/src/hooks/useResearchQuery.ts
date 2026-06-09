@@ -40,7 +40,7 @@ export function useResearchQuery() {
   const filters = useResearchStore(s => s.filters)
   const [state, setState] = useState<QueryState>(IDLE)
 
-  const ask = useCallback(async (query: string) => {
+  const ask = useCallback(async (query: string, projectId?: string) => {
     const trimmed = query.trim()
     if (!trimmed) return
 
@@ -61,6 +61,7 @@ export function useResearchQuery() {
         },
         body: JSON.stringify({
           query: trimmed,
+          projectId,
           filters: {
             agentIds: filters.agentIds.length > 0 ? filters.agentIds : undefined,
             docTypes: filters.docTypes.length > 0 ? filters.docTypes : undefined,

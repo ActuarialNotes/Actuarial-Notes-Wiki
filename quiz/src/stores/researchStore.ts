@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type ResearchTab = 'monitor' | 'ask' | 'benchmarks'
+export type ResearchTab = 'resources' | 'benchmarks' | 'projects'
 
 export interface ResearchFilters {
   agentIds: string[]
@@ -27,7 +27,14 @@ function toggle(list: string[], value: string): string[] {
 interface ResearchState {
   tab: ResearchTab
   filters: ResearchFilters
+  // Shared keyword-search query, driving both the keyword feed and the AI Ask
+  // box on the Resources surface. Persisted across tab switches.
+  searchQuery: string
+  // The project currently open in the Projects tab (null = project list view).
+  openProjectId: string | null
   setTab: (tab: ResearchTab) => void
+  setSearchQuery: (query: string) => void
+  setOpenProject: (projectId: string | null) => void
   toggleAgent: (agentId: string) => void
   toggleDocType: (docType: string) => void
   toggleProvince: (province: string) => void
@@ -42,9 +49,13 @@ interface ResearchState {
 // Benchmarks views all read from (and narrow) the same agent/province/date
 // selection so switching tabs doesn't lose the user's scoping.
 export const useResearchStore = create<ResearchState>((set) => ({
-  tab: 'monitor',
+  tab: 'resources',
   filters: EMPTY_FILTERS,
+  searchQuery: '',
+  openProjectId: null,
   setTab: (tab) => set({ tab }),
+  setSearchQuery: (searchQuery) => set({ searchQuery }),
+  setOpenProject: (openProjectId) => set({ openProjectId }),
   toggleAgent: (agentId) => set(state => ({
     filters: { ...state.filters, agentIds: toggle(state.filters.agentIds, agentId) },
   })),

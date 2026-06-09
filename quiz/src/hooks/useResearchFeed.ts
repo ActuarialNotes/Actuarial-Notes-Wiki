@@ -36,6 +36,7 @@ interface FeedState {
 
 export interface FeedResult extends FeedState {
   loadMore: () => void
+  refresh: () => void
 }
 
 // Structured-filter feed over research_documents — the "Monitor" tab's data
@@ -44,7 +45,7 @@ export interface FeedResult extends FeedState {
 //
 // Supports offset-based pagination: `loadMore` fetches the next page and
 // appends. Resets automatically when filters change (even if already on page 0).
-export function useResearchFeed(): FeedResult {
+export function useResearchFeed(documentIds?: string[] | null): FeedResult {
   const filters = useResearchStore(s => s.filters)
 
   // filtersVersion bumps whenever filters reference changes, so the fetch
@@ -52,6 +53,10 @@ export function useResearchFeed(): FeedResult {
   const [filtersVersion, setFiltersVersion] = useState(0)
   const [page, setPage] = useState(0)
   const prevFiltersRef = useRef(filters)
+  // Project scoping: restrict the feed to a fixed document-id set. A stable
+  // string key lets the reset effect notice when the scope changes.
+  const scopeKey = documentIds ? documentIds.join(',') : null
+  const prevScopeRef = useRef(scopeKey)
 
   const [documents, setDocuments] = useState<ResearchDocumentRow[]>([])
   const [loading, setLoading] = useState(true)
@@ -61,12 +66,13 @@ export function useResearchFeed(): FeedResult {
   const [total, setTotal] = useState<number | null>(null)
 
   useEffect(() => {
-    if (prevFiltersRef.current !== filters) {
+    if (prevFiltersRef.current !== filters || prevScopeRef.current !== scopeKey) {
       prevFiltersRef.current = filters
+      prevScopeRef.current = scopeKey
       setFiltersVersion(v => v + 1)
       setPage(0)
     }
-  }, [filters])
+  }, [filters, scopeKey])
 
   useEffect(() => {
     let cancelled = false
@@ -94,6 +100,7 @@ export function useResearchFeed(): FeedResult {
       .order('published_at', { ascending: false })
       .range(offset, offset + PAGE_SIZE - 1)
 
+    if (documentIds) query = query.in('id', documentIds)
     if (filters.agentIds.length > 0) query = query.in('agent_id', filters.agentIds)
     if (filters.docTypes.length > 0) query = query.in('type', filters.docTypes)
     if (filters.provinces.length > 0) query = query.overlaps('jurisdiction_provinces', filters.provinces)
@@ -134,6 +141,11 @@ export function useResearchFeed(): FeedResult {
   }, [filtersVersion, page]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadMore = () => setPage(p => p + 1)
+  // Re-fetch from page 0 (e.g. after a new source is added to the corpus).
+  const refresh = () => {
+    setPage(0)
+    setFiltersVersion(v => v + 1)
+  }
 
-  return { documents, loading, loadingMore, error, hasMore, total, loadMore }
+  return { documents, loading, loadingMore, error, hasMore, total, loadMore, refresh }
 }

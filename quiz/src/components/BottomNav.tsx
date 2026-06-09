@@ -81,16 +81,23 @@ export default function BottomNav() {
                 <GraduationCap className="h-5 w-5 shrink-0" />
                 <span className="text-xs font-medium">Actuarial Exams</span>
               </button>
-              <button
-                type="button"
-                onClick={() => navigateTo('/research')}
-                className={`flex flex-1 flex-col items-center justify-center gap-1 py-4 transition-colors ${
-                  location.pathname.startsWith('/research') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <Microscope className="h-5 w-5 shrink-0" />
-                <span className="text-xs font-medium">Research</span>
-              </button>
+              {user && (
+                <button
+                  type="button"
+                  onClick={() => navigateTo('/research')}
+                  className={`flex flex-1 flex-col items-center justify-center gap-1 py-4 transition-colors ${
+                    location.pathname.startsWith('/research') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <Microscope className="h-5 w-5 shrink-0" />
+                  <span className="flex items-center gap-1 text-xs font-medium">
+                    Research
+                    <span className="text-[9px] font-semibold px-1 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none">
+                      Beta
+                    </span>
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         </>

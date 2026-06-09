@@ -19,6 +19,7 @@ import BottomNav from '@/components/BottomNav'
 import OnboardingTour from '@/components/OnboardingTour'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
+import { useAuth } from '@/hooks/useAuth'
 
 const Research    = lazy(() => import('@/pages/Research'))
 
@@ -96,6 +97,12 @@ function PageTracker() {
   return null
 }
 
+function RequireAuth({ children }: { children: ReactNode }) {
+  const { user } = useAuth()
+  if (!user) return <Navigate to="/auth" replace />
+  return <>{children}</>
+}
+
 export default function App({ initialSession }: { initialSession: Session | null }) {
   return (
     <BrowserRouter>
@@ -119,11 +126,13 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/upgrade" element={<Upgrade />} />
                 <Route path="/store" element={<ErrorBoundary><Store /></ErrorBoundary>} />
                 <Route path="/research" element={
-                  <ErrorBoundary>
-                    <Suspense fallback={<WikiFallback />}>
-                      <Research />
-                    </Suspense>
-                  </ErrorBoundary>
+                  <RequireAuth>
+                    <ErrorBoundary>
+                      <Suspense fallback={<WikiFallback />}>
+                        <Research />
+                      </Suspense>
+                    </ErrorBoundary>
+                  </RequireAuth>
                 } />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>

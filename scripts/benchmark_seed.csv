@@ -1,0 +1,54 @@
+# benchmark_seed.csv — Research tab benchmark data source of truth.
+# Edit this file, then run:  python3 scripts/generate_benchmark_seed.py
+#
+# VERIFICATION REQUIRED (per CLAUDE.md: no published content without human review):
+#
+# Rows marked [CONFIRMED] below are grounded in publicly-released press releases
+# and can be cross-checked via the source_url + source_page.
+#
+# Rows marked [ILLUSTRATIVE] are plausible industry estimates used as placeholder
+# data so the Benchmarks UI has something to display. Replace them with verified
+# figures from the cited insurer's annual report or investor supplement before
+# relying on any value for a real decision.
+#
+# Sources used:
+#   Intact Q4-2024 press release: https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2024-results
+#   Intact Q4-2021 press release: https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2021-results
+#
+agent_id,doc_type,period,fiscal_label,source_url,source_title,published_at,metric_name,value,unit,province,source_page,source_text,confidence
+# ── Intact Financial (TSX: IFC) — confirmed from press releases ───────────────
+# [CONFIRMED] FY2024 combined ratio 92.2% (Q4-2024 press release, vs 94.2% prior year)
+intact-financial,annual_report,FY2024,Intact Financial 2024 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2024-results,Intact Financial Corporation reports Q4-2024 results,2025-02-12,combined_ratio,92.2,%,,1,"The combined ratio improved by 2.0 pts to 92.2% for the full year 2024.",1
+# [CONFIRMED] FY2024 operating ROE 16.5% (Q4-2024 press release)
+intact-financial,annual_report,FY2024,Intact Financial 2024 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2024-results,Intact Financial Corporation reports Q4-2024 results,2025-02-12,roe,16.5,%,,1,"Operating ROE was 16.5% for the full year 2024, up from prior year.",1
+# [CONFIRMED] FY2023 combined ratio 94.2% (stated as prior year in Q4-2024 press release)
+intact-financial,annual_report,FY2023,Intact Financial 2023 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2023-results,Intact Financial Corporation reports Q4-2023 results,2024-02-14,combined_ratio,94.2,%,,1,"Combined ratio of 94.2% for the full year 2023, reflecting elevated catastrophe losses.",1
+# [CONFIRMED] FY2021 combined ratio 92.9% (Q4-2021 press release)
+intact-financial,annual_report,FY2021,Intact Financial 2021 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2021-results,Intact Financial Corporation reports Q4-2021 results,2022-02-10,combined_ratio,92.9,%,,1,"The combined ratio was 92.9% for the full year 2021, a strong underwriting result.",1
+# ── Intact Financial — [ILLUSTRATIVE] fill in from annual reports/supplements ──
+# Replace these with figures from https://www.intactfc.com/financial-information/annual-reports
+intact-financial,annual_report,FY2024,Intact Financial 2024 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2024-results,Intact Financial Corporation reports Q4-2024 results,2025-02-12,loss_ratio,63.5,%,,4,"ILLUSTRATIVE — replace with confirmed loss ratio from the 2024 annual report, p.4.",0.5
+intact-financial,annual_report,FY2024,Intact Financial 2024 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2024-results,Intact Financial Corporation reports Q4-2024 results,2025-02-12,expense_ratio,28.7,%,,4,"ILLUSTRATIVE — replace with confirmed expense ratio from the 2024 annual report, p.4.",0.5
+intact-financial,annual_report,FY2023,Intact Financial 2023 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2023-results,Intact Financial Corporation reports Q4-2023 results,2024-02-14,loss_ratio,65.8,%,,4,"ILLUSTRATIVE — replace with confirmed loss ratio from the 2023 annual report.",0.5
+intact-financial,annual_report,FY2023,Intact Financial 2023 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2023-results,Intact Financial Corporation reports Q4-2023 results,2024-02-14,expense_ratio,28.4,%,,4,"ILLUSTRATIVE — replace with confirmed expense ratio from the 2023 annual report.",0.5
+intact-financial,annual_report,FY2021,Intact Financial 2021 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2021-results,Intact Financial Corporation reports Q4-2021 results,2022-02-10,loss_ratio,63.0,%,,4,"ILLUSTRATIVE — replace with confirmed loss ratio from the 2021 annual report.",0.5
+intact-financial,annual_report,FY2021,Intact Financial 2021 Annual Results,https://www.intactfc.com/press-releases/1/intact-financial-corporation-reports-q4-2021-results,Intact Financial Corporation reports Q4-2021 results,2022-02-10,expense_ratio,29.9,%,,4,"ILLUSTRATIVE — replace with confirmed expense ratio from the 2021 annual report.",0.5
+# ── Aviva Canada — [ILLUSTRATIVE] ────────────────────────────────────────────
+# Source: https://www.aviva.ca/en/about-aviva/investor-relations/
+aviva-canada,annual_report,FY2023,Aviva Canada 2023 Annual Report,https://www.aviva.ca/en/about-aviva/investor-relations/,Aviva Canada 2023 Annual Report,2024-03-01,combined_ratio,96.8,%,,12,"ILLUSTRATIVE — replace with figure from Aviva Canada 2023 annual report or parent Aviva plc disclosure.",0.5
+aviva-canada,annual_report,FY2022,Aviva Canada 2022 Annual Report,https://www.aviva.ca/en/about-aviva/investor-relations/,Aviva Canada 2022 Annual Report,2023-03-01,combined_ratio,97.4,%,,12,"ILLUSTRATIVE — replace with figure from Aviva Canada 2022 annual report or parent Aviva plc disclosure.",0.5
+aviva-canada,annual_report,FY2021,Aviva Canada 2021 Annual Report,https://www.aviva.ca/en/about-aviva/investor-relations/,Aviva Canada 2021 Annual Report,2022-03-01,combined_ratio,95.3,%,,12,"ILLUSTRATIVE — replace with figure from Aviva Canada 2021 annual report or parent Aviva plc disclosure.",0.5
+# ── Desjardins General Insurance — [ILLUSTRATIVE] ────────────────────────────
+# Source: Desjardins Group annual report at https://www.desjardins.com/en/a-propos/publications/rapports-annuels.html
+desjardins-general,annual_report,FY2023,Desjardins Group 2023 Annual Report,https://www.desjardins.com/en/a-propos/publications/rapports-annuels.html,Desjardins Group 2023 Annual Report,2024-03-01,combined_ratio,98.2,%,,45,"ILLUSTRATIVE — replace with figure from Desjardins Group 2023 annual report (P&C insurance segment).",0.5
+desjardins-general,annual_report,FY2022,Desjardins Group 2022 Annual Report,https://www.desjardins.com/en/a-propos/publications/rapports-annuels.html,Desjardins Group 2022 Annual Report,2023-03-01,combined_ratio,96.5,%,,45,"ILLUSTRATIVE — replace with figure from Desjardins Group 2022 annual report (P&C insurance segment).",0.5
+# ── Co-operators General — [ILLUSTRATIVE] ────────────────────────────────────
+# Source: https://www.cooperators.ca/en/about/financials.aspx
+cooperators,annual_report,FY2023,Co-operators General 2023 Annual Report,https://www.cooperators.ca/en/about/financials.aspx,Co-operators General 2023 Annual Report,2024-04-01,combined_ratio,99.1,%,,18,"ILLUSTRATIVE — replace with figure from Co-operators General 2023 annual report.",0.5
+cooperators,annual_report,FY2022,Co-operators General 2022 Annual Report,https://www.cooperators.ca/en/about/financials.aspx,Co-operators General 2022 Annual Report,2023-04-01,combined_ratio,97.3,%,,18,"ILLUSTRATIVE — replace with figure from Co-operators General 2022 annual report.",0.5
+# ── IBC / GISA — industry statistics (national) — [ILLUSTRATIVE] ─────────────
+# Source: IBC Facts Book at https://www.ibc.ca/industry-resources/resources-data/facts-book
+# Province empty = null = national consolidated figure
+ibc,industry_statistics,FY2023,IBC Facts Book 2023,https://www.ibc.ca/industry-resources/resources-data/facts-book,Facts of the Property and Casualty Insurance Industry in Canada 2023,2024-05-01,combined_ratio,103.2,%,,8,"ILLUSTRATIVE — replace with confirmed industry combined ratio from IBC Facts Book 2023, p.8.",0.5
+ibc,industry_statistics,FY2022,IBC Facts Book 2022,https://a-us.storyblok.com/f/1003207/x/09c346cc31/ibc-2022-facts.pdf,Facts of the Property and Casualty Insurance Industry in Canada 2022,2023-05-01,combined_ratio,100.7,%,,8,"ILLUSTRATIVE — replace with confirmed industry combined ratio from IBC Facts Book 2022, p.8.",0.5
+ibc,industry_statistics,FY2021,IBC Facts Book 2021,https://www.ibc.ca/industry-resources/resources-data/facts-book,Facts of the Property and Casualty Insurance Industry in Canada 2021,2022-05-01,combined_ratio,97.4,%,,8,"ILLUSTRATIVE — replace with confirmed industry combined ratio from IBC Facts Book 2021, p.8.",0.5

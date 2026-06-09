@@ -19,9 +19,26 @@ const VALID_DOCUMENT_TYPES: ReadonlySet<string> = new Set([
   'cia_educational_note',
 ])
 
+// Canonical benchmark metric_name slugs. Keep in sync with the client-side
+// catalog in quiz/src/lib/researchMetrics.ts (RESEARCH_METRICS) — this is a Deno
+// edge module and can't import the Vite source, so the list is duplicated by
+// hand. The extraction prompt instructs the model to use exactly these slugs so
+// research_metrics.metric_name stays consistent with what the UI knows how to
+// render. Unknown names are logged but not dropped (see asMetrics).
+const CANONICAL_METRIC_NAMES = [
+  'combined_ratio', 'loss_ratio', 'expense_ratio',
+  'mct_ratio', 'roe', 'premium_growth', 'net_written_premium',
+] as const
+const CANONICAL_METRIC_SET: ReadonlySet<string> = new Set(CANONICAL_METRIC_NAMES)
+
 const EXTRACTION_PROMPT = `Extract structured data from the following Canadian insurance industry document.
 Return ONLY valid JSON matching this schema. Use null for absent fields.
 Do not guess or infer values not explicitly stated in the document.
+
+For "metrics", only extract financial/statistical figures that map to one of
+these canonical metric names; use the exact slug, and omit any metric that does
+not fit one of them:
+${CANONICAL_METRIC_NAMES.join(', ')}
 
 {
   "documentType": "<one of the DocumentType enum values>",
@@ -67,6 +84,11 @@ function asMetrics(v: unknown): ExtractedMetric[] {
       typeof m.unit !== 'string' || typeof m.period !== 'string' ||
       typeof m.sourcePage !== 'number' || typeof m.sourceText !== 'string'
     ) continue
+    // Keep non-canonical names (permissive) but surface them so the catalog can
+    // be extended deliberately rather than silently drifting.
+    if (!CANONICAL_METRIC_SET.has(m.name)) {
+      console.warn('research-ingest: non-canonical metric name extracted:', m.name)
+    }
     out.push({
       name: m.name,
       value: m.value,

@@ -2,6 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useResearchStore } from '@/stores/researchStore'
 
+export interface ResearchMetricSummary {
+  metric_name: string
+  value: number
+  unit: string
+  period: string
+}
+
 export interface ResearchDocumentRow {
   id: string
   agent_id: string
@@ -13,6 +20,7 @@ export interface ResearchDocumentRow {
   summary: string | null
   jurisdiction_provinces: string[] | null
   exam_tags: string[] | null
+  research_metrics: ResearchMetricSummary[] | null
 }
 
 export const PAGE_SIZE = 25
@@ -78,7 +86,9 @@ export function useResearchFeed(): FeedResult {
     let query = supabase
       .from('research_documents')
       .select(
-        'id, agent_id, type, title, published_at, url, pdf_url, summary, jurisdiction_provinces, exam_tags',
+        'id, agent_id, type, title, published_at, url, pdf_url, summary, ' +
+          'jurisdiction_provinces, exam_tags, ' +
+          'research_metrics(metric_name, value, unit, period)',
         { count: 'exact' },
       )
       .order('published_at', { ascending: false })

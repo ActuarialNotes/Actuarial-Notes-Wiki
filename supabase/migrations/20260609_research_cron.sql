@@ -1,18 +1,25 @@
 -- research_cron: schedule pg_cron jobs that call the research-ingest edge
 -- function on the cadences each adapter needs.
 --
--- Prerequisites (run once in the Supabase SQL editor before applying this
--- migration, or add to your project's bootstrap script):
+-- Prerequisites — run these two commands in the Supabase SQL editor BEFORE
+-- applying this migration (Vault stores them encrypted; no superuser needed):
 --
---   ALTER DATABASE postgres
---     SET "app.settings.supabase_url" = 'https://<project-ref>.supabase.co';
---   ALTER DATABASE postgres
---     SET "app.settings.research_ingest_cron_secret" = '<secret>';
+--   SELECT vault.create_secret(
+--     'https://<project-ref>.supabase.co',
+--     'supabase_project_url',
+--     'Supabase project base URL for pg_cron edge-function calls'
+--   );
+--
+--   SELECT vault.create_secret(
+--     '<your-cron-secret>',
+--     'research_ingest_cron_secret',
+--     'Shared secret for research-ingest cron authentication'
+--   );
 --
 -- The cron secret must match the RESEARCH_INGEST_CRON_SECRET Supabase secret
 -- set for the research-ingest edge function (supabase secrets set ...).
--- If RESEARCH_INGEST_CRON_SECRET is not set on the function, the header is
--- ignored and any caller is accepted — set it before enabling these jobs.
+-- Your project ref appears in the Supabase dashboard URL:
+--   app.supabase.com/project/<project-ref>
 
 create extension if not exists pg_cron  with schema extensions;
 create extension if not exists pg_net   with schema extensions;
@@ -25,10 +32,11 @@ select cron.schedule(
   '0 6 * * *',
   $$
   select net.http_post(
-    url     := current_setting('app.settings.supabase_url') || '/functions/v1/research-ingest',
+    url     := (select decrypted_secret from vault.decrypted_secrets where name = 'supabase_project_url')
+               || '/functions/v1/research-ingest',
     headers := jsonb_build_object(
-                 'Content-Type',   'application/json',
-                 'x-cron-secret',  current_setting('app.settings.research_ingest_cron_secret')
+                 'Content-Type',  'application/json',
+                 'x-cron-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'research_ingest_cron_secret')
                ),
     body    := '{}'::jsonb
   );
@@ -44,10 +52,11 @@ select cron.schedule(
   '0 8 16 2,5,8,11 *',
   $$
   select net.http_post(
-    url     := current_setting('app.settings.supabase_url') || '/functions/v1/research-ingest',
+    url     := (select decrypted_secret from vault.decrypted_secrets where name = 'supabase_project_url')
+               || '/functions/v1/research-ingest',
     headers := jsonb_build_object(
-                 'Content-Type',   'application/json',
-                 'x-cron-secret',  current_setting('app.settings.research_ingest_cron_secret')
+                 'Content-Type',  'application/json',
+                 'x-cron-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'research_ingest_cron_secret')
                ),
     body    := '{}'::jsonb
   );

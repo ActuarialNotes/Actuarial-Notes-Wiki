@@ -39,7 +39,9 @@ function FilterBar() {
   const filters = useResearchStore(s => s.filters)
   const toggleAgent = useResearchStore(s => s.toggleAgent)
   const toggleProvince = useResearchStore(s => s.toggleProvince)
+  const clearProvinces = useResearchStore(s => s.clearProvinces)
   const toggleLineOfBusiness = useResearchStore(s => s.toggleLineOfBusiness)
+  const clearLinesOfBusiness = useResearchStore(s => s.clearLinesOfBusiness)
   const setDateRange = useResearchStore(s => s.setDateRange)
   const resetFilters = useResearchStore(s => s.resetFilters)
   const hasFilters =
@@ -73,6 +75,13 @@ function FilterBar() {
       </div>
       <div className="flex flex-wrap items-center gap-1.5">
         <span className="text-xs text-muted-foreground mr-1">Province</span>
+        <button
+          type="button"
+          onClick={clearProvinces}
+          className={chipClass(filters.provinces.length === 0)}
+        >
+          All
+        </button>
         {PROVINCES.map(province => (
           <button
             key={province}
@@ -86,6 +95,13 @@ function FilterBar() {
       </div>
       <div className="flex flex-wrap items-center gap-1.5">
         <span className="text-xs text-muted-foreground mr-1">LOB</span>
+        <button
+          type="button"
+          onClick={clearLinesOfBusiness}
+          className={chipClass(filters.linesOfBusiness.length === 0)}
+        >
+          All
+        </button>
         {allLinesOfBusiness().map(lob => (
           <button
             key={lob.slug}

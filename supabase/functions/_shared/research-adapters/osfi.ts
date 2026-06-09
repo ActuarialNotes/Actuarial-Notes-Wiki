@@ -29,10 +29,15 @@ const LISTING_PAGES = [
   { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2617', label: 'Letters and Advisories' },
 ]
 
-// Cap per listing page to avoid hitting the edge function memory limit (150 MB
-// on the free plan). Each PDF fetch + unpdf extraction is ~10-20 MB; 5 docs
-// per page keeps peak usage well within budget. Raise once on a paid plan.
-const MAX_DOCS_PER_LISTING_PAGE = 5
+// Cap per listing page to avoid the 150 MB edge-function memory limit on the
+// free plan. OSFI guideline pages are large HTML documents; 2 per page (4
+// total per run) keeps peak usage safely under the limit. Raise once on a
+// paid plan or after switching to a streaming/chunked fetch approach.
+const MAX_DOCS_PER_LISTING_PAGE = 2
+
+// Truncate raw text before storing — large OSFI pages can be 500 KB+ and
+// accumulate quickly across multiple documents in the same run.
+const MAX_RAW_TEXT_CHARS = 20_000
 
 interface ListingLink {
   title: string
@@ -83,7 +88,7 @@ async function buildDocument(ctx: AdapterContext, link: ListingLink, errors: Ada
     line_of_business: null,
     url: link.href,
     pdf_url: link.href.toLowerCase().endsWith('.pdf') ? link.href : null,
-    raw_text: rawText,
+    raw_text: rawText.length > MAX_RAW_TEXT_CHARS ? rawText.slice(0, MAX_RAW_TEXT_CHARS) : rawText,
     is_in_review: true,
   }
 

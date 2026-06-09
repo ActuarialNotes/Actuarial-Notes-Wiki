@@ -29,6 +29,11 @@ const LISTING_PAGES = [
   { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2617', label: 'Letters and Advisories' },
 ]
 
+// Cap per listing page to avoid hitting the edge function memory limit (150 MB
+// on the free plan). Each PDF fetch + unpdf extraction is ~10-20 MB; 5 docs
+// per page keeps peak usage well within budget. Raise once on a paid plan.
+const MAX_DOCS_PER_LISTING_PAGE = 5
+
 interface ListingLink {
   title: string
   href: string
@@ -105,7 +110,7 @@ export async function fetchOsfiUpdates(ctx: AdapterContext): Promise<AdapterResu
       continue
     }
 
-    const links = parseListingLinks(html, page.url)
+    const links = parseListingLinks(html, page.url).slice(0, MAX_DOCS_PER_LISTING_PAGE)
     for (const link of links) {
       try {
         // OSFI publications (guidelines/letters) rarely carry the kind of

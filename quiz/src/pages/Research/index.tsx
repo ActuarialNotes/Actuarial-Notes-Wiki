@@ -14,6 +14,18 @@ const TABS: { id: ResearchTab; label: string }[] = [
 // plus 'ATL' for the Atlantic-grouped multi-provincial filings.
 const PROVINCES = ['ON', 'AB', 'QC', 'BC', 'ATL', 'NB', 'NL', 'NS', 'PE']
 
+const DATE_PRESETS = [
+  { label: '7d', days: 7 },
+  { label: '30d', days: 30 },
+  { label: '90d', days: 90 },
+] as const
+
+function daysAgoISO(n: number): string {
+  const d = new Date()
+  d.setDate(d.getDate() - n)
+  return d.toISOString().split('T')[0]
+}
+
 function chipClass(active: boolean): string {
   return `rounded-full border px-2.5 py-1 text-xs transition-colors ${
     active
@@ -26,8 +38,21 @@ function FilterBar() {
   const filters = useResearchStore(s => s.filters)
   const toggleAgent = useResearchStore(s => s.toggleAgent)
   const toggleProvince = useResearchStore(s => s.toggleProvince)
+  const setDateRange = useResearchStore(s => s.setDateRange)
   const resetFilters = useResearchStore(s => s.resetFilters)
-  const hasFilters = filters.agentIds.length > 0 || filters.provinces.length > 0
+  const hasFilters =
+    filters.agentIds.length > 0 ||
+    filters.provinces.length > 0 ||
+    !!filters.dateFrom
+
+  function handleDatePreset(days: number) {
+    const from = daysAgoISO(days)
+    if (filters.dateFrom === from) {
+      setDateRange(null, null)
+    } else {
+      setDateRange(from, null)
+    }
+  }
 
   return (
     <div className="space-y-2.5">
@@ -53,6 +78,19 @@ function FilterBar() {
             className={chipClass(filters.provinces.includes(province))}
           >
             {province}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="text-xs text-muted-foreground mr-1">Period</span>
+        {DATE_PRESETS.map(({ label, days }) => (
+          <button
+            key={label}
+            type="button"
+            onClick={() => handleDatePreset(days)}
+            className={chipClass(filters.dateFrom === daysAgoISO(days))}
+          >
+            {label}
           </button>
         ))}
         {hasFilters && (

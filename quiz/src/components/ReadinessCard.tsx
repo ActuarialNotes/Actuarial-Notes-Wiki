@@ -1380,55 +1380,57 @@ export function ReadinessCard({
               <BookOpen className="h-5 w-5" />
               Read concepts
             </Button>
+          </CardContent>
+        </Card>
 
-            {/* Topics mastered collapsible */}
-            <div className="border-t pt-3 space-y-2">
-              <button
-                type="button"
-                onClick={() => setTopicsMasteredOpen(prev => !prev)}
-                className="w-full"
-                aria-expanded={topicsMasteredOpen}
-              >
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Topics mastered</span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold">
-                        {isPremium ? aggregate.level3 : 0}
-                        <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
-                        <span className="text-muted-foreground font-normal ml-1.5">({isPremium ? aggregate.strongPct : 0}%)</span>
-                      </span>
-                      <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
-                    </div>
+        {/* Topics Learned card */}
+        <Card>
+          <CardContent className="p-5 space-y-2">
+            <button
+              type="button"
+              onClick={() => setTopicsMasteredOpen(prev => !prev)}
+              className="w-full"
+              aria-expanded={topicsMasteredOpen}
+            >
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Topics Learned</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">
+                      {isPremium ? aggregate.level3 : 0}
+                      <span className="text-muted-foreground font-normal">/{aggregate.total}</span>
+                      <span className="text-muted-foreground font-normal ml-1.5">({isPremium ? aggregate.strongPct : 0}%)</span>
+                    </span>
+                    <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${topicsMasteredOpen ? '' : '-rotate-90'}`} />
                   </div>
-                  {isPremium ? (
-                    <div className="h-2 rounded-full bg-secondary overflow-hidden flex">
-                      <div className="h-full transition-all" style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
-                      <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
-                      <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
-                    </div>
-                  ) : (
-                    <div className="h-2 rounded-full bg-secondary overflow-hidden" />
-                  )}
                 </div>
-              </button>
+                {isPremium ? (
+                  <div className="h-4 rounded-full bg-secondary overflow-hidden flex">
+                    <div className="h-full transition-all" style={{ width: `${aggregate.strongPct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
+                    <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
+                    <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
+                  </div>
+                ) : (
+                  <div className="h-4 rounded-full bg-secondary overflow-hidden" />
+                )}
+              </div>
+            </button>
 
-              {topicsMasteredOpen && (
-                <div className="max-h-80 overflow-y-auto" ref={topicsMasteredContainerRef}>
-                  <StudyPlanTracker
-                    syllabus={syllabus}
-                    masteryRecords={masteryRecords}
-                    studyPlan={isPremium ? plan : null}
-                    allConceptsForNav={allConcepts}
-                    onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
-                    openTopics={openTopics}
-                    onToggle={toggleTopic}
-                    flashingConcept={isPremium ? flashingConcept : undefined}
-                    showMastery={isPremium ? undefined : false}
-                  />
-                </div>
-              )}
-            </div>
+            {topicsMasteredOpen && (
+              <div className="max-h-80 overflow-y-auto" ref={topicsMasteredContainerRef}>
+                <StudyPlanTracker
+                  syllabus={syllabus}
+                  masteryRecords={masteryRecords}
+                  studyPlan={isPremium ? plan : null}
+                  allConceptsForNav={allConcepts}
+                  onConceptSelect={concept => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', concept.index)}
+                  openTopics={openTopics}
+                  onToggle={toggleTopic}
+                  flashingConcept={isPremium ? flashingConcept : undefined}
+                  showMastery={isPremium ? undefined : false}
+                />
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

@@ -45,22 +45,47 @@ interface ListingLink {
   dateText: string | null
 }
 
-// Conservative <a>-tag scrape of a listing page. See reality notes above —
-// this is the piece most likely to need rework against OSFI's actual markup.
+// Scrape a listing page for individual guidance document links.
+//
+// Key design notes (informed by inspecting OSFI's actual HTML):
+//   - Individual document URLs follow /en/guidance/guidance-library/<slug>.
+//     Requiring a non-empty slug after /guidance-library/ filters out the
+//     listing hub itself (/en/guidance/guidance-library) and navigation
+//     breadcrumb links (/en/guidance) which were matching the old broad regex
+//     and, via .slice(0, MAX_DOCS_PER_LISTING_PAGE), crowding out real docs.
+//   - OSFI (GC Web Theme / Drupal) renders dates as
+//     <time datetime="YYYY-MM-DD"> inside the same item block as the title.
+//     We search a 1000-char window around each matched link to pick that up.
 function parseListingLinks(html: string, baseUrl: string): ListingLink[] {
   const out: ListingLink[] = []
-  const linkRe = /<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi
+  const seen = new Set<string>()
   const stripTags = (s: string) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+
+  // Match hrefs of the form /…/guidance-library/<slug> where <slug> starts
+  // with an alphanumeric character — this excludes the bare listing hub URL
+  // (/guidance-library with no trailing path segment) and query-param-only
+  // variants (/guidance-library?f[0]=…).
+  const linkRe = /<a[^>]+href="([^"]*\/guidance-library\/[a-z0-9][^"?#]*)"[^>]*>([\s\S]*?)<\/a>/gi
 
   let match: RegExpExecArray | null
   while ((match = linkRe.exec(html)) !== null) {
-    const href = match[1]
+    const rawHref = match[1]
+    if (seen.has(rawHref)) continue
+    seen.add(rawHref)
+
     const title = stripTags(match[2])
     if (!title || title.length < 8) continue
-    if (!/guideline|letter|advisory|guidance|circular/i.test(title) && !/\/guidance\//i.test(href)) continue
-    const absolute = href.startsWith('http') ? href : new URL(href, baseUrl).toString()
-    out.push({ title, href: absolute, dateText: null })
+
+    // Look for <time datetime="YYYY-MM-DD"> within the same item block.
+    const linkPos = match.index
+    const vicinity = html.slice(Math.max(0, linkPos - 300), linkPos + 800)
+    const timeMatch = /datetime="(\d{4}-\d{2}-\d{2})"/.exec(vicinity)
+    const dateText = timeMatch ? timeMatch[1] : null
+
+    const absolute = rawHref.startsWith('http') ? rawHref : new URL(rawHref, baseUrl).toString()
+    out.push({ title, href: absolute, dateText })
   }
+
   return out
 }
 
@@ -83,7 +108,7 @@ async function buildDocument(ctx: AdapterContext, link: ListingLink, errors: Ada
     agent_id: AGENT_ID,
     type: classifyDocumentType(link.title),
     title: link.title,
-    published_at: new Date().toISOString(),
+    published_at: link.dateText ? new Date(link.dateText).toISOString() : new Date().toISOString(),
     jurisdiction_provinces: [],          // OSFI is federal — no provincial scoping
     line_of_business: null,
     url: link.href,

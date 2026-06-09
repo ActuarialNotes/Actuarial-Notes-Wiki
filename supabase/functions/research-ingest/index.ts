@@ -32,7 +32,13 @@ function json(body: unknown, status = 200) {
 // skipped. Network/parse failures return null so adapters can log and continue.
 async function fetchText(url: string): Promise<string | null> {
   try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'ActuarialNotesResearchBot/1.0' } })
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-CA,en;q=0.9',
+      },
+    })
     if (!res.ok) return null
 
     const contentType = res.headers.get('content-type') || ''

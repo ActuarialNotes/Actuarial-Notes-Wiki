@@ -102,14 +102,41 @@ function normalizeFilters(filters) {
   };
 }
 
-// Stage 1: structured filter on research_documents, newest first.
-async function fetchCandidateDocuments(client, filters) {
+// Resolve a project to the set of document ids it contains, verifying the
+// caller owns it. Service-role bypasses RLS, so the user_id filter is the
+// authorization boundary — it must not be omitted. Returns null when the
+// project doesn't exist or isn't the caller's (treated as "no access").
+async function resolveProjectDocumentIds(client, projectId, userId) {
+  const { data: project } = await client
+    .from('research_projects')
+    .select('id')
+    .eq('id', projectId)
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (!project) return null;
+
+  const { data: links, error } = await client
+    .from('research_project_documents')
+    .select('document_id')
+    .eq('project_id', projectId);
+  if (error) {
+    console.error('research: project document resolution failed:', error.message);
+    return [];
+  }
+  return (links || []).map(l => l.document_id);
+}
+
+// Stage 1: structured filter on research_documents, newest first. When
+// `documentIds` is provided (project scoping) the candidate set is restricted
+// to those ids.
+async function fetchCandidateDocuments(client, filters, documentIds) {
   let query = client
     .from('research_documents')
     .select('id, agent_id, type, title, published_at, url, summary, jurisdiction_provinces, exam_tags')
     .order('published_at', { ascending: false })
     .limit(MAX_DOCUMENTS);
 
+  if (documentIds) query = query.in('id', documentIds);
   if (filters.agentIds) query = query.in('agent_id', filters.agentIds);
   if (filters.docTypes) query = query.in('type', filters.docTypes);
   if (filters.provinces) query = query.overlaps('jurisdiction_provinces', filters.provinces);
@@ -126,7 +153,7 @@ async function fetchCandidateDocuments(client, filters) {
 
 // Stage 2 (optional): embed the query and run semantic search over chunks via
 // the match_research_chunks RPC, scoped to the same structured filters.
-async function fetchRelevantChunks(client, query, filters) {
+async function fetchRelevantChunks(client, query, filters, documentIds) {
   if (!process.env.OPENAI_API_KEY) return [];
 
   let embedding;
@@ -158,6 +185,12 @@ async function fetchRelevantChunks(client, query, filters) {
   if (error) {
     console.error('research: chunk search RPC failed:', error.message);
     return [];
+  }
+  // The RPC has no document-id filter, so when project-scoped we narrow the
+  // returned chunks to the project's documents in JS.
+  if (documentIds) {
+    const allow = new Set(documentIds);
+    return (data || []).filter(c => allow.has(c.document_id));
   }
   return data || [];
 }
@@ -234,18 +267,38 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: `Rate limit exceeded. You can make ${RATE_LIMIT} requests per hour. Please wait and try again.` });
   }
 
-  const { query, filters } = req.body || {};
+  const { query, filters, projectId } = req.body || {};
   if (!query || typeof query !== 'string' || !query.trim()) {
     return res.status(400).json({ error: 'Missing or invalid "query" field in request body' });
+  }
+  if (projectId !== undefined && typeof projectId !== 'string') {
+    return res.status(400).json({ error: 'Invalid "projectId" field in request body' });
   }
 
   const client = admin();
   const normalizedFilters = normalizeFilters(filters);
 
+  // Project scoping: resolve to the project's document ids (ownership-checked).
+  let projectDocIds = null;
+  if (projectId) {
+    projectDocIds = await resolveProjectDocumentIds(client, projectId, user.id);
+    if (projectDocIds === null) {
+      return res.status(403).json({ error: 'Project not found' });
+    }
+    if (projectDocIds.length === 0) {
+      return res.status(200).json({
+        answer: 'This project has no documents yet. Add sources to it to ask grounded questions over them.',
+        citations: [],
+        unverifiedClaims: [],
+        tokensUsed: 0,
+      });
+    }
+  }
+
   let documents, chunks;
   try {
-    documents = await fetchCandidateDocuments(client, normalizedFilters);
-    chunks = await fetchRelevantChunks(client, query, normalizedFilters);
+    documents = await fetchCandidateDocuments(client, normalizedFilters, projectDocIds);
+    chunks = await fetchRelevantChunks(client, query, normalizedFilters, projectDocIds);
   } catch (err) {
     return res.status(502).json({ error: 'Failed to query the document corpus: ' + (err.message || 'Unknown error') });
   }

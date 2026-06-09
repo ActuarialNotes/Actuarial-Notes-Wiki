@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -9,6 +9,19 @@ import type { ResearchDocumentRow, ResearchMetricSummary } from '@/hooks/useRese
 
 function formatDocType(type: string): string {
   return type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+}
+
+// Render a ts_headline snippet. The RPC wraps matches in literal <mark> tags; we
+// HTML-escape the whole string first (so source angle brackets can't inject
+// markup), then re-enable only our own <mark> sentinels.
+function headlineHtml(headline: string): string {
+  const escaped = headline
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  return escaped
+    .replace(/&lt;mark&gt;/g, '<mark class="bg-primary/20 text-foreground rounded-sm px-0.5">')
+    .replace(/&lt;\/mark&gt;/g, '</mark>')
 }
 
 function formatDate(iso: string): string {
@@ -41,9 +54,16 @@ function metricChips(metrics: ResearchMetricSummary[]): { key: string; label: st
 export function DocumentCard({
   document,
   isNew = false,
+  headline,
+  action,
 }: {
   document: ResearchDocumentRow
   isNew?: boolean
+  // Highlighted keyword-search snippet (with <mark> tags). When present it
+  // replaces the clamped summary.
+  headline?: string | null
+  // Optional control rendered at the card's top-right (e.g. add/remove from project).
+  action?: ReactNode
 }) {
   const agent = agentMeta(document.agent_id)
   const [expanded, setExpanded] = useState(false)
@@ -87,6 +107,7 @@ export function DocumentCard({
             {document.title}
             <ExternalLink className="inline h-3 w-3 ml-1 align-text-top text-muted-foreground" aria-hidden />
           </a>
+          {action && <div className="shrink-0">{action}</div>}
         </div>
 
         {visibleChips.length > 0 && (
@@ -105,7 +126,12 @@ export function DocumentCard({
           </div>
         )}
 
-        {document.summary && (
+        {headline ? (
+          <p
+            className="text-sm text-muted-foreground [&_mark]:bg-primary/20"
+            dangerouslySetInnerHTML={{ __html: headlineHtml(headline) }}
+          />
+        ) : document.summary && (
           <div>
             <p
               className={`text-sm text-muted-foreground ${expanded ? '' : `line-clamp-${SUMMARY_CLAMP_LINES}`}`}

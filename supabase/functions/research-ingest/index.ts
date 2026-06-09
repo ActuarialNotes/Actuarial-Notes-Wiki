@@ -15,6 +15,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { extractStructuredData } from '../_shared/research-adapters/extract.ts'
+import { fetchText } from '../_shared/research-adapters/fetchText.ts'
 import { fetchOsfiUpdates } from '../_shared/research-adapters/osfi.ts'
 import { fetchOsfiFindata } from '../_shared/research-adapters/osfi-findata.ts'
 import { fetchFsraUpdates } from '../_shared/research-adapters/fsra.ts'
@@ -27,36 +28,6 @@ const CRON_SECRET_HEADER = 'x-cron-secret'
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
-}
-
-// Fetch a URL's text content. HTML is decoded directly; PDFs are routed
-// through `unpdf` (a pure-JS, edge-runtime-friendly extractor — no native
-// deps, unlike pdf-parse/pdfjs-dist's worker requirements). Anything else is
-// skipped. Network/parse failures return null so adapters can log and continue.
-async function fetchText(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'en-CA,en;q=0.9',
-      },
-    })
-    if (!res.ok) return null
-
-    const contentType = res.headers.get('content-type') || ''
-    if (contentType.includes('pdf') || url.toLowerCase().endsWith('.pdf')) {
-      const { extractText } = await import('https://esm.sh/unpdf@0.12.1')
-      const buffer = new Uint8Array(await res.arrayBuffer())
-      const { text } = await extractText(buffer, { mergePages: true })
-      return Array.isArray(text) ? text.join('\n') : text
-    }
-
-    return await res.text()
-  } catch (err) {
-    console.error('research-ingest: fetchText failed for', url, err)
-    return null
-  }
 }
 
 function buildContext(): AdapterContext {

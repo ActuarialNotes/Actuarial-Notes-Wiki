@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
+  ChevronDown,
   ChevronsLeft,
   ChevronsRight,
   Gem,
@@ -100,6 +101,57 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
       <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
       {badge && <span className={`shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>{badge}</span>}
     </NavLink>
+  )
+}
+
+function SidebarGroup({
+  label,
+  icon,
+  collapsed,
+  isActive,
+  children,
+}: {
+  label: string
+  icon: React.ReactNode
+  collapsed: boolean
+  isActive: boolean
+  children: React.ReactNode
+}) {
+  const [open, setOpen] = useState(isActive)
+
+  // Auto-expand when navigating to a child route
+  useEffect(() => {
+    if (isActive) setOpen(true)
+  }, [isActive])
+
+  // When sidebar is icon-only (collapsed desktop), render children directly
+  if (collapsed) {
+    return <>{children}</>
+  }
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className={`w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+          isActive
+            ? 'text-foreground font-medium'
+            : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
+        }`}
+      >
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
+        <span className="flex-1 truncate text-left">{label}</span>
+        <ChevronDown
+          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+      {open && (
+        <div className="ml-4 mt-0.5 border-l border-border pl-2 space-y-0.5">
+          {children}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -438,21 +490,31 @@ export default function Sidebar() {
               onNavigate={closeMobile}
             />
           )}
-          <SidebarItem
-            to={getLastWikiPath()}
+          <SidebarGroup
             label="Study Guides"
             icon={<BookOpen className="h-4 w-4" />}
             collapsed={collapsed}
-            onNavigate={closeMobile}
-            forceActive={location.pathname.startsWith('/wiki')}
-          />
-          <SidebarItem
-            to="/research"
-            label="Research"
-            icon={<Microscope className="h-4 w-4" />}
-            collapsed={collapsed}
-            onNavigate={closeMobile}
-          />
+            isActive={
+              location.pathname.startsWith('/wiki') ||
+              location.pathname.startsWith('/research')
+            }
+          >
+            <SidebarItem
+              to={getLastWikiPath()}
+              label="Actuarial Exams"
+              icon={<GraduationCap className="h-4 w-4" />}
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+              forceActive={location.pathname.startsWith('/wiki')}
+            />
+            <SidebarItem
+              to="/research"
+              label="Research"
+              icon={<Microscope className="h-4 w-4" />}
+              collapsed={collapsed}
+              onNavigate={closeMobile}
+            />
+          </SidebarGroup>
           <SidebarItem
             to="/flashcards"
             label="Flashcards"

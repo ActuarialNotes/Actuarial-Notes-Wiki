@@ -24,15 +24,20 @@ import { emptyResult } from './types.ts'
 const AGENT_ID = 'osfi'
 const SOURCE_NAME = 'osfi'
 
+// Three pages of each type gives 6 listing fetches × 2 docs = 12 docs/run
+// and covers ~60-90 documents across the first few daily cron runs.
+// upsert(ignoreDuplicates:true) makes re-runs idempotent.
 const LISTING_PAGES = [
-  { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2616', label: 'Guidelines' },
-  { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2617', label: 'Letters and Advisories' },
+  { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2616', label: 'Guidelines p1' },
+  { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2616&page=1', label: 'Guidelines p2' },
+  { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2616&page=2', label: 'Guidelines p3' },
+  { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2617', label: 'Letters p1' },
+  { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2617&page=1', label: 'Letters p2' },
+  { url: 'https://www.osfi-bsif.gc.ca/en/guidance/guidance-library?f%5B0%5D=guidance_type%3A2617&page=2', label: 'Letters p3' },
 ]
 
-// Cap per listing page to avoid the 150 MB edge-function memory limit on the
-// free plan. OSFI guideline pages are large HTML documents; 2 per page (4
-// total per run) keeps peak usage safely under the limit. Raise once on a
-// paid plan or after switching to a streaming/chunked fetch approach.
+// Cap per listing page. OSFI guideline pages are HTML (not PDF), so memory
+// per doc is low; 2 keeps each run well under the 150 MB free-plan limit.
 const MAX_DOCS_PER_LISTING_PAGE = 2
 
 // Truncate raw text before storing — large OSFI pages can be 500 KB+ and
@@ -75,6 +80,12 @@ function parseListingLinks(html: string, baseUrl: string): ListingLink[] {
 
     const title = stripTags(match[2])
     if (!title || title.length < 8) continue
+
+    // Require at least one regulatory-document keyword in the title. This
+    // filters out structural/overview pages (e.g. "How OSFI guidance aligns
+    // with our mandate", "List of rescinded guidance") that share the
+    // /guidance-library/<slug> URL pattern but aren't substantive documents.
+    if (!/guideline|advisory|letter|circular|bulletin|notice|consultation/i.test(title)) continue
 
     // Look for <time datetime="YYYY-MM-DD"> within the same item block.
     const linkPos = match.index

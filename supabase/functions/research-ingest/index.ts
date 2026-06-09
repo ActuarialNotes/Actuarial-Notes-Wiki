@@ -11,12 +11,14 @@
 //   - Daily   : OSFI, FSRA, AIRB, AMF        (new bulletins/circulars)
 //   - Quarterly: Intact, Aviva Canada         (~mid-Feb/May/Aug/Nov, post-earnings)
 //   - Annual  : IBC "Facts of the Industry"
-// FSRA/AIRB/AMF/IBC adapters are not implemented yet (see Phase 1 checklist —
-// "Then expand"); this orchestrator only wires up OSFI and Intact for now.
+// IBC adapter is not yet implemented.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { extractStructuredData } from '../_shared/research-adapters/extract.ts'
 import { fetchOsfiUpdates } from '../_shared/research-adapters/osfi.ts'
+import { fetchFsraUpdates } from '../_shared/research-adapters/fsra.ts'
+import { fetchAirbUpdates } from '../_shared/research-adapters/airb.ts'
+import { fetchAmfUpdates } from '../_shared/research-adapters/amf.ts'
 import { fetchIntactUpdates } from '../_shared/research-adapters/intact.ts'
 import type { AdapterContext, AdapterResult, AdapterError, MetricInsert } from '../_shared/research-adapters/types.ts'
 
@@ -64,6 +66,9 @@ interface AdapterRun {
 
 const ADAPTERS: AdapterRun[] = [
   { name: 'osfi', run: fetchOsfiUpdates },
+  { name: 'fsra', run: fetchFsraUpdates },
+  { name: 'airb', run: fetchAirbUpdates },
+  { name: 'amf', run: fetchAmfUpdates },
   { name: 'intact-financial', run: fetchIntactUpdates },
 ]
 

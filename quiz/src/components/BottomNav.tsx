@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, LayoutDashboard, Layers, Play } from 'lucide-react'
+import { BookOpen, GraduationCap, Layers, LayoutDashboard, Microscope, Play, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 
@@ -8,7 +9,6 @@ function getLastWikiPath(): string {
 }
 
 const NAV_ITEMS = [
-  { to: '/wiki',       label: 'Guides',     icon: BookOpen,        end: false, authRequired: false },
   { to: '/flashcards', label: 'Flashcards', icon: Layers,          end: false, authRequired: false },
   { to: '/',           label: 'Quiz',       icon: Play,            end: true,  authRequired: false },
   { to: '/dashboard',  label: 'Dashboard',  icon: LayoutDashboard, end: false, authRequired: true  },
@@ -18,6 +18,7 @@ export default function BottomNav() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const [studyGuidesOpen, setStudyGuidesOpen] = useState(false)
 
   const profileName =
     (user?.user_metadata?.full_name as string | undefined) ||
@@ -29,68 +30,129 @@ export default function BottomNav() {
 
   const items = NAV_ITEMS.filter(item => !item.authRequired || !!user)
 
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 z-[45] flex md:hidden bg-background/95 backdrop-blur-md border-t border-border h-14">
-      {items.map(item => {
-        const Icon = item.icon
+  const isStudyGuidesActive =
+    location.pathname.startsWith('/wiki') || location.pathname.startsWith('/research')
 
-        if (item.to === '/wiki') {
-          const isActive = location.pathname.startsWith('/wiki')
+  // Close the sub-menu on route change
+  useEffect(() => {
+    setStudyGuidesOpen(false)
+  }, [location.pathname])
+
+  function handleStudyGuidesTab() {
+    setStudyGuidesOpen(v => !v)
+  }
+
+  function navigateTo(path: string) {
+    setStudyGuidesOpen(false)
+    navigate(path)
+  }
+
+  return (
+    <>
+      {/* Study Guides sub-menu panel */}
+      {studyGuidesOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-[44] md:hidden"
+            onClick={() => setStudyGuidesOpen(false)}
+            aria-hidden="true"
+          />
+          {/* Panel */}
+          <div className="fixed bottom-14 left-0 right-0 z-[46] md:hidden bg-background/95 backdrop-blur-md border-t border-border">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-border/50">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Study Guides</span>
+              <button
+                type="button"
+                onClick={() => setStudyGuidesOpen(false)}
+                className="h-6 w-6 flex items-center justify-center rounded text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            <div className="flex">
+              <button
+                type="button"
+                onClick={() => navigateTo(getLastWikiPath())}
+                className={`flex flex-1 flex-col items-center justify-center gap-1 py-4 transition-colors ${
+                  location.pathname.startsWith('/wiki') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <GraduationCap className="h-5 w-5 shrink-0" />
+                <span className="text-xs font-medium">Actuarial Exams</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigateTo('/research')}
+                className={`flex flex-1 flex-col items-center justify-center gap-1 py-4 transition-colors ${
+                  location.pathname.startsWith('/research') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Microscope className="h-5 w-5 shrink-0" />
+                <span className="text-xs font-medium">Research</span>
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      <nav className="fixed bottom-0 left-0 right-0 z-[45] flex md:hidden bg-background/95 backdrop-blur-md border-t border-border h-14">
+        {/* Study Guides tab */}
+        <button
+          type="button"
+          onClick={handleStudyGuidesTab}
+          className={`flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
+            isStudyGuidesActive || studyGuidesOpen ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          <BookOpen className="h-5 w-5 shrink-0" />
+          <span className="text-[10px] font-medium">Guides</span>
+        </button>
+
+        {items.map(item => {
+          const Icon = item.icon
           return (
-            <button
+            <NavLink
               key={item.to}
-              type="button"
-              onClick={() => navigate(getLastWikiPath())}
-              className={`flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
-                isActive ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
-              }`}
+              to={item.to}
+              end={item.end}
+              data-tour={item.to === '/' ? 'nav-quiz' : undefined}
+              className={({ isActive }) =>
+                `flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
+                  isActive
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`
+              }
             >
               <Icon className="h-5 w-5 shrink-0" />
               <span className="text-[10px] font-medium">{item.label}</span>
-            </button>
+            </NavLink>
           )
-        }
+        })}
 
-        return (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            data-tour={item.to === '/' ? 'nav-quiz' : undefined}
-            className={({ isActive }) =>
-              `flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
-                isActive
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`
-            }
-          >
-            <Icon className="h-5 w-5 shrink-0" />
-            <span className="text-[10px] font-medium">{item.label}</span>
-          </NavLink>
-        )
-      })}
-      <NavLink
-        to="/settings"
-        className={({ isActive }) =>
-          `flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
-            isActive
-              ? 'text-primary'
-              : 'text-muted-foreground hover:text-foreground'
-          }`
-        }
-      >
-        {user ? (
-          <span className="shrink-0">
-            <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
-          </span>
-        ) : (
-          <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5 shrink-0">
-            <circle cx="10" cy="10" r="8.25" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3.5 2.5" />
-          </svg>
-        )}
-        <span className="text-[10px] font-medium">You</span>
-      </NavLink>
-    </nav>
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            `flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
+              isActive
+                ? 'text-primary'
+                : 'text-muted-foreground hover:text-foreground'
+            }`
+          }
+        >
+          {user ? (
+            <span className="shrink-0">
+              <AvatarDisplay avatarUrl={avatarUrl} initials={profileInitials} size={20} />
+            </span>
+          ) : (
+            <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5 shrink-0">
+              <circle cx="10" cy="10" r="8.25" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3.5 2.5" />
+            </svg>
+          )}
+          <span className="text-[10px] font-medium">You</span>
+        </NavLink>
+      </nav>
+    </>
   )
 }

@@ -355,13 +355,7 @@ export function QuestionCard({
   function handlePartAnswer(label: string, value: string) {
     const updated = { ...partAnswers, [label]: value }
     setPartAnswers(updated)
-    // Essay parts (answer === '') need no user input — skip them when deciding
-    // whether all graded parts are filled.
-    const parts = question.parts ?? []
-    const allFilled = parts.every(p => p.answer === '' || (updated[p.label] ?? '').trim() !== '')
-    // Signal all-filled state on every change so the page-level Confirm button
-    // appears/disappears live as the user types across parts.
-    onAnswer(allFilled ? JSON.stringify(updated) : '')
+    onAnswer(JSON.stringify(updated))
   }
 
   // ── multiple-choice ──────────────────────────────────────────────────────
@@ -459,8 +453,6 @@ export function QuestionCard({
 
   // ── multi-part ───────────────────────────────────────────────────────────
   const parts = question.parts ?? []
-  // Essay parts (answer === '') require no user input
-  const allPartsAnswered = parts.every(p => p.answer === '' || (partAnswers[p.label] ?? '').trim() !== '')
 
   return (
     <Card className="w-full">
@@ -495,12 +487,6 @@ export function QuestionCard({
             onSelfGrade={onEssaySelfGrade ? (grade) => onEssaySelfGrade(part.label, grade) : undefined}
           />
         ))}
-
-        {!isLocked && parts.length > 0 && !allPartsAnswered && (
-          <p className="text-xs text-muted-foreground text-center">
-            Answer all parts to submit
-          </p>
-        )}
 
         {isLocked && onNext && (
           <p className="text-xs text-center text-muted-foreground pt-1 select-none">

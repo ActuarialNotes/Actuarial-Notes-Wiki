@@ -507,13 +507,20 @@ export default function Sidebar() {
               onNavigate={closeMobile}
               forceActive={location.pathname.startsWith('/wiki')}
             />
-            <SidebarItem
-              to="/research"
-              label="Research"
-              icon={<Microscope className="h-4 w-4" />}
-              collapsed={collapsed}
-              onNavigate={closeMobile}
-            />
+            {user && (
+              <SidebarItem
+                to="/research"
+                label="Research"
+                icon={<Microscope className="h-4 w-4" />}
+                collapsed={collapsed}
+                onNavigate={closeMobile}
+                badge={
+                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none">
+                    Beta
+                  </span>
+                }
+              />
+            )}
           </SidebarGroup>
           <SidebarItem
             to="/flashcards"

@@ -10,6 +10,17 @@
 // supabase/migrations/20260608_research.sql — it is the client-side source of
 // truth for display metadata so the UI doesn't need a round trip just to label
 // a badge.
+//
+// SCOPE NOTE: this module covers the regulatory intelligence layer only —
+// agents, regulatory relationships, documents, and financial metrics. It does
+// not model claims, reserves, loss development, or risk types; those belong in
+// the exam concept pages (Concepts/*.md) that sit above this layer.
+//
+// ONTOLOGY ALIGNMENT (Actuarial-Notes/Actuarial-Ontology v0.7.0-draft):
+// All AgentType values except `industry_bureau` map directly onto AO classes
+// (Regulator, Insurer). `industry_bureau` is a local extension for statistical
+// bodies (IBC, GISA) that have no direct AO equivalent — they are Organizations
+// in AO terms but are neither Regulators nor Insurers.
 
 export type AgentType =
   | 'federal_regulator'
@@ -99,7 +110,16 @@ const AGENTS: AgentMeta[] = [
   { id: 'desjardins-general', type: 'federally_incorporated_insurer', legalName: 'Desjardins General Insurance Group', shortName: 'Desjardins', jurisdiction: { scope: 'multi_provincial', provinces: ['ON', 'QC'], domains: ['financial_disclosure'] } },
   { id: 'aviva-canada', type: 'federally_incorporated_insurer', legalName: 'Aviva Canada Inc.', shortName: 'Aviva', jurisdiction: { scope: 'multi_provincial', provinces: ['ON', 'AB', 'QC', 'BC'], domains: ['financial_disclosure'] } },
   { id: 'td-insurance', type: 'federally_incorporated_insurer', legalName: 'TD Insurance', shortName: 'TD Insurance', jurisdiction: { scope: 'multi_provincial', provinces: [], domains: ['financial_disclosure'] } },
-  { id: 'cooperators', type: 'federally_incorporated_insurer', legalName: 'The Co-operators General Insurance Company', shortName: 'Co-operators', jurisdiction: { scope: 'multi_provincial', provinces: [], domains: ['financial_disclosure'] } },
+  { id: 'cooperators',   type: 'federally_incorporated_insurer', legalName: 'The Co-operators General Insurance Company',   shortName: 'Co-operators', jurisdiction: { scope: 'multi_provincial', provinces: [],                         domains: ['financial_disclosure'] } },
+  // ── Additional insurers from Actuarial-Ontology knowledge base ───────────────
+  { id: 'definity',      type: 'federally_incorporated_insurer', legalName: 'Definity Financial Corporation',               shortName: 'Definity',     jurisdiction: { scope: 'multi_provincial', provinces: ['ON', 'AB', 'BC', 'QC'],    domains: ['financial_disclosure'] } },
+  { id: 'allstate-canada', type: 'federally_incorporated_insurer', legalName: 'Allstate Insurance Company of Canada',       shortName: 'Allstate',     jurisdiction: { scope: 'multi_provincial', provinces: ['ON', 'AB', 'QC', 'BC'],    domains: ['financial_disclosure'] } },
+  { id: 'wawanesa',      type: 'federally_incorporated_insurer', legalName: 'Wawanesa Mutual Insurance Company',            shortName: 'Wawanesa',     jurisdiction: { scope: 'multi_provincial', provinces: ['BC', 'MB', 'ON'],          domains: ['financial_disclosure'] } },
+  { id: 'chubb-canada',  type: 'federally_incorporated_insurer', legalName: 'Chubb Insurance Company of Canada',           shortName: 'Chubb',        jurisdiction: { scope: 'multi_provincial', provinces: ['ON', 'AB', 'QC', 'BC'],    domains: ['financial_disclosure'] } },
+  { id: 'gore-mutual',   type: 'province_incorporated_insurer',  legalName: 'Gore Mutual Insurance Company',               shortName: 'Gore Mutual',  jurisdiction: { scope: 'multi_provincial', provinces: ['ON', 'BC'],               domains: ['financial_disclosure'] } },
+  { id: 'sgi-canada',    type: 'public_insurer',                  legalName: 'SGI Canada',                                 shortName: 'SGI Canada',   jurisdiction: { scope: 'multi_provincial', provinces: ['SK', 'AB', 'MB', 'ON', 'BC'], domains: ['product_regulation'] } },
+  { id: 'mpi',           type: 'public_insurer',                  legalName: 'Manitoba Public Insurance',                  shortName: 'MPI',          jurisdiction: { scope: 'provincial',       provinces: ['MB'],                     domains: ['product_regulation'] } },
+  { id: 'saaq',          type: 'public_insurer',                  legalName: "Société de l'assurance automobile du Québec", shortName: 'SAAQ',         jurisdiction: { scope: 'provincial',       provinces: ['QC'],                     domains: ['product_regulation'] } },
 ]
 
 const AGENTS_BY_ID = new Map(AGENTS.map(a => [a.id, a]))
@@ -157,6 +177,9 @@ export function agentRelationship(a: string, b: string): RelationshipType | null
   if (regulator.type === 'provincial_regulator' && overlapsJurisdiction(regulator, insurer)) {
     return 'regulates'
   }
+  // `statistical_member_of` is only valid when the governing side is an
+  // industry_bureau (IBC, GISA). This mirrors the DB trigger in
+  // 20260613_research_ontology_v2.sql that enforces the same constraint.
   if (regulator.type === 'industry_bureau' && overlapsJurisdiction(regulator, insurer)) {
     return 'statistical_member_of'
   }

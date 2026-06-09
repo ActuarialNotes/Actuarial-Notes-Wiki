@@ -70,7 +70,10 @@ export const RESEARCH_METRICS: readonly MetricDef[] = [
     label: 'MCT ratio',
     shortLabel: 'MCT',
     unit: '%',
-    description: 'Minimum Capital Test ratio — regulatory solvency capital coverage.',
+    // MCT (Minimum Capital Test) is the OSFI/Canadian P&C solvency measure — distinct
+    // from EU Solvency II's MCR/SCR and US Risk-Based Capital (RBC). Do not map
+    // EU-context MCR values here; they measure different regulatory regimes.
+    description: 'Minimum Capital Test ratio — OSFI Canadian P&C solvency capital coverage (≥150% supervisory target).',
     format: pct,
     betterDirection: 'higher',
   },

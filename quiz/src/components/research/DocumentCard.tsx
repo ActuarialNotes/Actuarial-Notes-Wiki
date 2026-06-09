@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ExternalLink, FileText, ChevronDown, ChevronUp } from 'lucide-react'
+import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { agentMeta } from '@/lib/researchOntology'
@@ -87,18 +87,6 @@ export function DocumentCard({
             {document.title}
             <ExternalLink className="inline h-3 w-3 ml-1 align-text-top text-muted-foreground" aria-hidden />
           </a>
-          {document.pdf_url && (
-            <a
-              href={document.pdf_url}
-              target="_blank"
-              rel="noreferrer"
-              title="Open PDF"
-              className="shrink-0 text-muted-foreground hover:text-primary transition-colors"
-            >
-              <FileText className="h-4 w-4" aria-hidden />
-              <span className="sr-only">PDF</span>
-            </a>
-          )}
         </div>
 
         {visibleChips.length > 0 && (
@@ -144,9 +132,16 @@ export function DocumentCard({
           </div>
         )}
 
-        {document.exam_tags && document.exam_tags.length > 0 && (
+        {(document.pdf_url || (document.exam_tags && document.exam_tags.length > 0)) && (
           <div className="flex flex-wrap gap-1.5 pt-1">
-            {document.exam_tags.map(tag => (
+            {document.pdf_url && (
+              <a href={document.pdf_url} target="_blank" rel="noreferrer">
+                <Badge variant="outline" className="text-[10px] uppercase text-primary border-primary/40 hover:bg-primary/10 transition-colors cursor-pointer">
+                  PDF
+                </Badge>
+              </a>
+            )}
+            {document.exam_tags?.map(tag => (
               <Badge key={tag} variant="outline" className="text-[10px] uppercase">
                 {tag}
               </Badge>

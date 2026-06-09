@@ -26,6 +26,7 @@ function agentLabel(agentId: string): string {
 
 export default function BenchmarkView() {
   const agentIds = useResearchStore(s => s.filters.agentIds)
+  const linesOfBusiness = useResearchStore(s => s.filters.linesOfBusiness)
   const [metricName, setMetricName] = useState<string>(RESEARCH_METRICS[0].name)
   const [rows, setRows] = useState<MetricRow[]>([])
   const [loading, setLoading] = useState(true)
@@ -38,10 +39,11 @@ export default function BenchmarkView() {
 
     let query = supabase
       .from('research_metrics')
-      .select('agent_id, value, period')
+      .select('agent_id, value, period, line_of_business')
       .eq('metric_name', metricName)
 
     if (agentIds.length > 0) query = query.in('agent_id', agentIds)
+    if (linesOfBusiness.length > 0) query = query.in('line_of_business', linesOfBusiness)
 
     query.then(({ data, error: queryError }: { data: MetricRow[] | null; error: { message: string } | null }) => {
       if (cancelled) return
@@ -55,7 +57,7 @@ export default function BenchmarkView() {
     })
 
     return () => { cancelled = true }
-  }, [metricName, agentIds])
+  }, [metricName, agentIds, linesOfBusiness])
 
   const metric = metricDef(metricName) ?? RESEARCH_METRICS[0]
   const { points, agentIds: seriesAgentIds } = useMemo(() => buildChartData(rows), [rows])

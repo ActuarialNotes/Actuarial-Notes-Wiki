@@ -97,6 +97,7 @@ export function useResearchFeed(): FeedResult {
     if (filters.agentIds.length > 0) query = query.in('agent_id', filters.agentIds)
     if (filters.docTypes.length > 0) query = query.in('type', filters.docTypes)
     if (filters.provinces.length > 0) query = query.overlaps('jurisdiction_provinces', filters.provinces)
+    if (filters.linesOfBusiness.length > 0) query = query.overlaps('line_of_business', filters.linesOfBusiness)
     if (filters.dateFrom) query = query.gte('published_at', filters.dateFrom)
     if (filters.dateTo) query = query.lte('published_at', filters.dateTo)
 

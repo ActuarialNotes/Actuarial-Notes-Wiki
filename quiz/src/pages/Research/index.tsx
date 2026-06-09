@@ -1,5 +1,5 @@
 import { useResearchStore, type ResearchTab } from '@/stores/researchStore'
-import { allAgents } from '@/lib/researchOntology'
+import { allAgents, allLinesOfBusiness } from '@/lib/researchOntology'
 import { CorpusScorecard } from '@/components/research/CorpusScorecard'
 import MonitorView from './MonitorView'
 import ResearchView from './ResearchView'
@@ -39,11 +39,13 @@ function FilterBar() {
   const filters = useResearchStore(s => s.filters)
   const toggleAgent = useResearchStore(s => s.toggleAgent)
   const toggleProvince = useResearchStore(s => s.toggleProvince)
+  const toggleLineOfBusiness = useResearchStore(s => s.toggleLineOfBusiness)
   const setDateRange = useResearchStore(s => s.setDateRange)
   const resetFilters = useResearchStore(s => s.resetFilters)
   const hasFilters =
     filters.agentIds.length > 0 ||
     filters.provinces.length > 0 ||
+    filters.linesOfBusiness.length > 0 ||
     !!filters.dateFrom
 
   function handleDatePreset(days: number) {
@@ -79,6 +81,19 @@ function FilterBar() {
             className={chipClass(filters.provinces.includes(province))}
           >
             {province}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="text-xs text-muted-foreground mr-1">LOB</span>
+        {allLinesOfBusiness().map(lob => (
+          <button
+            key={lob.slug}
+            type="button"
+            onClick={() => toggleLineOfBusiness(lob.slug)}
+            className={chipClass(filters.linesOfBusiness.includes(lob.slug))}
+          >
+            {lob.label}
           </button>
         ))}
       </div>

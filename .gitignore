@@ -5,3 +5,6 @@ dist/
 .vercel/
 __pycache__/
 *.pyc
+
+# OSFI raw regulatory-return dumps (large; not committed — feed scripts/etl_osfi.py)
+data/osfi/*.txt

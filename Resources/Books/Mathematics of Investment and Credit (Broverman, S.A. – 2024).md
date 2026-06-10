@@ -72,12 +72,25 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 - 6.1 [[Spot Rate|Spot Rates of Interest]]
 - 6.3 [[Forward Rate|Forward Rates of Interest]]
 
-## 7 Asset-Liability Management
+## 7 Cashflow Duration and Immunization
 
 - 7.1 [[Duration]]
   - 7.1.1 [[Macaulay Duration]]
   - 7.1.2 [[Modified Duration]]
 - 7.2 [[Convexity]]
+- 7.3 [[Redington Immunization]] and [[Full Immunization]]
+- 7.4 [[Cash Flow|Cash Flow Matching]]
+
+## 8 Additional Topics in Finance and Investment
+
+- 8.1 [[Yield Curve|Term Structure]] Applications and Stochastic Rates
+- 8.2 Financial Instruments and Investment Strategies
+
+## 9 Forwards, Futures, Swaps, and Options
+
+- 9.1 Forward and Futures Contracts
+- 9.2 Interest Rate Swaps
+- 9.3 Options and the Binomial Option Pricing Model
 
 ## Links
 - [worldcat.org](https://search.worldcat.org/title/mathematics-of-investment-and-credit-broverman)

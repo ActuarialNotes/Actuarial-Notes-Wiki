@@ -116,7 +116,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 ## 9 Additional Topics in Probability
   - 9.1 [[Poisson Process]]
   - 9.2 [[Markov Chain|Markov Chains]]
-  - 9.3 [[Entropy (information theory)|Entropy]]
+  - 9.3 Surprise, Uncertainty, and [[Entropy (information theory)|Entropy]]
   - 9.4 Coding Theory and Entropy
 
 ## 10 Simulation
@@ -134,8 +134,6 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
   - Answers to Selected Problems
   - Solutions to Self-Test Problems and Exercises
   - Index
-  - Common Discrete Distributions
-  - Common Continuous Distributions
 
 
 ## Links  

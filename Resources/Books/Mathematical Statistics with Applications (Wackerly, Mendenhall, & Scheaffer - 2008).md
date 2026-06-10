@@ -251,5 +251,4 @@ ISBN: 978-0495110811
 - Appendix 1 Matrices and Other Useful Mathematical Results
 - Appendix 2 Common Probability Distributions, Means, Variances, and MGFs
 - Appendix 3 Tables
-- Appendix R
 

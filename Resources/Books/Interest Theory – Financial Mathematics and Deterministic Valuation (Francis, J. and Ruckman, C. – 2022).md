@@ -11,116 +11,101 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 ## 1 Setting the Stage
 
 - 1.01 The BA II Plus Calculator
-- 1.02 [[Accumulation Function|Accumulation Functions]]
-- 1.03 [[Effective Rate|Effective Interest Rates]]
-- 1.04 [[Present Value]] and [[Discount Factor]]
+- 1.02 Valuation Dates and Payment Dates
+- 1.03 [[Present Value|Current Values]]
+- 1.04 [[Loans]] Repaid with a Single Payment
 
-## 2 The Accumulation Function
+## 2 Simple Interest and Discount
 
 - 2.01 [[Simple Interest]]
-- 2.02 [[Compound Interest]]
-- 2.03 [[Nominal Interest Rate|Nominal Rates of Interest]]
-- 2.04 [[Force of Interest]]
-- 2.05 [[Variable Force of Interest|Varying Force of Interest]]
+- 2.02 [[Discount Rate|Simple Discount]]
+- 2.03 [[Effective Rate|Effective Rates of Interest]]
 
-## 3 The Present Value and Discount Functions
+## 3 Compound Interest and Discount
 
-- 3.01 [[Present Value]] with [[Simple Interest]]
-- 3.02 [[Present Value]] with [[Compound Interest]]
-- 3.03 [[Discount Rate|Simple Discount]]
-- 3.04 [[Discount Rate|Compound Discount]]
-- 3.05 [[Nominal Discount Rate Convertible m-thly|Nominal Rates of Discount]]
-- 3.06 Relationships Among [[Interest Rate|Interest]] and [[Discount Rate|Discount Rates]]
+- 3.01 [[Compound Interest]]
+- 3.02 [[Discount Rate|Compound Discount]]
+- 3.03 [[Present Value]] and [[Discount Factor]]
+- 3.04 [[Nominal Interest Rate|Nominal Rates of Interest]] and [[Nominal Discount Rate Convertible m-thly|Discount]]
+- 3.05 [[Equation of Value|Equations of Value]]
 
-## 4 Equations of Value
+## 4 Constant Force of Interest
 
-- 4.01 [[Equation of Value|Equations of Value]] — Single Payment
-- 4.02 [[Equation of Value|Equations of Value]] — Multiple Payments
-- 4.03 [[Real Rate of Interest]] and [[Inflation]]
+- 4.01 [[Force of Interest]]
+- 4.02 [[Accumulation Function|Accumulating]] and [[Present Value|Discounting]] with a Constant Force
 
-## 5 Introduction to Annuities
+## 5 Varying Rates
 
-- 5.01 [[Annuity Immediate]] Basics
-- 5.02 [[Annuity Due]] Basics
-- 5.03 [[Level Perpetuity|Perpetuity-Immediate]]
-- 5.04 [[Perpetuity]]-Due
-- 5.05 Deferred [[Annuity Immediate|Annuities]]
+- 5.01 [[Variable Force of Interest|Varying Force of Interest]]
+- 5.02 Varying [[Effective Rate|Effective Rates]]
+- 5.03 [[Real Rate of Interest]] and [[Inflation]]
 
-## 6 Level Annuities
+## 6 Level Annuities Payable Once per Time Unit
 
-- 6.01 [[Present Value]] of [[Annuity Immediate]]
-- 6.02 [[Accumulated Value]] of [[Annuity Immediate]]
-- 6.03 Solving for n and i
-- 6.04 [[Annuity Due]] Formulas
+- 6.01 [[Annuity Immediate]]
+- 6.02 [[Annuity Due]]
+- 6.03 Deferred [[Annuity Immediate|Annuities]]
+- 6.04 [[Level Perpetuity|Perpetuities]]
 
-## 7 Annuities with Non-Level Payments
+## 7 Level Annuities Payable More than Once per Time Unit
 
-- 7.01 [[Arithmetic Increasing Annuity|Increasing Annuities]] — [[Arithmetic Progression]]
-- 7.02 [[Arithmetic Increasing Annuity|Decreasing Annuities]] — [[Arithmetic Progression]]
-- 7.03 Annuities with [[Geometric Progression|Geometric Payments]]
-- 7.04 [[Non-level Annuities|Other Non-Level Annuities]]
+- 7.01 [[Payable m-thly|Annuities Payable m-thly]]
+- 7.02 [[Payable Continuously|Continuously Payable Annuities]]
 
-## 8 Annuities with Different Payment Periods
+## 8 Increasing Annuities
 
-- 8.01 [[Payable m-thly|Annuities Payable m-thly]]
-- 8.02 [[Payable Continuously|Continuously Payable Annuities]]
-- 8.03 Varying Continuous Annuities
+- 8.01 [[Arithmetic Increasing Annuity|Increasing Annuities]] — [[Arithmetic Progression]]
+- 8.02 [[Arithmetic Increasing Annuity|Decreasing Annuities]] — [[Arithmetic Progression]]
 
-## 9 Loan Amortization
+## 9 Continuously Payable Varying Annuities
 
-- 9.01 The [[Amortization]] Method
-- 9.02 [[Outstanding Balance]] — Prospective Method
-- 9.03 [[Outstanding Balance]] — Retrospective Method
-- 9.04 [[Amortization]] Schedules
-- 9.05 [[Principal]] and [[Interest]] Payments
+- 9.01 Continuously Increasing, [[Payable Continuously|Continuously Payable Annuities]]
+- 9.02 Other Varying Continuous Annuities
 
-## 10 Sinking Funds
+## 10 Geometric Progression Annuities
 
-- 10.01 Sinking Fund Method of [[Loans|Loan]] Repayment
-- 10.02 Comparing [[Amortization]] and Sinking Fund Methods
-- 10.03 [[Balloon Payment]] and [[Drop Payment|Drop Payments]]
+- 10.01 Annuities with [[Geometric Progression|Geometric Payments]]
 
-## 11 Bond Valuation
+## 11 Loans
 
-- 11.01 [[Bonds|Bond]] Terminology and Definitions
-- 11.02 [[Bond Price|Basic Bond Pricing]] Formula
-- 11.03 Premium and Discount — [[Amortization of Premium|Amortization]]
-- 11.04 [[Book Value]] of a [[Bonds|Bond]]
-- 11.05 [[Bonds|Bond]] Amortization Schedules
+- 11.01 The [[Amortization]] Method
+- 11.02 [[Outstanding Balance]] — Prospective and Retrospective Methods
+- 11.03 [[Amortization]] Schedules
+- 11.04 [[Balloon Payment]] and [[Drop Payment|Drop Payments]]
+- 11.05 The Sinking Fund Method
 
-## 12 Bond Topics
+## 12 Project Evaluation
 
-- 12.01 [[Yield Rate|Bond Yield Rates]]
-- 12.02 [[Callable Bond|Callable Bonds]]
-- 12.03 [[Bonds|Bond]] Price Between [[Coupon]] Dates
-- 12.04 [[Face Value]] and [[Redemption Value]]
+- 12.01 [[Net Present Value]] and [[Yield Rate|Internal Rate of Return]]
+- 12.02 Dollar-Weighted Rate of Return
+- 12.03 Time-Weighted Rate of Return
 
-## 13 Rates of Return
+## 13 Fixed Income Securities
 
-- 13.01 [[Net Present Value]] and [[Yield Rate|Internal Rate of Return]]
-- 13.02 Dollar-Weighted Rate of Return
-- 13.03 Time-Weighted Rate of Return
-- 13.04 Portfolio Rate of Return
+- 13.01 [[Bonds|Bond]] Terminology and [[Bond Price|Pricing]]
+- 13.02 [[Book Value]] and [[Amortization of Premium|Premium]]/[[Accumulation of Discount|Discount]]
+- 13.03 [[Yield Rate|Bond Yield Rates]]
+- 13.04 [[Callable Bond|Callable Bonds]]
+- 13.05 [[Bonds|Bond]] Price Between [[Coupon]] Dates
 
-## 14 Duration and Convexity
+## 14 Convexity and Macaulay Duration
 
 - 14.01 [[Macaulay Duration]]
 - 14.02 [[Modified Duration]]
 - 14.03 [[Convexity]]
 
-## 15 Immunization
+## 15 Asset-Liability Management
 
-- 15.01 [[Redington Immunization]]
-- 15.02 [[Full Immunization]]
-- 15.03 [[Cash Flow|Cash Flow Matching]]
-- 15.04 [[Asset-Liability Portfolio|Asset-Liability Management]]
+- 15.01 Interest Rate Risk
+- 15.02 [[Cash Flow|Cash Flow Matching]]
+- 15.03 [[Redington Immunization]]
+- 15.04 [[Full Immunization]]
 
 ## 16 The Term Structure of Interest Rates
 
-- 16.01 [[Yield Curve]]
+- 16.01 [[Yield Curve|Yield Rates]] and the [[Yield Curve]]
 - 16.02 [[Spot Rate|Spot Rates]]
 - 16.03 [[Forward Rate|Forward Rates]]
-- 16.04 [[Yield Curve|Par Rates]]
 
 ## Links
 - [worldcat.org](https://search.worldcat.org/title/interest-theory-francis-ruckman)

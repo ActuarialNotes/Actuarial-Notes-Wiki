@@ -12,21 +12,37 @@ import {
 } from 'recharts'
 import { supabase } from '@/lib/supabase'
 import { useResearchStore } from '@/stores/researchStore'
-import { agentMeta } from '@/lib/researchOntology'
+import { agentMeta, lobMeta } from '@/lib/researchOntology'
 import { RESEARCH_METRICS, metricDef } from '@/lib/researchMetrics'
-import { buildChartData, summarizeByAgent, type MetricRow } from '@/lib/researchBenchmarks'
+import {
+  buildChartData,
+  summarizeBySeries,
+  type MetricRow,
+  type SeriesSummary,
+} from '@/lib/researchBenchmarks'
 import { comparePeriods, formatPeriod } from '@/lib/researchPeriods'
 import { MetricComparisonTable } from '@/components/research/MetricComparisonTable'
 
 const LINE_COLORS = ['#3b82f6', '#10b981', '#8b5cf6', '#f97316', '#ef4444', '#06b6d4']
 
-function agentLabel(agentId: string): string {
-  return agentMeta(agentId)?.shortName ?? agentId
+// Build a seriesKey -> human label map from the summaries, so the chart legend
+// and tooltip can name each line by agent + province/line scope rather than the
+// opaque composite key. e.g. "Intact · ON · Personal auto".
+function buildSeriesLabels(summaries: SeriesSummary[]): Map<string, string> {
+  const labels = new Map<string, string>()
+  for (const s of summaries) {
+    const parts = [agentMeta(s.agentId)?.shortName ?? s.agentId]
+    if (s.province) parts.push(s.province)
+    if (s.lineOfBusiness) parts.push(lobMeta(s.lineOfBusiness)?.label ?? s.lineOfBusiness)
+    labels.set(s.seriesKey, parts.join(' · '))
+  }
+  return labels
 }
 
 export default function BenchmarkView() {
   const agentIds = useResearchStore(s => s.filters.agentIds)
   const linesOfBusiness = useResearchStore(s => s.filters.linesOfBusiness)
+  const provinces = useResearchStore(s => s.filters.provinces)
   const [metricName, setMetricName] = useState<string>(RESEARCH_METRICS[0].name)
   const [rows, setRows] = useState<MetricRow[]>([])
   const [loading, setLoading] = useState(true)
@@ -39,11 +55,12 @@ export default function BenchmarkView() {
 
     let query = supabase
       .from('research_metrics')
-      .select('agent_id, value, period, line_of_business')
+      .select('agent_id, value, period, province, line_of_business')
       .eq('metric_name', metricName)
 
     if (agentIds.length > 0) query = query.in('agent_id', agentIds)
     if (linesOfBusiness.length > 0) query = query.in('line_of_business', linesOfBusiness)
+    if (provinces.length > 0) query = query.in('province', provinces)
 
     query.then(({ data, error: queryError }: { data: MetricRow[] | null; error: { message: string } | null }) => {
       if (cancelled) return
@@ -57,11 +74,12 @@ export default function BenchmarkView() {
     })
 
     return () => { cancelled = true }
-  }, [metricName, agentIds, linesOfBusiness])
+  }, [metricName, agentIds, linesOfBusiness, provinces])
 
   const metric = metricDef(metricName) ?? RESEARCH_METRICS[0]
-  const { points, agentIds: seriesAgentIds } = useMemo(() => buildChartData(rows), [rows])
-  const summaries = useMemo(() => summarizeByAgent(rows), [rows])
+  const { points, seriesKeys } = useMemo(() => buildChartData(rows), [rows])
+  const summaries = useMemo(() => summarizeBySeries(rows), [rows])
+  const seriesLabels = useMemo(() => buildSeriesLabels(summaries), [summaries])
   // Latest period across the whole selection, for the chart header context.
   const latestPeriod = useMemo(() => {
     if (rows.length === 0) return null
@@ -146,15 +164,15 @@ export default function BenchmarkView() {
                     <YAxis tick={{ fontSize: 12 }} unit={metric.unit === '%' ? '%' : ''} width={48} />
                     <Tooltip
                       labelFormatter={formatPeriod}
-                      formatter={(value: number, name: string) => [metric.format(value), agentLabel(name)]}
+                      formatter={(value: number, name: string) => [metric.format(value), seriesLabels.get(name) ?? name]}
                     />
-                    <Legend formatter={agentLabel} />
-                    {seriesAgentIds.map((agentId, i) => (
+                    <Legend formatter={(name: string) => seriesLabels.get(name) ?? name} />
+                    {seriesKeys.map((key, i) => (
                       <Line
-                        key={agentId}
+                        key={key}
                         type="monotone"
-                        dataKey={agentId}
-                        name={agentId}
+                        dataKey={key}
+                        name={key}
                         stroke={LINE_COLORS[i % LINE_COLORS.length]}
                         connectNulls
                         dot={{ r: 3 }}

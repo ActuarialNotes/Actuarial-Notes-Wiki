@@ -28,6 +28,7 @@ const VALID_DOCUMENT_TYPES: ReadonlySet<string> = new Set([
 const CANONICAL_METRIC_NAMES = [
   'combined_ratio', 'loss_ratio', 'expense_ratio',
   'mct_ratio', 'roe', 'premium_growth', 'net_written_premium',
+  'direct_written_premium', 'earned_premium',
 ] as const
 const CANONICAL_METRIC_SET: ReadonlySet<string> = new Set(CANONICAL_METRIC_NAMES)
 

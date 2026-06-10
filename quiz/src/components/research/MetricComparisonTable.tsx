@@ -1,12 +1,14 @@
 // The number-forward hero of the Benchmarks tab: a sortable table of the latest
-// value per agent for the selected metric, with the change vs. the prior period
+// value per series for the selected metric, with the change vs. the prior period
 // (coloured by whether the move is favourable) and a sparkline of the trend.
+// A "series" is an agent within a province × line-of-business scope, so a single
+// agent can appear on multiple rows when its filings are segmented.
 
 import { useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
-import { agentMeta } from '@/lib/researchOntology'
+import { agentMeta, lobMeta } from '@/lib/researchOntology'
 import type { MetricDef } from '@/lib/researchMetrics'
-import type { AgentSummary } from '@/lib/researchBenchmarks'
+import type { SeriesSummary } from '@/lib/researchBenchmarks'
 import { formatPeriod } from '@/lib/researchPeriods'
 import { MetricSparkline } from './MetricSparkline'
 
@@ -16,6 +18,15 @@ function agentLabel(agentId: string): string {
   return agentMeta(agentId)?.shortName ?? agentId
 }
 
+// Human label for a series' province × line scope, e.g. "ON · Personal auto".
+// Empty (national / unsegmented) scopes render nothing.
+function scopeLabel(summary: SeriesSummary): string {
+  const parts: string[] = []
+  if (summary.province) parts.push(summary.province)
+  if (summary.lineOfBusiness) parts.push(lobMeta(summary.lineOfBusiness)?.label ?? summary.lineOfBusiness)
+  return parts.join(' · ')
+}
+
 // Is a delta favourable given the metric's better-direction? Used to colour the
 // change green (good) or red (bad) regardless of the raw sign.
 function deltaIsGood(delta: number, betterDirection: MetricDef['betterDirection']): boolean {
@@ -23,7 +34,7 @@ function deltaIsGood(delta: number, betterDirection: MetricDef['betterDirection'
   return betterDirection === 'higher' ? delta > 0 : delta < 0
 }
 
-function DeltaCell({ summary, metric }: { summary: AgentSummary; metric: MetricDef }) {
+function DeltaCell({ summary, metric }: { summary: SeriesSummary; metric: MetricDef }) {
   if (summary.delta === null || summary.deltaPct === null) {
     return <span className="text-muted-foreground">—</span>
   }
@@ -49,10 +60,14 @@ export function MetricComparisonTable({
   summaries,
   metric,
 }: {
-  summaries: AgentSummary[]
+  summaries: SeriesSummary[]
   metric: MetricDef
 }) {
   const [sortKey, setSortKey] = useState<SortKey>('value')
+
+  // Only show the Scope column when at least one row is segmented by
+  // province/line — keeps the national-only view uncluttered.
+  const hasScope = useMemo(() => summaries.some(s => s.province || s.lineOfBusiness), [summaries])
 
   const sorted = useMemo(() => {
     const copy = [...summaries]
@@ -85,6 +100,7 @@ export function MetricComparisonTable({
         <thead>
           <tr className="border-b text-xs text-muted-foreground">
             <th className="px-3 py-2 text-left font-medium">Agent</th>
+            {hasScope && <th className="px-3 py-2 text-left font-medium">Scope</th>}
             <th className="px-3 py-2 text-right font-medium">
               <HeaderButton label={`Latest (${metric.unit})`} k="value" />
             </th>
@@ -97,8 +113,11 @@ export function MetricComparisonTable({
         </thead>
         <tbody>
           {sorted.map(summary => (
-            <tr key={summary.agentId} className="border-b last:border-0 hover:bg-accent/40">
+            <tr key={summary.seriesKey} className="border-b last:border-0 hover:bg-accent/40">
               <td className="px-3 py-2 font-medium">{agentLabel(summary.agentId)}</td>
+              {hasScope && (
+                <td className="px-3 py-2 text-left text-xs text-muted-foreground">{scopeLabel(summary)}</td>
+              )}
               <td className="px-3 py-2 text-right tabular-nums font-semibold">
                 {metric.format(summary.latest.value)}
               </td>

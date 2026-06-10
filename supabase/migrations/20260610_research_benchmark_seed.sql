@@ -6,6 +6,10 @@
 -- (per insurer-group, by province × line) are derived from OSFI P&C
 -- regulatory returns via scripts/etl_osfi.py; whole-company figures are
 -- hand-curated from public disclosures. Each metric carries its source.
+--
+-- This file is the fresh-DB bootstrap. For ongoing data refreshes (and once
+-- the row count outgrows a migration), apply the same rows idempotently with
+-- scripts/load_benchmarks.py, which shares this script's row-builders.
 
 -- Synthetic source documents (idempotent on the unique url).
 insert into research_documents (id, agent_id, type, title, published_at, url, jurisdiction_provinces, extraction_confidence, is_in_review, summary)

@@ -29,10 +29,31 @@ templates map those coordinates to line-item meanings.
 
 ## Workflow
 
+The raw `.txt` dumps live in the private `osfi-raw` Supabase Storage bucket
+(created by `supabase/migrations/20260617_research_osfi_storage.sql`) — that is
+their canonical home, not git and not just your laptop. Scripts need the
+server-side secrets `SUPABASE_URL` (or `VITE_SUPABASE_URL`) and
+`SUPABASE_SERVICE_ROLE_KEY`.
+
 ```bash
-# 1. drop dumps here, then derive the benchmark rows:
-python3 scripts/etl_osfi.py            # → scripts/osfi_benchmark_rows.csv
-# 2. fold them into the seed migration:
-python3 scripts/generate_benchmark_seed.py
-# 3. commit scripts/osfi_benchmark_rows.csv + the regenerated migration (NOT the .txt)
+# first time / new quarter: drop dumps here, then push to the bucket
+python3 scripts/osfi_storage.py push    # data/osfi/*.txt → osfi-raw bucket
+
+# on any machine: pull the dumps back down before processing
+python3 scripts/osfi_storage.py pull    # osfi-raw bucket → data/osfi/
+
+# derive the committed benchmark rows from the dumps:
+python3 scripts/etl_osfi.py             # → scripts/osfi_benchmark_rows.csv
+
+# load the rows into Supabase (idempotent upsert; preview with --dry-run):
+python3 scripts/load_benchmarks.py --dry-run
+python3 scripts/load_benchmarks.py
 ```
+
+`scripts/generate_benchmark_seed.py` still regenerates the
+`20260610_research_benchmark_seed.sql` migration for fresh-DB bootstraps, but
+`load_benchmarks.py` is the canonical path for ongoing refreshes (it shares the
+same row-builders, so the two never drift). Commit
+`scripts/osfi_benchmark_rows.csv` and the regenerated migration — never the
+`.txt` dumps.
+

@@ -168,6 +168,52 @@ def build_documents(rows):
     return docs
 
 
+def document_rows(docs):
+    """Documents as plain column→value dicts, in stable (agent, url) order.
+
+    Shared by the SQL renderer and the PostgREST loader so the two delivery
+    paths can never drift.
+    """
+    rows = []
+    for d in sorted(docs.values(), key=lambda x: (x["agent_id"], x["url"])):
+        rows.append({
+            "id": d["id"],
+            "agent_id": d["agent_id"],
+            "type": d["type"],
+            "title": d["title"],
+            "published_at": d["published_at"],
+            "url": d["url"],
+            "jurisdiction_provinces": d["provinces"],
+            "extraction_confidence": 1,
+            "is_in_review": False,
+            "summary": f"Source-of-record for seeded benchmark metrics ({d['title']}).",
+        })
+    return rows
+
+
+def metric_rows(rows):
+    """Metrics as plain column→value dicts, in CSV order. Empty province/line
+    become None (SQL NULL / JSON null)."""
+    out = []
+    for r in rows:
+        prov = r.get("province", "").strip()
+        lob = r.get("line_of_business", "").strip()
+        out.append({
+            "document_id": doc_id_for(r["source_url"]),
+            "agent_id": r["agent_id"],
+            "metric_name": r["metric_name"],
+            "value": float(r["value"]),
+            "unit": r["unit"],
+            "period": r["period"],
+            "province": prov or None,
+            "line_of_business": lob or None,
+            "source_page": int(r["source_page"]),
+            "source_text": r["source_text"],
+            "confidence": float(r["confidence"]),
+        })
+    return out
+
+
 def render(rows, docs):
     seed_ids = sorted({d["id"] for d in docs.values()})
     out = []
@@ -179,6 +225,10 @@ def render(rows, docs):
     out.append("-- (per insurer-group, by province × line) are derived from OSFI P&C")
     out.append("-- regulatory returns via scripts/etl_osfi.py; whole-company figures are")
     out.append("-- hand-curated from public disclosures. Each metric carries its source.")
+    out.append("--")
+    out.append("-- This file is the fresh-DB bootstrap. For ongoing data refreshes (and once")
+    out.append("-- the row count outgrows a migration), apply the same rows idempotently with")
+    out.append("-- scripts/load_benchmarks.py, which shares this script's row-builders.")
     out.append("")
     out.append("-- Synthetic source documents (idempotent on the unique url).")
     out.append(
@@ -188,13 +238,13 @@ def render(rows, docs):
     )
     out.append("values")
     doc_values = []
-    for d in sorted(docs.values(), key=lambda x: (x["agent_id"], x["url"])):
-        summary = f"Source-of-record for seeded benchmark metrics ({d['title']})."
+    for d in document_rows(docs):
         doc_values.append(
             "  ("
             f"{sql_str(d['id'])}, {sql_str(d['agent_id'])}, {sql_str(d['type'])}, "
             f"{sql_str(d['title'])}, {sql_str(d['published_at'])}, {sql_str(d['url'])}, "
-            f"{sql_array(d['provinces'])}, 1, false, {sql_str(summary)})"
+            f"{sql_array(d['jurisdiction_provinces'])}, {d['extraction_confidence']}, "
+            f"{str(d['is_in_review']).lower()}, {sql_str(d['summary'])})"
         )
     out.append(",\n".join(doc_values))
     out.append("on conflict (url) do nothing;")
@@ -210,16 +260,13 @@ def render(rows, docs):
     )
     out.append("values")
     metric_values = []
-    for r in rows:
-        doc_id = doc_id_for(r["source_url"])
-        prov = r.get("province", "").strip()
-        lob = r.get("line_of_business", "").strip()
+    for m in metric_rows(rows):
         metric_values.append(
             "  ("
-            f"{sql_str(doc_id)}, {sql_str(r['agent_id'])}, {sql_str(r['metric_name'])}, "
-            f"{float(r['value'])}, {sql_str(r['unit'])}, {sql_str(r['period'])}, "
-            f"{sql_str(prov)}, {sql_str(lob)}, {int(r['source_page'])}, {sql_str(r['source_text'])}, "
-            f"{float(r['confidence'])})"
+            f"{sql_str(m['document_id'])}, {sql_str(m['agent_id'])}, {sql_str(m['metric_name'])}, "
+            f"{m['value']}, {sql_str(m['unit'])}, {sql_str(m['period'])}, "
+            f"{sql_str(m['province'])}, {sql_str(m['line_of_business'])}, {m['source_page']}, "
+            f"{sql_str(m['source_text'])}, {m['confidence']})"
         )
     out.append(",\n".join(metric_values))
     out.append(";")

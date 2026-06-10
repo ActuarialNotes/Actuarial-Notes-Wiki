@@ -104,6 +104,27 @@ export const RESEARCH_METRICS: readonly MetricDef[] = [
     format: cadMillions,
     betterDirection: 'higher',
   },
+  {
+    name: 'direct_written_premium',
+    label: 'Direct written premium',
+    shortLabel: 'DWP',
+    unit: 'CAD M',
+    // Segmented (line × province) premium volume is the basis for market-share
+    // analysis — distinct from net_written_premium, which is the company-wide
+    // figure net of reinsurance reported in investor disclosures.
+    description: 'Direct premium written for the line/province over the period, in millions of CAD.',
+    format: cadMillions,
+    betterDirection: 'higher',
+  },
+  {
+    name: 'earned_premium',
+    label: 'Earned premium',
+    shortLabel: 'EP',
+    unit: 'CAD M',
+    description: 'Premium earned over the period (the denominator of the loss ratio), in millions of CAD.',
+    format: cadMillions,
+    betterDirection: 'higher',
+  },
 ] as const
 
 const METRICS_BY_NAME = new Map(RESEARCH_METRICS.map(m => [m.name, m]))

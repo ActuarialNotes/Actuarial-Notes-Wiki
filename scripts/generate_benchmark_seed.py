@@ -56,6 +56,14 @@ DOC_TYPES = {"annual_report", "quarterly_supplement", "industry_statistics", "md
 KNOWN_METRICS = {
     "combined_ratio", "loss_ratio", "expense_ratio",
     "mct_ratio", "roe", "premium_growth", "net_written_premium",
+    "direct_written_premium", "earned_premium",
+}
+
+# Canonical line-of-business slugs — keep in sync with LINES_OF_BUSINESS in
+# quiz/src/lib/researchOntology.ts. Empty line_of_business = consolidated/all-lines.
+KNOWN_LOBS = {
+    "personal_auto", "commercial_auto", "personal_property",
+    "commercial_property", "liability", "accident_sickness",
 }
 
 KNOWN_PROVINCES = {"ON", "AB", "QC", "BC", "NB", "NL", "NS", "PE", "ATL"}
@@ -111,6 +119,9 @@ def validate(rows):
         prov = r.get("province", "").strip()
         if prov and prov not in KNOWN_PROVINCES:
             fail(f"row {i}: unknown province {prov!r}")
+        lob = r.get("line_of_business", "").strip()
+        if lob and lob not in KNOWN_LOBS:
+            fail(f"row {i}: unknown line_of_business {lob!r}")
         try:
             float(r["value"])
             int(r["source_page"])
@@ -179,18 +190,19 @@ def render(rows, docs):
     out.append(
         "insert into research_metrics "
         "(document_id, agent_id, metric_name, value, unit, period, province, "
-        "source_page, source_text, confidence)"
+        "line_of_business, source_page, source_text, confidence)"
     )
     out.append("values")
     metric_values = []
     for r in rows:
         doc_id = doc_id_for(r["source_url"])
         prov = r.get("province", "").strip()
+        lob = r.get("line_of_business", "").strip()
         metric_values.append(
             "  ("
             f"{sql_str(doc_id)}, {sql_str(r['agent_id'])}, {sql_str(r['metric_name'])}, "
             f"{float(r['value'])}, {sql_str(r['unit'])}, {sql_str(r['period'])}, "
-            f"{sql_str(prov)}, {int(r['source_page'])}, {sql_str(r['source_text'])}, "
+            f"{sql_str(prov)}, {sql_str(lob)}, {int(r['source_page'])}, {sql_str(r['source_text'])}, "
             f"{float(r['confidence'])})"
         )
     out.append(",\n".join(metric_values))

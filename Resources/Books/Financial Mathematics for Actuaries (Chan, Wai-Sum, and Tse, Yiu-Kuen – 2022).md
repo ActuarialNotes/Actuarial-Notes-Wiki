@@ -71,5 +71,11 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 - 8.4 [[Redington Immunization]]
 - 8.5 [[Full Immunization]] and [[Cash Flow|Cash Flow Matching]]
 
+## 9 Stochastic Interest Rates
+
+- 9.1 Deterministic Scenarios of Interest Rates
+- 9.2 Random-Scenario and Independent Lognormal Models
+- 9.3 Autoregressive and Dynamic Term-Structure Models
+
 ## Links
 - [worldcat.org](https://search.worldcat.org/title/financial-mathematics-for-actuaries-chan-tse)

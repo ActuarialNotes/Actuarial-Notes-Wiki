@@ -5,6 +5,7 @@ import { useAddResourceByUrl } from '@/hooks/useAddResourceByUrl'
 import { ResearchSearchBar } from '@/components/research/ResearchSearchBar'
 import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import ResourcesView from './ResourcesView'
 import BenchmarkView from './BenchmarkView'
 import ProjectsView from './ProjectsView'
@@ -88,6 +89,9 @@ export default function Research() {
           <BenchmarkView />
         </>
       )}
+
+      {/* Reader for timeline cards (books / events / regulation). */}
+      <ConceptPopup />
     </div>
   )
 }

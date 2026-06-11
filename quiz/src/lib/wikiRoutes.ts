@@ -2,11 +2,15 @@
 // Replaces the old external URL builder (wikiUrl.ts) that pointed at
 // wiki.actuarialnotes.com; everything now resolves to /wiki/... routes.
 
-export type WikiEntryKind = 'concept' | 'resource' | 'exam'
+export type WikiEntryKind = 'concept' | 'resource' | 'exam' | 'event' | 'regulation'
 
 export interface WikiEntryRef {
   kind: WikiEntryKind
   name: string
+  // Explicit repo path, used when the file can't be derived from kind+name
+  // (e.g. a `type: event` file that lives in Resources/Regulation/). When set,
+  // entryRefToRepoPath() returns it verbatim.
+  path?: string
 }
 
 // "Expected Value" → "Expected+Value" (matches Obsidian Publish slugs, keeps
@@ -37,6 +41,12 @@ export function pathToEntryRef(path: string): WikiEntryRef | null {
   if (p.toLowerCase().startsWith('resources/books/')) {
     return { kind: 'resource', name: p.slice('resources/books/'.length) }
   }
+  if (p.toLowerCase().startsWith('resources/events/')) {
+    return { kind: 'event', name: p.slice('resources/events/'.length), path: `${p}.md` }
+  }
+  if (p.toLowerCase().startsWith('resources/regulation/')) {
+    return { kind: 'regulation', name: p.slice('resources/regulation/'.length), path: `${p}.md` }
+  }
   if (/^Exam[ -]/i.test(p)) {
     return { kind: 'exam', name: p }
   }
@@ -44,6 +54,7 @@ export function pathToEntryRef(path: string): WikiEntryRef | null {
 }
 
 export function entryRefToRepoPath(ref: WikiEntryRef): string {
+  if (ref.path) return ref.path
   switch (ref.kind) {
     case 'concept':
       return `Concepts/${ref.name}.md`
@@ -51,6 +62,10 @@ export function entryRefToRepoPath(ref: WikiEntryRef): string {
       return `Resources/Books/${ref.name}.md`
     case 'exam':
       return `${ref.name}.md`
+    case 'event':
+      return `Resources/Events/${ref.name}.md`
+    case 'regulation':
+      return `Resources/Regulation/${ref.name}.md`
   }
 }
 
@@ -81,7 +96,7 @@ export function hrefToEntryRef(href: string): WikiEntryRef | null {
   if (!clean) return null
 
   // Already slugged as concept/resource/exam internal route?
-  const internal = clean.match(/^wiki\/(concept|resource|exam)\/(.+)$/i)
+  const internal = clean.match(/^wiki\/(concept|resource|exam|event|regulation)\/(.+)$/i)
   if (internal) {
     return { kind: internal[1].toLowerCase() as WikiEntryKind, name: fromSlug(internal[2]) }
   }

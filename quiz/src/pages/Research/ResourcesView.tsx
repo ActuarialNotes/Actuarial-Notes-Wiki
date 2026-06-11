@@ -11,6 +11,7 @@ import { ResearchSearchBar } from '@/components/research/ResearchSearchBar'
 import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
 import { AddToProjectButton } from '@/components/research/AddToProjectButton'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
+import { ResourceTimelinePanel } from '@/components/research/ResourceTimelinePanel'
 
 // ── Last-visit tracking (browse mode only) ───────────────────────────────────
 
@@ -140,6 +141,9 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
 
   return (
     <div className="space-y-5">
+      {/* Corpus view: month-by-month timeline heatmap of resources/regulation. */}
+      {!isProjectScope && <ResourceTimelinePanel />}
+
       {/* In project scope the search/ask/add box lives here, scoped to the
           project's sources. For the corpus view it lives at the page top
           (Research/index.tsx) so search sits above the tabs like other tabs. */}

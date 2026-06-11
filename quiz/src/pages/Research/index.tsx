@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useResearchStore, type ResearchTab } from '@/stores/researchStore'
 import { useResearchQuery } from '@/hooks/useResearchQuery'
 import { useAddResourceByUrl } from '@/hooks/useAddResourceByUrl'
-import { ResearchSearchBar } from '@/components/research/ResearchSearchBar'
+import { ResearchTopSearch } from '@/components/research/ResearchTopSearch'
 import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
@@ -20,8 +20,8 @@ export default function Research() {
   const tab = useResearchStore(s => s.tab)
   const setTab = useResearchStore(s => s.setTab)
 
-  // Page-level corpus search / AI assistant (not project-scoped). Lives above
-  // the tabs so search sits at the top of the page, like the other tabs' search.
+  // Page-level corpus search / AI assistant (not project-scoped). Rendered as a
+  // sticky top bar, exactly like the exam study-guide search.
   const { loading: asking, error: askError, result, ask, reset } = useResearchQuery()
   const addUrl = useAddResourceByUrl()
   const [addNotice, setAddNotice] = useState<string | null>(null)
@@ -39,17 +39,8 @@ export default function Research() {
   }
 
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-6 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Research</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Search Canadian P&amp;C insurance bulletins, guidance, regulations, and financial filings,
-          gather citeable sources into projects, and run the analysis with AI — every claim cites a
-          document and page.
-        </p>
-      </div>
-
-      <ResearchSearchBar
+    <div>
+      <ResearchTopSearch
         onAsk={q => ask(q)}
         asking={asking}
         onAddUrl={handleAddUrl}
@@ -59,39 +50,43 @@ export default function Research() {
         onActivate={() => setTab('resources')}
       />
 
-      <div className="flex border-b">
-        {TABS.map(t => (
-          <button
-            key={t.id}
-            type="button"
-            onClick={() => setTab(t.id)}
-            className={`px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px ${
-              tab === t.id
-                ? 'border-primary text-foreground'
-                : 'border-transparent text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
+      <div className="container max-w-4xl mx-auto px-4 py-6 space-y-6">
+        <h1 className="text-2xl font-bold">Research</h1>
+
+        <div className="flex border-b">
+          {TABS.map(t => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTab(t.id)}
+              className={`px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px ${
+                tab === t.id
+                  ? 'border-primary text-foreground'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {tab === 'projects' && <ProjectsView />}
+        {tab === 'resources' && (
+          <>
+            <AiAnswerPanel loading={asking} error={askError} result={result} onDismiss={reset} />
+            <ResourcesView refreshNonce={refreshNonce} />
+          </>
+        )}
+        {tab === 'benchmarks' && (
+          <>
+            <ResearchFilterPanel />
+            <BenchmarkView />
+          </>
+        )}
+
+        {/* Reader for timeline cards (books / events / regulation). */}
+        <ConceptPopup />
       </div>
-
-      {tab === 'projects' && <ProjectsView />}
-      {tab === 'resources' && (
-        <>
-          <AiAnswerPanel loading={asking} error={askError} result={result} onDismiss={reset} />
-          <ResourcesView refreshNonce={refreshNonce} />
-        </>
-      )}
-      {tab === 'benchmarks' && (
-        <>
-          <ResearchFilterPanel />
-          <BenchmarkView />
-        </>
-      )}
-
-      {/* Reader for timeline cards (books / events / regulation). */}
-      <ConceptPopup />
     </div>
   )
 }

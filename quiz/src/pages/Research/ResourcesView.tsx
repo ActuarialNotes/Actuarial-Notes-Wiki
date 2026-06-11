@@ -141,9 +141,6 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
 
   return (
     <div className="space-y-5">
-      {/* Corpus view: month-by-month timeline heatmap of resources/regulation. */}
-      {!isProjectScope && <ResourceTimelinePanel />}
-
       {/* In project scope the search/ask/add box lives here, scoped to the
           project's sources. For the corpus view it lives at the page top
           (Research/index.tsx) so search sits above the tabs like other tabs. */}
@@ -163,6 +160,10 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
       )}
 
       <ResearchFilterPanel />
+
+      {/* Corpus view: month-by-month timeline heatmap of resources/regulation,
+          scoped by the filters above. */}
+      {!isProjectScope && <ResourceTimelinePanel />}
 
       {searching ? (
         <SearchResults search={search} action={cardAction} />

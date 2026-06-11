@@ -129,6 +129,7 @@ interface TimelineRawEntry {
   path: string
   summary?: string
   jurisdiction?: string
+  lob?: string[]
   impactLevel?: string
   status?: string
   issuingBody?: string
@@ -219,6 +220,7 @@ async function collectResourceTimeline(): Promise<TimelineRawEntry[]> {
         path: `${dir}/${name}`,
         summary: isBook ? undefined : extractSummary(text),
         jurisdiction: attrs['jurisdiction'] ? String(attrs['jurisdiction']) : undefined,
+        lob: Array.isArray(attrs['lob']) ? attrs['lob'].map(String) : undefined,
         impactLevel: attrs['impact_level'] ? String(attrs['impact_level']) : undefined,
         status: attrs['status'] ? String(attrs['status']) : undefined,
         issuingBody: attrs['issuing_body'] ? String(attrs['issuing_body']) : undefined,

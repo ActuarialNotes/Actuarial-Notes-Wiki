@@ -22,6 +22,7 @@ export interface TimelineRawEntry {
   path: string
   summary?: string
   jurisdiction?: string
+  lob?: string[]
   impactLevel?: string
   status?: string
   issuingBody?: string

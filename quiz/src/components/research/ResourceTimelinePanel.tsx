@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { History } from 'lucide-react'
 import rawTimeline from 'virtual:resource-timeline'
 import {
@@ -7,9 +7,11 @@ import {
   latestPopulatedMonth,
   type TimelineEntry,
 } from '@/lib/resourceTimeline'
+import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { ResourceHeatmap } from '@/components/wiki/ResourceHeatmap'
 import { ResourceMonthCards } from '@/components/wiki/ResourceMonthCards'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useResearchStore } from '@/stores/researchStore'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 // Map a timeline entry to a popup-viewer ref. Books open as 'resource' (so the
@@ -24,17 +26,31 @@ function entryToRef(entry: TimelineEntry): WikiEntryRef {
 }
 
 export function ResourceTimelinePanel() {
-  const entries = useMemo(() => toTimelineEntries(rawTimeline), [])
+  const allEntries = useMemo(() => toTimelineEntries(rawTimeline), [])
+  const filters = useResearchStore(s => s.filters)
+  const entries = useMemo(() => filterTimelineEntries(allEntries, filters), [allEntries, filters])
   const [selected, setSelected] = useState<{ year: number; month: number } | null>(
     () => latestPopulatedMonth(entries),
   )
+
+  // Re-anchor the selection when the filters narrow the entries (e.g. the
+  // previously selected month no longer has anything in it).
+  useEffect(() => {
+    setSelected(prev => {
+      if (prev && entriesForMonth(entries, prev.year, prev.month).length > 0) return prev
+      return latestPopulatedMonth(entries)
+    })
+    // entries already depends on filters; re-run only when it changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entries])
+
   const openAt = useConceptPopup(s => s.openAt)
   const monthEntries = useMemo(
     () => selected ? entriesForMonth(entries, selected.year, selected.month) : [],
     [entries, selected],
   )
 
-  if (entries.length === 0) return null
+  if (allEntries.length === 0) return null
 
   return (
     <section className="space-y-4">

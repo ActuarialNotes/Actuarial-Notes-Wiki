@@ -109,24 +109,6 @@ export function ResourceHeatmap({ entries, selected, onSelectMonth }: Props) {
           </div>
         </div>
       </div>
-
-      {/* Legend */}
-      <div className="mt-3 flex items-center justify-between gap-3 pl-[34px]">
-        <p className="text-[11px] text-muted-foreground">
-          Each square is one month, 1700 → today. Scroll to explore.
-        </p>
-        <div className="flex items-center gap-1.5 shrink-0">
-          <span className="text-[10px] text-muted-foreground">Fewer</span>
-          {[0, 1, 2, 4].map(c => (
-            <span
-              key={c}
-              className={`rounded-[3px] ${c === 0 ? 'bg-muted/30' : ''}`}
-              style={{ width: 11, height: 11, backgroundColor: cellColor(c) }}
-            />
-          ))}
-          <span className="text-[10px] text-muted-foreground">More</span>
-        </div>
-      </div>
     </div>
   )
 }

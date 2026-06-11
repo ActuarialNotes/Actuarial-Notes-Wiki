@@ -7,10 +7,6 @@ import { wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import rawTimeline from 'virtual:resource-timeline'
-import { toTimelineEntries, entriesForMonth, latestPopulatedMonth } from '@/lib/resourceTimeline'
-import { ResourceHeatmap } from '@/components/wiki/ResourceHeatmap'
-import { ResourceMonthCards } from '@/components/wiki/ResourceMonthCards'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -103,16 +99,6 @@ export default function WikiHome() {
 
   const exams = useMemo(() => index.filter(i => i.category === 'exam'), [index])
   const books = useMemo(() => index.filter(i => i.category === 'document'), [index])
-
-  // Resources heatmap timeline (books + events + regulation), dated from frontmatter.
-  const timelineEntries = useMemo(() => toTimelineEntries(rawTimeline), [])
-  const [selectedMonth, setSelectedMonth] = useState<{ year: number; month: number } | null>(
-    () => latestPopulatedMonth(toTimelineEntries(rawTimeline)),
-  )
-  const monthEntries = useMemo(
-    () => selectedMonth ? entriesForMonth(timelineEntries, selectedMonth.year, selectedMonth.month) : [],
-    [timelineEntries, selectedMonth],
-  )
 
   const examsByKey = useMemo(() => {
     const map = new Map<string, WikiIndexItem[]>()
@@ -349,43 +335,15 @@ export default function WikiHome() {
         )}
       </section>
 
-      <section className="space-y-5">
-        <div>
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <BookMarked className="h-5 w-5 text-muted-foreground" />
-            Resources
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            A timeline of the books, milestones and regulation that shaped actuarial practice — pick a month to see what happened.
-          </p>
-        </div>
-
-        {timelineEntries.length > 0 && (
-          <>
-            <ResourceHeatmap
-              entries={timelineEntries}
-              selected={selectedMonth}
-              onSelectMonth={(year, month) => setSelectedMonth({ year, month })}
-            />
-            {selectedMonth && (
-              <ResourceMonthCards
-                entries={monthEntries}
-                year={selectedMonth.year}
-                month={selectedMonth.month}
-                onClear={() => setSelectedMonth(null)}
-              />
-            )}
-          </>
-        )}
-
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            All books
-          </h3>
-          {books.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Loading resources…</p>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <section>
+        <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+          <BookMarked className="h-5 w-5 text-muted-foreground" />
+          Resources
+        </h2>
+        {books.length === 0 ? (
+          <p className="text-sm text-muted-foreground">Loading resources…</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {books.map(book => (
               <Link key={book.path} to={wikiRoute({ kind: 'resource', name: book.name })}>
                 <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
@@ -433,9 +391,8 @@ export default function WikiHome() {
                 </Card>
               </Link>
             ))}
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </section>
     </div>
   )

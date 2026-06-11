@@ -1,7 +1,5 @@
-import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
 import type { TimelineEntry, TimelineKind } from '@/lib/resourceTimeline'
-import { wikiRoute } from '@/lib/wikiRoutes'
 import { Card } from '@/components/ui/card'
 
 const MONTH_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -39,9 +37,15 @@ function MetaPill({ children }: { children: React.ReactNode }) {
   )
 }
 
-function EntryCard({ entry }: { entry: TimelineEntry }) {
-  const inner = (
-    <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
+function EntryCard({ entry, onOpen }: { entry: TimelineEntry; onOpen: (entry: TimelineEntry) => void }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(entry)}
+      className="text-left w-full"
+      aria-label={`Open ${entry.title}`}
+    >
+    <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch cursor-pointer">
       {entry.coverImage && (
         <div className="flex-shrink-0 p-2 flex items-center">
           <img
@@ -78,12 +82,8 @@ function EntryCard({ entry }: { entry: TimelineEntry }) {
         </div>
       </div>
     </Card>
+    </button>
   )
-
-  // Books have a dedicated wiki page; events/regulation render in place.
-  return entry.kind === 'book'
-    ? <Link to={wikiRoute({ kind: 'resource', name: entry.name })}>{inner}</Link>
-    : inner
 }
 
 interface Props {
@@ -91,9 +91,10 @@ interface Props {
   year: number
   month: number
   onClear: () => void
+  onOpenEntry: (entry: TimelineEntry) => void
 }
 
-export function ResourceMonthCards({ entries, year, month, onClear }: Props) {
+export function ResourceMonthCards({ entries, year, month, onClear, onOpenEntry }: Props) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
@@ -116,7 +117,7 @@ export function ResourceMonthCards({ entries, year, month, onClear }: Props) {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {entries.map(entry => (
-            <EntryCard key={`${entry.kind}:${entry.path}`} entry={entry} />
+            <EntryCard key={`${entry.kind}:${entry.path}`} entry={entry} onOpen={onOpenEntry} />
           ))}
         </div>
       )}

@@ -1,6 +1,7 @@
 import { useResearchStore, type ResearchTab } from '@/stores/researchStore'
 import { CorpusScorecard } from '@/components/research/CorpusScorecard'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
+import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import ResourcesView from './ResourcesView'
 import BenchmarkView from './BenchmarkView'
 import ProjectsView from './ProjectsView'
@@ -53,6 +54,9 @@ export default function Research() {
         </>
       )}
       {tab === 'projects' && <ProjectsView />}
+
+      {/* Reader for timeline cards (books / events / regulation). */}
+      <ConceptPopup />
     </div>
   )
 }

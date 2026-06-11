@@ -2,6 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { ResearchDocumentRow } from '@/hooks/useResearchFeed'
 
+// Onboarding metadata captured when a project is created (all optional so older
+// projects still load). See researchProjectMeta.ts for the value vocabularies.
+export interface ProjectOnboarding {
+  documentType?: string | null
+  jurisdictionCountry?: string | null
+  jurisdictionRegion?: string | null
+  lineOfBusiness?: string | null
+  departments?: string[]
+}
+
 export interface ResearchProject {
   id: string
   name: string
@@ -9,6 +19,11 @@ export interface ResearchProject {
   created_at: string
   updated_at: string
   documentCount: number
+  documentType: string | null
+  jurisdictionCountry: string | null
+  jurisdictionRegion: string | null
+  lineOfBusiness: string | null
+  departments: string[]
 }
 
 interface ProjectsState {
@@ -23,7 +38,32 @@ interface ProjectRow {
   description: string | null
   created_at: string
   updated_at: string
+  document_type: string | null
+  jurisdiction_country: string | null
+  jurisdiction_region: string | null
+  line_of_business: string | null
+  departments: string[] | null
   research_project_documents: { count: number }[]
+}
+
+const PROJECT_COLUMNS =
+  'id, name, description, created_at, updated_at, document_type, ' +
+  'jurisdiction_country, jurisdiction_region, line_of_business, departments'
+
+function mapProjectRow(p: ProjectRow): ResearchProject {
+  return {
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    created_at: p.created_at,
+    updated_at: p.updated_at,
+    documentCount: p.research_project_documents?.[0]?.count ?? 0,
+    documentType: p.document_type,
+    jurisdictionCountry: p.jurisdiction_country,
+    jurisdictionRegion: p.jurisdiction_region,
+    lineOfBusiness: p.line_of_business,
+    departments: p.departments ?? [],
+  }
 }
 
 // User-owned research projects: named collections of saved corpus documents.
@@ -35,37 +75,43 @@ export function useResearchProjects() {
   const refresh = useCallback(async () => {
     const { data, error } = await supabase
       .from('research_projects')
-      .select('id, name, description, created_at, updated_at, research_project_documents(count)')
+      .select(`${PROJECT_COLUMNS}, research_project_documents(count)`)
       .order('updated_at', { ascending: false })
 
     if (error) {
       setState({ projects: [], loading: false, error: error.message })
       return
     }
-    const projects: ResearchProject[] = (data as ProjectRow[] ?? []).map(p => ({
-      id: p.id,
-      name: p.name,
-      description: p.description,
-      created_at: p.created_at,
-      updated_at: p.updated_at,
-      documentCount: p.research_project_documents?.[0]?.count ?? 0,
-    }))
+    const projects = (data as ProjectRow[] ?? []).map(mapProjectRow)
     setState({ projects, loading: false, error: null })
   }, [])
 
   useEffect(() => { refresh() }, [refresh])
 
-  const createProject = useCallback(async (name: string, description?: string): Promise<ResearchProject | null> => {
+  const createProject = useCallback(async (
+    name: string,
+    description?: string,
+    onboarding?: ProjectOnboarding,
+  ): Promise<ResearchProject | null> => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return null
     const { data, error } = await supabase
       .from('research_projects')
-      .insert({ user_id: user.id, name: name.trim(), description: description?.trim() || null })
-      .select('id, name, description, created_at, updated_at')
+      .insert({
+        user_id: user.id,
+        name: name.trim(),
+        description: description?.trim() || null,
+        document_type: onboarding?.documentType ?? null,
+        jurisdiction_country: onboarding?.jurisdictionCountry ?? null,
+        jurisdiction_region: onboarding?.jurisdictionRegion ?? null,
+        line_of_business: onboarding?.lineOfBusiness ?? null,
+        departments: onboarding?.departments ?? [],
+      })
+      .select(PROJECT_COLUMNS)
       .single()
     if (error || !data) return null
     await refresh()
-    return { ...(data as Omit<ResearchProject, 'documentCount'>), documentCount: 0 }
+    return mapProjectRow({ ...(data as ProjectRow), research_project_documents: [{ count: 0 }] })
   }, [refresh])
 
   const renameProject = useCallback(async (id: string, name: string, description?: string) => {

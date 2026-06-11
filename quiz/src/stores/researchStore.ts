@@ -49,7 +49,7 @@ interface ResearchState {
 // Benchmarks views all read from (and narrow) the same agent/province/date
 // selection so switching tabs doesn't lose the user's scoping.
 export const useResearchStore = create<ResearchState>((set) => ({
-  tab: 'resources',
+  tab: 'projects',
   filters: EMPTY_FILTERS,
   searchQuery: '',
   openProjectId: null,

@@ -2,6 +2,7 @@
 Title: "Financial Mathematics: Theory and Practice"
 Authors: "Robert L. Brown, Steve Kopp"
 Year: "2024"
+date: "2024"
 Edition: 2nd
 Publisher: ACTEX Learning
 ISBN: 979-8-89016-187-1

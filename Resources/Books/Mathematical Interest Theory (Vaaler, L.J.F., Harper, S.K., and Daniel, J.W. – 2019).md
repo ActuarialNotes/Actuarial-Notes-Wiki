@@ -2,6 +2,7 @@
 Title: Mathematical Interest Theory
 Authors: "Leslie Jane Federer Vaaler, Shinko Kojima Harper, James W. Daniel"
 Year: "2019"
+date: "2019"
 Edition: 3rd
 Publisher: American Mathematical Society
 ISBN: 978-1-4704-4393-1

@@ -15,3 +15,9 @@ declare module 'virtual:questions-content' {
   const questions: string[]
   export default questions
 }
+
+declare module 'virtual:resource-timeline' {
+  import type { TimelineRawEntry } from '@/lib/resourceTimeline'
+  const timeline: TimelineRawEntry[]
+  export default timeline
+}

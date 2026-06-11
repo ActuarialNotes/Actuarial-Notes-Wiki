@@ -2,6 +2,7 @@
 Title: Mathematical Statistics with Applications
 Authors: Dennis D. Wackerly, William Mendenhall, Richard L. Scheaffer
 Year: "2008"
+date: "2008"
 Edition: 7e
 Publisher: Thomson Brooks/Cole
 ISBN: 978-0495110811

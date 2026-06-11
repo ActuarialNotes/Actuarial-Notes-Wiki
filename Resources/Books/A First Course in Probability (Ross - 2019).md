@@ -2,6 +2,7 @@
 Title: A First Course in Probability
 Author: Sheldon Ross
 Year: "2019"
+date: "2019"
 Edition: 10th
 Publisher: Pearson
 ISBN: 978-0134753119

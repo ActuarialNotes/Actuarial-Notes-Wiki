@@ -4,6 +4,7 @@ Authors: "Hogg, R.V., Tanis, E.A., and\r
 
   Zimmerman, D.L."
 Year: "2020"
+date: "2020"
 Edition: 10e
 Publisher: Prentice Hall
 ISBN: 978-0135189399

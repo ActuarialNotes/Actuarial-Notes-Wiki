@@ -2,6 +2,7 @@
 Title: Financial Mathematics for Actuaries
 Authors: "Wai-Sum Chan, Yiu-Kuen Tse"
 Year: "2022"
+date: "2022"
 Edition: 3rd
 Publisher: World Scientific
 ISBN: 978-981-124-327-1

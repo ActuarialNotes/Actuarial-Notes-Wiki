@@ -2,6 +2,7 @@
 Title: Probability for Risk Management
 Authors: " Matthew J. Hassett, Donald G. Stewart, Jelena Milovanovic"
 Year: "2021"
+date: "2021"
 Edition: 3e
 Publisher: ACTEX
 ISBN: 978-1-64756-322-6

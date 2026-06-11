@@ -38,16 +38,10 @@ export function ResourceTimelinePanel() {
 
   return (
     <section className="space-y-4">
-      <div>
-        <h2 className="text-base font-semibold flex items-center gap-2">
-          <History className="h-4 w-4 text-muted-foreground" />
-          Timeline
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          A month-by-month view of the books, milestones and regulation that shaped actuarial
-          practice — pick a month, then open any card to read it.
-        </p>
-      </div>
+      <h2 className="text-base font-semibold flex items-center gap-2">
+        <History className="h-4 w-4 text-muted-foreground" />
+        Timeline
+      </h2>
 
       <ResourceHeatmap
         entries={entries}

@@ -11,6 +11,7 @@ import { ResearchSearchBar } from '@/components/research/ResearchSearchBar'
 import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
 import { AddToProjectButton } from '@/components/research/AddToProjectButton'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
+import { ResourceTimelinePanel } from '@/components/research/ResourceTimelinePanel'
 
 // ── Last-visit tracking (browse mode only) ───────────────────────────────────
 
@@ -128,6 +129,8 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
 
   return (
     <div className="space-y-5">
+      {!isProjectScope && <ResourceTimelinePanel />}
+
       <ResearchSearchBar
         onAsk={q => ask(q, projectId)}
         asking={asking}

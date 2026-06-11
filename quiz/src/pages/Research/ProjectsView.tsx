@@ -1,8 +1,18 @@
-import { useState, type FormEvent } from 'react'
-import { Loader2, FolderOpen, Plus, ChevronLeft, Trash2, FileText } from 'lucide-react'
+import { useState } from 'react'
+import { Loader2, FolderOpen, ChevronLeft, Trash2, FileText, FolderPlus, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useResearchStore } from '@/stores/researchStore'
-import { useResearchProjects, useProjectDocuments } from '@/hooks/useResearchProjects'
+import { useResearchProjects, useProjectDocuments, type ResearchProject } from '@/hooks/useResearchProjects'
+import { NewProjectDialog } from '@/components/research/NewProjectDialog'
+import { SuggestedResources } from '@/components/research/SuggestedResources'
+import { DiscoverResources } from '@/components/research/DiscoverResources'
+import {
+  documentTypeMeta,
+  countryMeta,
+  regionLabel,
+  departmentLabels,
+} from '@/lib/researchProjectMeta'
+import { lobMeta } from '@/lib/researchOntology'
 import ResourcesView from './ResourcesView'
 
 export default function ProjectsView() {
@@ -10,47 +20,58 @@ export default function ProjectsView() {
   return openProjectId ? <ProjectDetail projectId={openProjectId} /> : <ProjectList />
 }
 
+// ── Project metadata badges ───────────────────────────────────────────────────
+
+function MetaBadge({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+      {children}
+    </span>
+  )
+}
+
+function projectBadges(p: ResearchProject): string[] {
+  const out: string[] = []
+  const dt = documentTypeMeta(p.documentType)
+  if (dt) out.push(dt.label)
+  const region = regionLabel(p.jurisdictionCountry, p.jurisdictionRegion)
+  const country = countryMeta(p.jurisdictionCountry)?.label
+  if (region) out.push(region)
+  else if (country) out.push(country)
+  const lob = p.lineOfBusiness ? lobMeta(p.lineOfBusiness)?.label : null
+  if (lob) out.push(lob)
+  return out
+}
+
 // ── Project list ──────────────────────────────────────────────────────────────
 
 function ProjectList() {
   const { projects, loading, error, createProject, deleteProject } = useResearchProjects()
   const setOpenProject = useResearchStore(s => s.setOpenProject)
-  const [name, setName] = useState('')
-  const [creating, setCreating] = useState(false)
+  const [showDialog, setShowDialog] = useState(false)
 
-  const handleCreate = async (e: FormEvent) => {
-    e.preventDefault()
-    if (!name.trim() || creating) return
-    setCreating(true)
-    const project = await createProject(name)
-    setCreating(false)
-    setName('')
+  const handleCreate = async (
+    name: string,
+    description: string,
+    onboarding: Parameters<typeof createProject>[2],
+  ) => {
+    const project = await createProject(name, description, onboarding)
+    setShowDialog(false)
     if (project) setOpenProject(project.id)
   }
 
   return (
     <div className="space-y-5">
-      <div>
-        <p className="text-sm text-muted-foreground">
-          Collect citeable sources into a working set, then search and ask grounded questions scoped to
-          just that set.
+      <div className="rounded-xl border bg-gradient-to-br from-primary/5 to-transparent p-5">
+        <h2 className="text-lg font-semibold">Start a project</h2>
+        <p className="mt-1 max-w-prose text-sm text-muted-foreground">
+          Make a project to discover relevant resources and benchmarks, then run the analysis with AI
+          review agents — e.g. assess an Ontario reg change with an actuarial and underwriting lens.
         </p>
-      </div>
-
-      <form onSubmit={handleCreate} className="flex flex-col gap-2 sm:flex-row">
-        <input
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          placeholder="New project name…"
-          maxLength={120}
-          className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-        />
-        <Button type="submit" disabled={creating || !name.trim()} className="gap-1.5">
-          {creating ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Plus className="h-4 w-4" aria-hidden />}
-          Create project
+        <Button onClick={() => setShowDialog(true)} size="lg" className="mt-4 gap-2">
+          <FolderPlus className="h-5 w-5" aria-hidden /> New project
         </Button>
-      </form>
+      </div>
 
       {loading && (
         <div className="flex items-center justify-center gap-2 py-12 text-sm text-muted-foreground">
@@ -60,44 +81,53 @@ function ProjectList() {
       {error && <p className="py-12 text-center text-sm text-destructive">{error}</p>}
 
       {!loading && !error && projects.length === 0 && (
-        <p className="mx-auto max-w-md py-12 text-center text-sm text-muted-foreground">
-          No projects yet. Create one above, then save documents to it from the Resources tab.
+        <p className="mx-auto max-w-md py-8 text-center text-sm text-muted-foreground">
+          No projects yet. Create one above to get a tailored set of sources and start your analysis.
         </p>
       )}
 
       {projects.length > 0 && (
         <ul className="space-y-2">
-          {projects.map(p => (
-            <li
-              key={p.id}
-              className="flex items-center gap-3 rounded-lg border bg-card p-3 transition-colors hover:border-primary/40"
-            >
-              <button
-                type="button"
-                onClick={() => setOpenProject(p.id)}
-                className="flex flex-1 items-center gap-3 text-left"
+          {projects.map(p => {
+            const badges = projectBadges(p)
+            return (
+              <li
+                key={p.id}
+                className="flex items-center gap-3 rounded-lg border bg-card p-3 transition-colors hover:border-primary/40"
               >
-                <FolderOpen className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
-                <span className="min-w-0">
-                  <span className="block truncate text-sm font-medium">{p.name}</span>
-                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <FileText className="h-3 w-3" aria-hidden />
-                    {p.documentCount} document{p.documentCount !== 1 ? 's' : ''}
-                    {p.description ? ` · ${p.description}` : ''}
+                <button
+                  type="button"
+                  onClick={() => setOpenProject(p.id)}
+                  className="flex flex-1 items-center gap-3 text-left"
+                >
+                  <FolderOpen className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium">{p.name}</span>
+                    <span className="mt-1 flex flex-wrap items-center gap-1.5">
+                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <FileText className="h-3 w-3" aria-hidden />
+                        {p.documentCount} doc{p.documentCount !== 1 ? 's' : ''}
+                      </span>
+                      {badges.map(b => <MetaBadge key={b}>{b}</MetaBadge>)}
+                    </span>
                   </span>
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => { if (confirm(`Delete project “${p.name}”?`)) deleteProject(p.id) }}
-                className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-                aria-label={`Delete ${p.name}`}
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </li>
-          ))}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { if (confirm(`Delete project “${p.name}”?`)) deleteProject(p.id) }}
+                  className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                  aria-label={`Delete ${p.name}`}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </li>
+            )
+          })}
         </ul>
+      )}
+
+      {showDialog && (
+        <NewProjectDialog onClose={() => setShowDialog(false)} onCreate={handleCreate} />
       )}
     </div>
   )
@@ -105,13 +135,23 @@ function ProjectList() {
 
 // ── Project detail (scoped Resources view) ────────────────────────────────────
 
+type DetailView = 'sources' | 'discover'
+
 function ProjectDetail({ projectId }: { projectId: string }) {
   const setOpenProject = useResearchStore(s => s.setOpenProject)
-  const { projects } = useResearchProjects()
+  const { projects, addDocument } = useResearchProjects()
   const [refreshKey, setRefreshKey] = useState(0)
-  const { documentIds, loading } = useProjectDocuments(projectId, refreshKey)
+  const [view, setView] = useState<DetailView>('sources')
+  const { documents, documentIds, loading } = useProjectDocuments(projectId, refreshKey)
 
   const project = projects.find(p => p.id === projectId)
+  const badges = project ? projectBadges(project) : []
+  const agents = departmentLabels(project?.departments)
+
+  const handleAdd = async (documentId: string) => {
+    await addDocument(projectId, documentId)
+    setRefreshKey(k => k + 1)
+  }
 
   return (
     <div className="space-y-4">
@@ -123,21 +163,53 @@ function ProjectDetail({ projectId }: { projectId: string }) {
         <ChevronLeft className="h-4 w-4" aria-hidden /> All projects
       </button>
 
-      <div>
+      <div className="space-y-2">
         <h2 className="text-lg font-semibold">{project?.name ?? 'Project'}</h2>
         {project?.description && <p className="text-sm text-muted-foreground">{project.description}</p>}
+        {(badges.length > 0 || agents.length > 0) && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {badges.map(b => <MetaBadge key={b}>{b}</MetaBadge>)}
+            {agents.length > 0 && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                <Sparkles className="h-3 w-3" aria-hidden /> {agents.join(' · ')}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="flex gap-1 rounded-lg border bg-card p-1">
+        {([['sources', 'Sources & analysis'], ['discover', 'Discover & add']] as const).map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setView(id)}
+            className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+              view === id ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
 
       {loading ? (
         <div className="flex items-center justify-center gap-2 py-12 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Loading project…
         </div>
+      ) : view === 'discover' ? (
+        <DiscoverResources existingIds={documentIds} onAdd={handleAdd} />
       ) : (
-        <ResourcesView
-          projectId={projectId}
-          projectDocumentIds={documentIds}
-          onProjectMutated={() => setRefreshKey(k => k + 1)}
-        />
+        <div className="space-y-4">
+          {documents.length === 0 && (
+            <SuggestedResources project={project} existingIds={documentIds} onAdd={handleAdd} />
+          )}
+          <ResourcesView
+            projectId={projectId}
+            projectDocumentIds={documentIds}
+            onProjectMutated={() => setRefreshKey(k => k + 1)}
+          />
+        </div>
       )}
     </div>
   )

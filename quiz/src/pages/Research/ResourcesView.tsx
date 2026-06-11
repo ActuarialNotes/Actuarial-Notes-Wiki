@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Loader2, Trash2 } from 'lucide-react'
 import { useResearchFeed, type ResearchDocumentRow } from '@/hooks/useResearchFeed'
 import { useResearchSearch } from '@/hooks/useResearchSearch'
@@ -73,9 +73,12 @@ interface ResourcesViewProps {
   projectDocumentIds?: string[]
   // Called after a source is added by URL (so the project view can refetch).
   onProjectMutated?: () => void
+  // Bumped by the page-level search bar after a corpus URL-add, so the browse
+  // feed refetches to show the new document (non-project scope only).
+  refreshNonce?: number
 }
 
-export default function ResourcesView({ projectId, projectDocumentIds, onProjectMutated }: ResourcesViewProps) {
+export default function ResourcesView({ projectId, projectDocumentIds, onProjectMutated, refreshNonce }: ResourcesViewProps) {
   const searchQuery = useResearchStore(s => s.searchQuery).trim()
   const isProjectScope = projectId !== undefined
 
@@ -86,6 +89,15 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
   const [addNotice, setAddNotice] = useState<string | null>(null)
 
   const lastVisit = usePreviousVisit()
+
+  // Refetch the corpus feed when the page-level search bar reports a URL-add.
+  const didMountRef = useRef(false)
+  useEffect(() => {
+    if (!didMountRef.current) { didMountRef.current = true; return }
+    if (!isProjectScope) feed.refresh()
+    // feed.refresh is stable; only the nonce should drive this.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshNonce])
 
   const handleAdd = async (url: string) => {
     setAddNotice(null)
@@ -128,19 +140,25 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
 
   return (
     <div className="space-y-5">
-      <ResearchSearchBar
-        onAsk={q => ask(q, projectId)}
-        asking={asking}
-        onAddUrl={handleAdd}
-        addingUrl={addUrl.loading}
-        addError={addUrl.error}
-        addNotice={addNotice}
-        addContextLabel={isProjectScope ? 'Added sources are saved to this project.' : undefined}
-      />
+      {/* In project scope the search/ask/add box lives here, scoped to the
+          project's sources. For the corpus view it lives at the page top
+          (Research/index.tsx) so search sits above the tabs like other tabs. */}
+      {isProjectScope && (
+        <>
+          <ResearchSearchBar
+            onAsk={q => ask(q, projectId)}
+            asking={asking}
+            onAddUrl={handleAdd}
+            addingUrl={addUrl.loading}
+            addError={addUrl.error}
+            addNotice={addNotice}
+            addContextLabel="Added sources are saved to this project."
+          />
+          <AiAnswerPanel loading={asking} error={askError} result={result} onDismiss={reset} />
+        </>
+      )}
 
       <ResearchFilterPanel />
-
-      <AiAnswerPanel loading={asking} error={askError} result={result} onDismiss={reset} />
 
       {searching ? (
         <SearchResults search={search} action={cardAction} />

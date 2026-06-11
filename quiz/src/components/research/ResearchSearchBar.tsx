@@ -14,6 +14,9 @@ interface ResearchSearchBarProps {
   addNotice: string | null
   // e.g. "to this project" — clarifies where an added source lands.
   addContextLabel?: string
+  // Called when the user runs a search or asks — lets a parent surface results
+  // (e.g. switch to the Resources tab).
+  onActivate?: () => void
 }
 
 // Unified search surface for the Research tab: one box that runs fast keyword
@@ -21,7 +24,7 @@ interface ResearchSearchBarProps {
 // collapsible "add a source by URL" affordance. The query text lives in
 // researchStore so it persists across tab switches and drives the keyword feed.
 export function ResearchSearchBar({
-  onAsk, asking, onAddUrl, addingUrl, addError, addNotice, addContextLabel,
+  onAsk, asking, onAddUrl, addingUrl, addError, addNotice, addContextLabel, onActivate,
 }: ResearchSearchBarProps) {
   const searchQuery = useResearchStore(s => s.searchQuery)
   const setSearchQuery = useResearchStore(s => s.setSearchQuery)
@@ -32,13 +35,16 @@ export function ResearchSearchBar({
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault()
-    setSearchQuery(input.trim())
+    const trimmed = input.trim()
+    setSearchQuery(trimmed)
+    if (trimmed) onActivate?.()
   }
 
   const handleAsk = () => {
     const trimmed = input.trim()
     if (!trimmed || asking) return
     setSearchQuery(trimmed)
+    onActivate?.()
     onAsk(trimmed)
   }
 
@@ -58,7 +64,7 @@ export function ResearchSearchBar({
             value={input}
             onChange={e => setInput(e.target.value)}
             placeholder="Search bulletins, guidance, regulations, filings…"
-            className="h-10 w-full rounded-md border border-input bg-background pl-9 pr-9 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            className="h-11 w-full rounded-md border border-input bg-background pl-9 pr-9 text-base placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
           {input && (
             <button
@@ -103,7 +109,7 @@ export function ResearchSearchBar({
             onChange={e => setUrl(e.target.value)}
             placeholder="https://www.osfi-bsif.gc.ca/…/guideline"
             disabled={addingUrl}
-            className="h-9 flex-1 rounded-md border border-input bg-background px-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
+            className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-base placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
           />
           <Button type="submit" size="sm" variant="outline" disabled={addingUrl || !url.trim()} className="gap-1.5">
             {addingUrl && <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />}

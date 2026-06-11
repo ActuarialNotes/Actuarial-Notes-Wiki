@@ -2,6 +2,7 @@
 Title: Mathematics of Investment and Credit
 Author: Samuel A. Broverman
 Year: "2024"
+date: "2024"
 Edition: 8th
 Publisher: ACTEX Learning
 ISBN: 979-8-8901-6016-4

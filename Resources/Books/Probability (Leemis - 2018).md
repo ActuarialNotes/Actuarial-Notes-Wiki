@@ -2,6 +2,7 @@
 Title: Probability
 Author: Lawrence M. Leemis
 Year: "2018"
+date: "2018"
 Edition: 2nd
 Publisher: Lightning Source
 ISBN: 978-0-9829174-7-3

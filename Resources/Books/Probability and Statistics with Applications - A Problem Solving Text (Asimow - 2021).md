@@ -2,6 +2,7 @@
 Title: "Probability & Statistics with Applications: A Problem Solving Text"
 Authors: Leonard A. Asimow, Mark M. Maxwell
 Year: "2015"
+date: "2015"
 Edition: 2nd
 Publisher: ACTEX
 ISBN: 978-1-62542-472-3

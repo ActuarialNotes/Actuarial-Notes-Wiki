@@ -2,6 +2,7 @@
 Title: "Interest Theory: Financial Mathematics and Deterministic Valuation"
 Authors: "Joe Francis, Chris Ruckman"
 Year: "2022"
+date: "2022"
 Edition: 3rd
 Publisher: ActuarialBrew
 ISBN: 978-0-9981604-4-3

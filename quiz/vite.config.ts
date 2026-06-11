@@ -103,6 +103,152 @@ function wikiContentPlugin(): Plugin {
   }
 }
 
+// ── Resource timeline ────────────────────────────────────────────────────────
+// A flat, dated index of the content that powers the Resources heatmap: books
+// (Resources/Books), historical events (Resources/Events) and regulation
+// (Resources/Regulation). Kept separate from the wiki-content index above so the
+// search/index logic — which only understands 'exam' | 'concept' | 'document' —
+// is unaffected. A future Resources/Benchmarks (OSFI PC-1) directory can be added
+// to TIMELINE_SOURCES and will flow through automatically.
+
+type TimelineKind = 'book' | 'event' | 'regulation' | 'benchmark'
+
+const TIMELINE_SOURCES: { dir: string; kind: TimelineKind }[] = [
+  { dir: 'Resources/Books', kind: 'book' },
+  { dir: 'Resources/Events', kind: 'event' },
+  { dir: 'Resources/Regulation', kind: 'regulation' },
+]
+
+interface TimelineRawEntry {
+  id: string
+  kind: TimelineKind
+  /** 'YYYY-MM-DD' (full date) or 'YYYY' (year-only, e.g. textbooks). */
+  date: string
+  title: string
+  name: string
+  path: string
+  summary?: string
+  jurisdiction?: string
+  impactLevel?: string
+  status?: string
+  issuingBody?: string
+  author?: string
+  publisher?: string
+  edition?: string
+  year?: number
+  coverImage?: string
+}
+
+// front-matter delegates to js-yaml, which parses an unquoted `date: 1965-03-18`
+// into a JS Date (UTC midnight). Normalise both Dates and strings to a plain key.
+function toDateString(v: unknown): string | undefined {
+  if (v == null) return undefined
+  if (v instanceof Date && !isNaN(v.getTime())) return v.toISOString().slice(0, 10)
+  const s = String(v).trim()
+  return s || undefined
+}
+
+function yearFromFilename(name: string): string | undefined {
+  const m = /\((\d{4})\)/.exec(name)
+  return m ? m[1] : undefined
+}
+
+const MD_LINK_RE = /\[([^\]]+)\]\([^)]+\)/g
+const MD_BOLD_RE = /\*\*([^*]+)\*\*/g
+const MD_ITALIC_RE = /(?<!\*)\*([^*]+)\*(?!\*)/g
+
+// First descriptive paragraph of the body, stripped of headings and markdown.
+function extractSummary(raw: string): string | undefined {
+  const body = raw.replace(/^---[\s\S]*?\n---[ \t]*\r?\n?/, '')
+  let cur = ''
+  let first = ''
+  for (const lineRaw of body.split('\n')) {
+    const line = lineRaw.trim()
+    if (/^#{1,6}\s/.test(line) || line === '') {
+      if (cur.trim()) { first = cur.trim(); break }
+      continue
+    }
+    cur += (cur ? ' ' : '') + line
+  }
+  if (!first && cur.trim()) first = cur.trim()
+  if (!first) return undefined
+  let s = first
+    .replace(MD_LINK_RE, '$1')
+    .replace(MD_BOLD_RE, '$1')
+    .replace(MD_ITALIC_RE, '$1')
+    .trim()
+  if (s.length > 260) s = s.slice(0, 257).trimEnd() + '…'
+  return s
+}
+
+async function collectResourceTimeline(): Promise<TimelineRawEntry[]> {
+  const entries: TimelineRawEntry[] = []
+
+  for (const { dir, kind } of TIMELINE_SOURCES) {
+    const names = await readdir(path.join(REPO_ROOT, dir)).catch(() => [] as string[])
+    for (const name of names) {
+      if (!name.endsWith('.md')) continue
+      const text = await readFile(path.join(REPO_ROOT, dir, name), 'utf-8').catch(() => null)
+      if (text == null) continue
+      const attrs = (fm<Record<string, unknown>>(text).attributes ?? {}) as Record<string, unknown>
+      const bare = name.replace(/\.md$/i, '')
+
+      // Effective/published date. Books usually carry only `date`/`Year`; events &
+      // regulation carry a full ISO `date`. Fall back to a year in the filename.
+      const date =
+        toDateString(attrs['date']) ??
+        toDateString(attrs['Year']) ??
+        yearFromFilename(bare)
+      if (!date) continue // no resolvable date → omit from the timeline (still in the grid)
+
+      const yearNum = parseInt(date.slice(0, 4), 10)
+      const isBook = kind === 'book'
+      // A file in Resources/Regulation may declare `type: event`; honour it.
+      const declaredType = String(attrs['type'] ?? '').toLowerCase()
+      const resolvedKind: TimelineKind =
+        declaredType === 'event' ? 'event'
+        : declaredType === 'regulation' ? 'regulation'
+        : kind
+
+      entries.push({
+        id: attrs['id'] ? String(attrs['id']) : bare,
+        kind: resolvedKind,
+        date,
+        title: String(attrs['title'] || attrs['Title'] || bare),
+        name: bare,
+        path: `${dir}/${name}`,
+        summary: isBook ? undefined : extractSummary(text),
+        jurisdiction: attrs['jurisdiction'] ? String(attrs['jurisdiction']) : undefined,
+        impactLevel: attrs['impact_level'] ? String(attrs['impact_level']) : undefined,
+        status: attrs['status'] ? String(attrs['status']) : undefined,
+        issuingBody: attrs['issuing_body'] ? String(attrs['issuing_body']) : undefined,
+        author: (attrs['Authors'] || attrs['Author']) ? String(attrs['Authors'] || attrs['Author']) : undefined,
+        publisher: attrs['Publisher'] ? String(attrs['Publisher']) : undefined,
+        edition: attrs['Edition'] ? String(attrs['Edition']) : undefined,
+        year: Number.isFinite(yearNum) ? yearNum : undefined,
+        coverImage: isBook ? extractCoverImageUrl(text) : undefined,
+      })
+    }
+  }
+
+  entries.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0))
+  return entries
+}
+
+function resourceTimelinePlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:resource-timeline'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'resource-timeline',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      const data = await collectResourceTimeline()
+      return `export default ${JSON.stringify(data)}`
+    },
+  }
+}
+
 async function collectQuestions(): Promise<string[]> {
   const rawFiles: string[] = []
   const questionsDir = path.join(REPO_ROOT, 'questions')
@@ -134,7 +280,7 @@ function questionsContentPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin(), questionsContentPlugin()],
+  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

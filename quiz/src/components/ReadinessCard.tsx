@@ -17,7 +17,7 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
-import { parseSectionWeight } from '@/lib/readiness'
+import { computeReadiness, parseSectionWeight } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
@@ -71,9 +71,6 @@ function StudyGuideRadial({
   examRecords,
   now,
   onConceptClick,
-  level1Count,
-  level2Count,
-  level3Count,
   totalCount,
   selectedConcept,
   flashRadial,
@@ -82,9 +79,6 @@ function StudyGuideRadial({
   examRecords: ConceptMasteryRecord[]
   now: Date
   onConceptClick?: (name: string) => void
-  level1Count: number
-  level2Count: number
-  level3Count: number
   totalCount: number
   selectedConcept?: string | null
   flashRadial?: boolean
@@ -125,11 +119,13 @@ function StudyGuideRadial({
     [segments, selectedConcept],
   )
 
-  // Weighted progress credits partial mastery (Level 1/2) instead of only
-  // counting fully-mastered (Level 3) concepts, so early progress shows up
-  // as more than 0%.
-  const progressScore = level1Count * 1 + level2Count * 2 + level3Count * 3
-  const pctText = totalCount > 0 ? `${Math.round((progressScore / (totalCount * 3)) * 100)}%` : '0%'
+  // Same weighted-progress formula as the "Readiness" badge (lib/readiness.ts),
+  // so the two numbers always agree.
+  const overallPct = useMemo(
+    () => computeReadiness(syllabus, examRecords, now).overallPct,
+    [syllabus, examRecords, now],
+  )
+  const pctText = totalCount > 0 ? `${Math.round(overallPct)}%` : '0%'
   const centerSeg = hovered ?? selected
 
   return (
@@ -197,7 +193,7 @@ function StudyGuideRadial({
               opacity={flashRadial ? 0.9 : 0.4}
               style={{ transition: 'opacity 0.8s ease-out' }}
             >
-              progress
+              readiness
             </text>
           </>
         )}
@@ -1357,9 +1353,6 @@ export function ReadinessCard({
               syllabus={syllabus}
               examRecords={isPremium ? examRecords : []}
               now={now}
-              level1Count={isPremium ? aggregate.level1 : 0}
-              level2Count={isPremium ? aggregate.level2 : 0}
-              level3Count={isPremium ? aggregate.level3 : 0}
               totalCount={aggregate.total}
               selectedConcept={isPremium && popupFromRadial ? popupCurrentName : null}
               flashRadial={flashRadial}

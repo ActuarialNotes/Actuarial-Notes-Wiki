@@ -12,27 +12,7 @@ import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
 import { AddToProjectButton } from '@/components/research/AddToProjectButton'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { ResourceTimelinePanel } from '@/components/research/ResourceTimelinePanel'
-
-// ── Last-visit tracking (browse mode only) ───────────────────────────────────
-
-const LAST_VISIT_KEY = 'research_lastVisit'
-
-function usePreviousVisit(): string | null {
-  const [prev] = useState<string | null>(() => {
-    const stored = localStorage.getItem(LAST_VISIT_KEY)
-    localStorage.setItem(LAST_VISIT_KEY, new Date().toISOString())
-    return stored
-  })
-  return prev
-}
-
-function isNewDoc(doc: ResearchDocumentRow, lastVisit: string | null): boolean {
-  if (!lastVisit) return false
-  const docDate = new Date(doc.published_at).getTime()
-  const visitDate = new Date(lastVisit).getTime()
-  const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000
-  return docDate > visitDate && docDate > thirtyDaysAgo
-}
+import { ResourceSearchMatches } from '@/components/research/ResourceSearchMatches'
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -56,8 +36,6 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
   const { loading: asking, error: askError, result, ask, reset } = useResearchQuery()
   const addUrl = useAddResourceByUrl()
   const [addNotice, setAddNotice] = useState<string | null>(null)
-
-  const lastVisit = usePreviousVisit()
 
   // Refetch the corpus feed when the page-level search bar reports a URL-add.
   const didMountRef = useRef(false)
@@ -130,15 +108,19 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
       {searching ? (
         <>
           <ResearchFilterPanel />
+          {!isProjectScope && <ResourceSearchMatches />}
           <SearchResults search={search} action={cardAction} />
         </>
-      ) : (
+      ) : isProjectScope ? (
         <>
-          {/* Corpus view: month-by-month timeline heatmap of resources/regulation,
-              with the shared filters between the heading and the heatmap. */}
-          {isProjectScope ? <ResearchFilterPanel /> : <ResourceTimelinePanel />}
-          <BrowseFeed feed={feed} lastVisit={lastVisit} action={cardAction} isProjectScope={isProjectScope} />
+          <ResearchFilterPanel />
+          <BrowseFeed feed={feed} action={cardAction} />
         </>
+      ) : (
+        // Corpus view: everything here comes from the markdown vault
+        // (Resources/Books, Resources/Events, Resources/Regulation), browsed
+        // via the month-by-month timeline heatmap.
+        <ResourceTimelinePanel />
       )}
     </div>
   )
@@ -197,18 +179,14 @@ function SearchResults({
   )
 }
 
-// ── Browse feed (chronological) ───────────────────────────────────────────────
+// ── Browse feed (project sources) ─────────────────────────────────────────────
 
 function BrowseFeed({
   feed,
-  lastVisit,
   action,
-  isProjectScope,
 }: {
   feed: ReturnType<typeof useResearchFeed>
-  lastVisit: string | null
   action: (doc: ResearchDocumentRow) => ReactNode
-  isProjectScope: boolean
 }) {
   const { documents, loading, loadingMore, error, hasMore, total, loadMore } = feed
 
@@ -223,33 +201,21 @@ function BrowseFeed({
   if (documents.length === 0) {
     return (
       <p className="mx-auto max-w-md py-16 text-center text-sm text-muted-foreground">
-        {isProjectScope
-          ? 'This project has no documents yet. Search the corpus and use “Save” on a result, or add a source by URL.'
-          : 'No documents match the current filters yet. Clear your filters to see everything available, or add a source by URL.'}
+        This project has no documents yet. Search the corpus and use “Save” on a result, or add a source by URL.
       </p>
     )
   }
 
-  const newCount = isProjectScope ? 0 : documents.filter(d => isNewDoc(d, lastVisit)).length
-
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>
-          {total !== null
-            ? `Showing ${documents.length} of ${total.toLocaleString()} document${total !== 1 ? 's' : ''}`
-            : `${documents.length} document${documents.length !== 1 ? 's' : ''}`}
-        </span>
-        {newCount > 0 && <span className="font-medium text-primary">{newCount} new since your last visit</span>}
-      </div>
+      <p className="text-xs text-muted-foreground">
+        {total !== null
+          ? `Showing ${documents.length} of ${total.toLocaleString()} document${total !== 1 ? 's' : ''}`
+          : `${documents.length} document${documents.length !== 1 ? 's' : ''}`}
+      </p>
 
       {documents.map(doc => (
-        <DocumentCard
-          key={doc.id}
-          document={doc}
-          isNew={!isProjectScope && isNewDoc(doc, lastVisit)}
-          action={action(doc)}
-        />
+        <DocumentCard key={doc.id} document={doc} action={action(doc)} />
       ))}
 
       {hasMore && (

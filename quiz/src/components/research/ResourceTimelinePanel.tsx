@@ -5,7 +5,7 @@ import {
   toTimelineEntries,
   entriesForMonth,
   latestPopulatedMonth,
-  type TimelineEntry,
+  entryToRef,
 } from '@/lib/resourceTimeline'
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { ResourceHeatmap } from '@/components/wiki/ResourceHeatmap'
@@ -13,18 +13,6 @@ import { ResourceMonthCards } from '@/components/wiki/ResourceMonthCards'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useResearchStore } from '@/stores/researchStore'
-import type { WikiEntryRef } from '@/lib/wikiRoutes'
-
-// Map a timeline entry to a popup-viewer ref. Books open as 'resource' (so the
-// metadata card renders); events/regulation open via their explicit repo path,
-// which also handles the `type: event` file that lives in Resources/Regulation/.
-function entryToRef(entry: TimelineEntry): WikiEntryRef {
-  const kind: WikiEntryRef['kind'] =
-    entry.kind === 'book' || entry.kind === 'benchmark' ? 'resource'
-    : entry.kind === 'regulation' ? 'regulation'
-    : 'event'
-  return { kind, name: entry.name, path: entry.path }
-}
 
 export function ResourceTimelinePanel() {
   const allEntries = useMemo(() => toTimelineEntries(rawTimeline), [])

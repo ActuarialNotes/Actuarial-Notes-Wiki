@@ -6,6 +6,8 @@ import {
   buildMonthCounts,
   entriesForMonth,
   latestPopulatedMonth,
+  searchTimelineEntries,
+  entryToRef,
   type TimelineRawEntry,
 } from './resourceTimeline'
 
@@ -94,5 +96,61 @@ describe('latestPopulatedMonth', () => {
   })
   it('returns null for no entries', () => {
     expect(latestPopulatedMonth([])).toBeNull()
+  })
+})
+
+describe('searchTimelineEntries', () => {
+  const entries = toTimelineEntries([
+    raw({
+      date: '2026-07-01',
+      title: 'Ontario Auto Insurance Reform',
+      issuingBody: 'Financial Services Regulatory Authority of Ontario (FSRA)',
+      summary: 'Transition to SABS optionality.',
+      kind: 'regulation',
+    }),
+    raw({
+      date: '2026-06-09',
+      title: 'Domestic Stability Buffer Letter',
+      issuingBody: 'Office of the Superintendent of Financial Institutions (OSFI)',
+      summary: 'Maintains the buffer at 3.50%.',
+      kind: 'regulation',
+    }),
+    raw({ date: '2019', title: 'Loss Models', kind: 'book', author: 'Klugman' }),
+  ])
+
+  it('matches case-insensitively across title, summary, and issuing body', () => {
+    expect(searchTimelineEntries(entries, 'osfi').map(e => e.title)).toEqual(['Domestic Stability Buffer Letter'])
+    expect(searchTimelineEntries(entries, 'sabs').map(e => e.title)).toEqual(['Ontario Auto Insurance Reform'])
+    expect(searchTimelineEntries(entries, 'klugman').map(e => e.title)).toEqual(['Loss Models'])
+  })
+
+  it('requires every whitespace-separated term to match (AND semantics)', () => {
+    expect(searchTimelineEntries(entries, 'ontario auto').map(e => e.title)).toEqual(['Ontario Auto Insurance Reform'])
+    expect(searchTimelineEntries(entries, 'osfi reform')).toEqual([])
+  })
+
+  it('returns nothing for a blank query', () => {
+    expect(searchTimelineEntries(entries, '   ')).toEqual([])
+  })
+})
+
+describe('entryToRef', () => {
+  it('maps books and benchmarks to the resource kind', () => {
+    const [book] = toTimelineEntries([
+      raw({ date: '2019', title: 'Loss Models', kind: 'book', name: 'Loss Models', path: 'Resources/Books/Loss Models.md' }),
+    ])
+    expect(entryToRef(book)).toEqual({ kind: 'resource', name: 'Loss Models', path: 'Resources/Books/Loss Models.md' })
+  })
+
+  it('maps regulation and events to their own kinds, preserving the explicit path', () => {
+    const [reg] = toTimelineEntries([
+      raw({ date: '2026-07-01', title: 'SABS Reform', kind: 'regulation', name: 'SABS Reform', path: 'Resources/Regulation/SABS Reform.md' }),
+    ])
+    expect(entryToRef(reg)).toEqual({ kind: 'regulation', name: 'SABS Reform', path: 'Resources/Regulation/SABS Reform.md' })
+
+    const [evt] = toTimelineEntries([
+      raw({ date: '1965-03-18', title: 'CIA Founded', kind: 'event', name: 'CIA Founded', path: 'Resources/Events/CIA Founded.md' }),
+    ])
+    expect(entryToRef(evt)).toEqual({ kind: 'event', name: 'CIA Founded', path: 'Resources/Events/CIA Founded.md' })
   })
 })

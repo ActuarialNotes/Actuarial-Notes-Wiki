@@ -37,7 +37,7 @@ function MetaPill({ children }: { children: React.ReactNode }) {
   )
 }
 
-function EntryCard({ entry, onOpen }: { entry: TimelineEntry; onOpen: (entry: TimelineEntry) => void }) {
+export function EntryCard({ entry, onOpen }: { entry: TimelineEntry; onOpen: (entry: TimelineEntry) => void }) {
   return (
     <button
       type="button"

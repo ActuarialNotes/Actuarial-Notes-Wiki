@@ -7,7 +7,7 @@ interface YearRangeSliderProps {
   onChange: (value: [number, number] | null) => void
 }
 
-type HandleId = 'start' | 'end'
+type HandleId = 'start' | 'end' | 'range'
 
 function clampPercent(p: number): number {
   return Math.min(100, Math.max(0, p))
@@ -28,12 +28,17 @@ function clientXToYear(clientX: number, rect: DOMRect, min: number, max: number)
 // active it renders as a plain horizontal line; clicking it places the first
 // handle, and a second click (before or after) places the second handle and
 // commits a sorted [start, end] range. Once both handles exist they can be
-// dragged, or nudged with arrow/Home/End keys; the caller's Clear control
-// resets back to "no filter" by passing null.
+// dragged individually (or nudged with arrow/Home/End keys), and the filled
+// segment between them can be dragged to slide the whole range while keeping
+// its width; the caller's Clear control resets back to "no filter" by
+// passing null.
 export function YearRangeSlider({ min, max, value, onChange }: YearRangeSliderProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [pending, setPending] = useState<number | null>(null)
   const [dragging, setDragging] = useState<HandleId | null>(null)
+  // Anchor for whole-range drags: the year under the pointer and the range's
+  // values at drag start, so we can shift both bounds by the same delta.
+  const rangeDragRef = useRef<{ anchorYear: number; start: number; end: number } | null>(null)
 
   // A committed range supersedes any in-progress first click.
   useEffect(() => {
@@ -58,6 +63,9 @@ export function YearRangeSlider({ min, max, value, onChange }: YearRangeSliderPr
   const beginDrag = (handle: HandleId) => (e: React.PointerEvent) => {
     e.stopPropagation()
     e.preventDefault()
+    if (handle === 'range' && value) {
+      rangeDragRef.current = { anchorYear: yearFromClientX(e.clientX), start: value[0], end: value[1] }
+    }
     setDragging(handle)
   }
 
@@ -67,16 +75,24 @@ export function YearRangeSlider({ min, max, value, onChange }: YearRangeSliderPr
     const onMove = (e: PointerEvent) => {
       const year = yearFromClientX(e.clientX)
       if (dragging === 'start') onChange([Math.min(year, end), end])
-      else onChange([start, Math.max(year, start)])
+      else if (dragging === 'end') onChange([start, Math.max(year, start)])
+      else {
+        const anchor = rangeDragRef.current
+        if (!anchor) return
+        const width = anchor.end - anchor.start
+        const delta = Math.max(min - anchor.start, Math.min(year - anchor.anchorYear, max - anchor.end))
+        const newStart = anchor.start + delta
+        onChange([newStart, newStart + width])
+      }
     }
-    const onUp = () => setDragging(null)
+    const onUp = () => { setDragging(null); rangeDragRef.current = null }
     window.addEventListener('pointermove', onMove)
     window.addEventListener('pointerup', onUp)
     return () => {
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerup', onUp)
     }
-  }, [dragging, value, onChange, yearFromClientX])
+  }, [dragging, value, onChange, yearFromClientX, min, max])
 
   const adjust = (handle: HandleId) => (e: React.KeyboardEvent) => {
     if (!value) return
@@ -105,7 +121,10 @@ export function YearRangeSlider({ min, max, value, onChange }: YearRangeSliderPr
       <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-muted" />
       {hasRange && (
         <div
-          className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-primary"
+          aria-hidden="true"
+          title="Drag to move the range"
+          onPointerDown={beginDrag('range')}
+          className="absolute top-1/2 h-3 -translate-y-1/2 touch-none cursor-grab rounded-full bg-primary active:cursor-grabbing"
           style={{
             left: `${yearToPercent(value[0], min, max)}%`,
             right: `${100 - yearToPercent(value[1], min, max)}%`,

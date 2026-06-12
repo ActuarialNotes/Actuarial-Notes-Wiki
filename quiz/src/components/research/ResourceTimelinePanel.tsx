@@ -10,6 +10,7 @@ import {
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { ResourceHeatmap } from '@/components/wiki/ResourceHeatmap'
 import { ResourceMonthCards } from '@/components/wiki/ResourceMonthCards'
+import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useResearchStore } from '@/stores/researchStore'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
@@ -50,8 +51,6 @@ export function ResourceTimelinePanel() {
     [entries, selected],
   )
 
-  if (allEntries.length === 0) return null
-
   return (
     <section className="space-y-4">
       <h2 className="text-base font-semibold flex items-center gap-2">
@@ -59,20 +58,26 @@ export function ResourceTimelinePanel() {
         Timeline
       </h2>
 
-      <ResourceHeatmap
-        entries={entries}
-        selected={selected}
-        onSelectMonth={(year, month) => setSelected({ year, month })}
-      />
+      <ResearchFilterPanel />
 
-      {selected && (
-        <ResourceMonthCards
-          entries={monthEntries}
-          year={selected.year}
-          month={selected.month}
-          onClear={() => setSelected(null)}
-          onOpenEntry={entry => openAt([entryToRef(entry)], 0, entry.path)}
-        />
+      {allEntries.length > 0 && (
+        <>
+          <ResourceHeatmap
+            entries={entries}
+            selected={selected}
+            onSelectMonth={(year, month) => setSelected({ year, month })}
+          />
+
+          {selected && (
+            <ResourceMonthCards
+              entries={monthEntries}
+              year={selected.year}
+              month={selected.month}
+              onClear={() => setSelected(null)}
+              onOpenEntry={entry => openAt([entryToRef(entry)], 0, entry.path)}
+            />
+          )}
+        </>
       )}
     </section>
   )

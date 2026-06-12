@@ -1,19 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { X } from 'lucide-react'
 import {
   type TimelineEntry,
   buildMonthCounts,
   monthKey,
   TIMELINE_MIN_YEAR,
 } from '@/lib/resourceTimeline'
+import { YearRangeSlider } from '@/components/wiki/YearRangeSlider'
 
 const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const CELL = 15 // px — square side
 const GAP = 3 // px — gap between cells/columns
-
-// Default visible window: the most recent decade, narrower than the full
-// TIMELINE_MIN_YEAR..present range so the grid is useful without scrolling.
-// The From/To controls let users widen or shift this.
-const DEFAULT_RANGE_YEARS = 10
 
 // Shade of blue scales with how many resources/events/regulation land in a month.
 function cellColor(count: number): string | undefined {
@@ -37,20 +34,16 @@ export function ResourceHeatmap({ entries, selected, onSelectMonth }: Props) {
     [entries],
   )
 
-  // Adjustable display range — defaults to the most recent decade. Values may
-  // be NaN while a field is empty; the years memo below falls back to the
-  // full min/max bounds in that case.
-  const [rangeStart, setRangeStart] = useState(() => Math.max(minYear, maxYear - DEFAULT_RANGE_YEARS + 1))
-  const [rangeEnd, setRangeEnd] = useState(maxYear)
+  // No range selected → show the full min/max span. The slider lets users
+  // narrow this to a sub-range.
+  const [yearRange, setYearRange] = useState<[number, number] | null>(null)
 
   const years = useMemo(() => {
-    const a = Number.isFinite(rangeStart) ? rangeStart : minYear
-    const b = Number.isFinite(rangeEnd) ? rangeEnd : maxYear
+    const [a, b] = yearRange ?? [minYear, maxYear]
     const start = Math.max(minYear, Math.min(a, b))
     const end = Math.min(maxYear, Math.max(a, b))
-    if (end < start) return []
     return Array.from({ length: end - start + 1 }, (_, i) => start + i)
-  }, [rangeStart, rangeEnd, minYear, maxYear])
+  }, [yearRange, minYear, maxYear])
 
   const counts = useMemo(() => buildMonthCounts(entries), [entries])
 
@@ -63,33 +56,23 @@ export function ResourceHeatmap({ entries, selected, onSelectMonth }: Props) {
   return (
     <div className="rounded-xl border bg-card p-3 sm:p-4 space-y-3">
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="font-medium text-foreground">Range</span>
-        <label className="flex items-center gap-1.5">
-          From
-          <input
-            type="number"
-            inputMode="numeric"
-            value={Number.isNaN(rangeStart) ? '' : rangeStart}
-            min={minYear}
-            max={maxYear}
-            aria-label="Heatmap start year"
-            onChange={e => setRangeStart(e.target.valueAsNumber)}
-            className="w-[4.5rem] rounded-md border border-input bg-background px-1.5 py-0.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-        </label>
-        <label className="flex items-center gap-1.5">
-          To
-          <input
-            type="number"
-            inputMode="numeric"
-            value={Number.isNaN(rangeEnd) ? '' : rangeEnd}
-            min={minYear}
-            max={maxYear}
-            aria-label="Heatmap end year"
-            onChange={e => setRangeEnd(e.target.valueAsNumber)}
-            className="w-[4.5rem] rounded-md border border-input bg-background px-1.5 py-0.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-        </label>
+        <span className="font-medium text-foreground shrink-0">Range</span>
+        <span className="shrink-0 tabular-nums">{minYear}</span>
+        <YearRangeSlider min={minYear} max={maxYear} value={yearRange} onChange={setYearRange} />
+        <span className="shrink-0 tabular-nums">{maxYear}</span>
+        {yearRange && (
+          <span className="flex shrink-0 items-center gap-1.5">
+            <span className="tabular-nums text-foreground">{yearRange[0]}–{yearRange[1]}</span>
+            <button
+              type="button"
+              onClick={() => setYearRange(null)}
+              aria-label="Clear year range"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </span>
+        )}
       </div>
 
       <div className="flex items-stretch gap-[3px]">

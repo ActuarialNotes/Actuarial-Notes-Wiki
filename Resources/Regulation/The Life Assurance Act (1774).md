@@ -1,4 +1,4 @@
---- 
+---
 id: reg-uk-1774-life-assurance-act
 title: "The Life Assurance Act 1774 (The Gambling Act)"
 type: regulation

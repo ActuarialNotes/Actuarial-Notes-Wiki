@@ -1,6 +1,6 @@
 ---
 id: reg-ca-1987-osfi-act
-title: "Proclamation of the Financial Institutions Institutions Regulator Act"
+title: "Proclamation of the Office of the Superintendent of Financial Institutions Act"
 type: regulation
 status: effective
 date: 1987-07-02

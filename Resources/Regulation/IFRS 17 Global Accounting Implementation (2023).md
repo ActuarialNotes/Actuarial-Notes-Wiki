@@ -19,8 +19,8 @@ aliases: ["IFRS 17 Effective Date", "Insurance Contracts Accounting"]
 Replaced the legacy IFRS 4 accounting standard completely. It fundamentally changed how insurance liabilities are valued on corporate balance sheets, requiring premium revenue to be recognized as services are delivered rather than when cash is received.
 
 ## Key Technical Constructs
-*   **Contractual Service Margin (CSM):** Represents the unearned profit of a group of insurance contracts that the insurer will recognize as it provides services in the future.
-*   **Discount Rates:** Liability valuations must explicitly utilize current market-consistent discount curves rather than historical pricing assumptions.
+- **Contractual Service Margin (CSM):** Represents the unearned profit of a group of insurance contracts that the insurer will recognize as it provides services in the future.
+- **Discount Rates:** Liability valuations must explicitly utilize current market-consistent discount curves rather than historical pricing assumptions.
 
 ## Downstream Operational Impact
 - **Finance & Actuarial Alignment:** Actuarial cash flow engines had to be directly integrated with accounting ledger software to enable dynamic monthly valuation updates.

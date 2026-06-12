@@ -20,7 +20,7 @@ aliases: ["FSRA SABS Specifications 2025", "August 2025 Auto Insurance Filings"]
 FSRA officially launched its regulatory timeline and submission specifications for the upcoming July 2026 unbundling of accident benefits. This set the deadline and mathematical parameters for all auto rate filings in Ontario.
 
 ## Structural Requirements & Timelines
-- **Filing Paths Established:** 
+- **Filing Paths Established:**
     1. *Accelerated Path:* Open after August 1, 2025, offering a guaranteed review within 30 business days for standard implementations.
     2. *Non-Accelerated Path:* Open until September 30, 2025, targeting final regulatory approvals before the end of Q4 2025.
 - **Product Benchmarks:** Defined mandatory product benchmark assumptions and cost rating factors that insurers must reference when itemizing individual optional benefit premiums.

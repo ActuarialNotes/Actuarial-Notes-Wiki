@@ -5,6 +5,7 @@ import {
   toTimelineEntries,
   buildMonthCounts,
   entriesForMonth,
+  entriesNewestFirst,
   latestPopulatedMonth,
   searchTimelineEntries,
   entryToRef,
@@ -82,6 +83,18 @@ describe('entriesForMonth', () => {
     ])
     const cell = entriesForMonth(entries, 1987, 6)
     expect(cell.map(e => e.title)).toEqual(['Milestone', 'OSFI', 'Book Z'])
+  })
+})
+
+describe('entriesNewestFirst', () => {
+  it('sorts entries most recent first, events before books on ties', () => {
+    const entries = toTimelineEntries([
+      raw({ date: '1762-09-07', title: 'old' }),
+      raw({ date: '2023-01-01', title: 'newer' }),
+      raw({ date: '2010-09-01', title: 'mid', kind: 'book' }),
+      raw({ date: '2010-09-01', title: 'mid event', kind: 'event' }),
+    ])
+    expect(entriesNewestFirst(entries).map(e => e.title)).toEqual(['newer', 'mid event', 'mid', 'old'])
   })
 })
 

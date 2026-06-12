@@ -9,6 +9,8 @@
 // Nothing here imports the virtual module, so every function below is unit
 // testable in isolation (see resourceTimeline.test.ts).
 
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
+
 export type TimelineKind = 'book' | 'event' | 'regulation' | 'benchmark'
 
 /** Shape emitted by the build-time plugin. */
@@ -110,4 +112,41 @@ export function latestPopulatedMonth(entries: TimelineEntry[]): { year: number; 
     }
   }
   return best
+}
+
+/**
+ * Keyword search over timeline entries (title, name, summary, issuing body,
+ * author, publisher, jurisdiction, status). Every whitespace-separated term in
+ * `query` must match somewhere (AND semantics); a blank query matches nothing.
+ */
+export function searchTimelineEntries(entries: TimelineEntry[], query: string): TimelineEntry[] {
+  const terms = query.toLowerCase().split(/\s+/).filter(Boolean)
+  if (terms.length === 0) return []
+  return entries.filter(entry => {
+    const haystack = [
+      entry.title,
+      entry.name,
+      entry.summary,
+      entry.issuingBody,
+      entry.author,
+      entry.publisher,
+      entry.jurisdiction,
+      entry.status,
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+    return terms.every(term => haystack.includes(term))
+  })
+}
+
+// Map a timeline entry to a popup-viewer ref. Books open as 'resource' (so the
+// metadata card renders); events/regulation open via their explicit repo path,
+// which also handles the `type: event` file that lives in Resources/Regulation/.
+export function entryToRef(entry: TimelineEntry): WikiEntryRef {
+  const kind: WikiEntryRef['kind'] =
+    entry.kind === 'book' || entry.kind === 'benchmark' ? 'resource'
+    : entry.kind === 'regulation' ? 'regulation'
+    : 'event'
+  return { kind, name: entry.name, path: entry.path }
 }

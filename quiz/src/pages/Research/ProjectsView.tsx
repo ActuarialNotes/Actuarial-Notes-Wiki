@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { Loader2, FolderOpen, ChevronLeft, Trash2, FileText, FolderPlus, Sparkles, Settings2 } from 'lucide-react'
+import { Loader2, FolderOpen, ChevronLeft, Trash2, FileText, FolderPlus, Sparkles, Settings2, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useResearchStore } from '@/stores/researchStore'
-import { useResearchProjects, useProjectDocuments, type ResearchProject } from '@/hooks/useResearchProjects'
+import { useResearchProjects, useProjectDocuments, useProjectWikiItems, type ResearchProject } from '@/hooks/useResearchProjects'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { entryRefToRepoPath, type WikiEntryKind } from '@/lib/wikiRoutes'
 import { NewProjectDialog } from '@/components/research/NewProjectDialog'
 import { EditProjectScopeDialog } from '@/components/research/EditProjectScopeDialog'
 import { SuggestedResources } from '@/components/research/SuggestedResources'
@@ -108,6 +110,12 @@ function ProjectList() {
                         <FileText className="h-3 w-3" aria-hidden />
                         {p.documentCount} doc{p.documentCount !== 1 ? 's' : ''}
                       </span>
+                      {p.wikiItemCount > 0 && (
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <BookOpen className="h-3 w-3" aria-hidden />
+                          {p.wikiItemCount} page{p.wikiItemCount !== 1 ? 's' : ''}
+                        </span>
+                      )}
                       {badges.map(b => <MetaBadge key={b}>{b}</MetaBadge>)}
                     </span>
                   </span>
@@ -139,7 +147,7 @@ function ProjectDetail({ projectId }: { projectId: string }) {
   const setOpenProject = useResearchStore(s => s.setOpenProject)
   const setTab = useResearchStore(s => s.setTab)
   const setAddSourcesProject = useResearchStore(s => s.setAddSourcesProject)
-  const { projects, addDocument, updateProjectOnboarding } = useResearchProjects()
+  const { projects, addDocument, removeWikiItem, updateProjectOnboarding } = useResearchProjects()
   const [refreshKey, setRefreshKey] = useState(0)
   const [showEditScope, setShowEditScope] = useState(false)
   const { documents, documentIds, loading } = useProjectDocuments(projectId, refreshKey)
@@ -215,6 +223,13 @@ function ProjectDetail({ projectId }: { projectId: string }) {
               onProjectMutated={() => setRefreshKey(k => k + 1)}
             />
           </div>
+
+          <SavedWikiItems
+            projectId={projectId}
+            refreshKey={refreshKey}
+            onRemove={removeWikiItem}
+            onMutated={() => setRefreshKey(k => k + 1)}
+          />
         </div>
       )}
 
@@ -224,6 +239,62 @@ function ProjectDetail({ projectId }: { projectId: string }) {
           onClose={() => setShowEditScope(false)}
           onSave={onboarding => updateProjectOnboarding(project.id, onboarding)}
         />
+      )}
+    </div>
+  )
+}
+
+// ── Saved wiki pages ───────────────────────────────────────────────────────
+// Concept/resource/regulation pages saved from the wiki popup's "Add to
+// Project" menu item (components/wiki/AddToProjectMenuItem.tsx).
+
+function SavedWikiItems({
+  projectId,
+  refreshKey,
+  onRemove,
+  onMutated,
+}: {
+  projectId: string
+  refreshKey: number
+  onRemove: (projectId: string, kind: WikiEntryKind, name: string) => Promise<void>
+  onMutated: () => void
+}) {
+  const { items, loading } = useProjectWikiItems(projectId, refreshKey)
+  const openAt = useConceptPopup(s => s.openAt)
+
+  if (!loading && items.length === 0) return null
+
+  return (
+    <div className="space-y-3">
+      <h3 className="text-sm font-semibold text-muted-foreground">Saved Pages</h3>
+      {loading ? (
+        <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> Loading pages…
+        </div>
+      ) : (
+        <ul className="space-y-2">
+          {items.map(item => (
+            <li key={`${item.kind}:${item.name}`} className="flex items-center gap-3 rounded-lg border bg-card p-3">
+              <button
+                type="button"
+                onClick={() => openAt([item], 0, entryRefToRepoPath(item))}
+                className="flex flex-1 items-center gap-2 min-w-0 text-left"
+              >
+                <BookOpen className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+                <span className="min-w-0 flex-1 truncate text-sm font-medium">{item.name}</span>
+                <MetaBadge>{item.kind}</MetaBadge>
+              </button>
+              <button
+                type="button"
+                onClick={() => onRemove(projectId, item.kind, item.name).then(onMutated)}
+                className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                aria-label={`Remove ${item.name}`}
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   )

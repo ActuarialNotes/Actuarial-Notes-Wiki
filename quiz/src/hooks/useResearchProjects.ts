@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { ResearchDocumentRow } from '@/hooks/useResearchFeed'
+import type { WikiEntryKind, WikiEntryRef } from '@/lib/wikiRoutes'
 
 // Onboarding metadata captured when a project is created (all optional so older
 // projects still load). See researchProjectMeta.ts for the value vocabularies.
@@ -19,6 +20,7 @@ export interface ResearchProject {
   created_at: string
   updated_at: string
   documentCount: number
+  wikiItemCount: number
   documentType: string | null
   jurisdictionCountry: string | null
   jurisdictionRegion: string | null
@@ -44,6 +46,7 @@ interface ProjectRow {
   line_of_business: string | null
   departments: string[] | null
   research_project_documents: { count: number }[]
+  research_project_wiki_items: { count: number }[]
 }
 
 const PROJECT_COLUMNS =
@@ -58,6 +61,7 @@ function mapProjectRow(p: ProjectRow): ResearchProject {
     created_at: p.created_at,
     updated_at: p.updated_at,
     documentCount: p.research_project_documents?.[0]?.count ?? 0,
+    wikiItemCount: p.research_project_wiki_items?.[0]?.count ?? 0,
     documentType: p.document_type,
     jurisdictionCountry: p.jurisdiction_country,
     jurisdictionRegion: p.jurisdiction_region,
@@ -75,7 +79,7 @@ export function useResearchProjects() {
   const refresh = useCallback(async () => {
     const { data, error } = await supabase
       .from('research_projects')
-      .select(`${PROJECT_COLUMNS}, research_project_documents(count)`)
+      .select(`${PROJECT_COLUMNS}, research_project_documents(count), research_project_wiki_items(count)`)
       .order('updated_at', { ascending: false })
 
     if (error) {
@@ -111,7 +115,11 @@ export function useResearchProjects() {
       .single()
     if (error || !data) return null
     await refresh()
-    return mapProjectRow({ ...(data as ProjectRow), research_project_documents: [{ count: 0 }] })
+    return mapProjectRow({
+      ...(data as ProjectRow),
+      research_project_documents: [{ count: 0 }],
+      research_project_wiki_items: [{ count: 0 }],
+    })
   }, [refresh])
 
   const renameProject = useCallback(async (id: string, name: string, description?: string) => {
@@ -160,7 +168,17 @@ export function useResearchProjects() {
     await refresh()
   }, [refresh])
 
-  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, deleteProject, addDocument, removeDocument }
+  const removeWikiItem = useCallback(async (projectId: string, kind: WikiEntryKind, name: string) => {
+    await supabase
+      .from('research_project_wiki_items')
+      .delete()
+      .eq('project_id', projectId)
+      .eq('kind', kind)
+      .eq('name', name)
+    await refresh()
+  }, [refresh])
+
+  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, deleteProject, addDocument, removeDocument, removeWikiItem }
 }
 
 interface ProjectDocsState {
@@ -207,6 +225,52 @@ export function useProjectDocuments(projectId: string | null, refreshKey = 0) {
         const rows = (data ?? [])
         const documents = rows.map(r => r.research_documents).filter((d): d is ResearchDocumentRow => d !== null)
         setState({ documents, documentIds: rows.map(r => r.document_id), loading: false, error: null })
+      })
+
+    return () => { cancelled = true }
+  }, [projectId, refreshKey])
+
+  return state
+}
+
+interface ProjectWikiItemsState {
+  items: WikiEntryRef[]
+  loading: boolean
+  error: string | null
+}
+
+interface WikiItemRow {
+  kind: WikiEntryKind
+  name: string
+  path: string | null
+}
+
+// The wiki pages (concepts/resources/exams/events/regulations) saved into a
+// project via "Add to Project", newest-added first.
+export function useProjectWikiItems(projectId: string | null, refreshKey = 0) {
+  const [state, setState] = useState<ProjectWikiItemsState>({ items: [], loading: true, error: null })
+
+  useEffect(() => {
+    if (!projectId) {
+      setState({ items: [], loading: false, error: null })
+      return
+    }
+    let cancelled = false
+    setState(s => ({ ...s, loading: true, error: null }))
+
+    supabase
+      .from('research_project_wiki_items')
+      .select('kind, name, path')
+      .eq('project_id', projectId)
+      .order('added_at', { ascending: false })
+      .then(({ data, error }: { data: WikiItemRow[] | null; error: { message: string } | null }) => {
+        if (cancelled) return
+        if (error) {
+          setState({ items: [], loading: false, error: error.message })
+          return
+        }
+        const items = (data ?? []).map(r => ({ kind: r.kind, name: r.name, path: r.path ?? undefined }))
+        setState({ items, loading: false, error: null })
       })
 
     return () => { cancelled = true }

@@ -15,7 +15,7 @@ import {
 export const FIELD =
   'w-full rounded-md border border-input bg-background px-3 py-2 text-[16px] sm:text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
 
-function chipClass(active: boolean): string {
+export function chipClass(active: boolean): string {
   return `rounded-full border px-3 py-1.5 text-sm transition-colors ${
     active
       ? 'border-primary bg-primary/10 text-primary'

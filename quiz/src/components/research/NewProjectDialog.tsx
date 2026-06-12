@@ -1,41 +1,26 @@
 import { useEffect, useState } from 'react'
-import { Loader2, X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Loader2, X, Check, ChevronLeft, ChevronRight, Lightbulb } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { PROJECT_DOCUMENT_TYPES } from '@/lib/researchProjectMeta'
-import {
-  FIELD,
-  Field,
-  DocumentTypeField,
-  JurisdictionField,
-  LineOfBusinessField,
-  DepartmentsField,
-} from './ProjectScopeFields'
+import { PROJECT_DOCUMENT_TYPES, PROJECT_STARTERS, type ProjectStarter } from '@/lib/researchProjectMeta'
+import { FIELD, Field, DocumentTypeField } from './ProjectScopeFields'
 import type { ProjectOnboarding } from '@/hooks/useResearchProjects'
 
 interface NewProjectDialogProps {
   onClose: () => void
-  onCreate: (name: string, description: string, onboarding: ProjectOnboarding) => Promise<void>
+  onCreate: (name: string, onboarding: ProjectOnboarding) => Promise<void>
 }
 
-const STEPS = ['Basics', 'Type', 'Scope', 'Agents'] as const
+const STEPS = ['Basics', 'Type'] as const
 
-// Steps where the choice is optional — a "Skip" link lets a user move on
-// without deciding, leaving the field unset (changeable later from the
-// project's "Edit scope" action).
-const SKIPPABLE_STEPS = new Set([1, 2])
-
-// Project onboarding as a short, 4-step wizard: Basics (name + what you're
-// working on), Type (document type), Scope (jurisdiction + line of business),
-// and Agents (which departments' lens the AI applies). Only the name is
-// required — Type and Scope can be skipped and changed later from the
-// project's "Edit scope" action; the goal is a fast, low-friction start with
-// one decision-cluster per page.
+// Project onboarding as a fast, 2-step wizard: Basics (name, with color-coded
+// starter ideas to seed it) and Type (document type, then Create). Jurisdiction,
+// line of business, and review agents get sensible defaults here — either from a
+// picked starter or the existing baseline (Canada, actuarial + underwriting) —
+// and stay editable later from the project's "Edit scope" action.
 export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
   const [documentType, setDocumentType] = useState<string | null>(PROJECT_DOCUMENT_TYPES[0].slug)
-  const [country, setCountry] = useState<string | null>('CA')
   const [region, setRegion] = useState<string>('')
   const [lob, setLob] = useState<string | null>(null)
   const [departments, setDepartments] = useState<string[]>(['actuarial', 'underwriting'])
@@ -56,16 +41,20 @@ export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
   const isLast = step === STEPS.length - 1
   const canAdvance = step > 0 || name.trim().length > 0
 
-  function toggleDept(slug: string) {
-    setDepartments(prev => (prev.includes(slug) ? prev.filter(d => d !== slug) : [...prev, slug]))
+  function pickStarter(starter: ProjectStarter) {
+    setName(starter.name)
+    setDocumentType(starter.documentType)
+    setRegion(starter.jurisdictionRegion ?? '')
+    setLob(starter.lineOfBusiness)
+    setDepartments(starter.departments)
   }
 
   async function handleCreate() {
     if (!name.trim() || submitting) return
     setSubmitting(true)
-    await onCreate(name, description, {
+    await onCreate(name, {
       documentType,
-      jurisdictionCountry: country,
+      jurisdictionCountry: 'CA',
       jurisdictionRegion: region || null,
       lineOfBusiness: lob,
       departments,
@@ -81,16 +70,6 @@ export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
   function handleNext(e: React.FormEvent) {
     e.preventDefault()
     if (canAdvance) advance()
-  }
-
-  function handleSkip() {
-    if (step === 1) setDocumentType(null)
-    if (step === 2) {
-      setCountry(null)
-      setRegion('')
-      setLob(null)
-    }
-    advance()
   }
 
   return (
@@ -153,37 +132,31 @@ export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
                     className={FIELD}
                   />
                 </Field>
-                <Field title="What are you working on?" hint="Helps us suggest relevant resources to start.">
-                  <textarea
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    placeholder="Briefly describe the question, reg change, or filing you're analyzing…"
-                    rows={3}
-                    maxLength={500}
-                    className={`${FIELD} resize-none`}
-                  />
+                <Field title="Or start from an idea">
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {PROJECT_STARTERS.map(starter => {
+                      const active = name === starter.name
+                      return (
+                        <button
+                          key={starter.name}
+                          type="button"
+                          onClick={() => pickStarter(starter)}
+                          className={`flex items-start gap-2 rounded-lg border p-3 text-left text-sm transition-colors ${starter.color.card} ${
+                            active ? 'border-primary' : 'border-transparent'
+                          }`}
+                        >
+                          <Lightbulb className={`mt-0.5 h-4 w-4 shrink-0 ${starter.color.icon}`} aria-hidden />
+                          <span className={`font-medium ${starter.color.text}`}>{starter.name}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
                 </Field>
               </>
             )}
 
             {step === 1 && (
               <DocumentTypeField value={documentType} onChange={setDocumentType} />
-            )}
-
-            {step === 2 && (
-              <>
-                <JurisdictionField
-                  country={country}
-                  region={region}
-                  onCountryChange={c => { setCountry(c); setRegion('') }}
-                  onRegionChange={setRegion}
-                />
-                <LineOfBusinessField value={lob} onChange={setLob} />
-              </>
-            )}
-
-            {step === 3 && (
-              <DepartmentsField value={departments} onToggle={toggleDept} />
             )}
           </div>
 
@@ -196,17 +169,10 @@ export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
             >
               {step === 0 ? 'Cancel' : <><ChevronLeft className="h-4 w-4" /> Back</>}
             </Button>
-            <div className="flex items-center gap-2">
-              {SKIPPABLE_STEPS.has(step) && (
-                <Button type="button" variant="ghost" onClick={handleSkip}>
-                  Skip
-                </Button>
-              )}
-              <Button type="submit" disabled={!canAdvance || submitting} className="gap-1.5">
-                {submitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
-                {isLast ? 'Create project' : <>Next <ChevronRight className="h-4 w-4" /></>}
-              </Button>
-            </div>
+            <Button type="submit" disabled={!canAdvance || submitting} className="gap-1.5">
+              {submitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
+              {isLast ? 'Create project' : <>Next <ChevronRight className="h-4 w-4" /></>}
+            </Button>
           </div>
         </form>
       </div>

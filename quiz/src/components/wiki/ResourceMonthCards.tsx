@@ -88,32 +88,36 @@ export function EntryCard({ entry, onOpen }: { entry: TimelineEntry; onOpen: (en
 
 interface Props {
   entries: TimelineEntry[]
-  year: number
-  month: number
+  /** The selected (year, month) cell, or null to show all resources. */
+  selected: { year: number; month: number } | null
   onClear: () => void
   onOpenEntry: (entry: TimelineEntry) => void
 }
 
-export function ResourceMonthCards({ entries, year, month, onClear, onOpenEntry }: Props) {
+export function ResourceMonthCards({ entries, selected, onClear, onOpenEntry }: Props) {
+  const heading = selected ? `${MONTH_LONG[selected.month]} ${selected.year}` : 'All resources'
+  const emptyMessage = selected ? 'Nothing recorded this month.' : 'No resources match the current filters.'
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">
-          {MONTH_LONG[month]} {year}
+          {heading}
           <span className="ml-2 font-normal text-muted-foreground">
             {entries.length} item{entries.length === 1 ? '' : 's'}
           </span>
         </h3>
-        <button
-          type="button"
-          onClick={onClear}
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <X className="h-3.5 w-3.5" /> Clear
-        </button>
+        {selected && (
+          <button
+            type="button"
+            onClick={onClear}
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <X className="h-3.5 w-3.5" /> Clear
+          </button>
+        )}
       </div>
       {entries.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Nothing recorded this month.</p>
+        <p className="text-sm text-muted-foreground">{emptyMessage}</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {entries.map(entry => (

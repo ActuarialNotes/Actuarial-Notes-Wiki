@@ -90,16 +90,25 @@ export function buildMonthCounts(entries: TimelineEntry[]): Map<string, number> 
   return counts
 }
 
+/** Tie-break order for entries that land in the same cell or share a date. */
+const KIND_ORDER: Record<TimelineKind, number> = { event: 0, regulation: 1, benchmark: 2, book: 3 }
+
 /** All entries for a given (year, month) cell, sorted books-last then by title. */
 export function entriesForMonth(
   entries: TimelineEntry[],
   year: number,
   month: number,
 ): TimelineEntry[] {
-  const kindOrder: Record<TimelineKind, number> = { event: 0, regulation: 1, benchmark: 2, book: 3 }
   return entries
     .filter(e => e.year === year && (e.month ?? 0) === month)
-    .sort((a, b) => kindOrder[a.kind] - kindOrder[b.kind] || a.title.localeCompare(b.title))
+    .sort((a, b) => KIND_ORDER[a.kind] - KIND_ORDER[b.kind] || a.title.localeCompare(b.title))
+}
+
+/** All entries, most recent first — used for the "All resources" list view. */
+export function entriesNewestFirst(entries: TimelineEntry[]): TimelineEntry[] {
+  return [...entries].sort((a, b) =>
+    b.date.localeCompare(a.date) || KIND_ORDER[a.kind] - KIND_ORDER[b.kind] || a.title.localeCompare(b.title),
+  )
 }
 
 /** The most recent (year, month) cell that has at least one entry, if any. */

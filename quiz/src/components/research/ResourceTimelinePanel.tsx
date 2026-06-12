@@ -4,7 +4,7 @@ import rawTimeline from 'virtual:resource-timeline'
 import {
   toTimelineEntries,
   entriesForMonth,
-  latestPopulatedMonth,
+  entriesNewestFirst,
   entryToRef,
 } from '@/lib/resourceTimeline'
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
@@ -18,24 +18,23 @@ export function ResourceTimelinePanel() {
   const allEntries = useMemo(() => toTimelineEntries(rawTimeline), [])
   const filters = useResearchStore(s => s.filters)
   const entries = useMemo(() => filterTimelineEntries(allEntries, filters), [allEntries, filters])
-  const [selected, setSelected] = useState<{ year: number; month: number } | null>(
-    () => latestPopulatedMonth(entries),
-  )
+  // No month selected → show all resources matching the active filters.
+  const [selected, setSelected] = useState<{ year: number; month: number } | null>(null)
 
   // Re-anchor the selection when the filters narrow the entries (e.g. the
   // previously selected month no longer has anything in it).
   useEffect(() => {
     setSelected(prev => {
       if (prev && entriesForMonth(entries, prev.year, prev.month).length > 0) return prev
-      return latestPopulatedMonth(entries)
+      return null
     })
     // entries already depends on filters; re-run only when it changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entries])
 
   const openAt = useConceptPopup(s => s.openAt)
-  const monthEntries = useMemo(
-    () => selected ? entriesForMonth(entries, selected.year, selected.month) : [],
+  const displayedEntries = useMemo(
+    () => selected ? entriesForMonth(entries, selected.year, selected.month) : entriesNewestFirst(entries),
     [entries, selected],
   )
 
@@ -56,15 +55,12 @@ export function ResourceTimelinePanel() {
             onSelectMonth={(year, month) => setSelected({ year, month })}
           />
 
-          {selected && (
-            <ResourceMonthCards
-              entries={monthEntries}
-              year={selected.year}
-              month={selected.month}
-              onClear={() => setSelected(null)}
-              onOpenEntry={entry => openAt([entryToRef(entry)], 0, entry.path)}
-            />
-          )}
+          <ResourceMonthCards
+            entries={displayedEntries}
+            selected={selected}
+            onClear={() => setSelected(null)}
+            onOpenEntry={entry => openAt([entryToRef(entry)], 0, entry.path)}
+          />
         </>
       )}
     </section>

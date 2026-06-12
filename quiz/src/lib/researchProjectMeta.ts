@@ -123,3 +123,54 @@ export function departmentMeta(slug: string): DepartmentMeta | undefined {
 export function departmentLabels(slugs: string[] | null | undefined): string[] {
   return (slugs ?? []).map(s => departmentMeta(s)?.label ?? s)
 }
+
+// ── Project starters ──────────────────────────────────────────────────────────
+// A handful of example project ideas shown on the "New project" Basics step,
+// color-coded like the Flashcards pack cards so the onboarding screen reads as
+// a set of ready-to-go starting points rather than a bare form. Picking one
+// fills in the name and seeds sensible type/jurisdiction/line-of-business/agent
+// defaults for the Type step — all still editable later via "Edit scope".
+
+export interface ProjectStarter {
+  name: string
+  documentType: string
+  jurisdictionRegion: string | null
+  lineOfBusiness: string | null
+  departments: string[]
+  color: { card: string; text: string; icon: string }
+}
+
+export const PROJECT_STARTERS: readonly ProjectStarter[] = [
+  {
+    name: 'Ontario auto reform 2026 impact',
+    documentType: 'research_report',
+    jurisdictionRegion: 'ON',
+    lineOfBusiness: 'personal_auto',
+    departments: ['actuarial', 'underwriting'],
+    color: { card: 'bg-blue-500/10 hover:bg-blue-500/15', text: 'text-blue-700 dark:text-blue-300', icon: 'text-blue-500' },
+  },
+  {
+    name: 'Alberta auto rate filing benchmark',
+    documentType: 'actuarial_justification',
+    jurisdictionRegion: 'AB',
+    lineOfBusiness: 'personal_auto',
+    departments: ['actuarial'],
+    color: { card: 'bg-emerald-500/10 hover:bg-emerald-500/15', text: 'text-emerald-700 dark:text-emerald-300', icon: 'text-emerald-500' },
+  },
+  {
+    name: 'BC claims trend review',
+    documentType: 'research_report',
+    jurisdictionRegion: 'BC',
+    lineOfBusiness: 'personal_auto',
+    departments: ['claims', 'actuarial'],
+    color: { card: 'bg-violet-500/10 hover:bg-violet-500/15', text: 'text-violet-700 dark:text-violet-300', icon: 'text-violet-500' },
+  },
+  {
+    name: 'Quebec product compliance check',
+    documentType: 'research_report',
+    jurisdictionRegion: 'QC',
+    lineOfBusiness: 'personal_auto',
+    departments: ['legal_compliance', 'product'],
+    color: { card: 'bg-orange-500/10 hover:bg-orange-500/15', text: 'text-orange-700 dark:text-orange-300', icon: 'text-orange-500' },
+  },
+]

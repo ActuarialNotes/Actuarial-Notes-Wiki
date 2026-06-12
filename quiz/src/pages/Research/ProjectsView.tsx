@@ -7,6 +7,7 @@ import { NewProjectDialog } from '@/components/research/NewProjectDialog'
 import { EditProjectScopeDialog } from '@/components/research/EditProjectScopeDialog'
 import { SuggestedResources } from '@/components/research/SuggestedResources'
 import { DiscoverResources } from '@/components/research/DiscoverResources'
+import { ProjectFaq } from '@/components/research/ProjectFaq'
 import {
   documentTypeMeta,
   countryMeta,
@@ -53,10 +54,9 @@ function ProjectList() {
 
   const handleCreate = async (
     name: string,
-    description: string,
     onboarding: Parameters<typeof createProject>[2],
   ) => {
-    const project = await createProject(name, description, onboarding)
+    const project = await createProject(name, undefined, onboarding)
     setShowDialog(false)
     if (project) setOpenProject(project.id)
   }
@@ -136,13 +136,13 @@ function ProjectList() {
 
 // ── Project detail (scoped Resources view) ────────────────────────────────────
 
-type DetailView = 'sources' | 'discover'
+type DetailView = 'ask' | 'sources' | 'discover'
 
 function ProjectDetail({ projectId }: { projectId: string }) {
   const setOpenProject = useResearchStore(s => s.setOpenProject)
   const { projects, addDocument, updateProjectOnboarding } = useResearchProjects()
   const [refreshKey, setRefreshKey] = useState(0)
-  const [view, setView] = useState<DetailView>('sources')
+  const [view, setView] = useState<DetailView>('ask')
   const [showEditScope, setShowEditScope] = useState(false)
   const { documents, documentIds, loading } = useProjectDocuments(projectId, refreshKey)
 
@@ -188,7 +188,7 @@ function ProjectDetail({ projectId }: { projectId: string }) {
       </div>
 
       <div className="flex gap-1 rounded-lg border bg-card p-1">
-        {([['sources', 'Sources & analysis'], ['discover', 'Discover & add']] as const).map(([id, label]) => (
+        {([['ask', 'Ask'], ['sources', 'Sources & analysis'], ['discover', 'Discover & add']] as const).map(([id, label]) => (
           <button
             key={id}
             type="button"
@@ -206,6 +206,8 @@ function ProjectDetail({ projectId }: { projectId: string }) {
         <div className="flex items-center justify-center gap-2 py-12 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Loading project…
         </div>
+      ) : view === 'ask' ? (
+        project ? <ProjectFaq project={project} onDocumentsAdded={() => setRefreshKey(k => k + 1)} /> : null
       ) : view === 'discover' ? (
         <DiscoverResources existingIds={documentIds} onAdd={handleAdd} />
       ) : (

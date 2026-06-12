@@ -122,6 +122,23 @@ export function useResearchProjects() {
     await refresh()
   }, [refresh])
 
+  // Revisit the type/jurisdiction/line-of-business/agents choices made (or
+  // skipped) during the New project wizard.
+  const updateProjectOnboarding = useCallback(async (id: string, onboarding: ProjectOnboarding) => {
+    await supabase
+      .from('research_projects')
+      .update({
+        document_type: onboarding.documentType ?? null,
+        jurisdiction_country: onboarding.jurisdictionCountry ?? null,
+        jurisdiction_region: onboarding.jurisdictionRegion ?? null,
+        line_of_business: onboarding.lineOfBusiness ?? null,
+        departments: onboarding.departments ?? [],
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+    await refresh()
+  }, [refresh])
+
   const deleteProject = useCallback(async (id: string) => {
     await supabase.from('research_projects').delete().eq('id', id)
     await refresh()
@@ -143,7 +160,7 @@ export function useResearchProjects() {
     await refresh()
   }, [refresh])
 
-  return { ...state, refresh, createProject, renameProject, deleteProject, addDocument, removeDocument }
+  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, deleteProject, addDocument, removeDocument }
 }
 
 interface ProjectDocsState {

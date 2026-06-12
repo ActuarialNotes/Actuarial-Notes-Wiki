@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Loader2, FolderOpen, ChevronLeft, Trash2, FileText, FolderPlus, Sparkles } from 'lucide-react'
+import { Loader2, FolderOpen, ChevronLeft, Trash2, FileText, FolderPlus, Sparkles, Settings2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useResearchStore } from '@/stores/researchStore'
 import { useResearchProjects, useProjectDocuments, type ResearchProject } from '@/hooks/useResearchProjects'
 import { NewProjectDialog } from '@/components/research/NewProjectDialog'
+import { EditProjectScopeDialog } from '@/components/research/EditProjectScopeDialog'
 import { SuggestedResources } from '@/components/research/SuggestedResources'
 import { DiscoverResources } from '@/components/research/DiscoverResources'
 import {
@@ -139,9 +140,10 @@ type DetailView = 'sources' | 'discover'
 
 function ProjectDetail({ projectId }: { projectId: string }) {
   const setOpenProject = useResearchStore(s => s.setOpenProject)
-  const { projects, addDocument } = useResearchProjects()
+  const { projects, addDocument, updateProjectOnboarding } = useResearchProjects()
   const [refreshKey, setRefreshKey] = useState(0)
   const [view, setView] = useState<DetailView>('sources')
+  const [showEditScope, setShowEditScope] = useState(false)
   const { documents, documentIds, loading } = useProjectDocuments(projectId, refreshKey)
 
   const project = projects.find(p => p.id === projectId)
@@ -166,16 +168,23 @@ function ProjectDetail({ projectId }: { projectId: string }) {
       <div className="space-y-2">
         <h2 className="text-lg font-semibold">{project?.name ?? 'Project'}</h2>
         {project?.description && <p className="text-sm text-muted-foreground">{project.description}</p>}
-        {(badges.length > 0 || agents.length > 0) && (
-          <div className="flex flex-wrap items-center gap-1.5">
-            {badges.map(b => <MetaBadge key={b}>{b}</MetaBadge>)}
-            {agents.length > 0 && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
-                <Sparkles className="h-3 w-3" aria-hidden /> {agents.join(' · ')}
-              </span>
-            )}
-          </div>
-        )}
+        <div className="flex flex-wrap items-center gap-1.5">
+          {badges.map(b => <MetaBadge key={b}>{b}</MetaBadge>)}
+          {agents.length > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+              <Sparkles className="h-3 w-3" aria-hidden /> {agents.join(' · ')}
+            </span>
+          )}
+          {project && (
+            <button
+              type="button"
+              onClick={() => setShowEditScope(true)}
+              className="inline-flex items-center gap-1 rounded-full border border-input px-2 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
+            >
+              <Settings2 className="h-3 w-3" aria-hidden /> Edit scope
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="flex gap-1 rounded-lg border bg-card p-1">
@@ -210,6 +219,14 @@ function ProjectDetail({ projectId }: { projectId: string }) {
             onProjectMutated={() => setRefreshKey(k => k + 1)}
           />
         </div>
+      )}
+
+      {showEditScope && project && (
+        <EditProjectScopeDialog
+          project={project}
+          onClose={() => setShowEditScope(false)}
+          onSave={onboarding => updateProjectOnboarding(project.id, onboarding)}
+        />
       )}
     </div>
   )

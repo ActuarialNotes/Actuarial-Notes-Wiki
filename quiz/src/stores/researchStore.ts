@@ -32,9 +32,13 @@ interface ResearchState {
   searchQuery: string
   // The project currently open in the Projects tab (null = project list view).
   openProjectId: string | null
+  // Set when "Add Sources" is used from a project — scopes the Resources tab's
+  // add actions to this project until cleared.
+  addSourcesProjectId: string | null
   setTab: (tab: ResearchTab) => void
   setSearchQuery: (query: string) => void
   setOpenProject: (projectId: string | null) => void
+  setAddSourcesProject: (projectId: string | null) => void
   toggleAgent: (agentId: string) => void
   toggleDocType: (docType: string) => void
   toggleProvince: (province: string) => void
@@ -53,9 +57,11 @@ export const useResearchStore = create<ResearchState>((set) => ({
   filters: EMPTY_FILTERS,
   searchQuery: '',
   openProjectId: null,
+  addSourcesProjectId: null,
   setTab: (tab) => set({ tab }),
   setSearchQuery: (searchQuery) => set({ searchQuery }),
   setOpenProject: (openProjectId) => set({ openProjectId }),
+  setAddSourcesProject: (addSourcesProjectId) => set({ addSourcesProjectId }),
   toggleAgent: (agentId) => set(state => ({
     filters: { ...state.filters, agentIds: toggle(state.filters.agentIds, agentId) },
   })),

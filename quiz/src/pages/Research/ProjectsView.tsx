@@ -6,7 +6,6 @@ import { useResearchProjects, useProjectDocuments, type ResearchProject } from '
 import { NewProjectDialog } from '@/components/research/NewProjectDialog'
 import { EditProjectScopeDialog } from '@/components/research/EditProjectScopeDialog'
 import { SuggestedResources } from '@/components/research/SuggestedResources'
-import { DiscoverResources } from '@/components/research/DiscoverResources'
 import { ProjectFaq } from '@/components/research/ProjectFaq'
 import {
   documentTypeMeta,
@@ -26,7 +25,7 @@ export default function ProjectsView() {
 
 function MetaBadge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
+    <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[11px] font-medium text-blue-700 dark:text-blue-300">
       {children}
     </span>
   )
@@ -136,13 +135,12 @@ function ProjectList() {
 
 // ── Project detail (scoped Resources view) ────────────────────────────────────
 
-type DetailView = 'ask' | 'sources' | 'discover'
-
 function ProjectDetail({ projectId }: { projectId: string }) {
   const setOpenProject = useResearchStore(s => s.setOpenProject)
+  const setTab = useResearchStore(s => s.setTab)
+  const setAddSourcesProject = useResearchStore(s => s.setAddSourcesProject)
   const { projects, addDocument, updateProjectOnboarding } = useResearchProjects()
   const [refreshKey, setRefreshKey] = useState(0)
-  const [view, setView] = useState<DetailView>('ask')
   const [showEditScope, setShowEditScope] = useState(false)
   const { documents, documentIds, loading } = useProjectDocuments(projectId, refreshKey)
 
@@ -187,39 +185,36 @@ function ProjectDetail({ projectId }: { projectId: string }) {
         </div>
       </div>
 
-      <div className="flex gap-1 rounded-lg border bg-card p-1">
-        {([['ask', 'Ask'], ['sources', 'Sources & analysis'], ['discover', 'Discover & add']] as const).map(([id, label]) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setView(id)}
-            className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-              view === id ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
       {loading ? (
         <div className="flex items-center justify-center gap-2 py-12 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Loading project…
         </div>
-      ) : view === 'ask' ? (
-        project ? <ProjectFaq project={project} onDocumentsAdded={() => setRefreshKey(k => k + 1)} /> : null
-      ) : view === 'discover' ? (
-        <DiscoverResources existingIds={documentIds} onAdd={handleAdd} />
       ) : (
         <div className="space-y-4">
-          {documents.length === 0 && (
-            <SuggestedResources project={project} existingIds={documentIds} onAdd={handleAdd} />
-          )}
-          <ResourcesView
-            projectId={projectId}
-            projectDocumentIds={documentIds}
-            onProjectMutated={() => setRefreshKey(k => k + 1)}
-          />
+          {project && <ProjectFaq project={project} onDocumentsAdded={() => setRefreshKey(k => k + 1)} />}
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-muted-foreground">Sources</h3>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => { setAddSourcesProject(projectId); setTab('resources') }}
+                className="gap-1.5"
+              >
+                <FolderPlus className="h-4 w-4" aria-hidden /> Add Sources
+              </Button>
+            </div>
+            {documents.length === 0 && (
+              <SuggestedResources project={project} existingIds={documentIds} onAdd={handleAdd} />
+            )}
+            <ResourcesView
+              projectId={projectId}
+              projectDocumentIds={documentIds}
+              onProjectMutated={() => setRefreshKey(k => k + 1)}
+            />
+          </div>
         </div>
       )}
 

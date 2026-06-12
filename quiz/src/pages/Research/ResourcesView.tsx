@@ -1,14 +1,10 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { Loader2, Trash2 } from 'lucide-react'
+import { Loader2, Trash2, Plus, Check } from 'lucide-react'
 import { useResearchFeed, type ResearchDocumentRow } from '@/hooks/useResearchFeed'
 import { useResearchSearch } from '@/hooks/useResearchSearch'
-import { useResearchQuery } from '@/hooks/useResearchQuery'
-import { useAddResourceByUrl } from '@/hooks/useAddResourceByUrl'
 import { useResearchStore } from '@/stores/researchStore'
 import { supabase } from '@/lib/supabase'
 import { DocumentCard } from '@/components/research/DocumentCard'
-import { ResearchSearchBar } from '@/components/research/ResearchSearchBar'
-import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
 import { AddToProjectButton } from '@/components/research/AddToProjectButton'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { ResourceTimelinePanel } from '@/components/research/ResourceTimelinePanel'
@@ -25,17 +21,25 @@ interface ResourcesViewProps {
   // Bumped by the page-level search bar after a corpus URL-add, so the browse
   // feed refetches to show the new document (non-project scope only).
   refreshNonce?: number
+  // "Add Sources" flow: when set (non-project scope), browse/search the corpus
+  // with a one-tap add into this project instead of the "Save to…" picker.
+  addToProjectId?: string | null
+  addToProjectIds?: string[]
+  onAddToProject?: (documentId: string) => Promise<void>
 }
 
-export default function ResourcesView({ projectId, projectDocumentIds, onProjectMutated, refreshNonce }: ResourcesViewProps) {
+export default function ResourcesView({
+  projectId, projectDocumentIds, onProjectMutated, refreshNonce,
+  addToProjectId, addToProjectIds, onAddToProject,
+}: ResourcesViewProps) {
   const searchQuery = useResearchStore(s => s.searchQuery).trim()
   const isProjectScope = projectId !== undefined
+  const isAddMode = !isProjectScope && !!addToProjectId
 
   const feed = useResearchFeed(isProjectScope ? (projectDocumentIds ?? []) : undefined)
   const search = useResearchSearch(isProjectScope ? (projectDocumentIds ?? []) : undefined)
-  const { loading: asking, error: askError, result, ask, reset } = useResearchQuery()
-  const addUrl = useAddResourceByUrl()
-  const [addNotice, setAddNotice] = useState<string | null>(null)
+  const [addingId, setAddingId] = useState<string | null>(null)
+  const [addedIds, setAddedIds] = useState<Set<string>>(new Set())
 
   // Refetch the corpus feed when the page-level search bar reports a URL-add.
   const didMountRef = useRef(false)
@@ -46,16 +50,11 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshNonce])
 
-  const handleAdd = async (url: string) => {
-    setAddNotice(null)
-    const res = await addUrl.add(url, projectId)
-    if (res) {
-      const verb = res.status === 'duplicate' ? 'Already in the corpus' : 'Added'
-      const review = res.document.is_in_review ? ' (pending review)' : ''
-      setAddNotice(`${verb}: ${res.document.title}${review}.`)
-      if (isProjectScope) onProjectMutated?.()
-      else feed.refresh()
-    }
+  const handleAddToProject = async (documentId: string) => {
+    setAddingId(documentId)
+    await onAddToProject?.(documentId)
+    setAddedIds(prev => new Set(prev).add(documentId))
+    setAddingId(null)
   }
 
   const removeFromProject = async (documentId: string) => {
@@ -80,6 +79,27 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
         </button>
       )
     }
+    if (isAddMode) {
+      const inProject = (addToProjectIds ?? []).includes(doc.id)
+      const added = addedIds.has(doc.id) || inProject
+      return (
+        <button
+          type="button"
+          onClick={() => handleAddToProject(doc.id)}
+          disabled={added || addingId === doc.id}
+          className="flex items-center gap-1 rounded-md border border-input px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground disabled:opacity-60"
+        >
+          {addingId === doc.id ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : added ? (
+            <Check className="h-3.5 w-3.5 text-primary" />
+          ) : (
+            <Plus className="h-3.5 w-3.5" />
+          )}
+          {inProject ? 'In project' : added ? 'Added' : 'Add'}
+        </button>
+      )
+    }
     return <AddToProjectButton documentId={doc.id} />
   }
 
@@ -87,34 +107,24 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
 
   return (
     <div className="space-y-5">
-      {/* In project scope the search/ask/add box lives here, scoped to the
-          project's sources. For the corpus view it lives at the page top
-          (Research/index.tsx) so search sits above the tabs like other tabs. */}
-      {isProjectScope && (
-        <>
-          <ResearchSearchBar
-            onAsk={q => ask(q, projectId)}
-            asking={asking}
-            onAddUrl={handleAdd}
-            addingUrl={addUrl.loading}
-            addError={addUrl.error}
-            addNotice={addNotice}
-            addContextLabel="Added sources are saved to this project."
-          />
-          <AiAnswerPanel loading={asking} error={askError} result={result} onDismiss={reset} />
-        </>
-      )}
-
       {searching ? (
         <>
           <ResearchFilterPanel />
           {!isProjectScope && <ResourceSearchMatches />}
           <SearchResults search={search} action={cardAction} />
         </>
-      ) : isProjectScope ? (
+      ) : isProjectScope || isAddMode ? (
         <>
           <ResearchFilterPanel />
-          <BrowseFeed feed={feed} action={cardAction} />
+          <BrowseFeed
+            feed={feed}
+            action={cardAction}
+            emptyMessage={
+              isAddMode
+                ? 'No documents available yet. Try searching the corpus above.'
+                : 'This project has no documents yet. Search the corpus and use “Save” on a result, or add a source by URL.'
+            }
+          />
         </>
       ) : (
         // Corpus view: everything here comes from the markdown vault
@@ -184,9 +194,11 @@ function SearchResults({
 function BrowseFeed({
   feed,
   action,
+  emptyMessage,
 }: {
   feed: ReturnType<typeof useResearchFeed>
   action: (doc: ResearchDocumentRow) => ReactNode
+  emptyMessage: string
 }) {
   const { documents, loading, loadingMore, error, hasMore, total, loadMore } = feed
 
@@ -201,7 +213,7 @@ function BrowseFeed({
   if (documents.length === 0) {
     return (
       <p className="mx-auto max-w-md py-16 text-center text-sm text-muted-foreground">
-        This project has no documents yet. Search the corpus and use “Save” on a result, or add a source by URL.
+        {emptyMessage}
       </p>
     )
   }

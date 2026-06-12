@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type ResearchTab = 'resources' | 'benchmarks' | 'projects'
+export type ResearchTab = 'resources' | 'projects'
 
 export interface ResearchFilters {
   agentIds: string[]
@@ -45,9 +45,9 @@ interface ResearchState {
   resetFilters: () => void
 }
 
-// Shared filter/tab state for the /research feature — Monitor, Ask, and
-// Benchmarks views all read from (and narrow) the same agent/province/date
-// selection so switching tabs doesn't lose the user's scoping.
+// Shared filter/tab state for the /research feature — Monitor and Ask views
+// all read from (and narrow) the same agent/province/date selection so
+// switching tabs doesn't lose the user's scoping.
 export const useResearchStore = create<ResearchState>((set) => ({
   tab: 'projects',
   filters: EMPTY_FILTERS,

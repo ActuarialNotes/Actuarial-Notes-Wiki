@@ -1,8 +1,8 @@
-// Canonical catalog of the benchmark metrics surfaced across the Research tab
-// (Benchmarks comparison table + trend chart, Monitor document chips). This is
-// the single source of truth for a metric's display label, unit, value
-// formatting, and whether a higher or lower value is "better" (used to colour
-// deltas green/red regardless of sign).
+// Canonical catalog of the benchmark metrics surfaced as chips on Research
+// document cards (Monitor / Resources feed). This is the single source of
+// truth for a metric's display label, unit, value formatting, and whether a
+// higher or lower value is "better" (used to colour deltas green/red
+// regardless of sign).
 //
 // NOTE: the ingestion side keeps a parallel list of canonical metric_name slugs
 // in `supabase/functions/_shared/research-adapters/extract.ts`

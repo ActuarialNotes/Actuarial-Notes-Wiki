@@ -18,7 +18,7 @@ export const TIMELINE_KINDS: TimelineKind[] = ['book', 'regulation', 'event', 'b
 
 /** Human-readable label for each kind, shared by the type filter pills and entry cards. */
 export const KIND_LABEL: Record<TimelineKind, string> = {
-  book: 'Resource',
+  book: 'Books',
   event: 'Event',
   regulation: 'Regulation',
   benchmark: 'Benchmark',

@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { Search, Sparkles, Loader2, Plus, X, FileText, ExternalLink } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
+import { Search, Sparkles, Loader2, Plus, X, FileText, Library, ExternalLink } from 'lucide-react'
+import rawTimeline from 'virtual:resource-timeline'
 import { useResearchStore } from '@/stores/researchStore'
 import { useResearchSearch } from '@/hooks/useResearchSearch'
 import { agentMeta } from '@/lib/researchOntology'
+import { toTimelineEntries, searchTimelineEntries, entryToRef, KIND_LABEL, type TimelineEntry } from '@/lib/resourceTimeline'
+import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 
 interface ResearchTopSearchProps {
   onAsk: (query: string) => void
@@ -18,6 +22,11 @@ interface ResearchTopSearchProps {
 function formatDate(iso: string): string {
   const d = new Date(iso)
   return isNaN(d.getTime()) ? '' : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+}
+
+function formatTimelineDate(entry: TimelineEntry): string {
+  if (entry.month === null) return String(entry.year)
+  return new Date(entry.year, entry.month).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
 }
 
 // Page-level corpus search for the Research tab, styled and positioned exactly
@@ -37,12 +46,24 @@ export function ResearchTopSearch({
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { results, loading } = useResearchSearch()
+  const filters = useResearchStore(s => s.filters)
+  const openConceptAt = useConceptPopup(s => s.openAt)
 
   // Debounce the keyword query that drives the results dropdown.
   useEffect(() => {
     const t = setTimeout(() => setSearchQuery(input.trim()), 200)
     return () => clearTimeout(t)
   }, [input, setSearchQuery])
+
+  // Keyword matches against the markdown-vault resource timeline (Books,
+  // Events, Regulation, Benchmark) — searched alongside the agent-fetched
+  // corpus (research_documents) so the top search covers all resource types.
+  const allTimelineEntries = useMemo(() => toTimelineEntries(rawTimeline), [])
+  const timelineMatches = useMemo(() => {
+    const query = input.trim()
+    if (!query) return []
+    return searchTimelineEntries(filterTimelineEntries(allTimelineEntries, filters), query).slice(0, 8)
+  }, [allTimelineEntries, filters, input])
 
   useEffect(() => {
     if (!active) return
@@ -134,14 +155,34 @@ export function ResearchTopSearch({
           {/* Results dropdown — only when there's a query */}
           {isExpanded && (
             <div className="border-t pb-3 pt-2">
-              {loading && results.length === 0 ? (
+              {loading && results.length === 0 && timelineMatches.length === 0 ? (
                 <div className="flex items-center gap-2 px-2 py-3 text-sm text-muted-foreground">
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Searching…
                 </div>
-              ) : results.length === 0 ? (
+              ) : results.length === 0 && timelineMatches.length === 0 ? (
                 <p className="px-2 py-3 text-xs text-muted-foreground">No matches.</p>
               ) : (
                 <ul className="max-h-[55vh] space-y-0.5 overflow-y-auto">
+                  {timelineMatches.map(entry => (
+                    <li key={`${entry.kind}:${entry.path}`}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActive(false)
+                          openConceptAt([entryToRef(entry)], 0, entry.path)
+                        }}
+                        className="flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-accent/60"
+                      >
+                        <Library className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" aria-hidden />
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm text-foreground">{entry.title}</span>
+                          <span className="block truncate text-[11px] text-muted-foreground">
+                            {[KIND_LABEL[entry.kind], formatTimelineDate(entry)].filter(Boolean).join(' · ')}
+                          </span>
+                        </span>
+                      </button>
+                    </li>
+                  ))}
                   {results.map(doc => (
                     <li key={doc.id}>
                       <a

@@ -11,6 +11,7 @@ import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { ResourceHeatmap } from '@/components/wiki/ResourceHeatmap'
 import { ResourceMonthCards } from '@/components/wiki/ResourceMonthCards'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
+import { ResourceKindFilterPills } from '@/components/research/ResourceKindFilterPills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useResearchStore } from '@/stores/researchStore'
 
@@ -18,6 +19,15 @@ export function ResourceTimelinePanel() {
   const allEntries = useMemo(() => toTimelineEntries(rawTimeline), [])
   const filters = useResearchStore(s => s.filters)
   const entries = useMemo(() => filterTimelineEntries(allEntries, filters), [allEntries, filters])
+
+  // Year range selected on the heatmap further narrows the entries shown below.
+  const [yearRange, setYearRange] = useState<[number, number] | null>(null)
+  const yearFilteredEntries = useMemo(() => {
+    if (!yearRange) return entries
+    const [start, end] = yearRange
+    return entries.filter(e => e.year >= start && e.year <= end)
+  }, [entries, yearRange])
+
   // No month selected → show all resources matching the active filters.
   const [selected, setSelected] = useState<{ year: number; month: number } | null>(null)
 
@@ -25,17 +35,17 @@ export function ResourceTimelinePanel() {
   // previously selected month no longer has anything in it).
   useEffect(() => {
     setSelected(prev => {
-      if (prev && entriesForMonth(entries, prev.year, prev.month).length > 0) return prev
+      if (prev && entriesForMonth(yearFilteredEntries, prev.year, prev.month).length > 0) return prev
       return null
     })
-    // entries already depends on filters; re-run only when it changes.
+    // yearFilteredEntries already depends on filters/yearRange; re-run only when it changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entries])
+  }, [yearFilteredEntries])
 
   const openAt = useConceptPopup(s => s.openAt)
   const displayedEntries = useMemo(
-    () => selected ? entriesForMonth(entries, selected.year, selected.month) : entriesNewestFirst(entries),
-    [entries, selected],
+    () => selected ? entriesForMonth(yearFilteredEntries, selected.year, selected.month) : entriesNewestFirst(yearFilteredEntries),
+    [yearFilteredEntries, selected],
   )
 
   return (
@@ -45,15 +55,19 @@ export function ResourceTimelinePanel() {
         Timeline
       </h2>
 
-      <ResearchFilterPanel />
-
       {allEntries.length > 0 && (
         <>
+          <ResourceKindFilterPills />
+
           <ResourceHeatmap
             entries={entries}
             selected={selected}
             onSelectMonth={(year, month) => setSelected({ year, month })}
+            yearRange={yearRange}
+            onYearRangeChange={setYearRange}
           />
+
+          <ResearchFilterPanel />
 
           <ResourceMonthCards
             entries={displayedEntries}

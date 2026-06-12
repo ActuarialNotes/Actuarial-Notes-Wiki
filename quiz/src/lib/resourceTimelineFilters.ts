@@ -54,9 +54,15 @@ function matchesDateRange(entry: TimelineEntry, dateFrom: string | null, dateTo:
   return true
 }
 
+function matchesDocTypes(entry: TimelineEntry, docTypes: string[]): boolean {
+  if (docTypes.length === 0) return true
+  return docTypes.includes(entry.kind)
+}
+
 /** Narrow timeline entries down to those matching the active Research filters. */
 export function filterTimelineEntries(entries: TimelineEntry[], filters: ResearchFilters): TimelineEntry[] {
   return entries.filter(entry =>
+    matchesDocTypes(entry, filters.docTypes) &&
     matchesAgents(entry, filters.agentIds) &&
     matchesProvinces(entry, filters.provinces) &&
     matchesLinesOfBusiness(entry, filters.linesOfBusiness) &&

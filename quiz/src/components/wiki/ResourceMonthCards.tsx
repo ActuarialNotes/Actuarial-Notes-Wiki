@@ -1,15 +1,8 @@
 import { X } from 'lucide-react'
-import type { TimelineEntry, TimelineKind } from '@/lib/resourceTimeline'
+import { KIND_LABEL, type TimelineEntry, type TimelineKind } from '@/lib/resourceTimeline'
 import { Card } from '@/components/ui/card'
 
 const MONTH_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
-const KIND_LABEL: Record<TimelineKind, string> = {
-  book: 'Resource',
-  event: 'Event',
-  regulation: 'Regulation',
-  benchmark: 'Benchmark',
-}
 
 const KIND_BADGE: Record<TimelineKind, string> = {
   book: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',

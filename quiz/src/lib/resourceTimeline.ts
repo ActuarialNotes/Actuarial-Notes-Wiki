@@ -13,6 +13,17 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 export type TimelineKind = 'book' | 'event' | 'regulation' | 'benchmark'
 
+/** All known timeline kinds, in display order for the type filter pills. */
+export const TIMELINE_KINDS: TimelineKind[] = ['book', 'regulation', 'event', 'benchmark']
+
+/** Human-readable label for each kind, shared by the type filter pills and entry cards. */
+export const KIND_LABEL: Record<TimelineKind, string> = {
+  book: 'Resource',
+  event: 'Event',
+  regulation: 'Regulation',
+  benchmark: 'Benchmark',
+}
+
 /** Shape emitted by the build-time plugin. */
 export interface TimelineRawEntry {
   id: string

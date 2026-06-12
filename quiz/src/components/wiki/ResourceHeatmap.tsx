@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { X } from 'lucide-react'
 import {
   type TimelineEntry,
@@ -23,9 +23,12 @@ interface Props {
   entries: TimelineEntry[]
   selected: { year: number; month: number } | null
   onSelectMonth: (year: number, month: number) => void
+  /** Year range selected via the slider, or null for the full span. Also narrows the results below. */
+  yearRange: [number, number] | null
+  onYearRangeChange: (value: [number, number] | null) => void
 }
 
-export function ResourceHeatmap({ entries, selected, onSelectMonth }: Props) {
+export function ResourceHeatmap({ entries, selected, onSelectMonth, yearRange, onYearRangeChange }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const minYear = TIMELINE_MIN_YEAR
@@ -33,10 +36,6 @@ export function ResourceHeatmap({ entries, selected, onSelectMonth }: Props) {
     () => Math.max(new Date().getFullYear(), ...entries.map(e => e.year)),
     [entries],
   )
-
-  // No range selected → show the full min/max span. The slider lets users
-  // narrow this to a sub-range.
-  const [yearRange, setYearRange] = useState<[number, number] | null>(null)
 
   const years = useMemo(() => {
     const [a, b] = yearRange ?? [minYear, maxYear]
@@ -58,14 +57,14 @@ export function ResourceHeatmap({ entries, selected, onSelectMonth }: Props) {
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
         <span className="font-medium text-foreground shrink-0">Range</span>
         <span className="shrink-0 tabular-nums">{minYear}</span>
-        <YearRangeSlider min={minYear} max={maxYear} value={yearRange} onChange={setYearRange} />
+        <YearRangeSlider min={minYear} max={maxYear} value={yearRange} onChange={onYearRangeChange} />
         <span className="shrink-0 tabular-nums">{maxYear}</span>
         {yearRange && (
           <span className="flex shrink-0 items-center gap-1.5">
             <span className="tabular-nums text-foreground">{yearRange[0]}–{yearRange[1]}</span>
             <button
               type="button"
-              onClick={() => setYearRange(null)}
+              onClick={() => onYearRangeChange(null)}
               aria-label="Clear year range"
               className="text-muted-foreground transition-colors hover:text-foreground"
             >

@@ -3,8 +3,7 @@
 // HTML is decoded directly; PDFs are routed through `unpdf` (a pure-JS,
 // edge-runtime-friendly extractor — no native deps, unlike pdf-parse/pdfjs-dist's
 // worker requirements). Network/parse failures return null so callers can log
-// and continue. Used by both the scheduled orchestrator (research-ingest) and
-// the on-demand add-by-URL function (research-ingest-url).
+// and continue. Used by the on-demand add-by-URL function (research-ingest-url).
 
 export async function fetchText(url: string): Promise<string | null> {
   try {

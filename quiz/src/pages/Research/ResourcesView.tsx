@@ -34,38 +34,6 @@ function isNewDoc(doc: ResearchDocumentRow, lastVisit: string | null): boolean {
   return docDate > visitDate && docDate > thirtyDaysAgo
 }
 
-// ── Date grouping ─────────────────────────────────────────────────────────────
-
-type DateGroup = 'today' | 'this_week' | 'this_month' | 'older'
-
-const GROUP_LABELS: Record<DateGroup, string> = {
-  today: 'Today',
-  this_week: 'This Week',
-  this_month: 'This Month',
-  older: 'Older',
-}
-
-const GROUP_ORDER: DateGroup[] = ['today', 'this_week', 'this_month', 'older']
-
-function dateGroup(published_at: string): DateGroup {
-  const diffDays = (Date.now() - new Date(published_at).getTime()) / (1000 * 60 * 60 * 24)
-  if (diffDays < 1) return 'today'
-  if (diffDays < 7) return 'this_week'
-  if (diffDays < 30) return 'this_month'
-  return 'older'
-}
-
-function groupDocuments(docs: ResearchDocumentRow[]): Map<DateGroup, ResearchDocumentRow[]> {
-  const map = new Map<DateGroup, ResearchDocumentRow[]>()
-  for (const doc of docs) {
-    const g = dateGroup(doc.published_at)
-    const arr = map.get(g)
-    if (arr) arr.push(doc)
-    else map.set(g, [doc])
-  }
-  return map
-}
-
 // ── Component ─────────────────────────────────────────────────────────────────
 
 interface ResourcesViewProps {
@@ -159,16 +127,18 @@ export default function ResourcesView({ projectId, projectDocumentIds, onProject
         </>
       )}
 
-      <ResearchFilterPanel />
-
-      {/* Corpus view: month-by-month timeline heatmap of resources/regulation,
-          scoped by the filters above. */}
-      {!isProjectScope && <ResourceTimelinePanel />}
-
       {searching ? (
-        <SearchResults search={search} action={cardAction} />
+        <>
+          <ResearchFilterPanel />
+          <SearchResults search={search} action={cardAction} />
+        </>
       ) : (
-        <BrowseFeed feed={feed} lastVisit={lastVisit} action={cardAction} isProjectScope={isProjectScope} />
+        <>
+          {/* Corpus view: month-by-month timeline heatmap of resources/regulation,
+              with the shared filters between the heading and the heatmap. */}
+          {isProjectScope ? <ResearchFilterPanel /> : <ResourceTimelinePanel />}
+          <BrowseFeed feed={feed} lastVisit={lastVisit} action={cardAction} isProjectScope={isProjectScope} />
+        </>
       )}
     </div>
   )
@@ -227,7 +197,7 @@ function SearchResults({
   )
 }
 
-// ── Browse feed (date-grouped) ────────────────────────────────────────────────
+// ── Browse feed (chronological) ───────────────────────────────────────────────
 
 function BrowseFeed({
   feed,
@@ -260,11 +230,10 @@ function BrowseFeed({
     )
   }
 
-  const groups = groupDocuments(documents)
   const newCount = isProjectScope ? 0 : documents.filter(d => isNewDoc(d, lastVisit)).length
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>
           {total !== null
@@ -274,22 +243,13 @@ function BrowseFeed({
         {newCount > 0 && <span className="font-medium text-primary">{newCount} new since your last visit</span>}
       </div>
 
-      {GROUP_ORDER.filter(g => groups.has(g)).map(g => (
-        <section key={g}>
-          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {GROUP_LABELS[g]}
-          </h2>
-          <div className="space-y-3">
-            {groups.get(g)!.map(doc => (
-              <DocumentCard
-                key={doc.id}
-                document={doc}
-                isNew={!isProjectScope && isNewDoc(doc, lastVisit)}
-                action={action(doc)}
-              />
-            ))}
-          </div>
-        </section>
+      {documents.map(doc => (
+        <DocumentCard
+          key={doc.id}
+          document={doc}
+          isNew={!isProjectScope && isNewDoc(doc, lastVisit)}
+          action={action(doc)}
+        />
       ))}
 
       {hasMore && (

@@ -4,16 +4,13 @@ import { useResearchQuery } from '@/hooks/useResearchQuery'
 import { useAddResourceByUrl } from '@/hooks/useAddResourceByUrl'
 import { ResearchTopSearch } from '@/components/research/ResearchTopSearch'
 import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
-import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import ResourcesView from './ResourcesView'
-import BenchmarkView from './BenchmarkView'
 import ProjectsView from './ProjectsView'
 
 const TABS: { id: ResearchTab; label: string }[] = [
   { id: 'projects', label: 'Projects' },
   { id: 'resources', label: 'Resources' },
-  { id: 'benchmarks', label: 'Benchmarks' },
 ]
 
 export default function Research() {
@@ -77,13 +74,6 @@ export default function Research() {
             <ResourcesView refreshNonce={refreshNonce} />
           </>
         )}
-        {tab === 'benchmarks' && (
-          <>
-            <ResearchFilterPanel />
-            <BenchmarkView />
-          </>
-        )}
-
         {/* Reader for timeline cards (books / events / regulation). */}
         <ConceptPopup />
       </div>

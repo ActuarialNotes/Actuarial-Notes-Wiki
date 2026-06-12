@@ -1,8 +1,8 @@
-// Shared LLM extraction step for research-ingest adapters. Calls Anthropic
+// Shared LLM extraction step for research document ingestion. Calls Anthropic
 // with the structured-extraction prompt and parses its JSON response into an
-// ExtractionResult. Adapters call `extract(rawText, sourceUrl)` once they have
-// a document's plain-text content; this keeps the Anthropic integration (auth,
-// retries, JSON-repair) in one place rather than duplicated per adapter.
+// ExtractionResult. research-ingest-url calls `extract(rawText, sourceUrl)`
+// once it has a document's plain-text content; this keeps the Anthropic
+// integration (auth, retries, JSON-repair) in one place.
 
 import type { ExtractionResult, ExtractedMetric, DocumentType } from './types.ts'
 
@@ -88,7 +88,7 @@ function asMetrics(v: unknown): ExtractedMetric[] {
     // Keep non-canonical names (permissive) but surface them so the catalog can
     // be extended deliberately rather than silently drifting.
     if (!CANONICAL_METRIC_SET.has(m.name)) {
-      console.warn('research-ingest: non-canonical metric name extracted:', m.name)
+      console.warn('research-ingest-url: non-canonical metric name extracted:', m.name)
     }
     out.push({
       name: m.name,
@@ -133,7 +133,7 @@ function parseJsonResponse(text: string): Record<string, unknown> | null {
 export async function extractStructuredData(rawText: string, sourceUrl: string): Promise<ExtractionResult | null> {
   const apiKey = Deno.env.get('ANTHROPIC_API_KEY')
   if (!apiKey) {
-    console.warn('research-ingest: ANTHROPIC_API_KEY not set, skipping extraction for', sourceUrl)
+    console.warn('research-ingest-url: ANTHROPIC_API_KEY not set, skipping extraction for', sourceUrl)
     return null
   }
 
@@ -155,11 +155,11 @@ export async function extractStructuredData(rawText: string, sourceUrl: string):
       }),
     })
   } catch (err) {
-    console.error('research-ingest: extraction request failed for', sourceUrl, err)
+    console.error('research-ingest-url: extraction request failed for', sourceUrl, err)
     return null
   }
   if (!res.ok) {
-    console.error('research-ingest: extraction API error', res.status, 'for', sourceUrl)
+    console.error('research-ingest-url: extraction API error', res.status, 'for', sourceUrl)
     return null
   }
 
@@ -169,7 +169,7 @@ export async function extractStructuredData(rawText: string, sourceUrl: string):
 
   const parsed = parseJsonResponse(content)
   if (!parsed) {
-    console.error('research-ingest: could not parse extraction JSON for', sourceUrl)
+    console.error('research-ingest-url: could not parse extraction JSON for', sourceUrl)
     return null
   }
 

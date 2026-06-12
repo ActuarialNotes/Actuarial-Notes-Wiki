@@ -1,10 +1,10 @@
 // research-ingest-url — on-demand ingestion of a single source by URL.
 //
-// The scheduled scrapers (research-ingest) only grow the corpus on their cron
-// cadence; this lets a signed-in user paste a URL to a specific bulletin,
-// guideline, or regulation and have it fetched, extracted, and inserted into
-// research_documents immediately — reusing the same fetchText + extraction
-// pipeline as the adapters, just without listing-page context.
+// The corpus is otherwise grown from verified sources loaded in batches; this
+// lets a signed-in user paste a URL to a specific bulletin, guideline, or
+// regulation and have it fetched, extracted, and inserted into
+// research_documents immediately via the shared fetchText + extraction
+// pipeline (see _shared/research-adapters/), without listing-page context.
 //
 // Auth: the caller's Supabase session bearer token identifies the user; the
 // actual corpus write is done with the service-role key (research_documents is

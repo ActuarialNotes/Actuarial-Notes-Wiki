@@ -42,7 +42,6 @@ jobs:
           deploy stripe-webhook
           deploy delete-account
           deploy redeem-beta-code
-          deploy research-ingest --no-verify-jwt
           deploy research-ingest-url
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}

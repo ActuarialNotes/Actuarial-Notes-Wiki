@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, Link, useSearchParams, useNavigationType } from 'react-router-dom'
-import { ChevronLeft, Loader2 } from 'lucide-react'
+import { ChevronLeft, ListChecks, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText } from '@/lib/wikiExtract'
 import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { Card, CardContent } from '@/components/ui/card'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
@@ -142,16 +143,21 @@ export default function WikiExam() {
     [content],
   )
 
+  const conceptList = useMemo(
+    () => pageRefs
+      .filter(r => r.kind === 'concept')
+      .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name)),
+    [pageRefs],
+  )
+
   const studyPlanRefs = useMemo(() => {
     const row = examRows.find(r => r.exam_id === progressKey)
     const cache = row?.study_plan_cache
     if (!cache || cache.generatedDate !== todayISO() || !cache.todaysConcepts?.length) return null
     const planSet = new Set(cache.todaysConcepts.map(n => n.toLowerCase()))
-    const refs = pageRefs
-      .filter(r => r.kind === 'concept' && !/ \([^)]*\d{4}\)$/.test(r.name))
-      .filter(r => planSet.has(r.name.toLowerCase()))
+    const refs = conceptList.filter(r => planSet.has(r.name.toLowerCase()))
     return refs.length > 0 ? refs : null
-  }, [examRows, progressKey, pageRefs])
+  }, [examRows, progressKey, conceptList])
 
   const resourceRefs = useMemo(() => {
     const seen = new Set<string>()
@@ -185,9 +191,6 @@ export default function WikiExam() {
 
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind === 'exam') return false
-    const conceptList = pageRefs
-      .filter(r => r.kind === 'concept')
-      .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
     if (ref.kind === 'resource' || / \([^)]*\d{4}\)$/.test(ref.name)) {
       e.preventDefault()
       const resList = resourceRefs ?? [{ kind: 'resource' as const, name: ref.name }]
@@ -206,7 +209,7 @@ export default function WikiExam() {
       resourceRefs,
     )
     return true
-  }, [pageRefs, examFileName, openAt, studyPlanRefs, resourceRefs])
+  }, [conceptList, resourceRefs, examFileName, openAt, studyPlanRefs])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
@@ -217,21 +220,42 @@ export default function WikiExam() {
   useEffect(() => {
     if (!conceptParam || pageRefs.length === 0 || popupOpenedRef.current) return
     popupOpenedRef.current = true
-    const conceptList = pageRefs
-      .filter(r => r.kind === 'concept')
-      .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name))
     const idx = conceptList.findIndex(
       r => r.name.toLowerCase() === conceptParam.toLowerCase(),
     )
     const openList = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptParam }]
     openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs)
-  }, [conceptParam, pageRefs, examFileName, openAt, studyPlanRefs, resourceRefs])
+  }, [conceptParam, pageRefs, conceptList, examFileName, openAt, studyPlanRefs, resourceRefs])
 
   return (
     <div className="space-y-4">
       <Link to="/wiki" state={{ fromExam: true }} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
         <ChevronLeft className="h-4 w-4" /> All exams
       </Link>
+
+      {studyPlanRefs && (
+        <Card className="border-primary/30 bg-primary/5">
+          <CardContent className="p-3 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-sm font-semibold">
+              <ListChecks className="h-4 w-4 text-primary shrink-0" />
+              Today's Study Plan
+            </div>
+            <ul className="space-y-0.5">
+              {studyPlanRefs.map((ref, idx) => (
+                <li key={ref.name}>
+                  <button
+                    type="button"
+                    onClick={() => openAt(studyPlanRefs, idx, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'study-plan', fullList: conceptList })}
+                    className="w-full text-left text-sm rounded-md px-2 py-1.5 truncate hover:bg-primary/10 transition-colors"
+                  >
+                    {ref.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
 
       {status === 'loading' && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">

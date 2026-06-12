@@ -71,7 +71,9 @@ function StudyGuideRadial({
   examRecords,
   now,
   onConceptClick,
-  masteredCount,
+  level1Count,
+  level2Count,
+  level3Count,
   totalCount,
   selectedConcept,
   flashRadial,
@@ -80,7 +82,9 @@ function StudyGuideRadial({
   examRecords: ConceptMasteryRecord[]
   now: Date
   onConceptClick?: (name: string) => void
-  masteredCount: number
+  level1Count: number
+  level2Count: number
+  level3Count: number
   totalCount: number
   selectedConcept?: string | null
   flashRadial?: boolean
@@ -121,7 +125,11 @@ function StudyGuideRadial({
     [segments, selectedConcept],
   )
 
-  const pctText = totalCount > 0 ? `${Math.round((masteredCount / totalCount) * 100)}%` : '0%'
+  // Weighted progress credits partial mastery (Level 1/2) instead of only
+  // counting fully-mastered (Level 3) concepts, so early progress shows up
+  // as more than 0%.
+  const progressScore = level1Count * 1 + level2Count * 2 + level3Count * 3
+  const pctText = totalCount > 0 ? `${Math.round((progressScore / (totalCount * 3)) * 100)}%` : '0%'
   const centerSeg = hovered ?? selected
 
   return (
@@ -189,7 +197,7 @@ function StudyGuideRadial({
               opacity={flashRadial ? 0.9 : 0.4}
               style={{ transition: 'opacity 0.8s ease-out' }}
             >
-              mastered
+              progress
             </text>
           </>
         )}
@@ -1349,7 +1357,9 @@ export function ReadinessCard({
               syllabus={syllabus}
               examRecords={isPremium ? examRecords : []}
               now={now}
-              masteredCount={isPremium ? aggregate.level3 : 0}
+              level1Count={isPremium ? aggregate.level1 : 0}
+              level2Count={isPremium ? aggregate.level2 : 0}
+              level3Count={isPremium ? aggregate.level3 : 0}
               totalCount={aggregate.total}
               selectedConcept={isPremium && popupFromRadial ? popupCurrentName : null}
               flashRadial={flashRadial}

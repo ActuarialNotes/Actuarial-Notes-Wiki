@@ -105,11 +105,11 @@ function wikiContentPlugin(): Plugin {
 
 // ── Resource timeline ────────────────────────────────────────────────────────
 // A flat, dated index of the content that powers the Resources heatmap: books
-// (Resources/Books), historical events (Resources/Events) and regulation
-// (Resources/Regulation). Kept separate from the wiki-content index above so the
+// (Resources/Books), historical events (Resources/Events), regulation
+// (Resources/Regulation), and regulator-published loss-trend/capital benchmarks
+// (Resources/Benchmarks). Kept separate from the wiki-content index above so the
 // search/index logic — which only understands 'exam' | 'concept' | 'document' —
-// is unaffected. A future Resources/Benchmarks (OSFI PC-1) directory can be added
-// to TIMELINE_SOURCES and will flow through automatically.
+// is unaffected.
 
 type TimelineKind = 'book' | 'event' | 'regulation' | 'benchmark'
 
@@ -117,6 +117,7 @@ const TIMELINE_SOURCES: { dir: string; kind: TimelineKind }[] = [
   { dir: 'Resources/Books', kind: 'book' },
   { dir: 'Resources/Events', kind: 'event' },
   { dir: 'Resources/Regulation', kind: 'regulation' },
+  { dir: 'Resources/Benchmarks', kind: 'benchmark' },
 ]
 
 interface TimelineRawEntry {

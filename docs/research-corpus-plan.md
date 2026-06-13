@@ -58,10 +58,10 @@ Available from: "[host](https://...)"
 
 ## Phase 0 — repo prep (do first, small code task)
 
-- [ ] Create `Resources/Benchmarks/` directory
-- [ ] Add `{ dir: 'Resources/Benchmarks', kind: 'benchmark' }` to `TIMELINE_SOURCES` in `quiz/vite.config.ts`
-- [ ] Verify `type: benchmark` flows through `ResourceHeatmap.tsx` / `ResourceMonthCards.tsx` / `ConceptPopup` reader (TimelineKind already includes it per the comment in vite.config.ts — confirm no UI gap)
-- [ ] Note the new `source_url` / `source_type` / `pdf_url` frontmatter fields somewhere durable (CLAUDE.md or a short note at the top of `Resources/Regulation/`)
+- [x] Create `Resources/Benchmarks/` directory (seeded with `OSFI PC-1 Return (2023).md`)
+- [x] Add `{ dir: 'Resources/Benchmarks', kind: 'benchmark' }` to `TIMELINE_SOURCES` in `quiz/vite.config.ts`
+- [x] Verify `type: benchmark` flows through `ResourceHeatmap.tsx` / `ResourceMonthCards.tsx` / `ConceptPopup` reader — `TimelineKind`, `KIND_LABEL`, `KIND_BADGE`, `KIND_ORDER`, and `TIMELINE_KINDS` already covered `'benchmark'`; only `pathToEntryRef` in `wikiRoutes.ts` was missing a `resources/benchmarks/` case (now added) so `[[wikilinks]]` into the new directory resolve correctly. `npm run build` and `npx vitest run` both pass.
+- [x] New `source_url` / `source_type` / `pdf_url` frontmatter fields are documented above in "Target schema A" — this plan doc is the durable reference.
 
 ## How to use this plan
 
@@ -573,7 +573,7 @@ Target: `Resources/Regulation/` for transition guidance, `Resources/Books/` for 
 
 Target: `Resources/Benchmarks/` (new directory — see Phase 0). Default `jurisdiction: "CA"`.
 
-- [ ] OSFI P&C-1 Return — industry-aggregate supplement (most recent) — `issuing_body: "OSFI"` — src: TBD
+- [x] OSFI P&C-1 Return — industry-aggregate supplement (most recent) — `issuing_body: "OSFI"` — done: `Resources/Benchmarks/OSFI PC-1 Return (2023).md`
 - [ ] OSFI — annual statistical summary of P&C industry MCT ratios and capital, by company — `issuing_body: "OSFI"` — src: TBD
 - [ ] AIRB — industry benchmark loss-trend rates, Private Passenger Auto (most recent) — `jurisdiction: "CA-AB"` · `issuing_body: "AIRB"` · lob `["Auto-Personal"]` — src: TBD
 - [ ] AIRB — approved industry trend rates by coverage (Bodily Injury, Accident Benefits, Collision, Comprehensive) — `jurisdiction: "CA-AB"` · `issuing_body: "AIRB"` · lob `["Auto-Personal"]` — src: TBD

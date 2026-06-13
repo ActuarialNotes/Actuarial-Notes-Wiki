@@ -4,7 +4,7 @@
 //   - Resources/Books        → books (usually year-only dates)
 //   - Resources/Events       → historical milestones
 //   - Resources/Regulation   → regulation & accounting standards
-// A future Resources/Benchmarks (OSFI PC-1) directory flows through the same path.
+//   - Resources/Benchmarks   → regulator-published loss-trend/capital benchmarks
 //
 // Nothing here imports the virtual module, so every function below is unit
 // testable in isolation (see resourceTimeline.test.ts).

@@ -47,6 +47,9 @@ export function pathToEntryRef(path: string): WikiEntryRef | null {
   if (p.toLowerCase().startsWith('resources/regulation/')) {
     return { kind: 'regulation', name: p.slice('resources/regulation/'.length), path: `${p}.md` }
   }
+  if (p.toLowerCase().startsWith('resources/benchmarks/')) {
+    return { kind: 'resource', name: p.slice('resources/benchmarks/'.length), path: `${p}.md` }
+  }
   if (/^Exam[ -]/i.test(p)) {
     return { kind: 'exam', name: p }
   }

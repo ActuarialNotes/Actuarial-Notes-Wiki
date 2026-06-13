@@ -131,9 +131,17 @@ export function useAskProjectQuestion() {
         body: JSON.stringify({ projectId, question: question.trim(), departmentIds }),
       })
 
-      const data = await res.json()
+      const text = await res.text()
+      let data: { error?: string } | null = null
+      if (text) {
+        try { data = JSON.parse(text) } catch { /* non-JSON response body */ }
+      }
       if (!res.ok) {
-        setState({ loading: false, error: data?.error || 'Failed to get an answer.' })
+        setState({ loading: false, error: data?.error || `Failed to get an answer (status ${res.status}).` })
+        return null
+      }
+      if (!data) {
+        setState({ loading: false, error: 'Empty response from server. Please try again.' })
         return null
       }
       setState(IDLE)

@@ -85,12 +85,7 @@ export function ProjectFaq({ project, onDocumentsAdded }: ProjectFaqProps) {
   return (
     <div className="space-y-4">
       <div className="rounded-xl border bg-gradient-to-br from-primary/5 to-transparent p-5">
-        <h3 className="text-lg font-semibold">Ask a question</h3>
-        <p className="mt-1 max-w-prose text-sm text-muted-foreground">
-          Choose the agents whose perspective you need. They'll research relevant sources for this
-          project, answer from their lens, and synthesize a result.
-        </p>
-        <Button onClick={() => setShowAsk(true)} size="lg" className="mt-4 gap-2">
+        <Button onClick={() => setShowAsk(true)} size="lg" className="w-full gap-2 py-7 text-base">
           <Sparkles className="h-5 w-5" aria-hidden /> Ask
         </Button>
       </div>

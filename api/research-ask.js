@@ -256,6 +256,17 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
+  try {
+    return await handleAsk(req, res);
+  } catch (err) {
+    console.error('research-ask: unhandled error:', err);
+    if (!res.headersSent) {
+      return res.status(500).json({ error: 'Internal server error: ' + (err?.message || 'Unknown error') });
+    }
+  }
+}
+
+async function handleAsk(req, res) {
   const user = await authenticate(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 

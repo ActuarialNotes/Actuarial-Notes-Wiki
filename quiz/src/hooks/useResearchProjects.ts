@@ -178,7 +178,20 @@ export function useResearchProjects() {
     await refresh()
   }, [refresh])
 
-  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, deleteProject, addDocument, removeDocument, removeWikiItem }
+  // Save a vault page (concept/resource/exam/event/regulation) into a
+  // project's Saved Pages — same table as the wiki popup's "Add to Project"
+  // menu item (AddToProjectMenuItem.tsx).
+  const addWikiItem = useCallback(async (projectId: string, ref: WikiEntryRef) => {
+    await supabase
+      .from('research_project_wiki_items')
+      .upsert(
+        { project_id: projectId, kind: ref.kind, name: ref.name, path: ref.path ?? null },
+        { onConflict: 'project_id,kind,name', ignoreDuplicates: true },
+      )
+    await refresh()
+  }, [refresh])
+
+  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, deleteProject, addDocument, removeDocument, removeWikiItem, addWikiItem }
 }
 
 interface ProjectDocsState {

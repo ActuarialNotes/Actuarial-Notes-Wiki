@@ -4,10 +4,12 @@ import { useResearchFeed, type ResearchDocumentRow } from '@/hooks/useResearchFe
 import { useResearchSearch } from '@/hooks/useResearchSearch'
 import { useResearchStore } from '@/stores/researchStore'
 import { supabase } from '@/lib/supabase'
+import { entryToRef } from '@/lib/resourceTimeline'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { DocumentCard } from '@/components/research/DocumentCard'
 import { AddToProjectButton } from '@/components/research/AddToProjectButton'
 import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
-import { ResourceTimelinePanel } from '@/components/research/ResourceTimelinePanel'
+import { AddEntryButton, ResourceTimelinePanel } from '@/components/research/ResourceTimelinePanel'
 import { ResourceSearchMatches } from '@/components/research/ResourceSearchMatches'
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -26,11 +28,17 @@ interface ResourcesViewProps {
   addToProjectId?: string | null
   addToProjectIds?: string[]
   onAddToProject?: (documentId: string) => Promise<void>
+  // "Add Sources" flow for vault pages (Resources/Books, Events, Regulation):
+  // saved into research_project_wiki_items, same as the wiki popup's "Add to
+  // Project" menu item.
+  addedWikiKeys?: Set<string>
+  onAddWikiItem?: (ref: WikiEntryRef) => Promise<void>
 }
 
 export default function ResourcesView({
   projectId, projectDocumentIds, onProjectMutated, refreshNonce,
   addToProjectId, addToProjectIds, onAddToProject,
+  addedWikiKeys, onAddWikiItem,
 }: ResourcesViewProps) {
   const searchQuery = useResearchStore(s => s.searchQuery).trim()
   const isProjectScope = projectId !== undefined
@@ -105,32 +113,48 @@ export default function ResourcesView({
 
   const searching = searchQuery.length > 0
 
+  // In "Add Sources" mode, vault timeline matches get an inline "Add to
+  // project" action that saves into research_project_wiki_items.
+  const wikiAddAction = isAddMode && onAddWikiItem
+    ? (entry: Parameters<NonNullable<React.ComponentProps<typeof ResourceSearchMatches>['action']>>[0]) => {
+      const ref = entryToRef(entry)
+      return (
+        <AddEntryButton
+          entry={entry}
+          added={addedWikiKeys?.has(`${ref.kind}:${ref.name}`) ?? false}
+          onAdd={e => onAddWikiItem(entryToRef(e))}
+        />
+      )
+    }
+    : undefined
+
   return (
     <div className="space-y-5">
       {searching ? (
         <>
           <ResearchFilterPanel />
-          {!isProjectScope && <ResourceSearchMatches />}
+          {!isProjectScope && <ResourceSearchMatches action={wikiAddAction} />}
           <SearchResults search={search} action={cardAction} />
         </>
-      ) : isProjectScope || isAddMode ? (
+      ) : isProjectScope ? (
         <>
           <ResearchFilterPanel />
           <BrowseFeed
             feed={feed}
             action={cardAction}
-            emptyMessage={
-              isAddMode
-                ? 'No documents available yet. Try searching the corpus above.'
-                : 'This project has no documents yet. Search the corpus and use “Save” on a result, or add a source by URL.'
-            }
+            emptyMessage='This project has no documents yet. Search the corpus and use “Save” on a result, or add a source by URL.'
           />
         </>
       ) : (
         // Corpus view: everything here comes from the markdown vault
         // (Resources/Books, Resources/Events, Resources/Regulation), browsed
-        // via the month-by-month timeline heatmap.
-        <ResourceTimelinePanel />
+        // via the month-by-month timeline heatmap. In "Add Sources" mode each
+        // entry gets an "Add" action into the active project's Saved Pages.
+        <ResourceTimelinePanel
+          addToProjectId={isAddMode ? addToProjectId : undefined}
+          addedWikiKeys={addedWikiKeys}
+          onAddEntry={onAddWikiItem}
+        />
       )}
     </div>
   )

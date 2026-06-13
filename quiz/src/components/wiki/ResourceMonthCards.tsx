@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
 import { KIND_LABEL, type TimelineEntry, type TimelineKind } from '@/lib/resourceTimeline'
 import { Card } from '@/components/ui/card'
@@ -30,52 +31,66 @@ function MetaPill({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function EntryCard({ entry, onOpen }: { entry: TimelineEntry; onOpen: (entry: TimelineEntry) => void }) {
+export function EntryCard({
+  entry,
+  onOpen,
+  action,
+}: {
+  entry: TimelineEntry
+  onOpen: (entry: TimelineEntry) => void
+  /** Optional action control (e.g. "Add to project") rendered alongside the card content. */
+  action?: ReactNode
+}) {
   return (
-    <button
-      type="button"
-      onClick={() => onOpen(entry)}
-      className="text-left w-full"
-      aria-label={`Open ${entry.title}`}
-    >
-    <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch cursor-pointer">
-      {entry.coverImage && (
-        <div className="flex-shrink-0 p-2 flex items-center">
-          <img
-            src={entry.coverImage}
-            alt={entry.title}
-            className="w-14 sm:w-16 rounded-md object-contain max-h-24 bg-muted/20"
-            loading="lazy"
-            onError={(e) => {
-              const p = e.currentTarget.parentElement
-              if (p) p.style.display = 'none'
-            }}
-          />
+    <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
+      <button
+        type="button"
+        onClick={() => onOpen(entry)}
+        className="text-left flex-1 min-w-0 flex flex-row items-stretch cursor-pointer"
+        aria-label={`Open ${entry.title}`}
+      >
+        {entry.coverImage && (
+          <div className="flex-shrink-0 p-2 flex items-center">
+            <img
+              src={entry.coverImage}
+              alt={entry.title}
+              className="w-14 sm:w-16 rounded-md object-contain max-h-24 bg-muted/20"
+              loading="lazy"
+              onError={(e) => {
+                const p = e.currentTarget.parentElement
+                if (p) p.style.display = 'none'
+              }}
+            />
+          </div>
+        )}
+        <div className="p-3 flex flex-col gap-1.5 flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${KIND_BADGE[entry.kind]}`}>
+              {KIND_LABEL[entry.kind]}
+            </span>
+            <span className="text-[11px] text-muted-foreground">{formatEntryDate(entry)}</span>
+          </div>
+          <p className="text-sm font-semibold leading-snug">{entry.title}</p>
+          {entry.summary && (
+            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">{entry.summary}</p>
+          )}
+          <div className="flex flex-wrap gap-1 mt-0.5">
+            {entry.author && <MetaPill>{entry.author}</MetaPill>}
+            {entry.edition && <MetaPill>{entry.edition} ed.</MetaPill>}
+            {entry.publisher && <MetaPill>{entry.publisher}</MetaPill>}
+            {entry.jurisdiction && <MetaPill>{entry.jurisdiction}</MetaPill>}
+            {entry.issuingBody && <MetaPill>{entry.issuingBody}</MetaPill>}
+            {entry.impactLevel && <MetaPill>{entry.impactLevel} impact</MetaPill>}
+            {entry.status && entry.status !== 'effective' && <MetaPill>{entry.status}</MetaPill>}
+          </div>
+        </div>
+      </button>
+      {action && (
+        <div className="flex items-center p-2" onClick={e => e.stopPropagation()}>
+          {action}
         </div>
       )}
-      <div className="p-3 flex flex-col gap-1.5 flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${KIND_BADGE[entry.kind]}`}>
-            {KIND_LABEL[entry.kind]}
-          </span>
-          <span className="text-[11px] text-muted-foreground">{formatEntryDate(entry)}</span>
-        </div>
-        <p className="text-sm font-semibold leading-snug">{entry.title}</p>
-        {entry.summary && (
-          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">{entry.summary}</p>
-        )}
-        <div className="flex flex-wrap gap-1 mt-0.5">
-          {entry.author && <MetaPill>{entry.author}</MetaPill>}
-          {entry.edition && <MetaPill>{entry.edition} ed.</MetaPill>}
-          {entry.publisher && <MetaPill>{entry.publisher}</MetaPill>}
-          {entry.jurisdiction && <MetaPill>{entry.jurisdiction}</MetaPill>}
-          {entry.issuingBody && <MetaPill>{entry.issuingBody}</MetaPill>}
-          {entry.impactLevel && <MetaPill>{entry.impactLevel} impact</MetaPill>}
-          {entry.status && entry.status !== 'effective' && <MetaPill>{entry.status}</MetaPill>}
-        </div>
-      </div>
     </Card>
-    </button>
   )
 }
 
@@ -85,9 +100,11 @@ interface Props {
   selected: { year: number; month: number } | null
   onClear: () => void
   onOpenEntry: (entry: TimelineEntry) => void
+  /** Optional per-entry action control (e.g. "Add to project"). */
+  action?: (entry: TimelineEntry) => ReactNode
 }
 
-export function ResourceMonthCards({ entries, selected, onClear, onOpenEntry }: Props) {
+export function ResourceMonthCards({ entries, selected, onClear, onOpenEntry, action }: Props) {
   const heading = selected ? `${MONTH_LONG[selected.month]} ${selected.year}` : 'All resources'
   const emptyMessage = selected ? 'Nothing recorded this month.' : 'No resources match the current filters.'
   return (
@@ -114,7 +131,7 @@ export function ResourceMonthCards({ entries, selected, onClear, onOpenEntry }: 
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {entries.map(entry => (
-            <EntryCard key={`${entry.kind}:${entry.path}`} entry={entry} onOpen={onOpenEntry} />
+            <EntryCard key={`${entry.kind}:${entry.path}`} entry={entry} onOpen={onOpenEntry} action={action?.(entry)} />
           ))}
         </div>
       )}

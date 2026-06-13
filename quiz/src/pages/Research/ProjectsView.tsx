@@ -64,16 +64,9 @@ function ProjectList() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-xl border bg-gradient-to-br from-primary/5 to-transparent p-5">
-        <h2 className="text-lg font-semibold">Start a project</h2>
-        <p className="mt-1 max-w-prose text-sm text-muted-foreground">
-          Make a project to discover relevant resources and benchmarks, then run the analysis with AI
-          review agents — e.g. assess an Ontario reg change with an actuarial and underwriting lens.
-        </p>
-        <Button onClick={() => setShowDialog(true)} size="lg" className="mt-4 gap-2">
-          <FolderPlus className="h-5 w-5" aria-hidden /> New project
-        </Button>
-      </div>
+      <Button onClick={() => setShowDialog(true)} size="lg" className="h-14 w-full gap-2 text-base">
+        <FolderPlus className="h-5 w-5" aria-hidden /> New project
+      </Button>
 
       {loading && (
         <div className="flex items-center justify-center gap-2 py-12 text-sm text-muted-foreground">

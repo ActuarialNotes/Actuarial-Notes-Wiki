@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FolderPlus, X } from 'lucide-react'
 import { useResearchStore, type ResearchTab } from '@/stores/researchStore'
 import { useResearchQuery } from '@/hooks/useResearchQuery'
 import { useAddResourceByUrl } from '@/hooks/useAddResourceByUrl'
-import { useResearchProjects, useProjectDocuments } from '@/hooks/useResearchProjects'
+import { useResearchProjects, useProjectDocuments, useProjectWikiItems } from '@/hooks/useResearchProjects'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ResearchTopSearch } from '@/components/research/ResearchTopSearch'
 import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
@@ -30,15 +31,30 @@ export default function Research() {
 
   // "Add Sources" flow: when set, the Resources tab adds results directly into
   // this project instead of showing the "Save to…" picker.
-  const { projects, addDocument } = useResearchProjects()
+  const { projects, addDocument, addWikiItem } = useResearchProjects()
   const [addRefreshKey, setAddRefreshKey] = useState(0)
   const { documentIds: addToProjectIds } = useProjectDocuments(addSourcesProjectId, addRefreshKey)
   const addSourcesProject = projects.find(p => p.id === addSourcesProjectId)
+
+  // Vault pages (Resources/Books, Events, Regulation) already saved to the
+  // active "Add Sources" project, so the timeline can show "Added" instead of "Add".
+  const [addWikiRefreshKey, setAddWikiRefreshKey] = useState(0)
+  const { items: addedWikiItems } = useProjectWikiItems(addSourcesProjectId, addWikiRefreshKey)
+  const addedWikiKeys = useMemo(
+    () => new Set(addedWikiItems.map(item => `${item.kind}:${item.name}`)),
+    [addedWikiItems],
+  )
 
   const handleAddToProject = async (documentId: string) => {
     if (!addSourcesProjectId) return
     await addDocument(addSourcesProjectId, documentId)
     setAddRefreshKey(k => k + 1)
+  }
+
+  const handleAddWikiItem = async (ref: WikiEntryRef) => {
+    if (!addSourcesProjectId) return
+    await addWikiItem(addSourcesProjectId, ref)
+    setAddWikiRefreshKey(k => k + 1)
   }
 
   const handleAddUrl = async (url: string) => {
@@ -107,6 +123,8 @@ export default function Research() {
               addToProjectId={addSourcesProjectId}
               addToProjectIds={addToProjectIds}
               onAddToProject={handleAddToProject}
+              addedWikiKeys={addedWikiKeys}
+              onAddWikiItem={handleAddWikiItem}
             />
           </>
         )}

@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import rawTimeline from 'virtual:resource-timeline'
-import { toTimelineEntries, searchTimelineEntries, entryToRef } from '@/lib/resourceTimeline'
+import { toTimelineEntries, searchTimelineEntries, entryToRef, type TimelineEntry } from '@/lib/resourceTimeline'
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { EntryCard } from '@/components/wiki/ResourceMonthCards'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -10,7 +10,7 @@ import { useResearchStore } from '@/stores/researchStore'
 // Resources/Events, Resources/Regulation) — shown alongside the corpus document
 // search results so regulations, events, and books are searchable too, not just
 // the agent-fetched bulletins/filings in research_documents.
-export function ResourceSearchMatches() {
+export function ResourceSearchMatches({ action }: { action?: (entry: TimelineEntry) => ReactNode }) {
   const query = useResearchStore(s => s.searchQuery).trim()
   const filters = useResearchStore(s => s.filters)
   const openAt = useConceptPopup(s => s.openAt)
@@ -34,6 +34,7 @@ export function ResourceSearchMatches() {
             key={`${entry.kind}:${entry.path}`}
             entry={entry}
             onOpen={e => openAt([entryToRef(e)], 0, e.path)}
+            action={action?.(entry)}
           />
         ))}
       </div>

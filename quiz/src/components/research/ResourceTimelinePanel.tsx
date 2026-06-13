@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { History } from 'lucide-react'
+import { Check, History, Loader2, Plus } from 'lucide-react'
 import rawTimeline from 'virtual:resource-timeline'
 import {
   toTimelineEntries,
   entriesForMonth,
   entriesNewestFirst,
   entryToRef,
+  type TimelineEntry,
 } from '@/lib/resourceTimeline'
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { ResourceHeatmap } from '@/components/wiki/ResourceHeatmap'
@@ -14,8 +15,54 @@ import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { ResourceKindFilterPills } from '@/components/research/ResourceKindFilterPills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useResearchStore } from '@/stores/researchStore'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
-export function ResourceTimelinePanel() {
+// "Add to project" control for a timeline entry — saves it into
+// research_project_wiki_items (the same table the wiki popup's "Add to
+// Project" menu item writes to; see AddToProjectMenuItem.tsx).
+export function AddEntryButton({
+  entry,
+  added,
+  onAdd,
+}: {
+  entry: TimelineEntry
+  added: boolean
+  onAdd: (entry: TimelineEntry) => Promise<void>
+}) {
+  const [busy, setBusy] = useState(false)
+  const handleClick = async () => {
+    setBusy(true)
+    await onAdd(entry)
+    setBusy(false)
+  }
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      disabled={added || busy}
+      className="flex items-center gap-1 rounded-md border border-input px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground disabled:opacity-60"
+    >
+      {busy ? (
+        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+      ) : added ? (
+        <Check className="h-3.5 w-3.5 text-primary" />
+      ) : (
+        <Plus className="h-3.5 w-3.5" />
+      )}
+      {added ? 'Added' : 'Add'}
+    </button>
+  )
+}
+
+interface ResourceTimelinePanelProps {
+  /** When set, renders an "Add to project" action on each entry, saving into this project's Saved Pages. */
+  addToProjectId?: string | null
+  /** Keys (`${WikiEntryRef.kind}:${WikiEntryRef.name}`) already saved to the active project. */
+  addedWikiKeys?: Set<string>
+  onAddEntry?: (ref: WikiEntryRef) => Promise<void>
+}
+
+export function ResourceTimelinePanel({ addToProjectId, addedWikiKeys, onAddEntry }: ResourceTimelinePanelProps) {
   const allEntries = useMemo(() => toTimelineEntries(rawTimeline), [])
   const filters = useResearchStore(s => s.filters)
   const entries = useMemo(() => filterTimelineEntries(allEntries, filters), [allEntries, filters])
@@ -74,6 +121,16 @@ export function ResourceTimelinePanel() {
             selected={selected}
             onClear={() => setSelected(null)}
             onOpenEntry={entry => openAt([entryToRef(entry)], 0, entry.path)}
+            action={addToProjectId && onAddEntry ? entry => {
+              const ref = entryToRef(entry)
+              return (
+                <AddEntryButton
+                  entry={entry}
+                  added={addedWikiKeys?.has(`${ref.kind}:${ref.name}`) ?? false}
+                  onAdd={e => onAddEntry(entryToRef(e))}
+                />
+              )
+            } : undefined}
           />
         </>
       )}

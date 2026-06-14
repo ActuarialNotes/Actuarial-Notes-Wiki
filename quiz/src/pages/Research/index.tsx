@@ -7,6 +7,7 @@ import { useResearchProjects, useProjectDocuments, useProjectWikiItems } from '@
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ResearchTopSearch } from '@/components/research/ResearchTopSearch'
 import { AiAnswerPanel } from '@/components/research/AiAnswerPanel'
+import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import ResourcesView from './ResourcesView'
 import ProjectsView from './ProjectsView'
@@ -23,7 +24,9 @@ export default function Research() {
   const setAddSourcesProject = useResearchStore(s => s.setAddSourcesProject)
 
   // Page-level corpus search / AI assistant (not project-scoped). Rendered as a
-  // sticky top bar, exactly like the exam study-guide search.
+  // sticky top bar, exactly like the exam study-guide search. The AI "Ask"
+  // half is gated by RESEARCH_AI_ENABLED (see lib/featureFlags.ts); while off,
+  // this hook stays dormant (never invoked) and only keyword search renders.
   const { loading: asking, error: askError, result, ask, reset } = useResearchQuery()
   const addUrl = useAddResourceByUrl()
   const [addNotice, setAddNotice] = useState<string | null>(null)
@@ -117,7 +120,9 @@ export default function Research() {
                 </button>
               </div>
             )}
-            <AiAnswerPanel loading={asking} error={askError} result={result} onDismiss={reset} />
+            {RESEARCH_AI_ENABLED && (
+              <AiAnswerPanel loading={asking} error={askError} result={result} onDismiss={reset} />
+            )}
             <ResourcesView
               refreshNonce={refreshNonce}
               addToProjectId={addSourcesProjectId}

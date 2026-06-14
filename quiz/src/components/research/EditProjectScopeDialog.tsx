@@ -8,6 +8,7 @@ import {
   DepartmentsField,
 } from './ProjectScopeFields'
 import type { ProjectOnboarding, ResearchProject } from '@/hooks/useResearchProjects'
+import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
 
 interface EditProjectScopeDialogProps {
   project: ResearchProject
@@ -84,7 +85,10 @@ export function EditProjectScopeDialog({ project, onClose, onSave }: EditProject
             onRegionChange={setRegion}
           />
           <LineOfBusinessField value={lob} onChange={setLob} />
-          <DepartmentsField value={departments} onToggle={toggleDept} />
+          {/* "Review agents" is an AI-steering control — hidden with the
+              assistant (see lib/featureFlags.ts). The saved `departments` value
+              is preserved untouched so it returns intact when AI is re-enabled. */}
+          {RESEARCH_AI_ENABLED && <DepartmentsField value={departments} onToggle={toggleDept} />}
         </div>
 
         <div className="flex items-center justify-end gap-2 border-t px-5 py-3.5">

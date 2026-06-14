@@ -7,6 +7,7 @@ import { agentMeta } from '@/lib/researchOntology'
 import { toTimelineEntries, searchTimelineEntries, entryToRef, KIND_LABEL, type TimelineEntry } from '@/lib/resourceTimeline'
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
 
 interface ResearchTopSearchProps {
   onAsk: (query: string) => void
@@ -140,16 +141,20 @@ export function ResearchTopSearch({
                 <X className="h-4 w-4" />
               </button>
             )}
-            <button
-              type="button"
-              onClick={handleAsk}
-              disabled={asking || !hasQuery}
-              aria-label="Ask AI"
-              className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
-            >
-              {asking ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <Sparkles className="h-3.5 w-3.5" aria-hidden />}
-              Ask AI
-            </button>
+            {/* "Ask AI" assistant — gated off by RESEARCH_AI_ENABLED. While off,
+                the bar stays a pure keyword search over the corpus + timeline. */}
+            {RESEARCH_AI_ENABLED && (
+              <button
+                type="button"
+                onClick={handleAsk}
+                disabled={asking || !hasQuery}
+                aria-label="Ask AI"
+                className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                {asking ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <Sparkles className="h-3.5 w-3.5" aria-hidden />}
+                Ask AI
+              </button>
+            )}
           </div>
 
           {/* Results dropdown — only when there's a query */}

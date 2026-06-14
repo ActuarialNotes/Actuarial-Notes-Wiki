@@ -16,6 +16,7 @@ import {
   departmentLabels,
 } from '@/lib/researchProjectMeta'
 import { lobMeta } from '@/lib/researchOntology'
+import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
 import ResourcesView from './ResourcesView'
 
 export default function ProjectsView() {
@@ -169,7 +170,9 @@ function ProjectDetail({ projectId }: { projectId: string }) {
         {project?.description && <p className="text-sm text-muted-foreground">{project.description}</p>}
         <div className="flex flex-wrap items-center gap-1.5">
           {badges.map(b => <MetaBadge key={b}>{b}</MetaBadge>)}
-          {agents.length > 0 && (
+          {/* "Review agents" badge — an AI-only concept, gated off with the
+              assistant (see lib/featureFlags.ts). */}
+          {RESEARCH_AI_ENABLED && agents.length > 0 && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
               <Sparkles className="h-3 w-3" aria-hidden /> {agents.join(' · ')}
             </span>
@@ -192,7 +195,12 @@ function ProjectDetail({ projectId }: { projectId: string }) {
         </div>
       ) : (
         <div className="space-y-4">
-          {project && <ProjectFaq project={project} onDocumentsAdded={() => setRefreshKey(k => k + 1)} />}
+          {/* AI "Ask" surface (CTA + FAQ / Research Report / Actuarial
+              Justification), gated off via RESEARCH_AI_ENABLED. While off, a
+              project is a pure source collection: scope + Sources list. */}
+          {RESEARCH_AI_ENABLED && project && (
+            <ProjectFaq project={project} onDocumentsAdded={() => setRefreshKey(k => k + 1)} />
+          )}
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">

@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { FolderPlus, Plus, Check, Loader2, ChevronRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
@@ -8,9 +9,9 @@ interface ProjectOption {
   name: string
 }
 
-// Minimum space (submenu width + gap) needed to open to the right before
-// flipping to the left of the action menu instead.
-const SUBMENU_SPACE = 224
+// Width of the portaled submenu (matches w-52) and the gap from the action menu.
+const SUBMENU_WIDTH = 208
+const SUBMENU_GAP = 4
 
 // "Add to Project" action for the concept/resource popup menu. Mirrors
 // AddToProjectButton (components/research/AddToProjectButton.tsx) but opens
@@ -18,9 +19,15 @@ const SUBMENU_SPACE = 224
 // its own popover, and saves into research_project_wiki_items (kind+name)
 // instead of research_project_documents (document_id) — see
 // 20260619_research_project_wiki_items.sql.
+//
+// The submenu is rendered via a portal into document.body and positioned with
+// `position: fixed`, so it floats in its own layer rather than as an absolute
+// child of the action menu — keeping it out of the action menu's
+// overflow-y-auto container (which would otherwise gain a horizontal scrollbar
+// from the submenu's overflow).
 export function AddToProjectMenuItem({ item }: { item: WikiEntryRef }) {
   const [expanded, setExpanded] = useState(false)
-  const [alignLeft, setAlignLeft] = useState(false)
+  const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(null)
   const [projects, setProjects] = useState<ProjectOption[] | null>(null)
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set())
   const [busyId, setBusyId] = useState<string | null>(null)
@@ -37,12 +44,19 @@ export function AddToProjectMenuItem({ item }: { item: WikiEntryRef }) {
     setSavedIds(new Set(savedRows.map(r => r.project_id)))
   }
 
+  // Position the portaled submenu against the button's viewport rect, flipping
+  // to the left when there isn't enough room to the right.
+  useLayoutEffect(() => {
+    if (!expanded || !btnRef.current) { setMenuPos(null); return }
+    const rect = btnRef.current.getBoundingClientRect()
+    const left = window.innerWidth - rect.right < SUBMENU_WIDTH + SUBMENU_GAP
+      ? rect.left - SUBMENU_WIDTH - SUBMENU_GAP
+      : rect.right + SUBMENU_GAP
+    setMenuPos({ top: rect.top, left })
+  }, [expanded])
+
   function toggleExpanded() {
     const next = !expanded
-    if (next && btnRef.current) {
-      const rect = btnRef.current.getBoundingClientRect()
-      setAlignLeft(window.innerWidth - rect.right < SUBMENU_SPACE)
-    }
     setExpanded(next)
     if (next && projects === null) load()
   }
@@ -99,10 +113,12 @@ export function AddToProjectMenuItem({ item }: { item: WikiEntryRef }) {
         <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
       </button>
 
-      {expanded && (
+      {expanded && menuPos && createPortal(
         <div
           role="menu"
-          className={`absolute top-0 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-72 overflow-y-auto ${alignLeft ? 'right-full mr-1' : 'left-full ml-1'}`}
+          data-add-to-project-menu
+          style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, width: SUBMENU_WIDTH }}
+          className="rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-72 overflow-y-auto"
         >
           {projects === null ? (
             <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
@@ -146,7 +162,8 @@ export function AddToProjectMenuItem({ item }: { item: WikiEntryRef }) {
             )}
             <span className="flex-1 text-left">New Project</span>
           </button>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )

@@ -128,11 +128,15 @@ export function ConceptPopup() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, close, navigate])
 
-  // Close play menu when clicking outside of it.
+  // Close play menu when clicking outside of it. The "Add to Project" submenu
+  // is rendered in its own portal (outside playMenuRef in the DOM), so it's
+  // excluded via the data-add-to-project-menu marker.
   useEffect(() => {
     if (!showPlayMenu) return
     function onPointerDown(e: PointerEvent) {
-      if (playMenuRef.current && !playMenuRef.current.contains(e.target as Node)) {
+      const target = e.target as HTMLElement | null
+      if (target?.closest('[data-add-to-project-menu]')) return
+      if (playMenuRef.current && !playMenuRef.current.contains(target)) {
         setShowPlayMenu(false)
       }
     }

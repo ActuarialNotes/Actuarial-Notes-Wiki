@@ -10,6 +10,7 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
+import { selectQuestionsForCoverage } from '@/lib/studyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -528,15 +529,6 @@ export default function Landing() {
     )
   }
 
-  // Score a question by how many plan concepts it covers
-  function conceptCoverageScore(q: { wiki_link: string[] }, planSet: Set<string>): number {
-    return q.wiki_link.filter(link => {
-      const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
-      const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
-      return planSet.has(n)
-    }).length
-  }
-
   function handleStart() {
     if (selectedConcept) {
       const params = new URLSearchParams({ concept: selectedConcept, mode: 'quiz', reveal, from: 'home' })
@@ -561,12 +553,11 @@ export default function Landing() {
           })
         })
         if (todayQs.length > 0) {
-          // Sort by number of plan concepts covered (descending), then cap the
-          // pool at count*3 so the quiz shuffle draws preferentially from the
-          // highest-coverage questions rather than the full unfiltered list.
-          const scored = todayQs.map(q => ({ q, score: conceptCoverageScore(q, todaySet) }))
-          scored.sort((a, b) => b.score - a.score)
-          const poolIds = scored.slice(0, Math.min(count * 3, scored.length)).map(x => x.q.id)
+          // Greedily cover as many of today's concepts as possible with the
+          // fewest questions, so a quiz with count >= concepts covers every
+          // concept at least once.
+          const selected = selectQuestionsForCoverage(todayQs, displayConcepts, count)
+          const poolIds = selected.map(q => q.id)
           try {
             sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(poolIds))
           } catch { /* ignore */ }

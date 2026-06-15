@@ -604,3 +604,76 @@ export function daysUntilScheduled(conceptName: string, plan: StudyPlan | null):
   if (!d) return null
   return daysBetween(todayISO(), d)
 }
+
+// ── Today's plan question selection ───────────────────────────────────────────
+
+interface CoverageQuestion {
+  id: string
+  wiki_link: string[]
+}
+
+// Resolve a question's wiki_link entries to the lowercased concept names they
+// reference, matching the normalization used to build today's concept set.
+function linkedConceptNames(wikiLinks: string[]): Set<string> {
+  const names = new Set<string>()
+  for (const link of wikiLinks) {
+    const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
+    const name = clean.split('/').filter(Boolean).pop()?.toLowerCase()
+    if (name) names.add(name)
+  }
+  return names
+}
+
+/**
+ * Pick up to `count` questions from `questions` that cover as many of
+ * `concepts` as possible, using the fewest questions necessary.
+ *
+ * Phase 1 greedily picks the question covering the most not-yet-covered
+ * concepts at each step, so a quiz with `count >= concepts.length` covers
+ * every concept (at least one question each) and a quiz with
+ * `count < concepts.length` still spreads across as many distinct concepts
+ * as those questions can reach.
+ *
+ * Phase 2 fills any remaining slots with the highest-coverage leftover
+ * questions, so extra questions still stay on-topic.
+ */
+export function selectQuestionsForCoverage<T extends CoverageQuestion>(
+  questions: T[],
+  concepts: string[],
+  count: number,
+): T[] {
+  const conceptSet = new Set(concepts.map(c => c.toLowerCase()))
+  const uncovered = new Set(conceptSet)
+  const pool = [...questions]
+  const selected: T[] = []
+
+  while (uncovered.size > 0 && selected.length < count && pool.length > 0) {
+    let bestIdx = -1
+    let bestCovered: Set<string> = new Set()
+    for (let i = 0; i < pool.length; i++) {
+      const covered = new Set([...linkedConceptNames(pool[i].wiki_link)].filter(c => uncovered.has(c)))
+      if (covered.size > bestCovered.size) {
+        bestCovered = covered
+        bestIdx = i
+      }
+    }
+    if (bestIdx === -1) break
+    const [chosen] = pool.splice(bestIdx, 1)
+    selected.push(chosen)
+    for (const c of bestCovered) uncovered.delete(c)
+  }
+
+  if (selected.length < count && pool.length > 0) {
+    pool.sort((a, b) => {
+      const scoreA = [...linkedConceptNames(a.wiki_link)].filter(c => conceptSet.has(c)).length
+      const scoreB = [...linkedConceptNames(b.wiki_link)].filter(c => conceptSet.has(c)).length
+      return scoreB - scoreA
+    })
+    for (const q of pool) {
+      if (selected.length >= count) break
+      selected.push(q)
+    }
+  }
+
+  return selected
+}

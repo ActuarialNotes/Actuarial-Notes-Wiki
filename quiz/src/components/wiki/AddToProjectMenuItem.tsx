@@ -1,8 +1,11 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useNavigate } from 'react-router-dom'
 import { FolderPlus, Plus, Check, Loader2, ChevronRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useResearchStore } from '@/stores/researchStore'
 
 interface ProjectOption {
   id: string
@@ -25,7 +28,7 @@ const SUBMENU_GAP = 4
 // child of the action menu — keeping it out of the action menu's
 // overflow-y-auto container (which would otherwise gain a horizontal scrollbar
 // from the submenu's overflow).
-export function AddToProjectMenuItem({ item }: { item: WikiEntryRef }) {
+export function AddToProjectMenuItem({ item, onNavigate }: { item: WikiEntryRef; onNavigate?: () => void }) {
   const [expanded, setExpanded] = useState(false)
   const [menuPos, setMenuPos] = useState<{ top: number; left: number } | null>(null)
   const [projects, setProjects] = useState<ProjectOption[] | null>(null)
@@ -33,6 +36,10 @@ export function AddToProjectMenuItem({ item }: { item: WikiEntryRef }) {
   const [busyId, setBusyId] = useState<string | null>(null)
   const [creating, setCreating] = useState(false)
   const btnRef = useRef<HTMLButtonElement>(null)
+  const navigate = useNavigate()
+  const closePopup = useConceptPopup(s => s.close)
+  const setResearchTab = useResearchStore(s => s.setTab)
+  const setOpenProject = useResearchStore(s => s.setOpenProject)
 
   async function load() {
     const [projectsRes, savedRes] = await Promise.all([
@@ -59,6 +66,17 @@ export function AddToProjectMenuItem({ item }: { item: WikiEntryRef }) {
     const next = !expanded
     setExpanded(next)
     if (next && projects === null) load()
+  }
+
+  // Jump to the saved project — directly into it if there's exactly one,
+  // otherwise to the projects list to pick.
+  function handleView() {
+    const ids = [...savedIds]
+    setResearchTab('projects')
+    setOpenProject(ids.length === 1 ? ids[0] : null)
+    onNavigate?.()
+    closePopup()
+    navigate('/research')
   }
 
   async function addToProject(projectId: string) {
@@ -95,23 +113,34 @@ export function AddToProjectMenuItem({ item }: { item: WikiEntryRef }) {
 
   return (
     <div className="relative">
-      <button
-        ref={btnRef}
-        type="button"
-        onClick={toggleExpanded}
-        aria-expanded={expanded}
-        aria-haspopup="menu"
-        className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${expanded ? 'bg-accent' : 'hover:bg-accent'}`}
-      >
-        <FolderPlus className="h-3.5 w-3.5 shrink-0" />
-        <span className="flex-1 text-left">Add to Project</span>
+      <div className={`flex items-center transition-colors ${expanded ? 'bg-accent' : 'hover:bg-accent'}`}>
+        <button
+          ref={btnRef}
+          type="button"
+          onClick={toggleExpanded}
+          aria-expanded={expanded}
+          aria-haspopup="menu"
+          className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left min-w-0"
+        >
+          <FolderPlus className="h-3.5 w-3.5 shrink-0" />
+          <span className="flex-1 text-left truncate">Add to Project</span>
+          {savedIds.size > 0 && (
+            <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
+              {savedIds.size}
+            </span>
+          )}
+          <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+        </button>
         {savedIds.size > 0 && (
-          <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
-            {savedIds.size}
-          </span>
+          <button
+            type="button"
+            onClick={handleView}
+            className="text-xs text-primary hover:underline pr-3 shrink-0"
+          >
+            view
+          </button>
         )}
-        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-      </button>
+      </div>
 
       {expanded && menuPos && createPortal(
         <div

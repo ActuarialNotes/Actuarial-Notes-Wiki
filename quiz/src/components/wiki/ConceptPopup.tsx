@@ -341,7 +341,7 @@ export function ConceptPopup() {
                   </Link>
                 )}
               </div>
-              {user && <AddToProjectMenuItem item={current} />}
+              {user && <AddToProjectMenuItem item={current} onNavigate={() => setShowPlayMenu(false)} />}
               <button
                 type="button"
                 onClick={() => { setMathView(true); setListenView(false); setShowPlayMenu(false) }}

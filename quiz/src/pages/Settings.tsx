@@ -29,6 +29,7 @@ import { COLOR_THEMES } from '@/lib/colorThemes'
 import { FREE_ANIMALS } from '@/lib/characters'
 import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
+import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
 
 // ---- Exam status cycle & icons ----
 
@@ -472,6 +473,7 @@ export default function Settings() {
 
   // ---- Progress & Data modals ----
   const [showResetModal, setShowResetModal] = useState(false)
+  const [resetScope, setResetScope] = useState<'all' | string>('all')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [dataActionState, setDataActionState] = useState<{ saving: boolean; error: string | null; success: string | null }>({ saving: false, error: null, success: null })
@@ -479,8 +481,14 @@ export default function Settings() {
   const handleResetHistory = async () => {
     setShowResetModal(false)
     setDataActionState({ saving: true, error: null, success: null })
-    const ok = await resetHistory()
-    setDataActionState({ saving: false, error: ok ? null : 'Failed to reset history.', success: ok ? 'Study history cleared.' : null })
+    const examId = resetScope === 'all' ? null : resetScope
+    const ok = await resetHistory(examId)
+    const scopeLabel = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'all exams'
+    setDataActionState({
+      saving: false,
+      error: ok ? null : 'Failed to reset history.',
+      success: ok ? `Study history and learning progress cleared for ${scopeLabel}.` : null,
+    })
   }
 
   const handleDeleteAccount = async () => {
@@ -518,7 +526,12 @@ export default function Settings() {
         onCancel={() => setShowResetModal(false)}
         destructive
       >
-        <p>This will permanently delete all your quiz sessions and question responses. This cannot be undone.</p>
+        <p>
+          This will permanently delete all quiz sessions, question responses, and learning progress
+          (concept mastery, daily completions, and cached study plans)
+          {resetScope === 'all' ? ' for every exam' : ` for ${EXAM_ID_TO_LABEL[resetScope] ?? resetScope}`}.
+          This cannot be undone.
+        </p>
       </ConfirmModal>
 
       <ConfirmModal
@@ -1088,16 +1101,31 @@ export default function Settings() {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium">Reset study history</p>
-                      <p className="text-xs text-muted-foreground">Permanently delete all quiz sessions and responses.</p>
+                      <p className="text-xs text-muted-foreground">
+                        Permanently delete quiz sessions, question responses, and learning progress (concept mastery,
+                        daily completions, cached study plans).
+                      </p>
                     </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowResetModal(true)}
-                      disabled={dataState.saving || dataActionState.saving}
-                      className="shrink-0"
-                    >
-                      Reset History
-                    </Button>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <select
+                        value={resetScope}
+                        onChange={e => setResetScope(e.target.value)}
+                        aria-label="Reset scope"
+                        className="text-sm border border-input rounded-md px-2 py-2 bg-background text-foreground cursor-pointer"
+                      >
+                        <option value="all">All exams</option>
+                        {RESETTABLE_EXAMS.map(({ id, label }) => (
+                          <option key={id} value={id}>{label}</option>
+                        ))}
+                      </select>
+                      <Button
+                        variant="outline"
+                        onClick={() => setShowResetModal(true)}
+                        disabled={dataState.saving || dataActionState.saving}
+                      >
+                        Reset History
+                      </Button>
+                    </div>
                   </div>
 
                   <Separator />

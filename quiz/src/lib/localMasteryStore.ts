@@ -51,3 +51,20 @@ export function syncLocalMastery(records: ConceptMasteryRecord[]): void {
   }
   save(store)
 }
+
+// Clears cached mastery records — either everything (examId omitted) or just
+// the entries for one exam (used by the Settings "reset progress" controls).
+export function clearLocalMastery(examId?: string): void {
+  if (!examId) {
+    try {
+      localStorage.removeItem(KEY)
+    } catch { /* ignore */ }
+    return
+  }
+  const store = load()
+  const prefix = `${examId}::`
+  for (const key of Object.keys(store)) {
+    if (key.startsWith(prefix)) delete store[key]
+  }
+  save(store)
+}

@@ -257,7 +257,7 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
 
         // Fail-streak forgetting: mastery record shows forgotten but time-based
         // decay from last_correct_at wouldn't have triggered yet. Add a synthetic
-        // forget event at last_attempted_at (time of the 3rd consecutive failure).
+        // forget event around last_attempted_at (time of the 3rd consecutive failure).
         if (
           currentLevel === 'forgotten' &&
           lastLevelEvent &&
@@ -266,7 +266,20 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
         ) {
           const anchorRaw = rawMasteryRows.find(r => r.state === 'forgotten')
           if (anchorRaw?.last_attempted_at) {
-            const at = new Date(anchorRaw.last_attempted_at)
+            // All question_responses from the quiz that caused the forgetting
+            // share one client-side timestamp, written slightly *after*
+            // last_attempted_at (set earlier in the same submission). Anchoring
+            // the forget event at last_attempted_at would therefore place it
+            // before every attempt dot from that quiz, making the 3 consecutive
+            // wrong answers that triggered it all render on the 'forgotten' row
+            // (and overlap into what looks like a single dot). Anchor it just
+            // after the latest attempt dot instead, so those dots render at
+            // their pre-forget level (e.g. level2) and the step line drops to
+            // Forgotten immediately after them.
+            const lastDotTime = attemptDots.length > 0
+              ? attemptDots[attemptDots.length - 1].at.getTime()
+              : 0
+            const at = new Date(Math.max(new Date(anchorRaw.last_attempted_at).getTime(), lastDotTime + 1))
             finalLevelEvents = [
               ...levelEvents,
               { at, from: lastLevelEvent.to, to: 'forgotten' as MasteryState },

@@ -139,6 +139,32 @@ export function ProgressGraph({ levelEvents, attemptDots, onHoverLevel }: GraphP
   const xLabels = buildXLabels()
   const stepPath = buildStepPath()
 
+  // Several attempts answered in the same quiz session share one timestamp
+  // (and, if their level didn't change, one level) and would otherwise render
+  // as perfectly overlapping circles — looking like a single attempt. Spread
+  // dots that land on (nearly) the same pixel position out horizontally so
+  // each attempt stays visible.
+  const DOT_R = 5.5
+  const positionedDots = attemptDots.map(dot => ({
+    dot,
+    cx: xScale(dot.at),
+    cy: yScale(stateToYIndex(dot.levelAtTime)),
+  }))
+  const dotGroups = new Map<string, typeof positionedDots>()
+  for (const p of positionedDots) {
+    const key = `${Math.round(p.cx)}:${Math.round(p.cy)}`
+    const group = dotGroups.get(key)
+    if (group) group.push(p)
+    else dotGroups.set(key, [p])
+  }
+  const spreadDots: { dot: AttemptDot; cx: number; cy: number }[] = []
+  for (const group of dotGroups.values()) {
+    group.forEach((p, i) => {
+      const offset = (i - (group.length - 1) / 2) * (DOT_R + 1)
+      spreadDots.push({ dot: p.dot, cx: p.cx + offset, cy: p.cy })
+    })
+  }
+
   return (
     <svg
       ref={svgRef}
@@ -189,12 +215,12 @@ export function ProgressGraph({ levelEvents, attemptDots, onHoverLevel }: GraphP
       />
 
       {/* Attempt dots */}
-      {attemptDots.map((dot, idx) => (
+      {spreadDots.map(({ dot, cx, cy }, idx) => (
         <circle
           key={idx}
-          cx={xScale(dot.at)}
-          cy={yScale(stateToYIndex(dot.levelAtTime))}
-          r={5.5}
+          cx={cx}
+          cy={cy}
+          r={DOT_R}
           fill={dot.isCorrect ? '#22c55e' : '#ef4444'}
           stroke="white"
           strokeWidth={2}

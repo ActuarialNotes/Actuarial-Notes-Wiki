@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { generateStudyPlan, todayISO, addDays, daysBetween, PLAN_CACHE_VERSION } from './studyPlan'
+import { generateStudyPlan, todayISO, addDays, daysBetween, PLAN_CACHE_VERSION, selectQuestionsForCoverage } from './studyPlan'
 import { emptyRecord, type ConceptMasteryRecord } from './mastery'
 import type { WikiExamSyllabus } from './wikiParser'
 
@@ -549,5 +549,62 @@ describe('generateStudyPlan — reviewConcepts order', () => {
     })
     expect(plan.status).not.toBe('review_mode')
     expect(plan.reviewConcepts.length).toBeLessThanOrEqual(3)
+  })
+})
+
+describe('selectQuestionsForCoverage', () => {
+  const q = (id: string, ...concepts: string[]) => ({ id, wiki_link: concepts })
+
+  it('covers every concept when count equals the number of concepts', () => {
+    const concepts = ['Accumulated Value', 'Accumulation Function', 'Annuity Due', 'Discount Rate', 'Effective Discount Rate']
+    // Two questions double up on the first two concepts; the rest are single-concept.
+    const questions = [
+      q('q1', 'Accumulated Value', 'Accumulation Function'),
+      q('q2', 'Accumulated Value', 'Accumulation Function'),
+      q('q3', 'Annuity Due'),
+      q('q4', 'Discount Rate'),
+      q('q5', 'Effective Discount Rate'),
+      q('q6', 'Accumulated Value'),
+    ]
+
+    const selected = selectQuestionsForCoverage(questions, concepts, 5)
+
+    expect(selected).toHaveLength(5)
+    const covered = new Set(selected.flatMap(s => s.wiki_link))
+    for (const c of concepts) expect(covered.has(c)).toBe(true)
+  })
+
+  it('maximizes concept coverage when count is less than the number of concepts', () => {
+    const concepts = ['Topic 1', 'Topic 2', 'Topic 3', 'Topic 4', 'Topic 5']
+    const questions = [
+      q('multi-a', 'Topic 1', 'Topic 2', 'Topic 3'),
+      q('multi-b', 'Topic 4', 'Topic 5'),
+      q('single', 'Topic 1'),
+    ]
+
+    const selected = selectQuestionsForCoverage(questions, concepts, 3)
+
+    expect(selected).toHaveLength(3)
+    const covered = new Set(selected.flatMap(s => s.wiki_link))
+    for (const c of concepts) expect(covered.has(c)).toBe(true)
+    // The two multi-concept questions alone cover everything; greedy should pick both.
+    expect(selected.some(s => s.id === 'multi-a')).toBe(true)
+    expect(selected.some(s => s.id === 'multi-b')).toBe(true)
+  })
+
+  it('returns at most the available questions when the pool is smaller than count', () => {
+    const concepts = ['Topic 1', 'Topic 2', 'Topic 3']
+    const questions = [q('q1', 'Topic 1'), q('q2', 'Topic 2')]
+
+    const selected = selectQuestionsForCoverage(questions, concepts, 5)
+
+    expect(selected).toHaveLength(2)
+  })
+
+  it('returns an empty array when count is 0', () => {
+    const concepts = ['Topic 1']
+    const questions = [q('q1', 'Topic 1')]
+
+    expect(selectQuestionsForCoverage(questions, concepts, 0)).toHaveLength(0)
   })
 })

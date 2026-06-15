@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
@@ -173,6 +173,34 @@ export function ConceptPopup() {
       delete root.dataset.conceptSplitOpen
     }
   }, [open, height])
+
+  // While maximized, keep the popup's top offset in sync with the floating
+  // search bar's actual rendered height. A one-time measurement on click
+  // goes stale if the search bar grows/shrinks afterwards (e.g. the page
+  // title strip or an In Development/Beta banner mounts asynchronously),
+  // leaving the popup either hidden behind the search bar or with a gap
+  // above it.
+  useLayoutEffect(() => {
+    if (!maximized) return
+    const root = document.documentElement
+    function update() {
+      const topBar = document.querySelector('[data-floating-search]') as HTMLElement | null
+      const offset = topBar
+        ? topBar.getBoundingClientRect().bottom
+        : window.innerWidth >= 1024 ? 0 : 56
+      root.style.setProperty('--popup-max-top', `${Math.max(0, Math.round(offset))}px`)
+    }
+    update()
+    const topBar = document.querySelector('[data-floating-search]')
+    const observer = new ResizeObserver(update)
+    if (topBar) observer.observe(topBar)
+    window.addEventListener('resize', update)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', update)
+      root.style.removeProperty('--popup-max-top')
+    }
+  }, [maximized])
 
   // Reset math / listen view when popup closes.
   useEffect(() => {
@@ -413,16 +441,7 @@ export function ConceptPopup() {
         </div>
         <button
           type="button"
-          onClick={() => {
-            if (!maximized) {
-              const topBar = document.querySelector('[data-floating-search]') as HTMLElement | null
-              const offset = topBar
-                ? topBar.getBoundingClientRect().bottom
-                : window.innerWidth >= 1024 ? 0 : 56
-              document.documentElement.style.setProperty('--popup-max-top', `${Math.round(offset)}px`)
-            }
-            setMaximized(v => !v)
-          }}
+          onClick={() => setMaximized(v => !v)}
           className="text-muted-foreground hover:text-foreground p-1"
           title={maximized ? 'Restore size' : 'Maximize'}
           aria-label={maximized ? 'Restore size' : 'Maximize'}

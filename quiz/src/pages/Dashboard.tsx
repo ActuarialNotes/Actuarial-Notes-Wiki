@@ -23,7 +23,7 @@ import type { MasteryState } from '@/lib/mastery'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
-import { LOCALIZED_EXAMS } from '@/data/examSittings'
+import { LOCALIZED_EXAMS, matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
@@ -105,7 +105,7 @@ export default function Dashboard() {
   const { user, loading: authLoading, signOut } = useAuth()
   const { sessions, loading: sessionsLoading } = useProgress()
   const { syllabi, loading: syllabusLoading } = useWikiSyllabus()
-  const { progress: examProgress, targetDates, updateTargetDate, loadingExams } = useExamProgress()
+  const { progress: examProgress, targetDates, examVariants, updateTargetDate, loadingExams } = useExamProgress()
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
   const { isPremium, refresh: refreshSubscription } = useSubscription()
   const { balance: gemBalance } = useGems()
@@ -194,8 +194,11 @@ export default function Dashboard() {
 
   // All exams that are marked in_progress and have a known syllabus
   const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'),
-    [syllabi, examProgress],
+    () => syllabi.filter(s => {
+      const key = wikiExamIdToProgressKey(s.examId)
+      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
+    }),
+    [syllabi, examProgress, examVariants],
   )
 
   // Restore active exam from localStorage once syllabi are loaded

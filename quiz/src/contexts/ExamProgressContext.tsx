@@ -30,6 +30,8 @@ interface ExamProgressContextValue {
   progress: Record<string, string>
   /** Derived: target date keyed by exam_id */
   targetDates: Record<string, string | null>
+  /** Derived: selected regional variant (e.g. 'US'/'CA'/'INT') keyed by exam_id */
+  examVariants: Record<string, string | null>
   /** Persist an updated exam target date */
   updateTargetDate: (examId: string, date: string | null) => Promise<boolean>
   /** Persist an updated study plan config for a given exam */
@@ -253,12 +255,18 @@ export function ExamProgressProvider({ children }: { children: ReactNode }) {
     return d
   }, [examRows])
 
+  const examVariants = useMemo(() => {
+    const v: Record<string, string | null> = {}
+    examRows.forEach(r => { v[r.exam_id] = r.study_plan_config?.examVariant ?? null })
+    return v
+  }, [examRows])
+
   return (
     <ExamProgressContext.Provider value={{
       examRows, setExamRows, loadingExams,
       selectedTrack, setSelectedTrack,
       saveExamRows, examsState,
-      progress, targetDates, updateTargetDate, updateStudyPlanConfig, updateStudyPlanCache,
+      progress, targetDates, examVariants, updateTargetDate, updateStudyPlanConfig, updateStudyPlanCache,
     }}>
       {children}
     </ExamProgressContext.Provider>

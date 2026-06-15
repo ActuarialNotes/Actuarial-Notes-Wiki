@@ -31,6 +31,7 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { matchesSelectedVariant } from '@/data/examSittings'
 import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
@@ -243,11 +244,12 @@ export default function Sidebar() {
   const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
-  const { progress: examProgress } = useExamProgress()
+  const { progress: examProgress, examVariants } = useExamProgress()
   const { syllabi } = useWikiSyllabus()
-  const inProgressSyllabi = syllabi.filter(
-    s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'
-  )
+  const inProgressSyllabi = syllabi.filter(s => {
+    const key = wikiExamIdToProgressKey(s.examId)
+    return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
+  })
   const { cards } = useFlashcards()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
 

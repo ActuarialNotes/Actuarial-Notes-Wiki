@@ -50,6 +50,7 @@ import { entryRefToRepoPath, wikiRoute } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { matchesSelectedVariant } from '@/data/examSittings'
 import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
@@ -242,7 +243,7 @@ interface FlashcardPack {
 function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
-  const { progress: examProgress, targetDates } = useExamProgress()
+  const { progress: examProgress, targetDates, examVariants } = useExamProgress()
   const { addCard, hasCard, savedPacks, deleteSavedPack } = useFlashcards()
 
   const [collapsed, setCollapsed] = useState(false)
@@ -251,8 +252,11 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
   const [selectedConcepts, setSelectedConcepts] = useState<Set<string>>(new Set())
 
   const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'),
-    [syllabi, examProgress],
+    () => syllabi.filter(s => {
+      const key = wikiExamIdToProgressKey(s.examId)
+      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
+    }),
+    [syllabi, examProgress, examVariants],
   )
 
   const primarySyllabus = inProgressSyllabi[0] ?? null

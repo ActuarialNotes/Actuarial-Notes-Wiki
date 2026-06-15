@@ -6,6 +6,7 @@ import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { wikiRoute } from '@/lib/wikiRoutes'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { TRACKS, type Track } from '@/data/tracks'
+import { matchesSelectedVariant } from '@/data/examSittings'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -47,7 +48,7 @@ function formatTargetDate(dateStr: string): string {
 export default function WikiHome() {
   const { syllabi, loading } = useWikiSyllabus()
   const { setPageRefs, setExamId } = useWikiPage()
-  const { progress: examProgress, targetDates, selectedTrack } = useExamProgress()
+  const { progress: examProgress, targetDates, examVariants, selectedTrack } = useExamProgress()
   const { byConcept } = useConceptMastery()
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const location = useLocation()
@@ -112,8 +113,11 @@ export default function WikiHome() {
 
   // In-progress syllabi in the same order as Flashcards tab so colour indices align
   const inProgressSyllabi = useMemo(
-    () => syllabi.filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] === 'in_progress'),
-    [syllabi, examProgress],
+    () => syllabi.filter(s => {
+      const key = wikiExamIdToProgressKey(s.examId)
+      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
+    }),
+    [syllabi, examProgress, examVariants],
   )
 
   // Pill data for all in-progress exams (shown regardless of active body filter)
@@ -238,8 +242,9 @@ export default function WikiHome() {
                     const match = syllabi.find(s => s.examId === examIdCleaned)
                       ?? syllabi.find(s => wikiExamIdToProgressKey(s.examId) === examNameToTrackKey(exam.name))
                     const status = examProgress[examId]
-                    const isInProgress = status === 'in_progress'
-                    const isCompleted = status === 'completed'
+                    const variantMatch = matchesSelectedVariant(examId, examIdCleaned, examVariants[examId])
+                    const isInProgress = status === 'in_progress' && variantMatch
+                    const isCompleted = status === 'completed' && variantMatch
                     const targetDate = targetDates[examId]
 
                     // Colour mirrors Flashcards tab assignment; key-based so colour indices align

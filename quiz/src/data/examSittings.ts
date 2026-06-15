@@ -174,6 +174,23 @@ export const LOCALIZED_EXAMS: Record<string, ExamVariant[]> = {
   ],
 }
 
+/** Maps a localized exam's chosen variant ID to the wiki examId whose syllabus matches it. */
+export const LOCALIZED_EXAM_VARIANT_IDS: Record<string, Record<string, string>> = {
+  'CAS-6': { US: '6U', CA: '6C', INT: '6U' },
+}
+
+/**
+ * For exams with regional variants (e.g. CAS-6's "6C"/"6U" syllabi), returns true if
+ * `examId` is the syllabus matching the user's selected `variant` for `progressKey`.
+ * Exams without variants, or with no variant selected yet, always match.
+ */
+export function matchesSelectedVariant(progressKey: string, examId: string, variant: string | null | undefined): boolean {
+  const variantMap = LOCALIZED_EXAM_VARIANT_IDS[progressKey]
+  if (!variantMap || !variant) return true
+  const expectedExamId = variantMap[variant]
+  return !expectedExamId || examId === expectedExamId
+}
+
 /** Formats a sitting's date range for display, e.g. "Jul 8–19, 2026" or "Jul 27, 2026" */
 export function formatSittingDate(sitting: ExamSitting): string {
   const start = new Date(sitting.startDate + 'T00:00:00')

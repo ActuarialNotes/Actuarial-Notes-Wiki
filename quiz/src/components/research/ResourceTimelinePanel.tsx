@@ -11,7 +11,6 @@ import {
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { ResourceHeatmap } from '@/components/wiki/ResourceHeatmap'
 import { ResourceMonthCards } from '@/components/wiki/ResourceMonthCards'
-import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { ResourceKindFilterPills } from '@/components/research/ResourceKindFilterPills'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useResearchStore } from '@/stores/researchStore'
@@ -113,8 +112,6 @@ export function ResourceTimelinePanel({ addToProjectId, addedWikiKeys, onAddEntr
             yearRange={yearRange}
             onYearRangeChange={setYearRange}
           />
-
-          <ResearchFilterPanel />
 
           <ResourceMonthCards
             entries={displayedEntries}

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { Search, Sparkles, Loader2, Plus, X, FileText, Library, ExternalLink } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Search, Sparkles, Loader2, SlidersHorizontal, X, FileText, Library, ExternalLink } from 'lucide-react'
 import rawTimeline from 'virtual:resource-timeline'
 import { useResearchStore } from '@/stores/researchStore'
 import { useResearchSearch } from '@/hooks/useResearchSearch'
@@ -8,14 +8,11 @@ import { toTimelineEntries, searchTimelineEntries, entryToRef, KIND_LABEL, type 
 import { filterTimelineEntries } from '@/lib/resourceTimelineFilters'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
+import { ResearchFilterPanel, useActiveFilterCount } from './ResearchFilterPanel'
 
 interface ResearchTopSearchProps {
   onAsk: (query: string) => void
   asking: boolean
-  onAddUrl: (url: string) => void
-  addingUrl: boolean
-  addError: string | null
-  addNotice: string | null
   // Surface the AI answer (switch to the Resources tab) when Ask AI runs.
   onActivate: () => void
 }
@@ -34,20 +31,23 @@ function formatTimelineDate(entry: TimelineEntry): string {
 // like the exam study-guide search (WikiFloatingSearch): a sticky, full-width,
 // borderless bar pinned to the top, with live results appearing in a dropdown
 // right below as you type (no scope pills). "Ask AI" runs the grounded
-// assistant; a focused empty box reveals the add-a-source-by-URL affordance.
+// assistant. A "Filters" toggle (Source / Jurisdiction / Line of business /
+// Published) expands the same dropdown area — these are the only filter
+// controls for the Research tab; they apply to search, browse, and the
+// resource timeline alike via the shared researchStore filters.
 export function ResearchTopSearch({
-  onAsk, asking, onAddUrl, addingUrl, addError, addNotice, onActivate,
+  onAsk, asking, onActivate,
 }: ResearchTopSearchProps) {
   const setSearchQuery = useResearchStore(s => s.setSearchQuery)
   const [input, setInput] = useState('')
   const [active, setActive] = useState(false)
-  const [showAddUrl, setShowAddUrl] = useState(false)
-  const [url, setUrl] = useState('')
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { results, loading } = useResearchSearch()
   const filters = useResearchStore(s => s.filters)
+  const activeFilterCount = useActiveFilterCount()
   const openConceptAt = useConceptPopup(s => s.openAt)
 
   // Debounce the keyword query that drives the results dropdown.
@@ -69,7 +69,10 @@ export function ResearchTopSearch({
   useEffect(() => {
     if (!active) return
     function onDown(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) setActive(false)
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setActive(false)
+        setFiltersOpen(false)
+      }
     }
     document.addEventListener('mousedown', onDown)
     return () => document.removeEventListener('mousedown', onDown)
@@ -77,13 +80,19 @@ export function ResearchTopSearch({
 
   const query = input.trim()
   const hasQuery = query.length > 0
-  const isExpanded = active && hasQuery
+  const isExpanded = active && (hasQuery || filtersOpen)
 
   function dismiss() {
     setInput('')
     setSearchQuery('')
     setActive(false)
+    setFiltersOpen(false)
     inputRef.current?.blur()
+  }
+
+  function toggleFilters() {
+    setFiltersOpen(v => !v)
+    setActive(true)
   }
 
   const handleAsk = () => {
@@ -92,13 +101,8 @@ export function ResearchTopSearch({
     onActivate()
     onAsk(query)
     setActive(false)
+    setFiltersOpen(false)
     inputRef.current?.blur()
-  }
-
-  const handleAddUrl = (e: FormEvent) => {
-    e.preventDefault()
-    if (!url.trim() || addingUrl) return
-    onAddUrl(url.trim())
   }
 
   return (
@@ -106,7 +110,7 @@ export function ResearchTopSearch({
       {isExpanded && (
         <div
           className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm"
-          onMouseDown={e => { e.preventDefault(); setActive(false) }}
+          onMouseDown={e => { e.preventDefault(); setActive(false); setFiltersOpen(false) }}
         />
       )}
 
@@ -141,6 +145,25 @@ export function ResearchTopSearch({
                 <X className="h-4 w-4" />
               </button>
             )}
+            <button
+              type="button"
+              onClick={toggleFilters}
+              aria-pressed={filtersOpen}
+              aria-label="Filters"
+              className={`relative flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                filtersOpen
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-input text-muted-foreground hover:text-foreground hover:bg-accent/60'
+              }`}
+            >
+              <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
+              <span className="hidden sm:inline">Filters</span>
+              {activeFilterCount > 0 && (
+                <span className="rounded-full bg-primary/15 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
             {/* "Ask AI" assistant — gated off by RESEARCH_AI_ENABLED. While off,
                 the bar stays a pure keyword search over the corpus + timeline. */}
             {RESEARCH_AI_ENABLED && (
@@ -157,99 +180,67 @@ export function ResearchTopSearch({
             )}
           </div>
 
-          {/* Results dropdown — only when there's a query */}
+          {/* Dropdown — filters and/or live results */}
           {isExpanded && (
-            <div className="border-t pb-3 pt-2">
-              {loading && results.length === 0 && timelineMatches.length === 0 ? (
-                <div className="flex items-center gap-2 px-2 py-3 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Searching…
-                </div>
-              ) : results.length === 0 && timelineMatches.length === 0 ? (
-                <p className="px-2 py-3 text-xs text-muted-foreground">No matches.</p>
-              ) : (
-                <ul className="max-h-[55vh] space-y-0.5 overflow-y-auto">
-                  {timelineMatches.map(entry => (
-                    <li key={`${entry.kind}:${entry.path}`}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setActive(false)
-                          openConceptAt([entryToRef(entry)], 0, entry.path)
-                        }}
-                        className="flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-accent/60"
-                      >
-                        <Library className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" aria-hidden />
-                        <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm text-foreground">{entry.title}</span>
-                          <span className="block truncate text-[11px] text-muted-foreground">
-                            {[KIND_LABEL[entry.kind], formatTimelineDate(entry)].filter(Boolean).join(' · ')}
-                          </span>
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                  {results.map(doc => (
-                    <li key={doc.id}>
-                      <a
-                        href={doc.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => setActive(false)}
-                        className="flex items-start gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-accent/60"
-                      >
-                        <FileText className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" aria-hidden />
-                        <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm text-foreground">
-                            {doc.title}
-                            <ExternalLink className="ml-1 inline h-3 w-3 align-text-top text-muted-foreground" aria-hidden />
-                          </span>
-                          <span className="block truncate text-[11px] text-muted-foreground">
-                            {[agentMeta(doc.agent_id)?.shortName ?? doc.agent_id, formatDate(doc.published_at)]
-                              .filter(Boolean)
-                              .join(' · ')}
-                          </span>
-                        </span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
+            <div className="space-y-3 border-t pb-3 pt-2">
+              {filtersOpen && <ResearchFilterPanel />}
 
-          {/* Add-a-source affordance — shown on focus when not actively searching */}
-          {active && !hasQuery && (
-            <div className="border-t py-2.5">
-              <button
-                type="button"
-                onClick={() => setShowAddUrl(v => !v)}
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-              >
-                <Plus className="h-3.5 w-3.5" aria-hidden /> Add a source by URL
-              </button>
-
-              {showAddUrl && (
-                <form onSubmit={handleAddUrl} className="mt-2 flex flex-col gap-2 sm:flex-row">
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={e => setUrl(e.target.value)}
-                    placeholder="https://www.osfi-bsif.gc.ca/…/guideline"
-                    disabled={addingUrl}
-                    className="h-9 flex-1 rounded-md border border-input bg-background px-3 text-[16px] sm:text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50"
-                  />
-                  <button
-                    type="submit"
-                    disabled={addingUrl || !url.trim()}
-                    className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md border border-input px-3 text-sm transition-colors hover:bg-accent/60 disabled:opacity-50"
-                  >
-                    {addingUrl && <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />}
-                    {addingUrl ? 'Fetching…' : 'Add source'}
-                  </button>
-                </form>
+              {hasQuery && (
+                loading && results.length === 0 && timelineMatches.length === 0 ? (
+                  <div className="flex items-center gap-2 px-2 py-3 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Searching…
+                  </div>
+                ) : results.length === 0 && timelineMatches.length === 0 ? (
+                  <p className="px-2 py-3 text-xs text-muted-foreground">No matches.</p>
+                ) : (
+                  <ul className="max-h-[55vh] space-y-0.5 overflow-y-auto">
+                    {timelineMatches.map(entry => (
+                      <li key={`${entry.kind}:${entry.path}`}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActive(false)
+                            openConceptAt([entryToRef(entry)], 0, entry.path)
+                          }}
+                          className="flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-accent/60"
+                        >
+                          <Library className="mt-0.5 h-4 w-4 shrink-0 text-blue-500" aria-hidden />
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-sm text-foreground">{entry.title}</span>
+                            <span className="block truncate text-[11px] text-muted-foreground">
+                              {[KIND_LABEL[entry.kind], formatTimelineDate(entry)].filter(Boolean).join(' · ')}
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                    {results.map(doc => (
+                      <li key={doc.id}>
+                        <a
+                          href={doc.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => setActive(false)}
+                          className="flex items-start gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-accent/60"
+                        >
+                          <FileText className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" aria-hidden />
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-sm text-foreground">
+                              {doc.title}
+                              <ExternalLink className="ml-1 inline h-3 w-3 align-text-top text-muted-foreground" aria-hidden />
+                            </span>
+                            <span className="block truncate text-[11px] text-muted-foreground">
+                              {[agentMeta(doc.agent_id)?.shortName ?? doc.agent_id, formatDate(doc.published_at)]
+                                .filter(Boolean)
+                                .join(' · ')}
+                            </span>
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )
               )}
-              {showAddUrl && addError && <p className="mt-1 text-xs text-destructive">{addError}</p>}
-              {showAddUrl && addNotice && <p className="mt-1 text-xs text-muted-foreground">{addNotice}</p>}
             </div>
           )}
         </div>

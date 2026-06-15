@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import { FolderPlus, X } from 'lucide-react'
 import { useResearchStore, type ResearchTab } from '@/stores/researchStore'
 import { useResearchQuery } from '@/hooks/useResearchQuery'
-import { useAddResourceByUrl } from '@/hooks/useAddResourceByUrl'
 import { useResearchProjects, useProjectDocuments, useProjectWikiItems } from '@/hooks/useResearchProjects'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ResearchTopSearch } from '@/components/research/ResearchTopSearch'
@@ -28,9 +27,6 @@ export default function Research() {
   // half is gated by RESEARCH_AI_ENABLED (see lib/featureFlags.ts); while off,
   // this hook stays dormant (never invoked) and only keyword search renders.
   const { loading: asking, error: askError, result, ask, reset } = useResearchQuery()
-  const addUrl = useAddResourceByUrl()
-  const [addNotice, setAddNotice] = useState<string | null>(null)
-  const [refreshNonce, setRefreshNonce] = useState(0)
 
   // "Add Sources" flow: when set, the Resources tab adds results directly into
   // this project instead of showing the "Save to…" picker.
@@ -60,26 +56,11 @@ export default function Research() {
     setAddWikiRefreshKey(k => k + 1)
   }
 
-  const handleAddUrl = async (url: string) => {
-    setAddNotice(null)
-    const res = await addUrl.add(url)
-    if (res) {
-      const verb = res.status === 'duplicate' ? 'Already in the corpus' : 'Added'
-      const review = res.document.is_in_review ? ' (pending review)' : ''
-      setAddNotice(`${verb}: ${res.document.title}${review}.`)
-      setRefreshNonce(n => n + 1)
-    }
-  }
-
   return (
     <div>
       <ResearchTopSearch
         onAsk={q => ask(q)}
         asking={asking}
-        onAddUrl={handleAddUrl}
-        addingUrl={addUrl.loading}
-        addError={addUrl.error}
-        addNotice={addNotice}
         onActivate={() => setTab('resources')}
       />
 
@@ -124,7 +105,6 @@ export default function Research() {
               <AiAnswerPanel loading={asking} error={askError} result={result} onDismiss={reset} />
             )}
             <ResourcesView
-              refreshNonce={refreshNonce}
               addToProjectId={addSourcesProjectId}
               addToProjectIds={addToProjectIds}
               onAddToProject={handleAddToProject}

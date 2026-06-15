@@ -3,8 +3,7 @@ import { Loader2, FolderOpen, ChevronLeft, Trash2, FileText, FolderPlus, Sparkle
 import { Button } from '@/components/ui/button'
 import { useResearchStore } from '@/stores/researchStore'
 import { useResearchProjects, useProjectDocuments, useProjectWikiItems, type ResearchProject } from '@/hooks/useResearchProjects'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { entryRefToRepoPath, type WikiEntryKind } from '@/lib/wikiRoutes'
+import { AddSourcesMenu } from '@/components/research/AddSourcesMenu'
 import { NewProjectDialog } from '@/components/research/NewProjectDialog'
 import { EditProjectScopeDialog } from '@/components/research/EditProjectScopeDialog'
 import { SuggestedResources } from '@/components/research/SuggestedResources'
@@ -144,7 +143,9 @@ function ProjectDetail({ projectId }: { projectId: string }) {
   const { projects, addDocument, removeWikiItem, updateProjectOnboarding } = useResearchProjects()
   const [refreshKey, setRefreshKey] = useState(0)
   const [showEditScope, setShowEditScope] = useState(false)
-  const { documents, documentIds, loading } = useProjectDocuments(projectId, refreshKey)
+  const { documents, documentIds, loading: docsLoading } = useProjectDocuments(projectId, refreshKey)
+  const { items: wikiItems, loading: wikiLoading } = useProjectWikiItems(projectId, refreshKey)
+  const loading = docsLoading || wikiLoading
 
   const project = projects.find(p => p.id === projectId)
   const badges = project ? projectBadges(project) : []
@@ -197,40 +198,34 @@ function ProjectDetail({ projectId }: { projectId: string }) {
         <div className="space-y-4">
           {/* AI "Ask" surface (CTA + FAQ / Research Report / Actuarial
               Justification), gated off via RESEARCH_AI_ENABLED. While off, a
-              project is a pure source collection: scope + Sources list. */}
+              project is a pure source collection: scope + Documents list. */}
           {RESEARCH_AI_ENABLED && project && (
             <ProjectFaq project={project} onDocumentsAdded={() => setRefreshKey(k => k + 1)} />
           )}
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-muted-foreground">Sources</h3>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => { setAddSourcesProject(projectId); setTab('resources') }}
-                className="gap-1.5"
-              >
-                <FolderPlus className="h-4 w-4" aria-hidden /> Add Sources
-              </Button>
+              <h3 className="text-sm font-semibold text-muted-foreground">Documents</h3>
+              <AddSourcesMenu
+                projectId={projectId}
+                onBrowseResources={() => { setAddSourcesProject(projectId); setTab('resources') }}
+                onSourceAdded={() => setRefreshKey(k => k + 1)}
+              />
             </div>
-            {documents.length === 0 && (
+            {documents.length === 0 && wikiItems.length === 0 && (
               <SuggestedResources project={project} existingIds={documentIds} onAdd={handleAdd} />
             )}
             <ResourcesView
               projectId={projectId}
               projectDocumentIds={documentIds}
+              projectWikiItems={wikiItems}
               onProjectMutated={() => setRefreshKey(k => k + 1)}
+              onRemoveWikiItem={async (kind, name) => {
+                await removeWikiItem(projectId, kind, name)
+                setRefreshKey(k => k + 1)
+              }}
             />
           </div>
-
-          <SavedWikiItems
-            projectId={projectId}
-            refreshKey={refreshKey}
-            onRemove={removeWikiItem}
-            onMutated={() => setRefreshKey(k => k + 1)}
-          />
         </div>
       )}
 
@@ -240,62 +235,6 @@ function ProjectDetail({ projectId }: { projectId: string }) {
           onClose={() => setShowEditScope(false)}
           onSave={onboarding => updateProjectOnboarding(project.id, onboarding)}
         />
-      )}
-    </div>
-  )
-}
-
-// ── Saved wiki pages ───────────────────────────────────────────────────────
-// Concept/resource/regulation pages saved from the wiki popup's "Add to
-// Project" menu item (components/wiki/AddToProjectMenuItem.tsx).
-
-function SavedWikiItems({
-  projectId,
-  refreshKey,
-  onRemove,
-  onMutated,
-}: {
-  projectId: string
-  refreshKey: number
-  onRemove: (projectId: string, kind: WikiEntryKind, name: string) => Promise<void>
-  onMutated: () => void
-}) {
-  const { items, loading } = useProjectWikiItems(projectId, refreshKey)
-  const openAt = useConceptPopup(s => s.openAt)
-
-  if (!loading && items.length === 0) return null
-
-  return (
-    <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-muted-foreground">Saved Pages</h3>
-      {loading ? (
-        <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" /> Loading pages…
-        </div>
-      ) : (
-        <ul className="space-y-2">
-          {items.map(item => (
-            <li key={`${item.kind}:${item.name}`} className="flex items-center gap-3 rounded-lg border bg-card p-3">
-              <button
-                type="button"
-                onClick={() => openAt([item], 0, entryRefToRepoPath(item))}
-                className="flex flex-1 items-center gap-2 min-w-0 text-left"
-              >
-                <BookOpen className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-                <span className="min-w-0 flex-1 truncate text-sm font-medium">{item.name}</span>
-                <MetaBadge>{item.kind}</MetaBadge>
-              </button>
-              <button
-                type="button"
-                onClick={() => onRemove(projectId, item.kind, item.name).then(onMutated)}
-                className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-                aria-label={`Remove ${item.name}`}
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </li>
-          ))}
-        </ul>
       )}
     </div>
   )

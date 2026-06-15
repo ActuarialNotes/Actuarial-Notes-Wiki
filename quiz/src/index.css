@@ -51,6 +51,90 @@
     --input: 0 0% 18%;
     --ring: 0 0% 91%;
   }
+
+  /* Colourful theme: vibrant violet primary + teal accent */
+  [data-color-theme="colourful"] {
+    --background: 240 60% 98%;
+    --foreground: 240 10% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 12%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 199 89% 92%;
+    --secondary-foreground: 240 10% 15%;
+    --muted: 240 20% 94%;
+    --muted-foreground: 240 10% 45%;
+    --accent: 162 73% 46%;
+    --accent-foreground: 0 0% 100%;
+    --border: 240 20% 88%;
+    --input: 240 20% 88%;
+    --ring: 262 83% 58%;
+  }
+
+  [data-color-theme="colourful"].dark {
+    --background: 250 35% 9%;
+    --foreground: 240 30% 96%;
+    --card: 250 30% 14%;
+    --card-foreground: 240 30% 96%;
+    --popover: 250 30% 12%;
+    --popover-foreground: 240 30% 96%;
+    --primary: 263 85% 66%;
+    --primary-foreground: 250 35% 9%;
+    --secondary: 250 25% 20%;
+    --secondary-foreground: 240 30% 96%;
+    --muted: 250 25% 18%;
+    --muted-foreground: 240 15% 65%;
+    --accent: 162 70% 50%;
+    --accent-foreground: 250 35% 9%;
+    --border: 250 25% 22%;
+    --input: 250 25% 22%;
+    --ring: 263 85% 66%;
+  }
+
+  /* High Contrast theme: pure black/white for max readability */
+  [data-color-theme="high-contrast"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 92%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 20%;
+    --accent: 0 0% 0%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 100% 40%;
+    --border: 0 0% 0%;
+    --input: 0 0% 0%;
+    --ring: 0 0% 0%;
+  }
+
+  [data-color-theme="high-contrast"].dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 85%;
+    --accent: 0 0% 100%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 100% 65%;
+    --border: 0 0% 100%;
+    --input: 0 0% 100%;
+    --ring: 0 0% 100%;
+  }
 }
 
 @layer base {

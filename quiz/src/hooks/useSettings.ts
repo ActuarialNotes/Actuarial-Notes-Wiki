@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress, type ExamProgressRow } from '@/contexts/ExamProgressContext'
 import type { ItemStatus } from '@/data/tracks'
+import { resetProgressData } from '@/lib/resetProgress'
 
 export type { ExamProgressRow }
 export type { ItemStatus }
@@ -132,15 +133,18 @@ export function useSettings() {
     return urlData.publicUrl
   }, [user])
 
-  // --- Data: reset study history ---
-  const resetHistory = useCallback(async () => {
+  // --- Data: reset quiz history & learning progress, for one exam or all exams ---
+  const resetHistory = useCallback(async (examId: string | null) => {
     if (!user) return false
     setDataState({ saving: true, error: null, success: null })
-    const { error } = await supabase.from('quiz_sessions').delete().eq('user_id', user.id)
+    const error = await resetProgressData(user.id, examId)
     if (error) {
-      setDataState({ saving: false, error: error.message, success: null })
+      setDataState({ saving: false, error, success: null })
       return false
     }
+    // Force useProgress (and any other quiz-session-saved listeners) to refetch
+    // so session counts and heatmaps reflect the cleared data immediately.
+    window.dispatchEvent(new CustomEvent('quiz-session-saved'))
     setDataState({ saving: false, error: null, success: 'Study history cleared.' })
     return true
   }, [user])

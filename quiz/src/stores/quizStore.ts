@@ -6,11 +6,7 @@ import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type Conc
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dailyProgressStore'
-
-const EXAM_LABEL_TO_ID: Record<string, string> = {
-  'Probability': 'P',
-  'Financial Mathematics': 'FM',
-}
+import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 
 // Resolve a Question's wiki_link[] entries to canonical concept names so that
 // mastery upserts use the same key (concept_slug) regardless of whether the
@@ -231,7 +227,7 @@ function computeMasteryTransitions(
   return transitions
 }
 
-const LAST_SESSION_KEY = 'actuarial_last_session'
+export const LAST_SESSION_KEY = 'actuarial_last_session'
 
 interface PersistableSession {
   questions: Question[]

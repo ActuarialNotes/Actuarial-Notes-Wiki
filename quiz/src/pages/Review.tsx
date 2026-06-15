@@ -16,11 +16,7 @@ import type { MasteryState } from '@/lib/mastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
-
-const EXAM_LABEL_TO_ID: Record<string, string> = {
-  'Probability': 'P',
-  'Financial Mathematics': 'FM',
-}
+import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New', level1: '1', level2: '2', level3: '3', forgotten: 'F',

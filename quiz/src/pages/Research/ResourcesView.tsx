@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { Loader2, Trash2, Plus, Check } from 'lucide-react'
+import { useState, type ReactNode } from 'react'
+import { Loader2, Trash2, Plus, Check, BookOpen } from 'lucide-react'
 import { useResearchFeed, type ResearchDocumentRow } from '@/hooks/useResearchFeed'
 import { useResearchSearch } from '@/hooks/useResearchSearch'
 import { useResearchStore } from '@/stores/researchStore'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { supabase } from '@/lib/supabase'
 import { entryToRef } from '@/lib/resourceTimeline'
-import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import { entryRefToRepoPath, type WikiEntryKind, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { Card, CardContent } from '@/components/ui/card'
 import { DocumentCard } from '@/components/research/DocumentCard'
 import { AddToProjectButton } from '@/components/research/AddToProjectButton'
-import { ResearchFilterPanel } from '@/components/research/ResearchFilterPanel'
 import { AddEntryButton, ResourceTimelinePanel } from '@/components/research/ResourceTimelinePanel'
 import { ResourceSearchMatches } from '@/components/research/ResourceSearchMatches'
 
@@ -18,11 +19,12 @@ interface ResourcesViewProps {
   // When set, this view is scoped to a single project's saved documents.
   projectId?: string
   projectDocumentIds?: string[]
-  // Called after a source is added by URL (so the project view can refetch).
+  // Wiki pages (concepts/resources/exams/events/regulations) saved to this
+  // project — rendered alongside the corpus documents below as one list.
+  projectWikiItems?: WikiEntryRef[]
+  // Called after a source is added/removed (so the project view can refetch).
   onProjectMutated?: () => void
-  // Bumped by the page-level search bar after a corpus URL-add, so the browse
-  // feed refetches to show the new document (non-project scope only).
-  refreshNonce?: number
+  onRemoveWikiItem?: (kind: WikiEntryKind, name: string) => Promise<void>
   // "Add Sources" flow: when set (non-project scope), browse/search the corpus
   // with a one-tap add into this project instead of the "Save to…" picker.
   addToProjectId?: string | null
@@ -36,7 +38,7 @@ interface ResourcesViewProps {
 }
 
 export default function ResourcesView({
-  projectId, projectDocumentIds, onProjectMutated, refreshNonce,
+  projectId, projectDocumentIds, projectWikiItems, onProjectMutated, onRemoveWikiItem,
   addToProjectId, addToProjectIds, onAddToProject,
   addedWikiKeys, onAddWikiItem,
 }: ResourcesViewProps) {
@@ -48,15 +50,7 @@ export default function ResourcesView({
   const search = useResearchSearch(isProjectScope ? (projectDocumentIds ?? []) : undefined)
   const [addingId, setAddingId] = useState<string | null>(null)
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set())
-
-  // Refetch the corpus feed when the page-level search bar reports a URL-add.
-  const didMountRef = useRef(false)
-  useEffect(() => {
-    if (!didMountRef.current) { didMountRef.current = true; return }
-    if (!isProjectScope) feed.refresh()
-    // feed.refresh is stable; only the nonce should drive this.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refreshNonce])
+  const openWikiPage = useConceptPopup(s => s.openAt)
 
   const handleAddToProject = async (documentId: string) => {
     setAddingId(documentId)
@@ -132,19 +126,18 @@ export default function ResourcesView({
     <div className="space-y-5">
       {searching ? (
         <>
-          <ResearchFilterPanel />
           {!isProjectScope && <ResourceSearchMatches action={wikiAddAction} />}
           <SearchResults search={search} action={cardAction} />
         </>
       ) : isProjectScope ? (
-        <>
-          <ResearchFilterPanel />
-          <BrowseFeed
-            feed={feed}
-            action={cardAction}
-            emptyMessage='This project has no documents yet. Search the corpus and use “Save” on a result, or add a source by URL.'
-          />
-        </>
+        <BrowseFeed
+          feed={feed}
+          action={cardAction}
+          wikiItems={projectWikiItems ?? []}
+          onOpenWikiItem={item => openWikiPage([item], 0, entryRefToRepoPath(item))}
+          onRemoveWikiItem={onRemoveWikiItem}
+          emptyMessage='No documents in this project yet. Use “Add Sources” to browse the corpus, or add a source by URL.'
+        />
       ) : (
         // Corpus view: everything here comes from the markdown vault
         // (Resources/Books, Resources/Events, Resources/Regulation), browsed
@@ -213,15 +206,21 @@ function SearchResults({
   )
 }
 
-// ── Browse feed (project sources) ─────────────────────────────────────────────
+// ── Browse feed (project documents — corpus docs + saved wiki pages) ──────────
 
 function BrowseFeed({
   feed,
   action,
+  wikiItems = [],
+  onOpenWikiItem,
+  onRemoveWikiItem,
   emptyMessage,
 }: {
   feed: ReturnType<typeof useResearchFeed>
   action: (doc: ResearchDocumentRow) => ReactNode
+  wikiItems?: WikiEntryRef[]
+  onOpenWikiItem?: (item: WikiEntryRef) => void
+  onRemoveWikiItem?: (kind: WikiEntryKind, name: string) => Promise<void>
   emptyMessage: string
 }) {
   const { documents, loading, loadingMore, error, hasMore, total, loadMore } = feed
@@ -234,7 +233,7 @@ function BrowseFeed({
     )
   }
   if (error) return <p className="py-16 text-center text-sm text-destructive">{error}</p>
-  if (documents.length === 0) {
+  if (documents.length === 0 && wikiItems.length === 0) {
     return (
       <p className="mx-auto max-w-md py-16 text-center text-sm text-muted-foreground">
         {emptyMessage}
@@ -242,13 +241,25 @@ function BrowseFeed({
     )
   }
 
+  const shown = documents.length + wikiItems.length
+  const totalCount = total !== null ? total + wikiItems.length : null
+
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">
-        {total !== null
-          ? `Showing ${documents.length} of ${total.toLocaleString()} document${total !== 1 ? 's' : ''}`
-          : `${documents.length} document${documents.length !== 1 ? 's' : ''}`}
+        {totalCount !== null
+          ? `Showing ${shown} of ${totalCount.toLocaleString()} document${totalCount !== 1 ? 's' : ''}`
+          : `${shown} document${shown !== 1 ? 's' : ''}`}
       </p>
+
+      {wikiItems.map(item => (
+        <WikiItemCard
+          key={`${item.kind}:${item.name}`}
+          item={item}
+          onOpen={onOpenWikiItem ? () => onOpenWikiItem(item) : undefined}
+          onRemove={onRemoveWikiItem ? () => onRemoveWikiItem(item.kind, item.name) : undefined}
+        />
+      ))}
 
       {documents.map(doc => (
         <DocumentCard key={doc.id} document={doc} action={action(doc)} />
@@ -268,5 +279,56 @@ function BrowseFeed({
         </div>
       )}
     </div>
+  )
+}
+
+// ── Saved wiki page row (concept/resource/exam/event/regulation) ──────────────
+
+function WikiItemCard({
+  item,
+  onOpen,
+  onRemove,
+}: {
+  item: WikiEntryRef
+  onOpen?: () => void
+  onRemove?: () => Promise<void>
+}) {
+  const [removing, setRemoving] = useState(false)
+
+  const handleRemove = async () => {
+    if (!onRemove) return
+    setRemoving(true)
+    await onRemove()
+    setRemoving(false)
+  }
+
+  return (
+    <Card className="transition-colors hover:border-primary/40">
+      <CardContent className="flex items-center gap-3 p-4">
+        <button
+          type="button"
+          onClick={onOpen}
+          className="flex min-w-0 flex-1 items-center gap-2 text-left"
+        >
+          <BookOpen className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+          <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">{item.name}</span>
+          <span className="shrink-0 rounded-full bg-blue-500/10 px-2 py-0.5 text-[11px] font-medium text-blue-700 dark:text-blue-300">
+            {item.kind}
+          </span>
+        </button>
+        {onRemove && (
+          <button
+            type="button"
+            onClick={handleRemove}
+            disabled={removing}
+            className="flex shrink-0 items-center gap-1 rounded-md border border-input px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive disabled:opacity-60"
+            aria-label={`Remove ${item.name}`}
+          >
+            {removing ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <Trash2 className="h-3.5 w-3.5" aria-hidden />}
+            Remove
+          </button>
+        )}
+      </CardContent>
+    </Card>
   )
 }

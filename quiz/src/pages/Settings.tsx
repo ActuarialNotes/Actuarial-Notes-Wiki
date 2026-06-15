@@ -25,6 +25,7 @@ import {
   serializeAvatar,
 } from '@/components/AvatarDisplay'
 import { COSMETICS } from '@/lib/cosmetics'
+import { COLOR_THEMES } from '@/lib/colorThemes'
 import { FREE_ANIMALS } from '@/lib/characters'
 import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
@@ -265,7 +266,7 @@ const BASE_NAV_ITEMS = [
 export default function Settings() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
-  const { theme, toggleTheme } = useTheme()
+  const { theme, toggleTheme, colorTheme, setColorTheme } = useTheme()
   const { isPremium, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
   const { sessions } = useProgress()
   const {
@@ -610,8 +611,10 @@ export default function Settings() {
                 <CardHeader>
                   <CardTitle>Appearance</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="flex gap-2">
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="text-sm font-medium mb-2">Mode</p>
+                    <div className="flex gap-2">
                       <button
                         type="button"
                         onClick={() => theme !== 'light' && toggleTheme()}
@@ -638,6 +641,49 @@ export default function Settings() {
                         <Moon className="h-4 w-4" />
                         Dark
                       </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium mb-2">Theme</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      {COLOR_THEMES.map(option => {
+                        const swatch = theme === 'dark' ? option.preview.dark : option.preview.light
+                        const selected = colorTheme === option.id
+                        return (
+                          <button
+                            key={option.id}
+                            type="button"
+                            onClick={() => setColorTheme(option.id)}
+                            className={cn(
+                              'flex flex-col gap-2 p-3 rounded-md border text-left transition-colors',
+                              selected
+                                ? 'border-primary ring-2 ring-primary'
+                                : 'border-border hover:bg-accent hover:text-accent-foreground'
+                            )}
+                          >
+                            <div className="flex gap-1.5">
+                              <span
+                                className="h-5 w-5 rounded-full border border-border/50"
+                                style={{ backgroundColor: swatch.background }}
+                              />
+                              <span
+                                className="h-5 w-5 rounded-full border border-border/50"
+                                style={{ backgroundColor: swatch.primary }}
+                              />
+                              <span
+                                className="h-5 w-5 rounded-full border border-border/50"
+                                style={{ backgroundColor: swatch.accent }}
+                              />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium">{option.name}</p>
+                              <p className="text-xs text-muted-foreground">{option.description}</p>
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
                 </CardContent>
               </Card>

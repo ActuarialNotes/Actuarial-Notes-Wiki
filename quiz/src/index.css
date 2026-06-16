@@ -276,6 +276,9 @@
   z-index: 60;
   pointer-events: none;
   border-radius: 12px;
+  /* Static ring — visible even if the keyframe animation fails (e.g. CSS vars
+     in @keyframes have spotty support in older iOS Safari). */
+  box-shadow: 0 0 0 2px hsl(var(--primary)), 0 0 0 5px hsl(var(--primary) / 0.35);
   animation: onboarding-pulse 1.8s ease-in-out infinite;
   transition:
     top 280ms cubic-bezier(0.4, 0, 0.2, 1),

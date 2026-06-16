@@ -1671,30 +1671,6 @@ export default function Flashcards() {
     }
   }, [cards.length, activeIndex])
 
-  // Navigate to and flash a card when arriving via the ?highlight= URL param.
-  // Depends on orderedCards so the effect re-runs once cards finish loading.
-  useEffect(() => {
-    if (!highlightName) return
-    const latest = orderedCardsRef.current
-    const idx = latest.findIndex(c => c.name.toLowerCase() === highlightName.toLowerCase())
-    if (idx < 0) return // card not found yet; will retry when orderedCards updates
-    setActiveIndex(idx)
-    const timerId = setTimeout(() => {
-      setFlashingCard(highlightName)
-      if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
-      flashTimerRef.current = setTimeout(() => {
-        setFlashingCard(null)
-        setSearchParams(prev => {
-          const next = new URLSearchParams(prev)
-          next.delete('highlight')
-          return next
-        }, { replace: true })
-      }, 1700)
-    }, 100)
-    return () => clearTimeout(timerId)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [highlightName, cards])
-
   // Reset tracked popup name when popup closes
   useEffect(() => {
     if (!popupOpen) prevPopupNameRef.current = null
@@ -1778,6 +1754,29 @@ export default function Flashcards() {
   }, [cards, customOrder, groupBy, conceptToExam])
 
   orderedCardsRef.current = orderedCards
+
+  // Navigate to and flash a card when arriving via the ?highlight= URL param.
+  // Must be after orderedCards so the dep array re-fires when sort order changes
+  // (e.g. conceptToExam populates after syllabi load, reordering cards by exam).
+  useEffect(() => {
+    if (!highlightName) return
+    const idx = orderedCards.findIndex(c => c.name.toLowerCase() === highlightName.toLowerCase())
+    if (idx < 0) return
+    setActiveIndex(idx)
+    const timerId = setTimeout(() => {
+      setFlashingCard(highlightName)
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
+      flashTimerRef.current = setTimeout(() => {
+        setFlashingCard(null)
+        setSearchParams(prev => {
+          const next = new URLSearchParams(prev)
+          next.delete('highlight')
+          return next
+        }, { replace: true })
+      }, 1700)
+    }, 100)
+    return () => clearTimeout(timerId)
+  }, [highlightName, orderedCards, setSearchParams])
 
   // Exam groups derived from orderedCards
   const examGroups = useMemo(() => {

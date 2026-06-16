@@ -242,7 +242,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
                 <select
                   value={selectedTrack}
                   onChange={e => setSelectedTrack(e.target.value)}
-                  className="flex-1 text-base border border-input rounded-md px-2 py-1.5 bg-background text-foreground cursor-pointer"
+                  className="flex-1 min-w-0 text-base border border-input rounded-md px-2 py-1.5 bg-background text-foreground cursor-pointer"
                 >
                   {TRACKS.map(t => (
                     <option key={t.key} value={t.key}>{t.name}</option>

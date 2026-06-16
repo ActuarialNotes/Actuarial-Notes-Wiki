@@ -268,7 +268,7 @@ const BASE_NAV_ITEMS = [
 export default function Settings() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
-  const { theme, toggleTheme, colorTheme, setColorTheme } = useTheme()
+  const { theme, toggleTheme, colorTheme, setColorTheme, colourfulVariant, setColourfulVariant } = useTheme()
   const { isPremium, isBetaTester, currentPeriodEnd, loading: subLoading } = useSubscription()
   const { sessions } = useProgress()
   const {
@@ -683,6 +683,61 @@ export default function Settings() {
                       {COLOR_THEMES.map(option => {
                         const swatch = theme === 'dark' ? option.preview.dark : option.preview.light
                         const selected = colorTheme === option.id
+
+                        if (option.id === 'colourful') {
+                          return (
+                            <div
+                              key={option.id}
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => setColorTheme(option.id)}
+                              onKeyDown={e => e.key === 'Enter' && setColorTheme(option.id)}
+                              className={cn(
+                                'flex flex-col gap-2 p-3 rounded-md border text-left transition-colors cursor-pointer',
+                                selected
+                                  ? 'border-primary ring-2 ring-primary'
+                                  : 'border-border hover:bg-accent hover:text-accent-foreground'
+                              )}
+                            >
+                              <p className="text-sm font-medium">{option.name}</p>
+                              <div className="flex gap-1.5 flex-wrap">
+                                {option.variants!.map(v => {
+                                  const vPrimary = theme === 'dark' ? v.dark.primary : v.light.primary
+                                  const vAccent = theme === 'dark' ? v.dark.accent : v.light.accent
+                                  const vSelected = selected && colourfulVariant === v.id
+                                  return (
+                                    <button
+                                      key={v.id}
+                                      type="button"
+                                      aria-label={v.id}
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        setColorTheme('colourful')
+                                        setColourfulVariant(v.id)
+                                      }}
+                                      className={cn(
+                                        'flex gap-1 p-0.5 rounded border transition-colors',
+                                        vSelected
+                                          ? 'border-primary ring-1 ring-primary'
+                                          : 'border-transparent hover:border-border'
+                                      )}
+                                    >
+                                      <span
+                                        className="h-4 w-4 rounded-full border border-border/50"
+                                        style={{ backgroundColor: vPrimary }}
+                                      />
+                                      <span
+                                        className="h-4 w-4 rounded-full border border-border/50"
+                                        style={{ backgroundColor: vAccent }}
+                                      />
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                          )
+                        }
+
                         return (
                           <button
                             key={option.id}
@@ -709,10 +764,7 @@ export default function Settings() {
                                 style={{ backgroundColor: swatch.accent }}
                               />
                             </div>
-                            <div>
-                              <p className="text-sm font-medium">{option.name}</p>
-                              <p className="text-xs text-muted-foreground">{option.description}</p>
-                            </div>
+                            <p className="text-sm font-medium">{option.name}</p>
                           </button>
                         )
                       })}

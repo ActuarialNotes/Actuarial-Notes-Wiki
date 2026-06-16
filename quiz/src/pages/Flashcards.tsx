@@ -7,6 +7,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   ChevronsUpDown,
   GraduationCap,
   Headphones,
@@ -1590,15 +1591,6 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                 ))}
               </div>
             )}
-            {!expanded && markdown && (
-              <button
-                type="button"
-                onClick={e => { e.stopPropagation(); setExpanded(true) }}
-                className="self-start text-xs text-primary hover:underline mt-1"
-              >
-                Expand
-              </button>
-            )}
             {expanded && markdown && (
               <div className="border-t pt-4 overflow-y-auto max-h-96">
                 <WikiArticle
@@ -1607,6 +1599,19 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                   onWikiLink={ref => { jumpTo(ref); return true }}
                 />
               </div>
+            )}
+            {markdown && (
+              <button
+                type="button"
+                onClick={e => { e.stopPropagation(); setExpanded(v => !v) }}
+                className="flex items-center justify-center w-full mt-auto pt-2 pb-1 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={expanded ? 'Collapse' : 'Expand'}
+              >
+                {expanded
+                  ? <ChevronUp className="h-8 w-8" />
+                  : <ChevronDown className="h-8 w-8" />
+                }
+              </button>
             )}
           </div>
         )}

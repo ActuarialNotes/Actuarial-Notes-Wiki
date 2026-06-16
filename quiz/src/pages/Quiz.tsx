@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Loader2, X, ChevronLeft, Volume2, VolumeX, Bookmark, BookmarkCheck, AlertCircle, Keyboard } from 'lucide-react'
+import { Loader2, X, ChevronLeft, Volume2, VolumeX, AlertCircle, Keyboard } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
@@ -407,18 +407,6 @@ export default function Quiz() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => toggleFlag(currentQuestion.id)}
-            className={isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'}
-            aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
-          >
-            {isFlagged
-              ? <BookmarkCheck className="h-4 w-4 mr-1" />
-              : <Bookmark className="h-4 w-4 mr-1" />}
-            {isFlagged ? 'Flagged' : 'Flag'}
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
             onClick={toggleSound}
             aria-label={soundEnabled ? 'Mute sounds' : 'Unmute sounds'}
             className="text-muted-foreground hover:text-foreground"
@@ -445,6 +433,8 @@ export default function Quiz() {
           onNavigate={goToQuestion}
           flaggedIds={flaggedIds}
           questionIds={storeQuestions.map(q => q.id)}
+          isFlagged={isFlagged}
+          onFlag={() => toggleFlag(currentQuestion.id)}
         />
       </div>
 

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Bookmark, BookmarkCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Progress } from '@/components/ui/progress'
 
@@ -9,9 +9,11 @@ interface ProgressBarProps {
   onNavigate?: (index: number) => void   // called with 0-based index
   flaggedIds?: string[]
   questionIds?: string[]
+  isFlagged?: boolean
+  onFlag?: () => void
 }
 
-export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds }: ProgressBarProps) {
+export function ProgressBar({ current, total, onNavigate, flaggedIds, questionIds, isFlagged, onFlag }: ProgressBarProps) {
   const percentage = total > 0 ? Math.min(100, (current / total) * 100) : 0
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -82,6 +84,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
   return (
     <div className="space-y-2.5">
       <div className="flex justify-between items-center text-sm text-muted-foreground">
+        <div className="flex items-center gap-1.5">
         {onNavigate ? (
           <div ref={containerRef} className="relative">
             <button
@@ -106,7 +109,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
                 className="absolute top-full left-0 mt-1 z-50 bg-popover border border-border rounded-md shadow-lg max-h-64 overflow-y-auto min-w-[190px]"
               >
                 {Array.from({ length: total }, (_, i) => {
-                  const isFlagged = !!(flaggedIds && questionIds && flaggedIds.includes(questionIds[i] ?? ''))
+                  const isItemFlagged = !!(flaggedIds && questionIds && flaggedIds.includes(questionIds[i] ?? ''))
                   const isCurrent = i === current - 1
                   return (
                     <button
@@ -114,7 +117,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
                       type="button"
                       role="option"
                       aria-selected={isCurrent}
-                      aria-label={`Go to question ${i + 1}${isFlagged ? ' (flagged)' : ''}`}
+                      aria-label={`Go to question ${i + 1}${isItemFlagged ? ' (flagged)' : ''}`}
                       data-active={isCurrent}
                       onClick={() => { onNavigate(i); setOpen(false) }}
                       className={cn(
@@ -123,7 +126,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
                       )}
                     >
                       <span>Question {i + 1}</span>
-                      {isFlagged && <span aria-hidden="true" className="text-xs">🚩</span>}
+                      {isItemFlagged && <span aria-hidden="true" className="text-xs">🚩</span>}
                     </button>
                   )
                 })}
@@ -133,6 +136,23 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
         ) : (
           <span>Question {current} of {total}</span>
         )}
+        {onFlag && (
+          <button
+            type="button"
+            onClick={onFlag}
+            aria-label={isFlagged ? 'Remove flag' : 'Flag question'}
+            className={cn(
+              'flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition-colors hover:bg-accent',
+              isFlagged ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+            )}
+          >
+            {isFlagged
+              ? <BookmarkCheck className="h-3.5 w-3.5" />
+              : <Bookmark className="h-3.5 w-3.5" />}
+            {isFlagged ? 'Flagged' : 'Flag'}
+          </button>
+        )}
+        </div>
         <span>{Math.round(percentage)}%</span>
       </div>
       <Progress value={percentage} className="h-2 [&>div]:bg-foreground" />

@@ -51,15 +51,21 @@ export function AddToProjectMenuItem({ item, onNavigate }: { item: WikiEntryRef;
     setSavedIds(new Set(savedRows.map(r => r.project_id)))
   }
 
-  // Position the portaled submenu against the button's viewport rect, flipping
-  // to the left when there isn't enough room to the right.
+  // Position the portaled submenu against the button's viewport rect. Prefers
+  // opening to the right; flips left when there isn't room. Both axes are
+  // clamped to keep the menu fully on-screen (important on narrow mobile
+  // viewports where the action menu can sit close to either edge).
   useLayoutEffect(() => {
     if (!expanded || !btnRef.current) { setMenuPos(null); return }
     const rect = btnRef.current.getBoundingClientRect()
-    const left = window.innerWidth - rect.right < SUBMENU_WIDTH + SUBMENU_GAP
-      ? rect.left - SUBMENU_WIDTH - SUBMENU_GAP
-      : rect.right + SUBMENU_GAP
-    setMenuPos({ top: rect.top, left })
+    const hasRoomRight = window.innerWidth - rect.right >= SUBMENU_WIDTH + SUBMENU_GAP
+    const rawLeft = hasRoomRight
+      ? rect.right + SUBMENU_GAP
+      : rect.left - SUBMENU_WIDTH - SUBMENU_GAP
+    const left = Math.max(SUBMENU_GAP, Math.min(window.innerWidth - SUBMENU_WIDTH - SUBMENU_GAP, rawLeft))
+    // max-h-72 = 288px; clamp top so the menu doesn't spill below the viewport.
+    const top = Math.min(rect.top, Math.max(SUBMENU_GAP, window.innerHeight - 288 - SUBMENU_GAP))
+    setMenuPos({ top, left })
   }, [expanded])
 
   function toggleExpanded() {

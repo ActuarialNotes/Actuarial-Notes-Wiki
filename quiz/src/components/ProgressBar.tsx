@@ -80,7 +80,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
   }
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-2.5">
       <div className="flex justify-between items-center text-sm text-muted-foreground">
         {onNavigate ? (
           <div ref={containerRef} className="relative">

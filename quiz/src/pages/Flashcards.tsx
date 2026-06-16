@@ -1397,7 +1397,6 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   const [expanded, setExpanded] = useState(false)
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-  const { jumpTo } = useConceptPopup()
   const { addCard, hasCard } = useFlashcards()
   const routerNavigate = useNavigate()
   const [showPlayMenu, setShowPlayMenu] = useState(false)
@@ -1567,14 +1566,14 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
               <div>
                 <WikiArticle
                   markdown={definition}
-                  onWikiLink={ref => { jumpTo(ref); return true }}
+                  onWikiLink={ref => { const { open, jumpTo, openAt } = useConceptPopup.getState(); if (open) jumpTo(ref); else openAt([ref], 0); return true }}
                 />
               </div>
             )}
             {reverseCardModes.has('math') && allEquations.length > 0 && (
               <div className="space-y-3">
                 {allEquations.map((eq, i) => (
-                  <WikiArticle key={i} markdown={eq} onWikiLink={ref => { jumpTo(ref); return true }} />
+                  <WikiArticle key={i} markdown={eq} onWikiLink={ref => { const { open, jumpTo, openAt } = useConceptPopup.getState(); if (open) jumpTo(ref); else openAt([ref], 0); return true }} />
                 ))}
               </div>
             )}
@@ -1604,7 +1603,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                 <WikiArticle
                   markdown={markdown}
                   sourcePath={entryRefToRepoPath(current)}
-                  onWikiLink={ref => { jumpTo(ref); return true }}
+                  onWikiLink={ref => { const { open, jumpTo, openAt } = useConceptPopup.getState(); if (open) jumpTo(ref); else openAt([ref], 0); return true }}
                 />
               </div>
             )}

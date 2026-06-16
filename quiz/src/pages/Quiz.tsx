@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Loader2, X, ChevronLeft, Volume2, VolumeX, Bookmark, BookmarkCheck, AlertCircle } from 'lucide-react'
+import { Loader2, X, ChevronLeft, Volume2, VolumeX, Bookmark, BookmarkCheck, AlertCircle, Keyboard } from 'lucide-react'
 import { useQuestions } from '@/hooks/useQuestions'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
@@ -10,11 +10,13 @@ import type { SelfGrade } from '@/components/QuestionCard'
 import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
+import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
+import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted } from '@/lib/analytics'
 
 export default function Quiz() {
@@ -102,6 +104,7 @@ export default function Quiz() {
   const [showSelfGradeScreen, setShowSelfGradeScreen] = useState(false)
   // keyed by `${questionId}__${partLabel}`
   const [essaySelfGrades, setEssaySelfGrades] = useState<Record<string, SelfGrade>>({})
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
 
   const essayQuestions = useMemo(
     () => storeQuestions.filter(q =>
@@ -129,6 +132,32 @@ export default function Quiz() {
   // Multi-part questions show the Confirm button immediately (no need to wait
   // for a pending selection) — incomplete submissions are caught with a confirm dialog
   const showConfirmButton = !isLocked && (pendingAnswer !== null || currentQuestion?.type === 'multi-part')
+
+  const anyDialogOpen = showQuitDialog || showIncompletePartsDialog || showSelfGradeScreen || showShortcutsHelp
+
+  // Select an MC answer by its 0-based index in the options array
+  function selectAnswerByIndex(i: number) {
+    if (!currentQuestion || isLocked) return
+    if (currentQuestion.type === 'multi-part' || !currentQuestion.options?.length) return
+    const option = currentQuestion.options[i]
+    if (option) handleSelectAnswer(option.key)
+  }
+
+  usePageKeyboard({
+    '1': () => selectAnswerByIndex(0),
+    '2': () => selectAnswerByIndex(1),
+    '3': () => selectAnswerByIndex(2),
+    '4': () => selectAnswerByIndex(3),
+    'Enter': () => {
+      if (isLocked) handleNextFromAnswer()
+      else if (pendingAnswer !== null) handleConfirmAnswer()
+    },
+    'ArrowRight': () => { if (isLocked) handleNextFromAnswer() },
+    'ArrowLeft': () => { if (currentIndex > 0) goToPreviousQuestion() },
+    'f': () => { if (currentQuestion) toggleFlag(currentQuestion.id) },
+    'm': () => toggleSound(),
+    '?': () => setShowShortcutsHelp(v => !v),
+  }, !anyDialogOpen && status !== 'idle' && status !== 'complete')
 
   function handleQuit() {
     try { sessionStorage.removeItem('actuarial_selected_ids') } catch { /* ignore */ }
@@ -396,6 +425,16 @@ export default function Quiz() {
           >
             {soundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
           </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowShortcutsHelp(true)}
+            aria-label="Keyboard shortcuts"
+            title="Keyboard shortcuts (?)"
+            className="text-muted-foreground hover:text-foreground hidden sm:flex"
+          >
+            <Keyboard className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 
@@ -425,6 +464,13 @@ export default function Quiz() {
             setShowIncompletePartsDialog(false)
             commitAnswer(pendingAnswer ?? '{}')
           }}
+        />
+      )}
+
+      {showShortcutsHelp && (
+        <KeyboardShortcutsHelp
+          context="quiz"
+          onClose={() => setShowShortcutsHelp(false)}
         />
       )}
 

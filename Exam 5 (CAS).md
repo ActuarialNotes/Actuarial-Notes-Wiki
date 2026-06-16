@@ -15,15 +15,15 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > 
 > 1. Define and describe [[Exposure Base]]s as used in the ratemaking process
 > 2. Evaluate and select an exposure base in a given scenario (e.g., line of business, use cases)
-> 3. Aggregate and/or organize ratemaking data by: [[Calendar Year]], [[Policy Year]], [[Accident Year]], [[Report Year]], close year, in-force, net of reinsurance
+> 3. Aggregate and/or organize ratemaking data by: [[Calendar Year]], [[Policy Year]], [[Accident Year]], [[Report Year]], close year, [[In-Force|in-force]], net of reinsurance; collect [[Earned Premium]] and [[Earned Exposure]]
 > 4. Evaluate ratemaking data and analyses for errors and reasonableness
 > 5. Separate data into groups that balance [[Homogeneity]] and [[Credibility]] and summarize the considerations for determining such groups
-> 6. Calculate [[Loss and Loss Adjustment Expense]]s for ratemaking (e.g., common ratios, adjustments to losses, claims-made vs occurrence coverage)
-> 7. Calculate various adjustments to the premium used for ratemaking (e.g., [[On-Leveling]], premium audit)
+> 6. Calculate [[Loss and Loss Adjustment Expense]]s for ratemaking (e.g., common ratios, adjustments to losses, [[Claims Made Coverage|claims-made]] vs occurrence coverage)
+> 7. Calculate various adjustments to the premium used for ratemaking (e.g., [[On Level Premium]], [[On-Leveling]], premium audit)
 > 8. Calculate and apply trends (e.g., [[Exposure Trend|Exposure]], [[Premium Trend|Premium]], [[Loss Trend|Loss]]) using different approaches (e.g., exponential and linear analyses)
-> 9. Calculate the underwriting provisions underlying the overall [[Rate Level Indication]] (e.g., fixed and variable expenses, profit and contingency, reinsurance costs)
+> 9. Calculate the underwriting provisions underlying the overall [[Rate Level Indication]] (e.g., [[Fixed Expenses|fixed]] and [[Variable Expenses|variable expenses]], [[Profit and Contingency Provision|profit and contingency]], reinsurance costs); determine indicated [[Rate Change]]
 > 10. Demonstrate proper handling of extraordinary losses for ratemaking purposes (e.g., [[Large Loss]]es, [[Catastrophe]]s)
-> 11. Construct an overall rate level indication using the [[Pure Premium Method]] and [[Loss Ratio Method]]
+> 11. Construct an overall rate level indication using the [[Pure Premium Method]] and [[Loss Ratio Method]]; calculate a [[Permissible Loss Ratio]]
 > 12. Apply [[Credibility]] to ratemaking analyses using different methods and justify choice of complement
 > 13. Select and justify a final rate change beyond the calculated overall rate level indication (e.g., operational, marketing, regulatory [[Ratemaking Constraints|Constraints]], [[Lifetime Value]])
 > 14. Perform calculations related to alternative ratemaking procedures (e.g., classification, territory, [[Deductible]]s, [[Increased Limits]], [[Coinsurance]], [[Commercial Lines Rating]] mechanisms)
@@ -49,10 +49,10 @@ The **Basic Techniques for Ratemaking and Estimating Claim Liabilities** is a 4-
 > 20. Describe the role of [[Homogeneity]] and [[Credibility]] of data in estimating unpaid claims
 > 21. Describe the fundamentals of different [[Types of Insurance]] (e.g., long tail vs. short tail lines, low frequency vs. high frequency lines, occurrence vs. claims made)
 > 22. Articulate the importance of accurate estimates of unpaid claims
-> 23. Build and analyze [[Development Triangle]]s (e.g., loss, count, [[Allocated Loss Adjustment Expense]] (ALAE))
+> 23. Build and analyze [[Development Triangle]]s (e.g., loss, count, [[Allocated Loss Adjustment Expense]] (ALAE)); select [[Age to Age Factor|age-to-age factors]] and [[Cumulative Development Factor]]s
 > 24. Apply a [[Tail Factor]]
-> 25. Use development triangles as diagnostic tools to identify changes and trends (e.g., loss and claim count, ratio of losses to premium, severity, ratios of loss and claim counts)
-> 26. Calculate and evaluate unpaid loss estimation techniques (i.e., [[Chain Ladder Method]], case outstanding development, [[Expected Loss Method]], [[Bornhuetter-Ferguson Method]], [[Cape Cod Method]], frequency-severity, [[Berquist-Sherman Method|Berquist-Sherman]], [[Benktander Method]])
+> 25. Use development triangles as diagnostic tools to identify changes and trends (e.g., [[Frequency|claim count]], [[Severity]], [[Severity Analysis]], ratio of losses to premium, ratios of loss and claim counts)
+> 26. Calculate and evaluate unpaid loss estimation techniques (i.e., [[Chain Ladder Method]], [[Case Reserves|case outstanding development]], [[Expected Loss Method]], [[Bornhuetter-Ferguson Method]], [[Cape Cod Method]], [[Frequency-Severity Method|frequency-severity]], [[Berquist-Sherman Method|Berquist-Sherman]], [[Benktander Method]]); estimate [[IBNR]] and [[Ultimate Loss]]
 > 27. Assess the influence of operating changes on the estimation of unpaid losses (e.g., claims coding, claims processing, underwriting and policy provisions, marketing, reinsurance, treatment of recoveries such as deductibles, salvage and subrogation)
 > 28. Adjust data and/or estimation techniques for changes in the internal and external environment (e.g., shift in adequacy of case outstanding or settlement rates, change in mix of business, change in rate level, inflationary or legal environment)
 > 29. Consider the impact of and adjust for the presence of large losses in a reserving analysis

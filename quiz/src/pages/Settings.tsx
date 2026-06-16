@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Loader2, User, ChevronRight, Star, Sun, Moon, GraduationCap } from 'lucide-react'
+import { Loader2, User, ChevronRight, Star, Sun, Moon, GraduationCap, Mail } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
@@ -30,6 +30,7 @@ import { FREE_ANIMALS } from '@/lib/characters'
 import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
 import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
+import { ContactDialog } from '@/components/ContactDialog'
 
 // ---- Exam status cycle & icons ----
 
@@ -293,6 +294,7 @@ export default function Settings() {
 
   // ---- Onboarding tour (replayable from Support) ----
   const restartTour = useOnboardingTour(s => s.restart)
+  const [showContact, setShowContact] = useState(false)
 
   // ---- Section refs for scroll-nav ----
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
@@ -518,6 +520,8 @@ export default function Settings() {
 
   return (
     <>
+      {showContact && <ContactDialog onClose={() => setShowContact(false)} />}
+
       <ConfirmModal
         open={showResetModal}
         title="Reset study history?"
@@ -597,7 +601,7 @@ export default function Settings() {
                 <CardHeader>
                   <CardTitle>Support</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium">Take the tour</p>
@@ -612,6 +616,22 @@ export default function Settings() {
                     >
                       <GraduationCap className="h-4 w-4 mr-2" />
                       Start tour
+                    </Button>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">Contact us</p>
+                      <p className="text-xs text-muted-foreground">
+                        Have a question or found a bug? Send us a message.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowContact(true)}
+                      className="shrink-0"
+                    >
+                      <Mail className="h-4 w-4 mr-2" />
+                      Contact us
                     </Button>
                   </div>
                 </CardContent>

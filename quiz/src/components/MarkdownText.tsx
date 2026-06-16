@@ -12,9 +12,19 @@ interface Props {
   inline?: boolean
 }
 
+const scrollableTable: Components['table'] = ({ children, ...props }) => (
+  <div className="overflow-x-auto w-full my-2">
+    <table {...props}>{children}</table>
+  </div>
+)
+
 const inlineComponents: Components = {
   p: ({ children }) => <span>{children}</span>,
   br: () => <span> </span>,
+}
+
+const blockComponents: Components = {
+  table: scrollableTable,
 }
 
 export function MarkdownText({ children, className, inline }: Props) {
@@ -23,7 +33,7 @@ export function MarkdownText({ children, className, inline }: Props) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
-        components={inline ? inlineComponents : undefined}
+        components={inline ? inlineComponents : blockComponents}
       >
         {children}
       </ReactMarkdown>

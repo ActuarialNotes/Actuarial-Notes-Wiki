@@ -1254,6 +1254,16 @@ function GalleryPanel({
 }) {
   const { user } = useAuth()
   const [showManageDialog, setShowManageDialog] = useState(false)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const activeCard = orderedCards[activeIndex]
+    if (!activeCard || !scrollContainerRef.current) return
+    const el = scrollContainerRef.current.querySelector<HTMLElement>(
+      `[data-card-name="${CSS.escape(activeCard.name)}"]`
+    )
+    if (el) el.scrollIntoView({ block: 'center', behavior: 'instant' })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleCardSelect(card: FlashCard) {
     const idx = orderedCards.findIndex(c => c.name === card.name)
@@ -1328,7 +1338,7 @@ function GalleryPanel({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-6 pb-24 md:pb-20">
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-6 pb-24 md:pb-20">
         <FlashcardPacksSection />
 
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>

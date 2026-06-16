@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Gem } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { Button } from '@/components/ui/button'
@@ -306,6 +307,7 @@ export function ConceptCoverageSection({
   selectedQuestion,
   onQuestionSelect,
 }: ConceptCoverageSectionProps) {
+  const navigate = useNavigate()
   const stats = buildConceptStats(questions, responses)
   const outcomes = questions.map(q => { const c = responses[q.id]?.chosen; return c != null && isAnswerCorrect(q, c) })
 
@@ -362,6 +364,15 @@ export function ConceptCoverageSection({
               </div>
             )}
           </div>
+
+          {/* Dashboard link */}
+          {score.isLoggedIn && (
+            <div className="mt-4">
+              <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')}>
+                Go to Dashboard
+              </Button>
+            </div>
+          )}
 
           {/* Sign-in prompt */}
           {!score.isLoggedIn && (

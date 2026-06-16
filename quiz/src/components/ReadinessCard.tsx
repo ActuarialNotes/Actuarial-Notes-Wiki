@@ -948,7 +948,11 @@ export function ReadinessCard({
 
           {/* Day panel — shown when a heatmap day is clicked */}
           {selectedDay && (() => {
-            const daySessions = examSessions.filter(s => s.completed_at.slice(0, 10) === selectedDay)
+            const daySessions = examSessions.filter(s => {
+              const d = new Date(s.completed_at)
+              const localDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+              return localDate === selectedDay
+            })
             const dayTotal = daySessions.reduce((s, r) => s + r.total_questions, 0)
             const dayCorrect = daySessions.reduce((s, r) => s + r.correct_count, 0)
             const dayLevelUps = selectedDayLevelUps.length

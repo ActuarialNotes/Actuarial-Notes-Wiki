@@ -376,7 +376,7 @@ export function QuestionCard({
         </CardHeader>
 
         <CardContent className="space-y-2" data-tour="answer-options">
-          {question.options.map(option => (
+          {question.options.map((option, idx) => (
             <AnswerOption
               key={option.key}
               optionKey={option.key}
@@ -387,6 +387,7 @@ export function QuestionCard({
               revealAnswer={showExplanation}
               onClick={onAnswer}
               onNext={isLocked ? onNext : undefined}
+              keyHint={String(idx + 1)}
             />
           ))}
 

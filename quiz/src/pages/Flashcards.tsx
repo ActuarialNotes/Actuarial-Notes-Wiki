@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   BookOpen,
@@ -11,6 +11,7 @@ import {
   GraduationCap,
   Headphones,
   Images,
+  Keyboard,
   LayoutGrid,
   Layers,
   Loader2,
@@ -57,6 +58,8 @@ import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { trackFlashcardReviewed } from '@/lib/analytics'
+import { usePageKeyboard } from '@/hooks/useKeyboard'
+import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
 type ReverseCardSection = 'definition' | 'math' | 'images'
@@ -673,6 +676,7 @@ function FlashcardControlsBar({
   onFlipToggle,
   focusMode,
   onFocusToggle,
+  onShortcutsHelp,
 }: {
   galleryOpen: boolean
   onGalleryToggle: () => void
@@ -682,6 +686,7 @@ function FlashcardControlsBar({
   onFlipToggle: () => void
   focusMode: boolean
   onFocusToggle: () => void
+  onShortcutsHelp: () => void
 }) {
   return (
     <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 py-3 sm:py-4 border-t bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
@@ -740,6 +745,14 @@ function FlashcardControlsBar({
             : 'text-muted-foreground hover:text-foreground hover:bg-accent'
         }`}
       ><Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+
+      <button
+        type="button"
+        onClick={onShortcutsHelp}
+        title="Keyboard shortcuts (?)"
+        aria-label="Keyboard shortcuts"
+        className="hidden sm:inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+      ><Keyboard className="h-4 w-4 sm:h-5 sm:w-5" /></button>
     </div>
   )
 }
@@ -1361,21 +1374,25 @@ function GalleryPanel({
 
 // ─── Study Area ───────────────────────────────────────────────────────────────
 
-function FlashcardStudyArea({
-  cards,
-  index,
-  isFlashing,
-  reverseCardModes,
-  onSetModes,
-  defaultFlipped,
-}: {
+interface FlashcardStudyAreaHandle {
+  flip: () => void
+}
+
+const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   cards: WikiEntryRef[]
   index: number
   isFlashing?: boolean
   reverseCardModes: Set<ReverseCardSection>
   onSetModes: (modes: Set<ReverseCardSection>) => void
   defaultFlipped: boolean
-}) {
+}>(function FlashcardStudyArea({
+  cards,
+  index,
+  isFlashing,
+  reverseCardModes,
+  onSetModes,
+  defaultFlipped,
+}, ref) {
   const [flipped, setFlipped] = useState(defaultFlipped)
   const [expanded, setExpanded] = useState(false)
   const [markdown, setMarkdown] = useState<string | null>(null)
@@ -1416,6 +1433,8 @@ function FlashcardStudyArea({
     if (showPlayMenu) document.addEventListener('mousedown', handleOutside)
     return () => document.removeEventListener('mousedown', handleOutside)
   }, [showPlayMenu])
+
+  useImperativeHandle(ref, () => ({ flip: handleFlip }))
 
   function handleFlip() {
     if (!flipped) {
@@ -1607,7 +1626,7 @@ function FlashcardStudyArea({
       )}
     </div>
   )
-}
+})
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -1624,10 +1643,12 @@ export default function Flashcards() {
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const orderedCardsRef = useRef<FlashCard[]>([])
   const prevPopupNameRef = useRef<string | null>(null)
+  const studyAreaRef = useRef<FlashcardStudyAreaHandle>(null)
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [galleryExpanded, setGalleryExpanded] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
+  const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
   const [groupBy, setGroupBy] = useState<GroupBy>('exam')
   const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
     new Set<ReverseCardSection>(['definition']),
@@ -1650,6 +1671,19 @@ export default function Flashcards() {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [focusMode])
+
+  // Keyboard navigation for study mode (disabled when gallery overlay or popups are open)
+  usePageKeyboard({
+    ' ': () => { studyAreaRef.current?.flip() },
+    'ArrowRight': () => {
+      setActiveIndex(i => Math.min(i + 1, orderedCardsRef.current.length - 1))
+    },
+    'ArrowLeft': () => {
+      setActiveIndex(i => Math.max(i - 1, 0))
+    },
+    'f': () => { setFocusMode(v => !v); setGalleryExpanded(false) },
+    '?': () => setShowShortcutsHelp(v => !v),
+  }, !galleryExpanded && !popupOpen && !showShortcutsHelp && cards.length > 0)
 
   function toggleReverseMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {
@@ -1898,6 +1932,7 @@ export default function Flashcards() {
         {/* Study area */}
         <div className={focusMode ? 'pointer-events-auto' : undefined}>
           <FlashcardStudyArea
+            ref={studyAreaRef}
             cards={orderedCards}
             index={activeIndex}
             isFlashing={flashingCard?.toLowerCase() === orderedCards[activeIndex]?.name.toLowerCase()}
@@ -1909,6 +1944,13 @@ export default function Flashcards() {
       </div>
 
       <ConceptPopup />
+
+      {showShortcutsHelp && (
+        <KeyboardShortcutsHelp
+          context="flashcards"
+          onClose={() => setShowShortcutsHelp(false)}
+        />
+      )}
 
       {/* Fixed controls footer — always at bottom, above mobile nav */}
       <div className={`fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 ${focusMode ? 'z-[57]' : 'z-[46]'}`}>
@@ -1949,6 +1991,7 @@ export default function Flashcards() {
           onFlipToggle={() => setGlobalFlip(v => !v)}
           focusMode={focusMode}
           onFocusToggle={handleFocusToggle}
+          onShortcutsHelp={() => setShowShortcutsHelp(true)}
         />
       </div>
     </>

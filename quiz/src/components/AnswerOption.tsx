@@ -11,6 +11,7 @@ interface AnswerOptionProps {
   revealAnswer: boolean
   onClick: (key: string) => void
   onNext?: () => void  // when locked, clicking any option advances to next question
+  keyHint?: string     // keyboard shortcut hint, e.g. "1"
 }
 
 export function AnswerOption({
@@ -22,6 +23,7 @@ export function AnswerOption({
   revealAnswer,
   onClick,
   onNext,
+  keyHint,
 }: AnswerOptionProps) {
   // Prevent accidental selection when the user is scrolling over an option.
   // We track vertical movement: if the pointer/touch moves more than 8px
@@ -122,6 +124,14 @@ export function AnswerOption({
       >
         {text}
       </MarkdownText>
+      {keyHint && !isDisabled && (
+        <kbd
+          aria-hidden="true"
+          className="hidden sm:flex self-start mt-0.5 shrink-0 h-5 min-w-[1.25rem] items-center justify-center rounded border border-border bg-muted/70 text-[10px] font-mono font-semibold text-muted-foreground/70 px-1"
+        >
+          {keyHint}
+        </kbd>
+      )}
     </div>
   )
 }

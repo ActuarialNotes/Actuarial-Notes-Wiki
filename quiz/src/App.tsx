@@ -1,5 +1,5 @@
-import { lazy, Suspense, Component, type ReactNode, type ErrorInfo } from 'react'
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
+import { lazy, Suspense, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
+import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom'
 import { usePageTracking } from '@/hooks/usePageTracking'
 import { Loader2 } from 'lucide-react'
 import type { Session } from '@supabase/supabase-js'
@@ -97,6 +97,23 @@ function PageTracker() {
   return null
 }
 
+function GlobalKeyHandler() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        const target = e.target as HTMLElement | null
+        if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+        e.preventDefault()
+        navigate('/search')
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [navigate])
+  return null
+}
+
 function RequireAuth({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   if (!user) return <Navigate to="/auth" replace />
@@ -107,6 +124,7 @@ export default function App({ initialSession }: { initialSession: Session | null
   return (
     <BrowserRouter>
       <PageTracker />
+      <GlobalKeyHandler />
       <AuthProvider initialSession={initialSession}>
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">

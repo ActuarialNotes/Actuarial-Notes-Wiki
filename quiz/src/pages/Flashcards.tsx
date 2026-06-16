@@ -1376,10 +1376,13 @@ function GalleryPanel({
   useEffect(() => {
     const activeCard = orderedCards[activeIndex]
     if (!activeCard || !scrollContainerRef.current) return
-    const el = scrollContainerRef.current.querySelector<HTMLElement>(
-      `[data-card-name="${CSS.escape(activeCard.name)}"]`
-    )
-    if (el) el.scrollIntoView({ block: 'center', behavior: 'instant' })
+    const all = scrollContainerRef.current.querySelectorAll<HTMLElement>('[data-card-name]')
+    for (const el of all) {
+      if (el.dataset.cardName === activeCard.name) {
+        el.scrollIntoView({ block: 'center', behavior: 'instant' })
+        break
+      }
+    }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleCardSelect(card: FlashCard) {

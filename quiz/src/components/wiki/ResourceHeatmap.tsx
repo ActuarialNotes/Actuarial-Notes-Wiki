@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { X } from 'lucide-react'
 import {
   type TimelineEntry,
   buildMonthCounts,
@@ -59,19 +58,6 @@ export function ResourceHeatmap({ entries, selected, onSelectMonth, yearRange, o
         <span className="shrink-0 tabular-nums">{minYear}</span>
         <YearRangeSlider min={minYear} max={maxYear} value={yearRange} onChange={onYearRangeChange} />
         <span className="shrink-0 tabular-nums">{maxYear}</span>
-        {yearRange && (
-          <span className="flex shrink-0 items-center gap-1.5">
-            <span className="tabular-nums text-foreground">{yearRange[0]}–{yearRange[1]}</span>
-            <button
-              type="button"
-              onClick={() => onYearRangeChange(null)}
-              aria-label="Clear year range"
-              className="text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </span>
-        )}
       </div>
 
       <div className="flex items-stretch gap-[3px]">
@@ -89,7 +75,10 @@ export function ResourceHeatmap({ entries, selected, onSelectMonth, yearRange, o
         </div>
 
         {/* Horizontally scrollable grid */}
-        <div ref={scrollRef} className="overflow-x-auto flex-1 pb-1">
+        <div
+          ref={scrollRef}
+          className="overflow-x-auto flex-1 pb-1 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
+        >
           <div style={{ minWidth: years.length * (CELL + GAP) }}>
             {/* Year labels (decade marks) */}
             <div className="flex gap-[3px]" style={{ height: 16 }}>

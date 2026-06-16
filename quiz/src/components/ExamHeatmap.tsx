@@ -42,7 +42,10 @@ function addDays(d: Date, n: number): Date {
 }
 
 function isoKey(d: Date): string {
-  return d.toISOString().slice(0, 10)
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
 }
 
 function daysUntil(dateStr: string): number {
@@ -165,7 +168,8 @@ export function ExamHeatmap({
   const scoreByDay = useMemo(() => {
     const map = new Map<string, { total: number; count: number }>()
     for (const s of sessions) {
-      const key = s.completed_at.slice(0, 10)
+      const d = new Date(s.completed_at)
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
       const pct = s.total_questions > 0 ? (s.correct_count / s.total_questions) * 100 : 0
       const existing = map.get(key)
       if (existing) { existing.total += pct; existing.count++ }

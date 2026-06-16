@@ -425,6 +425,7 @@ export function ReadinessCard({
   const [selectedDayLevelUps, setSelectedDayLevelUps] = useState<DailyLevelUp[]>([])
   const [viewingSession, setViewingSession] = useState<QuizSession | null>(null)
   const [allDailyCompletions, setAllDailyCompletions] = useState<Array<{ day: string; concept_slug: string }>>([])
+  const [allDailyCompletionsVersion, setAllDailyCompletionsVersion] = useState(0)
   const savedScrollY = useRef(0)
 
   const toggleTopic = (name: string) =>
@@ -446,6 +447,12 @@ export function ReadinessCard({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openConceptsTrigger])
+
+  useEffect(() => {
+    const handleSessionSaved = () => setAllDailyCompletionsVersion(v => v + 1)
+    window.addEventListener('quiz-session-saved', handleSessionSaved)
+    return () => window.removeEventListener('quiz-session-saved', handleSessionSaved)
+  }, [])
 
   useEffect(() => {
     setCompletedToday(readTodayLevelUps())
@@ -500,7 +507,7 @@ export function ReadinessCard({
       })
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, progressKey])
+  }, [user, progressKey, allDailyCompletionsVersion])
 
   useEffect(() => {
     const today = todayISO()

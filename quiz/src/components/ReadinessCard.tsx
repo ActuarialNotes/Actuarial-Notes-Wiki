@@ -1170,7 +1170,7 @@ export function ReadinessCard({
                         <button
                           type="button"
                           onClick={() => togglePlanTopicOpen(group.topicName)}
-                          className="flex-1 flex items-center gap-1 text-left"
+                          className="flex-1 min-w-0 flex items-center gap-1 text-left"
                           aria-expanded={isOpen}
                         >
                           <span className={`text-xs font-semibold truncate min-w-0 ${allDeselected ? 'text-muted-foreground/50' : 'text-foreground'}`}>

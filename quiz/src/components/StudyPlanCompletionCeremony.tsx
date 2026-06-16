@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { Check, Circle, Gem, X, Loader2, Lock, LockOpen } from 'lucide-react'
+import { Check, Circle, Gem, X, Loader2, Lock, Unlock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { todayISO } from '@/lib/studyPlan'
@@ -326,7 +326,7 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
               <div className="text-center py-6 ceremony-celebration-in">
                 <div className="flex items-center justify-center">
                   <div className="h-24 w-24 rounded-full bg-emerald-500/15 border-2 border-emerald-400/60 flex items-center justify-center lock-open-burst">
-                    <LockOpen className="h-12 w-12 text-emerald-400" />
+                    <Unlock className="h-12 w-12 text-emerald-400" />
                   </div>
                 </div>
               </div>

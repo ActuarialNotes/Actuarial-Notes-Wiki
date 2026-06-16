@@ -54,17 +54,17 @@ const onExam = (p: string) => p.startsWith('/wiki/exam')
 const BASE_STEPS: TourStep[] = [
   {
     icon: GraduationCap,
-    title: 'Learn how to use Actuarial Notes',
-    body: 'Take a quick interactive tour — just follow the green highlights and tap where they point.',
+    title: 'Welcome to Actuarial Notes',
+    body: 'Follow the highlights and tap where they point — takes about 2 minutes.',
     advance: 'manual',
   },
   // ── Study guide ──
   {
     icon: BookOpen,
     title: 'Open a study guide',
-    body: 'Tap the Exam P-1 study guide to see the concepts it covers.',
+    body: 'Tap Exam P-1 to see the syllabus.',
     path: '/wiki',
-    target: '[data-tour="exam-p"]',
+    target: '[data-tour=”exam-p”]',
     advance: 'tap',
   },
   // ── Concept popup ──
@@ -74,7 +74,7 @@ const BASE_STEPS: TourStep[] = [
     body: 'Tap “Calculus” to open its explanation in a popup.',
     path: EXAM_P_ROUTE,
     match: onExam,
-    target: '[data-wikiref="concept:calculus"]',
+    target: '[data-wikiref=”concept:calculus”]',
     advance: 'tap',
   },
   {
@@ -82,15 +82,15 @@ const BASE_STEPS: TourStep[] = [
     title: 'Open the actions menu',
     body: 'Tap the action button next to the concept name.',
     match: onExam,
-    target: '[data-tour="concept-action"]',
+    target: '[data-tour=”concept-action”]',
     advance: 'tap',
   },
   {
     icon: Layers,
     title: 'Add it to your flashcards',
-    body: 'Tap “Add to Flashcards” to save this concept so you can review it later.',
+    body: 'Tap “Add to Flashcards” to save this concept.',
     match: onExam,
-    target: '[data-tour="add-flashcard"]',
+    target: '[data-tour=”add-flashcard”]',
     advance: 'tap',
   },
   {
@@ -98,41 +98,41 @@ const BASE_STEPS: TourStep[] = [
     title: 'View your flashcards',
     body: 'Tap “view” to jump to your flashcard deck.',
     match: onExam,
-    target: '[data-tour="view-flashcards"]',
+    target: '[data-tour=”view-flashcards”]',
     advance: 'tap',
   },
   // ── Flashcards ──
   {
     icon: FlipHorizontal,
     title: 'Flip a card',
-    body: 'Tap the card to flip it and reveal the full explanation on the back.',
+    body: 'Tap the card to flip it and see the explanation.',
     path: '/flashcards',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour="flip-card"]',
+    target: '[data-tour=”flip-card”]',
     advance: 'tap',
   },
   {
     icon: SlidersHorizontal,
     title: 'Change what\'s on the card',
-    body: 'Tap “Back content” to open the options for the back of each card.',
+    body: 'Tap “Back content” to choose what shows on the back.',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour="card-content"]',
+    target: '[data-tour=”card-content”]',
     advance: 'tap',
   },
   {
     icon: Sigma,
     title: 'Show the math',
-    body: 'Tap “Math” to put the key equations on the back of your cards.',
+    body: 'Tap “Math” to show the key equations on the back.',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour="card-math"]',
+    target: '[data-tour=”card-math”]',
     advance: 'tap',
   },
   {
     icon: FlipHorizontal,
     title: 'There\'s the math',
-    body: 'The equations now show on the back of your card. Ready to test yourself? Tap the Quiz tab.',
+    body: 'Equations are on the back now. Tap the Quiz tab to try a practice question.',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour="nav-quiz"]',
+    target: '[data-tour=”nav-quiz”]',
     advance: 'tap',
   },
   // ── Quiz ──
@@ -142,7 +142,7 @@ const BASE_STEPS: TourStep[] = [
     body: 'Tap Exam P-1 to choose your topics.',
     path: '/',
     match: p => p === '/',
-    target: '[data-tour="quiz-exam-p"]',
+    target: '[data-tour=”quiz-exam-p”]',
     advance: 'tap',
   },
   {
@@ -150,40 +150,40 @@ const BASE_STEPS: TourStep[] = [
     title: 'Start the quiz',
     body: 'Pick a question count, then tap Start Quiz.',
     match: p => p === '/',
-    target: '[data-tour="start-quiz"]',
+    target: '[data-tour=”start-quiz”]',
     advance: 'tap',
   },
   {
     icon: MousePointerClick,
     title: 'Answer a question',
-    body: 'Choose an answer and confirm it — you\'ll get an instant worked explanation.',
+    body: 'Pick an answer and confirm it — you\'ll get a full explanation right away.',
     match: p => p === '/quiz',
     path: '/quiz',
-    target: '[data-tour="answer-options"]',
+    target: '[data-tour=”answer-options”]',
     advance: 'watch',
     watch: () => Object.keys(useQuizStore.getState().responses).length > 0,
   },
   {
     icon: X,
     title: 'Quit the quiz',
-    body: 'In a real session you\'d keep going — for now, tap Quit quiz to wrap up.',
+    body: 'Normally you\'d keep going — for the tour, tap Quit quiz.',
     match: p => p === '/quiz',
-    target: '[data-tour="quit-quiz"]',
+    target: '[data-tour=”quit-quiz”]',
     advance: 'tap',
   },
   {
     icon: RotateCcw,
     title: 'Finish & grade',
-    body: 'Tap Finish quiz to grade what you answered and see your results.',
+    body: 'Tap Finish quiz to see your results.',
     match: p => p === '/quiz',
-    target: '[data-tour="dialog-finish"]',
+    target: '[data-tour=”dialog-finish”]',
     advance: 'tap',
   },
   // ── Log in ──
   {
     icon: LogIn,
     title: 'Log in to track your progress',
-    body: 'Sign in to save your mastery, streaks, and study progress across all your devices.',
+    body: 'Sign in to save your progress, streaks, and study history across devices.',
     advance: 'manual',
     cta: 'Log in',
     ctaRoute: '/auth',
@@ -367,7 +367,7 @@ export default function OnboardingTour() {
         <div
           role="dialog"
           aria-label="Getting started tour"
-          className="onboarding-roll-in pointer-events-auto w-full max-w-md rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-600 to-emerald-700 text-white shadow-2xl"
+          className="onboarding-roll-in pointer-events-auto w-full max-w-md rounded-2xl border border-primary/30 bg-primary text-primary-foreground shadow-2xl"
         >
           <div className="flex items-start gap-3 p-4 pr-3">
             <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/25">
@@ -376,7 +376,7 @@ export default function OnboardingTour() {
 
             <div className="min-w-0 flex-1">
               <h2 className="text-[15px] font-semibold leading-snug">{current.title}</h2>
-              <p className="mt-1 text-[13px] leading-relaxed text-emerald-50/90">{current.body}</p>
+              <p className="mt-1 text-[13px] leading-relaxed text-primary-foreground/80">{current.body}</p>
             </div>
 
             <button
@@ -384,7 +384,7 @@ export default function OnboardingTour() {
               onClick={finish}
               aria-label="Dismiss tour"
               title="Dismiss"
-              className="-mr-1 -mt-1 shrink-0 rounded-full p-1 text-emerald-50/70 transition-colors hover:bg-white/10 hover:text-white"
+              className="-mr-1 -mt-1 shrink-0 rounded-full p-1 text-primary-foreground/60 transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground"
             >
               <X className="h-4 w-4" />
             </button>
@@ -413,7 +413,7 @@ export default function OnboardingTour() {
                 <button
                   type="button"
                   onClick={prev}
-                  className="rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-emerald-50/80 transition-colors hover:bg-white/10 hover:text-white"
+                  className="rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-primary-foreground/70 transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground"
                 >
                   Back
                 </button>
@@ -422,7 +422,7 @@ export default function OnboardingTour() {
                 <button
                   type="button"
                   onClick={() => (isLast ? finish() : next())}
-                  className="rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-emerald-50/70 transition-colors hover:bg-white/10 hover:text-white"
+                  className="rounded-lg px-2.5 py-1.5 text-[13px] font-medium text-primary-foreground/60 transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground"
                 >
                   Skip
                 </button>
@@ -430,7 +430,7 @@ export default function OnboardingTour() {
                 <button
                   type="button"
                   onClick={handlePrimary}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3.5 py-1.5 text-[13px] font-semibold text-emerald-700 shadow-sm transition-transform hover:bg-emerald-50 active:scale-95"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary-foreground px-3.5 py-1.5 text-[13px] font-semibold text-primary shadow-sm transition-all hover:opacity-90 active:scale-95"
                 >
                   {primaryLabel}
                   {isLast ? (

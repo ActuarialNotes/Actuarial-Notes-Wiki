@@ -18,11 +18,31 @@ import type { QuizMode } from '@/lib/parser'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
+type ExamOrg = 'SOA' | 'CAS'
+
 const EXAMS = [
-  { value: 'Probability', label: 'Exam P-1 (SOA)' },
-  { value: 'Financial Mathematics', label: 'Exam FM-2 (SOA)' },
-  { value: 'Exam 5', label: 'Exam 5 (CAS)' },
+  { value: 'Probability', label: 'Exam P-1 (SOA)', org: 'SOA' as ExamOrg, progressKey: 'P' },
+  { value: 'Financial Mathematics', label: 'Exam FM-2 (SOA)', org: 'SOA' as ExamOrg, progressKey: 'FM' },
+  { value: 'Exam 5', label: 'Exam 5 (CAS)', org: 'CAS' as ExamOrg, progressKey: 'CAS-5' },
 ]
+
+const SOA_TRACK_KEYS = new Set(['ASA', 'FSA'])
+const BODY_FILTER_KEY = 'quiz.bodyFilter'
+
+// Mirrors PACK_COLOR_PALETTE in Flashcards.tsx and WikiHome.tsx so active exams share colour across tabs
+const PACK_COLORS = [
+  { bg: 'bg-blue-500/10 border-blue-400/40',      hover: 'hover:bg-blue-500/25 hover:border-blue-400/70' },
+  { bg: 'bg-emerald-500/10 border-emerald-400/40', hover: 'hover:bg-emerald-500/25 hover:border-emerald-400/70' },
+  { bg: 'bg-violet-500/10 border-violet-400/40',   hover: 'hover:bg-violet-500/25 hover:border-violet-400/70' },
+  { bg: 'bg-orange-500/10 border-orange-400/40',   hover: 'hover:bg-orange-500/25 hover:border-orange-400/70' },
+  { bg: 'bg-rose-500/10 border-rose-400/40',       hover: 'hover:bg-rose-500/25 hover:border-rose-400/70' },
+  { bg: 'bg-cyan-500/10 border-cyan-400/40',       hover: 'hover:bg-cyan-500/25 hover:border-cyan-400/70' },
+] as const
+
+function formatTargetDate(dateStr: string): string {
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
+}
 
 
 // Question counts that mirror each real exam
@@ -189,17 +209,26 @@ function ExamOptionCard({
   exam,
   onClick,
   questionCount,
+  colorIdx,
+  targetDate,
 }: {
-  exam: { value: string; label: string }
+  exam: { value: string; label: string; org: ExamOrg }
   onClick: () => void
   questionCount: number
+  colorIdx: number  // index into PACK_COLORS; -1 means not active
+  targetDate?: string | null
 }) {
+  const isActive = colorIdx >= 0
+  const colorEntry = isActive ? PACK_COLORS[colorIdx % PACK_COLORS.length] : null
   const isExam5 = exam.value === 'Exam 5'
   const description = isExam5 ? null : exam.value
 
   return (
     <button type="button" data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined} onClick={onClick} className="text-left w-full">
-      <Card className={cn('h-full transition-all duration-150 overflow-hidden hover:bg-accent/30')}>
+      <Card className={cn(
+        'h-full transition-all duration-150 overflow-hidden',
+        colorEntry ? cn(colorEntry.bg, colorEntry.hover) : 'hover:bg-accent/30',
+      )}>
         <CardHeader className="pb-3">
           <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
           {description && (
@@ -209,12 +238,20 @@ function ExamOptionCard({
             <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-muted text-muted-foreground">
               {questionCount} question{questionCount !== 1 ? 's' : ''}
             </span>
-            {isExam5 && (
+            {isActive ? (
+              <span className={cn(
+                'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium',
+                targetDate
+                  ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+              )}>
+                {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
+              </span>
+            ) : isExam5 ? (
               <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
                 In Development
               </span>
-            )}
-            {!isExam5 && (
+            ) : (
               <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 Beta
               </span>
@@ -230,7 +267,7 @@ export default function Landing() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
-  const { progress: examProgress, targetDates } = useExamProgress()
+  const { progress: examProgress, targetDates, selectedTrack } = useExamProgress()
   const { byExam: conceptsByExam, loading: conceptsLoading } = useConcepts()
   const { questions: allQuestions } = useAllQuestions()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -241,16 +278,29 @@ export default function Landing() {
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
   const initialConcept = searchParams.get('concept') ?? ''
 
-  const inProgressExams = EXAMS.filter(e => {
-    const examId = Object.entries(EXAM_ID_TO_TOPIC).find(([, t]) => t === e.value)?.[0]
-    return examId ? examProgress[examId] === 'in_progress' : false
+  const [filterOverride, setFilterOverride] = useState<ExamOrg | null>(() => {
+    try {
+      const saved = localStorage.getItem(BODY_FILTER_KEY)
+      return saved === 'SOA' || saved === 'CAS' ? saved : null
+    } catch { return null }
   })
-  const otherExams = EXAMS.filter(e => !inProgressExams.includes(e))
-  const hasInProgress = inProgressExams.length > 0
+  const defaultFilter: ExamOrg = SOA_TRACK_KEYS.has(selectedTrack) ? 'SOA' : 'CAS'
+  const activeFilter = filterOverride ?? defaultFilter
+
+  function handleSetFilter(f: ExamOrg) {
+    try { localStorage.setItem(BODY_FILTER_KEY, f) } catch { /* ignore */ }
+    setFilterOverride(f)
+  }
+
+  const filteredExams = EXAMS.filter(e => e.org === activeFilter)
+
+  // Index of each exam in the global active-exams list (for consistent colour across tabs)
+  const activeExamValues = EXAMS
+    .filter(e => examProgress[e.progressKey] === 'in_progress')
+    .map(e => e.value)
 
   const [topic, setTopic] = useState(initialTopic)
   const [mode, setMode] = useState<QuizMode>(initialMode)
-  const [showOther, setShowOther] = useState(!hasInProgress)
 
   const [selectedConcept, setSelectedConcept] = useState(initialConcept)
 
@@ -277,11 +327,10 @@ export default function Landing() {
   // Pre-select first in-progress exam when progress loads
   useEffect(() => {
     if (initialTopic) return
-    if (inProgressExams.length > 0) {
-      setTopic(inProgressExams[0].value)
-      setShowOther(false)
-    }
-  }, [examProgress.P, examProgress.FM])  // eslint-disable-line react-hooks/exhaustive-deps
+    const firstInProgress = EXAMS.find(e => examProgress[e.progressKey] === 'in_progress')
+    if (firstInProgress) setTopic(firstInProgress.value)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [examProgress.P, examProgress.FM, examProgress['CAS-5']])
 
   // Reset state and restore saved topic selections when exam topic or mode changes
   useEffect(() => {
@@ -671,53 +720,43 @@ export default function Landing() {
 
       <div className="space-y-6">
           {!hasTopic && (
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Exam</label>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {(hasInProgress ? inProgressExams : EXAMS).map(exam => (
-                  <ExamOptionCard
-                    key={exam.value}
-                    exam={exam}
-                    onClick={() => setTopic(exam.value)}
-                    questionCount={questionCounts[exam.value] ?? 0}
-                  />
-                ))}
-              </div>
-
-              {hasInProgress && otherExams.length > 0 && (
-                <div className="mt-1">
-                  <button
-                    type="button"
-                    onClick={() => setShowOther(v => !v)}
-                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={`w-3 h-3 transition-transform ${showOther ? 'rotate-90' : ''}`}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">Exam</label>
+                <div className="flex items-center rounded-lg border bg-muted/50 p-0.5 gap-0.5">
+                  {(['SOA', 'CAS'] as const).map(tab => (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => handleSetFilter(tab)}
+                      className={cn(
+                        'px-5 py-1.5 rounded-md text-sm font-medium transition-colors',
+                        activeFilter === tab
+                          ? 'bg-background text-foreground shadow-sm'
+                          : 'text-muted-foreground hover:text-foreground',
+                      )}
                     >
-                      <polyline points="6 4 12 10 6 16" />
-                    </svg>
-                    Other exams
-                  </button>
-                  {showOther && (
-                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-2">
-                      {otherExams.map(exam => (
-                        <ExamOptionCard
-                          key={exam.value}
-                          exam={exam}
-                          onClick={() => setTopic(exam.value)}
-                          questionCount={questionCounts[exam.value] ?? 0}
-                        />
-                      ))}
-                    </div>
-                  )}
+                      {tab}
+                    </button>
+                  ))}
                 </div>
-              )}
+              </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {filteredExams.map(exam => {
+                  const colorIdx = activeExamValues.indexOf(exam.value)
+                  const isActive = colorIdx >= 0
+                  return (
+                    <ExamOptionCard
+                      key={exam.value}
+                      exam={exam}
+                      onClick={() => setTopic(exam.value)}
+                      questionCount={questionCounts[exam.value] ?? 0}
+                      colorIdx={colorIdx}
+                      targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
+                    />
+                  )
+                })}
+              </div>
             </div>
           )}
 

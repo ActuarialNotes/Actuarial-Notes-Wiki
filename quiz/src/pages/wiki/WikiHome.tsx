@@ -26,6 +26,7 @@ type BodyFilter = 'SOA' | 'CAS'
 const TRACK_ORDER = ['ACAS', 'FCAS', 'ASA', 'FSA']
 const SOA_TRACK_KEYS = new Set(['ASA', 'FSA'])
 const CAS_TRACK_KEYS = new Set(['ACAS', 'FCAS'])
+const BODY_FILTER_KEY = 'quiz.bodyFilter'
 
 // WikiFloatingSearch height: h-[calc(3.5rem-1px)] + 1px border = 56px (sticky top-0 on mobile)
 const SEARCH_BAR_H = 56
@@ -72,9 +73,20 @@ export default function WikiHome() {
   }, [])
 
   // Default to the user's current track body; user can override with the control
-  const [filterOverride, setFilterOverride] = useState<BodyFilter | null>(null)
+  // Persisted in localStorage so the Quiz tab stays in sync
+  const [filterOverride, setFilterOverride] = useState<BodyFilter | null>(() => {
+    try {
+      const saved = localStorage.getItem(BODY_FILTER_KEY)
+      return saved === 'SOA' || saved === 'CAS' ? saved : null
+    } catch { return null }
+  })
   const defaultFilter: BodyFilter = SOA_TRACK_KEYS.has(selectedTrack) ? 'SOA' : 'CAS'
   const filter = filterOverride ?? defaultFilter
+
+  function handleSetFilter(f: BodyFilter) {
+    try { localStorage.setItem(BODY_FILTER_KEY, f) } catch { /* ignore */ }
+    setFilterOverride(f)
+  }
 
   // Used to position sticky track headers just below the sticky Exams header
   const examsHeaderRef = useRef<HTMLDivElement>(null)
@@ -182,7 +194,7 @@ export default function WikiHome() {
               {(['SOA', 'CAS'] as const).map(tab => (
                 <button
                   key={tab}
-                  onClick={() => setFilterOverride(tab)}
+                  onClick={() => handleSetFilter(tab)}
                   className={cn(
                     'px-5 py-2 rounded-md text-sm font-medium transition-colors',
                     filter === tab

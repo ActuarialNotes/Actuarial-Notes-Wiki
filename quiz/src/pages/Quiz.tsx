@@ -11,13 +11,44 @@ import { ProgressBar } from '@/components/ProgressBar'
 import { QuitQuizDialog } from '@/components/QuitQuizDialog'
 import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
+import { LevelUpToast } from '@/components/LevelUpToast'
+import type { LevelNotice } from '@/components/LevelUpToast'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
-import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
+import type { Question, QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
+import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState } from '@/lib/mastery'
+import type { ConceptMasteryRecord } from '@/lib/mastery'
+import { slugForLink } from '@/lib/conceptMatch'
+import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted } from '@/lib/analytics'
+
+function computeLevelUps(
+  question: Question,
+  masteryRecords: ConceptMasteryRecord[],
+): LevelNotice[] {
+  const examId = EXAM_LABEL_TO_ID[question.exam]
+  if (!examId) return []
+  const isHard = question.difficulty === 'hard'
+  const now = new Date()
+  const notices: LevelNotice[] = []
+  for (const link of question.wiki_link) {
+    const slug = slugForLink(link)
+    if (!slug) continue
+    const existing = masteryRecords.find(r => r.exam_id === examId && r.concept_slug === slug)
+    const prev = existing
+      ? { ...existing, state: sanitizeMasteryState(existing.state) }
+      : emptyRecord('', examId, slug)
+    const decayed = decayIfStale(prev, now)
+    const next = applyAnswer(decayed, { isCorrect: true, isHard, at: now })
+    if (next.state !== decayed.state && (next.state === 'level1' || next.state === 'level2' || next.state === 'level3')) {
+      notices.push({ conceptSlug: slug, from: decayed.state, to: next.state })
+    }
+  }
+  return notices
+}
 
 export default function Quiz() {
   const [searchParams] = useSearchParams()
@@ -116,10 +147,13 @@ export default function Quiz() {
   // Tracks whether the user clicked "Change Answer" on the current question
   const [isChangingAnswer, setIsChangingAnswer] = useState(false)
 
+  const [levelUpNotices, setLevelUpNotices] = useState<LevelNotice[]>([])
+
   // Clear pending selection and scroll to top whenever the question changes
   useEffect(() => {
     setPendingAnswer(null)
     setIsChangingAnswer(false)
+    setLevelUpNotices([])
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [currentIndex])
 
@@ -206,6 +240,10 @@ export default function Quiz() {
     const correct = isAnswerCorrect(currentQuestion, answer)
     if (!isChangingAnswer) {
       playSound(correct ? 'correct' : 'wrong')
+    }
+    if (correct && !isChangingAnswer && reveal === 'during') {
+      const notices = computeLevelUps(currentQuestion, masteryRecords)
+      if (notices.length > 0) setLevelUpNotices(notices)
     }
     answerQuestion(currentQuestion.id, answer)
     setIsChangingAnswer(false)
@@ -484,6 +522,8 @@ export default function Quiz() {
           onNext={isLocked ? handleNextFromAnswer : undefined}
         />
       </div>
+
+      <LevelUpToast notices={levelUpNotices} />
 
       {submitError && (
         <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3">

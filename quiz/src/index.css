@@ -93,6 +93,67 @@
     --ring: 263 85% 66%;
   }
 
+  /* Colourful variant overrides — only primary/accent/ring change; backgrounds inherit from base */
+  [data-color-theme="colourful"][data-colourful-variant="blue-orange"] {
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 25 95% 53%;
+    --accent-foreground: 0 0% 100%;
+    --ring: 217 91% 60%;
+  }
+  [data-color-theme="colourful"][data-colourful-variant="blue-orange"].dark {
+    --primary: 213 94% 68%;
+    --primary-foreground: 215 35% 9%;
+    --accent: 25 95% 61%;
+    --accent-foreground: 215 35% 9%;
+    --ring: 213 94% 68%;
+  }
+
+  [data-color-theme="colourful"][data-colourful-variant="rose-amber"] {
+    --primary: 347 77% 50%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 43 96% 51%;
+    --accent-foreground: 0 0% 10%;
+    --ring: 347 77% 50%;
+  }
+  [data-color-theme="colourful"][data-colourful-variant="rose-amber"].dark {
+    --primary: 350 96% 72%;
+    --primary-foreground: 350 30% 10%;
+    --accent: 43 96% 56%;
+    --accent-foreground: 43 30% 10%;
+    --ring: 350 96% 72%;
+  }
+
+  [data-color-theme="colourful"][data-colourful-variant="emerald-pink"] {
+    --primary: 160 84% 39%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 330 82% 60%;
+    --accent-foreground: 0 0% 100%;
+    --ring: 160 84% 39%;
+  }
+  [data-color-theme="colourful"][data-colourful-variant="emerald-pink"].dark {
+    --primary: 158 64% 52%;
+    --primary-foreground: 160 35% 9%;
+    --accent: 330 86% 70%;
+    --accent-foreground: 330 35% 9%;
+    --ring: 158 64% 52%;
+  }
+
+  [data-color-theme="colourful"][data-colourful-variant="sky-indigo"] {
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 239 84% 67%;
+    --accent-foreground: 0 0% 100%;
+    --ring: 199 89% 48%;
+  }
+  [data-color-theme="colourful"][data-colourful-variant="sky-indigo"].dark {
+    --primary: 199 92% 60%;
+    --primary-foreground: 200 35% 9%;
+    --accent: 239 90% 74%;
+    --accent-foreground: 239 35% 9%;
+    --ring: 199 92% 60%;
+  }
+
   /* High Contrast theme: pure black/white for max readability */
   [data-color-theme="high-contrast"] {
     --background: 0 0% 100%;

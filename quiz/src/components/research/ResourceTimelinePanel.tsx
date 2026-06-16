@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Check, History, Loader2, Plus } from 'lucide-react'
+import { Check, History, Loader2, Plus, X } from 'lucide-react'
 import rawTimeline from 'virtual:resource-timeline'
 import {
   toTimelineEntries,
@@ -99,6 +99,21 @@ export function ResourceTimelinePanel({ addToProjectId, addedWikiKeys, onAddEntr
       <h2 className="text-base font-semibold flex items-center gap-2">
         <History className="h-4 w-4 text-muted-foreground" />
         Timeline
+        {yearRange && (
+          <>
+            <span className="text-sm font-normal text-muted-foreground tabular-nums">
+              {yearRange[0]}–{yearRange[1]}
+            </span>
+            <button
+              type="button"
+              onClick={() => setYearRange(null)}
+              aria-label="Clear year range"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </>
+        )}
       </h2>
 
       {allEntries.length > 0 && (

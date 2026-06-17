@@ -9,6 +9,7 @@ import {
   ChevronRight,
   ChevronUp,
   ChevronsUpDown,
+  Eye,
   GraduationCap,
   Headphones,
   Images,
@@ -708,7 +709,7 @@ function FlashcardControlsBar({
         }`}
       >
         {galleryOpen
-          ? <BookOpen className="h-4 w-4" />
+          ? <span className="inline-flex gap-0.5"><Eye className="h-4 w-4" /><Eye className="h-4 w-4" /></span>
           : <LayoutGrid className="h-4 w-4" />
         }
         <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
@@ -955,7 +956,7 @@ function SortableCard({
                   onClick={e => { e.stopPropagation(); onSelect(); setShowPlayMenu(false) }}
                   className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
                 >
-                  <Play className="h-3.5 w-3.5 shrink-0" />
+                  <span className="inline-flex shrink-0 gap-0.5"><Eye className="h-3.5 w-3.5" /><Eye className="h-3.5 w-3.5" /></span>
                   Study
                 </button>
                 <button
@@ -1142,7 +1143,7 @@ function SortableCard({
                 onClick={e => { e.stopPropagation(); onSelect(); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
-                <Play className="h-3.5 w-3.5 shrink-0" />
+                <span className="inline-flex shrink-0 gap-0.5"><Eye className="h-3.5 w-3.5" /><Eye className="h-3.5 w-3.5" /></span>
                 Study
               </button>
               <button

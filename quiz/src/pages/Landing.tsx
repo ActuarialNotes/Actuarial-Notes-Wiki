@@ -311,6 +311,9 @@ export default function Landing() {
   const [count, setCount] = useState<number>(3)
   const reveal = 'during' as const
 
+  // Mock exam sitting selection (null = random mix across all years)
+  const [selectedYear, setSelectedYear] = useState<number | null>(null)
+
   // Concept override passed from dashboard when user deselects some plan concepts
   const conceptOverrideRef = useRef<string[] | null>(null)
   const didApplyOverrideRef = useRef(false)
@@ -336,6 +339,7 @@ export default function Landing() {
   useEffect(() => {
     setIsAdaptive(false)
     setConceptMode('custom')
+    setSelectedYear(null)
     if (topic && mode === 'quiz') {
       try {
         const saved = localStorage.getItem(`actuarial_quiz_concepts_v1_${topic}`)
@@ -623,10 +627,34 @@ export default function Landing() {
       if (selectedConcepts.length > 0) params.set('concepts', selectedConcepts.join(','))
       params.set('count', String(count))
       params.set('reveal', reveal)
+    } else if (selectedYear !== null) {
+      params.set('year', String(selectedYear))
+      const sittingCount = allQuestions.filter(q => q.exam === topic && q.year === selectedYear).length
+      params.set('count', String(sittingCount || (MOCK_EXAM_QUESTIONS[topic] ?? 30)))
     } else {
       params.set('count', String(MOCK_EXAM_QUESTIONS[topic] ?? 30))
     }
     navigate(`/quiz?${params.toString()}`)
+  }
+
+  // Available exam sittings (year + session) derived from the question bank
+  const availableSittings = useMemo(() => {
+    if (!topic) return []
+    const sittingMap = new Map<number, string | undefined>()
+    for (const q of allQuestions) {
+      if (q.exam !== topic) continue
+      if (q.year) sittingMap.set(q.year, q.session)
+    }
+    return Array.from(sittingMap.entries())
+      .sort(([a], [b]) => b - a)
+      .map(([year, session]) => ({ year, session }))
+  }, [allQuestions, topic])
+
+  function sittingLabel(year: number, session?: string): string {
+    const s = session?.toLowerCase()
+    if (s === 'spring' || s === 'sp') return `Sp ${year}`
+    if (s === 'fall' || s === 'fa') return `Fall ${year}`
+    return String(year)
   }
 
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
@@ -867,10 +895,18 @@ export default function Landing() {
               {/* ── Mock Exam mode info ────────────────────────────────── */}
               {mode === 'mock-exam' && (
                 <div className="rounded-lg border bg-muted/40 px-4 py-3 space-y-1">
-                  <p className="text-sm font-medium">{mockExamCount} questions</p>
+                  <p className="text-sm font-medium">
+                    {selectedYear !== null
+                      ? `${allQuestions.filter(q => q.exam === topic && q.year === selectedYear).length} questions`
+                      : `${mockExamCount} questions`
+                    }
+                  </p>
                   <p className="text-xs text-muted-foreground">
-                    Distributed across all {examLabel} topics to mirror the real exam.
-                    Answers and explanations are revealed at the end.
+                    {selectedYear !== null
+                      ? `All questions from the ${sittingLabel(selectedYear, availableSittings.find(s => s.year === selectedYear)?.session)} sitting.`
+                      : `Distributed across all ${examLabel} topics to mirror the real exam.`
+                    }
+                    {' '}Answers and explanations are revealed at the end.
                   </p>
                 </div>
               )}
@@ -911,6 +947,41 @@ export default function Landing() {
               Mock Exam
             </button>
           </div>
+
+          {/* ── Sitting selector (real exam sittings) ─────────────────── */}
+          {mode === 'mock-exam' && availableSittings.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground shrink-0">Sitting:</span>
+              <div className="flex gap-1.5 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setSelectedYear(null)}
+                  className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                    selectedYear === null
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
+                  }`}
+                >
+                  Mix
+                </button>
+                {availableSittings.map(s => (
+                  <button
+                    key={s.year}
+                    type="button"
+                    onClick={() => setSelectedYear(s.year)}
+                    className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                      selectedYear === s.year
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
+                    }`}
+                  >
+                    {sittingLabel(s.year, s.session)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <button
             type="button"
             data-tour="start-quiz"

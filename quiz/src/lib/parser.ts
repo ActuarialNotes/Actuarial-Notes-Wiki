@@ -37,6 +37,7 @@ export interface Question {
   examiner_report?: string // examiner's notes for single-part question types
   author?: string
   year?: number
+  session?: string  // e.g. "Spring" or "Fall" for CAS/SOA sittings
 }
 
 export interface QuestionFilter {
@@ -69,6 +70,7 @@ interface QuestionFrontmatter {
   points?: unknown
   author?: unknown
   year?: unknown
+  session?: unknown
 }
 
 const OPTION_REGEX = /^- ([A-E])\)\s+(.+)/
@@ -245,6 +247,7 @@ export function parseQuestion(raw: string): Question | null {
       points: Number(data.points ?? 1),
       author: data.author ? String(data.author) : undefined,
       year: data.year ? Number(data.year) : undefined,
+      session: data.session ? String(data.session) : undefined,
     }
 
     // ── multi-part ──────────────────────────────────────────────────────────

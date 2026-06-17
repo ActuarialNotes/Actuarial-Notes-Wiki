@@ -4,7 +4,7 @@ Author: Society of Actuaries
 Publisher: Society of Actuaries
 Type: Study Note
 Code: P-21-05
-Available from: "[soa.org](https://www.soa.org/education/exam-req/edu-exam-p-detail/)"
+Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/p-21-05.pdf)"
 ---
 ![[Risk and Insurance - SOA - Cover.png]]
 ## I. Introduction

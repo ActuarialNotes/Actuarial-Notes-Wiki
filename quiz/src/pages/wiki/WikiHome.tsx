@@ -11,6 +11,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { decayIfStale } from '@/lib/mastery'
 import { cn } from '@/lib/utils'
 
 function examNameToTrackKey(name: string): string {
@@ -31,15 +32,6 @@ const BODY_FILTER_KEY = 'quiz.bodyFilter'
 // WikiFloatingSearch height: h-[calc(3.5rem-1px)] + 1px border = 56px (sticky top-0 on mobile)
 const SEARCH_BAR_H = 56
 
-// Mirrors PACK_COLOR_PALETTE in Flashcards.tsx so in-progress exams share the same colour across tabs
-const PACK_COLORS = [
-  { bg: 'bg-blue-500/10 border-blue-400/40',      hover: 'hover:bg-blue-500/25 hover:border-blue-400/70',      bar: 'bg-blue-500',    text: 'text-blue-600 dark:text-blue-400' },
-  { bg: 'bg-emerald-500/10 border-emerald-400/40', hover: 'hover:bg-emerald-500/25 hover:border-emerald-400/70', bar: 'bg-emerald-500', text: 'text-emerald-600 dark:text-emerald-400' },
-  { bg: 'bg-violet-500/10 border-violet-400/40',   hover: 'hover:bg-violet-500/25 hover:border-violet-400/70',   bar: 'bg-violet-500',  text: 'text-violet-600 dark:text-violet-400' },
-  { bg: 'bg-orange-500/10 border-orange-400/40',   hover: 'hover:bg-orange-500/25 hover:border-orange-400/70',   bar: 'bg-orange-500',  text: 'text-orange-600 dark:text-orange-400' },
-  { bg: 'bg-rose-500/10 border-rose-400/40',       hover: 'hover:bg-rose-500/25 hover:border-rose-400/70',       bar: 'bg-rose-500',    text: 'text-rose-600 dark:text-rose-400' },
-  { bg: 'bg-cyan-500/10 border-cyan-400/40',       hover: 'hover:bg-cyan-500/25 hover:border-cyan-400/70',       bar: 'bg-cyan-500',    text: 'text-cyan-600 dark:text-cyan-400' },
-] as const
 
 function formatTargetDate(dateStr: string): string {
   const d = new Date(dateStr)
@@ -135,10 +127,10 @@ export default function WikiHome() {
   // Pill data for all in-progress exams (shown regardless of active body filter)
   const inProgressPills = useMemo(() =>
     inProgressSyllabi
-      .map((syllabus, idx) => {
+      .map((syllabus) => {
         const progressKey = wikiExamIdToProgressKey(syllabus.examId)
         const item = (examsByKey.get(progressKey) ?? [])[0]
-        return item ? { syllabus, item, colorIdx: idx } : null
+        return item ? { syllabus, item } : null
       })
       .filter((x): x is NonNullable<typeof x> => x != null),
     [inProgressSyllabi, examsByKey],
@@ -211,22 +203,13 @@ export default function WikiHome() {
           {/* In-progress exam quick-links */}
           {inProgressPills.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
-              {inProgressPills.map(({ syllabus, item, colorIdx }) => {
-                const color = PACK_COLORS[colorIdx % PACK_COLORS.length]
-                return (
-                  <Link key={syllabus.examId} to={wikiRoute({ kind: 'exam', name: item.name })}>
-                    <span
-                      className={cn(
-                        'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium transition-opacity hover:opacity-80',
-                        color.bg,
-                        color.text,
-                      )}
-                    >
-                      {syllabus.examLabel}
-                    </span>
-                  </Link>
-                )
-              })}
+              {inProgressPills.map(({ syllabus, item }) => (
+                <Link key={syllabus.examId} to={wikiRoute({ kind: 'exam', name: item.name })}>
+                  <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-opacity hover:opacity-80">
+                    {syllabus.examLabel}
+                  </span>
+                </Link>
+              ))}
             </div>
           )}
         </div>
@@ -259,37 +242,30 @@ export default function WikiHome() {
                     const isCompleted = status === 'completed' && variantMatch
                     const targetDate = targetDates[examId]
 
-                    // Colour mirrors Flashcards tab assignment; key-based so colour indices align
-                    const inProgressIdx = inProgressSyllabi.findIndex(
-                      s => wikiExamIdToProgressKey(s.examId) === examId,
-                    )
-                    const colorEntry = isInProgress && inProgressIdx >= 0
-                      ? PACK_COLORS[inProgressIdx % PACK_COLORS.length]
-                      : null
-
-                    // Concept mastery progress (level3 = fully mastered)
+                    // Concept mastery progress by level
                     const allConcepts = match
                       ? match.topics.flatMap(t => t.concepts.map(c => c.name))
                       : []
-                    const masteredCount = allConcepts.filter(name => {
+                    const now = new Date()
+                    const conceptStates = allConcepts.map(name => {
                       const rec = byConcept.get(`${examId}::${name.toLowerCase()}`)
-                      return rec?.state === 'level3'
-                    }).length
-                    const progressPct = allConcepts.length > 0
-                      ? Math.round((masteredCount / allConcepts.length) * 100)
-                      : 0
+                      return rec ? decayIfStale(rec, now).state : 'new'
+                    })
+                    const total = conceptStates.length
+                    const level3Count = conceptStates.filter(s => s === 'level3').length
+                    const level2Count = conceptStates.filter(s => s === 'level2').length
+                    const level1Count = conceptStates.filter(s => s === 'level1').length
+                    const level3Pct = total > 0 ? Math.round((level3Count / total) * 100) : 0
+                    const level2Pct = total > 0 ? Math.round((level2Count / total) * 100) : 0
+                    const level1Pct = total > 0 ? Math.round((level1Count / total) * 100) : 0
 
                     return (
                       <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={examId === 'P' ? 'exam-p' : undefined}>
                         <Card
                           className={cn(
                             'h-full transition-all duration-150 overflow-hidden',
-                            // Default (new) exam hover
-                            !colorEntry && !isCompleted && 'hover:bg-accent/30',
-                            isCompleted && 'hover:bg-accent/30',
-                            // In-progress: coloured background + vibrant on hover
-                            colorEntry && colorEntry.bg,
-                            colorEntry && colorEntry.hover,
+                            !isInProgress && 'hover:bg-accent/30',
+                            isInProgress && 'bg-primary/10 border-primary/40 hover:bg-primary/25 hover:border-primary/70',
                           )}
                         >
                           <CardHeader className="pb-3">
@@ -307,14 +283,7 @@ export default function WikiHome() {
                             {!isCompleted && (
                               <div className="mt-2">
                                 {isInProgress ? (
-                                  <span
-                                    className={cn(
-                                      'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium',
-                                      targetDate
-                                        ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
-                                    )}
-                                  >
+                                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
                                     {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
                                   </span>
                                 ) : examId !== 'P' && examId !== 'FM' ? (
@@ -331,13 +300,16 @@ export default function WikiHome() {
                           </CardHeader>
 
                           {/* Progress bar — in-progress only, not for completed */}
-                          {isInProgress && colorEntry && (
-                            <div className="px-6 pb-4">
-                              <div className="h-1 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
-                                <div
-                                  className={cn('h-full rounded-full transition-all', colorEntry.bar)}
-                                  style={{ width: `${progressPct}%` }}
-                                />
+                          {isInProgress && total > 0 && (
+                            <div className="px-6 pb-4 space-y-1">
+                              <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                                <span>Readiness</span>
+                                <span className="font-medium tabular-nums">{level3Pct}%</span>
+                              </div>
+                              <div className="h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden flex">
+                                <div className="h-full transition-all" style={{ width: `${level3Pct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />
+                                <div className="h-full transition-all" style={{ width: `${level2Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.55)' }} />
+                                <div className="h-full transition-all" style={{ width: `${level1Pct}%`, backgroundColor: 'rgba(34, 197, 94, 0.25)' }} />
                               </div>
                             </div>
                           )}

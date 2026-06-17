@@ -5,7 +5,7 @@ import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
-import { QuestionSearchRow } from '@/components/QuestionSearchRow'
+import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
 
 // Matches a raw wiki_link value against a concept name. Handles two formats:
 //   "Concepts/Fund+Accumulation"  (hrefToEntryRef resolves the name directly)
@@ -186,6 +186,12 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
     return filtered
   }, [questions, difficultyFilters, conceptFilters])
 
+  const filteredOutQuestions = useMemo(() => {
+    if (difficultyFilters.size === 0 && conceptFilters.size === 0) return []
+    const visibleIds = new Set(visibleQuestions.map(q => q.id))
+    return questions.filter(q => !visibleIds.has(q.id))
+  }, [questions, visibleQuestions, difficultyFilters, conceptFilters])
+
   const difficultyOptionCounts = useMemo(() => {
     let filtered = questions
     if (conceptFilters.size > 0) {
@@ -295,20 +301,35 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
           )}
           {!loading && questions.length > 0 && (
             <>
-              {/* Filter dropdowns */}
+              {/* Filter controls */}
               <div className="flex items-center gap-2 flex-wrap">
-                <MultiSelectDropdown
-                  label="Difficulty"
-                  options={DIFFICULTY_OPTIONS}
-                  selected={difficultyFilters}
-                  onToggle={d => setDifficultyFilters(prev => {
-                    const next = new Set(prev)
-                    if (next.has(d)) next.delete(d)
-                    else next.add(d)
-                    return next
-                  })}
-                  getCount={v => difficultyOptionCounts[v] ?? 0}
-                />
+                {DIFFICULTY_OPTIONS.map(opt => {
+                  const count = difficultyOptionCounts[opt.value] ?? 0
+                  const active = difficultyFilters.has(opt.value)
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setDifficultyFilters(prev => {
+                        const next = new Set(prev)
+                        if (next.has(opt.value)) next.delete(opt.value)
+                        else next.add(opt.value)
+                        return next
+                      })}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                        active
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-input bg-background hover:bg-accent text-muted-foreground'
+                      }`}
+                    >
+                      <DifficultyDots difficulty={opt.value} />
+                      <span className="capitalize">{opt.label}</span>
+                      <span className="ml-0.5 text-xs bg-muted rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center text-muted-foreground">
+                        {count}
+                      </span>
+                    </button>
+                  )
+                })}
                 {relatedConcepts.length > 0 && (
                   <MultiSelectDropdown
                     label="Concepts"
@@ -351,6 +372,12 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
                   </div>
                   <span className="text-sm text-muted-foreground">
                     {visibleQuestions.filter(q => selectedIds.has(q.id)).length} / {visibleQuestions.length} selected
+                    {(() => {
+                      const hiddenSelected = filteredOutQuestions.filter(q => selectedIds.has(q.id)).length
+                      return hiddenSelected > 0
+                        ? <span className="ml-1 text-xs">(+{hiddenSelected} filtered)</span>
+                        : null
+                    })()}
                   </span>
                 </label>
               </div>
@@ -369,6 +396,26 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
                   onToggleSelect={toggleQuestion}
                 />
               ))}
+              {filteredOutQuestions.length > 0 && (
+                <div className="opacity-30 pointer-events-none select-none space-y-3 pt-1">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-px bg-border" />
+                    <span className="text-xs text-muted-foreground shrink-0">
+                      {filteredOutQuestions.length} filtered out
+                    </span>
+                    <div className="flex-1 h-px bg-border" />
+                  </div>
+                  {filteredOutQuestions.map(q => (
+                    <QuestionSearchRow
+                      key={q.id}
+                      question={q}
+                      query=""
+                      selected={false}
+                      onToggleSelect={() => {}}
+                    />
+                  ))}
+                </div>
+              )}
             </>
           )}
         </div>

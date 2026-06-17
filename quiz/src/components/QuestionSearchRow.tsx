@@ -33,6 +33,24 @@ function conceptLabel(link: string): string {
   return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
 
+export function DifficultyDots({ difficulty }: { difficulty: string }) {
+  const count = difficulty === 'easy' ? 1 : difficulty === 'medium' ? 2 : 3
+  return (
+    <span
+      className="flex items-center gap-0.5 shrink-0"
+      title={difficulty}
+      aria-label={`${difficulty} difficulty`}
+    >
+      {[0, 1, 2].map(i => (
+        <span
+          key={i}
+          className={`h-2 w-2 rounded-full ${i < count ? 'bg-red-500' : 'bg-muted-foreground/20'}`}
+        />
+      ))}
+    </span>
+  )
+}
+
 export function QuestionSearchRow({ question, query, selected, onToggleSelect }: QuestionSearchRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
@@ -49,6 +67,7 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
     >
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 overflow-x-auto flex-1 min-w-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <DifficultyDots difficulty={question.difficulty} />
           <div
             role="checkbox"
             aria-checked={selected}
@@ -72,9 +91,6 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
               {conceptLabel(link)}
             </span>
           ))}
-          <span className="text-xs px-2 py-0.5 rounded-full border border-input text-muted-foreground bg-background shrink-0 capitalize">
-            {question.difficulty}
-          </span>
         </div>
         <button
           type="button"

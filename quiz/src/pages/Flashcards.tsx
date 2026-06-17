@@ -1895,6 +1895,19 @@ export default function Flashcards() {
     return map
   }, [syllabi])
 
+  // concept name → syllabus position { topicIndex, conceptIndex } for ordering
+  const conceptSyllabusPosition = useMemo(() => {
+    const map = new Map<string, { topicIndex: number; conceptIndex: number }>()
+    for (const s of syllabi) {
+      s.topics.forEach((topic, topicIndex) => {
+        topic.concepts.forEach((c, conceptIndex) => {
+          map.set(c.name.toLowerCase(), { topicIndex, conceptIndex })
+        })
+      })
+    }
+    return map
+  }, [syllabi])
+
   // concept name → best mastery state
   const conceptMasteryMap = useMemo(() => {
     const map = new Map<string, MasteryState>()
@@ -1936,16 +1949,22 @@ export default function Flashcards() {
       }
       return ordered
     }
-    // 'exam': sort by exam label (Other last), then name within group
+    // 'exam': sort by exam label (Other last), then by syllabus order within group
     return [...cards].sort((a, b) => {
       const ea = conceptToExam.get(a.name.toLowerCase()) ?? 'Other'
       const eb = conceptToExam.get(b.name.toLowerCase()) ?? 'Other'
       if (ea === 'Other' && eb !== 'Other') return 1
       if (ea !== 'Other' && eb === 'Other') return -1
       if (ea !== eb) return ea.localeCompare(eb)
+      const pa = conceptSyllabusPosition.get(a.name.toLowerCase())
+      const pb = conceptSyllabusPosition.get(b.name.toLowerCase())
+      if (pa && pb) {
+        if (pa.topicIndex !== pb.topicIndex) return pa.topicIndex - pb.topicIndex
+        return pa.conceptIndex - pb.conceptIndex
+      }
       return a.name.localeCompare(b.name)
     })
-  }, [cards, customOrder, groupBy, conceptToExam])
+  }, [cards, customOrder, groupBy, conceptToExam, conceptSyllabusPosition])
 
   orderedCardsRef.current = orderedCards
 

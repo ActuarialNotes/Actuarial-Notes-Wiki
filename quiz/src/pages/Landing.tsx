@@ -156,13 +156,13 @@ function GroupSection({
                 className={`flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors ${
                   isSelected
                     ? 'text-primary bg-primary/10 hover:bg-primary/15'
-                    : 'text-foreground hover:bg-muted/50'
+                    : 'text-primary/60 hover:text-primary hover:bg-primary/5'
                 }`}
               >
                 {isSelected ? (
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
                 ) : (
-                  <Circle className="h-4 w-4 shrink-0 text-muted-foreground/40" />
+                  <Circle className="h-4 w-4 shrink-0 text-primary/30" />
                 )}
                 <span className="flex-1 text-sm font-medium leading-snug">
                   {subtopic}

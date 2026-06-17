@@ -1325,7 +1325,7 @@ function FlashcardsManageDialog({
                   onChange={e => setPackName(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') handleSave() }}
                   placeholder="Pack name…"
-                  className="flex-1 h-8 rounded-md border bg-background px-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+                  className="flex-1 h-8 rounded-md border bg-background px-2.5 text-[16px] sm:text-sm focus:outline-none focus:ring-1 focus:ring-ring"
                 />
                 <Button size="sm" onClick={handleSave}>Save</Button>
               </div>

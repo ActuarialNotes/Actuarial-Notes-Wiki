@@ -77,7 +77,7 @@ export function ResourceHeatmap({ entries, selected, onSelectMonth, yearRange, o
         {/* Horizontally scrollable grid */}
         <div
           ref={scrollRef}
-          className="overflow-x-auto flex-1 pb-1 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
+          className="overflow-x-auto flex-1 pb-1 [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/30 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/50 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/70"
         >
           <div style={{ minWidth: years.length * (CELL + GAP) }}>
             {/* Year labels (decade marks) */}

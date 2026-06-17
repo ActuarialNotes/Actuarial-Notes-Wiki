@@ -216,6 +216,11 @@ export default function OnboardingTour() {
   useEffect(() => {
     if (!active || !current) return
 
+    // Drop any stale spotlight immediately — before the page-guard return below.
+    // Without this the previous step's ring stays frozen on-screen while React
+    // Router is transitioning to the new route.
+    setTargetRect(null)
+
     // Make sure we're on the step's page before looking for its target.
     const onRightPage = current.match
       ? current.match(location.pathname)
@@ -226,10 +231,6 @@ export default function OnboardingTour() {
       if (current.path) navigate(current.path)
       return
     }
-
-    // Drop any highlight from the previous step so a stale ring never lingers
-    // over the wrong element while we hunt for this step's target.
-    setTargetRect(null)
 
     if (!current.target) return
 

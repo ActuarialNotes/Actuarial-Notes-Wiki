@@ -77,6 +77,7 @@ export default function Quiz() {
     }
 
     const conceptsParam = searchParams.get('concepts')
+    const yearParam = searchParams.get('year')
     return {
       exam: searchParams.get('exam') ?? undefined,
       topics: topicsParam ? topicsParam.split(',') : undefined,
@@ -86,6 +87,7 @@ export default function Quiz() {
       count: countParam ? Number(countParam) : undefined,
       ids,
       concept: searchParams.get('concept') ?? undefined,
+      year: yearParam ? Number(yearParam) : undefined,
     }
   }, [searchParams])  // eslint-disable-line react-hooks/exhaustive-deps
 

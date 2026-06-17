@@ -190,7 +190,7 @@ export function ConceptPopup() {
       const topBar = document.querySelector('[data-floating-search]') as HTMLElement | null
       const offset = topBar
         ? topBar.getBoundingClientRect().bottom
-        : window.innerWidth >= 1024 ? 0 : 56
+        : (window.innerWidth >= 768 && window.innerWidth < 1024) ? 56 : 0
       root.style.setProperty('--popup-max-top', `${Math.max(0, Math.round(offset))}px`)
     }
     update()

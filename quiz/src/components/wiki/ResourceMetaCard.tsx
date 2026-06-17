@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react'
+import { Download, ExternalLink } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { ResourceMeta } from '@/lib/resourceMeta'
@@ -38,15 +38,27 @@ export function ResourceMetaCard({ meta, compact }: { meta: ResourceMeta; compac
         )}
         {meta.getCopyUrl && (
           <div className="mt-auto pt-1">
-            <a
-              href={meta.getCopyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
-            >
-              <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-              Get a Copy
-            </a>
+            {/\.pdf$/i.test(meta.getCopyUrl) ? (
+              <a
+                href={meta.getCopyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+              >
+                <Download className="h-3.5 w-3.5 mr-1.5" />
+                Download PDF
+              </a>
+            ) : (
+              <a
+                href={meta.getCopyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+              >
+                <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                Get a Copy
+              </a>
+            )}
           </div>
         )}
       </div>

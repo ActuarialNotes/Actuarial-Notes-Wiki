@@ -101,7 +101,6 @@ export function ExamHeatmap({
 
   // Scroll strip state
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [cellWidth, setCellWidth] = useState(44)
 
   const inputRef = useRef<HTMLInputElement>(null)
   const inputReadyRef = useRef<HTMLInputElement>(null)
@@ -204,24 +203,14 @@ export function ExamHeatmap({
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
-    const w = Math.max(36, (el.clientWidth - 6 * STRIP_GAP) / 7)
+    // Cell width is controlled by CSS calc; derive it from clientWidth for scroll math
+    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
     const todayIdx = allDays.findIndex(d => d.isToday)
     if (todayIdx >= 0) {
-      el.scrollLeft = Math.max(0, todayIdx * (w + STRIP_GAP) - el.clientWidth / 2 + w / 2)
+      el.scrollLeft = Math.max(0, todayIdx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally only on mount — highlightedDay effect handles subsequent scrolls
-
-  // Keep cell width sized so 7 cells fill the container
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-    const compute = () => setCellWidth(Math.max(36, (el.clientWidth - 6 * STRIP_GAP) / 7))
-    compute()
-    const ro = new ResizeObserver(compute)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
 
   // Smooth-scroll to center highlighted day when it changes
   useEffect(() => {
@@ -229,9 +218,9 @@ export function ExamHeatmap({
     const el = scrollRef.current
     const idx = allDays.findIndex(d => d.key === highlightedDay)
     if (idx < 0) return
-    const scrollLeft = idx * (cellWidth + STRIP_GAP) - el.clientWidth / 2 + cellWidth / 2
-    el.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' })
-  }, [highlightedDay, cellWidth, allDays])
+    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+    el.scrollTo({ left: Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
+  }, [highlightedDay, allDays])
 
   // Full-grid memos (only used when showFullTimeline)
   const totalWeeks = useMemo(() => {
@@ -427,7 +416,7 @@ export function ExamHeatmap({
                     key={cell.key}
                     role={isClickable ? 'button' : undefined}
                     onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
-                    style={{ width: cellWidth, ...bgStyle }}
+                    style={{ width: `calc((100% - ${6 * STRIP_GAP}px) / 7)`, ...bgStyle }}
                     className={cls}
                     title={cell.key}
                   >

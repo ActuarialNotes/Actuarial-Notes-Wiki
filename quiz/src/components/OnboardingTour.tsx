@@ -248,7 +248,6 @@ export default function OnboardingTour() {
       if (isLastStep) finish()
       else next()
     }
-    const onTap = () => advance()
 
     // 'watch' steps advance on a polled condition rather than a tap.
     if (isWatch && current.watch) {
@@ -260,14 +259,26 @@ export default function OnboardingTour() {
       checkWatch()
     }
 
+    // For 'tap' steps, use a document-level capture listener rather than
+    // attaching to the specific element. This survives element recreation
+    // (e.g. ReactMarkdown re-creates anchors when its `components` prop
+    // changes), which would otherwise silently detach an element listener.
+    const onDocClick = !isWatch
+      ? (e: MouseEvent) => {
+          if (cancelled || !current.target) return
+          const t = e.target as HTMLElement | null
+          if (t && t.closest(current.target!)) advance()
+        }
+      : null
+    if (onDocClick) document.addEventListener('click', onDocClick, true)
+
     const loop = () => {
       if (cancelled) return
       if (el && !document.body.contains(el)) {
-        // Element went away (e.g. menu closed) — drop it and resume polling.
-        if (!isWatch) el.removeEventListener('click', onTap, true)
+        // Element went away temporarily (e.g. React re-rendered and replaced
+        // the node). Keep the spotlight at its last position — don't clear it —
+        // so the user sees a stable ring while we re-poll for the new node.
         el = null
-        lastRect = null
-        setTargetRect(null)
         poll()
         return
       }
@@ -305,7 +316,6 @@ export default function OnboardingTour() {
       }
       if (found) {
         el = found
-        if (!isWatch) found.addEventListener('click', onTap, true)
         const r = found.getBoundingClientRect()
         if (r.top < 64 || r.bottom > window.innerHeight - 64) {
           found.scrollIntoView({ block: 'center', behavior: 'smooth' })
@@ -322,7 +332,7 @@ export default function OnboardingTour() {
       clearTimeout(pollTimer)
       clearTimeout(watchTimer)
       cancelAnimationFrame(raf)
-      if (el && !isWatch) el.removeEventListener('click', onTap, true)
+      if (onDocClick) document.removeEventListener('click', onDocClick, true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, safeStep, location.pathname])

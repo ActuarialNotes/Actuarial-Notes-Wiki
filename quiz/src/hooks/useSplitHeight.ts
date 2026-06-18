@@ -41,7 +41,8 @@ export interface SplitHeightApi {
 export function useSplitHeight(): SplitHeightApi {
   const [height, setHeight] = useState<number>(() => {
     if (typeof window === 'undefined') return 400
-    return readStored() ?? Math.round(window.innerHeight * DEFAULT_HEIGHT)
+    const stored = readStored()
+    return stored !== null ? clampHeight(stored) : Math.round(window.innerHeight * DEFAULT_HEIGHT)
   })
 
   const dragState = useRef<{ startY: number; startH: number } | null>(null)

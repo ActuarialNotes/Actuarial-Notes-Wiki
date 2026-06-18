@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, FileDown, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -17,6 +17,7 @@ import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuizMode } from '@/lib/parser'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { getSittingPdfLink, getExamPdfLink } from '@/data/examPdfLinks'
 
 type ExamOrg = 'SOA' | 'CAS'
 
@@ -908,6 +909,25 @@ export default function Landing() {
                     }
                     {' '}Answers and explanations are revealed at the end.
                   </p>
+                  {(() => {
+                    const sitting = selectedYear !== null ? availableSittings.find(s => s.year === selectedYear) : null
+                    const pdfLink = sitting
+                      ? getSittingPdfLink(topic, selectedYear!, sitting.session)
+                      : availableSittings.length === 0
+                        ? getExamPdfLink(topic)
+                        : null
+                    return pdfLink ? (
+                      <a
+                        href={pdfLink.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 hover:underline transition-colors pt-0.5"
+                      >
+                        <FileDown className="h-3 w-3" />
+                        {pdfLink.label}
+                      </a>
+                    ) : null
+                  })()}
                 </div>
               )}
 

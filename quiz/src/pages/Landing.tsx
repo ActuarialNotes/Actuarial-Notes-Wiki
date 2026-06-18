@@ -117,7 +117,7 @@ function GroupSection({
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
         )}
-        <div className="relative z-10 flex items-stretch">
+        <div className={`relative z-10 flex items-stretch ${allSelected ? 'bg-primary/10' : someSelected ? 'bg-primary/5' : ''}`}>
           {/* Select-all checkmark circle */}
           <button
             type="button"

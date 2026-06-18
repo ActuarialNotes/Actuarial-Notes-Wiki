@@ -102,7 +102,6 @@ export function ExamHeatmap({
   // Scroll strip state
   const scrollRef = useRef<HTMLDivElement>(null)
   const [cellWidth, setCellWidth] = useState(44)
-  const initialScrollDone = useRef(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
   const inputReadyRef = useRef<HTMLInputElement>(null)
@@ -201,29 +200,25 @@ export function ExamHeatmap({
     return days
   }, [gridStart, gridEnd, today, scoreByDay, targetDate, targetReadyDate])
 
-  // Measure cell width from container and scroll to today on first render
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el || initialScrollDone.current) return
-    const raf = requestAnimationFrame(() => {
-      const w = Math.max(36, (el.clientWidth - 6 * STRIP_GAP) / 7)
-      setCellWidth(w)
-      const todayIdx = allDays.findIndex(d => d.isToday)
-      if (todayIdx >= 0) {
-        el.scrollLeft = Math.max(0, todayIdx * (w + STRIP_GAP) - el.clientWidth / 2 + w / 2)
-      }
-      initialScrollDone.current = true
-    })
-    return () => cancelAnimationFrame(raf)
-  }, [allDays])
-
-  // Update cell width on resize (without re-scrolling)
+  // Scroll to today once when the strip first mounts
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
-    const ro = new ResizeObserver(() => {
-      setCellWidth(Math.max(36, (el.clientWidth - 6 * STRIP_GAP) / 7))
-    })
+    const w = Math.max(36, (el.clientWidth - 6 * STRIP_GAP) / 7)
+    const todayIdx = allDays.findIndex(d => d.isToday)
+    if (todayIdx >= 0) {
+      el.scrollLeft = Math.max(0, todayIdx * (w + STRIP_GAP) - el.clientWidth / 2 + w / 2)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // intentionally only on mount — highlightedDay effect handles subsequent scrolls
+
+  // Keep cell width sized so 7 cells fill the container
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const compute = () => setCellWidth(Math.max(36, (el.clientWidth - 6 * STRIP_GAP) / 7))
+    compute()
+    const ro = new ResizeObserver(compute)
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
@@ -403,13 +398,10 @@ export function ExamHeatmap({
         <>
           <div
             ref={scrollRef}
-            className="overflow-x-auto pb-1.5 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
+            className="overflow-x-auto pb-1.5 min-h-[44px] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
             style={{ scrollbarWidth: 'thin' }}
           >
-            <div
-              className="flex"
-              style={{ gap: STRIP_GAP, width: allDays.length * (cellWidth + STRIP_GAP) - STRIP_GAP }}
-            >
+            <div className="flex" style={{ gap: STRIP_GAP }}>
               {allDays.map(cell => {
                 const pct = !cell.isFuture ? resolvedPct(cell.key, cell.data, dayPlanPct) : null
                 const isClickable = !!onDayClick
@@ -418,7 +410,7 @@ export function ExamHeatmap({
                 const dayLabel = DAY_LABELS[isoIndex]
                 const bgStyle = pct !== null ? cellStyle(pct) : undefined
 
-                let cls = 'flex-shrink-0 flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all select-none'
+                let cls = 'flex-shrink-0 aspect-square flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all select-none'
                 if (cell.isFuture) {
                   if (cell.isExamDay) cls += ' bg-primary/30 ring-1 ring-inset ring-primary'
                   else if (cell.isReadyDay) cls += ' bg-amber-400/30 ring-1 ring-inset ring-amber-400'
@@ -435,7 +427,7 @@ export function ExamHeatmap({
                     key={cell.key}
                     role={isClickable ? 'button' : undefined}
                     onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
-                    style={{ width: cellWidth, height: cellWidth, ...bgStyle }}
+                    style={{ width: cellWidth, ...bgStyle }}
                     className={cls}
                     title={cell.key}
                   >

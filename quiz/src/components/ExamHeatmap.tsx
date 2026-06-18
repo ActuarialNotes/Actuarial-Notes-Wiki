@@ -5,6 +5,7 @@ import { ExamSittingsList } from '@/components/ExamSittingsList'
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+const STRIP_GAP = 6 // px gap between cells
 
 function cellStyle(pct: number | null): { backgroundColor: string } | undefined {
   if (pct === null) return undefined
@@ -68,6 +69,7 @@ interface Props {
   onDayClick?: (date: string) => void
   onOpenStudyPlan?: (step?: 1 | 2 | 3) => void
   dayPlanPct?: Map<string, number>
+  /** No longer restricts to mobile — kept for API compatibility */
   mobileMonthOnly?: boolean
   highlightedDay?: string | null
 }
@@ -82,7 +84,6 @@ export function ExamHeatmap({
   onDayClick,
   onOpenStudyPlan,
   dayPlanPct,
-  mobileMonthOnly = false,
   highlightedDay,
 }: Props) {
   const [editing, setEditing] = useState(false)
@@ -97,6 +98,12 @@ export function ExamHeatmap({
       return false
     }
   })
+
+  // Scroll strip state
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [cellWidth, setCellWidth] = useState(44)
+  const initialScrollDone = useRef(false)
+
   const inputRef = useRef<HTMLInputElement>(null)
   const inputReadyRef = useRef<HTMLInputElement>(null)
 
@@ -147,11 +154,6 @@ export function ExamHeatmap({
     return mondayOf(addDays(today, 28))
   }, [targetDate, today])
 
-  const totalWeeks = useMemo(() => {
-    const diff = gridEnd.getTime() - gridStart.getTime()
-    return Math.max(4, Math.round(diff / (7 * 86400000)) + 1)
-  }, [gridStart, gridEnd])
-
   const scoreByDay = useMemo(() => {
     const map = new Map<string, { total: number; count: number }>()
     for (const s of sessions) {
@@ -169,19 +171,78 @@ export function ExamHeatmap({
     return result
   }, [sessions])
 
-  // 7-day strip: today ±3
-  const stripDays = useMemo(() => {
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = addDays(today, i - 3)
-      const key = isoKey(d)
-      const isFuture = d > today
-      const isToday = key === isoKey(today)
-      const isExamDay = !!targetDate && key === targetDate
-      const isReadyDay = !!targetReadyDate && key === targetReadyDate
-      const data = scoreByDay.get(key) ?? null
-      return { key, d, isFuture, isToday, isExamDay, isReadyDay, data }
+  // All individual days in the timeline range (for the scrollable strip)
+  const allDays = useMemo(() => {
+    const todayKey = isoKey(today)
+    const days: Array<{
+      key: string
+      d: Date
+      isFuture: boolean
+      isToday: boolean
+      isExamDay: boolean
+      isReadyDay: boolean
+      data: DayData | null
+    }> = []
+    let cur = new Date(gridStart)
+    const end = new Date(gridEnd)
+    while (cur <= end) {
+      const key = isoKey(cur)
+      days.push({
+        key,
+        d: new Date(cur),
+        isFuture: cur > today,
+        isToday: key === todayKey,
+        isExamDay: !!targetDate && key === targetDate,
+        isReadyDay: !!targetReadyDate && key === targetReadyDate,
+        data: scoreByDay.get(key) ?? null,
+      })
+      cur = addDays(cur, 1)
+    }
+    return days
+  }, [gridStart, gridEnd, today, scoreByDay, targetDate, targetReadyDate])
+
+  // Measure cell width from container and scroll to today on first render
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el || initialScrollDone.current) return
+    const raf = requestAnimationFrame(() => {
+      const w = Math.max(36, (el.clientWidth - 6 * STRIP_GAP) / 7)
+      setCellWidth(w)
+      const todayIdx = allDays.findIndex(d => d.isToday)
+      if (todayIdx >= 0) {
+        el.scrollLeft = Math.max(0, todayIdx * (w + STRIP_GAP) - el.clientWidth / 2 + w / 2)
+      }
+      initialScrollDone.current = true
     })
-  }, [today, scoreByDay, targetDate, targetReadyDate])
+    return () => cancelAnimationFrame(raf)
+  }, [allDays])
+
+  // Update cell width on resize (without re-scrolling)
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      setCellWidth(Math.max(36, (el.clientWidth - 6 * STRIP_GAP) / 7))
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  // Smooth-scroll to center highlighted day when it changes
+  useEffect(() => {
+    if (!highlightedDay || !scrollRef.current) return
+    const el = scrollRef.current
+    const idx = allDays.findIndex(d => d.key === highlightedDay)
+    if (idx < 0) return
+    const scrollLeft = idx * (cellWidth + STRIP_GAP) - el.clientWidth / 2 + cellWidth / 2
+    el.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' })
+  }, [highlightedDay, cellWidth, allDays])
+
+  // Full-grid memos (only used when showFullTimeline)
+  const totalWeeks = useMemo(() => {
+    const diff = gridEnd.getTime() - gridStart.getTime()
+    return Math.max(4, Math.round(diff / (7 * 86400000)) + 1)
+  }, [gridStart, gridEnd])
 
   const examDateWeekIdx = useMemo(() => {
     if (!targetDate) return -1
@@ -208,7 +269,6 @@ export function ExamHeatmap({
       const month = colStart.getMonth()
       const monthLabel = month !== prevMonth ? MONTH_ABBR[month] : null
       prevMonth = month
-
       const days = Array.from({ length: 7 }, (_, i) => {
         const d = addDays(colStart, i)
         const key = isoKey(d)
@@ -224,7 +284,6 @@ export function ExamHeatmap({
             : `${key}: no activity`
         return { key, data, isFuture, isToday, isExamDay, isReadyDay, title }
       })
-
       return {
         key: isoKey(colStart),
         monthLabel,
@@ -241,7 +300,6 @@ export function ExamHeatmap({
         month: 'short', day: 'numeric', year: 'numeric',
       })
     : null
-
   const readyDaysLeft = targetReadyDate ? daysUntil(targetReadyDate) : null
   const readyDateLabel = targetReadyDate
     ? new Date(targetReadyDate + 'T00:00:00').toLocaleDateString(undefined, {
@@ -251,7 +309,7 @@ export function ExamHeatmap({
 
   void examProgressKey
 
-  // Shared date rows JSX
+  // Shared date rows
   const dateRows = (
     <div className="flex flex-col gap-1 pt-0.5">
       <div className="flex items-center gap-1.5">
@@ -265,9 +323,7 @@ export function ExamHeatmap({
             {examDateLabel ? (
               <>
                 <span className="font-medium">Exam: {examDateLabel}</span>
-                {daysLeft !== null && daysLeft <= 0 && (
-                  <span className="opacity-60">passed</span>
-                )}
+                {daysLeft !== null && daysLeft <= 0 && <span className="opacity-60">passed</span>}
               </>
             ) : (
               <span>Set exam date</span>
@@ -281,39 +337,18 @@ export function ExamHeatmap({
                 ref={inputRef}
                 type="date"
                 value={draft}
-                onChange={e => {
-                  const val = e.target.value
-                  setDraft(val)
-                  if (val) saveDate(val)
-                }}
-                onKeyDown={e => {
-                  if (e.key === 'Escape') setEditing(false)
-                }}
+                onChange={e => { const v = e.target.value; setDraft(v); if (v) saveDate(v) }}
+                onKeyDown={e => { if (e.key === 'Escape') setEditing(false) }}
                 className="text-[16px] bg-background border rounded px-1 py-0.5 text-foreground"
               />
-              <button
-                type="button"
-                onClick={() => setEditing(false)}
-                className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
-                aria-label="Cancel"
-              >
+              <button type="button" onClick={() => setEditing(false)} className="text-muted-foreground hover:text-foreground p-0.5 transition-colors" aria-label="Cancel">
                 <X className="h-3 w-3" />
               </button>
               {targetDate && (
-                <button
-                  type="button"
-                  onClick={() => saveDate('')}
-                  className="text-[11px] text-muted-foreground hover:text-destructive transition-colors"
-                >
-                  Clear
-                </button>
+                <button type="button" onClick={() => saveDate('')} className="text-[11px] text-muted-foreground hover:text-destructive transition-colors">Clear</button>
               )}
             </div>
-            <ExamSittingsList
-              examId={examProgressKey}
-              selectedDate={draft}
-              onSelect={d => { setDraft(d); saveDate(d) }}
-            />
+            <ExamSittingsList examId={examProgressKey} selectedDate={draft} onSelect={d => { setDraft(d); saveDate(d) }} />
           </div>
         )}
       </div>
@@ -330,9 +365,7 @@ export function ExamHeatmap({
               {readyDateLabel ? (
                 <>
                   <span className="font-medium">Target ready: {readyDateLabel}</span>
-                  {readyDaysLeft !== null && readyDaysLeft <= 0 && (
-                    <span className="opacity-60">passed</span>
-                  )}
+                  {readyDaysLeft !== null && readyDaysLeft <= 0 && <span className="opacity-60">passed</span>}
                 </>
               ) : (
                 <span>Set target ready date</span>
@@ -346,32 +379,15 @@ export function ExamHeatmap({
                 type="date"
                 value={draftReady}
                 max={targetDate ?? undefined}
-                onChange={e => {
-                  const val = e.target.value
-                  setDraftReady(val)
-                  if (val) saveReadyDate(val)
-                }}
-                onKeyDown={e => {
-                  if (e.key === 'Escape') setEditingReady(false)
-                }}
+                onChange={e => { const v = e.target.value; setDraftReady(v); if (v) saveReadyDate(v) }}
+                onKeyDown={e => { if (e.key === 'Escape') setEditingReady(false) }}
                 className="text-[16px] bg-background border rounded px-1 py-0.5 text-foreground"
               />
-              <button
-                type="button"
-                onClick={() => setEditingReady(false)}
-                className="text-muted-foreground hover:text-foreground p-0.5 transition-colors"
-                aria-label="Cancel"
-              >
+              <button type="button" onClick={() => setEditingReady(false)} className="text-muted-foreground hover:text-foreground p-0.5 transition-colors" aria-label="Cancel">
                 <X className="h-3 w-3" />
               </button>
               {targetReadyDate && (
-                <button
-                  type="button"
-                  onClick={() => saveReadyDate('')}
-                  className="text-[11px] text-muted-foreground hover:text-destructive transition-colors"
-                >
-                  Clear
-                </button>
+                <button type="button" onClick={() => saveReadyDate('')} className="text-[11px] text-muted-foreground hover:text-destructive transition-colors">Clear</button>
               )}
             </div>
           )}
@@ -382,63 +398,71 @@ export function ExamHeatmap({
 
   return (
     <div className="space-y-3">
-      {mobileMonthOnly && !showFullTimeline ? (
-        /* ── 7-day strip (default mobile view) ── */
+      {!showFullTimeline ? (
+        /* ── Scrollable day strip (default) ── */
         <>
-          <div className="grid grid-cols-7 gap-1.5">
-            {stripDays.map(cell => {
-              const pct = !cell.isFuture ? resolvedPct(cell.key, cell.data, dayPlanPct) : null
-              const isClickable = !!onDayClick
-              const dow = cell.d.getDay()
-              const isoIndex = (dow + 6) % 7 // 0=Mon…6=Sun
-              const dayLabel = DAY_LABELS[isoIndex]
-              const bgStyle = pct !== null ? cellStyle(pct) : undefined
+          <div
+            ref={scrollRef}
+            className="overflow-x-auto pb-1.5 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
+            style={{ scrollbarWidth: 'thin' }}
+          >
+            <div
+              className="flex"
+              style={{ gap: STRIP_GAP, width: allDays.length * (cellWidth + STRIP_GAP) - STRIP_GAP }}
+            >
+              {allDays.map(cell => {
+                const pct = !cell.isFuture ? resolvedPct(cell.key, cell.data, dayPlanPct) : null
+                const isClickable = !!onDayClick
+                const dow = cell.d.getDay()
+                const isoIndex = (dow + 6) % 7
+                const dayLabel = DAY_LABELS[isoIndex]
+                const bgStyle = pct !== null ? cellStyle(pct) : undefined
 
-              let cellClass = 'flex flex-col items-center justify-center gap-0.5 rounded-xl py-3 aspect-square transition-all select-none'
-              if (cell.isFuture) {
-                if (cell.isExamDay) cellClass += ' bg-primary/30 ring-1 ring-inset ring-primary'
-                else if (cell.isReadyDay) cellClass += ' bg-amber-400/30 ring-1 ring-inset ring-amber-400'
-                else cellClass += ' bg-muted/20'
-              } else if (pct === null) {
-                cellClass += ' bg-muted/30'
-              }
-              if (cell.key === highlightedDay) cellClass += ' ring-2 ring-white/90'
-              else if (cell.isToday) cellClass += ' ring-2 ring-inset ring-foreground/70 dark:ring-white/80'
-              if (isClickable) cellClass += ' cursor-pointer hover:opacity-75 active:opacity-60'
+                let cls = 'flex-shrink-0 flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all select-none'
+                if (cell.isFuture) {
+                  if (cell.isExamDay) cls += ' bg-primary/30 ring-1 ring-inset ring-primary'
+                  else if (cell.isReadyDay) cls += ' bg-amber-400/30 ring-1 ring-inset ring-amber-400'
+                  else cls += ' bg-muted/20'
+                } else if (pct === null) {
+                  cls += ' bg-muted/30'
+                }
+                if (cell.key === highlightedDay) cls += ' ring-2 ring-white/90'
+                else if (cell.isToday) cls += ' ring-2 ring-inset ring-foreground/70 dark:ring-white/80'
+                if (isClickable) cls += ' cursor-pointer hover:opacity-75 active:opacity-60'
 
-              return (
-                <button
-                  key={cell.key}
-                  type="button"
-                  onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
-                  style={bgStyle}
-                  className={cellClass}
-                  aria-label={`${cell.key}${cell.isExamDay ? ' — Exam day' : cell.isReadyDay ? ' — Target ready' : ''}`}
-                  title={cell.key}
-                >
-                  <span className="text-[10px] leading-none text-muted-foreground">{dayLabel}</span>
-                  <span className={`text-xl font-bold leading-none mt-0.5${cell.isFuture && !cell.isExamDay && !cell.isReadyDay ? ' text-muted-foreground/60' : ''}`}>
-                    {cell.d.getDate()}
-                  </span>
-                  {cell.isExamDay && (
-                    <span className="text-[8px] leading-none text-primary font-medium mt-0.5">Exam</span>
-                  )}
-                  {!cell.isExamDay && cell.isReadyDay && (
-                    <span className="text-[8px] leading-none text-amber-500 font-medium mt-0.5">Ready</span>
-                  )}
-                  {cell.d.getDate() === 1 && !cell.isExamDay && !cell.isReadyDay && (
-                    <span className="text-[8px] leading-none text-muted-foreground mt-0.5">{MONTH_ABBR[cell.d.getMonth()]}</span>
-                  )}
-                </button>
-              )
-            })}
+                return (
+                  <div
+                    key={cell.key}
+                    role={isClickable ? 'button' : undefined}
+                    onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
+                    style={{ width: cellWidth, height: cellWidth, ...bgStyle }}
+                    className={cls}
+                    title={cell.key}
+                  >
+                    <span className="text-[10px] leading-none text-muted-foreground">{dayLabel}</span>
+                    <span className={`text-base font-bold leading-none mt-0.5${cell.isFuture && !cell.isExamDay && !cell.isReadyDay ? ' text-muted-foreground/60' : ''}`}>
+                      {cell.d.getDate()}
+                    </span>
+                    {cell.isExamDay && (
+                      <span className="text-[8px] leading-none text-primary font-medium mt-0.5">Exam</span>
+                    )}
+                    {!cell.isExamDay && cell.isReadyDay && (
+                      <span className="text-[8px] leading-none text-amber-500 font-medium mt-0.5">Ready</span>
+                    )}
+                    {cell.d.getDate() === 1 && !cell.isExamDay && !cell.isReadyDay && (
+                      <span className="text-[8px] leading-none text-muted-foreground mt-0.5">{MONTH_ABBR[cell.d.getMonth()]}</span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           {/* Expand chevron */}
           <button
             type="button"
             onClick={() => toggleTimeline(true)}
-            className="w-full flex items-center justify-center py-1 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+            className="w-full flex items-center justify-center py-0.5 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
             aria-label="Expand to full timeline"
             title="Expand to full timeline"
           >
@@ -468,25 +492,18 @@ export function ExamHeatmap({
           <div className="flex items-stretch gap-[2px]">
             <div className="flex flex-col gap-[2px] shrink-0" style={{ width: 16 }}>
               {DAY_LABELS.map((label, i) => (
-                <div
-                  key={i}
-                  className="h-[14px] flex items-center justify-end pr-0.5 text-[10px] text-muted-foreground leading-none select-none"
-                >
+                <div key={i} className="h-[14px] flex items-center justify-end pr-0.5 text-[10px] text-muted-foreground leading-none select-none">
                   {i % 2 === 0 ? label : ''}
                 </div>
               ))}
             </div>
-
             <div className="flex-1 flex gap-[2px] overflow-hidden">
               {columns.map(col => (
                 <div
                   key={col.key}
                   className={`flex-1 flex flex-col gap-[2px] rounded-sm ${
-                    col.isExamWeek
-                      ? 'ring-1 ring-inset ring-primary/50'
-                      : col.isTargetReadyWeek
-                        ? 'ring-1 ring-inset ring-amber-400/60'
-                        : ''
+                    col.isExamWeek ? 'ring-1 ring-inset ring-primary/50'
+                      : col.isTargetReadyWeek ? 'ring-1 ring-inset ring-amber-400/60' : ''
                   }`}
                 >
                   {col.days.map(cell => {
@@ -501,13 +518,11 @@ export function ExamHeatmap({
                         style={!cell.isFuture ? cellStyle(resolvedPct(cell.key, cell.data, dayPlanPct)) : undefined}
                         className={`w-full rounded-[2px] ${
                           cell.isFuture
-                            ? cell.isExamDay
-                              ? 'bg-primary/30 h-[14px] ring-1 ring-inset ring-primary'
-                              : cell.isReadyDay
-                                ? 'bg-amber-400/30 h-[14px] ring-1 ring-inset ring-amber-400'
-                                : col.isExamWeek ? 'bg-primary/10 h-[14px]'
-                                : col.isTargetReadyWeek ? 'bg-amber-400/10 h-[14px]'
-                                : 'h-[14px] bg-muted/20'
+                            ? cell.isExamDay ? 'bg-primary/30 h-[14px] ring-1 ring-inset ring-primary'
+                              : cell.isReadyDay ? 'bg-amber-400/30 h-[14px] ring-1 ring-inset ring-amber-400'
+                              : col.isExamWeek ? 'bg-primary/10 h-[14px]'
+                              : col.isTargetReadyWeek ? 'bg-amber-400/10 h-[14px]'
+                              : 'h-[14px] bg-muted/20'
                             : `h-[14px] ${cell.data === null ? 'bg-muted/30' : ''}${isClickable ? ' cursor-pointer hover:opacity-80' : ''}`
                         }${cell.key === highlightedDay ? ' ring-2 ring-white/90' : cell.isToday ? ' ring-1 ring-inset ring-foreground/70 dark:ring-white/80' : ''}`}
                       />
@@ -518,18 +533,16 @@ export function ExamHeatmap({
             </div>
           </div>
 
-          {/* Collapse chevron (mobile only) */}
-          {mobileMonthOnly && (
-            <button
-              type="button"
-              onClick={() => toggleTimeline(false)}
-              className="w-full flex items-center justify-center py-1 text-muted-foreground/50 hover:text-muted-foreground transition-colors"
-              aria-label="Collapse to week view"
-              title="Collapse to week view"
-            >
-              <ChevronUp className="h-7 w-7" strokeWidth={1.5} />
-            </button>
-          )}
+          {/* Collapse chevron */}
+          <button
+            type="button"
+            onClick={() => toggleTimeline(false)}
+            className="w-full flex items-center justify-center py-0.5 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+            aria-label="Collapse to week strip"
+            title="Collapse to week strip"
+          >
+            <ChevronUp className="h-7 w-7" strokeWidth={1.5} />
+          </button>
         </>
       )}
 

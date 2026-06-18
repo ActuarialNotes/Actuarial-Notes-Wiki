@@ -24,7 +24,6 @@ import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/daily
 import type { QuizSession } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
-import { useIsMobile } from '@/hooks/useIsMobile'
 
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
@@ -379,7 +378,6 @@ export function ReadinessCard({
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const isMobile = useIsMobile()
   const openDashboard = useConceptPopup(s => s.openDashboard)
   const popupOpen = useConceptPopup(s => s.open)
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
@@ -942,7 +940,7 @@ export function ReadinessCard({
             onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
             onDayClick={date => { setSelectedDay(date) }}
             dayPlanPct={dayPlanPct}
-            mobileMonthOnly={isMobile}
+            mobileMonthOnly
             highlightedDay={selectedDay}
           />
 
@@ -1032,13 +1030,22 @@ export function ReadinessCard({
                     return (
                       <div className="border-t pt-3 space-y-1">
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
-                        {futureConcepts.map(a => (
-                          <div key={a.conceptName} className="flex items-center gap-2.5 px-2 py-1.5">
-                            <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-                            <span className="text-sm flex-1 min-w-0 truncate">{a.conceptName}</span>
-                            <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[NEXT_STATE[masteryStateByName.get(a.conceptName.toLowerCase()) ?? 'new'] ?? 'level1']}</span>
-                          </div>
-                        ))}
+                        {futureConcepts.map(a => {
+                          const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
+                          return (
+                            <div key={a.conceptName} className="flex items-center gap-2.5 px-2 py-1.5">
+                              <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                              <button
+                                type="button"
+                                onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
+                                className="text-sm flex-1 min-w-0 truncate text-left hover:text-foreground/70 transition-colors"
+                              >
+                                {a.conceptName}
+                              </button>
+                              <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[NEXT_STATE[masteryStateByName.get(a.conceptName.toLowerCase()) ?? 'new'] ?? 'level1']}</span>
+                            </div>
+                          )
+                        })}
                       </div>
                     )
                   }
@@ -1047,13 +1054,22 @@ export function ReadinessCard({
                     return (
                       <div className="border-t pt-3 space-y-1">
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Concepts mastered</p>
-                        {selectedDayLevelUps.map(lu => (
-                          <div key={lu.conceptSlug + lu.at} className="flex items-center gap-2.5 px-2 py-1.5">
-                            <Check className="h-4 w-4 text-green-500 shrink-0" />
-                            <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">{lu.conceptSlug}</span>
-                            <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {STATE_LABEL[lu.to]}</span>
-                          </div>
-                        ))}
+                        {selectedDayLevelUps.map(lu => {
+                          const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === lu.conceptSlug.toLowerCase())
+                          return (
+                            <div key={lu.conceptSlug + lu.at} className="flex items-center gap-2.5 px-2 py-1.5">
+                              <Check className="h-4 w-4 text-green-500 shrink-0" />
+                              <button
+                                type="button"
+                                onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
+                                className="text-sm flex-1 min-w-0 truncate text-left text-muted-foreground line-through hover:line-through hover:text-foreground/70 transition-colors"
+                              >
+                                {lu.conceptSlug}
+                              </button>
+                              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {STATE_LABEL[lu.to]}</span>
+                            </div>
+                          )
+                        })}
                       </div>
                     )
                   }

@@ -72,7 +72,7 @@ export default function WikiHome() {
       return saved === 'SOA' || saved === 'CAS' ? saved : null
     } catch { return null }
   })
-  const defaultFilter: BodyFilter = SOA_TRACK_KEYS.has(selectedTrack) ? 'SOA' : 'CAS'
+  const defaultFilter: BodyFilter = CAS_TRACK_KEYS.has(selectedTrack) ? 'CAS' : 'SOA'
   const filter = filterOverride ?? defaultFilter
 
   function handleSetFilter(f: BodyFilter) {

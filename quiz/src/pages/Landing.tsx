@@ -107,22 +107,28 @@ function GroupSection({
   const selectedCount = group.subtopics.filter(s => selectedSubtopics.includes(s)).length
   const examPercentage = parseGroupWeight(group.weight)
 
+  const rowBg = allSelected
+    ? 'bg-primary/10 group-hover:bg-primary/15'
+    : someSelected
+    ? 'bg-primary/5 group-hover:bg-primary/10'
+    : 'group-hover:bg-accent/30'
+
   return (
-    <div className={`rounded-lg overflow-hidden border border-border ${allSelected ? 'bg-primary/10' : someSelected ? 'bg-primary/5' : 'bg-background'}`}>
+    <div className="rounded-lg overflow-hidden bg-background border border-border">
       <div className="relative">
-        {/* Bar fill: weight indicator, only shown when nothing is selected */}
+        {/* Bar fill: weight indicator, hidden when any subtopics are selected */}
         {examPercentage !== null && !(allSelected || someSelected) && (
           <div
             className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
         )}
-        <div className="relative z-10 flex items-stretch">
+        <div className="relative z-10 flex items-stretch group">
           {/* Select-all checkmark circle */}
           <button
             type="button"
             onClick={e => onSelectAll(group, e)}
-            className="flex items-center justify-center px-3 hover:bg-accent/30 transition-colors duration-150 shrink-0"
+            className={`flex items-center justify-center px-3 transition-colors duration-150 shrink-0 ${rowBg}`}
             aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
           >
             {allSelected ? (
@@ -138,7 +144,7 @@ function GroupSection({
           <button
             type="button"
             onClick={() => setOpen(v => !v)}
-            className="flex-1 py-3 pr-4 text-left hover:bg-accent/30 transition-colors duration-150"
+            className={`flex-1 py-3 pr-4 text-left transition-colors duration-150 ${rowBg}`}
             aria-expanded={open}
           >
             <div className="flex items-center gap-3 w-full">

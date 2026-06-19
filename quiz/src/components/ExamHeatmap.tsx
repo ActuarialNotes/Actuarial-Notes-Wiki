@@ -6,6 +6,7 @@ import { ExamSittingsList } from '@/components/ExamSittingsList'
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 const STRIP_GAP = 6 // px gap between cells
+const STRIP_CELL_SIZE = 52 // px, fixed square size for each day cell in the scrollable strip
 
 function cellStyle(pct: number | null): { backgroundColor: string } | undefined {
   if (pct === null) return undefined
@@ -203,8 +204,7 @@ export function ExamHeatmap({
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
-    // Cell width is controlled by CSS calc; derive it from clientWidth for scroll math
-    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+    const cellW = STRIP_CELL_SIZE
     const todayIdx = allDays.findIndex(d => d.isToday)
     if (todayIdx >= 0) {
       el.scrollLeft = Math.max(0, todayIdx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2)
@@ -221,7 +221,7 @@ export function ExamHeatmap({
 
     function checkTodayVisible() {
       if (!el) return
-      const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+      const cellW = STRIP_CELL_SIZE
       const todayIdx = allDays.findIndex(d => d.isToday)
       if (todayIdx < 0) { setShowTodayButton(false); return }
       const todayLeft = todayIdx * (cellW + STRIP_GAP)
@@ -238,7 +238,7 @@ export function ExamHeatmap({
   function scrollToToday() {
     const el = scrollRef.current
     if (!el) return
-    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+    const cellW = STRIP_CELL_SIZE
     const todayIdx = allDays.findIndex(d => d.isToday)
     if (todayIdx >= 0) {
       el.scrollTo({ left: Math.max(0, todayIdx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
@@ -251,7 +251,7 @@ export function ExamHeatmap({
     const el = scrollRef.current
     const idx = allDays.findIndex(d => d.key === highlightedDay)
     if (idx < 0) return
-    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+    const cellW = STRIP_CELL_SIZE
     el.scrollTo({ left: Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
   }, [highlightedDay, allDays])
 
@@ -432,7 +432,7 @@ export function ExamHeatmap({
                 const dayLabel = DAY_LABELS[isoIndex]
                 const bgStyle = pct !== null ? cellStyle(pct) : undefined
 
-                let cls = 'flex-shrink-0 h-[56px] flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all select-none'
+                let cls = 'flex-shrink-0 aspect-square flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all select-none'
                 if (cell.isFuture) {
                   if (cell.isExamDay) cls += ' bg-primary/30 ring-1 ring-inset ring-primary'
                   else if (cell.isReadyDay) cls += ' bg-amber-400/30 ring-1 ring-inset ring-amber-400'
@@ -449,7 +449,7 @@ export function ExamHeatmap({
                     key={cell.key}
                     role={isClickable ? 'button' : undefined}
                     onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
-                    style={{ width: `calc((100% - ${6 * STRIP_GAP}px) / 7)`, ...bgStyle }}
+                    style={{ width: STRIP_CELL_SIZE, ...bgStyle }}
                     className={cls}
                     title={cell.key}
                   >

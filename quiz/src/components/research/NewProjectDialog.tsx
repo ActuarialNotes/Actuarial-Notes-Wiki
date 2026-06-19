@@ -1,8 +1,20 @@
 import { useEffect, useState } from 'react'
-import { Loader2, X, Check, ChevronLeft, ChevronRight, Lightbulb } from 'lucide-react'
+import { Loader2, X, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { PROJECT_DOCUMENT_TYPES, PROJECT_STARTERS, type ProjectStarter } from '@/lib/researchProjectMeta'
-import { FIELD, Field, DocumentTypeField } from './ProjectScopeFields'
+import {
+  suggestProjectName,
+  subtypeMeta,
+  artifactTypeMeta,
+  type ArtifactType,
+} from '@/lib/researchProjectMeta'
+import {
+  FIELD,
+  Field,
+  ArtifactTypeField,
+  SubtypeField,
+  JurisdictionField,
+  LineOfBusinessField,
+} from './ProjectScopeFields'
 import type { ProjectOnboarding } from '@/hooks/useResearchProjects'
 
 interface NewProjectDialogProps {
@@ -10,21 +22,30 @@ interface NewProjectDialogProps {
   onCreate: (name: string, onboarding: ProjectOnboarding) => Promise<void>
 }
 
-const STEPS = ['Basics', 'Type'] as const
+const STEPS = ['Type', 'Subtype', 'Scope', 'Name'] as const
 
-// Project onboarding as a fast, 2-step wizard: Basics (name, with color-coded
-// starter ideas to seed it) and Type (document type, then Create). Jurisdiction,
-// line of business, and review agents get sensible defaults here — either from a
-// picked starter or the existing baseline (Canada, actuarial + underwriting) —
-// and stay editable later from the project's "Edit scope" action.
+// Project onboarding as a 4-step wizard that mirrors the decisions a research
+// artifact needs: what type it is (Document vs Model), its subtype (report /
+// filing / … or reserving / pricing / …), the scope it covers (jurisdiction and
+// line of business), and finally a name — pre-populated from the choices so far
+// (e.g. "ON Personal Auto Filing"). Everything stays editable later via the
+// project's "Edit scope" action.
 export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
   const [step, setStep] = useState(0)
-  const [name, setName] = useState('')
-  const [documentType, setDocumentType] = useState<string | null>(PROJECT_DOCUMENT_TYPES[0].slug)
+  const [artifactType, setArtifactType] = useState<ArtifactType | null>(null)
+  const [subtype, setSubtype] = useState<string | null>(null)
   const [region, setRegion] = useState<string>('')
   const [lob, setLob] = useState<string | null>(null)
-  const [departments, setDepartments] = useState<string[]>(['actuarial', 'underwriting'])
+  const [name, setName] = useState('')
+  const [nameTouched, setNameTouched] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+
+  // Keep the name in sync with the choices so far until the user edits it by
+  // hand — so arriving at the Name step shows a sensible suggestion.
+  useEffect(() => {
+    if (nameTouched) return
+    setName(suggestProjectName({ artifactType, subtype, region, lineOfBusiness: lob }))
+  }, [artifactType, subtype, region, lob, nameTouched])
 
   // Close on Escape, and lock body scroll while open.
   useEffect(() => {
@@ -39,25 +60,27 @@ export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
   }, [onClose])
 
   const isLast = step === STEPS.length - 1
-  const canAdvance = step > 0 || name.trim().length > 0
+  const canAdvance =
+    step === 0 ? artifactType !== null
+    : step === 1 ? subtype !== null
+    : step === 3 ? name.trim().length > 0
+    : true
 
-  function pickStarter(starter: ProjectStarter) {
-    setName(starter.name)
-    setDocumentType(starter.documentType)
-    setRegion(starter.jurisdictionRegion ?? '')
-    setLob(starter.lineOfBusiness)
-    setDepartments(starter.departments)
+  function pickArtifactType(slug: ArtifactType) {
+    setArtifactType(slug)
+    setSubtype(null) // subtype options depend on the artifact type
   }
 
   async function handleCreate() {
     if (!name.trim() || submitting) return
     setSubmitting(true)
     await onCreate(name, {
-      documentType,
+      artifactType,
+      documentType: subtype,
       jurisdictionCountry: 'CA',
       jurisdictionRegion: region || null,
       lineOfBusiness: lob,
-      departments,
+      departments: ['actuarial', 'underwriting'],
     })
     // Parent unmounts on success; keep submitting=true through the unmount.
   }
@@ -108,7 +131,7 @@ export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
                 >
                   {i < step ? <Check className="h-3.5 w-3.5" /> : i + 1}
                 </span>
-                <span className={`text-xs ${i === step ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
+                <span className={`hidden text-xs sm:inline ${i === step ? 'font-medium text-foreground' : 'text-muted-foreground'}`}>
                   {label}
                 </span>
                 {i < STEPS.length - 1 && <span className="h-px flex-1 bg-border" />}
@@ -120,43 +143,41 @@ export function NewProjectDialog({ onClose, onCreate }: NewProjectDialogProps) {
         <form onSubmit={handleNext} className="flex min-h-0 flex-1 flex-col">
           <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-4">
             {step === 0 && (
-              <>
-                <Field title="Project name">
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    placeholder="e.g. Ontario auto reform 2026 impact"
-                    maxLength={120}
-                    autoFocus
-                    className={FIELD}
-                  />
-                </Field>
-                <Field title="Or start from an idea">
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {PROJECT_STARTERS.map(starter => {
-                      const active = name === starter.name
-                      return (
-                        <button
-                          key={starter.name}
-                          type="button"
-                          onClick={() => pickStarter(starter)}
-                          className={`flex items-start gap-2 rounded-lg border p-3 text-left text-sm transition-colors ${starter.color.card} ${
-                            active ? 'border-primary' : 'border-transparent'
-                          }`}
-                        >
-                          <Lightbulb className={`mt-0.5 h-4 w-4 shrink-0 ${starter.color.icon}`} aria-hidden />
-                          <span className={`font-medium ${starter.color.text}`}>{starter.name}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                </Field>
-              </>
+              <ArtifactTypeField value={artifactType} onChange={pickArtifactType} />
             )}
 
             {step === 1 && (
-              <DocumentTypeField value={documentType} onChange={setDocumentType} />
+              <SubtypeField artifactType={artifactType} value={subtype} onChange={setSubtype} />
+            )}
+
+            {step === 2 && (
+              <>
+                <JurisdictionField
+                  country="CA"
+                  region={region}
+                  onCountryChange={() => { /* Canada only for now */ }}
+                  onRegionChange={setRegion}
+                />
+                <LineOfBusinessField value={lob} onChange={setLob} />
+              </>
+            )}
+
+            {step === 3 && (
+              <Field title="Project name" hint="Pre-filled from your choices — edit it however you like.">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={e => { setName(e.target.value); setNameTouched(true) }}
+                  placeholder="e.g. ON Personal Auto Filing"
+                  maxLength={120}
+                  autoFocus
+                  className={FIELD}
+                />
+                <p className="text-xs text-muted-foreground">
+                  {artifactTypeMeta(artifactType)?.label}
+                  {subtypeMeta(subtype) ? ` · ${subtypeMeta(subtype)?.label}` : ''}
+                </p>
+              </Field>
             )}
           </div>
 

@@ -2091,21 +2091,13 @@ export default function Flashcards() {
       )}
 
       <div
-        className={`container max-w-4xl mx-auto pb-40 md:pb-36${focusMode ? ' relative z-[56] pointer-events-none' : ''}`}
+        className={`container max-w-4xl mx-auto pb-52 md:pb-44${focusMode ? ' relative z-[56] pointer-events-none' : ''}`}
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Sticky header: title + gallery strip — hidden when gallery overlay is open */}
         {!galleryExpanded && (
-          <div className={`sticky top-0 md:top-14 lg:top-0 z-10 bg-background border-b px-4 sm:px-6 pt-3${focusMode ? ' invisible' : ''}`}>
-            <div className="mb-1">
-              <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
-            </div>
-            <GalleryStrip
-              cards={orderedCards}
-              activeIndex={activeIndex}
-              onSelect={setActiveIndex}
-              conceptMasteryMap={conceptMasteryMap}
-            />
+          <div className={`sticky top-0 md:top-14 lg:top-0 z-10 bg-background border-b px-4 sm:px-6 py-3${focusMode ? ' invisible' : ''}`}>
+            <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
           </div>
         )}
 
@@ -2134,6 +2126,17 @@ export default function Flashcards() {
 
       {/* Fixed controls footer — always at bottom, above mobile nav */}
       <div className={`fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 ${focusMode ? 'z-[57]' : 'z-[46]'}`}>
+        {/* Gallery strip conveyor — only in study mode */}
+        {!galleryExpanded && (
+          <div className="border-t bg-background px-4">
+            <GalleryStrip
+              cards={orderedCards}
+              activeIndex={activeIndex}
+              onSelect={setActiveIndex}
+              conceptMasteryMap={conceptMasteryMap}
+            />
+          </div>
+        )}
         {/* Prev / Next nav footer — only in study mode */}
         {!galleryExpanded && (
           <div className="flex items-stretch border-t h-16 shrink-0 bg-background">

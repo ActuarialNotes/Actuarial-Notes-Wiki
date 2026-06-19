@@ -11,7 +11,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { decayIfStale } from '@/lib/mastery'
+import { computeReadiness } from '@/lib/readiness'
 import { cn } from '@/lib/utils'
 
 function examNameToTrackKey(name: string): string {
@@ -42,7 +42,7 @@ export default function WikiHome() {
   const { syllabi, loading } = useWikiSyllabus()
   const { setPageRefs, setExamId } = useWikiPage()
   const { progress: examProgress, targetDates, examVariants, selectedTrack } = useExamProgress()
-  const { byConcept } = useConceptMastery()
+  const { records: masteryRecords } = useConceptMastery()
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const location = useLocation()
   const navigationType = useNavigationType()
@@ -242,19 +242,18 @@ export default function WikiHome() {
                     const isCompleted = status === 'completed' && variantMatch
                     const targetDate = targetDates[examId]
 
-                    // Concept mastery progress by level
-                    const allConcepts = match
-                      ? match.topics.flatMap(t => t.concepts.map(c => c.name))
-                      : []
                     const now = new Date()
-                    const conceptStates = allConcepts.map(name => {
-                      const rec = byConcept.get(`${examId}::${name.toLowerCase()}`)
-                      return rec ? decayIfStale(rec, now).state : 'new'
-                    })
-                    const total = conceptStates.length
-                    const level3Count = conceptStates.filter(s => s === 'level3').length
-                    const level2Count = conceptStates.filter(s => s === 'level2').length
-                    const level1Count = conceptStates.filter(s => s === 'level1').length
+                    const examRecords = match
+                      ? masteryRecords.filter(r => r.exam_id === examId)
+                      : []
+                    const { overallPct, sections } = match
+                      ? computeReadiness(match, examRecords, now)
+                      : { overallPct: 0, sections: [] }
+                    const total = sections.reduce((sum, s) => sum + s.total, 0)
+                    const level3Count = sections.reduce((sum, s) => sum + s.level3Count, 0)
+                    const level2Count = sections.reduce((sum, s) => sum + s.level2Count, 0)
+                    const level1Count = sections.reduce((sum, s) => sum + s.level1Count, 0)
+                    const readinessPct = Math.round(overallPct)
                     const level3Pct = total > 0 ? Math.round((level3Count / total) * 100) : 0
                     const level2Pct = total > 0 ? Math.round((level2Count / total) * 100) : 0
                     const level1Pct = total > 0 ? Math.round((level1Count / total) * 100) : 0
@@ -304,7 +303,7 @@ export default function WikiHome() {
                             <div className="px-6 pb-4 space-y-1">
                               <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                                 <span>Readiness</span>
-                                <span className="font-medium tabular-nums">{level3Pct}%</span>
+                                <span className="font-medium tabular-nums">{readinessPct}%</span>
                               </div>
                               <div className="h-1.5 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden flex">
                                 <div className="h-full transition-all" style={{ width: `${level3Pct}%`, backgroundColor: 'rgba(34, 197, 94, 1)' }} />

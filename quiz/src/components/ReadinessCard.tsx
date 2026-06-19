@@ -134,13 +134,18 @@ function StudyGuideRadial({
       while (j < segments.length && segments[j].topicName === name) j++
       const startDeg = segments[i].startDeg
       const endDeg = segments[j - 1].endDeg
-      const prevEnd = i > 0 ? segments[i - 1].endDeg : startDeg
+      const lastSegEnd = segments[segments.length - 1].endDeg
+      const prevEnd = i > 0 ? segments[i - 1].endDeg : lastSegEnd
+      // For i=0 wrap the boundary around 360°→0° (gives ~0° = 12 o'clock)
+      const boundaryDeg = i > 0
+        ? (prevEnd + startDeg) / 2
+        : ((lastSegEnd + startDeg + 360) / 2) % 360
       groups.push({
         topicName: name,
         startDeg,
         endDeg,
         midDeg: (startDeg + endDeg) / 2,
-        boundaryDeg: i > 0 ? (prevEnd + startDeg) / 2 : startDeg,
+        boundaryDeg,
       })
       i = j
     }
@@ -197,9 +202,8 @@ function StudyGuideRadial({
           )
         })}
 
-        {/* Topic boundary dividers */}
+        {/* Topic boundary dividers — all boundaries including i=0 (12 o'clock) */}
         {topicGroups.map((g, i) => {
-          if (i === 0) return null
           const p1 = sgPolar(g.boundaryDeg, SG_INNER_R - 4)
           const p2 = sgPolar(g.boundaryDeg, SG_OUTER_R + 4)
           return (
@@ -215,35 +219,35 @@ function StudyGuideRadial({
           )
         })}
 
-        {/* Topic objective labels */}
+        {/* Curved topic labels — text follows the arc perimeter */}
         {topicGroups.map((g, i) => {
           const arcSpan = g.endDeg - g.startDeg
           if (arcSpan < 16) return null
-          const leaderStart = sgPolar(g.midDeg, SG_OUTER_R + 4)
-          const leaderEnd = sgPolar(g.midDeg, SG_OUTER_R + 11)
-          const labelPt = sgPolar(g.midDeg, SG_OUTER_R + 13)
-          const dx = labelPt.x - SG_CX
-          const anchor = Math.abs(dx) < 10 ? 'middle' : dx > 0 ? 'start' : 'end'
-          const label = g.topicName.length > 16 ? g.topicName.slice(0, 14) + '…' : g.topicName
+          const LABEL_R = SG_OUTER_R + 9
+          // Bottom half (90°–270°): reverse arc direction so text reads L→R
+          const isBottom = g.midDeg > 90 && g.midDeg < 270
+          const p1 = isBottom ? sgPolar(g.endDeg, LABEL_R) : sgPolar(g.startDeg, LABEL_R)
+          const p2 = isBottom ? sgPolar(g.startDeg, LABEL_R) : sgPolar(g.endDeg, LABEL_R)
+          const sweepFlag = isBottom ? 0 : 1
+          const largeArcFlag = arcSpan > 180 ? 1 : 0
+          const arcLen = (arcSpan / 360) * 2 * Math.PI * LABEL_R
+          const maxChars = Math.max(2, Math.floor(arcLen / 4.2))
+          const label = g.topicName.length > maxChars
+            ? g.topicName.slice(0, maxChars - 1) + '…'
+            : g.topicName
+          const pathId = `topic-arc-${i}`
           return (
             <g key={`lbl-${i}`}>
-              <line
-                x1={leaderStart.x} y1={leaderStart.y}
-                x2={leaderEnd.x} y2={leaderEnd.y}
-                stroke="currentColor"
-                strokeWidth={0.75}
-                opacity={0.28}
-              />
-              <text
-                x={labelPt.x + (anchor === 'start' ? 2 : anchor === 'end' ? -2 : 0)}
-                y={labelPt.y}
-                fontSize={6.5}
-                fill="currentColor"
-                opacity={0.6}
-                textAnchor={anchor}
-                dominantBaseline="middle"
-              >
-                {label}
+              <defs>
+                <path
+                  id={pathId}
+                  d={`M${p1.x} ${p1.y} A${LABEL_R} ${LABEL_R} 0 ${largeArcFlag} ${sweepFlag} ${p2.x} ${p2.y}`}
+                />
+              </defs>
+              <text fontSize={7} fill="currentColor" opacity={0.65}>
+                <textPath href={`#${pathId}`} startOffset="50%" textAnchor="middle">
+                  {label}
+                </textPath>
               </text>
             </g>
           )

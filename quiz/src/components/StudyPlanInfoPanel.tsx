@@ -11,31 +11,31 @@ const LEVELS: { key: string; label: string; desc: string; color: string }[] = [
   {
     key: 'new',
     label: 'New',
-    desc: "You haven't tried this concept yet.",
+    desc: "Not yet attempted.",
     color: 'bg-muted text-muted-foreground',
   },
   {
     key: 'level1',
     label: 'Level 1',
-    desc: 'First correct answer — fragile, needs reinforcement soon.',
+    desc: 'First correct answer. Still fragile; return on a later day to advance.',
     color: 'bg-green-50 text-green-600 border-green-200 dark:bg-green-950/20 dark:text-green-500 dark:border-green-900',
   },
   {
     key: 'level2',
     label: 'Level 2',
-    desc: 'Several correct answers across at least two days.',
+    desc: 'Answered correctly on at least two separate days.',
     color: 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800',
   },
   {
     key: 'level3',
     label: 'Level 3',
-    desc: 'Mastered — including at least one hard question.',
+    desc: 'Mastered. Answered correctly on at least three separate days, including one hard question.',
     color: 'bg-green-200 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-700',
   },
   {
     key: 'forgotten',
     label: 'Forgotten',
-    desc: 'Decayed from disuse or repeated wrong answers — re-earn it.',
+    desc: 'Decayed after 7 days without a correct answer, or 3 wrong answers in a row. Re-earn it.',
     color: 'bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/40',
   },
 ]
@@ -44,7 +44,7 @@ function SpacedRepetitionSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">
-        Instead of cramming, we revisit each concept at growing intervals — short gaps at first, then longer ones as the concept sticks.
+        Instead of cramming, we revisit each concept at growing intervals: short gaps at first, then longer ones as the concept sticks.
       </p>
       <div className="flex items-center gap-1.5 flex-wrap">
         {['Day 1', 'Day 3', 'Day 7', 'Day 14', 'Day 30'].map((d, i, arr) => (

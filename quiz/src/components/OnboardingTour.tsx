@@ -64,17 +64,17 @@ const BASE_STEPS: TourStep[] = [
     title: 'Open a study guide',
     body: 'Tap Exam P-1 to see the syllabus.',
     path: '/wiki',
-    target: '[data-tour=”exam-p”]',
+    target: '[data-tour="exam-p"]',
     advance: 'tap',
   },
   // ── Concept popup ──
   {
     icon: MousePointerClick,
     title: 'Open a concept',
-    body: 'Tap “Calculus” to open its explanation in a popup.',
+    body: 'Tap "Calculus" to open its explanation in a popup.',
     path: EXAM_P_ROUTE,
     match: onExam,
-    target: '[data-wikiref=”concept:calculus”]',
+    target: '[data-wikiref="concept:calculus"]',
     advance: 'tap',
   },
   {
@@ -82,23 +82,23 @@ const BASE_STEPS: TourStep[] = [
     title: 'Open the actions menu',
     body: 'Tap the action button next to the concept name.',
     match: onExam,
-    target: '[data-tour=”concept-action”]',
+    target: '[data-tour="concept-action"]',
     advance: 'tap',
   },
   {
     icon: Layers,
     title: 'Add it to your flashcards',
-    body: 'Tap “Add to Flashcards” to save this concept.',
+    body: 'Tap "Add to Flashcards" to save this concept.',
     match: onExam,
-    target: '[data-tour=”add-flashcard”]',
+    target: '[data-tour="add-flashcard"]',
     advance: 'tap',
   },
   {
     icon: Eye,
     title: 'View your flashcards',
-    body: 'Tap “view” to jump to your flashcard deck.',
+    body: 'Tap "view" to jump to your flashcard deck.',
     match: onExam,
-    target: '[data-tour=”view-flashcards”]',
+    target: '[data-tour="view-flashcards"]',
     advance: 'tap',
   },
   // ── Flashcards ──
@@ -108,23 +108,23 @@ const BASE_STEPS: TourStep[] = [
     body: 'Tap the card to flip it and see the explanation.',
     path: '/flashcards',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour=”flip-card”]',
+    target: '[data-tour="flip-card"]',
     advance: 'tap',
   },
   {
     icon: SlidersHorizontal,
     title: 'Change what\'s on the card',
-    body: 'Tap “Back content” to choose what shows on the back.',
+    body: 'Tap "Back content" to choose what shows on the back.',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour=”card-content”]',
+    target: '[data-tour="card-content"]',
     advance: 'tap',
   },
   {
     icon: Sigma,
     title: 'Show the math',
-    body: 'Tap “Math” to show the key equations on the back.',
+    body: 'Tap "Math" to show the key equations on the back.',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour=”card-math”]',
+    target: '[data-tour="card-math"]',
     advance: 'tap',
   },
   {
@@ -132,7 +132,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'There\'s the math',
     body: 'Equations are on the back now. Tap the Quiz tab to try a practice question.',
     match: p => p.startsWith('/flashcards'),
-    target: '[data-tour=”nav-quiz”]',
+    target: '[data-tour="nav-quiz"]',
     advance: 'tap',
   },
   // ── Quiz ──
@@ -142,7 +142,7 @@ const BASE_STEPS: TourStep[] = [
     body: 'Tap Exam P-1 to choose your topics.',
     path: '/',
     match: p => p === '/',
-    target: '[data-tour=”quiz-exam-p”]',
+    target: '[data-tour="quiz-exam-p"]',
     advance: 'tap',
   },
   {
@@ -150,7 +150,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'Start the quiz',
     body: 'Pick a question count, then tap Start Quiz.',
     match: p => p === '/',
-    target: '[data-tour=”start-quiz”]',
+    target: '[data-tour="start-quiz"]',
     advance: 'tap',
   },
   {
@@ -159,7 +159,7 @@ const BASE_STEPS: TourStep[] = [
     body: 'Pick an answer and confirm it — you\'ll get a full explanation right away.',
     match: p => p === '/quiz',
     path: '/quiz',
-    target: '[data-tour=”answer-options”]',
+    target: '[data-tour="answer-options"]',
     advance: 'watch',
     watch: () => Object.keys(useQuizStore.getState().responses).length > 0,
   },
@@ -168,7 +168,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'Quit the quiz',
     body: 'Normally you\'d keep going — for the tour, tap Quit quiz.',
     match: p => p === '/quiz',
-    target: '[data-tour=”quit-quiz”]',
+    target: '[data-tour="quit-quiz"]',
     advance: 'tap',
   },
   {
@@ -176,7 +176,7 @@ const BASE_STEPS: TourStep[] = [
     title: 'Finish & grade',
     body: 'Tap Finish quiz to see your results.',
     match: p => p === '/quiz',
-    target: '[data-tour=”dialog-finish”]',
+    target: '[data-tour="dialog-finish"]',
     advance: 'tap',
   },
   // ── Log in ──
@@ -275,9 +275,6 @@ export default function OnboardingTour() {
     const loop = () => {
       if (cancelled) return
       if (el && !document.body.contains(el)) {
-        // Element went away temporarily (e.g. React re-rendered and replaced
-        // the node). Keep the spotlight at its last position — don't clear it —
-        // so the user sees a stable ring while we re-poll for the new node.
         el = null
         poll()
         return
@@ -300,26 +297,26 @@ export default function OnboardingTour() {
 
     const poll = () => {
       if (cancelled) return
-      // An anchor may exist in more than one layout (e.g. the Quiz tab lives in
-      // both the desktop sidebar and the mobile bottom nav). Pick the first
-      // candidate that's actually visible (non-zero box).
-      let found: HTMLElement | null = null
+      // Prefer an element whose midpoint is in-viewport (e.g. bottom-nav tab over
+      // a hidden sidebar copy). Fall back to any non-zero-sized match so the
+      // spotlight still appears even if the element is partially off-screen.
+      let onscreen: HTMLElement | null = null
+      let offscreen: HTMLElement | null = null
       for (const c of document.querySelectorAll<HTMLElement>(current.target!)) {
         const r = c.getBoundingClientRect()
+        if (r.width === 0 || r.height === 0) continue
         const midX = (r.left + r.right) / 2
         const midY = (r.top + r.bottom) / 2
-        if (
-          r.width > 0 && r.height > 0 &&
-          midX >= 0 && midX <= window.innerWidth &&
-          midY >= 0 && midY <= window.innerHeight
-        ) { found = c; break }
+        if (midX >= 0 && midX <= window.innerWidth && midY >= 0 && midY <= window.innerHeight) {
+          onscreen = c
+          break
+        }
+        offscreen ??= c
       }
+      const found = onscreen ?? offscreen
       if (found) {
         el = found
-        const r = found.getBoundingClientRect()
-        if (r.top < 64 || r.bottom > window.innerHeight - 64) {
-          found.scrollIntoView({ block: 'center', behavior: 'smooth' })
-        }
+        found.scrollIntoView({ block: 'center', behavior: 'smooth' })
         loop()
       } else {
         pollTimer = window.setTimeout(poll, 150)
@@ -371,7 +368,7 @@ export default function OnboardingTour() {
 
       <div
         className={cn(
-          'fixed inset-x-0 z-[61] flex justify-center px-3 pointer-events-none',
+          'fixed inset-x-0 z-[63] flex justify-center px-3 pointer-events-none',
           placeTop ? 'top-3 md:top-4' : 'bottom-14 md:bottom-4',
         )}
       >

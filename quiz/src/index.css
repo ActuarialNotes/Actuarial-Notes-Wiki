@@ -276,7 +276,7 @@
 }
 .onboarding-spotlight {
   position: fixed;
-  z-index: 60;
+  z-index: 62;
   pointer-events: none;
   border-radius: 12px;
   box-shadow: 0 0 0 2px hsl(var(--primary));

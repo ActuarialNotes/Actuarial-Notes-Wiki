@@ -118,6 +118,35 @@ function StudyGuideRadial({
     [segments, selectedConcept],
   )
 
+  const topicGroups = useMemo(() => {
+    if (segments.length === 0) return []
+    const groups: Array<{
+      topicName: string
+      startDeg: number
+      endDeg: number
+      midDeg: number
+      boundaryDeg: number
+    }> = []
+    let i = 0
+    while (i < segments.length) {
+      const name = segments[i].topicName
+      let j = i
+      while (j < segments.length && segments[j].topicName === name) j++
+      const startDeg = segments[i].startDeg
+      const endDeg = segments[j - 1].endDeg
+      const prevEnd = i > 0 ? segments[i - 1].endDeg : startDeg
+      groups.push({
+        topicName: name,
+        startDeg,
+        endDeg,
+        midDeg: (startDeg + endDeg) / 2,
+        boundaryDeg: i > 0 ? (prevEnd + startDeg) / 2 : startDeg,
+      })
+      i = j
+    }
+    return groups
+  }, [segments])
+
   // Same weighted-progress formula as the "Readiness" badge (lib/readiness.ts),
   // so the two numbers always agree.
   const overallPct = useMemo(
@@ -165,6 +194,58 @@ function StudyGuideRadial({
               onClick={() => onConceptClick?.(seg.conceptName)}
               className="cursor-pointer"
             />
+          )
+        })}
+
+        {/* Topic boundary dividers */}
+        {topicGroups.map((g, i) => {
+          if (i === 0) return null
+          const p1 = sgPolar(g.boundaryDeg, SG_INNER_R - 4)
+          const p2 = sgPolar(g.boundaryDeg, SG_OUTER_R + 4)
+          return (
+            <line
+              key={`div-${i}`}
+              x1={p1.x} y1={p1.y}
+              x2={p2.x} y2={p2.y}
+              stroke="currentColor"
+              strokeWidth={1}
+              opacity={0.22}
+              strokeLinecap="round"
+            />
+          )
+        })}
+
+        {/* Topic objective labels */}
+        {topicGroups.map((g, i) => {
+          const arcSpan = g.endDeg - g.startDeg
+          if (arcSpan < 16) return null
+          const leaderStart = sgPolar(g.midDeg, SG_OUTER_R + 4)
+          const leaderEnd = sgPolar(g.midDeg, SG_OUTER_R + 11)
+          const labelPt = sgPolar(g.midDeg, SG_OUTER_R + 13)
+          const dx = labelPt.x - SG_CX
+          const anchor = Math.abs(dx) < 10 ? 'middle' : dx > 0 ? 'start' : 'end'
+          const label = g.topicName.length > 16 ? g.topicName.slice(0, 14) + '…' : g.topicName
+          return (
+            <g key={`lbl-${i}`}>
+              <line
+                x1={leaderStart.x} y1={leaderStart.y}
+                x2={leaderEnd.x} y2={leaderEnd.y}
+                stroke="currentColor"
+                strokeWidth={0.75}
+                opacity={0.28}
+              />
+              <text
+                x={labelPt.x + (anchor === 'start' ? 2 : anchor === 'end' ? -2 : 0)}
+                y={labelPt.y}
+                fontSize={6.5}
+                fill="currentColor"
+                opacity={0.6}
+                textAnchor={anchor}
+                dominantBaseline="middle"
+              >
+                {label}
+              </text>
+            </g>
           )
         })}
 

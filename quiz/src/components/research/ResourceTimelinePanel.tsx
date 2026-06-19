@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Check, History, Loader2, Plus, X } from 'lucide-react'
+import { Check, ChevronDown, ChevronUp, History, Loader2, Plus, X } from 'lucide-react'
 import rawTimeline from 'virtual:resource-timeline'
 import {
   toTimelineEntries,
@@ -15,6 +15,8 @@ import { ResourceKindFilterPills } from '@/components/research/ResourceKindFilte
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useResearchStore } from '@/stores/researchStore'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
+
+type SortKey = 'date' | 'title' | 'author'
 
 // "Add to project" control for a timeline entry — saves it into
 // research_project_wiki_items (the same table the wiki popup's "Add to
@@ -88,11 +90,41 @@ export function ResourceTimelinePanel({ addToProjectId, addedWikiKeys, onAddEntr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yearFilteredEntries])
 
+  const [sortBy, setSortBy] = useState<SortKey>('date')
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
+
+  const handleSort = (key: SortKey) => {
+    if (sortBy === key) {
+      setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy(key)
+      setSortDir(key === 'date' ? 'desc' : 'asc')
+    }
+  }
+
   const openAt = useConceptPopup(s => s.openAt)
   const displayedEntries = useMemo(
     () => selected ? entriesForMonth(yearFilteredEntries, selected.year, selected.month) : entriesNewestFirst(yearFilteredEntries),
     [yearFilteredEntries, selected],
   )
+
+  const sortedEntries = useMemo(() => {
+    return [...displayedEntries].sort((a, b) => {
+      let cmp = 0
+      if (sortBy === 'date') {
+        cmp = a.date.localeCompare(b.date)
+      } else if (sortBy === 'title') {
+        cmp = a.title.localeCompare(b.title)
+      } else {
+        const aA = a.author ?? ''
+        const bA = b.author ?? ''
+        if (!aA && bA) return 1
+        if (aA && !bA) return -1
+        cmp = aA.localeCompare(bA)
+      }
+      return sortDir === 'asc' ? cmp : -cmp
+    })
+  }, [displayedEntries, sortBy, sortDir])
 
   return (
     <section className="space-y-4">
@@ -118,8 +150,6 @@ export function ResourceTimelinePanel({ addToProjectId, addedWikiKeys, onAddEntr
 
       {allEntries.length > 0 && (
         <>
-          <ResourceKindFilterPills />
-
           <ResourceHeatmap
             entries={entries}
             selected={selected}
@@ -128,8 +158,33 @@ export function ResourceTimelinePanel({ addToProjectId, addedWikiKeys, onAddEntr
             onYearRangeChange={setYearRange}
           />
 
+          <ResourceKindFilterPills />
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground shrink-0">Sort:</span>
+            {(['date', 'title', 'author'] as SortKey[]).map(key => {
+              const active = sortBy === key
+              const label = key === 'date' ? 'Date' : key === 'title' ? 'Title' : 'Author'
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => handleSort(key)}
+                  className={`flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors ${
+                    active
+                      ? 'border-foreground/30 bg-foreground/10 text-foreground'
+                      : 'border-border text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+                  }`}
+                >
+                  {label}
+                  {active && (sortDir === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />)}
+                </button>
+              )
+            })}
+          </div>
+
           <ResourceMonthCards
-            entries={displayedEntries}
+            entries={sortedEntries}
             selected={selected}
             onClear={() => setSelected(null)}
             onOpenEntry={entry => openAt([entryToRef(entry)], 0, entry.path)}

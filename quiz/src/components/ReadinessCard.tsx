@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, X } from 'lucide-react'
+import { AlertTriangle, ArrowUp, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, Target, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -295,8 +295,8 @@ function BehindWarning({ plan }: { plan: StudyPlan }) {
       <div className="flex items-center gap-1.5 font-medium">
         <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
         {plan.status === 'target_passed'
-          ? 'Your target ready date has passed — pacing to exam date instead.'
-          : `Behind pace — ${plan.conceptsPerDay} concept${plan.conceptsPerDay === 1 ? '' : 's'} per day needed to catch up.`}
+          ? 'Your target ready date has passed. Pacing to exam date instead.'
+          : `Behind pace: ${plan.conceptsPerDay} concept${plan.conceptsPerDay === 1 ? '' : 's'} per day needed to catch up.`}
       </div>
       {plan.status === 'behind' && (
         <p>Consider an extended quiz session today to cover more ground.</p>
@@ -310,7 +310,7 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
     <div className="rounded-lg border border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950/30 px-3 py-2.5 text-xs text-purple-800 dark:text-purple-300 space-y-1">
       <div className="flex items-center gap-1.5 font-medium">
         <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-        All concepts mastered — great work!
+        All concepts mastered. Great work!
       </div>
       <p>Today's plan uses spaced repetition to keep your weakest concepts fresh.</p>
       {concepts.length > 0 && (
@@ -484,6 +484,7 @@ export function ReadinessCard({
   const [showInfo, setShowInfo] = useState(false)
   const [showBonusInfo, setShowBonusInfo] = useState(false)
   const [showHeatmapInfo, setShowHeatmapInfo] = useState(false)
+  const [showStudyGuideInfo, setShowStudyGuideInfo] = useState(false)
   const [bonusClaimed, setBonusClaimed] = useState<boolean>(() => {
     try {
       const key = `actuarial_daily_bonus_${wikiExamIdToProgressKey(syllabus.examId)}_${todayISO()}`
@@ -1056,7 +1057,7 @@ export function ReadinessCard({
 
                 {/* Session flashcard grid */}
                 {daySessions.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">{isFutureDay ? 'No sessions yet — this day is in the future.' : 'No sessions on this date.'}</p>
+                  <p className="text-xs text-muted-foreground">{isFutureDay ? 'No sessions yet. This day is in the future.' : 'No sessions on this date.'}</p>
                 ) : (
                   <div className="grid grid-cols-2 gap-2">
                     {daySessions.map(session => (
@@ -1304,10 +1305,7 @@ export function ReadinessCard({
                   onClick={handleReplace}
                   className="w-full gap-1.5 text-xs h-8"
                 >
-                  Replace
-                  <span className="text-muted-foreground font-normal">
-                    — use today's completed concepts
-                  </span>
+                  Replace with today's completed concepts
                 </Button>
               )}
 
@@ -1395,7 +1393,18 @@ export function ReadinessCard({
       <div className="space-y-3">
         <Card ref={studyGuideCardRef} className="bg-card">
           <CardContent className="p-5 space-y-4">
-            <h3 className="text-sm font-semibold">Study Guide</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold">Study Guide</h3>
+              <button
+                type="button"
+                onClick={() => setShowStudyGuideInfo(true)}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                aria-label="Study guide info"
+                title="Study guide info"
+              >
+                <Info className="h-4 w-4" />
+              </button>
+            </div>
 
             <StudyGuideRadial
               syllabus={syllabus}
@@ -1506,6 +1515,7 @@ export function ReadinessCard({
       <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
       <HeatmapInfoPanel open={showHeatmapInfo} onClose={() => setShowHeatmapInfo(false)} />
       <DailyBonusInfoPanel open={showBonusInfo} onClose={() => setShowBonusInfo(false)} />
+      <StudyGuideInfoPanel open={showStudyGuideInfo} onClose={() => setShowStudyGuideInfo(false)} />
 
       {/* Session completion overlay */}
       {viewingSession && (
@@ -1570,6 +1580,83 @@ function DailyBonusInfoPanel({ open, onClose }: { open: boolean; onClose: () => 
           </div>
           <p className="text-xs text-muted-foreground">
             Tip: if today's plan doesn't reflect what you actually studied, use the <strong>Replace</strong> button to swap in the concepts you completed today.
+          </p>
+        </div>
+        <div className="px-5 pb-5 flex justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            Got it
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Study Guide Info Panel ────────────────────────────────────────────────────
+
+const STUDY_GUIDE_LEVELS: { fill: string; label: string; desc: string }[] = [
+  { fill: 'rgba(34,197,94,0.10)', label: 'New',       desc: 'Not yet attempted.' },
+  { fill: 'rgba(34,197,94,0.28)', label: 'Level 1',   desc: 'First correct answer.' },
+  { fill: 'rgba(34,197,94,0.62)', label: 'Level 2',   desc: 'Practiced correctly on at least two separate days.' },
+  { fill: '#22c55e',              label: 'Level 3',   desc: 'Mastered, including at least one hard question.' },
+  { fill: 'rgba(239,68,68,0.45)', label: 'Forgotten', desc: 'Needs re-earning.' },
+]
+
+function StudyGuideInfoPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) return null
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Study guide information"
+      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div className="w-full max-w-sm bg-card border rounded-xl shadow-2xl flex flex-col my-16">
+        <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
+          <Target className="h-4 w-4 text-primary shrink-0" />
+          <span className="flex-1 font-semibold text-sm">Study Guide</span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground p-2 transition-colors rounded-md hover:bg-muted/50"
+            aria-label="Close"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="p-5 space-y-4 text-sm leading-relaxed">
+          <p className="text-muted-foreground">
+            The radial chart shows every concept on your exam syllabus. Each segment represents one concept, sized by its topic's weight in the exam.
+          </p>
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Colour key</p>
+            <div className="space-y-2">
+              {STUDY_GUIDE_LEVELS.map(l => (
+                <div key={l.label} className="flex items-start gap-2.5">
+                  <span
+                    className="inline-block h-4 w-4 rounded-[3px] shrink-0 mt-0.5 border border-white/10"
+                    style={{ backgroundColor: l.fill }}
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-foreground">{l.label}:</span> {l.desc}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1">
+            <p className="text-xs font-semibold">Readiness %</p>
+            <p className="text-xs text-muted-foreground">
+              The percentage shown in the centre is your overall readiness score, weighted by both topic weight and mastery level. Higher mastery levels contribute more to the score.
+            </p>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Tap any segment to open that concept and start practising.
           </p>
         </div>
         <div className="px-5 pb-5 flex justify-end">

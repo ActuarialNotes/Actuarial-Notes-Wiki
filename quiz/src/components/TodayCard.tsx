@@ -81,8 +81,8 @@ function BehindWarning({ plan }: { plan: StudyPlan }) {
       <div className="flex items-center gap-1.5 font-medium">
         <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
         {plan.status === 'target_passed'
-          ? 'Your target ready date has passed — pacing to exam date instead.'
-          : `Behind pace — ${plan.conceptsPerDay} concept${plan.conceptsPerDay === 1 ? '' : 's'} per day needed to catch up.`}
+          ? 'Your target ready date has passed. Pacing to exam date instead.'
+          : `Behind pace: ${plan.conceptsPerDay} concept${plan.conceptsPerDay === 1 ? '' : 's'} per day needed to catch up.`}
       </div>
       {plan.status === 'behind' && (
         <p>Consider an extended quiz session today to cover more ground.</p>
@@ -96,7 +96,7 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
     <div className="rounded-lg border border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950/30 px-3 py-2.5 text-xs text-purple-800 dark:text-purple-300 space-y-1">
       <div className="flex items-center gap-1.5 font-medium">
         <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
-        All concepts mastered — great work!
+        All concepts mastered. Great work!
       </div>
       <p>Today's plan uses spaced repetition to keep your weakest concepts fresh.</p>
       {concepts.length > 0 && (
@@ -443,8 +443,7 @@ export function TodayCard({
               </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Add a target ready date and we'll automatically build a daily study schedule
-              — dividing remaining concepts across your available days.
+              Add a target ready date and we'll automatically build a daily study schedule, dividing remaining concepts across your available days.
             </p>
             <Button size="sm" onClick={() => setShowConfig(true)} className="gap-1.5">
               <Settings2 className="h-3.5 w-3.5" />

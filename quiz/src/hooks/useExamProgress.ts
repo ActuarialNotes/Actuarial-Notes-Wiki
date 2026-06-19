@@ -2,10 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 
-// Maps wiki exam IDs to the exam label stored in question.exam
+// Maps exam progress keys to the exam label stored in question.exam
 export const EXAM_ID_TO_TOPIC: Record<string, string> = {
   P: 'Probability',
   FM: 'Financial Mathematics',
+  'CAS-5': 'Exam 5',
 }
 
 // Maps question.exam labels back to wiki exam IDs

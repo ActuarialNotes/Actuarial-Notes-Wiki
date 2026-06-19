@@ -24,6 +24,7 @@ import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/daily
 import type { QuizSession } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
+import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 
 
 // ── Study Guide Radial ─────────────────────────────────────────────────────────
@@ -875,9 +876,11 @@ export function ReadinessCard({
     const totalDelay = Math.max(groupedPlanConcepts.length * 220 + 150, 300)
     setTimeout(() => {
       setHighlightedTopicIdx(null)
-      navigate(`/?topic=${encodeURIComponent(syllabus.examTopic)}&mode=quiz`)
+      const progressKey = wikiExamIdToProgressKey(syllabus.examId)
+      const topicValue = EXAM_ID_TO_TOPIC[progressKey] ?? syllabus.examTopic
+      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz`)
     }, totalDelay)
-  }, [navigate, syllabus.examTopic, groupedPlanConcepts])
+  }, [navigate, syllabus.examId, syllabus.examTopic, groupedPlanConcepts])
 
   useEffect(() => {
     if (startQuizTrigger) handleStartQuiz()

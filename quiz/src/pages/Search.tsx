@@ -359,7 +359,7 @@ export default function Search() {
   const subtopics = topic ? (subtopicsByTopic[topic] ?? []) : []
 
   const syllabusForTopic = useMemo(
-    () => syllabi.find(s => s.examTopic === topic) ?? null,
+    () => syllabi.find(s => s.examTopic === topic || s.examLabel === topic) ?? null,
     [syllabi, topic],
   )
 

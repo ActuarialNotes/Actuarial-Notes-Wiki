@@ -30,15 +30,6 @@ const EXAMS = [
 const SOA_TRACK_KEYS = new Set(['ASA', 'FSA'])
 const BODY_FILTER_KEY = 'quiz.bodyFilter'
 
-// Mirrors PACK_COLOR_PALETTE in Flashcards.tsx and WikiHome.tsx so active exams share colour across tabs
-const PACK_COLORS = [
-  { bg: 'bg-blue-500/10 border-blue-400/40',      hover: 'hover:bg-blue-500/25 hover:border-blue-400/70' },
-  { bg: 'bg-emerald-500/10 border-emerald-400/40', hover: 'hover:bg-emerald-500/25 hover:border-emerald-400/70' },
-  { bg: 'bg-violet-500/10 border-violet-400/40',   hover: 'hover:bg-violet-500/25 hover:border-violet-400/70' },
-  { bg: 'bg-orange-500/10 border-orange-400/40',   hover: 'hover:bg-orange-500/25 hover:border-orange-400/70' },
-  { bg: 'bg-rose-500/10 border-rose-400/40',       hover: 'hover:bg-rose-500/25 hover:border-rose-400/70' },
-  { bg: 'bg-cyan-500/10 border-cyan-400/40',       hover: 'hover:bg-cyan-500/25 hover:border-cyan-400/70' },
-] as const
 
 function formatTargetDate(dateStr: string): string {
   const d = new Date(dateStr)
@@ -216,11 +207,10 @@ function ExamOptionCard({
   exam: { value: string; label: string; org: ExamOrg }
   onClick: () => void
   questionCount: number
-  colorIdx: number  // index into PACK_COLORS; -1 means not active
+  colorIdx: number  // -1 means not active
   targetDate?: string | null
 }) {
   const isActive = colorIdx >= 0
-  const colorEntry = isActive ? PACK_COLORS[colorIdx % PACK_COLORS.length] : null
   const isExam5 = exam.value === 'Exam 5'
   const description = isExam5 ? null : exam.value
 
@@ -228,7 +218,9 @@ function ExamOptionCard({
     <button type="button" data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined} onClick={onClick} className="text-left w-full">
       <Card className={cn(
         'h-full transition-all duration-150 overflow-hidden',
-        colorEntry ? cn(colorEntry.bg, colorEntry.hover) : 'hover:bg-accent/30',
+        isActive
+          ? 'bg-primary/10 border-primary/40 hover:bg-primary/25 hover:border-primary/70'
+          : 'hover:bg-accent/30',
       )}>
         <CardHeader className="pb-3">
           <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>

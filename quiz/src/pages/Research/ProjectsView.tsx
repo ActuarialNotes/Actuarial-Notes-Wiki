@@ -10,6 +10,7 @@ import { SuggestedResources } from '@/components/research/SuggestedResources'
 import { ProjectFaq } from '@/components/research/ProjectFaq'
 import { ModelOutputs } from '@/components/research/ModelOutputs'
 import { ProjectSections } from '@/components/research/ProjectSections'
+import { AddResourcesDialog } from '@/components/research/AddResourcesDialog'
 import {
   projectTypeLabel,
   artifactTypeMeta,
@@ -144,11 +145,10 @@ function ProjectList() {
 
 function ProjectOverview({ projectId }: { projectId: string }) {
   const setOpenProject = useResearchStore(s => s.setOpenProject)
-  const setTab = useResearchStore(s => s.setTab)
-  const setAddSourcesProject = useResearchStore(s => s.setAddSourcesProject)
   const { projects, addDocument, removeWikiItem, updateProjectOnboarding, updateModelOutputs, updateProjectSections } = useResearchProjects()
   const [refreshKey, setRefreshKey] = useState(0)
   const [showEditScope, setShowEditScope] = useState(false)
+  const [showAddResources, setShowAddResources] = useState(false)
   const { documents, documentIds, loading: docsLoading } = useProjectDocuments(projectId, refreshKey)
   const { items: wikiItems, loading: wikiLoading } = useProjectWikiItems(projectId, refreshKey)
   const loading = docsLoading || wikiLoading
@@ -220,6 +220,7 @@ function ProjectOverview({ projectId }: { projectId: string }) {
               project={project}
               wikiItems={wikiItems}
               onSectionsChange={sections => updateProjectSections(project.id, sections)}
+              onOpenAddResources={() => setShowAddResources(true)}
             />
           )}
 
@@ -238,7 +239,7 @@ function ProjectOverview({ projectId }: { projectId: string }) {
               <h3 className="text-sm font-semibold text-muted-foreground">Resources</h3>
               <AddSourcesMenu
                 projectId={projectId}
-                onBrowseResources={() => { setAddSourcesProject(projectId); setTab('resources') }}
+                onBrowseResources={() => setShowAddResources(true)}
                 onSourceAdded={() => setRefreshKey(k => k + 1)}
               />
             </div>
@@ -264,6 +265,14 @@ function ProjectOverview({ projectId }: { projectId: string }) {
           project={project}
           onClose={() => setShowEditScope(false)}
           onSave={onboarding => updateProjectOnboarding(project.id, onboarding)}
+        />
+      )}
+
+      {showAddResources && (
+        <AddResourcesDialog
+          projectId={projectId}
+          onClose={() => setShowAddResources(false)}
+          onMutated={() => setRefreshKey(k => k + 1)}
         />
       )}
     </div>

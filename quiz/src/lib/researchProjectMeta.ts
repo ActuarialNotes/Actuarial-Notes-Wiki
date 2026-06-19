@@ -302,6 +302,8 @@ export interface SectionTemplate {
   title: string
   /** One-line hint shown under the section title to orient the user. */
   hint: string
+  /** A fuller sentence explaining what the section is, shown when expanded. */
+  description: string
   subsections: readonly SubsectionTemplate[]
 }
 
@@ -317,35 +319,35 @@ function slugifyKey(s: string): string {
 // any document subtype without a bespoke outline.
 const DOCUMENT_SECTIONS: Record<string, readonly SectionTemplate[]> = {
   report: [
-    { key: 'introduction',      title: 'Introduction',      hint: 'Frame the question, objectives, and scope.',        subsections: sub('Background', 'Objectives', 'Scope') },
-    { key: 'literature_review', title: 'Literature Review',  hint: 'Prior work, regulation, and market context.',       subsections: sub('Prior work', 'Regulatory context') },
-    { key: 'methodology',       title: 'Methodology',        hint: 'Approach, data, and techniques used.',              subsections: sub('Approach', 'Data', 'Techniques') },
-    { key: 'analysis',          title: 'Analysis',           hint: 'Results and key findings.',                         subsections: sub('Results', 'Key findings') },
-    { key: 'discussion',        title: 'Discussion',         hint: 'Interpretation and limitations.',                   subsections: sub('Interpretation', 'Limitations') },
-    { key: 'conclusion',        title: 'Conclusion',         hint: 'Summary and recommendations.',                      subsections: sub('Summary', 'Recommendations') },
-    { key: 'references',        title: 'References',         hint: 'Sources cited.',                                    subsections: [] },
+    { key: 'introduction',      title: 'Introduction',      hint: 'Frame the question, objectives, and scope.',        description: 'The introduction sets up the question the report answers — why it matters, what it aims to establish, and the boundaries of the analysis.', subsections: sub('Background', 'Objectives', 'Scope') },
+    { key: 'literature_review', title: 'Literature Review',  hint: 'Prior work, regulation, and market context.',       description: 'A literature review surveys the existing work, regulation, and market context the report builds on, so the analysis is grounded in what is already known.', subsections: sub('Prior work', 'Regulatory context') },
+    { key: 'methodology',       title: 'Methodology',        hint: 'Approach, data, and techniques used.',              description: 'The methodology describes how the work was done — the data, assumptions, and techniques used — in enough detail for the results to be reproduced.', subsections: sub('Approach', 'Data', 'Techniques') },
+    { key: 'analysis',          title: 'Analysis',           hint: 'Results and key findings.',                         description: 'The analysis presents the results of applying the methodology and draws out the key findings the evidence supports.', subsections: sub('Results', 'Key findings') },
+    { key: 'discussion',        title: 'Discussion',         hint: 'Interpretation and limitations.',                   description: 'The discussion interprets what the findings mean, places them in context, and is candid about the limitations and caveats of the work.', subsections: sub('Interpretation', 'Limitations') },
+    { key: 'conclusion',        title: 'Conclusion',         hint: 'Summary and recommendations.',                      description: 'The conclusion summarizes what was found and sets out the recommendations or decisions the report supports.', subsections: sub('Summary', 'Recommendations') },
+    { key: 'references',        title: 'References',         hint: 'Sources cited.',                                    description: 'A reference list captures every source cited, so each claim in the report can be traced back to its origin.', subsections: [] },
   ],
   filing: [
-    { key: 'executive_summary', title: 'Executive Summary',  hint: 'The ask and headline impact, up front.',            subsections: [] },
-    { key: 'background',        title: 'Background',          hint: 'Current program and regulatory context.',          subsections: sub('Current program', 'Regulatory context') },
-    { key: 'rate_indication',   title: 'Rate Indication',     hint: 'Experience, trend, and the indicated change.',      subsections: sub('Loss experience', 'Trend', 'Indicated change') },
-    { key: 'supporting_data',   title: 'Supporting Data',     hint: 'Exhibits and benchmarks behind the indication.',    subsections: sub('Exhibits', 'Benchmarks') },
-    { key: 'impact_analysis',   title: 'Impact Analysis',     hint: 'Dislocation, capping, and policyholder impact.',     subsections: sub('Dislocation', 'Capping') },
-    { key: 'certification',     title: 'Compliance & Certification', hint: 'Actuarial opinion and sign-off.',            subsections: sub('Actuarial opinion', 'Sign-off') },
+    { key: 'executive_summary', title: 'Executive Summary',  hint: 'The ask and headline impact, up front.',            description: 'The executive summary states the ask and its headline impact up front, so a reviewer grasps the proposal before reading the detail.', subsections: [] },
+    { key: 'background',        title: 'Background',          hint: 'Current program and regulatory context.',          description: 'The background describes the current program and the regulatory context the filing operates within.', subsections: sub('Current program', 'Regulatory context') },
+    { key: 'rate_indication',   title: 'Rate Indication',     hint: 'Experience, trend, and the indicated change.',      description: 'The rate indication derives the needed rate change from loss experience and trend — the actuarial heart of the filing.', subsections: sub('Loss experience', 'Trend', 'Indicated change') },
+    { key: 'supporting_data',   title: 'Supporting Data',     hint: 'Exhibits and benchmarks behind the indication.',    description: 'Supporting data gathers the exhibits and benchmarks that substantiate the indication for a regulator.', subsections: sub('Exhibits', 'Benchmarks') },
+    { key: 'impact_analysis',   title: 'Impact Analysis',     hint: 'Dislocation, capping, and policyholder impact.',     description: 'The impact analysis shows how the proposed change lands on policyholders — dislocation, capping, and the distribution of effects.', subsections: sub('Dislocation', 'Capping') },
+    { key: 'certification',     title: 'Compliance & Certification', hint: 'Actuarial opinion and sign-off.',            description: 'Compliance and certification carries the actuarial opinion and sign-off attesting that the filing meets professional and regulatory standards.', subsections: sub('Actuarial opinion', 'Sign-off') },
   ],
   memo: [
-    { key: 'purpose',        title: 'Purpose',        hint: 'Why this memo exists.',         subsections: [] },
-    { key: 'background',     title: 'Background',      hint: 'Context the reader needs.',     subsections: [] },
-    { key: 'analysis',       title: 'Analysis',        hint: 'The work and what it shows.',   subsections: sub('Findings') },
-    { key: 'recommendation', title: 'Recommendation',  hint: 'What to do, and next steps.',   subsections: sub('Next steps') },
+    { key: 'purpose',        title: 'Purpose',        hint: 'Why this memo exists.',         description: 'The purpose states, in a line or two, why the memo exists and the decision it informs.', subsections: [] },
+    { key: 'background',     title: 'Background',      hint: 'Context the reader needs.',     description: 'The background gives the reader just enough context to follow the analysis without prior knowledge.', subsections: [] },
+    { key: 'analysis',       title: 'Analysis',        hint: 'The work and what it shows.',   description: 'The analysis lays out the work done and what it shows, focused on what the reader needs to reach a decision.', subsections: sub('Findings') },
+    { key: 'recommendation', title: 'Recommendation',  hint: 'What to do, and next steps.',   description: 'The recommendation states clearly what to do and the next steps to get there.', subsections: sub('Next steps') },
   ],
   presentation: [
-    { key: 'agenda',          title: 'Title & Agenda',   hint: 'Set up the deck.',                  subsections: [] },
-    { key: 'context',         title: 'Context',          hint: 'Background and objectives.',        subsections: sub('Background', 'Objectives') },
-    { key: 'findings',        title: 'Key Findings',     hint: 'The main results, one idea a slide.', subsections: [] },
-    { key: 'recommendations', title: 'Recommendations',  hint: 'What you are asking for.',          subsections: [] },
-    { key: 'next_steps',      title: 'Next Steps',       hint: 'Owners and timeline.',              subsections: [] },
-    { key: 'appendix',        title: 'Appendix',         hint: 'Supporting detail.',                subsections: [] },
+    { key: 'agenda',          title: 'Title & Agenda',   hint: 'Set up the deck.',                  description: 'The title and agenda set up the deck — who it is for, what it covers, and how it flows.', subsections: [] },
+    { key: 'context',         title: 'Context',          hint: 'Background and objectives.',        description: 'The context slides give the audience the background and objectives they need before the findings.', subsections: sub('Background', 'Objectives') },
+    { key: 'findings',        title: 'Key Findings',     hint: 'The main results, one idea a slide.', description: 'The key findings present the main results, ideally one idea per slide so each lands clearly.', subsections: [] },
+    { key: 'recommendations', title: 'Recommendations',  hint: 'What you are asking for.',          description: 'The recommendations make the ask explicit — what you want the audience to decide or approve.', subsections: [] },
+    { key: 'next_steps',      title: 'Next Steps',       hint: 'Owners and timeline.',              description: 'Next steps assign owners and a timeline so the deck ends with a concrete plan of action.', subsections: [] },
+    { key: 'appendix',        title: 'Appendix',         hint: 'Supporting detail.',                description: 'The appendix holds the supporting detail and back-up slides that underpin the main story.', subsections: [] },
   ],
 }
 
@@ -353,13 +355,13 @@ const DOCUMENT_SECTIONS: Record<string, readonly SectionTemplate[]> = {
 // model subtype. Each step's subsections are the design decisions to walk
 // through (e.g. ARIMA would be a resource attached under "Model").
 const MODEL_SECTIONS: readonly SectionTemplate[] = [
-  { key: 'purpose_scope', title: 'Purpose and Scope', hint: 'What the model is for and where it applies.',     subsections: sub('Business problem', 'Intended use', 'Scope & limitations') },
-  { key: 'data',          title: 'Data',              hint: 'Sources, quality, and adjustments.',              subsections: sub('Data sources', 'Data quality', 'Adjustments') },
-  { key: 'assumptions',   title: 'Assumptions',       hint: 'Key assumptions and their rationale.',            subsections: sub('Key assumptions', 'Rationale', 'Sensitivities') },
-  { key: 'model',         title: 'Model',             hint: 'Methodology, form, and parameterization.',        subsections: sub('Methodology', 'Model form', 'Parameterization') },
-  { key: 'test',          title: 'Test',              hint: 'Validation, back-testing, and sensitivity.',      subsections: sub('Validation', 'Back-testing', 'Sensitivity testing') },
-  { key: 'implement',     title: 'Implement',         hint: 'Rollout plan, controls, and sign-off.',           subsections: sub('Implementation plan', 'Controls', 'Sign-off') },
-  { key: 'monitor',       title: 'Monitor',           hint: 'Ongoing monitoring, triggers, and review.',       subsections: sub('Monitoring plan', 'Triggers', 'Review cadence') },
+  { key: 'purpose_scope', title: 'Purpose and Scope', hint: 'What the model is for and where it applies.',     description: 'Purpose and scope defines the business problem the model solves, who will rely on it, and the limits within which its results are valid.', subsections: sub('Business problem', 'Intended use', 'Scope & limitations') },
+  { key: 'data',          title: 'Data',              hint: 'Sources, quality, and adjustments.',              description: 'The data step identifies the sources the model draws on, assesses their quality and relevance, and records any adjustments made before use.', subsections: sub('Data sources', 'Data quality', 'Adjustments') },
+  { key: 'assumptions',   title: 'Assumptions',       hint: 'Key assumptions and their rationale.',            description: 'Assumptions are the judgements the model rests on — each one stated, justified, and tested for how sensitive the results are to it.', subsections: sub('Key assumptions', 'Rationale', 'Sensitivities') },
+  { key: 'model',         title: 'Model',             hint: 'Methodology, form, and parameterization.',        description: 'The model step sets out the methodology and mathematical form chosen and how it is parameterized — for example, fitting an ARIMA model to a claims series.', subsections: sub('Methodology', 'Model form', 'Parameterization') },
+  { key: 'test',          title: 'Test',              hint: 'Validation, back-testing, and sensitivity.',      description: 'Testing is where the model is challenged — validated against held-out experience, back-tested, and stressed — to confirm it performs as intended before it is trusted.', subsections: sub('Validation', 'Back-testing', 'Sensitivity testing') },
+  { key: 'implement',     title: 'Implement',         hint: 'Rollout plan, controls, and sign-off.',           description: 'The implementation plan covers how the model moves into production — the rollout, the controls around it, and the sign-offs required to put it into use.', subsections: sub('Implementation plan', 'Controls', 'Sign-off') },
+  { key: 'monitor',       title: 'Monitor',           hint: 'Ongoing monitoring, triggers, and review.',       description: 'Monitoring keeps the model honest over time — tracking performance against expectation, with triggers and a review cadence that flag when it needs to be recalibrated.', subsections: sub('Monitoring plan', 'Triggers', 'Review cadence') },
 ]
 
 /** The section structure for a project, given its artifact type and subtype. */

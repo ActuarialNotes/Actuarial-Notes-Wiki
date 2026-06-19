@@ -1100,7 +1100,7 @@ export function ReadinessCard({
                               >
                                 {a.conceptName}
                               </button>
-                              <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[NEXT_STATE[masteryStateByName.get(a.conceptName.toLowerCase()) ?? 'new'] ?? 'level1']}</span>
+                              <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[NEXT_STATE[a.initialState] ?? a.initialState]}</span>
                             </div>
                           )
                         })}

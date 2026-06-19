@@ -100,11 +100,11 @@ describe('editable sections', () => {
     const fromTemplate = effectiveSections({ artifactType: 'model', documentType: 'pricing', sections: null })
     expect(fromTemplate.map(s => s.title)[0]).toBe('Purpose and Scope')
     // Returns a mutable copy, not the frozen template array.
-    expect(() => fromTemplate.push({ key: 'x', title: 'X', hint: '', subsections: [] })).not.toThrow()
+    expect(() => fromTemplate.push({ key: 'x', title: 'X', hint: '', description: '', subsections: [] })).not.toThrow()
   })
 
   it('uses the project\'s edited sections when present', () => {
-    const custom = [{ key: 'one', title: 'One', hint: '', subsections: [] }]
+    const custom = [{ key: 'one', title: 'One', hint: '', description: '', subsections: [] }]
     expect(effectiveSections({ artifactType: 'document', documentType: 'report', sections: custom }))
       .toEqual(custom)
   })

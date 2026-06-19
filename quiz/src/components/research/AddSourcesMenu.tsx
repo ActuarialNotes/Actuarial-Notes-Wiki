@@ -5,17 +5,17 @@ import { useAddResourceByUrl } from '@/hooks/useAddResourceByUrl'
 
 interface AddSourcesMenuProps {
   projectId: string
-  // "Browse Resources" — switches to the Resources tab in "Add Sources" mode
-  // (existing behaviour, previously the whole button).
+  // "Browse Resources" — opens the in-project Add resources popup (the Resources
+  // tab's corpus browser, scoped to adding into this project).
   onBrowseResources: () => void
   // Called after a source is successfully added via the Upload dialog, so the
   // project view can refetch its document list.
   onSourceAdded: () => void
 }
 
-// "Add Sources" control on a project's detail page. Opens a small menu with
-// two ways to add a document: browse the corpus/timeline (Resources tab), or
-// add a single source by URL via the Upload dialog.
+// "Add Resources" control on a project's detail page. Opens a small menu with
+// two ways to add a resource: browse the corpus/timeline (in a popup), or add a
+// single source by URL via the Upload dialog.
 export function AddSourcesMenu({ projectId, onBrowseResources, onSourceAdded }: AddSourcesMenuProps) {
   const [open, setOpen] = useState(false)
   const [showUpload, setShowUpload] = useState(false)
@@ -39,7 +39,7 @@ export function AddSourcesMenu({ projectId, onBrowseResources, onSourceAdded }: 
         onClick={() => setOpen(v => !v)}
         className="gap-1.5"
       >
-        <FolderPlus className="h-4 w-4" aria-hidden /> Add Sources
+        <FolderPlus className="h-4 w-4" aria-hidden /> Add Resources
       </Button>
 
       {open && (

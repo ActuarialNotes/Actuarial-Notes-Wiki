@@ -18,7 +18,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import {
-  ChevronRight, GripVertical, Plus, Trash2, StickyNote, FileText, X, Loader2, BookOpen,
+  ChevronRight, GripVertical, Plus, Trash2, FolderPlus, X, BookOpen,
 } from 'lucide-react'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useProjectSections, type SectionResource } from '@/hooks/useProjectSections'
@@ -34,10 +34,12 @@ export function ProjectSections({
   project,
   wikiItems,
   onSectionsChange,
+  onOpenAddResources,
 }: {
   project: ResearchProject
   wikiItems: WikiEntryRef[]
   onSectionsChange: (sections: SectionTemplate[]) => Promise<void>
+  onOpenAddResources: () => void
 }) {
   const isModel = project.artifactType === 'model'
   const [sections, setSections] = useState<SectionTemplate[]>(() => effectiveSections(project))
@@ -94,13 +96,13 @@ export function ProjectSections({
     const title = window.prompt('New section title:')?.trim()
     if (!title) return
     const key = makeSectionKey(title, sections.map(s => s.key))
-    persist([...sections, { key, title, hint: '', subsections: [] }])
+    persist([...sections, { key, title, hint: '', description: '', subsections: [] }])
   }
 
   function removeSection(sectionKey: string) {
     const section = sections.find(s => s.key === sectionKey)
     if (!section) return
-    if (!window.confirm(`Remove “${section.title}” and its resources and notes?`)) return
+    if (!window.confirm(`Remove “${section.title}” and its resources?`)) return
     persist(sections.filter(s => s.key !== sectionKey))
     api.removeSectionContent(sectionKey)
   }
@@ -122,6 +124,7 @@ export function ProjectSections({
                 api={api}
                 wikiItems={wikiItems}
                 onRemove={() => removeSection(section.key)}
+                onOpenAddResources={onOpenAddResources}
               />
             ))}
           </ol>
@@ -147,12 +150,14 @@ function SectionAccordion({
   api,
   wikiItems,
   onRemove,
+  onOpenAddResources,
 }: {
   index: number
   section: SectionTemplate
   api: SectionsApi
   wikiItems: WikiEntryRef[]
   onRemove: () => void
+  onOpenAddResources: () => void
 }) {
   const [open, setOpen] = useState(false)
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -167,7 +172,6 @@ function SectionAccordion({
   }
 
   const resCount = api.resources.filter(r => r.sectionKey === section.key).length
-  const noteCount = api.notes.filter(n => n.sectionKey === section.key).length
   const buckets: (SubsectionTemplate | null)[] =
     section.subsections.length > 0 ? [...section.subsections] : [null]
 
@@ -196,10 +200,9 @@ function SectionAccordion({
             <span className="block truncate text-sm font-medium">{section.title}</span>
             {section.hint && <span className="block truncate text-xs text-muted-foreground">{section.hint}</span>}
           </span>
-          {(resCount > 0 || noteCount > 0) && (
-            <span className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
-              {resCount > 0 && <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{resCount}</span>}
-              {noteCount > 0 && <span className="flex items-center gap-1"><StickyNote className="h-3 w-3" />{noteCount}</span>}
+          {resCount > 0 && (
+            <span className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
+              <BookOpen className="h-3 w-3" />{resCount}
             </span>
           )}
           <ChevronRight className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${open ? 'rotate-90' : ''}`} aria-hidden />
@@ -216,6 +219,9 @@ function SectionAccordion({
 
       {open && (
         <div className="space-y-4 border-t bg-background/40 p-3">
+          {section.description && (
+            <p className="text-sm text-muted-foreground">{section.description}</p>
+          )}
           {buckets.map(bucket => (
             <SubsectionBucket
               key={bucket?.key ?? '_section'}
@@ -223,6 +229,7 @@ function SectionAccordion({
               subsection={bucket}
               api={api}
               wikiItems={wikiItems}
+              onOpenAddResources={onOpenAddResources}
             />
           ))}
         </div>
@@ -236,11 +243,13 @@ function SubsectionBucket({
   subsection,
   api,
   wikiItems,
+  onOpenAddResources,
 }: {
   sectionKey: string
   subsection: SubsectionTemplate | null
   api: SectionsApi
   wikiItems: WikiEntryRef[]
+  onOpenAddResources: () => void
 }) {
   const subKey = subsection?.key ?? null
   const { setNodeRef, isOver } = useDroppable({
@@ -249,61 +258,28 @@ function SubsectionBucket({
   })
 
   const resources = api.resources.filter(r => r.sectionKey === sectionKey && r.subsectionKey === subKey)
-  const notes = api.notes.filter(n => n.sectionKey === sectionKey && n.subsectionKey === subKey)
 
   return (
     <section
       ref={setNodeRef}
-      className={`space-y-2 rounded-md border p-3 transition-colors ${isOver ? 'border-primary bg-primary/5' : 'border-border/60'}`}
+      className={`space-y-3 rounded-md border p-3 transition-colors ${isOver ? 'border-primary bg-primary/5' : 'border-border/60'}`}
     >
       {subsection && <h4 className="text-sm font-semibold">{subsection.title}</h4>}
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Resources</p>
-          <AddResourceMenu
-            wikiItems={wikiItems}
-            existing={resources.map(r => r.ref)}
-            onAdd={ref => api.addResource(sectionKey, subKey, ref)}
-          />
+      {resources.length > 0 && (
+        <div className="grid gap-2 sm:grid-cols-2">
+          {resources.map(r => (
+            <ResourceCard key={r.id} resource={r} onRemove={() => api.removeResource(r.id)} />
+          ))}
         </div>
-        {resources.length === 0 ? (
-          <p className="text-xs text-muted-foreground">Drag a resource here, or add one.</p>
-        ) : (
-          <div className="grid gap-2 sm:grid-cols-2">
-            {resources.map(r => (
-              <ResourceCard key={r.id} resource={r} onRemove={() => api.removeResource(r.id)} />
-            ))}
-          </div>
-        )}
-      </div>
+      )}
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-            <StickyNote className="h-3 w-3" aria-hidden /> Notes
-          </p>
-          <button
-            type="button"
-            onClick={() => api.addNote(sectionKey, subKey, '')}
-            className="inline-flex items-center gap-1 rounded-md border border-input px-2 py-1 text-xs text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-          >
-            <Plus className="h-3 w-3" aria-hidden /> Add note
-          </button>
-        </div>
-        {notes.length > 0 && (
-          <ul className="space-y-2">
-            {notes.map(n => (
-              <NoteEditor
-                key={n.id}
-                initialBody={n.body}
-                onSave={body => api.updateNote(n.id, body)}
-                onRemove={() => api.removeNote(n.id)}
-              />
-            ))}
-          </ul>
-        )}
-      </div>
+      <AddResourceMenu
+        wikiItems={wikiItems}
+        existing={resources.map(r => r.ref)}
+        onAdd={ref => api.addResource(sectionKey, subKey, ref)}
+        onOpenAddResources={onOpenAddResources}
+      />
     </section>
   )
 }
@@ -363,58 +339,19 @@ function ResourceCard({ resource, onRemove }: { resource: SectionResource; onRem
   )
 }
 
-function NoteEditor({
-  initialBody,
-  onSave,
-  onRemove,
-}: {
-  initialBody: string
-  onSave: (body: string) => Promise<void>
-  onRemove: () => Promise<void>
-}) {
-  const [body, setBody] = useState(initialBody)
-  const [saving, setSaving] = useState(false)
-
-  async function handleBlur() {
-    if (body === initialBody) return
-    setSaving(true)
-    await onSave(body)
-    setSaving(false)
-  }
-
-  return (
-    <li className="rounded-md border bg-background p-2">
-      <textarea
-        value={body}
-        onChange={e => setBody(e.target.value)}
-        onBlur={handleBlur}
-        rows={2}
-        placeholder="Write a note…"
-        className="w-full resize-y bg-transparent text-[16px] outline-none sm:text-sm"
-      />
-      <div className="mt-1 flex items-center justify-end gap-2">
-        {saving && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" aria-hidden />}
-        <button
-          type="button"
-          onClick={onRemove}
-          className="inline-flex items-center gap-1 rounded p-1 text-xs text-muted-foreground hover:text-destructive"
-          aria-label="Delete note"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </button>
-      </div>
-    </li>
-  )
-}
-
+// Prominent "Add resource" control. Opens a menu to pin a resource already
+// saved to the project, or to open the full Add resources popup to bring new
+// ones into the project.
 function AddResourceMenu({
   wikiItems,
   existing,
   onAdd,
+  onOpenAddResources,
 }: {
   wikiItems: WikiEntryRef[]
   existing: WikiEntryRef[]
   onAdd: (ref: WikiEntryRef) => Promise<void>
+  onOpenAddResources: () => void
 }) {
   const [open, setOpen] = useState(false)
   const available = useMemo(() => {
@@ -427,35 +364,48 @@ function AddResourceMenu({
       <button
         type="button"
         onClick={() => setOpen(o => !o)}
-        className="inline-flex items-center gap-1 rounded-md border border-input px-2 py-1 text-xs text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+        className="flex w-full items-center justify-center gap-2 rounded-md border border-primary/50 bg-primary/10 px-3 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/15"
       >
-        <Plus className="h-3 w-3" aria-hidden /> Add resource
+        <Plus className="h-4 w-4" aria-hidden /> Add resource
       </button>
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 z-20 mt-1 max-h-64 w-64 overflow-y-auto rounded-md border bg-popover py-1 shadow-md">
+          <div className="absolute left-0 right-0 z-20 mt-1 max-h-72 overflow-y-auto rounded-md border bg-popover py-1 shadow-md">
+            <button
+              type="button"
+              onClick={() => { setOpen(false); onOpenAddResources() }}
+              className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-medium text-primary hover:bg-accent"
+            >
+              <FolderPlus className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              Add resources to project
+            </button>
+            <div className="my-1 border-t" />
             {wikiItems.length === 0 ? (
-              <p className="flex items-start gap-2 px-3 py-2 text-xs text-muted-foreground">
-                <FileText className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                Save resources to the project first — then pin them here.
+              <p className="px-3 py-2 text-xs text-muted-foreground">
+                Save resources to the project, then pin them here.
               </p>
             ) : available.length === 0 ? (
               <p className="px-3 py-2 text-xs text-muted-foreground">All saved resources are already here.</p>
             ) : (
-              available.map(w => (
-                <button
-                  key={`${w.kind}:${w.name}`}
-                  type="button"
-                  onClick={async () => { await onAdd(w); setOpen(false) }}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-accent"
-                >
-                  <span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
-                    {w.kind}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate">{w.name}</span>
-                </button>
-              ))
+              <>
+                <p className="px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                  Pin a saved resource
+                </p>
+                {available.map(w => (
+                  <button
+                    key={`${w.kind}:${w.name}`}
+                    type="button"
+                    onClick={async () => { await onAdd(w); setOpen(false) }}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-accent"
+                  >
+                    <span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
+                      {w.kind}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate">{w.name}</span>
+                  </button>
+                ))}
+              </>
             )}
           </div>
         </>

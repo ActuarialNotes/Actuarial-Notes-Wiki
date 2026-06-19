@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { ResearchDocumentRow } from '@/hooks/useResearchFeed'
 import type { WikiEntryKind, WikiEntryRef } from '@/lib/wikiRoutes'
+import type { SectionTemplate } from '@/lib/researchProjectMeta'
 
 // Onboarding metadata captured when a project is created (all optional so older
 // projects still load). See researchProjectMeta.ts for the value vocabularies.
@@ -30,6 +31,8 @@ export interface ResearchProject {
   departments: string[]
   modelOutputs: string[]
   modelCodeLanguage: string | null
+  // The user's edited section structure, or null to use the type's template.
+  sections: SectionTemplate[] | null
 }
 
 interface ProjectsState {
@@ -52,6 +55,7 @@ interface ProjectRow {
   departments: string[] | null
   model_outputs: string[] | null
   model_code_language: string | null
+  sections: SectionTemplate[] | null
   research_project_documents: { count: number }[]
   research_project_wiki_items: { count: number }[]
 }
@@ -59,7 +63,7 @@ interface ProjectRow {
 const PROJECT_COLUMNS =
   'id, name, description, created_at, updated_at, artifact_type, document_type, ' +
   'jurisdiction_country, jurisdiction_region, line_of_business, departments, ' +
-  'model_outputs, model_code_language'
+  'model_outputs, model_code_language, sections'
 
 function mapProjectRow(p: ProjectRow): ResearchProject {
   return {
@@ -78,6 +82,7 @@ function mapProjectRow(p: ProjectRow): ResearchProject {
     departments: p.departments ?? [],
     modelOutputs: p.model_outputs ?? [],
     modelCodeLanguage: p.model_code_language,
+    sections: p.sections ?? null,
   }
 }
 
@@ -174,6 +179,15 @@ export function useResearchProjects() {
     await refresh()
   }, [refresh])
 
+  // Persist the user's edited section structure (add / remove / reorder).
+  const updateProjectSections = useCallback(async (id: string, sections: SectionTemplate[]) => {
+    await supabase
+      .from('research_projects')
+      .update({ sections, updated_at: new Date().toISOString() })
+      .eq('id', id)
+    await refresh()
+  }, [refresh])
+
   const deleteProject = useCallback(async (id: string) => {
     await supabase.from('research_projects').delete().eq('id', id)
     await refresh()
@@ -218,7 +232,7 @@ export function useResearchProjects() {
     await refresh()
   }, [refresh])
 
-  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, updateModelOutputs, deleteProject, addDocument, removeDocument, removeWikiItem, addWikiItem }
+  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, updateModelOutputs, updateProjectSections, deleteProject, addDocument, removeDocument, removeWikiItem, addWikiItem }
 }
 
 interface ProjectDocsState {

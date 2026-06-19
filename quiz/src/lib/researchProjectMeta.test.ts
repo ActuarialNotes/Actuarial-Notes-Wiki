@@ -9,6 +9,8 @@ import {
   projectSections,
   sectionTemplate,
   suggestProjectName,
+  effectiveSections,
+  makeSectionKey,
   MODEL_OUTPUTS,
   CODE_LANGUAGES,
 } from './researchProjectMeta'
@@ -90,6 +92,27 @@ describe('suggestProjectName', () => {
     expect(suggestProjectName({
       artifactType: null, subtype: null, region: null, lineOfBusiness: null,
     })).toBe('')
+  })
+})
+
+describe('editable sections', () => {
+  it('falls back to the template when the project has no custom sections', () => {
+    const fromTemplate = effectiveSections({ artifactType: 'model', documentType: 'pricing', sections: null })
+    expect(fromTemplate.map(s => s.title)[0]).toBe('Purpose and Scope')
+    // Returns a mutable copy, not the frozen template array.
+    expect(() => fromTemplate.push({ key: 'x', title: 'X', hint: '', subsections: [] })).not.toThrow()
+  })
+
+  it('uses the project\'s edited sections when present', () => {
+    const custom = [{ key: 'one', title: 'One', hint: '', subsections: [] }]
+    expect(effectiveSections({ artifactType: 'document', documentType: 'report', sections: custom }))
+      .toEqual(custom)
+  })
+
+  it('makes a unique slug for a new section', () => {
+    expect(makeSectionKey('Risk Appetite', [])).toBe('risk_appetite')
+    expect(makeSectionKey('Data', ['data'])).toBe('data_2')
+    expect(makeSectionKey('Data', ['data', 'data_2'])).toBe('data_3')
   })
 })
 

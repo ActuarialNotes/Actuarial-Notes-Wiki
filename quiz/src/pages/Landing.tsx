@@ -108,7 +108,7 @@ function GroupSection({
   const examPercentage = parseGroupWeight(group.weight)
 
   return (
-    <div className="rounded-lg overflow-hidden bg-background border border-border">
+    <div className={`rounded-lg overflow-hidden border border-border ${allSelected ? 'bg-primary/10' : someSelected ? 'bg-primary/5' : 'bg-background'}`}>
       <div className="relative">
         {/* Bar fill: weight indicator, only shown when nothing is selected */}
         {examPercentage !== null && !(allSelected || someSelected) && (
@@ -116,10 +116,6 @@ function GroupSection({
             className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
-        )}
-        {/* Selected state: full-width primary tint behind both buttons */}
-        {(allSelected || someSelected) && (
-          <div className={`absolute inset-0 ${allSelected ? 'bg-primary/10' : 'bg-primary/5'}`} />
         )}
         <div className="relative z-10 flex items-stretch">
           {/* Select-all checkmark circle */}

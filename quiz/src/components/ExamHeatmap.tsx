@@ -212,6 +212,39 @@ export function ExamHeatmap({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally only on mount — highlightedDay effect handles subsequent scrolls
 
+  // Track whether today's cell is visible in the scroll strip
+  const [showTodayButton, setShowTodayButton] = useState(false)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el || showFullTimeline) { setShowTodayButton(false); return }
+
+    function checkTodayVisible() {
+      if (!el) return
+      const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+      const todayIdx = allDays.findIndex(d => d.isToday)
+      if (todayIdx < 0) { setShowTodayButton(false); return }
+      const todayLeft = todayIdx * (cellW + STRIP_GAP)
+      const todayRight = todayLeft + cellW
+      const visible = todayLeft >= el.scrollLeft - 1 && todayRight <= el.scrollLeft + el.clientWidth + 1
+      setShowTodayButton(!visible)
+    }
+
+    checkTodayVisible()
+    el.addEventListener('scroll', checkTodayVisible, { passive: true })
+    return () => el.removeEventListener('scroll', checkTodayVisible)
+  }, [allDays, showFullTimeline])
+
+  function scrollToToday() {
+    const el = scrollRef.current
+    if (!el) return
+    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+    const todayIdx = allDays.findIndex(d => d.isToday)
+    if (todayIdx >= 0) {
+      el.scrollTo({ left: Math.max(0, todayIdx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
+    }
+  }
+
   // Smooth-scroll to center highlighted day when it changes
   useEffect(() => {
     if (!highlightedDay || !scrollRef.current) return
@@ -439,16 +472,28 @@ export function ExamHeatmap({
             </div>
           </div>
 
-          {/* Expand chevron */}
-          <button
-            type="button"
-            onClick={() => toggleTimeline(true)}
-            className="w-full flex items-center justify-center py-0.5 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
-            aria-label="Expand to full timeline"
-            title="Expand to full timeline"
-          >
-            <ChevronDown className="h-7 w-7" strokeWidth={1.5} />
-          </button>
+          {/* Expand chevron + Today button */}
+          <div className="relative flex items-center justify-center py-0.5">
+            <button
+              type="button"
+              onClick={() => toggleTimeline(true)}
+              className="flex items-center justify-center text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+              aria-label="Expand to full timeline"
+              title="Expand to full timeline"
+            >
+              <ChevronDown className="h-7 w-7" strokeWidth={1.5} />
+            </button>
+            {showTodayButton && (
+              <button
+                type="button"
+                onClick={scrollToToday}
+                className="absolute right-0 text-[11px] font-medium px-2 py-0.5 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors"
+                aria-label="Scroll to today"
+              >
+                Today
+              </button>
+            )}
+          </div>
         </>
       ) : (
         /* ── Full timeline grid ── */

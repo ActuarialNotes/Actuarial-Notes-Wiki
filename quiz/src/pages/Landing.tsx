@@ -355,7 +355,7 @@ export default function Landing() {
   // --- Syllabus-derived data ---
 
   const syllabusForTopic = useMemo(
-    () => syllabi.find(s => s.examTopic === topic) ?? null,
+    () => syllabi.find(s => s.examTopic === topic || s.examLabel === topic) ?? null,
     [syllabi, topic],
   )
 

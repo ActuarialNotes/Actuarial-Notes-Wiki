@@ -1,19 +1,18 @@
 import { useState } from 'react'
-import { Loader2, FolderOpen, ChevronLeft, Trash2, FileText, FolderPlus, Sparkles, Settings2, BookOpen, ChevronRight, StickyNote } from 'lucide-react'
+import { Loader2, FolderOpen, ChevronLeft, Trash2, FileText, FolderPlus, Sparkles, Settings2, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useResearchStore } from '@/stores/researchStore'
 import { useResearchProjects, useProjectDocuments, useProjectWikiItems, type ResearchProject } from '@/hooks/useResearchProjects'
-import { useProjectSections } from '@/hooks/useProjectSections'
 import { AddSourcesMenu } from '@/components/research/AddSourcesMenu'
 import { NewProjectDialog } from '@/components/research/NewProjectDialog'
 import { EditProjectScopeDialog } from '@/components/research/EditProjectScopeDialog'
 import { SuggestedResources } from '@/components/research/SuggestedResources'
 import { ProjectFaq } from '@/components/research/ProjectFaq'
 import { ModelOutputs } from '@/components/research/ModelOutputs'
+import { ProjectSections } from '@/components/research/ProjectSections'
 import {
   projectTypeLabel,
   artifactTypeMeta,
-  projectSections,
   countryMeta,
   regionLabel,
   departmentLabels,
@@ -21,11 +20,12 @@ import {
 import { lobMeta } from '@/lib/researchOntology'
 import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
 import ResourcesView from './ResourcesView'
-import ProjectSectionView from './ProjectSectionView'
 
 export default function ProjectsView() {
   const openProjectId = useResearchStore(s => s.openProjectId)
-  return openProjectId ? <ProjectDetail projectId={openProjectId} /> : <ProjectList />
+  // Remount the overview when switching projects so per-project local state
+  // (e.g. the editable section list) resets cleanly.
+  return openProjectId ? <ProjectOverview key={openProjectId} projectId={openProjectId} /> : <ProjectList />
 }
 
 // ── Project metadata badges ───────────────────────────────────────────────────
@@ -90,6 +90,7 @@ function ProjectList() {
         <ul className="space-y-2">
           {projects.map(p => {
             const badges = projectBadges(p)
+            const TypeIcon = artifactTypeMeta(p.artifactType)?.icon ?? FolderOpen
             return (
               <li
                 key={p.id}
@@ -100,7 +101,7 @@ function ProjectList() {
                   onClick={() => setOpenProject(p.id)}
                   className="flex flex-1 items-center gap-3 text-left"
                 >
-                  <FolderOpen className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
+                  <TypeIcon className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-medium">{p.name}</span>
                     <span className="mt-1 flex flex-wrap items-center gap-1.5">
@@ -139,37 +140,22 @@ function ProjectList() {
   )
 }
 
-// ── Project detail (scoped Resources view) ────────────────────────────────────
-
-function ProjectDetail({ projectId }: { projectId: string }) {
-  const openSectionKey = useResearchStore(s => s.openSectionKey)
-  const { projects } = useResearchProjects()
-  const project = projects.find(p => p.id === projectId)
-
-  // A section opens in its own page under the project.
-  if (project && openSectionKey) {
-    return <ProjectSectionView project={project} sectionKey={openSectionKey} />
-  }
-  return <ProjectOverview projectId={projectId} />
-}
+// ── Project overview (sections + resource library) ────────────────────────────
 
 function ProjectOverview({ projectId }: { projectId: string }) {
   const setOpenProject = useResearchStore(s => s.setOpenProject)
-  const setOpenSection = useResearchStore(s => s.setOpenSection)
   const setTab = useResearchStore(s => s.setTab)
   const setAddSourcesProject = useResearchStore(s => s.setAddSourcesProject)
-  const { projects, addDocument, removeWikiItem, updateProjectOnboarding, updateModelOutputs } = useResearchProjects()
+  const { projects, addDocument, removeWikiItem, updateProjectOnboarding, updateModelOutputs, updateProjectSections } = useResearchProjects()
   const [refreshKey, setRefreshKey] = useState(0)
   const [showEditScope, setShowEditScope] = useState(false)
   const { documents, documentIds, loading: docsLoading } = useProjectDocuments(projectId, refreshKey)
   const { items: wikiItems, loading: wikiLoading } = useProjectWikiItems(projectId, refreshKey)
-  const { resources: sectionResources, notes: sectionNotes } = useProjectSections(projectId)
   const loading = docsLoading || wikiLoading
 
   const project = projects.find(p => p.id === projectId)
   const badges = project ? projectBadges(project) : []
   const agents = departmentLabels(project?.departments)
-  const sections = projectSections(project?.artifactType, project?.documentType)
   const isModel = project?.artifactType === 'model'
   const ArtifactIcon = artifactTypeMeta(project?.artifactType)?.icon ?? FolderOpen
 
@@ -227,42 +213,15 @@ function ProjectOverview({ projectId }: { projectId: string }) {
           )}
 
           {/* Section structure — a Document's outline, or a Model's workflow.
-              Each section opens in its own page. */}
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold text-muted-foreground">
-              {isModel ? 'Model workflow' : 'Sections'}
-            </h3>
-            <ol className="space-y-2">
-              {sections.map((s, i) => {
-                const resCount = sectionResources.filter(r => r.sectionKey === s.key).length
-                const noteCount = sectionNotes.filter(n => n.sectionKey === s.key).length
-                return (
-                  <li key={s.key}>
-                    <button
-                      type="button"
-                      onClick={() => setOpenSection(s.key)}
-                      className="flex w-full items-center gap-3 rounded-lg border bg-card p-3 text-left transition-colors hover:border-primary/40"
-                    >
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-muted-foreground">
-                        {i + 1}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-medium">{s.title}</span>
-                        <span className="block truncate text-xs text-muted-foreground">{s.hint}</span>
-                      </span>
-                      {(resCount > 0 || noteCount > 0) && (
-                        <span className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
-                          {resCount > 0 && <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{resCount}</span>}
-                          {noteCount > 0 && <span className="flex items-center gap-1"><StickyNote className="h-3 w-3" />{noteCount}</span>}
-                        </span>
-                      )}
-                      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
-                    </button>
-                  </li>
-                )
-              })}
-            </ol>
-          </div>
+              Sections are collapsible, reorderable, and accept dragged
+              resources; each opens inline rather than on its own page. */}
+          {project && (
+            <ProjectSections
+              project={project}
+              wikiItems={wikiItems}
+              onSectionsChange={sections => updateProjectSections(project.id, sections)}
+            />
+          )}
 
           {/* Model outputs — Documentation / Code (R, Python, Excel). */}
           {isModel && project && (

@@ -120,6 +120,30 @@ export function useProjectSections(projectId: string | null) {
     await refresh()
   }, [refresh])
 
+  // Drag-and-drop: re-home a resource to a different section/subsection.
+  const moveResource = useCallback(async (
+    id: string,
+    sectionKey: string,
+    subsectionKey: string | null,
+  ) => {
+    await supabase
+      .from('research_project_section_resources')
+      .update({ section_key: sectionKey, subsection_key: subsectionKey })
+      .eq('id', id)
+    await refresh()
+  }, [refresh])
+
+  // Drop every resource and note belonging to a section — used when the section
+  // itself is removed from the structure.
+  const removeSectionContent = useCallback(async (sectionKey: string) => {
+    if (!projectId) return
+    await Promise.all([
+      supabase.from('research_project_section_resources').delete().eq('project_id', projectId).eq('section_key', sectionKey),
+      supabase.from('research_project_section_notes').delete().eq('project_id', projectId).eq('section_key', sectionKey),
+    ])
+    await refresh()
+  }, [projectId, refresh])
+
   const addNote = useCallback(async (
     sectionKey: string,
     subsectionKey: string | null,
@@ -145,5 +169,5 @@ export function useProjectSections(projectId: string | null) {
     await refresh()
   }, [refresh])
 
-  return { ...state, refresh, addResource, removeResource, addNote, updateNote, removeNote }
+  return { ...state, refresh, addResource, removeResource, moveResource, removeSectionContent, addNote, updateNote, removeNote }
 }

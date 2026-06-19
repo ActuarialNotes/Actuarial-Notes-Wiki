@@ -371,6 +371,35 @@ export function projectSections(
   return DOCUMENT_SECTIONS[subtype ?? ''] ?? DOCUMENT_SECTIONS.report
 }
 
+/**
+ * A project's effective sections: the user's edited structure if they have one,
+ * otherwise the template for the artifact type/subtype. Returned as a mutable
+ * copy so callers can add/remove/reorder before persisting.
+ */
+export function effectiveSections(project: {
+  artifactType?: string | null
+  documentType?: string | null
+  sections?: SectionTemplate[] | null
+}): SectionTemplate[] {
+  if (project.sections && project.sections.length > 0) {
+    return project.sections.map(s => ({ ...s, subsections: [...s.subsections] }))
+  }
+  return projectSections(project.artifactType, project.documentType).map(s => ({
+    ...s,
+    subsections: [...s.subsections],
+  }))
+}
+
+/** A unique section slug for a new section, avoiding collisions with existing keys. */
+export function makeSectionKey(title: string, existingKeys: readonly string[]): string {
+  const base = slugifyKey(title) || 'section'
+  const taken = new Set(existingKeys)
+  if (!taken.has(base)) return base
+  let n = 2
+  while (taken.has(`${base}_${n}`)) n++
+  return `${base}_${n}`
+}
+
 /** Find a single section template within a project's structure. */
 export function sectionTemplate(
   artifactType: string | null | undefined,

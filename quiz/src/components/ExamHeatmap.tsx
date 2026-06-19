@@ -432,7 +432,7 @@ export function ExamHeatmap({
                 const dayLabel = DAY_LABELS[isoIndex]
                 const bgStyle = pct !== null ? cellStyle(pct) : undefined
 
-                let cls = 'flex-shrink-0 aspect-square flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all select-none'
+                let cls = 'flex-shrink-0 h-[56px] flex flex-col items-center justify-center gap-0.5 rounded-xl transition-all select-none'
                 if (cell.isFuture) {
                   if (cell.isExamDay) cls += ' bg-primary/30 ring-1 ring-inset ring-primary'
                   else if (cell.isReadyDay) cls += ' bg-amber-400/30 ring-1 ring-inset ring-amber-400'

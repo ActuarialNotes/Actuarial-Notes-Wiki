@@ -99,6 +99,7 @@ export default function Quiz() {
     responses,
     flaggedIds,
     status,
+    manualGrades,
     startQuiz,
     answerQuestion,
     clearAnswer,
@@ -106,6 +107,7 @@ export default function Quiz() {
     goToPreviousQuestion,
     goToQuestion,
     toggleFlag,
+    setManualGrade,
     completeQuiz,
     resetQuiz,
   } = useQuizStore()
@@ -512,6 +514,14 @@ export default function Quiz() {
           showExplanation={showExplanation}
           isLocked={isLocked}
           onNext={isLocked ? handleNextFromAnswer : undefined}
+          selfGrade={currentQuestion.type === 'free-entry' ? manualGrades[currentQuestion.id] : undefined}
+          onSelfGrade={currentQuestion.type === 'free-entry' ? (grade) => setManualGrade(currentQuestion.id, grade) : undefined}
+          partManualGrades={currentQuestion.type === 'multi-part' ? Object.fromEntries(
+            Object.entries(manualGrades)
+              .filter(([k]) => k.startsWith(`${currentQuestion.id}__`))
+              .map(([k, v]) => [k.slice(currentQuestion.id.length + 2), v])
+          ) : undefined}
+          onPartManualGrade={currentQuestion.type === 'multi-part' ? (partLabel, grade) => setManualGrade(`${currentQuestion.id}__${partLabel}`, grade) : undefined}
         />
       </div>
 

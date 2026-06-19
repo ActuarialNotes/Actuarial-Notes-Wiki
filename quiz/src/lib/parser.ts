@@ -75,12 +75,17 @@ interface QuestionFrontmatter {
 
 const OPTION_REGEX = /^- ([A-E])\)\s+(.+)/
 
-// Normalize a free-entry answer for comparison: strip whitespace; if parseable
-// as a number, round to 4 decimal places so "3.670" and "3.67" compare equal.
+export type SelfGrade = 'correct' | 'partial' | 'incorrect'
+
+// Normalize a free-entry answer for comparison: strip whitespace and common
+// currency/formatting characters ($, €, £, commas), then if parseable as a
+// number round to 4 decimal places so "3400", "$3,400", and "3,400" all compare
+// equal, and "3.670" and "3.67" compare equal.
 export function normalizeAnswerText(s: string): string {
   const trimmed = s.trim()
-  const num = Number(trimmed)
-  if (!isNaN(num) && trimmed !== '') {
+  const stripped = trimmed.replace(/[$€£,]/g, '')
+  const num = Number(stripped)
+  if (stripped !== '' && !isNaN(num)) {
     return String(Math.round(num * 10000) / 10000)
   }
   return trimmed.toLowerCase()

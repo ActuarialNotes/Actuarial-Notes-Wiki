@@ -6,9 +6,9 @@ import { TopicBadge } from '@/components/TopicBadge'
 import { MarkdownText } from '@/components/MarkdownText'
 import { Button } from '@/components/ui/button'
 import { isAnswerCorrect, normalizeAnswerText, estimateEssayScore } from '@/lib/parser'
-import type { Question, Part } from '@/lib/parser'
+import type { Question, Part, SelfGrade } from '@/lib/parser'
 
-export type SelfGrade = 'correct' | 'partial' | 'incorrect'
+export type { SelfGrade }
 
 interface QuestionCardProps {
   question: Question
@@ -18,8 +18,13 @@ interface QuestionCardProps {
   isLocked?: boolean   // true once the answer is confirmed and cannot be changed
   showMeta?: boolean   // show exam/topic/difficulty badges; false during live quiz
   onNext?: () => void  // when provided, clicking any locked answer advances
-  essaySelfGrades?: Record<string, SelfGrade>  // keyed by part label (for controlled self-grading)
+  essaySelfGrades?: Record<string, SelfGrade>  // keyed by part label (for essay self-grading)
   onEssaySelfGrade?: (partLabel: string, grade: SelfGrade) => void
+  // Manual grade override for free-entry (top-level) and multi-part free-entry parts
+  selfGrade?: SelfGrade  // for free-entry questions
+  onSelfGrade?: (grade: SelfGrade) => void
+  partManualGrades?: Record<string, SelfGrade>  // keyed by part.label for multi-part
+  onPartManualGrade?: (partLabel: string, grade: SelfGrade) => void
 }
 
 // ── Free-entry input ────────────────────────────────────────────────────────
@@ -31,19 +36,22 @@ interface FreeEntryInputProps {
   showExplanation: boolean
   onSubmit: (value: string) => void
   autoSubmit?: boolean
+  selfGrade?: SelfGrade
+  onSelfGrade?: (grade: SelfGrade) => void
 }
 
-function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false }: FreeEntryInputProps) {
+function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSubmit, autoSubmit = false, selfGrade, onSelfGrade }: FreeEntryInputProps) {
   const [text, setText] = useState(answer)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Sync when answer changes externally (e.g. navigating back to a question)
   useEffect(() => {
     setText(answer)
   }, [answer])
 
   const isAnswered = isLocked && answer !== ''
-  const isRight = isAnswered && normalizeAnswerText(answer) === normalizeAnswerText(correctAnswer)
+  const autoIsRight = isAnswered && normalizeAnswerText(answer) === normalizeAnswerText(correctAnswer)
+  // If user has manually graded, use that; otherwise use auto-grade
+  const isRight = selfGrade !== undefined ? selfGrade === 'correct' : autoIsRight
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
@@ -89,10 +97,18 @@ function FreeEntryInput({ answer, isLocked, correctAnswer, showExplanation, onSu
       </div>
 
       {showExplanation && isAnswered && (
-        <div className="text-sm">
-          {!isRight && (
+        <div className="space-y-2 text-sm">
+          {!autoIsRight && (
             <p className="text-muted-foreground">
               Correct answer: <span className="font-semibold text-foreground">{correctAnswer}</span>
+            </p>
+          )}
+          {!autoIsRight && onSelfGrade && (
+            <SelfGradeButtons value={selfGrade ?? null} onChange={onSelfGrade} />
+          )}
+          {!autoIsRight && !onSelfGrade && selfGrade && (
+            <p className={`text-xs font-medium ${selfGrade === 'correct' ? 'text-green-600 dark:text-green-400' : selfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'}`}>
+              {selfGrade === 'correct' ? '✓ Marked correct' : selfGrade === 'partial' ? '~ Marked partial' : '✗ Marked incorrect'}
             </p>
           )}
         </div>
@@ -148,7 +164,7 @@ function SelfGradeButtons({ value, onChange }: { value: SelfGrade | null; onChan
 function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, selfGrade: externalSelfGrade, onSelfGrade }: PartCardProps) {
   const isEssay = part.answer === ''
   const isAnswered = isLocked && (isEssay || partAnswer !== '')
-  const isRight = !isEssay && isAnswered && (
+  const autoIsRight = !isEssay && isAnswered && (
     part.type === 'multiple-choice'
       ? partAnswer === part.answer
       : normalizeAnswerText(partAnswer) === normalizeAnswerText(part.answer)
@@ -156,6 +172,11 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
   const [internalSelfGrade, setInternalSelfGrade] = useState<SelfGrade | null>(null)
   const effectiveSelfGrade = externalSelfGrade ?? internalSelfGrade
+
+  // For free-entry parts, if user manually graded, use that for display
+  const isRight = (!isEssay && part.type === 'free-entry' && effectiveSelfGrade !== null)
+    ? effectiveSelfGrade === 'correct'
+    : autoIsRight
 
   function handleSelfGradeClick(grade: SelfGrade) {
     setInternalSelfGrade(grade)
@@ -256,8 +277,8 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           )}
         </span>
         {isAnswered && (
-          <span className={isRight ? 'text-green-600 dark:text-green-400 text-xs font-medium' : 'text-red-600 dark:text-red-400 text-xs font-medium'}>
-            {isRight ? '✓ Correct' : '✗ Incorrect'}
+          <span className={isRight ? 'text-green-600 dark:text-green-400 text-xs font-medium' : effectiveSelfGrade === 'partial' ? 'text-yellow-600 dark:text-yellow-400 text-xs font-medium' : 'text-red-600 dark:text-red-400 text-xs font-medium'}>
+            {isRight ? '✓ Correct' : effectiveSelfGrade === 'partial' ? '~ Partial' : '✗ Incorrect'}
           </span>
         )}
       </div>
@@ -287,6 +308,8 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           showExplanation={showExplanation && isAnswered}
           onSubmit={val => onPartAnswer(part.label, val)}
           autoSubmit={true}
+          selfGrade={effectiveSelfGrade ?? undefined}
+          onSelfGrade={onSelfGrade ? handleSelfGradeClick : undefined}
         />
       )}
 
@@ -295,9 +318,11 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
           'rounded-md border p-3 space-y-2 text-sm',
           isRight
             ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950'
-            : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950',
+            : effectiveSelfGrade === 'partial'
+              ? 'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950'
+              : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950',
         ].join(' ')}>
-          {!isRight && part.answer && (
+          {!autoIsRight && part.answer && (
             <p className="text-muted-foreground text-xs">
               Correct answer: <span className="font-semibold text-foreground">{part.answer}</span>
             </p>
@@ -333,6 +358,10 @@ export function QuestionCard({
   onNext,
   essaySelfGrades,
   onEssaySelfGrade,
+  selfGrade,
+  onSelfGrade,
+  partManualGrades,
+  onPartManualGrade,
 }: QuestionCardProps) {
   // Per-part answer state for multi-part questions
   const [partAnswers, setPartAnswers] = useState<Record<string, string>>({})
@@ -413,7 +442,8 @@ export function QuestionCard({
   // ── free-entry ───────────────────────────────────────────────────────────
   if (question.type === 'free-entry') {
     const answered = isLocked && selectedAnswer !== null
-    const correct = answered && isAnswerCorrect(question, selectedAnswer!)
+    const autoCorrect = answered && isAnswerCorrect(question, selectedAnswer!)
+    const correct = selfGrade !== undefined ? selfGrade === 'correct' : autoCorrect
 
     return (
       <Card className="w-full">
@@ -437,6 +467,8 @@ export function QuestionCard({
             correctAnswer={question.answer}
             showExplanation={showExplanation}
             onSubmit={onAnswer}
+            selfGrade={selfGrade}
+            onSelfGrade={onSelfGrade}
           />
 
           {showExplanation && answered && (
@@ -484,8 +516,16 @@ export function QuestionCard({
             isLocked={isLocked}
             showExplanation={showExplanation}
             onPartAnswer={handlePartAnswer}
-            selfGrade={essaySelfGrades?.[part.label]}
-            onSelfGrade={onEssaySelfGrade ? (grade) => onEssaySelfGrade(part.label, grade) : undefined}
+            selfGrade={
+              part.answer === ''
+                ? essaySelfGrades?.[part.label]
+                : partManualGrades?.[part.label]
+            }
+            onSelfGrade={
+              part.answer === ''
+                ? (onEssaySelfGrade ? (grade) => onEssaySelfGrade(part.label, grade) : undefined)
+                : (onPartManualGrade ? (grade) => onPartManualGrade(part.label, grade) : undefined)
+            }
           />
         ))}
 

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { isAnswerCorrect } from '@/lib/parser'
-import type { Question, QuizMode } from '@/lib/parser'
+import { isAnswerCorrect, normalizeAnswerText } from '@/lib/parser'
+import type { Question, QuizMode, SelfGrade } from '@/lib/parser'
 import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
@@ -25,6 +25,7 @@ async function upsertMasteryFromResponses(
   questions: Question[],
   responses: Record<string, { chosen: string }>,
   fallbackRecords: ConceptMasteryRecord[] = [],
+  manualGrades: Record<string, SelfGrade> = {},
 ): Promise<MasteryTransition[]> {
   // Group answer events by (exam_id, concept_slug). Within a single quiz a
   // concept may be touched multiple times — fold them in question order so
@@ -35,7 +36,7 @@ async function upsertMasteryFromResponses(
     if (!examId) continue
     const chosen = responses[q.id]?.chosen
     if (chosen === undefined) continue
-    const isCorrect = isAnswerCorrect(q, chosen)
+    const isCorrect = effectiveIsCorrect(q, chosen, manualGrades)
     const isHard = q.difficulty === 'hard'
     for (const conceptSlug of conceptsForQuestion(q)) {
       events.push({ examId, conceptSlug, isCorrect, isHard })
@@ -136,6 +137,34 @@ export interface MasteryTransition {
   to: MasteryState
 }
 
+// Returns the effective correctness of a question, taking manual grade overrides
+// into account. For multi-part questions each part may be individually overridden.
+function effectiveIsCorrect(q: Question, chosen: string, manualGrades: Record<string, SelfGrade>): boolean {
+  if (q.type === 'free-entry') {
+    const override = manualGrades[q.id]
+    if (override !== undefined) return override === 'correct'
+    return isAnswerCorrect(q, chosen)
+  }
+  if (q.type === 'multi-part') {
+    try {
+      const parts = q.parts ?? []
+      const gradedParts = parts.filter(p => p.answer !== '')
+      if (gradedParts.length === 0) return true
+      const chosenParts = JSON.parse(chosen) as Record<string, string>
+      return gradedParts.every(part => {
+        const override = manualGrades[`${q.id}__${part.label}`]
+        if (override !== undefined) return override === 'correct'
+        const partChosen = chosenParts[part.label] ?? ''
+        if (part.type === 'multiple-choice') return partChosen === part.answer
+        return normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)
+      })
+    } catch {
+      return false
+    }
+  }
+  return isAnswerCorrect(q, chosen)
+}
+
 type QuizStatus = 'idle' | 'loading' | 'active' | 'reviewing' | 'complete'
 
 interface Response {
@@ -152,6 +181,7 @@ export interface CompletedSession {
   timeTakenSeconds: number | null
   completedAt: string
   masteryTransitions?: MasteryTransition[]
+  manualGrades?: Record<string, SelfGrade>
   // True when this session was completed while signed out, meaning it was
   // only written to localStorage and still needs to be persisted to Supabase
   // once the user signs in (see syncPendingSessionToCloud).
@@ -169,6 +199,7 @@ export interface QuizStore {
   questionStartedAt: Date | null
   status: QuizStatus
   error: string | null
+  manualGrades: Record<string, SelfGrade>
 
   // Actions
   startQuiz: (questions: Question[], mode: QuizMode) => void
@@ -178,6 +209,7 @@ export interface QuizStore {
   goToPreviousQuestion: () => void
   goToQuestion: (index: number) => void
   toggleFlag: (questionId: string) => void
+  setManualGrade: (key: string, grade: SelfGrade) => void
   completeQuiz: (userId: string | null, priorMasteryRecords?: ConceptMasteryRecord[]) => Promise<void>
   resetQuiz: () => void
 }
@@ -186,6 +218,7 @@ function computeMasteryTransitions(
   questions: Question[],
   responses: Record<string, { chosen: string }>,
   priorRecords: ConceptMasteryRecord[],
+  manualGrades: Record<string, SelfGrade> = {},
 ): MasteryTransition[] {
   const bySlug = new Map<string, ConceptMasteryRecord>()
   for (const r of priorRecords) {
@@ -201,7 +234,7 @@ function computeMasteryTransitions(
     if (chosen === undefined) continue
     const examId = EXAM_LABEL_TO_ID[q.exam]
     if (!examId) continue
-    const isCorrect = isAnswerCorrect(q, chosen)
+    const isCorrect = effectiveIsCorrect(q, chosen, manualGrades)
     const isHard = q.difficulty === 'hard'
 
     for (const conceptSlug of conceptsForQuestion(q)) {
@@ -236,6 +269,7 @@ interface PersistableSession {
   correctCount: number
   totalSeconds: number | null
   masteryTransitions: MasteryTransition[]
+  manualGrades?: Record<string, SelfGrade>
 }
 
 // Writes a completed quiz to Supabase: quiz_sessions, question_responses,
@@ -244,7 +278,7 @@ interface PersistableSession {
 // sessions completed while signed out and persisted retroactively after the
 // user signs in).
 async function persistSessionToCloud(userId: string, params: PersistableSession): Promise<{ error: string | null }> {
-  const { questions, responses, mode, correctCount, totalSeconds, masteryTransitions } = params
+  const { questions, responses, mode, correctCount, totalSeconds, masteryTransitions, manualGrades = {} } = params
   const upward = masteryTransitions.filter(
     t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
   )
@@ -315,7 +349,7 @@ async function persistSessionToCloud(userId: string, params: PersistableSession)
     question_id: q.id,
     chosen_answer: responses[q.id]?.chosen ?? null,
     correct_answer: q.answer,
-    is_correct: (() => { const c = responses[q.id]?.chosen; return c !== undefined && isAnswerCorrect(q, c) })(),
+    is_correct: (() => { const c = responses[q.id]?.chosen; return c !== undefined && effectiveIsCorrect(q, c, manualGrades) })(),
     time_spent_seconds: responses[q.id]?.timeSpent ?? null,
     answered_at: answeredAt,
   }))
@@ -380,6 +414,7 @@ const initialState = {
   questionStartedAt: null,
   status: 'idle' as QuizStatus,
   error: null,
+  manualGrades: {} as Record<string, SelfGrade>,
 }
 
 export const useQuizStore = create<QuizStore>((set, get) => ({
@@ -451,8 +486,12 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }))
   },
 
+  setManualGrade(key, grade) {
+    set(state => ({ manualGrades: { ...state.manualGrades, [key]: grade } }))
+  },
+
   async completeQuiz(userId, priorMasteryRecords = []) {
-    const { questions, responses, mode, startedAt } = get()
+    const { questions, responses, mode, startedAt, manualGrades } = get()
     set({ status: 'complete' })
 
     const totalSeconds = startedAt
@@ -461,14 +500,14 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     const correctCount = questions.filter(q => {
       const chosen = responses[q.id]?.chosen
-      return chosen !== undefined && isAnswerCorrect(q, chosen)
+      return chosen !== undefined && effectiveIsCorrect(q, chosen, manualGrades)
     }).length
 
     if (!userId) {
       // Unauthenticated: no DB to fetch from, so compute transitions from the
       // caller-provided priorMasteryRecords (localStorage). Fire the level-up
       // event so TodayCard reflects progress, then return early.
-      const masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
+      const masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
       const upward = masteryTransitions.filter(
         t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
       )
@@ -481,6 +520,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         timeTakenSeconds: totalSeconds,
         completedAt: new Date().toISOString(),
         masteryTransitions,
+        manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
         needsCloudSync: true,
       }
       try {
@@ -505,12 +545,12 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     // when a prior quiz already changed the concept's state in this session.
     let masteryTransitions: MasteryTransition[]
     try {
-      masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords)
+      masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords, manualGrades)
     } catch (masteryErr) {
       console.error('concept_mastery upsert failed:', masteryErr)
       // Fall back to stale computation so the session record and daily_completions
       // still carry approximate data rather than being empty.
-      masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
+      masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
     }
 
     const upward = masteryTransitions.filter(
@@ -527,6 +567,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       timeTakenSeconds: totalSeconds,
       completedAt: new Date().toISOString(),
       masteryTransitions,
+      manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
     }
     try {
       localStorage.setItem(LAST_SESSION_KEY, JSON.stringify(completedSession))
@@ -552,6 +593,7 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       correctCount,
       totalSeconds,
       masteryTransitions,
+      manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
     })
     if (error) set({ error })
   },
@@ -585,14 +627,14 @@ export async function syncPendingSessionToCloud(
   const session = readLastSession()
   if (!session?.needsCloudSync) return false
 
-  const { questions, responses, mode, correctCount, timeTakenSeconds } = session
+  const { questions, responses, mode, correctCount, timeTakenSeconds, manualGrades = {} } = session
 
   let masteryTransitions: MasteryTransition[]
   try {
-    masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords)
+    masteryTransitions = await upsertMasteryFromResponses(userId, questions, responses, priorMasteryRecords, manualGrades)
   } catch (masteryErr) {
     console.error('concept_mastery upsert failed during pending session sync:', masteryErr)
-    masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords)
+    masteryTransitions = computeMasteryTransitions(questions, responses, priorMasteryRecords, manualGrades)
   }
 
   const { error } = await persistSessionToCloud(userId, {
@@ -602,6 +644,7 @@ export async function syncPendingSessionToCloud(
     correctCount,
     totalSeconds: timeTakenSeconds,
     masteryTransitions,
+    manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
   })
   if (error) {
     console.error('Failed to save pending quiz session after sign-in:', error)

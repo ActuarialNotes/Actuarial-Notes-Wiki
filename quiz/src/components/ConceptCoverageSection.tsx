@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Gem } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { Button } from '@/components/ui/button'
-import { isAnswerCorrect } from '@/lib/parser'
-import type { Question } from '@/lib/parser'
+import { isAnswerCorrect, normalizeAnswerText } from '@/lib/parser'
+import type { Question, SelfGrade } from '@/lib/parser'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -49,13 +49,12 @@ function resolveConceptName(link: string): string | null {
 
 function buildConceptStats(
   questions: Question[],
-  responses: Record<string, Response>,
+  outcomes: boolean[],
 ): ConceptStat[] {
   const map = new Map<string, ConceptStat>()
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i]
-    const chosen = responses[q.id]?.chosen
-    const isCorrect = chosen != null && isAnswerCorrect(q, chosen)
+    const isCorrect = outcomes[i] ?? false
     const names = new Set<string>()
     for (const link of q.wiki_link) {
       const name = resolveConceptName(link)
@@ -298,6 +297,34 @@ interface ConceptCoverageSectionProps {
   score: ScoreSummary
   selectedQuestion: number | null
   onQuestionSelect: (idx: number | null) => void
+  manualGrades?: Record<string, SelfGrade>
+}
+
+function effectiveOutcome(q: Question, chosen: string | null | undefined, manualGrades: Record<string, SelfGrade>): boolean {
+  if (chosen == null) return false
+  if (q.type === 'free-entry') {
+    const override = manualGrades[q.id]
+    if (override !== undefined) return override === 'correct'
+    return isAnswerCorrect(q, chosen)
+  }
+  if (q.type === 'multi-part') {
+    try {
+      const parts = q.parts ?? []
+      const gradedParts = parts.filter(p => p.answer !== '')
+      if (gradedParts.length === 0) return true
+      const chosenParts = JSON.parse(chosen) as Record<string, string>
+      return gradedParts.every(part => {
+        const override = manualGrades[`${q.id}__${part.label}`]
+        if (override !== undefined) return override === 'correct'
+        const partChosen = chosenParts[part.label] ?? ''
+        if (part.type === 'multiple-choice') return partChosen === part.answer
+        return normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)
+      })
+    } catch {
+      return false
+    }
+  }
+  return isAnswerCorrect(q, chosen)
 }
 
 export function ConceptCoverageSection({
@@ -306,10 +333,11 @@ export function ConceptCoverageSection({
   score,
   selectedQuestion,
   onQuestionSelect,
+  manualGrades = {},
 }: ConceptCoverageSectionProps) {
   const navigate = useNavigate()
-  const stats = buildConceptStats(questions, responses)
-  const outcomes = questions.map(q => { const c = responses[q.id]?.chosen; return c != null && isAnswerCorrect(q, c) })
+  const outcomes = questions.map(q => effectiveOutcome(q, responses[q.id]?.chosen, manualGrades))
+  const stats = buildConceptStats(questions, outcomes)
 
   const [selectedName, setSelectedName] = useState<string | null>(null)
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, GraduationCap, Layers, LayoutDashboard, Microscope, Play, X } from 'lucide-react'
+import { BookOpen, GraduationCap, Layers, LayoutDashboard, Microscope, Play } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 
@@ -60,37 +60,27 @@ export default function BottomNav() {
           />
           {/* Panel */}
           <div className="fixed bottom-14 left-0 right-0 z-[46] md:hidden bg-background/95 backdrop-blur-md border-t border-border">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-border/50">
-              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Study Guides</span>
-              <button
-                type="button"
-                onClick={() => setStudyGuidesOpen(false)}
-                className="h-6 w-6 flex items-center justify-center rounded text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
             <div className="flex">
               <button
                 type="button"
                 onClick={() => navigateTo(getLastWikiPath())}
-                className={`flex flex-1 flex-col items-center justify-center gap-1 py-4 transition-colors ${
+                className={`flex flex-1 flex-col items-center justify-center gap-2 py-6 transition-colors ${
                   location.pathname.startsWith('/wiki') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <GraduationCap className="h-5 w-5 shrink-0" />
-                <span className="text-xs font-medium">Actuarial Exams</span>
+                <GraduationCap className="h-7 w-7 shrink-0" />
+                <span className="text-sm font-medium">Actuarial Exams</span>
               </button>
               {user && (
                 <button
                   type="button"
                   onClick={() => navigateTo('/research')}
-                  className={`flex flex-1 flex-col items-center justify-center gap-1 py-4 transition-colors ${
+                  className={`flex flex-1 flex-col items-center justify-center gap-2 py-6 transition-colors ${
                     location.pathname.startsWith('/research') ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
-                  <Microscope className="h-5 w-5 shrink-0" />
-                  <span className="flex items-center gap-1 text-xs font-medium">
+                  <Microscope className="h-7 w-7 shrink-0" />
+                  <span className="flex items-center gap-1 text-sm font-medium">
                     Research
                     <span className="text-[9px] font-semibold px-1 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none">
                       Beta

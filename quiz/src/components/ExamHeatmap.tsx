@@ -6,7 +6,6 @@ import { ExamSittingsList } from '@/components/ExamSittingsList'
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 const STRIP_GAP = 6 // px gap between cells
-const STRIP_CELL_SIZE = 52 // px, fixed square size for each day cell in the scrollable strip
 
 function cellStyle(pct: number | null): { backgroundColor: string } | undefined {
   if (pct === null) return undefined
@@ -204,7 +203,7 @@ export function ExamHeatmap({
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
-    const cellW = STRIP_CELL_SIZE
+    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
     const todayIdx = allDays.findIndex(d => d.isToday)
     if (todayIdx >= 0) {
       el.scrollLeft = Math.max(0, todayIdx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2)
@@ -221,7 +220,7 @@ export function ExamHeatmap({
 
     function checkTodayVisible() {
       if (!el) return
-      const cellW = STRIP_CELL_SIZE
+      const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
       const todayIdx = allDays.findIndex(d => d.isToday)
       if (todayIdx < 0) { setShowTodayButton(false); return }
       const todayLeft = todayIdx * (cellW + STRIP_GAP)
@@ -238,7 +237,7 @@ export function ExamHeatmap({
   function scrollToToday() {
     const el = scrollRef.current
     if (!el) return
-    const cellW = STRIP_CELL_SIZE
+    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
     const todayIdx = allDays.findIndex(d => d.isToday)
     if (todayIdx >= 0) {
       el.scrollTo({ left: Math.max(0, todayIdx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
@@ -251,7 +250,7 @@ export function ExamHeatmap({
     const el = scrollRef.current
     const idx = allDays.findIndex(d => d.key === highlightedDay)
     if (idx < 0) return
-    const cellW = STRIP_CELL_SIZE
+    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
     el.scrollTo({ left: Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
   }, [highlightedDay, allDays])
 
@@ -416,8 +415,8 @@ export function ExamHeatmap({
   return (
     <div className="space-y-3">
       {!showFullTimeline ? (
-        /* ── Scrollable day strip (default) ── */
-        <>
+        /* ── Scrollable day strip (default) — max-w constrains to 7 cells ── */
+        <div className="max-w-[400px] w-full mx-auto flex flex-col gap-3">
           <div
             ref={scrollRef}
             className="overflow-x-auto pt-0.5 pb-2 min-h-[44px] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
@@ -449,7 +448,7 @@ export function ExamHeatmap({
                     key={cell.key}
                     role={isClickable ? 'button' : undefined}
                     onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
-                    style={{ width: STRIP_CELL_SIZE, ...bgStyle }}
+                    style={{ width: `calc((100% - ${6 * STRIP_GAP}px) / 7)`, ...bgStyle }}
                     className={cls}
                     title={cell.key}
                   >
@@ -494,7 +493,7 @@ export function ExamHeatmap({
               </button>
             )}
           </div>
-        </>
+        </div>
       ) : (
         /* ── Full timeline grid ── */
         <>

@@ -420,7 +420,7 @@ export function ExamHeatmap({
         <>
           <div
             ref={scrollRef}
-            className="overflow-x-auto pb-1.5 min-h-[44px] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
+            className="overflow-x-auto pt-0.5 pb-2 min-h-[44px] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
             style={{ scrollbarWidth: 'thin' }}
           >
             <div className="flex" style={{ gap: STRIP_GAP }}>
@@ -523,7 +523,7 @@ export function ExamHeatmap({
                 </div>
               ))}
             </div>
-            <div className="flex-1 flex gap-[2px] overflow-hidden">
+            <div className="flex-1 flex gap-[2px]">
               {columns.map(col => (
                 <div
                   key={col.key}

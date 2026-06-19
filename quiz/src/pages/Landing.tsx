@@ -22,9 +22,16 @@ import { getSittingPdfLink, getExamPdfLink } from '@/data/examPdfLinks'
 type ExamOrg = 'SOA' | 'CAS'
 
 const EXAMS = [
-  { value: 'Probability', label: 'Exam P-1 (SOA)', org: 'SOA' as ExamOrg, progressKey: 'P' },
-  { value: 'Financial Mathematics', label: 'Exam FM-2 (SOA)', org: 'SOA' as ExamOrg, progressKey: 'FM' },
-  { value: 'Exam 5', label: 'Exam 5 (CAS)', org: 'CAS' as ExamOrg, progressKey: 'CAS-5' },
+  { value: 'Probability', label: 'Exam P-1', tracks: ['ASA', 'ACAS'] as const, progressKey: 'P' },
+  { value: 'Financial Mathematics', label: 'Exam FM-2', tracks: ['ASA', 'ACAS'] as const, progressKey: 'FM' },
+  { value: 'Exam 5', label: 'Exam 5', tracks: ['ACAS'] as const, progressKey: 'CAS-5' },
+]
+
+const QUIZ_TRACK_GROUPS = [
+  { key: 'ACAS', name: 'ACAS | Associate of the Casualty Actuarial Society', org: 'CAS' as ExamOrg },
+  { key: 'FCAS', name: 'FCAS | Fellow of the Casualty Actuarial Society', org: 'CAS' as ExamOrg },
+  { key: 'ASA',  name: 'ASA | Associate of the Society of Actuaries', org: 'SOA' as ExamOrg },
+  { key: 'FSA',  name: 'FSA | Fellow of the Society of Actuaries', org: 'SOA' as ExamOrg },
 ]
 
 const SOA_TRACK_KEYS = new Set(['ASA', 'FSA'])
@@ -44,7 +51,7 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Exam 5': 25,
 }
 
-const QUICK_COUNTS = [3, 5, 10]
+const QUICK_COUNTS = [1, 3, 5, 10]
 
 // ─── Mastery level labels and badge styles ────────────────────────────────────
 
@@ -210,7 +217,7 @@ function ExamOptionCard({
   colorIdx,
   targetDate,
 }: {
-  exam: { value: string; label: string; org: ExamOrg }
+  exam: { value: string; label: string }
   onClick: () => void
   questionCount: number
   colorIdx: number  // -1 means not active
@@ -291,7 +298,10 @@ export default function Landing() {
     setFilterOverride(f)
   }
 
-  const filteredExams = EXAMS.filter(e => e.org === activeFilter)
+  const filteredTrackGroups = QUIZ_TRACK_GROUPS
+    .filter(g => g.org === activeFilter)
+    .map(g => ({ ...g, exams: EXAMS.filter(e => (e.tracks as readonly string[]).includes(g.key)) }))
+    .filter(g => g.exams.length > 0)
 
   // Index of each exam in the global active-exams list (for consistent colour across tabs)
   const activeExamValues = EXAMS
@@ -768,21 +778,30 @@ export default function Landing() {
                   ))}
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {filteredExams.map(exam => {
-                  const colorIdx = activeExamValues.indexOf(exam.value)
-                  const isActive = colorIdx >= 0
-                  return (
-                    <ExamOptionCard
-                      key={exam.value}
-                      exam={exam}
-                      onClick={() => setTopic(exam.value)}
-                      questionCount={questionCounts[exam.value] ?? 0}
-                      colorIdx={colorIdx}
-                      targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
-                    />
-                  )
-                })}
+              <div className="space-y-4">
+                {filteredTrackGroups.map(group => (
+                  <div key={group.key}>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                      {group.name}
+                    </p>
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                      {group.exams.map(exam => {
+                        const colorIdx = activeExamValues.indexOf(exam.value)
+                        const isActive = colorIdx >= 0
+                        return (
+                          <ExamOptionCard
+                            key={exam.value}
+                            exam={exam}
+                            onClick={() => setTopic(exam.value)}
+                            questionCount={questionCounts[exam.value] ?? 0}
+                            colorIdx={colorIdx}
+                            targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
+                          />
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}

@@ -6,6 +6,7 @@ import type { WikiEntryKind, WikiEntryRef } from '@/lib/wikiRoutes'
 // Onboarding metadata captured when a project is created (all optional so older
 // projects still load). See researchProjectMeta.ts for the value vocabularies.
 export interface ProjectOnboarding {
+  artifactType?: string | null
   documentType?: string | null
   jurisdictionCountry?: string | null
   jurisdictionRegion?: string | null
@@ -21,11 +22,14 @@ export interface ResearchProject {
   updated_at: string
   documentCount: number
   wikiItemCount: number
+  artifactType: string | null
   documentType: string | null
   jurisdictionCountry: string | null
   jurisdictionRegion: string | null
   lineOfBusiness: string | null
   departments: string[]
+  modelOutputs: string[]
+  modelCodeLanguage: string | null
 }
 
 interface ProjectsState {
@@ -40,18 +44,22 @@ interface ProjectRow {
   description: string | null
   created_at: string
   updated_at: string
+  artifact_type: string | null
   document_type: string | null
   jurisdiction_country: string | null
   jurisdiction_region: string | null
   line_of_business: string | null
   departments: string[] | null
+  model_outputs: string[] | null
+  model_code_language: string | null
   research_project_documents: { count: number }[]
   research_project_wiki_items: { count: number }[]
 }
 
 const PROJECT_COLUMNS =
-  'id, name, description, created_at, updated_at, document_type, ' +
-  'jurisdiction_country, jurisdiction_region, line_of_business, departments'
+  'id, name, description, created_at, updated_at, artifact_type, document_type, ' +
+  'jurisdiction_country, jurisdiction_region, line_of_business, departments, ' +
+  'model_outputs, model_code_language'
 
 function mapProjectRow(p: ProjectRow): ResearchProject {
   return {
@@ -62,11 +70,14 @@ function mapProjectRow(p: ProjectRow): ResearchProject {
     updated_at: p.updated_at,
     documentCount: p.research_project_documents?.[0]?.count ?? 0,
     wikiItemCount: p.research_project_wiki_items?.[0]?.count ?? 0,
+    artifactType: p.artifact_type,
     documentType: p.document_type,
     jurisdictionCountry: p.jurisdiction_country,
     jurisdictionRegion: p.jurisdiction_region,
     lineOfBusiness: p.line_of_business,
     departments: p.departments ?? [],
+    modelOutputs: p.model_outputs ?? [],
+    modelCodeLanguage: p.model_code_language,
   }
 }
 
@@ -105,6 +116,7 @@ export function useResearchProjects() {
         user_id: user.id,
         name: name.trim(),
         description: description?.trim() || null,
+        artifact_type: onboarding?.artifactType ?? null,
         document_type: onboarding?.documentType ?? null,
         jurisdiction_country: onboarding?.jurisdictionCountry ?? null,
         jurisdiction_region: onboarding?.jurisdictionRegion ?? null,
@@ -136,11 +148,26 @@ export function useResearchProjects() {
     await supabase
       .from('research_projects')
       .update({
+        artifact_type: onboarding.artifactType ?? null,
         document_type: onboarding.documentType ?? null,
         jurisdiction_country: onboarding.jurisdictionCountry ?? null,
         jurisdiction_region: onboarding.jurisdictionRegion ?? null,
         line_of_business: onboarding.lineOfBusiness ?? null,
         departments: onboarding.departments ?? [],
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+    await refresh()
+  }, [refresh])
+
+  // Configure the outputs a Model project generates (Documentation / Code) and,
+  // when Code is selected, the target language.
+  const updateModelOutputs = useCallback(async (id: string, outputs: string[], codeLanguage: string | null) => {
+    await supabase
+      .from('research_projects')
+      .update({
+        model_outputs: outputs,
+        model_code_language: codeLanguage,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
@@ -191,7 +218,7 @@ export function useResearchProjects() {
     await refresh()
   }, [refresh])
 
-  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, deleteProject, addDocument, removeDocument, removeWikiItem, addWikiItem }
+  return { ...state, refresh, createProject, renameProject, updateProjectOnboarding, updateModelOutputs, deleteProject, addDocument, removeDocument, removeWikiItem, addWikiItem }
 }
 
 interface ProjectDocsState {

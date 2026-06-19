@@ -4,7 +4,10 @@ import {
   PROJECT_DOCUMENT_TYPES,
   COUNTRIES,
   DEPARTMENTS,
+  ARTIFACT_TYPES,
   countryMeta,
+  subtypesForArtifact,
+  type ArtifactType,
 } from '@/lib/researchProjectMeta'
 
 // Shared building blocks for the project onboarding wizard (NewProjectDialog)
@@ -65,6 +68,95 @@ export function BigOptionButton({
       {active && <Check className="h-3.5 w-3.5 shrink-0" aria-hidden />}
       {children}
     </button>
+  )
+}
+
+// A large icon + label + description card, used for the artifact-type and
+// subtype pickers so each option reads as a distinct, recognizable choice.
+function IconOptionCard({
+  active,
+  onClick,
+  icon: Icon,
+  label,
+  description,
+}: {
+  active: boolean
+  onClick: () => void
+  icon: React.ComponentType<{ className?: string }>
+  label: string
+  description: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex items-start gap-3 rounded-lg border p-3 text-left transition-colors ${
+        active ? 'border-primary bg-primary/5' : 'border-input hover:bg-accent/50'
+      }`}
+    >
+      <span
+        className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${
+          active ? 'bg-primary/10 text-primary' : 'bg-accent text-muted-foreground'
+        }`}
+      >
+        <Icon className="h-5 w-5" />
+      </span>
+      <span className="min-w-0">
+        <span className="flex items-center gap-1.5 text-sm font-medium">
+          {active && <Check className="h-3.5 w-3.5 text-primary" aria-hidden />}
+          {label}
+        </span>
+        <span className="mt-0.5 block text-xs text-muted-foreground">{description}</span>
+      </span>
+    </button>
+  )
+}
+
+export function ArtifactTypeField({ value, onChange }: { value: ArtifactType | null; onChange: (slug: ArtifactType) => void }) {
+  return (
+    <Field title="What type of research artifact would you like to create?">
+      <div className="grid gap-2">
+        {ARTIFACT_TYPES.map(t => (
+          <IconOptionCard
+            key={t.slug}
+            active={value === t.slug}
+            onClick={() => onChange(t.slug)}
+            icon={t.icon}
+            label={t.label}
+            description={t.description}
+          />
+        ))}
+      </div>
+    </Field>
+  )
+}
+
+export function SubtypeField({
+  artifactType,
+  value,
+  onChange,
+}: {
+  artifactType: ArtifactType | null
+  value: string | null
+  onChange: (slug: string) => void
+}) {
+  const options = subtypesForArtifact(artifactType)
+  const title = artifactType === 'model' ? 'What kind of model?' : 'What kind of document?'
+  return (
+    <Field title={title}>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {options.map(t => (
+          <IconOptionCard
+            key={t.slug}
+            active={value === t.slug}
+            onClick={() => onChange(t.slug)}
+            icon={t.icon}
+            label={t.label}
+            description={t.description}
+          />
+        ))}
+      </div>
+    </Field>
   )
 }
 

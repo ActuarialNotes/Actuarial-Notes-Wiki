@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react'
 import { Loader2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
-  DocumentTypeField,
+  ArtifactTypeField,
+  SubtypeField,
   JurisdictionField,
   LineOfBusinessField,
   DepartmentsField,
 } from './ProjectScopeFields'
 import type { ProjectOnboarding, ResearchProject } from '@/hooks/useResearchProjects'
 import { RESEARCH_AI_ENABLED } from '@/lib/featureFlags'
+import type { ArtifactType } from '@/lib/researchProjectMeta'
 
 interface EditProjectScopeDialogProps {
   project: ResearchProject
@@ -19,6 +21,7 @@ interface EditProjectScopeDialogProps {
 // Lets a user revisit the type/scope/agent choices made (or skipped) during
 // the New project wizard, on a single page rather than re-running the wizard.
 export function EditProjectScopeDialog({ project, onClose, onSave }: EditProjectScopeDialogProps) {
+  const [artifactType, setArtifactType] = useState<ArtifactType | null>(project.artifactType as ArtifactType | null)
   const [documentType, setDocumentType] = useState<string | null>(project.documentType)
   const [country, setCountry] = useState<string | null>(project.jurisdictionCountry)
   const [region, setRegion] = useState<string>(project.jurisdictionRegion ?? '')
@@ -45,6 +48,7 @@ export function EditProjectScopeDialog({ project, onClose, onSave }: EditProject
     if (submitting) return
     setSubmitting(true)
     await onSave({
+      artifactType,
       documentType,
       jurisdictionCountry: country,
       jurisdictionRegion: region || null,
@@ -77,7 +81,11 @@ export function EditProjectScopeDialog({ project, onClose, onSave }: EditProject
         </div>
 
         <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-5 py-4">
-          <DocumentTypeField value={documentType} onChange={setDocumentType} />
+          <ArtifactTypeField
+            value={artifactType}
+            onChange={t => { setArtifactType(t); setDocumentType(null) }}
+          />
+          <SubtypeField artifactType={artifactType} value={documentType} onChange={setDocumentType} />
           <JurisdictionField
             country={country}
             region={region}

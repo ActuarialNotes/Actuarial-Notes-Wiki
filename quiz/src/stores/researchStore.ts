@@ -32,12 +32,16 @@ interface ResearchState {
   searchQuery: string
   // The project currently open in the Projects tab (null = project list view).
   openProjectId: string | null
+  // The section currently open within a project (null = project overview). Each
+  // section opens in its own page; see pages/Research/ProjectSectionView.tsx.
+  openSectionKey: string | null
   // Set when "Add Sources" is used from a project — scopes the Resources tab's
   // add actions to this project until cleared.
   addSourcesProjectId: string | null
   setTab: (tab: ResearchTab) => void
   setSearchQuery: (query: string) => void
   setOpenProject: (projectId: string | null) => void
+  setOpenSection: (sectionKey: string | null) => void
   setAddSourcesProject: (projectId: string | null) => void
   toggleAgent: (agentId: string) => void
   toggleDocType: (docType: string) => void
@@ -57,10 +61,13 @@ export const useResearchStore = create<ResearchState>((set) => ({
   filters: EMPTY_FILTERS,
   searchQuery: '',
   openProjectId: null,
+  openSectionKey: null,
   addSourcesProjectId: null,
   setTab: (tab) => set({ tab }),
   setSearchQuery: (searchQuery) => set({ searchQuery }),
-  setOpenProject: (openProjectId) => set({ openProjectId }),
+  // Opening (or leaving) a project always resets the open section.
+  setOpenProject: (openProjectId) => set({ openProjectId, openSectionKey: null }),
+  setOpenSection: (openSectionKey) => set({ openSectionKey }),
   setAddSourcesProject: (addSourcesProjectId) => set({ addSourcesProjectId }),
   toggleAgent: (agentId) => set(state => ({
     filters: { ...state.filters, agentIds: toggle(state.filters.agentIds, agentId) },

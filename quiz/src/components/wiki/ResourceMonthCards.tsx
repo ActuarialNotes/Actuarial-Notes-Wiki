@@ -105,14 +105,13 @@ interface Props {
 }
 
 export function ResourceMonthCards({ entries, selected, onClear, onOpenEntry, action }: Props) {
-  const heading = selected ? `${MONTH_LONG[selected.month]} ${selected.year}` : 'All resources'
   const emptyMessage = selected ? 'Nothing recorded this month.' : 'No resources match the current filters.'
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">
-          {heading}
-          <span className="ml-2 font-normal text-muted-foreground">
+          {selected && `${MONTH_LONG[selected.month]} ${selected.year}`}
+          <span className={`font-normal text-muted-foreground${selected ? ' ml-2' : ''}`}>
             {entries.length} item{entries.length === 1 ? '' : 's'}
           </span>
         </h3>

@@ -110,14 +110,18 @@ function GroupSection({
   return (
     <div className="rounded-lg overflow-hidden bg-background border border-border">
       <div className="relative">
-        {/* Bar fill – proportional to exam weight when collapsed, full width when expanded */}
-        {examPercentage !== null && (
+        {/* Bar fill: weight indicator, only shown when nothing is selected */}
+        {examPercentage !== null && !(allSelected || someSelected) && (
           <div
             className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
             style={{ width: open ? '100%' : `${examPercentage}%` }}
           />
         )}
-        <div className={`relative z-10 flex items-stretch ${allSelected ? 'bg-primary/10' : someSelected ? 'bg-primary/5' : ''}`}>
+        {/* Selected state: full-width primary tint behind both buttons */}
+        {(allSelected || someSelected) && (
+          <div className={`absolute inset-0 ${allSelected ? 'bg-primary/10' : 'bg-primary/5'}`} />
+        )}
+        <div className="relative z-10 flex items-stretch">
           {/* Select-all checkmark circle */}
           <button
             type="button"

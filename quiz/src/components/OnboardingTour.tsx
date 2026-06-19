@@ -275,9 +275,6 @@ export default function OnboardingTour() {
     const loop = () => {
       if (cancelled) return
       if (el && !document.body.contains(el)) {
-        // Element went away temporarily (e.g. React re-rendered and replaced
-        // the node). Keep the spotlight at its last position — don't clear it —
-        // so the user sees a stable ring while we re-poll for the new node.
         el = null
         poll()
         return
@@ -300,26 +297,26 @@ export default function OnboardingTour() {
 
     const poll = () => {
       if (cancelled) return
-      // An anchor may exist in more than one layout (e.g. the Quiz tab lives in
-      // both the desktop sidebar and the mobile bottom nav). Pick the first
-      // candidate that's actually visible (non-zero box).
-      let found: HTMLElement | null = null
+      // Prefer an element whose midpoint is in-viewport (e.g. bottom-nav tab over
+      // a hidden sidebar copy). Fall back to any non-zero-sized match so the
+      // spotlight still appears even if the element is partially off-screen.
+      let onscreen: HTMLElement | null = null
+      let offscreen: HTMLElement | null = null
       for (const c of document.querySelectorAll<HTMLElement>(current.target!)) {
         const r = c.getBoundingClientRect()
+        if (r.width === 0 || r.height === 0) continue
         const midX = (r.left + r.right) / 2
         const midY = (r.top + r.bottom) / 2
-        if (
-          r.width > 0 && r.height > 0 &&
-          midX >= 0 && midX <= window.innerWidth &&
-          midY >= 0 && midY <= window.innerHeight
-        ) { found = c; break }
+        if (midX >= 0 && midX <= window.innerWidth && midY >= 0 && midY <= window.innerHeight) {
+          onscreen = c
+          break
+        }
+        offscreen ??= c
       }
+      const found = onscreen ?? offscreen
       if (found) {
         el = found
-        const r = found.getBoundingClientRect()
-        if (r.top < 64 || r.bottom > window.innerHeight - 64) {
-          found.scrollIntoView({ block: 'center', behavior: 'smooth' })
-        }
+        found.scrollIntoView({ block: 'center', behavior: 'smooth' })
         loop()
       } else {
         pollTimer = window.setTimeout(poll, 150)
@@ -371,7 +368,7 @@ export default function OnboardingTour() {
 
       <div
         className={cn(
-          'fixed inset-x-0 z-[61] flex justify-center px-3 pointer-events-none',
+          'fixed inset-x-0 z-[63] flex justify-center px-3 pointer-events-none',
           placeTop ? 'top-3 md:top-4' : 'bottom-14 md:bottom-4',
         )}
       >

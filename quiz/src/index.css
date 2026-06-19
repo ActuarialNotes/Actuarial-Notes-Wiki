@@ -573,6 +573,30 @@
   .level-up-toast-in, .level-up-toast-shimmer { animation: none; }
 }
 
+/* Themed scrollbars — use CSS variable tokens so they adapt to every colour
+   scheme and dark/light mode automatically. Thin track is transparent;
+   thumb uses muted-foreground at reduced opacity for a subtle, non-distracting
+   appearance that still reads against any background. */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.35);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.65);
+}
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.35) transparent;
+}
+
 /* Brief green flash when a study-plan concept transitions to completed */
 @keyframes concept-success {
   0%   { background-color: hsl(142 72% 50% / 0.18); transform: scale(1); }

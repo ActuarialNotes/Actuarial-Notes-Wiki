@@ -44,7 +44,7 @@ export function useQuestions(filters: QuestionFilter) {
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, topicsKey, idsKey, filters.concept, conceptsKey, filters.year])
+  }, [filters.exam, filters.topic, filters.difficulty, filters.mode, filters.count, topicsKey, idsKey, filters.concept, conceptsKey, filters.year, filters.session])
 
   return { questions, loading, error }
 }

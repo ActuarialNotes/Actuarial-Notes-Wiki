@@ -51,6 +51,7 @@ export interface QuestionFilter {
   count?: number        // max questions to return
   author?: string       // partial match, case-insensitive
   year?: number
+  session?: string      // filter by sitting session, e.g. "Spring" or "Fall"
   search?: string       // free-text search on stem and id
   ids?: string[]        // when set, only return questions whose id is in this list
   concept?: string      // filter by wiki_link concept name (single)
@@ -413,6 +414,7 @@ export function filterQuestions(questions: Question[], filters: QuestionFilter):
       if (!q.author?.toLowerCase().includes(filters.author.toLowerCase())) return false
     }
     if (filters.year && q.year !== filters.year) return false
+    if (filters.session && q.session?.toLowerCase() !== filters.session.toLowerCase()) return false
     if (filters.search) {
       const needle = filters.search.toLowerCase()
       if (!q.stem.toLowerCase().includes(needle) && !q.id.toLowerCase().includes(needle)) return false

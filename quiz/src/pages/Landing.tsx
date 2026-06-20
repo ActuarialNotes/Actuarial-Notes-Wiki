@@ -321,7 +321,7 @@ export default function Landing() {
   const reveal = 'during' as const
 
   // Mock exam sitting selection (null = random mix across all years)
-  const [selectedYear, setSelectedYear] = useState<number | null>(null)
+  const [selectedSitting, setSelectedSitting] = useState<{ year: number; session?: string } | null>(null)
 
   // Concept override passed from dashboard when user deselects some plan concepts
   const conceptOverrideRef = useRef<string[] | null>(null)
@@ -348,7 +348,7 @@ export default function Landing() {
   useEffect(() => {
     setIsAdaptive(false)
     setConceptMode('custom')
-    setSelectedYear(null)
+    setSelectedSitting(null)
     if (topic && mode === 'quiz') {
       try {
         const saved = localStorage.getItem(`actuarial_quiz_concepts_v1_${topic}`)
@@ -636,9 +636,14 @@ export default function Landing() {
       if (selectedConcepts.length > 0) params.set('concepts', selectedConcepts.join(','))
       params.set('count', String(count))
       params.set('reveal', reveal)
-    } else if (selectedYear !== null) {
-      params.set('year', String(selectedYear))
-      const sittingCount = allQuestions.filter(q => q.exam === topic && q.year === selectedYear).length
+    } else if (selectedSitting !== null) {
+      params.set('year', String(selectedSitting.year))
+      if (selectedSitting.session) params.set('session', selectedSitting.session)
+      const sittingCount = allQuestions.filter(q =>
+        q.exam === topic &&
+        q.year === selectedSitting.year &&
+        (!selectedSitting.session || q.session?.toLowerCase() === selectedSitting.session.toLowerCase())
+      ).length
       params.set('count', String(sittingCount || (MOCK_EXAM_QUESTIONS[topic] ?? 30)))
     } else {
       params.set('count', String(MOCK_EXAM_QUESTIONS[topic] ?? 30))
@@ -646,17 +651,28 @@ export default function Landing() {
     navigate(`/quiz?${params.toString()}`)
   }
 
-  // Available exam sittings (year + session) derived from the question bank
+  // Available exam sittings (year + session) derived from the question bank.
+  // Uses a composite key so Spring and Fall of the same year appear as separate entries.
   const availableSittings = useMemo(() => {
     if (!topic) return []
-    const sittingMap = new Map<number, string | undefined>()
+    const seen = new Set<string>()
+    const sittings: { year: number; session?: string }[] = []
     for (const q of allQuestions) {
-      if (q.exam !== topic) continue
-      if (q.year) sittingMap.set(q.year, q.session)
+      if (q.exam !== topic || !q.year) continue
+      const key = `${q.year}|${q.session ?? ''}`
+      if (!seen.has(key)) {
+        seen.add(key)
+        sittings.push({ year: q.year, session: q.session })
+      }
     }
-    return Array.from(sittingMap.entries())
-      .sort(([a], [b]) => b - a)
-      .map(([year, session]) => ({ year, session }))
+    return sittings.sort((a, b) => {
+      if (b.year !== a.year) return b.year - a.year
+      const order = (s?: string) => {
+        const l = s?.toLowerCase()
+        return l === 'spring' || l === 'sp' ? 0 : l === 'fall' || l === 'fa' ? 1 : 2
+      }
+      return order(a.session) - order(b.session)
+    })
   }, [allQuestions, topic])
 
   function sittingLabel(year: number, session?: string): string {
@@ -914,22 +930,26 @@ export default function Landing() {
               {mode === 'mock-exam' && (
                 <div className="rounded-lg border bg-muted/40 px-4 py-3 space-y-1">
                   <p className="text-sm font-medium">
-                    {selectedYear !== null
-                      ? `${allQuestions.filter(q => q.exam === topic && q.year === selectedYear).length} questions`
+                    {selectedSitting !== null
+                      ? `${allQuestions.filter(q =>
+                          q.exam === topic &&
+                          q.year === selectedSitting.year &&
+                          (!selectedSitting.session || q.session?.toLowerCase() === selectedSitting.session.toLowerCase())
+                        ).length} questions`
                       : `${mockExamCount} questions`
                     }
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {selectedYear !== null
-                      ? `All questions from the ${sittingLabel(selectedYear, availableSittings.find(s => s.year === selectedYear)?.session)} sitting.`
+                    {selectedSitting !== null
+                      ? `All questions from the ${sittingLabel(selectedSitting.year, selectedSitting.session)} sitting.`
                       : `Distributed across all ${examLabel} topics to mirror the real exam.`
                     }
                     {' '}Answers and explanations are revealed at the end.
                   </p>
                   {(() => {
-                    const sitting = selectedYear !== null ? availableSittings.find(s => s.year === selectedYear) : null
+                    const sitting = selectedSitting
                     const pdfLink = sitting
-                      ? getSittingPdfLink(topic, selectedYear!, sitting.session)
+                      ? getSittingPdfLink(topic, sitting.year, sitting.session)
                       : availableSittings.length === 0
                         ? getExamPdfLink(topic)
                         : null
@@ -992,29 +1012,32 @@ export default function Landing() {
               <div className="flex gap-1.5 flex-wrap">
                 <button
                   type="button"
-                  onClick={() => setSelectedYear(null)}
+                  onClick={() => setSelectedSitting(null)}
                   className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
-                    selectedYear === null
+                    selectedSitting === null
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
                 >
                   Mix
                 </button>
-                {availableSittings.map(s => (
-                  <button
-                    key={s.year}
-                    type="button"
-                    onClick={() => setSelectedYear(s.year)}
-                    className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
-                      selectedYear === s.year
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
-                    }`}
-                  >
-                    {sittingLabel(s.year, s.session)}
-                  </button>
-                ))}
+                {availableSittings.map(s => {
+                  const isActive = selectedSitting?.year === s.year && selectedSitting?.session === s.session
+                  return (
+                    <button
+                      key={`${s.year}|${s.session ?? ''}`}
+                      type="button"
+                      onClick={() => setSelectedSitting({ year: s.year, session: s.session })}
+                      className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                        isActive
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
+                      }`}
+                    >
+                      {sittingLabel(s.year, s.session)}
+                    </button>
+                  )
+                })}
               </div>
             </div>
           )}

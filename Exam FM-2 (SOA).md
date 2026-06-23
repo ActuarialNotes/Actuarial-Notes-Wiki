@@ -9,13 +9,13 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 
 > [!example]- Time Value of Money  {5-15%}
 > Understand and be able to perform calculations relating to [[Present Value]], [[Current Value]], and [[Accumulated Value]].
-> 1. Define and recognize the definitions of the following terms: [[Interest Rate]] (rate of interest), [[Simple Interest]], [[Compound Interest]], [[Accumulation Function]], [[Future Value]], current value, present value, [[Net Present Value]], [[Discount Factor]], [[Discount Rate]] (rate of discount), [[Convertible m-thly]], [[Nominal Interest Rate|Nominal Rate]], [[Effective Rate]], [[Inflation]] and [[Real Rate of Interest]], [[Force of Interest]], [[Equation of Value]].
+> 1. Define and recognize the definitions of the following terms: [[Interest Rate]] (rate of interest), [[Simple Interest]], [[Compound Interest]], [[Accumulation Function]], [[Fund Accumulation]], [[Future Value]], current value, present value, [[Net Present Value]], [[Discount Factor]], [[Discount Rate]] (rate of discount), [[Convertible m-thly]], [[Nominal Interest Rate|Nominal Rate]], [[Effective Rate]], [[Inflation]] and [[Real Rate of Interest]], [[Force of Interest]], [[Equation of Value]].
 > 2. Given any three of **interest rate**, **period of time**, **present value**, and **future value**, calculate the remaining item using **simple** or **compound interest**. Solve [[Time Value of Money Equations]] involving [[Variable Force of Interest]].
 > 3. Given any one of the **effective interest rate**, the [[Nominal Interest Rate Convertible m-thly]], the [[Effective Discount Rate]], the [[Nominal Discount Rate Convertible m-thly]], or the **force of interest**, calculate any of the other items.
 > 4. Write the **equation of value** given a set of **cash flows** and an **interest rate**
 
 > [!example]- Annuities/Cash Flows with Non-Contingent Payments  {20-30%}
-> 1. Define and recognize the definitions of the following terms: [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing Annuity|Geometric Increasing/Decreasing Annuity]], [[Term of Annuity]].
+> 1. Define and recognize the definitions of the following terms: [[Annuity Immediate]], [[Annuity Due]], [[Perpetuity]], [[Payable m-thly]] or [[Payable Continuously]], [[Level Payment Annuity]], [[Arithmetic Increasing Annuity|Arithmetic Increasing/Decreasing Annuity]], [[Geometric Increasing Annuity|Geometric Increasing/Decreasing Annuity]], [[Decreasing Annuity]], [[Continuous Annuity]], [[Term of Annuity]].
 > 2. For each of the following types of **annuity**/**cash flows**, given sufficient information of **immediate** or **due**, **present value**, **future value**, **current value**, **interest rate**, **payment amount**, and term of annuity, calculate any remaining item.
 >	- [[Level Annuity]], finite term.
 >	- [[Level Perpetuity]]
@@ -26,7 +26,7 @@ The **Financial Mathematics (FM-2) Exam** is a 2.5 hour SOA exam with 35 multipl
 
 > [!example]- Loans {15-25%}
 > Understand key concepts concerning [[Loans]] and how to perform related calculations.
-> 1. Define and recognize the definitions of the following terms: [[Principal]], [[Interest]], [[Term of Loan]], [[Outstanding Balance]], [[Final Payment]], [[Drop Payment]], [[Balloon Payment]], [[Amortization]]
+> 1. Define and recognize the definitions of the following terms: [[Principal]], [[Interest]], [[Term of Loan]], [[Outstanding Balance]], [[Final Payment]], [[Drop Payment]], [[Balloon Payment]], [[Amortization]], [[Loan Repayment Comparison]]
 > 2. Calculate:
 > 	- The missing item, given any four of: **term of loan**,** interest rate**, **payment amount**, **payment period**, **principal**.
 > 	- The **outstanding balance** at any point in time.

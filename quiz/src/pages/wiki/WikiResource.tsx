@@ -56,7 +56,7 @@ export default function WikiResource() {
 
   return (
     <div className="space-y-4">
-      <Link to="/wiki" className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+      <Link to="/wiki" state={{ fromResource: true }} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
         <ChevronLeft className="h-4 w-4" /> All resources
       </Link>
 

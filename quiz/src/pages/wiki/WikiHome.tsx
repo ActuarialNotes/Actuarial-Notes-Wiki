@@ -47,8 +47,12 @@ export default function WikiHome() {
   const location = useLocation()
   const navigationType = useNavigationType()
 
-  // Restore scroll when returning from an exam page; scroll to top on fresh visits
-  const shouldRestore = useRef(navigationType === 'POP' || !!(location.state as { fromExam?: boolean } | null)?.fromExam)
+  // Restore scroll when returning from an exam or resource page; scroll to top on fresh visits
+  const shouldRestore = useRef(
+    navigationType === 'POP' ||
+    !!(location.state as { fromExam?: boolean; fromResource?: boolean } | null)?.fromExam ||
+    !!(location.state as { fromExam?: boolean; fromResource?: boolean } | null)?.fromResource,
+  )
   useEffect(() => {
     if (shouldRestore.current) {
       const saved = sessionStorage.getItem('wiki-home:scroll')

@@ -53,17 +53,21 @@ export default function WikiHome() {
     !!(location.state as { fromExam?: boolean; fromResource?: boolean } | null)?.fromExam ||
     !!(location.state as { fromExam?: boolean; fromResource?: boolean } | null)?.fromResource,
   )
+  const scrollRestored = useRef(false)
+  // On fresh visits scroll to top immediately; on returns wait for index to load
+  // so the page is tall enough before we try to jump to the saved position.
   useEffect(() => {
-    if (shouldRestore.current) {
-      const saved = sessionStorage.getItem('wiki-home:scroll')
-      if (saved !== null) {
-        const top = parseInt(saved, 10)
-        requestAnimationFrame(() => window.scrollTo({ top, behavior: 'instant' }))
-      }
-    } else {
-      window.scrollTo({ top: 0, behavior: 'instant' })
-    }
+    if (!shouldRestore.current) window.scrollTo({ top: 0, behavior: 'instant' })
   }, [])
+  useEffect(() => {
+    if (!shouldRestore.current || scrollRestored.current || index.length === 0) return
+    scrollRestored.current = true
+    const saved = sessionStorage.getItem('wiki-home:scroll')
+    if (saved !== null) {
+      const top = parseInt(saved, 10)
+      requestAnimationFrame(() => window.scrollTo({ top, behavior: 'instant' }))
+    }
+  }, [index])
   useEffect(() => {
     return () => { sessionStorage.setItem('wiki-home:scroll', String(window.scrollY)) }
   }, [])

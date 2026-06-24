@@ -246,8 +246,9 @@ existing page.
 Base the explanation on the worked solution in the SOA solutions PDF. Reformat it
 as clean prose + LaTeX (don't paste raw OCR text):
 
-- Use `$$…$$` for displayed equations (each distinct equation on its own block).
 - Use `$…$` for inline math (variable names, short expressions in text).
+- Use `$$…$$` for single displayed equations that are one step only.
+- Use `align*` for any multi-step derivation (see LaTeX formatting rules below).
 - Normalize variable names to match the question body.
 - Show the key algebraic steps; omit trivial intermediate arithmetic.
 - If the solution uses a table (e.g. probability distributions, joint tables), render
@@ -255,6 +256,60 @@ as clean prose + LaTeX (don't paste raw OCR text):
 - End with the final answer value, formatted as bold or a display equation.
 - Do NOT repeat the question options in the Explanation section.
 - Do NOT include a `### Answer` sub-heading — the answer is already in the frontmatter.
+
+### LaTeX formatting rules (phone readability)
+
+The app renders markdown with `remark-math` + `rehype-katex`. These rules are
+required for correct rendering and readability on a phone screen.
+
+**Rule 1 — Use `align*` for multi-step derivations.**
+
+Never chain evaluation steps as separate `$$` blocks or on one long line.
+Write each step on its own `&=` line inside one `align*` block:
+
+```markdown
+$$
+\begin{align*}
+E[X] &= \int_0^{10} y \cdot f(y)\,dy + 10\,P[Y > 10] \\
+     &= \int_0^{10} 2y^{-2}\,dy + 10\int_{10}^{\infty} 2y^{-3}\,dy \\
+     &= 1.8 + 0.1 \\
+     &= 1.9
+\end{align*}
+$$
+```
+
+**Rule 2 — `$$` delimiters must be on their own lines.**
+
+`remark-math` requires the closing `$$` to start a new line. If the `$$` is
+not on its own line the entire block renders as raw text. Always write:
+
+```
+$$
+\begin{align*}
+...
+\end{align*}
+$$
+```
+
+Never `$$\begin{align*}...\end{align*}$$` on combined lines.
+
+**Rule 3 — Split formula = result onto separate lines.**
+
+Within an `align*` block, a line like `X &= formula = numeric_result` overflows
+on a phone. Put the numeric result on its own `&=` line:
+
+```markdown
+$$
+\begin{align*}
+P[A|B] &= \frac{(0.9)(0.3)}{(0.6)(0.1)+(0.9)(0.3)+(0.99)(0.6)} \\
+       &= \frac{0.27}{0.924} \\
+       &\approx 0.29
+\end{align*}
+$$
+```
+
+**Exception:** Short decimal → percentage pairs (`= 0.0453 = 4.53\%`) can stay
+on one line since both sides are brief.
 
 ```markdown
 ---
@@ -280,8 +335,13 @@ as clean prose + LaTeX (don't paste raw OCR text):
 - [ ] `answer` letter matches the solutions PDF
 - [ ] Question body matches the PDF wording exactly (no paraphrasing)
 - [ ] All 5 answer options (A–E) are included in the body
-- [ ] LaTeX renders correctly: `$$…$$` for display, `$…$` inline; no smart quotes,
-      no OCR dash artifacts (`−` → `-`), no Unicode fraction glyphs (`½` → `1/2`)
+- [ ] LaTeX renders correctly: `$…$` inline, `$$…$$` for single-step display,
+      `align*` for multi-step derivations; no smart quotes, no OCR dash artifacts
+      (`−` → `-`), no Unicode fraction glyphs (`½` → `1/2`)
+- [ ] Multi-step derivations use `align*` with each step on its own `&=` line
+- [ ] `$$` delimiters are each on their own line (never `$$\begin{align*}…`)
+- [ ] No line inside `align*` has two evaluation `=` signs (formula = result on
+      same line) — split at the result unless both sides are very short
 - [ ] `wiki_link` entries use `+` for spaces and point to pages that actually exist
       (run `ls Concepts/ | grep -i "<name>"` to verify)
 - [ ] `topic` exactly matches an existing `Concepts/<name>.md` filename (without `.md`)

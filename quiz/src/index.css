@@ -573,6 +573,14 @@
   .level-up-toast-in, .level-up-toast-shimmer { animation: none; }
 }
 
+/* Block math (KaTeX display equations): scroll horizontally instead of overflowing
+   the container, matching the same behaviour as wide tables. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.25rem; /* room for the scrollbar on mobile */
+}
+
 /* Themed scrollbars — use CSS variable tokens so they adapt to every colour
    scheme and dark/light mode automatically. Thin track is transparent;
    thumb uses muted-foreground at reduced opacity for a subtle, non-distracting

@@ -817,6 +817,21 @@ export function ReadinessCard({
         result.set(day, pct)
       }
     }
+
+    // If all today's plan concepts are done (including pre-mastered ones not in countByDay),
+    // force today to 100% so the heatmap shows maximum brightness when "Done for Today!".
+    if (displayConcepts.length > 0) {
+      const allDone = displayConcepts.every(name => {
+        const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+        const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+        return (
+          examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+          STATE_ORDER[currentState] >= STATE_ORDER[target]
+        )
+      })
+      if (allDone) result.set(today, 100)
+    }
+
     return result
   }, [user, plan, allDailyCompletions, examCompletedToday, displayConcepts, masteryStateByName, targetByName])
 

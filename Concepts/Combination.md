@@ -5,7 +5,7 @@ A **Combination** $\binom{n}{k}$ ("$n$ choose $k$") counts the number of ways to
 
 - $n$ is the total number of objects and $k$ is the number of objects selected
 - The identity $\binom{n}{k} = \binom{n}{n-k}$ reflects that choosing $k$ items to include is equivalent to choosing $n-k$ to exclude
-- Combinations appear in the [[Binomial]] distribution, [[Hypergeometric]] distribution, and the [[Inclusion-Exclusion Principle]] for counting
+- Combinations appear in the [[Binomial Distribution|Binomial]] distribution, [[Hypergeometric Distribution|Hypergeometric]] distribution, and the [[Inclusion-Exclusion Principle]] for counting
 
 > [!example]- Selecting a Claims Committee {Example}
 > An insurer needs to form a committee of 3 adjusters from a pool of 8. How many different committees are possible?

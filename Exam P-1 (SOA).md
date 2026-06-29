@@ -37,7 +37,7 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > - [[Hypergeometric Distribution]]
 > - [[Negative Binomial Distribution]]
 > - [[Poisson Distribution]]
-> - [[Uniform Discrete Distribution|Uniform]]
+> - [[Uniform Discrete|Uniform]]
 >
 > ### Continuous Univariate Distributions 
 > - [[Beta]]

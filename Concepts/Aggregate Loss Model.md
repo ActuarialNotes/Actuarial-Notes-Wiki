@@ -10,7 +10,7 @@ An **Aggregate Loss Model** models the total (aggregate) losses $S$ from a portf
 - This is called the **collective risk model**
 - When $N \sim \text{Poi}(\lambda)$: $\text{Var}(S) = \lambda \cdot E[X^2]$ (simplification since $\text{Var}(N) = E[N] = \lambda$)
 - When $N \sim \text{Poi}(\lambda)$ and $X_i \sim \text{Exp}(\theta)$: $S$ has a **compound Poisson** distribution; the MGF is $M_S(t) = \exp\!\left(\lambda(M_X(t) - 1)\right)$
-- The [[Normal]] approximation via the [[Central Limit Theorem (CLT)]] applies when the portfolio is large
+- The [[Normal Distribution|Normal]] approximation via the [[Central Limit Theorem (CLT)]] applies when the portfolio is large
 
 > [!example]- Mean and Variance of Aggregate Losses {Example}
 > A portfolio has $N \sim \text{Poi}(100)$ claims per year. Individual claim sizes $X_i$ have $E[X] = 500$ and $\text{Var}(X) = 90{,}000$. Find $E[S]$ and $\text{Var}(S)$.

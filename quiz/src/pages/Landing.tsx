@@ -24,6 +24,7 @@ type ExamOrg = 'SOA' | 'CAS'
 const EXAMS = [
   { value: 'Probability', label: 'Exam P-1', tracks: ['ASA', 'ACAS'] as const, progressKey: 'P' },
   { value: 'Financial Mathematics', label: 'Exam FM-2', tracks: ['ASA', 'ACAS'] as const, progressKey: 'FM' },
+  { value: 'Exam MAS-I', label: 'Exam MAS-I', tracks: ['ACAS'] as const, progressKey: 'MAS-I' },
   { value: 'Exam 5', label: 'Exam 5', tracks: ['ACAS'] as const, progressKey: 'CAS-5' },
 ]
 
@@ -48,6 +49,7 @@ function formatTargetDate(dateStr: string): string {
 const MOCK_EXAM_QUESTIONS: Record<string, number> = {
   'Probability': 30,
   'Financial Mathematics': 35,
+  'Exam MAS-I': 40,
   'Exam 5': 25,
 }
 
@@ -224,8 +226,10 @@ function ExamOptionCard({
   targetDate?: string | null
 }) {
   const isActive = colorIdx >= 0
-  const isExam5 = exam.value === 'Exam 5'
-  const description = isExam5 ? null : exam.value
+  // Beta exams have a full question bank; others are still being built out.
+  const isBeta = exam.value === 'Probability' || exam.value === 'Financial Mathematics'
+  // Hide the subtitle when it would just repeat the label (e.g. "Exam 5", "Exam MAS-I").
+  const description = exam.value.startsWith('Exam ') ? null : exam.value
 
   return (
     <button type="button" data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined} onClick={onClick} className="text-left w-full">
@@ -253,13 +257,13 @@ function ExamOptionCard({
               )}>
                 {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
               </span>
-            ) : isExam5 ? (
-              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                In Development
-              </span>
-            ) : (
+            ) : isBeta ? (
               <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 Beta
+              </span>
+            ) : (
+              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                In Development
               </span>
             )}
           </div>

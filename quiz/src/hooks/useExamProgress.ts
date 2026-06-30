@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 export const EXAM_ID_TO_TOPIC: Record<string, string> = {
   P: 'Probability',
   FM: 'Financial Mathematics',
+  'MAS-I': 'Exam MAS-I',
   'CAS-5': 'Exam 5',
 }
 

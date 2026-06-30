@@ -1,6 +1,6 @@
 # Concepts Without Review Questions
 
-> Generated 2026-06-30. **147 of 372 concepts (39.5%)** have at least one linked question.
+> Generated 2026-06-30. **147 of 381 concepts (38.6%)** have at least one linked question.
 
 ## Summary
 
@@ -8,8 +8,8 @@
 |---|---|---|---|
 | Exam P | 50 | 10 | 60 |
 | Exam FM | 80 | 1 | 81 |
-| Other Exams & Topics | 17 | 214 | 231 |
-| **Total** | **147** | **225** | **372** |
+| Other Exams & Topics | 17 | 223 | 240 |
+| **Total** | **147** | **234** | **381** |
 
 ---
 
@@ -50,6 +50,7 @@
 - Actuarial Assumptions
 - Actuarial Math
 - Actuary
+- Added Variable Plot
 - Age to Age Factor
 - Agent
 - Aggregate Loss Model
@@ -78,6 +79,7 @@
 - Catastrophe Loss
 - Catastrophe Modelling
 - Catastrophe Modelling Framework
+- Categorical Predictor
 - Ceded Losses
 - Censoring
 - Central Limit Theorem (CLT)
@@ -98,6 +100,7 @@
 - Considerations for Implementing Rates
 - Consistency
 - Constraint
+- Control Variable
 - Correlation
 - Credibility
 - Credibility Theory
@@ -122,6 +125,7 @@
 - Exploratory Data Analysis
 - Exposure Base
 - Exposure Trend
+- Extended Linear Model
 - Fixed Expenses
 - Frequency
 - Frequency-Severity Method
@@ -135,6 +139,7 @@
 - In-Force
 - Increased Limits
 - Incurred Losses
+- Interaction
 - Joint Life
 - K-Means Clustering
 - K-Nearest Neighbors
@@ -153,14 +158,17 @@
 - Loss Ratio Method
 - Loss Trend
 - Loss and Loss Adjustment Expense
+- Marginal Model Plot
 - Markov Chain
 - Maximum Likelihood Estimation
 - Mean Square Error
 - Minimum Variance
+- Model Structure
 - Net Losses
 - Net of Reinsurance
 - Neural Network
 - Occurrence Coverage
+- Offset Variable
 - On Level Premium
 - Overall Rate Level Indication
 - Paid Losses
@@ -250,5 +258,6 @@
 - Underwriting Year
 - VIN Fraud
 - Variable Expenses
+- Variable Selection
 - Whole Life Insurance
 - Written Premium

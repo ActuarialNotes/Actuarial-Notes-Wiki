@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { X, CalendarDays, Target, Info, Sparkles, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
+import { SittingDateGrid } from '@/components/SittingDateGrid'
 import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { getSittingsForExam, LOCALIZED_EXAMS } from '@/data/examSittings'
 import {
@@ -275,6 +276,15 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                       examId={examId}
                       selectedDate={localExamDate}
                       onSelect={handleExamSittingSelect}
+                    />
+                  )}
+                  {selectedSitting?.endDate && selectedSitting.endDate !== selectedSitting.startDate
+                    && daysBetween(selectedSitting.startDate, selectedSitting.endDate) <= 35 && (
+                    <SittingDateGrid
+                      startDate={selectedSitting.startDate}
+                      endDate={selectedSitting.endDate}
+                      selectedDate={localExamDate}
+                      onSelect={handleExamDateChange}
                     />
                   )}
                 </>

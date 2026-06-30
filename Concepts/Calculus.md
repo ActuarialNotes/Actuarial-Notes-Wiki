@@ -1,6 +1,4 @@
-[[Actuarial Notes Wiki|Wiki]] / [[Actuarial Methods]] / ==Calculus==
-
-**Calculus** is the mathematical study of continuous change. It is a core prerequisite for actuarial mathematics, underpinning [[Probability Theory]], [[Financial Mathematics]], and [[Life Contingencies]] through differentiation, integration, and series analysis.
+**Calculus** is the mathematical study of continuous change. It is a core prerequisite for actuarial mathematics, underpinning [[Probability Theory]], financial mathematics, and life contingencies through differentiation, integration, and series analysis.
 
 ### Limits and Continuity
 A **limit** describes the value a function approaches as its input approaches a point.
@@ -34,7 +32,7 @@ The **derivative** of $f$ at $x$ measures the instantaneous rate of change:
 $$\frac{\partial f}{\partial x}(x,y) \quad \text{holds } y \text{ fixed}$$
 
 > [!example]- Finding the Force of Mortality {Example}
-> The survival function is $S(t) = e^{-\lambda t}$. Find the [[Force of Mortality]] $\mu(t) = -\dfrac{S'(t)}{S(t)}$.
+> The survival function is $S(t) = e^{-\lambda t}$. Find the [[Hazard Rate|force of mortality]] $\mu(t) = -\dfrac{S'(t)}{S(t)}$.
 >
 > > [!answer]-
 > > $$S'(t) = -\lambda e^{-\lambda t}$$

@@ -1,6 +1,6 @@
 # Concepts Without Review Questions
 
-> Generated 2026-06-30. **147 of 369 concepts (39.8%)** have at least one linked question.
+> Generated 2026-06-30. **147 of 370 concepts (39.7%)** have at least one linked question.
 
 ## Summary
 
@@ -8,8 +8,8 @@
 |---|---|---|---|
 | Exam P | 50 | 10 | 60 |
 | Exam FM | 80 | 1 | 81 |
-| Other Exams & Topics | 17 | 211 | 228 |
-| **Total** | **147** | **222** | **369** |
+| Other Exams & Topics | 17 | 212 | 229 |
+| **Total** | **147** | **223** | **370** |
 
 ---
 
@@ -143,6 +143,7 @@
 - Lift
 - Limited Expected Value
 - Limited Fluctuation Credibility
+- Linear Algebra
 - Linear Mixed Model
 - Link Function
 - Long Tail Lines

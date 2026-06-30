@@ -211,8 +211,9 @@ export function ExamHeatmap({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally only on mount — highlightedDay effect handles subsequent scrolls
 
-  // Track whether today's cell is visible in the scroll strip
+  // Track whether today's cell is visible in the scroll strip, and which side it's off to
   const [showTodayButton, setShowTodayButton] = useState(false)
+  const [todayButtonSide, setTodayButtonSide] = useState<'left' | 'right'>('right')
 
   useEffect(() => {
     const el = scrollRef.current
@@ -227,6 +228,7 @@ export function ExamHeatmap({
       const todayRight = todayLeft + cellW
       const visible = todayLeft >= el.scrollLeft - 1 && todayRight <= el.scrollLeft + el.clientWidth + 1
       setShowTodayButton(!visible)
+      if (!visible) setTodayButtonSide(todayLeft < el.scrollLeft ? 'left' : 'right')
     }
 
     checkTodayVisible()
@@ -486,7 +488,7 @@ export function ExamHeatmap({
               <button
                 type="button"
                 onClick={scrollToToday}
-                className="absolute right-0 text-[11px] font-medium px-2 py-0.5 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors"
+                className={`absolute ${todayButtonSide === 'left' ? 'left-0' : 'right-0'} text-[11px] font-medium px-2 py-0.5 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors`}
                 aria-label="Scroll to today"
               >
                 Today

@@ -79,6 +79,41 @@ describe('new state', () => {
   })
 })
 
+// ── applyAnswer: collection gate ────────────────────────────────────────────
+
+describe('collection gate (new → level1)', () => {
+  it('promotes new → level1 when collected (default)', () => {
+    expect(applyAnswer(rec(), { isCorrect: true, isHard: false, at: NOW, collected: true }).state).toBe('level1')
+  })
+
+  it('holds at new on correct answer when not collected', () => {
+    const r = applyAnswer(rec(), { isCorrect: true, isHard: false, at: NOW, collected: false })
+    expect(r.state).toBe('new')
+  })
+
+  it('still accumulates correct_count while uncollected so progress is not lost', () => {
+    let r = rec()
+    r = applyAnswer(r, { isCorrect: true, isHard: false, at: NOW, collected: false })
+    r = applyAnswer(r, { isCorrect: true, isHard: false, at: NOW, collected: false })
+    expect(r.state).toBe('new')
+    expect(r.correct_count).toBe(2)
+  })
+
+  it('promotes to level1 once collected even after prior uncollected correct answers', () => {
+    let r = rec()
+    r = applyAnswer(r, { isCorrect: true, isHard: false, at: NOW, collected: false })
+    expect(r.state).toBe('new')
+    // Same day, now collected: the next correct answer earns level1.
+    r = applyAnswer(r, { isCorrect: true, isHard: false, at: NOW, collected: true })
+    expect(r.state).toBe('level1')
+  })
+
+  it('does not gate a previously-learned (forgotten) concept regardless of collected flag', () => {
+    const forgotten = rec({ state: 'forgotten', correct_count: 3 })
+    expect(applyAnswer(forgotten, { isCorrect: true, isHard: false, at: NOW, collected: false }).state).toBe('level1')
+  })
+})
+
 // ── applyAnswer: level1 state ───────────────────────────────────────────────
 
 describe('level1 state', () => {

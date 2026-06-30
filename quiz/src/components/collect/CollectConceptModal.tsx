@@ -142,6 +142,10 @@ export function CollectConceptModal() {
     return Array.from(set)
   }, [syllabi])
 
+  // NOTE: this "which concept does this describe?" check is intentionally a
+  // placeholder — it's too easy (the answer is the card title). Replacing it with
+  // genuine authored/generated comprehension questions is its own task; see
+  // docs/flashcard-collection.md.
   const prompt = useMemo(() => {
     if (!def) return ''
     const masked = maskDefinition(def, name)
@@ -170,36 +174,29 @@ export function CollectConceptModal() {
     }
     // 1) Card spins faster and faster.
     setPhase('spinning')
-    after(1150, () => {
-      // 2) Whole screen lights up in the dominant colour.
+    after(1100, () => {
+      // 2) The card grows and dissolves into a radial bloom of dominant light.
       setPhase('flash')
       after(520, () => {
-        // 3) Distil into a glowing drop and fly it to the Flashcards tab.
-        setPhase('distill')
+        // 3) The light distils into a glowing drop that flies to the Flashcards
+        //    tab. Target/offset are baked into CSS custom props so a single
+        //    keyframe drives the flight (no cross-frame transition toggling).
         const target = flashcardNavCenter()
         const startX = window.innerWidth / 2
         const startY = window.innerHeight / 2
         setDropStyle({
           left: startX,
           top: startY,
-          transform: 'translate(-50%, -50%) scale(1)',
-          opacity: 1,
+          ['--dx' as string]: `${target.x - startX}px`,
+          ['--dy' as string]: `${target.y - startY}px`,
         })
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          setDropStyle({
-            left: startX,
-            top: startY,
-            transform: `translate(calc(-50% + ${target.x - startX}px), calc(-50% + ${target.y - startY}px)) scale(0.18)`,
-            opacity: 0.9,
-            transition: 'transform 0.85s cubic-bezier(0.5, 0, 0.4, 1), opacity 0.85s ease-in',
-          })
-        }))
-        after(880, () => {
+        setPhase('distill')
+        after(820, () => {
           // 4) Drop lands → persist + light up the tab in sync.
           collect(name)
           addCard({ kind: 'concept', name })
           setPhase('done')
-          after(450, close)
+          after(520, close)
         })
       })
     })
@@ -219,7 +216,13 @@ export function CollectConceptModal() {
 
   if (!ref) return null
 
-  const dominantFlash = phase === 'flash' || phase === 'distill'
+  const inBloom = phase === 'flash' || phase === 'distill'
+  // The card stays mounted through the flash so it visibly dissolves into the
+  // bloom rather than cutting out. It's gone by the distil phase.
+  const showCard = phase !== 'distill'
+  // Drop the modal chrome (border/background/header) once the ceremony starts so
+  // only the card + light remain on screen.
+  const showChrome = phase === 'question'
 
   return createPortal(
     <div
@@ -234,9 +237,9 @@ export function CollectConceptModal() {
         onClick={() => phase === 'question' && close()}
       />
 
-      {/* Full-screen dominant flash (white in dark mode / black in light mode via --foreground) */}
-      {dominantFlash && (
-        <div className="collect-screen-flash pointer-events-none absolute inset-0" />
+      {/* Radial dominant bloom (white in dark mode / black in light mode via --foreground) */}
+      {inBloom && (
+        <div className="collect-bloom pointer-events-none absolute inset-0" />
       )}
 
       {/* Flying distilled drop */}
@@ -247,31 +250,36 @@ export function CollectConceptModal() {
       )}
 
       {/* Modal card */}
-      {phase !== 'flash' && phase !== 'distill' && (
-        <div className="relative z-[121] w-full max-w-md rounded-2xl border bg-card text-card-foreground shadow-2xl overflow-hidden">
+      {showCard && (
+        <div className={`relative z-[121] w-full max-w-md text-card-foreground ${
+          showChrome ? 'rounded-2xl border bg-card shadow-2xl overflow-hidden' : 'flex flex-col items-center'
+        }`}>
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b">
-            <div className="flex items-center gap-2 min-w-0">
-              <Lock className="h-4 w-4 text-primary shrink-0" />
-              <span className="font-semibold text-sm truncate">
-                {alreadyCollected ? 'Collected' : 'Collect this flashcard'}
-              </span>
+          {showChrome && (
+            <div className="flex items-center justify-between px-4 py-3 border-b">
+              <div className="flex items-center gap-2 min-w-0">
+                <Lock className="h-4 w-4 text-primary shrink-0" />
+                <span className="font-semibold text-sm truncate">
+                  {alreadyCollected ? 'Collected' : 'Collect this flashcard'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={close}
+                className="text-muted-foreground hover:text-foreground p-1 -mr-1"
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={close}
-              className="text-muted-foreground hover:text-foreground p-1 -mr-1"
-              aria-label="Close"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
+          )}
 
           {/* Body */}
-          <div className="px-5 py-5 flex flex-col items-center gap-5">
+          <div className={`flex flex-col items-center gap-5 ${showChrome ? 'px-5 py-5' : 'py-5'}`}>
             <CollectCard3D
               name={name}
-              phase={phase === 'spinning' ? 'spin' : phase === 'done' || alreadyCollected ? 'won' : 'idle'}
+              phase={phase === 'spinning' || phase === 'flash' ? 'spin' : phase === 'done' || alreadyCollected ? 'won' : 'idle'}
+              className={phase === 'flash' ? 'collect-card-absorb z-[122]' : ''}
             />
 
             {alreadyCollected ? (
@@ -291,7 +299,7 @@ export function CollectConceptModal() {
               </div>
             ) : phase === 'spinning' ? (
               <p className="text-sm font-medium text-muted-foreground animate-pulse">Collecting…</p>
-            ) : loadState === 'loading' ? (
+            ) : phase === 'flash' ? null : loadState === 'loading' ? (
               <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
                 <Loader2 className="h-4 w-4 animate-spin" /> Preparing your check…
               </div>

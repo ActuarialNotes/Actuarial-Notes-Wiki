@@ -5,6 +5,7 @@
 export const EXAM_LABEL_TO_ID: Record<string, string> = {
   'Probability': 'P',
   'Financial Mathematics': 'FM',
+  'Exam MAS-I': 'MAS-I',
 }
 
 export const EXAM_ID_TO_LABEL: Record<string, string> = Object.fromEntries(

@@ -1,6 +1,6 @@
 # Concepts Without Review Questions
 
-> Generated 2026-06-30. **147 of 368 concepts (39.9%)** have at least one linked question.
+> Generated 2026-06-30. **147 of 369 concepts (39.8%)** have at least one linked question.
 
 ## Summary
 
@@ -8,8 +8,8 @@
 |---|---|---|---|
 | Exam P | 50 | 10 | 60 |
 | Exam FM | 80 | 1 | 81 |
-| Other Exams & Topics | 17 | 210 | 227 |
-| **Total** | **147** | **221** | **368** |
+| Other Exams & Topics | 17 | 211 | 228 |
+| **Total** | **147** | **222** | **369** |
 
 ---
 
@@ -150,6 +150,7 @@
 - Loss Ratio Method
 - Loss Trend
 - Loss and Loss Adjustment Expense
+- Markov Chain
 - Maximum Likelihood Estimation
 - Mean Square Error
 - Minimum Variance

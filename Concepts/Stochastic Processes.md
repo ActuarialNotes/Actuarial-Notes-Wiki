@@ -21,7 +21,7 @@ A **Stochastic Process** $\{X(t) : t \in T\}$ is a collection of [[Random Variab
 > > On average the insurer expects 24 claims in six months.
 
 > [!example]- A Two-State Risk-Class Markov Chain {Example}
-> Each year an insured is classed Standard ($S$) or Preferred ($P$). The process is a discrete-time **Markov chain** with one-step transition matrix
+> Each year an insured is classed Standard ($S$) or Preferred ($P$). The process is a discrete-time [[Markov Chain]] with one-step transition matrix
 > $$\begin{array}{c|cc} & S & P \\ \hline S & 0.8 & 0.2 \\ P & 0.3 & 0.7 \end{array}$$
 > An insured is Standard this year. Find the probability they are Preferred two years from now.
 >

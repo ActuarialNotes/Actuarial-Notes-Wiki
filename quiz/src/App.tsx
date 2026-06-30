@@ -17,6 +17,7 @@ import Store from '@/pages/Store'
 import Sidebar from '@/components/Sidebar'
 import BottomNav from '@/components/BottomNav'
 import OnboardingTour from '@/components/OnboardingTour'
+import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -177,6 +178,7 @@ export default function App({ initialSession }: { initialSession: Session | null
             </main>
             <BottomNav />
             <OnboardingTour />
+            <CollectConceptModal />
           </div>
         </ExamProgressProvider>
       </AuthProvider>

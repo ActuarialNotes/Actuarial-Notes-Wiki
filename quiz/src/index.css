@@ -615,3 +615,129 @@
 .concept-success {
   animation: concept-success 800ms ease-out both;
 }
+
+/* ─── Flashcard collection ──────────────────────────────────────────────────
+   The "collect" flow: a flashy 3D card, an accelerating spin, a full-screen
+   dominant flash, and a glowing drop that flies into the Flashcards tab. */
+
+/* 3D card render (pure CSS, no WebGL) */
+.collect-card-scene {
+  perspective: 1100px;
+}
+.collect-card-3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.collect-card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.1rem;
+  overflow: hidden;
+  backface-visibility: hidden;
+  box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.55), inset 0 0 0 1px rgb(255 255 255 / 0.18);
+}
+/* Glossy diagonal sheen that sweeps across the card */
+.collect-card-sheen {
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.5) 50%, transparent 65%);
+  transform: translateX(-30%);
+  animation: collect-sheen 3.4s ease-in-out infinite;
+}
+@keyframes collect-sheen {
+  0%, 100% { transform: translateX(-40%) rotate(0deg); opacity: 0; }
+  45%      { opacity: 0.9; }
+  60%      { transform: translateX(40%) rotate(0deg); opacity: 0; }
+}
+/* Inset holographic frame */
+.collect-card-frame {
+  position: absolute;
+  inset: 10px;
+  border-radius: 0.8rem;
+  border: 1px solid rgb(255 255 255 / 0.35);
+  box-shadow: inset 0 0 24px rgb(255 255 255 / 0.18);
+  pointer-events: none;
+}
+
+.collect-card-idle {
+  animation: collect-card-float 4s ease-in-out infinite;
+}
+@keyframes collect-card-float {
+  0%, 100% { transform: rotateY(-12deg) rotateX(5deg); }
+  50%      { transform: rotateY(12deg)  rotateX(-3deg); }
+}
+
+/* Spin that visibly accelerates (ease-in) into a fast finish */
+.collect-card-spin {
+  animation: collect-card-spin 1.15s cubic-bezier(0.55, 0, 0.85, 0.4) forwards;
+}
+@keyframes collect-card-spin {
+  0%   { transform: rotateY(0deg)    scale(1); }
+  60%  { transform: rotateY(900deg)  scale(1.06); }
+  100% { transform: rotateY(1800deg) scale(1.18); filter: brightness(1.6); }
+}
+
+.collect-card-won {
+  animation: collect-card-won 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes collect-card-won {
+  0%   { transform: rotateY(0deg) scale(0.6); opacity: 0; }
+  100% { transform: rotateY(0deg) scale(1);   opacity: 1; }
+}
+
+/* Whole-screen dominant flash — --foreground is near-white in dark mode and
+   near-black in light mode, giving the high-contrast "light up" the brief asks
+   for in either theme. */
+.collect-screen-flash {
+  background: hsl(var(--foreground));
+  animation: collect-screen-flash 700ms ease-out forwards;
+}
+@keyframes collect-screen-flash {
+  0%   { opacity: 0; }
+  30%  { opacity: 0.96; }
+  100% { opacity: 0.82; }
+}
+
+/* Distilled drop that flies to the Flashcards tab */
+.collect-drop-core {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #ffffff, hsl(var(--primary)) 70%);
+  box-shadow: 0 0 22px 8px hsl(var(--primary) / 0.7), 0 0 60px 20px hsl(var(--primary) / 0.35);
+  animation: collect-drop-pulse 0.85s ease-in-out infinite;
+}
+@keyframes collect-drop-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.18); }
+}
+
+.collect-shake {
+  animation: collect-shake 0.4s ease-in-out;
+}
+@keyframes collect-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+/* Flashcards nav item lights up when a collected drop lands */
+.flashcard-nav-glow {
+  animation: flashcard-nav-glow 1.5s ease-out;
+}
+@keyframes flashcard-nav-glow {
+  0%   { color: hsl(var(--primary)); filter: drop-shadow(0 0 0 hsl(var(--primary))); transform: scale(1); }
+  25%  { color: hsl(var(--primary)); filter: drop-shadow(0 0 10px hsl(var(--primary) / 0.9)); transform: scale(1.22); }
+  60%  { transform: scale(1); }
+  100% { filter: drop-shadow(0 0 0 transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collect-card-spin, .collect-card-idle, .collect-card-sheen,
+  .collect-screen-flash, .collect-drop-core, .collect-shake,
+  .flashcard-nav-glow { animation: none; }
+}

@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useFlashcards } from '@/hooks/useFlashcards'
+import { COLLECTED_EVENT } from '@/hooks/useCollectedCards'
 import { useGems } from '@/hooks/useGems'
 import { getDailyQuizStats, DAILY_QUIZ_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
@@ -63,9 +64,10 @@ type ItemProps = {
   badge?: React.ReactNode
   forceActive?: boolean
   dataTour?: string
+  dataFlashcardNav?: boolean
 }
 
-function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge, forceActive, dataTour }: ItemProps) {
+function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, badge, forceActive, dataTour, dataFlashcardNav }: ItemProps) {
   const base =
     'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors'
   const inactive = 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
@@ -97,6 +99,7 @@ function SidebarItem({ to, label, icon, collapsed, external, end, onNavigate, ba
       className={({ isActive }) => `${base} ${(isActive || forceActive) ? active : inactive}`}
       onClick={onNavigate}
       data-tour={dataTour}
+      data-flashcard-nav={dataFlashcardNav ? '' : undefined}
     >
       <span className="flex h-5 w-5 shrink-0 items-center justify-center">{icon}</span>
       <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''}`}>{label}</span>
@@ -252,6 +255,14 @@ export default function Sidebar() {
   })
   const { cards } = useFlashcards()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
+  const [collectGlow, setCollectGlow] = useState(0)
+
+  // Light up the Flashcards item whenever a card is collected.
+  useEffect(() => {
+    const onCollected = () => setCollectGlow(k => k + 1)
+    window.addEventListener(COLLECTED_EVENT, onCollected)
+    return () => window.removeEventListener(COLLECTED_EVENT, onCollected)
+  }, [])
 
   // Keep daily quiz stats fresh after each quiz completion.
   useEffect(() => {
@@ -527,10 +538,11 @@ export default function Sidebar() {
           <SidebarItem
             to="/flashcards"
             label="Flashcards"
-            icon={<Layers className="h-4 w-4" />}
+            icon={<Layers key={collectGlow} className={`h-4 w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />}
             collapsed={collapsed}
             onNavigate={closeMobile}
             badge={flashcardBadge}
+            dataFlashcardNav
           />
           <SidebarItem
             to="/"

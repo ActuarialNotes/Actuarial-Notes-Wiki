@@ -1,11 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Lightbulb, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Lightbulb, Loader2, Lock, Unlock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useFlashcards } from '@/hooks/useFlashcards'
+import { useCollect } from '@/hooks/useCollect'
+import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
@@ -33,6 +35,8 @@ const MASTERY_PILL: Partial<Record<MasteryState, { label: string; className: str
 export function ConceptPopup() {
   const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const { addCard, hasCard, cards } = useFlashcards()
+  const openCollect = useCollect(s => s.open)
+  const collectedCards = useCollectedCards(s => s.cards)
   const [conceptQuestionCount, setConceptQuestionCount] = useState<number | null>(null)
   const location = useLocation()
   const routerNavigate = useNavigate()
@@ -306,6 +310,26 @@ export function ConceptPopup() {
               {MASTERY_PILL[masteryState]!.label}
             </button>
           )}
+          {/* Collect lock — first step to actively learning this concept. Sits
+              immediately before the play/action button (per design). */}
+          {current.kind === 'concept' && (() => {
+            const collected = collectedCards.some(c => c.name.toLowerCase() === current.name.toLowerCase())
+            return (
+              <button
+                type="button"
+                onClick={() => openCollect(current)}
+                className={`inline-flex items-center justify-center h-8 w-8 rounded-md border shrink-0 transition-colors ${
+                  collected
+                    ? 'border-emerald-500/60 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                    : 'bg-background hover:bg-accent text-foreground'
+                }`}
+                title={collected ? 'Collected — view collection' : 'Collect this flashcard'}
+                aria-label={collected ? `${current.name} collected` : `Collect ${current.name}`}
+              >
+                {collected ? <Unlock className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+              </button>
+            )
+          })()}
           {/* Play button + mini menu — immediately right of the concept name */}
           <div className="relative shrink-0" ref={playMenuRef}>
           <button

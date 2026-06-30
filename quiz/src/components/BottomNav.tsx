@@ -3,6 +3,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, GraduationCap, Layers, LayoutDashboard, Microscope, Play } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { COLLECTED_EVENT } from '@/hooks/useCollectedCards'
 
 function getLastWikiPath(): string {
   try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
@@ -19,6 +20,14 @@ export default function BottomNav() {
   const navigate = useNavigate()
   const location = useLocation()
   const [studyGuidesOpen, setStudyGuidesOpen] = useState(false)
+  const [collectGlow, setCollectGlow] = useState(0)
+
+  // Light up the Flashcards tab whenever a card is collected.
+  useEffect(() => {
+    const onCollected = () => setCollectGlow(k => k + 1)
+    window.addEventListener(COLLECTED_EVENT, onCollected)
+    return () => window.removeEventListener(COLLECTED_EVENT, onCollected)
+  }, [])
 
   const profileName =
     (user?.user_metadata?.full_name as string | undefined) ||
@@ -108,12 +117,14 @@ export default function BottomNav() {
 
         {items.map(item => {
           const Icon = item.icon
+          const isFlashcards = item.to === '/flashcards'
           return (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
               data-tour={item.to === '/' ? 'nav-quiz' : undefined}
+              data-flashcard-nav={isFlashcards ? '' : undefined}
               className={({ isActive }) =>
                 `flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors ${
                   isActive
@@ -122,7 +133,10 @@ export default function BottomNav() {
                 }`
               }
             >
-              <Icon className="h-5 w-5 shrink-0" />
+              <Icon
+                key={isFlashcards ? collectGlow : undefined}
+                className={`h-5 w-5 shrink-0 ${isFlashcards && collectGlow > 0 ? 'flashcard-nav-glow' : ''}`}
+              />
               <span className="text-[10px] font-medium">{item.label}</span>
             </NavLink>
           )

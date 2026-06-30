@@ -92,7 +92,7 @@ export function HeatmapInfoPanel({ open, onClose }: Props) {
   if (!open) return null
 
   const total = SLIDES.length
-  const { Icon, title, Content } = SLIDES[slide]
+  const { Icon, title } = SLIDES[slide]
   const prev = () => setSlide(s => Math.max(0, s - 1))
   const next = () => setSlide(s => Math.min(total - 1, s + 1))
 
@@ -119,16 +119,27 @@ export function HeatmapInfoPanel({ open, onClose }: Props) {
           </button>
         </div>
 
-        {/* Slide content */}
+        {/* Slide content: all slides stacked in the same grid cell so the
+            container always sizes to the tallest slide, keeping the footer
+            buttons from shifting as the user navigates. */}
         <div
-          className="p-5 text-sm leading-relaxed"
+          className="grid p-5 text-sm leading-relaxed"
           onTouchStart={e => setTouchStart(e.touches[0].clientX)}
           onTouchEnd={e => {
             const diff = touchStart - e.changedTouches[0].clientX
             if (Math.abs(diff) > 40) { diff > 0 ? next() : prev() }
           }}
         >
-          <Content />
+          {SLIDES.map(({ Content: SlideContent }, i) => (
+            <div
+              key={i}
+              className="col-start-1 row-start-1"
+              style={i === slide ? undefined : { visibility: 'hidden', pointerEvents: 'none' }}
+              aria-hidden={i === slide ? undefined : true}
+            >
+              <SlideContent />
+            </div>
+          ))}
         </div>
 
         {/* Footer: prev / dots / next-or-got-it */}
@@ -137,10 +148,10 @@ export function HeatmapInfoPanel({ open, onClose }: Props) {
             type="button"
             onClick={prev}
             disabled={slide === 0}
-            className="p-2.5 rounded-md text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors hover:bg-muted/50"
+            className="p-2.5 rounded-full border bg-muted/40 text-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted/40 transition-colors shadow-sm"
             aria-label="Previous"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-5 w-5" />
           </button>
           <div className="flex gap-1.5 items-center">
             {Array.from({ length: total }).map((_, i) => (
@@ -157,10 +168,10 @@ export function HeatmapInfoPanel({ open, onClose }: Props) {
             <button
               type="button"
               onClick={next}
-              className="p-2.5 rounded-md text-muted-foreground hover:text-foreground transition-colors hover:bg-muted/50"
+              className="p-2.5 rounded-full border bg-muted/40 text-foreground hover:bg-muted transition-colors shadow-sm"
               aria-label="Next"
             >
-              <ChevronRight className="h-6 w-6" />
+              <ChevronRight className="h-5 w-5" />
             </button>
           ) : (
             <button

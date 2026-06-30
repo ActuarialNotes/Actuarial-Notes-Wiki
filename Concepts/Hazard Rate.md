@@ -5,7 +5,7 @@ The **Hazard Rate** $\mu(t)$ (also called the **force of mortality** in life con
 > $$S(t) = \exp\!\left(-\int_0^t \mu(s)\,ds\right)$$
 
 - Also written $h(t)$ or $\lambda(t)$ depending on context; in life tables it is $\mu_x$
-- A **constant** hazard rate $\mu(t) = \mu$ corresponds to the [[Exponential]] distribution: $S(t) = e^{-\mu t}$
+- A **constant** hazard rate $\mu(t) = \mu$ corresponds to the [[Exponential Distribution|Exponential]] distribution: $S(t) = e^{-\mu t}$
 - The **cumulative hazard function** $H(t) = \int_0^t \mu(s)\,ds = -\ln S(t)$
 - An **increasing** hazard rate indicates aging (e.g., Weibull with shape $> 1$)
 - A **decreasing** hazard rate indicates infant-mortality effects (Weibull with shape $< 1$)

@@ -1,4 +1,4 @@
-The **Hypergeometric Distribution** models the number of successes in a sample of size $n$ drawn **without replacement** from a finite population of $N$ items, $K$ of which are successes. Unlike the [[Binomial]], trials are not independent.
+The **Hypergeometric Distribution** models the number of successes in a sample of size $n$ drawn **without replacement** from a finite population of $N$ items, $K$ of which are successes. Unlike the [[Binomial Distribution|Binomial]], trials are not independent.
 
 > $$P(X = k) = \frac{\dbinom{K}{k}\dbinom{N-K}{n-k}}{\dbinom{N}{n}}$$
 >

@@ -1,6 +1,8 @@
 The **Power Set** $\mathcal{P}(S)$ of a set $S$ is the set of all subsets of $S$, including the empty set $\varnothing$ and $S$ itself. It is the building block for defining the collection of [[Event]]s on a [[Sample Space]] in [[Set Theory]].
 
-> $$\mathcal{P}(S) = \{\, A : A \subseteq S \,\}, \qquad |\mathcal{P}(S)| = 2^{|S|}$$
+> $$\mathcal{P}(S) = \{\, A : A \subseteq S \,\}$$
+>
+> $$|\mathcal{P}(S)| = 2^{|S|}$$
 
 - The cardinality $|\mathcal{P}(S)| = 2^{n}$ for a finite set with $n = |S|$ elements, because each element is independently either in or out of a given subset.
 - It always contains both the empty set $\varnothing$ and the full set $S$.

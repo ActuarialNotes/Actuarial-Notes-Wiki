@@ -60,16 +60,34 @@ term. (A handful of older non-P/FM pages have frontmatter; do not copy that.)
 - **Put the formula immediately after the definition, before any property
   bullets.** This is the single most common inconsistency to fix on existing
   pages.
-- **One formula = one `> $$` block.** Don't fragment a single formula into a
-  stack of separate `> $$` blockquotes. Use `cases`, `aligned`, or `align*`
-  *inside one block* for piecewise or multi-line definitions:
+- **Keep each block mobile-readable — narrow, not wide.** Pages are read on
+  phones; a block that is too wide gets cut off or shrunk to illegibility. This
+  is the governing constraint and it overrides "consolidate everything."
+- **One *expression* per block; never place two formulas side by side.** Do not
+  join distinct equations on one line with `\qquad`, `,\quad`, or similar
+  horizontal spacing (e.g. `$$\mathcal{P}(S)=\{A:A\subseteq S\}, \qquad |\mathcal{P}(S)|=2^{|S|}$$`).
+  Split them into separate stacked `> $$` blocks instead:
+
+  ```markdown
+  > $$\mathcal{P}(S) = \{\, A : A \subseteq S \,\}$$
+  >
+  > $$|\mathcal{P}(S)| = 2^{|S|}$$
+  ```
+
+- **A single formula stays in one block.** Use `cases`, `aligned`, or `align*`
+  *inside one block* for a piecewise definition or a derivation that is one
+  logical statement — these stack *vertically*, so they stay narrow:
 
   ```markdown
   > $$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)} \end{cases}$$
   ```
 
-- It is fine to have a **second** `> $$` block for a genuinely distinct formula
-  (e.g. PMF in one block, then `E[X]` and `Var(X)` in another).
+  The rule of thumb: **stack vertically (more blocks or more `\\` lines), never
+  spread horizontally.** If a single line is still too long to fit a phone,
+  break it across `\\` lines (e.g. at an `=` or a `+`).
+- Use separate `> $$` blocks for genuinely distinct formulas (e.g. PMF in one
+  block, then `E[X]` and `Var(X)` each in their own block rather than on one
+  wide line).
 - Define every symbol that appears. Prefer defining symbols in a bullet right
   after the block (`- where $\lambda > 0$ is the average event rate`) over
   cramming `\text{where ...}` lines inside the math.
@@ -177,7 +195,7 @@ The app renders with `remark-math` + `rehype-katex`; pages are read on phones.
 - [ ] Starts with `**Term**` + definition; no frontmatter
 - [ ] Definition is 1–2 precise sentences with relevant `[[wiki-links]]`
 - [ ] Defining formula is in a `> $$` block **immediately after** the definition
-- [ ] A single formula isn't split across multiple `> $$` blocks (use `cases`/`aligned`)
+- [ ] Each `> $$` block is mobile-narrow: no two formulas side-by-side via `\qquad`/`\quad`; distinct formulas in separate stacked blocks; long lines broken across `\\`
 - [ ] Distributions include PMF/PDF **and** mean/variance
 - [ ] Every symbol in the formula is defined (prose/bullet, not crammed `\text{where}`)
 - [ ] Property bullets come **after** the formula, before the examples

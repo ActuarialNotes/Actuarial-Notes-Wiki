@@ -1,6 +1,6 @@
 The **Law of Large Numbers (LLN)** states that the sample mean $\bar{X}_n$ of $n$ independent and identically distributed [[Random Variable]]s with finite mean $\mu$ converges to $\mu$ as the sample size grows. It is the formal reason risk pooling works: the average loss per policy becomes predictable as an insurer writes more independent policies.
 
-> $$\bar{X}_n = \frac{1}{n}\sum_{i=1}^{n} X_i \;\xrightarrow[n\to\infty]{}\; \mu = E[X_i]$$
+> $$\bar{X}_n = \frac{1}{n}\sum_{i=1}^{n} X_i \;\xrightarrow[n\to\infty]{}\; \mu$$
 
 - **Weak LLN:** for any tolerance $\epsilon > 0$, $\ P\!\left(\,|\bar{X}_n - \mu| > \epsilon\,\right) \to 0$ as $n \to \infty$ — the sample mean is increasingly likely to land near $\mu$.
 - It requires the $X_i$ to be i.i.d. with finite mean $\mu$; the standard proof also assumes finite variance $\sigma^2$ and applies Chebyshev's inequality to $\bar{X}_n$, which has $\text{Var}(\bar{X}_n) = \sigma^2/n$.

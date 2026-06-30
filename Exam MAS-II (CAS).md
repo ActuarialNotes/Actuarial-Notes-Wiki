@@ -28,7 +28,7 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > 1. Understand the assumptions behind the [[Linear Mixed Model]] design
 > 2. Understand how to use a [[Hierarchical Model]]
 > 3. Interpret output from a [[Linear Mixed Model]] and make appropriate choices when evaluating modeling options
-> 4. Interpret linear mixed model diagnostics and summary statistics to evaluate the model structure and variable selection
+> 4. Interpret linear mixed model diagnostics and summary statistics to evaluate the [[Model Structure|model structure]] and [[Variable Selection|variable selection]]
 > 
 > **Readings:** West
 

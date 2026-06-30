@@ -39,16 +39,16 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 
 > [!example]- C. Extended Linear Models {45–55%}
 > 
-> Candidates should be able to solve problems using extended linear models and determine when these models are appropriate to use.
+> Candidates should be able to solve problems using [[Extended Linear Model|extended linear models]] and determine when these models are appropriate to use.
 > 
 > 10. Select the appropriate model for an extended linear model
-> 11. Select the appropriate model structure for an extended linear model given the behavior of the data set (e.g., appropriate [[Link Function]] and distribution for the dependent variable for [[Generalized Linear Model]])
+> 11. Select the appropriate [[Model Structure|model structure]] for an extended linear model given the behavior of the data set (e.g., appropriate [[Link Function]] and distribution for the dependent variable for [[Generalized Linear Model]])
 > 12. Evaluate models developed using an extended linear model approach
 > 13. Interpret the extended linear model output from statistical software, such as [[Parameter Estimate Tables|parameter estimate tables]] and [[ANOVA]] tables
-> 14. Distinguish among categorical, ordinal, and continuous predictors and their interactions, and how these relate to their usage in an extended linear model
-> 15. Understand and apply control and offset variables in [[Generalized Linear Model]]s
+> 14. Distinguish among [[Categorical Predictor|categorical, ordinal, and continuous predictors]] and their [[Interaction|interactions]], and how these relate to their usage in an extended linear model
+> 15. Understand and apply [[Control Variable|control]] and [[Offset Variable|offset]] variables in [[Generalized Linear Model]]s
 > 16. Understand and calculate [[AIC]], [[BIC]], [[Deviance]], and [[R-Squared]]
-> 17. Analyze model diagnostic plots (e.g., [[Residual Plot]]s, marginal model, [[QQ Plot]]s, and added variable plots) to assess quality of fit
+> 17. Analyze model diagnostic plots (e.g., [[Residual Plot]]s, [[Marginal Model Plot|marginal model]], [[QQ Plot]]s, and [[Added Variable Plot|added variable plots]]) to assess quality of fit
 > 18. Interpret [[Exploratory Data Analysis]] plots for various data types (e.g., box plots, univariate plots, histograms)
 > 
 > **Readings:** Dobson and Barnett · Hogg, McKean, and Craig · James et al. · Larsen

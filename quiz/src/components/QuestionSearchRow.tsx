@@ -13,16 +13,16 @@ interface QuestionSearchRowProps {
 
 function highlightStem(text: string, query: string): React.ReactNode {
   const q = query.trim()
-  if (!q) return text
+  if (!q) return <LatexText>{text}</LatexText>
   const idx = text.toLowerCase().indexOf(q.toLowerCase())
-  if (idx < 0) return text
+  if (idx < 0) return <LatexText>{text}</LatexText>
   return (
     <>
-      {text.slice(0, idx)}
+      <LatexText>{text.slice(0, idx)}</LatexText>
       <mark className="bg-primary/20 text-foreground rounded px-0.5">
         {text.slice(idx, idx + q.length)}
       </mark>
-      {text.slice(idx + q.length)}
+      <LatexText>{text.slice(idx + q.length)}</LatexText>
     </>
   )
 }

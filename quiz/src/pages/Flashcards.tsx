@@ -2125,7 +2125,11 @@ export default function Flashcards() {
       )}
 
       {/* Fixed controls footer — always at bottom, above mobile nav */}
-      <div className={`fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 ${focusMode ? 'z-[57]' : 'z-[46]'}`}>
+      <div
+        className={`fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
+          focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
+        }`}
+      >
         {/* Gallery strip conveyor — only in study mode */}
         {!galleryExpanded && (
           <div className="border-t bg-background px-4">

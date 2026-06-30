@@ -275,13 +275,18 @@ export default function Sidebar() {
     }
   }, [])
 
+  // Re-keyed on every collect so the pop+glow animation replays each time the
+  // count ticks up, mirroring the gem-balance celebration below.
   const flashcardBadge = useMemo(() =>
     cards.length > 0 ? (
-      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
+      <span
+        key={collectGlow}
+        className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
+      >
         {cards.length}
       </span>
     ) : null,
-  [cards.length])
+  [cards.length, collectGlow])
 
   const quizBadge = useMemo(() =>
     dailyQuizStats.total > 0 ? (
@@ -538,7 +543,22 @@ export default function Sidebar() {
           <SidebarItem
             to="/flashcards"
             label="Flashcards"
-            icon={<Layers key={collectGlow} className={`h-4 w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />}
+            icon={
+              <span className="relative inline-flex items-center justify-center">
+                {collectGlow > 0 && <span key={collectGlow} className="flashcard-nav-ring" aria-hidden="true" />}
+                <Layers key={collectGlow} className={`h-4 w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
+                {/* Collapsed sidebar hides the row badge, so mirror the count as a
+                    corner badge on the icon itself when icon-only. */}
+                {collapsed && cards.length > 0 && (
+                  <span
+                    key={`count-${collectGlow}`}
+                    className={`hidden lg:flex absolute -top-1.5 -right-2 h-3.5 min-w-[0.875rem] items-center justify-center rounded-full bg-primary px-[3px] text-[9px] font-bold leading-none text-primary-foreground tabular-nums ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
+                  >
+                    {cards.length}
+                  </span>
+                )}
+              </span>
+            }
             collapsed={collapsed}
             onNavigate={closeMobile}
             badge={flashcardBadge}

@@ -4,6 +4,7 @@ import { BookOpen, GraduationCap, Layers, LayoutDashboard, Microscope, Play } fr
 import { useAuth } from '@/hooks/useAuth'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { COLLECTED_EVENT } from '@/hooks/useCollectedCards'
+import { useFlashcards } from '@/hooks/useFlashcards'
 
 function getLastWikiPath(): string {
   try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
@@ -19,6 +20,7 @@ export default function BottomNav() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const { cards } = useFlashcards()
   const [studyGuidesOpen, setStudyGuidesOpen] = useState(false)
   const [collectGlow, setCollectGlow] = useState(0)
 
@@ -133,10 +135,23 @@ export default function BottomNav() {
                 }`
               }
             >
-              <Icon
-                key={isFlashcards ? collectGlow : undefined}
-                className={`h-5 w-5 shrink-0 ${isFlashcards && collectGlow > 0 ? 'flashcard-nav-glow' : ''}`}
-              />
+              <span className="relative inline-flex items-center justify-center">
+                {isFlashcards && collectGlow > 0 && (
+                  <span key={collectGlow} className="flashcard-nav-ring" aria-hidden="true" />
+                )}
+                <Icon
+                  key={isFlashcards ? collectGlow : undefined}
+                  className={`h-5 w-5 shrink-0 ${isFlashcards && collectGlow > 0 ? 'flashcard-nav-glow' : ''}`}
+                />
+                {isFlashcards && cards.length > 0 && (
+                  <span
+                    key={`count-${collectGlow}`}
+                    className={`absolute -top-1 -right-2 flex h-3.5 min-w-[0.875rem] items-center justify-center rounded-full bg-primary px-[3px] text-[9px] font-bold leading-none text-primary-foreground tabular-nums ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
+                  >
+                    {cards.length}
+                  </span>
+                )}
+              </span>
               <span className="text-[10px] font-medium">{item.label}</span>
             </NavLink>
           )

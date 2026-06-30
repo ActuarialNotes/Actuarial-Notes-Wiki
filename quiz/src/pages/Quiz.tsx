@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import type { Question, QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState } from '@/lib/mastery'
+import { useCollectedCards } from '@/hooks/useCollectedCards'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { slugForLink } from '@/lib/conceptMatch'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
@@ -42,7 +43,8 @@ function computeLevelUps(
       ? { ...existing, state: sanitizeMasteryState(existing.state) }
       : emptyRecord('', examId, slug)
     const decayed = decayIfStale(prev, now)
-    const next = applyAnswer(decayed, { isCorrect: true, isHard, at: now })
+    const collected = useCollectedCards.getState().isCollected(slug)
+    const next = applyAnswer(decayed, { isCorrect: true, isHard, at: now, collected })
     if (next.state !== decayed.state && (next.state === 'level1' || next.state === 'level2' || next.state === 'level3')) {
       notices.push({ conceptSlug: slug, from: decayed.state, to: next.state })
     }

@@ -18,12 +18,15 @@ import {
   Layers,
   Lightbulb,
   Loader2,
+  Lock,
   Maximize2,
   Play,
   Sigma,
+  Sparkles,
   Target,
   Trash2,
   TrendingUp,
+  Unlock,
   X,
 } from 'lucide-react'
 import {
@@ -43,6 +46,8 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useFlashcards, type FlashCard } from '@/hooks/useFlashcards'
+import { useCollectedCards } from '@/hooks/useCollectedCards'
+import { useCollect } from '@/hooks/useCollect'
 import { useAuth } from '@/hooks/useAuth'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -253,6 +258,13 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, targetDates, examVariants } = useExamProgress()
   const { addCard, hasCard, savedPacks, deleteSavedPack } = useFlashcards()
+  const collectedCards = useCollectedCards(s => s.cards)
+  const openCollect = useCollect(s => s.open)
+  const collectedSet = useMemo(
+    () => new Set(collectedCards.map(c => c.name.toLowerCase())),
+    [collectedCards],
+  )
+  const isCollected = (name: string) => collectedSet.has(name.toLowerCase())
 
   const [collapsed, setCollapsed] = useState(false)
   const [selectedPackId, setSelectedPackId] = useState<string | null>(null)
@@ -357,9 +369,25 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
     if (toAdd.length > 0) onCardsAdded?.()
   }
 
+  function packConceptsFor(pack: FlashcardPack): string[] {
+    return pack.type === 'study_plan' ? studyPlanConcepts : pack.concepts
+  }
+
   function packCounts(pack: FlashcardPack): { inGallery: number; total: number } {
-    const concepts = pack.type === 'study_plan' ? studyPlanConcepts : pack.concepts
+    const concepts = packConceptsFor(pack)
     return { inGallery: concepts.filter(n => hasCard(n)).length, total: concepts.length }
+  }
+
+  function packCollected(pack: FlashcardPack): { collected: number; total: number } {
+    const concepts = packConceptsFor(pack)
+    return { collected: concepts.filter(n => isCollected(n)).length, total: concepts.length }
+  }
+
+  // Open the collect flow for the first not-yet-collected concept in a pack —
+  // the "collect from the Flashcards tab" pathway.
+  function collectNext(pack: FlashcardPack) {
+    const next = packConceptsFor(pack).find(n => !isCollected(n))
+    if (next) openCollect({ kind: 'concept', name: next })
   }
 
   const isLoading = planLoading || masteryLoading || syllabiLoading
@@ -377,11 +405,16 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
         className="flex items-center justify-between px-4 py-3.5 cursor-pointer hover:bg-accent/40 transition-colors rounded-lg"
         aria-expanded={!collapsed}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           <Layers className="h-4 w-4 text-primary shrink-0" />
           <span className="font-medium text-sm">Flashcard Packs</span>
           {packs.length > 0 && (
-            <span className="text-sm text-muted-foreground">{packs.length} pack{packs.length === 1 ? '' : 's'}</span>
+            <span className="text-sm text-muted-foreground shrink-0">{packs.length} pack{packs.length === 1 ? '' : 's'}</span>
+          )}
+          {collectedCards.length > 0 && (
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 shrink-0">
+              <Unlock className="h-3 w-3" /> {collectedCards.length} collected
+            </span>
           )}
         </div>
         <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
@@ -395,17 +428,17 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
               <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading packs…
             </div>
           ) : (
-            <div
-              className="flex items-stretch gap-2 overflow-x-auto pb-1"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
               {packs.map(pack => {
                 const { inGallery, total } = packCounts(pack)
+                const { collected } = packCollected(pack)
                 const isSelected = pack.id === selectedPackId
                 const isLO = pack.type === 'learning_objective'
                 const isStudyPlan = pack.type === 'study_plan'
                 const palette = !isStudyPlan ? PACK_COLOR_PALETTE[pack.colorIndex ?? 0] : null
                 const isSaved = pack.type === 'saved'
+                const fullyCollected = total > 0 && collected === total
+                const collectedPct = total > 0 ? Math.round((collected / total) * 100) : 0
                 const cardCls = isStudyPlan
                   ? (isSelected ? `${STUDY_PLAN_COLOR.selCard} ${STUDY_PLAN_COLOR.selText}` : `${STUDY_PLAN_COLOR.card} ${STUDY_PLAN_COLOR.cardText}`)
                   : isSaved
@@ -428,11 +461,18 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
                       ? (isSelected ? palette!.selSub : palette!.loCardSub)
                       : (isSelected ? palette!.selSub : palette!.cardSub)
                 return (
-                  <div key={pack.id} className="relative shrink-0 group/chip">
+                  <div
+                    key={pack.id}
+                    className={`relative group/chip rounded-xl overflow-hidden border transition-all ${
+                      fullyCollected
+                        ? 'border-amber-400/70 ring-1 ring-amber-400/50 collect-pack-complete'
+                        : 'border-transparent'
+                    }`}
+                  >
                     <button
                       type="button"
                       onClick={() => setSelectedPackId(prev => prev === pack.id ? null : pack.id)}
-                      className={`flex flex-col items-start gap-1 px-3.5 py-3 rounded-xl text-left transition-colors min-w-[130px] max-w-[175px] w-full h-full ${isSaved ? 'pr-7' : ''} ${cardCls}`}
+                      className={`flex flex-col items-start gap-1.5 px-3 py-3 text-left transition-colors w-full h-full ${isSaved ? 'pr-7' : ''} ${cardCls}`}
                     >
                       <div className="flex items-center gap-1.5 w-full">
                         {pack.type === 'study_plan' && (
@@ -448,18 +488,52 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
                           <LayoutGrid className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
                         )}
                         <span className="text-xs font-semibold truncate flex-1 min-w-0">{pack.label}</span>
+                        {fullyCollected && (
+                          <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300">
+                            <Sparkles className="h-3.5 w-3.5" />
+                          </span>
+                        )}
                       </div>
                       {pack.sublabel && (
                         <span className={`text-[11px] truncate w-full ${subCls}`}>
                           {pack.sublabel}
                         </span>
                       )}
-                      {(total > 0 || pack.type !== 'study_plan') && (
-                        <span className={`text-[11px] tabular-nums ${subCls}`}>
-                          {isLoading && pack.type === 'study_plan' ? '…' : `${inGallery}/${total} added`}
+
+                      {/* Collected progress — the elevated status of a pack */}
+                      <div className="w-full mt-0.5 space-y-1">
+                        <div className={`flex items-center justify-between text-[11px] tabular-nums ${subCls}`}>
+                          <span className="inline-flex items-center gap-1">
+                            {fullyCollected
+                              ? <Unlock className="h-3 w-3" />
+                              : <Lock className="h-3 w-3" />}
+                            {isLoading && pack.type === 'study_plan' ? '…' : `${collected}/${total} collected`}
+                          </span>
+                        </div>
+                        <div className="h-1.5 w-full rounded-full bg-current/15 overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-current transition-all"
+                            style={{ width: `${collectedPct}%` }}
+                          />
+                        </div>
+                        <span className={`text-[10px] tabular-nums ${subCls}`}>
+                          {inGallery}/{total} in gallery
                         </span>
-                      )}
+                      </div>
                     </button>
+
+                    {/* Collect pathway — collect the next uncollected concept */}
+                    {!fullyCollected && total > 0 && !(isLoading && pack.type === 'study_plan') && (
+                      <button
+                        type="button"
+                        onClick={() => collectNext(pack)}
+                        className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-md bg-background/90 backdrop-blur px-2 py-1 text-[10px] font-semibold text-foreground border shadow-sm opacity-0 group-hover/chip:opacity-100 focus:opacity-100 transition-opacity"
+                        aria-label={`Collect next concept in ${pack.label}`}
+                      >
+                        <Lock className="h-2.5 w-2.5" /> Collect
+                      </button>
+                    )}
+
                     {isSaved && (
                       <button
                         type="button"
@@ -572,6 +646,19 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
                             {added && (
                               <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In gallery</span>
                             )}
+                            <button
+                              type="button"
+                              onClick={() => openCollect({ kind: 'concept', name })}
+                              title={isCollected(name) ? 'Collected' : 'Collect this flashcard'}
+                              aria-label={isCollected(name) ? `${name} collected` : `Collect ${name}`}
+                              className={`shrink-0 h-6 w-6 rounded-md flex items-center justify-center transition-colors ${
+                                isCollected(name)
+                                  ? 'text-emerald-600 dark:text-emerald-400'
+                                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                              }`}
+                            >
+                              {isCollected(name) ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
+                            </button>
                           </li>
                         )
                       })}

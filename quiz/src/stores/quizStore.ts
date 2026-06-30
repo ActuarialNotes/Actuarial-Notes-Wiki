@@ -7,6 +7,18 @@ import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dailyProgressStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
+import { useCollectedCards } from '@/hooks/useCollectedCards'
+
+// A concept must be collected (comprehension check passed) before a correct
+// answer can advance it from 'new' to level1. Read straight from the collected
+// store so this works outside React (the quiz store is a plain module).
+function isConceptCollected(conceptName: string): boolean {
+  try {
+    return useCollectedCards.getState().isCollected(conceptName)
+  } catch {
+    return false
+  }
+}
 
 // Resolve a Question's wiki_link[] entries to canonical concept names so that
 // mastery upserts use the same key (concept_slug) regardless of whether the
@@ -103,7 +115,8 @@ async function upsertMasteryFromResponses(
   for (const ev of events) {
     const key = `${ev.examId}::${ev.conceptSlug}`
     const prev = byKey.get(key)!
-    byKey.set(key, applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now }))
+    const collected = isConceptCollected(ev.conceptSlug)
+    byKey.set(key, applyAnswer(prev, { isCorrect: ev.isCorrect, isHard: ev.isHard, at: now, collected }))
   }
 
   const rows = [...byKey.entries()]
@@ -240,7 +253,8 @@ function computeMasteryTransitions(
     for (const conceptSlug of conceptsForQuestion(q)) {
       const key = conceptSlug.toLowerCase()
       const current = simulated.get(key) ?? bySlug.get(key) ?? emptyRecord('', examId, conceptSlug)
-      simulated.set(key, applyAnswer(current, { isCorrect, isHard, at: now }))
+      const collected = isConceptCollected(conceptSlug)
+      simulated.set(key, applyAnswer(current, { isCorrect, isHard, at: now, collected }))
     }
   }
 

@@ -16,8 +16,8 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > 
 > Candidates should understand and be able to calculate credibility-weighted estimates.
 > 
-> 1. Calculate classical ([[Limited Fluctuation Credibility]]), [[Bühlmann Credibility]], [[Bühlmann-Straub Credibility]], and [[Bayesian Credibility]]-weighted estimates for frequency, severity, and aggregate loss
-> 2. Understand the framework used for the classical (limited fluctuation), Bühlmann, Bühlmann-Straub, and Bayesian credibility procedures
+> 1. Calculate classical ([[Limited Fluctuation Credibility]]), [[Bühlmann Credibility]], [[Bühlmann-Straub Credibility]], and [[Bayesian Credibility]]-weighted estimates for [[Frequency|frequency]], [[Severity|severity]], and [[Aggregate Loss Model|aggregate loss]]
+> 2. Understand the framework used for the classical ([[Limited Fluctuation Credibility|limited fluctuation]]), [[Bühlmann Credibility|Bühlmann]], [[Bühlmann-Straub Credibility|Bühlmann-Straub]], and [[Bayesian Credibility|Bayesian]] credibility procedures
 > 
 > **Readings:** Tse
 
@@ -42,7 +42,7 @@ The **Modern Actuarial Statistics II** exam is a 4-hour computer-based exam cove
 > 4. Understand the assumptions underlying different [[Tree Ensemble]] methods and the improvements they can make to decision trees
 > 5. Compute elements of [[Principal Components Analysis]] (PCA) (e.g., loading vectors, variance explained)
 > 6. Interpret [[Principal Components Analysis]] (PCA) software outputs
-> 7. Perform the computations behind [[Clustering]] procedures (e.g., [[K-Means Clustering]], hierarchical clustering)
+> 7. Perform the computations behind [[Clustering]] procedures (e.g., [[K-Means Clustering]], [[Clustering|hierarchical clustering]])
 > 8. Interpret clustering procedure outputs
 > 9. Interpret [[Neural Network]] results
 > 10. Calculate measures of model predictive accuracy (e.g., [[Lift]], [[Gini Index]], [[AUROC]])

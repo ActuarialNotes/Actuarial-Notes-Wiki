@@ -29,7 +29,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 2. Estimate a [[Sufficient Statistic]] for a distribution
 > 3. Test statistical hypotheses, including [[Type I Error]] and [[Type II Error]]
 > 4. Test means and variances using critical values from a [[Sampling Distribution]]
-> 5. Model insurance claim frequency and severity
+> 5. Model insurance claim [[Frequency]] and [[Severity]]
 > 6. Model insurance claims in aggregate using [[Aggregate Loss Model]]s
 > 7. Calculate [[Order Statistics]] of a sample
 > 8. Perform point estimation of statistical parameters using [[Maximum Likelihood Estimation]] (MLE) applying criteria such as [[Consistency]], [[Unbiasedness]], [[Sufficiency]], [[Efficiency]], [[Minimum Variance]], and [[Mean Square Error]] (e.g., accounting for [[Censoring]] and [[Truncation]] in the data)
@@ -44,7 +44,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 10. Select the appropriate model for an extended linear model
 > 11. Select the appropriate model structure for an extended linear model given the behavior of the data set (e.g., appropriate [[Link Function]] and distribution for the dependent variable for [[Generalized Linear Model]])
 > 12. Evaluate models developed using an extended linear model approach
-> 13. Interpret the extended linear model output from statistical software, such as parameter estimate tables and [[ANOVA]] tables
+> 13. Interpret the extended linear model output from statistical software, such as [[Parameter Estimate Tables|parameter estimate tables]] and [[ANOVA]] tables
 > 14. Distinguish among categorical, ordinal, and continuous predictors and their interactions, and how these relate to their usage in an extended linear model
 > 15. Understand and apply control and offset variables in [[Generalized Linear Model]]s
 > 16. Understand and calculate [[AIC]], [[BIC]], [[Deviance]], and [[R-Squared]]

@@ -67,7 +67,7 @@ export function ListenView({ markdown }: Props) {
   return (
     <div>
       {/* Control bar */}
-      <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 -mt-4 px-4 sm:px-6 py-2 mb-3 flex items-center gap-2 border-b bg-card/95 backdrop-blur">
+      <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-3 flex items-center gap-2 border-b bg-card/95 backdrop-blur">
         <button
           type="button"
           onClick={onToggle}

@@ -497,7 +497,7 @@ export function ConceptPopup() {
       <MathViewContext.Provider value={{ active: mathView, enter: () => setMathView(true) }}>
         <div
           ref={bodyRef}
-          className="flex-1 min-h-0 overflow-y-scroll overscroll-contain px-4 sm:px-6 py-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+          className={`flex-1 min-h-0 overflow-y-scroll overscroll-contain px-4 sm:px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] ${listenView ? 'pt-0' : 'pt-4'}`}
         >
           {status === 'loading' && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">

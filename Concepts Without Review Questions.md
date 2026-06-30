@@ -1,6 +1,6 @@
 # Concepts Without Review Questions
 
-> Generated 2026-06-30. **147 of 370 concepts (39.7%)** have at least one linked question.
+> Generated 2026-06-30. **147 of 372 concepts (39.5%)** have at least one linked question.
 
 ## Summary
 
@@ -8,8 +8,8 @@
 |---|---|---|---|
 | Exam P | 50 | 10 | 60 |
 | Exam FM | 80 | 1 | 81 |
-| Other Exams & Topics | 17 | 212 | 229 |
-| **Total** | **147** | **223** | **370** |
+| Other Exams & Topics | 17 | 214 | 231 |
+| **Total** | **147** | **225** | **372** |
 
 ---
 
@@ -96,6 +96,7 @@
 - Commercial Lines Rating
 - Conditional and Marginal Probability Functions
 - Considerations for Implementing Rates
+- Consistency
 - Constraint
 - Correlation
 - Credibility
@@ -114,6 +115,7 @@
 - Discount Function
 - Earned Exposure
 - Earned Premium
+- Efficiency
 - Entropy
 - Expected Loss Method
 - Experience Rating

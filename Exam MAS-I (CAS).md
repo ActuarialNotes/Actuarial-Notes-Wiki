@@ -32,7 +32,7 @@ The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam c
 > 5. Model insurance claim frequency and severity
 > 6. Model insurance claims in aggregate using [[Aggregate Loss Model]]s
 > 7. Calculate [[Order Statistics]] of a sample
-> 8. Perform point estimation of statistical parameters using [[Maximum Likelihood Estimation]] (MLE) applying criteria such as consistency, [[Unbiasedness]], [[Sufficiency]], efficiency, [[Minimum Variance]], and [[Mean Square Error]] (e.g., accounting for censoring and truncation in the data)
+> 8. Perform point estimation of statistical parameters using [[Maximum Likelihood Estimation]] (MLE) applying criteria such as [[Consistency]], [[Unbiasedness]], [[Sufficiency]], [[Efficiency]], [[Minimum Variance]], and [[Mean Square Error]] (e.g., accounting for [[Censoring]] and [[Truncation]] in the data)
 > 9. Adjust calculations for the effect of missing data values, including [[Censoring]] and [[Truncation]]
 > 
 > **Readings:** Hogg, McKean, and Craig · Tse

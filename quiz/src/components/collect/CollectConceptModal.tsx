@@ -176,8 +176,10 @@ export function CollectConceptModal() {
     setPhase('spinning')
     after(1100, () => {
       // 2) The card grows and dissolves into a radial bloom of dominant light.
+      // Matches the 560ms .collect-card-absorb duration so the card finishes
+      // fading out before it unmounts, instead of popping off mid-fade.
       setPhase('flash')
-      after(520, () => {
+      after(560, () => {
         // 3) The light distils into a glowing drop that flies to the Flashcards
         //    tab. Target/offset are baked into CSS custom props so a single
         //    keyframe drives the flight (no cross-frame transition toggling).
@@ -218,8 +220,10 @@ export function CollectConceptModal() {
 
   const inBloom = phase === 'flash' || phase === 'distill'
   // The card stays mounted through the flash so it visibly dissolves into the
-  // bloom rather than cutting out. It's gone by the distil phase.
-  const showCard = phase !== 'distill'
+  // bloom rather than cutting out. Once it's flown off as a drop (distill),
+  // it stays gone for good — it must never reappear once "done", or the card
+  // visibly flashes back into view right after the player watched it fly away.
+  const showCard = phase === 'question' || phase === 'spinning' || phase === 'flash'
   // Drop the modal chrome (border/background/header) once the ceremony starts so
   // only the card + light remain on screen.
   const showChrome = phase === 'question'
@@ -278,7 +282,7 @@ export function CollectConceptModal() {
           <div className={`flex flex-col items-center gap-5 ${showChrome ? 'px-5 py-5' : 'py-5'}`}>
             <CollectCard3D
               name={name}
-              phase={phase === 'spinning' || phase === 'flash' ? 'spin' : phase === 'done' || alreadyCollected ? 'won' : 'idle'}
+              phase={phase === 'spinning' || phase === 'flash' ? 'spin' : alreadyCollected ? 'won' : 'idle'}
               className={phase === 'flash' ? 'collect-card-absorb z-[122]' : ''}
             />
 
@@ -290,12 +294,6 @@ export function CollectConceptModal() {
                 <p className="text-xs text-muted-foreground">
                   You've unlocked this flashcard. Keep studying it in the Flashcards tab.
                 </p>
-              </div>
-            ) : phase === 'done' ? (
-              <div className="flex flex-col items-center gap-2 text-center">
-                <span className="inline-flex items-center gap-1.5 text-base font-bold text-primary">
-                  <Sparkles className="h-5 w-5" /> Collected!
-                </span>
               </div>
             ) : phase === 'spinning' ? (
               <p className="text-sm font-medium text-muted-foreground animate-pulse">Collecting…</p>
@@ -352,6 +350,16 @@ export function CollectConceptModal() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Done: the card has already flown off as a drop — confirm without
+          bringing it back into view. */}
+      {phase === 'done' && (
+        <div className="collect-done-pop relative z-[121] flex flex-col items-center gap-2 text-center">
+          <span className="inline-flex items-center gap-1.5 text-base font-bold text-primary">
+            <Sparkles className="h-5 w-5" /> Collected!
+          </span>
         </div>
       )}
     </div>,

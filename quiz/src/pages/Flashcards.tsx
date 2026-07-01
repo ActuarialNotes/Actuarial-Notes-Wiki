@@ -1833,6 +1833,9 @@ interface FlashcardStudyAreaHandle {
   flip: () => void
 }
 
+const SWIPE_THRESHOLD = 80
+const SWIPE_FLY_DISTANCE = 500
+
 const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   cards: WikiEntryRef[]
   index: number
@@ -1840,6 +1843,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   reverseCardModes: Set<ReverseCardSection>
   onSetModes: (modes: Set<ReverseCardSection>) => void
   defaultFlipped: boolean
+  onNext: () => void
+  onPrev: () => void
+  hasNext: boolean
+  hasPrev: boolean
 }>(function FlashcardStudyArea({
   cards,
   index,
@@ -1847,6 +1854,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   reverseCardModes,
   onSetModes,
   defaultFlipped,
+  onNext,
+  onPrev,
+  hasNext,
+  hasPrev,
 }, ref) {
   const [flipped, setFlipped] = useState(defaultFlipped)
   const [expanded, setExpanded] = useState(false)
@@ -1861,6 +1872,14 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
+
+  // Swipe-to-navigate (mobile touch only — desktop keeps click-to-flip + Prev/Next buttons)
+  const [dragX, setDragX] = useState(0)
+  const [swiping, setSwiping] = useState(false)
+  const [settling, setSettling] = useState(false)
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null)
+  const horizontalLockRef = useRef(false)
+  const dragXRef = useRef(0)
 
   const studyUserAnimal: AnimalType = (() => {
     const raw = studyUser?.user_metadata?.avatar_url as string | undefined
@@ -1885,6 +1904,16 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
       setLoadStatus('idle')
     }
   }, [index, defaultFlipped]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Reset any in-flight swipe state when the displayed card changes
+  useEffect(() => {
+    touchStartRef.current = null
+    horizontalLockRef.current = false
+    dragXRef.current = 0
+    setDragX(0)
+    setSwiping(false)
+    setSettling(false)
+  }, [index])
 
   useEffect(() => {
     function handleOutside(e: MouseEvent) {
@@ -1914,6 +1943,73 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
     }
   }
 
+  function handleTouchStart(e: React.TouchEvent) {
+    if (settling) return
+    // Only the flipped (back) face has nested interactive elements (links,
+    // buttons) — mirrors the onClick guard below so taps on those don't
+    // also start a swipe.
+    if (flipped) {
+      const target = e.target as HTMLElement
+      if (target.closest('a, button, [role="button"], input, select, textarea')) {
+        touchStartRef.current = null
+        return
+      }
+    }
+    const t = e.touches[0]
+    touchStartRef.current = { x: t.clientX, y: t.clientY }
+    horizontalLockRef.current = false
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    const start = touchStartRef.current
+    if (!start || settling) return
+    const t = e.touches[0]
+    const dx = t.clientX - start.x
+    const dy = t.clientY - start.y
+    if (!horizontalLockRef.current) {
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return
+      if (Math.abs(dx) <= Math.abs(dy)) {
+        // Vertical intent — let the page scroll, abandon swipe tracking
+        touchStartRef.current = null
+        return
+      }
+      horizontalLockRef.current = true
+      setSwiping(true)
+    }
+    e.preventDefault()
+    dragXRef.current = dx
+    setDragX(dx)
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (!horizontalLockRef.current) {
+      touchStartRef.current = null
+      return
+    }
+    e.preventDefault()
+    touchStartRef.current = null
+    horizontalLockRef.current = false
+    setSwiping(false)
+
+    const dx = dragXRef.current
+    if (dx <= -SWIPE_THRESHOLD && hasNext) {
+      setSettling(true)
+      dragXRef.current = -SWIPE_FLY_DISTANCE
+      setDragX(-SWIPE_FLY_DISTANCE)
+      setTimeout(() => { onNext(); }, 200)
+    } else if (dx >= SWIPE_THRESHOLD && hasPrev) {
+      setSettling(true)
+      dragXRef.current = SWIPE_FLY_DISTANCE
+      setDragX(SWIPE_FLY_DISTANCE)
+      setTimeout(() => { onPrev(); }, 200)
+    } else {
+      setSettling(true)
+      dragXRef.current = 0
+      setDragX(0)
+      setTimeout(() => setSettling(false), 200)
+    }
+  }
+
   const definition = markdown ? extractFirstParagraph(markdown) : null
   const allEquations = markdown ? extractMathBlockquotes(markdown) : []
   const cardImages = markdown ? extractImages(markdown) : []
@@ -1923,7 +2019,13 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
       {/* Flip card */}
       <div
         data-tour="flip-card"
-        className={`w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer transition-all${flipped ? '' : ' select-none'}${isFlashing ? ' flashcard-highlight' : ''}`}
+        className={`relative w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer${flipped ? '' : ' select-none'}${isFlashing ? ' flashcard-highlight' : ''}`}
+        style={{
+          transform: `translateX(${dragX}px) rotate(${dragX / 20}deg)`,
+          opacity: 1 - Math.min(Math.abs(dragX) / SWIPE_FLY_DISTANCE, 1),
+          transition: settling ? 'transform 200ms ease, opacity 200ms ease' : 'none',
+          touchAction: 'pan-y',
+        }}
         onClick={(e) => {
           if (!flipped) { handleFlip(); return }
           // When showing back: flip only if click wasn't on an interactive element
@@ -1932,11 +2034,27 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
             handleFlip()
           }
         }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         role={flipped ? undefined : 'button'}
         tabIndex={flipped ? undefined : 0}
         aria-label={flipped ? undefined : 'Click to reveal'}
         onKeyDown={e => { if (!flipped && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleFlip() } }}
       >
+        {swiping && Math.abs(dragX) > 20 && (
+          <div
+            className={`pointer-events-none absolute inset-y-0 flex items-center z-10 ${dragX < 0 ? 'right-3' : 'left-3'}`}
+            style={{ opacity: Math.min(Math.abs(dragX) / SWIPE_THRESHOLD, 1) }}
+          >
+            <div className="rounded-full bg-foreground/10 p-2">
+              {dragX < 0
+                ? (hasNext ? <ChevronRight className="h-6 w-6" /> : null)
+                : (hasPrev ? <ChevronLeft className="h-6 w-6" /> : null)}
+            </div>
+          </div>
+        )}
         {!flipped ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 gap-3">
             <span className="text-3xl font-bold text-center leading-tight">{current.name}</span>
@@ -2428,6 +2546,10 @@ export default function Flashcards() {
             reverseCardModes={reverseCardModes}
             onSetModes={setReverseCardModes}
             defaultFlipped={globalFlip}
+            onNext={() => setActiveIndex(i => Math.min(i + 1, orderedCards.length - 1))}
+            onPrev={() => setActiveIndex(i => Math.max(i - 1, 0))}
+            hasNext={activeIndex < orderedCards.length - 1}
+            hasPrev={activeIndex > 0}
           />
         </div>
       </div>

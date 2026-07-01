@@ -797,4 +797,1071 @@ export const COMPREHENSION_CHECKS: Record<string, ComprehensionCheck> = {
     ],
     correctIndex: 0,
   },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  //  EXAM FM (Financial Mathematics) syllabus concepts
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // ─── Time Value of Money ─────────────────────────────────────────────
+
+  'Present Value': {
+    question:
+      "A fixed $1,000 is due in 5 years. If the interest rate used to value it rises from 4% to 6%, what happens to its value today?",
+    // 0: confuses PV with FV (higher rate = more) · 2: treats PV as the nominal amount · 3: mechanical off-by-the-rate error
+    options: [
+      "It rises, since a higher rate earns more interest",
+      "It falls, because future dollars are discounted more heavily",
+      "It stays at $1,000, since that amount is fixed",
+      "It rises by exactly 2%",
+    ],
+    correctIndex: 1,
+  },
+
+  'Current Value': {
+    question:
+      "Cash flows occur at times 0, 3, and 6. To find their value at a reference time of 4, how is each cash flow treated?",
+    // 0: confuses with present value (time 0) · 1: confuses with accumulated/future value (end) · 3: ignores the time value of money
+    options: [
+      "All are discounted back to time 0",
+      "All are accumulated forward to time 6",
+      "Flows before time 4 are accumulated forward and flows after are discounted back to time 4",
+      "All are simply added at face value, ignoring timing",
+    ],
+    correctIndex: 2,
+  },
+
+  'Accumulated Value': {
+    question:
+      "$1,000 is deposited today at 5% effective annual interest. Its value 3 years from now is closest to:",
+    // 1: discounted instead of accumulated · 2: used simple instead of compound interest · 3: ignored interest entirely
+    options: [
+      "$1,157.63",
+      "$863.84",
+      "$1,150.00",
+      "$1,000.00",
+    ],
+    correctIndex: 0,
+  },
+
+  'Interest Rate': {
+    question:
+      "An account grows from $500 to $540 in one year. What is the effective annual interest rate?",
+    // 1: reports the interest amount rather than the rate · 2: mistakes the accumulation factor for the rate · 3: divides by the ending balance instead of the principal
+    options: [
+      "8%",
+      "$40",
+      "108%",
+      "7.4%",
+    ],
+    correctIndex: 0,
+  },
+
+  'Simple Interest': {
+    question:
+      "$1,000 earns 10% simple interest. How much interest accrues during the third year?",
+    // 1: applies compound interest (interest on interest) · 2: partial-compounding misconception · 3: reports cumulative interest instead of one year's
+    options: [
+      "$100 — the same as every year",
+      "$121 — interest itself earns interest, so it grows each year",
+      "$110 — the prior interest is added to principal first",
+      "$300 — the total interest over the three years",
+    ],
+    correctIndex: 0,
+  },
+
+  'Compound Interest': {
+    question:
+      "$1,000 is invested for 2 years. Compared with 10% simple interest, 10% compound interest earns how much more total interest?",
+    // 1: misses that compounding adds interest-on-interest · 2: reverses the direction · 3: grossly overstates the effect
+    options: [
+      "$10 more — from interest earned on the first year's interest",
+      "The same, since the rate is identical",
+      "$10 less, because compounding uses a discounted base",
+      "$100 more, doubling the interest",
+    ],
+    correctIndex: 0,
+  },
+
+  'Accumulation Function': {
+    question:
+      "The accumulation function a(t) gives the time-t value of 1 invested at time 0. Which property must every valid a(t) satisfy?",
+    // 1: confuses starting from zero with starting from one unit · 2: reverses the non-decreasing requirement · 3: mistakes simple interest's form for a universal requirement
+    options: [
+      "a(0) = 1",
+      "a(0) = 0",
+      "a(t) decreases as t increases",
+      "a(t) must be linear in t",
+    ],
+    correctIndex: 0,
+  },
+
+  'Fund Accumulation': {
+    question:
+      "Two $1,000 deposits go into a fund earning 5%, one at the start of the year and one at the end. Versus depositing both at year-end, the year-end fund value is:",
+    // 1: ignores timing / the time value of money · 2: reverses the timing effect · 3: irrelevant condition
+    options: [
+      "Higher, because the earlier deposit earns a year of interest",
+      "The same, since $2,000 is deposited either way",
+      "Lower, because splitting the deposits reduces interest",
+      "Impossible to tell without a withdrawal schedule",
+    ],
+    correctIndex: 0,
+  },
+
+  'Future Value': {
+    question:
+      "A single deposit is left to grow for 10 years. If the interest rate is higher, its value at the end is:",
+    // 1: confuses future value with present value · 2: treats FV as the nominal deposit · 3: invents a spurious condition
+    options: [
+      "Larger — more interest accumulates",
+      "Smaller — a higher rate discounts it more",
+      "Unchanged — the deposit amount is fixed",
+      "Larger only under simple, not compound, interest",
+    ],
+    correctIndex: 0,
+  },
+
+  'Net Present Value': {
+    question:
+      "A project's net present value is exactly $0 at a discount rate of 8%. What does this tell you?",
+    // 1: confuses zero NPV with zero cash flow · 2: ignores discounting · 3: misreads the breakeven point
+    options: [
+      "8% is the project's internal rate of return",
+      "The project produces no cash inflows at all",
+      "The project's total undiscounted profit is zero",
+      "The discount rate must be raised to make the project viable",
+    ],
+    correctIndex: 0,
+  },
+
+  'Discount Factor': {
+    question:
+      "At an effective interest rate of 25%, what is the one-period discount factor v?",
+    // 1: uses 1 − i instead of 1/(1+i) · 2: uses the accumulation factor 1 + i · 3: mistakes the rate itself for the factor
+    options: [
+      "0.80",
+      "0.75",
+      "1.25",
+      "0.25",
+    ],
+    correctIndex: 0,
+  },
+
+  'Discount Rate': {
+    question:
+      "A lender quotes an annual effective discount rate d. Compared with the equivalent effective interest rate i, the value of d is:",
+    // 1: reverses the relationship · 2: conflates the two rates · 3: spurious algebraic relationship
+    options: [
+      "Smaller than i, because the charge is collected up front",
+      "Larger than i, because discounting is more expensive",
+      "Exactly equal to i",
+      "Equal to i², the rate squared",
+    ],
+    correctIndex: 0,
+  },
+
+  'Convertible m-thly': {
+    question:
+      "A nominal rate of 12% convertible monthly means interest is credited each month at what rate?",
+    // 1: treats the nominal annual rate as the monthly rate · 2: ignores the monthly compounding · 3: forgets that compounding raises the effective annual rate above 12%
+    options: [
+      "1% per month, compounding to slightly more than 12% per year",
+      "12% per month",
+      "12% per year, credited once at year-end",
+      "1% per month, compounding to exactly 12% per year",
+    ],
+    correctIndex: 0,
+  },
+
+  'Nominal Interest Rate': {
+    question:
+      "Two accounts each quote a 6% nominal annual rate, but one compounds monthly and the other annually. Which earns more over a year?",
+    // 1: assumes less frequent compounding earns more · 2: treats the nominal rate as the actual earned rate · 3: misunderstands crediting
+    options: [
+      "The monthly-compounding account, because interest is credited more often",
+      "The annual-compounding account, because it applies the full 6% at once",
+      "They earn the same, since both quote 6%",
+      "Neither earns interest until the year ends",
+    ],
+    correctIndex: 0,
+  },
+
+  'Effective Rate': {
+    question:
+      "Rate A is 7.0% compounded annually; Rate B is 6.9% compounded monthly. Which has the higher effective annual rate?",
+    // 1: compares nominal rates directly, ignoring compounding · 2: assumes the frequencies cancel the gap · 3: reverses the compounding effect
+    options: [
+      "Rate B — monthly compounding more than offsets the lower nominal rate",
+      "Rate A, because 7.0% is the larger stated rate",
+      "They are identical once compounding is considered",
+      "Rate A, because annual compounding always beats monthly",
+    ],
+    correctIndex: 0,
+  },
+
+  'Real Rate of Interest': {
+    question:
+      "The nominal interest rate is 8% and inflation is 3%. The real rate of interest is approximately:",
+    // 1: adds instead of subtracting · 2: ignores inflation · 3: multiplies the rates
+    options: [
+      "About 5% (roughly the nominal rate minus inflation)",
+      "About 11% (the nominal rate plus inflation)",
+      "About 8% (inflation doesn't affect it)",
+      "About 0.24% (nominal times inflation)",
+    ],
+    correctIndex: 0,
+  },
+
+  'Force of Interest': {
+    question:
+      "For a positive effective annual rate i, the equivalent force of interest δ is:",
+    // 1: reverses the inequality · 2: treats them as identical · 3: that is the discount rate, not the force
+    options: [
+      "Slightly less than i",
+      "Slightly more than i",
+      "Exactly equal to i",
+      "Equal to i/(1+i)",
+    ],
+    correctIndex: 0,
+  },
+
+  'Equation of Value': {
+    question:
+      "When setting up an equation of value, does the choice of comparison (valuation) date change the value you solve for?",
+    // 1: the misconception that the present-value date is mandatory · 2: spurious monotonic claim · 3: misunderstands the method
+    options: [
+      "No — any common date yields the same solution for the unknown",
+      "Yes — only time 0 (present value) gives the correct answer",
+      "Yes — a later date always produces a larger unknown",
+      "It works only if inflows and outflows occur at the same time",
+    ],
+    correctIndex: 0,
+  },
+
+  'Time Value of Money Equations': {
+    question:
+      "At a fixed positive rate, an investment compounds and doubles in a certain number of years. If the interest rate doubles, the doubling time roughly:",
+    // 1: reverses the inverse relationship · 2: treats time as independent of rate · 3: nonsense
+    options: [
+      "Halves",
+      "Doubles",
+      "Stays the same",
+      "Falls to zero",
+    ],
+    correctIndex: 0,
+  },
+
+  'Variable Force of Interest': {
+    question:
+      "The force of interest varies as δ(t). The accumulated value of 1 from time 0 to time n is found by:",
+    // 1: treats it like a constant endpoint effective rate · 2: uses the endpoint force instead of integrating · 3: crude averaging shortcut
+    options: [
+      "Exponentiating the integral of δ(t) from 0 to n",
+      "Computing (1 + δ(n))ⁿ",
+      "Exponentiating δ(n) × n, using the force at time n",
+      "Averaging δ(0) and δ(n), then compounding",
+    ],
+    correctIndex: 0,
+  },
+
+  'Nominal Interest Rate Convertible m-thly': {
+    question:
+      "The effective annual rate is 8%. The nominal rate convertible quarterly, i⁽⁴⁾, is:",
+    // 1: conflates nominal with effective · 2: wrong direction (nominal < effective for m>1) · 3: confuses the annual nominal rate with the per-quarter rate
+    options: [
+      "Slightly less than 8%",
+      "Exactly 8%",
+      "Slightly more than 8%",
+      "2%, since 8% ÷ 4 = 2%",
+    ],
+    correctIndex: 0,
+  },
+
+  'Effective Discount Rate': {
+    question:
+      "At an effective discount rate of 5%, a borrower who will repay $1,000 in one year receives how much today?",
+    // 1: treats d as an interest rate (1/1.05) · 2: adds the discount instead of deducting it · 3: misplaces the timing of the discount charge
+    options: [
+      "$950 — the $50 discount is deducted up front",
+      "$952.38 — found by dividing by 1.05",
+      "$1,050 — the discount is added to the repayment",
+      "$1,000 — the full amount, with the discount paid later",
+    ],
+    correctIndex: 0,
+  },
+
+  'Nominal Discount Rate Convertible m-thly': {
+    question:
+      "For the same effective annual rate and the same frequency m, how does the nominal discount rate d⁽ᵐ⁾ compare with the nominal interest rate i⁽ᵐ⁾?",
+    // 1: reverses the inequality · 2: conflates discount and interest · 3: nonsense
+    options: [
+      "d⁽ᵐ⁾ is smaller than i⁽ᵐ⁾",
+      "d⁽ᵐ⁾ is larger than i⁽ᵐ⁾",
+      "They are equal",
+      "d⁽ᵐ⁾ is always negative",
+    ],
+    correctIndex: 0,
+  },
+
+  // ─── Annuities / Cash Flows with Non-Contingent Payments ─────────────
+
+  'Annuity Immediate': {
+    question:
+      "An annuity-immediate makes its first payment when?",
+    // 1: 'immediate' term-matching trap → confuses with annuity-due (time 0) · 2: confuses with accumulated-value timing · 3: confuses with a single lump sum
+    options: [
+      "At the end of the first period (time 1)",
+      "At the beginning of the first period (time 0)",
+      "One period after the last payment",
+      "Only at maturity, as a single lump sum",
+    ],
+    correctIndex: 0,
+  },
+
+  'Annuity Due': {
+    question:
+      "An annuity-due and an annuity-immediate have identical payments, term, and rate. How do their present values compare?",
+    // 1: 'immediate = sooner' term-matching trap · 2: ignores timing · 3: right direction, wrong factor
+    options: [
+      "The due is larger, by a factor of (1+i)",
+      "The immediate is larger, since 'immediate' means paid sooner",
+      "They are equal, since the payments are identical",
+      "The due is larger, by a factor of i",
+    ],
+    correctIndex: 0,
+  },
+
+  'Perpetuity': {
+    question:
+      "A perpetuity pays $100 at the end of every year forever, at 5% interest. Its present value is:",
+    // 1: mistakes endless payments for infinite value · 2: uses the perpetuity-due formula (payments at period start) · 3: values only the first payment
+    options: [
+      "$2,000",
+      "Infinite, since the payments never stop",
+      "$2,100",
+      "$100",
+    ],
+    correctIndex: 0,
+  },
+
+  'Payable m-thly': {
+    question:
+      "An annuity 'payable monthly' at an annual rate of 1 makes payments of what size each month?",
+    // 1: misreads the annual total as the monthly payment · 2: spurious · 3: denies that monthly payments actually occur
+    options: [
+      "1/12 each month, totaling 1 per year",
+      "1 each month, totaling 12 per year",
+      "12 each month",
+      "1 once per year, merely recorded monthly",
+    ],
+    correctIndex: 0,
+  },
+
+  'Payable Continuously': {
+    question:
+      "A continuous annuity's present value formula differs from the annuity-immediate's in that it:",
+    // 1: spurious · 2: plausible-looking but wrong rate substitution · 3: denies the timing benefit of continuous payment
+    options: [
+      "Divides by the force of interest δ instead of i",
+      "Divides by i², the rate squared",
+      "Uses the discount rate d instead of i",
+      "Is identical, since continuous timing doesn't change the value",
+    ],
+    correctIndex: 0,
+  },
+
+  'Level Payment Annuity': {
+    question:
+      "A level annuity pays $1,000 at the end of each year for 3 years at 5%. Which expression gives its present value?",
+    // 1: ignores discounting · 2: treats three payments as one lump sum at year 3 · 3: computes the accumulated value instead of present value
+    options: [
+      "1000 × (1 − 1.05⁻³)/0.05",
+      "1000 × 3, the sum of the payments",
+      "1000 × 1.05⁻³",
+      "1000 × (1.05³ − 1)/0.05",
+    ],
+    correctIndex: 0,
+  },
+
+  'Arithmetic Increasing Annuity': {
+    question:
+      "In an 'arithmetic increasing' annuity, the payments grow how?",
+    // 1: confuses with a geometric annuity (constant %) · 2: spurious · 3: geometric growth (doubling)
+    options: [
+      "By a constant dollar amount each period (100, 200, 300, …)",
+      "By a constant percentage each period (×1.05 each time)",
+      "By a constant amount, but only every other period",
+      "By doubling each period (100, 200, 400, …)",
+    ],
+    correctIndex: 0,
+  },
+
+  'Geometric Increasing Annuity': {
+    question:
+      "A pension pays $20,000 growing 3% each year. What makes this geometric rather than arithmetic?",
+    // 1: describes arithmetic growth · 2: spurious · 3: confuses payment growth with rate growth
+    options: [
+      "Each payment is a fixed multiple (1.03×) of the previous one",
+      "Each payment adds a fixed $3,000 to the previous one",
+      "The payments rise and then fall",
+      "The interest rate grows 3% per year",
+    ],
+    correctIndex: 0,
+  },
+
+  'Decreasing Annuity': {
+    question:
+      "A decreasing annuity pays 5, 4, 3, 2, 1 at the ends of years 1–5, while an increasing one pays 1, 2, 3, 4, 5. Which has the larger present value?",
+    // 1: ignores that later dollars are discounted more · 2: ignores timing (both total 15) · 3: the ordering actually holds for any i > 0
+    options: [
+      "The decreasing annuity, because its larger payments arrive earlier",
+      "The increasing annuity, because its largest payments come last",
+      "They are equal, since both total 15",
+      "It cannot be determined without the interest rate",
+    ],
+    correctIndex: 0,
+  },
+
+  'Continuous Annuity': {
+    question:
+      "Compared with an annuity-immediate paying 1 at each year-end, a continuous annuity paying at rate 1 per year over the same term has a present value that is:",
+    // 1: misconception that spreading payments lowers value · 2: ignores within-year timing · 3: spurious condition
+    options: [
+      "Larger, because payments arrive continuously (on average sooner)",
+      "Smaller, because the money is spread thinly across the year",
+      "Identical, since both pay 1 per year in total",
+      "Larger only when i is negative",
+    ],
+    correctIndex: 0,
+  },
+
+  'Term of Annuity': {
+    question:
+      "Solving aₙ = PV/P for the term gives n = 8.7. What does the non-integer result mean?",
+    // 1: treats fractional periods as literal equal payments · 2: ignores that a 9th full payment would overpay · 3: misreads a valid fractional term as unsolvable
+    options: [
+      "8 full payments plus a smaller final (drop) payment",
+      "The annuity runs exactly 8.7 years with equal payments throughout",
+      "Round to 9 equal full payments with no adjustment",
+      "The problem has no valid solution",
+    ],
+    correctIndex: 0,
+  },
+
+  'Level Annuity': {
+    question:
+      "For a level annuity, aₙ gives the present value and sₙ the accumulated value. At what date does sₙ value the payments?",
+    // 1: that is aₙ's valuation date · 2: confuses accumulated value with present value · 3: spurious
+    options: [
+      "At the date of the final payment",
+      "One period before the first payment",
+      "At time 0, today",
+      "Halfway through the term",
+    ],
+    correctIndex: 0,
+  },
+
+  'Level Perpetuity': {
+    question:
+      "How does a level perpetuity-due's present value compare with an otherwise identical perpetuity-immediate?",
+    // 1: spurious factor · 2: reverses; perpetuities never end · 3: ignores the one-period timing shift
+    options: [
+      "Larger by exactly one payment (an extra payment received today)",
+      "Exactly double",
+      "Smaller, since due payments come first and end sooner",
+      "Equal, since both continue forever",
+    ],
+    correctIndex: 0,
+  },
+
+  'Non-level Annuities': {
+    question:
+      "Which of the following is NOT a non-level annuity?",
+    // 0 is the correct pick (it is level). 1: arithmetic non-level · 2: geometric non-level · 3: irregular non-level
+    options: [
+      "$500 at the end of each year for 10 years",
+      "$100, $200, $300, … increasing each year",
+      "Payments growing 4% every year",
+      "$1,000 in year 1, nothing in year 2, then $3,000",
+    ],
+    correctIndex: 0,
+  },
+
+  'Arithmetic Progression': {
+    question:
+      "Payments form an arithmetic progression starting at $100 with common difference $50. What is the 4th payment?",
+    // 1: treats it as geometric (×1.5) · 2: miscounts the term (100 + 4×50) · 3: adds the difference only once
+    options: [
+      "$250",
+      "$337.50",
+      "$300",
+      "$150",
+    ],
+    correctIndex: 0,
+  },
+
+  'Geometric Progression': {
+    question:
+      "Payments form a geometric progression: $1,000, then growing 10% each year. What is the 3rd payment?",
+    // 1: treats it as arithmetic (adds $100 twice) · 2: applies 30% growth at once · 3: grows for only one period
+    options: [
+      "$1,210",
+      "$1,200",
+      "$1,300",
+      "$1,100",
+    ],
+    correctIndex: 0,
+  },
+
+  // ─── Loans ───────────────────────────────────────────────────────────
+
+  'Loans': {
+    question:
+      "On an amortized loan, the outstanding balance at any time equals:",
+    // 1: the classic incorrect formula that ignores accrued interest · 2: ignores discounting · 3: spurious
+    options: [
+      "The present value of the remaining payments",
+      "The original principal minus the sum of payments made",
+      "The remaining payments added up undiscounted",
+      "The original principal minus total interest paid",
+    ],
+    correctIndex: 0,
+  },
+
+  'Principal': {
+    question:
+      "In a level-payment amortized loan, the principal (not interest) portion of each successive payment:",
+    // 1: confuses level total payment with level principal · 2: reverses (that's the interest portion) · 3: ignores the interest component
+    options: [
+      "Increases over time, as the balance and its interest shrink",
+      "Stays constant, since the total payment is level",
+      "Decreases over time",
+      "Equals the full payment every period",
+    ],
+    correctIndex: 0,
+  },
+
+  'Interest': {
+    question:
+      "In a level-payment amortized loan at rate i, the interest portion of the payment in period t equals:",
+    // 1: treats it like flat/simple interest on the original balance · 2: ignores principal repayment · 3: wrong base
+    options: [
+      "i times the outstanding balance at the start of period t",
+      "i times the original loan amount, every period",
+      "The full level payment",
+      "i times the payment amount",
+    ],
+    correctIndex: 0,
+  },
+
+  'Term of Loan': {
+    question:
+      "Two loans of equal amount and rate are repaid with level payments, one over 10 years and one over 20 years. The 20-year loan has:",
+    // 1: misses that a longer term accrues more total interest · 2: reverses the payment direction · 3: ignores the extra interest
+    options: [
+      "A smaller payment but more total interest paid",
+      "A smaller payment and less total interest",
+      "A larger payment and less total interest",
+      "The same total interest, just spread out",
+    ],
+    correctIndex: 0,
+  },
+
+  'Outstanding Balance': {
+    question:
+      "Immediately after the k-th payment, the outstanding balance of a level-payment loan is best found as:",
+    // 1: the incorrect formula that ignores interest · 2: that is the amount subtracted, not the balance · 3: spurious
+    options: [
+      "The present value of the remaining n − k payments",
+      "The original loan minus k times the payment",
+      "The accumulated value of the k payments already made",
+      "k times the payment, discounted",
+    ],
+    correctIndex: 0,
+  },
+
+  'Final Payment': {
+    question:
+      "A loan's term works out to a non-integer number of periods. The final payment is therefore:",
+    // 1: denies the adjustment · 2: spurious · 3: misconception that the loan is already repaid
+    options: [
+      "Different from the regular payment — a smaller drop or larger balloon",
+      "Always equal to the regular payment",
+      "Always exactly double the regular payment",
+      "Zero, since the loan is already repaid",
+    ],
+    correctIndex: 0,
+  },
+
+  'Drop Payment': {
+    question:
+      "A drop payment on a loan is:",
+    // 1: that describes a balloon payment · 2: 'drop = skip' term-matching trap · 3: spurious
+    options: [
+      "A final payment smaller than the regular payment",
+      "A final payment larger than the regular payment",
+      "A skipped payment deferred to later",
+      "The first payment, reduced to cover interest only",
+    ],
+    correctIndex: 0,
+  },
+
+  'Balloon Payment': {
+    question:
+      "A balloon-payment loan structure means:",
+    // 1: that describes a drop payment · 2: spurious · 3: reverses the timing
+    options: [
+      "The final payment is larger than the regular payments",
+      "The final payment is smaller than the regular payments",
+      "Every payment inflates a little each period",
+      "The first payment is the largest, then they shrink",
+    ],
+    correctIndex: 0,
+  },
+
+  'Amortization': {
+    question:
+      "Under standard loan amortization, what stays constant from payment to payment?",
+    // 1: the interest portion decreases each period · 2: the principal portion increases each period · 3: the balance decreases each period
+    options: [
+      "The total payment amount",
+      "The interest portion",
+      "The principal portion",
+      "The outstanding balance",
+    ],
+    correctIndex: 0,
+  },
+
+  'Loan Repayment Comparison': {
+    question:
+      "A loan can be repaid by the amortization method or the sinking-fund method. If the sinking fund earns a lower rate than the loan charges, the sinking-fund method is:",
+    // 1: reverses the cost comparison · 2: ignores the rate gap · 3: misconception that a building fund is cost-free
+    options: [
+      "More expensive to the borrower",
+      "Less expensive to the borrower",
+      "Identical in cost, regardless of the fund's rate",
+      "Free of interest, since a fund is accumulating",
+    ],
+    correctIndex: 0,
+  },
+
+  // ─── Bonds ───────────────────────────────────────────────────────────
+
+  'Bonds': {
+    question:
+      "A bond's coupon rate exceeds its yield rate. The bond sells at:",
+    // 1: reverses the premium/discount rule · 2: the equal-rates (par) case · 3: denies that price depends on yield
+    options: [
+      "A premium (price above redemption value)",
+      "A discount (price below redemption value)",
+      "Par (price equal to redemption value)",
+      "Exactly its face value, whatever the rates",
+    ],
+    correctIndex: 0,
+  },
+
+  'Bond Price': {
+    question:
+      "After a bond is issued, market yields rise. The bond's price:",
+    // 1: thinks higher yield means higher price · 2: treats price as static · 3: spurious conditional
+    options: [
+      "Falls",
+      "Rises",
+      "Stays fixed at the purchase price",
+      "Rises if a premium bond, falls if a discount bond",
+    ],
+    correctIndex: 0,
+  },
+
+  'Book Value': {
+    question:
+      "After issuance, market yields change. A bond's book value is computed using:",
+    // 1: confuses book value with market value · 2: wrong rate · 3: spurious
+    options: [
+      "The original yield rate locked in at purchase",
+      "The current market yield",
+      "The coupon rate",
+      "Whichever rate is higher",
+    ],
+    correctIndex: 0,
+  },
+
+  'Market Value': {
+    question:
+      "A bond's market value differs from its book value because market value is found using:",
+    // 1: that is book value's rate · 2: spurious · 3: wrong rate
+    options: [
+      "The current prevailing market yield",
+      "The original yield locked in at purchase",
+      "The face value divided by the coupon rate",
+      "The coupon rate only",
+    ],
+    correctIndex: 0,
+  },
+
+  'Amortization of Premium': {
+    question:
+      "For a bond bought at a premium, amortization of premium makes the book value over time:",
+    // 1: that is accumulation of discount · 2: denies that amortization occurs · 3: spurious
+    options: [
+      "Decrease toward the redemption value",
+      "Increase toward the redemption value",
+      "Stay constant at the purchase price",
+      "Jump straight to face value",
+    ],
+    correctIndex: 0,
+  },
+
+  'Accumulation of Discount': {
+    question:
+      "For a bond bought at a discount, the book value over the bond's life:",
+    // 1: that is premium amortization · 2: denies accumulation · 3: spurious
+    options: [
+      "Rises toward the redemption value",
+      "Falls toward the redemption value",
+      "Stays at the discounted purchase price",
+      "Equals the coupon each period",
+    ],
+    correctIndex: 0,
+  },
+
+  'Redemption Value': {
+    question:
+      "The redemption value C of a bond is:",
+    // 1: confuses redemption value with purchase price · 2: spurious · 3: false — it usually equals face value
+    options: [
+      "The amount paid to the holder at maturity",
+      "The price paid to buy the bond",
+      "The sum of all coupon payments",
+      "Always strictly greater than the face value",
+    ],
+    correctIndex: 0,
+  },
+
+  'Face Value': {
+    question:
+      "A bond's face value primarily determines:",
+    // 1: confuses face value with the price · 2: wrong driver · 3: that is the term
+    options: [
+      "The size of each coupon (face × coupon rate)",
+      "The price an investor pays for the bond",
+      "The yield the investor earns",
+      "The number of coupons paid",
+    ],
+    correctIndex: 0,
+  },
+
+  'Yield Rate': {
+    question:
+      "A bond trades below its redemption value (at a discount). Its yield rate is therefore:",
+    // 1: reverses (that's a premium bond) · 2: the par case · 3: misconception
+    options: [
+      "Higher than its coupon rate",
+      "Lower than its coupon rate",
+      "Equal to its coupon rate",
+      "Zero, since it's discounted",
+    ],
+    correctIndex: 0,
+  },
+
+  'Coupon': {
+    question:
+      "After a bond is issued, market interest rates rise. Each coupon payment the holder receives:",
+    // 1: confuses a fixed coupon with a floating rate · 2: spurious · 3: misconception that coupons reprice
+    options: [
+      "Stays the same fixed dollar amount",
+      "Rises along with market rates",
+      "Falls to keep the yield constant",
+      "Is recomputed using the new yield",
+    ],
+    correctIndex: 0,
+  },
+
+  'Coupon Rate': {
+    question:
+      "A $1,000 face-value bond pays $45 annual coupons. Its annual coupon rate is:",
+    // 1: confuses the dollar coupon with the rate · 2: conflates coupon rate with yield · 3: invents a semiannual assumption
+    options: [
+      "4.5%",
+      "$45 — the coupon amount is the rate",
+      "Equal to the bond's yield rate",
+      "9%, since $45 is paid twice a year",
+    ],
+    correctIndex: 0,
+  },
+
+  'Term of Bond': {
+    question:
+      "Between two otherwise-identical bonds, the one with the longer time to maturity is:",
+    // 1: reverses the duration relationship · 2: ignores term's effect on duration · 3: misconception
+    options: [
+      "More sensitive to interest rate changes",
+      "Less sensitive to interest rate changes",
+      "Equally sensitive, since the coupons match",
+      "Insensitive to rates, being held to maturity",
+    ],
+    correctIndex: 0,
+  },
+
+  'Callable Bond': {
+    question:
+      "A callable bond gives the right to redeem early to whom, and when is it typically exercised?",
+    // 1: reverses who holds the option and the rate direction · 2: right party, wrong rate direction · 3: wrong party
+    options: [
+      "The issuer, typically when interest rates have fallen",
+      "The bondholder, when rates have risen",
+      "The issuer, typically when rates have risen",
+      "The bondholder, at any coupon date",
+    ],
+    correctIndex: 0,
+  },
+
+  'Non-Callable Bond': {
+    question:
+      "Compared with a callable bond, a non-callable bond eliminates which risk?",
+    // 1: overstates — its price still moves with rates · 2: unrelated to the call feature · 3: spurious
+    options: [
+      "The risk of early redemption by the issuer",
+      "All interest rate risk, fixing its price",
+      "Default (credit) risk",
+      "Reinvestment risk on the final redemption",
+    ],
+    correctIndex: 0,
+  },
+
+  'Call Price': {
+    question:
+      "The call price of a callable bond is:",
+    // 1: confuses call price with the purchase price · 2: ignores the call premium · 3: spurious
+    options: [
+      "The amount the issuer pays to redeem early, usually at or above face value",
+      "The market price a buyer pays for the bond",
+      "Always exactly the face value",
+      "The present value of the remaining coupons only",
+    ],
+    correctIndex: 0,
+  },
+
+  'Call Premium': {
+    question:
+      "A bond callable at $1,050 has a face value of $1,000. Its call premium is:",
+    // 1: confuses call premium with the full call price · 2: confuses call premium with a purchase premium · 3: spurious
+    options: [
+      "$50",
+      "$1,050 — the full call price",
+      "The amount the purchase price exceeds face when bought at a premium",
+      "$1,000, the face value",
+    ],
+    correctIndex: 0,
+  },
+
+  'Reinvestment of Coupons': {
+    question:
+      "A bond is bought to yield 7%, but its coupons can only be reinvested at 4%. The investor's realized annual return over the holding period will be:",
+    // 1: ignores reinvestment risk · 2: reverses the effect · 3: overcorrects all the way to the reinvestment rate
+    options: [
+      "Below 7%, because coupons grow more slowly than assumed",
+      "Exactly 7%, the purchase yield",
+      "Above 7%, since extra interest accumulates",
+      "Exactly 4%, the reinvestment rate",
+    ],
+    correctIndex: 0,
+  },
+
+  // ─── General Cash Flows, Portfolios & Asset-Liability Management ──────
+
+  'Duration': {
+    question:
+      "Bond A has duration 3; Bond B has duration 9. For a given small change in yield, which bond's price moves more?",
+    // 1: reverses the sensitivity relationship · 2: ignores duration as a sensitivity measure · 3: misconception
+    options: [
+      "Bond B — higher duration means greater rate sensitivity",
+      "Bond A — lower duration means more movement",
+      "Both move equally, since duration is just average time",
+      "Neither moves, if held to maturity",
+    ],
+    correctIndex: 0,
+  },
+
+  'Convexity': {
+    question:
+      "Two bonds have equal duration, but Bond A has higher convexity. Bond A will:",
+    // 1: ignores the second-order effect · 2: reverses the benefit · 3: spurious
+    options: [
+      "Gain more when yields fall and lose less when yields rise",
+      "Move identically to Bond B, since the durations match",
+      "Lose more when yields fall",
+      "Have lower price sensitivity in every scenario",
+    ],
+    correctIndex: 0,
+  },
+
+  'Macaulay Duration': {
+    question:
+      "Macaulay duration is best described as:",
+    // 1: that is modified duration (a sensitivity) · 2: that is just maturity, not PV-weighted · 3: spurious
+    options: [
+      "The present-value-weighted average time until the cash flows are received",
+      "The percentage price drop per 1% rise in yield",
+      "The number of years until the final cash flow",
+      "The total count of cash flows",
+    ],
+    correctIndex: 0,
+  },
+
+  'Modified Duration': {
+    question:
+      "How does modified duration relate to Macaulay duration?",
+    // 1: conflates the two · 2: reverses the factor · 3: spurious
+    options: [
+      "Modified = Macaulay ÷ (1+i), so it's slightly smaller",
+      "They are always equal",
+      "Modified = Macaulay × (1+i), so it's larger",
+      "Modified = Macaulay², squared",
+    ],
+    correctIndex: 0,
+  },
+
+  'Portfolio': {
+    question:
+      "A portfolio holds $40,000 in a bond of duration 3 and $60,000 in a bond of duration 8. Its duration is:",
+    // 1: ignores value-weighting (simple average) · 2: adds instead of averaging · 3: takes the maximum
+    options: [
+      "6.0 — the market-value-weighted average",
+      "5.5 — the simple average of 3 and 8",
+      "11 — the sum of the two durations",
+      "8 — the larger of the two",
+    ],
+    correctIndex: 0,
+  },
+
+  'Spot Rate': {
+    question:
+      "When pricing a 3-year coupon bond from a spot-rate curve, each cash flow is discounted:",
+    // 1: applies one rate to every cash flow · 2: spurious · 3: an approximation, not the exact method
+    options: [
+      "At the spot rate matching its own payment date",
+      "All at the 3-year spot rate",
+      "All at the 1-year spot rate",
+      "At the average of the three spot rates",
+    ],
+    correctIndex: 0,
+  },
+
+  'Forward Rate': {
+    question:
+      "The 1-year spot rate is 4% and the 2-year spot rate is 5%. The 1-year forward rate for year 2 is:",
+    // 1: confuses the forward with the far spot · 2: uses the near spot · 3: averages instead of compounding
+    options: [
+      "About 6%, above both spot rates",
+      "5%, equal to the 2-year spot rate",
+      "4%, equal to the 1-year spot rate",
+      "4.5%, the average of the two spots",
+    ],
+    correctIndex: 0,
+  },
+
+  'Yield Curve': {
+    question:
+      "An 'inverted' yield curve is one where:",
+    // 1: that is a normal curve · 2: that is a flat curve · 3: confuses the curve with premium pricing
+    options: [
+      "Short-term rates exceed long-term rates",
+      "Long-term rates exceed short-term rates",
+      "All maturities carry the same rate",
+      "Bond prices exceed face value",
+    ],
+    correctIndex: 0,
+  },
+
+  'Cash Flow': {
+    question:
+      "In cash flow analysis, a negative cash flow at time t represents:",
+    // 1: misconception that cash flows must be positive · 2: spurious · 3: confuses the sign with discounting
+    options: [
+      "An outflow or payment made at time t",
+      "An error, since cash flows must be positive",
+      "A flow that lowers the interest rate",
+      "A future inflow discounted to today",
+    ],
+    correctIndex: 0,
+  },
+
+  'Duration Matching': {
+    question:
+      "Duration matching protects a portfolio against small interest rate changes by setting:",
+    // 1: confuses duration with maturity · 2: spurious · 3: an insufficient / wrong condition
+    options: [
+      "Asset and liability durations equal (with equal present values)",
+      "Asset and liability maturity dates equal",
+      "The number of assets equal to the number of liabilities",
+      "Asset yields equal to liability yields only",
+    ],
+    correctIndex: 0,
+  },
+
+  'Immunization': {
+    question:
+      "Beyond matching present values and durations, Redington immunization also requires that:",
+    // 1: reverses the convexity inequality · 2: the boundary case, not the requirement · 3: drops the third condition
+    options: [
+      "Asset convexity exceed liability convexity",
+      "Asset convexity be less than liability convexity",
+      "Asset and liability convexity be identical",
+      "Convexity be ignored entirely",
+    ],
+    correctIndex: 0,
+  },
+
+  'Full Immunization': {
+    question:
+      "Full immunization differs from Redington immunization in that it:",
+    // 1: that is Redington's scope · 2: false — durations still match · 3: false — present values still match
+    options: [
+      "Protects against any single rate shift — by bracketing each liability with asset cash flows before and after it",
+      "Only protects against very small parallel shifts",
+      "Requires no duration matching at all",
+      "Ignores present-value matching",
+    ],
+    correctIndex: 0,
+  },
+
+  'Redington Immunization': {
+    question:
+      "Redington immunization protects a portfolio's surplus against:",
+    // 1: that is full immunization's scope · 2: beyond parallel-shift protection · 3: an unrelated risk
+    options: [
+      "Small, parallel shifts in the interest rate",
+      "Any interest rate shift, large or small",
+      "Changes in the shape (steepening) of the yield curve",
+      "Credit defaults in the asset portfolio",
+    ],
+    correctIndex: 0,
+  },
+
+  '1st-Order Linear Approximation': {
+    question:
+      "The first-order (duration-based) approximation of a bond's price change is:",
+    // 1: ignores that it is only a linear approximation · 2: spurious asymmetry · 3: confuses first and second order
+    options: [
+      "Approximate — it omits the convexity (curvature) correction",
+      "Exact for any size of yield change",
+      "Valid only when yields rise, not when they fall",
+      "The same thing as the convexity adjustment",
+    ],
+    correctIndex: 0,
+  },
+
+  'Asset-Liability Portfolio': {
+    question:
+      "In an asset-liability portfolio, exact cash-flow matching differs from duration matching in that cash-flow matching:",
+    // 1: that describes duration matching · 2: that describes duration matching · 3: the opposite of the method
+    options: [
+      "Funds each liability with an asset payment on the same date, leaving no reinvestment risk",
+      "Only approximately protects value and still carries reinvestment risk",
+      "Matches durations but not the timing of cash flows",
+      "Ignores the timing of cash flows entirely",
+    ],
+    correctIndex: 0,
+  },
 }

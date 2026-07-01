@@ -35,6 +35,101 @@ function LevelPill({ level }: { level: MasteryState }) {
   )
 }
 
+// ─── Reusable panel ─────────────────────────────────────────────────────────
+//
+// The level-pill + legend + graph, without any modal chrome. Rendered on its own
+// inside the standalone modal below, and embedded alongside the 3D flashcard in
+// the collect modal so a collected concept shows "card + progress" in one place.
+
+export function LearningProgressPanel({ conceptName }: { conceptName: string }) {
+  const { isPremium, isBetaTester, loading: subLoading } = useSubscription()
+  const { levelEvents, attemptDots, currentLevel, loading, error } = useConceptLearningHistory(conceptName)
+  const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
+
+  const isAccessible = isPremium || isBetaTester
+  const isLoading = loading || subLoading
+  const isEmpty = !isLoading && isAccessible && levelEvents.length === 0 && attemptDots.length === 0
+  const displayLevel = hoveredLevel ?? currentLevel
+
+  return (
+    <div className="space-y-5">
+      {isLoading && (
+        <div className="flex items-center gap-2 text-sm text-muted-foreground py-8 justify-center">
+          <Loader2 className="h-4 w-4 animate-spin" /> Loading progress…
+        </div>
+      )}
+
+      {!isLoading && !isAccessible && (
+        <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
+          <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+            <Lock className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <p className="font-semibold">Learning Progress</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Track your mastery journey over time
+            </p>
+          </div>
+          <Link to="/upgrade" className={buttonVariants({ size: 'sm' })}>
+            Upgrade to Premium
+          </Link>
+        </div>
+      )}
+
+      {!isLoading && isAccessible && error && (
+        <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </div>
+      )}
+
+      {!isLoading && isAccessible && isEmpty && (
+        <div className="text-center py-10 text-muted-foreground text-sm">
+          No quiz attempts yet for this concept.
+          <br />
+          Complete a quiz to see your progress here.
+        </div>
+      )}
+
+      {!isLoading && isAccessible && !isEmpty && !error && (
+        <>
+          {/* Level pill */}
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">
+              {hoveredLevel ? 'Level at selected time' : 'Current level'}
+            </span>
+            <LevelPill level={displayLevel} />
+          </div>
+
+          {/* Legend */}
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <span className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded-full bg-green-500 shrink-0" />
+              Correct attempt
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded-full bg-red-500 shrink-0" />
+              Incorrect attempt
+            </span>
+          </div>
+
+          {/* Graph */}
+          <div className="rounded-lg border bg-muted/30 p-2">
+            <ProgressGraph
+              levelEvents={levelEvents}
+              attemptDots={attemptDots}
+              onHoverLevel={setHoveredLevel}
+            />
+          </div>
+
+          <p className="text-xs text-muted-foreground text-center">
+            Hover the graph to explore your level at any point in time
+          </p>
+        </>
+      )}
+    </div>
+  )
+}
+
 // ─── Main modal ───────────────────────────────────────────────────────────────
 
 interface LearningProgressModalProps {
@@ -43,10 +138,6 @@ interface LearningProgressModalProps {
 }
 
 export function LearningProgressModal({ conceptName, onClose }: LearningProgressModalProps) {
-  const { isPremium, isBetaTester, loading: subLoading } = useSubscription()
-  const { levelEvents, attemptDots, currentLevel, loading, error } = useConceptLearningHistory(conceptName)
-  const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
-
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
@@ -54,11 +145,6 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
-
-  const isAccessible = isPremium || isBetaTester
-  const isLoading = loading || subLoading
-  const isEmpty = !isLoading && isAccessible && levelEvents.length === 0 && attemptDots.length === 0
-  const displayLevel = hoveredLevel ?? currentLevel
 
   return (
     <div
@@ -86,80 +172,8 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
         </div>
 
         {/* Body */}
-        <div className="p-5 space-y-5">
-          {isLoading && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground py-8 justify-center">
-              <Loader2 className="h-4 w-4 animate-spin" /> Loading progress…
-            </div>
-          )}
-
-          {!isLoading && !isAccessible && (
-            <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
-              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Lock className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="font-semibold">Learning Progress</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Track your mastery journey over time
-                </p>
-              </div>
-              <Link to="/upgrade" className={buttonVariants({ size: 'sm' })}>
-                Upgrade to Premium
-              </Link>
-            </div>
-          )}
-
-          {!isLoading && isAccessible && error && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-              {error}
-            </div>
-          )}
-
-          {!isLoading && isAccessible && isEmpty && (
-            <div className="text-center py-10 text-muted-foreground text-sm">
-              No quiz attempts yet for this concept.
-              <br />
-              Complete a quiz to see your progress here.
-            </div>
-          )}
-
-          {!isLoading && isAccessible && !isEmpty && !error && (
-            <>
-              {/* Level pill */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">
-                  {hoveredLevel ? 'Level at selected time' : 'Current level'}
-                </span>
-                <LevelPill level={displayLevel} />
-              </div>
-
-              {/* Legend */}
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-2">
-                  <span className="inline-block h-3 w-3 rounded-full bg-green-500 shrink-0" />
-                  Correct attempt
-                </span>
-                <span className="flex items-center gap-2">
-                  <span className="inline-block h-3 w-3 rounded-full bg-red-500 shrink-0" />
-                  Incorrect attempt
-                </span>
-              </div>
-
-              {/* Graph */}
-              <div className="rounded-lg border bg-muted/30 p-2">
-                <ProgressGraph
-                  levelEvents={levelEvents}
-                  attemptDots={attemptDots}
-                  onHoverLevel={setHoveredLevel}
-                />
-              </div>
-
-              <p className="text-xs text-muted-foreground text-center">
-                Hover the graph to explore your level at any point in time
-              </p>
-            </>
-          )}
+        <div className="p-5">
+          <LearningProgressPanel conceptName={conceptName} />
         </div>
       </div>
     </div>

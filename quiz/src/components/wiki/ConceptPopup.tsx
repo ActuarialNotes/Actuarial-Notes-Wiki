@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Lightbulb, Loader2, Lock, Unlock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Lightbulb, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -25,7 +25,8 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { parseAvatarUrl, type AnimalType } from '@/components/AvatarDisplay'
 
-const MASTERY_PILL: Partial<Record<MasteryState, { label: string; className: string }>> = {
+const MASTERY_PILL: Record<MasteryState, { label: string; className: string }> = {
+  new:      { label: 'New', className: 'bg-muted text-muted-foreground' },
   level1:   { label: '1', className: 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-300' },
   level2:   { label: '2', className: 'bg-green-200 text-green-800 dark:bg-green-900/60 dark:text-green-200' },
   level3:   { label: '3', className: 'bg-green-400 text-green-950 dark:bg-green-800 dark:text-green-100' },
@@ -300,33 +301,39 @@ export function ConceptPopup() {
       <div className="flex items-center gap-2 px-3 h-14 border-b shrink-0">
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
-          {masteryState && MASTERY_PILL[masteryState] && (
-            <button
-              type="button"
-              onClick={() => setShowLearningProgress(true)}
-              title="Learning Progress"
-              className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${MASTERY_PILL[masteryState]!.className}`}
-            >
-              {MASTERY_PILL[masteryState]!.label}
-            </button>
-          )}
-          {/* Collect lock — first step to actively learning this concept. Sits
-              immediately before the play/action button (per design). */}
+          {/* Collect / status indicator — borderless so it reads as part of the
+              concept name, not a separate button. Locked → lock icon (opens the
+              collect flow); once collected → mastery status (New/1/2/3/F) which
+              opens the combined card + learning-progress modal, where it can
+              level up. */}
           {current.kind === 'concept' && (() => {
             const collected = collectedCards.some(c => c.name.toLowerCase() === current.name.toLowerCase())
+            // A concept past New has necessarily been collected already (grandfathered
+            // users included), so surface its status even if not in the collected store.
+            const showStatus = collected || (masteryState !== null && masteryState !== 'new')
+            if (showStatus) {
+              const pill = MASTERY_PILL[masteryState ?? 'new']
+              return (
+                <button
+                  type="button"
+                  onClick={() => openCollect(current)}
+                  title="View flashcard & learning progress"
+                  aria-label={`${current.name} — ${pill.label}. View flashcard and progress`}
+                  className={`shrink-0 inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full text-[11px] font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${pill.className}`}
+                >
+                  {pill.label}
+                </button>
+              )
+            }
             return (
               <button
                 type="button"
                 onClick={() => openCollect(current)}
-                className={`inline-flex items-center justify-center h-8 w-8 rounded-md border shrink-0 transition-colors ${
-                  collected
-                    ? 'border-emerald-500/60 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                    : 'bg-background hover:bg-accent text-foreground'
-                }`}
-                title={collected ? 'Collected — view collection' : 'Collect this flashcard'}
-                aria-label={collected ? `${current.name} collected` : `Collect ${current.name}`}
+                className="inline-flex items-center justify-center h-8 w-8 -ml-1 rounded-md shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                title="Collect this flashcard"
+                aria-label={`Collect ${current.name}`}
               >
-                {collected ? <Unlock className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+                <Lock className="h-4 w-4" />
               </button>
             )
           })()}

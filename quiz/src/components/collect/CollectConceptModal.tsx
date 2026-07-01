@@ -10,6 +10,7 @@ import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import { stripFrontmatter } from '@/components/wiki/WikiArticle'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
+import { LearningProgressPanel } from '@/components/wiki/LearningProgressModal'
 
 type Phase = 'question' | 'spinning' | 'flash' | 'distill' | 'done'
 
@@ -255,12 +256,14 @@ export function CollectConceptModal() {
 
       {/* Modal card */}
       {showCard && (
-        <div className={`relative z-[121] w-full max-w-md text-card-foreground ${
-          showChrome ? 'rounded-2xl border bg-card shadow-2xl overflow-hidden' : 'flex flex-col items-center'
+        <div className={`relative z-[121] w-full text-card-foreground ${
+          showChrome
+            ? `rounded-2xl border bg-card shadow-2xl ${alreadyCollected ? 'max-w-lg max-h-[88vh] flex flex-col overflow-hidden' : 'max-w-md overflow-hidden'}`
+            : 'max-w-md flex flex-col items-center'
         }`}>
           {/* Header */}
           {showChrome && (
-            <div className="flex items-center justify-between px-4 py-3 border-b">
+            <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
               <div className="flex items-center gap-2 min-w-0">
                 <Lock className="h-4 w-4 text-primary shrink-0" />
                 <span className="font-semibold text-sm truncate">
@@ -279,21 +282,29 @@ export function CollectConceptModal() {
           )}
 
           {/* Body */}
-          <div className={`flex flex-col items-center gap-5 ${showChrome ? 'px-5 py-5' : 'py-5'}`}>
+          <div className={`flex flex-col items-center gap-5 ${showChrome ? 'px-5 py-5' : 'py-5'} ${alreadyCollected ? 'min-h-0 overflow-y-auto' : ''}`}>
             <CollectCard3D
               name={name}
               phase={phase === 'spinning' || phase === 'flash' ? 'spin' : alreadyCollected ? 'won' : 'idle'}
+              size={alreadyCollected ? 'md' : 'lg'}
               className={phase === 'flash' ? 'collect-card-absorb z-[122]' : ''}
             />
 
             {alreadyCollected ? (
-              <div className="flex flex-col items-center gap-2 text-center">
-                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
-                  <Check className="h-4 w-4" /> Already in your collection
-                </span>
-                <p className="text-xs text-muted-foreground">
-                  You've unlocked this flashcard. Keep studying it in the Flashcards tab.
-                </p>
+              <div className="w-full flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center gap-1.5 text-center">
+                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                    <Check className="h-4 w-4" /> Collected — now level it up
+                  </span>
+                  <p className="text-xs text-muted-foreground">
+                    Quiz this concept to advance from New → Level 1 → 2 → 3.
+                  </p>
+                </div>
+                {/* Combined view: the learning-progress graph lives with the card
+                    now that the concept is collected and can level up. */}
+                <div className="w-full border-t pt-4">
+                  <LearningProgressPanel conceptName={name} />
+                </div>
               </div>
             ) : phase === 'spinning' ? (
               <p className="text-sm font-medium text-muted-foreground animate-pulse">Collecting…</p>

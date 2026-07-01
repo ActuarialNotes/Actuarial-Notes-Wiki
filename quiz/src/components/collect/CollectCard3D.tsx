@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 // A flashy, colourful 3D-looking flashcard showing a concept name. Pure CSS —
 // no WebGL — so it stays light and renders crisply everywhere. The colour
@@ -12,6 +12,9 @@ interface CollectCard3DProps {
   phase?: 'idle' | 'spin' | 'won'
   size?: 'md' | 'lg'
   className?: string
+  // When set, the card can be flipped by clicking/tapping it to reveal `back`.
+  flippable?: boolean
+  back?: React.ReactNode
 }
 
 // Pleasant, high-contrast gradient pairs (start, mid, end) — vivid enough to
@@ -36,16 +39,51 @@ function hashString(s: string): number {
   return Math.abs(h)
 }
 
-export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '' }: CollectCard3DProps) {
+export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '', flippable = false, back }: CollectCard3DProps) {
   const [c0, c1, c2] = useMemo(() => GRADIENTS[hashString(name) % GRADIENTS.length], [name])
+  const [side, setSide] = useState<'front' | 'back'>('front')
+  const [flipping, setFlipping] = useState(false)
+  // Once the card has been flipped, drop back to a static front resting state
+  // so a flip-back doesn't replay the "won" entrance pop-in animation below.
+  const [everFlipped, setEverFlipped] = useState(false)
+
+  // A new concept always opens showing its front.
+  useEffect(() => { setSide('front'); setFlipping(false); setEverFlipped(false) }, [name])
 
   const dims = size === 'lg' ? 'w-52 h-72 sm:w-60 sm:h-80' : 'w-36 h-48'
-  const phaseClass =
-    phase === 'spin' ? 'collect-card-spin' : phase === 'won' ? 'collect-card-won' : 'collect-card-idle'
+  const restClass = phase === 'spin'
+    ? 'collect-card-spin'
+    : phase === 'won'
+      ? (everFlipped ? 'collect-card-won-front' : 'collect-card-won')
+      : 'collect-card-idle'
+  const restClassBack = phase === 'won' ? 'collect-card-won-back' : 'collect-card-idle-back'
+  const flipClass = flipping
+    ? (side === 'front' ? 'collect-card-flip-fwd' : 'collect-card-flip-rev')
+    : (side === 'front' ? restClass : restClassBack)
+
+  function handleClick() {
+    if (!flippable || flipping || phase === 'spin') return
+    setFlipping(true)
+  }
+
+  function handleAnimationEnd() {
+    if (!flipping) return
+    setSide(s => (s === 'front' ? 'back' : 'front'))
+    setFlipping(false)
+    setEverFlipped(true)
+  }
 
   return (
-    <div className={`collect-card-scene ${dims} ${className}`} aria-hidden="true">
-      <div className={`collect-card-3d ${phaseClass}`}>
+    <div
+      className={`collect-card-scene shrink-0 ${dims} ${className} ${flippable ? 'cursor-pointer' : ''}`}
+      onClick={handleClick}
+      role={flippable ? 'button' : undefined}
+      tabIndex={flippable ? 0 : undefined}
+      aria-label={flippable ? `${name} flashcard, tap to flip` : undefined}
+      aria-hidden={flippable ? undefined : true}
+      onKeyDown={flippable ? e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } } : undefined}
+    >
+      <div className={`collect-card-3d ${flipClass}`} onAnimationEnd={handleAnimationEnd}>
         <div
           className="collect-card-face"
           style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
@@ -56,15 +94,22 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
           <span className="collect-card-frame" />
           {/* Concept name */}
           <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
-              Flashcard
-            </span>
-            <span className="mt-2 text-xl sm:text-2xl font-extrabold leading-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
+            <span className="text-xl sm:text-2xl font-extrabold leading-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
               {name}
             </span>
-            <span className="mt-3 h-px w-10 bg-white/50" />
           </div>
         </div>
+        {flippable && (
+          <div
+            className="collect-card-face collect-card-face-back"
+            style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
+          >
+            <span className="collect-card-frame" />
+            <div className="relative z-10 flex h-full flex-col items-center justify-center overflow-y-auto px-4 py-5 text-center pointer-events-auto">
+              {back}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

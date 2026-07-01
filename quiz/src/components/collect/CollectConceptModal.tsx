@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+import { useNavigate } from 'react-router-dom'
 import { Check, Loader2, Lock, Sparkles, X } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
@@ -13,7 +14,7 @@ import { CollectCard3D } from '@/components/collect/CollectCard3D'
 import { LearningProgressPanel } from '@/components/wiki/LearningProgressModal'
 import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
 
-type Phase = 'question' | 'spinning' | 'flash' | 'distill' | 'done'
+type Phase = 'question' | 'spinning' | 'flash' | 'done'
 
 const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
 
@@ -43,21 +44,23 @@ function extractDefinition(markdown: string): string {
   return out.join(' ')
 }
 
-// Hide the concept's own name inside its definition so the prompt tests
-// comprehension rather than word-matching. Also strips LaTeX/markdown noise so
-// the snippet reads as plain language.
-function maskDefinition(def: string, name: string): string {
-  let masked = def
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  masked = masked.replace(new RegExp(escaped, 'gi'), ' ____ ')
-  // Drop inline/blocks LaTeX and wiki-link syntax for readability.
-  masked = masked
+// Drop inline/block LaTeX and wiki-link syntax so a definition snippet reads
+// as plain language.
+function stripMarkup(text: string): string {
+  return text
     .replace(/\$\$?[^$]*\$\$?/g, ' … ')
     .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_m, a, b) => b || a)
     .replace(/[*_`]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
-  return masked
+}
+
+// Hide the concept's own name inside its definition so the prompt tests
+// comprehension rather than word-matching.
+function maskDefinition(def: string, name: string): string {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const masked = def.replace(new RegExp(escaped, 'gi'), ' ____ ')
+  return stripMarkup(masked)
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -69,42 +72,23 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-// Locate the visible Flashcards nav target (mobile bottom-nav or desktop
-// sidebar item) so the distilled "drop" can fly into it.
-function flashcardNavCenter(): { x: number; y: number } {
-  const els = Array.from(document.querySelectorAll('[data-flashcard-nav]')) as HTMLElement[]
-  for (const el of els) {
-    const r = el.getBoundingClientRect()
-    const cx = r.left + r.width / 2
-    const cy = r.top + r.height / 2
-    // Require the element to be genuinely on-screen — the desktop sidebar item
-    // still has layout while translated off-canvas on mobile, so a width/visibility
-    // check alone would send the drop off the left edge.
-    const onScreen =
-      r.width > 0 && r.height > 0 && el.offsetParent !== null &&
-      cx >= 0 && cx <= window.innerWidth && cy >= 0 && cy <= window.innerHeight
-    if (onScreen) return { x: cx, y: cy }
-  }
-  // Fallback: bottom-left, where the tab lives on both layouts.
-  return { x: 48, y: window.innerHeight - 28 }
-}
-
 export function CollectConceptModal() {
   const { ref, close } = useCollect()
   const { collect, isCollected } = useCollectedCards()
   const { addCard } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
   const { play } = useSoundEffects()
+  const navigate = useNavigate()
 
   const name = ref?.name ?? ''
   const alreadyCollected = ref ? isCollected(name) : false
 
   const [phase, setPhase] = useState<Phase>('question')
   const [def, setDef] = useState<string | null>(null)
+  const [defError, setDefError] = useState(false)
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const [selected, setSelected] = useState<string | null>(null)
   const [wrong, setWrong] = useState<string | null>(null)
-  const [dropStyle, setDropStyle] = useState<React.CSSProperties | null>(null)
   const timers = useRef<number[]>([])
 
   const after = useCallback((ms: number, fn: () => void) => {
@@ -119,22 +103,26 @@ export function CollectConceptModal() {
     setPhase('question')
     setSelected(null)
     setWrong(null)
-    setDropStyle(null)
     setDef(null)
+    setDefError(false)
     if (!ref) return
-    if (alreadyCollected) { setLoadState('ready'); return }
     // An authored comprehension check is self-contained — no wiki fetch needed
-    // to build the question, so skip straight to the ready state.
-    if (COMPREHENSION_CHECKS[name]) { setLoadState('ready'); return }
-    setLoadState('loading')
+    // to build the question, so the question flow doesn't wait on one. The
+    // definition is still fetched below (in the background) for the card's
+    // flippable back side.
+    setLoadState(alreadyCollected || COMPREHENSION_CHECKS[name] ? 'ready' : 'loading')
     let cancelled = false
     fetchWikiFile(entryRefToRepoPath(ref))
       .then(raw => {
         if (cancelled) return
         setDef(extractDefinition(raw))
-        setLoadState('ready')
+        setLoadState(prev => (prev === 'loading' ? 'ready' : prev))
       })
-      .catch(() => { if (!cancelled) setLoadState('error') })
+      .catch(() => {
+        if (cancelled) return
+        setDefError(true)
+        setLoadState(prev => (prev === 'loading' ? 'error' : prev))
+      })
     return () => { cancelled = true }
   }, [ref, name]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -183,13 +171,22 @@ export function CollectConceptModal() {
 
   const hasRealQuestion = check ? true : (!!prompt && options.length >= 2)
 
+  // Reverse side of the card — the concept's definition only, no title/label
+  // repeated (the front already carries the name).
+  const cardBack = def ? (
+    <p className="text-sm sm:text-base leading-relaxed text-white">{stripMarkup(def)}</p>
+  ) : (
+    <p className="text-sm text-white/70">
+      {defError ? 'Definition unavailable.' : 'Loading definition…'}
+    </p>
+  )
+
   const runCollectAnimation = useCallback(() => {
     play('correct')
     if (prefersReducedMotion()) {
       collect(name)
       addCard({ kind: 'concept', name })
       setPhase('done')
-      after(700, close)
       return
     }
     // 1) Card spins faster and faster.
@@ -200,29 +197,14 @@ export function CollectConceptModal() {
       // fading out before it unmounts, instead of popping off mid-fade.
       setPhase('flash')
       after(560, () => {
-        // 3) The light distils into a glowing drop that flies to the Flashcards
-        //    tab. Target/offset are baked into CSS custom props so a single
-        //    keyframe drives the flight (no cross-frame transition toggling).
-        const target = flashcardNavCenter()
-        const startX = window.innerWidth / 2
-        const startY = window.innerHeight / 2
-        setDropStyle({
-          left: startX,
-          top: startY,
-          ['--dx' as string]: `${target.x - startX}px`,
-          ['--dy' as string]: `${target.y - startY}px`,
-        })
-        setPhase('distill')
-        after(820, () => {
-          // 4) Drop lands → persist + light up the tab in sync.
-          collect(name)
-          addCard({ kind: 'concept', name })
-          setPhase('done')
-          after(520, close)
-        })
+        // 3) Bloom fades → persist + light up the Flashcards tab, then hold on
+        //    the "Collected!" screen so the player can view or continue.
+        collect(name)
+        addCard({ kind: 'concept', name })
+        setPhase('done')
       })
     })
-  }, [name, collect, addCard, play, after, close])
+  }, [name, collect, addCard, play, after])
 
   function handleAnswer(opt: string) {
     if (phase !== 'question' || selected) return
@@ -238,15 +220,16 @@ export function CollectConceptModal() {
 
   if (!ref) return null
 
-  const inBloom = phase === 'flash' || phase === 'distill'
-  // The card stays mounted through the flash so it visibly dissolves into the
-  // bloom rather than cutting out. Once it's flown off as a drop (distill),
-  // it stays gone for good — it must never reappear once "done", or the card
-  // visibly flashes back into view right after the player watched it fly away.
+  const inBloom = phase === 'flash'
   const showCard = phase === 'question' || phase === 'spinning' || phase === 'flash'
   // Drop the modal chrome (border/background/header) once the ceremony starts so
   // only the card + light remain on screen.
   const showChrome = phase === 'question'
+
+  function handleViewFlashcard() {
+    close()
+    navigate(`/flashcards?highlight=${encodeURIComponent(name)}`)
+  }
 
   return createPortal(
     <div
@@ -266,18 +249,11 @@ export function CollectConceptModal() {
         <div className="collect-bloom pointer-events-none absolute inset-0" />
       )}
 
-      {/* Flying distilled drop */}
-      {phase === 'distill' && dropStyle && (
-        <div className="collect-drop pointer-events-none fixed z-[130]" style={dropStyle}>
-          <span className="collect-drop-core" />
-        </div>
-      )}
-
       {/* Modal card */}
       {showCard && (
         <div className={`relative z-[121] w-full text-card-foreground ${
           showChrome
-            ? `rounded-2xl border bg-card shadow-2xl ${alreadyCollected ? 'max-w-lg max-h-[88vh] flex flex-col overflow-hidden' : 'max-w-md overflow-hidden'}`
+            ? `rounded-2xl border bg-card shadow-2xl max-h-[88vh] flex flex-col overflow-hidden ${alreadyCollected ? 'max-w-lg' : 'max-w-md'}`
             : 'max-w-md flex flex-col items-center'
         }`}>
           {/* Header */}
@@ -286,7 +262,7 @@ export function CollectConceptModal() {
               <div className="flex items-center gap-2 min-w-0">
                 <Lock className="h-4 w-4 text-primary shrink-0" />
                 <span className="font-semibold text-sm truncate">
-                  {alreadyCollected ? 'Collected' : 'Collect this flashcard'}
+                  {alreadyCollected ? 'Collected' : 'Collect'}
                 </span>
               </div>
               <button
@@ -301,12 +277,14 @@ export function CollectConceptModal() {
           )}
 
           {/* Body */}
-          <div className={`flex flex-col items-center gap-5 ${showChrome ? 'px-5 py-5' : 'py-5'} ${alreadyCollected ? 'min-h-0 overflow-y-auto' : ''}`}>
+          <div className={`flex flex-col items-center gap-5 ${showChrome ? 'px-5 py-5' : 'py-5'} ${showChrome ? 'min-h-0 overflow-y-auto' : ''}`}>
             <CollectCard3D
               name={name}
               phase={phase === 'spinning' || phase === 'flash' ? 'spin' : alreadyCollected ? 'won' : 'idle'}
               size={alreadyCollected ? 'md' : 'lg'}
               className={phase === 'flash' ? 'collect-card-absorb z-[122]' : ''}
+              flippable={phase === 'question'}
+              back={cardBack}
             />
 
             {alreadyCollected ? (
@@ -333,26 +311,21 @@ export function CollectConceptModal() {
               </div>
             ) : (
               <div className="w-full flex flex-col gap-3">
-                <div className="text-center">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                    Quick comprehension check
+                {!hasRealQuestion && (
+                  <p className="text-sm text-foreground text-center">
+                    Tap to confirm you've read about this concept.
                   </p>
-                  {!hasRealQuestion && (
-                    <p className="text-sm text-foreground">
-                      Tap to confirm you've read about this concept.
-                    </p>
-                  )}
-                  {hasRealQuestion && !check && (
-                    <p className="text-sm text-foreground">Which concept does this describe?</p>
-                  )}
-                </div>
+                )}
+                {hasRealQuestion && !check && (
+                  <p className="text-sm text-foreground text-center">Which concept does this describe?</p>
+                )}
 
                 {check ? (
-                  <p className="px-1 text-sm leading-relaxed text-center font-medium text-foreground">
+                  <p className="px-1 text-base sm:text-lg leading-relaxed text-center font-medium text-foreground">
                     {check.question}
                   </p>
                 ) : hasRealQuestion ? (
-                  <blockquote className="rounded-lg bg-muted/60 px-3.5 py-3 text-sm leading-relaxed text-foreground/90 border-l-2 border-primary/50">
+                  <blockquote className="rounded-lg bg-muted/60 px-3.5 py-3 text-base sm:text-lg leading-relaxed text-foreground/90 border-l-2 border-primary/50">
                     “{prompt}”
                   </blockquote>
                 ) : null}
@@ -390,13 +363,30 @@ export function CollectConceptModal() {
         </div>
       )}
 
-      {/* Done: the card has already flown off as a drop — confirm without
-          bringing it back into view. */}
+      {/* Done: hold on a confirmation screen with the collected card (still
+          flippable) and let the player choose where to go next. */}
       {phase === 'done' && (
-        <div className="collect-done-pop relative z-[121] flex flex-col items-center gap-2 text-center">
+        <div className="collect-done-pop relative z-[121] w-full max-w-xs flex flex-col items-center gap-5 text-center">
+          <CollectCard3D name={name} phase="won" size="lg" flippable back={cardBack} />
           <span className="inline-flex items-center gap-1.5 text-base font-bold text-primary">
             <Sparkles className="h-5 w-5" /> Collected!
           </span>
+          <div className="w-full flex gap-2">
+            <button
+              type="button"
+              onClick={handleViewFlashcard}
+              className="flex-1 px-4 py-2.5 rounded-lg border border-border text-sm font-medium hover:bg-accent transition-colors"
+            >
+              View Flashcard
+            </button>
+            <button
+              type="button"
+              onClick={close}
+              className="flex-1 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+            >
+              Continue
+            </button>
+          </div>
         </div>
       )}
     </div>,

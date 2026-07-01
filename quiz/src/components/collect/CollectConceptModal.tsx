@@ -11,6 +11,7 @@ import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import { stripFrontmatter } from '@/components/wiki/WikiArticle'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
 import { LearningProgressPanel } from '@/components/wiki/LearningProgressModal'
+import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
 
 type Phase = 'question' | 'spinning' | 'flash' | 'distill' | 'done'
 
@@ -122,6 +123,9 @@ export function CollectConceptModal() {
     setDef(null)
     if (!ref) return
     if (alreadyCollected) { setLoadState('ready'); return }
+    // An authored comprehension check is self-contained — no wiki fetch needed
+    // to build the question, so skip straight to the ready state.
+    if (COMPREHENSION_CHECKS[name]) { setLoadState('ready'); return }
     setLoadState('loading')
     let cancelled = false
     fetchWikiFile(entryRefToRepoPath(ref))
@@ -143,10 +147,17 @@ export function CollectConceptModal() {
     return Array.from(set)
   }, [syllabi])
 
-  // NOTE: this "which concept does this describe?" check is intentionally a
-  // placeholder — it's too easy (the answer is the card title). Replacing it with
-  // genuine authored/generated comprehension questions is its own task; see
-  // docs/flashcard-collection.md.
+  // Authored comprehension check for this concept, if one exists. When present
+  // it takes priority over the masked-definition fallback below.
+  const check = useMemo<ComprehensionCheck | null>(
+    () => (name ? COMPREHENSION_CHECKS[name] ?? null : null),
+    [name],
+  )
+
+  // Fallback question for concepts without an authored check: mask the concept's
+  // own name out of its definition and ask "which concept does this describe?".
+  // This is the weaker "matching" check (the answer is the card title); authored
+  // entries in comprehensionChecks.ts supersede it. See docs/flashcard-collection.md.
   const prompt = useMemo(() => {
     if (!def) return ''
     const masked = maskDefinition(def, name)
@@ -154,15 +165,23 @@ export function CollectConceptModal() {
     return masked.length > 240 ? masked.slice(0, 237).trimEnd() + '…' : masked
   }, [def, name])
 
-  // Build the multiple-choice options once the prompt is ready. Frozen for the
-  // lifetime of this concept so re-renders don't reshuffle under the user.
+  // Build the multiple-choice options once the question is ready. Frozen for the
+  // lifetime of this concept so re-renders don't reshuffle under the user. For an
+  // authored check the options are its four choices; otherwise the concept name
+  // plus three distractor concept names.
   const options = useMemo(() => {
+    if (check) return shuffle(check.options)
     if (!name) return []
     const distractors = shuffle(allConceptNames.filter(n => n.toLowerCase() !== name.toLowerCase())).slice(0, 3)
     return shuffle([name, ...distractors])
-  }, [name, allConceptNames])
+  }, [name, check, allConceptNames])
 
-  const hasRealQuestion = !!prompt && options.length >= 2
+  // The correct answer text for whichever question style is active. For the
+  // fallback the concept's own name is correct; for an authored check it's the
+  // designated option.
+  const correctAnswer = check ? check.options[check.correctIndex] : name
+
+  const hasRealQuestion = check ? true : (!!prompt && options.length >= 2)
 
   const runCollectAnimation = useCallback(() => {
     play('correct')
@@ -207,7 +226,7 @@ export function CollectConceptModal() {
 
   function handleAnswer(opt: string) {
     if (phase !== 'question' || selected) return
-    if (opt.toLowerCase() === name.toLowerCase()) {
+    if (opt.toLowerCase() === correctAnswer.toLowerCase()) {
       setSelected(opt)
       runCollectAnimation()
     } else {
@@ -318,18 +337,25 @@ export function CollectConceptModal() {
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
                     Quick comprehension check
                   </p>
-                  <p className="text-sm text-foreground">
-                    {hasRealQuestion
-                      ? 'Which concept does this describe?'
-                      : `Tap to confirm you've read about this concept.`}
-                  </p>
+                  {!hasRealQuestion && (
+                    <p className="text-sm text-foreground">
+                      Tap to confirm you've read about this concept.
+                    </p>
+                  )}
+                  {hasRealQuestion && !check && (
+                    <p className="text-sm text-foreground">Which concept does this describe?</p>
+                  )}
                 </div>
 
-                {hasRealQuestion && (
+                {check ? (
+                  <p className="px-1 text-sm leading-relaxed text-center font-medium text-foreground">
+                    {check.question}
+                  </p>
+                ) : hasRealQuestion ? (
                   <blockquote className="rounded-lg bg-muted/60 px-3.5 py-3 text-sm leading-relaxed text-foreground/90 border-l-2 border-primary/50">
                     “{prompt}”
                   </blockquote>
-                )}
+                ) : null}
 
                 <div className="grid gap-2">
                   {(hasRealQuestion ? options : [name]).map(opt => {

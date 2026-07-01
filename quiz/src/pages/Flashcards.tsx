@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   BookOpen,
@@ -8,7 +8,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  ChevronsUpDown,
   Eye,
   GraduationCap,
   Headphones,
@@ -21,6 +20,8 @@ import {
   Lock,
   Maximize2,
   Play,
+  Plus,
+  Search,
   Sigma,
   Sparkles,
   Target,
@@ -72,6 +73,7 @@ import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
+type GalleryTab = 'deck' | 'collected' | 'packs'
 type ReverseCardSection = 'definition' | 'math' | 'images' | 'mnemonic'
 
 const GROUP_LABELS: { key: GroupBy; label: string }[] = [
@@ -242,22 +244,79 @@ function extractFirstParagraph(markdown: string): string {
   return paragraphLines.join('\n')
 }
 
-// ─── Flashcard Packs ──────────────────────────────────────────────────────────
+// ─── Flashcard Packs & Gallery Tabs ───────────────────────────────────────────
 
-interface FlashcardPack {
-  id: string
-  label: string
-  sublabel?: string
-  type: 'study_plan' | 'exam' | 'learning_objective' | 'saved'
-  concepts: string[]
-  colorIndex?: number
+type PackKind = 'study_plan' | 'exam' | 'learning_objective' | 'saved'
+
+interface PackColors {
+  card: string
+  cardText: string
+  cardSub: string
+  cardIcon: string
 }
 
-function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
-  const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
-  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
-  const { progress: examProgress, targetDates, examVariants } = useExamProgress()
-  const { addCard, hasCard, savedPacks, deleteSavedPack } = useFlashcards()
+function packColorsFor(kind: PackKind, colorIndex: number | undefined, isSub: boolean): PackColors {
+  if (kind === 'study_plan') {
+    return {
+      card: STUDY_PLAN_COLOR.card,
+      cardText: STUDY_PLAN_COLOR.cardText,
+      cardSub: STUDY_PLAN_COLOR.cardSub,
+      cardIcon: STUDY_PLAN_COLOR.cardIcon,
+    }
+  }
+  if (kind === 'saved') {
+    return {
+      card: SAVED_PACK_COLOR.card,
+      cardText: SAVED_PACK_COLOR.cardText,
+      cardSub: SAVED_PACK_COLOR.cardSub,
+      cardIcon: SAVED_PACK_COLOR.cardIcon,
+    }
+  }
+  const palette = PACK_COLOR_PALETTE[colorIndex ?? 0]
+  if (isSub) {
+    return {
+      card: palette.loCard,
+      cardText: palette.loCardText,
+      cardSub: palette.loCardSub,
+      cardIcon: palette.loCardIcon,
+    }
+  }
+  return {
+    card: palette.card,
+    cardText: palette.cardText,
+    cardSub: palette.cardSub,
+    cardIcon: palette.cardIcon,
+  }
+}
+
+// A single expandable pack. The header shows collected/deck progress; expanding
+// reveals the concept list where cards can be selected and added to the deck or
+// collected one at a time. Learning-objective packs render in the `isSub`
+// (smaller, indented) variant beneath their exam pack.
+function PackRow({
+  label,
+  sublabel,
+  kind,
+  concepts,
+  colorIndex,
+  isSub = false,
+  loading = false,
+  emptyHint,
+  onDelete,
+  onCardsAdded,
+}: {
+  label: string
+  sublabel?: string
+  kind: PackKind
+  concepts: string[]
+  colorIndex?: number
+  isSub?: boolean
+  loading?: boolean
+  emptyHint?: ReactNode
+  onDelete?: () => void
+  onCardsAdded?: () => void
+}) {
+  const { addCard, hasCard } = useFlashcards()
   const collectedCards = useCollectedCards(s => s.cards)
   const openCollect = useCollect(s => s.open)
   const collectedSet = useMemo(
@@ -266,10 +325,203 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
   )
   const isCollected = (name: string) => collectedSet.has(name.toLowerCase())
 
-  const [collapsed, setCollapsed] = useState(false)
-  const [selectedPackId, setSelectedPackId] = useState<string | null>(null)
-  const [conceptsExpanded, setConceptsExpanded] = useState(false)
-  const [selectedConcepts, setSelectedConcepts] = useState<Set<string>>(new Set())
+  const [expanded, setExpanded] = useState(false)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+
+  const total = concepts.length
+  const inDeck = concepts.filter(n => hasCard(n)).length
+  const collected = concepts.filter(n => isCollected(n)).length
+  const notAdded = concepts.filter(n => !hasCard(n))
+  const allAdded = total > 0 && notAdded.length === 0
+  const fullyCollected = total > 0 && collected === total
+  const collectedPct = total > 0 ? Math.round((collected / total) * 100) : 0
+
+  const colors = packColorsFor(kind, colorIndex, isSub)
+  const Icon =
+    kind === 'study_plan' ? CalendarDays
+      : kind === 'exam' ? GraduationCap
+        : kind === 'saved' ? LayoutGrid
+          : Target
+
+  function toggleSelect(name: string) {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(name)) next.delete(name); else next.add(name)
+      return next
+    })
+  }
+
+  function handleAdd() {
+    const toAdd = selected.size > 0
+      ? concepts.filter(n => selected.has(n) && !hasCard(n))
+      : notAdded
+    for (const name of toAdd) addCard({ kind: 'concept', name })
+    setSelected(new Set())
+    if (toAdd.length > 0) onCardsAdded?.()
+  }
+
+  function collectNext() {
+    const next = concepts.find(n => !isCollected(n))
+    if (next) openCollect({ kind: 'concept', name: next })
+  }
+
+  return (
+    <div
+      className={`rounded-xl border transition-all ${colors.card} ${colors.cardText} ${
+        fullyCollected
+          ? 'border-amber-400/70 ring-1 ring-amber-400/50 collect-pack-complete'
+          : 'border-transparent'
+      }`}
+    >
+      {/* Header — click to expand */}
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => setExpanded(v => !v)}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpanded(v => !v) } }}
+        className={`flex items-start gap-2.5 cursor-pointer ${isSub ? 'px-3 py-2.5' : 'px-3.5 py-3'}`}
+        aria-expanded={expanded}
+      >
+        <Icon className={`shrink-0 mt-0.5 ${isSub ? 'h-3.5 w-3.5' : 'h-4 w-4'} ${colors.cardIcon}`} />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className={`font-semibold truncate ${isSub ? 'text-xs' : 'text-sm'}`}>{label}</span>
+            {fullyCollected && (
+              <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300">
+                <Sparkles className="h-3.5 w-3.5" />
+              </span>
+            )}
+          </div>
+          {sublabel && <span className={`block text-[11px] truncate ${colors.cardSub}`}>{sublabel}</span>}
+          <div className="mt-1.5 space-y-1">
+            <div className={`flex items-center justify-between text-[11px] tabular-nums ${colors.cardSub}`}>
+              <span className="inline-flex items-center gap-1">
+                {fullyCollected ? <Unlock className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
+                {loading ? '…' : `${collected}/${total} collected`}
+              </span>
+              <span>{inDeck}/{total} in deck</span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-current/15 overflow-hidden">
+              <div className="h-full rounded-full bg-current transition-all" style={{ width: `${collectedPct}%` }} />
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          {onDelete && (
+            <button
+              type="button"
+              onClick={e => { e.stopPropagation(); onDelete() }}
+              aria-label={`Delete ${label} pack`}
+              className="h-6 w-6 rounded flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+            >
+              <Trash2 className="h-3 w-3" />
+            </button>
+          )}
+          {expanded
+            ? <ChevronUp className={`h-4 w-4 ${colors.cardSub}`} />
+            : <ChevronDown className={`h-4 w-4 ${colors.cardSub}`} />}
+        </div>
+      </div>
+
+      {/* Actions + concept list */}
+      {expanded && (
+        <div className="px-3.5 pb-3 space-y-2">
+          {emptyHint}
+          {loading && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading…
+            </div>
+          )}
+          {!loading && total > 0 && (
+            <>
+              <div className="flex gap-2">
+                {allAdded ? (
+                  <span className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-green-500/15 text-green-600 dark:text-green-400 text-xs font-semibold">
+                    <Check className="h-3.5 w-3.5" /> All in deck
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleAdd}
+                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    {selected.size > 0 ? `Add ${selected.size} to deck` : `Add all ${notAdded.length} to deck`}
+                  </button>
+                )}
+                {!fullyCollected && (
+                  <button
+                    type="button"
+                    onClick={collectNext}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border bg-background text-xs font-semibold text-foreground hover:bg-accent transition-colors"
+                  >
+                    <Lock className="h-3 w-3" /> Collect
+                  </button>
+                )}
+              </div>
+              <ul className="overflow-y-auto rounded-lg bg-background/40" style={{ maxHeight: '18rem' }}>
+                {concepts.map(name => {
+                  const added = hasCard(name)
+                  const checked = selected.has(name)
+                  return (
+                    <li key={name} className="flex items-center gap-2.5 px-2 py-1.5">
+                      <button
+                        type="button"
+                        onClick={() => !added && toggleSelect(name)}
+                        disabled={added}
+                        aria-label={added ? `${name} already in deck` : checked ? `Deselect ${name}` : `Select ${name}`}
+                        className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                          added
+                            ? 'bg-green-500/20 border-green-500 cursor-default'
+                            : checked
+                              ? 'bg-primary border-primary'
+                              : 'border-muted-foreground/40 hover:border-muted-foreground/70'
+                        }`}
+                      >
+                        {(added || checked) && (
+                          <svg className={`w-3 h-3 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
+                            <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </button>
+                      <span className={`text-xs flex-1 min-w-0 truncate text-foreground ${added ? 'opacity-60' : ''}`}>{name}</span>
+                      {added && (
+                        <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In deck</span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => openCollect({ kind: 'concept', name })}
+                        title={isCollected(name) ? 'Collected' : 'Collect this flashcard'}
+                        aria-label={isCollected(name) ? `${name} collected` : `Collect ${name}`}
+                        className={`shrink-0 h-6 w-6 rounded-md flex items-center justify-center transition-colors ${
+                          isCollected(name)
+                            ? 'text-emerald-600 dark:text-emerald-400'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                        }`}
+                      >
+                        {isCollected(name) ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Packs tab — every available pack, organized by exam. The whole-exam pack sits
+// at the top of each exam group; its learning-objective packs are listed under
+// it as indented sub-sections. Today's study plan and any user-saved packs
+// bookend the list.
+function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
+  const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
+  const { progress: examProgress, targetDates, examVariants } = useExamProgress()
+  const { savedPacks, deleteSavedPack } = useFlashcards()
 
   const inProgressSyllabi = useMemo(
     () => syllabi.filter(s => {
@@ -290,386 +542,310 @@ function FlashcardPacksSection({ onCardsAdded }: { onCardsAdded?: () => void } =
     masteryLoading,
   )
 
-  const packs = useMemo((): FlashcardPack[] => {
-    const result: FlashcardPack[] = []
-    if (primarySyllabus) {
-      result.push({ id: 'study_plan', label: "Today's Study Plan", type: 'study_plan', concepts: [] })
-    }
-    if (inProgressSyllabi.length === 0) {
-      // Show fallback packs for P and FM when no exam is in progress
-      const fallbackIds = ['P-1', 'FM-2']
-      let colorIdx = 0
-      for (const examId of fallbackIds) {
-        const syllabus = syllabi.find(s => s.examId === examId)
-        if (!syllabus) continue
-        if (examProgress[wikiExamIdToProgressKey(syllabus.examId)] === 'completed') continue
-        const allConcepts = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
-        result.push({ id: `exam_${syllabus.examId}`, label: syllabus.examLabel, type: 'exam', concepts: allConcepts, colorIndex: colorIdx++ })
-      }
-    } else {
-      for (const [i, syllabus] of inProgressSyllabi.entries()) {
-        const colorIdx = i % PACK_COLOR_PALETTE.length
-        const allConcepts = syllabus.topics.flatMap(t => t.concepts.map(c => c.name))
-        result.push({ id: `exam_${syllabus.examId}`, label: syllabus.examLabel, type: 'exam', concepts: allConcepts, colorIndex: colorIdx })
-        for (const topic of syllabus.topics) {
-          if (topic.concepts.length > 0) {
-            result.push({
-              id: `lo_${syllabus.examId}_${topic.name}`,
-              label: topic.name,
-              sublabel: syllabus.examLabel,
-              type: 'learning_objective',
-              concepts: topic.concepts.map(c => c.name),
-              colorIndex: colorIdx,
-            })
-          }
-        }
-      }
-    }
-    for (const sp of savedPacks) {
-      result.push({ id: sp.id, label: sp.label, type: 'saved', concepts: sp.concepts })
-    }
-    return result
-  }, [inProgressSyllabi, primarySyllabus, savedPacks, syllabi, examProgress])
-
-  // Reset concept state when switching packs
-  useEffect(() => {
-    setSelectedConcepts(new Set())
-    setConceptsExpanded(false)
-  }, [selectedPackId])
-
-  const selectedPack = packs.find(p => p.id === selectedPackId) ?? null
-
   const studyPlanConcepts = useMemo(() => {
     if (!studyPlan) return []
     return studyPlan.status === 'review_mode' ? studyPlan.reviewConcepts : studyPlan.todaysConcepts
   }, [studyPlan])
 
-  const displayConcepts = useMemo(() => {
-    if (!selectedPack) return []
-    return selectedPack.type === 'study_plan' ? studyPlanConcepts : selectedPack.concepts
-  }, [selectedPack, studyPlanConcepts])
-
-  const notYetAdded = displayConcepts.filter(name => !hasCard(name))
-  const allAdded = displayConcepts.length > 0 && notYetAdded.length === 0
-
-  function toggleConceptSelect(name: string) {
-    setSelectedConcepts(prev => {
-      const next = new Set(prev)
-      if (next.has(name)) next.delete(name); else next.add(name)
-      return next
-    })
-  }
-
-  function handleAddSelected() {
-    const toAdd = selectedConcepts.size > 0
-      ? displayConcepts.filter(n => selectedConcepts.has(n) && !hasCard(n))
-      : notYetAdded
-    for (const name of toAdd) addCard({ kind: 'concept', name })
-    setSelectedConcepts(new Set())
-    if (toAdd.length > 0) onCardsAdded?.()
-  }
-
-  function packConceptsFor(pack: FlashcardPack): string[] {
-    return pack.type === 'study_plan' ? studyPlanConcepts : pack.concepts
-  }
-
-  function packCounts(pack: FlashcardPack): { inGallery: number; total: number } {
-    const concepts = packConceptsFor(pack)
-    return { inGallery: concepts.filter(n => hasCard(n)).length, total: concepts.length }
-  }
-
-  function packCollected(pack: FlashcardPack): { collected: number; total: number } {
-    const concepts = packConceptsFor(pack)
-    return { collected: concepts.filter(n => isCollected(n)).length, total: concepts.length }
-  }
-
-  // Open the collect flow for the first not-yet-collected concept in a pack —
-  // the "collect from the Flashcards tab" pathway.
-  function collectNext(pack: FlashcardPack) {
-    const next = packConceptsFor(pack).find(n => !isCollected(n))
-    if (next) openCollect({ kind: 'concept', name: next })
-  }
+  // One group per exam (fallbacks to P and FM when nothing is in progress),
+  // each with the whole-exam concept list plus its learning-objective packs.
+  const examGroups = useMemo(() => {
+    const source: typeof inProgressSyllabi = inProgressSyllabi.length === 0
+      ? (['P-1', 'FM-2']
+          .map(id => syllabi.find(s => s.examId === id))
+          .filter((s): s is typeof syllabi[number] => !!s)
+          .filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] !== 'completed'))
+      : inProgressSyllabi
+    return source.map((syllabus, i) => ({
+      examId: syllabus.examId,
+      examLabel: syllabus.examLabel,
+      colorIndex: i % PACK_COLOR_PALETTE.length,
+      allConcepts: syllabus.topics.flatMap(t => t.concepts.map(c => c.name)),
+      learningObjectives: syllabus.topics
+        .filter(t => t.concepts.length > 0)
+        .map(t => ({ name: t.name, concepts: t.concepts.map(c => c.name) })),
+    }))
+  }, [inProgressSyllabi, syllabi, examProgress])
 
   const isLoading = planLoading || masteryLoading || syllabiLoading
-
-  if (!isLoading && packs.length === 0) return null
+  const hasContent = !!primarySyllabus || examGroups.length > 0 || savedPacks.length > 0
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground">
-      {/* Section header */}
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => setCollapsed(v => !v)}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCollapsed(v => !v) } }}
-        className="flex items-center justify-between px-4 py-3.5 cursor-pointer hover:bg-accent/40 transition-colors rounded-lg"
-        aria-expanded={!collapsed}
-      >
-        <div className="flex items-center gap-2 min-w-0">
-          <Layers className="h-4 w-4 text-primary shrink-0" />
-          <span className="font-medium text-sm">Flashcard Packs</span>
-          {packs.length > 0 && (
-            <span className="text-sm text-muted-foreground shrink-0">{packs.length} pack{packs.length === 1 ? '' : 's'}</span>
-          )}
-          {collectedCards.length > 0 && (
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 shrink-0">
-              <Unlock className="h-3 w-3" /> {collectedCards.length} collected
-            </span>
+    <div className="space-y-6">
+      {/* Today's study plan */}
+      {primarySyllabus && (
+        <PackRow
+          kind="study_plan"
+          label="Today's Study Plan"
+          sublabel={primarySyllabus.examLabel}
+          concepts={studyPlanConcepts}
+          loading={isLoading}
+          onCardsAdded={onCardsAdded}
+          emptyHint={
+            !isLoading && !studyPlan?.config?.targetReadyDate ? (
+              <p className="text-xs text-muted-foreground py-1">
+                Set up your study plan on the{' '}
+                <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+                to see today's concepts.
+              </p>
+            ) : undefined
+          }
+        />
+      )}
+
+      {/* Exam packs, each with its learning-objective sub-packs */}
+      {examGroups.map(group => (
+        <div key={group.examId} className="space-y-2">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
+            {group.examLabel}
+          </h3>
+          <PackRow
+            kind="exam"
+            label={`${group.examLabel} — All concepts`}
+            concepts={group.allConcepts}
+            colorIndex={group.colorIndex}
+            onCardsAdded={onCardsAdded}
+          />
+          {group.learningObjectives.length > 0 && (
+            <div className="ml-1 pl-3 border-l-2 border-border/60 space-y-1.5">
+              <p className="text-[11px] font-medium text-muted-foreground/80 uppercase tracking-wide px-1 pt-0.5">
+                Learning Objectives
+              </p>
+              {group.learningObjectives.map(lo => (
+                <PackRow
+                  key={lo.name}
+                  kind="learning_objective"
+                  label={lo.name}
+                  concepts={lo.concepts}
+                  colorIndex={group.colorIndex}
+                  isSub
+                  onCardsAdded={onCardsAdded}
+                />
+              ))}
+            </div>
           )}
         </div>
-        <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
-      </div>
+      ))}
 
-      {!collapsed && (
-        <div className="px-4 pb-4 space-y-3">
-          {/* Horizontal scrollable pack chips */}
-          {isLoading && packs.length === 0 ? (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading packs…
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
-              {packs.map(pack => {
-                const { inGallery, total } = packCounts(pack)
-                const { collected } = packCollected(pack)
-                const isSelected = pack.id === selectedPackId
-                const isLO = pack.type === 'learning_objective'
-                const isStudyPlan = pack.type === 'study_plan'
-                const palette = !isStudyPlan ? PACK_COLOR_PALETTE[pack.colorIndex ?? 0] : null
-                const isSaved = pack.type === 'saved'
-                const fullyCollected = total > 0 && collected === total
-                const collectedPct = total > 0 ? Math.round((collected / total) * 100) : 0
-                const cardCls = isStudyPlan
-                  ? (isSelected ? `${STUDY_PLAN_COLOR.selCard} ${STUDY_PLAN_COLOR.selText}` : `${STUDY_PLAN_COLOR.card} ${STUDY_PLAN_COLOR.cardText}`)
-                  : isSaved
-                    ? (isSelected ? `${SAVED_PACK_COLOR.selCard} ${SAVED_PACK_COLOR.selText}` : `${SAVED_PACK_COLOR.card} ${SAVED_PACK_COLOR.cardText}`)
-                    : isLO
-                      ? (isSelected ? `${palette!.loSelCard} text-white` : `${palette!.loCard} ${palette!.loCardText}`)
-                      : (isSelected ? `${palette!.selCard} ${palette!.selText}` : `${palette!.card} ${palette!.cardText}`)
-                const iconCls = isStudyPlan
-                  ? (isSelected ? STUDY_PLAN_COLOR.selIcon : STUDY_PLAN_COLOR.cardIcon)
-                  : isSaved
-                    ? (isSelected ? SAVED_PACK_COLOR.selIcon : SAVED_PACK_COLOR.cardIcon)
-                    : isLO
-                      ? (isSelected ? palette!.selIcon : palette!.loCardIcon)
-                      : (isSelected ? palette!.selIcon : palette!.cardIcon)
-                const subCls = isStudyPlan
-                  ? (isSelected ? STUDY_PLAN_COLOR.selSub : STUDY_PLAN_COLOR.cardSub)
-                  : isSaved
-                    ? (isSelected ? SAVED_PACK_COLOR.selSub : SAVED_PACK_COLOR.cardSub)
-                    : isLO
-                      ? (isSelected ? palette!.selSub : palette!.loCardSub)
-                      : (isSelected ? palette!.selSub : palette!.cardSub)
-                return (
-                  <div
-                    key={pack.id}
-                    className={`relative group/chip rounded-xl overflow-hidden border transition-all ${
-                      fullyCollected
-                        ? 'border-amber-400/70 ring-1 ring-amber-400/50 collect-pack-complete'
-                        : 'border-transparent'
-                    }`}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setSelectedPackId(prev => prev === pack.id ? null : pack.id)}
-                      className={`flex flex-col items-start gap-1.5 px-3 py-3 text-left transition-colors w-full h-full ${isSaved ? 'pr-7' : ''} ${cardCls}`}
-                    >
-                      <div className="flex items-center gap-1.5 w-full">
-                        {pack.type === 'study_plan' && (
-                          <CalendarDays className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
-                        )}
-                        {pack.type === 'exam' && (
-                          <GraduationCap className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
-                        )}
-                        {pack.type === 'learning_objective' && (
-                          <Target className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
-                        )}
-                        {pack.type === 'saved' && (
-                          <LayoutGrid className={`h-3.5 w-3.5 shrink-0 ${iconCls}`} />
-                        )}
-                        <span className="text-xs font-semibold truncate flex-1 min-w-0">{pack.label}</span>
-                        {fullyCollected && (
-                          <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300">
-                            <Sparkles className="h-3.5 w-3.5" />
-                          </span>
-                        )}
-                      </div>
-                      {pack.sublabel && (
-                        <span className={`text-[11px] truncate w-full ${subCls}`}>
-                          {pack.sublabel}
-                        </span>
-                      )}
-
-                      {/* Collected progress — the elevated status of a pack */}
-                      <div className="w-full mt-0.5 space-y-1">
-                        <div className={`flex items-center justify-between text-[11px] tabular-nums ${subCls}`}>
-                          <span className="inline-flex items-center gap-1">
-                            {fullyCollected
-                              ? <Unlock className="h-3 w-3" />
-                              : <Lock className="h-3 w-3" />}
-                            {isLoading && pack.type === 'study_plan' ? '…' : `${collected}/${total} collected`}
-                          </span>
-                        </div>
-                        <div className="h-1.5 w-full rounded-full bg-current/15 overflow-hidden">
-                          <div
-                            className="h-full rounded-full bg-current transition-all"
-                            style={{ width: `${collectedPct}%` }}
-                          />
-                        </div>
-                        <span className={`text-[10px] tabular-nums ${subCls}`}>
-                          {inGallery}/{total} in gallery
-                        </span>
-                      </div>
-                    </button>
-
-                    {/* Collect pathway — collect the next uncollected concept */}
-                    {!fullyCollected && total > 0 && !(isLoading && pack.type === 'study_plan') && (
-                      <button
-                        type="button"
-                        onClick={() => collectNext(pack)}
-                        className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-md bg-background/90 backdrop-blur px-2 py-1 text-[10px] font-semibold text-foreground border shadow-sm opacity-0 group-hover/chip:opacity-100 focus:opacity-100 transition-opacity"
-                        aria-label={`Collect next concept in ${pack.label}`}
-                      >
-                        <Lock className="h-2.5 w-2.5" /> Collect
-                      </button>
-                    )}
-
-                    {isSaved && (
-                      <button
-                        type="button"
-                        onClick={() => deleteSavedPack(pack.id)}
-                        aria-label={`Delete ${pack.label} pack`}
-                        className="absolute top-1 right-1 h-5 w-5 rounded flex items-center justify-center text-muted-foreground opacity-0 group-hover/chip:opacity-100 focus:opacity-100 hover:text-destructive transition-all"
-                      >
-                        <Trash2 className="h-2.5 w-2.5" />
-                      </button>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          )}
-
-          {/* Selected pack concept list */}
-          {selectedPack && (
-            <div className="border-t pt-2 space-y-2">
-              {/* Concept list header — acts as collapse toggle */}
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={() => setConceptsExpanded(v => !v)}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setConceptsExpanded(v => !v) } }}
-                className="flex items-center justify-between gap-2 cursor-pointer hover:bg-accent/40 rounded px-1 py-1 transition-colors"
-                aria-expanded={conceptsExpanded}
-              >
-                <span className="text-xs font-medium text-muted-foreground truncate">
-                  {selectedPack.label}
-                  {!isLoading && displayConcepts.length > 0 && (
-                    <span className="ml-1 font-normal">· {displayConcepts.length}</span>
-                  )}
-                </span>
-                <div className="flex items-center gap-1 shrink-0">
-                  {!isLoading && allAdded && (
-                    <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-green-600 dark:text-green-400">
-                      <Check className="h-2.5 w-2.5" /> All added
-                    </span>
-                  )}
-                  <ChevronsUpDown className="h-3 w-3 text-muted-foreground" />
-                </div>
-              </div>
-
-              {/* Add all button — visible even when concept list is collapsed */}
-              {!isLoading && !allAdded && displayConcepts.length > 0 && (
-                <button
-                  type="button"
-                  onClick={handleAddSelected}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
-                >
-                  {selectedConcepts.size > 0 ? `Add ${selectedConcepts.size}` : `Add all ${notYetAdded.length}`}
-                </button>
-              )}
-
-              {conceptsExpanded && (
-                <div className="space-y-2">
-                  {isLoading && selectedPack.type === 'study_plan' && (
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading study plan…
-                    </div>
-                  )}
-
-                  {!isLoading && selectedPack.type === 'study_plan' && !primarySyllabus && (
-                    <p className="text-xs text-muted-foreground py-1">
-                      Add an exam in progress from the{' '}
-                      <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
-                      to see today's study plan.
-                    </p>
-                  )}
-
-                  {!isLoading && selectedPack.type === 'study_plan' && primarySyllabus && !studyPlan?.config?.targetReadyDate && (
-                    <p className="text-xs text-muted-foreground py-1">
-                      Set up your study plan on the{' '}
-                      <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
-                      to see today's concepts.
-                    </p>
-                  )}
-
-                  {!isLoading && displayConcepts.length > 0 && (
-                    <ul
-                      className="overflow-y-auto"
-                      style={{ maxHeight: '18rem' }}
-                    >
-                      {displayConcepts.map(name => {
-                        const added = hasCard(name)
-                        const checked = selectedConcepts.has(name)
-                        return (
-                          <li key={name} className="flex items-center gap-3 py-1.5">
-                            <button
-                              type="button"
-                              onClick={() => !added && toggleConceptSelect(name)}
-                              disabled={added}
-                              aria-label={added ? `${name} already in gallery` : checked ? `Deselect ${name}` : `Select ${name}`}
-                              className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
-                                added
-                                  ? 'bg-green-500/20 border-green-500 cursor-default'
-                                  : checked
-                                    ? 'bg-primary border-primary'
-                                    : 'border-muted-foreground/40 hover:border-muted-foreground/70'
-                              }`}
-                            >
-                              {(added || checked) && (
-                                <svg className={`w-3 h-3 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
-                                  <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                              )}
-                            </button>
-                            <span className={`text-xs flex-1 min-w-0 truncate ${added ? 'text-muted-foreground' : ''}`}>{name}</span>
-                            {added && (
-                              <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In gallery</span>
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => openCollect({ kind: 'concept', name })}
-                              title={isCollected(name) ? 'Collected' : 'Collect this flashcard'}
-                              aria-label={isCollected(name) ? `${name} collected` : `Collect ${name}`}
-                              className={`shrink-0 h-6 w-6 rounded-md flex items-center justify-center transition-colors ${
-                                isCollected(name)
-                                  ? 'text-emerald-600 dark:text-emerald-400'
-                                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                              }`}
-                            >
-                              {isCollected(name) ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
-                            </button>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+      {/* Saved packs */}
+      {savedPacks.length > 0 && (
+        <div className="space-y-2">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
+            Saved Packs
+          </h3>
+          {savedPacks.map(sp => (
+            <PackRow
+              key={sp.id}
+              kind="saved"
+              label={sp.label}
+              concepts={sp.concepts}
+              onDelete={() => deleteSavedPack(sp.id)}
+              onCardsAdded={onCardsAdded}
+            />
+          ))}
         </div>
       )}
+
+      {isLoading && !hasContent && (
+        <div className="flex items-center gap-2 text-xs text-muted-foreground py-2">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading packs…
+        </div>
+      )}
+      {!isLoading && !hasContent && (
+        <p className="text-sm text-muted-foreground py-6 text-center">
+          No packs available yet. Mark an exam as in progress on the{' '}
+          <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>.
+        </p>
+      )}
+    </div>
+  )
+}
+
+// Collected tab — every concept the user has unlocked by passing its
+// comprehension check. Each can be added straight to the study deck.
+function CollectedContent({
+  conceptMasteryMap,
+  onCardsAdded,
+}: {
+  conceptMasteryMap: Map<string, MasteryState>
+  onCardsAdded?: () => void
+}) {
+  const collectedCards = useCollectedCards(s => s.cards)
+  const { addCard, hasCard } = useFlashcards()
+
+  const sorted = useMemo(
+    () => [...collectedCards].sort((a, b) => b.collectedAt - a.collectedAt),
+    [collectedCards],
+  )
+
+  if (sorted.length === 0) {
+    return (
+      <div className="rounded-xl border bg-card text-card-foreground p-10 text-center space-y-2">
+        <Unlock className="h-9 w-9 mx-auto text-muted-foreground/50" />
+        <p className="text-sm text-muted-foreground">You haven't collected any flashcards yet.</p>
+        <p className="text-xs text-muted-foreground">
+          Collect a card from the <span className="font-medium">Packs</span> tab or a concept page by
+          passing its quick comprehension check.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      {sorted.map(c => {
+        const added = hasCard(c.name)
+        const mastery = conceptMasteryMap.get(c.name.toLowerCase()) ?? 'new'
+        return (
+          <div key={c.name} className="rounded-xl border bg-card text-card-foreground flex flex-col p-3 gap-2 min-h-[110px]">
+            <div className="flex items-start justify-between gap-2">
+              <span className="font-semibold text-sm leading-snug min-w-0">{c.name}</span>
+              <Unlock className="h-3.5 w-3.5 shrink-0 text-emerald-500 mt-0.5" />
+            </div>
+            <div className="flex items-center justify-between gap-2 mt-auto pt-1">
+              <MasteryPill state={mastery} />
+              {added ? (
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-green-600 dark:text-green-400">
+                  <Check className="h-3 w-3" /> In deck
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => { addCard({ kind: 'concept', name: c.name }); onCardsAdded?.() }}
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
+                >
+                  <Plus className="h-3 w-3" /> Add to deck
+                </button>
+              )}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// Free-form "add any flashcard to your deck" search — surfaced in the My Deck
+// tab. Matches against every concept in the syllabi plus anything collected.
+function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
+  const { syllabi } = useWikiSyllabus()
+  const collectedCards = useCollectedCards(s => s.cards)
+  const { addCard, hasCard } = useFlashcards()
+  const [query, setQuery] = useState('')
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  const allConcepts = useMemo(() => {
+    const set = new Set<string>()
+    for (const s of syllabi) for (const t of s.topics) for (const c of t.concepts) set.add(c.name)
+    for (const c of collectedCards) set.add(c.name)
+    return [...set].sort((a, b) => a.localeCompare(b))
+  }, [syllabi, collectedCards])
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return []
+    return allConcepts.filter(n => n.toLowerCase().includes(q)).slice(0, 24)
+  }, [query, allConcepts])
+
+  useEffect(() => {
+    if (!open) return
+    function onOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onOutside)
+    return () => document.removeEventListener('mousedown', onOutside)
+  }, [open])
+
+  return (
+    <div className="relative" ref={ref}>
+      <div className="relative">
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+        <input
+          type="text"
+          value={query}
+          onChange={e => { setQuery(e.target.value); setOpen(true) }}
+          onFocus={() => setOpen(true)}
+          placeholder="Add a flashcard…"
+          className="h-9 w-44 sm:w-56 rounded-md border bg-background pl-8 pr-2.5 text-[16px] sm:text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+        />
+      </div>
+      {open && query.trim() && (
+        <div className="absolute right-0 top-full mt-1 w-64 max-h-72 overflow-y-auto rounded-lg border bg-popover text-popover-foreground shadow-lg z-50 py-1">
+          {results.length === 0 ? (
+            <p className="px-3 py-2 text-xs text-muted-foreground">No matches</p>
+          ) : results.map(name => {
+            const added = hasCard(name)
+            return (
+              <button
+                key={name}
+                type="button"
+                disabled={added}
+                onClick={() => { addCard({ kind: 'concept', name }); onCardsAdded?.() }}
+                className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors ${
+                  added ? 'text-muted-foreground cursor-default' : 'hover:bg-accent'
+                }`}
+              >
+                {added
+                  ? <Check className="h-3.5 w-3.5 shrink-0 text-green-500" />
+                  : <Plus className="h-3.5 w-3.5 shrink-0 text-primary" />}
+                <span className="flex-1 min-w-0 truncate">{name}</span>
+                {added && <span className="text-[10px] shrink-0">In deck</span>}
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// The three-way tab switcher at the top of the gallery.
+function GalleryTabBar({
+  active,
+  onChange,
+  deckCount,
+  collectedCount,
+}: {
+  active: GalleryTab
+  onChange: (tab: GalleryTab) => void
+  deckCount: number
+  collectedCount: number
+}) {
+  const tabs: { key: GalleryTab; label: string; icon: typeof Layers; count?: number }[] = [
+    { key: 'deck', label: 'My Deck', icon: Layers, count: deckCount },
+    { key: 'collected', label: 'Collected', icon: Unlock, count: collectedCount },
+    { key: 'packs', label: 'Packs', icon: LayoutGrid },
+  ]
+  return (
+    <div className="flex items-center gap-1 p-1 rounded-lg bg-muted/60">
+      {tabs.map(t => {
+        const isActive = t.key === active
+        const Icon = t.icon
+        return (
+          <button
+            key={t.key}
+            type="button"
+            onClick={() => onChange(t.key)}
+            aria-pressed={isActive}
+            className={`flex-1 inline-flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors ${
+              isActive
+                ? 'bg-background text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Icon className="h-4 w-4 shrink-0" />
+            <span className="truncate">{t.label}</span>
+            {t.count !== undefined && t.count > 0 && (
+              <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full tabular-nums ${
+                isActive ? 'bg-primary/15 text-primary' : 'bg-muted-foreground/15 text-muted-foreground'
+              }`}>
+                {t.count}
+              </span>
+            )}
+          </button>
+        )
+      })}
     </div>
   )
 }
@@ -1455,6 +1631,9 @@ function GalleryPanel({
   conceptMasteryMap,
   reverseCardModes,
   globalFlip,
+  inline = false,
+  initialTab = 'deck',
+  onCardsAdded,
 }: {
   cards: FlashCard[]
   orderedCards: FlashCard[]
@@ -1468,16 +1647,23 @@ function GalleryPanel({
   onRemoveAll: () => void
   onDragEnd: (e: DragEndEvent) => void
   sensors: ReturnType<typeof useSensors>
-  onClose: () => void
+  onClose?: () => void
   conceptMasteryMap: Map<string, MasteryState>
   reverseCardModes: Set<ReverseCardSection>
   globalFlip: boolean
+  inline?: boolean
+  initialTab?: GalleryTab
+  onCardsAdded?: () => void
 }) {
   const { user } = useAuth()
+  const collectedCount = useCollectedCards(s => s.cards.length)
+  const [tab, setTab] = useState<GalleryTab>(initialTab)
   const [showManageDialog, setShowManageDialog] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
+  // Center the active deck card when the deck tab becomes visible.
   useEffect(() => {
+    if (tab !== 'deck') return
     const activeCard = orderedCards[activeIndex]
     if (!activeCard || !scrollContainerRef.current) return
     const all = scrollContainerRef.current.querySelectorAll<HTMLElement>('[data-card-name]')
@@ -1487,12 +1673,12 @@ function GalleryPanel({
         break
       }
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [tab]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleCardSelect(card: FlashCard) {
     const idx = orderedCards.findIndex(c => c.name === card.name)
     onSelect(idx >= 0 ? idx : 0)
-    onClose()
+    onClose?.()
   }
 
   function renderCard(card: FlashCard) {
@@ -1513,84 +1699,119 @@ function GalleryPanel({
   }
 
   return (
-    <div className="gallery-panel fixed inset-0 z-40 flex flex-col bg-background">
-      {/* Panel header — card count, filters */}
-      <div className="sticky top-0 z-10 bg-background border-b">
-        <div className="flex items-center gap-3 px-4 py-3">
-          {/* Card count + manage button */}
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => setShowManageDialog(true)}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {cards.length} card{cards.length === 1 ? '' : 's'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowManageDialog(true)}
-              title="Manage cards"
-              className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+    <div className={inline ? 'flex flex-col' : 'gallery-panel fixed inset-0 z-40 flex flex-col bg-background'}>
+      {/* Header — tab switcher + close */}
+      <div className={inline ? 'pb-3' : 'sticky top-0 z-10 bg-background border-b px-4 py-3'}>
+        <div className="flex items-center gap-3">
+          <div className="flex-1 min-w-0">
+            <GalleryTabBar
+              active={tab}
+              onChange={setTab}
+              deckCount={cards.length}
+              collectedCount={collectedCount}
+            />
           </div>
-
-          {/* Sort dropdown */}
-          <select
-            value={groupBy}
-            onChange={e => onGroupByChange(e.target.value as GroupBy)}
-            className="h-9 rounded-md border bg-muted/60 px-3 text-sm font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-ring shrink-0"
-          >
-            {GROUP_LABELS.map(({ key, label }) => (
-              <option key={key} value={key}>{label}</option>
-            ))}
-          </select>
-
-          <div className="flex-1" />
-
-          {/* Close button */}
-          <button
-            type="button"
-            onClick={onClose}
-            title="Close gallery"
-            className="inline-flex items-center justify-center h-9 w-9 rounded-md border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
-          >
-            ✕
-          </button>
+          {!inline && (
+            <button
+              type="button"
+              onClick={onClose}
+              title="Close gallery"
+              className="inline-flex items-center justify-center h-9 w-9 rounded-md border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
+            >
+              ✕
+            </button>
+          )}
         </div>
       </div>
 
       {/* Scrollable content */}
-      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-6 pb-24 md:pb-20">
-        <FlashcardPacksSection />
+      <div
+        ref={scrollContainerRef}
+        className={inline
+          ? 'space-y-4'
+          : 'flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4 pb-24 md:pb-20'}
+      >
+        {tab === 'deck' && (
+          <div className="space-y-4">
+            {/* Deck controls: count / manage / sort / add */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setShowManageDialog(true)}
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {cards.length} card{cards.length === 1 ? '' : 's'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowManageDialog(true)}
+                  title="Manage cards"
+                  className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              {cards.length > 0 && (
+                <select
+                  value={groupBy}
+                  onChange={e => onGroupByChange(e.target.value as GroupBy)}
+                  className="h-9 rounded-md border bg-muted/60 px-3 text-sm font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-ring shrink-0"
+                >
+                  {GROUP_LABELS.map(({ key, label }) => (
+                    <option key={key} value={key}>{label}</option>
+                  ))}
+                </select>
+              )}
+              <div className="flex-1" />
+              <DeckAddSearch onCardsAdded={onCardsAdded} />
+            </div>
 
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-          <SortableContext items={orderedCards.map(c => c.name)} strategy={rectSortingStrategy}>
-            {groupBy === 'exam' ? (
-              <div className="space-y-6">
-                {examGroups.length === 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {orderedCards.map(renderCard)}
-                  </div>
-                ) : (
-                  examGroups.map(({ label, cards: groupCards }) => (
-                    <div key={label} className="space-y-2">
-                      <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{label}</h2>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                        {groupCards.map(renderCard)}
-                      </div>
-                    </div>
-                  ))
-                )}
+            {cards.length === 0 ? (
+              <div className="rounded-xl border bg-card text-card-foreground p-10 text-center space-y-2">
+                <Layers className="h-9 w-9 mx-auto text-muted-foreground/50" />
+                <p className="text-sm text-muted-foreground">Your deck is empty.</p>
+                <p className="text-xs text-muted-foreground">
+                  Add flashcards from the <span className="font-medium">Packs</span> or{' '}
+                  <span className="font-medium">Collected</span> tabs, or search above.
+                </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {orderedCards.map(renderCard)}
-              </div>
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+                <SortableContext items={orderedCards.map(c => c.name)} strategy={rectSortingStrategy}>
+                  {groupBy === 'exam' ? (
+                    <div className="space-y-6">
+                      {examGroups.length === 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                          {orderedCards.map(renderCard)}
+                        </div>
+                      ) : (
+                        examGroups.map(({ label, cards: groupCards }) => (
+                          <div key={label} className="space-y-2">
+                            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{label}</h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                              {groupCards.map(renderCard)}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                      {orderedCards.map(renderCard)}
+                    </div>
+                  )}
+                </SortableContext>
+              </DndContext>
             )}
-          </SortableContext>
-        </DndContext>
+          </div>
+        )}
+
+        {tab === 'collected' && (
+          <CollectedContent conceptMasteryMap={conceptMasteryMap} onCardsAdded={onCardsAdded} />
+        )}
+
+        {tab === 'packs' && <PacksContent onCardsAdded={onCardsAdded} />}
       </div>
 
       {showManageDialog && (
@@ -1599,7 +1820,7 @@ function GalleryPanel({
           cardNames={cards.map(c => c.name)}
           canSave={!!user}
           onCancel={() => setShowManageDialog(false)}
-          onRemoveAll={() => { onRemoveAll(); onClose(); setShowManageDialog(false) }}
+          onRemoveAll={() => { onRemoveAll(); onClose?.(); setShowManageDialog(false) }}
         />
       )}
     </div>
@@ -2104,24 +2325,33 @@ export default function Flashcards() {
     if (activeIndex === oldIdx) setActiveIndex(newIdx)
   }
 
-  // Empty state
+  // Empty state — no cards in the deck yet. Show the tabbed gallery inline so
+  // the user can browse Packs / Collected and add cards to start studying.
   if (cards.length === 0) {
     return (
       <>
-        <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <div className="container max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
           <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
-          <FlashcardPacksSection onCardsAdded={() => setGalleryExpanded(true)} />
-          <div className="rounded-xl border bg-card text-card-foreground p-12 text-center space-y-3">
-            <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50" />
-            <p className="text-sm text-muted-foreground">
-              Open a concept in the Study Guide, click the{' '}
-              <span className="font-medium">▷ Play</span> button, and choose{' '}
-              <span className="font-medium">Add to Flashcards</span>.
-            </p>
-            <Link to="/wiki" className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
-              <BookOpen className="h-4 w-4" /> Go to Study Guides
-            </Link>
-          </div>
+          <GalleryPanel
+            inline
+            initialTab="packs"
+            onCardsAdded={() => setGalleryExpanded(true)}
+            cards={cards}
+            orderedCards={orderedCards}
+            groupBy={groupBy}
+            onGroupByChange={setGroupBy}
+            examGroups={examGroups}
+            flashingCard={flashingCard}
+            activeIndex={activeIndex}
+            onSelect={setActiveIndex}
+            onRemove={removeCard}
+            onRemoveAll={clearCards}
+            onDragEnd={handleDragEnd}
+            sensors={sensors}
+            conceptMasteryMap={conceptMasteryMap}
+            reverseCardModes={reverseCardModes}
+            globalFlip={globalFlip}
+          />
         </div>
         <ConceptPopup />
       </>

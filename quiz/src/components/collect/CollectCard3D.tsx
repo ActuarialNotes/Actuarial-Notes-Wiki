@@ -84,29 +84,33 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
       onKeyDown={flippable ? e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } } : undefined}
     >
       <div className={`collect-card-3d ${flipClass}`} onAnimationEnd={handleAnimationEnd}>
-        <div
-          className="collect-card-face"
-          style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
-        >
-          {/* Glossy sheen sweep */}
-          <span className="collect-card-sheen" />
-          {/* Holographic frame */}
-          <span className="collect-card-frame" />
-          {/* Concept name */}
-          <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
-            <span className="text-xl sm:text-2xl font-extrabold leading-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
-              {name}
-            </span>
+        <div className="collect-card-face">
+          <div
+            className="collect-card-face-inner"
+            style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
+          >
+            {/* Glossy sheen sweep */}
+            <span className="collect-card-sheen" />
+            {/* Holographic frame */}
+            <span className="collect-card-frame" />
+            {/* Concept name */}
+            <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
+              <span className="text-xl sm:text-2xl font-extrabold leading-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
+                {name}
+              </span>
+            </div>
           </div>
         </div>
         {flippable && (
-          <div
-            className="collect-card-face collect-card-face-back"
-            style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
-          >
-            <span className="collect-card-frame" />
-            <div className="relative z-10 flex h-full flex-col items-center justify-center overflow-y-auto px-4 py-5 text-center pointer-events-auto">
-              {back}
+          <div className="collect-card-face collect-card-face-back">
+            <div
+              className="collect-card-face-inner"
+              style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
+            >
+              <span className="collect-card-frame" />
+              <div className="relative z-10 flex h-full flex-col items-center justify-center overflow-y-auto px-4 py-5 text-center pointer-events-auto">
+                {back}
+              </div>
             </div>
           </div>
         )}

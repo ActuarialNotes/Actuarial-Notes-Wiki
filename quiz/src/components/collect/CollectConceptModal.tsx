@@ -10,6 +10,7 @@ import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import { stripFrontmatter } from '@/components/wiki/WikiArticle'
+import { cleanWikiLinks } from '@/lib/wikiParser'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
 import { LearningProgressPanel } from '@/components/wiki/LearningProgressModal'
 import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
@@ -29,8 +30,9 @@ function extractDefinition(markdown: string): string {
   const lines = cleaned.split('\n')
   const out: string[] = []
   let started = false
-  for (const line of lines) {
-    const t = line.trim()
+  let i = 0
+  for (; i < lines.length; i++) {
+    const t = lines[i]!.trim()
     if (!started) {
       if (t && !t.startsWith('#') && !/^[*+-] /.test(t) && !/^\d+\. /.test(t) && !t.startsWith('>')) {
         started = true
@@ -41,15 +43,28 @@ function extractDefinition(markdown: string): string {
       out.push(t)
     }
   }
-  return out.join(' ')
+  const def = out.join(' ')
+  // A paragraph ending in a colon is introducing an enumeration — fold the
+  // list that follows in, otherwise the "definition" is a dangling teaser
+  // that never says what it's a list of (e.g. "...must satisfy:" with the
+  // actual axioms left off).
+  if (!/:\s*$/.test(def)) return def
+  const items: string[] = []
+  for (; i < lines.length; i++) {
+    const t = lines[i]!.trim()
+    if (!t) { if (items.length) break; else continue }
+    const m = t.match(/^(?:[*+-]|\d+\.) (.+)/)
+    if (!m) break
+    items.push(m[1]!)
+  }
+  return items.length ? `${def} ${items.join(', ')}.` : def
 }
 
 // Drop inline/block LaTeX and wiki-link syntax so a definition snippet reads
 // as plain language.
 function stripMarkup(text: string): string {
-  return text
+  return cleanWikiLinks(text)
     .replace(/\$\$?[^$]*\$\$?/g, ' … ')
-    .replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_m, a, b) => b || a)
     .replace(/[*_`]/g, '')
     .replace(/\s+/g, ' ')
     .trim()

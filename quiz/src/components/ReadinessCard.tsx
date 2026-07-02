@@ -502,7 +502,6 @@ export function ReadinessCard({
   })
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
   const [highlightedTopicIdx, setHighlightedTopicIdx] = useState<number | null>(null)
-  const [planTopicsOpen, setPlanTopicsOpen] = useState<Set<string>>(new Set())
 
   // Quiz history state
   const [selectedDay, setSelectedDay] = useState<string | null>(null)
@@ -707,13 +706,6 @@ export function ReadinessCard({
     [groupedPlanConcepts, masteryStateByName]
   )
 
-  // Auto-open plan topic groups (uncollapsed by default) when the plan loads
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (groupedPlanConcepts.length === 0) return
-    setPlanTopicsOpen(new Set(groupedPlanConcepts.map(g => g.topicName)))
-  }, [groupedPlanConcepts.map(g => g.topicName).join('|')])
-
   // Auto-expand Topics Mastered section and relevant topics when study plan is active
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -874,15 +866,6 @@ export function ReadinessCard({
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allConceptsDone, bonusClaimed, todayGemsEarned, user, progressKey])
-
-  const togglePlanTopicOpen = useCallback((topicName: string) => {
-    setPlanTopicsOpen(prev => {
-      const next = new Set(prev)
-      if (next.has(topicName)) next.delete(topicName)
-      else next.add(topicName)
-      return next
-    })
-  }, [])
 
   const handleStartQuiz = useCallback(() => {
     groupedPlanConcepts.forEach((_group, idx) => {
@@ -1229,58 +1212,45 @@ export function ReadinessCard({
                 </div>
               )}
 
-              {/* Grouped concept list — topics uncollapsed by default, each concept is toggleable */}
-              <div className="space-y-1.5">
+              {/* Grouped concept list — topic heading with its concepts listed directly below */}
+              <div className="space-y-3">
                 {groupedPlanConcepts.map((group, groupIdx) => {
                   const isHighlighted = highlightedTopicIdx === groupIdx
-                  const isOpen = planTopicsOpen.has(group.topicName)
                   return (
                     <div
                       key={group.topicName}
-                      className={`rounded-lg border transition-all duration-200 ${isHighlighted ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'border-border/60'}`}
+                      className={`space-y-0.5 rounded-lg px-2 py-1.5 -mx-2 transition-colors duration-200 ${isHighlighted ? 'bg-primary/5 ring-1 ring-primary/20' : ''}`}
                     >
-                      {/* Topic header row */}
-                      <button
-                        type="button"
-                        onClick={() => togglePlanTopicOpen(group.topicName)}
-                        className="flex items-center gap-1.5 px-2 py-1.5 w-full text-left"
-                        aria-expanded={isOpen}
-                      >
-                        <span className="text-xs font-semibold truncate min-w-0 text-foreground flex-1">
-                          {group.topicName}
-                        </span>
-                        <ChevronDown className={`h-3 w-3 text-muted-foreground shrink-0 transition-transform duration-150 ${isOpen ? '' : '-rotate-90'}`} />
-                      </button>
-                      {/* Concepts list */}
-                      {isOpen && (
-                        <div className="border-t border-border/40 px-2 pb-2 pt-1.5 space-y-1">
-                          {group.concepts.map(name => {
-                            const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                            const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                            const isCompleted =
-                              examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-                              STATE_ORDER[currentState] >= STATE_ORDER[target]
-                            const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
-                            return (
-                              <div key={name} className={`flex items-center gap-2 w-full${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
-                                {isCompleted
-                                  ? <Check className="h-4 w-4 text-green-500 shrink-0" />
-                                  : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
-                                {/* Concept name — opens popup */}
-                                <button
-                                  type="button"
-                                  data-study-concept={name.toLowerCase()}
-                                  onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', planIdx === -1 ? 0 : planIdx)}
-                                  className={`flex-1 text-left text-xs py-1 truncate transition-colors hover:text-foreground/80 ${isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
-                                >
-                                  {name}
-                                </button>
-                                <span className={`text-xs shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {STATE_LABEL[target]}</span>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      )}
+                      {/* Topic heading */}
+                      <p className="text-xs font-semibold text-muted-foreground truncate">
+                        {group.topicName}
+                      </p>
+                      {/* Concepts */}
+                      {group.concepts.map(name => {
+                        const target = targetByName.get(name.toLowerCase()) ?? 'level1'
+                        const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
+                        const isCompleted =
+                          examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
+                          STATE_ORDER[currentState] >= STATE_ORDER[target]
+                        const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+                        return (
+                          <div key={name} className={`flex items-center gap-2 w-full${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
+                            {isCompleted
+                              ? <Check className="h-4 w-4 text-green-500 shrink-0" />
+                              : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}
+                            {/* Concept name — opens popup */}
+                            <button
+                              type="button"
+                              data-study-concept={name.toLowerCase()}
+                              onClick={() => openDashboard(toRefs(allConcepts), toRefs(studyPlanConceptsForModal), 'study-plan', planIdx === -1 ? 0 : planIdx)}
+                              className={`flex-1 text-left text-sm py-1 truncate transition-colors hover:text-foreground/80 ${isCompleted ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                            >
+                              {name}
+                            </button>
+                            <span className={`text-xs shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {STATE_LABEL[target]}</span>
+                          </div>
+                        )
+                      })}
                     </div>
                   )
                 })}

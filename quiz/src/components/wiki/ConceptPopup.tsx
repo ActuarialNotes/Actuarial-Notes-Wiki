@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Lightbulb, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -13,7 +13,6 @@ import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ListenView } from '@/components/wiki/ListenView'
-import { MnemonicBubble } from '@/components/wiki/MnemonicBubble'
 import { MathViewContext } from '@/contexts/MathViewContext'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
@@ -23,7 +22,6 @@ import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
-import { parseAvatarUrl, type AnimalType } from '@/components/AvatarDisplay'
 
 const MASTERY_PILL: Record<MasteryState, { label: string; className: string }> = {
   new:      { label: 'New', className: 'bg-muted text-muted-foreground' },
@@ -56,7 +54,6 @@ export function ConceptPopup() {
   const [galleryIndex, setGalleryIndex] = useState(0)
   const [mathView, setMathView] = useState(false)
   const [listenView, setListenView] = useState(false)
-  const [mnemonicView, setMnemonicView] = useState(false)
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -210,9 +207,9 @@ export function ConceptPopup() {
     }
   }, [maximized])
 
-  // Reset math / listen / mnemonic view when popup closes.
+  // Reset math / listen view when popup closes.
   useEffect(() => {
-    if (!open) { setMathView(false); setListenView(false); setMnemonicView(false) }
+    if (!open) { setMathView(false); setListenView(false) }
   }, [open])
 
   // Fetch question count for the current concept (uses cached question list).
@@ -261,12 +258,6 @@ export function ConceptPopup() {
   const isLoggedInPremium = !!user && isPremium
   const currentFilter = dashboardContext?.filter ?? 'entire-syllabus'
 
-  const userAnimal: AnimalType = (() => {
-    const raw = user?.user_metadata?.avatar_url as string | undefined
-    if (!raw) return 'fox'
-    const parsed = parseAvatarUrl(raw)
-    return parsed.type === 'animal' ? parsed.value : 'fox'
-  })()
   const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
 
   return (
@@ -413,7 +404,7 @@ export function ConceptPopup() {
               {user && <AddToProjectMenuItem item={current} onNavigate={() => setShowPlayMenu(false)} />}
               <button
                 type="button"
-                onClick={() => { setMathView(true); setListenView(false); setMnemonicView(false); setShowPlayMenu(false) }}
+                onClick={() => { setMathView(true); setListenView(false); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <Sigma className="h-3.5 w-3.5 shrink-0" />
@@ -421,22 +412,12 @@ export function ConceptPopup() {
               </button>
               <button
                 type="button"
-                onClick={() => { setListenView(true); setMathView(false); setMnemonicView(false); setShowPlayMenu(false) }}
+                onClick={() => { setListenView(true); setMathView(false); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <Headphones className="h-3.5 w-3.5 shrink-0" />
                 Listen
               </button>
-              {current.kind === 'concept' && (
-                <button
-                  type="button"
-                  onClick={() => { setMnemonicView(true); setMathView(false); setListenView(false); setShowPlayMenu(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-                >
-                  <Lightbulb className="h-3.5 w-3.5 shrink-0" />
-                  Mnemonic
-                </button>
-              )}
               <button
                 type="button"
                 onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
@@ -475,18 +456,6 @@ export function ConceptPopup() {
               aria-label="Exit Listen"
             >
               <Headphones className="h-4 w-4" />
-            </button>
-          )}
-          {/* Lightbulb icon — visible only while in Mnemonic view; clicking exits it */}
-          {mnemonicView && (
-            <button
-              type="button"
-              onClick={() => setMnemonicView(false)}
-              className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
-              title="Exit Mnemonic"
-              aria-label="Exit Mnemonic"
-            >
-              <Lightbulb className="h-4 w-4" />
             </button>
           )}
           {images.length > 0 && (
@@ -540,10 +509,7 @@ export function ConceptPopup() {
               Couldn't load <span className="font-medium">{current.name}</span>.
             </div>
           )}
-          {mnemonicView && current.kind === 'concept' && (
-            <MnemonicBubble conceptName={current.name} animal={userAnimal} />
-          )}
-          {content !== null && !mnemonicView && (
+          {content !== null && (
             listenView ? (
               <ListenView markdown={content} />
             ) : mathView ? (

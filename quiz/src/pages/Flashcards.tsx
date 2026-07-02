@@ -15,7 +15,6 @@ import {
   Keyboard,
   LayoutGrid,
   Layers,
-  Lightbulb,
   Loader2,
   Lock,
   Maximize2,
@@ -61,10 +60,8 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { matchesSelectedVariant } from '@/data/examSittings'
-import { parseAvatarUrl, type AnimalType } from '@/components/AvatarDisplay'
 import { Button } from '@/components/ui/button'
 import { WikiArticle, stripFrontmatter, extractMathBlockquotes, extractImages } from '@/components/wiki/WikiArticle'
-import { MnemonicBubble } from '@/components/wiki/MnemonicBubble'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
@@ -74,7 +71,7 @@ import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
 type GalleryTab = 'deck' | 'collected' | 'packs'
-type ReverseCardSection = 'definition' | 'math' | 'images' | 'mnemonic'
+type ReverseCardSection = 'definition' | 'math' | 'images'
 
 const GROUP_LABELS: { key: GroupBy; label: string }[] = [
   { key: 'exam',   label: 'Exam' },
@@ -893,7 +890,6 @@ function ViewModeDropdown({
             )}
             {reverseCardModes.has('math') && <Sigma className="h-3.5 w-3.5" />}
             {reverseCardModes.has('images') && <Images className="h-3.5 w-3.5" />}
-            {reverseCardModes.has('mnemonic') && <Lightbulb className="h-3.5 w-3.5" />}
           </span>
         ) : (
           <span className="text-xs font-medium">Back</span>
@@ -908,7 +904,6 @@ function ViewModeDropdown({
               { mode: 'definition', label: 'Definition', icon: <span className="font-serif italic font-bold text-sm w-4 text-center leading-none">D</span> },
               { mode: 'math', label: 'Math', icon: <Sigma className="h-4 w-4" /> },
               { mode: 'images', label: 'Images', icon: <Images className="h-4 w-4" /> },
-              { mode: 'mnemonic', label: 'Mnemonic', icon: <Lightbulb className="h-4 w-4" /> },
             ] as const
           ).map(({ mode, label, icon }) => {
             const active = reverseCardModes.has(mode)
@@ -1112,17 +1107,9 @@ function SortableCard({
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const { openAt } = useConceptPopup()
   const { addCard, hasCard, cards } = useFlashcards()
-  const { user: cardUser } = useAuth()
   const routerNavigate = useNavigate()
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
-
-  const userAnimal: AnimalType = (() => {
-    const raw = cardUser?.user_metadata?.avatar_url as string | undefined
-    if (!raw) return 'fox'
-    const parsed = parseAvatarUrl(raw)
-    return parsed.type === 'animal' ? parsed.value : 'fox'
-  })()
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name })
 
@@ -1360,9 +1347,6 @@ function SortableCard({
                 </figure>
               ))}
             </div>
-          )}
-          {reverseCardModes.has('mnemonic') && card.kind === 'concept' && (
-            <MnemonicBubble conceptName={card.name} animal={userAnimal} />
           )}
         </div>
       </div>
@@ -1864,7 +1848,6 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [loadStatus, setLoadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const { addCard, hasCard } = useFlashcards()
-  const { user: studyUser } = useAuth()
   const routerNavigate = useNavigate()
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
@@ -1880,13 +1863,6 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
   const horizontalLockRef = useRef(false)
   const dragXRef = useRef(0)
-
-  const studyUserAnimal: AnimalType = (() => {
-    const raw = studyUser?.user_metadata?.avatar_url as string | undefined
-    if (!raw) return 'fox'
-    const parsed = parseAvatarUrl(raw)
-    return parsed.type === 'animal' ? parsed.value : 'fox'
-  })()
 
   const current = cards[index]
 
@@ -2169,9 +2145,6 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                   </figure>
                 ))}
               </div>
-            )}
-            {reverseCardModes.has('mnemonic') && current.kind === 'concept' && (
-              <MnemonicBubble conceptName={current.name} animal={studyUserAnimal} />
             )}
             {expanded && markdown && (
               <div className="border-t pt-4 overflow-y-auto max-h-96">

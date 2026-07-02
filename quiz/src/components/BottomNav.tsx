@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { COLLECTED_EVENT } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
+import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 
 function getLastWikiPath(): string {
   try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
@@ -50,6 +51,10 @@ export default function BottomNav() {
   }, [location.pathname])
 
   function handleStudyGuidesTab() {
+    if (!RESEARCH_TAB_ENABLED) {
+      navigate(getLastWikiPath())
+      return
+    }
     setStudyGuidesOpen(v => !v)
   }
 
@@ -61,7 +66,7 @@ export default function BottomNav() {
   return (
     <>
       {/* Study Guides sub-menu panel */}
-      {studyGuidesOpen && (
+      {RESEARCH_TAB_ENABLED && studyGuidesOpen && (
         <>
           {/* Backdrop */}
           <div

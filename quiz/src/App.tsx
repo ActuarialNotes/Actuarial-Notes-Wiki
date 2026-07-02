@@ -21,6 +21,7 @@ import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
+import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 
 const Research    = lazy(() => import('@/pages/Research'))
 
@@ -145,13 +146,17 @@ export default function App({ initialSession }: { initialSession: Session | null
                 <Route path="/upgrade" element={<Upgrade />} />
                 <Route path="/store" element={<ErrorBoundary><Store /></ErrorBoundary>} />
                 <Route path="/research" element={
-                  <RequireAuth>
-                    <ErrorBoundary>
-                      <Suspense fallback={<WikiFallback />}>
-                        <Research />
-                      </Suspense>
-                    </ErrorBoundary>
-                  </RequireAuth>
+                  RESEARCH_TAB_ENABLED ? (
+                    <RequireAuth>
+                      <ErrorBoundary>
+                        <Suspense fallback={<WikiFallback />}>
+                          <Research />
+                        </Suspense>
+                      </ErrorBoundary>
+                    </RequireAuth>
+                  ) : (
+                    <Navigate to="/wiki" replace />
+                  )
                 } />
                 <Route path="/wiki" element={
                   <Suspense fallback={<WikiFallback />}>

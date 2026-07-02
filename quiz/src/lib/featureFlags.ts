@@ -36,3 +36,18 @@
  * complete re-enable checklist.
  */
 export const RESEARCH_AI_ENABLED: boolean = false
+
+/**
+ * Research tab (the whole surface, not just the AI assistant) — currently OFF.
+ *
+ * The nav no longer shows a "Research" entry, and the `/research` route
+ * redirects to the wiki. Because "Study Guides" only has one child left when
+ * Research is hidden, the sidebar/bottom-nav also drop the nested
+ * group/panel and render a single flat "Study Guides" link — see the
+ * `RESEARCH_TAB_ENABLED` checks in components/Sidebar.tsx and
+ * components/BottomNav.tsx, and the `/research` route in App.tsx.
+ *
+ * All the underlying code, routes, and Supabase tables are left intact.
+ * Re-enabling is a one-line change: set this to `true`.
+ */
+export const RESEARCH_TAB_ENABLED: boolean = false

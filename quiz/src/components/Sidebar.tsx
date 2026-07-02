@@ -37,6 +37,7 @@ import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
+import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
@@ -508,38 +509,49 @@ export default function Sidebar() {
               onNavigate={closeMobile}
             />
           )}
-          <SidebarGroup
-            label="Study Guides"
-            icon={<BookOpen className="h-4 w-4" />}
-            collapsed={collapsed}
-            isActive={
-              location.pathname.startsWith('/wiki') ||
-              location.pathname.startsWith('/research')
-            }
-          >
+          {RESEARCH_TAB_ENABLED ? (
+            <SidebarGroup
+              label="Study Guides"
+              icon={<BookOpen className="h-4 w-4" />}
+              collapsed={collapsed}
+              isActive={
+                location.pathname.startsWith('/wiki') ||
+                location.pathname.startsWith('/research')
+              }
+            >
+              <SidebarItem
+                to={getLastWikiPath()}
+                label="Actuarial Exams"
+                icon={<GraduationCap className="h-4 w-4" />}
+                collapsed={collapsed}
+                onNavigate={closeMobile}
+                forceActive={location.pathname.startsWith('/wiki')}
+              />
+              {user && (
+                <SidebarItem
+                  to="/research"
+                  label="Research"
+                  icon={<Microscope className="h-4 w-4" />}
+                  collapsed={collapsed}
+                  onNavigate={closeMobile}
+                  badge={
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none">
+                      Beta
+                    </span>
+                  }
+                />
+              )}
+            </SidebarGroup>
+          ) : (
             <SidebarItem
               to={getLastWikiPath()}
-              label="Actuarial Exams"
-              icon={<GraduationCap className="h-4 w-4" />}
+              label="Study Guides"
+              icon={<BookOpen className="h-4 w-4" />}
               collapsed={collapsed}
               onNavigate={closeMobile}
               forceActive={location.pathname.startsWith('/wiki')}
             />
-            {user && (
-              <SidebarItem
-                to="/research"
-                label="Research"
-                icon={<Microscope className="h-4 w-4" />}
-                collapsed={collapsed}
-                onNavigate={closeMobile}
-                badge={
-                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none">
-                    Beta
-                  </span>
-                }
-              />
-            )}
-          </SidebarGroup>
+          )}
           <SidebarItem
             to="/flashcards"
             label="Flashcards"

@@ -19,6 +19,7 @@ import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
+import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 import { useAuth } from '@/hooks/useAuth'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -410,7 +411,7 @@ export function ConceptPopup() {
                   </Link>
                 )}
               </div>
-              {user && <AddToProjectMenuItem item={current} onNavigate={() => setShowPlayMenu(false)} />}
+              {RESEARCH_TAB_ENABLED && user && <AddToProjectMenuItem item={current} onNavigate={() => setShowPlayMenu(false)} />}
               <button
                 type="button"
                 onClick={() => { setMathView(true); setListenView(false); setMnemonicView(false); setShowPlayMenu(false) }}

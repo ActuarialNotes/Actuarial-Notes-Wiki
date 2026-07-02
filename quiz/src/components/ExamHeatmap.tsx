@@ -573,7 +573,7 @@ export function ExamHeatmap({
         </>
       )}
 
-      {dateRows}
+      {showFullTimeline && dateRows}
     </div>
   )
 }

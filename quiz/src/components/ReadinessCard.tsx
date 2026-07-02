@@ -1017,6 +1017,20 @@ export function ReadinessCard({
             highlightedDay={selectedDay}
           />
 
+          {/* Start quiz CTA — moved here from the Study Plan card */}
+          {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
+            <button
+              type="button"
+              onClick={handleStartQuiz}
+              className="w-full flex items-center gap-3 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-colors"
+            >
+              <Play className="h-5 w-5 shrink-0" />
+              <span className="flex-1 text-left">
+                {todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz"}
+              </span>
+            </button>
+          )}
+
           {/* Day panel — shown when a heatmap day is clicked */}
           {selectedDay && (() => {
             const daySessions = examSessions.filter(s => {
@@ -1214,18 +1228,6 @@ export function ReadinessCard({
                   )}
                 </div>
               )}
-
-              {/* Primary CTA */}
-              <button
-                type="button"
-                onClick={handleStartQuiz}
-                className="w-full flex items-center gap-3 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-colors"
-              >
-                <Play className="h-5 w-5 shrink-0" />
-                <span className="flex-1 text-left">
-                  {todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz"}
-                </span>
-              </button>
 
               {/* Grouped concept list — topics uncollapsed by default, each concept is toggleable */}
               <div className="space-y-1.5">

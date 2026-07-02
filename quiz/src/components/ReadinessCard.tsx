@@ -987,7 +987,7 @@ export function ReadinessCard({
           {/* Header */}
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2 flex-wrap">
-              <h2 className="text-xl font-semibold truncate">{syllabus.examLabel}</h2>
+              <h3 className="text-sm font-semibold truncate">Study Schedule</h3>
             </div>
             <div className="flex items-center gap-1 shrink-0">
               <button
@@ -1157,7 +1157,7 @@ export function ReadinessCard({
 
       {/* Today's Study Plan card */}
       {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
-        <Card>
+        <Card className="border-0">
           <CardContent className="p-6 space-y-4">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
@@ -1409,7 +1409,7 @@ export function ReadinessCard({
 
       {/* RIGHT COLUMN: Study Guide */}
       <div className="space-y-3">
-        <Card ref={studyGuideCardRef} className="bg-card">
+        <Card ref={studyGuideCardRef} className="bg-card border-0">
           <CardContent className="p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold">Study Guide</h3>
@@ -1462,7 +1462,7 @@ export function ReadinessCard({
         </Card>
 
         {/* Topics Learned card */}
-        <Card>
+        <Card className="border-0">
           <CardContent className="p-5 space-y-2">
             <button
               type="button"

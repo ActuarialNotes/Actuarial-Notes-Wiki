@@ -18,6 +18,7 @@ import {
   Loader2,
   Lock,
   Maximize2,
+  Minus,
   Play,
   Plus,
   Search,
@@ -510,10 +511,78 @@ function PackRow({
   )
 }
 
+interface ExamPackGroupData {
+  examId: string
+  examLabel: string
+  colorIndex: number
+  allConcepts: string[]
+  learningObjectives: { name: string; concepts: string[] }[]
+}
+
+// One exam's packs as a single grid cell: the whole-exam pack on top, with its
+// learning-objective packs tucked behind a tap-to-reveal toggle so the grid
+// stays compact and scannable until you drill into an exam.
+function ExamPackGroup({
+  group,
+  onCardsAdded,
+}: {
+  group: ExamPackGroupData
+  onCardsAdded?: () => void
+}) {
+  const [showObjectives, setShowObjectives] = useState(false)
+  return (
+    <div className="space-y-2">
+      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
+        {group.examLabel}
+      </h3>
+      <PackRow
+        kind="exam"
+        label={`${group.examLabel} — All concepts`}
+        concepts={group.allConcepts}
+        colorIndex={group.colorIndex}
+        onCardsAdded={onCardsAdded}
+      />
+      {group.learningObjectives.length > 0 && (
+        <div>
+          <button
+            type="button"
+            onClick={() => setShowObjectives(v => !v)}
+            aria-expanded={showObjectives}
+            className="w-full flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+          >
+            <Target className="h-3.5 w-3.5 shrink-0" />
+            <span className="uppercase tracking-wide">
+              Learning Objectives ({group.learningObjectives.length})
+            </span>
+            {showObjectives
+              ? <ChevronUp className="h-3.5 w-3.5 ml-auto shrink-0" />
+              : <ChevronDown className="h-3.5 w-3.5 ml-auto shrink-0" />}
+          </button>
+          {showObjectives && (
+            <div className="mt-1.5 ml-1 pl-3 border-l-2 border-border/60 space-y-1.5">
+              {group.learningObjectives.map(lo => (
+                <PackRow
+                  key={lo.name}
+                  kind="learning_objective"
+                  label={lo.name}
+                  concepts={lo.concepts}
+                  colorIndex={group.colorIndex}
+                  isSub
+                  onCardsAdded={onCardsAdded}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // Packs tab — every available pack, organized by exam. The whole-exam pack sits
-// at the top of each exam group; its learning-objective packs are listed under
-// it as indented sub-sections. Today's study plan and any user-saved packs
-// bookend the list.
+// at the top of each exam group; its learning-objective packs hide behind a
+// toggle. Exam groups lay out in a responsive multi-column grid on desktop.
+// Today's study plan and any user-saved packs bookend the list.
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -590,39 +659,15 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
         />
       )}
 
-      {/* Exam packs, each with its learning-objective sub-packs */}
-      {examGroups.map(group => (
-        <div key={group.examId} className="space-y-2">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
-            {group.examLabel}
-          </h3>
-          <PackRow
-            kind="exam"
-            label={`${group.examLabel} — All concepts`}
-            concepts={group.allConcepts}
-            colorIndex={group.colorIndex}
-            onCardsAdded={onCardsAdded}
-          />
-          {group.learningObjectives.length > 0 && (
-            <div className="ml-1 pl-3 border-l-2 border-border/60 space-y-1.5">
-              <p className="text-[11px] font-medium text-muted-foreground/80 uppercase tracking-wide px-1 pt-0.5">
-                Learning Objectives
-              </p>
-              {group.learningObjectives.map(lo => (
-                <PackRow
-                  key={lo.name}
-                  kind="learning_objective"
-                  label={lo.name}
-                  concepts={lo.concepts}
-                  colorIndex={group.colorIndex}
-                  isSub
-                  onCardsAdded={onCardsAdded}
-                />
-              ))}
-            </div>
-          )}
+      {/* Exam packs — responsive multi-column grid, each with its
+          learning-objective sub-packs behind a tap-to-reveal toggle */}
+      {examGroups.length > 0 && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-6 items-start">
+          {examGroups.map(group => (
+            <ExamPackGroup key={group.examId} group={group} onCardsAdded={onCardsAdded} />
+          ))}
         </div>
-      ))}
+      )}
 
       {/* Saved packs */}
       {savedPacks.length > 0 && (
@@ -659,16 +704,22 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
 }
 
 // Collected tab — every concept the user has unlocked by passing its
-// comprehension check. Each can be added straight to the study deck.
+// comprehension check. Cards render identically to My Deck (same flip-on-tap
+// tile) so the two views feel consistent; the always-visible +/- control adds
+// or removes each card from the study deck in place.
 function CollectedContent({
   conceptMasteryMap,
+  reverseCardModes,
+  globalFlip,
   onCardsAdded,
 }: {
   conceptMasteryMap: Map<string, MasteryState>
+  reverseCardModes: Set<ReverseCardSection>
+  globalFlip: boolean
   onCardsAdded?: () => void
 }) {
   const collectedCards = useCollectedCards(s => s.cards)
-  const { addCard, hasCard } = useFlashcards()
+  const { addCard, removeCard, hasCard } = useFlashcards()
 
   const sorted = useMemo(
     () => [...collectedCards].sort((a, b) => b.collectedAt - a.collectedAt),
@@ -688,37 +739,34 @@ function CollectedContent({
     )
   }
 
+  // Wrapped in a (drag-disabled) sortable context so the shared SortableCard
+  // tile can be reused verbatim without becoming reorderable here.
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-      {sorted.map(c => {
-        const added = hasCard(c.name)
-        const mastery = conceptMasteryMap.get(c.name.toLowerCase()) ?? 'new'
-        return (
-          <div key={c.name} className="rounded-xl border bg-card text-card-foreground flex flex-col p-3 gap-2 min-h-[110px]">
-            <div className="flex items-start justify-between gap-2">
-              <span className="font-semibold text-sm leading-snug min-w-0">{c.name}</span>
-              <Unlock className="h-3.5 w-3.5 shrink-0 text-emerald-500 mt-0.5" />
-            </div>
-            <div className="flex items-center justify-between gap-2 mt-auto pt-1">
-              <MasteryPill state={mastery} />
-              {added ? (
-                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-green-600 dark:text-green-400">
-                  <Check className="h-3 w-3" /> In deck
-                </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => { addCard({ kind: 'concept', name: c.name }); onCardsAdded?.() }}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
-                >
-                  <Plus className="h-3 w-3" /> Add to deck
-                </button>
-              )}
-            </div>
-          </div>
-        )
-      })}
-    </div>
+    <DndContext collisionDetection={closestCenter} onDragEnd={() => {}}>
+      <SortableContext items={sorted.map(c => c.name)} strategy={rectSortingStrategy}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {sorted.map(c => {
+            const card: FlashCard = { kind: 'concept', name: c.name, addedAt: c.collectedAt }
+            return (
+              <SortableCard
+                key={c.name}
+                card={card}
+                masteryState={conceptMasteryMap.get(c.name.toLowerCase()) ?? 'new'}
+                onSelect={() => { if (!hasCard(c.name)) { addCard(card); onCardsAdded?.() } }}
+                onRemove={removeCard}
+                isFlashing={false}
+                isActive={false}
+                reverseCardModes={reverseCardModes}
+                globalFlip={globalFlip}
+                collected
+                disableSort
+                onCardsAdded={onCardsAdded}
+              />
+            )
+          })}
+        </div>
+      </SortableContext>
+    </DndContext>
   )
 }
 
@@ -1088,6 +1136,9 @@ function SortableCard({
   isActive,
   reverseCardModes,
   globalFlip,
+  collected = false,
+  disableSort = false,
+  onCardsAdded,
 }: {
   card: FlashCard
   masteryState: MasteryState
@@ -1097,6 +1148,9 @@ function SortableCard({
   isActive: boolean
   reverseCardModes: Set<ReverseCardSection>
   globalFlip: boolean
+  collected?: boolean
+  disableSort?: boolean
+  onCardsAdded?: () => void
 }) {
   const [flipped, setFlipped] = useState(globalFlip)
   const [markdown, setMarkdown] = useState<string | null>(null)
@@ -1111,7 +1165,47 @@ function SortableCard({
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name })
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: card.name, disabled: disableSort })
+
+  const inDeck = hasCard(card.name)
+  function toggleDeck(e: React.MouseEvent) {
+    e.stopPropagation()
+    if (inDeck) {
+      onRemove(card.name)
+    } else {
+      addCard(card)
+      onCardsAdded?.()
+    }
+  }
+
+  // Prominent circle-check (collected) + always-visible add/remove-from-deck
+  // control. Rendered on both card faces so they appear regardless of where the
+  // card lives (My Deck, Collected, …) or whether it's showing front or back.
+  const deckToggleButton = (
+    <button
+      type="button"
+      onPointerDown={e => e.stopPropagation()}
+      onClick={toggleDeck}
+      aria-label={inDeck ? `Remove ${card.name} from deck` : `Add ${card.name} to deck`}
+      title={inDeck ? 'Remove from deck' : 'Add to deck'}
+      className={`inline-flex items-center justify-center h-7 w-7 rounded-full border shadow-sm transition-colors ${
+        inDeck
+          ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
+          : 'bg-background text-foreground border-border hover:bg-accent hover:border-primary/50'
+      }`}
+    >
+      {inDeck ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+    </button>
+  )
+  const collectedBadge = collected ? (
+    <span
+      title="Collected"
+      aria-label="Collected"
+      className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-emerald-500 text-white shadow-sm"
+    >
+      <Check className="h-4 w-4" strokeWidth={3} />
+    </span>
+  ) : null
 
   useEffect(() => {
     if (!showPlayMenu) return
@@ -1177,9 +1271,12 @@ function SortableCard({
         }}
         className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
-        {/* Header: name + play button */}
-        <div className="flex items-center justify-between gap-1 px-3 py-2 border-b">
+        {/* Header: name + collected badge + deck toggle + play button */}
+        <div className="flex items-center justify-between gap-1.5 px-3 py-2 border-b">
           <span className="text-sm font-medium text-muted-foreground truncate min-w-0">{card.name}</span>
+          <div className="flex items-center gap-1.5 shrink-0">
+          {collectedBadge}
+          {deckToggleButton}
           <div className="relative shrink-0" ref={playMenuRef}>
             <button
               ref={playBtnRef}
@@ -1297,6 +1394,7 @@ function SortableCard({
               </div>
             )}
           </div>
+          </div>
         </div>
         {showQuestionsModal && (
           <ConceptQuestionsModal conceptName={card.name} onClose={() => setShowQuestionsModal(false)} />
@@ -1360,10 +1458,19 @@ function SortableCard({
       data-card-name={card.name}
       {...listeners}
       {...attributes}
-      className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing hover:shadow-md select-none`}
+      onClick={(e) => {
+        const target = e.target as HTMLElement
+        if (!target.closest('a, button, [role="button"], input, select, textarea')) {
+          handleFlipOpen()
+        }
+      }}
+      className={`${baseClass} ${colorClass} cursor-pointer active:cursor-grabbing hover:shadow-md select-none`}
     >
-      {/* Action button */}
-      <div className="flex items-center justify-end px-2 pt-2">
+      {/* Top bar: deck toggle + collected badge + actions menu */}
+      <div className="flex items-center justify-between gap-1.5 px-2 pt-2">
+        {deckToggleButton}
+        <div className="flex items-center gap-1.5">
+        {collectedBadge}
         <div className="relative" ref={playMenuRef}>
           <button
             ref={playBtnRef}
@@ -1480,6 +1587,7 @@ function SortableCard({
               </button>
             </div>
           )}
+        </div>
         </div>
       </div>
       {showQuestionsModal && (
@@ -1640,7 +1748,12 @@ function GalleryPanel({
   onCardsAdded?: () => void
 }) {
   const { user } = useAuth()
-  const collectedCount = useCollectedCards(s => s.cards.length)
+  const collectedCards = useCollectedCards(s => s.cards)
+  const collectedCount = collectedCards.length
+  const collectedSet = useMemo(
+    () => new Set(collectedCards.map(c => c.name.toLowerCase())),
+    [collectedCards],
+  )
   const [tab, setTab] = useState<GalleryTab>(initialTab)
   const [showManageDialog, setShowManageDialog] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -1678,6 +1791,8 @@ function GalleryPanel({
         isActive={overallIdx === activeIndex}
         reverseCardModes={reverseCardModes}
         globalFlip={globalFlip}
+        collected={collectedSet.has(card.name.toLowerCase())}
+        onCardsAdded={onCardsAdded}
       />
     )
   }
@@ -1792,7 +1907,12 @@ function GalleryPanel({
         )}
 
         {tab === 'collected' && (
-          <CollectedContent conceptMasteryMap={conceptMasteryMap} onCardsAdded={onCardsAdded} />
+          <CollectedContent
+            conceptMasteryMap={conceptMasteryMap}
+            reverseCardModes={reverseCardModes}
+            globalFlip={globalFlip}
+            onCardsAdded={onCardsAdded}
+          />
         )}
 
         {tab === 'packs' && <PacksContent onCardsAdded={onCardsAdded} />}

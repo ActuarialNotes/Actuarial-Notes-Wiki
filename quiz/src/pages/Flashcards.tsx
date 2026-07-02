@@ -1204,6 +1204,7 @@ function SortableCard({
   collected = false,
   disableSort = false,
   onCardsAdded,
+  focusMode = false,
 }: {
   card: FlashCard
   masteryState: MasteryState
@@ -1216,6 +1217,7 @@ function SortableCard({
   collected?: boolean
   disableSort?: boolean
   onCardsAdded?: () => void
+  focusMode?: boolean
 }) {
   const [flipped, setFlipped] = useState(globalFlip)
   const [markdown, setMarkdown] = useState<string | null>(null)
@@ -1302,7 +1304,9 @@ function SortableCard({
   const allEquations = markdown ? extractMathBlockquotes(markdown) : []
   const cardImages = markdown ? extractImages(markdown) : []
 
-  const baseClass = `group relative rounded-xl border flex flex-col transition-shadow min-h-[150px]${collected ? ' flashcard-collected' : ''}${isFlashing ? ' flashcard-highlight' : ''}`
+  // Focus mode drops the "shiny"/holographic treatment for collected cards so
+  // every card reads the same and the title is the only thing that stands out.
+  const baseClass = `group relative rounded-xl border flex flex-col transition-shadow min-h-[150px]${collected && !focusMode ? ' flashcard-collected' : ''}${isFlashing ? ' flashcard-highlight' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 border-primary shadow-sm'
     : 'bg-card text-card-foreground'
@@ -1326,7 +1330,8 @@ function SortableCard({
         }}
         className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
-        {/* Header: name + play button */}
+        {/* Header: name + play button — hidden in focus mode */}
+        {!focusMode && (
         <div className="flex items-center justify-between gap-1 px-3 py-2 border-b">
           <span className="text-sm font-medium text-muted-foreground truncate min-w-0">{card.name}</span>
           <div className="relative shrink-0" ref={playMenuRef}>
@@ -1447,6 +1452,7 @@ function SortableCard({
             )}
           </div>
         </div>
+        )}
         {showQuestionsModal && (
           <ConceptQuestionsModal conceptName={card.name} onClose={() => setShowQuestionsModal(false)} />
         )}
@@ -1519,7 +1525,8 @@ function SortableCard({
       }}
       className={`${baseClass} ${colorClass} cursor-pointer active:cursor-grabbing hover:shadow-md select-none`}
     >
-      {/* Top bar: deck toggle + actions menu */}
+      {/* Top bar: deck toggle + actions menu — hidden in focus mode */}
+      {!focusMode && (
       <div className="flex items-center justify-between gap-1.5 px-2 pt-2">
         {deckToggleButton}
         <div className="relative" ref={playMenuRef}>
@@ -1640,6 +1647,7 @@ function SortableCard({
           )}
         </div>
       </div>
+      )}
       {showQuestionsModal && (
         <ConceptQuestionsModal conceptName={card.name} onClose={() => setShowQuestionsModal(false)} />
       )}
@@ -1647,7 +1655,8 @@ function SortableCard({
         <LearningProgressModal conceptName={card.name} onClose={() => setShowLearningProgress(false)} />
       )}
 
-      {/* Name — click to flip */}
+      {/* Name — click to flip. In focus mode the title is the only thing shown:
+          no lock icon, no mastery pill, no collect button. */}
       <button
         type="button"
         onPointerDown={e => e.stopPropagation()}
@@ -1658,26 +1667,28 @@ function SortableCard({
       >
         <span className="flex items-center justify-center gap-1.5">
           <span className="font-semibold text-base leading-snug">{card.name}</span>
-          {!collected && <Lock className="h-4 w-4 shrink-0" />}
+          {!collected && !focusMode && <Lock className="h-4 w-4 shrink-0" />}
         </span>
       </button>
 
-      {/* Mastery pill / collect button */}
-      <div className="flex justify-center pb-2.5">
-        {collected ? (
-          <MasteryPill state={masteryState} />
-        ) : (
-          <button
-            type="button"
-            onPointerDown={e => e.stopPropagation()}
-            onClick={e => { e.stopPropagation(); openCollect(card) }}
-            aria-label={`Collect ${card.name}`}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            <Lock className="h-3 w-3" /> Collect
-          </button>
-        )}
-      </div>
+      {/* Mastery pill / collect button — hidden in focus mode */}
+      {!focusMode && (
+        <div className="flex justify-center pb-2.5">
+          {collected ? (
+            <MasteryPill state={masteryState} />
+          ) : (
+            <button
+              type="button"
+              onPointerDown={e => e.stopPropagation()}
+              onClick={e => { e.stopPropagation(); openCollect(card) }}
+              aria-label={`Collect ${card.name}`}
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              <Lock className="h-3 w-3" /> Collect
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -1791,6 +1802,7 @@ function GalleryPanel({
   inline = false,
   initialTab = 'deck',
   onCardsAdded,
+  focusMode = false,
 }: {
   cards: FlashCard[]
   orderedCards: FlashCard[]
@@ -1811,6 +1823,7 @@ function GalleryPanel({
   inline?: boolean
   initialTab?: GalleryTab
   onCardsAdded?: () => void
+  focusMode?: boolean
 }) {
   const { user } = useAuth()
   const collectedCards = useCollectedCards(s => s.cards)
@@ -1858,25 +1871,36 @@ function GalleryPanel({
         globalFlip={globalFlip}
         collected={collectedSet.has(card.name.toLowerCase())}
         onCardsAdded={onCardsAdded}
+        focusMode={focusMode}
       />
     )
   }
 
+  // In focus mode the panel covers the full viewport (including the sidebar) and
+  // sits above the focus backdrop, so the cards are the only thing on screen.
+  const containerClass = inline
+    ? 'flex flex-col'
+    : focusMode
+      ? 'fixed inset-0 z-[56] flex flex-col bg-background'
+      : 'gallery-panel fixed inset-0 z-40 flex flex-col bg-background'
+
   return (
-    <div className={inline ? 'flex flex-col' : 'gallery-panel fixed inset-0 z-40 flex flex-col bg-background'}>
-      {/* Header — tab switcher */}
-      <div className={inline ? 'pb-3' : 'sticky top-0 z-10 bg-background border-b px-4 py-3'}>
-        <div className="flex items-center gap-3">
-          <div className="flex-1 min-w-0">
-            <GalleryTabBar
-              active={tab}
-              onChange={setTab}
-              deckCount={cards.length}
-              collectedCount={collectedCount}
-            />
+    <div className={containerClass}>
+      {/* Header — tab switcher (hidden in focus mode) */}
+      {!focusMode && (
+        <div className={inline ? 'pb-3' : 'sticky top-0 z-10 bg-background border-b px-4 py-3'}>
+          <div className="flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <GalleryTabBar
+                active={tab}
+                onChange={setTab}
+                deckCount={cards.length}
+                collectedCount={collectedCount}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Scrollable content */}
       <div
@@ -1887,7 +1911,8 @@ function GalleryPanel({
       >
         {tab === 'deck' && (
           <div className="space-y-4">
-            {/* Deck controls: count / manage / sort / add */}
+            {/* Deck controls: count / manage / sort / add — hidden in focus mode */}
+            {!focusMode && (
             <div className="flex items-center gap-3 flex-wrap">
               <div className="flex items-center gap-2 shrink-0">
                 <button
@@ -1920,6 +1945,7 @@ function GalleryPanel({
               <div className="flex-1" />
               <DeckAddSearch onCardsAdded={onCardsAdded} />
             </div>
+            )}
 
             {cards.length === 0 ? (
               <div className="rounded-xl border bg-card text-card-foreground p-10 text-center space-y-2">
@@ -2416,7 +2442,7 @@ export default function Flashcards() {
     'ArrowLeft': () => {
       setActiveIndex(i => Math.max(i - 1, 0))
     },
-    'f': () => { setFocusMode(v => !v); setGalleryExpanded(false) },
+    'f': () => { setFocusMode(v => !v) },
     '?': () => setShowShortcutsHelp(v => !v),
   }, !galleryExpanded && !popupOpen && !showShortcutsHelp && cards.length > 0)
 
@@ -2651,10 +2677,15 @@ export default function Flashcards() {
     )
   }
 
+  // Focus mode works in both study and gallery views — toggling it must not
+  // kick the user out of the gallery. In gallery view it strips the chrome
+  // (sidebar, panel header, per-card actions) so the cards themselves are the
+  // only thing on screen.
   function handleFocusToggle() {
     setFocusMode(v => !v)
-    setGalleryExpanded(false)
   }
+
+  const studyFocus = focusMode && !galleryExpanded
 
   return (
     <>
@@ -2697,11 +2728,12 @@ export default function Flashcards() {
           conceptMasteryMap={conceptMasteryMap}
           reverseCardModes={reverseCardModes}
           globalFlip={globalFlip}
+          focusMode={focusMode}
         />
       )}
 
       <div
-        className={`container max-w-4xl mx-auto pb-52 md:pb-44${focusMode ? ' relative z-[56] pointer-events-none' : ''}`}
+        className={`container max-w-4xl mx-auto pb-52 md:pb-44${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Sticky header: title + gallery strip — hidden when gallery overlay is open */}
@@ -2712,7 +2744,7 @@ export default function Flashcards() {
         )}
 
         {/* Study area */}
-        <div className={focusMode ? 'pointer-events-auto' : undefined}>
+        <div className={studyFocus ? 'pointer-events-auto' : undefined}>
           <FlashcardStudyArea
             ref={studyAreaRef}
             cards={orderedCards}

@@ -340,14 +340,6 @@ export default function Landing() {
     } catch { /* ignore */ }
   }
 
-  // Pre-select first in-progress exam when progress loads
-  useEffect(() => {
-    if (initialTopic) return
-    const firstInProgress = EXAMS.find(e => examProgress[e.progressKey] === 'in_progress')
-    if (firstInProgress) setTopic(firstInProgress.value)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examProgress.P, examProgress.FM, examProgress['CAS-5']])
-
   // Reset state and restore saved topic selections when exam topic or mode changes
   useEffect(() => {
     setIsAdaptive(false)

@@ -771,14 +771,17 @@ function CollectedContent({
 }
 
 // Free-form "add any flashcard to your deck" search — surfaced in the My Deck
-// tab. Matches against every concept in the syllabi plus anything collected.
+// tab as a "+" button that expands into a full-width search bar pinned to the
+// top of the screen, matching WikiFloatingSearch / QuizFloatingSearch. Matches
+// against every concept in the syllabi plus anything collected.
 function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
   const { syllabi } = useWikiSyllabus()
   const collectedCards = useCollectedCards(s => s.cards)
   const { addCard, hasCard } = useFlashcards()
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const allConcepts = useMemo(() => {
     const set = new Set<string>()
@@ -793,55 +796,107 @@ function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
     return allConcepts.filter(n => n.toLowerCase().includes(q)).slice(0, 24)
   }, [query, allConcepts])
 
+  function close() {
+    setQuery('')
+    setOpen(false)
+  }
+
   useEffect(() => {
     if (!open) return
+    inputRef.current?.focus()
     function onOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) close()
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') close()
     }
     document.addEventListener('mousedown', onOutside)
-    return () => document.removeEventListener('mousedown', onOutside)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onOutside)
+      document.removeEventListener('keydown', onKey)
+    }
   }, [open])
 
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        title="Add a flashcard"
+        aria-label="Add a flashcard"
+        className="inline-flex items-center justify-center h-9 w-9 rounded-md border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
+      >
+        <Plus className="h-4 w-4" />
+      </button>
+    )
+  }
+
   return (
-    <div className="relative" ref={ref}>
-      <div className="relative">
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-        <input
-          type="text"
-          value={query}
-          onChange={e => { setQuery(e.target.value); setOpen(true) }}
-          onFocus={() => setOpen(true)}
-          placeholder="Add a flashcard…"
-          className="h-9 w-44 sm:w-56 rounded-md border bg-background pl-8 pr-2.5 text-[16px] sm:text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-        />
-      </div>
-      {open && query.trim() && (
-        <div className="absolute right-0 top-full mt-1 w-64 max-h-72 overflow-y-auto rounded-lg border bg-popover text-popover-foreground shadow-lg z-50 py-1">
-          {results.length === 0 ? (
-            <p className="px-3 py-2 text-xs text-muted-foreground">No matches</p>
-          ) : results.map(name => {
-            const added = hasCard(name)
-            return (
-              <button
-                key={name}
-                type="button"
-                disabled={added}
-                onClick={() => { addCard({ kind: 'concept', name }); onCardsAdded?.() }}
-                className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors ${
-                  added ? 'text-muted-foreground cursor-default' : 'hover:bg-accent'
-                }`}
-              >
-                {added
-                  ? <Check className="h-3.5 w-3.5 shrink-0 text-green-500" />
-                  : <Plus className="h-3.5 w-3.5 shrink-0 text-primary" />}
-                <span className="flex-1 min-w-0 truncate">{name}</span>
-                {added && <span className="text-[10px] shrink-0">In deck</span>}
-              </button>
-            )
-          })}
+    <>
+      <div
+        className="fixed inset-0 z-[64] bg-background/60 backdrop-blur-sm"
+        onMouseDown={e => { e.preventDefault(); close() }}
+      />
+      <div
+        ref={containerRef}
+        className="fixed top-0 left-0 right-0 z-[65] border-b bg-background/95 backdrop-blur-md shadow-lg"
+      >
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center gap-2 h-14">
+            <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="Add a flashcard…"
+              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder:text-muted-foreground"
+              aria-label="Add a flashcard"
+              autoComplete="off"
+              spellCheck={false}
+            />
+            <button
+              type="button"
+              onClick={close}
+              aria-label="Close search"
+              className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          {query.trim() && (
+            <div className="border-t py-2">
+              <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
+                {results.length === 0 ? (
+                  <li className="text-xs text-muted-foreground px-2 py-2">No matches</li>
+                ) : results.map(name => {
+                  const added = hasCard(name)
+                  return (
+                    <li key={name}>
+                      <button
+                        type="button"
+                        disabled={added}
+                        onClick={() => { addCard({ kind: 'concept', name }); onCardsAdded?.() }}
+                        className={`w-full flex items-center gap-2 rounded-md px-2 py-2 text-sm text-left transition-colors ${
+                          added ? 'text-muted-foreground cursor-default' : 'hover:bg-accent'
+                        }`}
+                      >
+                        {added
+                          ? <Check className="h-3.5 w-3.5 shrink-0 text-green-500" />
+                          : <Plus className="h-3.5 w-3.5 shrink-0 text-primary" />}
+                        <span className="flex-1 min-w-0 truncate">{name}</span>
+                        {added && <span className="text-[10px] shrink-0">In deck</span>}
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
+    </>
   )
 }
 

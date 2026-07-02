@@ -995,6 +995,7 @@ function FlashcardControlsBar({
   focusMode,
   onFocusToggle,
   onShortcutsHelp,
+  minimal = false,
 }: {
   galleryOpen: boolean
   onGalleryToggle: () => void
@@ -1005,28 +1006,33 @@ function FlashcardControlsBar({
   focusMode: boolean
   onFocusToggle: () => void
   onShortcutsHelp: () => void
+  minimal?: boolean
 }) {
   return (
     <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 py-3 sm:py-4 border-t bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
-      <button
-        type="button"
-        onClick={onGalleryToggle}
-        title={galleryOpen ? 'Back to study' : 'Open gallery'}
-        aria-pressed={galleryOpen}
-        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-colors ${
-          galleryOpen
-            ? 'bg-primary text-primary-foreground border-primary'
-            : 'text-muted-foreground hover:text-foreground hover:bg-accent border-border'
-        }`}
-      >
-        {galleryOpen
-          ? <span className="inline-flex gap-0.5"><Eye className="h-4 w-4" /><Eye className="h-4 w-4" /></span>
-          : <LayoutGrid className="h-4 w-4" />
-        }
-        <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
-      </button>
+      {!minimal && (
+        <>
+          <button
+            type="button"
+            onClick={onGalleryToggle}
+            title={galleryOpen ? 'Back to study' : 'Open gallery'}
+            aria-pressed={galleryOpen}
+            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-colors ${
+              galleryOpen
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent border-border'
+            }`}
+          >
+            {galleryOpen
+              ? <span className="inline-flex gap-0.5"><Eye className="h-4 w-4" /><Eye className="h-4 w-4" /></span>
+              : <LayoutGrid className="h-4 w-4" />
+            }
+            <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
+          </button>
 
-      <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
+          <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
+        </>
+      )}
 
       <div className="flex items-center gap-2 shrink-0">
         <span className="text-xs sm:text-sm text-muted-foreground">Flip</span>
@@ -1050,19 +1056,23 @@ function FlashcardControlsBar({
 
       <ViewModeDropdown reverseCardModes={reverseCardModes} onToggleMode={onToggleMode} />
 
-      <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
+      {!minimal && (
+        <>
+          <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
 
-      <button
-        type="button"
-        onClick={onFocusToggle}
-        title={focusMode ? 'Exit focus mode' : 'Focus mode'}
-        aria-pressed={focusMode}
-        className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border transition-colors ${
-          focusMode
-            ? 'bg-primary text-primary-foreground border-primary'
-            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-        }`}
-      ><Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+          <button
+            type="button"
+            onClick={onFocusToggle}
+            title={focusMode ? 'Exit focus mode' : 'Focus mode'}
+            aria-pressed={focusMode}
+            className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border transition-colors ${
+              focusMode
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+            }`}
+          ><Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+        </>
+      )}
 
       <button
         type="button"
@@ -1191,9 +1201,8 @@ function SortableCard({
     }
   }
 
-  // Prominent circle-check (collected) + always-visible add/remove-from-deck
-  // control. Rendered on both card faces so they appear regardless of where the
-  // card lives (My Deck, Collected, …) or whether it's showing front or back.
+  // Quiet, always-available add/remove-from-deck control. Transparent so it
+  // doesn't compete with the card content — only the front face shows it.
   const deckToggleButton = (
     <button
       type="button"
@@ -1201,24 +1210,11 @@ function SortableCard({
       onClick={toggleDeck}
       aria-label={inDeck ? `Remove ${card.name} from deck` : `Add ${card.name} to deck`}
       title={inDeck ? 'Remove from deck' : 'Add to deck'}
-      className={`inline-flex items-center justify-center h-7 w-7 rounded-full border shadow-sm transition-colors ${
-        inDeck
-          ? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
-          : 'bg-background text-foreground border-border hover:bg-accent hover:border-primary/50'
-      }`}
+      className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-transparent text-muted-foreground hover:text-foreground transition-colors"
     >
       {inDeck ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
     </button>
   )
-  const collectedBadge = collected ? (
-    <span
-      title="Collected"
-      aria-label="Collected"
-      className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-emerald-500 text-white shadow-sm"
-    >
-      <Check className="h-4 w-4" strokeWidth={3} />
-    </span>
-  ) : null
 
   useEffect(() => {
     if (!showPlayMenu) return
@@ -1263,7 +1259,7 @@ function SortableCard({
   const allEquations = markdown ? extractMathBlockquotes(markdown) : []
   const cardImages = markdown ? extractImages(markdown) : []
 
-  const baseClass = `group relative rounded-xl border flex flex-col transition-shadow min-h-[150px]${isFlashing ? ' flashcard-highlight' : ''}`
+  const baseClass = `group relative rounded-xl border flex flex-col transition-shadow min-h-[150px]${collected ? ' flashcard-collected' : ''}${isFlashing ? ' flashcard-highlight' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 border-primary shadow-sm'
     : 'bg-card text-card-foreground'
@@ -1277,19 +1273,19 @@ function SortableCard({
         {...listeners}
         {...attributes}
         onClick={(e) => {
+          // NB: the card itself carries role="button" from dnd-kit's drag
+          // attributes, so we must not include [role="button"] here or the
+          // guard would always match the card and never flip back.
           const target = e.target as HTMLElement
-          if (!target.closest('a, button, [role="button"], input, select, textarea')) {
+          if (!target.closest('a, button, input, select, textarea')) {
             setFlipped(false)
           }
         }}
         className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
-        {/* Header: name + collected badge + deck toggle + play button */}
-        <div className="flex items-center justify-between gap-1.5 px-3 py-2 border-b">
+        {/* Header: name + play button */}
+        <div className="flex items-center justify-between gap-1 px-3 py-2 border-b">
           <span className="text-sm font-medium text-muted-foreground truncate min-w-0">{card.name}</span>
-          <div className="flex items-center gap-1.5 shrink-0">
-          {collectedBadge}
-          {deckToggleButton}
           <div className="relative shrink-0" ref={playMenuRef}>
             <button
               ref={playBtnRef}
@@ -1407,7 +1403,6 @@ function SortableCard({
               </div>
             )}
           </div>
-          </div>
         </div>
         {showQuestionsModal && (
           <ConceptQuestionsModal conceptName={card.name} onClose={() => setShowQuestionsModal(false)} />
@@ -1475,18 +1470,18 @@ function SortableCard({
       {...listeners}
       {...attributes}
       onClick={(e) => {
+        // See note on the back face: exclude [role="button"] so dnd-kit's own
+        // role on the card doesn't swallow the flip.
         const target = e.target as HTMLElement
-        if (!target.closest('a, button, [role="button"], input, select, textarea')) {
+        if (!target.closest('a, button, input, select, textarea')) {
           handleFlipOpen()
         }
       }}
       className={`${baseClass} ${colorClass} cursor-pointer active:cursor-grabbing hover:shadow-md select-none`}
     >
-      {/* Top bar: deck toggle + collected badge + actions menu */}
+      {/* Top bar: deck toggle + actions menu */}
       <div className="flex items-center justify-between gap-1.5 px-2 pt-2">
         {deckToggleButton}
-        <div className="flex items-center gap-1.5">
-        {collectedBadge}
         <div className="relative" ref={playMenuRef}>
           <button
             ref={playBtnRef}
@@ -1603,7 +1598,6 @@ function SortableCard({
               </button>
             </div>
           )}
-        </div>
         </div>
       </div>
       {showQuestionsModal && (
@@ -2564,11 +2558,13 @@ export default function Flashcards() {
   }
 
   // Empty state — no cards in the deck yet. Show the tabbed gallery inline so
-  // the user can browse Packs / Collected and add cards to start studying.
+  // the user can browse Packs / Collected and add cards to start studying. The
+  // layout fills the viewport (rather than contracting to its content) and
+  // keeps the controls toolbar pinned to the bottom, matching the study view.
   if (cards.length === 0) {
     return (
       <>
-        <div className="container max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-40 md:pb-32 space-y-6">
           <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
           <GalleryPanel
             inline
@@ -2592,6 +2588,31 @@ export default function Flashcards() {
           />
         </div>
         <ConceptPopup />
+
+        {showShortcutsHelp && (
+          <KeyboardShortcutsHelp
+            context="flashcards"
+            onClose={() => setShowShortcutsHelp(false)}
+          />
+        )}
+
+        {/* Controls toolbar — kept visible so the empty deck doesn't lose it.
+            Flip / Back content act on the gallery cards; study-only controls
+            (gallery toggle, focus) are hidden via `minimal`. */}
+        <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
+          <FlashcardControlsBar
+            minimal
+            galleryOpen={false}
+            onGalleryToggle={() => {}}
+            reverseCardModes={reverseCardModes}
+            onToggleMode={toggleReverseMode}
+            flip={globalFlip}
+            onFlipToggle={() => setGlobalFlip(v => !v)}
+            focusMode={false}
+            onFocusToggle={() => {}}
+            onShortcutsHelp={() => setShowShortcutsHelp(true)}
+          />
+        </div>
       </>
     )
   }

@@ -381,20 +381,7 @@ export default function Dashboard() {
     >
       {/* Header */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between gap-2">
-          <h1 className="text-2xl font-bold tracking-tight">Actuarial Notes</h1>
-          {!isGuest && (
-            <button
-              type="button"
-              onClick={() => setExamsOpen(true)}
-              className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-              aria-label="Add or manage exams"
-              title="Add or manage exams"
-            >
-              <PlusCircle className="h-5 w-5" />
-            </button>
-          )}
-        </div>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Actuarial Notes</p>
         <div className="flex items-center gap-2.5 flex-wrap">
           {/* Avatar + name — clicking opens the profile dropdown (same as desktop sidebar) */}
           <div
@@ -486,6 +473,17 @@ export default function Dashboard() {
               </div>
             )}
           </div>
+          {!isGuest && (
+            <button
+              type="button"
+              onClick={() => setExamsOpen(true)}
+              className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+              aria-label="Add or manage exams"
+              title="Add or manage exams"
+            >
+              <PlusCircle className="h-5 w-5" />
+            </button>
+          )}
         </div>
         {multiExam && (
           <div className="flex gap-1.5 flex-wrap">
@@ -494,7 +492,7 @@ export default function Dashboard() {
                 key={s.examId}
                 type="button"
                 onClick={() => setActiveExamIdx(i)}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                className={`px-4 py-1.5 rounded-full text-base font-semibold transition-colors ${
                   i === clampedIdx
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-transparent text-muted-foreground hover:text-foreground'

@@ -184,7 +184,7 @@ export function ActiveExamCard({
 
 export function ActiveExamCardLoading() {
   return (
-    <Card>
+    <Card className="border-0">
       <CardContent className="flex items-center justify-center py-10">
         <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
       </CardContent>
@@ -195,7 +195,7 @@ export function ActiveExamCardLoading() {
 export function ActiveExamCardEmpty({ onChooseExam }: { onChooseExam?: () => void }) {
   const navigate = useNavigate()
   return (
-    <Card>
+    <Card className="border-0">
       <CardContent className="py-8 text-center space-y-3">
         <p className="text-sm text-muted-foreground">No active exam yet.</p>
         <Button onClick={() => onChooseExam ? onChooseExam() : navigate('/settings#exams')}>

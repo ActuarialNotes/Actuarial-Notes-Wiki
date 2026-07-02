@@ -28,6 +28,36 @@ import { useGems } from '@/hooks/useGems'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
+// ── Mini readiness ring — small replica of the study-guide radial gauge ───────
+
+function MiniReadinessRing({ pct }: { pct: number }) {
+  const size = 64
+  const stroke = 7
+  const r = (size - stroke) / 2
+  const c = 2 * Math.PI * r
+  const offset = c * (1 - Math.min(100, Math.max(0, pct)) / 100)
+  const cx = size / 2
+  const cy = size / 2
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0">
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="currentColor" strokeOpacity={0.12} strokeWidth={stroke} />
+      <circle
+        cx={cx} cy={cy} r={r} fill="none"
+        stroke="#22c55e"
+        strokeWidth={stroke}
+        strokeLinecap="round"
+        strokeDasharray={c}
+        strokeDashoffset={offset}
+        transform={`rotate(-90 ${cx} ${cy})`}
+        style={{ transition: 'stroke-dashoffset 300ms ease-out' }}
+      />
+      <text x={cx} y={cy + 5} textAnchor="middle" fontSize={16} fontWeight={800} fill="currentColor">
+        {pct}%
+      </text>
+    </svg>
+  )
+}
+
 // ── Welcome Modal ─────────────────────────────────────────────────────────────
 
 function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
@@ -456,39 +486,6 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-          {overallPct !== null && activeSyllabus && (
-            <button
-              type="button"
-              onClick={() => setScrollToRadialTrigger(v => v + 1)}
-              className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-primary/10 shrink-0 hover:bg-primary/20 transition-colors"
-              title="Scroll to study guide"
-            >
-              <span className="text-sm font-bold tabular-nums leading-none">{overallPct}%</span>
-              <span className="text-[9px] text-muted-foreground mt-0.5">Readiness</span>
-            </button>
-          )}
-          {daysToReady !== null && (
-            <button
-              type="button"
-              onClick={() => { setOnboardingStep(readyDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
-              className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-amber-500/10 shrink-0 hover:bg-amber-500/20 transition-colors"
-              title="Edit target ready date"
-            >
-              <span className="text-sm font-bold tabular-nums leading-none text-amber-600 dark:text-amber-400">{daysToReady}</span>
-              <span className="text-[9px] text-muted-foreground mt-0.5">to prepare</span>
-            </button>
-          )}
-          {daysUntilExam !== null && (
-            <button
-              type="button"
-              onClick={() => { setOnboardingStep(examDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
-              className="flex flex-col items-center px-2.5 py-1.5 rounded-lg bg-card shrink-0 hover:bg-muted transition-colors"
-              title="Edit exam date"
-            >
-              <span className="text-sm font-bold tabular-nums leading-none">{daysUntilExam}</span>
-              <span className="text-[9px] text-muted-foreground mt-0.5">until exam</span>
-            </button>
-          )}
         </div>
         {multiExam && (
           <div className="flex gap-1.5 flex-wrap">
@@ -506,6 +503,43 @@ export default function Dashboard() {
                 {s.examLabel}
               </button>
             ))}
+          </div>
+        )}
+        {(overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
+          <div className="grid grid-cols-3 gap-3">
+            {overallPct !== null && activeSyllabus && (
+              <button
+                type="button"
+                onClick={() => setScrollToRadialTrigger(v => v + 1)}
+                className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-colors"
+                title="Scroll to study guide"
+              >
+                <MiniReadinessRing pct={overallPct} />
+                <span className="text-xs text-muted-foreground">Readiness</span>
+              </button>
+            )}
+            {daysToReady !== null && (
+              <button
+                type="button"
+                onClick={() => { setOnboardingStep(readyDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
+                className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 transition-colors"
+                title="Edit target ready date"
+              >
+                <span className="text-3xl font-bold tabular-nums leading-none text-amber-600 dark:text-amber-400">{daysToReady}</span>
+                <span className="text-xs text-muted-foreground">to prepare</span>
+              </button>
+            )}
+            {daysUntilExam !== null && (
+              <button
+                type="button"
+                onClick={() => { setOnboardingStep(examDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
+                className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-card hover:bg-muted transition-colors"
+                title="Edit exam date"
+              >
+                <span className="text-3xl font-bold tabular-nums leading-none">{daysUntilExam}</span>
+                <span className="text-xs text-muted-foreground">until exam</span>
+              </button>
+            )}
           </div>
         )}
       </div>

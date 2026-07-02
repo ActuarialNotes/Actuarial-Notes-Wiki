@@ -1226,6 +1226,7 @@ function SortableCard({
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const { openAt } = useConceptPopup()
   const { addCard, hasCard, cards } = useFlashcards()
+  const openCollect = useCollect(s => s.open)
   const routerNavigate = useNavigate()
   const playMenuRef = useRef<HTMLDivElement>(null)
   const playBtnRef = useRef<HTMLButtonElement>(null)
@@ -1655,12 +1656,27 @@ function SortableCard({
           isActive ? 'text-primary' : 'hover:text-primary'
         }`}
       >
-        <span className="font-semibold text-base leading-snug">{card.name}</span>
+        <span className="flex items-center justify-center gap-1.5">
+          <span className="font-semibold text-base leading-snug">{card.name}</span>
+          {!collected && <Lock className="h-4 w-4 shrink-0" />}
+        </span>
       </button>
 
-      {/* Mastery pill */}
+      {/* Mastery pill / collect button */}
       <div className="flex justify-center pb-2.5">
-        <MasteryPill state={masteryState} />
+        {collected ? (
+          <MasteryPill state={masteryState} />
+        ) : (
+          <button
+            type="button"
+            onPointerDown={e => e.stopPropagation()}
+            onClick={e => { e.stopPropagation(); openCollect(card) }}
+            aria-label={`Collect ${card.name}`}
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            <Lock className="h-3 w-3" /> Collect
+          </button>
+        )}
       </div>
     </div>
   )

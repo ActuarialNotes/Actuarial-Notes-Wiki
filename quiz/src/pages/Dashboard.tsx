@@ -523,7 +523,7 @@ export default function Dashboard() {
                 className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 transition-colors"
                 title="Edit target ready date"
               >
-                <span className="text-3xl font-bold tabular-nums leading-none text-amber-600 dark:text-amber-400">{daysToReady}</span>
+                <span className="text-3xl font-bold tabular-nums leading-none text-amber-600 dark:text-amber-400">{daysToReady} days</span>
                 <span className="text-xs text-muted-foreground">to prepare</span>
               </button>
             )}
@@ -534,7 +534,7 @@ export default function Dashboard() {
                 className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-card hover:bg-muted transition-colors"
                 title="Edit exam date"
               >
-                <span className="text-3xl font-bold tabular-nums leading-none">{daysUntilExam}</span>
+                <span className="text-3xl font-bold tabular-nums leading-none">{daysUntilExam} days</span>
                 <span className="text-xs text-muted-foreground">until exam</span>
               </button>
             )}

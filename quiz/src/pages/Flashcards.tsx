@@ -1793,7 +1793,7 @@ function GalleryPanel({
 
   return (
     <div className={inline ? 'flex flex-col' : 'gallery-panel fixed inset-0 z-40 flex flex-col bg-background'}>
-      {/* Header — tab switcher + close */}
+      {/* Header — tab switcher */}
       <div className={inline ? 'pb-3' : 'sticky top-0 z-10 bg-background border-b px-4 py-3'}>
         <div className="flex items-center gap-3">
           <div className="flex-1 min-w-0">
@@ -1804,16 +1804,6 @@ function GalleryPanel({
               collectedCount={collectedCount}
             />
           </div>
-          {!inline && (
-            <button
-              type="button"
-              onClick={onClose}
-              title="Close gallery"
-              className="inline-flex items-center justify-center h-9 w-9 rounded-md border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
-            >
-              ✕
-            </button>
-          )}
         </div>
       </div>
 

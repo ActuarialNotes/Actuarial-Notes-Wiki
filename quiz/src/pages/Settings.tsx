@@ -31,6 +31,7 @@ import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
 import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
 import { ContactDialog } from '@/components/ContactDialog'
+import { filterSessionsByExam, sessionsToCsv, buildExportFilename, downloadCsv } from '@/lib/exportData'
 
 // ---- Exam status cycle & icons ----
 
@@ -476,6 +477,7 @@ export default function Settings() {
   // ---- Progress & Data modals ----
   const [showResetModal, setShowResetModal] = useState(false)
   const [resetScope, setResetScope] = useState<'all' | string>('all')
+  const [exportScope, setExportScope] = useState<'all' | string>('all')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [dataActionState, setDataActionState] = useState<{ saving: boolean; error: string | null; success: string | null }>({ saving: false, error: null, success: null })
@@ -490,6 +492,22 @@ export default function Settings() {
       saving: false,
       error: ok ? null : 'Failed to reset history.',
       success: ok ? `Study history and learning progress cleared for ${scopeLabel}.` : null,
+    })
+  }
+
+  const handleExportCsv = () => {
+    const examId = exportScope === 'all' ? null : exportScope
+    const scoped = filterSessionsByExam(sessions, examId)
+    const scopeLabel = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'all exams'
+    if (scoped.length === 0) {
+      setDataActionState({ saving: false, error: `No study history to export for ${scopeLabel}.`, success: null })
+      return
+    }
+    downloadCsv(buildExportFilename(examId), sessionsToCsv(scoped))
+    setDataActionState({
+      saving: false,
+      error: null,
+      success: `Exported ${scoped.length} ${scoped.length === 1 ? 'session' : 'sessions'} for ${scopeLabel}.`,
     })
   }
 
@@ -1203,17 +1221,32 @@ export default function Settings() {
                   <Separator />
 
                   {/* Export */}
-                  <div>
-                    <p className="text-sm font-medium mb-2">Export performance data</p>
-                    <div className="flex flex-wrap gap-3">
-                      <Button variant="outline" disabled title="Coming soon">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">Export performance data</p>
+                      <p className="text-xs text-muted-foreground">
+                        Download your quiz history (date, exam, topic, score and time per session) as a spreadsheet.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <select
+                        value={exportScope}
+                        onChange={e => setExportScope(e.target.value)}
+                        aria-label="Export scope"
+                        className="text-sm border border-input rounded-md px-2 py-2 bg-background text-foreground cursor-pointer"
+                      >
+                        <option value="all">All exams</option>
+                        {RESETTABLE_EXAMS.map(({ id, label }) => (
+                          <option key={id} value={id}>{label}</option>
+                        ))}
+                      </select>
+                      <Button variant="outline" onClick={handleExportCsv}>
                         Export CSV
                       </Button>
                       <Button variant="outline" disabled title="Coming soon">
                         Export PDF
                       </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">Export formats coming soon.</p>
                   </div>
 
                   <Feedback error={dataActionState.error} success={dataActionState.success} />

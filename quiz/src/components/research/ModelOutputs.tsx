@@ -31,7 +31,7 @@ export function ModelOutputs({ outputs, codeLanguage, onSave }: ModelOutputsProp
   }
 
   return (
-    <section className="space-y-3 rounded-lg border bg-card p-4">
+    <section className="space-y-3 rounded-lg bg-card p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">Outputs</h3>
         {saving && <span className="text-xs text-muted-foreground">Saving…</span>}

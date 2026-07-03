@@ -38,7 +38,7 @@ export function CompiledView({ project, questions, type }: CompiledViewProps) {
   }
 
   return (
-    <article className="space-y-5 rounded-lg border bg-card p-5">
+    <article className="space-y-5 rounded-lg bg-card p-5">
       <header className="space-y-1 border-b pb-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{meta?.label ?? type}</p>
         <h3 className="text-lg font-semibold">{project.name}</h3>

@@ -1316,7 +1316,7 @@ export function ReadinessCard({
         <div className="relative rounded-xl overflow-hidden">
           {/* Blurred background: Custom Study Plan card */}
           <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50 rounded-xl" aria-hidden="true">
-            <div className="h-full bg-card rounded-xl border p-5 space-y-3">
+            <div className="h-full bg-card rounded-xl p-5 space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold">Today's Study Plan</h3>
                 <Settings2 className="h-4 w-4 text-muted-foreground" />

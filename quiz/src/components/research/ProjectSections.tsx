@@ -176,7 +176,7 @@ function SectionAccordion({
     section.subsections.length > 0 ? [...section.subsections] : [null]
 
   return (
-    <li ref={setNodeRef} style={style} className="overflow-hidden rounded-lg border bg-card">
+    <li ref={setNodeRef} style={style} className="overflow-hidden rounded-lg bg-card">
       <div className="flex items-center gap-2 p-3">
         <button
           type="button"
@@ -312,7 +312,7 @@ function ResourceCard({ resource, onRemove }: { resource: SectionResource; onRem
     <div
       ref={setNodeRef}
       style={style}
-      className="group flex items-center gap-2 rounded-lg border bg-card p-3 transition-colors hover:border-primary/40"
+      className="group flex items-center gap-2 rounded-lg bg-card p-3 transition-colors"
       {...attributes}
       {...listeners}
     >

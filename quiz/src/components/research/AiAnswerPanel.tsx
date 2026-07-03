@@ -16,7 +16,7 @@ export function AiAnswerPanel({ loading, error, result, onDismiss }: AiAnswerPan
   if (!loading && !error && !result) return null
 
   return (
-    <div className="rounded-lg border bg-card p-4">
+    <div className="rounded-lg bg-card p-4">
       <div className="mb-2 flex items-center gap-2">
         <Sparkles className="h-4 w-4 text-primary" aria-hidden />
         <span className="text-sm font-medium">AI answer</span>

@@ -32,7 +32,7 @@ export function SuggestedResources({ project, existingIds, onAdd }: SuggestedRes
   }
 
   return (
-    <div className="rounded-lg border border-dashed bg-card/40 p-3">
+    <div className="rounded-lg bg-card/40 p-3">
       <div className="mb-2 flex items-center gap-2">
         <Sparkles className="h-4 w-4 text-primary" aria-hidden />
         <span className="text-sm font-medium">Suggested resources</span>

@@ -24,7 +24,7 @@ function QuestionCard({ q }: { q: ProjectQuestion }) {
   const answeredAgents = q.agentAnswers.filter(a => a.answer)
 
   return (
-    <li className="rounded-lg border bg-card">
+    <li className="rounded-lg bg-card">
       <button
         type="button"
         onClick={() => setExpanded(v => !v)}
@@ -91,7 +91,7 @@ export function ProjectFaq({ project, onDocumentsAdded }: ProjectFaqProps) {
       </div>
 
       {questions.length > 0 && (
-        <div className="flex gap-1 rounded-lg border bg-card p-1">
+        <div className="flex gap-1 rounded-lg bg-card p-1">
           {VIEWS.map(v => (
             <button
               key={v.id}

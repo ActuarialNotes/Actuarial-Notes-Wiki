@@ -5,7 +5,7 @@ import type { ResourceMeta } from '@/lib/resourceMeta'
 
 export function ResourceMetaCard({ meta, compact }: { meta: ResourceMeta; compact?: boolean }) {
   return (
-    <div className={cn('flex gap-4 rounded-lg border bg-card p-4 not-prose', compact ? 'mb-3' : 'mb-4')}>
+    <div className={cn('flex gap-4 rounded-lg bg-card p-4 not-prose', compact ? 'mb-3' : 'mb-4')}>
       {meta.coverImageUrl && (
         <div className={cn('flex-shrink-0', compact ? 'w-16' : 'w-24 md:w-28')}>
           <img

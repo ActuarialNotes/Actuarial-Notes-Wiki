@@ -71,8 +71,8 @@ export const COLOR_THEMES: ColorThemeOption[] = [
     id: 'high-contrast',
     name: 'High Contrast',
     preview: {
-      light: { background: '#ffffff', primary: '#000000', accent: '#000000' },
-      dark: { background: '#000000', primary: '#ffffff', accent: '#ffffff' },
+      light: { background: '#ffffff', primary: '#000000', accent: '#d9d9d9' },
+      dark: { background: '#000000', primary: '#ffffff', accent: '#262626' },
     },
   },
 ]

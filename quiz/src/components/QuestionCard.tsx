@@ -191,7 +191,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         : null
 
     return (
-      <div className="rounded-lg border bg-card p-4 space-y-3">
+      <div className="rounded-lg bg-card p-4 space-y-3">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Part {part.label.toUpperCase()}
@@ -268,7 +268,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
   // ── Graded part (MC or free-entry) ─────────────────────────────────────────
   return (
-    <div className="rounded-lg border bg-card p-4 space-y-3">
+    <div className="rounded-lg bg-card p-4 space-y-3">
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Part {part.label.toUpperCase()}

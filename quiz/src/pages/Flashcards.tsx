@@ -728,7 +728,7 @@ function CollectedContent({
 
   if (sorted.length === 0) {
     return (
-      <div className="rounded-xl border bg-card text-card-foreground p-10 text-center space-y-2">
+      <div className="rounded-xl bg-card text-card-foreground p-10 text-center space-y-2">
         <Unlock className="h-9 w-9 mx-auto text-muted-foreground/50" />
         <p className="text-sm text-muted-foreground">You haven't collected any flashcards yet.</p>
         <p className="text-xs text-muted-foreground">
@@ -1948,7 +1948,7 @@ function GalleryPanel({
             )}
 
             {cards.length === 0 ? (
-              <div className="rounded-xl border bg-card text-card-foreground p-10 text-center space-y-2">
+              <div className="rounded-xl bg-card text-card-foreground p-10 text-center space-y-2">
                 <Layers className="h-9 w-9 mx-auto text-muted-foreground/50" />
                 <p className="text-sm text-muted-foreground">Your deck is empty.</p>
                 <p className="text-xs text-muted-foreground">
@@ -2196,7 +2196,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
       {/* Flip card */}
       <div
         data-tour="flip-card"
-        className={`relative w-full max-w-xl min-h-56 rounded-2xl border bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer${flipped ? '' : ' select-none'}${isFlashing ? ' flashcard-highlight' : ''}`}
+        className={`relative w-full max-w-xl min-h-56 rounded-2xl bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer${flipped ? '' : ' select-none'}${isFlashing ? ' flashcard-highlight' : ''}`}
         style={{
           transform: `translateX(${dragX}px) rotate(${dragX / 20}deg)`,
           opacity: 1 - Math.min(Math.abs(dragX) / SWIPE_FLY_DISTANCE, 1),

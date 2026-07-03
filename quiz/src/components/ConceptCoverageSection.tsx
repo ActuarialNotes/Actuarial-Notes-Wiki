@@ -353,7 +353,7 @@ export function ConceptCoverageSection({
     <div className="space-y-4">
 
       {/* ── Quiz complete card: score summary ─────────────────────── */}
-      <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+      <div className="rounded-xl bg-card shadow-sm overflow-hidden">
         <div className="px-5 pt-5 pb-4">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -416,7 +416,7 @@ export function ConceptCoverageSection({
 
       {/* ── Quiz coverage card: graph + concept chips ─────────────── */}
       {stats.length > 0 && (
-        <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+        <div className="rounded-xl bg-card shadow-sm overflow-hidden">
           <div className="px-5 py-3 border-b">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Quiz Coverage

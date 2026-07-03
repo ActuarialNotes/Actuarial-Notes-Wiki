@@ -95,7 +95,7 @@ function ProjectList() {
             return (
               <li
                 key={p.id}
-                className="flex items-center gap-3 rounded-lg border bg-card p-3 transition-colors hover:border-primary/40"
+                className="flex items-center gap-3 rounded-lg bg-card p-3 transition-colors"
               >
                 <button
                   type="button"

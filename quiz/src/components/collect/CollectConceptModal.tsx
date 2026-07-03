@@ -11,6 +11,7 @@ import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import { stripFrontmatter } from '@/components/wiki/WikiArticle'
 import { cleanWikiLinks } from '@/lib/wikiParser'
+import { MarkdownText } from '@/components/MarkdownText'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
 import { LearningProgressPanel } from '@/components/wiki/LearningProgressModal'
 import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
@@ -187,9 +188,16 @@ export function CollectConceptModal() {
   const hasRealQuestion = check ? true : (!!prompt && options.length >= 2)
 
   // Reverse side of the card — the concept's definition only, no title/label
-  // repeated (the front already carries the name).
+  // repeated (the front already carries the name). Wiki-link syntax is stripped
+  // to plain text, but LaTeX is rendered (not dropped) so formulae read
+  // correctly. KaTeX inherits the card's white text; wide display math scrolls
+  // horizontally rather than overflowing the narrow card.
   const cardBack = def ? (
-    <p className="text-sm sm:text-base leading-relaxed text-white">{stripMarkup(def)}</p>
+    <MarkdownText
+      className="text-sm sm:text-base leading-relaxed text-white [&_.katex]:text-white [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden"
+    >
+      {cleanWikiLinks(def)}
+    </MarkdownText>
   ) : (
     <p className="text-sm text-white/70">
       {defError ? 'Definition unavailable.' : 'Loading definition…'}

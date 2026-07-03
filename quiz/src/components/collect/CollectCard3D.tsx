@@ -108,8 +108,14 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
               style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
             >
               <span className="collect-card-frame" />
-              <div className="relative z-10 flex h-full flex-col items-center justify-center overflow-y-auto px-4 py-5 text-center pointer-events-auto">
-                {back}
+              {/* Scroll container owns the overflow; the inner min-h-full flex
+                  centres short definitions but grows (and scrolls) for long
+                  ones. Centring directly on a scroll container would clip and
+                  strand the top of overflowing content. */}
+              <div className="collect-card-back-scroll relative z-10 h-full overflow-y-auto px-4 py-5 pointer-events-auto">
+                <div className="flex min-h-full flex-col items-center justify-center text-center">
+                  {back}
+                </div>
               </div>
             </div>
           </div>

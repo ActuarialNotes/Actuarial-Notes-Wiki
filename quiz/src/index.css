@@ -692,6 +692,23 @@
 .collect-card-face-back {
   transform: rotateY(180deg);
 }
+/* A slim, translucent scrollbar on the card back so a long definition reads as
+   scrollable against the vivid gradient without a heavy native bar. */
+.collect-card-back-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.5) transparent;
+  overscroll-behavior: contain;
+}
+.collect-card-back-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.collect-card-back-scroll::-webkit-scrollbar-thumb {
+  background: rgb(255 255 255 / 0.45);
+  border-radius: 3px;
+}
+.collect-card-back-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
 /* Glossy diagonal sheen that sweeps across the card */
 .collect-card-sheen {
   position: absolute;

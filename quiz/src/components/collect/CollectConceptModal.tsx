@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { Check, Loader2, Lock, Sparkles, X } from 'lucide-react'
+import { Check, Loader2, Lock, Play, Sparkles, X } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
@@ -13,6 +13,7 @@ import { stripFrontmatter } from '@/components/wiki/WikiArticle'
 import { cleanWikiLinks } from '@/lib/wikiParser'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
 import { LearningProgressPanel } from '@/components/wiki/LearningProgressModal'
+import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
 
 type Phase = 'question' | 'spinning' | 'flash' | 'done'
@@ -104,6 +105,7 @@ export function CollectConceptModal() {
   const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
   const [selected, setSelected] = useState<string | null>(null)
   const [wrong, setWrong] = useState<string | null>(null)
+  const [showQuestions, setShowQuestions] = useState(false)
   const timers = useRef<number[]>([])
 
   const after = useCallback((ms: number, fn: () => void) => {
@@ -120,6 +122,7 @@ export function CollectConceptModal() {
     setWrong(null)
     setDef(null)
     setDefError(false)
+    setShowQuestions(false)
     if (!ref) return
     // An authored comprehension check is self-contained — no wiki fetch needed
     // to build the question, so the question flow doesn't wait on one. The
@@ -247,6 +250,7 @@ export function CollectConceptModal() {
   }
 
   return createPortal(
+    <>
     <div
       className="fixed inset-0 z-[120] flex items-center justify-center p-4"
       role="dialog"
@@ -306,12 +310,20 @@ export function CollectConceptModal() {
               <div className="w-full flex flex-col items-center gap-4">
                 <div className="flex flex-col items-center gap-1.5 text-center">
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
-                    <Check className="h-4 w-4" /> Collected — now level it up
+                    <Check className="h-4 w-4" /> Collected
                   </span>
                   <p className="text-xs text-muted-foreground">
-                    Quiz this concept to advance from New → Level 1 → 2 → 3.
+                    Quiz this concept to level it up.
                   </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowQuestions(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+                >
+                  <Play className="h-4 w-4" />
+                  Start Quiz
+                </button>
                 {/* Combined view: the learning-progress graph lives with the card
                     now that the concept is collected and can level up. */}
                 <div className="w-full border-t pt-4">
@@ -404,7 +416,15 @@ export function CollectConceptModal() {
           </div>
         </div>
       )}
-    </div>,
+    </div>
+    {/* Rendered in its own stacking context so it layers above the collect
+        dialog (z-[120]) instead of behind it. */}
+    {showQuestions && (
+      <div className="relative z-[130]">
+        <ConceptQuestionsModal conceptName={name} onClose={() => setShowQuestions(false)} />
+      </div>
+    )}
+    </>,
     document.body,
   )
 }

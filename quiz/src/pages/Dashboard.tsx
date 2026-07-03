@@ -381,12 +381,11 @@ export default function Dashboard() {
     >
       {/* Header */}
       <div className="space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Actuarial Notes</p>
         <div className="flex items-center gap-2.5 flex-wrap">
           {/* Avatar + name — clicking opens the profile dropdown (same as desktop sidebar) */}
           <div
             ref={profileRef}
-            className="relative flex items-center gap-2.5 flex-1 min-w-0"
+            className="relative flex items-center gap-2.5 min-w-0"
             onClick={() => !isGuest && setProfileOpen(v => !v)}
             style={{ cursor: isGuest ? 'default' : 'pointer' }}
           >
@@ -395,6 +394,17 @@ export default function Dashboard() {
             )}
             {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
             <span className="text-sm font-semibold truncate min-w-0">{displayName}</span>
+            {!isGuest && (
+              <button
+                type="button"
+                onClick={e => { e.stopPropagation(); setExamsOpen(true) }}
+                className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+                aria-label="Add or manage exams"
+                title="Add or manage exams"
+              >
+                <PlusCircle className="h-5 w-5" />
+              </button>
+            )}
 
             {/* Profile dropdown */}
             {profileOpen && !isGuest && (
@@ -473,17 +483,6 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-          {!isGuest && (
-            <button
-              type="button"
-              onClick={() => setExamsOpen(true)}
-              className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
-              aria-label="Add or manage exams"
-              title="Add or manage exams"
-            >
-              <PlusCircle className="h-5 w-5" />
-            </button>
-          )}
         </div>
         {multiExam && (
           <div className="flex gap-1.5 flex-wrap">

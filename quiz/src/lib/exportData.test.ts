@@ -1,23 +1,27 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+
+// exportData imports the Supabase client, which throws at module load when the
+// VITE_SUPABASE_* env vars are absent (as they are under vitest). The functions
+// exercised here are pure and never touch it, so a bare stub is enough.
+vi.mock('@/lib/supabase', () => ({ supabase: {} }))
+
 import {
   csvEscape,
-  filterSessionsByExam,
-  sessionsToCsv,
+  responsesToCsv,
   buildExportFilename,
+  type ExportedResponse,
 } from './exportData'
-import type { QuizSession } from './supabase'
 
-function session(overrides: Partial<QuizSession> = {}): QuizSession {
+function response(overrides: Partial<ExportedResponse> = {}): ExportedResponse {
   return {
-    id: 'id-1',
-    user_id: 'u1',
+    answered_at: '2026-07-01T12:00:00.000Z',
     exam: 'Probability',
     topic: 'Random Variables',
-    mode: 'quiz',
-    total_questions: 10,
-    correct_count: 8,
-    time_taken_seconds: 300,
-    completed_at: '2026-07-01T12:00:00.000Z',
+    question_id: 'P-042',
+    chosen_answer: 'B',
+    correct_answer: 'C',
+    is_correct: false,
+    time_spent_seconds: 45,
     ...overrides,
   }
 }
@@ -47,51 +51,39 @@ describe('csvEscape', () => {
   })
 })
 
-describe('filterSessionsByExam', () => {
-  const sessions = [
-    session({ id: 'a', exam: 'Probability' }),
-    session({ id: 'b', exam: 'Financial Mathematics' }),
-    session({ id: 'c', exam: 'Probability' }),
-  ]
-
-  it('returns all sessions when examId is null', () => {
-    expect(filterSessionsByExam(sessions, null)).toHaveLength(3)
-  })
-
-  it('filters by the exam label mapped from the exam id', () => {
-    const result = filterSessionsByExam(sessions, 'P')
-    expect(result.map(s => s.id)).toEqual(['a', 'c'])
-  })
-
-  it('returns nothing for an exam with no sessions', () => {
-    expect(filterSessionsByExam(sessions, 'FM')).toHaveLength(1)
-    expect(filterSessionsByExam([], 'P')).toHaveLength(0)
-  })
-})
-
-describe('sessionsToCsv', () => {
-  it('emits a header row plus one row per session', () => {
-    const csv = sessionsToCsv([session()])
+describe('responsesToCsv', () => {
+  it('emits a header row plus one row per answered question', () => {
+    const csv = responsesToCsv([response()])
     const lines = csv.replace(/^﻿/, '').trimEnd().split('\r\n')
-    expect(lines[0]).toBe('Date,Exam,Topic,Mode,Total Questions,Correct,Accuracy (%),Time (seconds)')
-    expect(lines[1]).toBe('2026-07-01T12:00:00.000Z,Probability,Random Variables,quiz,10,8,80,300')
+    expect(lines[0]).toBe('Date,Exam,Topic,Question ID,Your Answer,Correct Answer,Result,Time (seconds)')
+    expect(lines[1]).toBe('2026-07-01T12:00:00.000Z,Probability,Random Variables,P-042,B,C,Incorrect,45')
     expect(lines).toHaveLength(2)
   })
 
-  it('computes accuracy and avoids divide-by-zero', () => {
-    const csv = sessionsToCsv([session({ total_questions: 0, correct_count: 0 })])
+  it('renders is_correct as a human-readable Result', () => {
+    const csv = responsesToCsv([response({ is_correct: true })])
     const row = csv.replace(/^﻿/, '').trimEnd().split('\r\n')[1]
-    expect(row.split(',')[6]).toBe('0')
+    expect(row.split(',')[6]).toBe('Correct')
   })
 
-  it('renders a null time as an empty field', () => {
-    const csv = sessionsToCsv([session({ time_taken_seconds: null })])
+  it('renders missing answer/topic/time as empty fields', () => {
+    const csv = responsesToCsv([response({ chosen_answer: null, topic: null, exam: null, time_spent_seconds: null })])
+    const cells = csv.replace(/^﻿/, '').trimEnd().split('\r\n')[1].split(',')
+    expect(cells[1]).toBe('') // exam
+    expect(cells[2]).toBe('') // topic
+    expect(cells[4]).toBe('') // your answer
+    expect(cells[7]).toBe('') // time
+  })
+
+  it('quotes answer text that contains commas', () => {
+    const csv = responsesToCsv([response({ chosen_answer: '1,000', correct_answer: '2,000' })])
     const row = csv.replace(/^﻿/, '').trimEnd().split('\r\n')[1]
-    expect(row.endsWith(',')).toBe(true)
+    expect(row).toContain('"1,000"')
+    expect(row).toContain('"2,000"')
   })
 
   it('starts with a UTF-8 BOM', () => {
-    expect(sessionsToCsv([session()]).charCodeAt(0)).toBe(0xfeff)
+    expect(responsesToCsv([response()]).charCodeAt(0)).toBe(0xfeff)
   })
 })
 

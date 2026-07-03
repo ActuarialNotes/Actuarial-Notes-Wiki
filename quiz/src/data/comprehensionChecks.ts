@@ -1864,4 +1864,573 @@ export const COMPREHENSION_CHECKS: Record<string, ComprehensionCheck> = {
     ],
     correctIndex: 0,
   },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  //  Exam MAS-I (CAS) — Modern Actuarial Statistics I
+  // ═══════════════════════════════════════════════════════════════════════
+
+  // ─── A. Probability Models (Stochastic Processes & Survival Models) ──────
+
+  'Stochastic Processes': {
+    question:
+      "An insurer records its cumulative claim count N(t) continuously as claims arrive, so N(t) is a whole-number total. How is this process best classified?",
+    // 1: thinks integer counts force discrete time · 2: thinks continuous time forces a continuous state · 3: conflates both axes the wrong way
+    options: [
+      "Continuous-time, discrete-state",
+      "Discrete-time, discrete-state",
+      "Continuous-time, continuous-state",
+      "Discrete-time, continuous-state",
+    ],
+    correctIndex: 0,
+  },
+
+  'Poisson Process': {
+    question:
+      "Claims arrive as a Poisson process at 20 per year. Independently, each claim is 'large' with probability 0.10. At what rate do large claims arrive?",
+    // 1: thinks thinning changes the mix but not the rate · 2: subtracts, treating large as the leftover 90% · 3: uses the thinning probability itself as the rate
+    options: [
+      "2 per year — the thinned process is Poisson with rate 20 × 0.10",
+      "20 per year — thinning changes the mix of claims, not the arrival rate",
+      "18 per year — large claims are what remain after the other 90%",
+      "0.10 per year — the rate equals the thinning probability",
+    ],
+    correctIndex: 0,
+  },
+
+  'Limited Expected Value': {
+    question:
+      "Losses X have mean E[X] = 1,000. A policy pays each loss but caps the payment at u = 800. Which quantity equals the insurer's expected payment per loss?",
+    // 1: that is the reinsurer's excess-of-loss share E[(X−u)₊] · 2: subtracts the cap like a deductible · 3: applies the cap to the mean instead of to each loss (Jensen)
+    options: [
+      "E[min(X, 800)]",
+      "E[max(X − 800, 0)]",
+      "E[X] − 800 = 200",
+      "min(E[X], 800) = 800",
+    ],
+    correctIndex: 0,
+  },
+
+  'Survival Model': {
+    question:
+      "For a lifetime T, the survival function is S(t) = P(T > t). Which property must ALWAYS hold?",
+    // 1: describes the CDF F(t), not the survival function · 2: treats S as a density that integrates to 1 · 3: invents a specific functional form as if universal
+    options: [
+      "S(0) = 1 and S(t) is non-increasing",
+      "S(0) = 0 and S(t) increases toward 1",
+      "S(t) integrates to 1 over all t ≥ 0",
+      "S(t) = t/ω for some maximum age ω",
+    ],
+    correctIndex: 0,
+  },
+
+  'Hazard Rate': {
+    question:
+      "For a lifetime with survival function S(t), which statement about the force of mortality μ(t) = f(t)/S(t) is correct?",
+    // 1: treats a rate as a probability bounded by 1 · 2: drops the division by S(t) · 3: reverses the meaning of an increasing hazard
+    options: [
+      "A constant μ(t) corresponds to an exponential lifetime",
+      "μ(t) is a probability, so it can never exceed 1",
+      "μ(t) is just the density f(t)",
+      "An increasing μ(t) indicates infant-mortality (early-failure) effects",
+    ],
+    correctIndex: 0,
+  },
+
+  'Joint Life': {
+    question:
+      "Two independent lives have 10-year survival probabilities 0.9 and 0.8. The joint-life status fails at the FIRST death. What is the probability the status survives 10 years (both still alive)?",
+    // 1: computes the last-survivor status (at least one alive) · 2: averages the two probabilities · 3: adds them and subtracts 1
+    options: [
+      "0.72 = 0.9 × 0.8",
+      "0.98 = 1 − (0.1 × 0.2)",
+      "0.85 = (0.9 + 0.8) / 2",
+      "0.70 = 0.9 + 0.8 − 1",
+    ],
+    correctIndex: 0,
+  },
+
+  'Whole Life Insurance': {
+    question:
+      "Under a constant force of mortality μ and force of interest δ, the net single premium for a benefit of 1 paid at the moment of death is:",
+    // 1: reverses the roles of mortality and interest · 2: drops the +δ in the denominator · 3: that is the whole-life annuity value, not the insurance
+    options: [
+      "μ / (μ + δ)",
+      "δ / (μ + δ)",
+      "μ / δ",
+      "1 / (μ + δ)",
+    ],
+    correctIndex: 0,
+  },
+
+  'Life Annuity': {
+    question:
+      "For a life aged x, the whole-life insurance EPV is Ā_x = 0.3 and the force of interest is δ = 0.05. Using Ā_x + δ·ā_x = 1, the whole-life annuity EPV ā_x is:",
+    // 1: puts Ā_x in the numerator instead of 1 − Ā_x · 2: multiplies by δ instead of dividing · 3: forgets to divide by δ at all
+    options: [
+      "14, from (1 − Ā_x) / δ",
+      "6, from Ā_x / δ",
+      "0.035, from (1 − Ā_x) · δ",
+      "0.7, from 1 − Ā_x",
+    ],
+    correctIndex: 0,
+  },
+
+  // ─── B. Statistics ───────────────────────────────────────────────────────
+
+  'Statistics': {
+    question:
+      "Which of the following is a statistic rather than a parameter?",
+    // 1–3: all are fixed population parameters, not quantities computed from a sample
+    options: [
+      "The sample mean x̄ of 20 observed claims",
+      "The population mean μ of all claim sizes",
+      "The true variance σ² of the claim distribution",
+      "The Poisson rate λ governing claim arrivals",
+    ],
+    correctIndex: 0,
+  },
+
+  'Sufficient Statistic': {
+    question:
+      "For an i.i.d. Poisson(λ) sample, which quantity captures all of the sample's information about λ?",
+    // 1: a valid statistic but not sufficient — it discards information · 2: fixed by design, carries no information about λ · 3: λ is the unknown parameter, not a statistic
+    options: [
+      "The sum ΣXᵢ (the sample total)",
+      "The sample maximum, max Xᵢ",
+      "The sample size n",
+      "The value of λ itself",
+    ],
+    correctIndex: 0,
+  },
+
+  'Type I Error': {
+    question:
+      "An actuary tests H₀: 'current rates are adequate.' The rates truly ARE adequate, but the test rejects H₀ and the company raises rates. What error is this?",
+    // 1: that is a Type II error (fail to reject a false H₀) · 2: a design choice, not an error that occurred · 3: an unrelated modeling mistake
+    options: [
+      "Rejecting a null hypothesis that is actually true (a false positive)",
+      "Failing to reject a null hypothesis that is actually false (a false negative)",
+      "Choosing too small a significance level α",
+      "Using the wrong test statistic for the data",
+    ],
+    correctIndex: 0,
+  },
+
+  'Type II Error': {
+    question:
+      "In a hypothesis test, what happens to the probability of a Type II error (β) if you lower the significance level α while holding sample size fixed?",
+    // 1: thinks both error types shrink together · 2: thinks α and β move independently · 3: thinks a strict α eliminates false negatives entirely
+    options: [
+      "β increases — making rejection harder raises the chance of missing a false H₀",
+      "β decreases — a smaller α reduces both error types at once",
+      "β is unaffected — α and β move independently",
+      "β becomes 0 — a strict α eliminates false negatives",
+    ],
+    correctIndex: 0,
+  },
+
+  'Sampling Distribution': {
+    question:
+      "Claims have population standard deviation σ = 400. For random samples of size n = 64, the standard deviation of the sample mean x̄ (its standard error) is:",
+    // 1: confuses the sampling distribution's spread with the population's · 2: divides by n instead of √n · 3: multiplies by √n instead of dividing
+    options: [
+      "50 = 400 / √64",
+      "400 — x̄ has the same spread as an individual claim",
+      "6.25 = 400 / 64",
+      "3,200 = 400 × √64",
+    ],
+    correctIndex: 0,
+  },
+
+  'Frequency': {
+    question:
+      "An auto book has 500 claims over 5,000 car-years. Next year it writes 10,000 car-years but still has 500 claims. What happens to frequency?",
+    // 1: treats frequency as a count, not a rate · 2: inverts the exposure–frequency relationship · 3: confuses frequency with the raw claim count
+    options: [
+      "It halves, from 0.10 to 0.05",
+      "It stays at 0.10, since the claim count is unchanged",
+      "It doubles, from 0.10 to 0.20",
+      "It rises to 500 claims per year",
+    ],
+    correctIndex: 0,
+  },
+
+  'Severity': {
+    question:
+      "An accident year has $4,000,000 of losses from 500 claims. If total losses stay at $4,000,000 but the claim count rises to 800, what happens to average severity?",
+    // 1: treats severity as total dollars, not a per-claim average · 2: inverts the claims–severity relationship · 3: confuses severity with aggregate losses
+    options: [
+      "It falls, from $8,000 to $5,000 per claim",
+      "It stays at $8,000, since total losses didn't change",
+      "It rises, from $8,000 to $12,800 per claim",
+      "It equals $4,000,000, the total losses",
+    ],
+    correctIndex: 0,
+  },
+
+  'Aggregate Loss Model': {
+    question:
+      "A portfolio expects E[N] = 200 claims per year, each with mean severity E[X] = $1,500. What is expected aggregate loss E[S]?",
+    // 1: adds frequency and severity instead of multiplying · 2: confuses computing the mean with the variance's data needs · 3: double-counts the claim count
+    options: [
+      "$300,000 = E[N] × E[X]",
+      "$1,700 = E[N] + E[X]",
+      "Cannot be determined without Var(N) and Var(X)",
+      "$60,000,000 = E[N] × E[X] × 200",
+    ],
+    correctIndex: 0,
+  },
+
+  'Maximum Likelihood Estimation': {
+    question:
+      "The MLE of θ for some data is θ̂ = 4. Using the invariance property of MLEs, what is the MLE of e^(−θ)?",
+    // 1: applies the wrong transform (just negates) · 2: treats θ as random, Bayesian-style · 3: misses the invariance property entirely
+    options: [
+      "e^(−4)",
+      "−4",
+      "e^(−E[θ]), which needs the full distribution of θ̂",
+      "It cannot be found without re-maximizing a new likelihood",
+    ],
+    correctIndex: 0,
+  },
+
+  'Consistency': {
+    question:
+      "Which statement about a consistent estimator is TRUE?",
+    // 1: confuses consistency with unbiasedness (a finite-n property) · 2: misreads convergence in probability as exact equality · 3: confuses consistency with minimum variance/efficiency
+    options: [
+      "It can be biased at every finite sample size yet still be consistent",
+      "It must be unbiased for every sample size n",
+      "It equals the true parameter exactly once n is large enough",
+      "It is guaranteed to have the smallest possible variance",
+    ],
+    correctIndex: 0,
+  },
+
+  'Unbiasedness': {
+    question:
+      "The sample variance S² = Σ(Xᵢ − x̄)² / (n − 1) divides by n − 1 rather than n specifically because:",
+    // 1: confuses removing bias with minimizing variance · 2: invents a data-dropping rationale · 3: that describes consistency, which the ÷n version also satisfies
+    options: [
+      "dividing by n − 1 makes E[S²] equal σ², removing the bias",
+      "dividing by n − 1 gives the smallest possible variance",
+      "n − 1 is the count after discarding one outlier",
+      "it makes S² converge to σ² as n → ∞",
+    ],
+    correctIndex: 0,
+  },
+
+  'Sufficiency': {
+    question:
+      "Why should a good estimator be a function of a sufficient statistic?",
+    // 1: sufficiency does not imply unbiasedness · 2: over-specific and false · 3: an unrelated distributional property
+    options: [
+      "By Rao–Blackwell, conditioning an unbiased estimator on it never increases variance",
+      "Because a sufficient statistic is always an unbiased estimator of θ",
+      "Because it forces the estimator to equal the sample mean",
+      "Because it guarantees the estimator is normally distributed",
+    ],
+    correctIndex: 0,
+  },
+
+  'Efficiency': {
+    question:
+      "Two unbiased estimators of μ: the sample mean has variance σ²/n, the sample median about 1.57σ²/n. Which is more efficient, and why?",
+    // 1: confuses robustness to tails with efficiency · 2: confuses unbiasedness with equal efficiency · 3: misreads 'efficiency' as computational speed
+    options: [
+      "The sample mean — for the same n it has the smaller variance",
+      "The sample median — it is less affected by the tails",
+      "They are equally efficient because both are unbiased",
+      "Whichever one is faster to compute",
+    ],
+    correctIndex: 0,
+  },
+
+  'Minimum Variance': {
+    question:
+      "Among all unbiased estimators of θ, the UMVUE has the smallest variance. Which statement is correct?",
+    // 1: an estimator cannot have zero variance by construction · 2: the MLE is not generally the UMVUE in finite samples · 3: an unbiased estimator's bias is already zero, so there is none left to reduce
+    options: [
+      "Its variance is still bounded below by the Cramér–Rao bound 1/I(θ)",
+      "It has zero variance by construction",
+      "It is guaranteed to equal the MLE",
+      "Reducing its bias further would lower its variance",
+    ],
+    correctIndex: 0,
+  },
+
+  'Mean Square Error': {
+    question:
+      "An estimator has variance 4 and bias 3. What is its mean square error?",
+    // 1: adds the bias instead of its square · 2: ignores the bias term · 3: ignores the variance term
+    options: [
+      "13 = 4 + 3²",
+      "7 = 4 + 3",
+      "4 — only the variance matters",
+      "9 = 3² — only the squared bias matters",
+    ],
+    correctIndex: 0,
+  },
+
+  'Censoring': {
+    question:
+      "A claim is right-censored at 4 (we know the loss exceeded 4 but not its exact size). How does it enter the likelihood?",
+    // 1: treats the censored value as if observed exactly · 2: wrongly discards censored data as uninformative · 3: confuses censoring with truncation
+    options: [
+      "Through the survival probability S(4) = P(X > 4)",
+      "Through the density f(4), as if the loss were exactly 4",
+      "It is dropped — a censored observation carries no information",
+      "Through f(4)/S(4), the truncated-data contribution",
+    ],
+    correctIndex: 0,
+  },
+
+  'Truncation': {
+    question:
+      "With a deductible d, only losses above d are ever reported (you never even learn how many fell below). How does a reported loss x enter the likelihood, and what bias results if the deductible is ignored?",
+    // 1: correct adjustment but wrong bias direction · 2: that is the censoring contribution, S(d) · 3: ignores the conditioning entirely
+    options: [
+      "As f(x)/S(d); ignoring it biases the estimated mean upward",
+      "As f(x)/S(d); ignoring it biases the estimated mean downward",
+      "As S(d); the reported value is treated as a lower bound",
+      "As f(x) with no adjustment; truncation needs no correction",
+    ],
+    correctIndex: 0,
+  },
+
+  // ─── C. Extended Linear Models ───────────────────────────────────────────
+
+  'Extended Linear Model': {
+    question:
+      "Ordinary least-squares regression is a special case of an extended linear model. Which OLS restriction does an extended linear model relax?",
+    // 1: OLS also handles categorical predictors via dummies, so this is not the relaxation · 2: all these models estimate parameters from data · 3: unrelated to what an ELM generalizes
+    options: [
+      "The response must be Normal with an identity link",
+      "The predictors must all be numeric",
+      "The parameters must be estimated from data",
+      "There must be at least one predictor",
+    ],
+    correctIndex: 0,
+  },
+
+  'Model Structure': {
+    question:
+      "In building a GLM, which decision is part of the model structure, as opposed to the choice of response distribution or link function?",
+    // 1: that is the distribution choice · 2: that is the link choice · 3: a property of the distribution, not the structure
+    options: [
+      "Whether to include a territory × vehicle-age interaction term",
+      "Whether the response follows a Poisson or a Gamma distribution",
+      "Whether to use a log or an identity link",
+      "The dispersion parameter of the exponential family",
+    ],
+    correctIndex: 0,
+  },
+
+  'Link Function': {
+    question:
+      "In a GLM, the link function g is applied to:",
+    // 1: confuses transforming the mean with transforming each raw response · 2: confuses the link with a predictor transformation · 3: unrelated to residuals
+    options: [
+      "the mean of the response, E[Y], setting g(E[Y]) equal to the linear predictor",
+      "each individual response value Yᵢ before fitting",
+      "each predictor xⱼ before it enters the model",
+      "the residuals, to stabilize their variance",
+    ],
+    correctIndex: 0,
+  },
+
+  'Parameter Estimate Tables': {
+    question:
+      "A Poisson GLM with a log link reports coefficient β̂ = 0.40 for Territory B (reference: Territory A), with p = 0.002. What does the output tell you?",
+    // 1: reads the raw coefficient as the multiplier, skipping exp · 2: reverses the p-value significance rule · 3: wrong sign and skips exp
+    options: [
+      "Territory B is significant, with about e^0.40 ≈ 1.49× the expected claims of Territory A",
+      "Territory B has 0.40× the expected claims of Territory A",
+      "Territory B is not significant, because p is small",
+      "Territory B has about 40% fewer claims than Territory A",
+    ],
+    correctIndex: 0,
+  },
+
+  'ANOVA': {
+    question:
+      "A one-way ANOVA produces a large F-statistic with a small p-value. What do you conclude?",
+    // 1: despite 'analysis of variance', the test is about means, not variances · 2: that is the failing-to-reject conclusion, the opposite · 3: an unrelated assumption
+    options: [
+      "At least one group mean differs from the others",
+      "The group variances differ from one another",
+      "All group means are equal",
+      "The response is not Normally distributed",
+    ],
+    correctIndex: 0,
+  },
+
+  'Categorical Predictor': {
+    question:
+      "A GLM includes 'territory' with 4 levels (A, B, C, D). How many indicator (dummy) variables are needed, and what happens to the omitted level?",
+    // 1: forgets the reference level (k dummies causes collinearity) · 2: treats an unordered category as a single numeric score · 3: confuses the reference level with deleted observations
+    options: [
+      "3 indicators; the 4th (reference) level is absorbed into the intercept",
+      "4 indicators, one per level",
+      "1 indicator, scoring the 4 levels as a single number",
+      "3 indicators, and the reference level's rows are dropped from the data",
+    ],
+    correctIndex: 0,
+  },
+
+  'Interaction': {
+    question:
+      "In a GLM, an interaction between vehicle age and a 'sports car' indicator means that:",
+    // 1: confuses an interaction with correlation between the predictors · 2: that describes additive main effects, not an interaction · 3: an invented rule
+    options: [
+      "the effect of vehicle age on the response differs between sports and non-sports cars",
+      "vehicle age and the sports-car indicator are correlated with each other",
+      "both vehicle age and sports car appear as main effects",
+      "vehicle age must be dropped whenever sports car is in the model",
+    ],
+    correctIndex: 0,
+  },
+
+  'Control Variable': {
+    question:
+      "An actuary adds calendar year to a frequency GLM to keep its effect from leaking into the rating variables, but won't use it to set rates. Is its coefficient estimated, and why include it?",
+    // 1: that describes an offset (coefficient fixed at 1), not this · 2: contradicts 'not used to set rates' · 3: unrelated model term
+    options: [
+      "Its coefficient IS estimated; it is included to avoid omitted-variable bias in the rating variables",
+      "Its coefficient is fixed at 1, like an exposure term",
+      "It is a rating variable that enters the final rate directly",
+      "It is an interaction term between the rating variables",
+    ],
+    correctIndex: 0,
+  },
+
+  'Offset Variable': {
+    question:
+      "A Poisson claim-count GLM includes ln(exposure) as an offset. What is special about how exposure enters the model?",
+    // 1: that describes an ordinary covariate/control, not an offset · 2: confuses the offset with the link function · 3: an invented role
+    options: [
+      "Its coefficient is fixed at 1 rather than estimated, forcing expected counts proportional to exposure",
+      "Its coefficient is estimated like any other predictor's",
+      "It is transformed by the link function along with the mean",
+      "It replaces the intercept term",
+    ],
+    correctIndex: 0,
+  },
+
+  'AIC': {
+    question:
+      "Comparing two GLMs, Model A has AIC = 246 and Model B has AIC = 250. Which is preferred, and what does AIC balance?",
+    // 1: reverses the 'lower is better' direction · 2: AIC does not require nested models · 3: ignores the complexity-penalty term
+    options: [
+      "Model A (lower AIC); AIC balances goodness of fit against the number of parameters",
+      "Model B (higher AIC); a higher value means more variance explained",
+      "Model A, but only if the two models are nested",
+      "Cannot tell — AIC measures only fit, not complexity",
+    ],
+    correctIndex: 0,
+  },
+
+  'BIC': {
+    question:
+      "For a large sample size n, how does BIC's model choice tend to differ from AIC's?",
+    // 1: reverses the effect of the heavier penalty · 2: ignores that the two use different penalties · 3: BIC does penalize the parameter count
+    options: [
+      "BIC favors simpler models, because its ln(n) penalty exceeds AIC's penalty of 2",
+      "BIC favors more complex models, because ln(n) rewards extra parameters",
+      "BIC and AIC always select exactly the same model",
+      "BIC ignores the number of parameters entirely",
+    ],
+    correctIndex: 0,
+  },
+
+  'Deviance': {
+    question:
+      "For a GLM, what does a deviance of 0 indicate, and can deviance be negative?",
+    // 1: reverses the meaning of zero deviance · 2: confuses deviance with a significance test · 3: deviance is always ≥ 0
+    options: [
+      "Zero deviance means a perfect fit; deviance is always ≥ 0",
+      "Zero deviance means the worst possible fit, and it can take any sign",
+      "Zero deviance means no predictor is significant",
+      "Deviance can go negative when the model overfits",
+    ],
+    correctIndex: 0,
+  },
+
+  'R-Squared': {
+    question:
+      "You add a completely irrelevant predictor to a linear regression. What happens to R², and what does that reveal about it?",
+    // 1: ordinary R² cannot decrease when a predictor is added · 2: also false; it does not stay fixed · 3: confuses in-sample fit with out-of-sample prediction
+    options: [
+      "R² increases or stays equal; R² never penalizes added predictors, so it can't flag a useless one",
+      "R² decreases, correctly flagging the useless predictor",
+      "R² stays exactly the same regardless of predictors",
+      "R² measures out-of-sample accuracy, so it drops",
+    ],
+    correctIndex: 0,
+  },
+
+  'Residual Plot': {
+    question:
+      "A residual-vs-fitted plot shows the residuals fanning out (spread widening) as the fitted values grow. What does this indicate?",
+    // 1: misreads a fan shape as a sign of good fit · 2: a systematic trend/curve, not a fan, signals a missing predictor · 3: a fan says nothing in favor of normality
+    options: [
+      "Non-constant error variance (heteroscedasticity)",
+      "An excellent fit, since the residuals grow with the prediction",
+      "That a predictor is missing from the model",
+      "That the residuals are perfectly Normal",
+    ],
+    correctIndex: 0,
+  },
+
+  'Marginal Model Plot': {
+    question:
+      "A marginal model plot overlays two curves against a predictor. What are the two curves, and what does a large gap between them mean?",
+    // 1: confuses it with a residual/QQ diagnostic · 2: confuses it with a confidence band · 3: reverses the agreement/divergence interpretation
+    options: [
+      "A smooth of the raw data vs the model's fitted smooth; a large gap signals model misspecification",
+      "Two residual curves; a large gap means the residuals are Normal",
+      "Upper and lower confidence bands; a gap means wide uncertainty",
+      "The data smooth vs the model smooth; close agreement signals a poor fit",
+    ],
+    correctIndex: 0,
+  },
+
+  'QQ Plot': {
+    question:
+      "A Normal QQ plot of residuals runs along the 45° line in the middle but curves sharply upward in the upper-right tail. What does this indicate?",
+    // 1: ignores the tail departure and over-reads the straight middle · 2: wrong tail direction · 3: a dodge unsupported by the pattern shown
+    options: [
+      "The residuals have a heavier right tail than the Normal distribution",
+      "The residuals are perfectly Normal, since most points lie on the line",
+      "The residuals have a lighter right tail than the Normal",
+      "The sample is too small to interpret",
+    ],
+    correctIndex: 0,
+  },
+
+  'Added Variable Plot': {
+    question:
+      "How does an added-variable (partial regression) plot for predictor xⱼ differ from a simple scatter of Y against xⱼ?",
+    // 1: that is exactly the unadjusted scatter it improves on · 2: that is an ordinary residual plot · 3: that is a QQ plot
+    options: [
+      "It shows xⱼ's effect after removing the other predictors' effects from both Y and xⱼ",
+      "It plots raw Y against raw xⱼ with no adjustment",
+      "It plots residuals against fitted values",
+      "It compares xⱼ's distribution to a Normal reference",
+    ],
+    correctIndex: 0,
+  },
+
+  'Exploratory Data Analysis': {
+    question:
+      "When in the modeling process is exploratory data analysis primarily used, and what is its goal?",
+    // 1: confuses EDA with confirmatory inference · 2: also confuses it with formal testing · 3: overstates EDA's role as a replacement for modeling
+    options: [
+      "Before formal modeling, to reveal patterns, anomalies, and suitable model structures",
+      "After fitting, to formally test whether coefficients are significant",
+      "Only at the end, to compute the p-values reported to regulators",
+      "In place of model fitting, since plots are sufficient on their own",
+    ],
+    correctIndex: 0,
+  },
 }

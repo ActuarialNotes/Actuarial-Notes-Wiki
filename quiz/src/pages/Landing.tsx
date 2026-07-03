@@ -13,6 +13,7 @@ import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { selectQuestionsForCoverage } from '@/lib/studyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
+import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuizMode } from '@/lib/parser'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -218,18 +219,19 @@ function ExamOptionCard({
   questionCount,
   colorIdx,
   targetDate,
+  subtitle,
 }: {
   exam: { value: string; label: string }
   onClick: () => void
   questionCount: number
   colorIdx: number  // -1 means not active
   targetDate?: string | null
+  subtitle?: string | null
 }) {
   const isActive = colorIdx >= 0
   // Beta exams have a full question bank; others are still being built out.
   const isBeta = exam.value === 'Probability' || exam.value === 'Financial Mathematics'
-  // Hide the subtitle when it would just repeat the label (e.g. "Exam 5", "Exam MAS-I").
-  const description = exam.value.startsWith('Exam ') ? null : exam.value
+  const description = subtitle ?? null
 
   return (
     <button type="button" data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined} onClick={onClick} className="text-left w-full">
@@ -301,6 +303,17 @@ export default function Landing() {
     try { localStorage.setItem(BODY_FILTER_KEY, f) } catch { /* ignore */ }
     setFilterOverride(f)
   }
+
+  // Exam subtitles (e.g. "Basic Techniques for Ratemaking and Estimating Claim
+  // Liabilities" for Exam 5) sourced from the wiki syllabus so the Quiz tab
+  // matches the Study Guides tab exactly.
+  const examTopicByProgressKey = useMemo(() => {
+    const map: Record<string, string> = {}
+    for (const s of syllabi) {
+      map[wikiExamIdToProgressKey(s.examId)] = s.examTopic
+    }
+    return map
+  }, [syllabi])
 
   const filteredTrackGroups = QUIZ_TRACK_GROUPS
     .filter(g => g.org === activeFilter)
@@ -808,6 +821,7 @@ export default function Landing() {
                             questionCount={questionCounts[exam.value] ?? 0}
                             colorIdx={colorIdx}
                             targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
+                            subtitle={examTopicByProgressKey[exam.progressKey]}
                           />
                         )
                       })}

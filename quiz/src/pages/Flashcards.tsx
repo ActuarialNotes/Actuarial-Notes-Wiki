@@ -2032,6 +2032,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   onPrev: () => void
   hasNext: boolean
   hasPrev: boolean
+  focusMode?: boolean
 }>(function FlashcardStudyArea({
   cards,
   index,
@@ -2043,6 +2044,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   onPrev,
   hasNext,
   hasPrev,
+  focusMode = false,
 }, ref) {
   const [flipped, setFlipped] = useState(defaultFlipped)
   const [expanded, setExpanded] = useState(false)
@@ -2066,6 +2068,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   const dragXRef = useRef(0)
 
   const current = cards[index]
+
+  useEffect(() => {
+    if (focusMode) setExpanded(false)
+  }, [focusMode])
 
   useEffect(() => {
     setFlipped(defaultFlipped)
@@ -2238,6 +2244,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
           </div>
         ) : (
           <div className="flex-1 flex flex-col p-6 gap-4">
+            {!focusMode && (
             <div className="flex items-center gap-2">
               <p className="text-sm font-medium text-muted-foreground">{current.name}</p>
               {/* Play menu — left-aligned right after the name */}
@@ -2312,6 +2319,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                 )}
               </div>
             </div>
+            )}
             {loadStatus === 'loading' && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground py-4">
                 <Loader2 className="h-4 w-4 animate-spin" /> Loading…
@@ -2356,7 +2364,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                 />
               </div>
             )}
-            {markdown && (
+            {markdown && !focusMode && (
               <button
                 type="button"
                 onClick={e => { e.stopPropagation(); setExpanded(v => !v) }}
@@ -2757,6 +2765,7 @@ export default function Flashcards() {
             onPrev={() => setActiveIndex(i => Math.max(i - 1, 0))}
             hasNext={activeIndex < orderedCards.length - 1}
             hasPrev={activeIndex > 0}
+            focusMode={focusMode}
           />
         </div>
       </div>

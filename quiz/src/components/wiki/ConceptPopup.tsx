@@ -14,7 +14,6 @@ import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ListenView } from '@/components/wiki/ListenView'
 import { MathViewContext } from '@/contexts/MathViewContext'
-import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
@@ -46,7 +45,6 @@ export function ConceptPopup() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const { height, beginDrag } = useSplitHeight()
   const [maximized, setMaximized] = useState(false)
-  const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showQuestionsModal, setShowQuestionsModal] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
@@ -421,7 +419,7 @@ export function ConceptPopup() {
               </button>
               <button
                 type="button"
-                onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
+                onClick={() => { openCollect(current); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
@@ -662,12 +660,6 @@ export function ConceptPopup() {
       </div>
     </aside>
 
-    {showLearningProgress && (
-      <LearningProgressModal
-        conceptName={current.name}
-        onClose={() => setShowLearningProgress(false)}
-      />
-    )}
     {showQuestionsModal && (
       <ConceptQuestionsModal
         conceptName={current.name}

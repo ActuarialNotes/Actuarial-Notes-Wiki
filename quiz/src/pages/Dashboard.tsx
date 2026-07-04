@@ -362,7 +362,7 @@ export default function Dashboard() {
   const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
   const initials = displayName.slice(0, 2).toUpperCase()
 
-  const multiExam = inProgressSyllabi.length > 1
+  const hasActiveExams = inProgressSyllabi.length > 0
 
   return (
     <>
@@ -484,7 +484,7 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-        {multiExam && (
+        {hasActiveExams && (
           <div className="flex gap-1.5 flex-wrap">
             {inProgressSyllabi.map((s, i) => (
               <button

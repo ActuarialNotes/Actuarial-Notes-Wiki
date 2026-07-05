@@ -48,7 +48,7 @@ const PHRASES: Record<AnimalType, PhraseFn[]> = {
     () => 'Statistically speaking, you will succeed.',
     () => 'I\'ve read every actuarial textbook. You should too.',
     () => 'Wisdom is just flashcards you didn\'t lose.',
-    ctx => ctx.totalTopics ? `${ctx.totalTopics} topics in the syllabus. I\'ve memorized them all.` : 'Knowledge is power. Obviously.',
+    ctx => ctx.totalTopics ? `${ctx.totalTopics} topics in the syllabus. I've memorized them all.` : 'Knowledge is power. Obviously.',
     ctx => `${days(ctx)} days of preparation. Optimal.`,
   ],
   wolf: [
@@ -76,7 +76,7 @@ const DEFAULT_PHRASES: PhraseFn[] = [
 const VARIANT_PHRASES: Partial<Record<string, PhraseFn[]>> = {
   'fox:crimson': [
     () => 'Red Fox energy: fast, fierce, unstoppable.',
-    ctx => `${days(ctx)} days? This Red Fox doesn\'t miss.`,
+    ctx => `${days(ctx)} days? This Red Fox doesn't miss.`,
     () => 'The crimson flash always arrives first.',
     ctx => ctx.topicsMastered ? `${ctx.topicsMastered} topics? Red Foxes count in kills.` : 'Red Fox sharpens every edge.',
     () => 'Bold color, bolder results.',

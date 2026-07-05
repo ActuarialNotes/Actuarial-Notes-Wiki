@@ -280,7 +280,7 @@ class Parser {
     // assumes current char is '{'
     this.i++ // skip '{'
     let depth = 1
-    let start = this.i
+    const start = this.i
     while (this.i < this.s.length && depth > 0) {
       const c = this.s[this.i]
       if (c === '{') depth++

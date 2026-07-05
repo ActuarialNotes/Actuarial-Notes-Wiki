@@ -1,0 +1,51 @@
+name: CI
+
+# Gate every change to the quiz app on lint, typecheck, unit tests, and a
+# production build. Runs on PRs and on pushes to main. Path-filtered to the app
+# and this workflow so unrelated content-only changes don't spend CI minutes.
+on:
+  pull_request:
+    paths:
+      - 'quiz/**'
+      - '.github/workflows/ci.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'quiz/**'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch:
+
+# Cancel superseded runs on the same ref (e.g. rapid pushes to a PR branch).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: lint · typecheck · test · build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: quiz
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: quiz/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      # `npm run build` runs `tsc && vite build`, so this covers both the
+      # typecheck and the production bundle in one step.
+      - name: Build
+        run: npm run build

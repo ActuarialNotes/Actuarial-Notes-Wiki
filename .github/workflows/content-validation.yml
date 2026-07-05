@@ -1,0 +1,41 @@
+name: Content Validation
+
+# Gate every change to the question bank on content integrity (roadmap P0.2).
+# The app's parser silently drops any question it can't parse and any duplicate
+# id, so bad frontmatter or a mismatched answer key means the question just never
+# appears in-app. This check reproduces that contract so drift fails the PR
+# instead of shipping. Path-filtered to content the validator reads.
+on:
+  pull_request:
+    paths:
+      - 'questions/**'
+      - 'Concepts/**'
+      - 'scripts/validate_content.py'
+      - '.github/workflows/content-validation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'questions/**'
+      - 'Concepts/**'
+      - 'scripts/validate_content.py'
+      - '.github/workflows/content-validation.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: content-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: validate question bank
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Standard library only — no dependencies to install.
+      - name: Validate content
+        run: python3 scripts/validate_content.py

@@ -1,5 +1,15 @@
 /// <reference types="vite/client" />
 
+interface ImportMetaEnv {
+  /**
+   * Optional error-monitoring collector endpoint. When set, captured errors are
+   * beacon-POSTed here (a Sentry tunnel or any custom collector). See
+   * lib/errorMonitoring.ts. Left unset, errors go to console + the GA4
+   * `exception` event only.
+   */
+  readonly VITE_ERROR_ENDPOINT?: string
+}
+
 interface Window {
   gtag: (...args: unknown[]) => void
   dataLayer: unknown[]

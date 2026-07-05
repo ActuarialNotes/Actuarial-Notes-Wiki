@@ -24,7 +24,7 @@ import { slugForLink } from '@/lib/conceptMatch'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
-import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted } from '@/lib/analytics'
+import { trackQuizStarted, trackQuestionAnswered, trackQuizCompleted, trackFirstQuiz, trackFirstCorrect } from '@/lib/analytics'
 
 function computeLevelUps(
   question: Question,
@@ -125,7 +125,9 @@ export default function Quiz() {
   useEffect(() => {
     if (!loading && questions.length > 0 && status === 'idle') {
       startQuiz(questions, mode)
-      trackQuizStarted({ mode, exam: questions[0]?.exam ?? 'Unknown', question_count: questions.length })
+      const exam = questions[0]?.exam ?? 'Unknown'
+      trackQuizStarted({ mode, exam, question_count: questions.length })
+      trackFirstQuiz({ mode, exam })
     }
   }, [loading, questions, status, mode, startQuiz])
 
@@ -256,6 +258,7 @@ export default function Quiz() {
     answerQuestion(currentQuestion.id, answer)
     setIsChangingAnswer(false)
     trackQuestionAnswered({ question_id: currentQuestion.id, is_correct: correct, exam: currentQuestion.exam, mode })
+    if (correct) trackFirstCorrect({ mode, exam: currentQuestion.exam })
   }
 
   function handleChangeAnswer() {

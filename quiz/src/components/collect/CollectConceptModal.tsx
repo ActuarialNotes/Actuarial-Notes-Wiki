@@ -16,6 +16,7 @@ import { CollectCard3D } from '@/components/collect/CollectCard3D'
 import { LearningProgressPanel } from '@/components/wiki/LearningProgressModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
+import { trackConceptCollected } from '@/lib/analytics'
 
 type Phase = 'question' | 'spinning' | 'flash' | 'done'
 
@@ -209,6 +210,7 @@ export function CollectConceptModal() {
 
   const runCollectAnimation = useCallback(() => {
     play('correct')
+    trackConceptCollected({ concept: name })
     if (prefersReducedMotion()) {
       collect(name)
       addCard({ kind: 'concept', name })

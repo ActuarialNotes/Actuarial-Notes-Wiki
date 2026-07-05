@@ -22,6 +22,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { captureError } from '@/lib/errorMonitoring'
 
 const Research    = lazy(() => import('@/pages/Research'))
 
@@ -52,7 +53,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('Error boundary caught:', error, info)
+    captureError(error, { source: 'error-boundary', fatal: true, componentStack: info.componentStack ?? undefined })
   }
 
   render() {

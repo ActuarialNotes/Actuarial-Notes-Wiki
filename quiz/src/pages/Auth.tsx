@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { trackSignup } from '@/lib/analytics'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -77,6 +78,7 @@ export default function Auth() {
           options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
         })
         if (authError) throw authError
+        trackSignup('password')
         setSignupSuccess(true)
       }
     } catch (err) {

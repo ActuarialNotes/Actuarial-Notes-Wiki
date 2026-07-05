@@ -3,8 +3,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { findSyllabiForConcept } from '@/lib/conceptMatch'
+import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
 type Scope = 'page' | 'all'
 
@@ -21,6 +24,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
   const [active, setActive] = useState(false)
+  const [chooser, setChooser] = useState<{ conceptName: string; syllabi: WikiExamSyllabus[] } | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const location = useLocation()
@@ -107,24 +111,29 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
     if (idx >= 0 && conceptList.length > 0) {
       // Concept is on the current exam page — open popup here.
       openAt(conceptList, idx, examSourcePath ?? undefined)
-    } else {
-      // Concept is not on the current page — navigate to its exam study guide.
-      const needle = ref.name.toLowerCase()
-      const examSyllabus = syllabi.find(s =>
-        s.topics.some(t => t.concepts.some(c => {
-          if (c.name.toLowerCase() === needle) return true
-          const targetBase = c.target.split('/').pop()?.replace(/\.md$/i, '').toLowerCase()
-          return targetBase === needle
-        }))
-      )
-      if (examSyllabus) {
-        const examName = examSyllabus.fileName ?? examSyllabus.examLabel
-        navigate(`${wikiRoute({ kind: 'exam', name: examName })}?concept=${encodeURIComponent(ref.name)}`)
-      } else {
-        // Fallback: open popup in place if we can't find the exam.
-        openAt([ref], 0, undefined)
-      }
+      return
     }
+
+    // Concept is not on the current page — navigate to its exam study guide.
+    // If it's taught in more than one exam's syllabus, ask which to open
+    // instead of silently picking one.
+    const matches = findSyllabiForConcept(syllabi, ref.name)
+    if (matches.length > 1) {
+      setChooser({ conceptName: ref.name, syllabi: matches })
+    } else if (matches.length === 1) {
+      const examName = matches[0]!.fileName ?? matches[0]!.examLabel
+      navigate(`${wikiRoute({ kind: 'exam', name: examName })}?concept=${encodeURIComponent(ref.name)}`)
+    } else {
+      // Fallback: open popup in place if we can't find the exam.
+      openAt([ref], 0, undefined)
+    }
+  }
+
+  function goToSyllabus(s: WikiExamSyllabus) {
+    if (!chooser) return
+    setChooser(null)
+    const examName = s.fileName ?? s.examLabel
+    navigate(`${wikiRoute({ kind: 'exam', name: examName })}?concept=${encodeURIComponent(chooser.conceptName)}`)
   }
 
   return (
@@ -237,6 +246,15 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
           </div>
         )}
       </div>
+
+      {chooser && (
+        <ChooseSyllabusModal
+          conceptName={chooser.conceptName}
+          syllabi={chooser.syllabi}
+          onChoose={goToSyllabus}
+          onClose={() => setChooser(null)}
+        />
+      )}
     </>
   )
 }

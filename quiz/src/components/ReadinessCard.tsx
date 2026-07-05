@@ -964,7 +964,7 @@ export function ReadinessCard({
           side by side directly below the top readiness/countdown cards. */}
       <div className="flex gap-3">
         <Button
-          variant="outline"
+          variant="secondary"
           onClick={() => {
             if (isPremium) {
               const hasStudyPlan = studyPlanConceptsForModal.length > 0

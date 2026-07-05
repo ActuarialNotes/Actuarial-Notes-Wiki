@@ -23,7 +23,7 @@ function rawGithubUrl(path: string): string {
 function escapeMarkdownLabel(label: string): string {
   // Escape markdown-significant punctuation so labels like "Expected *Value*"
   // or "Std. (σ)" don't turn into emphasis/groups inside the generated link.
-  return label.replace(/[\\\[\]()*_`{}]/g, '\\$&')
+  return label.replace(/[\\[\]()*_`{}]/g, '\\$&')
 }
 
 // CommonMark rule: ordered lists starting with N≠1 cannot interrupt a paragraph.

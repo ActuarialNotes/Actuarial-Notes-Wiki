@@ -54,7 +54,7 @@ describe('csvEscape', () => {
 describe('responsesToCsv', () => {
   it('emits a header row plus one row per answered question', () => {
     const csv = responsesToCsv([response()])
-    const lines = csv.replace(/^﻿/, '').trimEnd().split('\r\n')
+    const lines = csv.replace(/^\uFEFF/, '').trimEnd().split('\r\n')
     expect(lines[0]).toBe('Date,Exam,Topic,Question ID,Your Answer,Correct Answer,Result,Time (seconds)')
     expect(lines[1]).toBe('2026-07-01T12:00:00.000Z,Probability,Random Variables,P-042,B,C,Incorrect,45')
     expect(lines).toHaveLength(2)
@@ -62,13 +62,13 @@ describe('responsesToCsv', () => {
 
   it('renders is_correct as a human-readable Result', () => {
     const csv = responsesToCsv([response({ is_correct: true })])
-    const row = csv.replace(/^﻿/, '').trimEnd().split('\r\n')[1]
+    const row = csv.replace(/^\uFEFF/, '').trimEnd().split('\r\n')[1]
     expect(row.split(',')[6]).toBe('Correct')
   })
 
   it('renders missing answer/topic/time as empty fields', () => {
     const csv = responsesToCsv([response({ chosen_answer: null, topic: null, exam: null, time_spent_seconds: null })])
-    const cells = csv.replace(/^﻿/, '').trimEnd().split('\r\n')[1].split(',')
+    const cells = csv.replace(/^\uFEFF/, '').trimEnd().split('\r\n')[1].split(',')
     expect(cells[1]).toBe('') // exam
     expect(cells[2]).toBe('') // topic
     expect(cells[4]).toBe('') // your answer
@@ -77,7 +77,7 @@ describe('responsesToCsv', () => {
 
   it('quotes answer text that contains commas', () => {
     const csv = responsesToCsv([response({ chosen_answer: '1,000', correct_answer: '2,000' })])
-    const row = csv.replace(/^﻿/, '').trimEnd().split('\r\n')[1]
+    const row = csv.replace(/^\uFEFF/, '').trimEnd().split('\r\n')[1]
     expect(row).toContain('"1,000"')
     expect(row).toContain('"2,000"')
   })

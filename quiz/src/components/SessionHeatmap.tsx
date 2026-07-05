@@ -116,7 +116,7 @@ function HeatmapGrid({ scoreByDay, weeks }: HeatmapGridProps) {
 
   // Build columns: each column is one week (7 days, Mon–Sun).
   const columns: { key: string; days: { key: string; data: DayScore | null; isFuture: boolean }[] }[] = []
-  let monthMarks: { col: number; month: string }[] = []
+  const monthMarks: { col: number; month: string }[] = []
 
   for (let w = 0; w < weeks; w++) {
     const colStart = addDays(gridStart, w * 7)

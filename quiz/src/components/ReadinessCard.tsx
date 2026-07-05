@@ -960,6 +960,42 @@ export function ReadinessCard({
 
   return (
     <div className="space-y-4">
+      {/* Primary actions — Read concepts (left) + Start Today's Quiz (right),
+          side by side directly below the top readiness/countdown cards. */}
+      <div className="flex gap-3">
+        <Button
+          variant="outline"
+          onClick={() => {
+            if (isPremium) {
+              const hasStudyPlan = studyPlanConceptsForModal.length > 0
+              openDashboard(
+                toRefs(allConcepts),
+                hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
+                hasStudyPlan ? 'study-plan' : 'entire-syllabus',
+                0,
+              )
+            } else {
+              openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)
+            }
+          }}
+          disabled={allConcepts.length === 0}
+          className="flex-1 gap-2.5 text-base h-auto py-4"
+        >
+          <BookOpen className="h-5 w-5" />
+          Read concepts
+        </Button>
+        {isPremium && displayConcepts.length > 0 && (
+          <button
+            type="button"
+            onClick={handleStartQuiz}
+            className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-colors"
+          >
+            <Play className="h-5 w-5 shrink-0" />
+            {todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz"}
+          </button>
+        )}
+      </div>
+
       {/* Bento grid: left = heatmap + plan, right = gauges + actions (md+) */}
       <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
       {/* Left column: heatmap card + study plan card */}
@@ -999,20 +1035,6 @@ export function ReadinessCard({
             mobileMonthOnly
             highlightedDay={selectedDay}
           />
-
-          {/* Start quiz CTA — moved here from the Study Plan card */}
-          {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
-            <button
-              type="button"
-              onClick={handleStartQuiz}
-              className="w-full flex items-center gap-3 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-colors"
-            >
-              <Play className="h-5 w-5 shrink-0" />
-              <span className="flex-1 text-left">
-                {todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz"}
-              </span>
-            </button>
-          )}
 
           {/* Day panel — shown when a heatmap day is clicked */}
           {selectedDay && (() => {
@@ -1408,28 +1430,6 @@ export function ReadinessCard({
                 openDashboard(toRefs(allConcepts), null, 'entire-syllabus', idx === -1 ? 0 : idx, { circular: true, fromRadial: true })
               }}
             />
-
-            <Button
-              variant="outline"
-              onClick={() => {
-                if (isPremium) {
-                  const hasStudyPlan = studyPlanConceptsForModal.length > 0
-                  openDashboard(
-                    toRefs(allConcepts),
-                    hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
-                    hasStudyPlan ? 'study-plan' : 'entire-syllabus',
-                    0,
-                  )
-                } else {
-                  openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)
-                }
-              }}
-              disabled={allConcepts.length === 0}
-              className="gap-3 text-base w-full h-auto py-4"
-            >
-              <BookOpen className="h-5 w-5" />
-              Read concepts
-            </Button>
           </CardContent>
         </Card>
 

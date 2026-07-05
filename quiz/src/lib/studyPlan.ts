@@ -636,18 +636,23 @@ function linkedConceptNames(wikiLinks: string[]): Set<string> {
  *
  * Phase 2 fills any remaining slots with the highest-coverage leftover
  * questions, so extra questions still stay on-topic.
+ *
+ * When `count` is omitted, no cap is applied and phase 2 is skipped: the
+ * result is the minimum greedy set that covers every reachable concept —
+ * the fewest questions that complete the whole plan.
  */
 export function selectQuestionsForCoverage<T extends CoverageQuestion>(
   questions: T[],
   concepts: string[],
-  count: number,
+  count?: number,
 ): T[] {
   const conceptSet = new Set(concepts.map(c => c.toLowerCase()))
   const uncovered = new Set(conceptSet)
   const pool = [...questions]
   const selected: T[] = []
+  const cap = count ?? Infinity
 
-  while (uncovered.size > 0 && selected.length < count && pool.length > 0) {
+  while (uncovered.size > 0 && selected.length < cap && pool.length > 0) {
     let bestIdx = -1
     let bestCovered: Set<string> = new Set()
     for (let i = 0; i < pool.length; i++) {
@@ -663,7 +668,7 @@ export function selectQuestionsForCoverage<T extends CoverageQuestion>(
     for (const c of bestCovered) uncovered.delete(c)
   }
 
-  if (selected.length < count && pool.length > 0) {
+  if (count !== undefined && selected.length < count && pool.length > 0) {
     pool.sort((a, b) => {
       const scoreA = [...linkedConceptNames(a.wiki_link)].filter(c => conceptSet.has(c)).length
       const scoreB = [...linkedConceptNames(b.wiki_link)].filter(c => conceptSet.has(c)).length
@@ -676,4 +681,17 @@ export function selectQuestionsForCoverage<T extends CoverageQuestion>(
   }
 
   return selected
+}
+
+/**
+ * The fewest questions needed to cover every reachable concept in `concepts`
+ * — i.e. the number of questions a "Today's Quiz" needs to give the user a
+ * shot at completing the entire day's plan. Concepts with no matching question
+ * simply can't be covered and don't inflate the count.
+ */
+export function minQuestionsToCoverConcepts<T extends CoverageQuestion>(
+  questions: T[],
+  concepts: string[],
+): number {
+  return selectQuestionsForCoverage(questions, concepts).length
 }

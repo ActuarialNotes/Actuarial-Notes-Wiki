@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { generateStudyPlan, todayISO, addDays, daysBetween, PLAN_CACHE_VERSION, selectQuestionsForCoverage } from './studyPlan'
+import { generateStudyPlan, todayISO, addDays, daysBetween, PLAN_CACHE_VERSION, selectQuestionsForCoverage, minQuestionsToCoverConcepts } from './studyPlan'
 import { emptyRecord, type ConceptMasteryRecord } from './mastery'
 import type { WikiExamSyllabus } from './wikiParser'
 
@@ -606,5 +606,50 @@ describe('selectQuestionsForCoverage', () => {
     const questions = [q('q1', 'Topic 1')]
 
     expect(selectQuestionsForCoverage(questions, concepts, 0)).toHaveLength(0)
+  })
+
+  it('returns the minimum covering set (no padding) when count is omitted', () => {
+    const concepts = ['Topic 1', 'Topic 2', 'Topic 3', 'Topic 4', 'Topic 5']
+    const questions = [
+      q('multi-a', 'Topic 1', 'Topic 2', 'Topic 3'),
+      q('multi-b', 'Topic 4', 'Topic 5'),
+      q('single-1', 'Topic 1'),
+      q('single-2', 'Topic 2'),
+      q('single-3', 'Topic 3'),
+    ]
+
+    const selected = selectQuestionsForCoverage(questions, concepts)
+
+    // Two multi-concept questions cover all five concepts — nothing extra added.
+    expect(selected).toHaveLength(2)
+    const covered = new Set(selected.flatMap(s => s.wiki_link))
+    for (const c of concepts) expect(covered.has(c)).toBe(true)
+  })
+
+  it('only counts coverable concepts (uncovered ones do not inflate the count)', () => {
+    const concepts = ['Topic 1', 'Topic 2', 'Unavailable']
+    const questions = [q('q1', 'Topic 1', 'Topic 2')]
+
+    expect(minQuestionsToCoverConcepts(questions, concepts)).toBe(1)
+  })
+})
+
+describe('minQuestionsToCoverConcepts', () => {
+  const q = (id: string, ...concepts: string[]) => ({ id, wiki_link: concepts })
+
+  it('is one question per concept when no questions share concepts', () => {
+    const concepts = ['A', 'B', 'C']
+    const questions = [q('q1', 'A'), q('q2', 'B'), q('q3', 'C')]
+    expect(minQuestionsToCoverConcepts(questions, concepts)).toBe(3)
+  })
+
+  it('collapses to fewer questions when one question covers several concepts', () => {
+    const concepts = ['A', 'B', 'C', 'D']
+    const questions = [q('q1', 'A', 'B', 'C'), q('q2', 'D')]
+    expect(minQuestionsToCoverConcepts(questions, concepts)).toBe(2)
+  })
+
+  it('is zero when there are no questions', () => {
+    expect(minQuestionsToCoverConcepts([], ['A', 'B'])).toBe(0)
   })
 })

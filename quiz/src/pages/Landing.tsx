@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, FileDown, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
@@ -10,7 +10,8 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
-import { selectQuestionsForCoverage } from '@/lib/studyPlan'
+import { selectQuestionsForCoverage, minQuestionsToCoverConcepts } from '@/lib/studyPlan'
+import { readTodayLevelUps, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
@@ -337,6 +338,24 @@ export default function Landing() {
   const [count, setCount] = useState<number>(3)
   const reveal = 'during' as const
 
+  // Set once the user picks a specific question count, so the auto-sizing effect
+  // (which defaults Today's Quiz to the whole-plan coverage count) stops overriding
+  // their choice. Reset whenever the exam/mode changes.
+  const userPickedCountRef = useRef(false)
+
+  // Concepts levelled up today — used to drop already-completed concepts from
+  // Today's Quiz so a re-launch after some wrong answers only re-tests what's left.
+  const [todayLevelUps, setTodayLevelUps] = useState(() => readTodayLevelUps())
+  useEffect(() => {
+    const refresh = () => setTodayLevelUps(readTodayLevelUps())
+    window.addEventListener(LEVELUP_EVENT, refresh)
+    window.addEventListener('storage', refresh)
+    return () => {
+      window.removeEventListener(LEVELUP_EVENT, refresh)
+      window.removeEventListener('storage', refresh)
+    }
+  }, [])
+
   // Mock exam sitting selection (null = random mix across all years)
   const [selectedSitting, setSelectedSitting] = useState<{ year: number; session?: string } | null>(null)
 
@@ -358,6 +377,7 @@ export default function Landing() {
     setIsAdaptive(false)
     setConceptMode('custom')
     setSelectedSitting(null)
+    userPickedCountRef.current = false
     if (topic && mode === 'quiz') {
       try {
         const saved = localStorage.getItem(`actuarial_quiz_concepts_v1_${topic}`)
@@ -517,6 +537,57 @@ export default function Landing() {
       : plan.todaysConcepts
   }, [plan])
 
+  // Resolve today's plan into the concepts still to be completed and the question
+  // pool that can cover them. "Incomplete" = scheduled today but not yet levelled
+  // up today, so a re-launch after some wrong answers only re-tests what's left.
+  // When everything is already done, fall back to the full plan for extra practice.
+  const buildTodaysPlanSelection = useCallback((): { todayQs: typeof allQuestions; concepts: string[] } | null => {
+    if (!plan || !topic) return null
+    const displayConcepts = plan.status === 'review_mode'
+      ? (plan.reviewConcepts ?? [])
+      : plan.todaysConcepts
+    if (displayConcepts.length === 0) return null
+
+    const doneSet = new Set(todayLevelUps.map(l => l.conceptSlug.toLowerCase()))
+    const remaining = displayConcepts.filter(n => !doneSet.has(n.toLowerCase()))
+    const concepts = remaining.length > 0 ? remaining : displayConcepts
+
+    const conceptSet = new Set(concepts.map(n => n.toLowerCase()))
+    const todayQs = allQuestions.filter(q => {
+      if (q.exam !== topic) return false
+      return q.wiki_link.some(link => {
+        const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
+        const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
+        return conceptSet.has(n)
+      })
+    })
+    if (todayQs.length === 0) return null
+    return { todayQs, concepts }
+  }, [plan, topic, allQuestions, todayLevelUps])
+
+  // Fewest questions needed to cover the whole (remaining) plan — the count a
+  // dashboard-launched Today's Quiz auto-selects to complete the day's plan.
+  const todaysPlanFullCount = useMemo(() => {
+    const sel = buildTodaysPlanSelection()
+    if (!sel) return 0
+    return minQuestionsToCoverConcepts(sel.todayQs, sel.concepts)
+  }, [buildTodaysPlanSelection])
+
+  // Store the coverage-optimal question set and jump straight into the quiz.
+  // `desiredCount` caps the questions (used when the user picks a smaller count);
+  // the fewest-questions greedy cover keeps it on today's concepts either way.
+  const launchTodaysPlan = useCallback((desiredCount: number): boolean => {
+    const sel = buildTodaysPlanSelection()
+    if (!sel) return false
+    const selected = selectQuestionsForCoverage(sel.todayQs, sel.concepts, desiredCount)
+    if (selected.length === 0) return false
+    try {
+      sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selected.map(q => q.id)))
+    } catch { /* ignore */ }
+    navigate(`/quiz?selection=stored&mode=quiz&reveal=${reveal}&count=${selected.length}&from=home`)
+    return true
+  }, [buildTodaysPlanSelection, navigate])
+
   // Auto-activate today's study plan for premium users when it has concepts.
   // If the dashboard passed a custom concept selection (some deselected), apply that instead.
   useEffect(() => {
@@ -538,6 +609,31 @@ export default function Landing() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, planConceptCount])
+
+  // Auto-size Today's Quiz to cover the entire (remaining) plan, until the user
+  // picks a specific count. This is what makes "Start Today's Quiz" pull exactly
+  // the number of questions needed to complete the day's plan.
+  useEffect(() => {
+    if (useTodaysPlan && !userPickedCountRef.current && todaysPlanFullCount > 0) {
+      setCount(todaysPlanFullCount)
+    }
+  }, [useTodaysPlan, todaysPlanFullCount])
+
+  // One-click launch from the dashboard: as soon as the plan + question bank are
+  // ready, jump straight into a quiz sized to complete today's plan. Falls back to
+  // the normal config screen if the user isn't premium or has no plan.
+  const didAutostartRef = useRef(false)
+  useEffect(() => {
+    if (didAutostartRef.current) return
+    if (searchParams.get('autostart') !== '1') return
+    if (!user || mode !== 'quiz' || !topic) return
+    if (masteryLoading || conceptsLoading || planLoading || subLoading) return
+    if (!isPremium || !plan || planConceptCount === 0 || allQuestions.length === 0) return
+    const sel = buildTodaysPlanSelection()
+    if (!sel) return
+    didAutostartRef.current = true
+    launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts))
+  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan])
 
   // Persist manual concept selections to localStorage
   useEffect(() => {
@@ -610,34 +706,10 @@ export default function Landing() {
       return
     }
 
-    // Today's study plan mode: filter by concept names, prioritize multi-concept questions
+    // Today's study plan mode: greedily cover as many of today's (still-incomplete)
+    // concepts as possible with the fewest questions, capped at the chosen count.
     if (useTodaysPlan && plan) {
-      const displayConcepts = plan.status === 'review_mode'
-        ? (plan.reviewConcepts ?? [])
-        : plan.todaysConcepts
-      if (displayConcepts.length > 0) {
-        const todaySet = new Set(displayConcepts.map(n => n.toLowerCase()))
-        const todayQs = allQuestions.filter(q => {
-          if (q.exam !== topic) return false
-          return q.wiki_link.some(link => {
-            const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
-            const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
-            return todaySet.has(n)
-          })
-        })
-        if (todayQs.length > 0) {
-          // Greedily cover as many of today's concepts as possible with the
-          // fewest questions, so a quiz with count >= concepts covers every
-          // concept at least once.
-          const selected = selectQuestionsForCoverage(todayQs, displayConcepts, count)
-          const poolIds = selected.map(q => q.id)
-          try {
-            sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(poolIds))
-          } catch { /* ignore */ }
-          navigate(`/quiz?selection=stored&mode=quiz&reveal=${reveal}&count=${count}&from=home`)
-          return
-        }
-      }
+      if (launchTodaysPlan(count)) return
     }
 
     const params = new URLSearchParams({ exam: topic, mode })
@@ -987,12 +1059,32 @@ export default function Landing() {
     {hasSelection && (
       <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm">
         <div className="container max-w-2xl mx-auto px-4 pt-3 pb-4 space-y-3">
+          {mode === 'quiz' && useTodaysPlan && todaysPlanFullCount > 0 && (
+            <p className="text-xs text-muted-foreground text-center">
+              {count >= todaysPlanFullCount
+                ? `Covers today's whole plan in ${todaysPlanFullCount} question${todaysPlanFullCount !== 1 ? 's' : ''}`
+                : `${count} of ${todaysPlanFullCount} questions needed to finish today's plan`}
+            </p>
+          )}
           <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
+            {mode === 'quiz' && useTodaysPlan && todaysPlanFullCount > 0 && (
+              <button
+                type="button"
+                onClick={() => { userPickedCountRef.current = true; setMode('quiz'); setCount(todaysPlanFullCount) }}
+                className={`flex-[2] h-10 rounded-lg text-sm font-bold transition-colors px-2 ${
+                  mode === 'quiz' && count === todaysPlanFullCount
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
+                }`}
+              >
+                Full plan
+              </button>
+            )}
             {QUICK_COUNTS.map(n => (
               <button
                 key={n}
                 type="button"
-                onClick={() => { setMode('quiz'); setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n)) }}
+                onClick={() => { userPickedCountRef.current = true; setMode('quiz'); setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n)) }}
                 className={`flex-1 h-10 rounded-lg text-sm font-bold transition-colors ${
                   mode === 'quiz' && count === n && effectiveAvailableCount >= n
                     ? 'bg-primary text-primary-foreground shadow-sm'

@@ -473,9 +473,14 @@ export function ReadinessCard({
     arr.map(c => ({ kind: 'concept' as const, name: c.name }))
   const prevPopupConceptRef = useRef<string | null>(null)
   const studyGuideCardRef = useRef<HTMLDivElement>(null)
+  const studyPlanCardRef = useRef<HTMLDivElement>(null)
   const topicsMasteredContainerRef = useRef<HTMLDivElement>(null)
   const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
   const [flashRadial, setFlashRadial] = useState(false)
+  const [quizStartConcept, setQuizStartConcept] = useState<string | null>(null)
+  const [tracePlanBorder, setTracePlanBorder] = useState(false)
+  const [isLaunchingQuiz, setIsLaunchingQuiz] = useState(false)
+  const isLaunchingQuizRef = useRef(false)
   const [recentlyCompletedConcepts, setRecentlyCompletedConcepts] = useState<Set<string>>(new Set())
   const prevCompletedRef = useRef<Set<string>>(new Set())
   const [topicsMasteredOpen, setTopicsMasteredOpen] = useState(false)
@@ -679,6 +684,14 @@ export function ReadinessCard({
       .filter(g => g.concepts.length > 0)
   }, [syllabus, displayConcepts])
 
+  // Flattened (concept, owning-group-index) pairs in display order — drives the
+  // "Start Today's Quiz" cascade so each concept row lights up individually while
+  // its parent topic group stays subtly highlighted.
+  const cascadeSteps = useMemo(
+    () => groupedPlanConcepts.flatMap((g, groupIdx) => g.concepts.map(name => ({ name, groupIdx }))),
+    [groupedPlanConcepts]
+  )
+
   const targetByName = useMemo(() => {
     const map = new Map<string, MasteryState>()
     if (!plan) return map
@@ -868,17 +881,40 @@ export function ReadinessCard({
   }, [allConceptsDone, bonusClaimed, todayGemsEarned, user, progressKey])
 
   const handleStartQuiz = useCallback(() => {
-    groupedPlanConcepts.forEach((_group, idx) => {
-      setTimeout(() => setHighlightedTopicIdx(idx), idx * 220)
+    if (isLaunchingQuizRef.current) return
+    isLaunchingQuizRef.current = true
+    setIsLaunchingQuiz(true)
+
+    // Scroll the study plan into view first, then sweep a highlight through each
+    // concept individually while the card border is traced in the primary colour —
+    // together they tell the user exactly what today's session is about to cover.
+    studyPlanCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    setTracePlanBorder(true)
+
+    const n = cascadeSteps.length
+    const startDelay = 150
+    // Keep the whole cascade snappy even for long plans by shrinking the per-concept step.
+    const step = n > 0 ? Math.max(70, Math.min(130, 1000 / n)) : 0
+    cascadeSteps.forEach((s, idx) => {
+      setTimeout(() => {
+        setHighlightedTopicIdx(s.groupIdx)
+        setQuizStartConcept(s.name.toLowerCase())
+      }, startDelay + idx * step)
     })
-    const totalDelay = Math.max(groupedPlanConcepts.length * 220 + 150, 300)
+
+    const cascadeEnd = startDelay + n * step
+    const totalDelay = Math.max(cascadeEnd + 400, 900)
     setTimeout(() => {
       setHighlightedTopicIdx(null)
+      setQuizStartConcept(null)
+      setTracePlanBorder(false)
+      isLaunchingQuizRef.current = false
+      setIsLaunchingQuiz(false)
       const progressKey = wikiExamIdToProgressKey(syllabus.examId)
       const topicValue = EXAM_ID_TO_TOPIC[progressKey] ?? syllabus.examTopic
       navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz`)
     }, totalDelay)
-  }, [navigate, syllabus.examId, syllabus.examTopic, groupedPlanConcepts])
+  }, [navigate, syllabus.examId, syllabus.examTopic, cascadeSteps])
 
   useEffect(() => {
     if (startQuizTrigger) handleStartQuiz()
@@ -988,10 +1024,11 @@ export function ReadinessCard({
           <button
             type="button"
             onClick={handleStartQuiz}
-            className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-colors"
+            disabled={isLaunchingQuiz}
+            className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
           >
-            <Play className="h-5 w-5 shrink-0" />
-            {todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz"}
+            <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
+            {isLaunchingQuiz ? 'Get ready…' : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")}
           </button>
         )}
       </div>
@@ -1176,7 +1213,20 @@ export function ReadinessCard({
 
       {/* Today's Study Plan card */}
       {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
-        <Card className="border-0">
+        <Card ref={studyPlanCardRef} className="border-0 relative">
+          {tracePlanBorder && (
+            <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+              <rect
+                x={0} y={0} width="100%" height="100%"
+                rx={8} ry={8}
+                fill="none"
+                stroke="hsl(var(--primary))"
+                strokeWidth={2}
+                pathLength={100}
+                className="study-plan-trace-path"
+              />
+            </svg>
+          )}
           <CardContent className="p-6 space-y-4">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
@@ -1255,8 +1305,9 @@ export function ReadinessCard({
                           examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
                           STATE_ORDER[currentState] >= STATE_ORDER[target]
                         const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
+                        const isCascadeHighlighted = quizStartConcept === name.toLowerCase()
                         return (
-                          <div key={name} className={`flex items-center gap-2 w-full${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
+                          <div key={name} className={`flex items-center gap-2 w-full${(flashingConcept?.toLowerCase() === name.toLowerCase() || isCascadeHighlighted) ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
                             {isCompleted
                               ? <Check className="h-4 w-4 text-green-500 shrink-0" />
                               : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}

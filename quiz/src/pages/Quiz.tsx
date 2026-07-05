@@ -13,6 +13,7 @@ import { IncompletePartsDialog } from '@/components/IncompletePartsDialog'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { LevelUpToast } from '@/components/LevelUpToast'
 import type { LevelNotice } from '@/components/LevelUpToast'
+import { PreQuizCollectGate } from '@/components/collect/PreQuizCollectGate'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
@@ -56,7 +57,7 @@ export default function Quiz() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { records: masteryRecords } = useConceptMastery()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
 
   const mode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
   // reveal='during' shows explanation after each answer; 'end' defers to review
@@ -158,6 +159,51 @@ export default function Quiz() {
   const [isChangingAnswer, setIsChangingAnswer] = useState(false)
 
   const [levelUpNotices, setLevelUpNotices] = useState<LevelNotice[]>([])
+
+  // ── Pre-quiz collection gate ─────────────────────────────────────────────
+  // Concepts must be collected (comprehension check passed) before a correct
+  // answer can advance them from New → Level 1. Surface the collect prompt up
+  // front so today's quiz can actually level up its concepts. Only applies to
+  // ordinary quizzes (never mock exams) and only for concepts currently at New.
+  const [collectGateDismissed, setCollectGateDismissed] = useState(false)
+  const collectedCards = useCollectedCards(s => s.cards)
+
+  const newQuizConcepts = useMemo(() => {
+    if (mode !== 'quiz') return []
+    const lookup = new Map<string, ConceptMasteryRecord>()
+    for (const r of masteryRecords) lookup.set(r.concept_slug.toLowerCase(), r)
+    const now = new Date()
+    const seen = new Set<string>()
+    const result: string[] = []
+    for (const q of storeQuestions) {
+      for (const link of q.wiki_link) {
+        const slug = slugForLink(link)
+        if (!slug) continue
+        const key = slug.toLowerCase()
+        if (seen.has(key)) continue
+        seen.add(key)
+        const rec = lookup.get(key)
+        const state = rec ? decayIfStale(rec, now).state : 'new'
+        if (state === 'new') result.push(slug)
+      }
+    }
+    return result
+  }, [storeQuestions, masteryRecords, mode])
+
+  const hasUncollectedNewConcept = newQuizConcepts.some(
+    name => !collectedCards.some(c => c.name.toLowerCase() === name.toLowerCase()),
+  )
+
+  // Show the gate only at the very start of the session (before any answer) so
+  // it never interrupts a quiz already in progress, and only once mastery has
+  // loaded so the New/collected classification is accurate.
+  const showCollectGate =
+    mode === 'quiz' &&
+    !collectGateDismissed &&
+    !masteryLoading &&
+    status === 'active' &&
+    Object.keys(responses).length === 0 &&
+    hasUncollectedNewConcept
 
   // Clear pending selection and scroll to top whenever the question changes
   useEffect(() => {
@@ -350,6 +396,17 @@ export default function Quiz() {
   }
 
   if (!currentQuestion) return null
+
+  // ── Pre-quiz collection gate ─────────────────────────────────────────────
+  if (showCollectGate) {
+    return (
+      <PreQuizCollectGate
+        concepts={newQuizConcepts}
+        onStart={() => setCollectGateDismissed(true)}
+        onQuit={handleQuit}
+      />
+    )
+  }
 
   const isFlagged = flaggedIds.includes(currentQuestion.id)
 

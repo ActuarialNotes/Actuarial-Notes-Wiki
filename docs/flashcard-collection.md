@@ -28,6 +28,29 @@ upsert + optimistic simulation, and `Quiz.tsx`'s level-up preview).
 Users can still add packs to the gallery and quiz uncollected concepts — they
 just won't reach Level 1 until they collect.
 
+## Collect-then-quiz flow (daily quiz)
+
+Because a **New** concept only advances to Level 1 once collected, the quiz
+itself prompts for collection up front. When a quiz-mode session starts,
+`Quiz.tsx` inspects the concepts referenced by its questions and, for any that
+are currently **New** and **uncollected**, shows the `PreQuizCollectGate`
+(`components/collect/PreQuizCollectGate.tsx`) *before* the first question. Each
+listed concept has a **Collect** button that opens the shared
+`CollectConceptModal`; collected concepts flip to a checkmark. A **Start Quiz**
+button proceeds into the questions.
+
+The gate is intentionally a *soft* prompt — the user can start without
+collecting (uncollected concepts still won't pass New until collected, matching
+the mastery gate). It only appears:
+
+- in ordinary **quiz** mode (never a mock exam),
+- at the very start of the session (before any answer), and
+- once mastery has loaded, so the New/collected classification is accurate.
+
+Concepts already collected or already past New (grandfathered users) never
+appear, so a single-concept quiz launched from an already-collected concept
+shows no gate.
+
 ## Open tasks
 
 - **TODO — better comprehension questions.** The current check is a
@@ -38,6 +61,6 @@ just won't reach Level 1 until they collect.
   conceptual question per concept (stored alongside the content, similar to
   `data/mnemonics.ts`) rather than deriving it from the definition at runtime.
   Until then the gate still works; only the question quality is weak.
-- **TODO — collect-then-quiz flow.** In the daily quiz / study plan, a New
-  concept should present its comprehension check *first* (to unlock), then its
-  quiz questions. Tracked as a follow-up to the mastery-gate change.
+- ~~**collect-then-quiz flow.**~~ Done — see "Collect-then-quiz flow" above.
+  The daily quiz now surfaces a collection prompt for its New, uncollected
+  concepts before the questions.

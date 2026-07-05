@@ -70,6 +70,24 @@ export function resolveConceptState(
 }
 
 /**
+ * All syllabi whose topic lists reference a concept, matched by display name
+ * or by the raw `[[target]]` basename (handles `[[Bond Price|Price]]` aliases).
+ * A concept taught in more than one exam's study guide yields multiple results —
+ * callers must not silently pick the first one; ask the user which to open.
+ */
+export function findSyllabiForConcept(
+  syllabi: WikiExamSyllabus[],
+  conceptName: string,
+): WikiExamSyllabus[] {
+  const needle = conceptName.toLowerCase()
+  return syllabi.filter(s => s.topics.some(t => t.concepts.some(c => {
+    if (c.name.toLowerCase() === needle) return true
+    const targetBase = c.target.split('/').pop()?.replace(/\.md$/i, '').toLowerCase()
+    return targetBase === needle
+  })))
+}
+
+/**
  * Re-key mastery records from their stored (file/base name) slug to the
  * syllabus display name, so name-keyed consumers like aggregateForTopic find
  * aliased concepts. Records whose slug isn't an aliased target pass through

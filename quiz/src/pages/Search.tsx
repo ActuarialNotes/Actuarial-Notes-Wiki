@@ -6,6 +6,8 @@ import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
 import { hrefToEntryRef, pathToEntryRef, wikiRoute } from '@/lib/wikiRoutes'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
+import { findSyllabiForConcept } from '@/lib/conceptMatch'
+import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
 import { useTopics } from '@/hooks/useTopics'
 import { useAuth } from '@/hooks/useAuth'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
@@ -197,18 +199,23 @@ function highlight(text: string, query: string) {
 }
 
 function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query: string; syllabi: WikiExamSyllabus[] }) {
+  const navigate = useNavigate()
+  const [showChooser, setShowChooser] = useState(false)
   const ref = pathToEntryRef(item.path) ?? { kind: 'concept' as const, name: item.name }
 
+  const matchingSyllabi = item.category === 'concept' ? findSyllabiForConcept(syllabi, item.name) : []
+  const isAmbiguous = matchingSyllabi.length > 1
+
   let route = wikiRoute(ref)
-  if (item.category === 'concept' && syllabi.length > 0) {
-    const needle = item.name.toLowerCase()
-    const examSyllabus = syllabi.find(s =>
-      s.topics.some(t => t.concepts.some(c => c.name.toLowerCase() === needle))
-    )
-    if (examSyllabus) {
-      const examRoute = wikiRoute({ kind: 'exam', name: examSyllabus.fileName ?? examSyllabus.examLabel })
-      route = `${examRoute}?concept=${encodeURIComponent(item.name)}`
-    }
+  if (matchingSyllabi.length === 1) {
+    const examRoute = wikiRoute({ kind: 'exam', name: matchingSyllabi[0]!.fileName ?? matchingSyllabi[0]!.examLabel })
+    route = `${examRoute}?concept=${encodeURIComponent(item.name)}`
+  }
+
+  function goToSyllabus(s: WikiExamSyllabus) {
+    setShowChooser(false)
+    const examRoute = wikiRoute({ kind: 'exam', name: s.fileName ?? s.examLabel })
+    navigate(`${examRoute}?concept=${encodeURIComponent(item.name)}`)
   }
 
   const Icon =
@@ -222,25 +229,36 @@ function ConceptResultRow({ item, query, syllabi }: { item: WikiIndexItem; query
   const display = item.title ?? item.name
 
   return (
-    <Link
-      to={route}
-      className="flex items-start gap-3 px-4 py-3 hover:bg-accent/60 transition-colors"
-    >
-      <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
-      <div className="min-w-0 flex-1">
-        <div className="text-sm truncate">{highlight(display, query)}</div>
-        {(item.author || item.year) && (
-          <div className="text-[11px] text-muted-foreground truncate mt-0.5">
-            {[item.author, item.year].filter(Boolean).join(' · ')}
-          </div>
-        )}
-      </div>
-      {item.questionCount ? (
-        <span className="shrink-0 text-[11px] text-muted-foreground self-center tabular-nums">
-          {item.questionCount} {item.questionCount === 1 ? 'question' : 'questions'}
-        </span>
-      ) : null}
-    </Link>
+    <>
+      <Link
+        to={route}
+        onClick={e => { if (isAmbiguous) { e.preventDefault(); setShowChooser(true) } }}
+        className="flex items-start gap-3 px-4 py-3 hover:bg-accent/60 transition-colors"
+      >
+        <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
+        <div className="min-w-0 flex-1">
+          <div className="text-sm truncate">{highlight(display, query)}</div>
+          {(item.author || item.year) && (
+            <div className="text-[11px] text-muted-foreground truncate mt-0.5">
+              {[item.author, item.year].filter(Boolean).join(' · ')}
+            </div>
+          )}
+        </div>
+        {item.questionCount ? (
+          <span className="shrink-0 text-[11px] text-muted-foreground self-center tabular-nums">
+            {item.questionCount} {item.questionCount === 1 ? 'question' : 'questions'}
+          </span>
+        ) : null}
+      </Link>
+      {showChooser && (
+        <ChooseSyllabusModal
+          conceptName={item.name}
+          syllabi={matchingSyllabi}
+          onChoose={goToSyllabus}
+          onClose={() => setShowChooser(false)}
+        />
+      )}
+    </>
   )
 }
 

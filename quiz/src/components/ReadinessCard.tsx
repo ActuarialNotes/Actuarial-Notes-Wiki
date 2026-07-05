@@ -912,7 +912,9 @@ export function ReadinessCard({
       setIsLaunchingQuiz(false)
       const progressKey = wikiExamIdToProgressKey(syllabus.examId)
       const topicValue = EXAM_ID_TO_TOPIC[progressKey] ?? syllabus.examTopic
-      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz`)
+      // autostart=1 tells Landing to jump straight into a quiz sized to complete
+      // today's plan (fewest questions covering every still-incomplete concept).
+      navigate(`/?topic=${encodeURIComponent(topicValue)}&mode=quiz&autostart=1`)
     }, totalDelay)
   }, [navigate, syllabus.examId, syllabus.examTopic, cascadeSteps])
 

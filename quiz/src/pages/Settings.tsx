@@ -31,7 +31,7 @@ import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
 import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
 import { ContactDialog } from '@/components/ContactDialog'
-import { filterSessionsByExam, sessionsToCsv, buildExportFilename, downloadCsv } from '@/lib/exportData'
+import { fetchExportResponses, responsesToCsv, buildExportFilename, downloadCsv } from '@/lib/exportData'
 
 // ---- Exam status cycle & icons ----
 
@@ -495,20 +495,31 @@ export default function Settings() {
     })
   }
 
-  const handleExportCsv = () => {
+  const [exporting, setExporting] = useState(false)
+
+  const handleExportCsv = async () => {
+    if (!user) return
     const examId = exportScope === 'all' ? null : exportScope
-    const scoped = filterSessionsByExam(sessions, examId)
     const scopeLabel = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'all exams'
-    if (scoped.length === 0) {
-      setDataActionState({ saving: false, error: `No study history to export for ${scopeLabel}.`, success: null })
-      return
+    setExporting(true)
+    setDataActionState({ saving: false, error: null, success: null })
+    try {
+      const rows = await fetchExportResponses(user.id, examId)
+      if (rows.length === 0) {
+        setDataActionState({ saving: false, error: `No answered questions to export for ${scopeLabel}.`, success: null })
+        return
+      }
+      downloadCsv(buildExportFilename(examId), responsesToCsv(rows))
+      setDataActionState({
+        saving: false,
+        error: null,
+        success: `Exported ${rows.length} ${rows.length === 1 ? 'question' : 'questions'} for ${scopeLabel}.`,
+      })
+    } catch (err) {
+      setDataActionState({ saving: false, error: err instanceof Error ? err.message : 'Failed to export data.', success: null })
+    } finally {
+      setExporting(false)
     }
-    downloadCsv(buildExportFilename(examId), sessionsToCsv(scoped))
-    setDataActionState({
-      saving: false,
-      error: null,
-      success: `Exported ${scoped.length} ${scoped.length === 1 ? 'session' : 'sessions'} for ${scopeLabel}.`,
-    })
   }
 
   const handleDeleteAccount = async () => {
@@ -1225,7 +1236,8 @@ export default function Settings() {
                     <div>
                       <p className="text-sm font-medium">Export performance data</p>
                       <p className="text-xs text-muted-foreground">
-                        Download your quiz history (date, exam, topic, score and time per session) as a spreadsheet.
+                        Download every question you&apos;ve answered (date, exam, topic, your answer, correct answer,
+                        result and time) as a spreadsheet.
                       </p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -1240,8 +1252,8 @@ export default function Settings() {
                           <option key={id} value={id}>{label}</option>
                         ))}
                       </select>
-                      <Button variant="outline" onClick={handleExportCsv}>
-                        Export CSV
+                      <Button variant="outline" onClick={handleExportCsv} disabled={exporting}>
+                        {exporting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Exporting…</> : 'Export CSV'}
                       </Button>
                       <Button variant="outline" disabled title="Coming soon">
                         Export PDF

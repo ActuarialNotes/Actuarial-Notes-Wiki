@@ -1,24 +1,37 @@
 // Builds and downloads a CSV export of the user's performance data. Used by the
 // "Export performance data" control in Settings.
 //
-// The exported table is the quiz-session history — the same data summarised by
-// the "Study history" line (session count + average score) above the control.
-// Each row is one completed quiz/mock-exam, scoped to a single exam or to every
-// exam, mirroring the Reset History scope selector.
+// The exported table is question-level: one row per answered question, pulled
+// from question_responses and joined to its quiz_sessions parent for the exam
+// and topic context (question_responses itself only stores the question id and
+// the answer). Rows are scoped to a single exam or to every exam, mirroring the
+// Reset History scope selector.
 
-import type { QuizSession } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import { EXAM_ID_TO_LABEL } from '@/lib/examIds'
 
 const CSV_COLUMNS = [
   'Date',
   'Exam',
   'Topic',
-  'Mode',
-  'Total Questions',
-  'Correct',
-  'Accuracy (%)',
+  'Question ID',
+  'Your Answer',
+  'Correct Answer',
+  'Result',
   'Time (seconds)',
 ] as const
+
+/** A single answered-question row, flattened from question_responses + session. */
+export interface ExportedResponse {
+  answered_at: string
+  exam: string | null
+  topic: string | null
+  question_id: string
+  chosen_answer: string | null
+  correct_answer: string
+  is_correct: boolean
+  time_spent_seconds: number | null
+}
 
 /**
  * Escapes a single value for RFC 4180 CSV output. Wraps the value in double
@@ -36,32 +49,71 @@ export function csvEscape(value: string | number | null | undefined): string {
   return str
 }
 
-/** Returns only the sessions belonging to `examId`, or all sessions when null. */
-export function filterSessionsByExam(sessions: QuizSession[], examId: string | null): QuizSession[] {
-  if (examId === null) return sessions
-  const examLabel = EXAM_ID_TO_LABEL[examId] ?? examId
-  return sessions.filter(s => s.exam === examLabel)
+/** Renders answered-question rows as a CSV string (header row + UTF-8 BOM). */
+export function responsesToCsv(rows: ExportedResponse[]): string {
+  const body = rows.map(r => [
+    r.answered_at,
+    r.exam ?? '',
+    r.topic ?? '',
+    r.question_id,
+    r.chosen_answer ?? '',
+    r.correct_answer,
+    r.is_correct ? 'Correct' : 'Incorrect',
+    r.time_spent_seconds ?? '',
+  ].map(csvEscape).join(','))
+  // Leading BOM so Excel opens the file as UTF-8.
+  return '﻿' + [CSV_COLUMNS.join(','), ...body].join('\r\n') + '\r\n'
 }
 
-/** Renders quiz sessions as a CSV string (with header row and UTF-8 BOM). */
-export function sessionsToCsv(sessions: QuizSession[]): string {
-  const rows = sessions.map(s => {
-    const accuracy = s.total_questions > 0
-      ? Math.round((s.correct_count / s.total_questions) * 100)
-      : 0
-    return [
-      s.completed_at,
-      s.exam ?? '',
-      s.topic ?? '',
-      s.mode,
-      s.total_questions,
-      s.correct_count,
-      accuracy,
-      s.time_taken_seconds ?? '',
-    ].map(csvEscape).join(',')
-  })
-  // Leading BOM so Excel opens the file as UTF-8.
-  return '﻿' + [CSV_COLUMNS.join(','), ...rows].join('\r\n') + '\r\n'
+// Shape returned by the embedded select below. The to-one session relationship
+// comes back as an object, but PostgREST can also hand it back as a single-
+// element array, so normalizeResponse handles both.
+interface RawResponseRow {
+  question_id: string
+  chosen_answer: string | null
+  correct_answer: string
+  is_correct: boolean
+  time_spent_seconds: number | null
+  answered_at: string
+  quiz_sessions: { exam: string | null; topic: string | null } | { exam: string | null; topic: string | null }[] | null
+}
+
+function normalizeResponse(row: RawResponseRow): ExportedResponse {
+  const session = Array.isArray(row.quiz_sessions) ? row.quiz_sessions[0] : row.quiz_sessions
+  return {
+    answered_at: row.answered_at,
+    exam: session?.exam ?? null,
+    topic: session?.topic ?? null,
+    question_id: row.question_id,
+    chosen_answer: row.chosen_answer,
+    correct_answer: row.correct_answer,
+    is_correct: row.is_correct,
+    time_spent_seconds: row.time_spent_seconds,
+  }
+}
+
+/**
+ * Fetches every answered question for the user, newest first, joined to its
+ * session for exam/topic context. Pass `examId` to scope to one exam, or `null`
+ * for all exams. Throws on a query error.
+ */
+export async function fetchExportResponses(userId: string, examId: string | null): Promise<ExportedResponse[]> {
+  // !inner makes the join an inner join so a filter on quiz_sessions.exam
+  // actually narrows the returned question_responses rows.
+  let query = supabase
+    .from('question_responses')
+    .select('question_id, chosen_answer, correct_answer, is_correct, time_spent_seconds, answered_at, quiz_sessions!inner(exam, topic)')
+    .eq('user_id', userId)
+    .order('answered_at', { ascending: false })
+
+  if (examId !== null) {
+    const examLabel = EXAM_ID_TO_LABEL[examId] ?? examId
+    query = query.eq('quiz_sessions.exam', examLabel)
+  }
+
+  const { data, error } = await query
+  if (error) throw new Error(error.message)
+  return ((data ?? []) as unknown as RawResponseRow[]).map(normalizeResponse)
 }
 
 /** Builds a descriptive, filesystem-safe filename for the export. */

@@ -287,15 +287,11 @@ export default function WikiHome() {
                             )}
 
                             {/* Status pill — hidden for completed exams */}
-                            {!isCompleted && (
+                            {!isCompleted && (isInProgress || (examId !== 'P' && examId !== 'FM')) && (
                               <div className="mt-2">
                                 {isInProgress ? (
                                   <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
                                     {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
-                                  </span>
-                                ) : examId !== 'P' && examId !== 'FM' ? (
-                                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                                    In Development
                                   </span>
                                 ) : (
                                   <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">

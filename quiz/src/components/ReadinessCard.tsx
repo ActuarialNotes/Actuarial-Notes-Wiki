@@ -12,6 +12,8 @@ import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
 import { SessionCompletionOverlay } from '@/components/SessionCompletionOverlay'
+import { StreakNavBadge } from '@/components/StreakBadge'
+import { STREAK_ENABLED } from '@/lib/featureFlags'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
@@ -1059,7 +1061,8 @@ export function ReadinessCard({
             <div className="min-w-0 flex items-center gap-2 flex-wrap">
               <h3 className="text-sm font-semibold truncate">Study Schedule</h3>
             </div>
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
+              {STREAK_ENABLED && user && <StreakNavBadge />}
               <button
                 type="button"
                 onClick={() => setShowHeatmapInfo(true)}

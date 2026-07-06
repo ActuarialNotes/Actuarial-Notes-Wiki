@@ -61,7 +61,7 @@ export function StreakStat() {
   const color = flameClass(status, currentStreak)
   return (
     <div
-      className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-orange-500/10"
+      className="flex flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-orange-500/10"
       title={
         currentStreak > 0
           ? `Longest streak: ${longestStreak} day${longestStreak === 1 ? '' : 's'}`

@@ -518,7 +518,7 @@ export default function Dashboard() {
               <button
                 type="button"
                 onClick={() => setScrollToRadialTrigger(v => v + 1)}
-                className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-colors"
+                className="flex flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-colors"
                 title="Scroll to study guide"
               >
                 <MiniReadinessRing pct={overallPct} />
@@ -529,7 +529,7 @@ export default function Dashboard() {
               <button
                 type="button"
                 onClick={() => { setOnboardingStep(readyDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
-                className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 transition-colors"
+                className="flex flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 transition-colors"
                 title="Edit target ready date"
               >
                 <span className="text-3xl font-bold tabular-nums leading-none text-amber-600 dark:text-amber-400">{daysToReady} days</span>
@@ -540,7 +540,7 @@ export default function Dashboard() {
               <button
                 type="button"
                 onClick={() => { setOnboardingStep(examDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
-                className="flex flex-col items-center justify-center gap-1.5 py-4 rounded-2xl bg-card hover:bg-muted transition-colors"
+                className="flex flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-card hover:bg-muted transition-colors"
                 title="Edit exam date"
               >
                 <span className="text-3xl font-bold tabular-nums leading-none">{daysUntilExam} days</span>

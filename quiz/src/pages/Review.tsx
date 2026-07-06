@@ -16,6 +16,8 @@ import type { MasteryState } from '@/lib/mastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
+import { QuestCompleteOverlay } from '@/components/QuestCompleteOverlay'
+import { QUESTS_ENABLED } from '@/lib/featureFlags'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 
 const STATE_LABEL: Record<MasteryState, string> = {
@@ -265,6 +267,8 @@ export default function Review() {
 
   return (
     <>
+    {/* Quests cleared by this quiz — shown before the review content below. */}
+    {QUESTS_ENABLED && <QuestCompleteOverlay />}
     <ConceptPopup />
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
 

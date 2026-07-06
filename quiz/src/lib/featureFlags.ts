@@ -77,11 +77,14 @@ export const XP_ENABLED: boolean = true
 
 /**
  * Daily quests (roadmap P1.4) — the piece that turns the flat gem economy into
- * a loop. When ON, 2–3 rotating daily quests (authored in data/quests.ts,
- * evaluated by the pure lib/quests.ts engine) appear on the Dashboard, advance
- * as quizzes complete, and pay gems + XP when cleared (lib/questStore.ts).
- * The engine and its tests stay compiled either way; the `: boolean` annotation
- * keeps both branches of every gate type-checked (see the flags above). Gate it
- * off to dark-launch or roll back independently of streaks/XP.
+ * a loop. When ON, a personalized board of 3 daily quests (authored in
+ * data/quests.ts, generated/evaluated by the pure lib/quests.ts engine —
+ * revive quests only when concepts are actually forgotten, a focus quest from
+ * today's study plan) appears on the Dashboard, advances as quizzes complete,
+ * and pays gems + XP when the student collects a cleared quest
+ * (lib/questStore.ts; a collect prompt also pops after the quiz that cleared
+ * it). The engine and its tests stay compiled either way; the `: boolean`
+ * annotation keeps both branches of every gate type-checked (see the flags
+ * above). Gate it off to dark-launch or roll back independently of streaks/XP.
  */
 export const QUESTS_ENABLED: boolean = true

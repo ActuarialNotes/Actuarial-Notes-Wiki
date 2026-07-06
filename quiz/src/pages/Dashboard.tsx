@@ -18,7 +18,8 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import type { MasteryState } from '@/lib/mastery'
+import { decayIfStale, type MasteryState } from '@/lib/mastery'
+import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
@@ -332,6 +333,23 @@ export default function Dashboard() {
     return Math.round(computeReadiness(activeSyllabus, examRecords, new Date()).overallPct)
   }, [activeSyllabus, activeProgressKey, masteryRecords])
 
+  // Personalization signals for the daily-quest board: how many concepts have
+  // decayed to Forgotten (revive quests only appear when there's something to
+  // revive) and today's study-plan concepts (focus-quest candidates). Left
+  // undefined until mastery + plan have loaded so the board isn't seeded from
+  // an empty context.
+  const questContext = useMemo<QuestContext | undefined>(() => {
+    if (masteryLoading || planLoading) return undefined
+    const now = new Date()
+    const forgottenDue = masteryRecords.filter(
+      r => decayIfStale(r, now).state === 'forgotten',
+    ).length
+    const planConcepts = studyPlan?.status === 'review_mode'
+      ? studyPlan.reviewConcepts
+      : studyPlan?.todaysConcepts ?? []
+    return { forgottenDue, planConcepts }
+  }, [masteryLoading, planLoading, masteryRecords, studyPlan])
+
   const daysUntilExam = useMemo(() => {
     if (!activeTargetDate) return null
     const now = new Date(); now.setHours(0, 0, 0, 0)
@@ -592,8 +610,8 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Daily quests — today's rotating goals and their gem/XP payouts */}
-      {QUESTS_ENABLED && !isGuest && <QuestsCard />}
+      {/* Daily quests — today's personalized goals and their gem/XP payouts */}
+      {QUESTS_ENABLED && !isGuest && <QuestsCard context={questContext} />}
 
       {/* Readiness card — only shown when there is an active exam */}
       <div>

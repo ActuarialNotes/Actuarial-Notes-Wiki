@@ -51,3 +51,14 @@ export const RESEARCH_AI_ENABLED: boolean = false
  * Re-enabling is a one-line change: set this to `true`.
  */
 export const RESEARCH_TAB_ENABLED: boolean = false
+
+/**
+ * Daily streak system (roadmap P1.1) — the first piece of the retention loop.
+ *
+ * When ON, a flame streak badge appears in the Sidebar, BottomNav, and Dashboard
+ * and a day of study extends the streak (see lib/streak.ts / lib/streakStore.ts).
+ * Gated so the surface can be dark-launched or rolled back independently; the
+ * pure streak engine and its tests stay compiled either way. The `: boolean`
+ * annotation keeps both branches type-checked (see the flags above).
+ */
+export const STREAK_ENABLED: boolean = true

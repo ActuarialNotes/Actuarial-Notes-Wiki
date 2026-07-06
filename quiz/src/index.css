@@ -925,3 +925,16 @@
   .collect-bloom, .collect-shake,
   .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop { animation: none; }
 }
+
+/* Streak flame: a gentle looping flicker while the streak is active today. */
+.streak-flame-pulse {
+  animation: streak-flame-pulse 2.4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+@keyframes streak-flame-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  50%      { transform: scale(1.12); filter: drop-shadow(0 0 5px rgb(249 115 22 / 0.6)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .streak-flame-pulse { animation: none; }
+}

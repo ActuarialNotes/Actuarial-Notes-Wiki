@@ -7,9 +7,10 @@ import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dailyProgressStore'
 import { recordStreakActivity } from '@/lib/streakStore'
-import { xpForAnswers, type XpAnswer } from '@/lib/xp'
+import { xpForAnswers } from '@/lib/xp'
 import { recordXp } from '@/lib/xpStore'
 import { recordQuestProgress } from '@/lib/questStore'
+import type { QuestAnswer } from '@/lib/quests'
 import { QUESTS_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
@@ -39,26 +40,29 @@ function conceptsForQuestion(q: Question): string[] {
 
 // The answered questions of a completed quiz, reduced to the shape both the XP
 // engine (roadmap P1.2) and the quest engine (P1.4) consume: difficulty-weighted
-// correctness plus whether the answer correctly revived a concept that had
-// decayed to Forgotten — the `from: 'forgotten'` transitions tell us which
-// concepts were revisited.
+// correctness, the concepts each question touches (for study-plan focus
+// quests), and whether the answer correctly revived a concept that had decayed
+// to Forgotten — the `from: 'forgotten'` transitions tell us which concepts
+// were revisited.
 function quizAnswers(
   questions: Question[],
   responses: Record<string, Response>,
   manualGrades: Record<string, SelfGrade>,
   transitions: MasteryTransition[],
-): XpAnswer[] {
+): QuestAnswer[] {
   const decayed = new Set(
     transitions.filter(t => t.from === 'forgotten').map(t => t.conceptSlug),
   )
-  const answers: XpAnswer[] = []
+  const answers: QuestAnswer[] = []
   for (const q of questions) {
     const chosen = responses[q.id]?.chosen
     if (chosen === undefined) continue
+    const concepts = conceptsForQuestion(q)
     answers.push({
       isCorrect: effectiveIsCorrect(q, chosen, manualGrades),
       difficulty: q.difficulty,
-      reviving: conceptsForQuestion(q).some(slug => decayed.has(slug)),
+      reviving: concepts.some(slug => decayed.has(slug)),
+      concepts,
     })
   }
   return answers

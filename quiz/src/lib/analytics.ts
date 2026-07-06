@@ -26,6 +26,7 @@ export interface AnalyticsEventMap {
   xp_earned: { amount: number; total: number }
   daily_goal_met: { goal: string; xp: number }
   quest_completed: { quest: string; gems: number; xp: number }
+  quest_claimed: { quests: number; gems: number; xp: number }
   daily_quests_cleared: { quests: number }
   search_query: { query: string; exam: string; difficulty: string }
   upgrade_clicked: Record<string, never>
@@ -97,9 +98,14 @@ export function trackDailyGoalMet(params: AnalyticsEventMap['daily_goal_met']) {
   track('daily_goal_met', params)
 }
 
-/** Fires once per quest per day, when its reward is paid (roadmap P1.4). */
+/** Fires once per quest per day, when its target is reached (roadmap P1.4). */
 export function trackQuestCompleted(params: AnalyticsEventMap['quest_completed']) {
   track('quest_completed', params)
+}
+
+/** Fires when the student collects quest rewards (the actual gem/XP payout). */
+export function trackQuestClaimed(params: AnalyticsEventMap['quest_claimed']) {
+  track('quest_claimed', params)
 }
 
 /** Fires when the last of the day's quests is cleared. */

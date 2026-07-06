@@ -5,32 +5,53 @@ import { localDayKey } from '@/lib/streak'
 import { resolveTimeZone } from '@/lib/streakStore'
 import {
   emptyQuests,
-  pickDailyQuests,
   questBoard,
+  questRewards,
+  type QuestContext,
   type QuestProgressView,
   type QuestsState,
 } from '@/lib/quests'
-import { QUEST_EVENT, readLocalQuests, rowToQuestsState, type QuestRow } from '@/lib/questStore'
+import {
+  claimQuestRewards,
+  ensureDailyQuests,
+  QUEST_EVENT,
+  readLocalQuests,
+  rowToQuestsState,
+  type QuestRow,
+} from '@/lib/questStore'
 
 export interface QuestsView {
   /** Today's quests with their progress, in display order. */
   board: QuestProgressView[]
-  /** How many of today's quests are cleared. */
+  /** How many of today's quests are cleared (target reached). */
   completedCount: number
-  /** How many quests are live today. */
+  /** How many quests are on today's board. */
   totalCount: number
   /** Whether every quest is cleared. */
   allDone: boolean
+  /** Cleared-but-uncollected quests. */
+  claimable: QuestProgressView[]
+  /** Total gems waiting to be collected. */
+  claimableGems: number
+  /** Total XP waiting to be collected. */
+  claimableXp: number
+  /** Collect rewards (all claimable quests, or just the given ids). */
+  claim: (ids?: readonly string[]) => Promise<void>
   loading: boolean
   /** Force a re-read from the source of truth. */
   refresh: () => void
 }
 
-// Reads the current user's daily-quest progress (Supabase when signed in,
+// Reads the current user's daily-quest board (Supabase when signed in,
 // localStorage for guests) and keeps it fresh via realtime, the same-tab
-// QUEST_EVENT fired on quiz completion, and a tab-focus refetch. Mirrors the
-// load/subscribe pattern used by useXp/useStreak.
-export function useQuests(): QuestsView {
+// QUEST_EVENT fired on quiz completion / claims, and a tab-focus refetch.
+// Mirrors the load/subscribe pattern used by useXp/useStreak.
+//
+// Pass `context` (mastery + study-plan signals, computed by the Dashboard) to
+// seed today's personalized board; leave it undefined while that data is still
+// loading — the hook re-personalizes as soon as it arrives, but only while the
+// board is untouched (see lib/quests.ts reseedDailyQuests).
+export function useQuests(context?: QuestContext): QuestsView {
   const { user } = useAuth()
   const userId = user?.id
   const tz = useMemo(() => resolveTimeZone(), [])
@@ -68,7 +89,19 @@ export function useQuests(): QuestsView {
     return () => { cancelled = true }
   }, [userId, version])
 
-  // Same-tab updates (quiz completion writes then dispatches QUEST_EVENT).
+  // Seed / re-personalize today's board once the caller has real context. The
+  // store only writes (and only dispatches QUEST_EVENT) when something actually
+  // changes, so this settles instead of looping.
+  const contextKey = context
+    ? `${context.forgottenDue}:${context.planConcepts.join('|')}`
+    : null
+  useEffect(() => {
+    if (loading || !context) return
+    void ensureDailyQuests(userId ?? null, context)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, loading, contextKey])
+
+  // Same-tab updates (quiz completion / claim writes then dispatches QUEST_EVENT).
   useEffect(() => {
     const handler = () => refresh()
     window.addEventListener(QUEST_EVENT, handler)
@@ -97,14 +130,27 @@ export function useQuests(): QuestsView {
     return () => document.removeEventListener('visibilitychange', onVisible)
   }, [refresh])
 
+  const claim = useCallback(
+    async (ids?: readonly string[]) => {
+      await claimQuestRewards(userId ?? null, ids)
+    },
+    [userId],
+  )
+
   const today = localDayKey(new Date(), tz)
-  const board = questBoard(state, today, pickDailyQuests(today))
+  const board = questBoard(state, today)
   const completedCount = board.filter(b => b.done).length
+  const claimable = board.filter(b => b.claimable)
+  const totals = questRewards(claimable.map(b => b.quest))
   return {
     board,
     completedCount,
     totalCount: board.length,
     allDone: board.length > 0 && completedCount === board.length,
+    claimable,
+    claimableGems: totals.gems,
+    claimableXp: totals.xp,
+    claim,
     loading,
     refresh,
   }

@@ -86,14 +86,19 @@ Other important `lib/` modules:
   replaces the mascot icon and opens an XP/daily-goal popup) and
   `components/DailyGoalPicker.tsx` (Settings goal picker). Gated by `XP_ENABLED`.
 - `quests.ts` / `questStore.ts` — daily-quest engine (roadmap P1.4), the gem-economy
-  loop. `quests.ts` is the pure, tested core: a deterministic day-keyed rotation over
-  the quest catalogue authored in `data/quests.ts` (one always-achievable "core" quest
-  + two retention-aligned "specials" per day), per-quiz tallies, and once-per-day
-  completion. `questStore.ts` persists `QuestsState` to the `user_quests` table
-  (signed-in) or localStorage (guests), pays completions (gems via the `award_gems`
-  RPC, XP via `recordXp`), and is called from `quizStore` on quiz completion
-  (`recordQuestProgress`). Surfaced via `hooks/useQuests.ts` +
-  `components/QuestsCard.tsx` on the Dashboard. Gated by `QUESTS_ENABLED`.
+  loop. `quests.ts` is the pure, tested core: it generates a *personalized* daily
+  board from the catalogue authored in `data/quests.ts` (one always-achievable "core"
+  quest, a revive quest only when concepts have actually decayed to Forgotten, a
+  focus quest from today's study plan, generic specials filling the rest), freezes it
+  into `QuestsState` for the day, tallies per-quiz progress, and claims completed
+  quests. `questStore.ts` persists the state to the `user_quests` table (signed-in)
+  or localStorage (guests); `ensureDailyQuests` seeds the board from Dashboard
+  context, `recordQuestProgress` advances it from `quizStore` on quiz completion, and
+  `claimQuestRewards` pays collected quests (gems via the `award_gems` RPC, XP via
+  `recordXp`) — rewards are claimed by the user, never auto-paid. Surfaced via
+  `hooks/useQuests.ts` + `components/QuestsCard.tsx` (collapsible Dashboard section)
+  and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
+  Gated by `QUESTS_ENABLED`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)

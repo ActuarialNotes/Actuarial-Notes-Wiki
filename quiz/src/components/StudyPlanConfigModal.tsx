@@ -1,13 +1,12 @@
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { X, CalendarDays, Target, Info, Sparkles, BookOpen, Lock } from 'lucide-react'
+import { X, CalendarDays, Info, Sparkles, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { SittingDateGrid } from '@/components/SittingDateGrid'
 import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { getSittingsForExam, LOCALIZED_EXAMS } from '@/data/examSittings'
 import {
-  QUICK_SET_LABELS,
   QUICK_SET_PRESETS,
   applyPreset,
   daysBetween,
@@ -19,6 +18,13 @@ import {
 } from '@/lib/studyPlan'
 
 const HEADLINE_PRESETS: QuickSetPreset[] = ['1w', '2w', '1m']
+
+// Compact chip labels for the ready-date buffer presets (the hero date shows the resolved day)
+const HEADLINE_PRESET_LABELS: Record<'1w' | '2w' | '1m', string> = {
+  '1w': '1 week',
+  '2w': '2 weeks',
+  '1m': '1 month',
+}
 
 interface Props {
   config: StudyPlanConfig
@@ -142,99 +148,80 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
       aria-label="Study plan configuration"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-md bg-card border rounded-xl shadow-2xl flex flex-col my-12">
-        {/* Header — exam name prominently displayed */}
-        <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
-          <div className="flex items-center gap-2 min-w-0">
-            <Target className="h-4 w-4 text-primary shrink-0" />
-            <div className="min-w-0">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide font-medium leading-none">Study Plan</p>
-              <p className="text-base font-bold leading-tight truncate">{examLabel}</p>
-            </div>
+      <div className="w-full max-w-md bg-card border rounded-2xl shadow-2xl flex flex-col my-12">
+        {/* Header — just the exam name */}
+        <div className="flex items-start justify-between px-6 pt-5">
+          <div className="min-w-0">
+            <p className="text-xs font-medium text-muted-foreground/70 leading-none">Study plan</p>
+            <h2 className="text-xl font-bold leading-tight truncate mt-1">{examLabel}</h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-1 transition-colors ml-2 shrink-0"
+            className="text-muted-foreground/50 hover:text-foreground p-1 -mr-1 -mt-1 transition-colors ml-2 shrink-0"
             aria-label="Close"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Step indicator */}
-        <div className="flex items-center gap-0 px-5 pt-5">
-          {STEP_LABELS.map((label, i) => {
+        {/* Progress — minimal segmented bar */}
+        <div className="flex items-center gap-1.5 px-6 pt-4">
+          {STEP_LABELS.map((_, i) => {
             const s = i + 1
             const isActive = step === s
             const isDone = step > s
             const isStrategyLocked = s === STRATEGY_STEP && !isPremium
             return (
-              <div key={s} className="flex items-center flex-1 last:flex-none">
-                {isStrategyLocked ? (
-                  <div className="flex flex-col items-center gap-1.5">
-                    <div className="h-8 w-8 rounded-full flex items-center justify-center bg-muted/50 text-muted-foreground/40 cursor-not-allowed border border-dashed border-muted-foreground/20">
-                      <Lock className="h-3.5 w-3.5" />
-                    </div>
-                    <span className="text-[10px] whitespace-nowrap text-muted-foreground/40">{label}</span>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (s === step) {
-                        if (step < TOTAL_STEPS && !isNextDisabled()) setStep(step + 1)
-                      } else {
-                        setStep(s)
-                      }
-                    }}
-                    className="flex flex-col items-center gap-1.5 focus:outline-none"
-                    aria-label={`Go to step ${s}: ${label}`}
-                    aria-current={isActive ? 'step' : undefined}
-                  >
-                    <div
-                      className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 ${
-                        isActive
-                          ? 'bg-primary text-primary-foreground scale-110 ring-2 ring-primary/30'
-                          : isDone
-                          ? 'bg-primary/30 text-primary hover:bg-primary/50 cursor-pointer'
-                          : 'bg-muted text-muted-foreground hover:bg-muted/80 cursor-pointer'
-                      }`}
-                    >
-                      {s}
-                    </div>
-                    <span className={`text-[10px] whitespace-nowrap transition-colors ${isActive ? 'text-foreground font-semibold' : 'text-muted-foreground'}`}>
-                      {label}
-                    </span>
-                  </button>
-                )}
-                {i < STEP_LABELS.length - 1 && (
-                  <div className={`flex-1 h-0.5 mx-2 mb-5 rounded-full transition-colors ${step > s ? 'bg-primary/50' : 'bg-border'}`} />
-                )}
-              </div>
+              <button
+                key={s}
+                type="button"
+                disabled={isStrategyLocked}
+                onClick={() => {
+                  if (isStrategyLocked) return
+                  if (s === step) {
+                    if (step < TOTAL_STEPS && !isNextDisabled()) setStep(step + 1)
+                  } else {
+                    setStep(s)
+                  }
+                }}
+                className="group flex-1 py-2 focus:outline-none disabled:cursor-not-allowed"
+                aria-label={`Step ${s} of ${TOTAL_STEPS}`}
+                aria-current={isActive ? 'step' : undefined}
+              >
+                <div
+                  className={`h-1 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'bg-primary'
+                      : isDone
+                      ? 'bg-primary/40'
+                      : 'bg-muted group-hover:bg-muted-foreground/20'
+                  }`}
+                />
+              </button>
             )
           })}
         </div>
 
-        <div className="p-5 pt-4 space-y-4">
+        <div className="px-6 pb-2 pt-5 space-y-5">
 
           {/* Step: Version selection (localized exams only) */}
           {step === 1 && hasVariants && (
-            <div className="space-y-3">
-              <p className="text-base font-semibold">Which version are you taking?</p>
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">Which version are you taking?</p>
               <div className="space-y-2">
                 {variants!.map(v => (
                   <button
                     key={v.id}
                     type="button"
                     onClick={() => setLocalExamVariant(v.id)}
-                    className={`w-full text-left rounded-lg border p-3 transition-all duration-200 ${
+                    className={`w-full text-left rounded-xl border p-3.5 text-sm font-semibold transition-all duration-200 ${
                       localExamVariant === v.id
-                        ? 'border-primary bg-primary/10 shadow-sm scale-[1.01]'
+                        ? 'border-primary bg-primary/10'
                         : 'border-border hover:bg-accent/50'
                     }`}
                   >
-                    <p className="text-sm font-semibold">{v.label}</p>
+                    {v.label}
                   </button>
                 ))}
               </div>
@@ -243,20 +230,18 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
 
           {/* Exam Date step */}
           {step === EXAM_DATE_STEP && (
-            <div className="space-y-3">
-              <p className="text-base font-semibold">When is your exam?</p>
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">When is your exam?</p>
 
               {localExamDate && examDaysOut !== null && examDaysOut > 0 && (
-                <div className="flex items-center gap-2">
-                  <p className="text-3xl font-bold">{formatReadableDate(localExamDate)}</p>
-                  <button
-                    type="button"
-                    onClick={() => { examDateInputRef.current?.showPicker?.() ?? examDateInputRef.current?.click() }}
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label="Pick exam date"
-                  >
-                    <CalendarDays className="h-5 w-5" />
-                  </button>
+                <button
+                  type="button"
+                  onClick={() => { examDateInputRef.current?.showPicker?.() ?? examDateInputRef.current?.click() }}
+                  className="group flex items-center gap-2.5 text-left"
+                  aria-label="Change exam date"
+                >
+                  <span className="text-4xl font-bold tracking-tight">{formatReadableDate(localExamDate)}</span>
+                  <CalendarDays className="h-5 w-5 text-muted-foreground/50 group-hover:text-foreground transition-colors" />
                   <input
                     ref={examDateInputRef}
                     type="date"
@@ -266,7 +251,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     onChange={e => handleExamDateChange(e.target.value)}
                     className="sr-only dark:[color-scheme:dark]"
                   />
-                </div>
+                </button>
               )}
 
               {hasSittings ? (
@@ -308,21 +293,19 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
 
           {/* Ready Date step */}
           {step === READY_DATE_STEP && (
-            <div className="space-y-3">
-              <p className="text-base font-semibold">When do you want to be 100% ready for your exam?</p>
+            <div className="space-y-4">
+              <p className="text-lg font-semibold">When do you want to be exam-ready?</p>
 
-              {/* Selected ready date + calendar icon trigger */}
+              {/* Selected ready date — tap to pick a custom day */}
               {readyDate && (
-                <div className="flex items-center gap-2">
-                  <p className="text-3xl font-bold">{formatReadableDate(readyDate)}</p>
-                  <button
-                    type="button"
-                    onClick={() => { readyDateInputRef.current?.showPicker?.() ?? readyDateInputRef.current?.click() }}
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label="Pick a ready date"
-                  >
-                    <CalendarDays className="h-5 w-5" />
-                  </button>
+                <button
+                  type="button"
+                  onClick={() => { readyDateInputRef.current?.showPicker?.() ?? readyDateInputRef.current?.click() }}
+                  className="group flex items-center gap-2.5 text-left"
+                  aria-label="Change ready date"
+                >
+                  <span className="text-4xl font-bold tracking-tight">{formatReadableDate(readyDate)}</span>
+                  <CalendarDays className="h-5 w-5 text-muted-foreground/50 group-hover:text-foreground transition-colors" />
                   <input
                     ref={readyDateInputRef}
                     type="date"
@@ -332,42 +315,39 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     onChange={e => handleReadyDateChange(e.target.value)}
                     className="sr-only dark:[color-scheme:dark]"
                   />
-                </div>
+                </button>
               )}
 
-              {/* Preset cards */}
+              {/* Buffer presets — the hero date above shows the resolved day */}
               {localExamDate && (
                 <div className="grid grid-cols-3 gap-2">
                   {HEADLINE_PRESETS.map(p => {
                     const isActive = activePreset === p
-                    const targetDate = applyPreset(localExamDate, p)
                     return (
                       <button
                         key={p}
                         type="button"
                         onClick={() => selectPreset(p)}
-                        className={`rounded-lg border p-3 text-left transition-all duration-200 ${
+                        className={`rounded-xl border py-2.5 text-sm font-semibold transition-all duration-200 ${
                           isActive
-                            ? 'border-primary bg-primary/10 shadow-sm scale-[1.02]'
-                            : 'border-border hover:bg-accent/50 hover:border-border'
+                            ? 'border-primary bg-primary/10 text-primary'
+                            : 'border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
                         }`}
                       >
-                        <p className="text-sm font-semibold">{QUICK_SET_LABELS[p]}</p>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">
-                          {formatReadableDate(targetDate)}
-                        </p>
+                        {HEADLINE_PRESET_LABELS[p as '1w' | '2w' | '1m']}
                       </button>
                     )
                   })}
                 </div>
               )}
+              <p className="text-xs text-muted-foreground/70">A buffer before exam day to review and rest.</p>
 
               {readyDate && daysOut !== null && daysOut <= 0 && (
                 <p className="text-xs text-destructive">Date must be in the future</p>
               )}
 
               {!isPremium && (
-                <div className="flex items-start gap-2 rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+                <div className="flex items-start gap-2 rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
                   <Lock className="h-3.5 w-3.5 shrink-0 mt-0.5 text-primary/60" />
                   <span>
                     Study strategy customization is a{' '}
@@ -381,14 +361,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
 
           {/* Study Strategy step */}
           {step === STRATEGY_STEP && (
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Target className="h-4 w-4 text-muted-foreground shrink-0" />
-                <p className="text-sm font-medium flex-1">Study strategy</p>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-lg font-semibold">How do you want to study?</p>
                 <button
                   type="button"
                   onClick={() => setShowInfo(true)}
-                  className="text-muted-foreground hover:text-foreground transition-colors p-1 -mr-1"
+                  className="text-muted-foreground/50 hover:text-foreground transition-colors p-1 -mr-1 shrink-0"
                   aria-label="How custom study plans work"
                   title="How custom study plans work"
                 >
@@ -401,13 +380,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                   {
                     value: 'strong_all' as TargetStrengthLevel,
                     label: 'Master everything',
-                    desc: 'Aim to fully master every concept before the ready date. Learn concepts in sequence, one-by-one.',
+                    desc: 'Fully master every concept, one at a time.',
                     icon: BookOpen,
                   },
                   {
                     value: 'strong_key' as TargetStrengthLevel,
                     label: 'Focus on key topics',
-                    desc: 'Learn the key topics first, then fill in the details of less common concepts as time allows.',
+                    desc: 'Prioritize key topics, then fill in the rest.',
                     icon: Sparkles,
                   },
                 ] as const).map(opt => {
@@ -418,13 +397,13 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                       key={opt.value}
                       type="button"
                       onClick={() => setStrength(opt.value)}
-                      className={`w-full text-left rounded-lg border p-4 transition-all duration-200 ${
+                      className={`w-full text-left rounded-xl border p-4 transition-all duration-200 ${
                         isActive
-                          ? 'border-primary bg-primary/10 shadow-sm scale-[1.01]'
+                          ? 'border-primary bg-primary/10'
                           : 'border-border hover:bg-accent/50'
                       }`}
                     >
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-center gap-3">
                         <div
                           className={`h-9 w-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                             isActive
@@ -436,7 +415,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold">{opt.label}</p>
-                          <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{opt.desc}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">{opt.desc}</p>
                         </div>
                       </div>
                     </button>
@@ -448,7 +427,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
         </div>
 
         {/* Footer */}
-        <div className="px-5 pb-5 flex gap-2 justify-between">
+        <div className="px-6 pb-6 pt-3 flex gap-2 justify-between">
           <div>
             {step > 1 && (
               <Button variant="outline" size="sm" onClick={() => setStep(step - 1)}>

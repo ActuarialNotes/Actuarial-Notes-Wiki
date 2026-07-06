@@ -8,7 +8,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/typography": "^0.5.10",
     "@types/katex": "^0.16.8",
     "@types/react": "^18.2.55",

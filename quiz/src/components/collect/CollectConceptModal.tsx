@@ -7,6 +7,7 @@ import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
+import { useConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import { stripFrontmatter } from '@/components/wiki/WikiArticle'
@@ -100,6 +101,9 @@ export function CollectConceptModal() {
 
   const name = ref?.name ?? ''
   const alreadyCollected = ref ? isCollected(name) : false
+  // Matches the Flashcards-tab foil-ring treatment for this concept once it's
+  // collected; meaningless (stays 'new') while the card is still locked.
+  const { currentLevel } = useConceptLearningHistory(name)
 
   const [phase, setPhase] = useState<Phase>('question')
   const [def, setDef] = useState<string | null>(null)
@@ -314,6 +318,8 @@ export function CollectConceptModal() {
               className={phase === 'flash' ? 'collect-card-absorb z-[122]' : ''}
               flippable={phase === 'question'}
               back={cardBack}
+              locked={!alreadyCollected}
+              mastery={currentLevel}
             />
 
             {alreadyCollected ? (
@@ -404,7 +410,7 @@ export function CollectConceptModal() {
           flippable) and let the player choose where to go next. */}
       {phase === 'done' && (
         <div className="collect-done-pop relative z-[121] w-full max-w-xs flex flex-col items-center gap-5 text-center">
-          <CollectCard3D name={name} phase="won" size="lg" flippable back={cardBack} />
+          <CollectCard3D name={name} phase="won" size="lg" flippable back={cardBack} mastery={currentLevel} />
           <span className="inline-flex items-center gap-1.5 text-base font-bold text-primary">
             <Sparkles className="h-5 w-5" /> Collected!
           </span>

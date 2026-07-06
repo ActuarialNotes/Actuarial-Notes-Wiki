@@ -903,6 +903,70 @@
   100% { transform: rotateY(0deg) scale(1);   opacity: 1; }
 }
 
+/* Foil border ring — the same padding+mask-exclude ring technique as the
+   Flashcards-tab .flashcard-collected treatment, reimplemented here (rather
+   than shared) so it can sit on the 3D card's front face without disturbing
+   that face's own depth box-shadow. -l3 (and the pre-collect "locked" pack)
+   get the vivid, travelling rainbow foil; -l2 gets a calmer static gradient. */
+.collect-card-foil-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  pointer-events: none;
+  z-index: 6;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.collect-card-foil-ring.collect-card-foil-l2 {
+  background: linear-gradient(115deg, rgb(56 189 248 / 0.75), rgb(232 121 249 / 0.75), rgb(250 204 21 / 0.75));
+}
+.collect-card-foil-ring.collect-card-foil-l3,
+.collect-card-foil-ring.collect-card-foil-locked {
+  background: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
+  background-size: 300% 100%;
+  animation: collect-card-foil-shift 2.6s linear infinite;
+}
+@keyframes collect-card-foil-shift {
+  to { background-position: 300% 0; }
+}
+
+/* "Wrapped in plastic" seal — shown on the collect-preview card before it has
+   been collected. Faint crinkle creases (static) plus a bright glassy sweep
+   (animated) sell the sealed-cellophane read, on top of the rainbow foil ring
+   above, so the card looks like an unopened, exciting pack. */
+.collect-card-plastic {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 7;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.12), transparent 45%);
+}
+.collect-card-plastic::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  background:
+    repeating-linear-gradient(124deg, rgb(255 255 255 / 0.10) 0px, rgb(255 255 255 / 0.10) 1px, transparent 1px, transparent 15px),
+    repeating-linear-gradient(38deg, rgb(255 255 255 / 0.07) 0px, rgb(255 255 255 / 0.07) 1px, transparent 1px, transparent 21px);
+}
+.collect-card-plastic::after {
+  content: '';
+  position: absolute;
+  inset: -45%;
+  background: linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 0.85) 50%, transparent 58%);
+  transform: translateX(-45%);
+  animation: collect-card-plastic-sheen 3s ease-in-out infinite;
+}
+@keyframes collect-card-plastic-sheen {
+  0%, 100% { transform: translateX(-45%); opacity: 0; }
+  50%      { opacity: 1; }
+  75%      { transform: translateX(45%); opacity: 0; }
+}
+
 /* Whole-screen dominant bloom — radial light grows from the card's centre,
    fills the screen, then fades to reveal the "Collected!" screen. --foreground
    is near-white in dark mode and near-black in light mode, giving the
@@ -1005,7 +1069,8 @@
   .collect-card-spin, .collect-card-idle, .collect-card-idle-back, .collect-card-sheen, .collect-card-absorb,
   .collect-card-flip-fwd, .collect-card-flip-rev,
   .collect-bloom, .collect-shake,
-  .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop { animation: none; }
+  .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop,
+  .collect-card-foil-ring, .collect-card-plastic::after { animation: none; }
 }
 
 /* Streak flame: a gentle looping flicker while the streak is active today. */

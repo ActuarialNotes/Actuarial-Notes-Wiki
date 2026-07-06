@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -290,5 +291,12 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+  },
+  // Unit tests (vitest) live alongside the modules they cover under src/. Scope
+  // collection to src/ so the Playwright E2E specs in e2e/*.spec.ts — which
+  // import @playwright/test and only run under `playwright test` — aren't swept
+  // up by vitest's default **/*.spec.ts glob.
+  test: {
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
   },
 })

@@ -61,10 +61,21 @@ export function readLocalQuests(): QuestsState {
   try {
     const raw = localStorage.getItem(LOCAL_KEY)
     if (!raw) return emptyQuests()
-    return { ...emptyQuests(), ...(JSON.parse(raw) as Partial<QuestsState>) }
+    const parsed = { ...emptyQuests(), ...(JSON.parse(raw) as Partial<QuestsState>) }
+    // Tolerate stale/older persisted shapes (e.g. the first quests revision had
+    // no stored board) — a malformed field degrades to its empty value.
+    if (!Array.isArray(parsed.quests)) parsed.quests = []
+    if (!Array.isArray(parsed.claimed)) parsed.claimed = []
+    if (typeof parsed.progress !== 'object' || parsed.progress === null) parsed.progress = {}
+    return parsed
   } catch {
     return emptyQuests()
   }
+}
+
+/** Whether the state carries a usable board for `todayKey`. */
+export function hasTodayBoard(state: QuestsState, todayKey: string): boolean {
+  return state.day === todayKey && state.quests.length > 0
 }
 
 export function writeLocalQuests(state: QuestsState): void {
@@ -167,6 +178,38 @@ async function upsertQuestsState(userId: string, state: QuestsState, tz: string)
   if (error) throw new Error(error.message)
 }
 
+/**
+ * The state to operate on for a signed-in user: the cloud row when it carries
+ * today's board (the normal case), otherwise the localStorage mirror when *it*
+ * does. This keeps quests fully functional when the cloud row can't hold a
+ * board yet — user_quests missing or on the pre-board schema — because every
+ * write path below mirrors to localStorage and tolerates a failed cloud write.
+ */
+async function effectiveState(userId: string, today: string): Promise<QuestsState> {
+  const local = readLocalQuests()
+  try {
+    const cloud = await fetchQuestsState(userId)
+    return hasTodayBoard(cloud, today) || !hasTodayBoard(local, today) ? cloud : local
+  } catch (err) {
+    console.warn('user_quests fetch failed, using local state:', err)
+    return local
+  }
+}
+
+/** Persist to the cloud when signed in (best effort) and always to localStorage. */
+async function persistState(userId: string | null, state: QuestsState, tz: string): Promise<void> {
+  if (userId) {
+    try {
+      await upsertQuestsState(userId, state, tz)
+    } catch (err) {
+      // Table may not be migrated yet, or the network is down — the local
+      // mirror below keeps quests working; sync resumes once writes succeed.
+      console.warn('user_quests upsert failed, keeping local state:', err)
+    }
+  }
+  writeLocalQuests(state)
+}
+
 // ── Seeding / personalizing today's board ─────────────────────────────────────
 
 /**
@@ -180,32 +223,16 @@ export async function ensureDailyQuests(
   userId: string | null,
   context: QuestContext,
 ): Promise<void> {
-  const tz = resolveTimeZone()
-  const today = localDayKey(new Date(), tz)
-
-  if (!userId) {
-    const current = readLocalQuests()
-    const next = reseedDailyQuests(current, today, context)
-    if (next === current) return
-    writeLocalQuests(next)
-    dispatch(QUEST_EVENT)
-    return
-  }
-
   try {
-    const current = await fetchQuestsState(userId)
+    const tz = resolveTimeZone()
+    const today = localDayKey(new Date(), tz)
+    const current = userId ? await effectiveState(userId, today) : readLocalQuests()
     const next = reseedDailyQuests(current, today, context)
     if (next === current) return
-    await upsertQuestsState(userId, next, tz)
-    writeLocalQuests(next)
+    await persistState(userId, next, tz)
     dispatch(QUEST_EVENT)
   } catch (err) {
-    console.warn('ensureDailyQuests: using local fallback:', err)
-    const current = readLocalQuests()
-    const next = reseedDailyQuests(current, today, context)
-    if (next === current) return
-    writeLocalQuests(next)
-    dispatch(QUEST_EVENT)
+    console.warn('ensureDailyQuests failed:', err)
   }
 }
 
@@ -238,28 +265,15 @@ export async function recordQuestProgress(
   userId: string | null,
   ev: QuestQuizEvent,
 ): Promise<void> {
-  const tz = resolveTimeZone()
-  const today = localDayKey(new Date(), tz)
-
-  if (!userId) {
-    const { next, completed } = applyQuizEvent(readLocalQuests(), ev, today)
-    writeLocalQuests(next)
-    afterProgress(next, completed, today)
-    return
-  }
-
   try {
-    const current = await fetchQuestsState(userId)
+    const tz = resolveTimeZone()
+    const today = localDayKey(new Date(), tz)
+    const current = userId ? await effectiveState(userId, today) : readLocalQuests()
     const { next, completed } = applyQuizEvent(current, ev, today)
-    if (next !== current) await upsertQuestsState(userId, next, tz)
-    writeLocalQuests(next)
+    if (next !== current) await persistState(userId, next, tz)
     afterProgress(next, completed, today)
   } catch (err) {
-    // Table may not be migrated yet, or the network is down — fall back to local.
-    console.warn('recordQuestProgress: using local fallback:', err)
-    const { next, completed } = applyQuizEvent(readLocalQuests(), ev, today)
-    writeLocalQuests(next)
-    afterProgress(next, completed, today)
+    console.warn('recordQuestProgress failed:', err)
   }
 }
 
@@ -281,22 +295,14 @@ export async function claimQuestRewards(
 
   let claimed: QuestDef[]
   try {
-    if (!userId) {
-      const { next, claimed: c } = claimQuests(readLocalQuests(), today, ids)
-      if (c.length === 0) return null
-      writeLocalQuests(next)
-      claimed = c
-    } else {
-      const current = await fetchQuestsState(userId)
-      const { next, claimed: c } = claimQuests(current, today, ids)
-      if (c.length === 0) return null
-      await upsertQuestsState(userId, next, tz)
-      writeLocalQuests(next)
-      claimed = c
-    }
+    const current = userId ? await effectiveState(userId, today) : readLocalQuests()
+    const { next, claimed: c } = claimQuests(current, today, ids)
+    if (c.length === 0) return null
+    // Persist the claim (cloud best-effort + always local) BEFORE paying, so a
+    // retry can never double-pay: both stores mark the quests claimed.
+    await persistState(userId, next, tz)
+    claimed = c
   } catch (err) {
-    // Don't fall back to a local claim for signed-in users: the cloud row still
-    // shows the quest unclaimed, and a divergent local claim risks double-pay.
     console.warn('claimQuestRewards failed:', err)
     return null
   }

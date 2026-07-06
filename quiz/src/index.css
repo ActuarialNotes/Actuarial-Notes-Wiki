@@ -534,6 +534,8 @@
   --sheen-op-2: 0.09;
   --sheen-band: 220%;
   --sheen-duration: 6.5s;
+  --foil-border: none;
+  --foil-border-width: 0px;
   box-shadow:
     inset 0 0 0 1px var(--sheen-inset),
     var(--sheen-glow-1),
@@ -547,6 +549,10 @@
   --sheen-op-2: 0.20;
   --sheen-band: 250%;
   --sheen-duration: 4.5s;
+  /* Static foil border — a soft, non-animated holographic edge that marks
+     this card as a step up from the plain New/L1 border. */
+  --foil-border: linear-gradient(115deg, rgb(56 189 248 / 0.6), rgb(232 121 249 / 0.6), rgb(250 204 21 / 0.6));
+  --foil-border-width: 1.5px;
 }
 .flashcard-collected.flashcard-sheen-l3 {
   --sheen-inset: hsl(var(--primary) / 0.45);
@@ -556,7 +562,34 @@
   --sheen-op-2: 0.55;
   --sheen-band: 300%;
   --sheen-duration: 2.1s;
+  /* Vivid, travelling foil border — same technique as L2 but fully saturated
+     and animated, so the rarest cards read as a distinct "foil" material
+     rather than just a brighter glow. */
+  --foil-border: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
+  --foil-border-width: 2px;
   animation: flashcard-collected-l3-pulse 2.6s ease-in-out infinite;
+}
+/* Gradient "foil" border ring, painted via the padding+mask-exclude trick so
+   it sits exactly on the card edge without affecting layout or covering the
+   content underneath (the mask leaves only the ring itself opaque). */
+.flashcard-collected::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--foil-border-width);
+  background: var(--foil-border);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.flashcard-collected.flashcard-sheen-l3::before {
+  background-size: 300% 100%;
+  animation: flashcard-foil-shift 3s linear infinite;
+}
+@keyframes flashcard-foil-shift {
+  to { background-position: 300% 0; }
 }
 .flashcard-collected::after {
   content: '';
@@ -599,6 +632,7 @@
 @media (prefers-reduced-motion: reduce) {
   .flashcard-collected::after { animation: none; }
   .flashcard-collected.flashcard-sheen-l3 { animation: none; }
+  .flashcard-collected.flashcard-sheen-l3::before { animation: none; }
 }
 
 /* Study-plan row highlight: rings a checklist row when the popup navigates to it. */

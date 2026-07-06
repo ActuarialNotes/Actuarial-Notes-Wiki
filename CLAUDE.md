@@ -76,8 +76,15 @@ Other important `lib/` modules:
   (guests) and is called from `quizStore` on quiz completion. Surfaced via
   `hooks/useStreak.ts` + `components/StreakBadge.tsx` in the Sidebar/BottomNav/Dashboard.
   Gated by `STREAK_ENABLED`.
+- `xp.ts` / `xpStore.ts` — daily goal + XP engine (roadmap P1.2). `xp.ts` is the
+  pure, tested core: per-answer XP weighted toward hard + decaying (revived) concepts,
+  a level curve, and the configurable daily-goal presets (`DAILY_GOALS`). `xpStore.ts`
+  persists `XpState` to the `user_xp` table (signed-in) or localStorage (guests) and is
+  called from `quizStore` on quiz completion (`recordXp`). Surfaced via `hooks/useXp.ts`
+  + `components/DailyGoalRing.tsx` (Dashboard ring) and `components/DailyGoalPicker.tsx`
+  (Settings goal picker). Gated by `XP_ENABLED`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
-  `STREAK_ENABLED`)
+  `STREAK_ENABLED`, `XP_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)

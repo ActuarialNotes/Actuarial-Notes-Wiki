@@ -62,3 +62,15 @@ export const RESEARCH_TAB_ENABLED: boolean = false
  * annotation keeps both branches type-checked (see the flags above).
  */
 export const STREAK_ENABLED: boolean = true
+
+/**
+ * Daily goal + XP system (roadmap P1.2) — the second piece of the retention loop.
+ *
+ * When ON, completing a quiz awards XP (weighted toward hard and decaying
+ * concepts — see lib/xp.ts), and a configurable daily-goal ring appears on the
+ * Dashboard with a matching goal picker in Settings. The pure XP/goal engine and
+ * its tests stay compiled either way; the `: boolean` annotation keeps both
+ * branches of every gate type-checked (see the flags above). Gate it off to
+ * dark-launch or roll back independently of the streak.
+ */
+export const XP_ENABLED: boolean = true

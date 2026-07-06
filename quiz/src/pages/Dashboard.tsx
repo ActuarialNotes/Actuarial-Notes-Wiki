@@ -25,7 +25,8 @@ import { computeReadiness } from '@/lib/readiness'
 import { LOCALIZED_EXAMS, matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
 import { StreakStat } from '@/components/StreakBadge'
-import { STREAK_ENABLED } from '@/lib/featureFlags'
+import { DailyGoalStat } from '@/components/DailyGoalRing'
+import { STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -363,6 +364,7 @@ export default function Dashboard() {
 
   const hasActiveExams = inProgressSyllabi.length > 0
   const showStreakStat = STREAK_ENABLED && !isGuest
+  const showGoalStat = XP_ENABLED && !isGuest
 
   return (
     <>
@@ -502,9 +504,10 @@ export default function Dashboard() {
             ))}
           </div>
         )}
-        {(showStreakStat || overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
+        {(showStreakStat || showGoalStat || overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {showStreakStat && <StreakStat />}
+            {showGoalStat && <DailyGoalStat />}
             {overallPct !== null && activeSyllabus && (
               <button
                 type="button"

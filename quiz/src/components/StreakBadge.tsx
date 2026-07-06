@@ -12,52 +12,27 @@ function flameClass(status: StreakStatus, count: number): string {
 }
 
 /**
- * Sidebar row variant — a flame + count that reads like the other nav rows.
- * `collapsed` mirrors the icon-only desktop sidebar (count shown as a corner
- * badge on the flame, like the Flashcards count).
+ * Sidebar variant — a compact flame + count for the right side of the Dashboard
+ * nav row (its `badge` slot). Renders nothing when there's no active streak, so
+ * the row stays clean until the user has one.
  */
-export function StreakRow({ collapsed }: { collapsed: boolean }) {
+export function StreakNavBadge() {
   const { currentStreak, status, loading } = useStreak()
-  if (loading) return null
+  if (loading || currentStreak <= 0) return null
 
   const color = flameClass(status, currentStreak)
-  const label =
-    currentStreak <= 0
-      ? 'Start a streak'
-      : `${currentStreak}-day streak`
-  const title =
-    status === 'at_risk'
-      ? 'Study today to keep your streak alive'
-      : currentStreak > 0
-      ? `${currentStreak}-day study streak`
-      : 'Complete a quiz to start a streak'
-
   return (
-    <div
-      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm"
-      title={collapsed ? label : title}
-      data-tour="streak"
+    <span
+      className="inline-flex items-center gap-1 text-[11px] font-semibold text-foreground tabular-nums"
+      title={
+        status === 'at_risk'
+          ? 'Study today to keep your streak alive'
+          : `${currentStreak}-day study streak`
+      }
     >
-      <span className="relative flex h-5 w-5 shrink-0 items-center justify-center">
-        <Flame className={`h-4 w-4 ${color} ${status === 'active' ? 'streak-flame-pulse' : ''}`} />
-        {collapsed && currentStreak > 0 && (
-          <span className="hidden lg:flex absolute -top-1.5 -right-2 h-3.5 min-w-[0.875rem] items-center justify-center rounded-full bg-orange-500 px-[3px] text-[9px] font-bold leading-none text-white tabular-nums">
-            {currentStreak}
-          </span>
-        )}
-      </span>
-      <span className={`flex-1 truncate ${collapsed ? 'lg:hidden' : ''} ${currentStreak > 0 ? 'text-foreground' : 'text-muted-foreground'}`}>
-        {currentStreak > 0 ? (
-          <>
-            <span className="font-semibold tabular-nums">{currentStreak}</span>
-            <span className="text-muted-foreground"> day{currentStreak === 1 ? '' : 's'}</span>
-            {status === 'at_risk' && <span className="text-amber-500"> · keep it up</span>}
-          </>
-        ) : (
-          <span className="text-muted-foreground">Start a streak</span>
-        )}
-      </span>
-    </div>
+      <Flame className={`h-3.5 w-3.5 ${color} ${status === 'active' ? 'streak-flame-pulse' : ''}`} />
+      {currentStreak} day{currentStreak === 1 ? '' : 's'}
+    </span>
   )
 }
 

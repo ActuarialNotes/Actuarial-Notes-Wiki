@@ -40,7 +40,7 @@ import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
-import { StreakRow } from '@/components/StreakBadge'
+import { StreakNavBadge, StreakCornerBadge } from '@/components/StreakBadge'
 import { COLOR_THEMES } from '@/lib/colorThemes'
 import { cn } from '@/lib/utils'
 
@@ -522,12 +522,23 @@ export default function Sidebar() {
             <SidebarItem
               to="/dashboard"
               label="Dashboard"
-              icon={<LayoutDashboard className="h-4 w-4" />}
+              icon={
+                <span className="relative inline-flex items-center justify-center">
+                  <LayoutDashboard className="h-4 w-4" />
+                  {/* Collapsed sidebar hides the row badge, so mirror the streak as
+                      a corner badge on the icon (matches the Flashcards count). */}
+                  {STREAK_ENABLED && collapsed && (
+                    <span className="hidden lg:block">
+                      <StreakCornerBadge />
+                    </span>
+                  )}
+                </span>
+              }
               collapsed={collapsed}
               onNavigate={closeMobile}
+              badge={STREAK_ENABLED ? <StreakNavBadge /> : undefined}
             />
           )}
-          {STREAK_ENABLED && user && <StreakRow collapsed={collapsed} />}
           {RESEARCH_TAB_ENABLED ? (
             <SidebarGroup
               label="Study Guides"

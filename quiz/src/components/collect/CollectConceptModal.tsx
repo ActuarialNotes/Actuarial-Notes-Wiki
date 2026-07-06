@@ -431,7 +431,11 @@ export function CollectConceptModal() {
         dialog (z-[120]) instead of behind it. */}
     {showQuestions && (
       <div className="relative z-[130]">
-        <ConceptQuestionsModal conceptName={name} onClose={() => setShowQuestions(false)} />
+        <ConceptQuestionsModal
+          conceptName={name}
+          onClose={() => setShowQuestions(false)}
+          onQuizStart={close}
+        />
       </div>
     )}
     </>,

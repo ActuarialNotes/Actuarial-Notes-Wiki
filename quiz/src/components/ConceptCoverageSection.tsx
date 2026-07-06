@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Gem } from 'lucide-react'
+import { Gem, LayoutDashboard, XCircle } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { Button } from '@/components/ui/button'
 import { isAnswerCorrect, normalizeAnswerText } from '@/lib/parser'
@@ -298,9 +298,10 @@ interface ConceptCoverageSectionProps {
   selectedQuestion: number | null
   onQuestionSelect: (idx: number | null) => void
   manualGrades?: Record<string, SelfGrade>
+  onReviewIncorrect?: () => void
 }
 
-function effectiveOutcome(q: Question, chosen: string | null | undefined, manualGrades: Record<string, SelfGrade>): boolean {
+export function effectiveOutcome(q: Question, chosen: string | null | undefined, manualGrades: Record<string, SelfGrade>): boolean {
   if (chosen == null) return false
   if (q.type === 'free-entry') {
     const override = manualGrades[q.id]
@@ -334,10 +335,12 @@ export function ConceptCoverageSection({
   selectedQuestion,
   onQuestionSelect,
   manualGrades = {},
+  onReviewIncorrect,
 }: ConceptCoverageSectionProps) {
   const navigate = useNavigate()
   const outcomes = questions.map(q => effectiveOutcome(q, responses[q.id]?.chosen, manualGrades))
   const stats = buildConceptStats(questions, outcomes)
+  const hasIncorrect = outcomes.some(o => !o)
 
   const [selectedName, setSelectedName] = useState<string | null>(null)
 
@@ -393,15 +396,6 @@ export function ConceptCoverageSection({
             )}
           </div>
 
-          {/* Dashboard link */}
-          {score.isLoggedIn && (
-            <div className="mt-4">
-              <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')}>
-                Go to Dashboard
-              </Button>
-            </div>
-          )}
-
           {/* Sign-in prompt */}
           {!score.isLoggedIn && (
             <div className="mt-4 rounded-lg border bg-muted/40 px-4 py-3 text-sm flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
@@ -413,6 +407,34 @@ export function ConceptCoverageSection({
           )}
         </div>
       </div>
+
+      {/* ── Actions card: go to dashboard + review incorrect ──────── */}
+      {(score.isLoggedIn || (onReviewIncorrect && hasIncorrect)) && (
+        <div className="rounded-xl bg-card shadow-sm overflow-hidden">
+          <div className="p-4 flex gap-3">
+            {score.isLoggedIn && (
+              <Button
+                variant="secondary"
+                onClick={() => navigate('/dashboard')}
+                className="flex-1 gap-2.5 text-base h-auto py-4"
+              >
+                <LayoutDashboard className="h-5 w-5" />
+                Go to Dashboard
+              </Button>
+            )}
+            {onReviewIncorrect && hasIncorrect && (
+              <button
+                type="button"
+                onClick={onReviewIncorrect}
+                className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97]"
+              >
+                <XCircle className="h-5 w-5" />
+                Review Incorrect
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── Quiz coverage card: graph + concept chips ─────────────── */}
       {stats.length > 0 && (

@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
-import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
+import { ConceptCoverageSection, effectiveOutcome } from '@/components/ConceptCoverageSection'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -153,6 +153,7 @@ export default function Review() {
   const { resetQuiz } = useQuizStore()
   const [session, setSession] = useState<CompletedSession | null>(null)
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
+  const [showIncorrectOnly, setShowIncorrectOnly] = useState(false)
   const [showBackToTop, setShowBackToTop] = useState(false)
   const questionReviewRef = useRef<HTMLDivElement>(null)
   const syncingRef = useRef(false)
@@ -209,11 +210,20 @@ export default function Review() {
   function handleQuestionSelect(idx: number | null) {
     setSelectedQuestion(idx)
     if (idx !== null) {
+      setShowIncorrectOnly(false)
       // Small delay so React can render before scrolling
       setTimeout(() => {
         questionReviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 80)
     }
+  }
+
+  function handleReviewIncorrect() {
+    setSelectedQuestion(null)
+    setShowIncorrectOnly(true)
+    setTimeout(() => {
+      questionReviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 80)
   }
 
   if (!session) {
@@ -244,8 +254,13 @@ export default function Review() {
   }
 
   // Which questions to show in the review list
+  const outcomes = session.questions.map(q =>
+    effectiveOutcome(q, session.responses[q.id]?.chosen, session.manualGrades ?? {})
+  )
   const visibleQuestions = selectedQuestion !== null
     ? session.questions.filter((_, i) => i === selectedQuestion)
+    : showIncorrectOnly
+    ? session.questions.filter((_, i) => !outcomes[i])
     : session.questions
 
   return (
@@ -271,6 +286,7 @@ export default function Review() {
         selectedQuestion={selectedQuestion}
         onQuestionSelect={handleQuestionSelect}
         manualGrades={session.manualGrades}
+        onReviewIncorrect={handleReviewIncorrect}
       />
 
       {/* ── Study plan checklist ─────────────────────────────────── */}
@@ -297,6 +313,19 @@ export default function Review() {
               <button
                 type="button"
                 onClick={() => setSelectedQuestion(null)}
+                className="hover:opacity-70 transition-opacity"
+                aria-label="Clear filter"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </span>
+          )}
+          {selectedQuestion === null && showIncorrectOnly && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+              Incorrect only
+              <button
+                type="button"
+                onClick={() => setShowIncorrectOnly(false)}
                 className="hover:opacity-70 transition-opacity"
                 aria-label="Clear filter"
               >

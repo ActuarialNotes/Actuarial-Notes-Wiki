@@ -325,7 +325,7 @@ interface CharacterSkinSelectorProps {
   onClose: () => void
 }
 
-function CharacterSkinSelector({ currentAvatarUrl, onClose }: CharacterSkinSelectorProps) {
+export function CharacterSkinSelector({ currentAvatarUrl, onClose }: CharacterSkinSelectorProps) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [ownedCosmetics, setOwnedCosmetics] = useState<Set<string>>(new Set())

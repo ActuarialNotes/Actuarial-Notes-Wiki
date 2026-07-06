@@ -81,8 +81,9 @@ Other important `lib/` modules:
   a level curve, and the configurable daily-goal presets (`DAILY_GOALS`). `xpStore.ts`
   persists `XpState` to the `user_xp` table (signed-in) or localStorage (guests) and is
   called from `quizStore` on quiz completion (`recordXp`). Surfaced via `hooks/useXp.ts`
-  + `components/DailyGoalRing.tsx` (Dashboard ring) and `components/DailyGoalPicker.tsx`
-  (Settings goal picker). Gated by `XP_ENABLED`.
+  + `components/LevelBadge.tsx` (the Dashboard header level badge — a level ring that
+  replaces the mascot icon and opens an XP/daily-goal popup) and
+  `components/DailyGoalPicker.tsx` (Settings goal picker). Gated by `XP_ENABLED`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)

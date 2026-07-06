@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { MasteryState } from '@/lib/mastery'
 
 // A flashy, colourful 3D-looking flashcard showing a concept name. Pure CSS —
 // no WebGL — so it stays light and renders crisply everywhere. The colour
@@ -15,6 +16,14 @@ interface CollectCard3DProps {
   // When set, the card can be flipped by clicking/tapping it to reveal `back`.
   flippable?: boolean
   back?: React.ReactNode
+  // Not yet collected — renders the front sealed under a "wrapped in plastic"
+  // sheen with the vivid, travelling rainbow foil border, so the yet-to-be-
+  // opened card reads as an exciting, unopened pack.
+  locked?: boolean
+  // Once collected, mirrors the Flashcards-tab foil-ring treatment so this
+  // card matches the same concept's tile in the gallery (level2 gets a calm
+  // static foil ring, level3 the vivid travelling one). Ignored when `locked`.
+  mastery?: MasteryState
 }
 
 // Pleasant, high-contrast gradient pairs (start, mid, end) — vivid enough to
@@ -39,8 +48,9 @@ function hashString(s: string): number {
   return Math.abs(h)
 }
 
-export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '', flippable = false, back }: CollectCard3DProps) {
+export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '', flippable = false, back, locked = false, mastery }: CollectCard3DProps) {
   const [c0, c1, c2] = useMemo(() => GRADIENTS[hashString(name) % GRADIENTS.length], [name])
+  const foilLevel = locked ? 'locked' : mastery === 'level3' ? 'l3' : mastery === 'level2' ? 'l2' : null
   const [side, setSide] = useState<'front' | 'back'>('front')
   const [flipping, setFlipping] = useState(false)
   // Once the card has been flipped, drop back to a static front resting state
@@ -99,6 +109,11 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
                 {name}
               </span>
             </div>
+            {/* Foil border ring, matching the Flashcards-tab treatment for this
+                mastery level (or the vivid "locked" rainbow for an unopened pack) */}
+            {foilLevel && <span className={`collect-card-foil-ring collect-card-foil-${foilLevel}`} />}
+            {/* Sealed-in-plastic sheen, only before the card has been collected */}
+            {locked && <span className="collect-card-plastic" />}
           </div>
         </div>
         {flippable && (

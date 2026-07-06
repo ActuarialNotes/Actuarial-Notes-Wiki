@@ -23,6 +23,8 @@ export interface AnalyticsEventMap {
   quiz_completed: { mode: string; exam: string; question_count: number; correct_count: number }
   flashcard_reviewed: { concept: string; kind: string }
   streak_extended: { length: number; longest: number }
+  xp_earned: { amount: number; total: number }
+  daily_goal_met: { goal: string; xp: number }
   search_query: { query: string; exam: string; difficulty: string }
   upgrade_clicked: Record<string, never>
 
@@ -81,6 +83,16 @@ export function trackSearchQuery(params: AnalyticsEventMap['search_query']) {
 /** Fires when a day of study lengthens the streak (not on same-day repeats). */
 export function trackStreakExtended(params: AnalyticsEventMap['streak_extended']) {
   track('streak_extended', params)
+}
+
+/** Fires each time a quiz awards XP (roadmap P1.2). */
+export function trackXpEarned(params: AnalyticsEventMap['xp_earned']) {
+  track('xp_earned', params)
+}
+
+/** Fires the first time the daily XP goal is reached on a given day. */
+export function trackDailyGoalMet(params: AnalyticsEventMap['daily_goal_met']) {
+  track('daily_goal_met', params)
 }
 
 export function trackUpgradeClicked() {

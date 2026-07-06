@@ -17,6 +17,8 @@ import { cn } from '@/lib/utils'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
+import { DailyGoalPicker } from '@/components/DailyGoalPicker'
+import { XP_ENABLED } from '@/lib/featureFlags'
 import {
   AvatarDisplay,
   ANIMAL_TYPES,
@@ -290,6 +292,7 @@ export default function Settings() {
   const navItems = [
     { id: 'support', label: 'Support' },
     { id: 'appearance', label: 'Appearance' },
+    ...(user && XP_ENABLED ? [{ id: 'dailygoal', label: 'Daily Goal' }] : []),
     ...(user ? BASE_NAV_ITEMS : [{ id: 'signin', label: 'Sign In' }]),
   ]
 
@@ -802,6 +805,13 @@ export default function Settings() {
                 </CardContent>
               </Card>
             </section>
+
+            {/* ---- Daily goal (XP) ---- */}
+            {user && XP_ENABLED && (
+              <section ref={el => { sectionRefs.current.dailygoal = el }} id="dailygoal">
+                <DailyGoalPicker />
+              </section>
+            )}
 
             {/* ---- Inline login (logged out) ---- */}
             {!user && (

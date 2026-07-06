@@ -723,11 +723,10 @@ export function ReadinessCard({
     [groupedPlanConcepts, masteryStateByName]
   )
 
-  // Auto-expand Topics Mastered section and relevant topics when study plan is active
+  // Auto-expand relevant topics (but not the Topics Learned card itself) when study plan is active
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (displayConcepts.length === 0) return
-    setTopicsMasteredOpen(true)
     const planTopicNames = new Set(groupedPlanConcepts.map(g => g.topicName))
     setOpenTopics(prev => {
       if (planTopicNames.size === 0) return prev

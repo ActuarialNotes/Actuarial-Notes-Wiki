@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Loader2, X } from 'lucide-react'
-import { ConceptCoverageSection } from '@/components/ConceptCoverageSection'
+import { ConceptCoverageSection, effectiveOutcome } from '@/components/ConceptCoverageSection'
 import { QuestionCard } from '@/components/QuestionCard'
 import { Separator } from '@/components/ui/separator'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'
@@ -29,7 +29,9 @@ function formatDate(iso: string): string {
 export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props) {
   const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' })
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
+  const [showIncorrectOnly, setShowIncorrectOnly] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const questionReviewRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -144,10 +146,20 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
                 onSignIn: () => {},
               }}
               selectedQuestion={selectedQuestion}
-              onQuestionSelect={setSelectedQuestion}
+              onQuestionSelect={idx => {
+                setSelectedQuestion(idx)
+                if (idx !== null) setShowIncorrectOnly(false)
+              }}
+              onReviewIncorrect={() => {
+                setSelectedQuestion(null)
+                setShowIncorrectOnly(true)
+                setTimeout(() => {
+                  questionReviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }, 80)
+              }}
             />
 
-            <div className="space-y-2 scroll-mt-6 mt-6">
+            <div ref={questionReviewRef} className="space-y-2 scroll-mt-6 mt-6">
               <div className="flex items-center gap-3">
                 <h2 className="text-lg font-semibold">Question Review</h2>
                 {selectedQuestion !== null && (
@@ -163,6 +175,19 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
                     </button>
                   </span>
                 )}
+                {selectedQuestion === null && showIncorrectOnly && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+                    Incorrect only
+                    <button
+                      type="button"
+                      onClick={() => setShowIncorrectOnly(false)}
+                      className="hover:opacity-70 transition-opacity"
+                      aria-label="Clear filter"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                )}
               </div>
               <Separator />
             </div>
@@ -170,6 +195,8 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
             <div className="space-y-4 mt-4">
               {(selectedQuestion !== null
                 ? loadState.questions.filter((_, i) => i === selectedQuestion)
+                : showIncorrectOnly
+                ? loadState.questions.filter(q => !effectiveOutcome(q, loadState.responses[q.id]?.chosen, {}))
                 : loadState.questions
               ).map((question) => {
                 const idx = loadState.questions.indexOf(question)

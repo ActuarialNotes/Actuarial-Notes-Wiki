@@ -26,7 +26,8 @@ import { LOCALIZED_EXAMS, matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
 import { StreakStat } from '@/components/StreakBadge'
 import { LevelBadge } from '@/components/LevelBadge'
-import { STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { QuestsCard } from '@/components/QuestsCard'
+import { QUESTS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -569,6 +570,9 @@ export default function Dashboard() {
           </button>
         </div>
       )}
+
+      {/* Daily quests — today's rotating goals and their gem/XP payouts */}
+      {QUESTS_ENABLED && !isGuest && <QuestsCard />}
 
       {/* Readiness card — only shown when there is an active exam */}
       <div>

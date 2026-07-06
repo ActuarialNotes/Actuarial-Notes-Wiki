@@ -44,7 +44,8 @@ quiz/                                             — the React app (this is whe
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
 - `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (flashcard-collect
   gate questions), `examSittings.ts` / `examPdfLinks.ts` (sitting dates + examiner reports),
-  `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `tracks.ts`
+  `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
+  catalogue), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
 - `stores/` — Zustand stores: `quizStore.ts` (active quiz session), `researchStore.ts` (flag-gated)
 - `contexts/` — Auth, ExamProgress, MathView providers
@@ -84,8 +85,17 @@ Other important `lib/` modules:
   + `components/LevelBadge.tsx` (the Dashboard header level badge — a level ring that
   replaces the mascot icon and opens an XP/daily-goal popup) and
   `components/DailyGoalPicker.tsx` (Settings goal picker). Gated by `XP_ENABLED`.
+- `quests.ts` / `questStore.ts` — daily-quest engine (roadmap P1.4), the gem-economy
+  loop. `quests.ts` is the pure, tested core: a deterministic day-keyed rotation over
+  the quest catalogue authored in `data/quests.ts` (one always-achievable "core" quest
+  + two retention-aligned "specials" per day), per-quiz tallies, and once-per-day
+  completion. `questStore.ts` persists `QuestsState` to the `user_quests` table
+  (signed-in) or localStorage (guests), pays completions (gems via the `award_gems`
+  RPC, XP via `recordXp`), and is called from `quizStore` on quiz completion
+  (`recordQuestProgress`). Surfaced via `hooks/useQuests.ts` +
+  `components/QuestsCard.tsx` on the Dashboard. Gated by `QUESTS_ENABLED`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
-  `STREAK_ENABLED`, `XP_ENABLED`)
+  `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)

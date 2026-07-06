@@ -25,6 +25,8 @@ export interface AnalyticsEventMap {
   streak_extended: { length: number; longest: number }
   xp_earned: { amount: number; total: number }
   daily_goal_met: { goal: string; xp: number }
+  quest_completed: { quest: string; gems: number; xp: number }
+  daily_quests_cleared: { quests: number }
   search_query: { query: string; exam: string; difficulty: string }
   upgrade_clicked: Record<string, never>
 
@@ -93,6 +95,16 @@ export function trackXpEarned(params: AnalyticsEventMap['xp_earned']) {
 /** Fires the first time the daily XP goal is reached on a given day. */
 export function trackDailyGoalMet(params: AnalyticsEventMap['daily_goal_met']) {
   track('daily_goal_met', params)
+}
+
+/** Fires once per quest per day, when its reward is paid (roadmap P1.4). */
+export function trackQuestCompleted(params: AnalyticsEventMap['quest_completed']) {
+  track('quest_completed', params)
+}
+
+/** Fires when the last of the day's quests is cleared. */
+export function trackDailyQuestsCleared(params: AnalyticsEventMap['daily_quests_cleared']) {
+  track('daily_quests_cleared', params)
 }
 
 export function trackUpgradeClicked() {

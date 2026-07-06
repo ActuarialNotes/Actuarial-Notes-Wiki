@@ -9,7 +9,8 @@ import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dail
 import { recordStreakActivity } from '@/lib/streakStore'
 import { xpForAnswers, type XpAnswer } from '@/lib/xp'
 import { recordXp } from '@/lib/xpStore'
-import { XP_ENABLED } from '@/lib/featureFlags'
+import { recordQuestProgress } from '@/lib/questStore'
+import { QUESTS_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 
@@ -36,17 +37,17 @@ function conceptsForQuestion(q: Question): string[] {
   return [...names]
 }
 
-// XP earned for a completed quiz (roadmap P1.2). Weighted by difficulty, with a
-// bonus for correctly reviving a concept that had decayed to Forgotten — the
-// `from: 'forgotten'` transitions tell us which concepts were revisited. Pure so
-// the same call works for guests and signed-in users; the award is persisted by
-// recordXp (localStorage or Supabase).
-function computeQuizXp(
+// The answered questions of a completed quiz, reduced to the shape both the XP
+// engine (roadmap P1.2) and the quest engine (P1.4) consume: difficulty-weighted
+// correctness plus whether the answer correctly revived a concept that had
+// decayed to Forgotten — the `from: 'forgotten'` transitions tell us which
+// concepts were revisited.
+function quizAnswers(
   questions: Question[],
   responses: Record<string, Response>,
   manualGrades: Record<string, SelfGrade>,
   transitions: MasteryTransition[],
-): number {
+): XpAnswer[] {
   const decayed = new Set(
     transitions.filter(t => t.from === 'forgotten').map(t => t.conceptSlug),
   )
@@ -60,7 +61,32 @@ function computeQuizXp(
       reviving: conceptsForQuestion(q).some(slug => decayed.has(slug)),
     })
   }
-  return xpForAnswers(answers)
+  return answers
+}
+
+// Award quiz XP toward the daily goal, then advance today's quests (which pay
+// their own gem/XP rewards). Sequenced in one fire-and-forget chain — never
+// awaited by callers — because both recordXp and a quest payout read-modify-write
+// the same user_xp row; firing them concurrently could drop one of the writes.
+// Both stores swallow their own failures, so this can never break quiz completion.
+function awardXpAndQuests(
+  userId: string | null,
+  questions: Question[],
+  responses: Record<string, Response>,
+  manualGrades: Record<string, SelfGrade>,
+  transitions: MasteryTransition[],
+): void {
+  if (!XP_ENABLED && !QUESTS_ENABLED) return
+  const answers = quizAnswers(questions, responses, manualGrades, transitions)
+  const levelUps = transitions.filter(
+    t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
+  ).length
+  void (async () => {
+    if (XP_ENABLED) await recordXp(userId, xpForAnswers(answers))
+    if (QUESTS_ENABLED) {
+      await recordQuestProgress(userId, { answers, levelUps, totalQuestions: questions.length })
+    }
+  })()
 }
 
 async function upsertMasteryFromResponses(
@@ -583,8 +609,8 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
       // Completing a quiz counts as a day of study — extend the streak (guest:
       // localStorage). Idempotent per local day; fire-and-forget.
       void recordStreakActivity(null)
-      // Award XP toward the daily goal (guest: localStorage). Fire-and-forget.
-      if (XP_ENABLED) void recordXp(null, computeQuizXp(questions, responses, manualGrades, masteryTransitions))
+      // Award XP + quest progress (guest: localStorage). Fire-and-forget.
+      awardXpAndQuests(null, questions, responses, manualGrades, masteryTransitions)
       return
     }
 
@@ -631,8 +657,8 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     // Supabase). Idempotent per local day; fire-and-forget so a streak write
     // never blocks or fails the session save.
     void recordStreakActivity(userId)
-    // Award XP toward the daily goal (signed-in: Supabase). Fire-and-forget.
-    if (XP_ENABLED) void recordXp(userId, computeQuizXp(questions, responses, manualGrades, masteryTransitions))
+    // Award XP + quest progress (signed-in: Supabase). Fire-and-forget.
+    awardXpAndQuests(userId, questions, responses, manualGrades, masteryTransitions)
 
     // Fire level-up event AFTER mastery is written to localStorage + DB so
     // Dashboard's refresh() call sees up-to-date records immediately.
@@ -710,8 +736,8 @@ export async function syncPendingSessionToCloud(
 
   // Seed the signed-in streak for today from this just-synced guest session.
   void recordStreakActivity(userId)
-  // Award XP for the just-synced guest session on the signed-in account.
-  if (XP_ENABLED) void recordXp(userId, computeQuizXp(questions, responses, manualGrades, masteryTransitions))
+  // Award XP + quest progress for the just-synced guest session on the account.
+  awardXpAndQuests(userId, questions, responses, manualGrades, masteryTransitions)
 
   // Mark as synced so a later visit to /review (or a re-render of this one)
   // doesn't insert a duplicate quiz_sessions row. Keep the rest of the session

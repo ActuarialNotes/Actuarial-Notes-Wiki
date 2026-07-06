@@ -9,11 +9,13 @@ import {
   Gem,
   GraduationCap,
   Layers,
+  Check,
   LayoutDashboard,
   LogOut,
   Menu,
   Microscope,
   Moon,
+  Palette,
   Play,
   Settings2,
   ShoppingBag,
@@ -39,6 +41,8 @@ import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { StreakRow } from '@/components/StreakBadge'
+import { COLOR_THEMES } from '@/lib/colorThemes'
+import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'quiz.sidebar.collapsed'
 
@@ -246,7 +250,7 @@ export default function Sidebar() {
   const { user, signOut } = useAuth()
   const { balance: gemBalance } = useGems()
   const { isPremium, isBetaTester } = useSubscription()
-  const { theme, toggleTheme } = useTheme()
+  const { theme, toggleTheme, colorTheme, setColorTheme, colourfulVariant, setColourfulVariant } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
   const { progress: examProgress, examVariants } = useExamProgress()
@@ -304,7 +308,9 @@ export default function Sidebar() {
   const { open: examsOpen, openExams, closeExams } = useExamsPopout()
   const [signOutConfirm, setSignOutConfirm] = useState(false)
   const [openExamDropdown, setOpenExamDropdown] = useState<string | null>(null)
+  const [themeOpen, setThemeOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
+  const themeRef = useRef<HTMLDivElement>(null)
 
   // Gem animation: tracks unseen increases and fires when the badge is visible.
   const prevGemBalance = useRef<number | null>(null)
@@ -365,6 +371,17 @@ export default function Sidebar() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [profileOpen])
+
+  useEffect(() => {
+    if (!themeOpen) return
+    function handleClickOutside(e: MouseEvent) {
+      if (themeRef.current && !themeRef.current.contains(e.target as Node)) {
+        setThemeOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [themeOpen])
 
   const closeMobile = () => setMobileOpen(false)
 
@@ -591,20 +608,97 @@ export default function Sidebar() {
         </nav>
 
         <div className="border-t px-2 py-3 space-y-1">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            title={collapsed ? (theme === 'dark' ? 'Light mode' : 'Dark mode') : undefined}
-            className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
-          >
-            <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </span>
-            <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>
-              {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-            </span>
-          </button>
+          <div className={cn('flex items-stretch gap-1', collapsed && 'lg:flex-col')}>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={collapsed ? (theme === 'dark' ? 'Light mode' : 'Dark mode') : undefined}
+              className="flex-1 flex items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </span>
+              <span className={`truncate ${collapsed ? 'lg:hidden' : ''}`}>
+                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+              </span>
+            </button>
+
+            {/* Inline theme popout: pick the colour theme without leaving for Settings */}
+            <div ref={themeRef} className="relative">
+              {themeOpen && (
+                <div className="absolute bottom-full right-0 mb-1 w-60 rounded-md border bg-popover shadow-md p-2 z-50 text-left">
+                  <p className="px-1 pb-1.5 text-xs font-semibold text-muted-foreground">Theme</p>
+                  <div className="space-y-1">
+                    {COLOR_THEMES.map(option => {
+                      const swatch = theme === 'dark' ? option.preview.dark : option.preview.light
+                      const selected = colorTheme === option.id
+                      return (
+                        <div key={option.id}>
+                          <button
+                            type="button"
+                            onClick={() => setColorTheme(option.id)}
+                            className={cn(
+                              'w-full flex items-center gap-2 rounded-md border px-2 py-1.5 transition-colors',
+                              selected
+                                ? 'border-primary ring-1 ring-primary'
+                                : 'border-border hover:bg-accent/60'
+                            )}
+                          >
+                            <span className="flex gap-1 shrink-0">
+                              <span className="h-4 w-4 rounded-full border border-border/50" style={{ backgroundColor: swatch.background }} />
+                              <span className="h-4 w-4 rounded-full border border-border/50" style={{ backgroundColor: swatch.primary }} />
+                              <span className="h-4 w-4 rounded-full border border-border/50" style={{ backgroundColor: swatch.accent }} />
+                            </span>
+                            <span className="text-sm font-medium">{option.name}</span>
+                            {selected && <Check className="ml-auto h-3.5 w-3.5 shrink-0 text-primary" />}
+                          </button>
+                          {option.id === 'colourful' && selected && option.variants && (
+                            <div className="mt-1 flex flex-wrap gap-1 pl-2">
+                              {option.variants.map(v => {
+                                const vPrimary = theme === 'dark' ? v.dark.primary : v.light.primary
+                                const vAccent = theme === 'dark' ? v.dark.accent : v.light.accent
+                                const vSelected = colourfulVariant === v.id
+                                return (
+                                  <button
+                                    key={v.id}
+                                    type="button"
+                                    aria-label={v.id}
+                                    onClick={() => setColourfulVariant(v.id)}
+                                    className={cn(
+                                      'flex gap-1 p-0.5 rounded border transition-colors',
+                                      vSelected ? 'border-primary ring-1 ring-primary' : 'border-transparent hover:border-border'
+                                    )}
+                                  >
+                                    <span className="h-4 w-4 rounded-full border border-border/50" style={{ backgroundColor: vPrimary }} />
+                                    <span className="h-4 w-4 rounded-full border border-border/50" style={{ backgroundColor: vAccent }} />
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => setThemeOpen(o => !o)}
+                aria-label="Choose colour theme"
+                aria-expanded={themeOpen}
+                title="Theme"
+                className={cn(
+                  'flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors',
+                  collapsed ? 'lg:w-full py-2 px-3' : 'h-full px-2',
+                  themeOpen && 'bg-accent/60 text-foreground'
+                )}
+              >
+                <Palette className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
 
           {user ? (
             <div ref={profileRef} className="relative">

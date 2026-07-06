@@ -18,7 +18,6 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { decayIfStale } from '@/lib/mastery'
 import type { MasteryState } from '@/lib/mastery'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
@@ -322,9 +321,7 @@ export default function Dashboard() {
 
   const overallPct = useMemo(() => {
     if (!activeSyllabus || !activeProgressKey) return null
-    const examRecords = masteryRecords
-      .filter(r => r.exam_id === activeProgressKey)
-      .map(r => decayIfStale(r, new Date()))
+    const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
     return Math.round(computeReadiness(activeSyllabus, examRecords, new Date()).overallPct)
   }, [activeSyllabus, activeProgressKey, masteryRecords])
 

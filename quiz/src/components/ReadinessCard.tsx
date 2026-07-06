@@ -454,13 +454,15 @@ interface Props {
   scrollToRadialTrigger?: number
   /** Whether the user has access to the custom Study Plan. Defaults to true. */
   isPremium?: boolean
+  /** Reports today's study-plan completion + 2× gem bonus status up to the parent, for a top-of-dashboard banner. */
+  onPlanCompletionChange?: (status: { complete: boolean; bonusClaimed: boolean; bonusAmount: number }) => void
 }
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
-  isPremium = true,
+  isPremium = true, onPlanCompletionChange,
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -879,6 +881,16 @@ export function ReadinessCard({
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allConceptsDone, bonusClaimed, todayGemsEarned, user, progressKey])
+
+  // Report completion status up so the Dashboard can show a top-of-page banner
+  useEffect(() => {
+    onPlanCompletionChange?.({
+      complete: isPremium && displayConcepts.length > 0 && allConceptsDone,
+      bonusClaimed,
+      bonusAmount: claimedBonusAmount,
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPremium, displayConcepts.length, allConceptsDone, bonusClaimed, claimedBonusAmount])
 
   const handleStartQuiz = useCallback(() => {
     if (isLaunchingQuizRef.current) return

@@ -22,6 +22,7 @@ export interface AnalyticsEventMap {
   question_answered: { question_id: string; is_correct: boolean; exam: string; mode: string }
   quiz_completed: { mode: string; exam: string; question_count: number; correct_count: number }
   flashcard_reviewed: { concept: string; kind: string }
+  streak_extended: { length: number; longest: number }
   search_query: { query: string; exam: string; difficulty: string }
   upgrade_clicked: Record<string, never>
 
@@ -75,6 +76,11 @@ export function trackFlashcardReviewed(params: AnalyticsEventMap['flashcard_revi
 
 export function trackSearchQuery(params: AnalyticsEventMap['search_query']) {
   track('search_query', params)
+}
+
+/** Fires when a day of study lengthens the streak (not on same-day repeats). */
+export function trackStreakExtended(params: AnalyticsEventMap['streak_extended']) {
+  track('streak_extended', params)
 }
 
 export function trackUpgradeClicked() {

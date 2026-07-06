@@ -29,6 +29,10 @@ function conceptLabel(link: string): string {
 interface ConceptQuestionsModalProps {
   conceptName: string
   onClose: () => void
+  /** Called (in addition to onClose) when the user actually starts a quiz from here —
+   *  lets callers that nest this modal inside another dialog (e.g. CollectConceptModal)
+   *  dismiss that outer dialog too, instead of leaving it stuck open behind the quiz. */
+  onQuizStart?: () => void
 }
 
 const DIFFICULTY_OPTIONS = [
@@ -119,7 +123,7 @@ function MultiSelectDropdown({
   )
 }
 
-export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestionsModalProps) {
+export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: ConceptQuestionsModalProps) {
   const unlocked = useIsConceptUnlocked(conceptName)
   const openCollect = useCollect(s => s.open)
   const [questions, setQuestions] = useState<Question[]>([])
@@ -260,6 +264,7 @@ export function ConceptQuestionsModal({ conceptName, onClose }: ConceptQuestions
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selectedQuestions.map(q => q.id)))
     } catch { /* ignore */ }
+    onQuizStart?.()
     onClose()
     navigate('/quiz?selection=stored')
   }

@@ -6,6 +6,7 @@ import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type Conc
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
 import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dailyProgressStore'
+import { recordStreakActivity } from '@/lib/streakStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 
@@ -549,6 +550,9 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         at: new Date().toISOString(),
       })))
       addDailyQuizStats(correctCount, questions.length)
+      // Completing a quiz counts as a day of study — extend the streak (guest:
+      // localStorage). Idempotent per local day; fire-and-forget.
+      void recordStreakActivity(null)
       return
     }
 
@@ -590,6 +594,11 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }
 
     addDailyQuizStats(correctCount, questions.length)
+
+    // Completing a quiz counts as a day of study — extend the streak (signed-in:
+    // Supabase). Idempotent per local day; fire-and-forget so a streak write
+    // never blocks or fails the session save.
+    void recordStreakActivity(userId)
 
     // Fire level-up event AFTER mastery is written to localStorage + DB so
     // Dashboard's refresh() call sees up-to-date records immediately.
@@ -664,6 +673,9 @@ export async function syncPendingSessionToCloud(
     console.error('Failed to save pending quiz session after sign-in:', error)
     return false
   }
+
+  // Seed the signed-in streak for today from this just-synced guest session.
+  void recordStreakActivity(userId)
 
   // Mark as synced so a later visit to /review (or a re-render of this one)
   // doesn't insert a duplicate quiz_sessions row. Keep the rest of the session

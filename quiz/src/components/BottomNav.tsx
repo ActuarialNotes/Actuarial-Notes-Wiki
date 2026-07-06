@@ -5,7 +5,8 @@ import { useAuth } from '@/hooks/useAuth'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { COLLECTED_EVENT } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
-import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
+import { StreakCornerBadge } from '@/components/StreakBadge'
 
 function getLastWikiPath(): string {
   try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
@@ -125,6 +126,7 @@ export default function BottomNav() {
         {items.map(item => {
           const Icon = item.icon
           const isFlashcards = item.to === '/flashcards'
+          const isQuiz = item.to === '/'
           return (
             <NavLink
               key={item.to}
@@ -156,6 +158,7 @@ export default function BottomNav() {
                     {cards.length}
                   </span>
                 )}
+                {isQuiz && STREAK_ENABLED && <StreakCornerBadge />}
               </span>
               <span className="text-[10px] font-medium">{item.label}</span>
             </NavLink>

@@ -70,7 +70,14 @@ Other important `lib/` modules:
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness score shown on the Dashboard
-- `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`)
+- `streak.ts` / `streakStore.ts` — daily-streak engine (roadmap P1.1). `streak.ts` is the
+  pure, tested core (timezone-correct day boundaries + freeze/repair mechanics);
+  `streakStore.ts` persists it to the `user_streaks` table (signed-in) or localStorage
+  (guests) and is called from `quizStore` on quiz completion. Surfaced via
+  `hooks/useStreak.ts` + `components/StreakBadge.tsx` in the Sidebar/BottomNav/Dashboard.
+  Gated by `STREAK_ENABLED`.
+- `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
+  `STREAK_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)

@@ -24,6 +24,8 @@ import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
 import { LOCALIZED_EXAMS, matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
+import { StreakStat } from '@/components/StreakBadge'
+import { STREAK_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -360,6 +362,7 @@ export default function Dashboard() {
   const initials = displayName.slice(0, 2).toUpperCase()
 
   const hasActiveExams = inProgressSyllabi.length > 0
+  const showStreakStat = STREAK_ENABLED && !isGuest
 
   return (
     <>
@@ -499,8 +502,9 @@ export default function Dashboard() {
             ))}
           </div>
         )}
-        {(overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
+        {(showStreakStat || overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
           <div className="grid grid-cols-3 gap-3">
+            {showStreakStat && <StreakStat />}
             {overallPct !== null && activeSyllabus && (
               <button
                 type="button"

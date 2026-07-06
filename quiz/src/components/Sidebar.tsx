@@ -39,7 +39,8 @@ import ExamsPopout from '@/components/ExamsPopout'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
-import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
+import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
+import { StreakRow } from '@/components/StreakBadge'
 import { COLOR_THEMES } from '@/lib/colorThemes'
 import { cn } from '@/lib/utils'
 
@@ -526,6 +527,7 @@ export default function Sidebar() {
               onNavigate={closeMobile}
             />
           )}
+          {STREAK_ENABLED && user && <StreakRow collapsed={collapsed} />}
           {RESEARCH_TAB_ENABLED ? (
             <SidebarGroup
               label="Study Guides"

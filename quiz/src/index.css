@@ -520,12 +520,43 @@
 
 /* Collected flashcard — a "shiny", holographic look that marks a card as
    collected without adding any badge. A soft iridescent glow rings the card and
-   a slow rainbow sheen sweeps across it (clipped to the rounded corners). */
+   a slow rainbow sheen sweeps across it (clipped to the rounded corners).
+   Intensity scales with mastery level via CSS custom properties: New/L1/
+   Forgotten get a barely-there glint, L2 is the original "shiny" look, and
+   L3 turns it up to a dramatic, fast, pulsing holographic shine. Level
+   modifier classes (below) override the variables; the bare class is the
+   subtle default. */
 .flashcard-collected {
+  --sheen-inset: hsl(var(--primary) / 0.12);
+  --sheen-glow-1: 0 0 8px -6px hsl(280 90% 60% / 0.20);
+  --sheen-glow-2: 0 0 10px -8px hsl(190 90% 55% / 0.16);
+  --sheen-op-1: 0.06;
+  --sheen-op-2: 0.09;
+  --sheen-band: 220%;
+  --sheen-duration: 6.5s;
   box-shadow:
-    inset 0 0 0 1px hsl(var(--primary) / 0.25),
-    0 0 16px -4px hsl(280 90% 60% / 0.45),
-    0 0 22px -6px hsl(190 90% 55% / 0.35);
+    inset 0 0 0 1px var(--sheen-inset),
+    var(--sheen-glow-1),
+    var(--sheen-glow-2);
+}
+.flashcard-collected.flashcard-sheen-l2 {
+  --sheen-inset: hsl(var(--primary) / 0.25);
+  --sheen-glow-1: 0 0 16px -4px hsl(280 90% 60% / 0.45);
+  --sheen-glow-2: 0 0 22px -6px hsl(190 90% 55% / 0.35);
+  --sheen-op-1: 0.14;
+  --sheen-op-2: 0.20;
+  --sheen-band: 250%;
+  --sheen-duration: 4.5s;
+}
+.flashcard-collected.flashcard-sheen-l3 {
+  --sheen-inset: hsl(var(--primary) / 0.45);
+  --sheen-glow-1: 0 0 26px -2px hsl(280 95% 65% / 0.75);
+  --sheen-glow-2: 0 0 36px -4px hsl(190 95% 60% / 0.65);
+  --sheen-op-1: 0.34;
+  --sheen-op-2: 0.55;
+  --sheen-band: 300%;
+  --sheen-duration: 2.1s;
+  animation: flashcard-collected-l3-pulse 2.6s ease-in-out infinite;
 }
 .flashcard-collected::after {
   content: '';
@@ -536,21 +567,38 @@
   background: linear-gradient(
     115deg,
     transparent 30%,
-    rgb(56 189 248 / 0.14) 42%,
-    rgb(232 121 249 / 0.20) 50%,
-    rgb(250 204 21 / 0.14) 58%,
+    rgb(56 189 248 / var(--sheen-op-1)) 42%,
+    rgb(232 121 249 / var(--sheen-op-2)) 50%,
+    rgb(250 204 21 / var(--sheen-op-1)) 58%,
     transparent 70%
   );
-  background-size: 250% 100%;
+  background-size: var(--sheen-band) 100%;
   background-position: 150% 0;
-  animation: flashcard-collected-shine 4.5s ease-in-out infinite;
+  animation: flashcard-collected-shine var(--sheen-duration) ease-in-out infinite;
 }
 @keyframes flashcard-collected-shine {
   0%, 100% { background-position: 150% 0; }
   50%      { background-position: -50% 0; }
 }
+/* Extra pulsing glow ring for L3, layered on top of the base box-shadow via
+   the animation so the card visibly "breathes" between sheen sweeps. */
+@keyframes flashcard-collected-l3-pulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 0 1px var(--sheen-inset),
+      var(--sheen-glow-1),
+      var(--sheen-glow-2);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 1.5px hsl(var(--primary) / 0.6),
+      0 0 34px 2px hsl(280 95% 68% / 0.9),
+      0 0 46px 4px hsl(190 95% 62% / 0.8);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .flashcard-collected::after { animation: none; }
+  .flashcard-collected.flashcard-sheen-l3 { animation: none; }
 }
 
 /* Study-plan row highlight: rings a checklist row when the popup navigates to it. */
@@ -924,4 +972,17 @@
   .collect-card-flip-fwd, .collect-card-flip-rev,
   .collect-bloom, .collect-shake,
   .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop { animation: none; }
+}
+
+/* Streak flame: a gentle looping flicker while the streak is active today. */
+.streak-flame-pulse {
+  animation: streak-flame-pulse 2.4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+@keyframes streak-flame-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 transparent); }
+  50%      { transform: scale(1.12); filter: drop-shadow(0 0 5px rgb(249 115 22 / 0.6)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .streak-flame-pulse { animation: none; }
 }

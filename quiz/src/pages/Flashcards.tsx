@@ -1306,7 +1306,10 @@ function SortableCard({
 
   // Focus mode drops the "shiny"/holographic treatment for collected cards so
   // every card reads the same and the title is the only thing that stands out.
-  const baseClass = `group relative rounded-xl border flex flex-col transition-shadow min-h-[150px]${collected && !focusMode ? ' flashcard-collected' : ''}${isFlashing ? ' flashcard-highlight' : ''}`
+  // Sheen intensity scales with mastery: New/L1/Forgotten stay subtle, L2 is
+  // the standard shine, L3 gets the dramatic pulsing treatment.
+  const sheenLevelClass = masteryState === 'level3' ? ' flashcard-sheen-l3' : masteryState === 'level2' ? ' flashcard-sheen-l2' : ''
+  const baseClass = `group relative rounded-xl border flex flex-col transition-shadow min-h-[150px]${collected && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 border-primary shadow-sm'
     : 'bg-card text-card-foreground'

@@ -11,7 +11,9 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/ca
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { computeReadiness } from '@/lib/readiness'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
 
 function examNameToTrackKey(name: string): string {
@@ -43,6 +45,7 @@ export default function WikiHome() {
   const { setPageRefs, setExamId } = useWikiPage()
   const { progress: examProgress, targetDates, examVariants, selectedTrack } = useExamProgress()
   const { records: masteryRecords } = useConceptMastery()
+  const openAt = useConceptPopup(s => s.openAt)
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const location = useLocation()
   const navigationType = useNavigationType()
@@ -112,6 +115,10 @@ export default function WikiHome() {
 
   const exams = useMemo(() => index.filter(i => i.category === 'exam'), [index])
   const books = useMemo(() => index.filter(i => i.category === 'document'), [index])
+  const resourceRefs = useMemo<WikiEntryRef[]>(
+    () => books.map(book => ({ kind: 'resource', name: book.name })),
+    [books],
+  )
 
   const examsByKey = useMemo(() => {
     const map = new Map<string, WikiIndexItem[]>()
@@ -336,8 +343,13 @@ export default function WikiHome() {
           <p className="text-sm text-muted-foreground">Loading resources…</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {books.map(book => (
-              <Link key={book.path} to={wikiRoute({ kind: 'resource', name: book.name })}>
+            {books.map((book, bookIdx) => (
+              <button
+                key={book.path}
+                type="button"
+                onClick={() => openAt(resourceRefs, bookIdx, '/wiki')}
+                className="w-full text-left appearance-none bg-transparent p-0"
+              >
                 <Card className="h-full transition-all duration-150 hover:bg-accent/40 overflow-hidden flex flex-row items-stretch">
                   {book.coverImage && (
                     <div className="flex-shrink-0 p-2 flex items-center">
@@ -381,7 +393,7 @@ export default function WikiHome() {
                     )}
                   </div>
                 </Card>
-              </Link>
+              </button>
             ))}
           </div>
         )}

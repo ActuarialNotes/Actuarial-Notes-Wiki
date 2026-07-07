@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { Gem, GraduationCap, Loader2, LogIn, LogOut, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Check, Gem, GraduationCap, Loader2, LogIn, LogOut, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -21,7 +21,7 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
-import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import { DAILY_QUIZ_EVENT, getDailyQuizStats, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
 import { LOCALIZED_EXAMS, matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
@@ -162,6 +162,7 @@ export default function Dashboard() {
   )
   const [planComplete, setPlanComplete] = useState(false)
   const [dayCompleteInfoTrigger, setDayCompleteInfoTrigger] = useState(0)
+  const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
   const [profileOpen, setProfileOpen] = useState(false)
   const [signOutConfirm, setSignOutConfirm] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -213,6 +214,15 @@ export default function Dashboard() {
     window.addEventListener(LEVELUP_EVENT, refreshMastery)
     return () => window.removeEventListener(LEVELUP_EVENT, refreshMastery)
   }, [refreshMastery])
+
+  // Keep today's correct-answer count fresh so the streak stat's checkmark
+  // (any correct answer today, independent of study-plan completion) updates
+  // live as quizzes are completed.
+  useEffect(() => {
+    const refresh = () => setDailyQuizStats(getDailyQuizStats())
+    window.addEventListener(DAILY_QUIZ_EVENT, refresh)
+    return () => window.removeEventListener(DAILY_QUIZ_EVENT, refresh)
+  }, [])
 
   useEffect(() => {
     if (!profileOpen) {
@@ -534,21 +544,31 @@ export default function Dashboard() {
         {(showStreakStat || overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {showStreakStat && (
-              <StreakStat
-                planComplete={planComplete}
-                onOpenDayComplete={() => setDayCompleteInfoTrigger(v => v + 1)}
-              />
+              <StreakStat activeToday={dailyQuizStats.correct > 0} />
             )}
             {overallPct !== null && activeSyllabus && (
-              <button
-                type="button"
-                onClick={() => setScrollToRadialTrigger(v => v + 1)}
-                className="flex flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-colors"
-                title="Scroll to study guide"
-              >
-                <MiniReadinessRing pct={overallPct} />
-                <span className="text-xs text-muted-foreground">Readiness</span>
-              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setScrollToRadialTrigger(v => v + 1)}
+                  className="flex w-full flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-colors"
+                  title="Scroll to study guide"
+                >
+                  <MiniReadinessRing pct={overallPct} />
+                  <span className="text-xs text-muted-foreground">Readiness</span>
+                </button>
+                {planComplete && (
+                  <button
+                    type="button"
+                    onClick={() => setDayCompleteInfoTrigger(v => v + 1)}
+                    className="absolute -top-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white shadow ring-2 ring-background hover:bg-green-600 transition-colors"
+                    aria-label="Today's study plan complete — view bonus details"
+                    title="Today's study plan complete — tap for details"
+                  >
+                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                  </button>
+                )}
+              </div>
             )}
             {daysToReady !== null && (
               <button

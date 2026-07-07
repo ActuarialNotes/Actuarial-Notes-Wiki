@@ -52,16 +52,16 @@ export function StreakCornerBadge() {
 
 /**
  * Dashboard variant — a flame stat tile matching the readiness/days tiles in the
- * header grid. When `planComplete` is true (today's study plan is fully done),
- * the tile burns brighter with a filled-in flame and a tappable checkmark badge
- * that opens the day-complete/2× gem bonus info panel.
+ * header grid. When `activeToday` is true (at least one question has been
+ * answered correctly today), the tile burns brighter with a filled-in flame and
+ * a checkmark badge confirming today's streak activity is in. This is
+ * independent of study-plan completion — see the Readiness tile's own
+ * checkmark for that.
  */
 export function StreakStat({
-  planComplete = false,
-  onOpenDayComplete,
+  activeToday = false,
 }: {
-  planComplete?: boolean
-  onOpenDayComplete?: () => void
+  activeToday?: boolean
 }) {
   const { currentStreak, longestStreak, status, loading } = useStreak()
   if (loading) return null
@@ -70,36 +70,34 @@ export function StreakStat({
   return (
     <div
       className={`relative flex flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl transition-colors ${
-        planComplete ? 'bg-orange-500/20 ring-1 ring-orange-500/40' : 'bg-orange-500/10'
+        activeToday ? 'bg-orange-500/20 ring-1 ring-orange-500/40' : 'bg-orange-500/10'
       }`}
       title={
         currentStreak > 0
           ? `Longest streak: ${longestStreak} day${longestStreak === 1 ? '' : 's'}`
-          : 'Complete a quiz to start a streak'
+          : 'Answer a question correctly to start a streak'
       }
     >
       <span className="flex items-center gap-1 leading-none">
         <Flame
-          className={`h-6 w-6 ${planComplete ? 'text-orange-500' : color} ${status === 'active' ? 'streak-flame-pulse' : ''}`}
-          fill={planComplete ? 'currentColor' : 'none'}
+          className={`h-6 w-6 ${activeToday ? 'text-orange-500' : color} ${status === 'active' ? 'streak-flame-pulse' : ''}`}
+          fill={activeToday ? 'currentColor' : 'none'}
         />
-        <span className={`text-3xl font-bold tabular-nums ${planComplete ? 'text-orange-500' : currentStreak > 0 ? 'text-orange-600 dark:text-orange-400' : 'text-muted-foreground'}`}>
+        <span className={`text-3xl font-bold tabular-nums ${activeToday ? 'text-orange-500' : currentStreak > 0 ? 'text-orange-600 dark:text-orange-400' : 'text-muted-foreground'}`}>
           {currentStreak}
         </span>
       </span>
       <span className="text-xs text-muted-foreground">
         day streak{status === 'at_risk' ? ' · today?' : ''}
       </span>
-      {planComplete && (
-        <button
-          type="button"
-          onClick={onOpenDayComplete}
-          className="absolute -top-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-white shadow ring-2 ring-background hover:bg-orange-600 transition-colors"
-          aria-label="Today's study plan complete — view bonus details"
-          title="Today's study plan complete — tap for details"
+      {activeToday && (
+        <span
+          className="absolute -top-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-white shadow ring-2 ring-background"
+          aria-label="Answered a question correctly today"
+          title="Answered a question correctly today"
         >
           <Check className="h-3.5 w-3.5" strokeWidth={3} />
-        </button>
+        </span>
       )}
     </div>
   )

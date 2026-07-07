@@ -456,9 +456,9 @@ interface Props {
   scrollToRadialTrigger?: number
   /** Whether the user has access to the custom Study Plan. Defaults to true. */
   isPremium?: boolean
-  /** Reports whether today's study plan is fully complete, so the Dashboard's streak stat can show a checkmark. */
+  /** Reports whether today's study plan is fully complete, so the Dashboard's readiness stat can show a checkmark. */
   onPlanCompletionChange?: (complete: boolean) => void
-  /** Bumped by the Dashboard (e.g. tapping the streak-stat checkmark) to open the day-complete/bonus info panel. */
+  /** Bumped by the Dashboard (e.g. tapping the readiness-stat checkmark) to open the day-complete/bonus info panel. */
   openDayCompleteInfoTrigger?: number
 }
 
@@ -886,13 +886,13 @@ export function ReadinessCard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allConceptsDone, bonusClaimed, todayGemsEarned, user, progressKey])
 
-  // Report completion status up so the Dashboard can mark the streak stat done
+  // Report completion status up so the Dashboard can mark the readiness stat done
   useEffect(() => {
     onPlanCompletionChange?.(isPremium && displayConcepts.length > 0 && allConceptsDone)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPremium, displayConcepts.length, allConceptsDone])
 
-  // Open the day-complete/bonus info panel when the Dashboard's streak-stat checkmark is tapped
+  // Open the day-complete/bonus info panel when the Dashboard's readiness-stat checkmark is tapped
   useEffect(() => {
     if (openDayCompleteInfoTrigger) setShowDayCompleteInfo(true)
   // eslint-disable-next-line react-hooks/exhaustive-deps

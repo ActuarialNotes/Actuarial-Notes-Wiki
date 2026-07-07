@@ -230,8 +230,8 @@ function ExamOptionCard({
   subtitle?: string | null
 }) {
   const isActive = colorIdx >= 0
-  // Beta exams have a full question bank; others are still being built out.
-  const isBeta = exam.value === 'Probability' || exam.value === 'Financial Mathematics'
+  // P and FM are the mature exams with a full question bank; others are in beta.
+  const isBeta = exam.value !== 'Probability' && exam.value !== 'Financial Mathematics'
   const description = subtitle ?? null
 
   return (
@@ -264,11 +264,7 @@ function ExamOptionCard({
               <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 Beta
               </span>
-            ) : (
-              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400">
-                In Development
-              </span>
-            )}
+            ) : null}
           </div>
         </CardHeader>
       </Card>

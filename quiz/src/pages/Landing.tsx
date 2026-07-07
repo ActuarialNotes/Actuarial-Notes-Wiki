@@ -400,6 +400,10 @@ export default function Landing() {
   )
   const examDateForPlan = examIdForPlan ? (targetDates[examIdForPlan] ?? null) : null
 
+  // Today's Plan only applies to the exam the user is actively working
+  // toward — not every exam they happen to browse to on this screen.
+  const examInProgress = !!examIdForPlan && examProgress[examIdForPlan] === 'in_progress'
+
   const { plan, loading: planLoading } = useStudyPlan(
     syllabusForTopic,
     masteryRecords,
@@ -523,7 +527,7 @@ export default function Landing() {
   }, [plan, allQuestions, topic])
 
   // Derived: whether today's plan is the active filter
-  const useTodaysPlan = conceptMode === 'today' && isPremium && !!plan && planConceptCount > 0
+  const useTodaysPlan = examInProgress && conceptMode === 'today' && isPremium && !!plan && planConceptCount > 0
 
   // Display names for concepts in today's plan (used in dropdown)
   const todayConceptDisplayNames = useMemo(() => {
@@ -598,13 +602,13 @@ export default function Landing() {
       return
     }
 
-    if (!didApplyOverrideRef.current && isPremium && plan && planConceptCount > 0) {
+    if (!didApplyOverrideRef.current && examInProgress && isPremium && plan && planConceptCount > 0) {
       setConceptMode('today')
       setSelectedConcepts([])
       setIsAdaptive(false)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, planConceptCount])
+  }, [topic, mode, user?.id, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, planConceptCount, examInProgress])
 
   // Auto-size Today's Quiz to cover the entire (remaining) plan, until the user
   // picks a specific count. This is what makes "Start Today's Quiz" pull exactly
@@ -624,12 +628,12 @@ export default function Landing() {
     if (searchParams.get('autostart') !== '1') return
     if (!user || mode !== 'quiz' || !topic) return
     if (masteryLoading || conceptsLoading || planLoading || subLoading) return
-    if (!isPremium || !plan || planConceptCount === 0 || allQuestions.length === 0) return
+    if (!examInProgress || !isPremium || !plan || planConceptCount === 0 || allQuestions.length === 0) return
     const sel = buildTodaysPlanSelection()
     if (!sel) return
     didAutostartRef.current = true
     launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts))
-  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan])
+  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress])
 
   // Persist manual concept selections to localStorage
   useEffect(() => {
@@ -906,7 +910,7 @@ export default function Landing() {
               {mode === 'quiz' && (
                 <div className="space-y-3">
                   {/* Today's Plan / By Topic segmented control */}
-                  {user && (
+                  {user && examInProgress && (
                     <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
                       <button
                         type="button"
@@ -948,7 +952,7 @@ export default function Landing() {
                   )}
 
                   {/* Today's Plan content */}
-                  {user && conceptMode === 'today' && (
+                  {user && examInProgress && conceptMode === 'today' && (
                     !isPremium ? (
                       <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 flex items-start gap-3">
                         <div className="flex-1 space-y-1">
@@ -981,7 +985,7 @@ export default function Landing() {
                   )}
 
                   {/* By Topic concept groups */}
-                  {(!user || conceptMode === 'custom') && (
+                  {(!user || !examInProgress || conceptMode === 'custom') && (
                     <div className="space-y-2">
                       {conceptsLoading && orderedConcepts.length === 0 ? (
                         <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>

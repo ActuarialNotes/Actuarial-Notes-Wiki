@@ -5,7 +5,7 @@ import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stor
 import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { loadCachedStudyPlan } from '@/lib/studyPlan'
+import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ConceptCoverageSection, effectiveOutcome } from '@/components/ConceptCoverageSection'
 import { Button } from '@/components/ui/button'
@@ -13,12 +13,25 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
 import type { MasteryState } from '@/lib/mastery'
+import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuestCompleteOverlay } from '@/components/QuestCompleteOverlay'
+import { StudyPlanCompleteOverlay } from '@/components/StudyPlanCompleteOverlay'
 import { QUESTS_ENABLED } from '@/lib/featureFlags'
+import { readJustCompletedQuests } from '@/lib/questStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
+import { getDailyGems } from '@/lib/dailyProgressStore'
+
+// Mirrors the target-state progression used by TodayCard/ReadinessCard to
+// decide whether a concept has reached today's assigned goal.
+const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
+  new: 'level1', forgotten: 'level1', level1: 'level2', level2: 'level3',
+}
+const STATE_ORDER: Record<MasteryState, number> = {
+  new: 0, forgotten: 0, level1: 1, level2: 2, level3: 3,
+}
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New', level1: '1', level2: '2', level3: '3', forgotten: 'F',
@@ -192,11 +205,14 @@ export default function Review() {
       .finally(() => { syncingRef.current = false })
   }, [user, session, masteryLoading, masteryRecords])
 
-  const studyPlan = useMemo(() => {
+  const progressKey = useMemo(() => {
     if (!session) return null
-    const examId = EXAM_LABEL_TO_ID[session.questions[0]?.exam ?? ''] ?? null
-    return examId ? loadCachedStudyPlan(examId) : null
+    return EXAM_LABEL_TO_ID[session.questions[0]?.exam ?? ''] ?? null
   }, [session])
+
+  const studyPlan = useMemo(() => {
+    return progressKey ? loadCachedStudyPlan(progressKey) : null
+  }, [progressKey])
 
   const newlyCompletedSlugs = useMemo(() => {
     const slugs = new Set<string>()
@@ -207,6 +223,41 @@ export default function Review() {
     }
     return slugs
   }, [session])
+
+  // Today's Study Plan completion — mirrors ReadinessCard's "all concepts on
+  // target" check, but scoped to what's needed here so we can surface the 2×
+  // bonus unlock right after the quiz that finished it, instead of waiting for
+  // the user to return to the Dashboard.
+  const planJustCompleted = useMemo(() => {
+    if (!progressKey || !studyPlan || masteryLoading) return false
+    if (studyPlan.status === 'review_mode') return false
+    const concepts = studyPlan.todaysConcepts
+    if (concepts.length === 0) return false
+    const lookup = buildMasteryLookup(masteryRecords.filter(r => r.exam_id === progressKey))
+    const now = new Date()
+    return concepts.every(name => {
+      const current = resolveConceptState(lookup, { name }, now)
+      const target: MasteryState = current === 'level3' ? 'level3' : (NEXT_STATE[current] ?? 'level1')
+      const advancedToday = newlyCompletedSlugs.has(name.toLowerCase())
+      return STATE_ORDER[current] >= STATE_ORDER[target] || advancedToday
+    })
+  }, [progressKey, studyPlan, masteryLoading, masteryRecords, newlyCompletedSlugs])
+
+  const [showPlanBonus, setShowPlanBonus] = useState(false)
+  const planBonusHandledRef = useRef(false)
+
+  useEffect(() => {
+    if (planBonusHandledRef.current || !planJustCompleted || !progressKey) return
+    planBonusHandledRef.current = true
+    // Let a quest celebration take priority if both landed on this quiz —
+    // the Dashboard's own bonus indicator still claims it silently later.
+    if (QUESTS_ENABLED && readJustCompletedQuests().length > 0) return
+    try {
+      const raw = localStorage.getItem(`actuarial_daily_bonus_${progressKey}_${todayISO()}`)
+      const alreadyClaimed = raw ? !!(JSON.parse(raw) as { amount?: number }).amount : false
+      if (!alreadyClaimed) setShowPlanBonus(true)
+    } catch { /* ignore */ }
+  }, [planJustCompleted, progressKey])
 
   // When user clicks a radial segment, select it and scroll to the question review
   function handleQuestionSelect(idx: number | null) {
@@ -269,6 +320,14 @@ export default function Review() {
     <>
     {/* Quests cleared by this quiz — shown before the review content below. */}
     {QUESTS_ENABLED && <QuestCompleteOverlay />}
+    {/* Today's Study Plan finished by this quiz — unlock the 2× gem bonus. */}
+    {showPlanBonus && progressKey && (
+      <StudyPlanCompleteOverlay
+        progressKey={progressKey}
+        gemsEarned={getDailyGems()}
+        onClose={() => setShowPlanBonus(false)}
+      />
+    )}
     <ConceptPopup />
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
 

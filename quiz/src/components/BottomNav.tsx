@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { COLLECTED_EVENT } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
+import { useTodayQuizCount } from '@/hooks/useTodayQuizCount'
 import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { StreakCornerBadge } from '@/components/StreakBadge'
 
@@ -23,6 +24,7 @@ export default function BottomNav() {
   const navigate = useNavigate()
   const location = useLocation()
   const { cards } = useFlashcards()
+  const todayQuizCount = useTodayQuizCount()
   const [studyGuidesOpen, setStudyGuidesOpen] = useState(false)
   const [collectGlow, setCollectGlow] = useState(0)
 
@@ -156,6 +158,11 @@ export default function BottomNav() {
                     className={`absolute -top-1 -right-2 flex h-3.5 min-w-[0.875rem] items-center justify-center rounded-full bg-primary px-[3px] text-[9px] font-bold leading-none text-primary-foreground tabular-nums ${collectGlow > 0 ? 'flashcard-badge-pop' : ''}`}
                   >
                     {cards.length}
+                  </span>
+                )}
+                {isQuiz && todayQuizCount > 0 && (
+                  <span className="absolute -top-1 -right-2 flex h-3.5 min-w-[0.875rem] items-center justify-center rounded-full bg-orange-500 px-[3px] text-[9px] font-bold leading-none text-white tabular-nums">
+                    {todayQuizCount}
                   </span>
                 )}
                 {isQuiz && STREAK_ENABLED && <StreakCornerBadge />}

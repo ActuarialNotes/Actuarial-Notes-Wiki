@@ -144,10 +144,10 @@ export default function BottomNav() {
             >
               <span className="relative inline-flex items-center justify-center">
                 {isFlashcards && collectGlow > 0 && (
-                  <span key={collectGlow} className="flashcard-nav-ring" aria-hidden="true" />
+                  <span key={`ring-${collectGlow}`} className="flashcard-nav-ring" aria-hidden="true" />
                 )}
                 <Icon
-                  key={isFlashcards ? collectGlow : undefined}
+                  key={isFlashcards ? `icon-${collectGlow}` : undefined}
                   className={`h-5 w-5 shrink-0 ${isFlashcards && collectGlow > 0 ? 'flashcard-nav-glow' : ''}`}
                 />
                 {isFlashcards && cards.length > 0 && (

@@ -587,8 +587,8 @@ export default function Sidebar() {
             label="Flashcards"
             icon={
               <span className="relative inline-flex items-center justify-center">
-                {collectGlow > 0 && <span key={collectGlow} className="flashcard-nav-ring" aria-hidden="true" />}
-                <Layers key={collectGlow} className={`h-4 w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
+                {collectGlow > 0 && <span key={`ring-${collectGlow}`} className="flashcard-nav-ring" aria-hidden="true" />}
+                <Layers key={`icon-${collectGlow}`} className={`h-4 w-4 ${collectGlow > 0 ? 'flashcard-nav-glow' : ''}`} />
                 {/* Collapsed sidebar hides the row badge, so mirror the count as a
                     corner badge on the icon itself when icon-only. */}
                 {collapsed && cards.length > 0 && (

@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { CheckCircle2, Gem, GraduationCap, Loader2, LogIn, LogOut, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Gem, GraduationCap, Loader2, LogIn, LogOut, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -160,9 +160,8 @@ export default function Dashboard() {
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
     () => new URLSearchParams(location.search).get('upgraded') === '1',
   )
-  const [planCompletion, setPlanCompletion] = useState<{ complete: boolean; bonusClaimed: boolean; bonusAmount: number }>(
-    { complete: false, bonusClaimed: false, bonusAmount: 0 },
-  )
+  const [planComplete, setPlanComplete] = useState(false)
+  const [dayCompleteInfoTrigger, setDayCompleteInfoTrigger] = useState(0)
   const [profileOpen, setProfileOpen] = useState(false)
   const [signOutConfirm, setSignOutConfirm] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -531,7 +530,12 @@ export default function Dashboard() {
         )}
         {(showStreakStat || overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {showStreakStat && <StreakStat />}
+            {showStreakStat && (
+              <StreakStat
+                planComplete={planComplete}
+                onOpenDayComplete={() => setDayCompleteInfoTrigger(v => v + 1)}
+              />
+            )}
             {overallPct !== null && activeSyllabus && (
               <button
                 type="button"
@@ -568,24 +572,6 @@ export default function Dashboard() {
           </div>
         )}
       </div>
-
-      {/* Today's Study Plan Complete banner — shown once every planned concept is done for the day */}
-      {planCompletion.complete && (
-        <div className="rounded-lg border border-green-500/40 bg-green-500/10 px-4 py-3 flex items-start gap-3">
-          <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
-          <div>
-            <p className="text-sm font-semibold text-green-700 dark:text-green-400">
-              Today's Study Plan Complete!
-            </p>
-            <p className="text-xs text-green-600 dark:text-green-500 mt-0.5 flex items-center gap-1">
-              <Gem className="h-3 w-3 text-cyan-500 shrink-0" />
-              {planCompletion.bonusClaimed
-                ? `2× gem bonus applied — +${planCompletion.bonusAmount} bonus gems earned today.`
-                : "You're earning a 2× gem bonus on today's quizzes."}
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Congratulations banner — shown after returning from Stripe checkout */}
       {showUpgradedBanner && (
@@ -638,7 +624,8 @@ export default function Dashboard() {
             startQuizTrigger={startQuizCounter}
             scrollToRadialTrigger={scrollToRadialTrigger}
             isPremium={isPremium}
-            onPlanCompletionChange={setPlanCompletion}
+            onPlanCompletionChange={setPlanComplete}
+            openDayCompleteInfoTrigger={dayCompleteInfoTrigger}
           />
         )}
       </div>

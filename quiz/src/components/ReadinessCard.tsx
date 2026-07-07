@@ -456,15 +456,17 @@ interface Props {
   scrollToRadialTrigger?: number
   /** Whether the user has access to the custom Study Plan. Defaults to true. */
   isPremium?: boolean
-  /** Reports today's study-plan completion + 2× gem bonus status up to the parent, for a top-of-dashboard banner. */
-  onPlanCompletionChange?: (status: { complete: boolean; bonusClaimed: boolean; bonusAmount: number }) => void
+  /** Reports whether today's study plan is fully complete, so the Dashboard's streak stat can show a checkmark. */
+  onPlanCompletionChange?: (complete: boolean) => void
+  /** Bumped by the Dashboard (e.g. tapping the streak-stat checkmark) to open the day-complete/bonus info panel. */
+  openDayCompleteInfoTrigger?: number
 }
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
-  isPremium = true, onPlanCompletionChange,
+  isPremium = true, onPlanCompletionChange, openDayCompleteInfoTrigger,
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -493,6 +495,7 @@ export function ReadinessCard({
   const [configInitialStep, setConfigInitialStep] = useState<1 | 2 | 3>(1)
   const [showInfo, setShowInfo] = useState(false)
   const [showBonusInfo, setShowBonusInfo] = useState(false)
+  const [showDayCompleteInfo, setShowDayCompleteInfo] = useState(false)
   const [showHeatmapInfo, setShowHeatmapInfo] = useState(false)
   const [showStudyGuideInfo, setShowStudyGuideInfo] = useState(false)
   const [bonusClaimed, setBonusClaimed] = useState<boolean>(() => {
@@ -883,15 +886,17 @@ export function ReadinessCard({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allConceptsDone, bonusClaimed, todayGemsEarned, user, progressKey])
 
-  // Report completion status up so the Dashboard can show a top-of-page banner
+  // Report completion status up so the Dashboard can mark the streak stat done
   useEffect(() => {
-    onPlanCompletionChange?.({
-      complete: isPremium && displayConcepts.length > 0 && allConceptsDone,
-      bonusClaimed,
-      bonusAmount: claimedBonusAmount,
-    })
+    onPlanCompletionChange?.(isPremium && displayConcepts.length > 0 && allConceptsDone)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPremium, displayConcepts.length, allConceptsDone, bonusClaimed, claimedBonusAmount])
+  }, [isPremium, displayConcepts.length, allConceptsDone])
+
+  // Open the day-complete/bonus info panel when the Dashboard's streak-stat checkmark is tapped
+  useEffect(() => {
+    if (openDayCompleteInfoTrigger) setShowDayCompleteInfo(true)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openDayCompleteInfoTrigger])
 
   const handleStartQuiz = useCallback(() => {
     if (isLaunchingQuizRef.current) return
@@ -1573,6 +1578,15 @@ export function ReadinessCard({
       <HeatmapInfoPanel open={showHeatmapInfo} onClose={() => setShowHeatmapInfo(false)} />
       <DailyBonusInfoPanel open={showBonusInfo} onClose={() => setShowBonusInfo(false)} />
       <StudyGuideInfoPanel open={showStudyGuideInfo} onClose={() => setShowStudyGuideInfo(false)} />
+      <DayCompleteInfoPanel
+        open={showDayCompleteInfo}
+        onClose={() => setShowDayCompleteInfo(false)}
+        conceptsCompleted={examCompletedToday.map(lu => ({ name: lu.conceptSlug, label: STATE_LABEL[lu.to] }))}
+        questionsAnswered={todayQuestionsAnswered}
+        gemsEarned={todayGemsEarned}
+        bonusClaimed={bonusClaimed}
+        bonusAmount={claimedBonusAmount}
+      />
 
       {/* Session completion overlay */}
       {viewingSession && (
@@ -1638,6 +1652,85 @@ function DailyBonusInfoPanel({ open, onClose }: { open: boolean; onClose: () => 
           <p className="text-xs text-muted-foreground">
             Tip: if today's plan doesn't reflect what you actually studied, use the <strong>Replace</strong> button to swap in the concepts you completed today.
           </p>
+        </div>
+        <div className="px-5 pb-5 flex justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            Got it
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Day Complete Info Panel ───────────────────────────────────────────────────
+
+function DayCompleteInfoPanel({
+  open, onClose, conceptsCompleted, questionsAnswered, gemsEarned, bonusClaimed, bonusAmount,
+}: {
+  open: boolean
+  onClose: () => void
+  conceptsCompleted: { name: string; label: string }[]
+  questionsAnswered: number
+  gemsEarned: number
+  bonusClaimed: boolean
+  bonusAmount: number
+}) {
+  if (!open) return null
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Today's study plan complete"
+      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div className="w-full max-w-sm bg-card border rounded-xl shadow-2xl flex flex-col my-16">
+        <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
+          <CheckCircle2 className="h-4 w-4 text-orange-500 shrink-0" />
+          <span className="flex-1 font-semibold text-sm">Today's Study Plan Complete</span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
+            aria-label="Close"
+          >
+            <span className="text-lg leading-none">×</span>
+          </button>
+        </div>
+        <div className="p-5 space-y-4 text-sm leading-relaxed">
+          <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-center gap-2.5">
+            <Gem className="h-5 w-5 text-cyan-400 shrink-0" />
+            <p className="text-cyan-700 dark:text-cyan-300">
+              {bonusClaimed
+                ? <><strong>2× gem bonus applied</strong> — +{bonusAmount} bonus gem{bonusAmount === 1 ? '' : 's'} earned today.</>
+                : <>2× gem bonus is active for the rest of today.</>}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground mb-1.5">Today's achievements</p>
+            <ul className="text-xs text-muted-foreground space-y-1">
+              <li>· Answered {questionsAnswered} question{questionsAnswered === 1 ? '' : 's'}, earning {gemsEarned} gem{gemsEarned === 1 ? '' : 's'}</li>
+              <li>· Levelled up {conceptsCompleted.length} concept{conceptsCompleted.length === 1 ? '' : 's'}</li>
+            </ul>
+          </div>
+
+          {conceptsCompleted.length > 0 && (
+            <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1 max-h-40 overflow-y-auto">
+              {conceptsCompleted.map(c => (
+                <div key={c.name} className="flex items-center gap-2 text-xs">
+                  <Check className="h-3.5 w-3.5 text-green-500 shrink-0" />
+                  <span className="flex-1 min-w-0 truncate">{c.name}</span>
+                  <span className="text-green-600 dark:text-green-400 font-medium shrink-0">→ {c.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="px-5 pb-5 flex justify-end">
           <button

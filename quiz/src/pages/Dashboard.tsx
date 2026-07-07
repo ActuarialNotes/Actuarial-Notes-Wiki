@@ -409,7 +409,7 @@ export default function Dashboard() {
         aria-hidden={isGuest}
       >
     <div
-      className="container max-w-4xl mx-auto px-5 sm:px-8 py-8 space-y-8"
+      className="container max-w-4xl mx-auto px-5 sm:px-8 py-8 space-y-4"
       style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
     >
       {/* Header */}

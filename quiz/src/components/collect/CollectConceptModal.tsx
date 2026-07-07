@@ -202,12 +202,12 @@ export function CollectConceptModal() {
   // horizontally rather than overflowing the narrow card.
   const cardBack = def ? (
     <MarkdownText
-      className="text-sm sm:text-base leading-relaxed text-white [&_.katex]:text-white [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden"
+      className="text-sm sm:text-base leading-relaxed text-card-foreground [&_.katex]:text-card-foreground [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden"
     >
       {cleanWikiLinks(def)}
     </MarkdownText>
   ) : (
-    <p className="text-sm text-white/70">
+    <p className="text-sm text-muted-foreground">
       {defError ? 'Definition unavailable.' : 'Loading definition…'}
     </p>
   )

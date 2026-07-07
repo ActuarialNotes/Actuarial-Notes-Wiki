@@ -793,43 +793,52 @@
   transform: rotateY(180deg);
 }
 /* A slim, translucent scrollbar on the card back so a long definition reads as
-   scrollable against the vivid gradient without a heavy native bar. */
+   scrollable against the card surface without a heavy native bar. */
 .collect-card-back-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgb(255 255 255 / 0.5) transparent;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.5) transparent;
   overscroll-behavior: contain;
 }
 .collect-card-back-scroll::-webkit-scrollbar {
   width: 6px;
 }
 .collect-card-back-scroll::-webkit-scrollbar-thumb {
-  background: rgb(255 255 255 / 0.45);
+  background: hsl(var(--muted-foreground) / 0.45);
   border-radius: 3px;
 }
 .collect-card-back-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
-/* Glossy diagonal sheen that sweeps across the card */
-.collect-card-sheen {
-  position: absolute;
-  inset: -40%;
-  background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.5) 50%, transparent 65%);
-  transform: translateX(-30%);
-  animation: collect-sheen 3.4s ease-in-out infinite;
+/* Plain themed card surface — matches the Flashcards-gallery tile (bg-card)
+   rather than a coloured gradient, so a collected card looks identical here and
+   in the gallery. The collectible "shine" is layered on top via the foil ring,
+   holo sheen and (while locked) the plastic wrap. */
+.collect-card-surface {
+  background: hsl(var(--card));
 }
-@keyframes collect-sheen {
-  0%, 100% { transform: translateX(-40%) rotate(0deg); opacity: 0; }
-  45%      { opacity: 0.9; }
-  60%      { transform: translateX(40%) rotate(0deg); opacity: 0; }
-}
-/* Inset holographic frame */
-.collect-card-frame {
+/* Holographic rainbow sheen that slowly sweeps across the card, mirroring the
+   Flashcards-tab collected tile (.flashcard-collected::after). */
+.collect-card-holo {
   position: absolute;
-  inset: 10px;
-  border-radius: 0.8rem;
-  border: 1px solid rgb(255 255 255 / 0.35);
-  box-shadow: inset 0 0 24px rgb(255 255 255 / 0.18);
+  inset: 0;
+  border-radius: inherit;
   pointer-events: none;
+  z-index: 5;
+  background: linear-gradient(
+    115deg,
+    transparent 34%,
+    rgb(56 189 248 / 0.22) 44%,
+    rgb(232 121 249 / 0.30) 50%,
+    rgb(250 204 21 / 0.22) 56%,
+    transparent 66%
+  );
+  background-size: 250% 100%;
+  background-position: 150% 0;
+  animation: collect-card-holo 4s ease-in-out infinite;
+}
+@keyframes collect-card-holo {
+  0%, 100% { background-position: 150% 0; }
+  50%      { background-position: -50% 0; }
 }
 
 .collect-card-idle {
@@ -1066,7 +1075,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .collect-card-spin, .collect-card-idle, .collect-card-idle-back, .collect-card-sheen, .collect-card-absorb,
+  .collect-card-spin, .collect-card-idle, .collect-card-idle-back, .collect-card-holo, .collect-card-absorb,
   .collect-card-flip-fwd, .collect-card-flip-rev,
   .collect-bloom, .collect-shake,
   .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop,

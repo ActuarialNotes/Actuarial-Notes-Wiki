@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { MasteryState } from '@/lib/mastery'
 
-// A flashy, colourful 3D-looking flashcard showing a concept name. Pure CSS —
-// no WebGL — so it stays light and renders crisply everywhere. The colour
-// gradient is derived deterministically from the concept name so the same
-// concept always yields the same card.
+// A 3D-looking flashcard showing a concept name. Pure CSS — no WebGL — so it
+// stays light and renders crisply everywhere. The card surface matches the
+// Flashcards-gallery tile (plain themed card, not a coloured gradient); the
+// collectible "shine" comes from a travelling foil border + holographic sheen,
+// and — while still locked — a glossy "wrapped in plastic" overlay.
 
 interface CollectCard3DProps {
   name: string
@@ -26,30 +27,7 @@ interface CollectCard3DProps {
   mastery?: MasteryState
 }
 
-// Pleasant, high-contrast gradient pairs (start, mid, end) — vivid enough to
-// feel collectible without clashing with either theme.
-const GRADIENTS: [string, string, string][] = [
-  ['#6366f1', '#8b5cf6', '#ec4899'], // indigo → violet → pink
-  ['#0ea5e9', '#3b82f6', '#6366f1'], // sky → blue → indigo
-  ['#10b981', '#14b8a6', '#06b6d4'], // emerald → teal → cyan
-  ['#f59e0b', '#f97316', '#ef4444'], // amber → orange → red
-  ['#ec4899', '#d946ef', '#a855f7'], // pink → fuchsia → purple
-  ['#14b8a6', '#22c55e', '#84cc16'], // teal → green → lime
-  ['#f43f5e', '#fb7185', '#f59e0b'], // rose → coral → amber
-  ['#8b5cf6', '#6366f1', '#0ea5e9'], // violet → indigo → sky
-]
-
-function hashString(s: string): number {
-  let h = 0
-  for (let i = 0; i < s.length; i++) {
-    h = (h << 5) - h + s.charCodeAt(i)
-    h |= 0
-  }
-  return Math.abs(h)
-}
-
 export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '', flippable = false, back, locked = false, mastery }: CollectCard3DProps) {
-  const [c0, c1, c2] = useMemo(() => GRADIENTS[hashString(name) % GRADIENTS.length], [name])
   const foilLevel = locked ? 'locked' : mastery === 'level3' ? 'l3' : mastery === 'level2' ? 'l2' : null
   const [side, setSide] = useState<'front' | 'back'>('front')
   const [flipping, setFlipping] = useState(false)
@@ -95,20 +73,17 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
     >
       <div className={`collect-card-3d ${flipClass}`} onAnimationEnd={handleAnimationEnd}>
         <div className="collect-card-face">
-          <div
-            className="collect-card-face-inner"
-            style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
-          >
-            {/* Glossy sheen sweep */}
-            <span className="collect-card-sheen" />
-            {/* Holographic frame */}
-            <span className="collect-card-frame" />
-            {/* Concept name */}
+          <div className="collect-card-face-inner collect-card-surface">
+            {/* Concept name — styled like the gallery tile (themed foreground on
+                the plain card surface, not white-on-gradient) */}
             <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
-              <span className="text-xl sm:text-2xl font-extrabold leading-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]">
+              <span className="text-xl sm:text-2xl font-bold leading-tight text-card-foreground">
                 {name}
               </span>
             </div>
+            {/* Holographic rainbow sheen, matching the Flashcards-tab collected
+                tile so the card reads as a "shiny" collectible */}
+            {foilLevel && <span className="collect-card-holo" />}
             {/* Foil border ring, matching the Flashcards-tab treatment for this
                 mastery level (or the vivid "locked" rainbow for an unopened pack) */}
             {foilLevel && <span className={`collect-card-foil-ring collect-card-foil-${foilLevel}`} />}
@@ -118,11 +93,8 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
         </div>
         {flippable && (
           <div className="collect-card-face collect-card-face-back">
-            <div
-              className="collect-card-face-inner"
-              style={{ background: `linear-gradient(135deg, ${c0} 0%, ${c1} 50%, ${c2} 100%)` }}
-            >
-              <span className="collect-card-frame" />
+            <div className="collect-card-face-inner collect-card-surface">
+              {foilLevel && <span className={`collect-card-foil-ring collect-card-foil-${foilLevel}`} />}
               {/* Scroll container owns the overflow; the inner min-h-full flex
                   centres short definitions but grows (and scrolls) for long
                   ones. Centring directly on a scroll container would clip and

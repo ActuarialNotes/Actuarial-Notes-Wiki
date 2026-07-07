@@ -4,8 +4,7 @@ import type { MasteryState } from '@/lib/mastery'
 // A 3D-looking flashcard showing a concept name. Pure CSS — no WebGL — so it
 // stays light and renders crisply everywhere. The card surface matches the
 // Flashcards-gallery tile (plain themed card, not a coloured gradient); the
-// collectible "shine" comes from a travelling foil border + holographic sheen,
-// and — while still locked — a glossy "wrapped in plastic" overlay.
+// collectible "shine" comes from a travelling foil border + holographic sheen.
 
 interface CollectCard3DProps {
   name: string
@@ -17,9 +16,8 @@ interface CollectCard3DProps {
   // When set, the card can be flipped by clicking/tapping it to reveal `back`.
   flippable?: boolean
   back?: React.ReactNode
-  // Not yet collected — renders the front sealed under a "wrapped in plastic"
-  // sheen with the vivid, travelling rainbow foil border, so the yet-to-be-
-  // opened card reads as an exciting, unopened pack.
+  // Not yet collected — renders the front with the vivid, travelling rainbow
+  // foil border, so the yet-to-be-opened card reads as an exciting pack.
   locked?: boolean
   // Once collected, mirrors the Flashcards-tab foil-ring treatment so this
   // card matches the same concept's tile in the gallery (level2 gets a calm
@@ -72,7 +70,13 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
       onKeyDown={flippable ? e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } } : undefined}
     >
       <div className={`collect-card-3d ${flipClass}`} onAnimationEnd={handleAnimationEnd}>
-        <div className="collect-card-face">
+        {/* `backface-visibility: hidden` alone doesn't reliably hide the
+            reverse face on mobile Safari — the other face's (mirrored)
+            content bleeds through at rest. Since the flip state is tracked in
+            JS anyway, explicitly hide whichever face isn't showing (both stay
+            visible mid-flip, matching the brief moment either would be
+            partway rotated). */}
+        <div className="collect-card-face" style={flippable && side === 'back' && !flipping ? { visibility: 'hidden' } : undefined}>
           <div className="collect-card-face-inner collect-card-surface">
             {/* Concept name — styled like the gallery tile (themed foreground on
                 the plain card surface, not white-on-gradient) */}
@@ -87,12 +91,10 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
             {/* Foil border ring, matching the Flashcards-tab treatment for this
                 mastery level (or the vivid "locked" rainbow for an unopened pack) */}
             {foilLevel && <span className={`collect-card-foil-ring collect-card-foil-${foilLevel}`} />}
-            {/* Sealed-in-plastic sheen, only before the card has been collected */}
-            {locked && <span className="collect-card-plastic" />}
           </div>
         </div>
         {flippable && (
-          <div className="collect-card-face collect-card-face-back">
+          <div className="collect-card-face collect-card-face-back" style={side === 'front' && !flipping ? { visibility: 'hidden' } : undefined}>
             <div className="collect-card-face-inner collect-card-surface">
               {foilLevel && <span className={`collect-card-foil-ring collect-card-foil-${foilLevel}`} />}
               {/* Scroll container owns the overflow; the inner min-h-full flex

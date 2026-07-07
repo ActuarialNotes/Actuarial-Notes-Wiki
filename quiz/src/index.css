@@ -920,6 +920,7 @@
 .collect-card-foil-ring {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   border-radius: inherit;
   padding: 2px;
   pointer-events: none;
@@ -931,49 +932,20 @@
 .collect-card-foil-ring.collect-card-foil-l2 {
   background: linear-gradient(115deg, rgb(56 189 248 / 0.75), rgb(232 121 249 / 0.75), rgb(250 204 21 / 0.75));
 }
-.collect-card-foil-ring.collect-card-foil-l3,
-.collect-card-foil-ring.collect-card-foil-locked {
-  background: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
-  background-size: 300% 100%;
-  animation: collect-card-foil-shift 2.6s linear infinite;
-}
-@keyframes collect-card-foil-shift {
-  to { background-position: 300% 0; }
-}
-
-/* "Wrapped in plastic" seal — shown on the collect-preview card before it has
-   been collected. Faint crinkle creases (static) plus a bright glassy sweep
-   (animated) sell the sealed-cellophane read, on top of the rainbow foil ring
-   above, so the card looks like an unopened, exciting pack. */
-.collect-card-plastic {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 7;
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.12), transparent 45%);
-}
-.collect-card-plastic::before {
+/* L3 (and the pre-collect "locked" pack) get a vivid rainbow that visibly
+   travels around the card's border. The conic-gradient lives on an oversized,
+   rotating ::before; the ring above masks it down to just the border band, so
+   the colour sweep reads as circling the card rather than sliding sideways. */
+.collect-card-foil-ring.collect-card-foil-l3::before,
+.collect-card-foil-ring.collect-card-foil-locked::before {
   content: '';
   position: absolute;
-  inset: -15%;
-  background:
-    repeating-linear-gradient(124deg, rgb(255 255 255 / 0.10) 0px, rgb(255 255 255 / 0.10) 1px, transparent 1px, transparent 15px),
-    repeating-linear-gradient(38deg, rgb(255 255 255 / 0.07) 0px, rgb(255 255 255 / 0.07) 1px, transparent 1px, transparent 21px);
+  inset: -75%;
+  background: conic-gradient(rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
+  animation: collect-card-foil-spin 3s linear infinite;
 }
-.collect-card-plastic::after {
-  content: '';
-  position: absolute;
-  inset: -45%;
-  background: linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 0.85) 50%, transparent 58%);
-  transform: translateX(-45%);
-  animation: collect-card-plastic-sheen 3s ease-in-out infinite;
-}
-@keyframes collect-card-plastic-sheen {
-  0%, 100% { transform: translateX(-45%); opacity: 0; }
-  50%      { opacity: 1; }
-  75%      { transform: translateX(45%); opacity: 0; }
+@keyframes collect-card-foil-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Whole-screen dominant bloom — radial light grows from the card's centre,
@@ -1079,7 +1051,8 @@
   .collect-card-flip-fwd, .collect-card-flip-rev,
   .collect-bloom, .collect-shake,
   .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop,
-  .collect-card-foil-ring, .collect-card-plastic::after { animation: none; }
+  .collect-card-foil-ring.collect-card-foil-l3::before,
+  .collect-card-foil-ring.collect-card-foil-locked::before { animation: none; }
 }
 
 /* Streak flame: a gentle looping flicker while the streak is active today. */

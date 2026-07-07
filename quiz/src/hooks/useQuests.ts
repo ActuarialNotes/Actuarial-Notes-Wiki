@@ -14,6 +14,7 @@ import {
 import {
   claimQuestRewards,
   ensureDailyQuests,
+  hasTodayBoard,
   QUEST_EVENT,
   readLocalQuests,
   rowToQuestsState,
@@ -82,12 +83,19 @@ export function useQuests(context?: QuestContext): QuestsView {
           // Table may not be migrated yet — fall back to the local signal.
           setState(readLocalQuests())
         } else {
-          setState(rowToQuestsState(data) ?? emptyQuests())
+          // Prefer the cloud row, but when it can't carry today's board (table
+          // on the pre-board schema, or a quiz finished before the row synced)
+          // fall back to the localStorage mirror the questStore maintains —
+          // otherwise the card would vanish for exactly those users.
+          const cloud = rowToQuestsState(data) ?? emptyQuests()
+          const local = readLocalQuests()
+          const todayKey = localDayKey(new Date(), tz)
+          setState(hasTodayBoard(cloud, todayKey) || !hasTodayBoard(local, todayKey) ? cloud : local)
         }
         setLoading(false)
       })
     return () => { cancelled = true }
-  }, [userId, version])
+  }, [userId, version, tz])
 
   // Seed / re-personalize today's board once the caller has real context. The
   // store only writes (and only dispatches QUEST_EVENT) when something actually

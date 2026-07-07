@@ -19,7 +19,7 @@ import type { QuestKind } from '@/data/quests'
 // Per-kind icon + accent so the daily quests read at a glance. Colors echo the
 // surfaces they relate to: hard questions burn amber, revivals use the
 // mastery-decay red, level-ups the readiness green.
-const KIND_STYLE: Record<QuestKind, { Icon: typeof Target; accent: string; chip: string }> = {
+export const KIND_STYLE: Record<QuestKind, { Icon: typeof Target; accent: string; chip: string }> = {
   correct: { Icon: Target, accent: 'text-sky-500', chip: 'bg-sky-500/10' },
   hard_correct: { Icon: Zap, accent: 'text-amber-500', chip: 'bg-amber-500/10' },
   revive: { Icon: HeartPulse, accent: 'text-rose-500', chip: 'bg-rose-500/10' },
@@ -29,7 +29,7 @@ const KIND_STYLE: Record<QuestKind, { Icon: typeof Target; accent: string; chip:
 }
 
 /** The emerald "collect rewards" pill shared by the header and quest rows. */
-function CollectButton({
+export function CollectButton({
   gems,
   xp,
   busy,

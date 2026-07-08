@@ -148,7 +148,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
       aria-label="Study plan configuration"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-md bg-card border rounded-2xl shadow-2xl flex flex-col my-12">
+      <div className="w-full max-w-md bg-card rounded-2xl shadow-2xl flex flex-col my-12">
         {/* Header — just the exam name */}
         <div className="flex items-start justify-between px-6 pt-5">
           <div className="min-w-0">
@@ -215,10 +215,10 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                     key={v.id}
                     type="button"
                     onClick={() => setLocalExamVariant(v.id)}
-                    className={`w-full text-left rounded-xl border p-3.5 text-sm font-semibold transition-all duration-200 ${
+                    className={`w-full text-left rounded-xl p-3.5 text-sm font-semibold transition-all duration-200 ${
                       localExamVariant === v.id
-                        ? 'border-primary bg-primary/10'
-                        : 'border-border hover:bg-accent/50'
+                        ? 'bg-primary/10'
+                        : 'bg-muted/40 hover:bg-accent/50'
                     }`}
                   >
                     {v.label}
@@ -328,10 +328,10 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                         key={p}
                         type="button"
                         onClick={() => selectPreset(p)}
-                        className={`rounded-xl border py-2.5 text-sm font-semibold transition-all duration-200 ${
+                        className={`rounded-xl py-2.5 text-sm font-semibold transition-all duration-200 ${
                           isActive
-                            ? 'border-primary bg-primary/10 text-primary'
-                            : 'border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                            ? 'bg-primary/10 text-primary'
+                            : 'bg-muted/40 text-muted-foreground hover:text-foreground'
                         }`}
                       >
                         {HEADLINE_PRESET_LABELS[p as '1w' | '2w' | '1m']}
@@ -347,7 +347,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
               )}
 
               {!isPremium && (
-                <div className="flex items-start gap-2 rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+                <div className="flex items-start gap-2 rounded-lg bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
                   <Lock className="h-3.5 w-3.5 shrink-0 mt-0.5 text-primary/60" />
                   <span>
                     Study strategy customization is a{' '}
@@ -397,10 +397,10 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
                       key={opt.value}
                       type="button"
                       onClick={() => setStrength(opt.value)}
-                      className={`w-full text-left rounded-xl border p-4 transition-all duration-200 ${
+                      className={`w-full text-left rounded-xl p-4 transition-all duration-200 ${
                         isActive
-                          ? 'border-primary bg-primary/10'
-                          : 'border-border hover:bg-accent/50'
+                          ? 'bg-primary/10'
+                          : 'bg-muted/40 hover:bg-accent/50'
                       }`}
                     >
                       <div className="flex items-center gap-3">

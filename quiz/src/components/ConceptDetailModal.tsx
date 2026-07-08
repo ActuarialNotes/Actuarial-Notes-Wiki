@@ -57,13 +57,9 @@ function QuestionItem({
 
   return (
     <div
-      className={`border rounded-lg p-4 space-y-2 transition-colors cursor-pointer ${
+      className={`rounded-lg p-4 space-y-2 transition-colors cursor-pointer ${
         selected
-          ? 'border-primary/60 bg-primary/5'
-          : hasAttempted
-          ? hasCorrect
-            ? 'border-green-200 dark:border-green-800 hover:bg-accent/30'
-            : 'border-orange-200 dark:border-orange-800 hover:bg-accent/30'
+          ? 'bg-primary/5'
           : 'hover:bg-accent/30'
       }`}
       onClick={onToggle}
@@ -151,7 +147,7 @@ function QuestionItem({
             <button
               type="button"
               onClick={() => setShowAnswer(v => !v)}
-              className="text-xs px-3 py-1 rounded-md border border-input hover:bg-accent transition-colors"
+              className="text-xs px-3 py-1 rounded-md hover:bg-accent transition-colors"
             >
               {showAnswer ? 'Hide answer' : 'Show answer'}
             </button>
@@ -353,14 +349,14 @@ export function ConceptDetailModal({
     >
       <div className="w-full max-w-2xl flex flex-col gap-2 my-8">
         {/* Viewing filter — floats above the card */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/40 border border-border/50 shrink-0">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/40 shrink-0">
           <span className="text-xs text-muted-foreground shrink-0">Viewing:</span>
           <div className="relative">
             <select
               value={studyPlanConcepts ? conceptFilter : 'entire-syllabus'}
               onChange={e => studyPlanConcepts && setConceptFilter(e.target.value as ConceptFilter)}
               disabled={!studyPlanConcepts}
-              className="appearance-none text-xs border rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-default disabled:opacity-80"
+              className="appearance-none text-xs rounded-md pl-2.5 pr-6 py-1 bg-background hover:bg-accent transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary disabled:cursor-default disabled:opacity-80"
             >
               {studyPlanConcepts && (
                 <option value="study-plan">
@@ -377,10 +373,10 @@ export function ConceptDetailModal({
         </div>
 
         {/* Card */}
-        <div className="w-full bg-card border rounded-xl shadow-2xl flex flex-col">
+        <div className="w-full bg-card rounded-xl shadow-2xl flex flex-col">
 
         {/* Header */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b shrink-0">
+        <div className="flex items-center gap-2 px-4 py-3 shrink-0">
           <div className="flex-1 min-w-0 flex flex-col gap-0.5">
             <span className={`self-start text-xs px-2 py-0.5 rounded-full ${badge.className}`}>
               {badge.label}
@@ -469,10 +465,10 @@ export function ConceptDetailModal({
                           key={mode}
                           type="button"
                           onClick={() => setFilter(mode)}
-                          className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                          className={`text-xs px-2.5 py-1 rounded-full transition-colors ${
                             filter === mode
-                              ? 'bg-primary text-primary-foreground border-primary'
-                              : 'border-border text-muted-foreground hover:text-foreground hover:bg-accent'
+                              ? 'bg-primary text-primary-foreground'
+                              : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                           }`}
                         >
                           {label}
@@ -520,7 +516,7 @@ export function ConceptDetailModal({
               </div>
             )}
             {questionsError && (
-              <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+              <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
                 {questionsError}
               </div>
             )}
@@ -555,7 +551,7 @@ export function ConceptDetailModal({
               <button
                 type="button"
                 onClick={openInStudyGuide}
-                className="text-xs flex items-center gap-1 border rounded-md px-2.5 py-1.5 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
+                className="text-xs flex items-center gap-1 rounded-md px-2.5 py-1.5 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
                 title="Open in Study Guide"
               >
                 <BookOpen className="h-3 w-3" />
@@ -578,7 +574,7 @@ export function ConceptDetailModal({
                     <span className="text-xs text-muted-foreground">{topic.weight}</span>
                   )}
                 </div>
-                <div className="space-y-1 pl-3 border-l-2 border-border">
+                <div className="space-y-1 pl-3">
                   {topic.concepts.map(c => {
                     const isCurrent = c.name.toLowerCase() === currentConceptName.toLowerCase()
                     return (
@@ -608,7 +604,7 @@ export function ConceptDetailModal({
 
         {/* Previous / Next navigation — bottom of card */}
         {showFooterNav && (
-          <div className="flex items-stretch border-t h-10 shrink-0 bg-muted/10 mt-auto">
+          <div className="flex items-stretch h-10 shrink-0 bg-muted/10 mt-auto">
             <button
               type="button"
               disabled={!canPrev}

@@ -208,7 +208,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
         aria-modal="true"
         aria-label="Credential Path & Exams"
         className={cn(
-          'fixed z-[60] flex flex-col bg-background border shadow-xl overflow-hidden',
+          'fixed z-[60] flex flex-col bg-background shadow-xl overflow-hidden',
           // Mobile: full-width bottom sheet
           'bottom-0 left-0 right-0 max-h-[85vh] rounded-t-xl',
           // Desktop: side panel positioned via inline style
@@ -217,7 +217,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
         style={desktopLeft ? { left: desktopLeft } : undefined}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 shrink-0">
           <div className="flex items-center gap-2">
             <GraduationCap className="h-4 w-4 text-muted-foreground" />
             <span className="font-semibold text-sm">Credential Path &amp; Exams</span>
@@ -319,7 +319,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
             </div>
 
             {/* Footer */}
-            <div className="border-t px-4 py-3 shrink-0 space-y-2">
+            <div className="px-4 py-3 shrink-0 space-y-2">
               {(examsState.error || examsState.success) && (
                 <p className={cn(
                   'text-xs',
@@ -344,7 +344,7 @@ export default function ExamsPopout({ open, onClose }: Props) {
           {/* Sign-in overlay */}
           {!user && (
             <div className="absolute inset-0 z-10 flex items-center justify-center">
-              <div className="bg-card border rounded-2xl shadow-2xl px-6 py-5 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
+              <div className="bg-card rounded-2xl shadow-2xl px-6 py-5 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
                 <p className="text-sm font-semibold text-foreground text-center">Sign in to track exam progress</p>
                 <button
                   type="button"

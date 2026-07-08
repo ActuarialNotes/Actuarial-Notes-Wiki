@@ -98,7 +98,7 @@ function ConfirmModal({
   if (!open) return null
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-background border border-border rounded-lg p-6 w-full max-w-md shadow-lg space-y-4">
+      <div className="bg-background rounded-lg p-6 w-full max-w-md shadow-lg space-y-4">
         <h3 className="font-semibold text-lg">{title}</h3>
         <div className="text-sm text-muted-foreground space-y-2">{children}</div>
         <div className="flex justify-end gap-3">
@@ -121,7 +121,7 @@ function ConfirmModal({
 function Feedback({ error, success }: { error: string | null; success: string | null }) {
   if (!error && !success) return null
   return (
-    <Alert className={cn('mt-3 text-sm', error ? 'border-destructive text-destructive' : 'border-green-500 text-green-700 dark:text-green-400')}>
+    <Alert className={cn('mt-3 text-sm', error ? 'bg-destructive/10 text-destructive' : 'bg-green-500/10 text-green-700 dark:text-green-400')}>
       {error ?? success}
     </Alert>
   )
@@ -684,10 +684,10 @@ export default function Settings() {
                         type="button"
                         onClick={() => theme !== 'light' && toggleTheme()}
                         className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-md border text-sm font-medium transition-colors',
+                          'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
                           theme === 'light'
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'bg-background text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                         )}
                       >
                         <Sun className="h-4 w-4" />
@@ -697,10 +697,10 @@ export default function Settings() {
                         type="button"
                         onClick={() => theme !== 'dark' && toggleTheme()}
                         className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-md border text-sm font-medium transition-colors',
+                          'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
                           theme === 'dark'
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'bg-background text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                         )}
                       >
                         <Moon className="h-4 w-4" />
@@ -725,10 +725,10 @@ export default function Settings() {
                               onClick={() => setColorTheme(option.id)}
                               onKeyDown={e => e.key === 'Enter' && setColorTheme(option.id)}
                               className={cn(
-                                'flex flex-col gap-2 p-3 rounded-md border text-left transition-colors cursor-pointer',
+                                'flex flex-col gap-2 p-3 rounded-md text-left transition-colors cursor-pointer',
                                 selected
-                                  ? 'border-primary ring-2 ring-primary'
-                                  : 'border-border hover:bg-accent hover:text-accent-foreground'
+                                  ? 'ring-2 ring-primary'
+                                  : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground'
                               )}
                             >
                               <p className="text-sm font-medium">{option.name}</p>
@@ -748,10 +748,10 @@ export default function Settings() {
                                         setColourfulVariant(v.id)
                                       }}
                                       className={cn(
-                                        'flex gap-1 p-0.5 rounded border transition-colors',
+                                        'flex gap-1 p-0.5 rounded transition-colors',
                                         vSelected
-                                          ? 'border-primary ring-1 ring-primary'
-                                          : 'border-transparent hover:border-border'
+                                          ? 'ring-1 ring-primary'
+                                          : 'hover:bg-accent'
                                       )}
                                     >
                                       <span
@@ -776,10 +776,10 @@ export default function Settings() {
                             type="button"
                             onClick={() => setColorTheme(option.id)}
                             className={cn(
-                              'flex flex-col gap-2 p-3 rounded-md border text-left transition-colors',
+                              'flex flex-col gap-2 p-3 rounded-md text-left transition-colors',
                               selected
-                                ? 'border-primary ring-2 ring-primary'
-                                : 'border-border hover:bg-accent hover:text-accent-foreground'
+                                ? 'ring-2 ring-primary'
+                                : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground'
                             )}
                           >
                             <div className="flex gap-1.5">
@@ -982,7 +982,7 @@ export default function Settings() {
                                 />
                               </div>
                               {pwValidErr && (
-                                <Alert className="text-sm border-destructive text-destructive">{pwValidErr}</Alert>
+                                <Alert className="text-sm bg-destructive/10 text-destructive">{pwValidErr}</Alert>
                               )}
                               <Feedback error={accountState.error} success={accountState.success} />
                               <div className="flex gap-2">
@@ -1276,7 +1276,7 @@ export default function Settings() {
                   <Separator />
 
                   {/* Delete account */}
-                  <div className="rounded-md border border-destructive/40 p-4 space-y-3">
+                  <div className="rounded-md bg-destructive/5 p-4 space-y-3">
                     <p className="text-sm font-semibold text-destructive">Danger zone</p>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                       <div>

@@ -240,7 +240,7 @@ export default function Store() {
       </p>
 
       {error && (
-        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive flex items-center justify-between gap-2">
+        <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive flex items-center justify-between gap-2">
           <span>{error}</span>
           <button onClick={() => setError(null)} className="opacity-60 hover:opacity-100 shrink-0">✕</button>
         </div>
@@ -351,10 +351,10 @@ export default function Store() {
                   key={char.animal}
                   onClick={() => setSkinAnimalFilter(isActive ? null : char.animal)}
                   className={cn(
-                    'shrink-0 flex flex-col items-center gap-1 p-2 rounded-xl border transition-colors',
+                    'shrink-0 flex flex-col items-center gap-1 p-2 rounded-xl transition-colors',
                     isActive
-                      ? 'bg-foreground/10 border-foreground'
-                      : 'border-border hover:border-foreground/50',
+                      ? 'bg-foreground/10'
+                      : 'bg-muted/40 hover:bg-accent',
                     !isCharOwned && 'opacity-40',
                   )}
                 >

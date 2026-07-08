@@ -116,7 +116,7 @@ function GroupSection({
     : 'group-hover:bg-accent/30'
 
   return (
-    <div className="rounded-lg overflow-hidden bg-background border border-border">
+    <div className="rounded-lg overflow-hidden bg-background">
       <div className="relative">
         {/* Bar fill: weight indicator, hidden when any subtopics are selected */}
         {examPercentage !== null && !(allSelected || someSelected) && (
@@ -171,7 +171,7 @@ function GroupSection({
         </div>
       </div>
 
-      <div hidden={!open} className="border-t border-border/40 pb-1 pt-1 bg-card">
+      <div hidden={!open} className="pb-1 pt-1 bg-card">
         <div className="flex flex-col">
           {group.subtopics.map(subtopic => {
             const isSelected = selectedSubtopics.includes(subtopic)
@@ -239,7 +239,7 @@ function ExamOptionCard({
       <Card className={cn(
         'h-full transition-all duration-150 overflow-hidden',
         isActive
-          ? 'bg-primary/10 border-primary/40 hover:bg-primary/25 hover:border-primary/70'
+          ? 'bg-primary/10 hover:bg-primary/25'
           : 'hover:bg-accent/30',
       )}>
         <CardHeader className="pb-3">
@@ -833,7 +833,7 @@ export default function Landing() {
         {selectedConcept && (
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground">Concept:</span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary px-3 py-1 text-sm font-medium">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-sm font-medium">
               {selectedConcept}
               <button
                 type="button"
@@ -954,7 +954,7 @@ export default function Landing() {
                   {/* Today's Plan content */}
                   {user && examInProgress && conceptMode === 'today' && (
                     !isPremium ? (
-                      <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 flex items-start gap-3">
+                      <div className="rounded-lg bg-muted/40 px-4 py-3 flex items-start gap-3">
                         <div className="flex-1 space-y-1">
                           <p className="text-sm font-medium">Personalized daily study plan</p>
                           <p className="text-xs text-muted-foreground">Get a daily study schedule tailored to your exam date and mastery progress.</p>
@@ -967,12 +967,12 @@ export default function Landing() {
                         </Link>
                       </div>
                     ) : planConceptCount === 0 ? (
-                      <div className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+                      <div className="rounded-lg bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
                         No concepts scheduled for today. Set your exam date in the dashboard to generate a study plan.
                       </div>
                     ) : (
-                      <div className="rounded-lg border border-border/60 bg-muted/30 overflow-hidden">
-                        <div className="divide-y divide-border/30">
+                      <div className="rounded-lg bg-muted/30 overflow-hidden">
+                        <div>
                           {todayConceptDisplayNames.map(concept => (
                             <div key={concept} className="flex items-center gap-2.5 px-3 py-2.5">
                               <Check className="h-4 w-4 shrink-0 text-primary/60" />
@@ -1010,7 +1010,7 @@ export default function Landing() {
 
               {/* ── Mock Exam mode info ────────────────────────────────── */}
               {mode === 'mock-exam' && (
-                <div className="rounded-lg border bg-muted/40 px-4 py-3 space-y-1">
+                <div className="rounded-lg bg-muted/40 px-4 py-3 space-y-1">
                   <p className="text-sm font-medium">
                     {selectedSitting !== null
                       ? `${allQuestions.filter(q =>
@@ -1057,7 +1057,7 @@ export default function Landing() {
     </div>
 
     {hasSelection && (
-      <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm">
+      <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 bg-background/95 backdrop-blur-sm">
         <div className="container max-w-2xl mx-auto px-4 pt-3 pb-4 space-y-3">
           {mode === 'quiz' && useTodaysPlan && todaysPlanFullCount > 0 && (
             <p className="text-xs text-muted-foreground text-center">

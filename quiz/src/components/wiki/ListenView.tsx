@@ -67,7 +67,7 @@ export function ListenView({ markdown }: Props) {
   return (
     <div>
       {/* Control bar */}
-      <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-3 flex items-center gap-2 border-b bg-card/95 backdrop-blur">
+      <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 mb-3 flex items-center gap-2 bg-card/95 backdrop-blur">
         <button
           type="button"
           onClick={onToggle}
@@ -84,7 +84,7 @@ export function ListenView({ markdown }: Props) {
         <button
           type="button"
           onClick={() => rewind()}
-          className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
+          className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
           title="Previous paragraph"
           aria-label="Previous paragraph"
         >
@@ -93,7 +93,7 @@ export function ListenView({ markdown }: Props) {
         <button
           type="button"
           onClick={() => skipForward()}
-          className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
+          className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
           title="Next paragraph"
           aria-label="Next paragraph"
         >

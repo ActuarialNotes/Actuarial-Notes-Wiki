@@ -220,7 +220,7 @@ export default function WikiHome() {
             <div className="flex flex-wrap gap-1.5">
               {inProgressPills.map(({ syllabus, item }) => (
                 <Link key={syllabus.examId} to={wikiRoute({ kind: 'exam', name: item.name })}>
-                  <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-opacity hover:opacity-80">
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-opacity hover:opacity-80">
                     {syllabus.examLabel}
                   </span>
                 </Link>
@@ -237,7 +237,7 @@ export default function WikiHome() {
               <div key={track.key}>
                 {/* Sticky track header — sits just below the sticky Exams block */}
                 <div
-                  className="sticky z-10 -mx-4 px-4 py-1.5 mb-3 bg-background/95 backdrop-blur-sm border-b"
+                  className="sticky z-10 -mx-4 px-4 py-1.5 mb-3 bg-background/95 backdrop-blur-sm"
                   style={{ top: `${SEARCH_BAR_H + headerHeight}px` }}
                 >
                   <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -279,7 +279,7 @@ export default function WikiHome() {
                           className={cn(
                             'h-full transition-all duration-150 overflow-hidden',
                             !isInProgress && 'hover:bg-accent/30',
-                            isInProgress && 'bg-primary/10 border-primary/40 hover:bg-primary/25 hover:border-primary/70',
+                            isInProgress && 'bg-primary/10 hover:bg-primary/25',
                           )}
                         >
                           <CardHeader className="pb-3">

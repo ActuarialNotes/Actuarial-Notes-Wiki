@@ -75,7 +75,7 @@ function ScoreBar({ session }: { session: QuizSession }) {
 function SessionRow({ session, divider }: { session: QuizSession; divider: boolean }) {
   return (
     <div>
-      {divider && <div className="border-t my-3" />}
+      {divider && <div className="my-3" />}
       <div className="space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">

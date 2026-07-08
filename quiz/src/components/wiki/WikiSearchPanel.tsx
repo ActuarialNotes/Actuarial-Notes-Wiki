@@ -142,7 +142,7 @@ export function WikiSearchPanel({ pageRefs }: WikiSearchPanelProps) {
 
   return (
     <div className="flex flex-col h-full min-h-0">
-      <div className="px-3 py-3 border-b space-y-2 shrink-0">
+      <div className="px-3 py-3 space-y-2 shrink-0">
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold">Search Study Guides</span>
           <span className="text-xs text-muted-foreground tabular-nums">{results.length}</span>

@@ -94,7 +94,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
               aria-haspopup="listbox"
               onClick={() => setOpen(o => !o)}
               onKeyDown={handleToggleKeyDown}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-border bg-muted/40 hover:bg-accent hover:text-foreground transition-colors text-sm font-medium"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-muted/40 hover:bg-accent hover:text-foreground transition-colors text-sm font-medium"
             >
               Question {current} of {total}
               <ChevronDown className={cn('h-3.5 w-3.5 transition-transform text-muted-foreground', open && 'rotate-180')} />
@@ -106,7 +106,7 @@ export function ProgressBar({ current, total, onNavigate, flaggedIds, questionId
                 role="listbox"
                 aria-label="Jump to question"
                 onKeyDown={handleListKeyDown}
-                className="absolute top-full left-0 mt-1 z-50 bg-popover border border-border rounded-md shadow-lg max-h-64 overflow-y-auto min-w-[190px]"
+                className="absolute top-full left-0 mt-1 z-50 bg-popover rounded-md shadow-lg max-h-64 overflow-y-auto min-w-[190px]"
               >
                 {Array.from({ length: total }, (_, i) => {
                   const isItemFlagged = !!(flaggedIds && questionIds && flaggedIds.includes(questionIds[i] ?? ''))

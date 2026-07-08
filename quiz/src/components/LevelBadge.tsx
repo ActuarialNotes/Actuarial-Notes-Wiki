@@ -119,7 +119,7 @@ function XpPopup({ xp, avatarUrl, onClose }: { xp: XpView; avatarUrl: string; on
 
       {/* Popup — centered on all screen sizes */}
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[340px] bg-card border rounded-2xl shadow-2xl p-4 outline-none text-left"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[340px] bg-card rounded-2xl shadow-2xl p-4 outline-none text-left"
         role="dialog"
         aria-modal="true"
         aria-label="Your XP and daily goal"
@@ -156,7 +156,7 @@ function XpPopup({ xp, avatarUrl, onClose }: { xp: XpView; avatarUrl: string; on
         </div>
 
         {/* Today's daily goal */}
-        <div className="rounded-xl border bg-muted/40 p-3 mb-4 space-y-1.5">
+        <div className="rounded-xl bg-muted/40 p-3 mb-4 space-y-1.5">
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-sm font-medium">
               <Target className="h-4 w-4 text-violet-500" /> Daily goal
@@ -203,7 +203,7 @@ function XpPopup({ xp, avatarUrl, onClose }: { xp: XpView; avatarUrl: string; on
         </div>
 
         {/* Footer actions */}
-        <div className="mt-3 pt-3 border-t flex items-center justify-between gap-2">
+        <div className="mt-3 pt-3 flex items-center justify-between gap-2">
           <button
             type="button"
             onClick={() => setShowCharacter(true)}

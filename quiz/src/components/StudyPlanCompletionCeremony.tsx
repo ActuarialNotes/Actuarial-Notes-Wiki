@@ -207,7 +207,7 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
         className="fixed inset-0 z-50 flex items-center justify-center p-4 ceremony-overlay-in"
         style={{ background: 'rgba(0,0,0,0.82)', backdropFilter: 'blur(6px)' }}
       >
-        <div className="relative bg-background rounded-2xl shadow-2xl border w-full max-w-sm overflow-hidden">
+        <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
 
           {/* Close / skip — hidden once claimed */}
           {phase !== 'claimed' && (
@@ -241,7 +241,7 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
                 {concepts.slice(0, visibleCount).map(c => (
                   <li
                     key={c.name}
-                    className="ceremony-concept-in flex items-center gap-2.5 px-3 py-2 rounded-xl bg-green-50 dark:bg-green-950/25 border border-green-200 dark:border-green-800"
+                    className="ceremony-concept-in flex items-center gap-2.5 px-3 py-2 rounded-xl bg-green-50 dark:bg-green-950/25"
                   >
                     <span className="study-plan-check-in shrink-0" style={{ animationDelay: '100ms' }}>
                       <Check className="h-4 w-4 text-green-500" />
@@ -257,7 +257,7 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
                 {concepts.slice(visibleCount).map(c => (
                   <li
                     key={c.name}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl border border-border opacity-25"
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-muted/20 opacity-25"
                   >
                     <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
                     <span className="text-sm flex-1 min-w-0 truncate">{c.name}</span>

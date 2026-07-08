@@ -286,12 +286,12 @@ export function CollectConceptModal() {
       {showCard && (
         <div className={`relative z-[121] w-full text-card-foreground ${
           showChrome
-            ? `rounded-2xl border bg-card shadow-2xl max-h-[88vh] flex flex-col overflow-hidden ${alreadyCollected ? 'max-w-lg' : 'max-w-md'}`
+            ? `rounded-2xl bg-card shadow-2xl max-h-[88vh] flex flex-col overflow-hidden ${alreadyCollected ? 'max-w-lg' : 'max-w-md'}`
             : 'max-w-md flex flex-col items-center'
         }`}>
           {/* Header */}
           {showChrome && (
-            <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
+            <div className="flex items-center justify-between px-4 py-3 shrink-0">
               <div className="flex items-center gap-2 min-w-0">
                 <Lock className="h-4 w-4 text-primary shrink-0" />
                 <span className="font-semibold text-sm truncate">
@@ -342,7 +342,7 @@ export function CollectConceptModal() {
                 </button>
                 {/* Combined view: the learning-progress graph lives with the card
                     now that the concept is collected and can level up. */}
-                <div className="w-full border-t pt-4">
+                <div className="w-full pt-4">
                   <LearningProgressPanel conceptName={name} />
                 </div>
               </div>
@@ -383,12 +383,12 @@ export function CollectConceptModal() {
                         type="button"
                         onClick={() => handleAnswer(opt)}
                         disabled={!!selected}
-                        className={`w-full text-left px-4 py-2.5 rounded-lg border text-sm font-medium transition-all ${
+                        className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
                           isChosen
-                            ? 'border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+                            ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
                             : isWrong
-                              ? 'border-destructive bg-destructive/10 text-destructive collect-shake'
-                              : 'border-border hover:border-primary/60 hover:bg-accent'
+                              ? 'bg-destructive/10 text-destructive collect-shake'
+                              : 'bg-muted/40 hover:bg-accent'
                         }`}
                       >
                         {opt}
@@ -418,7 +418,7 @@ export function CollectConceptModal() {
             <button
               type="button"
               onClick={handleViewFlashcard}
-              className="flex-1 px-4 py-2.5 rounded-lg border border-border text-sm font-medium hover:bg-accent transition-colors"
+              className="flex-1 px-4 py-2.5 rounded-lg bg-muted/40 text-sm font-medium hover:bg-accent transition-colors"
             >
               View Flashcard
             </button>

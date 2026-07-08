@@ -37,7 +37,7 @@ function HeatmapOverviewSlide() {
 function ExamDatesSlide() {
   return (
     <div className="space-y-3">
-      <div className="rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5 space-y-1.5">
+      <div className="rounded-lg bg-primary/5 px-3 py-2.5 space-y-1.5">
         <div className="flex items-center gap-2 text-sm font-semibold">
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary/70 shrink-0" />
           Exam Date <span className="text-muted-foreground font-normal">(blue highlight)</span>
@@ -46,7 +46,7 @@ function ExamDatesSlide() {
           The actual date of your exam sitting.
         </p>
       </div>
-      <div className="rounded-lg border border-amber-400/30 bg-amber-400/5 px-3 py-2.5 space-y-1.5">
+      <div className="rounded-lg bg-amber-400/5 px-3 py-2.5 space-y-1.5">
         <div className="flex items-center gap-2 text-sm font-semibold">
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-amber-400 shrink-0" />
           Target Ready Date <span className="text-muted-foreground font-normal">(amber highlight)</span>
@@ -66,11 +66,11 @@ function RegistrationSlide() {
         Actuarial exams are offered at fixed sittings throughout the year through the SOA and CAS.
       </p>
       <div className="space-y-2.5 text-sm">
-        <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1">
+        <div className="rounded-lg bg-muted/30 px-3 py-2.5 space-y-1">
           <p className="font-semibold">SOA Exams (P, FM, IFM, LTAM, STAM, SRM, PA)</p>
           <p className="text-muted-foreground">Register at soa.org. Most exams have multiple sittings per year.</p>
         </div>
-        <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1">
+        <div className="rounded-lg bg-muted/30 px-3 py-2.5 space-y-1">
           <p className="font-semibold">CAS Exams (Exams 1–9)</p>
           <p className="text-muted-foreground">Register at casact.org. Check the exam calendar for sitting dates.</p>
         </div>
@@ -104,9 +104,9 @@ export function HeatmapInfoPanel({ open, onClose }: Props) {
       aria-label="Exam heatmap information"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-lg bg-card border rounded-xl shadow-2xl flex flex-col my-12">
+      <div className="w-full max-w-lg bg-card rounded-xl shadow-2xl flex flex-col my-12">
         {/* Header */}
-        <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
+        <div className="flex items-center gap-2 px-4 h-12 shrink-0">
           <Icon className="h-4 w-4 text-primary shrink-0" />
           <span className="flex-1 font-semibold text-sm">{title}</span>
           <button
@@ -148,7 +148,7 @@ export function HeatmapInfoPanel({ open, onClose }: Props) {
             type="button"
             onClick={prev}
             disabled={slide === 0}
-            className="p-2.5 rounded-full border bg-muted/40 text-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted/40 transition-colors shadow-sm"
+            className="p-2.5 rounded-full bg-muted/40 text-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted/40 transition-colors shadow-sm"
             aria-label="Previous"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -168,7 +168,7 @@ export function HeatmapInfoPanel({ open, onClose }: Props) {
             <button
               type="button"
               onClick={next}
-              className="p-2.5 rounded-full border bg-muted/40 text-foreground hover:bg-muted transition-colors shadow-sm"
+              className="p-2.5 rounded-full bg-muted/40 text-foreground hover:bg-muted transition-colors shadow-sm"
               aria-label="Next"
             >
               <ChevronRight className="h-5 w-5" />

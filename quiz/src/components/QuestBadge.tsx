@@ -124,7 +124,7 @@ function QuestListPopup({
     <>
       <div className="fixed inset-0 z-[65] bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
       <div
-        className="fixed left-1/2 top-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl border bg-card p-4 text-left shadow-2xl outline-none"
+        className="fixed left-1/2 top-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-4 text-left shadow-2xl outline-none"
         role="dialog"
         aria-modal="true"
         aria-label="Daily quests"
@@ -153,7 +153,7 @@ function QuestListPopup({
         </div>
 
         {claimable.length > 0 && (
-          <div className="mb-3 flex items-center justify-between gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2">
+          <div className="mb-3 flex items-center justify-between gap-2 rounded-xl bg-emerald-500/10 px-3 py-2">
             <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
               {claimable.length} quest{claimable.length > 1 ? 's' : ''} ready to collect
             </span>
@@ -232,7 +232,7 @@ function QuestDetailPopup({
     <>
       <div className="fixed inset-0 z-[65] bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
       <div
-        className="fixed left-1/2 top-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl border bg-card p-4 text-left shadow-2xl outline-none"
+        className="fixed left-1/2 top-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-4 text-left shadow-2xl outline-none"
         role="dialog"
         aria-modal="true"
         aria-label={quest.title}
@@ -277,11 +277,11 @@ function QuestDetailPopup({
           </div>
         </div>
 
-        <div className="mb-4 rounded-xl border bg-muted/40 p-3">
+        <div className="mb-4 rounded-xl bg-muted/40 p-3">
           <p className="text-xs text-muted-foreground">{KIND_DETAIL[quest.kind]}</p>
         </div>
 
-        <div className="flex items-center justify-between gap-2 rounded-xl border bg-muted/30 px-3 py-2.5">
+        <div className="flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2.5">
           <span className="inline-flex items-center gap-2 text-sm font-semibold tabular-nums">
             <Gem className="h-4 w-4 text-emerald-500" />
             {quest.gems}

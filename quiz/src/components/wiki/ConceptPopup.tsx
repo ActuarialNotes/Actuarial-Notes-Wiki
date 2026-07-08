@@ -288,7 +288,7 @@ export function ConceptPopup() {
       )}
 
       {/* Header */}
-      <div className="flex items-center gap-2 px-3 h-14 border-b shrink-0">
+      <div className="flex items-center gap-2 px-3 h-14 shrink-0">
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
           {/* Collect / status indicator — borderless so it reads as part of the
@@ -340,14 +340,14 @@ export function ConceptPopup() {
               }
               setShowPlayMenu(v => !v)
             }}
-            className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
+            className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
             title="Start Quiz or Add to Flashcards"
             aria-label="Start Quiz or Add to Flashcards"
           >
             <Play className="h-4 w-4" />
           </button>
           {showPlayMenu && (
-            <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-72 overflow-y-auto ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+            <div className={`absolute top-full mt-1 w-52 rounded-md bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-72 overflow-y-auto ${menuAlignRight ? 'right-0' : 'left-0'}`}>
               <button
                 type="button"
                 onClick={() => { setShowQuestionsModal(true); setShowPlayMenu(false) }}
@@ -438,7 +438,7 @@ export function ConceptPopup() {
             <button
               type="button"
               onClick={() => setMathView(false)}
-              className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
+              className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
               title="Exit Math View"
               aria-label="Exit Math View"
             >
@@ -450,7 +450,7 @@ export function ConceptPopup() {
             <button
               type="button"
               onClick={() => setListenView(false)}
-              className="inline-flex items-center justify-center h-8 w-8 rounded-md border bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
+              className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
               title="Exit Listen"
               aria-label="Exit Listen"
             >
@@ -544,7 +544,7 @@ export function ConceptPopup() {
       </MathViewContext.Provider>
 
       {/* Footer nav */}
-      <div className="flex items-stretch border-t h-16 shrink-0 bg-background/60">
+      <div className="flex items-stretch h-16 shrink-0 bg-background/60">
         <button
           type="button"
           disabled={!canPrev}
@@ -573,7 +573,7 @@ export function ConceptPopup() {
             </button>
 
             {viewingDropdownOpen && (
-              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-56 rounded-md border bg-popover text-popover-foreground shadow-md py-1">
+              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-56 rounded-md bg-popover text-popover-foreground shadow-md py-1">
                 {hasStudyPlan ? (
                   <button
                     type="button"
@@ -620,7 +620,7 @@ export function ConceptPopup() {
             )}
 
             {showPremiumInfo && (
-              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-60 rounded-md border bg-popover text-popover-foreground shadow-md p-3">
+              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 z-50 w-60 rounded-md bg-popover text-popover-foreground shadow-md p-3">
                 <div className="flex items-center gap-1.5 mb-1.5 text-xs font-medium">
                   <Lock className="h-3 w-3 shrink-0" />
                   Premium feature

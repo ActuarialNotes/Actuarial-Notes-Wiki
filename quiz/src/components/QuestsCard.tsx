@@ -133,7 +133,7 @@ export function QuestsCard({ context }: { context?: QuestContext }) {
   }
 
   return (
-    <div className="rounded-2xl border bg-card">
+    <div className="rounded-2xl bg-card">
       {/* Header — always visible; the whole row toggles the section. */}
       <button
         type="button"

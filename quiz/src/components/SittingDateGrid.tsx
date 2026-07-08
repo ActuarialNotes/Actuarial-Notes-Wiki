@@ -111,7 +111,7 @@ export function SittingDateGrid({ startDate, endDate, selectedDate, onSelect }: 
                       className={`h-8 w-8 rounded-md flex items-center justify-center text-xs font-semibold transition-all duration-150 ${
                         isSelected
                           ? 'bg-primary text-primary-foreground ring-2 ring-primary/40 scale-105'
-                          : 'bg-muted/40 border border-border text-foreground hover:bg-accent hover:border-primary/50'
+                          : 'bg-muted/40 text-foreground hover:bg-accent'
                       }`}
                     >
                       {cell.day}

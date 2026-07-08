@@ -77,17 +77,17 @@ function MultiSelectDropdown({
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors whitespace-nowrap ${
+        className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
           selected.size > 0
-            ? 'border-primary bg-primary/10 text-primary'
-            : 'border-input bg-background hover:bg-accent'
+            ? 'bg-primary/10 text-primary'
+            : 'bg-background hover:bg-accent'
         }`}
       >
         <span>{displayLabel}</span>
         <ChevronDown className={`h-4 w-4 transition-transform shrink-0 ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="absolute top-full left-0 mt-1 z-20 bg-card border rounded-lg shadow-lg min-w-[200px] py-1.5 max-h-72 overflow-y-auto">
+        <div className="absolute top-full left-0 mt-1 z-20 bg-card rounded-lg shadow-lg min-w-[200px] py-1.5 max-h-72 overflow-y-auto">
           {options.map(opt => {
             const count = getCount?.(opt.value)
             return (
@@ -277,9 +277,9 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
       aria-label={`Questions for ${conceptName}`}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="relative w-full max-w-2xl bg-card border rounded-xl shadow-2xl flex flex-col my-8 mx-4 max-h-[calc(100vh-4rem)]">
+      <div className="relative w-full max-w-2xl bg-card rounded-xl shadow-2xl flex flex-col my-8 mx-4 max-h-[calc(100vh-4rem)]">
         {/* Header */}
-        <div className="flex items-center gap-3 px-4 h-12 border-b shrink-0">
+        <div className="flex items-center gap-3 px-4 h-12 shrink-0">
           <span className="flex-1 truncate font-semibold text-sm">
             Questions: {conceptName}
           </span>
@@ -323,7 +323,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
             </div>
           )}
           {unlocked && error && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
               {error}
             </div>
           )}
@@ -349,10 +349,10 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
                         else next.add(opt.value)
                         return next
                       })}
-                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-colors ${
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                         active
-                          ? 'border-primary bg-primary/10 text-primary'
-                          : 'border-input bg-background hover:bg-accent text-muted-foreground'
+                          ? 'bg-primary/10 text-primary'
+                          : 'bg-background hover:bg-accent text-muted-foreground'
                       }`}
                     >
                       <DifficultyDots difficulty={opt.value} />
@@ -431,12 +431,10 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
               ))}
               {filteredOutQuestions.length > 0 && (
                 <div className="opacity-30 pointer-events-none select-none space-y-3 pt-1">
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 h-px bg-border" />
+                  <div className="flex items-center justify-center gap-2">
                     <span className="text-xs text-muted-foreground shrink-0">
                       {filteredOutQuestions.length} filtered out
                     </span>
-                    <div className="flex-1 h-px bg-border" />
                   </div>
                   {filteredOutQuestions.map(q => (
                     <QuestionSearchRow
@@ -455,7 +453,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
 
         {/* Floating Start Quiz button */}
         {unlocked && !loading && questions.length > 0 && (
-          <div className="shrink-0 px-4 py-3 border-t bg-card rounded-b-xl">
+          <div className="shrink-0 px-4 py-3 bg-card rounded-b-xl">
             <button
               type="button"
               onClick={handleStartQuiz}

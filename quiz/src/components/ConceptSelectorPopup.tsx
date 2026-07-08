@@ -25,7 +25,7 @@ export function ConceptSelectorPopup({ conceptName, onBrowseQuestions, onReadCon
       aria-label={`Options for ${conceptName}`}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="bg-card border rounded-xl shadow-2xl w-full max-w-sm p-6 space-y-4">
+      <div className="bg-card rounded-xl shadow-2xl w-full max-w-sm p-6 space-y-4">
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-base font-semibold min-w-0 truncate" title={conceptName}>
             {conceptName}
@@ -44,7 +44,7 @@ export function ConceptSelectorPopup({ conceptName, onBrowseQuestions, onReadCon
           <button
             type="button"
             onClick={onBrowseQuestions}
-            className="flex flex-col items-center gap-2 p-5 rounded-lg border hover:bg-accent transition-colors text-sm font-medium"
+            className="flex flex-col items-center gap-2 p-5 rounded-lg bg-muted/40 hover:bg-accent transition-colors text-sm font-medium"
           >
             <HelpCircle className="h-6 w-6 text-primary" />
             Browse Questions
@@ -52,7 +52,7 @@ export function ConceptSelectorPopup({ conceptName, onBrowseQuestions, onReadCon
           <button
             type="button"
             onClick={onReadConcept}
-            className="flex flex-col items-center gap-2 p-5 rounded-lg border hover:bg-accent transition-colors text-sm font-medium"
+            className="flex flex-col items-center gap-2 p-5 rounded-lg bg-muted/40 hover:bg-accent transition-colors text-sm font-medium"
           >
             <BookOpen className="h-6 w-6 text-primary" />
             Read Concept

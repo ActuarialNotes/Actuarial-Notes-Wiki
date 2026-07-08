@@ -108,7 +108,7 @@ export function ActiveExamCard({
   }
 
   return (
-    <Card className="border-primary/40 ring-1 ring-primary/10 shadow-sm">
+    <Card className="ring-1 ring-primary/10 shadow-sm">
       <CardContent className="p-5 space-y-4">
         {/* Header row */}
         <div className="flex items-start justify-between gap-3">
@@ -134,7 +134,7 @@ export function ActiveExamCard({
 
         {/* Quiz history */}
         {examSessions.length > 0 && (
-          <div className="border-t pt-3 space-y-1">
+          <div className="pt-3 space-y-1">
             {historyExpanded && historyFilter && (
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground pb-1">
                 <span>Filtering by {historyFilter}</span>

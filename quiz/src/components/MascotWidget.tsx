@@ -297,7 +297,7 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
             }}
           />
           <div
-            className="rounded-2xl border bg-card px-3 py-2 shadow-sm max-w-[220px] text-left"
+            className="rounded-2xl bg-card px-3 py-2 shadow-sm max-w-[220px] text-left"
             style={{
               transition: 'opacity 250ms ease, transform 250ms ease',
               opacity: visible ? 1 : 0,
@@ -422,7 +422,7 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose }: CharacterSk
 
       {/* Popup — centered on all screen sizes */}
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[340px] bg-card border rounded-2xl shadow-2xl p-4 outline-none"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[340px] bg-card rounded-2xl shadow-2xl p-4 outline-none"
         role="dialog"
         aria-modal="true"
         aria-label="Choose character and skin"
@@ -525,7 +525,7 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose }: CharacterSk
         </div>
 
         {/* Store link */}
-        <div className="mt-3 pt-3 border-t">
+        <div className="mt-3 pt-3">
           <button
             type="button"
             onClick={() => { navigate('/store'); onClose() }}

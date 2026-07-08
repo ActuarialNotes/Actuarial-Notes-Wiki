@@ -96,7 +96,7 @@ export default function Upgrade() {
         </p>
       </div>
 
-      <Card className="border-primary/30 ring-1 ring-primary/10 shadow-sm">
+      <Card className="ring-1 ring-primary/10 shadow-sm">
         <CardHeader>
           <CardTitle className="flex items-baseline gap-2">
             <span className="text-4xl font-bold">$10</span>
@@ -107,7 +107,7 @@ export default function Upgrade() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="relative">
-            <div className="flex items-center gap-2 rounded-md border border-green-500/40 bg-green-50 dark:bg-green-950/20 px-3 py-2 text-xs">
+            <div className="flex items-center gap-2 rounded-md bg-green-50 dark:bg-green-950/20 px-3 py-2 text-xs">
               <span className="flex-1 text-green-700 dark:text-green-300">
                 <strong>Launch discount:</strong> Offer valid until June 30, 2026.
               </span>
@@ -121,7 +121,7 @@ export default function Upgrade() {
               </button>
             </div>
             {showDiscountInfo && (
-              <div className="mt-1.5 rounded-md border border-green-500/30 bg-green-50 dark:bg-green-950/30 px-3 py-2 text-xs text-green-700 dark:text-green-300">
+              <div className="mt-1.5 rounded-md bg-green-50 dark:bg-green-950/30 px-3 py-2 text-xs text-green-700 dark:text-green-300">
                 If you subscribe before the offer expires, your price is locked in at $10/month forever — even after the launch discount ends.
               </div>
             )}
@@ -140,7 +140,7 @@ export default function Upgrade() {
           </ul>
 
           {error && (
-            <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
               {error}
             </div>
           )}
@@ -152,7 +152,7 @@ export default function Upgrade() {
             </Button>
           ) : isPremium ? (
             <div className="space-y-2">
-              <div className="rounded-md border border-green-500/40 bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+              <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
                 You're already a Premium member. Thanks for your support!
               </div>
               <Button variant="outline" className="w-full" onClick={() => navigate('/dashboard')}>
@@ -181,7 +181,7 @@ export default function Upgrade() {
       </Card>
 
       {!isPremium && !subLoading && (
-        <Card className="border-dashed">
+        <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <Tag className="h-4 w-4 text-muted-foreground" />
@@ -190,7 +190,7 @@ export default function Upgrade() {
           </CardHeader>
           <CardContent className="space-y-3">
             {betaSuccess ? (
-              <div className="rounded-md border border-green-500/40 bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+              <div className="rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-700 dark:text-green-400">
                 Code redeemed! You now have Premium access. Welcome aboard.
               </div>
             ) : (

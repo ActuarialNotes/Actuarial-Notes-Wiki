@@ -56,7 +56,7 @@ export function QuestCompleteOverlay() {
       aria-modal="true"
       aria-label="Quest complete"
     >
-      <div className="w-full max-w-sm space-y-4 rounded-2xl border bg-card p-6 shadow-2xl">
+      <div className="w-full max-w-sm space-y-4 rounded-2xl bg-card p-6 shadow-2xl">
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10">
             <Swords className="h-7 w-7 text-emerald-500" />

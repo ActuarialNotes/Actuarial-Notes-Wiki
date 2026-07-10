@@ -28,7 +28,8 @@ import { useGems } from '@/hooks/useGems'
 import { StreakStat } from '@/components/StreakBadge'
 import { LevelBadge } from '@/components/LevelBadge'
 import { QuestBadge } from '@/components/QuestBadge'
-import { QUESTS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
+import { MASTERY_ANALYTICS_ENABLED, QUESTS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -268,6 +269,12 @@ export default function Dashboard() {
   const activeSyllabus = inProgressSyllabi[clampedIdx] ?? null
   const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
   const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
+
+  // Mastery records scoped to the active exam — feeds the mastery-analytics card (P2.5).
+  const activeExamRecords = useMemo(
+    () => (activeProgressKey ? masteryRecords.filter(r => r.exam_id === activeProgressKey) : []),
+    [masteryRecords, activeProgressKey],
+  )
 
   const activeHasVariants = activeSyllabus ? (LOCALIZED_EXAMS[activeSyllabus.examId]?.length ?? 0) > 0 : false
   const examDateStep = activeHasVariants ? 2 : 1
@@ -649,6 +656,15 @@ export default function Dashboard() {
           />
         )}
       </div>
+
+      {/* Mastery insights — richer learner analytics (roadmap P2.5) */}
+      {MASTERY_ANALYTICS_ENABLED && !isGuest && activeSyllabus && (
+        <MasteryAnalyticsCard
+          syllabus={activeSyllabus}
+          masteryRecords={activeExamRecords}
+          examDate={activeTargetDate}
+        />
+      )}
 
       {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
       {!isGuest && onboardingOpen && activeSyllabus && (

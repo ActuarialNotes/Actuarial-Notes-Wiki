@@ -64,6 +64,9 @@ before touching that area**:
 - `docs/research-ai-disabled.md` — what the two Research feature flags hide and the exact
   re-enable checklist (read before touching anything under `Research`/`research`).
 - `docs/research-corpus-plan.md` — the plan for the Canadian P&C `Resources/` markdown corpus.
+- `docs/leagues.md` — the opt-in weekly XP leagues (roadmap P4.1): the tier ladder and
+  promotion/relegation math, the lazy Monday-UTC rollover, and the privacy model
+  (snapshot-on-join / delete-on-leave, RPC-only board reads).
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
@@ -99,16 +102,29 @@ Other important `lib/` modules:
   `hooks/useQuests.ts` + `components/QuestsCard.tsx` (collapsible Dashboard section)
   and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
   Gated by `QUESTS_ENABLED`.
+- `leagues.ts` / `leagueStore.ts` — weekly XP leagues (roadmap P4.1), the opt-in social
+  layer. `leagues.ts` is the pure, tested core: the Bronze→Diamond tier ladder, the
+  promotion/demotion zone formulas (duplicated in the SQL rollover — see
+  `docs/leagues.md`), and the Monday-UTC week clock. Unlike the other gamification
+  stores, `leagueStore.ts` has no localStorage side: leagues are signed-in only and all
+  state lives behind SECURITY DEFINER RPCs (`join_league`, `leave_league`,
+  `record_league_xp`, `get_league_board` in `supabase/migrations/20260710_leagues.sql`)
+  because a leaderboard is cross-user — the client can never write its own weekly XP or
+  read the raw member table. `recordLeagueXp` is fired alongside `recordXp` from
+  `quizStore` and quest claims. Surfaced via `hooks/useLeague.ts` +
+  `components/LeagueCard.tsx` (Dashboard) and `components/LeagueSettingsCard.tsx`
+  (Settings opt-in/out). Gated by `LEAGUES_ENABLED`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
-  `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`)
+  `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
+  `LEAGUES_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **17 test files /
-~293 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
-matching, and the research/resource-timeline modules).
+`*.test.ts` files sit alongside the modules they test (vitest). There are **25 test files /
+~435 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+matching, the gamification engines, and the research/resource-timeline modules).
 
 ## Feature flags & the Research tab
 

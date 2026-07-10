@@ -29,7 +29,8 @@ import { StreakStat } from '@/components/StreakBadge'
 import { LevelBadge } from '@/components/LevelBadge'
 import { QuestBadge } from '@/components/QuestBadge'
 import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
-import { MASTERY_ANALYTICS_ENABLED, QUESTS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { LeagueCard } from '@/components/LeagueCard'
+import { LEAGUES_ENABLED, MASTERY_ANALYTICS_ENABLED, QUESTS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -665,6 +666,9 @@ export default function Dashboard() {
           examDate={activeTargetDate}
         />
       )}
+
+      {/* Weekly XP league — opt-in leaderboard (roadmap P4.1); not exam-scoped */}
+      {LEAGUES_ENABLED && !isGuest && <LeagueCard />}
 
       {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
       {!isGuest && onboardingOpen && activeSyllabus && (

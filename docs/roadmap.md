@@ -1,6 +1,6 @@
 # Development Roadmap — Actuarial Notes Wiki
 
-_Last updated: 2026-07-05_
+_Last updated: 2026-07-10_
 
 This roadmap turns the current product into a best-in-class **gamified learning app for
 actuarial students**. It is grounded in a detailed review of the codebase as it stands
@@ -175,6 +175,8 @@ depth (Phase 2) are proven._
 - **P4.1 — Leaderboards & light social.** Opt-in weekly XP leagues (Duolingo-style
   promotion/relegation) and/or study-group leaderboards. Keep it privacy-first and optional
   (addresses G3).
+  _Status: shipped 2026-07-10 — weekly XP leagues (see `docs/leagues.md`); study-group
+  leaderboards deferred._
 - **P4.2 — Referrals.** Gem/premium-day rewards for inviting a study buddy; instrument
   virality (K-factor) via the P0.4 analytics.
 - **P4.3 — Monetization depth.** Revisit the free/premium boundary now that the loop exists:

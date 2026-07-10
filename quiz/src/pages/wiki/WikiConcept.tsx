@@ -117,7 +117,7 @@ export default function WikiConcept() {
               onClick={() => navigate(
                 `${wikiRoute({ kind: 'exam', name: s.fileName ?? s.examLabel })}?concept=${encodeURIComponent(conceptName)}`,
               )}
-              className="w-full flex items-center gap-2.5 rounded-lg border px-4 py-3 text-left hover:bg-accent transition-colors"
+              className="w-full flex items-center gap-2.5 rounded-lg bg-muted/40 px-4 py-3 text-left hover:bg-accent transition-colors"
             >
               <GraduationCap className="h-4 w-4 shrink-0 text-teal-500" />
               <span className="min-w-0 flex-1">

@@ -50,7 +50,7 @@ export function ContactDialog({ onClose }: ContactDialogProps) {
       aria-labelledby="contact-dialog-title"
     >
       <div
-        className="w-full max-w-md rounded-lg border bg-card text-card-foreground shadow-lg p-5 space-y-4"
+        className="w-full max-w-md rounded-lg bg-card text-card-foreground shadow-lg p-5 space-y-4"
         onClick={e => e.stopPropagation()}
       >
         <div>

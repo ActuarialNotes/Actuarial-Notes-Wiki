@@ -38,10 +38,10 @@ export function ExamSittingsList({ examId, selectedDate, onSelect }: Props) {
               key={i}
               type="button"
               onClick={() => onSelect(selectDate)}
-              className={`w-full text-left rounded-lg px-3 py-2.5 transition-all duration-150 border ${
+              className={`w-full text-left rounded-lg px-3 py-2.5 transition-all duration-150 ${
                 active
-                  ? 'border-primary bg-primary/10 text-foreground shadow-sm'
-                  : 'border-border hover:border-primary/50 hover:bg-accent/60 text-muted-foreground hover:text-foreground'
+                  ? 'bg-primary/10 text-foreground shadow-sm'
+                  : 'bg-muted/40 hover:bg-accent/60 text-muted-foreground hover:text-foreground'
               }`}
             >
               <div className="flex items-center justify-between gap-2">

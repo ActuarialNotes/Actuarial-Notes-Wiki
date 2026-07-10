@@ -77,7 +77,7 @@ export function DocumentCard({
   const overflowChips = chips.length - visibleChips.length
 
   return (
-    <Card className="transition-colors hover:border-primary/40">
+    <Card className="transition-colors hover:bg-accent/30">
       <CardContent className="p-4 space-y-2">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
           <Badge variant="secondary">{agent?.shortName ?? document.agent_id}</Badge>

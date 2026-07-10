@@ -90,7 +90,7 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
       ref={scrollRef}
     >
       {/* Top bar */}
-      <div className="sticky top-0 z-10 bg-background/90 backdrop-blur-sm border-b flex items-center gap-3 px-4 h-14 shrink-0">
+      <div className="sticky top-0 z-10 bg-background/90 backdrop-blur-sm flex items-center gap-3 px-4 h-14 shrink-0">
         <button
           type="button"
           onClick={onClose}
@@ -117,7 +117,7 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
         )}
 
         {loadState.status === 'error' && (
-          <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-6 text-center space-y-2">
+          <div className="rounded-xl bg-destructive/10 p-6 text-center space-y-2">
             <p className="text-sm font-semibold text-destructive">Failed to load session</p>
             <p className="text-xs text-muted-foreground">{loadState.message}</p>
             <button

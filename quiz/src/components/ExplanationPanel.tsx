@@ -13,10 +13,10 @@ export function ExplanationPanel({ explanation, wikiLinks, isCorrect, examinerRe
   return (
     <div
       className={cn(
-        'rounded-lg border p-4 mt-4 space-y-3',
+        'rounded-lg p-4 mt-4 space-y-3',
         isCorrect
-          ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950'
-          : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950'
+          ? 'bg-green-50 dark:bg-green-950'
+          : 'bg-red-50 dark:bg-red-950'
       )}
     >
       <div className="flex items-center gap-2">
@@ -38,7 +38,7 @@ export function ExplanationPanel({ explanation, wikiLinks, isCorrect, examinerRe
       )}
 
       {examinerReport && (
-        <div className="pt-2 border-t border-current/10">
+        <div className="pt-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">
             Examiner&apos;s Notes
           </p>

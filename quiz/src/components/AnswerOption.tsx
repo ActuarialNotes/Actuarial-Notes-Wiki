@@ -32,37 +32,37 @@ export function AnswerOption({
   const scrolling = useRef(false)
 
   const baseClasses =
-    'w-full text-left px-4 py-3 rounded-lg border text-sm font-medium transition-colors flex items-start gap-3'
+    'w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-start gap-3'
 
   const isNavigable = isDisabled && !!onNext
 
   const stateClasses = cn({
     // Pending selection (chosen but not yet confirmed) — clear highlight
-    'border-primary bg-primary/15 dark:bg-primary/25 ring-2 ring-primary/40':
+    'bg-primary/15 dark:bg-primary/25 ring-2 ring-primary/40':
       !isDisabled && isSelected,
 
     // Unselected and available — hoverable
-    'border-input bg-background hover:bg-accent hover:text-accent-foreground cursor-pointer':
+    'bg-muted/40 hover:bg-accent hover:text-accent-foreground cursor-pointer':
       !isDisabled && !isSelected,
 
     // Confirmed correct
-    'border-green-500 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100 dark:border-green-500':
+    'bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100':
       isDisabled && isSelected && isCorrect && revealAnswer,
 
     // Confirmed wrong
-    'border-red-500 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100 dark:border-red-500':
+    'bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100':
       isDisabled && isSelected && !isCorrect && revealAnswer,
 
     // Confirmed, answer not yet revealed (mock exam / end-reveal)
-    'border-primary bg-primary/15 dark:bg-primary/25':
+    'bg-primary/15 dark:bg-primary/25':
       isDisabled && isSelected && !revealAnswer,
 
     // Not selected, but correct (revealed)
-    'border-green-400 bg-green-50/50 text-green-800 dark:bg-green-950/50 dark:text-green-300 dark:border-green-600':
+    'bg-green-50/50 text-green-800 dark:bg-green-950/50 dark:text-green-300':
       isDisabled && !isSelected && isCorrect && revealAnswer,
 
     // Not selected, disabled — muted
-    'border-input bg-muted/40 text-muted-foreground opacity-60':
+    'bg-muted/40 text-muted-foreground opacity-60':
       isDisabled && !isSelected && (!isCorrect || !revealAnswer),
 
     // Cursor: pointer when interactive

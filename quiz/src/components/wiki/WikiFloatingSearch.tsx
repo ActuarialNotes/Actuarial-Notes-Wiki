@@ -180,7 +180,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
 
           {/* Exam title strip — same height as search bar */}
           {pageTitle && (
-            <div className="flex items-center gap-2.5 h-[calc(3.5rem-1px)] border-t">
+            <div className="flex items-center gap-2.5 h-[calc(3.5rem-1px)]">
               <span className="font-semibold text-sm truncate flex-1 min-w-0">{pageTitle}</span>
               {pageTitleBadge && <span className="shrink-0">{pageTitleBadge}</span>}
             </div>
@@ -188,7 +188,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
 
           {/* Dropdown — only when query is non-empty */}
           {isExpanded && (
-            <div className="border-t pb-3">
+            <div className="pb-3">
               {/* Scope pills */}
               <div className="flex flex-wrap gap-1.5 py-2.5">
                 <button
@@ -236,12 +236,12 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
 
         {/* Status banner — thin, full-width, hidden while search dropdown is open */}
         {pageTitle && isInDevelopment && !isExpanded && (
-          <div className="border-t bg-amber-500/10 py-1.5 text-center text-amber-600 dark:text-amber-400 text-[11px] font-medium tracking-wide">
+          <div className="bg-amber-500/10 py-1.5 text-center text-amber-600 dark:text-amber-400 text-[11px] font-medium tracking-wide">
             In Development
           </div>
         )}
         {pageTitle && isBeta && !isExpanded && (
-          <div className="border-t bg-emerald-500/10 py-1.5 text-center text-emerald-600 dark:text-emerald-400 text-[11px] font-medium tracking-wide">
+          <div className="bg-emerald-500/10 py-1.5 text-center text-emerald-600 dark:text-emerald-400 text-[11px] font-medium tracking-wide">
             Beta
           </div>
         )}

@@ -20,8 +20,8 @@ export function ChooseSyllabusModal({ conceptName, syllabi, onChoose, onClose }:
       aria-label={`Choose exam study guide for ${conceptName}`}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-sm bg-card text-card-foreground border rounded-xl shadow-2xl">
-        <div className="flex items-center justify-between gap-2 px-4 py-3 border-b">
+      <div className="w-full max-w-sm bg-card text-card-foreground rounded-xl shadow-2xl">
+        <div className="flex items-center justify-between gap-2 px-4 py-3">
           <div className="min-w-0">
             <p className="text-xs text-muted-foreground">Multiple study guides reference</p>
             <p className="font-semibold truncate">{conceptName}</p>
@@ -42,7 +42,7 @@ export function ChooseSyllabusModal({ conceptName, syllabi, onChoose, onClose }:
               key={s.examId}
               type="button"
               onClick={() => onChoose(s)}
-              className="w-full flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left hover:bg-accent transition-colors"
+              className="w-full flex items-center gap-2.5 rounded-lg bg-muted/40 px-3 py-2.5 text-left hover:bg-accent transition-colors"
             >
               <GraduationCap className="h-4 w-4 shrink-0 text-teal-500" />
               <span className="min-w-0 flex-1">

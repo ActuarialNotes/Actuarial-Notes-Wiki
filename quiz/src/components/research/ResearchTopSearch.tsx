@@ -151,10 +151,10 @@ export function ResearchTopSearch({
               onClick={toggleFilters}
               aria-pressed={filtersOpen}
               aria-label="Filters"
-              className={`relative flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                 filtersOpen
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-input text-muted-foreground hover:text-foreground hover:bg-accent/60'
+                  ? 'bg-primary/10 text-primary'
+                  : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent/60'
               }`}
             >
               <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
@@ -183,7 +183,7 @@ export function ResearchTopSearch({
 
           {/* Dropdown — filters and/or live results */}
           {isExpanded && (
-            <div className="space-y-3 border-t pb-3 pt-2">
+            <div className="space-y-3 pb-3 pt-2">
               {filtersOpen && <ResearchFilterPanel />}
 
               {hasQuery && (

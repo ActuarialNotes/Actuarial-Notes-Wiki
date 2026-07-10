@@ -35,10 +35,10 @@ export function DailyGoalPicker() {
                 onClick={() => void setDailyGoal(user?.id ?? null, g.id)}
                 aria-pressed={selected}
                 className={cn(
-                  'flex flex-col items-start gap-0.5 p-3 rounded-md border text-left transition-colors',
+                  'flex flex-col items-start gap-0.5 p-3 rounded-md text-left transition-colors',
                   selected
-                    ? 'border-primary ring-2 ring-primary bg-primary/5'
-                    : 'border-border hover:bg-accent hover:text-accent-foreground',
+                    ? 'ring-2 ring-primary bg-primary/5'
+                    : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground',
                 )}
               >
                 <span className="text-sm font-semibold">{g.label}</span>

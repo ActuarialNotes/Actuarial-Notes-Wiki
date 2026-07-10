@@ -460,7 +460,7 @@ export default function Quiz() {
         </div>
 
         {submitError && (
-          <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3">
+          <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-3">
             <AlertCircle className="h-4 w-4 shrink-0" />
             {submitError}
           </div>
@@ -592,7 +592,7 @@ export default function Quiz() {
       <LevelUpToast notices={levelUpNotices} />
 
       {submitError && (
-        <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-lg px-4 py-3">
+        <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 rounded-lg px-4 py-3">
           <AlertCircle className="h-4 w-4 flex-shrink-0" />
           {submitError}
         </div>

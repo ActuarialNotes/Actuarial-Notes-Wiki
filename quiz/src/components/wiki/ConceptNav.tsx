@@ -81,7 +81,7 @@ export function ConceptNav({ conceptName, syllabus, fromExamId }: ConceptNavProp
 
   return (
     <nav
-      className="sticky bottom-0 mt-8 -mx-4 sm:-mx-6 border-t bg-background/95 backdrop-blur px-3 sm:px-4 py-2 flex items-center gap-2"
+      className="sticky bottom-0 mt-8 -mx-4 sm:-mx-6 bg-background/95 backdrop-blur px-3 sm:px-4 py-2 flex items-center gap-2"
       aria-label="Concept navigation"
     >
       <div className="flex-1 min-w-0">
@@ -119,7 +119,7 @@ export function ConceptNav({ conceptName, syllabus, fromExamId }: ConceptNavProp
         {open && position && (
           <div
             ref={menuRef}
-            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-md border bg-popover text-popover-foreground shadow-lg p-1"
+            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-md bg-popover text-popover-foreground shadow-lg p-1"
             role="menu"
           >
             <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">

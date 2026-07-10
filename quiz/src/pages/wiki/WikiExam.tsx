@@ -232,7 +232,7 @@ export default function WikiExam() {
       </Link>
 
       {studyPlanRefs && (
-        <Card className="border-primary/30 bg-primary/5">
+        <Card className="bg-primary/5">
           <CardContent className="p-3 space-y-1.5">
             <div className="flex items-center gap-1.5 text-sm font-semibold">
               <ListChecks className="h-4 w-4 text-primary shrink-0" />

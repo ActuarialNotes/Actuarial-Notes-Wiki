@@ -365,10 +365,8 @@ function PackRow({
 
   return (
     <div
-      className={`rounded-xl border transition-all ${colors.card} ${colors.cardText} ${
-        fullyCollected
-          ? 'border-amber-400/70 ring-1 ring-amber-400/50 collect-pack-complete'
-          : 'border-transparent'
+      className={`rounded-xl transition-all ${colors.card} ${colors.cardText} ${
+        fullyCollected ? 'ring-1 ring-amber-400/50 collect-pack-complete' : ''
       }`}
     >
       {/* Header — click to expand */}
@@ -451,7 +449,7 @@ function PackRow({
                   <button
                     type="button"
                     onClick={collectNext}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border bg-background text-xs font-semibold text-foreground hover:bg-accent transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-background/60 text-xs font-semibold text-foreground hover:bg-accent transition-colors"
                   >
                     <Lock className="h-3 w-3" /> Collect
                   </button>
@@ -559,7 +557,7 @@ function ExamPackGroup({
               : <ChevronDown className="h-3.5 w-3.5 ml-auto shrink-0" />}
           </button>
           {showObjectives && (
-            <div className="mt-1.5 ml-1 pl-3 border-l-2 border-border/60 space-y-1.5">
+            <div className="mt-1.5 ml-1 pl-3 space-y-1.5">
               {group.learningObjectives.map(lo => (
                 <PackRow
                   key={lo.name}
@@ -825,7 +823,7 @@ function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
         onClick={() => setOpen(true)}
         title="Add a flashcard"
         aria-label="Add a flashcard"
-        className="inline-flex items-center justify-center h-9 w-9 rounded-md border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
+        className="inline-flex items-center justify-center h-9 w-9 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
       >
         <Plus className="h-4 w-4" />
       </button>
@@ -866,7 +864,7 @@ function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
             </button>
           </div>
           {query.trim() && (
-            <div className="border-t py-2">
+            <div className="py-2">
               <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
                 {results.length === 0 ? (
                   <li className="text-xs text-muted-foreground px-2 py-2">No matches</li>
@@ -980,10 +978,10 @@ function ViewModeDropdown({
         data-tour="card-content"
         onClick={() => setOpen(v => !v)}
         title="Back content"
-        className={`inline-flex items-center gap-1 px-2 h-9 sm:h-10 rounded-md border transition-colors ${
+        className={`inline-flex items-center gap-1 px-2 h-9 sm:h-10 rounded-md transition-colors ${
           hasActive
-            ? 'bg-primary text-primary-foreground border-primary'
-            : 'text-muted-foreground hover:text-foreground hover:bg-accent border-border'
+            ? 'bg-primary text-primary-foreground'
+            : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
         }`}
       >
         {hasActive ? (
@@ -1001,7 +999,7 @@ function ViewModeDropdown({
       </button>
 
       {open && (
-        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-background border rounded-xl shadow-lg p-1.5 flex flex-col gap-0.5 min-w-[148px] z-50">
+        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-background rounded-xl shadow-lg p-1.5 flex flex-col gap-0.5 min-w-[148px] z-50">
           {(
             [
               { mode: 'definition', label: 'Definition', icon: <span className="font-serif italic font-bold text-sm w-4 text-center leading-none">D</span> },
@@ -1059,7 +1057,7 @@ function FlashcardControlsBar({
   minimal?: boolean
 }) {
   return (
-    <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 py-3 sm:py-4 border-t bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
+    <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 py-3 sm:py-4 bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
       {!minimal && (
         <>
           <button
@@ -1067,10 +1065,10 @@ function FlashcardControlsBar({
             onClick={onGalleryToggle}
             title={galleryOpen ? 'Back to study' : 'Open gallery'}
             aria-pressed={galleryOpen}
-            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs sm:text-sm font-medium transition-colors ${
+            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
               galleryOpen
-                ? 'bg-primary text-primary-foreground border-primary'
-                : 'text-muted-foreground hover:text-foreground hover:bg-accent border-border'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
             }`}
           >
             {galleryOpen
@@ -1079,8 +1077,6 @@ function FlashcardControlsBar({
             }
             <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
           </button>
-
-          <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
         </>
       )}
 
@@ -1102,22 +1098,18 @@ function FlashcardControlsBar({
         </button>
       </div>
 
-      <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
-
       <ViewModeDropdown reverseCardModes={reverseCardModes} onToggleMode={onToggleMode} />
 
       {!minimal && (
         <>
-          <div className="w-px h-7 sm:h-8 bg-border shrink-0" />
-
           <button
             type="button"
             onClick={onFocusToggle}
             title={focusMode ? 'Exit focus mode' : 'Focus mode'}
             aria-pressed={focusMode}
-            className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border transition-colors ${
+            className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md transition-colors ${
               focusMode
-                ? 'bg-primary text-primary-foreground border-primary'
+                ? 'bg-primary text-primary-foreground'
                 : 'text-muted-foreground hover:text-foreground hover:bg-accent'
             }`}
           ><Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
@@ -1129,7 +1121,7 @@ function FlashcardControlsBar({
         onClick={onShortcutsHelp}
         title="Keyboard shortcuts (?)"
         aria-label="Keyboard shortcuts"
-        className="hidden sm:inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md border text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+        className="hidden sm:inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
       ><Keyboard className="h-4 w-4 sm:h-5 sm:w-5" /></button>
     </div>
   )
@@ -1309,9 +1301,9 @@ function SortableCard({
   // Sheen intensity scales with mastery: New/L1/Forgotten stay subtle, L2 is
   // the standard shine, L3 gets the dramatic pulsing treatment.
   const sheenLevelClass = masteryState === 'level3' ? ' flashcard-sheen-l3' : masteryState === 'level2' ? ' flashcard-sheen-l2' : ''
-  const baseClass = `group relative rounded-xl border flex flex-col transition-shadow min-h-[150px]${collected && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}`
+  const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${collected && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}`
   const colorClass = isActive
-    ? 'bg-primary/10 border-primary shadow-sm'
+    ? 'bg-primary/10 shadow-sm'
     : 'bg-card text-card-foreground'
 
   if (flipped) {
@@ -1335,7 +1327,7 @@ function SortableCard({
       >
         {/* Header: name + play button — hidden in focus mode */}
         {!focusMode && (
-        <div className="flex items-center justify-between gap-1 px-3 py-2 border-b">
+        <div className="flex items-center justify-between gap-1 px-3 py-2">
           <span className="text-sm font-medium text-muted-foreground truncate min-w-0">{card.name}</span>
           <div className="relative shrink-0" ref={playMenuRef}>
             <button
@@ -1356,7 +1348,7 @@ function SortableCard({
               <Play className="h-4 w-4" />
             </button>
             {showPlayMenu && (
-              <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+              <div className={`absolute top-full mt-1 w-52 rounded-md bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
                 <button
                   type="button"
                   onPointerDown={e => e.stopPropagation()}
@@ -1441,7 +1433,7 @@ function SortableCard({
                   <TrendingUp className="h-3.5 w-3.5 shrink-0" />
                   Learning Progress
                 </button>
-                <div className="border-t my-1" />
+                <div className="my-1" />
                 <button
                   type="button"
                   onPointerDown={e => e.stopPropagation()}
@@ -1551,7 +1543,7 @@ function SortableCard({
             <Play className="h-4 w-4" />
           </button>
           {showPlayMenu && (
-            <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+            <div className={`absolute top-full mt-1 w-52 rounded-md bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
               <button
                 type="button"
                 onPointerDown={e => e.stopPropagation()}
@@ -1636,7 +1628,7 @@ function SortableCard({
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
                 Learning Progress
               </button>
-              <div className="border-t my-1" />
+              <div className="my-1" />
               <button
                 type="button"
                 onPointerDown={e => e.stopPropagation()}
@@ -1735,7 +1727,7 @@ function FlashcardsManageDialog({
       aria-modal="true"
     >
       <div
-        className="w-full max-w-sm rounded-lg border bg-card text-card-foreground shadow-lg p-5 space-y-4"
+        className="w-full max-w-sm rounded-lg bg-card text-card-foreground shadow-lg p-5 space-y-4"
         onClick={e => e.stopPropagation()}
       >
         <div className="space-y-1">
@@ -1746,7 +1738,7 @@ function FlashcardsManageDialog({
         </div>
 
         {canSave && cardCount > 0 && (
-          <div className="rounded-md border p-3 space-y-2">
+          <div className="rounded-md bg-muted/40 p-3 space-y-2">
             <p className="text-sm font-medium">Save as pack</p>
             {saved ? (
               <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-1.5">
@@ -1891,7 +1883,7 @@ function GalleryPanel({
     <div className={containerClass}>
       {/* Header — tab switcher (hidden in focus mode) */}
       {!focusMode && (
-        <div className={inline ? 'pb-3' : 'sticky top-0 z-10 bg-background border-b px-4 py-3'}>
+        <div className={inline ? 'pb-3' : 'sticky top-0 z-10 bg-background px-4 py-3'}>
           <div className="flex items-center gap-3">
             <div className="flex-1 min-w-0">
               <GalleryTabBar
@@ -2264,14 +2256,14 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                     }
                     setShowPlayMenu(v => !v)
                   }}
-                  className="inline-flex items-center justify-center h-7 w-7 rounded-md border bg-background hover:bg-accent text-foreground shrink-0"
+                  className="inline-flex items-center justify-center h-7 w-7 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
                   title="Quiz, Study Guide, and more"
                   aria-label="Quiz, Study Guide, and more"
                 >
                   <Play className="h-3.5 w-3.5" />
                 </button>
                 {showPlayMenu && (
-                  <div className={`absolute top-full mt-1 w-52 rounded-md border bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+                  <div className={`absolute top-full mt-1 w-52 rounded-md bg-popover text-popover-foreground shadow-md z-50 py-1 ${menuAlignRight ? 'right-0' : 'left-0'}`}>
                     <button
                       type="button"
                       onClick={() => { setShowQuestions(true); setShowPlayMenu(false) }}
@@ -2359,7 +2351,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
               </div>
             )}
             {expanded && markdown && (
-              <div className="border-t pt-4 overflow-y-auto max-h-96">
+              <div className="pt-4 overflow-y-auto max-h-96">
                 <WikiArticle
                   markdown={markdown}
                   sourcePath={entryRefToRepoPath(current)}
@@ -2749,7 +2741,7 @@ export default function Flashcards() {
       >
         {/* Sticky header: title + gallery strip — hidden when gallery overlay is open */}
         {!galleryExpanded && (
-          <div className={`sticky top-0 md:top-14 lg:top-0 z-10 bg-background border-b px-4 sm:px-6 py-3${focusMode ? ' invisible' : ''}`}>
+          <div className={`sticky top-0 md:top-14 lg:top-0 z-10 bg-background px-4 sm:px-6 py-3${focusMode ? ' invisible' : ''}`}>
             <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
           </div>
         )}
@@ -2790,7 +2782,7 @@ export default function Flashcards() {
       >
         {/* Gallery strip conveyor — only in study mode */}
         {!galleryExpanded && (
-          <div className="border-t bg-background px-4">
+          <div className="bg-background px-4">
             <GalleryStrip
               cards={orderedCards}
               activeIndex={activeIndex}
@@ -2801,7 +2793,7 @@ export default function Flashcards() {
         )}
         {/* Prev / Next nav footer — only in study mode */}
         {!galleryExpanded && (
-          <div className="flex items-stretch border-t h-16 shrink-0 bg-background">
+          <div className="flex items-stretch h-16 shrink-0 bg-background">
             <button
               type="button"
               disabled={activeIndex === 0}

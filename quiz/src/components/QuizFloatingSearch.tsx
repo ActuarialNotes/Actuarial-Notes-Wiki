@@ -126,7 +126,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
 
           {/* Selection bar — shown when selections exist and dropdown is closed */}
           {!isExpanded && selectedIds.size > 0 && (
-            <div className="flex items-center justify-between gap-3 border-t py-2">
+            <div className="flex items-center justify-between gap-3 py-2">
               <span className="text-sm text-muted-foreground">
                 <span className="font-medium text-foreground">{selectedIds.size}</span> question{selectedIds.size !== 1 ? 's' : ''} selected
               </span>
@@ -141,7 +141,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                 <button
                   type="button"
                   onClick={handleStartQuiz}
-                  className="px-4 py-1.5 rounded-full border border-primary bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
+                  className="px-4 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium hover:bg-primary/90 transition-colors"
                 >
                   Start Quiz →
                 </button>
@@ -152,7 +152,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
           {/* Dropdown — shown whenever search is active */}
           {isExpanded && (
             <div
-              className="border-t flex flex-col"
+              className="flex flex-col"
               style={{ height: 'calc(100dvh - 3.5rem)' }}
             >
               {/* Single scrollable region: tags → filter pills → results.
@@ -160,11 +160,11 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
               <div className="flex-1 overflow-y-auto min-h-0">
                 {/* Selected question tags */}
                 {selectedIds.size > 0 && (
-                  <div className="flex flex-wrap gap-1.5 px-0.5 py-2 border-b">
+                  <div className="flex flex-wrap gap-1.5 px-0.5 py-2">
                     {selectedQuestions.map(q => (
                       <span
                         key={q.id}
-                        className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-medium"
+                        className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-medium"
                       >
                         <span className="max-w-[160px] truncate">{q.id}</span>
                         <button
@@ -181,12 +181,12 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                 )}
 
                 {/* Filter pills + result count */}
-                <div className="flex flex-wrap items-center gap-1.5 px-0.5 py-2 border-b">
+                <div className="flex flex-wrap items-center gap-1.5 px-0.5 py-2">
                   {filterPills && filterPills.length > 0 ? (
                     filterPills.map(pill => (
                       <span
                         key={pill.label}
-                        className="inline-flex items-center gap-1 rounded-full border border-border bg-muted text-foreground px-2.5 py-0.5 text-xs font-medium"
+                        className="inline-flex items-center gap-1 rounded-full bg-muted text-foreground px-2.5 py-0.5 text-xs font-medium"
                       >
                         {pill.label}
                         <button
@@ -227,11 +227,11 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
 
               {/* Start Quiz button — pinned at bottom */}
               {selectedIds.size > 0 && (
-                <div className="flex-shrink-0 border-t pt-2 pb-3">
+                <div className="flex-shrink-0 pt-2 pb-3">
                   <button
                     type="button"
                     onClick={handleStartQuiz}
-                    className="w-full px-4 py-2 rounded-md border border-primary bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+                    className="w-full px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
                   >
                     Start Quiz with {selectedIds.size} selected →
                   </button>

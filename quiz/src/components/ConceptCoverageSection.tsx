@@ -271,10 +271,10 @@ function ConceptChip({
       type="button"
       onClick={onSelect}
       className={[
-        'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-all shrink-0',
+        'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all shrink-0',
         isSelected
-          ? 'bg-foreground text-background border-foreground shadow-sm'
-          : 'bg-muted/40 text-foreground border-border hover:border-foreground/40 hover:bg-muted/70',
+          ? 'bg-foreground text-background shadow-sm'
+          : 'bg-muted/40 text-foreground hover:bg-muted/70',
       ].join(' ')}
     >
       <span
@@ -398,7 +398,7 @@ export function ConceptCoverageSection({
 
           {/* Sign-in prompt */}
           {!score.isLoggedIn && (
-            <div className="mt-4 rounded-lg border bg-muted/40 px-4 py-3 text-sm flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+            <div className="mt-4 rounded-lg bg-muted/40 px-4 py-3 text-sm flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
               <span className="text-muted-foreground">Sign in to save your results and track progress</span>
               <Button size="sm" variant="outline" onClick={score.onSignIn}>
                 Sign In
@@ -439,7 +439,7 @@ export function ConceptCoverageSection({
       {/* ── Quiz coverage card: graph + concept chips ─────────────── */}
       {stats.length > 0 && (
         <div className="rounded-xl bg-card shadow-sm overflow-hidden">
-          <div className="px-5 py-3 border-b">
+          <div className="px-5 py-3">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Quiz Coverage
             </p>
@@ -456,7 +456,7 @@ export function ConceptCoverageSection({
             />
           </div>
 
-          <div className="px-5 py-3 border-t">
+          <div className="px-5 py-3">
             <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
               Concept Coverage
             </p>

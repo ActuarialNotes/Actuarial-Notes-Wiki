@@ -46,7 +46,7 @@ export function WikiContent({ link }: WikiContentProps) {
   }
 
   return (
-    <div className="rounded-md border bg-background/60">
+    <div className="rounded-md bg-background/60">
       <button
         type="button"
         onClick={handleToggle}
@@ -61,7 +61,7 @@ export function WikiContent({ link }: WikiContentProps) {
       </button>
 
       {open && (
-        <div className="px-4 py-3 border-t text-sm">
+        <div className="px-4 py-3 text-sm">
           {status === 'loading' && (
             <p className="text-muted-foreground text-xs">Loading…</p>
           )}

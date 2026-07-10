@@ -77,7 +77,7 @@ function todayLongDate(): string {
 
 function BehindWarning({ plan }: { plan: StudyPlan }) {
   return (
-    <div className="rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 px-3 py-2.5 text-xs text-amber-800 dark:text-amber-300 space-y-1">
+    <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 px-3 py-2.5 text-xs text-amber-800 dark:text-amber-300 space-y-1">
       <div className="flex items-center gap-1.5 font-medium">
         <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
         {plan.status === 'target_passed'
@@ -93,7 +93,7 @@ function BehindWarning({ plan }: { plan: StudyPlan }) {
 
 function ReviewModeNote({ concepts }: { concepts: string[] }) {
   return (
-    <div className="rounded-lg border border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950/30 px-3 py-2.5 text-xs text-purple-800 dark:text-purple-300 space-y-1">
+    <div className="rounded-lg bg-purple-50 dark:bg-purple-950/30 px-3 py-2.5 text-xs text-purple-800 dark:text-purple-300 space-y-1">
       <div className="flex items-center gap-1.5 font-medium">
         <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
         All concepts mastered. Great work!
@@ -183,7 +183,7 @@ function StudyPlanTracker({
             </button>
 
             {isOpen && topic.concepts.length > 0 && (
-              <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
+              <div className="space-y-1 pl-5 ml-2 mb-2 mt-1">
                 {topic.concepts.map(c => {
                   const rec = recordsBySlug.get(c.name.toLowerCase())
                   const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'
@@ -212,9 +212,9 @@ function StudyPlanTracker({
       })}
 
       {syllabus.resources.length > 0 && (
-        <div className="pt-2 mt-1 border-t">
+        <div className="pt-2 mt-1">
           <p className="text-sm font-semibold py-2">Resources</p>
-          <ul className="space-y-1 pl-5 border-l-2 border-border ml-2">
+          <ul className="space-y-1 pl-5 ml-2">
             {syllabus.resources.map(r => (
               <li key={r.name}>
                 <Link
@@ -381,7 +381,7 @@ export function TodayCard({
       ? displayConcepts.slice(0, 3)
       : syllabus.topics[0]?.concepts.slice(0, 3).map(c => c.name) ?? []
     return (
-      <Card className="border-primary/30 ring-1 ring-primary/10 shadow-sm relative overflow-hidden">
+      <Card className="ring-1 ring-primary/10 shadow-sm relative overflow-hidden">
         <CardContent className="p-5 space-y-3" aria-hidden="true">
           <div className="flex items-start justify-between gap-2">
             <h2 className="text-xl font-semibold">Study Plan</h2>
@@ -433,7 +433,7 @@ export function TodayCard({
   if (!loading && !plan?.config.targetReadyDate) {
     return (
       <>
-        <Card className="border-dashed">
+        <Card>
           <CardContent className="p-5 space-y-3">
             <h2 className="text-xl font-semibold">Study Plan</h2>
             <div className="flex items-start justify-between gap-2">
@@ -449,7 +449,7 @@ export function TodayCard({
               <Settings2 className="h-3.5 w-3.5" />
               Configure study plan
             </Button>
-            <div className="border-t pt-2">
+            <div className="pt-2">
               {planExpanded && (
                 <div className="pb-2 pt-1">
                   <StudyPlanTracker
@@ -504,7 +504,7 @@ export function TodayCard({
 
   return (
     <>
-      <Card className="border-primary/30 ring-1 ring-primary/10 shadow-sm">
+      <Card className="ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-3">
           {/* Title + settings */}
           <div className="flex items-start justify-between gap-2">
@@ -605,7 +605,7 @@ export function TodayCard({
           {completedToday.filter(lu =>
             displayConcepts.some(n => n.toLowerCase() === lu.conceptSlug.toLowerCase())
           ).length > 0 && (
-            <div className="rounded-md border border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/20 px-3 py-2.5 space-y-1.5">
+            <div className="rounded-md bg-green-50 dark:bg-green-950/20 px-3 py-2.5 space-y-1.5">
               <div className="flex items-center gap-1.5 text-xs font-medium text-green-700 dark:text-green-400">
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
                 Completed today
@@ -628,7 +628,7 @@ export function TodayCard({
 
           {/* Collapsible study plan */}
           {!loading && plan && (
-            <div className="border-t pt-2">
+            <div className="pt-2">
               {planExpanded && (
                 <div className="pb-2 pt-1">
                   <StudyPlanTracker

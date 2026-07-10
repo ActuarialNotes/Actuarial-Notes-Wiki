@@ -45,8 +45,8 @@ export function ConceptReadModal({ conceptName, onClose }: Props) {
       aria-label={`Read: ${conceptName}`}
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-2xl bg-card border rounded-xl shadow-2xl flex flex-col my-8">
-        <div className="flex items-center gap-3 px-4 h-12 border-b shrink-0">
+      <div className="w-full max-w-2xl bg-card rounded-xl shadow-2xl flex flex-col my-8">
+        <div className="flex items-center gap-3 px-4 h-12 shrink-0">
           <span className="flex-1 truncate font-semibold text-sm">{conceptName}</span>
           <button
             type="button"

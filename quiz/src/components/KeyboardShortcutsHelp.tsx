@@ -41,7 +41,7 @@ function Kbd({ label }: { label: string }) {
 function ShortcutTable({ rows }: { rows: ShortcutRow[] }) {
   return (
     <table className="w-full text-sm">
-      <tbody className="divide-y divide-border">
+      <tbody>
         {rows.map(row => (
           <tr key={row.description}>
             <td className="py-2 pr-4 w-px whitespace-nowrap">
@@ -86,7 +86,7 @@ export function KeyboardShortcutsHelp({ context, onClose }: KeyboardShortcutsHel
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative z-10 w-full max-w-sm rounded-xl border bg-background shadow-xl p-5 space-y-4">
+      <div className="relative z-10 w-full max-w-sm rounded-xl bg-background shadow-xl p-5 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Keyboard className="h-4 w-4 text-muted-foreground" />

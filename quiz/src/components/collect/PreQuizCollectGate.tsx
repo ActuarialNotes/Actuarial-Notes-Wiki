@@ -49,7 +49,7 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
         </span>
       </div>
 
-      <Card className="border-primary/30 ring-1 ring-primary/10 shadow-sm">
+      <Card className="ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-4">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 text-primary shrink-0">
@@ -68,7 +68,7 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
               const isCollected = collectedSet.has(name.toLowerCase())
               return (
                 <li key={name}>
-                  <div className="flex items-center gap-2.5 rounded-lg border px-3 py-2.5">
+                  <div className="flex items-center gap-2.5 rounded-lg px-3 py-2.5">
                     {isCollected ? (
                       <Check className="h-4 w-4 text-green-500 shrink-0" />
                     ) : (

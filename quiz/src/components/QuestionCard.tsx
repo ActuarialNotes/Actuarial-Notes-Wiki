@@ -139,16 +139,16 @@ function SelfGradeButtons({ value, onChange }: { value: SelfGrade | null; onChan
         {(['correct', 'partial', 'incorrect'] as const).map(grade => {
           const active = value === grade
           const cfg = {
-            correct: { label: '✓ Full credit', active: 'bg-green-600 hover:bg-green-700 text-white border-green-600', inactive: 'border-green-600/40 text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950' },
-            partial:  { label: '~ Partial',     active: 'bg-yellow-500 hover:bg-yellow-600 text-white border-yellow-500', inactive: 'border-yellow-500/40 text-yellow-700 hover:bg-yellow-50 dark:text-yellow-400 dark:hover:bg-yellow-950' },
-            incorrect:{ label: '✗ No credit',   active: 'bg-red-600 hover:bg-red-700 text-white border-red-600',         inactive: 'border-red-600/40 text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950' },
+            correct: { label: '✓ Full credit', active: 'bg-green-600 hover:bg-green-700 text-white', inactive: 'bg-green-600/10 text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-950' },
+            partial:  { label: '~ Partial',     active: 'bg-yellow-500 hover:bg-yellow-600 text-white', inactive: 'bg-yellow-500/10 text-yellow-700 hover:bg-yellow-50 dark:text-yellow-400 dark:hover:bg-yellow-950' },
+            incorrect:{ label: '✗ No credit',   active: 'bg-red-600 hover:bg-red-700 text-white',         inactive: 'bg-red-600/10 text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950' },
           }[grade]
           return (
             <button
               key={grade}
               onClick={() => onChange(grade)}
               className={[
-                'inline-flex items-center rounded-md border px-3 py-1.5 text-xs font-medium transition-colors',
+                'inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium transition-colors',
                 active ? cfg.active : cfg.inactive,
               ].join(' ')}
             >
@@ -215,7 +215,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
         ) : (
           <div className="space-y-3">
             {partAnswer.trim() ? (
-              <div className="rounded-md border bg-muted/20 p-3 space-y-1">
+              <div className="rounded-md bg-muted/20 p-3 space-y-1">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your Response</p>
                 <p className="text-sm whitespace-pre-wrap text-foreground">{partAnswer}</p>
               </div>
@@ -239,13 +239,13 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
             )}
 
             {showExplanation && (part.explanation || part.examiner_report) && (
-              <div className="rounded-md border border-border bg-muted/40 p-3 space-y-2 text-sm">
+              <div className="rounded-md bg-muted/40 p-3 space-y-2 text-sm">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Sample Answer</p>
                 {part.explanation && (
                   <MarkdownText className={PART_MD_CLASS}>{part.explanation}</MarkdownText>
                 )}
                 {part.examiner_report && (
-                  <div className="pt-2 border-t border-current/10">
+                  <div className="pt-2">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
                       Examiner&apos;s Notes
                     </p>
@@ -315,12 +315,12 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
 
       {showExplanation && isAnswered && (part.explanation || part.examiner_report) && (
         <div className={[
-          'rounded-md border p-3 space-y-2 text-sm',
+          'rounded-md p-3 space-y-2 text-sm',
           isRight
-            ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950'
+            ? 'bg-green-50 dark:bg-green-950'
             : effectiveSelfGrade === 'partial'
-              ? 'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950'
-              : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950',
+              ? 'bg-yellow-50 dark:bg-yellow-950'
+              : 'bg-red-50 dark:bg-red-950',
         ].join(' ')}>
           {!autoIsRight && part.answer && (
             <p className="text-muted-foreground text-xs">
@@ -331,7 +331,7 @@ function PartCard({ part, partAnswer, isLocked, showExplanation, onPartAnswer, s
             <MarkdownText className={PART_MD_CLASS}>{part.explanation}</MarkdownText>
           )}
           {part.examiner_report && (
-            <div className="pt-2 border-t border-current/10">
+            <div className="pt-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
                 Examiner&apos;s Notes
               </p>

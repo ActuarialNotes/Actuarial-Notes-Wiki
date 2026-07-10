@@ -67,7 +67,7 @@ function MiniReadinessRing({ pct }: { pct: number }) {
 function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative bg-card border rounded-2xl shadow-2xl max-w-sm w-full p-6 flex flex-col gap-4">
+      <div className="relative bg-card rounded-2xl shadow-2xl max-w-sm w-full p-6 flex flex-col gap-4">
         <button
           type="button"
           onClick={onClose}
@@ -114,7 +114,7 @@ function WelcomeModal({ onAddExam, onClose }: { onAddExam: () => void; onClose: 
 function SignInOverlay({ onSignIn }: { onSignIn: () => void }) {
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-      <div className="pointer-events-auto bg-card border rounded-2xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
+      <div className="pointer-events-auto bg-card rounded-2xl shadow-2xl px-8 py-7 flex flex-col items-center gap-3 max-w-xs w-full mx-4">
         <div className="flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-1">
           <LogIn className="h-6 w-6 text-primary" />
         </div>
@@ -448,7 +448,7 @@ export default function Dashboard() {
             {/* Profile dropdown */}
             {profileOpen && !isGuest && (
               <div
-                className="absolute top-full left-0 mt-1 z-50 min-w-[180px] rounded-md border bg-popover shadow-md py-1"
+                className="absolute top-full left-0 mt-1 z-50 min-w-[180px] rounded-md bg-popover shadow-md py-1"
                 onClick={e => e.stopPropagation()}
               >
                 <button
@@ -503,7 +503,7 @@ export default function Dashboard() {
                       <button
                         type="button"
                         onClick={() => setSignOutConfirm(false)}
-                        className="flex-1 rounded-md border bg-background text-xs py-1.5 font-medium hover:bg-accent transition-colors"
+                        className="flex-1 rounded-md bg-muted text-xs py-1.5 font-medium hover:bg-accent transition-colors"
                       >
                         Cancel
                       </button>
@@ -598,7 +598,7 @@ export default function Dashboard() {
 
       {/* Congratulations banner — shown after returning from Stripe checkout */}
       {showUpgradedBanner && (
-        <div className="rounded-lg border border-green-500/40 bg-green-500/10 px-4 py-3 flex items-start justify-between gap-3">
+        <div className="rounded-lg bg-green-500/10 px-4 py-3 flex items-start justify-between gap-3">
           <div className="flex items-start gap-2">
             <Sparkles className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
             <div>

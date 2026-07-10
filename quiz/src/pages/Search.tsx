@@ -67,8 +67,8 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
 
   return (
     <div
-      className={`border rounded-lg p-4 space-y-2 transition-colors ${
-        selected ? 'border-primary bg-primary/5' : 'hover:bg-accent/30'
+      className={`rounded-lg p-4 space-y-2 transition-colors ${
+        selected ? 'bg-primary/5' : 'hover:bg-accent/30'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -154,7 +154,7 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
               <button
                 type="button"
                 onClick={() => setShowAnswer(true)}
-                className="text-xs px-3 py-1 rounded-md border border-input hover:bg-accent transition-colors"
+                className="text-xs px-3 py-1 rounded-md hover:bg-accent transition-colors"
               >
                 Show answer
               </button>
@@ -162,7 +162,7 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
               <button
                 type="button"
                 onClick={() => setShowAnswer(false)}
-                className="text-xs px-3 py-1 rounded-md border border-input hover:bg-accent transition-colors"
+                className="text-xs px-3 py-1 rounded-md hover:bg-accent transition-colors"
               >
                 Hide answer
               </button>
@@ -762,10 +762,10 @@ export default function Search() {
                           setUseTodaysPlan(next)
                           if (next) setSelectedSubtopics([])
                         }}
-                        className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg border text-sm transition-colors ${
+                        className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm transition-colors ${
                           useTodaysPlan
-                            ? 'border-primary bg-primary/5 text-primary font-medium'
-                            : 'border-input hover:bg-accent text-foreground'
+                            ? 'bg-primary/5 text-primary font-medium'
+                            : 'bg-muted/40 hover:bg-accent text-foreground'
                         }`}
                       >
                         <CalendarCheck className="h-4 w-4 shrink-0" />
@@ -778,7 +778,7 @@ export default function Search() {
                     ) : !isPremium ? (
                       <Link
                         to="/upgrade"
-                        className="flex items-center gap-2 w-full px-3 py-2 rounded-lg border border-dashed border-muted-foreground/30 text-sm text-muted-foreground hover:bg-muted/30 transition-colors"
+                        className="flex items-center gap-2 w-full px-3 py-2 rounded-lg bg-muted/30 text-sm text-muted-foreground hover:bg-muted/40 transition-colors"
                       >
                         <Lock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
                         <span className="flex-1 text-left">Today's Study Plan</span>
@@ -792,7 +792,7 @@ export default function Search() {
                   ) : subtopics.length === 0 ? (
                     <p className="text-xs text-muted-foreground">No topics available.</p>
                   ) : (
-                    <div className={`rounded-lg border divide-y transition-opacity ${useTodaysPlan ? 'opacity-50' : ''}`}>
+                    <div className={`rounded-lg bg-muted/10 transition-opacity ${useTodaysPlan ? 'opacity-50' : ''}`}>
                       {groupedSubtopics.map(group => {
                         const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
                         const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
@@ -815,12 +815,12 @@ export default function Search() {
                               <button
                                 type="button"
                                 onClick={e => selectAllInGroup(group, e)}
-                                className={`shrink-0 ml-1 px-3 py-1.5 rounded border text-xs transition-colors ${
+                                className={`shrink-0 ml-1 px-3 py-1.5 rounded text-xs transition-colors ${
                                   allSelected
-                                    ? 'bg-primary text-primary-foreground border-primary'
+                                    ? 'bg-primary text-primary-foreground'
                                     : someSelected
-                                      ? 'bg-primary/10 text-primary border-primary/30'
-                                      : 'border-input text-muted-foreground hover:bg-accent'
+                                      ? 'bg-primary/10 text-primary'
+                                      : 'bg-background text-muted-foreground hover:bg-accent'
                                 }`}
                               >
                                 {allSelected ? 'All ✓' : someSelected ? 'Some' : 'Select all'}
@@ -906,7 +906,7 @@ export default function Search() {
             </p>
 
             {error && (
-              <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-center justify-between gap-4">
+              <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-center justify-between gap-4">
                 <span>{error}</span>
                 <button
                   type="button"
@@ -921,7 +921,7 @@ export default function Search() {
             {loading && (
               <div className="space-y-2">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="border rounded-lg p-4 animate-pulse">
+                  <div key={i} className="rounded-lg bg-muted/20 p-4 animate-pulse">
                     <div className="h-4 bg-muted rounded w-3/4" />
                     <div className="h-3 bg-muted rounded w-1/2 mt-2" />
                   </div>
@@ -958,7 +958,7 @@ export default function Search() {
             ) : wikiLoading ? (
               <div className="space-y-2">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="border rounded-lg p-4 animate-pulse">
+                  <div key={i} className="rounded-lg bg-muted/20 p-4 animate-pulse">
                     <div className="h-4 bg-muted rounded w-3/4" />
                     <div className="h-3 bg-muted rounded w-1/2 mt-2" />
                   </div>
@@ -973,7 +973,7 @@ export default function Search() {
                 <p className="text-sm text-muted-foreground">
                   {wikiResults.length} result{wikiResults.length !== 1 ? 's' : ''} found
                 </p>
-                <div className="border rounded-lg divide-y overflow-hidden">
+                <div className="rounded-lg overflow-hidden bg-muted/10">
                   {wikiResults.map(item => (
                     <ConceptResultRow key={`${item.category}:${item.path}`} item={item} query={textQuery} syllabi={syllabi} />
                   ))}
@@ -986,11 +986,11 @@ export default function Search() {
 
       {/* Sticky quiz button — Questions mode only */}
       {searchType === 'questions' && !loading && filtered.length > 0 && (
-        <div className="fixed bottom-16 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm border-t border-border">
+        <div className="fixed bottom-16 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-50 flex justify-center px-4 py-4 bg-background/80 backdrop-blur-sm">
           <button
             type="button"
             onClick={handleStartQuiz}
-            className="px-6 py-2.5 rounded-full border border-primary bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium shadow-lg"
+            className="px-6 py-2.5 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium shadow-lg"
           >
             {selectedIds.size > 0
               ? `Start quiz with ${selectedIds.size} selected`

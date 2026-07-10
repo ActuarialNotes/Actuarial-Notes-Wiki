@@ -39,7 +39,7 @@ const STATE_TEXT_COLOR: Record<MasteryState, string> = {
 
 function InfoPanel() {
   return (
-    <div className="mt-2 rounded-md border bg-muted/50 p-3 text-xs text-muted-foreground space-y-2">
+    <div className="mt-2 rounded-md bg-muted/50 p-3 text-xs text-muted-foreground space-y-2">
       <p className="font-medium text-foreground">How concept mastery works</p>
       <p>
         Each concept advances through four levels. The bar above each topic is the
@@ -169,7 +169,7 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
 
           {/* Today's plan summary */}
           {studyPlan && studyPlan.config.targetReadyDate && studyPlan.status !== 'review_mode' && (
-            <div className="mt-2 rounded-md border bg-muted/30 p-3 text-xs space-y-2">
+            <div className="mt-2 rounded-md bg-muted/30 p-3 text-xs space-y-2">
               {todaysConcepts.length > 0 && (
                 <div className="space-y-1">
                   <div className="flex items-center gap-1.5 font-medium text-foreground">
@@ -249,7 +249,7 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
 
                   {/* Concept rows — clickable buttons that open the selector popup */}
                   {isOpen && topic.concepts.length > 0 && (
-                    <div className="space-y-1 pl-5 border-l-2 border-border ml-2 mb-2 mt-1">
+                    <div className="space-y-1 pl-5 ml-2 mb-2 mt-1">
                       {topic.concepts.map(c => {
                         const rec = recordsBySlug.get(c.name.toLowerCase())
                         const state: MasteryState = rec ? decayIfStale(rec, now).state : 'new'

@@ -49,7 +49,7 @@ function SpacedRepetitionSlide() {
       <div className="flex items-center gap-1.5 flex-wrap">
         {['Day 1', 'Day 3', 'Day 7', 'Day 14', 'Day 30'].map((d, i, arr) => (
           <span key={d} className="flex items-center gap-1.5">
-            <span className="text-sm font-medium px-2 py-0.5 rounded-md border bg-muted/40">{d}</span>
+            <span className="text-sm font-medium px-2 py-0.5 rounded-md bg-muted/40">{d}</span>
             {i < arr.length - 1 && <span className="text-muted-foreground text-sm">›</span>}
           </span>
         ))}
@@ -128,9 +128,9 @@ export function StudyPlanInfoPanel({ open, onClose }: Props) {
       aria-label="How custom study plans work"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-lg bg-card border rounded-xl shadow-2xl flex flex-col my-12">
+      <div className="w-full max-w-lg bg-card rounded-xl shadow-2xl flex flex-col my-12">
         {/* Header */}
-        <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
+        <div className="flex items-center gap-2 px-4 h-12 shrink-0">
           <Icon className="h-4 w-4 text-primary shrink-0" />
           <span className="flex-1 font-semibold text-sm">{title}</span>
           <button
@@ -172,7 +172,7 @@ export function StudyPlanInfoPanel({ open, onClose }: Props) {
             type="button"
             onClick={prev}
             disabled={slide === 0}
-            className="p-2.5 rounded-full border bg-muted/40 text-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted/40 transition-colors shadow-sm"
+            className="p-2.5 rounded-full bg-muted/40 text-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted/40 transition-colors shadow-sm"
             aria-label="Previous"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -192,7 +192,7 @@ export function StudyPlanInfoPanel({ open, onClose }: Props) {
             <button
               type="button"
               onClick={next}
-              className="p-2.5 rounded-full border bg-muted/40 text-foreground hover:bg-muted transition-colors shadow-sm"
+              className="p-2.5 rounded-full bg-muted/40 text-foreground hover:bg-muted transition-colors shadow-sm"
               aria-label="Next"
             >
               <ChevronRight className="h-5 w-5" />

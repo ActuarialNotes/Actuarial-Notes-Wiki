@@ -375,7 +375,7 @@ export default function OnboardingTour() {
         <div
           role="dialog"
           aria-label="Getting started tour"
-          className="onboarding-roll-in pointer-events-auto w-full max-w-md rounded-2xl border border-primary/30 bg-primary text-primary-foreground shadow-2xl"
+          className="onboarding-roll-in pointer-events-auto w-full max-w-md rounded-2xl bg-primary text-primary-foreground shadow-2xl"
         >
           <div className="flex items-start gap-3 p-4 pr-3">
             <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/25">

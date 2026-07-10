@@ -23,7 +23,7 @@ export function IncompletePartsDialog({ onCancel, onConfirm }: IncompletePartsDi
       aria-modal="true"
     >
       <div
-        className="w-full max-w-sm rounded-lg border bg-card text-card-foreground shadow-lg p-5 space-y-4"
+        className="w-full max-w-sm rounded-lg bg-card text-card-foreground shadow-lg p-5 space-y-4"
         onClick={e => e.stopPropagation()}
       >
         <div className="space-y-1">

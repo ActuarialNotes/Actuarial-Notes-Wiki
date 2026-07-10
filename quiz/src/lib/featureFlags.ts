@@ -88,3 +88,17 @@ export const XP_ENABLED: boolean = true
  * above). Gate it off to dark-launch or roll back independently of streaks/XP.
  */
 export const QUESTS_ENABLED: boolean = true
+
+/**
+ * Learner mastery analytics (roadmap P2.5) — turns signals the learning engine
+ * already computes into an actionable study surface. When ON, a collapsible
+ * "Mastery insights" card appears on the Dashboard with three sections
+ * (lib/masteryAnalytics.ts): concepts about to decay, a predicted
+ * exam-readiness-by-date curve, and a weakest-topics ranking whose rows
+ * deep-link into a targeted quiz. It reads only data the Dashboard already
+ * loads (mastery records + syllabus) — no new fetch. The pure analytics engine
+ * and its tests stay compiled either way; the `: boolean` annotation keeps both
+ * branches of every gate type-checked (see the flags above). Gate it off to
+ * dark-launch or roll back independently of the other engagement surfaces.
+ */
+export const MASTERY_ANALYTICS_ENABLED: boolean = true

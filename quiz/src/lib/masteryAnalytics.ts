@@ -24,6 +24,7 @@ import {
 } from '@/lib/mastery'
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
 import { computeReadiness, type SectionReadiness } from '@/lib/readiness'
+import { selectQuestionsForCoverage, type StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000
@@ -215,4 +216,137 @@ export function weakestTopics(
     .sort((a, b) => a.readinessPct - b.readinessPct || b.weight - a.weight)
 
   return typeof limit === 'number' ? ranked.slice(0, limit) : ranked
+}
+
+// ── Coverage-optimized review selection ──────────────────────────────────────
+// Reuse the app's greedy set-cover (selectQuestionsForCoverage) so a decay
+// review is one or a few questions that hit as many fading concepts as possible,
+// rather than every question tagged to a concept.
+
+/** A minimal question shape for coverage selection. */
+export interface CoverableQuestion {
+  id: string
+  wiki_link: string[]
+}
+
+// Does any of a question's wiki_links resolve to `lowerConcept`? Mirrors the
+// last-segment/lowercase normalization selectQuestionsForCoverage matches on.
+function linksIncludeConcept(wikiLinks: string[], lowerConcept: string): boolean {
+  for (const link of wikiLinks) {
+    const name = link.replace(/\+/g, ' ').replace(/\.md$/i, '').split('/').filter(Boolean).pop()?.toLowerCase()
+    if (name === lowerConcept) return true
+  }
+  return false
+}
+
+/**
+ * The single question that best reviews `requiredConcept`: among questions that
+ * cover it, the one touching the most of `conceptNames` (the other fading
+ * concepts). Returns null when no question covers the required concept.
+ */
+export function pickReviewQuestionForConcept<T extends CoverableQuestion>(
+  questions: T[],
+  conceptNames: string[],
+  requiredConcept: string,
+): T | null {
+  const pool = questions.filter(q => linksIncludeConcept(q.wiki_link, requiredConcept.toLowerCase()))
+  const [best] = selectQuestionsForCoverage(pool, conceptNames, 1)
+  return best ?? null
+}
+
+/**
+ * The fewest questions that together cover every concept in `conceptNames`
+ * (greedy set-cover). Concepts with no matching question are simply skipped.
+ */
+export function pickReviewQuestionsForConcepts<T extends CoverableQuestion>(
+  questions: T[],
+  conceptNames: string[],
+): T[] {
+  return selectQuestionsForCoverage(questions, conceptNames)
+}
+
+// ── Plan-completion readiness projection ─────────────────────────────────────
+
+const MASTERED_STATE: MasteryState = 'level3'
+
+// A fresh level3 record so a plan-mastered concept doesn't pre-decay before the
+// sample date (models "learned and maintained on schedule").
+function freshlyMastered(concept_slug: string, at: Date): ConceptMasteryRecord {
+  const iso = at.toISOString()
+  return {
+    user_id: '',
+    exam_id: '',
+    concept_slug,
+    state: MASTERED_STATE,
+    correct_count: 3,
+    incorrect_streak: 0,
+    hard_correct_count: 1,
+    last_correct_at: iso,
+    last_attempted_at: iso,
+  }
+}
+
+/**
+ * Overall readiness projected from `from` to `to` **assuming the study plan is
+ * completed on schedule** — the optimistic counterpart to `projectReadiness`
+ * (which assumes no study). Each concept's mastery date is the latest
+ * `scheduledDate` among its plan assignments (realized at the end of that day);
+ * at each sample date, concepts due by then are treated as freshly mastered and
+ * the rest keep their current (naturally decaying) record. The curve rises to
+ * the plan's target and then holds as maintenance keeps concepts fresh.
+ */
+export function projectReadinessWithPlan(
+  syllabus: WikiExamSyllabus,
+  records: ConceptMasteryRecord[],
+  plan: StudyPlan,
+  from: Date,
+  to: Date,
+  stepDays = 1,
+): ReadinessProjectionPoint[] {
+  // Latest scheduled date per concept = its mastery date, realized at end of day
+  // (start of the next) so today's uncompleted plan doesn't inflate "today".
+  const masteryDateByConcept = new Map<string, number>()
+  for (const a of plan.assignments) {
+    const key = a.conceptName.toLowerCase()
+    const doneMs = new Date(a.scheduledDate + 'T00:00:00').getTime() + MS_PER_DAY
+    const prev = masteryDateByConcept.get(key)
+    if (prev == null || doneMs > prev) masteryDateByConcept.set(key, doneMs)
+  }
+
+  const lookup = buildMasteryLookup(records)
+  const masteryDateFor = (concept: { name: string; target?: string | null }): number | undefined =>
+    masteryDateByConcept.get(concept.name.toLowerCase()) ??
+    (concept.target ? masteryDateByConcept.get(concept.target.toLowerCase()) : undefined)
+
+  const readinessAt = (d: Date): number => {
+    const dMs = d.getTime()
+    const synthetic: ConceptMasteryRecord[] = []
+    for (const topic of syllabus.topics) {
+      for (const concept of topic.concepts) {
+        const rec = lookupConceptRecord(lookup, concept)
+        const masteredBy = masteryDateFor(concept)
+        if (masteredBy != null && masteredBy <= dMs) {
+          synthetic.push(freshlyMastered(concept.name, d))
+        } else if (rec) {
+          synthetic.push(rec)
+        }
+      }
+    }
+    return computeReadiness(syllabus, synthetic, d).overallPct
+  }
+
+  const startMs = from.getTime()
+  const endMs = to.getTime()
+  if (endMs <= startMs) return [{ date: new Date(startMs), overallPct: readinessAt(from) }]
+
+  const step = Math.max(1, stepDays) * MS_PER_DAY
+  const points: ReadinessProjectionPoint[] = []
+  for (let t = startMs; t <= endMs; t += step) {
+    const date = new Date(t)
+    points.push({ date, overallPct: readinessAt(date) })
+  }
+  if (points[points.length - 1].date.getTime() < endMs) {
+    points.push({ date: new Date(endMs), overallPct: readinessAt(to) })
+  }
+  return points
 }

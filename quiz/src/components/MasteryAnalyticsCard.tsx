@@ -3,22 +3,29 @@ import { useNavigate } from 'react-router-dom'
 import { Activity, ChevronDown, Clock, Target, TrendingDown } from 'lucide-react'
 import {
   conceptsAboutToDecay,
+  pickReviewQuestionForConcept,
+  pickReviewQuestionsForConcepts,
   projectReadiness,
+  projectReadinessWithPlan,
   weakestTopics,
   type DecayWarning,
   type ReadinessProjectionPoint,
   type WeakTopic,
 } from '@/lib/masteryAnalytics'
 import { trackMasteryAnalyticsQuiz } from '@/lib/analytics'
+import { computeReadiness } from '@/lib/readiness'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
+import type { StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { useAllQuestions } from '@/hooks/useAllQuestions'
 
 // Warn about concepts decaying within two weeks — long enough to be actionable,
 // short enough to stay urgent.
 const DECAY_HORIZON_DAYS = 14
-// How many days ahead to project readiness when the learner hasn't set an exam date.
+// How many days ahead to project readiness when there's no exam/target date.
 const DEFAULT_PROJECTION_DAYS = 90
 const MS_PER_DAY = 24 * 60 * 60 * 1000
+const SELECTED_IDS_KEY = 'actuarial_selected_ids'
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New',
@@ -39,16 +46,33 @@ function shortDate(d: Date): string {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
 }
 
+// Launch a quiz of specific question ids via the shared selection=stored seam
+// (mirrors Landing.launchTodaysPlan) — keeps the URL small for multi-question sets.
+function launchStoredQuiz(navigate: ReturnType<typeof useNavigate>, ids: string[]) {
+  try {
+    sessionStorage.setItem(SELECTED_IDS_KEY, JSON.stringify(ids))
+  } catch {
+    /* ignore quota/private-mode errors */
+  }
+  const params = new URLSearchParams({
+    selection: 'stored',
+    mode: 'quiz',
+    reveal: 'during',
+    count: String(ids.length),
+    from: 'dashboard',
+  })
+  navigate(`/quiz?${params.toString()}`)
+}
+
 // ── Predicted readiness sparkline ────────────────────────────────────────────
-// A compact line+area chart of overall readiness from today to the exam date,
-// assuming no further study. Same SVG idiom as MiniReadinessRing / the study
-// radial — no chart dependency.
+// A compact dashed line+area chart of projected readiness from today to the exam
+// date. Dashed to signal it's a prediction. Same SVG idiom as MiniReadinessRing.
 function ReadinessProjectionChart({
   points,
-  examDate,
+  endDate,
 }: {
   points: ReadinessProjectionPoint[]
-  examDate: Date
+  endDate: Date
 }) {
   const W = 320
   const H = 96
@@ -67,25 +91,33 @@ function ReadinessProjectionChart({
 
   const startPct = Math.round(first.overallPct)
   const endPct = Math.round(last.overallPct)
-  const dropped = endPct < startPct
 
   return (
     <div>
       <div className="flex items-baseline justify-between gap-2">
-        <p className="text-xs font-medium text-muted-foreground">Predicted readiness</p>
+        <p className="text-xs font-medium text-muted-foreground">Predicted readiness · if you follow your plan</p>
         <p className="text-xs font-semibold tabular-nums">
-          {endPct}% <span className="font-normal text-muted-foreground">on {shortDate(examDate)}</span>
+          {endPct}% <span className="font-normal text-muted-foreground">on {shortDate(endDate)}</span>
         </p>
       </div>
-      <svg viewBox={`0 0 ${W} ${H}`} className="mt-1.5 w-full" preserveAspectRatio="none" role="img" aria-label={`Readiness projected to fall to ${endPct}% by the exam`}>
-        <path d={area} fill="#22c55e" fillOpacity={0.12} />
-        <path d={line} fill="none" stroke="#22c55e" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+      <svg viewBox={`0 0 ${W} ${H}`} className="mt-1.5 w-full" preserveAspectRatio="none" role="img" aria-label={`Readiness projected to reach ${endPct}% by ${shortDate(endDate)} if you follow your study plan`}>
+        <path d={area} fill="#22c55e" fillOpacity={0.1} />
+        <path
+          d={line}
+          fill="none"
+          stroke="#22c55e"
+          strokeWidth={2}
+          strokeDasharray="4 3"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+        />
         <circle cx={xFor(0)} cy={yFor(first.overallPct)} r={2.5} fill="#22c55e" />
-        <circle cx={xFor(n - 1)} cy={yFor(last.overallPct)} r={2.5} fill={dropped ? '#f59e0b' : '#22c55e'} />
+        <circle cx={xFor(n - 1)} cy={yFor(last.overallPct)} r={2.5} fill="#22c55e" />
       </svg>
       <div className="flex justify-between text-[10px] tabular-nums text-muted-foreground">
         <span>Today · {startPct}%</span>
-        <span>{shortDate(examDate)} · {endPct}%</span>
+        <span>{shortDate(endDate)} · {endPct}%</span>
       </div>
     </div>
   )
@@ -99,46 +131,85 @@ interface Props {
   masteryRecords: ConceptMasteryRecord[]
   /** Exam/target date (YYYY-MM-DD) or null. */
   examDate: string | null
+  /** The active exam's study plan, used to project readiness assuming completion. */
+  plan: StudyPlan | null
 }
 
 /**
  * Learner mastery-analytics card (roadmap P2.5). Collapsed to a one-line summary
  * — how many concepts are fading and current readiness — and expandable into
- * three read-only views derived from the mastery records the Dashboard already
- * loads: concepts about to decay, a predicted exam-readiness-by-date curve, and
- * a weakest-topics ranking whose rows launch a targeted quiz. Hides itself until
- * the learner has some mastery to analyse.
+ * three views derived from the mastery records the Dashboard already loads:
+ * concepts about to decay (each reviewable in a single coverage-optimized
+ * question), a predicted exam-readiness curve assuming the study plan is
+ * completed on schedule, and a weakest-topics ranking that launches a targeted
+ * quiz. Hides itself until the learner has some mastery to analyse.
  */
-export function MasteryAnalyticsCard({ syllabus, masteryRecords, examDate }: Props) {
+export function MasteryAnalyticsCard({ syllabus, masteryRecords, examDate, plan }: Props) {
   const navigate = useNavigate()
   const [expanded, setExpanded] = useState(false)
+  const { questions: allQuestions } = useAllQuestions()
+
+  const examQuestions = useMemo(
+    () => allQuestions.filter(q => q.exam === syllabus.examTopic),
+    [allQuestions, syllabus.examTopic],
+  )
 
   const { warnings, weak, projection, readinessNow, projectionEnd } = useMemo(() => {
     const now = new Date()
     const warnings = conceptsAboutToDecay(syllabus, masteryRecords, now, DECAY_HORIZON_DAYS)
     const weak = weakestTopics(syllabus, masteryRecords, now, 4)
+    const readinessNow = Math.round(computeReadiness(syllabus, masteryRecords, now).overallPct)
 
-    // Project to the exam date if it's in the future, else a default horizon.
-    const parsed = examDate ? new Date(examDate + 'T00:00:00') : null
+    // Project to the exam date if it's in the future, else the plan's ready date,
+    // else a default horizon.
+    const parsedExam = examDate ? new Date(examDate + 'T00:00:00') : null
+    const planEnd = plan?.effectiveReadyDate ? new Date(plan.effectiveReadyDate + 'T00:00:00') : null
     const projectionEnd =
-      parsed && parsed.getTime() > now.getTime()
-        ? parsed
-        : new Date(now.getTime() + DEFAULT_PROJECTION_DAYS * MS_PER_DAY)
+      parsedExam && parsedExam.getTime() > now.getTime()
+        ? parsedExam
+        : planEnd && planEnd.getTime() > now.getTime()
+          ? planEnd
+          : new Date(now.getTime() + DEFAULT_PROJECTION_DAYS * MS_PER_DAY)
+
     const totalDays = Math.max(1, (projectionEnd.getTime() - now.getTime()) / MS_PER_DAY)
     const stepDays = Math.max(1, Math.ceil(totalDays / 40))
-    const projection = projectReadiness(syllabus, masteryRecords, now, projectionEnd, stepDays)
+    const projection = plan
+      ? projectReadinessWithPlan(syllabus, masteryRecords, plan, now, projectionEnd, stepDays)
+      : projectReadiness(syllabus, masteryRecords, now, projectionEnd, stepDays)
 
-    return { warnings, weak, projection, readinessNow: Math.round(projection[0].overallPct), projectionEnd }
-  }, [syllabus, masteryRecords, examDate])
+    return { warnings, weak, projection, readinessNow, projectionEnd }
+  }, [syllabus, masteryRecords, examDate, plan])
+
+  const decayConceptNames = useMemo(() => warnings.map(w => w.concept), [warnings])
+  // Fewest questions covering every fading concept (greedy set-cover).
+  const reviewAllQuestions = useMemo(
+    () => pickReviewQuestionsForConcepts(examQuestions, decayConceptNames),
+    [examQuestions, decayConceptNames],
+  )
 
   // Nothing to analyse until the learner has advanced at least one concept.
   const hasProgress = masteryRecords.some(r => r.state !== 'new')
   if (!hasProgress) return null
 
-  const launchConceptQuiz = (concept: string) => {
+  // Review a single fading concept with ONE question, chosen to also refresh as
+  // many other fading concepts as possible. Falls back to the concept quiz if no
+  // tagged question is found (or questions haven't loaded yet).
+  const launchConceptReview = (concept: string) => {
     trackMasteryAnalyticsQuiz({ source: 'decay_warning', exam: syllabus.examTopic })
-    const params = new URLSearchParams({ concept, mode: 'quiz', reveal: 'during', from: 'dashboard' })
-    navigate(`/quiz?${params.toString()}`)
+    const chosen = pickReviewQuestionForConcept(examQuestions, decayConceptNames, concept)
+    if (chosen) {
+      launchStoredQuiz(navigate, [chosen.id])
+    } else {
+      const params = new URLSearchParams({ concept, mode: 'quiz', reveal: 'during', from: 'dashboard' })
+      navigate(`/quiz?${params.toString()}`)
+    }
+  }
+
+  // Review every fading concept in the fewest questions (greedy set-cover).
+  const launchReviewAll = () => {
+    if (reviewAllQuestions.length === 0) return
+    trackMasteryAnalyticsQuiz({ source: 'decay_warning', exam: syllabus.examTopic })
+    launchStoredQuiz(navigate, reviewAllQuestions.map(q => q.id))
   }
 
   const launchTopicQuiz = (topic: WeakTopic) => {
@@ -150,13 +221,13 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords, examDate }: Pro
   }
 
   return (
-    <div className="rounded-2xl border bg-card">
+    <div className="rounded-lg bg-card text-card-foreground shadow-[var(--shadow-card)]">
       {/* Header — the whole row toggles the section. */}
       <button
         type="button"
         onClick={() => setExpanded(v => !v)}
         aria-expanded={expanded}
-        className="flex w-full items-center gap-2 rounded-2xl p-5 text-left transition-colors hover:bg-muted/40"
+        className="flex w-full items-center gap-2 rounded-lg p-5 text-left transition-colors hover:bg-muted/40"
       >
         <Activity className="h-4 w-4 shrink-0 text-primary" />
         <h2 className="text-sm font-bold tracking-tight">Mastery insights</h2>
@@ -178,10 +249,19 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords, examDate }: Pro
               <div className="mb-2 flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5 text-amber-500" />
                 <h3 className="text-xs font-semibold">About to decay</h3>
+                {warnings.length > 1 && reviewAllQuestions.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={launchReviewAll}
+                    className="ml-auto rounded-full border px-3 py-1 text-xs font-semibold transition-colors hover:bg-muted"
+                  >
+                    Review all ({reviewAllQuestions.length})
+                  </button>
+                )}
               </div>
               <ul className="space-y-1.5">
                 {warnings.slice(0, 5).map(w => (
-                  <DecayRow key={w.concept} warning={w} onReview={() => launchConceptQuiz(w.concept)} />
+                  <DecayRow key={w.concept} warning={w} onReview={() => launchConceptReview(w.concept)} />
                 ))}
               </ul>
             </section>
@@ -189,7 +269,7 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords, examDate }: Pro
 
           {/* Predicted readiness by date */}
           <section>
-            <ReadinessProjectionChart points={projection} examDate={projectionEnd} />
+            <ReadinessProjectionChart points={projection} endDate={projectionEnd} />
           </section>
 
           {/* Weakest topics */}

@@ -663,6 +663,7 @@ export default function Dashboard() {
           syllabus={activeSyllabus}
           masteryRecords={activeExamRecords}
           examDate={activeTargetDate}
+          plan={studyPlan}
         />
       )}
 

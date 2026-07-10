@@ -3,11 +3,16 @@ import {
   conceptsAboutToDecay,
   daysUntilNextDecay,
   nextDecayStep,
+  pickReviewQuestionForConcept,
+  pickReviewQuestionsForConcepts,
   projectReadiness,
+  projectReadinessWithPlan,
   weakestTopics,
+  type CoverableQuestion,
 } from './masteryAnalytics'
 import type { ConceptMasteryRecord, MasteryState } from './mastery'
 import { computeReadiness } from './readiness'
+import type { ConceptAssignment, StudyPlan } from './studyPlan'
 import type { WikiConcept, WikiExamSyllabus, WikiTopic } from './wikiParser'
 
 // Fixed "now" so decay timers are deterministic.
@@ -171,5 +176,75 @@ describe('weakestTopics', () => {
 
   it('respects the limit', () => {
     expect(weakestTopics(syl, records, NOW, 1).map(t => t.name)).toEqual(['Weak'])
+  })
+})
+
+// ── Round 2 ──────────────────────────────────────────────────────────────────
+
+describe('coverage-optimized review selection', () => {
+  const q = (id: string, links: string[]): CoverableQuestion => ({ id, wiki_link: links })
+  const questions = [
+    q('q1', ['Concepts/c1']),
+    q('q2', ['Concepts/c2']),
+    q('q3', ['Concepts/c1', 'Concepts/c2']), // covers both
+  ]
+
+  it('picks the single question covering the required concept plus the most others', () => {
+    const chosen = pickReviewQuestionForConcept(questions, ['c1', 'c2'], 'c1')
+    expect(chosen?.id).toBe('q3') // includes c1 and also covers c2
+  })
+
+  it('returns null when no question covers the required concept', () => {
+    expect(pickReviewQuestionForConcept(questions, ['zzz'], 'zzz')).toBeNull()
+  })
+
+  it('covers all concepts in the fewest questions', () => {
+    const chosen = pickReviewQuestionsForConcepts(questions, ['c1', 'c2'])
+    expect(chosen).toHaveLength(1)
+    expect(chosen[0].id).toBe('q3')
+  })
+})
+
+describe('projectReadinessWithPlan', () => {
+  const syl = syllabus([topic('Prob', [concept('c1'), concept('c2')])])
+  const assignment = (conceptName: string, scheduledDate: string): ConceptAssignment => ({
+    conceptName,
+    topicName: 'Prob',
+    scheduledDate,
+    initialState: 'new',
+  })
+  const isoInDays = (n: number) => new Date(NOW.getTime() + n * MS_PER_DAY).toISOString().slice(0, 10)
+  const plan = (assignments: ConceptAssignment[]): StudyPlan => ({
+    examId: 'P-1',
+    generatedDate: NOW.toISOString().slice(0, 10),
+    config: { targetReadyDate: isoInDays(10), targetStrengthLevel: 'strong_all', planStartDate: isoInDays(-5) },
+    todaysConcepts: [],
+    assignments,
+    dayNumber: 1,
+    totalDays: 15,
+    daysRemaining: 10,
+    conceptsPerDay: 1,
+    status: 'on_track',
+    reviewConcepts: [],
+    effectiveReadyDate: isoInDays(10),
+    targetPassedFallback: false,
+  })
+
+  it('rises from current readiness to the plan target and never falls', () => {
+    const records: ConceptMasteryRecord[] = [] // both concepts New today → 0%
+    const p = plan([assignment('c1', isoInDays(1)), assignment('c2', isoInDays(5))])
+    const points = projectReadinessWithPlan(syl, records, p, NOW, new Date(NOW.getTime() + 10 * MS_PER_DAY), 1)
+
+    expect(points[0].overallPct).toBeCloseTo(0, 5) // today's plan not yet completed
+    for (let i = 1; i < points.length; i++) {
+      expect(points[i].overallPct).toBeGreaterThanOrEqual(points[i - 1].overallPct - 1e-9)
+    }
+    expect(points[points.length - 1].overallPct).toBeCloseTo(100, 5) // both mastered by day 6
+  })
+
+  it('holds the target after every concept is mastered', () => {
+    const p = plan([assignment('c1', isoInDays(1)), assignment('c2', isoInDays(2))])
+    const points = projectReadinessWithPlan(syl, [], p, NOW, new Date(NOW.getTime() + 10 * MS_PER_DAY), 1)
+    expect(points[points.length - 1].overallPct).toBeCloseTo(100, 5)
   })
 })

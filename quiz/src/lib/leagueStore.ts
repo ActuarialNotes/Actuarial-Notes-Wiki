@@ -1,10 +1,11 @@
-// Sync glue for the weekly XP leagues (roadmap P4.1). The shared math (tier
-// ladder, promotion/demotion zones, the UTC week clock) lives in lib/leagues.ts;
-// the authoritative state lives server-side behind SECURITY DEFINER RPCs
-// (supabase/migrations/20260710_leagues.sql) because a leaderboard is inherently
-// cross-user: the client can never write its own weekly XP or read the raw
-// member table. Unlike streak/xp/questStore there is no localStorage fallback —
-// leagues are signed-in only and have no meaningful offline state.
+// Sync glue for the weekly XP leagues (roadmap P4.1). Leagues are PER EXAM, so
+// every entry point takes an `exam` (the exam_progress key: 'P', 'FM', …). The
+// shared math (tier ladder, promotion/demotion zones, the UTC week clock) lives
+// in lib/leagues.ts; the authoritative state lives server-side behind SECURITY
+// DEFINER RPCs (supabase/migrations/20260710_leagues.sql) because a leaderboard
+// is inherently cross-user: the client can never write its own weekly XP or read
+// the raw member table. Unlike streak/xp/questStore there is no localStorage
+// fallback — leagues are signed-in only and have no meaningful offline state.
 //
 // Every function here is fail-soft (never throws): a league hiccup must not
 // break quiz completion or the Dashboard. A LEAGUE_EVENT is dispatched after
@@ -72,12 +73,14 @@ interface BoardRpcRow {
  * The caller's own league state. A missing row means "never interacted" and
  * reads as the opted-out defaults; null means the fetch itself failed.
  */
-export async function fetchLeagueSelf(userId: string): Promise<LeagueSelfState | null> {
+export async function fetchLeagueSelf(userId: string, exam: string): Promise<LeagueSelfState | null> {
+  if (!exam) return EMPTY_SELF
   try {
     const { data, error } = await supabase
       .from('user_leagues')
       .select('opted_in, tier, last_result, last_result_week, last_rank')
       .eq('user_id', userId)
+      .eq('exam', exam)
       .maybeSingle()
     if (error) throw new Error(error.message)
     if (!data) return EMPTY_SELF
@@ -103,10 +106,10 @@ export async function fetchLeagueSelf(userId: string): Promise<LeagueSelfState |
  * RPC also performs the lazy weekly rollover server-side, so calling this is
  * what settles a finished week.
  */
-export async function fetchLeagueBoard(userId: string): Promise<LeagueBoardRow[] | null> {
-  if (!userId) return null
+export async function fetchLeagueBoard(userId: string, exam: string): Promise<LeagueBoardRow[] | null> {
+  if (!userId || !exam) return null
   try {
-    const { data, error } = await supabase.rpc('get_league_board')
+    const { data, error } = await supabase.rpc('get_league_board', { p_exam: exam })
     if (error) throw new Error(error.message)
     return ((data as BoardRpcRow[] | null) ?? []).map(row => ({
       rank: row.rank,
@@ -127,11 +130,13 @@ export async function fetchLeagueBoard(userId: string): Promise<LeagueBoardRow[]
  */
 export async function joinLeague(
   userId: string | null,
+  exam: string,
   profile: { displayName: string; avatarUrl: string },
 ): Promise<boolean> {
-  if (!LEAGUES_ENABLED || !userId) return false
+  if (!LEAGUES_ENABLED || !userId || !exam) return false
   try {
     const { data, error } = await supabase.rpc('join_league', {
+      p_exam: exam,
       p_display_name: profile.displayName,
       p_avatar_url: profile.avatarUrl,
     })
@@ -149,10 +154,10 @@ export async function joinLeague(
  * Opt out: deletes this week's membership and the shared name/avatar copies
  * server-side (tier and last result are kept for a future return).
  */
-export async function leaveLeague(userId: string | null): Promise<boolean> {
-  if (!LEAGUES_ENABLED || !userId) return false
+export async function leaveLeague(userId: string | null, exam: string): Promise<boolean> {
+  if (!LEAGUES_ENABLED || !userId || !exam) return false
   try {
-    const { error } = await supabase.rpc('leave_league')
+    const { error } = await supabase.rpc('leave_league', { p_exam: exam })
     if (error) throw new Error(error.message)
     trackLeagueLeft()
     dispatchLeagueUpdated()
@@ -164,15 +169,20 @@ export async function leaveLeague(userId: string | null): Promise<boolean> {
 }
 
 /**
- * Add earned XP to the caller's weekly league total. Fired unconditionally
- * after every quiz/quest payout (see stores/quizStore.ts and lib/questStore.ts)
- * — the server silently no-ops for non-members, and guests never reach the RPC.
- * Never throws: a failed league write must not break quiz completion.
+ * Add earned XP to the caller's weekly league total for `exam`. Fired
+ * unconditionally after every quiz (see stores/quizStore.ts) with the quiz's
+ * exam — the server silently no-ops for non-members, and guests never reach the
+ * RPC. Never throws: a failed league write must not break quiz completion.
  */
-export async function recordLeagueXp(userId: string | null, amount: number): Promise<void> {
-  if (!LEAGUES_ENABLED || !userId || amount <= 0) return
+export async function recordLeagueXp(
+  userId: string | null,
+  exam: string | null,
+  amount: number,
+): Promise<void> {
+  if (!LEAGUES_ENABLED || !userId || !exam || amount <= 0) return
   try {
     const { data, error } = await supabase.rpc('record_league_xp', {
+      p_exam: exam,
       p_amount: Math.floor(amount),
     })
     if (error) throw new Error(error.message)

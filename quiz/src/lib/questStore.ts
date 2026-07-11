@@ -26,8 +26,6 @@ import { localDayKey } from '@/lib/streak'
 import { resolveTimeZone } from '@/lib/streakStore'
 import { addDailyGems } from '@/lib/dailyProgressStore'
 import { recordXp } from '@/lib/xpStore'
-import { recordLeagueXp } from '@/lib/leagueStore'
-import { LEAGUES_ENABLED } from '@/lib/featureFlags'
 import {
   applyQuizEvent,
   claimQuests,
@@ -312,11 +310,10 @@ export async function claimQuestRewards(
   const totals = questRewards(claimed)
   trackQuestClaimed({ quests: claimed.length, gems: totals.gems, xp: totals.xp })
 
-  // recordXp never throws and fires its own XP_EVENT for the goal ring; quest
-  // XP also counts toward the weekly league total (recordLeagueXp no-ops for
-  // guests and non-members).
+  // recordXp never throws and fires its own XP_EVENT for the goal ring. Quest XP
+  // is deliberately not credited to leagues: quests are cross-exam, while leagues
+  // are per-exam, so there's no single exam to attribute it to.
   if (totals.xp > 0) await recordXp(userId, totals.xp)
-  if (LEAGUES_ENABLED && totals.xp > 0) await recordLeagueXp(userId, totals.xp)
 
   if (totals.gems > 0 && userId) {
     try {

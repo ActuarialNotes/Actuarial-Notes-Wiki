@@ -88,9 +88,12 @@ function awardXpAndQuests(
     t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
   ).length
   const xp = xpForAnswers(answers)
+  // League XP is per-exam: credit it to this quiz's exam (undefined for untracked
+  // exams, in which case recordLeagueXp no-ops).
+  const leagueExam = EXAM_LABEL_TO_ID[questions[0]?.exam ?? ''] ?? null
   void (async () => {
     if (XP_ENABLED) await recordXp(userId, xp)
-    if (LEAGUES_ENABLED) await recordLeagueXp(userId, xp)
+    if (LEAGUES_ENABLED) await recordLeagueXp(userId, leagueExam, xp)
     if (QUESTS_ENABLED) {
       await recordQuestProgress(userId, { answers, levelUps, totalQuestions: questions.length })
     }

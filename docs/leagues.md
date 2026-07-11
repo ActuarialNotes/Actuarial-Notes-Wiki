@@ -1,12 +1,17 @@
 # Weekly XP Leagues (roadmap P4.1)
 
-Opt-in, Duolingo-style weekly leaderboards: students who join are grouped into
-**cohorts of up to 30** at their **tier** for the current UTC week and ranked by
-the XP they earn; when the week ends, the top of each cohort is promoted a tier
-and the bottom (plus anyone who earned nothing) is relegated. The feature is
-deliberately light social — no chat, no friending, no public profiles — and
-**privacy-first**: nothing is shared until the student explicitly joins, and
-leaving deletes what was shared.
+Opt-in, Duolingo-style weekly leaderboards, **one league per exam**: students
+who join an exam's league are grouped into **cohorts of up to 30** at their
+**tier** for the current UTC week and ranked by the XP they earn on that exam;
+when the week ends, the top of each cohort is promoted a tier and the bottom
+(plus anyone who earned nothing) is relegated. A student studying several exams
+competes in a separate league for each. The feature is deliberately light social
+— no chat, no friending, no public profiles — and **privacy-first**: nothing is
+shared until the student explicitly joins, and leaving deletes what was shared.
+
+The **exam** key is the exam_progress key (`'P'`, `'FM'`, `'MAS-I'`, …), the
+same value `EXAM_LABEL_TO_ID` / `wikiExamIdToProgressKey` produce on the client
+and that quiz completion credits XP to.
 
 Where the pieces live:
 
@@ -14,10 +19,22 @@ Where the pieces live:
 |---|---|
 | Shared constants + rendering math (pure, tested) | `quiz/src/lib/leagues.ts` (+ `leagues.test.ts`) |
 | Client sync glue (RPC calls, `LEAGUE_EVENT`) | `quiz/src/lib/leagueStore.ts` |
-| Hook (load + realtime + event + focus refresh) | `quiz/src/hooks/useLeague.ts` |
-| Dashboard card / Settings opt-in card | `quiz/src/components/LeagueCard.tsx`, `LeagueSettingsCard.tsx` |
+| Hook (load + realtime + event + focus refresh) | `quiz/src/hooks/useLeague.ts` — `useLeague(exam)` |
+| Leaderboard UI (Level popup tab) + its exam selector | `quiz/src/components/LeaderboardPanel.tsx` |
+| Level badge popup that hosts the tab (Level / Quests / League) | `quiz/src/components/LevelBadge.tsx` |
+| Settings opt-in card | `quiz/src/components/LeagueSettingsCard.tsx` |
 | Tables + RLS + all server logic | `supabase/migrations/20260710_leagues.sql` |
 | Feature flag | `LEAGUES_ENABLED` in `quiz/src/lib/featureFlags.ts` |
+
+## Where it surfaces
+
+There is no standalone Dashboard card. The leaderboard lives as the **League
+tab** inside the Level-badge popup (top-left of the Dashboard), alongside the
+**Level** and **Quests** tabs (`LevelBadge.tsx` → `LeaderboardPanel.tsx` /
+`QuestsPanel.tsx`). Because leagues are per-exam, the League tab carries a
+compact exam selector (styled like the Dashboard exam pills, smaller) when more
+than one exam is active, defaulting to the Dashboard's active exam. Settings has
+a parallel opt-in card with its own exam selector.
 
 ## Privacy model
 
@@ -25,7 +42,7 @@ Display name and avatar normally live in `auth.users.user_metadata`, which is
 **not readable across users** — so a leaderboard has to copy them somewhere
 cohort-mates can see. The design makes that copy an explicit, reversible act:
 
-- **Nothing is shared until join.** The join UI (Dashboard card and Settings)
+- **Nothing is shared until join.** The join UI (League tab and Settings)
   previews exactly what will be shared: display name, avatar, weekly XP —
   never email, user id, or any study data.
 - **Joining snapshots** the profile name/avatar into `league_members` (visible
@@ -37,14 +54,23 @@ cohort-mates can see. The design makes that copy an explicit, reversible act:
   user resumes their ladder position.
 - **Board reads are RPC-only.** `league_cohorts` and `league_members` have RLS
   enabled with **zero policies**, so no client can select from them at all.
-  The only read path is `get_league_board()`, which returns
+  The only read path is `get_league_board(p_exam)`, which returns
   `(rank, display_name, avatar_url, weekly_xp, is_self)` for the caller's own
-  cohort — peer user ids are never exposed; the caller finds themself via
-  `is_self`. (This is also why the board has no realtime subscription — see
-  Deferrals.)
+  cohort in that exam — peer user ids are never exposed; the caller finds
+  themself via `is_self`. (This is also why the board has no realtime
+  subscription — see Deferrals.)
 - **Writes are server-authoritative.** All mutations go through
   `SECURITY DEFINER` RPCs (the `award_gems` pattern): the client can *add*
-  earned XP via `record_league_xp` but can never set totals, tier, or rank.
+  earned XP via `record_league_xp(p_exam, p_amount)` but can never set totals,
+  tier, or rank.
+
+The RPCs are `join_league(p_exam, p_display_name, p_avatar_url)` →
+returns the joined tier, `leave_league(p_exam)`, `record_league_xp(p_exam,
+p_amount)` → new weekly total or NULL when not a member, and
+`get_league_board(p_exam)`. Every one first runs `league_rollover_if_due()`.
+Tables are keyed per-exam: `league_cohorts (exam, tier, week_start)`,
+`league_members` unique on `(user_id, exam)`, and `user_leagues` with PK
+`(user_id, exam)`.
 
 ## The ladder
 
@@ -103,42 +129,46 @@ There is no cron. Every public RPC (`join_league`, `record_league_xp`,
 A gap of several zero-traffic weeks collapses into a **single one-step
 rollover** — acceptable at current scale, documented simplification.
 
-Invariant: `user_leagues.opted_in = true` ⟺ the user has a `league_members`
-row for the current week (once rollover has run). Join establishes both, leave
-clears both, rollover re-establishes it for everyone opted in.
+Invariant (per exam): `user_leagues.opted_in = true` ⟺ the user has a
+`league_members` row for that exam for the current week (once rollover has run).
+Join establishes both, leave clears both, rollover re-establishes it for
+everyone opted in. Rollover runs globally across all exams in one pass.
 
 ## XP flow
 
-`record_league_xp` is called fire-and-forget wherever XP is awarded, with the
-same amount as `recordXp`:
+`record_league_xp(exam, amount)` is called fire-and-forget on **quiz
+completion** (`awardXpAndQuests` in `stores/quizStore.ts`), with the same amount
+as `recordXp` and the quiz's exam (`EXAM_LABEL_TO_ID[questions[0].exam]`). The
+RPC silently no-ops (returns NULL) for non-members and untracked exams, so the
+client never needs to know membership before calling; guests short-circuit
+client-side. XP earned *before* joining does not count retroactively — the
+weekly total starts at 0 at join time.
 
-- Quiz completion — `awardXpAndQuests` in `stores/quizStore.ts`.
-- Quest claims — `claimQuestRewards` in `lib/questStore.ts`.
+Quest-claim XP is **deliberately not** credited to leagues: quests are
+cross-exam (one daily board across all study), while a league is per-exam, so
+there is no single exam to attribute the bonus to. League XP is quiz XP only.
 
-The RPC silently no-ops (returns NULL) for non-members, so the client never
-needs to know membership before calling; guests short-circuit client-side.
-XP earned *before* joining does not count retroactively — the weekly total
-starts at 0 at join time. Like every store in the gamification family,
-`leagueStore` **never throws**: a league failure must not break quiz completion.
+Like every store in the gamification family, `leagueStore` **never throws**: a
+league failure must not break quiz completion.
 
 ## Edge cases
 
 | Case | Behavior |
 |---|---|
-| Mid-week join | Joins an open current-week cohort at the stored tier, `weekly_xp = 0`. |
+| Mid-week join | Joins an open current-week cohort for that exam at the stored tier, `weekly_xp = 0`. |
 | Leave mid-week | Membership row gone at once; no result recorded at rollover. |
-| Rejoin later | Resumes stored tier; snapshots re-taken from the current profile. |
+| Rejoin later | Resumes stored tier (per exam); snapshots re-taken from the current profile. |
 | Zero-XP week | Demoted one tier (Bronze floor → `stayed`). |
 | Cohort of 1 | An active lone member promotes; an inactive one demotes (zero-XP rule). |
 | Cohort-cap race | Soft cap — a concurrent join may overfill a cohort by one; harmless. |
-| Unmigrated env | Store functions catch and `console.warn`; the card shows the join view. |
+| Multiple exams | Independent leagues, tiers, and opt-in per exam; the League tab's selector switches between them. |
+| Unmigrated env | Store functions catch and `console.warn`; the tab shows the join view. |
 
 ## Deliberate deferrals
 
 - **Board realtime** — would need a SELECT policy on `league_members` (leaking
   peer user ids) or per-cohort channels; refetch on `LEAGUE_EVENT` / tab focus
   is plenty for a weekly board.
-- **Dashboard stat-grid tile** — tier + rank already live in the card header.
 - **Study-group leaderboards** (the "and/or" half of P4.1) — private invite-code
   groups could reuse the member/board/RPC shape later.
 - **Multi-week catch-up granularity** — see Lazy rollover.

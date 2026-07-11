@@ -18,7 +18,8 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { DailyGoalPicker } from '@/components/DailyGoalPicker'
-import { XP_ENABLED } from '@/lib/featureFlags'
+import { LeagueSettingsCard } from '@/components/LeagueSettingsCard'
+import { LEAGUES_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import {
   AvatarDisplay,
   ANIMAL_TYPES,
@@ -293,6 +294,7 @@ export default function Settings() {
     { id: 'support', label: 'Support' },
     { id: 'appearance', label: 'Appearance' },
     ...(user && XP_ENABLED ? [{ id: 'dailygoal', label: 'Daily Goal' }] : []),
+    ...(user && LEAGUES_ENABLED ? [{ id: 'league', label: 'Leaderboard' }] : []),
     ...(user ? BASE_NAV_ITEMS : [{ id: 'signin', label: 'Sign In' }]),
   ]
 
@@ -810,6 +812,13 @@ export default function Settings() {
             {user && XP_ENABLED && (
               <section ref={el => { sectionRefs.current.dailygoal = el }} id="dailygoal">
                 <DailyGoalPicker />
+              </section>
+            )}
+
+            {/* ---- Weekly XP league opt-in (roadmap P4.1) ---- */}
+            {user && LEAGUES_ENABLED && (
+              <section ref={el => { sectionRefs.current.league = el }} id="league">
+                <LeagueSettingsCard />
               </section>
             )}
 

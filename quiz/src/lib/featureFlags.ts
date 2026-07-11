@@ -102,3 +102,23 @@ export const QUESTS_ENABLED: boolean = true
  * dark-launch or roll back independently of the other engagement surfaces.
  */
 export const MASTERY_ANALYTICS_ENABLED: boolean = true
+
+/**
+ * Weekly XP leagues (roadmap P4.1) — opt-in, privacy-first light social. When
+ * ON, a collapsible "League" card appears on the Dashboard (signed-in only)
+ * and a matching opt-in/out section appears in Settings. Joining places the
+ * student in a cohort of up to 30 at their tier for the current UTC week,
+ * ranked by weekly XP; at week end the top of the cohort promotes a tier and
+ * the bottom relegates (Duolingo-style — pure math in lib/leagues.ts, the
+ * server-authoritative ranking/rollover in supabase/migrations/20260710_leagues.sql,
+ * design in docs/leagues.md).
+ *
+ * Privacy: nothing is shared until the student explicitly joins; joining
+ * snapshots only their display name, avatar, and weekly XP for cohort-mates to
+ * see (never user ids or emails — board reads are RPC-only), and leaving
+ * deletes the shared copies. The engine and its tests stay compiled either
+ * way; the `: boolean` annotation keeps both branches of every gate
+ * type-checked (see the flags above). Gate it off to dark-launch or roll back
+ * independently of the other engagement surfaces.
+ */
+export const LEAGUES_ENABLED: boolean = true

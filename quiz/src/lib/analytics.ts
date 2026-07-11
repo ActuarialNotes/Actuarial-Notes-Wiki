@@ -29,6 +29,8 @@ export interface AnalyticsEventMap {
   quest_claimed: { quests: number; gems: number; xp: number }
   daily_quests_cleared: { quests: number }
   mastery_analytics_quiz: { source: 'weak_topic' | 'decay_warning'; exam: string; topic?: string }
+  league_joined: { tier: number }
+  league_left: Record<string, never>
   search_query: { query: string; exam: string; difficulty: string }
   upgrade_clicked: Record<string, never>
 
@@ -121,6 +123,16 @@ export function trackUpgradeClicked() {
 /** Fires when a targeted quiz is launched from the mastery-analytics card (P2.5). */
 export function trackMasteryAnalyticsQuiz(params: AnalyticsEventMap['mastery_analytics_quiz']) {
   track('mastery_analytics_quiz', params)
+}
+
+/** Fires when the student opts in to the weekly XP league (roadmap P4.1). */
+export function trackLeagueJoined(params: AnalyticsEventMap['league_joined']) {
+  track('league_joined', params)
+}
+
+/** Fires when the student opts out of the weekly XP league. */
+export function trackLeagueLeft() {
+  track('league_left')
 }
 
 // ── Activation-funnel helpers ────────────────────────────────────────────────

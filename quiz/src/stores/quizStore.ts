@@ -10,8 +10,9 @@ import { recordStreakActivity } from '@/lib/streakStore'
 import { xpForAnswers } from '@/lib/xp'
 import { recordXp } from '@/lib/xpStore'
 import { recordQuestProgress } from '@/lib/questStore'
+import { recordLeagueXp } from '@/lib/leagueStore'
 import type { QuestAnswer } from '@/lib/quests'
-import { QUESTS_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { LEAGUES_ENABLED, QUESTS_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 
@@ -68,11 +69,12 @@ function quizAnswers(
   return answers
 }
 
-// Award quiz XP toward the daily goal, then advance today's quests (which pay
-// their own gem/XP rewards). Sequenced in one fire-and-forget chain — never
-// awaited by callers — because both recordXp and a quest payout read-modify-write
-// the same user_xp row; firing them concurrently could drop one of the writes.
-// Both stores swallow their own failures, so this can never break quiz completion.
+// Award quiz XP toward the daily goal and the weekly league, then advance
+// today's quests (which pay their own gem/XP rewards). Sequenced in one
+// fire-and-forget chain — never awaited by callers — because both recordXp and
+// a quest payout read-modify-write the same user_xp row; firing them
+// concurrently could drop one of the writes. All three stores swallow their
+// own failures, so this can never break quiz completion.
 function awardXpAndQuests(
   userId: string | null,
   questions: Question[],
@@ -80,13 +82,15 @@ function awardXpAndQuests(
   manualGrades: Record<string, SelfGrade>,
   transitions: MasteryTransition[],
 ): void {
-  if (!XP_ENABLED && !QUESTS_ENABLED) return
+  if (!XP_ENABLED && !QUESTS_ENABLED && !LEAGUES_ENABLED) return
   const answers = quizAnswers(questions, responses, manualGrades, transitions)
   const levelUps = transitions.filter(
     t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
   ).length
+  const xp = xpForAnswers(answers)
   void (async () => {
-    if (XP_ENABLED) await recordXp(userId, xpForAnswers(answers))
+    if (XP_ENABLED) await recordXp(userId, xp)
+    if (LEAGUES_ENABLED) await recordLeagueXp(userId, xp)
     if (QUESTS_ENABLED) {
       await recordQuestProgress(userId, { answers, levelUps, totalQuestions: questions.length })
     }

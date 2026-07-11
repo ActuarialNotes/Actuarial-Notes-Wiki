@@ -103,17 +103,21 @@ Other important `lib/` modules:
   and `components/QuestCompleteOverlay.tsx` (post-quiz collect prompt on /review).
   Gated by `QUESTS_ENABLED`.
 - `leagues.ts` / `leagueStore.ts` — weekly XP leagues (roadmap P4.1), the opt-in social
-  layer. `leagues.ts` is the pure, tested core: the Bronze→Diamond tier ladder, the
+  layer. Leagues are **per-exam** (keyed by the exam_progress key: `P`/`FM`/`MAS-I`).
+  `leagues.ts` is the pure, tested core: the Bronze→Diamond tier ladder, the
   promotion/demotion zone formulas (duplicated in the SQL rollover — see
   `docs/leagues.md`), and the Monday-UTC week clock. Unlike the other gamification
   stores, `leagueStore.ts` has no localStorage side: leagues are signed-in only and all
   state lives behind SECURITY DEFINER RPCs (`join_league`, `leave_league`,
-  `record_league_xp`, `get_league_board` in `supabase/migrations/20260710_leagues.sql`)
-  because a leaderboard is cross-user — the client can never write its own weekly XP or
-  read the raw member table. `recordLeagueXp` is fired alongside `recordXp` from
-  `quizStore` and quest claims. Surfaced via `hooks/useLeague.ts` +
-  `components/LeagueCard.tsx` (Dashboard) and `components/LeagueSettingsCard.tsx`
-  (Settings opt-in/out). Gated by `LEAGUES_ENABLED`.
+  `record_league_xp`, `get_league_board` — each takes the exam — in
+  `supabase/migrations/20260710_leagues.sql`) because a leaderboard is cross-user — the
+  client can never write its own weekly XP or read the raw member table. `recordLeagueXp`
+  is fired alongside `recordXp` from `quizStore` on quiz completion, credited to the
+  quiz's exam (quest XP is not — quests are cross-exam). Surfaced not as its own card but
+  as the **League tab** in the Level-badge popup (`components/LevelBadge.tsx` hosts
+  Level/Quests/League tabs → `components/LeaderboardPanel.tsx` with a per-exam selector,
+  `components/QuestsPanel.tsx`), plus `components/LeagueSettingsCard.tsx` (Settings
+  opt-in/out). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
   `LEAGUES_ENABLED`)

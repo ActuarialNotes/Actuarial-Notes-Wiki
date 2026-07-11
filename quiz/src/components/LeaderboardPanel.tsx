@@ -1,40 +1,56 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Loader2, Minus, Trophy, X } from 'lucide-react'
+import { ChevronDown, ChevronUp, Loader2, Minus, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useLeague } from '@/hooks/useLeague'
 import { formatWeekCountdown, tierByIndex, zoneForRank, type LeagueZone } from '@/lib/leagues'
 import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { cn } from '@/lib/utils'
 
+// Leaderboard tab body for the Level popup (roadmap P4.1). Leagues are per-exam,
+// so it carries a compact exam selector (styled like the Dashboard exam pills,
+// smaller) when more than one exam is active. Signed-in only; nothing is shared
+// until the student explicitly joins the selected exam's league.
+
 const RESULT_ACK_PREFIX = 'actuarial_league_result_ack_'
 
-function resultAcknowledged(week: string): boolean {
+/** Result ack is keyed by exam + week so each exam's banner dismisses on its own. */
+function ackKey(exam: string, week: string): string {
+  return `${RESULT_ACK_PREFIX}${exam}_${week}`
+}
+
+function resultAcknowledged(exam: string, week: string): boolean {
   try {
-    return localStorage.getItem(RESULT_ACK_PREFIX + week) === '1'
+    return localStorage.getItem(ackKey(exam, week)) === '1'
   } catch {
     return false
   }
 }
 
-function acknowledgeResult(week: string): void {
+function acknowledgeResult(exam: string, week: string): void {
   try {
-    localStorage.setItem(RESULT_ACK_PREFIX + week, '1')
+    localStorage.setItem(ackKey(exam, week), '1')
   } catch {
     /* quota exceeded */
   }
 }
 
-/**
- * Weekly XP league card (roadmap P4.1). Collapsed to a one-line summary —
- * tier + rank, or an invitation to join — and expandable into the full cohort
- * leaderboard with promotion/demotion zones. Signed-in only (the Dashboard
- * gates it); nothing is shared until the student explicitly opts in, and the
- * join view spells out exactly what joining shares.
- */
-export function LeagueCard() {
+export interface LeagueExamOption {
+  id: string
+  label: string
+}
+
+export function LeaderboardPanel({
+  exams,
+  initialExamId,
+}: {
+  exams: LeagueExamOption[]
+  initialExamId?: string | null
+}) {
   const { user } = useAuth()
-  const league = useLeague()
-  const [expanded, setExpanded] = useState(false)
+  const [selectedExam, setSelectedExam] = useState<string | null>(
+    initialExamId && exams.some(e => e.id === initialExamId) ? initialExamId : exams[0]?.id ?? null,
+  )
+  const league = useLeague(selectedExam)
   const [joining, setJoining] = useState(false)
   const [dismissedWeek, setDismissedWeek] = useState<string | null>(null)
 
@@ -46,82 +62,80 @@ export function LeagueCard() {
   const avatarUrl = (user?.user_metadata?.avatar_url as string | undefined) ?? ''
   const initials = displayName.slice(0, 2).toUpperCase()
 
-  const summary = league.loading
-    ? ''
-    : league.optedIn
-      ? `${league.tier.label}${league.selfRank ? ` · #${league.selfRank}` : ''} · ${formatWeekCountdown(new Date())} left`
-      : 'Compete in a weekly XP leaderboard'
-
   const handleJoin = async () => {
     setJoining(true)
     await league.join(displayName, avatarUrl)
     setJoining(false)
   }
 
-  // Last week's outcome, until dismissed (persisted per week across reloads).
+  if (exams.length === 0) {
+    return (
+      <p className="py-4 text-center text-sm text-muted-foreground">
+        Start studying an exam to join its weekly league.
+      </p>
+    )
+  }
+
   const showResult =
     league.lastResult &&
+    selectedExam &&
     league.lastResult.week !== dismissedWeek &&
-    !resultAcknowledged(league.lastResult.week)
+    !resultAcknowledged(selectedExam, league.lastResult.week)
 
   return (
-    <div className="rounded-2xl border bg-card">
-      {/* Header — the whole row toggles the section. */}
-      <button
-        type="button"
-        onClick={() => setExpanded(v => !v)}
-        aria-expanded={expanded}
-        className="flex w-full items-center gap-2 rounded-2xl p-5 text-left transition-colors hover:bg-muted/40"
-      >
-        <Trophy className="h-4 w-4 shrink-0" style={{ color: league.tier.color }} />
-        <h2 className="text-sm font-bold tracking-tight">League</h2>
-        <span className="min-w-0 flex-1 truncate text-xs font-medium tabular-nums text-muted-foreground">
-          {summary}
-        </span>
-        <ChevronDown
-          className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`}
-        />
-      </button>
-
-      {expanded && (
-        <div className="space-y-4 px-5 pb-5">
-          {league.loading ? (
-            <div className="flex justify-center py-6">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            </div>
-          ) : !league.optedIn ? (
-            <JoinPrompt
-              displayName={displayName}
-              avatarUrl={avatarUrl}
-              initials={initials}
-              joining={joining}
-              onJoin={() => void handleJoin()}
-            />
-          ) : (
-            <>
-              {showResult && league.lastResult && (
-                <ResultBanner
-                  result={league.lastResult.result}
-                  rank={league.lastResult.rank}
-                  tierLabel={league.tier.label}
-                  onDismiss={() => {
-                    acknowledgeResult(league.lastResult!.week)
-                    setDismissedWeek(league.lastResult!.week)
-                  }}
-                />
+    <div className="space-y-3">
+      {/* Exam selector — mirrors the Dashboard exam pills, smaller. */}
+      {exams.length > 1 && (
+        <div className="flex flex-wrap gap-1.5">
+          {exams.map(e => (
+            <button
+              key={e.id}
+              type="button"
+              onClick={() => setSelectedExam(e.id)}
+              className={cn(
+                'rounded-full px-3 py-1 text-xs font-semibold transition-colors',
+                e.id === selectedExam
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-transparent text-muted-foreground hover:text-foreground',
               )}
-              <Board
-                board={league.board}
-                tierIndex={league.tier.index}
-                tierLabel={league.tier.label}
-              />
-              <p className="text-[11px] text-muted-foreground">
-                Top finishers move up a league on Monday (00:00 UTC); the bottom — and anyone
-                who ends the week with 0 XP — move down.
-              </p>
-            </>
-          )}
+            >
+              {e.label}
+            </button>
+          ))}
         </div>
+      )}
+
+      {league.loading ? (
+        <div className="flex justify-center py-6">
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : !league.optedIn ? (
+        <JoinPrompt
+          displayName={displayName}
+          avatarUrl={avatarUrl}
+          initials={initials}
+          joining={joining}
+          onJoin={() => void handleJoin()}
+        />
+      ) : (
+        <>
+          {showResult && league.lastResult && selectedExam && (
+            <ResultBanner
+              result={league.lastResult.result}
+              rank={league.lastResult.rank}
+              tierLabel={league.tier.label}
+              onDismiss={() => {
+                acknowledgeResult(selectedExam, league.lastResult!.week)
+                setDismissedWeek(league.lastResult!.week)
+              }}
+            />
+          )}
+          <Board board={league.board} tierIndex={league.tier.index} tierLabel={league.tier.label} />
+          <p className="text-[11px] text-muted-foreground">
+            Top finishers move up a league on Monday (00:00 UTC); the bottom — and anyone who
+            ends the week with 0 XP — move down.
+          </p>
+        </>
       )}
     </div>
   )
@@ -145,7 +159,7 @@ function JoinPrompt({
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">
-        Join a weekly league of up to 30 students studying alongside you. Earn XP to climb the
+        Join a weekly league of up to 30 students studying this exam. Earn XP to climb the
         board — finish near the top and you&apos;re promoted to the next league.
       </p>
       <div className="flex items-center gap-2.5 rounded-xl bg-muted/40 p-3">

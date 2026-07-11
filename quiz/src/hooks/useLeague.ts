@@ -16,9 +16,11 @@ export interface LeagueView {
   loading: boolean
   /** Leagues are signed-in only; false = show nothing (guest Dashboard is gated anyway). */
   signedIn: boolean
-  /** Whether the user has opted in to the weekly league. */
+  /** Whether an exam is selected to view a league for. */
+  hasExam: boolean
+  /** Whether the user has opted in to this exam's weekly league. */
   optedIn: boolean
-  /** The user's current tier on the ladder. */
+  /** The user's current tier on the ladder for this exam. */
   tier: LeagueTier
   /** This week's cohort standings (empty when not a member or still loading). */
   board: LeagueBoardRow[]
@@ -48,13 +50,14 @@ function previousWeekKey(now: Date): string {
   return weekKey(lastWeek)
 }
 
-// Reads the current user's league state + cohort standings and keeps them fresh
-// via the same-tab LEAGUE_EVENT (fired after quiz XP / join / leave), realtime
-// on the user's own user_leagues row (rollover results land there), and a
-// tab-focus refetch. Mirrors the load/subscribe pattern used by useXp. The
+// Reads the current user's league state + cohort standings for `exam` and keeps
+// them fresh via the same-tab LEAGUE_EVENT (fired after quiz XP / join / leave),
+// realtime on the user's own user_leagues rows (rollover results land there),
+// and a tab-focus refetch. Mirrors the load/subscribe pattern used by useXp. The
 // board itself is not on realtime — cohort-mates' scores refresh on those same
-// triggers, which is plenty for a weekly leaderboard.
-export function useLeague(): LeagueView {
+// triggers, which is plenty for a weekly leaderboard. Pass `exam` = null when no
+// exam is selected (returns an empty, opted-out view).
+export function useLeague(exam: string | null): LeagueView {
   const { user } = useAuth()
   const userId = user?.id
   // Per-instance channel name so multiple mounts don't collide on one channel.
@@ -68,7 +71,7 @@ export function useLeague(): LeagueView {
 
   useEffect(() => {
     let cancelled = false
-    if (!userId) {
+    if (!userId || !exam) {
       setSelf(EMPTY_SELF)
       setBoard([])
       setLoading(false)
@@ -78,15 +81,15 @@ export function useLeague(): LeagueView {
     void (async () => {
       // Board first: its RPC performs the lazy weekly rollover server-side, so
       // reading self *after* it sees the post-rollover tier/result on Mondays.
-      const nextBoard = await fetchLeagueBoard(userId)
-      const nextSelf = await fetchLeagueSelf(userId)
+      const nextBoard = await fetchLeagueBoard(userId, exam)
+      const nextSelf = await fetchLeagueSelf(userId, exam)
       if (cancelled) return
       setBoard(nextBoard ?? [])
       setSelf(nextSelf ?? EMPTY_SELF)
       setLoading(false)
     })()
     return () => { cancelled = true }
-  }, [userId, version])
+  }, [userId, exam, version])
 
   // Same-tab updates (quiz completion / join / leave dispatch LEAGUE_EVENT).
   useEffect(() => {
@@ -119,16 +122,18 @@ export function useLeague(): LeagueView {
 
   const join = useCallback(
     async (displayName: string, avatarUrl: string) => {
-      await joinLeague(userId ?? null, { displayName, avatarUrl })
+      if (!exam) return
+      await joinLeague(userId ?? null, exam, { displayName, avatarUrl })
       refresh()
     },
-    [userId, refresh],
+    [userId, exam, refresh],
   )
 
   const leave = useCallback(async () => {
-    await leaveLeague(userId ?? null)
+    if (!exam) return
+    await leaveLeague(userId ?? null, exam)
     refresh()
-  }, [userId, refresh])
+  }, [userId, exam, refresh])
 
   const selfRank = board.find(row => row.isSelf)?.rank ?? null
 
@@ -142,6 +147,7 @@ export function useLeague(): LeagueView {
   return {
     loading,
     signedIn: !!userId,
+    hasExam: !!exam,
     optedIn: self.optedIn,
     tier: tierByIndex(self.tier),
     board,

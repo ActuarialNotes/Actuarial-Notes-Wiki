@@ -27,10 +27,9 @@ import { LOCALIZED_EXAMS, matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
 import { StreakStat } from '@/components/StreakBadge'
 import { LevelBadge } from '@/components/LevelBadge'
-import { QuestBadge } from '@/components/QuestBadge'
 import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
-import { LeagueCard } from '@/components/LeagueCard'
-import { LEAGUES_ENABLED, MASTERY_ANALYTICS_ENABLED, QUESTS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import type { LeagueExamOption } from '@/components/LeaderboardPanel'
+import { MASTERY_ANALYTICS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -271,6 +270,20 @@ export default function Dashboard() {
   const activeProgressKey = activeSyllabus ? wikiExamIdToProgressKey(activeSyllabus.examId) : null
   const activeTargetDate = activeProgressKey ? (targetDates[activeProgressKey] ?? null) : null
 
+  // Active exams for the Leaderboard tab's exam selector (leagues are per-exam),
+  // keyed by exam_progress key so they match what quizStore credits XP to.
+  const leagueExams = useMemo<LeagueExamOption[]>(() => {
+    const seen = new Set<string>()
+    const out: LeagueExamOption[] = []
+    for (const s of inProgressSyllabi) {
+      const id = wikiExamIdToProgressKey(s.examId)
+      if (seen.has(id)) continue
+      seen.add(id)
+      out.push({ id, label: s.examLabel })
+    }
+    return out
+  }, [inProgressSyllabi])
+
   // Mastery records scoped to the active exam — feeds the mastery-analytics card (P2.5).
   const activeExamRecords = useMemo(
     () => (activeProgressKey ? masteryRecords.filter(r => r.exam_id === activeProgressKey) : []),
@@ -431,15 +444,18 @@ export default function Dashboard() {
             style={{ cursor: isGuest ? 'default' : 'pointer' }}
           >
             {!isGuest && showLevelBadge && (
-              <LevelBadge avatarUrl={avatarUrl} size={36} />
+              <LevelBadge
+                avatarUrl={avatarUrl}
+                size={36}
+                questContext={questContext}
+                leagueExams={leagueExams}
+                activeExamId={activeProgressKey}
+              />
             )}
             {!isGuest && !showLevelBadge && (
               <MascotWidget compact avatarUrl={avatarUrl} initials={initials} context={mascotContext} />
             )}
             {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
-            {!isGuest && QUESTS_ENABLED && (
-              <QuestBadge context={questContext} />
-            )}
             <span className="text-sm font-semibold truncate min-w-0">{displayName}</span>
             {!isGuest && (
               <button
@@ -668,8 +684,6 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Weekly XP league — opt-in leaderboard (roadmap P4.1); not exam-scoped */}
-      {LEAGUES_ENABLED && !isGuest && <LeagueCard />}
 
       {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
       {!isGuest && onboardingOpen && activeSyllabus && (

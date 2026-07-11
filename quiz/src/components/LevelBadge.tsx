@@ -1,24 +1,42 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { X, Palette, Zap, Sparkles, Target, Check } from 'lucide-react'
+import { X, Palette, Zap, Sparkles, Target, Check, Trophy, Swords, BarChart3 } from 'lucide-react'
 import { useXp, type XpView } from '@/hooks/useXp'
+import { useQuests } from '@/hooks/useQuests'
 import { XP_CORRECT, XP_REVIVE_BONUS } from '@/lib/xp'
+import { QUESTS_ENABLED, LEAGUES_ENABLED } from '@/lib/featureFlags'
 import { CharacterSkinSelector } from '@/components/MascotWidget'
+import { QuestsPanel } from '@/components/QuestsPanel'
+import { LeaderboardPanel, type LeagueExamOption } from '@/components/LeaderboardPanel'
+import type { QuestContext } from '@/lib/quests'
 
 // Level badge (roadmap P1.2). Replaces the character icon in the Dashboard header
 // with a compact ring showing the current level and today's daily-goal progress.
-// Clicking it opens a popup with the XP breakdown, how bonuses are earned, and a
-// way to change character (the header was the only entry point to that selector).
+// Clicking it opens a popup with three tabs — Level (XP + daily goal), Quests
+// (today's board, roadmap P1.4), and Leaderboard (per-exam weekly league,
+// roadmap P4.1) — consolidating what used to be separate header badges/cards.
 
 interface LevelBadgeProps {
   /** Diameter in px (matches the mascot icon it replaces). */
   size?: number
   /** Current avatar url — passed through to the character selector in the popup. */
   avatarUrl: string
+  /** Personalization signals for the daily-quest board (Quests tab). */
+  questContext?: QuestContext
+  /** Active exams for the Leaderboard tab's exam selector (progress key + label). */
+  leagueExams?: LeagueExamOption[]
+  /** The exam to default the Leaderboard tab to (the Dashboard's active exam). */
+  activeExamId?: string | null
 }
 
-export function LevelBadge({ size = 36, avatarUrl }: LevelBadgeProps) {
+type PopupTab = 'level' | 'quests' | 'leaderboard'
+
+export function LevelBadge({ size = 36, avatarUrl, questContext, leagueExams = [], activeExamId }: LevelBadgeProps) {
   const xp = useXp()
+  // Read the quest board here too so the ring can show a "collect me" dot even
+  // while the popup is closed (the old QuestBadge did this in the same spot).
+  const quests = useQuests(QUESTS_ENABLED ? questContext : undefined)
+  const claimableCount = QUESTS_ENABLED ? quests.claimable.length : 0
   const [open, setOpen] = useState(false)
 
   if (xp.loading) {
@@ -36,13 +54,28 @@ export function LevelBadge({ size = 36, avatarUrl }: LevelBadgeProps) {
       <button
         type="button"
         onClick={e => { e.stopPropagation(); setOpen(true) }}
-        aria-label={`Level ${xp.level}, ${xp.earnedToday} of ${xp.target} daily XP. View progress.`}
+        aria-label={`Level ${xp.level}, ${xp.earnedToday} of ${xp.target} daily XP. View progress, quests and leaderboard.`}
         title={`Level ${xp.level} · ${xp.earnedToday}/${xp.target} XP today`}
-        className="rounded-full transition-transform duration-150 active:scale-90 outline-none focus-visible:ring-2 focus-visible:ring-primary block"
+        className="relative rounded-full transition-transform duration-150 active:scale-90 outline-none focus-visible:ring-2 focus-visible:ring-primary block"
       >
         <LevelRing size={size} level={xp.level} ratio={xp.ratio} met={xp.met} />
+        {claimableCount > 0 && (
+          <span className="absolute -top-1 -right-1 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-emerald-500 px-[3px] text-[9px] font-bold leading-none text-white tabular-nums">
+            {claimableCount}
+          </span>
+        )}
       </button>
-      {open && <XpPopup xp={xp} avatarUrl={avatarUrl} onClose={() => setOpen(false)} />}
+      {open && (
+        <LevelPopup
+          xp={xp}
+          avatarUrl={avatarUrl}
+          questContext={questContext}
+          leagueExams={leagueExams}
+          activeExamId={activeExamId}
+          claimableCount={claimableCount}
+          onClose={() => setOpen(false)}
+        />
+      )}
     </div>
   )
 }
@@ -96,9 +129,24 @@ function ProgressBar({ ratio, color }: { ratio: number; color: string }) {
   )
 }
 
-function XpPopup({ xp, avatarUrl, onClose }: { xp: XpView; avatarUrl: string; onClose: () => void }) {
-  const navigate = useNavigate()
-  const [showCharacter, setShowCharacter] = useState(false)
+function LevelPopup({
+  xp,
+  avatarUrl,
+  questContext,
+  leagueExams,
+  activeExamId,
+  claimableCount,
+  onClose,
+}: {
+  xp: XpView
+  avatarUrl: string
+  questContext?: QuestContext
+  leagueExams: LeagueExamOption[]
+  activeExamId?: string | null
+  claimableCount: number
+  onClose: () => void
+}) {
+  const [tab, setTab] = useState<PopupTab>('level')
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -106,7 +154,12 @@ function XpPopup({ xp, avatarUrl, onClose }: { xp: XpView; avatarUrl: string; on
     return () => window.removeEventListener('keydown', handler)
   }, [onClose])
 
-  const levelRatio = xp.xpForLevel > 0 ? xp.xpIntoLevel / xp.xpForLevel : 0
+  const tabs: { id: PopupTab; label: string; Icon: typeof Target; show: boolean; badge?: number }[] = [
+    { id: 'level', label: 'Level', Icon: BarChart3, show: true },
+    { id: 'quests', label: 'Quests', Icon: Swords, show: QUESTS_ENABLED, badge: claimableCount },
+    { id: 'leaderboard', label: 'League', Icon: Trophy, show: LEAGUES_ENABLED },
+  ]
+  const visibleTabs = tabs.filter(t => t.show)
 
   return (
     <>
@@ -119,10 +172,10 @@ function XpPopup({ xp, avatarUrl, onClose }: { xp: XpView; avatarUrl: string; on
 
       {/* Popup — centered on all screen sizes */}
       <div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[340px] bg-card rounded-2xl shadow-2xl p-4 outline-none text-left"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[66] w-[calc(100vw-2rem)] max-w-[360px] bg-card rounded-2xl shadow-2xl p-4 outline-none text-left"
         role="dialog"
         aria-modal="true"
-        aria-label="Your XP and daily goal"
+        aria-label="Your progress, quests and leaderboard"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -146,79 +199,125 @@ function XpPopup({ xp, avatarUrl, onClose }: { xp: XpView; avatarUrl: string; on
           </button>
         </div>
 
-        {/* Level progress */}
-        <div className="space-y-1.5 mb-4">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">Progress to Level {xp.level + 1}</span>
-            <span className="tabular-nums font-medium">{xp.xpIntoLevel}/{xp.xpForLevel} XP</span>
+        {/* Tabs */}
+        {visibleTabs.length > 1 && (
+          <div className="mb-4 flex gap-1 rounded-xl bg-muted/50 p-1">
+            {visibleTabs.map(t => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setTab(t.id)}
+                aria-pressed={tab === t.id}
+                className={`relative flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-semibold transition-colors ${
+                  tab === t.id
+                    ? 'bg-card text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <t.Icon className="h-3.5 w-3.5" />
+                {t.label}
+                {!!t.badge && t.badge > 0 && (
+                  <span className="ml-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-emerald-500 px-[3px] text-[9px] font-bold leading-none text-white tabular-nums">
+                    {t.badge}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
-          <ProgressBar ratio={levelRatio} color="#8b5cf6" />
-        </div>
+        )}
 
-        {/* Today's daily goal */}
-        <div className="rounded-xl bg-muted/40 p-3 mb-4 space-y-1.5">
-          <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-sm font-medium">
-              <Target className="h-4 w-4 text-violet-500" /> Daily goal
+        {/* Tab body */}
+        <div className="max-h-[60vh] overflow-y-auto">
+          {tab === 'level' && <LevelTab xp={xp} avatarUrl={avatarUrl} onClose={onClose} />}
+          {tab === 'quests' && QUESTS_ENABLED && <QuestsPanel context={questContext} />}
+          {tab === 'leaderboard' && LEAGUES_ENABLED && (
+            <LeaderboardPanel exams={leagueExams} initialExamId={activeExamId} />
+          )}
+        </div>
+      </div>
+    </>
+  )
+}
+
+function LevelTab({ xp, avatarUrl, onClose }: { xp: XpView; avatarUrl: string; onClose: () => void }) {
+  const navigate = useNavigate()
+  const [showCharacter, setShowCharacter] = useState(false)
+  const levelRatio = xp.xpForLevel > 0 ? xp.xpIntoLevel / xp.xpForLevel : 0
+
+  return (
+    <>
+      {/* Level progress */}
+      <div className="space-y-1.5 mb-4">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-muted-foreground">Progress to Level {xp.level + 1}</span>
+          <span className="tabular-nums font-medium">{xp.xpIntoLevel}/{xp.xpForLevel} XP</span>
+        </div>
+        <ProgressBar ratio={levelRatio} color="#8b5cf6" />
+      </div>
+
+      {/* Today's daily goal */}
+      <div className="rounded-xl bg-muted/40 p-3 mb-4 space-y-1.5">
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-1.5 text-sm font-medium">
+            <Target className="h-4 w-4 text-violet-500" /> Daily goal
+          </span>
+          {xp.met ? (
+            <span className="flex items-center gap-1 text-xs font-semibold text-green-600 dark:text-green-400">
+              <Check className="h-3.5 w-3.5" /> Reached
             </span>
-            {xp.met ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-green-600 dark:text-green-400">
-                <Check className="h-3.5 w-3.5" /> Reached
-              </span>
-            ) : (
-              <span className="text-xs tabular-nums font-medium">{xp.earnedToday}/{xp.target} XP</span>
-            )}
-          </div>
-          <ProgressBar ratio={xp.ratio} color={xp.met ? '#22c55e' : '#8b5cf6'} />
-          <p className="text-xs text-muted-foreground">
-            {xp.met
-              ? `Nice — you hit your ${xp.goal.label} goal today.`
-              : `${Math.max(0, xp.target - xp.earnedToday)} XP to go on your ${xp.goal.label} goal.`}
-          </p>
+          ) : (
+            <span className="text-xs tabular-nums font-medium">{xp.earnedToday}/{xp.target} XP</span>
+          )}
         </div>
+        <ProgressBar ratio={xp.ratio} color={xp.met ? '#22c55e' : '#8b5cf6'} />
+        <p className="text-xs text-muted-foreground">
+          {xp.met
+            ? `Nice — you hit your ${xp.goal.label} goal today.`
+            : `${Math.max(0, xp.target - xp.earnedToday)} XP to go on your ${xp.goal.label} goal.`}
+        </p>
+      </div>
 
-        {/* How XP is earned (bonuses) */}
-        <div className="space-y-2 mb-1">
-          <p className="text-xs font-medium text-muted-foreground">How you earn XP</p>
-          <ul className="space-y-1.5 text-xs">
-            <li className="flex items-center gap-2">
-              <Zap className="h-3.5 w-3.5 text-amber-500 shrink-0" />
-              <span>
-                Correct answer:{' '}
-                <span className="font-semibold tabular-nums">
-                  {XP_CORRECT.easy}–{XP_CORRECT.hard} XP
-                </span>{' '}
-                <span className="text-muted-foreground">(harder questions pay more)</span>
-              </span>
-            </li>
-            <li className="flex items-center gap-2">
-              <Sparkles className="h-3.5 w-3.5 text-violet-500 shrink-0" />
-              <span>
-                Reviving a fading concept:{' '}
-                <span className="font-semibold tabular-nums">+{XP_REVIVE_BONUS} XP</span>{' '}
-                <span className="text-muted-foreground">bonus</span>
-              </span>
-            </li>
-          </ul>
-        </div>
+      {/* How XP is earned (bonuses) */}
+      <div className="space-y-2 mb-1">
+        <p className="text-xs font-medium text-muted-foreground">How you earn XP</p>
+        <ul className="space-y-1.5 text-xs">
+          <li className="flex items-center gap-2">
+            <Zap className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+            <span>
+              Correct answer:{' '}
+              <span className="font-semibold tabular-nums">
+                {XP_CORRECT.easy}–{XP_CORRECT.hard} XP
+              </span>{' '}
+              <span className="text-muted-foreground">(harder questions pay more)</span>
+            </span>
+          </li>
+          <li className="flex items-center gap-2">
+            <Sparkles className="h-3.5 w-3.5 text-violet-500 shrink-0" />
+            <span>
+              Reviving a fading concept:{' '}
+              <span className="font-semibold tabular-nums">+{XP_REVIVE_BONUS} XP</span>{' '}
+              <span className="text-muted-foreground">bonus</span>
+            </span>
+          </li>
+        </ul>
+      </div>
 
-        {/* Footer actions */}
-        <div className="mt-3 pt-3 flex items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={() => setShowCharacter(true)}
-            className="flex items-center gap-1.5 text-xs text-primary hover:underline"
-          >
-            <Palette className="h-3.5 w-3.5" /> Change character
-          </button>
-          <button
-            type="button"
-            onClick={() => { navigate('/settings'); onClose() }}
-            className="text-xs text-muted-foreground hover:text-foreground hover:underline"
-          >
-            Change goal
-          </button>
-        </div>
+      {/* Footer actions */}
+      <div className="mt-3 pt-3 flex items-center justify-between gap-2">
+        <button
+          type="button"
+          onClick={() => setShowCharacter(true)}
+          className="flex items-center gap-1.5 text-xs text-primary hover:underline"
+        >
+          <Palette className="h-3.5 w-3.5" /> Change character
+        </button>
+        <button
+          type="button"
+          onClick={() => { navigate('/settings'); onClose() }}
+          className="text-xs text-muted-foreground hover:text-foreground hover:underline"
+        >
+          Change goal
+        </button>
       </div>
 
       {showCharacter && (

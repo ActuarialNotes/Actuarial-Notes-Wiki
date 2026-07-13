@@ -227,6 +227,20 @@
   color: hsl(0 0% 9%) !important;
 }
 
+/* Wiki: a repeated mention of a concept already linked earlier in the same
+   learning objective. Kept clickable but rendered dimmer (lower opacity + a
+   dotted underline) so the first/primary link is the one that stands out. */
+.wiki-link--repeat {
+  opacity: 0.5;
+  text-decoration-style: dotted;
+}
+
+/* When a dimmed repeat link is the active concept (popup open), restore full
+   opacity so its highlight chip reads clearly. */
+.wiki-link--active.wiki-link--repeat {
+  opacity: 1;
+}
+
 /* Listen view: the word/equation currently being spoken by text-to-speech.
    .tts-tok carries the transition; .tts-tok--active is the highlight.
    scroll-margin keeps the active word clear of the sticky toolbar at the top

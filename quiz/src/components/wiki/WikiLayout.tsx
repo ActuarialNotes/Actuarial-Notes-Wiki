@@ -11,11 +11,17 @@ import { setWikiIndexBundle } from '@/lib/wikiIndex'
 setWikiContentLookup((path: string) => wikiBundle.files[path])
 setWikiIndexBundle(wikiBundle.index)
 
+export interface StudyPlanHeaderData {
+  items: { name: string }[]
+  onSelect: (index: number) => void
+}
+
 interface WikiPageContextValue {
   setPageRefs: (refs: WikiEntryRef[]) => void
   setExamId: (id: string | null) => void
   setPageTitle: (title: string | null) => void
   setPageTitleBadge: (badge: ReactNode) => void
+  setStudyPlan: (plan: StudyPlanHeaderData | null) => void
   setIsInDevelopment: (v: boolean) => void
   setIsBeta: (v: boolean) => void
 }
@@ -33,6 +39,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const [, setExamIdState] = useState<string | null>(null)
   const [pageTitle, setPageTitleState] = useState<string | null>(null)
   const [pageTitleBadge, setPageTitleBadgeState] = useState<ReactNode>(null)
+  const [studyPlan, setStudyPlanState] = useState<StudyPlanHeaderData | null>(null)
   const [isInDevelopment, setIsInDevelopmentState] = useState(false)
   const [isBeta, setIsBetaState] = useState(false)
   const location = useLocation()
@@ -43,6 +50,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const setExamId = useCallback((id: string | null) => setExamIdState(id), [])
   const setPageTitle = useCallback((title: string | null) => setPageTitleState(title), [])
   const setPageTitleBadge = useCallback((badge: ReactNode) => setPageTitleBadgeState(badge), [])
+  const setStudyPlan = useCallback((plan: StudyPlanHeaderData | null) => setStudyPlanState(plan), [])
   const setIsInDevelopment = useCallback((v: boolean) => setIsInDevelopmentState(v), [])
   const setIsBeta = useCallback((v: boolean) => setIsBetaState(v), [])
 
@@ -63,6 +71,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
     setExamIdState(null)
     setPageTitleState(null)
     setPageTitleBadgeState(null)
+    setStudyPlanState(null)
     setIsInDevelopmentState(false)
     setIsBetaState(false)
 
@@ -75,12 +84,13 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   }, [location.pathname, location.search, closeOnNavigation])
 
   return (
-    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setIsInDevelopment, setIsBeta }}>
+    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setStudyPlan, setIsInDevelopment, setIsBeta }}>
       <div className="min-h-screen flex flex-col">
         <WikiFloatingSearch
           pageRefs={pageRefs}
           pageTitle={pageTitle}
           pageTitleBadge={pageTitleBadge}
+          studyPlan={studyPlan}
           isInDevelopment={isInDevelopment}
           isBeta={isBeta}
         />

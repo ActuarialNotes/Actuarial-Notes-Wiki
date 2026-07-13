@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, FileText, GraduationCap, Search, X } from 'lucide-react'
+import { BookMarked, FileText, GraduationCap, ListChecks, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
@@ -8,6 +8,7 @@ import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import type { StudyPlanHeaderData } from '@/components/wiki/WikiLayout'
 
 type Scope = 'page' | 'all'
 
@@ -15,15 +16,17 @@ interface WikiFloatingSearchProps {
   pageRefs: WikiEntryRef[]
   pageTitle?: string | null
   pageTitleBadge?: React.ReactNode
+  studyPlan?: StudyPlanHeaderData | null
   isInDevelopment?: boolean
   isBeta?: boolean
 }
 
-export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
+export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyPlan, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
   const [active, setActive] = useState(false)
+  const [showPlan, setShowPlan] = useState(false)
   const [chooser, setChooser] = useState<{ conceptName: string; syllabi: WikiExamSyllabus[] } | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -44,6 +47,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
     setQuery('')
     setScope('page')
     setActive(false)
+    setShowPlan(false)
   }, [location.pathname])
 
   useEffect(() => {
@@ -100,6 +104,13 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
   }, [index, query, scope, pageRefs])
 
   const isExpanded = active && hasQuery
+  const hasPlan = !!studyPlan && studyPlan.items.length > 0
+  const planOpen = showPlan && hasPlan && !isExpanded
+
+  function togglePlan() {
+    dismiss()
+    setShowPlan(v => !v)
+  }
 
   function handleConceptSelect(ref: WikiEntryRef) {
     dismiss()
@@ -145,6 +156,13 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
         />
       )}
 
+      {planOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm"
+          onMouseDown={e => { e.preventDefault(); setShowPlan(false) }}
+        />
+      )}
+
       <div
         ref={containerRef}
         data-floating-search
@@ -159,7 +177,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              onFocus={() => setActive(true)}
+              onFocus={() => { setActive(true); setShowPlan(false) }}
               className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder:text-muted-foreground"
               placeholder="Search concepts"
               aria-label="Search study guides"
@@ -182,7 +200,44 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
           {pageTitle && (
             <div className="flex items-center gap-2.5 h-[calc(3.5rem-1px)]">
               <span className="font-semibold text-sm truncate flex-1 min-w-0">{pageTitle}</span>
+              {hasPlan && (
+                <button
+                  type="button"
+                  onClick={togglePlan}
+                  aria-expanded={planOpen}
+                  aria-label="Today's Study Plan"
+                  className={
+                    'shrink-0 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ' +
+                    (planOpen
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-primary/10 text-primary hover:bg-primary/20')
+                  }
+                >
+                  <ListChecks className="h-4 w-4 shrink-0" />
+                  Today's Study Plan
+                </button>
+              )}
               {pageTitleBadge && <span className="shrink-0">{pageTitleBadge}</span>}
+            </div>
+          )}
+
+          {/* Study plan dropdown — today's concepts */}
+          {planOpen && studyPlan && (
+            <div className="pb-3">
+              <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
+                {studyPlan.items.map((item, idx) => (
+                  <li key={item.name}>
+                    <button
+                      type="button"
+                      onClick={() => { studyPlan.onSelect(idx); setShowPlan(false) }}
+                      className="flex items-center gap-2 w-full text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/60 transition-colors"
+                    >
+                      <FileText className="h-4 w-4 shrink-0 text-violet-500" />
+                      <span className="truncate">{item.name}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
@@ -235,12 +290,12 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, isInDe
         </div>
 
         {/* Status banner — thin, full-width, hidden while search dropdown is open */}
-        {pageTitle && isInDevelopment && !isExpanded && (
+        {pageTitle && isInDevelopment && !isExpanded && !planOpen && (
           <div className="bg-amber-500/10 py-1.5 text-center text-amber-600 dark:text-amber-400 text-[11px] font-medium tracking-wide">
             In Development
           </div>
         )}
-        {pageTitle && isBeta && !isExpanded && (
+        {pageTitle && isBeta && !isExpanded && !planOpen && (
           <div className="bg-emerald-500/10 py-1.5 text-center text-emerald-600 dark:text-emerald-400 text-[11px] font-medium tracking-wide">
             Beta
           </div>

@@ -44,6 +44,13 @@ export function ensureListSpacing(md: string): string {
 //   [[Target|Display]]      → [Display](/wiki/concept/Target)
 //   [[Target]]              → [Target](/wiki/concept/Target)
 // Runs `!` (embeds) first so the inner [[...]] isn't consumed by the second pass.
+//
+// Within an exam `[!example]` callout (a learning objective), the second and
+// later mentions of the *same* concept get a `#repeat` fragment on their href
+// so the renderer can style them dimmer — the first (primary) link stands out
+// while every instance stays clickable. The "seen" set resets at each callout
+// header, so a concept re-used across two learning objectives is primary in
+// both (mirroring how the study-plan extractor de-dupes per objective).
 export function rewriteWikilinks(md: string): string {
   const embedded = md.replace(/!\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_full, target: string, display?: string) => {
     const t = target.trim()
@@ -56,12 +63,36 @@ export function rewriteWikilinks(md: string): string {
     return `[📎 ${escapeMarkdownLabel(label)}](${wikiRoute(ref)})`
   })
 
-  return embedded.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_full, target: string, display?: string) => {
-    const t = target.trim()
-    const label = (display ?? '').trim() || (t.includes('/') ? t.split('/').pop()! : t)
-    const ref = hrefToEntryRef(t) ?? { kind: 'concept' as const, name: t }
-    return `[${escapeMarkdownLabel(label)}](${wikiRoute(ref)})`
-  })
+  const linkRe = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g
+  let inExample = false
+  let seen = new Set<string>()
+
+  return embedded
+    .split('\n')
+    .map(line => {
+      const header = line.match(/^>\s*\[!(\w+)\]/)
+      if (header) {
+        inExample = header[1].toLowerCase() === 'example'
+        seen = new Set()
+      } else if (!line.startsWith('>')) {
+        // A non-blockquote line ends the current callout scope.
+        inExample = false
+      }
+
+      return line.replace(linkRe, (_full, target: string, display?: string) => {
+        const t = target.trim()
+        const label = (display ?? '').trim() || (t.includes('/') ? t.split('/').pop()! : t)
+        const ref = hrefToEntryRef(t) ?? { kind: 'concept' as const, name: t }
+        let route = wikiRoute(ref)
+        if (inExample) {
+          const key = ref.name.toLowerCase()
+          if (seen.has(key)) route += '#repeat'
+          else seen.add(key)
+        }
+        return `[${escapeMarkdownLabel(label)}](${route})`
+      })
+    })
+    .join('\n')
 }
 
 export function extractImages(markdown: string): Array<{ src: string; alt: string; caption: string }> {
@@ -190,11 +221,15 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       }
       const route = wikiRoute(ref)
       const exists = isInWikiIndex(ref.kind, ref.name)
+      // A `#repeat` fragment (added by rewriteWikilinks for the 2nd+ mention of
+      // a concept within a learning objective) marks a dimmer, secondary link.
+      const isRepeat = href.includes('#repeat')
       return (
         <a
           href={route}
           data-wikiref={refKey(ref)}
           {...rest}
+          className={isRepeat ? 'wiki-link--repeat' : undefined}
           style={exists ? undefined : { textDecorationLine: 'none' }}
           onClick={e => {
             if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return

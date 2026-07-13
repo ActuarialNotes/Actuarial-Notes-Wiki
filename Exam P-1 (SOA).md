@@ -15,7 +15,7 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > Understand basic concepts of [[Probability]] and [[Discrete Mathematics]].
 > 1. Define [[Set Function]], [[Venn Diagram]], [[Sample Space]], and [[Event]]. Define probability as a set function on a collection of events and state the basic [[Axioms of Probability]]. Use [[Set Theory]] to represent and analyze events.
 > 2. Calculate probabilities using [[Combinatorics]], such as [[Combination]] and [[Permutation]].
-> 3. Define [[Independent Events|Independence]] and calculate probabilities of **Independent Events**.
+> 3. Define [[Independent Events|Independence]] and calculate probabilities of [[Independent Events]].
 > 4. Calculate probabilities of [[Mutually Exclusive Events]].
 > 5. Calculate probabilities using [[Probability Addition Rule]] and [[Probability Multiplication Rule|Probability Multiplication Rules]], including the [[Inclusion-Exclusion Principle]].
 > 6. Define and calculate [[Conditional Probability]].
@@ -24,12 +24,12 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 
 > [!example]- Univariate Random Variables {44-50%}
 > Understand [[Discrete Univariate Distributions]] and [[Continuous Univariate Distributions]] and their applications. 
-> 1. Explain and apply the concepts of **Probability**, [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
-> 2. Calculate **Conditional Probabilities**.
+> 1. Explain and apply the concepts of [[Probability]], [[Random Variable|Random Variables]], probability density functions, and cumulative distribution functions.
+> 2. Calculate [[Conditional Probability|Conditional Probabilities]].
 > 3. Explain and calculate expected values, including moments, mode, median, and [[Percentile|percentiles]].
 > 4. Explain and calculate [[Variance]], [[Standard Deviation]], and [[Coefficient of Variation]].
 > 5. Calculate the amount that an insurance company pays to a policyholder for a claim given [[Policy Information]], including [[Deductible|Deductibles]], [[Coinsurance Percentage|Coinsurance Percentages]], and [[Benefit Limit|Benefit Limits]], as well as other factors, such as [[Inflation]].
-> 6. Calculate the [[Expected Value]], **Variance**, and **Standard Deviation** of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]].
+> 6. Calculate the [[Expected Value]], [[Variance]], and [[Standard Deviation]] of both the [[Loss Random Variable]] and the corresponding [[Payment Random Variable]].
 >
 > ### Discrete Univariate Distributions 
 > - [[Binomial Distribution]]
@@ -52,9 +52,9 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 > 1. Determine [[Joint Probability Function|Joint Probability Functions]] and [[Joint Cumulative Distribution Function|Joint Cumulative Distribution Functions]] for discrete random variables.
 > 2. Determine [[Conditional Probability Function]] and [[Marginal Probability Function]] for discrete random variables.
 > 3. Calculate [[Moments for Joint Distributions]] for joint, conditional, and marginal discrete distributions.
-> 4. Calculate **Variance** and standard deviation for conditional and marginal probability distributions for discrete random variables.
+> 4. Calculate [[Variance]] and standard deviation for conditional and marginal probability distributions for discrete random variables.
 > 5. Calculate the [[Covariance]] and the [[Correlation Coefficient]] for discrete random variables.
-> 6. Determine the **Joint Distribution of Order Statistics** for a set of independent random variables.
+> 6. Determine the [[Order Statistics|Joint Distribution of Order Statistics]] for a set of independent random variables.
 > 7. Calculate [[Probabilities for Linear Combinations]] of independent discrete random variables as well as for continuous normal random variables.
 > 8. Calculate [[Moments for Linear Combinations]] of independent random variables.
 > 9. Apply the [[Central Limit Theorem]] to calculate approximations of probabilities for linear combinations of independent and identically distributed random variables.

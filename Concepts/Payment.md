@@ -1,13 +1,15 @@
-## Definition
+The **payment** $Y$ (the insurer's payment) is the amount an insurer actually pays a policyholder after all policy adjustments — [[Deductible|deductible]], [[Coinsurance|coinsurance]], and [[Benefit Limit|benefit limit]] — are applied to the raw [[Loss Random Variable|loss]] $X$.
 
-The ==Payment== (or insurer's payment) is the amount an insurance company actually pays to a policyholder after all policy adjustments — deductible, coinsurance, and benefit limits — have been applied to the raw loss. It is the output of transforming the loss through the policy terms:
+> $$Y = \min\!\big(c\,(X - d)^+,\ u\big)$$
 
-$$ Y = \min\!\big(c \cdot (X - d)^+,\ u\big) $$
+- $X$ is the ground-up loss, $d$ the deductible, $c$ the coinsurance factor, and $u$ the benefit limit (maximum payment).
+- $(X - d)^+ = \max(X - d,\ 0)$ applies the deductible; multiplying by $c$ applies coinsurance; the outer $\min$ caps the payment at $u$.
+- This is the [[Payment Random Variable|payment random variable]] whose expectation drives premium and reserve calculations.
 
-where $X$ is the loss, $d$ is the deductible, $c$ is the coinsurance proportion, and $u$ is the benefit limit.
-
-> [!example]- A loss $X$ is uniformly distributed on $[0, 1000]$ with a \$$200$ deductible and no other adjustments. What is $E[Y]$?
-> $Y = (X - 200)^+$. For $X \leq 200$, $Y = 0$; for $X > 200$, $Y = X - 200$.
-> $$E[Y] = \int_{200}^{1000} (x - 200) \cdot \frac{1}{1000}\, dx$$
+> [!example]- Expected Payment with a Deductible {Example}
+> A loss $X$ is uniformly distributed on $[0, 1000]$ with a \$$200$ deductible and no other adjustments. Find $E[Y]$.
 >
-> $$= \frac{1}{1000} \cdot \frac{(800)^2}{2} = \frac{640{,}000}{2{,}000} = 320$$
+> > [!answer]-
+> > Here $Y = (X - 200)^+$: zero for $X \le 200$, and $X - 200$ for $X > 200$.
+> > $$\begin{align*} E[Y] &= \int_{200}^{1000} (x - 200)\,\frac{1}{1000}\,dx \\ &= \frac{1}{1000} \cdot \frac{(800)^2}{2} \\ &= \frac{640{,}000}{2{,}000} = 320 \end{align*}$$
+> > The insurer expects to pay \$$320$ per loss after the deductible.

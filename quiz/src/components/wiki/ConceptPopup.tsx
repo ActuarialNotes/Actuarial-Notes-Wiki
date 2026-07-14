@@ -32,7 +32,7 @@ const MASTERY_PILL: Record<MasteryState, { label: string; className: string }> =
 }
 
 export function ConceptPopup() {
-  const { open, list, index, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
+  const { open, list, index, occurrences, occurrenceIndex, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
   const { addCard, hasCard, cards } = useFlashcards()
   const openCollect = useCollect(s => s.open)
   const collectedCards = useCollectedCards(s => s.cards)
@@ -248,8 +248,12 @@ export function ConceptPopup() {
   if (!open || !current) return null
 
   const isCircular = !!(dashboardContext?.circular)
-  const canPrev = isCircular || index > 0
-  const canNext = isCircular || index < list.length - 1
+  // In occurrence mode, prev/next step through every mention (repeats included),
+  // so bounds follow the occurrence list; the count shown stays the deduped
+  // concept total so a repeat never changes "the number of concepts".
+  const occMode = !!(occurrences && occurrences.length)
+  const canPrev = isCircular || (occMode ? occurrenceIndex > 0 : index > 0)
+  const canNext = isCircular || (occMode ? occurrenceIndex < occurrences!.length - 1 : index < list.length - 1)
   const position = `${index + 1} of ${list.length}`
   const sourcePath = current ? entryRefToRepoPath(current) : undefined
   const hasStudyPlan = !!(dashboardContext?.studyPlanList?.length)

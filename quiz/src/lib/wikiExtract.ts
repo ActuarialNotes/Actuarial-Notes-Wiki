@@ -11,14 +11,17 @@ import { hrefToEntryRef, type WikiEntryRef } from '@/lib/wikiRoutes'
 // concept list and causing spurious "Couldn't load" fetch errors.
 const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
 
-export function extractWikiLinksFromText(text: string): WikiEntryRef[] {
-  // Strip YAML frontmatter and the breadcrumb nav line before scanning for links.
+// Ordered scan of every [[wikilink]] in a markdown blob, in document order and
+// WITHOUT de-duplication — so a concept mentioned three times yields three
+// entries. Used to build the occurrence-aware navigation on exam pages (the
+// deduped list drives the concept count; this one drives which occurrence is
+// highlighted). Frontmatter and the breadcrumb nav line are stripped first.
+export function extractWikiLinkOccurrences(text: string): WikiEntryRef[] {
   const cleaned = text
     .replace(/^---\n[\s\S]*?\n---\n?/, '')
     .replace(BREADCRUMB_RE, '')
 
   const regex = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g
-  const seen = new Set<string>()
   const refs: WikiEntryRef[] = []
   let match: RegExpExecArray | null
 
@@ -29,6 +32,16 @@ export function extractWikiLinksFromText(text: string): WikiEntryRef[] {
       kind: 'concept' as const,
       name: display || (target.includes('/') ? target.split('/').pop()! : target),
     }
+    refs.push(ref)
+  }
+  return refs
+}
+
+export function extractWikiLinksFromText(text: string): WikiEntryRef[] {
+  const seen = new Set<string>()
+  const refs: WikiEntryRef[] = []
+
+  for (const ref of extractWikiLinkOccurrences(text)) {
     const key = `${ref.kind}:${ref.name.toLowerCase()}`
     if (!seen.has(key)) {
       seen.add(key)

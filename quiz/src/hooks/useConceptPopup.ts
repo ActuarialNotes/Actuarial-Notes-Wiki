@@ -6,6 +6,18 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 type DashboardFilter = 'study-plan' | 'entire-syllabus' | 'source-material'
 
+// A single mention of a concept on the source page, in document order. The
+// same concept mentioned N times (a primary link + N-1 dimmed repeats) yields
+// N entries with occurrence 0..N-1. `occurrence` is the concept's position
+// among the same-name links in the rendered article, so the highlight can
+// target the exact one that was clicked / navigated to. The concept *count*
+// (the deduped `list`) is unaffected — occurrences only steer highlighting and
+// prev/next stops so a repeat is never skipped over.
+export interface OccurrenceRef {
+  name: string
+  occurrence: number
+}
+
 interface DashboardContext {
   studyPlanList: WikiEntryRef[] | null
   fullList: WikiEntryRef[]
@@ -13,17 +25,24 @@ interface DashboardContext {
   filter: DashboardFilter
   circular: boolean
   fromRadial: boolean
+  // Document-ordered occurrences for the "entire syllabus" view (null elsewhere).
+  occurrences: OccurrenceRef[] | null
 }
 
 interface ConceptPopupState {
   open: boolean
   list: WikiEntryRef[]
   index: number
+  // Document-ordered occurrences for the current (entire-syllabus) view, or
+  // null when occurrence-aware navigation doesn't apply (dashboard, study-plan
+  // / source-material filters). Drives which mention gets highlighted.
+  occurrences: OccurrenceRef[] | null
+  occurrenceIndex: number
   // What triggered the popup — used by "This Page" search to compute scope.
   sourcePath: string | null
   // Set when opened from the dashboard to support the Viewing filter bar.
   dashboardContext: DashboardContext | null
-  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[] }) => void
+  openAt: (list: WikiEntryRef[], index: number, sourcePath?: string | null, studyPlanList?: WikiEntryRef[] | null, resourceList?: WikiEntryRef[] | null, options?: { initialFilter?: DashboardFilter; fullList?: WikiEntryRef[]; occurrences?: OccurrenceRef[] | null; occurrenceIndex?: number }) => void
   // Opens the popup from the dashboard with optional study-plan/entire-syllabus filter.
   openDashboard: (
     fullList: WikiEntryRef[],
@@ -45,22 +64,32 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
   open: false,
   list: [],
   index: 0,
+  occurrences: null,
+  occurrenceIndex: 0,
   sourcePath: null,
   dashboardContext: null,
-  openAt: (list, index, sourcePath = null, studyPlanList, resourceList, options) =>
+  openAt: (list, index, sourcePath = null, studyPlanList, resourceList, options) => {
+    const filter = options?.initialFilter ?? 'entire-syllabus'
+    const occurrences = options?.occurrences ?? null
     set({
       open: true,
       list,
       index: Math.max(0, Math.min(index, list.length - 1)),
+      // Occurrence nav only applies to the entire-syllabus view.
+      occurrences: filter === 'entire-syllabus' ? occurrences : null,
+      occurrenceIndex: filter === 'entire-syllabus' ? Math.max(0, options?.occurrenceIndex ?? 0) : 0,
       sourcePath,
-      dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: options?.fullList ?? list, resourceList: resourceList ?? null, filter: options?.initialFilter ?? 'entire-syllabus', circular: false, fromRadial: false },
-    }),
+      dashboardContext: { studyPlanList: studyPlanList ?? null, fullList: options?.fullList ?? list, resourceList: resourceList ?? null, filter, circular: false, fromRadial: false, occurrences },
+    })
+  },
   openDashboard: (fullList, studyPlanList, filter, initialIndex, options = {}) => {
     const list = filter === 'study-plan' && studyPlanList ? studyPlanList : fullList
     set({
       open: true,
       list,
       index: Math.max(0, Math.min(initialIndex, list.length - 1)),
+      occurrences: null,
+      occurrenceIndex: 0,
       sourcePath: null,
       dashboardContext: {
         studyPlanList,
@@ -69,6 +98,7 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
         filter,
         circular: options.circular ?? false,
         fromRadial: options.fromRadial ?? false,
+        occurrences: null,
       },
     })
   },
@@ -85,35 +115,56 @@ export const useConceptPopup = create<ConceptPopupState>((set, get) => ({
     const newIndex = currentName
       ? Math.max(0, newList.findIndex(r => r.name.toLowerCase() === currentName))
       : 0
-    set({ list: newList, index: newIndex, dashboardContext: { ...dashboardContext, filter } })
+    // Re-enable occurrence nav only for the entire-syllabus view.
+    const occurrences = filter === 'entire-syllabus' ? dashboardContext.occurrences : null
+    const occurrenceIndex =
+      occurrences && currentName
+        ? Math.max(0, occurrences.findIndex(o => o.name.toLowerCase() === currentName))
+        : 0
+    set({ list: newList, index: newIndex, occurrences, occurrenceIndex, dashboardContext: { ...dashboardContext, filter } })
   },
   navigate: delta => {
-    const { list, index, dashboardContext } = get()
+    const { list, index, occurrences, occurrenceIndex } = get()
+    // Occurrence mode: step through every mention (including dimmed repeats) in
+    // document order. The concept `index` follows the occurrence's name, so the
+    // count never changes but a repeat is never skipped.
+    if (occurrences && occurrences.length) {
+      const nextOcc = Math.max(0, Math.min(occurrences.length - 1, occurrenceIndex + delta))
+      const name = occurrences[nextOcc]?.name.toLowerCase()
+      const nextIndex = name ? list.findIndex(r => r.name.toLowerCase() === name) : -1
+      set({ occurrenceIndex: nextOcc, index: nextIndex >= 0 ? nextIndex : index })
+      return
+    }
     if (!list.length) return
+    const { dashboardContext } = get()
     const next = dashboardContext?.circular
       ? ((index + delta) % list.length + list.length) % list.length
       : Math.max(0, Math.min(list.length - 1, index + delta))
     set({ index: next })
   },
   jumpTo: ref => {
-    const { list } = get()
+    const { list, occurrences } = get()
+    // Keep occurrence highlighting in sync: jump to the concept's first mention.
+    const syncOcc = occurrences
+      ? Math.max(0, occurrences.findIndex(o => o.name.toLowerCase() === ref.name.toLowerCase()))
+      : 0
     const existingIdx = list.findIndex(
       r => r.kind === ref.kind && r.name.toLowerCase() === ref.name.toLowerCase(),
     )
     if (existingIdx >= 0) {
-      set({ index: existingIdx })
+      set({ index: existingIdx, occurrenceIndex: syncOcc })
     } else {
       // Append & jump — mirrors publish.js behaviour when following a link
       // from inside a concept.
       const next = [...list, ref]
-      set({ list: next, index: next.length - 1 })
+      set({ list: next, index: next.length - 1, occurrenceIndex: syncOcc })
     }
   },
-  close: () => set({ open: false, list: [], index: 0, sourcePath: null, dashboardContext: null }),
+  close: () => set({ open: false, list: [], index: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null }),
   closeOnNavigation: pathname => {
     const { open, sourcePath } = get()
     if (open && sourcePath && sourcePath !== pathname) {
-      set({ open: false, list: [], index: 0, sourcePath: null, dashboardContext: null })
+      set({ open: false, list: [], index: 0, occurrences: null, occurrenceIndex: 0, sourcePath: null, dashboardContext: null })
     }
   },
 }))

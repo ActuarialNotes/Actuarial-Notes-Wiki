@@ -193,6 +193,8 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
   const popupIndex = useConceptPopup(s => s.index)
   const popupSource = useConceptPopup(s => s.sourcePath)
   const popupCurrent = useConceptPopup(s => s.list[s.index])
+  const popupOccurrences = useConceptPopup(s => s.occurrences)
+  const popupOccurrenceIndex = useConceptPopup(s => s.occurrenceIndex)
 
   const components = useMemo<Components>(() => ({
     ...calloutComponents,
@@ -271,11 +273,19 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         : popupCurrent.kind === 'concept'
         ? `resource:${popupCurrent.name.toLowerCase()}`
         : null
-    const target = Array.from(root.querySelectorAll<HTMLElement>('[data-wikiref]'))
-      .find(el => {
+    const matches = Array.from(root.querySelectorAll<HTMLElement>('[data-wikiref]'))
+      .filter(el => {
         const attr = el.getAttribute('data-wikiref')
         return attr === key || (altKey !== null && attr === altKey)
-      }) ?? null
+      })
+    // Which mention to highlight: the occurrence the user clicked / navigated
+    // to (dimmed repeats included). Falls back to the first when occurrence nav
+    // isn't active or the concept doesn't match the current occurrence entry.
+    const wantOcc =
+      popupOccurrences && popupOccurrences[popupOccurrenceIndex]?.name.toLowerCase() === popupCurrent.name.toLowerCase()
+        ? popupOccurrences[popupOccurrenceIndex]!.occurrence
+        : 0
+    const target = matches[Math.min(wantOcc, matches.length - 1)] ?? matches[0] ?? null
     if (!target) return
     target.classList.add('wiki-link--active')
     root.classList.add('concept-focus-mode')
@@ -314,7 +324,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     // 1. ConceptPopup.useEffect has run and set --concept-split-height.
     // 2. Any callout re-renders have been committed and laid out.
     requestAnimationFrame(() => requestAnimationFrame(doScroll))
-  }, [popupOpen, popupIndex, popupSource, popupCurrent, sourcePath])
+  }, [popupOpen, popupIndex, popupOccurrences, popupOccurrenceIndex, popupSource, popupCurrent, sourcePath])
 
   return (
     <div

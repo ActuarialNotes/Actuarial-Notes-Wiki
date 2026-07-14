@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, Link, useSearchParams, useNavigationType } from 'react-router-dom'
 import { ChevronLeft, Loader2 } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
-import { extractWikiLinksFromText } from '@/lib/wikiExtract'
+import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wikiExtract'
 import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -141,12 +141,31 @@ export default function WikiExam() {
     [content],
   )
 
+  const isConceptRef = (r: WikiEntryRef) =>
+    r.kind === 'concept' && !/ \([^)]*\d{4}\)$/.test(r.name)
+
   const conceptList = useMemo(
-    () => pageRefs
-      .filter(r => r.kind === 'concept')
-      .filter(r => !/ \([^)]*\d{4}\)$/.test(r.name)),
+    () => pageRefs.filter(isConceptRef),
     [pageRefs],
   )
+
+  // Document-ordered concept mentions (dimmed repeats included), each tagged
+  // with its occurrence index among same-name links. Drives which mention the
+  // popup highlights and lets prev/next stop on every occurrence — while the
+  // concept count stays the deduped `conceptList.length`.
+  const conceptOccurrences = useMemo(() => {
+    if (!content) return []
+    const counts = new Map<string, number>()
+    const out: { name: string; occurrence: number }[] = []
+    for (const r of extractWikiLinkOccurrences(content)) {
+      if (!isConceptRef(r)) continue
+      const key = r.name.toLowerCase()
+      const occ = counts.get(key) ?? 0
+      counts.set(key, occ + 1)
+      out.push({ name: r.name, occurrence: occ })
+    }
+    return out
+  }, [content])
 
   const studyPlanRefs = useMemo(() => {
     const row = examRows.find(r => r.exam_id === progressKey)
@@ -198,9 +217,10 @@ export default function WikiExam() {
         openAt(studyPlanRefs, idx, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
           initialFilter: 'study-plan',
           fullList: conceptList,
+          occurrences: conceptOccurrences,
         }),
     })
-  }, [studyPlanRefs, resourceRefs, conceptList, examFileName, openAt, setStudyPlan])
+  }, [studyPlanRefs, resourceRefs, conceptList, conceptOccurrences, examFileName, openAt, setStudyPlan])
 
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind === 'exam') return false
@@ -208,21 +228,40 @@ export default function WikiExam() {
       e.preventDefault()
       const resList = resourceRefs ?? [{ kind: 'resource' as const, name: ref.name }]
       const resIdx = resList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
-      openAt(resList, resIdx >= 0 ? resIdx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList })
+      openAt(resList, resIdx >= 0 ? resIdx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, { initialFilter: 'source-material', fullList: conceptList, occurrences: conceptOccurrences })
       return true
     }
     if (ref.kind !== 'concept') return false
     e.preventDefault()
     const idx = conceptList.findIndex(r => r.name.toLowerCase() === ref.name.toLowerCase())
+    // Which mention was clicked? Count same-name links preceding this anchor in
+    // the article so the highlight lands on the clicked dup, not the first one.
+    const key = `concept:${ref.name.toLowerCase()}`
+    const root = e.currentTarget.closest('[data-source-page]')
+    let clickedOcc = 0
+    if (root) {
+      const sameKey = Array.from(root.querySelectorAll('[data-wikiref]')).filter(
+        el => el.getAttribute('data-wikiref') === key,
+      )
+      const pos = sameKey.indexOf(e.currentTarget)
+      if (pos >= 0) clickedOcc = pos
+    }
+    const occurrenceIndex = Math.max(
+      0,
+      conceptOccurrences.findIndex(
+        o => o.name.toLowerCase() === ref.name.toLowerCase() && o.occurrence === clickedOcc,
+      ),
+    )
     openAt(
       conceptList.length > 0 ? conceptList : [ref],
       idx >= 0 ? idx : 0,
       `${examFileName}.md`,
       studyPlanRefs,
       resourceRefs,
+      { occurrences: conceptOccurrences, occurrenceIndex },
     )
     return true
-  }, [conceptList, resourceRefs, examFileName, openAt, studyPlanRefs])
+  }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs])
 
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
@@ -237,8 +276,15 @@ export default function WikiExam() {
       r => r.name.toLowerCase() === conceptParam.toLowerCase(),
     )
     const openList = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptParam }]
-    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs)
-  }, [conceptParam, pageRefs, conceptList, examFileName, openAt, studyPlanRefs, resourceRefs])
+    const occurrenceIndex = Math.max(
+      0,
+      conceptOccurrences.findIndex(o => o.name.toLowerCase() === conceptParam.toLowerCase()),
+    )
+    openAt(openList, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
+      occurrences: conceptOccurrences,
+      occurrenceIndex,
+    })
+  }, [conceptParam, pageRefs, conceptList, conceptOccurrences, examFileName, openAt, studyPlanRefs, resourceRefs])
 
   return (
     <div className="space-y-4">

@@ -502,7 +502,6 @@ function ConceptActions({
           aria-label={`Unlock ${name}`}
         >
           <Lock className="h-3 w-3 shrink-0" />
-          Unlock
         </button>
       )}
       {questionCount !== 0 && (
@@ -518,7 +517,6 @@ function ConceptActions({
           aria-label={questionCount != null ? `Start quiz on ${name}, ${questionCount} questions` : `Start quiz on ${name}`}
         >
           <Play className="h-3 w-3 shrink-0" />
-          Start Quiz
           {questionCount != null && questionCount > 0 && (
             <span className="rounded-full bg-primary/20 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums leading-none">
               {questionCount}

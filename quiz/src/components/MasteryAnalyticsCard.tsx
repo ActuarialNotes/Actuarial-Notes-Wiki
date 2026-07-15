@@ -67,8 +67,8 @@ interface Props {
  * two views derived from the mastery records the Dashboard already loads:
  * concepts about to decay (each reviewable in a single coverage-optimized
  * question) and a weakest-topics ranking that launches a targeted quiz. The
- * predicted exam-readiness curve lives in the Dashboard readiness-stat popup
- * (ReadinessProjectionModal). Hides itself until the learner has some mastery
+ * predicted exam-readiness curve lives in the Study Schedule info panel
+ * (HeatmapInfoPanel). Hides itself until the learner has some mastery
  * to analyse.
  */
 export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {

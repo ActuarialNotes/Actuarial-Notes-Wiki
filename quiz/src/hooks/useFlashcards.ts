@@ -3,6 +3,10 @@ import type { WikiEntryRef } from '@/lib/wikiRoutes'
 
 export interface FlashCard extends WikiEntryRef {
   addedAt: number
+  // Timestamp the card was marked "completed" in the deck, or undefined if not.
+  // Completed cards stay in the deck (with a checkmark) until "Clear Completed"
+  // sweeps them into a date-stamped saved pack.
+  completedAt?: number
 }
 
 export interface SavedFlashcardPack {
@@ -73,6 +77,8 @@ interface FlashcardsState {
   addCard: (ref: WikiEntryRef) => void
   removeCard: (name: string) => void
   clearCards: () => void
+  toggleCompleted: (name: string) => void
+  clearCompleted: () => void
   hasCard: (name: string) => boolean
   setCustomOrder: (names: string[]) => void
   addSavedPack: (label: string, concepts: string[]) => void
@@ -105,6 +111,59 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     save([])
     saveOrder([])
     set({ cards: [], customOrder: [] })
+  },
+  toggleCompleted: (name) => {
+    const { cards } = get()
+    const nextCards = cards.map(c =>
+      c.name.toLowerCase() === name.toLowerCase()
+        ? { ...c, completedAt: c.completedAt ? undefined : Date.now() }
+        : c,
+    )
+    save(nextCards)
+    set({ cards: nextCards })
+  },
+  clearCompleted: () => {
+    const { cards, customOrder, savedPacks } = get()
+    const completed = cards.filter(c => c.completedAt)
+    if (completed.length === 0) return
+    const completedNames = completed.map(c => c.name)
+    const completedLower = new Set(completedNames.map(n => n.toLowerCase()))
+
+    // Move the cleared cards into a date-stamped "Completed <date>" pack so they
+    // can be re-added from the Packs tab. Merge into today's pack when clearing
+    // more than once in a day rather than spawning duplicate packs.
+    const label = `Completed ${new Date().toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    })}`
+    const existing = savedPacks.find(p => p.label === label)
+    let nextPacks: SavedFlashcardPack[]
+    if (existing) {
+      const merged = [...existing.concepts]
+      const seen = new Set(merged.map(n => n.toLowerCase()))
+      for (const name of completedNames) {
+        if (!seen.has(name.toLowerCase())) { merged.push(name); seen.add(name.toLowerCase()) }
+      }
+      nextPacks = savedPacks.map(p =>
+        p.id === existing.id ? { ...p, concepts: merged, savedAt: Date.now() } : p,
+      )
+    } else {
+      const newPack: SavedFlashcardPack = {
+        id: `completed_${Date.now()}`,
+        label,
+        concepts: completedNames,
+        savedAt: Date.now(),
+      }
+      nextPacks = [...savedPacks, newPack]
+    }
+
+    const nextCards = cards.filter(c => !c.completedAt)
+    const nextOrder = customOrder.filter(n => !completedLower.has(n.toLowerCase()))
+    save(nextCards)
+    saveOrder(nextOrder)
+    persistSavedPacks(nextPacks)
+    set({ cards: nextCards, customOrder: nextOrder, savedPacks: nextPacks })
   },
   hasCard: (name) =>
     get().cards.some(c => c.name.toLowerCase() === name.toLowerCase()),

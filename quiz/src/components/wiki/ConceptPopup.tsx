@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
@@ -48,6 +49,12 @@ export function ConceptPopup() {
   const [showQuestionsModal, setShowQuestionsModal] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
+  // Viewport rect of the play button, captured when the menu opens. The menu is
+  // portaled to <body> (out of the fixed aside's stacking context) so it can
+  // layer above the onboarding-tour coach-mark; fixed positioning is anchored
+  // from this rect. The button sits in the aside's non-scrolling header, so the
+  // rect stays valid for the life of the menu.
+  const [menuRect, setMenuRect] = useState<DOMRect | null>(null)
   const [images, setImages] = useState<Array<{ src: string; alt: string; caption: string }>>([])
   const [showGallery, setShowGallery] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
@@ -140,6 +147,9 @@ export function ConceptPopup() {
     function onPointerDown(e: PointerEvent) {
       const target = e.target as HTMLElement | null
       if (target?.closest('[data-add-to-project-menu]')) return
+      // The menu itself is portaled to <body> (outside playMenuRef), so a click
+      // inside it wouldn't count as "inside" without this marker check.
+      if (target?.closest('[data-play-menu]')) return
       if (playMenuRef.current && !playMenuRef.current.contains(target)) {
         setShowPlayMenu(false)
       }
@@ -341,6 +351,7 @@ export function ConceptPopup() {
               if (!showPlayMenu && playBtnRef.current) {
                 const rect = playBtnRef.current.getBoundingClientRect()
                 setMenuAlignRight(window.innerWidth - rect.right < 200)
+                setMenuRect(rect)
               }
               setShowPlayMenu(v => !v)
             }}
@@ -350,8 +361,17 @@ export function ConceptPopup() {
           >
             <Play className="h-4 w-4" />
           </button>
-          {showPlayMenu && (
-            <div className={`absolute top-full mt-1 w-52 rounded-md bg-popover text-popover-foreground shadow-md z-50 py-1 max-h-72 overflow-y-auto ${menuAlignRight ? 'right-0' : 'left-0'}`}>
+          {showPlayMenu && menuRect && createPortal(
+            <div
+              data-play-menu
+              className="fixed w-52 rounded-md bg-popover text-popover-foreground shadow-md z-[70] py-1 max-h-[min(18rem,80vh)] overflow-y-auto"
+              style={{
+                top: menuRect.bottom + 4,
+                ...(menuAlignRight
+                  ? { right: Math.max(8, window.innerWidth - menuRect.right) }
+                  : { left: menuRect.left }),
+              }}
+            >
               <button
                 type="button"
                 onClick={() => { setShowQuestionsModal(true); setShowPlayMenu(false) }}
@@ -434,7 +454,8 @@ export function ConceptPopup() {
                   </span>
                 )}
               </button>
-            </div>
+            </div>,
+            document.body,
           )}
           </div>
           {/* Sigma icon — visible only while in Math View; clicking exits it */}

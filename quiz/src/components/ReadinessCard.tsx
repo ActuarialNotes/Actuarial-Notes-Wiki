@@ -1590,7 +1590,14 @@ export function ReadinessCard({
         />
       )}
       <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
-      <HeatmapInfoPanel open={showHeatmapInfo} onClose={() => setShowHeatmapInfo(false)} />
+      <HeatmapInfoPanel
+        open={showHeatmapInfo}
+        onClose={() => setShowHeatmapInfo(false)}
+        syllabus={syllabus}
+        masteryRecords={examRecords}
+        examDate={examDate}
+        plan={plan}
+      />
       <DailyBonusInfoPanel open={showBonusInfo} onClose={() => setShowBonusInfo(false)} />
       <StudyGuideInfoPanel open={showStudyGuideInfo} onClose={() => setShowStudyGuideInfo(false)} />
       <DayCompleteInfoPanel

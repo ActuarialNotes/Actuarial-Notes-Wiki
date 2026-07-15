@@ -1234,7 +1234,21 @@ export function ReadinessCard({
 
       {/* Today's Study Plan card */}
       {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
-        <Card ref={studyPlanCardRef} className="border-0 relative">
+        <Card
+          ref={studyPlanCardRef}
+          className={`border-0 relative transition-colors ${allConceptsDone ? 'bg-green-500/10 dark:bg-green-500/15' : ''}`}
+        >
+          {allConceptsDone && (
+            <button
+              type="button"
+              onClick={() => setShowDayCompleteInfo(true)}
+              className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-500 text-white shadow ring-2 ring-background hover:bg-green-600 transition-colors z-10"
+              aria-label="Today's study plan complete — view bonus details"
+              title="Today's study plan complete — tap for details"
+            >
+              <Check className="h-4 w-4" strokeWidth={3} />
+            </button>
+          )}
           {tracePlanBorder && (
             <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
               <rect
@@ -1391,13 +1405,6 @@ export function ReadinessCard({
                 >
                   Replace with today's completed concepts
                 </Button>
-              )}
-
-              {allConceptsDone && (
-                <div className="flex items-center gap-2 rounded-lg bg-green-500/10 border border-green-500/30 px-3 py-2.5 text-green-600 dark:text-green-400">
-                  <CheckCircle2 className="h-4 w-4 shrink-0" />
-                  <span className="text-sm font-semibold">Done for Today!</span>
-                </div>
               )}
 
             </div>

@@ -4,10 +4,12 @@ import {
   BookOpen,
   CalendarDays,
   Check,
+  CheckCircle2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  Circle,
   Eye,
   GraduationCap,
   Headphones,
@@ -1198,6 +1200,8 @@ function SortableCard({
   disableSort = false,
   onCardsAdded,
   focusMode = false,
+  isCompleted = false,
+  onToggleComplete,
 }: {
   card: FlashCard
   masteryState: MasteryState
@@ -1215,6 +1219,11 @@ function SortableCard({
   disableSort?: boolean
   onCardsAdded?: () => void
   focusMode?: boolean
+  // Deck-context completion tracking. When `onToggleComplete` is provided (My
+  // Deck tab) the top-left control becomes a "mark complete" circle instead of
+  // the add/remove-from-deck toggle used elsewhere (e.g. the Collected tab).
+  isCompleted?: boolean
+  onToggleComplete?: (name: string) => void
 }) {
   const [flipped, setFlipped] = useState(globalFlip)
   const [markdown, setMarkdown] = useState<string | null>(null)
@@ -1255,6 +1264,26 @@ function SortableCard({
       className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-transparent text-muted-foreground hover:text-foreground transition-colors"
     >
       {inDeck ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+    </button>
+  )
+
+  // Deck-context "mark complete" control: an empty circle that fills with a
+  // satisfying checkmark when tapped. Replaces the deck toggle in My Deck.
+  const completeToggleButton = (
+    <button
+      type="button"
+      onPointerDown={e => e.stopPropagation()}
+      onClick={e => { e.stopPropagation(); onToggleComplete?.(card.name) }}
+      aria-label={isCompleted ? `Mark ${card.name} not complete` : `Mark ${card.name} complete`}
+      aria-pressed={isCompleted}
+      title={isCompleted ? 'Completed — tap to undo' : 'Mark complete'}
+      className={`inline-flex items-center justify-center h-7 w-7 rounded-full transition-colors ${
+        isCompleted ? 'text-green-500' : 'text-muted-foreground/50 hover:text-green-500'
+      }`}
+    >
+      {isCompleted
+        ? <CheckCircle2 key="done" className="h-5 w-5 flashcard-complete-pop" />
+        : <Circle className="h-5 w-5" />}
     </button>
   )
 
@@ -1307,7 +1336,7 @@ function SortableCard({
   // the standard shine, L3 gets the dramatic pulsing treatment.
   const sheenLevelClass = masteryState === 'level3' ? ' flashcard-sheen-l3' : masteryState === 'level2' ? ' flashcard-sheen-l2' : ''
   const showSheen = (animateCollected ?? collected) && collected
-  const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}`
+  const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}${isCompleted ? ' ring-1 ring-green-500/50' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 shadow-sm'
     : 'bg-card text-card-foreground'
@@ -1529,7 +1558,7 @@ function SortableCard({
       {/* Top bar: deck toggle + actions menu — hidden in focus mode */}
       {!focusMode && (
       <div className="flex items-center justify-between gap-1.5 px-2 pt-2">
-        {deckToggleButton}
+        {onToggleComplete ? completeToggleButton : deckToggleButton}
         <div className="relative" ref={playMenuRef}>
           <button
             ref={playBtnRef}
@@ -1829,8 +1858,10 @@ function GalleryPanel({
   focusMode?: boolean
 }) {
   const { user } = useAuth()
+  const { toggleCompleted, clearCompleted } = useFlashcards()
   const collectedCards = useCollectedCards(s => s.cards)
   const collectedCount = collectedCards.length
+  const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
   const collectedSet = useMemo(
     () => new Set(collectedCards.map(c => c.name.toLowerCase())),
     [collectedCards],
@@ -1875,6 +1906,8 @@ function GalleryPanel({
         animateCollected={false}
         onCardsAdded={onCardsAdded}
         focusMode={focusMode}
+        isCompleted={!!card.completedAt}
+        onToggleComplete={toggleCompleted}
       />
     )
   }
@@ -1946,6 +1979,20 @@ function GalleryPanel({
                 </select>
               )}
               <div className="flex-1" />
+              {completedCount > 0 && (
+                <button
+                  type="button"
+                  onClick={clearCompleted}
+                  title="Move completed cards into a dated pack and clear them from your deck"
+                  className="inline-flex items-center gap-1.5 px-3 h-9 rounded-md bg-green-600 text-white text-xs sm:text-sm font-semibold shadow-sm hover:bg-green-700 active:scale-[0.98] transition-all shrink-0"
+                >
+                  <CheckCircle2 className="h-4 w-4 shrink-0" />
+                  <span>Clear Completed</span>
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/25 tabular-nums">
+                    {completedCount}
+                  </span>
+                </button>
+              )}
               <DeckAddSearch onCardsAdded={onCardsAdded} />
             </div>
             )}

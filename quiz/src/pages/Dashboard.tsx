@@ -28,6 +28,7 @@ import { useGems } from '@/hooks/useGems'
 import { StreakStat } from '@/components/StreakBadge'
 import { LevelBadge } from '@/components/LevelBadge'
 import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
+import { ReadinessProjectionModal } from '@/components/ReadinessProjectionModal'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 import { MASTERY_ANALYTICS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
@@ -158,6 +159,7 @@ export default function Dashboard() {
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
   const [scrollToRadialTrigger, setScrollToRadialTrigger] = useState(0)
+  const [showReadinessProjection, setShowReadinessProjection] = useState(false)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
     () => new URLSearchParams(location.search).get('upgraded') === '1',
   )
@@ -574,9 +576,9 @@ export default function Dashboard() {
               <div className="relative">
                 <button
                   type="button"
-                  onClick={() => setScrollToRadialTrigger(v => v + 1)}
+                  onClick={() => setShowReadinessProjection(true)}
                   className="flex w-full flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-colors"
-                  title="Scroll to study guide"
+                  title="View predicted readiness"
                 >
                   <MiniReadinessRing pct={overallPct} />
                   <span className="text-xs text-muted-foreground">Readiness</span>
@@ -679,8 +681,19 @@ export default function Dashboard() {
         <MasteryAnalyticsCard
           syllabus={activeSyllabus}
           masteryRecords={activeExamRecords}
+        />
+      )}
+
+      {/* Predicted-readiness popup — opened by clicking the readiness stat */}
+      {showReadinessProjection && activeSyllabus && (
+        <ReadinessProjectionModal
+          open={showReadinessProjection}
+          onClose={() => setShowReadinessProjection(false)}
+          syllabus={activeSyllabus}
+          masteryRecords={activeExamRecords}
           examDate={activeTargetDate}
           plan={studyPlan}
+          onViewStudyGuide={() => setScrollToRadialTrigger(v => v + 1)}
         />
       )}
 

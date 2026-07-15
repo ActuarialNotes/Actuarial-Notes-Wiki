@@ -77,9 +77,14 @@ Other important `lib/` modules:
 - `streak.ts` / `streakStore.ts` — daily-streak engine (roadmap P1.1). `streak.ts` is the
   pure, tested core (timezone-correct day boundaries + freeze/repair mechanics);
   `streakStore.ts` persists it to the `user_streaks` table (signed-in) or localStorage
-  (guests) and is called from `quizStore` on quiz completion. Surfaced via
-  `hooks/useStreak.ts` + `components/StreakBadge.tsx` in the Sidebar/BottomNav/Dashboard.
-  Gated by `STREAK_ENABLED`.
+  (guests) and is called from `quizStore` on quiz completion — but only when the quiz
+  had **at least one correct answer** (an all-wrong quiz no longer banks the day). Each
+  record `settleStreak`s a day-keyed celebration marker (grown or not) and fires
+  `STREAK_CELEBRATION_EVENT`; `components/StreakCompleteOverlay.tsx` reads that on /review
+  to play a flame animation when today's streak grew, then resolves so the
+  `QuestCompleteOverlay` follows (sequenced by `PostQuizCelebrations` in `pages/Review.tsx`).
+  Also surfaced via `hooks/useStreak.ts` + `components/StreakBadge.tsx` in the
+  Sidebar/BottomNav/Dashboard. Gated by `STREAK_ENABLED`.
 - `xp.ts` / `xpStore.ts` — daily goal + XP engine (roadmap P1.2). `xp.ts` is the
   pure, tested core: per-answer XP weighted toward hard + decaying (revived) concepts,
   a level curve, and the configurable daily-goal presets (`DAILY_GOALS`). `xpStore.ts`

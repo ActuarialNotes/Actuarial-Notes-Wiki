@@ -617,9 +617,10 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         at: new Date().toISOString(),
       })))
       addDailyQuizStats(correctCount, questions.length)
-      // Completing a quiz counts as a day of study — extend the streak (guest:
-      // localStorage). Idempotent per local day; fire-and-forget.
-      void recordStreakActivity(null)
+      // A correct answer counts as a day of study — extend the streak (guest:
+      // localStorage). Gated on at least one correct answer so an all-wrong quiz
+      // doesn't bank the day. Idempotent per local day; fire-and-forget.
+      if (correctCount > 0) void recordStreakActivity(null)
       // Award XP + quest progress (guest: localStorage). Fire-and-forget.
       awardXpAndQuests(null, questions, responses, manualGrades, masteryTransitions)
       return
@@ -664,10 +665,11 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
 
     addDailyQuizStats(correctCount, questions.length)
 
-    // Completing a quiz counts as a day of study — extend the streak (signed-in:
-    // Supabase). Idempotent per local day; fire-and-forget so a streak write
-    // never blocks or fails the session save.
-    void recordStreakActivity(userId)
+    // A correct answer counts as a day of study — extend the streak (signed-in:
+    // Supabase). Gated on at least one correct answer so an all-wrong quiz
+    // doesn't bank the day. Idempotent per local day; fire-and-forget so a
+    // streak write never blocks or fails the session save.
+    if (correctCount > 0) void recordStreakActivity(userId)
     // Award XP + quest progress (signed-in: Supabase). Fire-and-forget.
     awardXpAndQuests(userId, questions, responses, manualGrades, masteryTransitions)
 
@@ -745,8 +747,9 @@ export async function syncPendingSessionToCloud(
     return false
   }
 
-  // Seed the signed-in streak for today from this just-synced guest session.
-  void recordStreakActivity(userId)
+  // Seed the signed-in streak for today from this just-synced guest session —
+  // only when it had a correct answer (matches the live completeQuiz gate).
+  if (correctCount > 0) void recordStreakActivity(userId)
   // Award XP + quest progress for the just-synced guest session on the account.
   awardXpAndQuests(userId, questions, responses, manualGrades, masteryTransitions)
 

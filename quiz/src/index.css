@@ -290,7 +290,9 @@
 }
 .onboarding-spotlight {
   position: fixed;
-  z-index: 62;
+  /* Above the concept popup's actions menu (z-70, portaled to <body>) so the
+     tour highlight stays visible when spotlighting an item inside that menu. */
+  z-index: 72;
   pointer-events: none;
   border-radius: 12px;
   box-shadow: 0 0 0 2px hsl(var(--primary));

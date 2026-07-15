@@ -126,6 +126,8 @@ function MultiSelectDropdown({
 export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: ConceptQuestionsModalProps) {
   const unlocked = useIsConceptUnlocked(conceptName)
   const openCollect = useCollect(s => s.open)
+  const closeCollect = useCollect(s => s.close)
+  const [pendingStart, setPendingStart] = useState(false)
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -134,9 +136,9 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
   const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    // Practice questions for a locked concept aren't fetched until it's
-    // collected — quizzing is gated behind the collect prompt below.
-    if (!unlocked) return
+    // The question browser is always available so the user can preview and
+    // pick questions before collecting — starting the quiz is what's gated
+    // behind the collect prompt (see handleStartQuiz), not browsing.
     let cancelled = false
     setLoading(true)
     setError(null)
@@ -158,7 +160,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
         if (!cancelled) setLoading(false)
       })
     return () => { cancelled = true }
-  }, [conceptName, unlocked])
+  }, [conceptName])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -259,8 +261,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
     [questions, selectedIds],
   )
 
-  function handleStartQuiz() {
-    if (selectedQuestions.length === 0) return
+  function beginQuiz() {
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selectedQuestions.map(q => q.id)))
     } catch { /* ignore */ }
@@ -268,6 +269,31 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
     onClose()
     navigate('/quiz?selection=stored')
   }
+
+  function handleStartQuiz() {
+    if (selectedQuestions.length === 0) return
+    // Quizzing is gated on collection: if the concept isn't collected yet,
+    // surface the collect prompt first and remember that the user wanted to
+    // start — the effect below carries them into the quiz once it's collected.
+    if (!unlocked) {
+      setPendingStart(true)
+      openCollect({ kind: 'concept', name: conceptName })
+      return
+    }
+    beginQuiz()
+  }
+
+  // Once a pending collect completes (concept becomes unlocked), close the
+  // collect prompt and continue into the quiz the user asked to start.
+  useEffect(() => {
+    if (!pendingStart || !unlocked) return
+    setPendingStart(false)
+    closeCollect()
+    beginQuiz()
+    // beginQuiz is stable enough for this one-shot hand-off; deps kept minimal
+    // to avoid re-running as selection state changes underneath.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingStart, unlocked])
 
   return (
     <div
@@ -296,43 +322,22 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
 
         {/* Scrollable Body */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
-          {!unlocked && (
-            <div className="flex flex-col items-center justify-center gap-3 py-10 px-4 text-center">
-              <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10 text-primary">
-                <Lock className="h-5 w-5" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-base font-semibold">Collect {conceptName} to unlock its quiz</h3>
-                <p className="text-sm text-muted-foreground max-w-xs">
-                  Pass a quick comprehension check to add this concept to your flashcards before quizzing on it.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => openCollect({ kind: 'concept', name: conceptName })}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
-              >
-                <Lock className="h-4 w-4" />
-                Collect {conceptName}
-              </button>
-            </div>
-          )}
-          {unlocked && loading && (
+          {loading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground py-4 justify-center">
               <Loader2 className="h-4 w-4 animate-spin" /> Loading questions…
             </div>
           )}
-          {unlocked && error && (
+          {error && (
             <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
               {error}
             </div>
           )}
-          {unlocked && !loading && !error && questions.length === 0 && (
+          {!loading && !error && questions.length === 0 && (
             <div className="text-center py-8 text-muted-foreground text-sm">
               No questions found for this concept.
             </div>
           )}
-          {unlocked && !loading && questions.length > 0 && (
+          {!loading && questions.length > 0 && (
             <>
               {/* Filter controls */}
               <div className="flex items-center gap-2 flex-wrap">
@@ -451,18 +456,27 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
           )}
         </div>
 
-        {/* Floating Start Quiz button */}
-        {unlocked && !loading && questions.length > 0 && (
-          <div className="shrink-0 px-4 py-3 bg-card rounded-b-xl">
+        {/* Floating Start Quiz button. When the concept isn't collected yet,
+            the browser stays fully usable but starting the quiz routes through
+            the collect prompt first (handleStartQuiz). */}
+        {!loading && questions.length > 0 && (
+          <div className="shrink-0 px-4 py-3 bg-card rounded-b-xl space-y-2">
             <button
               type="button"
               onClick={handleStartQuiz}
               disabled={selectedIds.size === 0}
               className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <Play className="h-4 w-4" />
-              Start Quiz ({selectedQuestions.length})
+              {unlocked ? <Play className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+              {unlocked
+                ? `Start Quiz (${selectedQuestions.length})`
+                : `Collect to Start Quiz (${selectedQuestions.length})`}
             </button>
+            {!unlocked && (
+              <p className="text-center text-xs text-muted-foreground">
+                Pass a quick comprehension check to collect {conceptName}, then your quiz starts automatically.
+              </p>
+            )}
           </div>
         )}
       </div>

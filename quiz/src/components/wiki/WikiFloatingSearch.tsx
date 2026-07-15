@@ -1,12 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, FileText, GraduationCap, ListChecks, Search, X } from 'lucide-react'
+import { BookMarked, FileText, GraduationCap, ListChecks, Lock, Play, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
 import { ChooseSyllabusModal } from '@/components/wiki/ChooseSyllabusModal'
+import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
+import { useCollect } from '@/hooks/useCollect'
+import { useCollectedCards } from '@/hooks/useCollectedCards'
+import { useConceptMastery } from '@/hooks/useConceptMastery'
+import { decayIfStale } from '@/lib/mastery'
+import { fetchAllQuestions } from '@/lib/github'
+import { parseAllQuestions } from '@/lib/parser'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import type { StudyPlanHeaderData } from '@/components/wiki/WikiLayout'
 
@@ -28,17 +35,48 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
   const [active, setActive] = useState(false)
   const [showPlan, setShowPlan] = useState(false)
   const [chooser, setChooser] = useState<{ conceptName: string; syllabi: WikiExamSyllabus[] } | null>(null)
+  const [questionCounts, setQuestionCounts] = useState<Map<string, number> | null>(null)
+  const [quizConcept, setQuizConcept] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const location = useLocation()
   const navigate = useNavigate()
   const { openAt } = useConceptPopup()
   const { syllabi } = useWikiSyllabus()
+  const collectedCards = useCollectedCards(s => s.cards)
+  const { records: masteryRecords } = useConceptMastery()
 
   useEffect(() => {
     let cancelled = false
     buildWikiIndex()
       .then(items => { if (!cancelled) setIndex(items) })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
+
+  // Per-concept question counts, so each concept row can label its "Start Quiz"
+  // action with how many questions are available. Keyed by the concept name
+  // normalised the same way filterQuestions/linkMatchesConcept resolve a
+  // wiki_link's trailing segment (slug hyphens → spaces).
+  useEffect(() => {
+    let cancelled = false
+    fetchAllQuestions()
+      .then(raw => {
+        if (cancelled) return
+        const map = new Map<string, number>()
+        for (const q of parseAllQuestions(raw)) {
+          const seen = new Set<string>()
+          for (const link of q.wiki_link) {
+            const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
+            const seg = (clean.split('/').filter(Boolean).pop() ?? '')
+              .replace(/-/g, ' ').trim().toLowerCase()
+            if (!seg || seen.has(seg)) continue
+            seen.add(seg)
+            map.set(seg, (map.get(seg) ?? 0) + 1)
+          }
+        }
+        setQuestionCounts(map)
+      })
       .catch(() => {})
     return () => { cancelled = true }
   }, [])
@@ -74,6 +112,29 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
     setQuery('')
     setActive(false)
     inputRef.current?.blur()
+  }
+
+  // A concept is unlocked once its flashcard is collected — or, for pre-collect
+  // users, once mastery moved past New. Mirrors useIsConceptUnlocked, but
+  // resolved from a single mastery/collected read shared across every row.
+  function isUnlocked(name: string): boolean {
+    const lower = name.toLowerCase()
+    if (collectedCards.some(c => c.name.toLowerCase() === lower)) return true
+    const record = masteryRecords.find(r => r.concept_slug.toLowerCase() === lower)
+    if (!record) return false
+    return decayIfStale(record, new Date()).state !== 'new'
+  }
+
+  // null while the question bank is still loading; a number once counted.
+  function questionCountFor(name: string): number | null {
+    if (!questionCounts) return null
+    return questionCounts.get(name.trim().toLowerCase()) ?? 0
+  }
+
+  function startQuiz(name: string) {
+    dismiss()
+    setShowPlan(false)
+    setQuizConcept(name)
   }
 
   const hasQuery = query.trim().length > 0
@@ -226,15 +287,22 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
             <div className="pb-3">
               <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
                 {studyPlan.items.map((item, idx) => (
-                  <li key={item.name}>
+                  <li key={item.name} className="flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => { studyPlan.onSelect(idx); setShowPlan(false) }}
-                      className="flex items-center gap-2 w-full text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/60 transition-colors"
+                      className="flex items-center gap-2 min-w-0 text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/60 transition-colors"
                     >
                       <FileText className="h-4 w-4 shrink-0 text-violet-500" />
                       <span className="truncate">{item.name}</span>
                     </button>
+                    <ConceptActions
+                      name={item.name}
+                      unlocked={isUnlocked(item.name)}
+                      questionCount={questionCountFor(item.name)}
+                      onStartQuiz={startQuiz}
+                      onDismiss={() => setShowPlan(false)}
+                    />
                   </li>
                 ))}
               </ul>
@@ -280,7 +348,16 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
                 ) : (
                   conceptResults.map(item => (
                     <li key={`${item.category}:${item.path}`}>
-                      <ConceptResultRow item={item} query={query} onSelect={dismiss} onConceptSelect={handleConceptSelect} />
+                      <ConceptResultRow
+                        item={item}
+                        query={query}
+                        onSelect={dismiss}
+                        onConceptSelect={handleConceptSelect}
+                        unlocked={item.category === 'concept' ? isUnlocked(item.name) : true}
+                        questionCount={item.category === 'concept' ? questionCountFor(item.name) : null}
+                        onStartQuiz={startQuiz}
+                        onDismiss={dismiss}
+                      />
                     </li>
                   ))
                 )}
@@ -310,6 +387,14 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
           onClose={() => setChooser(null)}
         />
       )}
+
+      {quizConcept && (
+        <ConceptQuestionsModal
+          conceptName={quizConcept}
+          onClose={() => setQuizConcept(null)}
+          onQuizStart={() => setQuizConcept(null)}
+        />
+      )}
     </>
   )
 }
@@ -319,47 +404,129 @@ function ConceptResultRow({
   query,
   onSelect,
   onConceptSelect,
+  unlocked,
+  questionCount,
+  onStartQuiz,
+  onDismiss,
 }: {
   item: WikiIndexItem
   query: string
   onSelect: () => void
   onConceptSelect: (ref: WikiEntryRef) => void
+  unlocked: boolean
+  questionCount: number | null
+  onStartQuiz: (name: string) => void
+  onDismiss: () => void
 }) {
   const ref = pathToEntryRef(item.path) ?? { kind: 'concept' as const, name: item.name }
   const route = wikiRoute(ref)
+  const isConcept = item.category === 'concept'
   const Icon =
     item.category === 'exam' ? GraduationCap :
-    item.category === 'concept' ? FileText :
+    isConcept ? FileText :
     BookMarked
   const iconColor =
     item.category === 'exam' ? 'text-teal-500' :
-    item.category === 'concept' ? 'text-violet-500' :
+    isConcept ? 'text-violet-500' :
     'text-muted-foreground'
   const display = item.title ?? item.name
 
   return (
-    <Link
-      to={route}
-      onClick={e => {
-        if (item.category === 'concept') {
-          e.preventDefault()
-          onConceptSelect(ref)
-        } else {
-          onSelect()
-        }
-      }}
-      className="flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent/60 transition-colors"
-    >
-      <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
-      <div className="min-w-0 flex-1">
-        <div className="text-sm truncate">{highlight(display, query)}</div>
-        {(item.author || item.year) && (
-          <div className="text-[11px] text-muted-foreground truncate">
-            {[item.author, item.year].filter(Boolean).join(' · ')}
-          </div>
-        )}
-      </div>
-    </Link>
+    <div className="flex items-center gap-1.5">
+      <Link
+        to={route}
+        onClick={e => {
+          if (isConcept) {
+            e.preventDefault()
+            onConceptSelect(ref)
+          } else {
+            onSelect()
+          }
+        }}
+        className={`flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent/60 transition-colors min-w-0 ${isConcept ? '' : 'flex-1'}`}
+      >
+        <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
+        <div className="min-w-0 flex-1">
+          <div className="text-sm truncate">{highlight(display, query)}</div>
+          {(item.author || item.year) && (
+            <div className="text-[11px] text-muted-foreground truncate">
+              {[item.author, item.year].filter(Boolean).join(' · ')}
+            </div>
+          )}
+        </div>
+      </Link>
+      {isConcept && (
+        <ConceptActions
+          name={item.name}
+          unlocked={unlocked}
+          questionCount={questionCount}
+          onStartQuiz={onStartQuiz}
+          onDismiss={onDismiss}
+        />
+      )}
+    </div>
+  )
+}
+
+// Inline "Unlock" + "Start Quiz" actions shown beside a concept name in the
+// search results and Today's Study Plan lists. Unlock opens the flashcard
+// collect flow (hidden once the concept is already unlocked); Start Quiz opens
+// the per-concept question picker, labelled with how many questions exist.
+function ConceptActions({
+  name,
+  unlocked,
+  questionCount,
+  onStartQuiz,
+  onDismiss,
+}: {
+  name: string
+  unlocked: boolean
+  questionCount: number | null
+  onStartQuiz: (name: string) => void
+  onDismiss: () => void
+}) {
+  const openCollect = useCollect(s => s.open)
+  return (
+    <div className="flex items-center gap-1 shrink-0">
+      {!unlocked && (
+        <button
+          type="button"
+          onClick={e => {
+            e.preventDefault()
+            e.stopPropagation()
+            onDismiss()
+            openCollect({ kind: 'concept', name })
+          }}
+          className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium bg-accent text-muted-foreground hover:text-foreground hover:bg-accent/80 transition-colors"
+          title={`Unlock ${name}`}
+          aria-label={`Unlock ${name}`}
+        >
+          <Lock className="h-3 w-3 shrink-0" />
+          Unlock
+        </button>
+      )}
+      {questionCount !== 0 && (
+        <button
+          type="button"
+          onClick={e => {
+            e.preventDefault()
+            e.stopPropagation()
+            onStartQuiz(name)
+          }}
+          className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+          title={`Start a quiz on ${name}`}
+          aria-label={questionCount != null ? `Start quiz on ${name}, ${questionCount} questions` : `Start quiz on ${name}`}
+        >
+          <Play className="h-3 w-3 shrink-0" />
+          Start Quiz
+          {questionCount != null && questionCount > 0 && (
+            <span className="rounded-full bg-primary/20 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums leading-none">
+              {questionCount}
+            </span>
+          )}
+        </button>
+      )}
+    </div>
   )
 }
 

@@ -18,8 +18,9 @@ import { useConceptPopup } from '@/hooks/useConceptPopup'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuestCompleteOverlay } from '@/components/QuestCompleteOverlay'
+import { StreakCompleteOverlay } from '@/components/StreakCompleteOverlay'
 import { StudyPlanCompleteOverlay } from '@/components/StudyPlanCompleteOverlay'
-import { QUESTS_ENABLED } from '@/lib/featureFlags'
+import { QUESTS_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { readJustCompletedQuests } from '@/lib/questStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { getDailyGems } from '@/lib/dailyProgressStore'
@@ -155,6 +156,25 @@ function StudyPlanChecklist({
         </div>
       )}
     </div>
+  )
+}
+
+// ─── Post-quiz celebrations ───────────────────────────────────────────────────
+
+// Sequences the two post-quiz celebrations so the streak flame plays first and
+// the quest collect prompt follows. The streak overlay resolves as soon as it's
+// dismissed — or immediately when the streak didn't grow — flipping to the quest
+// overlay. When a streak can't run (feature off, or no correct answer today), we
+// start already resolved so quests appear right away.
+function PostQuizCelebrations({ streakEligible }: { streakEligible: boolean }) {
+  const [streakDone, setStreakDone] = useState(!streakEligible)
+  return (
+    <>
+      {streakEligible && !streakDone && (
+        <StreakCompleteOverlay onResolved={() => setStreakDone(true)} />
+      )}
+      {QUESTS_ENABLED && streakDone && <QuestCompleteOverlay />}
+    </>
   )
 }
 
@@ -318,8 +338,9 @@ export default function Review() {
 
   return (
     <>
-    {/* Quests cleared by this quiz — shown before the review content below. */}
-    {QUESTS_ENABLED && <QuestCompleteOverlay />}
+    {/* Streak flame (if today's streak grew) then quests cleared by this quiz —
+        shown in that order before the review content below. */}
+    <PostQuizCelebrations streakEligible={STREAK_ENABLED && correctCount > 0} />
     {/* Today's Study Plan finished by this quiz — unlock the 2× gem bonus. */}
     {showPlanBonus && progressKey && (
       <StudyPlanCompleteOverlay

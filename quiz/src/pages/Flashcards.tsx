@@ -289,11 +289,157 @@ function packColorsFor(kind: PackKind, colorIndex: number | undefined, isSub: bo
   }
 }
 
-// A single expandable pack. The header shows collected/deck progress; expanding
-// reveals the concept list where cards can be selected and added to the deck or
-// collected one at a time. Learning-objective packs render in the `isSub`
-// (smaller, indented) variant beneath their exam pack.
-function PackRow({
+// Popup listing every concept in a pack. Opened from the stacked-flashcard
+// icon on a pack card; lets you select individual concepts, add them to the
+// deck, or collect them one at a time — without cluttering the card itself.
+function PackConceptsModal({
+  label,
+  concepts,
+  onClose,
+  onCardsAdded,
+}: {
+  label: string
+  concepts: string[]
+  onClose: () => void
+  onCardsAdded?: () => void
+}) {
+  const { addCard, hasCard } = useFlashcards()
+  const collectedCards = useCollectedCards(s => s.cards)
+  const openCollect = useCollect(s => s.open)
+  const collectedSet = useMemo(
+    () => new Set(collectedCards.map(c => c.name.toLowerCase())),
+    [collectedCards],
+  )
+  const isCollected = (name: string) => collectedSet.has(name.toLowerCase())
+
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  const notAdded = concepts.filter(n => !hasCard(n))
+  const allAdded = concepts.length > 0 && notAdded.length === 0
+
+  function toggleSelect(name: string) {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(name)) next.delete(name); else next.add(name)
+      return next
+    })
+  }
+
+  function handleAdd() {
+    const toAdd = selected.size > 0
+      ? concepts.filter(n => selected.has(n) && !hasCard(n))
+      : notAdded
+    for (const name of toAdd) addCard({ kind: 'concept', name })
+    setSelected(new Set())
+    if (toAdd.length > 0) onCardsAdded?.()
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${label} concepts`}
+      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div className="w-full max-w-lg bg-card rounded-xl shadow-2xl flex flex-col my-8 max-h-[85vh]">
+        <div className="flex items-center gap-3 px-4 h-12 shrink-0 border-b">
+          <Layers className="h-4 w-4 text-muted-foreground shrink-0" />
+          <span className="flex-1 truncate font-semibold text-sm">{label}</span>
+          <span className="text-xs text-muted-foreground shrink-0">{concepts.length} concepts</span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-muted-foreground hover:text-foreground p-1 transition-colors"
+            title="Close"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        {concepts.length > 0 && (
+          <div className="px-4 pt-3 shrink-0">
+            {allAdded ? (
+              <span className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-green-500/15 text-green-600 dark:text-green-400 text-xs font-semibold">
+                <Check className="h-3.5 w-3.5" /> All in deck
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={handleAdd}
+                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                {selected.size > 0 ? `Add ${selected.size} to deck` : `Add all ${notAdded.length} to deck`}
+              </button>
+            )}
+          </div>
+        )}
+
+        <ul className="overflow-y-auto flex-1 px-4 py-3 space-y-0.5">
+          {concepts.map(name => {
+            const added = hasCard(name)
+            const checked = selected.has(name)
+            return (
+              <li key={name} className="flex items-center gap-2.5 py-1.5">
+                <button
+                  type="button"
+                  onClick={() => !added && toggleSelect(name)}
+                  disabled={added}
+                  aria-label={added ? `${name} already in deck` : checked ? `Deselect ${name}` : `Select ${name}`}
+                  className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                    added
+                      ? 'bg-green-500/20 border-green-500 cursor-default'
+                      : checked
+                        ? 'bg-primary border-primary'
+                        : 'border-muted-foreground/40 hover:border-muted-foreground/70'
+                  }`}
+                >
+                  {(added || checked) && (
+                    <svg className={`w-3 h-3 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
+                      <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </button>
+                <span className={`text-sm flex-1 min-w-0 truncate text-foreground ${added ? 'opacity-60' : ''}`}>{name}</span>
+                {added && (
+                  <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In deck</span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => openCollect({ kind: 'concept', name })}
+                  title={isCollected(name) ? 'Collected' : 'Collect this flashcard'}
+                  aria-label={isCollected(name) ? `${name} collected` : `Collect ${name}`}
+                  className={`shrink-0 h-7 w-7 rounded-md flex items-center justify-center transition-colors ${
+                    isCollected(name)
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                  }`}
+                >
+                  {isCollected(name) ? <Unlock className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+// A single pack card. The header shows collected/deck progress; tapping it
+// reveals two large action buttons (add everything to the deck, or collect
+// the next uncollected card). The stacked-flashcard icon in the top right
+// opens a popup with the individual concept list. Learning-objective packs
+// render in the `isSub` (smaller) variant.
+function PackCard({
   label,
   sublabel,
   kind,
@@ -326,7 +472,7 @@ function PackRow({
   const isCollected = (name: string) => collectedSet.has(name.toLowerCase())
 
   const [expanded, setExpanded] = useState(false)
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [showConcepts, setShowConcepts] = useState(false)
 
   const total = concepts.length
   const inDeck = concepts.filter(n => hasCard(n)).length
@@ -343,21 +489,9 @@ function PackRow({
         : kind === 'saved' ? LayoutGrid
           : Target
 
-  function toggleSelect(name: string) {
-    setSelected(prev => {
-      const next = new Set(prev)
-      if (next.has(name)) next.delete(name); else next.add(name)
-      return next
-    })
-  }
-
   function handleAdd() {
-    const toAdd = selected.size > 0
-      ? concepts.filter(n => selected.has(n) && !hasCard(n))
-      : notAdded
-    for (const name of toAdd) addCard({ kind: 'concept', name })
-    setSelected(new Set())
-    if (toAdd.length > 0) onCardsAdded?.()
+    for (const name of notAdded) addCard({ kind: 'concept', name })
+    if (notAdded.length > 0) onCardsAdded?.()
   }
 
   function collectNext() {
@@ -371,7 +505,7 @@ function PackRow({
         fullyCollected ? 'ring-1 ring-amber-400/50 collect-pack-complete' : ''
       }`}
     >
-      {/* Header — click to expand */}
+      {/* Header — click to reveal actions */}
       <div
         role="button"
         tabIndex={0}
@@ -380,12 +514,12 @@ function PackRow({
         className={`flex items-start gap-2.5 cursor-pointer ${isSub ? 'px-3 py-2.5' : 'px-3.5 py-3'}`}
         aria-expanded={expanded}
       >
-        <Icon className={`shrink-0 mt-0.5 ${isSub ? 'h-3.5 w-3.5' : 'h-4 w-4'} ${colors.cardIcon}`} />
+        <Icon className={`shrink-0 mt-0.5 ${isSub ? 'h-4 w-4' : 'h-5 w-5'} ${colors.cardIcon}`} />
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <span className={`font-semibold truncate ${isSub ? 'text-xs' : 'text-sm'}`}>{label}</span>
+          <div className="flex items-start gap-1.5">
+            <span className={`font-bold leading-tight line-clamp-2 ${isSub ? 'text-sm' : 'text-base sm:text-lg'}`}>{label}</span>
             {fullyCollected && (
-              <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300">
+              <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300 mt-0.5">
                 <Sparkles className="h-3.5 w-3.5" />
               </span>
             )}
@@ -404,26 +538,34 @@ function PackRow({
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-0.5 shrink-0">
           {onDelete && (
             <button
               type="button"
               onClick={e => { e.stopPropagation(); onDelete() }}
               aria-label={`Delete ${label} pack`}
-              className="h-6 w-6 rounded flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+              className="h-7 w-7 rounded flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
             >
-              <Trash2 className="h-3 w-3" />
+              <Trash2 className="h-3.5 w-3.5" />
             </button>
           )}
-          {expanded
-            ? <ChevronUp className={`h-4 w-4 ${colors.cardSub}`} />
-            : <ChevronDown className={`h-4 w-4 ${colors.cardSub}`} />}
+          {total > 0 && (
+            <button
+              type="button"
+              onClick={e => { e.stopPropagation(); setShowConcepts(true) }}
+              aria-label={`View ${label} concepts`}
+              title="View concepts"
+              className={`rounded-lg flex items-center justify-center transition-colors hover:bg-black/10 dark:hover:bg-white/10 ${colors.cardIcon} ${isSub ? 'h-8 w-8' : 'h-9 w-9'}`}
+            >
+              <Layers className={isSub ? 'h-5 w-5' : 'h-6 w-6'} />
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Actions + concept list */}
+      {/* Actions */}
       {expanded && (
-        <div className="px-3.5 pb-3 space-y-2">
+        <div className="px-3.5 pb-3.5 space-y-2">
           {emptyHint}
           {loading && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
@@ -431,158 +573,60 @@ function PackRow({
             </div>
           )}
           {!loading && total > 0 && (
-            <>
-              <div className="flex gap-2">
-                {allAdded ? (
-                  <span className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-green-500/15 text-green-600 dark:text-green-400 text-xs font-semibold">
-                    <Check className="h-3.5 w-3.5" /> All in deck
-                  </span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleAdd}
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
-                  >
-                    <Plus className="h-3.5 w-3.5" />
-                    {selected.size > 0 ? `Add ${selected.size} to deck` : `Add all ${notAdded.length} to deck`}
-                  </button>
-                )}
-                {!fullyCollected && (
-                  <button
-                    type="button"
-                    onClick={collectNext}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-background/60 text-xs font-semibold text-foreground hover:bg-accent transition-colors"
-                  >
-                    <Lock className="h-3 w-3" /> Collect
-                  </button>
-                )}
-              </div>
-              <ul className="overflow-y-auto rounded-lg bg-background/40" style={{ maxHeight: '18rem' }}>
-                {concepts.map(name => {
-                  const added = hasCard(name)
-                  const checked = selected.has(name)
-                  return (
-                    <li key={name} className="flex items-center gap-2.5 px-2 py-1.5">
-                      <button
-                        type="button"
-                        onClick={() => !added && toggleSelect(name)}
-                        disabled={added}
-                        aria-label={added ? `${name} already in deck` : checked ? `Deselect ${name}` : `Select ${name}`}
-                        className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
-                          added
-                            ? 'bg-green-500/20 border-green-500 cursor-default'
-                            : checked
-                              ? 'bg-primary border-primary'
-                              : 'border-muted-foreground/40 hover:border-muted-foreground/70'
-                        }`}
-                      >
-                        {(added || checked) && (
-                          <svg className={`w-3 h-3 ${added ? 'text-green-600 dark:text-green-400' : 'text-primary-foreground'}`} viewBox="0 0 10 10" fill="none">
-                            <path d="M1.5 5L4 7.5L8.5 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        )}
-                      </button>
-                      <span className={`text-xs flex-1 min-w-0 truncate text-foreground ${added ? 'opacity-60' : ''}`}>{name}</span>
-                      {added && (
-                        <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In deck</span>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => openCollect({ kind: 'concept', name })}
-                        title={isCollected(name) ? 'Collected' : 'Collect this flashcard'}
-                        aria-label={isCollected(name) ? `${name} collected` : `Collect ${name}`}
-                        className={`shrink-0 h-6 w-6 rounded-md flex items-center justify-center transition-colors ${
-                          isCollected(name)
-                            ? 'text-emerald-600 dark:text-emerald-400'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                        }`}
-                      >
-                        {isCollected(name) ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
-                      </button>
-                    </li>
-                  )
-                })}
-              </ul>
-            </>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
-interface ExamPackGroupData {
-  examId: string
-  examLabel: string
-  colorIndex: number
-  allConcepts: string[]
-  learningObjectives: { name: string; concepts: string[] }[]
-}
-
-// One exam's packs as a single grid cell: the whole-exam pack on top, with its
-// learning-objective packs tucked behind a tap-to-reveal toggle so the grid
-// stays compact and scannable until you drill into an exam.
-function ExamPackGroup({
-  group,
-  onCardsAdded,
-}: {
-  group: ExamPackGroupData
-  onCardsAdded?: () => void
-}) {
-  const [showObjectives, setShowObjectives] = useState(false)
-  return (
-    <div className="space-y-2">
-      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
-        {group.examLabel}
-      </h3>
-      <PackRow
-        kind="exam"
-        label={`${group.examLabel} — All concepts`}
-        concepts={group.allConcepts}
-        colorIndex={group.colorIndex}
-        onCardsAdded={onCardsAdded}
-      />
-      {group.learningObjectives.length > 0 && (
-        <div>
-          <button
-            type="button"
-            onClick={() => setShowObjectives(v => !v)}
-            aria-expanded={showObjectives}
-            className="w-full flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
-          >
-            <Target className="h-3.5 w-3.5 shrink-0" />
-            <span className="uppercase tracking-wide">
-              Learning Objectives ({group.learningObjectives.length})
-            </span>
-            {showObjectives
-              ? <ChevronUp className="h-3.5 w-3.5 ml-auto shrink-0" />
-              : <ChevronDown className="h-3.5 w-3.5 ml-auto shrink-0" />}
-          </button>
-          {showObjectives && (
-            <div className="mt-1.5 ml-1 pl-3 space-y-1.5">
-              {group.learningObjectives.map(lo => (
-                <PackRow
-                  key={lo.name}
-                  kind="learning_objective"
-                  label={lo.name}
-                  concepts={lo.concepts}
-                  colorIndex={group.colorIndex}
-                  isSub
-                  onCardsAdded={onCardsAdded}
-                />
-              ))}
+            <div className="flex flex-col gap-2">
+              {allAdded ? (
+                <span className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-green-500/15 text-green-600 dark:text-green-400 text-sm font-semibold">
+                  <Check className="h-4 w-4" /> All in deck
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={e => { e.stopPropagation(); handleAdd() }}
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add all {notAdded.length} to deck
+                </button>
+              )}
+              {!fullyCollected && (
+                <button
+                  type="button"
+                  onClick={e => { e.stopPropagation(); collectNext() }}
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-background/60 text-sm font-semibold text-foreground hover:bg-accent transition-colors"
+                >
+                  <Lock className="h-4 w-4" /> Collect
+                </button>
+              )}
             </div>
           )}
         </div>
       )}
+
+      {showConcepts && (
+        <PackConceptsModal
+          label={label}
+          concepts={concepts}
+          onClose={() => setShowConcepts(false)}
+          onCardsAdded={onCardsAdded}
+        />
+      )}
     </div>
   )
 }
 
-// Packs tab — every available pack, organized by exam. The whole-exam pack sits
-// at the top of each exam group; its learning-objective packs hide behind a
-// toggle. Exam groups lay out in a responsive multi-column grid on desktop.
-// Today's study plan and any user-saved packs bookend the list.
+interface PackDescriptor {
+  key: string
+  kind: PackKind
+  label: string
+  concepts: string[]
+  colorIndex?: number
+  isSub?: boolean
+}
+
+// Packs tab — every available pack, laid out as a flat two-column grid of pack
+// cards (no per-exam headers). Each exam contributes its whole-exam pack plus
+// one card per learning objective. Today's study plan and any user-saved
+// packs bookend the grid.
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -633,6 +677,32 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     }))
   }, [inProgressSyllabi, syllabi, examProgress])
 
+  // Flatten exam groups into a single list of pack cards — the whole-exam
+  // pack followed by one card per learning objective, no group headers.
+  const flatPacks = useMemo(() => {
+    const items: PackDescriptor[] = []
+    for (const group of examGroups) {
+      items.push({
+        key: `${group.examId}-all`,
+        kind: 'exam',
+        label: `${group.examLabel} — All concepts`,
+        concepts: group.allConcepts,
+        colorIndex: group.colorIndex,
+      })
+      for (const lo of group.learningObjectives) {
+        items.push({
+          key: `${group.examId}-${lo.name}`,
+          kind: 'learning_objective',
+          label: lo.name,
+          concepts: lo.concepts,
+          colorIndex: group.colorIndex,
+          isSub: true,
+        })
+      }
+    }
+    return items
+  }, [examGroups])
+
   const isLoading = planLoading || masteryLoading || syllabiLoading
   const hasContent = !!primarySyllabus || examGroups.length > 0 || savedPacks.length > 0
 
@@ -640,7 +710,7 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     <div className="space-y-6">
       {/* Today's study plan */}
       {primarySyllabus && (
-        <PackRow
+        <PackCard
           kind="study_plan"
           label="Today's Study Plan"
           sublabel={primarySyllabus.examLabel}
@@ -659,12 +729,19 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
         />
       )}
 
-      {/* Exam packs — responsive multi-column grid, each with its
-          learning-objective sub-packs behind a tap-to-reveal toggle */}
-      {examGroups.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-6 items-start">
-          {examGroups.map(group => (
-            <ExamPackGroup key={group.examId} group={group} onCardsAdded={onCardsAdded} />
+      {/* Exam + learning-objective packs — flat two-column grid */}
+      {flatPacks.length > 0 && (
+        <div className="grid grid-cols-2 gap-3">
+          {flatPacks.map(p => (
+            <PackCard
+              key={p.key}
+              kind={p.kind}
+              label={p.label}
+              concepts={p.concepts}
+              colorIndex={p.colorIndex}
+              isSub={p.isSub}
+              onCardsAdded={onCardsAdded}
+            />
           ))}
         </div>
       )}
@@ -675,16 +752,18 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
             Saved Packs
           </h3>
-          {savedPacks.map(sp => (
-            <PackRow
-              key={sp.id}
-              kind="saved"
-              label={sp.label}
-              concepts={sp.concepts}
-              onDelete={() => deleteSavedPack(sp.id)}
-              onCardsAdded={onCardsAdded}
-            />
-          ))}
+          <div className="grid grid-cols-2 gap-3">
+            {savedPacks.map(sp => (
+              <PackCard
+                key={sp.id}
+                kind="saved"
+                label={sp.label}
+                concepts={sp.concepts}
+                onDelete={() => deleteSavedPack(sp.id)}
+                onCardsAdded={onCardsAdded}
+              />
+            ))}
+          </div>
         </div>
       )}
 

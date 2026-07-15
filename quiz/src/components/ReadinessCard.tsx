@@ -1236,8 +1236,9 @@ export function ReadinessCard({
         </CardContent>
       </Card>
 
-      {/* Today's Study Plan card — `order-1` floats it to the top of the left column */}
-      {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
+      {/* Today's Study Plan card — `order-1` floats it to the top of the left column.
+          Stays visible regardless of which day is selected on the Study Schedule heatmap. */}
+      {isPremium && displayConcepts.length > 0 && (
         <Card
           ref={studyPlanCardRef}
           className={`order-1 border-0 relative transition-colors ${allConceptsDone ? 'bg-green-500/10 dark:bg-green-500/15' : ''}`}

@@ -9,7 +9,7 @@ A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a ra
 > $$\text{of the experiment}$$
 
 > [!example]- Sample Space for Claim Occurrence and Size {Example}
-> An experiment records whether a policyholder files a claim and, if so, classifies the loss as small ( $\leq\$1,000$ ) or large ($>\$1000$). Write the sample space.
+> An experiment records whether a policyholder files a claim and, if so, classifies the loss as small ($\le$ \$$1{,}000$) or large ($>$ \$$1{,}000$). Write the sample space.
 >
 > > [!answer]-
 > > There are three mutually exclusive, exhaustive outcomes:

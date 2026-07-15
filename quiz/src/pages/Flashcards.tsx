@@ -1801,7 +1801,8 @@ function GalleryPanel({
   reverseCardModes,
   globalFlip,
   inline = false,
-  initialTab = 'deck',
+  tab,
+  onTabChange,
   onCardsAdded,
   focusMode = false,
 }: {
@@ -1822,7 +1823,8 @@ function GalleryPanel({
   reverseCardModes: Set<ReverseCardSection>
   globalFlip: boolean
   inline?: boolean
-  initialTab?: GalleryTab
+  tab: GalleryTab
+  onTabChange: (tab: GalleryTab) => void
   onCardsAdded?: () => void
   focusMode?: boolean
 }) {
@@ -1833,7 +1835,6 @@ function GalleryPanel({
     () => new Set(collectedCards.map(c => c.name.toLowerCase())),
     [collectedCards],
   )
-  const [tab, setTab] = useState<GalleryTab>(initialTab)
   const [showManageDialog, setShowManageDialog] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -1895,7 +1896,7 @@ function GalleryPanel({
             <div className="flex-1 min-w-0">
               <GalleryTabBar
                 active={tab}
-                onChange={setTab}
+                onChange={onTabChange}
                 deckCount={cards.length}
                 collectedCount={collectedCount}
               />
@@ -2418,6 +2419,11 @@ export default function Flashcards() {
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [galleryExpanded, setGalleryExpanded] = useState(false)
+  // Lifted out of GalleryPanel so the selected tab (Packs/Collected/My Deck)
+  // survives the empty→non-empty remount when the first card is added —
+  // otherwise the inline (empty-deck) and overlay GalleryPanel instances each
+  // mount their own default tab and adding a card "jumps" you to My Deck.
+  const [galleryTab, setGalleryTab] = useState<GalleryTab>('packs')
   const [focusMode, setFocusMode] = useState(false)
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
   const [groupBy, setGroupBy] = useState<GroupBy>('exam')
@@ -2638,7 +2644,8 @@ export default function Flashcards() {
           <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
           <GalleryPanel
             inline
-            initialTab="packs"
+            tab={galleryTab}
+            onTabChange={setGalleryTab}
             onCardsAdded={() => setGalleryExpanded(true)}
             cards={cards}
             orderedCards={orderedCards}
@@ -2739,6 +2746,8 @@ export default function Flashcards() {
           reverseCardModes={reverseCardModes}
           globalFlip={globalFlip}
           focusMode={focusMode}
+          tab={galleryTab}
+          onTabChange={setGalleryTab}
         />
       )}
 

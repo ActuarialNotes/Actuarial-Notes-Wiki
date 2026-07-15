@@ -1194,6 +1194,7 @@ function SortableCard({
   reverseCardModes,
   globalFlip,
   collected = false,
+  animateCollected,
   disableSort = false,
   onCardsAdded,
   focusMode = false,
@@ -1207,6 +1208,10 @@ function SortableCard({
   reverseCardModes: Set<ReverseCardSection>
   globalFlip: boolean
   collected?: boolean
+  // Whether collected cards get the holographic sheen animation. Defaults to
+  // `collected` (Collected tab keeps its shine); My Deck passes false so the
+  // ongoing animation doesn't distract while reading.
+  animateCollected?: boolean
   disableSort?: boolean
   onCardsAdded?: () => void
   focusMode?: boolean
@@ -1301,7 +1306,8 @@ function SortableCard({
   // Sheen intensity scales with mastery: New/L1/Forgotten stay subtle, L2 is
   // the standard shine, L3 gets the dramatic pulsing treatment.
   const sheenLevelClass = masteryState === 'level3' ? ' flashcard-sheen-l3' : masteryState === 'level2' ? ' flashcard-sheen-l2' : ''
-  const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${collected && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}`
+  const showSheen = (animateCollected ?? collected) && collected
+  const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 shadow-sm'
     : 'bg-card text-card-foreground'
@@ -1865,6 +1871,7 @@ function GalleryPanel({
         reverseCardModes={reverseCardModes}
         globalFlip={globalFlip}
         collected={collectedSet.has(card.name.toLowerCase())}
+        animateCollected={false}
         onCardsAdded={onCardsAdded}
         focusMode={focusMode}
       />

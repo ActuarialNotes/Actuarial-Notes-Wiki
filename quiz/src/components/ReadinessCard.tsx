@@ -1016,9 +1016,18 @@ export function ReadinessCard({
 
   return (
     <div className="space-y-4">
-      {/* Primary actions — Read concepts (left) + Start Today's Quiz (right),
-          side by side directly below the top readiness/countdown cards. */}
-      <div className="flex gap-3">
+      {/* Bento grid. Left column = Today's Study Plan + primary actions + warnings
+          + Study Schedule; right column = Study Guide + Topics Learned (md+). On
+          mobile everything collapses to a single column, and the left column's
+          children are laid out with `order-*` so Today's Study Plan sits on top,
+          the Read concepts / Start Quiz actions sit directly below it, then the
+          rest. */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
+      {/* Left column */}
+      <div className="flex flex-col gap-4">
+      {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
+          `order-2` places them directly below Today's Study Plan (order-1). */}
+      <div className="order-2 flex gap-3">
         <Button
           variant="secondary"
           onClick={() => {
@@ -1052,13 +1061,8 @@ export function ReadinessCard({
           </button>
         )}
       </div>
-
-      {/* Bento grid: left = heatmap + plan, right = gauges + actions (md+) */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
-      {/* Left column: heatmap card + study plan card */}
-      <div className="space-y-4">
-      {/* Heatmap card */}
-      <Card className="border-0 shadow-none">
+      {/* Study Schedule (heatmap) card — `order-4`, below the study plan/actions/warnings */}
+      <Card className="order-4 border-0 shadow-none">
         <CardContent className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between gap-3">
@@ -1232,11 +1236,11 @@ export function ReadinessCard({
         </CardContent>
       </Card>
 
-      {/* Today's Study Plan card */}
+      {/* Today's Study Plan card — `order-1` floats it to the top of the left column */}
       {isPremium && displayConcepts.length > 0 && (selectedDay === null || selectedDay === todayStr) && (
         <Card
           ref={studyPlanCardRef}
-          className={`border-0 relative transition-colors ${allConceptsDone ? 'bg-green-500/10 dark:bg-green-500/15' : ''}`}
+          className={`order-1 border-0 relative transition-colors ${allConceptsDone ? 'bg-green-500/10 dark:bg-green-500/15' : ''}`}
         >
           {allConceptsDone && (
             <button
@@ -1412,9 +1416,10 @@ export function ReadinessCard({
         </Card>
       )}
 
-      {/* Locked study plan — non-premium only, shown in left column */}
+      {/* Locked study plan — non-premium only. `order-1` keeps it at the top of
+          the left column, mirroring the premium Today's Study Plan card. */}
       {!isPremium && (
-        <div className="relative rounded-xl overflow-hidden">
+        <div className="order-1 relative rounded-xl overflow-hidden">
           {/* Blurred background: Custom Study Plan card */}
           <div className="absolute inset-0 pointer-events-none select-none blur-sm opacity-50 rounded-xl" aria-hidden="true">
             <div className="h-full bg-card rounded-xl p-5 space-y-3">
@@ -1471,13 +1476,16 @@ export function ReadinessCard({
         </div>
       )}
 
-      {/* Warnings */}
-      {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
-        <BehindWarning plan={plan} />
-      )}
-      {!loading && plan?.status === 'review_mode' && (
-        <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
-      )}
+      {/* Warnings — `order-3` sits them below the primary actions; `empty:hidden`
+          drops the flex gap when neither warning is shown. */}
+      <div className="order-3 flex flex-col gap-4 empty:hidden">
+        {!loading && plan && (plan.status === 'behind' || plan.status === 'target_passed') && (
+          <BehindWarning plan={plan} />
+        )}
+        {!loading && plan?.status === 'review_mode' && (
+          <ReviewModeNote concepts={plan.reviewConcepts ?? []} />
+        )}
+      </div>
       </div>{/* end left column */}
 
       {/* RIGHT COLUMN: Study Guide */}

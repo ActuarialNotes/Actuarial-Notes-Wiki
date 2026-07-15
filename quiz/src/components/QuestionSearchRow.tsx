@@ -2,7 +2,14 @@ import { useState } from 'react'
 import { Check } from 'lucide-react'
 import type { Question } from '@/lib/parser'
 import { LatexText } from '@/components/LatexText'
+import { MarkdownText } from '@/components/MarkdownText'
 import { ExplanationPanel } from '@/components/ExplanationPanel'
+
+// Renders question markdown (GFM tables + LaTeX) with the same table styling the
+// quiz uses, so data-heavy stems (development triangles, etc.) render as tables
+// rather than raw pipe text.
+const STEM_MD_CLASS =
+  'leading-relaxed [&_p]:my-1.5 [&_p:first-child]:mt-0 [&_table]:text-xs [&_th]:text-left [&_td]:pr-4 [&_table]:border-collapse [&_td]:border [&_td]:border-border [&_th]:border [&_th]:border-border [&_th]:px-2 [&_td]:px-2 [&_th]:py-1 [&_td]:py-1'
 
 interface QuestionSearchRowProps {
   question: Question
@@ -103,7 +110,7 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
 
       <div className="text-sm text-muted-foreground leading-relaxed">
         {expanded ? (
-          <LatexText>{question.stem}</LatexText>
+          <MarkdownText className={STEM_MD_CLASS}>{question.stem}</MarkdownText>
         ) : (
           <span>{highlightStem(previewText, query)}</span>
         )}
@@ -121,7 +128,7 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
                 }`}
               >
                 <span className="font-medium text-muted-foreground shrink-0">{opt.key})</span>
-                <span><LatexText>{opt.text}</LatexText></span>
+                <span><MarkdownText inline>{opt.text}</MarkdownText></span>
               </div>
             )
           })}

@@ -329,6 +329,12 @@ export default function Quiz() {
       }).length
       trackQuizCompleted({ mode, exam: storeQuestions[0]?.exam ?? 'Unknown', question_count: storeQuestions.length, correct_count: correctCount })
       playSound('complete')
+      // Persist essay self-grades collected on the reveal='end' self-grade screen
+      // into the store (keyed `${id}__${label}`) so they're saved with the session
+      // and shown on the /review end screen — otherwise they'd be lost.
+      for (const [key, grade] of Object.entries(essaySelfGrades)) {
+        setManualGrade(key, grade)
+      }
       await completeQuiz(user?.id ?? null, masteryRecords)
       navigate(`/review?${searchParams.toString()}`)
     } catch (err) {
@@ -485,6 +491,16 @@ export default function Quiz() {
     )
   }
 
+  // Per-part self-grades for the current multi-part question, read back from the
+  // store keyed by part label (the store keys them as `${id}__${label}`).
+  const partGradeMap: Record<string, SelfGrade> = Object.fromEntries(
+    Object.entries(manualGrades)
+      .filter(([k]) => k.startsWith(`${currentQuestion.id}__`))
+      .map(([k, v]) => [k.slice(currentQuestion.id.length + 2), v]),
+  )
+  const setPartGrade = (partLabel: string, grade: SelfGrade) =>
+    setManualGrade(`${currentQuestion.id}__${partLabel}`, grade)
+
   return (
     <div className="container max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
       <div className="flex items-center justify-between gap-3">
@@ -580,12 +596,14 @@ export default function Quiz() {
           onNext={isLocked ? handleNextFromAnswer : undefined}
           selfGrade={currentQuestion.type === 'free-entry' ? manualGrades[currentQuestion.id] : undefined}
           onSelfGrade={currentQuestion.type === 'free-entry' ? (grade) => setManualGrade(currentQuestion.id, grade) : undefined}
-          partManualGrades={currentQuestion.type === 'multi-part' ? Object.fromEntries(
-            Object.entries(manualGrades)
-              .filter(([k]) => k.startsWith(`${currentQuestion.id}__`))
-              .map(([k, v]) => [k.slice(currentQuestion.id.length + 2), v])
-          ) : undefined}
-          onPartManualGrade={currentQuestion.type === 'multi-part' ? (partLabel, grade) => setManualGrade(`${currentQuestion.id}__${partLabel}`, grade) : undefined}
+          // Multi-part grades (both graded free-entry parts and answerless essay
+          // parts) are persisted to the store under `${id}__${label}` so they
+          // survive navigation and show identically on the /review end screen.
+          // Essay parts route through essaySelfGrades in the card, so wire both.
+          partManualGrades={currentQuestion.type === 'multi-part' ? partGradeMap : undefined}
+          onPartManualGrade={currentQuestion.type === 'multi-part' ? setPartGrade : undefined}
+          essaySelfGrades={currentQuestion.type === 'multi-part' ? partGradeMap : undefined}
+          onEssaySelfGrade={currentQuestion.type === 'multi-part' ? setPartGrade : undefined}
         />
       </div>
 

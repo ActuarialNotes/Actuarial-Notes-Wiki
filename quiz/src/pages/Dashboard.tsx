@@ -290,7 +290,7 @@ export default function Dashboard() {
     [masteryRecords, activeProgressKey],
   )
 
-  const activeHasVariants = activeSyllabus ? (LOCALIZED_EXAMS[activeSyllabus.examId]?.length ?? 0) > 0 : false
+  const activeHasVariants = activeProgressKey ? (LOCALIZED_EXAMS[activeProgressKey]?.length ?? 0) > 0 : false
   const examDateStep = activeHasVariants ? 2 : 1
   const readyDateStep = activeHasVariants ? 3 : 2
 
@@ -691,8 +691,9 @@ export default function Dashboard() {
           config={planConfig}
           examDate={activeTargetDate}
           examLabel={activeSyllabus.examLabel}
-          examId={activeSyllabus.examId}
+          examId={activeProgressKey ?? undefined}
           initialStep={onboardingStep}
+          isPremium={isPremium}
           onSave={updatePlanConfig}
           onExamDateChange={handleTargetDateChange}
           onClose={() => setOnboardingOpen(false)}

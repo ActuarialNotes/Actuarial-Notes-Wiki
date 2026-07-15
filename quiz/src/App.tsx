@@ -18,6 +18,7 @@ import Sidebar from '@/components/Sidebar'
 import BottomNav from '@/components/BottomNav'
 import OnboardingTour from '@/components/OnboardingTour'
 import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
+import { useCollect } from '@/hooks/useCollect'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ExamProgressProvider } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -42,8 +43,17 @@ function WikiFallback() {
 
 interface ErrorBoundaryState { error: Error | null }
 
-class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryState> {
-  constructor(props: { children: ReactNode }) {
+interface ErrorBoundaryProps {
+  children: ReactNode
+  // When provided, this is rendered instead of the full-page crash screen. Used
+  // for app-level portals (e.g. the collect modal) that live outside a route
+  // boundary — a crash there would otherwise unmount the whole tree and leave a
+  // blank screen. `null` degrades gracefully by simply removing the failed UI.
+  fallback?: ReactNode
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props)
     this.state = { error: null }
   }
@@ -58,6 +68,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryStat
 
   render() {
     if (this.state.error) {
+      if (this.props.fallback !== undefined) return this.props.fallback
       return (
         <div className="container max-w-2xl mx-auto px-4 py-16 space-y-4">
           <h1 className="text-2xl font-bold text-destructive">Something went wrong</h1>
@@ -98,6 +109,21 @@ function NotFound() {
 function PageTracker() {
   usePageTracking()
   return null
+}
+
+// The collect modal is an app-level portal rendered outside every route's
+// ErrorBoundary, so an unhandled error inside it (or the data it loads) would
+// unmount the whole tree and leave a blank screen. Contain it in its own
+// boundary that degrades to nothing on error, and key the boundary to the
+// active concept so a failure on one card resets when the next card is opened
+// (rather than staying broken until a reload).
+function CollectModalBoundary() {
+  const conceptName = useCollect(s => s.ref?.name ?? null)
+  return (
+    <ErrorBoundary key={conceptName ?? '∅'} fallback={null}>
+      <CollectConceptModal />
+    </ErrorBoundary>
+  )
 }
 
 function GlobalKeyHandler() {
@@ -184,7 +210,7 @@ export default function App({ initialSession }: { initialSession: Session | null
             </main>
             <BottomNav />
             <OnboardingTour />
-            <CollectConceptModal />
+            <CollectModalBoundary />
           </div>
         </ExamProgressProvider>
       </AuthProvider>

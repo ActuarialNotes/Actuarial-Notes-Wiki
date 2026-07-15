@@ -405,6 +405,14 @@ export default function Review() {
           const idx = session.questions.indexOf(question)
           const chosen = session.responses[question.id]?.chosen ?? null
           const manualGrades = session.manualGrades ?? {}
+          // Per-part grades keyed by label — covers both graded free-entry parts
+          // (partManualGrades) and answerless essay parts (essaySelfGrades), which
+          // the card reads from separate props but are stored under the same key.
+          const partGrades = question.type === 'multi-part' ? Object.fromEntries(
+            Object.entries(manualGrades)
+              .filter(([k]) => k.startsWith(`${question.id}__`))
+              .map(([k, v]) => [k.slice(question.id.length + 2), v])
+          ) : undefined
           return (
             <div key={question.id} className="space-y-1">
               <p className="text-xs text-muted-foreground font-medium">Question {idx + 1}</p>
@@ -416,11 +424,8 @@ export default function Review() {
                 showMeta={true}
                 isLocked={true}
                 selfGrade={question.type === 'free-entry' ? manualGrades[question.id] : undefined}
-                partManualGrades={question.type === 'multi-part' ? Object.fromEntries(
-                  Object.entries(manualGrades)
-                    .filter(([k]) => k.startsWith(`${question.id}__`))
-                    .map(([k, v]) => [k.slice(question.id.length + 2), v])
-                ) : undefined}
+                partManualGrades={partGrades}
+                essaySelfGrades={partGrades}
               />
             </div>
           )

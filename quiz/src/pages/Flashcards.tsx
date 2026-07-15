@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState, 
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   BookOpen,
-  CalendarDays,
   Check,
   CheckCircle2,
   ChevronDown,
@@ -11,7 +10,6 @@ import {
   ChevronUp,
   Circle,
   Eye,
-  GraduationCap,
   Headphones,
   Images,
   Keyboard,
@@ -26,7 +24,6 @@ import {
   Search,
   Sigma,
   Sparkles,
-  Target,
   Trash2,
   TrendingUp,
   Unlock,
@@ -480,14 +477,8 @@ function PackCard({
   const notAdded = concepts.filter(n => !hasCard(n))
   const allAdded = total > 0 && notAdded.length === 0
   const fullyCollected = total > 0 && collected === total
-  const collectedPct = total > 0 ? Math.round((collected / total) * 100) : 0
 
   const colors = packColorsFor(kind, colorIndex, isSub)
-  const Icon =
-    kind === 'study_plan' ? CalendarDays
-      : kind === 'exam' ? GraduationCap
-        : kind === 'saved' ? LayoutGrid
-          : Target
 
   function handleAdd() {
     for (const name of notAdded) addCard({ kind: 'concept', name })
@@ -514,10 +505,9 @@ function PackCard({
         className={`flex items-start gap-2.5 cursor-pointer ${isSub ? 'px-3 py-2.5' : 'px-3.5 py-3'}`}
         aria-expanded={expanded}
       >
-        <Icon className={`shrink-0 mt-0.5 ${isSub ? 'h-4 w-4' : 'h-5 w-5'} ${colors.cardIcon}`} />
         <div className="flex-1 min-w-0">
           <div className="flex items-start gap-1.5">
-            <span className={`font-bold leading-tight line-clamp-2 ${isSub ? 'text-sm' : 'text-base sm:text-lg'}`}>{label}</span>
+            <span className={`font-bold leading-tight ${isSub ? 'text-sm' : 'text-base sm:text-lg'}`}>{label}</span>
             {fullyCollected && (
               <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300 mt-0.5">
                 <Sparkles className="h-3.5 w-3.5" />
@@ -525,17 +515,11 @@ function PackCard({
             )}
           </div>
           {sublabel && <span className={`block text-[11px] truncate ${colors.cardSub}`}>{sublabel}</span>}
-          <div className="mt-1.5 space-y-1">
-            <div className={`flex items-center justify-between text-[11px] tabular-nums ${colors.cardSub}`}>
-              <span className="inline-flex items-center gap-1">
-                {fullyCollected ? <Unlock className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
-                {loading ? '…' : `${collected}/${total} collected`}
-              </span>
-              <span>{inDeck}/{total} in deck</span>
-            </div>
-            <div className="h-1.5 w-full rounded-full bg-current/15 overflow-hidden">
-              <div className="h-full rounded-full bg-current transition-all" style={{ width: `${collectedPct}%` }} />
-            </div>
+          <div className={`mt-1.5 flex items-baseline gap-1 ${colors.cardText}`}>
+            <span className={`font-bold tabular-nums ${isSub ? 'text-lg' : 'text-2xl'}`}>
+              {loading ? '…' : inDeck}
+            </span>
+            <span className={`text-xs font-medium ${colors.cardSub}`}>in deck</span>
           </div>
         </div>
         <div className="flex items-center gap-0.5 shrink-0">

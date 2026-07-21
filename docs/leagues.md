@@ -30,8 +30,10 @@ Where the pieces live:
 
 There is no standalone Dashboard card. The leaderboard lives as the **League
 tab** inside the Level-badge popup (top-left of the Dashboard), alongside the
-**Level** and **Quests** tabs (`LevelBadge.tsx` → `LeaderboardPanel.tsx` /
-`QuestsPanel.tsx`). Because leagues are per-exam, the League tab carries a
+**Quests** tab (`LevelBadge.tsx` → `LeaderboardPanel.tsx` / `QuestsPanel.tsx`).
+The popup's header carries the current level and level-progress bar, and the
+daily goal is shown as the first row of the Quests tab (there is no separate
+Level tab). Because leagues are per-exam, the League tab carries a
 compact exam selector (styled like the Dashboard exam pills, smaller) when more
 than one exam is active, defaulting to the Dashboard's active exam. Settings has
 a parallel opt-in card with its own exam selector.

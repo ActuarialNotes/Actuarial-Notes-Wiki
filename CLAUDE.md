@@ -120,8 +120,9 @@ Other important `lib/` modules:
   is fired alongside `recordXp` from `quizStore` on quiz completion, credited to the
   quiz's exam (quest XP is not — quests are cross-exam). Surfaced not as its own card but
   as the **League tab** in the Level-badge popup (`components/LevelBadge.tsx` hosts
-  Level/Quests/League tabs → `components/LeaderboardPanel.tsx` with a per-exam selector,
-  `components/QuestsPanel.tsx`), plus `components/LeagueSettingsCard.tsx` (Settings
+  Quests/League tabs — the popup header shows the level + level-progress bar and the
+  daily goal is the first row of the Quests tab → `components/LeaderboardPanel.tsx` with
+  a per-exam selector, `components/QuestsPanel.tsx`), plus `components/LeagueSettingsCard.tsx` (Settings
   opt-in/out). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,

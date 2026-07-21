@@ -615,6 +615,32 @@
   .flashcard-collected.flashcard-sheen-l3::before { animation: none; }
 }
 
+/* Rainbow foil border for the collect (lock) icon in the concept-popup header —
+   the same travelling gradient edge as the L3 flashcard, scaled down to ring the
+   small lock button so it reads as a collectible card. Uses the identical
+   padding+mask-exclude ring trick so the border sits on the button edge without
+   covering the icon underneath. */
+.lock-foil-ring {
+  position: relative;
+}
+.lock-foil-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
+  background-size: 300% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: flashcard-foil-shift 3s linear infinite;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lock-foil-ring::before { animation: none; }
+}
+
 /* Study-plan row highlight: rings a checklist row when the popup navigates to it. */
 @keyframes concept-row-highlight {
   0%, 15% {

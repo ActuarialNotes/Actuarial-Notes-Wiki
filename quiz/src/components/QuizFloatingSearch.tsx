@@ -4,11 +4,26 @@ import { Search, X } from 'lucide-react'
 import { filterQuestions } from '@/lib/parser'
 import type { QuestionFilter } from '@/lib/parser'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
-import { QuestionSearchRow } from '@/components/QuestionSearchRow'
+import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
+import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 
 interface FilterPill {
   label: string
   onRemove: () => void
+}
+
+const DIFFICULTY_OPTIONS = [
+  { value: 'easy', label: 'Easy' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'hard', label: 'Hard' },
+]
+
+// Turns a raw wiki_link path ("Concepts/Geometric+Distribution", "/probability/set-theory")
+// into a human label, matching how QuestionSearchRow renders concept chips.
+function conceptLabel(link: string): string {
+  const clean = link.replace(/\.md$/i, '').replace(/\+/g, ' ')
+  const segment = clean.split('/').filter(Boolean).pop() ?? link
+  return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
 
 interface QuizFloatingSearchProps {
@@ -24,8 +39,19 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [difficultyFilters, setDifficultyFilters] = useState<Set<string>>(new Set())
+  const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // The incoming quiz-config filter (exam + selected concepts) defines the pool
+  // the difficulty/concept filters refine. When the quiz selection changes,
+  // drop stale refinements so they can't linger against a different pool.
+  const filterKey = JSON.stringify(filter ?? {})
+  useEffect(() => {
+    setDifficultyFilters(new Set())
+    setConceptFilters(new Set())
+  }, [filterKey])
 
   useEffect(() => {
     if (!active) return
@@ -67,7 +93,8 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
   // Expand whenever the search bar is active (focus), regardless of query
   const isExpanded = active
 
-  // Full filtered pool (used for count); sliced separately for rendering
+  // Pool defined by the quiz config (exam + selected concepts) and the search
+  // query — this is what the difficulty/concept refinements narrow further.
   const basePool = useMemo(() => {
     const hasFilter = filter && Object.keys(filter).length > 0
     const q = query.trim()
@@ -75,8 +102,72 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     return filterQuestions(allQuestions, { ...filter, search: q })
   }, [allQuestions, query, filter])
 
-  const questionResults = useMemo(() => basePool.slice(0, 100), [basePool])
-  const totalCount = basePool.length
+  // Concepts available to filter by, drawn from the current pool so the dropdown
+  // stays scoped to the selected quiz topics/exam.
+  const conceptOptions = useMemo(() => {
+    const seen = new Set<string>()
+    basePool.forEach(q => q.wiki_link.forEach(link => seen.add(conceptLabel(link))))
+    return Array.from(seen).sort().map(name => ({ value: name, label: name }))
+  }, [basePool])
+
+  // Apply the local refinements. Difficulty is OR within itself; concepts are OR
+  // within themselves; the two groups are AND'd together.
+  const visiblePool = useMemo(() => {
+    let filtered = basePool
+    if (difficultyFilters.size > 0) {
+      filtered = filtered.filter(q => difficultyFilters.has(q.difficulty))
+    }
+    if (conceptFilters.size > 0) {
+      filtered = filtered.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
+    }
+    return filtered
+  }, [basePool, difficultyFilters, conceptFilters])
+
+  // Option counts reflect the pool with the *other* filter group applied, so each
+  // count previews how many questions choosing it would leave.
+  const difficultyOptionCounts = useMemo(() => {
+    let pool = basePool
+    if (conceptFilters.size > 0) {
+      pool = pool.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
+    }
+    const counts: Record<string, number> = {}
+    pool.forEach(q => { counts[q.difficulty] = (counts[q.difficulty] ?? 0) + 1 })
+    return counts
+  }, [basePool, conceptFilters])
+
+  const conceptOptionCounts = useMemo(() => {
+    let pool = basePool
+    if (difficultyFilters.size > 0) {
+      pool = pool.filter(q => difficultyFilters.has(q.difficulty))
+    }
+    const counts: Record<string, number> = {}
+    pool.forEach(q => q.wiki_link.forEach(link => {
+      const lbl = conceptLabel(link)
+      counts[lbl] = (counts[lbl] ?? 0) + 1
+    }))
+    return counts
+  }, [basePool, difficultyFilters])
+
+  const questionResults = useMemo(() => visiblePool.slice(0, 100), [visiblePool])
+  const totalCount = visiblePool.length
+
+  function toggleDifficulty(value: string) {
+    setDifficultyFilters(prev => {
+      const next = new Set(prev)
+      if (next.has(value)) next.delete(value)
+      else next.add(value)
+      return next
+    })
+  }
+
+  function toggleConceptFilter(value: string) {
+    setConceptFilters(prev => {
+      const next = new Set(prev)
+      if (next.has(value)) next.delete(value)
+      else next.add(value)
+      return next
+    })
+  }
 
   const selectedQuestions = useMemo(
     () => allQuestions.filter(q => selectedIds.has(q.id)),
@@ -158,6 +249,43 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
               {/* Single scrollable region: tags → filter pills → results.
                   Everything scrolls together so tags don't push results off screen. */}
               <div className="flex-1 overflow-y-auto min-h-0">
+                {/* Difficulty + concept filters — scoped to the active quiz pool */}
+                {basePool.length > 0 && (
+                  <div className="flex items-center gap-2 flex-wrap px-0.5 py-2">
+                    {DIFFICULTY_OPTIONS.map(opt => {
+                      const count = difficultyOptionCounts[opt.value] ?? 0
+                      const isActive = difficultyFilters.has(opt.value)
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => toggleDifficulty(opt.value)}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                            isActive
+                              ? 'bg-primary/10 text-primary'
+                              : 'bg-background hover:bg-accent text-muted-foreground'
+                          }`}
+                        >
+                          <DifficultyDots difficulty={opt.value} />
+                          <span className="capitalize">{opt.label}</span>
+                          <span className="ml-0.5 text-xs bg-muted rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center text-muted-foreground">
+                            {count}
+                          </span>
+                        </button>
+                      )
+                    })}
+                    {conceptOptions.length > 0 && (
+                      <MultiSelectDropdown
+                        label="Concepts"
+                        options={conceptOptions}
+                        selected={conceptFilters}
+                        onToggle={toggleConceptFilter}
+                        getCount={v => conceptOptionCounts[v] ?? 0}
+                      />
+                    )}
+                  </div>
+                )}
+
                 {/* Selected question tags */}
                 {selectedIds.size > 0 && (
                   <div className="flex flex-wrap gap-1.5 px-0.5 py-2">

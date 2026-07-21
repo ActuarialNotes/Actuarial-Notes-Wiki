@@ -64,6 +64,9 @@ before touching that area**:
 - `docs/research-ai-disabled.md` — what the two Research feature flags hide and the exact
   re-enable checklist (read before touching anything under `Research`/`research`).
 - `docs/research-corpus-plan.md` — the plan for the Canadian P&C `Resources/` markdown corpus.
+- `docs/daily-plan-email.md` — the opt-in daily study-plan email: how the sender derives
+  "today's concepts" from the (usually day-old) `study_plan_cache`, the hourly pg_cron →
+  edge-function send loop, and the one-time Resend/vault setup checklist.
 - `docs/leagues.md` — the opt-in weekly XP leagues (roadmap P4.1): the tier ladder and
   promotion/relegation math, the lazy Monday-UTC rollover, and the privacy model
   (snapshot-on-join / delete-on-leave, RPC-only board reads).
@@ -124,9 +127,16 @@ Other important `lib/` modules:
   daily goal is the first row of the Quests tab → `components/LeaderboardPanel.tsx` with
   a per-exam selector, `components/QuestsPanel.tsx`), plus `components/LeagueSettingsCard.tsx` (Settings
   opt-in/out). `hooks/useLeague.ts` is `useLeague(exam)`. Gated by `LEAGUES_ENABLED`.
+- `dailyEmail.ts` — pure core of the opt-in daily study-plan email: derives "today's
+  concepts" from a cached (possibly stale) study plan and the local send-time math. The
+  actual sending happens server-side in the `daily-plan-email` edge function, which
+  mirrors these helpers verbatim (it can't import from `quiz/src` — same duplication
+  contract as the league SQL). Prefs live in `user_email_prefs`
+  (`hooks/useEmailPrefs.ts` + `components/EmailSettingsCard.tsx` in Settings). Gated by
+  `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
-  `LEAGUES_ENABLED`)
+  `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
@@ -211,7 +221,8 @@ via `supabase secrets set`, never as `VITE_*`.
   (most of the recent additions) the flag-gated **research** feature — `research_documents`,
   full-text search, ontology, projects, project questions/sections, cron.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,
-  account deletion, beta code redemption, Google Cloud TTS proxy, and `research-ingest-url`.
+  account deletion, beta code redemption, Google Cloud TTS proxy, `research-ingest-url`,
+  and `daily-plan-email` (the pg_cron-driven study-plan email sender).
 - `.github/workflows/deploy-functions.yml` — auto-deploys edge functions to Supabase on
   push to `main` when `supabase/functions/**` changes.
 

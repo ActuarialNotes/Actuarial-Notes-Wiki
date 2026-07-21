@@ -19,7 +19,8 @@ import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { DailyGoalPicker } from '@/components/DailyGoalPicker'
 import { LeagueSettingsCard } from '@/components/LeagueSettingsCard'
-import { LEAGUES_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { EmailSettingsCard } from '@/components/EmailSettingsCard'
+import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import {
   AvatarDisplay,
   ANIMAL_TYPES,
@@ -296,6 +297,7 @@ export default function Settings() {
     { id: 'appearance', label: 'Appearance' },
     ...(user && XP_ENABLED ? [{ id: 'dailygoal', label: 'Daily Goal' }] : []),
     ...(user && LEAGUES_ENABLED ? [{ id: 'league', label: 'Leaderboard' }] : []),
+    ...(user && DAILY_PLAN_EMAIL_ENABLED ? [{ id: 'email', label: 'Daily Email' }] : []),
     ...(user ? BASE_NAV_ITEMS : [{ id: 'signin', label: 'Sign In' }]),
   ]
 
@@ -829,6 +831,13 @@ export default function Settings() {
             {user && LEAGUES_ENABLED && (
               <section ref={el => { sectionRefs.current.league = el }} id="league">
                 <LeagueSettingsCard />
+              </section>
+            )}
+
+            {/* ---- Daily study-plan email opt-in ---- */}
+            {user && DAILY_PLAN_EMAIL_ENABLED && (
+              <section ref={el => { sectionRefs.current.email = el }} id="email">
+                <EmailSettingsCard />
               </section>
             )}
 

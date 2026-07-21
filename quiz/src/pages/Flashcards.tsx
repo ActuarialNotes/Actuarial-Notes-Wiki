@@ -21,7 +21,9 @@ import {
   Minus,
   Play,
   Plus,
+  RotateCcw,
   Search,
+  Shuffle,
   Sigma,
   Sparkles,
   Trash2,
@@ -58,6 +60,13 @@ import { fetchWikiFile } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
+import {
+  needsReviewOrder,
+  nextIncompleteIndex,
+  shuffled,
+  summarizeSession,
+  type StudyRating,
+} from '@/lib/flashcardStudy'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { Button } from '@/components/ui/button'
@@ -69,15 +78,17 @@ import { trackFlashcardReviewed } from '@/lib/analytics'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 
-type GroupBy = 'exam' | 'date' | 'alpha' | 'custom'
+type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 type GalleryTab = 'deck' | 'collected' | 'packs'
 type ReverseCardSection = 'definition' | 'math' | 'images'
 
 const GROUP_LABELS: { key: GroupBy; label: string }[] = [
-  { key: 'exam',   label: 'Exam' },
-  { key: 'date',   label: 'Date' },
-  { key: 'alpha',  label: 'A–Z' },
-  { key: 'custom', label: 'Custom' },
+  { key: 'exam',    label: 'Exam' },
+  { key: 'date',    label: 'Date' },
+  { key: 'alpha',   label: 'A–Z' },
+  { key: 'mastery', label: 'Needs review' },
+  { key: 'shuffle', label: 'Shuffle' },
+  { key: 'custom',  label: 'Custom' },
 ]
 
 const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; dotClass: string }> = {
@@ -1142,6 +1153,7 @@ function FlashcardControlsBar({
   focusMode,
   onFocusToggle,
   onShortcutsHelp,
+  onShuffle,
   minimal = false,
 }: {
   galleryOpen?: boolean
@@ -1153,6 +1165,7 @@ function FlashcardControlsBar({
   focusMode: boolean
   onFocusToggle: () => void
   onShortcutsHelp: () => void
+  onShuffle?: () => void
   minimal?: boolean
 }) {
   return (
@@ -1180,6 +1193,16 @@ function FlashcardControlsBar({
       </div>
 
       <ViewModeDropdown reverseCardModes={reverseCardModes} onToggleMode={onToggleMode} />
+
+      {!minimal && onShuffle && (
+        <button
+          type="button"
+          onClick={onShuffle}
+          title="Shuffle deck (S)"
+          aria-label="Shuffle deck"
+          className="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+        ><Shuffle className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+      )}
 
       {!minimal && (
         <>
@@ -1215,11 +1238,14 @@ function GalleryStrip({
   activeIndex,
   onSelect,
   conceptMasteryMap,
+  completedNames,
 }: {
   cards: FlashCard[]
   activeIndex: number
   onSelect: (index: number) => void
   conceptMasteryMap: Map<string, MasteryState>
+  /** Lowercased names of cards marked complete this session. */
+  completedNames: Set<string>
 }) {
   const activeChipRef = useRef<HTMLButtonElement>(null)
 
@@ -1252,6 +1278,9 @@ function GalleryStrip({
             >
               <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? 'bg-primary-foreground/70' : dotClass}`} />
               <span className="max-w-[120px] truncate">{card.name}</span>
+              {completedNames.has(card.name.toLowerCase()) && (
+                <Check className={`h-3 w-3 shrink-0 ${isActive ? 'text-primary-foreground/80' : 'text-green-500'}`} />
+              )}
             </button>
           )
         })}
@@ -1889,6 +1918,110 @@ function FlashcardsManageDialog({
   )
 }
 
+// ─── Study Session Summary ───────────────────────────────────────────────────
+
+// Shown when every card in the deck has been marked complete via the
+// Again / Got it loop. Recaps the session (with the cards that needed extra
+// passes) and offers the two natural next steps: sweep the finished cards into
+// a dated pack, or reset the deck and run it again.
+function StudySessionSummaryDialog({
+  cardNames,
+  againCounts,
+  onClearCompleted,
+  onStudyAgain,
+  onClose,
+}: {
+  cardNames: string[]
+  againCounts: Record<string, number>
+  onClearCompleted: () => void
+  onStudyAgain: () => void
+  onClose: () => void
+}) {
+  const summary = useMemo(() => summarizeSession(cardNames, againCounts), [cardNames, againCounts])
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Deck complete"
+    >
+      <div
+        className="w-full max-w-sm rounded-xl bg-card text-card-foreground shadow-2xl p-6 space-y-4"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="text-center space-y-2">
+          <span className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-green-500/15 text-green-500">
+            <CheckCircle2 className="h-7 w-7" />
+          </span>
+          <h2 className="text-lg font-bold">Deck complete!</h2>
+          <p className="text-sm text-muted-foreground">
+            {summary.total} card{summary.total === 1 ? '' : 's'} studied
+            {summary.struggled.length > 0
+              ? `, ${summary.firstTry} on the first try.`
+              : ' — all on the first try.'}
+          </p>
+        </div>
+
+        {summary.struggled.length > 0 && (
+          <div className="rounded-lg bg-muted/40 p-3 space-y-1.5">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Worth another look
+            </p>
+            <ul className="space-y-1">
+              {summary.struggled.slice(0, 5).map(({ name, againCount }) => (
+                <li key={name} className="flex items-center gap-2 text-sm">
+                  <span className="flex-1 min-w-0 truncate">{name}</span>
+                  <span className="shrink-0 text-[11px] font-semibold px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 tabular-nums">
+                    {againCount}× again
+                  </span>
+                </li>
+              ))}
+              {summary.struggled.length > 5 && (
+                <li className="text-xs text-muted-foreground">
+                  +{summary.struggled.length - 5} more
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={onClearCompleted}
+            title="Move completed cards into a dated pack and clear them from your deck"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-[0.98] transition-all"
+          >
+            <CheckCircle2 className="h-4 w-4" /> Clear completed to a pack
+          </button>
+          <button
+            type="button"
+            onClick={onStudyAgain}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-muted text-foreground text-sm font-semibold hover:bg-accent active:scale-[0.98] transition-all"
+          >
+            <RotateCcw className="h-4 w-4" /> Study again
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Keep browsing
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Gallery Panel (expanded overlay) ────────────────────────────────────────
 
 function GalleryPanel({
@@ -2145,6 +2278,7 @@ function GalleryPanel({
 
 interface FlashcardStudyAreaHandle {
   flip: () => void
+  isFlipped: () => boolean
 }
 
 const SWIPE_THRESHOLD = 80
@@ -2162,6 +2296,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   hasNext: boolean
   hasPrev: boolean
   focusMode?: boolean
+  // Again / Got it self-assessment loop. `onRate` advances to the next
+  // unfinished card (Got it also marks the current one complete).
+  onRate: (rating: StudyRating) => void
+  isCompleted: boolean
 }>(function FlashcardStudyArea({
   cards,
   index,
@@ -2174,6 +2312,8 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   hasNext,
   hasPrev,
   focusMode = false,
+  onRate,
+  isCompleted,
 }, ref) {
   const [flipped, setFlipped] = useState(defaultFlipped)
   const [expanded, setExpanded] = useState(false)
@@ -2237,7 +2377,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
     return () => document.removeEventListener('mousedown', handleOutside)
   }, [showPlayMenu])
 
-  useImperativeHandle(ref, () => ({ flip: handleFlip }))
+  useImperativeHandle(ref, () => ({ flip: handleFlip, isFlipped: () => flipped }))
 
   function handleFlip() {
     if (!flipped) {
@@ -2366,6 +2506,15 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                 : (hasPrev ? <ChevronLeft className="h-6 w-6" /> : null)}
             </div>
           </div>
+        )}
+        {isCompleted && (
+          <span
+            className="absolute top-3 right-3 z-10 text-green-500 pointer-events-none"
+            title="Completed"
+            aria-label="Completed"
+          >
+            <CheckCircle2 className="h-5 w-5" />
+          </span>
         )}
         {!flipped ? (
           <div className="flex-1 flex flex-col items-center justify-center p-8 gap-3">
@@ -2510,6 +2659,30 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
         )}
       </div>
 
+      {/* Again / Got it — the self-assessment loop, revealed once the card is
+          flipped. "Got it" marks the card complete and jumps to the next
+          unfinished card; "Again" keeps it cycling until it sticks. */}
+      {flipped && (
+        <div className="flex items-stretch gap-3 w-full max-w-xl">
+          <button
+            type="button"
+            onClick={() => onRate('again')}
+            title="Keep this card in rotation (1)"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-sm font-semibold hover:bg-rose-500/20 active:scale-[0.98] transition-all"
+          >
+            <RotateCcw className="h-4 w-4" /> Again
+          </button>
+          <button
+            type="button"
+            onClick={() => onRate('got')}
+            title="Mark complete and continue (2)"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-green-500/15 text-green-600 dark:text-green-400 text-sm font-semibold hover:bg-green-500/25 active:scale-[0.98] transition-all"
+          >
+            <CheckCircle2 className="h-4 w-4" /> Got it
+          </button>
+        </div>
+      )}
+
       {showQuestions && (
         <ConceptQuestionsModal
           conceptName={current.name}
@@ -2529,7 +2702,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function Flashcards() {
-  const { cards, removeCard, clearCards, customOrder, setCustomOrder } = useFlashcards()
+  const {
+    cards, removeCard, clearCards, customOrder, setCustomOrder,
+    toggleCompleted, clearCompleted, resetCompleted,
+  } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords } = useConceptMastery()
   const popupOpen = useConceptPopup(s => s.open)
@@ -2553,6 +2729,12 @@ export default function Flashcards() {
   const [focusMode, setFocusMode] = useState(false)
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
   const [groupBy, setGroupBy] = useState<GroupBy>('exam')
+  // The shuffled deck order (card names) while groupBy === 'shuffle'. Freshly
+  // drawn each time shuffle is chosen; newly added cards append at the end.
+  const [shuffleOrder, setShuffleOrder] = useState<string[]>([])
+  // Per-card "Again" tallies for the current study session (feeds the summary).
+  const [againCounts, setAgainCounts] = useState<Record<string, number>>({})
+  const [showSessionSummary, setShowSessionSummary] = useState(false)
   const [reverseCardModes, setReverseCardModes] = useState<Set<ReverseCardSection>>(
     new Set<ReverseCardSection>(['definition']),
   )
@@ -2584,9 +2766,12 @@ export default function Flashcards() {
     'ArrowLeft': () => {
       setActiveIndex(i => Math.max(i - 1, 0))
     },
+    '1': () => { if (studyAreaRef.current?.isFlipped()) handleRate('again') },
+    '2': () => { if (studyAreaRef.current?.isFlipped()) handleRate('got') },
+    's': () => { handleShuffle() },
     'f': () => { setFocusMode(v => !v) },
     '?': () => setShowShortcutsHelp(v => !v),
-  }, !galleryExpanded && !popupOpen && !showShortcutsHelp && cards.length > 0)
+  }, !galleryExpanded && !popupOpen && !showShortcutsHelp && !showSessionSummary && cards.length > 0)
 
   function toggleReverseMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {
@@ -2680,6 +2865,21 @@ export default function Flashcards() {
   const orderedCards = useMemo((): FlashCard[] => {
     if (groupBy === 'date') return [...cards].sort((a, b) => b.addedAt - a.addedAt)
     if (groupBy === 'alpha') return [...cards].sort((a, b) => a.name.localeCompare(b.name))
+    if (groupBy === 'mastery') {
+      return needsReviewOrder(cards, c => conceptMasteryMap.get(c.name.toLowerCase()) ?? 'new')
+    }
+    if (groupBy === 'shuffle') {
+      const nameToCard = new Map(cards.map(c => [c.name.toLowerCase(), c]))
+      const ordered: FlashCard[] = []
+      for (const name of shuffleOrder) {
+        const card = nameToCard.get(name.toLowerCase())
+        if (card) ordered.push(card)
+      }
+      for (const card of cards) {
+        if (!ordered.some(c => c.name.toLowerCase() === card.name.toLowerCase())) ordered.push(card)
+      }
+      return ordered
+    }
     if (groupBy === 'custom') {
       const nameToCard = new Map(cards.map(c => [c.name.toLowerCase(), c]))
       const ordered: FlashCard[] = []
@@ -2707,9 +2907,54 @@ export default function Flashcards() {
       }
       return a.name.localeCompare(b.name)
     })
-  }, [cards, customOrder, groupBy, conceptToExam, conceptSyllabusPosition])
+  }, [cards, customOrder, groupBy, conceptToExam, conceptSyllabusPosition, conceptMasteryMap, shuffleOrder])
 
   orderedCardsRef.current = orderedCards
+
+  const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
+  const completedNamesLower = useMemo(
+    () => new Set(cards.filter(c => c.completedAt).map(c => c.name.toLowerCase())),
+    [cards],
+  )
+
+  function handleShuffle() {
+    setShuffleOrder(shuffled(cards.map(c => c.name)))
+    setGroupBy('shuffle')
+    setActiveIndex(0)
+  }
+
+  // Selecting "Shuffle" from the sort dropdown draws a fresh order each time.
+  function handleGroupByChange(g: GroupBy) {
+    if (g === 'shuffle') setShuffleOrder(shuffled(cards.map(c => c.name)))
+    setGroupBy(g)
+  }
+
+  // Rate the current card and advance to the next unfinished one, wrapping
+  // around the deck. "Got it" marks it complete; "Again" tallies a lapse (and
+  // un-completes a previously finished card that has slipped). Once nothing is
+  // left unfinished, the session summary takes over.
+  function handleRate(rating: StudyRating) {
+    const card = orderedCards[activeIndex]
+    if (!card) return
+    if (rating === 'again') {
+      setAgainCounts(m => ({ ...m, [card.name]: (m[card.name] ?? 0) + 1 }))
+      if (card.completedAt) toggleCompleted(card.name)
+    } else if (!card.completedAt) {
+      toggleCompleted(card.name)
+    }
+    const completedFlags = orderedCards.map((c, i) =>
+      i === activeIndex ? rating === 'got' : !!c.completedAt)
+    const next = nextIncompleteIndex(completedFlags, activeIndex)
+    if (next === -1) {
+      setShowSessionSummary(true)
+    } else if (next === activeIndex) {
+      // Sole unfinished card: the index can't change, so flip it back over for
+      // another pass instead.
+      studyAreaRef.current?.flip()
+    } else {
+      setActiveIndex(next)
+    }
+  }
 
   // Navigate to and flash a card when arriving via the ?highlight= URL param.
   // Must be after orderedCards so the dep array re-fires when sort order changes
@@ -2776,7 +3021,7 @@ export default function Flashcards() {
             cards={cards}
             orderedCards={orderedCards}
             groupBy={groupBy}
-            onGroupByChange={setGroupBy}
+            onGroupByChange={handleGroupByChange}
             examGroups={examGroups}
             flashingCard={flashingCard}
             activeIndex={activeIndex}
@@ -2856,7 +3101,7 @@ export default function Flashcards() {
           cards={cards}
           orderedCards={orderedCards}
           groupBy={groupBy}
-          onGroupByChange={setGroupBy}
+          onGroupByChange={handleGroupByChange}
           examGroups={examGroups}
           flashingCard={flashingCard}
           activeIndex={activeIndex}
@@ -2901,6 +3146,8 @@ export default function Flashcards() {
             hasNext={activeIndex < orderedCards.length - 1}
             hasPrev={activeIndex > 0}
             focusMode={focusMode}
+            onRate={handleRate}
+            isCompleted={!!orderedCards[activeIndex]?.completedAt}
           />
         </div>
       </div>
@@ -2911,6 +3158,27 @@ export default function Flashcards() {
         <KeyboardShortcutsHelp
           context="flashcards"
           onClose={() => setShowShortcutsHelp(false)}
+        />
+      )}
+
+      {showSessionSummary && (
+        <StudySessionSummaryDialog
+          cardNames={orderedCards.map(c => c.name)}
+          againCounts={againCounts}
+          onClearCompleted={() => {
+            clearCompleted()
+            setAgainCounts({})
+            setShowSessionSummary(false)
+            setActiveIndex(0)
+          }}
+          onStudyAgain={() => {
+            resetCompleted()
+            if (groupBy === 'shuffle') setShuffleOrder(shuffled(cards.map(c => c.name)))
+            setAgainCounts({})
+            setShowSessionSummary(false)
+            setActiveIndex(0)
+          }}
+          onClose={() => setShowSessionSummary(false)}
         />
       )}
 
@@ -2928,6 +3196,7 @@ export default function Flashcards() {
               activeIndex={activeIndex}
               onSelect={setActiveIndex}
               conceptMasteryMap={conceptMasteryMap}
+              completedNames={completedNamesLower}
             />
           </div>
         )}
@@ -2943,10 +3212,15 @@ export default function Flashcards() {
               <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
               <span>Previous</span>
             </button>
-            <div className="self-center px-4 shrink-0">
+            <div className="self-center px-4 shrink-0 flex flex-col items-center">
               <span className="text-sm text-muted-foreground tabular-nums">
                 {activeIndex + 1} / {orderedCards.length}
               </span>
+              {completedCount > 0 && (
+                <span className="flex items-center gap-0.5 text-[10px] font-semibold text-green-600 dark:text-green-400 tabular-nums">
+                  <CheckCircle2 className="h-3 w-3" /> {completedCount} done
+                </span>
+              )}
             </div>
             <button
               type="button"
@@ -2969,6 +3243,7 @@ export default function Flashcards() {
           focusMode={focusMode}
           onFocusToggle={handleFocusToggle}
           onShortcutsHelp={() => setShowShortcutsHelp(true)}
+          onShuffle={handleShuffle}
         />
       </div>
     </>

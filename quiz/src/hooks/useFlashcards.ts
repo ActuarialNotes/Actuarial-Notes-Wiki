@@ -79,6 +79,7 @@ interface FlashcardsState {
   clearCards: () => void
   toggleCompleted: (name: string) => void
   clearCompleted: () => void
+  resetCompleted: () => void
   hasCard: (name: string) => boolean
   setCustomOrder: (names: string[]) => void
   addSavedPack: (label: string, concepts: string[]) => void
@@ -119,6 +120,15 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
         ? { ...c, completedAt: c.completedAt ? undefined : Date.now() }
         : c,
     )
+    save(nextCards)
+    set({ cards: nextCards })
+  },
+  // Un-complete every card without removing anything — used by "Study again"
+  // at the end of a study session to restart the deck from scratch.
+  resetCompleted: () => {
+    const { cards } = get()
+    if (!cards.some(c => c.completedAt)) return
+    const nextCards = cards.map(c => (c.completedAt ? { ...c, completedAt: undefined } : c))
     save(nextCards)
     set({ cards: nextCards })
   },

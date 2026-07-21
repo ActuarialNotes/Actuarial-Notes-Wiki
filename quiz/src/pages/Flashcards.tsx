@@ -3165,6 +3165,24 @@ export default function Flashcards() {
     setFocusMode(v => !v)
   }
 
+  // Opening the gallery always lands on "My Deck" and flashes the card being
+  // studied so you can see where the active card sits among the rest; the
+  // GalleryPanel scrolls it into view on mount. Closing just dismisses.
+  function handleGalleryToggle() {
+    if (galleryExpanded) {
+      setGalleryExpanded(false)
+      return
+    }
+    const activeCard = orderedCards[activeIndex]
+    setGalleryTab('deck')
+    setGalleryExpanded(true)
+    if (activeCard) {
+      setFlashingCard(activeCard.name)
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current)
+      flashTimerRef.current = setTimeout(() => setFlashingCard(null), 1700)
+    }
+  }
+
   const studyFocus = focusMode && !galleryExpanded
 
   return (
@@ -3329,7 +3347,7 @@ export default function Flashcards() {
         )}
         <FlashcardControlsBar
           galleryOpen={galleryExpanded}
-          onGalleryToggle={() => setGalleryExpanded(v => !v)}
+          onGalleryToggle={handleGalleryToggle}
           reverseCardModes={reverseCardModes}
           onToggleMode={toggleReverseMode}
           flip={globalFlip}

@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   BookOpen,
@@ -99,126 +99,104 @@ const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; d
   forgotten: { label: 'Forgotten', className: 'bg-rose-500/20 text-rose-600 dark:text-rose-400',   dotClass: 'bg-rose-500' },
 }
 
-// Color palette for exam packs — one entry per exam in rotation
+// Color palette for exam packs — one entry per exam in rotation. Whole-exam
+// ("hero") packs get the gradient treatment; learning-objective packs get the
+// quieter lo* variant so each exam reads as one color family.
 const PACK_COLOR_PALETTE = [
   // Blue
   {
-    card: 'bg-blue-500/10 hover:bg-blue-500/15',
+    card: 'bg-gradient-to-br from-blue-500/25 via-blue-500/10 to-transparent border border-blue-500/30 hover:border-blue-500/50',
     cardText: 'text-blue-700 dark:text-blue-300',
     cardSub: 'text-blue-600/70 dark:text-blue-400/60',
     cardIcon: 'text-blue-500',
-    selCard: 'bg-blue-600',
-    selText: 'text-white',
-    selSub: 'text-blue-100/80',
-    selIcon: 'text-blue-200',
-    loCard: 'bg-blue-500/5 hover:bg-blue-500/10',
+    barTrack: 'bg-blue-500/15',
+    loCard: 'bg-blue-500/5 border border-blue-500/15 hover:border-blue-500/35 hover:bg-blue-500/10',
     loCardText: 'text-blue-700/80 dark:text-blue-400/80',
     loCardSub: 'text-blue-600/60 dark:text-blue-400/50',
     loCardIcon: 'text-blue-400',
-    loSelCard: 'bg-blue-500',
+    loBarTrack: 'bg-blue-500/10',
   },
   // Emerald
   {
-    card: 'bg-emerald-500/10 hover:bg-emerald-500/15',
+    card: 'bg-gradient-to-br from-emerald-500/25 via-emerald-500/10 to-transparent border border-emerald-500/30 hover:border-emerald-500/50',
     cardText: 'text-emerald-700 dark:text-emerald-300',
     cardSub: 'text-emerald-600/70 dark:text-emerald-400/60',
     cardIcon: 'text-emerald-500',
-    selCard: 'bg-emerald-600',
-    selText: 'text-white',
-    selSub: 'text-emerald-100/80',
-    selIcon: 'text-emerald-200',
-    loCard: 'bg-emerald-500/5 hover:bg-emerald-500/10',
+    barTrack: 'bg-emerald-500/15',
+    loCard: 'bg-emerald-500/5 border border-emerald-500/15 hover:border-emerald-500/35 hover:bg-emerald-500/10',
     loCardText: 'text-emerald-700/80 dark:text-emerald-400/80',
     loCardSub: 'text-emerald-600/60 dark:text-emerald-400/50',
     loCardIcon: 'text-emerald-400',
-    loSelCard: 'bg-emerald-500',
+    loBarTrack: 'bg-emerald-500/10',
   },
   // Violet
   {
-    card: 'bg-violet-500/10 hover:bg-violet-500/15',
+    card: 'bg-gradient-to-br from-violet-500/25 via-violet-500/10 to-transparent border border-violet-500/30 hover:border-violet-500/50',
     cardText: 'text-violet-700 dark:text-violet-300',
     cardSub: 'text-violet-600/70 dark:text-violet-400/60',
     cardIcon: 'text-violet-500',
-    selCard: 'bg-violet-600',
-    selText: 'text-white',
-    selSub: 'text-violet-100/80',
-    selIcon: 'text-violet-200',
-    loCard: 'bg-violet-500/5 hover:bg-violet-500/10',
+    barTrack: 'bg-violet-500/15',
+    loCard: 'bg-violet-500/5 border border-violet-500/15 hover:border-violet-500/35 hover:bg-violet-500/10',
     loCardText: 'text-violet-700/80 dark:text-violet-400/80',
     loCardSub: 'text-violet-600/60 dark:text-violet-400/50',
     loCardIcon: 'text-violet-400',
-    loSelCard: 'bg-violet-500',
+    loBarTrack: 'bg-violet-500/10',
   },
   // Orange
   {
-    card: 'bg-orange-500/10 hover:bg-orange-500/15',
+    card: 'bg-gradient-to-br from-orange-500/25 via-orange-500/10 to-transparent border border-orange-500/30 hover:border-orange-500/50',
     cardText: 'text-orange-700 dark:text-orange-300',
     cardSub: 'text-orange-600/70 dark:text-orange-400/60',
     cardIcon: 'text-orange-500',
-    selCard: 'bg-orange-600',
-    selText: 'text-white',
-    selSub: 'text-orange-100/80',
-    selIcon: 'text-orange-200',
-    loCard: 'bg-orange-500/5 hover:bg-orange-500/10',
+    barTrack: 'bg-orange-500/15',
+    loCard: 'bg-orange-500/5 border border-orange-500/15 hover:border-orange-500/35 hover:bg-orange-500/10',
     loCardText: 'text-orange-700/80 dark:text-orange-400/80',
     loCardSub: 'text-orange-600/60 dark:text-orange-400/50',
     loCardIcon: 'text-orange-400',
-    loSelCard: 'bg-orange-500',
+    loBarTrack: 'bg-orange-500/10',
   },
   // Rose
   {
-    card: 'bg-rose-500/10 hover:bg-rose-500/15',
+    card: 'bg-gradient-to-br from-rose-500/25 via-rose-500/10 to-transparent border border-rose-500/30 hover:border-rose-500/50',
     cardText: 'text-rose-700 dark:text-rose-300',
     cardSub: 'text-rose-600/70 dark:text-rose-400/60',
     cardIcon: 'text-rose-500',
-    selCard: 'bg-rose-600',
-    selText: 'text-white',
-    selSub: 'text-rose-100/80',
-    selIcon: 'text-rose-200',
-    loCard: 'bg-rose-500/5 hover:bg-rose-500/10',
+    barTrack: 'bg-rose-500/15',
+    loCard: 'bg-rose-500/5 border border-rose-500/15 hover:border-rose-500/35 hover:bg-rose-500/10',
     loCardText: 'text-rose-700/80 dark:text-rose-400/80',
     loCardSub: 'text-rose-600/60 dark:text-rose-400/50',
     loCardIcon: 'text-rose-400',
-    loSelCard: 'bg-rose-500',
+    loBarTrack: 'bg-rose-500/10',
   },
   // Cyan
   {
-    card: 'bg-cyan-500/10 hover:bg-cyan-500/15',
+    card: 'bg-gradient-to-br from-cyan-500/25 via-cyan-500/10 to-transparent border border-cyan-500/30 hover:border-cyan-500/50',
     cardText: 'text-cyan-700 dark:text-cyan-300',
     cardSub: 'text-cyan-600/70 dark:text-cyan-400/60',
     cardIcon: 'text-cyan-500',
-    selCard: 'bg-cyan-600',
-    selText: 'text-white',
-    selSub: 'text-cyan-100/80',
-    selIcon: 'text-cyan-200',
-    loCard: 'bg-cyan-500/5 hover:bg-cyan-500/10',
+    barTrack: 'bg-cyan-500/15',
+    loCard: 'bg-cyan-500/5 border border-cyan-500/15 hover:border-cyan-500/35 hover:bg-cyan-500/10',
     loCardText: 'text-cyan-700/80 dark:text-cyan-400/80',
     loCardSub: 'text-cyan-600/60 dark:text-cyan-400/50',
     loCardIcon: 'text-cyan-400',
-    loSelCard: 'bg-cyan-500',
+    loBarTrack: 'bg-cyan-500/10',
   },
 ] as const
 
 const STUDY_PLAN_COLOR = {
-  card: 'bg-amber-500/10 hover:bg-amber-500/15',
+  card: 'bg-gradient-to-br from-amber-500/25 via-amber-500/10 to-transparent border border-amber-500/30 hover:border-amber-500/50',
   cardText: 'text-amber-700 dark:text-amber-300',
   cardSub: 'text-amber-600/70 dark:text-amber-400/60',
   cardIcon: 'text-amber-500',
-  selCard: 'bg-amber-600',
-  selText: 'text-white',
-  selSub: 'text-amber-100/80',
-  selIcon: 'text-amber-200',
+  barTrack: 'bg-amber-500/15',
 } as const
 
 const SAVED_PACK_COLOR = {
-  card: 'bg-purple-500/10 hover:bg-purple-500/15',
+  card: 'bg-gradient-to-br from-purple-500/25 via-purple-500/10 to-transparent border border-purple-500/30 hover:border-purple-500/50',
   cardText: 'text-purple-700 dark:text-purple-300',
   cardSub: 'text-purple-600/70 dark:text-purple-400/60',
   cardIcon: 'text-purple-500',
-  selCard: 'bg-purple-600',
-  selText: 'text-white',
-  selSub: 'text-purple-100/80',
-  selIcon: 'text-purple-200',
+  barTrack: 'bg-purple-500/15',
 } as const
 
 function MasteryPill({ state }: { state: MasteryState }) {
@@ -261,25 +239,12 @@ interface PackColors {
   cardText: string
   cardSub: string
   cardIcon: string
+  barTrack: string
 }
 
 function packColorsFor(kind: PackKind, colorIndex: number | undefined, isSub: boolean): PackColors {
-  if (kind === 'study_plan') {
-    return {
-      card: STUDY_PLAN_COLOR.card,
-      cardText: STUDY_PLAN_COLOR.cardText,
-      cardSub: STUDY_PLAN_COLOR.cardSub,
-      cardIcon: STUDY_PLAN_COLOR.cardIcon,
-    }
-  }
-  if (kind === 'saved') {
-    return {
-      card: SAVED_PACK_COLOR.card,
-      cardText: SAVED_PACK_COLOR.cardText,
-      cardSub: SAVED_PACK_COLOR.cardSub,
-      cardIcon: SAVED_PACK_COLOR.cardIcon,
-    }
-  }
+  if (kind === 'study_plan') return { ...STUDY_PLAN_COLOR }
+  if (kind === 'saved') return { ...SAVED_PACK_COLOR }
   const palette = PACK_COLOR_PALETTE[colorIndex ?? 0]
   if (isSub) {
     return {
@@ -287,6 +252,7 @@ function packColorsFor(kind: PackKind, colorIndex: number | undefined, isSub: bo
       cardText: palette.loCardText,
       cardSub: palette.loCardSub,
       cardIcon: palette.loCardIcon,
+      barTrack: palette.loBarTrack,
     }
   }
   return {
@@ -294,6 +260,7 @@ function packColorsFor(kind: PackKind, colorIndex: number | undefined, isSub: bo
     cardText: palette.cardText,
     cardSub: palette.cardSub,
     cardIcon: palette.cardIcon,
+    barTrack: palette.barTrack,
   }
 }
 
@@ -442,11 +409,13 @@ function PackConceptsModal({
   )
 }
 
-// A single pack card. The header shows collected/deck progress; tapping it
-// reveals two large action buttons (add everything to the deck, or collect
-// the next uncollected card). The stacked-flashcard icon in the top right
-// opens a popup with the individual concept list. Learning-objective packs
-// render in the `isSub` (smaller) variant.
+// A single pack card. The header shows collection progress plus a segmented
+// mastery bar; tapping it reveals a mastery breakdown and large action buttons
+// (add everything to the deck, collect the next uncollected card, browse the
+// concept list). Expansion is controlled by the parent so only one pack is
+// open at a time. The stacked-flashcard icon in the top right opens a popup
+// with the individual concept list. Learning-objective packs render in the
+// `isSub` (smaller) variant.
 function PackCard({
   label,
   sublabel,
@@ -456,6 +425,10 @@ function PackCard({
   isSub = false,
   loading = false,
   emptyHint,
+  expanded,
+  onToggleExpand,
+  masteryOf,
+  className = '',
   onDelete,
   onCardsAdded,
 }: {
@@ -467,6 +440,10 @@ function PackCard({
   isSub?: boolean
   loading?: boolean
   emptyHint?: ReactNode
+  expanded: boolean
+  onToggleExpand: () => void
+  masteryOf?: (name: string) => MasteryState
+  className?: string
   onDelete?: () => void
   onCardsAdded?: () => void
 }) {
@@ -479,7 +456,6 @@ function PackCard({
   )
   const isCollected = (name: string) => collectedSet.has(name.toLowerCase())
 
-  const [expanded, setExpanded] = useState(false)
   const [showConcepts, setShowConcepts] = useState(false)
 
   const total = concepts.length
@@ -489,7 +465,25 @@ function PackCard({
   const allAdded = total > 0 && notAdded.length === 0
   const fullyCollected = total > 0 && collected === total
 
+  // Mastery breakdown — powers the segmented progress bar and the expanded
+  // legend. Anything past New implies collected (the collect gate), so the
+  // "collected but still new" remainder gets its own faint segment.
+  const mastery = useMemo(() => {
+    const counts = { level1: 0, level2: 0, level3: 0, forgotten: 0 }
+    if (masteryOf) {
+      for (const n of concepts) {
+        const s = masteryOf(n)
+        if (s !== 'new') counts[s]++
+      }
+    }
+    return counts
+  }, [concepts, masteryOf])
+  const leveled = mastery.level1 + mastery.level2 + mastery.level3 + mastery.forgotten
+  const collectedNew = Math.max(0, collected - leveled)
+  const newCount = total - leveled
+
   const colors = packColorsFor(kind, colorIndex, isSub)
+  const pct = (n: number) => `${(n / Math.max(total, 1)) * 100}%`
 
   function handleAdd() {
     for (const name of notAdded) addCard({ kind: 'concept', name })
@@ -503,64 +497,90 @@ function PackCard({
 
   return (
     <div
-      className={`rounded-xl transition-all ${colors.card} ${colors.cardText} ${
+      className={`relative overflow-hidden rounded-xl transition-all ${colors.card} ${colors.cardText} ${
         fullyCollected ? 'ring-1 ring-amber-400/50 collect-pack-complete' : ''
-      }`}
+      } ${className}`}
     >
+      {/* Watermark on hero packs for depth */}
+      {!isSub && (
+        <Layers aria-hidden className={`pointer-events-none absolute -right-4 -bottom-6 h-24 w-24 opacity-[0.07] ${colors.cardIcon}`} />
+      )}
+
       {/* Header — click to reveal actions */}
       <div
         role="button"
         tabIndex={0}
-        onClick={() => setExpanded(v => !v)}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpanded(v => !v) } }}
-        className={`flex items-start gap-2.5 cursor-pointer ${isSub ? 'px-3 py-2.5' : 'px-3.5 py-3'}`}
+        onClick={onToggleExpand}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggleExpand() } }}
+        className={`cursor-pointer ${isSub ? 'px-3 pt-2.5 pb-3' : 'px-3.5 pt-3 pb-3.5'}`}
         aria-expanded={expanded}
       >
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start gap-1.5">
-            <span className={`font-bold leading-tight ${isSub ? 'text-sm' : 'text-base sm:text-lg'}`}>{label}</span>
-            {fullyCollected && (
-              <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300 mt-0.5">
-                <Sparkles className="h-3.5 w-3.5" />
-              </span>
+        <div className="flex items-start gap-2.5">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start gap-1.5">
+              <span className={`font-bold leading-tight ${isSub ? 'text-sm' : 'text-base sm:text-lg'}`}>{label}</span>
+              {fullyCollected && (
+                <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300 mt-0.5">
+                  <Sparkles className="h-3.5 w-3.5" />
+                </span>
+              )}
+            </div>
+            {sublabel && <span className={`block text-[11px] truncate ${colors.cardSub}`}>{sublabel}</span>}
+          </div>
+          <div className="flex items-center gap-0.5 shrink-0">
+            {onDelete && (
+              <button
+                type="button"
+                onClick={e => { e.stopPropagation(); onDelete() }}
+                aria-label={`Delete ${label} pack`}
+                className="h-7 w-7 rounded flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            )}
+            {total > 0 && (
+              <button
+                type="button"
+                onClick={e => { e.stopPropagation(); setShowConcepts(true) }}
+                aria-label={`View ${label} concepts`}
+                title="View concepts"
+                className={`rounded-lg flex items-center justify-center transition-colors hover:bg-black/10 dark:hover:bg-white/10 ${colors.cardIcon} ${isSub ? 'h-8 w-8' : 'h-9 w-9'}`}
+              >
+                <Layers className={isSub ? 'h-5 w-5' : 'h-6 w-6'} />
+              </button>
             )}
           </div>
-          {sublabel && <span className={`block text-[11px] truncate ${colors.cardSub}`}>{sublabel}</span>}
-          <div className={`mt-1.5 flex items-baseline gap-1 ${colors.cardText}`}>
-            <span className={`font-bold tabular-nums ${isSub ? 'text-lg' : 'text-2xl'}`}>
-              {loading ? '…' : inDeck}
-            </span>
-            <span className={`text-xs font-medium ${colors.cardSub}`}>in deck</span>
-          </div>
         </div>
-        <div className="flex items-center gap-0.5 shrink-0">
-          {onDelete && (
-            <button
-              type="button"
-              onClick={e => { e.stopPropagation(); onDelete() }}
-              aria-label={`Delete ${label} pack`}
-              className="h-7 w-7 rounded flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
-          )}
-          {total > 0 && (
-            <button
-              type="button"
-              onClick={e => { e.stopPropagation(); setShowConcepts(true) }}
-              aria-label={`View ${label} concepts`}
-              title="View concepts"
-              className={`rounded-lg flex items-center justify-center transition-colors hover:bg-black/10 dark:hover:bg-white/10 ${colors.cardIcon} ${isSub ? 'h-8 w-8' : 'h-9 w-9'}`}
-            >
-              <Layers className={isSub ? 'h-5 w-5' : 'h-6 w-6'} />
-            </button>
+
+        {/* Stats + mastery bar */}
+        <div className={`flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5 ${isSub ? 'mt-1.5' : 'mt-2'}`}>
+          <span className="flex items-baseline gap-1 whitespace-nowrap">
+            <span className={`font-bold tabular-nums ${isSub ? 'text-base' : 'text-xl'}`}>
+              {loading ? '…' : collected}
+            </span>
+            <span className={`text-[11px] font-medium ${colors.cardSub}`}>/ {total} collected</span>
+          </span>
+          <span className={`flex items-center gap-1 text-[11px] font-medium tabular-nums whitespace-nowrap ${colors.cardSub}`}>
+            {loading ? '…' : inDeck} in deck
+            <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+          </span>
+        </div>
+        <div className={`mt-1.5 flex h-1.5 rounded-full overflow-hidden ${colors.barTrack}`} aria-hidden>
+          {!loading && total > 0 && (
+            <>
+              {mastery.level3 > 0 && <div className="h-full bg-green-500" style={{ width: pct(mastery.level3) }} />}
+              {mastery.level2 > 0 && <div className="h-full bg-blue-500" style={{ width: pct(mastery.level2) }} />}
+              {mastery.level1 > 0 && <div className="h-full bg-amber-500" style={{ width: pct(mastery.level1) }} />}
+              {mastery.forgotten > 0 && <div className="h-full bg-rose-500" style={{ width: pct(mastery.forgotten) }} />}
+              {collectedNew > 0 && <div className="h-full bg-current opacity-30" style={{ width: pct(collectedNew) }} />}
+            </>
           )}
         </div>
       </div>
 
       {/* Actions */}
       {expanded && (
-        <div className="px-3.5 pb-3.5 space-y-2">
+        <div className={`pack-expand-in space-y-2.5 ${isSub ? 'px-3 pb-3' : 'px-3.5 pb-3.5'}`}>
           {emptyHint}
           {loading && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
@@ -568,31 +588,68 @@ function PackCard({
             </div>
           )}
           {!loading && total > 0 && (
-            <div className="flex flex-col gap-2">
-              {allAdded ? (
-                <span className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-green-500/15 text-green-600 dark:text-green-400 text-sm font-semibold">
-                  <Check className="h-4 w-4" /> All in deck
-                </span>
-              ) : (
+            <>
+              {/* Mastery legend */}
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-medium">
+                {mastery.level3 > 0 && (
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />{mastery.level3} mastered
+                  </span>
+                )}
+                {mastery.level1 + mastery.level2 > 0 && (
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />{mastery.level1 + mastery.level2} learning
+                  </span>
+                )}
+                {mastery.forgotten > 0 && (
+                  <span className="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />{mastery.forgotten} slipping — review!
+                  </span>
+                )}
+                {newCount > 0 && (
+                  <span className={`inline-flex items-center gap-1.5 ${colors.cardSub}`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-current opacity-40 shrink-0" />{newCount} to learn
+                  </span>
+                )}
+              </div>
+              {collected === 0 && (
+                <p className={`text-[11px] leading-snug ${colors.cardSub}`}>
+                  Pass a quick comprehension check to collect your first card from this pack.
+                </p>
+              )}
+              <div className="flex flex-col gap-2">
+                {allAdded ? (
+                  <span className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-green-500/15 text-green-600 dark:text-green-400 text-sm font-semibold">
+                    <Check className="h-4 w-4" /> All in deck
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={e => { e.stopPropagation(); handleAdd() }}
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add all {notAdded.length} to deck
+                  </button>
+                )}
+                {!fullyCollected && (
+                  <button
+                    type="button"
+                    onClick={e => { e.stopPropagation(); collectNext() }}
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-background/60 text-sm font-semibold text-foreground hover:bg-accent transition-colors"
+                  >
+                    <Lock className="h-4 w-4" /> Collect next · {total - collected} locked
+                  </button>
+                )}
                 <button
                   type="button"
-                  onClick={e => { e.stopPropagation(); handleAdd() }}
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
+                  onClick={e => { e.stopPropagation(); setShowConcepts(true) }}
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-foreground/70 hover:text-foreground hover:bg-background/60 transition-colors"
                 >
-                  <Plus className="h-4 w-4" />
-                  Add all {notAdded.length} to deck
+                  <BookOpen className="h-3.5 w-3.5" /> Browse all {total} concepts
                 </button>
-              )}
-              {!fullyCollected && (
-                <button
-                  type="button"
-                  onClick={e => { e.stopPropagation(); collectNext() }}
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-background/60 text-sm font-semibold text-foreground hover:bg-accent transition-colors"
-                >
-                  <Lock className="h-4 w-4" /> Collect
-                </button>
-              )}
-            </div>
+              </div>
+            </>
           )}
         </div>
       )}
@@ -618,15 +675,41 @@ interface PackDescriptor {
   isSub?: boolean
 }
 
-// Packs tab — every available pack, laid out as a flat two-column grid of pack
-// cards (no per-exam headers). Each exam contributes its whole-exam pack plus
-// one card per learning objective. Today's study plan and any user-saved
-// packs bookend the grid.
+// Packs tab — every available pack. Each exam contributes a full-width
+// "hero" pack followed by a two-column grid of its learning-objective packs.
+// Today's study plan and any user-saved packs bookend the grid. Only one
+// pack's action panel is open at a time (accordion).
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, targetDates, examVariants } = useExamProgress()
   const { savedPacks, deleteSavedPack } = useFlashcards()
+
+  const [expandedKey, setExpandedKey] = useState<string | null>(null)
+  const toggleExpanded = (key: string) => setExpandedKey(k => (k === key ? null : key))
+
+  // concept name → mastery state (same best-record + decay logic as the main
+  // deck view) so each pack can show its mastery bar and breakdown.
+  const packMasteryMap = useMemo(() => {
+    const map = new Map<string, MasteryState>()
+    const now = new Date()
+    const best = new Map<string, typeof masteryRecords[number]>()
+    for (const r of masteryRecords) {
+      const slug = r.concept_slug.toLowerCase()
+      const existing = best.get(slug)
+      if (!existing || (r.last_attempted_at ?? '') > (existing.last_attempted_at ?? '')) {
+        best.set(slug, r)
+      }
+    }
+    for (const [slug, r] of best) {
+      map.set(slug, decayIfStale(r, now).state)
+    }
+    return map
+  }, [masteryRecords])
+  const masteryOf = useCallback(
+    (name: string) => packMasteryMap.get(name.toLowerCase()) ?? 'new',
+    [packMasteryMap],
+  )
 
   const inProgressSyllabi = useMemo(
     () => syllabi.filter(s => {
@@ -711,6 +794,9 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
           sublabel={primarySyllabus.examLabel}
           concepts={studyPlanConcepts}
           loading={isLoading}
+          expanded={expandedKey === 'study-plan'}
+          onToggleExpand={() => toggleExpanded('study-plan')}
+          masteryOf={masteryOf}
           onCardsAdded={onCardsAdded}
           emptyHint={
             !isLoading && !studyPlan?.config?.targetReadyDate ? (
@@ -724,7 +810,8 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
         />
       )}
 
-      {/* Exam + learning-objective packs — flat two-column grid */}
+      {/* Exam + learning-objective packs — full-width hero card per exam,
+          learning objectives in a two-column grid beneath it */}
       {flatPacks.length > 0 && (
         <div className="grid grid-cols-2 gap-3">
           {flatPacks.map(p => (
@@ -735,6 +822,10 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
               concepts={p.concepts}
               colorIndex={p.colorIndex}
               isSub={p.isSub}
+              className={p.isSub ? undefined : 'col-span-2'}
+              expanded={expandedKey === p.key}
+              onToggleExpand={() => toggleExpanded(p.key)}
+              masteryOf={masteryOf}
               onCardsAdded={onCardsAdded}
             />
           ))}
@@ -754,6 +845,9 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
                 kind="saved"
                 label={sp.label}
                 concepts={sp.concepts}
+                expanded={expandedKey === `saved-${sp.id}`}
+                onToggleExpand={() => toggleExpanded(`saved-${sp.id}`)}
+                masteryOf={masteryOf}
                 onDelete={() => deleteSavedPack(sp.id)}
                 onCardsAdded={onCardsAdded}
               />

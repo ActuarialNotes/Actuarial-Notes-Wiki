@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { Check, Loader2, Lock, Play, Sparkles, X } from 'lucide-react'
+import { Loader2, Lock, Play, Sparkles, X } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { useConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
-import { fetchWikiFile } from '@/lib/github'
+import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
+import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import { entryRefToRepoPath } from '@/lib/wikiRoutes'
 import { stripFrontmatter } from '@/components/wiki/WikiArticle'
 import { cleanWikiLinks } from '@/lib/wikiParser'
@@ -112,6 +113,7 @@ export function CollectConceptModal() {
   const [selected, setSelected] = useState<string | null>(null)
   const [wrong, setWrong] = useState<string | null>(null)
   const [showQuestions, setShowQuestions] = useState(false)
+  const [questionCount, setQuestionCount] = useState<number | null>(null)
   const timers = useRef<number[]>([])
 
   const after = useCallback((ms: number, fn: () => void) => {
@@ -151,6 +153,21 @@ export function CollectConceptModal() {
   }, [ref, name]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => () => timers.current.forEach(clearTimeout), [])
+
+  // Count of questions available for this concept — shown on the Start Quiz
+  // button once the card is collected.
+  useEffect(() => {
+    if (!ref || !alreadyCollected) { setQuestionCount(null); return }
+    let cancelled = false
+    fetchAllQuestions()
+      .then(rawFiles => {
+        if (cancelled) return
+        const all = parseAllQuestions(rawFiles)
+        setQuestionCount(filterQuestions(all, { concept: name }).length)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [ref, name, alreadyCollected])
 
   // Pool of all other concept names for plausible distractors.
   const allConceptNames = useMemo(() => {
@@ -324,14 +341,6 @@ export function CollectConceptModal() {
 
             {alreadyCollected ? (
               <div className="w-full flex flex-col items-center gap-4">
-                <div className="flex flex-col items-center gap-1.5 text-center">
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400">
-                    <Check className="h-4 w-4" /> Collected
-                  </span>
-                  <p className="text-xs text-muted-foreground">
-                    Quiz this concept to level it up.
-                  </p>
-                </div>
                 <button
                   type="button"
                   onClick={() => setShowQuestions(true)}
@@ -339,12 +348,21 @@ export function CollectConceptModal() {
                 >
                   <Play className="h-4 w-4" />
                   Start Quiz
+                  {questionCount !== null && questionCount > 0 && (
+                    <span className="shrink-0 text-xs font-semibold px-1.5 py-0.5 rounded-full bg-primary-foreground/20 tabular-nums">
+                      {questionCount}
+                    </span>
+                  )}
                 </button>
-                {/* Combined view: the learning-progress graph lives with the card
-                    now that the concept is collected and can level up. */}
-                <div className="w-full pt-4">
-                  <LearningProgressPanel conceptName={name} />
-                </div>
+                {/* Learning-progress graph only appears once the concept has actually
+                    been levelled up (Level 1+). A freshly collected 'New' concept has
+                    nothing to plot, so we skip the panel (and its premium upsell)
+                    entirely until there's real progress to show. */}
+                {currentLevel !== 'new' && (
+                  <div className="w-full pt-4">
+                    <LearningProgressPanel conceptName={name} />
+                  </div>
+                )}
               </div>
             ) : phase === 'spinning' ? (
               <p className="text-sm font-medium text-muted-foreground animate-pulse">Collecting…</p>

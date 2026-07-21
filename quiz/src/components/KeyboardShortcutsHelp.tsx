@@ -18,8 +18,11 @@ const QUIZ_SHORTCUTS: ShortcutRow[] = [
 
 const FLASHCARD_SHORTCUTS: ShortcutRow[] = [
   { keys: ['Space'], description: 'Flip card' },
+  { keys: ['1'], description: 'Again — keep card in rotation (after flip)' },
+  { keys: ['2'], description: 'Got it — mark card complete (after flip)' },
   { keys: ['→'], description: 'Next card' },
   { keys: ['←'], description: 'Previous card' },
+  { keys: ['S'], description: 'Shuffle deck' },
   { keys: ['F'], description: 'Toggle focus mode' },
   { keys: ['Esc'], description: 'Exit focus mode' },
   { keys: ['?'], description: 'Show this help' },

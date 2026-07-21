@@ -890,6 +890,18 @@
   .collect-pack-complete::after { animation: none; }
 }
 
+/* Pack card action panel sliding open */
+.pack-expand-in {
+  animation: pack-expand-in 0.18s ease-out;
+}
+@keyframes pack-expand-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pack-expand-in { animation: none; }
+}
+
 /* Flashcards nav item lights up when a collected drop lands */
 .flashcard-nav-glow {
   animation: flashcard-nav-glow 1.5s ease-out;

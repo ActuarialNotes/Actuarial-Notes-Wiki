@@ -122,3 +122,17 @@ export const MASTERY_ANALYTICS_ENABLED: boolean = true
  * independently of the other engagement surfaces.
  */
 export const LEAGUES_ENABLED: boolean = true
+
+/**
+ * Recent-mistakes review card — surfaces the questions a learner most recently
+ * got wrong and, for each, flags the concept(s) most likely to blame (weighted
+ * by the learner's miss-rate on that concept plus its current mastery level —
+ * see lib/recentMistakes.ts). When ON, a compact "Review mistakes" card appears
+ * on the Dashboard (signed-in only) with a per-question and a Retry-all quiz
+ * launch. It reads only data the Dashboard already loads plus the learner's
+ * question-response history — no new heavy fetch. The pure engine and its tests
+ * stay compiled either way; the `: boolean` annotation keeps both branches of
+ * every gate type-checked (see the flags above). Gate it off to dark-launch or
+ * roll back independently of the other surfaces.
+ */
+export const MISTAKES_REVIEW_ENABLED: boolean = true

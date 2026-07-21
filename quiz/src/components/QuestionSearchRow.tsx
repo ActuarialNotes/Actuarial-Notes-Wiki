@@ -3,7 +3,7 @@ import { Check } from 'lucide-react'
 import type { Question } from '@/lib/parser'
 import { LatexText } from '@/components/LatexText'
 import { MarkdownText } from '@/components/MarkdownText'
-import { ExplanationPanel } from '@/components/ExplanationPanel'
+import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 
 // Renders question markdown (GFM tables + LaTeX) with the same table styling the
 // quiz uses, so data-heavy stems (development triangles, etc.) render as tables
@@ -143,13 +143,7 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
             </button>
           </div>
 
-          {showAnswer && (
-            <ExplanationPanel
-              explanation={question.explanation}
-              wikiLinks={question.wiki_link}
-              isCorrect
-            />
-          )}
+          {showAnswer && <QuestionAnswerReveal question={question} />}
         </div>
       )}
     </div>

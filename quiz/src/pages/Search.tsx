@@ -17,7 +17,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LatexText } from '@/components/LatexText'
-import { ExplanationPanel } from '@/components/ExplanationPanel'
+import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
 import { trackSearchQuery } from '@/lib/analytics'
 
 type SearchType = 'concepts' | 'questions' | 'resources'
@@ -169,13 +169,7 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
             )}
           </div>
 
-          {showAnswer && (
-            <ExplanationPanel
-              explanation={question.explanation}
-              wikiLinks={question.wiki_link}
-              isCorrect
-            />
-          )}
+          {showAnswer && <QuestionAnswerReveal question={question} />}
         </div>
       )}
     </div>

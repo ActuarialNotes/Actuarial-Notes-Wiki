@@ -1013,10 +1013,10 @@ function GalleryTabBar({
   )
 }
 
-// Study ⇄ Gallery toggle. Lives in the header (study view: replaces the page
-// title; gallery view: sits below the tab switcher) rather than the controls
-// footer. `galleryOpen` picks the direction: true → "Study" (return to the
-// single-card view), false → "Gallery" (open the overlay).
+// Study ⇄ Gallery toggle. Lives in the bottom controls footer (shared between
+// both views), alongside Flip / Back content / focus. `galleryOpen` picks the
+// direction: true → "Study" (return to the single-card view), false →
+// "Gallery" (open the overlay).
 function StudyGalleryToggle({
   galleryOpen,
   onToggle,
@@ -1133,6 +1133,8 @@ function ViewModeDropdown({
 }
 
 function FlashcardControlsBar({
+  galleryOpen,
+  onGalleryToggle,
   reverseCardModes,
   onToggleMode,
   flip,
@@ -1142,6 +1144,8 @@ function FlashcardControlsBar({
   onShortcutsHelp,
   minimal = false,
 }: {
+  galleryOpen?: boolean
+  onGalleryToggle?: () => void
   reverseCardModes: Set<ReverseCardSection>
   onToggleMode: (mode: ReverseCardSection) => void
   flip: boolean
@@ -1153,6 +1157,10 @@ function FlashcardControlsBar({
 }) {
   return (
     <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 py-3 sm:py-4 bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
+      {!minimal && onGalleryToggle && (
+        <StudyGalleryToggle galleryOpen={!!galleryOpen} onToggle={onGalleryToggle} />
+      )}
+
       <div className="flex items-center gap-2 shrink-0">
         <span className="text-xs sm:text-sm text-muted-foreground">Flip</span>
         <button
@@ -1996,16 +2004,15 @@ function GalleryPanel({
       {/* Header — tab switcher (hidden in focus mode) */}
       {!focusMode && (
         <div className={inline ? 'pb-3' : 'sticky top-0 z-10 bg-background px-4 py-3'}>
-          <div className="flex flex-col gap-2">
-            <GalleryTabBar
-              active={tab}
-              onChange={onTabChange}
-              deckCount={cards.length}
-              collectedCount={collectedCount}
-            />
-            {onClose && (
-              <StudyGalleryToggle galleryOpen onToggle={onClose} className="self-start" />
-            )}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <GalleryTabBar
+                active={tab}
+                onChange={onTabChange}
+                deckCount={cards.length}
+                collectedCount={collectedCount}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -2872,14 +2879,10 @@ export default function Flashcards() {
         className={`container max-w-4xl mx-auto pb-52 md:pb-44${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
-        {/* Sticky header: gallery toggle (no page title in study mode) — hidden
-            when the gallery overlay is open */}
+        {/* Sticky header: page title — hidden when the gallery overlay is open */}
         {!galleryExpanded && (
           <div className={`sticky top-0 md:top-14 lg:top-0 z-10 bg-background px-4 sm:px-6 py-3${focusMode ? ' invisible' : ''}`}>
-            <StudyGalleryToggle
-              galleryOpen={false}
-              onToggle={() => setGalleryExpanded(true)}
-            />
+            <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
           </div>
         )}
 
@@ -2957,6 +2960,8 @@ export default function Flashcards() {
           </div>
         )}
         <FlashcardControlsBar
+          galleryOpen={galleryExpanded}
+          onGalleryToggle={() => setGalleryExpanded(v => !v)}
           reverseCardModes={reverseCardModes}
           onToggleMode={toggleReverseMode}
           flip={globalFlip}

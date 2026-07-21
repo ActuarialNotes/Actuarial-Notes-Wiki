@@ -28,8 +28,9 @@ import { useGems } from '@/hooks/useGems'
 import { StreakStat } from '@/components/StreakBadge'
 import { LevelBadge } from '@/components/LevelBadge'
 import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
+import { RecentMistakesCard } from '@/components/RecentMistakesCard'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
-import { MASTERY_ANALYTICS_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { MASTERY_ANALYTICS_ENABLED, MISTAKES_REVIEW_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -679,6 +680,14 @@ export default function Dashboard() {
         <MasteryAnalyticsCard
           syllabus={activeSyllabus}
           masteryRecords={activeExamRecords}
+        />
+      )}
+
+      {/* Review mistakes — recently-missed questions + likely-problematic concepts */}
+      {MISTAKES_REVIEW_ENABLED && !isGuest && activeSyllabus && (
+        <RecentMistakesCard
+          masteryRecords={activeExamRecords}
+          examTopic={activeSyllabus.examTopic}
         />
       )}
 

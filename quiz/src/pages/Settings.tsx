@@ -34,7 +34,8 @@ import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
 import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
 import { ContactDialog } from '@/components/ContactDialog'
-import { fetchExportResponses, responsesToCsv, buildExportFilename, downloadCsv } from '@/lib/exportData'
+import { fetchExportResponses, responsesToCsv, buildExportFilename, downloadCsv, exportScopeSlug } from '@/lib/exportData'
+import { buildProgressReport, generateProgressReportPdf, buildPdfFilename } from '@/lib/exportPdf'
 
 // ---- Exam status cycle & icons ----
 
@@ -500,9 +501,10 @@ export default function Settings() {
     })
   }
 
+  const [exportFormat, setExportFormat] = useState<'csv' | 'pdf'>('csv')
   const [exporting, setExporting] = useState(false)
 
-  const handleExportCsv = async () => {
+  const handleExport = async () => {
     if (!user) return
     const examId = exportScope === 'all' ? null : exportScope
     const scopeLabel = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'all exams'
@@ -514,11 +516,19 @@ export default function Settings() {
         setDataActionState({ saving: false, error: `No answered questions to export for ${scopeLabel}.`, success: null })
         return
       }
-      downloadCsv(buildExportFilename(examId), responsesToCsv(rows))
+      if (exportFormat === 'pdf') {
+        const report = buildProgressReport(rows)
+        const owner = profile.displayName?.trim() || profile.email || 'You'
+        const scopeTitle = examId ? EXAM_ID_TO_LABEL[examId] ?? examId : 'All exams'
+        await generateProgressReportPdf(report, { scopeLabel: scopeTitle, owner }, buildPdfFilename(exportScopeSlug(examId)))
+      } else {
+        downloadCsv(buildExportFilename(examId), responsesToCsv(rows))
+      }
+      const format = exportFormat.toUpperCase()
       setDataActionState({
         saving: false,
         error: null,
-        success: `Exported ${rows.length} ${rows.length === 1 ? 'question' : 'questions'} for ${scopeLabel}.`,
+        success: `Exported ${rows.length} ${rows.length === 1 ? 'question' : 'questions'} for ${scopeLabel} as ${format}.`,
       })
     } catch (err) {
       setDataActionState({ saving: false, error: err instanceof Error ? err.message : 'Failed to export data.', success: null })
@@ -1255,11 +1265,12 @@ export default function Settings() {
                     <div>
                       <p className="text-sm font-medium">Export performance data</p>
                       <p className="text-xs text-muted-foreground">
-                        Download every question you&apos;ve answered (date, exam, topic, your answer, correct answer,
-                        result and time) as a spreadsheet.
+                        Download your answered questions as a <span className="font-medium">CSV</span> spreadsheet
+                        (date, exam, topic, your answer, correct answer, result and time), or a branded{' '}
+                        <span className="font-medium">PDF</span> progress report summarising your accuracy by exam and topic.
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
                       <select
                         value={exportScope}
                         onChange={e => setExportScope(e.target.value)}
@@ -1271,11 +1282,17 @@ export default function Settings() {
                           <option key={id} value={id}>{label}</option>
                         ))}
                       </select>
-                      <Button variant="outline" onClick={handleExportCsv} disabled={exporting}>
-                        {exporting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Exporting…</> : 'Export CSV'}
-                      </Button>
-                      <Button variant="outline" disabled title="Coming soon">
-                        Export PDF
+                      <select
+                        value={exportFormat}
+                        onChange={e => setExportFormat(e.target.value as 'csv' | 'pdf')}
+                        aria-label="Export format"
+                        className="text-sm border border-input rounded-md px-2 py-2 bg-background text-foreground cursor-pointer"
+                      >
+                        <option value="csv">CSV spreadsheet</option>
+                        <option value="pdf">PDF report</option>
+                      </select>
+                      <Button variant="outline" onClick={handleExport} disabled={exporting}>
+                        {exporting ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Exporting…</> : 'Export'}
                       </Button>
                     </div>
                   </div>

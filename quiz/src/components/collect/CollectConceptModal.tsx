@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, Lock, Play, Sparkles, X } from 'lucide-react'
+import { Check, Loader2, Lock, Play, Sparkles, X } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
@@ -427,11 +427,31 @@ export function CollectConceptModal() {
       {/* Done: hold on a confirmation screen with the collected card (still
           flippable) and let the player choose where to go next. */}
       {phase === 'done' && (
-        <div className="collect-done-pop relative z-[121] w-full max-w-xs flex flex-col items-center gap-5 text-center">
+        <div className="collect-done-pop relative z-[121] w-full max-w-sm flex flex-col items-center gap-5 text-center">
           <CollectCard3D name={name} phase="won" size="lg" flippable back={cardBack} mastery={currentLevel} />
           <span className="inline-flex items-center gap-1.5 text-base font-bold text-primary">
             <Sparkles className="h-5 w-5" /> Collected!
           </span>
+          {/* Recap the check the player just passed — the question and the
+              answer they got right — so the collect ceremony reinforces the
+              concept instead of only celebrating it. Skipped for the "tap to
+              confirm" fallback, which has no real question to recap. */}
+          {hasRealQuestion && (
+            <div className="w-full rounded-xl bg-muted/40 px-4 py-3 text-left">
+              {check ? (
+                <p className="text-sm font-medium text-foreground">{check.question}</p>
+              ) : (
+                <>
+                  <p className="text-sm font-medium text-foreground">Which concept does this describe?</p>
+                  <p className="mt-1 text-sm italic text-muted-foreground">“{prompt}”</p>
+                </>
+              )}
+              <div className="mt-2.5 flex items-start gap-2 rounded-lg bg-emerald-500/10 px-3 py-2">
+                <Check className="h-4 w-4 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">{correctAnswer}</span>
+              </div>
+            </div>
+          )}
           <div className="w-full flex gap-2">
             <button
               type="button"

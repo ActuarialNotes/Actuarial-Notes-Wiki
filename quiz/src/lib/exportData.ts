@@ -116,13 +116,17 @@ export async function fetchExportResponses(userId: string, examId: string | null
   return ((data ?? []) as unknown as RawResponseRow[]).map(normalizeResponse)
 }
 
-/** Builds a descriptive, filesystem-safe filename for the export. */
-export function buildExportFilename(examId: string | null, date = new Date()): string {
-  const scope = examId === null
+/** A filesystem-safe slug for an export scope ("all-exams" or e.g. "exam-p"). */
+export function exportScopeSlug(examId: string | null): string {
+  return examId === null
     ? 'all-exams'
     : (EXAM_ID_TO_LABEL[examId] ?? examId).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
+
+/** Builds a descriptive, filesystem-safe filename for the export. */
+export function buildExportFilename(examId: string | null, date = new Date()): string {
   const day = date.toISOString().slice(0, 10)
-  return `actuarial-notes-performance-${scope}-${day}.csv`
+  return `actuarial-notes-performance-${exportScopeSlug(examId)}-${day}.csv`
 }
 
 /** Triggers a browser download of `csv` under `filename`. */

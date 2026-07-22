@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 // Persisted flag so the guided tour only auto-launches on a visitor's first
 // time on the site. Bumping the version string re-shows the tour to everyone.
-const STORAGE_KEY = 'actuarial_onboarding_tour_v1'
+const STORAGE_KEY = 'actuarial_onboarding_tour_v2'
 
 function hasSeenTour(): boolean {
   try {

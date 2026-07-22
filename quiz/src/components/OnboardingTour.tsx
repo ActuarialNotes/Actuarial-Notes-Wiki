@@ -3,23 +3,30 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
   BookOpen,
-  Eye,
   FlipHorizontal,
   GraduationCap,
   Layers,
+  LayoutGrid,
+  Lock,
   LogIn,
   MousePointerClick,
   Play,
   RotateCcw,
-  Sigma,
-  SlidersHorizontal,
+  Sparkles,
+  Trophy,
   X,
 } from 'lucide-react'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { useAuth } from '@/hooks/useAuth'
 import { useQuizStore } from '@/stores/quizStore'
+import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { wikiRoute } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
+
+// The concept the tour walks the user through collecting. It must have a
+// wiki-link on the Exam P syllabus page (data-wikiref below) and a page to
+// read; the collect gate builds a comprehension check from it either way.
+const TOUR_CONCEPT = 'Calculus'
 
 // Route to the Exam P study guide — used as a fallback if the user lands on a
 // concept step without having tapped into the exam first.
@@ -49,93 +56,95 @@ interface TourStep {
 }
 
 const onExam = (p: string) => p.startsWith('/wiki/exam')
+const onFlashcards = (p: string) => p.startsWith('/flashcards')
 
-// The guided journey: study guides → concept popup → flashcards → quiz → log in.
+// Has the tour concept been collected yet? The collect gate persists to the
+// collected-cards store, so this is what "the check was passed" looks like.
+const collectedTourConcept = () =>
+  useCollectedCards
+    .getState()
+    .cards.some(c => c.name.toLowerCase() === TOUR_CONCEPT.toLowerCase())
+
+// The guided journey mirrors the real study loop:
+// study guide → meet a concept → collect it (comprehension gate) →
+// flashcards & daily packs → level up with a quiz → log in to keep it all.
 const BASE_STEPS: TourStep[] = [
   {
     icon: GraduationCap,
     title: 'Welcome to Actuarial Notes',
-    body: 'Follow the highlights and tap where they point — takes about 2 minutes.',
+    body: 'Here\'s the whole study loop in about 2 minutes — follow the highlights and tap where they point.',
     advance: 'manual',
   },
-  // ── Study guide ──
+  // ── Meet a concept ──
   {
     icon: BookOpen,
     title: 'Open a study guide',
-    body: 'Tap Exam P-1 to see the syllabus.',
+    body: 'Every exam is a syllabus of bite-size concepts. Tap Exam P-1 to open one.',
     path: '/wiki',
     target: '[data-tour="exam-p"]',
     advance: 'tap',
   },
-  // ── Concept popup ──
   {
     icon: MousePointerClick,
-    title: 'Open a concept',
-    body: 'Tap "Calculus" to open its explanation in a popup.',
+    title: 'Meet a concept',
+    body: 'Tap "Calculus" — concepts open in a popup you can read without losing your place.',
     path: EXAM_P_ROUTE,
     match: onExam,
     target: '[data-wikiref="concept:calculus"]',
     advance: 'tap',
   },
+  // ── Collect it (the comprehension gate) ──
   {
-    icon: Play,
-    title: 'Open the actions menu',
-    body: 'Tap the action button next to the concept name.',
+    icon: Lock,
+    title: 'Collect the card',
+    body: 'Concepts start locked. Tap the lock to collect this one into your deck.',
     match: onExam,
-    target: '[data-tour="concept-action"]',
+    target: '[data-tour="collect-card"]',
     advance: 'tap',
+  },
+  {
+    icon: Sparkles,
+    title: 'Pass the quick check',
+    body: 'Answer the short comprehension check — get it right and the card is yours.',
+    match: onExam,
+    target: '[data-tour="collect-options"]',
+    advance: 'watch',
+    watch: collectedTourConcept,
   },
   {
     icon: Layers,
-    title: 'Add it to your flashcards',
-    body: 'Tap "Add to Flashcards" to save this concept.',
+    title: 'Your first card!',
+    body: 'Nice — that\'s collected. Tap View Flashcard to open your deck.',
     match: onExam,
-    target: '[data-tour="add-flashcard"]',
+    target: '[data-tour="collect-view-flashcard"]',
     advance: 'tap',
   },
-  {
-    icon: Eye,
-    title: 'View your flashcards',
-    body: 'Tap "view" to jump to your flashcard deck.',
-    match: onExam,
-    target: '[data-tour="view-flashcards"]',
-    advance: 'tap',
-  },
-  // ── Flashcards ──
+  // ── Flashcards & daily packs ──
   {
     icon: FlipHorizontal,
-    title: 'Flip a card',
-    body: 'Tap the card to flip it and see the explanation.',
+    title: 'Flip through your deck',
+    body: 'This is your flashcard deck. Tap a card to flip it and see the explanation.',
     path: '/flashcards',
-    match: p => p.startsWith('/flashcards'),
+    match: onFlashcards,
     target: '[data-tour="flip-card"]',
     advance: 'tap',
   },
   {
-    icon: SlidersHorizontal,
-    title: 'Change what\'s on the card',
-    body: 'Tap "Back content" to choose what shows on the back.',
-    match: p => p.startsWith('/flashcards'),
-    target: '[data-tour="card-content"]',
-    advance: 'tap',
+    icon: LayoutGrid,
+    title: 'Grab a daily pack',
+    body: 'You don\'t have to collect cards one by one. Open the Gallery from the flashcard toolbar for ready-made packs — today\'s study plan, plus a pack for every exam and topic.',
+    match: onFlashcards,
+    advance: 'manual',
   },
+  // ── Level up with a quiz ──
   {
-    icon: Sigma,
-    title: 'Show the math',
-    body: 'Tap "Math" to show the key equations on the back.',
-    match: p => p.startsWith('/flashcards'),
-    target: '[data-tour="card-math"]',
-    advance: 'tap',
-  },
-  {
-    icon: FlipHorizontal,
-    title: 'There\'s the math',
-    body: 'Equations are on the back now. Tap the Quiz tab to try a practice question.',
-    match: p => p.startsWith('/flashcards'),
+    icon: Trophy,
+    title: 'Turn study into points',
+    body: 'Quizzes are where you earn XP and level up. Tap the Quiz tab to try one.',
+    match: onFlashcards,
     target: '[data-tour="nav-quiz"]',
     advance: 'tap',
   },
-  // ── Quiz ──
   {
     icon: Play,
     title: 'Start a quiz',
@@ -156,7 +165,7 @@ const BASE_STEPS: TourStep[] = [
   {
     icon: MousePointerClick,
     title: 'Answer a question',
-    body: 'Pick an answer and confirm it — you\'ll get a full explanation right away.',
+    body: 'Pick an answer and confirm — you\'ll get a full explanation, and every question you answer earns XP.',
     match: p => p === '/quiz',
     path: '/quiz',
     target: '[data-tour="answer-options"]',
@@ -173,8 +182,8 @@ const BASE_STEPS: TourStep[] = [
   },
   {
     icon: RotateCcw,
-    title: 'Finish & grade',
-    body: 'Tap Finish quiz to see your results.',
+    title: 'Finish & level up',
+    body: 'Tap Finish quiz to bank your XP and see your results.',
     match: p => p === '/quiz',
     target: '[data-tour="dialog-finish"]',
     advance: 'tap',
@@ -182,8 +191,8 @@ const BASE_STEPS: TourStep[] = [
   // ── Log in ──
   {
     icon: LogIn,
-    title: 'Log in to track your progress',
-    body: 'Sign in to save your progress, streaks, and study history across devices.',
+    title: 'Log in to keep it all',
+    body: 'That XP levels you up and fuels daily goals, streaks and quests. Sign in to save your cards, progress and study history across devices.',
     advance: 'manual',
     cta: 'Log in',
     ctaRoute: '/auth',

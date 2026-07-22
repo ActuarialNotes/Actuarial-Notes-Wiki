@@ -391,7 +391,7 @@ export function CollectConceptModal() {
                   </blockquote>
                 ) : null}
 
-                <div className="grid gap-2">
+                <div className="grid gap-2" data-tour="collect-options">
                   {(hasRealQuestion ? options : [name]).map(opt => {
                     const isWrong = wrong === opt
                     const isChosen = selected === opt
@@ -455,6 +455,7 @@ export function CollectConceptModal() {
           <div className="w-full flex gap-2">
             <button
               type="button"
+              data-tour="collect-view-flashcard"
               onClick={handleViewFlashcard}
               className="flex-1 px-4 py-2.5 rounded-lg bg-muted/40 text-sm font-medium hover:bg-accent transition-colors"
             >

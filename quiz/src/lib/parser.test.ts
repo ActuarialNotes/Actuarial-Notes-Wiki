@@ -240,3 +240,88 @@ describe('parseQuestion — multi-part with essay part', () => {
     expect(isAnswerCorrect(q, chosen)).toBe(false)
   })
 })
+
+// ── multi-part authored with no explicit "## Part" heading ────────────────────
+// Some CAS single-part written/calculation questions were authored with just
+// ### Answer / ### Explanation / ### Examiner Report sections and no part split.
+// These must parse as a single implicit "Part a" rather than being dropped.
+
+const SINGLE_PART_CALC_RAW = `---
+id: "test-single-calc"
+exam: "Exam 5"
+topic: "On-Level Premium"
+learning_objective: "Ratemaking"
+difficulty: medium
+type: multi-part
+year: 2013
+session: Fall
+points: 2
+wiki_link: Concepts/On+Level+Premium
+---
+
+Given the rate history below, calculate the calendar year 2012 earned premium at current rate level.
+
+### Answer
+$330,750,000
+
+### Explanation
+Extend exposures at current rates and sum by class.
+
+### Examiner Report
+Common error: using older rates.
+`
+
+describe('parseQuestion — single-part multi-part (no "## Part" heading)', () => {
+  const q = parseQuestion(SINGLE_PART_CALC_RAW)!
+
+  it('parses successfully instead of being dropped', () => expect(q).not.toBeNull())
+  it('type is multi-part', () => expect(q.type).toBe('multi-part'))
+  it('has exactly one part labelled a', () => {
+    expect(q.parts).toHaveLength(1)
+    expect(q.parts![0].label).toBe('a')
+  })
+  it('part inherits the frontmatter points', () => expect(q.parts![0].points).toBe(2))
+  it('stem carries the prompt', () => expect(q.stem).toContain('current rate level'))
+  it('part answer is the first line of the Answer section', () =>
+    expect(q.parts![0].answer).toBe('$330,750,000'))
+  it('part explanation is parsed', () =>
+    expect(q.parts![0].explanation).toContain('Extend exposures'))
+  it('part examiner_report is parsed', () =>
+    expect(q.parts![0].examiner_report).toContain('older rates'))
+})
+
+const SINGLE_PART_ESSAY_RAW = `---
+id: "test-single-essay"
+exam: "Exam 5"
+topic: "Ratemaking"
+learning_objective: "Ratemaking"
+difficulty: medium
+type: multi-part
+year: 2013
+session: Fall
+points: 1.5
+wiki_link: Concepts/Ratemaking
+---
+
+Construct a thorough argument in support of the proposal.
+
+### Explanation
+Several arguments support the proposal, including that the marketing spend is non-recurring.
+
+### Examiner Report
+Candidates were expected to give at least three distinct arguments.
+`
+
+describe('parseQuestion — single-part essay (no "## Part", no "### Answer")', () => {
+  const q = parseQuestion(SINGLE_PART_ESSAY_RAW)!
+
+  it('parses successfully', () => expect(q).not.toBeNull())
+  it('has one ungraded (essay) part', () => {
+    expect(q.parts).toHaveLength(1)
+    expect(q.parts![0].answer).toBe('')
+  })
+  it('model answer lives in the explanation', () =>
+    expect(q.parts![0].explanation).toContain('non-recurring'))
+  it('isAnswerCorrect treats the all-essay question as correct', () =>
+    expect(isAnswerCorrect(q, JSON.stringify({ a: 'anything' }))).toBe(true))
+})

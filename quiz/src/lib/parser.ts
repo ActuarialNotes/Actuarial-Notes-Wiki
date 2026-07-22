@@ -259,14 +259,31 @@ export function parseQuestion(raw: string): Question | null {
     // ── multi-part ──────────────────────────────────────────────────────────
     if (type === 'multi-part') {
       const firstPartIdx = content.search(/^## Part /m)
-      const stem = firstPartIdx >= 0
-        ? content.slice(0, firstPartIdx).trim()
-        : content.trim()
-
       const parts = parseMultiPartBody(content)
-      if (!parts) return null
+      if (parts) {
+        const stem = firstPartIdx >= 0
+          ? content.slice(0, firstPartIdx).trim()
+          : content.trim()
+        return { ...base, stem, options: [], answer: '', explanation: '', parts }
+      }
 
-      return { ...base, stem, options: [], answer: '', explanation: '', parts }
+      // No explicit "## Part" headings — treat the whole body as a single
+      // implicit part. Covers single-part CAS written/calculation questions
+      // authored with ### Answer/### Explanation/### Examiner Report sections
+      // but no part split, so they parse instead of being silently dropped.
+      const sec = parsePartSections(content)
+      if (!sec.answer && !sec.explanation) return null
+      const singlePart: Part = {
+        label: 'a',
+        points: base.points,
+        stem: '',
+        type: sec.options.length > 0 ? 'multiple-choice' : 'free-entry',
+        options: sec.options,
+        answer: sec.answer,
+        explanation: sec.explanation,
+        examiner_report: sec.examiner_report,
+      }
+      return { ...base, stem: sec.stem, options: [], answer: '', explanation: '', parts: [singlePart] }
     }
 
     // ── free-entry and multiple-choice ──────────────────────────────────────

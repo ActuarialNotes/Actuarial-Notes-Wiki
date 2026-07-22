@@ -866,6 +866,58 @@
   .collect-pack-complete::after { animation: none; }
 }
 
+/* ── Study-pack "gamer lighting" borders ─────────────────────────────────────
+   Packs drop the old flat gradient-overlay fill for a dark card ringed by a
+   moving multi-hue gradient border — the same padding+mask-exclude foil ring as
+   the collected flashcards, but tinted per-exam via --pack-foil so every exam
+   keeps its own colour family. --pack-glow (an "R G B" triple) drives a soft
+   outer glow for the "rainbow eclipse" gamer-lighting look. The bare .pack-foil
+   is the quieter, static ring used by learning-objective sub-packs; .pack-foil--hero
+   thickens it, brightens the glow, and sets the gradient travelling. */
+.pack-foil {
+  position: relative;
+  box-shadow:
+    0 0 0 0.5px rgb(var(--pack-glow) / 0.15),
+    0 0 14px -8px rgb(var(--pack-glow) / 0.35);
+}
+.pack-foil::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--pack-foil);
+  background-size: 300% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.pack-foil--hero {
+  box-shadow:
+    0 0 0 0.5px rgb(var(--pack-glow) / 0.25),
+    0 0 22px -6px rgb(var(--pack-glow) / 0.45),
+    inset 0 0 30px -18px rgb(var(--pack-glow) / 0.5);
+  transition: box-shadow 0.25s ease;
+}
+.pack-foil--hero::before {
+  padding: 1.5px;
+  opacity: 1;
+  /* Reuse the collected-flashcard foil animation so the gradient slides around
+     the border, giving the "moving gradient border" effect. */
+  animation: flashcard-foil-shift 4.5s linear infinite;
+}
+.pack-foil--hero:hover {
+  box-shadow:
+    0 0 0 0.5px rgb(var(--pack-glow) / 0.4),
+    0 0 30px -4px rgb(var(--pack-glow) / 0.6),
+    inset 0 0 34px -16px rgb(var(--pack-glow) / 0.6);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pack-foil--hero::before { animation: none; }
+}
+
 /* Pack card action panel sliding open */
 .pack-expand-in {
   animation: pack-expand-in 0.18s ease-out;

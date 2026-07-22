@@ -1152,6 +1152,35 @@ function StudyGalleryToggle({
   )
 }
 
+// Focus-mode toggle, sized/shaped to match StudyGalleryToggle so the two read
+// as a pair. Sits above the gallery strip alongside the Gallery button.
+function FocusModeToggle({
+  focusMode,
+  onToggle,
+  className = '',
+}: {
+  focusMode: boolean
+  onToggle: () => void
+  className?: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      title={focusMode ? 'Exit focus mode' : 'Focus mode'}
+      aria-pressed={focusMode}
+      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+        focusMode
+          ? 'bg-primary text-primary-foreground'
+          : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
+      } ${className}`}
+    >
+      <Maximize2 className="h-4 w-4" />
+      <span>Focus</span>
+    </button>
+  )
+}
+
 // ─── Controls Footer (shared between study and gallery views) ─────────────────
 
 function ViewModeDropdown({
@@ -1238,36 +1267,24 @@ function ViewModeDropdown({
 }
 
 function FlashcardControlsBar({
-  galleryOpen,
-  onGalleryToggle,
   reverseCardModes,
   onToggleMode,
   flip,
   onFlipToggle,
-  focusMode,
-  onFocusToggle,
   onShortcutsHelp,
   onShuffle,
   minimal = false,
 }: {
-  galleryOpen?: boolean
-  onGalleryToggle?: () => void
   reverseCardModes: Set<ReverseCardSection>
   onToggleMode: (mode: ReverseCardSection) => void
   flip: boolean
   onFlipToggle: () => void
-  focusMode: boolean
-  onFocusToggle: () => void
   onShortcutsHelp: () => void
   onShuffle?: () => void
   minimal?: boolean
 }) {
   return (
     <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 py-3 sm:py-4 bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
-      {!minimal && onGalleryToggle && (
-        <StudyGalleryToggle galleryOpen={!!galleryOpen} onToggle={onGalleryToggle} />
-      )}
-
       <div className="flex items-center gap-2 shrink-0">
         <span className="text-xs sm:text-sm text-muted-foreground">Flip</span>
         <button
@@ -1296,22 +1313,6 @@ function FlashcardControlsBar({
           aria-label="Shuffle deck"
           className="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
         ><Shuffle className="h-4 w-4 sm:h-5 sm:w-5" /></button>
-      )}
-
-      {!minimal && (
-        <>
-          <button
-            type="button"
-            onClick={onFocusToggle}
-            title={focusMode ? 'Exit focus mode' : 'Focus mode'}
-            aria-pressed={focusMode}
-            className={`inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md transition-colors ${
-              focusMode
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-            }`}
-          ><Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
-        </>
       )}
 
       <button
@@ -2249,7 +2250,7 @@ function GalleryPanel({
         ref={scrollContainerRef}
         className={inline
           ? 'space-y-4'
-          : 'flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4 pb-24 md:pb-20'}
+          : 'flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4 pb-32 md:pb-28'}
       >
         {tab === 'deck' && (
           <div className="space-y-4">
@@ -3151,8 +3152,6 @@ export default function Flashcards() {
             onToggleMode={toggleReverseMode}
             flip={globalFlip}
             onFlipToggle={() => setGlobalFlip(v => !v)}
-            focusMode={false}
-            onFocusToggle={() => {}}
             onShortcutsHelp={() => setShowShortcutsHelp(true)}
           />
         </div>
@@ -3303,6 +3302,13 @@ export default function Flashcards() {
           focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
         }`}
       >
+        {/* Gallery + Focus buttons — standalone pills above the strip. Shown in
+            both study and gallery views so the Gallery toggle can return to
+            study when the gallery overlay is open. */}
+        <div className="flex items-center justify-between gap-2 bg-background px-4 pt-2">
+          <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} />
+          <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} />
+        </div>
         {/* Gallery strip conveyor — only in study mode */}
         {!galleryExpanded && (
           <div className="bg-background px-4">
@@ -3360,14 +3366,10 @@ export default function Flashcards() {
         )}
         {(galleryExpanded || controlsExpanded) && (
           <FlashcardControlsBar
-            galleryOpen={galleryExpanded}
-            onGalleryToggle={handleGalleryToggle}
             reverseCardModes={reverseCardModes}
             onToggleMode={toggleReverseMode}
             flip={globalFlip}
             onFlipToggle={() => setGlobalFlip(v => !v)}
-            focusMode={focusMode}
-            onFocusToggle={handleFocusToggle}
             onShortcutsHelp={() => setShowShortcutsHelp(true)}
             onShuffle={handleShuffle}
           />

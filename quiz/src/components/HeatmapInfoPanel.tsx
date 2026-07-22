@@ -26,7 +26,7 @@ interface Props {
   plan: StudyPlan | null
 }
 
-function HeatmapOverviewSlide() {
+export function HeatmapOverviewSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">
@@ -54,7 +54,7 @@ function HeatmapOverviewSlide() {
   )
 }
 
-function ExamDatesSlide() {
+export function ExamDatesSlide() {
   return (
     <div className="space-y-3">
       <div className="rounded-lg bg-primary/5 px-3 py-2.5 space-y-1.5">
@@ -141,7 +141,7 @@ function ReadinessProjectionChart({
   )
 }
 
-function ReadinessProjectionSlide({
+export function ReadinessProjectionSlide({
   syllabus, masteryRecords, examDate, plan,
 }: {
   syllabus: WikiExamSyllabus
@@ -187,7 +187,7 @@ function ReadinessProjectionSlide({
   )
 }
 
-function RegistrationSlide() {
+export function RegistrationSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">

@@ -40,7 +40,7 @@ const LEVELS: { key: string; label: string; desc: string; color: string }[] = [
   },
 ]
 
-function SpacedRepetitionSlide() {
+export function SpacedRepetitionSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">
@@ -58,7 +58,7 @@ function SpacedRepetitionSlide() {
   )
 }
 
-function ForgettingCurveSlide() {
+export function ForgettingCurveSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">
@@ -83,7 +83,7 @@ function ForgettingCurveSlide() {
   )
 }
 
-function LevellingSlide() {
+export function LevellingSlide() {
   return (
     <div className="space-y-4">
       <p className="text-muted-foreground">

@@ -273,20 +273,26 @@ export default function WikiHome() {
                     const level2Pct = total > 0 ? Math.round((level2Count / total) * 100) : 0
                     const level1Pct = total > 0 ? Math.round((level1Count / total) * 100) : 0
 
+                    const hasProgressBar = isInProgress && total > 0
+
                     return (
                       <Link key={exam.path} to={wikiRoute({ kind: 'exam', name: exam.name })} data-tour={examId === 'P' ? 'exam-p' : undefined}>
                         <Card
                           className={cn(
-                            'h-full transition-all duration-150 overflow-hidden',
+                            'h-full flex flex-col transition-all duration-150 overflow-hidden',
+                            // Center content vertically when the card is only a header
+                            // (completed / beta cards) so it stays balanced if the card
+                            // is stretched to match a taller sibling in the grid row.
+                            !hasProgressBar && 'justify-center',
                             !isInProgress && 'hover:bg-accent/30',
                             isInProgress && 'bg-primary/10 hover:bg-primary/25',
                           )}
                         >
-                          <CardHeader className="pb-3">
-                            <div className="flex items-start justify-between gap-2">
+                          <CardHeader className={hasProgressBar ? 'pb-3' : undefined}>
+                            <div className="flex items-center justify-between gap-2">
                               <CardTitle className="text-base leading-snug">{exam.name}</CardTitle>
                               {isCompleted && (
-                                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+                                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                               )}
                             </div>
                             {match && (
@@ -310,7 +316,7 @@ export default function WikiHome() {
                           </CardHeader>
 
                           {/* Progress bar — in-progress only, not for completed */}
-                          {isInProgress && total > 0 && (
+                          {hasProgressBar && (
                             <div className="px-6 pb-4 space-y-1">
                               <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                                 <span>Readiness</span>

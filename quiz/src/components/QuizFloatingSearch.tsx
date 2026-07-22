@@ -169,10 +169,22 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     })
   }
 
-  const selectedQuestions = useMemo(
-    () => allQuestions.filter(q => selectedIds.has(q.id)),
-    [allQuestions, selectedIds],
-  )
+  // Select-all applies to the currently visible pool, leaving any selections
+  // outside the active refinements untouched (mirrors the study popup).
+  const allSelected = visiblePool.length > 0 && visiblePool.every(q => selectedIds.has(q.id))
+  const someSelected = visiblePool.some(q => selectedIds.has(q.id)) && !allSelected
+
+  function toggleSelectAll() {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      if (allSelected || someSelected) {
+        visiblePool.forEach(q => next.delete(q.id))
+      } else {
+        visiblePool.forEach(q => next.add(q.id))
+      }
+      return next
+    })
+  }
 
   return (
     <>
@@ -286,25 +298,36 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                   </div>
                 )}
 
-                {/* Selected question tags */}
-                {selectedIds.size > 0 && (
-                  <div className="flex flex-wrap gap-1.5 px-0.5 py-2">
-                    {selectedQuestions.map(q => (
-                      <span
-                        key={q.id}
-                        className="inline-flex items-center gap-1 rounded-full bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-medium"
+                {/* Select all — mirrors the study popup's collect toolbar */}
+                {visiblePool.length > 0 && (
+                  <div className="flex items-center gap-2 px-0.5 py-2">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <div
+                        role="checkbox"
+                        aria-checked={allSelected ? true : someSelected ? 'mixed' : false}
+                        tabIndex={0}
+                        onClick={toggleSelectAll}
+                        onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleSelectAll() } }}
+                        className={`h-4 w-4 rounded border-2 flex items-center justify-center transition-colors cursor-pointer ${
+                          allSelected || someSelected ? 'bg-primary border-primary' : 'border-input bg-background'
+                        }`}
                       >
-                        <span className="max-w-[160px] truncate">{q.id}</span>
-                        <button
-                          type="button"
-                          onClick={e => { e.stopPropagation(); toggleSelect(q.id) }}
-                          aria-label={`Remove ${q.id}`}
-                          className="hover:text-primary/70 transition-colors ml-0.5 shrink-0"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
+                        {allSelected && (
+                          <svg className="h-2.5 w-2.5 text-primary-foreground" fill="none" viewBox="0 0 12 12">
+                            <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                        {someSelected && <div className="h-0.5 w-2 bg-primary-foreground rounded" />}
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {allSelected ? 'Deselect all' : 'Select all'}
                       </span>
-                    ))}
+                    </label>
+                    {selectedIds.size > 0 && (
+                      <span className="ml-auto text-xs text-muted-foreground shrink-0">
+                        {selectedIds.size} selected
+                      </span>
+                    )}
                   </div>
                 )}
 

@@ -758,7 +758,7 @@ export default function Landing() {
 
   function sittingLabel(year: number, session?: string): string {
     const s = session?.toLowerCase()
-    if (s === 'spring' || s === 'sp') return `Sp ${year}`
+    if (s === 'spring' || s === 'sp') return `Spring ${year}`
     if (s === 'fall' || s === 'fa') return `Fall ${year}`
     return String(year)
   }

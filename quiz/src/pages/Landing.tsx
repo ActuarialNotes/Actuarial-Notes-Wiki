@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, FileDown, Lock, Play, X } from 'lucide-react'
+import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, FileDown, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
@@ -622,18 +622,43 @@ export default function Landing() {
   // One-click launch from the dashboard: as soon as the plan + question bank are
   // ready, jump straight into a quiz sized to complete today's plan. Falls back to
   // the normal config screen if the user isn't premium or has no plan.
+  //
+  // While this is pending we render a brief loading state (see `isAutostarting`
+  // below) instead of the config screen — the dashboard's launch animation flows
+  // straight into the quiz's collect gate with no flash of the config UI in
+  // between. `autostartFailed` flips us back to the config screen only once we
+  // know autostart can't proceed (not premium / no plan / no questions).
   const didAutostartRef = useRef(false)
+  const [autostartFailed, setAutostartFailed] = useState(false)
   useEffect(() => {
     if (didAutostartRef.current) return
     if (searchParams.get('autostart') !== '1') return
     if (!user || mode !== 'quiz' || !topic) return
     if (masteryLoading || conceptsLoading || planLoading || subLoading) return
-    if (!examInProgress || !isPremium || !plan || planConceptCount === 0 || allQuestions.length === 0) return
+    // Everything the autostart decision depends on has loaded. If we're not
+    // eligible, reveal the config screen instead of holding the spinner forever.
+    if (!examInProgress || !isPremium || !plan || planConceptCount === 0 || allQuestions.length === 0) {
+      setAutostartFailed(true)
+      return
+    }
     const sel = buildTodaysPlanSelection()
-    if (!sel) return
+    if (!sel) {
+      setAutostartFailed(true)
+      return
+    }
     didAutostartRef.current = true
     launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts))
   }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress])
+
+  // True while a dashboard-initiated autostart is still resolving (loading data
+  // or navigating into the quiz). Suppresses the config screen so the launch is
+  // seamless; `autostartFailed` ends it if we can't autostart after all.
+  const isAutostarting =
+    searchParams.get('autostart') === '1' &&
+    !autostartFailed &&
+    mode === 'quiz' &&
+    !!user &&
+    !!topic
 
   // Persist manual concept selections to localStorage
   useEffect(() => {
@@ -801,6 +826,17 @@ export default function Landing() {
     return pills
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedConcept, selectedConcepts])
+
+  // Dashboard launch is still resolving — hold a quiet loading state rather than
+  // flashing the quiz config screen on the way into the quiz.
+  if (isAutostarting) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-muted-foreground">Getting today's quiz ready…</p>
+      </div>
+    )
+  }
 
   return (
     <>

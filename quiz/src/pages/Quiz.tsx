@@ -174,6 +174,19 @@ export default function Quiz() {
     Object.keys(responses).length === 0 &&
     hasUncollectedNewConcept
 
+  // Whether the collect-gate decision is still pending: at the very start of a
+  // quiz session, `showCollectGate` depends on mastery, so if mastery is still
+  // loading we can't yet tell whether the gate should appear. Hold the loading
+  // state (below) rather than render the first question and then swap it out for
+  // the gate — that swap is the jarring "flash the first question" the collect
+  // launch is meant to avoid.
+  const awaitingCollectGateDecision =
+    mode === 'quiz' &&
+    !collectGateDismissed &&
+    masteryLoading &&
+    status === 'active' &&
+    Object.keys(responses).length === 0
+
   // Clear pending selection and scroll to top whenever the question changes
   useEffect(() => {
     setPendingAnswer(null)
@@ -316,7 +329,7 @@ export default function Quiz() {
   }
 
   // ── Loading state ────────────────────────────────────────────────────
-  if (loading || (status === 'idle' && !error)) {
+  if (loading || (status === 'idle' && !error) || awaitingCollectGateDecision) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />

@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, BookOpen, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Play, Lock, Settings2, Target, X } from 'lucide-react'
+import { AlertTriangle, ArrowUp, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Lock, Settings2, Target, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -485,7 +485,6 @@ export function ReadinessCard({
   const [flashRadial, setFlashRadial] = useState(false)
   const [quizStartConcept, setQuizStartConcept] = useState<string | null>(null)
   const [tracePlanBorder, setTracePlanBorder] = useState(false)
-  const [isLaunchingQuiz, setIsLaunchingQuiz] = useState(false)
   const isLaunchingQuizRef = useRef(false)
   const [recentlyCompletedConcepts, setRecentlyCompletedConcepts] = useState<Set<string>>(new Set())
   const prevCompletedRef = useRef<Set<string>>(new Set())
@@ -901,7 +900,6 @@ export function ReadinessCard({
   const handleStartQuiz = useCallback(() => {
     if (isLaunchingQuizRef.current) return
     isLaunchingQuizRef.current = true
-    setIsLaunchingQuiz(true)
 
     // Scroll the study plan into view first, then sweep a highlight through each
     // concept individually while the card border is traced in the primary colour —
@@ -927,7 +925,6 @@ export function ReadinessCard({
       setQuizStartConcept(null)
       setTracePlanBorder(false)
       isLaunchingQuizRef.current = false
-      setIsLaunchingQuiz(false)
       const progressKey = wikiExamIdToProgressKey(syllabus.examId)
       const topicValue = EXAM_ID_TO_TOPIC[progressKey] ?? syllabus.examTopic
       // autostart=1 tells Landing to jump straight into a quiz sized to complete
@@ -1025,42 +1022,6 @@ export function ReadinessCard({
       <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
       {/* Left column */}
       <div className="flex flex-col gap-4">
-      {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
-          `order-2` places them directly below Today's Study Plan (order-1). */}
-      <div className="order-2 flex gap-3">
-        <Button
-          variant="secondary"
-          onClick={() => {
-            if (isPremium) {
-              const hasStudyPlan = studyPlanConceptsForModal.length > 0
-              openDashboard(
-                toRefs(allConcepts),
-                hasStudyPlan ? toRefs(studyPlanConceptsForModal) : null,
-                hasStudyPlan ? 'study-plan' : 'entire-syllabus',
-                0,
-              )
-            } else {
-              openDashboard(toRefs(allConcepts), null, 'entire-syllabus', 0)
-            }
-          }}
-          disabled={allConcepts.length === 0}
-          className="flex-1 gap-2.5 text-base h-auto py-4"
-        >
-          <BookOpen className="h-5 w-5" />
-          Read concepts
-        </Button>
-        {isPremium && displayConcepts.length > 0 && (
-          <button
-            type="button"
-            onClick={handleStartQuiz}
-            disabled={isLaunchingQuiz}
-            className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
-          >
-            <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-            {isLaunchingQuiz ? 'Get ready…' : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")}
-          </button>
-        )}
-      </div>
       {/* Study Schedule (heatmap) card — `order-4`, below the study plan/actions/warnings */}
       <Card className="order-4 border-0 shadow-none">
         <CardContent className="p-6 space-y-5">

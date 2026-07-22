@@ -1,10 +1,21 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Gem, LayoutDashboard, XCircle } from 'lucide-react'
+import { ArrowRight, Gem, LayoutDashboard, XCircle } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { Button } from '@/components/ui/button'
 import { isAnswerCorrect, normalizeAnswerText } from '@/lib/parser'
 import type { Question, SelfGrade } from '@/lib/parser'
+import type { MasteryState } from '@/lib/mastery'
+import type { MasteryTransition } from '@/stores/quizStore'
+
+// Compact level labels for the "Concepts Levelled Up" cards.
+const LEVEL_LABEL: Record<MasteryState, string> = {
+  new: 'New',
+  level1: 'Level 1',
+  level2: 'Level 2',
+  level3: 'Level 3',
+  forgotten: 'Forgotten',
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -299,6 +310,8 @@ interface ConceptCoverageSectionProps {
   onQuestionSelect: (idx: number | null) => void
   manualGrades?: Record<string, SelfGrade>
   onReviewIncorrect?: () => void
+  /** Concepts that levelled up on this quiz — one card each (two-column grid). */
+  levelUpTransitions?: MasteryTransition[]
 }
 
 export function effectiveOutcome(q: Question, chosen: string | null | undefined, manualGrades: Record<string, SelfGrade>): boolean {
@@ -336,6 +349,7 @@ export function ConceptCoverageSection({
   onQuestionSelect,
   manualGrades = {},
   onReviewIncorrect,
+  levelUpTransitions = [],
 }: ConceptCoverageSectionProps) {
   const navigate = useNavigate()
   const outcomes = questions.map(q => effectiveOutcome(q, responses[q.id]?.chosen, manualGrades))
@@ -408,31 +422,57 @@ export function ConceptCoverageSection({
         </div>
       </div>
 
-      {/* ── Actions card: go to dashboard + review incorrect ──────── */}
-      {(score.isLoggedIn || (onReviewIncorrect && hasIncorrect)) && (
+      {/* ── Concepts levelled up: one card each, two-column grid ───── */}
+      {levelUpTransitions.length > 0 && (
         <div className="rounded-xl bg-card shadow-sm overflow-hidden">
-          <div className="p-4 flex gap-3">
-            {score.isLoggedIn && (
-              <Button
-                variant="secondary"
-                onClick={() => navigate('/dashboard')}
-                className="flex-1 gap-2.5 text-base h-auto py-4"
-              >
-                <LayoutDashboard className="h-5 w-5" />
-                Go to Dashboard
-              </Button>
-            )}
-            {onReviewIncorrect && hasIncorrect && (
-              <button
-                type="button"
-                onClick={onReviewIncorrect}
-                className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97]"
-              >
-                <XCircle className="h-5 w-5" />
-                Review Incorrect
-              </button>
-            )}
+          <div className="px-5 py-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Concepts Levelled Up
+            </p>
           </div>
+          <div className="px-4 pb-4 grid grid-cols-2 gap-2.5">
+            {levelUpTransitions.map((t, i) => (
+              <div
+                key={`${t.conceptSlug}-${i}`}
+                className="flex flex-col gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2.5"
+              >
+                <span className="text-sm font-semibold leading-snug text-foreground line-clamp-2">
+                  {t.conceptSlug}
+                </span>
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                  {LEVEL_LABEL[t.from]}
+                  <ArrowRight className="h-3 w-3 shrink-0" />
+                  {LEVEL_LABEL[t.to]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Actions: go to dashboard + review incorrect (bare buttons) ─ */}
+      {(score.isLoggedIn || (onReviewIncorrect && hasIncorrect)) && (
+        <div className="flex gap-3">
+          {score.isLoggedIn && (
+            <Button
+              variant="secondary"
+              onClick={() => navigate('/dashboard')}
+              className="flex-1 gap-2.5 text-base h-auto py-4"
+            >
+              <LayoutDashboard className="h-5 w-5" />
+              Go to Dashboard
+            </Button>
+          )}
+          {onReviewIncorrect && hasIncorrect && (
+            <button
+              type="button"
+              onClick={onReviewIncorrect}
+              className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97]"
+            >
+              <XCircle className="h-5 w-5" />
+              Review Incorrect
+            </button>
+          )}
         </div>
       )}
 

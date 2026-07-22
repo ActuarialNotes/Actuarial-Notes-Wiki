@@ -398,6 +398,7 @@ export default function Review() {
         onQuestionSelect={handleQuestionSelect}
         manualGrades={session.manualGrades}
         onReviewIncorrect={handleReviewIncorrect}
+        levelUpTransitions={upwardTransitions}
       />
 
       {/* ── Study plan checklist ─────────────────────────────────── */}

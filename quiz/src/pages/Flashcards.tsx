@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   BookOpen,
@@ -99,18 +99,26 @@ const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; d
   forgotten: { label: 'Forgotten', className: 'bg-rose-500/20 text-rose-600 dark:text-rose-400',   dotClass: 'bg-rose-500' },
 }
 
-// Color palette for exam packs — one entry per exam in rotation. Whole-exam
-// ("hero") packs get the gradient treatment; learning-objective packs get the
-// quieter lo* variant so each exam reads as one color family.
+// Color palette for exam packs — one entry per exam in rotation. Packs no
+// longer use a flat gradient-overlay fill; instead each card is a dark surface
+// ringed by a moving multi-hue gradient border ("rainbow eclipse" / gamer
+// lighting), the same foil technique as the collected flashcards. `foil` is the
+// per-exam gradient that travels around the border and `glow` (an "R G B"
+// triple) drives the soft outer light — both anchored to the exam's own colour
+// family so each exam stays visually distinct. Whole-exam ("hero") packs get
+// the animated, brighter treatment; learning-objective packs get the quieter
+// lo* variant so each exam reads as one color family.
 const PACK_COLOR_PALETTE = [
   // Blue
   {
-    card: 'bg-gradient-to-br from-blue-500/25 via-blue-500/10 to-transparent border border-blue-500/30 hover:border-blue-500/50',
+    card: 'bg-card',
+    foil: 'linear-gradient(115deg, #38bdf8, #818cf8, #22d3ee, #60a5fa, #38bdf8)',
+    glow: '56 189 248',
     cardText: 'text-blue-700 dark:text-blue-300',
     cardSub: 'text-blue-600/70 dark:text-blue-400/60',
     cardIcon: 'text-blue-500',
     barTrack: 'bg-blue-500/15',
-    loCard: 'bg-blue-500/5 border border-blue-500/15 hover:border-blue-500/35 hover:bg-blue-500/10',
+    loCard: 'bg-card',
     loCardText: 'text-blue-700/80 dark:text-blue-400/80',
     loCardSub: 'text-blue-600/60 dark:text-blue-400/50',
     loCardIcon: 'text-blue-400',
@@ -118,12 +126,14 @@ const PACK_COLOR_PALETTE = [
   },
   // Emerald
   {
-    card: 'bg-gradient-to-br from-emerald-500/25 via-emerald-500/10 to-transparent border border-emerald-500/30 hover:border-emerald-500/50',
+    card: 'bg-card',
+    foil: 'linear-gradient(115deg, #34d399, #22d3ee, #a3e635, #10b981, #34d399)',
+    glow: '52 211 153',
     cardText: 'text-emerald-700 dark:text-emerald-300',
     cardSub: 'text-emerald-600/70 dark:text-emerald-400/60',
     cardIcon: 'text-emerald-500',
     barTrack: 'bg-emerald-500/15',
-    loCard: 'bg-emerald-500/5 border border-emerald-500/15 hover:border-emerald-500/35 hover:bg-emerald-500/10',
+    loCard: 'bg-card',
     loCardText: 'text-emerald-700/80 dark:text-emerald-400/80',
     loCardSub: 'text-emerald-600/60 dark:text-emerald-400/50',
     loCardIcon: 'text-emerald-400',
@@ -131,12 +141,14 @@ const PACK_COLOR_PALETTE = [
   },
   // Violet
   {
-    card: 'bg-gradient-to-br from-violet-500/25 via-violet-500/10 to-transparent border border-violet-500/30 hover:border-violet-500/50',
+    card: 'bg-card',
+    foil: 'linear-gradient(115deg, #a78bfa, #e879f9, #818cf8, #c084fc, #a78bfa)',
+    glow: '167 139 250',
     cardText: 'text-violet-700 dark:text-violet-300',
     cardSub: 'text-violet-600/70 dark:text-violet-400/60',
     cardIcon: 'text-violet-500',
     barTrack: 'bg-violet-500/15',
-    loCard: 'bg-violet-500/5 border border-violet-500/15 hover:border-violet-500/35 hover:bg-violet-500/10',
+    loCard: 'bg-card',
     loCardText: 'text-violet-700/80 dark:text-violet-400/80',
     loCardSub: 'text-violet-600/60 dark:text-violet-400/50',
     loCardIcon: 'text-violet-400',
@@ -144,12 +156,14 @@ const PACK_COLOR_PALETTE = [
   },
   // Orange
   {
-    card: 'bg-gradient-to-br from-orange-500/25 via-orange-500/10 to-transparent border border-orange-500/30 hover:border-orange-500/50',
+    card: 'bg-card',
+    foil: 'linear-gradient(115deg, #fb923c, #fbbf24, #f87171, #fdba74, #fb923c)',
+    glow: '251 146 60',
     cardText: 'text-orange-700 dark:text-orange-300',
     cardSub: 'text-orange-600/70 dark:text-orange-400/60',
     cardIcon: 'text-orange-500',
     barTrack: 'bg-orange-500/15',
-    loCard: 'bg-orange-500/5 border border-orange-500/15 hover:border-orange-500/35 hover:bg-orange-500/10',
+    loCard: 'bg-card',
     loCardText: 'text-orange-700/80 dark:text-orange-400/80',
     loCardSub: 'text-orange-600/60 dark:text-orange-400/50',
     loCardIcon: 'text-orange-400',
@@ -157,12 +171,14 @@ const PACK_COLOR_PALETTE = [
   },
   // Rose
   {
-    card: 'bg-gradient-to-br from-rose-500/25 via-rose-500/10 to-transparent border border-rose-500/30 hover:border-rose-500/50',
+    card: 'bg-card',
+    foil: 'linear-gradient(115deg, #fb7185, #f472b6, #fb923c, #fda4af, #fb7185)',
+    glow: '251 113 133',
     cardText: 'text-rose-700 dark:text-rose-300',
     cardSub: 'text-rose-600/70 dark:text-rose-400/60',
     cardIcon: 'text-rose-500',
     barTrack: 'bg-rose-500/15',
-    loCard: 'bg-rose-500/5 border border-rose-500/15 hover:border-rose-500/35 hover:bg-rose-500/10',
+    loCard: 'bg-card',
     loCardText: 'text-rose-700/80 dark:text-rose-400/80',
     loCardSub: 'text-rose-600/60 dark:text-rose-400/50',
     loCardIcon: 'text-rose-400',
@@ -170,12 +186,14 @@ const PACK_COLOR_PALETTE = [
   },
   // Cyan
   {
-    card: 'bg-gradient-to-br from-cyan-500/25 via-cyan-500/10 to-transparent border border-cyan-500/30 hover:border-cyan-500/50',
+    card: 'bg-card',
+    foil: 'linear-gradient(115deg, #22d3ee, #38bdf8, #2dd4bf, #67e8f9, #22d3ee)',
+    glow: '34 211 238',
     cardText: 'text-cyan-700 dark:text-cyan-300',
     cardSub: 'text-cyan-600/70 dark:text-cyan-400/60',
     cardIcon: 'text-cyan-500',
     barTrack: 'bg-cyan-500/15',
-    loCard: 'bg-cyan-500/5 border border-cyan-500/15 hover:border-cyan-500/35 hover:bg-cyan-500/10',
+    loCard: 'bg-card',
     loCardText: 'text-cyan-700/80 dark:text-cyan-400/80',
     loCardSub: 'text-cyan-600/60 dark:text-cyan-400/50',
     loCardIcon: 'text-cyan-400',
@@ -184,7 +202,9 @@ const PACK_COLOR_PALETTE = [
 ] as const
 
 const STUDY_PLAN_COLOR = {
-  card: 'bg-gradient-to-br from-amber-500/25 via-amber-500/10 to-transparent border border-amber-500/30 hover:border-amber-500/50',
+  card: 'bg-card',
+  foil: 'linear-gradient(115deg, #fbbf24, #fb923c, #facc15, #fcd34d, #fbbf24)',
+  glow: '251 191 36',
   cardText: 'text-amber-700 dark:text-amber-300',
   cardSub: 'text-amber-600/70 dark:text-amber-400/60',
   cardIcon: 'text-amber-500',
@@ -192,7 +212,9 @@ const STUDY_PLAN_COLOR = {
 } as const
 
 const SAVED_PACK_COLOR = {
-  card: 'bg-gradient-to-br from-purple-500/25 via-purple-500/10 to-transparent border border-purple-500/30 hover:border-purple-500/50',
+  card: 'bg-card',
+  foil: 'linear-gradient(115deg, #c084fc, #e879f9, #a78bfa, #d8b4fe, #c084fc)',
+  glow: '192 132 252',
   cardText: 'text-purple-700 dark:text-purple-300',
   cardSub: 'text-purple-600/70 dark:text-purple-400/60',
   cardIcon: 'text-purple-500',
@@ -236,6 +258,8 @@ type PackKind = 'study_plan' | 'exam' | 'learning_objective' | 'saved'
 
 interface PackColors {
   card: string
+  foil: string
+  glow: string
   cardText: string
   cardSub: string
   cardIcon: string
@@ -249,6 +273,8 @@ function packColorsFor(kind: PackKind, colorIndex: number | undefined, isSub: bo
   if (isSub) {
     return {
       card: palette.loCard,
+      foil: palette.foil,
+      glow: palette.glow,
       cardText: palette.loCardText,
       cardSub: palette.loCardSub,
       cardIcon: palette.loCardIcon,
@@ -257,6 +283,8 @@ function packColorsFor(kind: PackKind, colorIndex: number | undefined, isSub: bo
   }
   return {
     card: palette.card,
+    foil: palette.foil,
+    glow: palette.glow,
     cardText: palette.cardText,
     cardSub: palette.cardSub,
     cardIcon: palette.cardIcon,
@@ -497,7 +525,8 @@ function PackCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl transition-all ${colors.card} ${colors.cardText} ${
+      style={{ '--pack-foil': colors.foil, '--pack-glow': colors.glow } as CSSProperties}
+      className={`relative overflow-hidden rounded-xl transition-all pack-foil ${isSub ? '' : 'pack-foil--hero'} ${colors.card} ${colors.cardText} ${
         fullyCollected ? 'ring-1 ring-amber-400/50 collect-pack-complete' : ''
       } ${className}`}
     >
@@ -3342,13 +3371,16 @@ export default function Flashcards() {
       >
         {/* Gallery + Focus buttons — standalone pills above the strip. Shown in
             both study and gallery views so the Gallery toggle can return to
-            study when the gallery overlay is open. */}
-        <div className="flex items-center justify-between gap-2 bg-background px-4 pt-2">
-          <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} />
-          <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} />
-        </div>
-        {/* Gallery strip conveyor — only in study mode */}
-        {!galleryExpanded && (
+            study when the gallery overlay is open. Hidden in focus mode, which
+            pares the footer down to just the Prev/Next nav. */}
+        {!focusMode && (
+          <div className="flex items-center justify-between gap-2 bg-background px-4 pt-2">
+            <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} />
+            <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} />
+          </div>
+        )}
+        {/* Gallery strip conveyor — only in study mode, and not in focus mode */}
+        {!galleryExpanded && !focusMode && (
           <div className="bg-background px-4">
             <GalleryStrip
               cards={orderedCards}

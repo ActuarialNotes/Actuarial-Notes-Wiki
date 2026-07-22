@@ -4,7 +4,8 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { Bell, Check, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Bell, BookOpen, Check, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -18,6 +19,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { todayISO } from '@/lib/studyPlan'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
@@ -161,6 +163,7 @@ export default function Dashboard() {
   const [onboardingStep, setOnboardingStep] = useState<1 | 2 | 3>(1)
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
+  const [isLaunchingQuiz, setIsLaunchingQuiz] = useState(false)
   const [scrollToRadialTrigger, setScrollToRadialTrigger] = useState(0)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
     () => new URLSearchParams(location.search).get('upgraded') === '1',
@@ -335,6 +338,32 @@ export default function Dashboard() {
   // ── Study plan ─────────────────────────────────────────────────────────────
   const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan, replaceTodaysConcepts } =
     useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate, masteryLoading)
+
+  // Today's plan concepts — gates the "Continue Studying / Start Today's Quiz"
+  // action (mirrors the same derivation in ReadinessCard).
+  const displayConcepts = studyPlan?.status === 'review_mode'
+    ? (studyPlan?.reviewConcepts ?? [])
+    : (studyPlan?.todaysConcepts ?? [])
+
+  // Questions answered today for the active exam — decides whether the primary
+  // action reads "Continue Studying" (already started) or "Start Today's Quiz".
+  const todayQuestionsAnswered = useMemo(() => {
+    if (!activeSyllabus) return 0
+    const today = todayISO()
+    return sessions
+      .filter(s => s.exam === activeSyllabus.examTopic && s.completed_at.slice(0, 10) === today)
+      .reduce((sum, s) => sum + s.total_questions, 0)
+  }, [sessions, activeSyllabus])
+
+  // Top-of-dashboard primary actions. "Read concepts" and the quiz launch reuse
+  // the trigger props ReadinessCard already listens on (same path as the header
+  // quick-actions), so the concept popup / quiz-launch cascade behave identically.
+  const handleReadConcepts = useCallback(() => setConceptsOpenCounter(c => c + 1), [])
+  const handleStartTodaysQuiz = useCallback(() => {
+    if (isLaunchingQuiz) return
+    setIsLaunchingQuiz(true)
+    setStartQuizCounter(c => c + 1)
+  }, [isLaunchingQuiz])
 
   // Build a fast masteryState lookup (conceptName → MasteryState) for TodayCard chips
   const masteryStateByName = useMemo(() => {
@@ -606,6 +635,31 @@ export default function Dashboard() {
             ))}
           </div>
         )}
+        {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
+            Sits at the top of the dashboard, above the streak/readiness stats. */}
+        {activeSyllabus && (
+          <div className="flex gap-3">
+            <Button
+              variant="secondary"
+              onClick={handleReadConcepts}
+              className="flex-1 gap-2.5 text-base h-auto py-4"
+            >
+              <BookOpen className="h-5 w-5" />
+              Read concepts
+            </Button>
+            {isPremium && displayConcepts.length > 0 && (
+              <button
+                type="button"
+                onClick={handleStartTodaysQuiz}
+                disabled={isLaunchingQuiz}
+                className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+              >
+                <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
+                {isLaunchingQuiz ? 'Get ready…' : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")}
+              </button>
+            )}
+          </div>
+        )}
         {(showStreakStat || overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {showStreakStat && (
@@ -715,20 +769,25 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Mastery insights — richer learner analytics (roadmap P2.5) */}
-      {MASTERY_ANALYTICS_ENABLED && !isGuest && activeSyllabus && (
-        <MasteryAnalyticsCard
-          syllabus={activeSyllabus}
-          masteryRecords={activeExamRecords}
-        />
-      )}
+      {/* Compact insight cards — two-up: fading concepts + recent mistakes */}
+      {!isGuest && activeSyllabus && (MASTERY_ANALYTICS_ENABLED || MISTAKES_REVIEW_ENABLED) && (
+        <div className="grid grid-cols-2 gap-4">
+          {/* Mastery insights — richer learner analytics (roadmap P2.5) */}
+          {MASTERY_ANALYTICS_ENABLED && (
+            <MasteryAnalyticsCard
+              syllabus={activeSyllabus}
+              masteryRecords={activeExamRecords}
+            />
+          )}
 
-      {/* Review mistakes — recently-missed questions + likely-problematic concepts */}
-      {MISTAKES_REVIEW_ENABLED && !isGuest && activeSyllabus && (
-        <RecentMistakesCard
-          masteryRecords={activeExamRecords}
-          examTopic={activeSyllabus.examTopic}
-        />
+          {/* Review mistakes — recently-missed questions + likely-problematic concepts */}
+          {MISTAKES_REVIEW_ENABLED && (
+            <RecentMistakesCard
+              masteryRecords={activeExamRecords}
+              examTopic={activeSyllabus.examTopic}
+            />
+          )}
+        </div>
       )}
 
 

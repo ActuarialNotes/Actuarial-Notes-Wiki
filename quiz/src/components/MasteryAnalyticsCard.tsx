@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TrendingDown } from 'lucide-react'
 import {
@@ -11,6 +11,7 @@ import { trackMasteryAnalyticsQuiz } from '@/lib/analytics'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
+import { FlipInsightCard, InsightBrowserModal } from '@/components/DashboardInsightCard'
 
 // Only surface concepts on the brink — decaying within three days. Anything
 // further out isn't urgent enough to earn a spot on the dashboard.
@@ -49,15 +50,16 @@ interface Props {
 }
 
 /**
- * Fading-concepts card (roadmap P2.5). A focused, always-expanded list of the
- * concepts whose spaced-repetition timer is about to step them down a level (or
- * to Forgotten) within the next few days — each reviewable in a single
- * coverage-optimized question. Derived purely from the mastery records the
- * Dashboard already loads. Hides itself entirely when nothing is fading.
+ * Fading-concepts card (roadmap P2.5). A compact flip card: the front shows the
+ * single most-urgent fading concept; flipping it reveals "Review" (quizzes just
+ * that concept in one coverage-optimized question) and "See all fading concepts"
+ * (opens a browser of every fading concept). Derived purely from the mastery
+ * records the Dashboard already loads. Hides itself entirely when nothing is fading.
  */
 export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {
   const navigate = useNavigate()
   const { questions: allQuestions } = useAllQuestions()
+  const [browserOpen, setBrowserOpen] = useState(false)
 
   const examQuestions = useMemo(
     () => allQuestions.filter(q => q.exam === syllabus.examTopic),
@@ -78,6 +80,8 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {
 
   // Nothing to show unless a concept is actually about to fade.
   if (warnings.length === 0) return null
+
+  const top = warnings[0]!
 
   // Review a single fading concept with ONE question, chosen to also refresh as
   // many other fading concepts as possible. Falls back to the concept quiz if no
@@ -100,34 +104,48 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {
     launchStoredQuiz(navigate, reviewAllQuestions.map(q => q.id))
   }
 
+  const icon = <TrendingDown className="h-4 w-4 shrink-0 text-amber-500" />
+
   return (
-    <div className="rounded-lg bg-card text-card-foreground shadow-[var(--shadow-card)]">
-      <div className="flex items-center gap-2 p-5 pb-3">
-        <TrendingDown className="h-4 w-4 shrink-0 text-amber-500" />
-        <h2 className="text-sm font-bold tracking-tight">Fading Concepts</h2>
-        <span className="text-xs font-medium tabular-nums text-muted-foreground">{warnings.length}</span>
-        {warnings.length > 1 && reviewAllQuestions.length > 0 && (
-          <button
-            type="button"
-            onClick={launchReviewAll}
-            className="ml-auto rounded-full border px-3 py-1 text-xs font-semibold transition-colors hover:bg-muted"
-          >
-            Review all ({reviewAllQuestions.length})
-          </button>
-        )}
-      </div>
-      <ul className="space-y-1 px-5 pb-5">
-        {warnings.map(w => (
-          <DecayRow key={w.concept} warning={w} onReview={() => launchConceptReview(w.concept)} />
-        ))}
-      </ul>
-    </div>
+    <>
+      <FlipInsightCard
+        icon={icon}
+        title="Fading Concepts"
+        count={warnings.length}
+        front={
+          <div className="min-w-0">
+            <p className="line-clamp-2 text-sm font-semibold leading-snug">{top.concept}</p>
+            <p className="mt-1 truncate text-xs text-muted-foreground">Fades {formatDays(top.daysUntil)}</p>
+          </div>
+        }
+        primaryLabel="Review"
+        onPrimary={() => launchConceptReview(top.concept)}
+        seeAllLabel="See all fading concepts"
+        onSeeAll={() => setBrowserOpen(true)}
+      />
+
+      {browserOpen && (
+        <InsightBrowserModal
+          title="Fading Concepts"
+          icon={icon}
+          onClose={() => setBrowserOpen(false)}
+          actionLabel={warnings.length > 1 && reviewAllQuestions.length > 0 ? `Review all (${reviewAllQuestions.length})` : undefined}
+          onAction={warnings.length > 1 && reviewAllQuestions.length > 0 ? () => { launchReviewAll() } : undefined}
+        >
+          <ul className="space-y-1">
+            {warnings.map(w => (
+              <DecayRow key={w.concept} warning={w} onReview={() => launchConceptReview(w.concept)} />
+            ))}
+          </ul>
+        </InsightBrowserModal>
+      )}
+    </>
   )
 }
 
 function DecayRow({ warning, onReview }: { warning: DecayWarning; onReview: () => void }) {
   return (
-    <li className="flex items-center gap-3">
+    <li className="flex items-center gap-3 py-1">
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">{warning.concept}</p>
         <p className="truncate text-xs text-muted-foreground">Fades {formatDays(warning.daysUntil)}</p>

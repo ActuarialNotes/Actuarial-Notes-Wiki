@@ -672,30 +672,6 @@
 }
 
 
-/* Quiz: level-up toast — concept pills float up from the bottom after a correct answer */
-@keyframes level-up-toast-in {
-  0%   { opacity: 0; transform: translateY(48px) scale(0.88); }
-  28%  { opacity: 1; transform: translateY(-4px) scale(1.04); }
-  48%  { opacity: 1; transform: translateY(0) scale(1); }
-  70%  { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-10px) scale(0.94); }
-}
-.level-up-toast-in {
-  animation: level-up-toast-in 3.4s cubic-bezier(0.34, 1.2, 0.64, 1) both;
-}
-/* Gold shimmer overlaid for Level 3 toasts */
-@keyframes level-up-toast-gold-glow {
-  48%, 70% { box-shadow: 0 0 0 2px rgb(251 191 36 / 0.45), 0 0 18px 3px rgb(251 191 36 / 0.22); }
-  100%      { box-shadow: none; }
-}
-.level-up-toast-shimmer {
-  animation: level-up-toast-in 3.4s cubic-bezier(0.34, 1.2, 0.64, 1) both,
-             level-up-toast-gold-glow 3.4s ease-out both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .level-up-toast-in, .level-up-toast-shimmer { animation: none; }
-}
-
 /* Block math (KaTeX display equations): scroll horizontally instead of overflowing
    the container, matching the same behaviour as wide tables. */
 .katex-display {

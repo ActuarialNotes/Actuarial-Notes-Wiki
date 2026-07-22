@@ -1,5 +1,35 @@
 import { test, expect } from '@playwright/test'
-import { COMPREHENSION_CHECKS } from '../src/data/comprehensionChecks'
+import { readdirSync, readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
+import { parseAllComprehensionChecks } from '../src/lib/comprehensionCheckParser'
+
+// Load the comprehension-check corpus the same way the app does, but from disk
+// rather than the build-time `virtual:comprehension-checks` module: Playwright's
+// Node ESM loader can't resolve `virtual:` ids, so importing src/data/
+// comprehensionChecks (which does) would blow up the whole run at collection
+// time. This mirrors collectComprehensionChecks() in vite.config.ts.
+function loadComprehensionChecks() {
+  const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+  const root = path.join(repoRoot, 'comprehension-checks')
+  const raw: string[] = []
+  for (const examDir of readdirSync(root)) {
+    const examPath = path.join(root, examDir)
+    let files: string[]
+    try {
+      files = readdirSync(examPath)
+    } catch {
+      continue // skip non-directory entries
+    }
+    for (const name of files) {
+      if (!name.endsWith('.md')) continue
+      raw.push(readFileSync(path.join(examPath, name), 'utf-8'))
+    }
+  }
+  return parseAllComprehensionChecks(raw)
+}
+
+const COMPREHENSION_CHECKS = loadComprehensionChecks()
 
 // Collecting a flashcard is the gate that unlocks a concept's mastery (see
 // docs/flashcard-collection.md). This drives the collect modal from the

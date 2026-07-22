@@ -2821,6 +2821,9 @@ export default function Flashcards() {
   // mount their own default tab and adding a card "jumps" you to My Deck.
   const [galleryTab, setGalleryTab] = useState<GalleryTab>('packs')
   const [focusMode, setFocusMode] = useState(false)
+  // The study-view controls toolbar (Gallery / Flip / Back content / shuffle /
+  // focus) starts collapsed; a chevron under the card count expands it.
+  const [controlsExpanded, setControlsExpanded] = useState(false)
   const [showShortcutsHelp, setShowShortcutsHelp] = useState(false)
   const [groupBy, setGroupBy] = useState<GroupBy>('exam')
   // The shuffled deck order (card names) while groupBy === 'shuffle'. Freshly
@@ -3333,6 +3336,16 @@ export default function Flashcards() {
                   <CheckCircle2 className="h-3 w-3" /> {completedCount} done
                 </span>
               )}
+              <button
+                type="button"
+                onClick={() => setControlsExpanded(v => !v)}
+                aria-expanded={controlsExpanded}
+                aria-label={controlsExpanded ? 'Hide controls' : 'Show controls'}
+                title={controlsExpanded ? 'Hide controls' : 'Show controls'}
+                className="mt-0.5 inline-flex items-center justify-center h-6 w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+              >
+                <ChevronUp className={`h-4 w-4 transition-transform ${controlsExpanded ? '' : 'rotate-180'}`} />
+              </button>
             </div>
             <button
               type="button"
@@ -3345,18 +3358,20 @@ export default function Flashcards() {
             </button>
           </div>
         )}
-        <FlashcardControlsBar
-          galleryOpen={galleryExpanded}
-          onGalleryToggle={handleGalleryToggle}
-          reverseCardModes={reverseCardModes}
-          onToggleMode={toggleReverseMode}
-          flip={globalFlip}
-          onFlipToggle={() => setGlobalFlip(v => !v)}
-          focusMode={focusMode}
-          onFocusToggle={handleFocusToggle}
-          onShortcutsHelp={() => setShowShortcutsHelp(true)}
-          onShuffle={handleShuffle}
-        />
+        {(galleryExpanded || controlsExpanded) && (
+          <FlashcardControlsBar
+            galleryOpen={galleryExpanded}
+            onGalleryToggle={handleGalleryToggle}
+            reverseCardModes={reverseCardModes}
+            onToggleMode={toggleReverseMode}
+            flip={globalFlip}
+            onFlipToggle={() => setGlobalFlip(v => !v)}
+            focusMode={focusMode}
+            onFocusToggle={handleFocusToggle}
+            onShortcutsHelp={() => setShowShortcutsHelp(true)}
+            onShuffle={handleShuffle}
+          />
+        )}
       </div>
     </>
   )

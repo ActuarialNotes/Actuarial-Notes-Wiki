@@ -13,12 +13,12 @@ own name out of the first paragraph of its `Concepts/*.md` page and asking
 the four options (`extractDefinition`/`maskDefinition`/`handleAnswer` in
 `CollectConceptModal.tsx`). That's not a comprehension check — it's a
 matching exercise: the answer is the card title the user is already looking
-at. This is a known, documented gap — see the "TODO — better comprehension
-questions" item in `docs/flashcard-collection.md`, which calls for exactly
-what this skill produces: an authored question per concept, stored as data
-rather than derived from the definition at runtime. A question at this
-skill's target level should be un-guessable by someone who has only glanced
-at the card's title.
+at. That fallback only fires for concepts with no authored check; an authored
+check per concept supersedes it — see `docs/flashcard-collection.md`. This
+skill produces those authored checks: a genuine conceptual question per
+concept, stored as markdown alongside the content rather than derived from the
+definition at runtime. A question at this skill's target level should be
+un-guessable by someone who has only glanced at the card's title.
 
 ## The core rule
 
@@ -108,98 +108,103 @@ Run every draft against this before finalizing:
 
 ## Output format
 
-This data doesn't exist yet in the repo — `docs/flashcard-collection.md`
-calls for it to be "stored alongside the content, similar to
-`data/mnemonics.ts`." Follow that pattern: a `Record` keyed by concept name
-in `quiz/src/data/comprehensionChecks.ts` (create the file if it isn't there
-yet), matching the plain, no-brackets key style `mnemonics.ts` already uses
-(`'Bayes Theorem'`, `'Sample Space'`, not `'[[Bayes Theorem]]'`). The key
-must exactly match the concept's display name — i.e. its `Concepts/*.md`
-filename without the extension — so it lines up with `allConceptNames` in
+Each check is one markdown file per concept under
+`comprehension-checks/<exam-id>/<Concept Name>.md` at the repo root (`exam-id`
+is `exam-p` / `exam-fm` / `exam-mas-i`, matching the question bank). The
+filename **is** the concept's display name — its `Concepts/*.md` filename
+without the extension (`Bayes Theorem.md`, `Sample Space.md`, not
+`[[Bayes Theorem]].md`) — so it lines up with `allConceptNames` in
 `CollectConceptModal.tsx` and the `concept.name` values from
-`useWikiSyllabus`.
+`useWikiSyllabus`. The `concept:` frontmatter must match the filename.
 
-```ts
-export interface ComprehensionCheck {
-  /** Stem shown in the collect modal — keep it to ~3 sentences. */
-  question: string
-  /** Exactly 4 options, in a fixed canonical order. The concept's own name
-   *  must never appear here — the UI is free to shuffle at render time. */
-  options: string[]
-  /** Index into `options` of the correct answer. */
-  correctIndex: number
-}
+The file is YAML frontmatter + a `- A) …` option list (same shape as the
+question bank, `questions/<exam-id>/*.md`), and a single authoring-only
+`<!-- rationale -->` comment naming the misconception each wrong choice targets
+— documentation for future maintainers, not runtime data, so it costs nothing
+and stops lazy distractors creeping back in during edits. `correct` is the
+letter (A–E) of the right option; the UI shuffles options at render time.
 
-export const COMPREHENSION_CHECKS: Record<string, ComprehensionCheck> = {
-  'Concept Name': {
-    question: '...',
-    options: ['...', '...', '...', '...'],
-    correctIndex: 0,
-  },
-}
+```markdown
+---
+concept: Concept Name
+exam: exam-p
+topic: General Probability
+correct: A
+---
+The question stem, kept to ~3 sentences.
+
+- A) …
+- B) …
+- C) …
+- D) …
+
+<!-- rationale: 1: misconception it targets · 2: … · 3: … -->
 ```
 
-Put one short comment line above each entry's `options` listing what
-misconception each wrong option targets (see worked examples below) — it's
-documentation for future maintainers, not runtime data, so it costs nothing
-and stops lazy distractors from creeping back in during edits.
-
-Wiring `COMPREHENSION_CHECKS` into `CollectConceptModal.tsx` (replacing the
-current `maskDefinition`/`allConceptNames`-based question) is a separate
-implementation task, not something this skill does on its own — only touch
-that component if the user explicitly asks you to wire the new questions in.
+`lib/comprehensionCheckParser.ts` parses these at build time (via the
+`virtual:comprehension-checks` vite module) into the `COMPREHENSION_CHECKS`
+lookup the modal reads — already wired. Adding a file is all that's needed;
+no code change. A corpus test in `comprehensionCheckParser.test.ts` validates
+every file (4 options, in-range `correct`, concept matches filename, correct
+answer isn't the concept name), so run `npm test` after adding checks.
 
 ## Worked examples
 
-**Frequency** (quantitative/ratio shape)
+**Frequency** (quantitative/ratio shape) — `comprehension-checks/exam-mas-i/Frequency.md`
 
-```ts
-'Frequency': {
-  question:
-    "This year, an insurer records 1,000 claims over 10,000 car-years of " +
-    "exposure. Next year, exposure grows to 20,000 car-years while claims " +
-    "stay at exactly 1,000. What happens to frequency?",
-  options: [
-    "It doubles, from 0.10 to 0.20",          // inverts exposure/frequency relationship
-    "It's cut in half, from 0.10 to 0.05",    // correct
-    "It stays at 0.10, since the claim count didn't change", // treats frequency as a count, not a rate
-    "It can't be determined without severity", // confuses frequency with pure premium
-  ],
-  correctIndex: 1,
-},
+```markdown
+---
+concept: Frequency
+exam: exam-mas-i
+topic: A. Probability Models
+correct: B
+---
+This year, an insurer records 1,000 claims over 10,000 car-years of exposure. Next year, exposure grows to 20,000 car-years while claims stay at exactly 1,000. What happens to frequency?
+
+- A) It doubles, from 0.10 to 0.20
+- B) It's cut in half, from 0.10 to 0.05
+- C) It stays at 0.10, since the claim count didn't change
+- D) It can't be determined without severity
+
+<!-- rationale: 0: inverts the exposure/frequency relationship · 2: treats frequency as a count, not a rate · 3: confuses frequency with pure premium -->
 ```
 
-**Sample Space** (foundational/definitional shape)
+**Sample Space** (foundational/definitional shape) — `comprehension-checks/exam-p/Sample Space.md`
 
-```ts
-'Sample Space': {
-  question:
-    "A fair die is rolled once, and the outcome is defined as the number " +
-    "of pips shown. Which of the following is NOT an element of the " +
-    "sample space?",
-  options: [
-    "4",
-    "6",
-    "1",
-    "\"Rolling an even number\"", // confuses an event (a subset of the sample space) with an outcome (a single element)
-  ],
-  correctIndex: 3,
-},
+```markdown
+---
+concept: Sample Space
+exam: exam-p
+topic: General Probability
+correct: D
+---
+A fair die is rolled once, and the outcome is defined as the number of pips shown. Which of the following is NOT an element of the sample space?
+
+- A) 4
+- B) 6
+- C) 1
+- D) "Rolling an even number"
+
+<!-- rationale: 0–2: genuine single-outcome elements · 3: an event (a subset), not an outcome (an element) -->
 ```
 
-**Generalized Linear Model** (framework/methodology shape)
+**Generalized Linear Model** (framework/methodology shape) — `comprehension-checks/exam-mas-i/Generalized Linear Model.md`
 
-```ts
-'Generalized Linear Model': {
-  question: "Which of the following is NOT required to specify a GLM?",
-  options: [
-    "A response distribution from the exponential family",
-    "A link function connecting the mean to the linear predictor",
-    "A linear predictor built from the covariates",
-    "An assumption that variance is constant across observations", // carries over OLS's homoscedasticity assumption, which GLMs specifically relax
-  ],
-  correctIndex: 3,
-},
+```markdown
+---
+concept: Generalized Linear Model
+exam: exam-mas-i
+topic: C. Extended Linear Models
+correct: D
+---
+Which of the following is NOT required to specify a GLM?
+
+- A) A response distribution from the exponential family
+- B) A link function connecting the mean to the linear predictor
+- C) A linear predictor built from the covariates
+- D) An assumption that variance is constant across observations
+
+<!-- rationale: 3: carries over OLS's homoscedasticity assumption, which GLMs specifically relax -->
 ```
 
 ## When you're stuck

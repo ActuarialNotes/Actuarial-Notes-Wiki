@@ -64,7 +64,7 @@ scorecard of record.
 | G4 | Thin gem economy | ✅ **Closed.** Daily quests are the earn loop (user-claimed, never auto-paid); the Store is the sink; earn/spend events are instrumented so the balance can be watched. |
 | G5 | God components | ❌ **Open — and growing.** `Flashcards.tsx` 2,836 lines, `ReadinessCard.tsx` **grew to 1,824**, `Settings.tsx` 1,323, `Landing.tsx` 1,162. The E2E safety net P3.1 was waiting on now exists; this is the oldest unaddressed risk. |
 | G6 | No E2E tests | ✅ **Closed.** `quiz/e2e/` — auth, quiz, collect, store, wiki, home specs — runs in CI against a built preview with inert Supabase placeholders. |
-| G7 | Weak comprehension-check gate | 🟡 **Half closed.** `data/comprehensionChecks.ts` holds 184 authored misconception-fork questions (the Exam P batch) and the collect-then-quiz flow shipped (`PreQuizCollectGate`). Concepts without an authored check still fall back to the guessable masked-definition question — FM/MAS-I/Exam 5 batches remain (P1.5). |
+| G7 | Weak comprehension-check gate | 🟡 **Half closed.** `comprehension-checks/<exam-id>/*.md` holds 183 authored misconception-fork questions (Exam P/FM/MAS-I, one file per concept) and the collect-then-quiz flow shipped (`PreQuizCollectGate`). Concepts without an authored check still fall back to the guessable masked-definition question — the Exam 5 batch remains (P1.5). |
 | G8 | Manual content pipeline | ✅ **Closed.** `content-validation.yml` + `scripts/validate_content.py` fail the PR on bad frontmatter, duplicate ids, or answer-key drift. |
 
 ---
@@ -202,12 +202,12 @@ everywhere (P1.5).
   §2.2.6). Gated by `QUESTS_ENABLED`.
 - 🟡 **P1.5 — Fix the collection gate (G7).** _Half shipped:_ the collect-then-quiz flow
   is done (`PreQuizCollectGate` soft-prompts New concepts before a quiz), and
-  `data/comprehensionChecks.ts` holds 184 authored questions covering the **Exam P**
-  syllabus, each built around a misconception fork (the correct answer is never the
-  concept's name or definition — see the `flashcard-comprehension-check` skill).
-  **Remaining:** author the Exam FM, MAS-I, and Exam 5 batches; until then those concepts
-  fall back to the guessable masked-definition question, which undermines the scaffold
-  (§2.2.5) exactly where novices need it.
+  `comprehension-checks/<exam-id>/*.md` holds 183 authored questions covering the
+  **Exam P, FM, and MAS-I** syllabi (one markdown file per concept), each built around a
+  misconception fork (the correct answer is never the concept's name or definition — see
+  the `flashcard-comprehension-check` skill). **Remaining:** author the Exam 5 batch;
+  until then those concepts fall back to the guessable masked-definition question, which
+  undermines the scaffold (§2.2.5) exactly where novices need it.
 - ⬜ **P1.6 — PWA / installability & offline.** _Not started._ Service worker + manifest;
   make the existing `localMasteryStore` / `dailyProgressStore` offline fallbacks
   first-class so a session on the subway still counts toward the streak. Also the
@@ -272,7 +272,7 @@ item here is a direct application of §2.2._
   currently vanish after the /review screen; the decay model re-surfaces the *concept*
   but not the *specific miss*. Queue missed questions for a spaced re-ask (e.g. 2–3 days
   later, interleaved into normal sessions), prioritized by high-confidence errors (P2.7).
-  Extend the misconception-annotation pattern proven in `data/comprehensionChecks.ts` to
+  Extend the misconception-annotation pattern proven in `comprehension-checks/` to
   explanation content: name *why* the tempting wrong answer is wrong, not just why the
   right one is right — that's what elaborative feedback means.
 

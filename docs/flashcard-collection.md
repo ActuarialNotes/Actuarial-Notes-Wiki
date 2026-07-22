@@ -51,16 +51,55 @@ Concepts already collected or already past New (grandfathered users) never
 appear, so a single-concept quiz launched from an already-collected concept
 shows no gate.
 
+## Where the comprehension checks live
+
+The authored checks are markdown, **one file per concept**, under
+`comprehension-checks/<exam-id>/<Concept Name>.md` at the repo root — edited like
+the question bank (`questions/<exam-id>/*.md`) rather than as a TS object. Each
+file is YAML frontmatter (`concept`, `exam`, `topic`, `correct` letter) plus a
+`- A) …` option list, and an authoring-only `<!-- rationale -->` comment naming
+the misconception each distractor targets:
+
+```markdown
+---
+concept: Axioms of Probability
+exam: exam-p
+topic: General Probability
+correct: A
+---
+Which statement is NOT one of the three axioms of probability?
+
+- A) For any two events, P(A ∪ B) = P(A) + P(B)
+- B) P(S) = 1 for the sample space S
+- C) P(E) ≥ 0 for every event E
+- D) For disjoint events, P(A ∪ B) = P(A) + P(B)
+
+<!-- rationale: 0: correct — additivity holds only for disjoint events · … -->
+```
+
+Vite bundles them at build time via the `virtual:comprehension-checks` module
+(`vite.config.ts`), `lib/comprehensionCheckParser.ts` parses them, and
+`data/comprehensionChecks.ts` exposes the concept-keyed `COMPREHENSION_CHECKS`
+lookup the modal reads — the same public API as before. A corpus test
+(`comprehensionCheckParser.test.ts`) validates every file (4 options, in-range
+`correct`, concept name matches filename, correct answer isn't the concept name),
+recovering the compile-time guarantees the old TS constant gave.
+
+The `flashcard-comprehension-check` skill authors these; its output target is a
+new `.md` file in the right exam folder.
+
 ## Open tasks
 
-- **TODO — better comprehension questions.** The current check is a
-  "which concept does this describe?" multiple-choice built from the concept's own
-  definition (name masked) plus sibling-concept distractors. This is too easy:
-  the answer is essentially the card title shown above the prompt. This needs its
-  own task — likely a dedicated **skill** that authors/generates a genuine
-  conceptual question per concept (stored alongside the content, similar to
-  `data/mnemonics.ts`) rather than deriving it from the definition at runtime.
-  Until then the gate still works; only the question quality is weak.
+- **TODO — better comprehension questions.** The *fallback* check (for a concept
+  with no authored file) is still a "which concept does this describe?"
+  multiple-choice built from the concept's own definition (name masked) plus
+  sibling-concept distractors, which is too easy — the answer is essentially the
+  card title. Authored `.md` checks supersede it per concept; the remaining work
+  is content, not storage: keep authoring genuine conceptual checks (via the
+  `flashcard-comprehension-check` skill) to retire the fallback.
+- ~~**move the checks out of one big TS file.**~~ Done — the checks are now
+  per-concept markdown under `comprehension-checks/` (see "Where the comprehension
+  checks live" above).
 - ~~**collect-then-quiz flow.**~~ Done — see "Collect-then-quiz flow" above.
   The daily quiz now surfaces a collection prompt for its New, uncollected
   concepts before the questions.

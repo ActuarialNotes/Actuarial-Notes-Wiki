@@ -28,6 +28,8 @@ Resources/{Books,Regulation,Events,Benchmarks,Data}/*.md
                                                   — resource pages; the dated ones feed the
                                                     Resources timeline/heatmap (frontmatter w/ source links)
 questions/<exam-id>/*.md                          — question bank (YAML frontmatter + markdown)
+comprehension-checks/<exam-id>/*.md               — flashcard-collect gate questions (one .md per concept,
+                                                    parsed by lib/comprehensionCheckParser.ts)
 Media/Attachments/                                — images referenced via ![[...]]
 scripts/                                          — Python content-maintenance scripts (one-off/batch)
 docs/                                             — design docs for app algorithms (read these!)
@@ -42,8 +44,10 @@ quiz/                                             — the React app (this is whe
 - `components/` — shared UI; `components/wiki/` (wiki UI), `components/ui/` (shadcn-style primitives),
   `components/collect/` (flashcard-collection modal + 3D card), `components/research/` (flag-gated)
 - `lib/` — core logic, mostly pure/testable modules (this is where the interesting algorithms live)
-- `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (flashcard-collect
-  gate questions), `examSittings.ts` / `examPdfLinks.ts` (sitting dates + examiner reports),
+- `data/` — authored static tables bundled into the app: `comprehensionChecks.ts` (parses the
+  flashcard-collect gate questions from `comprehension-checks/<exam-id>/*.md` at build time via the
+  `virtual:comprehension-checks` vite module — see `lib/comprehensionCheckParser.ts` +
+  `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates + examiner reports),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
   catalogue), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
@@ -176,6 +180,11 @@ compile — don't "clean up" the flagged code as dead.
   of concept paths), `answer`, `points` — followed by the question body, options, and an
   `## Explanation` section (LaTeX via `$$...$$`). Current banks: `exam-p`, `exam-fm`,
   `exam-mas-i`, `exam-5` (hundreds of questions each).
+- Comprehension-check files (`comprehension-checks/<exam-id>/<Concept Name>.md`) gate flashcard
+  collection: YAML frontmatter (`concept`, `exam`, `topic`, `correct` letter) + a `- A) …` option
+  list, then an authoring-only `<!-- rationale -->` comment. One file per concept; the filename is
+  the concept's display name. See `docs/flashcard-collection.md` and the
+  `flashcard-comprehension-check` skill.
 - Dated resource pages (`Resources/Regulation|Events|Benchmarks/*.md`) carry frontmatter
   with a `date`/`type` and source links (`source_url`, `source_type`, `pdf_url`) — these feed
   the Resources timeline/heatmap. `Resources/Books/*.md` use the older schema (`Available from`).

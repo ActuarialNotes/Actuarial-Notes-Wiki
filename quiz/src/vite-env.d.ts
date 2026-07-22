@@ -26,6 +26,11 @@ declare module 'virtual:questions-content' {
   export default questions
 }
 
+declare module 'virtual:comprehension-checks' {
+  const checks: string[]
+  export default checks
+}
+
 declare module 'virtual:resource-timeline' {
   import type { TimelineRawEntry } from '@/lib/resourceTimeline'
   const timeline: TimelineRawEntry[]

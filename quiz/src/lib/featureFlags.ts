@@ -124,6 +124,21 @@ export const MASTERY_ANALYTICS_ENABLED: boolean = true
 export const LEAGUES_ENABLED: boolean = true
 
 /**
+ * Daily study-plan email — an opt-in morning email listing what the study plan
+ * has scheduled for today. When ON, an "Email" card appears in Settings
+ * (signed-in only) with the opt-in toggle and a local send-time picker,
+ * persisted to the user_email_prefs table. The email itself is sent
+ * server-side by the daily-plan-email edge function on an hourly pg_cron
+ * schedule (see docs/daily-plan-email.md) — the cron keeps running either
+ * way, but with no way to opt in nobody has a row to send to, so gating the
+ * card effectively gates the feature. The pure derivation core
+ * (lib/dailyEmail.ts) and its tests stay compiled either way; the `: boolean`
+ * annotation keeps both branches of every gate type-checked (see the flags
+ * above).
+ */
+export const DAILY_PLAN_EMAIL_ENABLED: boolean = true
+
+/**
  * Recent-mistakes review card — surfaces the questions a learner most recently
  * got wrong and, for each, flags the concept(s) most likely to blame (weighted
  * by the learner's miss-rate on that concept plus its current mastery level —

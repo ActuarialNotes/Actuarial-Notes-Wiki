@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, RotateCcw } from 'lucide-react'
 import type { Question } from '@/lib/parser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { useRecentMistakes } from '@/hooks/useRecentMistakes'
 import type { ProblemConcept, RecentMistake } from '@/lib/recentMistakes'
+import { FlipInsightCard, InsightBrowserModal } from '@/components/DashboardInsightCard'
 
 const SELECTED_IDS_KEY = 'actuarial_selected_ids'
 
@@ -48,50 +49,81 @@ interface Props {
 }
 
 /**
- * Recent-mistakes review card. Minimal by design: each row is a missed question
- * plus the one or two concepts most likely to blame (weighted by the learner's
- * miss-rate on that concept and its mastery level — see lib/recentMistakes.ts).
- * Tap a row to retry that question; "Retry all" launches a quiz of every listed
- * miss. Hides itself entirely when there's nothing to review.
+ * Recent-mistakes card. A compact flip card: the front shows the single most
+ * recent missed question; flipping it reveals "Try Again" (retries just that
+ * question) and "See all recent mistakes" (opens a browser of every miss, each
+ * tagged with the one or two concepts most likely to blame — see
+ * lib/recentMistakes.ts). Hides itself entirely when there's nothing to review.
  */
 export function RecentMistakesCard({ masteryRecords, examTopic }: Props) {
   const navigate = useNavigate()
-  const { mistakes, loading } = useRecentMistakes(masteryRecords, examTopic)
+  const { mistakes, loading } = useRecentMistakes(masteryRecords, examTopic, 30)
+  const [browserOpen, setBrowserOpen] = useState(false)
 
   const allIds = useMemo(() => mistakes.map(m => m.question.id), [mistakes])
 
   if (loading || mistakes.length === 0) return null
 
-  return (
-    <div className="rounded-lg bg-card text-card-foreground shadow-[var(--shadow-card)]">
-      <div className="flex items-center gap-2 p-5 pb-3">
-        <RotateCcw className="h-4 w-4 shrink-0 text-primary" />
-        <h2 className="text-sm font-bold tracking-tight">Review mistakes</h2>
-        <span className="flex-1" />
-        <button
-          type="button"
-          onClick={() => launchStoredQuiz(navigate, allIds)}
-          className="shrink-0 rounded-full border px-3 py-1 text-xs font-semibold transition-colors hover:bg-muted"
-        >
-          Retry all ({allIds.length})
-        </button>
-      </div>
+  const top = mistakes[0]!
+  const icon = <RotateCcw className="h-4 w-4 shrink-0 text-primary" />
 
-      <ul className="px-5 pb-5 space-y-2.5">
-        {mistakes.map(m => (
-          <MistakeRow key={m.question.id} mistake={m} onRetry={() => launchStoredQuiz(navigate, [m.question.id])} />
-        ))}
-      </ul>
+  return (
+    <>
+      <FlipInsightCard
+        icon={icon}
+        title="Recent Mistakes"
+        count={mistakes.length}
+        front={
+          <div className="min-w-0">
+            <p className="line-clamp-2 text-sm font-semibold leading-snug">{questionLabel(top.question)}</p>
+            <MistakeChips mistake={top} className="mt-1.5" />
+          </div>
+        }
+        primaryLabel="Try Again"
+        onPrimary={() => launchStoredQuiz(navigate, [top.question.id])}
+        seeAllLabel="See all recent mistakes"
+        onSeeAll={() => setBrowserOpen(true)}
+      />
+
+      {browserOpen && (
+        <InsightBrowserModal
+          title="Recent Mistakes"
+          icon={icon}
+          onClose={() => setBrowserOpen(false)}
+          actionLabel={allIds.length > 1 ? `Retry all (${allIds.length})` : undefined}
+          onAction={allIds.length > 1 ? () => launchStoredQuiz(navigate, allIds) : undefined}
+        >
+          <ul className="space-y-2.5">
+            {mistakes.map(m => (
+              <MistakeRow key={m.question.id} mistake={m} onRetry={() => launchStoredQuiz(navigate, [m.question.id])} />
+            ))}
+          </ul>
+        </InsightBrowserModal>
+      )}
+    </>
+  )
+}
+
+// The likely culprits for a miss: flagged concepts, or — if none cleared the bar —
+// the single top-ranked concept. Cap at two chips to stay minimal.
+function shownConcepts(mistake: RecentMistake): ProblemConcept[] {
+  const flagged = mistake.problemConcepts.filter(c => c.isProblem)
+  return (flagged.length > 0 ? flagged : mistake.problemConcepts.slice(0, 1)).slice(0, 2)
+}
+
+function MistakeChips({ mistake, className = '' }: { mistake: RecentMistake; className?: string }) {
+  const shown = shownConcepts(mistake)
+  if (shown.length === 0) return null
+  return (
+    <div className={`flex flex-wrap items-center gap-1.5 ${className}`}>
+      {shown.map(c => (
+        <ConceptChip key={c.slug} concept={c} />
+      ))}
     </div>
   )
 }
 
 function MistakeRow({ mistake, onRetry }: { mistake: RecentMistake; onRetry: () => void }) {
-  // Show the likely culprits: flagged concepts, or — if none cleared the bar —
-  // the single top-ranked concept. Cap at two chips to stay minimal.
-  const flagged = mistake.problemConcepts.filter(c => c.isProblem)
-  const shown = (flagged.length > 0 ? flagged : mistake.problemConcepts.slice(0, 1)).slice(0, 2)
-
   return (
     <li>
       <button
@@ -101,13 +133,7 @@ function MistakeRow({ mistake, onRetry }: { mistake: RecentMistake; onRetry: () 
       >
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-medium">{questionLabel(mistake.question)}</p>
-          {shown.length > 0 && (
-            <div className="mt-1 flex flex-wrap items-center gap-1.5">
-              {shown.map(c => (
-                <ConceptChip key={c.slug} concept={c} />
-              ))}
-            </div>
-          )}
+          <MistakeChips mistake={mistake} className="mt-1" />
         </div>
         <RotateCcw className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" />
       </button>

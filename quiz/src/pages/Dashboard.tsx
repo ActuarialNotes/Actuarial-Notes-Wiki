@@ -729,20 +729,25 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Mastery insights — richer learner analytics (roadmap P2.5) */}
-      {MASTERY_ANALYTICS_ENABLED && !isGuest && activeSyllabus && (
-        <MasteryAnalyticsCard
-          syllabus={activeSyllabus}
-          masteryRecords={activeExamRecords}
-        />
-      )}
+      {/* Compact insight cards — two-up: fading concepts + recent mistakes */}
+      {!isGuest && activeSyllabus && (MASTERY_ANALYTICS_ENABLED || MISTAKES_REVIEW_ENABLED) && (
+        <div className="grid grid-cols-2 gap-4">
+          {/* Mastery insights — richer learner analytics (roadmap P2.5) */}
+          {MASTERY_ANALYTICS_ENABLED && (
+            <MasteryAnalyticsCard
+              syllabus={activeSyllabus}
+              masteryRecords={activeExamRecords}
+            />
+          )}
 
-      {/* Review mistakes — recently-missed questions + likely-problematic concepts */}
-      {MISTAKES_REVIEW_ENABLED && !isGuest && activeSyllabus && (
-        <RecentMistakesCard
-          masteryRecords={activeExamRecords}
-          examTopic={activeSyllabus.examTopic}
-        />
+          {/* Review mistakes — recently-missed questions + likely-problematic concepts */}
+          {MISTAKES_REVIEW_ENABLED && (
+            <RecentMistakesCard
+              masteryRecords={activeExamRecords}
+              examTopic={activeSyllabus.examTopic}
+            />
+          )}
+        </div>
       )}
 
 

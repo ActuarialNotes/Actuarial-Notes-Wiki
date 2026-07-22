@@ -20,10 +20,12 @@ import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuestCompleteOverlay } from '@/components/QuestCompleteOverlay'
 import { StreakCompleteOverlay } from '@/components/StreakCompleteOverlay'
 import { StudyPlanCompleteOverlay } from '@/components/StudyPlanCompleteOverlay'
+import { ConceptLevelUpCeremony } from '@/components/ConceptLevelUpCeremony'
 import { QUESTS_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { readJustCompletedQuests } from '@/lib/questStore'
 import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { getDailyGems } from '@/lib/dailyProgressStore'
+import { useGems } from '@/hooks/useGems'
 
 // Mirrors the target-state progression used by TodayCard/ReadinessCard to
 // decide whether a concept has reached today's assigned goal.
@@ -185,8 +187,12 @@ export default function Review() {
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
+  const { balance: gemBalance, loading: gemsLoading } = useGems()
   const { resetQuiz } = useQuizStore()
   const [session, setSession] = useState<CompletedSession | null>(null)
+  // Gates the streak/quest/plan celebrations until the level-up ceremony (if any)
+  // has been dismissed, so they play one after another rather than stacking.
+  const [levelUpsDone, setLevelUpsDone] = useState(false)
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
   const [showIncorrectOnly, setShowIncorrectOnly] = useState(false)
   const [showBackToTop, setShowBackToTop] = useState(false)
@@ -336,13 +342,34 @@ export default function Review() {
     ? session.questions.filter((_, i) => !outcomes[i])
     : session.questions
 
+  // Full-screen ceremony for concepts levelled up by this quiz — plays first,
+  // then hands off to the streak/quest/plan celebrations. For signed-in users we
+  // wait for the gem balance to load so the running tally lands on the right
+  // total; guests earn no gems so there's nothing to wait on.
+  const hasLevelUps = upwardTransitions.length > 0
+  const levelUpCeremonyReady = !user || !gemsLoading
+  const showLevelUpCeremony = hasLevelUps && !levelUpsDone && levelUpCeremonyReady
+  const celebrationsReady = !hasLevelUps || levelUpsDone
+
   return (
     <>
+    {/* Ceremony for each concept levelled up by this quiz. */}
+    {showLevelUpCeremony && (
+      <ConceptLevelUpCeremony
+        transitions={upwardTransitions}
+        gemsEarned={user ? correctCount : 0}
+        totalGems={gemBalance}
+        onResolved={() => setLevelUpsDone(true)}
+      />
+    )}
     {/* Streak flame (if today's streak grew) then quests cleared by this quiz —
-        shown in that order before the review content below. */}
-    <PostQuizCelebrations streakEligible={STREAK_ENABLED && correctCount > 0} />
+        shown in that order, after the level-up ceremony and before the review
+        content below. */}
+    {celebrationsReady && (
+      <PostQuizCelebrations streakEligible={STREAK_ENABLED && correctCount > 0} />
+    )}
     {/* Today's Study Plan finished by this quiz — unlock the 2× gem bonus. */}
-    {showPlanBonus && progressKey && (
+    {celebrationsReady && showPlanBonus && progressKey && (
       <StudyPlanCompleteOverlay
         progressKey={progressKey}
         gemsEarned={getDailyGems()}

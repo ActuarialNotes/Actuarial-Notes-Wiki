@@ -937,10 +937,28 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* "Clear Completed Flashcards" sweep: completed cards briefly lift, then
+   shrink and fade away before the deck actually drops them into a pack. */
+.flashcard-clearing {
+  animation: flashcard-clearing 0.55s cubic-bezier(0.4, 0, 0.7, 0.2) both;
+  pointer-events: none;
+}
+@keyframes flashcard-clearing {
+  0%   { opacity: 1; transform: scale(1) translateY(0); }
+  35%  { opacity: 1; transform: scale(1.04) translateY(-4px); }
+  100% { opacity: 0; transform: scale(0.6) translateY(-26px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .collect-card-snake-ring::before, .collect-card-absorb,
   .collect-bloom, .collect-shake,
   .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop, .flashcard-complete-pop { animation: none; }
+  /* Keep a plain fade so the cards still visibly leave without motion. */
+  .flashcard-clearing { animation: flashcard-clearing-fade 0.3s ease-out both; }
+}
+@keyframes flashcard-clearing-fade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
 /* Streak flame: a gentle looping flicker while the streak is active today. */

@@ -1405,6 +1405,7 @@ function SortableCard({
   focusMode = false,
   isCompleted = false,
   onToggleComplete,
+  isClearing = false,
 }: {
   card: FlashCard
   masteryState: MasteryState
@@ -1427,6 +1428,9 @@ function SortableCard({
   // the add/remove-from-deck toggle used elsewhere (e.g. the Collected tab).
   isCompleted?: boolean
   onToggleComplete?: (name: string) => void
+  // True while the card is animating out during a "Clear Completed Flashcards"
+  // sweep — shrinks and fades the card away just before it leaves the deck.
+  isClearing?: boolean
 }) {
   const [flipped, setFlipped] = useState(globalFlip)
   const [markdown, setMarkdown] = useState<string | null>(null)
@@ -1539,7 +1543,7 @@ function SortableCard({
   // the standard shine, L3 gets the dramatic pulsing treatment.
   const sheenLevelClass = masteryState === 'level3' ? ' flashcard-sheen-l3' : masteryState === 'level2' ? ' flashcard-sheen-l2' : ''
   const showSheen = (animateCollected ?? collected) && collected
-  const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}${isCompleted ? ' ring-1 ring-green-500/50' : ''}`
+  const baseClass = `group relative rounded-xl flex flex-col transition-shadow min-h-[150px]${showSheen && !focusMode ? ` flashcard-collected${sheenLevelClass}` : ''}${isFlashing ? ' flashcard-highlight' : ''}${isCompleted ? ' ring-1 ring-green-500/50' : ''}${isClearing ? ' flashcard-clearing' : ''}`
   const colorClass = isActive
     ? 'bg-primary/10 shadow-sm'
     : 'bg-card text-card-foreground'
@@ -2095,7 +2099,7 @@ function StudySessionSummaryDialog({
             title="Move completed cards into a dated pack and clear them from your deck"
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-green-600 text-white text-sm font-semibold hover:bg-green-700 active:scale-[0.98] transition-all"
           >
-            <CheckCircle2 className="h-4 w-4" /> Clear completed to a pack
+            <CheckCircle2 className="h-4 w-4" /> Clear Completed Flashcards
           </button>
           <button
             type="button"
@@ -2141,6 +2145,8 @@ function GalleryPanel({
   onTabChange,
   onCardsAdded,
   focusMode = false,
+  clearingNames,
+  onClearCompleted,
 }: {
   cards: FlashCard[]
   orderedCards: FlashCard[]
@@ -2163,6 +2169,13 @@ function GalleryPanel({
   onTabChange: (tab: GalleryTab) => void
   onCardsAdded?: () => void
   focusMode?: boolean
+  // Lowercased names of completed cards currently animating out (during a
+  // "Clear Completed Flashcards" sweep). Optional — undefined when nothing is
+  // being cleared.
+  clearingNames?: Set<string>
+  // Runs the animated "Clear Completed Flashcards" sweep. Falls back to the
+  // store's plain clearCompleted when not provided (e.g. inline empty deck).
+  onClearCompleted?: () => void
 }) {
   const { user } = useAuth()
   const { toggleCompleted, clearCompleted } = useFlashcards()
@@ -2215,6 +2228,7 @@ function GalleryPanel({
         focusMode={focusMode}
         isCompleted={!!card.completedAt}
         onToggleComplete={toggleCompleted}
+        isClearing={clearingNames?.has(card.name.toLowerCase()) ?? false}
       />
     )
   }
@@ -2289,12 +2303,12 @@ function GalleryPanel({
               {completedCount > 0 && (
                 <button
                   type="button"
-                  onClick={clearCompleted}
+                  onClick={onClearCompleted ?? clearCompleted}
                   title="Move completed cards into a dated pack and clear them from your deck"
                   className="inline-flex items-center gap-1.5 px-3 h-9 rounded-md bg-green-600 text-white text-xs sm:text-sm font-semibold shadow-sm hover:bg-green-700 active:scale-[0.98] transition-all shrink-0"
                 >
                   <CheckCircle2 className="h-4 w-4 shrink-0" />
-                  <span>Clear Completed</span>
+                  <span>Clear Completed Flashcards</span>
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/25 tabular-nums">
                     {completedCount}
                   </span>
@@ -2810,6 +2824,10 @@ export default function Flashcards() {
 
   const [flashingCard, setFlashingCard] = useState<string | null>(null)
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Names (lowercased) of completed cards currently animating out of the deck
+  // before "Clear Completed Flashcards" sweeps them into a dated pack.
+  const [clearingNames, setClearingNames] = useState<Set<string>>(() => new Set())
+  const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const orderedCardsRef = useRef<FlashCard[]>([])
   const prevPopupNameRef = useRef<string | null>(null)
   const studyAreaRef = useRef<FlashcardStudyAreaHandle>(null)
@@ -2895,6 +2913,9 @@ export default function Flashcards() {
   useEffect(() => {
     if (!popupOpen) prevPopupNameRef.current = null
   }, [popupOpen])
+
+  // Cancel any in-flight "Clear Completed" animation timer on unmount.
+  useEffect(() => () => { if (clearTimerRef.current) clearTimeout(clearTimerRef.current) }, [])
 
   // Flash and navigate the gallery strip when popup navigates to a new concept
   useEffect(() => {
@@ -3185,6 +3206,26 @@ export default function Flashcards() {
     }
   }
 
+  // "Clear Completed Flashcards" — take the user to My Deck and play a brief
+  // disappear animation on the finished cards, then sweep them into a dated
+  // pack. Shared by the end-of-session summary dialog and the in-deck toolbar
+  // button so the clear always reads as a deliberate, visible action.
+  function handleClearCompleted() {
+    const names = cards.filter(c => c.completedAt).map(c => c.name.toLowerCase())
+    if (names.length === 0) return
+    setShowSessionSummary(false)
+    setGalleryTab('deck')
+    setGalleryExpanded(true)
+    setClearingNames(new Set(names))
+    if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
+    clearTimerRef.current = setTimeout(() => {
+      clearCompleted()
+      setClearingNames(new Set())
+      setAgainCounts({})
+      setActiveIndex(0)
+    }, 600)
+  }
+
   const studyFocus = focusMode && !galleryExpanded
 
   return (
@@ -3231,6 +3272,8 @@ export default function Flashcards() {
           focusMode={focusMode}
           tab={galleryTab}
           onTabChange={setGalleryTab}
+          clearingNames={clearingNames}
+          onClearCompleted={handleClearCompleted}
         />
       )}
 
@@ -3279,12 +3322,7 @@ export default function Flashcards() {
         <StudySessionSummaryDialog
           cardNames={orderedCards.map(c => c.name)}
           againCounts={againCounts}
-          onClearCompleted={() => {
-            clearCompleted()
-            setAgainCounts({})
-            setShowSessionSummary(false)
-            setActiveIndex(0)
-          }}
+          onClearCompleted={handleClearCompleted}
           onStudyAgain={() => {
             resetCompleted()
             if (groupBy === 'shuffle') setShuffleOrder(shuffled(cards.map(c => c.name)))

@@ -3342,13 +3342,16 @@ export default function Flashcards() {
       >
         {/* Gallery + Focus buttons — standalone pills above the strip. Shown in
             both study and gallery views so the Gallery toggle can return to
-            study when the gallery overlay is open. */}
-        <div className="flex items-center justify-between gap-2 bg-background px-4 pt-2">
-          <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} />
-          <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} />
-        </div>
-        {/* Gallery strip conveyor — only in study mode */}
-        {!galleryExpanded && (
+            study when the gallery overlay is open. Hidden in focus mode, which
+            pares the footer down to just the Prev/Next nav. */}
+        {!focusMode && (
+          <div className="flex items-center justify-between gap-2 bg-background px-4 pt-2">
+            <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} />
+            <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} />
+          </div>
+        )}
+        {/* Gallery strip conveyor — only in study mode, and not in focus mode */}
+        {!galleryExpanded && !focusMode && (
           <div className="bg-background px-4">
             <GalleryStrip
               cards={orderedCards}

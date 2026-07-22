@@ -283,8 +283,41 @@ function questionsContentPlugin(): Plugin {
   }
 }
 
+// Flashcard-collect comprehension checks: one markdown file per concept under
+// comprehension-checks/<exam-id>/<Concept Name>.md, parsed at runtime by
+// lib/comprehensionCheckParser.ts. Structured just like the question bank above.
+async function collectComprehensionChecks(): Promise<string[]> {
+  const rawFiles: string[] = []
+  const root = path.join(REPO_ROOT, 'comprehension-checks')
+  const examDirs = await readdir(root).catch(() => [] as string[])
+  for (const examDir of examDirs) {
+    const examPath = path.join(root, examDir)
+    const files = await readdir(examPath).catch(() => [] as string[])
+    for (const name of files) {
+      if (!name.endsWith('.md')) continue
+      const text = await readFile(path.join(examPath, name), 'utf-8').catch(() => null)
+      if (text != null) rawFiles.push(text)
+    }
+  }
+  return rawFiles
+}
+
+function comprehensionChecksPlugin(): Plugin {
+  const VIRTUAL_ID = 'virtual:comprehension-checks'
+  const RESOLVED_ID = '\0' + VIRTUAL_ID
+  return {
+    name: 'comprehension-checks',
+    resolveId: (id) => id === VIRTUAL_ID ? RESOLVED_ID : undefined,
+    load: async (id) => {
+      if (id !== RESOLVED_ID) return
+      const checks = await collectComprehensionChecks()
+      return `export default ${JSON.stringify(checks)}`
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin()],
+  plugins: [react(), wikiContentPlugin(), resourceTimelinePlugin(), questionsContentPlugin(), comprehensionChecksPlugin()],
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },

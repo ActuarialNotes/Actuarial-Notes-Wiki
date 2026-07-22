@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { Check, Gem, GraduationCap, Loader2, LogIn, LogOut, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Bell, Check, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
 import ExamsPopout from '@/components/ExamsPopout'
@@ -30,7 +30,10 @@ import { LevelBadge } from '@/components/LevelBadge'
 import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
 import { RecentMistakesCard } from '@/components/RecentMistakesCard'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
-import { MASTERY_ANALYTICS_ENABLED, MISTAKES_REVIEW_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { DashboardExportModal } from '@/components/DashboardExportModal'
+import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
+import { DashboardGuideModal } from '@/components/DashboardGuideModal'
+import { DAILY_PLAN_EMAIL_ENABLED, MASTERY_ANALYTICS_ENABLED, MISTAKES_REVIEW_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -167,6 +170,9 @@ export default function Dashboard() {
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
   const [profileOpen, setProfileOpen] = useState(false)
   const [signOutConfirm, setSignOutConfirm] = useState(false)
+  const [exportOpen, setExportOpen] = useState(false)
+  const [remindersOpen, setRemindersOpen] = useState(false)
+  const [guideOpen, setGuideOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -547,6 +553,40 @@ export default function Dashboard() {
               </div>
             )}
           </div>
+
+          {!isGuest && (
+            <div className="ml-auto flex items-center gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={() => setExportOpen(true)}
+                className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                aria-label="Export your data"
+                title="Export your data (CSV or PDF)"
+              >
+                <Download className="h-5 w-5" />
+              </button>
+              {DAILY_PLAN_EMAIL_ENABLED && (
+                <button
+                  type="button"
+                  onClick={() => setRemindersOpen(true)}
+                  className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  aria-label="Daily reminder email settings"
+                  title="Daily reminder email settings"
+                >
+                  <Bell className="h-5 w-5" />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setGuideOpen(true)}
+                className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                aria-label="Dashboard guided tour"
+                title="Take a guided tour of the dashboard"
+              >
+                <HelpCircle className="h-5 w-5" />
+              </button>
+            </div>
+          )}
         </div>
         {hasActiveExams && (
           <div className="flex gap-1.5 flex-wrap">
@@ -693,6 +733,26 @@ export default function Dashboard() {
 
 
 
+      {!isGuest && user && (
+        <DashboardExportModal open={exportOpen} onClose={() => setExportOpen(false)} user={user} />
+      )}
+      {!isGuest && DAILY_PLAN_EMAIL_ENABLED && (
+        <DashboardRemindersModal
+          open={remindersOpen}
+          onClose={() => setRemindersOpen(false)}
+          email={user?.email ?? ''}
+        />
+      )}
+      {!isGuest && (
+        <DashboardGuideModal
+          open={guideOpen}
+          onClose={() => setGuideOpen(false)}
+          syllabus={activeSyllabus}
+          masteryRecords={activeExamRecords}
+          examDate={activeTargetDate}
+          plan={studyPlan}
+        />
+      )}
       {!isGuest && <ExamsPopout open={examsOpen} onClose={() => setExamsOpen(false)} />}
       {!isGuest && onboardingOpen && activeSyllabus && (
         <StudyPlanConfigModal

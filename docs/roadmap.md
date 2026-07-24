@@ -1,23 +1,34 @@
 # Development Roadmap — Actuarial Notes Wiki
 
-_Last updated: 2026-07-11_
+_Last updated: 2026-07-24_
 
 This roadmap turns the current product into a best-in-class **gamified learning app for
 actuarial students**. It is grounded in a detailed review of the codebase as it stands
 today, and it is ordered so that foundational safety nets come before big feature bets.
 
 > Read `CLAUDE.md` first for the map of the repo. This document assumes that context and
-> focuses on _where we're going_, not _what exists_.
+> focuses on _where we're going_, not _what exists_. A **sibling** plan,
+> `docs/actuarial-agent-product-plan.md`, covers a *separate* product line (an AI Actuarial
+> Agent for doing actuarial work) — it is deliberately not part of this roadmap, which
+> plans the exam-prep learning app only.
 
-**What changed in this revision (2026-07-11).** The first two phases have largely
-shipped: CI + content validation + error monitoring + typed analytics + E2E smoke
-(all of Phase 0), and the core engagement loop — streaks, XP/daily goals, quests —
-plus mastery analytics (P2.5) and weekly leagues (P4.1). With the loop built, the
-roadmap's center of gravity shifts from _engagement mechanics_ to _learning quality_:
-the remaining work is re-framed around learning-science best practices (see the new
-§2.2), and Phase 2 gains three pedagogy-driven items (interleaving, confidence
-calibration, an error-review loop). Phase 3's maintainability debt is now the oldest
-unaddressed risk and is called out as such.
+**What changed in this revision (2026-07-24).** Two open items moved off the "not started"
+line since 2026-07-11, both via the same pure-lib + flag + tests template:
+- **The first reminder channel shipped (P1.3 → 🟡).** An opt-in **daily study-plan email**
+  (`DAILY_PLAN_EMAIL_ENABLED`, `lib/dailyEmail.ts`, `docs/daily-plan-email.md`) sends a
+  morning list of today's scheduled concepts, with a user-picked send time
+  (implementation intention, §2.2.7), quiet days, and learning-state framing — exactly the
+  design §2.2(6–7) called for. Web push (still blocked on the P1.6 service worker) is the
+  remaining half.
+- **The error-review loop got its first surface (P2.8 → 🟡).** A **recent-mistakes review
+  card** (`MISTAKES_REVIEW_ENABLED`, `lib/recentMistakes.ts`) surfaces recently-missed
+  questions with a per-question and Retry-all launch, each tagged with the concept most
+  likely to blame. The spaced re-ask scheduling and high-confidence-error prioritization
+  (which waits on P2.7) remain.
+
+The prior revision's re-framing still holds: with the engagement loop built, the center of
+gravity is **learning quality** (§2.2), and Phase 3's god-component debt keeps growing —
+`Flashcards.tsx` has climbed past **3,450 lines**.
 
 ---
 
@@ -32,12 +43,15 @@ The product is already substantial and, in several areas, genuinely sophisticate
   plans (`lib/studyPlan.ts`), and syllabus-weighted readiness scoring (`lib/readiness.ts`)
   are the true moat. Most competitors have gamification _or_ a learning model — this has
   both.
-- **A complete, learning-aligned engagement loop** (new since the last revision).
+- **A complete, learning-aligned engagement loop.**
   Daily streaks with freeze/repair mechanics (`lib/streak.ts`), XP weighted toward hard
   and decaying concepts with configurable daily goals (`lib/xp.ts`), a personalized
   daily-quest board that pays the gem economy (`lib/quests.ts` + `data/quests.ts`), and
   opt-in weekly XP leagues (`lib/leagues.ts`, `docs/leagues.md`) — every reward fires for
-  behaviour the mastery model says improves retention, not raw volume.
+  behaviour the mastery model says improves retention, not raw volume. Now joined by the
+  first **re-engagement channel** (the opt-in daily study-plan email, `lib/dailyEmail.ts`)
+  and a **recent-mistakes review card** (`lib/recentMistakes.ts`) that pulls missed
+  questions back in front of the learner.
 - **A large, structured content vault.** ~915 questions across `exam-p` (376), `exam-fm`
   (350), `exam-mas-i` (90), and `exam-5` (99), plus concept and exam wiki pages with a
   canonical topic→concept→objective ontology (`scripts/ontology_map.py`), now gated by
@@ -45,9 +59,10 @@ The product is already substantial and, in several areas, genuinely sophisticate
 - **Working monetization + sync plumbing.** Supabase auth/sync, Stripe checkout/portal/
   webhook edge functions, a gems economy, cosmetics, characters/avatars, designation
   banners, and a Store.
-- **A mostly-pure, testable `lib/` layer.** ~435 tests across 25 files concentrate on the
-  trickiest logic (mastery, study plan, parsing, ontology, and now all four gamification
-  engines), with a 6-spec Playwright smoke suite covering the signed-out critical paths.
+- **A mostly-pure, testable `lib/` layer.** ~527 tests across 33 files concentrate on the
+  trickiest logic (mastery, study plan, parsing, ontology, all four gamification engines,
+  and now the daily-email derivation and recent-mistakes ranking), with a 6-spec Playwright
+  smoke suite covering the signed-out critical paths.
 - **A large finished-but-parked feature.** The Research tab (Canadian P&C corpus + AI
   "Ask") is fully built behind two feature flags — optionality, not dead weight.
 
@@ -58,11 +73,11 @@ scorecard of record.
 
 | # | Gap | Status |
 |---|-----|--------|
-| G1 | No CI for the app | ✅ **Closed.** `.github/workflows/ci.yml` gates every `quiz/**` PR on lint, ~435 unit tests, `tsc` + production build, and the Playwright E2E smoke suite. |
+| G1 | No CI for the app | ✅ **Closed.** `.github/workflows/ci.yml` gates every `quiz/**` PR on lint, ~527 unit tests, `tsc` + production build, and the Playwright E2E smoke suite. |
 | G2 | No error monitoring or funnel analytics | ✅ **Closed.** `lib/errorMonitoring.ts` (dependency-free capture → pluggable sinks, source maps on) + `lib/analytics.ts` (typed event catalogue) + `lib/funnel.ts` (activation funnel: `signup → first_quiz → first_correct → concept_collected → day2_return`). |
-| G3 | Core retention loop missing (streak/XP/goal/leaderboards/reminders) | 🟡 **Mostly closed.** Streaks (P1.1), XP + daily goal (P1.2), quests (P1.4), and leagues (P4.1) are live behind flags. **Reminders (P1.3) remain open** — the loop still relies on the user remembering to show up. |
+| G3 | Core retention loop missing (streak/XP/goal/leaderboards/reminders) | 🟡 **Mostly closed.** Streaks (P1.1), XP + daily goal (P1.2), quests (P1.4), and leagues (P4.1) are live behind flags. **Reminders (P1.3) are now half-closed** — the opt-in daily study-plan email brings lapsing users back through the inbox; web push still waits on the P1.6 service worker. |
 | G4 | Thin gem economy | ✅ **Closed.** Daily quests are the earn loop (user-claimed, never auto-paid); the Store is the sink; earn/spend events are instrumented so the balance can be watched. |
-| G5 | God components | ❌ **Open — and growing.** `Flashcards.tsx` 2,836 lines, `ReadinessCard.tsx` **grew to 1,824**, `Settings.tsx` 1,323, `Landing.tsx` 1,162. The E2E safety net P3.1 was waiting on now exists; this is the oldest unaddressed risk. |
+| G5 | God components | ❌ **Open — and growing faster.** `Flashcards.tsx` **grew to 3,450** (+614 since the last revision — the flashcard-experience work all landed inside it), `ReadinessCard.tsx` 1,808, `Settings.tsx` 1,349, `Landing.tsx` 1,198. The E2E safety net P3.1 was waiting on has existed for a while; this is the oldest unaddressed risk and the debt is compounding. |
 | G6 | No E2E tests | ✅ **Closed.** `quiz/e2e/` — auth, quiz, collect, store, wiki, home specs — runs in CI against a built preview with inert Supabase placeholders. |
 | G7 | Weak comprehension-check gate | 🟡 **Half closed.** `comprehension-checks/<exam-id>/*.md` holds 183 authored misconception-fork questions (Exam P/FM/MAS-I, one file per concept) and the collect-then-quiz flow shipped (`PreQuizCollectGate`). Concepts without an authored check still fall back to the guessable masked-definition question — the Exam 5 batch remains (P1.5). |
 | G8 | Manual content pipeline | ✅ **Closed.** `content-validation.yml` + `scripts/validate_content.py` fail the PR on bad frontmatter, duplicate ids, or answer-key drift. |
@@ -124,17 +139,18 @@ research:
      users start optimizing quests instead of their plan, the quest catalogue needs
      rebalancing, not richer rewards.
    - **Loss-aversion mechanics need compassion.** Streak freezes and same-day repair are
-     already built. Reminders (P1.3) must follow the same rule: opt-in, quiet hours, and
-     framed as an invitation ("your Level-2 concepts are about to decay") rather than a
-     threat ("you'll lose your streak!").
+     already built. Reminders (P1.3) follow the same rule — the shipped daily email is
+     opt-in, skips quiet days, and is framed as an invitation (today's scheduled concepts)
+     rather than a threat ("you'll lose your streak!"); web push must clear the same bar.
    - **Leaderboards demotivate the bottom half if naively framed.** The shipped leagues
      mitigate this correctly (opt-in, 30-person cohorts, weekly reset, promotion for the
      top rather than shaming the bottom). Any future social surface must clear the same
      bar.
 7. **Implementation intentions beat willpower.** "I will study at 7am on the train" works;
-   "I'll study more" doesn't. The reminder system (P1.3) should let users pick a study
-   time and anchor the nudge to it — that single design choice is what makes reminders a
-   pedagogy feature rather than a growth hack.
+   "I'll study more" doesn't. The reminder system (P1.3) lets users pick a study time and
+   anchors the nudge to it — the shipped daily email already does this with a per-user
+   local send hour, and web push should inherit the same anchor. That single design choice
+   is what makes reminders a pedagogy feature rather than a growth hack.
 
 ---
 
@@ -148,7 +164,7 @@ unambiguous. Status markers: ✅ shipped · 🟡 partial · ⬜ not started.
 _Goal: make the codebase safe to iterate on quickly._
 
 - ✅ **P0.1 — App CI pipeline.** _Shipped:_ `.github/workflows/ci.yml` runs lint,
-  ~435 unit tests, `tsc` + production build, and the E2E suite on every PR touching
+  ~527 unit tests, `tsc` + production build, and the E2E suite on every PR touching
   `quiz/**`, with concurrency-cancellation and path filtering.
 - ✅ **P0.2 — Content-validation CI.** _Shipped:_ `content-validation.yml` +
   `scripts/validate_content.py` reproduce the app parser's contract (frontmatter keys,
@@ -176,9 +192,10 @@ content validation; crashes and the activation funnel are instrumented.
 _Goal: give students a reason to come back **every day**._
 
 The loop exists: a returning user sees a streak, a daily-goal ring, and a quest board on
-open. What remains is (a) the channel that brings lapsing users back (P1.3 + P1.6) and
+open, and a lapsing user now gets an opt-in morning email. What remains is (a) the
+**push** channel that reaches users off-inbox (P1.3 web push + P1.6 service worker) and
 (b) finishing the comprehension-check content so the collect scaffold is genuine
-everywhere (P1.5).
+everywhere (P1.5, Exam 5 only now).
 
 - ✅ **P1.1 — Daily streak system.** _Shipped:_ pure engine in `lib/streak.ts`
   (timezone-correct day boundaries, Duolingo-style auto-consumed freeze tokens, same-day
@@ -188,13 +205,16 @@ everywhere (P1.5).
   hard and decaying concepts (the reward aligns with the learning model), a level curve,
   configurable `DAILY_GOALS` presets; level ring + XP popup on the Dashboard, goal picker
   in Settings. Gated by `XP_ENABLED`.
-- ⬜ **P1.3 — Streak-aware reminders.** _Not started; now the highest-value open item in
-  this phase._ Web push (needs the P1.6 service worker) and optional email nudges.
-  Design per §2.2(6–7): **opt-in only**, quiet hours, user-picked study time
-  (implementation intention), and invitation framing driven by real learning state —
-  "3 concepts hit their decay window today" — with the streak deadline as secondary
-  context, not the headline threat. Instrument reminder→session conversion so we can
-  prove it brings users back rather than trains them to ignore notifications.
+- 🟡 **P1.3 — Streak-aware reminders.** _Email half shipped:_ the opt-in **daily
+  study-plan email** (`DAILY_PLAN_EMAIL_ENABLED`, `lib/dailyEmail.ts` +
+  `supabase/functions/daily-plan-email`, `docs/daily-plan-email.md`) lands in the inbox
+  each morning with today's scheduled concepts — built to the §2.2(6–7) rules: **opt-in
+  only**, a user-picked local send hour (the implementation-intention anchor), quiet days
+  when nothing is scheduled, and learning-state framing (today's plan, not a streak
+  threat). **Remaining:** web push for users who don't open email (needs the P1.6 service
+  worker), and instrumenting reminder→session conversion so we can prove it brings users
+  back rather than trains them to ignore notifications. The email is the higher-value
+  channel for working actuaries; push is the follow-on.
 - ✅ **P1.4 — Quests / daily challenges.** _Shipped:_ personalized 3-quest daily board
   (`lib/quests.ts` + authored catalogue in `data/quests.ts`) — one always-achievable core
   quest, a revive quest only when concepts have actually decayed, a focus quest from
@@ -216,8 +236,9 @@ everywhere (P1.5).
 
 **Exit criteria:** D1 and D7 retention measurably improve _(instrumented, needs
 observation window)_; a returning user sees streak + daily goal + at least one quest on
-open ✅; reminders demonstrably bring users back ⬜; every collectible concept has an
-authored comprehension check ⬜.
+open ✅; reminders demonstrably bring users back 🟡 _(email channel live; conversion not
+yet instrumented, push not built)_; every collectible concept has an authored
+comprehension check 🟡 _(Exam P/FM/MAS-I done; Exam 5 remaining)_.
 
 ### Phase 2 — Learning depth & content quality ← **CURRENT FOCUS**
 
@@ -268,13 +289,17 @@ item here is a direct application of §2.2._
   you're right 71% of the time") and feed high-confidence errors into the P2.8 queue —
   those are the most dangerous misconceptions a candidate carries into an exam. Low
   friction, high signal; also sharpens `readiness.ts`.
-- ⬜ **P2.8 — Error-review loop ("mistakes deck")** _(new, §2.2.4)._ Missed questions
-  currently vanish after the /review screen; the decay model re-surfaces the *concept*
-  but not the *specific miss*. Queue missed questions for a spaced re-ask (e.g. 2–3 days
-  later, interleaved into normal sessions), prioritized by high-confidence errors (P2.7).
-  Extend the misconception-annotation pattern proven in `comprehension-checks/` to
-  explanation content: name *why* the tempting wrong answer is wrong, not just why the
-  right one is right — that's what elaborative feedback means.
+- 🟡 **P2.8 — Error-review loop ("mistakes deck")** _(§2.2.4)._ _First surface shipped:_ a
+  **recent-mistakes review card** (`MISTAKES_REVIEW_ENABLED`, `lib/recentMistakes.ts`)
+  surfaces the questions a learner most recently missed and, for each, flags the concept(s)
+  most likely to blame (weighted by miss-rate × current mastery), with a per-question and a
+  Retry-all quiz launch. This closes the "missed questions vanish after /review" gap for
+  *recent* misses. **Remaining:** turn it into a true spaced mistakes deck — queue misses
+  for a delayed re-ask (e.g. 2–3 days later, interleaved into normal sessions via P2.6),
+  prioritized by high-confidence errors once P2.7 lands. And extend the
+  misconception-annotation pattern proven in `comprehension-checks/` to explanation
+  content: name *why* the tempting wrong answer is wrong, not just why the right one is
+  right — that's what elaborative feedback means.
 
 **Exit criteria:** measurable lift in per-concept retention; every active exam has
 adequate question coverage; a question-quality feedback loop is live; mock exams are
@@ -284,15 +309,17 @@ timed and sitting-shaped; interleaving and calibration are live and A/B-validate
 
 _Goal: keep velocity high as the surface grows. The E2E safety net this phase was
 sequenced behind (P0.5) has existed for a while; meanwhile Phase 1/2 features kept
-landing on top of the god components — `ReadinessCard.tsx` grew from 1,664 to 1,824
-lines. Start paying this down alongside Phase 2, beginning with the file the next
-feature touches._
+landing on top of the god components — the flashcard-experience work pushed
+`Flashcards.tsx` past **3,450 lines** (+614 since the last revision). Start paying this
+down alongside Phase 2, beginning with the file the next feature touches._
 
-- ⬜ **P3.1 — Decompose god components (G5).** Split `Flashcards.tsx` (2,836 lines) into
-  view/logic/subcomponents with extracted hooks; then `ReadinessCard` (1,824),
-  `Settings` (1,323), `Landing` (1,162). Extract pure logic into `lib/` with tests as you
-  go. Do these opportunistically whenever a feature touches the file, plus one dedicated
-  pass on `Flashcards.tsx`. The E2E collect/quiz specs are the regression net.
+- ⬜ **P3.1 — Decompose god components (G5).** Split `Flashcards.tsx` (**3,450 lines** —
+  now by far the worst offender and still growing) into view/logic/subcomponents with
+  extracted hooks; then `ReadinessCard` (1,808), `Settings` (1,349), `Landing` (1,198).
+  Extract pure logic into `lib/` with tests as you go. Do these opportunistically whenever
+  a feature touches the file, plus one dedicated pass on `Flashcards.tsx` — which is
+  overdue given how much recent work compounded there. The E2E collect/quiz specs are the
+  regression net.
 - ⬜ **P3.2 — Design-system consolidation.** Codify `components/ui/` primitives and shared
   tokens (colors already in `lib/colorThemes.ts` / `examColors.ts`); document a11y-checked
   patterns so new gamification surfaces are consistent and accessible.
@@ -369,6 +396,7 @@ Phase 0 instrumented these; later phases are judged on evidence, not vibes.
 | Activation | % new users completing a first quiz on day 0 | Proves onboarding works | Instrumented (`lib/funnel.ts`) |
 | Retention | D1 / D7 / D30 return rate | The core health metric; Phase 1's target | Instrumented (`day2_return` + GA4) |
 | Engagement | Median streak length; daily-goal completion rate | Measures the loop directly | Instrumented (`streak_extended`, `daily_goal_met`) |
+| Re-engagement | Daily-email → session conversion rate | Proves reminders bring users back rather than train them to ignore (§2.2.7) | ⬜ needs a send→open→session event (P1.3 follow-on) |
 | Learning | Per-concept retention (correct on revisit after decay window) | Proves the engine, not just usage | Needs a dedicated event — prerequisite for P2.1/P2.6 A/Bs |
 | Calibration | Confidence-accuracy gap (P2.7) | Overconfidence is the exam-day killer | ⬜ ships with P2.7 |
 | Economy | Gem earn/spend balance; quest completion rate; quest-vs-plan adherence ratio (§2.2.6) | Detects a broken/inflationary economy — or reward-chasing displacing learning | Partially instrumented (`quest_claimed`) |
@@ -389,18 +417,20 @@ Phase 0 instrumented these; later phases are judged on evidence, not vibes.
   rewards claim-based and informational; monitor the quest-vs-plan adherence ratio; do
   not raise reward sizes to fix engagement dips — fix the learning value instead.
 - **Streak burnout / dark patterns.** Aggressive reminders erode trust. _Mitigation:_
-  freezes + same-day repair are live; P1.3 reminders must ship opt-in with quiet hours
-  and learning-state framing, and be judged on reminder→session conversion, not sends.
+  freezes + same-day repair are live; the shipped daily email is opt-in with quiet days
+  and learning-state framing — hold web push (P1.3) to the same bar, and judge both on
+  reminder→session conversion, not sends (the conversion event is not yet wired).
 - **Leaderboard demotivation** _(new)._ Bottom-of-cohort finishes can churn exactly the
   strugglers who most need the app. _Mitigation:_ leagues are opt-in and reset weekly;
   add the rank-split retention metric before building any further social surface.
 - **Refactor regressions.** Splitting `Flashcards.tsx` risks breaking the collect flow.
   _Mitigation:_ the E2E net (P0.5) now exists — but it only covers signed-out paths, so
   extend specs to the signed-in collect/mastery flow before the P3.1 dedicated pass.
-- **God-component compounding** _(elevated)._ Each Phase 1/2 feature that landed inside
-  `ReadinessCard`/`Flashcards` made the eventual split harder (ReadinessCard +160 lines
-  since the last revision). _Mitigation:_ enforce the "split as you touch" rule from
-  P3.1 starting with the next Phase 2 item.
+- **God-component compounding** _(elevated further)._ Each Phase 1/2 feature that landed
+  inside `Flashcards`/`ReadinessCard` made the eventual split harder — `Flashcards.tsx`
+  gained **+614 lines** since the last revision (now 3,450) as the flashcard-experience
+  work all landed in place. _Mitigation:_ enforce the "split as you touch" rule from P3.1
+  now, and treat the `Flashcards.tsx` dedicated pass as no longer deferrable.
 - **Economy inflation.** Quests added a real earn loop. _Mitigation:_ the earn/spend
   balance metric exists — actually review it before adding new sources (referrals P4.2
   will add another).
@@ -411,21 +441,25 @@ Phase 0 instrumented these; later phases are judged on evidence, not vibes.
 
 ## 7. Suggested immediate next steps
 
-The previous revision's three next steps (CI, monitoring/analytics, streak) all shipped.
-The next three, in order:
+Since the last revision the Exam FM comprehension-check batch, the daily-email reminder
+channel (P1.3 half), and the recent-mistakes card (P2.8 first surface) all shipped. The
+next three, in order:
 
-1. **P1.5 (finish) — Author the Exam FM comprehension-check batch.** Highest
-   pedagogy-per-effort: FM has near-complete question coverage (80/81 concepts) but its
-   collect gate still uses the guessable fallback, so the scaffold is weakest on the
-   best-covered exam. The Exam P batch + the `flashcard-comprehension-check` skill make
-   this a well-worn path. Then MAS-I and Exam 5.
-2. **P2.2 (finish) — Timed, sitting-shaped mock exams.** The mode skeleton exists;
-   adding the timer, weighted assembly from `data/examSittings.ts`, and the post-exam
-   readiness delta turns it into the product's summative-assessment pillar — and the
-   natural premium unit for P4.3.
-3. **P2.7 — Confidence & calibration.** Small surface (one tap per question), pure-lib
-   engine, big signal: it upgrades readiness scoring, seeds the P2.8 error queue, and
-   trains the metacognitive skill exams actually punish.
+1. **P2.7 — Confidence & calibration.** Now the highest-leverage open item: it is a small
+   surface (one tap per question), a pure-lib engine, and it has a *concrete downstream
+   consumer already built* — the recent-mistakes card (P2.8) can immediately prioritize
+   high-confidence errors once confidence is captured. It also upgrades readiness scoring
+   and trains the metacognitive skill exams actually punish.
+2. **P2.2 (finish) — Timed, sitting-shaped mock exams.** The mode skeleton exists; adding
+   the timer, weighted assembly from `data/examSittings.ts`, and the post-exam readiness
+   delta turns it into the product's summative-assessment pillar — and the natural premium
+   unit for P4.3.
+3. **Instrument + extend the two just-shipped surfaces.** Add the reminder→session
+   conversion event the daily email (P1.3) needs to prove it works, and grow the
+   recent-mistakes card into a true spaced mistakes deck (P2.8) — delayed re-asks
+   interleaved into normal sessions. Both are small follow-ons that turn a shipped surface
+   into a measured, complete one. Then author the Exam 5 comprehension-check batch (P1.5).
 
 In parallel, apply the P3.1 "split as you touch" rule to whichever god component the
-next feature lands in — the debt is now growing faster than it's being paid.
+next feature lands in — and schedule the dedicated `Flashcards.tsx` pass, now 3,450 lines
+and still the fastest-growing file. The debt is growing faster than it's being paid.

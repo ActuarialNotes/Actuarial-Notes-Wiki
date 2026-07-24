@@ -74,6 +74,10 @@ before touching that area**:
 - `docs/leagues.md` — the opt-in weekly XP leagues (roadmap P4.1): the tier ladder and
   promotion/relegation math, the lazy Monday-UTC rollover, and the privacy model
   (snapshot-on-join / delete-on-leave, RPC-only board reads).
+- `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
+  theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
+  component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
+  work stays consistent, minimalistic, and hierarchy-aware.
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects

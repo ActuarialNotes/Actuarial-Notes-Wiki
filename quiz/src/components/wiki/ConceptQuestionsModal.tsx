@@ -225,8 +225,8 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
       <div className="relative w-full max-w-2xl bg-card rounded-xl shadow-2xl flex flex-col my-8 mx-4 max-h-[calc(100vh-4rem)]">
         {/* Header */}
         <div className="flex items-center gap-3 px-4 h-12 shrink-0">
-          <span className="flex-1 truncate font-semibold text-sm">
-            Questions: {conceptName}
+          <span className="flex-1 truncate font-semibold text-lg">
+            {conceptName}
           </span>
           <button
             type="button"

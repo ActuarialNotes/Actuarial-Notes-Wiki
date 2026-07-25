@@ -11,7 +11,7 @@ import { trackMasteryAnalyticsQuiz } from '@/lib/analytics'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
-import { FlipInsightCard, InsightBrowserModal } from '@/components/DashboardInsightCard'
+import { InsightCard, InsightBrowserModal } from '@/components/DashboardInsightCard'
 
 // Only surface concepts on the brink — decaying within three days. Anything
 // further out isn't urgent enough to earn a spot on the dashboard.
@@ -108,13 +108,13 @@ export function MasteryAnalyticsCard({ syllabus, masteryRecords }: Props) {
 
   return (
     <>
-      <FlipInsightCard
+      <InsightCard
         icon={icon}
         title="Fading Concepts"
         count={warnings.length}
         front={
           <div className="min-w-0">
-            <p className="line-clamp-2 text-sm font-semibold leading-snug">{top.concept}</p>
+            <p className="line-clamp-2 text-sm font-medium leading-snug">{top.concept}</p>
             <p className="mt-1 truncate text-xs text-muted-foreground">Fades {formatDays(top.daysUntil)}</p>
           </div>
         }

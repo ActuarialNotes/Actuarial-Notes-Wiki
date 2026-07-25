@@ -5,7 +5,7 @@ import type { Question } from '@/lib/parser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { useRecentMistakes } from '@/hooks/useRecentMistakes'
 import type { ProblemConcept, RecentMistake } from '@/lib/recentMistakes'
-import { FlipInsightCard, InsightBrowserModal } from '@/components/DashboardInsightCard'
+import { InsightCard, InsightBrowserModal } from '@/components/DashboardInsightCard'
 
 const SELECTED_IDS_KEY = 'actuarial_selected_ids'
 
@@ -69,13 +69,13 @@ export function RecentMistakesCard({ masteryRecords, examTopic }: Props) {
 
   return (
     <>
-      <FlipInsightCard
+      <InsightCard
         icon={icon}
         title="Recent Mistakes"
         count={mistakes.length}
         front={
           <div className="min-w-0">
-            <p className="line-clamp-2 text-sm font-semibold leading-snug">{questionLabel(top.question)}</p>
+            <p className="line-clamp-2 text-sm font-medium leading-snug">{questionLabel(top.question)}</p>
             <MistakeChips mistake={top} className="mt-1.5" />
           </div>
         }

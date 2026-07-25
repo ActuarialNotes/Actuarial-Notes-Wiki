@@ -6,7 +6,7 @@
 > $$\text{IBNR} = \text{Ultimate Losses} - \text{Reported Losses}$$
 
 - Case reserves reflect the adjuster's current best estimate and are updated as new information emerges — medical reports, legal proceedings, settlement negotiations
-- Changes in case reserving adequacy over time (systematic strengthening or weakening) distort development triangle patterns; the [[Berquist Sherman Method|Berquist-Sherman]] adjustment restates historical triangles to current reserve levels
+- Changes in case reserving adequacy over time (systematic strengthening or weakening) distort development triangle patterns; the [[Berquist-Sherman Method|Berquist-Sherman]] adjustment restates historical triangles to current reserve levels
 - Total unpaid claim liability = Case Reserves + IBNR; case reserves cover known claims while IBNR covers unreported claims and development on known claims
 
 > [!example]- Case Reserves in the Incurred Triangle {Example}

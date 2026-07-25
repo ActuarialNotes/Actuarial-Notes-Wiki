@@ -5,7 +5,7 @@
 - Individual year factors are computed for each accident year; a **selected factor** is then chosen — typically a simple average, volume-weighted average (sum of column $n{+}1$ divided by sum of column $n$), or latest-$k$-year average
 - The volume-weighted (chain-weighted) average gives more credibility to accident years with larger loss amounts, making it less sensitive to individual outlier years
 - Age-to-age factors are chained together to produce the [[Cumulative Development Factor]]; each factor must be $\geq 1.0$ for lines where losses do not decrease over time
-- A factor that varies significantly by calendar year (diagonal trend) may indicate changing claims practices — a signal to consider the [[Berquist Sherman Method]]
+- A factor that varies significantly by calendar year (diagonal trend) may indicate changing claims practices — a signal to consider the [[Berquist-Sherman Method]]
 
 > [!example]- Factor Selection from Triangle {Example}
 > Cumulative incurred losses ($000s):

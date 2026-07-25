@@ -111,6 +111,16 @@ Run every draft against this before finalizing:
   `$(0.72 - 0.60) = +12\%$`.
 - There is exactly one unambiguously correct answer.
 - The concept's own name does not appear in any answer choice.
+- **The correct answer is not conspicuously the longest option.** The modal
+  shuffles the options, so authored A/B/C/D position never leaks — but length
+  does. The natural way to write these is to give the right answer its full
+  reasoning ("They are identical — because the IBNR term never sees reported
+  losses") while the distractors stay clipped, and a learner who has read
+  nothing can then pass by picking the wordiest choice. Either trim the correct
+  answer to its claim, or give each distractor its own reason clause; a
+  difference of a word or two is fine, a whole extra clause is a tell.
+  `python3 scripts/check_answer_balance.py` reports the offenders across the
+  corpus — run it after authoring a batch.
 - Every distractor targets a specific, nameable misconception (write that
   misconception down even if it doesn't ship in the UI — it's the fastest
   way to catch a lazy distractor).
@@ -173,6 +183,12 @@ counts and checkboxes stay honest. When writing several checks in one pass, vary
 the shape across the batch — a folder where every check is the same "which of
 these is NOT…" mould gets predictable fast, which defeats the gate as surely as
 an over-easy question does.
+
+Batches drift in ways single checks do not, so audit the finished set rather
+than trusting the per-file checklist: `python3 scripts/check_answer_balance.py`
+for the longest-option tell, and a glance at the spread of `correct:` letters
+and question shapes. Bulk authoring reliably produces a fully-reasoned correct
+answer beside clipped distractors — fix that across the batch before shipping.
 
 ## Worked examples
 

@@ -1205,14 +1205,6 @@ export default function Landing() {
     {hasSelection && (
       <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 bg-background/95 backdrop-blur-sm">
         <div className="container max-w-2xl mx-auto px-4 pt-3 pb-4 space-y-3">
-          {mode === 'quiz' && useTodaysPlan && todaysPlanFullCount > 0 && (
-            <p className="text-xs text-muted-foreground text-center">
-              {count >= todaysPlanFullCount
-                ? `Covers today's whole plan in ${todaysPlanFullCount} question${todaysPlanFullCount !== 1 ? 's' : ''}`
-                : `${count} of ${todaysPlanFullCount} questions needed to finish today's plan`}
-            </p>
-          )}
-
           {/* ── Question deck: availability + shuffle the draw ────────── */}
           {poolCount > 0 && (
             <QuestionDeckCard

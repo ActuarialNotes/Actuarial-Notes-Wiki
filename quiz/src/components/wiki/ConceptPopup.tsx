@@ -17,6 +17,7 @@ import { ListenView } from '@/components/wiki/ListenView'
 import { MathViewContext } from '@/contexts/MathViewContext'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
+import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
 import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 import { useAuth } from '@/hooks/useAuth'
@@ -47,6 +48,7 @@ export function ConceptPopup() {
   const { height, beginDrag } = useSplitHeight()
   const [maximized, setMaximized] = useState(false)
   const [showQuestionsModal, setShowQuestionsModal] = useState(false)
+  const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
   const [menuAlignRight, setMenuAlignRight] = useState(false)
   // Viewport rect of the play button, captured when the menu opens. The menu is
@@ -445,7 +447,7 @@ export function ConceptPopup() {
               </button>
               <button
                 type="button"
-                onClick={() => { openCollect(current); setShowPlayMenu(false) }}
+                onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
@@ -691,6 +693,12 @@ export function ConceptPopup() {
       <ConceptQuestionsModal
         conceptName={current.name}
         onClose={() => setShowQuestionsModal(false)}
+      />
+    )}
+    {showLearningProgress && (
+      <LearningProgressModal
+        conceptName={current.name}
+        onClose={() => setShowLearningProgress(false)}
       />
     )}
     {showGallery && (

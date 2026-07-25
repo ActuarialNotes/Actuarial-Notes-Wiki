@@ -101,10 +101,17 @@ export function CollectConceptModal() {
   const navigate = useNavigate()
 
   const name = ref?.name ?? ''
-  const alreadyCollected = ref ? isCollected(name) : false
   // Matches the Flashcards-tab foil-ring treatment for this concept once it's
   // collected; meaningless (stays 'new') while the card is still locked.
-  const { currentLevel } = useConceptLearningHistory(name)
+  const { currentLevel, levelEvents, attemptDots } = useConceptLearningHistory(name)
+  // A concept with real mastery has necessarily been collected already
+  // (grandfathered users included), even if it's absent from the local collected
+  // store. Treat it as collected so opening it from a mastery pill lands on the
+  // card + progress view rather than dropping into a re-collect quiz.
+  const alreadyCollected = ref ? (isCollected(name) || currentLevel !== 'new') : false
+  // Whether there's any history worth graphing — a freshly collected concept
+  // with no level changes and no attempts has nothing to plot.
+  const hasProgressHistory = levelEvents.length > 0 || attemptDots.length > 0
 
   const [phase, setPhase] = useState<Phase>('question')
   const [def, setDef] = useState<string | null>(null)
@@ -354,11 +361,12 @@ export function CollectConceptModal() {
                     </span>
                   )}
                 </button>
-                {/* Learning-progress graph only appears once the concept has actually
-                    been levelled up (Level 1+). A freshly collected 'New' concept has
-                    nothing to plot, so we skip the panel (and its premium upsell)
-                    entirely until there's real progress to show. */}
-                {currentLevel !== 'new' && (
+                {/* Learning-progress graph appears once there's history to plot —
+                    a level change or at least one recorded attempt. A freshly
+                    collected concept with no activity has nothing to graph, so we
+                    skip the panel (and its premium upsell) until there's real
+                    progress to show. */}
+                {hasProgressHistory && (
                   <div className="w-full pt-4">
                     <LearningProgressPanel conceptName={name} />
                   </div>

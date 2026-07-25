@@ -6,7 +6,7 @@ import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
-import { useSoundEffects } from '@/hooks/useSoundEffects'
+import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -98,6 +98,7 @@ export function CollectConceptModal() {
   const { addCard } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
   const { play } = useSoundEffects()
+  useSoundOnToggle(!!ref, 'open', 'close')
   const navigate = useNavigate()
 
   const name = ref?.name ?? ''
@@ -242,6 +243,7 @@ export function CollectConceptModal() {
     if (prefersReducedMotion()) {
       collect(name)
       addCard({ kind: 'concept', name })
+      play('collect')
       setPhase('done')
       return
     }
@@ -252,6 +254,7 @@ export function CollectConceptModal() {
       // Matches the 560ms .collect-card-absorb duration so the card finishes
       // fading out before it unmounts, instead of popping off mid-fade.
       setPhase('flash')
+      play('collect')
       after(560, () => {
         // 3) Bloom fades → persist + light up the Flashcards tab, then hold on
         //    the "Collected!" screen so the player can view or continue.
@@ -268,7 +271,7 @@ export function CollectConceptModal() {
       setSelected(opt)
       runCollectAnimation()
     } else {
-      play('wrong')
+      // Deliberately silent — the option shakes red, which is feedback enough.
       setWrong(opt)
       after(600, () => setWrong(null))
     }

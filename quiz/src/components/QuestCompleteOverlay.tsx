@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Gem, Loader2, Swords } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import { questRewards } from '@/lib/quests'
 import {
   claimQuestRewards,
@@ -24,6 +25,8 @@ export function QuestCompleteOverlay() {
   const { user } = useAuth()
   const [quests, setQuests] = useState<QuestDef[]>(() => readJustCompletedQuests())
   const [claiming, setClaiming] = useState(false)
+  const { play } = useSoundEffects()
+  useSoundOnMount('complete', quests.length > 0)
 
   useEffect(() => {
     const handler = () => setQuests(readJustCompletedQuests())
@@ -42,6 +45,7 @@ export function QuestCompleteOverlay() {
 
   const collect = () => {
     if (claiming) return
+    play('reward')
     setClaiming(true)
     void claimQuestRewards(user?.id ?? null, quests.map(q => q.id)).finally(() => {
       setClaiming(false)

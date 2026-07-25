@@ -9,6 +9,7 @@ import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRo
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useCollect } from '@/hooks/useCollect'
 import { useIsConceptUnlocked } from '@/hooks/useConceptUnlocked'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 // Matches a raw wiki_link value against a concept name. Handles two formats:
 //   "Concepts/Fund+Accumulation"  (hrefToEntryRef resolves the name directly)
@@ -43,6 +44,8 @@ const DIFFICULTY_OPTIONS = [
 ]
 
 export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: ConceptQuestionsModalProps) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   const unlocked = useIsConceptUnlocked(conceptName)
   const openCollect = useCollect(s => s.open)
   const closeCollect = useCollect(s => s.close)

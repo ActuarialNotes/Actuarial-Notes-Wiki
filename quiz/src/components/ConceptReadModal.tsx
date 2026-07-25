@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Loader2, X } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface Props {
   conceptName: string
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export function ConceptReadModal({ conceptName, onClose }: Props) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'error' | 'idle'>('loading')
 

@@ -13,6 +13,7 @@ import {
   todayISO,
   type StudyPlanConfig,
 } from '@/lib/studyPlan'
+import { useSoundOnToggle } from '@/hooks/useSoundEffects'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
 
@@ -89,6 +90,8 @@ function useDesktopLeft() {
 }
 
 export default function ExamsPopout({ open, onClose }: Props) {
+  // Paper: the panel sliding in.
+  useSoundOnToggle(open, 'open', 'close')
   const { user } = useAuth()
   const navigate = useNavigate()
   const { examRows, loadingExams, selectedTrack, setSelectedTrack, saveExamRows, examsState, updateStudyPlanConfig, updateTargetDate } = useExamProgress()

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
@@ -21,6 +21,7 @@ import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
 import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 import { useAuth } from '@/hooks/useAuth'
+import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -80,6 +81,19 @@ export function ConceptPopup() {
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
   const [showPremiumInfo, setShowPremiumInfo] = useState(false)
 
+  // The panel's own sound — a sheet of paper sliding out, and back in on close.
+  // It lives here rather than on the buttons because the popup can be opened
+  // from a wiki link, the search panel, the dashboard or a keyboard shortcut.
+  const { play } = useSoundEffects()
+  useSoundOnToggle(open, 'open', 'close')
+
+  // Stepping to the previous/next concept is a page flick, not a press. Shared
+  // by the footer buttons and the ←/→ shortcuts so both sound the same.
+  const turnPage = useCallback((direction: -1 | 1) => {
+    play('page')
+    navigate(direction)
+  }, [play, navigate])
+
   // Scroll the body back to top whenever the viewed concept changes.
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = 0
@@ -134,12 +148,12 @@ export function ConceptPopup() {
       const target = e.target as HTMLElement | null
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
       if (e.key === 'Escape') close()
-      else if (e.key === 'ArrowLeft') navigate(-1)
-      else if (e.key === 'ArrowRight') navigate(1)
+      else if (e.key === 'ArrowLeft') turnPage(-1)
+      else if (e.key === 'ArrowRight') turnPage(1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, close, navigate])
+  }, [open, close, turnPage])
 
   // Close play menu when clicking outside of it. The "Add to Project" submenu
   // is rendered in its own portal (outside playMenuRef in the DOM), so it's
@@ -511,6 +525,7 @@ export function ConceptPopup() {
         <button
           type="button"
           onClick={close}
+          data-sound="none"
           className="text-muted-foreground hover:text-foreground p-1"
           title="Close"
           aria-label="Close"
@@ -562,6 +577,7 @@ export function ConceptPopup() {
                   hideImages
                   onWikiLink={ref => {
                     // Stay inside the popup: swap the body instead of navigating.
+                    play('page')
                     jumpTo(ref)
                     return true
                   }}
@@ -577,12 +593,13 @@ export function ConceptPopup() {
         <button
           type="button"
           disabled={!canPrev}
+          data-sound="none"
           onClick={() => {
             if (showGallery) {
               setShowGallery(false)
               gallerySeekDirection.current = -1
             }
-            navigate(-1)
+            turnPage(-1)
           }}
           className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
@@ -674,12 +691,13 @@ export function ConceptPopup() {
         <button
           type="button"
           disabled={!canNext}
+          data-sound="none"
           onClick={() => {
             if (showGallery) {
               setShowGallery(false)
               gallerySeekDirection.current = 1
             }
-            navigate(1)
+            turnPage(1)
           }}
           className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >

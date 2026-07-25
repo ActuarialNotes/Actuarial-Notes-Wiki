@@ -3,6 +3,7 @@ import { useEmailPrefs } from '@/hooks/useEmailPrefs'
 import { formatHourLabel, detectTimezone } from '@/lib/dailyEmail'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
+import { useSoundOnToggle } from '@/hooks/useSoundEffects'
 
 const HOURS = Array.from({ length: 24 }, (_, h) => h)
 
@@ -19,6 +20,8 @@ interface Props {
 }
 
 export function DashboardRemindersModal({ open, onClose, email }: Props) {
+  // Paper: the panel sliding in.
+  useSoundOnToggle(open, 'open', 'close')
   const { prefs, loading, saving, error, save } = useEmailPrefs()
 
   if (!open) return null

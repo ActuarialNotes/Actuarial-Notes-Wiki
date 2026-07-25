@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Gem, Loader2, Lock } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import { supabase } from '@/lib/supabase'
 import { todayISO } from '@/lib/studyPlan'
 
@@ -24,6 +25,8 @@ interface Props {
 export function StudyPlanCompleteOverlay({ progressKey, gemsEarned, onClose }: Props) {
   const { user } = useAuth()
   const [claiming, setClaiming] = useState(false)
+  const { play } = useSoundEffects()
+  useSoundOnMount('complete')
 
   const markClaimed = () => {
     try {
@@ -36,6 +39,7 @@ export function StudyPlanCompleteOverlay({ progressKey, gemsEarned, onClose }: P
 
   const claim = () => {
     if (claiming) return
+    play('reward')
     setClaiming(true)
     if (gemsEarned > 0 && user) {
       supabase.rpc('award_gems', { p_amount: gemsEarned })

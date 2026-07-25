@@ -74,6 +74,11 @@ before touching that area**:
 - `docs/leagues.md` — the opt-in weekly XP leagues (roadmap P4.1): the tier ladder and
   promotion/relegation math, the lazy Monday-UTC rollover, and the privacy model
   (snapshot-on-join / delete-on-leave, RPC-only board reads).
+- `docs/sound-design.md` — the **sound-effects system**: the four rules the cue
+  catalogue follows (quiet interface feedback, paper-as-noise, melodic success,
+  silent mistakes), the delegated `data-sound` listener that gives every control
+  a press cue, and how to wire a new interaction. Read before adding or changing
+  a sound.
 - `docs/style-guide.md` — the app's **visual/interaction design system**: colour tokens &
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
@@ -142,6 +147,15 @@ Other important `lib/` modules:
   contract as the league SQL). Prefs live in `user_email_prefs`
   (`hooks/useEmailPrefs.ts` + `components/EmailSettingsCard.tsx` in Settings). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
+- `soundConfig.ts` / `soundEngine.ts` / `soundInteractions.ts` — the sound system.
+  `soundConfig.ts` is the cue catalogue as plain data (tones, noise sweeps,
+  envelopes) — edit sounds there; `soundEngine.ts` holds the single AudioContext,
+  the synth and the enabled/volume store; `soundInteractions.ts` is the pure
+  press-cue decision table used by `components/SoundEffects.tsx`, the one
+  delegated listener (mounted in `App`) that sounds every button in the app.
+  Override per element with `data-sound="<cue>"` / `data-sound="none"`. Nothing
+  plays for a wrong answer — that's deliberate and pinned by a test. See
+  `docs/sound-design.md`.
 - `featureFlags.ts` — build-time feature flags (`RESEARCH_AI_ENABLED`, `RESEARCH_TAB_ENABLED`,
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`)
@@ -150,9 +164,10 @@ Other important `lib/` modules:
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **25 test files /
-~435 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
-matching, the gamification engines, and the research/resource-timeline modules).
+`*.test.ts` files sit alongside the modules they test (vitest). There are **35 test files /
+~565 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+matching, the gamification engines, the sound catalogue, and the research/resource-timeline
+modules).
 
 ## Feature flags & the Research tab
 

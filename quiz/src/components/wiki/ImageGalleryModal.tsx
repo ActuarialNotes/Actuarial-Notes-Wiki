@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface GalleryImage {
   src: string
@@ -17,6 +18,8 @@ const MIN_ZOOM = 1
 const MAX_ZOOM = 4
 
 export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGalleryModalProps) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   const [index, setIndex] = useState(initialIndex)
   const [zoom, setZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })

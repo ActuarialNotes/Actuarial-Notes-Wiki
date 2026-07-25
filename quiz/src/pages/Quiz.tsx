@@ -211,7 +211,12 @@ export default function Quiz() {
     if (!currentQuestion || isLocked) return
     if (currentQuestion.type === 'multi-part' || !currentQuestion.options?.length) return
     const option = currentQuestion.options[i]
-    if (option) handleSelectAnswer(option.key)
+    if (option) {
+      // Picking with the number keys should sound like picking with the mouse;
+      // the delegated listener only sees pointer/Enter activations.
+      playSound('select')
+      handleSelectAnswer(option.key)
+    }
   }
 
   usePageKeyboard({
@@ -226,7 +231,9 @@ export default function Quiz() {
     'ArrowRight': () => { if (isLocked) handleNextFromAnswer() },
     'ArrowLeft': () => { if (currentIndex > 0) goToPreviousQuestion() },
     'f': () => { if (currentQuestion) toggleFlag(currentQuestion.id) },
-    'm': () => toggleSound(),
+    // The confirmation is only audible when the toggle just turned sound *on*,
+    // which is exactly when the user needs to hear that it worked.
+    'm': () => { toggleSound(); playSound('toggleOn') },
     '?': () => setShowShortcutsHelp(v => !v),
   }, !anyDialogOpen && status !== 'idle' && status !== 'complete')
 
@@ -275,8 +282,10 @@ export default function Quiz() {
   function commitAnswer(answer: string) {
     if (!currentQuestion) return
     const correct = isAnswerCorrect(currentQuestion, answer)
-    if (!isChangingAnswer) {
-      playSound(correct ? 'correct' : 'wrong')
+    // Right answers get the arpeggio; wrong ones stay silent on purpose — the
+    // reveal already says it, and a buzzer is punishment, not feedback.
+    if (correct && !isChangingAnswer) {
+      playSound('correct')
     }
     answerQuestion(currentQuestion.id, answer)
     setIsChangingAnswer(false)
@@ -506,7 +515,8 @@ export default function Quiz() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={toggleSound}
+            data-sound="none"
+            onClick={() => { toggleSound(); playSound('toggleOn') }}
             aria-label={soundEnabled ? 'Mute sounds' : 'Unmute sounds'}
             className="text-muted-foreground hover:text-foreground"
           >

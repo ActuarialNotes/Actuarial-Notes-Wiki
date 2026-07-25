@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { BookOpen, HelpCircle, X } from 'lucide-react'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface Props {
   conceptName: string
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export function ConceptSelectorPopup({ conceptName, onBrowseQuestions, onReadConcept, onClose }: Props) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()

@@ -10,6 +10,7 @@ import {
   exportScopeSlug,
 } from '@/lib/exportData'
 import { buildProgressReport, generateProgressReportPdf, buildPdfFilename } from '@/lib/exportPdf'
+import { useSoundOnToggle } from '@/hooks/useSoundEffects'
 
 // The same data export offered in Settings (CSV spreadsheet or branded PDF
 // progress report), surfaced from the Dashboard header via the download icon.
@@ -22,6 +23,8 @@ interface Props {
 }
 
 export function DashboardExportModal({ open, onClose, user }: Props) {
+  // Paper: the panel sliding in.
+  useSoundOnToggle(open, 'open', 'close')
   const [scope, setScope] = useState<'all' | string>('all')
   const [format, setFormat] = useState<'csv' | 'pdf'>('csv')
   const [exporting, setExporting] = useState(false)

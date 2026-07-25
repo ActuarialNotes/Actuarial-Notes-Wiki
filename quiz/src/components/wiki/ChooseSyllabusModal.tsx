@@ -1,5 +1,6 @@
 import { GraduationCap, X } from 'lucide-react'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface ChooseSyllabusModalProps {
   conceptName: string
@@ -12,6 +13,8 @@ interface ChooseSyllabusModalProps {
 // rather than silently jumping to the first match, let the user pick which
 // syllabus they meant.
 export function ChooseSyllabusModal({ conceptName, syllabi, onChoose, onClose }: ChooseSyllabusModalProps) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   return (
     <div
       className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"

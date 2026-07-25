@@ -1,98 +1,66 @@
-import { useCallback, useState } from 'react'
-import { SOUND_PATHS, SOUND_VOLUME, type SoundEvent } from '@/lib/soundConfig'
+import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react'
+import type { SoundEvent } from '@/lib/soundConfig'
+import {
+  getSoundSettings,
+  playSound,
+  setSoundEnabled,
+  setSoundVolume,
+  subscribeSound,
+  toggleSoundEnabled,
+} from '@/lib/soundEngine'
 
-const STORAGE_KEY = 'actuarial-notes-sounds'
+/**
+ * React binding for the sound engine.
+ *
+ * The settings live in the engine, not in component state, so a mute toggle in
+ * the quiz header and the one in Settings stay in sync (they used to hold
+ * independent `useState` copies and silently disagree).
+ */
+export function useSoundEffects() {
+  const settings = useSyncExternalStore(subscribeSound, getSoundSettings, getSoundSettings)
 
-function loadEnabled(): boolean {
-  try {
-    return localStorage.getItem(STORAGE_KEY) !== 'false'
-  } catch {
-    return true
+  const play = useCallback((event: SoundEvent) => { playSound(event) }, [])
+
+  return {
+    enabled: settings.enabled,
+    volume: settings.volume,
+    toggle: toggleSoundEnabled,
+    setEnabled: setSoundEnabled,
+    setVolume: setSoundVolume,
+    play,
   }
 }
 
-function synthCorrect(ctx: AudioContext, vol: number) {
-  // Ascending two-tone sine: D5 → A5
-  const osc = ctx.createOscillator()
-  const gain = ctx.createGain()
-  osc.connect(gain)
-  gain.connect(ctx.destination)
-  osc.type = 'sine'
-  osc.frequency.setValueAtTime(587.3, ctx.currentTime)
-  osc.frequency.setValueAtTime(880, ctx.currentTime + 0.13)
-  gain.gain.setValueAtTime(0, ctx.currentTime)
-  gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.01)
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5)
-  osc.start(ctx.currentTime)
-  osc.stop(ctx.currentTime + 0.5)
+/**
+ * Play a cue once, when the component mounts — the shape most of this app's
+ * modals and overlays take, since they're conditionally rendered rather than
+ * held mounted behind an `open` prop. Pass `false` to stay quiet (an overlay
+ * that decides mid-render it has nothing to celebrate).
+ */
+export function useSoundOnMount(event: SoundEvent, when = true) {
+  useEffect(() => {
+    if (when) playSound(event)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fire once per mount, on the entering edge of `when`
+  }, [when])
 }
 
-function synthWrong(ctx: AudioContext, vol: number) {
-  // Descending sawtooth: 220 Hz → 110 Hz
-  const osc = ctx.createOscillator()
-  const gain = ctx.createGain()
-  osc.connect(gain)
-  gain.connect(ctx.destination)
-  osc.type = 'sawtooth'
-  osc.frequency.setValueAtTime(220, ctx.currentTime)
-  osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.25)
-  gain.gain.setValueAtTime(vol * 0.4, ctx.currentTime)
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35)
-  osc.start(ctx.currentTime)
-  osc.stop(ctx.currentTime + 0.35)
-}
-
-function synthComplete(ctx: AudioContext, vol: number) {
-  // C-major arpeggio: C5, E5, G5, C6
-  const notes = [523.25, 659.25, 783.99, 1046.5]
-  notes.forEach((freq, i) => {
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-    osc.type = 'sine'
-    const t = ctx.currentTime + i * 0.12
-    osc.frequency.setValueAtTime(freq, t)
-    gain.gain.setValueAtTime(0, t)
-    gain.gain.linearRampToValueAtTime(vol, t + 0.01)
-    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4)
-    osc.start(t)
-    osc.stop(t + 0.4)
-  })
-}
-
-const SYNTHS: Record<SoundEvent, (ctx: AudioContext, vol: number) => void> = {
-  correct: synthCorrect,
-  wrong: synthWrong,
-  complete: synthComplete,
-}
-
-export function useSoundEffects() {
-  const [enabled, setEnabled] = useState(loadEnabled)
-
-  const toggle = useCallback(() => {
-    setEnabled(prev => {
-      const next = !prev
-      try { localStorage.setItem(STORAGE_KEY, String(next)) } catch { /* ignore */ }
-      return next
-    })
-  }, [])
-
-  const play = useCallback((event: SoundEvent) => {
-    if (!enabled) return
-    const path = SOUND_PATHS[event]
-    if (path) {
-      const audio = new Audio(path)
-      audio.volume = SOUND_VOLUME
-      audio.play().catch(() => {})
-      return
-    }
-    try {
-      const ctx = new AudioContext()
-      SYNTHS[event](ctx, SOUND_VOLUME)
-      setTimeout(() => ctx.close(), 2000)
-    } catch { /* ignore */ }
-  }, [enabled])
-
-  return { enabled, toggle, play }
+/**
+ * Play a cue when `active` flips true, and optionally another when it flips
+ * back. Used for surfaces whose sound belongs to the surface itself rather than
+ * to whichever of a dozen buttons opened it — the concept popup's paper slide,
+ * for instance, which can be triggered by a wiki link, the search panel, a
+ * keyboard shortcut or the dashboard.
+ *
+ * Nothing plays on the initial mount when `active` starts out true, so a page
+ * refresh with a panel already open stays quiet.
+ */
+export function useSoundOnToggle(active: boolean, onEvent: SoundEvent, offEvent?: SoundEvent) {
+  const previous = useRef(active)
+  useEffect(() => {
+    if (previous.current === active) return
+    previous.current = active
+    const event = active ? onEvent : offEvent
+    if (event) playSound(event)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- cue names are constants at every call site
+  }, [active])
 }

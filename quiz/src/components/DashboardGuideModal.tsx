@@ -22,6 +22,7 @@ import { STREAK_ENABLED, XP_ENABLED, QUESTS_ENABLED } from '@/lib/featureFlags'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { useSoundOnToggle } from '@/hooks/useSoundEffects'
 
 // A single guided walkthrough of the Dashboard, stitched together from the help
 // screens that already back each card's info button — the study-plan panel
@@ -96,6 +97,8 @@ function LevelQuestsSlide() {
 }
 
 export function DashboardGuideModal({ open, onClose, syllabus, masteryRecords, examDate, plan }: Props) {
+  // Paper: the panel sliding in.
+  useSoundOnToggle(open, 'open', 'close')
   const [slide, setSlide] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
 

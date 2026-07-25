@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 const CATEGORIES = [
   { value: 'bug', label: 'Bug report' },
@@ -19,6 +20,8 @@ interface ContactDialogProps {
 }
 
 export function ContactDialog({ onClose }: ContactDialogProps) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   const [category, setCategory] = useState('general')
   const [message, setMessage] = useState('')
 

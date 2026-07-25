@@ -4,7 +4,7 @@
 >
 > $$= \text{Paid} + \text{Case Reserves} + \text{IBNR} = \text{Reported} + \text{IBNR}$$
 
-- Every reserving method is just a different approach to estimating the unknown IBNR component: the [[Chain Ladder Method]] multiplies reported by a CDF; the [[Bornhuetter Ferguson Method]] anchors the unreported portion to an a priori expected loss ratio
+- Every reserving method is just a different approach to estimating the unknown IBNR component: the [[Chain Ladder Method]] multiplies reported by a CDF; the [[Bornhuetter-Ferguson Method]] anchors the unreported portion to an a priori expected loss ratio
 - Ultimate losses drive the loss ratio ($= \text{Ultimate}/\text{EP}$), which is the primary input to loss reserve adequacy testing and ratemaking indications
 - For immature accident years, the ultimate is highly uncertain; for mature years (e.g., $>$ 10 years developed), the ultimate approaches actual paid losses and IBNR becomes small
 - Ultimate is defined net of salvage and subrogation recoveries for net reserve purposes; gross ultimate excludes those recoveries

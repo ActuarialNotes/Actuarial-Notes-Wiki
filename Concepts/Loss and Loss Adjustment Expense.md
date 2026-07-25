@@ -8,7 +8,7 @@
 >
 > $$= \frac{\text{Loss + LAE}}{\text{Earned Premium}}$$
 
-- **[[Allocated Loss Adjustment Expenses ALAE|ALAE]]** (allocated LAE) are claim-specific expenses — legal defense, expert witnesses, litigation costs — assigned to individual claims and typically included with losses in development triangles
+- **[[Allocated Loss Adjustment Expense|ALAE]]** (allocated LAE) are claim-specific expenses — legal defense, expert witnesses, litigation costs — assigned to individual claims and typically included with losses in development triangles
 - **[[Unallocated Loss Adjustment Expenses ULAE|ULAE]]** (unallocated LAE) are overhead claims handling costs — staff salaries, IT systems — not assignable to specific claims; projected separately using methods like the paid-to-incurred ratio
 - In ratemaking, historical losses are adjusted to ultimate, trended to the future rating period, and loaded for both ALAE and ULAE before dividing by earned exposures or premium
 

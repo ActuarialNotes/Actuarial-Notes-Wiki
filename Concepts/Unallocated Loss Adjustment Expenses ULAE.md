@@ -1,4 +1,4 @@
-**Unallocated Loss Adjustment Expenses** (ULAE) are overhead claims-handling costs that cannot be attributed to specific individual claims — such as claims staff salaries, office rent, and IT systems — as distinguished from [[Allocated Loss Adjustment Expenses ALAE]], which are directly tied to individual claims.
+**Unallocated Loss Adjustment Expenses** (ULAE) are overhead claims-handling costs that cannot be attributed to specific individual claims — such as claims staff salaries, office rent, and IT systems — as distinguished from [[Allocated Loss Adjustment Expense|ALAE]], which are directly tied to individual claims.
 
 > $$\text{ULAE Reserve}$$
 >

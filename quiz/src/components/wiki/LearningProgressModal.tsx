@@ -42,7 +42,20 @@ function LevelPill({ level }: { level: MasteryState }) {
 // inside the standalone modal below, and embedded alongside the 3D flashcard in
 // the collect modal so a collected concept shows "card + progress" in one place.
 
-export function LearningProgressPanel({ conceptName }: { conceptName: string }) {
+export function LearningProgressPanel({
+  conceptName,
+  showLevelRow = true,
+  showHint = true,
+  onLevelChange,
+}: {
+  conceptName: string
+  /** Hide the internal "Current level" row — used when the level is shown elsewhere (e.g. beside a title). */
+  showLevelRow?: boolean
+  /** Hide the "Hover the graph…" hint below the graph. */
+  showHint?: boolean
+  /** Bubbles up the level currently on display (current or hovered), or null while unavailable. */
+  onLevelChange?: (level: MasteryState | null) => void
+}) {
   const { isPremium, isBetaTester, loading: subLoading } = useSubscription()
   const { levelEvents, attemptDots, currentLevel, loading, error } = useConceptLearningHistory(conceptName)
   const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
@@ -51,6 +64,11 @@ export function LearningProgressPanel({ conceptName }: { conceptName: string }) 
   const isLoading = loading || subLoading
   const isEmpty = !isLoading && isAccessible && levelEvents.length === 0 && attemptDots.length === 0
   const displayLevel = hoveredLevel ?? currentLevel
+  const canShowLevel = !isLoading && isAccessible && !isEmpty && !error
+
+  useEffect(() => {
+    onLevelChange?.(canShowLevel ? displayLevel : null)
+  }, [canShowLevel, displayLevel, onLevelChange])
 
   return (
     <div className="space-y-5">
@@ -91,15 +109,17 @@ export function LearningProgressPanel({ conceptName }: { conceptName: string }) 
         </div>
       )}
 
-      {!isLoading && isAccessible && !isEmpty && !error && (
+      {canShowLevel && (
         <>
           {/* Level pill */}
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">
-              {hoveredLevel ? 'Level at selected time' : 'Current level'}
-            </span>
-            <LevelPill level={displayLevel} />
-          </div>
+          {showLevelRow && (
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">
+                {hoveredLevel ? 'Level at selected time' : 'Current level'}
+              </span>
+              <LevelPill level={displayLevel} />
+            </div>
+          )}
 
           {/* Legend */}
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -122,9 +142,11 @@ export function LearningProgressPanel({ conceptName }: { conceptName: string }) 
             />
           </div>
 
-          <p className="text-xs text-muted-foreground text-center">
-            Hover the graph to explore your level at any point in time
-          </p>
+          {showHint && (
+            <p className="text-xs text-muted-foreground text-center">
+              Hover the graph to explore your level at any point in time
+            </p>
+          )}
         </>
       )}
     </div>
@@ -141,6 +163,7 @@ interface LearningProgressModalProps {
 export function LearningProgressModal({ conceptName, onClose }: LearningProgressModalProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
+  const [headerLevel, setHeaderLevel] = useState<MasteryState | null>(null)
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
@@ -159,10 +182,11 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
     >
       <div className="w-full max-w-xl bg-card rounded-xl shadow-2xl flex flex-col my-8">
         {/* Header */}
-        <div className="flex items-center gap-3 px-4 h-12 shrink-0">
-          <span className="flex-1 truncate font-semibold text-sm">
-            Learning Progress — {conceptName}
+        <div className="flex items-center gap-3 px-4 h-16 shrink-0">
+          <span className="flex-1 truncate text-xl font-bold">
+            {conceptName}
           </span>
+          {headerLevel && <LevelPill level={headerLevel} />}
           <button
             type="button"
             onClick={onClose}
@@ -176,7 +200,12 @@ export function LearningProgressModal({ conceptName, onClose }: LearningProgress
 
         {/* Body */}
         <div className="p-5">
-          <LearningProgressPanel conceptName={conceptName} />
+          <LearningProgressPanel
+            conceptName={conceptName}
+            showLevelRow={false}
+            showHint={false}
+            onLevelChange={setHeaderLevel}
+          />
         </div>
       </div>
     </div>

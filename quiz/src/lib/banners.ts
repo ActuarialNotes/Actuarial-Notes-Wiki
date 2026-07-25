@@ -13,7 +13,6 @@ export interface DesignationBanner {
   label: string
   fullName: string
   requirements: RequirementGroup[]
-  colors: { bg: string; text: string; border: string }
 }
 
 export function serializeBanner(equip: BannerEquip): string {
@@ -64,34 +63,34 @@ const ASA_REQS: RequirementGroup[] = [
   'ATPA', 'FAP', 'APC',
 ]
 
+// All four designations share one visual treatment — the ".designation-foil"
+// rainbow foil material (index.css) — rather than a distinct flat colour
+// each. They're all "earned achievement" credentials, so one shared,
+// higher-quality material reads better than four muted, near-identical pastels.
 export const DESIGNATION_BANNERS: DesignationBanner[] = [
   {
     id: 'acas',
     label: 'ACAS',
     fullName: 'Associate of the Casualty Actuarial Society',
     requirements: ACAS_REQS,
-    colors: { bg: '#dde8f5', text: '#1a3668', border: '#b0c4e0' },
   },
   {
     id: 'asa',
     label: 'ASA',
     fullName: 'Associate of the Society of Actuaries',
     requirements: ASA_REQS,
-    colors: { bg: '#ddeee4', text: '#1a4a2a', border: '#a8cdb5' },
   },
   {
     id: 'fcas',
     label: 'FCAS',
     fullName: 'Fellow of the Casualty Actuarial Society',
     requirements: [...ACAS_REQS, 'CAS-7', 'CAS-8', 'CAS-9'],
-    colors: { bg: '#f3e8d0', text: '#6b3a00', border: '#d4b078' },
   },
   {
     id: 'fsa',
     label: 'FSA',
     fullName: 'Fellow of the Society of Actuaries',
     requirements: [...ASA_REQS, 'FSA-DMAC', 'FSA-FAC'],
-    colors: { bg: '#f3e0d8', text: '#6b1a00', border: '#d4907a' },
   },
 ]
 

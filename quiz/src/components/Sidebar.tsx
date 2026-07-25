@@ -802,11 +802,15 @@ export default function Sidebar() {
                   <span className="truncate">{profileName}</span>
                   {bannerLabel && (
                     <span
-                      className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded-sm tracking-widest leading-none"
-                      style={{
-                        background: designationBanner?.colors.bg ?? (equippedBanner?.id === 'beta_tester' ? '#d1fae5' : '#ede9fe'),
-                        color: designationBanner?.colors.text ?? (equippedBanner?.id === 'beta_tester' ? '#065f46' : '#4c1d95'),
-                      }}
+                      title={designationBanner?.fullName}
+                      className={cn(
+                        'shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full tracking-wide leading-none',
+                        designationBanner
+                          ? 'designation-foil text-foreground'
+                          : equippedBanner?.id === 'beta_tester'
+                          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                          : 'bg-violet-500/15 text-violet-700 dark:text-violet-300',
+                      )}
                     >
                       {bannerLabel}
                     </span>
@@ -814,7 +818,7 @@ export default function Sidebar() {
                   {isPremium && (
                     <span
                       title={isBetaTester ? 'Beta Tester' : undefined}
-                      className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none"
+                      className="shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 leading-none"
                     >
                       {isBetaTester ? '★ Premium' : 'Premium'}
                     </span>

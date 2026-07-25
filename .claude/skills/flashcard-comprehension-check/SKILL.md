@@ -97,6 +97,13 @@ Run every draft against this before finalizing:
 - The stem reads in under about three sentences — it has to fit comfortably
   inside a modal, not a full exam page.
 - Any calculation uses clean numbers a learner can do in their head.
+- **The stem and options are plain text.** Unlike the flashcard's reverse side,
+  the modal renders them as bare strings (`{check.question}` and the option
+  `<button>` labels in `CollectConceptModal.tsx`) — no KaTeX, no markdown. `$x$`
+  shows up as literal dollar signs and `**bold**` as literal asterisks. Write
+  formulae in prose or Unicode (`P(a ≤ X ≤ b)`, `f(b) − f(a)`, `1.03×`), and
+  keep `$` for currency, as the existing corpus does. If a concept can only be
+  checked through rendered math, pick a different fork.
 - There is exactly one unambiguously correct answer.
 - The concept's own name does not appear in any answer choice.
 - Every distractor targets a specific, nameable misconception (write that
@@ -109,8 +116,12 @@ Run every draft against this before finalizing:
 ## Output format
 
 Each check is one markdown file per concept under
-`comprehension-checks/<exam-id>/<Concept Name>.md` at the repo root (`exam-id`
-is `exam-p` / `exam-fm` / `exam-mas-i`, matching the question bank). The
+`comprehension-checks/<exam-id>/<Concept Name>.md` at the repo root. `exam-id`
+matches the question bank (`exam-p`, `exam-fm`, `exam-mas-i`, `exam-5`, …);
+pick the folder for the earliest `Exam *.md` syllabus page that wiki-links the
+concept, and create the folder if it doesn't exist yet — the vite plugin globs
+every subdirectory, and the parser keys checks by concept name, so the folder is
+organisational only and nothing breaks when a new one appears. The
 filename **is** the concept's display name — its `Concepts/*.md` filename
 without the extension (`Bayes Theorem.md`, `Sample Space.md`, not
 `[[Bayes Theorem]].md`) — so it lines up with `allConceptNames` in
@@ -147,6 +158,16 @@ lookup the modal reads — already wired. Adding a file is all that's needed;
 no code change. A corpus test in `comprehensionCheckParser.test.ts` validates
 every file (4 options, in-range `correct`, concept matches filename, correct
 answer isn't the concept name), so run `npm test` after adding checks.
+
+## Working through the backlog
+
+`docs/comprehension-check-backlog.md` lists every concept still on the runtime
+fallback, bucketed into the `<exam-id>` folder its check belongs in. Regenerate
+it with `python3 scripts/list_missing_checks.py` after authoring a batch, so the
+counts and checkboxes stay honest. When writing several checks in one pass, vary
+the shape across the batch — a folder where every check is the same "which of
+these is NOT…" mould gets predictable fast, which defeats the gate as surely as
+an over-easy question does.
 
 ## Worked examples
 

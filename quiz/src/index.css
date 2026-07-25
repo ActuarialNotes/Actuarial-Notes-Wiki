@@ -1117,3 +1117,21 @@
   .streak-celebrate-halo,
   .streak-celebrate-count { animation: none; }
 }
+
+/* Quiz setup deck card: a quick riffle when the question draw is shuffled —
+   the card kicks sideways and tips, then settles. Brief UI feedback, not a
+   celebration. The confirmation text/icon it accompanies is static, so a
+   reduced-motion user still sees that the shuffle happened. */
+@keyframes deck-card-shuffle {
+  0%   { transform: translateX(0) rotate(0deg); }
+  25%  { transform: translateX(-6px) rotate(-1.2deg); }
+  55%  { transform: translateX(5px) rotate(0.9deg); }
+  80%  { transform: translateX(-2px) rotate(-0.3deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+.deck-card-shuffle {
+  animation: deck-card-shuffle 320ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .deck-card-shuffle { animation: none; }
+}

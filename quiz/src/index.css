@@ -641,6 +641,42 @@
   .lock-foil-ring::before { animation: none; }
 }
 
+/* Designation-credential rainbow foil — ACAS/ASA/FCAS/FSA share one "earned
+   achievement" material (Sidebar profile chip + Store banner preview) instead
+   of a flat colour per designation: a soft rainbow-tinted wash under the same
+   sky→fuchsia→gold foil ring as collected flashcards. The base class is a
+   calm, static ring for persistent chrome (the Sidebar chip); the --hero
+   modifier sets the ring travelling for the Store's purchase-moment preview. */
+.designation-foil {
+  position: relative;
+  background: linear-gradient(115deg,
+    hsl(199 89% 60% / 0.14), hsl(292 84% 61% / 0.14), hsl(45 93% 51% / 0.16));
+}
+.dark .designation-foil {
+  background: linear-gradient(115deg,
+    hsl(199 89% 60% / 0.22), hsl(292 84% 61% / 0.22), hsl(45 93% 51% / 0.24));
+}
+.designation-foil::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
+  background-size: 300% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.designation-foil--hero::before {
+  padding: 1.5px;
+  animation: flashcard-foil-shift 4.5s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .designation-foil--hero::before { animation: none; }
+}
+
 /* Study-plan row highlight: rings a checklist row when the popup navigates to it. */
 @keyframes concept-row-highlight {
   0%, 15% {

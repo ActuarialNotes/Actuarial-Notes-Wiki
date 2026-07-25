@@ -481,16 +481,9 @@ export default function Store() {
                       <Card key={banner.id}>
                         <CardContent className="p-4 space-y-3">
                           {/* Preview */}
-                          <div
-                            className="rounded-md px-6 py-5 text-center select-none"
-                            style={{
-                              background: banner.colors.bg,
-                              color: banner.colors.text,
-                              border: `1px solid ${banner.colors.border}`,
-                            }}
-                          >
+                          <div className="designation-foil designation-foil--hero rounded-md px-6 py-5 text-center select-none text-foreground">
                             <div className="text-xl font-semibold tracking-[0.25em]">{banner.label}</div>
-                            <div className="mt-1.5 h-px w-8 mx-auto opacity-20" style={{ background: 'currentColor' }} />
+                            <div className="mt-1.5 h-px w-8 mx-auto opacity-20 bg-foreground" />
                             <div className="mt-1.5 text-[11px] tracking-wider uppercase font-medium opacity-60">{banner.fullName}</div>
                           </div>
 

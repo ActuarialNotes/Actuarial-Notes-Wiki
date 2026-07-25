@@ -393,9 +393,14 @@ export function CollectConceptModal() {
                 )}
 
                 {check ? (
-                  <p className="px-1 text-base sm:text-lg leading-relaxed text-center font-medium text-foreground">
+                  // Authored stems render as markdown so LaTeX ($…$) comes out as
+                  // formulae rather than literal dollar signs. Currency in the
+                  // check corpus is escaped (\$) so it can't be mistaken for a
+                  // math delimiter — see the corpus test in
+                  // comprehensionCheckParser.test.ts.
+                  <MarkdownText className="px-1 text-base sm:text-lg leading-relaxed text-center font-medium text-foreground [&_p]:my-0 [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden">
                     {check.question}
-                  </p>
+                  </MarkdownText>
                 ) : hasRealQuestion ? (
                   <blockquote className="rounded-lg bg-muted/60 px-3.5 py-3 text-base sm:text-lg leading-relaxed text-foreground/90 border-l-2 border-primary/50">
                     “{prompt}”
@@ -420,7 +425,9 @@ export function CollectConceptModal() {
                               : 'bg-muted/40 hover:bg-accent'
                         }`}
                       >
-                        {opt}
+                        <MarkdownText inline className="[&_p]:my-0 [&_.katex]:text-current">
+                          {opt}
+                        </MarkdownText>
                       </button>
                     )
                   })}

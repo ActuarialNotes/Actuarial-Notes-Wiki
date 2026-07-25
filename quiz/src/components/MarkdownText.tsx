@@ -28,8 +28,13 @@ const blockComponents: Components = {
 }
 
 export function MarkdownText({ children, className, inline }: Props) {
+  // Inline mode wraps in a span, not a div: its callers are phrasing-level
+  // contexts (answer option buttons, spans in reveal/search rows) where a div
+  // is invalid HTML. Flex sizing classes still apply — flex items are
+  // blockified regardless of the element's default display.
+  const Wrapper = inline ? 'span' : 'div'
   return (
-    <div className={className}>
+    <Wrapper className={className}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
@@ -37,6 +42,6 @@ export function MarkdownText({ children, className, inline }: Props) {
       >
         {children}
       </ReactMarkdown>
-    </div>
+    </Wrapper>
   )
 }

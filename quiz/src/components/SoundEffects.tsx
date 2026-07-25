@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { playSound, unlockSound } from '@/lib/soundEngine'
+import { ACTIVATION_EVENTS, playSound, unlockSound } from '@/lib/soundEngine'
 import { resolveInteractionSound, type InteractionTarget } from '@/lib/soundInteractions'
 
 /**
@@ -51,7 +51,10 @@ export default function SoundEffects() {
 
   useEffect(() => {
     // pointerdown, not click: the cue should land the instant the finger does,
-    // which is also what makes it feel like a physical button.
+    // which is also what makes it feel like a physical button. On iOS this
+    // press is too early to *start* the audio context, so the engine holds the
+    // first cue and the `pointerup`/`touchend` below replays it milliseconds
+    // later — see ACTIVATION_EVENTS in soundEngine.
     function onPointerDown(e: PointerEvent) {
       unlockSound()
       if (e.button !== 0 && e.pointerType === 'mouse') return
@@ -63,20 +66,39 @@ export default function SoundEffects() {
     // clicks always report a positive detail, so this only fires for the cases
     // pointerdown missed.
     function onClick(e: MouseEvent) {
+      unlockSound()
       if (e.detail !== 0) return
       const event = resolveInteractionSound(describe(e.target))
       if (event) playSound(event)
     }
 
-    function onKeyDown() { unlockSound() }
+    // Every activation-granting event tries to start the context, for as long
+    // as it takes: a browser may refuse the first few, and one refusal must not
+    // leave the app mute for the rest of the session.
+    function onActivation() { unlockSound() }
+
+    // iOS suspends (or 'interrupts') the context when the tab is backgrounded,
+    // a call comes in, or Siri takes over. Returning to the page is itself
+    // enough to restart it.
+    function onVisibility() {
+      if (document.visibilityState === 'visible') unlockSound()
+    }
 
     document.addEventListener('pointerdown', onPointerDown, true)
     document.addEventListener('click', onClick, true)
-    document.addEventListener('keydown', onKeyDown, { capture: true, once: true })
+    for (const type of ACTIVATION_EVENTS) {
+      if (type === 'click') continue // handled above, with the cue
+      document.addEventListener(type, onActivation, true)
+    }
+    document.addEventListener('visibilitychange', onVisibility)
     return () => {
       document.removeEventListener('pointerdown', onPointerDown, true)
       document.removeEventListener('click', onClick, true)
-      document.removeEventListener('keydown', onKeyDown, true)
+      for (const type of ACTIVATION_EVENTS) {
+        if (type === 'click') continue
+        document.removeEventListener(type, onActivation, true)
+      }
+      document.removeEventListener('visibilitychange', onVisibility)
     }
   }, [])
 

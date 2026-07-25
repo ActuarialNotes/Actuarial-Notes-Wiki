@@ -10,7 +10,10 @@ import { cn } from '@/lib/utils'
  * setting is auditioned rather than guessed at.
  */
 export function SoundSettingsCard() {
-  const { enabled, setEnabled, volume, setVolume, play } = useSoundEffects()
+  const {
+    enabled, setEnabled, volume, setVolume, play,
+    ignoreSilentSwitch, setIgnoreSilentSwitch, showSilentSwitchOption,
+  } = useSoundEffects()
 
   return (
     <Card>
@@ -76,6 +79,44 @@ export function SoundSettingsCard() {
             className="w-full max-w-xs accent-primary disabled:opacity-40"
           />
         </div>
+
+        {showSilentSwitchOption && (
+          <div>
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-sm font-medium">Play on silent</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  iPhone and iPad silence app sounds when the ringer switch is off. Turn this
+                  on to hear them anyway — note that it pauses any music or podcast you have
+                  playing, so leave it off if you study with audio on.
+                </p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={ignoreSilentSwitch}
+                aria-label="Play on silent"
+                data-sound="none"
+                disabled={!enabled}
+                onClick={() => {
+                  setIgnoreSilentSwitch(!ignoreSilentSwitch)
+                  if (!ignoreSilentSwitch) play('toggleOn')
+                }}
+                className={cn(
+                  'relative shrink-0 mt-0.5 h-6 w-11 rounded-full transition-colors disabled:opacity-40',
+                  ignoreSilentSwitch ? 'bg-primary' : 'bg-muted'
+                )}
+              >
+                <span
+                  className={cn(
+                    'absolute top-0.5 h-5 w-5 rounded-full bg-background shadow transition-all',
+                    ignoreSilentSwitch ? 'left-[1.375rem]' : 'left-0.5'
+                  )}
+                />
+              </button>
+            </div>
+          </div>
+        )}
 
         <div>
           <p className="text-sm font-medium mb-2">Preview</p>

@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react'
 import type { SoundEvent } from '@/lib/soundConfig'
 import {
+  canIgnoreSilentSwitch,
   getSoundSettings,
   playSound,
+  setIgnoreSilentSwitch,
   setSoundEnabled,
   setSoundVolume,
   subscribeSound,
@@ -28,6 +30,11 @@ export function useSoundEffects() {
     setEnabled: setSoundEnabled,
     setVolume: setSoundVolume,
     play,
+    // iOS ringer switch — `showSilentSwitchOption` is false everywhere else,
+    // so the control simply doesn't render on browsers with no switch to fight.
+    ignoreSilentSwitch: settings.ignoreSilentSwitch,
+    setIgnoreSilentSwitch,
+    showSilentSwitchOption: canIgnoreSilentSwitch(),
   }
 }
 

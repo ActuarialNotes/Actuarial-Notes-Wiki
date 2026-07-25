@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseQuestion, isAnswerCorrect, normalizeAnswerText } from './parser'
+import { parseQuestion, isAnswerCorrect, normalizeAnswerText, questionCredit, questionOutcome } from './parser'
 
 // ── normalizeAnswerText ───────────────────────────────────────────────────────
 
@@ -239,6 +239,67 @@ describe('parseQuestion — multi-part with essay part', () => {
     const chosen = JSON.stringify({ a: '99' })
     expect(isAnswerCorrect(q, chosen)).toBe(false)
   })
+})
+
+// ── questionCredit / questionOutcome (partial credit) ─────────────────────────
+
+describe('questionCredit — multiple-choice', () => {
+  const q = parseQuestion(MC_RAW)!
+  it('full credit for correct', () => expect(questionCredit(q, 'B')).toBe(1))
+  it('no credit for wrong', () => expect(questionCredit(q, 'A')).toBe(0))
+  it('no credit when unanswered', () => expect(questionCredit(q, null)).toBe(0))
+  it('is never partial', () => {
+    expect(questionOutcome(q, 'B')).toBe('correct')
+    expect(questionOutcome(q, 'A')).toBe('incorrect')
+  })
+})
+
+describe('questionCredit — free-entry manual override', () => {
+  const q = parseQuestion(FREE_ENTRY_RAW)!
+  it('auto full credit for correct value', () => expect(questionCredit(q, '4.5')).toBe(1))
+  it('partial override → 0.5', () => expect(questionCredit(q, '4.5', { [q.id]: 'partial' })).toBe(0.5))
+  it('incorrect override → 0 even if value matches', () =>
+    expect(questionCredit(q, '4.5', { [q.id]: 'incorrect' })).toBe(0))
+  it('outcome partial for a partial override', () =>
+    expect(questionOutcome(q, 'wrong', { [q.id]: 'partial' })).toBe('partial'))
+})
+
+describe('questionCredit — multi-part partial credit', () => {
+  const q = parseQuestion(MULTI_PART_RAW)! // two graded free-entry parts a, b
+
+  it('both parts right → full credit', () => {
+    expect(questionCredit(q, JSON.stringify({ a: '4.5', b: '3.67' }))).toBe(1)
+    expect(questionOutcome(q, JSON.stringify({ a: '4.5', b: '3.67' }))).toBe('correct')
+  })
+
+  it('one of two parts right → half credit, partial outcome', () => {
+    const chosen = JSON.stringify({ a: '4.5', b: '99' })
+    expect(questionCredit(q, chosen)).toBe(0.5)
+    expect(questionOutcome(q, chosen)).toBe('partial')
+  })
+
+  it('both parts wrong → no credit, incorrect outcome', () => {
+    const chosen = JSON.stringify({ a: '1', b: '2' })
+    expect(questionCredit(q, chosen)).toBe(0)
+    expect(questionOutcome(q, chosen)).toBe('incorrect')
+  })
+
+  it('per-part manual override contributes partial weight', () => {
+    // a auto-correct (1) + b overridden partial (0.5) → 0.75
+    const chosen = JSON.stringify({ a: '4.5', b: 'something' })
+    expect(questionCredit(q, chosen, { [`${q.id}__b`]: 'partial' })).toBe(0.75)
+    expect(questionOutcome(q, chosen, { [`${q.id}__b`]: 'partial' })).toBe('partial')
+  })
+
+  it('invalid JSON → no credit', () => expect(questionCredit(q, 'not-json')).toBe(0))
+})
+
+describe('questionCredit — multi-part ignores essay parts', () => {
+  const q = parseQuestion(MULTI_PART_ESSAY_RAW)! // part a graded, part b essay
+  it('graded part right → full credit', () =>
+    expect(questionCredit(q, JSON.stringify({ a: '4.5' }))).toBe(1))
+  it('graded part wrong → no credit', () =>
+    expect(questionCredit(q, JSON.stringify({ a: '99' }))).toBe(0))
 })
 
 // ── multi-part authored with no explicit "## Part" heading ────────────────────

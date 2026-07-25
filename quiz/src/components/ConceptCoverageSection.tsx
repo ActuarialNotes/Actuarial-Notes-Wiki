@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Gem, LayoutDashboard, XCircle } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { Button } from '@/components/ui/button'
-import { isAnswerCorrect, normalizeAnswerText } from '@/lib/parser'
-import type { Question, SelfGrade } from '@/lib/parser'
+import { questionCredit, questionOutcome } from '@/lib/parser'
+import type { Question, SelfGrade, QuestionOutcome } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
 import type { MasteryTransition } from '@/stores/quizStore'
 
@@ -25,15 +25,30 @@ interface Response {
 
 interface ConceptStat {
   name: string
-  correct: number
+  score: number   // fractional credit summed across this concept's questions
   total: number
   questionIndices: number[]
+}
+
+// Outcome → segment/dot colour, shared by the radial chart and concept chips.
+const OUTCOME_COLOR: Record<QuestionOutcome, string> = {
+  correct: '#22c55e',   // green-500
+  partial: '#eab308',   // yellow-500
+  incorrect: '#ef4444', // red-500
+}
+
+// Trim a fractional score to a tidy label: "2" not "2.0", "1.5", "0.33".
+function formatScore(n: number): string {
+  return String(Math.round(n * 100) / 100)
 }
 
 export interface ScoreSummary {
   mode: 'quiz' | 'mock-exam'
   percentage: number
   correctCount: number
+  // Fractional points earned (partial credit included). Falls back to
+  // correctCount for the "Correct" tile when omitted.
+  scoredPoints?: number
   totalQuestions: number
   timeTakenSeconds: number | null
   gemsEarned: number
@@ -60,12 +75,12 @@ function resolveConceptName(link: string): string | null {
 
 function buildConceptStats(
   questions: Question[],
-  outcomes: boolean[],
+  credits: number[],
 ): ConceptStat[] {
   const map = new Map<string, ConceptStat>()
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i]
-    const isCorrect = outcomes[i] ?? false
+    const credit = credits[i] ?? 0
     const names = new Set<string>()
     for (const link of q.wiki_link) {
       const name = resolveConceptName(link)
@@ -74,11 +89,11 @@ function buildConceptStats(
     for (const name of names) {
       const key = name.toLowerCase()
       if (!map.has(key)) {
-        map.set(key, { name, correct: 0, total: 0, questionIndices: [] })
+        map.set(key, { name, score: 0, total: 0, questionIndices: [] })
       }
       const stat = map.get(key)!
       stat.total += 1
-      if (isCorrect) stat.correct += 1
+      stat.score += credit
       stat.questionIndices.push(i)
     }
   }
@@ -118,19 +133,21 @@ function QuizCoverageRadial({
   totalQ,
   questionIndices,
   outcomes,
+  credits,
   selectedQuestion,
   onQuestionClick,
 }: {
   totalQ: number
   questionIndices: number[]
-  outcomes: boolean[]
+  outcomes: QuestionOutcome[]
+  credits: number[]
   selectedQuestion: number | null
   onQuestionClick: (idx: number | null) => void
 }) {
   const [hovered, setHovered] = useState<number | null>(null)
   const linked = new Set(questionIndices)
   const segDeg = 360 / totalQ
-  const correctCount = questionIndices.filter(i => outcomes[i]).length
+  const scoredPoints = questionIndices.reduce((sum, i) => sum + (credits[i] ?? 0), 0)
 
   // active is the segment to label (selected takes priority over hovered)
   const active = selectedQuestion ?? hovered
@@ -158,7 +175,7 @@ function QuizCoverageRadial({
           }
 
           const fill = isLinked
-            ? outcomes[i] ? '#22c55e' : '#ef4444'
+            ? OUTCOME_COLOR[outcomes[i]]
             : 'currentColor'
 
           return (
@@ -178,7 +195,7 @@ function QuizCoverageRadial({
                 <path
                   d={arcPath(startDeg, endDeg, OUTER_R + 3, INNER_R - 3)}
                   fill="none"
-                  stroke={outcomes[i] ? '#22c55e' : '#ef4444'}
+                  stroke={OUTCOME_COLOR[outcomes[i]]}
                   strokeWidth={2.5}
                   opacity={0.7}
                   style={{ transform: 'scale(1.07)', transformOrigin: `${CX}px ${CY}px` }}
@@ -222,15 +239,15 @@ function QuizCoverageRadial({
               textAnchor="middle"
               fontSize={22}
               fontWeight="bold"
-              fill={outcomes[selectedQuestion] ? '#22c55e' : '#ef4444'}
+              fill={OUTCOME_COLOR[outcomes[selectedQuestion]]}
             >
-              {outcomes[selectedQuestion] ? '✓' : '✗'}
+              {outcomes[selectedQuestion] === 'correct' ? '✓' : outcomes[selectedQuestion] === 'partial' ? '~' : '✗'}
             </text>
           </>
         ) : (
           <>
             <text x={CX} y={CY - 8} textAnchor="middle" fontSize={26} fontWeight="bold" fill="currentColor">
-              {correctCount}/{questionIndices.length}
+              {formatScore(scoredPoints)}/{questionIndices.length}
             </text>
             <text x={CX} y={CY + 14} textAnchor="middle" fontSize={11} fill="currentColor" opacity={0.5}>
               correct
@@ -243,6 +260,10 @@ function QuizCoverageRadial({
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-green-500" />
           Correct
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2.5 w-2.5 rounded-full bg-yellow-500" />
+          Partial
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-red-500" />
@@ -274,8 +295,9 @@ function ConceptChip({
   isSelected: boolean
   onSelect: () => void
 }) {
-  const pct = stat.total > 0 ? stat.correct / stat.total : 0
-  const dotColor = pct === 1 ? '#22c55e' : pct >= 0.5 ? '#84cc16' : '#ef4444'
+  const dotColor = stat.score >= stat.total ? OUTCOME_COLOR.correct
+    : stat.score <= 0 ? OUTCOME_COLOR.incorrect
+    : OUTCOME_COLOR.partial
 
   return (
     <button
@@ -294,7 +316,7 @@ function ConceptChip({
       />
       {stat.name}
       <span className={`tabular-nums ${isSelected ? 'opacity-70' : 'text-muted-foreground'}`}>
-        {stat.correct}/{stat.total}
+        {formatScore(stat.score)}/{stat.total}
       </span>
     </button>
   )
@@ -314,31 +336,11 @@ interface ConceptCoverageSectionProps {
   levelUpTransitions?: MasteryTransition[]
 }
 
+// True only when a question earned *full* credit — used by callers that filter
+// "incorrect" questions (a partial still counts as not-fully-correct, so it
+// stays in the review list). Partial-credit scoring lives in questionCredit.
 export function effectiveOutcome(q: Question, chosen: string | null | undefined, manualGrades: Record<string, SelfGrade>): boolean {
-  if (chosen == null) return false
-  if (q.type === 'free-entry') {
-    const override = manualGrades[q.id]
-    if (override !== undefined) return override === 'correct'
-    return isAnswerCorrect(q, chosen)
-  }
-  if (q.type === 'multi-part') {
-    try {
-      const parts = q.parts ?? []
-      const gradedParts = parts.filter(p => p.answer !== '')
-      if (gradedParts.length === 0) return true
-      const chosenParts = JSON.parse(chosen) as Record<string, string>
-      return gradedParts.every(part => {
-        const override = manualGrades[`${q.id}__${part.label}`]
-        if (override !== undefined) return override === 'correct'
-        const partChosen = chosenParts[part.label] ?? ''
-        if (part.type === 'multiple-choice') return partChosen === part.answer
-        return normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)
-      })
-    } catch {
-      return false
-    }
-  }
-  return isAnswerCorrect(q, chosen)
+  return questionCredit(q, chosen, manualGrades) >= 1
 }
 
 export function ConceptCoverageSection({
@@ -352,9 +354,10 @@ export function ConceptCoverageSection({
   levelUpTransitions = [],
 }: ConceptCoverageSectionProps) {
   const navigate = useNavigate()
-  const outcomes = questions.map(q => effectiveOutcome(q, responses[q.id]?.chosen, manualGrades))
-  const stats = buildConceptStats(questions, outcomes)
-  const hasIncorrect = outcomes.some(o => !o)
+  const credits = questions.map(q => questionCredit(q, responses[q.id]?.chosen, manualGrades))
+  const outcomes = questions.map(q => questionOutcome(q, responses[q.id]?.chosen, manualGrades))
+  const stats = buildConceptStats(questions, credits)
+  const hasIncorrect = outcomes.some(o => o !== 'correct')
 
   const [selectedName, setSelectedName] = useState<string | null>(null)
 
@@ -386,7 +389,7 @@ export function ConceptCoverageSection({
 
           <div className="flex flex-wrap gap-6 mt-4">
             <div>
-              <span className="text-2xl font-bold tabular-nums">{score.correctCount}</span>
+              <span className="text-2xl font-bold tabular-nums">{formatScore(score.scoredPoints ?? score.correctCount)}</span>
               <span className="text-lg text-muted-foreground">/{score.totalQuestions}</span>
               <p className="text-xs text-muted-foreground mt-0.5">Correct</p>
             </div>
@@ -491,6 +494,7 @@ export function ConceptCoverageSection({
               totalQ={questions.length}
               questionIndices={selected ? selected.questionIndices : questions.map((_, i) => i)}
               outcomes={outcomes}
+              credits={credits}
               selectedQuestion={selectedQuestion}
               onQuestionClick={onQuestionSelect}
             />

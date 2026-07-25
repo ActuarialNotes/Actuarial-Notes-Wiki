@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, FileDown, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
-import { QuestionCardStack } from '@/components/QuestionCardStack'
+import { QuestionDeckCard } from '@/components/QuestionDeckCard'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
@@ -15,6 +15,7 @@ import { selectQuestionsForCoverage, minQuestionsToCoverConcepts } from '@/lib/s
 import { readTodayLevelUps, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
+import type { Question } from '@/lib/parser'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuizMode } from '@/lib/parser'
@@ -732,6 +733,22 @@ export default function Landing() {
   }
 
   function handleStart() {
+    // A shuffled draw pins the exact question set, whichever mode produced it.
+    if (drawnIds && drawnIds.length > 0) {
+      try {
+        sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(drawnIds))
+      } catch { /* ignore */ }
+      const params = new URLSearchParams({
+        selection: 'stored',
+        mode,
+        count: String(drawnIds.length),
+        from: 'home',
+      })
+      if (mode === 'quiz') params.set('reveal', reveal)
+      navigate(`/quiz?${params.toString()}`)
+      return
+    }
+
     if (selectedConcept) {
       const params = new URLSearchParams({ concept: selectedConcept, mode: 'quiz', reveal, from: 'home' })
       if (count < conceptAvailableCount) params.set('count', String(count))
@@ -805,15 +822,85 @@ export default function Landing() {
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = EXAMS.find(e => e.value === topic)?.label ?? topic
 
-  // How many questions the current configuration can draw from, and how many of
-  // those the quiz will actually pull. Drives the footer card stack + caption.
-  const examQuestionCount = topic ? (questionCounts[topic] ?? 0) : 0
-  const poolCount = mode === 'mock-exam'
-    ? (selectedSitting ? sittingQuestionCount : examQuestionCount)
-    : effectiveAvailableCount
+  // The questions the current configuration can draw from. Backs the deck
+  // card's availability number and gives the shuffle something to draw from.
+  const currentPool = useMemo<Question[]>(() => {
+    if (mode === 'mock-exam') {
+      if (!topic) return []
+      return filterQuestions(allQuestions, {
+        exam: topic,
+        ...(selectedSitting && { year: selectedSitting.year, session: selectedSitting.session }),
+      })
+    }
+    if (selectedConcept) return filterQuestions(allQuestions, { concept: selectedConcept })
+    if (useTodaysPlan) return buildTodaysPlanSelection()?.todayQs ?? []
+    if (!topic) return []
+    return filterQuestions(allQuestions, {
+      exam: topic,
+      ...(selectedConcepts.length > 0 && { concepts: selectedConcepts }),
+    })
+  }, [mode, topic, allQuestions, selectedSitting, selectedConcept, useTodaysPlan, buildTodaysPlanSelection, selectedConcepts])
+
+  // How many the pool holds, and how many of those the quiz will pull.
+  const poolCount = currentPool.length
   const quizQuestionCount = mode === 'mock-exam'
-    ? (selectedSitting ? sittingQuestionCount : Math.min(mockExamCount, examQuestionCount))
-    : Math.min(count, effectiveAvailableCount)
+    ? (selectedSitting ? poolCount : Math.min(mockExamCount, poolCount))
+    : Math.min(count, poolCount)
+
+  // ── Shuffling the draw ────────────────────────────────────────────────────
+  // Tapping the deck card fixes a specific set of questions for the next quiz.
+  // The set is cleared whenever the configuration changes, so Start can never
+  // launch a draw that no longer matches the filters on screen.
+  const [drawnIds, setDrawnIds] = useState<string[] | null>(null)
+  const [shuffleTick, setShuffleTick] = useState(0)
+  const [justShuffled, setJustShuffled] = useState(false)
+  const shuffleTimerRef = useRef<number | null>(null)
+
+  const drawSignature = [
+    mode,
+    topic,
+    selectedConcept,
+    conceptMode,
+    count,
+    selectedSitting ? `${selectedSitting.year}|${selectedSitting.session ?? ''}` : '',
+    [...selectedConcepts].sort().join(','),
+  ].join('§')
+
+  useEffect(() => {
+    setDrawnIds(null)
+    setJustShuffled(false)
+  }, [drawSignature])
+
+  useEffect(() => () => {
+    if (shuffleTimerRef.current !== null) window.clearTimeout(shuffleTimerRef.current)
+  }, [])
+
+  function handleShuffle() {
+    if (quizQuestionCount <= 0) return
+    const shuffled = [...currentPool]
+    // Fisher-Yates (uniform; sort+random is biased) — same draw the quiz itself uses.
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    // Today's Plan keeps its coverage guarantee: the greedy cover takes the
+    // first best-covering question, so running it over a shuffled pool yields a
+    // different set that still covers the day's concepts.
+    const planConcepts = useTodaysPlan ? buildTodaysPlanSelection()?.concepts : undefined
+    const draw = planConcepts
+      ? selectQuestionsForCoverage(shuffled, planConcepts, quizQuestionCount)
+      : shuffled.slice(0, quizQuestionCount)
+
+    setDrawnIds(draw.map(q => q.id))
+    setShuffleTick(t => t + 1)
+    setJustShuffled(true)
+    if (shuffleTimerRef.current !== null) window.clearTimeout(shuffleTimerRef.current)
+    shuffleTimerRef.current = window.setTimeout(() => setJustShuffled(false), 1800)
+  }
+
+  // Nothing a shuffle could change: an empty pool, or a draw that already takes
+  // every question available.
+  const shuffleDisabled = poolCount === 0 || quizQuestionCount >= poolCount
   const hasTopic = topic !== ''
   const hasSelection = hasTopic || selectedConcept !== ''
 
@@ -1126,17 +1213,16 @@ export default function Landing() {
             </p>
           )}
 
-          {/* ── Question deck: the pool, with the selected slice lit ──── */}
+          {/* ── Question deck: availability + shuffle the draw ────────── */}
           {poolCount > 0 && (
-            <div className="space-y-1.5">
-              <QuestionCardStack total={poolCount} selected={quizQuestionCount} />
-              <p className="text-xs text-muted-foreground text-center">
-                <span className="font-medium text-foreground tabular-nums">{quizQuestionCount}</span>
-                {' of '}
-                <span className="tabular-nums">{poolCount}</span>
-                {` question${poolCount !== 1 ? 's' : ''} available`}
-              </p>
-            </div>
+            <QuestionDeckCard
+              available={poolCount}
+              selected={quizQuestionCount}
+              onShuffle={handleShuffle}
+              shuffleTick={shuffleTick}
+              justShuffled={justShuffled}
+              disabled={shuffleDisabled}
+            />
           )}
 
           <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">

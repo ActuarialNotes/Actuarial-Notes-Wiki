@@ -67,6 +67,40 @@ delegated listener. Beyond that,
 Nearest-wins: `data-sound` on a wrapper only applies to presses on the wrapper
 itself, so a button inside a `data-sound="none"` card still clicks.
 
+## iOS
+
+Two things about iPhone/iPad are worth knowing before touching the engine,
+because both look like "sound is broken" and neither is.
+
+**Starting the context.** Web Audio will not start until a gesture grants user
+activation, and WebKit does not count the *press* — `pointerdown`, `touchstart`
+and `mousedown` all fail to start it, while `pointerup`, `touchend`, `click` and
+`keydown` succeed. Blink and Gecko happily resume from `pointerdown`, which is
+how the first version of this shipped working on desktop and completely mute on
+iPhone (in Safari and Chrome alike — Chrome on iOS is WebKit).
+
+So the engine resumes on every event in `ACTIVATION_EVENTS`, and keeps trying
+rather than giving up after one refusal. Press cues still fire on `pointerdown`
+for responsiveness; when the context isn't running yet, the cue is *held* and
+replayed by the next activation event — on a tap, that's the `touchend` a few
+tens of milliseconds later, so the very first press is still audible. A held cue
+is only discarded once it has actually played or gone stale
+(`PENDING_CUE_MAX_AGE_MS`); dropping it on a resume that resolved *without*
+starting the context is the subtle way to reintroduce this bug.
+
+`soundEngine.unlock.test.ts` reproduces all of it against a fake context that
+enforces WebKit's rule.
+
+**The ringer switch.** iOS silences the `ambient` audio session when the
+hardware switch is set to silent, and that's where a web page starts. The only
+session type that plays over it is `playback`, which the spec defines as
+*exclusive*: taking it interrupts the user's music or podcast rather than
+ducking it. (`transient` reads like the right category for UI sounds, but WebKit
+maps it to ambient, so it's silenced too.) A silenced phone staying silent is
+correct, so this stays off by default and Settings → Sound offers "Play on
+silent" to anyone who'd rather have the sounds — visible only where
+`navigator.audioSession` exists, which is WebKit only.
+
 ## Notes
 
 - Disabled controls are always silent, whatever their `data-sound` says.

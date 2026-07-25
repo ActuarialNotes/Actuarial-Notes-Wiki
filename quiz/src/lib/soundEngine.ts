@@ -24,6 +24,7 @@ import {
 
 const ENABLED_KEY = 'actuarial-notes-sounds'
 const VOLUME_KEY = 'actuarial-notes-sound-volume'
+const SILENT_SWITCH_KEY = 'actuarial-notes-sound-ignore-silent-switch'
 
 // ---------------------------------------------------------------------------
 // Settings store
@@ -33,20 +34,27 @@ export interface SoundSettings {
   enabled: boolean
   /** Master volume, 0–1. */
   volume: number
+  /**
+   * iOS only: play even when the ringer switch is set to silent. Off by
+   * default — see `setIgnoreSilentSwitch` for why this isn't free.
+   */
+  ignoreSilentSwitch: boolean
 }
 
 function loadSettings(): SoundSettings {
   let enabled = true
   let volume = DEFAULT_VOLUME
+  let ignoreSilentSwitch = false
   try {
     enabled = localStorage.getItem(ENABLED_KEY) !== 'false'
+    ignoreSilentSwitch = localStorage.getItem(SILENT_SWITCH_KEY) === 'true'
     const raw = localStorage.getItem(VOLUME_KEY)
     if (raw !== null) {
       const parsed = Number(raw)
       if (Number.isFinite(parsed)) volume = clamp01(parsed)
     }
   } catch { /* private mode / SSR — fall back to the defaults */ }
-  return { enabled, volume }
+  return { enabled, volume, ignoreSilentSwitch }
 }
 
 function clamp01(n: number): number {
@@ -90,6 +98,56 @@ export function setSoundVolume(volume: number) {
 }
 
 // ---------------------------------------------------------------------------
+// iOS ringer switch
+// ---------------------------------------------------------------------------
+
+interface AudioSessionLike { type: string }
+
+function audioSession(): AudioSessionLike | null {
+  if (typeof navigator === 'undefined') return null
+  const nav = navigator as Navigator & { audioSession?: AudioSessionLike }
+  return nav.audioSession ?? null
+}
+
+/**
+ * Whether this browser can be asked to play over the ringer switch. Only
+ * WebKit implements the Audio Session API, which is exactly where the problem
+ * exists — elsewhere there's no switch to fight and nothing to offer.
+ */
+export function canIgnoreSilentSwitch(): boolean {
+  return audioSession() !== null
+}
+
+/**
+ * On iOS the audio session starts out `ambient`, which the hardware ringer
+ * switch silences — the same rule that mutes a game but not a podcast. The
+ * only session type that plays over the switch is `playback`, and per the
+ * spec that's an *exclusive* type: taking it means the user's music or podcast
+ * gets interrupted rather than ducked. (`transient` sounds like the right
+ * answer for UI cues, but WebKit maps it to the ambient category, so it's
+ * silenced too.)
+ *
+ * That trade isn't ours to make for everyone, so this stays off by default —
+ * a silenced phone staying silent is correct behaviour — and Settings offers
+ * it to anyone who would rather have the sounds.
+ */
+function applyAudioSession() {
+  const session = audioSession()
+  if (!session) return
+  try {
+    session.type = settings.ignoreSilentSwitch ? 'playback' : 'auto'
+  } catch { /* unsupported value — leave the session alone */ }
+}
+
+export function setIgnoreSilentSwitch(ignore: boolean) {
+  if (settings.ignoreSilentSwitch === ignore) return
+  settings = { ...settings, ignoreSilentSwitch: ignore }
+  try { localStorage.setItem(SILENT_SWITCH_KEY, String(ignore)) } catch { /* ignore */ }
+  applyAudioSession()
+  emit()
+}
+
+// ---------------------------------------------------------------------------
 // Audio graph
 // ---------------------------------------------------------------------------
 
@@ -121,19 +179,82 @@ function getCtx(): AudioContext | null {
       return null
     }
   }
-  // Browsers suspend contexts created before the first gesture, and again when
-  // a tab is backgrounded; resuming is a no-op when already running.
-  if (ctx.state === 'suspended') void ctx.resume().catch(() => {})
+  // Contexts start suspended before the first gesture, and are suspended again
+  // when the tab is backgrounded (iOS also uses a non-standard 'interrupted'
+  // state for calls and Siri), so anything that isn't 'running' gets a resume.
+  if (ctx.state !== 'running') void ctx.resume().then(flushPending).catch(() => {})
   return ctx
 }
 
 /**
- * Warm the context up from inside a real user gesture. Called once by the
- * global listener in `SoundEffects` so the very first cue — which may be fired
- * from a timer, not a click — isn't swallowed by the autoplay policy.
+ * Events that grant the user activation Web Audio needs before it will start.
+ *
+ * This list is the whole reason sound worked on desktop but not on iPhone.
+ * WebKit does not treat `pointerdown` / `touchstart` / `mousedown` as
+ * activation-triggering for audio — only the *end* of an interaction counts —
+ * so resuming from `pointerdown` alone left the context suspended forever on
+ * iOS, in both Safari and Chrome (which is Safari's engine on iPhone). Blink
+ * and Gecko are happy to resume from `pointerdown`, which is why this never
+ * showed up on a laptop.
+ *
+ * Keep `pointerdown` OUT of this list — not because it does harm, but because
+ * its presence here would suggest it is sufficient, and it is not.
+ */
+export const ACTIVATION_EVENTS = ['pointerup', 'touchend', 'click', 'keydown'] as const
+
+/**
+ * How long a cue held back by a suspended context stays worth playing. Long
+ * enough to cover press → release on the first tap, short enough that a cue
+ * never arrives detached from the action that caused it.
+ */
+export const PENDING_CUE_MAX_AGE_MS = 500
+
+let pendingCue: { event: SoundEvent; at: number } | null = null
+
+/** Should a cue held while the context was starting still be played? */
+export function pendingCueIsFresh(queuedAt: number, now: number): boolean {
+  return now - queuedAt <= PENDING_CUE_MAX_AGE_MS
+}
+
+/**
+ * Play the cue that arrived while the context was still starting, so the very
+ * first tap of a session isn't silently dropped.
+ */
+function flushPending() {
+  if (!pendingCue) return
+  // Hold on to the cue while the context is still refusing to start. Every
+  // `resume()` resolves whether or not it was allowed — including the doomed
+  // one from `pointerdown` — so clearing here would throw the cue away
+  // moments before the gesture that could actually have played it.
+  if (ctx?.state !== 'running') return
+  const queued = pendingCue
+  pendingCue = null
+  if (!pendingCueIsFresh(queued.at, Date.now())) return
+  // The dropped attempt already stamped the throttle; clear it so the replay
+  // isn't mistaken for a double-fire.
+  lastPlayedAt.delete(queued.event)
+  playSound(queued.event)
+}
+
+/**
+ * Start (or restart) the audio context from inside a user gesture. Called by
+ * the global listener in `SoundEffects` for each of `ACTIVATION_EVENTS`, and
+ * again when the tab comes back to the foreground.
+ *
+ * Safe to call often: once the context is running this is a cheap no-op.
  */
 export function unlockSound() {
-  getCtx()
+  const audio = getCtx()
+  if (!audio) return
+  applyAudioSession()
+  if (audio.state === 'running') flushPending()
+}
+
+/** Whether the engine is actually able to make a sound right now. */
+export function soundContextState(): 'unsupported' | 'idle' | 'starting' | 'running' {
+  if (unavailable) return 'unsupported'
+  if (!ctx) return 'idle'
+  return ctx.state === 'running' ? 'running' : 'starting'
 }
 
 /** One second of white noise, reused (looped) by every noise-based cue. */
@@ -234,6 +355,17 @@ export function playSound(event: SoundEvent) {
 
   const audio = getCtx()
   if (!audio || !master) return
+
+  if (audio.state !== 'running') {
+    // The context hasn't been allowed to start yet. Scheduling into it now
+    // would render the cue against a frozen clock and lose it, so hold the
+    // most recent one and let `unlockSound` replay it the moment the next
+    // activation event starts the context. On iOS that next event is the
+    // `touchend`/`click` a few tens of milliseconds after this very press.
+    pendingCue = { event, at: Date.now() }
+    return
+  }
+
   try {
     const t0 = audio.currentTime + 0.001
     const bus = audio.createGain()

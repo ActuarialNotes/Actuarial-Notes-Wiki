@@ -293,12 +293,13 @@ export default function Settings() {
   )
 
   const navItems = [
-    { id: 'support', label: 'Support' },
+    ...(user ? [] : [{ id: 'signin', label: 'Sign In' }]),
     { id: 'appearance', label: 'Appearance' },
+    { id: 'support', label: 'Support' },
     ...(user && XP_ENABLED ? [{ id: 'dailygoal', label: 'Daily Goal' }] : []),
     ...(user && LEAGUES_ENABLED ? [{ id: 'league', label: 'Leaderboard' }] : []),
     ...(user && DAILY_PLAN_EMAIL_ENABLED ? [{ id: 'email', label: 'Daily Email' }] : []),
-    ...(user ? BASE_NAV_ITEMS : [{ id: 'signin', label: 'Sign In' }]),
+    ...(user ? BASE_NAV_ITEMS : []),
   ]
 
   // ---- Onboarding tour (replayable from Support) ----
@@ -641,48 +642,12 @@ export default function Settings() {
           {/* Sections */}
           <div className="flex-1 space-y-8 min-w-0">
 
-            {/* ---- Support (first) ---- */}
-            <section ref={el => { sectionRefs.current.support = el }} id="support">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Support</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Take the tour</p>
-                      <p className="text-xs text-muted-foreground">
-                        Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes and more.
-                      </p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => restartTour()}
-                      className="shrink-0"
-                    >
-                      <GraduationCap className="h-4 w-4 mr-2" />
-                      Start tour
-                    </Button>
-                  </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Contact us</p>
-                      <p className="text-xs text-muted-foreground">
-                        Have a question or found a bug? Send us a message.
-                      </p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowContact(true)}
-                      className="shrink-0"
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Contact us
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
+            {/* ---- Inline login (logged out, first) ---- */}
+            {!user && (
+              <section ref={el => { sectionRefs.current.signin = el }} id="signin">
+                <InlineAuthForm />
+              </section>
+            )}
 
             {/* ---- Appearance ---- */}
             <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">
@@ -820,6 +785,49 @@ export default function Settings() {
               </Card>
             </section>
 
+            {/* ---- Support ---- */}
+            <section ref={el => { sectionRefs.current.support = el }} id="support">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Support</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">Take the tour</p>
+                      <p className="text-xs text-muted-foreground">
+                        Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes and more.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => restartTour()}
+                      className="shrink-0"
+                    >
+                      <GraduationCap className="h-4 w-4 mr-2" />
+                      Start tour
+                    </Button>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">Contact us</p>
+                      <p className="text-xs text-muted-foreground">
+                        Have a question or found a bug? Send us a message.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowContact(true)}
+                      className="shrink-0"
+                    >
+                      <Mail className="h-4 w-4 mr-2" />
+                      Contact us
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
             {/* ---- Daily goal (XP) ---- */}
             {user && XP_ENABLED && (
               <section ref={el => { sectionRefs.current.dailygoal = el }} id="dailygoal">
@@ -838,13 +846,6 @@ export default function Settings() {
             {user && DAILY_PLAN_EMAIL_ENABLED && (
               <section ref={el => { sectionRefs.current.email = el }} id="email">
                 <EmailSettingsCard />
-              </section>
-            )}
-
-            {/* ---- Inline login (logged out) ---- */}
-            {!user && (
-              <section ref={el => { sectionRefs.current.signin = el }} id="signin">
-                <InlineAuthForm />
               </section>
             )}
 

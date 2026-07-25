@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions, questionCredit } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface Props {
   session: QuizSession
@@ -27,6 +28,7 @@ function formatDate(iso: string): string {
 }
 
 export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props) {
+  useSoundOnMount('open')
   const [loadState, setLoadState] = useState<LoadState>({ status: 'loading' })
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
   const [showIncorrectOnly, setShowIncorrectOnly] = useState(false)

@@ -75,6 +75,7 @@ import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { trackFlashcardReviewed } from '@/lib/analytics'
+import { playSound } from '@/lib/soundEngine'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 
@@ -2518,6 +2519,9 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   useImperativeHandle(ref, () => ({ flip: handleFlip, isFlipped: () => flipped }))
 
   function handleFlip() {
+    // Turning a card over is the paper flick, not a button press — the card
+    // itself carries data-sound="none" so this is the only cue.
+    playSound('page')
     if (!flipped) {
       setFlipped(true)
       trackFlashcardReviewed({ concept: current.name, kind: current.kind })
@@ -2582,6 +2586,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
     setSwiping(false)
 
     const dx = dragXRef.current
+    if ((dx <= -SWIPE_THRESHOLD && hasNext) || (dx >= SWIPE_THRESHOLD && hasPrev)) {
+      // The card flies off — same flick as the Prev/Next buttons.
+      playSound('page')
+    }
     if (dx <= -SWIPE_THRESHOLD && hasNext) {
       setSettling(true)
       dragXRef.current = -SWIPE_FLY_DISTANCE
@@ -2609,6 +2617,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
       {/* Flip card */}
       <div
         data-tour="flip-card"
+        data-sound="none"
         className={`relative w-full max-w-xl min-h-56 rounded-2xl bg-card text-card-foreground shadow-xl flex flex-col cursor-pointer${flipped ? '' : ' select-none'}${isFlashing ? ' flashcard-highlight' : ''}`}
         style={{
           transform: `translateX(${dragX}px) rotate(${dragX / 20}deg)`,
@@ -2812,6 +2821,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
           </button>
           <button
             type="button"
+            data-sound="none"
             onClick={() => onRate('got')}
             title="Mark complete and continue (2)"
             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-green-500/15 text-green-600 dark:text-green-400 text-sm font-semibold hover:bg-green-500/25 active:scale-[0.98] transition-all"
@@ -3084,6 +3094,9 @@ export default function Flashcards() {
   function handleRate(rating: StudyRating) {
     const card = orderedCards[activeIndex]
     if (!card) return
+    // "Got it" is a right answer like any other; "Again" is not a mistake, so
+    // it keeps the plain press cue the delegated listener already gives it.
+    if (rating === 'got') playSound('correct')
     if (rating === 'again') {
       setAgainCounts(m => ({ ...m, [card.name]: (m[card.name] ?? 0) + 1 }))
       if (card.completedAt) toggleCompleted(card.name)
@@ -3095,6 +3108,8 @@ export default function Flashcards() {
     const next = nextIncompleteIndex(completedFlags, activeIndex)
     if (next === -1) {
       setShowSessionSummary(true)
+      // Let the arpeggio for this last card ring before the session fanfare.
+      window.setTimeout(() => playSound('complete'), 380)
     } else if (next === activeIndex) {
       // Sole unfinished card: the index can't change, so flip it back over for
       // another pass instead.
@@ -3397,6 +3412,7 @@ export default function Flashcards() {
             <button
               type="button"
               disabled={activeIndex === 0}
+              data-sound="page"
               onClick={() => setActiveIndex(activeIndex - 1)}
               className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
@@ -3426,6 +3442,7 @@ export default function Flashcards() {
             <button
               type="button"
               disabled={activeIndex === orderedCards.length - 1}
+              data-sound="page"
               onClick={() => setActiveIndex(activeIndex + 1)}
               className="flex-1 flex items-center justify-center gap-2 px-4 text-base sm:text-sm font-medium hover:bg-accent/60 active:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { playSound } from '@/lib/soundEngine'
 import { Check, ChevronLeft, ChevronRight, Gem, Loader2, Target } from 'lucide-react'
 import { useQuests } from '@/hooks/useQuests'
 import { KIND_STYLE, CollectButton } from '@/components/QuestsCard'
@@ -29,6 +30,7 @@ export function QuestsPanel({ context, xp }: { context?: QuestContext; xp?: XpVi
 
   const collect = (ids?: readonly string[]) => {
     if (claiming) return
+    playSound('reward')
     setClaiming(true)
     void claim(ids).finally(() => setClaiming(false))
   }

@@ -19,6 +19,7 @@ import { useOnboardingTour } from '@/hooks/useOnboardingTour'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { DailyGoalPicker } from '@/components/DailyGoalPicker'
 import { LeagueSettingsCard } from '@/components/LeagueSettingsCard'
+import { SoundSettingsCard } from '@/components/SoundSettingsCard'
 import { EmailSettingsCard } from '@/components/EmailSettingsCard'
 import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 import {
@@ -295,6 +296,7 @@ export default function Settings() {
   const navItems = [
     ...(user ? [] : [{ id: 'signin', label: 'Sign In' }]),
     { id: 'appearance', label: 'Appearance' },
+    { id: 'sound', label: 'Sound' },
     { id: 'support', label: 'Support' },
     ...(user && XP_ENABLED ? [{ id: 'dailygoal', label: 'Daily Goal' }] : []),
     ...(user && LEAGUES_ENABLED ? [{ id: 'league', label: 'Leaderboard' }] : []),
@@ -783,6 +785,11 @@ export default function Settings() {
                   </div>
                 </CardContent>
               </Card>
+            </section>
+
+            {/* ---- Sound ---- */}
+            <section ref={el => { sectionRefs.current.sound = el }} id="sound">
+              <SoundSettingsCard />
             </section>
 
             {/* ---- Support ---- */}

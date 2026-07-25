@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { todayISO } from '@/lib/studyPlan'
 import type { MasteryState } from '@/lib/mastery'
+import { useSoundEffects } from '@/hooks/useSoundEffects'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -122,6 +123,7 @@ function launchConfetti(canvas: HTMLCanvasElement, originX: number, originY: num
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose }: Props) {
+  const { play } = useSoundEffects()
   const [visibleCount, setVisibleCount] = useState(0)
   const [phase, setPhase] = useState<Phase>('ticking')
   const [tapped, setTapped] = useState(false)
@@ -155,10 +157,11 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
     }
     const t = setTimeout(() => {
       setPhase('complete')
+      play('complete')
       fireAt(window.innerWidth / 2, window.innerHeight * 0.42)
     }, 750)
     return () => clearTimeout(t)
-  }, [visibleCount, concepts.length, phase, fireAt])
+  }, [visibleCount, concepts.length, phase, fireAt, play])
 
   // Animate gem count from gemsEarnedToday → gemsEarnedToday*2 in claimed phase
   const displayGems = useCountUp(bonusGems, bonusGems * 2, 1400, phase === 'claimed')
@@ -166,6 +169,8 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
   const handleLockTap = useCallback(async () => {
     if (tapped) return
     setTapped(true)
+
+    play('reward')
 
     // Fire confetti from lock position
     const rect = lockRef.current?.getBoundingClientRect()
@@ -192,7 +197,7 @@ export function StudyPlanCompletionCeremony({ concepts, gemsEarnedToday, onClose
     }
     if (!mounted.current) return
     setPhase('claimed')
-  }, [tapped, bonusGems, fireAt])
+  }, [tapped, bonusGems, fireAt, play])
 
   return (
     <>

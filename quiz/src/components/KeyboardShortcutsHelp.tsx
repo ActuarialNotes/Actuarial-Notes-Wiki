@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Keyboard, X } from 'lucide-react'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface ShortcutRow {
   keys: string[]
@@ -66,6 +67,8 @@ interface KeyboardShortcutsHelpProps {
 }
 
 export function KeyboardShortcutsHelp({ context, onClose }: KeyboardShortcutsHelpProps) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape' || e.key === '?') {

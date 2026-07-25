@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface QuitQuizDialogProps {
   mode: 'quiz' | 'mock-exam'
@@ -9,6 +10,8 @@ interface QuitQuizDialogProps {
 }
 
 export function QuitQuizDialog({ mode, onCancel, onConfirm, onFinish }: QuitQuizDialogProps) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   const label = mode === 'mock-exam' ? 'mock exam' : 'quiz'
 
   useEffect(() => {

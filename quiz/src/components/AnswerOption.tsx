@@ -100,6 +100,7 @@ export function AnswerOption({
       tabIndex={isDisabled && !isNavigable ? -1 : 0}
       aria-disabled={isDisabled && !isNavigable}
       aria-label={`Option ${optionKey}`}
+      data-sound="select"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onClick={handleClick}

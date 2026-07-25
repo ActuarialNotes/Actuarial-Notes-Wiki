@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Flame } from 'lucide-react'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 import {
   consumeStreakCelebration,
   readStreakCelebration,
@@ -32,6 +33,10 @@ export function StreakCompleteOverlay({ onResolved }: { onResolved: () => void }
   // Already resolved when we know on first render there's nothing to celebrate
   // (a same-day repeat quiz wrote a not-increased marker before navigation).
   const [resolved, setResolved] = useState(() => !!initial && !initial.increased)
+
+  // The flame catching. Keyed to the streak arriving, not to mount: the
+  // overlay mounts on every /review visit and usually has nothing to show.
+  useSoundOnMount('streak', streak !== null)
 
   // Fire onResolved exactly once, when we transition into the resolved state.
   const onResolvedRef = useRef(onResolved)

@@ -16,6 +16,7 @@ import {
   type QuickSetPreset,
   type TargetStrengthLevel,
 } from '@/lib/studyPlan'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 const HEADLINE_PRESETS: QuickSetPreset[] = ['1w', '2w', '1m']
 
@@ -39,6 +40,8 @@ interface Props {
 }
 
 export function StudyPlanConfigModal({ config, examDate, examLabel, examId, initialStep, isPremium = true, onSave, onExamDateChange, onClose }: Props) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   const today = todayISO()
 
   const variants = examId ? (LOCALIZED_EXAMS[examId] ?? null) : null

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 interface IncompletePartsDialogProps {
   onCancel: () => void
@@ -7,6 +8,8 @@ interface IncompletePartsDialogProps {
 }
 
 export function IncompletePartsDialog({ onCancel, onConfirm }: IncompletePartsDialogProps) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onCancel()

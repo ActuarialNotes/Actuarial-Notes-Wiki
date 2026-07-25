@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { playSound } from '@/lib/soundEngine'
 import {
   BookOpen,
   CheckCircle2,
@@ -128,6 +129,7 @@ export function QuestsCard({ context }: { context?: QuestContext }) {
 
   const collect = (ids?: readonly string[]) => {
     if (claiming) return
+    playSound('reward')
     setClaiming(true)
     void claim(ids).finally(() => setClaiming(false))
   }

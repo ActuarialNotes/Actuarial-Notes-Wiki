@@ -6,6 +6,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
 import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
+import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -138,6 +139,8 @@ interface LearningProgressModalProps {
 }
 
 export function LearningProgressModal({ conceptName, onClose }: LearningProgressModalProps) {
+  // Paper: the panel sliding in.
+  useSoundOnMount('open')
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()

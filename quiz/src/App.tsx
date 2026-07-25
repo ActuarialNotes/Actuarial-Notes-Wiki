@@ -17,6 +17,7 @@ import Store from '@/pages/Store'
 import Sidebar from '@/components/Sidebar'
 import BottomNav from '@/components/BottomNav'
 import OnboardingTour from '@/components/OnboardingTour'
+import SoundEffects from '@/components/SoundEffects'
 import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
 import { useCollect } from '@/hooks/useCollect'
 import { AuthProvider } from '@/contexts/AuthContext'
@@ -154,6 +155,7 @@ export default function App({ initialSession }: { initialSession: Session | null
     <BrowserRouter>
       <PageTracker />
       <GlobalKeyHandler />
+      <SoundEffects />
       <AuthProvider initialSession={initialSession}>
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">

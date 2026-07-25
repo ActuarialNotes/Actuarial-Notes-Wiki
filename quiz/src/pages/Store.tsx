@@ -6,6 +6,7 @@ import { useGems } from '@/hooks/useGems'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { supabase } from '@/lib/supabase'
+import { playSound } from '@/lib/soundEngine'
 import { AvatarDisplay, serializeAvatar, ANIMAL_LABELS, type AnimalType } from '@/components/AvatarDisplay'
 import { COSMETICS, type Cosmetic, type CosmeticRarity } from '@/lib/cosmetics'
 import { CHARACTERS, type CharacterDefinition, type CharacterRarity } from '@/lib/characters'
@@ -118,6 +119,7 @@ export default function Store() {
       p_price: char.priceGems,
     })
     if (rpcError) { setError(rpcError.message); setBusyId(null); return }
+    playSound('reward')
     await Promise.all([refreshGems(), fetchOwned()])
     setBusyId(null)
   }
@@ -144,6 +146,7 @@ export default function Store() {
       p_price: cosmetic.priceGems,
     })
     if (rpcError) { setError(rpcError.message); setBusyId(null); return }
+    playSound('reward')
     await Promise.all([refreshGems(), fetchOwned()])
     setBusyId(null)
   }
@@ -203,6 +206,7 @@ export default function Store() {
       p_price: CUSTOM_BANNER_PRICE,
     })
     if (rpcError) { setError(rpcError.message); setBusyId(null); return }
+    playSound('reward')
     await refreshGems()
     setOwnedIds(prev => new Set([...prev, CUSTOM_BANNER_PURCHASE_ID]))
     const equip: BannerEquip = { id: 'custom', text }

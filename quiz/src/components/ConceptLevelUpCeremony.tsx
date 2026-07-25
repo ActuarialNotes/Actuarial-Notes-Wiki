@@ -60,7 +60,7 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
     if (reduce || phase === 'summary') return
     let id: number
     if (phase === 'spin') {
-      play('correct')
+      play('levelUp')
       id = window.setTimeout(() => setPhase('flash'), 1100)
     } else {
       // flash → advance to the next card, or settle onto the summary
@@ -87,6 +87,8 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
     const duration = 900
     const t0 = performance.now()
     let raf = 0
+    // Land the gem chime on the counter, a beat after the completion chord.
+    const chime = window.setTimeout(() => play('reward'), 320)
     const tick = (t: number) => {
       const p = Math.min(1, (t - t0) / duration)
       const eased = 1 - Math.pow(1 - p, 3)
@@ -94,7 +96,7 @@ export function ConceptLevelUpCeremony({ transitions, gemsEarned, totalGems, onR
       if (p < 1) raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
+    return () => { cancelAnimationFrame(raf); window.clearTimeout(chime) }
   }, [phase, gemsEarned, totalGems, startBalance, play])
 
   if (transitions.length === 0) return null

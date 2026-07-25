@@ -8,6 +8,7 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
 import { ConceptCoverageSection, effectiveOutcome } from '@/components/ConceptCoverageSection'
+import { questionCredit } from '@/lib/parser'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -314,7 +315,15 @@ export default function Review() {
   }
 
   const { correctCount, totalQuestions, timeTakenSeconds } = session
-  const percentage = totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0
+  // Score with partial credit: a partially-right question (e.g. a multi-part
+  // where only some graded parts landed) contributes its fraction, rather than
+  // counting as a full miss. correctCount stays the whole-question count that
+  // drives gems/streak; scoredPoints is what the results screen displays.
+  const scoredPoints = session.questions.reduce(
+    (sum, q) => sum + questionCredit(q, session.responses[q.id]?.chosen, session.manualGrades ?? {}),
+    0,
+  )
+  const percentage = totalQuestions > 0 ? Math.round((scoredPoints / totalQuestions) * 100) : 0
 
   const upwardTransitions = session.masteryTransitions?.filter(
     t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3'
@@ -387,6 +396,7 @@ export default function Review() {
           mode: session.mode,
           percentage,
           correctCount,
+          scoredPoints,
           totalQuestions,
           timeTakenSeconds,
           gemsEarned: correctCount,

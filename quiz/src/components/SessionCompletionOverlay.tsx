@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import type { QuizSession, QuestionResponse } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { fetchAllQuestions } from '@/lib/github'
-import { parseAllQuestions } from '@/lib/parser'
+import { parseAllQuestions, questionCredit } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 
 interface Props {
@@ -77,8 +77,19 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
     scrollRef.current?.scrollTo({ top: 0 })
   }, [])
 
+  // Once the questions/responses are loaded, score with partial credit so the
+  // header % matches the (now three-state) coverage donut. Manual per-part
+  // grades aren't persisted with historical sessions, so partial credit here
+  // comes purely from auto-graded multi-part questions. Before load, fall back
+  // to the DB's whole-question correct_count.
+  const scoredPoints = loadState.status === 'done'
+    ? loadState.questions.reduce(
+        (sum, q) => sum + questionCredit(q, loadState.responses[q.id]?.chosen, {}),
+        0,
+      )
+    : session.correct_count
   const pct = session.total_questions > 0
-    ? Math.round((session.correct_count / session.total_questions) * 100)
+    ? Math.round((scoredPoints / session.total_questions) * 100)
     : 0
 
   return (
@@ -139,6 +150,7 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
                 mode: session.mode,
                 percentage: pct,
                 correctCount: session.correct_count,
+                scoredPoints,
                 totalQuestions: session.total_questions,
                 timeTakenSeconds: session.time_taken_seconds,
                 gemsEarned: session.correct_count,

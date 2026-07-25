@@ -120,6 +120,68 @@ export function isAnswerCorrect(question: Question, chosen: string): boolean {
   return false
 }
 
+export type QuestionOutcome = 'correct' | 'partial' | 'incorrect'
+
+// Fraction of credit [0,1] earned on a question, honouring manual grade
+// overrides and — crucially — awarding *partial* credit for multi-part
+// questions where only some graded parts are right (or a part was manually
+// graded 'partial'). `isAnswerCorrect` collapses these to a single boolean;
+// this is the graded-per-part view used by the results summary.
+export function questionCredit(
+  question: Question,
+  chosen: string | null | undefined,
+  manualGrades: Record<string, SelfGrade> = {},
+): number {
+  if (chosen == null) return 0
+  if (question.type === 'multiple-choice') {
+    return isAnswerCorrect(question, chosen) ? 1 : 0
+  }
+  if (question.type === 'free-entry') {
+    const override = manualGrades[question.id]
+    if (override !== undefined) return override === 'correct' ? 1 : override === 'partial' ? 0.5 : 0
+    return isAnswerCorrect(question, chosen) ? 1 : 0
+  }
+  if (question.type === 'multi-part') {
+    try {
+      const parts = question.parts ?? []
+      // Essay parts (answer === '') are ungraded — excluded, matching isAnswerCorrect.
+      const gradedParts = parts.filter(p => p.answer !== '')
+      if (gradedParts.length === 0) return 1
+      const chosenParts = JSON.parse(chosen) as Record<string, string>
+      let earned = 0
+      for (const part of gradedParts) {
+        const override = manualGrades[`${question.id}__${part.label}`]
+        if (override !== undefined) {
+          earned += override === 'correct' ? 1 : override === 'partial' ? 0.5 : 0
+          continue
+        }
+        const partChosen = chosenParts[part.label] ?? ''
+        const right = part.type === 'multiple-choice'
+          ? partChosen === part.answer
+          : normalizeAnswerText(partChosen) === normalizeAnswerText(part.answer)
+        earned += right ? 1 : 0
+      }
+      return earned / gradedParts.length
+    } catch {
+      return 0
+    }
+  }
+  return 0
+}
+
+// Three-state outcome derived from questionCredit: full credit → 'correct',
+// no credit → 'incorrect', anything in between → 'partial' (shown yellow).
+export function questionOutcome(
+  question: Question,
+  chosen: string | null | undefined,
+  manualGrades: Record<string, SelfGrade> = {},
+): QuestionOutcome {
+  const credit = questionCredit(question, chosen, manualGrades)
+  if (credit >= 1) return 'correct'
+  if (credit <= 0) return 'incorrect'
+  return 'partial'
+}
+
 // Whether every graded part of a multi-part question has a non-empty answer
 // (essay parts with answer === '' need no user input and are skipped).
 export function isMultiPartAnswerComplete(question: Question, chosen: string): boolean {

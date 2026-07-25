@@ -529,6 +529,13 @@ export default function Landing() {
   // Derived: whether today's plan is the active filter
   const useTodaysPlan = examInProgress && conceptMode === 'today' && isPremium && !!plan && planConceptCount > 0
 
+  // True once the async data that decides the initial Today's Plan vs. By Topic
+  // mode (mastery, concepts, study plan, subscription) has settled, so the
+  // segmented control can render its resolved state directly instead of
+  // painting the 'custom' default first and flashing to 'today' once the
+  // auto-activate effect above fires.
+  const quizModeResolved = !user || !examInProgress || (!masteryLoading && !conceptsLoading && !planLoading && !subLoading)
+
   // Display names for concepts in today's plan (used in dropdown)
   const todayConceptDisplayNames = useMemo(() => {
     if (!plan) return []
@@ -946,7 +953,10 @@ export default function Landing() {
               {mode === 'quiz' && (
                 <div className="space-y-3">
                   {/* Today's Plan / By Topic segmented control */}
-                  {user && examInProgress && (
+                  {user && examInProgress && !quizModeResolved && (
+                    <div className="h-9 rounded-xl border border-input bg-muted/30 animate-pulse" />
+                  )}
+                  {user && examInProgress && quizModeResolved && (
                     <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
                       <button
                         type="button"
@@ -988,7 +998,7 @@ export default function Landing() {
                   )}
 
                   {/* Today's Plan content */}
-                  {user && examInProgress && conceptMode === 'today' && (
+                  {user && examInProgress && quizModeResolved && conceptMode === 'today' && (
                     !isPremium ? (
                       <div className="rounded-lg bg-muted/40 px-4 py-3 flex items-start gap-3">
                         <div className="flex-1 space-y-1">
@@ -1021,7 +1031,7 @@ export default function Landing() {
                   )}
 
                   {/* By Topic concept groups */}
-                  {(!user || !examInProgress || conceptMode === 'custom') && (
+                  {quizModeResolved && (!user || !examInProgress || conceptMode === 'custom') && (
                     <div className="space-y-2">
                       {conceptsLoading && orderedConcepts.length === 0 ? (
                         <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>

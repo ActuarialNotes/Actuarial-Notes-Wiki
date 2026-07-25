@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   BookOpen,
@@ -25,7 +25,6 @@ import {
   Search,
   Shuffle,
   Sigma,
-  Sparkles,
   Trash2,
   TrendingUp,
   Unlock,
@@ -100,128 +99,6 @@ const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; d
   forgotten: { label: 'Forgotten', className: 'bg-rose-500/20 text-rose-600 dark:text-rose-400',   dotClass: 'bg-rose-500' },
 }
 
-// Color palette for exam packs — one entry per exam in rotation. Packs no
-// longer use a flat gradient-overlay fill; instead each card is a dark surface
-// ringed by a moving multi-hue gradient border ("rainbow eclipse" / gamer
-// lighting), the same foil technique as the collected flashcards. `foil` is the
-// per-exam gradient that travels around the border and `glow` (an "R G B"
-// triple) drives the soft outer light — both anchored to the exam's own colour
-// family so each exam stays visually distinct. Whole-exam ("hero") packs get
-// the animated, brighter treatment; learning-objective packs get the quieter
-// lo* variant so each exam reads as one color family.
-const PACK_COLOR_PALETTE = [
-  // Blue
-  {
-    card: 'bg-card',
-    foil: 'linear-gradient(115deg, #38bdf8, #818cf8, #22d3ee, #60a5fa, #38bdf8)',
-    glow: '56 189 248',
-    cardText: 'text-blue-700 dark:text-blue-300',
-    cardSub: 'text-blue-600/70 dark:text-blue-400/60',
-    cardIcon: 'text-blue-500',
-    barTrack: 'bg-blue-500/15',
-    loCard: 'bg-card',
-    loCardText: 'text-blue-700/80 dark:text-blue-400/80',
-    loCardSub: 'text-blue-600/60 dark:text-blue-400/50',
-    loCardIcon: 'text-blue-400',
-    loBarTrack: 'bg-blue-500/10',
-  },
-  // Emerald
-  {
-    card: 'bg-card',
-    foil: 'linear-gradient(115deg, #34d399, #22d3ee, #a3e635, #10b981, #34d399)',
-    glow: '52 211 153',
-    cardText: 'text-emerald-700 dark:text-emerald-300',
-    cardSub: 'text-emerald-600/70 dark:text-emerald-400/60',
-    cardIcon: 'text-emerald-500',
-    barTrack: 'bg-emerald-500/15',
-    loCard: 'bg-card',
-    loCardText: 'text-emerald-700/80 dark:text-emerald-400/80',
-    loCardSub: 'text-emerald-600/60 dark:text-emerald-400/50',
-    loCardIcon: 'text-emerald-400',
-    loBarTrack: 'bg-emerald-500/10',
-  },
-  // Violet
-  {
-    card: 'bg-card',
-    foil: 'linear-gradient(115deg, #a78bfa, #e879f9, #818cf8, #c084fc, #a78bfa)',
-    glow: '167 139 250',
-    cardText: 'text-violet-700 dark:text-violet-300',
-    cardSub: 'text-violet-600/70 dark:text-violet-400/60',
-    cardIcon: 'text-violet-500',
-    barTrack: 'bg-violet-500/15',
-    loCard: 'bg-card',
-    loCardText: 'text-violet-700/80 dark:text-violet-400/80',
-    loCardSub: 'text-violet-600/60 dark:text-violet-400/50',
-    loCardIcon: 'text-violet-400',
-    loBarTrack: 'bg-violet-500/10',
-  },
-  // Orange
-  {
-    card: 'bg-card',
-    foil: 'linear-gradient(115deg, #fb923c, #fbbf24, #f87171, #fdba74, #fb923c)',
-    glow: '251 146 60',
-    cardText: 'text-orange-700 dark:text-orange-300',
-    cardSub: 'text-orange-600/70 dark:text-orange-400/60',
-    cardIcon: 'text-orange-500',
-    barTrack: 'bg-orange-500/15',
-    loCard: 'bg-card',
-    loCardText: 'text-orange-700/80 dark:text-orange-400/80',
-    loCardSub: 'text-orange-600/60 dark:text-orange-400/50',
-    loCardIcon: 'text-orange-400',
-    loBarTrack: 'bg-orange-500/10',
-  },
-  // Rose
-  {
-    card: 'bg-card',
-    foil: 'linear-gradient(115deg, #fb7185, #f472b6, #fb923c, #fda4af, #fb7185)',
-    glow: '251 113 133',
-    cardText: 'text-rose-700 dark:text-rose-300',
-    cardSub: 'text-rose-600/70 dark:text-rose-400/60',
-    cardIcon: 'text-rose-500',
-    barTrack: 'bg-rose-500/15',
-    loCard: 'bg-card',
-    loCardText: 'text-rose-700/80 dark:text-rose-400/80',
-    loCardSub: 'text-rose-600/60 dark:text-rose-400/50',
-    loCardIcon: 'text-rose-400',
-    loBarTrack: 'bg-rose-500/10',
-  },
-  // Cyan
-  {
-    card: 'bg-card',
-    foil: 'linear-gradient(115deg, #22d3ee, #38bdf8, #2dd4bf, #67e8f9, #22d3ee)',
-    glow: '34 211 238',
-    cardText: 'text-cyan-700 dark:text-cyan-300',
-    cardSub: 'text-cyan-600/70 dark:text-cyan-400/60',
-    cardIcon: 'text-cyan-500',
-    barTrack: 'bg-cyan-500/15',
-    loCard: 'bg-card',
-    loCardText: 'text-cyan-700/80 dark:text-cyan-400/80',
-    loCardSub: 'text-cyan-600/60 dark:text-cyan-400/50',
-    loCardIcon: 'text-cyan-400',
-    loBarTrack: 'bg-cyan-500/10',
-  },
-] as const
-
-const STUDY_PLAN_COLOR = {
-  card: 'bg-card',
-  foil: 'linear-gradient(115deg, #fbbf24, #fb923c, #facc15, #fcd34d, #fbbf24)',
-  glow: '251 191 36',
-  cardText: 'text-amber-700 dark:text-amber-300',
-  cardSub: 'text-amber-600/70 dark:text-amber-400/60',
-  cardIcon: 'text-amber-500',
-  barTrack: 'bg-amber-500/15',
-} as const
-
-const SAVED_PACK_COLOR = {
-  card: 'bg-card',
-  foil: 'linear-gradient(115deg, #c084fc, #e879f9, #a78bfa, #d8b4fe, #c084fc)',
-  glow: '192 132 252',
-  cardText: 'text-purple-700 dark:text-purple-300',
-  cardSub: 'text-purple-600/70 dark:text-purple-400/60',
-  cardIcon: 'text-purple-500',
-  barTrack: 'bg-purple-500/15',
-} as const
-
 function MasteryPill({ state }: { state: MasteryState }) {
   const { label, className } = MASTERY_CONFIG[state]
   return (
@@ -255,47 +132,9 @@ function extractFirstParagraph(markdown: string): string {
 
 // ─── Flashcard Packs & Gallery Tabs ───────────────────────────────────────────
 
-type PackKind = 'study_plan' | 'exam' | 'learning_objective' | 'saved'
-
-interface PackColors {
-  card: string
-  foil: string
-  glow: string
-  cardText: string
-  cardSub: string
-  cardIcon: string
-  barTrack: string
-}
-
-function packColorsFor(kind: PackKind, colorIndex: number | undefined, isSub: boolean): PackColors {
-  if (kind === 'study_plan') return { ...STUDY_PLAN_COLOR }
-  if (kind === 'saved') return { ...SAVED_PACK_COLOR }
-  const palette = PACK_COLOR_PALETTE[colorIndex ?? 0]
-  if (isSub) {
-    return {
-      card: palette.loCard,
-      foil: palette.foil,
-      glow: palette.glow,
-      cardText: palette.loCardText,
-      cardSub: palette.loCardSub,
-      cardIcon: palette.loCardIcon,
-      barTrack: palette.loBarTrack,
-    }
-  }
-  return {
-    card: palette.card,
-    foil: palette.foil,
-    glow: palette.glow,
-    cardText: palette.cardText,
-    cardSub: palette.cardSub,
-    cardIcon: palette.cardIcon,
-    barTrack: palette.barTrack,
-  }
-}
-
-// Popup listing every concept in a pack. Opened from the stacked-flashcard
-// icon on a pack card; lets you select individual concepts, add them to the
-// deck, or collect them one at a time — without cluttering the card itself.
+// Popup listing every concept in a pack. Opened from "Browse concepts" on a
+// pack card; lets you select individual concepts, add them to the deck, or
+// collect them one at a time — without cluttering the card itself.
 function PackConceptsModal({
   label,
   concepts,
@@ -354,7 +193,6 @@ function PackConceptsModal({
     >
       <div className="w-full max-w-lg bg-card rounded-xl shadow-2xl flex flex-col my-8 max-h-[85vh]">
         <div className="flex items-center gap-3 px-4 h-12 shrink-0 border-b">
-          <Layers className="h-4 w-4 text-muted-foreground shrink-0" />
           <span className="flex-1 truncate font-semibold text-sm">{label}</span>
           <span className="text-xs text-muted-foreground shrink-0">{concepts.length} concepts</span>
           <button
@@ -371,18 +209,11 @@ function PackConceptsModal({
         {concepts.length > 0 && (
           <div className="px-4 pt-3 shrink-0">
             {allAdded ? (
-              <span className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-green-500/15 text-green-600 dark:text-green-400 text-xs font-semibold">
-                <Check className="h-3.5 w-3.5" /> All in deck
-              </span>
+              <p className="text-center text-xs text-muted-foreground py-2">All in deck</p>
             ) : (
-              <button
-                type="button"
-                onClick={handleAdd}
-                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
-              >
-                <Plus className="h-3.5 w-3.5" />
+              <Button size="sm" className="w-full" onClick={handleAdd}>
                 {selected.size > 0 ? `Add ${selected.size} to deck` : `Add all ${notAdded.length} to deck`}
-              </button>
+              </Button>
             )}
           </div>
         )}
@@ -414,7 +245,7 @@ function PackConceptsModal({
                 </button>
                 <span className={`text-sm flex-1 min-w-0 truncate text-foreground ${added ? 'opacity-60' : ''}`}>{name}</span>
                 {added && (
-                  <span className="text-[10px] text-green-600 dark:text-green-400 shrink-0">In deck</span>
+                  <span className="text-xs text-muted-foreground shrink-0">In deck</span>
                 )}
                 <button
                   type="button"
@@ -438,19 +269,18 @@ function PackConceptsModal({
   )
 }
 
-// A single pack card. The header shows collection progress plus a segmented
-// mastery bar; tapping it reveals a mastery breakdown and large action buttons
-// (add everything to the deck, collect the next uncollected card, browse the
-// concept list). Expansion is controlled by the parent so only one pack is
-// open at a time. The stacked-flashcard icon in the top right opens a popup
-// with the individual concept list. Learning-objective packs render in the
-// `isSub` (smaller) variant.
+// A single pack card. A neutral card surface (per the style guide: colour is a
+// signal, not decoration) — the header shows collection progress plus a
+// segmented mastery bar, and tapping it reveals the mastery breakdown and the
+// pack actions (add everything to the deck, collect the next uncollected card,
+// browse the concept list). Expansion is controlled by the parent so only one
+// pack is open at a time. The only colour on the card is state: the mastery
+// segments and, for a fully-collected pack, the gold "complete" sheen.
+// Learning-objective packs render in the `isSub` (smaller) variant.
 function PackCard({
   label,
   sublabel,
-  kind,
   concepts,
-  colorIndex,
   isSub = false,
   loading = false,
   emptyHint,
@@ -463,9 +293,7 @@ function PackCard({
 }: {
   label: string
   sublabel?: string
-  kind: PackKind
   concepts: string[]
-  colorIndex?: number
   isSub?: boolean
   loading?: boolean
   emptyHint?: ReactNode
@@ -511,7 +339,6 @@ function PackCard({
   const collectedNew = Math.max(0, collected - leveled)
   const newCount = total - leveled
 
-  const colors = packColorsFor(kind, colorIndex, isSub)
   const pct = (n: number) => `${(n / Math.max(total, 1)) * 100}%`
 
   function handleAdd() {
@@ -526,83 +353,54 @@ function PackCard({
 
   return (
     <div
-      style={{ '--pack-foil': colors.foil, '--pack-glow': colors.glow } as CSSProperties}
-      className={`relative overflow-hidden rounded-xl transition-all pack-foil ${isSub ? '' : 'pack-foil--hero'} ${colors.card} ${colors.cardText} ${
-        fullyCollected ? 'ring-1 ring-amber-400/50 collect-pack-complete' : ''
+      className={`relative overflow-hidden rounded-lg bg-card text-card-foreground shadow-[var(--shadow-card)] ${
+        fullyCollected ? 'collect-pack-complete' : ''
       } ${className}`}
     >
-      {/* Watermark on hero packs for depth */}
-      {!isSub && (
-        <Layers aria-hidden className={`pointer-events-none absolute -right-4 -bottom-6 h-24 w-24 opacity-[0.07] ${colors.cardIcon}`} />
-      )}
-
       {/* Header — click to reveal actions */}
       <div
         role="button"
         tabIndex={0}
         onClick={onToggleExpand}
         onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggleExpand() } }}
-        className={`cursor-pointer ${isSub ? 'px-3 pt-2.5 pb-3' : 'px-3.5 pt-3 pb-3.5'}`}
+        className={`cursor-pointer ${isSub ? 'p-3' : 'p-4'}`}
         aria-expanded={expanded}
       >
-        <div className="flex items-start gap-2.5">
+        <div className="flex items-start gap-2">
           <div className="flex-1 min-w-0">
-            <div className="flex items-start gap-1.5">
-              <span className={`font-bold leading-tight ${isSub ? 'text-sm' : 'text-base sm:text-lg'}`}>{label}</span>
-              {fullyCollected && (
-                <span title="Fully collected" className="shrink-0 text-amber-500 dark:text-amber-300 mt-0.5">
-                  <Sparkles className="h-3.5 w-3.5" />
-                </span>
-              )}
-            </div>
-            {sublabel && <span className={`block text-[11px] truncate ${colors.cardSub}`}>{sublabel}</span>}
+            <span className={`block font-semibold leading-tight tracking-tight ${isSub ? 'text-sm' : 'text-base'}`}>{label}</span>
+            {sublabel && <span className="block text-xs text-muted-foreground truncate">{sublabel}</span>}
           </div>
-          <div className="flex items-center gap-0.5 shrink-0">
-            {onDelete && (
-              <button
-                type="button"
-                onClick={e => { e.stopPropagation(); onDelete() }}
-                aria-label={`Delete ${label} pack`}
-                className="h-7 w-7 rounded flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
-              >
-                <Trash2 className="h-3.5 w-3.5" />
-              </button>
-            )}
-            {total > 0 && (
-              <button
-                type="button"
-                onClick={e => { e.stopPropagation(); setShowConcepts(true) }}
-                aria-label={`View ${label} concepts`}
-                title="View concepts"
-                className={`rounded-lg flex items-center justify-center transition-colors hover:bg-black/10 dark:hover:bg-white/10 ${colors.cardIcon} ${isSub ? 'h-8 w-8' : 'h-9 w-9'}`}
-              >
-                <Layers className={isSub ? 'h-5 w-5' : 'h-6 w-6'} />
-              </button>
-            )}
-          </div>
+          {onDelete && (
+            <button
+              type="button"
+              onClick={e => { e.stopPropagation(); onDelete() }}
+              aria-label={`Delete ${label} pack`}
+              className="shrink-0 h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-destructive transition-colors"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
         </div>
 
         {/* Stats + mastery bar */}
-        <div className={`flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5 ${isSub ? 'mt-1.5' : 'mt-2'}`}>
-          <span className="flex items-baseline gap-1 whitespace-nowrap">
-            <span className={`font-bold tabular-nums ${isSub ? 'text-base' : 'text-xl'}`}>
-              {loading ? '…' : collected}
-            </span>
-            <span className={`text-[11px] font-medium ${colors.cardSub}`}>/ {total} collected</span>
+        <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
+          <span className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
+            <span className="font-medium text-foreground">{loading ? '…' : collected}</span> / {total} collected
           </span>
-          <span className={`flex items-center gap-1 text-[11px] font-medium tabular-nums whitespace-nowrap ${colors.cardSub}`}>
+          <span className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums whitespace-nowrap">
             {loading ? '…' : inDeck} in deck
-            <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
           </span>
         </div>
-        <div className={`mt-1.5 flex h-1.5 rounded-full overflow-hidden ${colors.barTrack}`} aria-hidden>
+        <div className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-muted" aria-hidden>
           {!loading && total > 0 && (
             <>
               {mastery.level3 > 0 && <div className="h-full bg-green-500" style={{ width: pct(mastery.level3) }} />}
               {mastery.level2 > 0 && <div className="h-full bg-blue-500" style={{ width: pct(mastery.level2) }} />}
               {mastery.level1 > 0 && <div className="h-full bg-amber-500" style={{ width: pct(mastery.level1) }} />}
               {mastery.forgotten > 0 && <div className="h-full bg-rose-500" style={{ width: pct(mastery.forgotten) }} />}
-              {collectedNew > 0 && <div className="h-full bg-current opacity-30" style={{ width: pct(collectedNew) }} />}
+              {collectedNew > 0 && <div className="h-full bg-muted-foreground/40" style={{ width: pct(collectedNew) }} />}
             </>
           )}
         </div>
@@ -610,17 +408,17 @@ function PackCard({
 
       {/* Actions */}
       {expanded && (
-        <div className={`pack-expand-in space-y-2.5 ${isSub ? 'px-3 pb-3' : 'px-3.5 pb-3.5'}`}>
+        <div className={`pack-expand-in space-y-3 ${isSub ? 'px-3 pb-3' : 'px-4 pb-4'}`}>
           {emptyHint}
           {loading && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading…
+              <Loader2 className="h-4 w-4 animate-spin" /> Loading…
             </div>
           )}
           {!loading && total > 0 && (
             <>
               {/* Mastery legend */}
-              <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-medium">
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
                 {mastery.level3 > 0 && (
                   <span className="inline-flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />{mastery.level3} mastered
@@ -633,51 +431,45 @@ function PackCard({
                 )}
                 {mastery.forgotten > 0 && (
                   <span className="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />{mastery.forgotten} slipping — review!
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />{mastery.forgotten} slipping
                   </span>
                 )}
                 {newCount > 0 && (
-                  <span className={`inline-flex items-center gap-1.5 ${colors.cardSub}`}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-current opacity-40 shrink-0" />{newCount} to learn
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40 shrink-0" />{newCount} to learn
                   </span>
                 )}
               </div>
-              {collected === 0 && (
-                <p className={`text-[11px] leading-snug ${colors.cardSub}`}>
-                  Pass a quick comprehension check to collect your first card from this pack.
-                </p>
-              )}
               <div className="flex flex-col gap-2">
                 {allAdded ? (
-                  <span className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-green-500/15 text-green-600 dark:text-green-400 text-sm font-semibold">
-                    <Check className="h-4 w-4" /> All in deck
-                  </span>
+                  <p className="text-center text-xs text-muted-foreground py-2">All in deck</p>
                 ) : (
-                  <button
-                    type="button"
+                  <Button
+                    size="sm"
+                    className="w-full"
                     onClick={e => { e.stopPropagation(); handleAdd() }}
-                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 active:scale-[0.98] transition-all"
                   >
-                    <Plus className="h-4 w-4" />
                     Add all {notAdded.length} to deck
-                  </button>
+                  </Button>
                 )}
                 {!fullyCollected && (
-                  <button
-                    type="button"
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
                     onClick={e => { e.stopPropagation(); collectNext() }}
-                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-background/60 text-sm font-semibold text-foreground hover:bg-accent transition-colors"
                   >
-                    <Lock className="h-4 w-4" /> Collect next · {total - collected} locked
-                  </button>
+                    Collect next card
+                  </Button>
                 )}
-                <button
-                  type="button"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full text-muted-foreground"
                   onClick={e => { e.stopPropagation(); setShowConcepts(true) }}
-                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-foreground/70 hover:text-foreground hover:bg-background/60 transition-colors"
                 >
-                  <BookOpen className="h-3.5 w-3.5" /> Browse all {total} concepts
-                </button>
+                  Browse concepts
+                </Button>
               </div>
             </>
           )}
@@ -696,19 +488,10 @@ function PackCard({
   )
 }
 
-interface PackDescriptor {
-  key: string
-  kind: PackKind
-  label: string
-  concepts: string[]
-  colorIndex?: number
-  isSub?: boolean
-}
-
-// Packs tab — every available pack. Each exam contributes a full-width
-// "hero" pack followed by a two-column grid of its learning-objective packs.
-// Today's study plan and any user-saved packs bookend the grid. Only one
-// pack's action panel is open at a time (accordion).
+// Packs tab — every available pack. Each exam is its own section: a full-width
+// "all concepts" pack followed by a two-column grid of its learning-objective
+// packs. Today's study plan and any user-saved packs bookend the sections. Only
+// one pack's action panel is open at a time (accordion).
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -774,42 +557,15 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
           .filter((s): s is typeof syllabi[number] => !!s)
           .filter(s => examProgress[wikiExamIdToProgressKey(s.examId)] !== 'completed'))
       : inProgressSyllabi
-    return source.map((syllabus, i) => ({
+    return source.map(syllabus => ({
       examId: syllabus.examId,
       examLabel: syllabus.examLabel,
-      colorIndex: i % PACK_COLOR_PALETTE.length,
       allConcepts: syllabus.topics.flatMap(t => t.concepts.map(c => c.name)),
       learningObjectives: syllabus.topics
         .filter(t => t.concepts.length > 0)
         .map(t => ({ name: t.name, concepts: t.concepts.map(c => c.name) })),
     }))
   }, [inProgressSyllabi, syllabi, examProgress])
-
-  // Flatten exam groups into a single list of pack cards — the whole-exam
-  // pack followed by one card per learning objective, no group headers.
-  const flatPacks = useMemo(() => {
-    const items: PackDescriptor[] = []
-    for (const group of examGroups) {
-      items.push({
-        key: `${group.examId}-all`,
-        kind: 'exam',
-        label: `${group.examLabel} — All concepts`,
-        concepts: group.allConcepts,
-        colorIndex: group.colorIndex,
-      })
-      for (const lo of group.learningObjectives) {
-        items.push({
-          key: `${group.examId}-${lo.name}`,
-          kind: 'learning_objective',
-          label: lo.name,
-          concepts: lo.concepts,
-          colorIndex: group.colorIndex,
-          isSub: true,
-        })
-      }
-    }
-    return items
-  }, [examGroups])
 
   const isLoading = planLoading || masteryLoading || syllabiLoading
   const hasContent = !!primarySyllabus || examGroups.length > 0 || savedPacks.length > 0
@@ -819,7 +575,6 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
       {/* Today's study plan */}
       {primarySyllabus && (
         <PackCard
-          kind="study_plan"
           label="Today's Study Plan"
           sublabel={primarySyllabus.examLabel}
           concepts={studyPlanConcepts}
@@ -840,27 +595,39 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
         />
       )}
 
-      {/* Exam + learning-objective packs — full-width hero card per exam,
-          learning objectives in a two-column grid beneath it */}
-      {flatPacks.length > 0 && (
-        <div className="grid grid-cols-2 gap-3">
-          {flatPacks.map(p => (
+      {/* One section per exam — the whole-exam pack, then its learning
+          objectives in a two-column grid. The heading carries the grouping so
+          the cards themselves don't need a per-exam colour. */}
+      {examGroups.map(group => (
+        <div key={group.examId} className="space-y-2">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
+            {group.examLabel}
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
             <PackCard
-              key={p.key}
-              kind={p.kind}
-              label={p.label}
-              concepts={p.concepts}
-              colorIndex={p.colorIndex}
-              isSub={p.isSub}
-              className={p.isSub ? undefined : 'col-span-2'}
-              expanded={expandedKey === p.key}
-              onToggleExpand={() => toggleExpanded(p.key)}
+              label="All concepts"
+              concepts={group.allConcepts}
+              className="col-span-2"
+              expanded={expandedKey === `${group.examId}-all`}
+              onToggleExpand={() => toggleExpanded(`${group.examId}-all`)}
               masteryOf={masteryOf}
               onCardsAdded={onCardsAdded}
             />
-          ))}
+            {group.learningObjectives.map(lo => (
+              <PackCard
+                key={lo.name}
+                label={lo.name}
+                concepts={lo.concepts}
+                isSub
+                expanded={expandedKey === `${group.examId}-${lo.name}`}
+                onToggleExpand={() => toggleExpanded(`${group.examId}-${lo.name}`)}
+                masteryOf={masteryOf}
+                onCardsAdded={onCardsAdded}
+              />
+            ))}
+          </div>
         </div>
-      )}
+      ))}
 
       {/* Saved packs */}
       {savedPacks.length > 0 && (
@@ -872,7 +639,6 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
             {savedPacks.map(sp => (
               <PackCard
                 key={sp.id}
-                kind="saved"
                 label={sp.label}
                 concepts={sp.concepts}
                 expanded={expandedKey === `saved-${sp.id}`}
@@ -888,7 +654,7 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
 
       {isLoading && !hasContent && (
         <div className="flex items-center gap-2 text-xs text-muted-foreground py-2">
-          <Loader2 className="h-3.5 w-3.5 animate-spin" /> Loading packs…
+          <Loader2 className="h-4 w-4 animate-spin" /> Loading packs…
         </div>
       )}
       {!isLoading && !hasContent && (

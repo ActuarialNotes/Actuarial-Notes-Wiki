@@ -110,24 +110,40 @@ function MasteryPill({ state }: { state: MasteryState }) {
 
 const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
 
-function extractFirstParagraph(markdown: string): string {
+// Splits a wiki page's leading paragraph (the "definition") from the rest of
+// the body, so the two can be shown separately without duplicating it — e.g.
+// the flashcard back shows the definition, and the "expand" section below it
+// shows only what follows.
+function splitFirstParagraph(markdown: string): { paragraph: string; rest: string } {
   const cleaned = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
   const lines = cleaned.split('\n')
   const paragraphLines: string[] = []
   let started = false
-  for (const line of lines) {
-    const trimmed = line.trim()
+  let restStart = lines.length
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim()
     if (!started) {
       if (trimmed && !trimmed.startsWith('#') && !/^[*+-] /.test(trimmed) && !/^\d+\. /.test(trimmed) && !trimmed.startsWith('>')) {
         started = true
         paragraphLines.push(trimmed)
       }
     } else {
-      if (trimmed === '' || /^[*+-] /.test(trimmed) || /^\d+\. /.test(trimmed) || trimmed.startsWith('>') || trimmed.startsWith('#')) break
+      if (trimmed === '' || /^[*+-] /.test(trimmed) || /^\d+\. /.test(trimmed) || trimmed.startsWith('>') || trimmed.startsWith('#')) {
+        restStart = i
+        break
+      }
       paragraphLines.push(trimmed)
     }
   }
-  return paragraphLines.join('\n')
+  return { paragraph: paragraphLines.join('\n'), rest: lines.slice(restStart).join('\n') }
+}
+
+function extractFirstParagraph(markdown: string): string {
+  return splitFirstParagraph(markdown).paragraph
+}
+
+function withoutFirstParagraph(markdown: string): string {
+  return splitFirstParagraph(markdown).rest
 }
 
 // ─── Flashcard Packs & Gallery Tabs ───────────────────────────────────────────
@@ -2375,6 +2391,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
   }
 
   const definition = markdown ? extractFirstParagraph(markdown) : null
+  const remainder = markdown ? withoutFirstParagraph(markdown) : null
   const allEquations = markdown ? extractMathBlockquotes(markdown) : []
   const cardImages = markdown ? extractImages(markdown) : []
 
@@ -2546,10 +2563,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                 ))}
               </div>
             )}
-            {expanded && markdown && (
+            {expanded && remainder && (
               <div className="pt-4 overflow-y-auto max-h-96">
                 <WikiArticle
-                  markdown={markdown}
+                  markdown={remainder}
                   sourcePath={entryRefToRepoPath(current)}
                   onWikiLink={ref => { const { open, jumpTo, openAt } = useConceptPopup.getState(); if (open) jumpTo(ref); else openAt([ref], 0); return true }}
                 />

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, FileDown, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
+import { QuestionCardStack } from '@/components/QuestionCardStack'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
@@ -752,12 +753,7 @@ export default function Landing() {
     } else if (selectedSitting !== null) {
       params.set('year', String(selectedSitting.year))
       if (selectedSitting.session) params.set('session', selectedSitting.session)
-      const sittingCount = allQuestions.filter(q =>
-        q.exam === topic &&
-        q.year === selectedSitting.year &&
-        (!selectedSitting.session || q.session?.toLowerCase() === selectedSitting.session.toLowerCase())
-      ).length
-      params.set('count', String(sittingCount || (MOCK_EXAM_QUESTIONS[topic] ?? 30)))
+      params.set('count', String(sittingQuestionCount || (MOCK_EXAM_QUESTIONS[topic] ?? 30)))
     } else {
       params.set('count', String(MOCK_EXAM_QUESTIONS[topic] ?? 30))
     }
@@ -795,8 +791,29 @@ export default function Landing() {
     return String(year)
   }
 
+  // Questions belonging to the selected sitting — shared by the launch params,
+  // the mock-exam blurb, and the availability count in the footer.
+  const sittingQuestionCount = useMemo(() => {
+    if (!topic || !selectedSitting) return 0
+    return allQuestions.filter(q =>
+      q.exam === topic &&
+      q.year === selectedSitting.year &&
+      (!selectedSitting.session || q.session?.toLowerCase() === selectedSitting.session.toLowerCase())
+    ).length
+  }, [allQuestions, topic, selectedSitting])
+
   const mockExamCount = MOCK_EXAM_QUESTIONS[topic] ?? 30
   const examLabel = EXAMS.find(e => e.value === topic)?.label ?? topic
+
+  // How many questions the current configuration can draw from, and how many of
+  // those the quiz will actually pull. Drives the footer card stack + caption.
+  const examQuestionCount = topic ? (questionCounts[topic] ?? 0) : 0
+  const poolCount = mode === 'mock-exam'
+    ? (selectedSitting ? sittingQuestionCount : examQuestionCount)
+    : effectiveAvailableCount
+  const quizQuestionCount = mode === 'mock-exam'
+    ? (selectedSitting ? sittingQuestionCount : Math.min(mockExamCount, examQuestionCount))
+    : Math.min(count, effectiveAvailableCount)
   const hasTopic = topic !== ''
   const hasSelection = hasTopic || selectedConcept !== ''
 
@@ -848,7 +865,7 @@ export default function Landing() {
   return (
     <>
     <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
-    <div className={`container max-w-2xl mx-auto px-4 pt-0 space-y-8 ${hasSelection ? 'pb-56' : 'pb-12'}`}>
+    <div className={`container max-w-2xl mx-auto px-4 pt-0 space-y-8 ${hasSelection ? 'pb-72' : 'pb-12'}`}>
       <div className="sticky top-14 md:top-28 lg:top-14 z-20 bg-background -mx-4 px-4 pt-3 pb-4 space-y-3">
         {hasTopic && (
           <button
@@ -1059,11 +1076,7 @@ export default function Landing() {
                 <div className="rounded-lg bg-muted/40 px-4 py-3 space-y-1">
                   <p className="text-sm font-medium">
                     {selectedSitting !== null
-                      ? `${allQuestions.filter(q =>
-                          q.exam === topic &&
-                          q.year === selectedSitting.year &&
-                          (!selectedSitting.session || q.session?.toLowerCase() === selectedSitting.session.toLowerCase())
-                        ).length} questions`
+                      ? `${sittingQuestionCount} questions`
                       : `${mockExamCount} questions`
                     }
                   </p>
@@ -1112,6 +1125,20 @@ export default function Landing() {
                 : `${count} of ${todaysPlanFullCount} questions needed to finish today's plan`}
             </p>
           )}
+
+          {/* ── Question deck: the pool, with the selected slice lit ──── */}
+          {poolCount > 0 && (
+            <div className="space-y-1.5">
+              <QuestionCardStack total={poolCount} selected={quizQuestionCount} />
+              <p className="text-xs text-muted-foreground text-center">
+                <span className="font-medium text-foreground tabular-nums">{quizQuestionCount}</span>
+                {' of '}
+                <span className="tabular-nums">{poolCount}</span>
+                {` question${poolCount !== 1 ? 's' : ''} available`}
+              </p>
+            </div>
+          )}
+
           <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
             {mode === 'quiz' && useTodaysPlan && todaysPlanFullCount > 0 && (
               <button

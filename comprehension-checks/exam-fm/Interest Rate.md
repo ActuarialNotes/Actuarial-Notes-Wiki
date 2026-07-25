@@ -4,10 +4,10 @@ exam: exam-fm
 topic: "Time Value of Money"
 correct: A
 ---
-An account grows from $500 to $540 in one year. What is the effective annual interest rate?
+An account grows from \$500 to \$540 in one year. What is the effective annual interest rate?
 
 - A) 8%
-- B) $40
+- B) \$40
 - C) 108%
 - D) 7.4%
 

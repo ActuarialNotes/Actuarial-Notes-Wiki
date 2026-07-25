@@ -85,6 +85,13 @@ lookup the modal reads — the same public API as before. A corpus test
 `correct`, concept name matches filename, correct answer isn't the concept name),
 recovering the compile-time guarantees the old TS constant gave.
 
+Stems and options render through `MarkdownText`, so authored **LaTeX** (`$…$`)
+displays as KaTeX rather than literal dollar signs. That makes `$` a math
+delimiter, so **currency has to be escaped** (`\$900,000`) — two bare currency
+signs on a line would otherwise turn the prose between them into a formula. The
+corpus test enforces this and the matching authoring rule that inline math never
+opens on a bare digit.
+
 The `flashcard-comprehension-check` skill authors these; its output target is a
 new `.md` file in the right exam folder.
 

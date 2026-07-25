@@ -4,7 +4,7 @@ exam: exam-fm
 topic: "Annuities / Cash Flows with Non-Contingent Payments"
 correct: A
 ---
-A level annuity pays $1,000 at the end of each year for 3 years at 5%. Which expression gives its present value?
+A level annuity pays \$1,000 at the end of each year for 3 years at 5%. Which expression gives its present value?
 
 - A) 1000 × (1 − 1.05⁻³)/0.05
 - B) 1000 × 3, the sum of the payments

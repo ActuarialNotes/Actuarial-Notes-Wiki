@@ -97,13 +97,18 @@ Run every draft against this before finalizing:
 - The stem reads in under about three sentences — it has to fit comfortably
   inside a modal, not a full exam page.
 - Any calculation uses clean numbers a learner can do in their head.
-- **The stem and options are plain text.** Unlike the flashcard's reverse side,
-  the modal renders them as bare strings (`{check.question}` and the option
-  `<button>` labels in `CollectConceptModal.tsx`) — no KaTeX, no markdown. `$x$`
-  shows up as literal dollar signs and `**bold**` as literal asterisks. Write
-  formulae in prose or Unicode (`P(a ≤ X ≤ b)`, `f(b) − f(a)`, `1.03×`), and
-  keep `$` for currency, as the existing corpus does. If a concept can only be
-  checked through rendered math, pick a different fork.
+- **Formulae are LaTeX.** The stem and options render through `MarkdownText`,
+  so inline math (`$\int_a^b f(x)\,dx$`) comes out as KaTeX. Use it where a
+  formula genuinely reads better than prose — integrals, fractions, subscripts —
+  and don't wrap plain percentages or bare numbers in math just because you can.
+  Keep to inline `$…$`; display `$$…$$` is too tall for a modal option row.
+- **Currency must be escaped: `\$900,000`, never `$900,000`.** `$` is the math
+  delimiter, so two bare currency signs on one line silently swallow the prose
+  between them into a math span. The corpus test rejects an unescaped `$` before
+  a digit, and for the same reason **inline math must not open on a bare digit**
+  — no test can tell `$72\%$` from `$72,000`. Lead with an operator, a
+  parenthesis, or `\text{}`: `$\frac{0.72}{0.60} - 1 = +20\%$`,
+  `$(0.72 - 0.60) = +12\%$`.
 - There is exactly one unambiguously correct answer.
 - The concept's own name does not appear in any answer choice.
 - Every distractor targets a specific, nameable misconception (write that

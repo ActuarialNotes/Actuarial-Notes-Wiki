@@ -130,6 +130,35 @@ describe('comprehension-checks corpus', () => {
     expect(failures).toEqual([])
   })
 
+  // Stems and options are rendered as markdown (MarkdownText) so authored LaTeX
+  // shows as formulae, which means `$` is a math delimiter. A bare currency `$`
+  // is therefore dangerous: two of them on one line silently swallow the text
+  // between into an inline-math node ("$40,000 in a bond and $60,000" renders
+  // the prose as math). Currency must be written `\$`.
+  //
+  // The proxy for "this is currency" is a digit straight after an unescaped `$`,
+  // which can't be told apart from a math span that opens on a number. So the
+  // rule is also an authoring constraint: don't start inline math with a bare
+  // digit — lead with an operator, a parenthesis, or \text{} instead.
+  it('escapes currency dollars, keeping math delimiters balanced', () => {
+    const failures: string[] = []
+    for (const f of files) {
+      const parsed = parseComprehensionCheck(readFileSync(f.full, 'utf-8'))
+      if (!parsed) continue
+      const segments = [parsed.check.question, ...parsed.check.options]
+      for (const text of segments) {
+        if (/(?<!\\)\$\d/.test(text)) {
+          failures.push(`${f.name}: unescaped currency $ (write \\$) in "${text}"`)
+        }
+        const delimiters = text.match(/(?<!\\)\$/g)?.length ?? 0
+        if (delimiters % 2 !== 0) {
+          failures.push(`${f.name}: ${delimiters} unescaped $ — unbalanced math in "${text}"`)
+        }
+      }
+    }
+    expect(failures).toEqual([])
+  })
+
   it('has no duplicate concept keys across files', () => {
     const seen = new Map<string, string>()
     const dups: string[] = []

@@ -4,6 +4,7 @@ import { Search, X } from 'lucide-react'
 import { filterQuestions } from '@/lib/parser'
 import type { QuestionFilter } from '@/lib/parser'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
+import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 
@@ -36,11 +37,13 @@ interface QuizFloatingSearchProps {
 export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchProps = {}) {
   const navigate = useNavigate()
   const { questions: allQuestions } = useAllQuestions()
+  const { byQuestionId: attemptsByQuestionId } = useQuestionAttempts()
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [difficultyFilters, setDifficultyFilters] = useState<Set<string>>(new Set())
   const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
+  const [examFilters, setExamFilters] = useState<Set<string>>(new Set())
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -51,6 +54,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
   useEffect(() => {
     setDifficultyFilters(new Set())
     setConceptFilters(new Set())
+    setExamFilters(new Set())
   }, [filterKey])
 
   useEffect(() => {
@@ -110,8 +114,15 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     return Array.from(seen).sort().map(name => ({ value: name, label: name }))
   }, [basePool])
 
-  // Apply the local refinements. Difficulty is OR within itself; concepts are OR
-  // within themselves; the two groups are AND'd together.
+  // Exams available to filter by, drawn from the current pool the same way.
+  const examOptions = useMemo(() => {
+    const seen = new Set<string>()
+    basePool.forEach(q => seen.add(q.exam))
+    return Array.from(seen).sort().map(name => ({ value: name, label: name }))
+  }, [basePool])
+
+  // Apply the local refinements. Each group is OR within itself; the groups are
+  // AND'd together.
   const visiblePool = useMemo(() => {
     let filtered = basePool
     if (difficultyFilters.size > 0) {
@@ -120,25 +131,34 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     if (conceptFilters.size > 0) {
       filtered = filtered.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
     }
+    if (examFilters.size > 0) {
+      filtered = filtered.filter(q => examFilters.has(q.exam))
+    }
     return filtered
-  }, [basePool, difficultyFilters, conceptFilters])
+  }, [basePool, difficultyFilters, conceptFilters, examFilters])
 
-  // Option counts reflect the pool with the *other* filter group applied, so each
+  // Option counts reflect the pool with the *other* filter groups applied, so each
   // count previews how many questions choosing it would leave.
   const difficultyOptionCounts = useMemo(() => {
     let pool = basePool
     if (conceptFilters.size > 0) {
       pool = pool.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
     }
+    if (examFilters.size > 0) {
+      pool = pool.filter(q => examFilters.has(q.exam))
+    }
     const counts: Record<string, number> = {}
     pool.forEach(q => { counts[q.difficulty] = (counts[q.difficulty] ?? 0) + 1 })
     return counts
-  }, [basePool, conceptFilters])
+  }, [basePool, conceptFilters, examFilters])
 
   const conceptOptionCounts = useMemo(() => {
     let pool = basePool
     if (difficultyFilters.size > 0) {
       pool = pool.filter(q => difficultyFilters.has(q.difficulty))
+    }
+    if (examFilters.size > 0) {
+      pool = pool.filter(q => examFilters.has(q.exam))
     }
     const counts: Record<string, number> = {}
     pool.forEach(q => q.wiki_link.forEach(link => {
@@ -146,7 +166,20 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
       counts[lbl] = (counts[lbl] ?? 0) + 1
     }))
     return counts
-  }, [basePool, difficultyFilters])
+  }, [basePool, difficultyFilters, examFilters])
+
+  const examOptionCounts = useMemo(() => {
+    let pool = basePool
+    if (difficultyFilters.size > 0) {
+      pool = pool.filter(q => difficultyFilters.has(q.difficulty))
+    }
+    if (conceptFilters.size > 0) {
+      pool = pool.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
+    }
+    const counts: Record<string, number> = {}
+    pool.forEach(q => { counts[q.exam] = (counts[q.exam] ?? 0) + 1 })
+    return counts
+  }, [basePool, difficultyFilters, conceptFilters])
 
   const questionResults = useMemo(() => visiblePool.slice(0, 100), [visiblePool])
   const totalCount = visiblePool.length
@@ -162,6 +195,15 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
 
   function toggleConceptFilter(value: string) {
     setConceptFilters(prev => {
+      const next = new Set(prev)
+      if (next.has(value)) next.delete(value)
+      else next.add(value)
+      return next
+    })
+  }
+
+  function toggleExamFilter(value: string) {
+    setExamFilters(prev => {
       const next = new Set(prev)
       if (next.has(value)) next.delete(value)
       else next.add(value)
@@ -295,6 +337,15 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                         getCount={v => conceptOptionCounts[v] ?? 0}
                       />
                     )}
+                    {examOptions.length > 1 && (
+                      <MultiSelectDropdown
+                        label="Exam"
+                        options={examOptions}
+                        selected={examFilters}
+                        onToggle={toggleExamFilter}
+                        getCount={v => examOptionCounts[v] ?? 0}
+                      />
+                    )}
                   </div>
                 )}
 
@@ -370,6 +421,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                         query={query}
                         selected={selectedIds.has(q.id)}
                         onToggleSelect={toggleSelect}
+                        attemptSummary={attemptsByQuestionId.get(q.id)}
                       />
                     ))
                   )}

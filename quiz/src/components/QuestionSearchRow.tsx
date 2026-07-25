@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Check } from 'lucide-react'
+import { Check, CheckCircle2 } from 'lucide-react'
 import type { Question } from '@/lib/parser'
+import type { QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { LatexText } from '@/components/LatexText'
 import { MarkdownText } from '@/components/MarkdownText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
@@ -16,6 +17,7 @@ interface QuestionSearchRowProps {
   query: string
   selected: boolean
   onToggleSelect: (id: string) => void
+  attemptSummary?: QuestionAttemptSummary
 }
 
 function highlightStem(text: string, query: string): React.ReactNode {
@@ -58,12 +60,14 @@ export function DifficultyDots({ difficulty }: { difficulty: string }) {
   )
 }
 
-export function QuestionSearchRow({ question, query, selected, onToggleSelect }: QuestionSearchRowProps) {
+export function QuestionSearchRow({ question, query, selected, onToggleSelect, attemptSummary }: QuestionSearchRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
 
   const words = question.stem.trim().split(/\s+/)
   const previewText = words.length <= 6 ? question.stem : words.slice(0, 6).join(' ') + '…'
+  const hasAttempted = !!attemptSummary
+  const hasCorrect = hasAttempted && attemptSummary.correct_count > 0
 
   return (
     <div
@@ -98,6 +102,19 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect }:
               {conceptLabel(link)}
             </span>
           ))}
+          {hasAttempted && (
+            <span
+              title={hasCorrect ? `Correct (${attemptSummary.correct_count}/${attemptSummary.attempt_count} attempts)` : `Attempted (${attemptSummary.attempt_count}× — not yet correct)`}
+              className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border shrink-0 ${
+                hasCorrect
+                  ? 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                  : 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
+              }`}
+            >
+              {hasCorrect && <CheckCircle2 className="h-3 w-3" />}
+              {hasCorrect ? `Correct ×${attemptSummary.correct_count}` : `Attempted ×${attemptSummary.attempt_count}`}
+            </span>
+          )}
         </div>
         <button
           type="button"

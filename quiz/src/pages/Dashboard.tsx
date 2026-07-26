@@ -25,7 +25,7 @@ import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { DAILY_QUIZ_EVENT, getDailyQuizStats, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
-import { LOCALIZED_EXAMS, matchesSelectedVariant } from '@/data/examSittings'
+import { matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
 import { StreakStat } from '@/components/StreakBadge'
 import { LevelBadge } from '@/components/LevelBadge'
@@ -303,10 +303,6 @@ export default function Dashboard() {
     [masteryRecords, activeProgressKey],
   )
 
-  const activeHasVariants = activeProgressKey ? (LOCALIZED_EXAMS[activeProgressKey]?.length ?? 0) > 0 : false
-  const examDateStep = activeHasVariants ? 2 : 1
-  const readyDateStep = activeHasVariants ? 3 : 2
-
   // Persist active exam to localStorage when it changes
   useEffect(() => {
     if (!activeSyllabus) return
@@ -418,22 +414,6 @@ export default function Dashboard() {
       : studyPlan?.todaysConcepts ?? []
     return { forgottenDue, planConcepts }
   }, [masteryLoading, planLoading, masteryRecords, studyPlan])
-
-  const daysUntilExam = useMemo(() => {
-    if (!activeTargetDate) return null
-    const now = new Date(); now.setHours(0, 0, 0, 0)
-    return Math.max(0, Math.ceil(
-      (new Date(activeTargetDate + 'T00:00:00').getTime() - now.getTime()) / 86400000
-    ))
-  }, [activeTargetDate])
-
-  const daysToReady = useMemo(() => {
-    if (!planConfig.targetReadyDate) return null
-    const now = new Date(); now.setHours(0, 0, 0, 0)
-    return Math.max(0, Math.ceil(
-      (new Date(planConfig.targetReadyDate + 'T00:00:00').getTime() - now.getTime()) / 86400000
-    ))
-  }, [planConfig.targetReadyDate])
 
   if (authLoading) {
     return (
@@ -669,8 +649,10 @@ export default function Dashboard() {
             )}
           </div>
         )}
-        {(showStreakStat || overallPct !== null || daysToReady !== null || daysUntilExam !== null) && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {/* Streak + readiness stats. The "days to prepare" / "days until exam"
+            counters live in the Study Schedule card's chevron row (see ExamHeatmap). */}
+        {(showStreakStat || overallPct !== null) && (
+          <div className="grid grid-cols-2 gap-3">
             {showStreakStat && (
               <StreakStat activeToday={dailyQuizStats.correct > 0} />
             )}
@@ -697,28 +679,6 @@ export default function Dashboard() {
                   </button>
                 )}
               </div>
-            )}
-            {daysToReady !== null && (
-              <button
-                type="button"
-                onClick={() => { setOnboardingStep(readyDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
-                className="flex flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 transition-colors"
-                title="Edit target ready date"
-              >
-                <span className="text-3xl font-bold tabular-nums leading-none text-amber-600 dark:text-amber-400">{daysToReady} days</span>
-                <span className="text-xs text-muted-foreground">to prepare</span>
-              </button>
-            )}
-            {daysUntilExam !== null && (
-              <button
-                type="button"
-                onClick={() => { setOnboardingStep(examDateStep as 1 | 2 | 3); setOnboardingOpen(true) }}
-                className="flex flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-card hover:bg-muted transition-colors"
-                title="Edit exam date"
-              >
-                <span className="text-3xl font-bold tabular-nums leading-none">{daysUntilExam} days</span>
-                <span className="text-xs text-muted-foreground">until exam</span>
-              </button>
             )}
           </div>
         )}

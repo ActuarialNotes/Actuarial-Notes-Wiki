@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Calendar, ChevronDown, ChevronUp, X } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
+import { LOCALIZED_EXAMS } from '@/data/examSittings'
 
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
@@ -325,7 +326,27 @@ export function ExamHeatmap({
       })
     : null
 
-  void examProgressKey
+  // Step indices inside the Study Plan modal — mirrors its own `hasVariants`
+  // math so the date buttons open straight to the step they edit.
+  const hasVariants = (LOCALIZED_EXAMS[examProgressKey]?.length ?? 0) > 0
+  const examDateStep: 1 | 2 = hasVariants ? 2 : 1
+  const readyDateStep: 2 | 3 = hasVariants ? 3 : 2
+
+  // Without a study-plan modal to open we fall back to the inline date inputs,
+  // which live in the expanded timeline's date rows — so expand as well.
+  function openExamDateEditor() {
+    if (onOpenStudyPlan) { onOpenStudyPlan(examDateStep); return }
+    setDraft(targetDate ?? '')
+    setEditing(true)
+    toggleTimeline(true)
+  }
+
+  function openReadyDateEditor() {
+    if (onOpenStudyPlan) { onOpenStudyPlan(readyDateStep); return }
+    setDraftReady(targetReadyDate ?? '')
+    setEditingReady(true)
+    toggleTimeline(true)
+  }
 
   // Shared date rows
   const dateRows = (
@@ -334,14 +355,16 @@ export function ExamHeatmap({
         {!editing || onOpenStudyPlan ? (
           <button
             type="button"
-            onClick={() => onOpenStudyPlan ? onOpenStudyPlan() : (setDraft(targetDate ?? ''), setEditing(true))}
+            onClick={openExamDateEditor}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <Calendar className="h-3.5 w-3.5 shrink-0" />
             {examDateLabel ? (
               <>
                 <span className="font-medium">Exam: {examDateLabel}</span>
-                {daysLeft !== null && daysLeft <= 0 && <span className="opacity-60">passed</span>}
+                {daysLeft !== null && (daysLeft > 0
+                  ? <span className="opacity-60">· {daysLeft} days</span>
+                  : <span className="opacity-60">passed</span>)}
               </>
             ) : (
               <span>Set exam date</span>
@@ -376,14 +399,16 @@ export function ExamHeatmap({
           {!editingReady || onOpenStudyPlan ? (
             <button
               type="button"
-              onClick={() => onOpenStudyPlan ? onOpenStudyPlan(2) : (setDraftReady(targetReadyDate ?? ''), setEditingReady(true))}
+              onClick={openReadyDateEditor}
               className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <Calendar className="h-3.5 w-3.5 shrink-0 text-amber-500" />
               {readyDateLabel ? (
                 <>
                   <span className="font-medium">Target ready: {readyDateLabel}</span>
-                  {readyDaysLeft !== null && readyDaysLeft <= 0 && <span className="opacity-60">passed</span>}
+                  {readyDaysLeft !== null && (readyDaysLeft > 0
+                    ? <span className="opacity-60">· {readyDaysLeft} days</span>
+                    : <span className="opacity-60">passed</span>)}
                 </>
               ) : (
                 <span>Set target ready date</span>
@@ -412,6 +437,17 @@ export function ExamHeatmap({
         </div>
       )}
     </div>
+  )
+
+  const todayButton = (
+    <button
+      type="button"
+      onClick={scrollToToday}
+      className="text-[11px] font-medium px-2 py-1 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors"
+      aria-label="Scroll to today"
+    >
+      Today
+    </button>
   )
 
   return (
@@ -473,27 +509,50 @@ export function ExamHeatmap({
             </div>
           </div>
 
-          {/* Expand chevron + Today button */}
-          <div className="relative flex items-center justify-center py-0.5">
-            <button
-              type="button"
-              onClick={() => toggleTimeline(true)}
-              className="flex items-center justify-center text-muted-foreground/40 hover:text-muted-foreground transition-colors"
-              aria-label="Expand to full timeline"
-              title="Expand to full timeline"
-            >
-              <ChevronDown className="h-7 w-7" strokeWidth={1.5} />
-            </button>
-            {showTodayButton && (
+          {/* Day-count pills + expand chevron. "… to prepare" (left) and
+              "… until exam" (right) are buttons that open the Study Plan modal on
+              the step that edits that date; the Today button joins the chevron in
+              the middle when today has been scrolled out of view. */}
+          <div className="flex items-center justify-between gap-2 py-0.5">
+            <div className="flex-1 min-w-0 flex justify-start">
+              {readyDaysLeft !== null && (
+                <button
+                  type="button"
+                  onClick={openReadyDateEditor}
+                  className="max-w-full truncate text-[11px] font-medium px-2 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400 transition-colors"
+                  aria-label="Edit target ready date"
+                  title="Edit target ready date"
+                >
+                  <span className="font-bold tabular-nums">{Math.max(0, readyDaysLeft)}d</span> to prepare
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              {showTodayButton && todayButtonSide === 'left' && todayButton}
               <button
                 type="button"
-                onClick={scrollToToday}
-                className={`absolute ${todayButtonSide === 'left' ? 'left-0' : 'right-0'} text-[11px] font-medium px-2 py-0.5 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors`}
-                aria-label="Scroll to today"
+                onClick={() => toggleTimeline(true)}
+                className="flex items-center justify-center text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+                aria-label="Expand to full timeline"
+                title="Expand to full timeline"
               >
-                Today
+                <ChevronDown className="h-7 w-7" strokeWidth={1.5} />
               </button>
-            )}
+              {showTodayButton && todayButtonSide === 'right' && todayButton}
+            </div>
+            <div className="flex-1 min-w-0 flex justify-end">
+              {daysLeft !== null && (
+                <button
+                  type="button"
+                  onClick={openExamDateEditor}
+                  className="max-w-full truncate text-[11px] font-medium px-2 py-1 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors"
+                  aria-label="Edit exam date"
+                  title="Edit exam date"
+                >
+                  <span className="font-bold tabular-nums">{Math.max(0, daysLeft)}d</span> until exam
+                </button>
+              )}
+            </div>
           </div>
         </div>
       ) : (

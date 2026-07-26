@@ -461,17 +461,18 @@ interface Props {
   onPlanCompletionChange?: (complete: boolean) => void
   /** Bumped by the Dashboard (e.g. tapping the readiness-stat checkmark) to open the day-complete/bonus info panel. */
   openDayCompleteInfoTrigger?: number
-  /** DOM node the Today's Study Plan card portals into (e.g. a slot the Dashboard places
-   *  above its primary actions), so the card can render at the top of the page while its
-   *  state/logic stays owned here. Renders inline in its default bento-grid position when omitted. */
-  studyPlanSlot?: HTMLElement | null
+  /** DOM node the Study Schedule (heatmap) card portals into (e.g. a slot the Dashboard
+   *  places above its primary actions), so the card can render at the top of the page
+   *  while its state/logic stays owned here. Renders inline in its default bento-grid
+   *  position when omitted. */
+  studyScheduleSlot?: HTMLElement | null
 }
 
 export function ReadinessCard({
   syllabus, masteryRecords, sessions, plan, masteryStateByName,
   config, loading, examDate, onConfigChange, onRegenerate, onReplaceConcepts, onExamDateChange,
   openConceptsTrigger, startQuizTrigger, scrollToRadialTrigger,
-  isPremium = true, onPlanCompletionChange, openDayCompleteInfoTrigger, studyPlanSlot,
+  isPremium = true, onPlanCompletionChange, openDayCompleteInfoTrigger, studyScheduleSlot,
 }: Props) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -1016,13 +1017,204 @@ export function ReadinessCard({
     return () => { if (scrollId !== undefined) clearTimeout(scrollId); clearTimeout(clearId) }
   }, [popupCurrentName, popupFromRadial, popupDashboardFilter])
 
-  // Today's Study Plan card (+ its non-premium locked placeholder). Portals into
-  // `studyPlanSlot` when the Dashboard supplies one (a slot above its primary
-  // actions), so the card renders at the top of the page while its state/logic
-  // stays owned by this component; otherwise renders inline below in its default
-  // bento-grid position.
-  const studyPlanCardContent = (
-    <>
+  // Study Schedule (heatmap) card. Portals into `studyScheduleSlot` when the
+  // Dashboard supplies one (a slot above its primary actions), so the card
+  // renders at the top of the page while its state/logic stays owned by this
+  // component; otherwise renders inline below in its default bento-grid position.
+  const studyScheduleCardContent = (
+      <Card className="order-4 border-0 shadow-none">
+        <CardContent className="p-6 space-y-5">
+          {/* Header */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 flex items-center gap-2 flex-wrap">
+              <h3 className="text-sm font-semibold truncate">Study Schedule</h3>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              {STREAK_ENABLED && user && <StreakNavBadge />}
+              <button
+                type="button"
+                onClick={() => setShowHeatmapInfo(true)}
+                className="text-muted-foreground hover:text-foreground transition-colors p-1.5"
+                aria-label="Exam heatmap info"
+                title="Exam heatmap info"
+              >
+                <Info className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Heatmap */}
+          <ExamHeatmap
+            sessions={examSessions}
+            examProgressKey={progressKey}
+            targetDate={examDate}
+            onTargetDateChange={onExamDateChange ?? (() => {})}
+            targetReadyDate={config.targetReadyDate}
+            onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
+            onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
+            onDayClick={date => { setSelectedDay(date) }}
+            dayPlanPct={dayPlanPct}
+            mobileMonthOnly
+            highlightedDay={selectedDay}
+          />
+
+          {/* Day panel — shown when a heatmap day is clicked */}
+          {selectedDay && (() => {
+            const daySessions = examSessions.filter(s => {
+              const d = new Date(s.completed_at)
+              const localDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+              return localDate === selectedDay
+            })
+            const dayTotal = daySessions.reduce((s, r) => s + r.total_questions, 0)
+            const dayCorrect = daySessions.reduce((s, r) => s + r.correct_count, 0)
+            const dayLevelUps = selectedDayLevelUps.length
+            const dayLabel = new Date(selectedDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+            const isFutureDay = selectedDay > todayStr
+            return (
+              <div className="border-t pt-4 mt-1 space-y-4">
+                {/* Header row */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold">{dayLabel}</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedDay(null)}
+                    className="flex items-center justify-center h-8 w-8 rounded-full border border-border bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Clear day filter"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+
+                {/* Large stats */}
+                {daySessions.length > 0 && (
+                  <div className="flex items-center gap-5 flex-wrap">
+                    <div className="flex flex-col items-center">
+                      <span className="text-2xl font-bold tabular-nums leading-none">
+                        {dayCorrect}
+                        <span className="text-muted-foreground text-lg font-normal">/{dayTotal}</span>
+                      </span>
+                      <span className="text-[10px] text-muted-foreground mt-0.5">correct</span>
+                    </div>
+                    {dayCorrect > 0 && (
+                      <div className="flex flex-col items-center">
+                        <span className="text-2xl font-bold tabular-nums leading-none text-cyan-500 inline-flex items-center gap-1">
+                          {dayCorrect} <Gem className="h-5 w-5" />
+                        </span>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">gems</span>
+                      </div>
+                    )}
+                    {dayLevelUps > 0 && (
+                      <div className="flex flex-col items-center">
+                        <span className="text-2xl font-bold tabular-nums leading-none text-primary inline-flex items-center gap-1">
+                          {dayLevelUps} <ArrowUp className="h-5 w-5" />
+                        </span>
+                        <span className="text-[10px] text-muted-foreground mt-0.5">levelled up</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Session flashcard grid */}
+                {daySessions.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">{isFutureDay ? 'No sessions yet. This day is in the future.' : 'No sessions on this date.'}</p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2">
+                    {daySessions.map(session => (
+                      <QuizSessionCard
+                        key={session.id}
+                        session={session}
+                        onClick={() => {
+                          savedScrollY.current = window.scrollY
+                          setViewingSession(session)
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Study plan for this day */}
+                {isPremium && (() => {
+                  if (selectedDay === todayStr) {
+                    // Today: show live plan inline (moved below)
+                    return null
+                  }
+                  if (isFutureDay && plan) {
+                    const futureConcepts = plan.assignments.filter(a => a.scheduledDate === selectedDay)
+                    if (futureConcepts.length === 0) return null
+                    return (
+                      <div className="border-t pt-3 space-y-1">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
+                        {futureConcepts.map(a => {
+                          const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
+                          return (
+                            <div key={a.conceptName} className="flex items-center gap-2.5 px-2 py-1.5">
+                              <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                              <button
+                                type="button"
+                                onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
+                                className="text-sm flex-1 min-w-0 truncate text-left hover:text-foreground/70 transition-colors"
+                              >
+                                {a.conceptName}
+                              </button>
+                              <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[NEXT_STATE[a.initialState] ?? a.initialState]}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )
+                  }
+                  // Past day: show level-ups
+                  if (selectedDayLevelUps.length > 0) {
+                    return (
+                      <div className="border-t pt-3 space-y-1">
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Concepts mastered</p>
+                        {selectedDayLevelUps.map(lu => {
+                          const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === lu.conceptSlug.toLowerCase())
+                          return (
+                            <div key={lu.conceptSlug + lu.at} className="flex items-center gap-2.5 px-2 py-1.5">
+                              <Check className="h-4 w-4 text-green-500 shrink-0" />
+                              <button
+                                type="button"
+                                onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
+                                className="text-sm flex-1 min-w-0 truncate text-left text-muted-foreground line-through hover:line-through hover:text-foreground/70 transition-colors"
+                              >
+                                {lu.conceptSlug}
+                              </button>
+                              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {STATE_LABEL[lu.to]}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )
+                  }
+                  return null
+                })()}
+              </div>
+            )
+          })()}
+
+        </CardContent>
+      </Card>
+  )
+
+  return (
+    <div className="space-y-4">
+      {/* Bento grid. Left column = Today's Study Plan + primary actions + warnings
+          + Study Schedule; right column = Study Guide + Topics Learned (md+). On
+          mobile everything collapses to a single column, and the left column's
+          children are laid out with `order-*` so Today's Study Plan sits on top,
+          the Read concepts / Start Quiz actions sit directly below it, then the
+          rest. */}
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
+      {/* Left column */}
+      <div className="flex flex-col gap-4">
+      {/* Study Schedule (heatmap) card — portals to `studyScheduleSlot` when the Dashboard
+          supplies one (see the `studyScheduleCardContent` definition above), otherwise
+          renders inline here (`order-4`, below the study plan/actions/warnings). */}
+      {studyScheduleSlot ? createPortal(studyScheduleCardContent, studyScheduleSlot) : studyScheduleCardContent}
+
+      {/* Today's Study Plan card — `order-1` floats it to the top of the left column.
+          Stays visible regardless of which day is selected on the Study Schedule heatmap. */}
       {isPremium && displayConcepts.length > 0 && (
         <Card
           ref={studyPlanCardRef}
@@ -1261,200 +1453,6 @@ export function ReadinessCard({
           </div>
         </div>
       )}
-    </>
-  )
-
-  return (
-    <div className="space-y-4">
-      {/* Bento grid. Left column = Today's Study Plan + primary actions + warnings
-          + Study Schedule; right column = Study Guide + Topics Learned (md+). On
-          mobile everything collapses to a single column, and the left column's
-          children are laid out with `order-*` so Today's Study Plan sits on top,
-          the Read concepts / Start Quiz actions sit directly below it, then the
-          rest. */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-4 items-start">
-      {/* Left column */}
-      <div className="flex flex-col gap-4">
-      {/* Study Schedule (heatmap) card — `order-4`, below the study plan/actions/warnings */}
-      <Card className="order-4 border-0 shadow-none">
-        <CardContent className="p-6 space-y-5">
-          {/* Header */}
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0 flex items-center gap-2 flex-wrap">
-              <h3 className="text-sm font-semibold truncate">Study Schedule</h3>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              {STREAK_ENABLED && user && <StreakNavBadge />}
-              <button
-                type="button"
-                onClick={() => setShowHeatmapInfo(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1.5"
-                aria-label="Exam heatmap info"
-                title="Exam heatmap info"
-              >
-                <Info className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Heatmap */}
-          <ExamHeatmap
-            sessions={examSessions}
-            examProgressKey={progressKey}
-            targetDate={examDate}
-            onTargetDateChange={onExamDateChange ?? (() => {})}
-            targetReadyDate={config.targetReadyDate}
-            onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
-            onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
-            onDayClick={date => { setSelectedDay(date) }}
-            dayPlanPct={dayPlanPct}
-            mobileMonthOnly
-            highlightedDay={selectedDay}
-          />
-
-          {/* Day panel — shown when a heatmap day is clicked */}
-          {selectedDay && (() => {
-            const daySessions = examSessions.filter(s => {
-              const d = new Date(s.completed_at)
-              const localDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-              return localDate === selectedDay
-            })
-            const dayTotal = daySessions.reduce((s, r) => s + r.total_questions, 0)
-            const dayCorrect = daySessions.reduce((s, r) => s + r.correct_count, 0)
-            const dayLevelUps = selectedDayLevelUps.length
-            const dayLabel = new Date(selectedDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
-            const isFutureDay = selectedDay > todayStr
-            return (
-              <div className="border-t pt-4 mt-1 space-y-4">
-                {/* Header row */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold">{dayLabel}</span>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDay(null)}
-                    className="flex items-center justify-center h-8 w-8 rounded-full border border-border bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label="Clear day filter"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-
-                {/* Large stats */}
-                {daySessions.length > 0 && (
-                  <div className="flex items-center gap-5 flex-wrap">
-                    <div className="flex flex-col items-center">
-                      <span className="text-2xl font-bold tabular-nums leading-none">
-                        {dayCorrect}
-                        <span className="text-muted-foreground text-lg font-normal">/{dayTotal}</span>
-                      </span>
-                      <span className="text-[10px] text-muted-foreground mt-0.5">correct</span>
-                    </div>
-                    {dayCorrect > 0 && (
-                      <div className="flex flex-col items-center">
-                        <span className="text-2xl font-bold tabular-nums leading-none text-cyan-500 inline-flex items-center gap-1">
-                          {dayCorrect} <Gem className="h-5 w-5" />
-                        </span>
-                        <span className="text-[10px] text-muted-foreground mt-0.5">gems</span>
-                      </div>
-                    )}
-                    {dayLevelUps > 0 && (
-                      <div className="flex flex-col items-center">
-                        <span className="text-2xl font-bold tabular-nums leading-none text-primary inline-flex items-center gap-1">
-                          {dayLevelUps} <ArrowUp className="h-5 w-5" />
-                        </span>
-                        <span className="text-[10px] text-muted-foreground mt-0.5">levelled up</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Session flashcard grid */}
-                {daySessions.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">{isFutureDay ? 'No sessions yet. This day is in the future.' : 'No sessions on this date.'}</p>
-                ) : (
-                  <div className="grid grid-cols-2 gap-2">
-                    {daySessions.map(session => (
-                      <QuizSessionCard
-                        key={session.id}
-                        session={session}
-                        onClick={() => {
-                          savedScrollY.current = window.scrollY
-                          setViewingSession(session)
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {/* Study plan for this day */}
-                {isPremium && (() => {
-                  if (selectedDay === todayStr) {
-                    // Today: show live plan inline (moved below)
-                    return null
-                  }
-                  if (isFutureDay && plan) {
-                    const futureConcepts = plan.assignments.filter(a => a.scheduledDate === selectedDay)
-                    if (futureConcepts.length === 0) return null
-                    return (
-                      <div className="border-t pt-3 space-y-1">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
-                        {futureConcepts.map(a => {
-                          const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
-                          return (
-                            <div key={a.conceptName} className="flex items-center gap-2.5 px-2 py-1.5">
-                              <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-                              <button
-                                type="button"
-                                onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
-                                className="text-sm flex-1 min-w-0 truncate text-left hover:text-foreground/70 transition-colors"
-                              >
-                                {a.conceptName}
-                              </button>
-                              <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[NEXT_STATE[a.initialState] ?? a.initialState]}</span>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )
-                  }
-                  // Past day: show level-ups
-                  if (selectedDayLevelUps.length > 0) {
-                    return (
-                      <div className="border-t pt-3 space-y-1">
-                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Concepts mastered</p>
-                        {selectedDayLevelUps.map(lu => {
-                          const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === lu.conceptSlug.toLowerCase())
-                          return (
-                            <div key={lu.conceptSlug + lu.at} className="flex items-center gap-2.5 px-2 py-1.5">
-                              <Check className="h-4 w-4 text-green-500 shrink-0" />
-                              <button
-                                type="button"
-                                onClick={() => openDashboard(toRefs(allConcepts), null, 'entire-syllabus', cIdx === -1 ? 0 : cIdx)}
-                                className="text-sm flex-1 min-w-0 truncate text-left text-muted-foreground line-through hover:line-through hover:text-foreground/70 transition-colors"
-                              >
-                                {lu.conceptSlug}
-                              </button>
-                              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {STATE_LABEL[lu.to]}</span>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )
-                  }
-                  return null
-                })()}
-              </div>
-            )
-          })()}
-
-        </CardContent>
-      </Card>
-
-      {/* Today's Study Plan card — portals to `studyPlanSlot` when the Dashboard
-          supplies one (see the `studyPlanCardContent` definition above), otherwise
-          renders inline here (`order-1` floats it to the top of the left column).
-          Stays visible regardless of which day is selected on the Study Schedule heatmap. */}
-      {studyPlanSlot ? createPortal(studyPlanCardContent, studyPlanSlot) : studyPlanCardContent}
 
       {/* Warnings — `order-3` sits them below the primary actions; `empty:hidden`
           drops the flex gap when neither warning is shown. */}

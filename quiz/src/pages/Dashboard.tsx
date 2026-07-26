@@ -658,6 +658,7 @@ export default function Dashboard() {
             {isPremium && displayConcepts.length > 0 && (
               <button
                 type="button"
+                data-sound="begin"
                 onClick={handleStartTodaysQuiz}
                 disabled={isLaunchingQuiz}
                 className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"

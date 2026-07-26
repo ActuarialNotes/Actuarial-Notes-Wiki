@@ -84,10 +84,14 @@ export function SoundSettingsCard() {
               ['Click', 'click'],
               ['Panel', 'open'],
               ['Page turn', 'page'],
+              ['Shuffle', 'shuffle'],
               ['Correct', 'correct'],
+              ['Add to deck', 'addToDeck'],
               ['Collect', 'collect'],
               ['Level up', 'levelUp'],
               ['Session complete', 'complete'],
+              ['Begin quiz', 'begin'],
+              ['Unlock check', 'unlock'],
             ] as const).map(([label, event]) => (
               <button
                 key={event}

@@ -28,6 +28,8 @@ export type SoundEvent =
   | 'toggleOff'
   /** Moving between pages / tabs. */
   | 'navigate'
+  /** Opening a card's own actions menu (the header Play button). */
+  | 'actions'
   // — paper —
   /** A panel or modal slides in. */
   | 'open'
@@ -35,10 +37,14 @@ export type SoundEvent =
   | 'close'
   /** A flick between pages of the same surface (prev/next, card flip). */
   | 'page'
+  /** Riffling the flashcard deck into a new order. */
+  | 'shuffle'
   // — reward —
   /** The friendly three-note arpeggio: a right answer, anywhere. */
   | 'correct'
-  /** A flashcard lands in the deck. */
+  /** A card is filed into the study deck (no ceremony — that's `collect`). */
+  | 'addToDeck'
+  /** A flashcard lands in the deck via the collect ceremony. */
   | 'collect'
   /** A concept climbs the mastery ladder. */
   | 'levelUp'
@@ -48,6 +54,10 @@ export type SoundEvent =
   | 'streak'
   /** A quiz or study session is finished. */
   | 'complete'
+  /** Starting or resuming today's quiz from the Dashboard. */
+  | 'begin'
+  /** The locked comprehension-check screen gating a flashcard's collection. */
+  | 'unlock'
 
 export interface ToneSpec {
   /** Start offset from the cue's own start, in seconds. */
@@ -92,8 +102,12 @@ export interface SoundRecipe {
 }
 
 // Equal-tempered reference pitches (Hz), so the recipes below read musically.
+const E2 = 82.41
+const F2 = 87.31
+const G3 = 196.0
 const A3 = 220
 const C4 = 261.63
+const D4 = 293.66
 const E4 = 329.63
 const G4 = 392.0
 const A4 = 440.0
@@ -175,6 +189,16 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     tones: [{ at: 0, dur: 0.12, freq: D5, type: 'sine', gain: 0.12, attack: 0.02 }],
     lowpass: 4200,
   },
+  actions: {
+    // Opening a flashcard's own actions menu: the shared click transient plus
+    // a quick upward chirp — a little more "something unfolded" than a plain
+    // click, without the weight of a full `open` panel slide.
+    gain: 0.3,
+    throttleMs: 45,
+    noise: [CLICK_TICK],
+    tones: [CLICK_BODY, { at: 0.006, dur: 0.08, freq: C5, glide: E5, type: 'sine', gain: 0.15, attack: 0.006 }],
+    lowpass: 5600,
+  },
 
   // ---- paper --------------------------------------------------------------
   open: {
@@ -207,6 +231,22 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     noise: [{ at: 0, dur: 0.13, from: 1100, to: 3200, type: 'bandpass', q: 0.9, gain: 0.55, swell: 0.35 }],
     lowpass: 7000,
   },
+  shuffle: {
+    // A quick riffle: short noise ticks fanning past like a thumbed stack of
+    // cards, under one soft paper swell for body — the deck family's take on
+    // "several sheets moving at once" rather than one.
+    gain: 0.32,
+    throttleMs: 150,
+    lowpass: 6500,
+    noise: [
+      { at: 0,     dur: 0.16,  from: 500,  to: 2200, type: 'bandpass', q: 0.7, gain: 0.4,  swell: 0.4 },
+      { at: 0.01,  dur: 0.02,  from: 2800, to: 2000, type: 'bandpass', q: 1.3, gain: 0.42, swell: 0 },
+      { at: 0.04,  dur: 0.02,  from: 3000, to: 2100, type: 'bandpass', q: 1.3, gain: 0.4,  swell: 0 },
+      { at: 0.07,  dur: 0.018, from: 3100, to: 2200, type: 'bandpass', q: 1.3, gain: 0.36, swell: 0 },
+      { at: 0.095, dur: 0.018, from: 3000, to: 2200, type: 'bandpass', q: 1.3, gain: 0.3,  swell: 0 },
+      { at: 0.118, dur: 0.016, from: 2800, to: 2100, type: 'bandpass', q: 1.3, gain: 0.24, swell: 0 },
+    ],
+  },
 
   // ---- reward -------------------------------------------------------------
   correct: {
@@ -221,6 +261,16 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
       // Octave doubling on the last note only — sparkle, not a fourth note.
       { at: 0.18, dur: 0.44, freq: C6, type: 'sine', gain: 0.16, attack: 0.02 },
     ],
+  },
+  addToDeck: {
+    // A card filed into the study deck: a soft thud plus a single bright
+    // blip — lighter than `collect`, since this is just adding a card to a
+    // list, not unlocking one through the ceremony.
+    gain: 0.32,
+    throttleMs: 90,
+    lowpass: 5500,
+    noise: [{ at: 0, dur: 0.05, from: 900, to: 400, type: 'bandpass', q: 0.9, gain: 0.3, swell: 0.15 }],
+    tones: [{ at: 0.01, dur: 0.14, freq: D5, type: 'triangle', gain: 0.4, attack: 0.006 }],
   },
   collect: {
     // The card landing in the deck: paper first, then the triad a fifth higher
@@ -277,6 +327,35 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
       { at: 0, dur: 1.1, freq: G4, type: 'sine', gain: 0.16, attack: 0.08 },
       { at: 0, dur: 1.1, freq: E4, type: 'sine', gain: 0.1, attack: 0.1 },
     ],
+  },
+  begin: {
+    // The dashboard's big call to action: a rising whoosh under two notes a
+    // fourth apart, climbing — "let's go", not a fanfare (that's `complete`).
+    gain: 0.4,
+    throttleMs: 220,
+    lowpass: 4600,
+    noise: [{ at: 0, dur: 0.22, from: 700, to: 2600, type: 'bandpass', q: 0.65, gain: 0.4, swell: 0.35 }],
+    tones: [
+      { at: 0.02, dur: 0.26, freq: D5, type: 'sine', gain: 0.4, attack: 0.014 },
+      { at: 0.11, dur: 0.34, freq: G5, type: 'sine', gain: 0.46, attack: 0.014 },
+      { at: 0.11, dur: 0.5, freq: D4, type: 'sine', gain: 0.16, attack: 0.03 },
+    ],
+  },
+  unlock: {
+    // The locked comprehension-check screen: a low, dissonant drone swelling
+    // in like something dimming. Two low tones a semitone apart beat against
+    // each other for the "mysterious" texture, a faint high wisp fades
+    // overhead, and a slow rumble rises underneath — an eclipse settling in,
+    // not a jump-scare.
+    gain: 0.4,
+    throttleMs: 500,
+    lowpass: 950,
+    tones: [
+      { at: 0, dur: 1.5, freq: E2, type: 'sine', gain: 0.32, attack: 0.4 },
+      { at: 0, dur: 1.5, freq: F2, type: 'sine', gain: 0.24, attack: 0.45 },
+      { at: 0.2, dur: 1.1, freq: A3, glide: G3, type: 'sine', gain: 0.08, attack: 0.5 },
+    ],
+    noise: [{ at: 0, dur: 1.5, from: 380, to: 110, type: 'bandpass', q: 0.5, gain: 0.34, swell: 0.65 }],
   },
 }
 

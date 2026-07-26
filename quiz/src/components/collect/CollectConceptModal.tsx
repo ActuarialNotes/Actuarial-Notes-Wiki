@@ -140,6 +140,10 @@ export function CollectConceptModal() {
     setDefError(false)
     setShowQuestions(false)
     if (!ref) return
+    // The locked comprehension check gets its own low drone under the paper
+    // slide `open` already plays — a card that's already been collected has
+    // nothing to unlock, so it stays quiet.
+    if (!alreadyCollected) play('unlock')
     // An authored comprehension check is self-contained — no wiki fetch needed
     // to build the question, so the question flow doesn't wait on one. The
     // definition is still fetched below (in the background) for the card's

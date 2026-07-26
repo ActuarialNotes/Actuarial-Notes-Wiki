@@ -39,14 +39,19 @@ costs zero bytes of assets and every cue is tunable from one table.
 | `select` | Picking one of several — an answer option, a tab, a radio |
 | `toggleOn` / `toggleOff` | Switches and checkboxes, pitched up or down to match |
 | `navigate` | A route change |
+| `actions` | Opening a flashcard's own actions menu (the header Play button) |
 | `open` / `close` | A panel or modal sliding in or out |
 | `page` | A flick within one surface — popup prev/next, a flashcard turning over, a swipe |
+| `shuffle` | Riffling the flashcard deck into a new order |
 | `correct` | A right answer, anywhere: quiz, comprehension check, flashcard "Got it" |
-| `collect` | A flashcard landing in the deck |
+| `addToDeck` | A card filed into the study deck ("Add to Flashcards") |
+| `collect` | A flashcard landing in the deck via the collect ceremony |
 | `levelUp` | A concept climbing the mastery ladder |
 | `reward` | Gems paid out — quest collect, study-plan bonus, a store purchase |
 | `streak` | The daily streak growing |
 | `complete` | A quiz or study session finishing |
+| `begin` | Starting or resuming today's quiz from the Dashboard |
+| `unlock` | The locked comprehension-check screen gating a flashcard's collection |
 
 ## Wiring a new interaction
 

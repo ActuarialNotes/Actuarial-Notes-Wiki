@@ -196,7 +196,7 @@ function PackConceptsModal({
       : notAdded
     for (const name of toAdd) addCard({ kind: 'concept', name })
     setSelected(new Set())
-    if (toAdd.length > 0) onCardsAdded?.()
+    if (toAdd.length > 0) { playSound('addToDeck'); onCardsAdded?.() }
   }
 
   return (
@@ -227,7 +227,7 @@ function PackConceptsModal({
             {allAdded ? (
               <p className="text-center text-xs text-muted-foreground py-2">All in deck</p>
             ) : (
-              <Button size="sm" className="w-full" onClick={handleAdd}>
+              <Button size="sm" className="w-full" data-sound="none" onClick={handleAdd}>
                 {selected.size > 0 ? `Add ${selected.size} to deck` : `Add all ${notAdded.length} to deck`}
               </Button>
             )}
@@ -359,7 +359,7 @@ function PackCard({
 
   function handleAdd() {
     for (const name of notAdded) addCard({ kind: 'concept', name })
-    if (notAdded.length > 0) onCardsAdded?.()
+    if (notAdded.length > 0) { playSound('addToDeck'); onCardsAdded?.() }
   }
 
   function collectNext() {
@@ -463,6 +463,7 @@ function PackCard({
                   <Button
                     size="sm"
                     className="w-full"
+                    data-sound="none"
                     onClick={e => { e.stopPropagation(); handleAdd() }}
                   >
                     Add all {notAdded.length} to deck
@@ -856,8 +857,9 @@ function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
                     <li key={name}>
                       <button
                         type="button"
+                        data-sound="none"
                         disabled={added}
-                        onClick={() => { addCard({ kind: 'concept', name }); onCardsAdded?.() }}
+                        onClick={() => { playSound('addToDeck'); addCard({ kind: 'concept', name }); onCardsAdded?.() }}
                         className={`w-full flex items-center gap-2 rounded-md px-2 py-2 text-sm text-left transition-colors ${
                           added ? 'text-muted-foreground cursor-default' : 'hover:bg-accent'
                         }`}
@@ -1120,6 +1122,7 @@ function FlashcardControlsBar({
       {!minimal && onShuffle && (
         <button
           type="button"
+          data-sound="none"
           onClick={onShuffle}
           title="Shuffle deck (S)"
           aria-label="Shuffle deck"
@@ -1266,6 +1269,7 @@ function SortableCard({
     if (inDeck) {
       onRemove(card.name)
     } else {
+      playSound('addToDeck')
       addCard(card)
       onCardsAdded?.()
     }
@@ -1276,6 +1280,7 @@ function SortableCard({
   const deckToggleButton = (
     <button
       type="button"
+      data-sound="none"
       onPointerDown={e => e.stopPropagation()}
       onClick={toggleDeck}
       aria-label={inDeck ? `Remove ${card.name} from deck` : `Add ${card.name} to deck`}
@@ -1387,6 +1392,7 @@ function SortableCard({
             <button
               ref={playBtnRef}
               type="button"
+              data-sound="actions"
               onPointerDown={e => e.stopPropagation()}
               onClick={e => {
                 e.stopPropagation()
@@ -1435,8 +1441,13 @@ function SortableCard({
                 <div className="flex items-center hover:bg-accent transition-colors">
                   <button
                     type="button"
+                    data-sound="none"
                     onPointerDown={e => e.stopPropagation()}
-                    onClick={e => { e.stopPropagation(); addCard(card) }}
+                    onClick={e => {
+                      e.stopPropagation()
+                      if (!hasCard(card.name)) playSound('addToDeck')
+                      addCard(card)
+                    }}
                     className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
                   >
                     <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
@@ -1582,6 +1593,7 @@ function SortableCard({
           <button
             ref={playBtnRef}
             type="button"
+            data-sound="actions"
             onPointerDown={e => e.stopPropagation()}
             onClick={e => {
               e.stopPropagation()
@@ -1630,8 +1642,13 @@ function SortableCard({
               <div className="flex items-center hover:bg-accent transition-colors">
                 <button
                   type="button"
+                  data-sound="none"
                   onPointerDown={e => e.stopPropagation()}
-                  onClick={e => { e.stopPropagation(); addCard(card) }}
+                  onClick={e => {
+                    e.stopPropagation()
+                    if (!hasCard(card.name)) playSound('addToDeck')
+                    addCard(card)
+                  }}
                   className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
                 >
                   <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
@@ -2460,6 +2477,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                 <button
                   ref={playBtnRef}
                   type="button"
+                  data-sound="actions"
                   onPointerDown={e => e.stopPropagation()}
                   onClick={(e) => {
                     e.stopPropagation()
@@ -2498,7 +2516,11 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                     <div className="flex items-center hover:bg-accent transition-colors">
                       <button
                         type="button"
-                        onClick={() => { addCard(current) }}
+                        data-sound="none"
+                        onClick={() => {
+                          if (!hasCard(current.name)) playSound('addToDeck')
+                          addCard(current)
+                        }}
                         className="flex-1 flex items-center gap-2 px-3 py-2 text-sm"
                       >
                         <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">
@@ -2859,6 +2881,7 @@ export default function Flashcards() {
   )
 
   function handleShuffle() {
+    playSound('shuffle')
     setShuffleOrder(shuffled(cards.map(c => c.name)))
     setGroupBy('shuffle')
     setActiveIndex(0)

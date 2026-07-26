@@ -418,7 +418,11 @@ export function ConceptPopup() {
                 <button
                   type="button"
                   data-tour="add-flashcard"
-                  onClick={() => { addCard(current) }}
+                  data-sound="none"
+                  onClick={() => {
+                    if (!hasCard(current.name)) play('addToDeck')
+                    addCard(current)
+                  }}
                   className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
                 >
                   <span className="h-3.5 w-3.5 shrink-0 flex items-center justify-center text-xs">

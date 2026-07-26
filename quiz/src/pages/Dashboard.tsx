@@ -177,6 +177,9 @@ export default function Dashboard() {
   const [remindersOpen, setRemindersOpen] = useState(false)
   const [guideOpen, setGuideOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
+  // ReadinessCard portals its Today's Study Plan card into this slot so it renders
+  // at the top of the page, above the primary actions and stat grid.
+  const [studyPlanSlotEl, setStudyPlanSlotEl] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (showWelcomeModal) sessionStorage.removeItem('show_welcome')
@@ -635,8 +638,13 @@ export default function Dashboard() {
             ))}
           </div>
         )}
+        {/* Today's Study Plan card — portaled here by ReadinessCard (below) so it
+            sits at the very top of the dashboard, above the primary actions and
+            the streak/readiness stats. */}
+        {activeSyllabus && <div ref={setStudyPlanSlotEl} />}
+
         {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
-            Sits at the top of the dashboard, above the streak/readiness stats. */}
+            Sits directly below the study plan card, above the streak/readiness stats. */}
         {activeSyllabus && (
           <div className="flex gap-3">
             <Button
@@ -765,6 +773,7 @@ export default function Dashboard() {
             isPremium={isPremium}
             onPlanCompletionChange={setPlanComplete}
             openDayCompleteInfoTrigger={dayCompleteInfoTrigger}
+            studyPlanSlot={studyPlanSlotEl}
           />
         )}
       </div>

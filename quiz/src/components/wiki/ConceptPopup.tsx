@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
@@ -47,7 +47,10 @@ export function ConceptPopup() {
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const { height, beginDrag } = useSplitHeight()
-  const [maximized, setMaximized] = useState(false)
+  // Focus mode — the popup's counterpart to the Flashcards page focus mode:
+  // it fills the viewport (covering the sidebar, bottom nav and search bar) and
+  // strips the chrome back to the concept title, its text, and Previous/Next.
+  const [focusMode, setFocusMode] = useState(false)
   const [showQuestionsModal, setShowQuestionsModal] = useState(false)
   const [showLearningProgress, setShowLearningProgress] = useState(false)
   const [showPlayMenu, setShowPlayMenu] = useState(false)
@@ -147,13 +150,14 @@ export function ConceptPopup() {
     function onKey(e: KeyboardEvent) {
       const target = e.target as HTMLElement | null
       if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
-      if (e.key === 'Escape') close()
+      // Esc leaves focus mode first, then closes — same as the Flashcards page.
+      if (e.key === 'Escape') focusMode ? setFocusMode(false) : close()
       else if (e.key === 'ArrowLeft') turnPage(-1)
       else if (e.key === 'ArrowRight') turnPage(1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, close, turnPage])
+  }, [open, close, turnPage, focusMode])
 
   // Close play menu when clicking outside of it. The "Add to Project" submenu
   // is rendered in its own portal (outside playMenuRef in the DOM), so it's
@@ -204,37 +208,17 @@ export function ConceptPopup() {
     }
   }, [open, height])
 
-  // While maximized, keep the popup's top offset in sync with the floating
-  // search bar's actual rendered height. A one-time measurement on click
-  // goes stale if the search bar grows/shrinks afterwards (e.g. the page
-  // title strip or an In Development/Beta banner mounts asynchronously),
-  // leaving the popup either hidden behind the search bar or with a gap
-  // above it.
-  useLayoutEffect(() => {
-    if (!maximized) return
-    const root = document.documentElement
-    function update() {
-      const topBar = document.querySelector('[data-floating-search]') as HTMLElement | null
-      const offset = topBar
-        ? topBar.getBoundingClientRect().bottom
-        : (window.innerWidth >= 768 && window.innerWidth < 1024) ? 56 : 0
-      root.style.setProperty('--popup-max-top', `${Math.max(0, Math.round(offset))}px`)
-    }
-    update()
-    const topBar = document.querySelector('[data-floating-search]')
-    const observer = new ResizeObserver(update)
-    if (topBar) observer.observe(topBar)
-    window.addEventListener('resize', update)
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('resize', update)
-      root.style.removeProperty('--popup-max-top')
-    }
-  }, [maximized])
-
-  // Reset math / listen view when popup closes.
+  // Focus mode covers the whole viewport, so lock the page behind it the same
+  // way the Flashcards focus mode does.
   useEffect(() => {
-    if (!open) { setMathView(false); setListenView(false) }
+    if (!focusMode) return
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [focusMode])
+
+  // Reset math / listen / focus view when popup closes.
+  useEffect(() => {
+    if (!open) { setMathView(false); setListenView(false); setFocusMode(false) }
   }, [open])
 
   // Fetch question count for the current concept (uses cached question list).
@@ -293,13 +277,13 @@ export function ConceptPopup() {
     <>
     <aside
       className="concept-popup-aside fixed left-0 right-0 bottom-14 md:bottom-0 z-40 border-t bg-card text-card-foreground shadow-2xl flex flex-col"
-      data-maximized={maximized}
-      style={{ height: maximized ? undefined : `min(${height}px, 100vh)` }}
+      data-focus={focusMode}
+      style={{ height: focusMode ? undefined : `min(${height}px, 100vh)` }}
       role="complementary"
       aria-label={`Concept: ${current.name}`}
     >
-      {/* Drag handle — hidden in fullscreen, visible otherwise */}
-      {!maximized && (
+      {/* Drag handle — hidden in focus mode, visible otherwise */}
+      {!focusMode && (
         <div
           role="separator"
           aria-orientation="horizontal"
@@ -317,8 +301,10 @@ export function ConceptPopup() {
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex items-center gap-2 px-3 h-14 shrink-0">
+      {/* Header. Focus mode spans the full viewport, so the header and the body
+          below share a max-width reading column to keep line lengths sane on
+          desktop and stay aligned with each other. */}
+      <div className={`flex items-center gap-2 h-14 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex items-center gap-1.5 flex-1 min-w-0">
           <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
           {/* Collect / status indicator — borderless so it reads as part of the
@@ -326,7 +312,7 @@ export function ConceptPopup() {
               collect flow); once collected → mastery status (New/1/2/3/F) which
               opens the combined card + learning-progress modal, where it can
               level up. */}
-          {current.kind === 'concept' && (() => {
+          {!focusMode && current.kind === 'concept' && (() => {
             const collected = collectedCards.some(c => c.name.toLowerCase() === current.name.toLowerCase())
             // A concept past New has necessarily been collected already (grandfathered
             // users included), so surface its status even if not in the collected store.
@@ -360,6 +346,7 @@ export function ConceptPopup() {
             )
           })()}
           {/* Play button + mini menu — immediately right of the concept name */}
+          {!focusMode && (
           <div className="relative shrink-0" ref={playMenuRef}>
           <button
             ref={playBtnRef}
@@ -480,8 +467,9 @@ export function ConceptPopup() {
             document.body,
           )}
           </div>
+          )}
           {/* Sigma icon — visible only while in Math View; clicking exits it */}
-          {mathView && (
+          {!focusMode && mathView && (
             <button
               type="button"
               onClick={() => setMathView(false)}
@@ -493,7 +481,7 @@ export function ConceptPopup() {
             </button>
           )}
           {/* Headphones icon — visible only while in Listen view; clicking exits it */}
-          {listenView && (
+          {!focusMode && listenView && (
             <button
               type="button"
               onClick={() => setListenView(false)}
@@ -504,7 +492,7 @@ export function ConceptPopup() {
               <Headphones className="h-4 w-4" />
             </button>
           )}
-          {images.length > 0 && (
+          {!focusMode && images.length > 0 && (
             <button
               type="button"
               onClick={() => { setGalleryIndex(0); setShowGallery(true) }}
@@ -517,25 +505,30 @@ export function ConceptPopup() {
             </button>
           )}
         </div>
+        {/* Focus mode toggle — the only control that survives focus mode, so
+            there's always a way back out (Esc also works). */}
         <button
           type="button"
-          onClick={() => setMaximized(v => !v)}
+          onClick={() => setFocusMode(v => !v)}
+          aria-pressed={focusMode}
           className="text-muted-foreground hover:text-foreground p-1"
-          title={maximized ? 'Restore size' : 'Maximize'}
-          aria-label={maximized ? 'Restore size' : 'Maximize'}
+          title={focusMode ? 'Exit focus mode (Esc)' : 'Focus mode'}
+          aria-label={focusMode ? 'Exit focus mode' : 'Focus mode'}
         >
-          {maximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          {focusMode ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </button>
-        <button
-          type="button"
-          onClick={close}
-          data-sound="none"
-          className="text-muted-foreground hover:text-foreground p-1"
-          title="Close"
-          aria-label="Close"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        {!focusMode && (
+          <button
+            type="button"
+            onClick={close}
+            data-sound="none"
+            className="text-muted-foreground hover:text-foreground p-1"
+            title="Close"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       {/* Body — overflow-y:scroll (not auto) keeps this a scroll container even when
@@ -544,7 +537,7 @@ export function ConceptPopup() {
       <MathViewContext.Provider value={{ active: mathView, enter: () => setMathView(true) }}>
         <div
           ref={bodyRef}
-          className={`flex-1 min-h-0 overflow-y-scroll overscroll-contain px-4 sm:px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] ${listenView ? 'pt-0' : 'pt-4'}`}
+          className={`flex-1 min-h-0 w-full overflow-y-scroll overscroll-contain px-4 sm:px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] ${focusMode ? 'max-w-4xl mx-auto' : ''} ${listenView ? 'pt-0' : 'pt-4'}`}
         >
           {status === 'loading' && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -610,6 +603,9 @@ export function ConceptPopup() {
           <ChevronLeft className="h-6 w-6 sm:h-5 sm:w-5" />
           <span>Previous</span>
         </button>
+        {/* Position + syllabus-filter picker — extra information, so focus mode
+            drops it and leaves the footer as just Previous / Next. */}
+        {!focusMode && (
         <div className="self-center flex flex-col items-center gap-0.5 px-2 shrink-0" ref={viewingRef}>
           <span className="text-sm sm:text-xs text-muted-foreground tabular-nums">{position}</span>
           <div className="relative">
@@ -692,6 +688,7 @@ export function ConceptPopup() {
             )}
           </div>
         </div>
+        )}
         <button
           type="button"
           disabled={!canNext}

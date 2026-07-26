@@ -49,7 +49,7 @@ function InfoPanel() {
         <li><span className="font-medium text-muted-foreground">New</span> — never attempted.</li>
         <li><span className="font-medium text-green-600 dark:text-green-500">Level 1</span> — first correct answer; building familiarity.</li>
         <li><span className="font-medium text-green-700 dark:text-green-400">Level 2</span> — 2+ correct answers; practicing.</li>
-        <li><span className="font-medium text-green-800 dark:text-green-300">Level 3</span> — 3+ corrects including at least one hard question; mastered.</li>
+        <li><span className="font-medium text-green-800 dark:text-green-300">Level 3</span> — 3+ correct answers; mastered.</li>
         <li><span className="font-medium text-red-500">Forgotten</span> — 15 days without a correct answer, or 3 wrong in a row.</li>
       </ul>
     </div>

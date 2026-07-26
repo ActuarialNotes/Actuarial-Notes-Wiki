@@ -162,24 +162,28 @@ describe('level2 state', () => {
     })
   }
 
-  it('stays level2 when count >= threshold but no hard correct', () => {
-    const r = level2Rec({ correct_count: LEVEL3_CORRECT_THRESHOLD - 1 })
-    expect(correct(r, false).state).toBe('level2')
-  })
-
-  it('stays level2 when has hard correct but count below threshold', () => {
+  it('stays level2 when count below threshold', () => {
     const r = level2Rec({ correct_count: 1, hard_correct_count: 1 })
     expect(correct(r, true).state).toBe('level2')
   })
 
-  it('transitions to level3 when count >= LEVEL3_CORRECT_THRESHOLD AND at least one hard correct', () => {
+  it('transitions to level3 when count reaches LEVEL3_CORRECT_THRESHOLD', () => {
     const r = level2Rec({ correct_count: LEVEL3_CORRECT_THRESHOLD - 1, hard_correct_count: 1 })
     expect(correct(r, true).state).toBe('level3')
   })
 
-  it('transitions to level3 with easy final answer if count and hard threshold already met', () => {
-    const r = level2Rec({ correct_count: LEVEL3_CORRECT_THRESHOLD - 1, hard_correct_count: 1 })
-    expect(correct(r, false).state).toBe('level3')
+  // Concepts with no hard question in the bank must still be able to reach
+  // level3 — difficulty is not a promotion gate.
+  it('transitions to level3 with no hard correct answers at all', () => {
+    const r = level2Rec({ correct_count: LEVEL3_CORRECT_THRESHOLD - 1, hard_correct_count: 0 })
+    const next = correct(r, false)
+    expect(next.state).toBe('level3')
+    expect(next.hard_correct_count).toBe(0)
+  })
+
+  it('still tallies hard_correct_count as a statistic', () => {
+    const r = level2Rec({ correct_count: LEVEL3_CORRECT_THRESHOLD - 1, hard_correct_count: 0 })
+    expect(correct(r, true).hard_correct_count).toBe(1)
   })
 
   it('transitions to forgotten after 3 consecutive wrong answers', () => {

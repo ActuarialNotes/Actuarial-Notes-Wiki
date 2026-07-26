@@ -29,7 +29,7 @@ const LEVELS: { key: string; label: string; desc: string; color: string }[] = [
   {
     key: 'level3',
     label: 'Level 3',
-    desc: 'Mastered. Answered correctly on at least three separate days, including one hard question.',
+    desc: 'Mastered. Answered correctly on at least three separate days.',
     color: 'bg-green-200 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-700',
   },
   {

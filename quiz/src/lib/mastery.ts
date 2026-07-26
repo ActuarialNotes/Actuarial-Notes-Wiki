@@ -1,10 +1,12 @@
 // Concept mastery state machine.
 //
-// States advance as a learner answers questions. The Learning→Strong transition
-// requires at least one hard-difficulty correct answer to prevent grinding
-// easy questions to mastery. Stale concepts and runs of three failures both
-// flip back toward `forgotten`, which then re-enters the Learning track on the
-// next correct answer — Strong must be re-earned.
+// States advance as a learner answers questions, driven purely by correct-answer
+// counts and the one-advance-per-day rule. Difficulty does not gate promotion:
+// many concepts have no hard questions in the bank at all, so requiring one made
+// level3 unreachable for them. `hard_correct_count` is still tracked as a
+// statistic. Stale concepts and runs of three failures both flip back toward
+// `forgotten`, which then re-enters the Learning track on the next correct
+// answer — level3 must be re-earned.
 //
 // Decay ladder (Ebbinghaus expanding-interval principle — SM-2):
 //   Each successful recall strengthens the memory trace, so the interval before
@@ -113,9 +115,10 @@ export function applyAnswer(
 
     next.correct_count = decayed.correct_count + 1
     next.incorrect_streak = 0
+    // Tracked as a statistic only — it no longer gates any promotion.
     next.hard_correct_count = decayed.hard_correct_count + (isHard ? 1 : 0)
     next.last_correct_at = atIso
-    next.state = nextStateOnCorrect(decayed.state, next.correct_count, next.hard_correct_count, alreadyAdvancedToday, collected)
+    next.state = nextStateOnCorrect(decayed.state, next.correct_count, alreadyAdvancedToday, collected)
   } else {
     next.incorrect_streak = decayed.incorrect_streak + 1
     // Only forget a concept that was learned on a previous day. If last_correct_at
@@ -138,7 +141,6 @@ export function applyAnswer(
 function nextStateOnCorrect(
   state: MasteryState,
   correctCount: number,
-  hardCorrectCount: number,
   alreadyAdvancedToday: boolean,
   collected: boolean,
 ): MasteryState {
@@ -157,7 +159,9 @@ function nextStateOnCorrect(
     return 'level1'
   }
   if (state === 'level2') {
-    if (correctCount >= LEVEL3_CORRECT_THRESHOLD && hardCorrectCount >= 1) return 'level3'
+    // Correct count alone — difficulty is deliberately not a factor, because
+    // plenty of concepts have no hard question in the bank.
+    if (correctCount >= LEVEL3_CORRECT_THRESHOLD) return 'level3'
     return 'level2'
   }
   return state // level3 stays level3

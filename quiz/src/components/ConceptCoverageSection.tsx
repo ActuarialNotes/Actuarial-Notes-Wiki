@@ -410,12 +410,6 @@ export function ConceptCoverageSection({
                 <p className="text-xs text-muted-foreground mt-0.5">Gems earned</p>
               </div>
             )}
-            {score.conceptsLevelledUp !== undefined && score.conceptsLevelledUp > 0 && (
-              <div>
-                <span className="text-2xl font-bold tabular-nums">{score.conceptsLevelledUp}</span>
-                <p className="text-xs text-muted-foreground mt-0.5">Concepts levelled up</p>
-              </div>
-            )}
           </div>
 
           {/* Sign-in prompt */}
@@ -434,7 +428,7 @@ export function ConceptCoverageSection({
       {levelUpTransitions.length > 0 && (
         <div className="space-y-2">
           <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Concepts Levelled Up
+            {levelUpTransitions.length} Concept{levelUpTransitions.length === 1 ? '' : 's'} Levelled Up
           </p>
           <div className="grid grid-cols-2 gap-3">
             {levelUpTransitions.map((t, i) => (

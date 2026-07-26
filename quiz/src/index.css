@@ -486,29 +486,23 @@
   }
 }
 
-/* Maximized popup: start below the floating search bar.
-   --popup-max-top is measured dynamically by ConceptPopup when entering maximized
-   state (getBoundingClientRect of the search bar). Fallback: 0 desktop (no fixed
-   header), 3.5rem mobile (fixed sidebar header only — no search bar assumed).
+/* Focus mode: the concept is the only thing on screen. The panel fills the
+   viewport and layers above the floating search bar (z-50), the bottom nav
+   (z-45/46) and the in-flow desktop sidebar, so no other chrome shows through
+   — the popup's counterpart to the Flashcards page focus mode.
    dvh (dynamic viewport height) is used instead of vh so the panel never extends
    below the visual viewport on iOS when the URL bar is visible — which previously
    clipped the Previous/Next footer off-screen. */
-.concept-popup-aside[data-maximized="true"] {
-  top: var(--popup-max-top, 0rem);
-  height: calc(100dvh - var(--popup-max-top, 0rem));
+.concept-popup-aside[data-focus="true"] {
+  top: 0;
+  bottom: 0;
+  height: 100dvh;
+  z-index: 56;
 }
 
-@media (max-width: 767px) {
-  .concept-popup-aside[data-maximized="true"] {
-    top: var(--popup-max-top, 0rem);
-    height: calc(100dvh - var(--popup-max-top, 0rem) - 3.5rem);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .concept-popup-aside[data-maximized="true"] {
-    top: var(--popup-max-top, 3.5rem);
-    height: calc(100dvh - var(--popup-max-top, 3.5rem));
+@media (min-width: 1024px) {
+  .concept-popup-aside[data-focus="true"] {
+    left: 0 !important;
   }
 }
 

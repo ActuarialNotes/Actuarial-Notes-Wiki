@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Gem, LayoutDashboard, XCircle } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
+import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { Button } from '@/components/ui/button'
 import { questionCredit, questionOutcome } from '@/lib/parser'
 import type { Question, SelfGrade, QuestionOutcome } from '@/lib/parser'
@@ -354,6 +356,9 @@ export function ConceptCoverageSection({
   levelUpTransitions = [],
 }: ConceptCoverageSectionProps) {
   const navigate = useNavigate()
+  const openConceptPopup = useConceptPopup(s => s.openAt)
+  // Prev/next list for the popup — the levelled-up concepts, in card order.
+  const levelUpRefs: WikiEntryRef[] = levelUpTransitions.map(t => ({ kind: 'concept' as const, name: t.conceptSlug }))
   const credits = questions.map(q => questionCredit(q, responses[q.id]?.chosen, manualGrades))
   const outcomes = questions.map(q => questionOutcome(q, responses[q.id]?.chosen, manualGrades))
   const stats = buildConceptStats(questions, credits)
@@ -425,19 +430,19 @@ export function ConceptCoverageSection({
         </div>
       </div>
 
-      {/* ── Concepts levelled up: one card each, two-column grid ───── */}
+      {/* ── Concepts levelled up: standalone cards, two-column grid ── */}
       {levelUpTransitions.length > 0 && (
-        <div className="rounded-xl bg-card shadow-sm overflow-hidden">
-          <div className="px-5 py-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Concepts Levelled Up
-            </p>
-          </div>
-          <div className="px-4 pb-4 grid grid-cols-2 gap-2.5">
+        <div className="space-y-2">
+          <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Concepts Levelled Up
+          </p>
+          <div className="grid grid-cols-2 gap-3">
             {levelUpTransitions.map((t, i) => (
-              <div
+              <button
                 key={`${t.conceptSlug}-${i}`}
-                className="flex flex-col gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2.5"
+                type="button"
+                onClick={() => openConceptPopup(levelUpRefs, i)}
+                className="flex flex-col gap-1.5 rounded-xl bg-card shadow-sm px-4 py-3 text-left transition-all hover:shadow-md active:scale-[0.98]"
               >
                 <span className="text-sm font-semibold leading-snug text-foreground line-clamp-2">
                   {t.conceptSlug}
@@ -447,7 +452,7 @@ export function ConceptCoverageSection({
                   <ArrowRight className="h-3 w-3 shrink-0" />
                   {LEVEL_LABEL[t.to]}
                 </span>
-              </div>
+              </button>
             ))}
           </div>
         </div>

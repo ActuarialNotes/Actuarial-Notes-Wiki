@@ -41,6 +41,7 @@ import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { StreakNavBadge, StreakCornerBadge } from '@/components/StreakBadge'
+import { SoundPopover } from '@/components/SoundPopover'
 import { COLOR_THEMES } from '@/lib/colorThemes'
 import { cn } from '@/lib/utils'
 
@@ -634,6 +635,9 @@ export default function Sidebar() {
                 {theme === 'dark' ? 'Light mode' : 'Dark mode'}
               </span>
             </button>
+
+            {/* Inline sound popout: mute / volume without leaving for Settings */}
+            <SoundPopover collapsed={collapsed} />
 
             {/* Inline theme popout: pick the colour theme without leaving for Settings */}
             <div ref={themeRef} className="relative">

@@ -1752,7 +1752,7 @@ const STUDY_GUIDE_LEVELS: { fill: string; label: string; desc: string }[] = [
   { fill: 'rgba(34,197,94,0.10)', label: 'New',       desc: 'Not yet attempted.' },
   { fill: 'rgba(34,197,94,0.28)', label: 'Level 1',   desc: 'First correct answer.' },
   { fill: 'rgba(34,197,94,0.62)', label: 'Level 2',   desc: 'Practiced correctly on at least two separate days.' },
-  { fill: '#22c55e',              label: 'Level 3',   desc: 'Mastered, including at least one hard question.' },
+  { fill: '#22c55e',              label: 'Level 3',   desc: 'Mastered — practiced correctly on at least three separate days.' },
   { fill: 'rgba(239,68,68,0.45)', label: 'Forgotten', desc: 'Needs re-earning.' },
 ]
 

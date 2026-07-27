@@ -274,7 +274,7 @@ function PackConceptsModal({
                 )}
                 <button
                   type="button"
-                  onClick={() => openCollect({ kind: 'concept', name })}
+                  onClick={() => openCollect({ kind: 'concept', name }, { collected: isCollected(name) })}
                   title={isCollected(name) ? 'Collected' : 'Collect this flashcard'}
                   aria-label={isCollected(name) ? `${name} collected` : `Collect ${name}`}
                   className={`shrink-0 h-7 w-7 rounded-md flex items-center justify-center transition-colors ${

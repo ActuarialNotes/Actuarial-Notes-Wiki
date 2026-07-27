@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Lock, Loader2, X } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { useSubscription } from '@/hooks/useSubscription'
-import { useConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
+import { useConceptLearningHistory, type ConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
 import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
@@ -42,22 +42,33 @@ function LevelPill({ level }: { level: MasteryState }) {
 // inside the standalone modal below, and embedded alongside the 3D flashcard in
 // the collect modal so a collected concept shows "card + progress" in one place.
 
-export function LearningProgressPanel({
-  conceptName,
-  showLevelRow = true,
-  showHint = true,
-  onLevelChange,
-}: {
-  conceptName: string
+interface PanelProps {
   /** Hide the internal "Current level" row — used when the level is shown elsewhere (e.g. beside a title). */
   showLevelRow?: boolean
   /** Hide the "Hover the graph…" hint below the graph. */
   showHint?: boolean
   /** Bubbles up the level currently on display (current or hovered), or null while unavailable. */
   onLevelChange?: (level: MasteryState | null) => void
-}) {
+}
+
+export function LearningProgressPanel({ conceptName, ...props }: PanelProps & { conceptName: string }) {
+  const history = useConceptLearningHistory(conceptName)
+  return <LearningProgressPanelView history={history} {...props} />
+}
+
+// Same panel, driven by an already-loaded history. Callers that need the
+// concept's history themselves (the collect modal reads it to decide which face
+// of the card to show) pass theirs in rather than mounting a second copy of
+// useConceptLearningHistory for the same concept — which would duplicate every
+// query and every realtime subscription behind it.
+export function LearningProgressPanelView({
+  history,
+  showLevelRow = true,
+  showHint = true,
+  onLevelChange,
+}: PanelProps & { history: ConceptLearningHistory }) {
   const { isPremium, isBetaTester, loading: subLoading } = useSubscription()
-  const { levelEvents, attemptDots, currentLevel, loading, error } = useConceptLearningHistory(conceptName)
+  const { levelEvents, attemptDots, currentLevel, loading, error } = history
   const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
 
   const isAccessible = isPremium || isBetaTester

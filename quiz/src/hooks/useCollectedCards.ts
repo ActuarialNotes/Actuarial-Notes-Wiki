@@ -38,19 +38,26 @@ function persist(cards: CollectedCard[]) {
 interface CollectedCardsState {
   cards: CollectedCard[]
   isCollected: (name: string) => boolean
-  collect: (name: string) => void
+  /**
+   * Marks a concept collected. `silent` skips COLLECTED_EVENT — used when
+   * back-filling a card the user demonstrably already owns (mastery past New)
+   * rather than one they just won, so the nav doesn't celebrate a collection
+   * that isn't happening now.
+   */
+  collect: (name: string, opts?: { silent?: boolean }) => void
   uncollect: (name: string) => void
 }
 
 export const useCollectedCards = create<CollectedCardsState>((set, get) => ({
   cards: load(),
   isCollected: name => get().cards.some(c => c.name.toLowerCase() === name.toLowerCase()),
-  collect: name => {
+  collect: (name, opts) => {
     const { cards } = get()
     if (cards.some(c => c.name.toLowerCase() === name.toLowerCase())) return
     const next = [...cards, { name, collectedAt: Date.now() }]
     persist(next)
     set({ cards: next })
+    if (opts?.silent) return
     try {
       window.dispatchEvent(new CustomEvent(COLLECTED_EVENT, { detail: { name } }))
     } catch { /* ignore */ }

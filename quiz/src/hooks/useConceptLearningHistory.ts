@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { fetchAllQuestions } from '@/lib/github'
@@ -64,13 +64,19 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
   const userId = user?.id
   const [result, setResult] = useState<ConceptLearningHistory>({ ...EMPTY, loading: true })
   const [version, setVersion] = useState(0)
+  // Per-instance channel suffix. Two components can hold this hook for the same
+  // concept at once (the collect modal and the progress panel inside it); a
+  // shared topic makes the second subscribe fail with "cannot add
+  // postgres_changes callbacks after subscribe()", and unmounting either one
+  // tears down the other's subscription.
+  const channelId = useRef(Math.random().toString(36).slice(2))
 
   // Re-fetch when concept mastery or question responses change so the modal
   // stays accurate after a quiz completes without requiring a close/reopen.
   useEffect(() => {
-    if (!userId) return
+    if (!userId || !conceptName) return
     const channel = supabase
-      .channel(`concept-learning-history:${userId}:${conceptName}`)
+      .channel(`concept-learning-history:${userId}:${conceptName}:${channelId.current}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'concept_mastery', filter: `user_id=eq.${userId}` },
@@ -86,7 +92,10 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
   }, [userId, conceptName])
 
   useEffect(() => {
-    if (!userId) {
+    // No concept means nothing to load — the always-mounted collect modal holds
+    // this hook with an empty name whenever it's closed, and querying for it
+    // costs a question fetch plus two round-trips on every page load.
+    if (!userId || !conceptName) {
       setResult(EMPTY)
       return
     }

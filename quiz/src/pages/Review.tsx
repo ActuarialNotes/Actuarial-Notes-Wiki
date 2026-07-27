@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowUp, Check, X } from 'lucide-react'
+import { ArrowUp, X } from 'lucide-react'
 import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
-import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
+import type { CompletedSession } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
@@ -10,13 +10,10 @@ import { QuestionCard } from '@/components/QuestionCard'
 import { ConceptCoverageSection, effectiveOutcome } from '@/components/ConceptCoverageSection'
 import { questionCredit } from '@/lib/parser'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Loader2 } from 'lucide-react'
 import type { MasteryState } from '@/lib/mastery'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
-import { useConceptPopup } from '@/hooks/useConceptPopup'
-import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { QuestCompleteOverlay } from '@/components/QuestCompleteOverlay'
 import { StreakCompleteOverlay } from '@/components/StreakCompleteOverlay'
@@ -35,131 +32,6 @@ const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
 }
 const STATE_ORDER: Record<MasteryState, number> = {
   new: 0, forgotten: 0, level1: 1, level2: 2, level3: 3,
-}
-
-const STATE_LABEL: Record<MasteryState, string> = {
-  new: 'New', level1: '1', level2: '2', level3: '3', forgotten: 'F',
-}
-
-// ─── Study Plan Checklist ─────────────────────────────────────────────────────
-
-function StudyPlanChecklist({
-  todaysConcepts,
-  newlyCompletedSlugs,
-  transitionBySlug,
-  bonusConcepts,
-}: {
-  todaysConcepts: string[]
-  newlyCompletedSlugs: Set<string>
-  transitionBySlug: Map<string, MasteryTransition>
-  bonusConcepts: MasteryTransition[]
-}) {
-  const openAt = useConceptPopup(s => s.openAt)
-  const popupOpen = useConceptPopup(s => s.open)
-  const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
-  const prevPopupNameRef = useRef<string | null>(null)
-  const [flashingConcept, setFlashingConcept] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!popupOpen) prevPopupNameRef.current = null
-  }, [popupOpen])
-
-  useEffect(() => {
-    if (!popupCurrentName || popupCurrentName === prevPopupNameRef.current) return
-    prevPopupNameRef.current = popupCurrentName
-    const el = document.querySelector<HTMLElement>(`[data-study-concept="${CSS.escape(popupCurrentName.toLowerCase())}"]`)
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const popupHeight = popupOpen
-      ? (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--concept-split-height')) || window.innerHeight * 0.5)
-      : 0
-    const visibleHeight = window.innerHeight - popupHeight
-    window.scrollBy({ top: rect.top - visibleHeight / 2 + rect.height / 2, behavior: 'smooth' })
-    setFlashingConcept(popupCurrentName)
-    const id = setTimeout(() => setFlashingConcept(null), 1400)
-    return () => clearTimeout(id)
-  }, [popupCurrentName])
-
-  // Only show concepts levelled up today (checked off)
-  let animIdx = 0
-  const items = todaysConcepts
-    .filter(name => newlyCompletedSlugs.has(name.toLowerCase()))
-    .map(name => ({ name, delay: animIdx++ * 120 }))
-  const bonusStartIdx = animIdx
-
-  if (items.length === 0 && bonusConcepts.length === 0) return null
-
-  const allRefs: WikiEntryRef[] = [
-    ...items.map(({ name }) => ({ kind: 'concept' as const, name })),
-    ...bonusConcepts.map(t => ({ kind: 'concept' as const, name: t.conceptSlug })),
-  ]
-
-  return (
-    <div className="space-y-4">
-      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-        Learning Progress
-      </p>
-
-      {items.length > 0 && (
-        <div className="space-y-0.5">
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-            Today's Study Plan
-          </p>
-          {items.map(({ name, delay }, idx) => {
-            const transition = transitionBySlug.get(name.toLowerCase())
-            return (
-              <button
-                key={name}
-                type="button"
-                data-study-concept={name.toLowerCase()}
-                onClick={() => openAt(allRefs, idx)}
-                className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : ''}`}
-              >
-                <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${delay}ms` }}>
-                  <Check className="h-4 w-4 text-green-500" />
-                </span>
-                <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
-                  {name}
-                </span>
-                {transition && (
-                  <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
-                    {STATE_LABEL[transition.from]} → {STATE_LABEL[transition.to]}
-                  </span>
-                )}
-              </button>
-            )
-          })}
-        </div>
-      )}
-
-      {bonusConcepts.length > 0 && (
-        <div className="space-y-0.5">
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-            Other Concepts Learned
-          </p>
-          {bonusConcepts.map((t, i) => (
-            <button
-              key={t.conceptSlug}
-              type="button"
-              data-study-concept={t.conceptSlug.toLowerCase()}
-              onClick={() => openAt(allRefs, items.length + i)}
-              className={`w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-muted/50 text-left transition-colors${flashingConcept?.toLowerCase() === t.conceptSlug.toLowerCase() ? ' concept-row-highlight' : ''}`}
-            >
-              <span className="study-plan-check-in shrink-0" style={{ animationDelay: `${(bonusStartIdx + i) * 120}ms` }}>
-                <Check className="h-4 w-4 text-green-500" />
-              </span>
-              <span className="text-sm flex-1 min-w-0 truncate text-muted-foreground line-through">
-                {t.conceptSlug}
-              </span>
-              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
-                {STATE_LABEL[t.from]} → {STATE_LABEL[t.to]}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
 }
 
 // ─── Post-quiz celebrations ───────────────────────────────────────────────────
@@ -329,18 +201,6 @@ export default function Review() {
     t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3'
   ) ?? []
 
-  const todaysConcepts = studyPlan?.status === 'review_mode'
-    ? studyPlan.reviewConcepts
-    : studyPlan?.todaysConcepts ?? []
-
-  const todaysConceptsLower = new Set(todaysConcepts.map(n => n.toLowerCase()))
-  const bonusConcepts = upwardTransitions.filter(t => !todaysConceptsLower.has(t.conceptSlug.toLowerCase()))
-
-  const transitionBySlug = new Map<string, MasteryTransition>()
-  for (const t of upwardTransitions) {
-    transitionBySlug.set(t.conceptSlug.toLowerCase(), t)
-  }
-
   // Which questions to show in the review list
   const outcomes = session.questions.map(q =>
     effectiveOutcome(q, session.responses[q.id]?.chosen, session.manualGrades ?? {})
@@ -409,20 +269,6 @@ export default function Review() {
         onReviewIncorrect={handleReviewIncorrect}
         levelUpTransitions={upwardTransitions}
       />
-
-      {/* ── Study plan checklist ─────────────────────────────────── */}
-      {user && (todaysConcepts.length > 0 || bonusConcepts.length > 0) && (
-        <Card>
-          <CardContent className="pt-5">
-            <StudyPlanChecklist
-              todaysConcepts={todaysConcepts}
-              newlyCompletedSlugs={newlyCompletedSlugs}
-              transitionBySlug={transitionBySlug}
-              bonusConcepts={bonusConcepts}
-            />
-          </CardContent>
-        </Card>
-      )}
 
       {/* ── Question review ─────────────────────────────────────── */}
       <div ref={questionReviewRef} className="space-y-2 scroll-mt-6">

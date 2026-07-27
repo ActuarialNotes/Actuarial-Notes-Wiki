@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, LayoutDashboard, XCircle } from 'lucide-react'
-import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { Button } from '@/components/ui/button'
@@ -25,14 +24,7 @@ interface Response {
   chosen: string | null
 }
 
-interface ConceptStat {
-  name: string
-  score: number   // fractional credit summed across this concept's questions
-  total: number
-  questionIndices: number[]
-}
-
-// Outcome → segment/dot colour, shared by the radial chart and concept chips.
+// Outcome → segment colour for the radial chart.
 const OUTCOME_COLOR: Record<QuestionOutcome, string> = {
   correct: '#22c55e',   // green-500
   partial: '#eab308',   // yellow-500
@@ -65,40 +57,6 @@ function formatTime(seconds: number | null): string {
   const m = Math.floor(seconds / 60)
   const s = seconds % 60
   return m > 0 ? `${m}m ${s}s` : `${s}s`
-}
-
-function resolveConceptName(link: string): string | null {
-  const ref = hrefToEntryRef(link)
-  if (ref?.kind === 'concept' && ref.name) return ref.name
-  const last = link.split('/').filter(Boolean).pop()
-  return last ? last.replace(/-/g, ' ') : null
-}
-
-function buildConceptStats(
-  questions: Question[],
-  credits: number[],
-): ConceptStat[] {
-  const map = new Map<string, ConceptStat>()
-  for (let i = 0; i < questions.length; i++) {
-    const q = questions[i]
-    const credit = credits[i] ?? 0
-    const names = new Set<string>()
-    for (const link of q.wiki_link) {
-      const name = resolveConceptName(link)
-      if (name) names.add(name)
-    }
-    for (const name of names) {
-      const key = name.toLowerCase()
-      if (!map.has(key)) {
-        map.set(key, { name, score: 0, total: 0, questionIndices: [] })
-      }
-      const stat = map.get(key)!
-      stat.total += 1
-      stat.score += credit
-      stat.questionIndices.push(i)
-    }
-  }
-  return [...map.values()].sort((a, b) => a.name.localeCompare(b.name))
 }
 
 // ─── Radial quiz coverage chart ───────────────────────────────────────────────
@@ -285,44 +243,6 @@ function QuizCoverageRadial({
   )
 }
 
-// ─── Concept chip / tag ───────────────────────────────────────────────────────
-
-function ConceptChip({
-  stat,
-  isSelected,
-  onSelect,
-}: {
-  stat: ConceptStat
-  isSelected: boolean
-  onSelect: () => void
-}) {
-  const dotColor = stat.score >= stat.total ? OUTCOME_COLOR.correct
-    : stat.score <= 0 ? OUTCOME_COLOR.incorrect
-    : OUTCOME_COLOR.partial
-
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      className={[
-        'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all shrink-0',
-        isSelected
-          ? 'bg-foreground text-background shadow-sm'
-          : 'bg-muted/40 text-foreground hover:bg-muted/70',
-      ].join(' ')}
-    >
-      <span
-        className="h-1.5 w-1.5 rounded-full shrink-0"
-        style={{ background: isSelected ? 'currentColor' : dotColor }}
-      />
-      {stat.name}
-      <span className={`tabular-nums ${isSelected ? 'opacity-70' : 'text-muted-foreground'}`}>
-        {formatScore(stat.score)}/{stat.total}
-      </span>
-    </button>
-  )
-}
-
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 interface ConceptCoverageSectionProps {
@@ -360,12 +280,7 @@ export function ConceptCoverageSection({
   const levelUpRefs: WikiEntryRef[] = levelUpTransitions.map(t => ({ kind: 'concept' as const, name: t.conceptSlug }))
   const credits = questions.map(q => questionCredit(q, responses[q.id]?.chosen, manualGrades))
   const outcomes = questions.map(q => questionOutcome(q, responses[q.id]?.chosen, manualGrades))
-  const stats = buildConceptStats(questions, credits)
   const hasIncorrect = outcomes.some(o => o !== 'correct')
-
-  const [selectedName, setSelectedName] = useState<string | null>(null)
-
-  const selected = selectedName !== null ? (stats.find(s => s.name === selectedName) ?? null) : null
 
   // Score header colors
   const pctColor =
@@ -463,35 +378,18 @@ export function ConceptCoverageSection({
         </div>
       )}
 
-      {/* ── Quiz coverage card: graph + concept chips ─────────────── */}
-      {stats.length > 0 && (
+      {/* ── Quiz coverage card: graph ─────────────────────────────── */}
+      {questions.length > 0 && (
         <div className="rounded-xl bg-card shadow-sm overflow-hidden">
-          <div className="p-4 pt-5">
+          <div className="p-4 pt-5 pb-5">
             <QuizCoverageRadial
-              key={selectedName ?? '__all__'}
               totalQ={questions.length}
-              questionIndices={selected ? selected.questionIndices : questions.map((_, i) => i)}
+              questionIndices={questions.map((_, i) => i)}
               outcomes={outcomes}
               credits={credits}
               selectedQuestion={selectedQuestion}
               onQuestionClick={onQuestionSelect}
             />
-          </div>
-
-          <div className="px-5 py-3">
-            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-              Concept Coverage
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {stats.map(stat => (
-                <ConceptChip
-                  key={stat.name}
-                  stat={stat}
-                  isSelected={stat.name === selectedName}
-                  onSelect={() => setSelectedName(selectedName === stat.name ? null : stat.name)}
-                />
-              ))}
-            </div>
           </div>
         </div>
       )}

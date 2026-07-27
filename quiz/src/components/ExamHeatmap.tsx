@@ -8,6 +8,9 @@ const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 const STRIP_GAP = 6 // px gap between cells
 
+/** Which end of the strip an off-screen day sits past. */
+type Side = 'left' | 'right'
+
 function cellStyle(pct: number | null): { backgroundColor: string } | undefined {
   if (pct === null) return undefined
   const opacity = +(0.2 + 0.8 * (pct / 100)).toFixed(2)
@@ -214,28 +217,63 @@ export function ExamHeatmap({
 
   // Track whether today's cell is visible in the scroll strip, and which side it's off to
   const [showTodayButton, setShowTodayButton] = useState(false)
-  const [todayButtonSide, setTodayButtonSide] = useState<'left' | 'right'>('right')
+  const [todayButtonSide, setTodayButtonSide] = useState<Side>('right')
+
+  // Which end of the row each day-count pill sits on: a date the strip has been
+  // scrolled past sits on the left, one still ahead of the viewport on the right —
+  // so the pills always point back at the day they count down to.
+  const [pillSides, setPillSides] = useState<{ ready: Side; exam: Side }>({ ready: 'right', exam: 'right' })
 
   useEffect(() => {
     const el = scrollRef.current
     if (!el || showFullTimeline) { setShowTodayButton(false); return }
 
-    function checkTodayVisible() {
-      if (!el) return
-      const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
-      const todayIdx = allDays.findIndex(d => d.isToday)
-      if (todayIdx < 0) { setShowTodayButton(false); return }
-      const todayLeft = todayIdx * (cellW + STRIP_GAP)
-      const todayRight = todayLeft + cellW
-      const visible = todayLeft >= el.scrollLeft - 1 && todayRight <= el.scrollLeft + el.clientWidth + 1
-      setShowTodayButton(!visible)
-      if (!visible) setTodayButtonSide(todayLeft < el.scrollLeft ? 'left' : 'right')
+    function sideForDate(cellW: number, dateKey: string): Side {
+      if (!el) return 'right'
+      const idx = allDays.findIndex(d => d.key === dateKey)
+      if (idx < 0) {
+        // Date falls outside the rendered range — compare it with the left-most
+        // day currently in view instead.
+        const firstIdx = Math.min(
+          allDays.length - 1,
+          Math.max(0, Math.round(el.scrollLeft / (cellW + STRIP_GAP))),
+        )
+        const firstKey = allDays[firstIdx]?.key
+        return firstKey !== undefined && dateKey < firstKey ? 'left' : 'right'
+      }
+      // Left only once the cell has scrolled fully out the left edge.
+      const cellRight = idx * (cellW + STRIP_GAP) + cellW
+      return cellRight <= el.scrollLeft + 1 ? 'left' : 'right'
     }
 
-    checkTodayVisible()
-    el.addEventListener('scroll', checkTodayVisible, { passive: true })
-    return () => el.removeEventListener('scroll', checkTodayVisible)
-  }, [allDays, showFullTimeline])
+    function syncStripPositions() {
+      if (!el) return
+      const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+
+      const todayIdx = allDays.findIndex(d => d.isToday)
+      if (todayIdx < 0) {
+        setShowTodayButton(false)
+      } else {
+        const todayLeft = todayIdx * (cellW + STRIP_GAP)
+        const todayRight = todayLeft + cellW
+        const visible = todayLeft >= el.scrollLeft - 1 && todayRight <= el.scrollLeft + el.clientWidth + 1
+        setShowTodayButton(!visible)
+        if (!visible) setTodayButtonSide(todayLeft < el.scrollLeft ? 'left' : 'right')
+      }
+
+      const ready = targetReadyDate ? sideForDate(cellW, targetReadyDate) : 'right'
+      const exam = targetDate ? sideForDate(cellW, targetDate) : 'right'
+      setPillSides(prev => (prev.ready === ready && prev.exam === exam ? prev : { ready, exam }))
+    }
+
+    syncStripPositions()
+    el.addEventListener('scroll', syncStripPositions, { passive: true })
+    window.addEventListener('resize', syncStripPositions)
+    return () => {
+      el.removeEventListener('scroll', syncStripPositions)
+      window.removeEventListener('resize', syncStripPositions)
+    }
+  }, [allDays, showFullTimeline, targetDate, targetReadyDate])
 
   function scrollToToday() {
     const el = scrollRef.current
@@ -450,6 +488,31 @@ export function ExamHeatmap({
     </button>
   )
 
+  // Day-count pills — rendered into whichever end of the row `pillSides` puts them.
+  const readyPill = readyDaysLeft !== null ? (
+    <button
+      type="button"
+      onClick={openReadyDateEditor}
+      className="min-w-0 truncate text-[11px] font-medium px-2 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400 transition-colors"
+      aria-label="Edit target ready date"
+      title="Edit target ready date"
+    >
+      <span className="font-bold tabular-nums">{Math.max(0, readyDaysLeft)}d</span> to prepare
+    </button>
+  ) : null
+
+  const examPill = daysLeft !== null ? (
+    <button
+      type="button"
+      onClick={openExamDateEditor}
+      className="min-w-0 truncate text-[11px] font-medium px-2 py-1 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors"
+      aria-label="Edit exam date"
+      title="Edit exam date"
+    >
+      <span className="font-bold tabular-nums">{Math.max(0, daysLeft)}d</span> until exam
+    </button>
+  ) : null
+
   return (
     <div className="space-y-3">
       {!showFullTimeline ? (
@@ -509,23 +572,17 @@ export function ExamHeatmap({
             </div>
           </div>
 
-          {/* Day-count pills + expand chevron. "… to prepare" (left) and
-              "… until exam" (right) are buttons that open the Study Plan modal on
-              the step that edits that date; the Today button joins the chevron in
-              the middle when today has been scrolled out of view. */}
+          {/* Day-count pills + expand chevron. Each pill ("… to prepare",
+              "… until exam") is a button that opens the Study Plan modal on the step
+              that edits that date, and sits on the end of the row its day lies past:
+              right while the day is still ahead of the scrolled window, left once the
+              strip has been scrolled beyond it. The Today button joins the chevron in
+              the middle when today has been scrolled out of view. The side slots size
+              to their content so two co-located pills stay fully readable. */}
           <div className="flex items-center justify-between gap-2 py-0.5">
-            <div className="flex-1 min-w-0 flex justify-start">
-              {readyDaysLeft !== null && (
-                <button
-                  type="button"
-                  onClick={openReadyDateEditor}
-                  className="max-w-full truncate text-[11px] font-medium px-2 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400 transition-colors"
-                  aria-label="Edit target ready date"
-                  title="Edit target ready date"
-                >
-                  <span className="font-bold tabular-nums">{Math.max(0, readyDaysLeft)}d</span> to prepare
-                </button>
-              )}
+            <div className="flex-auto min-w-0 flex items-center justify-start gap-1.5">
+              {pillSides.ready === 'left' && readyPill}
+              {pillSides.exam === 'left' && examPill}
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
               {showTodayButton && todayButtonSide === 'left' && todayButton}
@@ -540,18 +597,9 @@ export function ExamHeatmap({
               </button>
               {showTodayButton && todayButtonSide === 'right' && todayButton}
             </div>
-            <div className="flex-1 min-w-0 flex justify-end">
-              {daysLeft !== null && (
-                <button
-                  type="button"
-                  onClick={openExamDateEditor}
-                  className="max-w-full truncate text-[11px] font-medium px-2 py-1 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors"
-                  aria-label="Edit exam date"
-                  title="Edit exam date"
-                >
-                  <span className="font-bold tabular-nums">{Math.max(0, daysLeft)}d</span> until exam
-                </button>
-              )}
+            <div className="flex-auto min-w-0 flex items-center justify-end gap-1.5">
+              {pillSides.ready === 'right' && readyPill}
+              {pillSides.exam === 'right' && examPill}
             </div>
           </div>
         </div>

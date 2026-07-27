@@ -399,7 +399,6 @@ export default function Review() {
           scoredPoints,
           totalQuestions,
           timeTakenSeconds,
-          gemsEarned: correctCount,
           conceptsLevelledUp: upwardTransitions.length,
           isLoggedIn: !!user,
           onSignIn: () => navigate('/auth', { state: { from: '/review' } }),

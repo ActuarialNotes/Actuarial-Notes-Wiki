@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Gem, LayoutDashboard, XCircle } from 'lucide-react'
+import { ArrowRight, LayoutDashboard, XCircle } from 'lucide-react'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -53,7 +53,6 @@ export interface ScoreSummary {
   scoredPoints?: number
   totalQuestions: number
   timeTakenSeconds: number | null
-  gemsEarned: number
   conceptsLevelledUp?: number
   isLoggedIn: boolean
   onSignIn: () => void
@@ -385,7 +384,6 @@ export function ConceptCoverageSection({
               <h1 className="text-xl font-bold">
                 {score.mode === 'mock-exam' ? 'Mock Exam Complete' : 'Quiz Complete'}
               </h1>
-              <p className="text-sm text-muted-foreground mt-0.5">Here are your results</p>
             </div>
             <div className={`text-4xl font-black tabular-nums leading-none ${pctColor}`}>
               {score.percentage}%
@@ -402,14 +400,6 @@ export function ConceptCoverageSection({
               <span className="text-2xl font-bold tabular-nums">{formatTime(score.timeTakenSeconds)}</span>
               <p className="text-xs text-muted-foreground mt-0.5">Time</p>
             </div>
-            {score.isLoggedIn && score.gemsEarned > 0 && (
-              <div>
-                <span className="text-2xl font-bold tabular-nums text-emerald-500 inline-flex items-center gap-1">
-                  +{score.gemsEarned} <Gem className="h-5 w-5" />
-                </span>
-                <p className="text-xs text-muted-foreground mt-0.5">Gems earned</p>
-              </div>
-            )}
           </div>
 
           {/* Sign-in prompt */}
@@ -426,29 +416,24 @@ export function ConceptCoverageSection({
 
       {/* ── Concepts levelled up: standalone cards, two-column grid ── */}
       {levelUpTransitions.length > 0 && (
-        <div className="space-y-2">
-          <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {levelUpTransitions.length} Concept{levelUpTransitions.length === 1 ? '' : 's'} Levelled Up
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            {levelUpTransitions.map((t, i) => (
-              <button
-                key={`${t.conceptSlug}-${i}`}
-                type="button"
-                onClick={() => openConceptPopup(levelUpRefs, i)}
-                className="flex flex-col gap-1.5 rounded-xl bg-card shadow-sm px-4 py-3 text-left transition-all hover:shadow-md active:scale-[0.98]"
-              >
-                <span className="text-sm font-semibold leading-snug text-foreground line-clamp-2">
-                  {t.conceptSlug}
-                </span>
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  {LEVEL_LABEL[t.from]}
-                  <ArrowRight className="h-3 w-3 shrink-0" />
-                  {LEVEL_LABEL[t.to]}
-                </span>
-              </button>
-            ))}
-          </div>
+        <div className="grid grid-cols-2 gap-3">
+          {levelUpTransitions.map((t, i) => (
+            <button
+              key={`${t.conceptSlug}-${i}`}
+              type="button"
+              onClick={() => openConceptPopup(levelUpRefs, i)}
+              className="flex flex-col gap-1.5 rounded-xl bg-card shadow-sm px-4 py-3 text-left transition-all hover:shadow-md active:scale-[0.98]"
+            >
+              <span className="text-sm font-semibold leading-snug text-foreground line-clamp-2">
+                {t.conceptSlug}
+              </span>
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                {LEVEL_LABEL[t.from]}
+                <ArrowRight className="h-3 w-3 shrink-0" />
+                {LEVEL_LABEL[t.to]}
+              </span>
+            </button>
+          ))}
         </div>
       )}
 
@@ -481,13 +466,7 @@ export function ConceptCoverageSection({
       {/* ── Quiz coverage card: graph + concept chips ─────────────── */}
       {stats.length > 0 && (
         <div className="rounded-xl bg-card shadow-sm overflow-hidden">
-          <div className="px-5 py-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Quiz Coverage
-            </p>
-          </div>
-
-          <div className="p-4">
+          <div className="p-4 pt-5">
             <QuizCoverageRadial
               key={selectedName ?? '__all__'}
               totalQ={questions.length}

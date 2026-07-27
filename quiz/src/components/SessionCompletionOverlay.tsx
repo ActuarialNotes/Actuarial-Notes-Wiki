@@ -155,7 +155,6 @@ export function SessionCompletionOverlay({ session, isLoggedIn, onClose }: Props
                 scoredPoints,
                 totalQuestions: session.total_questions,
                 timeTakenSeconds: session.time_taken_seconds,
-                gemsEarned: session.correct_count,
                 isLoggedIn,
                 onSignIn: () => {},
               }}

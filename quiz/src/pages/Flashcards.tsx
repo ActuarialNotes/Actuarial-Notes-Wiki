@@ -91,13 +91,22 @@ const GROUP_LABELS: { key: GroupBy; label: string }[] = [
   { key: 'custom',  label: 'Custom' },
 ]
 
-const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; dotClass: string }> = {
-  new:       { label: 'New',       className: 'bg-muted text-muted-foreground',                     dotClass: 'bg-muted-foreground/40' },
-  level1:    { label: '1',         className: 'bg-amber-500/20 text-amber-600 dark:text-amber-400', dotClass: 'bg-amber-500' },
-  level2:    { label: '2',         className: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',    dotClass: 'bg-blue-500' },
-  level3:    { label: '3',         className: 'bg-green-500/20 text-green-600 dark:text-green-400', dotClass: 'bg-green-500' },
-  forgotten: { label: 'Forgotten', className: 'bg-rose-500/20 text-rose-600 dark:text-rose-400',   dotClass: 'bg-rose-500' },
+// The mastery ladder as a single green ramp — grey for New, deepening green for
+// levels 1→3 — matching how the ladder is coloured everywhere else in the app
+// (ConceptDetailModal, TopicProgressSection, the readiness gauge). `fillClass`
+// is the solid form used for progress-bar segments and legend dots; `className`
+// is the tinted badge form.
+const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; fillClass: string }> = {
+  new:       { label: 'New',       className: 'bg-muted text-muted-foreground',                       fillClass: 'bg-muted-foreground/40' },
+  level1:    { label: '1',         className: 'bg-green-500/10 text-green-600 dark:text-green-500',   fillClass: 'bg-green-500/35' },
+  level2:    { label: '2',         className: 'bg-green-500/20 text-green-700 dark:text-green-400',   fillClass: 'bg-green-500/65' },
+  level3:    { label: '3',         className: 'bg-green-500/30 text-green-800 dark:text-green-300',   fillClass: 'bg-green-600 dark:bg-green-500' },
+  forgotten: { label: 'Forgotten', className: 'bg-rose-500/20 text-rose-600 dark:text-rose-400',      fillClass: 'bg-rose-500/70' },
 }
+
+// Concepts that haven't been collected yet sit below New — they're still behind
+// the collect gate, so they get the faintest fill of all.
+const LOCKED_FILL_CLASS = 'bg-muted-foreground/15'
 
 function MasteryPill({ state }: { state: MasteryState }) {
   const { label, className } = MASTERY_CONFIG[state]
@@ -338,24 +347,34 @@ function PackCard({
   const allAdded = total > 0 && notAdded.length === 0
   const fullyCollected = total > 0 && collected === total
 
-  // Mastery breakdown — powers the segmented progress bar and the expanded
-  // legend. Anything past New implies collected (the collect gate), so the
-  // "collected but still new" remainder gets its own faint segment.
-  const mastery = useMemo(() => {
-    const counts = { level1: 0, level2: 0, level3: 0, forgotten: 0 }
-    if (masteryOf) {
-      for (const n of concepts) {
-        const s = masteryOf(n)
-        if (s !== 'new') counts[s]++
-      }
+  // Level breakdown — powers the segmented progress bar and the expanded
+  // legend. Every concept lands in exactly one bucket of the ladder: still
+  // behind the collect gate (locked), collected but not yet answered (new), or
+  // one of the mastery levels.
+  const levels = useMemo(() => {
+    const counts = { locked: 0, new: 0, level1: 0, level2: 0, level3: 0, forgotten: 0 }
+    for (const n of concepts) {
+      const s = masteryOf ? masteryOf(n) : 'new'
+      if (s !== 'new') counts[s]++
+      else if (collectedSet.has(n.toLowerCase())) counts.new++
+      else counts.locked++
     }
     return counts
-  }, [concepts, masteryOf])
-  const leveled = mastery.level1 + mastery.level2 + mastery.level3 + mastery.forgotten
-  const collectedNew = Math.max(0, collected - leveled)
-  const newCount = total - leveled
+  }, [concepts, masteryOf, collectedSet])
 
   const pct = (n: number) => `${(n / Math.max(total, 1)) * 100}%`
+
+  // Ordered most- to least-advanced, so the bar reads as a ramp from deep green
+  // down to the empty (locked) tail.
+  const legend: { key: string; label: string; count: number; fillClass: string; textClass?: string }[] = [
+    { key: 'level3',    label: 'Level 3',   count: levels.level3,    fillClass: MASTERY_CONFIG.level3.fillClass },
+    { key: 'level2',    label: 'Level 2',   count: levels.level2,    fillClass: MASTERY_CONFIG.level2.fillClass },
+    { key: 'level1',    label: 'Level 1',   count: levels.level1,    fillClass: MASTERY_CONFIG.level1.fillClass },
+    { key: 'forgotten', label: 'Forgotten', count: levels.forgotten, fillClass: MASTERY_CONFIG.forgotten.fillClass, textClass: 'text-rose-600 dark:text-rose-400' },
+    { key: 'new',       label: 'New',       count: levels.new,       fillClass: MASTERY_CONFIG.new.fillClass },
+    { key: 'locked',    label: 'Locked',    count: levels.locked,    fillClass: LOCKED_FILL_CLASS },
+  ]
+  const barSummary = legend.filter(s => s.count > 0).map(s => `${s.label}: ${s.count}`).join(', ')
 
   function handleAdd() {
     for (const name of notAdded) addCard({ kind: 'concept', name })
@@ -409,16 +428,17 @@ function PackCard({
             <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
           </span>
         </div>
-        <div className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-muted" aria-hidden>
-          {!loading && total > 0 && (
-            <>
-              {mastery.level3 > 0 && <div className="h-full bg-green-500" style={{ width: pct(mastery.level3) }} />}
-              {mastery.level2 > 0 && <div className="h-full bg-blue-500" style={{ width: pct(mastery.level2) }} />}
-              {mastery.level1 > 0 && <div className="h-full bg-amber-500" style={{ width: pct(mastery.level1) }} />}
-              {mastery.forgotten > 0 && <div className="h-full bg-rose-500" style={{ width: pct(mastery.forgotten) }} />}
-              {collectedNew > 0 && <div className="h-full bg-muted-foreground/40" style={{ width: pct(collectedNew) }} />}
-            </>
-          )}
+        <div
+          className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-muted"
+          role="img"
+          aria-label={loading || total === 0 ? undefined : `Levels — ${barSummary}`}
+          title={loading || total === 0 ? undefined : barSummary}
+        >
+          {!loading && total > 0 && legend.map(seg => (
+            seg.count > 0 && (
+              <div key={seg.key} className={`h-full ${seg.fillClass}`} style={{ width: pct(seg.count) }} />
+            )
+          ))}
         </div>
       </div>
 
@@ -433,28 +453,14 @@ function PackCard({
           )}
           {!loading && total > 0 && (
             <>
-              {/* Mastery legend */}
+              {/* Level legend — mirrors the bar's segments, same order */}
               <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                {mastery.level3 > 0 && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />{mastery.level3} mastered
+                {legend.map(seg => seg.count > 0 && (
+                  <span key={seg.key} className={`inline-flex items-center gap-1.5 ${seg.textClass ?? ''}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${seg.fillClass}`} />
+                    {seg.label}: <span className="tabular-nums">{seg.count}</span>
                   </span>
-                )}
-                {mastery.level1 + mastery.level2 > 0 && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />{mastery.level1 + mastery.level2} learning
-                  </span>
-                )}
-                {mastery.forgotten > 0 && (
-                  <span className="inline-flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />{mastery.forgotten} slipping
-                  </span>
-                )}
-                {newCount > 0 && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40 shrink-0" />{newCount} to learn
-                  </span>
-                )}
+                ))}
               </div>
               <div className="flex flex-col gap-2">
                 {allAdded ? (
@@ -1172,7 +1178,7 @@ function GalleryStrip({
       >
         {cards.map((card, i) => {
           const masteryState = conceptMasteryMap.get(card.name.toLowerCase()) ?? 'new'
-          const { dotClass } = MASTERY_CONFIG[masteryState]
+          const { fillClass: dotClass } = MASTERY_CONFIG[masteryState]
           const isActive = i === activeIndex
           return (
             <button

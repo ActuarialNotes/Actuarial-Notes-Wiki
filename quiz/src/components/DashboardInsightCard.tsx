@@ -3,8 +3,8 @@ import { createPortal } from 'react-dom'
 import { ChevronRight, X } from 'lucide-react'
 
 /**
- * Shared shell for the two compact dashboard "insight" cards (Fading Concepts /
- * Recent Mistakes). A flat, single-tap card sized to sit two-up in a grid:
+ * Shell for the compact dashboard "insight" card (Fading Concepts). A flat,
+ * single-tap card sized to sit two-up in a grid:
  *
  *   • header  — icon + title + a count pill
  *   • item    — the single top item; the whole row is the primary action

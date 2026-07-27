@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { buildRecentMistakes, PROBLEM_SCORE_THRESHOLD, type MistakeResponseRow } from './recentMistakes'
+import {
+  buildRecentMistakes,
+  countCorrectedMistakes,
+  PROBLEM_SCORE_THRESHOLD,
+  type MistakeResponseRow,
+} from './recentMistakes'
 import type { Question } from './parser'
 import type { ConceptMasteryRecord } from './mastery'
 
@@ -122,5 +127,49 @@ describe('buildRecentMistakes', () => {
     const [mistake] = buildRecentMistakes(rows, questions, [], NOW)
     expect(mistake.problemConcepts[0].slug).toBe('Conditional Probability')
     expect(mistake.problemConcepts[0].score).toBeGreaterThan(mistake.problemConcepts[1].score)
+  })
+})
+
+describe('countCorrectedMistakes', () => {
+  const questions = [q('q1', ['Bayes Theorem']), q('q2', ['Axioms of Probability'])]
+
+  it('counts a question missed and later re-answered correctly', () => {
+    const rows = [
+      row('q1', false, '2026-07-19T10:00:00Z'),
+      row('q1', true, '2026-07-20T10:00:00Z'),
+    ]
+    expect(countCorrectedMistakes(rows, questions)).toBe(1)
+  })
+
+  it('does not count a question that was never missed', () => {
+    expect(countCorrectedMistakes([row('q1', true, '2026-07-20T10:00:00Z')], questions)).toBe(0)
+  })
+
+  it('does not count a question whose latest attempt is still wrong', () => {
+    const rows = [
+      row('q1', false, '2026-07-18T10:00:00Z'),
+      row('q1', true, '2026-07-19T10:00:00Z'),
+      row('q1', false, '2026-07-20T10:00:00Z'),
+    ]
+    expect(countCorrectedMistakes(rows, questions)).toBe(0)
+  })
+
+  it('counts each question once, however many attempts it took', () => {
+    const rows = [
+      row('q1', false, '2026-07-18T10:00:00Z'),
+      row('q1', false, '2026-07-19T10:00:00Z'),
+      row('q1', true, '2026-07-20T10:00:00Z'),
+      row('q2', false, '2026-07-19T10:00:00Z'),
+      row('q2', true, '2026-07-21T10:00:00Z'),
+    ]
+    expect(countCorrectedMistakes(rows, questions)).toBe(2)
+  })
+
+  it('ignores responses whose question is not in the bank', () => {
+    const rows = [
+      row('unknown', false, '2026-07-19T10:00:00Z'),
+      row('unknown', true, '2026-07-20T10:00:00Z'),
+    ]
+    expect(countCorrectedMistakes(rows, questions)).toBe(0)
   })
 })

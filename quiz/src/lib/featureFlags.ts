@@ -140,12 +140,14 @@ export const DAILY_PLAN_EMAIL_ENABLED: boolean = true
 
 /**
  * Recent-mistakes review card — surfaces the questions a learner most recently
- * got wrong and, for each, flags the concept(s) most likely to blame (weighted
+ * got wrong and, for each, ranks the concept(s) most likely to blame (weighted
  * by the learner's miss-rate on that concept plus its current mastery level —
- * see lib/recentMistakes.ts). When ON, a compact "Review mistakes" card appears
- * on the Dashboard (signed-in only) with a per-question and a Retry-all quiz
- * launch. It reads only data the Dashboard already loads plus the learner's
- * question-response history — no new heavy fetch. The pure engine and its tests
+ * see lib/recentMistakes.ts). When ON, a compact card appears on the Dashboard
+ * (signed-in only) naming the concepts behind the latest miss and how many
+ * misses have since been corrected; tapping it opens a reader that pages
+ * through every still-uncorrected miss with a Try-Again quiz launch. It reads
+ * only data the Dashboard already loads plus the learner's question-response
+ * history — no new heavy fetch. The pure engine and its tests
  * stay compiled either way; the `: boolean` annotation keeps both branches of
  * every gate type-checked (see the flags above). Gate it off to dark-launch or
  * roll back independently of the other surfaces.

@@ -102,6 +102,36 @@ function conceptScore(stat: ConceptStat | undefined, state: MasteryState): numbe
 }
 
 /**
+ * How many questions the learner has *corrected*: previously missed, and whose
+ * latest attempt is now correct. The counterpart to buildRecentMistakes — every
+ * question counted here is one that has dropped off the mistakes list.
+ *
+ * Because a question's latest attempt is by definition its most recent, "latest
+ * correct + any incorrect in history" is exactly "missed, then later fixed".
+ *
+ * @param rows      every question_response for the learner (any order)
+ * @param questions the question bank to scope against (e.g. the active exam's)
+ */
+export function countCorrectedMistakes(rows: MistakeResponseRow[], questions: Question[]): number {
+  const known = new Set(questions.map(q => q.id))
+
+  const latest = new Map<string, MistakeResponseRow>()
+  const everMissed = new Set<string>()
+  for (const row of rows) {
+    if (!known.has(row.question_id)) continue
+    if (!row.is_correct) everMissed.add(row.question_id)
+    const prev = latest.get(row.question_id)
+    if (!prev || row.answered_at > prev.answered_at) latest.set(row.question_id, row)
+  }
+
+  let corrected = 0
+  for (const id of everMissed) {
+    if (latest.get(id)?.is_correct) corrected++
+  }
+  return corrected
+}
+
+/**
  * Build the recent-mistakes list, worst-recent first.
  *
  * @param rows            every question_response for the learner (any order)

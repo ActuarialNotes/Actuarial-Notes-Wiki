@@ -62,24 +62,19 @@ export function QuestionDeckCard({
           <div className="flex items-baseline gap-1.5">
             <span className="text-3xl font-bold leading-none tabular-nums">{available}</span>
             <span className="text-sm text-muted-foreground">
-              question{available !== 1 ? 's' : ''} available
+              question{available !== 1 ? 's' : ''}
             </span>
           </div>
-          {/* The confirmation is text, not just motion, so a reduced-motion or
-              screen-reader user still gets told the shuffle landed. */}
-          <p className="mt-1 text-xs text-muted-foreground" aria-live="polite">
-            {justShuffled ? (
+          {/* The only sub-label: a confirmation after a tap. It's text, not just
+              motion, so a reduced-motion or screen-reader user still gets told
+              the shuffle landed. The line keeps its height when empty so the
+              card doesn't jump. */}
+          <p className="mt-1 flex h-4 items-center text-xs" aria-live="polite">
+            {justShuffled && (
               <span className="inline-flex items-center gap-1 font-medium text-green-600 dark:text-green-400">
                 <Check className="h-3.5 w-3.5 shrink-0" />
-                Shuffled — a new {selected} drawn
+                Shuffled
               </span>
-            ) : disabled ? (
-              <>Drawing all {selected}</>
-            ) : (
-              <>
-                Drawing <span className="font-medium tabular-nums text-foreground">{selected}</span>
-                {' · tap to shuffle'}
-              </>
             )}
           </p>
         </div>

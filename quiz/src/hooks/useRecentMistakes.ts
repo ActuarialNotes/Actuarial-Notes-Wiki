@@ -2,12 +2,19 @@ import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from './useAuth'
 import { useAllQuestions } from './useAllQuestions'
-import { buildRecentMistakes, type MistakeResponseRow, type RecentMistake } from '@/lib/recentMistakes'
+import {
+  buildRecentMistakes,
+  countCorrectedMistakes,
+  type MistakeResponseRow,
+  type RecentMistake,
+} from '@/lib/recentMistakes'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { Question } from '@/lib/parser'
 
 interface UseRecentMistakesResult {
   mistakes: RecentMistake[]
+  /** Questions once missed and since re-answered correctly (this exam). */
+  correctedCount: number
   loading: boolean
 }
 
@@ -78,5 +85,10 @@ export function useRecentMistakes(
     [rows, examQuestions, masteryRecords, limit],
   )
 
-  return { mistakes, loading: loading || questionsLoading }
+  const correctedCount = useMemo(
+    () => countCorrectedMistakes(rows, examQuestions),
+    [rows, examQuestions],
+  )
+
+  return { mistakes, correctedCount, loading: loading || questionsLoading }
 }

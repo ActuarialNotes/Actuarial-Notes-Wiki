@@ -323,7 +323,10 @@ export function ConceptPopup() {
                 <button
                   type="button"
                   data-tour="collect-card"
-                  onClick={() => openCollect(current)}
+                  // Hand the modal the verdict this pill is already showing, so
+                  // it opens straight onto the card + learning progress instead
+                  // of flashing the collect check while it re-derives mastery.
+                  onClick={() => openCollect(current, { collected: true, mastery: masteryState ?? undefined })}
                   title="View flashcard & learning progress"
                   aria-label={`${current.name} — ${pill.label}. View flashcard and progress`}
                   className={`shrink-0 inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full text-[11px] font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${pill.className}`}

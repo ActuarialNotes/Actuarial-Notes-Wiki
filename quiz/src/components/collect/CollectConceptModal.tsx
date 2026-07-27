@@ -15,7 +15,7 @@ import { stripFrontmatter } from '@/components/wiki/WikiArticle'
 import { cleanWikiLinks } from '@/lib/wikiParser'
 import { MarkdownText } from '@/components/MarkdownText'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
-import { LearningProgressPanel } from '@/components/wiki/LearningProgressModal'
+import { LearningProgressPanelView } from '@/components/wiki/LearningProgressModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
 import { trackConceptCollected } from '@/lib/analytics'
@@ -93,7 +93,7 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export function CollectConceptModal() {
-  const { ref, close } = useCollect()
+  const { ref, knownCollected, knownMastery, close } = useCollect()
   const { collect, isCollected } = useCollectedCards()
   const { addCard } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
@@ -104,15 +104,43 @@ export function CollectConceptModal() {
   const name = ref?.name ?? ''
   // Matches the Flashcards-tab foil-ring treatment for this concept once it's
   // collected; meaningless (stays 'new') while the card is still locked.
-  const { currentLevel, levelEvents, attemptDots } = useConceptLearningHistory(name)
+  const history = useConceptLearningHistory(name)
+  const { currentLevel, levelEvents, attemptDots, loading: historyLoading } = history
   // A concept with real mastery has necessarily been collected already
   // (grandfathered users included), even if it's absent from the local collected
   // store. Treat it as collected so opening it from a mastery pill lands on the
   // card + progress view rather than dropping into a re-collect quiz.
-  const alreadyCollected = ref ? (isCollected(name) || currentLevel !== 'new') : false
-  // Whether there's any history worth graphing — a freshly collected concept
-  // with no level changes and no attempts has nothing to plot.
-  const hasProgressHistory = levelEvents.length > 0 || attemptDots.length > 0
+  //
+  // `knownCollected` is the opener's answer to the same question (it just drew a
+  // mastery pill for this concept). It matters because `currentLevel` only
+  // arrives after a multi-query fetch: without the hint, opening a collected
+  // card on a device whose localStorage doesn't have it — a second browser, a
+  // cleared cache, the collected store never syncing — renders the collect
+  // comprehension check first and swaps to the card + progress view a beat
+  // later, which reads as the button glitching.
+  const alreadyCollected = ref ? (knownCollected || isCollected(name) || currentLevel !== 'new') : false
+  // Mastery to draw on the card. While the history is still loading, fall back
+  // to the level the opener was already showing so the card doesn't render as
+  // 'new' and then jump.
+  const cardMastery = currentLevel === 'new' && historyLoading ? knownMastery ?? 'new' : currentLevel
+  // Whether there's any history worth graphing — a collected concept with no
+  // level changes and no attempts has nothing to plot. A concept past New
+  // always has some, so while its history loads we hold the panel's own spinner
+  // rather than letting the whole section pop in when the fetch lands. Cards
+  // still at New keep the old behaviour: no placeholder for an empty graph.
+  const expectsProgress = currentLevel !== 'new' || (!!knownMastery && knownMastery !== 'new')
+  const hasProgressHistory =
+    levelEvents.length > 0 || attemptDots.length > 0 || (historyLoading && expectsProgress)
+
+  // Back-fill the local collected store for a card the user demonstrably owns
+  // (mastery past New) but that isn't recorded locally. Silent — this isn't a
+  // collection happening now — and it makes every later open of this concept
+  // resolve instantly instead of waiting on the history fetch again.
+  useEffect(() => {
+    if (!ref || !name) return
+    if (currentLevel === 'new' || isCollected(name)) return
+    collect(name, { silent: true })
+  }, [ref, name, currentLevel, isCollected, collect])
 
   const [phase, setPhase] = useState<Phase>('question')
   const [def, setDef] = useState<string | null>(null)
@@ -350,7 +378,7 @@ export function CollectConceptModal() {
               flippable={phase === 'question'}
               back={cardBack}
               locked={!alreadyCollected}
-              mastery={currentLevel}
+              mastery={cardMastery}
             />
 
             {alreadyCollected ? (
@@ -375,7 +403,7 @@ export function CollectConceptModal() {
                     progress to show. */}
                 {hasProgressHistory && (
                   <div className="w-full pt-4">
-                    <LearningProgressPanel conceptName={name} />
+                    <LearningProgressPanelView history={history} />
                   </div>
                 )}
               </div>

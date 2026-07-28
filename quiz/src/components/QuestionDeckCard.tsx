@@ -43,6 +43,7 @@ export function QuestionDeckCard({
         type="button"
         onClick={onShuffle}
         disabled={disabled}
+        data-sound="shuffle"
         onAnimationEnd={() => setRiffling(false)}
         aria-label={
           disabled
@@ -50,7 +51,7 @@ export function QuestionDeckCard({
             : `Shuffle the ${selected} question${selected !== 1 ? 's' : ''} drawn from ${available} available`
         }
         className={[
-          'group relative flex w-full max-w-xs items-center justify-center rounded-xl bg-card px-4 py-3 text-center',
+          'group relative flex w-full max-w-xs items-center gap-3 rounded-xl bg-card px-4 py-3 text-left',
           'transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
           disabled
             ? 'opacity-70'
@@ -58,20 +59,20 @@ export function QuestionDeckCard({
           riffling ? 'deck-card-shuffle' : '',
         ].join(' ')}
       >
-        <div className="flex items-baseline justify-center gap-1.5">
+        <div className="flex min-w-0 flex-1 items-baseline gap-1.5">
           <span className="text-3xl font-bold leading-none tabular-nums">{available}</span>
           <span className="text-sm text-muted-foreground">
             question{available !== 1 ? 's' : ''}
           </span>
         </div>
 
-        {/* Pinned right so the count stays centred on the card. After a tap the
-            shuffle icon gives way to a worded confirmation — text, not just
-            motion, so a reduced-motion or screen-reader user still gets told
-            the shuffle landed. */}
+        {/* After a tap the shuffle icon gives way to a worded confirmation —
+            text, not just motion, so a reduced-motion or screen-reader user
+            still gets told the shuffle landed. The slot keeps the icon's
+            height through the swap so the card can't change size. */}
         <span
           aria-live="polite"
-          className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-1.5"
+          className="flex h-9 shrink-0 items-center"
         >
           {justShuffled ? (
             <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600 dark:text-green-400">

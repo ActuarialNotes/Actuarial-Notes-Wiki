@@ -808,6 +808,7 @@ export default function Search() {
                               {hasToday && <span className="text-[10px] text-primary/70 shrink-0">today</span>}
                               <button
                                 type="button"
+                                data-sound="tick"
                                 onClick={e => selectAllInGroup(group, e)}
                                 className={`shrink-0 ml-1 px-3 py-1.5 rounded text-xs transition-colors ${
                                   allSelected
@@ -829,6 +830,7 @@ export default function Search() {
                                     <button
                                       key={subtopic}
                                       type="button"
+                                      data-sound="tick"
                                       onClick={() => toggleSubtopic(subtopic)}
                                       className="flex items-center gap-2.5 w-full py-2.5 text-left text-sm rounded hover:bg-muted/40 transition-colors"
                                     >

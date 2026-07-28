@@ -24,17 +24,34 @@ describe('resolveInteractionSound', () => {
     expect(resolveInteractionSound(null)).toBeNull()
   })
 
-  it('says which way a toggle just flipped', () => {
-    expect(resolveInteractionSound(target({ tag: 'input', type: 'checkbox', checked: false }))).toBe('toggleOn')
-    expect(resolveInteractionSound(target({ tag: 'input', type: 'checkbox', checked: true }))).toBe('toggleOff')
+  it('says which way a switch just flipped', () => {
     expect(resolveInteractionSound(target({ tag: 'button', role: 'switch', checked: true }))).toBe('toggleOff')
-    expect(resolveInteractionSound(target({ tag: 'div', role: 'menuitemcheckbox', checked: false }))).toBe('toggleOn')
+    expect(resolveInteractionSound(target({ tag: 'button', role: 'switch', checked: false }))).toBe('toggleOn')
+  })
+
+  it('ticks a checkbox the same way in both directions', () => {
+    // A box is ticked, not flipped: the list picker sounds the same going on as
+    // coming off, because the state is already visible in the box.
+    expect(resolveInteractionSound(target({ tag: 'input', type: 'checkbox', checked: false }))).toBe('tick')
+    expect(resolveInteractionSound(target({ tag: 'input', type: 'checkbox', checked: true }))).toBe('tick')
+    expect(resolveInteractionSound(target({ tag: 'div', role: 'checkbox', checked: false }))).toBe('tick')
+    expect(resolveInteractionSound(target({ tag: 'div', role: 'menuitemcheckbox', checked: true }))).toBe('tick')
+    // …and a topic row that is only a button opts in by name.
+    expect(resolveInteractionSound(target({ tag: 'button', explicit: 'tick' }))).toBe('tick')
   })
 
   it('uses the softer cue for picking one of several', () => {
     expect(resolveInteractionSound(target({ tag: 'input', type: 'radio' }))).toBe('select')
     expect(resolveInteractionSound(target({ tag: 'div', role: 'tab' }))).toBe('select')
     expect(resolveInteractionSound(target({ tag: 'div', role: 'option' }))).toBe('select')
+  })
+
+  it('leaves the ordinary button on the light click, thump only on request', () => {
+    // "Not every click is thumpy": the default is the light cue, and the low
+    // body is something a control has to ask for (the solid `Button` variants
+    // set `data-sound="press"` for their consumers).
+    expect(resolveInteractionSound(target({ tag: 'button' }))).toBe('click')
+    expect(resolveInteractionSound(target({ tag: 'button', explicit: 'press' }))).toBe('press')
   })
 
   it('lets data-sound override the default', () => {

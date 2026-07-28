@@ -131,6 +131,7 @@ function GroupSection({
           {/* Select-all checkmark circle */}
           <button
             type="button"
+            data-sound="tick"
             onClick={e => onSelectAll(group, e)}
             className={`flex items-center justify-center px-3 transition-colors duration-150 shrink-0 ${rowBg}`}
             aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
@@ -183,6 +184,7 @@ function GroupSection({
               <button
                 key={subtopic}
                 type="button"
+                data-sound="tick"
                 onClick={() => onToggle(subtopic)}
                 className={`flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors ${
                   isSelected

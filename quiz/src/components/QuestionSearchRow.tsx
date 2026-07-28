@@ -71,6 +71,9 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect, a
 
   return (
     <div
+      // The whole row toggles selection, so the whole row ticks — not just the
+      // checkbox inside it.
+      data-sound="tick"
       className={`rounded-lg p-3 space-y-2 transition-colors cursor-pointer ${
         selected ? 'bg-primary/5' : 'hover:bg-accent/30'
       }`}

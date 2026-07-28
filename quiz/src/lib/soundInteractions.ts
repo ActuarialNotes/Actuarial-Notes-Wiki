@@ -12,6 +12,11 @@
  * Components override the default with `data-sound`:
  *   data-sound="none"   → stay silent (something else plays a better cue)
  *   data-sound="open"   → any SoundEvent name
+ *
+ * Two overrides carry most of the weight in practice: `press` for the solid,
+ * primary-action buttons that should keep the low thump under the press (the
+ * `Button` component applies it for its solid variants), and `tick` for a row
+ * in a list of choices — a topic, a concept, a question.
  */
 
 import { SOUND_RECIPES, type SoundEvent } from '@/lib/soundConfig'
@@ -38,7 +43,15 @@ const SILENT_TAGS = new Set(['input', 'textarea', 'select', 'option'])
 /** Inputs that behave like a switch rather than a field. */
 const TOGGLE_INPUT_TYPES = new Set(['checkbox', 'radio'])
 
-const TOGGLE_ROLES = new Set(['switch', 'checkbox', 'menuitemcheckbox'])
+/** Roles that flip a setting on or off — those get the pitched toggle pair. */
+const TOGGLE_ROLES = new Set(['switch'])
+
+/**
+ * Roles that tick an item in a list of choices — the topic/concept/question
+ * pickers. A box is ticked, not flipped, so it gets the dry `tick` detent in
+ * both directions rather than the up/down toggle pair.
+ */
+const CHECK_ROLES = new Set(['checkbox', 'menuitemcheckbox'])
 
 /** Roles that mean "you picked one of several", which gets the softer cue. */
 const SELECT_ROLES = new Set(['tab', 'option', 'radio', 'menuitemradio'])
@@ -71,13 +84,13 @@ export function resolveInteractionSound(target: InteractionTarget | null): Sound
   const role = target.role?.toLowerCase() ?? null
   const inputType = target.type?.toLowerCase() ?? ''
 
-  // Checkboxes, radios and switches report which way they just flipped.
-  // `checked` is read before the browser applies the change, so the cue
-  // describes the state being entered, not the one being left.
+  // Switches report which way they just flipped. `checked` is read before the
+  // browser applies the change, so the cue describes the state being entered,
+  // not the one being left. Checkboxes tick the same either way.
   if (role && TOGGLE_ROLES.has(role)) return target.checked ? 'toggleOff' : 'toggleOn'
+  if (role && CHECK_ROLES.has(role)) return 'tick'
   if (tag === 'input' && TOGGLE_INPUT_TYPES.has(inputType)) {
-    if (inputType === 'radio') return 'select'
-    return target.checked ? 'toggleOff' : 'toggleOn'
+    return inputType === 'radio' ? 'select' : 'tick'
   }
 
   if (SILENT_TAGS.has(tag)) return null

@@ -1,7 +1,7 @@
 The **marginal probability function** of $X$ is obtained from the [[Joint Probability Function]] $p(x,y)$ by summing over all values of $Y$, describing the behavior of each variable in isolation.
 
 > $$p_X(x) = P(X = x)$$
->
+
 > $$= \sum_y p(x, y)$$
 
 - Similarly $p_Y(y) = \sum_x p(x,y)$

@@ -4,7 +4,7 @@ The **term of annuity** is the duration over which an annuity makes payments —
 - Given sufficient information (present value, payment amount, interest rate), the term can be solved using logarithms:
 
 > $$n = \frac{\ln(1 - i \cdot \text{PV}/P)}{\ln(1/(1+i))}$$
->
+
 > $$= \frac{-\ln(1 - i \cdot \text{PV}/P)}{\ln(1+i)}$$
 
 - A [[Perpetuity]] is an annuity with an infinite term.

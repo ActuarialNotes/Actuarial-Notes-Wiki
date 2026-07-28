@@ -1,7 +1,7 @@
 **On-Leveling** is the process of restating historical earned premium to the rate level currently in effect, so that loss ratios across the experience period are comparable and not distorted by intervening [[Rate Change]]s. The output of the process is [[On Level Premium|on-level premium]].
 
 > $$\text{On-Level Factor}$$
->
+
 > $$= \frac{\text{Current Rate Level Index}}{\text{Average Rate Level Index of Period}}$$
 
 - The **parallelogram (geometric) method** maps each rate change as a diagonal line across a calendar-time/policy-age square; the area of each rate-level region equals the proportion of a year's earned premium written at that rate level. It assumes premium is written uniformly throughout the year.

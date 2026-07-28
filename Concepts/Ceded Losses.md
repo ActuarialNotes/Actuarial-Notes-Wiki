@@ -3,7 +3,7 @@
 > $$\text{Net Losses} = \text{Gross Losses} - \text{Ceded Losses}$$
 
 > $$\text{Ceded Losses}$$
->
+
 > $$= \max(0,\; \text{Gross Loss} - \text{Retention}) \quad \text{(per-occurrence excess)}$$
 
 - Ceded losses are developed using their own triangles because cession patterns differ from gross patterns — excess layers respond only to large losses, which tend to report and develop more slowly

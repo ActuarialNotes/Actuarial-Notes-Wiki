@@ -3,7 +3,7 @@ An estimator $\hat{\theta}$ of a parameter $\theta$ is **unbiased** if its expec
 > $$E[\hat{\theta}] = \theta \quad \text{for all } \theta$$
 >
 > $$\text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$$
->
+
 > $$= 0$$
 
 - The **sample mean** $\bar{X} = \frac{1}{n}\sum X_i$ is an unbiased estimator of the population mean $\mu$

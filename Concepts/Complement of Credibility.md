@@ -1,7 +1,7 @@
 **Complement of Credibility** is the estimate paired with observed experience in a credibility-weighted indication: when experience receives weight $Z$, the complement receives the remaining weight $(1-Z)$. A well-chosen complement is unbiased, accurate, independent of the base statistic, and practical to obtain.
 
 > $$\text{Estimate}$$
->
+
 > $$= Z \times \text{Experience} + (1 - Z) \times \text{Complement}$$
 
 - The complement matters most when [[Credibility]] $Z$ is **low** — for small classes, new programs, or thin territories — because it then drives most of the result.

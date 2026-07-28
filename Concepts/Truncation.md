@@ -2,9 +2,9 @@
 
 > **Left-truncated likelihood contribution** (only losses $X > d$ are observed):
 > $$L_i(\theta) = \frac{f(x \mid \theta)}{S(d \mid \theta)}$$
->
+
 > $$= \frac{f(x \mid \theta)}{P(X > d \mid \theta)}$$
->
+
 > $$x > d$$
 
 - Under left-truncation at $d$, the effective distribution is the **conditional** distribution $X \mid X > d$

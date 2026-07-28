@@ -1,11 +1,11 @@
 **Severity Analysis** is the examination of average claim cost — total losses divided by claim count — across accident years, development ages, territories, or coverage types to quantify loss cost trends and diagnose reserve changes.
 
 > $$\text{Average Severity}$$
->
+
 > $$= \frac{\text{Total Losses}}{\text{Number of Claims}}$$
->
+
 > $$\text{Annual Trend}$$
->
+
 > $$= \left(\frac{\text{Current Severity}}{\text{Base Severity}}\right)^{1/n} - 1$$
 
 - Severity trend reflects medical cost inflation, wage inflation, social/legal environment changes, and shifts in claim mix; it is the primary driver of loss trend in most long-tail lines

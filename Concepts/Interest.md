@@ -8,7 +8,7 @@
 - In a level-payment [[Amortization]] schedule, the interest portion of each payment decreases over time as the balance is paid down, and the **principal repayment** portion increases correspondingly:
 
 > $$P_t = \text{Payment} - I_t$$
->
+
 > $$= \text{Payment} - i \cdot B_{t-1}$$
 
 > [!example]- Interest vs. Principal Split {Example}

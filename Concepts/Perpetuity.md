@@ -5,7 +5,7 @@ A **perpetuity** is an annuity that pays 1 per period forever. For a **perpetuit
 - For a **perpetuity-due** (payments at start of each period), the present value is one period's interest charge earlier:
 
 > $$\ddot{a}_{\overline{\infty}|} = \frac{1}{d}$$
->
+
 > $$= \frac{1+i}{i}$$
 
 - The relationship $\ddot{a}_{\overline{\infty}|} = 1 + a_{\overline{\infty}|}$ holds because the perpetuity-due can be seen as an immediate payment of 1 followed by a perpetuity-immediate.

@@ -1,7 +1,7 @@
 **Experience Rating** is an individual risk pricing modification that adjusts the manual (class) rate based on the insured's own historical loss experience, weighted by a credibility factor that reflects how much statistical weight the individual's data deserves.
 
 > $$\text{Experience Mod}$$
->
+
 > $$= Z \times \frac{A}{E} + (1 - Z) \times 1.0$$
 
 - $A$ = actual losses, $E$ = expected losses (from manual rate), $Z$ = credibility weight ($0 \leq Z \leq 1$); a mod greater than 1.0 indicates worse-than-average experience

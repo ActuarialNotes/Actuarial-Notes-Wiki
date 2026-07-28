@@ -1,7 +1,7 @@
 **Reserve adequacy** measures whether established loss reserves are sufficient to cover the true ultimate cost of unpaid claims — a reserve is **adequate** if it equals or exceeds the true liability, **deficient** if it understates it, and **redundant** (excessive) if it overstates it.
 
 > $$\text{Development}$$
->
+
 > $$= \text{Current Estimate} - \text{Prior Estimate} \quad \begin{cases} > 0 & \text{adverse (deficiency)} \\ < 0 & \text{favorable (redundancy)} \end{cases}$$
 
 - Adequacy is assessed through diagnostics: [[Actual vs Expected Analysis|actual-vs.-expected ratios]], paid-to-incurred ratios, loss ratio trends by accident year, and comparison across multiple reserving methods

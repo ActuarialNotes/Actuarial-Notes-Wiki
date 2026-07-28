@@ -3,7 +3,7 @@
 - It satisfies $\sigma(aX + b) = |a|\,\sigma(X)$, so location shifts do not affect spread
 
 > $$\sigma = \sqrt{\text{Var}(X)}$$
->
+
 > $$= \sqrt{E[X^2] - (E[X])^2}$$
 
 > [!example]- Standard Deviation of a Claim Amount {Example}

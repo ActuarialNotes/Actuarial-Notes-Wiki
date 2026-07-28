@@ -1,7 +1,7 @@
 **Earned Premium** is the portion of written premium that corresponds to the coverage already provided during the expired part of the policy period; it represents premium the insurer has "earned" the right to keep.
 
 > $$\text{Earned Premium}$$
->
+
 > $$= \text{Written Premium} - \Delta\text{Unearned Premium Reserve}$$
 
 - For a single annual policy, earned premium accrues pro-rata: a policy in force for 3 of 12 months earns 3/12 of its annual premium

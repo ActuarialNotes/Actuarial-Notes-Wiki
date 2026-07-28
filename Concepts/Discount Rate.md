@@ -1,7 +1,7 @@
 The **effective annual discount rate** $d$ is the interest paid at the **beginning** of a period on a loan of 1, rather than at the end. If you borrow 1 today and repay 1 at year-end, the interest charge of $d$ is deducted upfront so you receive only $1-d$ now.
 
 > $$d = \frac{i}{1+i}$$
->
+
 > $$= 1 - v$$
 
 - The key relationships among $d$, the effective rate $i$, and the discount factor $v = (1+i)^{-1}$ are:

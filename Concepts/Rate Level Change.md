@@ -1,7 +1,7 @@
 **Rate level change** refers to the impact of historical rate modifications on the comparability of premium and loss data across time periods, requiring on-level adjustments before ratemaking or reserve analysis can be performed.
 
 > $$\text{On-Level Factor}$$
->
+
 > $$= \frac{\text{Current Rate Level Index}}{\text{Historical Period Rate Level Index}}$$
 
 - Without on-level adjustment, comparing loss ratios across years with different rate levels will produce misleading trend and adequacy signals — a 10% rate increase makes the loss ratio appear to drop even if underlying costs are unchanged

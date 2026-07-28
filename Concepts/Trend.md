@@ -3,7 +3,7 @@
 > $$\text{Trend Factor} = (1 + r)^n$$
 >
 > $$\text{Trend Period}$$
->
+
 > $$= \text{Midpoint of future rating period} - \text{Midpoint of historical period}$$
 
 - Loss trend captures inflation, social inflation, and severity changes; it is applied in both the [[Loss Ratio Method]] and the [[Pure Premium Method]]

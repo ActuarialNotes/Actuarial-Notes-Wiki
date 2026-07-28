@@ -4,7 +4,7 @@ A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ 
 - Use permutations when sequence matters: ranking, scheduling, or assigning distinct roles
 
 > $$P(n, k) = \frac{n!}{(n-k)!}$$
->
+
 > $$= n \times (n-1) \times \cdots \times (n-k+1)$$
 
 > [!example]- Assigning Ranked Prizes to Adjusters {Example}

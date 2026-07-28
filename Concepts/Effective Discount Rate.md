@@ -1,18 +1,18 @@
 The **effective discount rate** $d$ is the interest paid at the **beginning** of the period rather than the end. On a $1$ investment for one period, $d$ is paid upfront and $1$ is returned at the end:
 
 > $$d = \frac{i}{1+i}$$
->
+
 > $$= iv$$
->
+
 > $$= 1 - v$$
 
 - $i$ is the effective [[Interest Rate]] and $v$ is the [[Discount Factor]].
 - The relationship between $i$ and $d$ is:
 
 > $$1 - d = v$$
->
+
 > $$= \frac{1}{1+i}$$
->
+
 > $$\Longleftrightarrow \qquad i = \frac{d}{1-d}$$
 
 - Under discount, $1$ today accumulates to $\frac{1}{1-d}$ after one period.

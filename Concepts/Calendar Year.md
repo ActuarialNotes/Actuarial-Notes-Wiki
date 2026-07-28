@@ -1,11 +1,11 @@
 **Calendar Year** (CY) is a data organization method that groups all premium and loss transactions by the calendar year in which they occur, without regard to the policy effective date or accident date.
 
 > $$\text{CY Loss Ratio}$$
->
+
 > $$= \frac{\text{CY Incurred Losses}}{\text{CY Earned Premium}}$$
->
+
 > $$\text{CY Earned Premium}$$
->
+
 > $$= \text{CY Written Premium} - \Delta\text{UEP}$$
 
 - CY data is immediately available from financial systems and aligns with statutory and GAAP reporting, making it the standard for financial statements and the combined ratio

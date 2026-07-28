@@ -3,7 +3,7 @@ A **Type II Error** occurs when a [[Hypothesis Testing|hypothesis test]] **fails
 > $$\beta = P(\text{Fail to Reject } H_0 \mid H_0 \text{ is false})$$
 >
 > $$\text{Power} = 1 - \beta$$
->
+
 > $$= P(\text{Reject } H_0 \mid H_0 \text{ is false})$$
 
 - $\beta$ depends on the true value of the parameter, the significance level $\alpha$, and the sample size $n$

@@ -4,7 +4,7 @@
 - In probability, combinatorics determines the sizes of events and sample spaces: $P(A) = |A| / |S|$ for uniform experiments
 
 > $$|\text{arrangements of } n \text{ objects}| = n!$$
->
+
 > $$= n \times (n-1) \times \cdots \times 2 \times 1$$
 
 > [!example]- Counting Equally Likely Outcomes for a Lottery {Example}

@@ -4,7 +4,7 @@
 - $\text{Var}(X) \geq 0$, with equality only if $X$ is constant
 
 > $$\text{Var}(X) = E\left[(X - \mu)^2\right]$$
->
+
 > $$= E[X^2] - \mu^2$$
 
 > [!example]- Variance of an Insurance Payment {Example}

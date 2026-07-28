@@ -1,7 +1,7 @@
 **Unallocated Loss Adjustment Expenses** (ULAE) are overhead claims-handling costs that cannot be attributed to specific individual claims — such as claims staff salaries, office rent, and IT systems — as distinguished from [[Allocated Loss Adjustment Expense|ALAE]], which are directly tied to individual claims.
 
 > $$\text{ULAE Reserve}$$
->
+
 > $$= \text{Unpaid Losses} \times \text{ULAE Ratio}$$
 
 - The **paid-to-incurred ratio method** (Kittel adjustment) estimates ULAE by weighting current-period ULAE against both paid and incurred losses, recognizing that ULAE is incurred partly when a claim opens and partly as it develops and closes

@@ -1,7 +1,7 @@
 **Roll forward analysis** (also called actual-versus-expected analysis or continuity analysis) evaluates how reserves established at one valuation date compare to what actually emerged by the next, reconciling the change through its component parts.
 
 > $$\text{Ending Reserve}$$
->
+
 > $$= \text{Beginning Reserve} + \text{New Claims Incurred} - \text{Payments Made} \pm \text{Development on Prior Years}$$
 
 - **Favorable development** (negative prior-year development) means beginning reserves were redundant — ultimate estimates declined; **adverse development** means they were deficient

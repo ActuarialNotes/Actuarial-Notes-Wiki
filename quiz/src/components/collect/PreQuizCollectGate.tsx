@@ -6,7 +6,7 @@
 // stalling them at New.
 
 import { useMemo } from 'react'
-import { Check, Lock, Play, Sparkles, X } from 'lucide-react'
+import { Check, Lock, Play, X } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { Card, CardContent } from '@/components/ui/card'
@@ -30,7 +30,6 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
     [collectedCards],
   )
   const remaining = concepts.filter(name => !collectedSet.has(name.toLowerCase())).length
-  const allCollected = remaining === 0
 
   return (
     <div className="container max-w-lg mx-auto px-4 sm:px-6 py-8">
@@ -51,17 +50,7 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
 
       <Card className="ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-4">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 text-primary shrink-0">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div className="min-w-0">
-              <h2 className="text-lg font-semibold leading-tight">Collect today's concepts</h2>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                Collect a flashcard to unlock leveling it up in this quiz.
-              </p>
-            </div>
-          </div>
+          <h2 className="text-lg font-semibold leading-tight">Unlock concepts to level up</h2>
 
           <ul className="space-y-1.5">
             {concepts.map(name => {
@@ -97,7 +86,7 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
             })}
           </ul>
 
-          <div className="pt-1 space-y-2">
+          <div className="pt-1">
             <Button
               onClick={onStart}
               size="lg"
@@ -106,11 +95,6 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
               <Play className="h-4 w-4 mr-1.5" />
               Start Quiz
             </Button>
-            {!allCollected && (
-              <p className="text-center text-xs text-muted-foreground">
-                You can still quiz uncollected concepts — they just won't level up past New until collected.
-              </p>
-            )}
           </div>
         </CardContent>
       </Card>

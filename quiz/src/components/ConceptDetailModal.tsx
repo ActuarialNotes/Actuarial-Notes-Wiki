@@ -57,6 +57,9 @@ function QuestionItem({
 
   return (
     <div
+      // The whole row toggles selection, so the whole row ticks — the buttons
+      // nested inside it still take their own cue (nearest wins).
+      data-sound="tick"
       className={`rounded-lg p-4 space-y-2 transition-colors cursor-pointer ${
         selected
           ? 'bg-primary/5'

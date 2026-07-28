@@ -82,6 +82,8 @@ export function SoundSettingsCard() {
           <div className="flex flex-wrap gap-2">
             {([
               ['Click', 'click'],
+              ['Press', 'press'],
+              ['Tick', 'tick'],
               ['Panel', 'open'],
               ['Page turn', 'page'],
               ['Shuffle', 'shuffle'],

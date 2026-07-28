@@ -103,6 +103,40 @@ describe('sound catalogue', () => {
       expect(click.throttleMs ?? 60).toBeLessThanOrEqual(50)
     })
 
+    it('keeps the thump out of the everyday cues', () => {
+      // The design rule: only `press` carries the low body. Everything a user
+      // hits dozens of times an hour is the high end of that transient, so a
+      // study session doesn't turn into knocking on a desk.
+      // A thump is the press body's shape: a low tone falling lower still.
+      // (A toggle's rising A4 → E5 is melody, not weight, so it doesn't count.)
+      const isThump = (t: { freq: number; glide?: number }) =>
+        t.freq <= 500 && (t.glide ?? t.freq) <= t.freq
+
+      for (const event of ['click', 'select', 'tick', 'toggleOn', 'toggleOff', 'actions'] as const) {
+        const thumps = (SOUND_RECIPES[event].tones ?? []).filter(isThump)
+        expect(thumps, `${event} has a body thumping under it`).toHaveLength(0)
+      }
+      expect((SOUND_RECIPES.press.tones ?? []).filter(isThump).length, 'press lost its body')
+        .toBeGreaterThan(0)
+    })
+
+    it('keeps a weighty press as short and quiet as a light one', () => {
+      const { click, press } = SOUND_RECIPES
+      expect(recipeDuration(press)).toBeLessThan(0.1)
+      expect(press.gain).toBeLessThanOrEqual(click.gain)
+      // Both are built on the same transient, so they read as one family.
+      expect(press.noise).toEqual(click.noise)
+    })
+
+    it('makes the list tick drier and brighter than a click', () => {
+      const { tick, click } = SOUND_RECIPES
+      expect(recipeDuration(tick)).toBeLessThan(recipeDuration(click))
+      const brightest = (spec: { from: number }[]) => Math.max(...spec.map(n => n.from))
+      expect(brightest(tick.noise!)).toBeGreaterThan(brightest(click.noise!))
+      // Ticking down a topic list must sound every row, not swallow half of them.
+      expect(tick.throttleMs ?? 60).toBeLessThanOrEqual(35)
+    })
+
     it('builds the paper cues out of noise, not tones', () => {
       for (const event of ['open', 'close', 'page'] as const) {
         expect(SOUND_RECIPES[event].noise?.length ?? 0, event).toBeGreaterThan(0)

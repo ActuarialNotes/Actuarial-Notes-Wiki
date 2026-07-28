@@ -9,6 +9,9 @@
  * Design rules — keep new cues in line with these:
  *   • Interface feedback is quiet and short. A click is ~30 ms and sits an
  *     order of magnitude below the celebratory cues.
+ *   • Only weighty presses are thumpy. The low body under a press belongs to
+ *     `press` — the app's solid, primary-action buttons. Ordinary controls get
+ *     the high end of that same transient and nothing underneath it.
  *   • Panels and cards move on filtered noise, not tones — the "paper" family
  *     (`open` / `close` / `page`).
  *   • Success is melodic: a soft major triad, always ascending, always round
@@ -20,10 +23,14 @@
 
 export type SoundEvent =
   // — interface —
-  /** Generic press: any button, link or menu item. */
+  /** Generic press: any button, link or menu item. Light — no low body. */
   | 'click'
+  /** A weighty press: the solid, primary-action buttons. `click` plus a thump. */
+  | 'press'
   /** Picking one of several things (answer option, list row, tab). */
   | 'select'
+  /** Ticking an item in a list of choices — a topic, a concept, a question. */
+  | 'tick'
   | 'toggleOn'
   | 'toggleOff'
   /** Moving between pages / tabs. */
@@ -144,41 +151,73 @@ function arpeggio(
 }
 
 /**
- * The transient every press shares: a tiny filtered noise tick plus a short
- * low body. The tick alone sounds like static; the body alone sounds like a
- * beep. Together they read as a physical button.
+ * The transient every press shares, in two halves.
+ *
+ * `CLICK_TICK` + `CLICK_EDGE` is the high end: the noise tick that places the
+ * press in time, and a whisper of pitched edge so it reads as a fingertip on a
+ * control rather than static. That pair on its own is the *light* press, and
+ * it's what almost everything in the app uses.
+ *
+ * `CLICK_BODY` is the thump underneath. It's what makes a press feel like it
+ * moved something, so it's reserved for presses that did: the `press` cue on
+ * solid, primary-action buttons. Stacked under every control instead, an
+ * afternoon of studying sounds like someone knocking on a desk.
  */
 const CLICK_TICK: NoiseSpec = { at: 0, dur: 0.018, from: 2600, to: 1500, type: 'bandpass', q: 1.1, gain: 0.55, swell: 0 }
+const CLICK_EDGE: ToneSpec = { at: 0, dur: 0.03, freq: 1250, glide: 850, type: 'sine', gain: 0.12, attack: 0.001 }
 const CLICK_BODY: ToneSpec = { at: 0, dur: 0.05, freq: 320, glide: 190, type: 'sine', gain: 0.22, attack: 0.001 }
 
 export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
   // ---- interface ----------------------------------------------------------
   click: {
+    // The default for every button, link and menu item — the high end of the
+    // press with nothing under it.
     gain: 0.3,
     throttleMs: 35,
+    noise: [CLICK_TICK],
+    tones: [CLICK_EDGE],
+  },
+  press: {
+    // The weighty one: the same tick with the low body back underneath. Used
+    // for solid primary actions (see `components/ui/button.tsx`) and anywhere a
+    // press should feel like it moved something — `data-sound="press"`.
+    gain: 0.3,
+    throttleMs: 40,
     noise: [CLICK_TICK],
     tones: [CLICK_BODY],
   },
   select: {
-    // Same click, plus a soft pitched confirmation a hair above it.
+    // Same light click, plus a soft pitched confirmation a hair above it.
     gain: 0.34,
     throttleMs: 35,
     noise: [CLICK_TICK],
-    tones: [CLICK_BODY, { at: 0.004, dur: 0.1, freq: A5, type: 'sine', gain: 0.16, attack: 0.006 }],
+    tones: [CLICK_EDGE, { at: 0.004, dur: 0.1, freq: A5, type: 'sine', gain: 0.16, attack: 0.006 }],
     lowpass: 5200,
+  },
+  tick: {
+    // Ticking a box in a list — a topic, a concept, a question. A dry wooden
+    // detent: shorter and higher than a click, with no body and no ring, so
+    // running down a list of topics reads as a row of pen marks rather than a
+    // row of presses. The throttle is short enough that a fast run down the
+    // list still marks every row.
+    gain: 0.3,
+    throttleMs: 30,
+    lowpass: 9000,
+    noise: [{ at: 0, dur: 0.012, from: 4400, to: 2600, type: 'bandpass', q: 2.2, gain: 0.5, swell: 0 }],
+    tones: [{ at: 0, dur: 0.022, freq: 2093, glide: 1480, type: 'triangle', gain: 0.14, attack: 0.001 }],
   },
   toggleOn: {
     gain: 0.34,
     throttleMs: 40,
     noise: [CLICK_TICK],
-    tones: [CLICK_BODY, { at: 0.01, dur: 0.12, freq: A4, glide: E5, type: 'sine', gain: 0.2, attack: 0.006 }],
+    tones: [CLICK_EDGE, { at: 0.01, dur: 0.12, freq: A4, glide: E5, type: 'sine', gain: 0.2, attack: 0.006 }],
     lowpass: 5200,
   },
   toggleOff: {
     gain: 0.32,
     throttleMs: 40,
     noise: [CLICK_TICK],
-    tones: [CLICK_BODY, { at: 0.01, dur: 0.12, freq: E5, glide: A4, type: 'sine', gain: 0.18, attack: 0.006 }],
+    tones: [CLICK_EDGE, { at: 0.01, dur: 0.12, freq: E5, glide: A4, type: 'sine', gain: 0.18, attack: 0.006 }],
     lowpass: 5200,
   },
   navigate: {
@@ -196,7 +235,7 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     gain: 0.3,
     throttleMs: 45,
     noise: [CLICK_TICK],
-    tones: [CLICK_BODY, { at: 0.006, dur: 0.08, freq: C5, glide: E5, type: 'sine', gain: 0.15, attack: 0.006 }],
+    tones: [CLICK_EDGE, { at: 0.006, dur: 0.08, freq: C5, glide: E5, type: 'sine', gain: 0.15, attack: 0.006 }],
     lowpass: 5600,
   },
 

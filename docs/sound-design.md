@@ -8,13 +8,19 @@ costs zero bytes of assets and every cue is tunable from one table.
 
 1. **Interface feedback is quiet and short.** A press is ~30 ms and sits an
    order of magnitude below the celebratory cues.
-2. **Panels and cards move on filtered noise, not tones.** The `open` / `close`
+2. **Only weighty presses are thumpy.** The press transient has two halves: a
+   high tick, and a low body under it. Ordinary controls — the vast majority —
+   get the high end alone (`click`). The body belongs to `press`, which the
+   solid `Button` variants (the committing actions: start, finish, save,
+   delete) opt into. Stacked under every control instead, an afternoon of
+   studying sounds like knocking on a desk.
+3. **Panels and cards move on filtered noise, not tones.** The `open` / `close`
    / `page` family is a bandpass sweep over white noise with a slow swell — it
    reads as a sheet of paper sliding, not as a beep.
-3. **Success is melodic.** An ascending major triad on round sines under a
+4. **Success is melodic.** An ascending major triad on round sines under a
    lowpass. The notes ring far longer than the gap between them, so all three
    are still sounding at the end: a chord, not a countdown.
-4. **Mistakes are silent.** There is deliberately no `wrong` cue. A wrong
+5. **Mistakes are silent.** There is deliberately no `wrong` cue. A wrong
    answer is already obvious on screen, and buzzing at someone who is studying
    is punishment, not feedback. `soundConfig.test.ts` pins this so it can't
    drift back in by accident.
@@ -35,9 +41,11 @@ costs zero bytes of assets and every cue is tunable from one table.
 
 | Cue | When |
 | --- | --- |
-| `click` | Any button, link or menu item |
+| `click` | Any button, link or menu item — the light press, no thump |
+| `press` | A committing action: the solid `Button` variants, or `data-sound="press"` |
 | `select` | Picking one of several — an answer option, a tab, a radio |
-| `toggleOn` / `toggleOff` | Switches and checkboxes, pitched up or down to match |
+| `tick` | Ticking an item in a list of choices — a topic, a concept, a question. Same either way: a box is ticked, not flipped |
+| `toggleOn` / `toggleOff` | Switches, pitched up or down to match |
 | `navigate` | A route change |
 | `actions` | Opening a flashcard's own actions menu (the header Play button) |
 | `open` / `close` | A panel or modal sliding in or out |
@@ -56,9 +64,15 @@ costs zero bytes of assets and every cue is tunable from one table.
 ## Wiring a new interaction
 
 Most of the time you don't: a `<button>` gets `click` for free from the
-delegated listener. Beyond that,
+delegated listener, and a `role="checkbox"` gets `tick`. Beyond that,
 
 - **A different cue for one control** — add `data-sound="page"` (any cue name).
+- **A row in a picker that isn't a checkbox** — the topic and concept lists are
+  built from plain `<button>`s, so they carry `data-sound="tick"` to join the
+  checkboxes. Do the same for any new list of choices.
+- **A press that should land with weight** — `data-sound="press"`. The `Button`
+  component already does this for its solid variants, so only raw `<button>`s
+  running a committing action need it.
 - **Silence one control** — `data-sound="none"`. Use it when something else
   already plays a better cue for that action, so the two don't stack.
 - **A cue that belongs to a surface, not a button** — `useSoundOnMount('open')`

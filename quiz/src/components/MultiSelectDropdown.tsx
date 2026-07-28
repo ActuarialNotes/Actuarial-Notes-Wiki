@@ -64,6 +64,7 @@ export function MultiSelectDropdown({
               <button
                 key={opt.value}
                 type="button"
+                data-sound="tick"
                 onClick={() => onToggle(opt.value)}
                 className="flex items-center gap-3 w-full px-4 py-3 text-sm hover:bg-accent transition-colors text-left"
               >

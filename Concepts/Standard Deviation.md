@@ -2,7 +2,9 @@
 - The standard deviation is directly interpretable because it shares units with $X$, unlike variance
 - It satisfies $\sigma(aX + b) = |a|\,\sigma(X)$, so location shifts do not affect spread
 
-> $$\sigma = \sqrt{\text{Var}(X)} = \sqrt{E[X^2] - (E[X])^2}$$
+> $$\sigma = \sqrt{\text{Var}(X)}$$
+>
+> $$= \sqrt{E[X^2] - (E[X])^2}$$
 
 > [!example]- Standard Deviation of a Claim Amount {Example}
 > Claim amounts $X$ follow a distribution with $E[X] = 200$ and $E[X^2] = 50{,}000$. Find the standard deviation of $X$.

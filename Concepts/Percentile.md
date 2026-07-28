@@ -1,6 +1,8 @@
 The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the value below which a proportion $p$ of the distribution lies — the smallest $x_p$ with $P(X \leq x_p) = p$. It is obtained by inverting the [[Cumulative Distribution Function (CDF)|CDF]].
 
-> $$P(X \leq x_p) = F(x_p) = p$$
+> $$P(X \leq x_p) = F(x_p)$$
+>
+> $$= p$$
 
 > $$x_p = F^{-1}(p)$$
 

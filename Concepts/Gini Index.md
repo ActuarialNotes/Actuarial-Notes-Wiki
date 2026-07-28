@@ -2,7 +2,9 @@ The **Gini Index** has two distinct uses in actuarial statistics:
 
 **1. Decision tree node impurity** — measures the purity of a node in a classification [[Decision Tree]]. A pure node (all one class) has Gini = 0.
 
-> $$G = \sum_{k=1}^K \hat{p}_{mk}(1 - \hat{p}_{mk}) = 1 - \sum_{k=1}^K \hat{p}_{mk}^2$$
+> $$G = \sum_{k=1}^K \hat{p}_{mk}(1 - \hat{p}_{mk})$$
+>
+> $$= 1 - \sum_{k=1}^K \hat{p}_{mk}^2$$
 
 **2. Model predictive accuracy** — a ranking-based performance metric for binary classifiers (related to the [[AUROC]]):
 

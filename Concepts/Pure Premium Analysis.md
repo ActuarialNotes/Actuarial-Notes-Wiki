@@ -2,7 +2,9 @@
 
 > $$\text{Pure Premium}$$
 >
-> $$= \frac{\text{Losses + LAE}}{\text{Earned Exposures}} = \text{Frequency} \times \text{Severity}$$
+> $$= \frac{\text{Losses + LAE}}{\text{Earned Exposures}}$$
+>
+> $$= \text{Frequency} \times \text{Severity}$$
 
 - Pure premiums are compared to the rate-implied pure premium (= Current Rate × PLR) to assess adequacy; a ratio above 1.0 signals inadequacy
 - The frequency-severity decomposition identifies whether adverse results are driven by more claims (frequency increase) or higher average costs (severity increase), guiding different corrective actions

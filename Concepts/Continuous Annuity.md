@@ -1,8 +1,12 @@
 The **continuous annuity** $\bar{a}_{\overline{n}|}$ is the [[Present Value]] of a payment stream flowing continuously at a constant rate of 1 per unit time over $[0, n]$, discounted at a constant [[Force of Interest]] $\delta$.
 
-> $$\bar{a}_{\overline{n}|} = \int_0^n e^{-\delta t}\,dt = \frac{1 - v^n}{\delta}$$
+> $$\bar{a}_{\overline{n}|} = \int_0^n e^{-\delta t}\,dt$$
+>
+> $$= \frac{1 - v^n}{\delta}$$
 
-> $$\bar{s}_{\overline{n}|} = \int_0^n e^{\delta(n-t)}\,dt = \frac{(1+i)^n - 1}{\delta}$$
+> $$\bar{s}_{\overline{n}|} = \int_0^n e^{\delta(n-t)}\,dt$$
+>
+> $$= \frac{(1+i)^n - 1}{\delta}$$
 
 - Here $v = e^{-\delta}$ is the annual discount factor and $\delta = \ln(1+i)$ links the force of interest to the effective annual rate $i$.
 - Equivalent forms: $\bar{a}_{\overline{n}|} = \dfrac{1 - e^{-\delta n}}{\delta}$ and $\bar{s}_{\overline{n}|} = \dfrac{e^{\delta n} - 1}{\delta}$.

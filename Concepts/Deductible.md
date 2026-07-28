@@ -5,7 +5,9 @@ A **Deductible** is the initial amount of a loss that the policyholder must pay 
   - A **franchise deductible** pays the full loss $X$ once it exceeds $d$
 - Deductibles reduce moral hazard and lower premiums by transferring some risk back to the insured
 
-> $$Y = (X - d)_+ = \max(X - d,\ 0)$$
+> $$Y = (X - d)_+$$
+>
+> $$= \max(X - d,\ 0)$$
 >
 > $$d = \text{deductible}, \quad X = \text{ground-up loss}$$
 

@@ -1,6 +1,8 @@
 The **net present value** (NPV) is the sum of the present values of all cash flows associated with a project or investment, with inflows treated as positive and outflows as negative. Discounting each cash flow $C_t$ at effective rate $i$ using $v = (1+i)^{-1}$:
 
-> $$NPV = \sum_t C_t\, v^t = PV(\text{inflows}) - PV(\text{outflows})$$
+> $$NPV = \sum_t C_t\, v^t$$
+>
+> $$= PV(\text{inflows}) - PV(\text{outflows})$$
 
 - A positive NPV means the investment creates value at rate $i$ — the inflows more than compensate for the outflows at the chosen discount rate.
 - A negative NPV means the opposite.

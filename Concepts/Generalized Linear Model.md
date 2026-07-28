@@ -1,6 +1,8 @@
 A **Generalized Linear Model (GLM)** extends ordinary linear regression to allow the response variable $Y$ to follow any distribution in the **exponential family** and to be related to the predictors through a **[[Link Function]]** $g$.
 
-> $$g(\mu_i) = \eta_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
+> $$g(\mu_i) = \eta_i$$
+>
+> $$= \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
 >
 > $$\text{where } \mu_i = E[Y_i \mid \mathbf{x}_i]$$
 

@@ -1,6 +1,8 @@
 **Deviance** is a goodness-of-fit measure for [[Generalized Linear Model]]s based on the log-likelihood. It compares the fitted model to the **saturated model** (a model with one parameter per observation, achieving perfect fit).
 
-> $$D = -2\left[\ell(\hat{\boldsymbol{\beta}}) - \ell_{\text{sat}}\right] = -2\left[\ell(\text{fitted model}) - \ell(\text{saturated model})\right]$$
+> $$D = -2\left[\ell(\hat{\boldsymbol{\beta}}) - \ell_{\text{sat}}\right]$$
+>
+> $$= -2\left[\ell(\text{fitted model}) - \ell(\text{saturated model})\right]$$
 
 - Deviance is always **non-negative**; $D = 0$ means a perfect fit
 - For a Normal linear model, deviance equals the **residual sum of squares** $\text{RSS} = \sum(y_i - \hat{y}_i)^2$

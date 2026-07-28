@@ -1,6 +1,8 @@
 **Modified duration** $D_{Mod}$ measures the percentage change in price per unit increase in the [[Yield Rate]] $j$:
 
-> $$D_{Mod} = -\frac{1}{P}\frac{dP}{dj} = \frac{D_{Mac}}{1+j}$$
+> $$D_{Mod} = -\frac{1}{P}\frac{dP}{dj}$$
+>
+> $$= \frac{D_{Mac}}{1+j}$$
 >
 > $$\Delta P \approx -D_{Mod} \cdot P \cdot \Delta j$$
 

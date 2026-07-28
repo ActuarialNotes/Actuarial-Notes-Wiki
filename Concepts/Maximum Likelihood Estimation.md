@@ -2,9 +2,13 @@
 
 > $$L(\theta) = \prod_{i=1}^n f(x_i \mid \theta)$$
 >
-> $$\hat{\theta}_{\text{MLE}} = \arg\max_\theta L(\theta) = \arg\max_\theta \ell(\theta)$$
+> $$\hat{\theta}_{\text{MLE}} = \arg\max_\theta L(\theta)$$
 >
-> $$\text{where } \ell(\theta) = \ln L(\theta) = \sum_{i=1}^n \ln f(x_i \mid \theta)$$
+> $$= \arg\max_\theta \ell(\theta)$$
+>
+> $$\text{where } \ell(\theta) = \ln L(\theta)$$
+>
+> $$= \sum_{i=1}^n \ln f(x_i \mid \theta)$$
 
 - Taking the log turns the product into a sum and simplifies maximization
 - The MLE is found by solving the **score equation**: $\ell'(\hat{\theta}) = 0$

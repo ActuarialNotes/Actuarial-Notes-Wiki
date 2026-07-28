@@ -2,7 +2,9 @@ The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is th
 
 > $$E[X \wedge u] = \int_0^u [1 - F(x)]\,dx \quad \text{(for non-negative } X\text{)}$$
 >
-> $$E[X \wedge u] = E[X] - E[\max(X - u, 0)] = E[X] - e(u)\cdot[1-F(u)]$$
+> $$E[X \wedge u] = E[X] - E[\max(X - u, 0)]$$
+>
+> $$= E[X] - e(u)\cdot[1-F(u)]$$
 
 - Also written $E[\min(X, u)]$; the **limited loss variable** is $Y = \min(X, u)$
 - As $u \to \infty$, $E[X \wedge u] \to E[X]$

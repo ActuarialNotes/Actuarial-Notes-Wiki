@@ -1,6 +1,8 @@
 The **probability multiplication rules** give the probability of the intersection of two [[Event|events]] in terms of a [[Conditional Probability|conditional probability]].
 
-> $$P(A \cap B) = P(A)\,P(B \mid A) = P(B)\,P(A \mid B)$$
+> $$P(A \cap B) = P(A)\,P(B \mid A)$$
+>
+> $$= P(B)\,P(A \mid B)$$
 
 - This rearranges the definition of conditional probability, $P(B \mid A) = P(A \cap B)/P(A)$.
 - For [[Independent Events|independent]] events it reduces to $P(A \cap B) = P(A)\,P(B)$.

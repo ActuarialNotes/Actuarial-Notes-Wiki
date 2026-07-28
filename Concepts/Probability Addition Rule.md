@@ -4,7 +4,7 @@ The **Probability Addition Rule** gives the probability that at least one of two
 - For three events the rule extends to include all pairwise and triple intersections:
 
 > $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
->
+
 > $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$
 
 > [!example]- Probability of at Least One Coverage Trigger {Example}

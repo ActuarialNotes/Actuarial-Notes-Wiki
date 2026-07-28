@@ -1,15 +1,15 @@
 The **Lognormal Distribution** $X \sim \text{Lognormal}(\mu, \sigma^2)$ applies when $\ln X \sim N(\mu, \sigma^2)$. It is widely used to model insurance losses, asset prices, and any quantity that must be positive and right-skewed.
 
 > $$f(x) = \frac{1}{x\sigma\sqrt{2\pi}}\exp\!\left(-\frac{(\ln x - \mu)^2}{2\sigma^2}\right)$$
->
+
 > $$x > 0$$
->
+
 > $$\text{where } \mu \in \mathbb{R} = \text{log-mean},\; \sigma > 0 = \text{log-standard deviation}$$
 
-> $$E[X] = e^{\mu + \sigma^2/2},$$
->
+> $$E[X] = e^{\mu + \sigma^2/2}$$
+
 > $$\text{Var}(X) = e^{2\mu+\sigma^2}(e^{\sigma^2}-1)$$
->
+
 > $$F(x) = \Phi\!\left(\frac{\ln x - \mu}{\sigma}\right)$$
 
 ![[Media/Lognormal_distribution_pdf.svg|500]]

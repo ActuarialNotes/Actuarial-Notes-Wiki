@@ -1,7 +1,7 @@
 **Combined Ratio** is the sum of the [[Loss Ratio|loss and LAE ratio]] and the underwriting expense ratio — the share of premium consumed by claims and the cost of doing business. A combined ratio below $100\%$ means the book is profitable **before** investment income; above $100\%$ means underwriting is losing money.
 
 > $$\text{Combined Ratio} = \frac{L + \text{LAE}}{\text{Earned Premium}} + \frac{\text{UW Expenses}}{\text{Written Premium}}$$
->
+
 > $$\text{Operating Ratio} = \text{Combined Ratio} - \text{Investment Income Ratio}$$
 
 - **The two terms use different denominators.** The loss and LAE ratio is on [[Earned Premium|earned premium]] (losses are incurred as coverage is provided); the expense ratio is conventionally on [[Written Premium|written premium]] (commissions and taxes are incurred when the policy is written). This is the "trade basis" combined ratio used in U.S. statutory reporting. A **financial basis** combined ratio puts both on earned premium. The two diverge whenever the book is growing or shrinking, so the basis must be stated.

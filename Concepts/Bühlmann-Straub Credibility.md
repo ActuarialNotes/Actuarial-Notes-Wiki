@@ -1,11 +1,11 @@
 **Bühlmann-Straub Credibility** extends [[Bühlmann Credibility]] to handle observations with **unequal exposures** (or weights) $m_i$. Each period $i$ contributes a loss rate $X_i = S_i / m_i$ with weight $m_i$, so periods with more exposure get more weight.
 
 > $$\text{Estimate} = Z \cdot \bar{X}_w + (1-Z) \cdot \mu$$
->
+
 > $$Z = \frac{m}{m + k}$$
->
+
 > $$\bar{X}_w = \frac{\sum_{i=1}^n m_i X_i}{\sum_{i=1}^n m_i}$$
->
+
 > $$m = \sum_{i=1}^n m_i$$
 
 **Variance components** (same definitions as [[Bühlmann Credibility]]):

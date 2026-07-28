@@ -1,11 +1,8 @@
 A **linear combination** of independent random variables $L = c_1 X_1 + c_2 X_2 + \cdots + c_n X_n$ is normally distributed when the $X_i$ are independent normals, enabling exact probability calculations via standardization.
 
 > $$L = c_1 X_1 + \cdots + c_n X_n \sim N\!\left(\sum_i c_i\mu_i,\ \sum_i c_i^2\sigma_i^2\right)$$
->
-> $$\text{where } X_1, \ldots, X_n \text{ are independent}$$
-> $$\text{normal}$$
-> $$\text{random variables}$$
 
+- $X_1, \ldots, X_n$ are independent normal random variables, and $c_1, \ldots, c_n$ are constants
 - For non-normal independent random variables, the [[Central Limit Theorem]] provides an approximation for large $n$
 
 > [!example]- Probability That Portfolio Loss Exceeds a Threshold {Example}

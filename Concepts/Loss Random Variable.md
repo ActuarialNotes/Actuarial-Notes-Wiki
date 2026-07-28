@@ -2,7 +2,7 @@ The **loss random variable** $X$ represents the ground-up loss amount before any
 - The [[Expected Value]] and [[Variance]] of the corresponding [[Payment Random Variable]] $Y$ differ from those of $X$ because of the truncation and censoring imposed by policy terms
 
 > $$Y = \begin{cases} 0 & X \leq d \\ X - d & X > d \end{cases}$$
->
+
 > $$\text{where } d = \text{ordinary deductible}$$
 
 > [!example]- Expected Payment with Deductible {Example}

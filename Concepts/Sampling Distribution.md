@@ -1,7 +1,7 @@
 A **Sampling Distribution** is the probability distribution of a statistic (e.g., the sample mean $\bar{X}$ or sample variance $S^2$) computed from all possible random samples of size $n$ drawn from a population.
 
 > $$\bar{X} \sim N\!\left(\mu,\, \frac{\sigma^2}{n}\right) \quad \text{if } X_i \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$$
->
+
 > $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1} \quad \text{(normal population)}$$
 
 **Key sampling distributions used in hypothesis testing:**

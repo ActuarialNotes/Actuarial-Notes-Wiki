@@ -1,7 +1,7 @@
 **Statistical Learning** is a framework of methods for modeling the relationship between inputs (predictors $\mathbf{X}$) and an output (response $Y$) from data, with the goal of **prediction** or **inference**.
 
 > $$Y = f(\mathbf{X}) + \varepsilon$$
->
+
 > $$\text{Expected prediction error}$$
 
 > $$= \text{Bias}^2(\hat{f}) + \text{Var}(\hat{f}) + \sigma_\varepsilon^2$$

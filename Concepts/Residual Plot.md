@@ -1,7 +1,7 @@
 A **Residual Plot** is a diagnostic graph used to assess model fit by plotting **residuals** (observed minus fitted values) against fitted values, a predictor, or another variable. Patterns in residuals indicate model deficiencies.
 
 > $$e_i = y_i - \hat{y}_i \quad \text{(raw residual)}$$
->
+
 > $$r_i = \frac{e_i}{\hat{\sigma}\sqrt{1 - h_{ii}}} \quad \text{(standardized/studentized residual)}$$
 
 **How to read residual plots:**

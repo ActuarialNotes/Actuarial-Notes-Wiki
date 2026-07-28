@@ -1,7 +1,7 @@
 An **Extended Linear Model (ELM)** is the broad class of regression models that go beyond ordinary least-squares regression by relaxing its classical assumptions — allowing a non-Normal response distribution, a non-identity [[Link Function]], and a flexible [[Model Structure]] for the linear predictor. [[Generalized Linear Model]]s are the most common extended linear model used in actuarial work.
 
 > $$\eta_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}$$
->
+
 > $$g(\mu_i) = \eta_i, \qquad Y_i \sim \text{(chosen response distribution)}$$
 
 | Model class | Response distribution | Link | Predictor effects |

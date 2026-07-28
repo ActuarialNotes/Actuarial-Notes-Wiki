@@ -1,7 +1,7 @@
 The **Central Limit Theorem** (CLT) states that the standardized sum of independent and identically distributed random variables with mean $\mu$ and finite variance $\sigma^2$ converges in distribution to a standard normal as $n \to \infty$.
 
 > $$\frac{S_n - n\mu}{\sigma\sqrt{n}} \xrightarrow{d} N(0,1) \quad \text{as } n \to \infty$$
->
+
 > $$\text{where } S_n = X_1 + \cdots + X_n$$
 
 - For large $n$, $S_n$ is approximately $N(n\mu,\, n\sigma^2)$ regardless of the original distribution

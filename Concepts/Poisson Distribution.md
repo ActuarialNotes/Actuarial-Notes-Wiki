@@ -1,9 +1,9 @@
 The **Poisson Distribution** $X \sim \text{Poi}(\lambda)$ models the number of events occurring in a fixed interval of time or space when events happen independently at a constant average rate $\lambda$.
 
 > $$P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}$$
->
+
 > $$k = 0, 1, 2, \ldots$$
->
+
 > $$\text{where } \lambda > 0 = \text{the rate (mean number of events)}$$
 
 - A defining property is $E[X] = \text{Var}(X) = \lambda$ — the mean and variance are equal

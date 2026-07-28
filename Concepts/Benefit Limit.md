@@ -1,7 +1,7 @@
 A **Benefit Limit** ($u$) is the maximum amount an insurer will pay on a single claim, capping the insurer's payment regardless of how large the underlying loss $X$ is.
 
 > $$Y = \min\!\bigl(\alpha(X - d)_+,\; u\bigr)$$
->
+
 > $$\text{where } u = \text{maximum benefit (benefit limit)}$$
 
 - The benefit limit is the insurer's counterpart to the [[Deductible]]: the deductible removes small losses, while the limit removes large ones

@@ -2,7 +2,7 @@
 
 > **First principal component** — the direction $\mathbf{z}_1 = \mathbf{X}\boldsymbol{\phi}_1$ that maximizes $\text{Var}(\mathbf{z}_1)$:
 > $$\boldsymbol{\phi}_1 = \arg\max_{\|\boldsymbol{\phi}\|=1} \text{Var}(\mathbf{X}\boldsymbol{\phi})$$
->
+
 > **Proportion of variance explained by PC $m$:**
 > $$\text{PVE}_m = \frac{\lambda_m}{\sum_{j=1}^p \lambda_j}$$
 

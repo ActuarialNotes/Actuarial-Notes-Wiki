@@ -1,7 +1,7 @@
 **Bayesian Credibility** applies [[Bayes Theorem|Bayesian inference]] to credibility: the prior distribution of the risk parameter $\theta$ is updated with observed data to produce a posterior distribution, and the credibility estimate is the **posterior mean** $E[\theta \mid \mathbf{X}]$.
 
 > $$\text{Credibility Estimate} = E[\theta \mid X_1, \ldots, X_n]$$
->
+
 > $$\pi(\theta \mid \mathbf{X}) \propto L(\mathbf{X} \mid \theta) \cdot \pi(\theta)$$
 
 - When the prior and likelihood form a **conjugate pair**, the posterior mean is a linear credibility formula of the form $Z\bar{X} + (1-Z)\mu_0$

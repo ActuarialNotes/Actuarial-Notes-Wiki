@@ -1,7 +1,7 @@
 **Duration matching** (also called **Redington immunization** when combined with convexity conditions) is a strategy to protect a [[Portfolio]] against small, parallel shifts in interest rates by matching the [[Duration]] of assets to the duration of liabilities:
 
 > $$D_{assets} = D_{liabilities}$$
->
+
 > $$PV_{assets} = PV_{liabilities}$$
 
 - These two conditions ensure that if interest rates change slightly, the change in asset value approximately equals the change in liability value

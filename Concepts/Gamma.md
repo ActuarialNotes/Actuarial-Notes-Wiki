@@ -1,11 +1,11 @@
 The **Gamma Distribution** $X \sim \text{Gamma}(\alpha, \theta)$ is a flexible continuous distribution on $(0, \infty)$ generalizing the exponential, used to model skewed loss severities and aggregate claims.
 
 > $$f(x) = \frac{x^{\alpha-1}\,e^{-x/\theta}}{\theta^{\alpha}\,\Gamma(\alpha)}$$
->
+
 > $$x > 0$$
->
+
 > $$\text{where } \alpha > 0 = \text{shape}$$
->
+
 > $$\theta > 0 = \text{scale}$$
 
 - $E[X] = \alpha\theta$, $\text{Var}(X) = \alpha\theta^2$, and coefficient of variation $CV = 1/\sqrt{\alpha}$

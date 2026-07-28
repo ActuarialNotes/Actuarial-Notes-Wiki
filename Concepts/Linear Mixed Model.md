@@ -1,11 +1,11 @@
 A **Linear Mixed Model (LMM)** extends ordinary linear regression by including both **fixed effects** (parameters that apply to the entire population) and **random effects** (parameters that vary across groups or subjects). This accommodates correlated observations, repeated measures, and grouped data.
 
 > $$\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\mathbf{u} + \boldsymbol{\varepsilon}$$
->
+
 > $$\mathbf{u} \sim N(\mathbf{0}, \mathbf{G})$$
->
+
 > $$\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \mathbf{R})$$
->
+
 > $$\mathbf{u} \perp \boldsymbol{\varepsilon}$$
 
 **Model components:**

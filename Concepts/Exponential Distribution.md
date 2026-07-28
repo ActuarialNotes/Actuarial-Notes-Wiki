@@ -1,7 +1,7 @@
 The **Exponential Distribution** $X \sim \text{Exp}(\theta)$ is a continuous distribution on $(0, \infty)$ commonly used to model the time between events or the size of insurance losses.
 
 > $$f(x) = \frac{1}{\theta}\,e^{-x/\theta}, \quad x > 0$$
->
+
 > $$\text{where } \theta > 0 = \text{mean (scale parameter)}$$
 
 - $E[X] = \theta$, $\text{Var}(X) = \theta^2$, and $F(x) = 1 - e^{-x/\theta}$

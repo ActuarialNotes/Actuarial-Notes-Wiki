@@ -1,7 +1,7 @@
 **Self-Insured Retention (SIR)** is the layer of loss a risk-bearing entity retains on its own balance sheet before any insurance responds. Entities that retain risk this way — self-insured corporations, public entities, captives, and group self-insurance pools — still need [[Unpaid Claims|unpaid claim estimates]] for their retained layer, which is why the reserving syllabus covers non-insurance entities alongside insurers.
 
 > $$\text{Retained Loss} = \sum_i \min(X_i, R)$$
->
+
 > $$\text{Excess Loss} = \sum_i \max(X_i - R, 0)$$
 
 - **SIR vs. deductible.** Under an SIR the insured handles and pays claims in the retained layer directly, and the insurer's limit sits *above* the retention. Under a [[Deductible|deductible]] the insurer typically pays the claim ground-up and bills the insured back, and the deductible erodes the policy limit. The economics are similar; the cash flow, claims-handling duty, and [[Allocated Loss Adjustment Expense|ALAE]] treatment are not.

@@ -1,7 +1,7 @@
 An estimator $\hat{\theta}_n$ is **consistent** for $\theta$ if it converges in probability to the true parameter value as the sample size grows without bound — larger samples make the estimator's error arbitrarily small with arbitrarily high probability.
 
 > $$\hat{\theta}_n \xrightarrow{p} \theta \quad \text{as } n \to \infty$$
->
+
 > $$\text{i.e., } \lim_{n\to\infty} P\big(|\hat{\theta}_n - \theta| > \varepsilon\big) = 0 \quad \text{for every } \varepsilon > 0$$
 
 - A convenient **sufficient condition**: if $\text{Bias}(\hat{\theta}_n) \to 0$ and $\text{Var}(\hat{\theta}_n) \to 0$ as $n \to \infty$, then $\hat{\theta}_n$ is consistent (this follows from $\text{MSE}(\hat{\theta}_n) \to 0$ and Chebyshev's inequality, since [[Mean Square Error|MSE]] bounds the tail probability)

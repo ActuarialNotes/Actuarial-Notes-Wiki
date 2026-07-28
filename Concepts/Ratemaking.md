@@ -7,9 +7,9 @@
 - The [[Overall Rate Level Indication|indicated rate change]] restates that equation as the adjustment needed to current rates:
 
 > $$\text{Indicated Rate Change} = \frac{L + E_F}{1 - V - Q_T} \Big/ \text{Current Avg Rate} - 1$$
->
+
 > $$L = \text{proj. loss \& LAE ratio (or PP)},\ E_F = \text{fixed expense}$$
->
+
 > $$V = \text{variable expense \%},\ Q_T = \text{target UW profit \%}$$
 
 - Two equivalent constructions produce this indication: the [[Pure Premium Method]] (works from exposures and losses, needs no premium) and the [[Loss Ratio Method]] (works from [[On Level Premium|on-level premium]] and a [[Permissible Loss Ratio]]). They agree when given consistent inputs.

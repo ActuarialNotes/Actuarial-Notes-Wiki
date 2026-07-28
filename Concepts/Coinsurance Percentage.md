@@ -1,10 +1,8 @@
 A **Coinsurance Percentage** ($\alpha$) is the fraction of the covered loss (after any deductible) that the insurer agrees to pay, with the insured retaining the remaining fraction $1 - \alpha$.
 
 > $$Y = \alpha \cdot (X - d)_+$$
->
-> $$\text{where } \alpha \in (0,1] = \text{coinsurance percentage}$$
-> $$\text{(insurer's share)}$$
 
+- $\alpha \in (0,1]$ is the coinsurance percentage — the insurer's share of the loss excess of the deductible $d$
 - When $\alpha = 1$ the insurer covers 100% of the excess; lower values mean the insured co-pays a portion
 - It scales the expected payment by $\alpha$ and the variance by $\alpha^2$
 

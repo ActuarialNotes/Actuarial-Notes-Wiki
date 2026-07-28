@@ -1,7 +1,7 @@
 The **Payment Random Variable** ($Y$) is the amount the insurer actually pays on a claim, derived from the [[Loss Random Variable]] $X$ after applying all policy provisions — [[Deductible]], [[Coinsurance Percentage|coinsurance]], and [[Benefit Limit|benefit limit]].
 
 > $$Y = \alpha\,\min\!\bigl((X-d)_+,\; u\bigr)$$
->
+
 > $$\text{where } d = \text{deductible},\; u = \text{benefit limit},\; \alpha = \text{coinsurance}$$
 
 - $Y$ has a mixed distribution: a probability mass at $Y = 0$ (when $X \leq d$) and a continuous or discrete component for positive payments

@@ -1,7 +1,7 @@
 A **forward rate** $f_{t_1, t_2}$ is the interest rate agreed upon today for an investment (or loan) beginning at a future time $t_1$ and maturing at time $t_2$. Forward rates are implied by the [[Yield Curve]] via [[Spot Rate]]s:
 
 > $$(1+s_{t_2})^{t_2} = (1+s_{t_1})^{t_1} \cdot (1+f_{t_1, t_2})^{t_2-t_1}$$
->
+
 > $$f_{t, t+1} = \frac{(1+s_{t+1})^{t+1}}{(1+s_t)^t} - 1$$
 
 - The second formula gives the one-period forward rate from time $t$ to $t+1$

@@ -1,7 +1,7 @@
 **Limited Fluctuation Credibility** (also called **Classical Credibility**) assigns a credibility factor $Z \in [0,1]$ to observed data based on whether the volume of data is sufficient to meet a specified accuracy standard. The estimate is then a blend of observed experience and an external prior.
 
 > $$\text{Estimate} = Z \cdot \bar{X} + (1-Z) \cdot \mu_0$$
->
+
 > $$Z = \min\!\left(1,\, \sqrt{\frac{n}{n_{\text{full}}}}\right)$$
 
 **Full credibility standard** — the number of observations $n_{\text{full}}$ required so that the observed mean is within $100r\%$ of the true mean with probability $1-\alpha$:

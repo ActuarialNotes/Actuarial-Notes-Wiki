@@ -1,7 +1,7 @@
 The **Akaike Information Criterion (AIC)** is a model selection measure that balances **goodness of fit** against **model complexity** by penalizing the log-likelihood for the number of parameters.
 
 > $$\text{AIC} = -2\ell(\hat{\boldsymbol{\beta}}) + 2p$$
->
+
 > $$\text{where } \ell(\hat{\boldsymbol{\beta}}) \text{ is the maximized log-likelihood and } p \text{ is the number of parameters}$$
 
 - **Lower AIC** indicates a better model (better fit relative to complexity)

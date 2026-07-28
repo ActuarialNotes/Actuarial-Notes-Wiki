@@ -1,9 +1,9 @@
 **Inflation** (in an insurance context) is the phenomenon by which the ground-up loss random variable grows by a factor $(1+r)$ over time, increasing both the frequency of losses exceeding fixed policy thresholds and the average severity of covered losses.
 
 > $$X' = (1 + r)\,X$$
->
+
 > $$\text{where } r = \text{annual inflation rate}$$
->
+
 > $$X = \text{original ground-up loss}$$
 
 - Unlike uniform scaling, inflation interacts non-linearly with fixed deductibles and benefit limits

@@ -1,7 +1,7 @@
 An estimator $\hat{\theta}$ of a parameter $\theta$ is **unbiased** if its expected value equals the true parameter value for all $\theta$. Unbiasedness means the estimator is correct **on average**.
 
 > $$E[\hat{\theta}] = \theta \quad \text{for all } \theta$$
->
+
 > $$\text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$$
 
 > $$= 0$$

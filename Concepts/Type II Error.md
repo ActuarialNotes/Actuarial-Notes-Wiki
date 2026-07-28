@@ -1,7 +1,7 @@
 A **Type II Error** occurs when a [[Hypothesis Testing|hypothesis test]] **fails to reject a false null hypothesis** $H_0$. It is also called a **false negative**.
 
 > $$\beta = P(\text{Fail to Reject } H_0 \mid H_0 \text{ is false})$$
->
+
 > $$\text{Power} = 1 - \beta$$
 
 > $$= P(\text{Reject } H_0 \mid H_0 \text{ is false})$$

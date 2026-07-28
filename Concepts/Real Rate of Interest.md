@@ -1,9 +1,9 @@
 The **real rate of interest** $i_r$ adjusts the nominal [[Interest Rate]] $i$ for the effect of [[Inflation]] $r$, representing the true growth in purchasing power:
 
 > $$1 + i_r = \frac{1+i}{1+r}$$
->
+
 > $$\Longrightarrow$$
->
+
 > $$i_r \approx i - r \text{ (for small rates)}$$
 
 - If the nominal rate exceeds inflation, the real rate is positive (purchasing power grows).

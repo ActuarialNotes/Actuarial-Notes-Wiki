@@ -3,7 +3,7 @@
 - Standard equation linking [[Present Value]], [[Future Value]], rate, and time:
 
 > $$\text{FV} = \text{PV} \cdot (1+i)^n$$
->
+
 > $$\Longleftrightarrow \qquad \text{PV} = \text{FV} \cdot v^n$$
 
 - More generally, the [[Equation of Value]] at time $t_0$ equates all inflows and outflows:

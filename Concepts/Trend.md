@@ -1,7 +1,7 @@
 **Trend** is the systematic change in loss costs or exposures over time, applied in ratemaking to project historical experience forward to the future rating period.
 
 > $$\text{Trend Factor} = (1 + r)^n$$
->
+
 > $$\text{Trend Period}$$
 
 > $$= \text{Midpoint of future rating period} - \text{Midpoint of historical period}$$

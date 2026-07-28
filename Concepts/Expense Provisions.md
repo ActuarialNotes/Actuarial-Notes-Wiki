@@ -1,7 +1,7 @@
 **Expense Provisions** are the loadings built into a rate to cover the insurer's costs of doing business other than losses and loss adjustment expense — commissions, other acquisition costs, general expenses, and premium taxes/licences/fees — together with the [[Profit and Contingency Provision|underwriting profit provision]]. How each is treated depends on whether it varies with premium.
 
 > $$\text{Rate} = \frac{\text{Pure Premium} + \text{Fixed Expense per Exposure}}{1 - V - Q_T}$$
->
+
 > $$V = \text{variable expense \%}, \quad Q_T = \text{target UW profit \%}$$
 
 - [[Variable Expenses]] move proportionally with premium — commissions (a percentage of premium), premium taxes, licences and fees. They are expressed as a percentage and enter the **denominator** of the rate formula, so they gross up the rate rather than being added to it.

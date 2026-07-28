@@ -93,17 +93,47 @@ term. (A handful of older non-P/FM pages have frontmatter; do not copy that.)
 - **Keep each block mobile-readable — narrow, not wide.** Pages are read on
   phones; a block that is too wide gets cut off or shrunk to illegibility. This
   is the governing constraint and it overrides "consolidate everything."
-- **One *expression* per block; never place two formulas side by side.** Do not
-  join distinct equations on one line with `\qquad`, `,\quad`, or similar
-  horizontal spacing (e.g. `$$\mathcal{P}(S)=\{A:A\subseteq S\}, \qquad |\mathcal{P}(S)|=2^{|S|}$$`).
-  Split them into separate stacked `> $$` blocks instead:
+- **One equation per box — separate blockquotes with a blank line, not `>`.**
+  `calloutComponents.blockquote` (`quiz/src/components/MarkdownCallout.tsx`)
+  renders **one rounded box per `<blockquote>`**. A bare `>` separator keeps
+  both formulas *inside the same blockquote*, so they share a box and the box
+  gets wide. A blank line ends the blockquote and starts a new one, giving each
+  equation its own box. This is the difference that matters on a phone:
 
   ```markdown
-  > $$\mathcal{P}(S) = \{\, A : A \subseteq S \,\}$$
-  >
-  > $$|\mathcal{P}(S)| = 2^{|S|}$$
+  > $$E[X] = \sum_x \sum_y x\,p(x,y)$$
+
+  > $$E[Y] = \sum_x \sum_y y\,p(x,y)$$
   ```
 
+  not:
+
+  ```markdown
+  > $$E[X] = \sum_x \sum_y x\,p(x,y)$$
+  >
+  > $$E[Y] = \sum_x \sum_y y\,p(x,y)$$     ← same box, too wide
+  ```
+
+  Keep a `**bold label:**` on the line directly above the `$$` it introduces,
+  with no `>` separator between them, so the label rides in its formula's box.
+- **Never chain `=` in a definition.** A definition block must not carry two or
+  more `=` signs. Break the chain so the first `=` stays with the left-hand
+  side and every subsequent `=` opens a new box that simply *begins* with `=`:
+
+  ```markdown
+  > $$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$
+
+  > $$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$
+  ```
+
+  (This applies to *definitions* only — worked examples inside
+  `[!example]`/`[!answer]` callouts keep their evaluation chains, as `align*`
+  steps per the LaTeX rules below.)
+- **Never place two formulas side by side.** Do not join distinct equations on
+  one line with `\qquad`, `,\quad`, or similar horizontal spacing (e.g.
+  `$$\mathcal{P}(S)=\{A:A\subseteq S\}, \qquad |\mathcal{P}(S)|=2^{|S|}$$`).
+  Split them into separate blockquotes as above, and drop the comma or
+  semicolon that used to join them — each box is now its own statement.
 - **A single formula stays in one block.** Use `cases`, `aligned`, or `align*`
   *inside one block* for a piecewise definition or a derivation that is one
   logical statement — these stack *vertically*, so they stay narrow:
@@ -112,12 +142,12 @@ term. (A handful of older non-P/FM pages have frontmatter; do not copy that.)
   > $$E[X] = \begin{cases} \displaystyle\sum_{k} k\, f(k) & \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} x\, f(x)\, dx & \text{(continuous)} \end{cases}$$
   ```
 
-  The rule of thumb: **stack vertically (more blocks or more `\\` lines), never
+  The rule of thumb: **stack vertically (more boxes or more `\\` lines), never
   spread horizontally.** If a single line is still too long to fit a phone,
   break it across `\\` lines (e.g. at an `=` or a `+`).
-- Use separate `> $$` blocks for genuinely distinct formulas (e.g. PMF in one
-  block, then `E[X]` and `Var(X)` each in their own block rather than on one
-  wide line).
+- Use separate blockquotes for genuinely distinct formulas (e.g. PMF in one
+  box, then `E[X]` and `Var(X)` each in their own box rather than on one
+  wide line, or sharing one).
 - Define every symbol that appears. Prefer defining symbols in a bullet right
   after the block (`- where $\lambda > 0$ is the average event rate`) over
   cramming `\text{where ...}` lines inside the math.
@@ -326,7 +356,9 @@ app can never display — so the concept looks permanently unstudied.
 - [ ] Starts with `**Term**` + definition; no frontmatter
 - [ ] Definition is 1–2 precise sentences with relevant `[[wiki-links]]`
 - [ ] Defining formula is in a `> $$` block **immediately after** the definition
-- [ ] Each `> $$` block is mobile-narrow: no two formulas side-by-side via `\qquad`/`\quad`; distinct formulas in separate stacked blocks; long lines broken across `\\`
+- [ ] Each `> $$` block is mobile-narrow: no two formulas side-by-side via `\qquad`/`\quad`; long lines broken across `\\`
+- [ ] One equation per box: distinct formulas are in **separate blockquotes** (blank line between), never joined by a bare `>` separator
+- [ ] No definition block chains two or more `=`; each continuation is its own box beginning with `=`
 - [ ] Distributions include PMF/PDF **and** mean/variance
 - [ ] Every symbol in the formula is defined (prose/bullet, not crammed `\text{where}`)
 - [ ] Property bullets come **after** the formula, before the examples

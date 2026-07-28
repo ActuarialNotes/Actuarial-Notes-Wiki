@@ -1,13 +1,13 @@
 An **ARIMA$(p, d, q)$** model (Autoregressive Integrated Moving Average) is the standard parametric framework for [[Time Series]] modeling. It combines **autoregressive (AR)**, **integrated (I)** (differencing for stationarity), and **moving average (MA)** components.
 
 > $$\phi(B)\nabla^d Y_t = \theta(B)\varepsilon_t$$
->
+
 > $$\phi(B) = 1 - \phi_1 B - \cdots - \phi_p B^p$$
->
+
 > $$\theta(B) = 1 + \theta_1 B + \cdots + \theta_q B^q$$
->
+
 > $$\varepsilon_t \stackrel{\text{iid}}{\sim} N(0, \sigma^2)$$
->
+
 > $$B Y_t = Y_{t-1} \text{ (backshift operator)}$$
 
 **Components:**

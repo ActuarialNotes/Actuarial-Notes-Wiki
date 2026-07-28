@@ -1,7 +1,7 @@
 **Catastrophe Loss** is a loss arising from a single event or series of related events — such as a hurricane, earthquake, or wildfire — that produces many simultaneous claims with large aggregate severity, making it too volatile to include in standard ratemaking experience without adjustment.
 
 > $$\text{Total Rate} = \text{Non-CAT Rate} + \text{CAT Loading}$$
->
+
 > $$\text{CAT Loading}$$
 
 > $$= \frac{\text{Expected Annual CAT Losses}}{\text{Exposures}}$$

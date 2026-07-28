@@ -1,7 +1,7 @@
 [[Random Variable]]s $X$ and $Y$ are **Independent** if knowledge of one provides no information about the other. Formally, for all values $x$ and $y$, the joint distribution factors into the product of the marginals.
 
 > $$F(x, y) = F_X(x) \cdot F_Y(y)$$
->
+
 > $$\Longleftrightarrow \quad f(x,y) = f_X(x)\cdot f_Y(y)$$
 
 - Independence implies [[Covariance]] is zero ($\text{Cov}(X,Y) = 0$), though the converse is not always true

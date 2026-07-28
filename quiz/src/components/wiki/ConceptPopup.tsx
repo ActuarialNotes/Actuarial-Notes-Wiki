@@ -8,6 +8,7 @@ import { parseAllQuestions, filterQuestions } from '@/lib/parser'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useCollect } from '@/hooks/useCollect'
+import { showAddedToDeck } from '@/hooks/useToast'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
@@ -410,7 +411,7 @@ export function ConceptPopup() {
                   data-tour="add-flashcard"
                   data-sound="none"
                   onClick={() => {
-                    if (!hasCard(current.name)) play('addToDeck')
+                    if (!hasCard(current.name)) { play('addToDeck'); showAddedToDeck(1) }
                     addCard(current)
                   }}
                   className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"

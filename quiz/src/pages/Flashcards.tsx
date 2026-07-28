@@ -49,6 +49,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useFlashcards, type FlashCard } from '@/hooks/useFlashcards'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useCollect } from '@/hooks/useCollect'
+import { showAddedToDeck } from '@/hooks/useToast'
 import { useAuth } from '@/hooks/useAuth'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -205,7 +206,7 @@ function PackConceptsModal({
       : notAdded
     for (const name of toAdd) addCard({ kind: 'concept', name })
     setSelected(new Set())
-    if (toAdd.length > 0) { playSound('addToDeck'); onCardsAdded?.() }
+    if (toAdd.length > 0) { playSound('addToDeck'); showAddedToDeck(toAdd.length); onCardsAdded?.() }
   }
 
   return (
@@ -378,7 +379,7 @@ function PackCard({
 
   function handleAdd() {
     for (const name of notAdded) addCard({ kind: 'concept', name })
-    if (notAdded.length > 0) { playSound('addToDeck'); onCardsAdded?.() }
+    if (notAdded.length > 0) { playSound('addToDeck'); showAddedToDeck(notAdded.length); onCardsAdded?.() }
   }
 
   function collectNext() {
@@ -739,7 +740,7 @@ function CollectedContent({
                 key={c.name}
                 card={card}
                 masteryState={conceptMasteryMap.get(c.name.toLowerCase()) ?? 'new'}
-                onSelect={() => { if (!hasCard(c.name)) { addCard(card); onCardsAdded?.() } }}
+                onSelect={() => { if (!hasCard(c.name)) { addCard(card); showAddedToDeck(1); onCardsAdded?.() } }}
                 onRemove={removeCard}
                 isFlashing={false}
                 isActive={false}
@@ -865,7 +866,7 @@ function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
                         type="button"
                         data-sound="none"
                         disabled={added}
-                        onClick={() => { playSound('addToDeck'); addCard({ kind: 'concept', name }); onCardsAdded?.() }}
+                        onClick={() => { playSound('addToDeck'); addCard({ kind: 'concept', name }); showAddedToDeck(1); onCardsAdded?.() }}
                         className={`w-full flex items-center gap-2 rounded-md px-2 py-2 text-sm text-left transition-colors ${
                           added ? 'text-muted-foreground cursor-default' : 'hover:bg-accent'
                         }`}
@@ -1277,6 +1278,7 @@ function SortableCard({
     } else {
       playSound('addToDeck')
       addCard(card)
+      showAddedToDeck(1)
       onCardsAdded?.()
     }
   }
@@ -1451,7 +1453,7 @@ function SortableCard({
                     onPointerDown={e => e.stopPropagation()}
                     onClick={e => {
                       e.stopPropagation()
-                      if (!hasCard(card.name)) playSound('addToDeck')
+                      if (!hasCard(card.name)) { playSound('addToDeck'); showAddedToDeck(1) }
                       addCard(card)
                     }}
                     className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
@@ -1652,7 +1654,7 @@ function SortableCard({
                   onPointerDown={e => e.stopPropagation()}
                   onClick={e => {
                     e.stopPropagation()
-                    if (!hasCard(card.name)) playSound('addToDeck')
+                    if (!hasCard(card.name)) { playSound('addToDeck'); showAddedToDeck(1) }
                     addCard(card)
                   }}
                   className="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-left"
@@ -2524,7 +2526,7 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
                         type="button"
                         data-sound="none"
                         onClick={() => {
-                          if (!hasCard(current.name)) playSound('addToDeck')
+                          if (!hasCard(current.name)) { playSound('addToDeck'); showAddedToDeck(1) }
                           addCard(current)
                         }}
                         className="flex-1 flex items-center gap-2 px-3 py-2 text-sm"

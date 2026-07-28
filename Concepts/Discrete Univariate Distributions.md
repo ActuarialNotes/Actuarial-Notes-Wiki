@@ -6,7 +6,9 @@ A **Discrete Univariate Distribution** describes the probability law of a single
 
 - The cumulative distribution function (CDF) specifies the probability that the variable is at most $x$:
 
-> $$F(x) = P(X \leq x) = \sum_{k \leq x} f(k)$$
+> $$F(x) = P(X \leq x)$$
+>
+> $$= \sum_{k \leq x} f(k)$$
 
 > [!example]- PMF Verification for a Simple Discrete Distribution {Example}
 > A random variable $X$ has PMF $f(k) = c \cdot k$ for $k = 1, 2, 3, 4$. Find $c$ and compute $P(X \leq 3)$.

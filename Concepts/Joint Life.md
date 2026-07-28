@@ -1,8 +1,12 @@
 **Joint Life** models describe the survival of two (or more) lives simultaneously, focusing on the time until the **first** death. Given two independent lives aged $x$ and $y$ with future lifetimes $T_x$ and $T_y$, the joint-life future lifetime is $T_{xy} = \min(T_x, T_y)$.
 
-> $$_{t}p_{xy} = P(T_{xy} > t) = {_t}p_x \cdot {_t}p_y \quad \text{(independence)}$$
+> $$_{t}p_{xy} = P(T_{xy} > t)$$
 >
-> $$_{t}q_{xy} = 1 - {_t}p_{xy} = 1 - {_t}p_x \cdot {_t}p_y$$
+> $$= {_t}p_x \cdot {_t}p_y \quad \text{(independence)}$$
+>
+> $$_{t}q_{xy} = 1 - {_t}p_{xy}$$
+>
+> $$= 1 - {_t}p_x \cdot {_t}p_y$$
 
 - The **last survivor** status $T_{\overline{xy}} = \max(T_x, T_y)$ is complementary to the joint-life status
 - Relationship: $T_{xy} + T_{\overline{xy}} = T_x + T_y$, so $\mathring{e}_{xy} + \mathring{e}_{\overline{xy}} = \mathring{e}_x + \mathring{e}_y$

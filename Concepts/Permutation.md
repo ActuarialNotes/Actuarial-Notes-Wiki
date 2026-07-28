@@ -3,7 +3,9 @@ A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ 
 - Permutations differ from combinations by a factor of $k!$: the number of ways to order the selected objects
 - Use permutations when sequence matters: ranking, scheduling, or assigning distinct roles
 
-> $$P(n, k) = \frac{n!}{(n-k)!} = n \times (n-1) \times \cdots \times (n-k+1)$$
+> $$P(n, k) = \frac{n!}{(n-k)!}$$
+>
+> $$= n \times (n-1) \times \cdots \times (n-k+1)$$
 
 > [!example]- Assigning Ranked Prizes to Adjusters {Example}
 > From 8 adjusters, an insurer awards a 1st, 2nd, and 3rd place performance bonus. How many distinct award outcomes are possible?

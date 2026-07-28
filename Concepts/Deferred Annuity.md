@@ -1,6 +1,8 @@
 A **deferred annuity** ${}_{k|}a_{\overline{n}|}$ is an [[Annuity Immediate|annuity-immediate]] (or [[Annuity Due|annuity-due]]) whose first payment is delayed by a **deferral period** of $k$ periods.
 
-> $${}_{k|}a_{\overline{n}|} = v^k \cdot a_{\overline{n}|} = a_{\overline{k+n}|} - a_{\overline{k}|}$$
+> $${}_{k|}a_{\overline{n}|} = v^k \cdot a_{\overline{n}|}$$
+>
+> $$= a_{\overline{k+n}|} - a_{\overline{k}|}$$
 
 > $${}_{k|}\ddot{a}_{\overline{n}|} = v^k \cdot \ddot{a}_{\overline{n}|}$$
 

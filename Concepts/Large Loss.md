@@ -2,7 +2,9 @@
 
 > $$\text{Limited Average Severity}(M)$$
 >
-> $$= E[\min(X, M)] = \int_0^{M} S(x)\,dx$$
+> $$= E[\min(X, M)]$$
+>
+> $$= \int_0^{M} S(x)\,dx$$
 
 - The standard treatment is to cap each individual loss at a large-loss limitation amount $M$ for the basic ratemaking analysis, then add a separate large-loss loading for the excess layer above $M$
 - The large-loss loading is typically derived from Increased Limits Factors (ILFs): $\text{Loading} = \text{Uncapped Pure Premium} \times (ILF(U) / ILF(M) - 1)$, where $U$ is the policy limit and $M$ is the cap

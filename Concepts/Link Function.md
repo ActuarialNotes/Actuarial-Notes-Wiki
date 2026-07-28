@@ -1,6 +1,8 @@
 A **Link Function** $g$ is a monotone, differentiable function in a [[Generalized Linear Model]] that connects the **expected value** of the response $\mu = E[Y]$ to the **linear predictor** $\eta = \mathbf{x}^\top\boldsymbol{\beta}$:
 
-> $$g(\mu) = \eta = \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p$$
+> $$g(\mu) = \eta$$
+>
+> $$= \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p$$
 >
 > $$\mu = g^{-1}(\eta)$$
 

@@ -1,7 +1,9 @@
 **Analysis of Variance (ANOVA)** is a statistical method for testing whether the means of two or more groups differ by partitioning total variability in the response into explained and unexplained components.
 
 > **One-Way ANOVA F-Test:**
-> $$F = \frac{\text{MSB}}{\text{MSW}} = \frac{\text{SS}_\text{Between}/(k-1)}{\text{SS}_\text{Within}/(N-k)} \sim F_{k-1,\, N-k}$$
+> $$F = \frac{\text{MSB}}{\text{MSW}}$$
+>
+> $$= \frac{\text{SS}_\text{Between}/(k-1)}{\text{SS}_\text{Within}/(N-k)} \sim F_{k-1,\, N-k}$$
 
 **ANOVA table structure:**
 

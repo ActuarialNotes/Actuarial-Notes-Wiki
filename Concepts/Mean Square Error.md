@@ -2,7 +2,9 @@ The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **ov
 
 > $$\text{MSE}(\hat{\theta})$$
 >
-> $$= E\!\left[(\hat{\theta} - \theta)^2\right] = \text{Var}(\hat{\theta}) + \left(\text{Bias}(\hat{\theta})\right)^2$$
+> $$= E\!\left[(\hat{\theta} - \theta)^2\right]$$
+>
+> $$= \text{Var}(\hat{\theta}) + \left(\text{Bias}(\hat{\theta})\right)^2$$
 >
 > $$\text{where } \text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$$
 

@@ -1,8 +1,12 @@
 A **Survival Model** describes the distribution of a lifetime random variable $T \geq 0$, representing the time until death or failure. The model is characterized by the **survival function** $S(t)$, which gives the probability of surviving beyond time $t$.
 
-> $$S(t) = P(T > t) = 1 - F(t)$$
+> $$S(t) = P(T > t)$$
 >
-> $$f(t) = -S'(t) = F'(t)$$
+> $$= 1 - F(t)$$
+>
+> $$f(t) = -S'(t)$$
+>
+> $$= F'(t)$$
 
 - $S(0) = 1$, $S(\infty) = 0$, and $S(t)$ is non-increasing
 - The conditional probability of dying between ages $x$ and $x+t$, given alive at $x$, uses **actuarial notation**: $_tq_x = P(T_x \leq t)$ and $_tp_x = P(T_x > t) = S(x+t)/S(x)$

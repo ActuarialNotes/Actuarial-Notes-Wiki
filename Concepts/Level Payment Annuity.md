@@ -2,7 +2,9 @@ A **level payment annuity** makes equal (level) payments at regular intervals fo
 
 - For a level payment $P$, $n$-period annuity-immediate at rate $i$:
 
-> $$\text{PV} = P \cdot a_{\overline{n}|i} = P \cdot \frac{1-v^n}{i}$$
+> $$\text{PV} = P \cdot a_{\overline{n}|i}$$
+>
+> $$= P \cdot \frac{1-v^n}{i}$$
 >
 > $$\text{FV} = P \cdot s_{\overline{n}|i}$$
 >

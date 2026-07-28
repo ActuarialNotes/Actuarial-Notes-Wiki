@@ -1,6 +1,8 @@
 The **standard deviation** ($\sigma$) is the positive square root of the [[Variance]], measuring the spread of a [[Random Variable]] in the same units as the variable itself.
 
-> $$\text{SD}(X) = \sigma = \sqrt{\text{Var}(X)}$$
+> $$\text{SD}(X) = \sigma$$
+>
+> $$= \sqrt{\text{Var}(X)}$$
 
 - Because it is in the original units (not squared), $\sigma$ is more directly interpretable than the variance.
 - For a linear transform, $\text{SD}(aX + b) = |a|\,\sigma$.

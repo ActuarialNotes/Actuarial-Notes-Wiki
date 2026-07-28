@@ -6,7 +6,9 @@
 >
 > $$\text{Indicated Rate}$$
 >
-> $$= \frac{\text{Pure Premium}}{1 - V - Q} = \frac{\text{Pure Premium}}{\text{PLR}}$$
+> $$= \frac{\text{Pure Premium}}{1 - V - Q}$$
+>
+> $$= \frac{\text{Pure Premium}}{\text{PLR}}$$
 
 - Losses are developed to ultimate and trended to the future rating period; exposures are similarly trended (unlike the loss ratio method, which trends losses only)
 - The permissible loss ratio $\text{PLR} = 1 - V - Q$ where $V$ = variable expense ratio and $Q$ = fixed expense and profit provision as a percent of premium

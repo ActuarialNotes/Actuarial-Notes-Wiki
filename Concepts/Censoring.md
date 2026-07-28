@@ -1,7 +1,9 @@
 **Censoring** occurs when the exact value of an observation is unknown, but it is known to exceed (or fall below) a threshold. In actuarial and survival analysis, **right-censoring** is most common: a claim or lifetime is observed only up to some censoring time $c$, after which observation ends.
 
 > **Right-censored likelihood contribution:**
-> $$\text{If } X > c: \quad L_i(\theta) = P(X > c \mid \theta) = S(c \mid \theta)$$
+> $$\text{If } X > c: \quad L_i(\theta) = P(X > c \mid \theta)$$
+>
+> $$= S(c \mid \theta)$$
 >
 > **Observed (uncensored) likelihood contribution:**
 > $$\text{If } X = x \leq c: \quad L_i(\theta) = f(x \mid \theta)$$

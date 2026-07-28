@@ -1,6 +1,8 @@
 **Covariance** measures the linear association between two random variables $X$ and $Y$. Positive covariance indicates the variables tend to move together; negative covariance indicates they tend to move in opposite directions.
 
-> $$\text{Cov}(X, Y) = E[XY] - E[X] \cdot E[Y] = E[(X - \mu_X)(Y - \mu_Y)]$$
+> $$\text{Cov}(X, Y) = E[XY] - E[X] \cdot E[Y]$$
+>
+> $$= E[(X - \mu_X)(Y - \mu_Y)]$$
 
 - If $X$ and $Y$ are [[Independent Random Variables|independent]], $\text{Cov}(X, Y) = 0$ (but the converse is not necessarily true)
 

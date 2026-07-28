@@ -7,7 +7,9 @@
 - where $i$ is the periodic [[Interest Rate]] and $B_{t-1}$ is the [[Outstanding Balance]] at the start of the period.
 - In a level-payment [[Amortization]] schedule, the interest portion of each payment decreases over time as the balance is paid down, and the **principal repayment** portion increases correspondingly:
 
-> $$P_t = \text{Payment} - I_t = \text{Payment} - i \cdot B_{t-1}$$
+> $$P_t = \text{Payment} - I_t$$
+>
+> $$= \text{Payment} - i \cdot B_{t-1}$$
 
 > [!example]- Interest vs. Principal Split {Example}
 > A $10{,}000$ loan at $5\%$ annual interest is repaid with 3 equal annual payments. Find the interest and principal in the first payment.

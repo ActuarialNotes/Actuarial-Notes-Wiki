@@ -1,12 +1,16 @@
 The **discount factor** $v$ is the [[Present Value]] of $1$ payable one period in the future:
 
-> $$v = \frac{1}{1+i} = 1 - d$$
+> $$v = \frac{1}{1+i}$$
+>
+> $$= 1 - d$$
 
 - $i$ is the effective [[Interest Rate]] and $d$ is the [[Discount Rate]].
 - The $n$-period discount factor is $v^n = (1+i)^{-n}$.
 - The discount factor converts a future cash flow to its present value:
 
-> $$\text{PV} = C \cdot v^n = \frac{C}{(1+i)^n}$$
+> $$\text{PV} = C \cdot v^n$$
+>
+> $$= \frac{C}{(1+i)^n}$$
 
 - Under [[Force of Interest]] $\delta$, the discount factor is $v = e^{-\delta}$ per period.
 

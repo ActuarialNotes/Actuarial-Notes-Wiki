@@ -1,13 +1,13 @@
 An **annuity-due** is a series of $n$ level payments of 1 made at the **beginning** of each period. Because each payment is received one period earlier than in an [[Annuity Immediate|annuity-immediate]], the annuity-due is worth exactly $(1+i)$ times as much.
 
 > $$\ddot{a}_{\overline{n}|} = (1+i)\,a_{\overline{n}|}$$
->
+
 > $$= \frac{1-v^n}{d}$$
 
 - The accumulated value at the end of the last period (one period after the final payment) is $\ddot{s}_{\overline{n}|}$:
 
 > $$\ddot{s}_{\overline{n}|} = (1+i)\,s_{\overline{n}|}$$
->
+
 > $$= \frac{(1+i)^n - 1}{d}$$
 
 - Here $d = i/(1+i)$ is the effective annual [[Discount Rate]].

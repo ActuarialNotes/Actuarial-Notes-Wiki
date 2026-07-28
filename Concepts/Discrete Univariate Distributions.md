@@ -7,7 +7,7 @@ A **Discrete Univariate Distribution** describes the probability law of a single
 - The cumulative distribution function (CDF) specifies the probability that the variable is at most $x$:
 
 > $$F(x) = P(X \leq x)$$
->
+
 > $$= \sum_{k \leq x} f(k)$$
 
 > [!example]- PMF Verification for a Simple Discrete Distribution {Example}

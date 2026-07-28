@@ -1,7 +1,7 @@
 **Paid losses** are the cumulative cash payments made to claimants for covered losses through a given valuation date, representing only the settled portion of the total liability — distinct from [[Incurred Losses|incurred losses]], which also include outstanding case reserves.
 
 > $$\text{Incurred Losses}$$
->
+
 > $$= \text{Paid Losses} + \text{Case Reserves}$$
 
 - Paid loss triangles develop more slowly than [[Incurred Losses|incurred (reported)]] triangles because payments lag behind claim acknowledgment and reserve-setting

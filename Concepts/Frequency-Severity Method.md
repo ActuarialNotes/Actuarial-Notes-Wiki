@@ -1,7 +1,7 @@
 **The frequency-severity method** projects ultimate losses by separately developing claim counts ([[Frequency]]) and average cost per claim ([[Severity]]), then combining them — allowing the actuary to diagnose whether reserve changes are count-driven or cost-driven.
 
 > $$\text{Ultimate Losses}$$
->
+
 > $$= \text{Projected Claim Count} \times \text{Projected Average Severity}$$
 
 - Separate [[Development Triangle|development triangles]] are maintained for claim counts and cumulative paid/incurred dollars; severity is derived as dollars ÷ counts at each age

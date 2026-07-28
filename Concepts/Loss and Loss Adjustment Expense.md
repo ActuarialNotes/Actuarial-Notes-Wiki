@@ -1,11 +1,11 @@
 **Loss and Loss Adjustment Expense (Loss + LAE)** is the combined total of claim payments and the expenses incurred to investigate, defend, and settle those claims, forming the numerator in both the pure premium and loss ratio methods of ratemaking.
 
 > $$\text{Pure Premium}$$
->
+
 > $$= \frac{\text{Loss + LAE}}{\text{Earned Exposures}}$$
->
+
 > $$\text{Loss Ratio}$$
->
+
 > $$= \frac{\text{Loss + LAE}}{\text{Earned Premium}}$$
 
 - **[[Allocated Loss Adjustment Expense|ALAE]]** (allocated LAE) are claim-specific expenses — legal defense, expert witnesses, litigation costs — assigned to individual claims and typically included with losses in development triangles

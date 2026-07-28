@@ -1,9 +1,9 @@
 **Written Premium** is the total premium booked at policy issuance for all policies written during a period, regardless of how much of the coverage period has elapsed.
 
 > $$\text{Earned Premium}$$
->
+
 > $$= \text{Written Premium} - \Delta\text{UEP}$$
->
+
 > $$\Delta\text{UEP} = \text{UEP}_{\text{end}} - \text{UEP}_{\text{begin}}$$
 
 - Written premium counts the full policy premium on the date the policy is bound; [[Earned Premium]] recognizes it ratably as coverage is provided over the policy term

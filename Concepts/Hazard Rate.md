@@ -1,9 +1,9 @@
 The **Hazard Rate** $\mu(t)$ (also called the **force of mortality** in life contingencies, or the **failure rate** in reliability) is the instantaneous rate of failure at time $t$ given survival to $t$.
 
 > $$\mu(t) = \frac{f(t)}{S(t)}$$
->
+
 > $$= -\frac{d}{dt}\ln S(t)$$
->
+
 > $$S(t) = \exp\!\left(-\int_0^t \mu(s)\,ds\right)$$
 
 - Also written $h(t)$ or $\lambda(t)$ depending on context; in life tables it is $\mu_x$

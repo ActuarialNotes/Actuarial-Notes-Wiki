@@ -1,7 +1,7 @@
 **Premium Trend** is the change in average premium per exposure over time resulting from shifts in exposure mix, coverage selections, or inflation in the exposure base — distinct from deliberate rate level changes.
 
 > $$\text{Trended Premium}$$
->
+
 > $$= \text{Historical Premium} \times (1 + t_p)^n$$
 
 - Premium trend arises because the same nominal rate applied to a changing book of business produces different average premiums even without a rate filing; for example, rising insured values on a homeowners book increase average premium independently of rate changes

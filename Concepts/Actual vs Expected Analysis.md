@@ -1,7 +1,7 @@
 **Actual vs. expected analysis** compares observed loss development (actual) to what was projected (expected) based on prior reserve selections, identifying whether development is emerging faster or slower than assumed.
 
 > $$\text{A/E Ratio}$$
->
+
 > $$= \frac{\text{Actual Incurred (current period)}}{\text{Expected Incurred (prior ultimate estimate)}}$$
 
 - A/E ratios near $1.0$ indicate stable development consistent with prior assumptions; ratios consistently above $1.0$ signal reserve deficiency; ratios below $1.0$ signal redundancy

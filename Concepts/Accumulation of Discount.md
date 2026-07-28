@@ -3,7 +3,7 @@
 - The discount accumulated in period $t$ equals the shortfall of the coupon below the yield earned:
 
 > $$\text{Discount accumulated in period } t$$
->
+
 > $$= (Cj - Fr) \cdot v^{n-t+1}$$
 
 - Where $j$ = yield rate per period.

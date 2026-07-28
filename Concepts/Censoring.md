@@ -2,9 +2,9 @@
 
 > **Right-censored likelihood contribution:**
 > $$\text{If } X > c: \quad L_i(\theta) = P(X > c \mid \theta)$$
->
+
 > $$= S(c \mid \theta)$$
->
+
 > **Observed (uncensored) likelihood contribution:**
 > $$\text{If } X = x \leq c: \quad L_i(\theta) = f(x \mid \theta)$$
 

@@ -1,7 +1,7 @@
 The **present value** (PV) is the value today of a future payment, discounted at an interest rate. Because a dollar received in the future is worth less than a dollar today — it could have been invested to earn interest — future cash flows are multiplied by the discount factor $v = (1+i)^{-1}$ raised to the number of periods. A payment of $FV$ due in $n$ periods at effective rate $i$ has present value:
 
 > $$PV = FV \cdot (1+i)^{-n}$$
->
+
 > $$= FV \cdot v^n$$
 
 - For multiple cash flows $C_t$ at various times $t$, the total present value is $\displaystyle PV = \sum_t C_t\, v^t$.

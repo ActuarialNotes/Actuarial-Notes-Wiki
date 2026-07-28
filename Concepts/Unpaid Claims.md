@@ -1,9 +1,9 @@
 **Unpaid Claims** are the insurer's estimated liability for claims that have occurred but have not yet been fully paid as of the valuation date. The unpaid claim estimate is the central output of a reserve analysis and comprises case reserves, development on known claims, and claims not yet reported.
 
 > $$\text{Unpaid Claims}$$
->
+
 > $$= \text{Case Reserves} + \text{IBNR}$$
->
+
 > $$= \underbrace{\text{Ultimate Loss} - \text{Paid Loss}}_{\text{total unpaid}}$$
 
 - The total unpaid estimate equals [[Ultimate Loss|ultimate losses]] minus paid losses. It splits into **case reserves** (claim-adjuster estimates on reported open claims) and **[[IBNR]]** — which itself is *pure IBNR* (unreported claims) plus *IBNER* (incurred-but-not-enough-reported development on known claims).

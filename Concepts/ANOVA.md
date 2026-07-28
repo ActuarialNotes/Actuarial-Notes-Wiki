@@ -2,7 +2,7 @@
 
 > **One-Way ANOVA F-Test:**
 > $$F = \frac{\text{MSB}}{\text{MSW}}$$
->
+
 > $$= \frac{\text{SS}_\text{Between}/(k-1)}{\text{SS}_\text{Within}/(N-k)} \sim F_{k-1,\, N-k}$$
 
 **ANOVA table structure:**

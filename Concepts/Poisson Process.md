@@ -5,7 +5,7 @@ A **Poisson Process** $\{N(t), t \geq 0\}$ is a counting process that models the
 > $$k = 0, 1, 2, \ldots$$
 >
 > $$E[N(t)] = \text{Var}(N(t))$$
->
+
 > $$= \lambda t$$
 
 - The number of events in non-overlapping intervals are **independent**

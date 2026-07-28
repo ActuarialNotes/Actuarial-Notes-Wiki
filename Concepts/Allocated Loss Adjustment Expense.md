@@ -3,7 +3,7 @@
 > $$\text{Total Incurred} = \text{Indemnity} + \text{ALAE}$$
 
 > $$\text{Pure Premium}$$
->
+
 > $$= \frac{\text{Losses} + \text{ALAE}}{\text{Exposures}}$$
 
 - ALAE is included in case reserves and reported losses, so standard loss development triangles often include ALAE combined with indemnity; this simplifies analysis but assumes similar development patterns

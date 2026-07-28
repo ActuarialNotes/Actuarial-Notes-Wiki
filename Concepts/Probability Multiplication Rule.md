@@ -3,7 +3,7 @@ The **Probability Multiplication Rule** gives the joint probability of two event
 - For a chain of events, the rule extends to $P(A_1 \cap A_2 \cap \cdots \cap A_n) = P(A_1)\,P(A_2 \mid A_1)\,P(A_3 \mid A_1 \cap A_2) \cdots$
 
 > $$P(A \cap B) = P(A) \cdot P(B \mid A)$$
->
+
 > $$= P(B) \cdot P(A \mid B)$$
 
 > [!example]- Sequential Claim Filing Without Replacement {Example}

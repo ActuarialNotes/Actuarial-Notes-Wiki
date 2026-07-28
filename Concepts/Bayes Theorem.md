@@ -2,7 +2,7 @@
 - The denominator $P(E)$ is computed via the [[The Law of Total Probability]] across a partition $\{H_i\}$ of the sample space:
 
 > $$P(H \mid E) = \frac{P(E \mid H)\,P(H)}{P(E)}$$
->
+
 > $$= \frac{P(E \mid H)\,P(H)}{\displaystyle\sum_{i} P(E \mid H_i)\,P(H_i)}$$
 
 - $H$ is the hypothesis and $E$ is the observed evidence

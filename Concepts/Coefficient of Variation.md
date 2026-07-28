@@ -1,7 +1,7 @@
 The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to the mean, measuring dispersion as a proportion of the mean.
 
 > $$CV = \frac{\sigma}{\mu}$$
->
+
 > $$= \frac{\sqrt{\text{Var}(X)}}{E[X]}$$
 
 - $CV$ is dimensionless, so it can compare the relative variability of distributions with different units or scales

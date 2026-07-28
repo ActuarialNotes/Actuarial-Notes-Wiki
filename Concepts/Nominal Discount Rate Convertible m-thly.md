@@ -3,13 +3,13 @@ The **nominal discount rate convertible $m$-thly**, denoted $d^{(m)}$, is an ann
 - The relationship to the effective annual rate $i$ (and effective discount rate $d$) is:
 
 > $$\left(1 - \frac{d^{(m)}}{m}\right)^m = 1 - d$$
->
+
 > $$= v$$
->
+
 > $$= \frac{1}{1+i}$$
 
 > $$d^{(m)} = m\!\left[1 - v^{1/m}\right]$$
->
+
 > $$= m\!\left[1 - (1+i)^{-1/m}\right]$$
 
 - As $m \to \infty$, $d^{(m)} \to \delta$ (the [[Force of Interest]]).

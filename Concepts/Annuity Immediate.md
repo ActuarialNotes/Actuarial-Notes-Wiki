@@ -1,9 +1,9 @@
 An **annuity-immediate** is a series of $n$ level payments of 1 made at the **end** of each period. The present value, valued one period before the first payment, is $a_{\overline{n}|}$, and the accumulated value at the time of the last payment is $s_{\overline{n}|}$.
 
 > $$a_{\overline{n}|} = \frac{1-v^n}{i}$$
->
+
 > $$= \frac{1-(1+i)^{-n}}{i}$$
->
+
 > $$s_{\overline{n}|} = \frac{(1+i)^n - 1}{i}$$
 
 - The two are related by $s_{\overline{n}|} = (1+i)^n \cdot a_{\overline{n}|}$.

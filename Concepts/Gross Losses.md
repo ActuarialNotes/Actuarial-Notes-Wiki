@@ -1,7 +1,7 @@
 **Gross Losses** are an insurer's losses before any reinsurance cessions or other recoveries are removed — the full amount of claims the insurer is liable for on a direct basis. Gross is the starting point from which [[Ceded Losses|ceded]], recovery, and [[Net Losses|net]] amounts are derived.
 
 > $$\text{Gross Losses}$$
->
+
 > $$= \text{Net Losses} + \text{Ceded Losses} + \text{Other Recoveries}$$
 
 - Reserve analyses are typically performed on **gross losses first** because the gross book is the largest and most homogeneous data set; ceded and net are then computed, often as gross minus the other.

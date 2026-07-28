@@ -2,7 +2,7 @@ A **Probability** $P$ is a measure of how likely an event $E$ is to occur. It is
 - If all outcomes in a finite sample space $S$ are equally likely, then $P$ can be calculated as:
 
 > $$P(A) = \frac{|E|}{|S|}$$
->
+
 > $$=\frac{\text{number of outcomes in E}}{\text{number of possible outcomes}}$$
 
 > [!example]- Probability of a Fair Die? {Example}

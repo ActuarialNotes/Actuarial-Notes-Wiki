@@ -3,7 +3,7 @@
 > $$\text{Total Rate} = \text{Non-CAT Rate} + \text{CAT Loading}$$
 >
 > $$\text{CAT Loading}$$
->
+
 > $$= \frac{\text{Expected Annual CAT Losses}}{\text{Exposures}}$$
 
 - CAT losses are excluded from the historical loss experience used to derive base rates because their low frequency and extreme severity distort the pure premium; instead, a separate CAT provision is added

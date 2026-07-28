@@ -1,7 +1,7 @@
 A **Markov Chain** is a [[Stochastic Processes|stochastic process]] $\{X_n\}$ on a discrete state space that has the **Markov property**: the next state depends on the past only through the current state. It is governed by a one-step **transition probability matrix** $P$.
 
 > $$P\big(X_{n+1} = j \mid X_n = i, \ldots, X_0\big) = P\big(X_{n+1} = j \mid X_n = i\big)$$
->
+
 > $$= P_{ij}$$
 
 - $P_{ij} \geq 0$ is the probability of moving from state $i$ to state $j$ in one step; each row sums to 1

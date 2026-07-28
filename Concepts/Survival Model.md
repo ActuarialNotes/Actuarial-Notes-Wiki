@@ -1,11 +1,11 @@
 A **Survival Model** describes the distribution of a lifetime random variable $T \geq 0$, representing the time until death or failure. The model is characterized by the **survival function** $S(t)$, which gives the probability of surviving beyond time $t$.
 
 > $$S(t) = P(T > t)$$
->
+
 > $$= 1 - F(t)$$
->
+
 > $$f(t) = -S'(t)$$
->
+
 > $$= F'(t)$$
 
 - $S(0) = 1$, $S(\infty) = 0$, and $S(t)$ is non-increasing

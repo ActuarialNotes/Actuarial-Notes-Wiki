@@ -2,9 +2,9 @@
 
 > **Cramér–Rao Lower Bound (CRLB):** For any unbiased estimator $\hat{\theta}$,
 > $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
->
+
 > $$= \frac{1}{n \cdot I_1(\theta)}$$
->
+
 > $$\text{where } I_1(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\ln f(X \mid \theta)\right)^2\right] \text{ is the Fisher information}$$
 
 - An unbiased estimator that **achieves** the CRLB is called **efficient**

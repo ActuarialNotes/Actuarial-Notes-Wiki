@@ -50,45 +50,42 @@ export function QuestionDeckCard({
             : `Shuffle the ${selected} question${selected !== 1 ? 's' : ''} drawn from ${available} available`
         }
         className={[
-          'group relative flex w-full max-w-xs items-center gap-4 rounded-xl border border-border bg-card px-4 py-3 text-left',
+          'group relative flex w-full max-w-xs items-center justify-center rounded-xl bg-card px-4 py-3 text-center',
           'transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
           disabled
             ? 'opacity-70'
-            : 'shadow-sm hover:border-foreground/25 hover:shadow-md active:scale-[0.98] motion-reduce:active:scale-100',
+            : 'shadow-sm hover:shadow-md active:scale-[0.98] motion-reduce:active:scale-100',
           riffling ? 'deck-card-shuffle' : '',
         ].join(' ')}
       >
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-3xl font-bold leading-none tabular-nums">{available}</span>
-            <span className="text-sm text-muted-foreground">
-              question{available !== 1 ? 's' : ''}
-            </span>
-          </div>
-          {/* The only sub-label: a confirmation after a tap. It's text, not just
-              motion, so a reduced-motion or screen-reader user still gets told
-              the shuffle landed. The line keeps its height when empty so the
-              card doesn't jump. */}
-          <p className="mt-1 flex h-4 items-center text-xs" aria-live="polite">
-            {justShuffled && (
-              <span className="inline-flex items-center gap-1 font-medium text-green-600 dark:text-green-400">
-                <Check className="h-3.5 w-3.5 shrink-0" />
-                Shuffled
-              </span>
-            )}
-          </p>
+        <div className="flex items-baseline justify-center gap-1.5">
+          <span className="text-3xl font-bold leading-none tabular-nums">{available}</span>
+          <span className="text-sm text-muted-foreground">
+            question{available !== 1 ? 's' : ''}
+          </span>
         </div>
 
+        {/* Pinned right so the count stays centred on the card. After a tap the
+            shuffle icon gives way to a worded confirmation — text, not just
+            motion, so a reduced-motion or screen-reader user still gets told
+            the shuffle landed. */}
         <span
-          aria-hidden
-          className={[
-            'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors',
-            justShuffled
-              ? 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300'
-              : 'bg-muted text-muted-foreground group-hover:text-foreground',
-          ].join(' ')}
+          aria-live="polite"
+          className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-1.5"
         >
-          {justShuffled ? <Check className="h-4 w-4" /> : <Shuffle className="h-4 w-4" />}
+          {justShuffled ? (
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-green-600 dark:text-green-400">
+              Shuffled
+              <Check className="h-3.5 w-3.5 shrink-0" />
+            </span>
+          ) : (
+            <span
+              aria-hidden
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground transition-colors group-hover:text-foreground"
+            >
+              <Shuffle className="h-4 w-4" />
+            </span>
+          )}
         </span>
       </button>
     </div>

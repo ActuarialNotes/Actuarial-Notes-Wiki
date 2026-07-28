@@ -18,7 +18,7 @@ ISBN: 978-1-62542-472-3
 
 - 2.1 [[Axioms of Probability]]
 - 2.2 [[Conditional Probability]] and [[Independent Events|Independence]]
-- 2.3 [[Bayes' Theorem]]
+- 2.3 [[Bayes Theorem|Bayes' Theorem]]
 
 ## 3 Discrete Random Variables
 
@@ -28,20 +28,20 @@ ISBN: 978-1-62542-472-3
 
 ## 4 Some Discrete Distributions
 
-- 4.1 [[Binomial]] and [[Bernoulli]] Distributions
+- 4.1 [[Binomial Distribution|Binomial]] and [[Bernoulli]] Distributions
 - 4.2 [[Hypergeometric Distribution]]
 - 4.3 [[Geometric Distribution|Geometric]] and [[Negative Binomial Distribution|Negative Binomial]]
-- 4.4 [[Poisson]] Distribution
+- 4.4 [[Poisson Distribution|Poisson]] Distribution
 
 ## 5 Calculus, Probability, and Continuous Distributions
 
 - 5.1 [[Continuous Random Variable|Continuous Random Variables]]
-- 5.2 [[Cumulative Distribution Function]]
+- 5.2 [[Cumulative Distribution Function (CDF)|Cumulative Distribution Function]]
 - 5.3 [[Expected Value]] and [[Variance]] of Continuous Variables
 
 ## 6 Some Continuous Distributions
 
-- 6.1 [[Uniform Distribution|Uniform]] Distribution
+- 6.1 [[Uniform Continuous Distribution|Uniform]] Distribution
 - 6.2 [[Exponential Distribution|Exponential]] and [[Gamma Distribution|Gamma]] Distributions
 - 6.3 [[Normal Distribution|Normal]] Distribution
 - 6.4 [[Lognormal Distribution|Lognormal]], [[Pareto Distribution|Pareto]], and [[Beta Distribution|Beta]]

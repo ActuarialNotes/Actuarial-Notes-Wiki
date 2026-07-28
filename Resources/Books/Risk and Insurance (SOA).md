@@ -23,7 +23,7 @@ Available from: "[soa.org](https://www.soa.org/globalassets/assets/files/edu/p-2
 
 - Frequency and severity distributions combine to form the [[Loss Random Variable|loss distribution]]
 - [[Expected Value]] and [[Variance]] of a loss random variable $X$
-- Pooling independent risks: $E[S_n] = n\mu$ and $Var[S_n] = n\sigma^2$ ([[Law of Large Numbers (LLN)|the basis for risk pooling]])
+- Pooling independent risks: $E[S_n] = n\mu$ and $Var[S_n] = n\sigma^2$ ([[Law of Large Numbers|the basis for risk pooling]])
 - [[Coefficient of Variation]] as a measure of relative variability
 - [[Insurance Premium|Net (benefit) premium]] versus gross premium
 

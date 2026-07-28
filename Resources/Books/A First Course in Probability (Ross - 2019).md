@@ -32,7 +32,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 ## 3 Conditional Probability and Independence
   - 3.1 Introduction
   - 3.2 [[Conditional Probability|Conditional Probabilities]]
-  - 3.3 [[Bayes' Theorem|Bayes’s Formula]]
+  - 3.3 [[Bayes Theorem|Bayes’s Formula]]
   - 3.4 [[Independent Events]]
   - 3.5 P(·|F) Is a Probability
 
@@ -42,10 +42,10 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
   - 4.3 [[Expected Value]]
   - 4.4 Expectation of a Function of a Random Variable
   - 4.5 [[Variance]]
-  - 4.6 The [[Bernoulli]] and [[Binomial]] Random Variables
+  - 4.6 The [[Bernoulli]] and [[Binomial Distribution|Binomial]] Random Variables
     - 4.6.1 Properties of Binomial Random Variables
     - 4.6.2 Computing the Binomial Distribution Function
-  - 4.7 The [[Poisson]] Random Variable
+  - 4.7 The [[Poisson Distribution|Poisson]] Random Variable
     - 4.7.1 Computing the Poisson Distribution Function
   - 4.8 Other Discrete Probability Distributions
     - 4.8.1 The [[Geometric Distribution|Geometric Random Variable]]
@@ -58,7 +58,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 ## 5 Continuous Random Variables
   - 5.1 Introduction
   - 5.2 Expectation and Variance of Continuous Random Variables
-  - 5.3 [[Uniform Distribution|Uniform Random Variable]]
+  - 5.3 [[Uniform Continuous Distribution|Uniform Random Variable]]
   - 5.4 [[Normal Distribution|Normal Random Variables]]
     - 5.4.1 Normal Approximation to the Binomial Distribution
   - 5.5 [[Exponential Distribution|Exponential Random Variables]]

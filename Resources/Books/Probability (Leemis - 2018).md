@@ -17,12 +17,12 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 - 1.4 [[Permutation|Permutations]] and [[Combination|Combinations]]
 - 1.5 [[Conditional Probability]]
 - 1.6 [[Independent Events|Independence]]
-- 1.7 [[Bayes' Theorem]] and [[The Law of Total Probability]]
+- 1.7 [[Bayes Theorem|Bayes' Theorem]] and [[The Law of Total Probability]]
 
 ## 2 Random Variables
 
 - 2.1 [[Random Variable|Random Variables]]
-- 2.2 [[Cumulative Distribution Function]]
+- 2.2 [[Cumulative Distribution Function (CDF)|Cumulative Distribution Function]]
 - 2.3 [[Expected Value]]
 - 2.4 [[Variance]] and [[Standard Deviation]]
 - 2.5 [[Moment-Generating Function]]
@@ -31,21 +31,21 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 ## 3 Discrete Distributions
 
 - 3.1 [[Bernoulli]] Distribution
-- 3.2 [[Binomial]] Distribution
-- 3.3 [[Geometric]] Distribution
-- 3.4 [[Negative Binomial]] Distribution
-- 3.5 [[Hypergeometric]] Distribution
-- 3.6 [[Poisson]] Distribution
+- 3.2 [[Binomial Distribution|Binomial]] Distribution
+- 3.3 [[Geometric Distribution|Geometric]] Distribution
+- 3.4 [[Negative Binomial Distribution|Negative Binomial]] Distribution
+- 3.5 [[Hypergeometric Distribution|Hypergeometric]] Distribution
+- 3.6 [[Poisson Distribution|Poisson]] Distribution
 - 3.7 [[Uniform Discrete|Discrete Uniform]] Distribution
 
 ## 4 Continuous Distributions
 
-- 4.1 [[Uniform Continuous|Uniform]] Distribution
-- 4.2 [[Normal]] Distribution
-- 4.3 [[Exponential]] Distribution
+- 4.1 [[Uniform Continuous Distribution|Uniform]] Distribution
+- 4.2 [[Normal Distribution|Normal]] Distribution
+- 4.3 [[Exponential Distribution|Exponential]] Distribution
 - 4.4 [[Gamma]] Distribution
 - 4.5 [[Beta]] Distribution
-- 4.6 [[Lognormal]] Distribution
+- 4.6 [[Lognormal Distribution|Lognormal]] Distribution
 
 ## 5 Additional Distributions and Properties
 
@@ -81,7 +81,7 @@ Find at your local library at: "[worldcat.org](https://search.worldcat.org/title
 - 8.1 [[Chebyshev's Inequality]]
 - 8.2 Law of Large Numbers
 - 8.3 [[Central Limit Theorem]]
-- 8.4 [[Normal]] Approximations
+- 8.4 [[Normal Distribution|Normal]] Approximations
 - 8.5 [[Markov Chain|Markov Chains]]
 - 8.6 [[Poisson Process]]
 - 8.7 Univariate Distribution Relationships

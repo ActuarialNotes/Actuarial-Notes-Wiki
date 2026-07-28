@@ -16,7 +16,7 @@ ISBN: 978-0135189399
 - 1.2 [[Methods of Enumeration]]
 - 1.3 [[Concepts/Conditional Probability]]
 - 1.4 [[Concepts/Independent Events]]
-- 1.5 [[Bayes' Theorem]]
+- 1.5 [[Bayes Theorem|Bayes' Theorem]]
 
 ## 2 Discrete Distributions
 
@@ -62,8 +62,8 @@ ISBN: 978-0135189399
 - 6.3 [[Order Statistics]]
 - 6.4 [[Maximum Likelihood Estimation|Maximum Likelihood]] and [[Method of Moments]] Estimation
 - 6.5 A Simple [[Regression]] Problem
-- 6.6 [[Asymptotic Distribution]]s of [[Maximum Likelihood Estimator]]s
-- 6.7 [[Sufficient Statistics]]
+- 6.6 [[Asymptotic Distribution]]s of [[Maximum Likelihood Estimation|Maximum Likelihood Estimator]]s
+- 6.7 [[Sufficient Statistic|Sufficient Statistics]]
 - 6.8 [[Bayesian Estimation]]
 
 ## 7 Interval Estimation

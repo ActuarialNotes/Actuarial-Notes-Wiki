@@ -18,7 +18,18 @@ access, and the queue for it is in [Verification queue](#verification-queue).
 
 That limit turned out to be less crippling than expected, because the syllabus pages
 carry section-level exclusion lists (`excluding 2.4; 3.5; 4.2, 4.5; …`), and those
-lists are a factual probe against the page's own TOC. Finding 1 came out of that probe.
+lists can be tested against the page's own TOC. Finding 1 came out of that probe.
+
+**What that probe does and does not establish.** A syllabus cannot exclude a section
+that doesn't exist, so `excluding 2.4` is evidence that Chan §2.4 is real — which makes
+its absence from the Chan page a genuine defect rather than a stylistic choice. But
+both ends of that inference are vault files: the exclusion list lives in
+`Exam FM-2 (SOA).md`, itself an unverified transcription of the SOA syllabus. So what
+finding 1 proves is that **two vault pages contradict each other**, and the reason for
+attributing the error to the book page rather than the syllabus page is the pruning
+pattern (13 gaps, 13 exclusions, zero exceptions) — which is strong circumstantial
+evidence about how the page was built, not a reading of the book. Confirming *which*
+page is wrong still requires the real TOC. Same for the two unexplained gaps.
 
 What was checked mechanically across all 31 pages: frontmatter completeness, timeline
 eligibility, the first-line summary, filename/extension conventions, inbound syllabus
@@ -172,9 +183,15 @@ the pattern.
 
 **Severity: medium — 76 distinct dead targets, but they split into two very different piles.**
 
-### 6a. Naming variants of pages that already exist (15) — safe to repoint now
+### 6a. Naming variants of pages that already exist (15) — ✅ fixed
 
-Each target below was confirmed present in `Concepts/`:
+Applied: 25 link instances across 5 pages (Ross, Leemis, Hogg, Asimow, and the SOA
+study note), taking the vault's broken-link groups from 429 to 414. Each repoint keeps
+the displayed text exactly as transcribed — `[[Poisson]]` became
+`[[Poisson Distribution|Poisson]]`, so "The Poisson Random Variable" still reads that
+way. Verified by stripping all link syntax before and after: zero display-text drift.
+
+Each target was confirmed present in `Concepts/`:
 
 | Link as written | Existing page |
 |---|---|

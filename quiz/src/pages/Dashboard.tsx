@@ -25,7 +25,7 @@ import { todayISO } from '@/lib/studyPlan'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
-import { DAILY_QUIZ_EVENT, getDailyQuizStats, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import { DAILY_QUIZ_EVENT, getDailyQuizStats, LEVELUP_EVENT, readTodayLevelUps } from '@/lib/dailyProgressStore'
 import { computeReadiness } from '@/lib/readiness'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
@@ -226,10 +226,19 @@ export default function Dashboard() {
 
   // Re-fetch mastery after a quiz completes so masteryStateByName reflects
   // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
-  // with the "Completed today" list).
+  // with the "Completed today" list). Also keeps todayLevelUps in sync so the
+  // Start-Quiz badge count drops concepts already finished today.
+  const [todayLevelUps, setTodayLevelUps] = useState(() => readTodayLevelUps())
   useEffect(() => {
+    const refresh = () => setTodayLevelUps(readTodayLevelUps())
     window.addEventListener(LEVELUP_EVENT, refreshMastery)
-    return () => window.removeEventListener(LEVELUP_EVENT, refreshMastery)
+    window.addEventListener(LEVELUP_EVENT, refresh)
+    window.addEventListener('storage', refresh)
+    return () => {
+      window.removeEventListener(LEVELUP_EVENT, refreshMastery)
+      window.removeEventListener(LEVELUP_EVENT, refresh)
+      window.removeEventListener('storage', refresh)
+    }
   }, [refreshMastery])
 
   // Keep today's correct-answer count fresh so the streak stat's checkmark
@@ -358,12 +367,18 @@ export default function Dashboard() {
   }, [sessions, activeSyllabus])
 
   // Fewest questions needed to complete today's plan — shown as a badge on the
-  // "Start Today's Quiz" button (mirrors the Quiz-tab nav badge, scoped to the
-  // active exam) and hidden once the plan is complete.
+  // "Start Today's Quiz" button (the exact size of the quiz that button
+  // launches, scoped to the active exam) and hidden once the plan is complete.
+  // The Quiz-tab nav badge sums this same per-exam count across every active
+  // exam, so the two numbers stay consistent.
+  const doneConceptSlugs = useMemo(
+    () => new Set(todayLevelUps.map(l => l.conceptSlug.toLowerCase())),
+    [todayLevelUps],
+  )
   const todaysQuizBadgeCount = useMemo(() => {
     if (!activeSyllabus) return 0
-    return questionsNeededForPlan(studyPlan, activeSyllabus.examTopic, allQuestions)
-  }, [activeSyllabus, studyPlan, allQuestions])
+    return questionsNeededForPlan(studyPlan, activeSyllabus.examTopic, allQuestions, doneConceptSlugs)
+  }, [activeSyllabus, studyPlan, allQuestions, doneConceptSlugs])
 
   // Top-of-dashboard primary actions. "Read concepts" and the quiz launch reuse
   // the trigger props ReadinessCard already listens on (same path as the header

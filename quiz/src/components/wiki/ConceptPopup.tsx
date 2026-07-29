@@ -13,7 +13,7 @@ import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useSplitHeight } from '@/hooks/useSplitHeight'
 import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components/wiki/WikiArticle'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
-import { parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
+import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ListenView } from '@/components/wiki/ListenView'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
@@ -573,9 +573,14 @@ export function ConceptPopup() {
             )
           ) : (
             <>
-              {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact />}
+              {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact showTitle={false} />}
               <WikiArticle
                 markdown={processedContent ?? content}
+                className={
+                  resourceMeta && isNumberedOutline(processedContent ?? content)
+                    ? OUTLINE_ARTICLE_CLASS
+                    : undefined
+                }
                 sourcePath={sourcePath}
                 hideImages
                 onWikiLink={ref => {

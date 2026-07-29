@@ -8,7 +8,7 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
-import { parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
+import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 
 export default function WikiResource() {
   const { slug = '' } = useParams()
@@ -74,6 +74,7 @@ export default function WikiResource() {
       {processedContent !== null && (
         <WikiArticle
           markdown={processedContent}
+          className={isNumberedOutline(processedContent) ? OUTLINE_ARTICLE_CLASS : undefined}
           sourcePath={`Resources/Books/${resourceName}.md`}
           onWikiLink={(ref, e) => {
             if (ref.kind !== 'concept') return false

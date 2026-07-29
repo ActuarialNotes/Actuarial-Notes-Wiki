@@ -63,11 +63,31 @@ export function stripFirstCoverImage(md: string): string {
   return md.replace(/!\[\[[^\]|]+\.(png|jpe?g|gif|svg|webp|avif)\]\][ \t]*\n?/i, '')
 }
 
-// Convert unordered list items (- …) to ordered list items (1. …) at every indent level.
-export function convertBulletsToOrdered(md: string): string {
-  return md.replace(/^(\s*)-(\s)/gm, '$11.$2')
+export function preprocessResourceMarkdown(raw: string): string {
+  return stripFirstCoverImage(raw)
 }
 
-export function preprocessResourceMarkdown(raw: string): string {
-  return convertBulletsToOrdered(stripFirstCoverImage(raw))
+const LIST_ITEM_RE = /^\s*[-*+]\s+\S/
+// "1", "1.4", "1.4.2", "0.1", "1.01", "A.2" — a chapter/section label.
+const SECTION_LABEL_RE = /^\s*[-*+]\s+(?:\d+|[A-Z])(?:\.\d+)*\.?\s+\S/
+
+// A book's table of contents already numbers itself ("1.4.2 Accumulated Value…"),
+// so list markers next to those lines are a second, conflicting numbering.
+// Detect that shape here; the outline styling below hides the markers and lets
+// the indent carry the hierarchy. Prose pages (the ASOPs, whose lists are real
+// bullets) fall through and keep their discs.
+export function isNumberedOutline(md: string): boolean {
+  const items = md.split('\n').filter(line => LIST_ITEM_RE.test(line))
+  if (items.length < 3) return false
+  const labelled = items.filter(line => SECTION_LABEL_RE.test(line)).length
+  return labelled / items.length >= 0.6
 }
+
+// Applied to the WikiArticle of a resource page whose body is a numbered
+// outline: no list markers, tighter rows, and chapter headings sized closer to
+// the entries they head.
+export const OUTLINE_ARTICLE_CLASS =
+  'prose-h2:text-lg prose-h2:mt-5 prose-h2:mb-1 ' +
+  'prose-ul:list-none prose-ul:pl-0 prose-ul:my-1.5 ' +
+  'prose-li:my-1 prose-li:pl-0 prose-li:leading-snug ' +
+  '[&_li>ul]:mt-1 [&_li>ul]:pl-4'

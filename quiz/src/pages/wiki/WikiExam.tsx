@@ -167,14 +167,19 @@ export default function WikiExam() {
     return out
   }, [content])
 
-  const studyPlanRefs = useMemo(() => {
-    const row = examRows.find(r => r.exam_id === progressKey)
-    const cache = row?.study_plan_cache
+  // Today's cached plan for this exam, or null when absent/stale.
+  const todaysPlan = useMemo(() => {
+    const cache = examRows.find(r => r.exam_id === progressKey)?.study_plan_cache
     if (!cache || cache.generatedDate !== todayISO() || !cache.todaysConcepts?.length) return null
-    const planSet = new Set(cache.todaysConcepts.map(n => n.toLowerCase()))
+    return cache
+  }, [examRows, progressKey])
+
+  const studyPlanRefs = useMemo(() => {
+    if (!todaysPlan) return null
+    const planSet = new Set(todaysPlan.todaysConcepts.map(n => n.toLowerCase()))
     const refs = conceptList.filter(r => planSet.has(r.name.toLowerCase()))
     return refs.length > 0 ? refs : null
-  }, [examRows, progressKey, conceptList])
+  }, [todaysPlan, conceptList])
 
   const resourceRefs = useMemo(() => {
     const seen = new Set<string>()
@@ -213,6 +218,8 @@ export default function WikiExam() {
     }
     setStudyPlan({
       items: studyPlanRefs.map(r => ({ name: r.name })),
+      examProgressKey: progressKey,
+      assignments: todaysPlan?.assignments ?? [],
       onSelect: idx =>
         openAt(studyPlanRefs, idx, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
           initialFilter: 'study-plan',
@@ -220,7 +227,7 @@ export default function WikiExam() {
           occurrences: conceptOccurrences,
         }),
     })
-  }, [studyPlanRefs, resourceRefs, conceptList, conceptOccurrences, examFileName, openAt, setStudyPlan])
+  }, [studyPlanRefs, resourceRefs, conceptList, conceptOccurrences, examFileName, openAt, setStudyPlan, progressKey, todaysPlan])
 
   const onWikiLink = useCallback((ref: WikiEntryRef, e: React.MouseEvent<HTMLAnchorElement>) => {
     if (ref.kind === 'exam') return false

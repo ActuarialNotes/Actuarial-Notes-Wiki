@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import type { ConceptAssignment } from '@/lib/studyPlan'
 import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { WikiFloatingSearch } from '@/components/wiki/WikiFloatingSearch'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -14,6 +15,14 @@ setWikiIndexBundle(wikiBundle.index)
 export interface StudyPlanHeaderData {
   items: { name: string }[]
   onSelect: (index: number) => void
+  /** Exam key ('P' | 'FM' | 'MAS-I' | …) — scopes the cross-device completion read. */
+  examProgressKey?: string | null
+  /**
+   * The cached plan's assignments, so the header can derive each concept's target
+   * for today and tick off the ones already done. Mastery is read by the header
+   * itself, which already subscribes to it for the unlock state.
+   */
+  assignments?: ConceptAssignment[]
 }
 
 interface WikiPageContextValue {

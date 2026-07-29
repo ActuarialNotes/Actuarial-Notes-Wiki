@@ -37,24 +37,15 @@ import {
   type MasteryState,
 } from '@/lib/mastery'
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
-import { readTodayLevelUps, LEVELUP_EVENT, getDailyGems, type DailyLevelUp } from '@/lib/dailyProgressStore'
-import { useDailyCompletions } from '@/hooks/useDailyCompletions'
+import { getDailyGems } from '@/lib/dailyProgressStore'
+import { useTodayCompletions } from '@/hooks/useTodayCompletions'
+import { buildTodayTargets, isConceptDoneToday } from '@/lib/planCompletion'
 import { StudyPlanCompletionCeremony } from '@/components/StudyPlanCompletionCeremony'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
-}
-
-// Maps a concept's initial state to the level it should reach today
-const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
-  new: 'level1', forgotten: 'level1',
-  level1: 'level2', level2: 'level3',
-}
-
-const STATE_ORDER: Record<MasteryState, number> = {
-  new: 0, forgotten: 0, level1: 1, level2: 2, level3: 3,
 }
 
 const STATE_BADGE: Record<MasteryState, string> = {
@@ -270,79 +261,25 @@ export function TodayCard({
   const [trackerConcept, setTrackerConcept] = useState<{
     name: string; state: MasteryState; index: number
   } | null>(null)
-  const [localCompletedToday, setLocalCompletedToday] = useState<DailyLevelUp[]>([])
   const [showCeremony, setShowCeremony] = useState(false)
   const [ceremonyGems, setCeremonyGems] = useState(0)
   const prevAllOnTarget = useRef(false)
 
-  // Load today's level-ups (this device) and keep in sync with quiz completions
-  useEffect(() => {
-    setLocalCompletedToday(readTodayLevelUps())
-    function handleLevelUp(e: Event) {
-      setLocalCompletedToday((e as CustomEvent<DailyLevelUp[]>).detail)
-    }
-    const levelUpKey = 'actuarial_daily_levelups_' + new Date().toISOString().slice(0, 10)
-    function handleStorage(e: StorageEvent) {
-      if (e.key === levelUpKey) setLocalCompletedToday(readTodayLevelUps())
-    }
-    window.addEventListener(LEVELUP_EVENT, handleLevelUp)
-    window.addEventListener('storage', handleStorage)
-    return () => {
-      window.removeEventListener(LEVELUP_EVENT, handleLevelUp)
-      window.removeEventListener('storage', handleStorage)
-    }
-  }, [])
-
-  // Merge this device's level-ups with the cross-device signal from Supabase so
-  // a quiz finished on another device still checks the item off here.
-  const serverCompletedToday = useDailyCompletions(wikiExamIdToProgressKey(syllabus.examId))
-  const completedToday = useMemo(() => {
-    const merged: DailyLevelUp[] = []
-    const seen = new Set<string>()
-    for (const lu of [...localCompletedToday, ...serverCompletedToday]) {
-      const key = `${lu.conceptSlug.toLowerCase()}::${lu.to}`
-      if (seen.has(key)) continue
-      seen.add(key)
-      merged.push(lu)
-    }
-    return merged
-  }, [localCompletedToday, serverCompletedToday, syllabus.examId])
+  // Today's level-ups from this device merged with the cross-device signal, so a
+  // quiz finished elsewhere still checks the item off here.
+  const completedToday = useTodayCompletions(wikiExamIdToProgressKey(syllabus.examId))
 
   const todaysConcepts = plan?.todaysConcepts ?? []
   const reviewConcepts = plan?.reviewConcepts ?? []
   const displayConcepts = plan?.status === 'review_mode' ? reviewConcepts : todaysConcepts
 
-  // Build a per-concept target map from today's scheduled assignments.
-  // Use the current mastery state (not the cached initialState) so the target
-  // stays accurate after same-day quiz progress or decay changes.
-  // Keep the highest target if a concept somehow has multiple assignments today.
-  const targetByName = new Map<string, MasteryState>()
-  if (plan) {
-    const today = todayISO()
-    for (const a of plan.assignments) {
-      if (a.scheduledDate === today) {
-        const currentState = masteryStateByName.get(a.conceptName.toLowerCase()) ?? a.initialState
-        const target: MasteryState = currentState === 'level3' ? 'level3' : (NEXT_STATE[currentState] ?? 'level1')
-        const existing = targetByName.get(a.conceptName.toLowerCase())
-        if (!existing || STATE_ORDER[target] > STATE_ORDER[existing]) {
-          targetByName.set(a.conceptName.toLowerCase(), target)
-        }
-      }
-    }
-  }
+  // Per-concept targets from today's scheduled assignments — shared with the
+  // study-guide header's plan list (see lib/planCompletion).
+  const targetByName = buildTodayTargets(plan?.assignments ?? [], masteryStateByName, todayISO())
 
-  // A concept is "on target" for today when it has reached or exceeded its target state,
-  // OR when it was advanced at all today. The latter handles the case where reconfiguring
-  // the plan regenerates assignments using current mastery, raising the target bar above
-  // what the user already achieved in the same day.
-  const onTargetCount = displayConcepts.filter(n => {
-    const target = targetByName.get(n.toLowerCase()) ?? 'level1'
-    const current = masteryStateByName.get(n.toLowerCase()) ?? 'new'
-    const advancedToday = completedToday.some(
-      lu => lu.conceptSlug.toLowerCase() === n.toLowerCase()
-    )
-    return STATE_ORDER[current] >= STATE_ORDER[target] || advancedToday
-  }).length
+  const onTargetCount = displayConcepts.filter(
+    n => isConceptDoneToday(n, targetByName, masteryStateByName, completedToday)
+  ).length
   const allOnTarget = displayConcepts.length > 0 && onTargetCount === displayConcepts.length
 
   const studyPlanConceptsForModal = displayConcepts.map(name => ({
@@ -553,10 +490,7 @@ export function TodayCard({
             <ul className="space-y-0.5">
               {displayConcepts.map((name, idx) => {
                 const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                const isCompleted =
-                  completedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-                  STATE_ORDER[currentState] >= STATE_ORDER[target]
+                const isCompleted = isConceptDoneToday(name, targetByName, masteryStateByName, completedToday)
                 return (
                   <li key={name}>
                     <button

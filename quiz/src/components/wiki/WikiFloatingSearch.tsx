@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookMarked, FileText, GraduationCap, ListChecks, Lock, Play, Search, X } from 'lucide-react'
+import { BookMarked, Check, FileText, GraduationCap, ListChecks, Lock, Play, Search, X } from 'lucide-react'
 import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { fromSlug, pathToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { findSyllabiForConcept } from '@/lib/conceptMatch'
@@ -11,7 +11,10 @@ import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
-import { decayIfStale } from '@/lib/mastery'
+import { useTodayCompletions } from '@/hooks/useTodayCompletions'
+import { decayIfStale, type MasteryState } from '@/lib/mastery'
+import { buildTodayTargets, isConceptDoneToday } from '@/lib/planCompletion'
+import { todayISO } from '@/lib/studyPlan'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
@@ -45,6 +48,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
   const { syllabi } = useWikiSyllabus()
   const collectedCards = useCollectedCards(s => s.cards)
   const { records: masteryRecords } = useConceptMastery()
+  const completedToday = useTodayCompletions(studyPlan?.examProgressKey ?? null)
 
   useEffect(() => {
     let cancelled = false
@@ -123,6 +127,29 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
     const record = masteryRecords.find(r => r.concept_slug.toLowerCase() === lower)
     if (!record) return false
     return decayIfStale(record, new Date()).state !== 'new'
+  }
+
+  // Current (decay-adjusted) mastery per concept, keyed lower-case — the input
+  // both today's plan targets and the done check need.
+  const masteryStateByName = useMemo(() => {
+    const now = new Date()
+    const map = new Map<string, MasteryState>()
+    for (const r of masteryRecords) {
+      map.set(r.concept_slug.toLowerCase(), decayIfStale(r, now).state)
+    }
+    return map
+  }, [masteryRecords])
+
+  const planTargets = useMemo(
+    () => buildTodayTargets(studyPlan?.assignments ?? [], masteryStateByName, todayISO()),
+    [studyPlan?.assignments, masteryStateByName],
+  )
+
+  // Ticks off a plan concept once it's been advanced today (here or on another
+  // device) or already sits at today's target — same rule as the Dashboard's
+  // Today card, shared via lib/planCompletion.
+  function isDoneToday(name: string): boolean {
+    return isConceptDoneToday(name, planTargets, masteryStateByName, completedToday)
   }
 
   // null while the question bank is still loading; a number once counted.
@@ -286,25 +313,33 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
           {planOpen && studyPlan && (
             <div className="pb-3">
               <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
-                {studyPlan.items.map((item, idx) => (
-                  <li key={item.name} className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => { studyPlan.onSelect(idx); setShowPlan(false) }}
-                      className="flex items-center gap-2 min-w-0 text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/60 transition-colors"
-                    >
-                      <FileText className="h-4 w-4 shrink-0 text-violet-500" />
-                      <span className="truncate">{item.name}</span>
-                    </button>
-                    <ConceptActions
-                      name={item.name}
-                      unlocked={isUnlocked(item.name)}
-                      questionCount={questionCountFor(item.name)}
-                      onStartQuiz={startQuiz}
-                      onDismiss={() => setShowPlan(false)}
-                    />
-                  </li>
-                ))}
+                {studyPlan.items.map((item, idx) => {
+                  const done = isDoneToday(item.name)
+                  return (
+                    <li key={item.name} className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => { studyPlan.onSelect(idx); setShowPlan(false) }}
+                        className="flex items-center gap-2 min-w-0 text-left rounded-md px-2 py-1.5 text-sm hover:bg-accent/60 transition-colors"
+                      >
+                        {done
+                          ? <Check className="h-4 w-4 shrink-0 text-green-500" aria-hidden="true" />
+                          : <FileText className="h-4 w-4 shrink-0 text-violet-500" aria-hidden="true" />}
+                        <span className={`truncate ${done ? 'text-muted-foreground line-through' : ''}`}>
+                          {item.name}
+                        </span>
+                        {done && <span className="sr-only">(completed today)</span>}
+                      </button>
+                      <ConceptActions
+                        name={item.name}
+                        unlocked={isUnlocked(item.name)}
+                        questionCount={questionCountFor(item.name)}
+                        onStartQuiz={startQuiz}
+                        onDismiss={() => setShowPlan(false)}
+                      />
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           )}

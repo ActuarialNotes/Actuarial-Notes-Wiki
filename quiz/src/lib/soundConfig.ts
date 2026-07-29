@@ -51,6 +51,8 @@ export type SoundEvent =
   | 'page'
   /** Riffling the flashcard deck into a new order. */
   | 'shuffle'
+  /** A finished card sliding off the deck during "Clear Completed Flashcards". */
+  | 'fileAway'
   // — reward —
   /** The friendly three-note arpeggio: a right answer, anywhere. */
   | 'correct'
@@ -355,6 +357,22 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
       { at: 0.095, dur: 0.018, from: 3000, to: 2200, type: 'bandpass', q: 1.3, gain: 0.3,  swell: 0 },
       { at: 0.118, dur: 0.016, from: 2800, to: 2100, type: 'bandpass', q: 1.3, gain: 0.24, swell: 0 },
     ],
+  },
+
+  fileAway: {
+    // One finished card sliding off the deck: paper leaving, and a small
+    // struck note on top of it so the card lands somewhere rather than just
+    // stopping. It fires once per card in a run that can be twenty long, which
+    // is why it's the quietest thing in the paper family and why it climbs —
+    // the pitch rising card after card is the sound of the deck emptying, and
+    // the last card off is the top of the scale. Dry: twenty reverb tails
+    // overlapping is not a sweep, it's a wash.
+    gain: 0.26,
+    throttleMs: 55,
+    lowpass: 6000,
+    combo: { steps: [0, 2, 4, 5, 7, 9, 11, 12], resetMs: 1500 },
+    noise: [{ at: 0, dur: 0.12, from: 2400, to: 700, type: 'bandpass', q: 0.8, gain: 0.34, swell: 0.25 }],
+    tones: [...bell(A4, { at: 0.02, dur: 0.22, gain: 0.4 })],
   },
 
   // ---- reward -------------------------------------------------------------

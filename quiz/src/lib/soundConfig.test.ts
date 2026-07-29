@@ -20,7 +20,7 @@ const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'reward', 'streak
 
 /** Everything a user hears dozens of times an hour. */
 const INTERFACE = ['click', 'press', 'select', 'tick', 'toggleOn', 'toggleOff', 'navigate', 'actions',
-  'open', 'close', 'page', 'shuffle'] as const
+  'open', 'close', 'page', 'shuffle', 'fileAway'] as const
 
 /**
  * The notes of a cue's melody, as opposed to the struck partials, sparkle and
@@ -281,11 +281,35 @@ describe('sound catalogue', () => {
       expect(combo.steps[combo.steps.length - 1]).toBeLessThanOrEqual(12)
     })
 
-    it('is the only cue that climbs', () => {
-      // Every other cue marks a distinct event; only a streak of the same
-      // event has anything to count.
+    it('climbs only where there is a run to count', () => {
+      // Most cues mark a distinct event and have nothing to count. The two
+      // that climb both fire repeatedly on the same action: a run of right
+      // answers, and a deck of finished cards clearing one after another.
       const climbing = entries().filter(([, recipe]) => recipe.combo)
-      expect(climbing.map(([event]) => event)).toEqual(['correct'])
+      expect(climbing.map(([event]) => event).sort()).toEqual(['correct', 'fileAway'])
+    })
+  })
+
+  describe('the clear-completed sweep', () => {
+    const combo = SOUND_RECIPES.fileAway.combo!
+
+    it('climbs an octave and stops there', () => {
+      // The sweep can be twenty cards long, so the climb is longer than the
+      // quiz's — but it still tops out at the octave rather than running away.
+      expect(combo.steps[0]).toBe(0)
+      expect(combo.steps).toEqual([...combo.steps].sort((a, b) => a - b))
+      expect(combo.steps[combo.steps.length - 1]).toBe(12)
+    })
+
+    it('outlasts the gap between two cards clearing', () => {
+      // The climb has to survive the stagger between cards (at most 230ms, see
+      // CLEAR_STAGGER_MS) or every card would sound at the root pitch.
+      expect(combo.resetMs).toBeGreaterThan(230)
+    })
+
+    it('stays under a card being added, since it fires far more often', () => {
+      expect(peakLevel(SOUND_RECIPES.fileAway))
+        .toBeLessThan(peakLevel(SOUND_RECIPES.addToDeck))
     })
   })
 

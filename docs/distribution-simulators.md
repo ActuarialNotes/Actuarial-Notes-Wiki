@@ -63,6 +63,26 @@ new entry is automatically checked for: defaults inside their slider bounds, tot
 over the plotting window matching the CDF span, a monotone CDF in [0, 1], Monte-Carlo draws
 reproducing the closed-form mean and variance, and the stated mode maximizing the density.
 
+## Layout & touch
+
+The card reads top-down: **title + notation → the four KPI tiles → plot → parameter sliders →
+simulation controls**. The moments sit *above* the plot they describe, each tile led by its Greek
+symbol (μ, σ², σ, γ₁; the sample counterparts are x̄, s², s) and rounded to one decimal by
+`formatKpi`.
+
+Most of this is used one-handed on a phone inside the full-screen gallery, so:
+
+- Parameter sliders use the shared `.sim-slider` class (`quiz/src/index.css`) — a 32px knob on a
+  10px track in a 44px row. Don't swap it back to a bare `accent-primary` range.
+- Every button in the card is `h-10` with `text-sm font-semibold`.
+- Axis type is sized in **CSS pixels**, not viewBox units: the plot measures its rendered width
+  with a `ResizeObserver` and converts `AXIS_FONT_PX` back into viewBox units, so labels are the
+  same physical size on a phone and a desktop. The gutters (`padLeft`, `padBottom`) derive from
+  that font size, and the y-axis title is dropped below ~520px of rendered width where the tick
+  labels need the room.
+- The plot readout works on touch: `onPointerDown` + `onPointerMove` with `touch-pan-y`, so a
+  horizontal drag scrubs the crosshair while a vertical drag still scrolls the page.
+
 ## Conventions worth keeping
 
 - **Seeded RNG.** `createRng(seed)` (mulberry32), not `Math.random`, so a simulation is

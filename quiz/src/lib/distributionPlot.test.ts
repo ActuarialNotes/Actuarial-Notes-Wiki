@@ -7,7 +7,9 @@ import {
   buildMassPoints,
   drawSamples,
   empiricalCdf,
+  formatKpi,
   formatStat,
+  formatTick,
   niceTicks,
   summarizeSamples,
   tallySamples,
@@ -165,5 +167,42 @@ describe('formatStat', () => {
   it('keeps integers whole when asked', () => {
     expect(formatStat(7, { integer: true })).toBe('7')
     expect(formatStat(7.5, { integer: true })).toBe('7.50')
+  })
+})
+
+describe('formatTick', () => {
+  it('drops the trailing zeros nice ticks never need', () => {
+    expect(formatTick(-4)).toBe('-4')
+    expect(formatTick(0)).toBe('0')
+    expect(formatTick(0.2)).toBe('0.2')
+    expect(formatTick(0.05)).toBe('0.05')
+    expect(formatTick(2.5)).toBe('2.5')
+    expect(formatTick(1000)).toBe('1000')
+  })
+
+  it('falls back to exponential outside the readable range', () => {
+    expect(formatTick(1e6)).toBe('1e+6')
+    expect(formatTick(0.0001)).toBe('1e-4')
+  })
+})
+
+describe('formatKpi', () => {
+  it('rounds the headline moments to one decimal', () => {
+    expect(formatKpi(3)).toBe('3.0')
+    expect(formatKpi(1.71428)).toBe('1.7')
+    expect(formatKpi(0.2857)).toBe('0.3')
+    expect(formatKpi(-2.44)).toBe('-2.4')
+    expect(formatKpi(1234.56)).toBe('1234.6')
+  })
+
+  it('keeps small values meaningful instead of showing 0.0', () => {
+    expect(formatKpi(0.026)).toBe('0.026')
+    expect(formatKpi(0.0012)).toBe('0.0012')
+    expect(formatKpi(0)).toBe('0')
+  })
+
+  it('goes exponential before the tile overflows', () => {
+    expect(formatKpi(4e7)).toBe('4.0e+7')
+    expect(formatKpi(NaN)).toBe('—')
   })
 })

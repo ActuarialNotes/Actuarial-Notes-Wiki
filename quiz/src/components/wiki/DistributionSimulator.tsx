@@ -22,7 +22,7 @@ import {
   type DistParams,
   type DistributionSpec,
 } from '@/lib/distributions'
-import { drawSamples, formatStat, summarizeSamples } from '@/lib/distributionPlot'
+import { drawSamples, formatKpi, formatStat, summarizeSamples } from '@/lib/distributionPlot'
 
 /** How many variates one press of "Simulate" draws. */
 const SAMPLE_SIZES = [100, 1000, 10000] as const
@@ -122,11 +122,11 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
       {/* Header: what's being plotted + how */}
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div className="min-w-0">
-          <p className="text-sm font-medium leading-tight">{spec.title}</p>
-          <p className="text-xs text-muted-foreground tabular-nums mt-0.5">{spec.notation(params)}</p>
+          <p className="text-base font-semibold leading-tight">{spec.title}</p>
+          <p className="text-sm text-muted-foreground tabular-nums mt-0.5">{spec.notation(params)}</p>
         </div>
-        <div className="flex items-center gap-1.5 shrink-0">
-          <div className="flex rounded-md border border-border overflow-hidden" role="group" aria-label="Plot view">
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="flex rounded-lg border border-border overflow-hidden" role="group" aria-label="Plot view">
             {(['pdf', 'cdf'] as const).map(mode => (
               <button
                 key={mode}
@@ -134,7 +134,7 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
                 onClick={() => setView(mode)}
                 aria-pressed={view === mode}
                 data-sound="select"
-                className={`px-2.5 py-1 text-xs font-medium transition-colors ${
+                className={`h-10 px-4 text-sm font-semibold transition-colors ${
                   view === mode ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-accent'
                 }`}
               >
@@ -149,13 +149,47 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
               setSamples([])
               setParams(defaultParams(spec))
             }}
-            className="p-1.5 rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            className="h-10 w-10 inline-flex items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
             aria-label="Reset parameters"
             title="Reset parameters"
           >
-            <RotateCcw className="h-4 w-4" aria-hidden />
+            <RotateCcw className="h-5 w-5" aria-hidden />
           </button>
         </div>
+      </div>
+
+      {/* The four headline moments, above the plot they describe */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <Stat
+          symbol="μ"
+          label="Mean"
+          value={formatKpi(moments.mean)}
+          sample={hasSamples ? formatKpi(sample.mean) : null}
+          sampleSymbol="x̄"
+        />
+        <Stat
+          symbol="σ²"
+          label="Variance"
+          value={formatKpi(moments.variance)}
+          sample={hasSamples ? formatKpi(sample.variance) : null}
+          sampleSymbol="s²"
+        />
+        <Stat
+          symbol="σ"
+          label="Std. dev."
+          value={formatKpi(moments.sd)}
+          sample={hasSamples ? formatKpi(sample.sd) : null}
+          sampleSymbol="s"
+        />
+        {moments.skewness !== null ? (
+          <Stat symbol="γ₁" label="Skewness" value={formatKpi(moments.skewness)} />
+        ) : (
+          <Stat
+            symbol="Mo"
+            label="Mode"
+            value={moments.mode !== null ? formatStat(moments.mode, { integer: integerValued }) : '—'}
+          />
+        )}
       </div>
 
       <DistributionPlot
@@ -167,18 +201,18 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
       />
 
       {/* Parameter sliders */}
-      <div className="space-y-2.5">
+      <div className="space-y-1">
         {spec.params.map(param => {
           const max = paramMax(param, params)
           const value = params[param.key]
           return (
             <div key={param.key}>
-              <div className="flex items-baseline justify-between gap-2 mb-1">
-                <label htmlFor={`${spec.key}-${param.key}`} className="text-xs">
-                  <span className="font-medium">{param.symbol}</span>
+              <div className="flex items-baseline justify-between gap-2">
+                <label htmlFor={`${spec.key}-${param.key}`} className="text-sm">
+                  <span className="font-semibold">{param.symbol}</span>
                   <span className="text-muted-foreground"> — {param.label}</span>
                 </label>
-                <span className="text-xs font-medium tabular-nums">
+                <span className="text-base font-semibold tabular-nums">
                   {param.integer ? value : formatStat(value)}
                 </span>
               </div>
@@ -190,46 +224,16 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
                 step={param.step}
                 value={value}
                 onChange={e => setParam(param.key, Number(e.target.value))}
-                className="w-full accent-primary"
+                className="sim-slider"
               />
             </div>
           )
         })}
       </div>
 
-      {/* Theory vs. simulation */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-0.5">
-        <Stat
-          label="Mean"
-          value={formatStat(moments.mean)}
-          sample={hasSamples ? formatStat(sample.mean) : null}
-        />
-        <Stat
-          label="Variance"
-          value={formatStat(moments.variance)}
-          sample={hasSamples ? formatStat(sample.variance) : null}
-        />
-        <Stat
-          label="Std. dev."
-          value={formatStat(moments.sd)}
-          sample={hasSamples ? formatStat(sample.sd) : null}
-        />
-        <Stat
-          label={moments.skewness !== null ? 'Skewness' : 'Mode'}
-          value={
-            moments.skewness !== null
-              ? formatStat(moments.skewness)
-              : moments.mode !== null
-              ? formatStat(moments.mode, { integer: integerValued })
-              : '—'
-          }
-          sample={null}
-        />
-      </div>
-
       {/* Simulation controls */}
-      <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-border">
-        <div className="flex rounded-md border border-border overflow-hidden mt-2" role="group" aria-label="Draws per simulation">
+      <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-border">
+        <div className="flex rounded-lg border border-border overflow-hidden" role="group" aria-label="Draws per simulation">
           {SAMPLE_SIZES.map(n => (
             <button
               key={n}
@@ -237,7 +241,7 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
               onClick={() => setSampleSize(n)}
               aria-pressed={sampleSize === n}
               data-sound="select"
-              className={`px-2 py-1 text-xs font-medium tabular-nums transition-colors ${
+              className={`h-10 px-3 text-sm font-semibold tabular-nums transition-colors ${
                 sampleSize === n ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-accent'
               }`}
             >
@@ -249,7 +253,7 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
           type="button"
           onClick={() => runSimulation(false)}
           disabled={drawing}
-          className="mt-2 h-8 px-3 rounded-md bg-primary text-primary-foreground text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+          className="h-10 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
         >
           {drawing ? 'Simulating…' : 'Simulate'}
         </button>
@@ -257,7 +261,7 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
           <button
             type="button"
             onClick={() => runSimulation(true)}
-            className="mt-2 h-8 px-3 rounded-md border border-border text-xs font-medium hover:bg-accent transition-colors"
+            className="h-10 px-4 rounded-lg border border-border text-sm font-semibold hover:bg-accent transition-colors"
           >
             Draw more
           </button>
@@ -269,30 +273,46 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
               stopDrawing()
               setSamples([])
             }}
-            className="mt-2 h-8 px-2 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            className="h-10 px-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
           >
             Clear
           </button>
         )}
-        <p className="mt-2 text-xs text-muted-foreground ml-auto tabular-nums">
+        <p className="text-sm text-muted-foreground ml-auto tabular-nums">
           {hasSamples
             ? `${sample.n.toLocaleString()} draws simulated`
             : 'Draw random values from this distribution'}
         </p>
       </div>
 
-      {caption && <p className="text-xs text-muted-foreground text-center">{caption}</p>}
+      {caption && <p className="text-sm text-muted-foreground text-center">{caption}</p>}
     </div>
   )
 }
 
-function Stat({ label, value, sample }: { label: string; value: string; sample: string | null }) {
+function Stat({
+  symbol,
+  label,
+  value,
+  sample = null,
+  sampleSymbol,
+}: {
+  symbol: string
+  label: string
+  value: string
+  sample?: string | null
+  sampleSymbol?: string
+}) {
   return (
-    <div className="rounded-md bg-muted/50 px-2 py-1.5">
-      <p className="text-[11px] text-muted-foreground leading-none">{label}</p>
-      <p className="text-sm font-medium tabular-nums mt-1 leading-none">{value}</p>
+    <div className="rounded-lg bg-muted/50 px-3 py-2">
+      <p className="text-sm text-muted-foreground leading-none">
+        <span className="font-semibold text-foreground">{symbol}</span> {label}
+      </p>
+      <p className="text-xl font-semibold tabular-nums mt-1.5 leading-none">{value}</p>
       {sample !== null && (
-        <p className="text-[11px] text-muted-foreground tabular-nums mt-1 leading-none">sim {sample}</p>
+        <p className="text-sm text-muted-foreground tabular-nums mt-1.5 leading-none">
+          {sampleSymbol ?? 'sim'} {sample}
+        </p>
       )}
     </div>
   )

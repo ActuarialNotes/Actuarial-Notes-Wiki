@@ -175,6 +175,19 @@ function parseExamPercentage(title: string): number | null {
   return null
 }
 
+// Is this child the blockquote's first paragraph?
+//
+// react-markdown hands us the intrinsic `<p>` element normally, but when the
+// consumer overrides `components.p` (WikiArticle does, to unwrap distribution
+// simulators) the element's type is that component instead. react-markdown
+// renders custom components with `passNode`, so the original tag is still
+// available on the `node` prop — check both spellings.
+function isParagraph(child: ReactElement): boolean {
+  if (child.type === 'p') return true
+  const node = (child.props as { node?: { tagName?: string } }).node
+  return node?.tagName === 'p'
+}
+
 interface MatchResult {
   type: string
   fold: '' | '-' | '+'
@@ -216,7 +229,7 @@ function matchCallout(children: ReactNode): MatchResult | null {
       return null
     }
 
-    if (isValidElement(child) && (child as ReactElement).type === 'p') {
+    if (isValidElement(child) && isParagraph(child as ReactElement)) {
       const pKids = Children.toArray(
         ((child as ReactElement).props as { children?: ReactNode }).children ?? [],
       )

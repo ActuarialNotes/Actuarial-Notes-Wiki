@@ -92,6 +92,13 @@ const GROUP_LABELS: { key: GroupBy; label: string }[] = [
   { key: 'custom',  label: 'Custom' },
 ]
 
+// How long each card's "clear" animation (border ring → green wash → shrink/
+// fade, see .flashcard-clearing/-clear-ring/-clear-wash in index.css) takes.
+// "Clear Completed Flashcards" steps through completed cards one at a time
+// at this cadence, so the next card's sweep starts right as the previous one
+// finishes disappearing.
+const CLEAR_CARD_MS = 700
+
 // The mastery ladder as a single green ramp — grey for New, deepening green for
 // levels 1→3 — matching how the ladder is coloured everywhere else in the app
 // (ConceptDetailModal, TopicProgressSection, the readiness gauge). `fillClass`
@@ -1392,6 +1399,12 @@ function SortableCard({
         }}
         className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
+        {isClearing && (
+          <>
+            <span className="flashcard-clear-ring" aria-hidden="true" />
+            <span className="flashcard-clear-wash" aria-hidden="true" />
+          </>
+        )}
         {/* Header: name + play button — hidden in focus mode */}
         {!focusMode && (
         <div className="flex items-center justify-between gap-1 px-3 py-2">
@@ -1593,6 +1606,12 @@ function SortableCard({
       }}
       className={`${baseClass} ${colorClass} cursor-pointer active:cursor-grabbing hover:shadow-md select-none`}
     >
+      {isClearing && (
+        <>
+          <span className="flashcard-clear-ring" aria-hidden="true" />
+          <span className="flashcard-clear-wash" aria-hidden="true" />
+        </>
+      )}
       {/* Top bar: deck toggle + actions menu — hidden in focus mode */}
       {!focusMode && (
       <div className="flex items-center justify-between gap-1.5 px-2 pt-2">
@@ -2039,6 +2058,24 @@ function GalleryPanel({
       }
     }
   }, [tab]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Scroll to whichever card just started its "Clear Completed Flashcards"
+  // sweep (the most recently added name — Sets preserve insertion order) so
+  // each card is brought into view in turn as the one-by-one animation steps
+  // through the deck.
+  const currentClearingName = clearingNames && clearingNames.size > 0
+    ? [...clearingNames].at(-1)
+    : undefined
+  useEffect(() => {
+    if (tab !== 'deck' || !currentClearingName || !scrollContainerRef.current) return
+    const all = scrollContainerRef.current.querySelectorAll<HTMLElement>('[data-card-name]')
+    for (const el of all) {
+      if (el.dataset.cardName?.toLowerCase() === currentClearingName) {
+        el.scrollIntoView({ block: 'center', behavior: 'smooth' })
+        break
+      }
+    }
+  }, [currentClearingName, tab])
 
   function handleCardSelect(card: FlashCard) {
     const idx = orderedCards.findIndex(c => c.name === card.name)
@@ -2679,7 +2716,7 @@ export default function Flashcards() {
   // Names (lowercased) of completed cards currently animating out of the deck
   // before "Clear Completed Flashcards" sweeps them into a dated pack.
   const [clearingNames, setClearingNames] = useState<Set<string>>(() => new Set())
-  const clearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const clearTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
   const orderedCardsRef = useRef<FlashCard[]>([])
   const prevPopupNameRef = useRef<string | null>(null)
   const studyAreaRef = useRef<FlashcardStudyAreaHandle>(null)
@@ -2767,7 +2804,7 @@ export default function Flashcards() {
   }, [popupOpen])
 
   // Cancel any in-flight "Clear Completed" animation timer on unmount.
-  useEffect(() => () => { if (clearTimerRef.current) clearTimeout(clearTimerRef.current) }, [])
+  useEffect(() => () => { clearTimersRef.current.forEach(clearTimeout) }, [])
 
   // Flash and navigate the gallery strip when popup navigates to a new concept
   useEffect(() => {
@@ -3069,19 +3106,32 @@ export default function Flashcards() {
   // pack. Shared by the end-of-session summary dialog and the in-deck toolbar
   // button so the clear always reads as a deliberate, visible action.
   function handleClearCompleted() {
-    const names = cards.filter(c => c.completedAt).map(c => c.name.toLowerCase())
+    // Visual order (not insertion order) so the sweep reads top-to-bottom the
+    // same way the deck is laid out on screen.
+    const names = orderedCards.filter(c => c.completedAt).map(c => c.name.toLowerCase())
     if (names.length === 0) return
     setShowSessionSummary(false)
     setGalleryTab('deck')
     setGalleryExpanded(true)
-    setClearingNames(new Set(names))
-    if (clearTimerRef.current) clearTimeout(clearTimerRef.current)
-    clearTimerRef.current = setTimeout(() => {
+    clearTimersRef.current.forEach(clearTimeout)
+    clearTimersRef.current = []
+    // Reveal one card's clear animation at a time. Each name is added (never
+    // removed) so a card that's finished its own animation stays hidden —
+    // `.flashcard-clearing` etc. are all fill-mode `both` — while the rest of
+    // the deck sweeps in turn behind it.
+    names.forEach((name, i) => {
+      const timer = setTimeout(() => {
+        setClearingNames(prev => new Set(prev).add(name))
+      }, i * CLEAR_CARD_MS)
+      clearTimersRef.current.push(timer)
+    })
+    const finalTimer = setTimeout(() => {
       clearCompleted()
       setClearingNames(new Set())
       setAgainCounts({})
       setActiveIndex(0)
-    }, 600)
+    }, names.length * CLEAR_CARD_MS)
+    clearTimersRef.current.push(finalTimer)
   }
 
   const studyFocus = focusMode && !galleryExpanded

@@ -116,14 +116,19 @@ function clearStaggerFor(count: number): number {
   return Math.max(90, Math.min(CLEAR_STAGGER_MS, Math.round(CLEAR_SWEEP_BUDGET_MS / count)))
 }
 
-// The three layers of a card's clear animation — the line racing round the
-// border, the green flooding out from the middle, and the checkmark stroked
-// over the top. Identical on both faces of the card; the shared timeline lives
-// in index.css.
+// The layers of a card's clear animation — the line racing round the border,
+// the disc of green flooding out from the middle, the halo the filled card
+// glows with, and the checkmark stroked over the top. Identical on both faces
+// of the card; the shared timeline lives in index.css. Each is its own element
+// so that every one of them can animate a transform or an opacity and nothing
+// has to repaint mid-sweep.
 const CLEAR_OVERLAY = (
   <>
-    <span className="flashcard-clear-ring" aria-hidden="true" />
-    <span className="flashcard-clear-wash" aria-hidden="true" />
+    <svg className="flashcard-clear-ring" width="100%" height="100%" aria-hidden="true">
+      <rect width="100%" height="100%" rx="11" pathLength="100" />
+    </svg>
+    <span className="flashcard-clear-glow" aria-hidden="true" />
+    <span className="flashcard-clear-wash" aria-hidden="true"><span /></span>
     <svg className="flashcard-clear-check" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M4 12.5 L9.5 18 L20 6.5" />
     </svg>

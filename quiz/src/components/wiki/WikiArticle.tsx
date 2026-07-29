@@ -6,8 +6,10 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import type { Components } from 'react-markdown'
 import { calloutComponents } from '@/components/MarkdownCallout'
+import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
+import { distributionForImage } from '@/lib/distributions'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 
 const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO as string
@@ -207,8 +209,30 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </h1>
       )
     },
+    // A paragraph whose only content is a distribution illustration becomes the
+    // simulator, which is a <div> — unwrap the <p> so it isn't invalid nesting.
+    p({ node, children, ...rest }) {
+      const kids = (node?.children ?? []).filter(
+        child => !(child.type === 'text' && child.value.trim() === ''),
+      )
+      const only = kids.length === 1 ? kids[0] : null
+      if (
+        !hideImages &&
+        only &&
+        only.type === 'element' &&
+        only.tagName === 'img' &&
+        distributionForImage(String(only.properties?.src ?? ''))
+      ) {
+        return <>{children}</>
+      }
+      return <p {...rest}>{children}</p>
+    },
     img({ src, alt }) {
       if (hideImages) return null
+      const distribution = distributionForImage(src)
+      // The vault's distribution plots are static snapshots of four parameter
+      // choices; swap them for the live thing.
+      if (distribution) return <DistributionSimulator spec={distribution} className="my-3" />
       return <img src={src} alt={alt ?? ''} className="max-w-full" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
     },
     a({ href, children, ...rest }) {

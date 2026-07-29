@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
+import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
+import { distributionForImage } from '@/lib/distributions'
 
 interface GalleryImage {
   src: string
@@ -153,6 +155,9 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
   }
 
   const current = images[index]
+  // Distribution illustrations open as the live simulator instead of a picture:
+  // there's nothing to zoom or pan, and its controls must not close the modal.
+  const distribution = distributionForImage(current.src)
 
   return (
     <div
@@ -231,30 +236,43 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
           </button>
         )}
 
-        {/* Image container — touch-action: none lets pointer events handle all gestures */}
-        <div
-          ref={containerRef}
-          className="h-full w-full flex items-center justify-center overflow-hidden select-none"
-          style={{ cursor, touchAction: 'none' }}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-        >
-          <img
-            key={current.src}
-            src={current.src}
-            alt={current.alt}
-            className="max-h-full max-w-full object-contain"
-            style={{
-              transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-              transformOrigin: 'center center',
-              willChange: 'transform',
-              transition: isDragging ? 'none' : 'transform 0.15s ease-out',
-            }}
-            draggable={false}
-            onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
-          />
-        </div>
+        {distribution ? (
+          <div className="h-full w-full overflow-y-auto px-3 py-2 sm:px-10">
+            <div className="mx-auto w-full max-w-2xl">
+              <DistributionSimulator
+                key={distribution.key}
+                spec={distribution}
+                caption={current.caption}
+                size="full"
+              />
+            </div>
+          </div>
+        ) : (
+          /* Image container — touch-action: none lets pointer events handle all gestures */
+          <div
+            ref={containerRef}
+            className="h-full w-full flex items-center justify-center overflow-hidden select-none"
+            style={{ cursor, touchAction: 'none' }}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+          >
+            <img
+              key={current.src}
+              src={current.src}
+              alt={current.alt}
+              className="max-h-full max-w-full object-contain"
+              style={{
+                transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
+                transformOrigin: 'center center',
+                willChange: 'transform',
+                transition: isDragging ? 'none' : 'transform 0.15s ease-out',
+              }}
+              draggable={false}
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+            />
+          </div>
+        )}
 
         {canNext && (
           <button
@@ -269,15 +287,15 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
         )}
       </div>
 
-      {/* Caption — dimmed */}
-      {current.caption && (
+      {/* Caption — dimmed. The simulator renders its own, so skip it there. */}
+      {current.caption && !distribution && (
         <div className="shrink-0 text-center px-8 pt-2 pb-0 opacity-40">
           <span className="text-sm text-white italic">{current.caption}</span>
         </div>
       )}
 
-      {/* Zoom slider */}
-      <div className="shrink-0 flex items-center gap-4 px-6 py-4">
+      {/* Zoom slider — nothing to zoom when the simulator is showing */}
+      <div className={`shrink-0 items-center gap-4 px-6 py-4 ${distribution ? 'hidden' : 'flex'}`}>
         <span className="text-base text-white/50 tabular-nums w-8 shrink-0">1×</span>
         <input
           type="range"

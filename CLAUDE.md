@@ -83,6 +83,10 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
+- `docs/distribution-simulators.md` — the **interactive distribution simulators** that replace the
+  static `Media/*_pdf.svg` / `*_pmf.svg` embeds on the distribution concept pages: parameter
+  sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
+  `lib/distribution*.ts` or adding a distribution.
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
@@ -90,6 +94,10 @@ Other important `lib/` modules:
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness score shown on the Dashboard
+- `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator
+  engine: special functions + seeded samplers, the per-distribution spec catalogue (with the
+  `Media/*.svg` → spec map), and the pure curve/histogram/tick helpers the SVG reads. Rendered by
+  `components/wiki/DistributionSimulator.tsx`. See `docs/distribution-simulators.md`.
 - `streak.ts` / `streakStore.ts` — daily-streak engine (roadmap P1.1). `streak.ts` is the
   pure, tested core (timezone-correct day boundaries + freeze/repair mechanics);
   `streakStore.ts` persists it to the `user_streaks` table (signed-in) or localStorage

@@ -21,6 +21,13 @@ Once you save a target date, the plan records today as the **plan start date**. 
 
 Each concept is resolved to its current mastery state (New, Level 1, Level 2, Level 3, or Forgotten) after applying any time-based decay that may have accumulated since you last practised it. Concepts at Level 3 are **mastered**; everything else is **unmastered**.
 
+A concept linked from more than one learning objective (Exam 7's "Reinsurance" appears under
+both *Data Preparation* and *Reinsurance*, for example) is still one concept: it's scheduled
+once, and the heaviest topic it belongs to owns it so *Key concepts first* prioritises it by
+its biggest stake in the exam. Without that, the concept would get one independent pipeline
+per topic and the two would interleave on the calendar — the plan would say "→ Level 2" on
+one day, "→ Level 1" the next and "→ Level 3" the day after.
+
 If every concept is already at Level 3, the plan enters **review mode** (see below).
 
 ### Step 2 — Sort unmastered concepts by priority

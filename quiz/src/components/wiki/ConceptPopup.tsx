@@ -15,7 +15,6 @@ import { WikiArticle, extractImages, extractMathBlockquotes } from '@/components
 import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ListenView } from '@/components/wiki/ListenView'
-import { MathViewContext } from '@/contexts/MathViewContext'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
@@ -538,56 +537,58 @@ export function ConceptPopup() {
       {/* Body — overflow-y:scroll (not auto) keeps this a scroll container even when
           content is short, so overscroll-contain traps wheel events and the dashboard
           behind never scrolls. Scrollbar is hidden via CSS. */}
-      <MathViewContext.Provider value={{ active: mathView, enter: () => setMathView(true) }}>
-        <div
-          ref={bodyRef}
-          className={`flex-1 min-h-0 w-full overflow-y-scroll overscroll-contain px-4 sm:px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] ${focusMode ? 'max-w-4xl mx-auto' : ''} ${listenView ? 'pt-0' : 'pt-4'}`}
-        >
-          {status === 'loading' && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" /> Loading…
-            </div>
-          )}
-          {status === 'error' && (
-            <div className="text-sm text-muted-foreground">
-              Couldn't load <span className="font-medium">{current.name}</span>.
-            </div>
-          )}
-          {content !== null && (
-            listenView ? (
-              <ListenView markdown={content} />
-            ) : mathView ? (
-              mathBlocks.length > 0 ? (
-                <div className="space-y-4">
-                  {mathBlocks.map((block, i) => (
-                    <WikiArticle key={i} markdown={block} sourcePath={sourcePath} hideImages />
-                  ))}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
-                  <Sigma className="h-8 w-8 opacity-30" />
-                  <span className="text-sm">No equations in this concept.</span>
-                </div>
-              )
+      <div
+        ref={bodyRef}
+        // The body, not each article inside it, is one math-focus scope — in
+        // Math View every equation is its own WikiArticle, and Previous/Next
+        // should still run through all of them. See lib/mathFocus.ts.
+        data-math-scope=""
+        className={`flex-1 min-h-0 w-full overflow-y-scroll overscroll-contain px-4 sm:px-6 pb-4 [&::-webkit-scrollbar]:hidden [scrollbar-width:none] ${focusMode ? 'max-w-4xl mx-auto' : ''} ${listenView ? 'pt-0' : 'pt-4'}`}
+      >
+        {status === 'loading' && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" /> Loading…
+          </div>
+        )}
+        {status === 'error' && (
+          <div className="text-sm text-muted-foreground">
+            Couldn't load <span className="font-medium">{current.name}</span>.
+          </div>
+        )}
+        {content !== null && (
+          listenView ? (
+            <ListenView markdown={content} />
+          ) : mathView ? (
+            mathBlocks.length > 0 ? (
+              <div className="space-y-4">
+                {mathBlocks.map((block, i) => (
+                  <WikiArticle key={i} markdown={block} sourcePath={sourcePath} hideImages />
+                ))}
+              </div>
             ) : (
-              <>
-                {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact />}
-                <WikiArticle
-                  markdown={processedContent ?? content}
-                  sourcePath={sourcePath}
-                  hideImages
-                  onWikiLink={ref => {
-                    // Stay inside the popup: swap the body instead of navigating.
-                    play('page')
-                    jumpTo(ref)
-                    return true
-                  }}
-                />
-              </>
+              <div className="flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground">
+                <Sigma className="h-8 w-8 opacity-30" />
+                <span className="text-sm">No equations in this concept.</span>
+              </div>
             )
-          )}
-        </div>
-      </MathViewContext.Provider>
+          ) : (
+            <>
+              {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact />}
+              <WikiArticle
+                markdown={processedContent ?? content}
+                sourcePath={sourcePath}
+                hideImages
+                onWikiLink={ref => {
+                  // Stay inside the popup: swap the body instead of navigating.
+                  play('page')
+                  jumpTo(ref)
+                  return true
+                }}
+              />
+            </>
+          )
+        )}
+      </div>
 
       {/* Footer nav */}
       <div className="flex items-stretch h-16 shrink-0 bg-background/60">

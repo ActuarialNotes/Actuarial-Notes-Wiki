@@ -708,6 +708,20 @@
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 0.25rem; /* room for the scrollbar on mobile */
+  /* Tapping an equation magnifies it — see components/MathFocus.tsx. Boxed
+     formulas take the same cursor from their [data-math-block] blockquote, so
+     the whole box reads as one target. */
+  cursor: zoom-in;
+}
+
+/* …except where the equation isn't the thing being clicked: inside a control it
+   is that control's label, and the magnified copy is already in focus mode. */
+a .katex-display,
+button .katex-display,
+label .katex-display,
+summary .katex-display,
+[data-math-magnify='none'] .katex-display {
+  cursor: inherit;
 }
 
 /* Themed scrollbars — use CSS variable tokens so they adapt to every colour

@@ -418,7 +418,7 @@ function PackCard({
     { key: 'new',       label: 'New',       count: levels.new,       fillClass: MASTERY_CONFIG.new.fillClass },
     { key: 'locked',    label: 'Locked',    count: levels.locked,    fillClass: LOCKED_FILL_CLASS },
   ]
-  const barSummary = legend.filter(s => s.count > 0).map(s => `${s.label}: ${s.count}`).join(', ')
+  const collectedSummary = `${collected} of ${total} collected`
 
   function handleAdd() {
     for (const name of notAdded) addCard({ kind: 'concept', name })
@@ -432,8 +432,8 @@ function PackCard({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-lg bg-card text-card-foreground shadow-[var(--shadow-card)] ${
-        fullyCollected ? 'collect-pack-complete' : ''
+      className={`relative overflow-hidden rounded-lg text-card-foreground shadow-[var(--shadow-card)] ${
+        fullyCollected ? 'collect-pack-complete' : 'bg-card'
       } ${className}`}
     >
       {/* Header — click to reveal actions */}
@@ -462,27 +462,25 @@ function PackCard({
           )}
         </div>
 
-        {/* Stats + mastery bar */}
-        <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
+        {/* Collection progress — one thick bar, no level breakdown */}
+        <div className="mt-2 flex items-center justify-between gap-2">
           <span className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
             <span className="font-medium text-foreground">{loading ? '…' : collected}</span> / {total} collected
           </span>
-          <span className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums whitespace-nowrap">
-            {loading ? '…' : inDeck} in deck
-            <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`} />
-          </span>
+          <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`} />
         </div>
         <div
-          className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-muted"
+          className="mt-2 h-3 rounded-full overflow-hidden bg-muted"
           role="img"
-          aria-label={loading || total === 0 ? undefined : `Levels — ${barSummary}`}
-          title={loading || total === 0 ? undefined : barSummary}
+          aria-label={loading || total === 0 ? undefined : collectedSummary}
+          title={loading || total === 0 ? undefined : collectedSummary}
         >
-          {!loading && total > 0 && legend.map(seg => (
-            seg.count > 0 && (
-              <div key={seg.key} className={`h-full ${seg.fillClass}`} style={{ width: pct(seg.count) }} />
-            )
-          ))}
+          {!loading && total > 0 && collected > 0 && (
+            <div
+              className="h-full rounded-full bg-green-600 dark:bg-green-500 transition-[width] duration-300"
+              style={{ width: pct(collected) }}
+            />
+          )}
         </div>
       </div>
 
@@ -497,7 +495,7 @@ function PackCard({
           )}
           {!loading && total > 0 && (
             <>
-              {/* Level legend — mirrors the bar's segments, same order */}
+              {/* Level breakdown — detail lives here, off the collapsed card */}
               <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
                 {legend.map(seg => seg.count > 0 && (
                   <span key={seg.key} className={`inline-flex items-center gap-1.5 ${seg.textClass ?? ''}`}>
@@ -505,6 +503,9 @@ function PackCard({
                     {seg.label}: <span className="tabular-nums">{seg.count}</span>
                   </span>
                 ))}
+                <span className="inline-flex items-center gap-1.5">
+                  In deck: <span className="tabular-nums">{inDeck}</span>
+                </span>
               </div>
               <div className="flex flex-col gap-2">
                 {allAdded ? (

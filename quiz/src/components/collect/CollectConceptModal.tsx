@@ -403,7 +403,7 @@ export function CollectConceptModal() {
                     progress to show. */}
                 {hasProgressHistory && (
                   <div className="w-full pt-4">
-                    <LearningProgressPanelView history={history} />
+                    <LearningProgressPanelView history={history} collapsible />
                   </div>
                 )}
               </div>

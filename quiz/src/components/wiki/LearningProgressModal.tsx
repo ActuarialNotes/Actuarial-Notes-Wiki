@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Lock, Loader2, X } from 'lucide-react'
+import { ChevronDown, Lock, Loader2, X } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptLearningHistory, type ConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
@@ -47,6 +47,12 @@ interface PanelProps {
   showLevelRow?: boolean
   /** Hide the "Hover the graph…" hint below the graph. */
   showHint?: boolean
+  /**
+   * Put the legend + graph behind a "Show exam history" toggle, collapsed by
+   * default. Used where the graph is a secondary detail rather than the point of
+   * the view (the collect modal, where the card and quiz come first).
+   */
+  collapsible?: boolean
   /** Bubbles up the level currently on display (current or hovered), or null while unavailable. */
   onLevelChange?: (level: MasteryState | null) => void
 }
@@ -65,11 +71,14 @@ export function LearningProgressPanelView({
   history,
   showLevelRow = true,
   showHint = true,
+  collapsible = false,
   onLevelChange,
 }: PanelProps & { history: ConceptLearningHistory }) {
   const { isPremium, isBetaTester, loading: subLoading } = useSubscription()
   const { levelEvents, attemptDots, currentLevel, loading, error } = history
   const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
+  const [graphOpen, setGraphOpen] = useState(false)
+  const graphVisible = !collapsible || graphOpen
 
   const isAccessible = isPremium || isBetaTester
   const isLoading = loading || subLoading
@@ -132,31 +141,57 @@ export function LearningProgressPanelView({
             </div>
           )}
 
-          {/* Legend */}
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3 rounded-full bg-green-500 shrink-0" />
-              Correct attempt
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3 rounded-full bg-red-500 shrink-0" />
-              Incorrect attempt
-            </span>
-          </div>
+          {/* Disclosure toggle — only rendered when the graph starts collapsed */}
+          {collapsible && (
+            <div className="flex justify-center">
+              <button
+                type="button"
+                onClick={() => {
+                  // Drop any hovered level so the pill falls back to "current"
+                  // while the graph is out of view.
+                  if (graphOpen) setHoveredLevel(null)
+                  setGraphOpen(open => !open)
+                }}
+                aria-expanded={graphOpen}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border bg-transparent text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+              >
+                {graphOpen ? 'Hide exam history' : 'Show exam history'}
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 transition-transform duration-200 ${graphOpen ? '' : '-rotate-90'}`}
+                />
+              </button>
+            </div>
+          )}
 
-          {/* Graph */}
-          <div className="rounded-lg bg-muted/30 p-2">
-            <ProgressGraph
-              levelEvents={levelEvents}
-              attemptDots={attemptDots}
-              onHoverLevel={setHoveredLevel}
-            />
-          </div>
+          {graphVisible && (
+            <>
+              {/* Legend */}
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <span className="flex items-center gap-2">
+                  <span className="inline-block h-3 w-3 rounded-full bg-green-500 shrink-0" />
+                  Correct attempt
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="inline-block h-3 w-3 rounded-full bg-red-500 shrink-0" />
+                  Incorrect attempt
+                </span>
+              </div>
 
-          {showHint && (
-            <p className="text-xs text-muted-foreground text-center">
-              Hover the graph to explore your level at any point in time
-            </p>
+              {/* Graph */}
+              <div className="rounded-lg bg-muted/30 p-2">
+                <ProgressGraph
+                  levelEvents={levelEvents}
+                  attemptDots={attemptDots}
+                  onHoverLevel={setHoveredLevel}
+                />
+              </div>
+
+              {showHint && (
+                <p className="text-xs text-muted-foreground text-center">
+                  Hover the graph to explore your level at any point in time
+                </p>
+              )}
+            </>
           )}
         </>
       )}

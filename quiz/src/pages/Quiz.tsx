@@ -103,7 +103,7 @@ export default function Quiz() {
     }
   }, [loading, questions, status, mode, startQuiz])
 
-  const { enabled: soundEnabled, toggle: toggleSound, play: playSound } = useSoundEffects()
+  const { enabled: soundEnabled, toggle: toggleSound, play: playSound, resetCombo: resetSoundCombo } = useSoundEffects()
 
 
   const [showQuitDialog, setShowQuitDialog] = useState(false)
@@ -283,9 +283,13 @@ export default function Quiz() {
     if (!currentQuestion) return
     const correct = isAnswerCorrect(currentQuestion, answer)
     // Right answers get the arpeggio; wrong ones stay silent on purpose — the
-    // reveal already says it, and a buzzer is punishment, not feedback.
+    // reveal already says it, and a buzzer is punishment, not feedback. What a
+    // miss does instead is end the run: the arpeggio climbs a step for each
+    // right answer in a row, and this drops it back to where it started.
     if (correct && !isChangingAnswer) {
       playSound('correct')
+    } else if (!correct) {
+      resetSoundCombo('correct')
     }
     answerQuestion(currentQuestion.id, answer)
     setIsChangingAnswer(false)

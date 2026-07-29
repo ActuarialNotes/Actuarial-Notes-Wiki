@@ -2,7 +2,7 @@
 // active exam — mirrors the per-exam "Today's Quiz" auto-sizing on the Quiz tab
 // (see Landing.tsx's todaysPlanFullCount), summed for the Quiz nav badge.
 
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress, EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -12,19 +12,29 @@ import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
 import { minQuestionsToCoverConcepts } from '@/lib/studyPlan'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { readTodayLevelUps, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { Question } from '@/lib/parser'
 
+// Fewest questions needed to finish today's plan for one exam — drops concepts
+// already levelled up today (doneConceptSlugs) so the count matches what the
+// next launched quiz will actually contain, same as Landing.tsx's
+// buildTodaysPlanSelection. Falls back to the full plan when everything's done
+// (re-launch keeps the plan's questions available for extra practice).
 export function questionsNeededForPlan(
   plan: StudyPlan | null,
   topic: string,
   allQuestions: Question[],
+  doneConceptSlugs: Set<string> = new Set(),
 ): number {
   if (!plan) return 0
   const displayConcepts = plan.status === 'review_mode' ? (plan.reviewConcepts ?? []) : plan.todaysConcepts
   if (displayConcepts.length === 0) return 0
 
-  const conceptSet = new Set(displayConcepts.map(c => c.toLowerCase()))
+  const remaining = displayConcepts.filter(c => !doneConceptSlugs.has(c.toLowerCase()))
+  const concepts = remaining.length > 0 ? remaining : displayConcepts
+
+  const conceptSet = new Set(concepts.map(c => c.toLowerCase()))
   const todayQs = allQuestions.filter(q => {
     if (q.exam !== topic) return false
     return q.wiki_link.some(link => {
@@ -34,7 +44,7 @@ export function questionsNeededForPlan(
     })
   })
   if (todayQs.length === 0) return 0
-  return minQuestionsToCoverConcepts(todayQs, displayConcepts)
+  return minQuestionsToCoverConcepts(todayQs, concepts)
 }
 
 /**
@@ -49,6 +59,24 @@ export function useTodayQuizCount(): number {
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
   const { questions: allQuestions } = useAllQuestions()
+
+  // Concepts levelled up today, so the total drops questions for exams whose
+  // plan is already finished — same source Landing.tsx uses when it actually
+  // sizes the launched quiz.
+  const [todayLevelUps, setTodayLevelUps] = useState(() => readTodayLevelUps())
+  useEffect(() => {
+    const refresh = () => setTodayLevelUps(readTodayLevelUps())
+    window.addEventListener(LEVELUP_EVENT, refresh)
+    window.addEventListener('storage', refresh)
+    return () => {
+      window.removeEventListener(LEVELUP_EVENT, refresh)
+      window.removeEventListener('storage', refresh)
+    }
+  }, [])
+  const doneConceptSlugs = useMemo(
+    () => new Set(todayLevelUps.map(l => l.conceptSlug.toLowerCase())),
+    [todayLevelUps],
+  )
 
   const syllabusP    = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'P') ?? null
   const syllabusFM   = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'FM') ?? null
@@ -70,8 +98,8 @@ export function useTodayQuizCount(): number {
     let total = 0
     for (const [examId, topic] of Object.entries(EXAM_ID_TO_TOPIC)) {
       if (examProgress[examId] !== 'in_progress') continue
-      total += questionsNeededForPlan(plansByExamId[examId], topic, allQuestions)
+      total += questionsNeededForPlan(plansByExamId[examId], topic, allQuestions, doneConceptSlugs)
     }
     return total
-  }, [user, isPremium, examProgress, allQuestions, planP, planFM, planMAS, planCAS5])
+  }, [user, isPremium, examProgress, allQuestions, planP, planFM, planMAS, planCAS5, doneConceptSlugs])
 }

@@ -28,9 +28,12 @@ const LEVEL_LABELS: Record<MasteryState, string> = {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function LevelPill({ level }: { level: MasteryState }) {
+// `sm` sits inline with a small modal title (the collect modal's header);
+// `md` is the standalone-modal header / level-row pill.
+export function LevelPill({ level, size = 'md' }: { level: MasteryState; size?: 'sm' | 'md' }) {
+  const sizing = size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-5 py-2 text-base'
   return (
-    <span className={`inline-flex items-center px-5 py-2 rounded-full text-base font-bold tracking-wide ${LEVEL_COLORS[level]}`}>
+    <span className={`inline-flex items-center rounded-full font-bold tracking-wide ${sizing} ${LEVEL_COLORS[level]}`}>
       {LEVEL_LABELS[level]}
     </span>
   )

@@ -15,9 +15,10 @@ import { stripFrontmatter } from '@/components/wiki/WikiArticle'
 import { cleanWikiLinks } from '@/lib/wikiParser'
 import { MarkdownText } from '@/components/MarkdownText'
 import { CollectCard3D } from '@/components/collect/CollectCard3D'
-import { LearningProgressPanelView } from '@/components/wiki/LearningProgressModal'
+import { LearningProgressPanelView, LevelPill } from '@/components/wiki/LearningProgressModal'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { COMPREHENSION_CHECKS, type ComprehensionCheck } from '@/data/comprehensionChecks'
+import type { MasteryState } from '@/lib/mastery'
 import { trackConceptCollected } from '@/lib/analytics'
 
 type Phase = 'question' | 'spinning' | 'flash' | 'done'
@@ -150,6 +151,9 @@ export function CollectConceptModal() {
   const [wrong, setWrong] = useState<string | null>(null)
   const [showQuestions, setShowQuestions] = useState(false)
   const [questionCount, setQuestionCount] = useState<number | null>(null)
+  // Level shown beside the modal title. Bubbled up by the progress panel (which
+  // no longer draws its own "Current level" row) so it tracks the graph hover too.
+  const [headerLevel, setHeaderLevel] = useState<MasteryState | null>(null)
   const timers = useRef<number[]>([])
 
   const after = useCallback((ms: number, fn: () => void) => {
@@ -167,6 +171,7 @@ export function CollectConceptModal() {
     setDef(null)
     setDefError(false)
     setShowQuestions(false)
+    setHeaderLevel(null)
     if (!ref) return
     // The locked comprehension check gets its own low drone under the paper
     // slide `open` already plays — a card that's already been collected has
@@ -356,6 +361,7 @@ export function CollectConceptModal() {
                 <span className="font-semibold text-sm truncate">
                   {alreadyCollected ? 'Collected' : 'Collect'}
                 </span>
+                {headerLevel && <LevelPill level={headerLevel} size="sm" />}
               </div>
               <button
                 type="button"
@@ -400,10 +406,17 @@ export function CollectConceptModal() {
                     a level change or at least one recorded attempt. A freshly
                     collected concept with no activity has nothing to graph, so we
                     skip the panel (and its premium upsell) until there's real
-                    progress to show. */}
+                    progress to show. The level itself is drawn beside the modal
+                    title, so the panel's own level row stays off; that puts the
+                    "Show exam history" toggle directly under Start Quiz. */}
                 {hasProgressHistory && (
-                  <div className="w-full pt-4">
-                    <LearningProgressPanelView history={history} collapsible />
+                  <div className="w-full">
+                    <LearningProgressPanelView
+                      history={history}
+                      collapsible
+                      showLevelRow={false}
+                      onLevelChange={setHeaderLevel}
+                    />
                   </div>
                 )}
               </div>

@@ -15,6 +15,8 @@ import {
   DEFAULT_VOLUME,
   SOUND_PATHS,
   SOUND_RECIPES,
+  comboMultiplier,
+  nextComboIndex,
   recipeDuration,
   type NoiseSpec,
   type SoundEvent,
@@ -96,7 +98,11 @@ export function setSoundVolume(volume: number) {
 let ctx: AudioContext | null = null
 let master: GainNode | null = null
 let noiseBuffer: AudioBuffer | null = null
+let reverb: ConvolverNode | null = null
 let unavailable = false
+
+/** Length of the shared reverb tail, in seconds. */
+const REVERB_SECONDS = 1.8
 
 type AudioContextCtor = typeof AudioContext
 
@@ -147,22 +153,63 @@ function getNoiseBuffer(audio: AudioContext): AudioBuffer {
   return noiseBuffer
 }
 
+/**
+ * The room the reward cues ring in.
+ *
+ * A convolver fed a synthesized impulse response: decaying noise, one-pole
+ * lowpassed so the tail is warm rather than hissy, generated independently per
+ * channel so it opens up in stereo. Cheap (one buffer, built once, shared by
+ * every cue) and it does more for how satisfying a chime feels than any amount
+ * of fiddling with the notes — dry synthesis always sounds like a phone UI.
+ */
+function getReverb(audio: AudioContext, dest: AudioNode): ConvolverNode | null {
+  if (reverb) return reverb
+  try {
+    const length = Math.floor(audio.sampleRate * REVERB_SECONDS)
+    const ir = audio.createBuffer(2, length, audio.sampleRate)
+    for (let channel = 0; channel < ir.numberOfChannels; channel++) {
+      const data = ir.getChannelData(channel)
+      let lowpassed = 0
+      for (let i = 0; i < length; i++) {
+        const t = i / length
+        lowpassed += (Math.random() * 2 - 1 - lowpassed) * 0.3
+        // Ramp the first few ms in, so the tail reads as early reflections
+        // rather than a burst of noise landing on top of the strike.
+        const onset = Math.min(1, t / 0.006)
+        data[i] = lowpassed * onset * Math.pow(1 - t, 3.2)
+      }
+    }
+    reverb = audio.createConvolver()
+    reverb.buffer = ir
+    reverb.connect(dest)
+  } catch {
+    return null
+  }
+  return reverb
+}
+
 // exponentialRampToValueAtTime cannot reach or start from zero.
 const SILENT = 0.0001
 
-function scheduleTone(audio: AudioContext, dest: AudioNode, spec: ToneSpec, t0: number) {
+function scheduleTone(audio: AudioContext, dest: AudioNode, spec: ToneSpec, t0: number, pitch = 1) {
   const start = t0 + spec.at
   const osc = audio.createOscillator()
   const gain = audio.createGain()
   osc.type = spec.type ?? 'sine'
-  osc.frequency.setValueAtTime(spec.freq, start)
+  osc.frequency.setValueAtTime(spec.freq * pitch, start)
   if (spec.glide !== undefined) {
-    osc.frequency.exponentialRampToValueAtTime(Math.max(SILENT, spec.glide), start + spec.dur)
+    osc.frequency.exponentialRampToValueAtTime(Math.max(SILENT, spec.glide * pitch), start + spec.dur)
   }
   const peak = Math.max(SILENT, spec.gain ?? 1)
   const attack = Math.min(spec.attack ?? 0.012, spec.dur * 0.5)
+  // `hold` keeps the note at full level before the decay begins — the
+  // difference between a fanfare that arrives somewhere and one that starts
+  // falling away the instant it gets there. It shares `dur` with the decay
+  // rather than extending it, and always leaves room for the decay itself.
+  const hold = Math.min(spec.hold ?? 0, Math.max(0, spec.dur - attack) * 0.6)
   gain.gain.setValueAtTime(SILENT, start)
   gain.gain.exponentialRampToValueAtTime(peak, start + attack)
+  if (hold > 0) gain.gain.setValueAtTime(peak, start + attack + hold)
   gain.gain.exponentialRampToValueAtTime(SILENT, start + spec.dur)
   osc.connect(gain)
   gain.connect(dest)
@@ -211,6 +258,39 @@ function throttled(event: SoundEvent, recipe: SoundRecipe): boolean {
   return false
 }
 
+// ---------------------------------------------------------------------------
+// Combo
+// ---------------------------------------------------------------------------
+
+/** How far up its climb each combo cue currently sits, and when it last played. */
+const comboState = new Map<SoundEvent, { index: number; at: number }>()
+
+/**
+ * Advance a cue's combo and return the pitch multiplier for this play. Cues
+ * without a `combo` always come back at 1.
+ */
+function advanceCombo(event: SoundEvent, recipe: SoundRecipe): number {
+  if (!recipe.combo) return 1
+  const now = Date.now()
+  const previous = comboState.get(event)
+  const index = previous
+    ? nextComboIndex(previous.index, now - previous.at, recipe.combo)
+    : 0
+  comboState.set(event, { index, at: now })
+  return comboMultiplier(recipe.combo, index)
+}
+
+/**
+ * Drop a cue back to the root of its climb.
+ *
+ * Called when the run it was tracking ends — a wrong answer, in practice.
+ * Mistakes stay silent, so this *is* the feedback: the next right answer comes
+ * back at the pitch it started from, and the climb has to be earned again.
+ */
+export function resetSoundCombo(event: SoundEvent) {
+  comboState.delete(event)
+}
+
 /**
  * Play a cue. Safe to call from anywhere — render, a timer, an event handler —
  * and safe to call when sound is off, unsupported or throttled: it just
@@ -235,6 +315,7 @@ export function playSound(event: SoundEvent) {
   const audio = getCtx()
   if (!audio || !master) return
   try {
+    const pitch = advanceCombo(event, recipe)
     const t0 = audio.currentTime + 0.001
     const bus = audio.createGain()
     bus.gain.value = recipe.gain
@@ -249,12 +330,28 @@ export function playSound(event: SoundEvent) {
     }
     tail.connect(master)
 
-    for (const tone of recipe.tones ?? []) scheduleTone(audio, bus, tone, t0)
+    // Post-filter send, so the room hears the same cue the listener does.
+    let send: GainNode | null = null
+    if (recipe.space) {
+      const room = getReverb(audio, master)
+      if (room) {
+        send = audio.createGain()
+        send.gain.value = recipe.space
+        tail.connect(send)
+        send.connect(room)
+      }
+    }
+
+    for (const tone of recipe.tones ?? []) scheduleTone(audio, bus, tone, t0, pitch)
     for (const noise of recipe.noise ?? []) scheduleNoise(audio, bus, noise, t0)
 
-    // Drop the per-cue bus once it has finished ringing so long sessions don't
-    // accumulate thousands of orphaned nodes.
-    const ms = (recipeDuration(recipe) + 0.15) * 1000
-    window.setTimeout(() => { try { tail.disconnect() } catch { /* ignore */ } }, ms)
+    // Drop the per-cue nodes once the cue has finished ringing so long sessions
+    // don't accumulate thousands of orphans. A cue with a send waits out the
+    // reverb too, so the tail isn't cut off mid-decay.
+    const ms = (recipeDuration(recipe) + 0.15 + (send ? REVERB_SECONDS : 0)) * 1000
+    window.setTimeout(() => {
+      try { tail.disconnect() } catch { /* ignore */ }
+      try { send?.disconnect() } catch { /* ignore */ }
+    }, ms)
   } catch { /* ignore */ }
 }

@@ -14,11 +14,16 @@
  *     the high end of that same transient and nothing underneath it.
  *   • Panels and cards move on filtered noise, not tones — the "paper" family
  *     (`open` / `close` / `page`).
- *   • Success is melodic: a soft major triad, always ascending, always round
- *     (sine waves under a gentle lowpass — no sawtooth edges anywhere).
+ *   • Success is *struck*, not beeped. Every reward cue is a mallet hitting a
+ *     tuned bar: a short noise transient, a fundamental, and harmonic partials
+ *     that die away faster than the note does. It ascends, it lands on its
+ *     loudest note, it has a low root under it for weight, and it rings in a
+ *     room (`space`). Round throughout — sine and triangle only, no sawtooth
+ *     edges anywhere.
  *   • Mistakes make no sound. There is deliberately no `wrong` cue: getting a
  *     question wrong is already visible on screen, and buzzing at someone who
- *     is studying is punishment, not feedback.
+ *     is studying is punishment, not feedback. A missed question is heard as
+ *     the `correct` streak dropping back to its root, not as a buzzer.
  */
 
 export type SoundEvent =
@@ -79,6 +84,13 @@ export interface ToneSpec {
   gain?: number
   /** Attack time in seconds. Longer = rounder, softer onset. */
   attack?: number
+  /**
+   * Seconds held at full level after the attack, before the decay starts —
+   * carved out of `dur`, not added to it. Zero (the default) gives the natural
+   * decay of a struck bar; a landing note wants a little hold so the fanfare
+   * arrives somewhere instead of immediately falling away.
+   */
+  hold?: number
 }
 
 export interface NoiseSpec {
@@ -97,6 +109,24 @@ export interface NoiseSpec {
   swell?: number
 }
 
+/**
+ * A cue whose pitch climbs while the player keeps succeeding — the coin-combo
+ * mechanic, borrowed from platformers and used here on `correct`.
+ *
+ * Consecutive plays walk up `steps` (semitones from the written pitch) and hold
+ * at the top; a gap longer than `resetMs`, or an explicit `resetSoundCombo`
+ * when the user gets one wrong, drops back to the root. This is the app's
+ * answer to the oldest problem in game audio: a cue that fires forty times an
+ * hour stops registering. It also does the job a buzzer would, without the
+ * punishment — after a miss you *hear* the climb start over.
+ */
+export interface ComboSpec {
+  /** Semitone offsets, walked in order. Must start at 0 and ascend. */
+  steps: number[]
+  /** A gap this long (ms) between plays starts the climb over. */
+  resetMs: number
+}
+
 export interface SoundRecipe {
   /** Overall level of the cue relative to the master volume (0–1). */
   gain: number
@@ -106,14 +136,43 @@ export interface SoundRecipe {
   lowpass?: number
   /** Minimum gap between two plays of this cue, in ms. */
   throttleMs?: number
+  /**
+   * How much of the cue is sent to the shared reverb (0–1). Depth: it's the
+   * difference between a chime happening *at* you and one happening in a room
+   * you're standing in. Reward cues use it; interface and paper cues stay dry,
+   * because a tail on something you press forty times an hour turns into mud.
+   */
+  space?: number
+  /** Optional pitch climb across consecutive plays. */
+  combo?: ComboSpec
+}
+
+/**
+ * Where a cue's pitch sits after `plays` consecutive plays: a frequency
+ * multiplier applied to every tone in the recipe. Pure so the climb can be
+ * tested without an AudioContext; the engine owns the counting.
+ */
+export function comboMultiplier(combo: ComboSpec | undefined, plays: number): number {
+  if (!combo || combo.steps.length === 0) return 1
+  const step = combo.steps[Math.min(Math.max(plays, 0), combo.steps.length - 1)]
+  return Math.pow(2, step / 12)
+}
+
+/**
+ * How far along the climb the next play sits, given the gap since the last one.
+ * Long gap → back to the root; otherwise one step further, capping at the top.
+ */
+export function nextComboIndex(previous: number, elapsedMs: number, combo: ComboSpec): number {
+  if (elapsedMs > combo.resetMs) return 0
+  return Math.min(previous + 1, combo.steps.length - 1)
 }
 
 // Equal-tempered reference pitches (Hz), so the recipes below read musically.
 const E2 = 82.41
 const F2 = 87.31
+const C3 = 130.81
 const G3 = 196.0
 const A3 = 220
-const C4 = 261.63
 const D4 = 293.66
 const E4 = 329.63
 const G4 = 392.0
@@ -129,25 +188,36 @@ const E6 = 1318.51
 const G6 = 1568.0
 
 /**
- * An ascending run of round sine notes — the shape shared by every success
- * cue. `step` is the gap between note onsets; each note rings for `dur`, so
- * the notes overlap into a chord rather than sounding like three separate
- * beeps. That overlap is what makes it read as "melodic" instead of "beepy".
+ * One struck note — the voice every reward cue is built from.
+ *
+ * A pure sine is a beep; what makes a chime read as a *thing that was hit* is
+ * the spectrum changing over the note. So each note is three oscillators: the
+ * fundamental, an octave above it, and a twelfth above that. The partials are
+ * scaled to die in a fraction of the fundamental's time, which is the whole
+ * trick — the note starts as bright metal and settles into a round tone, the
+ * way a glockenspiel bar or a music box tine does. Both partials are exact
+ * harmonics, so stacking three of these into a triad stays consonant instead of
+ * clanging like a real (inharmonic) bell.
  */
-function arpeggio(
-  freqs: number[],
-  opts: { step: number; dur: number; gain?: number; attack?: number; type?: OscillatorType; from?: number },
+function bell(
+  freq: number,
+  opts: { at: number; dur: number; gain?: number; attack?: number; hold?: number; sparkle?: number },
 ): ToneSpec[] {
-  const { step, dur, gain = 1, attack = 0.012, type = 'sine', from = 0 } = opts
-  return freqs.map((freq, i) => ({
-    at: from + i * step,
-    dur,
-    freq,
-    type,
-    attack,
-    // Taper slightly across the run so the top note doesn't stick out.
-    gain: gain * (1 - i * 0.06),
-  }))
+  const { at, dur, gain = 0.6, attack = 0.004, hold, sparkle = 1 } = opts
+  return [
+    { at, dur, freq, type: 'sine', gain, attack, hold },
+    { at, dur: dur * 0.42, freq: freq * 2, type: 'sine', gain: gain * 0.3 * sparkle, attack: attack * 0.6 },
+    { at, dur: dur * 0.2, freq: freq * 3, type: 'triangle', gain: gain * 0.1 * sparkle, attack: 0.001 },
+  ]
+}
+
+/**
+ * The mallet itself: a few milliseconds of bandpassed noise at the moment of
+ * the strike. Inaudible as its own event, but without it the bells fade up out
+ * of nowhere and the cue loses its sense of impact.
+ */
+function mallet(at = 0, gain = 0.3): NoiseSpec {
+  return { at, dur: 0.02, from: 3200, to: 1800, type: 'bandpass', q: 1.4, gain, swell: 0 }
 }
 
 /**
@@ -289,95 +359,152 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
 
   // ---- reward -------------------------------------------------------------
   correct: {
-    // The headline cue: an ascending C-major triad on round sines. Notes ring
-    // for far longer than the 90 ms between them, so all three are still
-    // sounding together at the end — a chord, not a countdown.
-    gain: 0.5,
+    // The headline cue, and the one that fires most: an ascending C-major
+    // triad struck on tuned bars. Each note rings far longer than the 75 ms
+    // between them, so all three are sounding together at the end — a chord,
+    // not a countdown — and the run gets *louder* as it climbs, so it lands on
+    // the fifth instead of trailing off. A low C3 sits underneath for weight
+    // and the whole thing is sent to the reverb, which is most of the
+    // difference between "a reward" and "a notification".
+    //
+    // The combo is the other half: a right answer after a right answer comes
+    // back a tone higher, up a fifth over five in a row. Miss one and the quiz
+    // calls `resetSoundCombo`, so the next one starts again from C.
+    // Quietest of the celebration cues on purpose: it fires forty times to
+    // `complete`'s one, and the hierarchy has to hold.
+    gain: 0.44,
     throttleMs: 90,
-    lowpass: 3000,
+    lowpass: 7000,
+    space: 0.28,
+    combo: { steps: [0, 2, 4, 5, 7], resetMs: 90_000 },
+    noise: [mallet()],
     tones: [
-      ...arpeggio([C5, E5, G5], { step: 0.09, dur: 0.52, gain: 0.85 }),
-      // Octave doubling on the last note only — sparkle, not a fourth note.
-      { at: 0.18, dur: 0.44, freq: C6, type: 'sine', gain: 0.16, attack: 0.02 },
+      ...bell(C5, { at: 0, dur: 0.5, gain: 0.6 }),
+      ...bell(E5, { at: 0.075, dur: 0.5, gain: 0.66 }),
+      ...bell(G5, { at: 0.15, dur: 0.66, gain: 0.78, hold: 0.05 }),
+      // Octave over the landing note — sparkle, not a fourth note.
+      { at: 0.15, dur: 0.5, freq: C6, type: 'sine', gain: 0.18, attack: 0.02 },
+      { at: 0, dur: 0.7, freq: C3, type: 'sine', gain: 0.2, attack: 0.02 },
     ],
   },
   addToDeck: {
-    // A card filed into the study deck: a soft thud plus a single bright
-    // blip — lighter than `collect`, since this is just adding a card to a
-    // list, not unlocking one through the ceremony.
-    gain: 0.32,
+    // A card filed into the study deck: a soft thud plus one struck note —
+    // lighter than `collect`, since this is just adding a card to a list, not
+    // unlocking one through the ceremony. Barely any room on it.
+    gain: 0.34,
     throttleMs: 90,
-    lowpass: 5500,
+    lowpass: 6500,
+    space: 0.18,
     noise: [{ at: 0, dur: 0.05, from: 900, to: 400, type: 'bandpass', q: 0.9, gain: 0.3, swell: 0.15 }],
-    tones: [{ at: 0.01, dur: 0.14, freq: D5, type: 'triangle', gain: 0.4, attack: 0.006 }],
+    tones: [...bell(D5, { at: 0.01, dur: 0.2, gain: 0.44 })],
   },
   collect: {
-    // The card landing in the deck: paper first, then the triad a fifth higher
-    // with a shimmer on top.
-    gain: 0.44,
+    // The card landing in the deck: paper first, then the triad a fifth higher,
+    // struck, with a shimmer over the landing and a long tail. The ceremony
+    // earns more room than anything else at this size.
+    gain: 0.5,
     throttleMs: 150,
-    lowpass: 5200,
-    noise: [{ at: 0, dur: 0.2, from: 900, to: 2600, type: 'bandpass', q: 0.8, gain: 0.35, swell: 0.4 }],
+    lowpass: 7500,
+    space: 0.42,
+    noise: [
+      { at: 0, dur: 0.2, from: 900, to: 2600, type: 'bandpass', q: 0.8, gain: 0.35, swell: 0.4 },
+      mallet(0.05, 0.26),
+    ],
     tones: [
-      ...arpeggio([G5, B5, E6], { step: 0.075, dur: 0.5, gain: 0.6, from: 0.05 }),
-      { at: 0.2, dur: 0.5, freq: G6, type: 'sine', gain: 0.12, attack: 0.03 },
+      ...bell(G5, { at: 0.05, dur: 0.44, gain: 0.55 }),
+      ...bell(B5, { at: 0.12, dur: 0.44, gain: 0.6 }),
+      ...bell(E6, { at: 0.19, dur: 0.7, gain: 0.68, hold: 0.06 }),
+      { at: 0.19, dur: 0.75, freq: G6, type: 'sine', gain: 0.14, attack: 0.04 },
+      { at: 0.02, dur: 0.85, freq: G3, type: 'sine', gain: 0.18, attack: 0.04 },
     ],
   },
   levelUp: {
-    // Four notes climbing an octave, with a low root underneath for weight.
-    gain: 0.5,
+    // A proper fanfare, in two halves: three quick notes as a pickup, then a
+    // second strike on the octave that holds. The rhythm is the point — an
+    // even four-note run is a scale exercise, a fast run into a held arrival
+    // is an announcement. Root underneath, fifth entering with the landing.
+    gain: 0.54,
     throttleMs: 200,
-    lowpass: 4000,
+    lowpass: 6500,
+    space: 0.5,
+    noise: [mallet(), mallet(0.3, 0.26)],
     tones: [
-      ...arpeggio([C5, E5, G5, C6], { step: 0.1, dur: 0.6, gain: 0.75 }),
-      { at: 0, dur: 0.8, freq: C4, type: 'sine', gain: 0.22, attack: 0.04 },
+      ...bell(C5, { at: 0, dur: 0.34, gain: 0.5 }),
+      ...bell(E5, { at: 0.085, dur: 0.34, gain: 0.55 }),
+      ...bell(G5, { at: 0.17, dur: 0.4, gain: 0.6 }),
+      ...bell(C6, { at: 0.3, dur: 0.95, gain: 0.72, hold: 0.14 }),
+      { at: 0.3, dur: 1.0, freq: G6, type: 'sine', gain: 0.12, attack: 0.05 },
+      { at: 0, dur: 1.15, freq: C3, type: 'sine', gain: 0.24, attack: 0.05 },
+      { at: 0.3, dur: 0.9, freq: G4, type: 'sine', gain: 0.14, attack: 0.08 },
     ],
   },
   reward: {
-    // Gems: two bright triangle blips, close together.
-    gain: 0.36,
+    // Gems: a coin dropping into the purse. A tiny high clink, then two struck
+    // notes a fourth apart — the platformer pickup interval — with the second
+    // one held. Short and bright; it fires once per quest, several in a row.
+    gain: 0.38,
     throttleMs: 60,
-    lowpass: 6000,
+    lowpass: 8000,
+    space: 0.3,
+    noise: [{ at: 0, dur: 0.014, from: 5200, to: 3400, type: 'bandpass', q: 2.4, gain: 0.28, swell: 0 }],
     tones: [
-      { at: 0, dur: 0.16, freq: E6, type: 'triangle', gain: 0.5, attack: 0.004 },
-      { at: 0.055, dur: 0.24, freq: G6, type: 'triangle', gain: 0.42, attack: 0.004 },
+      ...bell(B5, { at: 0, dur: 0.14, gain: 0.5, attack: 0.002 }),
+      ...bell(E6, { at: 0.055, dur: 0.34, gain: 0.56, attack: 0.002, hold: 0.04 }),
     ],
   },
   streak: {
-    // A warm swell that rises — the flame catching.
-    gain: 0.42,
+    // The flame catching: a warm swell that rises into two struck notes an
+    // octave apart, the second held, with a fifth above it as the flare. The
+    // glide underneath does the catching; the bells are the flame taking.
+    gain: 0.44,
     throttleMs: 200,
-    lowpass: 3400,
-    noise: [{ at: 0, dur: 0.42, from: 300, to: 1500, type: 'bandpass', q: 0.6, gain: 0.3, swell: 0.6 }],
+    lowpass: 5000,
+    space: 0.45,
+    noise: [{ at: 0, dur: 0.42, from: 300, to: 1600, type: 'bandpass', q: 0.6, gain: 0.3, swell: 0.6 }],
     tones: [
-      { at: 0, dur: 0.55, freq: A3, glide: A4, type: 'sine', gain: 0.35, attack: 0.06 },
-      ...arpeggio([E5, A5], { step: 0.12, dur: 0.5, gain: 0.5, from: 0.16 }),
+      { at: 0, dur: 0.6, freq: A3, glide: A4, type: 'sine', gain: 0.34, attack: 0.06 },
+      ...bell(E5, { at: 0.18, dur: 0.42, gain: 0.5 }),
+      ...bell(A5, { at: 0.3, dur: 0.72, gain: 0.6, hold: 0.08 }),
+      { at: 0.42, dur: 0.6, freq: E6, type: 'sine', gain: 0.12, attack: 0.06 },
     ],
   },
   complete: {
-    // Session over: the full triad plus an octave, held long, with a soft
-    // fifth-below pad so it settles instead of stopping.
-    gain: 0.5,
+    // Session over — the biggest cue in the app, and the only one allowed to
+    // take a second and a half. Same two-half shape as `levelUp` but wider: the
+    // run is slower, the arrival is struck again and held twice as long, and a
+    // soft root-and-third pad swells in underneath so the whole thing settles
+    // onto a chord instead of stopping.
+    // The loudest thing the app ever plays, and the only cue allowed to be.
+    gain: 0.56,
     throttleMs: 250,
-    lowpass: 3600,
+    lowpass: 6000,
+    space: 0.58,
+    noise: [mallet(), mallet(0.36, 0.24)],
     tones: [
-      ...arpeggio([C5, E5, G5, C6], { step: 0.11, dur: 0.75, gain: 0.7, attack: 0.016 }),
-      { at: 0.33, dur: 1.0, freq: E6, type: 'sine', gain: 0.14, attack: 0.05 },
-      { at: 0, dur: 1.1, freq: G4, type: 'sine', gain: 0.16, attack: 0.08 },
-      { at: 0, dur: 1.1, freq: E4, type: 'sine', gain: 0.1, attack: 0.1 },
+      ...bell(C5, { at: 0, dur: 0.5, gain: 0.5 }),
+      ...bell(E5, { at: 0.1, dur: 0.5, gain: 0.54 }),
+      ...bell(G5, { at: 0.2, dur: 0.55, gain: 0.58 }),
+      ...bell(C6, { at: 0.36, dur: 1.15, gain: 0.7, hold: 0.2 }),
+      { at: 0.36, dur: 1.2, freq: E6, type: 'sine', gain: 0.13, attack: 0.06 },
+      { at: 0, dur: 1.5, freq: C3, type: 'sine', gain: 0.24, attack: 0.08 },
+      { at: 0.36, dur: 1.2, freq: G4, type: 'sine', gain: 0.14, attack: 0.12 },
+      { at: 0.36, dur: 1.2, freq: E4, type: 'sine', gain: 0.1, attack: 0.14 },
     ],
   },
   begin: {
-    // The dashboard's big call to action: a rising whoosh under two notes a
-    // fourth apart, climbing — "let's go", not a fanfare (that's `complete`).
-    gain: 0.4,
+    // The dashboard's big call to action: a rising whoosh into two struck notes
+    // a fourth apart, the second held over a low root — "let's go", not a
+    // fanfare (that's `complete`). It opens rather than concludes, so it stops
+    // on the fifth instead of resolving home.
+    gain: 0.42,
     throttleMs: 220,
-    lowpass: 4600,
+    lowpass: 5600,
+    space: 0.35,
     noise: [{ at: 0, dur: 0.22, from: 700, to: 2600, type: 'bandpass', q: 0.65, gain: 0.4, swell: 0.35 }],
     tones: [
-      { at: 0.02, dur: 0.26, freq: D5, type: 'sine', gain: 0.4, attack: 0.014 },
-      { at: 0.11, dur: 0.34, freq: G5, type: 'sine', gain: 0.46, attack: 0.014 },
-      { at: 0.11, dur: 0.5, freq: D4, type: 'sine', gain: 0.16, attack: 0.03 },
+      ...bell(D5, { at: 0.02, dur: 0.26, gain: 0.42 }),
+      ...bell(G5, { at: 0.11, dur: 0.55, gain: 0.55, hold: 0.08 }),
+      { at: 0.11, dur: 0.6, freq: D4, type: 'sine', gain: 0.18, attack: 0.03 },
     ],
   },
   unlock: {
@@ -389,6 +516,9 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     gain: 0.4,
     throttleMs: 500,
     lowpass: 950,
+    // The one non-reward cue with room on it: the tail is what makes the
+    // locked screen feel like a space rather than a sound.
+    space: 0.5,
     tones: [
       { at: 0, dur: 1.5, freq: E2, type: 'sine', gain: 0.32, attack: 0.4 },
       { at: 0, dur: 1.5, freq: F2, type: 'sine', gain: 0.24, attack: 0.45 },

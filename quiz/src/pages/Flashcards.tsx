@@ -75,7 +75,7 @@ import { ConceptPopup } from '@/components/wiki/ConceptPopup'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { trackFlashcardReviewed } from '@/lib/analytics'
-import { playSound } from '@/lib/soundEngine'
+import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 
@@ -2908,10 +2908,12 @@ export default function Flashcards() {
   function handleRate(rating: StudyRating) {
     const card = orderedCards[activeIndex]
     if (!card) return
-    // "Got it" is a right answer like any other; "Again" is not a mistake, so
-    // it keeps the plain press cue the delegated listener already gives it.
+    // "Got it" is a right answer like any other — and a run of them climbs in
+    // pitch. "Again" is not a mistake, so it keeps the plain press cue the
+    // delegated listener already gives it, but it does end the run.
     if (rating === 'got') playSound('correct')
     if (rating === 'again') {
+      resetSoundCombo('correct')
       setAgainCounts(m => ({ ...m, [card.name]: (m[card.name] ?? 0) + 1 }))
       if (card.completedAt) toggleCompleted(card.name)
     } else if (!card.completedAt) {

@@ -3,6 +3,7 @@ import type { SoundEvent } from '@/lib/soundConfig'
 import {
   getSoundSettings,
   playSound,
+  resetSoundCombo,
   setSoundEnabled,
   setSoundVolume,
   subscribeSound,
@@ -20,6 +21,8 @@ export function useSoundEffects() {
   const settings = useSyncExternalStore(subscribeSound, getSoundSettings, getSoundSettings)
 
   const play = useCallback((event: SoundEvent) => { playSound(event) }, [])
+  // For cues whose pitch climbs across a run of successes: end the run.
+  const resetCombo = useCallback((event: SoundEvent) => { resetSoundCombo(event) }, [])
 
   return {
     enabled: settings.enabled,
@@ -28,6 +31,7 @@ export function useSoundEffects() {
     setEnabled: setSoundEnabled,
     setVolume: setSoundVolume,
     play,
+    resetCombo,
   }
 }
 

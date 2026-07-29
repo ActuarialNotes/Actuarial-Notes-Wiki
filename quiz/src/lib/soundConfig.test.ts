@@ -1,10 +1,80 @@
 import { describe, it, expect } from 'vitest'
-import { SOUND_RECIPES, recipeDuration, type SoundEvent, type SoundRecipe } from './soundConfig'
+import {
+  SOUND_RECIPES,
+  comboMultiplier,
+  nextComboIndex,
+  recipeDuration,
+  type SoundEvent,
+  type SoundRecipe,
+  type ToneSpec,
+} from './soundConfig'
 
 const EVENTS = Object.keys(SOUND_RECIPES) as SoundEvent[]
 
 function entries(): Array<[SoundEvent, SoundRecipe]> {
   return EVENTS.map(e => [e, SOUND_RECIPES[e]])
+}
+
+/** The cues that celebrate something, as opposed to acknowledging a press. */
+const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'reward', 'streak', 'complete', 'begin'] as const
+
+/** Everything a user hears dozens of times an hour. */
+const INTERFACE = ['click', 'press', 'select', 'tick', 'toggleOn', 'toggleOff', 'navigate', 'actions',
+  'open', 'close', 'page', 'shuffle'] as const
+
+/**
+ * The notes of a cue's melody, as opposed to the struck partials, sparkle and
+ * bass that sit underneath them. Every voice `bell()` adds under a note is well
+ * below a third of its level, so the level alone separates them.
+ */
+function principals(recipe: SoundRecipe): ToneSpec[] {
+  return (recipe.tones ?? []).filter(t => (t.gain ?? 1) > 0.3)
+}
+
+const semitones = (a: number, b: number) => Math.round(12 * Math.log2(b / a))
+
+/**
+ * Worst-case level of a cue at time `t`: every voice's envelope summed as if
+ * all of them were in phase. Real oscillators at different frequencies never
+ * add up this coherently, so this over-reports — which is what we want from a
+ * clipping guard.
+ *
+ * This mirrors the envelopes `scheduleTone` / `scheduleNoise` schedule in
+ * `soundEngine.ts` (attack ramp → optional hold → exponential decay, and the
+ * noise `swell`). If those change shape, change this with them.
+ */
+const SILENT = 0.0001
+
+function levelAt(recipe: SoundRecipe, t: number): number {
+  let sum = 0
+  for (const tone of recipe.tones ?? []) {
+    if (t < tone.at || t > tone.at + tone.dur) continue
+    const peak = tone.gain ?? 1
+    const attack = Math.min(tone.attack ?? 0.012, tone.dur * 0.5)
+    const hold = Math.min(tone.hold ?? 0, Math.max(0, tone.dur - attack) * 0.6)
+    const u = t - tone.at
+    if (u < attack) sum += peak * (u / attack)
+    else if (u < attack + hold) sum += peak
+    else sum += peak * Math.pow(SILENT / peak, (u - attack - hold) / (tone.dur - attack - hold))
+  }
+  for (const noise of recipe.noise ?? []) {
+    if (t < noise.at || t > noise.at + noise.dur) continue
+    const peak = noise.gain ?? 1
+    const swell = Math.max(0.002, noise.dur * Math.min(0.9, Math.max(0, noise.swell ?? 0)))
+    const u = t - noise.at
+    if (u < swell) sum += peak * (u / swell)
+    else sum += peak * Math.pow(SILENT / peak, (u - swell) / (noise.dur - swell))
+  }
+  return sum
+}
+
+/** The loudest instant of a cue, after its own master gain. */
+function peakLevel(recipe: SoundRecipe): number {
+  let peak = 0
+  for (let t = 0; t < recipeDuration(recipe); t += 0.0005) {
+    peak = Math.max(peak, levelAt(recipe, t))
+  }
+  return peak * recipe.gain
 }
 
 describe('sound catalogue', () => {
@@ -63,9 +133,9 @@ describe('sound catalogue', () => {
 
   describe('the correct-answer arpeggio', () => {
     const correct = SOUND_RECIPES.correct
-    // The three notes of the triad, ignoring the quiet octave doubling that
-    // sits on top of the last one.
-    const triad = (correct.tones ?? []).filter(t => (t.gain ?? 1) > 0.3)
+    // The three notes of the triad, ignoring the partials, the octave sparkle
+    // and the bass root that sit underneath them.
+    const triad = principals(correct)
 
     it('is exactly three notes', () => {
       expect(triad).toHaveLength(3)
@@ -78,7 +148,6 @@ describe('sound catalogue', () => {
     })
 
     it('is a major triad — 4 then 3 semitones', () => {
-      const semitones = (a: number, b: number) => Math.round(12 * Math.log2(b / a))
       expect(semitones(triad[0].freq, triad[1].freq)).toBe(4)
       expect(semitones(triad[1].freq, triad[2].freq)).toBe(3)
     })
@@ -89,9 +158,173 @@ describe('sound catalogue', () => {
       for (const note of triad) expect(note.dur).toBeGreaterThan(step * 2)
     })
 
-    it('is soft-edged and quick enough to sit inside a quiz', () => {
-      for (const note of triad) expect(note.attack ?? 0).toBeGreaterThanOrEqual(0.01)
+    it('is struck rather than faded in', () => {
+      // A mallet attack: fast enough to read as an impact, slow enough not to
+      // pop. Paired with a noise transient at the moment of the strike —
+      // without it the notes bloom out of nowhere and lose their weight.
+      for (const note of triad) {
+        expect(note.attack ?? 0.012).toBeLessThan(0.01)
+        expect(note.attack ?? 0.012).toBeGreaterThanOrEqual(0.001)
+      }
+      const strike = (correct.noise ?? []).filter(n => n.at === 0 && (n.swell ?? 0) === 0)
+      expect(strike.length, 'no mallet on the strike').toBeGreaterThan(0)
+    })
+
+    it('gives every note an octave partial that dies before the note does', () => {
+      // This is what makes a chime a chime rather than a beep: the spectrum
+      // narrows as it rings, the way a struck metal bar's does.
+      for (const note of triad) {
+        const octave = (correct.tones ?? []).find(t =>
+          t.at === note.at && Math.abs(t.freq - note.freq * 2) < 0.01)
+        expect(octave, `no octave partial over ${note.freq}`).toBeDefined()
+        expect(octave!.dur).toBeLessThan(note.dur)
+        expect(octave!.gain ?? 1).toBeLessThan(note.gain ?? 1)
+      }
+    })
+
+    it('carries a low root under the triad', () => {
+      const root = (correct.tones ?? []).filter(t => t.freq < triad[0].freq / 2)
+      expect(root.length, 'nothing underneath the triad').toBeGreaterThan(0)
+      // Quiet enough to be felt rather than heard as a fourth note.
+      for (const note of root) expect(note.gain ?? 1).toBeLessThan(0.3)
+    })
+
+    it('is quick enough to sit inside a quiz', () => {
       expect(recipeDuration(correct)).toBeLessThan(1)
+    })
+  })
+
+  describe('reward cues', () => {
+    it('lands on its loudest note', () => {
+      // A fanfare arrives somewhere. The old arpeggio tapered off across the
+      // run, which is the shape of a sound giving up rather than paying out.
+      for (const event of REWARDS) {
+        const notes = principals(SOUND_RECIPES[event])
+        if (notes.length < 2) continue
+        const last = notes[notes.length - 1]
+        for (const note of notes.slice(0, -1)) {
+          expect(note.at, `${event} is out of order`).toBeLessThan(last.at)
+          expect(note.gain ?? 1, `${event} fades out instead of landing`)
+            .toBeLessThanOrEqual(last.gain ?? 1)
+        }
+      }
+    })
+
+    it('rings in a room', () => {
+      for (const event of REWARDS) {
+        const space = SOUND_RECIPES[event].space
+        expect(space, `${event} is bone dry`).toBeGreaterThan(0)
+        expect(space, `${event} is all tail`).toBeLessThanOrEqual(1)
+      }
+    })
+
+    it('leaves the interface dry', () => {
+      // A reverb tail on something pressed forty times an hour is mud.
+      for (const event of INTERFACE) {
+        expect(SOUND_RECIPES[event].space, `${event} has a tail on it`).toBeUndefined()
+      }
+    })
+
+    it('leaves headroom at full volume', () => {
+      // A struck note is three oscillators, so a four-note fanfare is pushing
+      // twenty voices into one bus. Summed in phase they must still clear the
+      // destination's ceiling, or the payoff distorts for anyone with the
+      // volume slider up.
+      for (const [event, recipe] of entries()) {
+        expect(peakLevel(recipe), `${event} clips at full volume`).toBeLessThan(0.85)
+      }
+    })
+
+    it('keeps the everyday cue below the ceremonies', () => {
+      // Loudness is the hierarchy: what you hear constantly has to sit under
+      // what you hear once a session, or the big moments stop being big.
+      const correct = peakLevel(SOUND_RECIPES.correct)
+      for (const event of ['collect', 'levelUp', 'complete'] as const) {
+        expect(peakLevel(SOUND_RECIPES[event]), `${event} is no bigger than a right answer`)
+          .toBeGreaterThan(correct)
+      }
+      for (const event of INTERFACE) {
+        expect(peakLevel(SOUND_RECIPES[event]), `${event} is as loud as a reward`)
+          .toBeLessThan(correct)
+      }
+    })
+
+    it('never holds a note past its own duration', () => {
+      for (const [event, recipe] of entries()) {
+        for (const tone of recipe.tones ?? []) {
+          const attack = tone.attack ?? 0.012
+          expect(attack + (tone.hold ?? 0), `${event} holds longer than it rings`)
+            .toBeLessThan(tone.dur)
+        }
+      }
+    })
+  })
+
+  describe('the correct-answer combo', () => {
+    const combo = SOUND_RECIPES.correct.combo!
+
+    it('climbs on the cue a user hears most', () => {
+      // The oldest problem in game audio: a cue that fires forty times an hour
+      // stops registering. A run of right answers walks up the scale instead.
+      expect(combo).toBeDefined()
+      expect(combo.steps.length).toBeGreaterThan(2)
+      expect(combo.resetMs).toBeGreaterThan(0)
+    })
+
+    it('starts at the written pitch and only ever ascends', () => {
+      expect(combo.steps[0]).toBe(0)
+      expect(combo.steps).toEqual([...combo.steps].sort((a, b) => a - b))
+      expect(new Set(combo.steps).size).toBe(combo.steps.length)
+    })
+
+    it('stays inside an octave, so the top of a run is bright and not shrill', () => {
+      expect(combo.steps[combo.steps.length - 1]).toBeLessThanOrEqual(12)
+    })
+
+    it('is the only cue that climbs', () => {
+      // Every other cue marks a distinct event; only a streak of the same
+      // event has anything to count.
+      const climbing = entries().filter(([, recipe]) => recipe.combo)
+      expect(climbing.map(([event]) => event)).toEqual(['correct'])
+    })
+  })
+
+  describe('comboMultiplier', () => {
+    const combo = { steps: [0, 2, 4, 5, 7], resetMs: 1000 }
+
+    it('leaves the root pitch alone', () => {
+      expect(comboMultiplier(combo, 0)).toBe(1)
+    })
+
+    it('transposes by the semitones of the step reached', () => {
+      expect(comboMultiplier(combo, 2)).toBeCloseTo(Math.pow(2, 4 / 12))
+      expect(comboMultiplier(combo, 4)).toBeCloseTo(1.5, 2) // a perfect fifth
+    })
+
+    it('holds at the top of the climb rather than running away', () => {
+      expect(comboMultiplier(combo, 99)).toBe(comboMultiplier(combo, 4))
+    })
+
+    it('is a no-op for cues that do not climb', () => {
+      expect(comboMultiplier(undefined, 3)).toBe(1)
+      expect(comboMultiplier({ steps: [], resetMs: 1000 }, 3)).toBe(1)
+    })
+  })
+
+  describe('nextComboIndex', () => {
+    const combo = { steps: [0, 2, 4, 5, 7], resetMs: 1000 }
+
+    it('steps up while the run continues', () => {
+      expect(nextComboIndex(0, 500, combo)).toBe(1)
+      expect(nextComboIndex(1, 500, combo)).toBe(2)
+    })
+
+    it('caps at the last step', () => {
+      expect(nextComboIndex(4, 500, combo)).toBe(4)
+    })
+
+    it('starts over after a long enough gap', () => {
+      expect(nextComboIndex(3, 5000, combo)).toBe(0)
     })
   })
 

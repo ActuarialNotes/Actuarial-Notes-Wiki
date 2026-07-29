@@ -195,6 +195,39 @@ export function niceTicks(lo: number, hi: number, target = 5): number[] {
   return ticks
 }
 
+/**
+ * Formatting for the headline KPI tiles (μ, σ², σ, γ₁): one decimal place.
+ *
+ * One decimal is the rule, with two exceptions that keep a tile from reading as
+ * a meaningless "0.0": values below 0.05 fall back to two significant digits
+ * (a Beta variance of 0.026 stays 0.026), and very large values go exponential.
+ */
+export function formatKpi(value: number): string {
+  if (!Number.isFinite(value)) return '—'
+  if (value === 0) return '0'
+  const abs = Math.abs(value)
+  if (abs >= 100000) return value.toExponential(1)
+  if (abs < 0.05) return trimZeros(value.toPrecision(2))
+  return value.toFixed(1)
+}
+
+/**
+ * Axis tick labels. Ticks always come from `niceTicks` (1/2/5 × 10^k), so
+ * trailing zeros carry no information — "−4" and "0.2" read better than
+ * "−4.00" and "0.200" and take far less of the gutter.
+ */
+export function formatTick(value: number): string {
+  if (!Number.isFinite(value)) return ''
+  if (value === 0) return '0'
+  const abs = Math.abs(value)
+  if (abs >= 100000 || abs < 0.001) return value.toExponential(0)
+  return trimZeros(value.toFixed(3))
+}
+
+function trimZeros(text: string): string {
+  return text.includes('.') ? text.replace(/0+$/, '').replace(/\.$/, '') : text
+}
+
 /** Compact, magnitude-aware number formatting for stat readouts. */
 export function formatStat(value: number, opts: { integer?: boolean } = {}): string {
   if (!Number.isFinite(value)) return '—'

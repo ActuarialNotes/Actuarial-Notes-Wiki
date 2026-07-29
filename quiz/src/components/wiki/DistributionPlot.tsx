@@ -8,7 +8,7 @@
  * opacity, so the plot reads the same in every theme and in dark mode.
  */
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { DistParams, DistributionSpec } from '@/lib/distributions'
 import {
   binSamples,
@@ -16,17 +16,25 @@ import {
   buildMassPoints,
   empiricalCdf,
   formatStat,
+  formatTick,
   niceTicks,
   tallySamples,
   type Histogram,
 } from '@/lib/distributionPlot'
 
 const VB_W = 520
-const PAD_LEFT = 54
 const PAD_RIGHT = 12
-const PAD_TOP = 12
-const PAD_BOTTOM = 30
+const PAD_TOP = 14
 const CONTINUOUS_BINS = 36
+/** Below this rendered width the axis title is dropped — the labels need the room. */
+const Y_LABEL_MIN_WIDTH = 520
+/**
+ * Axis type size in **CSS pixels**. The SVG scales its viewBox to the container,
+ * so a fixed `fontSize` would shrink to ~7px on a phone; the rendered width is
+ * measured and the font size converted back into viewBox units, keeping labels
+ * the same physical size on every screen.
+ */
+const AXIS_FONT_PX = 13
 
 export interface DistributionPlotProps {
   spec: DistributionSpec
@@ -39,9 +47,23 @@ export interface DistributionPlotProps {
 
 export function DistributionPlot({ spec, params, view, samples, height = 250 }: DistributionPlotProps) {
   const [cursorX, setCursorX] = useState<number | null>(null)
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const [renderedWidth, setRenderedWidth] = useState(VB_W)
 
-  const chartW = VB_W - PAD_LEFT - PAD_RIGHT
-  const chartH = height - PAD_TOP - PAD_BOTTOM
+  // Track the on-screen width so axis type can be sized in real pixels.
+  useEffect(() => {
+    const svg = svgRef.current
+    if (!svg || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(entries => {
+      const width = entries[0]?.contentRect.width
+      if (width && width > 0) setRenderedWidth(width)
+    })
+    observer.observe(svg)
+    return () => observer.disconnect()
+  }, [])
+
+  const axisFont = Math.min(24, Math.max(11, (AXIS_FONT_PX * VB_W) / renderedWidth))
+  const showYLabel = renderedWidth >= Y_LABEL_MIN_WIDTH
   const discrete = spec.kind === 'discrete'
 
   const data = useMemo(() => {
@@ -76,8 +98,23 @@ export function DistributionPlot({ spec, params, view, samples, height = 250 }: 
   const { xLo, xHi, curve, mass, histogram, empirical, yMax } = data
   const xSpan = xHi - xLo || 1
 
+  const yTicks = niceTicks(0, yMax, 3).filter(t => t <= yMax)
+  const xTicks = niceTicks(xLo, xHi, 5).filter(t => (discrete ? Number.isInteger(t) : true))
+
+  // Gutters scale with the (pixel-constant) type: at phone width one glyph eats
+  // ~3× the viewBox units it does on a desktop, so fixed padding would let the
+  // tick labels run into the axis title or off the left edge.
+  const widestYLabel = Math.max(...yTicks.map(t => formatTick(t).length), 1)
+  const padLeft = Math.min(
+    150,
+    Math.round(axisFont * 0.58 * widestYLabel + axisFont * (showYLabel ? 1.9 : 0.7)),
+  )
+  const padBottom = Math.round(axisFont * 2.5)
+  const chartW = VB_W - padLeft - PAD_RIGHT
+  const chartH = height - PAD_TOP - padBottom
+
   function sx(x: number): number {
-    return PAD_LEFT + ((x - xLo) / xSpan) * chartW
+    return padLeft + ((x - xLo) / xSpan) * chartW
   }
   function sy(y: number): number {
     return PAD_TOP + chartH - (Math.min(y, yMax) / yMax) * chartH
@@ -89,22 +126,19 @@ export function DistributionPlot({ spec, params, view, samples, height = 250 }: 
   // ─── Hover readout ─────────────────────────────────────────────────────────
   const hovered = useMemo(() => {
     if (cursorX === null) return null
-    const x = xLo + ((cursorX - PAD_LEFT) / chartW) * xSpan
+    const x = xLo + ((cursorX - padLeft) / chartW) * xSpan
     if (x < xLo || x > xHi) return null
     if (discrete) {
       const k = Math.round(x)
       return { x: k, density: spec.density(k, params), cumulative: spec.cdf(k, params) }
     }
     return { x, density: spec.density(x, params), cumulative: spec.cdf(x, params) }
-  }, [cursorX, xLo, xHi, xSpan, chartW, discrete, spec, params])
+  }, [cursorX, xLo, xHi, xSpan, chartW, padLeft, discrete, spec, params])
 
   function handleMove(e: React.PointerEvent<SVGSVGElement>) {
     const rect = e.currentTarget.getBoundingClientRect()
     setCursorX(((e.clientX - rect.left) / rect.width) * VB_W)
   }
-
-  const yTicks = niceTicks(0, yMax, 3).filter(t => t <= yMax)
-  const xTicks = niceTicks(xLo, xHi, 5).filter(t => (discrete ? Number.isInteger(t) : true))
 
   const areaPath =
     curve.length > 0
@@ -152,7 +186,7 @@ export function DistributionPlot({ spec, params, view, samples, height = 250 }: 
   return (
     <div className="space-y-1">
       {/* Fixed-height readout strip so the plot never jumps as the cursor moves. */}
-      <div className="flex items-center justify-between gap-2 h-4 text-[11px] text-muted-foreground tabular-nums">
+      <div className="flex items-center justify-between gap-2 h-5 text-sm text-muted-foreground tabular-nums">
         <span>
           {hovered ? (
             <>
@@ -174,62 +208,79 @@ export function DistributionPlot({ spec, params, view, samples, height = 250 }: 
       </div>
 
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${VB_W} ${height}`}
         width="100%"
         preserveAspectRatio="xMidYMid meet"
-        className="w-full text-muted-foreground"
+        className="w-full text-muted-foreground touch-pan-y"
         role="img"
         aria-label={label}
+        // Hover on a mouse; press-and-drag on touch. `touch-pan-y` keeps the
+        // page scrollable while a horizontal drag scrubs the readout.
+        onPointerDown={handleMove}
         onPointerMove={handleMove}
+        onPointerUp={() => setCursorX(null)}
         onPointerLeave={() => setCursorX(null)}
       >
         {/* Y grid + labels */}
         {yTicks.map(t => (
           <g key={`y${t}`}>
             <line
-              x1={PAD_LEFT}
-              x2={PAD_LEFT + chartW}
+              x1={padLeft}
+              x2={padLeft + chartW}
               y1={sy(t)}
               y2={sy(t)}
               stroke="currentColor"
               strokeOpacity={0.12}
               strokeDasharray={t === 0 ? undefined : '3 3'}
             />
-            <text x={PAD_LEFT - 6} y={sy(t) + 3.5} textAnchor="end" fontSize={10} fill="currentColor" opacity={0.55}>
-              {formatStat(t)}
+            <text x={padLeft - axisFont * 0.45} y={sy(t) + axisFont * 0.35} textAnchor="end" fontSize={axisFont} fill="currentColor" opacity={0.6}>
+              {formatTick(t)}
             </text>
           </g>
         ))}
 
         {/* X ticks */}
-        {xTicks.map(t => (
-          <text
-            key={`x${t}`}
-            x={sx(t)}
-            y={height - 12}
-            textAnchor="middle"
-            fontSize={10}
-            fill="currentColor"
-            opacity={0.55}
-          >
-            {formatStat(t, { integer: discrete })}
-          </text>
-        ))}
-        <text x={PAD_LEFT + chartW} y={height - 1} textAnchor="end" fontSize={10} fill="currentColor" opacity={0.45}>
+        {xTicks.map(t => {
+          // Keep the first and last labels from spilling into the y-axis
+          // gutter / off the right edge by anchoring them inward.
+          const x = sx(t)
+          const halfWidth = formatTick(t).length * axisFont * 0.3
+          const anchor =
+            x - halfWidth < padLeft ? 'start' : x + halfWidth > VB_W - PAD_RIGHT ? 'end' : 'middle'
+          return (
+            <text
+              key={`x${t}`}
+              x={x}
+              y={height - padBottom + axisFont * 1.1}
+              textAnchor={anchor}
+              fontSize={axisFont}
+              fill="currentColor"
+              opacity={0.6}
+            >
+              {formatTick(t)}
+            </text>
+          )
+        })}
+        <text x={padLeft + chartW} y={height - 3} textAnchor="end" fontSize={axisFont} fill="currentColor" opacity={0.5}>
           {spec.xLabel}
         </text>
-        <text
-          transform={`rotate(-90 10 ${PAD_TOP + chartH / 2})`}
-          x={10}
-          y={PAD_TOP + chartH / 2}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fontSize={10}
-          fill="currentColor"
-          opacity={0.45}
-        >
-          {view === 'pdf' ? spec.yLabel : `P(X ≤ ${discrete ? 'k' : 'x'})`}
-        </text>
+        {/* The y-axis title is the first thing to go when the plot is narrow —
+            the readout strip above already names what's plotted. */}
+        {showYLabel && (
+          <text
+            transform={`rotate(-90 ${axisFont * 0.8} ${PAD_TOP + chartH / 2})`}
+            x={axisFont * 0.8}
+            y={PAD_TOP + chartH / 2}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize={axisFont}
+            fill="currentColor"
+            opacity={0.5}
+          >
+            {view === 'pdf' ? spec.yLabel : `P(X ≤ ${discrete ? 'k' : 'x'})`}
+          </text>
+        )}
 
         {/* ±1σ band around the mean — the visual anchor for the two headline stats */}
         {view === 'pdf' && meanInWindow && moments.sd > 0 && (
@@ -308,9 +359,9 @@ export function DistributionPlot({ spec, params, view, samples, height = 250 }: 
               opacity={0.7}
             />
             <text
-              x={sx(moments.mean) + 4}
-              y={PAD_TOP + 9}
-              fontSize={10}
+              x={sx(moments.mean) + 5}
+              y={PAD_TOP + 12}
+              fontSize={axisFont}
               className="fill-primary"
               opacity={0.85}
             >
@@ -335,8 +386,8 @@ export function DistributionPlot({ spec, params, view, samples, height = 250 }: 
 
         {/* Baseline */}
         <line
-          x1={PAD_LEFT}
-          x2={PAD_LEFT + chartW}
+          x1={padLeft}
+          x2={padLeft + chartW}
           y1={sy(0)}
           y2={sy(0)}
           stroke="currentColor"

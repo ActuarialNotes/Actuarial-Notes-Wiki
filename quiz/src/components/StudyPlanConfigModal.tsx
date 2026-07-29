@@ -1,11 +1,10 @@
-import { useEffect, useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { X, CalendarDays, Info, Sparkles, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { SittingDateGrid } from '@/components/SittingDateGrid'
 import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
-import { StudyPlanFormingOverlay } from '@/components/StudyPlanFormingOverlay'
 import { getSittingsForExam, LOCALIZED_EXAMS } from '@/data/examSittings'
 import {
   QUICK_SET_PRESETS,
@@ -13,11 +12,11 @@ import {
   daysBetween,
   todayISO,
   formatReadableDate,
-  type StudyPlan,
   type StudyPlanConfig,
   type QuickSetPreset,
   type TargetStrengthLevel,
 } from '@/lib/studyPlan'
+import { emitPlanLocked } from '@/lib/planForming'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 const HEADLINE_PRESETS: QuickSetPreset[] = ['1w', '2w', '1m']
@@ -36,20 +35,12 @@ interface Props {
   examId?: string
   initialStep?: number
   isPremium?: boolean
-  /**
-   * The caller's live study plan. Supplying it (even as null) opts this modal
-   * into the "schedule forming" animation on save: the modal holds itself open
-   * until the prop updates to a plan built from the config just saved, then
-   * plays it. Omit the prop entirely where no plan is in scope (e.g. the exam
-   * picker's onboarding flow) and saving closes immediately, as before.
-   */
-  plan?: StudyPlan | null
   onSave: (next: Partial<StudyPlanConfig>) => void
   onExamDateChange?: (date: string | null) => void
   onClose: () => void
 }
 
-export function StudyPlanConfigModal({ config, examDate, examLabel, examId, initialStep, isPremium = true, plan, onSave, onExamDateChange, onClose }: Props) {
+export function StudyPlanConfigModal({ config, examDate, examLabel, examId, initialStep, isPremium = true, onSave, onExamDateChange, onClose }: Props) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
   const today = todayISO()
@@ -92,20 +83,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
   const readyDateInputRef = useRef<HTMLInputElement>(null)
   const examDateInputRef = useRef<HTMLInputElement>(null)
 
-  // "Lock in plan" hands over to the schedule-forming animation instead of
-  // closing outright; `saved` holds the config we're waiting to see reflected
-  // in the `plan` prop before the animation can start.
-  const [saved, setSaved] = useState<{ readyDate: string | null; strength: TargetStrengthLevel } | null>(null)
-  // Regeneration runs in the caller's effect, a render or two behind the save.
-  // A short beat before reading the plan keeps us from animating the old one
-  // when the new config happens to produce an identical `configMatches`.
-  const [regenSettled, setRegenSettled] = useState(false)
-  useEffect(() => {
-    if (!saved) return
-    const t = setTimeout(() => setRegenSettled(true), 220)
-    return () => clearTimeout(t)
-  }, [saved])
-
   function selectPreset(preset: QuickSetPreset) {
     const base = localExamDate || examDate
     if (!base) return
@@ -144,13 +121,10 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     if (onExamDateChange) {
       onExamDateChange(localExamDate || null)
     }
-    // Callers that don't own a plan can't show the schedule forming — for them
-    // locking in still just closes the modal.
-    if (plan === undefined) {
-      onClose()
-      return
-    }
-    setSaved({ readyDate: readyDate || null, strength })
+    // The Dashboard's Study Schedule card picks this up and plays the schedule
+    // forming on itself, once the plan has regenerated from the config above.
+    if (examId) emitPlanLocked(examId)
+    onClose()
   }
 
   const examDaysOut = localExamDate ? daysBetween(today, localExamDate) : null
@@ -165,23 +139,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     if (s.endDate) return localExamDate >= s.startDate && localExamDate <= s.endDate
     return localExamDate === s.startDate
   }) ?? null
-
-  // Locked in — hand the screen over to the schedule-forming animation. The
-  // plan is only handed on once it was regenerated from the config just saved,
-  // so the animation never walks a stale schedule.
-  if (saved) {
-    const planIsFresh = !!plan
-      && regenSettled
-      && (plan.config?.targetReadyDate ?? null) === saved.readyDate
-      && plan.config?.targetStrengthLevel === saved.strength
-    return (
-      <StudyPlanFormingOverlay
-        plan={planIsFresh ? plan : null}
-        examDate={localExamDate || examDate}
-        onDone={onClose}
-      />
-    )
-  }
 
   function isNextDisabled(): boolean {
     if (step === 1 && hasVariants) return !localExamVariant

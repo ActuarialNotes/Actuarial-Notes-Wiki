@@ -1,11 +1,12 @@
-// View-model for the "schedule forming" animation played when a study plan is
-// locked in (see components/StudyPlanFormingOverlay.tsx).
+// View-model for the "schedule forming" playback that runs on the Dashboard's
+// Study Schedule card when a study plan is locked in (see
+// hooks/useSchedulePlayback.ts).
 //
 // A generated StudyPlan is a flat list of assignments keyed by date; the
-// animation needs the opposite shape — one entry per calendar day from today
+// playback needs the opposite shape — one entry per calendar day from today
 // through exam day, each carrying the concepts that day's plan schedules. The
-// overlay walks the result backwards (exam day → today) so the schedule reads
-// as filling in toward the present.
+// card walks the result backwards (exam day → today), so the schedule reads as
+// rewinding toward the present.
 
 import { addDays, daysBetween, todayISO, type StudyPlan } from '@/lib/studyPlan'
 
@@ -26,30 +27,49 @@ export interface PlanFormingSummary {
   concepts: number
 }
 
+/**
+ * Fired when a study plan is locked in, so the Dashboard's Study Schedule card
+ * can play the schedule forming. The config modal is opened from four places
+ * and none of them own that card, so the two are joined by an event rather than
+ * by threading a callback through every caller.
+ */
+export const PLAN_LOCKED_EVENT = 'actuarial_study_plan_locked'
+
+export interface PlanLockedDetail {
+  /** exam_progress key (e.g. "P", "FM", "5") the plan was saved for. */
+  examId: string
+}
+
+export function emitPlanLocked(examId: string): void {
+  window.dispatchEvent(new CustomEvent<PlanLockedDetail>(PLAN_LOCKED_EVENT, { detail: { examId } }))
+}
+
 /** Hard ceiling on the strip so an exam years out can't build an enormous grid. */
 export const MAX_FORMING_DAYS = 400
 
-/** Wall-clock budget for the whole reveal, before the settle beat. */
-export const TOTAL_REVEAL_MS = 2600
+/** Wall-clock budget for the whole sweep, before the settle beat. */
+export const TOTAL_REVEAL_MS = 4000
 
 /**
  * How much of a beat a day with nothing scheduled gets. Plans usually end in a
- * stretch of empty buffer days, and that's where the wave starts — at an even
- * pace the animation opens with a second of nothing to read.
+ * stretch of empty buffer days, and that's where the sweep starts — at an even
+ * pace the playback would open on a second of nothing to read. Kept close to a
+ * full beat all the same: the strip has to travel to each new day, and a sharp
+ * speed-up over the buffer turns that travel into a jump.
  */
-const EMPTY_DAY_WEIGHT = 0.3
+const EMPTY_DAY_WEIGHT = 0.6
 
 export interface FormingTimeline {
-  /** Reveal delay per day index. Index 0 is today, revealed last. */
+  /** When the sweep reaches each day, in ms. Index 0 is today, reached last. */
   delays: number[]
-  /** When the last cell (today) lands. */
+  /** When the sweep arrives at today. */
   durationMs: number
 }
 
 /**
- * Per-beat delay for the reveal wave. Held inside a fixed budget so a 3-week
- * plan and a 6-month plan both finish in roughly the same time, with a floor
- * and ceiling so a long plan never flickers and a short one never crawls.
+ * Per-beat delay for the sweep. Held inside a fixed budget so a 3-week plan
+ * and a 6-month plan both finish in roughly the same time, with a floor and
+ * ceiling so a long plan never blurs past and a short one never crawls.
  */
 export function planFormingStepMs(totalWeight: number): number {
   if (totalWeight <= 0) return 0
@@ -57,8 +77,8 @@ export function planFormingStepMs(totalWeight: number): number {
 }
 
 /**
- * When each day's cell appears, walking backwards from the end of the plan to
- * today. Days that schedule concepts hold a full beat so they can be read;
+ * When the sweep reaches each day, walking backwards from the end of the plan
+ * to today. Days that schedule concepts hold a full beat so they can be read;
  * empty days go by in a fraction of one.
  */
 export function buildFormingTimeline(days: PlanFormingDay[]): FormingTimeline {
@@ -155,4 +175,21 @@ export function summarizeFormingDays(days: PlanFormingDay[]): PlanFormingSummary
  */
 export function peakDailyLoad(days: PlanFormingDay[]): number {
   return days.reduce((max, d) => Math.max(max, d.concepts.length), 0)
+}
+
+/**
+ * Which day the sweep has reached at `elapsed` — an index into the day strip,
+ * starting at `days.length - 1` and arriving at 0 (today) after `durationMs`.
+ */
+export function formingIndexAt(timeline: FormingTimeline, elapsed: number): number {
+  const { delays } = timeline
+  const n = delays.length
+  if (n === 0) return 0
+  if (elapsed <= 0) return n - 1
+  if (elapsed >= timeline.durationMs) return 0
+
+  // Delays descend as the index grows, so walk down to the first day reached.
+  let i = n - 1
+  while (i > 0 && delays[i - 1] <= elapsed) i--
+  return i
 }

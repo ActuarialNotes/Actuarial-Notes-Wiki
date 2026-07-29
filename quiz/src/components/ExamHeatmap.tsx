@@ -76,6 +76,14 @@ interface Props {
   /** No longer restricts to mobile — kept for API compatibility */
   mobileMonthOnly?: boolean
   highlightedDay?: string | null
+  /**
+   * Day the "schedule forming" playback is currently on. While it's set the
+   * strip glides to each new day rather than smooth-scrolling to it, and the
+   * expanded timeline collapses so the sweep is always visible.
+   */
+  playbackDay?: string | null
+  /** How long the strip has to reach each new playback day. */
+  playbackStepMs?: number
 }
 
 export function ExamHeatmap({
@@ -89,6 +97,8 @@ export function ExamHeatmap({
   onOpenStudyPlan,
   dayPlanPct,
   highlightedDay,
+  playbackDay,
+  playbackStepMs = 190,
 }: Props) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
@@ -226,7 +236,7 @@ export function ExamHeatmap({
 
   useEffect(() => {
     const el = scrollRef.current
-    if (!el || showFullTimeline) { setShowTodayButton(false); return }
+    if (!el || showFullTimeline || playbackDay) { setShowTodayButton(false); return }
 
     function sideForDate(cellW: number, dateKey: string): Side {
       if (!el) return 'right'
@@ -273,7 +283,7 @@ export function ExamHeatmap({
       el.removeEventListener('scroll', syncStripPositions)
       window.removeEventListener('resize', syncStripPositions)
     }
-  }, [allDays, showFullTimeline, targetDate, targetReadyDate])
+  }, [allDays, showFullTimeline, targetDate, targetReadyDate, playbackDay])
 
   function scrollToToday() {
     const el = scrollRef.current
@@ -287,13 +297,38 @@ export function ExamHeatmap({
 
   // Smooth-scroll to center highlighted day when it changes
   useEffect(() => {
-    if (!highlightedDay || !scrollRef.current) return
+    if (!highlightedDay || playbackDay || !scrollRef.current) return
     const el = scrollRef.current
     const idx = allDays.findIndex(d => d.key === highlightedDay)
     if (idx < 0) return
     const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
     el.scrollTo({ left: Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
-  }, [highlightedDay, allDays])
+  }, [highlightedDay, playbackDay, allDays])
+
+  // Playback: glide the strip to each new day over the beat it's given, so a
+  // run of days reads as one continuous rewind rather than a series of jumps.
+  // Linear on purpose — easing every step would stutter at each boundary.
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el || !playbackDay) return
+    const idx = allDays.findIndex(d => d.key === playbackDay)
+    if (idx < 0) return
+    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+    const target = Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2)
+    const from = el.scrollLeft
+    const distance = target - from
+    if (Math.abs(distance) < 1 || playbackStepMs <= 0) { el.scrollLeft = target; return }
+    // Arrive before the beat is up, so each day comes to rest in the middle of
+    // the strip for a moment instead of still sliding when the next one lands.
+    const glideMs = playbackStepMs * 0.62
+    const start = performance.now()
+    let raf = requestAnimationFrame(function step(now) {
+      const p = Math.min(1, (now - start) / glideMs)
+      el.scrollLeft = from + distance * p
+      if (p < 1) raf = requestAnimationFrame(step)
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [playbackDay, playbackStepMs, allDays])
 
   // Full-grid memos (only used when showFullTimeline)
   const totalWeeks = useMemo(() => {
@@ -513,9 +548,13 @@ export function ExamHeatmap({
     </button>
   ) : null
 
+  // The playback needs the day strip; collapse the expanded timeline for it
+  // without disturbing the user's stored preference.
+  const showStrip = !showFullTimeline || !!playbackDay
+
   return (
     <div className="space-y-3">
-      {!showFullTimeline ? (
+      {showStrip ? (
         /* ── Scrollable day strip (default) — max-w constrains to 7 cells ── */
         <div className="max-w-[400px] w-full mx-auto flex flex-col gap-3">
           <div
@@ -540,9 +579,14 @@ export function ExamHeatmap({
                 } else if (pct === null) {
                   cls += ' bg-muted/30'
                 }
-                if (cell.key === highlightedDay) cls += ' ring-2 ring-white/90'
+                // Cells carry `transition-all`, so the mark on the day the sweep
+                // just left fades out behind it — shortened here so the trail
+                // reads as one moving highlight rather than two lit days.
+                if (playbackDay) cls += ' duration-75'
+                if (cell.key === playbackDay) cls += ' schedule-playback-day'
+                else if (cell.key === highlightedDay) cls += ' ring-2 ring-white/90'
                 else if (cell.isToday) cls += ' ring-2 ring-inset ring-foreground/70 dark:ring-white/80'
-                if (isClickable) cls += ' cursor-pointer hover:opacity-75 active:opacity-60'
+                if (isClickable && !playbackDay) cls += ' cursor-pointer hover:opacity-75 active:opacity-60'
 
                 return (
                   <div
@@ -680,7 +724,7 @@ export function ExamHeatmap({
         </>
       )}
 
-      {showFullTimeline && dateRows}
+      {showFullTimeline && !playbackDay && dateRows}
     </div>
   )
 }

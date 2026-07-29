@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import {
   buildFormingTimeline,
   buildPlanFormingDays,
+  formingIndexAt,
   peakDailyLoad,
   planFormingStepMs,
   summarizeFormingDays,
@@ -216,6 +217,38 @@ describe('buildFormingTimeline', () => {
     expect(buildFormingTimeline([])).toEqual({ delays: [], durationMs: 0 })
     const oneDay = buildFormingTimeline(daysWithConceptsOn([], 0))
     expect(oneDay).toEqual({ delays: [0], durationMs: 0 })
+  })
+
+  describe('formingIndexAt', () => {
+    const days = daysWithConceptsOn([1, 2, 3, 4], 6)
+    const timeline = buildFormingTimeline(days)
+
+    it('starts at the end of the strip and lands on today', () => {
+      expect(formingIndexAt(timeline, 0)).toBe(days.length - 1)
+      expect(formingIndexAt(timeline, -100)).toBe(days.length - 1)
+      expect(formingIndexAt(timeline, timeline.durationMs)).toBe(0)
+      expect(formingIndexAt(timeline, timeline.durationMs + 5000)).toBe(0)
+    })
+
+    it('walks backwards without skipping or reversing', () => {
+      let previous = days.length - 1
+      for (let t = 0; t <= timeline.durationMs + 5; t += 5) {
+        const i = formingIndexAt(timeline, t)
+        expect(i).toBeLessThanOrEqual(previous)
+        previous = i
+      }
+      expect(previous).toBe(0)
+    })
+
+    it('reaches each day at its own delay', () => {
+      for (let i = 0; i < days.length; i++) {
+        expect(formingIndexAt(timeline, timeline.delays[i])).toBe(i)
+      }
+    })
+
+    it('is safe on an empty timeline', () => {
+      expect(formingIndexAt({ delays: [], durationMs: 0 }, 100)).toBe(0)
+    })
   })
 })
 

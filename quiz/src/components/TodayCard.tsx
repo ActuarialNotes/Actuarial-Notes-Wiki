@@ -490,7 +490,6 @@ export function TodayCard({
             examDate={examDate}
             examLabel={syllabus.examLabel}
             examId={wikiExamIdToProgressKey(syllabus.examId)}
-            plan={plan}
             onSave={onConfigChange}
             onExamDateChange={onExamDateChange}
             onClose={() => setShowConfig(false)}
@@ -687,7 +686,6 @@ export function TodayCard({
           examDate={examDate}
           examLabel={syllabus.examLabel}
           examId={wikiExamIdToProgressKey(syllabus.examId)}
-          plan={plan}
           onSave={next => {
             onConfigChange(next)
             onRegenerate()

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { sanitizeMasteryState } from '@/lib/mastery'
@@ -23,6 +23,11 @@ export function useDailyCompletions(examId: string | null): DailyLevelUp[] {
   const userId = user?.id
   const [rows, setRows] = useState<DailyLevelUp[]>([])
   const [version, setVersion] = useState(0)
+  // Per-instance channel name, so two surfaces holding this hook at once (e.g.
+  // mid-navigation between the Dashboard and a study guide) can't trip Supabase's
+  // "cannot add postgres_changes callbacks after subscribe()" — same reason
+  // useConceptMastery randomizes its channel.
+  const channelId = useRef(`daily-completions-${Math.random().toString(36).slice(2)}`)
 
   const refresh = useCallback(() => setVersion(v => v + 1), [])
 
@@ -56,7 +61,7 @@ export function useDailyCompletions(examId: string | null): DailyLevelUp[] {
   useEffect(() => {
     if (!userId) return
     const channel = supabase
-      .channel(`daily_completions:${userId}`)
+      .channel(channelId.current)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'daily_completions', filter: `user_id=eq.${userId}` },

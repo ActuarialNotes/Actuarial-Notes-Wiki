@@ -15,9 +15,11 @@ import {
   DEFAULT_VOLUME,
   SOUND_PATHS,
   SOUND_RECIPES,
-  comboMultiplier,
+  comboBloom,
+  comboVoicing,
   nextComboIndex,
   recipeDuration,
+  type ComboVoice,
   type NoiseSpec,
   type SoundEvent,
   type SoundRecipe,
@@ -191,7 +193,13 @@ function getReverb(audio: AudioContext, dest: AudioNode): ConvolverNode | null {
 // exponentialRampToValueAtTime cannot reach or start from zero.
 const SILENT = 0.0001
 
-function scheduleTone(audio: AudioContext, dest: AudioNode, spec: ToneSpec, t0: number, pitch = 1) {
+function scheduleTone(
+  audio: AudioContext,
+  dest: AudioNode,
+  spec: ToneSpec,
+  t0: number,
+  { pitch, gain: level }: ComboVoice = { pitch: 1, gain: 1 },
+) {
   const start = t0 + spec.at
   const osc = audio.createOscillator()
   const gain = audio.createGain()
@@ -200,7 +208,7 @@ function scheduleTone(audio: AudioContext, dest: AudioNode, spec: ToneSpec, t0: 
   if (spec.glide !== undefined) {
     osc.frequency.exponentialRampToValueAtTime(Math.max(SILENT, spec.glide * pitch), start + spec.dur)
   }
-  const peak = Math.max(SILENT, spec.gain ?? 1)
+  const peak = Math.max(SILENT, (spec.gain ?? 1) * level)
   const attack = Math.min(spec.attack ?? 0.012, spec.dur * 0.5)
   // `hold` keeps the note at full level before the decay begins — the
   // difference between a fanfare that arrives somewhere and one that starts
@@ -265,19 +273,23 @@ function throttled(event: SoundEvent, recipe: SoundRecipe): boolean {
 /** How far up its climb each combo cue currently sits, and when it last played. */
 const comboState = new Map<SoundEvent, { index: number; at: number }>()
 
+/** A cue that doesn't climb: sounded once, exactly as written. */
+const PLAIN: { voices: ComboVoice[]; bloom: number } = { voices: [{ pitch: 1, gain: 1 }], bloom: 1 }
+
 /**
- * Advance a cue's combo and return the pitch multiplier for this play. Cues
- * without a `combo` always come back at 1.
+ * Advance a cue's combo and return how to voice this play: the octave-spanning
+ * Shepard layers (usually two, one at the root of the climb) and how far the
+ * room has opened up. Cues without a `combo` come back untouched.
  */
-function advanceCombo(event: SoundEvent, recipe: SoundRecipe): number {
-  if (!recipe.combo) return 1
+function advanceCombo(event: SoundEvent, recipe: SoundRecipe): { voices: ComboVoice[]; bloom: number } {
+  if (!recipe.combo) return PLAIN
   const now = Date.now()
   const previous = comboState.get(event)
   const index = previous
     ? nextComboIndex(previous.index, now - previous.at, recipe.combo)
     : 0
   comboState.set(event, { index, at: now })
-  return comboMultiplier(recipe.combo, index)
+  return { voices: comboVoicing(recipe.combo, index), bloom: comboBloom(recipe.combo, index) }
 }
 
 /**
@@ -315,7 +327,7 @@ export function playSound(event: SoundEvent) {
   const audio = getCtx()
   if (!audio || !master) return
   try {
-    const pitch = advanceCombo(event, recipe)
+    const { voices, bloom } = advanceCombo(event, recipe)
     const t0 = audio.currentTime + 0.001
     const bus = audio.createGain()
     bus.gain.value = recipe.gain
@@ -336,13 +348,19 @@ export function playSound(event: SoundEvent) {
       const room = getReverb(audio, master)
       if (room) {
         send = audio.createGain()
-        send.gain.value = recipe.space
+        // A cue mid-combo rings in a bigger room than the same cue at the root.
+        send.gain.value = Math.min(1, recipe.space * bloom)
         tail.connect(send)
         send.connect(room)
       }
     }
 
-    for (const tone of recipe.tones ?? []) scheduleTone(audio, bus, tone, t0, pitch)
+    // A combo cue is sounded once per Shepard layer — the same notes an octave
+    // apart, cross-faded, so the climb can wrap without anyone hearing it.
+    for (const voice of voices) {
+      for (const tone of recipe.tones ?? []) scheduleTone(audio, bus, tone, t0, voice)
+    }
+    // The mallet is a strike, not a note: one per play, whatever the voicing.
     for (const noise of recipe.noise ?? []) scheduleNoise(audio, bus, noise, t0)
 
     // Drop the per-cue nodes once the cue has finished ringing so long sessions

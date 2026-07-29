@@ -958,15 +958,15 @@ function StudyGalleryToggle({
       onClick={onToggle}
       title={galleryOpen ? 'Back to study' : 'Open gallery'}
       aria-pressed={galleryOpen}
-      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+      className={`inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base sm:text-lg font-medium transition-colors ${
         galleryOpen
           ? 'bg-primary text-primary-foreground'
           : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
       } ${className}`}
     >
       {galleryOpen
-        ? <span className="inline-flex gap-0.5"><Eye className="h-4 w-4" /><Eye className="h-4 w-4" /></span>
-        : <LayoutGrid className="h-4 w-4" />
+        ? <span className="inline-flex gap-0.5"><Eye className="h-5 w-5" /><Eye className="h-5 w-5" /></span>
+        : <LayoutGrid className="h-5 w-5" />
       }
       <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
     </button>
@@ -990,13 +990,13 @@ function FocusModeToggle({
       onClick={onToggle}
       title={focusMode ? 'Exit focus mode' : 'Focus mode'}
       aria-pressed={focusMode}
-      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+      className={`inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-base sm:text-lg font-medium transition-colors ${
         focusMode
           ? 'bg-primary text-primary-foreground'
           : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
       } ${className}`}
     >
-      <Maximize2 className="h-4 w-4" />
+      <Maximize2 className="h-5 w-5" />
       <span>Focus</span>
     </button>
   )
@@ -3203,9 +3203,9 @@ export default function Flashcards() {
             study when the gallery overlay is open. Hidden in focus mode, which
             pares the footer down to just the Prev/Next nav. */}
         {!focusMode && (
-          <div className="flex items-center justify-between gap-2 bg-background px-4 pt-2">
-            <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} />
-            <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} />
+          <div className="flex items-center justify-between gap-3 bg-background px-4 pt-2">
+            <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} className="flex-1" />
+            <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} className="flex-1" />
           </div>
         )}
         {/* Gallery strip conveyor — only in study mode, and not in focus mode */}

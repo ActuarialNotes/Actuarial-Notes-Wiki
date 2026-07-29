@@ -812,7 +812,6 @@ export default function Dashboard() {
           examId={activeProgressKey ?? undefined}
           initialStep={onboardingStep}
           isPremium={isPremium}
-          plan={studyPlan}
           onSave={updatePlanConfig}
           onExamDateChange={handleTargetDateChange}
           onClose={() => setOnboardingOpen(false)}

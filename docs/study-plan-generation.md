@@ -157,35 +157,46 @@ The plan carries an internal version number. When the generation logic changes i
 
 The study plan reads mastery state but does not write it. Mastery advances only when you answer questions correctly in a quiz session. The plan's job is to decide **when** to schedule each concept; the [concept learning progression](concept-learning-progression.md) decides **how far along** you are.
 
-## Locking In a Plan: the Schedule-Forming Animation
+## Locking In a Plan: the Schedule-Forming Playback
 
-Saving the study-plan configuration ("Lock in plan" in `StudyPlanConfigModal`) hands the screen
-to `components/StudyPlanFormingOverlay.tsx` instead of closing outright. The plan is built
-backwards from the finish line, so the animation shows it that way: every day from today
-through exam day is drawn as a cell in a week-column grid, and the cells fill in **from exam
-day back to today**, with a hero card above the grid flashing each date and the concepts that
-day's plan schedules. The wave lands on today, the overlay reports what was built
-("*N* concepts across *M* study days"), and dismisses itself.
+Saving the study-plan configuration ("Lock in plan" in `StudyPlanConfigModal`) doesn't just
+close the modal — the Dashboard's **Study Schedule card** then rewinds through the new
+schedule. The day strip sweeps from exam day back to today while the day panel underneath
+shows each day it passes and the concepts that day's plan schedules, landing on today with a
+line reporting what was built ("Schedule locked in — *N* concepts across *M* study days").
+The animation is the real card doing real work: the same strip, the same day panel, the same
+"Planned for this day" list a user gets by tapping a future day.
 
-The view-model is `lib/planForming.ts` (pure, tested):
+**How the pieces fit**
+
+- `StudyPlanConfigModal` emits `PLAN_LOCKED_EVENT` (`lib/planForming.ts`) on save and closes.
+  The modal is opened from four places and none of them own the Study Schedule card, so the
+  two are joined by an event rather than by threading a callback through every caller.
+- `ReadinessCard` (which owns the card) listens for it, scrolls the card into view, waits a
+  beat for the plan to regenerate, and starts the sweep. It renders the day the sweep is on
+  rather than mirroring it into `selectedDay`, so the strip and the panel can never disagree
+  by a frame and the sweep doesn't fire a level-up query for every day it passes.
+- `hooks/useSchedulePlayback.ts` owns only the day cursor: which day the card is showing,
+  whether the sweep has landed, and the summary to report. Under `prefers-reduced-motion` it
+  skips the rewind and lands on today immediately.
+- `ExamHeatmap` takes `playbackDay` and glides its strip to each new day (linear, finishing
+  inside the beat so a day comes to rest before the next arrives). It collapses the expanded
+  timeline for the duration without disturbing the user's stored preference, and the mark on
+  the day the sweep just left fades out quickly behind it.
+
+**The view-model** is `lib/planForming.ts` (pure, tested):
 
 - `buildPlanFormingDays` inverts `plan.assignments` into one entry per calendar day — including
   the empty days and the tail of buffer days between the ready date and exam day, because the
   gaps are part of what the schedule looks like. Today's row comes from `plan.todaysConcepts`
   rather than the raw assignments, so it matches what the Dashboard shows. The strip is capped
-  at `MAX_FORMING_DAYS` so an exam years out can't build an enormous grid.
-- `buildFormingTimeline` assigns each day its reveal delay. The whole reveal is held inside a
-  fixed budget (`TOTAL_REVEAL_MS`) so a 3-week plan and a 6-month plan finish in roughly the
-  same time, and days with nothing scheduled get a fraction of a beat — plans usually *end* in
-  a run of empty buffer days, which is exactly where the wave starts.
-
-The wave itself is one `animation-delay` per cell (`.plan-forming-cell` in `index.css`), so a
-400-cell grid costs no re-renders; React only tracks which day the hero card is reading out,
-sampled a few times a second so the concepts stay legible however fast the cells are filling.
-Under `prefers-reduced-motion` the overlay skips the wave and shows the finished schedule.
-
-The animation needs the plan that was *just* regenerated, which lands a render or two after the
-save. `StudyPlanConfigModal` therefore takes an optional `plan` prop: supplying it (even as
-`null`) opts a caller into the animation, and the modal holds itself open until the prop
-reflects the config it just saved. Callers with no plan in scope (the exam picker's onboarding
-flow) omit the prop and saving closes the modal as before.
+  at `MAX_FORMING_DAYS` so an exam years out can't sweep forever.
+- `buildFormingTimeline` decides when the sweep reaches each day. The whole rewind is held
+  inside a fixed budget (`TOTAL_REVEAL_MS`) so a 3-week plan and a 6-month plan finish in
+  roughly the same time, and days with nothing scheduled get a slightly shorter beat — plans
+  usually *end* in a run of empty buffer days, which is where the sweep starts. The
+  discount is deliberately mild: the strip has to travel to each new day, so a sharp speed-up
+  over the buffer turns that travel into a jump.
+- `formingIndexAt` maps elapsed time back to a day index, which is what the hook samples on
+  each frame (throttled to `PLAYBACK_HOLD_MS`, so the days stay readable however fast the
+  cursor is moving underneath).

@@ -24,6 +24,8 @@ import { computeReadiness, parseSectionWeight } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
+import { PLAN_LOCKED_EVENT, type PlanLockedDetail } from '@/lib/planForming'
+import { useSchedulePlayback, PLAYBACK_HOLD_MS } from '@/hooks/useSchedulePlayback'
 import type { QuizSession } from '@/lib/supabase'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
@@ -528,6 +530,14 @@ export function ReadinessCard({
   const [allDailyCompletionsVersion, setAllDailyCompletionsVersion] = useState(0)
   const savedScrollY = useRef(0)
 
+  // "Schedule forming": after a plan is locked in, this card rewinds through
+  // the new schedule — the strip sweeps from exam day back to today and the day
+  // panel below shows each day's concepts as it passes.
+  const playback = useSchedulePlayback()
+  const studyScheduleCardRef = useRef<HTMLDivElement>(null)
+  const planRef = useRef(plan)
+  useEffect(() => { planRef.current = plan }, [plan])
+
   const toggleTopic = (name: string) =>
     setOpenTopics(prev => {
       const next = new Set(prev)
@@ -592,6 +602,32 @@ export function ReadinessCard({
 
   const now = useMemo(() => new Date(), [])
   const progressKey = wikiExamIdToProgressKey(syllabus.examId)
+
+  // The day the strip highlights and the panel below describes: the sweep while
+  // it's running, otherwise whatever day the user clicked. Deriving it (rather
+  // than mirroring the sweep into `selectedDay`) keeps the two in lockstep and
+  // keeps the sweep from firing a level-up query for every day it passes.
+  const displayDay = playback.day ?? selectedDay
+
+  // Locking in a plan (from any of the places the config modal opens) scrolls
+  // this card into view and plays the new schedule forming on it. The plan
+  // regenerates in the owner's effect a render or two after the save, so the
+  // sweep waits a beat and then reads whatever plan has landed.
+  useEffect(() => {
+    if (!isPremium) return
+    function handlePlanLocked(e: Event) {
+      const detail = (e as CustomEvent<PlanLockedDetail>).detail
+      if (detail?.examId !== progressKey) return
+      studyScheduleCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      window.setTimeout(() => {
+        const fresh = planRef.current
+        if (fresh) playback.start(fresh, examDate)
+      }, 260)
+    }
+    window.addEventListener(PLAN_LOCKED_EVENT, handlePlanLocked)
+    return () => window.removeEventListener(PLAN_LOCKED_EVENT, handlePlanLocked)
+  }, [progressKey, examDate, isPremium, playback])
+
 
   // Fetch all daily_completions for this exam — used for heatmap plan-completion coloring
   useEffect(() => {
@@ -1022,7 +1058,7 @@ export function ReadinessCard({
   // renders at the top of the page while its state/logic stays owned by this
   // component; otherwise renders inline below in its default bento-grid position.
   const studyScheduleCardContent = (
-      <Card className="order-4 border-0 shadow-none">
+      <Card className="order-4 border-0 shadow-none" ref={studyScheduleCardRef}>
         <CardContent className="p-6 space-y-5">
           {/* Header */}
           <div className="flex items-center justify-between gap-3">
@@ -1043,6 +1079,15 @@ export function ReadinessCard({
             </div>
           </div>
 
+          {/* Schedule-forming status — only while the sweep is running */}
+          {playback.active && (
+            <p className="-mt-3 text-xs font-medium text-primary" aria-live="polite">
+              {playback.landed && playback.summary
+                ? `Schedule locked in — ${playback.summary.concepts} concept${playback.summary.concepts === 1 ? '' : 's'} across ${playback.summary.studyDays} study day${playback.summary.studyDays === 1 ? '' : 's'}`
+                : 'Building your schedule…'}
+            </p>
+          )}
+
           {/* Heatmap */}
           <ExamHeatmap
             sessions={examSessions}
@@ -1052,24 +1097,27 @@ export function ReadinessCard({
             targetReadyDate={config.targetReadyDate}
             onTargetReadyDateChange={date => onConfigChange({ targetReadyDate: date })}
             onOpenStudyPlan={(step) => { setConfigInitialStep(step ?? 1); setShowConfig(true) }}
-            onDayClick={date => { setSelectedDay(date) }}
+            onDayClick={date => { playback.stop(); setSelectedDay(date) }}
             dayPlanPct={dayPlanPct}
             mobileMonthOnly
-            highlightedDay={selectedDay}
+            highlightedDay={displayDay}
+            playbackDay={playback.day}
+            playbackStepMs={PLAYBACK_HOLD_MS}
           />
 
-          {/* Day panel — shown when a heatmap day is clicked */}
-          {selectedDay && (() => {
+          {/* Day panel — shown when a heatmap day is clicked, and driven by the
+              sweep while a locked-in schedule is playing back */}
+          {displayDay && (() => {
             const daySessions = examSessions.filter(s => {
               const d = new Date(s.completed_at)
               const localDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-              return localDate === selectedDay
+              return localDate === displayDay
             })
             const dayTotal = daySessions.reduce((s, r) => s + r.total_questions, 0)
             const dayCorrect = daySessions.reduce((s, r) => s + r.correct_count, 0)
             const dayLevelUps = selectedDayLevelUps.length
-            const dayLabel = new Date(selectedDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
-            const isFutureDay = selectedDay > todayStr
+            const dayLabel = new Date(displayDay + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+            const isFutureDay = displayDay > todayStr
             return (
               <div className="border-t pt-4 mt-1 space-y-4">
                 {/* Header row */}
@@ -1077,7 +1125,7 @@ export function ReadinessCard({
                   <span className="text-sm font-semibold">{dayLabel}</span>
                   <button
                     type="button"
-                    onClick={() => setSelectedDay(null)}
+                    onClick={() => { playback.stop(); setSelectedDay(null) }}
                     className="flex items-center justify-center h-8 w-8 rounded-full border border-border bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                     aria-label="Clear day filter"
                   >
@@ -1134,20 +1182,31 @@ export function ReadinessCard({
 
                 {/* Study plan for this day */}
                 {isPremium && (() => {
-                  if (selectedDay === todayStr) {
-                    // Today: show live plan inline (moved below)
-                    return null
-                  }
-                  if (isFutureDay && plan) {
-                    const futureConcepts = plan.assignments.filter(a => a.scheduledDate === selectedDay)
-                    if (futureConcepts.length === 0) return null
+                  // Today's plan lives in its own card, so clicking today's cell
+                  // normally shows nothing here — except during the sweep, where
+                  // landing on today is the whole point.
+                  if (displayDay === todayStr && !playback.active) return null
+                  if ((isFutureDay || playback.active) && plan) {
+                    const dayConcepts = plan.assignments.filter(a => a.scheduledDate === displayDay)
+                    // Capped and height-reserved during the sweep so a busy day
+                    // followed by a quiet one doesn't pump the whole dashboard.
+                    const futureConcepts = playback.active ? dayConcepts.slice(0, 4) : dayConcepts
+                    if (futureConcepts.length === 0 && !playback.active) return null
                     return (
-                      <div className="border-t pt-3 space-y-1">
+                      <div className={`border-t pt-3 space-y-1${playback.active ? ' min-h-[152px]' : ''}`}>
                         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Planned for this day</p>
-                        {futureConcepts.map(a => {
+                        {futureConcepts.length === 0 && (
+                          <p className="px-2 py-1.5 text-sm text-muted-foreground">Nothing scheduled — review and rest.</p>
+                        )}
+                        {futureConcepts.map((a, i) => {
                           const cIdx = allConcepts.findIndex(c => c.name.toLowerCase() === a.conceptName.toLowerCase())
                           return (
-                            <div key={a.conceptName} className="flex items-center gap-2.5 px-2 py-1.5">
+                            <div
+                              // Re-keyed per day during the sweep so each day's concepts flash in.
+                              key={playback.active ? `${displayDay}-${a.conceptName}` : a.conceptName}
+                              style={playback.active ? { animationDelay: `${i * 40}ms` } : undefined}
+                              className={`flex items-center gap-2.5 px-2 py-1.5${playback.active ? ' schedule-playback-concept' : ''}`}
+                            >
                               <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
                               <button
                                 type="button"
@@ -1160,6 +1219,11 @@ export function ReadinessCard({
                             </div>
                           )
                         })}
+                        {playback.active && dayConcepts.length > futureConcepts.length && (
+                          <p className="px-2 text-xs text-muted-foreground">
+                            +{dayConcepts.length - futureConcepts.length} more
+                          </p>
+                        )}
                       </div>
                     )
                   }
@@ -1559,7 +1623,6 @@ export function ReadinessCard({
           examId={wikiExamIdToProgressKey(syllabus.examId)}
           initialStep={configInitialStep}
           isPremium={isPremium}
-          plan={plan}
           onSave={next => {
             onConfigChange(next)
             onRegenerate()

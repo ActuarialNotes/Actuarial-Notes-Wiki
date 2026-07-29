@@ -34,7 +34,9 @@ export function MarkdownText({ children, className, inline }: Props) {
   // blockified regardless of the element's default display.
   const Wrapper = inline ? 'span' : 'div'
   return (
-    <Wrapper className={className}>
+    // data-math-scope: this block's equations step together in math focus mode
+    // (see lib/mathFocus.ts).
+    <Wrapper className={className} data-math-scope="">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}

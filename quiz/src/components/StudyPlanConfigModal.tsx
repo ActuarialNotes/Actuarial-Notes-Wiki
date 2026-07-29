@@ -16,6 +16,7 @@ import {
   type QuickSetPreset,
   type TargetStrengthLevel,
 } from '@/lib/studyPlan'
+import { emitPlanLocked } from '@/lib/planForming'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 const HEADLINE_PRESETS: QuickSetPreset[] = ['1w', '2w', '1m']
@@ -120,6 +121,9 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     if (onExamDateChange) {
       onExamDateChange(localExamDate || null)
     }
+    // The Dashboard's Study Schedule card picks this up and plays the schedule
+    // forming on itself, once the plan has regenerated from the config above.
+    if (examId) emitPlanLocked(examId)
     onClose()
   }
 

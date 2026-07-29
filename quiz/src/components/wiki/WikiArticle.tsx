@@ -354,6 +354,10 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
     <div
       ref={articleRef}
       data-source-page={sourcePath}
+      // One article is one set of equations for math focus mode. Surfaces that
+      // stack several articles (the popup body, a flashcard back) mark their
+      // own wrapper, and the outermost scope wins — see lib/mathFocus.ts.
+      data-math-scope=""
       className={
         'prose dark:prose-invert max-w-none ' +
         'prose-headings:mt-6 prose-headings:mb-2 prose-headings:font-semibold ' +

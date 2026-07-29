@@ -708,6 +708,20 @@
   overflow-x: auto;
   overflow-y: hidden;
   padding-bottom: 0.25rem; /* room for the scrollbar on mobile */
+  /* Tapping an equation magnifies it — see components/MathFocus.tsx. Boxed
+     formulas take the same cursor from their [data-math-block] blockquote, so
+     the whole box reads as one target. */
+  cursor: zoom-in;
+}
+
+/* …except where the equation isn't the thing being clicked: inside a control it
+   is that control's label, and the magnified copy is already in focus mode. */
+a .katex-display,
+button .katex-display,
+label .katex-display,
+summary .katex-display,
+[data-math-magnify='none'] .katex-display {
+  cursor: inherit;
 }
 
 /* Themed scrollbars — use CSS variable tokens so they adapt to every colour
@@ -1212,4 +1226,35 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .sim-slider:active::-webkit-slider-thumb { transform: none; }
+}
+
+/* ─── Study-plan "schedule forming" playback ────────────────────────────────
+   After a plan is locked in, the Dashboard's Study Schedule card rewinds
+   through the new schedule: the day strip sweeps from exam day back to today
+   (scroll handled in ExamHeatmap) while each day it passes is marked here and
+   the day panel below flashes that day's concepts in. */
+.schedule-playback-day {
+  box-shadow: 0 0 0 2px hsl(var(--foreground) / 0.9), 0 0 12px hsl(var(--foreground) / 0.35);
+  animation: schedule-playback-day 220ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes schedule-playback-day {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.schedule-playback-concept {
+  animation: schedule-playback-concept 200ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes schedule-playback-concept {
+  0%   { opacity: 0; transform: translateX(-6px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Under reduced motion the card skips the rewind and lands straight on today
+   (see useSchedulePlayback), so all that's left to quiet here is the flourish
+   on that final frame. */
+@media (prefers-reduced-motion: reduce) {
+  .schedule-playback-day { animation: none; }
+  .schedule-playback-concept { animation: none; }
 }

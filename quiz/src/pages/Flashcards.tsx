@@ -1541,8 +1541,10 @@ function SortableCard({
           <LearningProgressModal conceptName={card.name} onClose={() => setShowLearningProgress(false)} />
         )}
 
-        {/* Back content — grows to fit, no scrollbar */}
-        <div className="px-3 py-2">
+        {/* Back content — grows to fit, no scrollbar. data-math-scope: the whole
+            face is one math-focus set, so Previous/Next steps through the
+            definition's equations and the Math View list alike. */}
+        <div className="px-3 py-2" data-math-scope="">
           {loadStatus === 'loading' && (
             <div className="flex items-center gap-1 text-xs text-muted-foreground py-2">
               <Loader2 className="h-3 w-3 animate-spin" /> Loading…
@@ -2513,7 +2515,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
             <span className="text-3xl font-bold text-center leading-tight">{current.name}</span>
           </div>
         ) : (
-          <div className="flex-1 flex flex-col p-6 gap-4">
+          // data-math-scope: the revealed face is one math-focus set (see
+          // lib/mathFocus.ts) — Math View renders each equation as its own
+          // article, and Previous/Next should run through all of them.
+          <div className="flex-1 flex flex-col p-6 gap-4" data-math-scope="">
             {!focusMode && (
             <div className="flex items-center gap-2">
               <p className="text-sm font-medium text-muted-foreground">{current.name}</p>

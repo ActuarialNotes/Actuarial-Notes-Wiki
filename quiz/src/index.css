@@ -1163,3 +1163,43 @@ summary .katex-display,
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+
+/* ─── Study-plan "schedule forming" ceremony ────────────────────────────────
+   Played when a plan is locked in (components/StudyPlanFormingOverlay.tsx).
+   Every day between today and exam day is a cell in a week-column grid, and
+   the cells pop in from exam day backwards to today. The wave is driven purely
+   by each cell's animation-delay so a 400-cell grid costs no re-renders. */
+@keyframes plan-forming-cell {
+  0%   { opacity: 0; transform: scale(0.35); }
+  55%  { opacity: 1; transform: scale(1.25); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.plan-forming-cell {
+  animation: plan-forming-cell 380ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+/* The cell the hero card is currently reading out. */
+.plan-forming-cell-active {
+  box-shadow: 0 0 0 1.5px hsl(var(--foreground) / 0.85);
+}
+/* The date the wave is passing, flashing in above the grid. */
+@keyframes plan-forming-day {
+  0%   { opacity: 0.35; transform: translateY(3px); }
+  100% { opacity: 1;    transform: translateY(0); }
+}
+.plan-forming-day {
+  animation: plan-forming-day 180ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes plan-forming-concept {
+  0%   { opacity: 0; transform: translateX(-6px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.plan-forming-concept {
+  animation: plan-forming-concept 200ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+/* Reduced motion keeps the finished schedule — the overlay skips the wave and
+   renders the settled state, so the cells must not stay hidden. */
+@media (prefers-reduced-motion: reduce) {
+  .plan-forming-cell,
+  .plan-forming-day,
+  .plan-forming-concept { animation: none; }
+}

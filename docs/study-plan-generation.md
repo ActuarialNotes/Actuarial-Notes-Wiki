@@ -156,3 +156,36 @@ The plan carries an internal version number. When the generation logic changes i
 ## Relationship to Mastery
 
 The study plan reads mastery state but does not write it. Mastery advances only when you answer questions correctly in a quiz session. The plan's job is to decide **when** to schedule each concept; the [concept learning progression](concept-learning-progression.md) decides **how far along** you are.
+
+## Locking In a Plan: the Schedule-Forming Animation
+
+Saving the study-plan configuration ("Lock in plan" in `StudyPlanConfigModal`) hands the screen
+to `components/StudyPlanFormingOverlay.tsx` instead of closing outright. The plan is built
+backwards from the finish line, so the animation shows it that way: every day from today
+through exam day is drawn as a cell in a week-column grid, and the cells fill in **from exam
+day back to today**, with a hero card above the grid flashing each date and the concepts that
+day's plan schedules. The wave lands on today, the overlay reports what was built
+("*N* concepts across *M* study days"), and dismisses itself.
+
+The view-model is `lib/planForming.ts` (pure, tested):
+
+- `buildPlanFormingDays` inverts `plan.assignments` into one entry per calendar day — including
+  the empty days and the tail of buffer days between the ready date and exam day, because the
+  gaps are part of what the schedule looks like. Today's row comes from `plan.todaysConcepts`
+  rather than the raw assignments, so it matches what the Dashboard shows. The strip is capped
+  at `MAX_FORMING_DAYS` so an exam years out can't build an enormous grid.
+- `buildFormingTimeline` assigns each day its reveal delay. The whole reveal is held inside a
+  fixed budget (`TOTAL_REVEAL_MS`) so a 3-week plan and a 6-month plan finish in roughly the
+  same time, and days with nothing scheduled get a fraction of a beat — plans usually *end* in
+  a run of empty buffer days, which is exactly where the wave starts.
+
+The wave itself is one `animation-delay` per cell (`.plan-forming-cell` in `index.css`), so a
+400-cell grid costs no re-renders; React only tracks which day the hero card is reading out,
+sampled a few times a second so the concepts stay legible however fast the cells are filling.
+Under `prefers-reduced-motion` the overlay skips the wave and shows the finished schedule.
+
+The animation needs the plan that was *just* regenerated, which lands a render or two after the
+save. `StudyPlanConfigModal` therefore takes an optional `plan` prop: supplying it (even as
+`null`) opts a caller into the animation, and the modal holds itself open until the prop
+reflects the config it just saved. Callers with no plan in scope (the exam picker's onboarding
+flow) omit the prop and saving closes the modal as before.

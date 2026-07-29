@@ -1559,6 +1559,7 @@ export function ReadinessCard({
           examId={wikiExamIdToProgressKey(syllabus.examId)}
           initialStep={configInitialStep}
           isPremium={isPremium}
+          plan={plan}
           onSave={next => {
             onConfigChange(next)
             onRegenerate()

@@ -489,7 +489,11 @@ export function CollectConceptModal() {
           {hasRealQuestion && (
             <div className="w-full rounded-xl bg-muted/40 px-4 py-3 text-left">
               {check ? (
-                <p className="text-sm font-medium text-foreground">{check.question}</p>
+                // Same markdown treatment as the question phase — the authored
+                // stems carry LaTeX, so plain text would show raw `$…$`.
+                <MarkdownText className="text-sm font-medium text-foreground [&_p]:my-0 [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden">
+                  {check.question}
+                </MarkdownText>
               ) : (
                 <>
                   <p className="text-sm font-medium text-foreground">Which concept does this describe?</p>
@@ -498,7 +502,12 @@ export function CollectConceptModal() {
               )}
               <div className="mt-2.5 flex items-start gap-2 rounded-lg bg-emerald-500/10 px-3 py-2">
                 <Check className="h-4 w-4 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">{correctAnswer}</span>
+                <MarkdownText
+                  inline
+                  className="min-w-0 text-sm font-medium text-emerald-700 dark:text-emerald-300 [&_p]:my-0 [&_.katex]:text-current [&_.katex-display]:overflow-x-auto [&_.katex-display]:overflow-y-hidden"
+                >
+                  {correctAnswer}
+                </MarkdownText>
               </div>
             </div>
           )}

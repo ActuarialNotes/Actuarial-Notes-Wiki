@@ -2180,9 +2180,21 @@ function GalleryPanel({
       >
         {tab === 'deck' && (
           <div className="space-y-4">
-            {/* Deck controls: count / manage / sort / add — hidden in focus mode */}
+            {/* Deck controls: count / manage / sort / clear-completed / add — hidden
+                in focus mode. In the overlay panel the row sticks to the top of the
+                scroll area (just under the tab bar) so "Clear Completed Flashcards"
+                stays reachable while scrolling a long deck. Sticky offsets are
+                measured from the scroll container's content box, so -top-4/-mt-4
+                cancel its py-4 padding (the row pins flush to the panel edge with
+                no sliver of card showing above it) while pt-4 keeps the row sitting
+                where it did; -mx-4/px-4 stretch the opaque background across the
+                px-4 gutters so cards scroll cleanly underneath. */}
             {!focusMode && (
-            <div className="flex items-center gap-3 flex-wrap">
+            <div
+              className={`flex items-center gap-3 flex-wrap ${
+                inline ? '' : 'sticky -top-4 z-20 -mx-4 -mt-4 px-4 pt-4 pb-2 bg-background'
+              }`}
+            >
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   type="button"

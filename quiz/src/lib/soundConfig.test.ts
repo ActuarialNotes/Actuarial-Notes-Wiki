@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import {
   SOUND_RECIPES,
-  comboMultiplier,
+  comboBloom,
+  comboVoicing,
   nextComboIndex,
   recipeDuration,
   type SoundEvent,
@@ -277,8 +278,14 @@ describe('sound catalogue', () => {
       expect(new Set(combo.steps).size).toBe(combo.steps.length)
     })
 
-    it('stays inside an octave, so the top of a run is bright and not shrill', () => {
-      expect(combo.steps[combo.steps.length - 1]).toBeLessThanOrEqual(12)
+    it('stays inside an octave, because the rung after the last one is the wrap', () => {
+      expect(combo.steps[combo.steps.length - 1]).toBeLessThan(12)
+    })
+
+    it('opens the room up as a run goes, so a streak is audible without a ceiling', () => {
+      // Pitch can't carry streak length — the Shepard wrap makes every octave
+      // sound the same on purpose — so the reverb send is what grows.
+      expect(combo.bloom).toBeGreaterThan(1)
     })
 
     it('is the only cue that climbs', () => {
@@ -289,38 +296,107 @@ describe('sound catalogue', () => {
     })
   })
 
-  describe('comboMultiplier', () => {
-    const combo = { steps: [0, 2, 4, 5, 7], resetMs: 1000 }
+  describe('comboVoicing', () => {
+    const combo = { steps: [0, 2, 4, 7, 9], resetMs: 1000, bloom: 1.7 }
+    /** Semitones above the written pitch, per layer. */
+    const pitches = (plays: number) =>
+      comboVoicing(combo, plays).map(v => 12 * Math.log2(v.pitch))
+    const level = (plays: number) =>
+      comboVoicing(combo, plays).reduce((sum, v) => sum + v.gain, 0)
 
-    it('leaves the root pitch alone', () => {
-      expect(comboMultiplier(combo, 0)).toBe(1)
-    })
-
-    it('transposes by the semitones of the step reached', () => {
-      expect(comboMultiplier(combo, 2)).toBeCloseTo(Math.pow(2, 4 / 12))
-      expect(comboMultiplier(combo, 4)).toBeCloseTo(1.5, 2) // a perfect fifth
-    })
-
-    it('holds at the top of the climb rather than running away', () => {
-      expect(comboMultiplier(combo, 99)).toBe(comboMultiplier(combo, 4))
+    it('sounds the cue exactly as written at the root of the climb', () => {
+      // One layer at unity: a lone right answer is bit-for-bit the catalogue.
+      expect(comboVoicing(combo, 0)).toEqual([{ pitch: 1, gain: 1 }])
     })
 
     it('is a no-op for cues that do not climb', () => {
-      expect(comboMultiplier(undefined, 3)).toBe(1)
-      expect(comboMultiplier({ steps: [], resetMs: 1000 }, 3)).toBe(1)
+      expect(comboVoicing(undefined, 3)).toEqual([{ pitch: 1, gain: 1 }])
+      expect(comboVoicing({ steps: [], resetMs: 1000 }, 3)).toEqual([{ pitch: 1, gain: 1 }])
+    })
+
+    it('never gets louder than the cue is written, anywhere in the climb', () => {
+      // The `cos²` window is what buys this: the two layers' gains sum to one at
+      // every rung, so the headroom the catalogue is tuned for holds all the way
+      // up and a forty-answer streak can't distort.
+      for (let plays = 0; plays < 40; plays++) {
+        expect(level(plays), `level at play ${plays}`).toBeCloseTo(1, 2)
+      }
+    })
+
+    it('never climbs out of the register it started in', () => {
+      // This is the whole trick: the ladder rises forever, the *sound* doesn't.
+      for (let plays = 0; plays < 40; plays++) {
+        for (const semitones of pitches(plays)) {
+          expect(semitones, `layer at play ${plays}`).toBeGreaterThanOrEqual(-12)
+          expect(semitones, `layer at play ${plays}`).toBeLessThanOrEqual(12)
+        }
+      }
+    })
+
+    it('rises at every step of a run, with no top to reach', () => {
+      // What the ear follows across a wrap is chroma — where in the octave the
+      // note sits — so each play has to land a short step *above* the last one
+      // going round the circle. Anything past a tritone is heard as a fall.
+      const chroma = (plays: number) => combo.steps[plays % combo.steps.length]
+      for (let plays = 0; plays < 40; plays++) {
+        const step = ((chroma(plays + 1) - chroma(plays)) % 12 + 12) % 12
+        expect(step, `play ${plays} → ${plays + 1} does not rise`).toBeGreaterThan(0)
+        expect(step, `play ${plays} → ${plays + 1} is heard as a fall`).toBeLessThan(6)
+      }
+    })
+
+    it('comes back around seamlessly, so no octave sounds like a reset', () => {
+      for (let plays = 0; plays < 12; plays++) {
+        expect(comboVoicing(combo, plays + combo.steps.length)).toEqual(comboVoicing(combo, plays))
+      }
+    })
+
+    it('crossfades: the copy leaving the top fades out as the new one fades in', () => {
+      const mid = comboVoicing(combo, 3) // 7 semitones up — mid-wrap
+      expect(mid).toHaveLength(2)
+      expect(12 * Math.log2(mid[0].pitch / mid[1].pitch)).toBeCloseTo(12)
+      for (const voice of mid) expect(voice.gain).toBeGreaterThan(0.1)
+    })
+  })
+
+  describe('comboBloom', () => {
+    const combo = { steps: [0, 2, 4, 7, 9], resetMs: 1000, bloom: 1.7 }
+
+    it('is closed at the root and open once a run is going', () => {
+      expect(comboBloom(combo, 0)).toBe(1)
+      expect(comboBloom(combo, 4)).toBeCloseTo(1.7)
+    })
+
+    it('only ever opens, and settles before the pitch wraps', () => {
+      // If it were still moving at the wrap, the wrap would stop being seamless.
+      let previous = 0
+      for (let plays = 0; plays < 40; plays++) {
+        const bloom = comboBloom(combo, plays)
+        expect(bloom).toBeGreaterThanOrEqual(previous)
+        previous = bloom
+      }
+      expect(comboBloom(combo, 99)).toBe(comboBloom(combo, combo.steps.length - 1))
+    })
+
+    it('leaves cues without a bloom alone', () => {
+      expect(comboBloom(undefined, 3)).toBe(1)
+      expect(comboBloom({ steps: [0, 2], resetMs: 1000 }, 3)).toBe(1)
     })
   })
 
   describe('nextComboIndex', () => {
-    const combo = { steps: [0, 2, 4, 5, 7], resetMs: 1000 }
+    const combo = { steps: [0, 2, 4, 7, 9], resetMs: 1000 }
 
     it('steps up while the run continues', () => {
       expect(nextComboIndex(0, 500, combo)).toBe(1)
       expect(nextComboIndex(1, 500, combo)).toBe(2)
     })
 
-    it('caps at the last step', () => {
-      expect(nextComboIndex(4, 500, combo)).toBe(4)
+    it('keeps counting past the end of the ladder', () => {
+      // Nothing caps the run: the ladder wraps and the register stays put, so
+      // an unbounded count is still a bounded sound.
+      expect(nextComboIndex(4, 500, combo)).toBe(5)
+      expect(nextComboIndex(99, 500, combo)).toBe(100)
     })
 
     it('starts over after a long enough gap', () => {

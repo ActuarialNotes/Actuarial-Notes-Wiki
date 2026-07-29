@@ -17,7 +17,9 @@ import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/
 // display alias (e.g. "Callable Bond" not "Callable").
 // v4: even daily-load distribution; proactive scheduling for level3 concepts
 // approaching the decay threshold.
-export const PLAN_CACHE_VERSION = 4
+// v5: a concept linked from more than one syllabus topic is scheduled once
+// instead of once per topic (which produced out-of-order level targets).
+export const PLAN_CACHE_VERSION = 5
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -167,6 +169,13 @@ interface ConceptEntry {
   numericWeight: number
 }
 
+/** Identity of the concept page an entry points at — two syllabus entries sharing
+ *  it are the same concept, however they're displayed or linked. */
+function conceptKey(c: ConceptEntry): string {
+  const base = c.target?.split('/').pop()?.replace(/\.md$/i, '').trim()
+  return (base || c.name).toLowerCase()
+}
+
 interface GenerateInput {
   examId: string
   syllabus: WikiExamSyllabus
@@ -188,18 +197,40 @@ export function generateStudyPlan(input: GenerateInput): StudyPlan {
   // target — keeping aliased concepts (e.g. [[Bond Price|Price]]) in sync.
   const masteryBySlug = buildMasteryLookup(masteryRecords.filter(r => r.exam_id === examId))
 
-  // Collect all concepts with topic metadata
+  // Collect all concepts with topic metadata.
+  //
+  // The syllabus parser deduplicates concepts *within* a topic, not across them,
+  // so a concept linked from two objectives (e.g. Exam 7 links [[Reinsurance]]
+  // from both the data-prep preamble and the Reinsurance objective) arrives here
+  // twice. Scheduling each entry separately would give the same concept two
+  // independent three-stage pipelines, which interleave on the calendar: the plan
+  // would say "Reinsurance → Level 2" on one day, "→ Level 1" the next and
+  // "→ Level 3" the day after. The duplicate sessions also inflate the daily load
+  // and the mastered/total ratio behind the pacing status.
+  //
+  // So keep one entry per concept — keyed by the concept page it points at, since
+  // that's what mastery is stored under — and let the heaviest topic own it so
+  // 'strong_key' priority reflects the concept's biggest stake in the exam.
   const allConcepts: ConceptEntry[] = []
+  const conceptIndexByKey = new Map<string, number>()
   for (const topic of syllabus.topics) {
     const numericWeight = topic.weight ? parseTopicWeight(topic.weight) : 1
     for (const c of topic.concepts) {
-      allConcepts.push({
+      const entry: ConceptEntry = {
         name: c.name,
         target: c.target,
         topicName: topic.name,
         topicWeight: topic.weight,
         numericWeight,
-      })
+      }
+      const key = conceptKey(entry)
+      const existingIdx = conceptIndexByKey.get(key)
+      if (existingIdx === undefined) {
+        conceptIndexByKey.set(key, allConcepts.length)
+        allConcepts.push(entry)
+      } else if (numericWeight > allConcepts[existingIdx].numericWeight) {
+        allConcepts[existingIdx] = entry
+      }
     }
   }
 

@@ -327,6 +327,92 @@ describe('generateStudyPlan — new concept pipeline', () => {
   })
 })
 
+// ── Concepts linked from more than one topic ───────────────────────────────────
+
+// "Reinsurance" is linked from two objectives, as Exam 7 does. Each topic's
+// concept list is deduplicated by the parser, but the same concept can appear in
+// several topics.
+const crossTopicSyllabus = {
+  examId: '7',
+  examLabel: 'Exam 7',
+  examTopic: 'Advanced Estimation of Claims Liabilities',
+  resources: [],
+  topics: [
+    {
+      name: 'Data Preparation',
+      weight: '5-10%',
+      concepts: [
+        { name: 'Reinsurance', target: 'Reinsurance' },
+        { name: 'Unpaid Claims', target: 'Unpaid Claims' },
+      ],
+    },
+    {
+      name: 'Reinsurance',
+      weight: '20-25%',
+      concepts: [{ name: 'Reinsurance', target: 'Reinsurance' }],
+    },
+  ],
+} as unknown as WikiExamSyllabus
+
+describe('generateStudyPlan — concept linked from several topics', () => {
+  const crossTopicConfig = {
+    targetReadyDate: addDays(todayISO(), 76),
+    targetStrengthLevel: 'strong_all' as const,
+    planStartDate: todayISO(),
+  }
+
+  it('schedules one pipeline, not one per topic', () => {
+    const plan = generateStudyPlan({
+      examId: '7',
+      syllabus: crossTopicSyllabus,
+      masteryRecords: [],
+      config: crossTopicConfig,
+      examDate: addDays(todayISO(), 90),
+    })
+    const reinsurance = plan.assignments.filter(a => a.conceptName === 'Reinsurance')
+    expect(reinsurance.length).toBe(3)
+    expect(reinsurance.map(a => a.initialState).sort()).toEqual(['level1', 'level2', 'new'].sort())
+  })
+
+  it('never targets a lower level on a later day (the 2 → 1 → 3 bug)', () => {
+    const plan = generateStudyPlan({
+      examId: '7',
+      syllabus: crossTopicSyllabus,
+      masteryRecords: [],
+      config: crossTopicConfig,
+      examDate: addDays(todayISO(), 90),
+    })
+    const order: Record<string, number> = { new: 0, forgotten: 0, level1: 1, level2: 2, level3: 3 }
+    const byConcept = new Map<string, { date: string; state: string }[]>()
+    for (const a of plan.assignments) {
+      const list = byConcept.get(a.conceptName) ?? []
+      list.push({ date: a.scheduledDate, state: a.initialState })
+      byConcept.set(a.conceptName, list)
+    }
+    for (const [, stages] of byConcept) {
+      const sorted = [...stages].sort((x, y) => x.date.localeCompare(y.date))
+      for (let i = 1; i < sorted.length; i++) {
+        expect(order[sorted[i].state]).toBeGreaterThan(order[sorted[i - 1].state])
+      }
+    }
+  })
+
+  it('lets the heaviest topic own a shared concept so strong_key priority is not diluted', () => {
+    const plan = generateStudyPlan({
+      examId: '7',
+      syllabus: crossTopicSyllabus,
+      masteryRecords: [],
+      config: { ...crossTopicConfig, targetStrengthLevel: 'strong_key' },
+      examDate: addDays(todayISO(), 90),
+    })
+    const intro = plan.assignments.find(a => a.conceptName === 'Reinsurance' && a.initialState === 'new')
+    expect(intro?.topicName).toBe('Reinsurance')
+    // 20-25% beats the 5-10% topic, so Reinsurance is introduced before Unpaid Claims.
+    const otherIntro = plan.assignments.find(a => a.conceptName === 'Unpaid Claims' && a.initialState === 'new')
+    expect(intro!.scheduledDate <= otherIntro!.scheduledDate).toBe(true)
+  })
+})
+
 // ── todaysLevelUps grounding ──────────────────────────────────────────────────
 
 describe('generateStudyPlan — todaysLevelUps grounding', () => {

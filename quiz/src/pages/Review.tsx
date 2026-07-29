@@ -25,6 +25,10 @@ import { EXAM_LABEL_TO_ID } from '@/lib/examIds'
 import { getDailyGems } from '@/lib/dailyProgressStore'
 import { useGems } from '@/hooks/useGems'
 
+// Shared "quiz these exact questions" seam (same key RecentMistakesCard and
+// MasteryAnalyticsCard write) — keeps the retry URL small for a long miss list.
+const SELECTED_IDS_KEY = 'actuarial_selected_ids'
+
 // Mirrors the target-state progression used by TodayCard/ReadinessCard to
 // decide whether a concept has reached today's assigned goal.
 const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
@@ -211,6 +215,35 @@ export default function Review() {
     ? session.questions.filter((_, i) => !outcomes[i])
     : session.questions
 
+  // What "Try Again" re-quizzes: only the questions this session didn't get full
+  // credit on. A partial (e.g. a multi-part with some parts missed) counts as
+  // missed, and so does a question left unanswered. Nothing missed → nothing to
+  // retry, so the button drops out and only "New Quiz" remains.
+  const retryIds = session.questions.filter((_, i) => !outcomes[i]).map(q => q.id)
+  const retryMode = session.mode
+
+  function handleTryAgain() {
+    if (retryIds.length === 0) return
+    try {
+      sessionStorage.setItem(SELECTED_IDS_KEY, JSON.stringify(retryIds))
+    } catch {
+      /* ignore quota/private-mode errors */
+    }
+    // Build the params from scratch rather than reusing this page's: the original
+    // topic/concept/count filters would be dead weight (an ids selection wins in
+    // filterQuestions) and a stale `count` could truncate the retry set.
+    const params = new URLSearchParams({
+      selection: 'stored',
+      mode: retryMode,
+      reveal: searchParams.get('reveal') ?? 'during',
+      count: String(retryIds.length),
+    })
+    const from = searchParams.get('from')
+    if (from) params.set('from', from)
+    resetQuiz()
+    navigate(`/quiz?${params.toString()}`)
+  }
+
   // Full-screen ceremony for concepts levelled up by this quiz — plays first,
   // then hands off to the streak/quest/plan celebrations. For signed-in users we
   // wait for the gem balance to load so the running tally lands on the right
@@ -338,9 +371,11 @@ export default function Review() {
 
       {/* ── Actions ─────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row gap-3 pb-8">
-        <Button variant="outline" onClick={() => { resetQuiz(); navigate(`/quiz?${searchParams.toString()}`) }} className="flex-1">
-          Try Again
-        </Button>
+        {retryIds.length > 0 && (
+          <Button variant="outline" onClick={handleTryAgain} className="flex-1">
+            Try Again ({retryIds.length} missed)
+          </Button>
+        )}
         <Button onClick={() => { resetQuiz(); navigate('/') }} className="flex-1">
           New Quiz
         </Button>

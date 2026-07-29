@@ -1,5 +1,4 @@
-import { useState, useContext, isValidElement, Children, type ReactNode, type ReactElement, type ComponentType, Fragment } from 'react'
-import { MathViewContext } from '@/contexts/MathViewContext'
+import { useState, isValidElement, Children, type ReactNode, type ReactElement, type ComponentType, Fragment } from 'react'
 import {
   ChevronDown,
   Info,
@@ -388,15 +387,28 @@ function Callout({ type, fold, title, children }: CalloutProps) {
   )
 }
 
-function hasDisplayMath(node: ReactNode): boolean {
+function classList(value: unknown): string[] {
+  if (typeof value === 'string') return value.split(/\s+/)
+  if (Array.isArray(value)) return value.flatMap(entry => (typeof entry === 'string' ? entry.split(/\s+/) : []))
+  return []
+}
+
+/**
+ * Does this blockquote hold a rendered formula?
+ *
+ * Matches the KaTeX root rather than `.katex-display`: the vault writes boxed
+ * formulas as `> $$…$$` on one line, which remark parses as inline math, so the
+ * display wrapper is never emitted. Both spellings end up as `.katex`.
+ */
+function hasRenderedMath(node: ReactNode): boolean {
   if (node === null || node === undefined) return false
   if (typeof node === 'string' || typeof node === 'number' || typeof node === 'boolean') return false
-  if (Array.isArray(node)) return node.some(hasDisplayMath)
+  if (Array.isArray(node)) return node.some(hasRenderedMath)
   if (isValidElement(node)) {
     const el = node as ReactElement
     const props = el.props as Record<string, unknown>
-    if (typeof props.className === 'string' && props.className.includes('katex-display')) return true
-    if (props.children != null) return hasDisplayMath(props.children as ReactNode)
+    if (classList(props.className).includes('katex')) return true
+    if (props.children != null) return hasRenderedMath(props.children as ReactNode)
   }
   return false
 }
@@ -405,20 +417,20 @@ export const calloutComponents: Components = {
   blockquote(props) {
     const { children, ...rest } = props
     const match = matchCallout(children)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const mathCtx = useContext(MathViewContext)
-    const isMathBlock = !match && hasDisplayMath(children)
+    const isMathBlock = !match && hasRenderedMath(children)
 
     if (!match) {
       return (
         <blockquote
           {...rest}
+          // `data-math-block` makes the whole box — padding included — the tap
+          // target for math focus mode; the press itself is silent because the
+          // overlay it opens plays the panel cue. See components/MathFocus.tsx.
+          data-math-block={isMathBlock ? '' : undefined}
+          data-sound={isMathBlock ? 'none' : undefined}
           className={`not-prose my-4 bg-background rounded-lg px-6 py-4 text-center [&_p]:m-0${
-            isMathBlock && mathCtx && !mathCtx.active
-              ? ' cursor-pointer hover:ring-2 hover:ring-primary/40 transition-shadow'
-              : ''
+            isMathBlock ? ' cursor-zoom-in hover:ring-2 hover:ring-primary/40 transition-shadow' : ''
           }`}
-          onClick={isMathBlock && mathCtx && !mathCtx.active ? mathCtx.enter : undefined}
         >
           {children}
         </blockquote>

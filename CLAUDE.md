@@ -52,7 +52,7 @@ quiz/                                             — the React app (this is whe
   catalogue), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
 - `stores/` — Zustand stores: `quizStore.ts` (active quiz session), `researchStore.ts` (flag-gated)
-- `contexts/` — Auth, ExamProgress, MathView providers
+- `contexts/` — Auth, ExamProgress providers
 
 ## Key domain concepts (read the docs first)
 
@@ -147,6 +147,18 @@ Other important `lib/` modules:
   contract as the league SQL). Prefs live in `user_email_prefs`
   (`hooks/useEmailPrefs.ts` + `components/EmailSettingsCard.tsx` in Settings). Gated by
   `DAILY_PLAN_EMAIL_ENABLED`. See `docs/daily-plan-email.md`.
+- `mathFocus.ts` — math focus mode: tapping a rendered equation magnifies it in a
+  full-screen overlay with Previous/Next through the equations around it. This module
+  is the decision layer (what counts as a hit, which equations form one set, how far
+  to scale); `components/MathFocus.tsx` is the single delegated click listener mounted
+  in `App`, and `components/MathFocusOverlay.tsx` is the overlay. It works on *any*
+  surface that renders KaTeX because nothing opts in: a formula box is marked
+  `data-math-block` by `MarkdownCallout`, a container that groups equations into one
+  prev/next set is marked `data-math-scope` (`WikiArticle`, `MarkdownText`, and the
+  popup/flashcard bodies that stack several of them), and `data-math-magnify="none"`
+  opts a subtree out. Note the vault writes formulas as `> $$…$$` on one line, which
+  remark parses as *inline* math — so equations are matched on `.katex`, not
+  `.katex-display`.
 - `soundConfig.ts` / `soundEngine.ts` / `soundInteractions.ts` — the sound system.
   `soundConfig.ts` is the cue catalogue as plain data (tones, noise sweeps,
   envelopes) — edit sounds there; `soundEngine.ts` holds the single AudioContext,

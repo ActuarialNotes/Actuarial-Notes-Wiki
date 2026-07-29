@@ -16,12 +16,17 @@ function entries(): Array<[SoundEvent, SoundRecipe]> {
   return EVENTS.map(e => [e, SOUND_RECIPES[e]])
 }
 
+/** The cues with a pitch ladder on them. */
+function climbing(): Array<[SoundEvent, SoundRecipe]> {
+  return entries().filter(([, recipe]) => recipe.combo)
+}
+
 /** The cues that celebrate something, as opposed to acknowledging a press. */
 const REWARDS = ['correct', 'addToDeck', 'collect', 'levelUp', 'reward', 'streak', 'complete', 'begin'] as const
 
 /** Everything a user hears dozens of times an hour. */
 const INTERFACE = ['click', 'press', 'select', 'tick', 'toggleOn', 'toggleOff', 'navigate', 'actions',
-  'open', 'close', 'page', 'shuffle'] as const
+  'open', 'close', 'page', 'shuffle', 'fileAway'] as const
 
 /**
  * The notes of a cue's melody, as opposed to the struck partials, sparkle and
@@ -272,27 +277,55 @@ describe('sound catalogue', () => {
       expect(combo.resetMs).toBeGreaterThan(0)
     })
 
-    it('starts at the written pitch and only ever ascends', () => {
-      expect(combo.steps[0]).toBe(0)
-      expect(combo.steps).toEqual([...combo.steps].sort((a, b) => a - b))
-      expect(new Set(combo.steps).size).toBe(combo.steps.length)
-    })
-
-    it('stays inside an octave, because the rung after the last one is the wrap', () => {
-      expect(combo.steps[combo.steps.length - 1]).toBeLessThan(12)
-    })
-
     it('opens the room up as a run goes, so a streak is audible without a ceiling', () => {
       // Pitch can't carry streak length — the Shepard wrap makes every octave
       // sound the same on purpose — so the reverb send is what grows.
       expect(combo.bloom).toBeGreaterThan(1)
     })
 
-    it('is the only cue that climbs', () => {
-      // Every other cue marks a distinct event; only a streak of the same
-      // event has anything to count.
-      const climbing = entries().filter(([, recipe]) => recipe.combo)
-      expect(climbing.map(([event]) => event)).toEqual(['correct'])
+    it('climbs only where there is a run to count', () => {
+      // Most cues mark a distinct event and have nothing to count. The two
+      // that climb both fire repeatedly on the same action: a run of right
+      // answers, and a deck of finished cards clearing one after another.
+      expect(climbing().map(([event]) => event).sort()).toEqual(['correct', 'fileAway'])
+    })
+  })
+
+  // The Shepard wrap only works if every ladder obeys the same shape, so these
+  // hold for *any* cue that climbs rather than for `correct` alone.
+  describe('every ladder that climbs', () => {
+    it('starts at the written pitch and only ever ascends', () => {
+      for (const [event, recipe] of climbing()) {
+        const steps = recipe.combo!.steps
+        expect(steps[0], `${event} does not start at the written pitch`).toBe(0)
+        expect(steps, `${event} does not ascend`).toEqual([...steps].sort((a, b) => a - b))
+        expect(new Set(steps).size, `${event} repeats a rung`).toBe(steps.length)
+      }
+    })
+
+    it('stays inside an octave, because the rung after the last one is the wrap', () => {
+      // A rung at 12 is the root an octave up: `comboVoicing` sounds it exactly
+      // as the root, so the ladder would have a dead step in it and the wrap
+      // would repeat a note instead of moving on.
+      for (const [event, recipe] of climbing()) {
+        const steps = recipe.combo!.steps
+        expect(steps[steps.length - 1], `${event} reaches the wrap`).toBeLessThan(12)
+      }
+    })
+  })
+
+  describe('the clear-completed sweep', () => {
+    const combo = SOUND_RECIPES.fileAway.combo!
+
+    it('outlasts the gap between two cards clearing', () => {
+      // The climb has to survive the stagger between cards (at most 230ms, see
+      // CLEAR_STAGGER_MS) or every card would sound at the root pitch.
+      expect(combo.resetMs).toBeGreaterThan(230)
+    })
+
+    it('stays under a card being added, since it fires far more often', () => {
+      expect(peakLevel(SOUND_RECIPES.fileAway))
+        .toBeLessThan(peakLevel(SOUND_RECIPES.addToDeck))
     })
   })
 

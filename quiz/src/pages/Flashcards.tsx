@@ -92,12 +92,43 @@ const GROUP_LABELS: { key: GroupBy; label: string }[] = [
   { key: 'custom',  label: 'Custom' },
 ]
 
-// How long each card's "clear" animation (border ring → green wash → shrink/
-// fade, see .flashcard-clearing/-clear-ring/-clear-wash in index.css) takes.
-// "Clear Completed Flashcards" steps through completed cards one at a time
-// at this cadence, so the next card's sweep starts right as the previous one
-// finishes disappearing.
-const CLEAR_CARD_MS = 700
+// How long one card's "clear" animation (border ring → green flood + checkmark
+// → the card tipping back and lifting away; see .flashcard-clearing and friends
+// in index.css) runs.
+const CLEAR_CARD_MS = 1050
+
+// Gap between one card starting its clear and the next one starting. Shorter
+// than the animation itself on purpose: several cards are mid-clear at once, so
+// a finished deck reads as one wave rolling down it rather than a queue.
+const CLEAR_STAGGER_MS = 230
+
+// …but a twenty-card deck at that cadence outstays its welcome, so the stagger
+// tightens as the deck grows: the starts always fit inside this budget.
+const CLEAR_SWEEP_BUDGET_MS = 3000
+
+/**
+ * How far apart `count` cards should start their clear animations. Never
+ * tighter than 90ms: past that the cards stop reading as separate events, and
+ * the `fileAway` cue's own throttle would start swallowing them anyway.
+ */
+function clearStaggerFor(count: number): number {
+  if (count <= 1) return CLEAR_STAGGER_MS
+  return Math.max(90, Math.min(CLEAR_STAGGER_MS, Math.round(CLEAR_SWEEP_BUDGET_MS / count)))
+}
+
+// The three layers of a card's clear animation — the line racing round the
+// border, the green flooding out from the middle, and the checkmark stroked
+// over the top. Identical on both faces of the card; the shared timeline lives
+// in index.css.
+const CLEAR_OVERLAY = (
+  <>
+    <span className="flashcard-clear-ring" aria-hidden="true" />
+    <span className="flashcard-clear-wash" aria-hidden="true" />
+    <svg className="flashcard-clear-check" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 12.5 L9.5 18 L20 6.5" />
+    </svg>
+  </>
+)
 
 // The mastery ladder as a single green ramp — grey for New, deepening green for
 // levels 1→3 — matching how the ladder is coloured everywhere else in the app
@@ -1321,7 +1352,12 @@ function SortableCard({
       }`}
     >
       {isCompleted
-        ? <CheckCircle2 key="done" className="h-5 w-5 flashcard-complete-pop" />
+        ? (
+          <span key="done" className="relative inline-flex items-center justify-center">
+            <span className="flashcard-complete-ripple" aria-hidden="true" />
+            <CheckCircle2 className="h-5 w-5 flashcard-complete-pop" />
+          </span>
+        )
         : <Circle className="h-5 w-5" />}
     </button>
   )
@@ -1399,12 +1435,7 @@ function SortableCard({
         }}
         className={`${baseClass} ${colorClass} cursor-grab active:cursor-grabbing select-none`}
       >
-        {isClearing && (
-          <>
-            <span className="flashcard-clear-ring" aria-hidden="true" />
-            <span className="flashcard-clear-wash" aria-hidden="true" />
-          </>
-        )}
+        {isClearing && CLEAR_OVERLAY}
         {/* Header: name + play button — hidden in focus mode */}
         {!focusMode && (
         <div className="flex items-center justify-between gap-1 px-3 py-2">
@@ -1608,12 +1639,7 @@ function SortableCard({
       }}
       className={`${baseClass} ${colorClass} cursor-pointer active:cursor-grabbing hover:shadow-md select-none`}
     >
-      {isClearing && (
-        <>
-          <span className="flashcard-clear-ring" aria-hidden="true" />
-          <span className="flashcard-clear-wash" aria-hidden="true" />
-        </>
-      )}
+      {isClearing && CLEAR_OVERLAY}
       {/* Top bar: deck toggle + actions menu — hidden in focus mode */}
       {!focusMode && (
       <div className="flex items-center justify-between gap-1.5 px-2 pt-2">
@@ -2061,21 +2087,26 @@ function GalleryPanel({
     }
   }, [tab]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Scroll to whichever card just started its "Clear Completed Flashcards"
-  // sweep (the most recently added name — Sets preserve insertion order) so
-  // each card is brought into view in turn as the one-by-one animation steps
-  // through the deck.
+  // Follow the "Clear Completed Flashcards" sweep down the deck (the most
+  // recently started card — Sets preserve insertion order). The cards clear in
+  // an overlapping cascade, so chasing every one in turn would mean a new
+  // smooth scroll every couple of hundred milliseconds, each one interrupting
+  // the last; only cards that have actually drifted out of view are chased.
   const currentClearingName = clearingNames && clearingNames.size > 0
     ? [...clearingNames].at(-1)
     : undefined
   useEffect(() => {
-    if (tab !== 'deck' || !currentClearingName || !scrollContainerRef.current) return
-    const all = scrollContainerRef.current.querySelectorAll<HTMLElement>('[data-card-name]')
+    const container = scrollContainerRef.current
+    if (tab !== 'deck' || !currentClearingName || !container) return
+    const all = container.querySelectorAll<HTMLElement>('[data-card-name]')
     for (const el of all) {
-      if (el.dataset.cardName?.toLowerCase() === currentClearingName) {
+      if (el.dataset.cardName?.toLowerCase() !== currentClearingName) continue
+      const card = el.getBoundingClientRect()
+      const view = container.getBoundingClientRect()
+      if (card.top < view.top || card.bottom > view.bottom) {
         el.scrollIntoView({ block: 'center', behavior: 'smooth' })
-        break
       }
+      break
     }
   }, [currentClearingName, tab])
 
@@ -3122,14 +3153,19 @@ export default function Flashcards() {
     setGalleryExpanded(true)
     clearTimersRef.current.forEach(clearTimeout)
     clearTimersRef.current = []
-    // Reveal one card's clear animation at a time. Each name is added (never
-    // removed) so a card that's finished its own animation stays hidden —
-    // `.flashcard-clearing` etc. are all fill-mode `both` — while the rest of
-    // the deck sweeps in turn behind it.
+    // Each sweep starts its own climb, so the first card off a deck of two
+    // sounds the same as the first card off a deck of twenty.
+    resetSoundCombo('fileAway')
+    // Start the cards in turn — faster than they finish, so their animations
+    // overlap into a cascade. Each name is added (never removed) so a card
+    // that's finished its own animation stays gone (`.flashcard-clearing` and
+    // friends are all fill-mode `both`) while the wave rolls on behind it.
+    const stagger = clearStaggerFor(names.length)
     names.forEach((name, i) => {
       const timer = setTimeout(() => {
+        playSound('fileAway')
         setClearingNames(prev => new Set(prev).add(name))
-      }, i * CLEAR_CARD_MS)
+      }, i * stagger)
       clearTimersRef.current.push(timer)
     })
     const finalTimer = setTimeout(() => {
@@ -3137,7 +3173,7 @@ export default function Flashcards() {
       setClearingNames(new Set())
       setAgainCounts({})
       setActiveIndex(0)
-    }, names.length * CLEAR_CARD_MS)
+    }, (names.length - 1) * stagger + CLEAR_CARD_MS)
     clearTimersRef.current.push(finalTimer)
   }
 

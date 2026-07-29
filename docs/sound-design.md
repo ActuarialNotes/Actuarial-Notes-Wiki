@@ -120,6 +120,19 @@ a wrong answer in `pages/Quiz.tsx` and an "Again" rating in
 `pages/Flashcards.tsx`. If a third place ever starts playing `correct`, it
 should reset the combo on its failure path too.
 
+`fileAway` climbs for the same reason on a much shorter clock. "Clear Completed
+Flashcards" fires it once per card, a couple of hundred milliseconds apart, and
+the climb is what turns that from a stutter into a scale: the pitch rises card
+after card, all the way down the deck. It uses the same pentatonic rungs as
+`correct` — the wrap has to be a step like any other, or a nineteen-card sweep
+would hit a seam partway through — but no `bloom`, because the cue is dry and
+there is no room to open up.
+
+Its run is a single sweep, so `handleClearCompleted` calls
+`resetSoundCombo('fileAway')` before starting one rather than relying on the
+(deliberately generous) `resetMs` — the first card off a deck of two has to
+sound like the first card off a deck of twenty.
+
 ## The catalogue
 
 | Cue | When |
@@ -134,6 +147,7 @@ should reset the combo on its failure path too.
 | `open` / `close` | A panel or modal sliding in or out |
 | `page` | A flick within one surface — popup prev/next, a flashcard turning over, a swipe |
 | `shuffle` | Riffling the flashcard deck into a new order |
+| `fileAway` | One finished card sliding off the deck during "Clear Completed Flashcards". Climbs across the sweep — see "The combo" |
 | `correct` | A right answer, anywhere: quiz, comprehension check, flashcard "Got it". Climbs endlessly across a run — see "The combo" |
 | `addToDeck` | A card filed into the study deck ("Add to Flashcards") |
 | `collect` | A flashcard landing in the deck via the collect ceremony |

@@ -15,7 +15,7 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { Question } from '@/lib/parser'
 
-function questionsNeededForPlan(
+export function questionsNeededForPlan(
   plan: StudyPlan | null,
   topic: string,
   allQuestions: Question[],

@@ -18,6 +18,8 @@ import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
+import { useAllQuestions } from '@/hooks/useAllQuestions'
+import { questionsNeededForPlan } from '@/hooks/useTodayQuizCount'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -150,6 +152,7 @@ export default function Dashboard() {
   const { records: masteryRecords, loading: masteryLoading, refresh: refreshMastery } = useConceptMastery()
   const { isPremium, refresh: refreshSubscription } = useSubscription()
   const { balance: gemBalance } = useGems()
+  const { questions: allQuestions } = useAllQuestions()
 
   const popupOpen = useConceptPopup(s => s.open)
   const closePopup = useConceptPopup(s => s.close)
@@ -353,6 +356,14 @@ export default function Dashboard() {
       .filter(s => s.exam === activeSyllabus.examTopic && s.completed_at.slice(0, 10) === today)
       .reduce((sum, s) => sum + s.total_questions, 0)
   }, [sessions, activeSyllabus])
+
+  // Fewest questions needed to complete today's plan — shown as a badge on the
+  // "Start Today's Quiz" button (mirrors the Quiz-tab nav badge, scoped to the
+  // active exam) and hidden once the plan is complete.
+  const todaysQuizBadgeCount = useMemo(() => {
+    if (!activeSyllabus) return 0
+    return questionsNeededForPlan(studyPlan, activeSyllabus.examTopic, allQuestions)
+  }, [activeSyllabus, studyPlan, allQuestions])
 
   // Top-of-dashboard primary actions. "Read concepts" and the quiz launch reuse
   // the trigger props ReadinessCard already listens on (same path as the header
@@ -636,16 +647,26 @@ export default function Dashboard() {
               Read concepts
             </Button>
             {isPremium && displayConcepts.length > 0 && (
-              <button
-                type="button"
-                data-sound="begin"
-                onClick={handleStartTodaysQuiz}
-                disabled={isLaunchingQuiz}
-                className="flex-1 flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
-              >
-                <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-                {isLaunchingQuiz ? 'Get ready…' : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")}
-              </button>
+              <div className="relative flex-1">
+                <button
+                  type="button"
+                  data-sound="begin"
+                  onClick={handleStartTodaysQuiz}
+                  disabled={isLaunchingQuiz}
+                  className="w-full flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+                >
+                  <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
+                  {isLaunchingQuiz ? 'Get ready…' : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")}
+                </button>
+                {!planComplete && todaysQuizBadgeCount > 0 && (
+                  <span
+                    className="absolute -top-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-white text-xs font-bold shadow ring-2 ring-background tabular-nums"
+                    aria-label={`${todaysQuizBadgeCount} questions left in today's plan`}
+                  >
+                    {todaysQuizBadgeCount}
+                  </span>
+                )}
+              </div>
             )}
           </div>
         )}

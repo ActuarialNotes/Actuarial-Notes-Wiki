@@ -115,18 +115,101 @@ export interface NoiseSpec {
  * A cue whose pitch climbs while the player keeps succeeding — the coin-combo
  * mechanic, borrowed from platformers and used here on `correct`.
  *
- * Consecutive plays walk up `steps` (semitones from the written pitch) and hold
- * at the top; a gap longer than `resetMs`, or an explicit `resetSoundCombo`
- * when the user gets one wrong, drops back to the root. This is the app's
- * answer to the oldest problem in game audio: a cue that fires forty times an
- * hour stops registering. It also does the job a buzzer would, without the
- * punishment — after a miss you *hear* the climb start over.
+ * Consecutive plays walk up `steps` (semitones from the written pitch); a gap
+ * longer than `resetMs`, or an explicit `resetSoundCombo` when the user gets
+ * one wrong, drops back to the root. This is the app's answer to the oldest
+ * problem in game audio: a cue that fires forty times an hour stops
+ * registering. It also does the job a buzzer would, without the punishment —
+ * after a miss you *hear* the climb start over.
+ *
+ * The climb never ends. `steps` is one octave of a ladder that wraps forever,
+ * and the wrap is hidden by the Shepard voicing in `comboVoicing` — so a run of
+ * thirty right answers rises for all thirty without ever leaving the register
+ * it started in, and without a ceiling to bump into on the twentieth.
  */
 export interface ComboSpec {
-  /** Semitone offsets, walked in order. Must start at 0 and ascend. */
+  /**
+   * One octave of the ladder, in semitones from the written pitch. Must start
+   * at 0, ascend, and stay *under* 12 — the rung after the last one is the
+   * first one an octave up, which is where the climb wraps.
+   */
   steps: number[]
   /** A gap this long (ms) between plays starts the climb over. */
   resetMs: number
+  /**
+   * How much more room the cue rings in once a run is going (1 = none). Pitch
+   * alone can't tell you how long a streak is — the whole point of the Shepard
+   * wrap is that it sounds the same every octave — so the reverb send opens up
+   * across the first octave and then holds there. It's what makes a run *feel*
+   * like a run, and what you hear close back down after a miss.
+   */
+  bloom?: number
+}
+
+/** One octave-transposed copy of a cue, sounded as part of the climb. */
+export interface ComboVoice {
+  /** Frequency multiplier applied to every tone in the recipe. */
+  pitch: number
+  /** Level multiplier applied to every tone in the recipe. */
+  gain: number
+}
+
+/** Below this a layer isn't worth the oscillators — it's inaudible. */
+const QUIET_VOICE = 0.005
+
+/** How far up its octave the climb sits after `plays`, as a fraction (0–1). */
+function comboOctave(combo: ComboSpec | undefined, plays: number): number {
+  if (!combo || combo.steps.length === 0) return 0
+  const length = combo.steps.length
+  const index = ((Math.trunc(plays) % length) + length) % length
+  return combo.steps[index] / 12
+}
+
+/**
+ * How a cue is voiced after `plays` consecutive plays — a **Shepard tone**, the
+ * barber's-pole illusion, which is the only honest way to rise forever.
+ *
+ * The problem with a climb is that it has to stop somewhere. Walk up far enough
+ * and the cue is shrill; cap it and every answer past the fifth sounds the
+ * same, which is the repetition the climb existed to fix.
+ *
+ * The way out is to stop treating pitch as one thing. A note carries a *height*
+ * (which octave it's in) and a *chroma* (where in the octave — C, D, E…), and
+ * only chroma has to keep rising for the ear to hear a climb. So each play is
+ * sounded twice, an octave apart, under a loudness window that is fixed in
+ * absolute frequency: as the ladder walks up, the upper copy fades out of the
+ * top of the window exactly as fast as the lower one fades in at the bottom.
+ * Chroma marches up and up; height goes nowhere. After a full octave the cue is
+ * bit-for-bit what it was at the root, and the next answer rises out of it just
+ * like all the others.
+ *
+ * The window is `cos²`, so the two layers' gains sum to exactly 1 at every
+ * point of the climb — the cue never gets louder than it is written, and the
+ * headroom the catalogue is tuned for holds all the way up.
+ */
+export function comboVoicing(combo: ComboSpec | undefined, plays: number): ComboVoice[] {
+  const octave = comboOctave(combo, plays)
+  // At the root of the climb there is nothing to cross-fade with, and the cue
+  // sounds exactly as written.
+  if (octave === 0) return [{ pitch: 1, gain: 1 }]
+  const upper = Math.pow(Math.cos((Math.PI * octave) / 2), 2)
+  const voices: ComboVoice[] = []
+  if (upper > QUIET_VOICE) voices.push({ pitch: Math.pow(2, octave), gain: upper })
+  if (1 - upper > QUIET_VOICE) voices.push({ pitch: Math.pow(2, octave - 1), gain: 1 - upper })
+  return voices
+}
+
+/**
+ * How far the cue's reverb send has opened up after `plays` — 1 at the root,
+ * `combo.bloom` once a full octave has been climbed, and held there.
+ *
+ * Saturating inside the first octave is deliberate: it has to stop changing
+ * before the pitch wraps, or the wrap stops being seamless.
+ */
+export function comboBloom(combo: ComboSpec | undefined, plays: number): number {
+  if (!combo?.bloom || combo.steps.length < 2) return 1
+  const reach = Math.min(Math.max(plays, 0), combo.steps.length - 1) / (combo.steps.length - 1)
+  return 1 + (combo.bloom - 1) * reach
 }
 
 export interface SoundRecipe {
@@ -150,23 +233,14 @@ export interface SoundRecipe {
 }
 
 /**
- * Where a cue's pitch sits after `plays` consecutive plays: a frequency
- * multiplier applied to every tone in the recipe. Pure so the climb can be
- * tested without an AudioContext; the engine owns the counting.
- */
-export function comboMultiplier(combo: ComboSpec | undefined, plays: number): number {
-  if (!combo || combo.steps.length === 0) return 1
-  const step = combo.steps[Math.min(Math.max(plays, 0), combo.steps.length - 1)]
-  return Math.pow(2, step / 12)
-}
-
-/**
  * How far along the climb the next play sits, given the gap since the last one.
- * Long gap → back to the root; otherwise one step further, capping at the top.
+ * Long gap → back to the root; otherwise one rung further, forever. Nothing
+ * caps it: the ladder wraps (`comboOctave`) and the register doesn't move
+ * (`comboVoicing`), so an unbounded count is a bounded sound.
  */
 export function nextComboIndex(previous: number, elapsedMs: number, combo: ComboSpec): number {
   if (elapsedMs > combo.resetMs) return 0
-  return Math.min(previous + 1, combo.steps.length - 1)
+  return previous + 1
 }
 
 // Equal-tempered reference pitches (Hz), so the recipes below read musically.
@@ -364,13 +438,17 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // struck note on top of it so the card lands somewhere rather than just
     // stopping. It fires once per card in a run that can be twenty long, which
     // is why it's the quietest thing in the paper family and why it climbs —
-    // the pitch rising card after card is the sound of the deck emptying, and
-    // the last card off is the top of the scale. Dry: twenty reverb tails
-    // overlapping is not a sweep, it's a wash.
+    // the pitch rising card after card is the sound of the deck emptying.
+    //
+    // Same pentatonic rungs as `correct`, and for the same reason: the wrap
+    // from the last rung back to the root has to be a step like any other, so
+    // a nineteen-card sweep keeps rising the whole way down the deck. No
+    // `bloom` — the cue is dry, and twenty reverb tails overlapping is not a
+    // sweep, it's a wash.
     gain: 0.26,
     throttleMs: 55,
     lowpass: 6000,
-    combo: { steps: [0, 2, 4, 5, 7, 9, 11, 12], resetMs: 1500 },
+    combo: { steps: [0, 2, 4, 7, 9], resetMs: 1500 },
     noise: [{ at: 0, dur: 0.12, from: 2400, to: 700, type: 'bandpass', q: 0.8, gain: 0.34, swell: 0.25 }],
     tones: [...bell(A4, { at: 0.02, dur: 0.22, gain: 0.4 })],
   },
@@ -386,15 +464,22 @@ export const SOUND_RECIPES: Record<SoundEvent, SoundRecipe> = {
     // difference between "a reward" and "a notification".
     //
     // The combo is the other half: a right answer after a right answer comes
-    // back a tone higher, up a fifth over five in a row. Miss one and the quiz
-    // calls `resetSoundCombo`, so the next one starts again from C.
+    // back higher, and it never stops doing that. The rungs are the major
+    // pentatonic — the scale with no wrong notes in it — so every step of a run
+    // is consonant with the one before, and the climb wraps at the octave under
+    // a Shepard cross-fade (see `comboVoicing`) so it can rise for a
+    // thirty-answer streak without ever climbing out of its register. What
+    // grows instead of the register is the room: `bloom` opens the reverb up
+    // across the first five, which is what a long run sounds like. Miss one and
+    // the quiz calls `resetSoundCombo` — the pitch drops back to C and the room
+    // closes with it.
     // Quietest of the celebration cues on purpose: it fires forty times to
     // `complete`'s one, and the hierarchy has to hold.
     gain: 0.44,
     throttleMs: 90,
     lowpass: 7000,
     space: 0.28,
-    combo: { steps: [0, 2, 4, 5, 7], resetMs: 90_000 },
+    combo: { steps: [0, 2, 4, 7, 9], resetMs: 90_000, bloom: 1.7 },
     noise: [mallet()],
     tones: [
       ...bell(C5, { at: 0, dur: 0.5, gain: 0.6 }),

@@ -76,28 +76,62 @@ the reward family in `soundConfig.ts` is built from all five:
 
 ## The combo
 
-`correct` climbs. Consecutive right answers walk up `combo.steps` — a whole
-tone at a time, up a fifth over five in a row — and hold at the top; a long
+`correct` climbs. Consecutive right answers walk up `combo.steps`; a long
 enough gap, or an explicit `resetSoundCombo('correct')`, drops it back to the
 root. This is the app's answer to the oldest problem in game audio: a cue that
 fires forty times an hour stops registering. It also quietly does the job a
 buzzer would without the punishment — after a miss you *hear* the climb start
 over.
 
-The engine owns the counting (`soundEngine.ts`); the decisions are pure and
-tested (`comboMultiplier` / `nextComboIndex` in `soundConfig.ts`). Two call
-sites end a run: a wrong answer in `pages/Quiz.tsx` and an "Again" rating in
+**The climb has no top.** A ladder that caps is only a slower version of the
+problem it was built to fix: get five in a row and every answer after the fifth
+is the same sound again, which is where the old five-step climb ran out. But
+you can't just keep going either — walk up far enough and the cue is shrill,
+then inaudible.
+
+The way out is that pitch is two things. A note has a *height* (which octave)
+and a *chroma* (where in the octave — C, D, E…), and the ear will hear a climb
+from chroma alone. So the ladder wraps at the octave and each play is sounded
+**twice, an octave apart**, under a loudness window fixed in absolute
+frequency: as the run walks up, the upper copy fades out of the top of the
+window exactly as fast as the lower one fades in underneath. Chroma marches up
+forever; height goes nowhere. This is a **Shepard tone** — the barber's pole,
+the endlessly-rising staircase — and it means the twentieth right answer in a
+row is still rising, in the same register the first one was in.
+
+Three things keep it pleasant:
+
+- **The rungs are the major pentatonic** (`[0, 2, 4, 7, 9]`) — the scale with no
+  wrong notes in it. Every step of a run is consonant with the one before, and
+  the wrap from the last rung back to the root is a step like any other.
+- **The window is `cos²`**, so the two copies' gains sum to exactly 1 at every
+  point of the climb. The cue is never louder than it is written, so the
+  headroom the catalogue is tuned for holds all the way up — pinned by a test.
+- **The room grows instead of the register.** Pitch can't tell you how long a
+  streak is (that's the point of the wrap — every octave sounds the same), so
+  `combo.bloom` opens the reverb send up across the first octave and then holds
+  it there. It settles *before* the pitch wraps, so the wrap stays seamless. It
+  is also what you hear close back down after a miss.
+
+The engine owns the counting (`soundEngine.ts`) and sounds one copy of the cue
+per Shepard layer; the decisions are pure and tested (`comboVoicing` /
+`comboBloom` / `nextComboIndex` in `soundConfig.ts`). Two call sites end a run:
+a wrong answer in `pages/Quiz.tsx` and an "Again" rating in
 `pages/Flashcards.tsx`. If a third place ever starts playing `correct`, it
 should reset the combo on its failure path too.
 
 `fileAway` climbs for the same reason on a much shorter clock. "Clear Completed
-Flashcards" fires it once per card, a few hundred milliseconds apart, and the
-climb is what turns that from a stutter into a scale: the pitch rises card
-after card and the last one off the deck lands an octave up. Its run is a
-single sweep, so `handleClearCompleted` calls `resetSoundCombo('fileAway')`
-before starting one rather than relying on the (deliberately generous)
-`resetMs` — the first card off a deck of two has to sound like the first card
-off a deck of twenty.
+Flashcards" fires it once per card, a couple of hundred milliseconds apart, and
+the climb is what turns that from a stutter into a scale: the pitch rises card
+after card, all the way down the deck. It uses the same pentatonic rungs as
+`correct` — the wrap has to be a step like any other, or a nineteen-card sweep
+would hit a seam partway through — but no `bloom`, because the cue is dry and
+there is no room to open up.
+
+Its run is a single sweep, so `handleClearCompleted` calls
+`resetSoundCombo('fileAway')` before starting one rather than relying on the
+(deliberately generous) `resetMs` — the first card off a deck of two has to
+sound like the first card off a deck of twenty.
 
 ## The catalogue
 
@@ -114,7 +148,7 @@ off a deck of twenty.
 | `page` | A flick within one surface — popup prev/next, a flashcard turning over, a swipe |
 | `shuffle` | Riffling the flashcard deck into a new order |
 | `fileAway` | One finished card sliding off the deck during "Clear Completed Flashcards". Climbs across the sweep — see "The combo" |
-| `correct` | A right answer, anywhere: quiz, comprehension check, flashcard "Got it". Climbs across a run — see "The combo" |
+| `correct` | A right answer, anywhere: quiz, comprehension check, flashcard "Got it". Climbs endlessly across a run — see "The combo" |
 | `addToDeck` | A card filed into the study deck ("Add to Flashcards") |
 | `collect` | A flashcard landing in the deck via the collect ceremony |
 | `levelUp` | A concept climbing the mastery ladder |

@@ -119,13 +119,21 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
         (className ?? '')
       }
     >
-      {/* Header: what's being plotted + how */}
-      <div className="flex items-start justify-between gap-3 flex-wrap">
+      {/* Header: what's being plotted + how.
+          The PDF/CDF switch and reset always sit on their own row *below* the
+          notation, never beside it: the notation restates the current parameter
+          values, so as a slider moves it changes width and reflows between one
+          and two lines. Sharing a wrapping flex row with it made the buttons
+          hop sideways and up/down mid-drag. The notation line also reserves two
+          lines of height so that reflow can't shift the buttons either. */}
+      <div className="space-y-2">
         <div className="min-w-0">
           <p className="text-base font-semibold leading-tight">{spec.title}</p>
-          <p className="text-sm text-muted-foreground tabular-nums mt-0.5">{spec.notation(params)}</p>
+          <p className="text-sm text-muted-foreground tabular-nums mt-0.5 leading-snug min-h-[2.75em]">
+            {spec.notation(params)}
+          </p>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2">
           <div className="flex rounded-lg border border-border overflow-hidden" role="group" aria-label="Plot view">
             {(['pdf', 'cdf'] as const).map(mode => (
               <button

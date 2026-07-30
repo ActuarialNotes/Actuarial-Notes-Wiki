@@ -65,10 +65,17 @@ reproducing the closed-form mean and variance, and the stated mode maximizing th
 
 ## Layout & touch
 
-The card reads top-down: **title + notation → the four KPI tiles → plot → parameter sliders →
-simulation controls**. The moments sit *above* the plot they describe, each tile led by its Greek
-symbol (μ, σ², σ, γ₁; the sample counterparts are x̄, s², s) and rounded to one decimal by
-`formatKpi`.
+The card reads top-down: **title + notation → PDF/CDF switch + reset → the four KPI tiles → plot →
+parameter sliders → simulation controls**. The moments sit *above* the plot they describe, each tile
+led by its Greek symbol (μ, σ², σ, γ₁; the sample counterparts are x̄, s², s) and rounded to one
+decimal by `formatKpi`.
+
+The PDF/CDF switch and the reset button always live on their own row **below** the notation, never
+beside it, and the notation line reserves two lines of height (`leading-snug min-h-[2.75em]`). The
+notation restates the live parameter values, so dragging a slider changes its width and reflows it
+between one and two lines — with the buttons in the same wrapping row (or stacked under a
+variable-height notation) they visibly hopped around mid-drag. Keep them on a fixed row: controls
+you're aiming at shouldn't move while you're using the control next to them.
 
 Most of this is used one-handed on a phone inside the full-screen gallery, so:
 

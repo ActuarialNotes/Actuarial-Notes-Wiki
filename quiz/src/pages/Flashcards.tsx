@@ -2764,6 +2764,7 @@ export default function Flashcards() {
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
   const [searchParams, setSearchParams] = useSearchParams()
   const highlightName = searchParams.get('highlight')
+  const viewParam = searchParams.get('view')
 
   const [flashingCard, setFlashingCard] = useState<string | null>(null)
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -3048,6 +3049,22 @@ export default function Flashcards() {
     }, 100)
     return () => clearTimeout(timerId)
   }, [highlightName, orderedCards, setSearchParams])
+
+  // Arriving with ?view=deck — from tapping the "Added to Deck" confirmation —
+  // opens the gallery on My Deck so the cards just added are what you land on.
+  // The param is consumed immediately so a later Back/refresh doesn't reopen it.
+  useEffect(() => {
+    if (viewParam !== 'deck') return
+    setGalleryTab('deck')
+    // With an empty deck the gallery is already inline on the page; expanding
+    // the overlay on top of it would just cover it with the same panel.
+    if (cards.length > 0) setGalleryExpanded(true)
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev)
+      next.delete('view')
+      return next
+    }, { replace: true })
+  }, [viewParam, cards.length, setSearchParams])
 
   // Exam groups derived from orderedCards
   const examGroups = useMemo(() => {

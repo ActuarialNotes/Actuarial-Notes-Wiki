@@ -690,6 +690,35 @@
   animation: concept-row-highlight 1.4s ease-out both;
 }
 
+/* Dashboard sticky exam header: the tab strip scrolls sideways once the compact
+   actions claim the right end of the pinned row, so hide its scrollbar — the
+   partially-visible tab is the affordance. */
+.exam-tab-strip {
+  scrollbar-width: none;
+}
+.exam-tab-strip::-webkit-scrollbar {
+  display: none;
+}
+/* Fade the strip's trailing edge while tabs remain off to the right, so a
+   half-visible tab reads as "scroll for more" rather than as a clipped label. */
+.exam-tab-strip--fade {
+  mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
+}
+
+/* The compact "Read" / "Study" buttons slide in from the right as the full-size
+   pair scrolls up behind the pinned header. */
+@keyframes dashboard-pinned-actions-in {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: none; }
+}
+.dashboard-pinned-actions {
+  animation: dashboard-pinned-actions-in 160ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-pinned-actions { animation: none; }
+}
+
 /* Focus mode: when a concept is active and we're on its source page, dim every
    block in the article except the one containing the active wikilink. Lets the
    reader's eye land on the bullet that opened the popup. */

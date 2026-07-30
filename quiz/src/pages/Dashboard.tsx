@@ -185,6 +185,16 @@ export default function Dashboard() {
   // at the top of the page, above the primary actions and stat grid.
   const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
 
+  // Sticky exam header: the exam switcher pins to the top of the viewport, and
+  // once the full-size primary actions row has scrolled up behind it, compact
+  // copies of those two buttons slide into the pinned row so "Read concepts"
+  // and the quiz launch stay reachable from anywhere on the page.
+  const examTabsRowRef = useRef<HTMLDivElement>(null)
+  const examTabsScrollRef = useRef<HTMLDivElement>(null)
+  const primaryActionsRef = useRef<HTMLDivElement>(null)
+  const [actionsPinned, setActionsPinned] = useState(false)
+  const [tabsOverflowRight, setTabsOverflowRight] = useState(false)
+
   useEffect(() => {
     if (showWelcomeModal) sessionStorage.removeItem('show_welcome')
   // Only run once on mount.
@@ -391,6 +401,58 @@ export default function Dashboard() {
     setStartQuizCounter(c => c + 1)
   }, [isLaunchingQuiz])
 
+  // The tab strip's trailing edge only fades while there are more tabs to the
+  // right of it — fading a tab that's already the last one just makes the active
+  // pill look cut off.
+  const measureTabsOverflow = useCallback(() => {
+    const scroller = examTabsScrollRef.current
+    if (!scroller) return
+    setTabsOverflowRight(scroller.scrollWidth - scroller.clientWidth - scroller.scrollLeft > 1)
+  }, [])
+
+  // Swap in the compact header actions once the full-size actions row has
+  // scrolled up behind the pinned exam tabs. Both rects come from the same
+  // measurement, so the threshold follows the sticky offset (which differs per
+  // breakpoint — the md top bar vs. the lg sidebar) with nothing hard-coded.
+  // The pinned row's height is fixed (h-10 controls), so the compact buttons
+  // appearing can't move the threshold and make the state flicker.
+  useEffect(() => {
+    if (!activeSyllabus) {
+      setActionsPinned(false)
+      return
+    }
+    let raf = 0
+    const measure = () => {
+      raf = 0
+      const tabs = examTabsRowRef.current
+      const actions = primaryActionsRef.current
+      if (!tabs || !actions) return
+      setActionsPinned(actions.getBoundingClientRect().bottom < tabs.getBoundingClientRect().bottom)
+      measureTabsOverflow()
+    }
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(measure) }
+    measure()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+    }
+  }, [activeSyllabus, measureTabsOverflow])
+
+  // Keep the selected exam visible in the tab strip — it scrolls horizontally
+  // once the compact actions claim the right end of the pinned row.
+  useEffect(() => {
+    const scroller = examTabsScrollRef.current
+    if (!scroller) return
+    measureTabsOverflow()
+    const active = scroller.querySelector<HTMLElement>('[data-exam-tab-active="true"]')
+    if (!active) return
+    const left = active.offsetLeft - (scroller.clientWidth - active.offsetWidth) / 2
+    scroller.scrollTo({ left: Math.max(0, left), behavior: 'smooth' })
+  }, [clampedIdx, actionsPinned, inProgressSyllabi.length, measureTabsOverflow])
+
   // Build a fast masteryState lookup (conceptName → MasteryState) for TodayCard chips
   const masteryStateByName = useMemo(() => {
     const now = new Date()
@@ -463,6 +525,16 @@ export default function Dashboard() {
   const hasActiveExams = inProgressSyllabi.length > 0
   const showStreakStat = STREAK_ENABLED && !isGuest
   const showLevelBadge = XP_ENABLED && !isGuest
+
+  // Quiz-launch action, shared by the full-size actions row and its compact
+  // copy in the pinned exam header (which only has room for a one-word label).
+  const showQuizAction = isPremium && displayConcepts.length > 0
+  const quizActionLabel = isLaunchingQuiz
+    ? 'Get ready…'
+    : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")
+  const compactQuizLabel = isLaunchingQuiz
+    ? 'Wait…'
+    : (todayQuestionsAnswered > 0 ? 'Continue' : 'Study')
 
   return (
     <>
@@ -627,22 +699,77 @@ export default function Dashboard() {
             </div>
           )}
         </div>
+        {/* Exam switcher — pinned to the top of the viewport so the active exam
+            is always visible. Sticky offsets match the nav chrome: the mobile
+            bottom-nav leaves the top free, the md top bar is 3.5rem tall, and
+            the lg sidebar is beside the content. */}
         {hasActiveExams && (
-          <div className="flex gap-1.5 flex-wrap">
-            {inProgressSyllabi.map((s, i) => (
-              <button
-                key={s.examId}
-                type="button"
-                onClick={() => setActiveExamIdx(i)}
-                className={`px-4 py-1.5 rounded-full text-base font-semibold transition-colors ${
-                  i === clampedIdx
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-transparent text-muted-foreground hover:text-foreground'
-                }`}
+          <div className="sticky top-0 md:top-14 lg:top-0 z-20 -mx-5 sm:-mx-8 px-5 sm:px-8 py-1.5 bg-background/95 backdrop-blur-sm">
+            <div ref={examTabsRowRef} className="flex items-center gap-2">
+              <div
+                ref={examTabsScrollRef}
+                onScroll={measureTabsOverflow}
+                className={`exam-tab-strip flex flex-1 min-w-0 gap-1.5 overflow-x-auto${tabsOverflowRight ? ' exam-tab-strip--fade' : ''}`}
               >
-                {s.examLabel}
-              </button>
-            ))}
+                {inProgressSyllabi.map((s, i) => (
+                  <button
+                    key={s.examId}
+                    type="button"
+                    data-exam-tab-active={i === clampedIdx}
+                    onClick={() => setActiveExamIdx(i)}
+                    className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors ${
+                      i === clampedIdx
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-transparent text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {s.examLabel}
+                  </button>
+                ))}
+              </div>
+
+              {/* Compact copies of the primary actions — only once the full-size
+                  pair below has scrolled behind this row. Icon-only on phones,
+                  icon + short label from sm up. */}
+              {activeSyllabus && actionsPinned && (
+                <div className="dashboard-pinned-actions flex shrink-0 items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleReadConcepts}
+                    aria-label="Read concepts"
+                    title="Read concepts"
+                    className="flex h-10 items-center gap-1.5 rounded-full bg-secondary px-3 text-sm font-semibold text-secondary-foreground hover:bg-secondary/80 transition-colors"
+                  >
+                    <BookOpen className="h-4 w-4 shrink-0" />
+                    <span className="hidden sm:inline">Read</span>
+                  </button>
+                  {showQuizAction && (
+                    <div className="relative">
+                      <button
+                        type="button"
+                        data-sound="begin"
+                        onClick={handleStartTodaysQuiz}
+                        disabled={isLaunchingQuiz}
+                        aria-label={quizActionLabel}
+                        title={quizActionLabel}
+                        className="flex h-10 items-center gap-1.5 rounded-full bg-primary px-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 active:bg-primary/80 transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+                      >
+                        <Play className={`h-4 w-4 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
+                        <span className="hidden sm:inline">{compactQuizLabel}</span>
+                      </button>
+                      {!planComplete && todaysQuizBadgeCount > 0 && (
+                        <span
+                          className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-white text-[10px] font-bold shadow ring-2 ring-background tabular-nums"
+                          aria-label={`${todaysQuizBadgeCount} questions left in today's plan`}
+                        >
+                          {todaysQuizBadgeCount}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
         {/* Study Schedule card — portaled here by ReadinessCard (below) so it sits
@@ -653,7 +780,7 @@ export default function Dashboard() {
         {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
             Sits directly below the study schedule card, above the streak/readiness stats. */}
         {activeSyllabus && (
-          <div className="flex gap-3">
+          <div ref={primaryActionsRef} className="flex gap-3">
             <Button
               variant="secondary"
               onClick={handleReadConcepts}
@@ -662,7 +789,7 @@ export default function Dashboard() {
               <BookOpen className="h-5 w-5" />
               Read concepts
             </Button>
-            {isPremium && displayConcepts.length > 0 && (
+            {showQuizAction && (
               <div className="relative flex-1">
                 <button
                   type="button"
@@ -672,7 +799,7 @@ export default function Dashboard() {
                   className="w-full flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
                 >
                   <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-                  {isLaunchingQuiz ? 'Get ready…' : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")}
+                  {quizActionLabel}
                 </button>
                 {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
               </div>

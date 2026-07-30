@@ -19,7 +19,8 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
-import { questionsNeededForPlan } from '@/hooks/useTodayQuizCount'
+import { questionsNeededForPlan } from '@/lib/todayPlanCount'
+import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
@@ -673,14 +674,7 @@ export default function Dashboard() {
                   <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
                   {isLaunchingQuiz ? 'Get ready…' : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")}
                 </button>
-                {!planComplete && todaysQuizBadgeCount > 0 && (
-                  <span
-                    className="absolute -top-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-white text-xs font-bold shadow ring-2 ring-background tabular-nums"
-                    aria-label={`${todaysQuizBadgeCount} questions left in today's plan`}
-                  >
-                    {todaysQuizBadgeCount}
-                  </span>
-                )}
+                {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
               </div>
             )}
           </div>

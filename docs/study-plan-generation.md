@@ -120,6 +120,41 @@ You mastered "Bond Price" today. It won't decay for 30 days, and your target rea
 
 Today's concepts are the deduplicated list of everything scheduled for the current date. If you have already levelled up some concepts earlier in the day (in a prior quiz session), those levelled-up concepts are preserved at the top of the list. Fresh unlearned concepts fill remaining slots. This keeps the plan grounded in what you actually practised rather than replacing it with concepts you haven't touched yet.
 
+## The "questions left today" badge
+
+Once today's concepts are settled, the app answers one more question everywhere it can:
+**how many questions until today's plan is done?** That number is the size of the quiz a
+"Today's Plan" launch will actually contain — the fewest questions that cover every concept
+still outstanding (`minQuestionsToCoverConcepts`, the same greedy cover the launch itself
+uses), with concepts already levelled up today dropped so a re-launch after some wrong
+answers only re-tests what's left.
+
+The rule is that the badge appears on **every surface a quiz that would accomplish today's
+plan can be started from** — a learner should never have to guess whether the button in
+front of them is the one that finishes the day. Today that's:
+
+| Surface | Scope |
+|---|---|
+| Quiz tab in the bottom nav / Quiz row in the sidebar | all active exams, summed |
+| Sidebar exam pill + its **Start Quiz** menu item | that exam |
+| Quiz tab exam cards (`Landing`) | that exam |
+| Quiz tab **Start Quiz** button | that exam, and only when the picked count is sized to finish the plan |
+| Dashboard **Start Today's Quiz** | the active exam |
+
+Concept-scoped launches (a flashcard, a concept popup, the Search selection) deliberately
+have no badge — they don't complete the plan.
+
+- `lib/todayPlanCount.ts` is the pure, tested core: `todayPlanCountForExam` returns the
+  count plus a `complete` flag, and `badgeCountFor` collapses that to what the badge should
+  show (0 once the plan is done — a finished plan still has a re-launchable question count,
+  but nothing left to nag about).
+- `hooks/useTodayQuizCount.ts` assembles the per-exam study plans and exposes
+  `useTodayQuizCounts()` → `{ byExam, total }`. Premium-only, same as Today's Plan itself.
+- `components/TodayQuizBadge.tsx` is the shared look (orange, corner or inline variant).
+
+**When you add a new way to start a plan-completing quiz, badge it** — pull the count from
+the hook rather than recomputing it, so every surface keeps showing the same number.
+
 ## Pacing Status
 
 The plan tells you how your pace compares to what's needed:

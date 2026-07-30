@@ -1,5 +1,6 @@
 import { Check, Flame } from 'lucide-react'
 import { useStreak } from '@/hooks/useStreak'
+import { cn } from '@/lib/utils'
 import type { StreakStatus } from '@/lib/streak'
 
 // Shared visual language for the streak across the three surfaces it appears on
@@ -39,12 +40,17 @@ export function StreakNavBadge() {
 /**
  * BottomNav variant — a compact corner badge to overlay on a nav-tab icon.
  * Renders nothing when there's no active streak, so the tab stays clean.
+ * `className` overrides the corner it pins to, for icons that already carry a
+ * badge on the top-right (the Quiz tab's questions-left count).
  */
-export function StreakCornerBadge() {
+export function StreakCornerBadge({ className }: { className?: string }) {
   const { currentStreak, loading } = useStreak()
   if (loading || currentStreak <= 0) return null
   return (
-    <span className="absolute -top-1 -right-2 flex h-3.5 min-w-[0.875rem] items-center justify-center gap-0.5 rounded-full bg-orange-500 px-[3px] text-[9px] font-bold leading-none text-white tabular-nums">
+    <span className={cn(
+      'absolute -top-1 -right-2 flex h-3.5 min-w-[0.875rem] items-center justify-center gap-0.5 rounded-full bg-orange-500 px-[3px] text-[9px] font-bold leading-none text-white tabular-nums',
+      className,
+    )}>
       {currentStreak}
     </span>
   )

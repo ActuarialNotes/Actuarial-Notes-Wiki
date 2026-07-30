@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { useToast, addedToDeckMessage, showAddedToDeck } from './useToast'
+import { useToast, addedToDeckMessage, showAddedToDeck, MY_DECK_ROUTE } from './useToast'
 
 beforeEach(() => {
   useToast.setState({ toast: null })
@@ -19,6 +19,20 @@ describe('showAddedToDeck', () => {
   it('shows nothing when no card was actually added', () => {
     showAddedToDeck(0)
     expect(useToast.getState().toast).toBeNull()
+  })
+
+  it('links the confirmation to My Deck', () => {
+    showAddedToDeck(2)
+    expect(useToast.getState().toast?.to).toBe(MY_DECK_ROUTE)
+  })
+
+  it('opens the gallery on the deck tab', () => {
+    expect(MY_DECK_ROUTE).toBe('/flashcards?view=deck')
+  })
+
+  it('leaves a plain toast unlinked', () => {
+    useToast.getState().showToast('Saved')
+    expect(useToast.getState().toast?.to).toBeUndefined()
   })
 
   it('replaces the visible toast rather than stacking', () => {

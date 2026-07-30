@@ -10,11 +10,16 @@ export const TOAST_DURATION_MS = 2200
 export interface ToastMessage {
   id: number
   message: string
+  /**
+   * Route the toast links to. When set the pill becomes tappable and takes the
+   * user to where the thing they just did landed.
+   */
+  to?: string
 }
 
 interface ToastState {
   toast: ToastMessage | null
-  showToast: (message: string) => void
+  showToast: (message: string, to?: string) => void
   /** Dismiss the current toast; pass an id to only dismiss that specific one. */
   dismissToast: (id?: number) => void
 }
@@ -23,7 +28,7 @@ let nextId = 0
 
 export const useToast = create<ToastState>((set, get) => ({
   toast: null,
-  showToast: (message) => set({ toast: { id: ++nextId, message } }),
+  showToast: (message, to) => set({ toast: { id: ++nextId, message, to } }),
   dismissToast: (id) => {
     const current = get().toast
     if (!current) return
@@ -39,11 +44,18 @@ export function addedToDeckMessage(count: number): string {
 }
 
 /**
+ * Where the "Added to Deck" confirmation goes when tapped: the Flashcards
+ * gallery, opened on My Deck (see the `?view=deck` handler in `pages/Flashcards`).
+ */
+export const MY_DECK_ROUTE = '/flashcards?view=deck'
+
+/**
  * Confirm that `count` cards were just added to the flashcard deck. Call this
  * only with the number of *newly* added cards — adding a card that's already
- * in the deck is a no-op and shouldn't be confirmed.
+ * in the deck is a no-op and shouldn't be confirmed. Tapping the confirmation
+ * takes the user to My Deck, where the new cards are.
  */
 export function showAddedToDeck(count: number) {
   if (count < 1) return
-  useToast.getState().showToast(addedToDeckMessage(count))
+  useToast.getState().showToast(addedToDeckMessage(count), MY_DECK_ROUTE)
 }

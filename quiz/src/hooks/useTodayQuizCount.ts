@@ -1,6 +1,12 @@
-// Total number of questions needed to complete today's study plan across every
-// active exam — mirrors the per-exam "Today's Quiz" auto-sizing on the Quiz tab
-// (see Landing.tsx's todaysPlanFullCount), summed for the Quiz nav badge.
+// Questions still needed to finish today's study plan — per exam and summed
+// across every active exam. This is the single source for the "questions left
+// today" badge, which appears on every surface a quiz that would accomplish
+// those questions can be started from (see components/TodayQuizBadge.tsx):
+// the Quiz nav tab, the Sidebar Quiz row + exam-pill menu, the Quiz tab's exam
+// cards and Start button, and the Dashboard's "Start Today's Quiz".
+//
+// The per-exam math lives in lib/todayPlanCount.ts (pure + tested); this hook
+// only assembles the study plans it needs.
 
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
@@ -10,49 +16,30 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
-import { minQuestionsToCoverConcepts } from '@/lib/studyPlan'
+import { todayPlanCountForExam } from '@/lib/todayPlanCount'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { readTodayLevelUps, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import type { TodayPlanCount } from '@/lib/todayPlanCount'
 import type { StudyPlan } from '@/lib/studyPlan'
-import type { Question } from '@/lib/parser'
 
-// Fewest questions needed to finish today's plan for one exam — drops concepts
-// already levelled up today (doneConceptSlugs) so the count matches what the
-// next launched quiz will actually contain, same as Landing.tsx's
-// buildTodaysPlanSelection. Falls back to the full plan when everything's done
-// (re-launch keeps the plan's questions available for extra practice).
-export function questionsNeededForPlan(
-  plan: StudyPlan | null,
-  topic: string,
-  allQuestions: Question[],
-  doneConceptSlugs: Set<string> = new Set(),
-): number {
-  if (!plan) return 0
-  const displayConcepts = plan.status === 'review_mode' ? (plan.reviewConcepts ?? []) : plan.todaysConcepts
-  if (displayConcepts.length === 0) return 0
+export type { TodayPlanCount } from '@/lib/todayPlanCount'
 
-  const remaining = displayConcepts.filter(c => !doneConceptSlugs.has(c.toLowerCase()))
-  const concepts = remaining.length > 0 ? remaining : displayConcepts
-
-  const conceptSet = new Set(concepts.map(c => c.toLowerCase()))
-  const todayQs = allQuestions.filter(q => {
-    if (q.exam !== topic) return false
-    return q.wiki_link.some(link => {
-      const clean = link.replace(/\+/g, ' ').replace(/\.md$/i, '')
-      const n = clean.split('/').filter(Boolean).pop()?.toLowerCase() ?? ''
-      return conceptSet.has(n)
-    })
-  })
-  if (todayQs.length === 0) return 0
-  return minQuestionsToCoverConcepts(todayQs, concepts)
+export interface TodayQuizCounts {
+  /** Per-exam counts, keyed by exam progress key (`P`, `FM`, `MAS-I`, `CAS-5`).
+   *  Only exams marked "in progress" with an active plan get an entry. */
+  byExam: Record<string, TodayPlanCount>
+  /** Sum of the still-outstanding counts. Exams whose plan is already complete
+   *  contribute 0, so the badge disappears once the day's work is done. */
+  total: number
 }
 
+const EMPTY_COUNTS: TodayQuizCounts = { byExam: {}, total: 0 }
+
 /**
- * Sum of the fewest-questions-to-complete-today's-plan across every exam the
- * user has marked "in progress" and has an active study plan for. Premium-only,
- * same as Today's Plan on the Quiz tab; returns 0 for signed-out/free users.
+ * Questions left in today's study plan, per exam and in total. Premium-only,
+ * same as Today's Plan on the Quiz tab; returns empty for signed-out/free users.
  */
-export function useTodayQuizCount(): number {
+export function useTodayQuizCounts(): TodayQuizCounts {
   const { user } = useAuth()
   const { isPremium } = useSubscription()
   const { progress: examProgress, targetDates } = useExamProgress()
@@ -89,17 +76,26 @@ export function useTodayQuizCount(): number {
   const { plan: planCAS5 } = useStudyPlan(syllabusCAS5, masteryRecords, targetDates['CAS-5'] ?? null, masteryLoading)
 
   return useMemo(() => {
-    if (!user || !isPremium) return 0
+    if (!user || !isPremium) return EMPTY_COUNTS
 
     const plansByExamId: Record<string, StudyPlan | null> = {
       P: planP, FM: planFM, 'MAS-I': planMAS, 'CAS-5': planCAS5,
     }
 
+    const byExam: Record<string, TodayPlanCount> = {}
     let total = 0
     for (const [examId, topic] of Object.entries(EXAM_ID_TO_TOPIC)) {
       if (examProgress[examId] !== 'in_progress') continue
-      total += questionsNeededForPlan(plansByExamId[examId], topic, allQuestions, doneConceptSlugs)
+      const entry = todayPlanCountForExam(plansByExamId[examId], topic, allQuestions, doneConceptSlugs)
+      if (entry.count === 0 && !entry.complete) continue
+      byExam[examId] = entry
+      if (!entry.complete) total += entry.count
     }
-    return total
+    return { byExam, total }
   }, [user, isPremium, examProgress, allQuestions, planP, planFM, planMAS, planCAS5, doneConceptSlugs])
+}
+
+/** Total questions left in today's plan across every active exam. */
+export function useTodayQuizCount(): number {
+  return useTodayQuizCounts().total
 }

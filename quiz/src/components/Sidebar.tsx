@@ -41,6 +41,9 @@ import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { parseBanner, DESIGNATION_BANNERS } from '@/lib/banners'
 import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { StreakNavBadge, StreakCornerBadge } from '@/components/StreakBadge'
+import { TodayQuizCornerBadge, TodayQuizNavBadge } from '@/components/TodayQuizBadge'
+import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
+import { badgeCountFor } from '@/lib/todayPlanCount'
 import { SoundPopover } from '@/components/SoundPopover'
 import { COLOR_THEMES } from '@/lib/colorThemes'
 import { cn } from '@/lib/utils'
@@ -171,9 +174,11 @@ interface ExamPillProps {
   isOpen: boolean
   onToggle: () => void
   onClose: () => void
+  /** Questions left in this exam's plan today — badges the pill and its Start Quiz item. */
+  todayQuizCount?: number
 }
 
-function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
+function ExamPill({ syllabus, isOpen, onToggle, onClose, todayQuizCount = 0 }: ExamPillProps) {
   const navigate = useNavigate()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null)
@@ -203,14 +208,17 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
 
   return (
     <>
-      <button
-        ref={buttonRef}
-        type="button"
-        onClick={onToggle}
-        className="rounded-full bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 hover:bg-primary/20 transition-colors shrink-0"
-      >
-        {shortLabel}
-      </button>
+      <span className="relative shrink-0">
+        <button
+          ref={buttonRef}
+          type="button"
+          onClick={onToggle}
+          className="rounded-full bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 hover:bg-primary/20 transition-colors"
+        >
+          {shortLabel}
+        </button>
+        <TodayQuizCornerBadge count={todayQuizCount} size="sm" className="-top-1 -right-1.5" />
+      </span>
       {isOpen && dropdownPos && createPortal(
         <>
           {/* Full-screen backdrop — any tap outside the menu closes it */}
@@ -237,7 +245,8 @@ function ExamPill({ syllabus, isOpen, onToggle, onClose }: ExamPillProps) {
               className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-accent/60 transition-colors"
             >
               <Play className="h-4 w-4 shrink-0" />
-              <span>Start Quiz</span>
+              <span className="flex-1 text-left">Start Quiz</span>
+              <TodayQuizNavBadge count={todayQuizCount} />
             </button>
           </div>
         </>,
@@ -261,6 +270,7 @@ export default function Sidebar() {
     return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
   })
   const { cards } = useFlashcards()
+  const { byExam: todayQuizByExam, total: todayQuizTotal } = useTodayQuizCounts()
   const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
   const [collectGlow, setCollectGlow] = useState(0)
 
@@ -295,13 +305,21 @@ export default function Sidebar() {
     ) : null,
   [cards.length, collectGlow])
 
-  const quizBadge = useMemo(() =>
-    dailyQuizStats.total > 0 ? (
-      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
-        {dailyQuizStats.correct}/{dailyQuizStats.total}
+  // Questions left in today's plan (orange, same badge the Quiz tab and the
+  // Dashboard's Start button carry) alongside today's answered tally.
+  const quizBadge = useMemo(() => {
+    if (todayQuizTotal <= 0 && dailyQuizStats.total <= 0) return null
+    return (
+      <span className="flex items-center gap-1.5">
+        <TodayQuizNavBadge count={todayQuizTotal} />
+        {dailyQuizStats.total > 0 && (
+          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground tabular-nums">
+            {dailyQuizStats.correct}/{dailyQuizStats.total}
+          </span>
+        )}
       </span>
-    ) : null,
-  [dailyQuizStats.correct, dailyQuizStats.total])
+    )
+  }, [todayQuizTotal, dailyQuizStats.correct, dailyQuizStats.total])
 
   const [collapsed, setCollapsed] = useState<boolean>(getInitialCollapsed)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -436,6 +454,7 @@ export default function Sidebar() {
                 isOpen={openExamDropdown === key}
                 onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
                 onClose={() => setOpenExamDropdown(null)}
+                todayQuizCount={badgeCountFor(todayQuizByExam[key])}
               />
             )
           })}
@@ -493,6 +512,7 @@ export default function Sidebar() {
                   isOpen={openExamDropdown === key}
                   onToggle={() => setOpenExamDropdown(prev => prev === key ? null : key)}
                   onClose={() => setOpenExamDropdown(null)}
+                  todayQuizCount={badgeCountFor(todayQuizByExam[key])}
                 />
               )
             })}
@@ -610,7 +630,18 @@ export default function Sidebar() {
           <SidebarItem
             to="/"
             label="Quiz"
-            icon={<Play className="h-4 w-4" />}
+            icon={
+              <span className="relative inline-flex items-center justify-center">
+                <Play className="h-4 w-4" />
+                {/* Collapsed sidebar hides the row badge, so mirror the
+                    questions-left count as a corner badge on the icon. */}
+                {collapsed && (
+                  <span className="hidden lg:block">
+                    <TodayQuizCornerBadge count={todayQuizTotal} size="sm" className="-top-1.5 -right-2" />
+                  </span>
+                )}
+              </span>
+            }
             collapsed={collapsed}
             end
             onNavigate={closeMobile}

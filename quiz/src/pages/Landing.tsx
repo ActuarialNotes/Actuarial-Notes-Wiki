@@ -3,6 +3,9 @@ import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { CalendarCheck, Check, CheckCircle2, ChevronDown, ChevronLeft, Circle, FileDown, Loader2, Lock, Play, X } from 'lucide-react'
 import { QuizFloatingSearch } from '@/components/QuizFloatingSearch'
 import { QuestionDeckCard } from '@/components/QuestionDeckCard'
+import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
+import { useTodayQuizCounts } from '@/hooks/useTodayQuizCount'
+import { badgeCountFor } from '@/lib/todayPlanCount'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
@@ -225,6 +228,7 @@ function ExamOptionCard({
   colorIdx,
   targetDate,
   subtitle,
+  todayQuizCount = 0,
 }: {
   exam: { value: string; label: string }
   onClick: () => void
@@ -232,6 +236,8 @@ function ExamOptionCard({
   colorIdx: number  // -1 means not active
   targetDate?: string | null
   subtitle?: string | null
+  /** Questions left in this exam's plan today — picking the card starts here. */
+  todayQuizCount?: number
 }) {
   const isActive = colorIdx >= 0
   // P and FM are the mature exams with a full question bank; others are in beta.
@@ -239,7 +245,7 @@ function ExamOptionCard({
   const description = subtitle ?? null
 
   return (
-    <button type="button" data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined} onClick={onClick} className="text-left w-full">
+    <button type="button" data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined} onClick={onClick} className="relative text-left w-full">
       <Card className={cn(
         'h-full transition-all duration-150 overflow-hidden',
         isActive
@@ -272,6 +278,8 @@ function ExamOptionCard({
           </div>
         </CardHeader>
       </Card>
+      {/* After the Card so it paints above the card surface. */}
+      <TodayQuizCornerBadge count={todayQuizCount} size="md" />
     </button>
   )
 }
@@ -286,6 +294,9 @@ export default function Landing() {
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { syllabi } = useWikiSyllabus()
   const { isPremium, loading: subLoading } = useSubscription()
+  // Per-exam "questions left in today's plan" — badges the exam cards, so the
+  // count is visible before an exam is even picked.
+  const { byExam: todayQuizByExam } = useTodayQuizCounts()
 
   const initialTopic = searchParams.get('topic') ?? ''
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
@@ -1043,6 +1054,7 @@ export default function Landing() {
                             colorIdx={colorIdx}
                             targetDate={isActive ? (targetDates[exam.progressKey] ?? null) : null}
                             subtitle={examTopicByProgressKey[exam.progressKey]}
+                            todayQuizCount={badgeCountFor(todayQuizByExam[exam.progressKey])}
                           />
                         )
                       })}
@@ -1297,15 +1309,22 @@ export default function Landing() {
             </div>
           )}
 
-          <button
-            type="button"
-            data-tour="start-quiz"
-            onClick={handleStart}
-            className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl bg-primary text-primary-foreground text-base font-semibold hover:bg-primary/90 active:bg-primary/80 transition-colors"
-          >
-            <Play className="h-5 w-5" />
-            Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
-          </button>
+          <div className="relative">
+            <button
+              type="button"
+              data-tour="start-quiz"
+              onClick={handleStart}
+              className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl bg-primary text-primary-foreground text-base font-semibold hover:bg-primary/90 active:bg-primary/80 transition-colors"
+            >
+              <Play className="h-5 w-5" />
+              Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
+            </button>
+            {/* Only badge a launch that's actually sized to finish today's plan —
+                picking a smaller count means this quiz won't complete it. */}
+            {mode === 'quiz' && useTodaysPlan && count === todaysPlanFullCount && (
+              <TodayQuizCornerBadge count={badgeCountFor(todayQuizByExam[examIdForPlan ?? ''])} size="lg" />
+            )}
+          </div>
         </div>
       </div>
     )}

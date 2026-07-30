@@ -8,6 +8,7 @@ import { useFlashcards } from '@/hooks/useFlashcards'
 import { useTodayQuizCount } from '@/hooks/useTodayQuizCount'
 import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
 import { StreakCornerBadge } from '@/components/StreakBadge'
+import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 
 function getLastWikiPath(): string {
   try { return sessionStorage.getItem('wiki:last-path') || '/wiki' } catch { return '/wiki' }
@@ -160,12 +161,10 @@ export default function BottomNav() {
                     {cards.length}
                   </span>
                 )}
-                {isQuiz && todayQuizCount > 0 && (
-                  <span className="absolute -top-1 -right-2 flex h-3.5 min-w-[0.875rem] items-center justify-center rounded-full bg-orange-500 px-[3px] text-[9px] font-bold leading-none text-white tabular-nums">
-                    {todayQuizCount}
-                  </span>
-                )}
-                {isQuiz && STREAK_ENABLED && <StreakCornerBadge />}
+                {/* Questions left in today's plan on the right; the streak sits
+                    on the left so the two never stack on the same corner. */}
+                {isQuiz && <TodayQuizCornerBadge count={todayQuizCount} size="sm" className="-top-1 -right-2" />}
+                {isQuiz && STREAK_ENABLED && <StreakCornerBadge className="-top-1 -left-2 right-auto" />}
               </span>
               <span className="text-[10px] font-medium">{item.label}</span>
             </NavLink>

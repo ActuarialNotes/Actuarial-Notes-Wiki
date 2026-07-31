@@ -6,7 +6,6 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Settings2,
-  Info,
   AlertTriangle,
   CheckCircle2,
   Check,
@@ -20,7 +19,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
-import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import {
   todayISO,
@@ -255,7 +253,6 @@ export function TodayCard({
   isPremium = true,
 }: Props) {
   const [showConfig, setShowConfig] = useState(false)
-  const [showInfo, setShowInfo] = useState(false)
   const [selectedStudyPlanIdx, setSelectedStudyPlanIdx] = useState<number | null>(null)
   const [planExpanded, setPlanExpanded] = useState(false)
   const [trackerConcept, setTrackerConcept] = useState<{
@@ -344,15 +341,6 @@ export function TodayCard({
           <div className="space-y-1">
             <div className="flex items-center gap-1.5">
               <h3 className="text-base font-semibold">Custom Study Plan</h3>
-              <button
-                type="button"
-                onClick={() => setShowInfo(true)}
-                className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 hover:bg-primary/20 transition-colors shrink-0"
-                aria-label="How custom study plans work"
-                title="How custom study plans work"
-              >
-                <Info className="h-3.5 w-3.5" />
-              </button>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
               A daily plan tailored to you
@@ -432,7 +420,6 @@ export function TodayCard({
             onClose={() => setShowConfig(false)}
           />
         )}
-        <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
       </>
     )
   }
@@ -447,15 +434,6 @@ export function TodayCard({
           <div className="flex items-start justify-between gap-2">
             <h2 className="text-xl font-semibold">Study Plan</h2>
             <div className="flex items-center gap-0.5 shrink-0">
-              <button
-                type="button"
-                onClick={() => setShowInfo(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1.5"
-                aria-label="How custom study plans work"
-                title="How custom study plans work"
-              >
-                <Info className="h-5 w-5" />
-              </button>
               <button
                 type="button"
                 onClick={() => setShowConfig(true)}
@@ -628,7 +606,6 @@ export function TodayCard({
           onClose={() => setShowConfig(false)}
         />
       )}
-      <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
 
       {showCeremony && (
         <StudyPlanCompletionCeremony

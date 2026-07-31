@@ -691,8 +691,8 @@ export default function Dashboard() {
                 type="button"
                 onClick={() => setGuideOpen(true)}
                 className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                aria-label="Dashboard guided tour"
-                title="Take a guided tour of the dashboard"
+                aria-label="Help"
+                title="How the dashboard works"
               >
                 <HelpCircle className="h-5 w-5" />
               </button>

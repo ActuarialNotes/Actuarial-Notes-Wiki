@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react'
-import { X, BarChart2, Calendar, ClipboardList, ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react'
+import { useMemo } from 'react'
 import {
   projectReadiness,
   projectReadinessWithPlan,
@@ -10,21 +9,13 @@ import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
+// The heatmap/readiness explainer slides. The modal that used to wrap them
+// (opened from the Study Schedule card's info button) is gone —
+// DashboardGuideModal renders ReadinessProjectionSlide as its last page.
+
 // How many days ahead to project readiness when there's no exam/target date.
 const DEFAULT_PROJECTION_DAYS = 90
 const MS_PER_DAY = 24 * 60 * 60 * 1000
-
-interface Props {
-  open: boolean
-  onClose: () => void
-  syllabus: WikiExamSyllabus
-  /** Mastery records already filtered to the active exam. */
-  masteryRecords: ConceptMasteryRecord[]
-  /** Exam/target date (YYYY-MM-DD) or null. */
-  examDate: string | null
-  /** The active exam's study plan, used to project readiness assuming completion. */
-  plan: StudyPlan | null
-}
 
 export function HeatmapOverviewSlide() {
   return (
@@ -201,120 +192,6 @@ export function RegistrationSlide() {
         <div className="rounded-lg bg-muted/30 px-3 py-2.5 space-y-1">
           <p className="font-semibold">CAS Exams (Exams 1–9)</p>
           <p className="text-muted-foreground">Register at casact.org. Check the exam calendar for sitting dates.</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export function HeatmapInfoPanel({ open, onClose, syllabus, masteryRecords, examDate, plan }: Props) {
-  const [slide, setSlide] = useState(0)
-  const [touchStart, setTouchStart] = useState(0)
-
-  if (!open) return null
-
-  const slides = [
-    { Icon: BarChart2, title: 'Your Activity Heatmap', Content: HeatmapOverviewSlide },
-    { Icon: Calendar, title: 'Exam Date vs. Target Ready Date', Content: ExamDatesSlide },
-    {
-      Icon: TrendingUp,
-      title: 'Predicted Readiness',
-      Content: () => <ReadinessProjectionSlide syllabus={syllabus} masteryRecords={masteryRecords} examDate={examDate} plan={plan} />,
-    },
-    { Icon: ClipboardList, title: 'Registering for Exams', Content: RegistrationSlide },
-  ]
-
-  const total = slides.length
-  const { Icon, title } = slides[slide]
-  const prev = () => setSlide(s => Math.max(0, s - 1))
-  const next = () => setSlide(s => Math.min(total - 1, s + 1))
-
-  return (
-    <div
-      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Exam heatmap information"
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div className="w-full max-w-lg bg-card rounded-xl shadow-2xl flex flex-col my-12">
-        {/* Header */}
-        <div className="flex items-center gap-2 px-4 h-12 shrink-0">
-          <Icon className="h-4 w-4 text-primary shrink-0" />
-          <span className="flex-1 font-semibold text-sm">{title}</span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-2 transition-colors rounded-md hover:bg-muted/50"
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Slide content: all slides stacked in the same grid cell so the
-            container always sizes to the tallest slide, keeping the footer
-            buttons from shifting as the user navigates. */}
-        <div
-          className="grid p-5 text-sm leading-relaxed"
-          onTouchStart={e => setTouchStart(e.touches[0].clientX)}
-          onTouchEnd={e => {
-            const diff = touchStart - e.changedTouches[0].clientX
-            if (Math.abs(diff) > 40) { diff > 0 ? next() : prev() }
-          }}
-        >
-          {slides.map(({ Content: SlideContent }, i) => (
-            <div
-              key={i}
-              className="col-start-1 row-start-1"
-              style={i === slide ? undefined : { visibility: 'hidden', pointerEvents: 'none' }}
-              aria-hidden={i === slide ? undefined : true}
-            >
-              <SlideContent />
-            </div>
-          ))}
-        </div>
-
-        {/* Footer: prev / dots / next-or-got-it */}
-        <div className="px-5 pb-5 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={prev}
-            disabled={slide === 0}
-            className="p-2.5 rounded-full bg-muted/40 text-foreground hover:bg-muted disabled:opacity-30 disabled:hover:bg-muted/40 transition-colors shadow-sm"
-            aria-label="Previous"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <div className="flex gap-1.5 items-center">
-            {Array.from({ length: total }).map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setSlide(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                className={`rounded-full transition-all duration-200 ${i === slide ? 'w-4 h-1.5 bg-primary' : 'w-1.5 h-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/60'}`}
-              />
-            ))}
-          </div>
-          {slide < total - 1 ? (
-            <button
-              type="button"
-              onClick={next}
-              className="p-2.5 rounded-full bg-muted/40 text-foreground hover:bg-muted transition-colors shadow-sm"
-              aria-label="Next"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-md px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              Got it
-            </button>
-          )}
         </div>
       </div>
     </div>

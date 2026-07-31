@@ -1,10 +1,9 @@
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { X, CalendarDays, Info, Sparkles, BookOpen, Lock } from 'lucide-react'
+import { X, CalendarDays, Sparkles, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
 import { SittingDateGrid } from '@/components/SittingDateGrid'
-import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
 import { getSittingsForExam, LOCALIZED_EXAMS } from '@/data/examSittings'
 import {
   QUICK_SET_PRESETS,
@@ -79,7 +78,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
     }
     return '2w'
   })
-  const [showInfo, setShowInfo] = useState(false)
   const readyDateInputRef = useRef<HTMLInputElement>(null)
   const examDateInputRef = useRef<HTMLInputElement>(null)
 
@@ -369,18 +367,7 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
           {/* Study Strategy step */}
           {step === STRATEGY_STEP && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-lg font-semibold">How do you want to study?</p>
-                <button
-                  type="button"
-                  onClick={() => setShowInfo(true)}
-                  className="text-muted-foreground/50 hover:text-foreground transition-colors p-1 -mr-1 shrink-0"
-                  aria-label="How custom study plans work"
-                  title="How custom study plans work"
-                >
-                  <Info className="h-4 w-4" />
-                </button>
-              </div>
+              <p className="text-lg font-semibold">How do you want to study?</p>
 
               <div className="space-y-2">
                 {([
@@ -468,7 +455,6 @@ export function StudyPlanConfigModal({ config, examDate, examLabel, examId, init
           </div>
         </div>
       </div>
-      <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
     </div>
   )
 }

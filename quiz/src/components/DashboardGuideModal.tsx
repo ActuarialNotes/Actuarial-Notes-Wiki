@@ -3,33 +3,21 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  LayoutGrid,
-  Flame,
-  TrendingUp,
-  Calendar,
   Repeat,
-  TrendingDown,
-  Sparkles,
-  Trophy,
+  TrendingUp,
 } from 'lucide-react'
-import {
-  SpacedRepetitionSlide,
-  ForgettingCurveSlide,
-  LevellingSlide,
-} from '@/components/StudyPlanInfoPanel'
-import { ExamDatesSlide, ReadinessProjectionSlide } from '@/components/HeatmapInfoPanel'
-import { STREAK_ENABLED, XP_ENABLED, QUESTS_ENABLED } from '@/lib/featureFlags'
+import { SpacedRepetitionSlide } from '@/components/StudyPlanInfoPanel'
+import { ReadinessProjectionSlide } from '@/components/HeatmapInfoPanel'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { useSoundOnToggle } from '@/hooks/useSoundEffects'
 
-// A single guided walkthrough of the Dashboard, stitched together from the help
-// screens that already back each card's info button — the study-plan panel
-// (spaced repetition / forgetting curve / concept levelling) and the heatmap
-// panel (readiness projection / exam vs. target dates) — plus short intro slides
-// for the streak, readiness and level/quest surfaces that only had inline
-// popups. Opened from the "?" icon in the Dashboard header.
+// The single place the Dashboard explains itself. The per-card info buttons
+// that used to open their own panels are gone — everything instructional now
+// lives here, behind the "?" icon in the Dashboard header: how spaced
+// repetition paces the plan, and where the plan projects your readiness to
+// land (last, since it's the data-driven payoff of the first).
 
 interface Props {
   open: boolean
@@ -47,75 +35,22 @@ interface GuideSlide {
   Content: ComponentType
 }
 
-function WelcomeSlide() {
-  return (
-    <div className="space-y-4">
-      <p className="text-muted-foreground">
-        This is your home base. Every card here tracks a different part of your
-        study loop — this quick tour walks through what each one means.
-      </p>
-      <p className="text-muted-foreground">
-        Swipe or tap the arrows to move through the tour. You can reopen it any
-        time from the <span className="font-medium text-foreground">?</span> icon
-        at the top of the dashboard.
-      </p>
-    </div>
-  )
-}
-
-function StreakSlide() {
-  return (
-    <div className="space-y-4">
-      <p className="text-muted-foreground">
-        The flame counts how many days in a row you&apos;ve studied. A day counts
-        as soon as you answer <span className="font-medium text-foreground">one
-        question correctly</span> — the checkmark on the card confirms today is
-        already in.
-      </p>
-      <p className="text-muted-foreground">
-        Miss a day and the streak resets, so a little practice every day keeps it
-        burning.
-      </p>
-    </div>
-  )
-}
-
-function LevelQuestsSlide() {
-  return (
-    <div className="space-y-4">
-      <p className="text-muted-foreground">
-        The ring around your avatar is your level. Every question you answer earns
-        XP — weighted toward harder concepts and ones you&apos;re reviving — which
-        fills the ring and works toward your daily goal.
-      </p>
-      <p className="text-muted-foreground">
-        Tap the ring to open your daily goal, quests and league. Quests are small
-        daily challenges that pay out gems and XP when you collect them.
-      </p>
-    </div>
-  )
-}
-
 export function DashboardGuideModal({ open, onClose, syllabus, masteryRecords, examDate, plan }: Props) {
   // Paper: the panel sliding in.
   useSoundOnToggle(open, 'open', 'close')
   const [slide, setSlide] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
 
-  // Assemble the slide list from the reusable help-screen components. Slides
-  // that depend on data (readiness) or a feature flag are included only when
-  // they'd actually render something on the dashboard.
+  // The readiness projection needs an active exam to compute against, so it's
+  // appended only when there is one.
   const slides = useMemo<GuideSlide[]>(() => {
     const list: GuideSlide[] = [
-      { Icon: LayoutGrid, title: 'Your dashboard', Content: WelcomeSlide },
+      { Icon: Repeat, title: 'Spaced repetition', Content: SpacedRepetitionSlide },
     ]
-    if (STREAK_ENABLED) {
-      list.push({ Icon: Flame, title: 'Your streak', Content: StreakSlide })
-    }
     if (syllabus) {
       list.push({
         Icon: TrendingUp,
-        title: 'Readiness',
+        title: 'Projected readiness',
         Content: () => (
           <ReadinessProjectionSlide
             syllabus={syllabus}
@@ -125,15 +60,6 @@ export function DashboardGuideModal({ open, onClose, syllabus, masteryRecords, e
           />
         ),
       })
-    }
-    list.push(
-      { Icon: Calendar, title: 'Exam date vs. target ready date', Content: ExamDatesSlide },
-      { Icon: Repeat, title: 'Spaced repetition', Content: SpacedRepetitionSlide },
-      { Icon: TrendingDown, title: 'The forgetting curve', Content: ForgettingCurveSlide },
-      { Icon: Sparkles, title: 'Concept levelling', Content: LevellingSlide },
-    )
-    if (XP_ENABLED || QUESTS_ENABLED) {
-      list.push({ Icon: Trophy, title: 'Levels & quests', Content: LevelQuestsSlide })
     }
     return list
   }, [syllabus, masteryRecords, examDate, plan])
@@ -151,7 +77,7 @@ export function DashboardGuideModal({ open, onClose, syllabus, masteryRecords, e
       className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
-      aria-label="Dashboard guided tour"
+      aria-label="Dashboard help"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div className="w-full max-w-lg bg-card rounded-xl shadow-2xl flex flex-col my-12">

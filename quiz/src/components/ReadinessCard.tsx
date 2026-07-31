@@ -1,14 +1,12 @@
 import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, ArrowUp, Check, CheckCircle2, ChevronDown, Circle, Gem, Info, Lock, Settings2, Target, X } from 'lucide-react'
+import { AlertTriangle, ArrowUp, Check, CheckCircle2, ChevronDown, Circle, Gem, Lock, Settings2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { StudyPlanConfigModal } from '@/components/StudyPlanConfigModal'
-import { StudyPlanInfoPanel } from '@/components/StudyPlanInfoPanel'
-import { HeatmapInfoPanel } from '@/components/HeatmapInfoPanel'
 import { ConceptScheduleBadge } from '@/components/TopicProgressSection'
 import { ExamHeatmap } from '@/components/ExamHeatmap'
 import { QuizSessionCard } from '@/components/QuizSessionCard'
@@ -500,11 +498,8 @@ export function ReadinessCard({
   const [completedToday, setCompletedToday] = useState<DailyLevelUp[]>([])
   const [showConfig, setShowConfig] = useState(false)
   const [configInitialStep, setConfigInitialStep] = useState<1 | 2 | 3>(1)
-  const [showInfo, setShowInfo] = useState(false)
   const [showBonusInfo, setShowBonusInfo] = useState(false)
   const [showDayCompleteInfo, setShowDayCompleteInfo] = useState(false)
-  const [showHeatmapInfo, setShowHeatmapInfo] = useState(false)
-  const [showStudyGuideInfo, setShowStudyGuideInfo] = useState(false)
   const [bonusClaimed, setBonusClaimed] = useState<boolean>(() => {
     try {
       const key = `actuarial_daily_bonus_${wikiExamIdToProgressKey(syllabus.examId)}_${todayISO()}`
@@ -1067,15 +1062,6 @@ export function ReadinessCard({
             </div>
             <div className="flex items-center gap-2 shrink-0">
               {STREAK_ENABLED && user && <StreakNavBadge />}
-              <button
-                type="button"
-                onClick={() => setShowHeatmapInfo(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1.5"
-                aria-label="Exam heatmap info"
-                title="Exam heatmap info"
-              >
-                <Info className="h-5 w-5" />
-              </button>
             </div>
           </div>
 
@@ -1332,15 +1318,6 @@ export function ReadinessCard({
                       : '2× Bonus'}
                   </span>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setShowInfo(true)}
-                  className="ml-auto text-muted-foreground hover:text-foreground transition-colors p-1.5"
-                  aria-label="How custom study plans work"
-                  title="How custom study plans work"
-                >
-                  <Info className="h-5 w-5" />
-                </button>
               </div>
 
               {/* Progress pills — shown when there's activity today */}
@@ -1494,15 +1471,6 @@ export function ReadinessCard({
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-1.5">
                   <p className="text-base font-semibold">Custom Study Plan</p>
-                  <button
-                    type="button"
-                    onClick={() => setShowInfo(true)}
-                    className="flex items-center justify-center h-6 w-6 rounded-full bg-primary/10 text-primary ring-1 ring-primary/20 hover:bg-primary/20 transition-colors shrink-0"
-                    aria-label="How custom study plans work"
-                    title="How custom study plans work"
-                  >
-                    <Info className="h-3.5 w-3.5" />
-                  </button>
                 </div>
                 <p className="text-xs text-muted-foreground max-w-[220px]">
                   A daily plan tailored to you
@@ -1536,15 +1504,6 @@ export function ReadinessCard({
           <CardContent className="p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold">Study Guide</h3>
-              <button
-                type="button"
-                onClick={() => setShowStudyGuideInfo(true)}
-                className="text-muted-foreground hover:text-foreground transition-colors p-1"
-                aria-label="Study guide info"
-                title="Study guide info"
-              >
-                <Info className="h-4 w-4" />
-              </button>
             </div>
 
             <StudyGuideRadial
@@ -1631,17 +1590,7 @@ export function ReadinessCard({
           onClose={() => setShowConfig(false)}
         />
       )}
-      <StudyPlanInfoPanel open={showInfo} onClose={() => setShowInfo(false)} />
-      <HeatmapInfoPanel
-        open={showHeatmapInfo}
-        onClose={() => setShowHeatmapInfo(false)}
-        syllabus={syllabus}
-        masteryRecords={examRecords}
-        examDate={examDate}
-        plan={plan}
-      />
       <DailyBonusInfoPanel open={showBonusInfo} onClose={() => setShowBonusInfo(false)} />
-      <StudyGuideInfoPanel open={showStudyGuideInfo} onClose={() => setShowStudyGuideInfo(false)} />
       <DayCompleteInfoPanel
         open={showDayCompleteInfo}
         onClose={() => setShowDayCompleteInfo(false)}
@@ -1795,83 +1744,6 @@ function DayCompleteInfoPanel({
               ))}
             </div>
           )}
-        </div>
-        <div className="px-5 pb-5 flex justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-md px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            Got it
-          </button>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ── Study Guide Info Panel ────────────────────────────────────────────────────
-
-const STUDY_GUIDE_LEVELS: { fill: string; label: string; desc: string }[] = [
-  { fill: 'rgba(34,197,94,0.10)', label: 'New',       desc: 'Not yet attempted.' },
-  { fill: 'rgba(34,197,94,0.28)', label: 'Level 1',   desc: 'First correct answer.' },
-  { fill: 'rgba(34,197,94,0.62)', label: 'Level 2',   desc: 'Practiced correctly on at least two separate days.' },
-  { fill: '#22c55e',              label: 'Level 3',   desc: 'Mastered — practiced correctly on at least three separate days.' },
-  { fill: 'rgba(239,68,68,0.45)', label: 'Forgotten', desc: 'Needs re-earning.' },
-]
-
-function StudyGuideInfoPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
-  if (!open) return null
-  return (
-    <div
-      className="fixed inset-0 z-[70] flex items-start justify-center bg-background/80 backdrop-blur-sm p-4 overflow-y-auto"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Study guide information"
-      onClick={e => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div className="w-full max-w-sm bg-card border rounded-xl shadow-2xl flex flex-col my-16">
-        <div className="flex items-center gap-2 px-4 h-12 border-b shrink-0">
-          <Target className="h-4 w-4 text-primary shrink-0" />
-          <span className="flex-1 font-semibold text-sm">Study Guide</span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground p-2 transition-colors rounded-md hover:bg-muted/50"
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="p-5 space-y-4 text-sm leading-relaxed">
-          <p className="text-muted-foreground">
-            The radial chart shows every concept on your exam syllabus. Each segment represents one concept, sized by its topic's weight in the exam.
-          </p>
-          <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Colour key</p>
-            <div className="space-y-2">
-              {STUDY_GUIDE_LEVELS.map(l => (
-                <div key={l.label} className="flex items-start gap-2.5">
-                  <span
-                    className="inline-block h-4 w-4 rounded-[3px] shrink-0 mt-0.5 border border-white/10"
-                    style={{ backgroundColor: l.fill }}
-                  />
-                  <span className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-foreground">{l.label}:</span> {l.desc}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-lg border bg-muted/30 px-3 py-2.5 space-y-1">
-            <p className="text-xs font-semibold">Readiness %</p>
-            <p className="text-xs text-muted-foreground">
-              The percentage shown in the centre is your overall readiness score, weighted by both topic weight and mastery level. Higher mastery levels contribute more to the score.
-            </p>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Tap any segment to open that concept and start practising.
-          </p>
         </div>
         <div className="px-5 pb-5 flex justify-end">
           <button

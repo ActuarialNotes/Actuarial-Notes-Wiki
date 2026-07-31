@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronRight, Info, CalendarDays, BookMarked } from 'lucide-react'
+import { ChevronDown, ChevronRight, CalendarDays, BookMarked } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { wikiRoute } from '@/lib/wikiRoutes'
@@ -35,25 +35,6 @@ const STATE_TEXT_COLOR: Record<MasteryState, string> = {
   level2: 'text-green-700 dark:text-green-400',
   level3: 'text-green-800 dark:text-green-300',
   forgotten: 'text-red-500',
-}
-
-function InfoPanel() {
-  return (
-    <div className="mt-2 rounded-md bg-muted/50 p-3 text-xs text-muted-foreground space-y-2">
-      <p className="font-medium text-foreground">How concept mastery works</p>
-      <p>
-        Each concept advances through four levels. The bar above each topic is the
-        share of its concepts that have reached <span className="font-medium">Level 3</span>.
-      </p>
-      <ul className="space-y-1">
-        <li><span className="font-medium text-muted-foreground">New</span> — never attempted.</li>
-        <li><span className="font-medium text-green-600 dark:text-green-500">Level 1</span> — first correct answer; building familiarity.</li>
-        <li><span className="font-medium text-green-700 dark:text-green-400">Level 2</span> — 2+ correct answers; practicing.</li>
-        <li><span className="font-medium text-green-800 dark:text-green-300">Level 3</span> — 3+ correct answers; mastered.</li>
-        <li><span className="font-medium text-red-500">Forgotten</span> — 15 days without a correct answer, or 3 wrong in a row.</li>
-      </ul>
-    </div>
-  )
 }
 
 // ── Plan status badge ─────────────────────────────────────────────────────────
@@ -96,7 +77,6 @@ interface Props {
 
 export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Props) {
   const [openTopics, setOpenTopics] = useState<Set<string>>(new Set())
-  const [showInfo, setShowInfo] = useState(false)
   const [selectedConcept, setSelectedConcept] = useState<{ name: string; state: MasteryState; index: number } | null>(null)
 
   const examKey = wikiExamIdToProgressKey(syllabus.examId)
@@ -143,13 +123,6 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
             <CardTitle className="text-base">{syllabus.examLabel}</CardTitle>
-            <button
-              onClick={() => setShowInfo(v => !v)}
-              className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
-              aria-label="How mastery tracking works"
-            >
-              <Info className="h-4 w-4" />
-            </button>
             {studyPlan && (
               <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${(PACING_CONFIG[studyPlan.status] ?? PACING_CONFIG.on_track).className}`}>
                 {(PACING_CONFIG[studyPlan.status] ?? PACING_CONFIG.on_track).label}
@@ -165,7 +138,6 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
               </Link>
             )}
           </div>
-          {showInfo && <InfoPanel />}
 
           {/* Today's plan summary */}
           {studyPlan && studyPlan.config.targetReadyDate && studyPlan.status !== 'review_mode' && (

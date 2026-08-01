@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { applyAnswer, decayIfStale, emptyRecord, sanitizeMasteryState, type ConceptMasteryRecord, type MasteryState } from '@/lib/mastery'
 import { mergeLocalMastery } from '@/lib/localMasteryStore'
 import { slugForLink } from '@/lib/conceptMatch'
-import { appendTodayLevelUps, addDailyGems, addDailyQuizStats } from '@/lib/dailyProgressStore'
+import { appendTodayLevelUps, addDailyGems, addDailyQuizStats, appendTodayAnsweredIds } from '@/lib/dailyProgressStore'
 import { recordStreakActivity } from '@/lib/streakStore'
 import { xpForAnswers } from '@/lib/xp'
 import { recordXp } from '@/lib/xpStore'
@@ -617,6 +617,9 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
         at: new Date().toISOString(),
       })))
       addDailyQuizStats(correctCount, questions.length)
+      // Remember what today's quizzes have already served so the next Today's
+      // Plan launch draws fresh questions rather than repeating these.
+      appendTodayAnsweredIds(questions.map(q => q.id))
       // A correct answer counts as a day of study — extend the streak (guest:
       // localStorage). Gated on at least one correct answer so an all-wrong quiz
       // doesn't bank the day. Idempotent per local day; fire-and-forget.
@@ -664,6 +667,9 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
     }
 
     addDailyQuizStats(correctCount, questions.length)
+    // Remember what today's quizzes have already served so the next Today's
+    // Plan launch draws fresh questions rather than repeating these.
+    appendTodayAnsweredIds(questions.map(q => q.id))
 
     // A correct answer counts as a day of study — extend the streak (signed-in:
     // Supabase). Gated on at least one correct answer so an all-wrong quiz

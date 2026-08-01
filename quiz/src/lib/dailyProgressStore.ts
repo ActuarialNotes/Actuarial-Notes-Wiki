@@ -75,6 +75,43 @@ export function addDailyQuizStats(correct: number, total: number): void {
 
 export { DAILY_QUIZ_EVENT }
 
+// Questions served today (correct, wrong or skipped) — device-local, reset per
+// calendar day. Written by quizStore on quiz completion; read when a Today's
+// Plan quiz is built so a re-launch ("Continue Studying") draws questions the
+// user hasn't already seen today instead of replaying the same set. Device-local
+// like the rest of this module: a second device just starts from a clean slate,
+// which only costs a possible repeat.
+const ANSWERED_EVENT = 'actuarial_daily_answered'
+
+// Plenty for a day of study, and keeps the entry small enough not to threaten
+// the localStorage quota. Oldest IDs fall off first.
+const ANSWERED_LIMIT = 1000
+
+function todayAnsweredKey(): string {
+  return 'actuarial_daily_answered_' + new Date().toISOString().slice(0, 10)
+}
+
+export function readTodayAnsweredIds(): string[] {
+  try {
+    const raw = localStorage.getItem(todayAnsweredKey())
+    return raw ? (JSON.parse(raw) as string[]) : []
+  } catch {
+    return []
+  }
+}
+
+export function appendTodayAnsweredIds(ids: string[]): void {
+  if (ids.length === 0) return
+  try {
+    const merged = [...new Set([...readTodayAnsweredIds(), ...ids])]
+    const trimmed = merged.length > ANSWERED_LIMIT ? merged.slice(-ANSWERED_LIMIT) : merged
+    localStorage.setItem(todayAnsweredKey(), JSON.stringify(trimmed))
+    window.dispatchEvent(new CustomEvent(ANSWERED_EVENT, { detail: trimmed }))
+  } catch { /* quota exceeded */ }
+}
+
+export { ANSWERED_EVENT }
+
 export function appendTodayLevelUps(levelUps: DailyLevelUp[]): void {
   if (levelUps.length === 0) return
   try {

@@ -655,6 +655,17 @@ function linkedConceptNames(wikiLinks: string[]): Set<string> {
   return names
 }
 
+export interface CoverageOptions {
+  /**
+   * Question IDs the user has already answered today. These are held back from
+   * the draw: the selection only reaches for them once the unseen questions
+   * can't cover a concept (or can't fill the requested count). That's what makes
+   * re-launching today's plan — "Continue Studying" after the plan is finished —
+   * serve new questions instead of replaying the ones just answered.
+   */
+  seenIds?: ReadonlySet<string>
+}
+
 /**
  * Pick up to `count` questions from `questions` that cover as many of
  * `concepts` as possible, using the fewest questions necessary.
@@ -668,6 +679,11 @@ function linkedConceptNames(wikiLinks: string[]): Set<string> {
  * Phase 2 fills any remaining slots with the highest-coverage leftover
  * questions, so extra questions still stay on-topic.
  *
+ * Both phases run over the unseen questions first and only then over
+ * `options.seenIds` (see {@link CoverageOptions}), so a concept whose bank
+ * still has fresh questions never repeats one — a concept whose bank is
+ * exhausted for the day falls back to a repeat rather than being dropped.
+ *
  * When `count` is omitted, no cap is applied and phase 2 is skipped: the
  * result is the minimum greedy set that covers every reachable concept —
  * the fewest questions that complete the whole plan.
@@ -676,38 +692,49 @@ export function selectQuestionsForCoverage<T extends CoverageQuestion>(
   questions: T[],
   concepts: string[],
   count?: number,
+  options?: CoverageOptions,
 ): T[] {
   const conceptSet = new Set(concepts.map(c => c.toLowerCase()))
   const uncovered = new Set(conceptSet)
-  const pool = [...questions]
   const selected: T[] = []
   const cap = count ?? Infinity
 
-  while (uncovered.size > 0 && selected.length < cap && pool.length > 0) {
-    let bestIdx = -1
-    let bestCovered: Set<string> = new Set()
-    for (let i = 0; i < pool.length; i++) {
-      const covered = new Set([...linkedConceptNames(pool[i].wiki_link)].filter(c => uncovered.has(c)))
-      if (covered.size > bestCovered.size) {
-        bestCovered = covered
-        bestIdx = i
+  const seenIds = options?.seenIds
+  // Two pools in priority order: never-answered-today first, repeats last.
+  const pools = seenIds && seenIds.size > 0
+    ? [questions.filter(q => !seenIds.has(q.id)), questions.filter(q => seenIds.has(q.id))]
+    : [[...questions]]
+
+  for (const pool of pools) {
+    while (uncovered.size > 0 && selected.length < cap && pool.length > 0) {
+      let bestIdx = -1
+      let bestCovered: Set<string> = new Set()
+      for (let i = 0; i < pool.length; i++) {
+        const covered = new Set([...linkedConceptNames(pool[i].wiki_link)].filter(c => uncovered.has(c)))
+        if (covered.size > bestCovered.size) {
+          bestCovered = covered
+          bestIdx = i
+        }
       }
+      if (bestIdx === -1) break
+      const [chosen] = pool.splice(bestIdx, 1)
+      selected.push(chosen)
+      for (const c of bestCovered) uncovered.delete(c)
     }
-    if (bestIdx === -1) break
-    const [chosen] = pool.splice(bestIdx, 1)
-    selected.push(chosen)
-    for (const c of bestCovered) uncovered.delete(c)
   }
 
-  if (count !== undefined && selected.length < count && pool.length > 0) {
-    pool.sort((a, b) => {
-      const scoreA = [...linkedConceptNames(a.wiki_link)].filter(c => conceptSet.has(c)).length
-      const scoreB = [...linkedConceptNames(b.wiki_link)].filter(c => conceptSet.has(c)).length
-      return scoreB - scoreA
-    })
-    for (const q of pool) {
+  if (count !== undefined) {
+    for (const pool of pools) {
       if (selected.length >= count) break
-      selected.push(q)
+      pool.sort((a, b) => {
+        const scoreA = [...linkedConceptNames(a.wiki_link)].filter(c => conceptSet.has(c)).length
+        const scoreB = [...linkedConceptNames(b.wiki_link)].filter(c => conceptSet.has(c)).length
+        return scoreB - scoreA
+      })
+      for (const q of pool) {
+        if (selected.length >= count) break
+        selected.push(q)
+      }
     }
   }
 
@@ -719,10 +746,14 @@ export function selectQuestionsForCoverage<T extends CoverageQuestion>(
  * — i.e. the number of questions a "Today's Quiz" needs to give the user a
  * shot at completing the entire day's plan. Concepts with no matching question
  * simply can't be covered and don't inflate the count.
+ *
+ * Takes the same `options` as {@link selectQuestionsForCoverage} so the count
+ * shown on a "questions left today" badge matches the quiz that button starts.
  */
 export function minQuestionsToCoverConcepts<T extends CoverageQuestion>(
   questions: T[],
   concepts: string[],
+  options?: CoverageOptions,
 ): number {
-  return selectQuestionsForCoverage(questions, concepts).length
+  return selectQuestionsForCoverage(questions, concepts, undefined, options).length
 }

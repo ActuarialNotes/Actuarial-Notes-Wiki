@@ -19,6 +19,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { todayPlanCountForExam } from '@/lib/todayPlanCount'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { readTodayLevelUps, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import type { TodayPlanCount } from '@/lib/todayPlanCount'
 import type { StudyPlan } from '@/lib/studyPlan'
 
@@ -65,6 +66,10 @@ export function useTodayQuizCounts(): TodayQuizCounts {
     [todayLevelUps],
   )
 
+  // Questions today's quizzes already served — the launch prefers unseen ones,
+  // so the badge has to size itself the same way.
+  const answeredQuestionIds = useTodayAnsweredQuestions()
+
   const syllabusP    = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'P') ?? null
   const syllabusFM   = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'FM') ?? null
   const syllabusMAS  = syllabi.find(s => wikiExamIdToProgressKey(s.examId) === 'MAS-I') ?? null
@@ -86,13 +91,13 @@ export function useTodayQuizCounts(): TodayQuizCounts {
     let total = 0
     for (const [examId, topic] of Object.entries(EXAM_ID_TO_TOPIC)) {
       if (examProgress[examId] !== 'in_progress') continue
-      const entry = todayPlanCountForExam(plansByExamId[examId], topic, allQuestions, doneConceptSlugs)
+      const entry = todayPlanCountForExam(plansByExamId[examId], topic, allQuestions, doneConceptSlugs, answeredQuestionIds)
       if (entry.count === 0 && !entry.complete) continue
       byExam[examId] = entry
       if (!entry.complete) total += entry.count
     }
     return { byExam, total }
-  }, [user, isPremium, examProgress, allQuestions, planP, planFM, planMAS, planCAS5, doneConceptSlugs])
+  }, [user, isPremium, examProgress, allQuestions, planP, planFM, planMAS, planCAS5, doneConceptSlugs, answeredQuestionIds])
 }
 
 /** Total questions left in today's plan across every active exam. */

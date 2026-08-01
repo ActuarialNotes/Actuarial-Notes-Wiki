@@ -340,7 +340,7 @@ export function ConceptPopup() {
                 type="button"
                 data-tour="collect-card"
                 onClick={() => openCollect(current)}
-                className="lock-foil-ring inline-flex items-center justify-center h-8 w-8 -ml-1 rounded-md shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                className="lock-foil-ring inline-flex items-center justify-center h-8 w-8 -ml-2.5 rounded-md shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                 title="Collect this flashcard"
                 aria-label={`Collect ${current.name}`}
               >

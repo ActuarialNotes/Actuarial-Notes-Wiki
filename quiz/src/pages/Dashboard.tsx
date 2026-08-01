@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useProgress } from '@/hooks/useProgress'
 import { useSubscription } from '@/hooks/useSubscription'
 import { supabase } from '@/lib/supabase'
-import { Bell, BookOpen, Check, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
+import { Bell, BookOpen, Download, Gem, GraduationCap, HelpCircle, Loader2, LogIn, LogOut, Play, PlusCircle, Settings2, ShoppingBag, Sparkles, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ActiveExamCardLoading, ActiveExamCardEmpty } from '@/components/ActiveExamCard'
 import { ReadinessCard } from '@/components/ReadinessCard'
@@ -26,11 +26,9 @@ import { todayISO } from '@/lib/studyPlan'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
-import { DAILY_QUIZ_EVENT, getDailyQuizStats, LEVELUP_EVENT, readTodayLevelUps } from '@/lib/dailyProgressStore'
-import { computeReadiness } from '@/lib/readiness'
+import { LEVELUP_EVENT, readTodayLevelUps } from '@/lib/dailyProgressStore'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
-import { StreakStat } from '@/components/StreakBadge'
 import { LevelBadge } from '@/components/LevelBadge'
 import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
 import { RecentMistakesCard } from '@/components/RecentMistakesCard'
@@ -38,39 +36,9 @@ import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
 import { DashboardGuideModal } from '@/components/DashboardGuideModal'
-import { DAILY_PLAN_EMAIL_ENABLED, MASTERY_ANALYTICS_ENABLED, MISTAKES_REVIEW_ENABLED, STREAK_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
+import { DAILY_PLAN_EMAIL_ENABLED, MASTERY_ANALYTICS_ENABLED, MISTAKES_REVIEW_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
 
 const ACTIVE_EXAM_KEY = 'quiz.dashboard.activeExamId'
-
-// ── Mini readiness ring — small replica of the study-guide radial gauge ───────
-
-function MiniReadinessRing({ pct }: { pct: number }) {
-  const size = 64
-  const stroke = 7
-  const r = (size - stroke) / 2
-  const c = 2 * Math.PI * r
-  const offset = c * (1 - Math.min(100, Math.max(0, pct)) / 100)
-  const cx = size / 2
-  const cy = size / 2
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0">
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="currentColor" strokeOpacity={0.12} strokeWidth={stroke} />
-      <circle
-        cx={cx} cy={cy} r={r} fill="none"
-        stroke="#22c55e"
-        strokeWidth={stroke}
-        strokeLinecap="round"
-        strokeDasharray={c}
-        strokeDashoffset={offset}
-        transform={`rotate(-90 ${cx} ${cy})`}
-        style={{ transition: 'stroke-dashoffset 300ms ease-out' }}
-      />
-      <text x={cx} y={cy + 5} textAnchor="middle" fontSize={16} fontWeight={800} fill="currentColor">
-        {pct}%
-      </text>
-    </svg>
-  )
-}
 
 // ── Welcome Modal ─────────────────────────────────────────────────────────────
 
@@ -168,13 +136,10 @@ export default function Dashboard() {
   const [conceptsOpenCounter, setConceptsOpenCounter] = useState(0)
   const [startQuizCounter, setStartQuizCounter] = useState(0)
   const [isLaunchingQuiz, setIsLaunchingQuiz] = useState(false)
-  const [scrollToRadialTrigger, setScrollToRadialTrigger] = useState(0)
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(
     () => new URLSearchParams(location.search).get('upgraded') === '1',
   )
   const [planComplete, setPlanComplete] = useState(false)
-  const [dayCompleteInfoTrigger, setDayCompleteInfoTrigger] = useState(0)
-  const [dailyQuizStats, setDailyQuizStats] = useState(() => getDailyQuizStats())
   const [profileOpen, setProfileOpen] = useState(false)
   const [signOutConfirm, setSignOutConfirm] = useState(false)
   const [exportOpen, setExportOpen] = useState(false)
@@ -182,7 +147,7 @@ export default function Dashboard() {
   const [guideOpen, setGuideOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
   // ReadinessCard portals its Study Schedule card into this slot so it renders
-  // at the top of the page, above the primary actions and stat grid.
+  // at the top of the page, above the primary actions.
   const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
 
   // Sticky exam header: the exam switcher pins to the top of the viewport, and
@@ -251,15 +216,6 @@ export default function Dashboard() {
       window.removeEventListener('storage', refresh)
     }
   }, [refreshMastery])
-
-  // Keep today's correct-answer count fresh so the streak stat's checkmark
-  // (any correct answer today, independent of study-plan completion) updates
-  // live as quizzes are completed.
-  useEffect(() => {
-    const refresh = () => setDailyQuizStats(getDailyQuizStats())
-    window.addEventListener(DAILY_QUIZ_EVENT, refresh)
-    return () => window.removeEventListener(DAILY_QUIZ_EVENT, refresh)
-  }, [])
 
   useEffect(() => {
     if (!profileOpen) {
@@ -481,12 +437,6 @@ export default function Dashboard() {
     return { daysRemaining, topicsMastered, totalTopics }
   }, [activeSyllabus, activeProgressKey, masteryRecords, studyPlan])
 
-  const overallPct = useMemo(() => {
-    if (!activeSyllabus || !activeProgressKey) return null
-    const examRecords = masteryRecords.filter(r => r.exam_id === activeProgressKey)
-    return Math.round(computeReadiness(activeSyllabus, examRecords, new Date()).overallPct)
-  }, [activeSyllabus, activeProgressKey, masteryRecords])
-
   // Personalization signals for the daily-quest board: how many concepts have
   // decayed to Forgotten (revive quests only appear when there's something to
   // revive) and today's study-plan concepts (focus-quest candidates). Left
@@ -523,7 +473,6 @@ export default function Dashboard() {
   const initials = displayName.slice(0, 2).toUpperCase()
 
   const hasActiveExams = inProgressSyllabi.length > 0
-  const showStreakStat = STREAK_ENABLED && !isGuest
   const showLevelBadge = XP_ENABLED && !isGuest
 
   // Quiz-launch action, shared by the full-size actions row and its compact
@@ -773,12 +722,11 @@ export default function Dashboard() {
           </div>
         )}
         {/* Study Schedule card — portaled here by ReadinessCard (below) so it sits
-            at the very top of the dashboard, above the primary actions and the
-            streak/readiness stats. */}
+            at the very top of the dashboard, above the primary actions. */}
         {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
 
         {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
-            Sits directly below the study schedule card, above the streak/readiness stats. */}
+            Sits directly below the study schedule card. */}
         {activeSyllabus && (
           <div ref={primaryActionsRef} className="flex gap-3">
             <Button
@@ -802,39 +750,6 @@ export default function Dashboard() {
                   {quizActionLabel}
                 </button>
                 {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
-              </div>
-            )}
-          </div>
-        )}
-        {/* Streak + readiness stats. The "days to prepare" / "days until exam"
-            counters live in the Study Schedule card's chevron row (see ExamHeatmap). */}
-        {(showStreakStat || overallPct !== null) && (
-          <div className="grid grid-cols-2 gap-3">
-            {showStreakStat && (
-              <StreakStat activeToday={dailyQuizStats.correct > 0} />
-            )}
-            {overallPct !== null && activeSyllabus && (
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setScrollToRadialTrigger(v => v + 1)}
-                  className="flex w-full flex-col items-center justify-center gap-1.5 py-4 min-h-32 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-colors"
-                  title="View readiness breakdown"
-                >
-                  <MiniReadinessRing pct={overallPct} />
-                  <span className="text-xs text-muted-foreground">Readiness</span>
-                </button>
-                {planComplete && (
-                  <button
-                    type="button"
-                    onClick={() => setDayCompleteInfoTrigger(v => v + 1)}
-                    className="absolute -top-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-white shadow ring-2 ring-background hover:bg-green-600 transition-colors"
-                    aria-label="Today's study plan complete — view bonus details"
-                    title="Today's study plan complete — tap for details"
-                  >
-                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                  </button>
-                )}
               </div>
             )}
           </div>
@@ -887,10 +802,8 @@ export default function Dashboard() {
             onOpenOnboarding={(step = 1) => { setOnboardingStep(step); setOnboardingOpen(true) }}
             openConceptsTrigger={conceptsOpenCounter}
             startQuizTrigger={startQuizCounter}
-            scrollToRadialTrigger={scrollToRadialTrigger}
             isPremium={isPremium}
             onPlanCompletionChange={setPlanComplete}
-            openDayCompleteInfoTrigger={dayCompleteInfoTrigger}
             studyScheduleSlot={studyScheduleSlotEl}
           />
         )}

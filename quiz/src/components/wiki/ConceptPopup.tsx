@@ -25,6 +25,7 @@ import { useSoundEffects, useSoundOnToggle } from '@/hooks/useSoundEffects'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
+import { NavProgressBar } from '@/components/NavProgressBar'
 
 const MASTERY_PILL: Record<MasteryState, { label: string; className: string }> = {
   new:      { label: 'New', className: 'bg-muted text-muted-foreground' },
@@ -596,6 +597,11 @@ export function ConceptPopup() {
       </div>
 
       {/* Footer nav */}
+      <NavProgressBar
+        current={index + 1}
+        total={list.length}
+        label={`Concept ${index + 1} of ${list.length}`}
+      />
       <div className="flex items-stretch h-16 shrink-0 bg-background/60">
         <button
           type="button"

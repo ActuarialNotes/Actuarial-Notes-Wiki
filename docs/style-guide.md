@@ -293,6 +293,12 @@ input text is `text-base` (prevents iOS zoom-on-focus) — keep it. Disabled sta
 "X of Y / percent" display so progress reads consistently. Tracks use `bg-muted`; fills use
 the semantic colour for what's being measured (green for mastery/readiness).
 
+`NavProgressBar` is the `h-1` green bar that sits directly above **every** Previous / Next
+footer (concept popup, flashcard study view, concept detail modal, math-focus overlay,
+recent-mistakes modal), showing how far through the sequence the current item is. Any new
+surface with that footer shape gets it too — it's the position read that survives focus
+mode, where the "N of M" label is stripped.
+
 ### 7.6 Empty, loading & error states
 
 - **Loading:** `Loader2` spinner with `animate-spin`, `h-4 w-4`, beside muted text

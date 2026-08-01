@@ -11,6 +11,7 @@ import { WikiArticle } from '@/components/wiki/WikiArticle'
 import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { type MasteryState } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { NavProgressBar } from '@/components/NavProgressBar'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -607,7 +608,14 @@ export function ConceptDetailModal({
 
         {/* Previous / Next navigation — bottom of card */}
         {showFooterNav && (
-          <div className="flex items-stretch h-10 shrink-0 bg-muted/10 mt-auto">
+          <>
+          <NavProgressBar
+            current={localIndex + 1}
+            total={effectiveConcepts!.length}
+            className="mt-auto"
+            label={`Concept ${localIndex + 1} of ${effectiveConcepts!.length}`}
+          />
+          <div className="flex items-stretch h-10 shrink-0 bg-muted/10">
             <button
               type="button"
               disabled={!canPrev}
@@ -630,6 +638,7 @@ export function ConceptDetailModal({
               <ChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
+          </>
         )}
 
         </div>

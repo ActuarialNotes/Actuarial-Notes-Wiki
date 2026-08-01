@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, RotateCcw, X } from 'lucide-react'
 import type { RecentMistake } from '@/lib/recentMistakes'
 import { MarkdownText } from '@/components/MarkdownText'
 import { Button } from '@/components/ui/button'
+import { NavProgressBar } from '@/components/NavProgressBar'
 
 // Question markdown (GFM tables + LaTeX) with the same table styling the quiz
 // uses — mirrors QuestionSearchRow so data-heavy stems render as tables.
@@ -111,7 +112,13 @@ export function RecentMistakesModal({ mistakes, onClose, onRetry }: Props) {
           ))}
         </div>
 
-        <div className="flex items-center gap-2 border-t px-4 py-3">
+        <NavProgressBar
+          current={index + 1}
+          total={mistakes.length}
+          className="border-t"
+          label={`Mistake ${index + 1} of ${mistakes.length}`}
+        />
+        <div className="flex items-center gap-2 px-4 py-3">
           <button
             type="button"
             onClick={() => goTo(index - 1)}

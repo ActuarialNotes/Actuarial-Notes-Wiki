@@ -78,6 +78,7 @@ import { trackFlashcardReviewed } from '@/lib/analytics'
 import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
+import { NavProgressBar } from '@/components/NavProgressBar'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 type GalleryTab = 'deck' | 'collected' | 'packs'
@@ -3350,6 +3351,12 @@ export default function Flashcards() {
         )}
         {/* Prev / Next nav footer — only in study mode */}
         {!galleryExpanded && (
+          <>
+          <NavProgressBar
+            current={activeIndex + 1}
+            total={orderedCards.length}
+            label={`Card ${activeIndex + 1} of ${orderedCards.length}`}
+          />
           <div className="flex items-stretch h-16 shrink-0 bg-background">
             <button
               type="button"
@@ -3392,6 +3399,7 @@ export default function Flashcards() {
               <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
             </button>
           </div>
+          </>
         )}
         {(galleryExpanded || controlsExpanded) && (
           <FlashcardControlsBar

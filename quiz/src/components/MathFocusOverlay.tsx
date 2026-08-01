@@ -6,6 +6,7 @@ import {
   fitScale,
   stepIndex,
 } from '@/lib/mathFocus'
+import { NavProgressBar } from '@/components/NavProgressBar'
 
 interface Props {
   /** Detached copies of the equations in the tapped scope, in reading order. */
@@ -182,7 +183,14 @@ export function MathFocusOverlay({ equations, initialIndex, onClose }: Props) {
 
       {/* Footer nav — the same Previous / Next shape as the concept popup. */}
       {count > 1 && (
-        <div className="flex items-stretch h-16 shrink-0 bg-background/60 border-t">
+        <>
+        <NavProgressBar
+          current={index + 1}
+          total={count}
+          className="border-t"
+          label={`Equation ${index + 1} of ${count}`}
+        />
+        <div className="flex items-stretch h-16 shrink-0 bg-background/60">
           <button
             type="button"
             disabled={!canPrev}
@@ -204,6 +212,7 @@ export function MathFocusOverlay({ equations, initialIndex, onClose }: Props) {
             <ChevronRight className="h-6 w-6 sm:h-5 sm:w-5" />
           </button>
         </div>
+        </>
       )}
     </div>
   )

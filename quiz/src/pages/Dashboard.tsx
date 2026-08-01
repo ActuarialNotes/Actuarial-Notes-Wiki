@@ -27,6 +27,7 @@ import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { LEVELUP_EVENT, readTodayLevelUps } from '@/lib/dailyProgressStore'
+import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
 import { LevelBadge } from '@/components/LevelBadge'
@@ -342,10 +343,13 @@ export default function Dashboard() {
     () => new Set(todayLevelUps.map(l => l.conceptSlug.toLowerCase())),
     [todayLevelUps],
   )
+  // Questions today's quizzes already served — the launch prefers unseen ones,
+  // so the badge has to size itself the same way.
+  const todayAnsweredIds = useTodayAnsweredQuestions()
   const todaysQuizBadgeCount = useMemo(() => {
     if (!activeSyllabus) return 0
-    return questionsNeededForPlan(studyPlan, activeSyllabus.examTopic, allQuestions, doneConceptSlugs)
-  }, [activeSyllabus, studyPlan, allQuestions, doneConceptSlugs])
+    return questionsNeededForPlan(studyPlan, activeSyllabus.examTopic, allQuestions, doneConceptSlugs, todayAnsweredIds)
+  }, [activeSyllabus, studyPlan, allQuestions, doneConceptSlugs, todayAnsweredIds])
 
   // Top-of-dashboard primary actions. "Read concepts" and the quiz launch reuse
   // the trigger props ReadinessCard already listens on (same path as the header

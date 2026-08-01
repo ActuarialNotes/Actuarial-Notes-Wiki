@@ -155,6 +155,29 @@ have no badge — they don't complete the plan.
 **When you add a new way to start a plan-completing quiz, badge it** — pull the count from
 the hook rather than recomputing it, so every surface keeps showing the same number.
 
+## Fresh questions on a re-launch
+
+The greedy cover is deterministic, so on its own a second launch of the same plan would hand
+back the same questions. Two rules stop that:
+
+1. Concepts already levelled up today are dropped from the selection, so a re-launch after
+   some wrong answers only re-tests what's left. Once the whole plan is done, the selection
+   falls back to the full plan so **Continue Studying** still has something to practise.
+2. Every question today's quizzes have already served is held back from the draw
+   (`CoverageOptions.seenIds` on `selectQuestionsForCoverage` /
+   `minQuestionsToCoverConcepts`). Both the covering phase and the fill phase run over the
+   unseen questions first, and only fall back to a repeat for a concept whose bank is
+   exhausted for the day — better a repeat than dropping the concept.
+
+The seen set is written by `quizStore` on quiz completion into the day-keyed
+`actuarial_daily_answered_*` entry (`lib/dailyProgressStore.ts`) and read through
+`hooks/useTodayAnsweredQuestions.ts`. It's device-local, like the rest of that module: a
+second device starts from a clean slate, which at worst costs a repeat.
+
+Because holding questions back can make the cover slightly larger (a seen question covering
+three concepts may be replaced by two fresh ones), the badge passes the same seen set to
+`todayPlanCountForExam` — the count and the quiz it launches are computed the same way.
+
 ## Pacing Status
 
 The plan tells you how your pace compares to what's needed:

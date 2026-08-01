@@ -16,6 +16,7 @@ import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { selectQuestionsForCoverage, minQuestionsToCoverConcepts } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
@@ -367,6 +368,10 @@ export default function Landing() {
     }
   }, [])
 
+  // Questions today's quizzes have already served — held back from the draw so a
+  // re-launch of the plan gives new questions instead of the ones just answered.
+  const todayAnsweredIds = useTodayAnsweredQuestions()
+
   // Mock exam sitting selection (null = random mix across all years)
   const [selectedSitting, setSelectedSitting] = useState<{ year: number; session?: string } | null>(null)
 
@@ -562,7 +567,9 @@ export default function Landing() {
   // Resolve today's plan into the concepts still to be completed and the question
   // pool that can cover them. "Incomplete" = scheduled today but not yet levelled
   // up today, so a re-launch after some wrong answers only re-tests what's left.
-  // When everything is already done, fall back to the full plan for extra practice.
+  // When everything is already done, fall back to the full plan for extra practice
+  // — the `seenIds` option on the coverage helpers is what keeps that extra
+  // practice from being a replay of the questions just answered.
   const buildTodaysPlanSelection = useCallback((): { todayQs: typeof allQuestions; concepts: string[] } | null => {
     if (!plan || !topic) return null
     const displayConcepts = plan.status === 'review_mode'
@@ -592,8 +599,8 @@ export default function Landing() {
   const todaysPlanFullCount = useMemo(() => {
     const sel = buildTodaysPlanSelection()
     if (!sel) return 0
-    return minQuestionsToCoverConcepts(sel.todayQs, sel.concepts)
-  }, [buildTodaysPlanSelection])
+    return minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds })
+  }, [buildTodaysPlanSelection, todayAnsweredIds])
 
   // Store the coverage-optimal question set and jump straight into the quiz.
   // `desiredCount` caps the questions (used when the user picks a smaller count);
@@ -601,14 +608,14 @@ export default function Landing() {
   const launchTodaysPlan = useCallback((desiredCount: number): boolean => {
     const sel = buildTodaysPlanSelection()
     if (!sel) return false
-    const selected = selectQuestionsForCoverage(sel.todayQs, sel.concepts, desiredCount)
+    const selected = selectQuestionsForCoverage(sel.todayQs, sel.concepts, desiredCount, { seenIds: todayAnsweredIds })
     if (selected.length === 0) return false
     try {
       sessionStorage.setItem('actuarial_selected_ids', JSON.stringify(selected.map(q => q.id)))
     } catch { /* ignore */ }
     navigate(`/quiz?selection=stored&mode=quiz&reveal=${reveal}&count=${selected.length}&from=home`)
     return true
-  }, [buildTodaysPlanSelection, navigate])
+  }, [buildTodaysPlanSelection, navigate, todayAnsweredIds])
 
   // Auto-activate today's study plan for premium users when it has concepts.
   // If the dashboard passed a custom concept selection (some deselected), apply that instead.
@@ -669,8 +676,8 @@ export default function Landing() {
       return
     }
     didAutostartRef.current = true
-    launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts))
-  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress])
+    launchTodaysPlan(minQuestionsToCoverConcepts(sel.todayQs, sel.concepts, { seenIds: todayAnsweredIds }))
+  }, [searchParams, user, mode, topic, masteryLoading, conceptsLoading, planLoading, subLoading, isPremium, plan, planConceptCount, allQuestions, buildTodaysPlanSelection, launchTodaysPlan, examInProgress, todayAnsweredIds])
 
   // True while a dashboard-initiated autostart is still resolving (loading data
   // or navigating into the quiz). Suppresses the config screen so the launch is
@@ -901,7 +908,7 @@ export default function Landing() {
     // different set that still covers the day's concepts.
     const planConcepts = useTodaysPlan ? buildTodaysPlanSelection()?.concepts : undefined
     const draw = planConcepts
-      ? selectQuestionsForCoverage(shuffled, planConcepts, quizQuestionCount)
+      ? selectQuestionsForCoverage(shuffled, planConcepts, quizQuestionCount, { seenIds: todayAnsweredIds })
       : shuffled.slice(0, quizQuestionCount)
 
     setDrawnIds(draw.map(q => q.id))

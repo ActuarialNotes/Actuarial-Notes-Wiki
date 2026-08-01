@@ -718,6 +718,90 @@ describe('selectQuestionsForCoverage', () => {
 
     expect(minQuestionsToCoverConcepts(questions, concepts)).toBe(1)
   })
+
+  // Re-launching a finished plan ("Continue Studying") must not replay the
+  // questions the user just answered.
+  describe('seenIds', () => {
+    it('skips already-answered questions when fresh ones can cover the concepts', () => {
+      const concepts = ['Topic 1', 'Topic 2']
+      const questions = [
+        q('seen-a', 'Topic 1', 'Topic 2'),
+        q('fresh-1', 'Topic 1'),
+        q('fresh-2', 'Topic 2'),
+      ]
+
+      const selected = selectQuestionsForCoverage(questions, concepts, undefined, {
+        seenIds: new Set(['seen-a']),
+      })
+
+      expect(selected.map(s => s.id).sort()).toEqual(['fresh-1', 'fresh-2'])
+    })
+
+    it('prefers fresh questions even when a seen one covers more concepts', () => {
+      const concepts = ['Topic 1', 'Topic 2', 'Topic 3']
+      const questions = [
+        q('seen-wide', 'Topic 1', 'Topic 2', 'Topic 3'),
+        q('fresh-wide', 'Topic 1', 'Topic 2'),
+        q('fresh-3', 'Topic 3'),
+      ]
+
+      const selected = selectQuestionsForCoverage(questions, concepts, undefined, {
+        seenIds: new Set(['seen-wide']),
+      })
+
+      expect(selected.map(s => s.id)).not.toContain('seen-wide')
+    })
+
+    it('falls back to seen questions for a concept whose bank is exhausted', () => {
+      const concepts = ['Topic 1', 'Topic 2']
+      const questions = [q('seen-1', 'Topic 1'), q('fresh-2', 'Topic 2')]
+
+      const selected = selectQuestionsForCoverage(questions, concepts, undefined, {
+        seenIds: new Set(['seen-1']),
+      })
+
+      // Topic 1 has nothing else left today — repeating beats dropping it.
+      expect(selected.map(s => s.id).sort()).toEqual(['fresh-2', 'seen-1'])
+    })
+
+    it('fills the remaining slots with fresh questions before repeats', () => {
+      const concepts = ['Topic 1']
+      const questions = [
+        q('seen-1', 'Topic 1'),
+        q('seen-2', 'Topic 1'),
+        q('fresh-1', 'Topic 1'),
+        q('fresh-2', 'Topic 1'),
+      ]
+
+      const selected = selectQuestionsForCoverage(questions, concepts, 3, {
+        seenIds: new Set(['seen-1', 'seen-2']),
+      })
+
+      expect(selected).toHaveLength(3)
+      expect(selected.slice(0, 2).map(s => s.id).sort()).toEqual(['fresh-1', 'fresh-2'])
+    })
+
+    it('counts the fresh-first cover, so the badge matches the launched quiz', () => {
+      const concepts = ['Topic 1', 'Topic 2']
+      const questions = [
+        q('seen-a', 'Topic 1', 'Topic 2'),
+        q('fresh-1', 'Topic 1'),
+        q('fresh-2', 'Topic 2'),
+      ]
+
+      expect(minQuestionsToCoverConcepts(questions, concepts)).toBe(1)
+      expect(minQuestionsToCoverConcepts(questions, concepts, { seenIds: new Set(['seen-a']) })).toBe(2)
+    })
+
+    it('is unchanged when the seen set is empty', () => {
+      const concepts = ['Topic 1', 'Topic 2']
+      const questions = [q('q1', 'Topic 1', 'Topic 2'), q('q2', 'Topic 1')]
+
+      const selected = selectQuestionsForCoverage(questions, concepts, undefined, { seenIds: new Set() })
+
+      expect(selected.map(s => s.id)).toEqual(['q1'])
+    })
+  })
 })
 
 describe('minQuestionsToCoverConcepts', () => {

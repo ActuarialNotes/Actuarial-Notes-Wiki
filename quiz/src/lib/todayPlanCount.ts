@@ -33,12 +33,17 @@ function planConcepts(plan: StudyPlan): string[] {
  * count (a re-launch keeps those questions available for extra practice), so
  * callers that hide a finished plan should check `complete`, not `count` —
  * or just use {@link badgeCountFor}.
+ *
+ * `seenQuestionIds` (questions today's quizzes already served) is passed
+ * straight through to the coverage helper, which prefers unseen questions — so
+ * the count stays the size of the quiz the launch actually builds.
  */
 export function todayPlanCountForExam(
   plan: StudyPlan | null,
   topic: string,
   allQuestions: Question[],
   doneConceptSlugs: Set<string> = new Set(),
+  seenQuestionIds?: ReadonlySet<string>,
 ): TodayPlanCount {
   if (!plan) return NO_PLAN
   const displayConcepts = planConcepts(plan)
@@ -58,7 +63,7 @@ export function todayPlanCountForExam(
     })
   })
   if (todayQs.length === 0) return { count: 0, complete }
-  return { count: minQuestionsToCoverConcepts(todayQs, concepts), complete }
+  return { count: minQuestionsToCoverConcepts(todayQs, concepts, { seenIds: seenQuestionIds }), complete }
 }
 
 /** Count-only form of {@link todayPlanCountForExam}, for callers that don't
@@ -68,8 +73,9 @@ export function questionsNeededForPlan(
   topic: string,
   allQuestions: Question[],
   doneConceptSlugs: Set<string> = new Set(),
+  seenQuestionIds?: ReadonlySet<string>,
 ): number {
-  return todayPlanCountForExam(plan, topic, allQuestions, doneConceptSlugs).count
+  return todayPlanCountForExam(plan, topic, allQuestions, doneConceptSlugs, seenQuestionIds).count
 }
 
 /** What the badge should show for one exam: the outstanding count, or 0 once the

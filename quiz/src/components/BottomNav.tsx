@@ -6,8 +6,7 @@ import { AvatarDisplay } from '@/components/AvatarDisplay'
 import { COLLECTED_EVENT } from '@/hooks/useCollectedCards'
 import { useFlashcards } from '@/hooks/useFlashcards'
 import { useTodayQuizCount } from '@/hooks/useTodayQuizCount'
-import { RESEARCH_TAB_ENABLED, STREAK_ENABLED } from '@/lib/featureFlags'
-import { StreakCornerBadge } from '@/components/StreakBadge'
+import { RESEARCH_TAB_ENABLED } from '@/lib/featureFlags'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 
 function getLastWikiPath(): string {
@@ -161,10 +160,9 @@ export default function BottomNav() {
                     {cards.length}
                   </span>
                 )}
-                {/* Questions left in today's plan on the right; the streak sits
-                    on the left so the two never stack on the same corner. */}
+                {/* Questions left in today's plan — the only badge on this tab
+                    (the streak lives on the Dashboard). */}
                 {isQuiz && <TodayQuizCornerBadge count={todayQuizCount} size="sm" className="-top-1 -right-2" />}
-                {isQuiz && STREAK_ENABLED && <StreakCornerBadge className="-top-1 -left-2 right-auto" />}
               </span>
               <span className="text-[10px] font-medium">{item.label}</span>
             </NavLink>

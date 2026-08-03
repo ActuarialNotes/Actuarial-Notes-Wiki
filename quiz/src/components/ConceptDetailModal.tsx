@@ -35,8 +35,8 @@ const MASTERY_BADGE: Record<MasteryState, { label: string; className: string }> 
   forgotten: { label: 'Forgotten', className: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800 border' },
 }
 
-type TabMode = 'definition' | 'questions' | 'syllabus'
-type FilterMode = 'all' | 'new' | 'attempted'
+export type TabMode = 'definition' | 'questions' | 'syllabus'
+export type FilterMode = 'all' | 'new' | 'attempted'
 type ConceptFilter = 'study-plan' | 'entire-syllabus'
 
 function QuestionItem({
@@ -179,6 +179,15 @@ interface Props {
   studyPlanConcepts?: { name: string; state: MasteryState }[]
   initialConceptIndex?: number
   initialFilter?: ConceptFilter
+  /** Tab to land on (and return to when paging between concepts). */
+  initialTab?: TabMode
+  /** Questions-tab filter to land on — e.g. 'attempted' when fixing mistakes. */
+  initialQuestionFilter?: FilterMode
+  /**
+   * Name for the `allConcepts` list in the "Viewing:" header (e.g. "Mistakes").
+   * Defaults to "Entire Syllabus".
+   */
+  conceptListLabel?: string
   quizFrom?: string
 }
 
@@ -191,6 +200,9 @@ export function ConceptDetailModal({
   studyPlanConcepts,
   initialConceptIndex,
   initialFilter,
+  initialTab = 'definition',
+  initialQuestionFilter = 'all',
+  conceptListLabel,
   quizFrom,
 }: Props) {
   const [content, setContent] = useState<string | null>(null)
@@ -198,8 +210,8 @@ export function ConceptDetailModal({
   const [questions, setQuestions] = useState<Question[]>([])
   const [questionsLoading, setQuestionsLoading] = useState(true)
   const [questionsError, setQuestionsError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<TabMode>('definition')
-  const [filter, setFilter] = useState<FilterMode>('all')
+  const [activeTab, setActiveTab] = useState<TabMode>(initialTab)
+  const [filter, setFilter] = useState<FilterMode>(initialQuestionFilter)
   const [conceptFilter, setConceptFilter] = useState<ConceptFilter>(
     initialFilter ?? (studyPlanConcepts ? 'study-plan' : 'entire-syllabus')
   )
@@ -257,11 +269,13 @@ export function ConceptDetailModal({
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
+  // Paging to another concept re-enters the modal as it was opened — a mistakes
+  // browser keeps showing questions, a study-plan browser keeps showing the definition.
   useEffect(() => {
-    setActiveTab('definition')
-    setFilter('all')
+    setActiveTab(initialTab)
+    setFilter(initialQuestionFilter)
     setSelectedIds(new Set())
-  }, [localIndex])
+  }, [localIndex, initialTab, initialQuestionFilter])
 
   useEffect(() => {
     const newList = conceptFilter === 'study-plan' ? (studyPlanConcepts ?? allConcepts) : allConcepts
@@ -367,7 +381,7 @@ export function ConceptDetailModal({
                   Study Plan — {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}
                 </option>
               )}
-              <option value="entire-syllabus">Entire Syllabus</option>
+              <option value="entire-syllabus">{conceptListLabel ?? 'Entire Syllabus'}</option>
             </select>
             <ChevronDown className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
           </div>

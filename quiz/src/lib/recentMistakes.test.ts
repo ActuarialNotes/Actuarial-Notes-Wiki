@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest'
 import {
   buildRecentMistakes,
   countCorrectedMistakes,
+  mistakeConcepts,
   PROBLEM_SCORE_THRESHOLD,
   type MistakeResponseRow,
+  type RecentMistake,
 } from './recentMistakes'
 import type { Question } from './parser'
 import type { ConceptMasteryRecord } from './mastery'
@@ -171,5 +173,45 @@ describe('countCorrectedMistakes', () => {
       row('unknown', true, '2026-07-20T10:00:00Z'),
     ]
     expect(countCorrectedMistakes(rows, questions)).toBe(0)
+  })
+})
+
+describe('mistakeConcepts', () => {
+  function mistake(id: string, concepts: { slug: string; state: ConceptMasteryRecord['state'] }[]): RecentMistake {
+    return {
+      question: q(id, concepts.map(c => c.slug)),
+      answeredAt: '2026-07-20T10:00:00Z',
+      problemConcepts: concepts.map(c => ({
+        slug: c.slug,
+        name: c.slug,
+        state: c.state,
+        score: 1,
+        isProblem: true,
+      })),
+    }
+  }
+
+  it('takes the top-ranked culprit of each miss, in order', () => {
+    const out = mistakeConcepts([
+      mistake('q1', [{ slug: 'Bayes Theorem', state: 'forgotten' }, { slug: 'Event', state: 'level3' }]),
+      mistake('q2', [{ slug: 'Axioms of Probability', state: 'new' }]),
+    ])
+    expect(out).toEqual([
+      { name: 'Bayes Theorem', state: 'forgotten' },
+      { name: 'Axioms of Probability', state: 'new' },
+    ])
+  })
+
+  it('browses a concept once however many questions it sank', () => {
+    const out = mistakeConcepts([
+      mistake('q1', [{ slug: 'Bayes Theorem', state: 'new' }]),
+      mistake('q2', [{ slug: 'bayes theorem', state: 'new' }]),
+      mistake('q3', [{ slug: 'Event', state: 'new' }]),
+    ])
+    expect(out.map(c => c.name)).toEqual(['Bayes Theorem', 'Event'])
+  })
+
+  it('skips a miss with no concepts to blame', () => {
+    expect(mistakeConcepts([mistake('q1', [])])).toEqual([])
   })
 })

@@ -140,7 +140,7 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     const completedLower = new Set(completedNames.map(n => n.toLowerCase()))
 
     // Move the cleared cards into a date-stamped "Completed <date>" pack so they
-    // can be re-added from the Packs tab. Merge into today's pack when clearing
+    // can be re-added from the add-flashcards sheet. Merge into today's pack when clearing
     // more than once in a day rather than spawning duplicate packs.
     const label = `Completed ${new Date().toLocaleDateString(undefined, {
       month: 'short',

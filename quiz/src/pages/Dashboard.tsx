@@ -823,11 +823,12 @@ export default function Dashboard() {
             />
           )}
 
-          {/* Review mistakes — recently-missed questions + likely-problematic concepts */}
+          {/* Fix mistakes — the concepts behind recently-missed questions */}
           {MISTAKES_REVIEW_ENABLED && (
             <RecentMistakesCard
               masteryRecords={activeExamRecords}
               examTopic={activeSyllabus.examTopic}
+              syllabus={activeSyllabus}
             />
           )}
         </div>

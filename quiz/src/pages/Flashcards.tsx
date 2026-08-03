@@ -23,7 +23,6 @@ import {
   Plus,
   RotateCcw,
   Search,
-  Shuffle,
   Sigma,
   Trash2,
   TrendingUp,
@@ -81,7 +80,9 @@ import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { NavProgressBar } from '@/components/NavProgressBar'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
-type GalleryTab = 'deck' | 'collected' | 'packs'
+// Packs no longer get their own tab — they live in the "add flashcards" sheet
+// the footer's round + button opens (see AddFlashcardsButton).
+type GalleryTab = 'deck' | 'collected'
 type ReverseCardSection = 'definition' | 'math' | 'images'
 
 const GROUP_LABELS: { key: GroupBy; label: string }[] = [
@@ -654,11 +655,13 @@ function TodayStudyPlanPack({ onCardsAdded }: { onCardsAdded?: () => void }) {
   )
 }
 
-// Packs tab — every available pack. Each exam is its own section: a full-width
-// "all concepts" pack followed by a two-column grid of its learning-objective
-// packs. Any user-saved packs bookend the sections. Only one pack's action
-// panel is open at a time (accordion). Today's study plan no longer lives
-// here — it's pinned at the top of My Deck instead (see TodayStudyPlanPack).
+// The pack shelf — every available pack, rendered inside the add-flashcards
+// sheet (it used to be its own gallery tab). Each exam is its own section: a
+// full-width "all concepts" pack followed by a two-column grid of its
+// learning-objective packs. Any user-saved packs bookend the sections. Only one
+// pack's action panel is open at a time (accordion). Today's study plan no
+// longer lives here — it's pinned at the top of My Deck instead (see
+// TodayStudyPlanPack).
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -824,8 +827,8 @@ function CollectedContent({
         <Unlock className="h-9 w-9 mx-auto text-muted-foreground/50" />
         <p className="text-sm text-muted-foreground">You haven't collected any flashcards yet.</p>
         <p className="text-xs text-muted-foreground">
-          Collect a card from the <span className="font-medium">Packs</span> tab or a concept page by
-          passing its quick comprehension check.
+          Collect a card from a pack (the <span className="font-medium">+</span> button below) or a
+          concept page by passing its quick comprehension check.
         </p>
       </div>
     )
@@ -862,17 +865,22 @@ function CollectedContent({
   )
 }
 
-// Free-form "add any flashcard to your deck" search — surfaced in the My Deck
-// tab as a "+" button that expands into a full-width search bar pinned to the
-// top of the screen, matching WikiFloatingSearch / QuizFloatingSearch. Matches
-// against every concept in the syllabi plus anything collected.
-function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
+// The "add flashcards" sheet — one full-screen view that covers both ways into
+// the deck: a free-form concept search pinned to the top, and, whenever the
+// search box is empty, every available pack below it (Packs used to be its own
+// gallery tab). Matches against every concept in the syllabi plus anything
+// collected.
+function AddFlashcardsSheet({
+  onClose,
+  onCardsAdded,
+}: {
+  onClose: () => void
+  onCardsAdded?: () => void
+}) {
   const { syllabi } = useWikiSyllabus()
   const collectedCards = useCollectedCards(s => s.cards)
   const { addCard, hasCard } = useFlashcards()
   const [query, setQuery] = useState('')
-  const [open, setOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const allConcepts = useMemo(() => {
@@ -888,52 +896,19 @@ function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
     return allConcepts.filter(n => n.toLowerCase().includes(q)).slice(0, 24)
   }, [query, allConcepts])
 
-  function close() {
-    setQuery('')
-    setOpen(false)
-  }
-
   useEffect(() => {
-    if (!open) return
     inputRef.current?.focus()
-    function onOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) close()
-    }
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') close()
+      if (e.key === 'Escape') onClose()
     }
-    document.addEventListener('mousedown', onOutside)
     document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('mousedown', onOutside)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
-
-  if (!open) {
-    return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        title="Add a flashcard"
-        aria-label="Add a flashcard"
-        className="inline-flex items-center justify-center h-9 w-9 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors shrink-0"
-      >
-        <Plus className="h-4 w-4" />
-      </button>
-    )
-  }
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
 
   return (
-    <>
-      <div
-        className="fixed inset-0 z-[64] bg-background/60 backdrop-blur-sm"
-        onMouseDown={e => { e.preventDefault(); close() }}
-      />
-      <div
-        ref={containerRef}
-        className="fixed top-0 left-0 right-0 z-[65] border-b bg-background/95 backdrop-blur-md shadow-lg"
-      >
+    <div className="fixed inset-0 z-[64] flex flex-col bg-background">
+      {/* Search header */}
+      <div className="shrink-0 border-b bg-background/95 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 h-14">
             <Search className="h-4 w-4 text-muted-foreground shrink-0" />
@@ -950,50 +925,78 @@ function DeckAddSearch({ onCardsAdded }: { onCardsAdded?: () => void }) {
             />
             <button
               type="button"
-              onClick={close}
-              aria-label="Close search"
+              onClick={onClose}
+              aria-label="Close"
               className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
             >
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5" />
             </button>
           </div>
-          {query.trim() && (
-            <div className="py-2">
-              <ul className="space-y-0.5 max-h-[50vh] overflow-y-auto">
-                {results.length === 0 ? (
-                  <li className="text-xs text-muted-foreground px-2 py-2">No matches</li>
-                ) : results.map(name => {
-                  const added = hasCard(name)
-                  return (
-                    <li key={name}>
-                      <button
-                        type="button"
-                        data-sound="none"
-                        disabled={added}
-                        onClick={() => { playSound('addToDeck'); addCard({ kind: 'concept', name }); showAddedToDeck(1); onCardsAdded?.() }}
-                        className={`w-full flex items-center gap-2 rounded-md px-2 py-2 text-sm text-left transition-colors ${
-                          added ? 'text-muted-foreground cursor-default' : 'hover:bg-accent'
-                        }`}
-                      >
-                        {added
-                          ? <Check className="h-3.5 w-3.5 shrink-0 text-green-500" />
-                          : <Plus className="h-3.5 w-3.5 shrink-0 text-primary" />}
-                        <span className="flex-1 min-w-0 truncate">{name}</span>
-                        {added && <span className="text-[10px] shrink-0">In deck</span>}
-                      </button>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
+        </div>
+      </div>
+
+      {/* Search results while typing, the pack shelf otherwise */}
+      <div className="flex-1 overflow-y-auto overscroll-contain">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+          {query.trim() ? (
+            <ul className="space-y-0.5">
+              {results.length === 0 ? (
+                <li className="text-xs text-muted-foreground px-2 py-2">No matches</li>
+              ) : results.map(name => {
+                const added = hasCard(name)
+                return (
+                  <li key={name}>
+                    <button
+                      type="button"
+                      data-sound="none"
+                      disabled={added}
+                      onClick={() => { playSound('addToDeck'); addCard({ kind: 'concept', name }); showAddedToDeck(1); onCardsAdded?.() }}
+                      className={`w-full flex items-center gap-2 rounded-md px-2 py-2 text-sm text-left transition-colors ${
+                        added ? 'text-muted-foreground cursor-default' : 'hover:bg-accent'
+                      }`}
+                    >
+                      {added
+                        ? <Check className="h-3.5 w-3.5 shrink-0 text-green-500" />
+                        : <Plus className="h-3.5 w-3.5 shrink-0 text-primary" />}
+                      <span className="flex-1 min-w-0 truncate">{name}</span>
+                      {added && <span className="text-[10px] shrink-0">In deck</span>}
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          ) : (
+            <PacksContent onCardsAdded={onCardsAdded} />
           )}
         </div>
       </div>
+    </div>
+  )
+}
+
+// The round primary "+" that opens the add-flashcards sheet. Lives at the
+// right-hand end of the controls footer, in every flashcards view.
+function AddFlashcardsButton({ onCardsAdded }: { onCardsAdded?: () => void }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        title="Add flashcards"
+        aria-label="Add flashcards"
+        className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-95 transition-all"
+      >
+        <Plus className="h-5 w-5" />
+      </button>
+      {open && (
+        <AddFlashcardsSheet onClose={() => setOpen(false)} onCardsAdded={onCardsAdded} />
+      )}
     </>
   )
 }
 
-// The three-way tab switcher at the top of the gallery.
+// The tab switcher at the top of the gallery.
 function GalleryTabBar({
   active,
   onChange,
@@ -1008,7 +1011,6 @@ function GalleryTabBar({
   const tabs: { key: GalleryTab; label: string; icon: typeof Layers; count?: number }[] = [
     { key: 'deck', label: 'My Deck', icon: Layers, count: deckCount },
     { key: 'collected', label: 'Collected', icon: Unlock, count: collectedCount },
-    { key: 'packs', label: 'Packs', icon: LayoutGrid },
   ]
   return (
     <div className="flex items-center gap-1 p-1 rounded-lg bg-muted/60">
@@ -1046,14 +1048,18 @@ function GalleryTabBar({
 // Study ⇄ Gallery toggle. Lives in the bottom controls footer (shared between
 // both views), alongside Flip / Back content / focus. `galleryOpen` picks the
 // direction: true → "Study" (return to the single-card view), false →
-// "Gallery" (open the overlay).
+// "Gallery" (open the overlay). `count` is the deck size, shown as the orange
+// badge the rest of the app uses for "how much is waiting for you" (see
+// TodayQuizBadge / StreakBadge).
 function StudyGalleryToggle({
   galleryOpen,
   onToggle,
+  count,
   className = '',
 }: {
   galleryOpen: boolean
   onToggle: () => void
+  count?: number
   className?: string
 }) {
   return (
@@ -1073,6 +1079,14 @@ function StudyGalleryToggle({
         : <LayoutGrid className="h-5 w-5" />
       }
       <span>{galleryOpen ? 'Study' : 'Gallery'}</span>
+      {count !== undefined && count > 0 && (
+        <span
+          className="inline-flex items-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white tabular-nums"
+          aria-label={`${count} card${count === 1 ? '' : 's'} in your deck`}
+        >
+          {count}
+        </span>
+      )}
     </button>
   )
 }
@@ -1191,25 +1205,37 @@ function ViewModeDropdown({
   )
 }
 
+// The controls footer. Besides the card-display controls (Flip / Back content)
+// it carries what used to sit in the gallery's header row — the sort dropdown
+// and the manage-deck bin — plus the round + that opens the add-flashcards
+// sheet, pinned to the right-hand end.
 function FlashcardControlsBar({
   reverseCardModes,
   onToggleMode,
   flip,
   onFlipToggle,
   onShortcutsHelp,
-  onShuffle,
-  minimal = false,
+  cardCount = 0,
+  groupBy,
+  onGroupByChange,
+  onManage,
+  onCardsAdded,
 }: {
   reverseCardModes: Set<ReverseCardSection>
   onToggleMode: (mode: ReverseCardSection) => void
   flip: boolean
   onFlipToggle: () => void
   onShortcutsHelp: () => void
-  onShuffle?: () => void
-  minimal?: boolean
+  // Deck controls — only rendered once there's a deck to sort or manage.
+  cardCount?: number
+  groupBy?: GroupBy
+  onGroupByChange?: (g: GroupBy) => void
+  onManage?: () => void
+  onCardsAdded?: () => void
 }) {
+  const hasDeck = cardCount > 0
   return (
-    <div className="flex items-center justify-center gap-3 sm:gap-5 px-4 py-3 sm:py-4 bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
+    <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-3 sm:py-4 bg-background shadow-[0_-1px_4px_rgba(0,0,0,0.06)]">
       <div className="flex items-center gap-2 shrink-0">
         <span className="text-xs sm:text-sm text-muted-foreground">Flip</span>
         <button
@@ -1230,15 +1256,29 @@ function FlashcardControlsBar({
 
       <ViewModeDropdown reverseCardModes={reverseCardModes} onToggleMode={onToggleMode} />
 
-      {!minimal && onShuffle && (
+      {/* Sort order — "Shuffle" lives in here, which is why the bar no longer
+          carries a separate shuffle button (the S shortcut still works). */}
+      {hasDeck && groupBy && onGroupByChange && (
+        <select
+          value={groupBy}
+          onChange={e => onGroupByChange(e.target.value as GroupBy)}
+          aria-label="Sort deck"
+          className="h-9 sm:h-10 min-w-[3.5rem] max-w-[7.5rem] rounded-md border bg-muted/60 px-2 text-sm font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+        >
+          {GROUP_LABELS.map(({ key, label }) => (
+            <option key={key} value={key}>{label}</option>
+          ))}
+        </select>
+      )}
+
+      {hasDeck && onManage && (
         <button
           type="button"
-          data-sound="none"
-          onClick={onShuffle}
-          title="Shuffle deck (S)"
-          aria-label="Shuffle deck"
-          className="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-        ><Shuffle className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+          onClick={onManage}
+          title="Manage cards"
+          aria-label="Manage cards"
+          className="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 shrink-0 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
+        ><Trash2 className="h-4 w-4 sm:h-5 sm:w-5" /></button>
       )}
 
       <button
@@ -1248,6 +1288,10 @@ function FlashcardControlsBar({
         aria-label="Keyboard shortcuts"
         className="hidden sm:inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
       ><Keyboard className="h-4 w-4 sm:h-5 sm:w-5" /></button>
+
+      <div className="flex-1 min-w-0" />
+
+      <AddFlashcardsButton onCardsAdded={onCardsAdded} />
     </div>
   )
 }
@@ -2016,13 +2060,11 @@ function GalleryPanel({
   cards,
   orderedCards,
   groupBy,
-  onGroupByChange,
   examGroups,
   flashingCard,
   activeIndex,
   onSelect,
   onRemove,
-  onRemoveAll,
   onDragEnd,
   sensors,
   onClose,
@@ -2040,13 +2082,11 @@ function GalleryPanel({
   cards: FlashCard[]
   orderedCards: FlashCard[]
   groupBy: GroupBy
-  onGroupByChange: (g: GroupBy) => void
   examGroups: { label: string; cards: FlashCard[] }[]
   flashingCard: string | null
   activeIndex: number
   onSelect: (index: number) => void
   onRemove: (name: string) => void
-  onRemoveAll: () => void
   onDragEnd: (e: DragEndEvent) => void
   sensors: ReturnType<typeof useSensors>
   onClose?: () => void
@@ -2066,7 +2106,6 @@ function GalleryPanel({
   // store's plain clearCompleted when not provided (e.g. inline empty deck).
   onClearCompleted?: () => void
 }) {
-  const { user } = useAuth()
   const { toggleCompleted, clearCompleted } = useFlashcards()
   const collectedCards = useCollectedCards(s => s.cards)
   const collectedCount = collectedCards.length
@@ -2075,7 +2114,6 @@ function GalleryPanel({
     () => new Set(collectedCards.map(c => c.name.toLowerCase())),
     [collectedCards],
   )
-  const [showManageDialog, setShowManageDialog] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   // Center the active deck card when the deck tab becomes visible.
@@ -2180,65 +2218,34 @@ function GalleryPanel({
       >
         {tab === 'deck' && (
           <div className="space-y-4">
-            {/* Deck controls: count / manage / sort / clear-completed / add — hidden
-                in focus mode. In the overlay panel the row sticks to the top of the
-                scroll area (just under the tab bar) so "Clear Completed Flashcards"
-                stays reachable while scrolling a long deck. Sticky offsets are
-                measured from the scroll container's content box, so -top-4/-mt-4
-                cancel its py-4 padding (the row pins flush to the panel edge with
-                no sliver of card showing above it) while pt-4 keeps the row sitting
-                where it did; -mx-4/px-4 stretch the opaque background across the
-                px-4 gutters so cards scroll cleanly underneath. */}
-            {!focusMode && (
+            {/* Clear-completed — the only thing left in this row now that the
+                deck's count, sort and add controls live in the footer bar. In
+                the overlay panel it sticks to the top of the scroll area (just
+                under the tab bar) so it stays reachable while scrolling a long
+                deck. Sticky offsets are measured from the scroll container's
+                content box, so -top-4/-mt-4 cancel its py-4 padding (the row
+                pins flush to the panel edge with no sliver of card showing
+                above it) while pt-4 keeps the row sitting where it did;
+                -mx-4/px-4 stretch the opaque background across the px-4 gutters
+                so cards scroll cleanly underneath. */}
+            {!focusMode && completedCount > 0 && (
             <div
-              className={`flex items-center gap-3 flex-wrap ${
+              className={`flex items-center justify-end ${
                 inline ? '' : 'sticky -top-4 z-20 -mx-4 -mt-4 px-4 pt-4 pb-2 bg-background'
               }`}
             >
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setShowManageDialog(true)}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {cards.length} card{cards.length === 1 ? '' : 's'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowManageDialog(true)}
-                  title="Manage cards"
-                  className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-destructive hover:bg-accent transition-colors"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-              {cards.length > 0 && (
-                <select
-                  value={groupBy}
-                  onChange={e => onGroupByChange(e.target.value as GroupBy)}
-                  className="h-9 rounded-md border bg-muted/60 px-3 text-sm font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-ring shrink-0"
-                >
-                  {GROUP_LABELS.map(({ key, label }) => (
-                    <option key={key} value={key}>{label}</option>
-                  ))}
-                </select>
-              )}
-              <div className="flex-1" />
-              {completedCount > 0 && (
-                <button
-                  type="button"
-                  onClick={onClearCompleted ?? clearCompleted}
-                  title="Move completed cards into a dated pack and clear them from your deck"
-                  className="inline-flex items-center gap-1.5 px-3 h-9 rounded-md bg-green-600 text-white text-xs sm:text-sm font-semibold shadow-sm hover:bg-green-700 active:scale-[0.98] transition-all shrink-0"
-                >
-                  <CheckCircle2 className="h-4 w-4 shrink-0" />
-                  <span>Clear Completed Flashcards</span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/25 tabular-nums">
-                    {completedCount}
-                  </span>
-                </button>
-              )}
-              <DeckAddSearch onCardsAdded={onCardsAdded} />
+              <button
+                type="button"
+                onClick={onClearCompleted ?? clearCompleted}
+                title="Move completed cards into a dated pack and clear them from your deck"
+                className="inline-flex items-center gap-1.5 px-3 h-9 rounded-md bg-green-600 text-white text-xs sm:text-sm font-semibold shadow-sm hover:bg-green-700 active:scale-[0.98] transition-all shrink-0"
+              >
+                <CheckCircle2 className="h-4 w-4 shrink-0" />
+                <span>Clear Completed Flashcards</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/25 tabular-nums">
+                  {completedCount}
+                </span>
+              </button>
             </div>
             )}
 
@@ -2251,8 +2258,8 @@ function GalleryPanel({
                 <Layers className="h-9 w-9 mx-auto text-muted-foreground/50" />
                 <p className="text-sm text-muted-foreground">Your deck is empty.</p>
                 <p className="text-xs text-muted-foreground">
-                  Add flashcards from the <span className="font-medium">Packs</span> or{' '}
-                  <span className="font-medium">Collected</span> tabs, or search above.
+                  Tap the <span className="font-medium">+</span> button below to search for
+                  flashcards or add a whole pack.
                 </p>
               </div>
             ) : (
@@ -2295,18 +2302,7 @@ function GalleryPanel({
           />
         )}
 
-        {tab === 'packs' && <PacksContent onCardsAdded={onCardsAdded} />}
       </div>
-
-      {showManageDialog && (
-        <FlashcardsManageDialog
-          cardCount={cards.length}
-          cardNames={cards.map(c => c.name)}
-          canSave={!!user}
-          onCancel={() => setShowManageDialog(false)}
-          onRemoveAll={() => { onRemoveAll(); onClose?.(); setShowManageDialog(false) }}
-        />
-      )}
     </div>
   )
 }
@@ -2763,6 +2759,7 @@ export default function Flashcards() {
   } = useFlashcards()
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords } = useConceptMastery()
+  const { user } = useAuth()
   const popupOpen = useConceptPopup(s => s.open)
   // "Got it" gates on collection (see docs/flashcard-collection.md): rating an
   // uncollected card "Got it" opens the collect comprehension check instead of
@@ -2795,11 +2792,14 @@ export default function Flashcards() {
 
   const [activeIndex, setActiveIndex] = useState(0)
   const [galleryExpanded, setGalleryExpanded] = useState(false)
-  // Lifted out of GalleryPanel so the selected tab (Packs/Collected/My Deck)
+  // Lifted out of GalleryPanel so the selected tab (Collected/My Deck)
   // survives the empty→non-empty remount when the first card is added —
   // otherwise the inline (empty-deck) and overlay GalleryPanel instances each
   // mount their own default tab and adding a card "jumps" you to My Deck.
-  const [galleryTab, setGalleryTab] = useState<GalleryTab>('packs')
+  const [galleryTab, setGalleryTab] = useState<GalleryTab>('deck')
+  // Manage-deck dialog (rename/save/clear) — opened from the bin in the
+  // controls footer, which is where the gallery's old header row moved to.
+  const [showManageDialog, setShowManageDialog] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
   // The study-view controls toolbar (Gallery / Flip / Back content / shuffle /
   // focus) starts collapsed; a chevron under the card count expands it.
@@ -3152,13 +3152,11 @@ export default function Flashcards() {
             cards={cards}
             orderedCards={orderedCards}
             groupBy={groupBy}
-            onGroupByChange={handleGroupByChange}
             examGroups={examGroups}
             flashingCard={flashingCard}
             activeIndex={activeIndex}
             onSelect={setActiveIndex}
             onRemove={removeCard}
-            onRemoveAll={clearCards}
             onDragEnd={handleDragEnd}
             sensors={sensors}
             conceptMasteryMap={conceptMasteryMap}
@@ -3175,17 +3173,19 @@ export default function Flashcards() {
           />
         )}
 
-        {/* Controls toolbar — kept visible so the empty deck doesn't lose it.
-            Flip / Back content act on the gallery cards; study-only controls
-            (gallery toggle, focus) are hidden via `minimal`. */}
+        {/* Controls toolbar — kept visible so the empty deck doesn't lose it,
+            and so the + (the only way in with an empty deck) stays reachable.
+            Flip / Back content act on the gallery cards; the deck controls
+            (sort, manage) stay hidden until there's a deck. */}
         <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
           <FlashcardControlsBar
-            minimal
             reverseCardModes={reverseCardModes}
             onToggleMode={toggleReverseMode}
             flip={globalFlip}
             onFlipToggle={() => setGlobalFlip(v => !v)}
             onShortcutsHelp={() => setShowShortcutsHelp(true)}
+            cardCount={0}
+            onCardsAdded={() => setGalleryExpanded(true)}
           />
         </div>
       </>
@@ -3286,13 +3286,11 @@ export default function Flashcards() {
           cards={cards}
           orderedCards={orderedCards}
           groupBy={groupBy}
-          onGroupByChange={handleGroupByChange}
           examGroups={examGroups}
           flashingCard={flashingCard}
           activeIndex={activeIndex}
           onSelect={idx => { setActiveIndex(idx) }}
           onRemove={removeCard}
-          onRemoveAll={clearCards}
           onDragEnd={handleDragEnd}
           sensors={sensors}
           onClose={() => setGalleryExpanded(false)}
@@ -3370,7 +3368,12 @@ export default function Flashcards() {
             pares the footer down to just the Prev/Next nav. */}
         {!focusMode && (
           <div className="flex items-center justify-between gap-3 bg-background px-4 py-2">
-            <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} className="flex-1" />
+            <StudyGalleryToggle
+              galleryOpen={galleryExpanded}
+              onToggle={handleGalleryToggle}
+              count={cards.length}
+              className="flex-1"
+            />
             <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} className="flex-1" />
           </div>
         )}
@@ -3433,10 +3436,23 @@ export default function Flashcards() {
             flip={globalFlip}
             onFlipToggle={() => setGlobalFlip(v => !v)}
             onShortcutsHelp={() => setShowShortcutsHelp(true)}
-            onShuffle={handleShuffle}
+            cardCount={cards.length}
+            groupBy={groupBy}
+            onGroupByChange={handleGroupByChange}
+            onManage={() => setShowManageDialog(true)}
           />
         )}
       </div>
+
+      {showManageDialog && (
+        <FlashcardsManageDialog
+          cardCount={cards.length}
+          cardNames={cards.map(c => c.name)}
+          canSave={!!user}
+          onCancel={() => setShowManageDialog(false)}
+          onRemoveAll={() => { clearCards(); setGalleryExpanded(false); setShowManageDialog(false) }}
+        />
+      )}
     </>
   )
 }

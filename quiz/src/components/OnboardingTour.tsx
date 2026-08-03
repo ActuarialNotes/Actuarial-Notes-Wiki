@@ -132,7 +132,7 @@ const BASE_STEPS: TourStep[] = [
   {
     icon: LayoutGrid,
     title: 'Grab a daily pack',
-    body: 'You don\'t have to collect cards one by one. Open the Gallery from the flashcard toolbar for ready-made packs — today\'s study plan, plus a pack for every exam and topic.',
+    body: 'You don\'t have to collect cards one by one. Tap the + button on the flashcard toolbar for search and ready-made packs — a pack for every exam and topic.',
     match: onFlashcards,
     advance: 'manual',
   },

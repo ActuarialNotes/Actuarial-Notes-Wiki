@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest'
 import {
+  buildDayPlanPct,
   buildTodayTargets,
   isConceptDoneToday,
   mergeLevelUps,
   targetStateFor,
+  type DayPlanPctInput,
 } from './planCompletion'
 import type { ConceptAssignment } from './studyPlan'
 import type { MasteryState } from './mastery'
@@ -141,6 +143,124 @@ describe('isConceptDoneToday', () => {
     const empty = buildTodayTargets([], mastery([]), TODAY)
     expect(isConceptDoneToday('Annuities', empty, mastery([['Annuities', 'forgotten']]), []))
       .toBe(false)
+  })
+})
+
+describe('buildDayPlanPct', () => {
+  const YESTERDAY = '2026-07-28'
+
+  function pctFor(overrides: Partial<DayPlanPctInput> = {}): Map<string, number> {
+    return buildDayPlanPct({
+      today: TODAY,
+      completionsByDay: new Map(),
+      todaysConcepts: [],
+      targets: new Map(),
+      masteryStateByName: new Map(),
+      levelUps: [],
+      conceptsPerDay: 4,
+      studiedToday: false,
+      ...overrides,
+    })
+  }
+
+  it('scores today against today’s plan', () => {
+    const result = pctFor({
+      todaysConcepts: ['Perpetuity', 'Annuities', 'Duration', 'Convexity'],
+      targets: buildTodayTargets(
+        [assignment('Perpetuity', 'new'), assignment('Annuities', 'new'),
+         assignment('Duration', 'new'), assignment('Convexity', 'new')],
+        mastery([]),
+        TODAY,
+      ),
+      levelUps: [levelUp('Perpetuity'), levelUp('Annuities')],
+      studiedToday: true,
+    })
+    expect(result.get(TODAY)).toBe(50)
+  })
+
+  it('gives a finished plan the full 100%', () => {
+    const result = pctFor({
+      todaysConcepts: ['Perpetuity', 'Annuities'],
+      targets: buildTodayTargets(
+        [assignment('Perpetuity', 'new'), assignment('Annuities', 'new')],
+        mastery([]),
+        TODAY,
+      ),
+      levelUps: [levelUp('Perpetuity'), levelUp('Annuities')],
+      studiedToday: true,
+    })
+    expect(result.get(TODAY)).toBe(100)
+  })
+
+  it('counts a concept that already meets today’s target, with no completion row', () => {
+    // The bug this guards: completion used to be read off daily_completions
+    // alone, so a plan finished by concepts that were already on target left
+    // today unscored and the heatmap cell dim.
+    const result = pctFor({
+      todaysConcepts: ['Perpetuity', 'Annuities'],
+      targets: buildTodayTargets([assignment('Perpetuity', 'new')], mastery([]), TODAY),
+      masteryStateByName: mastery([['Perpetuity', 'level1'], ['Annuities', 'level2']]),
+      studiedToday: true,
+    })
+    expect(result.get(TODAY)).toBe(100)
+  })
+
+  it('counts a day whose plan has nothing left on it as complete', () => {
+    // Everything the schedule asked for is done, so `todaysConcepts` is empty —
+    // there is nothing to fall short of.
+    expect(pctFor({ studiedToday: true }).get(TODAY)).toBe(100)
+  })
+
+  it('leaves an empty-plan day alone when nothing was studied', () => {
+    expect(pctFor().has(TODAY)).toBe(false)
+  })
+
+  it('leaves today unscored when the day’s work moved no plan concept', () => {
+    // Studied, but nothing on the plan advanced — ExamHeatmap shades these as
+    // "studied, quota not met" rather than as a 0% cell.
+    const result = pctFor({
+      todaysConcepts: ['Perpetuity'],
+      targets: buildTodayTargets([assignment('Perpetuity', 'new')], mastery([]), TODAY),
+      studiedToday: true,
+    })
+    expect(result.has(TODAY)).toBe(false)
+  })
+
+  it('picks up today’s completions recorded on another device', () => {
+    const result = pctFor({
+      completionsByDay: new Map([[TODAY, new Set(['perpetuity'])]]),
+      todaysConcepts: ['Perpetuity', 'Annuities'],
+      targets: buildTodayTargets(
+        [assignment('Perpetuity', 'new'), assignment('Annuities', 'new')],
+        mastery([]),
+        TODAY,
+      ),
+    })
+    expect(result.get(TODAY)).toBe(50)
+  })
+
+  it('scores past days against the plan’s pace', () => {
+    const result = pctFor({
+      completionsByDay: new Map([[YESTERDAY, new Set(['perpetuity', 'annuities'])]]),
+      conceptsPerDay: 4,
+    })
+    expect(result.get(YESTERDAY)).toBe(50)
+  })
+
+  it('caps a past day that beat the pace at 100%', () => {
+    const result = pctFor({
+      completionsByDay: new Map([[YESTERDAY, new Set(['a', 'b', 'c'])]]),
+      conceptsPerDay: 2,
+    })
+    expect(result.get(YESTERDAY)).toBe(100)
+  })
+
+  it('treats any past completion as a full day when the plan has no pace', () => {
+    const result = pctFor({
+      completionsByDay: new Map([[YESTERDAY, new Set(['perpetuity'])]]),
+      conceptsPerDay: 0,
+    })
+    expect(result.get(YESTERDAY)).toBe(100)
   })
 })
 

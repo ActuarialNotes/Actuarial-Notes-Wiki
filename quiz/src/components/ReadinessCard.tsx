@@ -376,7 +376,10 @@ function StudyPlanTracker({
           <div key={topic.name}>
             <button
               data-topic={topic.name}
-              className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors sticky top-0 z-10 bg-card/95 backdrop-blur-sm"
+              // Sticks below the Dashboard's pinned exam header (52px: py-1.5 +
+              // h-10 controls), which stays put for the whole page — offsets
+              // mirror its own `top-0 md:top-14 lg:top-0`.
+              className="flex items-center gap-2 w-full py-2 text-left hover:bg-muted/40 rounded-md px-1 -mx-1 transition-colors sticky top-[52px] md:top-[108px] lg:top-[52px] z-10 bg-card/95 backdrop-blur-sm"
               onClick={() => onToggle(topic.name)}
               aria-expanded={isOpen}
             >

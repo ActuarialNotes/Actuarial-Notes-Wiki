@@ -22,7 +22,6 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { questionsNeededForPlan } from '@/lib/todayPlanCount'
 import { TodayQuizCornerBadge } from '@/components/TodayQuizBadge'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { todayISO } from '@/lib/studyPlan'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
@@ -318,24 +317,14 @@ export default function Dashboard() {
   const { plan: studyPlan, config: planConfig, loading: planLoading, updateConfig: updatePlanConfig, regenerate: regeneratePlan, replaceTodaysConcepts } =
     useStudyPlan(activeSyllabus, masteryRecords, activeTargetDate, masteryLoading)
 
-  // Today's plan concepts — gates the "Continue Studying / Start Today's Quiz"
-  // action (mirrors the same derivation in ReadinessCard).
+  // Today's plan concepts — gates the "Start Quiz / Extra Credit" action
+  // (mirrors the same derivation in ReadinessCard).
   const displayConcepts = studyPlan?.status === 'review_mode'
     ? (studyPlan?.reviewConcepts ?? [])
     : (studyPlan?.todaysConcepts ?? [])
 
-  // Questions answered today for the active exam — decides whether the primary
-  // action reads "Continue Studying" (already started) or "Start Today's Quiz".
-  const todayQuestionsAnswered = useMemo(() => {
-    if (!activeSyllabus) return 0
-    const today = todayISO()
-    return sessions
-      .filter(s => s.exam === activeSyllabus.examTopic && s.completed_at.slice(0, 10) === today)
-      .reduce((sum, s) => sum + s.total_questions, 0)
-  }, [sessions, activeSyllabus])
-
   // Fewest questions needed to complete today's plan — shown as a badge on the
-  // "Start Today's Quiz" button (the exact size of the quiz that button
+  // "Start Quiz" button (the exact size of the quiz that button
   // launches, scoped to the active exam) and hidden once the plan is complete.
   // The Quiz-tab nav badge sums this same per-exam count across every active
   // exam, so the two numbers stay consistent.
@@ -481,13 +470,15 @@ export default function Dashboard() {
 
   // Quiz-launch action, shared by the full-size actions row and its compact
   // copy in the pinned exam header (which only has room for a one-word label).
+  // Once today's plan is finished the same launch keeps working, but it's no
+  // longer the day's work — it reads as "Extra Credit".
   const showQuizAction = isPremium && displayConcepts.length > 0
   const quizActionLabel = isLaunchingQuiz
     ? 'Get ready…'
-    : (todayQuestionsAnswered > 0 ? 'Continue Studying' : "Start Today's Quiz")
+    : (planComplete ? 'Extra Credit' : 'Start Quiz')
   const compactQuizLabel = isLaunchingQuiz
     ? 'Wait…'
-    : (todayQuestionsAnswered > 0 ? 'Continue' : 'Study')
+    : (planComplete ? 'Extra' : 'Quiz')
 
   return (
     <>

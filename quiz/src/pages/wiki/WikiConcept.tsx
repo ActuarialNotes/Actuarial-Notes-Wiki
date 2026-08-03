@@ -8,6 +8,7 @@ import { findSyllabiForConcept } from '@/lib/conceptMatch'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { KeystoneBadge } from '@/components/KeystoneBadge'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
 // Picks the syllabus to redirect to when it's unambiguous. Returns null when
@@ -133,8 +134,9 @@ export default function WikiConcept() {
 
   return (
     <div className="space-y-4 relative">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
         <h1 className="text-2xl font-bold tracking-tight">{conceptName}</h1>
+        <KeystoneBadge name={conceptName} variant="chip" />
       </div>
 
       {status === 'loading' && (

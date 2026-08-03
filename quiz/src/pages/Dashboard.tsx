@@ -643,113 +643,121 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-        {/* Exam switcher — pinned to the top of the viewport so the active exam
-            is always visible. Sticky offsets match the nav chrome: the mobile
-            bottom-nav leaves the top free, the md top bar is 3.5rem tall, and
-            the lg sidebar is beside the content. */}
-        {hasActiveExams && (
-          <div className="sticky top-0 md:top-14 lg:top-0 z-20 -mx-5 sm:-mx-8 px-5 sm:px-8 py-1.5 bg-background/95 backdrop-blur-sm">
-            <div ref={examTabsRowRef} className="flex items-center gap-2">
-              <div
-                ref={examTabsScrollRef}
-                onScroll={measureTabsOverflow}
-                className={`exam-tab-strip flex flex-1 min-w-0 gap-1.5 overflow-x-auto${tabsOverflowRight ? ' exam-tab-strip--fade' : ''}`}
-              >
-                {inProgressSyllabi.map((s, i) => (
-                  <button
-                    key={s.examId}
-                    type="button"
-                    data-exam-tab-active={i === clampedIdx}
-                    onClick={() => setActiveExamIdx(i)}
-                    className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors ${
-                      i === clampedIdx
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-transparent text-muted-foreground hover:text-foreground'
-                    }`}
-                  >
-                    {s.examLabel}
-                  </button>
-                ))}
-              </div>
+      </div>
 
-              {/* Compact copies of the primary actions — only once the full-size
-                  pair below has scrolled behind this row. Icon-only on phones,
-                  icon + short label from sm up. */}
-              {activeSyllabus && actionsPinned && (
-                <div className="dashboard-pinned-actions flex shrink-0 items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={handleReadConcepts}
-                    aria-label="Read concepts"
-                    title="Read concepts"
-                    className="flex h-10 items-center gap-1.5 rounded-full bg-secondary px-3 text-sm font-semibold text-secondary-foreground hover:bg-secondary/80 transition-colors"
-                  >
-                    <BookOpen className="h-4 w-4 shrink-0" />
-                    <span className="hidden sm:inline">Read</span>
-                  </button>
-                  {showQuizAction && (
-                    <div className="relative">
-                      <button
-                        type="button"
-                        data-sound="begin"
-                        onClick={handleStartTodaysQuiz}
-                        disabled={isLaunchingQuiz}
-                        aria-label={quizActionLabel}
-                        title={quizActionLabel}
-                        className="flex h-10 items-center gap-1.5 rounded-full bg-primary px-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 active:bg-primary/80 transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
-                      >
-                        <Play className={`h-4 w-4 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-                        <span className="hidden sm:inline">{compactQuizLabel}</span>
-                      </button>
-                      {!planComplete && todaysQuizBadgeCount > 0 && (
-                        <span
-                          className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-white text-[10px] font-bold shadow ring-2 ring-background tabular-nums"
-                          aria-label={`${todaysQuizBadgeCount} questions left in today's plan`}
-                        >
-                          {todaysQuizBadgeCount}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-        {/* Study Schedule card — portaled here by ReadinessCard (below) so it sits
-            at the very top of the dashboard, above the primary actions. */}
-        {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
+      {/* Exam switcher — pinned to the top of the viewport so the active exam
+          is always visible. Sticky offsets match the nav chrome: the mobile
+          bottom-nav leaves the top free, the md top bar is 3.5rem tall, and
+          the lg sidebar is beside the content.
 
-        {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
-            Sits directly below the study schedule card. */}
-        {activeSyllabus && (
-          <div ref={primaryActionsRef} className="flex gap-3">
-            <Button
-              variant="secondary"
-              onClick={handleReadConcepts}
-              className="flex-1 gap-2.5 text-base h-auto py-4"
+          This row, the study-schedule slot and the primary actions are direct
+          children of the page container *on purpose*: a sticky element only
+          sticks inside its own containing block, so wrapping them in a header
+          <div> would un-pin the tabs the moment that wrapper scrolled past
+          (i.e. at the top of Today's Study Plan) and would leave the compact
+          actions below no room to ever show. Don't re-wrap them. */}
+      {hasActiveExams && (
+        <div className="sticky top-0 md:top-14 lg:top-0 z-20 -mx-5 sm:-mx-8 px-5 sm:px-8 py-1.5 bg-background/95 backdrop-blur-sm">
+          <div ref={examTabsRowRef} className="flex items-center gap-2">
+            <div
+              ref={examTabsScrollRef}
+              onScroll={measureTabsOverflow}
+              className={`exam-tab-strip flex flex-1 min-w-0 gap-1.5 overflow-x-auto${tabsOverflowRight ? ' exam-tab-strip--fade' : ''}`}
             >
-              <BookOpen className="h-5 w-5" />
-              Read concepts
-            </Button>
-            {showQuizAction && (
-              <div className="relative flex-1">
+              {inProgressSyllabi.map((s, i) => (
+                <button
+                  key={s.examId}
+                  type="button"
+                  data-exam-tab-active={i === clampedIdx}
+                  onClick={() => setActiveExamIdx(i)}
+                  className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors ${
+                    i === clampedIdx
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-transparent text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {s.examLabel}
+                </button>
+              ))}
+            </div>
+
+            {/* Compact copies of the primary actions — only once the full-size
+                pair below has scrolled behind this row. Icon-only on phones,
+                icon + short label from sm up. */}
+            {activeSyllabus && actionsPinned && (
+              <div className="dashboard-pinned-actions flex shrink-0 items-center gap-1.5">
                 <button
                   type="button"
-                  data-sound="begin"
-                  onClick={handleStartTodaysQuiz}
-                  disabled={isLaunchingQuiz}
-                  className="w-full flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+                  onClick={handleReadConcepts}
+                  aria-label="Read concepts"
+                  title="Read concepts"
+                  className="flex h-10 items-center gap-1.5 rounded-full bg-secondary px-3 text-sm font-semibold text-secondary-foreground hover:bg-secondary/80 transition-colors"
                 >
-                  <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-                  {quizActionLabel}
+                  <BookOpen className="h-4 w-4 shrink-0" />
+                  <span className="hidden sm:inline">Read</span>
                 </button>
-                {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
+                {showQuizAction && (
+                  <div className="relative">
+                    <button
+                      type="button"
+                      data-sound="begin"
+                      onClick={handleStartTodaysQuiz}
+                      disabled={isLaunchingQuiz}
+                      aria-label={quizActionLabel}
+                      title={quizActionLabel}
+                      className="flex h-10 items-center gap-1.5 rounded-full bg-primary px-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 active:bg-primary/80 transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+                    >
+                      <Play className={`h-4 w-4 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
+                      <span className="hidden sm:inline">{compactQuizLabel}</span>
+                    </button>
+                    {!planComplete && todaysQuizBadgeCount > 0 && (
+                      <span
+                        className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-white text-[10px] font-bold shadow ring-2 ring-background tabular-nums"
+                        aria-label={`${todaysQuizBadgeCount} questions left in today's plan`}
+                      >
+                        {todaysQuizBadgeCount}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+      {/* Study Schedule card — portaled here by ReadinessCard (below) so it sits
+          at the very top of the dashboard, above the primary actions. */}
+      {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
+
+      {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
+          Sits directly below the study schedule card. */}
+      {activeSyllabus && (
+        <div ref={primaryActionsRef} className="flex gap-3">
+          <Button
+            variant="secondary"
+            onClick={handleReadConcepts}
+            className="flex-1 gap-2.5 text-base h-auto py-4"
+          >
+            <BookOpen className="h-5 w-5" />
+            Read concepts
+          </Button>
+          {showQuizAction && (
+            <div className="relative flex-1">
+              <button
+                type="button"
+                data-sound="begin"
+                onClick={handleStartTodaysQuiz}
+                disabled={isLaunchingQuiz}
+                className="w-full flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+              >
+                <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
+                {quizActionLabel}
+              </button>
+              {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Congratulations banner — shown after returning from Stripe checkout */}
       {showUpgradedBanner && (

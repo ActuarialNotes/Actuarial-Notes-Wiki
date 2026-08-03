@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { X, Loader2, GraduationCap, Play, LogIn } from 'lucide-react'
+import { X, Loader2, GraduationCap, Play, LogIn, CalendarDays } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
@@ -304,10 +304,12 @@ export default function ExamsPopout({ open, onClose }: Props) {
                                   <button
                                     type="button"
                                     onClick={() => handleStartOnboarding(item)}
-                                    className="shrink-0 inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                                    className="shrink-0 inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                                   >
-                                    <Play className="h-3 w-3 fill-current" />
-                                    {hasPlan ? 'Continue Onboarding' : 'Start Onboarding'}
+                                    {hasPlan
+                                      ? <CalendarDays className="h-4 w-4" />
+                                      : <Play className="h-4 w-4 fill-current" />}
+                                    {hasPlan ? 'Change Exam Date' : 'Start Onboarding'}
                                   </button>
                                 )
                               })()}

@@ -180,6 +180,27 @@ subtle glint for common, static foil for L2, animated saturated foil for L3/hero
 material is **earned**, never applied to a whole list — a flashcard pack only picks up the gold
 `.collect-pack-complete` sheen once every card in it is collected; unfinished packs stay neutral.
 
+### 4.4 The "keystone" gold material
+
+Keystone concepts — the ~10–15 load-bearing concepts per exam (`docs/keystone-concepts.md`) —
+get a second rarity material: **polished gold**, via `.keystone-ring` (gradient edge, same
+padding + mask-exclude trick), `.keystone-wash` (warm background), and `.wiki-link--keystone`
+(gold underline + lozenge for a keystone mentioned in prose).
+
+Gold and foil mean different things and must stay distinguishable:
+
+| Material | Meaning | Behaviour |
+|---|---|---|
+| Rainbow **foil** | *Earned* — collected, Level 3, designation held | Animates at the top tier |
+| **Gold** keystone | *Intrinsic* — this concept was always load-bearing | Shine sweeps on hover/focus only |
+
+Because gold is intrinsic rather than a reward, it never animates at rest: a syllabus page with
+a dozen keystone links must still read as text. Where an element could carry both materials (a
+collected flashcard tile, the collect card), **the edge belongs to foil** and the keystone
+signal moves inside as a glyph or chip — never two rings on one border. Amber/gold is also the
+"at risk" warning hue (§4.1); keystone gold stays distinguishable by being a *gradient
+material* with a drawn glyph, not a flat amber pill.
+
 ---
 
 ## 5. Spacing & Layout

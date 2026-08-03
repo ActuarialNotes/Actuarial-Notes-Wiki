@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { MasteryState } from '@/lib/mastery'
+import { isKeystone } from '@/lib/keystone'
+import { KeystoneIcon } from '@/components/KeystoneBadge'
 
 // A flat flashcard showing a concept name, styled identically to a collected
 // tile in the Flashcards gallery (the same .flashcard-collected /
@@ -30,6 +32,7 @@ interface CollectCard3DProps {
 
 export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '', flippable = false, back, locked = false, mastery }: CollectCard3DProps) {
   const foilLevel = locked ? 'l3' : mastery === 'level3' ? 'l3' : mastery === 'level2' ? 'l2' : null
+  const keystone = isKeystone(name)
   const [side, setSide] = useState<'front' | 'back'>('front')
 
   // A new concept always opens showing its front.
@@ -60,8 +63,19 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
       <div className="absolute inset-0 rounded-xl overflow-hidden">
         {/* Front — concept name, styled like the gallery tile */}
         <div
-          className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center px-4 text-center ${side === 'back' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center gap-3 px-4 text-center ${keystone ? 'keystone-wash' : ''} ${side === 'back' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
+          {/* Keystone cards are worth more than the card you're collecting —
+              say so on the card itself. Gold chip, not a gold border: the edge
+              already belongs to the foil/rarity material. */}
+          {keystone && (
+            <span className="keystone-ring inline-flex items-center gap-1 rounded-full px-2 py-0.5">
+              <KeystoneIcon className="h-3.5 w-3.5" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-200">
+                Keystone
+              </span>
+            </span>
+          )}
           <span className="text-xl sm:text-2xl font-bold leading-tight text-card-foreground">
             {name}
           </span>

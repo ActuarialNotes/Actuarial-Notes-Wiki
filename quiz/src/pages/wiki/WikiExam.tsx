@@ -7,6 +7,7 @@ import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
+import { KeystoneStrip } from '@/components/wiki/KeystoneStrip'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
@@ -300,6 +301,22 @@ export default function WikiExam() {
     return true
   }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs])
 
+  // Open a keystone from the strip. It behaves like clicking that concept in
+  // the syllabus text: the popup opens on the full concept list so Previous/Next
+  // still walks the whole exam, not just the keystones.
+  const openKeystone = useCallback((conceptName: string) => {
+    const idx = conceptList.findIndex(r => r.name.toLowerCase() === conceptName.toLowerCase())
+    const list = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptName }]
+    const occurrenceIndex = Math.max(
+      0,
+      conceptOccurrences.findIndex(o => o.name.toLowerCase() === conceptName.toLowerCase()),
+    )
+    openAt(list, idx >= 0 ? idx : 0, `${examFileName}.md`, studyPlanRefs, resourceRefs, {
+      occurrences: conceptOccurrences,
+      occurrenceIndex,
+    })
+  }, [conceptList, conceptOccurrences, examFileName, openAt, studyPlanRefs, resourceRefs])
+
   // Reset the opened flag whenever the exam or the requested concept changes.
   useEffect(() => {
     popupOpenedRef.current = false
@@ -336,6 +353,14 @@ export default function WikiExam() {
       )}
       {status === 'error' && (
         <p className="text-sm text-muted-foreground">Couldn't load {examFileName}.</p>
+      )}
+
+      {content !== null && (
+        <KeystoneStrip
+          examId={progressKey}
+          examLabel={extractedTitle ?? examFileName}
+          onSelect={openKeystone}
+        />
       )}
 
       {content !== null && (

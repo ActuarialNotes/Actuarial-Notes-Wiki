@@ -26,6 +26,9 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { NavProgressBar } from '@/components/NavProgressBar'
+import { KeystoneBadge } from '@/components/KeystoneBadge'
+import { buildMasteryLookup } from '@/lib/conceptMatch'
+import { findKeystone, keystoneProgress } from '@/lib/keystone'
 
 const MASTERY_PILL: Record<MasteryState, { label: string; className: string }> = {
   new:      { label: 'New', className: 'bg-muted text-muted-foreground' },
@@ -81,6 +84,14 @@ export function ConceptPopup() {
     const record = masteryRecords.find(r => r.concept_slug.toLowerCase() === lower)
     if (!record) return null
     return decayIfStale(record, new Date()).state
+  }, [masteryRecords, current?.name])
+  // Keystone roll-up for the exam this concept anchors — the popup already has
+  // every mastery record loaded, so the badge's explainer can show real
+  // progress without a second query. Null for ordinary concepts.
+  const keystoneStats = useMemo(() => {
+    const match = findKeystone(current?.name)
+    if (!match) return undefined
+    return keystoneProgress(match.examId, buildMasteryLookup(masteryRecords), new Date())
   }, [masteryRecords, current?.name])
   const [viewingDropdownOpen, setViewingDropdownOpen] = useState(false)
   const [showPremiumInfo, setShowPremiumInfo] = useState(false)
@@ -308,6 +319,11 @@ export function ConceptPopup() {
       <div className={`flex items-center gap-2 h-14 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex items-center gap-2 flex-1 min-w-0">
           <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
+          {/* Keystone marker — gold, and only for the load-bearing few. Sits
+              first so the "this one matters" signal is read with the title. */}
+          {!focusMode && current.kind === 'concept' && (
+            <KeystoneBadge name={current.name} progress={keystoneStats} />
+          )}
           {/* Collect / status indicator, sitting just right of the concept name.
               Spacing is the row's `gap-2` and nothing else — the locked state
               draws a visible foil ring at the button's edge, so any negative

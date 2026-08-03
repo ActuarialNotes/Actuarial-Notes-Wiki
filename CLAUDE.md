@@ -49,7 +49,8 @@ quiz/                                             — the React app (this is whe
   `virtual:comprehension-checks` vite module — see `lib/comprehensionCheckParser.ts` +
   `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates + examiner reports),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
-  catalogue), `tracks.ts`
+  catalogue), `keystoneConcepts.ts` (the per-exam keystone catalogue — see
+  `docs/keystone-concepts.md`), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
 - `stores/` — Zustand stores: `quizStore.ts` (active quiz session), `researchStore.ts` (flag-gated)
 - `contexts/` — Auth, ExamProgress providers
@@ -83,6 +84,10 @@ before touching that area**:
   theming, the shallow type scale, the semantic state-colour map, spacing/radius/elevation,
   component & overlay patterns, motion, and a11y. Read before adding or restyling UI so new
   work stays consistent, minimalistic, and hierarchy-aware.
+- `docs/keystone-concepts.md` — **keystone concepts**: the authored ~10–15 load-bearing
+  concepts per exam (`data/keystoneConcepts.ts`), the `lib/keystone.ts` lookup every surface
+  shares, and the **gold** material that marks them. Read before editing the catalogue or
+  touching `.keystone-*` CSS — gold (intrinsic) and rainbow foil (earned) must stay distinct.
 - `docs/distribution-simulators.md` — the **interactive distribution simulators** that replace the
   static `Media/*_pdf.svg` / `*_pmf.svg` embeds on the distribution concept pages: parameter
   sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
@@ -92,6 +97,9 @@ Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
+- `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
+  matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
+  Rendered by `components/KeystoneBadge.tsx` + `components/wiki/KeystoneStrip.tsx`.
 - `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
   backed by `question_responses`) into the display state every question list shows: attempted or not,
   and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,
@@ -191,8 +199,8 @@ Other important `lib/` modules:
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **35 test files /
-~565 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **47 test files /
+~830 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 

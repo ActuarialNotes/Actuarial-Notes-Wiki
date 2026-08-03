@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, Loader2, Play, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, Loader2, Play, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
 import type { Question, Difficulty } from '@/lib/parser'
@@ -12,6 +12,7 @@ import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQue
 import { type MasteryState } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { NavProgressBar } from '@/components/NavProgressBar'
+import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -42,19 +43,18 @@ type ConceptFilter = 'study-plan' | 'entire-syllabus'
 function QuestionItem({
   question,
   attemptSummary,
+  attemptsTracked,
   selected,
   onToggle,
 }: {
   question: Question
   attemptSummary: QuestionAttemptSummary | undefined
+  attemptsTracked: boolean
   selected: boolean
   onToggle: () => void
 }) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
-
-  const hasAttempted = !!attemptSummary
-  const hasCorrect = hasAttempted && attemptSummary.correct_count > 0
 
   return (
     <div
@@ -95,19 +95,7 @@ function QuestionItem({
             <span className={`text-xs px-2 py-0.5 rounded-full border shrink-0 capitalize ${DIFFICULTY_COLORS[question.difficulty]}`}>
               {question.difficulty}
             </span>
-            {hasAttempted && (
-              <span
-                title={hasCorrect ? `Correct (${attemptSummary.correct_count}/${attemptSummary.attempt_count} attempts)` : `Attempted (${attemptSummary.attempt_count}× — not yet correct)`}
-                className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border shrink-0 ${
-                  hasCorrect
-                    ? 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
-                    : 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
-                }`}
-              >
-                {hasCorrect && <CheckCircle2 className="h-3 w-3" />}
-                {hasCorrect ? 'Correct' : 'Attempted'}
-              </span>
-            )}
+            <QuestionAttemptBadge summary={attemptSummary} showNew={attemptsTracked} />
           </div>
 
           <div className="text-sm text-muted-foreground leading-relaxed mt-2">
@@ -217,7 +205,7 @@ export function ConceptDetailModal({
   )
   const [localIndex, setLocalIndex] = useState(initialConceptIndex ?? 0)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const { byQuestionId } = useQuestionAttempts()
+  const { byQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
 
   const effectiveConcepts = conceptFilter === 'study-plan'
     ? (studyPlanConcepts ?? allConcepts)
@@ -552,6 +540,7 @@ export function ConceptDetailModal({
                 key={q.id}
                 question={q}
                 attemptSummary={byQuestionId.get(q.id)}
+                attemptsTracked={attemptsTracked}
                 selected={selectedIds.has(q.id)}
                 onToggle={() => toggleQuestion(q.id)}
               />

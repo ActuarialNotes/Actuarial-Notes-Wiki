@@ -8,7 +8,15 @@ export interface QuestionAttemptSummary {
   correct_count: number
 }
 
-export function useQuestionAttempts(): { byQuestionId: Map<string, QuestionAttemptSummary>; loading: boolean } {
+export function useQuestionAttempts(): {
+  byQuestionId: Map<string, QuestionAttemptSummary>
+  loading: boolean
+  /** Whether attempt history is knowable at all. Responses live server-side, so
+   *  a signed-out visitor has no history — an empty map then means "unknown",
+   *  not "nothing attempted". Question lists use this to decide whether the
+   *  "Not attempted" chip is meaningful. */
+  tracked: boolean
+} {
   const { user } = useAuth()
   const [byQuestionId, setByQuestionId] = useState<Map<string, QuestionAttemptSummary>>(new Map())
   const [loading, setLoading] = useState(false)
@@ -46,5 +54,5 @@ export function useQuestionAttempts(): { byQuestionId: Map<string, QuestionAttem
     return () => { cancelled = true }
   }, [user?.id])
 
-  return { byQuestionId, loading }
+  return { byQuestionId, loading, tracked: !!user }
 }

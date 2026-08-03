@@ -53,7 +53,7 @@ interface QuizFloatingSearchProps {
 export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchProps = {}) {
   const navigate = useNavigate()
   const { questions: allQuestions } = useAllQuestions()
-  const { byQuestionId: attemptsByQuestionId } = useQuestionAttempts()
+  const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(false)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
@@ -505,6 +505,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                         selected={selectedIds.has(q.id)}
                         onToggleSelect={toggleSelect}
                         attemptSummary={attemptsByQuestionId.get(q.id)}
+                        attemptsTracked={attemptsTracked}
                       />
                     ))
                   )}

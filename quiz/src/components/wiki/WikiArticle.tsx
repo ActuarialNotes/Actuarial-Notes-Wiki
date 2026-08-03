@@ -10,6 +10,7 @@ import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
 import { ExamGuideCards } from '@/components/wiki/ExamGuideCards'
 import { examIdFromFile, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
+import { isKeystone } from '@/lib/keystone'
 import { distributionForImage } from '@/lib/distributions'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 
@@ -267,12 +268,16 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       // A `#repeat` fragment (added by rewriteWikilinks for the 2nd+ mention of
       // a concept within a learning objective) marks a dimmer, secondary link.
       const isRepeat = href.includes('#repeat')
+      // Keystone concepts wear a gold marker inline, so the load-bearing few
+      // are visible while *reading* the syllabus, not only once opened. A
+      // dimmed repeat mention stays dim — one marker per idea is enough.
+      const keystone = !isRepeat && ref.kind === 'concept' && isKeystone(ref.name)
       return (
         <a
           href={route}
           data-wikiref={refKey(ref)}
           {...rest}
-          className={isRepeat ? 'wiki-link--repeat' : undefined}
+          className={isRepeat ? 'wiki-link--repeat' : keystone ? 'wiki-link--keystone' : undefined}
           style={exists ? undefined : { textDecorationLine: 'none' }}
           onClick={e => {
             if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return

@@ -644,6 +644,97 @@
   .designation-foil--hero::before { animation: none; }
 }
 
+/* ── Keystone concepts ─────────────────────────────────────────────────────
+   The load-bearing concepts of a syllabus (catalogue: data/keystoneConcepts.ts)
+   get their own material: polished **gold**, distinct from the rainbow foil.
+   The two must not be confused — rainbow foil is *earned* (you collected the
+   card, you reached L3), gold is *intrinsic* (this concept was always one of
+   the big ones). Gold therefore never animates on its own; the shine only
+   sweeps on hover or on a deliberate hero surface, so a page of keystone links
+   stays calm. See docs/keystone-concepts.md. */
+:root {
+  --keystone-gradient: linear-gradient(115deg, #a16207, #fbbf24, #fef3c7, #f59e0b, #a16207);
+  --keystone-edge: #b45309;
+}
+.dark {
+  --keystone-gradient: linear-gradient(115deg, #b45309, #fbbf24, #fffbeb, #f59e0b, #b45309);
+  --keystone-edge: #fbbf24;
+}
+
+/* Gold edge, painted with the same padding + mask-exclude ring trick as the
+   foil border so it sits on the element edge without covering its content. */
+/* Zero-specificity so a host that positions itself (a `fixed` popover panel,
+   an `absolute` overlay) keeps its own positioning — the ring only needs *a*
+   containing block, not `relative` specifically. */
+:where(.keystone-ring) {
+  position: relative;
+}
+.keystone-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--keystone-ring-width, 1.5px);
+  background: var(--keystone-gradient);
+  background-size: 300% 100%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+/* The shine: one slow sweep of the gradient, on hover/focus only. */
+.keystone-ring:hover::before,
+.keystone-ring:focus-visible::before,
+.keystone-ring--hero::before {
+  animation: keystone-shine 3.5s linear infinite;
+}
+.keystone-ring--hero {
+  --keystone-ring-width: 2px;
+}
+@keyframes keystone-shine {
+  to { background-position: 300% 0; }
+}
+
+/* Warm wash behind a keystone surface (the collect card, the badge chip) —
+   just enough to read as gold-lit rather than plain. */
+.keystone-wash {
+  background-image: linear-gradient(115deg,
+    hsl(45 93% 47% / 0.10), hsl(38 92% 50% / 0.05), hsl(48 96% 60% / 0.12));
+}
+.dark .keystone-wash {
+  background-image: linear-gradient(115deg,
+    hsl(45 93% 47% / 0.14), hsl(38 92% 50% / 0.06), hsl(48 96% 60% / 0.16));
+}
+
+/* A keystone concept mentioned inside wiki prose. Static gold — a marker, not
+   a light show — so a syllabus page with a dozen of them still reads as text. */
+.wiki-link--keystone {
+  text-decoration-color: var(--keystone-edge);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+.wiki-link--keystone::after {
+  content: '';
+  display: inline-block;
+  width: 0.42em;
+  height: 0.42em;
+  margin-left: 0.28em;
+  vertical-align: 0.06em;
+  border-radius: 1px;
+  transform: rotate(45deg);
+  background: var(--keystone-gradient);
+  background-size: 300% 100%;
+}
+.wiki-link--keystone:hover::after {
+  animation: keystone-shine 3.5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keystone-ring::before,
+  .keystone-ring--hero::before,
+  .wiki-link--keystone::after { animation: none !important; }
+}
+
 /* Study-plan row highlight: rings a checklist row when the popup navigates to it. */
 @keyframes concept-row-highlight {
   0%, 15% {

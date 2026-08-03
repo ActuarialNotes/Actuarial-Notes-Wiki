@@ -83,9 +83,11 @@ export function parseExamMetadata(
 // Parse an exam markdown file and extract Learning Objectives as a
 // WikiExamSyllabus. `[!example]` callouts (`> [!example]- TopicName {weight}`)
 // become topics; every [[wiki link]] inside becomes a concept. Any other
-// callout (e.g. `[!answer]- Source Material`) ends the current topic; the
-// book links inside the `[!answer]` block are collected as resources so they
-// don't get folded into the last learning objective.
+// callout ends the current topic; the book links inside the
+// `[!answer]- Source Material` block are collected as resources so they don't
+// get folded into the last learning objective. Callouts of any other type
+// (e.g. `[!info]`/`[!tip]` exam-day and study-approach notes) are ignored
+// entirely — their wiki links are guidance, not syllabus concepts or sources.
 export function parseExamSyllabus(
   content: string,
   examId: string,
@@ -124,12 +126,16 @@ export function parseExamSyllabus(
     const header = line.match(/^>\s*\[!(\w+)\]-?\s*([^{}\n]*?)(?:\s*\{([^}]+)\})?\s*$/)
     if (header) {
       flush()
-      if (header[1].toLowerCase() === 'example') {
+      const kind = header[1].toLowerCase()
+      if (kind === 'example') {
         inResource = false
         current = { name: header[2].trim(), weight: header[3]?.trim(), lines: [] }
       } else {
-        // Non-example callout (e.g. Source Material) — its body holds resources.
-        inResource = true
+        // Only the `[!answer]- Source Material` callout holds resources. Other
+        // callout types (exam-day notes, study advice) end the current topic but
+        // contribute neither concepts nor resources — their links are guidance,
+        // not syllabus entries.
+        inResource = kind === 'answer'
       }
     } else if (line.startsWith('>')) {
       const body = line.replace(/^>\s?/, '')

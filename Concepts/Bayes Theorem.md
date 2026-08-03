@@ -7,7 +7,7 @@
 
 - $H$ is the hypothesis and $E$ is the observed evidence
 - If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$
-- Bayes' Theorem is central to [[Credibility Theory]], [[Risk Classification]], and [[Predictive Modeling]]
+- Bayes' Theorem is central to [[Credibility Theory]] and to [[Bayesian Credibility]], where the prior is the class assumption and the posterior is the experience-updated estimate
 
 ![[Media/Bayes_theorem_visualisation.svg|450]]
 

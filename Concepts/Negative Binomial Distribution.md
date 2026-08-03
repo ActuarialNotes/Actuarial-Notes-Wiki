@@ -8,6 +8,9 @@ The **Negative Binomial Distribution** $X \sim \text{NegBin}(r, p)$ counts the n
 
 > $$E[X] = \frac{r}{p}, \qquad \text{Var}(X) = \frac{r(1-p)}{p^2}$$
 
+- **Check the parameterization first.** As written, $X$ counts *trials* and starts at $r$. The alternative counts *failures before the $r$-th success*, $Y = X - r \in \{0,1,2,\ldots\}$, with $P(Y=k) = \binom{k+r-1}{k}p^r(1-p)^k$ and $E[Y] = r(1-p)/p$. Same variance, means differing by $r$ — the same trap as the [[Geometric Distribution|geometric]].
+- $\text{Var}(X) > E[X]$ always, so the negative binomial is the standard **overdispersed** alternative to the [[Poisson Distribution|Poisson]] for claim counts in a heterogeneous portfolio.
+
 ![[Media/Negative_binomial_pmf.svg|500]]
 
 > [!example]- Claims Until Third Large Loss {Example}

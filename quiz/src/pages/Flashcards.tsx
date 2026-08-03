@@ -1063,7 +1063,7 @@ function StudyGalleryToggle({
 }
 
 // Focus-mode toggle, sized/shaped to match StudyGalleryToggle so the two read
-// as a pair. Sits above the gallery strip alongside the Gallery button.
+// as a pair. Sits above the Prev/Next nav alongside the Gallery button.
 function FocusModeToggle({
   focusMode,
   onToggle,
@@ -1233,67 +1233,6 @@ function FlashcardControlsBar({
         aria-label="Keyboard shortcuts"
         className="hidden sm:inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
       ><Keyboard className="h-4 w-4 sm:h-5 sm:w-5" /></button>
-    </div>
-  )
-}
-
-// ─── Gallery Strip ────────────────────────────────────────────────────────────
-
-function GalleryStrip({
-  cards,
-  activeIndex,
-  onSelect,
-  conceptMasteryMap,
-  completedNames,
-}: {
-  cards: FlashCard[]
-  activeIndex: number
-  onSelect: (index: number) => void
-  conceptMasteryMap: Map<string, MasteryState>
-  /** Lowercased names of cards marked complete this session. */
-  completedNames: Set<string>
-}) {
-  const activeChipRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    activeChipRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
-  }, [activeIndex])
-
-  return (
-    <div className="relative flex items-center">
-      {/* Scrollable chips */}
-      <div
-        className="flex items-center gap-1.5 overflow-x-auto py-2.5 pr-4 flex-1"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {cards.map((card, i) => {
-          const masteryState = conceptMasteryMap.get(card.name.toLowerCase()) ?? 'new'
-          const { fillClass: dotClass } = MASTERY_CONFIG[masteryState]
-          const isActive = i === activeIndex
-          return (
-            <button
-              key={card.name}
-              ref={isActive ? activeChipRef : undefined}
-              type="button"
-              onClick={() => onSelect(i)}
-              className={`flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-card text-card-foreground hover:bg-accent'
-              }`}
-            >
-              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? 'bg-primary-foreground/70' : dotClass}`} />
-              <span className="max-w-[120px] truncate">{card.name}</span>
-              {completedNames.has(card.name.toLowerCase()) && (
-                <Check className={`h-3 w-3 shrink-0 ${isActive ? 'text-primary-foreground/80' : 'text-green-500'}`} />
-              )}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Fade overlay */}
-      <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none" />
     </div>
   )
 }
@@ -3038,10 +2977,6 @@ export default function Flashcards() {
   orderedCardsRef.current = orderedCards
 
   const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
-  const completedNamesLower = useMemo(
-    () => new Set(cards.filter(c => c.completedAt).map(c => c.name.toLowerCase())),
-    [cards],
-  )
 
   function handleShuffle() {
     playSound('shuffle')
@@ -3359,7 +3294,7 @@ export default function Flashcards() {
       )}
 
       <div
-        className={`container max-w-4xl mx-auto pb-52 md:pb-44${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
+        className={`container max-w-4xl mx-auto pb-44 md:pb-36${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
         {/* Sticky header: page title — hidden when the gallery overlay is open */}
@@ -3421,26 +3356,14 @@ export default function Flashcards() {
           focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
         }`}
       >
-        {/* Gallery + Focus buttons — standalone pills above the strip. Shown in
+        {/* Gallery + Focus buttons — standalone pills above the nav. Shown in
             both study and gallery views so the Gallery toggle can return to
             study when the gallery overlay is open. Hidden in focus mode, which
             pares the footer down to just the Prev/Next nav. */}
         {!focusMode && (
-          <div className="flex items-center justify-between gap-3 bg-background px-4 pt-2">
+          <div className="flex items-center justify-between gap-3 bg-background px-4 py-2">
             <StudyGalleryToggle galleryOpen={galleryExpanded} onToggle={handleGalleryToggle} className="flex-1" />
             <FocusModeToggle focusMode={focusMode} onToggle={handleFocusToggle} className="flex-1" />
-          </div>
-        )}
-        {/* Gallery strip conveyor — only in study mode, and not in focus mode */}
-        {!galleryExpanded && !focusMode && (
-          <div className="bg-background px-4">
-            <GalleryStrip
-              cards={orderedCards}
-              activeIndex={activeIndex}
-              onSelect={setActiveIndex}
-              conceptMasteryMap={conceptMasteryMap}
-              completedNames={completedNamesLower}
-            />
           </div>
         )}
         {/* Prev / Next nav footer — only in study mode */}

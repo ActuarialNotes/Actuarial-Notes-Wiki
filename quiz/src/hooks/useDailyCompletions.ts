@@ -52,6 +52,7 @@ export function useDailyCompletions(examId: string | null): DailyLevelUp[] {
         from: sanitizeMasteryState(r.from_state),
         to: sanitizeMasteryState(r.to_state),
         at: r.at,
+        examId: r.exam_id,
       })))
     })
     return () => { cancelled = true }

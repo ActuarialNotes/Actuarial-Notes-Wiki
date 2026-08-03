@@ -25,7 +25,10 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuestContext } from '@/lib/quests'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
-import { LEVELUP_EVENT, readTodayLevelUps } from '@/lib/dailyProgressStore'
+import { LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import { planDoneConceptSlugs } from '@/lib/planCompletion'
+import { todayISO } from '@/lib/studyPlan'
+import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
@@ -202,19 +205,10 @@ export default function Dashboard() {
 
   // Re-fetch mastery after a quiz completes so masteryStateByName reflects
   // any level-ups immediately (e.g. the "0 / 5 Level 3" counter stays in sync
-  // with the "Completed today" list). Also keeps todayLevelUps in sync so the
-  // Start-Quiz badge count drops concepts already finished today.
-  const [todayLevelUps, setTodayLevelUps] = useState(() => readTodayLevelUps())
+  // with the "Completed today" list).
   useEffect(() => {
-    const refresh = () => setTodayLevelUps(readTodayLevelUps())
     window.addEventListener(LEVELUP_EVENT, refreshMastery)
-    window.addEventListener(LEVELUP_EVENT, refresh)
-    window.addEventListener('storage', refresh)
-    return () => {
-      window.removeEventListener(LEVELUP_EVENT, refreshMastery)
-      window.removeEventListener(LEVELUP_EVENT, refresh)
-      window.removeEventListener('storage', refresh)
-    }
+    return () => window.removeEventListener(LEVELUP_EVENT, refreshMastery)
   }, [refreshMastery])
 
   useEffect(() => {
@@ -328,9 +322,22 @@ export default function Dashboard() {
   // launches, scoped to the active exam) and hidden once the plan is complete.
   // The Quiz-tab nav badge sums this same per-exam count across every active
   // exam, so the two numbers stay consistent.
+  //
+  // What's left is measured with the same rule that ticks a concept off in the
+  // Today card's checklist — advanced today on any device, or already sitting at
+  // today's target — so the badge can never ask for a concept the user sees
+  // struck through. See lib/planCompletion.
+  const completedToday = useTodayCompletions(activeProgressKey)
   const doneConceptSlugs = useMemo(
-    () => new Set(todayLevelUps.map(l => l.conceptSlug.toLowerCase())),
-    [todayLevelUps],
+    () => planDoneConceptSlugs({
+      plan: studyPlan,
+      syllabus: activeSyllabus,
+      masteryRecords,
+      examProgressKey: activeProgressKey,
+      levelUps: completedToday,
+      today: todayISO(),
+    }),
+    [studyPlan, activeSyllabus, masteryRecords, activeProgressKey, completedToday],
   )
   // Questions today's quizzes already served — the launch prefers unseen ones,
   // so the badge has to size itself the same way.

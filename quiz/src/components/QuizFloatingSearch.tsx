@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, X } from 'lucide-react'
+import { History, Layers, Search, Sparkles, X } from 'lucide-react'
 import { filterQuestions } from '@/lib/parser'
-import type { QuestionFilter } from '@/lib/parser'
+import type { Question, QuestionFilter } from '@/lib/parser'
 import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRow'
@@ -18,6 +18,22 @@ const DIFFICULTY_OPTIONS = [
   { value: 'medium', label: 'Medium' },
   { value: 'hard', label: 'Hard' },
 ]
+
+/** Attempt-history filter, cycled by a single button: all → attempted → new → all. */
+type AttemptStatus = 'all' | 'attempted' | 'new'
+
+const ATTEMPT_STATUS_ORDER: AttemptStatus[] = ['all', 'attempted', 'new']
+
+const ATTEMPT_STATUS_META: Record<AttemptStatus, { label: string; icon: typeof Layers }> = {
+  all: { label: 'All', icon: Layers },
+  attempted: { label: 'Attempted', icon: History },
+  new: { label: 'New', icon: Sparkles },
+}
+
+function nextAttemptStatus(current: AttemptStatus): AttemptStatus {
+  const idx = ATTEMPT_STATUS_ORDER.indexOf(current)
+  return ATTEMPT_STATUS_ORDER[(idx + 1) % ATTEMPT_STATUS_ORDER.length]
+}
 
 // Turns a raw wiki_link path ("Concepts/Geometric+Distribution", "/probability/set-theory")
 // into a human label, matching how QuestionSearchRow renders concept chips.
@@ -44,6 +60,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
   const [difficultyFilters, setDifficultyFilters] = useState<Set<string>>(new Set())
   const [conceptFilters, setConceptFilters] = useState<Set<string>>(new Set())
   const [examFilters, setExamFilters] = useState<Set<string>>(new Set())
+  const [attemptStatus, setAttemptStatus] = useState<AttemptStatus>('all')
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -55,6 +72,7 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     setDifficultyFilters(new Set())
     setConceptFilters(new Set())
     setExamFilters(new Set())
+    setAttemptStatus('all')
   }, [filterKey])
 
   useEffect(() => {
@@ -121,6 +139,21 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     return Array.from(seen).sort().map(name => ({ value: name, label: name }))
   }, [basePool])
 
+  // A question counts as attempted once it has any recorded response — the same
+  // signal QuestionSearchRow uses to show its "Attempted/Correct" chip.
+  const isAttempted = useCallback(
+    (q: Question) => attemptsByQuestionId.has(q.id),
+    [attemptsByQuestionId],
+  )
+
+  const matchesAttemptStatus = useCallback(
+    (q: Question) =>
+      attemptStatus === 'all' ? true
+      : attemptStatus === 'attempted' ? isAttempted(q)
+      : !isAttempted(q),
+    [attemptStatus, isAttempted],
+  )
+
   // Apply the local refinements. Each group is OR within itself; the groups are
   // AND'd together.
   const visiblePool = useMemo(() => {
@@ -134,8 +167,11 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     if (examFilters.size > 0) {
       filtered = filtered.filter(q => examFilters.has(q.exam))
     }
+    if (attemptStatus !== 'all') {
+      filtered = filtered.filter(matchesAttemptStatus)
+    }
     return filtered
-  }, [basePool, difficultyFilters, conceptFilters, examFilters])
+  }, [basePool, difficultyFilters, conceptFilters, examFilters, attemptStatus, matchesAttemptStatus])
 
   // Option counts reflect the pool with the *other* filter groups applied, so each
   // count previews how many questions choosing it would leave.
@@ -147,10 +183,11 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     if (examFilters.size > 0) {
       pool = pool.filter(q => examFilters.has(q.exam))
     }
+    pool = pool.filter(matchesAttemptStatus)
     const counts: Record<string, number> = {}
     pool.forEach(q => { counts[q.difficulty] = (counts[q.difficulty] ?? 0) + 1 })
     return counts
-  }, [basePool, conceptFilters, examFilters])
+  }, [basePool, conceptFilters, examFilters, matchesAttemptStatus])
 
   const conceptOptionCounts = useMemo(() => {
     let pool = basePool
@@ -160,13 +197,14 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     if (examFilters.size > 0) {
       pool = pool.filter(q => examFilters.has(q.exam))
     }
+    pool = pool.filter(matchesAttemptStatus)
     const counts: Record<string, number> = {}
     pool.forEach(q => q.wiki_link.forEach(link => {
       const lbl = conceptLabel(link)
       counts[lbl] = (counts[lbl] ?? 0) + 1
     }))
     return counts
-  }, [basePool, difficultyFilters, examFilters])
+  }, [basePool, difficultyFilters, examFilters, matchesAttemptStatus])
 
   const examOptionCounts = useMemo(() => {
     let pool = basePool
@@ -176,10 +214,28 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
     if (conceptFilters.size > 0) {
       pool = pool.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
     }
+    pool = pool.filter(matchesAttemptStatus)
     const counts: Record<string, number> = {}
     pool.forEach(q => { counts[q.exam] = (counts[q.exam] ?? 0) + 1 })
     return counts
-  }, [basePool, difficultyFilters, conceptFilters])
+  }, [basePool, difficultyFilters, conceptFilters, matchesAttemptStatus])
+
+  // Counts for the attempt-status cycle, previewing what each state would leave
+  // once the other filter groups are applied.
+  const attemptStatusCounts = useMemo(() => {
+    let pool = basePool
+    if (difficultyFilters.size > 0) {
+      pool = pool.filter(q => difficultyFilters.has(q.difficulty))
+    }
+    if (conceptFilters.size > 0) {
+      pool = pool.filter(q => q.wiki_link.some(link => conceptFilters.has(conceptLabel(link))))
+    }
+    if (examFilters.size > 0) {
+      pool = pool.filter(q => examFilters.has(q.exam))
+    }
+    const attempted = pool.reduce((n, q) => n + (isAttempted(q) ? 1 : 0), 0)
+    return { all: pool.length, attempted, new: pool.length - attempted }
+  }, [basePool, difficultyFilters, conceptFilters, examFilters, isAttempted])
 
   const questionResults = useMemo(() => visiblePool.slice(0, 100), [visiblePool])
   const totalCount = visiblePool.length
@@ -347,6 +403,32 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
                         getCount={v => examOptionCounts[v] ?? 0}
                       />
                     )}
+                    {/* Attempt history — a single button cycling all → attempted → new.
+                        Only useful once the signed-in user has answered something. */}
+                    {attemptsByQuestionId.size > 0 && (() => {
+                      const { label, icon: Icon } = ATTEMPT_STATUS_META[attemptStatus]
+                      const isActive = attemptStatus !== 'all'
+                      return (
+                        <button
+                          type="button"
+                          data-sound="tick"
+                          onClick={() => setAttemptStatus(nextAttemptStatus)}
+                          aria-label={`Attempt filter: ${label}. Tap to cycle.`}
+                          title={`Showing ${label.toLowerCase()} questions — tap to cycle`}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                            isActive
+                              ? 'bg-primary/10 text-primary'
+                              : 'bg-background hover:bg-accent text-muted-foreground'
+                          }`}
+                        >
+                          <Icon className="h-4 w-4 shrink-0" />
+                          <span>{label}</span>
+                          <span className="ml-0.5 text-xs bg-muted rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center text-muted-foreground">
+                            {attemptStatusCounts[attemptStatus]}
+                          </span>
+                        </button>
+                      )
+                    })()}
                   </div>
                 )}
 

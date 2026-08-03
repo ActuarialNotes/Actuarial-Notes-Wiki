@@ -49,7 +49,7 @@ quiz/                                             — the React app (this is whe
   `virtual:comprehension-checks` vite module — see `lib/comprehensionCheckParser.ts` +
   `docs/flashcard-collection.md`), `examSittings.ts` / `examPdfLinks.ts` (sitting dates + examiner reports),
   `mnemonics.ts` / `stories.ts` (per-concept, per-avatar content), `quests.ts` (daily-quest
-  catalogue), `tracks.ts`
+  catalogue), `examGuides.ts` (the exam-page orientation cards — see below), `tracks.ts`
 - `hooks/` — React hooks wrapping lib logic + Supabase queries
 - `stores/` — Zustand stores: `quizStore.ts` (active quiz session), `researchStore.ts` (flag-gated)
 - `contexts/` — Auth, ExamProgress providers
@@ -214,6 +214,14 @@ compile — don't "clean up" the flagged code as dead.
 - Wiki links use Obsidian syntax: `[[Concept Name]]` or `[[Concept Name|Display Text]]`.
 - Exam pages use callout blocks (`> [!example]-`) listing learning objectives with weight
   percentages, e.g. `{23-30%}`.
+- An exam page may carry a bare `<div class="exam-guides"></div>` marking where the
+  **orientation cards** go (two dashboard-style cards above the learning objectives, each
+  opening a paged popup with a graphic per page — currently "Exam Day Tips" and "How to
+  Study for Exam P"). The div is only a position marker: the prose, the paging and the
+  illustrations are authored app-side in `quiz/src/data/examGuides.ts` (keyed by the wiki
+  exam id) + `components/wiki/ExamGuideGraphics.tsx`, and `WikiArticle` swaps the marker
+  for `components/wiki/ExamGuideCards.tsx`. Page bodies are markdown and may use
+  `[[Wiki Links]]`. An exam with no entry in `EXAM_GUIDES` renders nothing.
 - Question files (`questions/<exam-id>/*.md`) have YAML frontmatter: `id`, `exam`, `topic`,
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an

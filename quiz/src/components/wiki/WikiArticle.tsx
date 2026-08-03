@@ -7,7 +7,8 @@ import rehypeKatex from 'rehype-katex'
 import type { Components } from 'react-markdown'
 import { calloutComponents } from '@/components/MarkdownCallout'
 import { DistributionSimulator } from '@/components/wiki/DistributionSimulator'
-import { hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
+import { ExamGuideCards } from '@/components/wiki/ExamGuideCards'
+import { examIdFromFile, hrefToEntryRef, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { isInWikiIndex } from '@/lib/wikiIndex'
 import { distributionForImage } from '@/lib/distributions'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
@@ -172,6 +173,16 @@ function fixBlockquoteOrderedLists(md: string): string {
   )
 }
 
+// The exam pages mark where the orientation cards go with a bare
+// `<div class="exam-guides"></div>`. Swap it for a text marker *before*
+// stripHtmlBlocks runs, since that would otherwise drop it with the rest of the
+// layout divs; the paragraph renderer below turns the marker into the cards.
+export const EXAM_GUIDES_MARKER = '%%exam-guides%%'
+
+export function markExamGuides(md: string): string {
+  return md.replace(/^<div class="exam-guides"[^>]*>\s*<\/div> *$/gm, `\n${EXAM_GUIDES_MARKER}\n`)
+}
+
 // Strip block-level HTML divs that publish.js embeds for metadata / layout.
 // react-markdown renders them as literal text without rehype-raw, so they must
 // be removed before parsing.
@@ -188,8 +199,11 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
   const articleRef = useRef<HTMLDivElement | null>(null)
   const processed = useMemo(() => {
     const stripped = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
-    return stripHtmlBlocks(fixBlockquoteOrderedLists(rewriteWikilinks(stripped)))
+    return stripHtmlBlocks(markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(stripped))))
   }, [markdown])
+
+  // Exam pages get the orientation cards; every other page ignores the marker.
+  const guideExamId = sourcePath && /^Exam\b/i.test(sourcePath) ? examIdFromFile(sourcePath) : null
 
   const popupOpen = useConceptPopup(s => s.open)
   const popupIndex = useConceptPopup(s => s.index)
@@ -209,13 +223,16 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </h1>
       )
     },
-    // A paragraph whose only content is a distribution illustration becomes the
-    // simulator, which is a <div> — unwrap the <p> so it isn't invalid nesting.
+    // A paragraph whose only content is a marker or a distribution illustration
+    // becomes a <div> — unwrap the <p> so it isn't invalid nesting.
     p({ node, children, ...rest }) {
       const kids = (node?.children ?? []).filter(
         child => !(child.type === 'text' && child.value.trim() === ''),
       )
       const only = kids.length === 1 ? kids[0] : null
+      if (only && only.type === 'text' && only.value.trim() === EXAM_GUIDES_MARKER) {
+        return guideExamId ? <ExamGuideCards examId={guideExamId} /> : null
+      }
       if (
         !hideImages &&
         only &&
@@ -269,7 +286,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [navigate, onWikiLink, hideImages, titleBadge])
+  }), [navigate, onWikiLink, hideImages, titleBadge, guideExamId])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

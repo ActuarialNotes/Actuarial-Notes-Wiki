@@ -2762,6 +2762,20 @@ export default function Flashcards() {
   const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords } = useConceptMastery()
   const popupOpen = useConceptPopup(s => s.open)
+  // "Got it" gates on collection (see docs/flashcard-collection.md): rating an
+  // uncollected card "Got it" opens the collect comprehension check instead of
+  // completing the card outright — Introduce → Flashcard → Collect → Quiz.
+  // `pendingGotNameRef` remembers which card triggered the gate so the study
+  // loop can pick up where it left off once the check is passed (or dropped,
+  // if the player backs out without collecting).
+  const collectedCards = useCollectedCards(s => s.cards)
+  const collectedSet = useMemo(
+    () => new Set(collectedCards.map(c => c.name.toLowerCase())),
+    [collectedCards],
+  )
+  const openCollect = useCollect(s => s.open)
+  const collectOpenRef = useCollect(s => s.ref)
+  const pendingGotNameRef = useRef<string | null>(null)
   const popupCurrentName = useConceptPopup(s => s.open ? (s.list[s.index]?.name ?? null) : null)
   const [searchParams, setSearchParams] = useSearchParams()
   const highlightName = searchParams.get('highlight')
@@ -2832,7 +2846,7 @@ export default function Flashcards() {
     's': () => { handleShuffle() },
     'f': () => { setFocusMode(v => !v) },
     '?': () => setShowShortcutsHelp(v => !v),
-  }, !galleryExpanded && !popupOpen && !showShortcutsHelp && !showSessionSummary && cards.length > 0)
+  }, !galleryExpanded && !popupOpen && !collectOpenRef && !showShortcutsHelp && !showSessionSummary && cards.length > 0)
 
   function toggleReverseMode(mode: ReverseCardSection) {
     setReverseCardModes(prev => {
@@ -2994,13 +3008,13 @@ export default function Flashcards() {
     setGroupBy(g)
   }
 
-  // Rate the current card and advance to the next unfinished one, wrapping
-  // around the deck. "Got it" marks it complete; "Again" tallies a lapse (and
+  // Rate a card and advance to the next unfinished one, wrapping around the
+  // deck. "Got it" marks it complete; "Again" tallies a lapse (and
   // un-completes a previously finished card that has slipped). Once nothing is
-  // left unfinished, the session summary takes over.
-  function handleRate(rating: StudyRating) {
-    const card = orderedCards[activeIndex]
-    if (!card) return
+  // left unfinished, the session summary takes over. Split out from
+  // `handleRate` so the deferred "got it" path below (after the collect gate)
+  // can apply the same logic against whichever index the card ends up at.
+  function applyRating(rating: StudyRating, card: FlashCard, index: number) {
     // "Got it" is a right answer like any other — and a run of them climbs in
     // pitch. "Again" is not a mistake, so it keeps the plain press cue the
     // delegated listener already gives it, but it does end the run.
@@ -3013,13 +3027,13 @@ export default function Flashcards() {
       toggleCompleted(card.name)
     }
     const completedFlags = orderedCards.map((c, i) =>
-      i === activeIndex ? rating === 'got' : !!c.completedAt)
-    const next = nextIncompleteIndex(completedFlags, activeIndex)
+      i === index ? rating === 'got' : !!c.completedAt)
+    const next = nextIncompleteIndex(completedFlags, index)
     if (next === -1) {
       setShowSessionSummary(true)
       // Let the arpeggio for this last card ring before the session fanfare.
       window.setTimeout(() => playSound('complete'), 380)
-    } else if (next === activeIndex) {
+    } else if (next === index) {
       // Sole unfinished card: the index can't change, so flip it back over for
       // another pass instead.
       studyAreaRef.current?.flip()
@@ -3027,6 +3041,38 @@ export default function Flashcards() {
       setActiveIndex(next)
     }
   }
+
+  // A concept must be collected before its mastery can pass New (see
+  // docs/flashcard-collection.md), so "Got it" on an uncollected card opens
+  // the collect comprehension check — Introduce → Flashcard → Collect → Quiz
+  // — instead of completing the card outright. The card only completes once
+  // the check is passed (picked up by the effect below); backing out of the
+  // modal without collecting leaves the card exactly as it was.
+  function handleRate(rating: StudyRating) {
+    const card = orderedCards[activeIndex]
+    if (!card) return
+    if (rating === 'got' && !collectedSet.has(card.name.toLowerCase())) {
+      pendingGotNameRef.current = card.name
+      openCollect({ kind: 'concept', name: card.name })
+      return
+    }
+    applyRating(rating, card, activeIndex)
+  }
+
+  // Fires once the collect modal closes. If the card that triggered it is now
+  // collected, complete the "Got it" rating that was deferred; if the player
+  // closed the modal without passing the check, do nothing — the card stays
+  // in rotation.
+  useEffect(() => {
+    if (collectOpenRef) return
+    const pending = pendingGotNameRef.current
+    if (!pending) return
+    pendingGotNameRef.current = null
+    if (!collectedSet.has(pending.toLowerCase())) return
+    const idx = orderedCards.findIndex(c => c.name.toLowerCase() === pending.toLowerCase())
+    if (idx === -1) return
+    applyRating('got', orderedCards[idx], idx)
+  }, [collectOpenRef, collectedSet]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Navigate to and flash a card when arriving via the ?highlight= URL param.
   // Must be after orderedCards so the dep array re-fires when sort order changes

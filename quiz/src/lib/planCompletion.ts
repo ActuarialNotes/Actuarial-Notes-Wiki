@@ -81,6 +81,82 @@ export function isConceptDoneToday(
   return STATE_ORDER[current] >= STATE_ORDER[target]
 }
 
+export interface DayPlanPctInput {
+  /** Today's date, `YYYY-MM-DD` local (`todayISO()`). */
+  today: string
+  /**
+   * Lower-cased concept slugs completed on each day, from `daily_completions`
+   * (this exam only) merged with today's device-local level-ups.
+   */
+  completionsByDay: Map<string, Set<string>>
+  /** Today's plan concepts — the review picks when the plan is in review mode. */
+  todaysConcepts: string[]
+  /** Today's per-concept targets, from `buildTodayTargets`. */
+  targets: Map<string, MasteryState>
+  masteryStateByName: Map<string, MasteryState>
+  /** Today's level-ups for this exam. */
+  levelUps: DailyLevelUp[]
+  /** The plan's pace — the denominator for past days, which have no stored plan. */
+  conceptsPerDay: number
+  /** Whether any question was answered for this exam today. */
+  studiedToday: boolean
+}
+
+/**
+ * How much of each day's study plan was completed, 0–100 — the brightness of
+ * the Study Schedule heatmap's green (`components/ExamHeatmap.tsx`).
+ *
+ * Today is scored against today's plan with the same rule the Today card's
+ * checklist uses (`isConceptDoneToday`), so a day the user sees fully ticked off
+ * is a fully bright cell. That has to be computed from the plan itself rather
+ * than from `daily_completions` alone: a concept counts as done when it already
+ * meets today's target, which writes no completion row, and a day whose plan is
+ * empty — everything the schedule asked for is already done — has no rows at all
+ * yet is complete by definition.
+ *
+ * Past days have no stored plan to score against, so they fall back to the
+ * current pace: concepts levelled up that day against `conceptsPerDay`.
+ *
+ * A day is only given a percentage once it has something to show for itself
+ * (work today, or a completion on a past day). Days that were studied without
+ * moving the plan are left out entirely so the heatmap can shade them as
+ * "studied, quota not met" rather than as an empty 0%.
+ */
+export function buildDayPlanPct({
+  today,
+  completionsByDay,
+  todaysConcepts,
+  targets,
+  masteryStateByName,
+  levelUps,
+  conceptsPerDay,
+  studiedToday,
+}: DayPlanPctInput): Map<string, number> {
+  const result = new Map<string, number>()
+
+  for (const [day, slugs] of completionsByDay) {
+    if (day === today) continue
+    const pct = conceptsPerDay > 0
+      ? Math.min((slugs.size / conceptsPerDay) * 100, 100)
+      : (slugs.size > 0 ? 100 : 0)
+    if (pct > 0) result.set(day, pct)
+  }
+
+  const completedToday = completionsByDay.get(today) ?? new Set<string>()
+  if (studiedToday || completedToday.size > 0) {
+    const done = todaysConcepts.filter(name =>
+      completedToday.has(name.toLowerCase()) ||
+      isConceptDoneToday(name, targets, masteryStateByName, levelUps)
+    ).length
+    const pct = todaysConcepts.length > 0
+      ? (done / todaysConcepts.length) * 100
+      : 100
+    if (pct > 0) result.set(today, pct)
+  }
+
+  return result
+}
+
 /**
  * Merge device-local level-ups with the cross-device signal from Supabase,
  * de-duplicating on concept+destination state so the same advance recorded in

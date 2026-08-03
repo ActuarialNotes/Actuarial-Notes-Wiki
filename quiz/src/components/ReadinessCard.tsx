@@ -22,6 +22,12 @@ import { computeReadiness, parseSectionWeight } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
+import {
+  NEXT_STATE,
+  buildDayPlanPct,
+  buildTodayTargets,
+  isConceptDoneToday,
+} from '@/lib/planCompletion'
 import { PLAN_LOCKED_EVENT, type PlanLockedDetail } from '@/lib/planForming'
 import { useSchedulePlayback, PLAYBACK_HOLD_MS } from '@/hooks/useSchedulePlayback'
 import type { QuizSession } from '@/lib/supabase'
@@ -425,17 +431,8 @@ function StudyPlanTracker({
 
 // ── ReadinessCard ──────────────────────────────────────────────────────────────
 
-const STATE_ORDER: Record<MasteryState, number> = {
-  new: 0, forgotten: 0, level1: 1, level2: 2, level3: 3,
-}
-
 const STATE_LABEL: Record<MasteryState, string> = {
   new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
-}
-
-const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
-  new: 'level1', forgotten: 'level1',
-  level1: 'level2', level2: 'level3',
 }
 
 interface Props {
@@ -735,22 +732,12 @@ export function ReadinessCard({
     [groupedPlanConcepts]
   )
 
-  const targetByName = useMemo(() => {
-    const map = new Map<string, MasteryState>()
-    if (!plan) return map
-    const today = todayISO()
-    for (const a of plan.assignments) {
-      if (a.scheduledDate === today) {
-        const currentState = masteryStateByName.get(a.conceptName.toLowerCase()) ?? a.initialState
-        const target: MasteryState = currentState === 'level3' ? 'level3' : (NEXT_STATE[currentState] ?? 'level1')
-        const existing = map.get(a.conceptName.toLowerCase())
-        if (!existing || STATE_ORDER[target] > STATE_ORDER[existing]) {
-          map.set(a.conceptName.toLowerCase(), target)
-        }
-      }
-    }
-    return map
-  }, [plan, masteryStateByName])
+  // Per-concept targets for today — shared with the Dashboard's Today card and
+  // the study-guide header's plan list (see lib/planCompletion).
+  const targetByName = useMemo(
+    () => buildTodayTargets(plan?.assignments ?? [], masteryStateByName, todayISO()),
+    [plan, masteryStateByName]
+  )
 
   // Order matches the visual display order (syllabus topic order) so that
   // prev/next in the popup navigates in the same order the user sees on screen.
@@ -794,14 +781,9 @@ export function ReadinessCard({
   const todayLevelUps = examCompletedToday.length
 
   const allConceptsDone = useMemo(() =>
-    displayConcepts.length > 0 && displayConcepts.every(name => {
-      const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-      const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-      return (
-        examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-        STATE_ORDER[currentState] >= STATE_ORDER[target]
-      )
-    }),
+    displayConcepts.length > 0 && displayConcepts.every(name =>
+      isConceptDoneToday(name, targetByName, masteryStateByName, examCompletedToday)
+    ),
     [displayConcepts, examCompletedToday, targetByName, masteryStateByName]
   )
 
@@ -815,72 +797,47 @@ export function ReadinessCard({
 
   // Originally planned concepts that are not yet completed (for this exam)
   const incompleteOriginalConcepts = useMemo(() =>
-    displayConcepts.filter(name => {
-      const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-      const current = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-      return (
-        !examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) &&
-        STATE_ORDER[current] < STATE_ORDER[target]
-      )
-    }),
+    displayConcepts.filter(name =>
+      !isConceptDoneToday(name, targetByName, masteryStateByName, examCompletedToday)
+    ),
     [displayConcepts, examCompletedToday, targetByName, masteryStateByName]
   )
 
   const showReplaceButton = bonusConcepts.length > 0 && incompleteOriginalConcepts.length > 0
 
-  // Compute per-day plan completion % for heatmap coloring.
-  // When a plan exists: color = concepts_completed_that_day / conceptsPerDay (capped at 100%).
-  // When no plan: undefined → ExamHeatmap falls back to session-score coloring.
+  // Per-day plan completion % — the heatmap's green. Today is scored against
+  // today's plan with the same rule that ticks the checklist off, so a day the
+  // user has finished is a fully bright cell; past days fall back to the pace.
+  // With no plan this stays undefined and ExamHeatmap colours by session score.
+  // See buildDayPlanPct in lib/planCompletion.
   const dayPlanPct = useMemo((): Map<string, number> | undefined => {
     if (!user || !plan) return undefined
-    const cpd = plan.conceptsPerDay
     const today = todayISO()
-    const result = new Map<string, number>()
 
-    // Build per-day slug sets from historical daily_completions
-    const countByDay = new Map<string, Set<string>>()
+    // Per-day slug sets from daily_completions, plus today's live level-ups
+    // (which land here before the row is read back).
+    const completionsByDay = new Map<string, Set<string>>()
     for (const row of allDailyCompletions) {
-      if (!countByDay.has(row.day)) countByDay.set(row.day, new Set())
-      countByDay.get(row.day)!.add(row.concept_slug.toLowerCase())
+      if (!completionsByDay.has(row.day)) completionsByDay.set(row.day, new Set())
+      completionsByDay.get(row.day)!.add(row.concept_slug.toLowerCase())
     }
-    // Also incorporate today's live level-up data
     if (examCompletedToday.length > 0) {
-      if (!countByDay.has(today)) countByDay.set(today, new Set())
-      const todaySet = countByDay.get(today)!
+      if (!completionsByDay.has(today)) completionsByDay.set(today, new Set())
+      const todaySet = completionsByDay.get(today)!
       for (const lu of examCompletedToday) todaySet.add(lu.conceptSlug.toLowerCase())
     }
 
-    for (const [day, slugs] of countByDay) {
-      if (day === today && displayConcepts.length > 0) {
-        // Today: use exact plan completion ratio
-        const completed = displayConcepts.filter(name =>
-          slugs.has(name.toLowerCase()) ||
-          STATE_ORDER[masteryStateByName.get(name.toLowerCase()) ?? 'new'] >= STATE_ORDER[targetByName.get(name.toLowerCase()) ?? 'level1']
-        )
-        result.set(day, (completed.length / displayConcepts.length) * 100)
-      } else {
-        // Past days: estimate via conceptsPerDay quota
-        const pct = cpd > 0 ? Math.min((slugs.size / cpd) * 100, 100) : (slugs.size > 0 ? 100 : 0)
-        result.set(day, pct)
-      }
-    }
-
-    // If all today's plan concepts are done (including pre-mastered ones not in countByDay),
-    // force today to 100% so the heatmap shows maximum brightness when "Done for Today!".
-    if (displayConcepts.length > 0) {
-      const allDone = displayConcepts.every(name => {
-        const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-        const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-        return (
-          examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-          STATE_ORDER[currentState] >= STATE_ORDER[target]
-        )
-      })
-      if (allDone) result.set(today, 100)
-    }
-
-    return result
-  }, [user, plan, allDailyCompletions, examCompletedToday, displayConcepts, masteryStateByName, targetByName])
+    return buildDayPlanPct({
+      today,
+      completionsByDay,
+      todaysConcepts: displayConcepts,
+      targets: targetByName,
+      masteryStateByName,
+      levelUps: examCompletedToday,
+      conceptsPerDay: plan.conceptsPerDay,
+      studiedToday: todayQuestionsAnswered > 0,
+    })
+  }, [user, plan, allDailyCompletions, examCompletedToday, displayConcepts, masteryStateByName, targetByName, todayQuestionsAnswered])
 
   function handleReplace() {
     // One-for-one swap: each bonus concept replaces exactly one incomplete planned concept.
@@ -1358,10 +1315,7 @@ export function ReadinessCard({
                       {/* Concepts */}
                       {group.concepts.map(name => {
                         const target = targetByName.get(name.toLowerCase()) ?? 'level1'
-                        const currentState = masteryStateByName.get(name.toLowerCase()) ?? 'new'
-                        const isCompleted =
-                          examCompletedToday.some(lu => lu.conceptSlug.toLowerCase() === name.toLowerCase()) ||
-                          STATE_ORDER[currentState] >= STATE_ORDER[target]
+                        const isCompleted = isConceptDoneToday(name, targetByName, masteryStateByName, examCompletedToday)
                         const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
                         const isCascadeHighlighted = quizStartConcept === name.toLowerCase()
                         return (

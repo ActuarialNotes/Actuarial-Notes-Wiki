@@ -17,6 +17,15 @@ function cellStyle(pct: number | null): { backgroundColor: string } | undefined 
   return { backgroundColor: `rgba(34, 197, 94, ${opacity})` }
 }
 
+/**
+ * How green a past day's cell is, 0–100.
+ *
+ * With a study plan, `dayPlanPct` carries how much of that day's plan was
+ * completed (see `buildDayPlanPct` in lib/planCompletion) — a finished day is
+ * 100 and reads at full brightness. Days it leaves out moved no plan concept,
+ * so a day that was studied anyway gets a faint "showed up" shade. Without a
+ * plan there's nothing to measure against and any active day is fully green.
+ */
 function resolvedPct(
   key: string,
   data: DayData | null,

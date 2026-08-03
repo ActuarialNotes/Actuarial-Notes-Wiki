@@ -378,7 +378,7 @@ export default function OnboardingTour() {
       <div
         className={cn(
           'fixed inset-x-0 z-[63] flex justify-center px-3 pointer-events-none',
-          placeTop ? 'top-3 md:top-4' : 'bottom-14 md:bottom-4',
+          placeTop ? 'top-3 md:top-4' : 'bottom-16 md:bottom-4',
         )}
       >
         <div

@@ -3164,7 +3164,7 @@ export default function Flashcards() {
         {/* Controls toolbar — kept visible so the empty deck doesn't lose it.
             Flip / Back content act on the gallery cards; study-only controls
             (gallery toggle, focus) are hidden via `minimal`. */}
-        <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
+        <div className="fixed bottom-16 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-[46]">
           <FlashcardControlsBar
             minimal
             reverseCardModes={reverseCardModes}
@@ -3352,7 +3352,7 @@ export default function Flashcards() {
 
       {/* Fixed controls footer — always at bottom, above mobile nav */}
       <div
-        className={`fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
+        className={`fixed bottom-16 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 transition-opacity duration-300 ${
           focusMode ? 'z-[57] opacity-30 hover:opacity-100 focus-within:opacity-100' : 'z-[46]'
         }`}
       >

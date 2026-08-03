@@ -78,7 +78,7 @@ export default function BottomNav() {
             aria-hidden="true"
           />
           {/* Panel */}
-          <div className="fixed bottom-14 left-0 right-0 z-[46] md:hidden bg-background/95 backdrop-blur-md border-t border-border">
+          <div className="fixed bottom-16 left-0 right-0 z-[46] md:hidden bg-background/95 backdrop-blur-md border-t border-border">
             <div className="flex">
               <button
                 type="button"
@@ -112,7 +112,10 @@ export default function BottomNav() {
         </>
       )}
 
-      <nav className="fixed bottom-0 left-0 right-0 z-[45] flex md:hidden bg-background/95 backdrop-blur-md border-t border-border h-14">
+      {/* h-16 matches the Prev/Next footer height on Flashcards so the two
+          stacked bars read as one bottom chrome block. Anything that sits
+          above the nav offsets by the same 4rem (`bottom-16`). */}
+      <nav className="fixed bottom-0 left-0 right-0 z-[45] flex md:hidden bg-background/95 backdrop-blur-md border-t border-border h-16">
         {/* Study Guides tab */}
         <button
           type="button"

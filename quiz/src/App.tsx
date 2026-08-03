@@ -162,7 +162,8 @@ export default function App({ initialSession }: { initialSession: Session | null
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />
-            <main className="flex-1 min-w-0 md:pt-14 lg:pt-0 pb-16 md:pb-0">
+            {/* pb clears the h-16 mobile bottom nav plus a little breathing room */}
+            <main className="flex-1 min-w-0 md:pt-14 lg:pt-0 pb-[4.5rem] md:pb-0">
               <Routes>
                 <Route path="/" element={<Landing />} />
                 <Route path="/auth" element={<Auth />} />

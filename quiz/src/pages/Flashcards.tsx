@@ -376,7 +376,6 @@ function PackCard({
 }) {
   const { addCard, hasCard } = useFlashcards()
   const collectedCards = useCollectedCards(s => s.cards)
-  const openCollect = useCollect(s => s.open)
   const collectedSet = useMemo(
     () => new Set(collectedCards.map(c => c.name.toLowerCase())),
     [collectedCards],
@@ -389,6 +388,7 @@ function PackCard({
   const inDeck = concepts.filter(n => hasCard(n)).length
   const collected = concepts.filter(n => isCollected(n)).length
   const notAdded = concepts.filter(n => !hasCard(n))
+  const uncollectedNotAdded = concepts.filter(n => !isCollected(n) && !hasCard(n))
   const allAdded = total > 0 && notAdded.length === 0
   const fullyCollected = total > 0 && collected === total
 
@@ -426,9 +426,9 @@ function PackCard({
     if (notAdded.length > 0) { playSound('addToDeck'); showAddedToDeck(notAdded.length); onCardsAdded?.() }
   }
 
-  function collectNext() {
-    const next = concepts.find(n => !isCollected(n))
-    if (next) openCollect({ kind: 'concept', name: next })
+  function addUncollected() {
+    for (const name of uncollectedNotAdded) addCard({ kind: 'concept', name })
+    if (uncollectedNotAdded.length > 0) { playSound('addToDeck'); showAddedToDeck(uncollectedNotAdded.length); onCardsAdded?.() }
   }
 
   return (
@@ -521,14 +521,15 @@ function PackCard({
                     Add all {notAdded.length} to deck
                   </Button>
                 )}
-                {!fullyCollected && (
+                {uncollectedNotAdded.length > 0 && (
                   <Button
                     variant="outline"
                     size="sm"
                     className="w-full"
-                    onClick={e => { e.stopPropagation(); collectNext() }}
+                    data-sound="none"
+                    onClick={e => { e.stopPropagation(); addUncollected() }}
                   >
-                    Add uncollected cards
+                    Add {uncollectedNotAdded.length} uncollected card{uncollectedNotAdded.length === 1 ? '' : 's'} to deck
                   </Button>
                 )}
                 <Button
@@ -2225,10 +2226,6 @@ function GalleryPanel({
       >
         {tab === 'deck' && (
           <div className="space-y-4">
-            {/* Today's study plan — pinned here so it's always visible in My
-                Deck, not tucked away in a tab you have to remember to open. */}
-            {!focusMode && <TodayStudyPlanPack onCardsAdded={onCardsAdded} />}
-
             {/* Deck controls: count / manage / sort / clear-completed / add — hidden
                 in focus mode. In the overlay panel the row sticks to the top of the
                 scroll area (just under the tab bar) so "Clear Completed Flashcards"
@@ -2290,6 +2287,10 @@ function GalleryPanel({
               <DeckAddSearch onCardsAdded={onCardsAdded} />
             </div>
             )}
+
+            {/* Today's study plan — pinned here so it's always visible in My
+                Deck, not tucked away in a tab you have to remember to open. */}
+            {!focusMode && <TodayStudyPlanPack onCardsAdded={onCardsAdded} />}
 
             {cards.length === 0 ? (
               <div className="rounded-xl bg-card text-card-foreground p-10 text-center space-y-2">

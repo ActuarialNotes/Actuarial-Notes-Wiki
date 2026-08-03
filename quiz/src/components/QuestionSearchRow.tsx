@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Check, CheckCircle2 } from 'lucide-react'
+import { Check } from 'lucide-react'
 import type { Question } from '@/lib/parser'
 import type { QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { LatexText } from '@/components/LatexText'
 import { MarkdownText } from '@/components/MarkdownText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
+import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
 
 // Renders question markdown (GFM tables + LaTeX) with the same table styling the
 // quiz uses, so data-heavy stems (development triangles, etc.) render as tables
@@ -18,6 +19,9 @@ interface QuestionSearchRowProps {
   selected: boolean
   onToggleSelect: (id: string) => void
   attemptSummary?: QuestionAttemptSummary
+  /** True when the viewer's attempt history is actually known (signed in), so an
+   *  absent summary means "not attempted" rather than "unknown". */
+  attemptsTracked?: boolean
 }
 
 function highlightStem(text: string, query: string): React.ReactNode {
@@ -60,14 +64,12 @@ export function DifficultyDots({ difficulty }: { difficulty: string }) {
   )
 }
 
-export function QuestionSearchRow({ question, query, selected, onToggleSelect, attemptSummary }: QuestionSearchRowProps) {
+export function QuestionSearchRow({ question, query, selected, onToggleSelect, attemptSummary, attemptsTracked = false }: QuestionSearchRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
 
   const words = question.stem.trim().split(/\s+/)
   const previewText = words.length <= 6 ? question.stem : words.slice(0, 6).join(' ') + '…'
-  const hasAttempted = !!attemptSummary
-  const hasCorrect = hasAttempted && attemptSummary.correct_count > 0
 
   return (
     <div
@@ -94,6 +96,10 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect, a
           >
             {selected && <Check className="h-3 w-3" />}
           </div>
+          {/* Attempt history sits at the head of the chip strip: the strip
+              scrolls horizontally, and this is the one chip that must never be
+              the part scrolled out of sight. */}
+          <QuestionAttemptBadge summary={attemptSummary} showNew={attemptsTracked} />
           <span className="text-xs px-2 py-0.5 rounded-full border border-input text-muted-foreground bg-background shrink-0">
             {question.exam}
           </span>
@@ -105,19 +111,6 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect, a
               {conceptLabel(link)}
             </span>
           ))}
-          {hasAttempted && (
-            <span
-              title={hasCorrect ? `Correct (${attemptSummary.correct_count}/${attemptSummary.attempt_count} attempts)` : `Attempted (${attemptSummary.attempt_count}× — not yet correct)`}
-              className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border shrink-0 ${
-                hasCorrect
-                  ? 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
-                  : 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
-              }`}
-            >
-              {hasCorrect && <CheckCircle2 className="h-3 w-3" />}
-              {hasCorrect ? `Correct ×${attemptSummary.correct_count}` : `Attempted ×${attemptSummary.attempt_count}`}
-            </span>
-          )}
         </div>
         <button
           type="button"

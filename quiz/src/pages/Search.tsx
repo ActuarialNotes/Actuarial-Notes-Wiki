@@ -18,6 +18,8 @@ import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LatexText } from '@/components/LatexText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
+import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
+import { useQuestionAttempts, type QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
 import { trackSearchQuery } from '@/lib/analytics'
 
 type SearchType = 'concepts' | 'questions' | 'resources'
@@ -59,9 +61,11 @@ interface QuestionRowProps {
   activeDifficulty: Difficulty | ''
   activeTopic: string
   activeSubtopics: string[]
+  attemptSummary?: QuestionAttemptSummary
+  attemptsTracked: boolean
 }
 
-function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, activeTopic, activeSubtopics }: QuestionRowProps) {
+function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, activeTopic, activeSubtopics, attemptSummary, attemptsTracked }: QuestionRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
 
@@ -85,6 +89,7 @@ function QuestionRow({ question, selected, onToggleSelect, activeDifficulty, act
           >
             {selected && <Check className="h-3.5 w-3.5" />}
           </button>
+          <QuestionAttemptBadge summary={attemptSummary} showNew={attemptsTracked} />
           <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 transition-colors ${
             activeTopic && question.exam === activeTopic
               ? 'bg-foreground text-background'
@@ -264,6 +269,7 @@ export default function Search() {
   const { syllabi } = useWikiSyllabus()
   const { isPremium } = useSubscription()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
+  const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
 
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
@@ -942,6 +948,8 @@ export default function Search() {
                     activeDifficulty={difficulty}
                     activeTopic={topic}
                     activeSubtopics={selectedSubtopics}
+                    attemptSummary={attemptsByQuestionId.get(q.id)}
+                    attemptsTracked={attemptsTracked}
                   />
                 ))}
               </div>

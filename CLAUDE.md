@@ -92,6 +92,13 @@ Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
 - `wikiParser.ts` / `wikiIndex.ts` / `wikiExtract.ts` — parse wiki pages, build search index, extract syllabus structure
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
+- `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
+  backed by `question_responses`) into the display state every question list shows: attempted or not,
+  and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,
+  which is the single chip used by the Search page, the quiz floating search, the concept question
+  browser and the concept detail modal — add it to any new surface that lists questions rather than
+  writing a new chip. Attempt history is server-side only, so signed-out viewers pass
+  `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
 - `readiness.ts` — exam-readiness score shown on the Dashboard
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator

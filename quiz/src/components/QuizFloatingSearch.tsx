@@ -35,6 +35,18 @@ function nextAttemptStatus(current: AttemptStatus): AttemptStatus {
   return ATTEMPT_STATUS_ORDER[(idx + 1) % ATTEMPT_STATUS_ORDER.length]
 }
 
+/**
+ * True on touch-first devices, where focusing the field raises the on-screen
+ * keyboard. There the opening tap only reveals the panel — see the input's
+ * onMouseDown — so the filters and results aren't immediately buried under the
+ * keyboard. Mouse pointers keep the usual focus-on-first-click behaviour.
+ */
+function isTouchPointer(): boolean {
+  return typeof window !== 'undefined'
+    && typeof window.matchMedia === 'function'
+    && window.matchMedia('(pointer: coarse)').matches
+}
+
 // Turns a raw wiki_link path ("Concepts/Geometric+Distribution", "/probability/set-theory")
 // into a human label, matching how QuestionSearchRow renders concept chips.
 function conceptLabel(link: string): string {
@@ -307,6 +319,16 @@ export function QuizFloatingSearch({ filter, filterPills }: QuizFloatingSearchPr
               value={query}
               onChange={e => setQuery(e.target.value)}
               onFocus={() => setActive(true)}
+              onMouseDown={e => {
+                // First tap on touch: open the panel only. Cancelling the
+                // mousedown's default action suppresses the focus it would
+                // otherwise move to the input, so no keyboard yet — the next
+                // tap lands with the panel already open and focuses normally.
+                if (!active && isTouchPointer()) {
+                  e.preventDefault()
+                  setActive(true)
+                }
+              }}
               placeholder="Search questions…"
               className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder:text-muted-foreground"
               aria-label="Search questions"

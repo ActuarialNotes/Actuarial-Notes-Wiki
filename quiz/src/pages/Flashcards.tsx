@@ -64,6 +64,7 @@ import { KeystoneIcon } from '@/components/KeystoneBadge'
 import {
   needsReviewOrder,
   nextIncompleteIndex,
+  shouldLockPageScroll,
   shuffled,
   summarizeSession,
   type StudyRating,
@@ -2825,14 +2826,32 @@ export default function Flashcards() {
   )
   const [globalFlip, setGlobalFlip] = useState(false)
 
+  // Lock the page behind the viewport-covering views — but only while one of
+  // them is actually on screen. Both unmount when the deck empties (the
+  // empty-deck branch below renders its own scrolling layout instead), so a
+  // clear/remove that takes the last card has to release the lock too.
+  const lockPageScroll = shouldLockPageScroll({
+    deckSize: cards.length,
+    galleryExpanded,
+    focusMode,
+  })
   useEffect(() => {
-    if (galleryExpanded || focusMode) {
+    if (lockPageScroll) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
     }
     return () => { document.body.style.overflow = '' }
-  }, [galleryExpanded, focusMode])
+  }, [lockPageScroll])
+
+  // …and drop the overlay state itself, so re-adding a card doesn't drop the
+  // user straight back into a gallery or focus mode they never reopened.
+  useEffect(() => {
+    if (cards.length === 0) {
+      setGalleryExpanded(false)
+      setFocusMode(false)
+    }
+  }, [cards.length])
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {

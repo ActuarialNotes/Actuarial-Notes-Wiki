@@ -4,6 +4,7 @@ import {
   needsReviewOrder,
   shuffled,
   nextIncompleteIndex,
+  shouldLockPageScroll,
   summarizeSession,
 } from './flashcardStudy'
 import type { MasteryState } from './mastery'
@@ -140,5 +141,23 @@ describe('summarizeSession', () => {
   it('treats zero and missing counts as first-try', () => {
     const summary = summarizeSession(['a', 'b'], { a: 0 })
     expect(summary.firstTry).toBe(2)
+  })
+})
+
+describe('shouldLockPageScroll', () => {
+  it('locks while the gallery overlay or focus mode covers a non-empty deck', () => {
+    expect(shouldLockPageScroll({ deckSize: 3, galleryExpanded: true, focusMode: false })).toBe(true)
+    expect(shouldLockPageScroll({ deckSize: 3, galleryExpanded: false, focusMode: true })).toBe(true)
+  })
+
+  it('does not lock the plain study view', () => {
+    expect(shouldLockPageScroll({ deckSize: 3, galleryExpanded: false, focusMode: false })).toBe(false)
+  })
+
+  it('releases the lock when the deck empties under an open overlay', () => {
+    // "Clear Completed Flashcards" takes the last card while the gallery is
+    // open: the overlay unmounts in favour of the inline empty-deck layout, so
+    // the page behind it has to scroll again.
+    expect(shouldLockPageScroll({ deckSize: 0, galleryExpanded: true, focusMode: true })).toBe(false)
   })
 })

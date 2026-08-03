@@ -528,7 +528,7 @@ function PackCard({
                     className="w-full"
                     onClick={e => { e.stopPropagation(); collectNext() }}
                   >
-                    Collect next card
+                    Add uncollected cards
                   </Button>
                 )}
                 <Button
@@ -557,21 +557,15 @@ function PackCard({
   )
 }
 
-// Packs tab — every available pack. Each exam is its own section: a full-width
-// "all concepts" pack followed by a two-column grid of its learning-objective
-// packs. Today's study plan and any user-saved packs bookend the sections. Only
-// one pack's action panel is open at a time (accordion).
-function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
-  const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
+// Today's study plan pack — pinned at the top of My Deck (always visible
+// there, not tucked inside Packs) plus wherever else it's rendered. Owns its
+// own expand state since it now lives outside the Packs accordion.
+function TodayStudyPlanPack({ onCardsAdded }: { onCardsAdded?: () => void }) {
+  const { syllabi } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, targetDates, examVariants } = useExamProgress()
-  const { savedPacks, deleteSavedPack } = useFlashcards()
+  const [expanded, setExpanded] = useState(false)
 
-  const [expandedKey, setExpandedKey] = useState<string | null>(null)
-  const toggleExpanded = (key: string) => setExpandedKey(k => (k === key ? null : key))
-
-  // concept name → mastery state (same best-record + decay logic as the main
-  // deck view) so each pack can show its mastery bar and breakdown.
   const packMasteryMap = useMemo(() => {
     const map = new Map<string, MasteryState>()
     const now = new Date()
@@ -617,6 +611,78 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     return studyPlan.status === 'review_mode' ? studyPlan.reviewConcepts : studyPlan.todaysConcepts
   }, [studyPlan])
 
+  if (!primarySyllabus) return null
+
+  const isLoading = planLoading || masteryLoading
+
+  return (
+    <PackCard
+      label="Today's Study Plan"
+      sublabel={primarySyllabus.examLabel}
+      concepts={studyPlanConcepts}
+      loading={isLoading}
+      expanded={expanded}
+      onToggleExpand={() => setExpanded(v => !v)}
+      masteryOf={masteryOf}
+      onCardsAdded={onCardsAdded}
+      emptyHint={
+        !isLoading && !studyPlan?.config?.targetReadyDate ? (
+          <p className="text-xs text-muted-foreground py-1">
+            Set up your study plan on the{' '}
+            <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
+            to see today's concepts.
+          </p>
+        ) : undefined
+      }
+    />
+  )
+}
+
+// Packs tab — every available pack. Each exam is its own section: a full-width
+// "all concepts" pack followed by a two-column grid of its learning-objective
+// packs. Any user-saved packs bookend the sections. Only one pack's action
+// panel is open at a time (accordion). Today's study plan no longer lives
+// here — it's pinned at the top of My Deck instead (see TodayStudyPlanPack).
+function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
+  const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
+  const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
+  const { progress: examProgress, examVariants } = useExamProgress()
+  const { savedPacks, deleteSavedPack } = useFlashcards()
+
+  const [expandedKey, setExpandedKey] = useState<string | null>(null)
+  const toggleExpanded = (key: string) => setExpandedKey(k => (k === key ? null : key))
+
+  // concept name → mastery state (same best-record + decay logic as the main
+  // deck view) so each pack can show its mastery bar and breakdown.
+  const packMasteryMap = useMemo(() => {
+    const map = new Map<string, MasteryState>()
+    const now = new Date()
+    const best = new Map<string, typeof masteryRecords[number]>()
+    for (const r of masteryRecords) {
+      const slug = r.concept_slug.toLowerCase()
+      const existing = best.get(slug)
+      if (!existing || (r.last_attempted_at ?? '') > (existing.last_attempted_at ?? '')) {
+        best.set(slug, r)
+      }
+    }
+    for (const [slug, r] of best) {
+      map.set(slug, decayIfStale(r, now).state)
+    }
+    return map
+  }, [masteryRecords])
+  const masteryOf = useCallback(
+    (name: string) => packMasteryMap.get(name.toLowerCase()) ?? 'new',
+    [packMasteryMap],
+  )
+
+  const inProgressSyllabi = useMemo(
+    () => syllabi.filter(s => {
+      const key = wikiExamIdToProgressKey(s.examId)
+      return examProgress[key] === 'in_progress' && matchesSelectedVariant(key, s.examId, examVariants[key])
+    }),
+    [syllabi, examProgress, examVariants],
+  )
+
   // One group per exam (fallbacks to P and FM when nothing is in progress),
   // each with the whole-exam concept list plus its learning-objective packs.
   const examGroups = useMemo(() => {
@@ -636,34 +702,11 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     }))
   }, [inProgressSyllabi, syllabi, examProgress])
 
-  const isLoading = planLoading || masteryLoading || syllabiLoading
-  const hasContent = !!primarySyllabus || examGroups.length > 0 || savedPacks.length > 0
+  const isLoading = masteryLoading || syllabiLoading
+  const hasContent = examGroups.length > 0 || savedPacks.length > 0
 
   return (
     <div className="space-y-6">
-      {/* Today's study plan */}
-      {primarySyllabus && (
-        <PackCard
-          label="Today's Study Plan"
-          sublabel={primarySyllabus.examLabel}
-          concepts={studyPlanConcepts}
-          loading={isLoading}
-          expanded={expandedKey === 'study-plan'}
-          onToggleExpand={() => toggleExpanded('study-plan')}
-          masteryOf={masteryOf}
-          onCardsAdded={onCardsAdded}
-          emptyHint={
-            !isLoading && !studyPlan?.config?.targetReadyDate ? (
-              <p className="text-xs text-muted-foreground py-1">
-                Set up your study plan on the{' '}
-                <Link to="/dashboard" className="text-primary hover:underline">Dashboard</Link>{' '}
-                to see today's concepts.
-              </p>
-            ) : undefined
-          }
-        />
-      )}
-
       {/* One section per exam — the whole-exam pack, then its learning
           objectives in a two-column grid. The heading carries the grouping so
           the cards themselves don't need a per-exam colour. */}
@@ -2182,6 +2225,10 @@ function GalleryPanel({
       >
         {tab === 'deck' && (
           <div className="space-y-4">
+            {/* Today's study plan — pinned here so it's always visible in My
+                Deck, not tucked away in a tab you have to remember to open. */}
+            {!focusMode && <TodayStudyPlanPack onCardsAdded={onCardsAdded} />}
+
             {/* Deck controls: count / manage / sort / clear-completed / add — hidden
                 in focus mode. In the overlay panel the row sticks to the top of the
                 scroll area (just under the tab bar) so "Clear Completed Flashcards"

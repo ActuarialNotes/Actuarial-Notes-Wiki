@@ -71,6 +71,24 @@ export function nextIncompleteIndex(completed: readonly boolean[], fromIndex: nu
   return -1
 }
 
+/**
+ * Whether the Flashcards page should lock the page behind it (`body` overflow
+ * hidden). The gallery overlay and focus mode each cover the viewport, so the
+ * page behind them must not scroll — but neither is rendered once the deck is
+ * empty: the page falls back to its own inline empty-deck layout, which is a
+ * normal scrolling page. Emptying the deck while either is open (a "Clear
+ * Completed Flashcards" sweep that takes the last card, "Remove all", or
+ * removing the last card by hand) must therefore release the lock, or the page
+ * is left unscrollable with nothing on screen to close.
+ */
+export function shouldLockPageScroll(opts: {
+  deckSize: number
+  galleryExpanded: boolean
+  focusMode: boolean
+}): boolean {
+  return opts.deckSize > 0 && (opts.galleryExpanded || opts.focusMode)
+}
+
 export interface StudySessionSummary {
   /** Cards in the deck when the session finished. */
   total: number

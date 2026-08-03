@@ -212,6 +212,64 @@ async function upsertMasteryFromResponses(
   return transitions
 }
 
+// Promotes a single concept from New → Level 1 after the fact, when the user
+// collects it from the PostQuizCollectGate (docs/flashcard-collection.md):
+// a concept answered correctly during the quiz that just finished, but still
+// New because it wasn't collected yet. Collecting it there should retroactively
+// bank that correct answer rather than requiring another quiz. Only promotes
+// if the concept is still New — if something else (another device, another
+// quiz) already advanced it, this is a no-op.
+export async function promoteMissedLevelUp(
+  userId: string | null,
+  examId: string,
+  conceptSlug: string,
+): Promise<MasteryTransition | null> {
+  const now = new Date()
+
+  if (!userId) {
+    appendTodayLevelUps([{ conceptSlug, from: 'new', to: 'level1', at: now.toISOString() }])
+    return { conceptSlug, from: 'new', to: 'level1' }
+  }
+
+  const { data: existing, error: selectError } = await supabase
+    .from('concept_mastery')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('exam_id', examId)
+    .eq('concept_slug', conceptSlug)
+    .maybeSingle()
+  if (selectError) throw new Error(`concept_mastery select: ${selectError.message}`)
+
+  const prev: ConceptMasteryRecord = existing
+    ? { ...(existing as ConceptMasteryRecord), state: sanitizeMasteryState((existing as ConceptMasteryRecord).state) }
+    : emptyRecord(userId, examId, conceptSlug)
+  if (prev.state !== 'new') return null
+
+  const promoted = { ...prev, state: 'level1' as const, updated_at: now.toISOString() }
+  mergeLocalMastery([promoted])
+
+  const { error: upsertError } = await supabase
+    .from('concept_mastery')
+    .upsert([promoted], { onConflict: 'user_id,exam_id,concept_slug' })
+  if (upsertError) throw new Error(`concept_mastery upsert: ${upsertError.message}`)
+
+  try {
+    const day = now.toISOString().slice(0, 10)
+    const { error: completionError } = await supabase
+      .from('daily_completions')
+      .upsert([{
+        user_id: userId, exam_id: examId, concept_slug: conceptSlug, day,
+        from_state: 'new', to_state: 'level1', at: now.toISOString(),
+      }], { onConflict: 'user_id,exam_id,concept_slug,day' })
+    if (completionError) console.warn('daily_completions upsert failed:', completionError.message)
+  } catch (err) {
+    console.warn('daily_completions upsert threw:', err)
+  }
+
+  appendTodayLevelUps([{ conceptSlug, from: 'new', to: 'level1', at: now.toISOString() }])
+  return { conceptSlug, from: 'new', to: 'level1' }
+}
+
 export interface MasteryTransition {
   conceptSlug: string
   from: MasteryState

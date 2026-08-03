@@ -33,6 +33,14 @@ describe('parseExamSyllabus resources handling', () => {
     expect(p.resources.length).toBeGreaterThanOrEqual(5)
   })
 
+  it('ignores non-answer callouts, so study-advice links are not resources', () => {
+    // Exam P-1 carries `[!info]`/`[!tip]` exam-day and study-approach callouts
+    // that link concepts for guidance. Those must not leak into the source list.
+    expect(p.resources.every(r => /\d{4}|SOA|CAS/.test(r.name))).toBe(true)
+    expect(p.resources.map(r => r.name)).not.toContain('Deductible')
+    expect(p.resources.map(r => r.name)).not.toContain('Bayes Theorem')
+  })
+
   it('parses FM resources from the [!answer] table too', () => {
     const fm = syllabus('Exam FM-2 (SOA).md', 'FM-2', 'Financial Mathematics')
     expect(fm.topics.map(t => t.name)).toContain('General Cash Flows, Portfolios, and Asset Liability Management')

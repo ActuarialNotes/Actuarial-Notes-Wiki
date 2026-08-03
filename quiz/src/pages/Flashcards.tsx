@@ -155,6 +155,10 @@ const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; f
 // the collect gate, so they get the faintest fill of all.
 const LOCKED_FILL_CLASS = 'bg-muted-foreground/15'
 
+// Cards sitting in the deck but not collected yet: a light green that reads as
+// "on its way" under the solid green collected fill.
+const IN_DECK_FILL_CLASS = 'bg-green-500/25'
+
 function MasteryPill({ state }: { state: MasteryState }) {
   const { label, className } = MASTERY_CONFIG[state]
   return (
@@ -389,6 +393,9 @@ function PackCard({
   const total = concepts.length
   const inDeck = concepts.filter(n => hasCard(n)).length
   const collected = concepts.filter(n => isCollected(n)).length
+  // Light-green portion of the progress bar: everything the player has claimed
+  // so far, whether it's still waiting in the deck or already collected.
+  const started = concepts.filter(n => hasCard(n) || isCollected(n)).length
   const notAdded = concepts.filter(n => !hasCard(n))
   const uncollectedNotAdded = concepts.filter(n => !isCollected(n) && !hasCard(n))
   const allAdded = total > 0 && notAdded.length === 0
@@ -421,7 +428,7 @@ function PackCard({
     { key: 'new',       label: 'New',       count: levels.new,       fillClass: MASTERY_CONFIG.new.fillClass },
     { key: 'locked',    label: 'Locked',    count: levels.locked,    fillClass: LOCKED_FILL_CLASS },
   ]
-  const collectedSummary = `${collected} of ${total} collected`
+  const collectedSummary = `${collected} of ${total} collected, ${inDeck} in deck`
 
   function handleAdd() {
     for (const name of notAdded) addCard({ kind: 'concept', name })
@@ -465,7 +472,8 @@ function PackCard({
           )}
         </div>
 
-        {/* Collection progress — one thick bar, no level breakdown */}
+        {/* Collection progress — one thick bar: light green for cards added to
+            the deck, solid green for the ones already collected. */}
         <div className="mt-2 flex items-center justify-between gap-2">
           <span className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
             <span className="font-medium text-foreground">{loading ? '…' : collected}</span> / {total} collected
@@ -473,14 +481,20 @@ function PackCard({
           <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`} />
         </div>
         <div
-          className="mt-2 h-3 rounded-full overflow-hidden bg-muted"
+          className="relative mt-2 h-3 rounded-full overflow-hidden bg-muted"
           role="img"
           aria-label={loading || total === 0 ? undefined : collectedSummary}
           title={loading || total === 0 ? undefined : collectedSummary}
         >
+          {!loading && total > 0 && started > 0 && (
+            <div
+              className={`absolute inset-y-0 left-0 rounded-full transition-[width] duration-300 ${IN_DECK_FILL_CLASS}`}
+              style={{ width: pct(started) }}
+            />
+          )}
           {!loading && total > 0 && collected > 0 && (
             <div
-              className="h-full rounded-full bg-green-600 dark:bg-green-500 transition-[width] duration-300"
+              className="absolute inset-y-0 left-0 rounded-full bg-green-600 dark:bg-green-500 transition-[width] duration-300"
               style={{ width: pct(collected) }}
             />
           )}
@@ -507,6 +521,7 @@ function PackCard({
                   </span>
                 ))}
                 <span className="inline-flex items-center gap-1.5">
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${IN_DECK_FILL_CLASS}`} />
                   In deck: <span className="tabular-nums">{inDeck}</span>
                 </span>
               </div>
@@ -3137,7 +3152,6 @@ export default function Flashcards() {
     return (
       <>
         <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-40 md:pb-32 space-y-6">
-          <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
           <GalleryPanel
             inline
             tab={galleryTab}
@@ -3305,14 +3319,8 @@ export default function Flashcards() {
         className={`container max-w-4xl mx-auto pb-44 md:pb-36${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
-        {/* Sticky header: page title — hidden when the gallery overlay is open */}
-        {!galleryExpanded && (
-          <div className={`sticky top-0 md:top-14 lg:top-0 z-10 bg-background px-4 sm:px-6 py-3${focusMode ? ' invisible' : ''}`}>
-            <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
-          </div>
-        )}
-
-        {/* Study area */}
+        {/* Study area — no page title here; the nav already says "Flashcards"
+            and the deck should get the full height. */}
         <div className={studyFocus ? 'pointer-events-auto' : undefined}>
           <FlashcardStudyArea
             ref={studyAreaRef}

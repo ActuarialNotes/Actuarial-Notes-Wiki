@@ -9,7 +9,9 @@ import { QuestionSearchRow, DifficultyDots } from '@/components/QuestionSearchRo
 import { MultiSelectDropdown } from '@/components/MultiSelectDropdown'
 import { useCollect } from '@/hooks/useCollect'
 import { useIsConceptUnlocked } from '@/hooks/useConceptUnlocked'
+import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
+import { tallyAttempts } from '@/lib/questionAttempts'
 
 // Matches a raw wiki_link value against a concept name. Handles two formats:
 //   "Concepts/Fund+Accumulation"  (hrefToEntryRef resolves the name directly)
@@ -47,6 +49,7 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
   // Paper: the panel sliding in.
   useSoundOnMount('open')
   const unlocked = useIsConceptUnlocked(conceptName)
+  const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
   const openCollect = useCollect(s => s.open)
   const closeCollect = useCollect(s => s.close)
   const [pendingStart, setPendingStart] = useState(false)
@@ -153,6 +156,13 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
     })
     return counts
   }, [questions, difficultyFilters])
+
+  // Roll-up of the visible set, so the header answers "how much of this concept
+  // have I actually done?" without reading every row.
+  const attemptTotals = useMemo(
+    () => tallyAttempts(visibleQuestions.map(q => attemptsByQuestionId.get(q.id))),
+    [visibleQuestions, attemptsByQuestionId],
+  )
 
   const allSelected = visibleQuestions.length > 0 && visibleQuestions.every(q => selectedIds.has(q.id))
   const someSelected = visibleQuestions.some(q => selectedIds.has(q.id)) && !allSelected
@@ -340,6 +350,18 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
                     })()}
                   </span>
                 </label>
+                {attemptTotals.attempted > 0 && (
+                  <span className="ml-auto text-xs text-muted-foreground tabular-nums shrink-0">
+                    {attemptTotals.attempted}/{attemptTotals.total} attempted ·{' '}
+                    <span className="text-green-600 dark:text-green-400">{attemptTotals.correct} correct</span>
+                    {attemptTotals.incorrect > 0 && (
+                      <>
+                        {' · '}
+                        <span className="text-red-600 dark:text-red-400">{attemptTotals.incorrect} incorrect</span>
+                      </>
+                    )}
+                  </span>
+                )}
               </div>
 
               {visibleQuestions.length === 0 && (
@@ -354,6 +376,8 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
                   query=""
                   selected={selectedIds.has(q.id)}
                   onToggleSelect={toggleQuestion}
+                  attemptSummary={attemptsByQuestionId.get(q.id)}
+                  attemptsTracked={attemptsTracked}
                 />
               ))}
               {filteredOutQuestions.length > 0 && (
@@ -370,6 +394,8 @@ export function ConceptQuestionsModal({ conceptName, onClose, onQuizStart }: Con
                       query=""
                       selected={false}
                       onToggleSelect={() => {}}
+                      attemptSummary={attemptsByQuestionId.get(q.id)}
+                      attemptsTracked={attemptsTracked}
                     />
                   ))}
                 </div>

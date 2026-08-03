@@ -317,18 +317,20 @@ export function ConceptPopup() {
           below share a max-width reading column to keep line lengths sane on
           desktop and stay aligned with each other. */}
       <div className={`flex items-center gap-2 h-14 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
-        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
           <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
           {/* Keystone marker — gold, and only for the load-bearing few. Sits
               first so the "this one matters" signal is read with the title. */}
           {!focusMode && current.kind === 'concept' && (
             <KeystoneBadge name={current.name} progress={keystoneStats} />
           )}
-          {/* Collect / status indicator — borderless so it reads as part of the
-              concept name, not a separate button. Locked → lock icon (opens the
-              collect flow); once collected → mastery status (New/1/2/3/F) which
-              opens the combined card + learning-progress modal, where it can
-              level up. */}
+          {/* Collect / status indicator, sitting just right of the concept name.
+              Spacing is the row's `gap-2` and nothing else — the locked state
+              draws a visible foil ring at the button's edge, so any negative
+              margin here puts that ring straight onto the last letter of the
+              name. Locked → lock icon (opens the collect flow); once collected
+              → mastery status (New/1/2/3/F) which opens the combined card +
+              learning-progress modal, where it can level up. */}
           {!focusMode && current.kind === 'concept' && (() => {
             const collected = collectedCards.some(c => c.name.toLowerCase() === current.name.toLowerCase())
             // A concept past New has necessarily been collected already (grandfathered
@@ -357,7 +359,7 @@ export function ConceptPopup() {
                 type="button"
                 data-tour="collect-card"
                 onClick={() => openCollect(current)}
-                className="lock-foil-ring inline-flex items-center justify-center h-8 w-8 -ml-1.5 rounded-md shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                className="lock-foil-ring inline-flex items-center justify-center h-8 w-8 rounded-md shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                 title="Collect this flashcard"
                 aria-label={`Collect ${current.name}`}
               >

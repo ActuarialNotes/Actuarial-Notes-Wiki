@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, Link, useSearchParams, useNavigationType } from 'react-router-dom'
-import { ChevronLeft, Loader2 } from 'lucide-react'
+import { ChevronLeft, Loader2, CalendarDays } from 'lucide-react'
 import { fetchWikiFile } from '@/lib/github'
 import { extractWikiLinksFromText, extractWikiLinkOccurrences } from '@/lib/wikiExtract'
 import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
@@ -18,6 +18,17 @@ const STATUS_TITLE: Record<ItemStatus, string> = {
   not_started: 'Not started — click to update exam status',
   in_progress: 'In Progress — click to update exam status',
   completed: 'Passed — click to update exam status',
+}
+
+// Compact exam-day label for the in-progress badge; the year is only worth the
+// space when the sitting isn't in the current year.
+function formatExamDate(iso: string): string {
+  const d = new Date(iso + 'T12:00:00')
+  if (Number.isNaN(d.getTime())) return ''
+  const sameYear = d.getFullYear() === new Date().getFullYear()
+  return d.toLocaleDateString(undefined, sameYear
+    ? { month: 'short', day: 'numeric' }
+    : { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 function ExamStatusIcon({ status, size = 'md' }: { status: ItemStatus; size?: 'sm' | 'md' }) {
@@ -50,19 +61,38 @@ function ExamStatusIcon({ status, size = 'md' }: { status: ItemStatus; size?: 's
 
 function ExamStatusBadge({ progressKey, size = 'md' }: { progressKey: string; size?: 'sm' | 'md' }) {
   const { user } = useAuth()
-  const { progress } = useExamProgress()
+  const { progress, targetDates } = useExamProgress()
   const currentStatus = ((progress[progressKey] as ItemStatus) ?? 'not_started')
   const openExams = useExamsPopout(s => s.openExams)
+
+  // An in-progress exam with a date set says *when* it is rather than showing a
+  // status icon the date already implies.
+  const examDate = currentStatus === 'in_progress' ? targetDates[progressKey] : null
+  const examDateLabel = examDate ? formatExamDate(examDate) : ''
+  const title = user
+    ? (examDateLabel ? `Exam ${examDateLabel} — click to update exam status` : STATUS_TITLE[currentStatus])
+    : 'Sign in to track progress'
 
   return (
     <button
       type="button"
       onClick={openExams}
-      title={user ? STATUS_TITLE[currentStatus] : 'Sign in to track progress'}
-      aria-label={user ? STATUS_TITLE[currentStatus] : 'Sign in to track progress'}
+      title={title}
+      aria-label={title}
       className="inline-flex items-center justify-center shrink-0 rounded-full transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring not-prose"
     >
-      <ExamStatusIcon status={currentStatus} size={size} />
+      {examDateLabel ? (
+        <span
+          className={`inline-flex items-center gap-1 rounded-full bg-amber-500/10 font-medium text-amber-600 dark:text-amber-500 ${
+            size === 'sm' ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs'
+          }`}
+        >
+          <CalendarDays className={size === 'sm' ? 'h-3 w-3' : 'h-3.5 w-3.5'} />
+          {examDateLabel}
+        </span>
+      ) : (
+        <ExamStatusIcon status={currentStatus} size={size} />
+      )}
     </button>
   )
 }

@@ -1,15 +1,20 @@
 // Whether a concept in today's study plan is already done.
 //
-// Two surfaces ask this question and must answer it identically: the Dashboard's
-// "Today" card checklist and the study-guide header's "Today's Study Plan" list
-// (`components/wiki/WikiFloatingSearch.tsx`). The rule lives here so a concept
-// can't read as done on one and pending on the other.
+// Every surface that asks this question must answer it identically: the
+// Dashboard's "Today" card checklist, the study-guide header's "Today's Study
+// Plan" list (`components/wiki/WikiFloatingSearch.tsx`), *and* the sizing of the
+// quiz those surfaces launch — the "questions left today" badge
+// (`lib/todayPlanCount.ts`) and the plan quiz built in `pages/Landing.tsx`.
+// The rule lives here so a concept can't read as ticked off on the checklist yet
+// still be asked for by the badge.
 //
 // See docs/concept-learning-progression.md for the mastery ladder itself.
 
-import type { MasteryState } from '@/lib/mastery'
-import type { ConceptAssignment } from '@/lib/studyPlan'
+import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
+import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
+import type { ConceptAssignment, StudyPlan } from '@/lib/studyPlan'
 import type { DailyLevelUp } from '@/lib/dailyProgressStore'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
 /** The level a concept advances to when today's study of it succeeds. */
 export const NEXT_STATE: Partial<Record<MasteryState, MasteryState>> = {
@@ -79,6 +84,88 @@ export function isConceptDoneToday(
   const target = targets.get(key) ?? 'level1'
   const current = masteryStateByName.get(key) ?? 'new'
   return STATE_ORDER[current] >= STATE_ORDER[target]
+}
+
+/** The concepts a plan is asking for today (review mode swaps in its own list). */
+export function planConceptsToday(plan: StudyPlan | null): string[] {
+  if (!plan) return []
+  return plan.status === 'review_mode' ? (plan.reviewConcepts ?? []) : plan.todaysConcepts
+}
+
+/**
+ * Decay-adjusted mastery for every concept in a syllabus, keyed by lower-cased
+ * display name — the map `buildTodayTargets`/`isConceptDoneToday` read.
+ *
+ * Goes through `resolveConceptState` rather than the raw `concept_slug` so an
+ * aliased syllabus link (`[[Bond Price|Price]]`) still finds its mastery row.
+ */
+export function masteryStatesForSyllabus(
+  syllabus: WikiExamSyllabus | null,
+  masteryRecords: ConceptMasteryRecord[],
+  examProgressKey: string | null,
+  now: Date = new Date(),
+): Map<string, MasteryState> {
+  const map = new Map<string, MasteryState>()
+  if (!syllabus) return map
+  const records = examProgressKey
+    ? masteryRecords.filter(r => r.exam_id === examProgressKey)
+    : masteryRecords
+  const lookup = buildMasteryLookup(records)
+  for (const topic of syllabus.topics) {
+    for (const c of topic.concepts) {
+      map.set(c.name.toLowerCase(), resolveConceptState(lookup, c, now))
+    }
+  }
+  return map
+}
+
+export interface PlanDoneInput {
+  plan: StudyPlan | null
+  syllabus: WikiExamSyllabus | null
+  masteryRecords: ConceptMasteryRecord[]
+  /** exam_progress key (`P`, `FM`, …) — scopes the mastery rows to this exam. */
+  examProgressKey: string | null
+  /** Today's level-ups: device-local merged with `daily_completions`. */
+  levelUps: DailyLevelUp[]
+  /** Today's date, `YYYY-MM-DD` local (`todayISO()`). */
+  today: string
+  now?: Date
+}
+
+/**
+ * Which of today's plan concepts are already finished, as lower-cased names.
+ *
+ * This is the set the quiz sizing subtracts from — the "questions left today"
+ * badge and the plan quiz itself — and it is deliberately the *same* rule the
+ * checklist ticks with (`isConceptDoneToday`): advanced today on any device, or
+ * already sitting at today's target. Sizing off today's level-ups alone
+ * over-counts, because a concept that needs no work today (a Level 3
+ * maintenance refresher is already at its target) never produces a level-up and
+ * so would be asked for all day.
+ */
+export function planDoneConceptSlugs({
+  plan,
+  syllabus,
+  masteryRecords,
+  examProgressKey,
+  levelUps,
+  today,
+  now,
+}: PlanDoneInput): Set<string> {
+  const concepts = planConceptsToday(plan)
+  if (concepts.length === 0) return new Set()
+  const masteryStateByName = masteryStatesForSyllabus(syllabus, masteryRecords, examProgressKey, now)
+  const targets = buildTodayTargets(plan?.assignments ?? [], masteryStateByName, today)
+  // Level-ups read back from `daily_completions` know which exam they were
+  // credited to; device-local ones don't and apply to whichever plan asks.
+  const examLevelUps = examProgressKey
+    ? levelUps.filter(lu => !lu.examId || lu.examId === examProgressKey)
+    : levelUps
+  const done = new Set<string>()
+  for (const name of concepts) {
+    if (isConceptDoneToday(name, targets, masteryStateByName, examLevelUps)) done.add(name.toLowerCase())
+  }
+  return done
 }
 
 export interface DayPlanPctInput {
@@ -161,18 +248,28 @@ export function buildDayPlanPct({
  * Merge device-local level-ups with the cross-device signal from Supabase,
  * de-duplicating on concept+destination state so the same advance recorded in
  * both places is counted once. Order is preserved, local first.
+ *
+ * When both sources have the same advance, the server row's `examId` is carried
+ * onto the kept entry — the local record doesn't know which exam it belonged to,
+ * and a tagged entry lets a per-exam reader (`planDoneConceptSlugs`) keep one
+ * exam's completions out of another's plan.
  */
 export function mergeLevelUps(
   local: DailyLevelUp[],
   remote: DailyLevelUp[],
 ): DailyLevelUp[] {
   const merged: DailyLevelUp[] = []
-  const seen = new Set<string>()
+  const byKey = new Map<string, DailyLevelUp>()
   for (const lu of [...local, ...remote]) {
     const key = `${lu.conceptSlug.toLowerCase()}::${lu.to}`
-    if (seen.has(key)) continue
-    seen.add(key)
-    merged.push(lu)
+    const existing = byKey.get(key)
+    if (existing) {
+      if (!existing.examId && lu.examId) existing.examId = lu.examId
+      continue
+    }
+    const entry = { ...lu }
+    byKey.set(key, entry)
+    merged.push(entry)
   }
   return merged
 }

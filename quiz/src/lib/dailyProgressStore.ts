@@ -8,6 +8,10 @@ export interface DailyLevelUp {
   from: MasteryState
   to: MasteryState
   at: string  // ISO timestamp
+  /** exam_progress key the advance was credited to. Set on rows read back from
+   *  `daily_completions`; absent on the device-local records written here, which
+   *  aren't exam-scoped and so apply to whichever plan asks. */
+  examId?: string
 }
 
 export const LEVELUP_EVENT = 'actuarial_levelup'

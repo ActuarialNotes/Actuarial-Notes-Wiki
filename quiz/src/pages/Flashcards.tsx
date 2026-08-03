@@ -3144,7 +3144,6 @@ export default function Flashcards() {
     return (
       <>
         <div className="container mx-auto px-4 sm:px-6 py-6 min-h-[calc(100vh-9rem)] pb-40 md:pb-32 space-y-6">
-          <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
           <GalleryPanel
             inline
             tab={galleryTab}
@@ -3312,14 +3311,8 @@ export default function Flashcards() {
         className={`container max-w-4xl mx-auto pb-44 md:pb-36${studyFocus ? ' relative z-[56] pointer-events-none' : ''}`}
         style={popupOpen ? { paddingBottom: 'calc(var(--concept-split-height, 50vh) + 1.5rem)' } : undefined}
       >
-        {/* Sticky header: page title — hidden when the gallery overlay is open */}
-        {!galleryExpanded && (
-          <div className={`sticky top-0 md:top-14 lg:top-0 z-10 bg-background px-4 sm:px-6 py-3${focusMode ? ' invisible' : ''}`}>
-            <h1 className="text-2xl font-bold tracking-tight">Flashcards</h1>
-          </div>
-        )}
-
-        {/* Study area */}
+        {/* Study area — no page title here; the nav already says "Flashcards"
+            and the deck should get the full height. */}
         <div className={studyFocus ? 'pointer-events-auto' : undefined}>
           <FlashcardStudyArea
             ref={studyAreaRef}

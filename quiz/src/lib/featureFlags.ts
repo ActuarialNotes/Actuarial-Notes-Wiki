@@ -145,9 +145,11 @@ export const DAILY_PLAN_EMAIL_ENABLED: boolean = true
  * lib/recentMistakes.ts). When ON, a compact card appears on the Dashboard
  * (signed-in only) naming the concept behind the latest miss, with an orange
  * count of what's still outstanding and how many misses have since been
- * corrected; tapping it opens the regular concept popup (ConceptDetailModal) on
- * its Questions tab, scoped to the concepts behind those misses and paged with
- * the popup's own Previous/Next. It reads only data the Dashboard already loads
+ * corrected; tapping it opens MistakesReviewModal — the missed questions
+ * themselves, one at a time, answered in place (the quiz's own QuestionCard)
+ * and paged with Previous/Next. Answers are banked on close through
+ * recordReviewAnswers, so a question corrected there drops off the list. It
+ * reads only data the Dashboard already loads
  * plus the learner's question-response history — no new heavy fetch. The pure engine and its tests
  * stay compiled either way; the `: boolean` annotation keeps both branches of
  * every gate type-checked (see the flags above). Gate it off to dark-launch or

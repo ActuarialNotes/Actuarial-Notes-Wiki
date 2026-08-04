@@ -781,7 +781,6 @@ export default function Dashboard() {
             <FixMistakesButton
               masteryRecords={activeExamRecords}
               examTopic={activeSyllabus.examTopic}
-              syllabus={activeSyllabus}
               compactSlot={mistakesSlotEl}
             />
           )}

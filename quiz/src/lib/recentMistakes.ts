@@ -101,32 +101,6 @@ function conceptScore(stat: ConceptStat | undefined, state: MasteryState): numbe
   return (incorrect + PRIOR_STRENGTH * weakness) / (attempts + PRIOR_STRENGTH)
 }
 
-/** A concept to fix, in the shape the concept browser navigates by. */
-export interface MistakeConcept {
-  name: string
-  state: MasteryState
-}
-
-/**
- * The concepts behind the mistakes, most-recent first — one per miss (its
- * top-ranked culprit), de-duplicated so a concept that sank several questions
- * is browsed once. This is what the dashboard card names on its face and what
- * the concept browser pages through with Previous/Next.
- */
-export function mistakeConcepts(mistakes: RecentMistake[]): MistakeConcept[] {
-  const seen = new Set<string>()
-  const concepts: MistakeConcept[] = []
-  for (const mistake of mistakes) {
-    const top = mistake.problemConcepts[0]
-    if (!top) continue
-    const key = top.slug.toLowerCase()
-    if (seen.has(key)) continue
-    seen.add(key)
-    concepts.push({ name: top.name, state: top.state })
-  }
-  return concepts
-}
-
 /**
  * How many questions the learner has *corrected*: previously missed, and whose
  * latest attempt is now correct. The counterpart to buildRecentMistakes — every

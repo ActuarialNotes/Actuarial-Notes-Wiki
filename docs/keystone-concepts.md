@@ -41,10 +41,13 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
   dead link.
 - **One exam per concept.** The lookup index is keyed globally by concept name, so claiming the
   same concept for two exams would silently collapse to one entry.
-- **`why` is one short line about consequences**, addressed to a student — what breaks, or what
-  becomes easy, because of this concept. Keep it under ~95 characters: the explainer shows this
-  line and nothing else, so a second sentence just pushes the concept off the screen. It is not
-  a definition; the concept page already has one, and the test rejects a `why` that opens by
+- **`why` is one line in two beats**, addressed to a student: a concrete plain-language gloss of
+  what the concept actually says or does, then what breaks (or becomes easy) because of it. The
+  gloss is what keeps the line from reading as a riddle — a student meeting Exam 5 for the first
+  time learns nothing from "the retrospective mirror of ratemaking", but "estimating what is
+  still owed on claims already incurred" lands. Keep it under ~130 characters: the explainer
+  shows this line and nothing else, so a second sentence just pushes the concept off the screen.
+  It is still not the concept page's full definition, and the test rejects a `why` that opens by
   restating the concept's own name.
 
 ## The read side

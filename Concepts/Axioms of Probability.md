@@ -9,6 +9,8 @@ The **Axioms of Probability** (also called **Kolmogorov's axioms**) are three fo
 | **2. Non-negativity** | $P(E) \geq 0$ | No negative odds. You cannot have a less-than-zero chance of an event occurring. |
 | **3. Additivity** | $P\!\left(\bigcup_{i=1}^{\infty} E_i\right) = \sum_{i=1}^{\infty} P(E_i)$ | Add if no overlap. If events are [[Concepts/Mutually Exclusive Events]], the probability of "one or the other" is the sum of their individual probabilities. |
 
+![[Media/Figures/Axioms_of_Probability.svg|540]]
+
 > [!example]- Axioms satisfied? {Example}
 > A probability model assigns $P(A) = 0.3$, $P(B) = 0.5$, and $P(A \cup B) = 0.9$ where $A$ and $B$ are mutually exclusive. Does this violate the axioms of probability?
 > 

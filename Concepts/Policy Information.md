@@ -5,6 +5,8 @@
 
 > $$\text{Payment} = g(X;\ d,\ u,\ \alpha)$$
 
+![[Media/Figures/Policy_Information.svg|540]]
+
 > [!example]- Identifying Policy Provisions from a Contract {Example}
 > A health policy states: the insured pays the first \$500 of any claim, the insurer covers 80% of amounts above \$500, and the insurer's maximum payment is \$10{,}000. Identify each policy provision.
 >

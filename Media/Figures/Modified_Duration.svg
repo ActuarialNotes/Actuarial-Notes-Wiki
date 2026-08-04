@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 296" width="560" height="296" role="img">
+  <title>The tangent line duration provides at the current yield</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="294.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Modified duration is the slope of the price–yield curve</text>
+  <polyline points="82.25,76.78 83.6,77.76 84.96,78.73 86.31,79.7 87.67,80.66 89.02,81.61 90.38,82.57 91.73,83.52 93.08,84.46 94.44,85.4 95.79,86.34 97.15,87.27 98.5,88.2 99.85,89.13 101.21,90.05 102.56,90.96 103.92,91.88 105.27,92.78 106.62,93.69 107.98,94.59 109.33,95.49 110.69,96.38 112.04,97.27 113.4,98.15 114.75,99.03 116.1,99.91 117.46,100.78 118.81,101.65 120.17,102.52 121.52,103.38 122.88,104.24 124.23,105.09 125.58,105.95 126.94,106.79 128.29,107.64 129.65,108.48 131,109.31 132.35,110.15 133.71,110.97 135.06,111.8 136.42,112.62 137.77,113.44 139.12,114.25 140.48,115.07 141.83,115.87 143.19,116.68 144.54,117.48 145.9,118.28 147.25,119.07 148.6,119.86 149.96,120.65 151.31,121.43 152.67,122.21 154.02,122.99 155.38,123.76 156.73,124.53 158.08,125.3 159.44,126.07 160.79,126.83 162.15,127.58 163.5,128.34 164.85,129.09 166.21,129.84 167.56,130.58 168.92,131.32 170.27,132.06 171.62,132.8 172.98,133.53 174.33,134.26 175.69,134.98 177.04,135.71 178.4,136.43 179.75,137.14 181.1,137.86 182.46,138.57 183.81,139.27 185.17,139.98 186.52,140.68 187.87,141.38 189.23,142.08 190.58,142.77 191.94,143.46 193.29,144.14 194.65,144.83 196,145.51 197.35,146.19 198.71,146.86 200.06,147.54 201.42,148.21 202.77,148.87 204.12,149.54 205.48,150.2 206.83,150.86 208.19,151.51 209.54,152.17 210.9,152.82 212.25,153.46 213.6,154.11 214.96,154.75 216.31,155.39 217.67,156.03 219.02,156.66 220.38,157.29 221.73,157.92 223.08,158.55 224.44,159.17 225.79,159.79 227.15,160.41 228.5,161.03 229.85,161.64 231.21,162.25 232.56,162.86 233.92,163.47 235.27,164.07 236.62,164.67 237.98,165.27 239.33,165.86 240.69,166.46 242.04,167.05 243.4,167.64 244.75,168.22 246.1,168.81 247.46,169.39 248.81,169.97 250.17,170.54 251.52,171.12 252.87,171.69 254.23,172.26 255.58,172.83 256.94,173.39 258.29,173.95 259.65,174.51 261,175.07 262.35,175.63 263.71,176.18 265.06,176.73 266.42,177.28 267.77,177.83 269.12,178.37 270.48,178.91 271.83,179.45 273.19,179.99 274.54,180.52 275.9,181.06 277.25,181.59 278.6,182.12 279.96,182.64 281.31,183.17 282.67,183.69 284.02,184.21 285.38,184.73 286.73,185.25 288.08,185.76 289.44,186.27 290.79,186.78 292.15,187.29 293.5,187.8 294.85,188.3 296.21,188.8 297.56,189.3 298.92,189.8 300.27,190.29 301.62,190.79 302.98,191.28 304.33,191.77 305.69,192.26 307.04,192.74 308.4,193.23 309.75,193.71 311.1,194.19 312.46,194.67 313.81,195.14 315.17,195.62 316.52,196.09 317.88,196.56 319.23,197.03 320.58,197.49 321.94,197.96 323.29,198.42 324.65,198.88 326,199.34" class="curve" stroke="#3b82f6" stroke-width="2"/>
+  <polyline points="82.25,89.31 326,209.77" class="curve" stroke="#d97706" stroke-width="1.6"/>
+  <circle cx="201" cy="148" r="3.6" fill="#d97706"/>
+  <text x="241" y="136" text-anchor="middle" class="sm">current yield</text>
+  <line x1="76" y1="208" x2="336" y2="208" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="76" y1="208" x2="76" y2="58" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="107.25" y1="208" x2="107.25" y2="212" class="tick"/>
+  <text x="107.25" y="224" text-anchor="middle" class="sm dim">2%</text>
+  <line x1="201" y1="208" x2="201" y2="212" class="tick"/>
+  <text x="201" y="224" text-anchor="middle" class="sm dim">5%</text>
+  <line x1="294.75" y1="208" x2="294.75" y2="212" class="tick"/>
+  <text x="294.75" y="224" text-anchor="middle" class="sm dim">8%</text>
+  <line x1="72" y1="188" x2="76" y2="188" class="tick"/>
+  <text x="68" y="191.6" text-anchor="end" class="sm dim">800</text>
+  <line x1="72" y1="148" x2="76" y2="148" class="tick"/>
+  <text x="68" y="151.6" text-anchor="end" class="sm dim">1,000</text>
+  <line x1="72" y1="108" x2="76" y2="108" class="tick"/>
+  <text x="68" y="111.6" text-anchor="end" class="sm dim">1,200</text>
+  <text x="326" y="240" text-anchor="end" class="sm dim">yield j</text>
+  <text x="72" y="54" text-anchor="start" class="sm dim">price</text>
+  <text x="428" y="100" text-anchor="middle" class="sm bold">D_Mod = −(1/P) dP/dj</text>
+  <text x="428" y="120" text-anchor="middle" class="sm dim">= D_Mac/(1+j) = 7.72</text>
+  <line x1="340" y1="142" x2="340" y2="174" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="154" text-anchor="start" class="sm bold">ΔP ≈ −D_Mod · P · Δj</text>
+  <text x="350" y="170" text-anchor="start" class="sm dim">the tangent, not the curve</text>
+  <line x1="340" y1="188" x2="340" y2="220" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="200" text-anchor="start" class="sm bold">D_Mod &lt; D_Mac</text>
+  <text x="350" y="216" text-anchor="start" class="sm dim">since 1 + j &gt; 1</text>
+  <line x1="340" y1="234" x2="340" y2="266" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="246" text-anchor="start" class="sm bold">Add convexity</text>
+  <text x="350" y="262" text-anchor="start" class="sm dim">to correct the curvature</text>
+  <text x="280" y="286" text-anchor="middle" class="sm dim">The tangent always sits below the price curve — that is convexity</text>
+</svg>

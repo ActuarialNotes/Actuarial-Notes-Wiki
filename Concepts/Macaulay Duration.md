@@ -8,6 +8,8 @@
 - The relationship to [[Modified Duration]] is $D_{Mod} = D_{Mac}/(1+j)$
 - For a [[Perpetuity]], $D_{Mac} = (1+j)/j = 1/d$ years
 
+![[Media/Figures/Macaulay_Duration.svg|540]]
+
 > [!example]- Macaulay Duration of a Bond {Example}
 > A 2-year bond pays $100$ per year plus $1000$ at maturity, priced at $j = 5\%$. Find $D_{Mac}$.
 >

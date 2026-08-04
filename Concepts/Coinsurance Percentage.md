@@ -8,6 +8,8 @@ A **Coinsurance Percentage** ($\alpha$) is the fraction of the covered loss (aft
 - When $\alpha = 1$ the insurer covers 100% of the excess; lower values mean the insured co-pays a portion
 - It scales the expected payment by $\alpha$ and the variance by $\alpha^2$
 
+![[Media/Figures/Coinsurance_Percentage.svg|540]]
+
 > [!example]- Expected Payment with Deductible and Coinsurance {Example}
 > Ground-up losses $X$ have $E[(X-500)_+] = 1{,}200$ and $\text{Var}((X-500)_+) = 4{,}000{,}000$. The insurer applies coinsurance $\alpha = 0.80$. Find $E[Y]$ and $\text{Var}(Y)$.
 >

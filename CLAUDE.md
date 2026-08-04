@@ -92,6 +92,10 @@ before touching that area**:
   static `Media/*_pdf.svg` / `*_pmf.svg` embeds on the distribution concept pages: parameter
   sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
   `lib/distribution*.ts` or adding a distribution.
+- `docs/concept-figures.md` — the **generated concept figures**: one SVG per Exam P / Exam FM
+  concept in `Media/Figures/`, drawn by `scripts/generate_concept_figures.py` on top of the
+  dependency-free `scripts/figure_kit.py`. Read before editing a figure — they are generated,
+  so a hand edit to an SVG is lost on the next run.
 
 Other important `lib/` modules:
 - `parser.ts` — parses question markdown (frontmatter + body) into `Question` objects
@@ -249,6 +253,10 @@ compile — don't "clean up" the flagged code as dead.
   `wiki_link` arrays and regenerates `Concepts Without Review Questions.md`,
   `tag_missing_concepts.py` backfills concept tags. Run these when doing bulk content
   cleanup, not for one-off edits.
+- `generate_concept_figures.py` (+ `figure_kit.py`, `figure_registry.py`,
+  `figures_exam_{p,fm}.py`) draws the per-concept SVGs in `Media/Figures/` and inserts their
+  embeds. The figures are **generated** — edit the builder, not the SVG. See
+  `docs/concept-figures.md`.
 
 ## Running things
 

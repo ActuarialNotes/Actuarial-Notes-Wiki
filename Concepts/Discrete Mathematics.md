@@ -4,6 +4,8 @@
 
 > $$|\mathcal{P}(S)| = 2^{|S|}$$
 
+![[Media/Figures/Discrete_Mathematics.svg|520]]
+
 > [!example]- Counting Subsets of a Risk Portfolio {Example}
 > An insurer has 4 distinct risk categories: Fire, Flood, Theft, and Liability. How many distinct subsets of these risks could be included in a policy?
 >

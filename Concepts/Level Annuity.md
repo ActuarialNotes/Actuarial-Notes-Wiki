@@ -6,6 +6,8 @@ A **level annuity** is an annuity with equal, constant payments at regular inter
 - The relationship between the two: $\ddot{a}_{\overline{n}|} = (1+i) \cdot a_{\overline{n}|}$.
 - Level annuities are used to model loan repayments, regular deposits, and structured insurance payments.
 
+![[Media/Figures/Level_Annuity.svg|540]]
+
 > [!example]- Annuity-Immediate vs. Annuity-Due {Example}
 > Find the PV of a 4-year level annuity paying $1{,}000$/year at $i=5\%$, both immediate and due.
 >

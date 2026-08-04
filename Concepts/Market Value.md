@@ -8,6 +8,8 @@ The **market value** of a bond (or any financial asset) is its current price in 
 - When market yield exceeds the coupon rate, market value is below face (discount bond).
 - When market yield is below the coupon rate, market value exceeds face (premium bond).
 
+![[Media/Figures/Market_Value.svg|540]]
+
 > [!example]- Market Value After Rate Change {Example}
 > A 10-year $1{,}000$ bond with 5% annual coupons was originally priced to yield 5%. Two years later, market yields rise to 6%. Find the new market value.
 >

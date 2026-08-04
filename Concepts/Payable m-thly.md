@@ -5,6 +5,8 @@ An annuity **payable $m$-thly** makes $m$ payments per year of $1/m$ each, total
 - Here $i^{(m)}$ is the [[Nominal Interest Rate Convertible m-thly]] and $v = 1/(1+i)$.
 - Payable $m$-thly annuities arise when cash flows occur monthly, quarterly, or semi-annually rather than annually.
 
+![[Media/Figures/Payable_m-thly.svg|540]]
+
 > [!example]- Monthly Annuity Present Value {Example}
 > A 10-year annuity pays $100$ per month (end of month). Find the present value at $i = 6\%$ effective annual.
 >

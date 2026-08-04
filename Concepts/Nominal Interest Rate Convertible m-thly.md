@@ -10,6 +10,8 @@ The **nominal interest rate convertible $m$-thly**, denoted $i^{(m)}$, is an ann
 - As $m \to \infty$, $i^{(m)} \to \delta$ (the [[Force of Interest]]).
 - See also: [[Convertible m-thly]] and [[Nominal Discount Rate Convertible m-thly]].
 
+![[Media/Figures/Nominal_Interest_Rate_Convertible_m-thly.svg|540]]
+
 > [!example]- Converting Annual to Quarterly Rate {Example}
 > The effective annual rate is $8\%$. Find the nominal rate convertible quarterly $i^{(4)}$.
 >

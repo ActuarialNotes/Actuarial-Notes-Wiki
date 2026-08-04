@@ -7,6 +7,8 @@ The **Payment Random Variable** ($Y$) is the amount the insurer actually pays on
 - $Y$ has a mixed distribution: a probability mass at $Y = 0$ (when $X \leq d$) and a continuous or discrete component for positive payments
 - Its mean and variance differ from those of $X$ due to the truncation and censoring imposed by the policy
 
+![[Media/Figures/Payment_Random_Variable.svg|540]]
+
 > [!example]- Full Payment Function with Three Provisions {Example}
 > A policy has deductible $d = 200$, coinsurance $\alpha = 0.75$, and benefit limit $u = 900$. If $X = 1500$, find the payment $Y$.
 >

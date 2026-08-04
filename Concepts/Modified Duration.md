@@ -12,6 +12,8 @@
 
 > $$\Delta P \approx -D_{Mod} \cdot P \cdot \Delta j + \frac{1}{2} \cdot \text{Convexity} \cdot P \cdot (\Delta j)^2$$
 
+![[Media/Figures/Modified_Duration.svg|540]]
+
 > [!example]- Converting Between Duration Types {Example}
 > A bond has Macaulay duration of 7.5 years at a yield of 6% effective annual. Find the modified duration and the approximate price drop if yields rise to 6.5%.
 >

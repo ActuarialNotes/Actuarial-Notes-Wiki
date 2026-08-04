@@ -6,6 +6,8 @@
 - Under these conditions, for any interest rate change $i \to i + \Delta$, the [[Portfolio]] surplus remains non-negative
 - Full immunization generally requires more asset cash flows than [[Redington Immunization]] and is more restrictive
 
+![[Media/Figures/Full_Immunization.svg|540]]
+
 > [!example]- Full Immunization Setup {Example}
 > A single liability of $L$ is due at time $T$. Show how to fully immunize with two assets.
 >

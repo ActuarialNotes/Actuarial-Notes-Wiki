@@ -7,6 +7,8 @@
 - A common Exam FM scenario: amounts withdrawn from one fund are immediately deposited into and accumulate within a **second** fund earning a different rate — the accumulated value in the second fund uses its own rate, even though the deposits originated from the first fund's activity.
 - Directly related to [[Accumulated Value]] and [[Future Value]].
 
+![[Media/Figures/Fund_Accumulation.svg|540]]
+
 > [!example]- Fund with an Initial Deposit and Level Additions {Example}
 > \$$2{,}000$ is deposited into a fund today, and an additional \$$300$ is deposited at the end of each year for 6 years. The fund earns an annual effective interest rate of $5\%$. Find the accumulated value of the fund at the end of year 6.
 >

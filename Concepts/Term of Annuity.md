@@ -9,6 +9,8 @@ The **term of annuity** is the duration over which an annuity makes payments —
 
 - A [[Perpetuity]] is an annuity with an infinite term.
 
+![[Media/Figures/Term_of_Annuity.svg|540]]
+
 > [!example]- Solving for Unknown Term {Example}
 > A $10{,}000$ loan at $6\%$ is repaid with level annual payments of $1{,}500$. How many full payments are needed?
 >

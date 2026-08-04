@@ -12,6 +12,8 @@
 - The $(1+j)^2$ factor in the denominator of $v^{t+2}$ distinguishes this from the Macaulay duration formula
 - Higher convexity is beneficial: for the same duration, a more convex bond rises more when yields fall and falls less when yields rise
 
+![[Media/Figures/Convexity.svg|540]]
+
 > [!example]- Convexity Price Approximation {Example}
 > A bond has modified duration $D_{Mod} = 7.5$ years and convexity $= 68$. If yields rise by $0.5\%$ ($\Delta j = 0.005$), estimate the percentage price change.
 >

@@ -7,6 +7,8 @@ The **1st-order linear approximation** (or first-order Taylor approximation) est
 - This approximation is accurate for small $\Delta j$ but underestimates price increases and overestimates price decreases for large shifts, because the price-yield relationship is convex
 - The [[Convexity]] term corrects for this curvature
 
+![[Media/Figures/1st-Order_Linear_Approximation.svg|540]]
+
 > [!example]- Estimating Price Change {Example}
 > A bond has price \$$950$, modified duration $8.5$ years. Yields fall by 25 basis points ($\Delta j = -0.0025$).
 >

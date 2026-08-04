@@ -114,6 +114,7 @@ def main() -> int:
             print(f"  ! no page for {spec.concept!r}", file=sys.stderr)
             continue
         fig = spec.build()
+        fig.alt = spec.alt
         fig.save(OUT_DIR, spec.slug)
         written += 1
         if args.embed:

@@ -2176,3 +2176,479 @@ def reinvestment_of_coupons() -> Fig:
         f.text(350, yy + 29, sub, cls="sm dim", anchor="start")
     f.note(W / 2, 284, "This gap is reinvestment risk — the reason duration matters")
     return f
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 5. Duration, immunization and the term structure
+# ═══════════════════════════════════════════════════════════════════════════
+
+def _dur_cashflows(n=BOND_N, F=BOND_F, r=BOND_R, C=BOND_C):
+    return [(t, F * r + (C if t == n else 0.0)) for t in range(1, n + 1)]
+
+
+def _macaulay(j, flows=None):
+    flows = flows or _dur_cashflows()
+    pv = [(t, c * (1 + j) ** -t) for t, c in flows]
+    total = sum(v for _, v in pv)
+    return sum(t * v for t, v in pv) / total, total
+
+
+@figure("Duration", "Duration as the balance point of the discounted cash flows",
+        width=540)
+def duration() -> Fig:
+    f = Fig(W, 296)
+    f.title("Duration is the balance point of a bond's present values")
+
+    j = 0.05
+    flows = _dur_cashflows()
+    pv = [(t, c * (1 + j) ** -t) for t, c in flows]
+    dmac, price = _macaulay(j)
+    a = axes(f, 0, BOND_N + 0.8, 0, 700, left=68, right=234, top=68, bottom=96)
+    a.bars(pv, colour=BLUE, opacity="0.7")
+    a.frame(ylabel="PV of cash flow", xticks=list(range(1, BOND_N + 1)),
+            yticks=[0, 300, 600], yfmt=lambda t: f"{t:,.0f}")
+    f.text(a.x1, a.y1 + 32, "time t (periods)", cls="sm dim", anchor="end")
+    px = a.px(dmac)
+    f.polygon([(px, a.y1 + 2), (px - 9, a.y1 + 16), (px + 9, a.y1 + 16)], fill=AMBER)
+    f.line(a.x0, a.y1 + 2, a.x1, a.y1 + 2, cls="", stroke=AMBER, stroke_width="1.6")
+    f.text(px, a.y0 + 12, f"D_Mac = {dmac:.2f}", cls="sm bold", fill=AMBER)
+
+    f.text(428, 96, "Weighted-average time to payment", cls="sm bold")
+    rows = [
+        ("D_Mac", "Σ t·PV(C_t) / P, measured in periods", BLUE),
+        ("D_Mod = D_Mac/(1+j)", "the % price move per unit of j", VIOLET),
+        ("Longer duration", "more sensitive to rate changes", ROSE),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 122 + k * 48
+        f.line(340, yy, 340, yy + 34, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 13, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 29, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 286, "The redemption payment dominates — that is why it sits so late")
+    return f
+
+
+@figure("Macaulay Duration", "Each cash flow's present value weighting its own time",
+        width=540)
+def macaulay_duration() -> Fig:
+    f = Fig(W, 300)
+    f.title("Macaulay duration weights each date by its share of the price")
+
+    j = 0.05
+    flows = _dur_cashflows()
+    pv = [(t, c * (1 + j) ** -t) for t, c in flows]
+    dmac, price = _macaulay(j)
+    a = axes(f, 0, BOND_N + 0.8, 0, 0.72, left=72, right=238, top=70, bottom=98)
+    a.bars([(t, v / price) for t, v in pv], colour=VIOLET, opacity="0.7")
+    a.frame(ylabel="weight  PV(C_t)/P", xticks=list(range(1, BOND_N + 1)),
+            yticks=[0, 0.25, 0.5], yfmt=lambda t: f"{t:g}")
+    f.text(a.x1, a.y1 + 32, "time t", cls="sm dim", anchor="end")
+    a.vline(dmac, colour=AMBER)
+    f.text(a.px(dmac), a.y0 + 12, f"{dmac:.2f}", cls="sm bold", fill=AMBER)
+
+    f.text(430, 96, "D_Mac = Σ t·PV(C_t) / P", cls="sm bold")
+    f.text(430, 116, "the weights sum to 1", cls="sm dim")
+    f.box(342, 134, 186, 60, colour=VIOLET)
+    f.text(435, 156, "Measured in time units", cls="sm bold")
+    f.text(435, 174, "periods, not percent", cls="sm dim")
+    f.box(342, 202, 186, 60, colour=GREEN)
+    f.text(435, 224, "Perpetuity", cls="sm bold")
+    f.text(435, 242, "D_Mac = (1 + j)/j = 1/d", cls="sm dim")
+    f.note(W / 2, 288, "A zero-coupon bond has duration exactly equal to its term")
+    return f
+
+
+@figure("Modified Duration", "The tangent line duration provides at the current yield",
+        width=540)
+def modified_duration() -> Fig:
+    f = Fig(W, 296)
+    f.title("Modified duration is the slope of the price–yield curve")
+
+    j0 = 0.05
+    p0 = _bond_price(j0)
+    dmac, _ = _macaulay(j0)
+    dmod = dmac / (1 + j0)
+    a = axes(f, 0.01, 0.09, 700, 1400, left=76, right=234, top=68, bottom=88)
+    a.curve(lambda j: _bond_price(j), colour=BLUE, xa=0.012, xb=0.09)
+    a.polyline([(0.012, p0 + dmod * p0 * (j0 - 0.012)),
+                (0.09, p0 - dmod * p0 * (0.09 - j0))], colour=AMBER, width=1.6)
+    a.point(j0, p0, colour=AMBER)
+    a.label(j0, p0, "current yield", cls="sm", dy=-12, dx=40)
+    a.frame(xlabel="yield j", ylabel="price", xticks=[0.02, 0.05, 0.08],
+            xfmt=lambda t: f"{t * 100:.0f}%", yticks=[800, 1000, 1200],
+            yfmt=lambda t: f"{t:,.0f}")
+
+    f.text(428, 100, "D_Mod = −(1/P) dP/dj", cls="sm bold")
+    f.text(428, 120, f"= D_Mac/(1+j) = {dmod:.2f}", cls="sm dim")
+    rows = [
+        ("ΔP ≈ −D_Mod · P · Δj", "the tangent, not the curve", AMBER),
+        ("D_Mod < D_Mac", "since 1 + j > 1", VIOLET),
+        ("Add convexity", "to correct the curvature", GREEN),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 142 + k * 46
+        f.line(340, yy, 340, yy + 32, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 12, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 28, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 286, "The tangent always sits below the price curve — that is convexity")
+    return f
+
+
+@figure("1st-Order Linear Approximation", "The duration estimate against the true price "
+        "change", width=540)
+def first_order_approximation() -> Fig:
+    f = Fig(W, 300)
+    f.title("The duration estimate is a tangent — it drifts on large moves")
+
+    j0 = 0.05
+    p0 = _bond_price(j0)
+    dmac, _ = _macaulay(j0)
+    dmod = dmac / (1 + j0)
+    a = axes(f, 0.02, 0.08, 800, 1250, left=76, right=238, top=68, bottom=100)
+    a.curve(lambda j: _bond_price(j), colour=BLUE, xa=0.02, xb=0.08)
+    a.polyline([(0.02, p0 + dmod * p0 * (j0 - 0.02)),
+                (0.08, p0 - dmod * p0 * (0.08 - j0))], colour=AMBER, width=1.6)
+    a.point(j0, p0, colour="var(--dim)", r=3.2)
+    for jj in (0.03, 0.07):
+        true = _bond_price(jj)
+        approx = p0 - dmod * p0 * (jj - j0)
+        f.line(a.px(jj), a.py(true), a.px(jj), a.py(approx), cls="", stroke=ROSE,
+               stroke_width="2.4")
+        a.point(jj, true, colour=BLUE, r=3)
+        a.point(jj, approx, colour=AMBER, r=3)
+    a.label(0.032, 1200, "understates the gain", cls="sm", anchor="start")
+    a.label(0.068, 880, "overstates the loss", cls="sm", anchor="end")
+    a.frame(xlabel="yield j", ylabel="price", xticks=[0.03, 0.05, 0.07],
+            xfmt=lambda t: f"{t * 100:.0f}%", yticks=[900, 1100],
+            yfmt=lambda t: f"{t:,.0f}")
+    f.legend_row(a.x0 + 2, a.y1 + 52, [(BLUE, "true price"), (AMBER, "duration estimate")],
+                 gap=140)
+
+    f.text(430, 100, "ΔP ≈ −D_Mod · P · Δj", cls="sm bold")
+    f.box(342, 122, 186, 66, colour=ROSE)
+    f.text(435, 144, "Always an underestimate", cls="sm bold")
+    f.text(435, 164, "understates gains when j falls", cls="sm dim")
+    f.text(435, 180, "overstates losses when j rises", cls="sm dim")
+    f.box(342, 198, 186, 66, colour=GREEN)
+    f.text(435, 220, "Second-order fix", cls="sm bold")
+    f.text(435, 240, "+ ½ · Convexity · P · (Δj)²", cls="sm dim")
+    f.text(435, 256, "always a positive correction", cls="sm dim")
+    return f
+
+
+@figure("Convexity", "Convexity as the curvature the duration line misses", width=540)
+def convexity() -> Fig:
+    f = Fig(W, 300)
+    f.title("Convexity is the curvature the tangent leaves out")
+
+    # A 30-period bond, so the curvature the tangent misses is plainly visible.
+    n_long, j0 = 30, 0.05
+    price = lambda j: _bond_price(j, n=n_long)
+    p0 = price(j0)
+    dmac, _ = _macaulay(j0, flows=_dur_cashflows(n=n_long))
+    dmod = dmac / (1 + j0)
+    lo, hi = 0.015, 0.09
+    a = axes(f, lo, hi, 500, 1750, left=76, right=238, top=68, bottom=100)
+    curve_pts = [a.p(lo + (hi - lo) * k / 60, price(lo + (hi - lo) * k / 60))
+                 for k in range(61)]
+    tangent_pts = [a.p(lo + (hi - lo) * k / 60,
+                       max(500, p0 - dmod * p0 * (lo + (hi - lo) * k / 60 - j0)))
+                   for k in range(60, -1, -1)]
+    f.polygon(curve_pts + tangent_pts, fill=GREEN, fill_opacity="0.22", stroke="none")
+    a.curve(price, colour=BLUE, xa=lo, xb=hi)
+    a.polyline([(lo, p0 + dmod * p0 * (j0 - lo)),
+                (hi, max(500, p0 - dmod * p0 * (hi - j0)))], colour=AMBER, width=1.6)
+    a.point(j0, p0, colour="var(--dim)", r=3.2)
+    a.label(0.030, 1560, "the gap is convexity", cls="sm bold", anchor="start")
+    a.frame(xlabel="yield j", ylabel="price", xticks=[0.02, 0.05, 0.08],
+            xfmt=lambda t: f"{t * 100:.0f}%", yticks=[700, 1100, 1500],
+            yfmt=lambda t: f"{t:,.0f}")
+    f.legend_row(a.x0 + 2, a.y1 + 52, [(BLUE, "true price"), (AMBER, "duration only")],
+                 gap=140)
+
+    f.text(430, 100, "ΔP/P ≈ −D_Mod·Δj + ½·C·(Δj)²", cls="sm bold")
+    rows = [
+        ("C = (1/P) d²P/dj²", "Σ t(t+1) C_t v^(t+2) / P", BLUE),
+        ("Higher convexity is better", "more upside, less downside", GREEN),
+        ("Always positive", "for an ordinary bond", VIOLET),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 126 + k * 48
+        f.line(342, yy, 342, yy + 34, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(352, yy + 13, lab, cls="sm bold", anchor="start")
+        f.text(352, yy + 29, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 290, "Note the v^(t+2): convexity carries an extra (1+j)² in the "
+           "denominator")
+    return f
+
+
+@figure("Portfolio", "Portfolio duration as the value-weighted average of its holdings",
+        width=540)
+def portfolio() -> Fig:
+    f = Fig(W, 296)
+    f.title("A portfolio's duration is its value-weighted average")
+
+    holdings = [("Short bond", 300_000, 2.1, BLUE), ("Medium bond", 500_000, 6.4, VIOLET),
+                ("Long bond", 200_000, 14.2, ROSE)]
+    total_v = sum(v for _, v, _, _ in holdings)
+    port_d = sum(v * d for _, v, d, _ in holdings) / total_v
+
+    x0, y0, bar_w = 132, 92, 216
+    for k, (lab, val, dur, colour) in enumerate(holdings):
+        y = y0 + k * 46
+        f.text(x0 - 6, y + 17, lab, cls="sm bold", anchor="end")
+        w = bar_w * val / total_v
+        f.rect(x0 + 6, y, w, 26, rx=4, fill=colour, fill_opacity="0.4", stroke=colour,
+               stroke_width="1.2")
+        f.text(x0 + 6 + w / 2, y + 17, f"{val / 1000:,.0f}k", cls="sm bold")
+        f.text(x0 + bar_w + 26, y + 17, f"D = {dur:.1f}", cls="sm", anchor="start")
+    f.line(x0 - 88, y0 + 3 * 46 + 6, x0 + bar_w + 96, y0 + 3 * 46 + 6, cls="rule")
+    f.text(x0 - 6, y0 + 3 * 46 + 28, "Portfolio", cls="sm bold", anchor="end")
+    f.text(x0 + 6 + bar_w / 2, y0 + 3 * 46 + 28, f"{total_v / 1000:,.0f}k",
+           cls="sm bold")
+    f.text(x0 + bar_w + 26, y0 + 3 * 46 + 28, f"D = {port_d:.2f}", cls="sm bold",
+           anchor="start", fill=GREEN)
+
+    f.line(28, 258, 532, 258, cls="rule")
+    f.text(150, 278, "D_port = Σ Pᵢ Dᵢ / Σ Pᵢ", cls="sm bold")
+    f.text(412, 278, "Convexity averages the same way", cls="sm bold")
+    return f
+
+
+@figure("Spot Rate", "Spot rates as the yield on each zero-coupon maturity", width=540)
+def spot_rate() -> Fig:
+    f = Fig(W, 294)
+    f.title("A spot rate is the yield on one single future payment")
+
+    spots = [(1, 0.030), (2, 0.035), (3, 0.039), (4, 0.042), (5, 0.044), (6, 0.045)]
+    a = axes(f, 0.4, 6.6, 0.025, 0.050, left=76, right=238, top=70, bottom=94)
+    a.bars(spots, colour=BLUE, opacity="0.55", base=0.025)
+    a.polyline(spots, colour=VIOLET, width=2)
+    for t, s_ in spots:
+        a.point(t, s_, colour=VIOLET, r=3)
+    a.frame(ylabel="spot rate sₙ", xticks=[1, 2, 3, 4, 5, 6],
+            yticks=[0.03, 0.04, 0.05], yfmt=lambda t: f"{t * 100:.0f}%")
+    f.text(a.x1, a.y1 + 32, "maturity n (years)", cls="sm dim", anchor="end")
+    f.text((a.x0 + a.x1) / 2, a.y1 + 52, "each bar is a zero-coupon yield", cls="sm dim")
+
+    f.text(430, 100, "P = Σ C_t / (1 + s_t)^t", cls="sm bold")
+    f.text(430, 120, "discount each flow at its own rate", cls="sm dim")
+    f.box(342, 138, 186, 60, colour=VIOLET)
+    f.text(435, 160, "Read from the yield curve", cls="sm bold")
+    f.text(435, 178, "or bootstrapped from bond prices", cls="sm dim")
+    f.box(342, 206, 186, 60, colour=GREEN)
+    f.text(435, 228, "Links to forwards", cls="sm bold")
+    f.text(435, 246, "(1+sₙ)ⁿ = (1+sₙ₋₁)ⁿ⁻¹(1+f)", cls="sm dim")
+    return f
+
+
+@figure("Forward Rate", "The forward rate implied by two spot rates", width=540)
+def forward_rate() -> Fig:
+    f = Fig(W, 288)
+    f.title("A forward rate is locked in today for a future period")
+
+    y = 122
+    xs = timeline(f, y, 96, 400, 4, labels=["0", "1", "2", "3", "4"])
+    f.arrow(xs[0] + 6, y - 34, xs[2] - 6, y - 34, colour=BLUE, width=1.5)
+    f.text((xs[0] + xs[2]) / 2, y - 42, "s₂ for 2 years", cls="sm", fill=BLUE)
+    f.arrow(xs[0] + 6, y - 66, xs[3] - 6, y - 66, colour=VIOLET, width=1.5)
+    f.text((xs[0] + xs[3]) / 2, y - 74, "s₃ for 3 years", cls="sm", fill=VIOLET)
+    f.arrow(xs[2] + 6, y + 34, xs[3] - 6, y + 34, colour=AMBER, width=1.7)
+    f.text((xs[2] + xs[3]) / 2, y + 52, "f₂,₃", cls="sm bold", fill=AMBER)
+    f.text(424, y + 38, "implied, not quoted", cls="sm dim", anchor="start")
+
+    f.line(28, 188, 532, 188, cls="rule")
+    f.text(W / 2, 210, "(1 + s₃)³ = (1 + s₂)² · (1 + f₂,₃)", cls="sm bold")
+    f.text(150, 236, "f_{t,t+1} = (1+s_{t+1})^{t+1}/(1+s_t)^t − 1", cls="sm dim")
+    f.text(412, 236, "A rising spot curve implies forwards", cls="sm dim")
+    f.text(412, 254, "above the spot rates", cls="sm dim")
+    f.text(150, 254, "no arbitrage between the two routes", cls="sm dim")
+    f.note(W / 2, 278, "Two ways to be invested for three years must cost the same today")
+    return f
+
+
+@figure("Duration Matching", "Assets and liabilities matched in value and duration",
+        width=540)
+def duration_matching() -> Fig:
+    f = Fig(W, 300)
+    f.title("Match the value and the duration, and small rate moves cancel")
+
+    y = 138
+    xs = timeline(f, y, 96, 420, 8, labels=["0", "", "", "", "", "", "", "", ""])
+    for k, h, colour in ((2, 40, BLUE), (7, 52, BLUE)):
+        cash_arrow(f, xs[k], y, h, colour=colour, label="asset", up=True)
+    cash_arrow(f, xs[5], y, 54, colour=ROSE, label="liability", up=False)
+    dbar = (xs[0] + xs[8]) / 2
+    f.polygon([(dbar, y + 84), (dbar - 9, y + 98), (dbar + 9, y + 98)], fill=AMBER)
+    f.line(xs[0], y + 84, xs[8], y + 84, cls="", stroke=AMBER, stroke_width="1.6")
+    f.text(dbar, y + 116, "the two streams balance at the same point", cls="sm dim")
+
+    f.line(28, 268, 532, 268, cls="rule")
+    f.text(150, 288, "PV(A) = PV(L)   and   D(A) = D(L)", cls="sm bold")
+    f.text(412, 288, "Add C(A) ≥ C(L) for Redington", cls="sm bold")
+    return f
+
+
+@figure("Immunization", "The surplus curve under each immunization strategy", width=540)
+def immunization() -> Fig:
+    f = Fig(W, 306)
+    f.title("Immunization keeps the surplus non-negative when yields move")
+
+    a = axes(f, -0.03, 0.03, -20, 30, left=76, right=238, top=70, bottom=98)
+    a.curve(lambda d: 25000 * d * d, colour=GREEN)
+    a.curve(lambda d: -450 * d - 3000 * d * d, colour=ROSE, dash=True)
+    a.hline(0, colour="var(--dim)", dash=False)
+    a.frame(ylabel="surplus  S = V_A − V_L", xticks=[-0.02, 0.02],
+            xfmt=lambda t: f"{t * 100:+.0f}%", yticks=[-15, 0, 15],
+            yfmt=lambda t: f"{t:g}")
+    f.text(a.x1, a.y1 + 20, "shift in yield  Δj", cls="sm dim", anchor="end")
+    a.label(0.024, 24, "immunized", cls="sm bold", anchor="middle")
+    a.label(0.022, -13, "not immunized", cls="sm bold", anchor="middle")
+
+    f.text(430, 100, "Redington's three conditions", cls="sm bold")
+    conds = [
+        ("1.  PV(A) = PV(L)", "the surplus starts at zero", BLUE),
+        ("2.  D(A) = D(L)", "the first-order effect cancels", VIOLET),
+        ("3.  C(A) > C(L)", "the second-order effect is positive", GREEN),
+    ]
+    for k, (lab, sub, colour) in enumerate(conds):
+        yy = 124 + k * 48
+        f.line(342, yy, 342, yy + 34, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(352, yy + 13, lab, cls="sm bold", anchor="start")
+        f.text(352, yy + 29, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 296, "ΔS ≈ ½ (C_A − C_L) · V · (Δj)² ≥ 0 — small, parallel shifts only")
+    return f
+
+
+@figure("Redington Immunization", "The three Redington conditions and the surplus they "
+        "produce", width=540)
+def redington_immunization() -> Fig:
+    f = Fig(W, 300)
+    f.title("Redington: a local minimum of the surplus at the current yield")
+
+    a = axes(f, -0.025, 0.025, -4, 24, left=76, right=238, top=70, bottom=96)
+    a.area(lambda d: 32000 * d * d, -0.025, 0.025, colour=GREEN, opacity="0.16")
+    a.curve(lambda d: 32000 * d * d, colour=GREEN)
+    a.hline(0, colour="var(--dim)", dash=False)
+    a.point(0, 0, colour=AMBER, r=4)
+    a.label(0, 0, "S = 0 at the current yield", cls="sm", dy=16)
+    a.frame(ylabel="surplus S", xticks=[-0.02, 0.02],
+            xfmt=lambda t: f"{t * 100:+.0f}%", yticks=[0, 10, 20],
+            yfmt=lambda t: f"{t:g}")
+    f.text(a.x1, a.y1 + 20, "Δj", cls="sm dim", anchor="end")
+
+    f.text(430, 100, "ΔS ≈ ½(C_A − C_L)·V·(Δj)²", cls="sm bold")
+    rows = [
+        ("Non-negative either way", "the parabola opens upward", GREEN),
+        ("Small parallel shifts only", "not a general guarantee", ROSE),
+        ("Needs rebalancing", "durations drift as time passes", AMBER),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 126 + k * 48
+        f.line(342, yy, 342, yy + 34, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(352, yy + 13, lab, cls="sm bold", anchor="start")
+        f.text(352, yy + 29, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 290, "Less restrictive than cash-flow matching — the dates need not agree")
+    return f
+
+
+@figure("Full Immunization", "Asset cash flows surrounding each liability payment",
+        width=540)
+def full_immunization() -> Fig:
+    f = Fig(W, 296)
+    f.title("Full immunization: assets on both sides of every liability")
+
+    y = 130
+    xs = timeline(f, y, 96, 420, 8, labels=["0", "", "", "", "", "", "", "", ""])
+    cash_arrow(f, xs[2], y, 44, colour=BLUE, label="asset", up=True)
+    cash_arrow(f, xs[7], y, 44, colour=BLUE, label="asset", up=True)
+    cash_arrow(f, xs[5], y, 48, colour=ROSE, label="liability", up=False)
+    f.line(xs[2], y - 52, xs[7], y - 52, cls="thin dash", stroke=GREEN,
+           stroke_width="1.4")
+    f.text((xs[2] + xs[7]) / 2, y - 60, "the liability is surrounded", cls="sm bold",
+           fill=GREEN)
+
+    f.line(28, 208, 532, 208, cls="rule")
+    f.text(W / 2, 230, "Conditions", cls="sm bold")
+    conds = [
+        ("PV(A) = PV(L)", "at the current yield", BLUE),
+        ("D(A) = D(L)", "durations agree", VIOLET),
+        ("One asset each side", "of every liability date", GREEN),
+    ]
+    for k, (lab, sub, colour) in enumerate(conds):
+        x = 40 + k * 172
+        f.line(x, 246, x, 276, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(x + 10, 257, lab, cls="sm bold", anchor="start")
+        f.text(x + 10, 272, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 292, "Protects against any single shift — Redington only against small ones")
+    return f
+
+
+@figure("Asset-Liability Portfolio", "Asset cash flows set against the liabilities they "
+        "fund", width=540)
+def asset_liability_portfolio() -> Fig:
+    f = Fig(W, 318)
+    f.title("Assets are held to fund liabilities, not on their own merits")
+
+    y = 132
+    xs = timeline(f, y, 76, 452, 8, labels=["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+    assets = {1: 26, 2: 34, 3: 30, 4: 40, 5: 30, 6: 34, 7: 26, 8: 58}
+    liabs = {2: 30, 4: 36, 6: 30, 8: 48}
+    for k, h in assets.items():
+        cash_arrow(f, xs[k] - 4, y, h, colour=BLUE)
+    for k, h in liabs.items():
+        cash_arrow(f, xs[k] + 4, y, h, colour=ROSE, up=False)
+    f.text(468, y - 34, "assets", cls="sm bold", fill=BLUE, anchor="start")
+    f.text(468, y + 40, "liabilities", cls="sm bold", fill=ROSE, anchor="start")
+
+    f.line(28, 218, 532, 218, cls="rule")
+    strategies = [
+        ("Cash-flow matching", "each asset funds one liability exactly", GREEN),
+        ("Duration matching", "match value and duration, allow reinvestment", VIOLET),
+        ("Immunization", "add a convexity condition on top", AMBER),
+    ]
+    for k, (lab, sub, colour) in enumerate(strategies):
+        yy = 236 + k * 26
+        f.line(40, yy, 40, yy + 16, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(52, yy + 12, lab, cls="sm bold", anchor="start")
+        f.text(206, yy + 12, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 310, "The risk being managed is that rates move assets and liabilities "
+           "differently")
+    return f
+
+
+@figure("Annuity Immediate", "An annuity-immediate paying at the end of each period, "
+        "valued at both ends", width=540)
+def annuity_immediate() -> Fig:
+    f = Fig(W, 292)
+    f.title("An annuity-immediate pays at the end of each period")
+
+    y = 132
+    xs = timeline(f, y, 116, 424, 5, labels=["0", "1", "2", "3", "4", "5"])
+    for j in range(1, 6):
+        cash_arrow(f, xs[j], y, 36, colour=BLUE, label="1", up=True)
+    f.line(xs[0], y - 66, xs[0], y - 6, cls="thin dash", stroke=AMBER,
+           stroke_width="1.3")
+    f.text(xs[0], y - 74, "a₍ₙ₎ valued here", cls="sm bold", fill=AMBER)
+    f.line(xs[5], y - 66, xs[5], y - 6, cls="thin dash", stroke=GREEN,
+           stroke_width="1.3")
+    f.text(xs[5], y - 74, "s₍ₙ₎ valued here", cls="sm bold", fill=GREEN)
+    f.text(xs[0], y + 34, "one period before", cls="sm dim")
+    f.text(xs[5], y + 34, "at the last payment", cls="sm dim")
+
+    f.line(28, 196, 532, 196, cls="rule")
+    f.text(150, 218, "a₍ₙ₎ = (1 − vⁿ)/i", cls="sm bold")
+    f.text(150, 238, "s₍ₙ₎ = ((1+i)ⁿ − 1)/i", cls="sm dim")
+    f.text(150, 258, "s₍ₙ₎ = (1+i)ⁿ · a₍ₙ₎", cls="sm dim")
+    f.text(412, 218, "At i = 6%, n = 5", cls="sm bold")
+    f.text(412, 238, "a₍₅₎ = 4.2124,  s₍₅₎ = 5.6371", cls="sm dim")
+    f.text(412, 258, "1,200 per year → PV ≈ 5,054.87", cls="sm dim")
+    f.note(W / 2, 284, "The building block for loan amortisation and bond pricing")
+    return f

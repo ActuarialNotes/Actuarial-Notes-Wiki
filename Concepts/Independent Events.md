@@ -5,6 +5,8 @@ Two events $A$ and $B$ are **Independent** if knowing that one occurred provides
 
 > $$P(A \cap B) = P(A) \cdot P(B)$$
 
+![[Media/Figures/Independent_Events.svg|520]]
+
 > [!example]- Testing Independence of Two Claim Events {Example}
 > For two policyholders, $P(\text{A claims}) = 0.4$, $P(\text{B claims}) = 0.3$, and $P(\text{both claim}) = 0.12$. Are their claim events independent?
 >

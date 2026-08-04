@@ -10,6 +10,8 @@
 - Level payments front-load more interest than the constant-principal method — the two can be tied together by setting their total payments or total interest equal and solving for an unknown rate or payment.
 - The same comparison approach applies to two loans repaid by the same method at different [[Interest Rate]]s or [[Term of Loan]]s: write the equation of value for each and set the quantities of interest equal.
 
+![[Media/Figures/Loan_Repayment_Comparison.svg|540]]
+
 > [!example]- Solving for the Rate That Equates Two Repayment Methods {Example}
 > A \$$3{,}000$ loan can be repaid over 5 years in one of two ways: (i) level annual payments at an annual effective rate of $10\%$, or (ii) principal payments of \$$600$ per year plus interest on the unpaid balance at rate $j$. The total payments under both options are equal. Find $j$.
 >

@@ -14,6 +14,8 @@
 - For a **premium bond** ($P > C$), the book value decreases from $P$ toward $C$ over time (amortization of premium). For a **discount bond** ($P < C$), it increases from $P$ toward $C$ (accumulation of discount).
 - Book value is used in the [[Amortization Schedule]] for bonds: each coupon period the investor earns $j \cdot BV_{k-1}$ in yield, and the difference between the coupon $Fr$ and the yield $j \cdot BV_{k-1}$ is the write-down (premium) or write-up (discount) of the book value.
 
+![[Media/Figures/Book_Value.svg|540]]
+
 > [!example]- Book Value of a Premium Bond {Example}
 > A \$$1{,}000$ face value 3-year annual-coupon bond has coupon rate $8\%$ and yield rate $6\%$. Find the book value after the 2nd coupon.
 >

@@ -101,6 +101,7 @@ class Fig:
 
     w: float = 560
     h: float = 300
+    alt: str = ""
     parts: list[str] = field(default_factory=list)
     defs: list[str] = field(default_factory=list)
     _marker_ids: set[str] = field(default_factory=set)
@@ -214,9 +215,10 @@ class Fig:
     def svg(self) -> str:
         body = "\n  ".join(self.parts)
         defs = ("\n  <defs>\n    " + "\n    ".join(self.defs) + "\n  </defs>") if self.defs else ""
+        title = f"\n  <title>{escape(self.alt)}</title>" if self.alt else ""
         return (
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_fmt(self.w)} {_fmt(self.h)}" '
-            f'width="{_fmt(self.w)}" height="{_fmt(self.h)}" role="img">\n'
+            f'width="{_fmt(self.w)}" height="{_fmt(self.h)}" role="img">{title}\n'
             f"  <style>{STYLE}</style>{defs}\n"
             f'  <rect class="card" x="0.6" y="0.6" width="{_fmt(self.w - 1.2)}" '
             f'height="{_fmt(self.h - 1.2)}" rx="10"/>\n'

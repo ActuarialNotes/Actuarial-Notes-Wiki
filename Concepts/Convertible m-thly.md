@@ -5,6 +5,8 @@ A [[Nominal Interest Rate]] is **convertible $m$-thly** (or compounded $m$ times
 - Common cases: $m=2$ (semi-annual), $m=4$ (quarterly), $m=12$ (monthly), $m=365$ (daily).
 - As $m \to \infty$, the nominal rate convertible $m$-thly approaches continuous compounding and the [[Force of Interest]] $\delta = \ln(1+i)$.
 
+![[Media/Figures/Convertible_m-thly.svg|540]]
+
 > [!example]- Monthly Rate to Annual Effective Rate {Example}
 > A savings account pays a nominal rate of 6% convertible monthly ($m=12$). Find the equivalent effective annual rate.
 >

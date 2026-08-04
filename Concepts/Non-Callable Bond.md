@@ -6,6 +6,8 @@ A **non-callable bond** (also called a **bullet bond**) cannot be redeemed by th
 
 - With no uncertainty about the term $n$, non-callable bonds are simpler to analyze than [[Callable Bond]]s and are the baseline case for bond pricing on Exam FM.
 
+![[Media/Figures/Non-Callable_Bond.svg|540]]
+
 > [!example]- Non-Callable vs. Callable Pricing {Example}
 > A non-callable $1{,}000$ face bond pays 7% annual coupons and matures in 8 years. Price at 5% yield.
 >

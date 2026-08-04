@@ -8,6 +8,8 @@
 
 > $$\text{PV} = \sum_{t=1}^{n} C_t \cdot v^t$$
 
+![[Media/Figures/Non-level_Annuities.svg|540]]
+
 > [!example]- Staircase Payments {Example}
 > Payments of $100$, $200$, $300$, $400$ are made at end of years 1–4. Find the PV at $i = 5\%$.
 >

@@ -10,6 +10,8 @@ The **call price** is the price at which an issuer may redeem a [[Callable Bond]
 
 - Where $n_c$ is the number of periods until the call date.
 
+![[Media/Figures/Call_Price.svg|540]]
+
 > [!example]- Bond Priced to a Call {Example}
 > A $1{,}000$ face bond with 8% annual coupons can be called in 3 years at $1{,}050$. Find the price to yield 6%.
 >

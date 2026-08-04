@@ -12,6 +12,8 @@ A **level payment annuity** makes equal (level) payments at regular intervals fo
 
 - The symbols $a_{\overline{n}|}$ (present value annuity factor) and $s_{\overline{n}|}$ (accumulated value annuity factor) are standard actuarial notation.
 
+![[Media/Figures/Level_Payment_Annuity.svg|540]]
+
 > [!example]- Loan Repayment {Example}
 > A $20{,}000$ loan at $5\%$ effective annual interest is repaid with 5 level annual payments (end of year). Find the payment amount.
 >

@@ -24,6 +24,8 @@ The integrand is rarely the hard part; the **region** is. Work in this order:
 
 Reversing the order of integration is a legitimate move and is often far easier — but the limits must be re-derived from the sketch, not swapped mechanically.
 
+![[Media/Figures/Joint_Probability_Density_Function.svg|540]]
+
 > [!example]- Finding the Normalizing Constant on a Triangle {Example}
 > $f(x,y) = c(x+y)$ on the region $0 < x < y < 1$. Find $c$.
 >

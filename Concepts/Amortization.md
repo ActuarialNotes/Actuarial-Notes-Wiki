@@ -8,6 +8,8 @@
 - Principal in payment $k$: $PR_k = P \cdot v^{n-k+1}$
 - Outstanding balance after payment $k$: $OB_k = P \cdot a_{\overline{n-k}|i}$
 
+![[Media/Figures/Amortization.svg|540]]
+
 > [!example]- Amortizing a Loan {Example}
 > A \$$10{,}000$ loan is repaid with level annual payments over 4 years at $i = 5\%$ per year. Find the annual payment and the interest and principal portions of the first payment.
 >

@@ -7,6 +7,8 @@ An **equation of value** equates the [[Present Value]] (or [[Accumulated Value]]
 - All cash flows must be moved to the same point in time using the same [[Interest Rate]] before comparing.
 - A different choice of comparison date gives a different equation but the same solution for the unknown.
 
+![[Media/Figures/Equation_of_Value.svg|540]]
+
 > [!example]- Replacing Two Payments {Example}
 > Debts of $1{,}000$ due in 2 years and $2{,}000$ due in 5 years are to be replaced by a single payment at the end of 3 years. Find the payment using $i = 6\%$.
 >

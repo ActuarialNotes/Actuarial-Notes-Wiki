@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" width="560" height="300" role="img">
+  <title>Convexity as the curvature the duration line misses</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="298.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Convexity is the curvature the tangent leaves out</text>
+  <polygon points="76,58.44 80.1,63.11 84.2,67.63 88.3,72.01 92.4,76.25 96.5,80.36 100.6,84.34 104.7,88.2 108.8,91.94 112.9,95.57 117,99.09 121.1,102.5 125.2,105.8 129.3,109.01 133.4,112.12 137.5,115.14 141.6,118.07 145.7,120.91 149.8,123.67 153.9,126.34 158,128.94 162.1,131.46 166.2,133.91 170.3,136.29 174.4,138.6 178.5,140.84 182.6,143.02 186.7,145.14 190.8,147.2 194.9,149.2 199,151.15 203.1,153.04 207.2,154.87 211.3,156.66 215.4,158.4 219.5,160.09 223.6,161.74 227.7,163.34 231.8,164.89 235.9,166.41 240,167.88 244.1,169.32 248.2,170.72 252.3,172.08 256.4,173.41 260.5,174.7 264.6,175.96 268.7,177.18 272.8,178.38 276.9,179.54 281,180.68 285.1,181.79 289.2,182.86 293.3,183.92 297.4,184.94 301.5,185.94 305.6,186.92 309.7,187.87 313.8,188.8 317.9,189.71 322,190.6 322,200 317.9,200 313.8,200 309.7,200 305.6,200 301.5,200 297.4,199.96 293.3,197.93 289.2,195.9 285.1,193.87 281,191.84 276.9,189.81 272.8,187.78 268.7,185.75 264.6,183.72 260.5,181.7 256.4,179.67 252.3,177.64 248.2,175.61 244.1,173.58 240,171.55 235.9,169.52 231.8,167.49 227.7,165.46 223.6,163.43 219.5,161.4 215.4,159.37 211.3,157.35 207.2,155.32 203.1,153.29 199,151.26 194.9,149.23 190.8,147.2 186.7,145.17 182.6,143.14 178.5,141.11 174.4,139.08 170.3,137.05 166.2,135.03 162.1,133 158,130.97 153.9,128.94 149.8,126.91 145.7,124.88 141.6,122.85 137.5,120.82 133.4,118.79 129.3,116.76 125.2,114.73 121.1,112.7 117,110.68 112.9,108.65 108.8,106.62 104.7,104.59 100.6,102.56 96.5,100.53 92.4,98.5 88.3,96.47 84.2,94.44 80.1,92.41 76,90.38" fill="#059669" fill-opacity="0.22" stroke="none"/>
+  <polyline points="76,68 77.37,68 78.73,68 80.1,68 81.47,68 82.83,68 84.2,68 85.57,69.1 86.93,70.56 88.3,72.01 89.67,73.43 91.03,74.85 92.4,76.25 93.77,77.63 95.13,79 96.5,80.36 97.87,81.7 99.23,83.03 100.6,84.34 101.97,85.64 103.33,86.93 104.7,88.2 106.07,89.46 107.43,90.71 108.8,91.94 110.17,93.17 111.53,94.37 112.9,95.57 114.27,96.76 115.63,97.93 117,99.09 118.37,100.24 119.73,101.37 121.1,102.5 122.47,103.61 123.83,104.71 125.2,105.8 126.57,106.88 127.93,107.95 129.3,109.01 130.67,110.06 132.03,111.1 133.4,112.12 134.77,113.14 136.13,114.14 137.5,115.14 138.87,116.12 140.23,117.1 141.6,118.07 142.97,119.02 144.33,119.97 145.7,120.91 147.07,121.84 148.43,122.76 149.8,123.67 151.17,124.57 152.53,125.46 153.9,126.34 155.27,127.22 156.63,128.08 158,128.94 159.37,129.79 160.73,130.63 162.1,131.46 163.47,132.29 164.83,133.1 166.2,133.91 167.57,134.71 168.93,135.5 170.3,136.29 171.67,137.07 173.03,137.84 174.4,138.6 175.77,139.35 177.13,140.1 178.5,140.84 179.87,141.58 181.23,142.3 182.6,143.02 183.97,143.74 185.33,144.44 186.7,145.14 188.07,145.83 189.43,146.52 190.8,147.2 192.17,147.87 193.53,148.54 194.9,149.2 196.27,149.85 197.63,150.5 199,151.15 200.37,151.78 201.73,152.41 203.1,153.04 204.47,153.65 205.83,154.27 207.2,154.87 208.57,155.48 209.93,156.07 211.3,156.66 212.67,157.25 214.03,157.83 215.4,158.4 216.77,158.97 218.13,159.53 219.5,160.09 220.87,160.64 222.23,161.19 223.6,161.74 224.97,162.27 226.33,162.81 227.7,163.34 229.07,163.86 230.43,164.38 231.8,164.89 233.17,165.4 234.53,165.91 235.9,166.41 237.27,166.91 238.63,167.4 240,167.88 241.37,168.37 242.73,168.85 244.1,169.32 245.47,169.79 246.83,170.26 248.2,170.72 249.57,171.18 250.93,171.63 252.3,172.08 253.67,172.53 255.03,172.97 256.4,173.41 257.77,173.84 259.13,174.27 260.5,174.7 261.87,175.12 263.23,175.54 264.6,175.96 265.97,176.37 267.33,176.78 268.7,177.18 270.07,177.59 271.43,177.98 272.8,178.38 274.17,178.77 275.53,179.16 276.9,179.54 278.27,179.93 279.63,180.3 281,180.68 282.37,181.05 283.73,181.42 285.1,181.79 286.47,182.15 287.83,182.51 289.2,182.86 290.57,183.22 291.93,183.57 293.3,183.92 294.67,184.26 296.03,184.6 297.4,184.94 298.77,185.28 300.13,185.61 301.5,185.94 302.87,186.27 304.23,186.6 305.6,186.92 306.97,187.24 308.33,187.56 309.7,187.87 311.07,188.19 312.43,188.5 313.8,188.8 315.17,189.11 316.53,189.41 317.9,189.71 319.27,190.01 320.63,190.3 322,190.6" class="curve" stroke="#3b82f6" stroke-width="2"/>
+  <polyline points="76,90.38 322,200" class="curve" stroke="#d97706" stroke-width="1.6"/>
+  <circle cx="190.8" cy="147.2" r="3.2" fill="var(--dim)"/>
+  <text x="125.2" y="88.06" text-anchor="start" class="sm bold">the gap is convexity</text>
+  <line x1="76" y1="200" x2="332" y2="200" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="76" y1="200" x2="76" y2="58" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="92.4" y1="200" x2="92.4" y2="204" class="tick"/>
+  <text x="92.4" y="216" text-anchor="middle" class="sm dim">2%</text>
+  <line x1="190.8" y1="200" x2="190.8" y2="204" class="tick"/>
+  <text x="190.8" y="216" text-anchor="middle" class="sm dim">5%</text>
+  <line x1="289.2" y1="200" x2="289.2" y2="204" class="tick"/>
+  <text x="289.2" y="216" text-anchor="middle" class="sm dim">8%</text>
+  <line x1="72" y1="178.88" x2="76" y2="178.88" class="tick"/>
+  <text x="68" y="182.48" text-anchor="end" class="sm dim">700</text>
+  <line x1="72" y1="136.64" x2="76" y2="136.64" class="tick"/>
+  <text x="68" y="140.24" text-anchor="end" class="sm dim">1,100</text>
+  <line x1="72" y1="94.4" x2="76" y2="94.4" class="tick"/>
+  <text x="68" y="98" text-anchor="end" class="sm dim">1,500</text>
+  <text x="322" y="232" text-anchor="end" class="sm dim">yield j</text>
+  <text x="72" y="54" text-anchor="start" class="sm dim">price</text>
+  <line x1="78" y1="252" x2="91" y2="252" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="97" y="255.6" text-anchor="start" class="sm">true price</text>
+  <line x1="218" y1="252" x2="231" y2="252" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="237" y="255.6" text-anchor="start" class="sm">duration only</text>
+  <text x="430" y="100" text-anchor="middle" class="sm bold">ΔP/P ≈ −D_Mod·Δj + ½·C·(Δj)²</text>
+  <line x1="342" y1="126" x2="342" y2="160" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="352" y="139" text-anchor="start" class="sm bold">C = (1/P) d²P/dj²</text>
+  <text x="352" y="155" text-anchor="start" class="sm dim">Σ t(t+1) C_t v^(t+2) / P</text>
+  <line x1="342" y1="174" x2="342" y2="208" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="352" y="187" text-anchor="start" class="sm bold">Higher convexity is better</text>
+  <text x="352" y="203" text-anchor="start" class="sm dim">more upside, less downside</text>
+  <line x1="342" y1="222" x2="342" y2="256" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="352" y="235" text-anchor="start" class="sm bold">Always positive</text>
+  <text x="352" y="251" text-anchor="start" class="sm dim">for an ordinary bond</text>
+  <text x="280" y="290" text-anchor="middle" class="sm dim">Note the v^(t+2): convexity carries an extra (1+j)² in the denominator</text>
+</svg>

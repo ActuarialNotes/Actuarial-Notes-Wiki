@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 296" width="560" height="296" role="img">
+  <title>Duration as the balance point of the discounted cash flows</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="294.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Duration is the balance point of a bond's present values</text>
+  <rect x="84.01" y="191.02" width="15.77" height="8.98" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="107.89" y="191.45" width="15.77" height="8.55" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="131.78" y="191.86" width="15.77" height="8.14" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="155.67" y="192.24" width="15.77" height="7.76" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="179.56" y="192.61" width="15.77" height="7.39" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="203.45" y="192.96" width="15.77" height="7.04" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="227.34" y="193.3" width="15.77" height="6.7" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="251.23" y="193.62" width="15.77" height="6.38" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="275.12" y="193.92" width="15.77" height="6.08" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="299.01" y="78.45" width="15.77" height="121.55" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <line x1="68" y1="200" x2="336" y2="200" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="200" x2="68" y2="58" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="91.89" y1="200" x2="91.89" y2="204" class="tick"/>
+  <text x="91.89" y="216" text-anchor="middle" class="sm dim">1</text>
+  <line x1="115.78" y1="200" x2="115.78" y2="204" class="tick"/>
+  <text x="115.78" y="216" text-anchor="middle" class="sm dim">2</text>
+  <line x1="139.67" y1="200" x2="139.67" y2="204" class="tick"/>
+  <text x="139.67" y="216" text-anchor="middle" class="sm dim">3</text>
+  <line x1="163.56" y1="200" x2="163.56" y2="204" class="tick"/>
+  <text x="163.56" y="216" text-anchor="middle" class="sm dim">4</text>
+  <line x1="187.44" y1="200" x2="187.44" y2="204" class="tick"/>
+  <text x="187.44" y="216" text-anchor="middle" class="sm dim">5</text>
+  <line x1="211.33" y1="200" x2="211.33" y2="204" class="tick"/>
+  <text x="211.33" y="216" text-anchor="middle" class="sm dim">6</text>
+  <line x1="235.22" y1="200" x2="235.22" y2="204" class="tick"/>
+  <text x="235.22" y="216" text-anchor="middle" class="sm dim">7</text>
+  <line x1="259.11" y1="200" x2="259.11" y2="204" class="tick"/>
+  <text x="259.11" y="216" text-anchor="middle" class="sm dim">8</text>
+  <line x1="283" y1="200" x2="283" y2="204" class="tick"/>
+  <text x="283" y="216" text-anchor="middle" class="sm dim">9</text>
+  <line x1="306.89" y1="200" x2="306.89" y2="204" class="tick"/>
+  <text x="306.89" y="216" text-anchor="middle" class="sm dim">10</text>
+  <line x1="64" y1="200" x2="68" y2="200" class="tick"/>
+  <text x="60" y="203.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="64" y1="143.43" x2="68" y2="143.43" class="tick"/>
+  <text x="60" y="147.03" text-anchor="end" class="sm dim">300</text>
+  <line x1="64" y1="86.86" x2="68" y2="86.86" class="tick"/>
+  <text x="60" y="90.46" text-anchor="end" class="sm dim">600</text>
+  <text x="64" y="54" text-anchor="start" class="sm dim">PV of cash flow</text>
+  <text x="326" y="232" text-anchor="end" class="sm dim">time t (periods)</text>
+  <polygon points="261.69,202 252.69,216 270.69,216" fill="#d97706"/>
+  <line x1="68" y1="202" x2="326" y2="202" stroke="#d97706" stroke-width="1.6"/>
+  <text x="261.69" y="80" text-anchor="middle" class="sm bold" fill="#d97706">D_Mac = 8.11</text>
+  <text x="428" y="96" text-anchor="middle" class="sm bold">Weighted-average time to payment</text>
+  <line x1="340" y1="122" x2="340" y2="156" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="135" text-anchor="start" class="sm bold">D_Mac</text>
+  <text x="350" y="151" text-anchor="start" class="sm dim">Σ t·PV(C_t) / P, measured in periods</text>
+  <line x1="340" y1="170" x2="340" y2="204" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="183" text-anchor="start" class="sm bold">D_Mod = D_Mac/(1+j)</text>
+  <text x="350" y="199" text-anchor="start" class="sm dim">the % price move per unit of j</text>
+  <line x1="340" y1="218" x2="340" y2="252" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="231" text-anchor="start" class="sm bold">Longer duration</text>
+  <text x="350" y="247" text-anchor="start" class="sm dim">more sensitive to rate changes</text>
+  <text x="280" y="286" text-anchor="middle" class="sm dim">The redemption payment dominates — that is why it sits so late</text>
+</svg>

@@ -12,6 +12,8 @@ The **Variance for Conditional and Marginal Distributions** measures spread at t
 - A common slip is to compute $\text{Var}(E[X\mid Y])$ and stop — that is only the between-group piece, never the whole marginal variance.
 - Conditional distributions come from the [[Conditional Probability Function]] (discrete) or the [[Joint Probability Density Function]] (continuous). See also [[Moments for Joint Distributions]].
 
+![[Media/Figures/Variance_for_Conditional_and_Marginal_Distributions.svg|540]]
+
 > [!example]- Variance of Claims Given Policy Type {Example}
 > Joint PMF: $p(0,1)=0.3$, $p(1,1)=0.2$, $p(0,2)=0.1$, $p(1,2)=0.4$ where $X$ = claims and $Y$ = policy type. Find $\text{Var}(X \mid Y=2)$.
 >

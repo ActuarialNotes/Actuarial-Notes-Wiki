@@ -4,6 +4,8 @@ A **callable bond** gives the **issuer** the right (but not the obligation) to r
 - If bond is at **premium** (price $> $ redemption value): assume the earliest call date (worst case for investor)
 - If bond is at **discount** (price $<$ redemption value): assume the latest call date (worst case for investor)
 
+![[Media/Figures/Callable_Bond.svg|540]]
+
 > [!example]- Callable Bond Price {Example}
 > A $1{,}000$ bond with 8% annual coupons matures in 10 years but is callable at par after 5 years. Find the price to guarantee a minimum yield of 6%.
 >

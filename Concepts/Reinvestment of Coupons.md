@@ -8,6 +8,8 @@
 - If $r_i < j$, the accumulated value is lower and the realized return falls below $j$; if $r_i > j$, the investor does better than the promised yield.
 - This analysis motivates [[Reinvestment Risk]] as an important practical concern for coupon bonds.
 
+![[Media/Figures/Reinvestment_of_Coupons.svg|540]]
+
 > [!example]- Accumulated Value with Coupon Reinvestment {Example}
 > A \$$1{,}000$ face value 4-year bond pays 7% annual coupons and is redeemed at par. Coupons are reinvested at 4% per year. Find the total accumulated value at the end of 4 years and the realized annual yield.
 >

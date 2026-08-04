@@ -12,11 +12,11 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Separator } from '@/components/ui/separator'
-import { Loader2, User, ChevronRight, Star, Sun, Moon, GraduationCap, Mail } from 'lucide-react'
+import { Loader2, User, ChevronRight, Star, Sun, Moon, GraduationCap, Mail, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useOnboardingTour } from '@/hooks/useOnboardingTour'
-import { ExamSittingsList } from '@/components/ExamSittingsList'
+import { useExamsPopout } from '@/hooks/useExamsPopout'
 import { DailyGoalPicker } from '@/components/DailyGoalPicker'
 import { LeagueSettingsCard } from '@/components/LeagueSettingsCard'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
@@ -32,13 +32,7 @@ import { ContactDialog } from '@/components/ContactDialog'
 import { fetchExportResponses, responsesToCsv, buildExportFilename, downloadCsv, exportScopeSlug } from '@/lib/exportData'
 import { buildProgressReport, generateProgressReportPdf, buildPdfFilename } from '@/lib/exportPdf'
 
-// ---- Exam status cycle & icons ----
-
-const STATUS_CYCLE: Record<ItemStatus, ItemStatus> = {
-  not_started: 'in_progress',
-  in_progress: 'completed',
-  completed: 'not_started',
-}
+// ---- Exam status icons ----
 
 const STATUS_LABEL: Record<ItemStatus, string> = {
   not_started: 'Not Started',
@@ -69,6 +63,13 @@ function StatusIcon({ status }: { status: ItemStatus }) {
       <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   )
+}
+
+/** Format an exam target date (ISO `YYYY-MM-DD`) without tripping over UTC parsing. */
+function formatTargetDate(iso: string): string {
+  const d = new Date(iso + 'T00:00:00')
+  if (isNaN(d.getTime())) return iso
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
 // ---- Simple inline modal ----
@@ -275,9 +276,9 @@ export default function Settings() {
     profile, setProfile,
     examRows,
     loadingProfile, loadingExams,
-    changePassword, updateProfile, saveExamRows,
+    changePassword, updateProfile,
     resetHistory, deleteAccount,
-    accountState, profileState, examsState, dataState,
+    accountState, profileState, dataState,
   } = useSettings()
 
   // Detect OAuth/SSO users (Google, Apple, etc.) — they cannot change their password
@@ -309,8 +310,7 @@ export default function Settings() {
 
   // ---- Dirty tracking (per section) ----
   const [profileDirty, setProfileDirty] = useState(false)
-  const [examsDirty, setExamsDirty] = useState(false)
-  const isAnyDirty = profileDirty || examsDirty
+  const isAnyDirty = profileDirty
 
   // beforeunload warning
   useEffect(() => {
@@ -412,46 +412,10 @@ export default function Settings() {
   }
 
   // ---- Exams section state ----
+  // Settings only *shows* the track and the exams already on it; adding an exam or
+  // changing its status/date happens in the shared Exams popout (mounted by Sidebar).
   const { selectedTrack, setSelectedTrack } = useExamProgress()
-  const [localExamMap, setLocalExamMap] = useState<Record<string, { status: ItemStatus; targetDate: string }>>({})
-
-
-  // Populate localExamMap whenever examRows or selectedTrack changes
-  useEffect(() => {
-    const track = TRACKS.find(t => t.key === selectedTrack)
-    if (!track) return
-    const allItems: TrackItem[] = track.sections.flatMap(s => s.items)
-    const map: Record<string, { status: ItemStatus; targetDate: string }> = {}
-    allItems.forEach(item => {
-      const saved = examRows.find(r => r.exam_id === item.id)
-      map[item.id] = { status: saved?.status ?? 'not_started', targetDate: saved?.target_date ?? '' }
-    })
-    setLocalExamMap(map)
-    setExamsDirty(false)
-  }, [examRows, selectedTrack])
-
-  const setExamStatus = (examId: string, status: ItemStatus) => {
-    setLocalExamMap(prev => ({
-      ...prev,
-      [examId]: { ...prev[examId], status, targetDate: status !== 'in_progress' ? '' : prev[examId]?.targetDate ?? '' },
-    }))
-    setExamsDirty(true)
-  }
-
-  const setExamDate = (examId: string, targetDate: string) => {
-    setLocalExamMap(prev => ({ ...prev, [examId]: { ...prev[examId], targetDate } }))
-    setExamsDirty(true)
-  }
-
-  const handleExamsSave = async () => {
-    const rows = Object.entries(localExamMap).map(([exam_id, v]) => ({
-      exam_id,
-      status: v.status,
-      target_date: v.targetDate || null,
-    }))
-    const ok = await saveExamRows(rows)
-    if (ok) setExamsDirty(false)
-  }
+  const openExams = useExamsPopout(s => s.openExams)
 
   // ---- Progress & Data modals ----
   const [showResetModal, setShowResetModal] = useState(false)
@@ -534,6 +498,18 @@ export default function Settings() {
   }
 
   const currentTrack = TRACKS.find(t => t.key === selectedTrack) ?? TRACKS[0]
+
+  // The exams on this track the learner has actually started or passed — everything
+  // else is noise here and lives in the Exams popout.
+  const seenExamIds = new Set<string>()
+  const trackedExams: { item: TrackItem; status: ItemStatus; targetDate: string | null }[] = []
+  for (const item of currentTrack.sections.flatMap(s => s.items)) {
+    if (seenExamIds.has(item.id)) continue
+    const row = examRows.find(r => r.exam_id === item.id)
+    if (!row || row.status === 'not_started') continue
+    seenExamIds.add(item.id)
+    trackedExams.push({ item, status: row.status, targetDate: row.target_date ?? null })
+  }
 
   return (
     <>
@@ -1053,6 +1029,9 @@ export default function Settings() {
               <Card>
                 <CardHeader>
                   <CardTitle>Credential Path &amp; Exams</CardTitle>
+                  <CardDescription>
+                    Your track and the exams you&rsquo;re working through. Add or update exams in the exams panel.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
@@ -1071,79 +1050,48 @@ export default function Settings() {
 
                   {loadingExams ? (
                     <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
-                  ) : (
-                    <div className="space-y-4">
-                      {currentTrack.sections.map(section => (
-                        <div key={section.label}>
-                          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                            {section.label}
-                          </p>
-                          <div className="space-y-2">
-                            {section.items.map(item => {
-                              const row = localExamMap[item.id] ?? { status: 'not_started' as ItemStatus, targetDate: '' }
-                              const statusColor =
-                                row.status === 'completed' ? 'text-green-600 dark:text-green-500 opacity-100' :
-                                row.status === 'in_progress' ? 'text-amber-600 dark:text-amber-500 opacity-100' :
-                                'text-muted-foreground opacity-60'
-                              return (
-                                <div key={item.id} className="flex flex-wrap items-center gap-3 py-1">
-                                  <button
-                                    type="button"
-                                    onClick={() => setExamStatus(item.id, STATUS_CYCLE[row.status])}
-                                    title={STATUS_LABEL[row.status]}
-                                    aria-label={`${STATUS_LABEL[row.status]} — click to cycle ${item.name} status`}
-                                    className={cn(
-                                      'inline-flex items-center justify-center w-[22px] h-[22px] shrink-0 rounded-full transition-all duration-100 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&>svg]:w-[18px] [&>svg]:h-[18px]',
-                                      statusColor,
-                                    )}
-                                  >
-                                    <StatusIcon status={row.status} />
-                                  </button>
-                                  <span
-                                    className={cn(
-                                      'text-sm font-medium w-32 shrink-0',
-                                      row.status === 'completed' && 'line-through text-muted-foreground',
-                                    )}
-                                  >
-                                    {item.name}
-                                  </span>
-                                  {row.status === 'in_progress' && (
-                                    <div className="flex flex-col gap-2">
-                                      <div className="flex items-center gap-2">
-                                        <Label htmlFor={`date-${item.id}`} className="text-xs text-muted-foreground whitespace-nowrap">
-                                          Target date
-                                        </Label>
-                                        <input
-                                          id={`date-${item.id}`}
-                                          type="date"
-                                          value={row.targetDate}
-                                          onChange={e => setExamDate(item.id, e.target.value)}
-                                          className="text-base border border-input rounded-md px-2 py-1 bg-background text-foreground"
-                                        />
-                                      </div>
-                                      <ExamSittingsList
-                                        examId={item.id}
-                                        selectedDate={row.targetDate}
-                                        onSelect={date => setExamDate(item.id, date)}
-                                      />
-                                    </div>
-                                  )}
-                                </div>
-                              )
-                            })}
-                          </div>
+                  ) : trackedExams.length > 0 ? (
+                    <div className="space-y-1">
+                      {trackedExams.map(({ item, status, targetDate }) => (
+                        <div key={item.id} className="flex items-center gap-3 py-1">
+                          <span
+                            title={STATUS_LABEL[status]}
+                            className={cn(
+                              'inline-flex items-center justify-center w-[22px] h-[22px] shrink-0 [&>svg]:w-[18px] [&>svg]:h-[18px]',
+                              status === 'completed'
+                                ? 'text-green-600 dark:text-green-500'
+                                : 'text-amber-600 dark:text-amber-500',
+                            )}
+                          >
+                            <StatusIcon status={status} />
+                          </span>
+                          <span
+                            className={cn(
+                              'text-sm font-medium min-w-0 truncate',
+                              status === 'completed' && 'line-through text-muted-foreground',
+                            )}
+                          >
+                            {item.name}
+                          </span>
+                          <span className="ml-auto shrink-0 text-xs text-muted-foreground">
+                            {status === 'completed'
+                              ? STATUS_LABEL.completed
+                              : targetDate
+                              ? formatTargetDate(targetDate)
+                              : STATUS_LABEL.in_progress}
+                          </span>
                         </div>
                       ))}
                     </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      No exams on this track yet.
+                    </p>
                   )}
 
-                  <Feedback error={examsState.error} success={examsState.success} />
-                  <Button
-                    onClick={handleExamsSave}
-                    disabled={!examsDirty || examsState.saving}
-                    className="w-full sm:w-auto"
-                  >
-                    {examsState.saving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Saving…</> : 'Save Exam Progress'}
+                  <Button variant="outline" onClick={openExams} className="w-full sm:w-auto">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Exams
                   </Button>
                 </CardContent>
               </Card>

@@ -16,7 +16,7 @@
 //      without it. Not a definition — the concept page already has one.
 //
 // Consumed by lib/keystone.ts (lookup + progress) and rendered by
-// components/KeystoneBadge.tsx. See docs/keystone-concepts.md.
+// components/KeystoneName.tsx. See docs/keystone-concepts.md.
 
 export interface KeystoneConcept {
   /** Canonical concept name — matches `Concepts/<name>.md`. */

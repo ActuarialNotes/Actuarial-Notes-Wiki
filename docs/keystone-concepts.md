@@ -73,13 +73,19 @@ keystone left alone for a month counts as decayed here too.
 Defined in `quiz/src/index.css` under "Keystone concepts", and summarised in
 `docs/style-guide.md` §4.4.
 
+**The marker is a gold underline on the concept's own name — never an icon
+beside it.** A keystone therefore looks the same in a sentence on the syllabus
+page, as the popup title, as a flashcard title and in a search result, and the
+name itself is the tap target that explains why it is a keystone.
+
 | Class | What it does |
 |---|---|
-| `.keystone-ring` | Gold gradient edge, via the same padding + `mask-composite: exclude` ring trick as the foil border. `--keystone-ring-width` tunes thickness |
+| `.wiki-link--keystone` | A keystone mentioned in wiki prose: the link's underline turns gold |
+| `.keystone-underline` | The same marker for a name outside prose (popup title, page heading, card title): a gold gradient bar painted as a background, so it can catch the shine |
+| `.keystone-ring` | Gold gradient edge, via the same padding + `mask-composite: exclude` ring trick as the foil border. `--keystone-ring-width` tunes thickness. Used for *panels* (the strip, the explainer), not names |
 | `.keystone-ring--hero` | Thicker edge + a permanently travelling shine, for a hero surface |
-| `.keystone-wash` | Warm gold wash behind a keystone surface. Used on the small surfaces only — the badge chip and the collect card. The exam-page strip is edge-only (ring, no wash), so a full-width panel doesn't tint the page |
-| `.wiki-link--keystone` | A keystone mentioned in wiki prose: gold underline + a small gold lozenge |
-| `@keyframes keystone-shine` | The one sweep animation, used on hover/focus |
+| `.keystone-wash` | Warm gold wash behind a keystone surface. Small surfaces only — in practice just the collect card. The exam-page strip is edge-only (ring, no wash), so a full-width panel doesn't tint the page |
+| `@keyframes keystone-shine` / `keystone-shine-underline` | The sweep animations, used on hover/focus only |
 
 **Gold is not foil, and the two must not be confused:**
 
@@ -91,8 +97,8 @@ Defined in `quiz/src/index.css` under "Keystone concepts", and summarised in
 Because gold is intrinsic, it never animates on its own: the shine sweeps on hover/focus, or on
 a deliberate hero surface, so a syllabus page carrying a dozen keystone links stays calm.
 Where a surface could wear both materials (a collected flashcard tile, the collect card), the
-**edge belongs to foil** and the keystone signal is a glyph or chip inside — the two never
-fight for the same border.
+**edge belongs to foil** and the keystone signal moves inside — the underline on the card's
+name, or the gold chip on the collect card — so the two never fight for the same border.
 
 `prefers-reduced-motion: reduce` disables every keystone animation.
 
@@ -101,18 +107,30 @@ fight for the same border.
 | Surface | Treatment |
 |---|---|
 | Exam study guide (`pages/wiki/WikiExam.tsx`) | `components/wiki/KeystoneStrip.tsx` — the collapsible gold panel that *introduces* the idea, lists all of the exam's keystones with per-concept mastery dots and a mastered-count bar, and opens any of them in the concept popup |
-| Concept popup header (`components/wiki/ConceptPopup.tsx`) | `KeystoneBadge` — the gold glyph beside the title; tapping it explains what a keystone is, why *this* one qualifies, and the exam's mastered count |
+| Concept popup header (`components/wiki/ConceptPopup.tsx`) | The **title** is the marker: gold underline, and tapping the concept name opens the explainer (what a keystone is, why *this* one qualifies, the exam's mastered count) |
 | Wiki prose (`components/wiki/WikiArticle.tsx`) | `.wiki-link--keystone` on concept links — dimmed repeat mentions stay dim, so one marker per idea |
-| Flashcard tiles (`pages/Flashcards.tsx`) | The gold glyph beside the card name (glyph only — the tile edge belongs to the collected-foil material) |
-| Collect modal (`components/collect/CollectCard3D.tsx`) | A gold `KEYSTONE` chip + wash on the card being collected |
-| Wiki search results (`components/wiki/WikiSearchPanel.tsx`) | The keystone glyph replaces the generic concept file icon |
-| Standalone concept page (`pages/wiki/WikiConcept.tsx`) | The `chip` variant of the badge next to the title |
+| Flashcard tiles (`pages/Flashcards.tsx`) | Gold underline on the card name — never a ring, since the tile edge belongs to the collected-foil material |
+| Wiki search results (`components/wiki/WikiSearchPanel.tsx`) | Gold underline on the result's name; the category icon is untouched |
+| Standalone concept page (`pages/wiki/WikiConcept.tsx`) | Gold underline on the `<h1>`, same tap-to-explain |
+| Collect modal (`components/collect/CollectCard3D.tsx`) | A gold `KEYSTONE` chip + wash on the card being collected — a moment, not a name, so the glyph is allowed here |
+| Dashboard Study Guide radial (`components/ReadinessCard.tsx`) | Keystone spokes use the gold mastery ladder instead of the green one (`lib/masteryFill.ts`) |
 
-`components/KeystoneBadge.tsx` exports both `KeystoneIcon` (the drawn glyph — a gold arch
-block, deliberately not a lucide icon so it can carry the gradient and never reads as the
-gem/quest currency) and `KeystoneBadge` (glyph + explainer popover). The badge resolves the
-concept itself and renders **nothing** for a non-keystone, so call sites can drop it in
-unconditionally.
+`components/KeystoneName.tsx` exports `KeystoneName` (the name + explainer popover — it
+resolves the concept itself and renders plain text for a non-keystone, so call sites use it
+for *every* concept title rather than branching) and `KeystoneIcon` (the drawn arch block —
+deliberately not a lucide icon so it can carry the gradient and never reads as the gem/quest
+currency), which is kept for the two surfaces that mark a *space* rather than a name: the
+keystone strip and the collect card's chip.
+
+### The Dashboard radial
+
+`lib/masteryFill.ts` holds both ladders for the Study Guide ring: `LEVEL_FILL` (green, as
+before) and `KEYSTONE_FILL` (three shades of gold climbing with mastery, plus a faint gold
+for New so an untouched keystone still reads as one). `masteryFill(state, keystone)` picks
+between them. **Forgotten stays red in both** — a decayed keystone should alarm, not sparkle
+— and the legend shows each level as a split green/gold dot plus a "Keystone" swatch, so gold
+is self-explaining without a caption. Hovering a keystone spoke appends "· Keystone" to the
+centre readout. Pinned by `lib/masteryFill.test.ts`.
 
 ## Adding an exam
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { MasteryState } from '@/lib/mastery'
 import { isKeystone } from '@/lib/keystone'
-import { KeystoneIcon } from '@/components/KeystoneBadge'
+import { KeystoneIcon } from '@/components/KeystoneName'
 
 // A flat flashcard showing a concept name, styled identically to a collected
 // tile in the Flashcards gallery (the same .flashcard-collected /

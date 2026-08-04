@@ -713,26 +713,31 @@
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
 }
-.wiki-link--keystone::after {
-  content: '';
-  display: inline-block;
-  width: 0.42em;
-  height: 0.42em;
-  margin-left: 0.28em;
-  vertical-align: 0.06em;
-  border-radius: 1px;
-  transform: rotate(45deg);
-  background: var(--keystone-gradient);
-  background-size: 300% 100%;
+
+/* The same marker for a concept *name* outside prose — the popup title, a page
+   heading, a card title. There is no icon anywhere: the gold underline under
+   the word is the whole signal, so a keystone reads the same in a sentence, in
+   a header and in a list. Painted as a background bar (rather than
+   text-decoration) so it can carry the gradient and catch the shine on hover. */
+.keystone-underline {
+  background-image: var(--keystone-gradient);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 300% 2px;
+  padding-bottom: 2px;
 }
-.wiki-link--keystone:hover::after {
-  animation: keystone-shine 3.5s linear infinite;
+.keystone-underline:hover,
+.keystone-underline:focus-visible {
+  animation: keystone-shine-underline 3.5s linear infinite;
+}
+@keyframes keystone-shine-underline {
+  to { background-position: 300% 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .keystone-ring::before,
   .keystone-ring--hero::before,
-  .wiki-link--keystone::after { animation: none !important; }
+  .keystone-underline { animation: none !important; }
 }
 
 /* Study-plan row highlight: rings a checklist row when the popup navigates to it. */

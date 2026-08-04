@@ -26,7 +26,7 @@ import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { NavProgressBar } from '@/components/NavProgressBar'
-import { KeystoneBadge } from '@/components/KeystoneBadge'
+import { KeystoneName } from '@/components/KeystoneName'
 import { buildMasteryLookup } from '@/lib/conceptMatch'
 import { findKeystone, keystoneProgress } from '@/lib/keystone'
 
@@ -318,12 +318,15 @@ export function ConceptPopup() {
           desktop and stay aligned with each other. */}
       <div className={`flex items-center gap-2 h-14 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          <span className="truncate font-semibold text-base min-w-0">{current.name}</span>
-          {/* Keystone marker — gold, and only for the load-bearing few. Sits
-              first so the "this one matters" signal is read with the title. */}
-          {!focusMode && current.kind === 'concept' && (
-            <KeystoneBadge name={current.name} progress={keystoneStats} />
-          )}
+          {/* The title carries the keystone marker itself: a gold underline on
+              the name, tappable to explain why this concept is load-bearing.
+              For an ordinary concept `KeystoneName` renders plain text, so the
+              header looks exactly as it did before. */}
+          <KeystoneName
+            name={current.name}
+            progress={keystoneStats}
+            className="truncate font-semibold text-base min-w-0"
+          />
           {/* Collect / status indicator, sitting just right of the concept name.
               Spacing is the row's `gap-2` and nothing else — the locked state
               draws a visible foil ring at the button's edge, so any negative

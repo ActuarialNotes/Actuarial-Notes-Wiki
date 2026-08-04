@@ -5,7 +5,7 @@ import { buildWikiIndex, type WikiIndexItem } from '@/lib/wikiIndex'
 import { pathToEntryRef, wikiRoute, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { isKeystone } from '@/lib/keystone'
-import { KeystoneIcon } from '@/components/KeystoneBadge'
+
 
 type Scope = 'page' | 'all'
 type Sort = 'alpha' | 'category'
@@ -297,15 +297,13 @@ function SearchResultRow({ item, query }: { item: WikiIndexItem; query: string }
       to={route}
       className="flex items-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent/60 transition-colors"
     >
-      {/* A keystone concept swaps its generic file icon for the gold block, so
-          the load-bearing entries stand out while scanning results. */}
-      {item.category === 'concept' && isKeystone(item.name) ? (
-        <KeystoneIcon className="h-4 w-4 shrink-0 mt-0.5" />
-      ) : (
-        <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
-      )}
+      <Icon className={`h-4 w-4 shrink-0 mt-0.5 ${iconColor}`} />
       <div className="min-w-0 flex-1">
-        <div className="text-sm truncate">{highlight(display, query)}</div>
+        {/* A keystone result is marked the same way it is everywhere else: a
+            gold underline on the concept's name, not a second icon. */}
+        <div className={`text-sm truncate ${item.category === 'concept' && isKeystone(item.name) ? 'keystone-underline' : ''}`}>
+          {highlight(display, query)}
+        </div>
         {(item.author || item.year) && (
           <div className="text-[11px] text-muted-foreground truncate">
             {[item.author, item.year].filter(Boolean).join(' · ')}

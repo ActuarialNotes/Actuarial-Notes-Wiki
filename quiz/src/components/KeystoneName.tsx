@@ -4,15 +4,20 @@ import { findKeystone, keystonesForExam, type KeystoneProgress } from '@/lib/key
 
 // Keystone concepts — the gold marker and its explainer.
 //
-// The glyph is the literal thing: the wedge-shaped block at the crown of an
-// arch, the one that holds every other stone in place. It is drawn rather than
-// borrowed from lucide so it can carry the gold gradient of the `.keystone-*`
-// material (index.css) instead of a flat stroke colour, and so it never reads
-// as the gem/quest currency icons.
+// The marker is a **gold underline on the concept's own name**, nothing else:
+// no badge, no icon beside the title. A keystone therefore looks the same
+// wherever its name appears — inside a sentence on the syllabus page
+// (`.wiki-link--keystone`), as the popup title, as a page heading — and the
+// name itself is what you tap to find out why it's a keystone.
 //
-// Everything here is inert for a non-keystone concept: `<KeystoneBadge>`
-// resolves the name itself and renders nothing when there is no match, so call
-// sites can drop it in unconditionally.
+// `KeystoneName` is inert for an ordinary concept: it renders the plain name
+// with no underline and no click target, so call sites can use it for every
+// concept title rather than branching.
+//
+// `KeystoneIcon` (the drawn arch block — deliberately not a lucide icon, so it
+// can carry the gold gradient and never reads as the gem/quest currency) is
+// kept for the two surfaces that mark a *space* rather than a name: the
+// exam-guide keystone strip and the collect card's chip.
 
 export function KeystoneIcon({ className = 'h-4 w-4' }: { className?: string }) {
   const id = useId()
@@ -41,17 +46,16 @@ export function KeystoneIcon({ className = 'h-4 w-4' }: { className?: string }) 
   )
 }
 
-interface KeystoneBadgeProps {
-  /** Concept name (or wiki-link path). Non-keystones render nothing. */
+interface KeystoneNameProps {
+  /** Concept name (or wiki-link path). Non-keystones render as plain text. */
   name: string
-  /** `icon` for tight chrome, `chip` when there's room for the word. */
-  variant?: 'icon' | 'chip'
+  /** Typography/layout classes for the name — applied either way. */
+  className?: string
   /** Optional roll-up, shown in the explainer when the caller already has mastery loaded. */
   progress?: KeystoneProgress
-  className?: string
 }
 
-export function KeystoneBadge({ name, variant = 'icon', progress, className = '' }: KeystoneBadgeProps) {
+export function KeystoneName({ name, className = '', progress }: KeystoneNameProps) {
   const match = findKeystone(name)
   const [open, setOpen] = useState(false)
   const [rect, setRect] = useState<DOMRect | null>(null)
@@ -78,7 +82,7 @@ export function KeystoneBadge({ name, variant = 'icon', progress, className = ''
     }
   }, [open])
 
-  if (!match) return null
+  if (!match) return <span className={className}>{name}</span>
 
   const { concept, examId, examLabel } = match
   const total = keystonesForExam(examId).length
@@ -88,8 +92,6 @@ export function KeystoneBadge({ name, variant = 'icon', progress, className = ''
     setOpen(v => !v)
   }
 
-  const label = `${concept.name} is a keystone concept of ${examLabel}`
-
   return (
     <>
       <button
@@ -97,16 +99,10 @@ export function KeystoneBadge({ name, variant = 'icon', progress, className = ''
         type="button"
         onClick={toggle}
         aria-expanded={open}
-        aria-label={label}
-        title={label}
-        className={`keystone-ring keystone-wash shrink-0 inline-flex items-center justify-center gap-1 rounded-full transition-opacity hover:opacity-90 ${
-          variant === 'chip' ? 'h-6 pl-1.5 pr-2' : 'h-6 w-6'
-        } ${className}`}
+        title={`${concept.name} is a keystone concept of ${examLabel} — tap to see why`}
+        className={`keystone-underline text-left ${className}`}
       >
-        <KeystoneIcon className={variant === 'chip' ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
-        {variant === 'chip' && (
-          <span className="text-[11px] font-semibold text-amber-800 dark:text-amber-200">Keystone</span>
-        )}
+        {name}
       </button>
 
       {open && rect && createPortal(
@@ -117,7 +113,7 @@ export function KeystoneBadge({ name, variant = 'icon', progress, className = ''
           className="fixed z-[80] w-72 rounded-lg bg-popover text-popover-foreground shadow-lg p-3.5 keystone-ring"
           style={{
             top: Math.min(rect.bottom + 6, window.innerHeight - 16),
-            left: Math.max(8, Math.min(rect.left - 8, window.innerWidth - 296)),
+            left: Math.max(8, Math.min(rect.left, window.innerWidth - 296)),
           }}
         >
           <div className="flex items-center gap-2">

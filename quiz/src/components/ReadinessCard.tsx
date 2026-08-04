@@ -18,6 +18,8 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mastery'
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
+import { isKeystone } from '@/lib/keystone'
+import { KEYSTONE_FILL, KEYSTONE_TEXT, LEVEL3_TEXT, LEVEL_FILL, masteryFill } from '@/lib/masteryFill'
 import { computeReadiness, parseSectionWeight } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
@@ -45,21 +47,15 @@ const SG_OUTER_R = 126
 const SG_INNER_R = 74
 const SG_CONCEPT_GAP = 1.5
 
-const LEVEL_FILL: Record<MasteryState, string> = {
-  new:       'rgba(34,197,94,0.10)',
-  level1:    'rgba(34,197,94,0.28)',
-  level2:    'rgba(34,197,94,0.62)',
-  level3:    '#22c55e',
-  forgotten: 'rgba(239,68,68,0.45)',
-}
-
 interface SGSegment {
   startDeg: number
   endDeg: number
   conceptName: string
   topicName: string
   state: MasteryState
+  keystone: boolean
 }
+
 
 function sgPolar(angleDeg: number, r: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180
@@ -115,7 +111,14 @@ function StudyGuideRadial({
         const startDeg = cursor + gap / 2
         const endDeg = cursor + slotDeg - gap / 2
         if (endDeg > startDeg + 0.5) {
-          result.push({ startDeg, endDeg, conceptName: concept.name, topicName: topic.name, state })
+          result.push({
+            startDeg,
+            endDeg,
+            conceptName: concept.name,
+            topicName: topic.name,
+            state,
+            keystone: isKeystone(concept),
+          })
         }
         cursor += slotDeg
       }
@@ -176,10 +179,19 @@ function StudyGuideRadial({
       <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[12px] text-muted-foreground">
         {(['level3', 'level2', 'level1', 'new'] as MasteryState[]).map(s => (
           <span key={s} className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: LEVEL_FILL[s] }} />
+            {/* Each level shows both palettes stacked in one dot: green half for
+                an ordinary concept, gold half for a keystone at the same level. */}
+            <span
+              className="inline-block h-2 w-2 rounded-full shrink-0"
+              style={{ background: `linear-gradient(90deg, ${LEVEL_FILL[s]} 50%, ${KEYSTONE_FILL[s]} 50%)` }}
+            />
             {s === 'new' ? 'New' : s === 'level1' ? 'Level 1' : s === 'level2' ? 'Level 2' : 'Level 3'}
           </span>
         ))}
+        <span className="flex items-center gap-1">
+          <span className="inline-block h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: KEYSTONE_FILL.level3 }} />
+          Keystone
+        </span>
       </div>
       <svg viewBox={`0 0 ${SG_VB} ${SG_VB}`} className="w-full max-w-[260px]" style={{ overflow: 'visible' }}>
         <circle
@@ -195,7 +207,7 @@ function StudyGuideRadial({
             <path
               key={i}
               d={sgArc(seg.startDeg, seg.endDeg, SG_OUTER_R, SG_INNER_R)}
-              fill={LEVEL_FILL[seg.state]}
+              fill={masteryFill(seg.state, seg.keystone)}
               opacity={(hovered || selected) && !isActive ? 0.35 : 1}
               stroke={selected === seg && hovered !== seg ? 'rgba(255,255,255,0.55)' : 'none'}
               strokeWidth={selected === seg && hovered !== seg ? 1 : 0}
@@ -271,8 +283,13 @@ function StudyGuideRadial({
             <text x={SG_CX} y={SG_CY + 2} textAnchor="middle" fontSize={11} fill="currentColor" fontWeight="700">
               {centerSeg.conceptName.length > 20 ? centerSeg.conceptName.slice(0, 18) + '…' : centerSeg.conceptName}
             </text>
-            <text x={SG_CX} y={SG_CY + 18} textAnchor="middle" fontSize={10} fill={centerSeg.state === 'level3' ? '#22c55e' : 'currentColor'} opacity={centerSeg.state === 'level3' ? 1 : 0.65}>
+            <text
+              x={SG_CX} y={SG_CY + 18} textAnchor="middle" fontSize={10}
+              fill={centerSeg.keystone ? KEYSTONE_TEXT : centerSeg.state === 'level3' ? LEVEL3_TEXT : 'currentColor'}
+              opacity={centerSeg.keystone || centerSeg.state === 'level3' ? 1 : 0.65}
+            >
               {centerSeg.state === 'new' ? 'New' : centerSeg.state === 'level1' ? 'Level 1' : centerSeg.state === 'level2' ? 'Level 2' : centerSeg.state === 'level3' ? 'Level 3' : 'Forgotten'}
+              {centerSeg.keystone ? ' · Keystone' : ''}
             </text>
           </>
         ) : (

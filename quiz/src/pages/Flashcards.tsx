@@ -61,7 +61,6 @@ import { entryRefToRepoPath, wikiRoute } from '@/lib/wikiRoutes'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import { isKeystone } from '@/lib/keystone'
-import { KeystoneIcon } from '@/components/KeystoneBadge'
 import {
   needsReviewOrder,
   nextIncompleteIndex,
@@ -1794,13 +1793,13 @@ function SortableCard({
         }`}
       >
         <span className="flex items-center justify-center gap-1.5">
-          {/* Keystone marker. Deliberately the glyph alone, not the gold ring:
-              a collected card already wears the rainbow foil edge, and the two
-              materials must not fight for the same border. */}
-          {!focusMode && card.kind === 'concept' && isKeystone(card.name) && (
-            <KeystoneIcon className="h-4 w-4 shrink-0" />
-          )}
-          <span className="font-semibold text-base leading-snug">{card.name}</span>
+          {/* Keystone marker: the gold underline on the name, same as
+              everywhere else. Never a ring — a collected card already wears the
+              rainbow foil edge, and the two materials must not fight for the
+              same border. */}
+          <span className={`font-semibold text-base leading-snug ${card.kind === 'concept' && isKeystone(card.name) ? 'keystone-underline' : ''}`}>
+            {card.name}
+          </span>
           {!collected && !focusMode && <Lock className="h-4 w-4 shrink-0" />}
         </span>
       </button>

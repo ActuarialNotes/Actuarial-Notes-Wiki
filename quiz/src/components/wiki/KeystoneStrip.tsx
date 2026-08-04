@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { KeystoneIcon } from '@/components/KeystoneBadge'
+import { KeystoneIcon } from '@/components/KeystoneName'
 import { buildMasteryLookup } from '@/lib/conceptMatch'
 import { keystoneProgress } from '@/lib/keystone'
 import { useConceptMastery } from '@/hooks/useConceptMastery'

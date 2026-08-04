@@ -183,9 +183,12 @@ material is **earned**, never applied to a whole list — a flashcard pack only 
 ### 4.4 The "keystone" gold material
 
 Keystone concepts — the ~10–15 load-bearing concepts per exam (`docs/keystone-concepts.md`) —
-get a second rarity material: **polished gold**, via `.keystone-ring` (gradient edge, same
-padding + mask-exclude trick), `.keystone-wash` (warm background), and `.wiki-link--keystone`
-(gold underline + lozenge for a keystone mentioned in prose).
+get a second rarity material: **polished gold**. On a *name* it is always an underline —
+`.wiki-link--keystone` in prose, `.keystone-underline` for a title or heading — and never an
+icon or badge beside the word, so one signal covers every surface and the name itself stays
+the tap target. On a *panel* it is `.keystone-ring` (gradient edge, same padding +
+mask-exclude trick) with `.keystone-wash` behind it. In the Dashboard's Study Guide ring the
+same gold replaces green as the mastery ladder for keystone spokes (`lib/masteryFill.ts`).
 
 Gold and foil mean different things and must stay distinguishable:
 

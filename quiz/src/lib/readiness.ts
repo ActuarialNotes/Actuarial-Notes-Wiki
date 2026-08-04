@@ -115,10 +115,12 @@ export interface ReadinessCriterion {
   pct: number
   /** Share of the headline score this criterion carries, 0–1 (renormalised). */
   weight: number
-  /** What the number counts, e.g. "12 of 74 concepts at Level 3". */
+  /**
+   * The tally behind the number, e.g. "12/74 at Level 3 · 49 new". Kept to a
+   * single short line — the popup shows it under the bar, and prose explaining
+   * the scoring belongs in docs/exam-readiness.md, not on screen.
+   */
   detail: string
-  /** What would raise it. */
-  hint: string
 }
 
 export interface ReadinessBand {
@@ -162,10 +164,6 @@ export interface ExamReadinessAssessment {
   /** Null when the exam has no authored keystones. */
   keystone: KeystoneProgress | null
   counts: ConceptStateCounts
-}
-
-function plural(n: number, word: string): string {
-  return `${n} ${word}${n === 1 ? '' : 's'}`
 }
 
 /** Credit a mastery state earns toward readiness, 0–3. */
@@ -216,19 +214,17 @@ export function computeExamReadiness(
       pct: syllabusPct,
       weight: CRITERION_WEIGHTS.syllabus,
       detail: counts.total > 0
-        ? `${counts.level3} of ${plural(counts.total, 'concept')} at Level 3, ${counts.new} untouched`
-          + (counts.forgotten > 0 ? `, ${counts.forgotten} decayed` : '')
-        : 'No syllabus concepts parsed for this exam',
-      hint: 'Every concept carried a level higher lifts this, weighted by its section’s exam weighting. Concepts left unreviewed decay back down.',
+        ? `${counts.level3}/${counts.total} at Level 3 · ${counts.new} new`
+          + (counts.forgotten > 0 ? ` · ${counts.forgotten} decayed` : '')
+        : 'No syllabus concepts parsed',
     },
     ...(hasKeystones ? [{
       id: 'keystone' as const,
       label: 'Keystone concepts',
       pct: keystonePct,
       weight: CRITERION_WEIGHTS.keystone,
-      detail: `${keystone.mastered} of ${plural(keystone.total, 'keystone')} mastered`
-        + (keystone.forgotten > 0 ? `, ${keystone.forgotten} decayed` : ''),
-      hint: 'The load-bearing concepts of this exam. They carry more weight here than their share of the syllabus.',
+      detail: `${keystone.mastered}/${keystone.total} mastered`
+        + (keystone.forgotten > 0 ? ` · ${keystone.forgotten} decayed` : ''),
     }] : []),
   ]
 

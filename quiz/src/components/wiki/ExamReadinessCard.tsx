@@ -23,10 +23,14 @@ import type { MasteryState } from '@/lib/mastery'
  * card on the page about *the reader* rather than the exam.
  *
  * The card is the summary: an overall dial plus one dial per criterion. The
- * popup is the assessment — what each criterion measures, how the keystone
+ * popup is the assessment — each criterion's score and tally, how the keystone
  * concepts (docs/keystone-concepts.md) are sitting, and which syllabus sections
  * are dragging the score down. Keystones are listed here rather than in a strip
  * of their own: they are a readiness criterion, so this is where they belong.
+ *
+ * It stays deliberately short of prose: the numbers, the bars and the keystone
+ * chips are the content, and the explanation of *how* the score works lives in
+ * docs/exam-readiness.md rather than under every bar.
  *
  * Scoring lives in `lib/readiness.ts` — this file only draws it.
  */
@@ -122,7 +126,6 @@ function CriterionRow({ criterion, children }: { criterion: ReadinessCriterion; 
       </div>
       <CriterionBar pct={criterion.pct} />
       <p className="text-xs text-muted-foreground">{criterion.detail}</p>
-      <p className="text-xs text-muted-foreground/70">{criterion.hint}</p>
       {children}
     </li>
   )

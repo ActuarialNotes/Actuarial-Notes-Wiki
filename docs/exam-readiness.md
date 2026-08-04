@@ -1,8 +1,8 @@
 # Exam Readiness Score
 
-The card at the top of every exam study guide — a row of green dials that opens an
-assessment popup. It answers one question: *how ready am I to sit this exam?*, and then says
-why the number is what it is.
+The card at the top of every exam study guide — a single green dial that opens an
+assessment popup. It answers one question: *how ready am I to sit this exam?*, and the popup
+then says why the number is what it is.
 
 - Scoring: `quiz/src/lib/readiness.ts` (`computeExamReadiness`), tested in `readiness.test.ts`
 - UI: `quiz/src/components/wiki/ExamReadinessCard.tsx`
@@ -59,12 +59,19 @@ else to wire.
 
 `readinessBand(pct)` maps the score onto the verdict shown on the card and as the popup's
 heading: **Not started** (<15), **Building foundations** (<40), **Making progress** (<65),
-**Nearly exam ready** (<85), **Exam ready** (85+). Each carries a one-sentence blurb telling
-the reader what to do next.
+**Nearly exam ready** (<85), **Exam ready** (85+). Each also carries a one-sentence `blurb`
+saying what to do next; nothing renders it today — the band name says where the reader
+stands and the criterion rows say what is holding the number down, so the sentence was
+repeating both.
+
+## What the card shows
+
+The overall dial and the band label. Nothing else: the criteria, the tally and the sections
+are all one tap away, and a card that is a third of a phone wide has room for one number.
 
 ## What the popup shows
 
-1. The overall dial, the band and its blurb.
+1. The overall dial and the band.
 2. **How it's scored** — one row per criterion: its percentage, its weight, and a one-line
    tally of what the number counts (`detail`, e.g. `7/87 at Level 3 · 49 new`). No prose
    explaining the scoring: the criterion names and the tally carry it, and this document is
@@ -72,8 +79,8 @@ the reader what to do next.
    keystone list as chips with mastery dots; tapping one opens that concept in the concept
    popup, on the exam's full concept list so Previous/Next still walks the whole syllabus.
    **This is the only surface that names all of an exam's keystones.**
-3. **Syllabus sections** — the per-section bars, in syllabus order, with the sections below
-   the overall score named as "furthest behind".
+3. **Syllabus sections** — the per-section bars, in syllabus order. The bars themselves show
+   which sections are behind, so no line names them.
 
 Signed-out readers see the card at 0 with a line explaining that the score is built from
 answered questions — mastery is a server-side record, so there is nothing to show.
@@ -81,11 +88,12 @@ answered questions — mastery is a server-side record, so there is nothing to s
 ## Placement
 
 The card borrows the orientation cards' shell (`ExamGuideCards`) and is passed to them as
-`leadCard`, spanning that (desktop-capped, `max-w-md`) two-column row above them — a dial
-reads badly at half width, and this is the one card on an exam page that is about the reader
-rather than the exam. Exam pages that carry no `<div class="exam-guides"></div>` (everything
-but P and FM today) get the card from a marker `WikiArticle` inserts under the "Learning
-Objectives" heading instead.
+`leadCard`, taking the first column of that (desktop-capped, `max-w-xl`) three-column row —
+readiness, then the two guides. At a third of a phone's width the cards drop their title icon
+and step the title down a size; the dial scales with the card the way a guide cover does. Exam
+pages that carry no `<div class="exam-guides"></div>` (everything but P and FM today) get the
+card from a marker `WikiArticle` inserts under the "Learning Objectives" heading instead, in
+the same capped three-column grid so it lands at the same width.
 
 ## Colour
 

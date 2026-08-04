@@ -122,8 +122,9 @@ Other important `lib/` modules:
 - `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
   (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept
   tally); every surface that prints a readiness % calls it — the exam page's **Exam Readiness
-  Score** card (`components/wiki/ExamReadinessCard.tsx`, riding in the orientation-card row as
-  `ExamGuideCards`'s `leadCard`, its popup listing the exam's keystones), the Dashboard's
+  Score** card (`components/wiki/ExamReadinessCard.tsx`, the first of three cards in the
+  orientation-card row as `ExamGuideCards`'s `leadCard` — the card shows only the overall
+  dial, its popup the breakdown and the exam's keystones), the Dashboard's
   Study Guide radial, the exam grid and the readiness projection. `computeReadiness` is the
   weighted section score it is built from — an input, not a second number to display.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator
@@ -255,9 +256,9 @@ compile — don't "clean up" the flagged code as dead.
   exam id) + `components/wiki/ExamGuideGraphics.tsx`, and `WikiArticle` swaps the marker
   for `components/wiki/ExamGuideCards.tsx`. Page bodies are markdown and may use
   `[[Wiki Links]]`. An exam with no entry in `EXAM_GUIDES` renders no guide cards. The
-  **Exam Readiness Score** card rides in the same row (passed to `ExamGuideCards` as
-  `leadCard`, spanning it); on an exam page with no `exam-guides` div it falls back to a slot
-  inserted under the "Learning Objectives" heading.
+  **Exam Readiness Score** card rides in the same row as its first column (passed to
+  `ExamGuideCards` as `leadCard` — three cards across); on an exam page with no `exam-guides`
+  div it falls back to a slot inserted under the "Learning Objectives" heading.
 - Question files (`questions/<exam-id>/*.md`) have YAML frontmatter: `id`, `exam`, `topic`,
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an

@@ -7,7 +7,6 @@ import {
   computeExamReadiness,
   type ExamReadinessAssessment,
   type ReadinessCriterion,
-  type ReadinessCriterionId,
 } from '@/lib/readiness'
 import { LEVEL3_TEXT } from '@/lib/masteryFill'
 import { playSound } from '@/lib/soundEngine'
@@ -17,16 +16,15 @@ import type { MasteryState } from '@/lib/mastery'
 /**
  * The exam page's readiness card, and the assessment popup it opens.
  *
- * It sits with the orientation cards (`ExamGuideCards`) and borrows their shell
- * — the same card surface, the same click-to-open-a-popup interaction — but
- * spans the row, because a dial reads badly at half width and this is the one
- * card on the page about *the reader* rather than the exam.
+ * It rides in the orientation-card row (`ExamGuideCards`) as one card among
+ * three, borrowing their shell exactly — the same surface, the same
+ * click-to-open-a-popup interaction, the dial standing in for a cover graphic.
  *
- * The card is the summary: an overall dial plus one dial per criterion. The
- * popup is the assessment — each criterion's score and tally, how the keystone
- * concepts (docs/keystone-concepts.md) are sitting, and which syllabus sections
- * are dragging the score down. Keystones are listed here rather than in a strip
- * of their own: they are a readiness criterion, so this is where they belong.
+ * The card is one number: the overall dial and the band it falls in. Every
+ * breakdown is a tap away, in the popup — each criterion's score and tally, how
+ * the keystone concepts (docs/keystone-concepts.md) are sitting, and the
+ * per-section bars. Keystones are listed there rather than in a strip of their
+ * own: they are a readiness criterion, so that is where they belong.
  *
  * It stays deliberately short of prose: the numbers, the bars and the keystone
  * chips are the content, and the explanation of *how* the score works lives in
@@ -34,14 +32,6 @@ import type { MasteryState } from '@/lib/mastery'
  *
  * Scoring lives in `lib/readiness.ts` — this file only draws it.
  */
-
-// Dial labels on the card. Short forms of the criterion names from
-// `lib/readiness.ts` — the dials sit on one row on a phone, and the full names
-// are right there in the popup.
-const CARD_LABEL: Record<ReadinessCriterionId, string> = {
-  syllabus: 'Syllabus',
-  keystone: 'Keystones',
-}
 
 // Level dot colours track the mastery ladder (docs/concept-learning-progression.md).
 const DOT: Record<MasteryState, string> = {
@@ -57,7 +47,7 @@ const DOT: Record<MasteryState, string> = {
  * score, so the hue doesn't have to, and a readiness dial that turns red would
  * fight the mastery ladder's use of red for decay.
  */
-function ReadinessDial({ pct, size, label }: { pct: number; size: number; label?: string }) {
+function ReadinessDial({ pct, size, className }: { pct: number; size: number; className?: string }) {
   const value = Math.max(0, Math.min(100, pct))
   const stroke = Math.max(4, Math.round(size * 0.1))
   const r = (size - stroke) / 2
@@ -65,38 +55,36 @@ function ReadinessDial({ pct, size, label }: { pct: number; size: number; label?
   const cx = size / 2
   const cy = size / 2
   return (
-    // A labelled dial is boxed at a fixed width so the row stays on one line on
-    // a phone, with the label wrapping under the ring instead of setting the
-    // column width.
-    <div className="flex flex-col items-center gap-1" style={{ width: label ? Math.max(size, 68) : size }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="block shrink-0" aria-hidden="true">
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(var(--muted-foreground))" strokeOpacity={0.2} strokeWidth={stroke} />
-        <circle
-          cx={cx} cy={cy} r={r} fill="none"
-          stroke={LEVEL3_TEXT}
-          strokeWidth={stroke}
-          strokeLinecap="round"
-          strokeDasharray={c}
-          strokeDashoffset={c * (1 - value / 100)}
-          transform={`rotate(-90 ${cx} ${cy})`}
-          style={{ transition: 'stroke-dashoffset 500ms ease-out' }}
-        />
-        <text
-          x={cx} y={cy}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fontSize={size * 0.3}
-          fontWeight={700}
-          fill="hsl(var(--foreground))"
-          className="tabular-nums"
-        >
-          {Math.round(value)}
-        </text>
-      </svg>
-      {label && (
-        <span className="text-center text-[11px] leading-tight text-muted-foreground">{label}</span>
-      )}
-    </div>
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className={`block shrink-0 ${className ?? ''}`}
+      aria-hidden="true"
+    >
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="hsl(var(--muted-foreground))" strokeOpacity={0.2} strokeWidth={stroke} />
+      <circle
+        cx={cx} cy={cy} r={r} fill="none"
+        stroke={LEVEL3_TEXT}
+        strokeWidth={stroke}
+        strokeLinecap="round"
+        strokeDasharray={c}
+        strokeDashoffset={c * (1 - value / 100)}
+        transform={`rotate(-90 ${cx} ${cy})`}
+        style={{ transition: 'stroke-dashoffset 500ms ease-out' }}
+      />
+      <text
+        x={cx} y={cy}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fontSize={size * 0.3}
+        fontWeight={700}
+        fill="hsl(var(--foreground))"
+        className="tabular-nums"
+      >
+        {Math.round(value)}
+      </text>
+    </svg>
   )
 }
 
@@ -140,7 +128,7 @@ interface ModalProps {
 }
 
 function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, onClose }: ModalProps) {
-  const { overallPct, band, criteria, sections, weakestSections, keystone } = assessment
+  const { overallPct, band, criteria, sections, keystone } = assessment
 
   // Paper: the panel sliding in, then back out — same as the guide popup.
   useEffect(() => {
@@ -155,8 +143,6 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
-
-  const focus = weakestSections.slice(0, 2)
 
   return createPortal(
     <div
@@ -181,13 +167,12 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
         </div>
 
         <div className="space-y-5 px-5 pb-1">
-          {/* The verdict */}
+          {/* The verdict — the dial and the band it lands in. No blurb: the
+              band name already says where the reader stands, and the criterion
+              rows below say what to do about it. */}
           <div className="flex items-center gap-4">
-            <ReadinessDial pct={overallPct} size={104} />
-            <div className="min-w-0">
-              <h2 className="text-lg font-semibold tracking-tight">{band.label}</h2>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{band.blurb}</p>
-            </div>
+            <ReadinessDial pct={overallPct} size={88} />
+            <h2 className="min-w-0 text-lg font-semibold tracking-tight">{band.label}</h2>
           </div>
 
           {!signedIn && (
@@ -231,11 +216,6 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
           {sections.length > 0 && (
             <section>
               <h3 className="text-sm font-semibold">Syllabus sections</h3>
-              {focus.length > 0 && (
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                  Furthest behind: {focus.map(s => s.name).join(', ')}
-                </p>
-              )}
               <ul className="mt-2 space-y-2">
                 {sections.map(section => (
                   <li key={section.name} className="space-y-1">
@@ -299,18 +279,19 @@ export function ExamReadinessCard({ examId, examLabel, syllabus, onSelectConcept
         type="button"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
-        className="group col-span-2 flex flex-col rounded-lg bg-card p-4 text-left text-card-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group flex h-full flex-col rounded-lg bg-card p-3 text-left text-card-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:p-4"
       >
-        <div className="mb-3 flex flex-wrap items-start justify-center gap-x-2 gap-y-3 py-1 sm:gap-x-5">
-          <ReadinessDial pct={assessment.overallPct} size={76} label="Overall" />
-          {assessment.criteria.map(c => (
-            <ReadinessDial key={c.id} pct={c.pct} size={56} label={CARD_LABEL[c.id]} />
-          ))}
+        {/* One number. The dial stands where the guide cards put their cover
+            graphic — and, like the covers, it follows the card width (the
+            viewBox scales) so a third of a phone doesn't overflow it. The
+            breakdown waits in the popup. */}
+        <div className="mb-3 flex flex-1 items-center justify-center">
+          <ReadinessDial pct={assessment.overallPct} size={88} className="h-auto w-full max-w-[88px]" />
         </div>
         <div className="flex items-start gap-2">
-          <Gauge className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+          <Gauge className="mt-0.5 hidden h-5 w-5 shrink-0 text-primary sm:block" />
           <div className="min-w-0">
-            <h3 className="text-base font-semibold leading-snug tracking-tight">Exam Readiness Score</h3>
+            <h3 className="text-sm font-semibold leading-snug tracking-tight sm:text-base">Exam Readiness</h3>
             <p className="text-xs text-muted-foreground">{assessment.band.label}</p>
           </div>
         </div>

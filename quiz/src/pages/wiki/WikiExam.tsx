@@ -356,19 +356,18 @@ export default function WikiExam() {
       )}
 
       {content !== null && (
-        <KeystoneStrip
-          examId={progressKey}
-          examLabel={extractedTitle ?? examFileName}
-          onSelect={openKeystone}
-        />
-      )}
-
-      {content !== null && (
         <WikiArticle
           markdown={content}
           sourcePath={`${examFileName}.md`}
           onWikiLink={onWikiLink}
           titleBadge={titleBadge}
+          keystone={(
+            <KeystoneStrip
+              examId={progressKey}
+              examLabel={extractedTitle ?? examFileName}
+              onSelect={openKeystone}
+            />
+          )}
         />
       )}
     </div>

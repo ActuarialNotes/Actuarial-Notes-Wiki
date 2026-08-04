@@ -152,6 +152,8 @@ export interface WikiArticleProps {
   className?: string
   /** Optional node rendered inline after the H1 title (e.g. an exam status badge). */
   titleBadge?: React.ReactNode
+  /** Optional node rendered after the learning objectives (the keystone strip). */
+  keystone?: React.ReactNode
 }
 
 function refKey(ref: WikiEntryRef): string {
@@ -184,6 +186,21 @@ export function markExamGuides(md: string): string {
   return md.replace(/^<div class="exam-guides"[^>]*>\s*<\/div> *$/gm, `\n${EXAM_GUIDES_MARKER}\n`)
 }
 
+// The keystone panel goes *after* the learning objectives: the reader meets the
+// syllabus first, then the load-bearing few within it. Unlike the guide cards
+// the exam pages carry no marker for it, so one is inserted at the end of the
+// "Learning Objectives" section — before the next `##` heading, or at the end of
+// the page when nothing follows.
+export const KEYSTONE_MARKER = '%%keystone-strip%%'
+
+export function markKeystoneStrip(md: string): string {
+  const heading = /^## +Learning Objectives.*$/im.exec(md)
+  const after = heading ? heading.index + heading[0].length : 0
+  const next = heading ? /^## /m.exec(md.slice(after)) : null
+  const at = heading ? (next ? after + next.index : md.length) : md.length
+  return `${md.slice(0, at)}\n${KEYSTONE_MARKER}\n\n${md.slice(at)}`
+}
+
 // Strip block-level HTML divs that publish.js embeds for metadata / layout.
 // react-markdown renders them as literal text without rehype-raw, so they must
 // be removed before parsing.
@@ -195,13 +212,15 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, keystone }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
+  const hasKeystone = keystone != null
   const processed = useMemo(() => {
     const stripped = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
-    return stripHtmlBlocks(markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(stripped))))
-  }, [markdown])
+    const marked = markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(stripped)))
+    return stripHtmlBlocks(hasKeystone ? markKeystoneStrip(marked) : marked)
+  }, [markdown, hasKeystone])
 
   // Exam pages get the orientation cards; every other page ignores the marker.
   const guideExamId = sourcePath && /^Exam\b/i.test(sourcePath) ? examIdFromFile(sourcePath) : null
@@ -233,6 +252,9 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       const only = kids.length === 1 ? kids[0] : null
       if (only && only.type === 'text' && only.value.trim() === EXAM_GUIDES_MARKER) {
         return guideExamId ? <ExamGuideCards examId={guideExamId} /> : null
+      }
+      if (only && only.type === 'text' && only.value.trim() === KEYSTONE_MARKER) {
+        return <>{keystone}</>
       }
       if (
         !hideImages &&
@@ -291,7 +313,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [navigate, onWikiLink, hideImages, titleBadge, guideExamId])
+  }), [navigate, onWikiLink, hideImages, titleBadge, guideExamId, keystone])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

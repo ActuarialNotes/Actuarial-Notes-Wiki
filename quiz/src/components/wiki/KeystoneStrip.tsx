@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { KeystoneIcon } from '@/components/KeystoneName'
 import { buildMasteryLookup } from '@/lib/conceptMatch'
 import { keystoneProgress } from '@/lib/keystone'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -9,10 +8,12 @@ import type { MasteryState } from '@/lib/mastery'
 // The keystone strip — where the idea gets introduced.
 //
 // Every other keystone surface is a marker on something the reader already
-// found. This is the one place that says what a keystone *is* and names all of
-// them for the exam in front of you, so the concept is discoverable rather than
-// something you infer from a gold icon. It sits at the top of the exam study
-// guide and collapses to a single line once the reader has the idea.
+// found. This is the one place that names all of them for the exam in front of
+// you, so the concept is discoverable rather than something you infer from a
+// gold underline. It sits *below* the learning objectives — the reader meets
+// the syllabus first, then the load-bearing few within it — and is collapsed to
+// its one-line header by default, so the panel is something you open when you
+// want it rather than a wall between you and the page.
 
 const COLLAPSE_KEY = 'keystone-strip-collapsed'
 
@@ -36,8 +37,9 @@ interface KeystoneStripProps {
 
 export function KeystoneStrip({ examId, examLabel, onSelect }: KeystoneStripProps) {
   const { records } = useConceptMastery()
+  // Collapsed unless the reader has opened it before ('0' = they expanded it).
   const [collapsed, setCollapsed] = useState(
-    () => typeof window !== 'undefined' && window.localStorage.getItem(COLLAPSE_KEY) === '1',
+    () => typeof window === 'undefined' || window.localStorage.getItem(COLLAPSE_KEY) !== '0',
   )
 
   const progress = useMemo(
@@ -57,31 +59,24 @@ export function KeystoneStrip({ examId, examLabel, onSelect }: KeystoneStripProp
   const pct = progress.total ? Math.round((progress.mastered / progress.total) * 100) : 0
 
   return (
-    <section className="keystone-ring rounded-lg p-4 not-prose" aria-label={`Keystone concepts for ${examLabel}`}>
+    <section className="keystone-ring rounded-lg p-4 my-6 not-prose" aria-label={`Keystone concepts for ${examLabel}`}>
       <button
         type="button"
         onClick={toggle}
         aria-expanded={!collapsed}
         className="w-full flex items-center gap-2 text-left"
       >
-        <KeystoneIcon className="h-5 w-5 shrink-0" />
         <span className="text-base font-semibold">Keystone concepts</span>
-        <span className="ml-auto flex items-center gap-2 shrink-0">
-          <span className="text-xs text-muted-foreground tabular-nums">
-            {progress.mastered}/{progress.total} mastered
-          </span>
-          <ChevronDown
-            className={`h-4 w-4 text-muted-foreground transition-transform ${collapsed ? '' : 'rotate-180'}`}
-          />
+        <span className="text-xs text-muted-foreground tabular-nums">
+          {progress.mastered}/{progress.total}
         </span>
+        <ChevronDown
+          className={`ml-auto h-4 w-4 shrink-0 text-muted-foreground transition-transform ${collapsed ? '' : 'rotate-180'}`}
+        />
       </button>
 
       {!collapsed && (
         <>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Pull the keystone and the arch falls — learn these first, and over-learn them.
-          </p>
-
           <div className="mt-3 h-1.5 rounded-full bg-muted overflow-hidden" role="presentation">
             <div
               className="h-full rounded-full transition-[width] duration-500"

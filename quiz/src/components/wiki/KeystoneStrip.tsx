@@ -10,8 +10,8 @@ import type { MasteryState } from '@/lib/mastery'
 // Every other keystone surface is a marker on something the reader already
 // found. This is the one place that names all of them for the exam in front of
 // you, so the concept is discoverable rather than something you infer from a
-// gold underline. It sits *below* the learning objectives — the reader meets
-// the syllabus first, then the load-bearing few within it — and is collapsed to
+// gold underline. It opens the learning objectives — the load-bearing few named
+// before the reader starts down the syllabus — and is collapsed to
 // its one-line header by default, so the panel is something you open when you
 // want it rather than a wall between you and the page.
 

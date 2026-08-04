@@ -152,8 +152,12 @@ export interface WikiArticleProps {
   className?: string
   /** Optional node rendered inline after the H1 title (e.g. an exam status badge). */
   titleBadge?: React.ReactNode
-  /** Optional node rendered after the learning objectives (the keystone strip). */
-  keystone?: React.ReactNode
+  /**
+   * Optional node rendered with the exam's orientation cards (the readiness
+   * card). Falls back to a slot under the learning objectives on exam pages
+   * that carry no guide cards.
+   */
+  readiness?: React.ReactNode
 }
 
 function refKey(ref: WikiEntryRef): string {
@@ -186,17 +190,21 @@ export function markExamGuides(md: string): string {
   return md.replace(/^<div class="exam-guides"[^>]*>\s*<\/div> *$/gm, `\n${EXAM_GUIDES_MARKER}\n`)
 }
 
-// The keystone panel opens the learning objectives: it names the load-bearing
-// few before the reader starts down the syllabus. Unlike the guide cards the
-// exam pages carry no marker for it, so one is inserted directly under the
-// "Learning Objectives" heading — or at the end of the page when an exam has no
-// such heading.
-export const KEYSTONE_MARKER = '%%keystone-strip%%'
+// The readiness card rides along with the orientation cards, so on an exam page
+// that carries the `exam-guides` div it needs no marker of its own. Exams
+// without that div (the ones with no authored guides) get one inserted directly
+// under the "Learning Objectives" heading — or at the end of the page when an
+// exam has no such heading.
+export const READINESS_MARKER = '%%exam-readiness%%'
 
-export function markKeystoneStrip(md: string): string {
+export function hasExamGuidesMarker(md: string): boolean {
+  return /^<div class="exam-guides"[^>]*>\s*<\/div> *$/m.test(md)
+}
+
+export function markReadinessCard(md: string): string {
   const heading = /^## +Learning Objectives.*$/im.exec(md)
   const at = heading ? heading.index + heading[0].length : md.length
-  return `${md.slice(0, at)}\n\n${KEYSTONE_MARKER}\n${md.slice(at)}`
+  return `${md.slice(0, at)}\n\n${READINESS_MARKER}\n${md.slice(at)}`
 }
 
 // Strip block-level HTML divs that publish.js embeds for metadata / layout.
@@ -210,15 +218,18 @@ function stripHtmlBlocks(md: string): string {
     .replace(/^> *<div\b.*?<\/div> *\n?/gm, '')
 }
 
-export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, keystone }: WikiArticleProps) {
+export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, className, titleBadge, readiness }: WikiArticleProps) {
   const navigate = useNavigate()
   const articleRef = useRef<HTMLDivElement | null>(null)
-  const hasKeystone = keystone != null
+  const hasReadiness = readiness != null
   const processed = useMemo(() => {
     const stripped = stripFrontmatter(markdown).replace(BREADCRUMB_RE, '')
     const marked = markExamGuides(fixBlockquoteOrderedLists(rewriteWikilinks(stripped)))
-    return stripHtmlBlocks(hasKeystone ? markKeystoneStrip(marked) : marked)
-  }, [markdown, hasKeystone])
+    // With guide cards on the page the readiness card joins their row; without
+    // them it needs a marker of its own.
+    const needsMarker = hasReadiness && !hasExamGuidesMarker(stripped)
+    return stripHtmlBlocks(needsMarker ? markReadinessCard(marked) : marked)
+  }, [markdown, hasReadiness])
 
   // Exam pages get the orientation cards; every other page ignores the marker.
   const guideExamId = sourcePath && /^Exam\b/i.test(sourcePath) ? examIdFromFile(sourcePath) : null
@@ -249,10 +260,12 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
       )
       const only = kids.length === 1 ? kids[0] : null
       if (only && only.type === 'text' && only.value.trim() === EXAM_GUIDES_MARKER) {
-        return guideExamId ? <ExamGuideCards examId={guideExamId} /> : null
+        return guideExamId ? <ExamGuideCards examId={guideExamId} leadCard={readiness} /> : null
       }
-      if (only && only.type === 'text' && only.value.trim() === KEYSTONE_MARKER) {
-        return <>{keystone}</>
+      if (only && only.type === 'text' && only.value.trim() === READINESS_MARKER) {
+        // Same capped two-column grid the guide cards use, so an exam page
+        // without them lands the card at the same width as one with them.
+        return <div className="not-prose my-5 grid max-w-md grid-cols-2 gap-3 sm:gap-4">{readiness}</div>
       }
       if (
         !hideImages &&
@@ -311,7 +324,7 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         </a>
       )
     },
-  }), [navigate, onWikiLink, hideImages, titleBadge, guideExamId, keystone])
+  }), [navigate, onWikiLink, hideImages, titleBadge, guideExamId, readiness])
 
   // Active-concept highlight: when the popup is open and its sourcePath
   // matches this article's sourcePath, find the matching wikilink in this

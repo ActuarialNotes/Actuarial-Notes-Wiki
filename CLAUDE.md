@@ -89,6 +89,10 @@ before touching that area**:
   concepts per exam (`data/keystoneConcepts.ts`), the `lib/keystone.ts` lookup every surface
   shares, and the **gold** material that marks them. Read before editing the catalogue or
   touching `.keystone-*` CSS — gold (intrinsic) and rainbow foil (earned) must stay distinct.
+- `docs/exam-readiness.md` — the **Exam Readiness Score** card on each exam study guide: the
+  three weighted criteria (syllabus coverage, keystone concepts, retention), the bands, and
+  why keystone mastery carries far more than its share of the syllabus. Read before changing
+  `lib/readiness.ts` or the card.
 - `docs/distribution-simulators.md` — the **interactive distribution simulators** that replace the
   static `Media/*_pdf.svg` / `*_pmf.svg` embeds on the distribution concept pages: parameter
   sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
@@ -104,7 +108,8 @@ Other important `lib/` modules:
 - `conceptMatch.ts` — resolves concept name variants/aliases to a canonical slug (`slugForLink`)
 - `keystone.ts` — the keystone-concept read side: `findKeystone` / `isKeystone` (strict name
   matching, no fuzzy hits) and `keystoneProgress` (decay-aware mastery roll-up per exam).
-  Rendered by `components/KeystoneName.tsx` + `components/wiki/KeystoneStrip.tsx`.
+  Rendered by `components/KeystoneName.tsx`; the per-exam list lives in the readiness popup
+  (`components/wiki/ExamReadinessCard.tsx`), where keystone mastery is a scoring criterion.
 - `questionAttempts.ts` — turns a learner's per-question response tally (`hooks/useQuestionAttempts`,
   backed by `question_responses`) into the display state every question list shows: attempted or not,
   and how many attempts were successful vs unsuccessful. Rendered by `components/QuestionAttemptBadge.tsx`,
@@ -113,7 +118,12 @@ Other important `lib/` modules:
   writing a new chip. Attempt history is server-side only, so signed-out viewers pass
   `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
-- `readiness.ts` — exam-readiness score shown on the Dashboard
+- `readiness.ts` — exam-readiness scoring. `computeReadiness` is the weighted section score
+  behind the Dashboard's Study Guide radial; `computeExamReadiness` builds the full
+  assessment (three criteria — syllabus coverage, keystone concepts, retention — plus band,
+  section breakdown and concept tally) rendered by the exam page's **Exam Readiness Score**
+  card, `components/wiki/ExamReadinessCard.tsx`. That card rides in the orientation-card row
+  (`ExamGuideCards`'s `leadCard`), and its popup is where an exam's keystones are listed.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator
   engine: special functions + seeded samplers, the per-distribution spec catalogue (with the
   `Media/*.svg` → spec map), and the pure curve/histogram/tick helpers the SVG reads. Rendered by
@@ -204,8 +214,8 @@ Other important `lib/` modules:
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **47 test files /
-~830 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **53 test files /
+~890 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -242,7 +252,10 @@ compile — don't "clean up" the flagged code as dead.
   illustrations are authored app-side in `quiz/src/data/examGuides.ts` (keyed by the wiki
   exam id) + `components/wiki/ExamGuideGraphics.tsx`, and `WikiArticle` swaps the marker
   for `components/wiki/ExamGuideCards.tsx`. Page bodies are markdown and may use
-  `[[Wiki Links]]`. An exam with no entry in `EXAM_GUIDES` renders nothing.
+  `[[Wiki Links]]`. An exam with no entry in `EXAM_GUIDES` renders no guide cards. The
+  **Exam Readiness Score** card rides in the same row (passed to `ExamGuideCards` as
+  `leadCard`, spanning it); on an exam page with no `exam-guides` div it falls back to a slot
+  inserted under the "Learning Objectives" heading.
 - Question files (`questions/<exam-id>/*.md`) have YAML frontmatter: `id`, `exam`, `topic`,
   `learning_objective`, `difficulty` (`easy`/`medium`/`hard`), `type`, `wiki_link` (array
   of concept paths), `answer`, `points` — followed by the question body, options, and an

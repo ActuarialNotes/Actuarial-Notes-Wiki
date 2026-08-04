@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
@@ -228,10 +228,21 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
   )
 }
 
-export function ExamGuideCards({ examId }: { examId: string }) {
+interface ExamGuideCardsProps {
+  examId: string
+  /**
+   * A card rendered first in the grid, above the guides — the readiness card
+   * (`ExamReadinessCard`), which spans the row. Passed in rather than imported
+   * because it needs the page's syllabus and concept-popup wiring, which live
+   * in `WikiExam`.
+   */
+  leadCard?: ReactNode
+}
+
+export function ExamGuideCards({ examId, leadCard }: ExamGuideCardsProps) {
   const guides = guidesForExam(examId)
   const [openId, setOpenId] = useState<string | null>(null)
-  if (guides.length === 0) return null
+  if (guides.length === 0 && !leadCard) return null
   const open = guides.find(g => g.id === openId) ?? null
 
   return (
@@ -240,8 +251,10 @@ export function ExamGuideCards({ examId }: { examId: string }) {
           column the pair grew to ~400px each and read as a hero banner rather
           than the two side notes they are. Card height follows the width (the
           cover keeps its aspect ratio), so the cap shrinks both dimensions —
-          type stays at its normal size. */}
+          type stays at its normal size. The lead card spans the row inside that
+          same cap, so the block reads as one stack rather than two widths. */}
       <div className="grid max-w-md grid-cols-2 gap-3 sm:gap-4">
+        {leadCard}
         {guides.map(guide => (
           <ExamGuideCard key={guide.id} guide={guide} onOpen={() => setOpenId(guide.id)} />
         ))}

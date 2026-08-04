@@ -7,10 +7,10 @@ import { fromSlug, examIdFromFile, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
 import { WikiArticle } from '@/components/wiki/WikiArticle'
-import { KeystoneStrip } from '@/components/wiki/KeystoneStrip'
+import { ExamReadinessCard } from '@/components/wiki/ExamReadinessCard'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useAuth } from '@/hooks/useAuth'
-import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
+import { parseExamMetadata, parseExamSyllabus, wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { todayISO } from '@/lib/studyPlan'
 import { useExamsPopout } from '@/hooks/useExamsPopout'
 import type { ItemStatus } from '@/data/tracks'
@@ -145,6 +145,16 @@ export default function WikiExam() {
     const match = withoutFm.match(/^#\s+(.+)$/m)
     return match ? match[1].trim() : null
   }, [content])
+
+  // Parsed straight from the page's own markdown rather than through
+  // `useWikiSyllabus` (which fetches every exam) — this page already holds the
+  // file the syllabus comes from. Feeds the readiness score.
+  const syllabus = useMemo(() => {
+    if (!content) return null
+    const meta = parseExamMetadata(content)
+    if (!meta) return null
+    return parseExamSyllabus(content, meta.examId, meta.examLabel, meta.examTopic, examFileName)
+  }, [content, examFileName])
 
   const isExamBeta = progressKey !== 'P' && progressKey !== 'FM'
 
@@ -301,10 +311,10 @@ export default function WikiExam() {
     return true
   }, [conceptList, conceptOccurrences, resourceRefs, examFileName, openAt, studyPlanRefs])
 
-  // Open a keystone from the strip. It behaves like clicking that concept in
-  // the syllabus text: the popup opens on the full concept list so Previous/Next
-  // still walks the whole exam, not just the keystones.
-  const openKeystone = useCallback((conceptName: string) => {
+  // Open a concept from the readiness card (its keystone list). It behaves like
+  // clicking that concept in the syllabus text: the popup opens on the full
+  // concept list so Previous/Next still walks the whole exam.
+  const openReadinessConcept = useCallback((conceptName: string) => {
     const idx = conceptList.findIndex(r => r.name.toLowerCase() === conceptName.toLowerCase())
     const list = idx >= 0 ? conceptList : [{ kind: 'concept' as const, name: conceptName }]
     const occurrenceIndex = Math.max(
@@ -361,11 +371,12 @@ export default function WikiExam() {
           sourcePath={`${examFileName}.md`}
           onWikiLink={onWikiLink}
           titleBadge={titleBadge}
-          keystone={(
-            <KeystoneStrip
+          readiness={(
+            <ExamReadinessCard
               examId={progressKey}
               examLabel={extractedTitle ?? examFileName}
-              onSelect={openKeystone}
+              syllabus={syllabus}
+              onSelectConcept={openReadinessConcept}
             />
           )}
         />

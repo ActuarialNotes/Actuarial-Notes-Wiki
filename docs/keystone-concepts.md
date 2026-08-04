@@ -87,9 +87,9 @@ name itself is the tap target that explains why it is a keystone.
 |---|---|
 | `.wiki-link--keystone` | A keystone mentioned in wiki prose: the link's underline turns gold |
 | `.keystone-underline` | The same marker for a name outside prose (popup title, page heading, card title): a gold gradient bar painted as a background, so it can catch the shine |
-| `.keystone-ring` | Gold gradient edge, via the same padding + `mask-composite: exclude` ring trick as the foil border. `--keystone-ring-width` tunes thickness. Used for *panels* (the strip, the explainer), not names |
+| `.keystone-ring` | Gold gradient edge, via the same padding + `mask-composite: exclude` ring trick as the foil border. `--keystone-ring-width` tunes thickness. Used for *panels and chips* (the explainer popover, the collect card's chip), not names |
 | `.keystone-ring--hero` | Thicker edge + a permanently travelling shine, for a hero surface |
-| `.keystone-wash` | Warm gold wash behind a keystone surface. Small surfaces only — in practice just the collect card. The exam-page strip is edge-only (ring, no wash), so a full-width panel doesn't tint the page |
+| `.keystone-wash` | Warm gold wash behind a keystone surface. Small surfaces only — in practice just the collect card. Nothing full-width wears it, so a wide panel never tints the page |
 | `@keyframes keystone-shine` / `keystone-shine-underline` | The sweep animations, used on hover/focus only |
 
 **Gold is not foil, and the two must not be confused:**
@@ -111,7 +111,7 @@ name, or the gold chip on the collect card — so the two never fight for the sa
 
 | Surface | Treatment |
 |---|---|
-| Exam study guide (`pages/wiki/WikiExam.tsx`) | `components/wiki/KeystoneStrip.tsx` — the gold panel that names all of the exam's keystones with per-concept mastery dots and a mastered-count bar, and opens any of them in the concept popup. It sits **directly under the "Learning Objectives" heading**, above the first objective (placed by the `KEYSTONE_MARKER` that `markKeystoneStrip` inserts there — see `components/wiki/WikiArticle.tsx`) and is **collapsed by default**: the header is one line, `Keystone concepts n/total` plus a chevron, and the reader's choice is remembered in `localStorage` |
+| Exam study guide (`pages/wiki/WikiExam.tsx`) | Inside the **Exam Readiness Score** card (`components/wiki/ExamReadinessCard.tsx`), which rides in the orientation-card row at the top of the exam page. Keystone mastery is one of the three readiness criteria (35% of the score — see `lib/readiness.ts`), and the criterion carries the list: every keystone as a chip with a mastery dot, each opening that concept in the concept popup. This is the one place the exam names all of its keystones; it is inside the popup rather than on the page, because the score is the reason to look |
 | Concept popup header (`components/wiki/ConceptPopup.tsx`) | The **title** is the marker: gold underline, and tapping the concept name opens the explainer — the "Keystone concept" heading, the concept's one-line `why`, and the exam's mastered count. Nothing else: the explainer is read mid-study, over the concept it is explaining, so it never grows a second paragraph |
 | Wiki prose (`components/wiki/WikiArticle.tsx`) | `.wiki-link--keystone` on concept links — dimmed repeat mentions stay dim, so one marker per idea |
 | Flashcard tiles (`pages/Flashcards.tsx`) | Gold underline on the card name — never a ring, since the tile edge belongs to the collected-foil material |
@@ -124,8 +124,10 @@ name, or the gold chip on the collect card — so the two never fight for the sa
 resolves the concept itself and renders plain text for a non-keystone, so call sites use it
 for *every* concept title rather than branching) and `KeystoneIcon` (the drawn arch block —
 deliberately not a lucide icon so it can carry the gradient and never reads as the gem/quest
-currency), which is kept for the collect card's chip — a moment, not a name. The exam-page
-strip wears no icon: its gold ring is the marker.
+currency), which is kept for the collect card's chip — a moment, not a name. The keystone
+list inside the readiness popup wears neither: the card is about readiness, not keystones, so
+gold would compete with the score it is a criterion of — the per-concept mastery dot is the
+only marker there.
 
 ### The Dashboard radial
 
@@ -143,8 +145,9 @@ centre readout. Pinned by `lib/masteryFill.test.ts`.
    `id`.
 2. Add the exam's syllabus file to `SYLLABUS_FILE` in `keystone.test.ts` so the "is it actually
    on the syllabus?" check covers it.
-3. Nothing else — every surface reads the catalogue through `lib/keystone.ts`, and the strip
-   appears on that exam's study guide automatically.
+3. Nothing else — every surface reads the catalogue through `lib/keystone.ts`, so the new
+   exam's keystones become a readiness criterion on its study guide automatically. An exam
+   with no block scores on the other two criteria (see `lib/readiness.ts`).
 
 ## Deliberately not done
 

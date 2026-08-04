@@ -3,13 +3,17 @@ import {
   buildDayPlanPct,
   buildTodayTargets,
   isConceptDoneToday,
+  masteryStatesForSyllabus,
   mergeLevelUps,
+  planConceptsToday,
+  planDoneConceptSlugs,
   targetStateFor,
   type DayPlanPctInput,
 } from './planCompletion'
-import type { ConceptAssignment } from './studyPlan'
-import type { MasteryState } from './mastery'
+import type { ConceptAssignment, StudyPlan } from './studyPlan'
+import type { ConceptMasteryRecord, MasteryState } from './mastery'
 import type { DailyLevelUp } from './dailyProgressStore'
+import type { WikiExamSyllabus } from './wikiParser'
 
 const TODAY = '2026-07-29'
 
@@ -270,6 +274,15 @@ describe('mergeLevelUps', () => {
     expect(merged).toHaveLength(1)
   })
 
+  it('carries the server row’s exam onto the kept local entry', () => {
+    const merged = mergeLevelUps(
+      [levelUp('Perpetuity')],
+      [{ ...levelUp('perpetuity'), examId: 'FM' }],
+    )
+    expect(merged).toHaveLength(1)
+    expect(merged[0].examId).toBe('FM')
+  })
+
   it('keeps distinct destination states for the same concept', () => {
     const merged = mergeLevelUps([levelUp('Perpetuity', 'level1')], [levelUp('Perpetuity', 'level2')])
     expect(merged).toHaveLength(2)
@@ -282,5 +295,169 @@ describe('mergeLevelUps', () => {
 
   it('returns an empty list when neither source has anything', () => {
     expect(mergeLevelUps([], [])).toEqual([])
+  })
+})
+
+// ── The done-set the quiz sizing subtracts from ──────────────────────────────
+
+const NOW = new Date(`${TODAY}T12:00:00.000Z`)
+
+function syllabus(conceptNames: string[]): WikiExamSyllabus {
+  return {
+    examId: 'P-1',
+    examLabel: 'Exam P',
+    examTopic: 'Probability',
+    topics: [{
+      name: 'General Probability',
+      concepts: conceptNames.map(name => ({ name, target: name })),
+    }],
+    resources: [],
+  }
+}
+
+function record(
+  concept_slug: string,
+  state: MasteryState,
+  exam_id = 'P',
+  last_correct_at: string | null = `${TODAY}T09:00:00.000Z`,
+): ConceptMasteryRecord {
+  return {
+    user_id: 'u1',
+    exam_id,
+    concept_slug,
+    state,
+    correct_count: 3,
+    incorrect_streak: 0,
+    hard_correct_count: 1,
+    last_correct_at,
+    last_attempted_at: last_correct_at,
+  }
+}
+
+function plan(todaysConcepts: string[], assignments: ConceptAssignment[]): StudyPlan {
+  return {
+    examId: 'P-1',
+    generatedDate: TODAY,
+    config: { targetReadyDate: null, targetStrengthLevel: 'exam_ready', planStartDate: TODAY },
+    todaysConcepts,
+    assignments,
+    dayNumber: 1,
+    totalDays: 30,
+    daysRemaining: 29,
+    conceptsPerDay: 2,
+    status: 'on_track',
+    reviewConcepts: [],
+    effectiveReadyDate: TODAY,
+    targetPassedFallback: false,
+  }
+}
+
+describe('planConceptsToday', () => {
+  it('reads today’s concepts from a normal plan', () => {
+    expect(planConceptsToday(plan(['Bayes Theorem'], []))).toEqual(['Bayes Theorem'])
+  })
+
+  it('swaps in the review picks in review mode', () => {
+    const reviewing: StudyPlan = {
+      ...plan(['Bayes Theorem'], []),
+      status: 'review_mode',
+      reviewConcepts: ['Covariance'],
+    }
+    expect(planConceptsToday(reviewing)).toEqual(['Covariance'])
+  })
+
+  it('is empty without a plan', () => {
+    expect(planConceptsToday(null)).toEqual([])
+  })
+})
+
+describe('masteryStatesForSyllabus', () => {
+  it('scopes mastery rows to the exam', () => {
+    const states = masteryStatesForSyllabus(
+      syllabus(['Bayes Theorem']),
+      [record('Bayes Theorem', 'level3', 'MAS-I')],
+      'P',
+      NOW,
+    )
+    expect(states.get('bayes theorem')).toBe('new')
+  })
+
+  it('applies decay to a stale row', () => {
+    // 35 days without a correct answer — one rung down from Level 3.
+    const states = masteryStatesForSyllabus(
+      syllabus(['Bayes Theorem']),
+      [record('Bayes Theorem', 'level3', 'P', '2026-06-24T09:00:00.000Z')],
+      'P',
+      NOW,
+    )
+    expect(states.get('bayes theorem')).toBe('level2')
+  })
+})
+
+describe('planDoneConceptSlugs', () => {
+  const concepts = ['Bayes Theorem', 'Central Limit Theorem']
+
+  function doneFor(
+    masteryRecords: ConceptMasteryRecord[],
+    levelUps: DailyLevelUp[] = [],
+    assignments: ConceptAssignment[] = [
+      assignment('Bayes Theorem', 'level2'),
+      assignment('Central Limit Theorem', 'level2'),
+    ],
+  ): Set<string> {
+    return planDoneConceptSlugs({
+      plan: plan(concepts, assignments),
+      syllabus: syllabus(concepts),
+      masteryRecords,
+      examProgressKey: 'P',
+      levelUps,
+      today: TODAY,
+      now: NOW,
+    })
+  }
+
+  it('drops a concept advanced today', () => {
+    expect([...doneFor([], [levelUp('Bayes Theorem', 'level3')])]).toEqual(['bayes theorem'])
+  })
+
+  it('drops a Level 3 maintenance refresher that needs no work today', () => {
+    // The case the "questions left today" badge used to get wrong: a concept
+    // already at its target can never produce a level-up, so counting level-ups
+    // alone kept asking for a question the checklist showed as ticked off.
+    const done = doneFor(
+      [record('Bayes Theorem', 'level3')],
+      [],
+      [assignment('Bayes Theorem', 'level3'), assignment('Central Limit Theorem', 'level2')],
+    )
+    expect(done.has('bayes theorem')).toBe(true)
+    expect(done.has('central limit theorem')).toBe(false)
+  })
+
+  it('keeps a concept still short of today’s target', () => {
+    expect(doneFor([record('Central Limit Theorem', 'level2')]).has('central limit theorem'))
+      .toBe(false)
+  })
+
+  it('counts a level-up synced from another device', () => {
+    // Nothing device-local, nothing at target — only the daily_completions row.
+    expect(doneFor([], [levelUp('central limit theorem', 'level3')]).has('central limit theorem'))
+      .toBe(true)
+  })
+
+  it('ignores a completion credited to another exam', () => {
+    const elsewhere: DailyLevelUp = { ...levelUp('Central Limit Theorem', 'level3'), examId: 'MAS-I' }
+    expect(doneFor([], [elsewhere]).has('central limit theorem')).toBe(false)
+  })
+
+  it('is empty when the plan has nothing scheduled today', () => {
+    expect(planDoneConceptSlugs({
+      plan: plan([], []),
+      syllabus: syllabus(concepts),
+      masteryRecords: [record('Bayes Theorem', 'level3')],
+      examProgressKey: 'P',
+      levelUps: [],
+      today: TODAY,
+      now: NOW,
+    }).size).toBe(0)
   })
 })

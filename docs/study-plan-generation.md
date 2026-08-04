@@ -126,8 +126,23 @@ Once today's concepts are settled, the app answers one more question everywhere 
 **how many questions until today's plan is done?** That number is the size of the quiz a
 "Today's Plan" launch will actually contain — the fewest questions that cover every concept
 still outstanding (`minQuestionsToCoverConcepts`, the same greedy cover the launch itself
-uses), with concepts already levelled up today dropped so a re-launch after some wrong
+uses), with concepts already finished today dropped so a re-launch after some wrong
 answers only re-tests what's left.
+
+**"Finished today" means exactly what the checklist means by it** — `planDoneConceptSlugs`
+in `lib/planCompletion.ts`, the same `isConceptDoneToday` rule that strikes a row through in
+the Today card and the study-guide plan list: the concept was advanced today *on any device*
+(device-local level-ups merged with `daily_completions`), **or** its mastery already sits at
+today's target. Both clauses matter to the count:
+
+- Level-ups alone miss a concept that needs no work today. A Level 3 maintenance refresher
+  (Step 3, "Zero") is already at its target — `targetStateFor('level3') === 'level3'` — so it
+  can never produce a level-up, and a badge counting level-ups would go on asking for a
+  question against a row the user sees ticked off, all day.
+- Local level-ups alone miss a quiz finished on another device.
+
+So the badge, the quiz the button launches, and the ticks in the checklist are three views of
+one set. If you add a fourth, build it from `planDoneConceptSlugs` too.
 
 The rule is that the badge appears on **every surface a quiz that would accomplish today's
 plan can be started from** — a learner should never have to guess whether the button in
@@ -160,9 +175,10 @@ the hook rather than recomputing it, so every surface keeps showing the same num
 The greedy cover is deterministic, so on its own a second launch of the same plan would hand
 back the same questions. Two rules stop that:
 
-1. Concepts already levelled up today are dropped from the selection, so a re-launch after
-   some wrong answers only re-tests what's left. Once the whole plan is done, the selection
-   falls back to the full plan so **Continue Studying** still has something to practise.
+1. Concepts already finished today (`planDoneConceptSlugs`, above) are dropped from the
+   selection, so a re-launch after some wrong answers only re-tests what's left. Once the
+   whole plan is done, the selection falls back to the full plan so **Continue Studying**
+   still has something to practise.
 2. Every question today's quizzes have already served is held back from the draw
    (`CoverageOptions.seenIds` on `selectQuestionsForCoverage` /
    `minQuestionsToCoverConcepts`). Both the covering phase and the fill phase run over the

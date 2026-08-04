@@ -985,31 +985,12 @@ summary .katex-display,
   40%, 80% { transform: translateX(5px); }
 }
 
-/* Fully-collected pack — the whole card goes green (the app's mastery colour),
-   with a sheen sweeping across to mark the "complete" status in the pack shop. */
+/* Fully-collected pack — marked by a green border alone (the app's mastery
+   colour). No fill and no sheen: the card keeps the page behind it, so a shelf
+   of completed packs stays calm and the border does the signalling. */
 .collect-pack-complete {
   position: relative;
-  background-color: rgb(34 197 94 / 0.12);
-  box-shadow: 0 0 0 1px rgb(34 197 94 / 0.4), 0 4px 14px -6px rgb(34 197 94 / 0.4);
-}
-.dark .collect-pack-complete {
-  background-color: rgb(34 197 94 / 0.16);
-}
-.collect-pack-complete::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(115deg, transparent 40%, rgb(34 197 94 / 0.22) 50%, transparent 60%);
-  transform: translateX(-60%);
-  animation: collect-pack-shine 4.5s ease-in-out infinite;
-}
-@keyframes collect-pack-shine {
-  0%, 100% { transform: translateX(-60%); opacity: 0; }
-  50%      { transform: translateX(60%);  opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .collect-pack-complete::after { animation: none; }
+  box-shadow: 0 0 0 1px rgb(34 197 94 / 0.4);
 }
 
 /* Pack card action panel sliding open */

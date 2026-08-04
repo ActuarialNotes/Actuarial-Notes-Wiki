@@ -14,8 +14,9 @@ import { useAllQuestions } from '@/hooks/useAllQuestions'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
-import { selectQuestionsForCoverage, minQuestionsToCoverConcepts } from '@/lib/studyPlan'
-import { readTodayLevelUps, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import { selectQuestionsForCoverage, minQuestionsToCoverConcepts, todayISO } from '@/lib/studyPlan'
+import { planDoneConceptSlugs } from '@/lib/planCompletion'
+import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import { useSubscription } from '@/hooks/useSubscription'
 import { filterQuestions } from '@/lib/parser'
@@ -355,19 +356,6 @@ export default function Landing() {
   // their choice. Reset whenever the exam/mode changes.
   const userPickedCountRef = useRef(false)
 
-  // Concepts levelled up today — used to drop already-completed concepts from
-  // Today's Quiz so a re-launch after some wrong answers only re-tests what's left.
-  const [todayLevelUps, setTodayLevelUps] = useState(() => readTodayLevelUps())
-  useEffect(() => {
-    const refresh = () => setTodayLevelUps(readTodayLevelUps())
-    window.addEventListener(LEVELUP_EVENT, refresh)
-    window.addEventListener('storage', refresh)
-    return () => {
-      window.removeEventListener(LEVELUP_EVENT, refresh)
-      window.removeEventListener('storage', refresh)
-    }
-  }, [])
-
   // Questions today's quizzes have already served — held back from the draw so a
   // re-launch of the plan gives new questions instead of the ones just answered.
   const todayAnsweredIds = useTodayAnsweredQuestions()
@@ -564,12 +552,33 @@ export default function Landing() {
       : plan.todaysConcepts
   }, [plan])
 
+  // Today's level-ups (this device merged with the cross-device signal) — the
+  // input to the "already done today" test the plan checklist ticks with.
+  const completedToday = useTodayCompletions(examIdForPlan)
+
+  // Concepts today's plan still wants worked on, by the same rule the Dashboard
+  // checklist paints with: dropped once advanced today (anywhere) or once
+  // mastery already sits at today's target. Sizing off level-ups alone kept
+  // asking for concepts that need no work — a Level 3 maintenance refresher is
+  // already at target and can never produce a level-up. See lib/planCompletion.
+  const doneConceptSlugs = useMemo(
+    () => planDoneConceptSlugs({
+      plan,
+      syllabus: syllabusForTopic,
+      masteryRecords,
+      examProgressKey: examIdForPlan,
+      levelUps: completedToday,
+      today: todayISO(),
+    }),
+    [plan, syllabusForTopic, masteryRecords, examIdForPlan, completedToday],
+  )
+
   // Resolve today's plan into the concepts still to be completed and the question
-  // pool that can cover them. "Incomplete" = scheduled today but not yet levelled
-  // up today, so a re-launch after some wrong answers only re-tests what's left.
-  // When everything is already done, fall back to the full plan for extra practice
-  // — the `seenIds` option on the coverage helpers is what keeps that extra
-  // practice from being a replay of the questions just answered.
+  // pool that can cover them, so a re-launch after some wrong answers only
+  // re-tests what's left. When everything is already done, fall back to the full
+  // plan for extra practice — the `seenIds` option on the coverage helpers is
+  // what keeps that extra practice from being a replay of the questions just
+  // answered.
   const buildTodaysPlanSelection = useCallback((): { todayQs: typeof allQuestions; concepts: string[] } | null => {
     if (!plan || !topic) return null
     const displayConcepts = plan.status === 'review_mode'
@@ -577,8 +586,7 @@ export default function Landing() {
       : plan.todaysConcepts
     if (displayConcepts.length === 0) return null
 
-    const doneSet = new Set(todayLevelUps.map(l => l.conceptSlug.toLowerCase()))
-    const remaining = displayConcepts.filter(n => !doneSet.has(n.toLowerCase()))
+    const remaining = displayConcepts.filter(n => !doneConceptSlugs.has(n.toLowerCase()))
     const concepts = remaining.length > 0 ? remaining : displayConcepts
 
     const conceptSet = new Set(concepts.map(n => n.toLowerCase()))
@@ -592,7 +600,7 @@ export default function Landing() {
     })
     if (todayQs.length === 0) return null
     return { todayQs, concepts }
-  }, [plan, topic, allQuestions, todayLevelUps])
+  }, [plan, topic, allQuestions, doneConceptSlugs])
 
   // Fewest questions needed to cover the whole (remaining) plan — the count a
   // dashboard-launched Today's Quiz auto-selects to complete the day's plan.

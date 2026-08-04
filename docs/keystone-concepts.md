@@ -84,7 +84,7 @@ name itself is the tap target that explains why it is a keystone.
 | `.keystone-underline` | The same marker for a name outside prose (popup title, page heading, card title): a gold gradient bar painted as a background, so it can catch the shine |
 | `.keystone-ring` | Gold gradient edge, via the same padding + `mask-composite: exclude` ring trick as the foil border. `--keystone-ring-width` tunes thickness. Used for *panels* (the strip, the explainer), not names |
 | `.keystone-ring--hero` | Thicker edge + a permanently travelling shine, for a hero surface |
-| `.keystone-wash` | Warm gold wash behind a keystone surface |
+| `.keystone-wash` | Warm gold wash behind a keystone surface. Small surfaces only — in practice just the collect card. The exam-page strip is edge-only (ring, no wash), so a full-width panel doesn't tint the page |
 | `@keyframes keystone-shine` / `keystone-shine-underline` | The sweep animations, used on hover/focus only |
 
 **Gold is not foil, and the two must not be confused:**
@@ -97,8 +97,8 @@ name itself is the tap target that explains why it is a keystone.
 Because gold is intrinsic, it never animates on its own: the shine sweeps on hover/focus, or on
 a deliberate hero surface, so a syllabus page carrying a dozen keystone links stays calm.
 Where a surface could wear both materials (a collected flashcard tile, the collect card), the
-**edge belongs to foil** and the keystone signal is a glyph or chip inside — the two never
-fight for the same border.
+**edge belongs to foil** and the keystone signal moves inside — the underline on the card's
+name, or the gold chip on the collect card — so the two never fight for the same border.
 
 `prefers-reduced-motion: reduce` disables every keystone animation.
 

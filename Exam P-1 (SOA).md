@@ -9,22 +9,7 @@ The Probability (P-1) Exam is a 3 hour SOA exam with 30 multiple choice question
 - [[Calculus]], including series, differentiation, and integration.
 - Concepts introduced in [[Resources/Books/Risk and Insurance (SOA)]]
 
-> [!info]- Exam day: format, tools, and scoring
-> - **Format** — 3 hours, 30 multiple-choice questions, computer-based at a Prometric centre. That is **6 minutes per question** including reading time; a question you cannot start within 30 seconds should be flagged and skipped.
-> - **No formula sheet is provided.** Every density, mean, and variance on this page must be recalled from memory. This is the single biggest difference from a university course with an aid sheet.
-> - **A standard normal table *is* provided**, on-screen under an Exhibit button. You may not bring your own copy.
-> - **Approved calculators** — TI BA-35, BA II Plus, BA II Plus Professional, TI-30Xa, TI-30X II (IIS/IIB), or TI-30X MultiView (XS/XB). Anything else disqualifies the exam. Bring two, with fresh batteries.
-> - **Scoring** — scaled 0–10 with **6 required to pass**; the pass mark is set before the sitting using Item Response Theory. There is no penalty for a wrong answer, so never leave a question blank.
-
-> [!tip]- How to work through this material
-> A rough order that matches how the topics build, rather than the order they are listed in:
->
-> 1. **General Probability first** — it is the smallest section and everything else conditions on it. Get [[Conditional Probability]], [[The Law of Total Probability]], and [[Bayes Theorem]] genuinely automatic before moving on.
-> 2. **Univariate distributions next** (the largest section at 44–50%). Learn the six discrete and six continuous families as a *set*: for each, the story it models, its support, PMF/PDF, mean, and variance. The hard skill is identification, not integration — see the selector tables on [[Discrete Univariate Distributions]] and [[Continuous Univariate Distributions]].
-> 3. **Insurance applications** ([[Deductible]], [[Benefit Limit]], [[Coinsurance Percentage]], [[Inflation]]) are pure calculus applied to a [[Transformations of Random Variables|transformed]] loss variable. They are heavily tested and consistently under-practised because they do not appear in a standard university probability course.
-> 4. **Multivariate last.** The [[Joint Probability Density Function|continuous joint density]] material is where most candidates lose marks, and the obstacle is almost always setting up the double-integral limits over a non-rectangular region — not the integration itself. Sketch the region every single time.
->
-> **If you are coming from a second-year university probability course**, the gaps are usually the same four: memorization without an aid sheet, insurance payment variables, non-rectangular double integrals, and speed. Working problems under a 6-minute clock is not optional preparation — it is the exam.
+<div class="exam-guides"></div>
 
 ## Learning Objectives
 

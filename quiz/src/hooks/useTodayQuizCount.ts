@@ -8,7 +8,7 @@
 // The per-exam math lives in lib/todayPlanCount.ts (pure + tested); this hook
 // only assembles the study plans it needs.
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useExamProgress, EXAM_ID_TO_TOPIC } from '@/hooks/useExamProgress'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
@@ -17,11 +17,14 @@ import { useWikiSyllabus } from '@/hooks/useWikiSyllabus'
 import { useStudyPlan } from '@/hooks/useStudyPlan'
 import { useSubscription } from '@/hooks/useSubscription'
 import { todayPlanCountForExam } from '@/lib/todayPlanCount'
+import { planDoneConceptSlugs } from '@/lib/planCompletion'
+import { todayISO } from '@/lib/studyPlan'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
-import { readTodayLevelUps, LEVELUP_EVENT } from '@/lib/dailyProgressStore'
+import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { useTodayAnsweredQuestions } from '@/hooks/useTodayAnsweredQuestions'
 import type { TodayPlanCount } from '@/lib/todayPlanCount'
 import type { StudyPlan } from '@/lib/studyPlan'
+import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
 export type { TodayPlanCount } from '@/lib/todayPlanCount'
 
@@ -48,23 +51,11 @@ export function useTodayQuizCounts(): TodayQuizCounts {
   const { syllabi } = useWikiSyllabus()
   const { questions: allQuestions } = useAllQuestions()
 
-  // Concepts levelled up today, so the total drops questions for exams whose
-  // plan is already finished — same source Landing.tsx uses when it actually
-  // sizes the launched quiz.
-  const [todayLevelUps, setTodayLevelUps] = useState(() => readTodayLevelUps())
-  useEffect(() => {
-    const refresh = () => setTodayLevelUps(readTodayLevelUps())
-    window.addEventListener(LEVELUP_EVENT, refresh)
-    window.addEventListener('storage', refresh)
-    return () => {
-      window.removeEventListener(LEVELUP_EVENT, refresh)
-      window.removeEventListener('storage', refresh)
-    }
-  }, [])
-  const doneConceptSlugs = useMemo(
-    () => new Set(todayLevelUps.map(l => l.conceptSlug.toLowerCase())),
-    [todayLevelUps],
-  )
+  // Today's level-ups from this device merged with the cross-device signal —
+  // the raw material for the "already done today" test below. Unscoped (every
+  // exam) so one read serves all four plans; each plan only looks up its own
+  // concepts.
+  const completedToday = useTodayCompletions(null)
 
   // Questions today's quizzes already served — the launch prefers unseen ones,
   // so the badge has to size itself the same way.
@@ -86,18 +77,34 @@ export function useTodayQuizCounts(): TodayQuizCounts {
     const plansByExamId: Record<string, StudyPlan | null> = {
       P: planP, FM: planFM, 'MAS-I': planMAS, 'CAS-5': planCAS5,
     }
+    const syllabiByExamId: Record<string, WikiExamSyllabus | null> = {
+      P: syllabusP, FM: syllabusFM, 'MAS-I': syllabusMAS, 'CAS-5': syllabusCAS5,
+    }
 
+    const today = todayISO()
     const byExam: Record<string, TodayPlanCount> = {}
     let total = 0
     for (const [examId, topic] of Object.entries(EXAM_ID_TO_TOPIC)) {
       if (examProgress[examId] !== 'in_progress') continue
-      const entry = todayPlanCountForExam(plansByExamId[examId], topic, allQuestions, doneConceptSlugs, answeredQuestionIds)
+      const plan = plansByExamId[examId] ?? null
+      // Same "done today" rule the plan checklist ticks with, so the badge never
+      // asks for questions against a concept the user sees struck through.
+      const doneConceptSlugs = planDoneConceptSlugs({
+        plan,
+        syllabus: syllabiByExamId[examId] ?? null,
+        masteryRecords,
+        examProgressKey: examId,
+        levelUps: completedToday,
+        today,
+      })
+      const entry = todayPlanCountForExam(plan, topic, allQuestions, doneConceptSlugs, answeredQuestionIds)
       if (entry.count === 0 && !entry.complete) continue
       byExam[examId] = entry
       if (!entry.complete) total += entry.count
     }
     return { byExam, total }
-  }, [user, isPremium, examProgress, allQuestions, planP, planFM, planMAS, planCAS5, doneConceptSlugs, answeredQuestionIds])
+  }, [user, isPremium, examProgress, allQuestions, planP, planFM, planMAS, planCAS5,
+      syllabusP, syllabusFM, syllabusMAS, syllabusCAS5, masteryRecords, completedToday, answeredQuestionIds])
 }
 
 /** Total questions left in today's plan across every active exam. */

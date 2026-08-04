@@ -7,6 +7,7 @@
 // so the badge always matches the size of the quiz the surface actually starts.
 
 import { minQuestionsToCoverConcepts } from '@/lib/studyPlan'
+import { planConceptsToday } from '@/lib/planCompletion'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { Question } from '@/lib/parser'
 
@@ -19,16 +20,12 @@ export interface TodayPlanCount {
 
 const NO_PLAN: TodayPlanCount = { count: 0, complete: false }
 
-/** The concepts a plan is asking for today (review mode swaps in its own list). */
-function planConcepts(plan: StudyPlan): string[] {
-  return plan.status === 'review_mode' ? (plan.reviewConcepts ?? []) : plan.todaysConcepts
-}
-
 /**
  * Fewest questions needed to finish today's plan for one exam, plus whether the
- * plan is already done. Drops concepts already levelled up today
- * (`doneConceptSlugs`) so the count matches what the next launched quiz will
- * actually contain — same as Landing.tsx's buildTodaysPlanSelection. When
+ * plan is already done. Drops concepts already done today (`doneConceptSlugs`,
+ * built with `planDoneConceptSlugs` so it matches the checklist's ticks) so the
+ * count matches what the next launched quiz will actually contain — same as
+ * Landing.tsx's buildTodaysPlanSelection. When
  * everything's done it reports `complete` and falls back to the full plan's
  * count (a re-launch keeps those questions available for extra practice), so
  * callers that hide a finished plan should check `complete`, not `count` —
@@ -46,7 +43,7 @@ export function todayPlanCountForExam(
   seenQuestionIds?: ReadonlySet<string>,
 ): TodayPlanCount {
   if (!plan) return NO_PLAN
-  const displayConcepts = planConcepts(plan)
+  const displayConcepts = planConceptsToday(plan)
   if (displayConcepts.length === 0) return NO_PLAN
 
   const remaining = displayConcepts.filter(c => !doneConceptSlugs.has(c.toLowerCase()))

@@ -186,19 +186,17 @@ export function markExamGuides(md: string): string {
   return md.replace(/^<div class="exam-guides"[^>]*>\s*<\/div> *$/gm, `\n${EXAM_GUIDES_MARKER}\n`)
 }
 
-// The keystone panel goes *after* the learning objectives: the reader meets the
-// syllabus first, then the load-bearing few within it. Unlike the guide cards
-// the exam pages carry no marker for it, so one is inserted at the end of the
-// "Learning Objectives" section — before the next `##` heading, or at the end of
-// the page when nothing follows.
+// The keystone panel opens the learning objectives: it names the load-bearing
+// few before the reader starts down the syllabus. Unlike the guide cards the
+// exam pages carry no marker for it, so one is inserted directly under the
+// "Learning Objectives" heading — or at the end of the page when an exam has no
+// such heading.
 export const KEYSTONE_MARKER = '%%keystone-strip%%'
 
 export function markKeystoneStrip(md: string): string {
   const heading = /^## +Learning Objectives.*$/im.exec(md)
-  const after = heading ? heading.index + heading[0].length : 0
-  const next = heading ? /^## /m.exec(md.slice(after)) : null
-  const at = heading ? (next ? after + next.index : md.length) : md.length
-  return `${md.slice(0, at)}\n${KEYSTONE_MARKER}\n\n${md.slice(at)}`
+  const at = heading ? heading.index + heading[0].length : md.length
+  return `${md.slice(0, at)}\n\n${KEYSTONE_MARKER}\n${md.slice(at)}`
 }
 
 // Strip block-level HTML divs that publish.js embeds for metadata / layout.

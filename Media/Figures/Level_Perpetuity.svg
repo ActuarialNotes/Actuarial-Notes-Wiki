@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 284" width="560" height="284" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="282.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Level perpetuity: each payment's present value shrinks geometrically</text>
+  <rect x="72.36" y="82.09" width="8.23" height="117.91" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="84.84" y="87.7" width="8.23" height="112.3" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="97.31" y="93.05" width="8.23" height="106.95" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="109.79" y="98.14" width="8.23" height="101.86" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="122.26" y="102.99" width="8.23" height="97.01" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="134.74" y="107.61" width="8.23" height="92.39" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="147.22" y="112.01" width="8.23" height="87.99" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="159.69" y="116.2" width="8.23" height="83.8" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="172.17" y="120.19" width="8.23" height="79.81" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="184.64" y="123.99" width="8.23" height="76.01" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="197.12" y="127.61" width="8.23" height="72.39" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="209.6" y="131.06" width="8.23" height="68.94" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="222.07" y="134.34" width="8.23" height="65.66" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="234.55" y="137.47" width="8.23" height="62.53" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="247.03" y="140.45" width="8.23" height="59.55" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="259.5" y="143.28" width="8.23" height="56.72" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="271.98" y="145.98" width="8.23" height="54.02" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="284.45" y="148.55" width="8.23" height="51.45" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="296.93" y="151" width="8.23" height="49" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="309.41" y="153.34" width="8.23" height="46.66" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <line x1="64" y1="200" x2="336" y2="200" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="200" x2="64" y2="60" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="76.48" y1="200" x2="76.48" y2="204" class="tick"/>
+  <text x="76.48" y="216" text-anchor="middle" class="sm dim">1</text>
+  <line x1="126.38" y1="200" x2="126.38" y2="204" class="tick"/>
+  <text x="126.38" y="216" text-anchor="middle" class="sm dim">5</text>
+  <line x1="188.76" y1="200" x2="188.76" y2="204" class="tick"/>
+  <text x="188.76" y="216" text-anchor="middle" class="sm dim">10</text>
+  <line x1="251.14" y1="200" x2="251.14" y2="204" class="tick"/>
+  <text x="251.14" y="216" text-anchor="middle" class="sm dim">15</text>
+  <line x1="313.52" y1="200" x2="313.52" y2="204" class="tick"/>
+  <text x="313.52" y="216" text-anchor="middle" class="sm dim">20</text>
+  <line x1="60" y1="138.1" x2="64" y2="138.1" class="tick"/>
+  <text x="56" y="141.7" text-anchor="end" class="sm dim">0.5</text>
+  <line x1="60" y1="76.19" x2="64" y2="76.19" class="tick"/>
+  <text x="56" y="79.79" text-anchor="end" class="sm dim">1</text>
+  <text x="326" y="232" text-anchor="end" class="sm dim">payment number</text>
+  <text x="60" y="56" text-anchor="start" class="sm dim">present value of that payment</text>
+  <text x="195" y="246" text-anchor="middle" class="sm dim">the terms shrink fast enough to converge</text>
+  <text x="430" y="100" text-anchor="middle" class="sm bold">a₍∞₎ = Σ vᵏ = 1/i</text>
+  <text x="430" y="120" text-anchor="middle" class="sm dim">at i = 5%:  1/0.05 = 20</text>
+  <rect x="340" y="140" width="186" height="58" rx="7" fill="#7c3aed" fill-opacity="0.12" stroke="#7c3aed" stroke-width="1.2"/>
+  <text x="433" y="160" text-anchor="middle" class="sm bold">Perpetuity-due</text>
+  <text x="433" y="178" text-anchor="middle" class="sm dim">ä₍∞₎ = 1/d = 21</text>
+  <rect x="340" y="206" width="186" height="58" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
+  <text x="433" y="226" text-anchor="middle" class="sm bold">Growing at g &lt; i</text>
+  <text x="433" y="244" text-anchor="middle" class="sm dim">PV = 1/(i − g)</text>
+</svg>

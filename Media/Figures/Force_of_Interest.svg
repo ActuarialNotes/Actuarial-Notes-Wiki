@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 282" width="560" height="282" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="280.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">δ is the instantaneous rate at which a(t) grows</text>
+  <polyline points="60,186.6 61.38,186.15 62.76,185.7 64.13,185.25 65.51,184.8 66.89,184.35 68.27,183.89 69.64,183.44 71.02,182.98 72.4,182.52 73.78,182.06 75.16,181.6 76.53,181.13 77.91,180.67 79.29,180.2 80.67,179.73 82.04,179.26 83.42,178.79 84.8,178.31 86.18,177.84 87.56,177.36 88.93,176.88 90.31,176.4 91.69,175.92 93.07,175.44 94.44,174.95 95.82,174.47 97.2,173.98 98.58,173.49 99.96,173 101.33,172.51 102.71,172.01 104.09,171.52 105.47,171.02 106.84,170.52 108.22,170.02 109.6,169.52 110.98,169.01 112.36,168.5 113.73,168 115.11,167.49 116.49,166.98 117.87,166.46 119.24,165.95 120.62,165.43 122,164.91 123.38,164.39 124.76,163.87 126.13,163.35 127.51,162.82 128.89,162.3 130.27,161.77 131.64,161.24 133.02,160.71 134.4,160.17 135.78,159.64 137.16,159.1 138.53,158.56 139.91,158.02 141.29,157.48 142.67,156.93 144.04,156.39 145.42,155.84 146.8,155.29 148.18,154.74 149.56,154.18 150.93,153.63 152.31,153.07 153.69,152.51 155.07,151.95 156.44,151.38 157.82,150.82 159.2,150.25 160.58,149.68 161.96,149.11 163.33,148.54 164.71,147.97 166.09,147.39 167.47,146.81 168.84,146.23 170.22,145.65 171.6,145.06 172.98,144.48 174.36,143.89 175.73,143.3 177.11,142.71 178.49,142.11 179.87,141.52 181.24,140.92 182.62,140.32 184,139.72 185.38,139.11 186.76,138.51 188.13,137.9 189.51,137.29 190.89,136.68 192.27,136.06 193.64,135.45 195.02,134.83 196.4,134.21 197.78,133.59 199.16,132.96 200.53,132.34 201.91,131.71 203.29,131.08 204.67,130.44 206.04,129.81 207.42,129.17 208.8,128.53 210.18,127.89 211.56,127.25 212.93,126.6 214.31,125.96 215.69,125.31 217.07,124.65 218.44,124 219.82,123.34 221.2,122.68 222.58,122.02 223.96,121.36 225.33,120.7 226.71,120.03 228.09,119.36 229.47,118.69 230.84,118.01 232.22,117.34 233.6,116.66 234.98,115.98 236.36,115.29 237.73,114.61 239.11,113.92 240.49,113.23 241.87,112.54 243.24,111.84 244.62,111.15 246,110.45 247.38,109.74 248.76,109.04 250.13,108.33 251.51,107.63 252.89,106.91 254.27,106.2 255.64,105.48 257.02,104.77 258.4,104.05 259.78,103.32 261.16,102.6 262.53,101.87 263.91,101.14 265.29,100.41 266.67,99.67 268.04,98.93 269.42,98.19 270.8,97.45 272.18,96.71 273.56,95.96 274.93,95.21 276.31,94.46 277.69,93.7 279.07,92.94 280.44,92.18 281.82,91.42 283.2,90.66 284.58,89.89 285.96,89.12 287.33,88.34 288.71,87.57 290.09,86.79 291.47,86.01 292.84,85.23 294.22,84.44 295.6,83.65 296.98,82.86 298.36,82.07 299.73,81.27 301.11,80.47 302.49,79.67 303.87,78.87 305.24,78.06 306.62,77.25 308,76.44" class="curve" stroke="#3b82f6" stroke-width="2"/>
+  <polyline points="130.27,163.75 254.27,108.38" class="curve" stroke="#d97706" stroke-width="1.6"/>
+  <circle cx="192.27" cy="136.06" r="3.6" fill="#d97706"/>
+  <text x="175.73" y="117.3" text-anchor="middle" class="sm" fill="#d97706">slope a′(t)</text>
+  <line x1="60" y1="200" x2="318" y2="200" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="60" y1="200" x2="60" y2="56" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="60" y1="200" x2="60" y2="204" class="tick"/>
+  <text x="60" y="216" text-anchor="middle" class="sm dim">0</text>
+  <line x1="184" y1="200" x2="184" y2="204" class="tick"/>
+  <text x="184" y="216" text-anchor="middle" class="sm dim">3</text>
+  <line x1="308" y1="200" x2="308" y2="204" class="tick"/>
+  <text x="308" y="216" text-anchor="middle" class="sm dim">6</text>
+  <line x1="56" y1="186.6" x2="60" y2="186.6" class="tick"/>
+  <text x="52" y="190.2" text-anchor="end" class="sm dim">1</text>
+  <line x1="56" y1="119.6" x2="60" y2="119.6" class="tick"/>
+  <text x="52" y="123.2" text-anchor="end" class="sm dim">1.5</text>
+  <text x="308" y="232" text-anchor="end" class="sm dim">time t</text>
+  <text x="56" y="52" text-anchor="start" class="sm dim">a(t) = e^(δt)</text>
+  <text x="420" y="96" text-anchor="middle" class="sm bold">δ = a′(t) / a(t)</text>
+  <text x="420" y="116" text-anchor="middle" class="sm dim">= d/dt · ln a(t)</text>
+  <line x1="316" y1="136" x2="316" y2="168" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="326" y="148" text-anchor="start" class="sm bold">δ = ln(1 + i)</text>
+  <text x="326" y="164" text-anchor="start" class="sm dim">and i = e^δ − 1</text>
+  <line x1="316" y1="182" x2="316" y2="214" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="326" y="194" text-anchor="start" class="sm bold">a(t) = e^(δt)</text>
+  <text x="326" y="210" text-anchor="start" class="sm dim">constant force</text>
+  <line x1="316" y1="228" x2="316" y2="260" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="326" y="240" text-anchor="start" class="sm bold">Varying force</text>
+  <text x="326" y="256" text-anchor="start" class="sm dim">a(t) = exp(∫₀ᵗ δ(s) ds)</text>
+  <text x="280" y="270" text-anchor="middle" class="sm dim">δ is the m → ∞ limit of both i⁽ᵐ⁾ and d⁽ᵐ⁾</text>
+</svg>

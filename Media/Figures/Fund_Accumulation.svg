@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 284" width="560" height="284" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="282.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">A fund grows from interest and from what is paid into it</text>
+  <rect x="68" y="141.9" width="44.4" height="62.1" rx="2" fill="#3b82f6" fill-opacity="0.22"/>
+  <rect x="68" y="146.5" width="44.4" height="57.5" rx="2" fill="#3b82f6" fill-opacity="0.34"/>
+  <rect x="120.4" y="119.68" width="44.4" height="84.32" rx="2" fill="#3b82f6" fill-opacity="0.22"/>
+  <rect x="120.4" y="141.9" width="44.4" height="62.1" rx="2" fill="#3b82f6" fill-opacity="0.34"/>
+  <rect x="172.8" y="95.69" width="44.4" height="108.31" rx="2" fill="#3b82f6" fill-opacity="0.22"/>
+  <rect x="172.8" y="119.68" width="44.4" height="84.32" rx="2" fill="#3b82f6" fill-opacity="0.34"/>
+  <rect x="225.2" y="98.52" width="44.4" height="105.48" rx="2" fill="#3b82f6" fill-opacity="0.22"/>
+  <rect x="225.2" y="95.69" width="44.4" height="108.31" rx="2" fill="#3b82f6" fill-opacity="0.34"/>
+  <rect x="277.6" y="72.83" width="44.4" height="131.17" rx="2" fill="#3b82f6" fill-opacity="0.22"/>
+  <rect x="277.6" y="98.52" width="44.4" height="105.48" rx="2" fill="#3b82f6" fill-opacity="0.34"/>
+  <polyline points="64,146.5 116.4,141.9 168.8,119.68 221.2,95.69 273.6,98.52 326,72.83" class="curve" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="64" y1="204" x2="336" y2="204" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="204" x2="64" y2="56" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="204" x2="64" y2="208" class="tick"/>
+  <text x="64" y="220" text-anchor="middle" class="sm dim">0</text>
+  <line x1="116.4" y1="204" x2="116.4" y2="208" class="tick"/>
+  <text x="116.4" y="220" text-anchor="middle" class="sm dim">1</text>
+  <line x1="168.8" y1="204" x2="168.8" y2="208" class="tick"/>
+  <text x="168.8" y="220" text-anchor="middle" class="sm dim">2</text>
+  <line x1="221.2" y1="204" x2="221.2" y2="208" class="tick"/>
+  <text x="221.2" y="220" text-anchor="middle" class="sm dim">3</text>
+  <line x1="273.6" y1="204" x2="273.6" y2="208" class="tick"/>
+  <text x="273.6" y="220" text-anchor="middle" class="sm dim">4</text>
+  <line x1="326" y1="204" x2="326" y2="208" class="tick"/>
+  <text x="326" y="220" text-anchor="middle" class="sm dim">5</text>
+  <line x1="60" y1="204" x2="64" y2="204" class="tick"/>
+  <text x="56" y="207.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="60" y1="146.5" x2="64" y2="146.5" class="tick"/>
+  <text x="56" y="150.1" text-anchor="end" class="sm dim">1,000</text>
+  <line x1="60" y1="89" x2="64" y2="89" class="tick"/>
+  <text x="56" y="92.6" text-anchor="end" class="sm dim">2,000</text>
+  <text x="326" y="236" text-anchor="end" class="sm dim">year</text>
+  <text x="60" y="52" text-anchor="start" class="sm dim">fund balance</text>
+  <text x="142.6" y="111.68" text-anchor="middle" class="sm bold" fill="#059669">+300</text>
+  <text x="195" y="87.69" text-anchor="middle" class="sm bold" fill="#059669">+300</text>
+  <text x="247.4" y="90.52" text-anchor="middle" class="sm bold" fill="#e11d48">-200</text>
+  <text x="299.8" y="64.83" text-anchor="middle" class="sm bold" fill="#059669">+300</text>
+  <text x="428" y="96" text-anchor="middle" class="sm bold">AVₙ = F₀(1+i)ⁿ + Σ C_t (1+i)^(n−t)</text>
+  <line x1="348" y1="118" x2="348" y2="152" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="358" y="131" text-anchor="start" class="sm bold">Level deposits</text>
+  <text x="358" y="147" text-anchor="start" class="sm dim">the sum becomes C · s₍ₙ₎</text>
+  <line x1="348" y1="166" x2="348" y2="200" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="358" y="179" text-anchor="start" class="sm bold">Withdrawals</text>
+  <text x="358" y="195" text-anchor="start" class="sm dim">enter as negative flows</text>
+  <line x1="348" y1="214" x2="348" y2="248" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="358" y="227" text-anchor="start" class="sm bold">Two funds</text>
+  <text x="358" y="243" text-anchor="start" class="sm dim">each grows at its own rate</text>
+  <text x="280" y="270" text-anchor="middle" class="sm dim">Each deposit accumulates only for the time it is actually invested</text>
+</svg>

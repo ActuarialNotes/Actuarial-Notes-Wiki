@@ -367,9 +367,9 @@ class Axes:
         if label:
             self.fig.text(px_ + dx, py_ + dy, label, cls=cls)
 
-    def label(self, x, y, s, cls="sm", anchor="middle", dx=0, dy=0):
+    def label(self, x, y, s, cls="sm", anchor="middle", dx=0, dy=0, **kw):
         px_, py_ = self.p(x, y)
-        self.fig.text(px_ + dx, py_ + dy, s, cls=cls, anchor=anchor)
+        self.fig.text(px_ + dx, py_ + dy, s, cls=cls, anchor=anchor, **kw)
 
 
 def axes(fig: Fig, xmin, xmax, ymin, ymax, left=48, right=24, top=52, bottom=40) -> Axes:

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" width="560" height="300" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="298.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">A decreasing annuity is the mirror of an increasing one</text>
+  <line x1="100" y1="132" x2="438" y2="132" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="108" y1="128" x2="108" y2="136" class="tick"/>
+  <text x="108" y="149" text-anchor="middle" class="sm dim">0</text>
+  <line x1="170.4" y1="128" x2="170.4" y2="136" class="tick"/>
+  <text x="170.4" y="149" text-anchor="middle" class="sm dim">1</text>
+  <line x1="232.8" y1="128" x2="232.8" y2="136" class="tick"/>
+  <text x="232.8" y="149" text-anchor="middle" class="sm dim">2</text>
+  <line x1="295.2" y1="128" x2="295.2" y2="136" class="tick"/>
+  <text x="295.2" y="149" text-anchor="middle" class="sm dim">3</text>
+  <line x1="357.6" y1="128" x2="357.6" y2="136" class="tick"/>
+  <text x="357.6" y="149" text-anchor="middle" class="sm dim">4</text>
+  <line x1="420" y1="128" x2="420" y2="136" class="tick"/>
+  <text x="420" y="149" text-anchor="middle" class="sm dim">5</text>
+  <rect x="161.4" y="87" width="18" height="45" rx="2" fill="#7c3aed" fill-opacity="0.55"/>
+  <rect x="161.4" y="78" width="18" height="9" rx="2" fill="#3b82f6" fill-opacity="0.3"/>
+  <text x="170.4" y="101" text-anchor="middle" class="sm">5</text>
+  <rect x="223.8" y="96" width="18" height="36" rx="2" fill="#7c3aed" fill-opacity="0.55"/>
+  <rect x="223.8" y="78" width="18" height="18" rx="2" fill="#3b82f6" fill-opacity="0.3"/>
+  <text x="232.8" y="110" text-anchor="middle" class="sm">4</text>
+  <rect x="286.2" y="105" width="18" height="27" rx="2" fill="#7c3aed" fill-opacity="0.55"/>
+  <rect x="286.2" y="78" width="18" height="27" rx="2" fill="#3b82f6" fill-opacity="0.3"/>
+  <text x="295.2" y="119" text-anchor="middle" class="sm">3</text>
+  <rect x="348.6" y="114" width="18" height="18" rx="2" fill="#7c3aed" fill-opacity="0.55"/>
+  <rect x="348.6" y="78" width="18" height="36" rx="2" fill="#3b82f6" fill-opacity="0.3"/>
+  <text x="357.6" y="128" text-anchor="middle" class="sm">2</text>
+  <rect x="411" y="123" width="18" height="9" rx="2" fill="#7c3aed" fill-opacity="0.55"/>
+  <rect x="411" y="78" width="18" height="45" rx="2" fill="#3b82f6" fill-opacity="0.3"/>
+  <text x="420" y="137" text-anchor="middle" class="sm">1</text>
+  <line x1="156.4" y1="78" x2="434" y2="78" class="thin dash" stroke="#059669" stroke-width="1.4"/>
+  <text x="440" y="82" text-anchor="start" class="sm bold" fill="#059669">n + 1</text>
+  <line x1="452" y1="92" x2="465" y2="92" stroke="#7c3aed" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="471" y="95.6" text-anchor="start" class="sm">(Da)₍ₙ₎</text>
+  <line x1="452" y1="108" x2="465" y2="108" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="471" y="111.6" text-anchor="start" class="sm">(Ia)₍ₙ₎</text>
+  <line x1="28" y1="202" x2="532" y2="202" class="rule"/>
+  <text x="150" y="224" text-anchor="middle" class="sm bold">(Da)₍ₙ₎ = (n − a₍ₙ₎) / i</text>
+  <text x="150" y="244" text-anchor="middle" class="sm dim">payments n, n−1, …, 1</text>
+  <text x="150" y="266" text-anchor="middle" class="sm dim">(Ds)₍ₙ₎ = (1+i)ⁿ (Da)₍ₙ₎</text>
+  <text x="412" y="224" text-anchor="middle" class="sm bold">The pairing identity</text>
+  <text x="412" y="244" text-anchor="middle" class="sm dim">(Ia)₍ₙ₎ + (Da)₍ₙ₎ = (n+1) a₍ₙ₎</text>
+  <text x="412" y="266" text-anchor="middle" class="sm dim">each period's two payments sum to n+1</text>
+  <text x="280" y="292" text-anchor="middle" class="sm dim">P decreasing by Q:  PV = P·a₍ₙ₎ − (Q/i)(a₍ₙ₎ − n vⁿ)</text>
+</svg>

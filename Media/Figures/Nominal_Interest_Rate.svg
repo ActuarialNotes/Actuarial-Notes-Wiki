@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 284" width="560" height="284" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="282.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">For a fixed effective rate, i⁽ᵐ⁾ falls as m rises</text>
+  <polyline points="72,82.75 73.42,95.45 74.84,105.33 76.27,113.24 77.69,119.71 79.11,125.11 80.53,129.68 81.96,133.59 83.38,136.98 84.8,139.95 86.22,142.58 87.64,144.91 89.07,146.99 90.49,148.87 91.91,150.57 93.33,152.11 94.76,153.52 96.18,154.81 97.6,156 99.02,157.1 100.44,158.11 101.87,159.06 103.29,159.94 104.71,160.76 106.13,161.52 107.56,162.24 108.98,162.92 110.4,163.56 111.82,164.16 113.24,164.72 114.67,165.26 116.09,165.77 117.51,166.25 118.93,166.7 120.36,167.14 121.78,167.55 123.2,167.95 124.62,168.33 126.04,168.69 127.47,169.03 128.89,169.36 130.31,169.68 131.73,169.98 133.16,170.27 134.58,170.55 136,170.82 137.42,171.08 138.84,171.33 140.27,171.57 141.69,171.8 143.11,172.03 144.53,172.24 145.96,172.45 147.38,172.65 148.8,172.85 150.22,173.04 151.64,173.22 153.07,173.4 154.49,173.57 155.91,173.73 157.33,173.9 158.76,174.05 160.18,174.21 161.6,174.35 163.02,174.5 164.44,174.64 165.87,174.77 167.29,174.9 168.71,175.03 170.13,175.16 171.56,175.28 172.98,175.4 174.4,175.51 175.82,175.63 177.24,175.74 178.67,175.85 180.09,175.95 181.51,176.05 182.93,176.15 184.36,176.25 185.78,176.35 187.2,176.44 188.62,176.53 190.04,176.62 191.47,176.71 192.89,176.79 194.31,176.88 195.73,176.96 197.16,177.04 198.58,177.12 200,177.19 201.42,177.27 202.84,177.34 204.27,177.41 205.69,177.48 207.11,177.55 208.53,177.62 209.96,177.69 211.38,177.75 212.8,177.82 214.22,177.88 215.64,177.94 217.07,178 218.49,178.06 219.91,178.12 221.33,178.18 222.76,178.23 224.18,178.29 225.6,178.34 227.02,178.4 228.44,178.45 229.87,178.5 231.29,178.55 232.71,178.6 234.13,178.65 235.56,178.7 236.98,178.75 238.4,178.8 239.82,178.84 241.24,178.89 242.67,178.93 244.09,178.98 245.51,179.02 246.93,179.06 248.36,179.1 249.78,179.14 251.2,179.18 252.62,179.23 254.04,179.26 255.47,179.3 256.89,179.34 258.31,179.38 259.73,179.42 261.16,179.45 262.58,179.49 264,179.53 265.42,179.56 266.84,179.6 268.27,179.63 269.69,179.66 271.11,179.7 272.53,179.73 273.96,179.76 275.38,179.79 276.8,179.83 278.22,179.86 279.64,179.89 281.07,179.92 282.49,179.95 283.91,179.98 285.33,180.01 286.76,180.03 288.18,180.06 289.6,180.09 291.02,180.12 292.44,180.15 293.87,180.17 295.29,180.2 296.71,180.23 298.13,180.25 299.56,180.28 300.98,180.3 302.4,180.33 303.82,180.35 305.24,180.38 306.67,180.4 308.09,180.43 309.51,180.45 310.93,180.47 312.36,180.5 313.78,180.52 315.2,180.54 316.62,180.56 318.04,180.59 319.47,180.61 320.89,180.63 322.31,180.65 323.73,180.67 325.16,180.69 326.58,180.72 328,180.74" class="curve" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="72" y1="184.56" x2="328" y2="184.56" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+  <text x="215.36" y="171.16" text-anchor="middle" class="sm" fill="#059669">δ = ln(1 + i)</text>
+  <circle cx="72" cy="82.75" r="3.2" fill="#3b82f6"/>
+  <circle cx="82.24" cy="134.31" r="3.2" fill="#3b82f6"/>
+  <circle cx="102.72" cy="159.59" r="3.2" fill="#3b82f6"/>
+  <circle cx="184.64" cy="176.27" r="3.2" fill="#3b82f6"/>
+  <line x1="72" y1="200" x2="338" y2="200" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="72" y1="200" x2="72" y2="56" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="72" y1="200" x2="72" y2="204" class="tick"/>
+  <text x="72" y="216" text-anchor="middle" class="sm dim">1</text>
+  <line x1="102.72" y1="200" x2="102.72" y2="204" class="tick"/>
+  <text x="102.72" y="216" text-anchor="middle" class="sm dim">4</text>
+  <line x1="184.64" y1="200" x2="184.64" y2="204" class="tick"/>
+  <text x="184.64" y="216" text-anchor="middle" class="sm dim">12</text>
+  <line x1="307.52" y1="200" x2="307.52" y2="204" class="tick"/>
+  <text x="307.52" y="216" text-anchor="middle" class="sm dim">24</text>
+  <line x1="68" y1="183.25" x2="72" y2="183.25" class="tick"/>
+  <text x="64" y="186.85" text-anchor="end" class="sm dim">7.7%</text>
+  <line x1="68" y1="116.25" x2="72" y2="116.25" class="tick"/>
+  <text x="64" y="119.85" text-anchor="end" class="sm dim">7.9%</text>
+  <text x="328" y="232" text-anchor="end" class="sm dim">compounding frequency m</text>
+  <text x="68" y="52" text-anchor="start" class="sm dim">i⁽ᵐ⁾</text>
+  <text x="428" y="94" text-anchor="middle" class="sm bold">(1 + i⁽ᵐ⁾/m)ᵐ = 1 + i</text>
+  <text x="428" y="114" text-anchor="middle" class="sm dim">i⁽ᵐ⁾ = m[(1 + i)^(1/m) − 1]</text>
+  <text x="340" y="144" text-anchor="start" class="sm">i⁽¹⁾</text>
+  <text x="524" y="144" text-anchor="end" class="sm bold">8.0000%</text>
+  <text x="340" y="168" text-anchor="start" class="sm">i⁽²⁾</text>
+  <text x="524" y="168" text-anchor="end" class="sm bold">7.8461%</text>
+  <text x="340" y="192" text-anchor="start" class="sm">i⁽⁴⁾</text>
+  <text x="524" y="192" text-anchor="end" class="sm bold">7.7706%</text>
+  <text x="340" y="216" text-anchor="start" class="sm">i⁽¹²⁾</text>
+  <text x="524" y="216" text-anchor="end" class="sm bold">7.7208%</text>
+  <line x1="340" y1="250" x2="524" y2="250" class="rule"/>
+  <text x="432" y="268" text-anchor="middle" class="sm dim">all equivalent to i = 8% effective</text>
+</svg>

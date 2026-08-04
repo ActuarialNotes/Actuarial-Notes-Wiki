@@ -47,7 +47,7 @@ interface CardProps {
 }
 
 function ExamGuideCard({ guide, onOpen }: CardProps) {
-  const { Icon, title, blurb, pages } = guide
+  const { Icon, title, pages } = guide
   const Cover = pages[0].Graphic
   return (
     <button
@@ -58,14 +58,11 @@ function ExamGuideCard({ guide, onOpen }: CardProps) {
       {/* max-h keeps the banner from dominating the card at desktop widths —
           the SVG letterboxes inside the plate rather than stretching. */}
       <Cover className="mb-3 max-h-36" />
+      {/* Title only: the cover carries the subject, so a blurb and a page
+          count just crowded a card that is two-up on a phone. */}
       <div className="flex items-start gap-2">
         <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
         <h3 className="min-w-0 text-base font-semibold leading-snug tracking-tight">{title}</h3>
-      </div>
-      <p className="mt-1.5 text-sm leading-snug text-muted-foreground">{blurb}</p>
-      <div className="mt-auto flex items-center gap-1 pt-3 text-sm font-medium text-muted-foreground transition-colors group-hover:text-foreground">
-        <span>{pages.length} pages</span>
-        <ChevronRight className="h-4 w-4 shrink-0" />
       </div>
     </button>
   )

@@ -49,13 +49,13 @@ describe('EXAM_GUIDES', () => {
   it('is keyed by lowercase wiki exam ids', () => {
     for (const key of Object.keys(EXAM_GUIDES)) expect(key).toBe(key.toLowerCase())
     expect(guidesForExam('P-1')).toHaveLength(2)
-    expect(guidesForExam('fm-2')).toEqual([])
+    expect(guidesForExam('FM-2')).toHaveLength(2)
+    expect(guidesForExam('mas-i')).toEqual([])
   })
 
-  it('gives every guide a title, a blurb and at least two pages', () => {
+  it('gives every guide a title and at least two pages', () => {
     for (const guide of guides) {
       expect(guide.title.length).toBeGreaterThan(0)
-      expect(guide.blurb.length).toBeGreaterThan(0)
       // One page would not need the paging chrome.
       expect(guide.pages.length).toBeGreaterThanOrEqual(2)
     }

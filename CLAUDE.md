@@ -235,9 +235,10 @@ compile — don't "clean up" the flagged code as dead.
 - Exam pages use callout blocks (`> [!example]-`) listing learning objectives with weight
   percentages, e.g. `{23-30%}`.
 - An exam page may carry a bare `<div class="exam-guides"></div>` marking where the
-  **orientation cards** go (two dashboard-style cards above the learning objectives, each
-  opening a paged popup with a graphic per page — currently "Exam Day Tips" and "How to
-  Study for Exam P"). The div is only a position marker: the prose, the paging and the
+  **orientation cards** go (two dashboard-style cards, normally just below the exam's intro
+  paragraph, each opening a paged popup with a graphic per page — currently "Exam Day Tips"
+  and "How to Study for …", authored for Exam P and Exam FM). The card itself shows only its
+  cover graphic and title. The div is only a position marker: the prose, the paging and the
   illustrations are authored app-side in `quiz/src/data/examGuides.ts` (keyed by the wiki
   exam id) + `components/wiki/ExamGuideGraphics.tsx`, and `WikiArticle` swaps the marker
   for `components/wiki/ExamGuideCards.tsx`. Page bodies are markdown and may use

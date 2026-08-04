@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 306" width="560" height="306" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="304.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">A joint distribution, and the four things it is asked for</text>
+  <rect x="146" y="84" width="150" height="150" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+  <ellipse cx="221.0" cy="159.0" rx="30" ry="17" transform="rotate(-28 221.0 159.0)" fill="#3b82f6" fill-opacity="0.30" stroke="#3b82f6" stroke-width="1"/>
+  <ellipse cx="221.0" cy="159.0" rx="51" ry="29" transform="rotate(-28 221.0 159.0)" fill="#3b82f6" fill-opacity="0.17" stroke="#3b82f6" stroke-width="1"/>
+  <ellipse cx="221.0" cy="159.0" rx="72" ry="41" transform="rotate(-28 221.0 159.0)" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1"/>
+  <line x1="146" y1="234" x2="310" y2="234" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="146" y1="234" x2="146" y2="72" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <text x="316" y="238" text-anchor="start" class="sm dim">x</text>
+  <text x="140" y="68" text-anchor="end" class="sm dim">y</text>
+  <polyline points="146,279.59 148.5,279.45 151,279.27 153.5,279.04 156,278.75 158.5,278.39 161,277.94 163.5,277.39 166,276.74 168.5,275.95 171,275.03 173.5,273.96 176,272.74 178.5,271.35 181,269.8 183.5,268.08 186,266.23 188.5,264.23 191,262.13 193.5,259.96 196,257.74 198.5,255.52 201,253.35 203.5,251.27 206,249.34 208.5,247.61 211,246.12 213.5,244.91 216,244.02 218.5,243.48 221,243.3 223.5,243.48 226,244.02 228.5,244.91 231,246.12 233.5,247.61 236,249.34 238.5,251.27 241,253.35 243.5,255.52 246,257.74 248.5,259.96 251,262.13 253.5,264.23 256,266.23 258.5,268.08 261,269.8 263.5,271.35 266,272.74 268.5,273.96 271,275.03 273.5,275.95 276,276.74 278.5,277.39 281,277.94 283.5,278.39 286,278.75 288.5,279.04 291,279.27 293.5,279.45 296,279.59" class="curve" stroke="#d97706" stroke-width="1.8"/>
+  <text x="302" y="274" text-anchor="start" class="sm bold" fill="#d97706">f_X</text>
+  <polyline points="106.35,234 106.48,231.5 106.63,229 106.83,226.5 107.09,224 107.4,221.5 107.79,219 108.27,216.5 108.84,214 109.52,211.5 110.32,209 111.25,206.5 112.32,204 113.52,201.5 114.87,199 116.36,196.5 117.98,194 119.71,191.5 121.53,189 123.43,186.5 125.36,184 127.29,181.5 129.18,179 130.98,176.5 132.66,174 134.17,171.5 135.46,169 136.51,166.5 137.28,164 137.76,161.5 137.92,159 137.76,156.5 137.28,154 136.51,151.5 135.46,149 134.17,146.5 132.66,144 130.98,141.5 129.18,139 127.29,136.5 125.36,134 123.43,131.5 121.53,129 119.71,126.5 117.98,124 116.36,121.5 114.87,119 113.52,116.5 112.32,114 111.25,111.5 110.32,109 109.52,106.5 108.84,104 108.27,101.5 107.79,99 107.4,96.5 107.09,94 106.83,91.5 106.63,89 106.48,86.5 106.35,84" class="curve" stroke="#059669" stroke-width="1.8"/>
+  <text x="112" y="78" text-anchor="middle" class="sm bold" fill="#059669">f_Y</text>
+  <text x="221" y="288" text-anchor="middle" class="sm dim">joint density of (X, Y), with both marginals</text>
+  <line x1="324" y1="82" x2="324" y2="116" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="334" y="95" text-anchor="start" class="sm bold">Marginals</text>
+  <text x="334" y="111" text-anchor="start" class="sm dim">sum / integrate the other variable out</text>
+  <line x1="324" y1="132" x2="324" y2="166" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="334" y="145" text-anchor="start" class="sm bold">Conditionals</text>
+  <text x="334" y="161" text-anchor="start" class="sm dim">fix one variable, renormalise</text>
+  <line x1="324" y1="182" x2="324" y2="216" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="334" y="195" text-anchor="start" class="sm bold">Covariance</text>
+  <text x="334" y="211" text-anchor="start" class="sm dim">the tilt of the cloud</text>
+  <line x1="324" y1="232" x2="324" y2="266" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="334" y="245" text-anchor="start" class="sm bold">Independence</text>
+  <text x="334" y="261" text-anchor="start" class="sm dim">the joint factors into the marginals</text>
+  <text x="280" y="300" text-anchor="middle" class="sm dim">Everything on the multivariate syllabus is read off the joint law</text>
+</svg>

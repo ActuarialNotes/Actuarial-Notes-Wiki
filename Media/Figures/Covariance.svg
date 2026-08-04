@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 292" width="560" height="292" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="290.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Covariance adds up signed rectangles around the means</text>
+  <rect x="74" y="76" width="170" height="170" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+  <rect x="74" y="76" width="85" height="85" fill="#e11d48" fill-opacity="0.10"/>
+  <text x="116.5" y="123.5" text-anchor="middle" class="bold" fill="#e11d48">−</text>
+  <rect x="159" y="76" width="85" height="85" fill="#059669" fill-opacity="0.10"/>
+  <text x="201.5" y="123.5" text-anchor="middle" class="bold" fill="#059669">+</text>
+  <rect x="74" y="161" width="85" height="85" fill="#059669" fill-opacity="0.10"/>
+  <text x="116.5" y="208.5" text-anchor="middle" class="bold" fill="#059669">+</text>
+  <rect x="159" y="161" width="85" height="85" fill="#e11d48" fill-opacity="0.10"/>
+  <text x="201.5" y="208.5" text-anchor="middle" class="bold" fill="#e11d48">−</text>
+  <line x1="159" y1="76" x2="159" y2="246" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+  <line x1="74" y1="161" x2="244" y2="161" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+  <circle cx="150.78" cy="148.93" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="144.93" cy="196.94" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="161.55" cy="157.82" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="164.55" cy="157.74" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="136.75" cy="149.93" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="164.85" cy="183.71" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="161.94" cy="166.97" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="231.87" cy="105.37" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="152.96" cy="189.03" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="162.85" cy="139.15" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="82.66" cy="238.53" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="201.44" cy="150.61" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="131.64" cy="173.98" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="152.43" cy="167.48" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="142.17" cy="170.18" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="131.73" cy="165.63" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="169.96" cy="144.18" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="157.45" cy="173.25" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="179.08" cy="135.67" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="193.89" cy="150.79" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="136.34" cy="167.93" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="210.85" cy="158.68" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="107.48" cy="193.52" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="166.35" cy="131.39" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="198.56" cy="110.76" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="176.08" cy="176.13" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="120.62" cy="205.16" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="178.08" cy="160.3" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="146.96" cy="154.49" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="81.01" cy="222.76" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="201.27" cy="135.8" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="140.41" cy="192.33" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="132.58" cy="176.41" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="135.1" cy="166" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="173.86" cy="140.26" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="152.51" cy="195.84" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="178.13" cy="147.09" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="130.18" cy="184.09" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="158.87" cy="191.44" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="165.36" cy="162.69" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="166.09" cy="128.27" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="114.74" cy="221.07" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="163.03" cy="159.2" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="154.49" cy="156.18" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="176.49" cy="171.38" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <circle cx="176.6" cy="142.71" r="2.6" fill="#3b82f6" fill-opacity="0.75"/>
+  <text x="159" y="264" text-anchor="middle" class="sm dim">μₓ</text>
+  <text x="66" y="165" text-anchor="end" class="sm dim">μ_Y</text>
+  <text x="159" y="286" text-anchor="middle" class="sm dim">Cov &gt; 0: the + quadrants dominate</text>
+  <text x="404" y="92" text-anchor="middle" class="sm bold">Cov(X, Y) = E[(X − μₓ)(Y − μ_Y)]</text>
+  <text x="404" y="112" text-anchor="middle" class="sm dim">= E[XY] − E[X] E[Y]</text>
+  <line x1="296" y1="130" x2="296" y2="158" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="306" y="141" text-anchor="start" class="sm bold">Sign, not strength</text>
+  <text x="306" y="156" text-anchor="start" class="sm dim">the units make the size unreadable</text>
+  <line x1="296" y1="172" x2="296" y2="200" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="306" y="183" text-anchor="start" class="sm bold">Independent ⇒ Cov = 0</text>
+  <text x="306" y="198" text-anchor="start" class="sm dim">the converse is not true</text>
+  <line x1="296" y1="214" x2="296" y2="242" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="306" y="225" text-anchor="start" class="sm bold">Cov(X, X) = Var(X)</text>
+  <text x="306" y="240" text-anchor="start" class="sm dim">variance is self-covariance</text>
+  <line x1="296" y1="256" x2="296" y2="284" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="306" y="267" text-anchor="start" class="sm bold">Standardise it</text>
+  <text x="306" y="282" text-anchor="start" class="sm dim">ρ = Cov / (σₓ σ_Y) lands in [−1, 1]</text>
+</svg>

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 274" width="560" height="274" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="272.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Continuous uniform: constant density across (a, b)</text>
+  <polygon points="89.12,178 89.12,102 90.16,102 91.19,102 92.22,102 93.25,102 94.28,102 95.31,102 96.34,102 97.38,102 98.41,102 99.44,102 100.47,102 101.5,102 102.53,102 103.56,102 104.59,102 105.62,102 106.66,102 107.69,102 108.72,102 109.75,102 110.78,102 111.81,102 112.84,102 113.88,102 114.91,102 115.94,102 116.97,102 118,102 119.03,102 120.06,102 121.09,102 122.12,102 123.16,102 124.19,102 125.22,102 126.25,102 127.28,102 128.31,102 129.34,102 130.38,102 131.41,102 132.44,102 133.47,102 134.5,102 135.53,102 136.56,102 137.59,102 138.62,102 139.66,102 140.69,102 141.72,102 142.75,102 143.78,102 144.81,102 145.84,102 146.88,102 147.91,102 148.94,102 149.97,102 151,102 152.03,102 153.06,102 154.09,102 155.12,102 156.16,102 157.19,102 158.22,102 159.25,102 160.28,102 161.31,102 162.34,102 163.38,102 164.41,102 165.44,102 166.47,102 167.5,102 168.53,102 169.56,102 170.59,102 171.62,102 172.66,102 173.69,102 174.72,102 175.75,102 176.78,102 177.81,102 178.84,102 179.88,102 180.91,102 181.94,102 182.97,102 184,102 185.03,102 186.06,102 187.09,102 188.12,102 189.16,102 190.19,102 191.22,102 192.25,102 193.28,102 194.31,102 195.34,102 196.38,102 197.41,102 198.44,102 199.47,102 200.5,102 201.53,102 202.56,102 203.59,102 204.62,102 205.66,102 206.69,102 207.72,102 208.75,102 209.78,102 210.81,102 211.84,102 212.88,102 212.88,178" fill="#3b82f6" fill-opacity="0.2" stroke="none"/>
+  <polyline points="52,178 89.12,178 89.12,102 212.88,102 212.88,178 250,178" class="curve" stroke="#3b82f6" stroke-width="2"/>
+  <line x1="52" y1="178" x2="260" y2="178" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="52" y1="178" x2="52" y2="54" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="89.12" y1="178" x2="89.12" y2="182" class="tick"/>
+  <text x="89.12" y="194" text-anchor="middle" class="sm dim">a</text>
+  <line x1="212.88" y1="178" x2="212.88" y2="182" class="tick"/>
+  <text x="212.88" y="194" text-anchor="middle" class="sm dim">b</text>
+  <line x1="48" y1="102" x2="52" y2="102" class="tick"/>
+  <text x="44" y="105.6" text-anchor="end" class="sm dim">1/(b−a)</text>
+  <text x="250" y="210" text-anchor="end" class="sm dim">x</text>
+  <text x="48" y="50" text-anchor="start" class="sm dim">f(x)</text>
+  <text x="151" y="140" text-anchor="middle" class="sm bold">area = 1</text>
+  <polyline points="336,178 370.5,178 485.5,76.21 520,76.21" class="curve" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="336" y1="178" x2="530" y2="178" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="336" y1="178" x2="336" y2="54" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="370.5" y1="178" x2="370.5" y2="182" class="tick"/>
+  <text x="370.5" y="194" text-anchor="middle" class="sm dim">a</text>
+  <line x1="485.5" y1="178" x2="485.5" y2="182" class="tick"/>
+  <text x="485.5" y="194" text-anchor="middle" class="sm dim">b</text>
+  <line x1="332" y1="178" x2="336" y2="178" class="tick"/>
+  <text x="328" y="181.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="332" y1="76.21" x2="336" y2="76.21" class="tick"/>
+  <text x="328" y="79.81" text-anchor="end" class="sm dim">1</text>
+  <text x="520" y="210" text-anchor="end" class="sm dim">x</text>
+  <text x="332" y="50" text-anchor="start" class="sm dim">F(x)</text>
+  <text x="428" y="114.89" text-anchor="middle" class="sm">F(x) = (x−a)/(b−a)</text>
+  <line x1="28" y1="216" x2="532" y2="216" class="rule"/>
+  <text x="150" y="238" text-anchor="middle" class="sm bold">E[X] = (a+b)/2</text>
+  <text x="150" y="256" text-anchor="middle" class="sm dim">Var(X) = (b−a)²/12</text>
+  <text x="400" y="238" text-anchor="middle" class="sm bold">Conditioning on a sub-interval</text>
+  <text x="400" y="256" text-anchor="middle" class="sm dim">leaves it uniform on that sub-interval</text>
+</svg>

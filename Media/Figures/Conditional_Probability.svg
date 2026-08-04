@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 262" width="560" height="262" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="260.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Conditioning shrinks the sample space to B</text>
+  <rect x="30" y="58" width="234" height="130" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+  <text x="42" y="74" text-anchor="middle" class="sm dim">S</text>
+  <circle cx="120" cy="122" r="50" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.5"/>
+  <circle cx="172" cy="122" r="50" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.5"/>
+  <path d="M146,79.29 A50,50 0 0 1 146,164.71 A50,50 0 0 1 146,79.29 Z" fill="#7c3aed" fill-opacity="0.4" stroke="none"/>
+  <text x="92" y="82" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
+  <text x="200" y="82" text-anchor="middle" class="bold" fill="#d97706">B</text>
+  <text x="146" y="126" text-anchor="middle" class="sm bold">0.12</text>
+  <text x="196" y="126" text-anchor="middle" class="sm">0.28</text>
+  <text x="147" y="206" text-anchor="middle" class="sm dim">P(A ∩ B) = 0.12,  P(B) = 0.40</text>
+  <line x1="276" y1="122" x2="306" y2="122" class="thin" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#ahvardim)"/>
+  <text x="291" y="108" text-anchor="middle" class="sm dim">given B</text>
+  <text x="404" y="66" text-anchor="middle" class="sm dim">the new sample space is B</text>
+  <circle cx="404" cy="122" r="60" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.6"/>
+  <path d="M404,122 L404,62 A60,60 0 0 1 461.06,140.54 Z" fill="#7c3aed" fill-opacity="0.42" stroke="none"/>
+  <line x1="404" y1="122" x2="404" y2="62" class="thin" stroke="#7c3aed" stroke-width="1.2"/>
+  <line x1="404" y1="122" x2="461.06" y2="140.54" class="thin" stroke="#7c3aed" stroke-width="1.2"/>
+  <text x="430" y="100" text-anchor="middle" class="sm bold" fill="#7c3aed">A ∩ B</text>
+  <text x="388" y="148" text-anchor="middle" class="sm dim">B ∩ Aᶜ</text>
+  <text x="404" y="202" text-anchor="middle" class="sm bold">P(A | B) = 0.12 / 0.40 = 0.30</text>
+  <text x="404" y="222" text-anchor="middle" class="sm dim">30% of B is also A</text>
+  <text x="280" y="248" text-anchor="middle" class="sm dim">P(A | B) = P(A ∩ B) / P(B),  P(B) &gt; 0</text>
+</svg>

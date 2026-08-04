@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 264" width="560" height="264" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="262.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Choosing k from n: the two questions that pick the formula</text>
+  <text x="241" y="66" text-anchor="middle" class="sm bold">No repetition</text>
+  <text x="435" y="66" text-anchor="middle" class="sm bold">Repetition allowed</text>
+  <text x="138" y="104" text-anchor="end" class="sm bold">Order matters</text>
+  <text x="138" y="120" text-anchor="end" class="sm dim">arrangements</text>
+  <rect x="148" y="78" width="186" height="62" rx="7" fill="#7c3aed" fill-opacity="0.12" stroke="#7c3aed" stroke-width="1.2"/>
+  <text x="241" y="104" text-anchor="middle" class="sm mono">P(n,k) = n!/(n−k)!</text>
+  <text x="241" y="123" text-anchor="middle" class="sm bold" fill="#7c3aed">P(4,2) = 12</text>
+  <rect x="342" y="78" width="186" height="62" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
+  <text x="435" y="104" text-anchor="middle" class="sm mono">nᵏ</text>
+  <text x="435" y="123" text-anchor="middle" class="sm bold" fill="#d97706">4² = 16</text>
+  <text x="138" y="176" text-anchor="end" class="sm bold">Order ignored</text>
+  <text x="138" y="192" text-anchor="end" class="sm dim">selections</text>
+  <rect x="148" y="150" width="186" height="62" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+  <text x="241" y="176" text-anchor="middle" class="sm mono">C(n,k) = n!/[k!(n−k)!]</text>
+  <text x="241" y="195" text-anchor="middle" class="sm bold" fill="#059669">C(4,2) = 6</text>
+  <rect x="342" y="150" width="186" height="62" rx="7" fill="#0d9488" fill-opacity="0.12" stroke="#0d9488" stroke-width="1.2"/>
+  <text x="435" y="176" text-anchor="middle" class="sm mono">C(n+k−1, k)</text>
+  <text x="435" y="195" text-anchor="middle" class="sm bold" fill="#0d9488">C(5,2) = 10</text>
+  <line x1="28" y1="218" x2="532" y2="218" class="rule"/>
+  <text x="280" y="236" text-anchor="middle" class="sm dim">Arranging all n objects is the k = n case:  n! = 4! = 24</text>
+  <text x="280" y="252" text-anchor="middle" class="sm dim">For equally likely outcomes P(A) = |A| / |S| — the counting is the work</text>
+</svg>

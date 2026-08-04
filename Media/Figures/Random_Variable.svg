@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 254" width="560" height="254" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="252.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">A random variable is a function from outcomes to numbers</text>
+  <rect x="30" y="62" width="176" height="150" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+  <text x="43" y="78" text-anchor="middle" class="sm dim">S</text>
+  <rect x="56" y="78" width="60" height="28" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="86" y="96" text-anchor="middle" class="sm">HH</text>
+  <rect x="56" y="114" width="60" height="28" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="86" y="132" text-anchor="middle" class="sm">HT</text>
+  <rect x="56" y="150" width="60" height="28" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="86" y="168" text-anchor="middle" class="sm">TH</text>
+  <rect x="56" y="186" width="60" height="28" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="86" y="204" text-anchor="middle" class="sm">TT</text>
+  <text x="118" y="228" text-anchor="middle" class="sm dim">outcomes of two coin tosses</text>
+  <line x1="284" y1="138" x2="514" y2="138" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <text x="524" y="142" text-anchor="start" class="sm dim">ℝ</text>
+  <line x1="300" y1="133" x2="300" y2="143" class="tick"/>
+  <circle cx="300" cy="138" r="4.5" fill="#7c3aed"/>
+  <text x="300" y="158" text-anchor="middle" class="sm">0</text>
+  <line x1="400" y1="133" x2="400" y2="143" class="tick"/>
+  <circle cx="400" cy="138" r="4.5" fill="#7c3aed"/>
+  <text x="400" y="158" text-anchor="middle" class="sm">1</text>
+  <line x1="500" y1="133" x2="500" y2="143" class="tick"/>
+  <circle cx="500" cy="138" r="4.5" fill="#7c3aed"/>
+  <text x="500" y="158" text-anchor="middle" class="sm">2</text>
+  <line x1="120" y1="92" x2="496" y2="128" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
+  <line x1="120" y1="128" x2="396" y2="128" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
+  <line x1="120" y1="164" x2="396" y2="128" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
+  <line x1="120" y1="200" x2="296" y2="128" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
+  <text x="400" y="88" text-anchor="middle" class="sm bold">X = number of heads</text>
+  <text x="400" y="186" text-anchor="middle" class="sm dim">X : S → ℝ</text>
+  <text x="400" y="210" text-anchor="middle" class="sm dim">Discrete: countably many values</text>
+  <text x="400" y="226" text-anchor="middle" class="sm dim">Continuous: an interval of values</text>
+</svg>

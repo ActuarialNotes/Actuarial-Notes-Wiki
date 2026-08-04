@@ -55,8 +55,8 @@ function ExamGuideCard({ guide, onOpen }: CardProps) {
       onClick={onOpen}
       className="group flex h-full flex-col rounded-lg bg-card p-4 text-left text-card-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
-      {/* max-h keeps the banner from dominating the card at desktop widths —
-          the SVG letterboxes inside the plate rather than stretching. */}
+      {/* max-h is a backstop: the cover's height follows the card width via the
+          SVG aspect ratio, and the cap only bites on an unusually wide card. */}
       <Cover className="mb-3 max-h-36" />
       {/* Title only: the cover carries the subject, so a blurb and a page
           count just crowded a card that is two-up on a phone. */}
@@ -247,7 +247,13 @@ export function ExamGuideCards({ examId, leadCard }: ExamGuideCardsProps) {
 
   return (
     <div className="not-prose my-5">
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      {/* Two-up at every width, but capped on desktop: left to fill the article
+          column the pair grew to ~400px each and read as a hero banner rather
+          than the two side notes they are. Card height follows the width (the
+          cover keeps its aspect ratio), so the cap shrinks both dimensions —
+          type stays at its normal size. The lead card spans the row inside that
+          same cap, so the block reads as one stack rather than two widths. */}
+      <div className="grid max-w-md grid-cols-2 gap-3 sm:gap-4">
         {leadCard}
         {guides.map(guide => (
           <ExamGuideCard key={guide.id} guide={guide} onOpen={() => setOpenId(guide.id)} />

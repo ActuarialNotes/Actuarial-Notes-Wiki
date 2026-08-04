@@ -323,9 +323,13 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
 interface CharacterSkinSelectorProps {
   currentAvatarUrl: string
   onClose: () => void
+  // When provided, the picker hands the chosen avatar URL back instead of
+  // writing it to the user's metadata itself — used by Settings, where the
+  // choice is staged locally until "Save Profile".
+  onSelect?: (avatarUrl: string) => void
 }
 
-export function CharacterSkinSelector({ currentAvatarUrl, onClose }: CharacterSkinSelectorProps) {
+export function CharacterSkinSelector({ currentAvatarUrl, onClose, onSelect }: CharacterSkinSelectorProps) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [ownedCosmetics, setOwnedCosmetics] = useState<Set<string>>(new Set())
@@ -381,6 +385,7 @@ export function CharacterSkinSelector({ currentAvatarUrl, onClose }: CharacterSk
     const url = variantKey
       ? serializeAvatar({ type: 'animal', value: animal, variant: variantKey })
       : serializeAvatar({ type: 'animal', value: animal })
+    if (onSelect) { onSelect(url); return }
     setSaving(true)
     try {
       await supabase.auth.updateUser({ data: { avatar_url: url } })

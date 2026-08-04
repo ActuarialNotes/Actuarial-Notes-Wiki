@@ -8,7 +8,7 @@ than anything else on the syllabus.
 
 The feature has two halves:
 
-1. **An authored catalogue** — which concepts are keystones, and one sentence each on what
+1. **An authored catalogue** — which concepts are keystones, and one short line each on what
    leans on them.
 2. **A gold visual material** — so a keystone is recognisable everywhere it appears, without
    the student having to remember a list.
@@ -41,9 +41,11 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
   dead link.
 - **One exam per concept.** The lookup index is keyed globally by concept name, so claiming the
   same concept for two exams would silently collapse to one entry.
-- **`why` is one sentence about consequences**, addressed to a student — what breaks, or what
-  becomes easy, because of this concept. It is not a definition; the concept page already has
-  one, and the test rejects a `why` that opens by restating the concept's own name.
+- **`why` is one short line about consequences**, addressed to a student — what breaks, or what
+  becomes easy, because of this concept. Keep it under ~95 characters: the explainer shows this
+  line and nothing else, so a second sentence just pushes the concept off the screen. It is not
+  a definition; the concept page already has one, and the test rejects a `why` that opens by
+  restating the concept's own name.
 
 ## The read side
 
@@ -107,7 +109,7 @@ name, or the gold chip on the collect card — so the two never fight for the sa
 | Surface | Treatment |
 |---|---|
 | Exam study guide (`pages/wiki/WikiExam.tsx`) | `components/wiki/KeystoneStrip.tsx` — the collapsible gold panel that *introduces* the idea, lists all of the exam's keystones with per-concept mastery dots and a mastered-count bar, and opens any of them in the concept popup |
-| Concept popup header (`components/wiki/ConceptPopup.tsx`) | The **title** is the marker: gold underline, and tapping the concept name opens the explainer (what a keystone is, why *this* one qualifies, the exam's mastered count) |
+| Concept popup header (`components/wiki/ConceptPopup.tsx`) | The **title** is the marker: gold underline, and tapping the concept name opens the explainer — the "Keystone concept" heading, the concept's one-line `why`, and the exam's mastered count. Nothing else: the explainer is read mid-study, over the concept it is explaining, so it never grows a second paragraph |
 | Wiki prose (`components/wiki/WikiArticle.tsx`) | `.wiki-link--keystone` on concept links — dimmed repeat mentions stay dim, so one marker per idea |
 | Flashcard tiles (`pages/Flashcards.tsx`) | Gold underline on the card name — never a ring, since the tile edge belongs to the collected-foil material |
 | Wiki search results (`components/wiki/WikiSearchPanel.tsx`) | Gold underline on the result's name; the category icon is untouched |

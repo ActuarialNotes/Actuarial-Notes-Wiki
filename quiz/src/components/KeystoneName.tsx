@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { findKeystone, keystonesForExam, type KeystoneProgress } from '@/lib/keystone'
+import { findKeystone, type KeystoneProgress } from '@/lib/keystone'
 
 // Keystone concepts — the gold marker and its explainer.
 //
@@ -84,8 +84,7 @@ export function KeystoneName({ name, className = '', progress }: KeystoneNamePro
 
   if (!match) return <span className={className}>{name}</span>
 
-  const { concept, examId, examLabel } = match
-  const total = keystonesForExam(examId).length
+  const { concept, examLabel } = match
 
   function toggle() {
     if (!open && btnRef.current) setRect(btnRef.current.getBoundingClientRect())
@@ -110,24 +109,20 @@ export function KeystoneName({ name, className = '', progress }: KeystoneNamePro
           data-keystone-panel
           role="dialog"
           aria-label={`Keystone concept: ${concept.name}`}
-          className="fixed z-[80] w-72 rounded-lg bg-popover text-popover-foreground shadow-lg p-3.5 keystone-ring"
+          className="fixed z-[80] w-80 max-w-[calc(100vw-16px)] rounded-lg bg-popover text-popover-foreground shadow-lg p-3.5 keystone-ring"
           style={{
             top: Math.min(rect.bottom + 6, window.innerHeight - 16),
-            left: Math.max(8, Math.min(rect.left, window.innerWidth - 296)),
+            left: Math.max(8, Math.min(rect.left, window.innerWidth - 328)),
           }}
         >
           <div className="flex items-center gap-2">
             <KeystoneIcon className="h-5 w-5 shrink-0" />
-            <span className="text-sm font-semibold">Keystone concept</span>
-            <span className="ml-auto shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
+            <span className="text-base font-semibold">Keystone concept</span>
+            <span className="ml-auto shrink-0 text-[11px] font-medium px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
               {examLabel}
             </span>
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-foreground">{concept.why}</p>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-            {total} concepts carry {examLabel}. Learn these first — everything else on the
-            syllabus leans on them.
-          </p>
+          <p className="mt-2 text-sm leading-relaxed text-foreground">{concept.why}</p>
           {progress && (
             <div className="mt-2.5 flex items-center gap-2">
               <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
@@ -139,7 +134,7 @@ export function KeystoneName({ name, className = '', progress }: KeystoneNamePro
                   }}
                 />
               </div>
-              <span className="text-[11px] tabular-nums text-muted-foreground shrink-0">
+              <span className="text-xs tabular-nums text-muted-foreground shrink-0">
                 {progress.mastered}/{progress.total} mastered
               </span>
             </div>

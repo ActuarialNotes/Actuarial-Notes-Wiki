@@ -65,7 +65,7 @@ export function KeystoneStrip({ examId, examLabel, onSelect }: KeystoneStripProp
         className="w-full flex items-center gap-2 text-left"
       >
         <KeystoneIcon className="h-5 w-5 shrink-0" />
-        <span className="text-sm font-semibold">Keystone concepts</span>
+        <span className="text-base font-semibold">Keystone concepts</span>
         <span className="ml-auto flex items-center gap-2 shrink-0">
           <span className="text-xs text-muted-foreground tabular-nums">
             {progress.mastered}/{progress.total} mastered
@@ -78,10 +78,8 @@ export function KeystoneStrip({ examId, examLabel, onSelect }: KeystoneStripProp
 
       {!collapsed && (
         <>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-            Pull the keystone and the arch falls. These are the concepts the rest of this
-            syllabus is built on — the ones that turn up inside other definitions and are
-            quietly assumed by half the exam. Learn them first, and over-learn them.
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Pull the keystone and the arch falls — learn these first, and over-learn them.
           </p>
 
           <div className="mt-3 h-1.5 rounded-full bg-muted overflow-hidden" role="presentation">
@@ -98,7 +96,7 @@ export function KeystoneStrip({ examId, examLabel, onSelect }: KeystoneStripProp
                   type="button"
                   onClick={() => onSelect(concept.name)}
                   title={concept.why}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-card/70 px-2.5 py-1 text-xs hover:bg-accent transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-card/70 px-2.5 py-1 text-sm hover:bg-accent transition-colors"
                 >
                   <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${DOT[state]}`} aria-hidden="true" />
                   {concept.name}

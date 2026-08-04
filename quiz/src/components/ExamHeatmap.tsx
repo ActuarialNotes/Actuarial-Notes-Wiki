@@ -60,6 +60,12 @@ function isoKey(d: Date): string {
   return `${y}-${m}-${day}`
 }
 
+/** `scrollLeft` that puts the day at `idx` in the middle of the 7-cell strip. */
+function centerOffset(el: HTMLElement, idx: number): number {
+  const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+  return Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2)
+}
+
 function daysUntil(dateStr: string): number {
   const target = new Date(dateStr + 'T00:00:00')
   const now = new Date()
@@ -151,6 +157,10 @@ export function ExamHeatmap({
     try { localStorage.setItem('actuarial_heatmap_timeline', next ? '1' : '0') } catch {}
   }
 
+  // The playback needs the day strip; collapse the expanded timeline for it
+  // without disturbing the user's stored preference.
+  const showStrip = !showFullTimeline || !!playbackDay
+
   const today = useMemo(() => {
     const d = new Date()
     d.setHours(0, 0, 0, 0)
@@ -222,17 +232,40 @@ export function ExamHeatmap({
     return days
   }, [gridStart, gridEnd, today, scoreByDay, targetDate, targetReadyDate])
 
-  // Scroll to today once when the strip first mounts
+  // Center the strip on today every time it appears — on first mount, and again
+  // each time the full timeline is collapsed back down to it. Collapsing mounts a
+  // brand-new scroll element whose scrollLeft starts at 0, i.e. weeks before today
+  // at the far-left end of the range, so this can't be a mount-only effect.
+  //
+  // It also re-centers when the day range shifts underneath a position the user
+  // hasn't touched: `gridStart` is derived from the earliest session, so today's
+  // index moves once sessions finish loading. `autoScrollLeft` is the offset this
+  // effect last set (read back, so it carries the browser's own rounding) — once
+  // the strip sits anywhere else the scroll is the user's and is left alone.
+  //
+  // A highlighted day wins over today, since its own effect only fires when the
+  // day changes and so can't re-center a strip that has just remounted.
+  const stripWasShown = useRef(false)
+  const autoScrollLeft = useRef<number | null>(null)
+  const lastDays = useRef(allDays)
   useEffect(() => {
+    const rangeChanged = lastDays.current !== allDays
+    lastDays.current = allDays
+    if (!showStrip) { stripWasShown.current = false; autoScrollLeft.current = null; return }
     const el = scrollRef.current
     if (!el) return
-    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
-    const todayIdx = allDays.findIndex(d => d.isToday)
-    if (todayIdx >= 0) {
-      el.scrollLeft = Math.max(0, todayIdx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2)
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // intentionally only on mount — highlightedDay effect handles subsequent scrolls
+    const untouched = autoScrollLeft.current !== null && Math.abs(el.scrollLeft - autoScrollLeft.current) < 1
+    if (stripWasShown.current && !(rangeChanged && untouched)) return
+    stripWasShown.current = true
+    // Playback drives its own scrolling and starts on the day it rewinds from.
+    if (playbackDay) return
+    const idx = highlightedDay
+      ? allDays.findIndex(d => d.key === highlightedDay)
+      : allDays.findIndex(d => d.isToday)
+    if (idx < 0) return
+    el.scrollLeft = centerOffset(el, idx)
+    autoScrollLeft.current = el.scrollLeft
+  }, [showStrip, allDays, highlightedDay, playbackDay])
 
   // Track whether today's cell is visible in the scroll strip, and which side it's off to
   const [showTodayButton, setShowTodayButton] = useState(false)
@@ -297,11 +330,8 @@ export function ExamHeatmap({
   function scrollToToday() {
     const el = scrollRef.current
     if (!el) return
-    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
     const todayIdx = allDays.findIndex(d => d.isToday)
-    if (todayIdx >= 0) {
-      el.scrollTo({ left: Math.max(0, todayIdx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
-    }
+    if (todayIdx >= 0) el.scrollTo({ left: centerOffset(el, todayIdx), behavior: 'smooth' })
   }
 
   // Smooth-scroll to center highlighted day when it changes
@@ -310,8 +340,7 @@ export function ExamHeatmap({
     const el = scrollRef.current
     const idx = allDays.findIndex(d => d.key === highlightedDay)
     if (idx < 0) return
-    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
-    el.scrollTo({ left: Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2), behavior: 'smooth' })
+    el.scrollTo({ left: centerOffset(el, idx), behavior: 'smooth' })
   }, [highlightedDay, playbackDay, allDays])
 
   // Playback: glide the strip to each new day over the beat it's given, so a
@@ -322,8 +351,7 @@ export function ExamHeatmap({
     if (!el || !playbackDay) return
     const idx = allDays.findIndex(d => d.key === playbackDay)
     if (idx < 0) return
-    const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
-    const target = Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2)
+    const target = centerOffset(el, idx)
     const from = el.scrollLeft
     const distance = target - from
     if (Math.abs(distance) < 1 || playbackStepMs <= 0) { el.scrollLeft = target; return }
@@ -556,10 +584,6 @@ export function ExamHeatmap({
       <span className="font-bold tabular-nums">{Math.max(0, daysLeft)}d</span> until exam
     </button>
   ) : null
-
-  // The playback needs the day strip; collapse the expanded timeline for it
-  // without disturbing the user's stored preference.
-  const showStrip = !showFullTimeline || !!playbackDay
 
   return (
     <div className="space-y-3">

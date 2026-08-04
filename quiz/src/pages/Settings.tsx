@@ -22,16 +22,9 @@ import { LeagueSettingsCard } from '@/components/LeagueSettingsCard'
 import { SoundSettingsCard } from '@/components/SoundSettingsCard'
 import { EmailSettingsCard } from '@/components/EmailSettingsCard'
 import { DAILY_PLAN_EMAIL_ENABLED, LEAGUES_ENABLED, XP_ENABLED } from '@/lib/featureFlags'
-import {
-  AvatarDisplay,
-  ANIMAL_TYPES,
-  ANIMAL_LABELS,
-  parseAvatarUrl,
-  serializeAvatar,
-} from '@/components/AvatarDisplay'
-import { COSMETICS } from '@/lib/cosmetics'
+import { AvatarDisplay } from '@/components/AvatarDisplay'
+import { CharacterSkinSelector } from '@/components/MascotWidget'
 import { COLOR_THEMES } from '@/lib/colorThemes'
-import { FREE_ANIMALS } from '@/lib/characters'
 import { supabase } from '@/lib/supabase'
 import { useTheme } from '@/hooks/useTheme'
 import { RESETTABLE_EXAMS, EXAM_ID_TO_LABEL } from '@/lib/examIds'
@@ -409,39 +402,14 @@ export default function Settings() {
     }
   }
 
-  const handleAnimalSelect = (animal: typeof ANIMAL_TYPES[number]) => {
-    setLocalAvatarUrl(serializeAvatar({ type: 'animal', value: animal }))
+  // The character/skin grid lives in the shared picker popup (same one the
+  // Dashboard level badge opens); here the choice is staged until Save Profile.
+  const [showCharacterPicker, setShowCharacterPicker] = useState(false)
+
+  const handleCharacterSelect = (avatarUrl: string) => {
+    setLocalAvatarUrl(avatarUrl)
     setProfileDirty(true)
   }
-
-  // Owned cosmetics — extends the avatar picker with unlocked color variants.
-  const [ownedCosmetics, setOwnedCosmetics] = useState<Set<string>>(new Set())
-  useEffect(() => {
-    if (!user?.id) { setOwnedCosmetics(new Set()); return }
-    let cancelled = false
-    supabase
-      .from('user_cosmetics')
-      .select('cosmetic_id')
-      .eq('user_id', user.id)
-      .then(({ data, error }: { data: { cosmetic_id: string }[] | null; error: { message: string } | null }) => {
-        if (cancelled) return
-        if (error) {
-          console.warn('Settings: failed to load cosmetics:', error.message)
-          return
-        }
-        setOwnedCosmetics(new Set((data ?? []).map(r => r.cosmetic_id)))
-      })
-    return () => { cancelled = true }
-  }, [user?.id])
-
-  const handleVariantSelect = (animal: typeof ANIMAL_TYPES[number], variantKey: string) => {
-    setLocalAvatarUrl(serializeAvatar({ type: 'animal', value: animal, variant: variantKey }))
-    setProfileDirty(true)
-  }
-
-  const currentAvatar = parseAvatarUrl(localAvatarUrl)
-  const currentAnimal = currentAvatar.type === 'animal' ? currentAvatar.value : null
-  const currentVariant = currentAvatar.type === 'animal' ? currentAvatar.variant ?? null : null
 
   // ---- Exams section state ----
   const { selectedTrack, setSelectedTrack } = useExamProgress()
@@ -869,63 +837,20 @@ export default function Settings() {
                     <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
                   ) : (
                     <>
-                      {/* Avatar picker */}
-                      <div className="flex items-start gap-4">
+                      {/* Avatar — the picker itself lives in a popup */}
+                      <div className="flex items-center gap-4">
                         <AvatarDisplay avatarUrl={localAvatarUrl} initials={initials} size={64} />
-                        <div className="space-y-2">
-                          {/* Default animal swatches */}
-                          <div className="flex flex-wrap gap-2">
-                            {ANIMAL_TYPES.filter(animal =>
-                              FREE_ANIMALS.has(animal) || ownedCosmetics.has(`character:${animal}`)
-                            ).map(animal => {
-                              const isSelected = currentAnimal === animal && !currentVariant
-                              return (
-                                <button
-                                  key={animal}
-                                  type="button"
-                                  title={ANIMAL_LABELS[animal]}
-                                  onClick={() => handleAnimalSelect(animal)}
-                                  className={cn(
-                                    'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110 overflow-hidden p-0',
-                                    isSelected ? 'border-foreground scale-110' : 'border-transparent'
-                                  )}
-                                >
-                                  <AvatarDisplay avatarUrl={serializeAvatar({ type: 'animal', value: animal })} initials="" size={28} />
-                                </button>
-                              )
-                            })}
-                          </div>
-                          {/* Owned cosmetic variants */}
-                          {ownedCosmetics.size > 0 && (
-                            <div className="flex flex-wrap gap-2">
-                              {COSMETICS.filter(c => ownedCosmetics.has(c.id)).map(c => {
-                                const isSelected = currentAnimal === c.animal && currentVariant === c.variantKey
-                                return (
-                                  <button
-                                    key={c.id}
-                                    type="button"
-                                    title={c.variantName}
-                                    onClick={() => handleVariantSelect(c.animal!, c.variantKey!)}
-                                    className={cn(
-                                      'w-7 h-7 rounded-full border-2 transition-transform hover:scale-110 overflow-hidden p-0',
-                                      isSelected ? 'border-foreground scale-110' : 'border-transparent'
-                                    )}
-                                  >
-                                    <AvatarDisplay
-                                      avatarUrl={serializeAvatar({ type: 'animal', value: c.animal!, variant: c.variantKey! })}
-                                      initials=""
-                                      size={28}
-                                    />
-                                  </button>
-                                )
-                              })}
-                            </div>
-                          )}
-                          <Link to="/store" className="text-xs text-primary hover:underline inline-block">
-                            + Unlock more in the Store
-                          </Link>
-                        </div>
+                        <Button variant="outline" onClick={() => setShowCharacterPicker(true)}>
+                          Change Character
+                        </Button>
                       </div>
+                      {showCharacterPicker && (
+                        <CharacterSkinSelector
+                          currentAvatarUrl={localAvatarUrl}
+                          onSelect={handleCharacterSelect}
+                          onClose={() => setShowCharacterPicker(false)}
+                        />
+                      )}
 
                       <Separator />
 

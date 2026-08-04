@@ -257,11 +257,11 @@ function InlineAuthForm() {
 
 // ---- Nav items ----
 
-const BASE_NAV_ITEMS = [
+// Account sections, rendered first for signed-in users
+const ACCOUNT_NAV_ITEMS = [
   { id: 'profile',    label: 'Profile' },
   { id: 'premium',    label: 'Premium' },
   { id: 'exams',      label: 'Credential Path & Exams' },
-  { id: 'data',       label: 'Progress & Data' },
 ]
 
 // ---- Main page ----
@@ -289,13 +289,14 @@ export default function Settings() {
 
   const navItems = [
     ...(user ? [] : [{ id: 'signin', label: 'Sign In' }]),
+    ...(user ? ACCOUNT_NAV_ITEMS : []),
     { id: 'appearance', label: 'Appearance' },
     { id: 'sound', label: 'Sound' },
     { id: 'support', label: 'Support' },
     ...(user && XP_ENABLED ? [{ id: 'dailygoal', label: 'Daily Goal' }] : []),
     ...(user && LEAGUES_ENABLED ? [{ id: 'league', label: 'Leaderboard' }] : []),
     ...(user && DAILY_PLAN_EMAIL_ENABLED ? [{ id: 'email', label: 'Daily Email' }] : []),
-    ...(user ? BASE_NAV_ITEMS : []),
+    ...(user ? [{ id: 'data', label: 'Progress & Data' }] : []),
   ]
 
   // ---- Onboarding tour (replayable from Support) ----
@@ -595,214 +596,9 @@ export default function Settings() {
               </section>
             )}
 
-            {/* ---- Appearance ---- */}
-            <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Appearance</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p className="text-sm font-medium mb-2">Mode</p>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => theme !== 'light' && toggleTheme()}
-                        className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
-                          theme === 'light'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                        )}
-                      >
-                        <Sun className="h-4 w-4" />
-                        Light
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => theme !== 'dark' && toggleTheme()}
-                        className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
-                          theme === 'dark'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                        )}
-                      >
-                        <Moon className="h-4 w-4" />
-                        Dark
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-medium mb-2">Theme</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      {COLOR_THEMES.map(option => {
-                        const swatch = theme === 'dark' ? option.preview.dark : option.preview.light
-                        const selected = colorTheme === option.id
-
-                        if (option.id === 'colourful') {
-                          return (
-                            <div
-                              key={option.id}
-                              role="button"
-                              tabIndex={0}
-                              onClick={() => setColorTheme(option.id)}
-                              onKeyDown={e => e.key === 'Enter' && setColorTheme(option.id)}
-                              className={cn(
-                                'flex flex-col gap-2 p-3 rounded-md text-left transition-colors cursor-pointer',
-                                selected
-                                  ? 'ring-2 ring-primary'
-                                  : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground'
-                              )}
-                            >
-                              <p className="text-sm font-medium">{option.name}</p>
-                              <div className="flex gap-1.5 flex-wrap">
-                                {option.variants!.map(v => {
-                                  const vPrimary = theme === 'dark' ? v.dark.primary : v.light.primary
-                                  const vAccent = theme === 'dark' ? v.dark.accent : v.light.accent
-                                  const vSelected = selected && colourfulVariant === v.id
-                                  return (
-                                    <button
-                                      key={v.id}
-                                      type="button"
-                                      aria-label={v.id}
-                                      onClick={e => {
-                                        e.stopPropagation()
-                                        setColorTheme('colourful')
-                                        setColourfulVariant(v.id)
-                                      }}
-                                      className={cn(
-                                        'flex gap-1 p-0.5 rounded transition-colors',
-                                        vSelected
-                                          ? 'ring-1 ring-primary'
-                                          : 'hover:bg-accent'
-                                      )}
-                                    >
-                                      <span
-                                        className="h-4 w-4 rounded-full border border-border/50"
-                                        style={{ backgroundColor: vPrimary }}
-                                      />
-                                      <span
-                                        className="h-4 w-4 rounded-full border border-border/50"
-                                        style={{ backgroundColor: vAccent }}
-                                      />
-                                    </button>
-                                  )
-                                })}
-                              </div>
-                            </div>
-                          )
-                        }
-
-                        return (
-                          <button
-                            key={option.id}
-                            type="button"
-                            onClick={() => setColorTheme(option.id)}
-                            className={cn(
-                              'flex flex-col gap-2 p-3 rounded-md text-left transition-colors',
-                              selected
-                                ? 'ring-2 ring-primary'
-                                : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground'
-                            )}
-                          >
-                            <div className="flex gap-1.5">
-                              <span
-                                className="h-5 w-5 rounded-full border border-border/50"
-                                style={{ backgroundColor: swatch.background }}
-                              />
-                              <span
-                                className="h-5 w-5 rounded-full border border-border/50"
-                                style={{ backgroundColor: swatch.primary }}
-                              />
-                              <span
-                                className="h-5 w-5 rounded-full border border-border/50"
-                                style={{ backgroundColor: swatch.accent }}
-                              />
-                            </div>
-                            <p className="text-sm font-medium">{option.name}</p>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* ---- Sound ---- */}
-            <section ref={el => { sectionRefs.current.sound = el }} id="sound">
-              <SoundSettingsCard />
-            </section>
-
-            {/* ---- Support ---- */}
-            <section ref={el => { sectionRefs.current.support = el }} id="support">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Support</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Take the tour</p>
-                      <p className="text-xs text-muted-foreground">
-                        Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes and more.
-                      </p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => restartTour()}
-                      className="shrink-0"
-                    >
-                      <GraduationCap className="h-4 w-4 mr-2" />
-                      Start tour
-                    </Button>
-                  </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium">Contact us</p>
-                      <p className="text-xs text-muted-foreground">
-                        Have a question or found a bug? Send us a message.
-                      </p>
-                    </div>
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowContact(true)}
-                      className="shrink-0"
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Contact us
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </section>
-
-            {/* ---- Daily goal (XP) ---- */}
-            {user && XP_ENABLED && (
-              <section ref={el => { sectionRefs.current.dailygoal = el }} id="dailygoal">
-                <DailyGoalPicker />
-              </section>
-            )}
-
-            {/* ---- Weekly XP league opt-in (roadmap P4.1) ---- */}
-            {user && LEAGUES_ENABLED && (
-              <section ref={el => { sectionRefs.current.league = el }} id="league">
-                <LeagueSettingsCard />
-              </section>
-            )}
-
-            {/* ---- Daily study-plan email opt-in ---- */}
-            {user && DAILY_PLAN_EMAIL_ENABLED && (
-              <section ref={el => { sectionRefs.current.email = el }} id="email">
-                <EmailSettingsCard />
-              </section>
-            )}
-
             {user && <>
 
-            {/* ---- Profile (first) ---- */}
+            {/* ---- Profile ---- */}
             <section ref={el => { sectionRefs.current.profile = el }} id="profile">
               <Card>
                 <CardHeader>
@@ -1096,6 +892,215 @@ export default function Settings() {
                 </CardContent>
               </Card>
             </section>
+
+            </> /* end user && */}
+
+            {/* ---- Appearance ---- */}
+            <section ref={el => { sectionRefs.current.appearance = el }} id="appearance">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Appearance</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="text-sm font-medium mb-2">Mode</p>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => theme !== 'light' && toggleTheme()}
+                        className={cn(
+                          'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
+                          theme === 'light'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        )}
+                      >
+                        <Sun className="h-4 w-4" />
+                        Light
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => theme !== 'dark' && toggleTheme()}
+                        className={cn(
+                          'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
+                          theme === 'dark'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        )}
+                      >
+                        <Moon className="h-4 w-4" />
+                        Dark
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium mb-2">Theme</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      {COLOR_THEMES.map(option => {
+                        const swatch = theme === 'dark' ? option.preview.dark : option.preview.light
+                        const selected = colorTheme === option.id
+
+                        if (option.id === 'colourful') {
+                          return (
+                            <div
+                              key={option.id}
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => setColorTheme(option.id)}
+                              onKeyDown={e => e.key === 'Enter' && setColorTheme(option.id)}
+                              className={cn(
+                                'flex flex-col gap-2 p-3 rounded-md text-left transition-colors cursor-pointer',
+                                selected
+                                  ? 'ring-2 ring-primary'
+                                  : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground'
+                              )}
+                            >
+                              <p className="text-sm font-medium">{option.name}</p>
+                              <div className="flex gap-1.5 flex-wrap">
+                                {option.variants!.map(v => {
+                                  const vPrimary = theme === 'dark' ? v.dark.primary : v.light.primary
+                                  const vAccent = theme === 'dark' ? v.dark.accent : v.light.accent
+                                  const vSelected = selected && colourfulVariant === v.id
+                                  return (
+                                    <button
+                                      key={v.id}
+                                      type="button"
+                                      aria-label={v.id}
+                                      onClick={e => {
+                                        e.stopPropagation()
+                                        setColorTheme('colourful')
+                                        setColourfulVariant(v.id)
+                                      }}
+                                      className={cn(
+                                        'flex gap-1 p-0.5 rounded transition-colors',
+                                        vSelected
+                                          ? 'ring-1 ring-primary'
+                                          : 'hover:bg-accent'
+                                      )}
+                                    >
+                                      <span
+                                        className="h-4 w-4 rounded-full border border-border/50"
+                                        style={{ backgroundColor: vPrimary }}
+                                      />
+                                      <span
+                                        className="h-4 w-4 rounded-full border border-border/50"
+                                        style={{ backgroundColor: vAccent }}
+                                      />
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                          )
+                        }
+
+                        return (
+                          <button
+                            key={option.id}
+                            type="button"
+                            onClick={() => setColorTheme(option.id)}
+                            className={cn(
+                              'flex flex-col gap-2 p-3 rounded-md text-left transition-colors',
+                              selected
+                                ? 'ring-2 ring-primary'
+                                : 'bg-muted/40 hover:bg-accent hover:text-accent-foreground'
+                            )}
+                          >
+                            <div className="flex gap-1.5">
+                              <span
+                                className="h-5 w-5 rounded-full border border-border/50"
+                                style={{ backgroundColor: swatch.background }}
+                              />
+                              <span
+                                className="h-5 w-5 rounded-full border border-border/50"
+                                style={{ backgroundColor: swatch.primary }}
+                              />
+                              <span
+                                className="h-5 w-5 rounded-full border border-border/50"
+                                style={{ backgroundColor: swatch.accent }}
+                              />
+                            </div>
+                            <p className="text-sm font-medium">{option.name}</p>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* ---- Sound ---- */}
+            <section ref={el => { sectionRefs.current.sound = el }} id="sound">
+              <SoundSettingsCard />
+            </section>
+
+            {/* ---- Support ---- */}
+            <section ref={el => { sectionRefs.current.support = el }} id="support">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Support</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">Take the tour</p>
+                      <p className="text-xs text-muted-foreground">
+                        Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes and more.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => restartTour()}
+                      className="shrink-0"
+                    >
+                      <GraduationCap className="h-4 w-4 mr-2" />
+                      Start tour
+                    </Button>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">Contact us</p>
+                      <p className="text-xs text-muted-foreground">
+                        Have a question or found a bug? Send us a message.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowContact(true)}
+                      className="shrink-0"
+                    >
+                      <Mail className="h-4 w-4 mr-2" />
+                      Contact us
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* ---- Daily goal (XP) ---- */}
+            {user && XP_ENABLED && (
+              <section ref={el => { sectionRefs.current.dailygoal = el }} id="dailygoal">
+                <DailyGoalPicker />
+              </section>
+            )}
+
+            {/* ---- Weekly XP league opt-in (roadmap P4.1) ---- */}
+            {user && LEAGUES_ENABLED && (
+              <section ref={el => { sectionRefs.current.league = el }} id="league">
+                <LeagueSettingsCard />
+              </section>
+            )}
+
+            {/* ---- Daily study-plan email opt-in ---- */}
+            {user && DAILY_PLAN_EMAIL_ENABLED && (
+              <section ref={el => { sectionRefs.current.email = el }} id="email">
+                <EmailSettingsCard />
+              </section>
+            )}
+
+            {user && <>
 
             {/* ---- Progress & Data ---- */}
             <section ref={el => { sectionRefs.current.data = el }} id="data">

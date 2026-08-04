@@ -898,8 +898,10 @@ function AddFlashcardsSheet({
     return allConcepts.filter(n => n.toLowerCase().includes(q)).slice(0, 24)
   }, [query, allConcepts])
 
+  // Deliberately no autofocus: opening the sheet should show the packs, not
+  // shove a keyboard over them on mobile. The search box only takes focus when
+  // the user taps it.
   useEffect(() => {
-    inputRef.current?.focus()
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
     }
@@ -913,18 +915,25 @@ function AddFlashcardsSheet({
       <div className="shrink-0 border-b bg-background/95 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-2 h-14">
-            <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder="Add a flashcard…"
-              className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder:text-muted-foreground"
-              aria-label="Add a flashcard"
-              autoComplete="off"
-              spellCheck={false}
-            />
+            {/* Tapping anywhere in the search area (icon included) is what opens
+                the keyboard — the sheet itself never steals focus. */}
+            <div
+              className="flex-1 min-w-0 flex items-center gap-2 self-stretch cursor-text"
+              onClick={() => inputRef.current?.focus()}
+            >
+              <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="Add a flashcard…"
+                className="flex-1 min-w-0 bg-transparent border-0 focus:outline-none text-[16px] sm:text-sm text-foreground placeholder:text-muted-foreground"
+                aria-label="Add a flashcard"
+                autoComplete="off"
+                spellCheck={false}
+              />
+            </div>
             <button
               type="button"
               onClick={onClose}

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" width="560" height="300" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="298.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">A loan: principal in, payments out, balance in between</text>
+  <line x1="108" y1="116" x2="442" y2="116" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="116" y1="112" x2="116" y2="120" class="tick"/>
+  <text x="116" y="133" text-anchor="middle" class="sm dim">0</text>
+  <line x1="167.33" y1="112" x2="167.33" y2="120" class="tick"/>
+  <text x="167.33" y="133" text-anchor="middle" class="sm dim">1</text>
+  <line x1="218.67" y1="112" x2="218.67" y2="120" class="tick"/>
+  <text x="218.67" y="133" text-anchor="middle" class="sm dim">2</text>
+  <line x1="270" y1="112" x2="270" y2="120" class="tick"/>
+  <text x="270" y="133" text-anchor="middle" class="sm dim">3</text>
+  <line x1="321.33" y1="112" x2="321.33" y2="120" class="tick"/>
+  <text x="321.33" y="133" text-anchor="middle" class="sm dim">…</text>
+  <line x1="372.67" y1="112" x2="372.67" y2="120" class="tick"/>
+  <text x="372.67" y="133" text-anchor="middle" class="sm dim">n−1</text>
+  <line x1="424" y1="112" x2="424" y2="120" class="tick"/>
+  <text x="424" y="133" text-anchor="middle" class="sm dim">n</text>
+  <line x1="116" y1="116" x2="116" y2="168" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="116" y="184" text-anchor="middle" class="sm">L</text>
+  <line x1="167.33" y1="116" x2="167.33" y2="82" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="167.33" y="76" text-anchor="middle" class="sm">P</text>
+  <line x1="218.67" y1="116" x2="218.67" y2="82" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="218.67" y="76" text-anchor="middle" class="sm">P</text>
+  <line x1="270" y1="116" x2="270" y2="82" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="270" y="76" text-anchor="middle" class="sm">P</text>
+  <line x1="321.33" y1="116" x2="321.33" y2="82" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="321.33" y="76" text-anchor="middle" class="sm">P</text>
+  <line x1="372.67" y1="116" x2="372.67" y2="82" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="372.67" y="76" text-anchor="middle" class="sm">P</text>
+  <line x1="424" y1="116" x2="424" y2="82" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="424" y="76" text-anchor="middle" class="sm">P</text>
+  <text x="100" y="120" text-anchor="end" class="sm dim">borrower</text>
+  <line x1="28" y1="186" x2="532" y2="186" class="rule"/>
+  <line x1="36" y1="202" x2="36" y2="232" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="45" y="213" text-anchor="start" class="sm bold">Principal L</text>
+  <text x="45" y="228" text-anchor="start" class="sm dim">the amount borrowed</text>
+  <line x1="164" y1="202" x2="164" y2="232" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="173" y="213" text-anchor="start" class="sm bold">Rate i</text>
+  <text x="173" y="228" text-anchor="start" class="sm dim">charged on the balance</text>
+  <line x1="292" y1="202" x2="292" y2="232" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="301" y="213" text-anchor="start" class="sm bold">Term n</text>
+  <text x="301" y="228" text-anchor="start" class="sm dim">how many payments</text>
+  <line x1="420" y1="202" x2="420" y2="232" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="429" y="213" text-anchor="start" class="sm bold">Payment P</text>
+  <text x="429" y="228" text-anchor="start" class="sm dim">L / a₍ₙ₎ when level</text>
+  <text x="150" y="262" text-anchor="middle" class="sm bold">Prospective:  OB_k = P · a₍ₙ₋ₖ₎</text>
+  <text x="150" y="282" text-anchor="middle" class="sm dim">PV of the payments still to come</text>
+  <text x="412" y="262" text-anchor="middle" class="sm bold">Retrospective:  OB_k = L(1+i)ᵏ − P·s₍ₖ₎</text>
+  <text x="412" y="282" text-anchor="middle" class="sm dim">loan grown forward, less payments made</text>
+</svg>

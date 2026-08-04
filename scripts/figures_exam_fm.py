@@ -34,6 +34,11 @@ def _ann_due(n, i):
     return _ann_imm(n, i) * (1 + i)
 
 
+def _acc(n, i):
+    """s₍ₙ₎ — the accumulated value of an n-period annuity-immediate."""
+    return ((1 + i) ** n - 1) / i
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 # 1. Interest theory
 # ═══════════════════════════════════════════════════════════════════════════
@@ -1250,4 +1255,924 @@ def continuous_annuity() -> Fig:
     f.text(428, 226, "δ < i, so ā₍ₙ₎ > a₍ₙ₎", cls="sm bold")
     f.text(428, 244, "money arriving sooner is worth more", cls="sm dim")
     f.note(W / 2, 278, "s̄₍ₙ₎ = (1 + i)ⁿ ā₍ₙ₎ — the same two-date move as always")
+    return f
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 3. Loans
+# ═══════════════════════════════════════════════════════════════════════════
+
+# One amortised loan is reused across the loan pages, so a student reading them
+# in sequence sees the same schedule from several angles.
+LOAN_L, LOAN_I, LOAN_N = 10_000.0, 0.08, 8
+LOAN_P = LOAN_L / _ann_imm(LOAN_N, LOAN_I)
+
+
+def _schedule(L=LOAN_L, i=LOAN_I, n=LOAN_N, P=None):
+    """Return (balance_before, interest, principal, balance_after) per period."""
+    P = P if P is not None else L / _ann_imm(n, i)
+    rows, bal = [], L
+    for _ in range(n):
+        interest = bal * i
+        principal = P - interest
+        rows.append((bal, interest, principal, bal - principal))
+        bal -= principal
+    return rows, P
+
+
+def _amort_bars(f, a, rows, P, bar_frac=0.62):
+    """Stacked interest/principal bars, one per payment."""
+    bw = (a.px(1) - a.px(0)) * bar_frac
+    for k, (_, interest, principal, _) in enumerate(rows):
+        x = a.px(k + 1) - bw / 2
+        f.rect(x, a.py(P), bw, a.py(principal) - a.py(P), rx=2, fill=BLUE,
+               fill_opacity="0.7")
+        f.rect(x, a.py(principal), bw, a.y1 - a.py(principal), rx=2, fill=AMBER,
+               fill_opacity="0.7")
+    return bw
+
+
+@figure("Loans", "The four moving parts of a loan and the two ways to find the balance",
+        width=540)
+def loans() -> Fig:
+    f = Fig(W, 300)
+    f.title("A loan: principal in, payments out, balance in between")
+
+    y = 116
+    xs = timeline(f, y, 116, 424, 6, labels=["0", "1", "2", "3", "…", "n−1", "n"])
+    cash_arrow(f, xs[0], y, 52, colour=GREEN, label="L", up=False)
+    for j in range(1, 7):
+        cash_arrow(f, xs[j], y, 34, colour=BLUE, label="P", up=True)
+    f.text(100, y + 4, "borrower", cls="sm dim", anchor="end")
+
+    f.line(28, 186, 532, 186, cls="rule")
+    parts = [
+        ("Principal L", "the amount borrowed", GREEN),
+        ("Rate i", "charged on the balance", AMBER),
+        ("Term n", "how many payments", VIOLET),
+        ("Payment P", "L / a₍ₙ₎ when level", BLUE),
+    ]
+    for k, (lab, sub, colour) in enumerate(parts):
+        x = 36 + k * 128
+        f.line(x, 202, x, 232, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(x + 9, 213, lab, cls="sm bold", anchor="start")
+        f.text(x + 9, 228, sub, cls="sm dim", anchor="start")
+    f.text(150, 262, "Prospective:  OB_k = P · a₍ₙ₋ₖ₎", cls="sm bold")
+    f.text(150, 282, "PV of the payments still to come", cls="sm dim")
+    f.text(412, 262, "Retrospective:  OB_k = L(1+i)ᵏ − P·s₍ₖ₎", cls="sm bold")
+    f.text(412, 282, "loan grown forward, less payments made", cls="sm dim")
+    return f
+
+
+@figure("Amortization", "A level payment splitting into shrinking interest and growing "
+        "principal", width=540)
+def amortization() -> Fig:
+    f = Fig(W, 296)
+    f.title("The payment is level; its split is not")
+
+    rows, P = _schedule()
+    a = axes(f, 0.4, LOAN_N + 0.6, 0, P * 1.12, left=68, right=228, top=68, bottom=84)
+    _amort_bars(f, a, rows, P)
+    a.hline(P, colour=VIOLET, dash=False)
+    a.frame(xlabel="payment number", ylabel="payment",
+            xticks=list(range(1, LOAN_N + 1)), yticks=[0, 1000, P],
+            yfmt=lambda t: f"P = {t:,.0f}" if t > 1400 else f"{t:,.0f}")
+    f.legend_row(a.x0 + 2, a.y1 + 46, [(AMBER, "interest I_k"),
+                                       (BLUE, "principal PR_k")], gap=124)
+
+    f.text(430, 96, "P = L / a₍ₙ₎", cls="sm bold")
+    f.text(430, 116, f"= {LOAN_L:,.0f} / a₍₈₎ at 8% = {P:,.2f}", cls="sm dim")
+    rows2 = [
+        ("I_k = P (1 − v^(n−k+1))", "falls every period", AMBER),
+        ("PR_k = P v^(n−k+1)", "rises every period", BLUE),
+        ("OB_k = P a₍ₙ₋ₖ₎", "hits zero at k = n", VIOLET),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows2):
+        yy = 140 + k * 46
+        f.line(340, yy, 340, yy + 32, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 12, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 28, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 284, "The principal repaid grows by a factor of (1 + i) each period")
+    return f
+
+
+@figure("Principal", "The principal portion of each payment growing as the balance falls",
+        width=540)
+def principal() -> Fig:
+    f = Fig(W, 292)
+    f.title("Principal: what is borrowed, and what each payment returns")
+
+    rows, P = _schedule()
+    a = axes(f, 0.4, LOAN_N + 0.6, 0, P * 1.12, left=68, right=234, top=68, bottom=84)
+    _amort_bars(f, a, rows, P)
+    a.frame(xlabel="payment number", ylabel="payment",
+            xticks=list(range(1, LOAN_N + 1)), yticks=[0, 1000],
+            yfmt=lambda t: f"{t:,.0f}")
+    f.legend_row(a.x0 + 2, a.y1 + 46, [(BLUE, "principal repaid"), (AMBER, "interest")], gap=124)
+
+    f.text(428, 96, "L = 10,000 borrowed", cls="sm bold")
+    f.text(428, 116, "Σ PR_k = L exactly", cls="sm dim")
+    rows2 = [
+        ("First interest", "I₁ = L · i = 800", AMBER),
+        ("PR_k = P − I_k", "grows by (1+i) each period", BLUE),
+        ("In bonds", "principal means the redemption value", VIOLET),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows2):
+        yy = 140 + k * 46
+        f.line(340, yy, 340, yy + 32, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 12, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 28, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 280, "Every payment is interest first, principal second")
+    return f
+
+
+@figure("Interest", "Interest charged on the declining balance, period by period",
+        width=540)
+def interest() -> Fig:
+    f = Fig(W, 292)
+    f.title("Interest is charged on whatever is still owed")
+
+    rows, P = _schedule()
+    a = axes(f, 0.4, LOAN_N + 0.6, 0, 11000, left=72, right=234, top=68, bottom=84)
+    bw = (a.px(1) - a.px(0)) * 0.6
+    for k, (bal, interest_, _, _) in enumerate(rows):
+        x = a.px(k + 1)
+        f.rect(x - bw / 2, a.py(bal), bw, a.y1 - a.py(bal), rx=2, fill="var(--dim)",
+               fill_opacity="0.2")
+        f.rect(x - bw / 2, a.py(interest_ * 10), bw, a.y1 - a.py(interest_ * 10), rx=2,
+               fill=AMBER, fill_opacity="0.75")
+    a.frame(xlabel="period", ylabel="balance", xticks=list(range(1, LOAN_N + 1)),
+            yticks=[0, 5000, 10000], yfmt=lambda t: f"{t:,.0f}")
+    f.legend_row(a.x0 + 2, a.y1 + 46, [("var(--dim)", "balance OB₍ₖ₋₁₎"),
+                                       (AMBER, "interest I_k (×10)")], gap=140)
+
+    f.text(428, 96, "I_k = i · OB₍ₖ₋₁₎", cls="sm bold")
+    f.text(428, 116, "PR_k = payment − I_k", cls="sm dim")
+    rows2 = [
+        ("Falling balance", "so falling interest", AMBER),
+        ("Front-loaded", "early payments are mostly interest", ROSE),
+        ("Never on the original L", "always on the current balance", VIOLET),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows2):
+        yy = 140 + k * 46
+        f.line(340, yy, 340, yy + 32, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 12, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 28, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 280, "Interest is shown at ten times scale so both series are visible")
+    return f
+
+
+@figure("Outstanding Balance", "The loan balance falling to zero, found prospectively or "
+        "retrospectively", width=540)
+def outstanding_balance() -> Fig:
+    f = Fig(W, 296)
+    f.title("Two routes to the same balance")
+
+    rows, P = _schedule()
+    balances = [LOAN_L] + [r[3] for r in rows]
+    a = axes(f, 0, LOAN_N, 0, 11000, left=72, right=234, top=68, bottom=84)
+    a.area(lambda t: balances[min(int(t), LOAN_N)] +
+           (balances[min(int(t) + 1, LOAN_N)] - balances[min(int(t), LOAN_N)]) *
+           (t - int(t)), 0, LOAN_N, colour=BLUE, opacity="0.16")
+    a.polyline(list(enumerate(balances)), colour=BLUE)
+    for k, b in enumerate(balances):
+        a.point(k, b, colour=BLUE, r=3)
+    k0 = 3
+    a.vline(k0, y_top=balances[k0], colour=VIOLET)
+    a.label(k0, balances[k0], f"OB₃ = {balances[k0]:,.0f}", cls="sm bold", dy=-10)
+    a.frame(xlabel="payments made", ylabel="balance", xticks=list(range(LOAN_N + 1)),
+            yticks=[0, 5000, 10000], yfmt=lambda t: f"{t:,.0f}")
+
+    f.text(428, 96, "Same number, two derivations", cls="sm bold")
+    f.box(340, 114, 190, 62, colour=GREEN)
+    f.text(435, 136, "Prospective", cls="sm bold")
+    f.text(435, 156, "OB_k = P · a₍ₙ₋ₖ₎", cls="sm dim")
+    f.box(340, 184, 190, 62, colour=AMBER)
+    f.text(435, 206, "Retrospective", cls="sm bold")
+    f.text(435, 226, "OB_k = L(1+i)ᵏ − P·s₍ₖ₎", cls="sm dim")
+    f.note(W / 2, 284, "OB_k = L − P·a₍ₖ₎ is wrong — it ignores the interest accrued")
+    return f
+
+
+@figure("Term of Loan", "How the term trades off against the level payment", width=540)
+def term_of_loan() -> Fig:
+    f = Fig(W, 292)
+    f.title("Term, payment, rate and principal — any three fix the fourth")
+
+    a = axes(f, 2, 30, 0, 5200, left=76, right=238, top=70, bottom=88)
+    a.curve(lambda n: LOAN_L / _ann_imm(n, LOAN_I), colour=BLUE, xa=2, xb=30)
+    for n_ in (5, 10, 20):
+        a.point(n_, LOAN_L / _ann_imm(n_, LOAN_I), colour=AMBER, r=3.4)
+        a.label(n_, LOAN_L / _ann_imm(n_, LOAN_I),
+                f"{LOAN_L / _ann_imm(n_, LOAN_I):,.0f}", cls="sm", dy=-10)
+    a.frame(xlabel="term n (years)", ylabel="level payment",
+            xticks=[5, 10, 20, 30], yticks=[0, 2000, 4000],
+            yfmt=lambda t: f"{t:,.0f}")
+    f.text((a.x0 + a.x1) / 2, a.y1 + 54, "L = 10,000 at i = 8%", cls="sm dim")
+
+    f.text(430, 100, "P = L / a₍ₙ₎", cls="sm bold")
+    rows = [
+        ("Longer term", "smaller payment, more total interest", BLUE),
+        ("Non-integer n", "the last payment differs", AMBER),
+        ("Solve for n", "n = −ln(1 − iL/P)/ln(1 + i)", VIOLET),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 124 + k * 48
+        f.line(342, yy, 342, yy + 34, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(352, yy + 13, lab, cls="sm bold", anchor="start")
+        f.text(352, yy + 29, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 280, "A drop or balloon payment is what a non-integer term looks like")
+    return f
+
+
+@figure("Final Payment", "A drop payment and a balloon payment against the regular "
+        "payment", width=540)
+def final_payment() -> Fig:
+    f = Fig(W, 292)
+    f.title("When the term is not a whole number, the last payment differs")
+
+    for k, (head, last_h, colour, note) in enumerate((
+            ("Drop payment", 20, GREEN, "smaller than P — the loan was slightly over-paid"),
+            ("Balloon payment", 62, ROSE, "larger than P — the payments under-amortised"))):
+        y = 110 + k * 84
+        xs = timeline(f, y, 168, 424, 5, labels=["0", "1", "2", "3", "4", "5"])
+        f.text(152, y + 4, head, cls="sm bold", anchor="end", fill=colour)
+        for j in range(1, 5):
+            cash_arrow(f, xs[j], y, 34, colour=BLUE, label="P", up=True)
+        cash_arrow(f, xs[5], y, last_h, colour=colour, up=True)
+        f.text(444, y + 4, note.split(" — ")[0], cls="sm dim", anchor="start")
+
+    f.line(28, 232, 532, 232, cls="rule")
+    f.text(150, 254, "Drop:  B_n(1 + i),  smaller than P", cls="sm bold")
+    f.text(150, 274, "the balance was already nearly cleared", cls="sm dim")
+    f.text(412, 254, "Balloon:  OB₍ₙ₋₁₎(1 + i)", cls="sm bold")
+    f.text(412, 274, "the regular payments left a stub", cls="sm dim")
+    return f
+
+
+@figure("Drop Payment", "A final payment smaller than the regular one, clearing a small "
+        "remaining balance", width=540)
+def drop_payment() -> Fig:
+    f = Fig(W, 288)
+    f.title("A drop payment clears the small balance that is left")
+
+    y = 124
+    xs = timeline(f, y, 130, 420, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
+    for j in range(1, 6):
+        cash_arrow(f, xs[j], y, 42, colour=BLUE, label="P", up=True)
+    cash_arrow(f, xs[6], y, 18, colour=GREEN, label="drop", up=True)
+    f.line(xs[1] - 12, y - 42, xs[6] + 12, y - 42, cls="thin dash", stroke="var(--dim)",
+           stroke_width="1.2")
+    f.text(444, y - 46, "level P", cls="sm dim", anchor="start")
+
+    f.line(28, 190, 532, 190, cls="rule")
+    f.text(150, 212, "Drop = B_n (1 + i)", cls="sm bold")
+    f.text(150, 232, "the last balance, accumulated one period", cls="sm dim")
+    f.text(150, 252, "occurs on the regular payment date", cls="sm dim")
+    f.text(412, 212, "Why it happens", cls="sm bold")
+    f.text(412, 232, "P was rounded up, so the loan clears early", cls="sm dim")
+    f.text(412, 252, "contrast with a balloon, which is larger", cls="sm dim")
+    f.note(W / 2, 278, "Find the balance first — the drop is never P minus something")
+    return f
+
+
+@figure("Balloon Payment", "A final payment larger than the regular one, retiring the "
+        "remaining balance", width=540)
+def balloon_payment() -> Fig:
+    f = Fig(W, 288)
+    f.title("A balloon payment retires a balance the regular payments never cleared")
+
+    y = 132
+    xs = timeline(f, y, 130, 420, 6, labels=["0", "1", "2", "3", "4", "5", "6"])
+    for j in range(1, 6):
+        cash_arrow(f, xs[j], y, 32, colour=BLUE, label="K", up=True)
+    cash_arrow(f, xs[6], y, 78, colour=ROSE, label="B", up=True)
+    f.line(xs[1] - 12, y - 32, xs[5] + 12, y - 32, cls="thin dash", stroke="var(--dim)",
+           stroke_width="1.2")
+    f.text(444, y - 36, "level K", cls="sm dim", anchor="start")
+
+    f.line(28, 194, 532, 194, cls="rule")
+    f.text(150, 216, "B = OB₍ₙ₋₁₎ (1 + i)", cls="sm bold")
+    f.text(150, 236, "equivalently  B = L(1+i)ⁿ − K·s₍ₙ₋₁₎(1+i)", cls="sm dim")
+    f.text(412, 216, "Why it happens", cls="sm bold")
+    f.text(412, 236, "K is set below the full amortising payment", cls="sm dim")
+    f.text(412, 256, "so principal is still outstanding at the end", cls="sm dim")
+    f.note(W / 2, 278, "Mortgages with a short fixed term and a long amortisation do this")
+    return f
+
+
+@figure("Loan Repayment Comparison", "Level payments against constant-principal "
+        "repayment on the same loan", width=540)
+def loan_repayment_comparison() -> Fig:
+    f = Fig(W, 306)
+    f.title("Same loan, two repayment shapes")
+
+    rows, P = _schedule()
+    n, L, i = LOAN_N, LOAN_L, LOAN_I
+    for k, (head, colour) in enumerate((("Level payment", BLUE),
+                                        ("Constant principal", GREEN))):
+        a = axes(f, 0.4, n + 0.6, 0, 2400, left=54 + k * 256, right=306 - k * 256 + 22,
+                 top=88, bottom=134)
+        bw = (a.px(1) - a.px(0)) * 0.66
+        for t in range(1, n + 1):
+            if k == 0:
+                pr = rows[t - 1][2]
+                inte = rows[t - 1][1]
+            else:
+                pr = L / n
+                inte = i * L * (n - t + 1) / n
+            x = a.px(t) - bw / 2
+            f.rect(x, a.py(pr), bw, a.y1 - a.py(pr), rx=2, fill=colour,
+                   fill_opacity="0.7")
+            f.rect(x, a.py(pr + inte), bw, a.py(pr) - a.py(pr + inte), rx=2, fill=AMBER,
+                   fill_opacity="0.7")
+        a.frame(xticks=[1, 4, 8], yticks=[0, 1000, 2000], yfmt=lambda t: f"{t:,.0f}")
+        f.text((a.x0 + a.x1) / 2, 78, head, cls="sm bold", fill=colour)
+        total = (n * P - L) if k == 0 else (i * L * (n + 1) / 2)
+        f.text((a.x0 + a.x1) / 2, a.y1 + 32, "payment is level" if k == 0
+               else "payment falls each period", cls="sm dim")
+        f.text((a.x0 + a.x1) / 2, a.y1 + 50, f"total interest {total:,.0f}",
+               cls="sm bold")
+
+    f.legend_row(158, 250, [(AMBER, "interest"), (BLUE, "principal (level)"),
+                            (GREEN, "principal (constant)")], gap=124)
+    f.line(28, 268, 532, 268, cls="rule")
+    f.text(150, 288, "P_level = L / a₍ₙ₎", cls="sm bold")
+    f.text(412, 288, "Constant-principal interest = i·L·(n+1)/2", cls="sm bold")
+    return f
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 4. Bonds
+# ═══════════════════════════════════════════════════════════════════════════
+
+BOND_F = BOND_C = 1000.0
+BOND_R = 0.05          # coupon rate per period
+BOND_N = 10
+
+
+def _bond_price(j, n=BOND_N, F=BOND_F, r=BOND_R, C=BOND_C):
+    return F * r * _ann_imm(n, j) + C * (1 + j) ** -n
+
+
+def _book_values(j, n=BOND_N, F=BOND_F, r=BOND_R, C=BOND_C):
+    return [F * r * _ann_imm(n - k, j) + C * (1 + j) ** -(n - k) for k in range(n + 1)]
+
+
+def _bond_timeline(f, y, n=6, x0=104, x1=424, coupon_h=28, redemption_h=62,
+                   coupon_label="Fr", redemption_label="C"):
+    labels = ["0"] + [str(k) for k in range(1, n)] + ["n"]
+    if n > 4:
+        for k in range(3, n - 1):
+            labels[k] = "…" if k == 3 else ""
+    xs = timeline(f, y, x0, x1, n, labels=labels)
+    for k in range(1, n + 1):
+        cash_arrow(f, xs[k], y, coupon_h, colour=BLUE,
+                   label=coupon_label if k == 1 else None, up=True)
+    cash_arrow(f, xs[n], y, redemption_h, colour=GREEN, label=redemption_label, up=True)
+    return xs
+
+
+@figure("Bonds", "A bond's coupon stream and redemption payment on one timeline",
+        width=540)
+def bonds() -> Fig:
+    f = Fig(W, 300)
+    f.title("A bond is a coupon annuity plus a single redemption")
+
+    y = 122
+    xs = _bond_timeline(f, y, 6)
+    cash_arrow(f, xs[0], y, 48, colour=AMBER, label="P", up=False)
+    f.text(444, y - 30, "coupons Fr", cls="sm", fill=BLUE, anchor="start")
+    f.text(444, y - 62, "redemption C", cls="sm", fill=GREEN, anchor="start")
+
+    f.line(28, 198, 532, 198, cls="rule")
+    f.text(W / 2, 220, "P = Fr · a₍ₙ₎ⱼ  +  C · vⁿ", cls="sm bold")
+    terms = [
+        ("F  face value", "sets the coupon", GREEN),
+        ("r  coupon rate", "fixed at issue", BLUE),
+        ("j  yield rate", "set by the market", AMBER),
+        ("n  term", "number of coupons", VIOLET),
+    ]
+    for k, (lab, sub, colour) in enumerate(terms):
+        x = 36 + k * 128
+        f.line(x, 244, x, 274, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(x + 9, 255, lab, cls="sm bold", anchor="start")
+        f.text(x + 9, 270, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 292, "Fr > Cj → premium · Fr = Cj → par · Fr < Cj → discount")
+    return f
+
+
+@figure("Bond Price", "Bond price against yield, showing premium, par and discount",
+        width=540)
+def bond_price() -> Fig:
+    f = Fig(W, 292)
+    f.title("Price falls as yield rises — the two move in opposite directions")
+
+    a = axes(f, 0.01, 0.10, 700, 1400, left=72, right=234, top=68, bottom=88)
+    a.curve(lambda j: _bond_price(j), colour=BLUE, xa=0.012, xb=0.10)
+    a.hline(BOND_C, colour="var(--dim)")
+    a.vline(BOND_R, y_top=_bond_price(BOND_R), colour=GREEN)
+    a.point(BOND_R, BOND_C, colour=GREEN)
+    a.label(BOND_R, BOND_C, "par:  j = r", cls="sm bold", dy=-10, dx=26)
+    a.area(lambda j: _bond_price(j), 0.012, BOND_R, colour=AMBER, opacity="0.12",
+           base=BOND_C)
+    a.label(0.026, 1240, "premium", cls="sm bold", anchor="middle")
+    a.label(0.078, 820, "discount", cls="sm bold", anchor="middle")
+    a.frame(xlabel="yield j per period", ylabel="price",
+            xticks=[0.02, 0.05, 0.08], xfmt=lambda t: f"{t * 100:.0f}%",
+            yticks=[800, 1000, 1200], yfmt=lambda t: f"{t:,.0f}")
+
+    f.text(430, 100, "P = Fr·a₍ₙ₎ⱼ + C·vⁿ", cls="sm bold")
+    f.text(430, 120, "F = C = 1,000, r = 5%, n = 10", cls="sm dim")
+    f.box(340, 138, 190, 58, colour=VIOLET)
+    f.text(434, 158, "Premium/discount form", cls="sm bold")
+    f.text(434, 176, "P = C + (Fr − Cj) a₍ₙ₎", cls="sm dim")
+    f.box(340, 204, 190, 58, colour=AMBER)
+    f.text(434, 224, "The sign of (Fr − Cj)", cls="sm bold")
+    f.text(434, 242, "decides premium or discount", cls="sm dim")
+    f.note(W / 2, 282, "Price is just the PV of the bond's own cash flows at the yield")
+    return f
+
+
+@figure("Book Value", "Book value converging to the redemption value for a premium and a "
+        "discount bond", width=540)
+def book_value() -> Fig:
+    f = Fig(W, 296)
+    f.title("Book value walks the price to the redemption value")
+
+    a = axes(f, 0, BOND_N, 800, 1250, left=72, right=234, top=68, bottom=88)
+    prem = _book_values(0.03)
+    disc = _book_values(0.07)
+    a.polyline(list(enumerate(prem)), colour=AMBER)
+    a.polyline(list(enumerate(disc)), colour=BLUE)
+    a.hline(BOND_C, colour="var(--dim)")
+    for series, colour in ((prem, AMBER), (disc, BLUE)):
+        for k, b in enumerate(series):
+            a.point(k, b, colour=colour, r=2.6)
+    a.label(2.4, 1195, "premium bond", cls="sm bold", anchor="start")
+    a.label(2.4, 872, "discount bond", cls="sm bold", anchor="start")
+    a.label(BOND_N, BOND_C, "C", cls="sm bold", dy=-8, dx=-8)
+    a.frame(xlabel="coupons paid", ylabel="book value", xticks=[0, 5, 10],
+            yticks=[900, 1000, 1100, 1200], yfmt=lambda t: f"{t:,.0f}")
+
+    f.text(430, 100, "BV₀ = P   and   BVₙ = C", cls="sm bold")
+    f.box(340, 118, 190, 62, colour=GREEN)
+    f.text(435, 140, "Prospective", cls="sm bold")
+    f.text(435, 160, "BV_k = Fr·a₍ₙ₋ₖ₎ + C·v^(n−k)", cls="sm dim")
+    f.box(340, 188, 190, 62, colour=AMBER)
+    f.text(435, 210, "Retrospective", cls="sm bold")
+    f.text(435, 230, "BV_k = P(1+j)ᵏ − Fr·s₍ₖ₎", cls="sm dim")
+    f.note(W / 2, 284, "Always at the original yield j — book value is not market value")
+    return f
+
+
+@figure("Market Value", "Market value moving with the prevailing yield while book value "
+        "follows its own schedule", width=540)
+def market_value() -> Fig:
+    f = Fig(W, 296)
+    f.title("Market value follows today's yield; book value follows the original one")
+
+    a = axes(f, 0, BOND_N, 850, 1200, left=72, right=234, top=68, bottom=88)
+    book = _book_values(0.05)
+    a.polyline(list(enumerate(book)), colour=VIOLET, width=2)
+    market_yields = [0.05, 0.045, 0.038, 0.042, 0.055, 0.065, 0.058, 0.05, 0.046,
+                     0.05, 0.05]
+    market = [BOND_F * BOND_R * _ann_imm(BOND_N - k, market_yields[k]) +
+              BOND_C * (1 + market_yields[k]) ** -(BOND_N - k) if k < BOND_N else BOND_C
+              for k in range(BOND_N + 1)]
+    a.polyline(list(enumerate(market)), colour=BLUE)
+    a.frame(xlabel="coupons paid", ylabel="value", xticks=[0, 5, 10],
+            yticks=[900, 1000, 1100], yfmt=lambda t: f"{t:,.0f}")
+    f.legend_row(a.x0 + 2, a.y1 + 56, [(VIOLET, "book value"), (BLUE, "market value")],
+                 gap=118)
+
+    f.text(430, 100, "MV = Fr·a₍ₙ₎ + C·vⁿ", cls="sm bold")
+    f.text(430, 120, "at the prevailing market yield", cls="sm dim")
+    rows = [
+        ("Market yield > r", "trades below face — a discount", BLUE),
+        ("Market yield < r", "trades above face — a premium", AMBER),
+        ("Three different things", "market, book and face value", VIOLET),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 142 + k * 46
+        f.line(340, yy, 340, yy + 32, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 12, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 28, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 284, "Both converge on C at maturity, whatever happens in between")
+    return f
+
+
+@figure("Amortization of Premium", "A premium bond's book value written down to the "
+        "redemption value", width=540)
+def amortization_of_premium() -> Fig:
+    f = Fig(W, 296)
+    f.title("The premium is written off, coupon by coupon")
+
+    j = 0.03
+    book = _book_values(j)
+    a = axes(f, 0, BOND_N, 950, 1250, left=76, right=234, top=68, bottom=88)
+    a.area(lambda t: book[min(int(t), BOND_N)] +
+           (book[min(int(t) + 1, BOND_N)] - book[min(int(t), BOND_N)]) * (t - int(t)),
+           0, BOND_N, colour=AMBER, opacity="0.16", base=BOND_C)
+    a.polyline(list(enumerate(book)), colour=AMBER)
+    for k, b in enumerate(book):
+        a.point(k, b, colour=AMBER, r=2.8)
+    a.hline(BOND_C, colour="var(--dim)", label="C", anchor="start")
+    a.label(3.0, 1195, "premium P − C", cls="sm bold", anchor="start")
+    a.frame(xlabel="coupons paid", ylabel="book value", xticks=[0, 5, 10],
+            yticks=[1000, 1100, 1200], yfmt=lambda t: f"{t:,.0f}")
+
+    f.text(428, 100, "Fr > Cj  →  the coupon overpays", cls="sm bold")
+    f.box(340, 120, 190, 66, colour=AMBER)
+    f.text(435, 142, "Written off in period t", cls="sm bold")
+    f.text(435, 162, "(Fr − Cj) · v^(n−t+1)", cls="sm dim")
+    f.text(435, 180, "growing every period", cls="sm dim")
+    f.box(340, 194, 190, 66, colour=VIOLET)
+    f.text(435, 216, "Interest earned", cls="sm bold")
+    f.text(435, 236, "j · BV₍ₜ₋₁₎, less than the coupon", cls="sm dim")
+    f.text(435, 254, "the excess reduces book value", cls="sm dim")
+    f.note(W / 2, 284, "The mirror of accumulation of discount — same schedule, other sign")
+    return f
+
+
+@figure("Accumulation of Discount", "A discount bond's book value written up to the "
+        "redemption value", width=540)
+def accumulation_of_discount() -> Fig:
+    f = Fig(W, 296)
+    f.title("The discount is written up, coupon by coupon")
+
+    j = 0.07
+    book = _book_values(j)
+    a = axes(f, 0, BOND_N, 830, 1060, left=76, right=234, top=68, bottom=88)
+    a.area(lambda t: book[min(int(t), BOND_N)] +
+           (book[min(int(t) + 1, BOND_N)] - book[min(int(t), BOND_N)]) * (t - int(t)),
+           0, BOND_N, colour=BLUE, opacity="0.16", base=BOND_C)
+    a.polyline(list(enumerate(book)), colour=BLUE)
+    for k, b in enumerate(book):
+        a.point(k, b, colour=BLUE, r=2.8)
+    a.hline(BOND_C, colour="var(--dim)", label="C", anchor="start")
+    a.label(3.2, 895, "discount C − P", cls="sm bold", anchor="start")
+    a.frame(xlabel="coupons paid", ylabel="book value", xticks=[0, 5, 10],
+            yticks=[850, 950, 1050], yfmt=lambda t: f"{t:,.0f}")
+
+    f.text(428, 100, "Fr < Cj  →  the coupon underpays", cls="sm bold")
+    f.box(340, 120, 190, 66, colour=BLUE)
+    f.text(435, 142, "Written up in period t", cls="sm bold")
+    f.text(435, 162, "(Cj − Fr) · v^(n−t+1)", cls="sm dim")
+    f.text(435, 180, "growing every period", cls="sm dim")
+    f.box(340, 194, 190, 66, colour=GREEN)
+    f.text(435, 216, "The shortfall is made up", cls="sm bold")
+    f.text(435, 236, "by the capital gain at redemption", cls="sm dim")
+    f.text(435, 254, "so the investor still earns j", cls="sm dim")
+    f.note(W / 2, 284, "The mirror of amortization of premium — same schedule, other sign")
+    return f
+
+
+@figure("Face Value", "Face value as the base for coupons and, usually, the redemption",
+        width=540)
+def face_value() -> Fig:
+    f = Fig(W, 288)
+    f.title("Face value sets the coupon — it is not the price")
+
+    f.box(56, 84, 172, 76, colour=GREEN)
+    f.text(142, 112, "F = 1,000", cls="ttl")
+    f.text(142, 136, "face (par) value", cls="sm dim")
+    f.arrow(236, 108, 292, 108, colour=BLUE, width=1.6)
+    f.text(264, 98, "× r", cls="sm", fill=BLUE)
+    f.box(300, 84, 172, 76, colour=BLUE)
+    f.text(386, 112, "coupon = 50", cls="ttl")
+    f.text(386, 136, "F × r each period", cls="sm dim")
+    f.arrow(142, 172, 142, 200, colour=GREEN, width=1.6)
+    f.text(152, 190, "usually C = F at maturity", cls="sm dim", anchor="start")
+
+    f.line(28, 216, 532, 216, cls="rule")
+    cols = [
+        ("Face value F", "on the certificate", GREEN),
+        ("Redemption C", "what is repaid", VIOLET),
+        ("Price P", "what the buyer pays", AMBER),
+    ]
+    for k, (lab, sub, colour) in enumerate(cols):
+        x = 40 + k * 172
+        f.line(x, 234, x, 264, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(x + 10, 245, lab, cls="sm bold", anchor="start")
+        f.text(x + 10, 260, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 282, "All three are equal only when the bond sells at par")
+    return f
+
+
+@figure("Redemption Value", "The redemption payment at maturity, at, above or below par",
+        width=540)
+def redemption_value() -> Fig:
+    f = Fig(W, 288)
+    f.title("C is what the bondholder is repaid at maturity")
+
+    y = 124
+    xs = _bond_timeline(f, y, 6, x0=120, x1=420)
+    f.text(444, y - 60, "C at time n", cls="sm bold", fill=GREEN, anchor="start")
+
+    f.line(28, 190, 532, 190, cls="rule")
+    cols = [
+        ("C = F", "at par — the usual case", GREEN),
+        ("C > F", "redeemed above par", AMBER),
+        ("C < F", "redeemed below par", ROSE),
+    ]
+    for k, (lab, sub, colour) in enumerate(cols):
+        x = 40 + k * 172
+        f.line(x, 208, x, 238, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(x + 10, 219, lab, cls="sm bold", anchor="start")
+        f.text(x + 10, 234, sub, cls="sm dim", anchor="start")
+    f.text(W / 2, 262, "P = Fr · a₍ₙ₎ⱼ + C · vⁿ  — the coupon uses F, the terminal "
+           "payment uses C", cls="sm dim")
+    f.text(W / 2, 280, "For a callable bond, C changes with the assumed call date",
+           cls="sm dim")
+    return f
+
+
+@figure("Coupon", "The level coupon stream a bond pays until maturity", width=540)
+def coupon() -> Fig:
+    f = Fig(W, 286)
+    f.title("The coupon is the bond's income stream")
+
+    y = 126
+    xs = timeline(f, y, 104, 424, 8, labels=["0", "1", "2", "3", "4", "5", "6", "7", "8"])
+    for k in range(1, 9):
+        cash_arrow(f, xs[k], y, 34, colour=BLUE, label="Fr" if k in (1, 8) else None,
+                   up=True)
+    f.text(444, y - 34, "n coupons", cls="sm dim", anchor="start")
+    brace(f, xs[1], xs[8], y + 30, depth=9, label="coupon annuity: Fr · a₍ₙ₎",
+          colour=BLUE)
+
+    f.line(28, 200, 532, 200, cls="rule")
+    f.text(150, 222, "Coupon = F × r", cls="sm bold")
+    f.text(150, 242, "1,000 × 3% = 30 per half-year", cls="sm dim")
+    f.text(150, 262, "for a 6% bond paying semi-annually", cls="sm dim")
+    f.text(412, 222, "The other half of the return", cls="sm bold")
+    f.text(412, 242, "is the capital gain or loss at redemption", cls="sm dim")
+    f.text(412, 262, "coupons are level; the split of the yield is not", cls="sm dim")
+    return f
+
+
+@figure("Coupon Rate", "Coupon rate against yield rate, and the pricing it implies",
+        width=540)
+def coupon_rate() -> Fig:
+    f = Fig(W, 288)
+    f.title("Coupon rate is fixed at issue; yield is set by the market")
+
+    cases = [
+        ("r > j", "premium", "P > C", AMBER, 1.18),
+        ("r = j", "par", "P = C", GREEN, 1.0),
+        ("r < j", "discount", "P < C", BLUE, 0.84),
+    ]
+    base_y, height = 176, 84
+    for k, (rel, name, price, colour, ratio) in enumerate(cases):
+        cx = 128 + k * 152
+        h = height * ratio
+        f.rect(cx - 44, base_y - h, 88, h, rx=4, fill=colour, fill_opacity="0.35",
+               stroke=colour, stroke_width="1.3")
+        f.line(cx - 56, base_y - height, cx + 56, base_y - height, cls="thin dash",
+               stroke="var(--dim)", stroke_width="1.2")
+        f.text(cx, base_y - h / 2 + 4, price, cls="sm bold")
+        f.text(cx, base_y + 18, rel, cls="sm bold")
+        f.text(cx, base_y + 34, name, cls="sm dim")
+    f.text(60, 176 - height + 4, "C", cls="sm dim", anchor="end")
+
+    f.line(28, 230, 532, 230, cls="rule")
+    f.text(150, 252, "r = coupon / F", cls="sm bold")
+    f.text(150, 272, "stated per coupon period, fixed for life", cls="sm dim")
+    f.text(412, 252, "The comparison that matters is Fr vs Cj", cls="sm bold")
+    f.text(412, 272, "not r vs j, unless C = F", cls="sm dim")
+    return f
+
+
+@figure("Yield Rate", "The yield rate as the discount rate that reproduces the market "
+        "price", width=540)
+def yield_rate() -> Fig:
+    f = Fig(W, 292)
+    f.title("The yield is the rate that makes the price come out right")
+
+    a = axes(f, 0.01, 0.10, 700, 1400, left=76, right=234, top=68, bottom=88)
+    a.curve(lambda j: _bond_price(j), colour=BLUE, xa=0.012, xb=0.10)
+    target = 920.0
+    jstar = 0.062
+    a.hline(target, colour=AMBER, x_to=jstar)
+    a.vline(jstar, y_top=target, colour=AMBER)
+    a.point(jstar, target, colour=AMBER)
+    a.label(jstar, target, "solve for j", cls="sm bold", dy=-12, dx=34)
+    a.frame(xlabel="yield j", ylabel="price", xticks=[0.02, 0.05, 0.08],
+            xfmt=lambda t: f"{t * 100:.0f}%", yticks=[800, 1000, 1200],
+            yfmt=lambda t: f"{t:,.0f}")
+    f.text(a.x0 + 12, a.py(target) - 10, "market price", cls="sm dim", anchor="start")
+
+    f.text(428, 100, "P = Fr·a₍ₙ₎ⱼ + C·vⁿ", cls="sm bold")
+    f.text(428, 120, "the j that solves this is the yield", cls="sm dim")
+    rows = [
+        ("An internal rate of return", "no closed form — solve numerically", BLUE),
+        ("Price and yield move apart", "yield up, price down", ROSE),
+        ("r is fixed, j is not", "j reflects today's price", AMBER),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 142 + k * 46
+        f.line(340, yy, 340, yy + 32, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 12, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 28, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 284, "Yield to maturity assumes the bond is held to maturity")
+    return f
+
+
+@figure("Term of Bond", "How the bond's term drives its price sensitivity", width=540)
+def term_of_bond() -> Fig:
+    f = Fig(W, 292)
+    f.title("A longer term means more coupons — and more price risk")
+
+    a = axes(f, 0, 30, 700, 1350, left=76, right=234, top=68, bottom=88)
+    for j, colour, lab in ((0.03, AMBER, "j = 3%"), (0.05, "var(--dim)", "j = 5%"),
+                           (0.07, BLUE, "j = 7%")):
+        a.curve(lambda n, jj=j: _bond_price(jj, n=max(n, 0.5)), colour=colour, xa=1,
+                xb=30)
+        a.label(30, _bond_price(j, n=30), lab, cls="sm", dx=-24, dy=-8, fill=colour)
+    a.frame(xlabel="term n (coupon periods)", ylabel="price", xticks=[0, 10, 20, 30],
+            yticks=[800, 1000, 1200], yfmt=lambda t: f"{t:,.0f}")
+    f.text((a.x0 + a.x1) / 2, a.y1 + 54, "the fan widens with term — that is price risk",
+           cls="sm dim")
+
+    f.text(428, 100, "n = term × coupons per year", cls="sm bold")
+    rows = [
+        ("Longer n", "price moves more per 1% of yield", ROSE),
+        ("Higher duration", "the formal measure of that risk", VIOLET),
+        ("Callable bonds", "the effective term is uncertain", AMBER),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 128 + k * 48
+        f.line(340, yy, 340, yy + 34, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 13, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 29, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 282, "At j = r the price stays at par whatever the term")
+    return f
+
+
+@figure("Callable Bond", "The issuer's call option and the worst-case pricing rule",
+        width=540)
+def callable_bond() -> Fig:
+    f = Fig(W, 300)
+    f.title("A callable bond can be redeemed early — price the worst case")
+
+    y = 122
+    xs = timeline(f, y, 96, 424, 8,
+                  labels=["0", "1", "…", "", "call", "", "…", "", "n"])
+    for k in range(1, 9):
+        cash_arrow(f, xs[k], y, 26, colour=BLUE, up=True)
+    for k, (colour, lab) in ((4, (AMBER, "earliest call")), (8, (GREEN, "maturity"))):
+        cash_arrow(f, xs[k], y, 56, colour=colour, up=True)
+        f.text(xs[k], y - 66, lab, cls="sm bold", fill=colour)
+    f.line(xs[4], y + 26, xs[8], y + 26, cls="thin dash", stroke=VIOLET,
+           stroke_width="1.3")
+    f.text((xs[4] + xs[8]) / 2, y + 42, "the issuer chooses somewhere in here",
+           cls="sm dim")
+
+    f.line(28, 190, 532, 190, cls="rule")
+    f.text(W / 2, 212, "Price at the redemption date that is worst for the investor",
+           cls="sm bold")
+    cases = [
+        ("Priced at a premium", "assume the earliest call date", AMBER),
+        ("Priced at a discount", "assume the latest date — maturity", BLUE),
+    ]
+    for k, (lab, sub, colour) in enumerate(cases):
+        x = 60 + k * 250
+        f.box(x, 232, 226, 48, colour=colour)
+        f.text(x + 113, 252, lab, cls="sm bold")
+        f.text(x + 113, 270, sub, cls="sm dim")
+    f.note(W / 2, 294, "Issuers call when rates fall — that is the investor's "
+           "reinvestment risk")
+    return f
+
+
+@figure("Non-Callable Bond", "A bullet bond with certain cash flows to maturity",
+        width=540)
+def non_callable_bond() -> Fig:
+    f = Fig(W, 288)
+    f.title("A non-callable bond has no uncertainty about when it ends")
+
+    y = 124
+    xs = _bond_timeline(f, y, 8, x0=104, x1=424, coupon_h=28, redemption_h=58)
+    f.text(444, y - 58, "certain", cls="sm bold", fill=GREEN, anchor="start")
+
+    f.line(28, 194, 532, 194, cls="rule")
+    f.text(150, 216, "P = Fr · a₍ₙ₎ⱼ + C · vⁿ", cls="sm bold")
+    f.text(150, 236, "one term, one price, no cases", cls="sm dim")
+    f.text(150, 256, "also called a bullet bond", cls="sm dim")
+    f.text(412, 216, "No call risk", cls="sm bold")
+    f.text(412, 236, "the schedule cannot be cut short", cls="sm dim")
+    f.text(412, 256, "the baseline case for every bond formula", cls="sm dim")
+    f.note(W / 2, 280, "Compare with a callable bond, where n itself is uncertain")
+    return f
+
+
+@figure("Call Price", "The call price replacing the redemption value at a call date",
+        width=540)
+def call_price() -> Fig:
+    f = Fig(W, 292)
+    f.title("At a call date, the call price takes the place of C")
+
+    y = 122
+    xs = timeline(f, y, 104, 420, 8, labels=["0", "", "", "n_c", "", "", "", "", "n"])
+    for k in range(1, 9):
+        cash_arrow(f, xs[k], y, 24, colour=BLUE, up=True)
+    cash_arrow(f, xs[3], y, 60, colour=AMBER, label="C_call", up=True)
+    cash_arrow(f, xs[8], y, 60, colour=GREEN, label="C", up=True)
+    f.line(xs[3], y - 78, xs[3], y - 10, cls="thin dash", stroke=AMBER,
+           stroke_width="1.2")
+
+    f.line(28, 196, 532, 196, cls="rule")
+    f.text(150, 218, "P_call = Fr·a₍ₙ_c₎ⱼ + C_call·v^(n_c)", cls="sm bold")
+    f.text(150, 240, "the same formula, a shorter term", cls="sm dim")
+    f.text(150, 260, "and a different terminal payment", cls="sm dim")
+    f.text(412, 218, "Call price ≥ face value", cls="sm bold")
+    f.text(412, 240, "the excess is the call premium", cls="sm dim")
+    f.text(412, 260, "it compensates for the lost coupons", cls="sm dim")
+    f.note(W / 2, 284, "Price every possible call date and take the lowest price")
+    return f
+
+
+@figure("Call Premium", "The call premium shrinking to zero as maturity approaches",
+        width=540)
+def call_premium() -> Fig:
+    f = Fig(W, 292)
+    f.title("The call premium narrows as the bond nears maturity")
+
+    a = axes(f, 4, 10, 980, 1075, left=76, right=234, top=68, bottom=88)
+    call_prices = {4: 1060, 5: 1050, 6: 1040, 7: 1030, 8: 1020, 9: 1010, 10: 1000}
+    a.polyline([(k, v) for k, v in sorted(call_prices.items())], colour=AMBER)
+    for k, v in sorted(call_prices.items()):
+        a.point(k, v, colour=AMBER, r=3)
+    a.hline(BOND_C, colour="var(--dim)")
+    a.label(9.4, 1006, "face value", cls="sm dim")
+    for k in (4, 7):
+        f.line(a.px(k), a.py(call_prices[k]), a.px(k), a.py(BOND_C), cls="thin",
+               stroke=ROSE, stroke_width="2")
+    a.label(4.5, 1030, "call premium", cls="sm bold", anchor="start")
+    a.frame(xlabel="call date (period)", ylabel="call price", xticks=[4, 6, 8, 10],
+            yticks=[1000, 1050], yfmt=lambda t: f"{t:,.0f}")
+
+    f.text(428, 100, "Call premium = call price − F", cls="sm bold")
+    rows = [
+        ("Compensation", "for the coupons the investor loses", AMBER),
+        ("Declines with time", "reaching zero at maturity", VIOLET),
+        ("A cost to the issuer", "the price of holding the option", ROSE),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 126 + k * 48
+        f.line(340, yy, 340, yy + 34, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 13, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 29, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 282, "A call schedule is a table of call dates and their call prices")
+    return f
+
+
+@figure("Reinvestment of Coupons", "Realised return depending on the rate coupons are "
+        "reinvested at", width=540)
+def reinvestment_of_coupons() -> Fig:
+    f = Fig(W, 296)
+    f.title("The promised yield assumes coupons are reinvested at that yield")
+
+    j = 0.05
+    coupon_amt = BOND_F * BOND_R
+    a = axes(f, 0.01, 0.09, 1480, 1800, left=80, right=234, top=68, bottom=88)
+    a.curve(lambda ri: coupon_amt * _acc(BOND_N, max(ri, 1e-4)) + BOND_C,
+            colour=BLUE, xa=0.012, xb=0.09)
+    target = coupon_amt * _acc(BOND_N, j) + BOND_C
+    a.hline(target, colour="var(--dim)")
+    a.vline(j, y_top=target, colour=GREEN)
+    a.point(j, target, colour=GREEN)
+    a.label(j, target, "r_i = j", cls="sm bold", dy=-10, dx=26)
+    a.label(0.021, 1560, "short of the yield", cls="sm", anchor="start")
+    a.label(0.076, 1745, "ahead of it", cls="sm", anchor="middle")
+    a.frame(xlabel="reinvestment rate r_i", ylabel="accumulated value",
+            xticks=[0.02, 0.05, 0.08], xfmt=lambda t: f"{t * 100:.0f}%",
+            yticks=[1500, 1600, 1700], yfmt=lambda t: f"{t:,.0f}")
+
+    f.text(428, 100, "AV = Fr · s₍ₙ₎ at r_i  +  C", cls="sm bold")
+    rows = [
+        ("r_i = j", "AV = P(1+j)ⁿ — exactly the yield", GREEN),
+        ("r_i < j", "the realised return falls short", ROSE),
+        ("r_i > j", "the investor beats the promised yield", BLUE),
+    ]
+    for k, (lab, sub, colour) in enumerate(rows):
+        yy = 126 + k * 48
+        f.line(340, yy, 340, yy + 34, cls="", stroke=colour, stroke_width="2.6",
+               stroke_linecap="round")
+        f.text(350, yy + 13, lab, cls="sm bold", anchor="start")
+        f.text(350, yy + 29, sub, cls="sm dim", anchor="start")
+    f.note(W / 2, 284, "This gap is reinvestment risk — the reason duration matters")
     return f

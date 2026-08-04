@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">C is what the bondholder is repaid at maturity</text>
+  <line x1="112" y1="124" x2="438" y2="124" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="120" y1="120" x2="120" y2="128" class="tick"/>
+  <text x="120" y="141" text-anchor="middle" class="sm dim">0</text>
+  <line x1="170" y1="120" x2="170" y2="128" class="tick"/>
+  <text x="170" y="141" text-anchor="middle" class="sm dim">1</text>
+  <line x1="220" y1="120" x2="220" y2="128" class="tick"/>
+  <text x="220" y="141" text-anchor="middle" class="sm dim">2</text>
+  <line x1="270" y1="120" x2="270" y2="128" class="tick"/>
+  <text x="270" y="141" text-anchor="middle" class="sm dim">…</text>
+  <line x1="320" y1="120" x2="320" y2="128" class="tick"/>
+  <line x1="370" y1="120" x2="370" y2="128" class="tick"/>
+  <text x="370" y="141" text-anchor="middle" class="sm dim">5</text>
+  <line x1="420" y1="120" x2="420" y2="128" class="tick"/>
+  <text x="420" y="141" text-anchor="middle" class="sm dim">n</text>
+  <line x1="170" y1="124" x2="170" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="170" y="90" text-anchor="middle" class="sm">Fr</text>
+  <line x1="220" y1="124" x2="220" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="270" y1="124" x2="270" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="320" y1="124" x2="320" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="370" y1="124" x2="370" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="420" y1="124" x2="420" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="420" y1="124" x2="420" y2="62" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="420" y="56" text-anchor="middle" class="sm">C</text>
+  <text x="444" y="64" text-anchor="start" class="sm bold" fill="#059669">C at time n</text>
+  <line x1="28" y1="190" x2="532" y2="190" class="rule"/>
+  <line x1="40" y1="208" x2="40" y2="238" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="50" y="219" text-anchor="start" class="sm bold">C = F</text>
+  <text x="50" y="234" text-anchor="start" class="sm dim">at par — the usual case</text>
+  <line x1="212" y1="208" x2="212" y2="238" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="222" y="219" text-anchor="start" class="sm bold">C &gt; F</text>
+  <text x="222" y="234" text-anchor="start" class="sm dim">redeemed above par</text>
+  <line x1="384" y1="208" x2="384" y2="238" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="394" y="219" text-anchor="start" class="sm bold">C &lt; F</text>
+  <text x="394" y="234" text-anchor="start" class="sm dim">redeemed below par</text>
+  <text x="280" y="262" text-anchor="middle" class="sm dim">P = Fr · a₍ₙ₎ⱼ + C · vⁿ  — the coupon uses F, the terminal payment uses C</text>
+  <text x="280" y="280" text-anchor="middle" class="sm dim">For a callable bond, C changes with the assumed call date</text>
+</svg>

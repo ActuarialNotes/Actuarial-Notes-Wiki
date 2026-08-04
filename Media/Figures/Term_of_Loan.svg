@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 292" width="560" height="292" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="290.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Term, payment, rate and principal — any three fix the fourth</text>
+  <polyline points="76,70 77.37,70 78.73,77.48 80.1,84.77 81.47,91.19 82.83,96.89 84.2,101.99 85.57,106.56 86.93,110.7 88.3,114.46 89.67,117.88 91.03,121.02 92.4,123.91 93.77,126.56 95.13,129.02 96.5,131.3 97.87,133.43 99.23,135.4 100.6,137.25 101.97,138.98 103.33,140.61 104.7,142.14 106.07,143.58 107.43,144.93 108.8,146.22 110.17,147.43 111.53,148.58 112.9,149.67 114.27,150.71 115.63,151.69 117,152.63 118.37,153.53 119.73,154.39 121.1,155.2 122.47,155.98 123.83,156.73 125.2,157.45 126.57,158.13 127.93,158.79 129.3,159.43 130.67,160.03 132.03,160.62 133.4,161.18 134.77,161.72 136.13,162.25 137.5,162.75 138.87,163.23 140.23,163.7 141.6,164.16 142.97,164.59 144.33,165.02 145.7,165.43 147.07,165.82 148.43,166.2 149.8,166.58 151.17,166.93 152.53,167.28 153.9,167.62 155.27,167.95 156.63,168.27 158,168.58 159.37,168.88 160.73,169.17 162.1,169.45 163.47,169.73 164.83,170 166.2,170.26 167.57,170.51 168.93,170.76 170.3,171 171.67,171.23 173.03,171.46 174.4,171.68 175.77,171.9 177.13,172.11 178.5,172.32 179.87,172.52 181.23,172.72 182.6,172.91 183.97,173.09 185.33,173.28 186.7,173.45 188.07,173.63 189.43,173.8 190.8,173.96 192.17,174.13 193.53,174.29 194.9,174.44 196.27,174.59 197.63,174.74 199,174.89 200.37,175.03 201.73,175.17 203.1,175.3 204.47,175.44 205.83,175.57 207.2,175.7 208.57,175.82 209.93,175.94 211.3,176.06 212.67,176.18 214.03,176.3 215.4,176.41 216.77,176.52 218.13,176.63 219.5,176.73 220.87,176.84 222.23,176.94 223.6,177.04 224.97,177.14 226.33,177.24 227.7,177.33 229.07,177.42 230.43,177.51 231.8,177.6 233.17,177.69 234.53,177.78 235.9,177.86 237.27,177.95 238.63,178.03 240,178.11 241.37,178.19 242.73,178.26 244.1,178.34 245.47,178.41 246.83,178.49 248.2,178.56 249.57,178.63 250.93,178.7 252.3,178.77 253.67,178.83 255.03,178.9 256.4,178.96 257.77,179.03 259.13,179.09 260.5,179.15 261.87,179.21 263.23,179.27 264.6,179.33 265.97,179.39 267.33,179.45 268.7,179.5 270.07,179.56 271.43,179.61 272.8,179.66 274.17,179.72 275.53,179.77 276.9,179.82 278.27,179.87 279.63,179.92 281,179.96 282.37,180.01 283.73,180.06 285.1,180.1 286.47,180.15 287.83,180.19 289.2,180.24 290.57,180.28 291.93,180.32 293.3,180.36 294.67,180.41 296.03,180.45 297.4,180.49 298.77,180.53 300.13,180.56 301.5,180.6 302.87,180.64 304.23,180.68 305.6,180.71 306.97,180.75 308.33,180.78 309.7,180.82 311.07,180.85 312.43,180.89 313.8,180.92 315.17,180.95 316.53,180.99 317.9,181.02 319.27,181.05 320.63,181.08 322,181.11" class="curve" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="102.36" cy="139.46" r="3.4" fill="#d97706"/>
+  <text x="102.36" y="129.46" text-anchor="middle" class="sm">2,505</text>
+  <circle cx="146.29" cy="165.6" r="3.4" fill="#d97706"/>
+  <text x="146.29" y="155.6" text-anchor="middle" class="sm">1,490</text>
+  <circle cx="234.14" cy="177.75" r="3.4" fill="#d97706"/>
+  <text x="234.14" y="167.75" text-anchor="middle" class="sm">1,019</text>
+  <line x1="76" y1="204" x2="332" y2="204" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="76" y1="204" x2="76" y2="60" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="102.36" y1="204" x2="102.36" y2="208" class="tick"/>
+  <text x="102.36" y="220" text-anchor="middle" class="sm dim">5</text>
+  <line x1="146.29" y1="204" x2="146.29" y2="208" class="tick"/>
+  <text x="146.29" y="220" text-anchor="middle" class="sm dim">10</text>
+  <line x1="234.14" y1="204" x2="234.14" y2="208" class="tick"/>
+  <text x="234.14" y="220" text-anchor="middle" class="sm dim">20</text>
+  <line x1="322" y1="204" x2="322" y2="208" class="tick"/>
+  <text x="322" y="220" text-anchor="middle" class="sm dim">30</text>
+  <line x1="72" y1="204" x2="76" y2="204" class="tick"/>
+  <text x="68" y="207.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="72" y1="152.46" x2="76" y2="152.46" class="tick"/>
+  <text x="68" y="156.06" text-anchor="end" class="sm dim">2,000</text>
+  <line x1="72" y1="100.92" x2="76" y2="100.92" class="tick"/>
+  <text x="68" y="104.52" text-anchor="end" class="sm dim">4,000</text>
+  <text x="322" y="236" text-anchor="end" class="sm dim">term n (years)</text>
+  <text x="72" y="56" text-anchor="start" class="sm dim">level payment</text>
+  <text x="199" y="258" text-anchor="middle" class="sm dim">L = 10,000 at i = 8%</text>
+  <text x="430" y="100" text-anchor="middle" class="sm bold">P = L / a₍ₙ₎</text>
+  <line x1="342" y1="124" x2="342" y2="158" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="352" y="137" text-anchor="start" class="sm bold">Longer term</text>
+  <text x="352" y="153" text-anchor="start" class="sm dim">smaller payment, more total interest</text>
+  <line x1="342" y1="172" x2="342" y2="206" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="352" y="185" text-anchor="start" class="sm bold">Non-integer n</text>
+  <text x="352" y="201" text-anchor="start" class="sm dim">the last payment differs</text>
+  <line x1="342" y1="220" x2="342" y2="254" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="352" y="233" text-anchor="start" class="sm bold">Solve for n</text>
+  <text x="352" y="249" text-anchor="start" class="sm dim">n = −ln(1 − iL/P)/ln(1 + i)</text>
+  <text x="280" y="280" text-anchor="middle" class="sm dim">A drop or balloon payment is what a non-integer term looks like</text>
+</svg>

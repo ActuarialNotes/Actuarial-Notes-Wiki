@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 292" width="560" height="292" role="img">
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="290.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Interest is charged on whatever is still owed</text>
+  <rect x="81.29" y="80.73" width="18.59" height="127.27" rx="2" fill="var(--dim)" fill-opacity="0.2"/>
+  <rect x="81.29" y="106.18" width="18.59" height="101.82" rx="2" fill="#d97706" fill-opacity="0.75"/>
+  <rect x="112.27" y="92.69" width="18.59" height="115.31" rx="2" fill="var(--dim)" fill-opacity="0.2"/>
+  <rect x="112.27" y="115.75" width="18.59" height="92.25" rx="2" fill="#d97706" fill-opacity="0.75"/>
+  <rect x="143.24" y="105.62" width="18.59" height="102.38" rx="2" fill="var(--dim)" fill-opacity="0.2"/>
+  <rect x="143.24" y="126.09" width="18.59" height="81.91" rx="2" fill="#d97706" fill-opacity="0.75"/>
+  <rect x="174.22" y="119.57" width="18.59" height="88.43" rx="2" fill="var(--dim)" fill-opacity="0.2"/>
+  <rect x="174.22" y="137.26" width="18.59" height="70.74" rx="2" fill="#d97706" fill-opacity="0.75"/>
+  <rect x="205.2" y="134.65" width="18.59" height="73.35" rx="2" fill="var(--dim)" fill-opacity="0.2"/>
+  <rect x="205.2" y="149.32" width="18.59" height="58.68" rx="2" fill="#d97706" fill-opacity="0.75"/>
+  <rect x="236.17" y="150.92" width="18.59" height="57.08" rx="2" fill="var(--dim)" fill-opacity="0.2"/>
+  <rect x="236.17" y="162.34" width="18.59" height="45.66" rx="2" fill="#d97706" fill-opacity="0.75"/>
+  <rect x="267.15" y="168.51" width="18.59" height="39.49" rx="2" fill="var(--dim)" fill-opacity="0.2"/>
+  <rect x="267.15" y="176.4" width="18.59" height="31.6" rx="2" fill="#d97706" fill-opacity="0.75"/>
+  <rect x="298.12" y="187.49" width="18.59" height="20.51" rx="2" fill="var(--dim)" fill-opacity="0.2"/>
+  <rect x="298.12" y="191.59" width="18.59" height="16.41" rx="2" fill="#d97706" fill-opacity="0.75"/>
+  <line x1="72" y1="208" x2="336" y2="208" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="72" y1="208" x2="72" y2="58" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="90.59" y1="208" x2="90.59" y2="212" class="tick"/>
+  <text x="90.59" y="224" text-anchor="middle" class="sm dim">1</text>
+  <line x1="121.56" y1="208" x2="121.56" y2="212" class="tick"/>
+  <text x="121.56" y="224" text-anchor="middle" class="sm dim">2</text>
+  <line x1="152.54" y1="208" x2="152.54" y2="212" class="tick"/>
+  <text x="152.54" y="224" text-anchor="middle" class="sm dim">3</text>
+  <line x1="183.51" y1="208" x2="183.51" y2="212" class="tick"/>
+  <text x="183.51" y="224" text-anchor="middle" class="sm dim">4</text>
+  <line x1="214.49" y1="208" x2="214.49" y2="212" class="tick"/>
+  <text x="214.49" y="224" text-anchor="middle" class="sm dim">5</text>
+  <line x1="245.46" y1="208" x2="245.46" y2="212" class="tick"/>
+  <text x="245.46" y="224" text-anchor="middle" class="sm dim">6</text>
+  <line x1="276.44" y1="208" x2="276.44" y2="212" class="tick"/>
+  <text x="276.44" y="224" text-anchor="middle" class="sm dim">7</text>
+  <line x1="307.41" y1="208" x2="307.41" y2="212" class="tick"/>
+  <text x="307.41" y="224" text-anchor="middle" class="sm dim">8</text>
+  <line x1="68" y1="208" x2="72" y2="208" class="tick"/>
+  <text x="64" y="211.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="68" y1="144.36" x2="72" y2="144.36" class="tick"/>
+  <text x="64" y="147.96" text-anchor="end" class="sm dim">5,000</text>
+  <line x1="68" y1="80.73" x2="72" y2="80.73" class="tick"/>
+  <text x="64" y="84.33" text-anchor="end" class="sm dim">10,000</text>
+  <text x="326" y="240" text-anchor="end" class="sm dim">period</text>
+  <text x="68" y="54" text-anchor="start" class="sm dim">balance</text>
+  <line x1="74" y1="254" x2="87" y2="254" stroke="var(--dim)" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="93" y="257.6" text-anchor="start" class="sm">balance OB₍ₖ₋₁₎</text>
+  <line x1="214" y1="254" x2="227" y2="254" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="233" y="257.6" text-anchor="start" class="sm">interest I_k (×10)</text>
+  <text x="428" y="96" text-anchor="middle" class="sm bold">I_k = i · OB₍ₖ₋₁₎</text>
+  <text x="428" y="116" text-anchor="middle" class="sm dim">PR_k = payment − I_k</text>
+  <line x1="340" y1="140" x2="340" y2="172" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="152" text-anchor="start" class="sm bold">Falling balance</text>
+  <text x="350" y="168" text-anchor="start" class="sm dim">so falling interest</text>
+  <line x1="340" y1="186" x2="340" y2="218" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="198" text-anchor="start" class="sm bold">Front-loaded</text>
+  <text x="350" y="214" text-anchor="start" class="sm dim">early payments are mostly interest</text>
+  <line x1="340" y1="232" x2="340" y2="264" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="244" text-anchor="start" class="sm bold">Never on the original L</text>
+  <text x="350" y="260" text-anchor="start" class="sm dim">always on the current balance</text>
+  <text x="280" y="280" text-anchor="middle" class="sm dim">Interest is shown at ten times scale so both series are visible</text>
+</svg>

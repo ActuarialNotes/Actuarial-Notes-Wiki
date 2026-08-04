@@ -89,10 +89,11 @@ before touching that area**:
   concepts per exam (`data/keystoneConcepts.ts`), the `lib/keystone.ts` lookup every surface
   shares, and the **gold** material that marks them. Read before editing the catalogue or
   touching `.keystone-*` CSS — gold (intrinsic) and rainbow foil (earned) must stay distinct.
-- `docs/exam-readiness.md` — the **Exam Readiness Score** card on each exam study guide: the
-  three weighted criteria (syllabus coverage, keystone concepts, retention), the bands, and
-  why keystone mastery carries far more than its share of the syllabus. Read before changing
-  `lib/readiness.ts` or the card.
+- `docs/exam-readiness.md` — the **Exam Readiness Score**: the two weighted criteria
+  (syllabus coverage 60%, keystone concepts 40%), the bands, and why keystone mastery carries
+  far more than its share of the syllabus. `computeExamReadiness` is the *one* readiness
+  number — the exam-page card, the Dashboard radial, the exam grid and the readiness
+  projection all call it. Read before changing `lib/readiness.ts` or any readiness readout.
 - `docs/distribution-simulators.md` — the **interactive distribution simulators** that replace the
   static `Media/*_pdf.svg` / `*_pmf.svg` embeds on the distribution concept pages: parameter
   sliders, live moments, PDF↔CDF, and a Monte-Carlo histogram. Read before touching
@@ -118,12 +119,13 @@ Other important `lib/` modules:
   writing a new chip. Attempt history is server-side only, so signed-out viewers pass
   `showNew={false}` (via the hook's `tracked` flag) and see no chip instead of a false "Not attempted".
 - `resourceTimeline.ts` / `resourceTimelineFilters.ts` — build/filter the dated Resources timeline (heatmap)
-- `readiness.ts` — exam-readiness scoring. `computeReadiness` is the weighted section score
-  behind the Dashboard's Study Guide radial; `computeExamReadiness` builds the full
-  assessment (three criteria — syllabus coverage, keystone concepts, retention — plus band,
-  section breakdown and concept tally) rendered by the exam page's **Exam Readiness Score**
-  card, `components/wiki/ExamReadinessCard.tsx`. That card rides in the orientation-card row
-  (`ExamGuideCards`'s `leadCard`), and its popup is where an exam's keystones are listed.
+- `readiness.ts` — exam-readiness scoring. `computeExamReadiness` is **the** readiness score
+  (syllabus coverage 60% + keystone concepts 40%, plus band, section breakdown and concept
+  tally); every surface that prints a readiness % calls it — the exam page's **Exam Readiness
+  Score** card (`components/wiki/ExamReadinessCard.tsx`, riding in the orientation-card row as
+  `ExamGuideCards`'s `leadCard`, its popup listing the exam's keystones), the Dashboard's
+  Study Guide radial, the exam grid and the readiness projection. `computeReadiness` is the
+  weighted section score it is built from — an input, not a second number to display.
 - `distributionMath.ts` / `distributions.ts` / `distributionPlot.ts` — the distribution-simulator
   engine: special functions + seeded samplers, the per-distribution spec catalogue (with the
   `Media/*.svg` → spec map), and the pure curve/histogram/tick helpers the SVG reads. Rendered by

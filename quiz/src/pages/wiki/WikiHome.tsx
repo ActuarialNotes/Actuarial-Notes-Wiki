@@ -12,7 +12,7 @@ import { useWikiPage } from '@/components/wiki/WikiLayout'
 import { useExamProgress } from '@/contexts/ExamProgressContext'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useConceptPopup } from '@/hooks/useConceptPopup'
-import { computeReadiness } from '@/lib/readiness'
+import { computeExamReadiness } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { cn } from '@/lib/utils'
 
@@ -261,8 +261,10 @@ export default function WikiHome() {
                     const examRecords = match
                       ? masteryRecords.filter(r => r.exam_id === examId)
                       : []
+                    // The same score the exam page's Exam Readiness Score card
+                    // and the Dashboard radial show — one definition of readiness.
                     const { overallPct, sections } = match
-                      ? computeReadiness(match, examRecords, now)
+                      ? computeExamReadiness(match, examRecords, now, examId)
                       : { overallPct: 0, sections: [] }
                     const total = sections.reduce((sum, s) => sum + s.total, 0)
                     const level3Count = sections.reduce((sum, s) => sum + s.level3Count, 0)

@@ -20,7 +20,7 @@ import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mas
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
 import { isKeystone } from '@/lib/keystone'
 import { KEYSTONE_FILL, KEYSTONE_TEXT, LEVEL3_TEXT, LEVEL_FILL, masteryFill } from '@/lib/masteryFill'
-import { computeReadiness, parseSectionWeight } from '@/lib/readiness'
+import { computeExamReadiness, parseSectionWeight } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
 import { readTodayLevelUps, LEVELUP_EVENT, type DailyLevelUp } from '@/lib/dailyProgressStore'
@@ -165,10 +165,12 @@ function StudyGuideRadial({
     return groups
   }, [segments])
 
-  // Same weighted-progress formula as the "Readiness" badge (lib/readiness.ts),
-  // so the two numbers always agree.
+  // The one readiness score (lib/readiness.ts): syllabus coverage plus keystone
+  // mastery. The exam page's Exam Readiness Score card and the exam grid print
+  // the same call, so the numbers always agree — the gold spokes in this ring
+  // are the criterion the second half of it measures.
   const overallPct = useMemo(
-    () => computeReadiness(syllabus, examRecords, now).overallPct,
+    () => computeExamReadiness(syllabus, examRecords, now).overallPct,
     [syllabus, examRecords, now],
   )
   const pctText = totalCount > 0 ? `${Math.round(overallPct)}%` : '0%'

@@ -92,9 +92,10 @@ describe('readinessBand', () => {
 
 describe('computeExamReadiness', () => {
   it('scores an untouched exam at zero on every criterion', () => {
-    const a = computeExamReadiness(syllabus(), [], 'P', NOW)
+    const a = computeExamReadiness(syllabus(), [], NOW)
     expect(a.overallPct).toBe(0)
     expect(a.band.id).toBe('not-started')
+    expect(a.criteria.map(c => c.id)).toEqual(['syllabus', 'keystone'])
     expect(a.criteria.every(c => c.pct === 0)).toBe(true)
     expect(a.counts).toMatchObject({ total: 4, new: 4, studied: 0 })
   })
@@ -103,7 +104,6 @@ describe('computeExamReadiness', () => {
     const a = computeExamReadiness(
       syllabus(),
       [record('Bayes Theorem', 'level3'), record('Expected Value', 'level3')],
-      'P',
       NOW,
     )
     const keystone = a.criteria.find(c => c.id === 'keystone')
@@ -114,26 +114,38 @@ describe('computeExamReadiness', () => {
     expect(keystone!.weight).toBeCloseTo(CRITERION_WEIGHTS.keystone)
   })
 
-  it('drops the keystone criterion and renormalises for an exam with no catalogue', () => {
-    const a = computeExamReadiness(syllabus(), [], 'NO-SUCH-EXAM', NOW)
-    expect(a.keystone).toBeNull()
-    expect(a.criteria.map(c => c.id)).toEqual(['syllabus', 'retention'])
-    // The weights still add to 1, so a perfect score is still reachable.
-    expect(a.criteria.reduce((s, c) => s + c.weight, 0)).toBeCloseTo(1)
+  it('takes the keystone key from the syllabus when the caller passes none', () => {
+    const records = [record('Bayes Theorem', 'level3')]
+    // The syllabus names exam "P-1", whose progress key is "P".
+    expect(computeExamReadiness(syllabus(), records, NOW).overallPct)
+      .toBeCloseTo(computeExamReadiness(syllabus(), records, NOW, 'P').overallPct)
   })
 
-  it('measures retention over studied concepts only', () => {
-    const fresh = computeExamReadiness(syllabus(), [record('Bayes Theorem', 'level2')], 'P', NOW)
-    expect(fresh.criteria.find(c => c.id === 'retention')!.pct).toBe(100)
+  it('drops the keystone criterion and renormalises for an exam with no catalogue', () => {
+    const a = computeExamReadiness(syllabus(), [], NOW, 'NO-SUCH-EXAM')
+    expect(a.keystone).toBeNull()
+    expect(a.criteria.map(c => c.id)).toEqual(['syllabus'])
+    // The lone criterion carries the whole score, so 100 is still reachable and
+    // readiness equals syllabus coverage for that exam.
+    expect(a.criteria[0].weight).toBeCloseTo(1)
+  })
 
-    const decayed = computeExamReadiness(
+  it('scores an exam with no keystone catalogue exactly as its syllabus coverage', () => {
+    const records = [record('Bayes Theorem', 'level3'), record('Variance', 'level2')]
+    const a = computeExamReadiness(syllabus(), records, NOW, 'NO-SUCH-EXAM')
+    expect(a.overallPct).toBeCloseTo(computeReadiness(syllabus(), records, NOW).overallPct)
+  })
+
+  it('counts decayed concepts in the tally without a criterion of their own', () => {
+    const a = computeExamReadiness(
       syllabus(),
       [record('Bayes Theorem', 'level2'), record('Variance', 'forgotten')],
-      'P',
       NOW,
     )
-    expect(decayed.criteria.find(c => c.id === 'retention')!.pct).toBe(50)
-    expect(decayed.counts).toMatchObject({ studied: 2, forgotten: 1 })
+    expect(a.criteria.map(c => c.id)).toEqual(['syllabus', 'keystone'])
+    expect(a.counts).toMatchObject({ studied: 2, forgotten: 1 })
+    // Forgotten earns no credit, so it drags the syllabus criterion down.
+    expect(a.criteria[0].detail).toContain('1 decayed')
   })
 
   it('applies decay before scoring, so a stale Level 3 no longer counts as mastered', () => {
@@ -141,10 +153,9 @@ describe('computeExamReadiness', () => {
       // 60 days without a correct answer takes level3 → level2 → level1.
       syllabus(),
       [record('Bayes Theorem', 'level3', 60)],
-      'P',
       NOW,
     )
-    const fresh = computeExamReadiness(syllabus(), [record('Bayes Theorem', 'level3')], 'P', NOW)
+    const fresh = computeExamReadiness(syllabus(), [record('Bayes Theorem', 'level3')], NOW)
     expect(stale.overallPct).toBeLessThan(fresh.overallPct)
     expect(stale.counts.level3).toBe(0)
   })
@@ -154,7 +165,7 @@ describe('computeExamReadiness', () => {
       ...syllabus().topics.flatMap(t => t.concepts.map(c => record(c.name, 'level3'))),
       ...keystonesForExam('P').map(k => record(k.name, 'level3')),
     ]
-    const a = computeExamReadiness(syllabus(), everything, 'P', NOW)
+    const a = computeExamReadiness(syllabus(), everything, NOW)
     expect(Math.round(a.overallPct)).toBe(100)
     expect(a.band.id).toBe('ready')
     expect(a.weakestSections).toEqual([])
@@ -164,7 +175,6 @@ describe('computeExamReadiness', () => {
     const a = computeExamReadiness(
       syllabus(),
       [record('Expected Value', 'level3'), record('Variance', 'level3')],
-      'P',
       NOW,
     )
     expect(a.weakestSections.map(s => s.name)).toEqual(['General Probability'])

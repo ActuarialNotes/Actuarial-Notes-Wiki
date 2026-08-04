@@ -4,7 +4,7 @@ import {
   projectReadinessWithPlan,
   type ReadinessProjectionPoint,
 } from '@/lib/masteryAnalytics'
-import { computeReadiness } from '@/lib/readiness'
+import { computeExamReadiness } from '@/lib/readiness'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import type { StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
@@ -142,7 +142,7 @@ export function ReadinessProjectionSlide({
 }) {
   const { projection, readinessNow, projectionEnd } = useMemo(() => {
     const now = new Date()
-    const readinessNow = Math.round(computeReadiness(syllabus, masteryRecords, now).overallPct)
+    const readinessNow = Math.round(computeExamReadiness(syllabus, masteryRecords, now).overallPct)
 
     // Project to the exam date if it's in the future, else the plan's ready date,
     // else a default horizon.

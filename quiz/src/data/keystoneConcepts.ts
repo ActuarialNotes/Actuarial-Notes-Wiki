@@ -12,10 +12,14 @@
 //      The gold treatment in the UI is only meaningful while it stays rare.
 //   2. `name` must match a real `Concepts/<name>.md` page *and* appear in that
 //      exam's syllabus page — both are pinned by keystone.test.ts.
-//   3. `why` is **one short line** — a single clause a student reads at a
-//      glance, saying what *else* breaks without it. Not a definition (the
-//      concept page already has one), and not two sentences: the explainer
-//      shows this line and nothing else, so keep it under ~95 characters.
+//   3. `why` is **one line, in two beats**: a concrete plain-language gloss of
+//      what the concept actually says or does, then what *else* leans on it.
+//      The gloss is what stops the line reading as a riddle — "the retrospective
+//      mirror of ratemaking" means nothing to someone who hasn't met the topic
+//      yet, "estimating what is still owed on claims already incurred" does.
+//      It is still not the concept page's full definition, and still not two
+//      sentences: the explainer shows this line and nothing else, so keep it
+//      under ~130 characters.
 //
 // Consumed by lib/keystone.ts (lookup + progress) and rendered by
 // components/KeystoneName.tsx. See docs/keystone-concepts.md.
@@ -23,7 +27,7 @@
 export interface KeystoneConcept {
   /** Canonical concept name — matches `Concepts/<name>.md`. */
   name: string
-  /** One short line: what the rest of the syllabus leans on it for. */
+  /** One line: what it says, then what the rest of the syllabus leans on it for. */
   why: string
 }
 
@@ -42,47 +46,47 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
     concepts: [
       {
         name: 'Axioms of Probability',
-        why: 'Every rule you will use — complements, unions, conditioning — is derived from these three.',
+        why: 'Non-negativity, a total of 1, and additivity over disjoint events — the complement, union and conditioning rules all follow.',
       },
       {
         name: 'Conditional Probability',
-        why: 'Independence, Bayes and total probability are all this one move in disguise.',
+        why: 'Rescaling probability to a known outcome, P(A|B) = P(A and B)/P(B) — independence, Bayes and total probability rearrange it.',
       },
       {
         name: 'The Law of Total Probability',
-        why: 'Splits a messy problem into computable cases, and is the denominator in every Bayes answer.',
+        why: 'Splits a probability into weighted pieces over disjoint cases — how mixtures are computed, and the denominator of a Bayes answer.',
       },
       {
         name: 'Bayes Theorem',
-        why: 'The standard "given the result, which cause?" question — and credibility later on.',
+        why: 'Flips a conditional: P(cause | evidence) from P(evidence | cause) and a prior — posterior questions here, credibility later.',
       },
       {
         name: 'Random Variable',
-        why: 'Distributions, moments and payment questions are all just functions of one.',
+        why: 'A number attached to each outcome — distributions, moments, transformations and payment questions are all statements about one.',
       },
       {
         name: 'Expected Value',
-        why: 'Variance, covariance, MGFs and expected payments are all expectations of something.',
+        why: 'The probability-weighted average of a random variable — variance, covariance, MGFs and expected payments are all expectations.',
       },
       {
         name: 'Variance',
-        why: 'Carries every second-moment question: linear combinations, the CLT, spread and risk.',
+        why: 'E[X²] − E[X]², the average squared distance from the mean — it carries linear combinations, covariance, the CLT and risk.',
       },
       {
         name: 'Normal Distribution',
-        why: 'The default for anything aggregated or approximated, and your most-used table lookup.',
+        why: 'The bell curve you standardize to z and read from the table — the limit for sums and the exam\'s default approximation.',
       },
       {
         name: 'Poisson Distribution',
-        why: 'The counting model of the exam — claim counts, arrivals, exponential waiting times.',
+        why: 'Counts of rare events at a constant rate, with mean = variance = λ — claim counts, arrivals, and exponential waiting times.',
       },
       {
         name: 'Central Limit Theorem',
-        why: 'Licenses the normal approximation that turns intractable sums into a table lookup.',
+        why: 'Sums and averages of many independent variables turn normal — this is what licenses the normal approximation you keep using.',
       },
       {
         name: 'Payment Random Variable',
-        why: 'Deductibles, limits and coinsurance are all one transformation of a loss.',
+        why: 'What the insurer actually pays once a deductible, limit and coinsurance are applied — one transformation of the underlying loss.',
       },
     ],
   },
@@ -92,47 +96,47 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
     concepts: [
       {
         name: 'Present Value',
-        why: 'Annuities, loans, bonds and immunization are all structured ways of discounting.',
+        why: 'What a future cash flow is worth today once discounted — annuities, loans, bonds and immunization are all structured discounting.',
       },
       {
         name: 'Accumulation Function',
-        why: 'Defines what simple, compound and variable-force interest each do to a dollar.',
+        why: 'a(t), what one dollar grows to by time t — the single definition simple, compound and variable-force interest each specialize.',
       },
       {
         name: 'Force of Interest',
-        why: 'The continuous-time view that makes non-level rates tractable and links the rest.',
+        why: 'The instantaneous rate of growth δ = a\'(t)/a(t) — the continuous-time view that handles non-level rates and links i, d and v.',
       },
       {
         name: 'Equation of Value',
-        why: 'The setup step for nearly every problem: pick a comparison date, set values equal.',
+        why: 'Setting what you pay equal to what you receive at one comparison date — the setup step for nearly every problem on the exam.',
       },
       {
         name: 'Annuity Immediate',
-        why: 'Due, deferred, increasing and m-thly annuities are all adjustments to this formula.',
+        why: 'n level payments at the ends of periods, worth (1 − vⁿ)/i — due, deferred, increasing and m-thly annuities all adjust this.',
       },
       {
         name: 'Perpetuity',
-        why: 'The limiting case that gives fast sanity checks on level and increasing annuities.',
+        why: 'Level payments forever, worth 1/i — the limiting case that gives fast sanity checks on level and increasing annuity values.',
       },
       {
         name: 'Amortization',
-        why: 'Splitting each payment into interest and principal drives every loan question.',
+        why: 'Splitting each loan payment into interest on the balance and principal repaid — the basis of every outstanding-balance question.',
       },
       {
         name: 'Bond Price',
-        why: 'Premium, discount and book value all follow once this present value is automatic.',
+        why: 'The present value of the coupons plus the redemption amount — premium, discount, book value and write-up/down all follow.',
       },
       {
         name: 'Yield Rate',
-        why: 'The rate that balances an equation of value — the unknown most questions ask for.',
+        why: 'The interest rate that solves an equation of value (the IRR) — the unknown most problems are ultimately asking you to find.',
       },
       {
         name: 'Macaulay Duration',
-        why: 'The sensitivity measure the whole asset-liability section is written in.',
+        why: 'The present-value-weighted average time of the cash flows — the sensitivity measure the asset-liability section is written in.',
       },
       {
         name: 'Immunization',
-        why: 'The capstone: present value, duration and convexity in one set of conditions.',
+        why: 'Matching asset and liability present values, durations and convexity so a small rate move can\'t hurt — the exam\'s capstone.',
       },
     ],
   },
@@ -142,51 +146,51 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
     concepts: [
       {
         name: 'Poisson Process',
-        why: 'Thinning, superposition, compound models and interarrival times all start here.',
+        why: 'Events arriving at rate λ with independent increments — the base for thinning, superposition, compound models and waiting times.',
       },
       {
         name: 'Aggregate Loss Model',
-        why: 'The frequency-severity split behind total loss, on this and every later exam.',
+        why: 'Total loss as a random number of claims times their random sizes — the frequency-severity split used here and on every later exam.',
       },
       {
         name: 'Maximum Likelihood Estimation',
-        why: 'GLM fitting, survival models and the asymptotic results all assume a likelihood.',
+        why: 'Picking the parameters that make the observed data most likely — GLMs, survival models and the asymptotic results all assume it.',
       },
       {
         name: 'Sampling Distribution',
-        why: 'Confidence intervals and tests describe a statistic\'s behaviour, not the data\'s.',
+        why: 'How a statistic varies from sample to sample — confidence intervals and tests describe this, not the data\'s own distribution.',
       },
       {
         name: 'Mean Square Error',
-        why: 'The bias-variance split that explains why a biased estimator can still win.',
+        why: 'Bias squared plus variance — the decomposition that explains why a biased estimator can beat an unbiased one.',
       },
       {
         name: 'Type I Error',
-        why: 'Fixing α is what defines a test; power and p-values are read straight off it.',
+        why: 'Rejecting a true null hypothesis; fixing its probability α is what defines a test, and power and p-values are read against it.',
       },
       {
         name: 'Hazard Rate',
-        why: 'The pivot every survival question converts through: hazard, survival, density.',
+        why: 'The instantaneous failure rate given survival so far — the pivot for converting between survival, density and cumulative hazard.',
       },
       {
         name: 'Censoring',
-        why: 'Whether an observation is censored or truncated changes the likelihood you write.',
+        why: 'An observation known only to lie beyond some value — whether it is censored or truncated changes the likelihood you write.',
       },
       {
         name: 'Generalized Linear Model',
-        why: 'Half the syllabus, and the working model in pricing teams once you are on the job.',
+        why: 'Regression for non-normal responses via a link and exponential-family errors — half the syllabus, and the job itself afterwards.',
       },
       {
         name: 'Link Function',
-        why: 'Decides whether your model is multiplicative or additive, and how coefficients read.',
+        why: 'Maps the linear predictor to the mean — log makes the model multiplicative, identity additive, and it sets how coefficients read.',
       },
       {
         name: 'Deviance',
-        why: 'The GLM analogue of residual sum of squares: model comparison and fit run through it.',
+        why: 'Twice the log-likelihood gap from a perfect fit — the GLM stand-in for residual sum of squares in model comparison and fit tests.',
       },
       {
         name: 'AIC',
-        why: 'The standard "is the extra parameter worth it?" tiebreaker for non-nested models.',
+        why: 'Log-likelihood penalized by parameter count — the standard "is the extra variable worth it?" tiebreaker for non-nested models.',
       },
     ],
   },
@@ -196,63 +200,63 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
     concepts: [
       {
         name: 'Ratemaking',
-        why: 'The fundamental insurance equation every adjustment in the first half serves.',
+        why: 'Setting rates so premium covers expected losses, expenses and profit — the fundamental insurance equation the first half serves.',
       },
       {
         name: 'Exposure Base',
-        why: 'Pick the wrong measure of risk and every rate and relativity above it is wrong.',
+        why: 'The unit of risk premium is charged per, like a car-year or $100 of payroll — pick it wrong and every rate above it is wrong.',
       },
       {
         name: 'On Level Premium',
-        why: 'Without premium restated at current rates, the loss ratio method misstates the answer.',
+        why: 'Historical premium restated at today\'s rates — without it the loss ratio method compares losses to the wrong premium.',
       },
       {
         name: 'Loss Development',
-        why: 'One of the three mandatory data adjustments, and the engine of the reserving half.',
+        why: 'The growth of known losses toward their ultimate value — one of the three mandatory data adjustments, and the engine of reserving.',
       },
       {
         name: 'Loss Trend',
-        why: 'Carries past losses to the future policy period without double-counting development.',
+        why: 'Adjusts past losses for cost changes up to the future policy period — the piece that must not double-count development.',
       },
       {
         name: 'Overall Rate Level Indication',
-        why: 'The number the entire ratemaking process exists to produce.',
+        why: 'The percentage rate change indicated for the whole book — the number the entire ratemaking process exists to produce.',
       },
       {
         name: 'Pure Premium Method',
-        why: 'One of two routes to the indication — the exposure-based one, needing no premium.',
+        why: 'Indicates a rate directly from losses per exposure — the exposure-based route, usable when no premium history exists.',
       },
       {
         name: 'Loss Ratio Method',
-        why: 'The other route to the indication; when the two disagree is a recurring question.',
+        why: 'Indicates a rate change from losses over on-level premium — the other route, and why the two can disagree is a recurring question.',
       },
       {
         name: 'Credibility',
-        why: 'Decides how much weight your own data earns, and what the complement should be.',
+        why: 'How much weight Z your own data earns, and what complement fills the rest — applied at every level of a rate review.',
       },
       {
         name: 'Classification Ratemaking',
-        why: 'Turning one overall indication into rates for individual risks.',
+        why: 'Turning one overall indication into rates by class and territory, through relativities and multivariate methods.',
       },
       {
         name: 'Loss Reserving',
-        why: 'The retrospective mirror of ratemaking, framing every method in the second half.',
+        why: 'Estimating what is still owed on claims already incurred — the backward-looking half of the syllabus and all of its methods.',
       },
       {
         name: 'Development Triangle',
-        why: 'The shared data structure behind every reserving method on the syllabus.',
+        why: 'Losses arrayed by accident year and maturity — the shared data structure every reserving method on the syllabus reads.',
       },
       {
         name: 'Chain Ladder Method',
-        why: 'The baseline other methods are defined against, including where it breaks down.',
+        why: 'Projects losses to ultimate with age-to-age factors — the baseline other methods are defined against, and where it breaks down.',
       },
       {
         name: 'Bornhuetter-Ferguson Method',
-        why: 'The blend that fixes chain ladder\'s leverage on immature years — the most-tested one.',
+        why: 'Blends expected losses with reported ones by percent developed — it fixes chain ladder\'s leverage on immature years.',
       },
       {
         name: 'IBNR',
-        why: 'What every reserving method is ultimately estimating, and what you must explain.',
+        why: 'Claims incurred but not yet reported, plus development on known ones — what every reserving method is ultimately estimating.',
       },
     ],
   },

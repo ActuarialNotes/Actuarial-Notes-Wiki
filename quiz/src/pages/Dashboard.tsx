@@ -34,7 +34,7 @@ import { matchesSelectedVariant } from '@/data/examSittings'
 import { useGems } from '@/hooks/useGems'
 import { LevelBadge } from '@/components/LevelBadge'
 import { MasteryAnalyticsCard } from '@/components/MasteryAnalyticsCard'
-import { RecentMistakesCard } from '@/components/RecentMistakesCard'
+import { FixMistakesButton } from '@/components/FixMistakesButton'
 import type { LeagueExamOption } from '@/components/LeaderboardPanel'
 import { DashboardExportModal } from '@/components/DashboardExportModal'
 import { DashboardRemindersModal } from '@/components/DashboardRemindersModal'
@@ -152,6 +152,9 @@ export default function Dashboard() {
   // ReadinessCard portals its Study Schedule card into this slot so it renders
   // at the top of the page, above the primary actions.
   const [studyScheduleSlotEl, setStudyScheduleSlotEl] = useState<HTMLDivElement | null>(null)
+  // FixMistakesButton portals its compact copy into this slot in the pinned
+  // header row (the slot only exists while the actions are pinned).
+  const [mistakesSlotEl, setMistakesSlotEl] = useState<HTMLDivElement | null>(null)
 
   // Sticky exam header: the exam switcher pins to the top of the viewport, and
   // once the full-size primary actions row has scrolled up behind it, compact
@@ -727,6 +730,9 @@ export default function Dashboard() {
                     )}
                   </div>
                 )}
+                {/* Slot for FixMistakesButton's compact copy — `contents` so the
+                    portaled pill sits directly in this flex row. */}
+                <div ref={setMistakesSlotEl} className="contents" />
               </div>
             )}
           </div>
@@ -736,32 +742,48 @@ export default function Dashboard() {
           at the very top of the dashboard, above the primary actions. */}
       {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
 
-      {/* Primary actions — Read concepts (left) + Start Today's Quiz (right).
-          Sits directly below the study schedule card. */}
+      {/* Primary actions — Read concepts (left) + Start Today's Quiz (right),
+          with Fix Mistakes as a full-width row underneath. Sits directly below
+          the study schedule card. Fix Mistakes lives inside this block on
+          purpose: the pinned-header copies swap in once primaryActionsRef has
+          scrolled past, so all three have to scroll out together. */}
       {activeSyllabus && (
-        <div ref={primaryActionsRef} className="flex gap-3">
-          <Button
-            variant="secondary"
-            onClick={handleReadConcepts}
-            className="flex-1 gap-2.5 text-base h-auto py-4"
-          >
-            <BookOpen className="h-5 w-5" />
-            Read concepts
-          </Button>
-          {showQuizAction && (
-            <div className="relative flex-1">
-              <button
-                type="button"
-                data-sound="begin"
-                onClick={handleStartTodaysQuiz}
-                disabled={isLaunchingQuiz}
-                className="w-full flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
-              >
-                <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
-                {quizActionLabel}
-              </button>
-              {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
-            </div>
+        <div ref={primaryActionsRef} className="flex flex-col gap-3">
+          <div className="flex gap-3">
+            <Button
+              variant="secondary"
+              onClick={handleReadConcepts}
+              className="flex-1 gap-2.5 text-base h-auto py-4"
+            >
+              <BookOpen className="h-5 w-5" />
+              Read concepts
+            </Button>
+            {showQuizAction && (
+              <div className="relative flex-1">
+                <button
+                  type="button"
+                  data-sound="begin"
+                  onClick={handleStartTodaysQuiz}
+                  disabled={isLaunchingQuiz}
+                  className="w-full flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+                >
+                  <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
+                  {quizActionLabel}
+                </button>
+                {!planComplete && <TodayQuizCornerBadge count={todaysQuizBadgeCount} size="lg" />}
+              </div>
+            )}
+          </div>
+
+          {/* Fix mistakes — the concepts behind questions you've missed and not
+              yet re-answered correctly. Hides itself when there are none. */}
+          {!isGuest && MISTAKES_REVIEW_ENABLED && (
+            <FixMistakesButton
+              masteryRecords={activeExamRecords}
+              examTopic={activeSyllabus.examTopic}
+              syllabus={activeSyllabus}
+              compactSlot={mistakesSlotEl}
+            />
           )}
         </div>
       )}
@@ -819,26 +841,13 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Compact insight cards — two-up: fading concepts + recent mistakes */}
-      {!isGuest && activeSyllabus && (MASTERY_ANALYTICS_ENABLED || MISTAKES_REVIEW_ENABLED) && (
-        <div className="grid grid-cols-2 gap-4">
-          {/* Mastery insights — richer learner analytics (roadmap P2.5) */}
-          {MASTERY_ANALYTICS_ENABLED && (
-            <MasteryAnalyticsCard
-              syllabus={activeSyllabus}
-              masteryRecords={activeExamRecords}
-            />
-          )}
-
-          {/* Fix mistakes — the concepts behind recently-missed questions */}
-          {MISTAKES_REVIEW_ENABLED && (
-            <RecentMistakesCard
-              masteryRecords={activeExamRecords}
-              examTopic={activeSyllabus.examTopic}
-              syllabus={activeSyllabus}
-            />
-          )}
-        </div>
+      {/* Mastery insights — richer learner analytics (roadmap P2.5). Full-width
+          now that Fix Mistakes has moved up into the primary actions. */}
+      {!isGuest && activeSyllabus && MASTERY_ANALYTICS_ENABLED && (
+        <MasteryAnalyticsCard
+          syllabus={activeSyllabus}
+          masteryRecords={activeExamRecords}
+        />
       )}
 
 

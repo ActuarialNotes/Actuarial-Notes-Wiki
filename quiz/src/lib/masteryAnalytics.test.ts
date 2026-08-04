@@ -11,7 +11,7 @@ import {
   type CoverableQuestion,
 } from './masteryAnalytics'
 import type { ConceptMasteryRecord, MasteryState } from './mastery'
-import { computeReadiness } from './readiness'
+import { computeExamReadiness } from './readiness'
 import type { ConceptAssignment, StudyPlan } from './studyPlan'
 import type { WikiConcept, WikiExamSyllabus, WikiTopic } from './wikiParser'
 
@@ -37,9 +37,14 @@ function rec(partial: Partial<ConceptMasteryRecord> = {}): ConceptMasteryRecord 
 
 const concept = (name: string, target = name): WikiConcept => ({ name, target })
 const topic = (name: string, concepts: WikiConcept[], weight?: string): WikiTopic => ({ name, concepts, weight })
-const syllabus = (topics: WikiTopic[]): WikiExamSyllabus => ({
-  examId: 'P-1',
-  examLabel: 'Exam P',
+// `examId` decides whether the readiness score picks up a keystone criterion
+// (lib/readiness.ts keys the catalogue by the exam-progress key). The default
+// "ZZ-9" has no catalogue, so readiness is pure syllabus coverage and these
+// tests stay about projection mechanics; pass "P-1" to exercise the keystone
+// half of the score.
+const syllabus = (topics: WikiTopic[], examId = 'ZZ-9'): WikiExamSyllabus => ({
+  examId,
+  examLabel: 'Exam ZZ',
   examTopic: 'Probability',
   topics,
   resources: [],
@@ -125,10 +130,10 @@ describe('projectReadiness', () => {
   const syl = syllabus([topic('Prob', [concept('Bayes Theorem')])])
   const records = [rec({ concept_slug: 'Bayes Theorem', state: 'level3', last_correct_at: daysAgo(0) })]
 
-  it('matches computeReadiness at the start and never rises without study', () => {
+  it('matches the readiness score at the start and never rises without study', () => {
     const to = new Date(NOW.getTime() + 60 * MS_PER_DAY)
     const points = projectReadiness(syl, records, NOW, to, 10)
-    expect(points[0].overallPct).toBeCloseTo(computeReadiness(syl, records, NOW).overallPct, 5)
+    expect(points[0].overallPct).toBeCloseTo(computeExamReadiness(syl, records, NOW).overallPct, 5)
     for (let i = 1; i < points.length; i++) {
       expect(points[i].overallPct).toBeLessThanOrEqual(points[i - 1].overallPct + 1e-9)
     }
@@ -146,6 +151,15 @@ describe('projectReadiness', () => {
   it('returns a single point when the range is empty', () => {
     expect(projectReadiness(syl, records, NOW, NOW)).toHaveLength(1)
     expect(projectReadiness(syl, records, NOW, new Date(NOW.getTime() - MS_PER_DAY))).toHaveLength(1)
+  })
+
+  it('projects the same blended score the readiness surfaces show', () => {
+    // Same syllabus, but on an exam that has a keystone catalogue: the one
+    // mastered concept is a keystone, so the projection tracks that half too.
+    const keystoneSyl = syllabus([topic('Prob', [concept('Bayes Theorem')])], 'P-1')
+    const points = projectReadiness(keystoneSyl, records, NOW, new Date(NOW.getTime() + 60 * MS_PER_DAY), 10)
+    expect(points[0].overallPct).toBeCloseTo(computeExamReadiness(keystoneSyl, records, NOW).overallPct, 5)
+    expect(points[0].overallPct).toBeLessThan(100) // ten other keystones untouched
   })
 })
 

@@ -23,7 +23,7 @@ import {
   type MasteryState,
 } from '@/lib/mastery'
 import { buildMasteryLookup, lookupConceptRecord, resolveConceptState } from '@/lib/conceptMatch'
-import { computeReadiness, type SectionReadiness } from '@/lib/readiness'
+import { computeExamReadiness, computeReadiness, type SectionReadiness } from '@/lib/readiness'
 import { selectQuestionsForCoverage, type StudyPlan } from '@/lib/studyPlan'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 
@@ -150,8 +150,9 @@ export interface ReadinessProjectionPoint {
 /**
  * Overall readiness sampled from `from` to `to` (inclusive) every `stepDays`,
  * assuming no further study. Exact because decay is a pure function of the
- * evaluation date — each point is `computeReadiness(...).overallPct` at that
- * date. The final `to` point is always included even if the step overshoots.
+ * evaluation date — each point is `computeExamReadiness(...).overallPct` at
+ * that date, the same score every readiness surface shows. The final `to` point
+ * is always included even if the step overshoots.
  */
 export function projectReadiness(
   syllabus: WikiExamSyllabus,
@@ -163,17 +164,17 @@ export function projectReadiness(
   const startMs = from.getTime()
   const endMs = to.getTime()
   if (endMs <= startMs) {
-    return [{ date: new Date(startMs), overallPct: computeReadiness(syllabus, records, from).overallPct }]
+    return [{ date: new Date(startMs), overallPct: computeExamReadiness(syllabus, records, from).overallPct }]
   }
 
   const step = Math.max(1, stepDays) * MS_PER_DAY
   const points: ReadinessProjectionPoint[] = []
   for (let t = startMs; t <= endMs; t += step) {
     const date = new Date(t)
-    points.push({ date, overallPct: computeReadiness(syllabus, records, date).overallPct })
+    points.push({ date, overallPct: computeExamReadiness(syllabus, records, date).overallPct })
   }
   if (points[points.length - 1].date.getTime() < endMs) {
-    points.push({ date: new Date(endMs), overallPct: computeReadiness(syllabus, records, to).overallPct })
+    points.push({ date: new Date(endMs), overallPct: computeExamReadiness(syllabus, records, to).overallPct })
   }
   return points
 }
@@ -332,7 +333,7 @@ export function projectReadinessWithPlan(
         }
       }
     }
-    return computeReadiness(syllabus, synthetic, d).overallPct
+    return computeExamReadiness(syllabus, synthetic, d).overallPct
   }
 
   const startMs = from.getTime()

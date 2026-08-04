@@ -32,12 +32,11 @@ import type { MasteryState } from '@/lib/mastery'
  */
 
 // Dial labels on the card. Short forms of the criterion names from
-// `lib/readiness.ts` — four dials have to sit on one row on a phone, and the
-// full names are right there in the popup.
+// `lib/readiness.ts` — the dials sit on one row on a phone, and the full names
+// are right there in the popup.
 const CARD_LABEL: Record<ReadinessCriterionId, string> = {
   syllabus: 'Syllabus',
   keystone: 'Keystones',
-  retention: 'Retention',
 }
 
 // Level dot colours track the mastery ladder (docs/concept-learning-progression.md).
@@ -62,8 +61,8 @@ function ReadinessDial({ pct, size, label }: { pct: number; size: number; label?
   const cx = size / 2
   const cy = size / 2
   return (
-    // A labelled dial is boxed at a fixed width so four of them stay on one row
-    // on a phone, with the label wrapping under the ring instead of setting the
+    // A labelled dial is boxed at a fixed width so the row stays on one line on
+    // a phone, with the label wrapping under the ring instead of setting the
     // column width.
     <div className="flex flex-col items-center gap-1" style={{ width: label ? Math.max(size, 68) : size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="block shrink-0" aria-hidden="true">
@@ -285,7 +284,7 @@ export function ExamReadinessCard({ examId, examLabel, syllabus, onSelectConcept
   const assessment = useMemo(() => {
     if (!syllabus) return null
     const examRecords = records.filter(r => r.exam_id === examId)
-    return computeExamReadiness(syllabus, examRecords, examId, new Date())
+    return computeExamReadiness(syllabus, examRecords, new Date(), examId)
   }, [syllabus, records, examId])
 
   // Nothing to score: no syllabus concepts parsed *and* no keystones authored.

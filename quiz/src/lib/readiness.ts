@@ -1,4 +1,4 @@
-import type { WikiExamSyllabus } from '@/lib/wikiParser'
+import { wikiExamIdToProgressKey, type WikiExamSyllabus } from '@/lib/wikiParser'
 import type { ConceptMasteryRecord, MasteryState } from '@/lib/mastery'
 import { buildMasteryLookup, resolveConceptState } from '@/lib/conceptMatch'
 import { keystoneProgress, type KeystoneProgress } from '@/lib/keystone'
@@ -80,29 +80,31 @@ export function computeReadiness(
 
 // ── Exam readiness assessment ────────────────────────────────────────────────
 //
-// The exam page's readiness card needs more than the single number above: it
-// has to say *why* the score is what it is. The assessment below breaks
-// readiness into three criteria, each a 0–100 dial in its own right, and
-// combines them into the headline score:
+// `computeExamReadiness` is **the** readiness score: the number the exam page's
+// readiness card, the Dashboard's Study Guide radial, the exam grid and the
+// readiness projection all show. `computeReadiness` above is one input to it,
+// not a second opinion — nothing user-facing should print its `overallPct` on
+// its own, or the app ends up quoting two different readiness numbers.
 //
-//   Syllabus coverage (50%) — the weighted section score computed above: how
+// It breaks readiness into two criteria, each a 0–100 dial in its own right:
+//
+//   Syllabus coverage (60%) — the weighted section score computed above: how
 //     far up the mastery ladder the syllabus as a whole has been carried, with
 //     each section counted at its exam weighting.
-//   Keystone concepts (35%) — the same credit formula over the exam's authored
+//   Keystone concepts (40%) — the same credit formula over the exam's authored
 //     keystones (docs/keystone-concepts.md). Broad-but-shallow coverage that
 //     skips the load-bearing concepts is not readiness, so the few carry a
 //     weight far above their share of the syllabus. Omitted (and its weight
-//     redistributed) for exams with no keystone catalogue.
-//   Retention (15%) — of the concepts already studied, the share that has not
-//     decayed back to Forgotten. This is a hygiene measure over *studied*
-//     concepts only, which is why it carries the smallest weight: it says
-//     nothing about how much of the syllabus has been touched.
+//     redistributed) for exams with no keystone catalogue, which leaves the
+//     score equal to syllabus coverage there.
 //
-// Every state is read through `resolveConceptState` / `keystoneProgress`, so
-// decay is applied at read time exactly as it is everywhere else.
+// Decay needs no criterion of its own: a concept that goes unreviewed steps
+// back down the ladder, so both criteria fall on their own. Every state is read
+// through `resolveConceptState` / `keystoneProgress`, so that happens at read
+// time exactly as it does everywhere else.
 
-/** Relative weights of the three criteria; renormalised when one is missing. */
-export const CRITERION_WEIGHTS = { syllabus: 0.5, keystone: 0.35, retention: 0.15 } as const
+/** Relative weights of the criteria; renormalised when one is missing. */
+export const CRITERION_WEIGHTS = { syllabus: 0.6, keystone: 0.4 } as const
 
 export type ReadinessCriterionId = keyof typeof CRITERION_WEIGHTS
 
@@ -177,14 +179,16 @@ function stateCredit(state: MasteryState): number {
  * concept-state tally.
  *
  * `records` should already be filtered to this exam — the same way the
- * Dashboard and the exam grid filter by `exam_id` — and `examId` is the
- * exam-progress key (`P`, `FM`, `MAS-I`, `5`) the keystone catalogue is keyed by.
+ * Dashboard and the exam grid filter by `exam_id`. `examId` is the exam-progress
+ * key (`P`, `FM`, `MAS-I`, `5`) the keystone catalogue is keyed by; it defaults
+ * to the one the syllabus itself names, so callers that already hold the key can
+ * pass it and everyone else gets the same answer without deriving it.
  */
 export function computeExamReadiness(
   syllabus: WikiExamSyllabus,
   records: ConceptMasteryRecord[],
-  examId: string,
   now: Date,
+  examId: string = wikiExamIdToProgressKey(syllabus.examId),
 ): ExamReadinessAssessment {
   const lookup = buildMasteryLookup(records)
   const { overallPct: syllabusPct, sections } = computeReadiness(syllabus, records, now)
@@ -205,12 +209,6 @@ export function computeExamReadiness(
   const keystoneCredit = keystone.entries.reduce((sum, e) => sum + stateCredit(e.state), 0)
   const keystonePct = hasKeystones ? (keystoneCredit / (keystone.total * 3)) * 100 : 0
 
-  // Retention is measured over studied concepts only: with nothing studied
-  // there is nothing to retain, and the criterion sits at 0 like the others.
-  const retentionPct = counts.studied > 0
-    ? ((counts.studied - counts.forgotten) / counts.studied) * 100
-    : 0
-
   const criteria: ReadinessCriterion[] = [
     {
       id: 'syllabus',
@@ -219,8 +217,9 @@ export function computeExamReadiness(
       weight: CRITERION_WEIGHTS.syllabus,
       detail: counts.total > 0
         ? `${counts.level3} of ${plural(counts.total, 'concept')} at Level 3, ${counts.new} untouched`
+          + (counts.forgotten > 0 ? `, ${counts.forgotten} decayed` : '')
         : 'No syllabus concepts parsed for this exam',
-      hint: 'Every concept carried a level higher lifts this, weighted by its section’s exam weighting.',
+      hint: 'Every concept carried a level higher lifts this, weighted by its section’s exam weighting. Concepts left unreviewed decay back down.',
     },
     ...(hasKeystones ? [{
       id: 'keystone' as const,
@@ -231,16 +230,6 @@ export function computeExamReadiness(
         + (keystone.forgotten > 0 ? `, ${keystone.forgotten} decayed` : ''),
       hint: 'The load-bearing concepts of this exam. They carry more weight here than their share of the syllabus.',
     }] : []),
-    {
-      id: 'retention',
-      label: 'Retention',
-      pct: retentionPct,
-      weight: CRITERION_WEIGHTS.retention,
-      detail: counts.studied > 0
-        ? `${counts.studied - counts.forgotten} of ${plural(counts.studied, 'studied concept')} still fresh`
-        : 'Nothing studied yet',
-      hint: 'Concepts decay back to Forgotten when they go unreviewed. Reviving them restores this.',
-    },
   ]
 
   // Renormalise so a missing criterion redistributes its weight rather than

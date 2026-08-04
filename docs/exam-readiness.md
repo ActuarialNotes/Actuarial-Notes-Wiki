@@ -8,36 +8,52 @@ why the number is what it is.
 - UI: `quiz/src/components/wiki/ExamReadinessCard.tsx`
 - Placement: `components/wiki/WikiArticle.tsx` + `ExamGuideCards.tsx`; wired in `pages/wiki/WikiExam.tsx`
 
-## The three criteria
+## One score, everywhere
+
+`computeExamReadiness(...).overallPct` is **the** readiness number. Every surface that prints
+a readiness percentage calls it, so they can never disagree:
+
+| Surface | Where |
+|---|---|
+| Exam Readiness Score card + popup | `components/wiki/ExamReadinessCard.tsx` |
+| Dashboard Study Guide radial (the `NN% readiness` in the ring) | `components/ReadinessCard.tsx` |
+| Exam grid cards ("Readiness NN%") | `pages/wiki/WikiHome.tsx` |
+| Readiness projection ("now → exam day") | `lib/masteryAnalytics.ts` → `components/HeatmapInfoPanel.tsx` |
+
+`computeReadiness` (the weighted section score) is an *input* to it, not a second opinion.
+Nothing user-facing should print that function's `overallPct` on its own — it is what the
+syllabus-coverage criterion is made of, and the ranked-sections helpers reuse its per-section
+output. Adding a new readiness readout means calling `computeExamReadiness`.
+
+## The two criteria
 
 Each criterion is a 0–100 dial in its own right. The headline score is their weighted mean.
 
 | Criterion | Weight | What it measures |
 |---|---|---|
-| **Syllabus coverage** | 50% | The weighted section score (`computeReadiness`): how far up the mastery ladder the syllabus as a whole has been carried, each section counted at its exam weighting (the `{23-30%}` tag on the learning-objective callout, taken at its midpoint). |
-| **Keystone concepts** | 35% | The same credit formula over the exam's authored keystones (`docs/keystone-concepts.md`). |
-| **Retention** | 15% | Of the concepts already studied, the share that has **not** decayed back to Forgotten. |
+| **Syllabus coverage** | 60% | The weighted section score (`computeReadiness`): how far up the mastery ladder the syllabus as a whole has been carried, each section counted at its exam weighting (the `{23-30%}` tag on the learning-objective callout, taken at its midpoint). |
+| **Keystone concepts** | 40% | The same credit formula over the exam's authored keystones (`docs/keystone-concepts.md`). |
 
 Concept credit is the same ladder used everywhere else: 0 for New/Forgotten, 1/3 at Level 1,
 2/3 at Level 2, 1 at Level 3. Every state is read through `resolveConceptState` /
 `keystoneProgress`, so decay is applied at read time — a Level 3 left alone for two months
 scores as what it has decayed to, not as what the row says.
 
-**Why keystones carry 35% when they are ~11 of ~70 concepts.** Broad-but-shallow coverage
+**Why keystones carry 40% when they are ~11 of ~70 concepts.** Broad-but-shallow coverage
 that skips the load-bearing concepts is not readiness. Weighting the keystones at their share
 of the syllabus would make them invisible in the score; weighting them here means a candidate
 cannot reach "nearly ready" with the foundations untouched. This is the deliberate
 disagreement between this score and a plain concept count.
 
-**Why retention is only 15%, and why it is measured over studied concepts only.** It is a
-hygiene measure — it says nothing about how much of the syllabus has been touched, so a
-learner three concepts in can sit at 100% retention. That is fine at 15% next to two criteria
-that do measure breadth and depth, and it keeps the criterion doing its actual job: flagging
-decay before the sitting. With nothing studied it reports 0 rather than a vacuous 100.
+**Why there is no retention criterion.** Decay is already in both numbers: a concept left
+unreviewed steps back down the ladder, so it stops paying into syllabus coverage and, if it
+is a keystone, into that criterion too. A separate retention dial measured over *studied*
+concepts only would double-count the same decay and read high for a learner three concepts
+in. The popup surfaces decay as a count ("… , 4 decayed") instead of a third number.
 
-**Exams with no keystone catalogue** drop that criterion, and its weight is redistributed
-across the other two (so a perfect score stays reachable). Adding a `KEYSTONE_EXAMS` block
-for the exam makes it appear — nothing else to wire.
+**Exams with no keystone catalogue** drop that criterion, so their readiness is exactly
+syllabus coverage. Adding a `KEYSTONE_EXAMS` block for the exam makes it appear — nothing
+else to wire.
 
 ## Bands
 
@@ -63,10 +79,11 @@ answered questions — mastery is a server-side record, so there is nothing to s
 ## Placement
 
 The card borrows the orientation cards' shell (`ExamGuideCards`) and is passed to them as
-`leadCard`, spanning the two-column row above them — a dial reads badly at half width, and
-this is the one card on an exam page that is about the reader rather than the exam. Exam
-pages that carry no `<div class="exam-guides"></div>` (everything but P and FM today) get the
-card from a marker `WikiArticle` inserts under the "Learning Objectives" heading instead.
+`leadCard`, spanning that (desktop-capped, `max-w-md`) two-column row above them — a dial
+reads badly at half width, and this is the one card on an exam page that is about the reader
+rather than the exam. Exam pages that carry no `<div class="exam-guides"></div>` (everything
+but P and FM today) get the card from a marker `WikiArticle` inserts under the "Learning
+Objectives" heading instead.
 
 ## Colour
 

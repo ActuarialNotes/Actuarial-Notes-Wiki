@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 292" width="560" height="292" role="img">
+  <title>The principal portion of each payment growing as the balance falls</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="290.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Principal: what is borrowed, and what each payment returns</text>
+  <rect x="77.12" y="83" width="19.51" height="57.47" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="77.12" y="140.47" width="19.51" height="67.53" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="108.59" y="83" width="19.51" height="52.06" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="108.59" y="135.06" width="19.51" height="72.94" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="140.05" y="83" width="19.51" height="46.23" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="140.05" y="129.23" width="19.51" height="78.77" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="171.51" y="83" width="19.51" height="39.93" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="171.51" y="122.93" width="19.51" height="85.07" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="202.98" y="83" width="19.51" height="33.12" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="202.98" y="116.12" width="19.51" height="91.88" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="234.44" y="83" width="19.51" height="25.77" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="234.44" y="108.77" width="19.51" height="99.23" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="265.9" y="83" width="19.51" height="17.83" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="265.9" y="100.83" width="19.51" height="107.17" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="297.37" y="83" width="19.51" height="9.26" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="297.37" y="92.26" width="19.51" height="115.74" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <line x1="68" y1="208" x2="336" y2="208" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="208" x2="68" y2="58" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="86.88" y1="208" x2="86.88" y2="212" class="tick"/>
+  <text x="86.88" y="224" text-anchor="middle" class="sm dim">1</text>
+  <line x1="118.34" y1="208" x2="118.34" y2="212" class="tick"/>
+  <text x="118.34" y="224" text-anchor="middle" class="sm dim">2</text>
+  <line x1="149.8" y1="208" x2="149.8" y2="212" class="tick"/>
+  <text x="149.8" y="224" text-anchor="middle" class="sm dim">3</text>
+  <line x1="181.27" y1="208" x2="181.27" y2="212" class="tick"/>
+  <text x="181.27" y="224" text-anchor="middle" class="sm dim">4</text>
+  <line x1="212.73" y1="208" x2="212.73" y2="212" class="tick"/>
+  <text x="212.73" y="224" text-anchor="middle" class="sm dim">5</text>
+  <line x1="244.2" y1="208" x2="244.2" y2="212" class="tick"/>
+  <text x="244.2" y="224" text-anchor="middle" class="sm dim">6</text>
+  <line x1="275.66" y1="208" x2="275.66" y2="212" class="tick"/>
+  <text x="275.66" y="224" text-anchor="middle" class="sm dim">7</text>
+  <line x1="307.12" y1="208" x2="307.12" y2="212" class="tick"/>
+  <text x="307.12" y="224" text-anchor="middle" class="sm dim">8</text>
+  <line x1="64" y1="208" x2="68" y2="208" class="tick"/>
+  <text x="60" y="211.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="64" y1="136.17" x2="68" y2="136.17" class="tick"/>
+  <text x="60" y="139.77" text-anchor="end" class="sm dim">1,000</text>
+  <text x="326" y="240" text-anchor="end" class="sm dim">payment number</text>
+  <text x="64" y="54" text-anchor="start" class="sm dim">payment</text>
+  <line x1="70" y1="254" x2="83" y2="254" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="89" y="257.6" text-anchor="start" class="sm">principal repaid</text>
+  <line x1="194" y1="254" x2="207" y2="254" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="213" y="257.6" text-anchor="start" class="sm">interest</text>
+  <text x="428" y="96" text-anchor="middle" class="sm bold">L = 10,000 borrowed</text>
+  <text x="428" y="116" text-anchor="middle" class="sm dim">Σ PR_k = L exactly</text>
+  <line x1="340" y1="140" x2="340" y2="172" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="152" text-anchor="start" class="sm bold">First interest</text>
+  <text x="350" y="168" text-anchor="start" class="sm dim">I₁ = L · i = 800</text>
+  <line x1="340" y1="186" x2="340" y2="218" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="198" text-anchor="start" class="sm bold">PR_k = P − I_k</text>
+  <text x="350" y="214" text-anchor="start" class="sm dim">grows by (1+i) each period</text>
+  <line x1="340" y1="232" x2="340" y2="264" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="350" y="244" text-anchor="start" class="sm bold">In bonds</text>
+  <text x="350" y="260" text-anchor="start" class="sm dim">principal means the redemption value</text>
+  <text x="280" y="280" text-anchor="middle" class="sm dim">Every payment is interest first, principal second</text>
+</svg>

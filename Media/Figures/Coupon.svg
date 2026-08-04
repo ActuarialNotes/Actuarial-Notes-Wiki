@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 286" width="560" height="286" role="img">
+  <title>The level coupon stream a bond pays until maturity</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="284.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">The coupon is the bond's income stream</text>
+  <line x1="96" y1="126" x2="442" y2="126" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="104" y1="122" x2="104" y2="130" class="tick"/>
+  <text x="104" y="143" text-anchor="middle" class="sm dim">0</text>
+  <line x1="144" y1="122" x2="144" y2="130" class="tick"/>
+  <text x="144" y="143" text-anchor="middle" class="sm dim">1</text>
+  <line x1="184" y1="122" x2="184" y2="130" class="tick"/>
+  <text x="184" y="143" text-anchor="middle" class="sm dim">2</text>
+  <line x1="224" y1="122" x2="224" y2="130" class="tick"/>
+  <text x="224" y="143" text-anchor="middle" class="sm dim">3</text>
+  <line x1="264" y1="122" x2="264" y2="130" class="tick"/>
+  <text x="264" y="143" text-anchor="middle" class="sm dim">4</text>
+  <line x1="304" y1="122" x2="304" y2="130" class="tick"/>
+  <text x="304" y="143" text-anchor="middle" class="sm dim">5</text>
+  <line x1="344" y1="122" x2="344" y2="130" class="tick"/>
+  <text x="344" y="143" text-anchor="middle" class="sm dim">6</text>
+  <line x1="384" y1="122" x2="384" y2="130" class="tick"/>
+  <text x="384" y="143" text-anchor="middle" class="sm dim">7</text>
+  <line x1="424" y1="122" x2="424" y2="130" class="tick"/>
+  <text x="424" y="143" text-anchor="middle" class="sm dim">8</text>
+  <line x1="144" y1="126" x2="144" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="144" y="86" text-anchor="middle" class="sm">Fr</text>
+  <line x1="184" y1="126" x2="184" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="224" y1="126" x2="224" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="264" y1="126" x2="264" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="304" y1="126" x2="304" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="344" y1="126" x2="344" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="384" y1="126" x2="384" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="424" y1="126" x2="424" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="424" y="86" text-anchor="middle" class="sm">Fr</text>
+  <text x="444" y="92" text-anchor="start" class="sm dim">n coupons</text>
+  <path d="M144,156 v5.4 H279 q5,0 5,4.95 q0,-4.95 5,-4.95 H424 v-5.4" class="thin" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="284" y="176" text-anchor="middle" class="sm dim">coupon annuity: Fr · a₍ₙ₎</text>
+  <line x1="28" y1="200" x2="532" y2="200" class="rule"/>
+  <text x="150" y="222" text-anchor="middle" class="sm bold">Coupon = F × r</text>
+  <text x="150" y="242" text-anchor="middle" class="sm dim">1,000 × 3% = 30 per half-year</text>
+  <text x="150" y="262" text-anchor="middle" class="sm dim">for a 6% bond paying semi-annually</text>
+  <text x="412" y="222" text-anchor="middle" class="sm bold">The other half of the return</text>
+  <text x="412" y="242" text-anchor="middle" class="sm dim">is the capital gain or loss at redemption</text>
+  <text x="412" y="262" text-anchor="middle" class="sm dim">coupons are level; the split of the yield is not</text>
+</svg>

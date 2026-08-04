@@ -6,6 +6,8 @@ The **joint probability function** (joint PMF) of discrete random variables $X$ 
 - [[Marginal Probability Function]]s are obtained by summing out one variable
 - [[Conditional Probability Function]]s are obtained by fixing one variable
 
+![[Media/Figures/Joint_Probability_Function.svg|540]]
+
 > [!example]- Number of Claims and Policies Lapsed {Example}
 > Let $X$ = number of claims (0 or 1) and $Y$ = policies lapsed (0 or 1). Joint PMF:
 >

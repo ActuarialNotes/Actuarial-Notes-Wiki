@@ -5,6 +5,8 @@ The **$n$-year spot rate** $s_n$ is the yield to maturity on a zero-coupon bond 
 - Spot rates are read from the [[Yield Curve]] or bootstrapped from observed bond prices
 - The relationship between spot rates and [[Forward Rate|forward rates]] is $(1+s_n)^n = (1+s_{n-1})^{n-1}(1+f_{n-1,n})$, where $f_{n-1,n}$ is the one-year forward rate from year $n-1$ to $n$
 
+![[Media/Figures/Spot_Rate.svg|540]]
+
 > [!example]- Pricing a Bond with Spot Rates {Example}
 > Spot rates are $s_1 = 4\%$, $s_2 = 5\%$, $s_3 = 6\%$. Find the price of a \$$1{,}000$ face value 3-year bond paying annual coupons of \$$60$.
 >

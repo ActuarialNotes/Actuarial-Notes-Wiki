@@ -5,6 +5,8 @@ The **loss random variable** $X$ represents the ground-up loss amount before any
 >
 > $$\text{where } d = \text{ordinary deductible}$$
 
+![[Media/Figures/Loss_Random_Variable.svg|540]]
+
 > [!example]- Expected Payment with Deductible {Example}
 > Ground-up losses $X \sim \text{Exp}(\theta = 1000)$. A policy has an ordinary deductible $d = 500$.
 >

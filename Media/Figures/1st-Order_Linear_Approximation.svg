@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" width="560" height="300" role="img">
+  <title>The duration estimate against the true price change</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="298.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">The duration estimate is a tangent — it drifts on large moves</text>
+  <polyline points="76,68 77.37,68 78.73,68 80.1,68 81.47,68 82.83,68 84.2,68.32 85.57,69.32 86.93,70.31 88.3,71.3 89.67,72.28 91.03,73.26 92.4,74.24 93.77,75.21 95.13,76.18 96.5,77.15 97.87,78.12 99.23,79.08 100.6,80.04 101.97,80.99 103.33,81.94 104.7,82.89 106.07,83.84 107.43,84.78 108.8,85.72 110.17,86.66 111.53,87.59 112.9,88.52 114.27,89.44 115.63,90.37 117,91.29 118.37,92.21 119.73,93.12 121.1,94.03 122.47,94.94 123.83,95.85 125.2,96.75 126.57,97.65 127.93,98.55 129.3,99.44 130.67,100.33 132.03,101.22 133.4,102.1 134.77,102.99 136.13,103.86 137.5,104.74 138.87,105.61 140.23,106.48 141.6,107.35 142.97,108.22 144.33,109.08 145.7,109.94 147.07,110.79 148.43,111.65 149.8,112.5 151.17,113.34 152.53,114.19 153.9,115.03 155.27,115.87 156.63,116.71 158,117.54 159.37,118.37 160.73,119.2 162.1,120.03 163.47,120.85 164.83,121.67 166.2,122.49 167.57,123.3 168.93,124.12 170.3,124.92 171.67,125.73 173.03,126.54 174.4,127.34 175.77,128.14 177.13,128.93 178.5,129.73 179.87,130.52 181.23,131.31 182.6,132.09 183.97,132.88 185.33,133.66 186.7,134.44 188.07,135.21 189.43,135.99 190.8,136.76 192.17,137.53 193.53,138.29 194.9,139.06 196.27,139.82 197.63,140.58 199,141.33 200.37,142.09 201.73,142.84 203.1,143.59 204.47,144.33 205.83,145.08 207.2,145.82 208.57,146.56 209.93,147.3 211.3,148.03 212.67,148.76 214.03,149.49 215.4,150.22 216.77,150.95 218.13,151.67 219.5,152.39 220.87,153.11 222.23,153.82 223.6,154.54 224.97,155.25 226.33,155.96 227.7,156.66 229.07,157.37 230.43,158.07 231.8,158.77 233.17,159.47 234.53,160.16 235.9,160.86 237.27,161.55 238.63,162.24 240,162.92 241.37,163.61 242.73,164.29 244.1,164.97 245.47,165.65 246.83,166.32 248.2,167 249.57,167.67 250.93,168.34 252.3,169.01 253.67,169.67 255.03,170.33 256.4,170.99 257.77,171.65 259.13,172.31 260.5,172.96 261.87,173.62 263.23,174.27 264.6,174.92 265.97,175.56 267.33,176.21 268.7,176.85 270.07,177.49 271.43,178.13 272.8,178.76 274.17,179.4 275.53,180.03 276.9,180.66 278.27,181.29 279.63,181.91 281,182.54 282.37,183.16 283.73,183.78 285.1,184.4 286.47,185.02 287.83,185.63 289.2,186.24 290.57,186.85 291.93,187.46 293.3,188.07 294.67,188.67 296.03,189.28 297.4,189.88 298.77,190.48 300.13,191.07 301.5,191.67 302.87,192.26 304.23,192.86 305.6,193.45 306.97,194.03 308.33,194.62 309.7,195.2 311.07,195.79 312.43,196.37 313.8,196.95 315.17,197.52 316.53,198.1 317.9,198.67 319.27,199.24 320.63,199.81 322,200" class="curve" stroke="#3b82f6" stroke-width="2"/>
+  <polyline points="76,73.38 322,209.28" class="curve" stroke="#d97706" stroke-width="1.6"/>
+  <circle cx="199" cy="141.33" r="3.2" fill="var(--dim)"/>
+  <line x1="117" y1="91.29" x2="117" y2="96.03" stroke="#e11d48" stroke-width="2.4"/>
+  <circle cx="117" cy="91.29" r="3" fill="#3b82f6"/>
+  <circle cx="117" cy="96.03" r="3" fill="#d97706"/>
+  <line x1="281" y1="182.54" x2="281" y2="186.63" stroke="#e11d48" stroke-width="2.4"/>
+  <circle cx="281" cy="182.54" r="3" fill="#3b82f6"/>
+  <circle cx="281" cy="186.63" r="3" fill="#d97706"/>
+  <text x="125.2" y="82.67" text-anchor="start" class="sm">understates the gain</text>
+  <text x="272.8" y="176.53" text-anchor="end" class="sm">overstates the loss</text>
+  <line x1="76" y1="200" x2="332" y2="200" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="76" y1="200" x2="76" y2="58" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="117" y1="200" x2="117" y2="204" class="tick"/>
+  <text x="117" y="216" text-anchor="middle" class="sm dim">3%</text>
+  <line x1="199" y1="200" x2="199" y2="204" class="tick"/>
+  <text x="199" y="216" text-anchor="middle" class="sm dim">5%</text>
+  <line x1="281" y1="200" x2="281" y2="204" class="tick"/>
+  <text x="281" y="216" text-anchor="middle" class="sm dim">7%</text>
+  <line x1="72" y1="170.67" x2="76" y2="170.67" class="tick"/>
+  <text x="68" y="174.27" text-anchor="end" class="sm dim">900</text>
+  <line x1="72" y1="112" x2="76" y2="112" class="tick"/>
+  <text x="68" y="115.6" text-anchor="end" class="sm dim">1,100</text>
+  <text x="322" y="232" text-anchor="end" class="sm dim">yield j</text>
+  <text x="72" y="54" text-anchor="start" class="sm dim">price</text>
+  <line x1="78" y1="252" x2="91" y2="252" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="97" y="255.6" text-anchor="start" class="sm">true price</text>
+  <line x1="218" y1="252" x2="231" y2="252" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="237" y="255.6" text-anchor="start" class="sm">duration estimate</text>
+  <text x="430" y="100" text-anchor="middle" class="sm bold">ΔP ≈ −D_Mod · P · Δj</text>
+  <rect x="342" y="122" width="186" height="66" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
+  <text x="435" y="144" text-anchor="middle" class="sm bold">Always an underestimate</text>
+  <text x="435" y="164" text-anchor="middle" class="sm dim">understates gains when j falls</text>
+  <text x="435" y="180" text-anchor="middle" class="sm dim">overstates losses when j rises</text>
+  <rect x="342" y="198" width="186" height="66" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+  <text x="435" y="220" text-anchor="middle" class="sm bold">Second-order fix</text>
+  <text x="435" y="240" text-anchor="middle" class="sm dim">+ ½ · Convexity · P · (Δj)²</text>
+  <text x="435" y="256" text-anchor="middle" class="sm dim">always a positive correction</text>
+</svg>

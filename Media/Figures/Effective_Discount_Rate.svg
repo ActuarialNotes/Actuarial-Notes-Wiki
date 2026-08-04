@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 262" width="560" height="262" role="img">
+  <title>The effective discount rate measured over one period</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="260.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">d is the interest deducted from the front of the loan</text>
+  <line x1="152" y1="122" x2="418" y2="122" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="160" y1="118" x2="160" y2="126" class="tick"/>
+  <text x="160" y="139" text-anchor="middle" class="sm dim">0</text>
+  <line x1="400" y1="118" x2="400" y2="126" class="tick"/>
+  <text x="400" y="139" text-anchor="middle" class="sm dim">1</text>
+  <line x1="160" y1="122" x2="160" y2="76" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+  <text x="160" y="70" text-anchor="middle" class="sm">1 − d</text>
+  <line x1="400" y1="122" x2="400" y2="60" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="400" y="54" text-anchor="middle" class="sm">1</text>
+  <line x1="170" y1="44" x2="390" y2="44" class="thin" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah3b82f6)"/>
+  <text x="280" y="36" text-anchor="middle" class="sm bold" fill="#3b82f6">grows by 1/(1 − d)</text>
+  <text x="160" y="156" text-anchor="middle" class="sm dim">d stays with the lender</text>
+  <line x1="28" y1="182" x2="532" y2="182" class="rule"/>
+  <text x="42" y="204" text-anchor="start" class="sm bold">d = i / (1 + i)</text>
+  <text x="42" y="222" text-anchor="start" class="sm dim">= iv = 1 − v</text>
+  <text x="214" y="204" text-anchor="start" class="sm bold">1 − d = v</text>
+  <text x="214" y="222" text-anchor="start" class="sm dim">= 1/(1 + i)</text>
+  <text x="386" y="204" text-anchor="start" class="sm bold">i = d / (1 − d)</text>
+  <text x="386" y="222" text-anchor="start" class="sm dim">invert to recover i</text>
+  <text x="280" y="250" text-anchor="middle" class="sm dim">Same money, same period — only the timing of the interest differs</text>
+</svg>

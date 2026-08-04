@@ -6,6 +6,8 @@
 
 - If $X$ and $Y$ are [[Independent Random Variables|independent]], $\text{Cov}(X, Y) = 0$ (but the converse is not necessarily true)
 
+![[Media/Figures/Covariance.svg|540]]
+
 > [!example]- Computing Covariance from Expectations {Example}
 > Given $E[X] = 2$, $E[Y] = 4$, and $E[XY] = 10$, what is $\text{Cov}(X, Y)$?
 >

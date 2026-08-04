@@ -13,6 +13,8 @@ An **annuity-due** is a series of $n$ level payments of 1 made at the **beginnin
 - Here $d = i/(1+i)$ is the effective annual [[Discount Rate]].
 - Annuities-due arise naturally when payments are made at the start of a period, such as lease payments, insurance premiums paid in advance, or tuition fees.
 
+![[Media/Figures/Annuity_Due.svg|540]]
+
 > [!example]- Present Value of a 4-Year Annuity-Due {Example}
 > A lease requires payments of \$$800$ at the **beginning** of each year for 4 years. The effective annual rate is $i = 5\%$. Find the present value.
 >

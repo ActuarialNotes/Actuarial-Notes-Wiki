@@ -10,6 +10,8 @@ The **real rate of interest** $i_r$ adjusts the nominal [[Interest Rate]] $i$ fo
 - If inflation exceeds the nominal rate, the real rate is negative.
 - The real rate is essential for comparing investment returns across different inflationary environments.
 
+![[Media/Figures/Real_Rate_of_Interest.svg|540]]
+
 > [!example]- Inflation-Adjusted Return {Example}
 > A bond pays a nominal yield of 8%. Inflation is running at 3%. Find the real rate of interest.
 >

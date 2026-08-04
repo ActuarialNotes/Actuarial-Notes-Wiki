@@ -6,6 +6,8 @@ A **drop payment** is a final loan payment that is **smaller** than the regular 
 
 - This contrasts with a [[Balloon Payment]], which is **larger** than the regular payment.
 
+![[Media/Figures/Drop_Payment.svg|540]]
+
 > [!example]- Identifying and Computing a Drop Payment {Example}
 > A loan is repaid with annual payments of $500$. After 6 full payments the outstanding balance is $450$. Find the total payment at the end of year 7 if a drop payment convention is used at $i = 5\%$.
 >

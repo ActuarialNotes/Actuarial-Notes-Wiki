@@ -5,6 +5,8 @@ The **Continuous Uniform Distribution** $X \sim \text{Unif}(a, b)$ assigns equal
 - $E[X] = (a+b)/2$, $\text{Var}(X) = (b-a)^2/12$, and $F(x) = (x-a)/(b-a)$ for $a < x < b$
 - Conditional distributions on sub-intervals are also uniform (memoryless within the support)
 
+![[Media/Figures/Uniform_Continuous_Distribution.svg|520]]
+
 > [!example]- Expected Payment with Uniform Losses and a Deductible {Example}
 > Ground-up losses $X \sim \text{Unif}(0, 1000)$. An ordinary deductible of $d = 300$ applies. Find $E[(X - 300)_+]$.
 >

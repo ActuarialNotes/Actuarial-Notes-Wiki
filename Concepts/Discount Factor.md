@@ -14,6 +14,8 @@ The **discount factor** $v$ is the [[Present Value]] of $1$ payable one period i
 
 - Under [[Force of Interest]] $\delta$, the discount factor is $v = e^{-\delta}$ per period.
 
+![[Media/Figures/Discount_Factor.svg|520]]
+
 > [!example]- Present Value Using Discount Factor {Example}
 > Find the present value of $10{,}000$ due in 5 years at an effective annual rate of 4%.
 >

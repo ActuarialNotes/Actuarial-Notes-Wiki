@@ -6,6 +6,8 @@ The **Cumulative Distribution Function (CDF)** of a random variable $X$ gives th
 - The CDF is non-decreasing and right-continuous
 - $\lim_{x \to -\infty} F(x) = 0$ and $\lim_{x \to \infty} F(x) = 1$
 
+![[Media/Figures/Cumulative_Distribution_Function_CDF.svg|540]]
+
 > [!example]- CDF and Probability for a Uniform Variable {Example}
 > If $X$ is uniform on $[0, 5]$, what is the CDF and what is $P(2 \leq X \leq 4)$?
 >

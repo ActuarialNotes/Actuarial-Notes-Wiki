@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+  <title>A perpetuity's payments and the finite present value they converge to</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">A perpetuity pays forever, but its present value is finite</text>
+  <line x1="82" y1="122" x2="438" y2="122" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="90" y1="118" x2="90" y2="126" class="tick"/>
+  <text x="90" y="139" text-anchor="middle" class="sm dim">0</text>
+  <line x1="145" y1="118" x2="145" y2="126" class="tick"/>
+  <text x="145" y="139" text-anchor="middle" class="sm dim">1</text>
+  <line x1="200" y1="118" x2="200" y2="126" class="tick"/>
+  <text x="200" y="139" text-anchor="middle" class="sm dim">2</text>
+  <line x1="255" y1="118" x2="255" y2="126" class="tick"/>
+  <text x="255" y="139" text-anchor="middle" class="sm dim">3</text>
+  <line x1="310" y1="118" x2="310" y2="126" class="tick"/>
+  <text x="310" y="139" text-anchor="middle" class="sm dim">4</text>
+  <line x1="365" y1="118" x2="365" y2="126" class="tick"/>
+  <text x="365" y="139" text-anchor="middle" class="sm dim">5</text>
+  <line x1="420" y1="118" x2="420" y2="126" class="tick"/>
+  <text x="420" y="139" text-anchor="middle" class="sm dim">…</text>
+  <line x1="145" y1="122" x2="145" y2="90" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="145" y="84" text-anchor="middle" class="sm">1</text>
+  <line x1="200" y1="122" x2="200" y2="90" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="200" y="84" text-anchor="middle" class="sm">1</text>
+  <line x1="255" y1="122" x2="255" y2="90" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="255" y="84" text-anchor="middle" class="sm">1</text>
+  <line x1="310" y1="122" x2="310" y2="90" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="310" y="84" text-anchor="middle" class="sm">1</text>
+  <line x1="365" y1="122" x2="365" y2="90" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="365" y="84" text-anchor="middle" class="sm">1</text>
+  <line x1="420" y1="122" x2="420" y2="90" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="444" y="126" text-anchor="start" class="sm dim">forever</text>
+  <polyline points="75,235.47 76.11,234.89 77.21,234.32 78.32,233.75 79.42,233.19 80.53,232.63 81.63,232.08 82.74,231.54 83.84,231 84.95,230.47 86.06,229.95 87.16,229.43 88.27,228.91 89.37,228.4 90.48,227.9 91.58,227.4 92.69,226.91 93.79,226.42 94.9,225.94 96.01,225.46 97.11,224.99 98.22,224.52 99.32,224.06 100.43,223.6 101.53,223.15 102.64,222.7 103.74,222.26 104.85,221.82 105.96,221.39 107.06,220.96 108.17,220.54 109.27,220.12 110.38,219.7 111.48,219.29 112.59,218.88 113.69,218.48 114.8,218.09 115.91,217.69 117.01,217.3 118.12,216.92 119.22,216.54 120.33,216.16 121.43,215.79 122.54,215.42 123.64,215.06 124.75,214.7 125.86,214.34 126.96,213.99 128.07,213.64 129.17,213.29 130.28,212.95 131.38,212.61 132.49,212.28 133.59,211.95 134.7,211.62 135.81,211.3 136.91,210.98 138.02,210.66 139.12,210.35 140.23,210.04 141.33,209.73 142.44,209.43 143.54,209.13 144.65,208.83 145.76,208.54 146.86,208.25 147.97,207.96 149.07,207.67 150.18,207.39 151.28,207.11 152.39,206.84 153.49,206.57 154.6,206.3 155.71,206.03 156.81,205.77 157.92,205.51 159.02,205.25 160.13,204.99 161.23,204.74 162.34,204.49 163.44,204.24 164.55,204 165.66,203.76 166.76,203.52 167.87,203.28 168.97,203.05 170.08,202.81 171.18,202.59 172.29,202.36 173.39,202.13 174.5,201.91 175.61,201.69 176.71,201.48 177.82,201.26 178.92,201.05 180.03,200.84 181.13,200.63 182.24,200.42 183.34,200.22 184.45,200.02 185.56,199.82 186.66,199.62 187.77,199.43 188.87,199.24 189.98,199.04 191.08,198.86 192.19,198.67 193.29,198.48 194.4,198.3 195.51,198.12 196.61,197.94 197.72,197.76 198.82,197.59 199.93,197.42 201.03,197.25 202.14,197.08 203.24,196.91 204.35,196.74 205.46,196.58 206.56,196.42 207.67,196.26 208.77,196.1 209.88,195.94 210.98,195.78 212.09,195.63 213.19,195.48 214.3,195.33 215.41,195.18 216.51,195.03 217.62,194.89 218.72,194.74 219.83,194.6 220.93,194.46 222.04,194.32 223.14,194.18 224.25,194.04 225.36,193.91 226.46,193.78 227.57,193.64 228.67,193.51 229.78,193.38 230.88,193.26 231.99,193.13 233.09,193 234.2,192.88 235.31,192.76 236.41,192.64 237.52,192.52 238.62,192.4 239.73,192.28 240.83,192.16 241.94,192.05 243.04,191.93 244.15,191.82 245.26,191.71 246.36,191.6 247.47,191.49 248.57,191.38 249.68,191.28 250.78,191.17 251.89,191.07 252.99,190.97 254.1,190.86 255.21,190.76 256.31,190.66 257.42,190.56 258.52,190.47 259.63,190.37 260.73,190.27 261.84,190.18 262.94,190.09 264.05,189.99 265.16,189.9 266.26,189.81 267.37,189.72 268.47,189.63 269.58,189.54 270.68,189.46 271.79,189.37 272.89,189.29 274,189.2" class="curve" stroke="#7c3aed" stroke-width="2"/>
+  <line x1="74" y1="181.45" x2="274" y2="181.45" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+  <text x="278" y="185.05" text-anchor="start" class="sm dim">1/i = 20</text>
+  <line x1="74" y1="236" x2="284" y2="236" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="236" x2="74" y2="166" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="236" x2="74" y2="240" class="tick"/>
+  <text x="74" y="252" text-anchor="middle" class="sm dim">0</text>
+  <line x1="174" y1="236" x2="174" y2="240" class="tick"/>
+  <text x="174" y="252" text-anchor="middle" class="sm dim">20</text>
+  <line x1="274" y1="236" x2="274" y2="240" class="tick"/>
+  <text x="274" y="252" text-anchor="middle" class="sm dim">40</text>
+  <line x1="70" y1="208.73" x2="74" y2="208.73" class="tick"/>
+  <text x="66" y="212.33" text-anchor="end" class="sm dim">10</text>
+  <line x1="70" y1="181.45" x2="74" y2="181.45" class="tick"/>
+  <text x="66" y="185.05" text-anchor="end" class="sm dim">20</text>
+  <text x="274" y="268" text-anchor="end" class="sm dim">number of payments n</text>
+  <text x="70" y="162" text-anchor="start" class="sm dim">a₍ₙ₎</text>
+  <text x="430" y="190" text-anchor="middle" class="sm bold">a₍∞₎ = 1/i</text>
+  <text x="430" y="210" text-anchor="middle" class="sm dim">ä₍∞₎ = 1/d = (1+i)/i</text>
+  <text x="430" y="234" text-anchor="middle" class="sm bold">ä₍∞₎ = 1 + a₍∞₎</text>
+  <text x="430" y="254" text-anchor="middle" class="sm dim">one payment now, then a perpetuity</text>
+  <text x="430" y="276" text-anchor="middle" class="sm dim">consols, ground rent, endowments</text>
+</svg>

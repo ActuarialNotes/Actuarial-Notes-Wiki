@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 318" width="560" height="318" role="img">
+  <title>Asset cash flows set against the liabilities they fund</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="316.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Assets are held to fund liabilities, not on their own merits</text>
+  <line x1="68" y1="132" x2="470" y2="132" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="76" y1="128" x2="76" y2="136" class="tick"/>
+  <text x="76" y="149" text-anchor="middle" class="sm dim">0</text>
+  <line x1="123" y1="128" x2="123" y2="136" class="tick"/>
+  <text x="123" y="149" text-anchor="middle" class="sm dim">1</text>
+  <line x1="170" y1="128" x2="170" y2="136" class="tick"/>
+  <text x="170" y="149" text-anchor="middle" class="sm dim">2</text>
+  <line x1="217" y1="128" x2="217" y2="136" class="tick"/>
+  <text x="217" y="149" text-anchor="middle" class="sm dim">3</text>
+  <line x1="264" y1="128" x2="264" y2="136" class="tick"/>
+  <text x="264" y="149" text-anchor="middle" class="sm dim">4</text>
+  <line x1="311" y1="128" x2="311" y2="136" class="tick"/>
+  <text x="311" y="149" text-anchor="middle" class="sm dim">5</text>
+  <line x1="358" y1="128" x2="358" y2="136" class="tick"/>
+  <text x="358" y="149" text-anchor="middle" class="sm dim">6</text>
+  <line x1="405" y1="128" x2="405" y2="136" class="tick"/>
+  <text x="405" y="149" text-anchor="middle" class="sm dim">7</text>
+  <line x1="452" y1="128" x2="452" y2="136" class="tick"/>
+  <text x="452" y="149" text-anchor="middle" class="sm dim">8</text>
+  <line x1="119" y1="132" x2="119" y2="106" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="166" y1="132" x2="166" y2="98" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="213" y1="132" x2="213" y2="102" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="260" y1="132" x2="260" y2="92" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="307" y1="132" x2="307" y2="102" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="354" y1="132" x2="354" y2="98" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="401" y1="132" x2="401" y2="106" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="448" y1="132" x2="448" y2="74" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="174" y1="132" x2="174" y2="162" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <line x1="268" y1="132" x2="268" y2="168" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <line x1="362" y1="132" x2="362" y2="162" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <line x1="456" y1="132" x2="456" y2="180" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <text x="468" y="98" text-anchor="start" class="sm bold" fill="#3b82f6">assets</text>
+  <text x="468" y="172" text-anchor="start" class="sm bold" fill="#e11d48">liabilities</text>
+  <line x1="28" y1="218" x2="532" y2="218" class="rule"/>
+  <line x1="40" y1="236" x2="40" y2="252" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="52" y="248" text-anchor="start" class="sm bold">Cash-flow matching</text>
+  <text x="206" y="248" text-anchor="start" class="sm dim">each asset funds one liability exactly</text>
+  <line x1="40" y1="262" x2="40" y2="278" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="52" y="274" text-anchor="start" class="sm bold">Duration matching</text>
+  <text x="206" y="274" text-anchor="start" class="sm dim">match value and duration, allow reinvestment</text>
+  <line x1="40" y1="288" x2="40" y2="304" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="52" y="300" text-anchor="start" class="sm bold">Immunization</text>
+  <text x="206" y="300" text-anchor="start" class="sm dim">add a convexity condition on top</text>
+  <text x="280" y="310" text-anchor="middle" class="sm dim">The risk being managed is that rates move assets and liabilities differently</text>
+</svg>

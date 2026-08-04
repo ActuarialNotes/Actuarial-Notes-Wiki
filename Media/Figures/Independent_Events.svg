@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 274" width="560" height="274" role="img">
+  <title>Independence as a product of areas on the unit square</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="272.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Independence multiplies: P(A ∩ B) = P(A) · P(B)</text>
+  <rect x="80" y="62" width="152" height="152" rx="4" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+  <rect x="80" y="62" width="91.2" height="152" rx="0" fill="#3b82f6" fill-opacity="0.14"/>
+  <rect x="80" y="62" width="152" height="76" rx="0" fill="#d97706" fill-opacity="0.14"/>
+  <rect x="80" y="62" width="91.2" height="76" rx="0" fill="#059669" fill-opacity="0.3"/>
+  <line x1="171.2" y1="62" x2="171.2" y2="214" class="thin" stroke="#3b82f6" stroke-width="1.4"/>
+  <line x1="80" y1="138" x2="232" y2="138" class="thin" stroke="#d97706" stroke-width="1.4"/>
+  <path d="M80,220 v4.2 H120.6 q5,0 5,3.85 q0,-3.85 5,-3.85 H171.2 v-4.2" class="thin" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="125.6" y="238" text-anchor="middle" class="sm dim">P(A) = 0.6</text>
+  <text x="72" y="104" text-anchor="end" class="sm" fill="#d97706">P(B)</text>
+  <text x="72" y="118" text-anchor="end" class="sm" fill="#d97706">= 0.5</text>
+  <text x="125.6" y="104" text-anchor="middle" class="sm bold" fill="#059669">0.30</text>
+  <text x="410" y="76" text-anchor="middle" class="sm bold">Knowing B tells you nothing about A</text>
+  <line x1="300" y1="96" x2="300" y2="128" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="312" y="108" text-anchor="start" class="sm bold">P(A | B) = P(A)</text>
+  <text x="312" y="124" text-anchor="start" class="sm dim">the conditional equals the unconditional</text>
+  <line x1="300" y1="146" x2="300" y2="178" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="312" y="158" text-anchor="start" class="sm bold">P(A ∩ B) = P(A)P(B)</text>
+  <text x="312" y="174" text-anchor="start" class="sm dim">0.6 × 0.5 = 0.30</text>
+  <line x1="300" y1="196" x2="300" y2="228" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="312" y="208" text-anchor="start" class="sm bold">Verify, never assume</text>
+  <text x="312" y="224" text-anchor="start" class="sm dim">a Venn overlap alone proves nothing</text>
+  <text x="280" y="262" text-anchor="middle" class="sm dim">Mutual independence needs the product rule on every subset</text>
+</svg>

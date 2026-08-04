@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 296" width="560" height="296" role="img">
+  <title>Asset cash flows surrounding each liability payment</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="294.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Full immunization: assets on both sides of every liability</text>
+  <line x1="88" y1="130" x2="438" y2="130" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="96" y1="126" x2="96" y2="134" class="tick"/>
+  <text x="96" y="147" text-anchor="middle" class="sm dim">0</text>
+  <line x1="136.5" y1="126" x2="136.5" y2="134" class="tick"/>
+  <line x1="177" y1="126" x2="177" y2="134" class="tick"/>
+  <line x1="217.5" y1="126" x2="217.5" y2="134" class="tick"/>
+  <line x1="258" y1="126" x2="258" y2="134" class="tick"/>
+  <line x1="298.5" y1="126" x2="298.5" y2="134" class="tick"/>
+  <line x1="339" y1="126" x2="339" y2="134" class="tick"/>
+  <line x1="379.5" y1="126" x2="379.5" y2="134" class="tick"/>
+  <line x1="420" y1="126" x2="420" y2="134" class="tick"/>
+  <line x1="177" y1="130" x2="177" y2="86" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="177" y="80" text-anchor="middle" class="sm">asset</text>
+  <line x1="379.5" y1="130" x2="379.5" y2="86" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="379.5" y="80" text-anchor="middle" class="sm">asset</text>
+  <line x1="298.5" y1="130" x2="298.5" y2="178" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <text x="298.5" y="194" text-anchor="middle" class="sm">liability</text>
+  <line x1="177" y1="78" x2="379.5" y2="78" class="thin dash" stroke="#059669" stroke-width="1.4"/>
+  <text x="278.25" y="70" text-anchor="middle" class="sm bold" fill="#059669">the liability is surrounded</text>
+  <line x1="28" y1="208" x2="532" y2="208" class="rule"/>
+  <text x="280" y="230" text-anchor="middle" class="sm bold">Conditions</text>
+  <line x1="40" y1="246" x2="40" y2="276" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="50" y="257" text-anchor="start" class="sm bold">PV(A) = PV(L)</text>
+  <text x="50" y="272" text-anchor="start" class="sm dim">at the current yield</text>
+  <line x1="212" y1="246" x2="212" y2="276" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="222" y="257" text-anchor="start" class="sm bold">D(A) = D(L)</text>
+  <text x="222" y="272" text-anchor="start" class="sm dim">durations agree</text>
+  <line x1="384" y1="246" x2="384" y2="276" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="394" y="257" text-anchor="start" class="sm bold">One asset each side</text>
+  <text x="394" y="272" text-anchor="start" class="sm dim">of every liability date</text>
+  <text x="280" y="292" text-anchor="middle" class="sm dim">Protects against any single shift — Redington only against small ones</text>
+</svg>

@@ -6,6 +6,8 @@ The **bond price** $P$ is the present value of all future cash flows from a bond
 - An equivalent form is the **premium/discount formula**: $P = C + (Fr - Cj) \cdot a_{\overline{n}|j}$, which makes the premium or discount explicit.
 - When $Fr > Cj$ the bond sells at a **premium** ($P > C$); when $Fr < Cj$ it sells at a **discount** ($P < C$); when $Fr = Cj$ it sells at **par** ($P = C$).
 
+![[Media/Figures/Bond_Price.svg|540]]
+
 > [!example]- Bond Price Calculation {Example}
 > A \$$1{,}000$ face value 10-year bond pays semi-annual coupons at a coupon rate of $8\%$ per year. The bond is priced to yield $6\%$ per year convertible semi-annually. Find the bond price.
 >

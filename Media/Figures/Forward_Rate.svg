@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+  <title>The forward rate implied by two spot rates</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+    <marker id="ah7c3aed" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#7c3aed"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">A forward rate is locked in today for a future period</text>
+  <line x1="88" y1="122" x2="418" y2="122" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="96" y1="118" x2="96" y2="126" class="tick"/>
+  <text x="96" y="139" text-anchor="middle" class="sm dim">0</text>
+  <line x1="172" y1="118" x2="172" y2="126" class="tick"/>
+  <text x="172" y="139" text-anchor="middle" class="sm dim">1</text>
+  <line x1="248" y1="118" x2="248" y2="126" class="tick"/>
+  <text x="248" y="139" text-anchor="middle" class="sm dim">2</text>
+  <line x1="324" y1="118" x2="324" y2="126" class="tick"/>
+  <text x="324" y="139" text-anchor="middle" class="sm dim">3</text>
+  <line x1="400" y1="118" x2="400" y2="126" class="tick"/>
+  <text x="400" y="139" text-anchor="middle" class="sm dim">4</text>
+  <line x1="102" y1="88" x2="242" y2="88" class="thin" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ah3b82f6)"/>
+  <text x="172" y="80" text-anchor="middle" class="sm" fill="#3b82f6">s₂ for 2 years</text>
+  <line x1="102" y1="56" x2="318" y2="56" class="thin" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#ah7c3aed)"/>
+  <text x="210" y="48" text-anchor="middle" class="sm" fill="#7c3aed">s₃ for 3 years</text>
+  <line x1="254" y1="156" x2="318" y2="156" class="thin" stroke="#d97706" stroke-width="1.7" marker-end="url(#ahd97706)"/>
+  <text x="286" y="174" text-anchor="middle" class="sm bold" fill="#d97706">f₂,₃</text>
+  <text x="424" y="160" text-anchor="start" class="sm dim">implied, not quoted</text>
+  <line x1="28" y1="188" x2="532" y2="188" class="rule"/>
+  <text x="280" y="210" text-anchor="middle" class="sm bold">(1 + s₃)³ = (1 + s₂)² · (1 + f₂,₃)</text>
+  <text x="150" y="236" text-anchor="middle" class="sm dim">f_{t,t+1} = (1+s_{t+1})^{t+1}/(1+s_t)^t − 1</text>
+  <text x="412" y="236" text-anchor="middle" class="sm dim">A rising spot curve implies forwards</text>
+  <text x="412" y="254" text-anchor="middle" class="sm dim">above the spot rates</text>
+  <text x="150" y="254" text-anchor="middle" class="sm dim">no arbitrage between the two routes</text>
+  <text x="280" y="278" text-anchor="middle" class="sm dim">Two ways to be invested for three years must cost the same today</text>
+</svg>

@@ -4,6 +4,8 @@ An **event** $E$ is any subset of the [[Sample Space]] $S$.
 - A **compound event** contains two or more outcomes.
 - The [[Axioms of Probability]] define $P(E) \in [0,1]$ for every event $E$, with $P(S) = 1$.
 
+![[Media/Figures/Event.svg|520]]
+
 > [!example]- Rolling a Die {Example}
 > A fair six-sided die is rolled. The sample space is $S = \{1,2,3,4,5,6\}$.
 >

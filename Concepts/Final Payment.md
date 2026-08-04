@@ -5,6 +5,8 @@ The **final payment** on a loan is the last payment made to retire the outstandi
   - **[[Balloon Payment]]**: the final payment is **larger** than the regular payment (typically occurs when regular payments are set below the interest, causing the balance to grow)
 - The final payment amount equals the [[Outstanding Balance]] at the previous payment date accumulated by one period, minus any regular payment.
 
+![[Media/Figures/Final_Payment.svg|540]]
+
 > [!example]- Computing the Drop Payment {Example}
 > A $1{,}000$ loan at $6\%$ annual interest is repaid with annual payments of $250$. The term is approximately 4.65 years. Find the drop payment at end of year 5.
 >

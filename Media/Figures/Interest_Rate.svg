@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 250" width="560" height="250" role="img">
+  <title>The interest rate as the two-way bridge between present and future value</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="248.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">The interest rate is the exchange rate between dates</text>
+  <rect x="66" y="88" width="148" height="74" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
+  <text x="140" y="118" text-anchor="middle" class="ttl">PV</text>
+  <text x="140" y="140" text-anchor="middle" class="sm dim">value today</text>
+  <rect x="346" y="88" width="148" height="74" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+  <text x="420" y="118" text-anchor="middle" class="ttl">FV</text>
+  <text x="420" y="140" text-anchor="middle" class="sm dim">value at time n</text>
+  <line x1="222" y1="108" x2="338" y2="108" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="280" y="98" text-anchor="middle" class="sm bold" fill="#059669">× (1 + i)ⁿ</text>
+  <line x1="338" y1="146" x2="222" y2="146" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+  <text x="280" y="166" text-anchor="middle" class="sm bold" fill="#d97706">× vⁿ = (1 + i)⁻ⁿ</text>
+  <line x1="28" y1="190" x2="532" y2="190" class="rule"/>
+  <text x="44" y="212" text-anchor="start" class="sm bold">Effective i</text>
+  <text x="44" y="230" text-anchor="start" class="sm dim">compounded once per period</text>
+  <text x="216" y="212" text-anchor="start" class="sm bold">Nominal i⁽ᵐ⁾</text>
+  <text x="216" y="230" text-anchor="start" class="sm dim">credited m times a year</text>
+  <text x="388" y="212" text-anchor="start" class="sm bold">Force δ</text>
+  <text x="388" y="230" text-anchor="start" class="sm dim">the continuous-time limit</text>
+</svg>

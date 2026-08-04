@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+  <title>Inflows and outflows balanced at a chosen comparison date</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Move every cash flow to one comparison date, then balance</text>
+  <line x1="68" y1="138" x2="482" y2="138" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="76" y1="134" x2="76" y2="142" class="tick"/>
+  <text x="76" y="155" text-anchor="middle" class="sm dim">0</text>
+  <line x1="140.67" y1="134" x2="140.67" y2="142" class="tick"/>
+  <text x="140.67" y="155" text-anchor="middle" class="sm dim">1</text>
+  <line x1="205.33" y1="134" x2="205.33" y2="142" class="tick"/>
+  <text x="205.33" y="155" text-anchor="middle" class="sm dim">2</text>
+  <line x1="270" y1="134" x2="270" y2="142" class="tick"/>
+  <text x="270" y="155" text-anchor="middle" class="sm dim">3</text>
+  <line x1="334.67" y1="134" x2="334.67" y2="142" class="tick"/>
+  <text x="334.67" y="155" text-anchor="middle" class="sm dim">4</text>
+  <line x1="399.33" y1="134" x2="399.33" y2="142" class="tick"/>
+  <text x="399.33" y="155" text-anchor="middle" class="sm dim">5</text>
+  <line x1="464" y1="134" x2="464" y2="142" class="tick"/>
+  <text x="464" y="155" text-anchor="middle" class="sm dim">6</text>
+  <line x1="76" y1="42" x2="76" y2="184" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
+  <text x="84" y="36" text-anchor="start" class="sm bold" fill="#7c3aed">comparison date</text>
+  <line x1="205.33" y1="138" x2="205.33" y2="94" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="205.33" y="88" text-anchor="middle" class="sm">in</text>
+  <line x1="197.33" y1="76" x2="84" y2="76" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
+  <line x1="334.67" y1="138" x2="334.67" y2="94" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="334.67" y="88" text-anchor="middle" class="sm">in</text>
+  <line x1="326.67" y1="76" x2="84" y2="76" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
+  <line x1="464" y1="138" x2="464" y2="94" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="464" y="88" text-anchor="middle" class="sm">in</text>
+  <line x1="456" y1="76" x2="84" y2="76" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
+  <line x1="140.67" y1="138" x2="140.67" y2="174" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <text x="140.67" y="190" text-anchor="middle" class="sm">out</text>
+  <line x1="132.67" y1="190" x2="84" y2="190" class="thin dash" stroke="#e11d48" stroke-width="1" marker-end="url(#ahe11d48)"/>
+  <line x1="270" y1="138" x2="270" y2="174" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <text x="270" y="190" text-anchor="middle" class="sm">out</text>
+  <line x1="262" y1="190" x2="84" y2="190" class="thin dash" stroke="#e11d48" stroke-width="1" marker-end="url(#ahe11d48)"/>
+  <line x1="28" y1="216" x2="532" y2="216" class="rule"/>
+  <text x="280" y="238" text-anchor="middle" class="sm bold">PV of inflows  =  PV of outflows,  at the comparison date</text>
+  <text x="280" y="260" text-anchor="middle" class="sm dim">Any date works — a different date gives a different equation but the same answer</text>
+  <text x="280" y="278" text-anchor="middle" class="sm dim">Pick the date that cancels the most terms</text>
+</svg>

@@ -12,6 +12,8 @@
 
 - Solving these equations under [[Variable Force of Interest]] requires evaluating integrals.
 
+![[Media/Figures/Time_Value_of_Money_Equations.svg|540]]
+
 > [!example]- Solve for Unknown Time {Example}
 > How long does it take $5{,}000$ to double at an effective annual rate of $7\%$?
 >

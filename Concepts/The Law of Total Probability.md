@@ -5,6 +5,8 @@
 
 > $$P(B) = \sum_{i=1}^{n} P(B \mid A_i)\,P(A_i)$$
 
+![[Media/Figures/The_Law_of_Total_Probability.svg|540]]
+
 > [!example]- Overall Claim Probability Across Risk Classes {Example}
 > A portfolio is 30% young drivers ($A_1$), 50% middle-aged ($A_2$), and 20% senior ($A_3$). Claim probabilities are $P(C \mid A_1)=0.20$, $P(C \mid A_2)=0.10$, $P(C \mid A_3)=0.15$. Find the overall probability of a claim.
 >

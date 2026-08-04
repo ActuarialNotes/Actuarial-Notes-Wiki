@@ -8,6 +8,8 @@ The **Inclusion-Exclusion Principle** is a counting rule for the probability (or
 - For [[Mutually Exclusive Events|disjoint]] events the intersection terms are $0$, so the rule reduces to $P(A \cup B) = P(A) + P(B)$.
 - It is the general form of the addition rule of [[Probability]] and relies on [[Set Operations]] for the union and intersection.
 
+![[Media/Figures/Inclusion-Exclusion_Principle.svg|540]]
+
 > [!example]- Probability of At Least One Event Occurring {Example}
 > Among a group of insurance claims, $P(A) = 0.5$, $P(B) = 0.4$, and $P(A \cap B) = 0.2$. What is the probability that at least one of $A$ or $B$ occurs?
 >

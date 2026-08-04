@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 240" width="560" height="240" role="img">
+  <title>Disjoint events versus overlapping events</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <clipPath id="meA"><circle cx="382.0" cy="118" r="46"/></clipPath>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="238.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Mutually exclusive means the events cannot both occur</text>
+  <rect x="38" y="58" width="236" height="118" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+  <text x="50" y="74" text-anchor="middle" class="sm dim">S</text>
+  <circle cx="110" cy="118" r="46" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.6"/>
+  <circle cx="202" cy="118" r="46" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.6"/>
+  <text x="84.7" y="68" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
+  <text x="227.3" y="68" text-anchor="middle" class="bold" fill="#d97706">B</text>
+  <text x="156" y="190" text-anchor="middle" class="sm">A ∩ B = ∅   →   P(A ∩ B) = 0</text>
+  <text x="156" y="208" text-anchor="middle" class="sm dim">P(A ∪ B) = P(A) + P(B)</text>
+  <rect x="286" y="58" width="236" height="118" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+  <text x="298" y="74" text-anchor="middle" class="sm dim">S</text>
+  <circle cx="382" cy="118" r="46" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.6"/>
+  <circle cx="426" cy="118" r="46" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="1.6"/>
+  <text x="356.7" y="68" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
+  <text x="451.3" y="68" text-anchor="middle" class="bold" fill="#d97706">B</text>
+  <g clip-path="url(#meA)"><circle cx="426.0" cy="118" r="46" fill="#e11d48" fill-opacity="0.4"/></g>
+  <text x="404" y="190" text-anchor="middle" class="sm">A ∩ B ≠ ∅   →   P(A ∩ B) &gt; 0</text>
+  <text x="404" y="208" text-anchor="middle" class="sm dim">subtract the overlap once</text>
+  <text x="280" y="118" text-anchor="middle" class="sm dim">vs</text>
+</svg>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 276" width="560" height="276" role="img">
+  <title>B decomposed across a partition of the sample space</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="274.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Split B across a partition, then weight the pieces</text>
+  <rect x="32" y="58" width="268" height="140" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+  <rect x="32" y="58" width="80.4" height="140" rx="0" fill="#3b82f6" fill-opacity="0.12"/>
+  <line x1="32" y1="58" x2="32" y2="198" stroke="var(--edge)" stroke-width="1"/>
+  <text x="72.2" y="76" text-anchor="middle" class="sm bold" fill="#3b82f6">A₁</text>
+  <rect x="112.4" y="58" width="67" height="140" rx="0" fill="#d97706" fill-opacity="0.12"/>
+  <line x1="112.4" y1="58" x2="112.4" y2="198" stroke="var(--edge)" stroke-width="1"/>
+  <text x="145.9" y="76" text-anchor="middle" class="sm bold" fill="#d97706">A₂</text>
+  <rect x="179.4" y="58" width="67" height="140" rx="0" fill="#059669" fill-opacity="0.12"/>
+  <line x1="179.4" y1="58" x2="179.4" y2="198" stroke="var(--edge)" stroke-width="1"/>
+  <text x="212.9" y="76" text-anchor="middle" class="sm bold" fill="#059669">A₃</text>
+  <rect x="246.4" y="58" width="53.6" height="140" rx="0" fill="#7c3aed" fill-opacity="0.12"/>
+  <line x1="246.4" y1="58" x2="246.4" y2="198" stroke="var(--edge)" stroke-width="1"/>
+  <text x="273.2" y="76" text-anchor="middle" class="sm bold" fill="#7c3aed">A₄</text>
+  <ellipse cx="155.28" cy="142" rx="96" ry="40" fill="#e11d48" fill-opacity="0.28" stroke="#e11d48" stroke-width="1.6"/>
+  <text x="155.28" y="146" text-anchor="middle" class="bold" fill="#e11d48">B</text>
+  <text x="166" y="214" text-anchor="middle" class="sm dim">S is partitioned; B is cut into B ∩ Aᵢ</text>
+  <text x="426" y="74" text-anchor="middle" class="sm bold">P(B) = Σ P(B | Aᵢ) P(Aᵢ)</text>
+  <text x="322" y="96" text-anchor="start" class="sm dim">P(Aᵢ)</text>
+  <text x="392" y="96" text-anchor="middle" class="sm dim">P(B | Aᵢ)</text>
+  <text x="528" y="96" text-anchor="end" class="sm dim">product</text>
+  <text x="322" y="116" text-anchor="start" class="sm" fill="#3b82f6">A₁   0.30</text>
+  <text x="392" y="116" text-anchor="middle" class="sm">0.10</text>
+  <text x="528" y="116" text-anchor="end" class="sm">0.030</text>
+  <text x="322" y="138" text-anchor="start" class="sm" fill="#d97706">A₂   0.25</text>
+  <text x="392" y="138" text-anchor="middle" class="sm">0.40</text>
+  <text x="528" y="138" text-anchor="end" class="sm">0.100</text>
+  <text x="322" y="160" text-anchor="start" class="sm" fill="#059669">A₃   0.25</text>
+  <text x="392" y="160" text-anchor="middle" class="sm">0.20</text>
+  <text x="528" y="160" text-anchor="end" class="sm">0.050</text>
+  <text x="322" y="182" text-anchor="start" class="sm" fill="#7c3aed">A₄   0.20</text>
+  <text x="392" y="182" text-anchor="middle" class="sm">0.05</text>
+  <text x="528" y="182" text-anchor="end" class="sm">0.010</text>
+  <line x1="322" y1="212" x2="528" y2="212" class="rule"/>
+  <text x="322" y="228" text-anchor="start" class="sm bold">P(B)</text>
+  <text x="528" y="228" text-anchor="end" class="sm bold" fill="#e11d48">0.190</text>
+  <text x="280" y="262" text-anchor="middle" class="sm dim">The Aᵢ must be mutually exclusive and exhaustive</text>
+</svg>

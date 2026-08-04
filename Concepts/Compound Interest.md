@@ -6,6 +6,8 @@ Under **compound interest**, interest earned in each period is added to the prin
 - Compound interest is the standard convention for actuarial and financial calculations.
 - For $n$ periods at rate $i$, the accumulation factor $(1+i)^n$ is called the **accumulation factor**, and $(1+i)^{-n} = v^n$ is the **discount factor** $v$.
 
+![[Media/Figures/Compound_Interest.svg|520]]
+
 > [!example]- Comparing Simple vs. Compound Interest {Example}
 > $1{,}000$ is invested for 3 years at 6% per year. Compare simple vs. compound accumulation.
 >

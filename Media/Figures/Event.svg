@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 246" width="560" height="246" role="img">
+  <title>An event as a subset of the sample space, simple versus compound</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="244.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">An event is any subset of the sample space</text>
+  <rect x="34" y="58" width="250" height="140" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+  <text x="47" y="74" text-anchor="middle" class="sm dim">S</text>
+  <ellipse cx="105" cy="122" rx="56" ry="46" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="70" y="76" text-anchor="middle" class="bold" fill="#3b82f6">E</text>
+  <ellipse cx="240" cy="92" rx="20" ry="18" fill="#7c3aed" fill-opacity="0.15" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="266" y="74" text-anchor="middle" class="bold" fill="#7c3aed">F</text>
+  <circle cx="78" cy="96" r="4" fill="var(--dim)"/>
+  <circle cx="132" cy="90" r="4" fill="var(--dim)"/>
+  <circle cx="188" cy="100" r="4" fill="var(--dim)"/>
+  <circle cx="240" cy="92" r="4" fill="var(--dim)"/>
+  <circle cx="86" cy="150" r="4" fill="var(--dim)"/>
+  <circle cx="140" cy="158" r="4" fill="var(--dim)"/>
+  <circle cx="196" cy="152" r="4" fill="var(--dim)"/>
+  <circle cx="244" cy="146" r="4" fill="var(--dim)"/>
+  <text x="159" y="216" text-anchor="middle" class="sm dim">outcomes ω ∈ S</text>
+  <line x1="312" y1="76" x2="312" y2="106" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="324" y="86" text-anchor="start" class="sm bold">Simple event</text>
+  <text x="324" y="102" text-anchor="start" class="sm dim">F = {ω₄} — exactly one outcome</text>
+  <line x1="312" y1="126" x2="312" y2="156" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="324" y="136" text-anchor="start" class="sm bold">Compound event</text>
+  <text x="324" y="152" text-anchor="start" class="sm dim">E = {ω₁, ω₅} — two or more</text>
+  <line x1="312" y1="176" x2="312" y2="206" stroke="var(--dim)" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="324" y="186" text-anchor="start" class="sm bold">Certain / impossible</text>
+  <text x="324" y="202" text-anchor="start" class="sm dim">P(S) = 1,  P(∅) = 0</text>
+  <text x="280" y="232" text-anchor="middle" class="sm dim">Probability is assigned to events — that is, to subsets of S</text>
+</svg>

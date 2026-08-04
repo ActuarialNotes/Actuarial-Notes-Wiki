@@ -8,6 +8,8 @@
 - where $j$ is the [[Yield Rate]] per period; a longer duration means higher interest rate sensitivity
 - Duration is the foundation for [[Immunization]] and [[Duration Matching]]
 
+![[Media/Figures/Duration.svg|540]]
+
 > [!example]- Duration and Price Change {Example}
 > A bond has modified duration of 6 years. Yields rise by 0.5%. Estimate the percentage change in price.
 >

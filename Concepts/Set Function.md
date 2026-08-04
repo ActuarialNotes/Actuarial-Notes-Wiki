@@ -2,6 +2,8 @@ A **set function** $f$ is a function that maps a collection of subsets $\mathcal
 
 > $$f:\mathcal{F} \to \mathbb{R}$$
 
+![[Media/Figures/Set_Function.svg|500]]
+
 > [!example]- Probability as a Set Function {Example}
 > A **probability function** assigns a real number between 0 and 1 to [[Concepts/Event|Events]] (sets of outcomes).
 >

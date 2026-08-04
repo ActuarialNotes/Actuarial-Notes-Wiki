@@ -7,6 +7,8 @@
 - The formulas above apply when the observations are i.i.d. with common CDF $F(x)$ and PDF $f(x)$
 - For the $\text{Uniform}(0,1)$ distribution: $E[X_{(k)}] = \dfrac{k}{n+1}$
 
+![[Media/Figures/Order_Statistics.svg|540]]
+
 > [!example]- Expected Maximum of Three Uniform Observations {Example}
 > Three independent observations are drawn from a $\text{Uniform}(0,1)$ distribution. What is the expected value of the maximum?
 >

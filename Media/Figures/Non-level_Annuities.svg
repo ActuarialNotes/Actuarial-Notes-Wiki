@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" width="560" height="300" role="img">
+  <title>Three non-level payment patterns on one timeline</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+    <marker id="ah7c3aed" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#7c3aed"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="298.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">When payments vary, discount each one — or decompose</text>
+  <line x1="144" y1="92" x2="404" y2="92" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="152" y1="88" x2="152" y2="96" class="tick"/>
+  <line x1="198.8" y1="88" x2="198.8" y2="96" class="tick"/>
+  <text x="198.8" y="106" text-anchor="middle" class="sm dim">1</text>
+  <line x1="245.6" y1="88" x2="245.6" y2="96" class="tick"/>
+  <text x="245.6" y="106" text-anchor="middle" class="sm dim">2</text>
+  <line x1="292.4" y1="88" x2="292.4" y2="96" class="tick"/>
+  <text x="292.4" y="106" text-anchor="middle" class="sm dim">3</text>
+  <line x1="339.2" y1="88" x2="339.2" y2="96" class="tick"/>
+  <text x="339.2" y="106" text-anchor="middle" class="sm dim">4</text>
+  <line x1="386" y1="88" x2="386" y2="96" class="tick"/>
+  <text x="386" y="106" text-anchor="middle" class="sm dim">5</text>
+  <text x="140" y="88" text-anchor="end" class="sm bold" fill="#d97706">Arithmetic</text>
+  <text x="140" y="104" text-anchor="end" class="sm dim">P, P+Q, P+2Q, …</text>
+  <line x1="198.8" y1="92" x2="198.8" y2="78" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+  <line x1="245.6" y1="92" x2="245.6" y2="72" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+  <line x1="292.4" y1="92" x2="292.4" y2="66" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+  <line x1="339.2" y1="92" x2="339.2" y2="60" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+  <line x1="386" y1="92" x2="386" y2="54" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+  <line x1="144" y1="158" x2="404" y2="158" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="152" y1="154" x2="152" y2="162" class="tick"/>
+  <line x1="198.8" y1="154" x2="198.8" y2="162" class="tick"/>
+  <text x="198.8" y="172" text-anchor="middle" class="sm dim">1</text>
+  <line x1="245.6" y1="154" x2="245.6" y2="162" class="tick"/>
+  <text x="245.6" y="172" text-anchor="middle" class="sm dim">2</text>
+  <line x1="292.4" y1="154" x2="292.4" y2="162" class="tick"/>
+  <text x="292.4" y="172" text-anchor="middle" class="sm dim">3</text>
+  <line x1="339.2" y1="154" x2="339.2" y2="162" class="tick"/>
+  <text x="339.2" y="172" text-anchor="middle" class="sm dim">4</text>
+  <line x1="386" y1="154" x2="386" y2="162" class="tick"/>
+  <text x="386" y="172" text-anchor="middle" class="sm dim">5</text>
+  <text x="140" y="154" text-anchor="end" class="sm bold" fill="#e11d48">Geometric</text>
+  <text x="140" y="170" text-anchor="end" class="sm dim">1, (1+g), (1+g)², …</text>
+  <line x1="198.8" y1="158" x2="198.8" y2="144.12" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <line x1="245.6" y1="158" x2="245.6" y2="141.18" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <line x1="292.4" y1="158" x2="292.4" y2="136.76" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <line x1="339.2" y1="158" x2="339.2" y2="130" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <line x1="386" y1="158" x2="386" y2="120" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <line x1="144" y1="224" x2="404" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="152" y1="220" x2="152" y2="228" class="tick"/>
+  <line x1="198.8" y1="220" x2="198.8" y2="228" class="tick"/>
+  <text x="198.8" y="238" text-anchor="middle" class="sm dim">1</text>
+  <line x1="245.6" y1="220" x2="245.6" y2="228" class="tick"/>
+  <text x="245.6" y="238" text-anchor="middle" class="sm dim">2</text>
+  <line x1="292.4" y1="220" x2="292.4" y2="228" class="tick"/>
+  <text x="292.4" y="238" text-anchor="middle" class="sm dim">3</text>
+  <line x1="339.2" y1="220" x2="339.2" y2="228" class="tick"/>
+  <text x="339.2" y="238" text-anchor="middle" class="sm dim">4</text>
+  <line x1="386" y1="220" x2="386" y2="228" class="tick"/>
+  <text x="386" y="238" text-anchor="middle" class="sm dim">5</text>
+  <text x="140" y="220" text-anchor="end" class="sm bold" fill="#7c3aed">Irregular</text>
+  <text x="140" y="236" text-anchor="end" class="sm dim">no pattern at all</text>
+  <line x1="198.8" y1="224" x2="198.8" y2="198" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
+  <line x1="245.6" y1="224" x2="245.6" y2="210" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
+  <line x1="292.4" y1="224" x2="292.4" y2="192" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
+  <line x1="339.2" y1="224" x2="339.2" y2="204" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
+  <line x1="386" y1="224" x2="386" y2="186" class="thin" stroke="#7c3aed" stroke-width="1.8" marker-end="url(#ah7c3aed)"/>
+  <line x1="28" y1="254" x2="532" y2="254" class="rule"/>
+  <text x="150" y="276" text-anchor="middle" class="sm bold">PV = Σ C_t v^t</text>
+  <text x="150" y="294" text-anchor="middle" class="sm dim">always available, never wrong</text>
+  <text x="412" y="276" text-anchor="middle" class="sm bold">Or decompose</text>
+  <text x="412" y="294" text-anchor="middle" class="sm dim">level part + pure increasing part</text>
+</svg>

@@ -8,6 +8,8 @@ A **loan** is a financial arrangement in which a lender provides [[Principal]] t
 
 Loan repayment methods on Exam FM are primarily the **prospective method** (PV of future payments) and **retrospective method** (accumulated value of past payments) for computing the [[Outstanding Balance]].
 
+![[Media/Figures/Loans.svg|540]]
+
 > [!example]- Monthly Mortgage Payment {Example}
 > A $200{,}000$ mortgage is repaid with level monthly payments over 30 years at a nominal rate of 6% convertible monthly.
 >

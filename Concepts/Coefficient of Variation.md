@@ -8,6 +8,8 @@ The **Coefficient of Variation** $CV$ is the ratio of the standard deviation to 
 - A larger $CV$ indicates greater dispersion relative to the mean
 - It is meaningful only when $E[X] > 0$
 
+![[Media/Figures/Coefficient_of_Variation.svg|520]]
+
 > [!example]- Comparing Variability of Two Loss Distributions {Example}
 > Distribution A has mean \$500 and standard deviation \$100. Distribution B has mean \$2{,}000 and standard deviation \$300. Which has greater relative variability?
 >

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 292" width="560" height="292" role="img">
+  <title>Insurer payment against loss under an ordinary and a franchise deductible</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="290.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">A deductible removes the first d of every loss</text>
+  <polyline points="54,216 328,64" class="curve dash" stroke="var(--dim)" stroke-width="1.1"/>
+  <text x="289.64" y="73.12" text-anchor="middle" class="sm dim">Y = X</text>
+  <polyline points="54,216 136.2,216" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <polyline points="136.2,216 328,109.6" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <polyline points="54,216 136.2,216" class="curve" stroke="#d97706" stroke-width="2.4"/>
+  <polyline points="136.2,170.4 328,64" class="curve" stroke="#d97706" stroke-width="2.4"/>
+  <circle cx="136.2" cy="170.4" r="3" fill="#d97706"/>
+  <circle cx="136.2" cy="216" r="3.2" fill="var(--surf)" stroke="#d97706" stroke-width="1.4"/>
+  <line x1="54" y1="216" x2="338" y2="216" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="54" y1="216" x2="54" y2="54" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="136.2" y1="216" x2="136.2" y2="220" class="tick"/>
+  <text x="136.2" y="232" text-anchor="middle" class="sm dim">d</text>
+  <text x="328" y="248" text-anchor="end" class="sm dim">loss X</text>
+  <text x="50" y="50" text-anchor="start" class="sm dim">payment Y</text>
+  <line x1="136.2" y1="216" x2="136.2" y2="170.4" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <text x="95.1" y="199.28" text-anchor="middle" class="sm dim">insurer pays 0</text>
+  <line x1="60" y1="76" x2="73" y2="76" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="79" y="79.6" text-anchor="start" class="sm">ordinary: Y = (X − d)₊</text>
+  <line x1="60" y1="92" x2="73" y2="92" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="79" y="95.6" text-anchor="start" class="sm">franchise: pays all of X once X &gt; d</text>
+  <text x="420" y="96" text-anchor="middle" class="sm bold">Ordinary deductible</text>
+  <text x="420" y="114" text-anchor="middle" class="sm dim">Y = max(X − d, 0)</text>
+  <rect x="316" y="132" width="208" height="66" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="420" y="152" text-anchor="middle" class="sm bold">A mass sits at Y = 0</text>
+  <text x="420" y="170" text-anchor="middle" class="sm dim">every loss below d pays nothing,</text>
+  <text x="420" y="186" text-anchor="middle" class="sm dim">so Y is a mixed random variable</text>
+  <text x="420" y="222" text-anchor="middle" class="sm">E[Y] = ∫_d^∞ (x − d) f(x) dx</text>
+  <text x="420" y="240" text-anchor="middle" class="sm dim">Exponential: E[Y] = θ e^(−d/θ)</text>
+  <text x="280" y="278" text-anchor="middle" class="sm dim">Deductibles cut small claims, curb moral hazard, and lower premium</text>
+</svg>

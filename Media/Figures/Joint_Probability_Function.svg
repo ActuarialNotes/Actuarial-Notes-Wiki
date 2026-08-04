@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+  <title>A joint probability mass function laid out as a table</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">The joint PMF: one probability for every (x, y) pair</text>
+  <text x="92" y="86" text-anchor="middle" class="sm dim">y = 0</text>
+  <text x="144" y="86" text-anchor="middle" class="sm dim">y = 1</text>
+  <text x="196" y="86" text-anchor="middle" class="sm dim">y = 2</text>
+  <text x="56" y="111" text-anchor="end" class="sm dim">x = 0</text>
+  <text x="56" y="141" text-anchor="end" class="sm dim">x = 1</text>
+  <text x="56" y="171" text-anchor="end" class="sm dim">x = 2</text>
+  <rect x="66" y="92" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="92" y="111" text-anchor="middle" class="sm">0.10</text>
+  <rect x="118" y="92" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="144" y="111" text-anchor="middle" class="sm">0.08</text>
+  <rect x="170" y="92" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="196" y="111" text-anchor="middle" class="sm">0.02</text>
+  <rect x="66" y="122" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="92" y="141" text-anchor="middle" class="sm">0.06</text>
+  <rect x="118" y="122" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="144" y="141" text-anchor="middle" class="sm">0.20</text>
+  <rect x="170" y="122" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="196" y="141" text-anchor="middle" class="sm">0.14</text>
+  <rect x="66" y="152" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="92" y="171" text-anchor="middle" class="sm">0.04</text>
+  <rect x="118" y="152" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="144" y="171" text-anchor="middle" class="sm">0.12</text>
+  <rect x="170" y="152" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="196" y="171" text-anchor="middle" class="sm">0.24</text>
+  <text x="144" y="234" text-anchor="middle" class="sm bold">p(x, y) = P(X = x, Y = y)</text>
+  <text x="400" y="96" text-anchor="middle" class="sm bold">Two requirements</text>
+  <line x1="304" y1="116" x2="304" y2="148" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="314" y="128" text-anchor="start" class="sm bold">p(x, y) ≥ 0</text>
+  <text x="314" y="144" text-anchor="start" class="sm dim">no negative entries</text>
+  <line x1="304" y1="162" x2="304" y2="194" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="314" y="174" text-anchor="start" class="sm bold">Σ Σ p(x, y) = 1</text>
+  <text x="314" y="190" text-anchor="start" class="sm dim">the whole table sums to 1</text>
+  <line x1="304" y1="208" x2="304" y2="240" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="314" y="220" text-anchor="start" class="sm bold">Unknown constant c</text>
+  <text x="314" y="236" text-anchor="start" class="sm dim">solve by forcing the sum to 1</text>
+  <text x="280" y="272" text-anchor="middle" class="sm dim">Marginals are row and column sums; conditionals are single rows</text>
+</svg>

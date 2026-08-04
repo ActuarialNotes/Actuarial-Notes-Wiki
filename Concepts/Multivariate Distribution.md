@@ -4,6 +4,8 @@ A **multivariate distribution** describes the joint probabilistic behavior of tw
 - **[[Covariance]] and [[Correlation Coefficient]]**: measures of linear dependence between pairs of variables
 - If all variables are [[Independent Random Variables]], the joint distribution factors as the product of the marginals
 
+![[Media/Figures/Multivariate_Distribution.svg|540]]
+
 > [!example]- Joint vs. Marginal Distribution {Example}
 > $X$ and $Y$ each take values $\{0, 1\}$ with joint PMF: $P(0,0)=0.1$, $P(0,1)=0.4$, $P(1,0)=0.3$, $P(1,1)=0.2$.
 >

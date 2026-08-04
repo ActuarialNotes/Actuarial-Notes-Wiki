@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 280" width="560" height="280" role="img">
+  <title>The term as the count of payments, solved from the present value</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="278.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">The term n is how many payments there are</text>
+  <line x1="92" y1="118" x2="448" y2="118" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="100" y1="114" x2="100" y2="122" class="tick"/>
+  <text x="100" y="135" text-anchor="middle" class="sm dim">0</text>
+  <line x1="155" y1="114" x2="155" y2="122" class="tick"/>
+  <text x="155" y="135" text-anchor="middle" class="sm dim">1</text>
+  <line x1="210" y1="114" x2="210" y2="122" class="tick"/>
+  <text x="210" y="135" text-anchor="middle" class="sm dim">2</text>
+  <line x1="265" y1="114" x2="265" y2="122" class="tick"/>
+  <text x="265" y="135" text-anchor="middle" class="sm dim">…</text>
+  <line x1="320" y1="114" x2="320" y2="122" class="tick"/>
+  <text x="320" y="135" text-anchor="middle" class="sm dim">n−1</text>
+  <line x1="375" y1="114" x2="375" y2="122" class="tick"/>
+  <text x="375" y="135" text-anchor="middle" class="sm dim">n</text>
+  <line x1="430" y1="114" x2="430" y2="122" class="tick"/>
+  <line x1="155" y1="118" x2="155" y2="88" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="155" y="82" text-anchor="middle" class="sm">P</text>
+  <line x1="210" y1="118" x2="210" y2="88" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="210" y="82" text-anchor="middle" class="sm">P</text>
+  <line x1="265" y1="118" x2="265" y2="88" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="265" y="82" text-anchor="middle" class="sm">P</text>
+  <line x1="320" y1="118" x2="320" y2="88" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="320" y="82" text-anchor="middle" class="sm">P</text>
+  <line x1="375" y1="118" x2="375" y2="88" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="375" y="82" text-anchor="middle" class="sm">P</text>
+  <path d="M155,152 v5.4 H260 q5,0 5,4.95 q0,-4.95 5,-4.95 H375 v-5.4" class="thin" stroke="#7c3aed" stroke-width="1.2"/>
+  <text x="265" y="172" text-anchor="middle" class="sm dim">term = n payments</text>
+  <polyline points="75.37,231.37 76.51,230.86 77.65,230.35 78.78,229.85 79.92,229.35 81.06,228.85 82.19,228.36 83.33,227.88 84.47,227.4 85.6,226.92 86.74,226.45 87.88,225.98 89.02,225.52 90.15,225.06 91.29,224.61 92.43,224.16 93.56,223.71 94.7,223.27 95.84,222.84 96.97,222.41 98.11,221.98 99.25,221.55 100.38,221.13 101.52,220.72 102.66,220.31 103.79,219.9 104.93,219.5 106.07,219.1 107.2,218.7 108.34,218.31 109.48,217.92 110.61,217.53 111.75,217.15 112.89,216.78 114.03,216.4 115.16,216.03 116.3,215.66 117.44,215.3 118.57,214.94 119.71,214.59 120.85,214.23 121.98,213.88 123.12,213.54 124.26,213.19 125.39,212.85 126.53,212.52 127.67,212.19 128.8,211.86 129.94,211.53 131.08,211.21 132.21,210.89 133.35,210.57 134.49,210.25 135.62,209.94 136.76,209.63 137.9,209.33 139.03,209.03 140.17,208.73 141.31,208.43 142.45,208.14 143.58,207.85 144.72,207.56 145.86,207.27 146.99,206.99 148.13,206.71 149.27,206.43 150.4,206.16 151.54,205.89 152.68,205.62 153.81,205.35 154.95,205.09 156.09,204.82 157.22,204.56 158.36,204.31 159.5,204.05 160.63,203.8 161.77,203.55 162.91,203.31 164.04,203.06 165.18,202.82 166.32,202.58 167.46,202.34 168.59,202.11 169.73,201.87 170.87,201.64 172,201.41 173.14,201.19 174.28,200.96 175.41,200.74 176.55,200.52 177.69,200.3 178.82,200.09 179.96,199.87 181.1,199.66 182.23,199.45 183.37,199.25 184.51,199.04 185.64,198.84 186.78,198.63 187.92,198.44 189.05,198.24 190.19,198.04 191.33,197.85 192.47,197.66 193.6,197.47 194.74,197.28 195.88,197.09 197.01,196.91 198.15,196.72 199.29,196.54 200.42,196.36 201.56,196.18 202.7,196.01 203.83,195.83 204.97,195.66 206.11,195.49 207.24,195.32 208.38,195.15 209.52,194.99 210.65,194.82 211.79,194.66 212.93,194.5 214.06,194.34 215.2,194.18 216.34,194.02 217.48,193.87 218.61,193.71 219.75,193.56 220.89,193.41 222.02,193.26 223.16,193.11 224.3,192.96 225.43,192.82 226.57,192.67 227.71,192.53 228.84,192.39 229.98,192.25 231.12,192.11 232.25,191.98 233.39,191.84 234.53,191.71 235.66,191.57 236.8,191.44 237.94,191.31 239.07,191.18 240.21,191.05 241.35,190.93 242.49,190.8 243.62,190.67 244.76,190.55 245.9,190.43 247.03,190.31 248.17,190.19 249.31,190.07 250.44,189.95 251.58,189.84 252.72,189.72 253.85,189.61 254.99,189.49 256.13,189.38 257.26,189.27 258.4,189.16 259.54,189.05 260.67,188.94 261.81,188.84 262.95,188.73 264.08,188.63 265.22,188.52 266.36,188.42 267.5,188.32 268.63,188.22 269.77,188.12 270.91,188.02 272.04,187.92 273.18,187.83 274.32,187.73 275.45,187.64 276.59,187.54 277.73,187.45 278.86,187.36 280,187.26" class="curve" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="156.4" cy="204.75" r="3.6" fill="#d97706"/>
+  <line x1="156.4" y1="232" x2="156.4" y2="204.75" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+  <line x1="74" y1="204.75" x2="156.4" y2="204.75" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+  <line x1="74" y1="232" x2="290" y2="232" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="232" x2="74" y2="170" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="232" x2="74" y2="236" class="tick"/>
+  <text x="74" y="248" text-anchor="middle" class="sm dim">0</text>
+  <line x1="156.4" y1="232" x2="156.4" y2="236" class="tick"/>
+  <text x="156.4" y="248" text-anchor="middle" class="sm dim">12</text>
+  <line x1="280" y1="232" x2="280" y2="236" class="tick"/>
+  <text x="280" y="248" text-anchor="middle" class="sm dim">30</text>
+  <line x1="70" y1="215.75" x2="74" y2="215.75" class="tick"/>
+  <text x="66" y="219.35" text-anchor="end" class="sm dim">5</text>
+  <line x1="70" y1="199.5" x2="74" y2="199.5" class="tick"/>
+  <text x="66" y="203.1" text-anchor="end" class="sm dim">10</text>
+  <line x1="70" y1="183.25" x2="74" y2="183.25" class="tick"/>
+  <text x="66" y="186.85" text-anchor="end" class="sm dim">15</text>
+  <text x="280" y="264" text-anchor="end" class="sm dim">term n</text>
+  <text x="70" y="166" text-anchor="start" class="sm dim">a₍ₙ₎</text>
+  <text x="424" y="196" text-anchor="middle" class="sm bold">n = −ln(1 − i·PV/P) / ln(1 + i)</text>
+  <text x="424" y="218" text-anchor="middle" class="sm dim">invert the annuity factor with logs</text>
+  <text x="424" y="244" text-anchor="middle" class="sm dim">A perpetuity is the n → ∞ case</text>
+  <text x="424" y="264" text-anchor="middle" class="sm dim">A non-integer n implies a final part payment</text>
+</svg>

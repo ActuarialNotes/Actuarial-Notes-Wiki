@@ -12,6 +12,8 @@
 - Both formulas give the same result; the prospective method is usually simpler because it only requires the number of remaining payments $(n-k)$, while the retrospective method accumulates the original loan forward and subtracts the accumulated payments.
 - Note that the formula $OB_k = L - P\,a_{\overline{k}|i}$ is **incorrect** in general; it would only apply if interest were zero.
 
+![[Media/Figures/Outstanding_Balance.svg|540]]
+
 > [!example]- Outstanding Balance After 3 Payments {Example}
 > A \$$20{,}000$ loan is repaid with level annual payments over 6 years at $i = 8\%$. Find the outstanding balance immediately after the 3rd payment using both methods.
 >

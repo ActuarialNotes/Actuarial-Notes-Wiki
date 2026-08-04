@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 306" width="560" height="306" role="img">
+  <title>Level payments against constant-principal repayment on the same loan</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="304.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">Same loan, two repayment shapes</text>
+  <rect x="59.86" y="139.09" width="14.33" height="32.91" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="59.86" y="111.09" width="14.33" height="28" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="81.57" y="136.46" width="14.33" height="35.54" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="81.57" y="111.09" width="14.33" height="25.37" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="103.28" y="133.62" width="14.33" height="38.38" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="103.28" y="111.09" width="14.33" height="22.52" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="124.98" y="130.55" width="14.33" height="41.45" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="124.98" y="111.09" width="14.33" height="19.45" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="146.69" y="127.23" width="14.33" height="44.77" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="146.69" y="111.09" width="14.33" height="16.14" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="168.4" y="123.65" width="14.33" height="48.35" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="168.4" y="111.09" width="14.33" height="12.56" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="190.1" y="119.78" width="14.33" height="52.22" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="190.1" y="111.09" width="14.33" height="8.69" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="211.81" y="115.61" width="14.33" height="56.39" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="211.81" y="111.09" width="14.33" height="4.51" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <line x1="54" y1="172" x2="242" y2="172" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="54" y1="172" x2="54" y2="78" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="67.02" y1="172" x2="67.02" y2="176" class="tick"/>
+  <text x="67.02" y="188" text-anchor="middle" class="sm dim">1</text>
+  <line x1="132.15" y1="172" x2="132.15" y2="176" class="tick"/>
+  <text x="132.15" y="188" text-anchor="middle" class="sm dim">4</text>
+  <line x1="218.98" y1="172" x2="218.98" y2="176" class="tick"/>
+  <text x="218.98" y="188" text-anchor="middle" class="sm dim">8</text>
+  <line x1="50" y1="172" x2="54" y2="172" class="tick"/>
+  <text x="46" y="175.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="50" y1="137" x2="54" y2="137" class="tick"/>
+  <text x="46" y="140.6" text-anchor="end" class="sm dim">1,000</text>
+  <line x1="50" y1="102" x2="54" y2="102" class="tick"/>
+  <text x="46" y="105.6" text-anchor="end" class="sm dim">2,000</text>
+  <text x="143" y="78" text-anchor="middle" class="sm bold" fill="#3b82f6">Level payment</text>
+  <text x="143" y="204" text-anchor="middle" class="sm dim">payment is level</text>
+  <text x="143" y="222" text-anchor="middle" class="sm bold">total interest 3,921</text>
+  <rect x="315.86" y="128.25" width="14.33" height="43.75" rx="2" fill="#059669" fill-opacity="0.7"/>
+  <rect x="315.86" y="100.25" width="14.33" height="28" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="337.57" y="128.25" width="14.33" height="43.75" rx="2" fill="#059669" fill-opacity="0.7"/>
+  <rect x="337.57" y="103.75" width="14.33" height="24.5" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="359.28" y="128.25" width="14.33" height="43.75" rx="2" fill="#059669" fill-opacity="0.7"/>
+  <rect x="359.28" y="107.25" width="14.33" height="21" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="380.98" y="128.25" width="14.33" height="43.75" rx="2" fill="#059669" fill-opacity="0.7"/>
+  <rect x="380.98" y="110.75" width="14.33" height="17.5" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="402.69" y="128.25" width="14.33" height="43.75" rx="2" fill="#059669" fill-opacity="0.7"/>
+  <rect x="402.69" y="114.25" width="14.33" height="14" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="424.4" y="128.25" width="14.33" height="43.75" rx="2" fill="#059669" fill-opacity="0.7"/>
+  <rect x="424.4" y="117.75" width="14.33" height="10.5" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="446.1" y="128.25" width="14.33" height="43.75" rx="2" fill="#059669" fill-opacity="0.7"/>
+  <rect x="446.1" y="121.25" width="14.33" height="7" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <rect x="467.81" y="128.25" width="14.33" height="43.75" rx="2" fill="#059669" fill-opacity="0.7"/>
+  <rect x="467.81" y="124.75" width="14.33" height="3.5" rx="2" fill="#d97706" fill-opacity="0.7"/>
+  <line x1="310" y1="172" x2="498" y2="172" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="310" y1="172" x2="310" y2="78" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="323.02" y1="172" x2="323.02" y2="176" class="tick"/>
+  <text x="323.02" y="188" text-anchor="middle" class="sm dim">1</text>
+  <line x1="388.15" y1="172" x2="388.15" y2="176" class="tick"/>
+  <text x="388.15" y="188" text-anchor="middle" class="sm dim">4</text>
+  <line x1="474.98" y1="172" x2="474.98" y2="176" class="tick"/>
+  <text x="474.98" y="188" text-anchor="middle" class="sm dim">8</text>
+  <line x1="306" y1="172" x2="310" y2="172" class="tick"/>
+  <text x="302" y="175.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="306" y1="137" x2="310" y2="137" class="tick"/>
+  <text x="302" y="140.6" text-anchor="end" class="sm dim">1,000</text>
+  <line x1="306" y1="102" x2="310" y2="102" class="tick"/>
+  <text x="302" y="105.6" text-anchor="end" class="sm dim">2,000</text>
+  <text x="399" y="78" text-anchor="middle" class="sm bold" fill="#059669">Constant principal</text>
+  <text x="399" y="204" text-anchor="middle" class="sm dim">payment falls each period</text>
+  <text x="399" y="222" text-anchor="middle" class="sm bold">total interest 3,600</text>
+  <line x1="158" y1="250" x2="171" y2="250" stroke="#d97706" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="177" y="253.6" text-anchor="start" class="sm">interest</text>
+  <line x1="282" y1="250" x2="295" y2="250" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="301" y="253.6" text-anchor="start" class="sm">principal (level)</text>
+  <line x1="406" y1="250" x2="419" y2="250" stroke="#059669" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="425" y="253.6" text-anchor="start" class="sm">principal (constant)</text>
+  <line x1="28" y1="268" x2="532" y2="268" class="rule"/>
+  <text x="150" y="288" text-anchor="middle" class="sm bold">P_level = L / a₍ₙ₎</text>
+  <text x="412" y="288" text-anchor="middle" class="sm bold">Constant-principal interest = i·L·(n+1)/2</text>
+</svg>

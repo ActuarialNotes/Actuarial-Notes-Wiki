@@ -11,6 +11,8 @@
 
 > $$= \text{Payment} - i \cdot B_{t-1}$$
 
+![[Media/Figures/Interest.svg|540]]
+
 > [!example]- Interest vs. Principal Split {Example}
 > A $10{,}000$ loan at $5\%$ annual interest is repaid with 3 equal annual payments. Find the interest and principal in the first payment.
 >

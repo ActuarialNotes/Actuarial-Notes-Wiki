@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 282" width="560" height="282" role="img">
+  <title>Discount deducted at the start of each of m sub-periods</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 13.5px; font-weight: 600; }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="558.8" height="280.8" rx="10"/>
+  <text x="280" y="22" text-anchor="middle" class="ttl">d⁽ᵐ⁾ deducts interest at the start of each sub-period</text>
+  <line x1="88" y1="126" x2="418" y2="126" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="96" y1="122" x2="96" y2="130" class="tick"/>
+  <text x="96" y="143" text-anchor="middle" class="sm dim">0</text>
+  <line x1="172" y1="122" x2="172" y2="130" class="tick"/>
+  <text x="172" y="143" text-anchor="middle" class="sm dim">¼</text>
+  <line x1="248" y1="122" x2="248" y2="130" class="tick"/>
+  <text x="248" y="143" text-anchor="middle" class="sm dim">½</text>
+  <line x1="324" y1="122" x2="324" y2="130" class="tick"/>
+  <text x="324" y="143" text-anchor="middle" class="sm dim">¾</text>
+  <line x1="400" y1="122" x2="400" y2="130" class="tick"/>
+  <text x="400" y="143" text-anchor="middle" class="sm dim">1</text>
+  <line x1="102" y1="92" x2="166" y2="92" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
+  <text x="134" y="84" text-anchor="middle" class="sm" fill="#d97706">÷ (1 − d⁽⁴⁾/4)</text>
+  <circle cx="96" cy="92" r="3.4" fill="#d97706"/>
+  <line x1="178" y1="92" x2="242" y2="92" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
+  <text x="210" y="84" text-anchor="middle" class="sm" fill="#d97706">÷ (1 − d⁽⁴⁾/4)</text>
+  <circle cx="172" cy="92" r="3.4" fill="#d97706"/>
+  <line x1="254" y1="92" x2="318" y2="92" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
+  <text x="286" y="84" text-anchor="middle" class="sm" fill="#d97706">÷ (1 − d⁽⁴⁾/4)</text>
+  <circle cx="248" cy="92" r="3.4" fill="#d97706"/>
+  <line x1="330" y1="92" x2="394" y2="92" class="thin" stroke="#d97706" stroke-width="1.3" marker-end="url(#ahd97706)"/>
+  <text x="362" y="84" text-anchor="middle" class="sm" fill="#d97706">÷ (1 − d⁽⁴⁾/4)</text>
+  <circle cx="324" cy="92" r="3.4" fill="#d97706"/>
+  <text x="96" y="160" text-anchor="middle" class="sm dim">deducted up front</text>
+  <text x="400" y="160" text-anchor="middle" class="sm dim">1</text>
+  <line x1="28" y1="178" x2="532" y2="178" class="rule"/>
+  <text x="150" y="200" text-anchor="middle" class="sm bold">(1 − d⁽ᵐ⁾/m)ᵐ = 1 − d = v</text>
+  <text x="150" y="220" text-anchor="middle" class="sm dim">d⁽ᵐ⁾ = m[1 − (1 + i)^(−1/m)]</text>
+  <text x="150" y="238" text-anchor="middle" class="sm dim">as m → ∞, d⁽ᵐ⁾ → δ</text>
+  <text x="412" y="200" text-anchor="middle" class="sm bold">Ordering for any m &gt; 1</text>
+  <text x="412" y="220" text-anchor="middle" class="sm dim">d &lt; d⁽ᵐ⁾ &lt; δ &lt; i⁽ᵐ⁾ &lt; i</text>
+  <text x="412" y="238" text-anchor="middle" class="sm dim">everything meets at δ as m → ∞</text>
+  <text x="280" y="268" text-anchor="middle" class="sm dim">The discount mirror of i⁽ᵐ⁾ — same year, interest taken earlier</text>
+</svg>

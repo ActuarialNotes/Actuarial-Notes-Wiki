@@ -6,6 +6,8 @@ In the context of annuities, an **arithmetic progression** refers to a sequence 
 
 - Any arithmetic annuity can be decomposed into a [[Level Annuity]] of $P$ per period plus a pure increasing annuity of $Q$ per period.
 
+![[Media/Figures/Arithmetic_Progression.svg|540]]
+
 > [!example]- Increasing Annuity {Example}
 > Payments of $100, 200, 300, \ldots, 500$ are made at end of years 1–5. Find the PV at $i=6\%$.
 >

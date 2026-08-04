@@ -6,6 +6,8 @@ Under **simple interest**, interest is earned only on the original principal —
 - It is commonly used for short-term instruments (e.g., Treasury bills, inter-period valuations).
 - The [[Accumulation Function]] under simple interest is $a(t) = 1 + it$.
 
+![[Media/Figures/Simple_Interest.svg|520]]
+
 > [!example]- Simple Interest Growth {Example}
 > $2{,}000$ is invested at 8% per year simple interest for 9 months. Find the accumulated amount.
 >

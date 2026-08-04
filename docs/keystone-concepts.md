@@ -77,7 +77,7 @@ Defined in `quiz/src/index.css` under "Keystone concepts", and summarised in
 |---|---|
 | `.keystone-ring` | Gold gradient edge, via the same padding + `mask-composite: exclude` ring trick as the foil border. `--keystone-ring-width` tunes thickness |
 | `.keystone-ring--hero` | Thicker edge + a permanently travelling shine, for a hero surface |
-| `.keystone-wash` | Warm gold wash behind a keystone surface |
+| `.keystone-wash` | Warm gold wash behind a keystone surface. Used on the small surfaces only — the badge chip and the collect card. The exam-page strip is edge-only (ring, no wash), so a full-width panel doesn't tint the page |
 | `.wiki-link--keystone` | A keystone mentioned in wiki prose: gold underline + a small gold lozenge |
 | `@keyframes keystone-shine` | The one sweep animation, used on hover/focus |
 

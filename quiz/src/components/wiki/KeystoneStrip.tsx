@@ -57,7 +57,7 @@ export function KeystoneStrip({ examId, examLabel, onSelect }: KeystoneStripProp
   const pct = progress.total ? Math.round((progress.mastered / progress.total) * 100) : 0
 
   return (
-    <section className="keystone-ring keystone-wash rounded-lg p-4 not-prose" aria-label={`Keystone concepts for ${examLabel}`}>
+    <section className="keystone-ring rounded-lg p-4 not-prose" aria-label={`Keystone concepts for ${examLabel}`}>
       <button
         type="button"
         onClick={toggle}

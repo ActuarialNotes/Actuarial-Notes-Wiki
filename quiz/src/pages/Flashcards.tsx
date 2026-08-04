@@ -658,12 +658,13 @@ function TodayStudyPlanPack({ onCardsAdded }: { onCardsAdded?: () => void }) {
 }
 
 // The pack shelf — every available pack, rendered inside the add-flashcards
-// sheet (it used to be its own gallery tab). Each exam is its own section: a
-// full-width "all concepts" pack followed by a two-column grid of its
-// learning-objective packs. Any user-saved packs bookend the sections. Only one
-// pack's action panel is open at a time (accordion). Today's study plan no
-// longer lives here — it's pinned at the top of My Deck instead (see
-// TodayStudyPlanPack).
+// sheet (it used to be its own gallery tab). The exams are pill filters at the
+// top (same strip as the Dashboard's exam header) rather than stacked headings:
+// picking one shows its full-width "all concepts" pack followed by a two-column
+// grid of its learning-objective packs. Any user-saved packs sit below the
+// selected exam's section. Only one pack's action panel is open at a time
+// (accordion). Today's study plan no longer lives here — it's pinned at the top
+// of My Deck instead (see TodayStudyPlanPack).
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
@@ -723,44 +724,69 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     }))
   }, [inProgressSyllabi, syllabi, examProgress])
 
+  // Which exam's packs are on screen. Kept as an id (not an index) so it
+  // survives the groups being rebuilt, and clamped back to the first group
+  // whenever the selected exam disappears (e.g. it was marked completed).
+  const [selectedExamId, setSelectedExamId] = useState<string | null>(null)
+  const activeGroup = examGroups.find(g => g.examId === selectedExamId) ?? examGroups[0] ?? null
+
   const isLoading = masteryLoading || syllabiLoading
   const hasContent = examGroups.length > 0 || savedPacks.length > 0
 
   return (
-    <div className="space-y-6">
-      {/* One section per exam — the whole-exam pack, then its learning
-          objectives in a two-column grid. The heading carries the grouping so
-          the cards themselves don't need a per-exam colour. */}
-      {examGroups.map(group => (
-        <div key={group.examId} className="space-y-2">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
-            {group.examLabel}
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
-            <PackCard
-              label="All concepts"
-              concepts={group.allConcepts}
-              className="col-span-2"
-              expanded={expandedKey === `${group.examId}-all`}
-              onToggleExpand={() => toggleExpanded(`${group.examId}-all`)}
-              masteryOf={masteryOf}
-              onCardsAdded={onCardsAdded}
-            />
-            {group.learningObjectives.map(lo => (
-              <PackCard
-                key={lo.name}
-                label={lo.name}
-                concepts={lo.concepts}
-                isSub
-                expanded={expandedKey === `${group.examId}-${lo.name}`}
-                onToggleExpand={() => toggleExpanded(`${group.examId}-${lo.name}`)}
-                masteryOf={masteryOf}
-                onCardsAdded={onCardsAdded}
-              />
+    <div className="space-y-4">
+      {/* Exam filter — the Dashboard's exam header, same pill strip and same
+          active/inactive treatment, so switching exams feels identical in both
+          places. Sticky to the top of the sheet's scroll area; the negative
+          margins let the background span the container's padding. */}
+      {examGroups.length > 0 && (
+        <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 -mt-4 px-4 sm:px-6 pt-4 pb-1.5 bg-background/95 backdrop-blur-sm">
+          <div className="exam-tab-strip flex min-w-0 gap-1.5 overflow-x-auto">
+            {examGroups.map(group => (
+              <button
+                key={group.examId}
+                type="button"
+                onClick={() => setSelectedExamId(group.examId)}
+                className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors ${
+                  group.examId === activeGroup?.examId
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-transparent text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {group.examLabel}
+              </button>
             ))}
           </div>
         </div>
-      ))}
+      )}
+
+      {/* The selected exam — its whole-exam pack, then its learning objectives
+          in a two-column grid. */}
+      {activeGroup && (
+        <div className="grid grid-cols-2 gap-3">
+          <PackCard
+            label="All concepts"
+            concepts={activeGroup.allConcepts}
+            className="col-span-2"
+            expanded={expandedKey === `${activeGroup.examId}-all`}
+            onToggleExpand={() => toggleExpanded(`${activeGroup.examId}-all`)}
+            masteryOf={masteryOf}
+            onCardsAdded={onCardsAdded}
+          />
+          {activeGroup.learningObjectives.map(lo => (
+            <PackCard
+              key={lo.name}
+              label={lo.name}
+              concepts={lo.concepts}
+              isSub
+              expanded={expandedKey === `${activeGroup.examId}-${lo.name}`}
+              onToggleExpand={() => toggleExpanded(`${activeGroup.examId}-${lo.name}`)}
+              masteryOf={masteryOf}
+              onCardsAdded={onCardsAdded}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Saved packs */}
       {savedPacks.length > 0 && (

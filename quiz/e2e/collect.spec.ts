@@ -70,3 +70,57 @@ test.describe('flashcard collection', () => {
     await expect(page.getByText('Collected!')).toBeVisible()
   })
 })
+
+// The card can be flipped to read its definition before answering. Flipping is
+// switched off the moment the collect ceremony starts, which unmounts the back
+// pane — so a card left flipped has to fall back to its front, or it spins and
+// dissolves completely blank.
+//
+// The spin/flash phases only exist when motion is allowed: under the suite's
+// default `reducedMotion: 'reduce'` a correct answer jumps straight to the
+// "Collected!" screen (a freshly mounted card), which never reproduced this.
+test.describe('flashcard collection (animated)', () => {
+  test.use({ reducedMotion: 'no-preference' })
+
+  test('shows the concept name during collection even if the card was flipped', async ({ page }) => {
+    await page.goto('/wiki')
+    await expect(page.getByRole('heading', { name: 'Study Guides' })).toBeVisible()
+
+    await page.goto('/quiz?ids=p-004')
+
+    const collectButton = page.getByRole('button', { name: 'Collect' }).first()
+    await expect(collectButton).toBeVisible()
+    await collectButton.click()
+
+    const dialog = page.getByRole('dialog', { name: /^Collect / })
+    await expect(dialog).toBeVisible()
+
+    const label = (await dialog.getAttribute('aria-label')) ?? ''
+    const conceptName = label.replace(/^Collect /, '').trim()
+    const check = COMPREHENSION_CHECKS[conceptName]
+    const answer = check ? check.options[check.correctIndex] : conceptName
+
+    // Flip to the definition side. The panes cross-fade in place, so "hidden"
+    // here means opacity 0 — Playwright still counts a transparent element as
+    // visible, hence the CSS assertions.
+    const front = dialog.locator('[data-card-face="front"]')
+    const back = dialog.locator('[data-card-face="back"]')
+    await expect(front).toHaveCSS('opacity', '1')
+    await dialog.getByRole('button', { name: /flashcard, tap to flip$/ }).click()
+    await expect(back).toHaveCSS('opacity', '1')
+    await expect(front).toHaveCSS('opacity', '0')
+
+    await dialog.getByRole('button', { name: answer, exact: true }).click()
+
+    // Mid-ceremony the card must be showing its name again, not an empty face.
+    // The ceremony runs ~1.7s before the "Collected!" screen mounts a fresh
+    // (front-facing) card, so these are bounded well inside it — on the default
+    // 5s expect timeout a blank card would simply be retried until the ceremony
+    // ended and pass. 700ms leaves room for the 260ms pane cross-fade.
+    await expect(dialog.getByText('Collecting…')).toBeVisible()
+    await expect(front).toHaveCSS('opacity', '1', { timeout: 700 })
+    await expect(front).toContainText(conceptName, { timeout: 700 })
+
+    await expect(page.getByText('Collected!')).toBeVisible()
+  })
+})

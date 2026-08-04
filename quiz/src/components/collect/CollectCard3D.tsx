@@ -35,8 +35,16 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
   const keystone = isKeystone(name)
   const [side, setSide] = useState<'front' | 'back'>('front')
 
-  // A new concept always opens showing its front.
-  useEffect(() => { setSide('front') }, [name])
+  // A new concept always opens showing its front, and so does a card that stops
+  // being flippable — the collect ceremony switches flipping off, which unmounts
+  // the back pane, so a card left flipped would spin and dissolve completely
+  // blank. The derived side below is what covers the frame the ceremony starts
+  // on (this effect only runs after it); the reset keeps the state honest if
+  // flipping is switched back on.
+  useEffect(() => { setSide('front') }, [name, flippable])
+
+  // Never rest on a back that isn't rendered.
+  const shownSide = flippable ? side : 'front'
 
   const dims = size === 'lg' ? 'w-52 h-72 sm:w-60 sm:h-80' : 'w-36 h-48'
   // While the collection celebration is running, the accelerating snake ring
@@ -63,7 +71,8 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
       <div className="absolute inset-0 rounded-xl overflow-hidden">
         {/* Front — concept name, styled like the gallery tile */}
         <div
-          className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center gap-3 px-4 text-center ${keystone ? 'keystone-wash' : ''} ${side === 'back' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          data-card-face="front"
+          className={`collect-card-pane absolute inset-0 flex flex-col items-center justify-center gap-3 px-4 text-center ${keystone ? 'keystone-wash' : ''} ${shownSide === 'back' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         >
           {/* Keystone cards are worth more than the card you're collecting —
               say so on the card itself. Gold chip, not a gold border: the edge
@@ -83,7 +92,8 @@ export function CollectCard3D({ name, phase = 'idle', size = 'lg', className = '
         {/* Back — the concept's definition, revealed by tapping */}
         {flippable && (
           <div
-            className={`collect-card-pane collect-card-back-scroll absolute inset-0 overflow-y-auto px-4 py-5 pointer-events-auto ${side === 'front' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+            data-card-face="back"
+            className={`collect-card-pane collect-card-back-scroll absolute inset-0 overflow-y-auto px-4 py-5 pointer-events-auto ${shownSide === 'front' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
           >
             <div className="flex min-h-full flex-col items-center justify-center text-center">
               {back}

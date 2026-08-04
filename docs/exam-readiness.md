@@ -65,8 +65,10 @@ the reader what to do next.
 ## What the popup shows
 
 1. The overall dial, the band and its blurb.
-2. **How it's scored** — one row per criterion: its percentage, its weight, what the number
-   counts (`detail`), and what would raise it (`hint`). The keystone row carries the exam's
+2. **How it's scored** — one row per criterion: its percentage, its weight, and a one-line
+   tally of what the number counts (`detail`, e.g. `7/87 at Level 3 · 49 new`). No prose
+   explaining the scoring: the criterion names and the tally carry it, and this document is
+   where the reasoning lives. The keystone row carries the exam's
    keystone list as chips with mastery dots; tapping one opens that concept in the concept
    popup, on the exam's full concept list so Previous/Next still walks the whole syllabus.
    **This is the only surface that names all of an exam's keystones.**

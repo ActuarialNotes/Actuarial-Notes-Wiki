@@ -28,6 +28,12 @@ Wired in at two places:
 - `components/wiki/ImageGalleryModal.tsx` — the full-screen gallery (opened from the concept
   popup) renders the simulator instead of the picture, and hides the zoom slider and the
   tap-to-close pointer handlers so the controls stay usable.
+- `components/wiki/ConceptImageBanner.tsx` — the figure at the top of the concept popup. A
+  distribution illustration is never drawn there as a picture: the banner shows a **card**
+  (a sparkline of the default-parameter shape, plus the parameter symbols) that opens the
+  gallery, i.e. the full-screen simulator. The sparkline is drawn straight from
+  `buildContinuousCurve` / `buildMassPoints` rather than `DistributionPlot` — it is a hint at
+  the shape inside a button, so it carries no axes and no pointer handling.
 
 Flashcard card faces still show the static image: those cards are drag-and-flip surfaces, and
 sliders inside them would fight dnd-kit for the pointer.

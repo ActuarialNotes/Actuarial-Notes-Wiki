@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Images, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
+import { BookOpen, ChevronDown, ChevronLeft, ChevronRight, GripHorizontal, Headphones, Loader2, Lock, Maximize2, Minimize2, Play, Sigma, TrendingUp, X } from 'lucide-react'
 import { fetchWikiFile, fetchAllQuestions } from '@/lib/github'
 import { entryRefToRepoPath, wikiRoute, type WikiEntryRef } from '@/lib/wikiRoutes'
 import { parseAllQuestions, filterQuestions } from '@/lib/parser'
@@ -16,6 +16,7 @@ import { ResourceMetaCard } from '@/components/wiki/ResourceMetaCard'
 import { isNumberedOutline, OUTLINE_ARTICLE_CLASS, parseResourceMeta, preprocessResourceMarkdown } from '@/lib/resourceMeta'
 import { ListenView } from '@/components/wiki/ListenView'
 import { ImageGalleryModal } from '@/components/wiki/ImageGalleryModal'
+import { ConceptImageBanner } from '@/components/wiki/ConceptImageBanner'
 import { ConceptQuestionsModal } from '@/components/wiki/ConceptQuestionsModal'
 import { LearningProgressModal } from '@/components/wiki/LearningProgressModal'
 import { AddToProjectMenuItem } from '@/components/wiki/AddToProjectMenuItem'
@@ -517,18 +518,6 @@ export function ConceptPopup() {
               <Headphones className="h-4 w-4" />
             </button>
           )}
-          {!focusMode && images.length > 0 && (
-            <button
-              type="button"
-              onClick={() => { setGalleryIndex(0); setShowGallery(true) }}
-              className="inline-flex items-center justify-center h-8 w-8 rounded-md shrink-0"
-              style={{ background: 'linear-gradient(to right, #3b82f6, #a855f7, #ef4444)' }}
-              title={`View ${images.length} image${images.length !== 1 ? 's' : ''}`}
-              aria-label="Open image gallery"
-            >
-              <Images className="h-4 w-4 text-white" />
-            </button>
-          )}
         </div>
         {/* Focus mode toggle — the only control that survives focus mode, so
             there's always a way back out (Esc also works). */}
@@ -595,6 +584,11 @@ export function ConceptPopup() {
             )
           ) : (
             <>
+              {/* The concept's figure leads the page — see ConceptImageBanner. */}
+              <ConceptImageBanner
+                images={images}
+                onOpen={i => { setGalleryIndex(i); setShowGallery(true) }}
+              />
               {resourceMeta && <ResourceMetaCard meta={resourceMeta} compact showTitle={false} />}
               <WikiArticle
                 markdown={processedContent ?? content}

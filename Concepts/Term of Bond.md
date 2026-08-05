@@ -5,7 +5,7 @@ The **term of a bond** is the time from the bond's issue date (or purchase date)
 
 - For a [[Callable Bond]], the effective term depends on when the issuer exercises the call option, creating uncertainty in the bond's cash flows.
 
-![[Media/Figures/Term_of_Bond.svg|540]]
+![[Media/Figures/Term_of_Bond.svg|340]]
 
 > [!example]- Effect of Term on Price {Example}
 > A $1{,}000$ face bond pays 6% annual coupons and yields 8%. Find the price for a 5-year term and a 10-year term.

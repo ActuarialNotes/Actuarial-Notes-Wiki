@@ -6,7 +6,7 @@ The **current value** of a cash flow stream is its value at a specified referenc
 
 - $a(t)$ is the [[Accumulation Function]] and $C_k$ is the cash flow at time $t_k$.
 
-![[Media/Figures/Current_Value.svg|540]]
+![[Media/Figures/Current_Value.svg|340]]
 
 > [!example]- Value at an Intermediate Date {Example}
 > Payments of $1000$ at time 0 and $1000$ at time 4 are made. Find the current value at time 2 using an effective annual rate of 5%.

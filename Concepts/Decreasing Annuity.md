@@ -8,7 +8,7 @@ An **arithmetic decreasing annuity** has payments $n, n-1, n-2, \ldots, 1$ at th
 
 > $$PV = P \cdot a_{\overline{n}|} - \frac{Q}{i}\!\left(a_{\overline{n}|} - nv^n\right)$$
 
-![[Media/Figures/Decreasing_Annuity.svg|540]]
+![[Media/Figures/Decreasing_Annuity.svg|340]]
 
 > [!example]- Present Value of Payments 5, 4, 3, 2, 1 {Example}
 > A decreasing annuity pays \$$500,\,\$400,\,\$300,\,\$200,\,\$100$ at the end of years 1 through 5. The effective annual rate is $i = 6\%$. Find the present value.

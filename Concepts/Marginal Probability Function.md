@@ -11,7 +11,7 @@ The **marginal probability function** of $X$ is obtained from the [[Joint Probab
 
 - Marginal distributions are the starting point for computing [[Moments for Joint Distributions]] and assessing [[Independent Random Variables|independence]]
 
-![[Media/Figures/Marginal_Probability_Function.svg|540]]
+![[Media/Figures/Marginal_Probability_Function.svg|340]]
 
 > [!example]- Finding a Marginal PMF {Example}
 > Joint PMF: $p(1,1) = 0.2$, $p(1,2) = 0.3$, $p(2,1) = 0.1$, $p(2,2) = 0.4$. Find $p_X(x)$.

@@ -6,7 +6,7 @@
 
 > $$= \sqrt{E[X^2] - (E[X])^2}$$
 
-![[Media/Figures/Standard_Deviation.svg|520]]
+![[Media/Figures/Standard_Deviation.svg|340]]
 
 > [!example]- Standard Deviation of a Claim Amount {Example}
 > Claim amounts $X$ follow a distribution with $E[X] = 200$ and $E[X^2] = 50{,}000$. Find the standard deviation of $X$.

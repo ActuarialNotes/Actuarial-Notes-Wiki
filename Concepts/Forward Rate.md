@@ -7,7 +7,7 @@ A **forward rate** $f_{t_1, t_2}$ is the interest rate agreed upon today for an 
 - The second formula gives the one-period forward rate from time $t$ to $t+1$
 - Forward rates are used to price interest rate derivatives and to construct [[Yield Curve]]s from market data
 
-![[Media/Figures/Forward_Rate.svg|540]]
+![[Media/Figures/Forward_Rate.svg|340]]
 
 > [!example]- Computing a Forward Rate {Example}
 > The 1-year spot rate is $4\%$ and the 2-year spot rate is $5\%$. Find the 1-year forward rate for year 2.

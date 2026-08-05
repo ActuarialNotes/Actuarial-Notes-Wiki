@@ -9,7 +9,7 @@ The **interest rate** (or rate of interest) $i$ is the amount of interest earned
 - The **effective annual interest rate** refers to the rate compounded once per year.
 - Related measures include the [[Nominal Interest Rate|nominal rate]] convertible $m$-thly, the [[Discount Rate]], and the [[Force of Interest]].
 
-![[Media/Figures/Interest_Rate.svg|520]]
+![[Media/Figures/Interest_Rate.svg|340]]
 
 > [!example]- Finding the Interest Rate {Example}
 > An investment of $5{,}000$ grows to $6{,}802.44$ in 5 years under compound interest. Find the annual effective interest rate.

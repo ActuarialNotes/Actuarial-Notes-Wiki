@@ -13,7 +13,7 @@ The **effective annual discount rate** $d$ is the interest paid at the **beginni
 - Because interest is collected at the start rather than the end, $d < i$ for any positive interest rate.
 - The nominal discount rate convertible $m$-thly, $d^{(m)}$, satisfies $\left(1 - \frac{d^{(m)}}{m}\right)^m = 1 - d = v$, and as $m \to \infty$, $d^{(m)} \to \delta$.
 
-![[Media/Figures/Discount_Rate.svg|540]]
+![[Media/Figures/Discount_Rate.svg|340]]
 
 > [!example]- Finding the Discount Rate from an Effective Rate {Example}
 > The effective annual interest rate is $i = 8\%$. Find the effective annual discount rate $d$ and verify the relationship $d = iv$.

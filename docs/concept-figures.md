@@ -9,6 +9,27 @@ the first `> [!example]` callout.
 The figures are **generated, not hand-drawn**. Re-run the generator rather than editing
 an SVG by hand — a hand edit will be overwritten on the next run.
 
+## The card
+
+Every figure is the same **portrait card**, 360 × 470, built by `figure_kit.vcard()`,
+and carries exactly three things:
+
+1. a **title** — one line of plain English, wrapped to at most two lines;
+2. the **picture**, drawn into the fixed box `(20, 66)–(340, 392)`;
+3. one **formula** in the footer, with an optional second line for an equivalent form
+   (`Var(X) = E[(X − μ)²]` / `= E[X²] − μ²`).
+
+Nothing else. The annotation columns, worked tallies and "worth remembering" asides
+that these figures used to carry belong on the concept page, not inside the image — a
+figure is read at a glance, and at phone size a paragraph inside it is unreadable
+anyway. Labels *inside* the picture are fine when they are needed to read it (axis
+names, which curve is which, a marked value); a legend box or a stack of prose lines is
+not.
+
+The card is portrait because that is the shape of the space it is shown in: the
+full-screen figure viewer on a phone, and the figure banner at the top of the concept
+popup.
+
 ```bash
 python3 scripts/generate_concept_figures.py            # write the SVGs
 python3 scripts/generate_concept_figures.py --embed    # ...and insert missing embeds
@@ -24,7 +45,7 @@ distribution plots that the simulator replaces).
 
 | File | Role |
 |---|---|
-| `scripts/figure_kit.py` | The SVG toolkit: canvas, cartesian `Axes`, timelines, cash-flow arrows, Venn helpers, palette and stylesheet. No dependencies — pure Python. |
+| `scripts/figure_kit.py` | The SVG toolkit: the `vcard()` portrait card, cartesian `Axes` (`vaxes()` insets one into the card's box), timelines, cash-flow arrows, Venn helpers, palette and stylesheet. No dependencies — pure Python. |
 | `scripts/figure_registry.py` | The `@figure(concept, alt, width)` decorator and the registry it fills. |
 | `scripts/figures_exam_p.py` | The 52 Exam P builders, in syllabus order. |
 | `scripts/figures_exam_fm.py` | The 81 Exam FM builders, in syllabus order. |
@@ -51,25 +72,32 @@ surface and the dark one, so a blue curve is the same blue in either mode.
 
 ## Adding or changing a figure
 
-1. Write a builder in `figures_exam_p.py` or `figures_exam_fm.py` that returns a `Fig`,
-   and decorate it with `@figure("Concept Name", "alt text", width=520)`. The concept
-   name must match `Concepts/<name>.md` exactly; the slug is derived from it.
+1. Write a builder in `figures_exam_p.py` or `figures_exam_fm.py` that opens with
+   `vcard(title, formula)` and draws into the box, and decorate it with
+   `@figure("Concept Name", "alt text", width=WID)`. The concept name must match
+   `Concepts/<name>.md` exactly; the slug is derived from it.
 2. Run the generator and look at the result — the fastest check is to open the SVG
    directly, in both light and dark, before committing.
 3. `--check` exits non-zero while any exam concept still lacks a figure.
+   `--embed` inserts a missing embed and rewrites the width of an existing one, so a
+   change of canvas size reaches the pages too.
 
 Conventions worth keeping:
 
-- **One idea per figure.** A plot on the left, three or four annotated lines on the
-  right; or a timeline across the top and a footer rule with the formulas beneath.
+- **One idea per figure**, and one formula under it. If a second idea needs saying, it
+  belongs in the page's prose.
 - **Real numbers.** Where a worked value fits (an annuity factor, a bond price, a
   posterior probability), use one — a labelled example teaches more than a generic curve.
 - **Consistent examples across a family.** The loan pages all draw the same 10,000 loan
   at 8% over 8 years; the bond pages the same 1,000 par bond; the discrete multivariate
   pages the same 3×3 joint PMF. A student reading them in sequence sees one running
   example from several angles.
-- **Stay inside the card.** Text anchored `start` near x = 340 or `end` near x = 520 will
-  run off the 560-unit canvas surprisingly easily. Check, don't assume.
+- **Label curves where they run**, rather than in a legend box, when there is room —
+  a legend is a block of text competing with the picture. Where a legend is
+  unavoidable, drop the y-axis name: the two collide in the box's top-left corner.
+- **Stay inside the card.** Text anchored `start` near x = 300, or an axis label under a
+  plot whose x-axis sits mid-box (any plot with negative values), runs off or lands on
+  top of something surprisingly easily. Check, don't assume.
 
 ## Interaction with the distribution simulators
 

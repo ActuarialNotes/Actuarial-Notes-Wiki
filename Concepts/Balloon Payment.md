@@ -9,7 +9,7 @@ A **balloon payment** is a final loan payment that is larger than the regular pe
 
 - Or equivalently, $B$ is the [[Outstanding Balance]] $OB_{n-1}$ accumulated one more period: $B = OB_{n-1}(1+i)$.
 
-![[Media/Figures/Balloon_Payment.svg|540]]
+![[Media/Figures/Balloon_Payment.svg|340]]
 
 > [!example]- Balloon Payment on a Loan {Example}
 > A borrower takes a \$$10{,}000$ loan at $8\%$ annual interest. The borrower makes payments of \$$1{,}500$ at the end of each year for 9 years, then clears the loan with a balloon payment at the end of year 10. Find the balloon payment.

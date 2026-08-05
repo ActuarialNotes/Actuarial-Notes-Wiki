@@ -8,7 +8,7 @@ An **arithmetic increasing annuity** has payments $1, 2, 3, \ldots, n$ at the en
 
 > $$PV = P \cdot a_{\overline{n}|} + \frac{Q}{i}\!\left(a_{\overline{n}|} - nv^n\right)$$
 
-![[Media/Figures/Arithmetic_Increasing_Annuity.svg|540]]
+![[Media/Figures/Arithmetic_Increasing_Annuity.svg|340]]
 
 > [!example]- Present Value of Payments 1, 2, 3, 4, 5 {Example}
 > An annuity pays \$$100,\,\$200,\,\$300,\,\$400,\,\$500$ at the end of years 1 through 5. The effective annual rate is $i = 6\%$. Find the present value.

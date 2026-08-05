@@ -4,7 +4,7 @@ Two events $A$ and $B$ are **Mutually Exclusive** (disjoint) if they cannot both
 
 > $$A \cap B = \emptyset \implies P(A \cap B) = 0$$
 
-![[Media/Figures/Mutually_Exclusive_Events.svg|520]]
+![[Media/Figures/Mutually_Exclusive_Events.svg|340]]
 
 > [!example]- Insurance Claim Type {Example}
 > A single claim is classified as either property damage ($P$) or bodily injury ($B$), but not both. $P(P) = 0.60$ and $P(B) = 0.35$.

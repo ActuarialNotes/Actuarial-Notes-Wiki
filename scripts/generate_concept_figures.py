@@ -63,11 +63,17 @@ def embed_line(spec) -> str:
     return f"![[Media/Figures/{spec.slug}.svg|{spec.width}]]"
 
 
-def insert_embed(text: str, line: str) -> str | None:
+def insert_embed(text: str, line: str, slug: str) -> str | None:
     """Insert `line` before the first example callout, else at the end.
 
-    Returns None when the page already has an embed.
+    A page that already embeds *this* figure has its embed rewritten, so a
+    change of canvas size lands on the page too. Any other embed is left alone
+    and the page is skipped (returns None).
     """
+    own = re.compile(rf"!\[\[Media/Figures/{re.escape(slug)}\.svg(?:\|[^\]]*)?\]\]")
+    if own.search(text):
+        updated = own.sub(line.replace("\\", "\\\\"), text)
+        return updated if updated != text else None
     if EMBED_RE.search(text):
         return None
     match = EXAMPLE_RE.search(text)
@@ -119,7 +125,7 @@ def main() -> int:
         written += 1
         if args.embed:
             text = page_path.read_text(encoding="utf-8")
-            updated = insert_embed(text, embed_line(spec))
+            updated = insert_embed(text, embed_line(spec), spec.slug)
             if updated is not None:
                 page_path.write_text(updated, encoding="utf-8")
                 embedded += 1

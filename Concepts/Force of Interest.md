@@ -14,7 +14,7 @@ The **force of interest** $\delta$ is the continuously compounded [[Interest Rat
 
 - The force of interest equals the instantaneous rate of change of $\ln a(t)$: $\delta(t) = a'(t)/a(t)$.
 
-![[Media/Figures/Force_of_Interest.svg|540]]
+![[Media/Figures/Force_of_Interest.svg|340]]
 
 > [!example]- Converting Force of Interest to Effective Rate {Example}
 > The force of interest is $\delta = 0.05$ per year. Find the equivalent effective annual rate.

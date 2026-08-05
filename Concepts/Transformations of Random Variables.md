@@ -13,7 +13,7 @@ A **Transformation of a Random Variable** produces a new variable $Y = g(X)$ fro
 - Insurance applications are transformations: $Y = (X-d)_+$ under a [[Deductible]], $Y = \min(X, u)$ under a [[Benefit Limit]], and $X' = (1+r)X$ under [[Inflation]] all reshape the [[Loss Random Variable]] into the [[Payment Random Variable]].
 - If $E[g(X)]$ is all that is wanted, do **not** find $f_Y$ — use $E[g(X)] = \int g(x) f_X(x)\,dx$ directly.
 
-![[Media/Figures/Transformations_of_Random_Variables.svg|540]]
+![[Media/Figures/Transformations_of_Random_Variables.svg|340]]
 
 > [!example]- Scaling an Exponential Loss for Inflation {Example}
 > Losses follow $X \sim \text{Exponential}$ with mean 1000. Next year losses inflate by 10%, so $Y = 1.1X$. Find the density of $Y$.

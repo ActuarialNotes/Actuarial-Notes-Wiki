@@ -6,7 +6,7 @@ The **Discrete Uniform Distribution** $X \sim \text{Unif}\{1, \ldots, n\}$ assig
 - Over a general integer range $\{a, a+1, \ldots, b\}$ there are $n = b - a + 1$ values, with $E[X] = (a+b)/2$ and $\text{Var}(X) = (n^2-1)/12$. The variance depends only on **how many** values there are, not where the range sits — shifting a distribution never changes its spread.
 - Do not confuse it with the [[Uniform Continuous Distribution|continuous uniform]] on $(a,b)$, whose variance is $(b-a)^2/12$. For $\{1,\ldots,6\}$ the discrete answer is $35/12 \approx 2.92$; treating it as continuous on $(1,6)$ gives $25/12 \approx 2.08$.
 
-![[Media/Figures/Uniform_Discrete.svg|520]]
+![[Media/Figures/Uniform_Discrete.svg|340]]
 
 > [!example]- Rolling a Fair Six-Sided Die {Example}
 > A fair six-sided die is rolled. Find the expected value and variance of the outcome $X$.

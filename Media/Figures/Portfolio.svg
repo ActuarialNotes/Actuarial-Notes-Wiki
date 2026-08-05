@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 296" width="560" height="296" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Portfolio duration as the value-weighted average of its holdings</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -36,25 +38,25 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="294.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">A portfolio's duration is its value-weighted average</text>
-  <text x="126" y="109" text-anchor="end" class="sm bold">Short bond</text>
-  <rect x="138" y="92" width="64.8" height="26" rx="4" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="170.4" y="109" text-anchor="middle" class="sm bold">300k</text>
-  <text x="374" y="109" text-anchor="start" class="sm">D = 2.1</text>
-  <text x="126" y="155" text-anchor="end" class="sm bold">Medium bond</text>
-  <rect x="138" y="138" width="108" height="26" rx="4" fill="#7c3aed" fill-opacity="0.4" stroke="#7c3aed" stroke-width="1.2"/>
-  <text x="192" y="155" text-anchor="middle" class="sm bold">500k</text>
-  <text x="374" y="155" text-anchor="start" class="sm">D = 6.4</text>
-  <text x="126" y="201" text-anchor="end" class="sm bold">Long bond</text>
-  <rect x="138" y="184" width="43.2" height="26" rx="4" fill="#e11d48" fill-opacity="0.4" stroke="#e11d48" stroke-width="1.2"/>
-  <text x="159.6" y="201" text-anchor="middle" class="sm bold">200k</text>
-  <text x="374" y="201" text-anchor="start" class="sm">D = 14.2</text>
-  <line x1="44" y1="236" x2="444" y2="236" class="rule"/>
-  <text x="126" y="258" text-anchor="end" class="sm bold">Portfolio</text>
-  <text x="246" y="258" text-anchor="middle" class="sm bold">1,000k</text>
-  <text x="374" y="258" text-anchor="start" class="sm bold" fill="#059669">D = 6.67</text>
-  <line x1="28" y1="258" x2="532" y2="258" class="rule"/>
-  <text x="150" y="278" text-anchor="middle" class="sm bold">D_port = Σ Pᵢ Dᵢ / Σ Pᵢ</text>
-  <text x="412" y="278" text-anchor="middle" class="sm bold">Convexity averages the same way</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A portfolio's duration is its</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">value-weighted average</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">D_port = Σ Pᵢ Dᵢ / Σ Pᵢ</text>
+  <text x="84" y="142" text-anchor="end" class="sm bold">Short</text>
+  <rect x="92" y="122" width="100.8" height="30" rx="4" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="142.4" y="143" text-anchor="middle" class="sm bold">300k</text>
+  <text x="272" y="143" text-anchor="start" class="sm">D = 2.1</text>
+  <text x="84" y="204" text-anchor="end" class="sm bold">Medium</text>
+  <rect x="92" y="184" width="168" height="30" rx="4" fill="#7c3aed" fill-opacity="0.4" stroke="#7c3aed" stroke-width="1.2"/>
+  <text x="176" y="205" text-anchor="middle" class="sm bold">500k</text>
+  <text x="272" y="205" text-anchor="start" class="sm">D = 6.4</text>
+  <text x="84" y="266" text-anchor="end" class="sm bold">Long</text>
+  <rect x="92" y="246" width="67.2" height="30" rx="4" fill="#e11d48" fill-opacity="0.4" stroke="#e11d48" stroke-width="1.2"/>
+  <text x="125.6" y="267" text-anchor="middle" class="sm bold">200k</text>
+  <text x="272" y="267" text-anchor="start" class="sm">D = 14.2</text>
+  <line x1="40" y1="316" x2="320" y2="316" class="rule"/>
+  <text x="84" y="344" text-anchor="end" class="sm bold">Portfolio</text>
+  <text x="176" y="344" text-anchor="middle" class="sm bold">1,000k</text>
+  <text x="272" y="344" text-anchor="start" class="sm bold" fill="#059669">D = 6.67</text>
 </svg>

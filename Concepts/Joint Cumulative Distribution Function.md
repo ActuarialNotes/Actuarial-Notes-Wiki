@@ -10,7 +10,7 @@ The **joint cumulative distribution function** (joint CDF) of random variables $
 
 - The joint CDF of [[Independent Random Variables]] factors as $F(x,y) = F_X(x)\cdot F_Y(y)$
 
-![[Media/Figures/Joint_Cumulative_Distribution_Function.svg|540]]
+![[Media/Figures/Joint_Cumulative_Distribution_Function.svg|340]]
 
 > [!example]- Computing a Joint Probability {Example}
 > $X$ and $Y$ are independent, each Uniform on $[0,1]$. Find $P(X \leq 0.4,\; Y \leq 0.6)$.

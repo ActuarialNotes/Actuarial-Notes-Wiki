@@ -4,7 +4,7 @@ An **asset-liability portfolio** (or matched portfolio) refers to a set of asset
 - **[[Duration Matching]] / [[Immunization]]**: match the [[Duration]] (and optionally [[Convexity]]) of assets and liabilities, allowing some reinvestment but protecting against small rate changes
 - Asset-liability management (ALM) is central to insurance company balance sheet management and pension fund investing
 
-![[Media/Figures/Asset-Liability_Portfolio.svg|540]]
+![[Media/Figures/Asset-Liability_Portfolio.svg|340]]
 
 > [!example]- Simple ALM {Example}
 > An insurer has a liability of $50{,}000$ due in exactly 4 years at $i=5\%$. Describe a cash-flow-matched portfolio.

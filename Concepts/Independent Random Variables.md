@@ -8,7 +8,7 @@
 - For independent random variables: $E[XY] = E[X]\,E[Y]$ and $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$
 - The [[Central Limit Theorem]] applies to sums of independent and identically distributed (i.i.d.) random variables
 
-![[Media/Figures/Independent_Random_Variables.svg|540]]
+![[Media/Figures/Independent_Random_Variables.svg|340]]
 
 > [!example]- Verifying Independence {Example}
 > $X \sim \text{Uniform}(0,1)$ and $Y \sim \text{Uniform}(0,1)$ with joint density $f(x,y) = 2$ for $0 < x < y < 1$. Are $X$ and $Y$ independent?

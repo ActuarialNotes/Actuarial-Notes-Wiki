@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 276" width="560" height="276" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>One period of growth, and the equivalent nominal rates that produce it</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -41,28 +43,33 @@ text {
     <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
     <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="274.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">The effective rate is what actually happened over the period</text>
-  <line x1="152" y1="118" x2="418" y2="118" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="160" y1="114" x2="160" y2="122" class="tick"/>
-  <text x="160" y="135" text-anchor="middle" class="sm dim">0</text>
-  <line x1="400" y1="114" x2="400" y2="122" class="tick"/>
-  <text x="400" y="135" text-anchor="middle" class="sm dim">1</text>
-  <line x1="160" y1="118" x2="160" y2="78" class="thin" stroke="var(--dim)" stroke-width="1.8" marker-end="url(#ahvardim)"/>
-  <text x="160" y="72" text-anchor="middle" class="sm">1</text>
-  <line x1="400" y1="118" x2="400" y2="52" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="400" y="46" text-anchor="middle" class="sm">1 + i</text>
-  <line x1="170" y1="36" x2="390" y2="36" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
-  <text x="280" y="28" text-anchor="middle" class="sm bold" fill="#3b82f6">one measurement period</text>
-  <line x1="28" y1="172" x2="532" y2="172" class="rule"/>
-  <text x="280" y="194" text-anchor="middle" class="sm bold">These all describe the same 8% effective annual rate</text>
-  <text x="44" y="224" text-anchor="start" class="sm bold">i = 8.0000%</text>
-  <text x="44" y="242" text-anchor="start" class="sm dim">effective annual</text>
-  <text x="172" y="224" text-anchor="start" class="sm bold">i⁽²⁾ = 7.8461%</text>
-  <text x="172" y="242" text-anchor="start" class="sm dim">semi-annual</text>
-  <text x="300" y="224" text-anchor="start" class="sm bold">i⁽¹²⁾ = 7.7208%</text>
-  <text x="300" y="242" text-anchor="start" class="sm dim">monthly</text>
-  <text x="428" y="224" text-anchor="start" class="sm bold">δ = 7.6961%</text>
-  <text x="428" y="242" text-anchor="start" class="sm dim">continuous</text>
-  <text x="280" y="266" text-anchor="middle" class="sm dim">Convert every quoted rate to an effective rate before comparing</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">The effective rate is what actually</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">happened</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">1 + i = A(1) / A(0),   here i = 8%</text>
+  <line x1="88" y1="172" x2="286" y2="172" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="96" y1="168" x2="96" y2="176" class="tick"/>
+  <text x="96" y="189" text-anchor="middle" class="sm dim">0</text>
+  <line x1="268" y1="168" x2="268" y2="176" class="tick"/>
+  <text x="268" y="189" text-anchor="middle" class="sm dim">1</text>
+  <line x1="96" y1="172" x2="96" y2="134" class="thin" stroke="var(--dim)" stroke-width="1.8" marker-end="url(#ahvardim)"/>
+  <text x="96" y="128" text-anchor="middle" class="sm">1</text>
+  <line x1="268" y1="172" x2="268" y2="106" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="268" y="100" text-anchor="middle" class="sm">1 + i</text>
+  <line x1="106" y1="88" x2="258" y2="88" class="thin" stroke="#3b82f6" stroke-width="1.6" marker-end="url(#ah3b82f6)"/>
+  <text x="180" y="80" text-anchor="middle" class="sm bold" fill="#3b82f6">one measurement period</text>
+  <text x="180" y="240" text-anchor="middle" class="sm dim">all of these are the same 8%</text>
+  <line x1="58" y1="254" x2="58" y2="274" stroke="#3b82f6" stroke-width="2.8" stroke-linecap="round"/>
+  <text x="72" y="269" text-anchor="start" class="bold">i</text>
+  <text x="300" y="269" text-anchor="end" class="bold" fill="#3b82f6">8.0000%</text>
+  <line x1="58" y1="286" x2="58" y2="306" stroke="#7c3aed" stroke-width="2.8" stroke-linecap="round"/>
+  <text x="72" y="301" text-anchor="start" class="bold">i⁽²⁾</text>
+  <text x="300" y="301" text-anchor="end" class="bold" fill="#7c3aed">7.8461%</text>
+  <line x1="58" y1="318" x2="58" y2="338" stroke="#0d9488" stroke-width="2.8" stroke-linecap="round"/>
+  <text x="72" y="333" text-anchor="start" class="bold">i⁽¹²⁾</text>
+  <text x="300" y="333" text-anchor="end" class="bold" fill="#0d9488">7.7208%</text>
+  <line x1="58" y1="350" x2="58" y2="370" stroke="#059669" stroke-width="2.8" stroke-linecap="round"/>
+  <text x="72" y="365" text-anchor="start" class="bold">δ</text>
+  <text x="300" y="365" text-anchor="end" class="bold" fill="#059669">7.6961%</text>
 </svg>

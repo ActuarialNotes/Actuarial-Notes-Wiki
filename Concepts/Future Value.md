@@ -8,7 +8,7 @@ The **future value** (FV) of a cash flow is its [[Accumulated Value]] at a speci
 
 > $$\text{FV}_n = \sum_{t=0}^{n} C_t (1+i)^{n-t}$$
 
-![[Media/Figures/Future_Value.svg|520]]
+![[Media/Figures/Future_Value.svg|340]]
 
 > [!example]- Saving for a Future Goal {Example}
 > An investor deposits $500$ at the start of each year for 4 years at 6% effective annual interest. Find the accumulated value at the end of year 4.

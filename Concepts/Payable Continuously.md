@@ -11,7 +11,7 @@ An annuity **payable continuously** pays at a constant rate of $1$ per year, wit
 - Here $\delta$ is the [[Force of Interest]].
 - This is the limiting case of a [[Payable m-thly]] annuity as $m \to \infty$.
 
-![[Media/Figures/Payable_Continuously.svg|540]]
+![[Media/Figures/Payable_Continuously.svg|340]]
 
 > [!example]- Continuous Annuity Present Value {Example}
 > Find the present value of a 5-year continuous annuity paying at rate $1000$ per year, at $\delta = 0.07$.

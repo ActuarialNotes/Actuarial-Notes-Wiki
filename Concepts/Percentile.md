@@ -11,7 +11,7 @@ The **Percentile** (or quantile) $x_p$ of a [[Random Variable]] $X$ is the value
 - Percentiles describe tail behavior and underlie actuarial risk measures such as Value at Risk (VaR), the loss level a portfolio will not exceed with probability $p$.
 - For a continuous, strictly increasing $F$ the inverse is unique; where $F$ is flat or jumps, take the smallest $x_p$ satisfying the condition.
 
-![[Media/Figures/Percentile.svg|540]]
+![[Media/Figures/Percentile.svg|340]]
 
 > [!example]- 90th Percentile of an Exponential Distribution {Example}
 > Claim sizes follow an [[Exponential Distribution]] with CDF $F(x) = 1 - e^{-x/10}$ for $x \geq 0$. Find the 90th percentile.

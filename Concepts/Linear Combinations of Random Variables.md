@@ -9,7 +9,7 @@
 - A linear combination of independent normals is exactly normal, which is what makes [[Probabilities for Linear Combinations]] computable in closed form.
 - For $n$ i.i.d. variables, $\bar{X}$ has mean $\mu$ and variance $\sigma^2/n$; for large $n$ the [[Central Limit Theorem]] makes $L$ approximately normal whatever the $X_i$ are.
 
-![[Media/Figures/Linear_Combinations_of_Random_Variables.svg|540]]
+![[Media/Figures/Linear_Combinations_of_Random_Variables.svg|340]]
 
 > [!example]- Mean and Variance of a Two-Policy Portfolio {Example}
 > Independent losses have $E[X] = 300$, $\text{Var}(X) = 2{,}500$, $E[Y] = 500$, $\text{Var}(Y) = 10{,}000$. Find the mean and variance of $L = 2X + 3Y$.

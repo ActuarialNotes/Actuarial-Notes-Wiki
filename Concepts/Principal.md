@@ -5,7 +5,7 @@ The **principal** $L$ is the original amount borrowed in a loan.
 - In the context of bonds, the term **principal** often refers to the [[Face Value]] or [[Redemption Value]] — the amount repaid at maturity.
 - The distinction between principal and interest is important for tax purposes, accounting, and the construction of an [[Amortization Schedule]].
 
-![[Media/Figures/Principal.svg|540]]
+![[Media/Figures/Principal.svg|340]]
 
 > [!example]- Principal vs Interest in a Loan Payment {Example}
 > A borrower takes out a \$$15{,}000$ loan at $6\%$ annual interest, to be repaid with level annual payments over 5 years. How much of the very first payment is principal and how much is interest?

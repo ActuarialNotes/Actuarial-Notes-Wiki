@@ -15,7 +15,7 @@ The **nominal discount rate convertible $m$-thly**, denoted $d^{(m)}$, is an ann
 - As $m \to \infty$, $d^{(m)} \to \delta$ (the [[Force of Interest]]).
 - The nominal discount rate satisfies $d^{(m)} < i^{(m)}$ for all $m$.
 
-![[Media/Figures/Nominal_Discount_Rate_Convertible_m-thly.svg|540]]
+![[Media/Figures/Nominal_Discount_Rate_Convertible_m-thly.svg|340]]
 
 > [!example]- Finding Nominal Discount Rate {Example}
 > The effective annual interest rate is $6\%$. Find $d^{(12)}$.

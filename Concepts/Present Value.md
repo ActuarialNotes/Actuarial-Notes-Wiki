@@ -7,7 +7,7 @@ The **present value** (PV) is the value today of a future payment, discounted at
 - For multiple cash flows $C_t$ at various times $t$, the total present value is $\displaystyle PV = \sum_t C_t\, v^t$.
 - Present value is the fundamental building block of [[Annuity Immediate|annuity]], [[Net Present Value|NPV]], and [[Deferred Annuity|deferred annuity]] calculations.
 
-![[Media/Figures/Present_Value.svg|520]]
+![[Media/Figures/Present_Value.svg|340]]
 
 > [!example]- Present Value of a Lump Sum {Example}
 > An investor will receive $5000$ in 6 years. If the effective annual interest rate is $i = 7\%$, what is the present value of this payment?

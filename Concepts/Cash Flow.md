@@ -5,7 +5,7 @@ A **cash flow** is a payment of money at a specific point in time, which can be 
 - Financial mathematics analyzes streams of cash flows by computing their [[Present Value]], [[Accumulated Value]], or [[Net Present Value]]
 - Cash flow analysis forms the basis for [[Loans]], [[Bonds]], [[Annuity Immediate|annuities]], and [[Cash Flow Matching]] for liability management
 
-![[Media/Figures/Cash_Flow.svg|540]]
+![[Media/Figures/Cash_Flow.svg|340]]
 
 > [!example]- Valuing an Irregular Cash Flow Stream {Example}
 > A project pays $500$ at time 1, $-200$ at time 2 (an outflow), and $1{,}000$ at time 3. Find the PV at $i = 8\%$.

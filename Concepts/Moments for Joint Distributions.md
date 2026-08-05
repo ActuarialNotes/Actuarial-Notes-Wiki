@@ -10,7 +10,7 @@
 
 - For [[Independent Random Variables]], $E[XY] = E[X]E[Y]$, so $\text{Cov}(X,Y) = 0$
 
-![[Media/Figures/Moments_for_Joint_Distributions.svg|540]]
+![[Media/Figures/Moments_for_Joint_Distributions.svg|340]]
 
 > [!example]- Computing E[XY] {Example}
 > Joint PMF: $p(0,0)=0.3$, $p(0,1)=0.2$, $p(1,0)=0.1$, $p(1,1)=0.4$.

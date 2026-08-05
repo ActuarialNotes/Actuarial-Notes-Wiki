@@ -8,7 +8,7 @@
 2. $D_{Mac}(assets) = D_{Mac}(liabilities)$ ([[Duration Matching]])
 3. $C_{assets} > C_{liabilities}$ ([[Convexity]] of assets exceeds liabilities)
 
-![[Media/Figures/Immunization.svg|540]]
+![[Media/Figures/Immunization.svg|340]]
 
 > [!example]- Verifying Redington Immunization {Example}
 > Assets: $PV = 10000$, $D_{Mac} = 5$, convexity $= 30$. Liabilities: $PV = 10000$, $D_{Mac} = 5$, convexity $= 25$. Is Redington immunization achieved?

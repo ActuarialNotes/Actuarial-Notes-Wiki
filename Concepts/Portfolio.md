@@ -7,7 +7,7 @@ A **portfolio** is a collection of financial assets (bonds, stocks, cash flows) 
 
 > $$D_{Mod}^{\text{portfolio}} = \frac{\sum_i P_i \cdot D_{Mod,i}}{\sum_i P_i}$$
 
-![[Media/Figures/Portfolio.svg|540]]
+![[Media/Figures/Portfolio.svg|340]]
 
 > [!example]- Portfolio Duration {Example}
 > A portfolio has \$$40{,}000$ in a bond with modified duration 3 years and \$$60{,}000$ in a bond with modified duration 8 years. Find the portfolio's modified duration.

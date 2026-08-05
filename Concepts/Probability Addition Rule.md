@@ -7,7 +7,7 @@ The **Probability Addition Rule** gives the probability that at least one of two
 >
 > $$P(A \cup B \cup C) = P(A)+P(B)+P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)$$
 
-![[Media/Figures/Probability_Addition_Rule.svg|520]]
+![[Media/Figures/Probability_Addition_Rule.svg|340]]
 
 > [!example]- Probability of at Least One Coverage Trigger {Example}
 > For a commercial policy, the probability of a fire loss is 0.05, a flood loss is 0.03, and both losses in the same year is 0.01. What is the probability of at least one loss?

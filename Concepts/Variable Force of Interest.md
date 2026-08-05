@@ -8,7 +8,7 @@ A **variable (time-varying) force of interest** $\delta(t)$ allows the instantan
 
 - Solving [[Time Value of Money Equations]] under variable force of interest requires evaluating these integrals.
 
-![[Media/Figures/Variable_Force_of_Interest.svg|540]]
+![[Media/Figures/Variable_Force_of_Interest.svg|340]]
 
 > [!example]- Accumulation Under Variable Force {Example}
 > The force of interest at time $t$ is $\delta(t) = 0.04 + 0.002t$. Find the accumulation of $1$ from $t=0$ to $t=3$.

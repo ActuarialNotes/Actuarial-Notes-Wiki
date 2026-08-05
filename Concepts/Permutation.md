@@ -7,7 +7,7 @@ A **Permutation** $P(n, k)$ counts the number of ways to select and arrange $k$ 
 
 > $$= n \times (n-1) \times \cdots \times (n-k+1)$$
 
-![[Media/Figures/Permutation.svg|520]]
+![[Media/Figures/Permutation.svg|340]]
 
 > [!example]- Assigning Ranked Prizes to Adjusters {Example}
 > From 8 adjusters, an insurer awards a 1st, 2nd, and 3rd place performance bonus. How many distinct award outcomes are possible?

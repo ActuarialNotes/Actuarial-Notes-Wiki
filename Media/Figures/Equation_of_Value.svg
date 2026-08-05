@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Inflows and outflows balanced at a chosen comparison date</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -41,42 +43,42 @@ text {
     <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">Move every cash flow to one comparison date, then balance</text>
-  <line x1="68" y1="138" x2="482" y2="138" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="76" y1="134" x2="76" y2="142" class="tick"/>
-  <text x="76" y="155" text-anchor="middle" class="sm dim">0</text>
-  <line x1="140.67" y1="134" x2="140.67" y2="142" class="tick"/>
-  <text x="140.67" y="155" text-anchor="middle" class="sm dim">1</text>
-  <line x1="205.33" y1="134" x2="205.33" y2="142" class="tick"/>
-  <text x="205.33" y="155" text-anchor="middle" class="sm dim">2</text>
-  <line x1="270" y1="134" x2="270" y2="142" class="tick"/>
-  <text x="270" y="155" text-anchor="middle" class="sm dim">3</text>
-  <line x1="334.67" y1="134" x2="334.67" y2="142" class="tick"/>
-  <text x="334.67" y="155" text-anchor="middle" class="sm dim">4</text>
-  <line x1="399.33" y1="134" x2="399.33" y2="142" class="tick"/>
-  <text x="399.33" y="155" text-anchor="middle" class="sm dim">5</text>
-  <line x1="464" y1="134" x2="464" y2="142" class="tick"/>
-  <text x="464" y="155" text-anchor="middle" class="sm dim">6</text>
-  <line x1="76" y1="42" x2="76" y2="184" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
-  <text x="84" y="36" text-anchor="start" class="sm bold" fill="#7c3aed">comparison date</text>
-  <line x1="205.33" y1="138" x2="205.33" y2="94" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="205.33" y="88" text-anchor="middle" class="sm">in</text>
-  <line x1="197.33" y1="76" x2="84" y2="76" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
-  <line x1="334.67" y1="138" x2="334.67" y2="94" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="334.67" y="88" text-anchor="middle" class="sm">in</text>
-  <line x1="326.67" y1="76" x2="84" y2="76" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
-  <line x1="464" y1="138" x2="464" y2="94" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="464" y="88" text-anchor="middle" class="sm">in</text>
-  <line x1="456" y1="76" x2="84" y2="76" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
-  <line x1="140.67" y1="138" x2="140.67" y2="174" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-  <text x="140.67" y="190" text-anchor="middle" class="sm">out</text>
-  <line x1="132.67" y1="190" x2="84" y2="190" class="thin dash" stroke="#e11d48" stroke-width="1" marker-end="url(#ahe11d48)"/>
-  <line x1="270" y1="138" x2="270" y2="174" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-  <text x="270" y="190" text-anchor="middle" class="sm">out</text>
-  <line x1="262" y1="190" x2="84" y2="190" class="thin dash" stroke="#e11d48" stroke-width="1" marker-end="url(#ahe11d48)"/>
-  <line x1="28" y1="216" x2="532" y2="216" class="rule"/>
-  <text x="280" y="238" text-anchor="middle" class="sm bold">PV of inflows  =  PV of outflows,  at the comparison date</text>
-  <text x="280" y="260" text-anchor="middle" class="sm dim">Any date works — a different date gives a different equation but the same answer</text>
-  <text x="280" y="278" text-anchor="middle" class="sm dim">Pick the date that cancels the most terms</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Move every flow to one date, then</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">balance</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">PV(inflows) = PV(outflows)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">any date works — pick the one that cancels most</text>
+  <line x1="48" y1="236" x2="324" y2="236" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="56" y1="232" x2="56" y2="240" class="tick"/>
+  <text x="56" y="253" text-anchor="middle" class="sm dim">0</text>
+  <line x1="97.67" y1="232" x2="97.67" y2="240" class="tick"/>
+  <text x="97.67" y="253" text-anchor="middle" class="sm dim">1</text>
+  <line x1="139.33" y1="232" x2="139.33" y2="240" class="tick"/>
+  <text x="139.33" y="253" text-anchor="middle" class="sm dim">2</text>
+  <line x1="181" y1="232" x2="181" y2="240" class="tick"/>
+  <text x="181" y="253" text-anchor="middle" class="sm dim">3</text>
+  <line x1="222.67" y1="232" x2="222.67" y2="240" class="tick"/>
+  <text x="222.67" y="253" text-anchor="middle" class="sm dim">4</text>
+  <line x1="264.33" y1="232" x2="264.33" y2="240" class="tick"/>
+  <text x="264.33" y="253" text-anchor="middle" class="sm dim">5</text>
+  <line x1="306" y1="232" x2="306" y2="240" class="tick"/>
+  <text x="306" y="253" text-anchor="middle" class="sm dim">6</text>
+  <line x1="56" y1="130" x2="56" y2="310" class="thin dash" stroke="#7c3aed" stroke-width="1.4"/>
+  <text x="64" y="124" text-anchor="start" class="sm bold" fill="#7c3aed">comparison date</text>
+  <line x1="139.33" y1="236" x2="139.33" y2="188" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="139.33" y="182" text-anchor="middle" class="sm">in</text>
+  <line x1="131.33" y1="168" x2="64" y2="168" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
+  <line x1="222.67" y1="236" x2="222.67" y2="188" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="222.67" y="182" text-anchor="middle" class="sm">in</text>
+  <line x1="214.67" y1="168" x2="64" y2="168" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
+  <line x1="306" y1="236" x2="306" y2="188" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="306" y="182" text-anchor="middle" class="sm">in</text>
+  <line x1="298" y1="168" x2="64" y2="168" class="thin dash" stroke="#059669" stroke-width="1" marker-end="url(#ah059669)"/>
+  <line x1="97.67" y1="236" x2="97.67" y2="276" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <text x="97.67" y="292" text-anchor="middle" class="sm">out</text>
+  <line x1="89.67" y1="310" x2="64" y2="310" class="thin dash" stroke="#e11d48" stroke-width="1" marker-end="url(#ahe11d48)"/>
+  <line x1="181" y1="236" x2="181" y2="276" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <text x="181" y="292" text-anchor="middle" class="sm">out</text>
+  <line x1="173" y1="310" x2="64" y2="310" class="thin dash" stroke="#e11d48" stroke-width="1" marker-end="url(#ahe11d48)"/>
 </svg>

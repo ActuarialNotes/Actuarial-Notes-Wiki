@@ -22,7 +22,7 @@ Read the question for the **story** the quantity follows, then check the support
 - The normal is the only one on this list allowed to go negative — a red flag if the quantity is a loss.
 - Insurance provisions ([[Deductible|deductibles]], [[Benefit Limit|limits]], [[Coinsurance Percentage|coinsurance]]) transform whichever severity distribution is chosen; see [[Transformations of Random Variables]].
 
-![[Media/Figures/Continuous_Univariate_Distributions.svg|540]]
+![[Media/Figures/Continuous_Univariate_Distributions.svg|340]]
 
 > [!example]- Finding a Probability from a PDF {Example}
 > A random variable $X$ has PDF $f(x) = 3x^2$ for $0 < x < 1$. Find $P(0.5 < X < 1)$.

@@ -7,7 +7,7 @@ The **effective interest rate** $i$ is the actual rate of interest earned (or pa
 - The effective rate is the standard benchmark for comparing interest rates across different compounding frequencies.
 - The effective [[Discount Rate]] $d$ satisfies $d = iv = i/(1+i)$.
 
-![[Media/Figures/Effective_Rate.svg|540]]
+![[Media/Figures/Effective_Rate.svg|340]]
 
 > [!example]- Comparing Two Rates {Example}
 > Which is better: 7% compounded semi-annually, or 6.9% compounded monthly?

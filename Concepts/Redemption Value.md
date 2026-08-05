@@ -6,7 +6,7 @@ The **redemption value** $C$ is the amount paid to the bondholder at maturity (w
 
 - For [[Callable Bond]]s, the redemption value may vary by call date, and the buyer must calculate the worst-case yield (minimum yield) to determine the appropriate price.
 
-![[Media/Figures/Redemption_Value.svg|540]]
+![[Media/Figures/Redemption_Value.svg|340]]
 
 > [!example]- Bond Redeemable at a Premium {Example}
 > A $1{,}000$ face bond with 6% annual coupons matures in 5 years with redemption at $1{,}050$. Price at yield $7\%$.

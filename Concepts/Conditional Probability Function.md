@@ -6,7 +6,7 @@ A **Conditional Probability Function** gives the distribution of one random vari
 
 > $$P(X = x \mid Y = y) = \frac{P(X = x, Y = y)}{P(Y = y)}$$
 
-![[Media/Figures/Conditional_Probability_Function.svg|540]]
+![[Media/Figures/Conditional_Probability_Function.svg|340]]
 
 > [!example]- Conditional PDF from a Joint Density {Example}
 > If $f(x,y) = 6(1-y)$ for $0 \leq x \leq y \leq 1$, what is $f_{X|Y}(x \mid y)$?

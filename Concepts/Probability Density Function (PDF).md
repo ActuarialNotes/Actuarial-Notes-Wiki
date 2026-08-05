@@ -5,7 +5,7 @@ A **Probability Density Function (PDF)** describes the relative likelihood of a 
 - The PDF must satisfy $f(x) \geq 0$ and $\int_{-\infty}^{\infty} f(x)\, dx = 1$
 - $P(X = x) = 0$ for any single point
 
-![[Media/Figures/Probability_Density_Function_PDF.svg|520]]
+![[Media/Figures/Probability_Density_Function_PDF.svg|340]]
 
 > [!example]- Probability from a Polynomial PDF {Example}
 > If $f(x) = 3x^2$ for $0 \leq x \leq 1$, what is $P(X > 0.5)$?

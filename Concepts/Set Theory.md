@@ -7,7 +7,7 @@
 - The empty set $\varnothing$ contains no elements; the complement $A^c = S \setminus A$ is everything in $S$ not in $A$.
 - Sets are the building blocks of a probability space $(S, \mathcal{F}, P)$, in which events are the sets whose probabilities are measured.
 
-![[Media/Figures/Set_Theory.svg|540]]
+![[Media/Figures/Set_Theory.svg|340]]
 
 > [!example]- Union, Intersection, and Difference of Two Sets {Example}
 > Given $A = \{1, 2, 3, 4\}$ and $B = \{3, 4, 5, 6\}$, find $A \cup B$, $A \cap B$, and $A \setminus B$.

@@ -7,7 +7,7 @@ The **yield rate** $j$ (also called the yield to maturity) is the internal rate 
 - Bond prices and yields move in opposite directions: if the yield rises, the price falls, and vice versa.
 - The yield rate is the fundamental measure of a bond's return to a buy-and-hold investor.
 
-![[Media/Figures/Yield_Rate.svg|540]]
+![[Media/Figures/Yield_Rate.svg|340]]
 
 > [!example]- Finding the Yield Rate {Example}
 > A \$$1{,}000$ face value 3-year annual-coupon bond with coupon rate $5\%$ is currently priced at \$$950.26$. Verify that the yield rate is approximately $6.5\%$.

@@ -306,10 +306,13 @@ function effectiveIsCorrect(q: Question, chosen: string, manualGrades: Record<st
 
 type QuizStatus = 'idle' | 'loading' | 'active' | 'reviewing' | 'complete'
 
-interface Response {
+/** One answered question: what was chosen and how long it took. */
+export interface QuizResponse {
   chosen: string
   timeSpent: number  // seconds
 }
+
+type Response = QuizResponse
 
 export interface CompletedSession {
   questions: Question[]
@@ -827,4 +830,74 @@ export async function syncPendingSessionToCloud(
   }
 
   return true
+}
+
+/**
+ * Persist answers given outside a quiz run — today only the Fix-Mistakes
+ * reviewer (components/MistakesReviewModal.tsx), which answers missed questions
+ * one at a time in a modal instead of launching a quiz. Runs the same writes
+ * completeQuiz performs for an authenticated user (mastery, quiz_sessions +
+ * question_responses, gems, exam progress, daily stats, streak, XP/quests/
+ * leagues) so a question fixed in the modal counts exactly as much as one fixed
+ * inside a quiz — and, because it lands in question_responses, drops off the
+ * mistakes list.
+ *
+ * Deliberately does *not* touch LAST_SESSION_KEY: /review belongs to the last
+ * real quiz, and a handful of corrected questions shouldn't replace it.
+ *
+ * @param responses answered questions only, keyed by question id
+ */
+export async function recordReviewAnswers(
+  userId: string | null,
+  questions: Question[],
+  responses: Record<string, QuizResponse>,
+  priorMasteryRecords: ConceptMasteryRecord[] = [],
+  manualGrades: Record<string, SelfGrade> = {},
+): Promise<void> {
+  const answered = questions.filter(q => responses[q.id] !== undefined)
+  if (answered.length === 0) return
+
+  const correctCount = answered.filter(q =>
+    effectiveIsCorrect(q, responses[q.id]!.chosen, manualGrades),
+  ).length
+
+  let masteryTransitions: MasteryTransition[]
+  if (userId) {
+    try {
+      masteryTransitions = await upsertMasteryFromResponses(userId, answered, responses, priorMasteryRecords, manualGrades)
+    } catch (masteryErr) {
+      console.error('concept_mastery upsert failed during mistake review:', masteryErr)
+      masteryTransitions = computeMasteryTransitions(answered, responses, priorMasteryRecords, manualGrades)
+    }
+  } else {
+    masteryTransitions = computeMasteryTransitions(answered, responses, priorMasteryRecords, manualGrades)
+  }
+
+  const upward = masteryTransitions.filter(
+    t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3',
+  )
+
+  addDailyQuizStats(correctCount, answered.length)
+  appendTodayAnsweredIds(answered.map(q => q.id))
+  appendTodayLevelUps(upward.map(t => ({
+    conceptSlug: t.conceptSlug,
+    from: t.from,
+    to: t.to,
+    at: new Date().toISOString(),
+  })))
+  if (correctCount > 0) void recordStreakActivity(userId)
+  awardXpAndQuests(userId, answered, responses, manualGrades, masteryTransitions)
+
+  if (!userId) return
+
+  const { error } = await persistSessionToCloud(userId, {
+    questions: answered,
+    responses,
+    mode: 'quiz',
+    correctCount,
+    totalSeconds: answered.reduce((sum, q) => sum + (responses[q.id]?.timeSpent ?? 0), 0),
+    masteryTransitions,
+    manualGrades: Object.keys(manualGrades).length > 0 ? manualGrades : undefined,
+  })
+  if (error) console.error('Failed to save reviewed answers:', error)
 }

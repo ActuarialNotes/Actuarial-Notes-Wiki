@@ -1,11 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { RotateCcw } from 'lucide-react'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
-import type { WikiExamSyllabus } from '@/lib/wikiParser'
-import { mistakeConcepts } from '@/lib/recentMistakes'
 import { useRecentMistakes } from '@/hooks/useRecentMistakes'
-import { ConceptDetailModal } from '@/components/ConceptDetailModal'
+import { MistakesReviewModal } from '@/components/MistakesReviewModal'
 
 // How many uncorrected misses feed the browser. Generous — the button promises
 // everything you haven't fixed yet — but still bounded.
@@ -16,8 +14,6 @@ interface Props {
   masteryRecords: ConceptMasteryRecord[]
   /** Active exam label (q.exam) — scopes mistakes to this exam. */
   examTopic: string
-  /** Active exam syllabus — powers the browser's Syllabus tab. */
-  syllabus?: WikiExamSyllabus
   /**
    * Sticky-header slot (a `display: contents` div in the pinned actions row).
    * When present, a compact copy of the button is portaled into it so the action
@@ -30,22 +26,18 @@ interface Props {
 /**
  * Fix-mistakes action. Deliberately wordless: a label and an orange count of
  * what's still outstanding, styled as a light-red sibling of the Read concepts /
- * Start Quiz buttons it sits under. Tapping it opens the regular concept popup
- * (ConceptDetailModal) on its Questions tab, scoped to the concepts you've been
- * getting wrong — so the questions, quiz launch, and Previous/Next paging are the
- * same ones used everywhere else rather than a bespoke swipeable reader.
+ * Start Quiz buttons it sits under. Tapping it opens MistakesReviewModal — the
+ * missed questions themselves, one at a time, answerable in place with
+ * Previous/Next between them.
  *
  * Hides itself entirely when there's nothing outstanding to review.
  */
-export function FixMistakesButton({ masteryRecords, examTopic, syllabus, compactSlot }: Props) {
+export function FixMistakesButton({ masteryRecords, examTopic, compactSlot }: Props) {
   const { mistakes, loading } = useRecentMistakes(masteryRecords, examTopic, MISTAKE_LIMIT)
   const [open, setOpen] = useState(false)
 
-  const concepts = useMemo(() => mistakeConcepts(mistakes), [mistakes])
+  if (loading || mistakes.length === 0) return null
 
-  if (loading || concepts.length === 0) return null
-
-  const top = concepts[0]!
   const outstandingLabel = `${mistakes.length} question${mistakes.length === 1 ? '' : 's'} still to fix`
 
   // Orange, matching the streak flame and the today's-quiz count: this is a
@@ -89,16 +81,10 @@ export function FixMistakesButton({ masteryRecords, examTopic, syllabus, compact
       )}
 
       {open && (
-        <ConceptDetailModal
-          conceptName={top.name}
-          masteryState={top.state}
+        <MistakesReviewModal
+          mistakes={mistakes}
+          masteryRecords={masteryRecords}
           onClose={() => setOpen(false)}
-          syllabus={syllabus}
-          allConcepts={concepts}
-          conceptListLabel="Mistakes"
-          initialTab="questions"
-          initialQuestionFilter="attempted"
-          quizFrom="dashboard"
         />
       )}
     </>

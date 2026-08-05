@@ -22,9 +22,10 @@ line since 2026-07-11, both via the same pure-lib + flag + tests template:
   remaining half.
 - **The error-review loop got its first surface (P2.8 → 🟡).** A **recent-mistakes review
   card** (`MISTAKES_REVIEW_ENABLED`, `lib/recentMistakes.ts`) surfaces recently-missed
-  questions with a per-question and Retry-all launch, each tagged with the concept most
-  likely to blame. The spaced re-ask scheduling and high-confidence-error prioritization
-  (which waits on P2.7) remain.
+  questions, each tagged with the concept most likely to blame, and re-asks them in place
+  (`components/MistakesReviewModal.tsx`) — one question at a time, answered with the quiz's
+  own card and paged with Previous/Next. The spaced re-ask scheduling and
+  high-confidence-error prioritization (which waits on P2.7) remain.
 
 The prior revision's re-framing still holds: with the engagement loop built, the center of
 gravity is **learning quality** (§2.2), and Phase 3's god-component debt keeps growing —
@@ -292,8 +293,11 @@ item here is a direct application of §2.2._
 - 🟡 **P2.8 — Error-review loop ("mistakes deck")** _(§2.2.4)._ _First surface shipped:_ a
   **recent-mistakes review card** (`MISTAKES_REVIEW_ENABLED`, `lib/recentMistakes.ts`)
   surfaces the questions a learner most recently missed and, for each, flags the concept(s)
-  most likely to blame (weighted by miss-rate × current mastery), with a per-question and a
-  Retry-all quiz launch. This closes the "missed questions vanish after /review" gap for
+  most likely to blame (weighted by miss-rate × current mastery), then re-asks them in place
+  (`components/MistakesReviewModal.tsx`) — answer as many as you like, in any order, and the
+  answers are banked on close exactly as a quiz's are (`recordReviewAnswers` in
+  `stores/quizStore.ts`), so a corrected question drops off the list. This closes the
+  "missed questions vanish after /review" gap for
   *recent* misses. **Remaining:** turn it into a true spaced mistakes deck — queue misses
   for a delayed re-ask (e.g. 2–3 days later, interleaved into normal sessions via P2.6),
   prioritized by high-confidence errors once P2.7 lands. And extend the

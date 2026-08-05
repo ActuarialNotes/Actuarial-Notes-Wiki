@@ -265,18 +265,40 @@
   padding: 0 2px;
 }
 
-/* Onboarding tour: the welcome card rolls up from below the screen edge
-   with a gentle overshoot, settling above the mobile tab bar. */
+/* Onboarding tour: the step card grows out of the corner launcher it replaces,
+   so expanding reads as the same object opening rather than a new popup. */
 @keyframes onboarding-roll-in {
-  0%   { opacity: 0; transform: translateY(110%); }
-  65%  { opacity: 1; transform: translateY(-2%); }
-  100% { opacity: 1; transform: translateY(0); }
+  0%   { opacity: 0; transform: scale(0.9) translateY(12px); }
+  70%  { opacity: 1; transform: scale(1.01) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 .onboarding-roll-in {
-  animation: onboarding-roll-in 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: onboarding-roll-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: bottom right;
+}
+
+/* The collapsed launcher pops into the corner on first paint, then its icon
+   breathes gently so a first-time visitor notices it without being blocked. */
+@keyframes onboarding-launcher-in {
+  0%   { opacity: 0; transform: scale(0.6) translateY(8px); }
+  70%  { opacity: 1; transform: scale(1.04) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.onboarding-launcher-in {
+  animation: onboarding-launcher-in 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transform-origin: bottom right;
+}
+@keyframes onboarding-launcher-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary-foreground) / 0.35); }
+  50%      { box-shadow: 0 0 0 5px hsl(var(--primary-foreground) / 0); }
+}
+.onboarding-launcher-pulse {
+  animation: onboarding-launcher-pulse 2.4s ease-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .onboarding-roll-in { animation: none; }
+  .onboarding-roll-in,
+  .onboarding-launcher-in,
+  .onboarding-launcher-pulse { animation: none; }
 }
 
 /* Onboarding tour: pulsing spotlight ring drawn around the element the
@@ -290,9 +312,12 @@
 }
 .onboarding-spotlight {
   position: fixed;
-  /* Above the concept popup's actions menu (z-70, portaled to <body>) so the
-     tour highlight stays visible when spotlighting an item inside that menu. */
-  z-index: 72;
+  /* Above every overlay in the app — the concept popup's actions menu (z-70),
+     the collect modal and its dimmer (z-120/121) and the questions modal
+     (z-130). The tour spotlights elements *inside* those overlays, so anything
+     lower leaves the ring buried under the dimmer. Keep in step with the tour
+     card's z-[140] in OnboardingTour.tsx. */
+  z-index: 141;
   pointer-events: none;
   border-radius: 12px;
   box-shadow: 0 0 0 2px hsl(var(--primary));

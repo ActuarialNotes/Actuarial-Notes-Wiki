@@ -1047,7 +1047,9 @@ export default function Settings() {
                     <div>
                       <p className="text-sm font-medium">Take the tour</p>
                       <p className="text-xs text-muted-foreground">
-                        Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes and more.
+                        Replay the guided walkthrough of Study Guides, concept popups, flashcards, quizzes
+                        and more. Minimize it any time — it parks as a button in the bottom-right corner
+                        and picks up where you left off.
                       </p>
                     </div>
                     <Button

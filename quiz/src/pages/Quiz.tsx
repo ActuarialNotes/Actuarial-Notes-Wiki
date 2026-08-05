@@ -621,6 +621,7 @@ export default function Quiz() {
               <Button
                 onClick={handleConfirmAnswer}
                 size="lg"
+                data-tour="confirm-answer"
                 className="bg-foreground text-background hover:bg-foreground/90"
               >
                 Confirm Answer

@@ -1019,6 +1019,7 @@ function AddFlashcardsButton({ onCardsAdded }: { onCardsAdded?: () => void }) {
     <>
       <button
         type="button"
+        data-tour="add-flashcards-btn"
         onClick={() => setOpen(true)}
         title="Add flashcards"
         aria-label="Add flashcards"
@@ -3468,6 +3469,7 @@ export default function Flashcards() {
               )}
               <button
                 type="button"
+                data-tour="flashcard-controls-toggle"
                 onClick={() => setControlsExpanded(v => !v)}
                 aria-expanded={controlsExpanded}
                 aria-label={controlsExpanded ? 'Hide controls' : 'Show controls'}

@@ -90,6 +90,7 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
             <Button
               onClick={onStart}
               size="lg"
+              data-tour="gate-start-quiz"
               className="w-full bg-foreground text-background hover:bg-foreground/90"
             >
               <Play className="h-4 w-4 mr-1.5" />

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A final payment larger than the regular one, retiring the remaining balance</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -41,42 +43,38 @@ text {
     <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">A balloon payment retires a balance the regular payments never cleared</text>
-  <line x1="122" y1="132" x2="438" y2="132" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="130" y1="128" x2="130" y2="136" class="tick"/>
-  <text x="130" y="149" text-anchor="middle" class="sm dim">0</text>
-  <line x1="178.33" y1="128" x2="178.33" y2="136" class="tick"/>
-  <text x="178.33" y="149" text-anchor="middle" class="sm dim">1</text>
-  <line x1="226.67" y1="128" x2="226.67" y2="136" class="tick"/>
-  <text x="226.67" y="149" text-anchor="middle" class="sm dim">2</text>
-  <line x1="275" y1="128" x2="275" y2="136" class="tick"/>
-  <text x="275" y="149" text-anchor="middle" class="sm dim">3</text>
-  <line x1="323.33" y1="128" x2="323.33" y2="136" class="tick"/>
-  <text x="323.33" y="149" text-anchor="middle" class="sm dim">4</text>
-  <line x1="371.67" y1="128" x2="371.67" y2="136" class="tick"/>
-  <text x="371.67" y="149" text-anchor="middle" class="sm dim">5</text>
-  <line x1="420" y1="128" x2="420" y2="136" class="tick"/>
-  <text x="420" y="149" text-anchor="middle" class="sm dim">6</text>
-  <line x1="178.33" y1="132" x2="178.33" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="178.33" y="94" text-anchor="middle" class="sm">K</text>
-  <line x1="226.67" y1="132" x2="226.67" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="226.67" y="94" text-anchor="middle" class="sm">K</text>
-  <line x1="275" y1="132" x2="275" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="275" y="94" text-anchor="middle" class="sm">K</text>
-  <line x1="323.33" y1="132" x2="323.33" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="323.33" y="94" text-anchor="middle" class="sm">K</text>
-  <line x1="371.67" y1="132" x2="371.67" y2="100" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="371.67" y="94" text-anchor="middle" class="sm">K</text>
-  <line x1="420" y1="132" x2="420" y2="54" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
-  <text x="420" y="48" text-anchor="middle" class="sm">B</text>
-  <line x1="166.33" y1="100" x2="383.67" y2="100" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
-  <text x="444" y="96" text-anchor="start" class="sm dim">level K</text>
-  <line x1="28" y1="194" x2="532" y2="194" class="rule"/>
-  <text x="150" y="216" text-anchor="middle" class="sm bold">B = OB₍ₙ₋₁₎ (1 + i)</text>
-  <text x="150" y="236" text-anchor="middle" class="sm dim">equivalently  B = L(1+i)ⁿ − K·s₍ₙ₋₁₎(1+i)</text>
-  <text x="412" y="216" text-anchor="middle" class="sm bold">Why it happens</text>
-  <text x="412" y="236" text-anchor="middle" class="sm dim">K is set below the full amortising payment</text>
-  <text x="412" y="256" text-anchor="middle" class="sm dim">so principal is still outstanding at the end</text>
-  <text x="280" y="278" text-anchor="middle" class="sm dim">Mortgages with a short fixed term and a long amortisation do this</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">A balloon retires the balance left over</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">B = OB₍ₙ₋₁₎ (1 + i)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">K was set below the amortising payment</text>
+  <line x1="48" y1="268" x2="318" y2="268" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="56" y1="264" x2="56" y2="272" class="tick"/>
+  <text x="56" y="285" text-anchor="middle" class="sm dim">0</text>
+  <line x1="96.67" y1="264" x2="96.67" y2="272" class="tick"/>
+  <text x="96.67" y="285" text-anchor="middle" class="sm dim">1</text>
+  <line x1="137.33" y1="264" x2="137.33" y2="272" class="tick"/>
+  <text x="137.33" y="285" text-anchor="middle" class="sm dim">2</text>
+  <line x1="178" y1="264" x2="178" y2="272" class="tick"/>
+  <text x="178" y="285" text-anchor="middle" class="sm dim">3</text>
+  <line x1="218.67" y1="264" x2="218.67" y2="272" class="tick"/>
+  <text x="218.67" y="285" text-anchor="middle" class="sm dim">4</text>
+  <line x1="259.33" y1="264" x2="259.33" y2="272" class="tick"/>
+  <text x="259.33" y="285" text-anchor="middle" class="sm dim">5</text>
+  <line x1="300" y1="264" x2="300" y2="272" class="tick"/>
+  <text x="300" y="285" text-anchor="middle" class="sm dim">6</text>
+  <line x1="96.67" y1="268" x2="96.67" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="96.67" y="228" text-anchor="middle" class="sm">K</text>
+  <line x1="137.33" y1="268" x2="137.33" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="137.33" y="228" text-anchor="middle" class="sm">K</text>
+  <line x1="178" y1="268" x2="178" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="178" y="228" text-anchor="middle" class="sm">K</text>
+  <line x1="218.67" y1="268" x2="218.67" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="218.67" y="228" text-anchor="middle" class="sm">K</text>
+  <line x1="259.33" y1="268" x2="259.33" y2="234" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="259.33" y="228" text-anchor="middle" class="sm">K</text>
+  <line x1="300" y1="268" x2="300" y2="168" class="thin" stroke="#e11d48" stroke-width="1.8" marker-end="url(#ahe11d48)"/>
+  <text x="300" y="162" text-anchor="middle" class="sm">B</text>
+  <line x1="84.67" y1="234" x2="271.33" y2="234" class="thin dash" stroke="var(--dim)" stroke-width="1.2"/>
+  <text x="180" y="118" text-anchor="middle" class="sm dim">principal is still outstanding at the end</text>
 </svg>

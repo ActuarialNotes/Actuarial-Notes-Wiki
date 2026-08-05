@@ -5,7 +5,7 @@
 - If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$
 - Conditional probability is foundational to [[Bayes Theorem]], [[The Law of Total Probability]], and various insurance and actuarial calculations
 
-![[Media/Figures/Conditional_Probability.svg|540]]
+![[Media/Figures/Conditional_Probability.svg|340]]
 
 > [!example]- Claim Severity Given Deductible Threshold {Example}
 > A loss $X$ is uniformly distributed on $(0, 1000)$. Given that the loss exceeds 400, what is the probability it also exceeds 700?

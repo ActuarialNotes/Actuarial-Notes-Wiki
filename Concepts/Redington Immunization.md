@@ -8,7 +8,7 @@
 - Redington immunization only protects against small, parallel rate shifts and must be rebalanced as time passes and rates change
 - Less restrictive than [[Cash Flow Matching]] since exact cash flow timing is not required
 
-![[Media/Figures/Redington_Immunization.svg|540]]
+![[Media/Figures/Redington_Immunization.svg|340]]
 
 > [!example]- Verifying Redington Immunization {Example}
 > A company has a single liability of \$$10{,}000$ due in 4 years. It immunizes using two zero-coupon bonds: Bond A maturing in 2 years and Bond B maturing in 6 years. The current yield rate is $5\%$. Find the face values of the two bonds that satisfy the first two Redington conditions, and verify the third.

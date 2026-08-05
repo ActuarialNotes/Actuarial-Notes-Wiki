@@ -11,7 +11,7 @@ A **Deductible** is the initial amount of a loss that the policyholder must pay 
 
 > $$d = \text{deductible}, \quad X = \text{ground-up loss}$$
 
-![[Media/Figures/Deductible.svg|540]]
+![[Media/Figures/Deductible.svg|340]]
 
 > [!example]- Expected Payment with an Ordinary Deductible {Example}
 > Ground-up losses $X \sim \text{Exponential}(\theta = 1000)$. An ordinary deductible of $d = 200$ applies. Find $E[Y]$ where $Y = (X - 200)_+$.

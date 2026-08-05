@@ -8,7 +8,7 @@ A **linear combination** of independent random variables $L = c_1 X_1 + c_2 X_2 
 
 - For non-normal independent random variables, the [[Central Limit Theorem]] provides an approximation for large $n$
 
-![[Media/Figures/Probabilities_for_Linear_Combinations.svg|540]]
+![[Media/Figures/Probabilities_for_Linear_Combinations.svg|340]]
 
 > [!example]- Probability That Portfolio Loss Exceeds a Threshold {Example}
 > Two independent losses: $X_1 \sim N(100, 10^2)$ and $X_2 \sim N(200, 15^2)$. Find $P(X_1 + X_2 > 340)$.

@@ -17,7 +17,7 @@ The **effective discount rate** $d$ is the interest paid at the **beginning** of
 
 - Under discount, $1$ today accumulates to $\frac{1}{1-d}$ after one period.
 
-![[Media/Figures/Effective_Discount_Rate.svg|520]]
+![[Media/Figures/Effective_Discount_Rate.svg|340]]
 
 > [!example]- Bank Discount {Example}
 > A 91-day T-bill with face value $10{,}000$ is purchased at a bank discount rate of 4%. Find the purchase price and effective annual rate.

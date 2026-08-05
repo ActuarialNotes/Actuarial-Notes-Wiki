@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 246" width="560" height="246" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>An event as a subset of the sample space, simple versus compound</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -36,31 +38,23 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="244.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">An event is any subset of the sample space</text>
-  <rect x="34" y="58" width="250" height="140" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-  <text x="47" y="74" text-anchor="middle" class="sm dim">S</text>
-  <ellipse cx="105" cy="122" rx="56" ry="46" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
-  <text x="70" y="76" text-anchor="middle" class="bold" fill="#3b82f6">E</text>
-  <ellipse cx="240" cy="92" rx="20" ry="18" fill="#7c3aed" fill-opacity="0.15" stroke="#7c3aed" stroke-width="1.5"/>
-  <text x="266" y="74" text-anchor="middle" class="bold" fill="#7c3aed">F</text>
-  <circle cx="78" cy="96" r="4" fill="var(--dim)"/>
-  <circle cx="132" cy="90" r="4" fill="var(--dim)"/>
-  <circle cx="188" cy="100" r="4" fill="var(--dim)"/>
-  <circle cx="240" cy="92" r="4" fill="var(--dim)"/>
-  <circle cx="86" cy="150" r="4" fill="var(--dim)"/>
-  <circle cx="140" cy="158" r="4" fill="var(--dim)"/>
-  <circle cx="196" cy="152" r="4" fill="var(--dim)"/>
-  <circle cx="244" cy="146" r="4" fill="var(--dim)"/>
-  <text x="159" y="216" text-anchor="middle" class="sm dim">outcomes ω ∈ S</text>
-  <line x1="312" y1="76" x2="312" y2="106" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="324" y="86" text-anchor="start" class="sm bold">Simple event</text>
-  <text x="324" y="102" text-anchor="start" class="sm dim">F = {ω₄} — exactly one outcome</text>
-  <line x1="312" y1="126" x2="312" y2="156" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="324" y="136" text-anchor="start" class="sm bold">Compound event</text>
-  <text x="324" y="152" text-anchor="start" class="sm dim">E = {ω₁, ω₅} — two or more</text>
-  <line x1="312" y1="176" x2="312" y2="206" stroke="var(--dim)" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="324" y="186" text-anchor="start" class="sm bold">Certain / impossible</text>
-  <text x="324" y="202" text-anchor="start" class="sm dim">P(S) = 1,  P(∅) = 0</text>
-  <text x="280" y="232" text-anchor="middle" class="sm dim">Probability is assigned to events — that is, to subsets of S</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">An event is a subset of the sample space</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">E ⊆ S,   F = {ω₄} is a simple event</text>
+  <rect x="30" y="92" width="296" height="232" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+  <text x="43" y="108" text-anchor="middle" class="sm dim">S</text>
+  <ellipse cx="116" cy="196" rx="74" ry="68" fill="#3b82f6" fill-opacity="0.15" stroke="#3b82f6" stroke-width="1.6"/>
+  <text x="116" y="118" text-anchor="middle" class="bold" fill="#3b82f6">E</text>
+  <ellipse cx="258" cy="168" rx="30" ry="28" fill="#7c3aed" fill-opacity="0.15" stroke="#7c3aed" stroke-width="1.6"/>
+  <text x="258" y="126" text-anchor="middle" class="bold" fill="#7c3aed">F</text>
+  <circle cx="88" cy="166" r="4.5" fill="var(--dim)"/>
+  <circle cx="152" cy="158" r="4.5" fill="var(--dim)"/>
+  <circle cx="210" cy="180" r="4.5" fill="var(--dim)"/>
+  <circle cx="258" cy="168" r="4.5" fill="var(--dim)"/>
+  <circle cx="96" cy="236" r="4.5" fill="var(--dim)"/>
+  <circle cx="156" cy="248" r="4.5" fill="var(--dim)"/>
+  <circle cx="216" cy="238" r="4.5" fill="var(--dim)"/>
+  <circle cx="276" cy="280" r="4.5" fill="var(--dim)"/>
+  <text x="180" y="352" text-anchor="middle" class="sm dim">outcomes ω ∈ S</text>
 </svg>

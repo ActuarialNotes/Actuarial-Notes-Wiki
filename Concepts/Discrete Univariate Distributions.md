@@ -26,7 +26,7 @@ Most of the difficulty is identification, not computation. Read the question for
 - The **variance-to-mean ratio** is a fast identification check: it is $< 1$ for binomial, $= 1$ for Poisson, and $> 1$ for negative binomial.
 - For "at least one", reach for the complement $1 - P(X=0)$ rather than summing the tail.
 
-![[Media/Figures/Discrete_Univariate_Distributions.svg|540]]
+![[Media/Figures/Discrete_Univariate_Distributions.svg|340]]
 
 > [!example]- PMF Verification for a Simple Discrete Distribution {Example}
 > A random variable $X$ has PMF $f(k) = c \cdot k$ for $k = 1, 2, 3, 4$. Find $c$ and compute $P(X \leq 3)$.

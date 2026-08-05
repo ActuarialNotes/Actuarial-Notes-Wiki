@@ -7,7 +7,7 @@
 
 > $$= n \times (n-1) \times \cdots \times 2 \times 1$$
 
-![[Media/Figures/Combinatorics.svg|540]]
+![[Media/Figures/Combinatorics.svg|340]]
 
 > [!example]- Counting Equally Likely Outcomes for a Lottery {Example}
 > A lottery draws 3 numbers from $\{1, 2, 3, 4, 5\}$ without replacement. How many equally likely outcomes are there if order does not matter?

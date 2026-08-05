@@ -8,7 +8,7 @@
 
 > $$\text{Var}(W) = \sum_{i=1}^n a_i^2 \,\text{Var}(X_i)$$
 
-![[Media/Figures/Moments_for_Linear_Combinations.svg|540]]
+![[Media/Figures/Moments_for_Linear_Combinations.svg|340]]
 
 > [!example]- Portfolio of Two Risks {Example}
 > $X_1 \sim (E=100, \text{Var}=400)$ and $X_2 \sim (E=150, \text{Var}=900)$, independent. Find $E[X_1+X_2]$ and $\text{Var}(X_1+X_2)$.

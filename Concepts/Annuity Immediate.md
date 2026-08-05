@@ -10,7 +10,7 @@ An **annuity-immediate** is a series of $n$ level payments of 1 made at the **en
 - For a level payment of $P$ per period, multiply through by $P$.
 - The annuity-immediate is the standard building block for loan amortisation, bond pricing, and insurance reserve calculations.
 
-![[Media/Figures/Annuity_Immediate.svg|540]]
+![[Media/Figures/Annuity_Immediate.svg|340]]
 
 > [!example]- Present Value of a 5-Year Annuity-Immediate {Example}
 > An annuity pays \$$1{,}200$ at the end of each year for 5 years. The effective annual interest rate is $i = 6\%$. Find the present value.

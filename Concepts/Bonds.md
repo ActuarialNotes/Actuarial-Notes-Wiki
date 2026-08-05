@@ -12,7 +12,7 @@ A **bond** is a fixed-income debt instrument in which an issuer (borrower) promi
 
 - The **basic bond price formula**: $P = Fr \cdot a_{\overline{n}|j} + C \cdot v^n$ where $F$ = face value, $r$ = coupon rate per period, $C$ = redemption value, $n$ = number of coupons, $j$ = yield rate per period.
 
-![[Media/Figures/Bonds.svg|540]]
+![[Media/Figures/Bonds.svg|340]]
 
 > [!example]- Bond Pricing {Example}
 > A $1{,}000$ face value 5-year bond with 6% annual coupons is priced at a yield of 7%.

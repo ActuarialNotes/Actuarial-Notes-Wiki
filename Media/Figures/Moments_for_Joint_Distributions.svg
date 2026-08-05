@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>E[XY] built cell by cell from a joint table</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -36,45 +38,34 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">Every joint moment is one weighted sum over the table</text>
-  <text x="92" y="90" text-anchor="middle" class="sm dim">y = 0</text>
-  <text x="144" y="90" text-anchor="middle" class="sm dim">y = 1</text>
-  <text x="196" y="90" text-anchor="middle" class="sm dim">y = 2</text>
-  <text x="56" y="115" text-anchor="end" class="sm dim">x = 0</text>
-  <text x="56" y="145" text-anchor="end" class="sm dim">x = 1</text>
-  <text x="56" y="175" text-anchor="end" class="sm dim">x = 2</text>
-  <rect x="66" y="96" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="92" y="115" text-anchor="middle" class="sm">0.10</text>
-  <rect x="118" y="96" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="144" y="115" text-anchor="middle" class="sm">0.08</text>
-  <rect x="170" y="96" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="196" y="115" text-anchor="middle" class="sm">0.02</text>
-  <rect x="66" y="126" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="92" y="145" text-anchor="middle" class="sm">0.06</text>
-  <rect x="118" y="126" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="144" y="145" text-anchor="middle" class="sm">0.20</text>
-  <rect x="170" y="126" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="196" y="145" text-anchor="middle" class="sm">0.14</text>
-  <rect x="66" y="156" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="92" y="175" text-anchor="middle" class="sm">0.04</text>
-  <rect x="118" y="156" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="144" y="175" text-anchor="middle" class="sm">0.12</text>
-  <rect x="170" y="156" width="52" height="30" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
-  <text x="196" y="175" text-anchor="middle" class="sm">0.24</text>
-  <text x="144" y="236" text-anchor="middle" class="sm dim">each cell contributes g(x, y) · p(x, y)</text>
-  <text x="400" y="92" text-anchor="middle" class="sm bold">E[g(X, Y)] = Σ Σ g(x, y) p(x, y)</text>
-  <line x1="304" y1="112" x2="304" y2="140" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="314" y="123" text-anchor="start" class="sm bold">E[X] = Σ Σ x p(x, y)</text>
-  <text x="314" y="138" text-anchor="start" class="sm dim">= 1.34 here</text>
-  <line x1="304" y1="154" x2="304" y2="182" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="314" y="165" text-anchor="start" class="sm bold">E[Y] = Σ Σ y p(x, y)</text>
-  <text x="314" y="180" text-anchor="start" class="sm dim">= 1.28 here</text>
-  <line x1="304" y1="196" x2="304" y2="224" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="314" y="207" text-anchor="start" class="sm bold">E[XY] = Σ Σ xy p(x, y)</text>
-  <text x="314" y="222" text-anchor="start" class="sm dim">= 1.88 here</text>
-  <line x1="304" y1="238" x2="304" y2="266" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="314" y="249" text-anchor="start" class="sm bold">Cov(X, Y) = E[XY] − E[X]E[Y]</text>
-  <text x="314" y="264" text-anchor="start" class="sm dim">= 0.16 → positive tilt</text>
-  <text x="280" y="276" text-anchor="middle" class="sm dim">Independence would force E[XY] = E[X]E[Y] — it does not hold here</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Every joint moment is one weighted sum</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">E[g(X, Y)] = Σ Σ g(x, y) p(x, y)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">E[XY] = 1.88,  E[X] E[Y] = 1.72</text>
+  <text x="112" y="132" text-anchor="middle" class="sm dim">y = 0</text>
+  <text x="180" y="132" text-anchor="middle" class="sm dim">y = 1</text>
+  <text x="248" y="132" text-anchor="middle" class="sm dim">y = 2</text>
+  <text x="70" y="168" text-anchor="end" class="sm dim">x = 0</text>
+  <text x="70" y="216" text-anchor="end" class="sm dim">x = 1</text>
+  <text x="70" y="264" text-anchor="end" class="sm dim">x = 2</text>
+  <rect x="78" y="140" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="112" y="168" text-anchor="middle" class="sm">0.10</text>
+  <rect x="146" y="140" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="180" y="168" text-anchor="middle" class="sm">0.08</text>
+  <rect x="214" y="140" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="248" y="168" text-anchor="middle" class="sm">0.02</text>
+  <rect x="78" y="188" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="112" y="216" text-anchor="middle" class="sm">0.06</text>
+  <rect x="146" y="188" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="180" y="216" text-anchor="middle" class="sm">0.20</text>
+  <rect x="214" y="188" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="248" y="216" text-anchor="middle" class="sm">0.14</text>
+  <rect x="78" y="236" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="112" y="264" text-anchor="middle" class="sm">0.04</text>
+  <rect x="146" y="236" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="180" y="264" text-anchor="middle" class="sm">0.12</text>
+  <rect x="214" y="236" width="68" height="48" rx="3" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1"/>
+  <text x="248" y="264" text-anchor="middle" class="sm">0.24</text>
+  <text x="180" y="332" text-anchor="middle" class="sm dim">each cell contributes g(x, y) · p(x, y)</text>
 </svg>

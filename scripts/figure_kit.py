@@ -14,7 +14,11 @@ this module. It exists instead of matplotlib for three reasons:
 3. **Size.** Hand-written SVG is ~2 KB per figure; matplotlib's is ~40 KB.
 
 Coordinates are plain user units and the viewBox is unscaled, so a figure
-authored at 560×300 renders at whatever width the `![[...|500]]` embed asks for.
+authored at 360×470 renders at whatever width the `![[...|340]]` embed asks for.
+
+Every concept figure is **portrait** and carries three things and no more — a
+title, the picture, and the one formula worth remembering. `vcard()` lays those
+out; builders draw into the fixed box `(BX0, BY0)-(BX1, BY1)` between them.
 """
 
 from __future__ import annotations
@@ -53,7 +57,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -378,6 +384,61 @@ def axes(fig: Fig, xmin, xmax, ymin, ymax, left=48, right=24, top=52, bottom=40)
     return Axes(fig, left, top, fig.w - right, fig.h - bottom, xmin, xmax, ymin, ymax)
 
 
+# ── the portrait card ────────────────────────────────────────────────────────
+# One shape for every concept figure: a title, a picture, and one formula.
+# Everything else — the annotation columns, the footnotes, the "worth
+# remembering" asides — belongs on the concept page, not inside the image.
+VW, VH = 360, 470          # canvas
+BX0, BY0, BX1, BY1 = 20, 66, 340, 392   # the box a builder draws into
+BW, BH = BX1 - BX0, BY1 - BY0
+BCX, BCY = (BX0 + BX1) / 2, (BY0 + BY1) / 2
+
+
+def wrap(text: str, width: int = 40) -> list[str]:
+    """Greedy word wrap, measured in characters."""
+    lines: list[str] = []
+    cur = ""
+    for word in text.split():
+        cand = f"{cur} {word}".strip()
+        if len(cand) > width and cur:
+            lines.append(cur)
+            cur = word
+        else:
+            cur = cand
+    if cur:
+        lines.append(cur)
+    return lines
+
+
+def vcard(title: str, formula: str | list[str] | None = None, alt: str = "") -> Fig:
+    """A portrait figure: title on top, drawing box, formula in the footer.
+
+    The box is the same rectangle in every figure, so a reader flipping through
+    concept pages sees the picture land in the same place each time.
+    """
+    f = Fig(VW, VH, alt=alt)
+    lines = wrap(title, 40)[:3]
+    ys = {1: [40], 2: [31, 50], 3: [23, 42, 61]}[len(lines)]
+    for y, line in zip(ys, lines):
+        f.text(VW / 2, y, line, cls="ttl")
+
+    if formula:
+        rows = [formula] if isinstance(formula, str) else list(formula)[:2]
+        f.line(28, 406, VW - 28, 406, cls="rule")
+        if len(rows) == 1:
+            f.text(VW / 2, 438, rows[0], cls="fml")
+        else:
+            f.text(VW / 2, 430, rows[0], cls="fml")
+            f.text(VW / 2, 452, rows[1], cls="fml2")
+    return f
+
+
+def vaxes(fig: Fig, xmin, xmax, ymin, ymax, left=44, right=14, top=20, bottom=42) -> Axes:
+    """Cartesian axes inset into the portrait drawing box."""
+    return Axes(fig, BX0 + left, BY0 + top, BX1 - right, BY1 - bottom,
+                xmin, xmax, ymin, ymax)
+
+
 # ── cash-flow timeline ───────────────────────────────────────────────────────
 def timeline(fig: Fig, y, x0, x1, n, labels=None, tick_cls="sm dim", label_dy=17,
              show_axis_label=None):
@@ -469,5 +530,6 @@ def fmt_money(v: float) -> str:
 __all__ = [
     "Fig", "Axes", "axes", "timeline", "cash_arrow", "brace", "venn2", "universe",
     "stacked_bars", "fmt_money", "BLUE", "AMBER", "GREEN", "ROSE", "VIOLET", "TEAL",
-    "SERIES",
+    "SERIES", "vcard", "vaxes", "wrap", "VW", "VH", "BX0", "BY0", "BX1", "BY1",
+    "BW", "BH", "BCX", "BCY",
 ]

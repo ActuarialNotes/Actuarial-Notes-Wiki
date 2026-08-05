@@ -13,7 +13,7 @@ The **continuous annuity** $\bar{a}_{\overline{n}|}$ is the [[Present Value]] of
 - Compared with the [[Annuity Immediate|annuity-immediate]] $a_{\overline{n}|} = (1 - v^n)/i$, the discount rate $i$ is replaced by $\delta$. Since $\delta < i$, we have $\bar{a}_{\overline{n}|} > a_{\overline{n}|}$ — continuous receipt is worth more than end-of-period receipt.
 - [[Accumulated Value]] and present value are linked by $\bar{s}_{\overline{n}|} = (1+i)^n\,\bar{a}_{\overline{n}|}$.
 
-![[Media/Figures/Continuous_Annuity.svg|540]]
+![[Media/Figures/Continuous_Annuity.svg|340]]
 
 > [!example]- Present Value of a Continuous Annuity {Example}
 > Payments flow continuously at a rate of \$$1{,}000$ per year for 10 years at a force of interest $\delta = 0.06$. Find the present value.

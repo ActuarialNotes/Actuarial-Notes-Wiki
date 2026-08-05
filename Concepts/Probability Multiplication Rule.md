@@ -6,7 +6,7 @@ The **Probability Multiplication Rule** gives the joint probability of two event
 
 > $$= P(B) \cdot P(A \mid B)$$
 
-![[Media/Figures/Probability_Multiplication_Rule.svg|520]]
+![[Media/Figures/Probability_Multiplication_Rule.svg|340]]
 
 > [!example]- Sequential Claim Filing Without Replacement {Example}
 > A portfolio has 10 policies: 4 will generate claims this year and 6 will not. Two policies are selected at random without replacement. What is the probability both generate claims?

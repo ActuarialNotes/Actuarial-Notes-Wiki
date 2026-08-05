@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 296" width="560" height="296" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Project cash flows discounted and summed into an NPV</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -39,49 +41,35 @@ text {
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="294.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">NPV discounts every flow to time 0 and adds them up</text>
-  <rect x="77.92" y="111.62" width="15" height="91.25" rx="2" fill="#e11d48" fill-opacity="0.32"/>
-  <rect x="96.92" y="111.62" width="15" height="91.25" rx="2" fill="#e11d48" fill-opacity="0.8"/>
-  <rect x="129.46" y="84.25" width="15" height="27.38" rx="2" fill="#059669" fill-opacity="0.32"/>
-  <rect x="148.46" y="86.74" width="15" height="24.89" rx="2" fill="#059669" fill-opacity="0.8"/>
-  <rect x="181" y="75.12" width="15" height="36.5" rx="2" fill="#059669" fill-opacity="0.32"/>
-  <rect x="200" y="81.46" width="15" height="30.17" rx="2" fill="#059669" fill-opacity="0.8"/>
-  <rect x="232.54" y="75.12" width="15" height="36.5" rx="2" fill="#059669" fill-opacity="0.32"/>
-  <rect x="251.54" y="84.2" width="15" height="27.42" rx="2" fill="#059669" fill-opacity="0.8"/>
-  <rect x="284.08" y="84.25" width="15" height="27.38" rx="2" fill="#059669" fill-opacity="0.32"/>
-  <rect x="303.08" y="92.93" width="15" height="18.7" rx="2" fill="#059669" fill-opacity="0.8"/>
-  <line x1="64" y1="111.62" x2="342" y2="111.62" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="64" y1="212" x2="64" y2="56" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="94.92" y1="111.62" x2="94.92" y2="115.62" class="tick"/>
-  <text x="94.92" y="127.62" text-anchor="middle" class="sm dim">0</text>
-  <line x1="146.46" y1="111.62" x2="146.46" y2="115.62" class="tick"/>
-  <text x="146.46" y="127.62" text-anchor="middle" class="sm dim">1</text>
-  <line x1="198" y1="111.62" x2="198" y2="115.62" class="tick"/>
-  <text x="198" y="127.62" text-anchor="middle" class="sm dim">2</text>
-  <line x1="249.54" y1="111.62" x2="249.54" y2="115.62" class="tick"/>
-  <text x="249.54" y="127.62" text-anchor="middle" class="sm dim">3</text>
-  <line x1="301.08" y1="111.62" x2="301.08" y2="115.62" class="tick"/>
-  <text x="301.08" y="127.62" text-anchor="middle" class="sm dim">4</text>
-  <line x1="60" y1="202.88" x2="64" y2="202.88" class="tick"/>
-  <text x="56" y="206.47" text-anchor="end" class="sm dim">-1,000</text>
-  <line x1="60" y1="111.62" x2="64" y2="111.62" class="tick"/>
-  <text x="56" y="115.22" text-anchor="end" class="sm dim">0</text>
-  <line x1="60" y1="66" x2="64" y2="66" class="tick"/>
-  <text x="56" y="69.6" text-anchor="end" class="sm dim">500</text>
-  <text x="60" y="52" text-anchor="start" class="sm dim">cash flow</text>
-  <text x="332" y="230" text-anchor="end" class="sm dim">year</text>
-  <line x1="72" y1="78" x2="85" y2="78" stroke="var(--dim)" stroke-width="2.4" stroke-linecap="round"/>
-  <text x="91" y="81.6" text-anchor="start" class="sm">nominal</text>
-  <line x1="72" y1="94" x2="85" y2="94" stroke="#059669" stroke-width="2.4" stroke-linecap="round"/>
-  <text x="91" y="97.6" text-anchor="start" class="sm">discounted</text>
-  <text x="430" y="96" text-anchor="middle" class="sm bold">NPV = Σ C_t v^t</text>
-  <text x="430" y="116" text-anchor="middle" class="sm dim">at i = 10%:  NPV ≈ 109</text>
-  <rect x="340" y="134" width="186" height="58" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-  <text x="433" y="154" text-anchor="middle" class="sm bold">NPV &gt; 0</text>
-  <text x="433" y="172" text-anchor="middle" class="sm dim">the project beats the rate i</text>
-  <rect x="340" y="200" width="186" height="58" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
-  <text x="433" y="220" text-anchor="middle" class="sm bold">IRR</text>
-  <text x="433" y="238" text-anchor="middle" class="sm dim">the rate i* where NPV = 0</text>
-  <text x="280" y="284" text-anchor="middle" class="sm dim">Inflows positive, outflows negative — sign discipline is the trick</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">NPV discounts every flow to time 0</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">NPV = Σ C_t v^t</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">at i = 10%:  NPV ≈ 96</text>
+  <rect x="88.08" y="175.38" width="13" height="158.75" rx="2" fill="#e11d48" fill-opacity="0.3"/>
+  <rect x="105.08" y="175.38" width="13" height="158.75" rx="2" fill="#e11d48" fill-opacity="0.85"/>
+  <rect x="136.54" y="127.75" width="13" height="47.62" rx="2" fill="#059669" fill-opacity="0.3"/>
+  <rect x="153.54" y="132.08" width="13" height="43.3" rx="2" fill="#059669" fill-opacity="0.85"/>
+  <rect x="185" y="111.88" width="13" height="63.5" rx="2" fill="#059669" fill-opacity="0.3"/>
+  <rect x="202" y="122.9" width="13" height="52.48" rx="2" fill="#059669" fill-opacity="0.85"/>
+  <rect x="233.46" y="111.88" width="13" height="63.5" rx="2" fill="#059669" fill-opacity="0.3"/>
+  <rect x="250.46" y="127.67" width="13" height="47.71" rx="2" fill="#059669" fill-opacity="0.85"/>
+  <rect x="281.92" y="127.75" width="13" height="47.62" rx="2" fill="#059669" fill-opacity="0.3"/>
+  <rect x="298.92" y="142.85" width="13" height="32.53" rx="2" fill="#059669" fill-opacity="0.85"/>
+  <line x1="74" y1="175.38" x2="336" y2="175.38" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="350" x2="74" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="70" y1="334.12" x2="74" y2="334.12" class="tick"/>
+  <text x="66" y="337.73" text-anchor="end" class="sm dim">-1,000</text>
+  <line x1="70" y1="175.38" x2="74" y2="175.38" class="tick"/>
+  <text x="66" y="178.97" text-anchor="end" class="sm dim">0</text>
+  <line x1="70" y1="96" x2="74" y2="96" class="tick"/>
+  <text x="66" y="99.6" text-anchor="end" class="sm dim">500</text>
+  <text x="70" y="82" text-anchor="start" class="sm dim">cash flow</text>
+  <text x="103.08" y="366" text-anchor="middle" class="sm dim">0</text>
+  <text x="151.54" y="366" text-anchor="middle" class="sm dim">1</text>
+  <text x="200" y="366" text-anchor="middle" class="sm dim">2</text>
+  <text x="248.46" y="366" text-anchor="middle" class="sm dim">3</text>
+  <text x="296.92" y="366" text-anchor="middle" class="sm dim">4</text>
+  <text x="326" y="382" text-anchor="end" class="sm dim">year</text>
+  <text x="180" y="388" text-anchor="middle" class="sm dim">pale = nominal,  solid = discounted</text>
 </svg>

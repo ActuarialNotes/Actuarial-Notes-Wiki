@@ -11,7 +11,7 @@ In the context of annuities, a **geometric progression** refers to a sequence of
 
 - For a geometric [[Perpetuity]] ($i > g$): $\text{PV} = 1/(i-g)$.
 
-![[Media/Figures/Geometric_Progression.svg|540]]
+![[Media/Figures/Geometric_Progression.svg|340]]
 
 > [!example]- Geometric Perpetuity {Example}
 > A cash flow starts at $5{,}000$ at end of year 1 and grows at $2\%$ per year forever. Find the PV at $i=8\%$.

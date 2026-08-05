@@ -11,7 +11,7 @@ A **level perpetuity** is a [[Perpetuity]] with equal payments at every period, 
 - The present value formula follows from the limit of the finite annuity as $n \to \infty$, since $v^n \to 0$.
 - Level perpetuities model preferred stock dividends, ground rents, and endowments.
 
-![[Media/Figures/Level_Perpetuity.svg|540]]
+![[Media/Figures/Level_Perpetuity.svg|340]]
 
 > [!example]- Endowment Fund {Example}
 > A university endowment must pay $50{,}000$ annually (end of year) forever. At $5\%$ effective annual interest, how large must the endowment be?

@@ -4,7 +4,7 @@ The **face value** (also called **par value** or **nominal value**) $F$ of a bon
 
 - The face value is not necessarily the [[Bond Price|price]] paid for the bond. When the [[Yield Rate]] differs from the coupon rate, the bond trades at a premium (price $> F$) or discount (price $< F$).
 
-![[Media/Figures/Face_Value.svg|540]]
+![[Media/Figures/Face_Value.svg|340]]
 
 > [!example]- Coupon from Face Value {Example}
 > A $5{,}000$ face value bond pays a 4% semi-annual coupon rate. Find the semi-annual coupon payment.

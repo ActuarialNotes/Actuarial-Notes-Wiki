@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 254" width="560" height="254" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A random variable mapping outcomes of two coin tosses to the number of heads</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -40,36 +42,35 @@ text {
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
     <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="252.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">A random variable is a function from outcomes to numbers</text>
-  <rect x="30" y="62" width="176" height="150" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-  <text x="43" y="78" text-anchor="middle" class="sm dim">S</text>
-  <rect x="56" y="78" width="60" height="28" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="86" y="96" text-anchor="middle" class="sm">HH</text>
-  <rect x="56" y="114" width="60" height="28" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="86" y="132" text-anchor="middle" class="sm">HT</text>
-  <rect x="56" y="150" width="60" height="28" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="86" y="168" text-anchor="middle" class="sm">TH</text>
-  <rect x="56" y="186" width="60" height="28" rx="6" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="86" y="204" text-anchor="middle" class="sm">TT</text>
-  <text x="118" y="228" text-anchor="middle" class="sm dim">outcomes of two coin tosses</text>
-  <line x1="284" y1="138" x2="514" y2="138" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <text x="524" y="142" text-anchor="start" class="sm dim">ℝ</text>
-  <line x1="300" y1="133" x2="300" y2="143" class="tick"/>
-  <circle cx="300" cy="138" r="4.5" fill="#7c3aed"/>
-  <text x="300" y="158" text-anchor="middle" class="sm">0</text>
-  <line x1="400" y1="133" x2="400" y2="143" class="tick"/>
-  <circle cx="400" cy="138" r="4.5" fill="#7c3aed"/>
-  <text x="400" y="158" text-anchor="middle" class="sm">1</text>
-  <line x1="500" y1="133" x2="500" y2="143" class="tick"/>
-  <circle cx="500" cy="138" r="4.5" fill="#7c3aed"/>
-  <text x="500" y="158" text-anchor="middle" class="sm">2</text>
-  <line x1="120" y1="92" x2="496" y2="128" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
-  <line x1="120" y1="128" x2="396" y2="128" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
-  <line x1="120" y1="164" x2="396" y2="128" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
-  <line x1="120" y1="200" x2="296" y2="128" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
-  <text x="400" y="88" text-anchor="middle" class="sm bold">X = number of heads</text>
-  <text x="400" y="186" text-anchor="middle" class="sm dim">X : S → ℝ</text>
-  <text x="400" y="210" text-anchor="middle" class="sm dim">Discrete: countably many values</text>
-  <text x="400" y="226" text-anchor="middle" class="sm dim">Continuous: an interval of values</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A random variable maps outcomes to</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">numbers</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">X : S → ℝ</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">here X = number of heads</text>
+  <rect x="36" y="110" width="288" height="92" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+  <text x="49" y="126" text-anchor="middle" class="sm dim">S</text>
+  <rect x="42" y="152" width="64" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="74" y="174" text-anchor="middle">TT</text>
+  <rect x="114" y="152" width="64" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="146" y="174" text-anchor="middle">HT</text>
+  <rect x="186" y="152" width="64" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="218" y="174" text-anchor="middle">TH</text>
+  <rect x="258" y="152" width="64" height="34" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="290" y="174" text-anchor="middle">HH</text>
+  <line x1="50" y1="330" x2="310" y2="330" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <text x="320" y="334" text-anchor="start" class="sm dim">ℝ</text>
+  <line x1="66" y1="325" x2="66" y2="335" class="tick"/>
+  <circle cx="66" cy="330" r="5" fill="#7c3aed"/>
+  <text x="66" y="352" text-anchor="middle">0</text>
+  <line x1="180" y1="325" x2="180" y2="335" class="tick"/>
+  <circle cx="180" cy="330" r="5" fill="#7c3aed"/>
+  <text x="180" y="352" text-anchor="middle">1</text>
+  <line x1="294" y1="325" x2="294" y2="335" class="tick"/>
+  <circle cx="294" cy="330" r="5" fill="#7c3aed"/>
+  <text x="294" y="352" text-anchor="middle">2</text>
+  <line x1="74" y1="188" x2="66" y2="316" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
+  <line x1="146" y1="188" x2="180" y2="316" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
+  <line x1="218" y1="188" x2="180" y2="316" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
+  <line x1="290" y1="188" x2="294" y2="316" class="thin dash" stroke="var(--dim)" stroke-width="1" marker-end="url(#ahvardim)"/>
 </svg>

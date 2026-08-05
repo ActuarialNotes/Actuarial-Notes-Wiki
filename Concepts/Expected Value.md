@@ -5,7 +5,7 @@
 - It is linear: $E[aX + b] = aE[X] + b$
 - The $n$-th moment of $X$ is $E[X^n]$, and the $n$-th central moment is $E[(X-\mu)^n]$
 
-![[Media/Figures/Expected_Value.svg|520]]
+![[Media/Figures/Expected_Value.svg|340]]
 
 > [!example]- Expected Payout on a Simple Policy {Example}
 > A discrete random variable $X$ (claim size) has PMF: $P(X=0)=0.5$, $P(X=100)=0.3$, $P(X=500)=0.2$. Find $E[X]$.

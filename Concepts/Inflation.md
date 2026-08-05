@@ -9,7 +9,7 @@
 - Unlike uniform scaling, inflation interacts non-linearly with fixed deductibles and benefit limits
 - The same dollar deductible covers a smaller share of an inflated loss, and more claims breach the deductible — this effect is called the **leveraged impact of inflation**
 
-![[Media/Figures/Inflation.svg|540]]
+![[Media/Figures/Inflation.svg|340]]
 
 > [!example]- Effect of Inflation on Expected Payment {Example}
 > Ground-up losses $X \sim \text{Exponential}(\theta = 1000)$ with ordinary deductible $d = 500$. After 10% inflation, losses become $X' = 1.1X$. Find the new expected payment $E[(X'-500)_+]$.

@@ -8,7 +8,7 @@ A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a ra
 > $$\text{where each } \omega_i = \text{an elementary outcome}$$
 > $$\text{of the experiment}$$
 
-![[Media/Figures/Sample_Space.svg|520]]
+![[Media/Figures/Sample_Space.svg|340]]
 
 > [!example]- Sample Space for Claim Occurrence and Size {Example}
 > An experiment records whether a policyholder files a claim and, if so, classifies the loss as small ($\le$ \$$1{,}000$) or large ($>$ \$$1{,}000$). Write the sample space.

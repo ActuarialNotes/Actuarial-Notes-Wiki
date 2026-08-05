@@ -7,7 +7,7 @@
 - These two conditions ensure that if interest rates change slightly, the change in asset value approximately equals the change in liability value
 - For **full [[Immunization]]** (protection against any single interest rate change), [[Convexity]] must also satisfy $C_{assets} \geq C_{liabilities}$
 
-![[Media/Figures/Duration_Matching.svg|540]]
+![[Media/Figures/Duration_Matching.svg|340]]
 
 > [!example]- Matching Duration {Example}
 > A liability of $10{,}000$ is due in 5 years. At $i=6\%$, $PV = 7472.58$ and Macaulay duration $= 5$ years. What asset portfolio should be constructed?

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" width="560" height="300" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A bond's coupon stream and redemption payment on one timeline</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -42,48 +44,36 @@ text {
     <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
     <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="298.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">A bond is a coupon annuity plus a single redemption</text>
-  <line x1="96" y1="122" x2="442" y2="122" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="104" y1="118" x2="104" y2="126" class="tick"/>
-  <text x="104" y="139" text-anchor="middle" class="sm dim">0</text>
-  <line x1="157.33" y1="118" x2="157.33" y2="126" class="tick"/>
-  <text x="157.33" y="139" text-anchor="middle" class="sm dim">1</text>
-  <line x1="210.67" y1="118" x2="210.67" y2="126" class="tick"/>
-  <text x="210.67" y="139" text-anchor="middle" class="sm dim">2</text>
-  <line x1="264" y1="118" x2="264" y2="126" class="tick"/>
-  <text x="264" y="139" text-anchor="middle" class="sm dim">…</text>
-  <line x1="317.33" y1="118" x2="317.33" y2="126" class="tick"/>
-  <line x1="370.67" y1="118" x2="370.67" y2="126" class="tick"/>
-  <text x="370.67" y="139" text-anchor="middle" class="sm dim">5</text>
-  <line x1="424" y1="118" x2="424" y2="126" class="tick"/>
-  <text x="424" y="139" text-anchor="middle" class="sm dim">n</text>
-  <line x1="157.33" y1="122" x2="157.33" y2="94" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="157.33" y="88" text-anchor="middle" class="sm">Fr</text>
-  <line x1="210.67" y1="122" x2="210.67" y2="94" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="264" y1="122" x2="264" y2="94" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="317.33" y1="122" x2="317.33" y2="94" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="370.67" y1="122" x2="370.67" y2="94" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="424" y1="122" x2="424" y2="94" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="424" y1="122" x2="424" y2="60" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="424" y="54" text-anchor="middle" class="sm">C</text>
-  <line x1="104" y1="122" x2="104" y2="170" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
-  <text x="104" y="186" text-anchor="middle" class="sm">P</text>
-  <text x="444" y="92" text-anchor="start" class="sm" fill="#3b82f6">coupons Fr</text>
-  <text x="444" y="60" text-anchor="start" class="sm" fill="#059669">redemption C</text>
-  <line x1="28" y1="198" x2="532" y2="198" class="rule"/>
-  <text x="280" y="220" text-anchor="middle" class="sm bold">P = Fr · a₍ₙ₎ⱼ  +  C · vⁿ</text>
-  <line x1="36" y1="244" x2="36" y2="274" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="45" y="255" text-anchor="start" class="sm bold">F  face value</text>
-  <text x="45" y="270" text-anchor="start" class="sm dim">sets the coupon</text>
-  <line x1="164" y1="244" x2="164" y2="274" stroke="#3b82f6" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="173" y="255" text-anchor="start" class="sm bold">r  coupon rate</text>
-  <text x="173" y="270" text-anchor="start" class="sm dim">fixed at issue</text>
-  <line x1="292" y1="244" x2="292" y2="274" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="301" y="255" text-anchor="start" class="sm bold">j  yield rate</text>
-  <text x="301" y="270" text-anchor="start" class="sm dim">set by the market</text>
-  <line x1="420" y1="244" x2="420" y2="274" stroke="#7c3aed" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="429" y="255" text-anchor="start" class="sm bold">n  term</text>
-  <text x="429" y="270" text-anchor="start" class="sm dim">number of coupons</text>
-  <text x="280" y="292" text-anchor="middle" class="sm dim">Fr &gt; Cj → premium · Fr = Cj → par · Fr &lt; Cj → discount</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A coupon annuity plus a single</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">redemption</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">P = Fr · a₍ₙ₎ⱼ + C · vⁿ</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">Fr &gt; Cj premium,  Fr &lt; Cj discount</text>
+  <line x1="48" y1="236" x2="318" y2="236" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="56" y1="232" x2="56" y2="240" class="tick"/>
+  <text x="56" y="253" text-anchor="middle" class="sm dim">0</text>
+  <line x1="96.67" y1="232" x2="96.67" y2="240" class="tick"/>
+  <text x="96.67" y="253" text-anchor="middle" class="sm dim">1</text>
+  <line x1="137.33" y1="232" x2="137.33" y2="240" class="tick"/>
+  <text x="137.33" y="253" text-anchor="middle" class="sm dim">2</text>
+  <line x1="178" y1="232" x2="178" y2="240" class="tick"/>
+  <text x="178" y="253" text-anchor="middle" class="sm dim">…</text>
+  <line x1="218.67" y1="232" x2="218.67" y2="240" class="tick"/>
+  <line x1="259.33" y1="232" x2="259.33" y2="240" class="tick"/>
+  <text x="259.33" y="253" text-anchor="middle" class="sm dim">5</text>
+  <line x1="300" y1="232" x2="300" y2="240" class="tick"/>
+  <text x="300" y="253" text-anchor="middle" class="sm dim">n</text>
+  <line x1="96.67" y1="236" x2="96.67" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="96.67" y="200" text-anchor="middle" class="sm">Fr</text>
+  <line x1="137.33" y1="236" x2="137.33" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="178" y1="236" x2="178" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="218.67" y1="236" x2="218.67" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="259.33" y1="236" x2="259.33" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="300" y1="236" x2="300" y2="206" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="300" y1="236" x2="300" y2="164" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="300" y="158" text-anchor="middle" class="sm">C</text>
+  <line x1="56" y1="236" x2="56" y2="292" class="thin" stroke="#d97706" stroke-width="1.8" marker-end="url(#ahd97706)"/>
+  <text x="56" y="308" text-anchor="middle" class="sm">P</text>
+  <text x="180" y="128" text-anchor="middle" class="sm dim">coupons Fr, then C at maturity</text>
 </svg>

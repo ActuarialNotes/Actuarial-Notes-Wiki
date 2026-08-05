@@ -7,7 +7,7 @@
 
 > $$= E[X^2] - \mu^2$$
 
-![[Media/Figures/Variance.svg|520]]
+![[Media/Figures/Variance.svg|340]]
 
 > [!example]- Variance of an Insurance Payment {Example}
 > A loss $X$ has $E[X] = 500$ and $E[X^2] = 310{,}000$. Find $\text{Var}(X)$.

@@ -181,7 +181,9 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
             key={current.src}
             src={current.src}
             alt={current.alt}
-            className="mx-auto max-h-56 w-full object-contain"
+            // Concept figures are portrait (see docs/concept-figures.md), so a
+            // landscape-era height cap would shrink them to an unreadable column.
+            className="mx-auto max-h-80 w-full object-contain"
             onError={() => setFailed(prev => new Set(prev).add(current.src))}
           />
         </button>

@@ -9,7 +9,7 @@
 - Where $F$ = face, $r$ = coupon rate per period, $C$ = redemption value, $j$ = yield rate.
 - The [[Book Value]] decreases each period toward $C$ at maturity.
 
-![[Media/Figures/Amortization_of_Premium.svg|540]]
+![[Media/Figures/Amortization_of_Premium.svg|340]]
 
 > [!example]- Premium Bond Amortization {Example}
 > A $1{,}000$ face bond with 8% annual coupons is bought at 7% yield for 5 years (price = \$$1041.00$). Find the premium amortized in year 1.

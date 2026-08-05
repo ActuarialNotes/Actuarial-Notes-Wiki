@@ -7,7 +7,7 @@ A **coupon** is the periodic interest payment made by a bond issuer to the bondh
 - The total number of coupon payments equals $n$, the number of periods until maturity.
 - Coupons represent the income component of a bond's return; the other component is any capital gain or loss at redemption.
 
-![[Media/Figures/Coupon.svg|540]]
+![[Media/Figures/Coupon.svg|340]]
 
 > [!example]- Coupon Payment Amount {Example}
 > A \$$5{,}000$ face value bond pays semi-annual coupons at an annual coupon rate of $6\%$. What is each coupon payment?

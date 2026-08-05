@@ -6,7 +6,7 @@ The **call premium** is the amount by which the [[Call Price]] of a [[Callable B
 - The call premium typically declines as the call date approaches maturity, eventually reaching zero at maturity (where call price = face value).
 - From the issuer's perspective, the call premium is a cost of the call option. Higher call premiums make bonds more attractive to investors but increase the issuer's redemption cost.
 
-![[Media/Figures/Call_Premium.svg|540]]
+![[Media/Figures/Call_Premium.svg|340]]
 
 > [!example]- Identifying the Call Premium {Example}
 > A bond with $1{,}000$ face value is callable at $1{,}030$ after 2 years and at $1{,}015$ after 4 years.

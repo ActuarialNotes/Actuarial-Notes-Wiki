@@ -14,7 +14,7 @@ The **accumulation function** $a(t)$ gives the accumulated value at time $t \geq
 - The [[Force of Interest]] at any time is recovered from $a(t)$ by $\delta(t) = a'(t)/a(t) = \frac{d}{dt}\ln a(t)$.
 - The **amount function** $A(t) = k \cdot a(t)$ gives the accumulated value of an initial investment of $k$.
 
-![[Media/Figures/Accumulation_Function.svg|520]]
+![[Media/Figures/Accumulation_Function.svg|340]]
 
 > [!example]- Accumulated Value Under Simple vs. Compound Interest {Example}
 > An investor deposits \$$1{,}000$ at time 0. Compare the accumulated values at $t = 5$ years under (a) simple interest at $8\%$ and (b) compound interest at $8\%$.

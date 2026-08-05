@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 294" width="560" height="294" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Spot rates as the yield on each zero-coupon maturity</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -39,50 +41,45 @@ text {
   <defs>
     <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="292.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">A spot rate is the yield on one single future payment</text>
-  <rect x="86.71" y="174" width="26.19" height="26" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="126.39" y="148" width="26.19" height="52" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="166.07" y="127.2" width="26.19" height="72.8" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="205.75" y="111.6" width="26.19" height="88.4" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="245.42" y="101.2" width="26.19" height="98.8" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <rect x="285.1" y="96" width="26.19" height="104" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
-  <polyline points="99.81,174 139.48,148 179.16,127.2 218.84,111.6 258.52,101.2 298.19,96" class="curve" stroke="#7c3aed" stroke-width="2"/>
-  <circle cx="99.81" cy="174" r="3" fill="#7c3aed"/>
-  <circle cx="139.48" cy="148" r="3" fill="#7c3aed"/>
-  <circle cx="179.16" cy="127.2" r="3" fill="#7c3aed"/>
-  <circle cx="218.84" cy="111.6" r="3" fill="#7c3aed"/>
-  <circle cx="258.52" cy="101.2" r="3" fill="#7c3aed"/>
-  <circle cx="298.19" cy="96" r="3" fill="#7c3aed"/>
-  <line x1="76" y1="200" x2="332" y2="200" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="76" y1="200" x2="76" y2="60" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
-  <line x1="99.81" y1="200" x2="99.81" y2="204" class="tick"/>
-  <text x="99.81" y="216" text-anchor="middle" class="sm dim">1</text>
-  <line x1="139.48" y1="200" x2="139.48" y2="204" class="tick"/>
-  <text x="139.48" y="216" text-anchor="middle" class="sm dim">2</text>
-  <line x1="179.16" y1="200" x2="179.16" y2="204" class="tick"/>
-  <text x="179.16" y="216" text-anchor="middle" class="sm dim">3</text>
-  <line x1="218.84" y1="200" x2="218.84" y2="204" class="tick"/>
-  <text x="218.84" y="216" text-anchor="middle" class="sm dim">4</text>
-  <line x1="258.52" y1="200" x2="258.52" y2="204" class="tick"/>
-  <text x="258.52" y="216" text-anchor="middle" class="sm dim">5</text>
-  <line x1="298.19" y1="200" x2="298.19" y2="204" class="tick"/>
-  <text x="298.19" y="216" text-anchor="middle" class="sm dim">6</text>
-  <line x1="72" y1="174" x2="76" y2="174" class="tick"/>
-  <text x="68" y="177.6" text-anchor="end" class="sm dim">3%</text>
-  <line x1="72" y1="122" x2="76" y2="122" class="tick"/>
-  <text x="68" y="125.6" text-anchor="end" class="sm dim">4%</text>
-  <line x1="72" y1="70" x2="76" y2="70" class="tick"/>
-  <text x="68" y="73.6" text-anchor="end" class="sm dim">5%</text>
-  <text x="72" y="56" text-anchor="start" class="sm dim">spot rate sₙ</text>
-  <text x="322" y="232" text-anchor="end" class="sm dim">maturity n (years)</text>
-  <text x="199" y="252" text-anchor="middle" class="sm dim">each bar is a zero-coupon yield</text>
-  <text x="430" y="100" text-anchor="middle" class="sm bold">P = Σ C_t / (1 + s_t)^t</text>
-  <text x="430" y="120" text-anchor="middle" class="sm dim">discount each flow at its own rate</text>
-  <rect x="342" y="138" width="186" height="60" rx="7" fill="#7c3aed" fill-opacity="0.12" stroke="#7c3aed" stroke-width="1.2"/>
-  <text x="435" y="160" text-anchor="middle" class="sm bold">Read from the yield curve</text>
-  <text x="435" y="178" text-anchor="middle" class="sm dim">or bootstrapped from bond prices</text>
-  <rect x="342" y="206" width="186" height="60" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-  <text x="435" y="228" text-anchor="middle" class="sm bold">Links to forwards</text>
-  <text x="435" y="246" text-anchor="middle" class="sm dim">(1+sₙ)ⁿ = (1+sₙ₋₁)ⁿ⁻¹(1+f)</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A spot rate is the yield on one future</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">payment</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">P = Σ C_t / (1 + s_t)^t</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">discount each flow at its own rate</text>
+  <rect x="88.8" y="299.2" width="26.4" height="50.8" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="128.8" y="248.4" width="26.4" height="101.6" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="168.8" y="207.76" width="26.4" height="142.24" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="208.8" y="177.28" width="26.4" height="172.72" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="248.8" y="156.96" width="26.4" height="193.04" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="288.8" y="146.8" width="26.4" height="203.2" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <polyline points="102,299.2 142,248.4 182,207.76 222,177.28 262,156.96 302,146.8" class="curve" stroke="#7c3aed" stroke-width="2"/>
+  <circle cx="102" cy="299.2" r="3" fill="#7c3aed"/>
+  <circle cx="142" cy="248.4" r="3" fill="#7c3aed"/>
+  <circle cx="182" cy="207.76" r="3" fill="#7c3aed"/>
+  <circle cx="222" cy="177.28" r="3" fill="#7c3aed"/>
+  <circle cx="262" cy="156.96" r="3" fill="#7c3aed"/>
+  <circle cx="302" cy="146.8" r="3" fill="#7c3aed"/>
+  <line x1="78" y1="350" x2="336" y2="350" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="78" y1="350" x2="78" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="102" y1="350" x2="102" y2="354" class="tick"/>
+  <text x="102" y="366" text-anchor="middle" class="sm dim">1</text>
+  <line x1="142" y1="350" x2="142" y2="354" class="tick"/>
+  <text x="142" y="366" text-anchor="middle" class="sm dim">2</text>
+  <line x1="182" y1="350" x2="182" y2="354" class="tick"/>
+  <text x="182" y="366" text-anchor="middle" class="sm dim">3</text>
+  <line x1="222" y1="350" x2="222" y2="354" class="tick"/>
+  <text x="222" y="366" text-anchor="middle" class="sm dim">4</text>
+  <line x1="262" y1="350" x2="262" y2="354" class="tick"/>
+  <text x="262" y="366" text-anchor="middle" class="sm dim">5</text>
+  <line x1="302" y1="350" x2="302" y2="354" class="tick"/>
+  <text x="302" y="366" text-anchor="middle" class="sm dim">6</text>
+  <line x1="74" y1="299.2" x2="78" y2="299.2" class="tick"/>
+  <text x="70" y="302.8" text-anchor="end" class="sm dim">3%</text>
+  <line x1="74" y1="197.6" x2="78" y2="197.6" class="tick"/>
+  <text x="70" y="201.2" text-anchor="end" class="sm dim">4%</text>
+  <line x1="74" y1="96" x2="78" y2="96" class="tick"/>
+  <text x="70" y="99.6" text-anchor="end" class="sm dim">5%</text>
+  <text x="326" y="382" text-anchor="end" class="sm dim">maturity n (years)</text>
+  <text x="74" y="82" text-anchor="start" class="sm dim">spot rate sₙ</text>
 </svg>

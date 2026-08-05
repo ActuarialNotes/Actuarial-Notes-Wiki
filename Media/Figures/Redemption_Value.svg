@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 288" width="560" height="288" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>The redemption payment at maturity, at, above or below par</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -41,42 +43,41 @@ text {
     <marker id="ah3b82f6" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#3b82f6"/></marker>
     <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
   </defs>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="286.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">C is what the bondholder is repaid at maturity</text>
-  <line x1="112" y1="124" x2="438" y2="124" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
-  <line x1="120" y1="120" x2="120" y2="128" class="tick"/>
-  <text x="120" y="141" text-anchor="middle" class="sm dim">0</text>
-  <line x1="170" y1="120" x2="170" y2="128" class="tick"/>
-  <text x="170" y="141" text-anchor="middle" class="sm dim">1</text>
-  <line x1="220" y1="120" x2="220" y2="128" class="tick"/>
-  <text x="220" y="141" text-anchor="middle" class="sm dim">2</text>
-  <line x1="270" y1="120" x2="270" y2="128" class="tick"/>
-  <text x="270" y="141" text-anchor="middle" class="sm dim">…</text>
-  <line x1="320" y1="120" x2="320" y2="128" class="tick"/>
-  <line x1="370" y1="120" x2="370" y2="128" class="tick"/>
-  <text x="370" y="141" text-anchor="middle" class="sm dim">5</text>
-  <line x1="420" y1="120" x2="420" y2="128" class="tick"/>
-  <text x="420" y="141" text-anchor="middle" class="sm dim">n</text>
-  <line x1="170" y1="124" x2="170" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <text x="170" y="90" text-anchor="middle" class="sm">Fr</text>
-  <line x1="220" y1="124" x2="220" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="270" y1="124" x2="270" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="320" y1="124" x2="320" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="370" y1="124" x2="370" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="420" y1="124" x2="420" y2="96" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
-  <line x1="420" y1="124" x2="420" y2="62" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
-  <text x="420" y="56" text-anchor="middle" class="sm">C</text>
-  <text x="444" y="64" text-anchor="start" class="sm bold" fill="#059669">C at time n</text>
-  <line x1="28" y1="190" x2="532" y2="190" class="rule"/>
-  <line x1="40" y1="208" x2="40" y2="238" stroke="#059669" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="50" y="219" text-anchor="start" class="sm bold">C = F</text>
-  <text x="50" y="234" text-anchor="start" class="sm dim">at par — the usual case</text>
-  <line x1="212" y1="208" x2="212" y2="238" stroke="#d97706" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="222" y="219" text-anchor="start" class="sm bold">C &gt; F</text>
-  <text x="222" y="234" text-anchor="start" class="sm dim">redeemed above par</text>
-  <line x1="384" y1="208" x2="384" y2="238" stroke="#e11d48" stroke-width="2.6" stroke-linecap="round"/>
-  <text x="394" y="219" text-anchor="start" class="sm bold">C &lt; F</text>
-  <text x="394" y="234" text-anchor="start" class="sm dim">redeemed below par</text>
-  <text x="280" y="262" text-anchor="middle" class="sm dim">P = Fr · a₍ₙ₎ⱼ + C · vⁿ  — the coupon uses F, the terminal payment uses C</text>
-  <text x="280" y="280" text-anchor="middle" class="sm dim">For a callable bond, C changes with the assumed call date</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">C is what the bondholder is repaid at</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">maturity</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">P = Fr · a₍ₙ₎ⱼ + C · vⁿ</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">C = F at par;  C &gt; F or C &lt; F otherwise</text>
+  <line x1="48" y1="224" x2="318" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.2" marker-end="url(#ahvaraxis)"/>
+  <line x1="56" y1="220" x2="56" y2="228" class="tick"/>
+  <text x="56" y="241" text-anchor="middle" class="sm dim">0</text>
+  <line x1="96.67" y1="220" x2="96.67" y2="228" class="tick"/>
+  <text x="96.67" y="241" text-anchor="middle" class="sm dim">1</text>
+  <line x1="137.33" y1="220" x2="137.33" y2="228" class="tick"/>
+  <text x="137.33" y="241" text-anchor="middle" class="sm dim">2</text>
+  <line x1="178" y1="220" x2="178" y2="228" class="tick"/>
+  <text x="178" y="241" text-anchor="middle" class="sm dim">…</text>
+  <line x1="218.67" y1="220" x2="218.67" y2="228" class="tick"/>
+  <line x1="259.33" y1="220" x2="259.33" y2="228" class="tick"/>
+  <text x="259.33" y="241" text-anchor="middle" class="sm dim">5</text>
+  <line x1="300" y1="220" x2="300" y2="228" class="tick"/>
+  <text x="300" y="241" text-anchor="middle" class="sm dim">n</text>
+  <line x1="96.67" y1="224" x2="96.67" y2="194" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <text x="96.67" y="188" text-anchor="middle" class="sm">Fr</text>
+  <line x1="137.33" y1="224" x2="137.33" y2="194" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="178" y1="224" x2="178" y2="194" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="218.67" y1="224" x2="218.67" y2="194" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="259.33" y1="224" x2="259.33" y2="194" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="300" y1="224" x2="300" y2="194" class="thin" stroke="#3b82f6" stroke-width="1.8" marker-end="url(#ah3b82f6)"/>
+  <line x1="300" y1="224" x2="300" y2="152" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="300" y="146" text-anchor="middle" class="sm">C</text>
+  <text x="180" y="102" text-anchor="middle" class="sm dim">the coupons use F, the last payment uses C</text>
+  <line x1="66" y1="296" x2="66" y2="320" stroke="#059669" stroke-width="2.8" stroke-linecap="round"/>
+  <text x="78" y="312" text-anchor="start" class="bold">C = F</text>
+  <line x1="172" y1="296" x2="172" y2="320" stroke="#d97706" stroke-width="2.8" stroke-linecap="round"/>
+  <text x="184" y="312" text-anchor="start" class="bold">C &gt; F</text>
+  <line x1="278" y1="296" x2="278" y2="320" stroke="#e11d48" stroke-width="2.8" stroke-linecap="round"/>
+  <text x="290" y="312" text-anchor="start" class="bold">C &lt; F</text>
+  <text x="180" y="350" text-anchor="middle" class="sm dim">for a callable bond, C depends on the call date</text>
 </svg>

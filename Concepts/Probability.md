@@ -5,7 +5,7 @@ A **Probability** $P$ is a measure of how likely an event $E$ is to occur. It is
 
 > $$=\frac{\text{number of outcomes in E}}{\text{number of possible outcomes}}$$
 
-![[Media/Figures/Probability.svg|520]]
+![[Media/Figures/Probability.svg|340]]
 
 > [!example]- Probability of a Fair Die? {Example}
 > 

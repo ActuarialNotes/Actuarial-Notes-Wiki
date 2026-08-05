@@ -3,7 +3,7 @@ The **term of a loan** is the total number of payment periods until the loan is 
 - Along with the [[Interest Rate]], [[Principal]], and payment amount, it is one of the four key variables in a loan calculation — given any three, the fourth can be solved.
 - When the term is not an integer, the last payment may differ from the regular payments. This smaller final payment is called a [[Drop Payment]] (if it occurs at the same time as a regular payment) or a [[Balloon Payment]] (if it is larger than a regular payment).
 
-![[Media/Figures/Term_of_Loan.svg|540]]
+![[Media/Figures/Term_of_Loan.svg|340]]
 
 > [!example]- Solving for Term {Example}
 > A $5{,}000$ loan at $8\%$ annual interest is repaid with annual payments of $900$. Find the term.

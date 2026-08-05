@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 286" width="560" height="286" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>Alternating signs over the seven regions of a three-set Venn diagram</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -36,28 +38,22 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="284.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">Add singles, subtract pairs, add back the triple</text>
-  <circle cx="168" cy="114" r="58" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.5"/>
-  <circle cx="134" cy="172" r="58" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.5"/>
-  <circle cx="202" cy="172" r="58" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.5"/>
-  <text x="168" y="48" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
-  <text x="72" y="224" text-anchor="middle" class="bold" fill="#d97706">B</text>
-  <text x="264" y="224" text-anchor="middle" class="bold" fill="#059669">C</text>
-  <text x="168" y="88" text-anchor="middle" class="bold">+</text>
-  <text x="116" y="194" text-anchor="middle" class="bold">+</text>
-  <text x="220" y="194" text-anchor="middle" class="bold">+</text>
-  <text x="138" y="144" text-anchor="middle" class="bold">−</text>
-  <text x="198" y="144" text-anchor="middle" class="bold">−</text>
-  <text x="168" y="196" text-anchor="middle" class="bold">−</text>
-  <text x="168" y="162" text-anchor="middle" class="bold">+</text>
-  <text x="168" y="250" text-anchor="middle" class="sm dim">every region ends up counted exactly once</text>
-  <text x="420" y="78" text-anchor="middle" class="bold">P(A ∪ B ∪ C)</text>
-  <text x="310" y="106" text-anchor="start" class="sm" fill="#3b82f6">+ P(A) + P(B) + P(C)</text>
-  <text x="310" y="132" text-anchor="start" class="sm" fill="#e11d48">− P(A∩B) − P(A∩C) − P(B∩C)</text>
-  <text x="310" y="158" text-anchor="start" class="sm" fill="#059669">+ P(A∩B∩C)</text>
-  <rect x="300" y="182" width="236" height="62" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
-  <text x="418" y="202" text-anchor="middle" class="sm bold">Two events</text>
-  <text x="418" y="220" text-anchor="middle" class="sm dim">P(A ∪ B) = P(A) + P(B) − P(A∩B)</text>
-  <text x="418" y="236" text-anchor="middle" class="sm dim">disjoint events drop every ∩ term</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Alternating signs count each region once</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">P(A ∪ B ∪ C) = P(A) + P(B) + P(C)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">− P(A∩B) − P(A∩C) − P(B∩C) + P(A∩B∩C)</text>
+  <circle cx="180" cy="174" r="78" fill="#3b82f6" fill-opacity="0.16" stroke="#3b82f6" stroke-width="1.6"/>
+  <circle cx="134" cy="250" r="78" fill="#d97706" fill-opacity="0.16" stroke="#d97706" stroke-width="1.6"/>
+  <circle cx="226" cy="250" r="78" fill="#059669" fill-opacity="0.16" stroke="#059669" stroke-width="1.6"/>
+  <text x="180" y="86" text-anchor="middle" class="bold" fill="#3b82f6">A</text>
+  <text x="68" y="310" text-anchor="middle" class="bold" fill="#d97706">B</text>
+  <text x="292" y="310" text-anchor="middle" class="bold" fill="#059669">C</text>
+  <text x="180" y="134" text-anchor="middle" class="bold">+</text>
+  <text x="106" y="282" text-anchor="middle" class="bold">+</text>
+  <text x="254" y="282" text-anchor="middle" class="bold">+</text>
+  <text x="140" y="208" text-anchor="middle" class="bold">−</text>
+  <text x="220" y="208" text-anchor="middle" class="bold">−</text>
+  <text x="180" y="282" text-anchor="middle" class="bold">−</text>
+  <text x="180" y="238" text-anchor="middle" class="bold">+</text>
 </svg>

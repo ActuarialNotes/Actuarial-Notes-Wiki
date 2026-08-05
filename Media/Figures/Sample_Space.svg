@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 254" width="560" height="254" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
   <title>A sample space partitioned into its elementary outcomes</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
@@ -17,7 +17,9 @@ text {
   font-size: 12px;
 }
 .dim { fill: var(--dim); }
-.ttl { font-size: 13.5px; font-weight: 600; }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
 .sub { font-size: 11px; fill: var(--dim); }
 .sm  { font-size: 10.5px; }
 .bold { font-weight: 600; }
@@ -36,29 +38,24 @@ text {
 .thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
-  <rect class="card" x="0.6" y="0.6" width="558.8" height="252.8" rx="10"/>
-  <text x="280" y="22" text-anchor="middle" class="ttl">The sample space collects every elementary outcome exactly once</text>
-  <rect x="34" y="58" width="254" height="150" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
-  <text x="47" y="74" text-anchor="middle" class="sm dim">S</text>
-  <circle cx="74" cy="100" r="22" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-  <text x="74" y="105" text-anchor="middle" class="sm">ω₁</text>
-  <circle cx="150" cy="100" r="22" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-  <text x="150" y="105" text-anchor="middle" class="sm">ω₂</text>
-  <circle cx="226" cy="100" r="22" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-  <text x="226" y="105" text-anchor="middle" class="sm">ω₃</text>
-  <circle cx="74" cy="162" r="22" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-  <text x="74" y="167" text-anchor="middle" class="sm">ω₄</text>
-  <circle cx="150" cy="162" r="22" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-  <text x="150" y="167" text-anchor="middle" class="sm">ω₅</text>
-  <circle cx="226" cy="162" r="22" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.3"/>
-  <text x="226" y="167" text-anchor="middle" class="sm">ω₆</text>
-  <text x="161" y="226" text-anchor="middle" class="sm dim">S = {ω₁, …, ω₆}  — one roll of a die</text>
-  <text x="424" y="72" text-anchor="middle" class="bold">Two requirements</text>
-  <rect x="316" y="96" width="216" height="44" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
-  <text x="424" y="114" text-anchor="middle" class="sm bold">Mutually exclusive</text>
-  <text x="424" y="129" text-anchor="middle" class="sm dim">no two outcomes can occur together</text>
-  <rect x="316" y="152" width="216" height="44" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
-  <text x="424" y="170" text-anchor="middle" class="sm bold">Collectively exhaustive</text>
-  <text x="424" y="185" text-anchor="middle" class="sm dim">together they cover every possibility</text>
-  <text x="424" y="226" text-anchor="middle" class="sm dim">S may be finite, countable, or uncountable</text>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">The sample space lists every outcome</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">once</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">S = {ω₁, ω₂, …, ω₆}</text>
+  <rect x="36" y="86" width="288" height="234" rx="8" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+  <text x="49" y="102" text-anchor="middle" class="sm dim">S</text>
+  <circle cx="96" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+  <text x="96" y="158" text-anchor="middle">ω₁</text>
+  <circle cx="180" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+  <text x="180" y="158" text-anchor="middle">ω₂</text>
+  <circle cx="264" cy="152" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+  <text x="264" y="158" text-anchor="middle">ω₃</text>
+  <circle cx="96" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+  <text x="96" y="258" text-anchor="middle">ω₄</text>
+  <circle cx="180" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+  <text x="180" y="258" text-anchor="middle">ω₅</text>
+  <circle cx="264" cy="252" r="36" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.4"/>
+  <text x="264" y="258" text-anchor="middle">ω₆</text>
+  <text x="180" y="350" text-anchor="middle" class="sm dim">one roll of a die</text>
 </svg>

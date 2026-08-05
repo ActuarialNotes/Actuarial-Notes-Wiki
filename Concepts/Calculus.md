@@ -31,7 +31,7 @@ The **derivative** of $f$ at $x$ measures the instantaneous rate of change:
 
 $$\frac{\partial f}{\partial x}(x,y) \quad \text{holds } y \text{ fixed}$$
 
-![[Media/Figures/Calculus.svg|540]]
+![[Media/Figures/Calculus.svg|340]]
 
 > [!example]- Finding the Force of Mortality {Example}
 > The survival function is $S(t) = e^{-\lambda t}$. Find the [[Hazard Rate|force of mortality]] $\mu(t) = -\dfrac{S'(t)}{S(t)}$.

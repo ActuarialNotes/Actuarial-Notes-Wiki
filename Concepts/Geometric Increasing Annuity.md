@@ -7,7 +7,7 @@ A **geometric increasing (or decreasing) annuity** has payments that grow (or sh
 - When $i = g$, $\text{PV} = n \cdot v = n/(1+i)$.
 - For a geometric [[Perpetuity]] with $i > g$: $\text{PV} = 1/(i-g)$.
 
-![[Media/Figures/Geometric_Increasing_Annuity.svg|540]]
+![[Media/Figures/Geometric_Increasing_Annuity.svg|340]]
 
 > [!example]- Inflation-Adjusted Pension {Example}
 > A retiree receives $20{,}000$ at end of year 1, with payments increasing 3% per year for 20 years. At $i = 7\%$, find the present value.

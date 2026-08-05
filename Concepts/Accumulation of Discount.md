@@ -9,7 +9,7 @@
 - Where $j$ = yield rate per period.
 - The [[Book Value]] increases each period toward $C$ at maturity — this is the mirror image of [[Amortization of Premium]].
 
-![[Media/Figures/Accumulation_of_Discount.svg|540]]
+![[Media/Figures/Accumulation_of_Discount.svg|340]]
 
 > [!example]- Discount Bond Accumulation {Example}
 > A $1{,}000$ face bond with 5% annual coupons is bought at 6% yield for 3 years (price $= \$973.27$). Find the discount accumulated in year 1.

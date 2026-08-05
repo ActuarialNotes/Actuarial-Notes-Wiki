@@ -53,16 +53,18 @@ function ExamGuideCard({ guide, onOpen }: CardProps) {
     <button
       type="button"
       onClick={onOpen}
-      className="group flex h-full flex-col rounded-lg bg-card p-4 text-left text-card-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="group flex h-full flex-col rounded-lg bg-card p-3 text-left text-card-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:p-4"
     >
       {/* max-h is a backstop: the cover's height follows the card width via the
           SVG aspect ratio, and the cap only bites on an unusually wide card. */}
       <Cover className="mb-3 max-h-36" />
       {/* Title only: the cover carries the subject, so a blurb and a page
-          count just crowded a card that is two-up on a phone. */}
+          count just crowded a card that is three-up on a phone. The icon is
+          dropped at that width for the same reason — it costs a third of the
+          line and the cover already says which card this is. */}
       <div className="flex items-start gap-2">
-        <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-        <h3 className="min-w-0 text-base font-semibold leading-snug tracking-tight">{title}</h3>
+        <Icon className="mt-0.5 hidden h-5 w-5 shrink-0 text-primary sm:block" />
+        <h3 className="min-w-0 text-sm font-semibold leading-snug tracking-tight sm:text-base">{title}</h3>
       </div>
     </button>
   )
@@ -231,10 +233,10 @@ function ExamGuideModal({ guide, onClose }: ModalProps) {
 interface ExamGuideCardsProps {
   examId: string
   /**
-   * A card rendered first in the grid, above the guides — the readiness card
-   * (`ExamReadinessCard`), which spans the row. Passed in rather than imported
-   * because it needs the page's syllabus and concept-popup wiring, which live
-   * in `WikiExam`.
+   * A card rendered first in the grid, beside the guides — the readiness card
+   * (`ExamReadinessCard`), one column like they are. Passed in rather than
+   * imported because it needs the page's syllabus and concept-popup wiring,
+   * which live in `WikiExam`.
    */
   leadCard?: ReactNode
 }
@@ -247,13 +249,13 @@ export function ExamGuideCards({ examId, leadCard }: ExamGuideCardsProps) {
 
   return (
     <div className="not-prose my-5">
-      {/* Two-up at every width, but capped on desktop: left to fill the article
-          column the pair grew to ~400px each and read as a hero banner rather
-          than the two side notes they are. Card height follows the width (the
-          cover keeps its aspect ratio), so the cap shrinks both dimensions —
-          type stays at its normal size. The lead card spans the row inside that
-          same cap, so the block reads as one stack rather than two widths. */}
-      <div className="grid max-w-md grid-cols-2 gap-3 sm:gap-4">
+      {/* Three-up at every width — readiness, then the two guides — but capped
+          on desktop: left to fill the article column the cards grew to ~400px
+          each and read as a hero banner rather than the side notes they are.
+          Card height follows the width (the cover keeps its aspect ratio), so
+          the cap shrinks both dimensions; the cap is wider than the old two-up
+          one so a third column doesn't squeeze the covers. */}
+      <div className="grid max-w-xl grid-cols-3 gap-2 sm:gap-4">
         {leadCard}
         {guides.map(guide => (
           <ExamGuideCard key={guide.id} guide={guide} onOpen={() => setOpenId(guide.id)} />

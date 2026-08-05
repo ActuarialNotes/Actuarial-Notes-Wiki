@@ -263,9 +263,9 @@ export function WikiArticle({ markdown, onWikiLink, sourcePath, hideImages, clas
         return guideExamId ? <ExamGuideCards examId={guideExamId} leadCard={readiness} /> : null
       }
       if (only && only.type === 'text' && only.value.trim() === READINESS_MARKER) {
-        // Same capped two-column grid the guide cards use, so an exam page
+        // Same capped three-column grid the guide cards use, so an exam page
         // without them lands the card at the same width as one with them.
-        return <div className="not-prose my-5 grid max-w-md grid-cols-2 gap-3 sm:gap-4">{readiness}</div>
+        return <div className="not-prose my-5 grid max-w-xl grid-cols-3 gap-2 sm:gap-4">{readiness}</div>
       }
       if (
         !hideImages &&

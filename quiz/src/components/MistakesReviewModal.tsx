@@ -18,6 +18,12 @@ interface Props {
   mistakes: RecentMistake[]
   /** Mastery records for the active exam — the starting state for the upsert. */
   masteryRecords: ConceptMasteryRecord[]
+  /**
+   * Ids of the questions answered correctly so far, reported as they're graded.
+   * Answers are still only *banked* on close; this is purely so the outstanding
+   * count behind the panel can tick down live instead of waiting for the save.
+   */
+  onFixedChange?: (fixedIds: string[]) => void
   onClose: () => void
 }
 
@@ -28,6 +34,19 @@ interface Props {
  */
 function questionName(question: Question): string {
   return question.topic || question.learning_objective || question.exam
+}
+
+/** Did the learner get this one right? Null while it's still unanswered. */
+function verdictFor(
+  question: Question,
+  responses: Record<string, QuizResponse>,
+  manualGrades: Record<string, SelfGrade>,
+): boolean | null {
+  const r = responses[question.id]
+  if (r === undefined) return null
+  // A self-graded free-entry answer counts as the learner graded it.
+  const override = question.type === 'free-entry' ? manualGrades[question.id] : undefined
+  return override !== undefined ? override === 'correct' : isAnswerCorrect(question, r.chosen)
 }
 
 /**
@@ -51,7 +70,7 @@ function questionName(question: Question): string {
  * writes a finished quiz performs. A question answered correctly here therefore
  * drops off the mistakes list exactly as it would have from a quiz.
  */
-export function MistakesReviewModal({ mistakes, masteryRecords, onClose }: Props) {
+export function MistakesReviewModal({ mistakes, masteryRecords, onFixedChange, onClose }: Props) {
   const { user } = useAuth()
   const { play, resetCombo } = useSoundEffects()
   // The panel's own sound — a sheet of paper sliding out. Mounted only while
@@ -142,6 +161,15 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onClose }: Props
   }
   useEffect(() => () => saveRef.current(), [])
 
+  // Questions fixed so far in this sitting. Reported up as they're graded so the
+  // outstanding count on the button behind the panel drops in step with the
+  // work, rather than standing still until the on-close save lands.
+  const fixedIds = useMemo(
+    () => questions.filter(q => verdictFor(q, responses, manualGrades) === true).map(q => q.id),
+    [questions, responses, manualGrades],
+  )
+  useEffect(() => { onFixedChange?.(fixedIds) }, [fixedIds, onFixedChange])
+
   if (!question) return null
 
   function commit(answer: string) {
@@ -167,18 +195,9 @@ export function MistakesReviewModal({ mistakes, masteryRecords, onClose }: Props
     setManualGrades(prev => ({ ...prev, [key]: grade }))
   }
 
-  /** Did the learner get this one right? Null while it's still unanswered. */
-  function verdict(q: Question): boolean | null {
-    const r = responses[q.id]
-    if (r === undefined) return null
-    // A self-graded free-entry answer counts as the learner graded it.
-    const override = q.type === 'free-entry' ? manualGrades[q.id] : undefined
-    return override !== undefined ? override === 'correct' : isAnswerCorrect(q, r.chosen)
-  }
-
   const answeredCount = Object.keys(responses).length
-  const fixedCount = questions.filter(q => verdict(q) === true).length
-  const currentVerdict = verdict(question)
+  const fixedCount = fixedIds.length
+  const currentVerdict = verdictFor(question, responses, manualGrades)
   const isMultiPart = question.type === 'multi-part'
   const canCheck = pending !== null && isMultiPartAnswerComplete(question, pending)
   const name = questionName(question)

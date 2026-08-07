@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from './useAuth'
 
@@ -21,19 +21,15 @@ export function useQuestionAttempts(): {
   const [byQuestionId, setByQuestionId] = useState<Map<string, QuestionAttemptSummary>>(new Map())
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (!user) {
-      setByQuestionId(new Map())
-      return
-    }
-    let cancelled = false
-    setLoading(true)
+  // `isStale` lets a caller drop a result that arrived after it stopped caring —
+  // the user switched, or the component unmounted.
+  const fetchAttempts = useCallback((userId: string, isStale: () => boolean = () => false) => {
     supabase
       .from('question_responses')
       .select('question_id, is_correct')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .then(({ data }: { data: { question_id: string; is_correct: boolean }[] | null }) => {
-        if (cancelled || !data) return
+        if (!data || isStale()) return
         const map = new Map<string, QuestionAttemptSummary>()
         for (const row of data) {
           const existing = map.get(row.question_id)
@@ -50,9 +46,31 @@ export function useQuestionAttempts(): {
         }
         setByQuestionId(map)
       })
-      .finally(() => { if (!cancelled) setLoading(false) })
+      .finally(() => { if (!isStale()) setLoading(false) })
+  }, [])
+
+  useEffect(() => {
+    if (!user) {
+      setByQuestionId(new Map())
+      return
+    }
+    let cancelled = false
+    setLoading(true)
+    fetchAttempts(user.id, () => cancelled)
     return () => { cancelled = true }
-  }, [user?.id])
+  }, [user?.id, fetchAttempts])
+
+  // Answers are written from the quiz and the fix-mistakes reviewer, both of
+  // which signal `quiz-session-saved` once the responses have landed. Without
+  // this the chip a learner is looking at keeps showing the tally from before
+  // they answered, until a reload.
+  useEffect(() => {
+    if (!user?.id) return
+    const uid = user.id
+    const refetch = () => fetchAttempts(uid)
+    window.addEventListener('quiz-session-saved', refetch)
+    return () => window.removeEventListener('quiz-session-saved', refetch)
+  }, [user?.id, fetchAttempts])
 
   return { byQuestionId, loading, tracked: !!user }
 }

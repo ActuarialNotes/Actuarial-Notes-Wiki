@@ -473,10 +473,6 @@ async function persistSessionToCloud(userId: string, params: PersistableSession)
     return { error: sessionError?.message ?? 'Failed to save session' }
   }
 
-  // Signal useProgress (same tab) to refetch immediately — Supabase Realtime
-  // doesn't fire for quiz_sessions because it's not in the realtime publication.
-  window.dispatchEvent(new CustomEvent('quiz-session-saved'))
-
   // Use a JS timestamp for answered_at rather than the DB DEFAULT now().
   // daily_completions.at is also a JS timestamp set earlier in this function,
   // so using JS time here guarantees answered_at > daily_completions.at even
@@ -500,6 +496,16 @@ async function persistSessionToCloud(userId: string, params: PersistableSession)
   const { error: respError } = await supabase
     .from('question_responses')
     .insert(responseRows)
+
+  // Signal same-tab listeners to refetch immediately — Supabase Realtime doesn't
+  // fire for quiz_sessions because it's not in the realtime publication.
+  //
+  // Dispatched *after* the question_responses insert, not right after the
+  // quiz_sessions one: listeners read responses too (useRecentMistakes for the
+  // fix-mistakes count, useQuestionAttempts for the attempt badges), and firing
+  // before the rows land raced them into re-reading the pre-answer history — so
+  // a question just fixed stayed on the mistakes list until a reload.
+  window.dispatchEvent(new CustomEvent('quiz-session-saved'))
 
   // Award 1 gem per correct answer. Failure here is non-fatal: gem rewards
   // are nice-to-have and shouldn't block session save.

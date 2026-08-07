@@ -334,9 +334,9 @@ export function ConceptPopup() {
       <div className={`flex items-center gap-2 h-16 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {/* The title carries the keystone marker itself: a gold underline on
-              the name, tappable to explain why this concept is load-bearing.
-              For an ordinary concept `KeystoneName` renders plain text, so the
-              header looks exactly as it did before. */}
+              the name, tappable to confirm this concept is load-bearing. For an
+              ordinary concept `KeystoneName` renders plain text, so the header
+              looks exactly as it did before. */}
           <KeystoneName
             name={current.name}
             progress={keystoneStats}

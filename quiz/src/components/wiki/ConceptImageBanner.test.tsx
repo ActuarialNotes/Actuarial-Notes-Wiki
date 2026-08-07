@@ -50,15 +50,25 @@ describe('ConceptImageBanner', () => {
     // The picture itself is never shown — the static SVG is a snapshot of the
     // live thing behind the card.
     expect(html).not.toContain('<img')
-    expect(html).toContain('Interactive simulator')
     expect(html).toContain('Open the Normal Distribution simulator')
-    // The parameter symbols name the knobs the simulator exposes.
-    expect(html).toContain('μ and σ')
+    // The distribution's name is the card's whole label — no "Interactive
+    // simulator" heading, and no sub-line naming the parameters.
+    expect(html).toContain('Normal Distribution')
+    expect(html).not.toContain('Interactive simulator')
+    expect(html).not.toContain('then sample')
+  })
+
+  it('gives the simulator card the flashcard foil border', () => {
+    const html = render([img('Media/Normal_distribution_pdf.svg')])
+    expect(html).toContain('simulator-foil-ring')
+    // The foil ring *is* the card's edge; a hairline underneath would double it.
+    expect(html).not.toContain('border-border')
   })
 
   it('previews a discrete distribution as stems rather than a curve', () => {
     const html = render([img('Media/Binomial_distribution_pmf.svg')])
     expect(html).toContain('<line')
-    expect(html).toContain('n and p')
+    expect(html).toContain('Binomial Distribution')
+    expect(html).not.toContain('n and p')
   })
 })

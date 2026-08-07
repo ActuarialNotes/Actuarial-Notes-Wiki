@@ -607,20 +607,30 @@
   .flashcard-collected.flashcard-sheen-l3::before { animation: none; }
 }
 
-/* Rainbow foil border for the collect (lock) icon in the concept-popup header —
-   the same travelling gradient edge as the L3 flashcard, scaled down to ring the
-   small lock button so it reads as a collectible card. Uses the identical
-   padding+mask-exclude ring trick so the border sits on the button edge without
-   covering the icon underneath. */
-.lock-foil-ring {
+/* Travelling rainbow foil border, borrowed from the L3 flashcard and applied to
+   the two surfaces in the concept popup that are "a live thing, not a picture":
+   the collect (lock) icon in the header, and the distribution-simulator card
+   that leads the body. Same padding+mask-exclude ring trick, so the border sits
+   exactly on the element edge without covering the content underneath — which
+   means the host should carry no border of its own, or the two edges double up.
+   `--foil-ring-width` tunes the edge weight per host. */
+.lock-foil-ring,
+.simulator-foil-ring {
   position: relative;
+  --foil-ring-width: 1.5px;
 }
-.lock-foil-ring::before {
+/* The card is a much larger surface than the lock button, so its edge needs a
+   little more weight to read as the same material. */
+.simulator-foil-ring {
+  --foil-ring-width: 2px;
+}
+.lock-foil-ring::before,
+.simulator-foil-ring::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: var(--foil-ring-width);
   background: linear-gradient(115deg, rgb(56 189 248), rgb(232 121 249), rgb(250 204 21), rgb(56 189 248));
   background-size: 300% 100%;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -630,7 +640,8 @@
   pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .lock-foil-ring::before { animation: none; }
+  .lock-foil-ring::before,
+  .simulator-foil-ring::before { animation: none; }
 }
 
 /* Designation-credential rainbow foil — ACAS/ASA/FCAS/FSA share one "earned

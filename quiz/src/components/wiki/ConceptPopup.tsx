@@ -755,6 +755,7 @@ export function ConceptPopup() {
       <ImageGalleryModal
         images={images}
         initialIndex={galleryIndex}
+        hostFocusMode={focusMode}
         onClose={() => setShowGallery(false)}
       />
     )}

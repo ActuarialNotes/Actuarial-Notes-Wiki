@@ -22,8 +22,10 @@ import { buildContinuousCurve, buildMassPoints } from '@/lib/distributionPlot'
  * A figure the vault draws as a distribution illustration is not shown as a
  * picture at all. Those embeds are static snapshots that the app renders as a
  * live simulator (see `docs/distribution-simulators.md`), so the banner shows
- * a **card** — a preview of the shape plus a label — that opens the simulator
- * in the same full-screen modal.
+ * a **card** — a preview of the shape plus the distribution's name — that opens
+ * the simulator in the same full-screen modal. That card wears the same
+ * travelling rainbow foil edge as a collected flashcard (`.simulator-foil-ring`
+ * in index.css): both mark a surface with something live behind it.
  */
 
 export interface BannerImage {
@@ -56,12 +58,6 @@ function scaler(xs: number[], ys: number[]) {
     sx: (x: number) => PAD + ((x - xLo) / xSpan) * (VB_W - 2 * PAD),
     sy: (y: number) => VB_H - PAD - (y / yHi) * (VB_H - 2 * PAD),
   }
-}
-
-/** "μ and σ", "N, K and n" — the parameter symbols as a readable phrase. */
-function formatList(items: string[]): string {
-  if (items.length <= 1) return items[0] ?? ''
-  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`
 }
 
 function DistributionPreview({ spec }: { spec: DistributionSpec }) {
@@ -141,9 +137,11 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
 
   // The popup this sits in is itself `bg-card`, so the card *shadow* has
   // nothing to lift off — an inset region on a card takes the hairline instead
-  // (docs/style-guide.md §6.2: borders and shadows are alternatives).
+  // (docs/style-guide.md §6.2: borders and shadows are alternatives). The
+  // simulator card supplies its own edge (the foil ring), so the hairline is
+  // kept out of the shared base.
   const cardClass =
-    'group block w-full rounded-lg border border-border text-left transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+    'group block w-full rounded-lg text-left transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
 
   return (
     <div className={`not-prose mb-4${className ? ` ${className}` : ''}`}>
@@ -152,20 +150,19 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
           type="button"
           onClick={open}
           data-sound="open"
-          className={`${cardClass} flex items-center gap-3 p-3`}
+          // No `border` here: `.simulator-foil-ring` paints the travelling
+          // rainbow edge the collected flashcards use, and a hairline underneath
+          // it would read as a second, static border (see index.css).
+          className={`${cardClass} simulator-foil-ring flex items-center gap-3 p-3`}
           aria-label={`Open the ${distribution.title} simulator`}
         >
           <DistributionPreview spec={distribution} />
-          <span className="min-w-0 flex-1">
-            {/* The popup header already names the distribution — this says what
-                the card *does*, and the sub-line names the knobs behind it. */}
-            <span className="flex items-center gap-1.5 text-sm font-semibold leading-snug tracking-tight">
-              <SlidersHorizontal className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              <span className="min-w-0 truncate">Interactive simulator</span>
-            </span>
-            <span className="mt-0.5 block text-xs text-muted-foreground">
-              Drag {formatList(distribution.params.map(p => p.symbol))}, then sample
-            </span>
+          {/* The distribution's name is the whole label — the preview shape and
+              the sliders icon already say "live simulator", so naming the knobs
+              in a sub-line only crowded the card. */}
+          <span className="flex min-w-0 flex-1 items-center gap-1.5 text-sm font-semibold leading-snug tracking-tight">
+            <SlidersHorizontal className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <span className="min-w-0 truncate">{distribution.title}</span>
           </span>
           <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" aria-hidden />
         </button>
@@ -174,7 +171,7 @@ export function ConceptImageBanner({ images, onOpen, className }: ConceptImageBa
           type="button"
           onClick={open}
           data-sound="open"
-          className={`${cardClass} overflow-hidden p-2`}
+          className={`${cardClass} overflow-hidden border border-border p-2`}
           aria-label={`View ${current.alt || 'figure'} full screen`}
         >
           <img

@@ -13,13 +13,21 @@ interface GalleryImage {
 interface ImageGalleryModalProps {
   images: GalleryImage[]
   initialIndex: number
+  /**
+   * True when the concept popup hosting this modal is in focus mode. Focus mode
+   * moves the popup to the top of the viewport *and* up the z stack (z-index 56,
+   * see `.concept-popup-aside[data-focus="true"]` in index.css), and it drops the
+   * mobile bottom nav — so the modal has to clear both to be visible at all, and
+   * its bottom inset has to shrink to the popup's own footer.
+   */
+  hostFocusMode?: boolean
   onClose: () => void
 }
 
 const MIN_ZOOM = 1
 const MAX_ZOOM = 4
 
-export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGalleryModalProps) {
+export function ImageGalleryModal({ images, initialIndex, hostFocusMode = false, onClose }: ImageGalleryModalProps) {
   // Paper: the panel sliding in.
   useSoundOnMount('open')
   const [index, setIndex] = useState(initialIndex)
@@ -161,7 +169,14 @@ export function ImageGalleryModal({ images, initialIndex, onClose }: ImageGaller
 
   return (
     <div
-      className="fixed inset-x-0 top-0 bottom-[7.5rem] md:bottom-16 z-50 flex flex-col bg-black/95"
+      // z-[57] clears the focus-mode concept popup (z-index 56) — at the old
+      // z-50 the modal opened *behind* it, which read as the card simply not
+      // responding to a tap. The bottom inset deliberately stops short of the
+      // popup's Previous/Next footer, which stays live underneath and seeks to
+      // the next concept that has a figure.
+      className={`fixed inset-x-0 top-0 z-[57] flex flex-col bg-black/95 ${
+        hostFocusMode ? 'bottom-16' : 'bottom-[7.5rem] md:bottom-16'
+      }`}
       onWheel={e => e.stopPropagation()}
     >
       {/* Custom slider styles */}

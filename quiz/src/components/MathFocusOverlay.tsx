@@ -142,12 +142,15 @@ export function MathFocusOverlay({ equations, initialIndex, onClose }: Props) {
           fit even at the minimum scale. */}
       <div
         ref={stageRef}
-        className="flex-1 min-h-0 overflow-auto flex items-center justify-center px-4"
+        className="flex-1 min-h-0 overflow-auto flex px-4"
         onClick={e => { if (e.target === e.currentTarget) onClose() }}
       >
+        {/* `m-auto` centres the equation rather than `justify-center` on the
+            stage: auto margins collapse when the copy outgrows the stage, so an
+            oversized equation stays scrollable from its left edge. */}
         <div
           ref={holderRef}
-          className="text-foreground [&_.katex-display]:!my-0 [&_.katex-display]:!overflow-visible [&_.katex-display]:!pb-0"
+          className="m-auto text-foreground [&_.katex-display]:!my-0 [&_.katex-display]:!overflow-visible [&_.katex-display]:!pb-0 [&_.katex-display>.katex]:!w-auto [&_.katex-display>.katex]:!min-w-0"
         />
       </div>
 

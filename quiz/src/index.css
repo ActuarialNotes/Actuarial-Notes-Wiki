@@ -825,12 +825,50 @@
 }
 
 
-/* Block math (KaTeX display equations): scroll horizontally instead of overflowing
-   the container, matching the same behaviour as wide tables. */
-.katex-display {
+/* Block math: scroll horizontally instead of overflowing the container, matching
+   the same behaviour as wide tables. A formula must never print past the edge of
+   the surface holding it — on a narrow screen that spills over neighbouring
+   content and off the page.
+
+   Two shapes need covering. Standalone `$$…$$` gets KaTeX's `.katex-display`
+   wrapper; the vault's boxed formulas are written `> $$…$$` on one line, which
+   remark parses as *inline* math, so there is no display wrapper — just a
+   `.katex` inside the `[data-math-block]` blockquote MarkdownCallout marks. */
+.katex-display,
+[data-math-block] {
   overflow-x: auto;
   overflow-y: hidden;
+}
+.katex-display {
   padding-bottom: 0.25rem; /* room for the scrollbar on mobile */
+}
+
+/* Centring the scrolled content is the subtle part: `text-align: center` on
+   content wider than its box pushes the left half out of reach, because a
+   scroll container cannot scroll past its start edge. Sizing the child
+   `fit-content` with a 100% floor avoids that — it fills (and so stays centred
+   in) the box while the formula fits, and shrink-wraps the formula once it
+   doesn't, leaving both ends reachable. Wrapping is unaffected: while the
+   formula fits, the child is still full width, so KaTeX keeps breaking long
+   inline math at its binary operators rather than forcing a scroll. */
+.katex-display > .katex,
+[data-math-block] > *,
+[data-callout-body] > * {
+  width: fit-content;
+  min-width: 100%;
+}
+
+/* Callout bodies (`> [!example]-`, `> [!answer]-`) hold the same one-line
+   `> $$…$$` formulas, and the callout shell clips them — a worked answer wider
+   than the card simply lost its right-hand side. Scrolling the body keeps the
+   prose wrapping exactly as before: `fit-content` only outgrows the card when a
+   child's *unbreakable* content does, which for a paragraph means an equation. */
+[data-callout-body] {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.katex-display {
   /* Tapping an equation magnifies it — see components/MathFocus.tsx. Boxed
      formulas take the same cursor from their [data-math-block] blockquote, so
      the whole box reads as one target. */

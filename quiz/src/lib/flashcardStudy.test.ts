@@ -4,6 +4,7 @@ import {
   needsReviewOrder,
   shuffled,
   nextIncompleteIndex,
+  resolveActiveIndex,
   shouldLockPageScroll,
   summarizeSession,
 } from './flashcardStudy'
@@ -111,6 +112,34 @@ describe('nextIncompleteIndex', () => {
   it('tolerates an out-of-range fromIndex', () => {
     expect(nextIncompleteIndex([true, false], -1)).toBe(1)
     expect(nextIncompleteIndex([false, true], 5)).toBe(0)
+  })
+})
+
+describe('resolveActiveIndex', () => {
+  it('follows the named card when the deck is re-sorted underneath it', () => {
+    // The order the syllabus data rebuilds into — the numeric index the reader
+    // picked (0, "Calculus") now belongs to a different card entirely.
+    const before = ['Calculus', 'Discrete Mathematics', 'Bayes Theorem']
+    const after = ['Discrete Mathematics', 'Bayes Theorem', 'Calculus']
+    expect(resolveActiveIndex(before, 'Calculus', 0)).toBe(0)
+    expect(resolveActiveIndex(after, 'Calculus', 0)).toBe(2)
+  })
+
+  it('matches the name case-insensitively', () => {
+    expect(resolveActiveIndex(['Bayes Theorem', 'Calculus'], 'calculus', 0)).toBe(1)
+  })
+
+  it('falls back to the last position when the card has left the deck', () => {
+    expect(resolveActiveIndex(['a', 'b', 'c'], 'Calculus', 2)).toBe(2)
+  })
+
+  it('clamps the fallback to the deck', () => {
+    expect(resolveActiveIndex(['a', 'b'], null, 9)).toBe(1)
+    expect(resolveActiveIndex(['a', 'b'], null, -3)).toBe(0)
+  })
+
+  it('returns 0 for an empty deck', () => {
+    expect(resolveActiveIndex([], 'Calculus', 4)).toBe(0)
   })
 })
 

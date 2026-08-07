@@ -72,6 +72,35 @@ export function nextIncompleteIndex(completed: readonly boolean[], fromIndex: nu
 }
 
 /**
+ * Resolve which card is active after the deck's visual order has been rebuilt.
+ *
+ * The study view's ordering is derived from data that arrives asynchronously —
+ * syllabus positions and mastery records land well after the deck itself — so
+ * the list a card was chosen from gets rebuilt underneath the reader. A plain
+ * numeric index survives that rebuild pointing at the *slot*, not the card, so
+ * whatever slid into it becomes "active" (collect Calculus, come back to
+ * Discrete Mathematics). The page therefore remembers the active card by name
+ * and re-derives its index here whenever the order changes.
+ *
+ * `fallbackIndex` (the last resolved position, clamped) covers the card having
+ * left the deck entirely: removing the active card lands beside it rather than
+ * jumping back to the top.
+ */
+export function resolveActiveIndex(
+  orderedNames: readonly string[],
+  activeName: string | null,
+  fallbackIndex: number,
+): number {
+  if (orderedNames.length === 0) return 0
+  if (activeName) {
+    const target = activeName.toLowerCase()
+    const found = orderedNames.findIndex(name => name.toLowerCase() === target)
+    if (found >= 0) return found
+  }
+  return Math.min(Math.max(0, fallbackIndex), orderedNames.length - 1)
+}
+
+/**
  * Whether the Flashcards page should lock the page behind it (`body` overflow
  * hidden). The gallery overlay and focus mode each cover the viewport, so the
  * page behind them must not scroll — but neither is rendered once the deck is

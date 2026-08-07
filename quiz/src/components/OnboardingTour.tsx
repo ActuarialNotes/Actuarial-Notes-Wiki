@@ -40,7 +40,18 @@ const EXAM_P_ROUTE = wikiRoute({ kind: 'exam', name: 'Exam P-1 (SOA)' })
 // How long a step waits for its target to appear before it stops pretending
 // there's something to tap. `optionalTarget` steps move on; the rest surface a
 // Next button so a missing element can never strand the tour.
-const TARGET_GRACE_MS = 5000
+const TARGET_GRACE_MS = 4000
+
+// The shorter grace for a target that *was* on screen and then left it (the
+// modal it lived in closed, the user scrolled the screen away). We already know
+// the step's UI exists, so waiting the full grace just leaves a dead card up.
+const TARGET_LOST_MS = 900
+
+// How far a tracked element may jump before the ring re-mounts at the new spot
+// instead of gliding there through the CSS position transition. A ring sliding
+// across the screen past unrelated controls is the "mismatched border" — a
+// short hop (a list growing by a row) still animates.
+const SPOTLIGHT_JUMP_PX = 120
 
 interface TourStep {
   icon: ComponentType<{ className?: string }>
@@ -109,6 +120,49 @@ const closeReaders = () => {
   useConceptPopup.getState().close()
 }
 
+// Is this element genuinely *on screen*, not merely present in the DOM? Being
+// in the document isn't enough to earn a ring: the flashcards controls bar, the
+// concept popup and the collect modal all leave their buttons mounted while an
+// overlay covers them, and a ring drawn around something the visitor can't see
+// is the tour's worst failure — a border floating over blank space.
+//
+// Three tests, cheapest first: a real box, mostly inside the viewport, and a
+// hit test that lands on the element rather than on whatever is stacked above
+// it. The tour's own card and ring are skipped in that stack, so a target the
+// card sits over still counts (the card flips to the top of the screen for it).
+function isSpotlightable(el: HTMLElement, r: DOMRect): boolean {
+  if (r.width < 4 || r.height < 4) return false
+
+  const visibleW = Math.min(r.right, window.innerWidth) - Math.max(r.left, 0)
+  const visibleH = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0)
+  if (visibleW <= 0 || visibleH <= 0) return false
+  if (visibleW * visibleH < r.width * r.height * 0.5) return false
+
+  const style = getComputedStyle(el)
+  if (style.visibility === 'hidden' || style.opacity === '0') return false
+
+  // Sample the centre and four inset corners: a single centre probe misses on
+  // ring-shaped targets (an icon button's padding, a grid's gutters).
+  const points: [number, number][] = [
+    [0.5, 0.5],
+    [0.2, 0.2],
+    [0.8, 0.2],
+    [0.2, 0.8],
+    [0.8, 0.8],
+  ]
+  for (const [fx, fy] of points) {
+    const x = r.left + r.width * fx
+    const y = r.top + r.height * fy
+    if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) continue
+    for (const node of document.elementsFromPoint(x, y)) {
+      if (node.closest('[data-tour-chrome]')) continue
+      if (node === el || el.contains(node)) return true
+      break
+    }
+  }
+  return false
+}
+
 // The guided journey mirrors the real study loop:
 // study guide → meet a concept → collect it (comprehension gate) →
 // flashcards & daily packs → level up with a quiz → mastery → keep it all.
@@ -142,6 +196,10 @@ const BASE_STEPS: TourStep[] = [
     icon: Lock,
     title: 'Collect the card',
     body: 'Concepts start locked, and a locked concept can\'t level up. Tap the lock to collect this one into your deck.',
+    // The collect steps live wherever the concept was opened from, so `match`
+    // stays broad — but a visitor who has wandered onto another exam page has
+    // nothing to tap, and `path` is where the step can find its screen again.
+    path: EXAM_P_ROUTE,
     match: onExam,
     target: '[data-tour="collect-card"]',
     advance: 'tap',
@@ -151,6 +209,7 @@ const BASE_STEPS: TourStep[] = [
     icon: Sparkles,
     title: 'Pass the quick check',
     body: 'Answer the short comprehension check — get it right and the card is yours.',
+    path: EXAM_P_ROUTE,
     match: onExam,
     target: '[data-tour="collect-options"]',
     advance: 'watch',
@@ -162,6 +221,7 @@ const BASE_STEPS: TourStep[] = [
     icon: Layers,
     title: 'Your first card!',
     body: 'Nice — that\'s collected, and Calculus can now climb the mastery ladder. Tap View Flashcard to open your deck.',
+    path: EXAM_P_ROUTE,
     match: onExam,
     target: '[data-tour="collect-view-flashcard"]',
     advance: 'tap',
@@ -183,6 +243,7 @@ const BASE_STEPS: TourStep[] = [
     icon: LayoutGrid,
     title: 'Grab a daily pack',
     body: 'You don\'t have to collect cards one by one. Open the card controls, then tap + for search and ready-made packs — one for every exam and topic.',
+    path: '/flashcards',
     match: onFlashcards,
     // The + lives in the controls bar, which is collapsed in study view — point
     // at the handle that reveals it until the bar is actually open.
@@ -197,6 +258,7 @@ const BASE_STEPS: TourStep[] = [
     icon: Trophy,
     title: 'Turn study into points',
     body: 'Quizzes are where concepts level up and you earn XP. Tap the Quiz tab to try one.',
+    path: '/flashcards',
     match: onFlashcards,
     target: '[data-tour="nav-quiz"]',
     advance: 'tap',
@@ -303,6 +365,8 @@ export default function OnboardingTour() {
   // The visitor has opened the tour at least once, so the launcher stops
   // inviting ("Take the tour") and starts resuming ("Resume tour").
   const openedOnce = useRef(false)
+  // One "take me to this step's page" attempt per step — see the effect below.
+  const navAttempt = useRef<{ step: number; tried: boolean }>({ step: -1, tried: false })
 
   // Auto-launch on a first-time visitor's first render.
   useEffect(() => {
@@ -344,6 +408,11 @@ export default function OnboardingTour() {
 
     const isLastStep = safeStep >= steps.length - 1
 
+    let cancelled = false
+    let graceTimer = 0
+    let watchTimer = 0
+    let raf = 0
+
     // Already done? Step over it in whichever direction the user was heading,
     // so Back doesn't bounce straight off a satisfied step.
     if (current.skipIf?.()) {
@@ -358,6 +427,17 @@ export default function OnboardingTour() {
 
     current.onEnter?.()
 
+    // One navigation attempt per step. The effect re-runs on every route change,
+    // and a step whose page bounces it straight back (a quiz step with no quiz
+    // running) would otherwise navigate in a loop.
+    if (navAttempt.current.step !== safeStep) navAttempt.current = { step: safeStep, tried: false }
+    const goToStepPage = (): boolean => {
+      if (!current.path || location.pathname === current.path || navAttempt.current.tried) return false
+      navAttempt.current.tried = true
+      navigate(current.path)
+      return true
+    }
+
     // Make sure we're on the step's page before looking for its target.
     const onRightPage = current.match
       ? current.match(location.pathname)
@@ -365,24 +445,33 @@ export default function OnboardingTour() {
       ? location.pathname === current.path
       : true
     if (!onRightPage) {
-      if (current.path) navigate(current.path)
-      return
+      if (goToStepPage()) return
+      // Nowhere to navigate (or we already tried and the route bounced): don't
+      // leave the visitor holding a card that describes a screen they can't
+      // reach and offers only a greyed-out Skip. Surface a real Next.
+      graceTimer = window.setTimeout(() => {
+        if (!cancelled) setTargetMissing(true)
+      }, TARGET_GRACE_MS)
+      return () => {
+        cancelled = true
+        clearTimeout(graceTimer)
+      }
     }
 
     if (!current.target) return
     const selectorFor = current.target
     const selector = () => (typeof selectorFor === 'function' ? selectorFor() : selectorFor)
 
-    let cancelled = false
-    let graceTimer = 0
-    let watchTimer = 0
-    let raf = 0
     let el: HTMLElement | null = null
     let lastRect: DOMRect | null = null
 
     const isWatch = current.advance === 'watch'
+    // Once per step: a watch condition and a vanishing target can both come
+    // true in the same frame, and two advances would skip a step outright.
+    let advanced = false
     const advance = () => {
-      if (cancelled) return
+      if (cancelled || advanced) return
+      advanced = true
       if (isLastStep) finish()
       else next()
     }
@@ -417,69 +506,113 @@ export default function OnboardingTour() {
         : null
     if (onDocClick) document.addEventListener('click', onDocClick, true)
 
-    // Prefer an element whose midpoint is in-viewport (e.g. bottom-nav tab over
-    // a hidden sidebar copy). Fall back to any non-zero-sized match so the
-    // spotlight still appears even if the element is partially off-screen.
+    // Several copies of a target can be mounted at once (a bottom-nav tab and
+    // its hidden sidebar twin, the inline gallery and the overlay one). Prefer
+    // the one the visitor can actually see and touch; fall back to any in-
+    // viewport match, then to any non-zero-sized one, so a target that is only
+    // scrolled out of view still gets found — and scrolled to.
     const resolve = (): HTMLElement | null => {
+      let visible: HTMLElement | null = null
       let onscreen: HTMLElement | null = null
       let offscreen: HTMLElement | null = null
       for (const c of document.querySelectorAll<HTMLElement>(selector())) {
         const r = c.getBoundingClientRect()
         if (r.width === 0 || r.height === 0) continue
+        if (isSpotlightable(c, r)) {
+          visible = c
+          break
+        }
         const midX = (r.left + r.right) / 2
         const midY = (r.top + r.bottom) / 2
         if (midX >= 0 && midX <= window.innerWidth && midY >= 0 && midY <= window.innerHeight) {
-          onscreen = c
-          break
+          onscreen ??= c
+        } else {
+          offscreen ??= c
         }
-        offscreen ??= c
       }
-      return onscreen ?? offscreen
+      return visible ?? onscreen ?? offscreen
     }
 
-    // Nothing to point at after the grace period: an optional target on a
-    // guided step means the screen it described never appeared, so move on.
-    // Everything else swaps Skip for Next so the visitor keeps control — a
-    // manual step is never auto-advanced out from under someone reading it.
-    graceTimer = window.setTimeout(() => {
-      if (cancelled || el) return
-      if (current.optionalTarget && current.advance !== 'manual') advance()
-      else setTargetMissing(true)
-    }, TARGET_GRACE_MS)
+    // The step opened at this instant; `shownAt` is the last moment the ring was
+    // genuinely on screen. Both feed the grace window below, which is re-armed
+    // every time the target comes and goes — a one-shot timer left a step whose
+    // target vanished after it appeared with no spotlight and no way forward.
+    const openedAt = performance.now()
+    let shownAt = 0
+    let declaredMissing = false
 
-    // One rAF loop does both jobs: re-resolve the target (it can appear late,
-    // be replaced, or move to a better on-screen candidate) and track its rect.
+    // One rAF loop does every job: re-resolve the target (it can appear late,
+    // be replaced, or move to a better on-screen candidate), decide whether it
+    // is actually visible, track its rect, and time out when it isn't.
     const loop = () => {
       if (cancelled) return
+      raf = requestAnimationFrame(loop)
+
       const found = resolve()
       if (found !== el) {
         el = found
         lastRect = null
+        // A jump to a different element mounts the ring in place rather than
+        // sliding it there through the CSS position transition.
         setSpotKey(k => k + 1)
+        setTargetRect(null)
         if (found) {
-          clearTimeout(graceTimer)
-          setTargetMissing(false)
           const r = found.getBoundingClientRect()
           const offscreen = r.bottom < 0 || r.top > window.innerHeight
           if (offscreen) found.scrollIntoView({ block: 'center', behavior: 'smooth' })
-        } else {
-          setTargetRect(null)
         }
       }
-      if (el) {
-        const r = el.getBoundingClientRect()
+
+      const rect = el?.getBoundingClientRect() ?? null
+      const visible = !!el && !!rect && isSpotlightable(el, rect)
+
+      if (visible && rect) {
+        shownAt = performance.now()
+        if (declaredMissing) {
+          declaredMissing = false
+          setTargetMissing(false)
+        }
         if (
           !lastRect ||
-          lastRect.top !== r.top ||
-          lastRect.left !== r.left ||
-          lastRect.width !== r.width ||
-          lastRect.height !== r.height
+          lastRect.top !== rect.top ||
+          lastRect.left !== rect.left ||
+          lastRect.width !== rect.width ||
+          lastRect.height !== rect.height
         ) {
-          lastRect = r
-          setTargetRect(r)
+          if (
+            lastRect &&
+            (Math.abs(rect.left - lastRect.left) > SPOTLIGHT_JUMP_PX ||
+              Math.abs(rect.top - lastRect.top) > SPOTLIGHT_JUMP_PX)
+          ) {
+            setSpotKey(k => k + 1)
+          }
+          lastRect = rect
+          setTargetRect(rect)
         }
+        return
       }
-      raf = requestAnimationFrame(loop)
+
+      // Not visible: drop the ring straight away rather than leaving it behind
+      // over whatever is on screen now.
+      if (lastRect) {
+        lastRect = null
+        setTargetRect(null)
+      }
+      if (declaredMissing) return
+
+      const since = shownAt || openedAt
+      if (performance.now() - since < (shownAt ? TARGET_LOST_MS : TARGET_GRACE_MS)) return
+
+      // Out of grace. A step with a page of its own gets one shot at going
+      // there (the visitor may have wandered onto a different exam); an
+      // optional target on a guided step means the screen it described never
+      // appeared, so move on; everything else swaps Skip for Next so the
+      // visitor keeps control — a manual step is never auto-advanced out from
+      // under someone reading it.
+      if (goToStepPage()) return
+      declaredMissing = true
+      if (current.optionalTarget && current.advance !== 'manual') advance()
+      else setTargetMissing(true)
     }
     loop()
 
@@ -499,7 +632,10 @@ export default function OnboardingTour() {
 
   // ── Collapsed: a small launcher parked in the bottom-right corner ──
   if (!expanded) {
-    const launcherLabel = openedOnce.current
+    // Mid-tour is mid-tour whether the visitor minimised it a moment ago or the
+    // tab was reloaded under them and the step came back from storage.
+    const resumed = openedOnce.current || safeStep > 0
+    const launcherLabel = resumed
       ? `Resume the getting started tour — step ${safeStep + 1} of ${steps.length}`
       : 'Take the getting started tour'
     return (
@@ -512,11 +648,11 @@ export default function OnboardingTour() {
             type="button"
             onClick={expand}
             aria-label={launcherLabel}
-            title={openedOnce.current ? 'Resume tour' : 'Take the tour'}
+            title={resumed ? 'Resume tour' : 'Take the tour'}
             className="onboarding-launcher-pulse relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 transition-colors hover:bg-white/25"
           >
             <Icon className="h-4 w-4" />
-            {openedOnce.current && (
+            {resumed && (
               <span className="absolute -right-0.5 -top-0.5 min-w-[1rem] rounded-full bg-primary-foreground px-1 text-[9px] font-bold leading-4 tabular-nums text-primary">
                 {safeStep + 1}
               </span>
@@ -538,6 +674,8 @@ export default function OnboardingTour() {
 
   // ── Expanded: the step card, anchored to the same corner ──
   const isGuided = (current.advance === 'tap' || current.advance === 'watch') && !targetMissing
+  // A step that asked for a highlight and didn't get one explains itself.
+  const showMissingHint = targetMissing && (!!current.target || current.advance !== 'manual')
   const primaryLabel = isLast ? current.cta ?? 'Done' : 'Next'
   const progressPct = ((safeStep + 1) / steps.length) * 100
 
@@ -568,6 +706,7 @@ export default function OnboardingTour() {
       {targetRect && (
         <div
           key={spotKey}
+          data-tour-chrome
           className="onboarding-spotlight"
           style={{
             left: targetRect.left - 6,
@@ -579,6 +718,7 @@ export default function OnboardingTour() {
       )}
 
       <div
+        data-tour-chrome
         className={cn(
           'pointer-events-none fixed z-[140] flex justify-end px-3 print:hidden',
           'inset-x-0 md:inset-x-auto md:right-4',
@@ -598,6 +738,14 @@ export default function OnboardingTour() {
             <div className="min-w-0 flex-1">
               <h2 className="text-[15px] font-semibold leading-snug">{current.title}</h2>
               <p className="mt-1 text-[13px] leading-relaxed text-primary-foreground/80">{current.body}</p>
+              {/* The step wanted to point at something that isn't on this
+                  screen. Say so plainly rather than leaving a card describing a
+                  highlight the visitor is hunting for. */}
+              {showMissingHint && (
+                <p className="mt-1.5 text-[12px] leading-relaxed text-primary-foreground/55">
+                  That isn't on this screen right now — carry on with Next.
+                </p>
+              )}
             </div>
 
             <div className="-mr-0.5 -mt-1 flex shrink-0 items-center gap-0.5">

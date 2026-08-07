@@ -63,6 +63,7 @@ import { isKeystone } from '@/lib/keystone'
 import {
   needsReviewOrder,
   nextIncompleteIndex,
+  resolveActiveIndex,
   shouldLockPageScroll,
   shuffled,
   summarizeSession,
@@ -2839,7 +2840,37 @@ export default function Flashcards() {
   const prevPopupNameRef = useRef<string | null>(null)
   const studyAreaRef = useRef<FlashcardStudyAreaHandle>(null)
 
-  const [activeIndex, setActiveIndex] = useState(0)
+  // The active card is tracked by *name*, never by position. `orderedCards` is
+  // rebuilt every time the async data it sorts by lands (syllabus positions,
+  // mastery records), and a stored index would quietly follow the slot rather
+  // than the card — how "collect Calculus, open the deck" used to leave you
+  // looking at Discrete Mathematics. `activeIndex` is derived below, once
+  // `orderedCards` exists; `lastIndexRef` keeps the position for the one case
+  // the name can't answer (the active card left the deck).
+  const [activeName, setActiveName] = useState<string | null>(null)
+  const lastIndexRef = useRef(0)
+
+  // Index-shaped setter kept for every caller that thinks in positions ("next
+  // card", "the card you tapped"): it resolves against the current order and
+  // stores the card's name.
+  const setActiveIndex = useCallback((value: number | ((prev: number) => number)) => {
+    const list = orderedCardsRef.current
+    setActiveName(prev => {
+      const names = list.map(c => c.name)
+      const prevIndex = resolveActiveIndex(names, prev, lastIndexRef.current)
+      const raw = typeof value === 'function' ? value(prevIndex) : value
+      const next = Math.min(Math.max(0, raw), Math.max(0, names.length - 1))
+      return list[next]?.name ?? prev
+    })
+  }, [])
+
+  // "Start at the top of whatever the order is now" — shuffling or clearing
+  // completed cards rebuilds the deck, so pinning a name would be wrong.
+  const resetActiveIndex = useCallback(() => {
+    lastIndexRef.current = 0
+    setActiveName(null)
+  }, [])
+
   const [galleryExpanded, setGalleryExpanded] = useState(false)
   // Lifted out of GalleryPanel so the selected tab (Collected/My Deck)
   // survives the empty→non-empty remount when the first card is added —
@@ -2930,13 +2961,6 @@ export default function Flashcards() {
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } }),
   )
 
-  // Keep activeIndex in bounds when cards are removed
-  useEffect(() => {
-    if (cards.length > 0 && activeIndex >= cards.length) {
-      setActiveIndex(cards.length - 1)
-    }
-  }, [cards.length, activeIndex])
-
   // Reset tracked popup name when popup closes
   useEffect(() => {
     if (!popupOpen) prevPopupNameRef.current = null
@@ -2955,7 +2979,7 @@ export default function Flashcards() {
     setFlashingCard(popupCurrentName)
     const clearId = setTimeout(() => setFlashingCard(null), 1700)
     return () => clearTimeout(clearId)
-  }, [popupCurrentName])
+  }, [popupCurrentName, setActiveIndex])
 
   // concept name → exam label
   const conceptToExam = useMemo(() => {
@@ -3058,13 +3082,22 @@ export default function Flashcards() {
 
   orderedCardsRef.current = orderedCards
 
+  // Derived, not stored: re-point at the named active card on every re-sort so
+  // the deck can be reordered under the reader without swapping their card.
+  const activeIndex = resolveActiveIndex(
+    orderedCards.map(c => c.name),
+    activeName,
+    lastIndexRef.current,
+  )
+  lastIndexRef.current = activeIndex
+
   const completedCount = useMemo(() => cards.filter(c => c.completedAt).length, [cards])
 
   function handleShuffle() {
     playSound('shuffle')
     setShuffleOrder(shuffled(cards.map(c => c.name)))
     setGroupBy('shuffle')
-    setActiveIndex(0)
+    resetActiveIndex()
   }
 
   // Selecting "Shuffle" from the sort dropdown draws a fresh order each time.
@@ -3160,7 +3193,7 @@ export default function Flashcards() {
       }, 1700)
     }, 100)
     return () => clearTimeout(timerId)
-  }, [highlightName, orderedCards, setSearchParams])
+  }, [highlightName, orderedCards, setSearchParams, setActiveIndex])
 
   // Arriving with ?view=deck — from tapping the "Added to Deck" confirmation —
   // opens the gallery on My Deck so the cards just added are what you land on.
@@ -3200,7 +3233,8 @@ export default function Flashcards() {
     const reordered = arrayMove(orderedCards, oldIdx, newIdx)
     setCustomOrder(reordered.map(c => c.name))
     setGroupBy('custom')
-    if (activeIndex === oldIdx) setActiveIndex(newIdx)
+    // No index fix-up needed: the active card is tracked by name, so it follows
+    // itself into its new slot.
   }
 
   // Empty state — no cards in the deck yet. Show the tabbed gallery inline so
@@ -3318,7 +3352,7 @@ export default function Flashcards() {
       clearCompleted()
       setClearingNames(new Set())
       setAgainCounts({})
-      setActiveIndex(0)
+      resetActiveIndex()
     }, (names.length - 1) * stagger + CLEAR_CARD_MS)
     clearTimersRef.current.push(finalTimer)
   }
@@ -3417,7 +3451,7 @@ export default function Flashcards() {
             if (groupBy === 'shuffle') setShuffleOrder(shuffled(cards.map(c => c.name)))
             setAgainCounts({})
             setShowSessionSummary(false)
-            setActiveIndex(0)
+            resetActiveIndex()
           }}
           onClose={() => setShowSessionSummary(false)}
         />

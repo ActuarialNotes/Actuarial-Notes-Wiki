@@ -477,6 +477,29 @@
   animation: lock-open-burst 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
+/* Concept popup: slides up from the bottom edge instead of snapping into place,
+   which is what the panel's "sheet of paper" open sound already suggests. The
+   element only mounts while the popup is open, so the animation plays once per
+   open and not when stepping between concepts. Transform-only so it composites;
+   no `will-change` because a lingering transform hint would turn the aside into
+   a containing block for any fixed-position descendant. */
+.concept-popup-aside {
+  animation: concept-popup-in 260ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes concept-popup-in {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .concept-popup-aside {
+    animation: concept-popup-fade-in 120ms ease-out;
+  }
+}
+@keyframes concept-popup-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* Concept popup: left edge tracks the sidebar width exactly.
    --sidebar-width is set by Sidebar.tsx (16rem expanded, 3.5rem collapsed).
    On mobile the popup spans full width so we skip this rule. */

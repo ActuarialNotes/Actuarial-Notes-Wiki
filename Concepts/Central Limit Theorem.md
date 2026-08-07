@@ -6,7 +6,7 @@ The **Central Limit Theorem** (CLT) states that the standardized sum of independ
 
 - For large $n$, $S_n$ is approximately $N(n\mu,\, n\sigma^2)$ regardless of the original distribution
 
-![[Media/Central_limit_theorem.svg|600]]
+![[Media/Figures/Central_Limit_Theorem.svg|340]]
 
 > [!example]- Approximating Total Claims Across 200 Policies {Example}
 > An insurer has 200 independent policies. Each policy's annual claim has mean \$500 and standard deviation \$300. Approximate $P(S_{200} > 104{,}000)$.

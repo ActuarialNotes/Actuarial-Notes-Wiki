@@ -2,7 +2,7 @@ A **Venn Diagram** is a visual tool used to represent the relationships between 
 
 > $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
 
-![[Media/Venn_Diagram_Example.png|300]]
+![[Media/Figures/Venn_Diagram.svg|340]]
 
 - **$S$**: Universal Set — the rectangle representing every possible outcome (Total Probability = 1)
 - **$A, B$**: Sets A and B — the circles representing specific events

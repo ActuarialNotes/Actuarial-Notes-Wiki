@@ -38,8 +38,8 @@ python3 scripts/generate_concept_figures.py --only "Covariance"   # just one
 ```
 
 `--embed` skips any page that already contains an `![[...]]`, so it is safe to re-run
-and it never disturbs the hand-authored embeds (Bayes' theorem, the Venn diagram, the
-distribution plots that the simulator replaces).
+and it never disturbs the one remaining set of hand-authored embeds — the
+`Media/*_pdf.svg` / `*_pmf.svg` distribution plots that the simulator replaces.
 
 ## Modules
 
@@ -47,14 +47,15 @@ distribution plots that the simulator replaces).
 |---|---|
 | `scripts/figure_kit.py` | The SVG toolkit: the `vcard()` portrait card, cartesian `Axes` (`vaxes()` insets one into the card's box), timelines, cash-flow arrows, Venn helpers, palette and stylesheet. No dependencies — pure Python. |
 | `scripts/figure_registry.py` | The `@figure(concept, alt, width)` decorator and the registry it fills. |
-| `scripts/figures_exam_p.py` | The 52 Exam P builders, in syllabus order. |
-| `scripts/figures_exam_fm.py` | The 81 Exam FM builders, in syllabus order. |
+| `scripts/figures_exam_p.py` | The 56 Exam P builders, in syllabus order. |
+| `scripts/figures_exam_fm.py` | The 82 Exam FM builders, in syllabus order. |
 | `scripts/generate_concept_figures.py` | Walks the registry, writes the SVGs, optionally embeds them. |
 
 ## Why hand-written SVG and not matplotlib
 
-`scripts/generate_illustrations.py` (the older script that produced the distribution
-plots) uses matplotlib. These figures do not, for three reasons:
+`scripts/generate_illustrations.py` (the older script, now down to the distribution
+plots the simulator replaces) uses matplotlib. These figures do not, for three
+reasons:
 
 1. **Theme.** The quiz app defaults to a **dark** canvas, while the vault is also read in
    Obsidian, on GitHub, and on the published light site. An embed becomes

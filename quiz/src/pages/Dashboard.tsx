@@ -518,7 +518,7 @@ export default function Dashboard() {
             {!isGuest && showLevelBadge && (
               <LevelBadge
                 avatarUrl={avatarUrl}
-                size={36}
+                size={40}
                 questContext={questContext}
                 leagueExams={leagueExams}
                 activeExamId={activeProgressKey}
@@ -527,17 +527,17 @@ export default function Dashboard() {
             {!isGuest && !showLevelBadge && (
               <MascotWidget compact avatarUrl={avatarUrl} initials={initials} context={mascotContext} />
             )}
-            {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={36} />}
-            <span className="text-sm font-semibold truncate min-w-0">{displayName}</span>
+            {isGuest && <AvatarDisplay avatarUrl={avatarUrl} initials={initials} size={40} />}
+            <span className="text-base font-semibold truncate min-w-0">{displayName}</span>
             {!isGuest && (
               <button
                 type="button"
                 onClick={e => { e.stopPropagation(); setExamsOpen(true) }}
-                className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
+                className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors shrink-0"
                 aria-label="Add or manage exams"
                 title="Add or manage exams"
               >
-                <PlusCircle className="h-5 w-5" />
+                <PlusCircle className="h-6 w-6" />
               </button>
             )}
 
@@ -620,35 +620,35 @@ export default function Dashboard() {
           </div>
 
           {!isGuest && (
-            <div className="ml-auto flex items-center gap-1 shrink-0">
+            <div className="ml-auto flex items-center gap-1.5 shrink-0">
               <button
                 type="button"
                 onClick={() => setExportOpen(true)}
-                className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 aria-label="Export your data"
                 title="Export your data (CSV or PDF)"
               >
-                <Download className="h-5 w-5" />
+                <Download className="h-6 w-6" />
               </button>
               {DAILY_PLAN_EMAIL_ENABLED && (
                 <button
                   type="button"
                   onClick={() => setRemindersOpen(true)}
-                  className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                   aria-label="Daily reminder email settings"
                   title="Daily reminder email settings"
                 >
-                  <Bell className="h-5 w-5" />
+                  <Bell className="h-6 w-6" />
                 </button>
               )}
               <button
                 type="button"
                 onClick={() => setGuideOpen(true)}
-                className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                className="p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 aria-label="Help"
                 title="How the dashboard works"
               >
-                <HelpCircle className="h-5 w-5" />
+                <HelpCircle className="h-6 w-6" />
               </button>
             </div>
           )}

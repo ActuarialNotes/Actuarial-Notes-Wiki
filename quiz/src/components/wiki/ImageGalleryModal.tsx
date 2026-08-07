@@ -179,49 +179,6 @@ export function ImageGalleryModal({ images, initialIndex, hostFocusMode = false,
       }`}
       onWheel={e => e.stopPropagation()}
     >
-      {/* Custom slider styles */}
-      <style>{`
-        .gallery-slider {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 100%;
-          height: 40px;
-          background: transparent;
-          outline: none;
-          cursor: pointer;
-        }
-        .gallery-slider::-webkit-slider-runnable-track {
-          height: 14px;
-          border-radius: 7px;
-          background: rgba(255,255,255,0.2);
-        }
-        .gallery-slider::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: white;
-          cursor: pointer;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-          margin-top: -13px;
-        }
-        .gallery-slider::-moz-range-track {
-          height: 14px;
-          border-radius: 7px;
-          background: rgba(255,255,255,0.2);
-        }
-        .gallery-slider::-moz-range-thumb {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: white;
-          cursor: pointer;
-          border: none;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        }
-      `}</style>
-
       {/* Top bar — dimmed chrome */}
       <div className="flex items-center justify-between px-4 py-2 shrink-0 opacity-30 hover:opacity-70 transition-opacity">
         <span className="text-sm text-white tabular-nums">
@@ -319,7 +276,7 @@ export function ImageGalleryModal({ images, initialIndex, hostFocusMode = false,
           step={0.05}
           value={zoom}
           onChange={e => applyZoom(parseFloat(e.target.value))}
-          className="gallery-slider flex-1"
+          className="zoom-slider flex-1"
           aria-label="Zoom"
         />
         <span className="text-base text-white/50 tabular-nums w-8 shrink-0 text-right">4×</span>

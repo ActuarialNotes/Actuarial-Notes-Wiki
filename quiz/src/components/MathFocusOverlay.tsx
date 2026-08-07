@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, Minus, Plus, X } from 'lucide-react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useSoundEffects, useSoundOnMount } from '@/hooks/useSoundEffects'
 import {
   MATH_FOCUS_BASE_PX,
@@ -17,7 +17,11 @@ interface Props {
 
 const ZOOM_STEP = 0.25
 const ZOOM_MIN = 0.5
-const ZOOM_MAX = 3
+const ZOOM_MAX = 4
+
+function clampZoom(z: number) {
+  return Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z))
+}
 
 /**
  * Focus mode for a single equation: the tapped formula blown up to fill the
@@ -90,8 +94,8 @@ export function MathFocusOverlay({ equations, initialIndex, onClose }: Props) {
       if (e.key === 'Escape') onClose()
       else if (e.key === 'ArrowLeft') step(-1)
       else if (e.key === 'ArrowRight') step(1)
-      else if (e.key === '+' || e.key === '=') setZoom(z => Math.min(ZOOM_MAX, z + ZOOM_STEP))
-      else if (e.key === '-') setZoom(z => Math.max(ZOOM_MIN, z - ZOOM_STEP))
+      else if (e.key === '+' || e.key === '=') setZoom(z => clampZoom(z + ZOOM_STEP))
+      else if (e.key === '-') setZoom(z => clampZoom(z - ZOOM_STEP))
       else if (e.key === '0') setZoom(1)
       else return
       e.preventDefault()
@@ -154,34 +158,46 @@ export function MathFocusOverlay({ equations, initialIndex, onClose }: Props) {
         />
       </div>
 
-      {/* Zoom — the fitted size is 100%; the buttons scale relative to it. */}
-      <div className="flex items-center justify-center gap-3 shrink-0 py-2">
-        <button
-          type="button"
-          onClick={() => setZoom(z => Math.max(ZOOM_MIN, z - ZOOM_STEP))}
-          disabled={zoom <= ZOOM_MIN}
-          className="h-8 w-8 inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          aria-label="Zoom out"
-        >
-          <Minus className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          onClick={() => setZoom(1)}
-          className="text-xs text-muted-foreground hover:text-foreground tabular-nums w-12 text-center transition-colors"
-          aria-label="Reset zoom"
-        >
-          {Math.round(zoom * 100)}%
-        </button>
-        <button
-          type="button"
-          onClick={() => setZoom(z => Math.min(ZOOM_MAX, z + ZOOM_STEP))}
-          disabled={zoom >= ZOOM_MAX}
-          className="h-8 w-8 inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          aria-label="Zoom in"
-        >
-          <Plus className="h-4 w-4" />
-        </button>
+      {/* Zoom — the same slider the image gallery uses (`.zoom-slider`), which
+          on a phone is dragged with the thumb that's already holding the
+          device. 1× is the fitted size; the scale is relative to it. The two
+          custom properties recolour the shared control for the themed
+          background this overlay sits on, rather than the gallery's black. */}
+      <div
+        className="flex items-center gap-4 shrink-0 px-6 py-3"
+        style={{
+          '--zoom-slider-track': 'hsl(var(--foreground) / 0.18)',
+          '--zoom-slider-thumb': 'hsl(var(--foreground))',
+        } as CSSProperties}
+      >
+        <span className="text-base text-muted-foreground tabular-nums w-8 shrink-0">
+          {ZOOM_MIN}×
+        </span>
+        <input
+          type="range"
+          min={ZOOM_MIN}
+          max={ZOOM_MAX}
+          step={0.05}
+          value={zoom}
+          onChange={e => setZoom(clampZoom(parseFloat(e.target.value)))}
+          className="zoom-slider flex-1"
+          aria-label="Zoom"
+        />
+        <span className="text-base text-muted-foreground tabular-nums w-8 shrink-0 text-right">
+          {ZOOM_MAX}×
+        </span>
+        <span className="text-base text-foreground tabular-nums w-12 text-right shrink-0 font-semibold">
+          {zoom.toFixed(1)}×
+        </span>
+        {Math.abs(zoom - 1) > 0.001 && (
+          <button
+            type="button"
+            onClick={() => setZoom(1)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
+          >
+            reset
+          </button>
+        )}
       </div>
 
       {/* Footer nav — the same Previous / Next shape as the concept popup. */}

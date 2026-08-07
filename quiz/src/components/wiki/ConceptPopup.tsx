@@ -110,9 +110,12 @@ export function ConceptPopup() {
     navigate(direction)
   }, [play, navigate])
 
-  // Scroll the body back to top whenever the viewed concept changes.
+  // Scroll the body back to top whenever the viewed concept changes. The action
+  // menu closes with it — the next concept may be uncollected, in which case its
+  // header button is a lock and the menu has nothing to hang off.
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = 0
+    setShowPlayMenu(false)
   }, [current?.name])
 
   // Fetch markdown whenever the active ref changes.
@@ -286,6 +289,17 @@ export function ConceptPopup() {
 
   const todayLabel = `Study Plan — ${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}`
 
+  // The collect gate and the action menu share one header button. While a
+  // concept is uncollected the button *is* the lock: it shows the foil-ringed
+  // padlock and opens the collect flow, so the actions behind it (Start Quiz,
+  // Add to Flashcards, Math View, Listen, Learning Progress) are unreachable
+  // until the card is earned. Once collected the same slot becomes the play
+  // button. Non-concept entries (resources, exam pages) have no gate at all.
+  const isCollected = collectedCards.some(c => c.name.toLowerCase() === current.name.toLowerCase())
+  // A concept past New has necessarily been collected already (grandfathered
+  // users included), so treat it as unlocked even if not in the collected store.
+  const actionLocked = current.kind === 'concept' && !isCollected && (masteryState === null || masteryState === 'new')
+
   return (
     <>
     <aside
@@ -317,7 +331,7 @@ export function ConceptPopup() {
       {/* Header. Focus mode spans the full viewport, so the header and the body
           below share a max-width reading column to keep line lengths sane on
           desktop and stay aligned with each other. */}
-      <div className={`flex items-center gap-2 h-14 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
+      <div className={`flex items-center gap-2 h-16 shrink-0 ${focusMode ? 'w-full max-w-4xl mx-auto px-4 sm:px-6' : 'px-3'}`}>
         <div className="flex items-center gap-2 flex-1 min-w-0">
           {/* The title carries the keystone marker itself: a gold underline on
               the name, tappable to explain why this concept is load-bearing.
@@ -326,54 +340,49 @@ export function ConceptPopup() {
           <KeystoneName
             name={current.name}
             progress={keystoneStats}
-            className="truncate font-semibold text-base min-w-0"
+            className="truncate font-semibold text-lg sm:text-xl min-w-0"
           />
-          {/* Collect / status indicator, sitting just right of the concept name.
-              Spacing is the row's `gap-2` and nothing else — the locked state
-              draws a visible foil ring at the button's edge, so any negative
-              margin here puts that ring straight onto the last letter of the
-              name. Locked → lock icon (opens the collect flow); once collected
-              → mastery status (New/1/2/3/F) which opens the combined card +
+          {/* Mastery status (New/1/2/3/F), sitting just right of the concept
+              name — only once the card is collected, since an uncollected
+              concept is pinned at New by the gate. Opens the combined card +
               learning-progress modal, where it can level up. */}
-          {!focusMode && current.kind === 'concept' && (() => {
-            const collected = collectedCards.some(c => c.name.toLowerCase() === current.name.toLowerCase())
-            // A concept past New has necessarily been collected already (grandfathered
-            // users included), so surface its status even if not in the collected store.
-            const showStatus = collected || (masteryState !== null && masteryState !== 'new')
-            if (showStatus) {
-              const pill = MASTERY_PILL[masteryState ?? 'new']
-              return (
-                <button
-                  type="button"
-                  data-tour="collect-card"
-                  // Hand the modal the verdict this pill is already showing, so
-                  // it opens straight onto the card + learning progress instead
-                  // of flashing the collect check while it re-derives mastery.
-                  onClick={() => openCollect(current, { collected: true, mastery: masteryState ?? undefined })}
-                  title="View flashcard & learning progress"
-                  aria-label={`${current.name} — ${pill.label}. View flashcard and progress`}
-                  className={`shrink-0 inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full text-[11px] font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${pill.className}`}
-                >
-                  {pill.label}
-                </button>
-              )
-            }
+          {!focusMode && current.kind === 'concept' && !actionLocked && (() => {
+            const pill = MASTERY_PILL[masteryState ?? 'new']
             return (
               <button
                 type="button"
                 data-tour="collect-card"
-                onClick={() => openCollect(current)}
-                className="lock-foil-ring inline-flex items-center justify-center h-8 w-8 rounded-md shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-                title="Collect this flashcard"
-                aria-label={`Collect ${current.name}`}
+                // Hand the modal the verdict this pill is already showing, so
+                // it opens straight onto the card + learning progress instead
+                // of flashing the collect check while it re-derives mastery.
+                onClick={() => openCollect(current, { collected: true, mastery: masteryState ?? undefined })}
+                title="View flashcard & learning progress"
+                aria-label={`${current.name} — ${pill.label}. View flashcard and progress`}
+                className={`shrink-0 inline-flex items-center justify-center min-w-[1.875rem] h-7 px-2 rounded-full text-xs font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${pill.className}`}
               >
-                <Lock className="h-4 w-4" />
+                {pill.label}
               </button>
             )
           })()}
-          {/* Play button + mini menu — immediately right of the concept name */}
+          {/* The action button — or, while the concept is uncollected, the lock
+              that stands in for it. Spacing is the row's `gap-2` and nothing
+              else: the locked state draws a visible foil ring at the button's
+              edge, so any negative margin here puts that ring straight onto the
+              last letter of the name. */}
           {!focusMode && (
           <div className="relative shrink-0" ref={playMenuRef}>
+          {actionLocked ? (
+            <button
+              type="button"
+              data-tour="collect-card"
+              onClick={() => openCollect(current)}
+              className="lock-foil-ring inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+              title="Locked — collect this flashcard to unlock its actions"
+              aria-label={`Collect ${current.name} to unlock its actions`}
+            >
+              <Lock className="h-5 w-5" />
+            </button>
+          ) : (
           <button
             ref={playBtnRef}
             type="button"
@@ -386,12 +395,13 @@ export function ConceptPopup() {
               }
               setShowPlayMenu(v => !v)
             }}
-            className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-background hover:bg-accent text-foreground shrink-0"
+            className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-background hover:bg-accent text-foreground shrink-0"
             title="Start Quiz or Add to Flashcards"
             aria-label="Start Quiz or Add to Flashcards"
           >
-            <Play className="h-4 w-4" />
+            <Play className="h-5 w-5" />
           </button>
+          )}
           {showPlayMenu && menuRect && createPortal(
             <div
               data-play-menu
@@ -499,11 +509,11 @@ export function ConceptPopup() {
             <button
               type="button"
               onClick={() => setMathView(false)}
-              className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
               title="Exit Math View"
               aria-label="Exit Math View"
             >
-              <Sigma className="h-4 w-4" />
+              <Sigma className="h-5 w-5" />
             </button>
           )}
           {/* Headphones icon — visible only while in Listen view; clicking exits it */}
@@ -511,11 +521,11 @@ export function ConceptPopup() {
             <button
               type="button"
               onClick={() => setListenView(false)}
-              className="inline-flex items-center justify-center h-8 w-8 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
               title="Exit Listen"
               aria-label="Exit Listen"
             >
-              <Headphones className="h-4 w-4" />
+              <Headphones className="h-5 w-5" />
             </button>
           )}
         </div>
@@ -525,22 +535,22 @@ export function ConceptPopup() {
           type="button"
           onClick={() => setFocusMode(v => !v)}
           aria-pressed={focusMode}
-          className="text-muted-foreground hover:text-foreground p-1"
+          className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
           title={focusMode ? 'Exit focus mode (Esc)' : 'Focus mode'}
           aria-label={focusMode ? 'Exit focus mode' : 'Focus mode'}
         >
-          {focusMode ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          {focusMode ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
         </button>
         {!focusMode && (
           <button
             type="button"
             onClick={close}
             data-sound="none"
-            className="text-muted-foreground hover:text-foreground p-1"
+            className="inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
             title="Close"
             aria-label="Close"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         )}
       </div>

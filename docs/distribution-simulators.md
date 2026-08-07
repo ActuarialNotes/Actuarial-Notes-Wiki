@@ -27,13 +27,21 @@ Wired in at two places:
   `<div>` and `<div>` inside `<p>` is invalid nesting.
 - `components/wiki/ImageGalleryModal.tsx` — the full-screen gallery (opened from the concept
   popup) renders the simulator instead of the picture, and hides the zoom slider and the
-  tap-to-close pointer handlers so the controls stay usable.
+  tap-to-close pointer handlers so the controls stay usable. It layers at `z-[57]`, which is
+  what puts it above a concept popup in **focus mode** (`z-index: 56`); at its old `z-50` the
+  simulator opened *behind* the focus-mode popup and the card looked unresponsive. The
+  `hostFocusMode` prop also shrinks the bottom inset to the popup's own footer, since focus
+  mode drops the mobile bottom nav.
 - `components/wiki/ConceptImageBanner.tsx` — the figure at the top of the concept popup. A
   distribution illustration is never drawn there as a picture: the banner shows a **card**
-  (a sparkline of the default-parameter shape, plus the parameter symbols) that opens the
-  gallery, i.e. the full-screen simulator. The sparkline is drawn straight from
-  `buildContinuousCurve` / `buildMassPoints` rather than `DistributionPlot` — it is a hint at
-  the shape inside a button, so it carries no axes and no pointer handling.
+  (a sparkline of the default-parameter shape, plus the distribution's name) that opens the
+  gallery, i.e. the full-screen simulator. The name is the card's whole label — the sparkline
+  and the sliders icon already say "live simulator". The card wears `.simulator-foil-ring`
+  (`quiz/src/index.css`), the same travelling rainbow foil edge as a collected L3 flashcard, so
+  it must carry no `border` of its own — the ring *is* the edge, and a hairline under it reads
+  as a second, static border. The sparkline is drawn straight from `buildContinuousCurve` /
+  `buildMassPoints` rather than `DistributionPlot` — it is a hint at the shape inside a button,
+  so it carries no axes and no pointer handling.
 
 Flashcard card faces still show the static image: those cards are drag-and-flip surfaces, and
 sliders inside them would fight dnd-kit for the pointer.

@@ -9,7 +9,7 @@
 - If $A$ and $B$ are independent, then $P(A \mid B) = P(A)$
 - Bayes' Theorem is central to [[Credibility Theory]] and to [[Bayesian Credibility]], where the prior is the class assumption and the posterior is the experience-updated estimate
 
-![[Media/Bayes_theorem_visualisation.svg|450]]
+![[Media/Figures/Bayes_Theorem.svg|340]]
 
 > [!example]- Identifying a High-Risk Policyholder After a Claim {Example}
 > 20% of policyholders are high-risk ($H$) and 80% are low-risk ($L$). A high-risk policyholder files a claim in year 1 with probability 0.40; a low-risk one with probability 0.10. A randomly selected policyholder files a claim. What is the probability they are high-risk?

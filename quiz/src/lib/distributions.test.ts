@@ -197,8 +197,8 @@ describe('distributionForImage', () => {
   })
 
   it('leaves non-distribution images alone', () => {
-    expect(distributionForImage('Media/Venn_Diagram_Example.png')).toBeNull()
-    expect(distributionForImage('Media/Central_limit_theorem.svg')).toBeNull()
+    expect(distributionForImage('Media/Figures/Venn_Diagram.svg')).toBeNull()
+    expect(distributionForImage('Media/Figures/Central_Limit_Theorem.svg')).toBeNull()
     expect(distributionForImage(undefined)).toBeNull()
     expect(distributionForImage('Media/%E0%A4%A.svg')).toBeNull()
   })

@@ -1,4 +1,11 @@
-"""Generate SVG illustration plots for Exam P and FM concept pages."""
+"""Generate the distribution plots the quiz app swaps for a live simulator.
+
+Each `Media/<Distribution>_pdf.svg` / `_pmf.svg` written here is embedded on its
+concept page and replaced at render time by `DistributionSimulator` — see
+`docs/distribution-simulators.md`. Every *other* Exam P / FM concept figure is
+drawn by `generate_concept_figures.py` as a portrait card; see
+`docs/concept-figures.md`.
+"""
 
 import numpy as np
 import matplotlib
@@ -217,126 +224,7 @@ def plot_negative_binomial():
     save(fig, "Negative_binomial_pmf.svg")
 
 
-# ── Central Limit Theorem ─────────────────────────────────────────────────────
-def plot_clt():
-    rng = np.random.default_rng(42)
-    fig, axes = plt.subplots(1, 4, figsize=(9, 3), sharey=False)
-    ns = [1, 2, 5, 30]
-    titles = ["n=1\n(Uniform)", "n=2", "n=5", "n=30\n(≈ Normal)"]
-    for ax, n, title in zip(axes, ns, titles):
-        samples = rng.uniform(0, 1, (50_000, n)).mean(axis=1)
-        ax.hist(samples, bins=40, density=True, color="#2563eb", alpha=0.75, edgecolor="none")
-        ax.set_title(title, fontsize=9, fontweight="semibold")
-        ax.set_xlabel("x̄", fontsize=9)
-        ax.tick_params(labelsize=8)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        if n == 30:
-            mu, sigma = 0.5, 1 / (12**0.5 * n**0.5)
-            xg = np.linspace(0.2, 0.8, 200)
-            ax.plot(xg, stats.norm.pdf(xg, mu, sigma), "r-", lw=1.5, label="N(μ,σ²/n)")
-            ax.legend(fontsize=7.5)
-    axes[0].set_ylabel("Density", fontsize=9)
-    fig.suptitle("Central Limit Theorem — Sample Mean of Uniform(0,1)", fontsize=10, fontweight="semibold", y=1.02)
-    fig.tight_layout()
-    save(fig, "Central_limit_theorem.svg")
-
-
-# ── Correlation coefficient ────────────────────────────────────────────────────
-def plot_correlation():
-    rng = np.random.default_rng(7)
-    rhos = [-1, -0.8, -0.4, 0, 0.4, 0.8, 1]
-    fig, axes = plt.subplots(1, 7, figsize=(12, 2.2))
-    n = 300
-    for ax, rho in zip(axes, rhos):
-        cov = [[1, rho], [rho, 1]]
-        xy = rng.multivariate_normal([0, 0], cov, n)
-        ax.scatter(xy[:, 0], xy[:, 1], s=4, alpha=0.5, color="#2563eb", linewidths=0)
-        ax.set_title(f"ρ={rho}", fontsize=8.5, fontweight="semibold")
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_aspect("equal")
-        ax.spines[:].set_linewidth(0.5)
-    fig.suptitle("Pearson Correlation Coefficient", fontsize=10, fontweight="semibold", y=1.05)
-    fig.tight_layout(w_pad=0.3)
-    save(fig, "Correlation_examples.svg")
-
-
-# ── Bayes' Theorem ────────────────────────────────────────────────────────────
-def plot_bayes():
-    """Visualise Bayes' theorem as a 2-D probability area diagram."""
-    fig, ax = plt.subplots(figsize=(5, 3.8))
-
-    # P(H)=0.2, P(E|H)=0.8, P(E|¬H)=0.2
-    pH = 0.2
-    pEnH = 0.8
-    pEnNH = 0.2
-
-    # Draw the unit square split at x=pH (prior)
-    ax.add_patch(plt.Rectangle((0, 0), pH, 1, facecolor="#bfdbfe", edgecolor="white", lw=0.5))
-    ax.add_patch(plt.Rectangle((pH, 0), 1 - pH, 1, facecolor="#fecaca", edgecolor="white", lw=0.5))
-
-    # Shade the likelihood regions
-    ax.add_patch(plt.Rectangle((0, 0), pH, pEnH, facecolor="#1d4ed8", alpha=0.8, edgecolor="white", lw=0.5))
-    ax.add_patch(plt.Rectangle((pH, 0), 1 - pH, pEnNH, facecolor="#b91c1c", alpha=0.5, edgecolor="white", lw=0.5))
-
-    # Labels
-    ax.text(pH / 2, 1.03, "P(H)", ha="center", fontsize=9, color="#1d4ed8", fontweight="bold")
-    ax.text(pH + (1 - pH) / 2, 1.03, "P(¬H)", ha="center", fontsize=9, color="#b91c1c", fontweight="bold")
-
-    ax.text(pH / 2, pEnH / 2, "P(E|H)·P(H)\n= posterior × P(E)",
-            ha="center", va="center", fontsize=7.5, color="white", fontweight="bold")
-    ax.text(pH + (1 - pH) / 2, pEnNH / 2, "P(E|¬H)·P(¬H)",
-            ha="center", va="center", fontsize=7.5, color="white", fontweight="bold")
-
-    ax.axhline(pEnH, xmax=pH, color="#1d4ed8", lw=0.8, ls="--")
-    ax.axhline(pEnNH, xmin=pH, color="#b91c1c", lw=0.8, ls="--")
-    ax.axvline(pH, color="gray", lw=1)
-
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1.15)
-    ax.set_xticks([0, pH, 1])
-    ax.set_xticklabels(["0", f"P(H)={pH}", "1"])
-    ax.set_yticks([0, pEnNH, pEnH, 1])
-    ax.set_yticklabels(["0", f"P(E|¬H)\n={pEnNH}", f"P(E|H)\n={pEnH}", "1"], fontsize=7.5)
-    ax.set_xlabel("Prior probability of H", fontsize=9)
-    ax.set_title("Bayes' Theorem — Area Visualisation", fontsize=10, fontweight="semibold")
-
-    # P(H|E) arrow
-    post = (pEnH * pH) / (pEnH * pH + pEnNH * (1 - pH))
-    ax.annotate(f"P(H|E) = {post:.2f}", xy=(post * pH, 0.02),
-                xytext=(0.55, 0.15), fontsize=8, color="#1d4ed8",
-                arrowprops=dict(arrowstyle="->", color="#1d4ed8", lw=0.8))
-
-    fig.tight_layout()
-    save(fig, "Bayes_theorem_visualisation.svg")
-
-
-# ── Yield curve ───────────────────────────────────────────────────────────────
-def plot_yield_curve():
-    fig, ax = plt.subplots(figsize=(5.5, 3.2))
-    maturities = np.array([0.25, 0.5, 1, 2, 3, 5, 7, 10, 20, 30])
-    normal = [4.0, 4.1, 4.2, 4.35, 4.5, 4.75, 4.95, 5.1, 5.3, 5.4]
-    inverted = [5.4, 5.3, 5.1, 4.9, 4.7, 4.4, 4.2, 4.0, 3.7, 3.6]
-    flat = [4.7] * len(maturities)
-
-    ax.plot(maturities, normal, "o-", color="#16a34a", lw=2, ms=4, label="Normal (upward-sloping)")
-    ax.plot(maturities, flat, "s--", color="#2563eb", lw=1.8, ms=4, label="Flat")
-    ax.plot(maturities, inverted, "^-", color="#dc2626", lw=2, ms=4, label="Inverted (downward-sloping)")
-
-    ax.set_xlabel("Maturity (years)")
-    ax.set_ylabel("Yield (%)")
-    ax.set_xscale("log")
-    ax.set_xticks([0.25, 1, 2, 5, 10, 30])
-    ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    ax.legend(loc="center right")
-    ax.set_title("Yield Curve Shapes", fontsize=11, fontweight="semibold")
-    fig.tight_layout()
-    save(fig, "Yield_curve_types.svg")
-
-
 if __name__ == "__main__":
-    import matplotlib.ticker
     print("Generating illustrations…")
     plot_normal()
     plot_binomial()
@@ -348,8 +236,4 @@ if __name__ == "__main__":
     plot_geometric()
     plot_hypergeometric()
     plot_negative_binomial()
-    plot_clt()
-    plot_correlation()
-    plot_bayes()
-    plot_yield_curve()
     print("Done.")

@@ -14,6 +14,7 @@ picture only when they are needed to read it. Grouped in syllabus order:
 from __future__ import annotations
 
 import math
+from fractions import Fraction
 
 from figure_kit import (
     AMBER, BLUE, GREEN, ROSE, TEAL, VIOLET,
@@ -33,6 +34,35 @@ def _lognorm(x, mu=0.0, sd=0.7):
     if x <= 0:
         return 0.0
     return math.exp(-((math.log(x) - mu) ** 2) / (2 * sd * sd)) / (x * sd * math.sqrt(2 * math.pi))
+
+
+def _std_normals(seed: int, n: int) -> list[tuple[float, float]]:
+    """`n` independent standard-normal pairs — a scatter cloud, reproducibly.
+
+    An LCG plus Box–Muller rather than `random`, so the same figure comes out of
+    every Python build.
+    """
+    out = []
+    for _ in range(n):
+        seed = (1103515245 * seed + 12345) % 2147483648
+        u1 = seed / 2147483648
+        seed = (1103515245 * seed + 12345) % 2147483648
+        u2 = seed / 2147483648
+        r = math.sqrt(-2 * math.log(u1 + 1e-9))
+        out.append((r * math.cos(2 * math.pi * u2), r * math.sin(2 * math.pi * u2)))
+    return out
+
+
+def _mean_density(n: int, j: int, bars: int) -> float:
+    """Density of the mean of `n` iid Uniform(0,1) draws at the centre of bar `j`.
+
+    The Irwin–Hall density, summed in exact rational arithmetic — for n = 30 the
+    alternating terms run to 40-odd digits and float64 cancels away the answer.
+    """
+    s = Fraction(n * (2 * j + 1), 2 * bars)          # the sum, on [0, n]
+    total = sum((-1) ** k * math.comb(n, k) * (s - k) ** (n - 1)
+                for k in range(int(s) + 1))
+    return float(total) * n / math.factorial(n - 1)
 
 
 def _panel(f: Fig, px, py, pw, ph, name, colour):
@@ -213,6 +243,27 @@ def set_theory() -> Fig:
         f.text(ax - 26, cy - 28, "A", cls="sm bold", fill=BLUE)
         f.text(bx + 26, cy - 28, "B", cls="sm bold", fill=AMBER)
         f.text(cx, cy + 74, lab, cls="bold")
+    return f
+
+
+@figure("Venn Diagram", "Two overlapping events with all four region probabilities "
+        "filled in", width=WID)
+def venn_diagram() -> Fig:
+    f = vcard("Fill the overlap first, then work outwards",
+              ["P(A ∪ B) = P(A) + P(B) − P(A ∩ B)",
+               "= 0.70 + 0.40 − 0.20 = 0.90"])
+
+    sx, sy, sw, sh = 32, 108, 296, 200
+    universe(f, sx, sy, sw, sh)
+    cy = sy + sh / 2 + 6
+    (ax, _), (bx, _) = venn2(f, sx + sw / 2, cy, r=66, sep=68)
+    # The four regions a question can ask for, each carrying its probability.
+    f.text(ax - 30, cy + 5, "0.50", cls="bold", fill=BLUE)
+    f.text((ax + bx) / 2, cy + 5, "0.20", cls="bold")
+    f.text(bx + 30, cy + 5, "0.20", cls="bold", fill=AMBER)
+    f.text(sx + sw - 34, sy + sh - 32, "neither", cls="sm dim")
+    f.text(sx + sw - 34, sy + sh - 14, "0.10", cls="bold dim")
+    f.note(BCX, 336, "P(A) = 0.70 auto,   P(B) = 0.40 home")
     return f
 
 
@@ -448,6 +499,41 @@ def conditional_probability() -> Fig:
     f.line(ccx, ccy, ex, ey, cls="thin", stroke=VIOLET, stroke_width="1.2")
     f.text(ccx + 84, ccy - 24, "A ∩ B", cls="sm bold", fill=VIOLET)
     f.text(ccx - 84, ccy + 24, "B", cls="bold", fill=AMBER)
+    return f
+
+
+@figure("Bayes Theorem", "The prior split into two columns whose shaded claim areas make "
+        "up P(C), half of it high-risk", width=WID)
+def bayes_theorem() -> Fig:
+    f = vcard("The posterior is the claiming slice of the prior",
+              ["P(H | C) = P(C | H) P(H) / P(C)", "= 0.08 / 0.16 = 0.50"])
+
+    p_h, p_c_h, p_c_l = 0.20, 0.40, 0.10
+    x0, y0, w, h = 70, 108, 240, 168
+    split = x0 + w * p_h
+    # Width is the prior, height within a column is the likelihood, so a shaded
+    # area is a joint probability and the two shaded areas add to P(C).
+    f.rect(x0, y0, w * p_h, h, fill=BLUE, fill_opacity="0.12")
+    f.rect(split, y0, w * (1 - p_h), h, fill=ROSE, fill_opacity="0.12")
+    f.rect(x0, y0 + h * (1 - p_c_h), w * p_h, h * p_c_h, fill=BLUE, fill_opacity="0.55")
+    f.rect(split, y0 + h * (1 - p_c_l), w * (1 - p_h), h * p_c_l, fill=ROSE,
+           fill_opacity="0.55")
+    f.rect(x0, y0, w, h, rx=3, fill="none", stroke="var(--edge)", stroke_width="1.2")
+    f.line(split, y0, split, y0 + h, cls="", stroke="var(--surf)", stroke_width="1.4")
+    f.text(x0 + w * p_h / 2, y0 - 8, "H 0.20", cls="sm bold", fill=BLUE)
+    f.text(split + w * (1 - p_h) / 2, y0 - 8, "L 0.80", cls="sm bold", fill=ROSE)
+    f.text(x0 + w * p_h / 2, y0 + h - 28, "0.08", cls="sm bold")
+    f.text(split + w * (1 - p_h) / 2, y0 + h - 4, "0.08", cls="sm bold")
+    f.note(BCX, y0 + h + 20, "shaded = files a claim")
+
+    # The same two shaded areas laid side by side: P(C), half of it blue.
+    by = 312
+    f.rect(80, by, 110, 26, rx=3, fill=BLUE, fill_opacity="0.55")
+    f.rect(190, by, 110, 26, rx=3, fill=ROSE, fill_opacity="0.55")
+    f.rect(80, by, 220, 26, rx=3, fill="none", stroke="var(--edge)", stroke_width="1.2")
+    f.text(135, by + 17, "0.08", cls="sm bold")
+    f.text(245, by + 17, "0.08", cls="sm bold")
+    f.note(BCX, by + 48, "P(C) = 0.16 — the blue half is P(H | C)")
     return f
 
 
@@ -1240,14 +1326,7 @@ def covariance() -> Fig:
         f.text(rx_ + side / 4, ry_ + side / 4 + 5, sign, cls="bold", fill=colour)
     f.line(mx, py0, mx, py0 + side, cls="thin", stroke="var(--dim)", stroke_width="1.2")
     f.line(px0, my, px0 + side, my, cls="thin", stroke="var(--dim)", stroke_width="1.2")
-    seed = 7
-    for _ in range(52):
-        seed = (1103515245 * seed + 12345) % 2147483648
-        u1 = seed / 2147483648
-        seed = (1103515245 * seed + 12345) % 2147483648
-        u2 = seed / 2147483648
-        z1 = math.sqrt(-2 * math.log(u1 + 1e-9)) * math.cos(2 * math.pi * u2)
-        z2 = math.sqrt(-2 * math.log(u1 + 1e-9)) * math.sin(2 * math.pi * u2)
+    for z1, z2 in _std_normals(7, 52):
         x = mx + z1 * side / 6.4
         y = my - (0.72 * z1 + 0.7 * z2) * side / 6.4
         if px0 + 3 < x < px0 + side - 3 and py0 + 3 < y < py0 + side - 3:
@@ -1255,6 +1334,32 @@ def covariance() -> Fig:
     f.text(mx, py0 + side + 20, "μₓ", cls="sm dim")
     f.text(px0 - 8, my + 4, "μ_Y", cls="sm dim", anchor="end")
     f.text(BCX, 366, "Cov > 0: the + quadrants win", cls="sm dim")
+    return f
+
+
+@figure("Correlation Coefficient", "The same scatter cloud at six correlations, from a "
+        "falling line through a shapeless blob to a rising line", width=WID)
+def correlation_coefficient() -> Fig:
+    f = vcard("ρ is how tightly the cloud hugs a line",
+              ["ρ(X, Y) = Cov(X, Y) / (σₓ σ_Y)", "−1 ≤ ρ ≤ 1, and ρ = ±1 is a line"])
+
+    # One cloud, drawn six times: only ρ changes, so the panels read as the same
+    # points tilting rather than six unrelated pictures.
+    cloud = _std_normals(23, 64)
+    pw = 92
+    for i, rho in enumerate((-1, -0.8, -0.4, 0, 0.6, 1)):
+        px = 28 + (i % 3) * 106
+        py = 100 + (i // 3) * 130
+        f.rect(px, py, pw, pw, rx=4, fill="var(--soft)", stroke="var(--edge)",
+               stroke_width="1")
+        scale, spread = pw / 6.6, math.sqrt(1 - rho * rho)
+        for z1, z2 in cloud:
+            x = px + pw / 2 + z1 * scale
+            y = py + pw / 2 - (rho * z1 + spread * z2) * scale
+            if px + 3 < x < px + pw - 3 and py + 3 < y < py + pw - 3:
+                f.circle(x, y, 2.1, fill=BLUE, fill_opacity="0.7")
+        f.text(px + pw / 2, py + pw + 16, f"ρ = {rho:g}".replace("-", "−"),
+               cls="sm bold")
     return f
 
 
@@ -1419,4 +1524,34 @@ def probabilities_for_linear_combinations() -> Fig:
     a.label(8, _npdf(0, 0, 2.0), "X₂", cls="sm bold", fill=VIOLET, dy=-8)
     a.label(13, _npdf(0, 0, math.sqrt(1.4 ** 2 + 2.0 ** 2)), "X₁ + X₂", cls="sm bold",
             fill=AMBER, dy=-8)
+    return f
+
+
+@figure("Central Limit Theorem", "The density of the sample mean of n uniform draws, "
+        "flat at n = 1 and normal by n = 30", width=WID)
+def central_limit_theorem() -> Fig:
+    f = vcard("Average enough draws and the shape turns normal",
+              ["(Sₙ − nμ) / (σ√n) → N(0, 1)", "so Sₙ ≈ N(nμ, nσ²) for large n"])
+
+    bars, x0, x1, ph = 26, 84, 326, 54
+    bw = (x1 - x0) / bars
+    for row, n in enumerate((1, 2, 5, 30)):
+        py = 92 + row * 72
+        dens = [_mean_density(n, j, bars) for j in range(bars)]
+        peak = max(dens)
+        for j, d in enumerate(dens):
+            hgt = d / peak * ph
+            f.rect(x0 + j * bw + 0.5, py + ph - hgt, bw - 1, hgt, rx=1, fill=BLUE,
+                   fill_opacity="0.6")
+        f.line(x0, py + ph, x1, py + ph, cls="axis")
+        f.text(x0 - 12, py + ph - 4, f"n = {n}", cls="sm bold", anchor="end")
+        if n == 30:
+            # Each panel is scaled to its own peak, so the convergence shows up as
+            # the spread narrowing — with the limiting normal drawn over the last.
+            mu, sd = 0.5, 1 / math.sqrt(12 * n)
+            top = _npdf(mu, mu, sd)
+            f.poly([(x0 + t / 80 * (x1 - x0), py + ph - _npdf(t / 80, mu, sd) / top * ph)
+                    for t in range(81)], cls="curve", stroke=ROSE, stroke_width="1.8")
+            f.text(x1, py - 4, "N(μ, σ²/n)", cls="sm bold", fill=ROSE, anchor="end")
+    f.note(BCX, 380, "sample mean x̄ of n Uniform(0, 1) draws")
     return f

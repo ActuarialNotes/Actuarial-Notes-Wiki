@@ -1682,6 +1682,31 @@ def forward_rate() -> Fig:
     return f
 
 
+@figure("Yield Curve", "Normal, flat and inverted term structures on one set of axes",
+        width=WID)
+def yield_curve() -> Fig:
+    f = vcard("Three shapes the term structure takes",
+              ["P = Σ C_t / (1 + s_t)^t", "every maturity has its own spot rate"])
+
+    mats = [1, 2, 3, 5, 7, 10, 20, 30]
+    shapes = (
+        ("normal", GREEN, [4.2, 4.35, 4.5, 4.75, 4.95, 5.1, 5.3, 5.4], 5.4, -10),
+        ("flat", BLUE, [4.7] * len(mats), 4.7, -10),
+        ("inverted", ROSE, [5.1, 4.9, 4.7, 4.4, 4.2, 4.0, 3.7, 3.6], 3.6, 16),
+    )
+    a = vaxes(f, 0, 31, 3.3, 5.7, left=52, top=34)
+    for _, colour, series, _, _ in shapes:
+        a.polyline(list(zip(mats, series)), colour=colour)
+        for t, s_ in zip(mats, series):
+            a.point(t, s_, colour=colour, r=2.6)
+    # Labelled at the long end, where the three curves are furthest apart.
+    for label, colour, _, y, dy in shapes:
+        a.label(29, y, label, cls="sm bold", fill=colour, anchor="end", dy=dy)
+    a.frame(xlabel="maturity (years)", ylabel="spot rate", xticks=[1, 10, 20, 30],
+            yticks=[3.5, 4.0, 4.5, 5.0, 5.5], yfmt=lambda t: f"{t:.1f}%")
+    return f
+
+
 @figure("Duration Matching", "Assets and liabilities matched in value and duration",
         width=WID)
 def duration_matching() -> Fig:

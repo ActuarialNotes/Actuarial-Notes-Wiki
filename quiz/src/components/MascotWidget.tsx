@@ -215,7 +215,7 @@ export function MascotWidget({ avatarUrl, initials, context = {}, compact = fals
   const safeIdx = phraseIdx < phrases.length ? phraseIdx : 0
   const currentPhrase = (phrases[safeIdx] ?? phrases[0])?.(context) ?? ''
 
-  const iconSize = compact ? 36 : 48
+  const iconSize = compact ? 40 : 48
   const icon = (() => {
     if (parsed.type === 'animal') return null
     if (parsed.type === 'image' || parsed.type === 'custom') {

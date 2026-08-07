@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowUp, LayoutDashboard, X, XCircle } from 'lucide-react'
 import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
-import type { CompletedSession } from '@/stores/quizStore'
+import type { CompletedSession, MasteryTransition } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
@@ -150,15 +150,21 @@ export default function Review() {
     return progressKey ? loadCachedStudyPlan(progressKey) : null
   }, [progressKey])
 
+  // Level-ups banked by the post-quiz collect gate, after the quiz was scored.
+  // Kept beside the session's own transitions (rather than folded into it) so
+  // they show up in the results card without re-triggering the level-up
+  // ceremony, which has already played by the time the gate is on screen.
+  const [gateTransitions, setGateTransitions] = useState<MasteryTransition[]>([])
+
   const newlyCompletedSlugs = useMemo(() => {
     const slugs = new Set<string>()
-    for (const t of session?.masteryTransitions ?? []) {
+    for (const t of [...(session?.masteryTransitions ?? []), ...gateTransitions]) {
       if (t.to === 'level1' || t.to === 'level2' || t.to === 'level3') {
         slugs.add(t.conceptSlug.toLowerCase())
       }
     }
     return slugs
-  }, [session])
+  }, [session, gateTransitions])
 
   // Concepts this quiz answered correctly but that stayed New because they
   // weren't collected yet (see docs/flashcard-collection.md) — collecting them
@@ -268,9 +274,16 @@ export default function Review() {
   )
   const percentage = totalQuestions > 0 ? Math.round((scoredPoints / totalQuestions) * 100) : 0
 
-  const upwardTransitions = session.masteryTransitions?.filter(
+  // Level-ups the quiz itself produced. These drive the ceremony; the results
+  // card below lists these *plus* anything the collect gate banked afterwards.
+  const quizTransitions = session.masteryTransitions?.filter(
     t => t.to === 'level1' || t.to === 'level2' || t.to === 'level3'
   ) ?? []
+  const quizTransitionSlugs = new Set(quizTransitions.map(t => t.conceptSlug.toLowerCase()))
+  const upwardTransitions = [
+    ...quizTransitions,
+    ...gateTransitions.filter(t => !quizTransitionSlugs.has(t.conceptSlug.toLowerCase())),
+  ]
 
   // Which questions to show in the review list
   const outcomes = session.questions.map(q =>
@@ -315,7 +328,9 @@ export default function Review() {
   // then hands off to the streak/quest/plan celebrations. For signed-in users we
   // wait for the gem balance to load so the running tally lands on the right
   // total; guests earn no gems so there's nothing to wait on.
-  const hasLevelUps = upwardTransitions.length > 0
+  // Driven by the quiz's own level-ups only: a level-up banked later by the
+  // collect gate must not re-open the ceremony on top of that gate.
+  const hasLevelUps = quizTransitions.length > 0
   const levelUpCeremonyReady = !user || !gemsLoading
   const showLevelUpCeremony = hasLevelUps && !levelUpsDone && levelUpCeremonyReady
   const levelUpsReady = !hasLevelUps || levelUpsDone
@@ -331,7 +346,7 @@ export default function Review() {
     {/* Ceremony for each concept levelled up by this quiz. */}
     {showLevelUpCeremony && (
       <ConceptLevelUpCeremony
-        transitions={upwardTransitions}
+        transitions={quizTransitions}
         gemsEarned={user ? correctCount : 0}
         totalGems={gemBalance}
         onResolved={() => setLevelUpsDone(true)}
@@ -344,6 +359,9 @@ export default function Review() {
         examId={progressKey}
         userId={user?.id ?? null}
         concepts={missedLevelUpConcepts}
+        onPromoted={t => setGateTransitions(prev =>
+          prev.some(p => p.conceptSlug.toLowerCase() === t.conceptSlug.toLowerCase()) ? prev : [...prev, t]
+        )}
         onDone={() => setMissedGateDone(true)}
       />
     )}

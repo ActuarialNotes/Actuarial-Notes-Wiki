@@ -228,7 +228,9 @@ export async function promoteMissedLevelUp(
 
   if (!userId) {
     appendTodayLevelUps([{ conceptSlug, from: 'new', to: 'level1', at: now.toISOString() }])
-    return { conceptSlug, from: 'new', to: 'level1' }
+    const transition: MasteryTransition = { conceptSlug, from: 'new', to: 'level1' }
+    appendSessionTransition(transition)
+    return transition
   }
 
   const { data: existing, error: selectError } = await supabase
@@ -267,7 +269,9 @@ export async function promoteMissedLevelUp(
   }
 
   appendTodayLevelUps([{ conceptSlug, from: 'new', to: 'level1', at: now.toISOString() }])
-  return { conceptSlug, from: 'new', to: 'level1' }
+  const transition: MasteryTransition = { conceptSlug, from: 'new', to: 'level1' }
+  appendSessionTransition(transition)
+  return transition
 }
 
 export interface MasteryTransition {
@@ -774,6 +778,27 @@ export function readLastSession(): CompletedSession | null {
     return JSON.parse(raw) as CompletedSession
   } catch {
     return null
+  }
+}
+
+// Records a level-up banked *after* the quiz was written — currently only
+// promoteMissedLevelUp, when the user collects a concept from the post-quiz
+// gate. Without this the results screen's "levelled up" list (which reads the
+// stored session) would keep ignoring a concept the gate just promoted, even
+// though its mastery really did advance. Best-effort: a storage failure must
+// not break the collect flow.
+function appendSessionTransition(transition: MasteryTransition): void {
+  try {
+    const session = readLastSession()
+    if (!session) return
+    const existing = session.masteryTransitions ?? []
+    if (existing.some(t => t.conceptSlug.toLowerCase() === transition.conceptSlug.toLowerCase())) return
+    localStorage.setItem(LAST_SESSION_KEY, JSON.stringify({
+      ...session,
+      masteryTransitions: [...existing, transition],
+    }))
+  } catch {
+    /* ignore quota/private-mode errors */
   }
 }
 

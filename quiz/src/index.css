@@ -1433,6 +1433,11 @@ summary .katex-display,
 .sim-slider {
   -webkit-appearance: none;
   appearance: none;
+  /* Block, with no margin: as an inline element the range control picks up a
+     line box and half a line of leading under it — dead space the simulator
+     card can't spare on a phone. */
+  display: block;
+  margin: 0;
   width: 100%;
   height: 44px;
   background: transparent;

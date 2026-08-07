@@ -18,7 +18,7 @@ fallback for Obsidian, GitHub, and the published site.
 | `quiz/src/lib/distributions.ts` | The catalogue: one `DistributionSpec` per distribution + the `Media/*.svg` → spec map (`distributionForImage`). |
 | `quiz/src/lib/distributionPlot.ts` | Pure plotting/summarizing helpers: curve sampling, histogram binning, empirical CDF, sample summary, axis ticks, number formatting. |
 | `quiz/src/components/wiki/DistributionPlot.tsx` | The SVG canvas (curve/stems, histogram, mean + ±1σ markers, hover readout). |
-| `quiz/src/components/wiki/DistributionSimulator.tsx` | State + layout: sliders, PDF/CDF switch, stat tiles, simulation controls. |
+| `quiz/src/components/wiki/DistributionSimulator.tsx` | State + layout: sliders, PDF/CDF switch, stat tiles, the Simulate button. |
 
 Wired in at two places:
 
@@ -79,22 +79,34 @@ reproducing the closed-form mean and variance, and the stated mode maximizing th
 
 ## Layout & touch
 
-The card reads top-down: **title + notation → PDF/CDF switch + reset → the four KPI tiles → plot →
-parameter sliders → simulation controls**. The moments sit *above* the plot they describe, each tile
-led by its Greek symbol (μ, σ², σ, γ₁; the sample counterparts are x̄, s², s) and rounded to one
-decimal by `formatKpi`.
+The card reads top-down: **title + notation | PDF/CDF switch + reset → three KPI tiles → plot →
+parameter sliders → Simulate**. The whole thing is budgeted to fit an iPhone screen without
+scrolling — everything below is in service of that, and a change that adds a row should take one
+away. (A two-parameter distribution fits; the three-slider hypergeometric runs ~60px over and
+scrolls.)
 
-The PDF/CDF switch and the reset button always live on their own row **below** the notation, never
-beside it, and the notation line reserves two lines of height (`leading-snug min-h-[2.75em]`). The
-notation restates the live parameter values, so dragging a slider changes its width and reflows it
-between one and two lines — with the buttons in the same wrapping row (or stacked under a
-variable-height notation) they visibly hopped around mid-drag. Keep them on a fixed row: controls
-you're aiming at shouldn't move while you're using the control next to them.
+The moments sit *above* the plot they describe, each tile led by its symbol (μ, σ, γ₁ — or Mo where
+skewness has no closed form; the sample counterparts are x̄ and s) and rounded to one decimal by
+`formatKpi`. **Variance is deliberately not a tile**: σ is the one in the units of the x-axis, σ²
+is a square away from it, and the row is three across at every width rather than wrapping to two
+rows on a phone.
+
+The header is a two-column row: title + notation on the left, the PDF/CDF switch and reset on the
+right in a `shrink-0` column, top-aligned. The notation restates the live parameter values, so
+dragging a slider changes its width and reflows it between one and two lines — anything sharing a
+*wrapping* row with it hopped around mid-drag, which a fixed column can't. The notation still
+reserves two lines of height (`leading-snug min-h-[2.75em]`) so the sliders below don't shift
+either. Controls you're aiming at shouldn't move while you're using the control next to them.
+
+The title drops a trailing "Distribution" ("Negative Binomial", not "Negative Binomial
+Distribution") — the long names wrapped to a second line beside the switch, and the notation
+directly underneath says what it is.
 
 Most of this is used one-handed on a phone inside the full-screen gallery, so:
 
 - Parameter sliders use the shared `.sim-slider` class (`quiz/src/index.css`) — a 32px knob on a
-  10px track in a 44px row. Don't swap it back to a bare `accent-primary` range.
+  10px track in a 44px row, `display: block; margin: 0` so the control doesn't pick up a line box
+  and half a line of leading under it. Don't swap it back to a bare `accent-primary` range.
 - Every button in the card is `h-10` with `text-sm font-semibold`.
 - Axis type is sized in **CSS pixels**, not viewBox units: the plot measures its rendered width
   with a `ResizeObserver` and converts `AXIS_FONT_PX` back into viewBox units, so labels are the
@@ -109,7 +121,13 @@ Most of this is used one-handed on a phone inside the full-screen gallery, so:
 - **Seeded RNG.** `createRng(seed)` (mulberry32), not `Math.random`, so a simulation is
   reproducible and the samplers are unit-testable.
 - **Samples are cleared whenever a parameter changes** — a histogram must never sit under a curve
-  it wasn't drawn from.
+  it wasn't drawn from. Reset (the header button) clears the draws too; there is no separate Clear.
+- **Simulation is one button, one fixed batch.** Every press adds `DRAW_BATCH` (100) draws to the
+  pile — no batch-size selector, no "draw more", and the batch size is never printed in the UI. The
+  feedback is the running total in the plot's readout strip climbing, which is the thing worth
+  watching (that strip is the *only* place the count appears — don't add a second counter). Presses
+  during an animation queue up (`pendingRef`) rather than cancelling it, so a rapid tap always buys
+  a full batch, and the pile itself lives in `samplesRef` so overlapping presses can't drop draws.
 - **Animated draws respect `prefers-reduced-motion`**: the accumulating draw is spread over ~24
   animation frames, or lands in one batch when reduced motion is set.
 - **Colour follows `docs/style-guide.md`**: the theoretical shape is the only thing that gets

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check } from 'lucide-react'
 import type { Question } from '@/lib/parser'
-import type { QuestionAttemptSummary } from '@/hooks/useQuestionAttempts'
+import type { AttemptCounts } from '@/lib/questionAttempts'
 import { LatexText } from '@/components/LatexText'
 import { MarkdownText } from '@/components/MarkdownText'
 import { QuestionAnswerReveal } from '@/components/QuestionAnswerReveal'
@@ -16,9 +16,11 @@ const STEM_MD_CLASS =
 interface QuestionSearchRowProps {
   question: Question
   query: string
-  selected: boolean
-  onToggleSelect: (id: string) => void
-  attemptSummary?: QuestionAttemptSummary
+  selected?: boolean
+  /** Omit on read-only lists (e.g. the exam-history attempt list): the row then
+   *  drops its checkbox and click-to-select, leaving Expand as the only action. */
+  onToggleSelect?: (id: string) => void
+  attemptSummary?: AttemptCounts
   /** True when the viewer's attempt history is actually known (signed in), so an
    *  absent summary means "not attempted" rather than "unknown". */
   attemptsTracked?: boolean
@@ -64,9 +66,10 @@ export function DifficultyDots({ difficulty }: { difficulty: string }) {
   )
 }
 
-export function QuestionSearchRow({ question, query, selected, onToggleSelect, attemptSummary, attemptsTracked = false }: QuestionSearchRowProps) {
+export function QuestionSearchRow({ question, query, selected = false, onToggleSelect, attemptSummary, attemptsTracked = false }: QuestionSearchRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
+  const selectable = !!onToggleSelect
 
   const words = question.stem.trim().split(/\s+/)
   const previewText = words.length <= 6 ? question.stem : words.slice(0, 6).join(' ') + '…'
@@ -75,27 +78,29 @@ export function QuestionSearchRow({ question, query, selected, onToggleSelect, a
     <div
       // The whole row toggles selection, so the whole row ticks — not just the
       // checkbox inside it.
-      data-sound="tick"
-      className={`rounded-lg p-3 space-y-2 transition-colors cursor-pointer ${
-        selected ? 'bg-primary/5' : 'hover:bg-accent/30'
-      }`}
-      onClick={() => onToggleSelect(question.id)}
+      data-sound={selectable ? 'tick' : undefined}
+      className={`rounded-lg p-3 space-y-2 transition-colors ${
+        selectable ? 'cursor-pointer' : ''
+      } ${selected ? 'bg-primary/5' : selectable ? 'hover:bg-accent/30' : ''}`}
+      onClick={selectable ? () => onToggleSelect(question.id) : undefined}
     >
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 overflow-x-auto flex-1 min-w-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <DifficultyDots difficulty={question.difficulty} />
-          <div
-            role="checkbox"
-            aria-checked={selected}
-            aria-label={`Select question ${question.id}`}
-            className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors ${
-              selected
-                ? 'bg-primary border-primary text-primary-foreground'
-                : 'border-input'
-            }`}
-          >
-            {selected && <Check className="h-3 w-3" />}
-          </div>
+          {selectable && (
+            <div
+              role="checkbox"
+              aria-checked={selected}
+              aria-label={`Select question ${question.id}`}
+              className={`h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors ${
+                selected
+                  ? 'bg-primary border-primary text-primary-foreground'
+                  : 'border-input'
+              }`}
+            >
+              {selected && <Check className="h-3 w-3" />}
+            </div>
+          )}
           {/* Attempt history sits at the head of the chip strip: the strip
               scrolls horizontally, and this is the one chip that must never be
               the part scrolled out of sight. */}

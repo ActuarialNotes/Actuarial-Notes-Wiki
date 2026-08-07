@@ -706,6 +706,10 @@ export default function Dashboard() {
                   <BookOpen className="h-4 w-4 shrink-0" />
                   <span className="hidden sm:inline">Read</span>
                 </button>
+                {/* Slot for FixMistakesButton's compact copy — `contents` so the
+                    portaled pill sits directly in this flex row. Kept left of
+                    Start Quiz, mirroring the full-size row below. */}
+                <div ref={setMistakesSlotEl} className="contents" />
                 {showQuizAction && (
                   <div className="relative">
                     <button
@@ -730,9 +734,6 @@ export default function Dashboard() {
                     )}
                   </div>
                 )}
-                {/* Slot for FixMistakesButton's compact copy — `contents` so the
-                    portaled pill sits directly in this flex row. */}
-                <div ref={setMistakesSlotEl} className="contents" />
               </div>
             )}
           </div>

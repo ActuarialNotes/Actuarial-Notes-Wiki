@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { syntheticDecayEvents } from '@/lib/learningHistory'
+import { syntheticDecayEvents, summarizeAttemptedQuestions } from '@/lib/learningHistory'
 import {
   DECAY_DAYS_LEVEL1,
   DECAY_DAYS_LEVEL2,
@@ -140,5 +140,70 @@ describe('syntheticDecayEvents — non-decaying start states', () => {
 
   it('returns empty for "forgotten" regardless of elapsed time', () => {
     expect(syntheticDecayEvents('forgotten', daysAgo(999), NOW)).toEqual([])
+  })
+})
+
+// ── summarizeAttemptedQuestions ───────────────────────────────────────────────
+
+function dot(questionId: string, isCorrect: boolean, at: Date) {
+  return { questionId, isCorrect, at }
+}
+
+describe('summarizeAttemptedQuestions', () => {
+  it('returns nothing for no attempts', () => {
+    expect(summarizeAttemptedQuestions([])).toEqual([])
+  })
+
+  it('rolls repeat attempts on one question into a single row', () => {
+    const rows = summarizeAttemptedQuestions([
+      dot('q1', false, daysAgo(3)),
+      dot('q1', true, daysAgo(1)),
+    ])
+    expect(rows.length).toBe(1)
+    expect(rows[0].attempt_count).toBe(2)
+    expect(rows[0].correct_count).toBe(1)
+  })
+
+  it('keeps the latest attempt time for a question', () => {
+    const latest = daysAgo(1)
+    const rows = summarizeAttemptedQuestions([
+      dot('q1', true, latest),
+      dot('q1', false, daysAgo(5)),
+    ])
+    expect(rows[0].lastAttemptAt).toEqual(latest)
+  })
+
+  it('orders questions by most recent attempt first', () => {
+    const rows = summarizeAttemptedQuestions([
+      dot('old', true, daysAgo(9)),
+      dot('recent', false, daysAgo(1)),
+      dot('middle', true, daysAgo(4)),
+    ])
+    expect(rows.map(r => r.questionId)).toEqual(['recent', 'middle', 'old'])
+  })
+
+  it('breaks ties by question id so one quiz session orders stably', () => {
+    const sameTime = daysAgo(2)
+    const rows = summarizeAttemptedQuestions([
+      dot('q-b', true, sameTime),
+      dot('q-a', true, sameTime),
+    ])
+    expect(rows.map(r => r.questionId)).toEqual(['q-a', 'q-b'])
+  })
+
+  it('counts an all-wrong question as attempted with zero correct', () => {
+    const rows = summarizeAttemptedQuestions([
+      dot('q1', false, daysAgo(2)),
+      dot('q1', false, daysAgo(1)),
+    ])
+    expect(rows[0]).toMatchObject({ attempt_count: 2, correct_count: 0 })
+  })
+
+  it('ignores attempts with no question id', () => {
+    const rows = summarizeAttemptedQuestions([
+      dot('', true, daysAgo(1)),
+      dot('q1', true, daysAgo(2)),
+    ])
+    expect(rows.map(r => r.questionId)).toEqual(['q1'])
   })
 })

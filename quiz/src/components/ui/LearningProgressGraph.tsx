@@ -107,9 +107,19 @@ export interface GraphProps {
   levelEvents: LevelEvent[]
   attemptDots: AttemptDot[]
   onHoverLevel: (level: MasteryState | null) => void
+  /** Question the attempt list below the graph is filtered to, if any. */
+  selectedQuestionId?: string | null
+  /** Set to make the dots clickable — each one toggles the filter to its question. */
+  onSelectQuestion?: (questionId: string | null) => void
 }
 
-export function ProgressGraph({ levelEvents, attemptDots, onHoverLevel }: GraphProps) {
+export function ProgressGraph({
+  levelEvents,
+  attemptDots,
+  onHoverLevel,
+  selectedQuestionId = null,
+  onSelectQuestion,
+}: GraphProps) {
   const svgRef = useRef<SVGSVGElement>(null)
   const [cursorX, setCursorX] = useState<number | null>(null)
   const { xScale, xInverse, yScale, buildXLabels, buildStepPath } = makeScales(levelEvents, attemptDots)
@@ -134,10 +144,14 @@ export function ProgressGraph({ levelEvents, attemptDots, onHoverLevel }: GraphP
 
   function handleClick(e: React.MouseEvent<SVGSVGElement>) {
     onHoverLevel(getHoveredLevel(e.clientX))
+    // Dots stop propagation, so a click that reaches the canvas is a click off
+    // the dots — the natural way to drop the filter again.
+    onSelectQuestion?.(null)
   }
 
   const xLabels = buildXLabels()
   const stepPath = buildStepPath()
+  const selectable = !!onSelectQuestion
 
   // Several attempts answered in the same quiz session share one timestamp
   // (and, if their level didn't change, one level) and would otherwise render
@@ -214,19 +228,51 @@ export function ProgressGraph({ levelEvents, attemptDots, onHoverLevel }: GraphP
         opacity={0.7}
       />
 
-      {/* Attempt dots */}
-      {spreadDots.map(({ dot, cx, cy }, idx) => (
-        <circle
-          key={idx}
-          cx={cx}
-          cy={cy}
-          r={DOT_R}
-          fill={dot.isCorrect ? '#22c55e' : '#ef4444'}
-          stroke="white"
-          strokeWidth={2}
-          opacity={0.9}
-        />
-      ))}
+      {/* Attempt dots. When a select handler is supplied each dot is a control
+          that filters the question list below to the question it answered; the
+          dots for other questions dim so the chosen one stands out. */}
+      {spreadDots.map(({ dot, cx, cy }, idx) => {
+        const isSelected = !!selectedQuestionId && dot.questionId === selectedQuestionId
+        const isDimmed = !!selectedQuestionId && !isSelected
+        const toggle = () => onSelectQuestion?.(isSelected ? null : dot.questionId)
+        return (
+          <g
+            key={idx}
+            role={selectable ? 'button' : undefined}
+            tabIndex={selectable ? 0 : undefined}
+            aria-pressed={selectable ? isSelected : undefined}
+            aria-label={selectable ? `${dot.isCorrect ? 'Correct' : 'Incorrect'} attempt on ${dot.at.toLocaleDateString()} — show this question` : undefined}
+            className={selectable ? 'cursor-pointer outline-none' : undefined}
+            onClick={selectable ? e => { e.stopPropagation(); toggle() } : undefined}
+            onKeyDown={selectable
+              ? e => {
+                  if (e.key !== 'Enter' && e.key !== ' ') return
+                  e.preventDefault()
+                  e.stopPropagation()
+                  toggle()
+                }
+              : undefined}
+          >
+            {/* Transparent hit area — the visible dot is a small tap target. */}
+            {selectable && <circle cx={cx} cy={cy} r={DOT_R + 5} fill="transparent" />}
+            {isSelected && (
+              <circle
+                cx={cx} cy={cy} r={DOT_R + 3.5}
+                fill="none" stroke="currentColor" strokeWidth={1.5} strokeOpacity={0.8}
+              />
+            )}
+            <circle
+              cx={cx}
+              cy={cy}
+              r={DOT_R}
+              fill={dot.isCorrect ? '#22c55e' : '#ef4444'}
+              stroke="white"
+              strokeWidth={2}
+              opacity={isDimmed ? 0.25 : 0.9}
+            />
+          </g>
+        )
+      })}
 
       {/* Hover cursor line */}
       {cursorX !== null && (

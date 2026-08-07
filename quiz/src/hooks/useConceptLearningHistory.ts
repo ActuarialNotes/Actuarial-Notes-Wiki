@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { fetchAllQuestions } from '@/lib/github'
 import { parseAllQuestions } from '@/lib/parser'
+import type { Question } from '@/lib/parser'
 import { hrefToEntryRef } from '@/lib/wikiRoutes'
 import { slugForLink } from '@/lib/conceptMatch'
 import {
@@ -19,11 +20,15 @@ export interface AttemptDot {
   at: Date
   isCorrect: boolean
   levelAtTime: MasteryState
+  /** The question this attempt answered — lets a dot filter the list below the graph. */
+  questionId: string
 }
 
 export interface ConceptLearningHistory {
   levelEvents: LevelEvent[]
   attemptDots: AttemptDot[]
+  /** Every question linked to this concept, so callers can resolve an attempt's question. */
+  questions: Question[]
   currentLevel: MasteryState
   loading: boolean
   error: string | null
@@ -54,6 +59,7 @@ function levelAtTime(time: Date, levelEvents: LevelEvent[]): MasteryState {
 const EMPTY: ConceptLearningHistory = {
   levelEvents: [],
   attemptDots: [],
+  questions: [],
   currentLevel: 'new',
   loading: false,
   error: null,
@@ -176,6 +182,7 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
             at,
             isCorrect: r.is_correct,
             levelAtTime: levelAtTime(at, levelEvents),
+            questionId: r.question_id,
           }
         })
       }
@@ -308,7 +315,14 @@ export function useConceptLearningHistory(conceptName: string): ConceptLearningH
       }))
 
       if (!cancelled) {
-        setResult({ levelEvents: finalLevelEvents, attemptDots: finalAttemptDots, currentLevel, loading: false, error: null })
+        setResult({
+          levelEvents: finalLevelEvents,
+          attemptDots: finalAttemptDots,
+          questions: matchingQuestions,
+          currentLevel,
+          loading: false,
+          error: null,
+        })
       }
     }
 

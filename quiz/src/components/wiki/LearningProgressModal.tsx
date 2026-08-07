@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, Lock, Loader2, X } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import { useSubscription } from '@/hooks/useSubscription'
 import { useConceptLearningHistory, type ConceptLearningHistory } from '@/hooks/useConceptLearningHistory'
 import type { MasteryState } from '@/lib/mastery'
+import { summarizeAttemptedQuestions } from '@/lib/learningHistory'
 import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
+import { AttemptedQuestionsList } from '@/components/wiki/AttemptedQuestionsList'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -78,10 +80,22 @@ export function LearningProgressPanelView({
   onLevelChange,
 }: PanelProps & { history: ConceptLearningHistory }) {
   const { isPremium, isBetaTester, loading: subLoading } = useSubscription()
-  const { levelEvents, attemptDots, currentLevel, loading, error } = history
+  const { levelEvents, attemptDots, questions, currentLevel, loading, error } = history
   const [hoveredLevel, setHoveredLevel] = useState<MasteryState | null>(null)
   const [graphOpen, setGraphOpen] = useState(false)
+  const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(null)
   const graphVisible = !collapsible || graphOpen
+
+  const attemptSummaries = useMemo(() => summarizeAttemptedQuestions(attemptDots), [attemptDots])
+
+  // A filter picked on a graph that's since been hidden (or replaced by another
+  // concept's history) would silently narrow the list next time it opens.
+  useEffect(() => {
+    if (!graphVisible) setSelectedQuestionId(null)
+  }, [graphVisible])
+  useEffect(() => {
+    setSelectedQuestionId(null)
+  }, [questions])
 
   const isAccessible = isPremium || isBetaTester
   const isLoading = loading || subLoading
@@ -186,6 +200,8 @@ export function LearningProgressPanelView({
                   levelEvents={levelEvents}
                   attemptDots={attemptDots}
                   onHoverLevel={setHoveredLevel}
+                  selectedQuestionId={selectedQuestionId}
+                  onSelectQuestion={setSelectedQuestionId}
                 />
               </div>
 
@@ -194,6 +210,15 @@ export function LearningProgressPanelView({
                   Hover the graph to explore your level at any point in time
                 </p>
               )}
+
+              {/* The questions behind the dots — filtered to one question while
+                  a dot is selected. */}
+              <AttemptedQuestionsList
+                questions={questions}
+                summaries={attemptSummaries}
+                selectedQuestionId={selectedQuestionId}
+                onClearSelection={() => setSelectedQuestionId(null)}
+              />
             </>
           )}
         </>

@@ -742,30 +742,45 @@ export default function Dashboard() {
           at the very top of the dashboard, above the primary actions. */}
       {activeSyllabus && <div ref={setStudyScheduleSlotEl} />}
 
-      {/* Primary actions — Read concepts (left) + Start Today's Quiz (right),
-          with Fix Mistakes as a full-width row underneath. Sits directly below
-          the study schedule card. Fix Mistakes lives inside this block on
-          purpose: the pinned-header copies swap in once primaryActionsRef has
-          scrolled past, so all three have to scroll out together. */}
+      {/* Primary actions — Read concepts (left) + the narrow Fix Mistakes button
+          + Start Today's Quiz (right), one row directly below the study schedule
+          card. Fix Mistakes lives inside this block on purpose: the
+          pinned-header copies swap in once primaryActionsRef has scrolled past,
+          so all three have to scroll out together. */}
       {activeSyllabus && (
         <div ref={primaryActionsRef} className="flex flex-col gap-3">
-          <div className="flex gap-3">
+          {/* Three across on a phone is tight, so the two wide actions drop to
+              text-sm below sm and are allowed to wrap rather than overflow the
+              row (Button is whitespace-nowrap by default). */}
+          <div className="flex gap-2 sm:gap-3">
             <Button
               variant="secondary"
               onClick={handleReadConcepts}
-              className="flex-1 gap-2.5 text-base h-auto py-4"
+              className="min-w-0 flex-1 gap-1.5 sm:gap-2.5 whitespace-normal leading-tight text-sm sm:text-base h-auto px-3 sm:px-4 py-4"
             >
-              <BookOpen className="h-5 w-5" />
+              <BookOpen className="h-5 w-5 shrink-0" />
               Read concepts
             </Button>
+
+            {/* Fix mistakes — the concepts behind questions you've missed and
+                not yet re-answered correctly. Hides itself when there are
+                none, leaving the two full-width actions side by side. */}
+            {!isGuest && MISTAKES_REVIEW_ENABLED && (
+              <FixMistakesButton
+                masteryRecords={activeExamRecords}
+                examTopic={activeSyllabus.examTopic}
+                compactSlot={mistakesSlotEl}
+              />
+            )}
+
             {showQuizAction && (
-              <div className="relative flex-1">
+              <div className="relative min-w-0 flex-1">
                 <button
                   type="button"
                   data-sound="begin"
                   onClick={handleStartTodaysQuiz}
                   disabled={isLaunchingQuiz}
-                  className="w-full flex items-center justify-center gap-2.5 px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-base font-semibold transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
+                  className="w-full h-full flex items-center justify-center gap-1.5 sm:gap-2.5 px-3 sm:px-4 py-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/80 text-sm sm:text-base font-semibold leading-tight transition-all active:scale-[0.97] disabled:opacity-80 disabled:cursor-default"
                 >
                   <Play className={`h-5 w-5 shrink-0 ${isLaunchingQuiz ? 'animate-pulse' : ''}`} />
                   {quizActionLabel}
@@ -774,16 +789,6 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-
-          {/* Fix mistakes — the concepts behind questions you've missed and not
-              yet re-answered correctly. Hides itself when there are none. */}
-          {!isGuest && MISTAKES_REVIEW_ENABLED && (
-            <FixMistakesButton
-              masteryRecords={activeExamRecords}
-              examTopic={activeSyllabus.examTopic}
-              compactSlot={mistakesSlotEl}
-            />
-          )}
         </div>
       )}
 

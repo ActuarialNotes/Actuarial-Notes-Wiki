@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type Ref } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, LayoutDashboard, XCircle } from 'lucide-react'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
@@ -32,7 +32,7 @@ const OUTCOME_COLOR: Record<QuestionOutcome, string> = {
 }
 
 // Trim a fractional score to a tidy label: "2" not "2.0", "1.5", "0.33".
-function formatScore(n: number): string {
+export function formatScore(n: number): string {
   return String(Math.round(n * 100) / 100)
 }
 
@@ -255,6 +255,20 @@ interface ConceptCoverageSectionProps {
   onReviewIncorrect?: () => void
   /** Concepts that levelled up on this quiz — one card each (two-column grid). */
   levelUpTransitions?: MasteryTransition[]
+  /**
+   * Attached to the actions row (Go to Dashboard / Review Incorrect) so a page
+   * can tell when it has scrolled out of view — Review uses it to swap in its
+   * pinned header, the same way the Dashboard swaps in its compact actions.
+   */
+  actionsRef?: Ref<HTMLDivElement>
+}
+
+// Score → headline colour. Exported so the pinned header on /review prints the
+// same percentage in the same colour as the card it replaces.
+export function scoreColorClass(percentage: number): string {
+  return percentage >= 70 ? 'text-green-500'
+    : percentage >= 50 ? 'text-amber-500'
+    : 'text-red-500'
 }
 
 // True only when a question earned *full* credit — used by callers that filter
@@ -273,6 +287,7 @@ export function ConceptCoverageSection({
   manualGrades = {},
   onReviewIncorrect,
   levelUpTransitions = [],
+  actionsRef,
 }: ConceptCoverageSectionProps) {
   const navigate = useNavigate()
   const openConceptPopup = useConceptPopup(s => s.openAt)
@@ -283,10 +298,7 @@ export function ConceptCoverageSection({
   const hasIncorrect = outcomes.some(o => o !== 'correct')
 
   // Score header colors
-  const pctColor =
-    score.percentage >= 70 ? 'text-green-500' :
-    score.percentage >= 50 ? 'text-amber-500' :
-    'text-red-500'
+  const pctColor = scoreColorClass(score.percentage)
 
   return (
     <div className="space-y-4">
@@ -354,7 +366,7 @@ export function ConceptCoverageSection({
 
       {/* ── Actions: go to dashboard + review incorrect (bare buttons) ─ */}
       {(score.isLoggedIn || (onReviewIncorrect && hasIncorrect)) && (
-        <div className="flex gap-3">
+        <div ref={actionsRef} className="flex gap-3">
           {score.isLoggedIn && (
             <Button
               variant="secondary"

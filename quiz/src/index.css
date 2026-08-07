@@ -1529,6 +1529,66 @@ summary .katex-display,
   .sim-slider:active::-webkit-slider-thumb { transform: none; }
 }
 
+/* Zoom slider for the two full-screen viewers — the image gallery and math
+   focus mode. Both are read one-handed on a phone with the thumb resting at
+   the bottom of the screen, so the knob is deliberately huge and the track
+   spans the width. The two custom properties are the only difference between
+   the two hosts: the gallery always sits on black (the fallbacks below), math
+   focus on the themed background, which sets its own pair on the row. They're
+   read as `var(…, fallback)` rather than declared here, since a declaration on
+   the control itself would beat the value inherited from the row. */
+.zoom-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  margin: 0;
+  width: 100%;
+  height: 40px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  /* Vertical scrolling still works when a drag starts on the knob. */
+  touch-action: pan-y;
+}
+.zoom-slider::-webkit-slider-runnable-track {
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--zoom-slider-track, rgba(255, 255, 255, 0.2));
+}
+.zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--zoom-slider-thumb, #fff);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+  /* Centre the 40px knob on the 14px track. */
+  margin-top: -13px;
+}
+.zoom-slider::-moz-range-track {
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--zoom-slider-track, rgba(255, 255, 255, 0.2));
+}
+.zoom-slider::-moz-range-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--zoom-slider-thumb, #fff);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+.zoom-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px hsl(var(--ring) / 0.45);
+}
+.zoom-slider:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 4px hsl(var(--ring) / 0.45);
+}
+
 /* ─── Study-plan "schedule forming" playback ────────────────────────────────
    After a plan is locked in, the Dashboard's Study Schedule card rewinds
    through the new schedule: the day strip sweeps from exam day back to today

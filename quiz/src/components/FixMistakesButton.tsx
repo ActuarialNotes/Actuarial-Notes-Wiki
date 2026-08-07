@@ -24,11 +24,12 @@ interface Props {
 }
 
 /**
- * Fix-mistakes action. Deliberately wordless: a label and an orange count of
- * what's still outstanding, styled as a light-red sibling of the Read concepts /
- * Start Quiz buttons it sits under. Tapping it opens MistakesReviewModal — the
- * missed questions themselves, one at a time, answerable in place with
- * Previous/Next between them.
+ * Fix-mistakes action. Deliberately wordless: an icon and an orange corner count
+ * of what's still outstanding, styled as a light-red sibling of the Read
+ * concepts / Start Quiz buttons it sits *between*. It's the narrow middle
+ * column of that row — the smallest of the three, because it's the optional one.
+ * Tapping it opens MistakesReviewModal — the missed questions themselves, one at
+ * a time, answerable in place with Previous/Next between them.
  *
  * Hides itself entirely when there's nothing outstanding to review.
  */
@@ -40,29 +41,28 @@ export function FixMistakesButton({ masteryRecords, examTopic, compactSlot }: Pr
 
   const outstandingLabel = `${mistakes.length} question${mistakes.length === 1 ? '' : 's'} still to fix`
 
-  // Orange, matching the streak flame and the today's-quiz count: this is a
-  // "still owed" number, not a neutral stat.
-  const badge = (
-    <span
-      className="inline-flex items-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white tabular-nums"
-      aria-hidden="true"
-    >
-      {mistakes.length}
-    </span>
-  )
-
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label={`Fix mistakes — ${outstandingLabel}`}
-        className="flex w-full items-center justify-center gap-2.5 rounded-lg bg-red-50 px-4 py-4 text-base font-semibold text-red-900 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:bg-red-950 dark:text-red-100 dark:hover:bg-red-900/70"
-      >
-        <RotateCcw className="h-5 w-5 shrink-0" />
-        Fix Mistakes
-        {badge}
-      </button>
+      {/* Stretches to the row's height; `shrink-0` + no `flex-1` keeps it
+          narrower than the two full actions it sits between. */}
+      <div className="relative shrink-0">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label={`Fix mistakes — ${outstandingLabel}`}
+          title={`Fix Mistakes — ${outstandingLabel}`}
+          className="flex h-full items-center justify-center rounded-lg bg-red-50 px-3 sm:px-5 py-4 text-red-900 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:bg-red-950 dark:text-red-100 dark:hover:bg-red-900/70"
+        >
+          <RotateCcw className="h-5 w-5 shrink-0" />
+        </button>
+        {/* Orange corner count, the same "still owed" badge Start Quiz wears. */}
+        <span
+          className="absolute -top-1.5 -right-1.5 flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-orange-500 px-1.5 text-xs font-bold leading-none text-white tabular-nums shadow ring-2 ring-background"
+          aria-hidden="true"
+        >
+          {mistakes.length}
+        </span>
+      </div>
 
       {/* Compact copy for the pinned exam-header row */}
       {compactSlot && createPortal(
@@ -75,7 +75,12 @@ export function FixMistakesButton({ masteryRecords, examTopic, compactSlot }: Pr
         >
           <RotateCcw className="h-4 w-4 shrink-0" />
           <span className="hidden sm:inline">Fix</span>
-          {badge}
+          <span
+            className="inline-flex items-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white tabular-nums"
+            aria-hidden="true"
+          >
+            {mistakes.length}
+          </span>
         </button>,
         compactSlot,
       )}

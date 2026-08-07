@@ -64,24 +64,28 @@ export function FixMistakesButton({ masteryRecords, examTopic, compactSlot }: Pr
         </span>
       </div>
 
-      {/* Compact copy for the pinned exam-header row */}
+      {/* Compact copy for the pinned exam-header row. The count rides the
+          top-right corner here too, matching the pinned Start Quiz badge
+          rather than sitting inline inside the pill. */}
       {compactSlot && createPortal(
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label={`Fix mistakes — ${outstandingLabel}`}
-          title={`Fix Mistakes — ${outstandingLabel}`}
-          className="flex h-10 shrink-0 items-center gap-1.5 rounded-full bg-red-50 px-3 text-sm font-semibold text-red-900 transition-colors hover:bg-red-100 dark:bg-red-950 dark:text-red-100 dark:hover:bg-red-900/70"
-        >
-          <RotateCcw className="h-4 w-4 shrink-0" />
-          <span className="hidden sm:inline">Fix</span>
+        <div className="relative shrink-0">
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label={`Fix mistakes — ${outstandingLabel}`}
+            title={`Fix Mistakes — ${outstandingLabel}`}
+            className="flex h-10 items-center gap-1.5 rounded-full bg-red-50 px-3 text-sm font-semibold text-red-900 transition-colors hover:bg-red-100 dark:bg-red-950 dark:text-red-100 dark:hover:bg-red-900/70"
+          >
+            <RotateCcw className="h-4 w-4 shrink-0" />
+            <span className="hidden sm:inline">Fix</span>
+          </button>
           <span
-            className="inline-flex items-center rounded-full bg-orange-500 px-1.5 py-0.5 text-[11px] font-bold leading-none text-white tabular-nums"
+            className="absolute -top-1 -right-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-orange-500 px-1 text-[10px] font-bold leading-none text-white tabular-nums shadow ring-2 ring-background"
             aria-hidden="true"
           >
             {mistakes.length}
           </span>
-        </button>,
+        </div>,
         compactSlot,
       )}
 

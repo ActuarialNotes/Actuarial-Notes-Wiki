@@ -69,6 +69,7 @@ import {
   summarizeSession,
   type StudyRating,
 } from '@/lib/flashcardStudy'
+import { buildCollectedPacks } from '@/lib/collectedPacks'
 import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { matchesSelectedVariant } from '@/data/examSittings'
 import { Button } from '@/components/ui/button'
@@ -658,19 +659,27 @@ function TodayStudyPlanPack({ onCardsAdded }: { onCardsAdded?: () => void }) {
   )
 }
 
+// The pack shelf's "Collected" pill, selected alongside the exam ids in the
+// same strip.
+const COLLECTED_FILTER_ID = '__collected__'
+
 // The pack shelf — every available pack, rendered inside the add-flashcards
 // sheet (it used to be its own gallery tab). The exams are pill filters at the
 // top (same strip as the Dashboard's exam header) rather than stacked headings:
 // picking one shows its full-width "all concepts" pack followed by a two-column
-// grid of its learning-objective packs. Any user-saved packs sit below the
-// selected exam's section. Only one pack's action panel is open at a time
-// (accordion). Today's study plan no longer lives here — it's pinned at the top
-// of My Deck instead (see TodayStudyPlanPack).
+// grid of its learning-objective packs. A trailing "Collected" pill filters the
+// same shelf down to the cards the learner has already unlocked, grouped the
+// same way (see lib/collectedPacks.ts) — the fastest route from "I've collected
+// these" to "put them in my deck". Any user-saved packs sit below the selected
+// section. Only one pack's action panel is open at a time (accordion). Today's
+// study plan no longer lives here — it's pinned at the top of My Deck instead
+// (see TodayStudyPlanPack).
 function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
   const { syllabi, loading: syllabiLoading } = useWikiSyllabus()
   const { records: masteryRecords, loading: masteryLoading } = useConceptMastery()
   const { progress: examProgress, examVariants } = useExamProgress()
   const { savedPacks, deleteSavedPack } = useFlashcards()
+  const collectedCards = useCollectedCards(s => s.cards)
 
   const [expandedKey, setExpandedKey] = useState<string | null>(null)
   const toggleExpanded = (key: string) => setExpandedKey(k => (k === key ? null : key))
@@ -725,14 +734,29 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
     }))
   }, [inProgressSyllabi, syllabi, examProgress])
 
-  // Which exam's packs are on screen. Kept as an id (not an index) so it
+  // The "Collected" filter's shelf: only what the learner has unlocked, grouped
+  // into learning objectives the same way an exam is.
+  const collectedPacks = useMemo(
+    () => buildCollectedPacks(syllabi, collectedCards),
+    [syllabi, collectedCards],
+  )
+  const hasCollected = collectedPacks.allConcepts.length > 0
+
+  // Which filter's packs are on screen. Kept as an id (not an index) so it
   // survives the groups being rebuilt, and clamped back to the first group
-  // whenever the selected exam disappears (e.g. it was marked completed).
-  const [selectedExamId, setSelectedExamId] = useState<string | null>(null)
-  const activeGroup = examGroups.find(g => g.examId === selectedExamId) ?? examGroups[0] ?? null
+  // whenever the selection disappears (e.g. the exam was marked completed, or
+  // the last collected card was removed).
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const activeId =
+    (selectedId === COLLECTED_FILTER_ID && hasCollected ? COLLECTED_FILTER_ID : null)
+    ?? examGroups.find(g => g.examId === selectedId)?.examId
+    ?? examGroups[0]?.examId
+    ?? (hasCollected ? COLLECTED_FILTER_ID : null)
+  const showCollected = activeId === COLLECTED_FILTER_ID
+  const activeGroup = showCollected ? null : examGroups.find(g => g.examId === activeId) ?? null
 
   const isLoading = masteryLoading || syllabiLoading
-  const hasContent = examGroups.length > 0 || savedPacks.length > 0
+  const hasContent = examGroups.length > 0 || savedPacks.length > 0 || hasCollected
 
   return (
     <div className="space-y-4">
@@ -740,16 +764,16 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
           active/inactive treatment, so switching exams feels identical in both
           places. Sticky to the top of the sheet's scroll area; the negative
           margins let the background span the container's padding. */}
-      {examGroups.length > 0 && (
+      {(examGroups.length > 0 || hasCollected) && (
         <div className="sticky top-0 z-10 -mx-4 sm:-mx-6 -mt-4 px-4 sm:px-6 pt-4 pb-1.5 bg-background/95 backdrop-blur-sm">
           <div className="exam-tab-strip flex min-w-0 gap-1.5 overflow-x-auto">
             {examGroups.map(group => (
               <button
                 key={group.examId}
                 type="button"
-                onClick={() => setSelectedExamId(group.examId)}
+                onClick={() => setSelectedId(group.examId)}
                 className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors ${
-                  group.examId === activeGroup?.examId
+                  group.examId === activeId
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-transparent text-muted-foreground hover:text-foreground'
                 }`}
@@ -757,6 +781,23 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
                 {group.examLabel}
               </button>
             ))}
+            {/* Cross-exam, so it trails the exams rather than joining them. */}
+            {hasCollected && (
+              <button
+                type="button"
+                onClick={() => setSelectedId(COLLECTED_FILTER_ID)}
+                className={`shrink-0 h-10 px-4 rounded-full text-base font-semibold transition-colors inline-flex items-center gap-1.5 ${
+                  showCollected
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-transparent text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Collected
+                <span className={`text-xs tabular-nums ${showCollected ? 'opacity-80' : 'opacity-70'}`}>
+                  {collectedPacks.allConcepts.length}
+                </span>
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -782,6 +823,36 @@ function PacksContent({ onCardsAdded }: { onCardsAdded?: () => void } = {}) {
               isSub
               expanded={expandedKey === `${activeGroup.examId}-${lo.name}`}
               onToggleExpand={() => toggleExpanded(`${activeGroup.examId}-${lo.name}`)}
+              masteryOf={masteryOf}
+              onCardsAdded={onCardsAdded}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* The Collected filter — every unlocked card, then the learning
+          objectives they came from. Every pack here is fully collected, so the
+          cards read as complete and their action is "add these to my deck". */}
+      {showCollected && (
+        <div className="grid grid-cols-2 gap-3">
+          <PackCard
+            label="All collected"
+            concepts={collectedPacks.allConcepts}
+            className="col-span-2"
+            expanded={expandedKey === 'collected-all'}
+            onToggleExpand={() => toggleExpanded('collected-all')}
+            masteryOf={masteryOf}
+            onCardsAdded={onCardsAdded}
+          />
+          {collectedPacks.packs.map(pack => (
+            <PackCard
+              key={pack.key}
+              label={pack.label}
+              sublabel={pack.sublabel}
+              concepts={pack.concepts}
+              isSub
+              expanded={expandedKey === `collected-${pack.key}`}
+              onToggleExpand={() => toggleExpanded(`collected-${pack.key}`)}
               masteryOf={masteryOf}
               onCardsAdded={onCardsAdded}
             />

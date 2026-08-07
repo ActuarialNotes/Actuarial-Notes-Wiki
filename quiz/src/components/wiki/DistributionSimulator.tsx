@@ -3,10 +3,15 @@
  * vault (`Media/*_pdf.svg`, `Media/*_pmf.svg`).
  *
  * Instead of four frozen curves, the student gets the live distribution: every
- * parameter on a slider, the mean/variance/SD/skewness recomputed as they drag,
- * a PDF↔CDF switch, and a Monte-Carlo simulation that draws variates and stacks
+ * parameter on a slider, the mean/SD/skewness recomputed as they drag, a
+ * PDF↔CDF switch, and a Monte-Carlo simulation that draws variates and stacks
  * them into a histogram over the theoretical shape — so "the sample mean
  * converges to E[X]" is something they watch happen rather than read.
+ *
+ * The whole card is meant to fit a phone screen without scrolling, so the
+ * chrome is kept to a minimum: the view switch and reset ride beside the title,
+ * three stat tiles across, and simulation is a single button that keeps adding
+ * draws.
  *
  * The maths lives in `lib/distributions.ts` + `lib/distributionPlot.ts`; this
  * file is state and layout only.
@@ -24,8 +29,12 @@ import {
 } from '@/lib/distributions'
 import { drawSamples, formatKpi, formatStat, summarizeSamples } from '@/lib/distributionPlot'
 
-/** How many variates one press of "Simulate" draws. */
-const SAMPLE_SIZES = [100, 1000, 10000] as const
+/**
+ * How many variates one press of "Simulate" draws. Fixed, and deliberately not
+ * printed anywhere in the UI: the readout is the running total, so pressing the
+ * button reads as "more draws" rather than as a batch-size setting.
+ */
+const DRAW_BATCH = 100
 /** Frames the animated draw is spread over (skipped under reduced motion). */
 const DRAW_FRAMES = 24
 
@@ -45,67 +54,69 @@ export interface DistributionSimulatorProps {
 export function DistributionSimulator({ spec, caption, size = 'inline', className }: DistributionSimulatorProps) {
   const [params, setParams] = useState<DistParams>(() => defaultParams(spec))
   const [view, setView] = useState<'pdf' | 'cdf'>('pdf')
-  const [sampleSize, setSampleSize] = useState<number>(1000)
   const [samples, setSamples] = useState<number[]>([])
-  const [drawing, setDrawing] = useState(false)
 
   const rngRef = useRef<Rng>(createRng(Date.now() & 0x7fffffff))
   const frameRef = useRef<number | null>(null)
+  /** The live pile of draws; the state copy is what the plot renders. */
+  const samplesRef = useRef<number[]>([])
+  /** Draws still owed to the animation — one press adds `DRAW_BATCH`. */
+  const pendingRef = useRef(0)
 
-  const stopDrawing = useCallback(() => {
+  const clearSamples = useCallback(() => {
     if (frameRef.current !== null) cancelAnimationFrame(frameRef.current)
     frameRef.current = null
-    setDrawing(false)
+    pendingRef.current = 0
+    samplesRef.current = []
+    setSamples([])
   }, [])
 
   // A different distribution means a different set of sliders and a different
   // sample space — start over rather than carrying either across.
   useEffect(() => {
-    stopDrawing()
+    clearSamples()
     setParams(defaultParams(spec))
-    setSamples([])
-  }, [spec, stopDrawing])
+  }, [spec, clearSamples])
 
-  useEffect(() => stopDrawing, [stopDrawing])
+  useEffect(
+    () => () => {
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current)
+    },
+    [],
+  )
 
   const setParam = useCallback(
     (key: string, value: number) => {
       // Old draws came from a different distribution — clear them so the
       // histogram never disagrees with the curve it's drawn under.
-      stopDrawing()
-      setSamples([])
+      clearSamples()
       setParams(prev => spec.normalize({ ...prev, [key]: value }))
     },
-    [spec, stopDrawing],
+    [spec, clearSamples],
   )
 
-  const runSimulation = useCallback(
-    (append: boolean) => {
-      stopDrawing()
-      const accumulated = append ? samples.slice() : []
-      if (prefersReducedMotion()) {
-        setSamples(drawSamples(spec, params, sampleSize, rngRef.current, accumulated))
-        return
-      }
-      setDrawing(true)
-      const chunk = Math.max(1, Math.ceil(sampleSize / DRAW_FRAMES))
-      let drawn = 0
-      const step = () => {
-        const take = Math.min(chunk, sampleSize - drawn)
-        drawSamples(spec, params, take, rngRef.current, accumulated)
-        drawn += take
-        setSamples(accumulated.slice())
-        if (drawn < sampleSize) {
-          frameRef.current = requestAnimationFrame(step)
-        } else {
-          frameRef.current = null
-          setDrawing(false)
-        }
-      }
-      frameRef.current = requestAnimationFrame(step)
-    },
-    [spec, params, sampleSize, samples, stopDrawing],
-  )
+  // Every press adds another batch to the pile — the counter climbing is the
+  // whole point, so there is no batch-size control and no separate "draw more".
+  // Presses during an animation queue up rather than cancelling it, so a rapid
+  // tap always buys a full batch.
+  const runSimulation = useCallback(() => {
+    if (prefersReducedMotion()) {
+      drawSamples(spec, params, DRAW_BATCH, rngRef.current, samplesRef.current)
+      setSamples(samplesRef.current.slice())
+      return
+    }
+    pendingRef.current += DRAW_BATCH
+    if (frameRef.current !== null) return
+    const chunk = Math.max(1, Math.ceil(DRAW_BATCH / DRAW_FRAMES))
+    const step = () => {
+      const take = Math.min(chunk, pendingRef.current)
+      drawSamples(spec, params, take, rngRef.current, samplesRef.current)
+      pendingRef.current -= take
+      setSamples(samplesRef.current.slice())
+      frameRef.current = pendingRef.current > 0 ? requestAnimationFrame(step) : null
+    }
+    frameRef.current = requestAnimationFrame(step)
+  }, [spec, params])
 
   const moments = useMemo(() => spec.moments(params), [spec, params])
   const sample = useMemo(() => summarizeSamples(samples), [samples])
@@ -115,25 +126,28 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
   return (
     <div
       className={
-        'not-prose rounded-xl border border-border bg-card text-card-foreground p-3 sm:p-4 space-y-3 ' +
+        'not-prose rounded-xl border border-border bg-card text-card-foreground p-3 sm:p-4 space-y-2.5 ' +
         (className ?? '')
       }
     >
-      {/* Header: what's being plotted + how.
-          The PDF/CDF switch and reset always sit on their own row *below* the
-          notation, never beside it: the notation restates the current parameter
-          values, so as a slider moves it changes width and reflows between one
-          and two lines. Sharing a wrapping flex row with it made the buttons
-          hop sideways and up/down mid-drag. The notation line also reserves two
-          lines of height so that reflow can't shift the buttons either. */}
-      <div className="space-y-2">
+      {/* Header: what's being plotted (left) + how (right).
+          The switch and reset sit in their own column, top-aligned and
+          `shrink-0`: the notation restates the current parameter values, so it
+          changes width and reflows between one and two lines as a slider moves.
+          Anything sharing a *wrapping* row with it hopped around mid-drag —
+          a fixed column can't, and the notation still reserves two lines of
+          height so the sliders below it don't shift either. */}
+      <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="text-base font-semibold leading-tight">{spec.title}</p>
+          {/* "Binomial", not "Binomial Distribution": the long names wrapped to
+              a second line next to the switch, and the notation right below
+              says what it is anyway. */}
+          <p className="text-base font-semibold leading-tight">{spec.title.replace(/\s+Distribution$/, '')}</p>
           <p className="text-sm text-muted-foreground tabular-nums mt-0.5 leading-snug min-h-[2.75em]">
             {spec.notation(params)}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <div className="flex rounded-lg border border-border overflow-hidden" role="group" aria-label="Plot view">
             {(['pdf', 'cdf'] as const).map(mode => (
               <button
@@ -142,7 +156,7 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
                 onClick={() => setView(mode)}
                 aria-pressed={view === mode}
                 data-sound="select"
-                className={`h-10 px-4 text-sm font-semibold transition-colors ${
+                className={`h-10 px-2.5 text-sm font-semibold transition-colors ${
                   view === mode ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-accent'
                 }`}
               >
@@ -153,34 +167,28 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
           <button
             type="button"
             onClick={() => {
-              stopDrawing()
-              setSamples([])
+              clearSamples()
               setParams(defaultParams(spec))
             }}
             className="h-10 w-10 inline-flex items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-            aria-label="Reset parameters"
-            title="Reset parameters"
+            aria-label="Reset parameters and draws"
+            title="Reset parameters and draws"
           >
             <RotateCcw className="h-5 w-5" aria-hidden />
           </button>
         </div>
       </div>
 
-      {/* The four headline moments, above the plot they describe */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      {/* The headline moments, above the plot they describe. Three across on
+          every width — variance is left out on purpose: σ is the one in the
+          same units as the axis, and σ² is a square away from it. */}
+      <div className="grid grid-cols-3 gap-2">
         <Stat
           symbol="μ"
           label="Mean"
           value={formatKpi(moments.mean)}
           sample={hasSamples ? formatKpi(sample.mean) : null}
           sampleSymbol="x̄"
-        />
-        <Stat
-          symbol="σ²"
-          label="Variance"
-          value={formatKpi(moments.variance)}
-          sample={hasSamples ? formatKpi(sample.variance) : null}
-          sampleSymbol="s²"
         />
         <Stat
           symbol="σ"
@@ -205,7 +213,7 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
         params={params}
         view={view}
         samples={samples}
-        height={size === 'full' ? 300 : 250}
+        height={size === 'full' ? 260 : 250}
       />
 
       {/* Parameter sliders */}
@@ -239,59 +247,17 @@ export function DistributionSimulator({ spec, caption, size = 'inline', classNam
         })}
       </div>
 
-      {/* Simulation controls */}
-      <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-border">
-        <div className="flex rounded-lg border border-border overflow-hidden" role="group" aria-label="Draws per simulation">
-          {SAMPLE_SIZES.map(n => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => setSampleSize(n)}
-              aria-pressed={sampleSize === n}
-              data-sound="select"
-              className={`h-10 px-3 text-sm font-semibold tabular-nums transition-colors ${
-                sampleSize === n ? 'bg-secondary text-secondary-foreground' : 'text-muted-foreground hover:bg-accent'
-              }`}
-            >
-              {n.toLocaleString()}
-            </button>
-          ))}
-        </div>
-        <button
-          type="button"
-          onClick={() => runSimulation(false)}
-          disabled={drawing}
-          className="h-10 px-4 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
-        >
-          {drawing ? 'Simulating…' : 'Simulate'}
-        </button>
-        {hasSamples && !drawing && (
-          <button
-            type="button"
-            onClick={() => runSimulation(true)}
-            className="h-10 px-4 rounded-lg border border-border text-sm font-semibold hover:bg-accent transition-colors"
-          >
-            Draw more
-          </button>
-        )}
-        {hasSamples && (
-          <button
-            type="button"
-            onClick={() => {
-              stopDrawing()
-              setSamples([])
-            }}
-            className="h-10 px-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-          >
-            Clear
-          </button>
-        )}
-        <p className="text-sm text-muted-foreground ml-auto tabular-nums">
-          {hasSamples
-            ? `${sample.n.toLocaleString()} draws simulated`
-            : 'Draw random values from this distribution'}
-        </p>
-      </div>
+      {/* Simulation: one button, pressed as many times as you like. The running
+          total is printed by the plot's readout strip, so nothing here states a
+          batch size; reset (in the header) clears the draws with the
+          parameters. */}
+      <button
+        type="button"
+        onClick={runSimulation}
+        className="h-10 w-full rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity"
+      >
+        Simulate
+      </button>
 
       {caption && <p className="text-sm text-muted-foreground text-center">{caption}</p>}
     </div>
@@ -312,13 +278,13 @@ function Stat({
   sampleSymbol?: string
 }) {
   return (
-    <div className="rounded-lg bg-muted/50 px-3 py-2">
-      <p className="text-sm text-muted-foreground leading-none">
+    <div className="rounded-lg bg-muted/50 px-2.5 py-1.5 min-w-0">
+      <p className="text-xs text-muted-foreground leading-none truncate">
         <span className="font-semibold text-foreground">{symbol}</span> {label}
       </p>
-      <p className="text-xl font-semibold tabular-nums mt-1.5 leading-none">{value}</p>
+      <p className="text-lg font-semibold tabular-nums mt-1 leading-none">{value}</p>
       {sample !== null && (
-        <p className="text-sm text-muted-foreground tabular-nums mt-1.5 leading-none">
+        <p className="text-xs text-muted-foreground tabular-nums mt-1 leading-none">
           {sampleSymbol ?? 'sim'} {sample}
         </p>
       )}

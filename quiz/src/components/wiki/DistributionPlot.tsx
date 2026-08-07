@@ -203,7 +203,9 @@ export function DistributionPlot({ spec, params, view, samples, height = 250 }: 
           )}
         </span>
         {histogram && histogram.n > 0 && (
-          <span className="shrink-0">{histogram.n.toLocaleString()} draws</span>
+          <span className="shrink-0" aria-live="polite">
+            {histogram.n.toLocaleString()} draws
+          </span>
         )}
       </div>
 

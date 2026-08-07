@@ -1696,7 +1696,9 @@ function SortableCard({
             <div className="space-y-2">
               {cardImages.map((img, i) => (
                 <figure key={i} className="flex flex-col items-center gap-1">
-                  <img src={img.src} alt={img.alt} className="max-w-full object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+                  {/* Match the study card: fill the tile's width rather than
+                      rendering at the SVG's (small) intrinsic size. */}
+                  <img src={img.src} alt={img.alt} className="w-full max-h-[50vh] object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
                   {img.caption && (
                     <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
                   )}
@@ -2719,7 +2721,10 @@ const FlashcardStudyArea = forwardRef<FlashcardStudyAreaHandle, {
               <div className="space-y-3">
                 {cardImages.map((img, i) => (
                   <figure key={i} className="flex flex-col items-center gap-1">
-                    <img src={img.src} alt={img.alt} className="max-w-full max-h-48 object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+                    {/* Figures are the point of the card, not a thumbnail: fill the
+                        card's width and only clamp on height so a tall one still fits
+                        above the Again / Got it buttons. */}
+                    <img src={img.src} alt={img.alt} className="w-full max-h-[60vh] object-contain rounded" onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
                     {img.caption && (
                       <figcaption className="text-xs text-muted-foreground text-center">{img.caption}</figcaption>
                     )}

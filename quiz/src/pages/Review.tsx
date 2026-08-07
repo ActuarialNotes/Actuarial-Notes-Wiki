@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ArrowUp, X } from 'lucide-react'
+import { ArrowUp, LayoutDashboard, X, XCircle } from 'lucide-react'
 import { useQuizStore, readLastSession, syncPendingSessionToCloud } from '@/stores/quizStore'
 import type { CompletedSession } from '@/stores/quizStore'
 import { useAuth } from '@/hooks/useAuth'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { loadCachedStudyPlan, todayISO } from '@/lib/studyPlan'
 import { QuestionCard } from '@/components/QuestionCard'
-import { ConceptCoverageSection, effectiveOutcome } from '@/components/ConceptCoverageSection'
+import { ConceptCoverageSection, effectiveOutcome, formatScore, scoreColorClass } from '@/components/ConceptCoverageSection'
 import { questionCredit } from '@/lib/parser'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -74,7 +74,10 @@ export default function Review() {
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null)
   const [showIncorrectOnly, setShowIncorrectOnly] = useState(false)
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const [actionsPinned, setActionsPinned] = useState(false)
   const questionReviewRef = useRef<HTMLDivElement>(null)
+  const actionsRowRef = useRef<HTMLDivElement>(null)
+  const pinnedHeaderRef = useRef<HTMLDivElement>(null)
   const syncingRef = useRef(false)
 
   useEffect(() => {
@@ -82,6 +85,35 @@ export default function Review() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Reveal the pinned header once the full-size actions row (Go to Dashboard /
+  // Review Incorrect) has scrolled up behind the sticky line — same measurement
+  // the Dashboard uses for its compact actions. The threshold comes from the
+  // pinned header's own wrapper, which is zero-height and always mounted, so it
+  // reads the real sticky offset at every breakpoint and the bar fading in
+  // can't move the threshold and make the state flicker.
+  useEffect(() => {
+    let raf = 0
+    const measure = () => {
+      raf = 0
+      const actions = actionsRowRef.current
+      const anchor = pinnedHeaderRef.current
+      if (!actions || !anchor) {
+        setActionsPinned(false)
+        return
+      }
+      setActionsPinned(actions.getBoundingClientRect().bottom < anchor.getBoundingClientRect().top)
+    }
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(measure) }
+    measure()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+    }
+  }, [session])
 
   useEffect(() => {
     const last = readLastSession()
@@ -330,6 +362,62 @@ export default function Review() {
       />
     )}
     <ConceptPopup />
+
+    {/* ── Pinned score header ───────────────────────────────────────
+        Mirrors the Dashboard's pinned row: once the score card's actions have
+        scrolled past, the score and icon-only copies of those actions stay at
+        the top of the viewport. The wrapper is `h-0` on purpose so the bar
+        floats over the review content instead of reserving space for itself —
+        and so mounting it costs no layout shift at the top of the page. Sticky
+        offsets match the nav chrome (mobile bottom-nav, md top bar, lg sidebar). */}
+    <div ref={pinnedHeaderRef} className="sticky top-0 md:top-14 lg:top-0 z-20 h-0">
+      <div
+        aria-hidden={!actionsPinned}
+        className={`border-b border-border/60 bg-background/95 backdrop-blur-md transition-all duration-200 ${
+          actionsPinned ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+        }`}
+      >
+        <div className="container max-w-2xl mx-auto px-4 py-2 flex items-center gap-3">
+          <span className={`text-xl font-black tabular-nums leading-none ${scoreColorClass(percentage)}`}>
+            {percentage}%
+          </span>
+          <span className="text-xs text-muted-foreground tabular-nums">
+            {formatScore(scoredPoints)}/{totalQuestions}
+          </span>
+          <div className="flex-1" />
+          {user && (
+            <button
+              type="button"
+              onClick={() => navigate('/dashboard')}
+              aria-label="Go to Dashboard"
+              title="Go to Dashboard"
+              tabIndex={actionsPinned ? 0 : -1}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors hover:bg-secondary/80"
+            >
+              <LayoutDashboard className="h-5 w-5" />
+            </button>
+          )}
+          {retryIds.length > 0 && (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={handleReviewIncorrect}
+                aria-label={`Review ${retryIds.length} incorrect`}
+                title="Review Incorrect"
+                tabIndex={actionsPinned ? 0 : -1}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground transition-all hover:bg-primary/90 active:bg-primary/80 active:scale-[0.97]"
+              >
+                <XCircle className="h-5 w-5" />
+              </button>
+              <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-orange-500 px-1 text-[11px] font-bold leading-none text-white shadow ring-2 ring-background tabular-nums">
+                {retryIds.length}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+
     <div className="container max-w-2xl mx-auto px-4 py-8 space-y-6">
 
       {/* ── First card: score header + concept coverage ──────────── */}
@@ -352,10 +440,14 @@ export default function Review() {
         manualGrades={session.manualGrades}
         onReviewIncorrect={handleReviewIncorrect}
         levelUpTransitions={upwardTransitions}
+        actionsRef={actionsRowRef}
       />
 
       {/* ── Question review ─────────────────────────────────────── */}
-      <div ref={questionReviewRef} className="space-y-2 scroll-mt-6">
+      {/* Scroll margin clears the pinned header (its own height plus the sticky
+          offset at that breakpoint) so "Review Incorrect" doesn't park this
+          heading underneath the bar it was pressed from. */}
+      <div ref={questionReviewRef} className="space-y-2 scroll-mt-16 md:scroll-mt-28 lg:scroll-mt-16">
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-semibold">Question Review</h2>
           {selectedQuestion !== null && (

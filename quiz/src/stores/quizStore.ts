@@ -835,10 +835,10 @@ export async function syncPendingSessionToCloud(
 /**
  * Persist answers given outside a quiz run — today only the Fix-Mistakes
  * reviewer (components/MistakesReviewModal.tsx), which answers missed questions
- * one at a time in a modal instead of launching a quiz. Runs the same writes
+ * one at a time in a panel instead of launching a quiz. Runs the same writes
  * completeQuiz performs for an authenticated user (mastery, quiz_sessions +
  * question_responses, gems, exam progress, daily stats, streak, XP/quests/
- * leagues) so a question fixed in the modal counts exactly as much as one fixed
+ * leagues) so a question fixed in the panel counts exactly as much as one fixed
  * inside a quiz — and, because it lands in question_responses, drops off the
  * mistakes list.
  *

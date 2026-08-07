@@ -147,7 +147,7 @@ export const DAILY_PLAN_EMAIL_ENABLED: boolean = true
  * count of what's still outstanding and how many misses have since been
  * corrected; tapping it opens MistakesReviewModal — the missed questions
  * themselves, one at a time, answered in place (the quiz's own QuestionCard)
- * and paged with Previous/Next. Answers are banked on close through
+ * and paged with Previous/Next, in the concept popup's resizable bottom panel. Answers are banked on close through
  * recordReviewAnswers, so a question corrected there drops off the list. It
  * reads only data the Dashboard already loads
  * plus the learner's question-response history — no new heavy fetch. The pure engine and its tests

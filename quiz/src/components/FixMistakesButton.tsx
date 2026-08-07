@@ -29,7 +29,8 @@ interface Props {
  * concepts / Start Quiz buttons it sits *between*. It's the narrow middle
  * column of that row — the smallest of the three, because it's the optional one.
  * Tapping it opens MistakesReviewModal — the missed questions themselves, one at
- * a time, answerable in place with Previous/Next between them.
+ * a time, answerable in place with Previous/Next between them, in the same
+ * resizable bottom panel the concept popup uses.
  *
  * Hides itself entirely when there's nothing outstanding to review.
  */

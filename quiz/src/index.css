@@ -1079,6 +1079,41 @@ summary .katex-display,
   .pack-expand-in { animation: none; }
 }
 
+/* The add-flashcards sheet slides up from the bottom instead of appearing
+   instantly, so it reads as a sheet rising out of the footer "+" that opened
+   it — and slides back down on close rather than blinking away. */
+.add-flashcards-sheet {
+  animation: add-flashcards-sheet-in 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.add-flashcards-sheet[data-closing='true'] {
+  animation: add-flashcards-sheet-out 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes add-flashcards-sheet-in {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes add-flashcards-sheet-out {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .add-flashcards-sheet {
+    animation: add-flashcards-sheet-fade-in 0.12s ease-out;
+  }
+  .add-flashcards-sheet[data-closing='true'] {
+    animation: add-flashcards-sheet-fade-out 0.12s ease-out forwards;
+  }
+}
+@keyframes add-flashcards-sheet-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes add-flashcards-sheet-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
 /* Flashcards nav item lights up when a collected drop lands */
 .flashcard-nav-glow {
   animation: flashcard-nav-glow 1.5s ease-out;

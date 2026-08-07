@@ -893,6 +893,11 @@ function CollectedContent({
   )
 }
 
+// How long the add-flashcards sheet's slide-out runs before it unmounts —
+// keep in step with the `.add-flashcards-sheet[data-closing]` animation in
+// index.css.
+const SHEET_EXIT_MS = 200
+
 // The "add flashcards" sheet — one full-screen view that covers both ways into
 // the deck: a free-form concept search pinned to the top, and, whenever the
 // search box is empty, every available pack below it (Packs used to be its own
@@ -901,9 +906,12 @@ function CollectedContent({
 function AddFlashcardsSheet({
   onClose,
   onCardsAdded,
+  closing = false,
 }: {
   onClose: () => void
   onCardsAdded?: () => void
+  /** True while the slide-out is playing, just before the sheet unmounts. */
+  closing?: boolean
 }) {
   const { syllabi } = useWikiSyllabus()
   const collectedCards = useCollectedCards(s => s.cards)
@@ -936,7 +944,10 @@ function AddFlashcardsSheet({
   }, [onClose])
 
   return (
-    <div className="fixed inset-0 z-[64] flex flex-col bg-background">
+    <div
+      className="add-flashcards-sheet fixed inset-0 z-[64] flex flex-col bg-background"
+      data-closing={closing || undefined}
+    >
       {/* Search header */}
       <div className="shrink-0 border-b bg-background/95 backdrop-blur-md">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
@@ -1015,12 +1026,35 @@ function AddFlashcardsSheet({
 // right-hand end of the controls footer, in every flashcards view.
 function AddFlashcardsButton({ onCardsAdded }: { onCardsAdded?: () => void }) {
   const [open, setOpen] = useState(false)
+  // The sheet stays mounted for the length of its slide-out so closing it
+  // animates too; SHEET_EXIT_MS matches the `.add-flashcards-sheet` exit
+  // animation in index.css.
+  const [closing, setClosing] = useState(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>()
+
+  useEffect(() => () => clearTimeout(closeTimer.current), [])
+
+  function requestClose() {
+    if (closing) return
+    setClosing(true)
+    closeTimer.current = setTimeout(() => {
+      setOpen(false)
+      setClosing(false)
+    }, SHEET_EXIT_MS)
+  }
+
+  function openSheet() {
+    clearTimeout(closeTimer.current)
+    setClosing(false)
+    setOpen(true)
+  }
+
   return (
     <>
       <button
         type="button"
         data-tour="add-flashcards-btn"
-        onClick={() => setOpen(true)}
+        onClick={openSheet}
         title="Add flashcards"
         aria-label="Add flashcards"
         className="inline-flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-95 transition-all"
@@ -1028,7 +1062,11 @@ function AddFlashcardsButton({ onCardsAdded }: { onCardsAdded?: () => void }) {
         <Plus className="h-5 w-5" />
       </button>
       {open && (
-        <AddFlashcardsSheet onClose={() => setOpen(false)} onCardsAdded={onCardsAdded} />
+        <AddFlashcardsSheet
+          onClose={requestClose}
+          onCardsAdded={onCardsAdded}
+          closing={closing}
+        />
       )}
     </>
   )

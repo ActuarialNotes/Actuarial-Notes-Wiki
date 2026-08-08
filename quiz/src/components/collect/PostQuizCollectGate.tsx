@@ -10,6 +10,7 @@ import { Check, Loader2, Lock, Sparkles } from 'lucide-react'
 import { useCollect } from '@/hooks/useCollect'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
 import { promoteMissedLevelUp } from '@/stores/quizStore'
+import type { MasteryTransition } from '@/stores/quizStore'
 import { LevelPill } from '@/components/wiki/LearningProgressModal'
 
 interface Props {
@@ -18,16 +19,27 @@ interface Props {
   userId: string | null
   /** New-state concept names answered correctly this quiz but not collected. */
   concepts: string[]
+  /**
+   * Fired for each concept this gate actually promotes, so the results screen
+   * behind it can list the level-up it just banked. Not called when the concept
+   * had already advanced elsewhere (promoteMissedLevelUp returns null).
+   */
+  onPromoted?: (transition: MasteryTransition) => void
   onDone: () => void
 }
 
-export function PostQuizCollectGate({ examId, userId, concepts, onDone }: Props) {
+export function PostQuizCollectGate({ examId, userId, concepts, onPromoted, onDone }: Props) {
   const openCollect = useCollect(s => s.open)
   const collectedCards = useCollectedCards(s => s.cards)
   const [promoted, setPromoted] = useState<Set<string>>(new Set())
   const promotingRef = useRef<Set<string>>(new Set())
 
   const collectedSet = new Set(collectedCards.map(c => c.name.toLowerCase()))
+
+  // Kept in a ref so the promotion effect (which runs off collectedCards only)
+  // always calls the current callback without re-running on every render.
+  const onPromotedRef = useRef(onPromoted)
+  onPromotedRef.current = onPromoted
 
   // The instant a listed concept flips to collected, bank the level-up it
   // already earned this quiz — no need to wait for another correct answer.
@@ -37,6 +49,9 @@ export function PostQuizCollectGate({ examId, userId, concepts, onDone }: Props)
       if (!collectedSet.has(key) || promoted.has(key) || promotingRef.current.has(key)) continue
       promotingRef.current.add(key)
       promoteMissedLevelUp(userId, examId, name)
+        .then(transition => {
+          if (transition) onPromotedRef.current?.(transition)
+        })
         .catch(err => console.error('promoteMissedLevelUp failed:', err))
         .finally(() => {
           promotingRef.current.delete(key)

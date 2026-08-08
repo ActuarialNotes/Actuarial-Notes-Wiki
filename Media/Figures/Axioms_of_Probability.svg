@@ -43,7 +43,8 @@ text {
     <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
   </defs>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Kolmogorov's three axioms</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">The axioms: P ≥ 0, P(S) = 1, disjoint</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">events add</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="438" text-anchor="middle" class="fml">P(⋃ Eᵢ) = Σ P(Eᵢ)  for disjoint Eᵢ</text>
   <rect x="26" y="74" width="308" height="92" rx="7" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.2"/>

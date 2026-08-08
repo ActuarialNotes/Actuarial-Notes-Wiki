@@ -42,7 +42,8 @@ text {
     <marker id="ah7c3aed" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#7c3aed"/></marker>
   </defs>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Fix a row, then renormalise it</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A conditional PMF is one row divided by</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">its total</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="438" text-anchor="middle" class="fml">p(y | x) = p(x, y) / pₓ(x)</text>
   <text x="112" y="102" text-anchor="middle" class="sm dim">y = 0</text>

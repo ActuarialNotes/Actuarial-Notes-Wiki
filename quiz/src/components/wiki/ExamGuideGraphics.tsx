@@ -29,18 +29,86 @@ function Frame({ className, children }: GraphicProps & { children: ReactNode }) 
   )
 }
 
-/** A clock beside the question grid. Question count differs by exam. */
-function FormatFrame({ className, questions, done }: GraphicProps & { questions: number; done: number }) {
-  // Rows of ten, vertically centred on the clock however many rows that takes.
-  const rows = Math.ceil(questions / 10)
-  const top = 44 - (rows * 13 - 4) / 2
-  const cells = Array.from({ length: questions }, (_, i) => ({
-    x: 92 + (i % 10) * 10.4,
-    y: top + Math.floor(i / 10) * 13,
-    done: i < done,
-  }))
+/* ---------------------------------------------------------------------------
+ * Card covers
+ *
+ * The face of the card itself, as opposed to the wide illustration that heads a
+ * page inside the popup. A cover is square and drawn at the same size as the
+ * readiness card's dial (88, scaling down with the card) so the three cards in
+ * the row read as one row of equal-weight marks — the wide page graphics were
+ * only ever ~40px tall in a third-of-a-phone column, which is what made them
+ * look like stray icons. No `bg-muted/40` plate either: the dial beside them
+ * has none.
+ * ------------------------------------------------------------------------- */
+
+const COVER_VIEW_BOX = '0 0 88 88'
+
+function CoverFrame({ className, children }: GraphicProps & { children: ReactNode }) {
   return (
-    <Frame className={className}>
+    <svg
+      viewBox={COVER_VIEW_BOX}
+      role="presentation"
+      aria-hidden="true"
+      className={`block h-auto w-full max-w-[88px] ${className ?? ''}`}
+    >
+      {children}
+    </svg>
+  )
+}
+
+/**
+ * Exam-day cover: a clock, ring-weighted to match the readiness dial beside it.
+ */
+export function ClockCover({ className }: GraphicProps) {
+  return (
+    <CoverFrame className={className}>
+      <circle cx="44" cy="44" r="40" fill="none" stroke="hsl(var(--muted-foreground))" strokeOpacity={0.2} strokeWidth="8" />
+      {[0, 90, 180, 270].map(deg => (
+        <line
+          key={deg}
+          x1="44"
+          y1="14"
+          x2="44"
+          y2="20"
+          stroke="currentColor"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          className="text-muted-foreground/50"
+          transform={`rotate(${deg} 44 44)`}
+        />
+      ))}
+      <line x1="44" y1="44" x2="44" y2="22" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-primary" />
+      <line x1="44" y1="44" x2="60" y2="52" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-primary" />
+      <circle cx="44" cy="44" r="4.5" fill="currentColor" className="text-primary" />
+    </CoverFrame>
+  )
+}
+
+/**
+ * How-to-study cover: study effort stacking up, with the curve it buys.
+ */
+export function StudyCover({ className }: GraphicProps) {
+  const bars = [
+    { x: 20, h: 22 },
+    { x: 40, h: 36 },
+    { x: 60, h: 50 },
+  ]
+  return (
+    <CoverFrame className={className}>
+      {bars.map(b => (
+        <rect key={b.x} x={b.x} y={74 - b.h} width="14" height={b.h} rx="4" fill="currentColor" className="text-muted-foreground/25" />
+      ))}
+      <line x1="10" y1="76" x2="80" y2="76" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" className="text-muted-foreground/40" />
+      <path d="M16 60C34 56 46 40 68 18" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" className="text-primary" />
+      <circle cx="68" cy="18" r="6" fill="currentColor" className="text-primary" />
+    </CoverFrame>
+  )
+}
+
+/** The clock the format graphics share, centred at (44, 44). */
+function ClockFace() {
+  return (
+    <>
       <circle cx="44" cy="44" r="23" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-muted-foreground/35" />
       {[0, 90, 180, 270].map(deg => (
         <line
@@ -59,6 +127,23 @@ function FormatFrame({ className, questions, done }: GraphicProps & { questions:
       <line x1="44" y1="44" x2="44" y2="31" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="text-primary" />
       <line x1="44" y1="44" x2="55" y2="49" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="text-primary" />
       <circle cx="44" cy="44" r="2.6" fill="currentColor" className="text-primary" />
+    </>
+  )
+}
+
+/** A clock beside the question grid. Question count differs by exam. */
+function FormatFrame({ className, questions, done }: GraphicProps & { questions: number; done: number }) {
+  // Rows of ten, vertically centred on the clock however many rows that takes.
+  const rows = Math.ceil(questions / 10)
+  const top = 44 - (rows * 13 - 4) / 2
+  const cells = Array.from({ length: questions }, (_, i) => ({
+    x: 92 + (i % 10) * 10.4,
+    y: top + Math.floor(i / 10) * 13,
+    done: i < done,
+  }))
+  return (
+    <Frame className={className}>
+      <ClockFace />
 
       {cells.map((c, i) => (
         <rect
@@ -84,6 +169,35 @@ export function FormatGraphic({ className }: GraphicProps) {
 /** 2.5 hours, 35 questions (Exam FM). */
 export function FormatFmGraphic({ className }: GraphicProps) {
   return <FormatFrame className={className} questions={35} done={14} />
+}
+
+/** 4 hours, 45 questions (MAS-I and MAS-II). */
+export function FormatMasGraphic({ className }: GraphicProps) {
+  return <FormatFrame className={className} questions={45} done={18} />
+}
+
+/**
+ * The written-answer format: the same clock, but the paper is a handful of
+ * questions carrying point values rather than a grid of equal boxes.
+ */
+export function FormatWrittenGraphic({ className }: GraphicProps) {
+  const rows = [0, 1, 2, 3]
+  return (
+    <Frame className={className}>
+      <ClockFace />
+      {rows.map(i => {
+        const y = 20 + i * 15
+        return (
+          <g key={i}>
+            <rect x="92" y={y} width="70" height="10" rx="3" fill="currentColor" className="text-muted-foreground/25" />
+            {/* the point value the question is worth — what the time budget is
+                actually spent against */}
+            <rect x="166" y={y} width="16" height="10" rx="5" fill="currentColor" className={i < 2 ? 'text-primary/60' : 'text-primary/25'} />
+          </g>
+        )
+      })}
+    </Frame>
+  )
 }
 
 /** The aid sheet you may not bring, struck through. */
@@ -357,6 +471,238 @@ export function ImmunizationGraphic({ className }: GraphicProps) {
   )
 }
 
+/** Marks are given per step: a worked answer, ticked line by line. */
+export function PartialCreditGraphic({ className }: GraphicProps) {
+  const lines = [72, 96, 60, 84]
+  return (
+    <Frame className={className}>
+      <rect x="30" y="14" width="118" height="60" rx="5" fill="currentColor" className="text-card" />
+      <rect x="30" y="14" width="118" height="60" rx="5" fill="none" stroke="currentColor" strokeWidth="2" className="text-muted-foreground/35" />
+      {lines.map((w, i) => {
+        const y = 26 + i * 13
+        return (
+          <g key={i}>
+            <rect x="40" y={y - 3} width={w} height="5" rx="2.5" fill="currentColor" className="text-muted-foreground/30" />
+            {/* a tick in the margin for each step that earned its point */}
+            <polyline
+              points={`158,${y - 1} 163,${y + 4} 172,${y - 7}`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={i < 3 ? 'text-primary' : 'text-primary/30'}
+            />
+          </g>
+        )
+      })}
+    </Frame>
+  )
+}
+
+/**
+ * A stable series that shifts partway through — the diagnostic that says the
+ * data changed under you, not that the arithmetic went wrong.
+ */
+export function RegimeShiftGraphic({ className }: GraphicProps) {
+  const before = [56, 60, 54, 58, 55, 59]
+  const after = [36, 32, 38, 33, 35, 31]
+  const pts = [...before, ...after].map((y, i) => ({ x: 26 + i * 13.6, y, shifted: i >= before.length }))
+  return (
+    <Frame className={className}>
+      <line x1="18" y1="74" x2="184" y2="74" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      {/* the level each half sits at */}
+      <line x1="22" y1="57" x2="94" y2="57" stroke="currentColor" strokeWidth="1.8" strokeDasharray="4 3" strokeLinecap="round" className="text-muted-foreground/45" />
+      <line x1="104" y1="34" x2="180" y2="34" stroke="currentColor" strokeWidth="1.8" strokeDasharray="4 3" strokeLinecap="round" className="text-muted-foreground/45" />
+      {/* where the operating change lands */}
+      <line x1="99" y1="14" x2="99" y2="74" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-foreground/60" />
+      {pts.map(pt => (
+        <circle
+          key={pt.x}
+          cx={pt.x}
+          cy={pt.y}
+          r="3.4"
+          fill="currentColor"
+          className={pt.shifted ? 'text-primary' : 'text-muted-foreground/55'}
+        />
+      ))}
+    </Frame>
+  )
+}
+
+/** Credibility: the observation and its complement, weighted into one estimate. */
+export function CredibilityGraphic({ className }: GraphicProps) {
+  const x0 = 26
+  const width = 148
+  const split = x0 + width * 0.62
+  return (
+    <Frame className={className}>
+      <rect x={x0} y="40" width={width} height="18" rx="9" fill="currentColor" className="text-muted-foreground/25" />
+      <path
+        d={`M${x0 + 9} 40 H${split} V58 H${x0 + 9} a9 9 0 0 1 0 -18 Z`}
+        fill="currentColor"
+        className="text-primary/75"
+      />
+      {/* Z, where the weight lands */}
+      <line x1={split} y1="30" x2={split} y2="68" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-foreground/70" />
+      <circle cx={split} cy="26" r="4" fill="currentColor" className="text-foreground/70" />
+      {/* the two things being blended */}
+      <rect x={x0} y="20" width="36" height="5" rx="2.5" fill="currentColor" className="text-primary/60" />
+      <rect x={x0 + width - 36} y="20" width="36" height="5" rx="2.5" fill="currentColor" className="text-muted-foreground/40" />
+    </Frame>
+  )
+}
+
+/** A mixed model: one slope, a different intercept for every group. */
+export function MixedModelGraphic({ className }: GraphicProps) {
+  const groups = [
+    { dy: 0, cls: 'text-primary' },
+    { dy: 14, cls: 'text-muted-foreground/55' },
+    { dy: 28, cls: 'text-muted-foreground/40' },
+  ]
+  return (
+    <Frame className={className}>
+      <line x1="30" y1="76" x2="182" y2="76" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      <line x1="30" y1="76" x2="30" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      {groups.map(g => (
+        <g key={g.dy}>
+          <line x1="40" y1={44 + g.dy} x2="174" y2={16 + g.dy} stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" className={g.cls} />
+          {[58, 96, 134].map(x => (
+            <circle
+              key={x}
+              cx={x}
+              cy={44 + g.dy - ((x - 40) / 134) * 28}
+              r="2.8"
+              fill="currentColor"
+              className={g.cls}
+            />
+          ))}
+        </g>
+      ))}
+    </Frame>
+  )
+}
+
+/** A decision tree, split twice. */
+export function TreeGraphic({ className }: GraphicProps) {
+  const leaves = [58, 92, 126, 160]
+  return (
+    <Frame className={className}>
+      <line x1="100" y1="22" x2="75" y2="44" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="text-muted-foreground/40" />
+      <line x1="100" y1="22" x2="143" y2="44" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="text-muted-foreground/40" />
+      <line x1="75" y1="50" x2="58" y2="66" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="text-muted-foreground/40" />
+      <line x1="75" y1="50" x2="92" y2="66" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="text-muted-foreground/40" />
+      <line x1="143" y1="50" x2="126" y2="66" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="text-muted-foreground/40" />
+      <line x1="143" y1="50" x2="160" y2="66" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" className="text-muted-foreground/40" />
+      <circle cx="100" cy="18" r="7" fill="currentColor" className="text-primary" />
+      <circle cx="75" cy="46" r="6" fill="currentColor" className="text-primary/70" />
+      <circle cx="143" cy="46" r="6" fill="currentColor" className="text-primary/70" />
+      {leaves.map(x => (
+        <rect key={x} x={x - 8} y="68" width="16" height="10" rx="3" fill="currentColor" className="text-muted-foreground/35" />
+      ))}
+    </Frame>
+  )
+}
+
+/** A series, then the forecast it is fitted to produce. */
+export function TimeSeriesGraphic({ className }: GraphicProps) {
+  const history = [64, 52, 58, 44, 50, 38, 46, 34]
+  const path = history.map((y, i) => `${i === 0 ? 'M' : 'L'}${24 + i * 14} ${y}`).join(' ')
+  return (
+    <Frame className={className}>
+      <line x1="18" y1="76" x2="184" y2="76" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      {/* the forecast interval widening away from the last observation */}
+      <path d="M122 34 L184 18 L184 54 Z" fill="currentColor" className="text-primary/15" />
+      <path d={path} fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" className="text-primary" />
+      <path d="M122 34 L184 26" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray="5 4" strokeLinecap="round" className="text-primary/70" />
+      <line x1="122" y1="14" x2="122" y2="76" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 3" className="text-muted-foreground/40" />
+    </Frame>
+  )
+}
+
+/** A development triangle, latest diagonal picked out. */
+export function TriangleGraphic({ className }: GraphicProps) {
+  const rows = 5
+  const cells: { x: number; y: number; latest: boolean }[] = []
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < rows - r; c++) {
+      cells.push({ x: 56 + c * 22, y: 14 + r * 14, latest: c === rows - r - 1 })
+    }
+  }
+  return (
+    <Frame className={className}>
+      {cells.map((cell, i) => (
+        <rect
+          key={i}
+          x={cell.x}
+          y={cell.y}
+          width="19"
+          height="11"
+          rx="2.5"
+          fill="currentColor"
+          className={cell.latest ? 'text-primary/70' : 'text-muted-foreground/25'}
+        />
+      ))}
+      {/* the accident years down the side */}
+      {Array.from({ length: rows }, (_, r) => (
+        <rect key={r} x="30" y={14 + r * 14} width="18" height="11" rx="2.5" fill="currentColor" className="text-muted-foreground/40" />
+      ))}
+    </Frame>
+  )
+}
+
+/** The rate indication: what is needed against what is collected. */
+export function RateIndicationGraphic({ className }: GraphicProps) {
+  const need = [
+    { h: 30, cls: 'text-primary/75' },
+    { h: 12, cls: 'text-primary/45' },
+    { h: 10, cls: 'text-primary/25' },
+  ]
+  let acc = 0
+  return (
+    <Frame className={className}>
+      <line x1="26" y1="74" x2="182" y2="74" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      {/* premium as collected today */}
+      <rect x="52" y="32" width="40" height="42" rx="3" fill="currentColor" className="text-muted-foreground/30" />
+      {/* losses, LAE and expenses stacked into what the rate has to cover */}
+      {need.map((seg, i) => {
+        const y = 74 - acc - seg.h
+        acc += seg.h
+        return <rect key={i} x="120" y={y} width="40" height={seg.h} rx="3" fill="currentColor" className={seg.cls} />
+      })}
+      <line x1="48" y1="32" x2="166" y2="32" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 3" className="text-muted-foreground/45" />
+      {/* the gap between them, which is the indicated change */}
+      <line x1="172" y1="30" x2="172" y2="18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-primary" />
+      <polyline points="167,23 172,17 177,23" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-primary" />
+    </Frame>
+  )
+}
+
+/** Past papers, worked: a stack of sittings with the top one marked. */
+export function PastPapersGraphic({ className }: GraphicProps) {
+  return (
+    <Frame className={className}>
+      {[{ dx: -16, dy: 8, cls: 'text-muted-foreground/20' }, { dx: -8, dy: 4, cls: 'text-muted-foreground/30' }].map(s => (
+        <rect key={s.dx} x={82 + s.dx} y={14 + s.dy} width="52" height="60" rx="4" fill="currentColor" className={s.cls} />
+      ))}
+      <rect x="82" y="14" width="52" height="60" rx="4" fill="currentColor" className="text-card" />
+      <rect x="82" y="14" width="52" height="60" rx="4" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/60" />
+      {[26, 34, 42, 50].map(y => (
+        <line key={y} x1="90" y1={y} x2={y === 50 ? 114 : 126} y2={y} stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-muted-foreground/30" />
+      ))}
+      <polyline
+        points="92,63 100,71 124,58"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-primary"
+      />
+    </Frame>
+  )
+}
+
 /** The four gaps, as a checklist. */
 export function GapsGraphic({ className }: GraphicProps) {
   return (
@@ -381,11 +727,6 @@ export function GapsGraphic({ className }: GraphicProps) {
       })}
     </Frame>
   )
-}
-
-/** 4 hours, 45 questions (Exam MAS-I). */
-export function FormatMasIGraphic({ className }: GraphicProps) {
-  return <FormatFrame className={className} questions={45} done={18} />
 }
 
 /** The three syllabus sections as one bar, with the largest one filled. */

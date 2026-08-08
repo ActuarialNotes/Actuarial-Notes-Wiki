@@ -101,10 +101,11 @@ server-side record, so there is nothing to show until they do.
 The card borrows the orientation cards' shell (`ExamGuideCards`) and is passed to them as
 `leadCard`, taking the first column of that (desktop-capped, `max-w-xl`) three-column row —
 readiness, then the two guides. At a third of a phone's width the cards drop their title icon
-and step the title down a size; the dial scales with the card the way a guide cover does. Exam
-pages that carry no `<div class="exam-guides"></div>` (everything but P and FM today) get the
-card from a marker `WikiArticle` inserts under the "Learning Objectives" heading instead, in
-the same capped three-column grid so it lands at the same width.
+and step the title down a size; the dial and the guide covers are drawn at the same size (88,
+scaling down with the card) so the row reads as three marks of equal weight. Exam pages that
+carry no `<div class="exam-guides"></div>` (everything but P, FM, MAS-I, MAS-II and Exam 5
+today) get the card from a marker `WikiArticle` inserts under the "Learning Objectives"
+heading instead, in the same capped three-column grid so it lands at the same width.
 
 ## Colour
 

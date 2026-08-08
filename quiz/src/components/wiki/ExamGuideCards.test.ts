@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { rewriteGuideLinks } from '@/components/wiki/ExamGuideCards'
 import { markExamGuides, EXAM_GUIDES_MARKER } from '@/components/wiki/WikiArticle'
 import { EXAM_GUIDES, guidesForExam } from '@/data/examGuides'
+import { examIdFromFile } from '@/lib/wikiRoutes'
 
 // The exam-page orientation cards. Two things are worth pinning: the marker
 // handshake between the vault markdown and the renderer (silently losing it
@@ -51,12 +52,17 @@ describe('EXAM_GUIDES', () => {
     expect(guidesForExam('P-1')).toHaveLength(2)
     expect(guidesForExam('FM-2')).toHaveLength(2)
     expect(guidesForExam('MAS-I')).toHaveLength(2)
-    expect(guidesForExam('5')).toEqual([])
+    expect(guidesForExam('MAS-II')).toHaveLength(2)
+    // "Exam 5 (CAS)" has no dash, so the id picks up the -1 suffix.
+    expect(guidesForExam(examIdFromFile('Exam 5 (CAS).md'))).toHaveLength(2)
+    expect(guidesForExam('6u-1')).toEqual([])
   })
 
-  it('gives every guide a title and at least two pages', () => {
+  it('gives every guide a title, a cover and at least two pages', () => {
     for (const guide of guides) {
       expect(guide.title.length).toBeGreaterThan(0)
+      // The card face is its own square mark, not the first page's wide graphic.
+      expect(typeof guide.Cover).toBe('function')
       // One page would not need the paging chrome.
       expect(guide.pages.length).toBeGreaterThanOrEqual(2)
     }

@@ -72,18 +72,29 @@ are all one tap away, and a card that is a third of a phone wide has room for on
 ## What the popup shows
 
 1. The overall dial and the band.
-2. **How it's scored** — one row per criterion: its percentage, its weight, and a one-line
-   tally of what the number counts (`detail`, e.g. `7/87 at Level 3 · 49 new`). No prose
-   explaining the scoring: the criterion names and the tally carry it, and this document is
-   where the reasoning lives. The keystone row carries the exam's
-   keystone list as chips with mastery dots; tapping one opens that concept in the concept
-   popup, on the exam's full concept list so Previous/Next still walks the whole syllabus.
-   **This is the only surface that names all of an exam's keystones.**
-3. **Syllabus sections** — the per-section bars, in syllabus order. The bars themselves show
-   which sections are behind, so no line names them.
+2. One expandable row per criterion — **Syllabus coverage** and **Keystone concepts** — and
+   nothing else. Each row is its percentage, its weight, a bar, and a one-line tally of what
+   the number counts (`detail`, e.g. `7/87 at Level 3 · 49 new`). No prose explaining the
+   scoring and no heading over the pair: the criterion names and the tally carry it, and this
+   document is where the reasoning lives.
 
-Signed-out readers see the card at 0 with a line explaining that the score is built from
-answered questions — mastery is a server-side record, so there is nothing to show.
+Both rows start **collapsed** and expand (chevron on the right; the whole row is the tap
+target) onto the evidence behind their own number, so the breakdown is nested under the
+criterion it scores rather than sitting in a section of its own:
+
+- **Syllabus coverage** → the per-learning-objective bars, in syllabus order. The bars
+  themselves show which sections are behind, so no line names them.
+- **Keystone concepts** → the exam's keystone list as chips with mastery dots; tapping one
+  opens that concept in the concept popup, on the exam's full concept list so Previous/Next
+  still walks the whole syllabus. **This is the only surface that names all of an exam's
+  keystones.**
+
+A criterion with nothing to expand (no sections parsed, or an exam with no keystone
+catalogue) renders without a chevron rather than opening onto an empty panel.
+
+Signed-out readers see the card at 0 and, in place of the criteria explanation, a **Sign in**
+button (to `/auth`) under the dial with "Track learning progress" beneath it — mastery is a
+server-side record, so there is nothing to show until they do.
 
 ## Placement
 

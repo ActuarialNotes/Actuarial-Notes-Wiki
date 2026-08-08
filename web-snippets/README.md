@@ -99,27 +99,42 @@ The one thing that can still override them is a host rule using `!important`.
 If something looks wrong after pasting, check for `!important` in the site's
 stylesheet and add `!important` to the matching line in the snippet.
 
-### Why the flip card avoids `aspect-ratio`
+### Keep the flip card boring
 
-Everything inside the flip card is absolutely positioned, so it contributes no
-height of its own — whatever sets the card's height is a single point of
-failure, and if that fails the widget collapses to 0px and disappears
-completely. It once did exactly that: fine in Elementor's editor, invisible
-once published.
+The flip card previewed correctly in Elementor and then rendered as **nothing
+at all** on the published page. It took three attempts to fix because each
+one guessed at a different culprit and patched only that.
 
-So the height comes from a `padding-top: 133.3333%` spacer (the pre-2015
-aspect-ratio trick) rather than the modern `aspect-ratio` one-liner, and the
-structural boxes use `top/left/right/bottom` rather than `inset`. Both are
-things a CSS minifier on a published WordPress page can mangle, and
-`aspect-ratio` additionally has a known bad interaction with
-`container-type: inline-size`.
+What actually settled it was comparing feature usage across the three
+snippets. `mini-quiz` and `study-guide-radial` published correctly every time;
+the flip card was the *only* one using `aspect-ratio`, `container-type`/`cqw`,
+`clamp()`, 3D transforms (`perspective`, `preserve-3d`,
+`backface-visibility`), and an unguarded `mask-composite` ring. Rather than
+keep bisecting which of those broke on the live site, the card was rebuilt
+from the same plain vocabulary the two working snippets use.
 
-For the same reason every `cqw` value is written as a px fallback followed by
-`clamp(min, Ncqw, max)`. The clamp is not cosmetic: if the container context
-is ever lost, `cqw` stays valid CSS but silently resolves against the
-*viewport* instead — `8cqw` becomes ~94px on a desktop and bursts the card
-apart, and because the value is still valid no plain fallback would ever kick
-in. The clamp caps it.
+The rules that keep it safe, in rough order of importance:
+
+1. **The front face is in normal flow**, so the card's height is real content
+   height. Nothing derives height from width. This is the big one: everything
+   inside the old card was absolutely positioned, so its height rested
+   entirely on one declaration, and losing that made the whole widget 0px tall
+   and invisible.
+2. **Plain px sizing.** No container queries, no `clamp()`. `cqw` is
+   particularly treacherous here: with no container context it stays *valid*
+   CSS but resolves against the viewport, so `8cqw` became ~94px of padding
+   and no fallback could ever catch it.
+3. **The flip is an opacity cross-fade, not a 3D transform** — which also
+   matches what the app actually does (`CollectCard3D.tsx`: "a cross-fade
+   between panes, not a 3D flip").
+4. **The gradient ring is an enhancement inside `@supports`**, with a plain
+   2px border as the base. Unguarded, a dropped `mask-composite` turns that
+   ring into a solid gradient block covering the card's text.
+
+The property worth preserving: there is now no failure mode that renders
+nothing. Strip the snippet's CSS entirely and you still get readable text.
+If you want the 3D flip back, add it as an enhancement — just don't make the
+card's size depend on it.
 
 ### Surviving a page builder's re-renders
 

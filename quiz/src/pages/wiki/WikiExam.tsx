@@ -103,7 +103,7 @@ export default function WikiExam() {
   const [searchParams] = useSearchParams()
   const conceptParam = searchParams.get('concept')
   const examFileName = fromSlug(slug)
-  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setStudyPlan, setIsBeta } = useWikiPage()
+  const { setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setBackLink, setStudyPlan, setIsBeta } = useWikiPage()
   const openAt = useConceptPopup(s => s.openAt)
   const [content, setContent] = useState<string | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -138,6 +138,18 @@ export default function WikiExam() {
       <ExamStatusBadge progressKey={progressKey} size="sm" />
     </span>
   ), [progressKey])
+
+  const backLink = useMemo(() => (
+    <Link
+      to="/wiki"
+      state={{ fromExam: true }}
+      aria-label="All exams"
+      title="All exams"
+      className="inline-flex items-center justify-center shrink-0 -ml-1.5 h-7 w-7 rounded-full text-muted-foreground hover:text-foreground hover:bg-accent transition-colors not-prose"
+    >
+      <ChevronLeft className="h-5 w-5" />
+    </Link>
+  ), [])
 
   const extractedTitle = useMemo(() => {
     if (!content) return null
@@ -251,6 +263,10 @@ export default function WikiExam() {
     setPageTitleBadge(smallTitleBadge)
   }, [smallTitleBadge, setPageTitleBadge])
 
+  useEffect(() => {
+    setBackLink(backLink)
+  }, [backLink, setBackLink])
+
   // Feed today's study plan into the sticky header (button + expandable list).
   useEffect(() => {
     if (!studyPlanRefs) {
@@ -352,10 +368,6 @@ export default function WikiExam() {
 
   return (
     <div className="space-y-4">
-      <Link to="/wiki" state={{ fromExam: true }} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
-        <ChevronLeft className="h-4 w-4" /> All exams
-      </Link>
-
       {status === 'loading' && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Loading {examFileName}…

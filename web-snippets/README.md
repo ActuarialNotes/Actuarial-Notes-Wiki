@@ -32,12 +32,37 @@ repo build. They exist purely as copy/paste source for the marketing site.
 
 ## How to use
 
-Each file has a clearly marked `COPY START` / `COPY END` block. Everything
-inside that block — the markup, its `<style>`, and its `<script>` — is meant
-to be pasted as one chunk into a custom-HTML embed block on the site (Webflow
-embed, WordPress HTML block, Squarespace code block, etc.). The surrounding
-`<html>/<head>/<body>` scaffolding exists only so the snippet previews
-correctly on its own and does not need to travel with the copy/paste block.
+**Paste from `embed/`, not from this directory.**
+
+```
+web-snippets/embed/*.html   ← paste these (widget only, nothing else)
+web-snippets/*.html         ← open these in a browser to preview
+```
+
+Each file in `embed/` contains only the widget — markup, its `<style>` and its
+`<script>`, and nothing more. Select all, copy, paste into your CMS block
+(Elementor **HTML** widget, WordPress Custom HTML, Webflow embed, Squarespace
+code block). There is nothing to trim.
+
+The files in this directory are *preview pages*: complete standalone documents
+that wrap the widget in demo scaffolding — a mock 3-column hero row — so you
+can see how it behaves in a realistic layout. **Do not paste a preview page
+into your site.** Its demo columns will render on top of your real ones and
+squeeze the widget into a fraction of its intended width.
+
+Put each widget in its own CMS block so the builder's own spacing controls
+apply between them.
+
+### Regenerating the embed files
+
+`embed/` is generated from the `COPY START` / `COPY END` block of each preview
+file. After editing a preview file, re-run:
+
+```bash
+python3 web-snippets/build-embeds.py
+```
+
+Edit the preview files, never `embed/` — hand edits there are overwritten.
 
 ### Sizing
 
@@ -74,12 +99,26 @@ The one thing that can still override them is a host rule using `!important`.
 If something looks wrong after pasting, check for `!important` in the site's
 stylesheet and add `!important` to the matching line in the snippet.
 
+### Surviving a page builder's re-renders
+
+Elementor's live editor re-renders a widget after its script has already run,
+and AJAX page loads can inject one later still. Either would silently kill
+handlers that were bound to individual elements, leaving a card that won't
+flip or buttons that do nothing on a page that looks fine.
+
+So the flip card and the quiz attach a **single delegated listener to the
+document** and read their state back out of the DOM — nothing is bound
+per-element, so replacing the markup changes nothing. The radial draws itself
+and can't work that way, so it re-scans on a debounced `MutationObserver`
+(at most one scan per frame) and redraws if it finds an undrawn instance.
+
+All three are guarded so they stay correct when pasted more than once, and
+when the same script runs more than once on a page.
+
 ### Other notes
 
 - No external requests, fonts, or libraries — everything is inline, so these
   work inside CSP-restricted embed widgets.
-- Each script only queries within its own widget instances and marks them as
-  bound, so a snippet can safely be pasted more than once on the same page.
 - Respects `prefers-reduced-motion` (foil shimmer, flip, and wedge hover
   transitions are disabled for users who've asked for reduced motion).
 - The radial ships with demo data for Exam P — edit `SYLLABUS`, `KEYSTONES`

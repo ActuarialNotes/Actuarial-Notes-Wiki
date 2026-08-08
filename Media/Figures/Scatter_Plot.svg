@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A curved relationship that a correlation of zero would hide</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Two variables, one point per record</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">read direction, form, strength, outliers</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">r near 0 rules out a line, not a curve</text>
+  <line x1="68" y1="340" x2="336" y2="340" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="340" x2="68" y2="104" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="83.18" y1="340" x2="83.18" y2="344" class="tick"/>
+  <text x="83.18" y="356" text-anchor="middle" class="sm dim">20</text>
+  <line x1="159.06" y1="340" x2="159.06" y2="344" class="tick"/>
+  <text x="159.06" y="356" text-anchor="middle" class="sm dim">40</text>
+  <line x1="234.94" y1="340" x2="234.94" y2="344" class="tick"/>
+  <text x="234.94" y="356" text-anchor="middle" class="sm dim">60</text>
+  <line x1="310.82" y1="340" x2="310.82" y2="344" class="tick"/>
+  <text x="310.82" y="356" text-anchor="middle" class="sm dim">80</text>
+  <text x="326" y="372" text-anchor="end" class="sm dim">driver age</text>
+  <text x="64" y="100" text-anchor="start" class="sm dim">pure premium</text>
+  <circle cx="296.37" cy="209.84" r="3" fill="#3b82f6"/>
+  <circle cx="153.06" cy="260.56" r="3" fill="#3b82f6"/>
+  <circle cx="279" cy="219.17" r="3" fill="#3b82f6"/>
+  <circle cx="82.91" cy="253.09" r="3" fill="#3b82f6"/>
+  <circle cx="118.63" cy="292.64" r="3" fill="#3b82f6"/>
+  <circle cx="196.24" cy="269.81" r="3" fill="#3b82f6"/>
+  <circle cx="168.01" cy="306.69" r="3" fill="#3b82f6"/>
+  <circle cx="291.91" cy="210.08" r="3" fill="#3b82f6"/>
+  <circle cx="197.17" cy="303.93" r="3" fill="#3b82f6"/>
+  <circle cx="266.67" cy="230.94" r="3" fill="#3b82f6"/>
+  <circle cx="286.33" cy="245.78" r="3" fill="#3b82f6"/>
+  <circle cx="123.69" cy="285.77" r="3" fill="#3b82f6"/>
+  <circle cx="138.07" cy="258.15" r="3" fill="#3b82f6"/>
+  <circle cx="96.53" cy="238.65" r="3" fill="#3b82f6"/>
+  <circle cx="291.77" cy="234.53" r="3" fill="#3b82f6"/>
+  <circle cx="182.49" cy="309.14" r="3" fill="#3b82f6"/>
+  <circle cx="103.09" cy="230.84" r="3" fill="#3b82f6"/>
+  <circle cx="201.08" cy="311.14" r="3" fill="#3b82f6"/>
+  <circle cx="99.52" cy="256" r="3" fill="#3b82f6"/>
+  <circle cx="157.36" cy="305.21" r="3" fill="#3b82f6"/>
+  <circle cx="175.14" cy="275.85" r="3" fill="#3b82f6"/>
+  <circle cx="83.14" cy="219.89" r="3" fill="#3b82f6"/>
+  <circle cx="264.42" cy="244.83" r="3" fill="#3b82f6"/>
+  <circle cx="107.32" cy="264.57" r="3" fill="#3b82f6"/>
+  <circle cx="300.37" cy="219.95" r="3" fill="#3b82f6"/>
+  <circle cx="170.89" cy="279.23" r="3" fill="#3b82f6"/>
+  <circle cx="268.85" cy="269.34" r="3" fill="#3b82f6"/>
+  <circle cx="138" cy="303.31" r="3" fill="#3b82f6"/>
+  <circle cx="78.57" cy="218.06" r="3" fill="#3b82f6"/>
+  <circle cx="204.43" cy="276.3" r="3" fill="#3b82f6"/>
+  <polyline points="68,217.51 69.43,219.44 70.87,221.35 72.3,223.24 73.73,225.1 75.17,226.93 76.6,228.75 78.03,230.53 79.47,232.3 80.9,234.03 82.33,235.75 83.77,237.44 85.2,239.1 86.63,240.74 88.07,242.36 89.5,243.95 90.93,245.52 92.37,247.06 93.8,248.58 95.23,250.07 96.67,251.54 98.1,252.98 99.53,254.4 100.97,255.8 102.4,257.17 103.83,258.51 105.27,259.83 106.7,261.13 108.13,262.4 109.57,263.65 111,264.88 112.43,266.07 113.87,267.25 115.3,268.4 116.73,269.52 118.17,270.63 119.6,271.7 121.03,272.75 122.47,273.78 123.9,274.78 125.33,275.76 126.77,276.72 128.2,277.65 129.63,278.55 131.07,279.43 132.5,280.29 133.93,281.12 135.37,281.92 136.8,282.71 138.23,283.46 139.67,284.2 141.1,284.91 142.53,285.59 143.97,286.25 145.4,286.89 146.83,287.5 148.27,288.08 149.7,288.64 151.13,289.18 152.57,289.69 154,290.18 155.43,290.65 156.87,291.08 158.3,291.5 159.73,291.89 161.17,292.25 162.6,292.6 164.03,292.91 165.47,293.2 166.9,293.47 168.33,293.71 169.77,293.93 171.2,294.13 172.63,294.3 174.07,294.44 175.5,294.56 176.93,294.66 178.37,294.73 179.8,294.78 181.23,294.8 182.67,294.8 184.1,294.77 185.53,294.72 186.97,294.64 188.4,294.54 189.83,294.42 191.27,294.27 192.7,294.09 194.13,293.9 195.57,293.67 197,293.43 198.43,293.15 199.87,292.86 201.3,292.54 202.73,292.19 204.17,291.82 205.6,291.43 207.03,291.01 208.47,290.57 209.9,290.1 211.33,289.6 212.77,289.09 214.2,288.55 215.63,287.98 217.07,287.39 218.5,286.77 219.93,286.14 221.37,285.47 222.8,284.78 224.23,284.07 225.67,283.33 227.1,282.57 228.53,281.78 229.97,280.97 231.4,280.14 232.83,279.28 234.27,278.39 235.7,277.48 237.13,276.55 238.57,275.59 240,274.61 241.43,273.6 242.87,272.57 244.3,271.51 245.73,270.43 247.17,269.33 248.6,268.2 250.03,267.04 251.47,265.86 252.9,264.66 254.33,263.43 255.77,262.18 257.2,260.9 258.63,259.6 260.07,258.28 261.5,256.93 262.93,255.55 264.37,254.15 265.8,252.73 267.23,251.28 268.67,249.81 270.1,248.31 271.53,246.79 272.97,245.24 274.4,243.67 275.83,242.07 277.27,240.45 278.7,238.81 280.13,237.14 281.57,235.45 283,233.73 284.43,231.99 285.87,230.22 287.3,228.43 288.73,226.61 290.17,224.77 291.6,222.91 293.03,221.02 294.47,219.1 295.9,217.16 297.33,215.2 298.77,213.21 300.2,211.2 301.63,209.16 303.07,207.1 304.5,205.02 305.93,202.91 307.37,200.77 308.8,198.61 310.23,196.43 311.67,194.22 313.1,191.99 314.53,189.73 315.97,187.45 317.4,185.14 318.83,182.81 320.27,180.46 321.7,178.08 323.13,175.67 324.57,173.24 326,170.79" class="curve dash" stroke="#e11d48" stroke-width="2.2"/>
+  <text x="197" y="141.12" text-anchor="middle" class="sm bold" fill="#e11d48">r = −0.04</text>
+  <text x="32" y="384" text-anchor="start" class="sm dim">band the variable or add a squared term</text>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Observed and fitted averages compared across the range of one predictor</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Does the model track the data here?</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">compare E[y | x] observed vs fitted</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">one predictor at a time</text>
+  <line x1="66" y1="340" x2="336" y2="340" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="66" y1="340" x2="66" y2="104" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <text x="326" y="372" text-anchor="end" class="sm dim">vehicle age</text>
+  <text x="62" y="100" text-anchor="start" class="sm dim">frequency</text>
+  <polyline points="86.8,264.67 118,249.6 149.2,223.23 180.4,189.33 211.6,166.73 242.8,162.97 274,174.27 305.2,196.87" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <circle cx="86.8" cy="264.67" r="3.2" fill="#3b82f6"/>
+  <circle cx="118" cy="249.6" r="3.2" fill="#3b82f6"/>
+  <circle cx="149.2" cy="223.23" r="3.2" fill="#3b82f6"/>
+  <circle cx="180.4" cy="189.33" r="3.2" fill="#3b82f6"/>
+  <circle cx="211.6" cy="166.73" r="3.2" fill="#3b82f6"/>
+  <circle cx="242.8" cy="162.97" r="3.2" fill="#3b82f6"/>
+  <circle cx="274" cy="174.27" r="3.2" fill="#3b82f6"/>
+  <circle cx="305.2" cy="196.87" r="3.2" fill="#3b82f6"/>
+  <polyline points="66,268.43 67.44,267.81 68.89,267.18 70.33,266.55 71.78,265.92 73.22,265.29 74.67,264.67 76.11,264.04 77.56,263.41 79,262.78 80.44,262.16 81.89,261.53 83.33,260.9 84.78,260.27 86.22,259.64 87.67,259.02 89.11,258.39 90.56,257.76 92,257.13 93.44,256.51 94.89,255.88 96.33,255.25 97.78,254.62 99.22,253.99 100.67,253.37 102.11,252.74 103.56,252.11 105,251.48 106.44,250.86 107.89,250.23 109.33,249.6 110.78,248.97 112.22,248.34 113.67,247.72 115.11,247.09 116.56,246.46 118,245.83 119.44,245.21 120.89,244.58 122.33,243.95 123.78,243.32 125.22,242.69 126.67,242.07 128.11,241.44 129.56,240.81 131,240.18 132.44,239.56 133.89,238.93 135.33,238.3 136.78,237.67 138.22,237.04 139.67,236.42 141.11,235.79 142.56,235.16 144,234.53 145.44,233.91 146.89,233.28 148.33,232.65 149.78,232.02 151.22,231.39 152.67,230.77 154.11,230.14 155.56,229.51 157,228.88 158.44,228.26 159.89,227.63 161.33,227 162.78,226.37 164.22,225.74 165.67,225.12 167.11,224.49 168.56,223.86 170,223.23 171.44,222.61 172.89,221.98 174.33,221.35 175.78,220.72 177.22,220.09 178.67,219.47 180.11,218.84 181.56,218.21 183,217.58 184.44,216.96 185.89,216.33 187.33,215.7 188.78,215.07 190.22,214.44 191.67,213.82 193.11,213.19 194.56,212.56 196,211.93 197.44,211.31 198.89,210.68 200.33,210.05 201.78,209.42 203.22,208.79 204.67,208.17 206.11,207.54 207.56,206.91 209,206.28 210.44,205.66 211.89,205.03 213.33,204.4 214.78,203.77 216.22,203.14 217.67,202.52 219.11,201.89 220.56,201.26 222,200.63 223.44,200.01 224.89,199.38 226.33,198.75 227.78,198.12 229.22,197.49 230.67,196.87 232.11,196.24 233.56,195.61 235,194.98 236.44,194.36 237.89,193.73 239.33,193.1 240.78,192.47 242.22,191.84 243.67,191.22 245.11,190.59 246.56,189.96 248,189.33 249.44,188.71 250.89,188.08 252.33,187.45 253.78,186.82 255.22,186.19 256.67,185.57 258.11,184.94 259.56,184.31 261,183.68 262.44,183.06 263.89,182.43 265.33,181.8 266.78,181.17 268.22,180.54 269.67,179.92 271.11,179.29 272.56,178.66 274,178.03 275.44,177.41 276.89,176.78 278.33,176.15 279.78,175.52 281.22,174.89 282.67,174.27 284.11,173.64 285.56,173.01 287,172.38 288.44,171.76 289.89,171.13 291.33,170.5 292.78,169.87 294.22,169.24 295.67,168.62 297.11,167.99 298.56,167.36 300,166.73 301.44,166.11 302.89,165.48 304.33,164.85 305.78,164.22 307.22,163.59 308.67,162.97 310.11,162.34 311.56,161.71 313,161.08 314.44,160.46 315.89,159.83 317.33,159.2 318.78,158.57 320.22,157.94 321.67,157.32 323.11,156.69 324.56,156.06 326,155.43" class="curve dash" stroke="#e11d48" stroke-width="2.2"/>
+  <text x="144" y="170.5" text-anchor="start" class="sm" fill="#3b82f6">observed</text>
+  <text x="222" y="218.63" text-anchor="start" class="sm" fill="#e11d48">fitted</text>
+  <text x="32" y="384" text-anchor="start" class="sm dim">the gap at both ends: add a curved term</text>
+</svg>

@@ -7,7 +7,7 @@ import {
   CalculatorGraphic,
   ClockCover,
   CredibilityGraphic,
-  DiagnosticsGraphic,
+  DiagnosticPanelsGraphic,
   DistributionsGraphic,
   FormatFmGraphic,
   FormatGraphic,
@@ -18,16 +18,20 @@ import {
   GapsGraphic,
   ImmunizationGraphic,
   JointRegionGraphic,
+  LikelihoodGraphic,
   MixedModelGraphic,
+  ModelOutputGraphic,
   NoAidSheetGraphic,
   PartialCreditGraphic,
   PastPapersGraphic,
   PayoutGraphic,
-  PoissonProcessGraphic,
+  PoissonStreamGraphic,
   RateIndicationGraphic,
-  RegressionGraphic,
+  RegimeShiftGraphic,
   ScoreScaleGraphic,
+  SectionWeightsGraphic,
   StudyCover,
+  SurvivalCurveGraphic,
   TimeSeriesGraphic,
   TreeGraphic,
   TriangleGraphic,
@@ -293,67 +297,60 @@ const EXAM_FM_GUIDES: ExamGuide[] = [
   },
 ]
 
-/**
- * The CAS multiple-choice exams share a sitting: 4 hours, 45 questions, the
- * same approved calculators and the same 0–10 scale. Only the pacing advice
- * differs by syllabus, so the shared pages are built once here.
- */
-function casMultipleChoiceDayPages(pacing: string): ExamGuidePage[] {
-  return [
-    {
-      title: 'Format and pacing',
-      Graphic: FormatMasGraphic,
-      body: [
-        '**4 hours, 45 multiple-choice questions**, computer-based at a Pearson VUE centre.',
-        '',
-        pacing,
-      ].join('\n'),
-    },
-    {
-      title: 'Tables, but no formula sheet',
-      Graphic: FormulaSheetGraphic,
-      body: [
-        '**No formula sheet is provided.** Every estimator, likelihood, and model formula on the syllabus has to come from memory.',
-        '',
-        'What you *do* get is the CAS **table set** — standard normal, *t*, chi-square and *F* — on-screen. Practise with the same tables, because looking up a critical value fluently is worth a question or two on the day.',
-      ].join('\n'),
-    },
-    {
-      title: 'Approved calculators',
-      Graphic: CalculatorGraphic,
-      body: [
-        'Only these models are allowed:',
-        '',
-        '- TI BA-35',
-        '- TI BA II Plus / BA II Plus Professional',
-        '- TI-30Xa',
-        '- TI-30X II (IIS / IIB)',
-        '- TI-30X MultiView (XS / XB)',
-        '',
-        'Anything else disqualifies the exam. **Bring two**, with fresh batteries.',
-      ].join('\n'),
-    },
-    {
-      title: 'Scoring',
-      Graphic: ScoreScaleGraphic,
-      body: [
-        'Scaled **0–10, with 6 required to pass**. The pass mark reflects the difficulty of the paper, not the performance of the room, so a hard sitting is not a reason to bail.',
-        '',
-        'There is **no penalty for a wrong answer** — never leave a question blank.',
-      ].join('\n'),
-    },
-  ]
-}
-
 const EXAM_MAS_I_GUIDES: ExamGuide[] = [
   {
     id: 'exam-day',
     title: 'Exam Day Tips',
     Icon: Info,
     Cover: ClockCover,
-    pages: casMultipleChoiceDayPages(
-      'That is about **5 minutes 20 seconds per question**, but the paper is not evenly weighted: the extended-linear-model questions carry software output to read, while a [[Poisson Process]] or [[Survival Model]] question is often a single calculation. Bank the short ones first and spend the slack on the long ones.',
-    ),
+    pages: [
+      {
+        title: 'Format and pacing',
+        Graphic: FormatMasGraphic,
+        body: [
+          '**4 hours, 45 multiple-choice questions**, computer-based.',
+          '',
+          'That is a little over **5 minutes per question** — more generous than Exam P or FM, and it needs to be: a Section C question can carry a block of software output that takes a minute to read before any arithmetic starts.',
+        ].join('\n'),
+      },
+      {
+        title: 'Half the paper is one section',
+        Graphic: SectionWeightsGraphic,
+        body: [
+          'The weights are lopsided and the study plan should be too:',
+          '',
+          '- **A. Probability Models** — 20–30%',
+          '- **B. Statistics** — 20–30%',
+          '- **C. Extended Linear Models** — **45–55%**',
+          '',
+          'Section C alone is worth more than A and B together. A candidate who is strong on [[Poisson Process|Poisson processes]] and weak on [[Generalized Linear Model|GLMs]] has it exactly backwards.',
+        ].join('\n'),
+      },
+      {
+        title: 'Approved calculators',
+        Graphic: CalculatorGraphic,
+        body: [
+          'Only these models are allowed:',
+          '',
+          '- TI BA-35',
+          '- TI BA II Plus / BA II Plus Professional',
+          '- TI-30Xa',
+          '- TI-30X II (IIS / IIB)',
+          '- TI-30X MultiView (XS / XB)',
+          '',
+          'Anything else disqualifies the exam. **Bring two**, with fresh batteries.',
+        ].join('\n'),
+      },
+      {
+        title: 'Scoring',
+        Graphic: ScoreScaleGraphic,
+        body: [
+          'Scaled **0–10, with 6 required to pass**. The pass mark is set before the sitting, so you are not competing against the other candidates in the room.',
+          '',
+          'There is **no penalty for a wrong answer** — never leave a question blank.',
+        ].join('\n'),
+      },
+    ],
   },
   {
     id: 'how-to-study',
@@ -362,39 +359,48 @@ const EXAM_MAS_I_GUIDES: ExamGuide[] = [
     Cover: StudyCover,
     pages: [
       {
-        title: 'Probability models first',
-        Graphic: PoissonProcessGraphic,
+        title: 'Start where the marks are',
+        Graphic: ModelOutputGraphic,
         body: [
-          'Section A is **20–30%** and the most self-contained material on the paper — start where you can finish something.',
+          'Section C is 45–55% of the paper, so it gets first claim on your study time — not the last few weeks.',
           '',
-          'Learn the [[Poisson Process]] as a family: thinning, superposition, the compound process, and the exponential waiting time between arrivals. Then the [[Survival Model]] side — the [[Hazard Rate]], the [[Limited Expected Value]], and simple [[Joint Life]] calculations.',
+          'Build it in one order: the [[Exponential Family]] and the [[Link Function]] first, because they are what a [[Generalized Linear Model]] *is*; then the model families ([[Poisson Regression]], [[Logistic Regression]], [[Gamma]] severity, the [[Tweedie Distribution]]); then [[Model Structure]], [[Offset Variable|offsets]] and [[Interaction|interactions]].',
         ].join('\n'),
       },
       {
-        title: 'Statistics is the bridge',
-        Graphic: DistributionsGraphic,
+        title: 'Learn the Poisson process as one family',
+        Graphic: PoissonStreamGraphic,
         body: [
-          'Section B is another **20–30%**, and it is the vocabulary the rest of the exam speaks.',
+          'Section A is mostly one object seen from several angles. Learn the [[Poisson Process]] properly — counts, [[Interarrival Time|interarrival times]], **thinning** and **superposition** — and the variants are short steps from it.',
           '',
-          '[[Maximum Likelihood Estimation]] is the load-bearing skill — set up the likelihood, log it, differentiate, and be ready for [[Censoring]] and [[Truncation]] in the data. Around it sit the estimator properties ([[Unbiasedness]], [[Consistency]], [[Sufficiency]], [[Efficiency]], [[Mean Square Error]]), hypothesis testing, and [[Order Statistics]].',
+          'A [[Nonhomogeneous Poisson Process]] swaps $\\lambda t$ for $\\int \\lambda(u)\\,du$; a [[Compound Poisson Process]] attaches a random size to each event; a [[Mixed Poisson Process]] makes the rate itself random, which is where the [[Negative Binomial Distribution|negative binomial]] comes from.',
         ].join('\n'),
       },
       {
-        title: 'Extended linear models are half the exam',
-        Graphic: RegressionGraphic,
+        title: 'Statistics is criteria plus tests',
+        Graphic: LikelihoodGraphic,
         body: [
-          'Section C is **45–55%** on its own. If your study time runs out, it must not run out here.',
+          'Section B rewards knowing *why* an estimator is judged good, not just how to compute it. [[Maximum Likelihood Estimation]] is the spine; [[Fisher Information]] sets the bound that makes [[Efficiency|efficiency]] mean something; [[Unbiasedness]], [[Consistency]] and [[Mean Square Error]] are the criteria questions actually ask about.',
           '',
-          'The examinable skill is **choosing and reading a model**, not deriving one: pick the distribution and [[Link Function]] that suit the response, handle [[Categorical Predictor|categorical predictors]] and [[Interaction|interactions]], and know what a [[Control Variable|control]] or [[Offset Variable|offset]] variable is doing in a [[Generalized Linear Model]].',
+          'On the testing side, be fluent in the trio [[Hypothesis Testing]], [[Type I Error]] / [[Type II Error]] and the [[Power of a Test]], and read every incomplete-data question carefully — [[Censoring]] and [[Truncation]] change the likelihood in different ways.',
         ].join('\n'),
       },
       {
-        title: 'Then judge the model you fitted',
-        Graphic: DiagnosticsGraphic,
+        title: 'Survival material is small and scoreable',
+        Graphic: SurvivalCurveGraphic,
         body: [
-          'A large share of section C asks whether a fitted model is any good.',
+          'The life-contingencies objectives are a handful of marks that many candidates leave on the table because the material sits outside the rest of the syllabus.',
           '',
-          'Be fluent in [[AIC]], [[BIC]], [[Deviance]] and [[R-Squared]] as a comparison toolkit, and be able to read [[Residual Plot|residual]], [[QQ Plot|QQ]] and [[Added Variable Plot|added-variable]] plots, [[ANOVA]] tables, and [[Parameter Estimate Tables|parameter estimate tables]] straight off a software printout.',
+          'It is genuinely short: the [[Survival Model]] and [[Hazard Rate]], the [[Life Table]] and the probabilities read off it, [[Joint Life]] statuses, and simple [[Whole Life Insurance]] and [[Life Annuity]] values. A weekend of work here is usually worth more than a fifth pass over GLMs.',
+        ].join('\n'),
+      },
+      {
+        title: 'Much of the exam asks you to read',
+        Graphic: DiagnosticPanelsGraphic,
+        body: [
+          'A large share of Section C is interpretation rather than calculation: what a coefficient in a [[Parameter Estimate Tables|parameter estimate table]] means, whether an [[ANOVA]] table supports the extra term, what a [[Residual Plot]] or [[QQ Plot]] rules out.',
+          '',
+          'Practise reading output cold. Given a table, be able to state the relativity $e^{\\beta}$, the [[p-Value|p-value]] verdict, and what you would check next — and given a plot, name the assumption it tests.',
         ].join('\n'),
       },
       {
@@ -403,12 +409,12 @@ const EXAM_MAS_I_GUIDES: ExamGuide[] = [
         body: [
           'The gaps are usually the same four:',
           '',
-          '1. Treating section C as theory instead of output-reading practice',
-          '2. Likelihoods with censored or truncated data',
-          '3. Interpreting a coefficient on the model\'s own scale (a log link is multiplicative)',
-          '4. Speed',
+          '1. Section C started too late',
+          '2. Interpretation questions practised only as calculations',
+          '3. [[Censoring]] versus [[Truncation]] in the likelihood',
+          '4. The survival objectives skipped entirely',
           '',
-          'Work full 45-question papers under the clock — the sections read very differently, and switching between them is its own skill.',
+          'None of them is about difficulty — all four are about where the study time went.',
         ].join('\n'),
       },
     ],
@@ -421,9 +427,51 @@ const EXAM_MAS_II_GUIDES: ExamGuide[] = [
     title: 'Exam Day Tips',
     Icon: Info,
     Cover: ClockCover,
-    pages: casMultipleChoiceDayPages(
-      'That is about **5 minutes 20 seconds per question**. Much of this paper is interpretation — a [[Decision Tree]] to read, a clustering output to judge — so the calculation-heavy [[Credibility]] and [[ARIMA]] questions are where the time actually goes. Do the reading questions first and leave the arithmetic the room it needs.',
-    ),
+    pages: [
+      {
+        title: 'Format and pacing',
+        // Same sitting as MAS-I: 4 hours, 45 questions.
+        Graphic: FormatMasGraphic,
+        body: [
+          '**4 hours, 45 multiple-choice questions**, computer-based — the same sitting as [[Exam MAS-I (CAS)|MAS-I]].',
+          '',
+          'That is about **5 minutes 20 seconds per question**. Much of this paper is interpretation — a [[Decision Tree]] to read, a clustering output to judge — so the calculation-heavy [[Credibility]] and [[ARIMA]] questions are where the time actually goes. Do the reading questions first and leave the arithmetic the room it needs.',
+        ].join('\n'),
+      },
+      {
+        title: 'Tables, but no formula sheet',
+        Graphic: FormulaSheetGraphic,
+        body: [
+          '**No formula sheet is provided.** Every credibility formula, model definition and time-series relationship on the syllabus has to come from memory.',
+          '',
+          'What you *do* get is the CAS **table set** — standard normal, *t*, chi-square and *F* — on-screen. Practise with the same tables, because looking up a critical value fluently is worth a question or two on the day.',
+        ].join('\n'),
+      },
+      {
+        title: 'Approved calculators',
+        Graphic: CalculatorGraphic,
+        body: [
+          'Only these models are allowed:',
+          '',
+          '- TI BA-35',
+          '- TI BA II Plus / BA II Plus Professional',
+          '- TI-30Xa',
+          '- TI-30X II (IIS / IIB)',
+          '- TI-30X MultiView (XS / XB)',
+          '',
+          'Anything else disqualifies the exam. **Bring two**, with fresh batteries.',
+        ].join('\n'),
+      },
+      {
+        title: 'Scoring',
+        Graphic: ScoreScaleGraphic,
+        body: [
+          'Scaled **0–10, with 6 required to pass**. The pass mark is set before the sitting, so you are not competing against the other candidates in the room.',
+          '',
+          'There is **no penalty for a wrong answer** — never leave a question blank.',
+        ].join('\n'),
+      },
+    ],
   },
   {
     id: 'how-to-study',
@@ -562,7 +610,7 @@ const EXAM_5_GUIDES: ExamGuide[] = [
       },
       {
         title: 'Know when a method breaks',
-        Graphic: DiagnosticsGraphic,
+        Graphic: RegimeShiftGraphic,
         body: [
           'The marks above pass level are in the *judgement* parts: which method, and why this one here.',
           '',

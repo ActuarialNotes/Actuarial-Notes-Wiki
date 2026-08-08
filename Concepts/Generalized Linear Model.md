@@ -24,6 +24,8 @@ A **Generalized Linear Model (GLM)** extends ordinary linear regression to allow
 - Model fit is assessed via [[Deviance]], [[AIC]], [[BIC]], and [[Residual Plot]]s
 - **[[ANOVA]] (Analysis of Deviance)** compares nested GLMs
 
+![[Media/Figures/Generalized_Linear_Model.svg|340]]
+
 > [!example]- Poisson GLM for Claim Counts {Example}
 > An actuary models claim counts $N_i \sim \text{Poi}(\mu_i)$ as a function of driver age. The fitted model gives $\ln\hat{\mu}_i = -2.1 + 0.04 \cdot \text{age}_i$. Find the expected claim count for a 30-year-old driver.
 >

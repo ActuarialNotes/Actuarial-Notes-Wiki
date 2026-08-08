@@ -9,6 +9,8 @@
 - **[[Maximum Likelihood Estimation|MLEs]]** are **asymptotically efficient**: their variance converges to the CRLB as $n \to \infty$, even when no finite-sample estimator attains it exactly
 - Efficiency is distinct from [[Consistency]] and [[Unbiasedness]]: an estimator can be consistent and unbiased yet inefficient if a lower-variance unbiased alternative exists
 
+![[Media/Figures/Efficiency.svg|340]]
+
 > [!example]- Comparing Two Unbiased Estimators {Example}
 > For $X_1, \ldots, X_n \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$, consider the sample mean $\bar{X}$ and the sample median $M$ as estimators of $\mu$. Both are unbiased, with $\text{Var}(\bar{X}) = \sigma^2/n$ and $\text{Var}(M) \approx 1.571\,\sigma^2/n$ for large $n$. Which is more efficient?
 >

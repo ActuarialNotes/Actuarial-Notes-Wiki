@@ -500,60 +500,32 @@ export function PartialCreditGraphic({ className }: GraphicProps) {
   )
 }
 
-/** Claims arriving at random times, and the wait between two of them. */
-export function PoissonProcessGraphic({ className }: GraphicProps) {
-  const arrivals = [34, 50, 58, 88, 100, 138, 168]
+/**
+ * A stable series that shifts partway through — the diagnostic that says the
+ * data changed under you, not that the arithmetic went wrong.
+ */
+export function RegimeShiftGraphic({ className }: GraphicProps) {
+  const before = [56, 60, 54, 58, 55, 59]
+  const after = [36, 32, 38, 33, 35, 31]
+  const pts = [...before, ...after].map((y, i) => ({ x: 26 + i * 13.6, y, shifted: i >= before.length }))
   return (
     <Frame className={className}>
-      <line x1="18" y1="52" x2="184" y2="52" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
-      {arrivals.map(x => (
-        <g key={x}>
-          <line x1={x} y1="52" x2={x} y2="30" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-primary" />
-          <circle cx={x} cy="27" r="3.2" fill="currentColor" className="text-primary" />
-        </g>
+      <line x1="18" y1="74" x2="184" y2="74" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      {/* the level each half sits at */}
+      <line x1="22" y1="57" x2="94" y2="57" stroke="currentColor" strokeWidth="1.8" strokeDasharray="4 3" strokeLinecap="round" className="text-muted-foreground/45" />
+      <line x1="104" y1="34" x2="180" y2="34" stroke="currentColor" strokeWidth="1.8" strokeDasharray="4 3" strokeLinecap="round" className="text-muted-foreground/45" />
+      {/* where the operating change lands */}
+      <line x1="99" y1="14" x2="99" y2="74" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-foreground/60" />
+      {pts.map(pt => (
+        <circle
+          key={pt.x}
+          cx={pt.x}
+          cy={pt.y}
+          r="3.4"
+          fill="currentColor"
+          className={pt.shifted ? 'text-primary' : 'text-muted-foreground/55'}
+        />
       ))}
-      {/* the interarrival time, the thing that is actually exponential */}
-      <line x1="100" y1="66" x2="138" y2="66" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-foreground/60" />
-      {[100, 138].map(x => (
-        <line key={x} x1={x} y1="61" x2={x} y2="71" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-foreground/60" />
-      ))}
-    </Frame>
-  )
-}
-
-/** A fitted line through data — the whole extended-linear-model section. */
-export function RegressionGraphic({ className }: GraphicProps) {
-  const points = [
-    [46, 62], [60, 56], [72, 60], [86, 48], [98, 44],
-    [112, 46], [124, 36], [138, 34], [152, 26], [166, 28],
-  ]
-  return (
-    <Frame className={className}>
-      <line x1="30" y1="72" x2="182" y2="72" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
-      <line x1="30" y1="72" x2="30" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
-      <path d="M38 64C74 58 120 40 176 22" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="text-primary" />
-      {points.map(([x, y]) => (
-        <circle key={`${x}-${y}`} cx={x} cy={y} r="3.2" fill="currentColor" className="text-muted-foreground/55" />
-      ))}
-    </Frame>
-  )
-}
-
-/** Residuals about zero: the diagnostic that says whether the fit is any good. */
-export function DiagnosticsGraphic({ className }: GraphicProps) {
-  const residuals = [-9, 6, -4, 11, -7, 3, -12, 8, -3, 5, -6, 10]
-  return (
-    <Frame className={className}>
-      <line x1="20" y1="44" x2="182" y2="44" stroke="currentColor" strokeWidth="2" strokeDasharray="5 4" strokeLinecap="round" className="text-muted-foreground/45" />
-      {residuals.map((r, i) => {
-        const x = 30 + i * 13.5
-        return (
-          <g key={i}>
-            <line x1={x} y1="44" x2={x} y2={44 + r} stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
-            <circle cx={x} cy={44 + r} r="3.2" fill="currentColor" className="text-primary/75" />
-          </g>
-        )
-      })}
     </Frame>
   )
 }
@@ -753,6 +725,171 @@ export function GapsGraphic({ className }: GraphicProps) {
           </g>
         )
       })}
+    </Frame>
+  )
+}
+
+/** The three syllabus sections as one bar, with the largest one filled. */
+export function SectionWeightsGraphic({ className }: GraphicProps) {
+  // Midpoints of the published ranges: 25% / 25% / 50%.
+  const x0 = 20
+  const width = 160
+  const parts = [
+    { w: 0.25, accent: false },
+    { w: 0.25, accent: false },
+    { w: 0.50, accent: true },
+  ]
+  let x = x0
+  return (
+    <Frame className={className}>
+      {parts.map((p, i) => {
+        const w = width * p.w
+        const bar = (
+          <rect
+            key={i}
+            x={x + 2}
+            y="34"
+            width={w - 4}
+            height="20"
+            rx="4"
+            fill="currentColor"
+            className={p.accent ? 'text-primary/75' : 'text-muted-foreground/30'}
+          />
+        )
+        x += w
+        return bar
+      })}
+      <text x={x0 + width * 0.125} y="70" textAnchor="middle" fontSize="11" fill="currentColor" className="text-muted-foreground/70">A</text>
+      <text x={x0 + width * 0.375} y="70" textAnchor="middle" fontSize="11" fill="currentColor" className="text-muted-foreground/70">B</text>
+      <text x={x0 + width * 0.75} y="70" textAnchor="middle" fontSize="12" fontWeight="700" fill="currentColor" className="text-primary">C</text>
+      <text x={x0 + width * 0.75} y="28" textAnchor="middle" fontSize="11" fill="currentColor" className="text-primary/80">half the paper</text>
+    </Frame>
+  )
+}
+
+/** One arrival stream splitting into two thinned streams. */
+export function PoissonStreamGraphic({ className }: GraphicProps) {
+  const arrivals = [40, 58, 72, 96, 118, 134, 160]
+  return (
+    <Frame className={className}>
+      <line x1="20" y1="30" x2="184" y2="30" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      {arrivals.map((x, i) => (
+        <circle key={x} cx={x} cy="30" r="3.6" fill="currentColor" className={i % 3 === 0 ? 'text-primary' : 'text-muted-foreground/55'} />
+      ))}
+      {/* the split */}
+      <path d="M100 36 60 58" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" className="text-muted-foreground/40" />
+      <path d="M100 36 140 58" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 3" strokeLinecap="round" className="text-muted-foreground/40" />
+      <line x1="20" y1="70" x2="96" y2="70" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      <line x1="108" y1="70" x2="184" y2="70" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      {[34, 52, 78].map(x => (
+        <circle key={x} cx={x} cy="70" r="3.4" fill="currentColor" className="text-primary" />
+      ))}
+      {[118, 140, 152, 172].map(x => (
+        <circle key={x} cx={x} cy="70" r="3.4" fill="currentColor" className="text-muted-foreground/55" />
+      ))}
+    </Frame>
+  )
+}
+
+/** A log-likelihood peaking at the estimate. */
+export function LikelihoodGraphic({ className }: GraphicProps) {
+  return (
+    <Frame className={className}>
+      <line x1="26" y1="72" x2="182" y2="72" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      <line x1="26" y1="72" x2="26" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      <path d="M34 70c30 0 40-48 62-48s32 48 62 48" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" className="text-primary" />
+      <line x1="96" y1="72" x2="96" y2="22" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3 3" className="text-muted-foreground/45" />
+      <circle cx="96" cy="22" r="3.8" fill="currentColor" className="text-primary" />
+    </Frame>
+  )
+}
+
+/** A survival curve stepping down with age. */
+export function SurvivalCurveGraphic({ className }: GraphicProps) {
+  return (
+    <Frame className={className}>
+      <line x1="26" y1="72" x2="182" y2="72" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      <line x1="26" y1="72" x2="26" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-muted-foreground/35" />
+      <path
+        d="M26 20h22v7h22v9h22v13h22v16h22v9h22"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        className="text-primary"
+      />
+      <line x1="26" y1="20" x2="176" y2="20" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 3" className="text-muted-foreground/30" />
+    </Frame>
+  )
+}
+
+/** A coefficient table: the output an exam question asks you to read. */
+export function ModelOutputGraphic({ className }: GraphicProps) {
+  const rows = [26, 40, 54, 68]
+  return (
+    <Frame className={className}>
+      <rect x="24" y="14" width="152" height="60" rx="4" fill="currentColor" className="text-card" />
+      <rect x="24" y="14" width="152" height="60" rx="4" fill="none" stroke="currentColor" strokeWidth="2" className="text-muted-foreground/35" />
+      <line x1="24" y1="32" x2="176" y2="32" stroke="currentColor" strokeWidth="1.6" className="text-muted-foreground/35" />
+      {rows.map((y, i) => (
+        <g key={y}>
+          <rect x="32" y={y - 4} width="40" height="5" rx="2.5" fill="currentColor" className={i === 0 ? 'text-muted-foreground/55' : 'text-muted-foreground/30'} />
+          <rect x="82" y={y - 4} width="22" height="5" rx="2.5" fill="currentColor" className="text-muted-foreground/30" />
+          <rect x="112" y={y - 4} width="22" height="5" rx="2.5" fill="currentColor" className="text-muted-foreground/30" />
+          <rect x="142" y={y - 4} width="26" height="5" rx="2.5" fill="currentColor" className={i === 0 ? 'text-muted-foreground/55' : 'text-primary/75'} />
+        </g>
+      ))}
+    </Frame>
+  )
+}
+
+/** Four diagnostic panels, read at a glance. */
+export function DiagnosticPanelsGraphic({ className }: GraphicProps) {
+  const panel = (x: number, y: number, children: ReactNode) => (
+    <g transform={`translate(${x} ${y})`}>
+      <rect x="0" y="0" width="76" height="34" rx="4" fill="currentColor" className="text-card" />
+      <rect x="0" y="0" width="76" height="34" rx="4" fill="none" stroke="currentColor" strokeWidth="1.6" className="text-muted-foreground/30" />
+      {children}
+    </g>
+  )
+  return (
+    <Frame className={className}>
+      {/* residuals in a band */}
+      {panel(20, 10, (
+        <>
+          <line x1="8" y1="17" x2="68" y2="17" stroke="currentColor" strokeWidth="1.4" strokeDasharray="3 3" className="text-muted-foreground/40" />
+          {[12, 22, 30, 40, 50, 60].map((cx, i) => (
+            <circle key={cx} cx={cx} cy={17 + [-6, 4, -3, 6, -5, 2][i]} r="2.2" fill="currentColor" className="text-primary/70" />
+          ))}
+        </>
+      ))}
+      {/* QQ line */}
+      {panel(104, 10, (
+        <>
+          <line x1="8" y1="28" x2="68" y2="6" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 3" className="text-muted-foreground/40" />
+          {[12, 22, 32, 42, 52, 62].map((cx, i) => (
+            <circle key={cx} cx={cx} cy={27 - i * 4 + [0, 1, 0, -1, -2, -4][i]} r="2.2" fill="currentColor" className="text-primary/70" />
+          ))}
+        </>
+      ))}
+      {/* histogram */}
+      {panel(20, 48, (
+        <>
+          {[6, 14, 24, 18, 11, 6].map((h, i) => (
+            <rect key={i} x={10 + i * 10} y={28 - h} width="7" height={h} rx="1.5" fill="currentColor" className="text-primary/55" />
+          ))}
+        </>
+      ))}
+      {/* box plot */}
+      {panel(104, 48, (
+        <>
+          <line x1="10" y1="17" x2="66" y2="17" stroke="currentColor" strokeWidth="1.6" className="text-muted-foreground/45" />
+          <rect x="24" y="10" width="26" height="14" rx="2.5" fill="currentColor" className="text-primary/25" />
+          <rect x="24" y="10" width="26" height="14" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.6" className="text-primary/70" />
+          <line x1="36" y1="10" x2="36" y2="24" stroke="currentColor" strokeWidth="2" className="text-primary" />
+        </>
+      ))}
     </Frame>
   )
 }

@@ -10,6 +10,8 @@ The **Akaike Information Criterion (AIC)** is a model selection measure that bal
 - For small samples, use the **corrected AIC**: $\text{AIC}_c = \text{AIC} + \dfrac{2p(p+1)}{n-p-1}$
 - Compare with [[BIC]], which uses a stronger penalty $\ln(n)$ instead of 2, favoring simpler models more aggressively for large $n$
 
+![[Media/Figures/AIC.svg|340]]
+
 > [!example]- Selecting Between Two GLMs Using AIC {Example}
 > A Poisson GLM with 3 predictors has log-likelihood $\ell_1 = -120$. A simpler GLM with 1 predictor has $\ell_2 = -124$. Which model has lower AIC?
 >

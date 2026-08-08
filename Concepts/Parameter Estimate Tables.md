@@ -16,6 +16,8 @@
 - The **reference level** of a categorical predictor is absorbed into the intercept; other levels are interpreted relative to it
 - Standard errors from GLMs are based on the **Fisher information matrix**
 
+![[Media/Figures/Parameter_Estimate_Tables.svg|340]]
+
 > [!example]- Interpreting GLM Output {Example}
 > A Poisson GLM output shows: Intercept $\hat{\beta}_0 = -1.8$ (SE = 0.2) and Territory B $\hat{\beta}_1 = 0.45$ (SE = 0.15, p = 0.003). The reference is Territory A. Interpret the territory coefficient.
 >

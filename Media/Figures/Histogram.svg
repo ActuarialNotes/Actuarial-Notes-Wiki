@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Binned counts of a right-skewed variable with its density overlaid</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Bin the data, then compare shapes</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">bar height = nⱼ / (n · w)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">area of all bars = 1</text>
+  <line x1="66" y1="342" x2="336" y2="342" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="66" y1="342" x2="66" y2="104" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="66" y1="342" x2="66" y2="346" class="tick"/>
+  <text x="66" y="358" text-anchor="middle" class="sm dim">0</text>
+  <line x1="131" y1="342" x2="131" y2="346" class="tick"/>
+  <text x="131" y="358" text-anchor="middle" class="sm dim">5</text>
+  <line x1="196" y1="342" x2="196" y2="346" class="tick"/>
+  <text x="196" y="358" text-anchor="middle" class="sm dim">10</text>
+  <line x1="261" y1="342" x2="261" y2="346" class="tick"/>
+  <text x="261" y="358" text-anchor="middle" class="sm dim">15</text>
+  <line x1="326" y1="342" x2="326" y2="346" class="tick"/>
+  <text x="326" y="358" text-anchor="middle" class="sm dim">20</text>
+  <text x="326" y="374" text-anchor="end" class="sm dim">claim size (000s)</text>
+  <text x="62" y="100" text-anchor="start" class="sm dim">density</text>
+  <rect x="65.5" y="193.3" width="27" height="148.7" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="91.5" y="141.76" width="27" height="200.24" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="117.5" y="177.44" width="27" height="164.56" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="143.5" y="227.01" width="27" height="114.99" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="169.5" y="266.66" width="27" height="75.34" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="195.5" y="294.42" width="27" height="47.58" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="221.5" y="312.26" width="27" height="29.74" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="247.5" y="324.16" width="27" height="17.84" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="273.5" y="332.09" width="27" height="9.91" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="299.5" y="336.05" width="27" height="5.95" rx="1.5" fill="#3b82f6" fill-opacity="0.55"/>
+  <polyline points="66,342 67.44,309.92 68.89,284.25 70.33,261.74 71.78,241.69 73.22,223.69 74.67,207.51 76.11,192.93 77.56,179.81 79,168.03 80.44,157.46 81.89,148.01 83.33,139.59 84.78,132.13 86.22,125.55 87.67,119.8 89.11,114.8 90.56,114 92,114 93.44,114 94.89,114 96.33,114 97.78,114 99.22,114 100.67,114 102.11,114 103.56,114 105,114 106.44,114 107.89,114 109.33,114 110.78,114 112.22,114 113.67,114 115.11,114 116.56,114 118,114 119.44,114.39 120.89,117.07 122.33,119.85 123.78,122.73 125.22,125.7 126.67,128.74 128.11,131.84 129.56,135 131,138.21 132.44,141.46 133.89,144.74 135.33,148.04 136.78,151.37 138.22,154.7 139.67,158.05 141.11,161.4 142.56,164.74 144,168.08 145.44,171.41 146.89,174.73 148.33,178.02 149.78,181.3 151.22,184.56 152.67,187.78 154.11,190.98 155.56,194.15 157,197.29 158.44,200.39 159.89,203.46 161.33,206.48 162.78,209.47 164.22,212.42 165.67,215.33 167.11,218.2 168.56,221.02 170,223.8 171.44,226.54 172.89,229.23 174.33,231.88 175.78,234.48 177.22,237.04 178.67,239.56 180.11,242.02 181.56,244.44 183,246.82 184.44,249.15 185.89,251.44 187.33,253.68 188.78,255.88 190.22,258.03 191.67,260.14 193.11,262.2 194.56,264.23 196,266.21 197.44,268.14 198.89,270.04 200.33,271.9 201.78,273.71 203.22,275.48 204.67,277.22 206.11,278.91 207.56,280.57 209,282.19 210.44,283.77 211.89,285.31 213.33,286.82 214.78,288.3 216.22,289.73 217.67,291.14 219.11,292.51 220.56,293.85 222,295.15 223.44,296.42 224.89,297.67 226.33,298.88 227.78,300.06 229.22,301.21 230.67,302.33 232.11,303.43 233.56,304.49 235,305.53 236.44,306.55 237.89,307.53 239.33,308.5 240.78,309.43 242.22,310.35 243.67,311.24 245.11,312.1 246.56,312.95 248,313.77 249.44,314.57 250.89,315.34 252.33,316.1 253.78,316.84 255.22,317.56 256.67,318.26 258.11,318.94 259.56,319.6 261,320.24 262.44,320.87 263.89,321.48 265.33,322.07 266.78,322.65 268.22,323.21 269.67,323.75 271.11,324.28 272.56,324.8 274,325.3 275.44,325.79 276.89,326.26 278.33,326.72 279.78,327.17 281.22,327.6 282.67,328.03 284.11,328.44 285.56,328.84 287,329.22 288.44,329.6 289.89,329.97 291.33,330.32 292.78,330.67 294.22,331.01 295.67,331.33 297.11,331.65 298.56,331.96 300,332.26 301.44,332.55 302.89,332.83 304.33,333.11 305.78,333.37 307.22,333.63 308.67,333.88 310.11,334.13 311.56,334.36 313,334.59 314.44,334.82 315.89,335.03 317.33,335.24 318.78,335.45 320.22,335.65 321.67,335.84 323.11,336.02 324.56,336.21 326,336.38" class="curve" stroke="#d97706" stroke-width="2.4"/>
+  <text x="216.8" y="219.08" text-anchor="start" class="sm" fill="#d97706">fitted density</text>
+  <path d="M248,308.3 v-3.6 H256 q5,0 5,-3.3 q0,3.3 5,3.3 H274 v3.6" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+  <text x="261" y="289.3" text-anchor="middle" class="sm dim">bin width w</text>
+</svg>

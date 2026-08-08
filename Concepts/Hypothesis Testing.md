@@ -19,6 +19,8 @@
 - **Power** $= 1 - \beta = P(\text{Reject } H_0 \mid H_1 \text{ true})$
 - Reject $H_0$ when p-value $< \alpha$
 
+![[Media/Figures/Hypothesis_Testing.svg|340]]
+
 > [!example]- One-Sample Z-Test for a Mean {Example}
 > A claims adjuster believes average claim size is \$$5{,}000$. A sample of $n = 100$ claims has $\bar{x} = 5{,}200$ and $\sigma = 800$. Test $H_0: \mu = 5{,}000$ vs. $H_1: \mu > 5{,}000$ at $\alpha = 0.05$.
 >

@@ -10,6 +10,8 @@ An estimator $\hat{\theta}$ of a parameter $\theta$ is **unbiased** if its expec
 - The **UMVUE** (Uniformly Minimum Variance Unbiased Estimator) is the unbiased estimator with smallest variance for all $\theta$
 - **[[Maximum Likelihood Estimation|MLEs]]** are generally **asymptotically** unbiased but may be biased in small samples
 
+![[Media/Figures/Unbiasedness.svg|340]]
+
 > [!example]- Checking Unbiasedness of the Sample Mean {Example}
 > Let $X_1, \ldots, X_n$ be i.i.d. with mean $\mu$. Show that $\bar{X}$ is unbiased for $\mu$.
 >

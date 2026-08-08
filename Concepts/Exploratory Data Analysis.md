@@ -18,6 +18,8 @@
 - **Log transforms** of skewed positive variables (claim sizes, exposures) are common in actuarial EDA
 - EDA informs feature engineering, transformation choices, and the selection of an appropriate [[Generalized Linear Model]] family and [[Link Function]]
 
+![[Media/Figures/Exploratory_Data_Analysis.svg|340]]
+
 > [!example]- Using a Box Plot to Detect Group Differences {Example}
 > An actuary creates box plots of claim severity for four vehicle classes. Three boxes overlap substantially, but the "luxury" class has a noticeably higher median and wider IQR with several high outliers. What modeling decision might this suggest?
 >

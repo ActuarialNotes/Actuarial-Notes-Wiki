@@ -13,6 +13,8 @@ A **Poisson Process** $\{N(t), t \geq 0\}$ is a counting process that models the
 - A Poisson process with rate $\lambda$ **thinned** by probability $p$ produces a Poisson process with rate $\lambda p$
 - **Superposition**: two independent Poisson processes with rates $\lambda_1$ and $\lambda_2$ combine into a Poisson process with rate $\lambda_1 + \lambda_2$
 
+![[Media/Figures/Poisson_Process.svg|340]]
+
 > [!example]- Expected Number of Claims and Probability of More Than 5 {Example}
 > Claims arrive at rate $\lambda = 2$ per month. Find the expected number of claims and the probability of more than 5 claims in 3 months.
 >

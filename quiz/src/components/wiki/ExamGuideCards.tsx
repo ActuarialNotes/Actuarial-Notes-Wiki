@@ -47,17 +47,20 @@ interface CardProps {
 }
 
 function ExamGuideCard({ guide, onOpen }: CardProps) {
-  const { Icon, title, pages } = guide
-  const Cover = pages[0].Graphic
+  const { Icon, title, Cover } = guide
   return (
     <button
       type="button"
       onClick={onOpen}
       className="group flex h-full flex-col rounded-lg bg-card p-3 text-left text-card-foreground shadow-[var(--shadow-card)] transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:p-4"
     >
-      {/* max-h is a backstop: the cover's height follows the card width via the
-          SVG aspect ratio, and the cap only bites on an unusually wide card. */}
-      <Cover className="mb-3 max-h-36" />
+      {/* The cover is a square mark drawn at the readiness dial's size, in the
+          same centred, flex-1 slot that card uses — the wide page graphics used
+          to stand here and, in a third-of-a-phone column, came out barely tall
+          enough to read. Page graphics stay wide; only the card face is square. */}
+      <div className="mb-3 flex flex-1 items-center justify-center">
+        <Cover />
+      </div>
       {/* Title only: the cover carries the subject, so a blurb and a page
           count just crowded a card that is three-up on a phone. The icon is
           dropped at that width for the same reason — it costs a third of the

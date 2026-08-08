@@ -6,6 +6,8 @@
 
 The **Modern Actuarial Statistics I** exam is a 4-hour computer-based CAS exam covering [[Stochastic Processes]], [[Survival Model|Survival Models]], [[Statistics]], and [[Generalized Linear Model|Generalized Linear Models]] as part of the ACAS credentialing pathway.
 
+<div class="exam-guides"></div>
+
 ## Learning Objectives
 
 > [!example]- A. Probability Models (Stochastic Processes and Survival Models) {20–30%}

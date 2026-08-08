@@ -259,8 +259,11 @@ compile — don't "clean up" the flagged code as dead.
 - An exam page may carry a bare `<div class="exam-guides"></div>` marking where the
   **orientation cards** go (two dashboard-style cards, normally just below the exam's intro
   paragraph, each opening a paged popup with a graphic per page — currently "Exam Day Tips"
-  and "How to Study for …", authored for Exam P and Exam FM). The card itself shows only its
-  cover graphic and title. The div is only a position marker: the prose, the paging and the
+  and "How to Study for …", authored for Exam P, Exam FM, MAS-I, MAS-II and Exam 5). The card
+  itself shows only its square cover graphic (the clock / the study curve, drawn at the
+  readiness dial's size — not one of the wide page illustrations) and its title. Note the exam
+  id for a dash-less exam picks up a `-1` suffix, so Exam 5's `EXAM_GUIDES` key is `5-1`.
+  The div is only a position marker: the prose, the paging and the
   illustrations are authored app-side in `quiz/src/data/examGuides.ts` (keyed by the wiki
   exam id) + `components/wiki/ExamGuideGraphics.tsx`, and `WikiArticle` swaps the marker
   for `components/wiki/ExamGuideCards.tsx`. Page bodies are markdown and may use

@@ -1,10 +1,15 @@
 import { create } from 'zustand'
+import { queueCollectedSync } from '@/lib/flashcardSync'
 
 // "Collected" flashcards — a concept becomes collected once the user reads it
 // and passes a basic comprehension check (see CollectConceptModal). Collecting
 // is the first active-learning step and is distinct from manually adding a
 // concept to the flashcard gallery (useFlashcards). State is persisted to
-// localStorage, mirroring the offline-first pattern used elsewhere in the app.
+// localStorage, mirroring the offline-first pattern used elsewhere in the app,
+// and — for signed-in users — mirrored to the user_collected_cards table so the
+// set follows the learner across devices (see lib/flashcardSync.ts). The write
+// is fire-and-forget: localStorage stays the immediate source of truth, so this
+// store's API is still fully synchronous.
 
 export interface CollectedCard {
   name: string
@@ -46,6 +51,12 @@ interface CollectedCardsState {
    */
   collect: (name: string, opts?: { silent?: boolean }) => void
   uncollect: (name: string) => void
+  /**
+   * Replace the whole set from the server (see hooks/useFlashcardSync). Writes
+   * through to localStorage but does *not* queue a server push — the caller
+   * decides whether the merged state needs pushing back.
+   */
+  hydrate: (cards: CollectedCard[]) => void
 }
 
 export const useCollectedCards = create<CollectedCardsState>((set, get) => ({
@@ -56,6 +67,7 @@ export const useCollectedCards = create<CollectedCardsState>((set, get) => ({
     if (cards.some(c => c.name.toLowerCase() === name.toLowerCase())) return
     const next = [...cards, { name, collectedAt: Date.now() }]
     persist(next)
+    queueCollectedSync(next)
     set({ cards: next })
     if (opts?.silent) return
     try {
@@ -65,6 +77,11 @@ export const useCollectedCards = create<CollectedCardsState>((set, get) => ({
   uncollect: name => {
     const next = get().cards.filter(c => c.name.toLowerCase() !== name.toLowerCase())
     persist(next)
+    queueCollectedSync(next)
     set({ cards: next })
+  },
+  hydrate: cards => {
+    persist(cards)
+    set({ cards })
   },
 }))

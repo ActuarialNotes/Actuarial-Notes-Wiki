@@ -19,6 +19,7 @@ import BottomNav from '@/components/BottomNav'
 import OnboardingTour from '@/components/OnboardingTour'
 import SoundEffects from '@/components/SoundEffects'
 import MathFocus from '@/components/MathFocus'
+import FlashcardSync from '@/components/FlashcardSync'
 import Toast from '@/components/Toast'
 import { CollectConceptModal } from '@/components/collect/CollectConceptModal'
 import { useCollect } from '@/hooks/useCollect'
@@ -159,6 +160,7 @@ export default function App({ initialSession }: { initialSession: Session | null
       <GlobalKeyHandler />
       <SoundEffects />
       <AuthProvider initialSession={initialSession}>
+        <FlashcardSync />
         <ExamProgressProvider>
           <div className="min-h-screen bg-background text-foreground flex">
             <Sidebar />

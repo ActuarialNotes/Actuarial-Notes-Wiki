@@ -213,12 +213,21 @@ Other important `lib/` modules:
   `STREAK_ENABLED`, `XP_ENABLED`, `QUESTS_ENABLED`, `MASTERY_ANALYTICS_ENABLED`,
   `LEAGUES_ENABLED`, `DAILY_PLAN_EMAIL_ENABLED`)
 - `research*.ts` (researchOntology / researchMetrics / researchPeriods / researchProjectMeta) — Research-tab logic (flag-gated)
+- `flashcardSync.ts` — cross-device persistence for the flashcard state: the collected
+  set (`hooks/useCollectedCards`) and the deck / custom order / saved packs
+  (`hooks/useFlashcards`). Both stores stay synchronous and localStorage-first; this
+  module holds the pure merge functions and the Supabase reads/writes against
+  `user_collected_cards` / `user_flashcards` / `user_flashcard_packs` (row per card, so
+  two devices converge instead of clobbering). `hooks/useFlashcardSync.ts` orchestrates
+  it, mounted at the app root as `components/FlashcardSync.tsx`. The rule to keep in mind:
+  local state is unioned into the server **once per device per user** (so guest work
+  survives sign-in), and after that the server wins — see `docs/flashcard-collection.md`.
 - `localMasteryStore.ts` / `dailyProgressStore.ts` — localStorage-backed offline fallbacks that sync with Supabase
 - `github.ts` — fetches wiki content from GitHub raw URLs at runtime (for the live site, vs. the build-time bundle)
 - `supabase.ts` — Supabase client + shared row types
 
-`*.test.ts` files sit alongside the modules they test (vitest). There are **53 test files /
-~890 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
+`*.test.ts` files sit alongside the modules they test (vitest). There are **57 test files /
+~940 tests**, concentrated on the trickiest logic (mastery, study plan, parsing, ontology
 matching, the gamification engines, the sound catalogue, and the research/resource-timeline
 modules).
 
@@ -314,7 +323,8 @@ via `supabase secrets set`, never as `VITE_*`.
 
 - `supabase/migrations/` — SQL migrations, dated filenames (`YYYYMMDD_description.sql`).
   They cover: concept mastery, quiz sessions, exam progress, study plan config/cache,
-  user subscriptions/gems/cosmetics, beta codes, daily completions, store expansion, and
+  user subscriptions/gems/cosmetics, beta codes, daily completions, store expansion,
+  flashcard sync (collected cards + deck + saved packs), and
   (most of the recent additions) the flag-gated **research** feature — `research_documents`,
   full-text search, ontology, projects, project questions/sections, cron.
 - `supabase/functions/` — Deno edge functions: Stripe checkout/portal/webhook/sync,

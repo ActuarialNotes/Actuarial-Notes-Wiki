@@ -513,8 +513,11 @@ export function ConceptPopup() {
         </div>
         {/* Listen toggle — sits beside the focus toggle rather than inside the
             action menu, since it's a view switch like focus mode, not an
-            action. Gated by the collect lock like the menu items are. */}
-        {!focusMode && !actionLocked && (
+            action. Survives focus mode for the same reason that toggle does:
+            Listen is most useful with the page full-screen, so there has to be
+            a way in and out of it there. Gated by the collect lock like the
+            menu items are. */}
+        {!actionLocked && (
           <button
             type="button"
             onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false) }}

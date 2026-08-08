@@ -10,6 +10,8 @@
 - **Scaled deviance**: $D^* = D/\phi$ where $\phi$ is the dispersion parameter; under $H_0$ (model is correct), $D^* \approx \chi^2_{n-p}$
 - **Analysis of Deviance**: the difference in deviance between two nested models, $\Delta D = D_{\text{reduced}} - D_{\text{full}} \sim \chi^2_{\Delta p}$, is used to test whether additional predictors significantly improve fit
 
+![[Media/Figures/Deviance.svg|340]]
+
 > [!example]- Analysis of Deviance to Test a Predictor {Example}
 > A Poisson GLM with intercept only has deviance $D_0 = 45.2$ on 49 df. Adding "territory" (3 levels, 2 extra parameters) gives $D_1 = 30.8$ on 47 df. Test whether territory significantly improves fit at $\alpha = 0.05$.
 >

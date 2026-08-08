@@ -10,10 +10,10 @@ derived from which `Exam *.md` syllabus page links the concept (earliest exam wi
 do, noted in a trailing comment); the folder is organisational only — the parser keys checks by
 concept name, not by folder.
 
-**79 of 396 concepts remain.**
+**70 of 423 concepts remain.**
 Regenerate with `python3 scripts/list_missing_checks.py`.
 
-## unassigned — not linked from any Exam page (79)
+## unassigned — not linked from any Exam page (70)
 
 - [ ] AI Agent
 - [ ] Accrued Interest
@@ -26,7 +26,6 @@ Regenerate with `python3 scripts/list_missing_checks.py`.
 - [ ] Amortization Schedule
 - [ ] Attention
 - [ ] Bayesian
-- [ ] Bias
 - [ ] Bloom's Taxonomy
 - [ ] Bond Amortization
 - [ ] Canadian Institute of Actuaries (CIA)
@@ -42,20 +41,16 @@ Regenerate with `python3 scripts/list_missing_checks.py`.
 - [ ] Combined Ratio
 - [ ] Conditional and Marginal Probability Functions
 - [ ] Constraint
-- [ ] Correlation
 - [ ] Covariance and Correlation Coefficient
 - [ ] Credit
-- [ ] Cumulative Distribution Function (CDF)
 - [ ] Decision-Making
 - [ ] Deferred Annuity
 - [ ] Development Factor
 - [ ] Discount
 - [ ] Discount Function
 - [ ] Geometric Increasing Perpetuity
-- [ ] Hypothesis Testing
 - [ ] Increasing Annuity
 - [ ] Law of Large Numbers
-- [ ] Linear Combinations of Random Variables
 - [ ] Loan Amortization
 - [ ] Markov Chain
 - [ ] Nominal Discount Rate
@@ -67,8 +62,6 @@ Regenerate with `python3 scripts/list_missing_checks.py`.
 - [ ] Premium
 - [ ] Price Risk
 - [ ] Probability Addition Rules
-- [ ] Probability Density Function (PDF)
-- [ ] Probability Distributions
 - [ ] Probability Mass Function (PMF)
 - [ ] Probability Multiplication Rules
 - [ ] Probability Rules
@@ -89,8 +82,6 @@ Regenerate with `python3 scripts/list_missing_checks.py`.
 - [ ] Spot Rates and Forward Rates
 - [ ] Standard Deviation (SD)
 - [ ] Target Loss Ratio
-- [ ] Transformations of Random Variables
 - [ ] Trend
 - [ ] VIN Fraud
 - [ ] Variance and Standard Deviation
-- [ ] Variance for Conditional and Marginal Distributions

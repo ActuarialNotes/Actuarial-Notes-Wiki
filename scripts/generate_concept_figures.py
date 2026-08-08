@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Generate (and embed) the Exam P / Exam FM concept-page figures.
+"""Generate (and embed) the Exam P / Exam FM / Exam MAS-I concept-page figures.
 
-Every concept linked from `Exam P-1 (SOA).md` and `Exam FM-2 (SOA).md` should
-carry one figure that makes the idea visible — a Venn diagram, a payment
-timeline, an annotated density, a price–yield curve. This script draws them all
-into `Media/Figures/` and can insert the Obsidian embed into the matching
-`Concepts/*.md` page.
+Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md` and
+`Exam MAS-I (CAS).md` should carry one figure that makes the idea visible — a
+Venn diagram, a payment timeline, an annotated density, a rejection region. This
+script draws them all into `Media/Figures/` and can insert the Obsidian embed
+into the matching `Concepts/*.md` page.
 
     python3 scripts/generate_concept_figures.py            # write the SVGs
     python3 scripts/generate_concept_figures.py --embed    # ...and embed them
@@ -34,10 +34,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from figure_registry import REGISTRY  # noqa: E402
 import figures_exam_p  # noqa: F401,E402
 import figures_exam_fm  # noqa: F401,E402
+import figures_exam_mas_i  # noqa: F401,E402
 
 OUT_DIR = ROOT / "Media" / "Figures"
 CONCEPTS = ROOT / "Concepts"
-EXAM_PAGES = ["Exam P-1 (SOA).md", "Exam FM-2 (SOA).md"]
+EXAM_PAGES = ["Exam P-1 (SOA).md", "Exam FM-2 (SOA).md", "Exam MAS-I (CAS).md"]
 
 EMBED_RE = re.compile(r"!\[\[")
 EXAMPLE_RE = re.compile(r"^> \[!(example|answer|quote|info|tip|warning)\]", re.M)

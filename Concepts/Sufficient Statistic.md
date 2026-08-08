@@ -14,6 +14,8 @@ A **Sufficient Statistic** $T(X_1, \ldots, X_n)$ for a parameter $\theta$ is a s
 | $N(\mu, \sigma^2)$ | $\mu$ (known $\sigma^2$) | $\bar{X}$ |
 | $\text{Exp}(\theta)$ | $\theta$ | $\sum_{i=1}^n X_i$ |
 
+![[Media/Figures/Sufficient_Statistic.svg|340]]
+
 > [!example]- Verifying a Sufficient Statistic via Factorization {Example}
 > Let $X_1, \ldots, X_n \stackrel{\text{iid}}{\sim} \text{Poi}(\lambda)$. Show that $T = \sum X_i$ is sufficient for $\lambda$.
 >

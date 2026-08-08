@@ -50,7 +50,8 @@ describe('EXAM_GUIDES', () => {
     for (const key of Object.keys(EXAM_GUIDES)) expect(key).toBe(key.toLowerCase())
     expect(guidesForExam('P-1')).toHaveLength(2)
     expect(guidesForExam('FM-2')).toHaveLength(2)
-    expect(guidesForExam('mas-i')).toEqual([])
+    expect(guidesForExam('MAS-I')).toHaveLength(2)
+    expect(guidesForExam('5')).toEqual([])
   })
 
   it('gives every guide a title and at least two pages', () => {

@@ -9,6 +9,8 @@
 - In reserving, separate claim count [[Development Triangle|triangles]] track how the number of reported claims grows over time, enabling the [[Frequency-Severity Method]] to isolate count-driven reserve changes from cost-driven ones
 - Rising frequency can signal adverse claim environment, increased litigation, or a shift in policy mix; distinguishing it from severity trends is critical for accurate reserve selection
 
+![[Media/Figures/Frequency.svg|340]]
+
 > [!example]- Computing Claim Frequency {Example}
 > A workers compensation book has $25{,}000$ employee-years of exposure in accident year 2023. A total of $1{,}750$ claims are ultimately projected to be reported. Find the frequency.
 >

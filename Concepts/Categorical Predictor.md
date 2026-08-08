@@ -11,6 +11,8 @@ A **Categorical Predictor** is an explanatory variable in a [[Generalized Linear
 - Continuous predictors assume a smooth effect on the response (linear on the link scale unless transformed); banding a continuous variable into categories trades smoothness for flexibility at the cost of extra parameters
 - Choosing the right type for each variable is part of selecting the [[Model Structure]] of an [[Extended Linear Model]]
 
+![[Media/Figures/Categorical_Predictor.svg|340]]
+
 > [!example]- Coding a Categorical Predictor with a Reference Level {Example}
 > Territory has three levels: A, B, C. A Poisson GLM with a log link uses Territory A as the reference level and fits $\hat{\beta}_B = 0.20$, $\hat{\beta}_C = -0.10$. Interpret the relativities for Territories B and C relative to A.
 >

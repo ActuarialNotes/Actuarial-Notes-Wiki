@@ -7,6 +7,8 @@ A **Marginal Model Plot** is a regression diagnostic that overlays a smooth curv
 - Marginal model plots can be drawn against any predictor, or against the fitted values to check overall calibration
 - Especially useful for GLMs, where raw residuals on the link scale can be harder to interpret directly than a comparison of fitted-vs-actual curves
 
+![[Media/Figures/Marginal_Model_Plot.svg|340]]
+
 > [!example]- Detecting Missing Structure with a Marginal Model Plot {Example}
 > A Gamma GLM models claim severity as a linear function of vehicle age. The marginal model plot shows the data smooth curving upward sharply for very new and very old vehicles, while the model's smooth (fit with a single linear term) stays nearly flat in those regions. What does this suggest?
 >

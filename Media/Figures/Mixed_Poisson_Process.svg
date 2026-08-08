@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A random rate across risks widening the count distribution</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Each risk carries its own rate Λ</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">N | Λ ~ Poi(Λt)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">Var(N) = t·E[Λ] + t²·Var(Λ) &gt; E[N]</text>
+  <line x1="64" y1="184" x2="334" y2="184" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="184" x2="64" y2="72" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="184" x2="64" y2="188" class="tick"/>
+  <text x="64" y="200" text-anchor="middle" class="sm dim">0</text>
+  <line x1="150.67" y1="184" x2="150.67" y2="188" class="tick"/>
+  <text x="150.67" y="200" text-anchor="middle" class="sm dim">0.2</text>
+  <line x1="237.33" y1="184" x2="237.33" y2="188" class="tick"/>
+  <text x="237.33" y="200" text-anchor="middle" class="sm dim">0.4</text>
+  <line x1="324" y1="184" x2="324" y2="188" class="tick"/>
+  <text x="324" y="200" text-anchor="middle" class="sm dim">0.6</text>
+  <polyline points="64,184 65.44,83.69 66.89,85.34 68.33,86.97 69.78,88.58 71.22,90.16 72.67,91.71 74.11,93.23 75.56,94.73 77,96.21 78.44,97.66 79.89,99.09 81.33,100.49 82.78,101.87 84.22,103.23 85.67,104.56 87.11,105.88 88.56,107.17 90,108.44 91.44,109.69 92.89,110.91 94.33,112.12 95.78,113.31 97.22,114.48 98.67,115.63 100.11,116.76 101.56,117.87 103,118.96 104.44,120.04 105.89,121.09 107.33,122.13 108.78,123.16 110.22,124.16 111.67,125.15 113.11,126.12 114.56,127.08 116,128.02 117.44,128.95 118.89,129.86 120.33,130.75 121.78,131.63 123.22,132.5 124.67,133.35 126.11,134.19 127.56,135.01 129,135.82 130.44,136.61 131.89,137.4 133.33,138.17 134.78,138.93 136.22,139.67 137.67,140.4 139.11,141.12 140.56,141.83 142,142.53 143.44,143.22 144.89,143.89 146.33,144.55 147.78,145.2 149.22,145.85 150.67,146.48 152.11,147.1 153.56,147.71 155,148.31 156.44,148.9 157.89,149.48 159.33,150.05 160.78,150.61 162.22,151.16 163.67,151.7 165.11,152.24 166.56,152.76 168,153.28 169.44,153.79 170.89,154.29 172.33,154.78 173.78,155.26 175.22,155.73 176.67,156.2 178.11,156.66 179.56,157.11 181,157.56 182.44,157.99 183.89,158.42 185.33,158.85 186.78,159.26 188.22,159.67 189.67,160.07 191.11,160.47 192.56,160.86 194,161.24 195.44,161.62 196.89,161.99 198.33,162.35 199.78,162.71 201.22,163.06 202.67,163.41 204.11,163.75 205.56,164.08 207,164.41 208.44,164.73 209.89,165.05 211.33,165.37 212.78,165.67 214.22,165.98 215.67,166.28 217.11,166.57 218.56,166.86 220,167.14 221.44,167.42 222.89,167.69 224.33,167.96 225.78,168.23 227.22,168.49 228.67,168.74 230.11,169 231.56,169.24 233,169.49 234.44,169.73 235.89,169.96 237.33,170.2 238.78,170.42 240.22,170.65 241.67,170.87 243.11,171.09 244.56,171.3 246,171.51 247.44,171.72 248.89,171.92 250.33,172.12 251.78,172.31 253.22,172.51 254.67,172.7 256.11,172.88 257.56,173.07 259,173.25 260.44,173.43 261.89,173.6 263.33,173.77 264.78,173.94 266.22,174.11 267.67,174.27 269.11,174.43 270.56,174.59 272,174.75 273.44,174.9 274.89,175.05 276.33,175.2 277.78,175.34 279.22,175.49 280.67,175.63 282.11,175.77 283.56,175.9 285,176.04 286.44,176.17 287.89,176.3 289.33,176.42 290.78,176.55 292.22,176.67 293.67,176.79 295.11,176.91 296.56,177.03 298,177.15 299.44,177.26 300.89,177.37 302.33,177.48 303.78,177.59 305.22,177.69 306.67,177.8 308.11,177.9 309.56,178 311,178.1 312.44,178.2 313.89,178.29 315.33,178.39 316.78,178.48 318.22,178.57 319.67,178.66 321.11,178.75 322.56,178.84 324,178.92" class="curve" stroke="#7c3aed" stroke-width="2.2"/>
+  <text x="246" y="114.64" text-anchor="middle" class="sm" fill="#7c3aed">Λ varies by risk</text>
+  <text x="64" y="76" text-anchor="start" class="sm dim">mixing distribution of Λ</text>
+  <line x1="64" y1="352" x2="334" y2="352" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="352" x2="64" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="352" x2="64" y2="356" class="tick"/>
+  <text x="64" y="368" text-anchor="middle" class="sm dim">0</text>
+  <line x1="116" y1="352" x2="116" y2="356" class="tick"/>
+  <text x="116" y="368" text-anchor="middle" class="sm dim">1</text>
+  <line x1="168" y1="352" x2="168" y2="356" class="tick"/>
+  <text x="168" y="368" text-anchor="middle" class="sm dim">2</text>
+  <line x1="220" y1="352" x2="220" y2="356" class="tick"/>
+  <text x="220" y="368" text-anchor="middle" class="sm dim">3</text>
+  <line x1="272" y1="352" x2="272" y2="356" class="tick"/>
+  <text x="272" y="368" text-anchor="middle" class="sm dim">4</text>
+  <line x1="324" y1="352" x2="324" y2="356" class="tick"/>
+  <text x="324" y="368" text-anchor="middle" class="sm dim">5</text>
+  <text x="324" y="384" text-anchor="end" class="sm dim">claims in a year</text>
+  <rect x="57.5" y="238.34" width="13" height="113.66" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
+  <rect x="109.5" y="329.27" width="13" height="22.73" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
+  <rect x="161.5" y="349.73" width="13" height="2.27" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
+  <rect x="213.5" y="351.85" width="13" height="0.15" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
+  <rect x="265.5" y="351.99" width="13" height="0.01" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
+  <rect x="317.5" y="352" width="13" height="0" rx="1.5" fill="#3b82f6" fill-opacity="0.75"/>
+  <rect x="74.14" y="235.94" width="13" height="116.06" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
+  <rect x="126.14" y="332.7" width="13" height="19.3" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
+  <rect x="178.14" y="349.08" width="13" height="2.92" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
+  <rect x="230.14" y="351.58" width="13" height="0.42" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
+  <rect x="282.14" y="351.93" width="13" height="0.07" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
+  <rect x="334.14" y="351.99" width="13" height="0.01" rx="1.5" fill="#e11d48" fill-opacity="0.75"/>
+  <line x1="170" y1="252" x2="183" y2="252" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="189" y="255.6" text-anchor="start" class="sm">single Poisson</text>
+  <line x1="170" y1="267" x2="183" y2="267" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="189" y="270.6" text-anchor="start" class="sm">mixed (negative binomial)</text>
+</svg>

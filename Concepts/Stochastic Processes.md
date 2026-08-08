@@ -11,6 +11,8 @@ A **Stochastic Process** $\{X(t) : t \in T\}$ is a collection of [[Random Variab
 
 - For a Poisson counting process the increments are independent and stationary, giving $N(t) - N(s) \sim \text{Poi}(\lambda(t-s))$ for $s < t$
 
+![[Media/Figures/Stochastic_Processes.svg|340]]
+
 > [!example]- Cumulative Claims as a Counting Process {Example}
 > Claims hit a portfolio as a [[Poisson Process]] at rate $\lambda = 4$ per month. Let $N(t)$ be the cumulative number of claims by month $t$. Classify the process and find the expected count and variance over the first half-year.
 >

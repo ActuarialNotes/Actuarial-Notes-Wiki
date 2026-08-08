@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The ℓx column falling with age and the deaths dx between ages</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">ℓx survivors, dx deaths in the year</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">ₜpₓ = ℓ₍ₓ₊ₜ₎ / ℓₓ</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">dₓ = ℓₓ − ℓ₍ₓ₊₁₎</text>
+  <line x1="74" y1="344" x2="336" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="74" y1="344" x2="74" y2="98" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="90.43" y1="344" x2="90.43" y2="348" class="tick"/>
+  <text x="90.43" y="360" text-anchor="middle" class="sm dim">60</text>
+  <line x1="145.22" y1="344" x2="145.22" y2="348" class="tick"/>
+  <text x="145.22" y="360" text-anchor="middle" class="sm dim">61</text>
+  <line x1="200" y1="344" x2="200" y2="348" class="tick"/>
+  <text x="200" y="360" text-anchor="middle" class="sm dim">62</text>
+  <line x1="254.78" y1="344" x2="254.78" y2="348" class="tick"/>
+  <text x="254.78" y="360" text-anchor="middle" class="sm dim">63</text>
+  <line x1="309.57" y1="344" x2="309.57" y2="348" class="tick"/>
+  <text x="309.57" y="360" text-anchor="middle" class="sm dim">64</text>
+  <line x1="70" y1="334.92" x2="74" y2="334.92" class="tick"/>
+  <text x="66" y="338.52" text-anchor="end" class="sm dim">7,000</text>
+  <line x1="70" y1="244.15" x2="74" y2="244.15" class="tick"/>
+  <text x="66" y="247.75" text-anchor="end" class="sm dim">7,500</text>
+  <line x1="70" y1="153.38" x2="74" y2="153.38" class="tick"/>
+  <text x="66" y="156.98" text-anchor="end" class="sm dim">8,000</text>
+  <text x="326" y="376" text-anchor="end" class="sm dim">age x</text>
+  <text x="70" y="94" text-anchor="start" class="sm dim">ℓx</text>
+  <polyline points="90.43,153.38 145.22,182.43 200,216.92 254.78,256.86 309.57,304.06" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
+  <circle cx="90.43" cy="153.38" r="3.4" fill="#3b82f6"/>
+  <text x="90.43" y="170.38" text-anchor="middle" class="sm">8,000</text>
+  <circle cx="145.22" cy="182.43" r="3.4" fill="#3b82f6"/>
+  <text x="145.22" y="199.43" text-anchor="middle" class="sm">7,840</text>
+  <circle cx="200" cy="216.92" r="3.4" fill="#3b82f6"/>
+  <text x="200" y="233.92" text-anchor="middle" class="sm">7,650</text>
+  <circle cx="254.78" cy="256.86" r="3.4" fill="#3b82f6"/>
+  <text x="254.78" y="273.86" text-anchor="middle" class="sm">7,430</text>
+  <circle cx="309.57" cy="304.06" r="3.4" fill="#3b82f6"/>
+  <text x="309.57" y="321.06" text-anchor="middle" class="sm">7,170</text>
+  <line x1="145.22" y1="153.38" x2="145.22" y2="185.43" class="thin" stroke="#e11d48" stroke-width="1.5" marker-end="url(#ahe11d48)"/>
+  <text x="151.22" y="171.91" text-anchor="start" class="sm" fill="#e11d48">dₓ = 160</text>
+  <line x1="200" y1="182.43" x2="200" y2="219.92" class="thin" stroke="#e11d48" stroke-width="1.5" marker-end="url(#ahe11d48)"/>
+  <line x1="254.78" y1="216.92" x2="254.78" y2="259.86" class="thin" stroke="#e11d48" stroke-width="1.5" marker-end="url(#ahe11d48)"/>
+  <line x1="309.57" y1="256.86" x2="309.57" y2="307.06" class="thin" stroke="#e11d48" stroke-width="1.5" marker-end="url(#ahe11d48)"/>
+</svg>

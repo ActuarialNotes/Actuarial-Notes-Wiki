@@ -6,6 +6,8 @@
 - Zero correlation does **not** imply [[Independent Random Variables|independence]] unless $X$ and $Y$ are jointly normal.
 - Being unit-free, $\rho$ is comparable across variables on different scales, unlike the raw covariance.
 
+![[Media/Figures/Correlation.svg|340]]
+
 > [!example]- Correlation Between Insurance Loss and Expense {Example}
 > Two random variables $X$ and $Y$ have $\text{Var}(X) = 25$, $\text{Var}(Y) = 36$, and $\text{Cov}(X, Y) = -18$. Find the correlation coefficient and interpret it.
 >

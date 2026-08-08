@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rainbow Flip Card — Actuarial Notes snippet</title>
+<style>
+  /* ============================================================
+     Preview-page-only styles. Everything below this comment block,
+     down to "COPY START", is just so this file looks good opened
+     directly in a browser — none of it needs to go on your site.
+  ============================================================ */
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(250 35% 9%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 48px 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     COPY START — paste everything from here down to "COPY END"
+     into your site's HTML/embed block. The <style> and <script>
+     tags travel with the markup; nothing external is required.
+
+     Multiple copies of this snippet can live on the same page —
+     the script only ever looks inside each individual card, so
+     duplicate the block below as many times as you like and give
+     each a different concept name / definition.
+============================================================ -->
+<div class="an-flip-wrap" tabindex="0" role="button" aria-pressed="false" aria-label="Probability. Press to flip the card and read the definition.">
+  <div class="an-flip-card">
+    <div class="an-flip-face an-flip-front">
+      <span class="an-flip-tag">Concept</span>
+      <h3 class="an-flip-title">Probability</h3>
+      <span class="an-flip-hint">Tap to flip ↻</span>
+    </div>
+    <div class="an-flip-face an-flip-back">
+      <h4 class="an-flip-back-title">Probability</h4>
+      <p class="an-flip-back-text">
+        A number between 0 and 1 measuring how likely an event is to occur —
+        0 is impossible, 1 is certain. For equally likely outcomes:
+      </p>
+      <p class="an-flip-formula">P(event) = favorable outcomes / total outcomes</p>
+      <span class="an-flip-hint">↩ Tap to flip back</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .an-flip-wrap {
+    --an-card-w: 240px;
+    --an-card-h: 320px;
+    --an-bg: hsl(250 30% 14%);
+    --an-fg: hsl(240 30% 96%);
+    --an-muted: hsl(240 15% 70%);
+    --an-border: hsl(250 25% 26%);
+    --an-c1: rgb(56 189 248);   /* sky   */
+    --an-c2: rgb(232 121 249);  /* fuchsia */
+    --an-c3: rgb(250 204 21);   /* gold  */
+    display: inline-block;
+    width: var(--an-card-w);
+    height: var(--an-card-h);
+    perspective: 1400px;
+    cursor: pointer;
+    outline: none;
+  }
+  .an-flip-wrap:focus-visible .an-flip-card {
+    box-shadow: 0 0 0 3px hsl(263 85% 66% / 0.6);
+    border-radius: 18px;
+  }
+  .an-flip-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.4, 0.1, 0.2, 1);
+  }
+  .an-flip-wrap.an-is-flipped .an-flip-card {
+    transform: rotateY(180deg);
+  }
+  .an-flip-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    padding: 24px 20px;
+    border-radius: 18px;
+    background: var(--an-bg);
+    color: var(--an-fg);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    box-sizing: border-box;
+  }
+  .an-flip-back {
+    transform: rotateY(180deg);
+  }
+  /* Animated rainbow foil border — same padding+mask-exclude ring
+     technique used for "level 3" mastery cards in the app, just
+     applied here as a plain reusable CSS trick. */
+  .an-flip-face::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(115deg, var(--an-c1), var(--an-c2), var(--an-c3), var(--an-c1));
+    background-size: 300% 100%;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: an-foil-shift 4s linear infinite;
+  }
+  @keyframes an-foil-shift {
+    to { background-position: 300% 0; }
+  }
+  .an-flip-tag {
+    align-self: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--an-c1);
+    background: hsl(199 89% 48% / 0.15);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .an-flip-title {
+    margin: 4px 0 0;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+  .an-flip-back-title {
+    margin: 0 0 2px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--an-c2);
+  }
+  .an-flip-back-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--an-muted);
+  }
+  .an-flip-formula {
+    margin: 4px 0 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--an-fg);
+    background: hsl(0 0% 100% / 0.06);
+    border: 1px solid var(--an-border);
+    border-radius: 10px;
+    padding: 8px 12px;
+  }
+  .an-flip-hint {
+    position: absolute;
+    bottom: 14px;
+    font-size: 11px;
+    color: var(--an-muted);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .an-flip-card { transition: none; }
+    .an-flip-face::before { animation: none; }
+  }
+</style>
+
+<script>
+(function () {
+  // Scoped to querySelectorAll so this snippet still works correctly
+  // if it's pasted more than once on the same page.
+  document.querySelectorAll('.an-flip-wrap').forEach(function (card) {
+    if (card.dataset.anBound) return;
+    card.dataset.anBound = 'true';
+
+    function toggle() {
+      var flipped = card.classList.toggle('an-is-flipped');
+      card.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+    }
+
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+})();
+</script>
+<!-- ============================================================
+     COPY END
+============================================================ -->
+
+</body>
+</html>

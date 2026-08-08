@@ -6,9 +6,15 @@
 <title>Rainbow Flip Card — Actuarial Notes snippet</title>
 <style>
   /* ============================================================
-     Preview-page-only styles. Everything below this comment block,
-     down to "COPY START", is just so this file looks good opened
-     directly in a browser — none of it needs to go on your site.
+     Preview-page-only styles. Everything below this block, down to
+     "COPY START", is just so this file looks good opened directly
+     in a browser — none of it needs to go on your site.
+
+     The 3-column strip mimics the hero feature row on
+     actuarialnotes.com so you can check the card fits its column.
+     Note the deliberately aggressive `h4`/`p` rules below: they
+     stand in for the global heading/paragraph styles a real site
+     has, and the snippet is built to survive them.
   ============================================================ */
   body {
     margin: 0;
@@ -16,66 +22,97 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: hsl(250 35% 9%);
+    background: #000;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     padding: 48px 16px;
   }
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 900px;
+    width: 100%;
+    align-items: start;
+  }
+  .demo-grid h4 { color: #fff; font-size: 20px; margin: 16px 0 6px; }
+  .demo-grid p { color: #9ca3af; font-size: 14px; margin: 0; line-height: 1.5; }
+  @media (max-width: 640px) { .demo-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
+
+<div class="demo-grid">
+  <div>
 
 <!-- ============================================================
      COPY START — paste everything from here down to "COPY END"
      into your site's HTML/embed block. The <style> and <script>
      tags travel with the markup; nothing external is required.
 
-     Multiple copies of this snippet can live on the same page —
-     the script only ever looks inside each individual card, so
-     duplicate the block below as many times as you like and give
-     each a different concept name / definition.
+     SIZING: the card fills the width of whatever column you drop
+     it into and keeps a 3:4 card shape, up to --an-card-max
+     (default 260px). The type scales with the card itself
+     (container query units), so it stays proportional in a narrow
+     column instead of overflowing. Change the cap by setting
+     --an-card-max on .an-flip-wrap.
+
+     HOST-CSS SAFE: the card uses only <div>/<span> (never bare
+     h3/h4/p) and every rule is scoped under .an-flip-wrap, so
+     your site's global heading and paragraph styles can't
+     override it.
+
+     Multiple copies can live on the same page — the script only
+     ever looks inside each individual card, so duplicate the block
+     below and give each a different concept name / definition.
 ============================================================ -->
 <div class="an-flip-wrap" tabindex="0" role="button" aria-pressed="false" aria-label="Probability. Press to flip the card and read the definition.">
   <div class="an-flip-card">
     <div class="an-flip-face an-flip-front">
-      <span class="an-flip-tag">Concept</span>
-      <h3 class="an-flip-title">Probability</h3>
-      <span class="an-flip-hint">Tap to flip ↻</span>
+      <div class="an-flip-title">Probability</div>
     </div>
     <div class="an-flip-face an-flip-back">
-      <h4 class="an-flip-back-title">Probability</h4>
-      <p class="an-flip-back-text">
-        A number between 0 and 1 measuring how likely an event is to occur —
-        0 is impossible, 1 is certain. For equally likely outcomes:
-      </p>
-      <p class="an-flip-formula">P(event) = favorable outcomes / total outcomes</p>
-      <span class="an-flip-hint">↩ Tap to flip back</span>
+      <div class="an-flip-scroll">
+        <div class="an-flip-back-inner">
+          <div class="an-flip-back-title">Probability</div>
+          <div class="an-flip-back-text">
+            A number between 0 and 1 measuring how likely an event is to occur —
+            0 is impossible, 1 is certain. For equally likely outcomes:
+          </div>
+          <div class="an-flip-formula">P(E) = favorable outcomes / total outcomes</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
   .an-flip-wrap {
-    --an-card-w: 240px;
-    --an-card-h: 320px;
+    --an-card-max: 260px;
     --an-bg: hsl(250 30% 14%);
     --an-fg: hsl(240 30% 96%);
-    --an-muted: hsl(240 15% 70%);
+    --an-muted: hsl(240 15% 72%);
     --an-border: hsl(250 25% 26%);
-    --an-c1: rgb(56 189 248);   /* sky   */
+    --an-c1: rgb(56 189 248);   /* sky     */
     --an-c2: rgb(232 121 249);  /* fuchsia */
-    --an-c3: rgb(250 204 21);   /* gold  */
-    display: inline-block;
-    width: var(--an-card-w);
-    height: var(--an-card-h);
+    --an-c3: rgb(250 204 21);   /* gold    */
+
+    display: block;
+    width: 100%;
+    max-width: var(--an-card-max);
+    aspect-ratio: 3 / 4;
+    margin-inline: auto;
     perspective: 1400px;
     cursor: pointer;
     outline: none;
+    /* Lets the type below scale with the card's own width. */
+    container-type: inline-size;
   }
+  .an-flip-wrap * { box-sizing: border-box; }
   .an-flip-wrap:focus-visible .an-flip-card {
     box-shadow: 0 0 0 3px hsl(263 85% 66% / 0.6);
-    border-radius: 18px;
+    border-radius: 7cqw;
   }
-  .an-flip-card {
+  .an-flip-wrap .an-flip-card {
     position: relative;
     width: 100%;
     height: 100%;
@@ -85,30 +122,62 @@
   .an-flip-wrap.an-is-flipped .an-flip-card {
     transform: rotateY(180deg);
   }
-  .an-flip-face {
+  .an-flip-wrap .an-flip-face {
     position: absolute;
     inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
     text-align: center;
-    padding: 24px 20px;
-    border-radius: 18px;
+    border-radius: 7cqw;
     background: var(--an-bg);
     color: var(--an-fg);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-    box-sizing: border-box;
+    overflow: hidden;
   }
-  .an-flip-back {
+  .an-flip-wrap .an-flip-front {
+    padding: 8cqw 7cqw;
+  }
+  .an-flip-wrap .an-flip-back {
     transform: rotateY(180deg);
   }
-  /* Animated rainbow foil border — same padding+mask-exclude ring
-     technique used for "level 3" mastery cards in the app, just
-     applied here as a plain reusable CSS trick. */
-  .an-flip-face::before {
+  /* A very small column can't fit a long definition at a 3:4 ratio, so the
+     back scrolls rather than clipping — same behaviour as the app's card
+     back. The scroller sits inside the face so the foil ring above it stays
+     pinned to the card edge instead of scrolling away. */
+  .an-flip-wrap .an-flip-scroll {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 8cqw 7cqw;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(240 15% 72% / 0.5) transparent;
+  }
+  .an-flip-wrap .an-flip-scroll::-webkit-scrollbar { width: 5px; }
+  .an-flip-wrap .an-flip-scroll::-webkit-scrollbar-thumb {
+    background: hsl(240 15% 72% / 0.45);
+    border-radius: 3px;
+  }
+  .an-flip-wrap .an-flip-scroll::-webkit-scrollbar-track { background: transparent; }
+  /* min-height (not height) + centring: the content sits centred when it
+     fits, and simply grows downward when it doesn't — so an overflowing
+     definition never has its top clipped. */
+  .an-flip-wrap .an-flip-back-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3cqw;
+    min-height: 100%;
+    width: 100%;
+  }
+
+  /* Rainbow foil border — the same padding + mask-exclude ring
+     technique the app uses for its "Level 3" mastery cards. */
+  .an-flip-wrap .an-flip-face::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -121,64 +190,60 @@
     mask-composite: exclude;
     pointer-events: none;
     animation: an-foil-shift 4s linear infinite;
+    z-index: 2;
   }
   @keyframes an-foil-shift {
     to { background-position: 300% 0; }
   }
-  .an-flip-tag {
-    align-self: center;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--an-c1);
-    background: hsl(199 89% 48% / 0.15);
-    border-radius: 999px;
-    padding: 3px 10px;
-  }
-  .an-flip-title {
-    margin: 4px 0 0;
-    font-size: 26px;
+
+  /* Type. The px value is the fallback; the cqw line after it scales
+     with the card and wins wherever container queries are supported. */
+  .an-flip-wrap .an-flip-title {
+    margin: 0;
     font-weight: 800;
     line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--an-fg);
+    font-size: 26px;
+    font-size: 11cqw;
   }
-  .an-flip-back-title {
-    margin: 0 0 2px;
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--an-c2);
-  }
-  .an-flip-back-text {
+  .an-flip-wrap .an-flip-back-title {
     margin: 0;
-    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--an-c2);
+    font-size: 17px;
+    font-size: 7.2cqw;
+  }
+  .an-flip-wrap .an-flip-back-text {
+    margin: 0;
     line-height: 1.5;
     color: var(--an-muted);
+    font-size: 13px;
+    font-size: 5.4cqw;
   }
-  .an-flip-formula {
-    margin: 4px 0 0;
-    font-size: 14px;
+  .an-flip-wrap .an-flip-formula {
+    margin: 0;
     font-weight: 700;
+    line-height: 1.35;
     color: var(--an-fg);
     background: hsl(0 0% 100% / 0.06);
     border: 1px solid var(--an-border);
-    border-radius: 10px;
-    padding: 8px 12px;
+    border-radius: 3.5cqw;
+    padding: 3.5cqw 4cqw;
+    font-size: 13px;
+    font-size: 5.2cqw;
   }
-  .an-flip-hint {
-    position: absolute;
-    bottom: 14px;
-    font-size: 11px;
-    color: var(--an-muted);
-  }
+
   @media (prefers-reduced-motion: reduce) {
-    .an-flip-card { transition: none; }
-    .an-flip-face::before { animation: none; }
+    .an-flip-wrap .an-flip-card { transition: none; }
+    .an-flip-wrap .an-flip-face::before { animation: none; }
   }
 </style>
 
 <script>
 (function () {
-  // Scoped to querySelectorAll so this snippet still works correctly
+  // Scoped with querySelectorAll so this snippet still works correctly
   // if it's pasted more than once on the same page.
   document.querySelectorAll('.an-flip-wrap').forEach(function (card) {
     if (card.dataset.anBound) return;
@@ -202,6 +267,19 @@
 <!-- ============================================================
      COPY END
 ============================================================ -->
+
+    <h4>Collect flashcards</h4>
+    <p>Build your deck of concepts for the exam.</p>
+  </div>
+  <div>
+    <h4>Practice quizzes</h4>
+    <p>Test yourself with practice questions.</p>
+  </div>
+  <div>
+    <h4>Track progress</h4>
+    <p>Watch concepts climb the mastery ladder.</p>
+  </div>
+</div>
 
 </body>
 </html>

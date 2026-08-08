@@ -27,11 +27,11 @@
      ANSWER_INDEX + the option list in the <script> at the bottom.
 ============================================================ -->
 <div class="an-quiz" data-answer="1">
-  <p class="an-quiz-tag">Quick Check · Probability</p>
-  <h3 class="an-quiz-question">
+  <div class="an-quiz-tag">Quick Check · Probability</div>
+  <div class="an-quiz-question">
     You flip a fair coin 3 times. What's the probability all three flips
     show the <em>same</em> result (HHH or TTT)?
-  </h3>
+  </div>
 
   <div class="an-quiz-options" role="radiogroup" aria-label="Answer options">
     <button type="button" class="an-quiz-option" role="radio" aria-checked="false" data-index="0">
@@ -49,11 +49,11 @@
   </div>
 
   <div class="an-quiz-explain" role="status" aria-live="polite">
-    <p class="an-quiz-explain-title"></p>
-    <p class="an-quiz-explain-text">
+    <div class="an-quiz-explain-title"></div>
+    <div class="an-quiz-explain-text">
       P(HHH) = (1/2)<sup>3</sup> = 1/8, and P(TTT) = 1/8. The two outcomes
       can't both happen, so P(same result) = 1/8 + 1/8 = <strong>1/4</strong>.
-    </p>
+    </div>
     <button type="button" class="an-quiz-retry">Try again</button>
   </div>
 </div>
@@ -78,7 +78,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   .an-quiz * { box-sizing: border-box; }
-  .an-quiz-tag {
+  .an-quiz .an-quiz-tag {
     margin: 0 0 8px;
     font-size: 11px;
     font-weight: 700;
@@ -86,18 +86,28 @@
     text-transform: uppercase;
     color: var(--an-primary);
   }
-  .an-quiz-question {
+  .an-quiz .an-quiz-question {
     margin: 0 0 16px;
     font-size: 17px;
     font-weight: 700;
     line-height: 1.4;
+    /* Set explicitly rather than inherited: a host stylesheet with a bare
+       `div { color: ... }` rule targets this element directly, and a direct
+       rule always beats an inherited value. */
+    color: var(--an-fg);
   }
-  .an-quiz-options {
+  .an-quiz .an-quiz-options {
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
-  .an-quiz-option {
+  .an-quiz .an-quiz-text {
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: inherit;
+  }
+  .an-quiz .an-quiz-option {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -113,17 +123,17 @@
     cursor: pointer;
     transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
   }
-  .an-quiz-option:hover:not(:disabled) {
+  .an-quiz .an-quiz-option:hover:not(:disabled) {
     border-color: var(--an-primary);
     background: hsl(263 85% 66% / 0.08);
   }
-  .an-quiz-option:active:not(:disabled) {
+  .an-quiz .an-quiz-option:active:not(:disabled) {
     transform: scale(0.99);
   }
-  .an-quiz-option:disabled {
+  .an-quiz .an-quiz-option:disabled {
     cursor: default;
   }
-  .an-quiz-letter {
+  .an-quiz .an-quiz-letter {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -133,25 +143,27 @@
     border-radius: 999px;
     background: hsl(0 0% 100% / 0.08);
     font-size: 12px;
+    line-height: 1;
     font-weight: 800;
+    color: var(--an-fg);
   }
-  .an-quiz-option.an-is-correct {
+  .an-quiz .an-quiz-option.an-is-correct {
     border-color: var(--an-good);
     background: hsl(158 64% 45% / 0.14);
   }
-  .an-quiz-option.an-is-correct .an-quiz-letter {
+  .an-quiz .an-quiz-option.an-is-correct .an-quiz-letter {
     background: var(--an-good);
     color: hsl(0 0% 100%);
   }
-  .an-quiz-option.an-is-wrong {
+  .an-quiz .an-quiz-option.an-is-wrong {
     border-color: var(--an-bad);
     background: hsl(350 80% 62% / 0.12);
   }
-  .an-quiz-option.an-is-wrong .an-quiz-letter {
+  .an-quiz .an-quiz-option.an-is-wrong .an-quiz-letter {
     background: var(--an-bad);
     color: hsl(0 0% 100%);
   }
-  .an-quiz-explain {
+  .an-quiz .an-quiz-explain {
     display: none;
     margin-top: 16px;
     padding-top: 14px;
@@ -165,20 +177,22 @@
     from { opacity: 0; transform: translateY(-4px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .an-quiz-explain-title {
+  .an-quiz .an-quiz-explain-title {
     margin: 0 0 6px;
     font-size: 14px;
     font-weight: 800;
+    line-height: 1.4;
+    color: var(--an-fg);
   }
-  .an-quiz-explain-title.an-good { color: var(--an-good); }
-  .an-quiz-explain-title.an-bad { color: var(--an-bad); }
-  .an-quiz-explain-text {
+  .an-quiz .an-quiz-explain-title.an-good { color: var(--an-good); }
+  .an-quiz .an-quiz-explain-title.an-bad { color: var(--an-bad); }
+  .an-quiz .an-quiz-explain-text {
     margin: 0;
     font-size: 13px;
     line-height: 1.55;
     color: var(--an-muted);
   }
-  .an-quiz-retry {
+  .an-quiz .an-quiz-retry {
     margin-top: 12px;
     background: none;
     border: 1px solid var(--an-border);
@@ -189,7 +203,7 @@
     color: var(--an-fg);
     cursor: pointer;
   }
-  .an-quiz-retry:hover {
+  .an-quiz .an-quiz-retry:hover {
     border-color: var(--an-primary);
   }
 </style>

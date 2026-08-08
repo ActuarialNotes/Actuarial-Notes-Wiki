@@ -6,8 +6,8 @@ The **Hypergeometric Distribution** models the number of successes in a sample o
 >
 > $$\text{where } N = \text{population size},\; K = \text{successes in population},\; n = \text{sample size}$$
 
-> $$E[X] = \frac{nK}{N},$$
->
+> $$E[X] = \frac{nK}{N}$$
+
 > $$\text{Var}(X) = \frac{nK(N-K)(N-n)}{N^2(N-1)}$$
 
 ![[Media/Hypergeometric_pmf.svg|500]]

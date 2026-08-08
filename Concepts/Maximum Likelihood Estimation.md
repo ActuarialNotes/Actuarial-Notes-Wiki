@@ -1,14 +1,10 @@
 **Maximum Likelihood Estimation (MLE)** is a method of parameter estimation that chooses the parameter value $\hat{\theta}$ that **maximizes the likelihood function** — the probability of observing the given data as a function of the parameter.
 
 > $$L(\theta) = \prod_{i=1}^n f(x_i \mid \theta)$$
->
-> $$\hat{\theta}_{\text{MLE}} = \arg\max_\theta L(\theta)$$
 
-> $$= \arg\max_\theta \ell(\theta)$$
+> $$\hat{\theta}_{\text{MLE}} = \arg\max_\theta L(\theta) = \arg\max_\theta \ell(\theta)$$
 
-> $$\text{where } \ell(\theta) = \ln L(\theta)$$
-
-> $$= \sum_{i=1}^n \ln f(x_i \mid \theta)$$
+> $$\ell(\theta) = \ln L(\theta) = \sum_{i=1}^n \ln f(x_i \mid \theta)$$
 
 - Taking the log turns the product into a sum and simplifies maximization
 - The MLE is found by solving the **score equation**: $\ell'(\hat{\theta}) = 0$

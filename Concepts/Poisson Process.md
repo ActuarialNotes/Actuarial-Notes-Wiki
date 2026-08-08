@@ -3,10 +3,8 @@ A **Poisson Process** $\{N(t), t \geq 0\}$ is a counting process that models the
 > $$P(N(t) = k) = \frac{e^{-\lambda t}(\lambda t)^k}{k!}$$
 >
 > $$k = 0, 1, 2, \ldots$$
->
-> $$E[N(t)] = \text{Var}(N(t))$$
 
-> $$= \lambda t$$
+> $$E[N(t)] = \text{Var}(N(t)) = \lambda t$$
 
 - The number of events in non-overlapping intervals are **independent**
 - The number of events in any interval of length $t$ has distribution $\text{Poi}(\lambda t)$

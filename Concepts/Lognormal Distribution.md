@@ -6,10 +6,10 @@ The **Lognormal Distribution** $X \sim \text{Lognormal}(\mu, \sigma^2)$ applies 
 >
 > $$\text{where } \mu \in \mathbb{R} = \text{log-mean},\; \sigma > 0 = \text{log-standard deviation}$$
 
-> $$E[X] = e^{\mu + \sigma^2/2},$$
->
+> $$E[X] = e^{\mu + \sigma^2/2}$$
+
 > $$\text{Var}(X) = e^{2\mu+\sigma^2}(e^{\sigma^2}-1)$$
->
+
 > $$F(x) = \Phi\!\left(\frac{\ln x - \mu}{\sigma}\right)$$
 
 ![[Media/Lognormal_distribution_pdf.svg|500]]

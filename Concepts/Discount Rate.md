@@ -7,8 +7,8 @@ The **effective annual discount rate** $d$ is the interest paid at the **beginni
 - The key relationships among $d$, the effective rate $i$, and the discount factor $v = (1+i)^{-1}$ are:
 
 > $$d = iv$$
->
-> $$\text{and} \qquad i = \frac{d}{1-d}$$
+
+> $$i = \frac{d}{1-d}$$
 
 - Because interest is collected at the start rather than the end, $d < i$ for any positive interest rate.
 - The nominal discount rate convertible $m$-thly, $d^{(m)}$, satisfies $\left(1 - \frac{d^{(m)}}{m}\right)^m = 1 - d = v$, and as $m \to \infty$, $d^{(m)} \to \delta$.

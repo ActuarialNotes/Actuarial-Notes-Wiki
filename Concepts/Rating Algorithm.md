@@ -1,8 +1,6 @@
 **Rating Algorithm** is the step-by-step set of rules and the order of operations that combines a base rate with rating variables, factors, discounts, and fees to produce the final premium for an individual policy. It is how the actuary's rate-level and classification analyses are actually applied to a quote.
 
-> $$\text{Premium} = \Big[\text{Base Rate} \times \prod_i R_i \;(\text{multiplicative})$$
->
-> $$+ \textstyle\sum_j A_j \;(\text{additive})\Big] \times (1 - \text{Discounts}) + \text{Fees}$$
+> $$\text{Premium} = \Big[\text{Base Rate} \times \prod_i R_i \;(\text{multiplicative}) + \textstyle\sum_j A_j \;(\text{additive})\Big] \times (1 - \text{Discounts}) + \text{Fees}$$
 
 - The **order of operations matters**: a $10\%$ multiplicative discount applied before vs. after an additive fee yields different premiums. The algorithm specifies sequencing, capping, and rounding precisely so results are reproducible.
 - Factors may be **multiplicative** (relativities that compound, common for territory and class), **additive** (flat loadings), or a mix; the structure should reflect how the underlying costs actually interact.

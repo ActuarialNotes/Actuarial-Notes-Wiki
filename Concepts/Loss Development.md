@@ -1,7 +1,7 @@
 **Loss Development** is the change in the reported or paid value of a cohort of claims as it matures — the difference between losses valued at an early age and their eventual [[Ultimate Loss|ultimate]] settled value. Because a ratemaking or reserving analysis must compare cohorts at a common (ultimate) basis, immature [[Accident Year]]s must be developed before they can be used.
 
 > $$\text{Ultimate Losses} = \text{Losses at age } n \times \text{CDF}_{n \to \text{ult}}$$
->
+
 > $$\text{CDF}_{n \to \text{ult}} = \prod_{k \ge n} f_{k \to k+1} \times \text{Tail}$$
 
 - Development has two drivers: **pure IBNR** (claims that occurred but have not yet been reported) and **IBNER** (incurred but not enough reported — development on claims already known, as [[Case Reserves|case reserves]] are re-estimated toward settlement). Reported triangles capture both; paid triangles also capture the lag between a case reserve being set and the cheque clearing.

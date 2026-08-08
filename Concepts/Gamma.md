@@ -4,9 +4,7 @@ The **Gamma Distribution** $X \sim \text{Gamma}(\alpha, \theta)$ is a flexible c
 >
 > $$x > 0$$
 >
-> $$\text{where } \alpha > 0 = \text{shape}$$
->
-> $$\theta > 0 = \text{scale}$$
+> $$\text{where } \alpha > 0 = \text{shape},\; \theta > 0 = \text{scale}$$
 
 - $E[X] = \alpha\theta$, $\text{Var}(X) = \alpha\theta^2$, and coefficient of variation $CV = 1/\sqrt{\alpha}$
 - Special cases: exponential ($\alpha = 1$) and chi-squared ($\alpha = n/2$, $\theta = 2$)

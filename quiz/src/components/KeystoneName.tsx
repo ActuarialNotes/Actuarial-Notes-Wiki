@@ -8,7 +8,10 @@ import { findKeystone, type KeystoneProgress } from '@/lib/keystone'
 // no badge, no icon beside the title. A keystone therefore looks the same
 // wherever its name appears — inside a sentence on the syllabus page
 // (`.wiki-link--keystone`), as the popup title, as a page heading — and the
-// name itself is what you tap to find out why it's a keystone.
+// name itself is what you tap to confirm it is one. The explainer says only
+// that: the "Keystone concept" heading, the exam it belongs to, and the exam's
+// mastered count. No prose beneath it — it is read mid-study, over the concept
+// it is marking, so a paragraph there is just something in the way.
 //
 // `KeystoneName` is inert for an ordinary concept: it renders the plain name
 // with no underline and no click target, so call sites can use it for every
@@ -98,7 +101,7 @@ export function KeystoneName({ name, className = '', progress }: KeystoneNamePro
         type="button"
         onClick={toggle}
         aria-expanded={open}
-        title={`${concept.name} is a keystone concept of ${examLabel} — tap to see why`}
+        title={`${concept.name} is a keystone concept of ${examLabel}`}
         className={`keystone-underline text-left ${className}`}
       >
         {name}
@@ -122,9 +125,8 @@ export function KeystoneName({ name, className = '', progress }: KeystoneNamePro
               {examLabel}
             </span>
           </div>
-          <p className="mt-2 text-sm leading-relaxed text-foreground">{concept.why}</p>
           {progress && (
-            <div className="mt-2.5 flex items-center gap-2">
+            <div className="mt-3 flex items-center gap-2">
               <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
                 <div
                   className="h-full rounded-full"

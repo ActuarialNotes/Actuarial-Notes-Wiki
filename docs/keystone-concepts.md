@@ -45,10 +45,15 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
   what the concept actually says or does, then what breaks (or becomes easy) because of it. The
   gloss is what keeps the line from reading as a riddle — a student meeting Exam 5 for the first
   time learns nothing from "the retrospective mirror of ratemaking", but "estimating what is
-  still owed on claims already incurred" lands. Keep it under ~130 characters: the explainer
-  shows this line and nothing else, so a second sentence just pushes the concept off the screen.
-  It is still not the concept page's full definition, and the test rejects a `why` that opens by
-  restating the concept's own name.
+  still owed on claims already incurred" lands. Keep it under ~130 characters. It is still not
+  the concept page's full definition, and the test rejects a `why` that opens by restating the
+  concept's own name.
+
+  **`why` is not displayed as body text anywhere.** The keystone explainer shows no prose at
+  all — it is read mid-study, sitting over the concept it is marking, so a paragraph there is
+  only something in the way. `why` survives as the authored rationale for the catalogue and as
+  the hover `title` on the keystone chips in the readiness popup; do not reintroduce it as a
+  visible blurb under a keystone name.
 
 ## The read side
 
@@ -81,7 +86,7 @@ Defined in `quiz/src/index.css` under "Keystone concepts", and summarised in
 **The marker is a gold underline on the concept's own name — never an icon
 beside it.** A keystone therefore looks the same in a sentence on the syllabus
 page, as the popup title, as a flashcard title and in a search result, and the
-name itself is the tap target that explains why it is a keystone.
+name itself is the tap target that confirms it is a keystone.
 
 | Class | What it does |
 |---|---|
@@ -112,7 +117,7 @@ name, or the gold chip on the collect card — so the two never fight for the sa
 | Surface | Treatment |
 |---|---|
 | Exam study guide (`pages/wiki/WikiExam.tsx`) | Inside the **Exam Readiness Score** card (`components/wiki/ExamReadinessCard.tsx`), which rides in the orientation-card row at the top of the exam page. Keystone mastery is one of the three readiness criteria (35% of the score — see `lib/readiness.ts`), and the criterion carries the list: every keystone as a chip with a mastery dot, each opening that concept in the concept popup. This is the one place the exam names all of its keystones; it is inside the popup rather than on the page, because the score is the reason to look |
-| Concept popup header (`components/wiki/ConceptPopup.tsx`) | The **title** is the marker: gold underline, and tapping the concept name opens the explainer — the "Keystone concept" heading, the concept's one-line `why`, and the exam's mastered count. Nothing else: the explainer is read mid-study, over the concept it is explaining, so it never grows a second paragraph |
+| Concept popup header (`components/wiki/ConceptPopup.tsx`) | The **title** is the marker: gold underline, and tapping the concept name opens the explainer — the "Keystone concept" heading, the exam badge, and the exam's mastered count. Nothing else: the explainer is read mid-study, over the concept it is marking, so it carries no prose at all |
 | Wiki prose (`components/wiki/WikiArticle.tsx`) | `.wiki-link--keystone` on concept links — dimmed repeat mentions stay dim, so one marker per idea |
 | Flashcard tiles (`pages/Flashcards.tsx`) | Gold underline on the card name — never a ring, since the tile edge belongs to the collected-foil material |
 | Wiki search results (`components/wiki/WikiSearchPanel.tsx`) | Gold underline on the result's name; the category icon is untouched |

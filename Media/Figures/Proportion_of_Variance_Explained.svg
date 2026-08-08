@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Per-component and cumulative variance explained across eight components</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">How much variance each component carries</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">PVE_m = λ_m / Σλⱼ</text>
+  <line x1="85.67" y1="98" x2="85.67" y2="316" class="grid"/>
+  <line x1="116.62" y1="98" x2="116.62" y2="316" class="grid"/>
+  <line x1="147.57" y1="98" x2="147.57" y2="316" class="grid"/>
+  <line x1="178.52" y1="98" x2="178.52" y2="316" class="grid"/>
+  <line x1="209.48" y1="98" x2="209.48" y2="316" class="grid"/>
+  <line x1="240.43" y1="98" x2="240.43" y2="316" class="grid"/>
+  <line x1="271.38" y1="98" x2="271.38" y2="316" class="grid"/>
+  <line x1="302.33" y1="98" x2="302.33" y2="316" class="grid"/>
+  <line x1="64" y1="316" x2="324" y2="316" class="grid"/>
+  <line x1="64" y1="212.19" x2="324" y2="212.19" class="grid"/>
+  <line x1="64" y1="108.38" x2="324" y2="108.38" class="grid"/>
+  <line x1="64" y1="316" x2="324" y2="316" class="axis"/>
+  <line x1="64" y1="98" x2="64" y2="316" class="axis"/>
+  <line x1="85.67" y1="316" x2="85.67" y2="320" class="tick"/>
+  <text x="85.67" y="332" text-anchor="middle" class="sm dim">1</text>
+  <line x1="116.62" y1="316" x2="116.62" y2="320" class="tick"/>
+  <text x="116.62" y="332" text-anchor="middle" class="sm dim">2</text>
+  <line x1="147.57" y1="316" x2="147.57" y2="320" class="tick"/>
+  <text x="147.57" y="332" text-anchor="middle" class="sm dim">3</text>
+  <line x1="178.52" y1="316" x2="178.52" y2="320" class="tick"/>
+  <text x="178.52" y="332" text-anchor="middle" class="sm dim">4</text>
+  <line x1="209.48" y1="316" x2="209.48" y2="320" class="tick"/>
+  <text x="209.48" y="332" text-anchor="middle" class="sm dim">5</text>
+  <line x1="240.43" y1="316" x2="240.43" y2="320" class="tick"/>
+  <text x="240.43" y="332" text-anchor="middle" class="sm dim">6</text>
+  <line x1="271.38" y1="316" x2="271.38" y2="320" class="tick"/>
+  <text x="271.38" y="332" text-anchor="middle" class="sm dim">7</text>
+  <line x1="302.33" y1="316" x2="302.33" y2="320" class="tick"/>
+  <text x="302.33" y="332" text-anchor="middle" class="sm dim">8</text>
+  <line x1="60" y1="316" x2="64" y2="316" class="tick"/>
+  <text x="56" y="319.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="60" y1="212.19" x2="64" y2="212.19" class="tick"/>
+  <text x="56" y="215.79" text-anchor="end" class="sm dim">0.5</text>
+  <line x1="60" y1="108.38" x2="64" y2="108.38" class="tick"/>
+  <text x="56" y="111.98" text-anchor="end" class="sm dim">1</text>
+  <rect x="76.67" y="222.57" width="18" height="93.43" rx="1.5" fill="#3b82f6" fill-opacity="0.6"/>
+  <rect x="107.62" y="266.69" width="18" height="49.31" rx="1.5" fill="#3b82f6" fill-opacity="0.6"/>
+  <rect x="138.57" y="290.05" width="18" height="25.95" rx="1.5" fill="#3b82f6" fill-opacity="0.6"/>
+  <rect x="169.52" y="300.43" width="18" height="15.57" rx="1.5" fill="#3b82f6" fill-opacity="0.6"/>
+  <rect x="200.48" y="305.62" width="18" height="10.38" rx="1.5" fill="#3b82f6" fill-opacity="0.6"/>
+  <rect x="231.43" y="308.21" width="18" height="7.79" rx="1.5" fill="#3b82f6" fill-opacity="0.6"/>
+  <rect x="262.38" y="310.81" width="18" height="5.19" rx="1.5" fill="#3b82f6" fill-opacity="0.6"/>
+  <rect x="293.33" y="316" width="18" height="0" rx="1.5" fill="#3b82f6" fill-opacity="0.6"/>
+  <polyline points="85.67,222.57 116.62,173.26 147.57,147.31 178.52,131.74 209.48,121.36 240.43,113.57 271.38,108.38 302.33,108.38" class="curve" stroke="#e11d48" stroke-width="2.2"/>
+  <circle cx="85.67" cy="222.57" r="2.8" fill="#e11d48"/>
+  <circle cx="116.62" cy="173.26" r="2.8" fill="#e11d48"/>
+  <circle cx="147.57" cy="147.31" r="2.8" fill="#e11d48"/>
+  <circle cx="178.52" cy="131.74" r="2.8" fill="#e11d48"/>
+  <circle cx="209.48" cy="121.36" r="2.8" fill="#e11d48"/>
+  <circle cx="240.43" cy="113.57" r="2.8" fill="#e11d48"/>
+  <circle cx="271.38" cy="108.38" r="2.8" fill="#e11d48"/>
+  <circle cx="302.33" cy="108.38" r="2.8" fill="#e11d48"/>
+  <line x1="64" y1="149.9" x2="324" y2="149.9" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+  <text x="88.76" y="141.6" text-anchor="start" class="sm bold" fill="#059669">80% target</text>
+  <line x1="147.57" y1="316" x2="147.57" y2="147.31" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+  <text x="180" y="348" text-anchor="middle" class="sm dim">component m</text>
+  <text x="180" y="366" text-anchor="middle" class="sm bold">three components clear 80%</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">variance explained ≠ predictive power</text>
+</svg>

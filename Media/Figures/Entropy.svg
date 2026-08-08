@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Entropy peaking at maximum uncertainty and vanishing at certainty</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Entropy measures uncertainty in bits</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">D = −Σ p̂ₘₖ log p̂ₘₖ</text>
+  <line x1="64" y1="96" x2="64" y2="316" class="grid"/>
+  <line x1="129" y1="96" x2="129" y2="316" class="grid"/>
+  <line x1="194" y1="96" x2="194" y2="316" class="grid"/>
+  <line x1="259" y1="96" x2="259" y2="316" class="grid"/>
+  <line x1="324" y1="96" x2="324" y2="316" class="grid"/>
+  <line x1="64" y1="316" x2="324" y2="316" class="grid"/>
+  <line x1="64" y1="217.79" x2="324" y2="217.79" class="grid"/>
+  <line x1="64" y1="119.57" x2="324" y2="119.57" class="grid"/>
+  <line x1="64" y1="316" x2="334" y2="316" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="316" x2="64" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="316" x2="64" y2="320" class="tick"/>
+  <text x="64" y="332" text-anchor="middle" class="sm dim">0</text>
+  <line x1="129" y1="316" x2="129" y2="320" class="tick"/>
+  <text x="129" y="332" text-anchor="middle" class="sm dim">0.25</text>
+  <line x1="194" y1="316" x2="194" y2="320" class="tick"/>
+  <text x="194" y="332" text-anchor="middle" class="sm dim">0.5</text>
+  <line x1="259" y1="316" x2="259" y2="320" class="tick"/>
+  <text x="259" y="332" text-anchor="middle" class="sm dim">0.75</text>
+  <line x1="324" y1="316" x2="324" y2="320" class="tick"/>
+  <text x="324" y="332" text-anchor="middle" class="sm dim">1</text>
+  <line x1="60" y1="316" x2="64" y2="316" class="tick"/>
+  <text x="56" y="319.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="60" y1="217.79" x2="64" y2="217.79" class="tick"/>
+  <text x="56" y="221.39" text-anchor="end" class="sm dim">0.5</text>
+  <line x1="60" y1="119.57" x2="64" y2="119.57" class="tick"/>
+  <text x="56" y="123.17" text-anchor="end" class="sm dim">1</text>
+  <polyline points="64.52,311.91 65.96,303.44 67.4,296.26 68.84,289.78 70.27,283.77 71.71,278.14 73.15,272.82 74.59,267.75 76.03,262.9 77.47,258.25 78.91,253.78 80.35,249.47 81.78,245.3 83.22,241.27 84.66,237.37 86.1,233.59 87.54,229.92 88.98,226.35 90.42,222.88 91.85,219.51 93.29,216.23 94.73,213.04 96.17,209.93 97.61,206.9 99.05,203.95 100.49,201.07 101.93,198.26 103.36,195.52 104.8,192.85 106.24,190.25 107.68,187.71 109.12,185.23 110.56,182.82 112,180.46 113.43,178.16 114.87,175.91 116.31,173.72 117.75,171.59 119.19,169.5 120.63,167.47 122.07,165.49 123.51,163.57 124.94,161.69 126.38,159.85 127.82,158.07 129.26,156.33 130.7,154.64 132.14,152.99 133.58,151.39 135.01,149.84 136.45,148.32 137.89,146.85 139.33,145.43 140.77,144.04 142.21,142.7 143.65,141.4 145.09,140.13 146.52,138.91 147.96,137.73 149.4,136.59 150.84,135.49 152.28,134.43 153.72,133.4 155.16,132.42 156.59,131.47 158.03,130.56 159.47,129.69 160.91,128.85 162.35,128.06 163.79,127.29 165.23,126.57 166.67,125.88 168.1,125.23 169.54,124.62 170.98,124.04 172.42,123.49 173.86,122.99 175.3,122.51 176.74,122.08 178.17,121.68 179.61,121.31 181.05,120.98 182.49,120.68 183.93,120.42 185.37,120.2 186.81,120.01 188.25,119.85 189.68,119.73 191.12,119.64 192.56,119.59 194,119.57 195.44,119.59 196.88,119.64 198.32,119.73 199.75,119.85 201.19,120.01 202.63,120.2 204.07,120.42 205.51,120.68 206.95,120.98 208.39,121.31 209.83,121.68 211.26,122.08 212.7,122.51 214.14,122.99 215.58,123.49 217.02,124.04 218.46,124.62 219.9,125.23 221.33,125.88 222.77,126.57 224.21,127.29 225.65,128.06 227.09,128.85 228.53,129.69 229.97,130.56 231.41,131.47 232.84,132.42 234.28,133.4 235.72,134.43 237.16,135.49 238.6,136.59 240.04,137.73 241.48,138.91 242.91,140.13 244.35,141.4 245.79,142.7 247.23,144.04 248.67,145.43 250.11,146.85 251.55,148.32 252.99,149.84 254.42,151.39 255.86,152.99 257.3,154.64 258.74,156.33 260.18,158.07 261.62,159.85 263.06,161.69 264.49,163.57 265.93,165.49 267.37,167.47 268.81,169.5 270.25,171.59 271.69,173.72 273.13,175.91 274.57,178.16 276,180.46 277.44,182.82 278.88,185.23 280.32,187.71 281.76,190.25 283.2,192.85 284.64,195.52 286.07,198.26 287.51,201.07 288.95,203.95 290.39,206.9 291.83,209.93 293.27,213.04 294.71,216.23 296.15,219.51 297.58,222.88 299.02,226.35 300.46,229.92 301.9,233.59 303.34,237.37 304.78,241.27 306.22,245.3 307.65,249.47 309.09,253.78 310.53,258.25 311.97,262.9 313.41,267.75 314.85,272.82 316.29,278.14 317.73,283.77 319.16,289.78 320.6,296.26 322.04,303.44 323.48,311.91" class="curve" stroke="#7c3aed" stroke-width="2.4"/>
+  <circle cx="194" cy="119.57" r="4" fill="#7c3aed"/>
+  <text x="194" y="111.57" text-anchor="middle" class="sm bold" fill="#7c3aed">1 bit — a coin flip</text>
+  <circle cx="298" cy="223.88" r="3.6" fill="#059669"/>
+  <text x="290" y="216.68" text-anchor="end" class="sm" fill="#059669">0.47</text>
+  <text x="180" y="348" text-anchor="middle" class="sm dim">proportion in class 1</text>
+  <text x="180" y="366" text-anchor="middle" class="sm dim">0 when the node is pure</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">like Gini, but steeper near a pure node</text>
+</svg>

@@ -9,6 +9,8 @@ The **Bayesian Information Criterion (BIC)** (also called the **Schwarz criterio
 - BIC is consistent: as $n \to \infty$, it selects the true model (if it is among the candidates); AIC is not consistent but is **asymptotically efficient**
 - In practice, if AIC and BIC disagree, BIC typically selects a more parsimonious model
 
+![[Media/Figures/BIC.svg|340]]
+
 > [!example]- Comparing AIC and BIC for Model Selection {Example}
 > With $n = 100$ observations, compare two models: Model A has $p_A = 5$ parameters and $\ell_A = -200$; Model B has $p_B = 2$ parameters and $\ell_B = -210$.
 >

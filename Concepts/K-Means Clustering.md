@@ -15,6 +15,8 @@
 - K-Means assumes clusters are **roughly spherical** and of **similar size** — it can perform poorly on elongated or irregularly shaped clusters
 - Predictors must be **standardized** since K-Means is distance-based and scale-sensitive
 
+![[Media/Figures/K-Means_Clustering.svg|340]]
+
 > [!example]- One Iteration of K-Means {Example}
 > Three observations are $x_1 = 2$, $x_2 = 5$, $x_3 = 9$ (1D). Initial centroids are $c_1 = 2$ and $c_2 = 5$. Perform one update step.
 >

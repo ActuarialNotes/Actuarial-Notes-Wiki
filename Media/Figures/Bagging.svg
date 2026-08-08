@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Bootstrap resamples each growing their own tree, averaged into one prediction</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Average trees grown on bootstrap</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">resamples</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">f̂_bag(x) = (1/B) Σ f̂*ᵇ(x)</text>
+  <rect x="112" y="92" width="136" height="30" rx="7" fill="var(--edge)" fill-opacity="0.12" stroke="var(--edge)" stroke-width="1.2"/>
+  <text x="180" y="111" text-anchor="middle" class="sm">training data</text>
+  <line x1="180" y1="124" x2="78" y2="152" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <rect x="44" y="154" width="68" height="22" rx="4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.1"/>
+  <text x="78" y="169" text-anchor="middle" class="sm">resample 1</text>
+  <circle cx="78" cy="200" r="5" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1.4"/>
+  <line x1="73" y1="205" x2="56" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <circle cx="56" cy="232" r="5" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1.4"/>
+  <line x1="51" y1="237" x2="45" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="36" y="257" width="18" height="14" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <line x1="61" y1="237" x2="67" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="58" y="257" width="18" height="14" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <line x1="83" y1="205" x2="100" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <circle cx="100" cy="232" r="5" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-width="1.4"/>
+  <line x1="95" y1="237" x2="89" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="80" y="257" width="18" height="14" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <line x1="105" y1="237" x2="111" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="102" y="257" width="18" height="14" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <line x1="78" y1="278" x2="180" y2="302" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="180" y1="124" x2="180" y2="152" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <rect x="146" y="154" width="68" height="22" rx="4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.1"/>
+  <text x="180" y="169" text-anchor="middle" class="sm">resample 2</text>
+  <circle cx="180" cy="200" r="5" fill="#d97706" fill-opacity="0.2" stroke="#d97706" stroke-width="1.4"/>
+  <line x1="175" y1="205" x2="158" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <circle cx="158" cy="232" r="5" fill="#d97706" fill-opacity="0.2" stroke="#d97706" stroke-width="1.4"/>
+  <line x1="153" y1="237" x2="147" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="138" y="257" width="18" height="14" rx="3" fill="#d97706" fill-opacity="0.55"/>
+  <line x1="163" y1="237" x2="169" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="160" y="257" width="18" height="14" rx="3" fill="#d97706" fill-opacity="0.55"/>
+  <line x1="185" y1="205" x2="202" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <circle cx="202" cy="232" r="5" fill="#d97706" fill-opacity="0.2" stroke="#d97706" stroke-width="1.4"/>
+  <line x1="197" y1="237" x2="191" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="182" y="257" width="18" height="14" rx="3" fill="#d97706" fill-opacity="0.55"/>
+  <line x1="207" y1="237" x2="213" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="204" y="257" width="18" height="14" rx="3" fill="#d97706" fill-opacity="0.55"/>
+  <line x1="180" y1="278" x2="180" y2="302" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="180" y1="124" x2="282" y2="152" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <rect x="248" y="154" width="68" height="22" rx="4" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-width="1.1"/>
+  <text x="282" y="169" text-anchor="middle" class="sm">resample 3</text>
+  <circle cx="282" cy="200" r="5" fill="#059669" fill-opacity="0.2" stroke="#059669" stroke-width="1.4"/>
+  <line x1="277" y1="205" x2="260" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <circle cx="260" cy="232" r="5" fill="#059669" fill-opacity="0.2" stroke="#059669" stroke-width="1.4"/>
+  <line x1="255" y1="237" x2="249" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="240" y="257" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.55"/>
+  <line x1="265" y1="237" x2="271" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="262" y="257" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.55"/>
+  <line x1="287" y1="205" x2="304" y2="224" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <circle cx="304" cy="232" r="5" fill="#059669" fill-opacity="0.2" stroke="#059669" stroke-width="1.4"/>
+  <line x1="299" y1="237" x2="293" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="284" y="257" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.55"/>
+  <line x1="309" y1="237" x2="315" y2="256" class="thin" stroke="var(--axis)" stroke-width="1.2"/>
+  <rect x="306" y="257" width="18" height="14" rx="3" fill="#059669" fill-opacity="0.55"/>
+  <line x1="282" y1="278" x2="180" y2="302" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <rect x="112" y="306" width="136" height="30" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+  <text x="180" y="325" text-anchor="middle" class="sm bold">average</text>
+  <text x="180" y="358" text-anchor="middle" class="sm dim">Var = ρσ² + (1 − ρ)σ²/B — averaging kills</text>
+  <text x="180" y="374" text-anchor="middle" class="sm dim">the second term, never the first</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">trees grown deep and unpruned</text>
+</svg>

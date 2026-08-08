@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>An MA(1)'s memory ending after one period, so the forecast returns to the mean</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">A weighted sum of the last q shocks</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Y_t = μ + ε_t + θ₁ε_{t−1} + ⋯ + θ_qε_{t−q}</text>
+  <line x1="64" y1="100" x2="64" y2="310" class="grid"/>
+  <line x1="155.76" y1="100" x2="155.76" y2="310" class="grid"/>
+  <line x1="247.53" y1="100" x2="247.53" y2="310" class="grid"/>
+  <line x1="316.35" y1="100" x2="316.35" y2="310" class="grid"/>
+  <line x1="64" y1="280" x2="324" y2="280" class="grid"/>
+  <line x1="64" y1="205" x2="324" y2="205" class="grid"/>
+  <line x1="64" y1="130" x2="324" y2="130" class="grid"/>
+  <line x1="64" y1="310" x2="334" y2="310" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="310" x2="64" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="310" x2="64" y2="314" class="tick"/>
+  <line x1="155.76" y1="310" x2="155.76" y2="314" class="tick"/>
+  <line x1="247.53" y1="310" x2="247.53" y2="314" class="tick"/>
+  <text x="247.53" y="326" text-anchor="middle" class="sm dim">now</text>
+  <line x1="316.35" y1="310" x2="316.35" y2="314" class="tick"/>
+  <line x1="60" y1="280" x2="64" y2="280" class="tick"/>
+  <text x="56" y="283.6" text-anchor="end" class="sm dim">40</text>
+  <line x1="60" y1="205" x2="64" y2="205" class="tick"/>
+  <text x="56" y="208.6" text-anchor="end" class="sm dim">50</text>
+  <line x1="60" y1="130" x2="64" y2="130" class="tick"/>
+  <text x="56" y="133.6" text-anchor="end" class="sm dim">60</text>
+  <polyline points="64,177.72 71.65,192.9 79.29,169.38 86.94,237.04 94.59,182.05 102.24,232.08 109.88,213.03 117.53,145.12 125.18,133.29 132.82,251.97 140.47,202.01 148.12,207.76 155.76,269.28 163.41,234.34 171.06,247.43 178.71,263.99 186.35,213.99 194,227.72 201.65,215 209.29,214.24 216.94,195.27 224.59,205.17 232.24,173.09 239.88,140.03 247.53,206.97" class="curve" stroke="#3b82f6" stroke-width="1.9"/>
+  <polyline points="247.53,206.97 255.18,214 262.82,205 270.47,205 278.12,205 285.76,205 293.41,205 301.06,205 308.71,205 316.35,205" class="curve dash" stroke="#059669" stroke-width="2.2"/>
+  <line x1="64" y1="205" x2="324" y2="205" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+  <text x="316.35" y="291.25" text-anchor="end" class="sm bold" fill="#d97706">μ = 50</text>
+  <circle cx="255.18" cy="214" r="3.6" fill="#059669"/>
+  <text x="261.18" y="205" text-anchor="start" class="sm bold" fill="#059669">48.8</text>
+  <line x1="247.53" y1="310" x2="247.53" y2="115" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <text x="180" y="342" text-anchor="middle" class="sm dim">two steps out the shock has left the model —</text>
+  <text x="180" y="357" text-anchor="middle" class="sm dim">the forecast is simply μ</text>
+  <text x="180" y="375" text-anchor="middle" class="sm bold">always stationary; |ρ₁| ≤ 0.5 for an MA(1)</text>
+</svg>

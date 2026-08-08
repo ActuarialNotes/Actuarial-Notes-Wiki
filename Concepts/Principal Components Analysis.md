@@ -13,6 +13,8 @@
 - PCA requires **standardizing** predictors (subtract mean, divide by SD) when variables are on different scales
 - Used for **dimensionality reduction** before fitting models, and for **visualization** of high-dimensional data
 
+![[Media/Figures/Principal_Components_Analysis.svg|340]]
+
 > [!example]- Computing the First Principal Component {Example}
 > Two standardized predictors $X_1$ (vehicle age) and $X_2$ (driver age) have covariance matrix $\mathbf{S} = \begin{pmatrix}1 & 0.6\\0.6 & 1\end{pmatrix}$. The first eigenvector is $\boldsymbol{\phi}_1 = (0.707, 0.707)^\top$ with eigenvalue $\lambda_1 = 1.6$. What proportion of variance does PC1 explain?
 >

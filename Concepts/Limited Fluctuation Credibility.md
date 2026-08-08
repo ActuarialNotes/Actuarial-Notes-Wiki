@@ -13,6 +13,8 @@ $$n_{\text{full}} = \left(\frac{z_{\alpha/2}}{r}\right)^2 \cdot \frac{\text{Var}
 - For **aggregate losses**: $n_{\text{full}}$ combines frequency and severity CVs: $\text{CV}^2_S = \text{CV}^2_N + \text{CV}^2_X \cdot E[N]/E[N]$
 - Partial credibility uses the **square root rule**: $Z = \sqrt{n/n_{\text{full}}}$ when $n < n_{\text{full}}$
 
+![[Media/Figures/Limited_Fluctuation_Credibility.svg|340]]
+
 > [!example]- Credibility Factor for a Small Class {Example}
 > The full credibility standard for frequency is 1,082 claims. A class has 400 observed claims. Calculate the credibility factor.
 >

@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Fit improving with parameters while the AIC penalty turns the total around</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">AIC = fit penalized by parameter count</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">AIC = −2ℓ + 2k</text>
+  <line x1="114.73" y1="96" x2="114.73" y2="320" class="grid"/>
+  <line x1="178.15" y1="96" x2="178.15" y2="320" class="grid"/>
+  <line x1="241.56" y1="96" x2="241.56" y2="320" class="grid"/>
+  <line x1="304.98" y1="96" x2="304.98" y2="320" class="grid"/>
+  <line x1="64" y1="275.2" x2="324" y2="275.2" class="grid"/>
+  <line x1="64" y1="185.6" x2="324" y2="185.6" class="grid"/>
+  <line x1="64" y1="96" x2="324" y2="96" class="grid"/>
+  <line x1="64" y1="320" x2="334" y2="320" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="320" x2="64" y2="86" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="114.73" y1="320" x2="114.73" y2="324" class="tick"/>
+  <text x="114.73" y="336" text-anchor="middle" class="sm dim">2</text>
+  <line x1="178.15" y1="320" x2="178.15" y2="324" class="tick"/>
+  <text x="178.15" y="336" text-anchor="middle" class="sm dim">4</text>
+  <line x1="241.56" y1="320" x2="241.56" y2="324" class="tick"/>
+  <text x="241.56" y="336" text-anchor="middle" class="sm dim">6</text>
+  <line x1="304.98" y1="320" x2="304.98" y2="324" class="tick"/>
+  <text x="304.98" y="336" text-anchor="middle" class="sm dim">8</text>
+  <line x1="60" y1="275.2" x2="64" y2="275.2" class="tick"/>
+  <text x="56" y="278.8" text-anchor="end" class="sm dim">200</text>
+  <line x1="60" y1="185.6" x2="64" y2="185.6" class="tick"/>
+  <text x="56" y="189.2" text-anchor="end" class="sm dim">220</text>
+  <line x1="60" y1="96" x2="64" y2="96" class="tick"/>
+  <text x="56" y="99.6" text-anchor="end" class="sm dim">240</text>
+  <polyline points="83.02,131.84 114.73,194.56 146.44,239.36 178.15,261.76 209.85,270.72 241.56,273.41 273.27,274.75 304.98,275.2" class="curve dash" stroke="var(--dim)" stroke-width="1.8"/>
+  <polyline points="83.02,122.88 114.73,176.64 146.44,212.48 178.15,225.92 209.85,225.92 241.56,219.65 273.27,212.03 304.98,203.52" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <circle cx="178.15" cy="225.92" r="3.6" fill="#059669"/>
+  <text x="178.15" y="215.92" text-anchor="middle" class="sm">best AIC</text>
+  <text x="304.98" y="287.2" text-anchor="end" class="sm dim">−2ℓ</text>
+  <text x="133.76" y="140.8" text-anchor="start" class="sm bold" fill="#3b82f6">AIC</text>
+  <text x="180" y="352" text-anchor="middle" class="sm dim">parameters k</text>
+  <text x="180" y="370" text-anchor="middle" class="sm dim">fit always improves; AIC does not</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">lower is better — the value alone means nothing</text>
+</svg>

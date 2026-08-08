@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Two models compared on buckets sorted by the ratio of their predictions</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Sort on the ratio to see where two</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">models differ</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">sort by ŷᴬ / ŷᴮ</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">then plot both against actual</text>
+  <text x="180" y="88" text-anchor="middle" class="sm dim">buckets by ŷ_new / ŷ_current</text>
+  <line x1="97.7" y1="112" x2="97.7" y2="306" class="grid"/>
+  <line x1="145.85" y1="112" x2="145.85" y2="306" class="grid"/>
+  <line x1="194" y1="112" x2="194" y2="306" class="grid"/>
+  <line x1="242.15" y1="112" x2="242.15" y2="306" class="grid"/>
+  <line x1="290.3" y1="112" x2="290.3" y2="306" class="grid"/>
+  <line x1="64" y1="260.35" x2="324" y2="260.35" class="grid"/>
+  <line x1="64" y1="214.71" x2="324" y2="214.71" class="grid"/>
+  <line x1="64" y1="169.06" x2="324" y2="169.06" class="grid"/>
+  <line x1="64" y1="123.41" x2="324" y2="123.41" class="grid"/>
+  <line x1="64" y1="306" x2="324" y2="306" class="axis"/>
+  <line x1="64" y1="112" x2="64" y2="306" class="axis"/>
+  <line x1="97.7" y1="306" x2="97.7" y2="310" class="tick"/>
+  <text x="97.7" y="322" text-anchor="middle" class="sm dim">1</text>
+  <line x1="145.85" y1="306" x2="145.85" y2="310" class="tick"/>
+  <text x="145.85" y="322" text-anchor="middle" class="sm dim">2</text>
+  <line x1="194" y1="306" x2="194" y2="310" class="tick"/>
+  <text x="194" y="322" text-anchor="middle" class="sm dim">3</text>
+  <line x1="242.15" y1="306" x2="242.15" y2="310" class="tick"/>
+  <text x="242.15" y="322" text-anchor="middle" class="sm dim">4</text>
+  <line x1="290.3" y1="306" x2="290.3" y2="310" class="tick"/>
+  <text x="290.3" y="322" text-anchor="middle" class="sm dim">5</text>
+  <line x1="60" y1="260.35" x2="64" y2="260.35" class="tick"/>
+  <text x="56" y="263.95" text-anchor="end" class="sm dim">0.8</text>
+  <line x1="60" y1="214.71" x2="64" y2="214.71" class="tick"/>
+  <text x="56" y="218.31" text-anchor="end" class="sm dim">1</text>
+  <line x1="60" y1="169.06" x2="64" y2="169.06" class="tick"/>
+  <text x="56" y="172.66" text-anchor="end" class="sm dim">1.2</text>
+  <line x1="60" y1="123.41" x2="64" y2="123.41" class="tick"/>
+  <text x="56" y="127.01" text-anchor="end" class="sm dim">1.4</text>
+  <rect x="83.7" y="264.92" width="28" height="41.08" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+  <rect x="131.85" y="235.25" width="28" height="70.75" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+  <rect x="180" y="214.71" width="28" height="91.29" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+  <rect x="228.15" y="182.75" width="28" height="123.25" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+  <rect x="276.3" y="143.95" width="28" height="162.05" rx="1.5" fill="var(--dim)" fill-opacity="0.22"/>
+  <polyline points="97.7,260.35 145.85,232.96 194,212.42 242.15,187.32 290.3,150.8" class="curve" stroke="#059669" stroke-width="2.3"/>
+  <circle cx="97.7" cy="260.35" r="3.2" fill="#059669"/>
+  <circle cx="145.85" cy="232.96" r="3.2" fill="#059669"/>
+  <circle cx="194" cy="212.42" r="3.2" fill="#059669"/>
+  <circle cx="242.15" cy="187.32" r="3.2" fill="#059669"/>
+  <circle cx="290.3" cy="150.8" r="3.2" fill="#059669"/>
+  <polyline points="97.7,210.14 145.85,214.71 194,214.71 242.15,210.14 290.3,203.29" class="curve dash" stroke="#e11d48" stroke-width="2.3"/>
+  <circle cx="97.7" cy="210.14" r="3.2" fill="#e11d48"/>
+  <circle cx="145.85" cy="214.71" r="3.2" fill="#e11d48"/>
+  <circle cx="194" cy="214.71" r="3.2" fill="#e11d48"/>
+  <circle cx="242.15" cy="210.14" r="3.2" fill="#e11d48"/>
+  <circle cx="290.3" cy="203.29" r="3.2" fill="#e11d48"/>
+  <line x1="32" y1="344" x2="45" y2="344" stroke="var(--dim)" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="51" y="347.6" text-anchor="start" class="sm">actual</text>
+  <line x1="130" y1="344" x2="143" y2="344" stroke="#059669" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="149" y="347.6" text-anchor="start" class="sm">new</text>
+  <line x1="228" y1="344" x2="241" y2="344" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="247" y="347.6" text-anchor="start" class="sm">current</text>
+  <text x="180" y="370" text-anchor="middle" class="sm bold">the flat curve is the loser</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">the winner tracks the actuals in both tails</text>
+</svg>

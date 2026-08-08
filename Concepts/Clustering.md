@@ -22,6 +22,8 @@
 - Clustering requires a **dissimilarity measure** (e.g., Euclidean distance, correlation-based distance); predictors should be **standardized**
 - Used in actuarial science for **policyholder segmentation**, **territory grouping**, and **fraud detection**
 
+![[Media/Figures/Clustering.svg|340]]
+
 > [!example]- Choosing the Number of Clusters {Example}
 > An actuary applies hierarchical clustering to 500 policyholders using vehicle and driver characteristics. The dendrogram shows large height gaps between 3 and 4 clusters. What does this suggest?
 >

@@ -20,6 +20,8 @@
 - Lift is closely related to the [[AUROC]] and [[Gini Index]] — all measure ranking/discriminatory ability
 - **At 100% of the population**: cumulative lift = 1 for any model (all positives are eventually captured)
 
+![[Media/Figures/Lift.svg|340]]
+
 > [!example]- Calculating Lift for the Top Decile {Example}
 > A fraud detection model is applied to 1,000 claims. 100 claims are actual fraud (10% base rate). In the top decile (100 highest-scored claims), 35 are fraudulent. What is the lift?
 >

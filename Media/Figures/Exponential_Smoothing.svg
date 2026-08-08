@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Geometrically decaying weights on past observations, and the flat forecast they give</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Weights decaying geometrically into the</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">past</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Ŷ_{t+1} = αY_t + (1 − α)Ŷ_t</text>
+  <line x1="79.29" y1="102" x2="79.29" y2="288" class="grid"/>
+  <line x1="130.27" y1="102" x2="130.27" y2="288" class="grid"/>
+  <line x1="181.25" y1="102" x2="181.25" y2="288" class="grid"/>
+  <line x1="232.24" y1="102" x2="232.24" y2="288" class="grid"/>
+  <line x1="283.22" y1="102" x2="283.22" y2="288" class="grid"/>
+  <line x1="64" y1="288" x2="324" y2="288" class="grid"/>
+  <line x1="64" y1="210.5" x2="324" y2="210.5" class="grid"/>
+  <line x1="64" y1="133" x2="324" y2="133" class="grid"/>
+  <line x1="64" y1="288" x2="324" y2="288" class="axis"/>
+  <line x1="64" y1="102" x2="64" y2="288" class="axis"/>
+  <line x1="79.29" y1="288" x2="79.29" y2="292" class="tick"/>
+  <text x="79.29" y="304" text-anchor="middle" class="sm dim">t</text>
+  <line x1="130.27" y1="288" x2="130.27" y2="292" class="tick"/>
+  <text x="130.27" y="304" text-anchor="middle" class="sm dim">t−2</text>
+  <line x1="181.25" y1="288" x2="181.25" y2="292" class="tick"/>
+  <text x="181.25" y="304" text-anchor="middle" class="sm dim">t−4</text>
+  <line x1="232.24" y1="288" x2="232.24" y2="292" class="tick"/>
+  <text x="232.24" y="304" text-anchor="middle" class="sm dim">t−6</text>
+  <line x1="283.22" y1="288" x2="283.22" y2="292" class="tick"/>
+  <text x="283.22" y="304" text-anchor="middle" class="sm dim">t−8</text>
+  <line x1="60" y1="288" x2="64" y2="288" class="tick"/>
+  <text x="56" y="291.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="60" y1="210.5" x2="64" y2="210.5" class="tick"/>
+  <text x="56" y="214.1" text-anchor="end" class="sm dim">0.15</text>
+  <line x1="60" y1="133" x2="64" y2="133" class="tick"/>
+  <text x="56" y="136.6" text-anchor="end" class="sm dim">0.3</text>
+  <rect x="70.79" y="133" width="17" height="155" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="96.28" y="179.5" width="17" height="108.5" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="121.77" y="212.05" width="17" height="75.95" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="147.26" y="234.84" width="17" height="53.16" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="172.75" y="250.78" width="17" height="37.22" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="198.25" y="261.95" width="17" height="26.05" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="223.74" y="269.76" width="17" height="18.24" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="249.23" y="275.24" width="17" height="12.76" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="274.72" y="279.06" width="17" height="8.94" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="300.21" y="281.75" width="17" height="6.25" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <text x="145.57" y="161.42" text-anchor="start" class="sm bold" fill="#3b82f6">α = 0.3</text>
+  <line x1="40" y1="322" x2="320" y2="322" class="rule"/>
+  <text x="180" y="344" text-anchor="middle" class="sm">Ŷ₁₁ = 0.3(470) + 0.7(420) = 435</text>
+  <text x="180" y="364" text-anchor="middle" class="sm dim">α near 1 reacts fast; α near 0 smooths hard</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">Holt adds a trend; Holt-Winters adds a season</text>
+</svg>

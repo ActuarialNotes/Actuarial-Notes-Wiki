@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Splits restricted to a random subset of predictors so the trees decorrelate</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Only m of p predictors may split each</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">node</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">m ≈ √p  (classification),  p/3  (regression)</text>
+  <text x="180" y="98" text-anchor="middle" class="sm bold" fill="var(--dim)">bagging: m = p</text>
+  <rect x="62" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <rect x="90" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <rect x="118" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <rect x="146" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <rect x="174" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <rect x="202" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <rect x="230" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <rect x="258" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <rect x="286" y="108" width="22" height="22" rx="4" fill="var(--dim)" fill-opacity="0.55" stroke="var(--dim)" stroke-width="1.1"/>
+  <text x="180" y="150" text-anchor="middle" class="sm dim">every predictor eligible — the strong one always wins</text>
+  <text x="180" y="172" text-anchor="middle" class="sm bold" fill="#3b82f6">forest: m = √p = 3</text>
+  <rect x="62" y="182" width="22" height="22" rx="4" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.1"/>
+  <rect x="90" y="182" width="22" height="22" rx="4" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1.1"/>
+  <rect x="118" y="182" width="22" height="22" rx="4" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.1"/>
+  <rect x="146" y="182" width="22" height="22" rx="4" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.1"/>
+  <rect x="174" y="182" width="22" height="22" rx="4" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1.1"/>
+  <rect x="202" y="182" width="22" height="22" rx="4" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.1"/>
+  <rect x="230" y="182" width="22" height="22" rx="4" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.1"/>
+  <rect x="258" y="182" width="22" height="22" rx="4" fill="#3b82f6" fill-opacity="0.55" stroke="#3b82f6" stroke-width="1.1"/>
+  <rect x="286" y="182" width="22" height="22" rx="4" fill="var(--soft)" fill-opacity="1" stroke="var(--edge)" stroke-width="1.1"/>
+  <text x="180" y="224" text-anchor="middle" class="sm dim">eligible at this split</text>
+  <line x1="66" y1="338" x2="320" y2="338" class="axis"/>
+  <line x1="66" y1="258" x2="66" y2="338" class="axis"/>
+  <polyline points="66,263.93 67.41,265.9 68.82,267.29 70.23,268.3 71.64,269.08 73.06,269.7 74.47,270.21 75.88,270.62 77.29,270.97 78.7,271.27 80.11,271.53 81.52,271.75 82.93,271.95 84.34,272.13 85.76,272.28 87.17,272.42 88.58,272.55 89.99,272.66 91.4,272.77 92.81,272.87 94.22,272.95 95.63,273.04 97.04,273.11 98.46,273.18 99.87,273.24 101.28,273.31 102.69,273.36 104.1,273.41 105.51,273.46 106.92,273.51 108.33,273.56 109.74,273.6 111.16,273.64 112.57,273.67 113.98,273.71 115.39,273.74 116.8,273.77 118.21,273.8 119.62,273.83 121.03,273.86 122.44,273.89 123.86,273.91 125.27,273.94 126.68,273.96 128.09,273.98 129.5,274 130.91,274.02 132.32,274.04 133.73,274.06 135.14,274.08 136.56,274.1 137.97,274.11 139.38,274.13 140.79,274.15 142.2,274.16 143.61,274.18 145.02,274.19 146.43,274.2 147.84,274.22 149.26,274.23 150.67,274.24 152.08,274.26 153.49,274.27 154.9,274.28 156.31,274.29 157.72,274.3 159.13,274.31 160.54,274.32 161.96,274.33 163.37,274.34 164.78,274.35 166.19,274.36 167.6,274.37 169.01,274.38 170.42,274.38 171.83,274.39 173.24,274.4 174.66,274.41 176.07,274.42 177.48,274.42 178.89,274.43 180.3,274.44 181.71,274.44 183.12,274.45 184.53,274.46 185.94,274.46 187.36,274.47 188.77,274.48 190.18,274.48 191.59,274.49 193,274.5 194.41,274.5 195.82,274.51 197.23,274.51 198.64,274.52 200.06,274.52 201.47,274.53 202.88,274.53 204.29,274.54 205.7,274.54 207.11,274.55 208.52,274.55 209.93,274.56 211.34,274.56 212.76,274.56 214.17,274.57 215.58,274.57 216.99,274.58 218.4,274.58 219.81,274.59 221.22,274.59 222.63,274.59 224.04,274.6 225.46,274.6 226.87,274.6 228.28,274.61 229.69,274.61 231.1,274.62 232.51,274.62 233.92,274.62 235.33,274.63 236.74,274.63 238.16,274.63 239.57,274.64 240.98,274.64 242.39,274.64 243.8,274.64 245.21,274.65 246.62,274.65 248.03,274.65 249.44,274.66 250.86,274.66 252.27,274.66 253.68,274.66 255.09,274.67 256.5,274.67 257.91,274.67 259.32,274.67 260.73,274.68 262.14,274.68 263.56,274.68 264.97,274.68 266.38,274.69 267.79,274.69 269.2,274.69 270.61,274.69 272.02,274.7 273.43,274.7 274.84,274.7 276.26,274.7 277.67,274.71 279.08,274.71 280.49,274.71 281.9,274.71 283.31,274.71 284.72,274.72 286.13,274.72 287.54,274.72 288.96,274.72 290.37,274.72 291.78,274.73 293.19,274.73 294.6,274.73 296.01,274.73 297.42,274.73 298.83,274.73 300.24,274.74 301.66,274.74 303.07,274.74 304.48,274.74 305.89,274.74 307.3,274.75 308.71,274.75 310.12,274.75 311.53,274.75 312.94,274.75 314.36,274.75 315.77,274.75 317.18,274.76 318.59,274.76 320,274.76" class="curve" stroke="var(--dim)" stroke-width="2.2"/>
+  <line x1="66" y1="275.04" x2="320" y2="275.04" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <text x="313.49" y="268.37" text-anchor="end" class="sm bold" fill="var(--dim)">bagging, ρ = 0.85</text>
+  <polyline points="66,263.93 67.41,272.5 68.82,278.48 70.23,282.89 71.64,286.28 73.06,288.96 74.47,291.14 75.88,292.94 77.29,294.46 78.7,295.75 80.11,296.87 81.52,297.84 82.93,298.7 84.34,299.46 85.76,300.14 87.17,300.75 88.58,301.29 89.99,301.79 91.4,302.25 92.81,302.66 94.22,303.05 95.63,303.4 97.04,303.72 98.46,304.03 99.87,304.31 101.28,304.57 102.69,304.82 104.1,305.05 105.51,305.26 106.92,305.46 108.33,305.65 109.74,305.83 111.16,306 112.57,306.17 113.98,306.32 115.39,306.46 116.8,306.6 118.21,306.73 119.62,306.86 121.03,306.98 122.44,307.09 123.86,307.2 125.27,307.31 126.68,307.41 128.09,307.5 129.5,307.6 130.91,307.68 132.32,307.77 133.73,307.85 135.14,307.93 136.56,308.01 137.97,308.08 139.38,308.15 140.79,308.22 142.2,308.28 143.61,308.35 145.02,308.41 146.43,308.47 147.84,308.53 149.26,308.58 150.67,308.63 152.08,308.69 153.49,308.74 154.9,308.79 156.31,308.84 157.72,308.88 159.13,308.93 160.54,308.97 161.96,309.01 163.37,309.06 164.78,309.1 166.19,309.14 167.6,309.17 169.01,309.21 170.42,309.25 171.83,309.28 173.24,309.32 174.66,309.35 176.07,309.38 177.48,309.42 178.89,309.45 180.3,309.48 181.71,309.51 183.12,309.54 184.53,309.57 185.94,309.59 187.36,309.62 188.77,309.65 190.18,309.67 191.59,309.7 193,309.73 194.41,309.75 195.82,309.77 197.23,309.8 198.64,309.82 200.06,309.84 201.47,309.87 202.88,309.89 204.29,309.91 205.7,309.93 207.11,309.95 208.52,309.97 209.93,309.99 211.34,310.01 212.76,310.03 214.17,310.05 215.58,310.07 216.99,310.08 218.4,310.1 219.81,310.12 221.22,310.14 222.63,310.15 224.04,310.17 225.46,310.18 226.87,310.2 228.28,310.22 229.69,310.23 231.1,310.25 232.51,310.26 233.92,310.28 235.33,310.29 236.74,310.31 238.16,310.32 239.57,310.33 240.98,310.35 242.39,310.36 243.8,310.37 245.21,310.39 246.62,310.4 248.03,310.41 249.44,310.42 250.86,310.44 252.27,310.45 253.68,310.46 255.09,310.47 256.5,310.48 257.91,310.49 259.32,310.5 260.73,310.52 262.14,310.53 263.56,310.54 264.97,310.55 266.38,310.56 267.79,310.57 269.2,310.58 270.61,310.59 272.02,310.6 273.43,310.61 274.84,310.62 276.26,310.63 277.67,310.64 279.08,310.65 280.49,310.66 281.9,310.66 283.31,310.67 284.72,310.68 286.13,310.69 287.54,310.7 288.96,310.71 290.37,310.72 291.78,310.72 293.19,310.73 294.6,310.74 296.01,310.75 297.42,310.76 298.83,310.76 300.24,310.77 301.66,310.78 303.07,310.79 304.48,310.79 305.89,310.8 307.3,310.81 308.71,310.82 310.12,310.82 311.53,310.83 312.94,310.84 314.36,310.84 315.77,310.85 317.18,310.86 318.59,310.86 320,310.87" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
+  <line x1="66" y1="312.07" x2="320" y2="312.07" class="thin dash" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="313.49" y="305.41" text-anchor="end" class="sm bold" fill="#3b82f6">forest, ρ = 0.35</text>
+  <text x="180" y="356" text-anchor="middle" class="sm dim">trees B →   variance floors at ρσ²</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">m = p is bagging; small m decorrelates more</text>
+</svg>

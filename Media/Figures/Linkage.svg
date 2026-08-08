@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Complete, single and average linkage measuring the distance between the same two clusters</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Three ways to measure cluster distance</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">complete = max · single = min</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">average = mean</text>
+  <text x="180" y="98" text-anchor="middle" class="sm bold" fill="#e11d48">complete — max</text>
+  <line x1="76.92" y1="151.3" x2="250.16" y2="119.3" class="thin" stroke="#e11d48" stroke-width="2"/>
+  <circle cx="85.44" cy="123.48" r="3.4" fill="var(--dim)"/>
+  <circle cx="105.32" cy="140.17" r="3.4" fill="var(--dim)"/>
+  <circle cx="76.92" cy="151.3" r="3.4" fill="var(--dim)"/>
+  <circle cx="250.16" cy="119.3" r="3.4" fill="var(--dim)"/>
+  <circle cx="270.04" cy="141.57" r="3.4" fill="var(--dim)"/>
+  <circle cx="238.8" cy="156.87" r="3.4" fill="var(--dim)"/>
+  <text x="180" y="198" text-anchor="middle" class="sm bold" fill="#059669">single — min</text>
+  <line x1="105.32" y1="240.17" x2="238.8" y2="256.87" class="thin" stroke="#059669" stroke-width="2"/>
+  <circle cx="85.44" cy="223.48" r="3.4" fill="var(--dim)"/>
+  <circle cx="105.32" cy="240.17" r="3.4" fill="var(--dim)"/>
+  <circle cx="76.92" cy="251.3" r="3.4" fill="var(--dim)"/>
+  <circle cx="250.16" cy="219.3" r="3.4" fill="var(--dim)"/>
+  <circle cx="270.04" cy="241.57" r="3.4" fill="var(--dim)"/>
+  <circle cx="238.8" cy="256.87" r="3.4" fill="var(--dim)"/>
+  <text x="180" y="298" text-anchor="middle" class="sm bold" fill="#3b82f6">average — mean</text>
+  <line x1="85.44" y1="323.48" x2="250.16" y2="319.3" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <line x1="85.44" y1="323.48" x2="270.04" y2="341.57" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <line x1="85.44" y1="323.48" x2="238.8" y2="356.87" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <line x1="105.32" y1="340.17" x2="250.16" y2="319.3" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <line x1="105.32" y1="340.17" x2="270.04" y2="341.57" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <line x1="105.32" y1="340.17" x2="238.8" y2="356.87" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <line x1="76.92" y1="351.3" x2="250.16" y2="319.3" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <line x1="76.92" y1="351.3" x2="270.04" y2="341.57" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <line x1="76.92" y1="351.3" x2="238.8" y2="356.87" class="thin" stroke="#3b82f6" stroke-width="0.9" stroke-opacity="0.55"/>
+  <circle cx="85.44" cy="323.48" r="3.4" fill="var(--dim)"/>
+  <circle cx="105.32" cy="340.17" r="3.4" fill="var(--dim)"/>
+  <circle cx="76.92" cy="351.3" r="3.4" fill="var(--dim)"/>
+  <circle cx="250.16" cy="319.3" r="3.4" fill="var(--dim)"/>
+  <circle cx="270.04" cy="341.57" r="3.4" fill="var(--dim)"/>
+  <circle cx="238.8" cy="356.87" r="3.4" fill="var(--dim)"/>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">single linkage chains; complete and average balance</text>
+</svg>

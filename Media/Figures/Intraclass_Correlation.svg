@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The share of variance sitting between groups, and the design effect it causes</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">ICC is the between-group share of</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">variance</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">ρ = σ²_b / (σ²_b + σ²)</text>
+  <rect x="56" y="112" width="41.6" height="30" rx="4" fill="#7c3aed" fill-opacity="0.55"/>
+  <rect x="97.6" y="112" width="166.4" height="30" rx="4" fill="#3b82f6" fill-opacity="0.28"/>
+  <text x="76.8" y="132" text-anchor="middle" class="sm bold">0.20</text>
+  <text x="180.8" y="132" text-anchor="middle" class="sm">0.80</text>
+  <text x="76.8" y="104" text-anchor="middle" class="sm dim">between</text>
+  <text x="180.8" y="104" text-anchor="middle" class="sm dim">within</text>
+  <line x1="68" y1="186" x2="68" y2="318" class="grid"/>
+  <line x1="131" y1="186" x2="131" y2="318" class="grid"/>
+  <line x1="194" y1="186" x2="194" y2="318" class="grid"/>
+  <line x1="257" y1="186" x2="257" y2="318" class="grid"/>
+  <line x1="320" y1="186" x2="320" y2="318" class="grid"/>
+  <line x1="68" y1="312" x2="320" y2="312" class="grid"/>
+  <line x1="68" y1="258" x2="320" y2="258" class="grid"/>
+  <line x1="68" y1="198" x2="320" y2="198" class="grid"/>
+  <line x1="68" y1="318" x2="330" y2="318" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="318" x2="68" y2="176" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="318" x2="68" y2="322" class="tick"/>
+  <text x="68" y="334" text-anchor="middle" class="sm dim">0</text>
+  <line x1="131" y1="318" x2="131" y2="322" class="tick"/>
+  <text x="131" y="334" text-anchor="middle" class="sm dim">0.25</text>
+  <line x1="194" y1="318" x2="194" y2="322" class="tick"/>
+  <text x="194" y="334" text-anchor="middle" class="sm dim">0.5</text>
+  <line x1="257" y1="318" x2="257" y2="322" class="tick"/>
+  <text x="257" y="334" text-anchor="middle" class="sm dim">0.75</text>
+  <line x1="320" y1="318" x2="320" y2="322" class="tick"/>
+  <text x="320" y="334" text-anchor="middle" class="sm dim">1</text>
+  <line x1="64" y1="312" x2="68" y2="312" class="tick"/>
+  <text x="60" y="315.6" text-anchor="end" class="sm dim">1</text>
+  <line x1="64" y1="258" x2="68" y2="258" class="tick"/>
+  <text x="60" y="261.6" text-anchor="end" class="sm dim">10</text>
+  <line x1="64" y1="198" x2="68" y2="198" class="tick"/>
+  <text x="60" y="201.6" text-anchor="end" class="sm dim">20</text>
+  <text x="180" y="350" text-anchor="middle" class="sm dim">ρ</text>
+  <polyline points="68,312 69.4,311.37 70.8,310.73 72.2,310.1 73.6,309.47 75,308.83 76.4,308.2 77.8,307.57 79.2,306.93 80.6,306.3 82,305.67 83.4,305.03 84.8,304.4 86.2,303.77 87.6,303.13 89,302.5 90.4,301.87 91.8,301.23 93.2,300.6 94.6,299.97 96,299.33 97.4,298.7 98.8,298.07 100.2,297.43 101.6,296.8 103,296.17 104.4,295.53 105.8,294.9 107.2,294.27 108.6,293.63 110,293 111.4,292.37 112.8,291.73 114.2,291.1 115.6,290.47 117,289.83 118.4,289.2 119.8,288.57 121.2,287.93 122.6,287.3 124,286.67 125.4,286.03 126.8,285.4 128.2,284.77 129.6,284.13 131,283.5 132.4,282.87 133.8,282.23 135.2,281.6 136.6,280.97 138,280.33 139.4,279.7 140.8,279.07 142.2,278.43 143.6,277.8 145,277.17 146.4,276.53 147.8,275.9 149.2,275.27 150.6,274.63 152,274 153.4,273.37 154.8,272.73 156.2,272.1 157.6,271.47 159,270.83 160.4,270.2 161.8,269.57 163.2,268.93 164.6,268.3 166,267.67 167.4,267.03 168.8,266.4 170.2,265.77 171.6,265.13 173,264.5 174.4,263.87 175.8,263.23 177.2,262.6 178.6,261.97 180,261.33 181.4,260.7 182.8,260.07 184.2,259.43 185.6,258.8 187,258.17 188.4,257.53 189.8,256.9 191.2,256.27 192.6,255.63 194,255 195.4,254.37 196.8,253.73 198.2,253.1 199.6,252.47 201,251.83 202.4,251.2 203.8,250.57 205.2,249.93 206.6,249.3 208,248.67 209.4,248.03 210.8,247.4 212.2,246.77 213.6,246.13 215,245.5 216.4,244.87 217.8,244.23 219.2,243.6 220.6,242.97 222,242.33 223.4,241.7 224.8,241.07 226.2,240.43 227.6,239.8 229,239.17 230.4,238.53 231.8,237.9 233.2,237.27 234.6,236.63 236,236 237.4,235.37 238.8,234.73 240.2,234.1 241.6,233.47 243,232.83 244.4,232.2 245.8,231.57 247.2,230.93 248.6,230.3 250,229.67 251.4,229.03 252.8,228.4 254.2,227.77 255.6,227.13 257,226.5 258.4,225.87 259.8,225.23 261.2,224.6 262.6,223.97 264,223.33 265.4,222.7 266.8,222.07 268.2,221.43 269.6,220.8 271,220.17 272.4,219.53 273.8,218.9 275.2,218.27 276.6,217.63 278,217 279.4,216.37 280.8,215.73 282.2,215.1 283.6,214.47 285,213.83 286.4,213.2 287.8,212.57 289.2,211.93 290.6,211.3 292,210.67 293.4,210.03 294.8,209.4 296.2,208.77 297.6,208.13 299,207.5 300.4,206.87 301.8,206.23 303.2,205.6 304.6,204.97 306,204.33 307.4,203.7 308.8,203.07 310.2,202.43 311.6,201.8 313,201.17 314.4,200.53 315.8,199.9 317.2,199.27 318.6,198.63 320,198" class="curve" stroke="#e11d48" stroke-width="2.3"/>
+  <circle cx="118.4" cy="289.2" r="3.6" fill="#e11d48"/>
+  <text x="132.4" y="280.2" text-anchor="middle" class="sm">4.8</text>
+  <text x="199.04" y="213" text-anchor="middle" class="sm dim">design effect, n = 20</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">500 clustered claims ≈ 104 independent ones</text>
+</svg>

@@ -17,6 +17,8 @@ The **Gini Index** has two distinct uses in actuarial statistics:
 - For **binary classification** ($K=2$): $G = 2\hat{p}(1-\hat{p})$, maximized at $\hat{p}=0.5$ with $G=0.5$
 - Gini is preferred over [[Entropy]] in practice as it is computationally simpler
 
+![[Media/Figures/Gini_Index.svg|340]]
+
 > [!example]- Gini Index for a Decision Tree Node {Example}
 > A node in a classification tree contains 30 fraud cases and 70 non-fraud cases (100 total). Calculate the Gini Index.
 >

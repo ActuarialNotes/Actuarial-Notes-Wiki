@@ -15,6 +15,8 @@ $$\text{ICC} = \frac{\sigma_u^2}{\sigma_u^2 + \sigma_\varepsilon^2}$$
 - A high ICC indicates that knowing one observation's group provides substantial information about other observations in the same group
 - Hierarchical models can also include **random slopes**, where the effect of a predictor $x_{ij}$ varies across groups $j$
 
+![[Media/Figures/Hierarchical_Model.svg|340]]
+
 > [!example]- ICC in a Claims Hierarchical Model {Example}
 > An actuary fits a hierarchical model to claims data from 200 territories, each with multiple policyholders. The estimated variance components are $\hat{\sigma}_u^2 = 0.04$ (between territories) and $\hat{\sigma}_\varepsilon^2 = 0.16$ (within territories). Calculate the ICC.
 >

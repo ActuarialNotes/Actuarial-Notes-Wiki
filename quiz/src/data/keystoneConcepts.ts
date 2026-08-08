@@ -260,4 +260,66 @@ export const KEYSTONE_EXAMS: KeystoneExam[] = [
       },
     ],
   },
+  {
+    id: 'MAS-II',
+    label: 'Exam MAS-II',
+    concepts: [
+      {
+        name: 'Credibility Theory',
+        why: 'Weighting a class\'s own experience against a complement — every credibility method on the exam is one recipe for that weight.',
+      },
+      {
+        name: 'Bühlmann Credibility',
+        why: 'Sets Z = n/(n+k) from within-risk noise over between-risk spread — the least-squares answer the other methods are compared against.',
+      },
+      {
+        name: 'Bayesian Credibility',
+        why: 'The posterior mean given the experience; under a conjugate prior it equals Bühlmann exactly, which is why the pairs get memorized.',
+      },
+      {
+        name: 'Linear Mixed Model',
+        why: 'Regression with a population part plus group-level departures — the whole of section B, and how correlated observations are handled.',
+      },
+      {
+        name: 'Random Effects',
+        why: 'Group deviations treated as draws from a distribution, costing one variance rather than one coefficient per level.',
+      },
+      {
+        name: 'Best Linear Unbiased Predictor',
+        why: 'The shrunk prediction of a group effect — its shrinkage factor is Bühlmann\'s Z, which ties sections A and B together.',
+      },
+      {
+        name: 'Bias-Variance Tradeoff',
+        why: 'Flexibility trades approximation error for instability, so test error is U-shaped — why every tuning parameter on the exam exists.',
+      },
+      {
+        name: 'Cross-Validation',
+        why: 'Estimates test error by holding out folds in turn — how k, tree depth, m and λ are all actually chosen.',
+      },
+      {
+        name: 'Decision Tree',
+        why: 'Recursive binary splits carving predictor space into boxes — the base learner every ensemble method on the syllabus is built from.',
+      },
+      {
+        name: 'Tree Ensemble',
+        why: 'Combining many trees into one prediction; bagging and forests cut variance, boosting cuts bias, and the exam tests the difference.',
+      },
+      {
+        name: 'Principal Components Analysis',
+        why: 'Rotates correlated predictors onto directions of maximum variance — the loadings, scores and variance-explained computations.',
+      },
+      {
+        name: 'Stationarity',
+        why: 'A fixed mean, variance and autocovariance structure — the condition every ARIMA result assumes, and what differencing is for.',
+      },
+      {
+        name: 'Autocorrelation Function',
+        why: 'Correlation with the series k periods back; read with the PACF it is how the order of an ARIMA model gets identified.',
+      },
+      {
+        name: 'ARIMA',
+        why: 'Autoregressive, differencing and moving-average terms in one model — the framework the whole time-series section forecasts with.',
+      },
+    ],
+  },
 ]

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Credibility built on unequal yearly exposures rather than a count of years</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Exposure, not years, drives the weight</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Z = m / (m + k),  m = Σ mᵢ</text>
+  <rect x="52" y="209.2" width="36" height="58.8" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <text x="70" y="283" text-anchor="middle" class="sm dim">Y1</text>
+  <text x="70" y="202.2" text-anchor="middle" class="sm">140</text>
+  <rect x="107" y="158.8" width="36" height="109.2" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <text x="125" y="283" text-anchor="middle" class="sm dim">Y2</text>
+  <text x="125" y="151.8" text-anchor="middle" class="sm">260</text>
+  <rect x="162" y="188.2" width="36" height="79.8" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <text x="180" y="283" text-anchor="middle" class="sm dim">Y3</text>
+  <text x="180" y="181.2" text-anchor="middle" class="sm">190</text>
+  <rect x="217" y="95.8" width="36" height="172.2" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <text x="235" y="283" text-anchor="middle" class="sm dim">Y4</text>
+  <text x="235" y="88.8" text-anchor="middle" class="sm">410</text>
+  <rect x="272" y="133.6" width="36" height="134.4" rx="3" fill="#3b82f6" fill-opacity="0.55"/>
+  <text x="290" y="283" text-anchor="middle" class="sm dim">Y5</text>
+  <text x="290" y="126.6" text-anchor="middle" class="sm">320</text>
+  <line x1="44" y1="268" x2="320" y2="268" class="axis"/>
+  <text x="180" y="106" text-anchor="middle" class="sm dim">exposures mᵢ by year</text>
+  <path d="M52,292 v4.8 H174 q5,0 5,4.4 q0,-4.4 5,-4.4 H306 v-4.8" class="thin" stroke="var(--dim)" stroke-width="1.2"/>
+  <text x="179" y="311" text-anchor="middle" class="sm dim">m = 1,320</text>
+  <text x="180" y="350" text-anchor="middle" class="bold">k = 480  ⇒  Z = 1,320 / 1,800 = 0.73</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">one big year can outweigh several small ones</text>
+</svg>

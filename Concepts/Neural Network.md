@@ -18,6 +18,8 @@ A **Neural Network** (also called an **artificial neural network** or **multilay
 - **Dropout** and **regularization** (L1/L2 penalties) combat overfitting
 - **Deep networks** have multiple hidden layers; depth enables learning hierarchical feature representations
 
+![[Media/Figures/Neural_Network.svg|340]]
+
 > [!example]- Interpreting Neural Network Output {Example}
 > A neural network with a sigmoid output is used to predict claim fraud. For a new claim, the network outputs $\hat{p} = 0.82$. What does this mean, and how should a threshold be chosen?
 >

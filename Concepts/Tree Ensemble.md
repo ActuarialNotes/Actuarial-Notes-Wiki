@@ -18,6 +18,8 @@ $$\hat{f}^{(m)}(x) = \hat{f}^{(m-1)}(x) + \lambda \cdot \hat{f}_b(x; r_i^{(m-1)}
 - **Variable importance**: for random forests, measured by the average decrease in [[Gini Index]] or RSS over all splits on a variable
 - **Boosting hyperparameters**: number of trees $B$, shrinkage $\lambda$, tree depth $d$ — all tuned by cross-validation
 
+![[Media/Figures/Tree_Ensemble.svg|340]]
+
 > [!example]- Random Forest Variable Importance {Example}
 > A random forest is fitted to claim severity data with predictors: vehicle age, driver age, territory, and vehicle class. Variable importance (mean decrease in RSS) is 420, 310, 180, 95, respectively. Interpret.
 >

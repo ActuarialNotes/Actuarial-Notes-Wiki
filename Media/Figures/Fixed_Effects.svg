@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A fixed effect estimated separately per level against a random effect shrunk toward the mean</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Fixed effects are estimated, one per</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">level</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">E[y] = Xβ</text>
+  <line x1="64" y1="288.57" x2="324" y2="288.57" class="grid"/>
+  <line x1="64" y1="210" x2="324" y2="210" class="grid"/>
+  <line x1="64" y1="131.43" x2="324" y2="131.43" class="grid"/>
+  <line x1="64" y1="210" x2="324" y2="210" class="axis"/>
+  <line x1="64" y1="100" x2="64" y2="320" class="axis"/>
+  <line x1="60" y1="288.57" x2="64" y2="288.57" class="tick"/>
+  <text x="56" y="292.17" text-anchor="end" class="sm dim">-0.3</text>
+  <line x1="60" y1="210" x2="64" y2="210" class="tick"/>
+  <text x="56" y="213.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="60" y1="131.43" x2="64" y2="131.43" class="tick"/>
+  <text x="56" y="135.03" text-anchor="end" class="sm dim">0.3</text>
+  <text x="97.7" y="337" text-anchor="middle" class="sm dim">T1</text>
+  <text x="145.85" y="337" text-anchor="middle" class="sm dim">T2</text>
+  <text x="194" y="337" text-anchor="middle" class="sm dim">T3</text>
+  <text x="242.15" y="337" text-anchor="middle" class="sm dim">T4</text>
+  <text x="290.3" y="337" text-anchor="middle" class="sm dim">T5</text>
+  <rect x="87.11" y="210" width="21.19" height="68.1" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="135.26" y="210" width="21.19" height="28.81" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="183.41" y="204.76" width="21.19" height="5.24" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="231.56" y="173.33" width="21.19" height="36.67" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="279.7" y="131.43" width="21.19" height="78.57" rx="2" fill="#3b82f6" fill-opacity="0.7"/>
+  <line x1="64" y1="210" x2="324" y2="210" class="thin" stroke="var(--axis)" stroke-width="1.3"/>
+  <line x1="64" y1="320" x2="324" y2="320" class="rule"/>
+  <text x="180" y="358" text-anchor="middle" class="sm dim">one coefficient per territory —</text>
+  <text x="180" y="373" text-anchor="middle" class="sm dim">5 levels cost 4 parameters, no shrinkage</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">use when the levels themselves are the interest</text>
+</svg>

@@ -10,6 +10,8 @@
 - **Information gain** = reduction in entropy from a split: $\Delta D = D_{\text{parent}} - \frac{n_L}{n}D_L - \frac{n_R}{n}D_R$
 - The split that **maximizes information gain** (minimizes child entropy) is chosen
 
+![[Media/Figures/Entropy.svg|340]]
+
 > [!example]- Entropy of a Decision Tree Node {Example}
 > A node contains 40 claims that are large losses and 60 that are small losses (100 total). Calculate the entropy.
 >

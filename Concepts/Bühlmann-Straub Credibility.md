@@ -16,6 +16,8 @@ $$k = \frac{v}{a}, \quad v = E[\sigma^2(\theta)], \quad a = \text{Var}(\mu(\thet
 - When all $m_i = 1$, Bühlmann-Straub reduces to the standard Bühlmann model
 - Parameters $v$ and $a$ are typically estimated from the data using **empirical Bayes** methods
 
+![[Media/Figures/Bühlmann-Straub_Credibility.svg|340]]
+
 > [!example]- Bühlmann-Straub with Unequal Exposures {Example}
 > A risk has three years of data with exposures $(m_1, m_2, m_3) = (100, 200, 150)$ and loss rates $(X_1, X_2, X_3) = (0.08, 0.06, 0.09)$. Given $k = 2{,}500/m$ scaling such that $k = 250$ (i.e., $v/a = 250$) and overall mean $\mu = 0.07$, find the credibility estimate.
 >

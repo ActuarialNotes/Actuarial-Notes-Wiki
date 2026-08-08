@@ -34,10 +34,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from figure_registry import REGISTRY  # noqa: E402
 import figures_exam_p  # noqa: F401,E402
 import figures_exam_fm  # noqa: F401,E402
+import figures_exam_mas_ii  # noqa: F401,E402
 
 OUT_DIR = ROOT / "Media" / "Figures"
 CONCEPTS = ROOT / "Concepts"
-EXAM_PAGES = ["Exam P-1 (SOA).md", "Exam FM-2 (SOA).md"]
+EXAM_PAGES = ["Exam P-1 (SOA).md", "Exam FM-2 (SOA).md", "Exam MAS-II (CAS).md"]
 
 EMBED_RE = re.compile(r"!\[\[")
 EXAMPLE_RE = re.compile(r"^> \[!(example|answer|quote|info|tip|warning)\]", re.M)

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Parallel group lines under a random intercept against fanning lines when the slope is random too</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Random intercept shifts; random slope</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">fans</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">y = (β₀ + b₀ᵢ) + (β₁ + b₁ᵢ)x + ε</text>
+  <line x1="119.55" y1="108" x2="119.55" y2="204" class="grid"/>
+  <line x1="179.09" y1="108" x2="179.09" y2="204" class="grid"/>
+  <line x1="238.64" y1="108" x2="238.64" y2="204" class="grid"/>
+  <line x1="298.18" y1="108" x2="298.18" y2="204" class="grid"/>
+  <line x1="60" y1="180" x2="322" y2="180" class="grid"/>
+  <line x1="60" y1="141.6" x2="322" y2="141.6" class="grid"/>
+  <line x1="60" y1="204" x2="322" y2="204" class="axis"/>
+  <line x1="60" y1="108" x2="60" y2="204" class="axis"/>
+  <line x1="119.55" y1="204" x2="119.55" y2="208" class="tick"/>
+  <text x="119.55" y="220" text-anchor="middle" class="sm dim">1</text>
+  <line x1="179.09" y1="204" x2="179.09" y2="208" class="tick"/>
+  <text x="179.09" y="220" text-anchor="middle" class="sm dim">2</text>
+  <line x1="238.64" y1="204" x2="238.64" y2="208" class="tick"/>
+  <text x="238.64" y="220" text-anchor="middle" class="sm dim">3</text>
+  <line x1="298.18" y1="204" x2="298.18" y2="208" class="tick"/>
+  <text x="298.18" y="220" text-anchor="middle" class="sm dim">4</text>
+  <line x1="56" y1="180" x2="60" y2="180" class="tick"/>
+  <text x="52" y="183.6" text-anchor="end" class="sm dim">0.8</text>
+  <line x1="56" y1="141.6" x2="60" y2="141.6" class="tick"/>
+  <text x="52" y="145.2" text-anchor="end" class="sm dim">1.2</text>
+  <text x="180" y="100" text-anchor="middle" class="sm bold">random intercept</text>
+  <polyline points="89.77,184.8 316.05,162.91" class="curve" stroke="#3b82f6" stroke-width="1.5"/>
+  <polyline points="89.77,170.4 316.05,148.51" class="curve" stroke="#d97706" stroke-width="1.5"/>
+  <polyline points="89.77,157.92 316.05,136.03" class="curve" stroke="#059669" stroke-width="1.5"/>
+  <polyline points="89.77,146.4 316.05,124.51" class="curve" stroke="#7c3aed" stroke-width="1.5"/>
+  <polyline points="89.77,131.04 316.05,109.15" class="curve" stroke="#e11d48" stroke-width="1.5"/>
+  <line x1="119.55" y1="258" x2="119.55" y2="354" class="grid"/>
+  <line x1="179.09" y1="258" x2="179.09" y2="354" class="grid"/>
+  <line x1="238.64" y1="258" x2="238.64" y2="354" class="grid"/>
+  <line x1="298.18" y1="258" x2="298.18" y2="354" class="grid"/>
+  <line x1="60" y1="330" x2="322" y2="330" class="grid"/>
+  <line x1="60" y1="291.6" x2="322" y2="291.6" class="grid"/>
+  <line x1="60" y1="354" x2="322" y2="354" class="axis"/>
+  <line x1="60" y1="258" x2="60" y2="354" class="axis"/>
+  <line x1="119.55" y1="354" x2="119.55" y2="358" class="tick"/>
+  <text x="119.55" y="370" text-anchor="middle" class="sm dim">1</text>
+  <line x1="179.09" y1="354" x2="179.09" y2="358" class="tick"/>
+  <text x="179.09" y="370" text-anchor="middle" class="sm dim">2</text>
+  <line x1="238.64" y1="354" x2="238.64" y2="358" class="tick"/>
+  <text x="238.64" y="370" text-anchor="middle" class="sm dim">3</text>
+  <line x1="298.18" y1="354" x2="298.18" y2="358" class="tick"/>
+  <text x="298.18" y="370" text-anchor="middle" class="sm dim">4</text>
+  <line x1="56" y1="330" x2="60" y2="330" class="tick"/>
+  <text x="52" y="333.6" text-anchor="end" class="sm dim">0.8</text>
+  <line x1="56" y1="291.6" x2="60" y2="291.6" class="tick"/>
+  <text x="52" y="295.2" text-anchor="end" class="sm dim">1.2</text>
+  <text x="180" y="250" text-anchor="middle" class="sm bold">+ random slope</text>
+  <polyline points="89.77,331.92 316.05,288.14" class="curve" stroke="#3b82f6" stroke-width="1.5"/>
+  <polyline points="89.77,321.74 316.05,310.07" class="curve" stroke="#d97706" stroke-width="1.5"/>
+  <polyline points="89.77,307.15 316.05,279.43" class="curve" stroke="#059669" stroke-width="1.5"/>
+  <polyline points="89.77,298.9 316.05,295.98" class="curve" stroke="#7c3aed" stroke-width="1.5"/>
+  <polyline points="89.77,280.85 316.05,257.5" class="curve" stroke="#e11d48" stroke-width="1.5"/>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">a random slope costs σ²₁ and σ₀₁</text>
+</svg>

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Three sample paths of a counting process over the same time axis</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">A process is a whole family of paths</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">{ X(t) : t ≥ 0 }</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">one path per outcome ω</text>
+  <line x1="60" y1="348" x2="336" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="60" y1="348" x2="60" y2="82" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="60" y1="348" x2="60" y2="352" class="tick"/>
+  <text x="60" y="364" text-anchor="middle" class="sm dim">0</text>
+  <line x1="113.2" y1="348" x2="113.2" y2="352" class="tick"/>
+  <text x="113.2" y="364" text-anchor="middle" class="sm dim">2</text>
+  <line x1="166.4" y1="348" x2="166.4" y2="352" class="tick"/>
+  <text x="166.4" y="364" text-anchor="middle" class="sm dim">4</text>
+  <line x1="219.6" y1="348" x2="219.6" y2="352" class="tick"/>
+  <text x="219.6" y="364" text-anchor="middle" class="sm dim">6</text>
+  <line x1="272.8" y1="348" x2="272.8" y2="352" class="tick"/>
+  <text x="272.8" y="364" text-anchor="middle" class="sm dim">8</text>
+  <line x1="326" y1="348" x2="326" y2="352" class="tick"/>
+  <text x="326" y="364" text-anchor="middle" class="sm dim">10</text>
+  <line x1="56" y1="348" x2="60" y2="348" class="tick"/>
+  <text x="52" y="351.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="56" y1="274.86" x2="60" y2="274.86" class="tick"/>
+  <text x="52" y="278.46" text-anchor="end" class="sm dim">2</text>
+  <line x1="56" y1="201.71" x2="60" y2="201.71" class="tick"/>
+  <text x="52" y="205.31" text-anchor="end" class="sm dim">4</text>
+  <line x1="56" y1="128.57" x2="60" y2="128.57" class="tick"/>
+  <text x="52" y="132.17" text-anchor="end" class="sm dim">6</text>
+  <text x="326" y="380" text-anchor="end" class="sm dim">time t</text>
+  <polyline points="60,348 75.96,348 75.96,311.43 99.9,311.43 99.9,274.86 150.44,274.86 150.44,238.29 193,238.29 193,201.71 222.26,201.71 222.26,165.14 278.12,165.14 278.12,128.57 326,128.57" class="curve" stroke="#3b82f6" stroke-width="1.8"/>
+  <polyline points="60,348 91.92,348 91.92,311.43 113.2,311.43 113.2,274.86 129.16,274.86 129.16,238.29 187.68,238.29 187.68,201.71 256.84,201.71 256.84,165.14 326,165.14" class="curve" stroke="#d97706" stroke-width="1.8"/>
+  <polyline points="60,348 83.94,348 83.94,311.43 142.46,311.43 142.46,274.86 171.72,274.86 171.72,238.29 190.34,238.29 190.34,201.71 235.56,201.71 235.56,165.14 267.48,165.14 267.48,128.57 302.06,128.57 302.06,92 326,92" class="curve" stroke="#059669" stroke-width="1.8"/>
+</svg>

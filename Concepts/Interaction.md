@@ -7,6 +7,8 @@ An **Interaction** between two predictors in a [[Generalized Linear Model]] exis
 - Interactions can occur between two [[Categorical Predictor|categorical predictors]] (the effect differs by combination of levels), a categorical and a continuous predictor (the slope differs by group), or two continuous predictors
 - Interaction terms add to the [[Model Structure]] and are tested for significance via the [[Parameter Estimate Tables|parameter estimate table]] or a nested-model [[ANOVA]] (likelihood-ratio) test; unnecessary interactions increase the risk of overfitting
 
+![[Media/Figures/Interaction.svg|340]]
+
 > [!example]- Interpreting an Interaction Coefficient {Example}
 > A Poisson GLM for claim frequency includes vehicle age ($x_1$), an indicator for sports car ($x_2$), and their interaction, with $\hat{\beta}_1 = -0.02$, $\hat{\beta}_2 = 0.10$, $\hat{\beta}_3 = 0.03$. How does the effect of one additional year of vehicle age on log-frequency differ for sports cars versus non-sports cars?
 >

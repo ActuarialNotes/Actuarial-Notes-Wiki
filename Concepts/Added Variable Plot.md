@@ -9,6 +9,8 @@ An **Added Variable Plot** (partial regression plot) isolates the relationship b
 - Unlike a simple scatter plot of $Y$ against $x_j$, the added variable plot isolates $x_j$'s **marginal** contribution after controlling for the other predictors, including any [[Control Variable]]s
 - Points far out on the $e_{x_j}$ axis are high-leverage observations for $x_j$; points far from the fitted line are influential and worth investigating, complementing what a [[Residual Plot]] shows for overall fit
 
+![[Media/Figures/Added_Variable_Plot.svg|340]]
+
 > [!example]- Reading an Added Variable Plot {Example}
 > The added variable plot for vehicle age (after controlling for territory and driver age) shows a clear U-shape rather than a straight line. What does this indicate, and what model change would address it?
 >

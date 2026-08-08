@@ -19,6 +19,8 @@
 - **[[Censoring]]**: observation is known to exceed some value $c$; contribute $P(X > c \mid \theta) = S(c \mid \theta)$ to the likelihood
 - **[[Truncation]]**: only observations exceeding a threshold $d$ are recorded; condition on $X > d$, contributing $f(x \mid \theta)/S(d \mid \theta)$
 
+![[Media/Figures/Maximum_Likelihood_Estimation.svg|340]]
+
 > [!example]- MLE for an Exponential Distribution {Example}
 > Five claim sizes (in \$$1{,}000$s) are: $2, 3, 5, 4, 6$. Assuming $X_i \sim \text{Exp}(\theta)$, find the MLE of $\theta$.
 >

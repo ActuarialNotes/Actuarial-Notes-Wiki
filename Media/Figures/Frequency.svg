@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The distribution of claim counts per policy, most of them zero</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">How often a risk produces a claim</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">frequency = claims / exposure</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">E[N] = λ per exposure-year</text>
+  <line x1="68" y1="344" x2="336" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="344" x2="68" y2="100" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="97.77" y1="344" x2="97.77" y2="348" class="tick"/>
+  <text x="97.77" y="360" text-anchor="middle" class="sm dim">0</text>
+  <line x1="147.38" y1="344" x2="147.38" y2="348" class="tick"/>
+  <text x="147.38" y="360" text-anchor="middle" class="sm dim">1</text>
+  <line x1="197" y1="344" x2="197" y2="348" class="tick"/>
+  <text x="197" y="360" text-anchor="middle" class="sm dim">2</text>
+  <line x1="246.62" y1="344" x2="246.62" y2="348" class="tick"/>
+  <text x="246.62" y="360" text-anchor="middle" class="sm dim">3</text>
+  <line x1="296.23" y1="344" x2="296.23" y2="348" class="tick"/>
+  <text x="296.23" y="360" text-anchor="middle" class="sm dim">4</text>
+  <line x1="64" y1="344" x2="68" y2="344" class="tick"/>
+  <text x="60" y="347.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="64" y1="240" x2="68" y2="240" class="tick"/>
+  <text x="60" y="243.6" text-anchor="end" class="sm dim">0.4</text>
+  <line x1="64" y1="136" x2="68" y2="136" class="tick"/>
+  <text x="60" y="139.6" text-anchor="end" class="sm dim">0.8</text>
+  <text x="326" y="376" text-anchor="end" class="sm dim">claims in a year</text>
+  <rect x="82.77" y="141.51" width="30" height="202.49" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="132.38" y="293.38" width="30" height="50.62" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="182" y="337.67" width="30" height="6.33" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="231.62" y="343.47" width="30" height="0.53" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <rect x="281.23" y="343.97" width="30" height="0.03" rx="1.5" fill="#3b82f6" fill-opacity="0.7"/>
+  <text x="97.77" y="133.51" text-anchor="middle" class="sm">0.779</text>
+  <text x="147.38" y="285.38" text-anchor="middle" class="sm">0.195</text>
+  <text x="197" y="329.67" text-anchor="middle" class="sm">0.024</text>
+  <text x="180" y="90" text-anchor="middle" class="sm dim">λ = 0.25 claims per exposure-year</text>
+</svg>

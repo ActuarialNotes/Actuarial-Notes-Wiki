@@ -7,6 +7,8 @@ A **Type I Error** occurs when a [[Hypothesis Testing|hypothesis test]] incorrec
 - The **critical region** is constructed so that $P(\text{test statistic in critical region} \mid H_0) = \alpha$
 - In actuarial contexts, a Type I Error might mean incorrectly concluding that a rate change is needed when it is not
 
+![[Media/Figures/Type_I_Error.svg|340]]
+
 > [!example]- Identifying a Type I Error in Ratemaking {Example}
 > An actuary tests $H_0$: the current premium rate is adequate. At $\alpha = 0.05$, the test rejects $H_0$ and the company increases rates. Later analysis reveals the rates were adequate all along. What type of error occurred?
 >

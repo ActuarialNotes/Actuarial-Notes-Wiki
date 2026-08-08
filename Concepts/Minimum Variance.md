@@ -12,6 +12,8 @@
 - By the Lehmann–Scheffé theorem, an unbiased function of a **complete sufficient statistic** is the UMVUE
 - [[Maximum Likelihood Estimation|MLEs]] are **asymptotically efficient**: their variance approaches the CRLB as $n \to \infty$
 
+![[Media/Figures/Minimum_Variance.svg|340]]
+
 > [!example]- Cramér–Rao Bound for the Exponential Mean {Example}
 > For $X_i \stackrel{\text{iid}}{\sim} \text{Exp}(\theta)$, find the Cramér–Rao lower bound on the variance of any unbiased estimator of $\theta$.
 >

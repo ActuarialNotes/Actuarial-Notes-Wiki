@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A sample condensed into the two summaries that estimate the population mean and variance</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">A statistic condenses the sample</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">X̄ = (1/n) Σ Xᵢ</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">S² = (1/(n−1)) Σ (Xᵢ − X̄)²</text>
+  <text x="180" y="84" text-anchor="middle" class="sm dim">population</text>
+  <polyline points="60,161.79 61.44,161.77 62.89,161.74 64.33,161.7 65.78,161.66 67.22,161.62 68.67,161.57 70.11,161.51 71.56,161.45 73,161.38 74.44,161.31 75.89,161.23 77.33,161.13 78.78,161.03 80.22,160.92 81.67,160.8 83.11,160.66 84.56,160.52 86,160.35 87.44,160.18 88.89,159.99 90.33,159.78 91.78,159.55 93.22,159.3 94.67,159.03 96.11,158.74 97.56,158.42 99,158.08 100.44,157.72 101.89,157.33 103.33,156.91 104.78,156.45 106.22,155.97 107.67,155.46 109.11,154.91 110.56,154.32 112,153.7 113.44,153.04 114.89,152.34 116.33,151.61 117.78,150.83 119.22,150.01 120.67,149.15 122.11,148.25 123.56,147.31 125,146.33 126.44,145.3 127.89,144.23 129.33,143.12 130.78,141.96 132.22,140.77 133.67,139.54 135.11,138.27 136.56,136.97 138,135.63 139.44,134.26 140.89,132.86 142.33,131.43 143.78,129.98 145.22,128.51 146.67,127.02 148.11,125.51 149.56,124 151,122.48 152.44,120.95 153.89,119.43 155.33,117.92 156.78,116.42 158.22,114.93 159.67,113.46 161.11,112.02 162.56,110.61 164,109.23 165.44,107.9 166.89,106.61 168.33,105.37 169.78,104.19 171.22,103.06 172.67,102 174.11,101.01 175.56,100.09 177,99.24 178.44,98.48 179.89,97.79 181.33,97.2 182.78,96.69 184.22,96.26 185.67,95.94 187.11,95.7 188.56,95.56 190,95.51 191.44,95.56 192.89,95.7 194.33,95.94 195.78,96.26 197.22,96.69 198.67,97.2 200.11,97.79 201.56,98.48 203,99.24 204.44,100.09 205.89,101.01 207.33,102 208.78,103.06 210.22,104.19 211.67,105.37 213.11,106.61 214.56,107.9 216,109.23 217.44,110.61 218.89,112.02 220.33,113.46 221.78,114.93 223.22,116.42 224.67,117.92 226.11,119.43 227.56,120.95 229,122.48 230.44,124 231.89,125.51 233.33,127.02 234.78,128.51 236.22,129.98 237.67,131.43 239.11,132.86 240.56,134.26 242,135.63 243.44,136.97 244.89,138.27 246.33,139.54 247.78,140.77 249.22,141.96 250.67,143.12 252.11,144.23 253.56,145.3 255,146.33 256.44,147.31 257.89,148.25 259.33,149.15 260.78,150.01 262.22,150.83 263.67,151.61 265.11,152.34 266.56,153.04 268,153.7 269.44,154.32 270.89,154.91 272.33,155.46 273.78,155.97 275.22,156.45 276.67,156.91 278.11,157.33 279.56,157.72 281,158.08 282.44,158.42 283.89,158.74 285.33,159.03 286.78,159.3 288.22,159.55 289.67,159.78 291.11,159.99 292.56,160.18 294,160.35 295.44,160.52 296.89,160.66 298.33,160.8 299.78,160.92 301.22,161.03 302.67,161.13 304.11,161.23 305.56,161.31 307,161.38 308.44,161.45 309.89,161.51 311.33,161.57 312.78,161.62 314.22,161.66 315.67,161.7 317.11,161.74 318.56,161.77 320,161.79" class="curve" stroke="var(--dim)" stroke-width="1.6"/>
+  <line x1="60" y1="162" x2="320" y2="162" class="axis"/>
+  <text x="316" y="126" text-anchor="end" class="sm dim">μ, σ²</text>
+  <line x1="180" y1="170" x2="180" y2="198" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+  <text x="188" y="188" text-anchor="start" class="sm dim">sample of n</text>
+  <line x1="60" y1="222" x2="320" y2="222" class="axis"/>
+  <circle cx="128.82" cy="222" r="4.2" fill="#3b82f6" fill-opacity="0.85"/>
+  <circle cx="155.59" cy="222" r="4.2" fill="#3b82f6" fill-opacity="0.85"/>
+  <circle cx="174.71" cy="222" r="4.2" fill="#3b82f6" fill-opacity="0.85"/>
+  <circle cx="193.82" cy="222" r="4.2" fill="#3b82f6" fill-opacity="0.85"/>
+  <circle cx="203.38" cy="222" r="4.2" fill="#3b82f6" fill-opacity="0.85"/>
+  <circle cx="220.59" cy="222" r="4.2" fill="#3b82f6" fill-opacity="0.85"/>
+  <circle cx="232.06" cy="222" r="4.2" fill="#3b82f6" fill-opacity="0.85"/>
+  <circle cx="262.65" cy="222" r="4.2" fill="#3b82f6" fill-opacity="0.85"/>
+  <line x1="196.45" y1="252" x2="196.45" y2="230" class="thin" stroke="#e11d48" stroke-width="1.6" marker-end="url(#ahe11d48)"/>
+  <rect x="42" y="274" width="132" height="46" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
+  <text x="108" y="291" text-anchor="middle" class="sm">X̄ = 0.169</text>
+  <text x="108" y="309" text-anchor="middle" class="sm dim">centre</text>
+  <rect x="188" y="274" width="132" height="46" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
+  <text x="254" y="291" text-anchor="middle" class="sm">S² = 1.30</text>
+  <text x="254" y="309" text-anchor="middle" class="sm dim">spread</text>
+  <text x="180" y="368" text-anchor="middle" class="sm dim">estimates of μ and σ²</text>
+</svg>

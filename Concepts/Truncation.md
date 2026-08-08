@@ -12,6 +12,8 @@
 - **Right-truncation**: only values below some upper limit are recorded (less common in insurance)
 - Truncation differs from censoring: with truncation, you do not even know an observation exists; with censoring, you know there is an observation but not its exact value
 
+![[Media/Figures/Truncation.svg|340]]
+
 > [!example]- MLE With Left-Truncated Exponential Data {Example}
 > Claims above a deductible $d = 1$ are reported. Two reported claims are $x_1 = 2$ and $x_2 = 3$. Assume $X \sim \text{Exp}(\theta)$. Write and maximize the likelihood.
 >

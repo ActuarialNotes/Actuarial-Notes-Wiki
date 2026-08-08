@@ -37,3 +37,5 @@ Tossing a coin n times, how likely to get k heads?
 ## Central Concepts
 
 - **Central Limit Theorem**
+
+![[Media/Figures/Probability_Distributions.svg|340]]

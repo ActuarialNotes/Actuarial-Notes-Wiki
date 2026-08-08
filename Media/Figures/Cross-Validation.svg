@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Five folds, each held out in turn, and the error curve that results</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Score the model on data it never saw</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">CV(k) = (1/k) Σ MSEⱼ</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">k = 5 or 10 is the usual choice</text>
+  <rect x="56" y="94" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+  <rect x="108.8" y="94" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="161.6" y="94" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="214.4" y="94" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="267.2" y="94" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <text x="46" y="110" text-anchor="end" class="sm dim">fit 1</text>
+  <rect x="56" y="124" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="108.8" y="124" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+  <rect x="161.6" y="124" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="214.4" y="124" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="267.2" y="124" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <text x="46" y="140" text-anchor="end" class="sm dim">fit 2</text>
+  <rect x="56" y="154" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="108.8" y="154" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="161.6" y="154" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+  <rect x="214.4" y="154" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="267.2" y="154" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <text x="46" y="170" text-anchor="end" class="sm dim">fit 3</text>
+  <rect x="56" y="184" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="108.8" y="184" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="161.6" y="184" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="214.4" y="184" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+  <rect x="267.2" y="184" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <text x="46" y="200" text-anchor="end" class="sm dim">fit 4</text>
+  <rect x="56" y="214" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="108.8" y="214" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="161.6" y="214" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="214.4" y="214" width="48.8" height="22" rx="4" fill="#3b82f6" fill-opacity="0.22" stroke="none"/>
+  <rect x="267.2" y="214" width="48.8" height="22" rx="4" fill="#e11d48" fill-opacity="0.6" stroke="none"/>
+  <text x="46" y="230" text-anchor="end" class="sm dim">fit 5</text>
+  <line x1="54" y1="256" x2="67" y2="256" stroke="#e11d48" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="73" y="259.6" text-anchor="start" class="sm">held out</text>
+  <line x1="54" y1="272" x2="67" y2="272" stroke="#3b82f6" stroke-width="2.4" stroke-linecap="round"/>
+  <text x="73" y="275.6" text-anchor="start" class="sm">trained on</text>
+  <line x1="80" y1="360" x2="326" y2="360" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="80" y1="360" x2="80" y2="288" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="99.67" y1="360" x2="99.67" y2="364" class="tick"/>
+  <text x="99.67" y="376" text-anchor="middle" class="sm dim">1</text>
+  <line x1="148.83" y1="360" x2="148.83" y2="364" class="tick"/>
+  <text x="148.83" y="376" text-anchor="middle" class="sm dim">2</text>
+  <line x1="198" y1="360" x2="198" y2="364" class="tick"/>
+  <text x="198" y="376" text-anchor="middle" class="sm dim">3</text>
+  <line x1="247.17" y1="360" x2="247.17" y2="364" class="tick"/>
+  <text x="247.17" y="376" text-anchor="middle" class="sm dim">4</text>
+  <line x1="296.33" y1="360" x2="296.33" y2="364" class="tick"/>
+  <text x="296.33" y="376" text-anchor="middle" class="sm dim">5</text>
+  <polyline points="99.67,304.64 148.83,326.79 198,334.54 247.17,330.11 296.33,317.93" class="curve" stroke="#e11d48" stroke-width="2.2"/>
+  <polyline points="99.67,306.86 148.83,331.21 198,344.5 247.17,351.14 296.33,354.46" class="curve dash" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="198" cy="334.54" r="4" fill="#e11d48"/>
+  <text x="198" y="324.54" text-anchor="middle" class="sm bold" fill="#e11d48">best</text>
+  <text x="281.58" y="345.14" text-anchor="end" class="sm" fill="#3b82f6">training</text>
+</svg>

@@ -7,6 +7,8 @@
 - Adding structure (more terms) always improves in-sample fit but risks overfitting; [[AIC]] and [[BIC]] penalize unnecessary complexity when comparing structures
 - Two models with the same response distribution and link but different structure are compared using **[[ANOVA]] (analysis of deviance)** if one is nested within the other
 
+![[Media/Figures/Model_Structure.svg|340]]
+
 > [!example]- Comparing Two Candidate Model Structures {Example}
 > An actuary fits a Poisson GLM for claim frequency two ways: Model 1 uses main effects for territory and vehicle age only ([[AIC]] $= 4{,}102$). Model 2 adds a territory $\times$ vehicle age interaction ([[AIC]] $= 4{,}085$). Which model structure is preferred?
 >

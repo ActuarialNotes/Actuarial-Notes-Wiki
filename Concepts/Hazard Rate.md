@@ -15,6 +15,8 @@ The **Hazard Rate** $\mu(t)$ (also called the **force of mortality** in life con
 **Gompertz–Makeham model (common in life insurance):**
 $$\mu_x = A + Bc^x, \quad A \geq 0,\, B > 0,\, c > 1$$
 
+![[Media/Figures/Hazard_Rate.svg|340]]
+
 > [!example]- Computing the Hazard Rate from a Survival Function {Example}
 > The survival function is $S(t) = e^{-0.05t^2}$. Find the hazard rate $\mu(t)$.
 >

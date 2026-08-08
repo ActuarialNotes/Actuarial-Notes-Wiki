@@ -21,6 +21,8 @@ A **Link Function** $g$ is a monotone, differentiable function in a [[Generalize
 
 - The **log link** is standard for insurance severity and frequency models because it guarantees positive fitted values and allows multiplicative interpretation: a unit increase in $x_j$ multiplies $\mu$ by $e^{\beta_j}$
 
+![[Media/Figures/Link_Function.svg|340]]
+
 > [!example]- Interpreting a Log-Link Coefficient {Example}
 > A Gamma GLM with log link models claim severity. The coefficient on the indicator for "sports car" is $\hat{\beta} = 0.35$. Interpret this coefficient.
 >

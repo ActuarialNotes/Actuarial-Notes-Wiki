@@ -7,6 +7,8 @@ A **Control Variable** is a predictor included in an insurance [[Generalized Lin
 - A control variable's coefficient is **estimated from the data**, unlike an **[[Offset Variable]]**, whose coefficient is fixed at $1$
 - Control variables are still checked for statistical significance and reasonableness in the [[Parameter Estimate Tables|parameter estimate table]], even though they will not appear in the final rating plan
 
+![[Media/Figures/Control_Variable.svg|340]]
+
 > [!example]- Including a Control Variable to Avoid Bias {Example}
 > An actuary fits a Poisson frequency GLM with vehicle age as the only rating variable. Calendar year is known to affect frequency (due to changing claim-reporting patterns) and is correlated with the vehicle-age mix of the book, but calendar year will not be used to set rates. Should calendar year be included in the model?
 >

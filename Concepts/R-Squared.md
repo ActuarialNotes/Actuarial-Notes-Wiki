@@ -11,6 +11,8 @@ $$R^2_{\text{adj}} = 1 - \frac{\text{SS}_\text{Res}/(n-p-1)}{\text{SS}_\text{Tot
 - In [[Generalized Linear Model]]s, the analogue is the **pseudo-$R^2$** based on [[Deviance]]: $R^2_D = 1 - D/D_0$ where $D_0$ is the null deviance
 - $R^2$ measures in-sample fit only and does not directly assess predictive performance on new data
 
+![[Media/Figures/R-Squared.svg|340]]
+
 > [!example]- Computing R-Squared for a Linear Regression {Example}
 > A simple regression of claim severity on vehicle age gives $\text{SS}_\text{Tot} = 10{,}000$ and $\text{SS}_\text{Res} = 3{,}500$. Calculate $R^2$.
 >

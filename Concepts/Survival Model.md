@@ -17,6 +17,8 @@ A **Survival Model** describes the distribution of a lifetime random variable $T
 
 $$S(t) = \exp\!\left(-\int_0^t \mu(s)\,ds\right)$$
 
+![[Media/Figures/Survival_Model.svg|340]]
+
 > [!example]- Probability of Surviving to Age 75 Given Alive at 70 {Example}
 > Suppose $S(t) = e^{-0.02t}$ for $t \geq 0$ (constant force of mortality). Find the probability that a life aged 70 survives to age 75.
 >

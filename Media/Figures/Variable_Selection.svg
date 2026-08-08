@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A stepwise path through candidate models, scored by AIC</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Add terms while they earn their place</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">compare candidates on AIC / BIC</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">or on held-out error</text>
+  <rect x="34" y="94" width="208" height="44" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="138" y="120" text-anchor="middle" class="sm bold">intercept only</text>
+  <text x="328" y="122" text-anchor="end" class="sm">4,172</text>
+  <line x1="138" y1="140" x2="138" y2="150" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+  <rect x="34" y="152" width="208" height="44" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="138" y="178" text-anchor="middle" class="sm bold">+ territory</text>
+  <text x="328" y="180" text-anchor="end" class="sm">4,131</text>
+  <line x1="138" y1="198" x2="138" y2="208" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+  <rect x="34" y="210" width="208" height="44" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="138" y="236" text-anchor="middle" class="sm bold">+ vehicle age</text>
+  <text x="328" y="238" text-anchor="end" class="sm">4,102</text>
+  <line x1="138" y1="256" x2="138" y2="266" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+  <rect x="34" y="268" width="208" height="44" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+  <text x="138" y="294" text-anchor="middle" class="sm bold">+ driver age</text>
+  <text x="328" y="296" text-anchor="end" class="sm bold" fill="#059669">4,085</text>
+  <line x1="138" y1="314" x2="138" y2="324" class="thin" stroke="var(--dim)" stroke-width="1.2" marker-end="url(#ahvardim)"/>
+  <rect x="34" y="326" width="208" height="44" rx="7" fill="var(--dim)" fill-opacity="0.12" stroke="var(--dim)" stroke-width="1.2"/>
+  <text x="138" y="352" text-anchor="middle" class="sm bold">+ prior claim</text>
+  <text x="328" y="354" text-anchor="end" class="sm">4,089</text>
+  <text x="328" y="84" text-anchor="end" class="sm dim">AIC</text>
+  <text x="180" y="384" text-anchor="middle" class="sm dim">stop where AIC turns back up</text>
+</svg>

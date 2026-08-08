@@ -14,6 +14,8 @@
 - Censoring must be accounted for in [[Maximum Likelihood Estimation]] to avoid **downward bias** in estimated means or survival times
 - An observation that is **not** censored (the exact value is known) contributes $f(x|\theta)$ to the likelihood
 
+![[Media/Figures/Censoring.svg|340]]
+
 > [!example]- MLE With Censored Exponential Data {Example}
 > Three claims have observed values $x_1 = 2$, $x_2 = 3$, and one claim is right-censored at $c = 4$ (i.e., we know $X_3 > 4$). Assuming $X \sim \text{Exp}(\theta)$, write the likelihood.
 >

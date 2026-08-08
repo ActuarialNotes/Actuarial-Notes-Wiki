@@ -23,6 +23,8 @@ A **Linear Mixed Model (LMM)** extends ordinary linear regression by including b
 - **[[Hierarchical Model]]s** are a special case of LMMs with nested random effects
 - LMMs connect to [[Bühlmann-Straub Credibility]]: the BLUP (Best Linear Unbiased Predictor) for a random effect corresponds to the credibility estimate
 
+![[Media/Figures/Linear_Mixed_Model.svg|340]]
+
 > [!example]- Random Intercept Model for Repeated Claims {Example}
 > Claims from $i = 1, \ldots, 50$ policyholders are observed over $t = 1, \ldots, 4$ years. An actuary fits: $Y_{it} = \beta_0 + \beta_1 \text{age}_i + u_i + \varepsilon_{it}$, where $u_i \sim N(0, \sigma_u^2)$ is a policyholder random intercept. Interpret $\sigma_u^2$.
 >

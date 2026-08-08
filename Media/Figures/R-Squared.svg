@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The total sum of squares split into the part the model explains and the part it does not</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">The share of variation explained</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">R² = 1 − RSS / SS_Tot</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">= SS_Reg / SS_Tot</text>
+  <text x="180" y="96" text-anchor="middle" class="bold">SS_Tot = 1,000</text>
+  <rect x="60" y="110" width="240" height="46" rx="6" fill="var(--soft)" stroke="var(--edge)" stroke-width="1.2"/>
+  <rect x="60" y="110" width="163.2" height="46" rx="6" fill="#3b82f6" fill-opacity="0.55"/>
+  <text x="141.6" y="139" text-anchor="middle" class="sm bold">SS_Reg = 680</text>
+  <text x="261.6" y="139" text-anchor="middle" class="sm">RSS = 320</text>
+  <line x1="66" y1="344" x2="336" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="66" y1="344" x2="66" y2="206" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <polyline points="66,309.87 67.44,309.5 68.89,309.13 70.33,308.76 71.78,308.4 73.22,308.03 74.67,307.66 76.11,307.29 77.56,306.93 79,306.56 80.44,306.19 81.89,305.83 83.33,305.46 84.78,305.09 86.22,304.72 87.67,304.36 89.11,303.99 90.56,303.62 92,303.25 93.44,302.89 94.89,302.52 96.33,302.15 97.78,301.78 99.22,301.42 100.67,301.05 102.11,300.68 103.56,300.31 105,299.95 106.44,299.58 107.89,299.21 109.33,298.84 110.78,298.48 112.22,298.11 113.67,297.74 115.11,297.37 116.56,297.01 118,296.64 119.44,296.27 120.89,295.91 122.33,295.54 123.78,295.17 125.22,294.8 126.67,294.44 128.11,294.07 129.56,293.7 131,293.33 132.44,292.97 133.89,292.6 135.33,292.23 136.78,291.86 138.22,291.5 139.67,291.13 141.11,290.76 142.56,290.39 144,290.03 145.44,289.66 146.89,289.29 148.33,288.92 149.78,288.56 151.22,288.19 152.67,287.82 154.11,287.45 155.56,287.09 157,286.72 158.44,286.35 159.89,285.99 161.33,285.62 162.78,285.25 164.22,284.88 165.67,284.52 167.11,284.15 168.56,283.78 170,283.41 171.44,283.05 172.89,282.68 174.33,282.31 175.78,281.94 177.22,281.58 178.67,281.21 180.11,280.84 181.56,280.47 183,280.11 184.44,279.74 185.89,279.37 187.33,279 188.78,278.64 190.22,278.27 191.67,277.9 193.11,277.53 194.56,277.17 196,276.8 197.44,276.43 198.89,276.07 200.33,275.7 201.78,275.33 203.22,274.96 204.67,274.6 206.11,274.23 207.56,273.86 209,273.49 210.44,273.13 211.89,272.76 213.33,272.39 214.78,272.02 216.22,271.66 217.67,271.29 219.11,270.92 220.56,270.55 222,270.19 223.44,269.82 224.89,269.45 226.33,269.08 227.78,268.72 229.22,268.35 230.67,267.98 232.11,267.61 233.56,267.25 235,266.88 236.44,266.51 237.89,266.15 239.33,265.78 240.78,265.41 242.22,265.04 243.67,264.68 245.11,264.31 246.56,263.94 248,263.57 249.44,263.21 250.89,262.84 252.33,262.47 253.78,262.1 255.22,261.74 256.67,261.37 258.11,261 259.56,260.63 261,260.27 262.44,259.9 263.89,259.53 265.33,259.16 266.78,258.8 268.22,258.43 269.67,258.06 271.11,257.69 272.56,257.33 274,256.96 275.44,256.59 276.89,256.23 278.33,255.86 279.78,255.49 281.22,255.12 282.67,254.76 284.11,254.39 285.56,254.02 287,253.65 288.44,253.29 289.89,252.92 291.33,252.55 292.78,252.18 294.22,251.82 295.67,251.45 297.11,251.08 298.56,250.71 300,250.35 301.44,249.98 302.89,249.61 304.33,249.24 305.78,248.88 307.22,248.51 308.67,248.14 310.11,247.77 311.56,247.41 313,247.04 314.44,246.67 315.89,246.31 317.33,245.94 318.78,245.57 320.22,245.2 321.67,244.84 323.11,244.47 324.56,244.1 326,243.73" class="curve" stroke="#3b82f6" stroke-width="2.2"/>
+  <line x1="66" y1="276.37" x2="326" y2="276.37" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <text x="81.6" y="270.37" text-anchor="start" class="sm dim">ȳ</text>
+  <circle cx="89.4" cy="297.07" r="3.2" fill="#3b82f6"/>
+  <circle cx="120.6" cy="301.33" r="3.2" fill="#3b82f6"/>
+  <circle cx="144" cy="280" r="3.2" fill="#3b82f6"/>
+  <circle cx="175.2" cy="288.53" r="3.2" fill="#3b82f6"/>
+  <circle cx="198.6" cy="267.2" r="3.2" fill="#3b82f6"/>
+  <circle cx="222" cy="275.73" r="3.2" fill="#3b82f6"/>
+  <circle cx="253.2" cy="250.13" r="3.2" fill="#3b82f6"/>
+  <circle cx="276.6" cy="262.93" r="3.2" fill="#3b82f6"/>
+  <circle cx="302.6" cy="243.73" r="3.2" fill="#3b82f6"/>
+  <text x="180" y="384" text-anchor="middle" class="bold">R² = 680 / 1,000 = 0.68</text>
+</svg>

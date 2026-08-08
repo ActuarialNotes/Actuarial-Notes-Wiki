@@ -12,6 +12,8 @@
 - Variable selection should combine statistical significance (from the [[Parameter Estimate Tables|parameter estimate table]]) with business and actuarial judgment, e.g., regulatory restrictions on certain rating variables
 - Selecting too few variables causes underfitting (high bias); selecting too many causes overfitting (high variance) — a holdout sample or cross-validation helps detect overfitting that in-sample fit statistics alone would miss
 
+![[Media/Figures/Variable_Selection.svg|340]]
+
 > [!example]- Choosing Between Two Model Specifications {Example}
 > Two competing GLMs for claim frequency: Model 1 has $5$ parameters and a log-likelihood of $-2{,}040$. Model 2 adds $2$ more parameters and has a log-likelihood of $-2{,}037$. Using AIC ($\text{AIC} = -2\ell + 2k$), which model is preferred?
 >

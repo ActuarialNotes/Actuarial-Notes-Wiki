@@ -12,6 +12,8 @@ The **Residual Sum of Squares (RSS)** (also called the **Sum of Squared Errors, 
 - **Decomposition**: $\text{SS}_{\text{Tot}} = \text{SS}_{\text{Reg}} + \text{RSS}$, where $\text{SS}_{\text{Tot}} = \sum(y_i - \bar{y})^2$ and $\text{SS}_{\text{Reg}} = \sum(\hat{y}_i - \bar{y})^2$
 - [[R-Squared]] $= 1 - \text{RSS}/\text{SS}_{\text{Tot}}$
 
+![[Media/Figures/Residual_Sum_of_Squares.svg|340]]
+
 > [!example]- RSS for a Simple Linear Regression {Example}
 > Fitted values from a regression of claim severity ($y$) on vehicle age ($x$) are $\hat{y} = (180, 220, 260)$ and observed values are $y = (200, 210, 270)$. Compute the RSS.
 >

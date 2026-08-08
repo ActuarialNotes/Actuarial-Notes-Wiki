@@ -9,6 +9,8 @@
 - In the [[Frequency-Severity Method]], average severity triangles are derived by dividing cumulative dollar triangles by cumulative count triangles at each age, then developed to ultimate separately
 - Large individual losses (shock losses) can distort average severity; actuaries often cap or remove these before fitting severity trends, then add them back explicitly
 
+![[Media/Figures/Severity.svg|340]]
+
 > [!example]- Projecting Ultimate Average Severity {Example}
 > An accident year has $600$ reported claims and \$$4{,}200{,}000$ in reported losses at 24 months. The 24-to-ultimate severity development factor is $1.20$.
 >

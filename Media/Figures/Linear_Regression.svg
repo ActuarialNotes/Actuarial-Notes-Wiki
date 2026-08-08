@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A fitted least-squares line with the residuals it minimizes</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+    <marker id="ahe11d48" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#e11d48"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Least squares: minimise the residuals</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">Y = β₀ + β₁x + ε,  ε ~ N(0, σ²)</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">β̂ = (XᵀX)⁻¹Xᵀy</text>
+  <line x1="66" y1="344" x2="336" y2="344" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="66" y1="344" x2="66" y2="100" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="66" y1="344" x2="66" y2="348" class="tick"/>
+  <text x="66" y="360" text-anchor="middle" class="sm dim">0</text>
+  <line x1="196" y1="344" x2="196" y2="348" class="tick"/>
+  <text x="196" y="360" text-anchor="middle" class="sm dim">5</text>
+  <line x1="326" y1="344" x2="326" y2="348" class="tick"/>
+  <text x="326" y="360" text-anchor="middle" class="sm dim">10</text>
+  <line x1="62" y1="344" x2="66" y2="344" class="tick"/>
+  <text x="58" y="347.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="62" y1="227" x2="66" y2="227" class="tick"/>
+  <text x="58" y="230.6" text-anchor="end" class="sm dim">30</text>
+  <line x1="62" y1="110" x2="66" y2="110" class="tick"/>
+  <text x="58" y="113.6" text-anchor="end" class="sm dim">60</text>
+  <text x="326" y="376" text-anchor="end" class="sm dim">predictor x</text>
+  <text x="62" y="96" text-anchor="start" class="sm dim">response y</text>
+  <line x1="86.8" y1="215.3" x2="86.8" y2="236.64" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="115.4" y1="238.7" x2="115.4" y2="227.37" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="141.4" y1="203.6" x2="141.4" y2="218.95" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="164.8" y1="227" x2="164.8" y2="211.37" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="188.2" y1="184.1" x2="188.2" y2="203.79" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="211.6" y1="195.8" x2="211.6" y2="196.21" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="237.6" y1="152.9" x2="237.6" y2="187.78" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="261" y1="176.3" x2="261" y2="180.2" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="284.4" y1="137.3" x2="284.4" y2="172.62" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <line x1="305.2" y1="156.8" x2="305.2" y2="165.88" class="thin" stroke="#e11d48" stroke-width="1.3"/>
+  <polyline points="66,243.38 67.44,242.91 68.89,242.44 70.33,241.98 71.78,241.51 73.22,241.04 74.67,240.57 76.11,240.1 77.56,239.64 79,239.17 80.44,238.7 81.89,238.23 83.33,237.76 84.78,237.3 86.22,236.83 87.67,236.36 89.11,235.89 90.56,235.42 92,234.96 93.44,234.49 94.89,234.02 96.33,233.55 97.78,233.08 99.22,232.62 100.67,232.15 102.11,231.68 103.56,231.21 105,230.74 106.44,230.28 107.89,229.81 109.33,229.34 110.78,228.87 112.22,228.4 113.67,227.94 115.11,227.47 116.56,227 118,226.53 119.44,226.06 120.89,225.6 122.33,225.13 123.78,224.66 125.22,224.19 126.67,223.72 128.11,223.26 129.56,222.79 131,222.32 132.44,221.85 133.89,221.38 135.33,220.92 136.78,220.45 138.22,219.98 139.67,219.51 141.11,219.04 142.56,218.58 144,218.11 145.44,217.64 146.89,217.17 148.33,216.7 149.78,216.24 151.22,215.77 152.67,215.3 154.11,214.83 155.56,214.36 157,213.9 158.44,213.43 159.89,212.96 161.33,212.49 162.78,212.02 164.22,211.56 165.67,211.09 167.11,210.62 168.56,210.15 170,209.68 171.44,209.22 172.89,208.75 174.33,208.28 175.78,207.81 177.22,207.34 178.67,206.88 180.11,206.41 181.56,205.94 183,205.47 184.44,205 185.89,204.54 187.33,204.07 188.78,203.6 190.22,203.13 191.67,202.66 193.11,202.2 194.56,201.73 196,201.26 197.44,200.79 198.89,200.32 200.33,199.86 201.78,199.39 203.22,198.92 204.67,198.45 206.11,197.98 207.56,197.52 209,197.05 210.44,196.58 211.89,196.11 213.33,195.64 214.78,195.18 216.22,194.71 217.67,194.24 219.11,193.77 220.56,193.3 222,192.84 223.44,192.37 224.89,191.9 226.33,191.43 227.78,190.96 229.22,190.5 230.67,190.03 232.11,189.56 233.56,189.09 235,188.62 236.44,188.16 237.89,187.69 239.33,187.22 240.78,186.75 242.22,186.28 243.67,185.82 245.11,185.35 246.56,184.88 248,184.41 249.44,183.94 250.89,183.48 252.33,183.01 253.78,182.54 255.22,182.07 256.67,181.6 258.11,181.14 259.56,180.67 261,180.2 262.44,179.73 263.89,179.26 265.33,178.8 266.78,178.33 268.22,177.86 269.67,177.39 271.11,176.92 272.56,176.46 274,175.99 275.44,175.52 276.89,175.05 278.33,174.58 279.78,174.12 281.22,173.65 282.67,173.18 284.11,172.71 285.56,172.24 287,171.78 288.44,171.31 289.89,170.84 291.33,170.37 292.78,169.9 294.22,169.44 295.67,168.97 297.11,168.5 298.56,168.03 300,167.56 301.44,167.1 302.89,166.63 304.33,166.16 305.78,165.69 307.22,165.22 308.67,164.76 310.11,164.29 311.56,163.82 313,163.35 314.44,162.88 315.89,162.42 317.33,161.95 318.78,161.48 320.22,161.01 321.67,160.54 323.11,160.08 324.56,159.61 326,159.14" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <circle cx="86.8" cy="215.3" r="3.6" fill="#3b82f6"/>
+  <circle cx="115.4" cy="238.7" r="3.6" fill="#3b82f6"/>
+  <circle cx="141.4" cy="203.6" r="3.6" fill="#3b82f6"/>
+  <circle cx="164.8" cy="227" r="3.6" fill="#3b82f6"/>
+  <circle cx="188.2" cy="184.1" r="3.6" fill="#3b82f6"/>
+  <circle cx="211.6" cy="195.8" r="3.6" fill="#3b82f6"/>
+  <circle cx="237.6" cy="152.9" r="3.6" fill="#3b82f6"/>
+  <circle cx="261" cy="176.3" r="3.6" fill="#3b82f6"/>
+  <circle cx="284.4" cy="137.3" r="3.6" fill="#3b82f6"/>
+  <circle cx="305.2" cy="156.8" r="3.6" fill="#3b82f6"/>
+  <text x="255.8" y="250.4" text-anchor="start" class="sm" fill="#e11d48">residual</text>
+  <line x1="271.4" y1="242.6" x2="261" y2="168.5" class="thin dash" stroke="#e11d48" stroke-width="1.2" marker-end="url(#ahe11d48)"/>
+  <text x="324" y="92" text-anchor="end" class="sm bold" fill="#3b82f6">ŷ = 25.8 + 2.16x</text>
+</svg>

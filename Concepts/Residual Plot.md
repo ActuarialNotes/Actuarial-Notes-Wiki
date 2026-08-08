@@ -19,6 +19,8 @@ A **Residual Plot** is a diagnostic graph used to assess model fit by plotting *
 - **Residuals vs. predictor**: checks whether a variable's effect is correctly specified
 - A **Normal [[QQ Plot]]** of residuals checks the normality assumption
 
+![[Media/Figures/Residual_Plot.svg|340]]
+
 > [!example]- Identifying Heteroscedasticity in a Residual Plot {Example}
 > After fitting a linear regression of claim severity on vehicle value, the residual plot shows residuals spreading out in a fan shape as fitted values increase. What does this suggest?
 >

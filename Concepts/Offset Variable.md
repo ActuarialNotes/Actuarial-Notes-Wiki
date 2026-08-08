@@ -7,6 +7,8 @@ An **Offset Variable** is a predictor in a [[Generalized Linear Model]] whose co
 - If exposure were instead entered as an ordinary covariate, its estimated coefficient need not equal $1$, which would mask the intended exactly-proportional relationship
 - Offsets are also used to carry forward previously-determined relativities (e.g., an established territory relativity) into a new model without re-estimating them
 
+![[Media/Figures/Offset_Variable.svg|340]]
+
 > [!example]- Fitting a Poisson Frequency Model with an Exposure Offset {Example}
 > A Poisson GLM for claim counts uses $\ln(\text{Exposure})$ as an offset and a single rating variable, driver age, with fitted equation $\ln\hat{\mu}_i = \ln(\text{Exposure}_i) - 2.5 + 0.01 \cdot \text{age}_i$. For a driver age 40 with $2$ car-years of exposure, find the expected claim count and the fitted frequency.
 >

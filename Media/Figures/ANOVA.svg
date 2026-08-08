@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The analysis-of-variance table as a split of the total sum of squares</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Split the variation, then take a ratio</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">F = (SS_Reg / p) / (RSS / (n − p − 1))</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">MS = SS / df</text>
+  <rect x="42" y="96" width="276" height="34" rx="6" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>
+  <text x="54" y="118" text-anchor="start" class="sm bold">Source</text>
+  <text x="180" y="118" text-anchor="middle" class="sm bold">SS</text>
+  <text x="228" y="118" text-anchor="middle" class="sm bold">df</text>
+  <text x="276" y="118" text-anchor="middle" class="sm bold">MS</text>
+  <line x1="42" y1="170" x2="318" y2="170" class="rule"/>
+  <text x="54" y="158" text-anchor="start" class="sm">Regression</text>
+  <text x="180" y="158" text-anchor="middle" class="sm">680</text>
+  <text x="228" y="158" text-anchor="middle" class="sm">2</text>
+  <text x="276" y="158" text-anchor="middle" class="sm">340</text>
+  <line x1="42" y1="210" x2="318" y2="210" class="rule"/>
+  <text x="54" y="198" text-anchor="start" class="sm">Residual</text>
+  <text x="180" y="198" text-anchor="middle" class="sm">320</text>
+  <text x="228" y="198" text-anchor="middle" class="sm">47</text>
+  <text x="276" y="198" text-anchor="middle" class="sm">6.8</text>
+  <line x1="42" y1="250" x2="318" y2="250" class="rule"/>
+  <text x="54" y="238" text-anchor="start" class="sm">Total</text>
+  <text x="180" y="238" text-anchor="middle" class="sm">1,000</text>
+  <text x="228" y="238" text-anchor="middle" class="sm">49</text>
+  <text x="276" y="238" text-anchor="middle" class="sm"></text>
+  <rect x="66" y="276" width="228" height="52" rx="7" fill="#e11d48" fill-opacity="0.12" stroke="#e11d48" stroke-width="1.2"/>
+  <text x="180" y="296" text-anchor="middle" class="bold">F = 340 / 6.8 = 50.0</text>
+  <text x="180" y="314" text-anchor="middle" class="sm dim">p &lt; 0.001 — the model beats the mean</text>
+  <text x="180" y="354" text-anchor="middle" class="sm dim">for nested GLMs the same table holds</text>
+  <text x="180" y="372" text-anchor="middle" class="sm dim">deviances in place of sums of squares</text>
+</svg>

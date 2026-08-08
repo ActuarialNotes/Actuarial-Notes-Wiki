@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Sample moments set equal to the model's moments and solved</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvardim" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--dim)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Match the moments, then solve</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">X̄ = E[X | θ]</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">(1/n)ΣXᵢ² = E[X² | θ]</text>
+  <rect x="32" y="90" width="138" height="56" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="101" y="112" text-anchor="middle" class="sm">X̄ = 500</text>
+  <text x="101" y="130" text-anchor="middle" class="sm dim">sample</text>
+  <rect x="210" y="90" width="138" height="56" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
+  <text x="279" y="112" text-anchor="middle" class="sm">αθ</text>
+  <text x="279" y="130" text-anchor="middle" class="sm dim">model</text>
+  <text x="180" y="122" text-anchor="middle" class="ttl">=</text>
+  <rect x="32" y="162" width="138" height="56" rx="7" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="101" y="184" text-anchor="middle" class="sm">s² = 125,000</text>
+  <text x="101" y="202" text-anchor="middle" class="sm dim">sample</text>
+  <rect x="210" y="162" width="138" height="56" rx="7" fill="#d97706" fill-opacity="0.12" stroke="#d97706" stroke-width="1.2"/>
+  <text x="279" y="184" text-anchor="middle" class="sm">αθ²</text>
+  <text x="279" y="202" text-anchor="middle" class="sm dim">model</text>
+  <text x="180" y="194" text-anchor="middle" class="ttl">=</text>
+  <line x1="180" y1="226" x2="180" y2="256" class="thin" stroke="var(--dim)" stroke-width="1.4" marker-end="url(#ahvardim)"/>
+  <rect x="64" y="260" width="232" height="48" rx="7" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+  <text x="180" y="288" text-anchor="middle" class="bold">θ = 250,  α = 2</text>
+  <text x="180" y="334" text-anchor="middle" class="sm dim">two unknowns, two equations</text>
+  <text x="180" y="358" text-anchor="middle" class="sm dim">simple, consistent — but not efficient</text>
+</svg>

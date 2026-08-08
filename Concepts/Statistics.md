@@ -10,6 +10,8 @@
 - Statistics builds on [[Probability]]: a probability model for the data is assumed, then its parameters are estimated and tested
 - Actuaries use statistics to model claim frequency and severity, set premiums, and quantify reserve uncertainty
 
+![[Media/Figures/Statistics.svg|340]]
+
 > [!example]- Estimating the Mean and Variance of Claim Sizes {Example}
 > Five reported claims (in \$$1{,}000$s) are $4, 6, 7, 9, 9$. Estimate the mean and variance of the claim-size distribution.
 >

@@ -13,6 +13,8 @@ The **Mean Square Error (MSE)** of an estimator $\hat{\theta}$ measures its **ov
 - The **root mean square error (RMSE)** $= \sqrt{\text{MSE}}$ is in the same units as $\theta$
 - In actuarial credibility, the [[Credibility Theory|credibility estimator]] is chosen to minimize MSE
 
+![[Media/Figures/Mean_Square_Error.svg|340]]
+
 > [!example]- MSE of a Biased Estimator {Example}
 > For $X_i \stackrel{\text{iid}}{\sim} N(\mu, \sigma^2)$, compare the MSE of $S^2 = \frac{1}{n-1}\sum(X_i-\bar{X})^2$ (unbiased) and $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i-\bar{X})^2$ (biased MLE).
 >

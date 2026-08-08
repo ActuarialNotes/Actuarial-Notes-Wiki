@@ -15,6 +15,8 @@ An **Extended Linear Model (ELM)** is the broad class of regression models that 
 - Model adequacy is compared across candidate extended linear models using [[Deviance]], [[AIC]], [[BIC]], and [[Residual Plot]]s
 - In insurance ratemaking, the choice of extended linear model is driven by the data's behavior — e.g., a right-skewed, strictly positive severity favors a Gamma distribution with a log link, while integer claim counts favor a Poisson distribution
 
+![[Media/Figures/Extended_Linear_Model.svg|340]]
+
 > [!example]- Selecting an Extended Linear Model for Claim Severity {Example}
 > An actuary has individual claim severities that are strictly positive and right-skewed. Why is ordinary least-squares regression not an appropriate extended linear model here, and what would be a better choice?
 >

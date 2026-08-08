@@ -11,6 +11,8 @@ A **Type II Error** occurs when a [[Hypothesis Testing|hypothesis test]] **fails
 - Decreasing $\alpha$ generally **increases** $\beta$ — there is a trade-off between Type I and Type II errors
 - In actuarial contexts, a Type II Error might mean failing to detect an inadequate premium rate
 
+![[Media/Figures/Type_II_Error.svg|340]]
+
 > [!example]- Power of a Test {Example}
 > A test of $H_0: \mu = 100$ vs. $H_1: \mu = 110$ uses a sample of $n = 25$ with $\sigma = 20$ and $\alpha = 0.05$ (one-sided, upper). Find the power (probability of rejecting $H_0$ when the true mean is 110).
 >

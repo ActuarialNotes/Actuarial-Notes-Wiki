@@ -9,6 +9,8 @@ An estimator $\hat{\theta}_n$ is **consistent** for $\theta$ if it converges in 
 - An estimator can be **biased but still consistent** (e.g., the MLE of $\sigma^2$ divides by $n$ instead of $n-1$, but the bias vanishes as $n \to \infty$)
 - **[[Maximum Likelihood Estimation|MLEs]]** are consistent under standard regularity conditions, which is part of why MLE is the dominant estimation method in practice
 
+![[Media/Figures/Consistency.svg|340]]
+
 > [!example]- Consistency of the Sample Mean {Example}
 > Let $X_1, \ldots, X_n$ be i.i.d. with mean $\mu$ and finite variance $\sigma^2$. Show that $\bar{X}_n$ is consistent for $\mu$.
 >

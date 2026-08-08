@@ -1,10 +1,16 @@
 # Concept Figures
 
-Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md` and
-`Exam MAS-II (CAS).md` carries one figure that makes the idea visible — a Venn diagram,
-a payment timeline, an annotated density, a price–yield curve, a correlogram. They live in `Media/Figures/*.svg` and are embedded near
-the top of each `Concepts/*.md` page, after the definition and formula block and before
-the first `> [!example]` callout.
+Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md`,
+`Exam MAS-I (CAS).md` and `Exam MAS-II (CAS).md` carries one figure that makes the idea
+visible — a Venn diagram, a payment timeline, an annotated density, a rejection region,
+a correlogram. They live in `Media/Figures/*.svg` and are embedded near the top of each
+`Concepts/*.md` page, after the definition and formula block and before the first
+`> [!example]` callout.
+
+A concept on two syllabuses gets **one** builder, in the file for the exam that
+introduces it — MAS-I owns the thirteen it shares with MAS-II (`AIC`, `Cross-Validation`,
+`Linear Mixed Model`, …). Two builders for one concept would fight over the same slug,
+and `generate_concept_figures.py` prints a warning when it sees that.
 
 The figures are **generated, not hand-drawn**. Re-run the generator rather than editing
 an SVG by hand — a hand edit will be overwritten on the next run.
@@ -49,7 +55,8 @@ and it never disturbs the one remaining set of hand-authored embeds — the
 | `scripts/figure_registry.py` | The `@figure(concept, alt, width)` decorator and the registry it fills. |
 | `scripts/figures_exam_p.py` | The 56 Exam P builders, in syllabus order. |
 | `scripts/figures_exam_fm.py` | The 82 Exam FM builders, in syllabus order. |
-| `scripts/figures_exam_mas_ii.py` | The 84 Exam MAS-II builders, in syllabus order (credibility, mixed models, statistical learning, time series). |
+| `scripts/figures_exam_mas_i.py` | The 77 Exam MAS-I builders, in syllabus order. |
+| `scripts/figures_exam_mas_ii.py` | The 71 Exam MAS-II builders, in syllabus order (credibility, mixed models, statistical learning, time series). |
 | `scripts/generate_concept_figures.py` | Walks the registry, writes the SVGs, optionally embeds them. |
 
 ## Why hand-written SVG and not matplotlib
@@ -74,8 +81,8 @@ surface and the dark one, so a blue curve is the same blue in either mode.
 
 ## Adding or changing a figure
 
-1. Write a builder in `figures_exam_p.py`, `figures_exam_fm.py` or
-   `figures_exam_mas_ii.py` that opens with
+1. Write a builder in `figures_exam_p.py`, `figures_exam_fm.py`,
+   `figures_exam_mas_i.py` or `figures_exam_mas_ii.py` that opens with
    `vcard(title, formula)` and draws into the box, and decorate it with
    `@figure("Concept Name", "alt text", width=WID)`. The concept name must match
    `Concepts/<name>.md` exactly; the slug is derived from it.

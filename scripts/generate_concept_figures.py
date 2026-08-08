@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Generate (and embed) the Exam P / Exam FM concept-page figures.
+"""Generate (and embed) the Exam P / FM / MAS-I / MAS-II concept-page figures.
 
-Every concept linked from `Exam P-1 (SOA).md` and `Exam FM-2 (SOA).md` should
-carry one figure that makes the idea visible — a Venn diagram, a payment
-timeline, an annotated density, a price–yield curve. This script draws them all
-into `Media/Figures/` and can insert the Obsidian embed into the matching
+Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md`,
+`Exam MAS-I (CAS).md` and `Exam MAS-II (CAS).md` should carry one figure that
+makes the idea visible — a Venn diagram, a payment timeline, an annotated
+density, a rejection region, a correlogram. This script draws them all into
+`Media/Figures/` and can insert the Obsidian embed into the matching
 `Concepts/*.md` page.
+
+A concept on two syllabuses is registered by exactly one builder — the exam that
+introduces it — because a duplicate registration would have the two fight over
+the same slug. `main()` warns when that happens.
 
     python3 scripts/generate_concept_figures.py            # write the SVGs
     python3 scripts/generate_concept_figures.py --embed    # ...and embed them
@@ -34,18 +39,24 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from figure_registry import REGISTRY  # noqa: E402
 import figures_exam_p  # noqa: F401,E402
 import figures_exam_fm  # noqa: F401,E402
+import figures_exam_mas_i  # noqa: F401,E402
 import figures_exam_mas_ii  # noqa: F401,E402
 
 OUT_DIR = ROOT / "Media" / "Figures"
 CONCEPTS = ROOT / "Concepts"
-EXAM_PAGES = ["Exam P-1 (SOA).md", "Exam FM-2 (SOA).md", "Exam MAS-II (CAS).md"]
+EXAM_PAGES = [
+    "Exam P-1 (SOA).md",
+    "Exam FM-2 (SOA).md",
+    "Exam MAS-I (CAS).md",
+    "Exam MAS-II (CAS).md",
+]
 
 EMBED_RE = re.compile(r"!\[\[")
 EXAMPLE_RE = re.compile(r"^> \[!(example|answer|quote|info|tip|warning)\]", re.M)
 
 
 def exam_concepts() -> list[str]:
-    """Concept pages linked from the two exam syllabus pages, in order."""
+    """Concept pages linked from the exam syllabus pages, in order."""
     seen: list[str] = []
     for page in EXAM_PAGES:
         text = (ROOT / page).read_text(encoding="utf-8")

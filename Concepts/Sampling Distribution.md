@@ -16,6 +16,8 @@ A **Sampling Distribution** is the probability distribution of a statistic (e.g.
 - The **standard error** is $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$, the standard deviation of the sampling distribution of $\bar{X}$
 - By the [[Central Limit Theorem (CLT)]], $\bar{X}$ is approximately normal for large $n$ even when the population is not normal
 
+![[Media/Figures/Sampling_Distribution.svg|340]]
+
 > [!example]- Probability That a Sample Mean Falls in a Range {Example}
 > Claims $X_i$ are i.i.d. with $\mu = 2{,}000$ and $\sigma = 400$. For a random sample of $n = 64$, find $P(1{,}900 < \bar{X} < 2{,}100)$.
 >

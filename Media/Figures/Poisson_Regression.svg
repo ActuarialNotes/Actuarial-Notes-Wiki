@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Log-link coefficients acting as multiplicative relativities on frequency</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Coefficients become rating relativities</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="430" text-anchor="middle" class="fml">ln μ = ln(exposure) + β₀ + Σ βⱼxⱼ</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">relativity = e^βⱼ</text>
+  <line x1="146" y1="342" x2="336" y2="342" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="146" y1="342" x2="146" y2="102" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="146" y1="342" x2="146" y2="346" class="tick"/>
+  <text x="146" y="358" text-anchor="middle" class="sm dim">0</text>
+  <line x1="206" y1="342" x2="206" y2="346" class="tick"/>
+  <text x="206" y="358" text-anchor="middle" class="sm dim">0.1</text>
+  <line x1="266" y1="342" x2="266" y2="346" class="tick"/>
+  <text x="266" y="358" text-anchor="middle" class="sm dim">0.2</text>
+  <text x="326" y="374" text-anchor="end" class="sm dim">expected claims / year</text>
+  <rect x="146" y="131" width="60" height="22" rx="3" fill="var(--dim)" fill-opacity="0.65"/>
+  <text x="138" y="146" text-anchor="end" class="sm">base  e^(−2.30)</text>
+  <text x="212" y="146" text-anchor="start" class="sm">0.100</text>
+  <rect x="146" y="181" width="78" height="22" rx="3" fill="#3b82f6" fill-opacity="0.65"/>
+  <text x="138" y="196" text-anchor="end" class="sm">× urban  e^0.26</text>
+  <text x="230" y="196" text-anchor="start" class="sm">0.130</text>
+  <rect x="146" y="231" width="117.6" height="22" rx="3" fill="#d97706" fill-opacity="0.65"/>
+  <text x="138" y="246" text-anchor="end" class="sm">× young  e^0.41</text>
+  <text x="269.6" y="246" text-anchor="start" class="sm">0.196</text>
+  <rect x="146" y="281" width="146.4" height="22" rx="3" fill="#e11d48" fill-opacity="0.65"/>
+  <text x="138" y="296" text-anchor="end" class="sm">× prior claim  e^0.22</text>
+  <text x="298.4" y="296" text-anchor="start" class="sm">0.244</text>
+  <text x="180" y="94" text-anchor="middle" class="sm dim">each factor multiplies the one above</text>
+</svg>

@@ -11,6 +11,8 @@
 - A [[Maximum Likelihood Estimation|MLE]] is always a function of a sufficient statistic, so it automatically satisfies the sufficiency criterion
 - An unbiased function of a **complete** sufficient statistic is the UMVUE (Lehmann–Scheffé)
 
+![[Media/Figures/Sufficiency.svg|340]]
+
 > [!example]- Sufficiency via the Conditional Distribution {Example}
 > Let $X_1, \ldots, X_n \stackrel{\text{iid}}{\sim} \text{Bernoulli}(p)$ (e.g., whether each policy filed a claim). Show that $T = \sum X_i$ is sufficient for $p$.
 >

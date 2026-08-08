@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
-  <title>The same predictors assembled into three different linear predictors</title>
+  <title>The terms of a linear predictor: main effects, an interaction and a transform</title>
   <style>:root {
   --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
   --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
@@ -39,32 +39,27 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Which terms enter the linear predictor</text>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Which terms go into the predictor</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
-  <text x="180" y="438" text-anchor="middle" class="fml">η = β₀ + β₁x₁ + β₂x₂ + β₃x₁x₂ + ⋯</text>
-  <text x="180" y="94" text-anchor="middle" class="sm bold" fill="#3b82f6">main effects</text>
-  <rect x="122" y="111" width="54" height="22" rx="11.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="149" y="126" text-anchor="middle" class="sm">x₁</text>
-  <rect x="184" y="111" width="54" height="22" rx="11.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
-  <text x="211" y="126" text-anchor="middle" class="sm">x₂</text>
-  <text x="180" y="156" text-anchor="middle" class="sm dim">AIC 4,102</text>
-  <text x="180" y="186" text-anchor="middle" class="sm bold" fill="#059669">+ interaction</text>
-  <rect x="91" y="203" width="54" height="22" rx="11.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-  <text x="118" y="218" text-anchor="middle" class="sm">x₁</text>
-  <rect x="153" y="203" width="54" height="22" rx="11.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-  <text x="180" y="218" text-anchor="middle" class="sm">x₂</text>
-  <rect x="215" y="203" width="54" height="22" rx="11.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
-  <text x="242" y="218" text-anchor="middle" class="sm">x₁·x₂</text>
-  <text x="180" y="248" text-anchor="middle" class="sm dim">AIC 4,085</text>
-  <text x="180" y="278" text-anchor="middle" class="sm bold" fill="#d97706">+ polynomial</text>
-  <rect x="60" y="295" width="54" height="22" rx="11.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-  <text x="87" y="310" text-anchor="middle" class="sm">x₁</text>
-  <rect x="122" y="295" width="54" height="22" rx="11.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-  <text x="149" y="310" text-anchor="middle" class="sm">x₂</text>
-  <rect x="184" y="295" width="54" height="22" rx="11.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-  <text x="211" y="310" text-anchor="middle" class="sm">x₁·x₂</text>
-  <rect x="246" y="295" width="54" height="22" rx="11.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
-  <text x="273" y="310" text-anchor="middle" class="sm">x₁²</text>
-  <text x="180" y="340" text-anchor="middle" class="sm dim">AIC 4,088</text>
-  <text x="180" y="390" text-anchor="middle" class="sm dim">structure is separate from link and distribution</text>
+  <text x="180" y="430" text-anchor="middle" class="fml">η = β₀ + β₁x₁ + β₂x₂ + β₃x₁x₂ + β₄x₁²</text>
+  <text x="180" y="452" text-anchor="middle" class="fml2">distribution and link are chosen separately</text>
+  <rect x="36" y="96" width="76" height="28" rx="14.0" fill="var(--dim)" fill-opacity="0.14" stroke="var(--dim)" stroke-width="1.2"/>
+  <text x="74" y="114" text-anchor="middle" class="bold">β₀</text>
+  <text x="124" y="114" text-anchor="start" class="sm dim">intercept — the base level</text>
+  <rect x="36" y="152" width="76" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="74" y="170" text-anchor="middle" class="bold">β₁x₁</text>
+  <text x="124" y="170" text-anchor="start" class="sm dim">main effect: territory</text>
+  <text x="40" y="170" text-anchor="middle" class="bold">+</text>
+  <rect x="36" y="208" width="76" height="28" rx="14.0" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="74" y="226" text-anchor="middle" class="bold">β₂x₂</text>
+  <text x="124" y="226" text-anchor="start" class="sm dim">main effect: vehicle age</text>
+  <text x="40" y="226" text-anchor="middle" class="bold">+</text>
+  <rect x="36" y="264" width="76" height="28" rx="14.0" fill="#d97706" fill-opacity="0.14" stroke="#d97706" stroke-width="1.2"/>
+  <text x="74" y="282" text-anchor="middle" class="bold">β₃x₁x₂</text>
+  <text x="124" y="282" text-anchor="start" class="sm dim">interaction — effects not additive</text>
+  <text x="40" y="282" text-anchor="middle" class="bold">+</text>
+  <rect x="36" y="320" width="76" height="28" rx="14.0" fill="#059669" fill-opacity="0.14" stroke="#059669" stroke-width="1.2"/>
+  <text x="74" y="338" text-anchor="middle" class="bold">β₄x₁²</text>
+  <text x="124" y="338" text-anchor="start" class="sm dim">transform — a curved effect</text>
+  <text x="40" y="338" text-anchor="middle" class="bold">+</text>
 </svg>

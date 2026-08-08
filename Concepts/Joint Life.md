@@ -13,6 +13,8 @@
 - The **complete joint-life expectancy**: $\mathring{e}_{xy} = \int_0^\infty {_t}p_{xy}\,dt$
 - Under independence, the joint survival function factors into the product of the individual survival functions
 
+![[Media/Figures/Joint_Life.svg|340]]
+
 > [!example]- Probability Both Lives Survive 10 Years {Example}
 > Two independent lives, aged 40 and 50, have $_{10}p_{40} = 0.95$ and $_{10}p_{50} = 0.88$. Find the probability that both survive 10 years.
 >

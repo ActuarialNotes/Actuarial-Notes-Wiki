@@ -1,18 +1,27 @@
-The **bias-variance tradeoff** decomposes expected test error into three pieces: squared bias, variance, and irreducible noise. Flexibility lowers bias and raises variance, so test error falls then rises — a U-shape with a best model in the middle.
+The **Bias-Variance Tradeoff** is the decomposition of a model's expected prediction error into three pieces — squared [[Bias]], variance, and irreducible noise — and the fact that model complexity moves the first two in opposite directions. It is the reason the best-fitting model is almost never the best-predicting one.
 
-> $$E\!\left[(y_0 - \hat{f}(x_0))^{2}\right] = \underbrace{\left[\mathrm{Bias}(\hat{f}(x_0))\right]^{2}}_{\text{too rigid}} + \underbrace{\mathrm{Var}(\hat{f}(x_0))}_{\text{too twitchy}} + \underbrace{\mathrm{Var}(\varepsilon)}_{\text{irreducible}}$$
+> $$E\!\left[(y_0 - \hat{f}(x_0))^{2}\right] = \left[\text{Bias}(\hat{f}(x_0))\right]^{2} + \text{Var}(\hat{f}(x_0)) + \sigma^{2}$$
 
-- **Bias** is the error from approximating a complicated truth with a simple model; **variance** is how much $\hat f$ would change on a different training sample
-- **Training error always falls** with flexibility — it is not an estimate of test error, and using it to select a model always picks the most flexible one
-- $\mathrm{Var}(\varepsilon)$ is a floor no method beats, however much data or flexibility is thrown at it
-- Levers on the tradeoff: $k$ in [[K-Nearest Neighbors]], depth in a [[Decision Tree]], $\lambda$ in [[Regularization]], the number of trees and the learning rate in [[Boosting]]
-- [[Bagging]] attacks the variance term while leaving bias alone; [[Tree Pruning]] and regularization trade a little bias for a large drop in variance
+- **Bias** is error from the model being too rigid to represent the truth (a straight line through a curved relationship); **variance** is how much the fit would move if it were refitted on a different sample
+- Adding terms, interactions, or levels lowers bias and raises variance. Removing them does the reverse. The total is U-shaped, and the minimum is the right complexity
+- $\sigma^2$ is **irreducible**: no model, however good, predicts better than the noise in the response allows
+- **Underfitting** = high bias, low variance: training and test error are both high and close together. **Overfitting** = low bias, high variance: training error is tiny and test error is much larger
+- Training error is not a guide — it falls monotonically with complexity. Estimate test error with [[Cross-Validation]], or penalize complexity with [[AIC]] / [[BIC]]
+- More data lowers variance without touching bias, so a complex model that overfits at $n = 500$ may be exactly right at $n = 50{,}000$ — the practical reason large books support finer classification plans
+- Credibility weighting is this trade-off in actuarial dress: shrinking a volatile class estimate toward the overall mean accepts bias to cut variance, and lowers [[Mean Square Error]]
 
 ![[Media/Figures/Bias-Variance_Tradeoff.svg|340]]
 
-> [!example]- Choosing k in KNN {Example}
-> KNN regression on 200 claims gives training / test MSE of: $k=1$: 0 / 48.2; $k=5$: 18.4 / 31.0; $k=20$: 27.9 / 29.6; $k=100$: 40.1 / 41.5. Which $k$, and what is happening at each end?
+> [!example]- Decomposing Prediction Error {Example}
+> At a point $x_0$, a model has bias $-3$, variance $16$, and the response has irreducible variance $25$. Compare its expected squared prediction error with a simpler model having bias $-6$ and variance $4$.
 >
 > > [!answer]-
-> > **$k = 20$**, the minimum test MSE at 29.6.
-> > $k = 1$ interpolates every training point (training MSE 0) — zero bias, maximal variance, worst test error. $k = 100$ averages over half the sample — tiny variance, large bias, so both errors are high and nearly equal. Training MSE rises monotonically with $k$ and never identifies the right answer.
+> > $$\text{Model A} = (-3)^2 + 16 + 25 = 9 + 16 + 25 = 50$$
+> > $$\text{Model B} = (-6)^2 + 4 + 25 = 36 + 4 + 25 = 65$$
+> > Model A predicts better despite being the more complex one. Note that both are floored at $25$ — even a perfect model cannot beat the noise.
+
+> [!example]- Diagnosing Overfitting in a Rating Model {Example}
+> A frequency model with territory banded into $8$ groups has training deviance $2{,}400$ and holdout deviance $2{,}510$. Refitting with all $220$ postal codes as separate levels gives training deviance $1{,}950$ and holdout deviance $2{,}890$. What happened?
+>
+> > [!answer]-
+> > The $220$-level model has far lower **training** error and much worse **holdout** error — the signature of high variance. Most postal codes carry too little exposure to estimate their own relativity, so each coefficient is chasing a handful of claims. The $8$-band model accepts some bias (real differences within a band are averaged away) for a large reduction in variance, and predicts better.

@@ -10,10 +10,17 @@ C. Statistical learning — the framework, trees and ensembles, PCA, clustering,
    neural networks, model evaluation
 D. Time series — stationarity, ACF/PACF, ARIMA, trend and seasonality
 
-Consistent examples run through the families, as on the other two exams: the
+Consistent examples run through the families, as on the other exams: the
 credibility figures all price the same 300-claim class against a 1,082-claim
 standard, the mixed-model figures all use the same five grouped territories, and
 the time-series figures all draw the same quarterly loss index.
+
+Thirteen concepts on this syllabus are also on MAS-I (`AIC`, `BIC`,
+`Aggregate Loss Model`, `Bias-Variance Tradeoff`, `Cross-Validation`, `Frequency`,
+`Generalized Linear Model`, `Likelihood Ratio Test`, `Linear Mixed Model`,
+`Model Structure`, `Residual Sum of Squares`, `Severity`, `Variable Selection`).
+They are drawn by `figures_exam_mas_i.py` and deliberately absent here — two
+builders for one concept would fight over the same slug.
 """
 
 from __future__ import annotations
@@ -384,82 +391,6 @@ def complement_of_credibility() -> Fig:
     return f
 
 
-@figure("Frequency", "Claim counts over exposures, drawn as claims per car-year",
-        width=WID)
-def frequency() -> Fig:
-    f = vcard("Frequency counts claims per unit of exposure",
-              "Frequency = claims / exposures")
-
-    rows, cols = 5, 8
-    claims = {3, 9, 14, 22, 27, 31, 35}
-    f.text(BCX, 104, "40 car-years, 7 claims", cls="sm dim")
-    for i in range(rows * cols):
-        cx = 52 + (i % cols) * 34
-        cy = 138 + (i // cols) * 34
-        on = i in claims
-        f.rect(cx - 12, cy - 12, 24, 24, rx=5,
-               fill=ROSE if on else "var(--soft)",
-               fill_opacity="0.75" if on else "1",
-               stroke=ROSE if on else "var(--edge)", stroke_width="1.2")
-    f.text(BCX, 330, "7 / 40 = 0.175 claims per car-year", cls="bold")
-    f.text(BCX, BY1 - 2, "pure premium = frequency × severity", cls="sm dim")
-    return f
-
-
-@figure("Severity", "The average cost per claim marked on a right-skewed claim "
-        "size distribution", width=WID)
-def severity() -> Fig:
-    f = vcard("Severity is the average cost per claim",
-              "Severity = total losses / claims")
-
-    ax = vaxes(f, 0, 30, 0, 0.13, left=28, right=16, top=36, bottom=56)
-    def dens(x):
-        if x <= 0.2:
-            return 0.0
-        return math.exp(-((math.log(x) - 1.6) ** 2) / (2 * 0.7 ** 2)) / (x * 0.7 * math.sqrt(2 * math.pi))
-    ax.area(dens, 0.2, 30, colour=BLUE, opacity="0.16")
-    ax.curve(dens, colour=BLUE, width=2.2, xa=0.2)
-    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
-    for v, lab, colour in ((5.0, "median 5.0", "var(--dim)"),
-                           (6.35, "mean 6.35", GREEN)):
-        ax.vline(v, colour=colour, y_top=0.125)
-        ax.label(v, 0.125, lab, cls="sm bold", dy=-6,
-                 anchor="end" if v < 6 else "start", dx=-3 if v < 6 else 3,
-                 fill=colour)
-    f.text(BCX, ax.y1 + 20, "claim size ($000s)", cls="sm dim")
-    f.text(BCX, ax.y1 + 40, "the long right tail pulls the mean", cls="sm dim")
-    f.text(BCX, ax.y1 + 55, "above the median", cls="sm dim")
-    return f
-
-
-@figure("Aggregate Loss Model", "A random number of claims of random size summing "
-        "to the aggregate loss", width=WID)
-def aggregate_loss_model() -> Fig:
-    f = vcard("A random count of random claim sizes",
-              "S = X₁ + ⋯ + X_N")
-
-    f.text(BCX, 100, "N ~ Poisson(λ)  draws the count", cls="sm dim")
-    sizes = [34, 18, 52, 26, 41]
-    x = 46
-    base = 214
-    for i, s in enumerate(sizes):
-        h = s * 1.5
-        f.rect(x, base - h, 38, h, rx=3, fill=SERIES[i % len(SERIES)],
-               fill_opacity="0.6")
-        f.text(x + 19, base + 15, f"X{'₁₂₃₄₅'[i]}", cls="sm dim")
-        x += 56
-    f.line(38, base, 322, base, cls="axis")
-    f.text(BCX, 258, "N = 5 this year — next year it is a different N",
-           cls="sm dim")
-
-    total = sum(sizes)
-    f.rect(70, 288, 220, 34, rx=6, fill=GREEN, fill_opacity="0.18", stroke=GREEN,
-           stroke_width="1.4")
-    f.text(BCX, 310, f"S = {total}", cls="bold", fill=GREEN)
-    f.text(BCX, BY1 - 2, "E[S] = E[N]E[X];  both vary", cls="sm dim")
-    return f
-
-
 # ═══════════════════════════════════════════════════════════════════════════
 # B. Linear mixed models
 #
@@ -469,27 +400,6 @@ def aggregate_loss_model() -> Fig:
 
 _TERR = [(-0.26, 0.052), (-0.11, 0.030), (0.02, 0.041), (0.14, 0.024),
          (0.30, 0.038)]   # (intercept offset, slope offset) per territory
-
-
-@figure("Linear Mixed Model", "A mixed model drawn as a population line with one "
-        "shifted line per group", width=WID)
-def linear_mixed_model() -> Fig:
-    f = vcard("One population line, one shifted line per group",
-              "y = Xβ + Zb + ε")
-
-    ax = vaxes(f, 0, 4.4, 0.55, 1.45, left=42, right=16, top=30, bottom=54)
-    ax.frame(xticks=[1, 2, 3, 4], yticks=[0.7, 1.0, 1.3], grid=True)
-    for i, (b0, _) in enumerate(_TERR):
-        colour = SERIES[i % len(SERIES)]
-        ax.polyline([(t, 0.98 + 0.06 * t + b0) for t in (0.6, 4.3)],
-                    colour=colour, width=1.5)
-    ax.polyline([(t, 0.98 + 0.06 * t) for t in (0.6, 4.3)], colour="var(--ink)",
-                width=2.8)
-    ax.label(4.3, 0.98 + 0.06 * 4.3, "Xβ", cls="sm bold", anchor="end", dy=-8)
-    f.text(BCX, ax.y1 + 32, "development period", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "the heavy line is the fixed part; each thin", cls="sm dim")
-    f.text(BCX, ax.y1 + 65, "line is one group's random intercept", cls="sm dim")
-    return f
 
 
 @figure("Fixed Effects", "A fixed effect estimated separately per level against a "
@@ -686,120 +596,6 @@ def reml() -> Fig:
     return f
 
 
-@figure("Likelihood Ratio Test", "The chi-square reference distribution with the "
-        "observed deviance difference in its tail", width=WID)
-def likelihood_ratio_test() -> Fig:
-    f = vcard("Twice the log-likelihood gap, read off χ²",
-              "Λ = −2(ℓ_reduced − ℓ_full) ~ χ²_df")
-
-    def chi1(x):
-        if x <= 0.02:
-            return 0.0
-        return math.exp(-x / 2) / math.sqrt(2 * math.pi * x)
-
-    ax = vaxes(f, 0, 12, 0, 0.5, left=30, right=16, top=52, bottom=62)
-    ax.area(chi1, 3.84, 12, colour=ROSE, opacity="0.22")
-    ax.curve(chi1, colour=BLUE, width=2.2, xa=0.05)
-    f.line(ax.x0, ax.y1, ax.x1, ax.y1, cls="axis")
-    for v, lab, colour in ((3.84, "3.84", ROSE), (6.6, "Λ = 6.6", GREEN)):
-        ax.vline(v, colour=colour, y_top=0.30)
-        ax.label(v, 0.30, lab, cls="sm bold", fill=colour, dy=-6,
-                 anchor="end" if v < 5 else "start", dx=-3 if v < 5 else 4)
-    f.text(ax.px(7.6), ax.py(0.06), "5%", cls="sm", fill=ROSE)
-    f.text(BCX, ax.y1 + 22, "χ²₁ — one variance component tested", cls="sm dim")
-    f.text(BCX, ax.y1 + 40, "6.6 > 3.84 ⇒ keep the random effect", cls="sm bold")
-    f.text(BCX, BY1 - 2, "at a boundary the true p-value is halved", cls="sm dim")
-    return f
-
-
-@figure("AIC", "Fit improving with parameters while the AIC penalty turns the "
-        "total around", width=WID)
-def aic() -> Fig:
-    f = vcard("AIC = fit penalized by parameter count",
-              "AIC = −2ℓ + 2k")
-
-    ax = vaxes(f, 0.4, 8.6, 190, 240, left=44, right=16, top=30, bottom=72)
-    ax.frame(xticks=[2, 4, 6, 8], yticks=[200, 220, 240], grid=True)
-    fits = {1: 232, 2: 218, 3: 208, 4: 203, 5: 201, 6: 200.4, 7: 200.1, 8: 200.0}
-    ax.polyline([(k, v) for k, v in fits.items()], colour="var(--dim)", width=1.8,
-                dash=True)
-    ax.polyline([(k, v + 2 * k) for k, v in fits.items()], colour=BLUE, width=2.4)
-    best = min(fits, key=lambda k: fits[k] + 2 * k)
-    ax.point(best, fits[best] + 2 * best, colour=GREEN, label="best AIC", dy=-10)
-    ax.label(8, fits[8], "−2ℓ", cls="sm dim", anchor="end", dy=12)
-    ax.label(2.6, fits[2] + 4 + 8, "AIC", cls="sm bold", fill=BLUE, anchor="start")
-    f.text(BCX, ax.y1 + 32, "parameters k", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "fit always improves; AIC does not", cls="sm dim")
-    f.text(BCX, BY1 - 2, "lower is better — the value alone means nothing",
-           cls="sm dim")
-    return f
-
-
-@figure("BIC", "The BIC penalty growing with sample size against AIC's fixed 2 per "
-        "parameter", width=WID)
-def bic() -> Fig:
-    f = vcard("BIC's penalty grows with the sample",
-              "BIC = −2ℓ + k·log n")
-
-    ax = vaxes(f, 0, 1000, 0, 8, left=44, right=18, top=26, bottom=76)
-    ax.frame(xticks=[0, 250, 500, 750, 1000], yticks=[0, 2, 4, 6, 8], grid=True)
-    ax.curve(lambda n: math.log(max(n, 1.2)), colour=VIOLET, width=2.4)
-    ax.hline(2, colour=BLUE, dash=False, x_to=1000)
-    ax.label(760, 2, "AIC penalty = 2", cls="sm bold", fill=BLUE, dy=-8)
-    ax.label(700, math.log(700), "BIC penalty = log n", cls="sm bold", fill=VIOLET,
-             dy=-8, anchor="end")
-    ax.vline(7.39, colour="var(--dim)", y_top=2)
-    f.text(BCX, ax.y1 + 32, "sample size n", cls="sm dim")
-    f.text(BCX, ax.y1 + 50, "past n ≈ 8 the BIC penalty is the harsher —",
-           cls="sm dim")
-    f.text(BCX, ax.y1 + 65, "so BIC picks the sparser model", cls="sm dim")
-    return f
-
-
-@figure("Model Structure", "The same predictors assembled into three different "
-        "linear predictors", width=WID)
-def model_structure() -> Fig:
-    f = vcard("Which terms enter the linear predictor",
-              "η = β₀ + β₁x₁ + β₂x₂ + β₃x₁x₂ + ⋯")
-
-    rows = [("main effects", ["x₁", "x₂"], BLUE, "AIC 4,102"),
-            ("+ interaction", ["x₁", "x₂", "x₁·x₂"], GREEN, "AIC 4,085"),
-            ("+ polynomial", ["x₁", "x₂", "x₁·x₂", "x₁²"], AMBER, "AIC 4,088")]
-    for i, (name, terms, colour, note) in enumerate(rows):
-        y = 108 + i * 92
-        f.text(BCX, y - 14, name, cls="sm bold", fill=colour)
-        x = BCX - (len(terms) * 62 - 8) / 2
-        for t in terms:
-            f.chip(x + 27, y + 14, t, colour=colour, w=54)
-            x += 62
-        f.text(BCX, y + 48, note, cls="sm dim")
-    f.text(BCX, BY1 - 2, "structure is separate from link and distribution",
-           cls="sm dim")
-    return f
-
-
-@figure("Variable Selection", "Forward selection adding predictors while AIC "
-        "falls and then rises", width=WID)
-def variable_selection() -> Fig:
-    f = vcard("Add a term only while the criterion improves",
-              "compare by AIC, BIC or deviance")
-
-    ax = vaxes(f, -0.4, 5.4, 4080, 4140, left=48, right=16, top=48, bottom=58)
-    ax.frame(xticks=[0, 1, 2, 3, 4, 5], yticks=[4090, 4110, 4130], grid=True,
-             xfmt=lambda t: f"+{int(t)}", arrows=False)
-    pts = [(0, 4136), (1, 4112), (2, 4096), (3, 4085), (4, 4088), (5, 4094)]
-    ax.polyline(pts, colour=BLUE, width=2.4)
-    for x, y in pts:
-        ax.point(x, y, colour=BLUE if x != 3 else GREEN, r=3.6)
-    ax.point(3, 4085, colour=GREEN, r=5)
-    ax.label(3, 4085, "stop here", cls="sm bold", fill=GREEN, dy=-11)
-    f.text(BCX, BY0 + 26, "terms added, in order of significance", cls="sm dim")
-    f.text(BCX, ax.y1 + 34, "forward · backward · stepwise · criterion-based",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "statistics propose; judgement disposes", cls="sm dim")
-    return f
-
-
 @figure("Best Linear Unbiased Predictor", "Group deviations shrunk by a credibility "
         "weight that grows with the group's size", width=WID)
 def blup() -> Fig:
@@ -817,29 +613,6 @@ def blup() -> Fig:
     f.text(BCX, ax.y1 + 32, "group size nᵢ", cls="sm dim")
     f.text(BCX, ax.y1 + 50, "k = σ² / σ²_b — Bühlmann's k exactly", cls="sm dim")
     f.text(BCX, ax.y1 + 66, "raw 260 vs mean 200 ⇒ fitted 236", cls="sm bold")
-    return f
-
-
-@figure("Generalized Linear Model", "A linear predictor passed through a link "
-        "function to a non-normal mean", width=WID)
-def glm() -> Fig:
-    f = vcard("A link carries the linear predictor to the mean",
-              "g(μ) = β₀ + β₁x₁ + ⋯ + βₚxₚ")
-
-    f.box(34, 100, 96, 46, label="β₀ + Σβⱼxⱼ", colour=BLUE, label_cls="sm bold")
-    f.text(82, 160, "linear predictor η", cls="sm dim")
-    f.box(228, 100, 96, 46, label="μ = E[y]", colour=GREEN, label_cls="sm bold")
-    f.text(276, 160, "mean response", cls="sm dim")
-    f.arrow(136, 123, 222, 123, colour="var(--ink)", width=1.7)
-    f.text(179, 114, "g⁻¹", cls="sm bold")
-
-    ax = Axes(f, BX0 + 46, 202, BX1 - 20, 322, -2.2, 2.2, 0, 6)
-    ax.frame(yticks=[2, 4, 6], grid=True, arrows=False)
-    f.text(ax.x1, ax.y1 + 16, "η", cls="sm dim", anchor="end")
-    ax.curve(math.exp, colour=GREEN, width=2.3)
-    ax.label(1.05, 4.6, "log link ⇒ μ = e^η", cls="sm bold", fill=GREEN,
-             anchor="end")
-    f.text(BCX, BY1 - 2, "log link ⇒ multiplicative rating factors", cls="sm dim")
     return f
 
 
@@ -961,62 +734,6 @@ def unsupervised_learning() -> Fig:
     f.text(BCX, BY1 - 50, "every point the same colour — there is", cls="sm dim")
     f.text(BCX, BY1 - 34, "no label to score a fit against", cls="sm dim")
     f.text(BCX, BY1 - 2, "PCA and clustering, judged by judgement", cls="sm dim")
-    return f
-
-
-@figure("Bias-Variance Tradeoff", "Test error as a U-shape over flexibility, with "
-        "the bias and variance components underneath", width=WID)
-def bias_variance() -> Fig:
-    f = vcard("Test error is a U over flexibility",
-              "E[(y − f̂)²] = Bias² + Var + Var(ε)")
-
-    ax = vaxes(f, 0, 10, 0, 52, left=42, right=16, top=28, bottom=76)
-    ax.frame(xticks=[], yticks=[], grid=False)
-    bias = lambda t: 34 * math.exp(-0.55 * t) + 1
-    var = lambda t: 1.6 * math.exp(0.30 * t)
-    noise = 8.0
-    ax.curve(bias, colour=AMBER, width=1.9, xa=0.2)
-    ax.curve(var, colour=VIOLET, width=1.9, xa=0.2)
-    ax.hline(noise, colour="var(--dim)", x_to=10)
-    ax.curve(lambda t: bias(t) + var(t) + noise, colour=ROSE, width=2.6, xa=0.2)
-    ax.curve(lambda t: 30 * math.exp(-0.42 * t) + 1.5, colour=BLUE, width=1.9,
-             dash=True, xa=0.2)
-    best = min(range(20, 900), key=lambda i: bias(i / 100) + var(i / 100))
-    ax.vline(best / 100, colour=GREEN, y_top=50)
-    ax.label(best / 100, 50, "best", cls="sm bold", fill=GREEN, dy=-5)
-    ax.label(5.4, bias(5.4) + 4.5, "bias²", cls="sm", fill=AMBER)
-    ax.label(8.4, var(8.4) + 5, "var", cls="sm", fill=VIOLET, anchor="end")
-    ax.label(9.5, noise + 4.5, "Var(ε)", cls="sm dim", anchor="end")
-    ax.label(1.4, 46, "test", cls="sm bold", fill=ROSE)
-    ax.label(1.5, 22, "train", cls="sm", fill=BLUE, anchor="start")
-    f.text(BCX, ax.y1 + 20, "flexibility →", cls="sm dim")
-    f.text(BCX, BY1 - 2, "the noise floor no method beats", cls="sm dim")
-    return f
-
-
-@figure("Cross-Validation", "Five folds each taking a turn as the validation set",
-        width=WID)
-def cross_validation() -> Fig:
-    f = vcard("Each fold takes a turn as the held-out set",
-              "CV₍K₎ = (1/K) Σ MSEₖ")
-
-    x0, w, cw = 52, 236, 236 / 5
-    for k in range(5):
-        y = 106 + k * 34
-        for j in range(5):
-            held = j == k
-            f.rect(x0 + j * cw + 1.5, y, cw - 3, 24, rx=3,
-                   fill=ROSE if held else BLUE,
-                   fill_opacity="0.6" if held else "0.22",
-                   stroke=ROSE if held else BLUE, stroke_width="1")
-        f.text(x0 - 8, y + 17, f"{k+1}", cls="sm dim", anchor="end")
-        f.text(x0 + w + 10, y + 17, f"MSE{k+1}", cls="sm dim", anchor="start")
-    f.legend_row(BX0 + 40, 292, [(BLUE, "train"), (ROSE, "validate")], gap=110)
-    f.text(BCX, 326, "average the five to estimate test error", cls="sm dim")
-    f.text(BCX, 352, "K = n is LOOCV: near-unbiased, high variance",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "select variables inside the fold, not before",
-           cls="sm dim")
     return f
 
 
@@ -1221,33 +938,6 @@ def entropy() -> Fig:
     f.text(BCX, ax.y1 + 32, "proportion in class 1", cls="sm dim")
     f.text(BCX, ax.y1 + 50, "0 when the node is pure", cls="sm dim")
     f.text(BCX, BY1 - 2, "like Gini, but steeper near a pure node", cls="sm dim")
-    return f
-
-
-@figure("Residual Sum of Squares", "Vertical residuals from a fitted line, squared "
-        "and summed", width=WID)
-def rss() -> Fig:
-    f = vcard("The squared vertical gaps, added up",
-              "RSS = Σ (yᵢ − ŷᵢ)²")
-
-    r = _Rand(5)
-    ax = vaxes(f, 0, 10, 0, 10, left=36, right=16, top=32, bottom=70)
-    ax.frame(xticks=[], yticks=[], grid=True)
-    line = lambda x: 1.4 + 0.72 * x
-    ax.curve(line, colour="var(--ink)", width=2)
-    for i in range(9):
-        x = 0.9 + i * 1.02
-        y = line(x) + r.n(0, 1.15)
-        y = max(0.5, min(9.5, y))
-        f.line(ax.px(x), ax.py(y), ax.px(x), ax.py(line(x)), cls="thin",
-               stroke=ROSE, stroke_width="1.6")
-        ax.point(x, y, colour=BLUE, r=3.4)
-    ax.label(8.4, line(8.4), "ŷ", cls="sm bold", dy=-9, dx=6)
-    f.text(BCX, ax.y1 + 26, "the rose segments are the residuals", cls="sm dim")
-    f.text(BCX, ax.y1 + 44, "squaring punishes the big misses hardest",
-           cls="sm dim")
-    f.text(BCX, BY1 - 2, "the splitting criterion for a regression tree",
-           cls="sm dim")
     return f
 
 

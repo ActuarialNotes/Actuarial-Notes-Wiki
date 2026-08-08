@@ -1,53 +1,91 @@
 ---
 Title: "An Introduction to Statistical Learning: with Applications in R"
-Authors: "Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani"
+Authors: "James, G., Witten, D., Hastie, T., and Tibshirani, R."
 Year: "2021"
 date: "2021"
-Edition: 2nd
+Edition: 2e
 Publisher: Springer
-Type: Textbook
-Available from: "[statlearning.com](https://www.statlearning.com/) (free PDF)"
+ISBN: 978-1071614174
 ---
-The [[Statistical Learning]] text on both the [[Exam MAS-II (CAS)|MAS-II]] syllabus (section C, the largest section on the exam) and the [[Exam MAS-I (CAS)|MAS-I]] extended-linear-model section. The second edition runs to 13 chapters; MAS-II draws on the statistical-learning framework, resampling, trees and ensembles, neural networks and unsupervised learning.
+On two syllabuses. For [[Exam MAS-I (CAS)|MAS-I]] objectives C1–C9 it is the applied model-building reference, and chapters 2–6 carry that material: the [[Bias-Variance Tradeoff]], [[Linear Regression]], classification, [[Cross-Validation]] and model selection. For [[Exam MAS-II (CAS)|MAS-II]] it supplies section C — the largest section on that exam — through chapters 2, 5, 6, 8, 10 and 12. The full text is available free from the authors at [statlearning.com](https://www.statlearning.com/).
 
-The PDF is free from the authors' site, and each chapter ends with R labs and exercises worth working — the exam's computational objectives are exactly the lab computations.
+## 1 Introduction
 
-## What the syllabus takes from it
+- An overview of statistical learning, the data sets used, and notation
 
-### Statistical learning (Ch. 2)
+## 2 Statistical Learning
 
+- What is [[Statistical Learning]]? Prediction versus inference
 - [[Supervised Learning|Supervised]] versus [[Unsupervised Learning|unsupervised]] learning; regression versus classification
-- Assessing model accuracy, training versus test error, and the [[Bias-Variance Tradeoff]]
-- [[K-Nearest Neighbors]] as the running example of a flexible non-parametric method
+- Assessing model accuracy: training versus test error, and the [[Bias-Variance Tradeoff]]
+- The classification setting and the Bayes classifier
+- [[K-Nearest Neighbors]]
 
-### Resampling methods (Ch. 5)
+## 3 Linear Regression
 
-- The validation-set approach, LOOCV and $K$-fold [[Cross-Validation]]
-- The [[Bootstrap]] and what it does that cross-validation does not
+- Simple and multiple [[Linear Regression]]
+- Assessing the accuracy of the coefficient estimates and of the model ([[R-Squared]], [[Residual Sum of Squares]])
+- Other considerations: qualitative predictors ([[Categorical Predictor]]), [[Interaction|interactions]], non-linear relationships
+- Potential problems: non-constant variance, outliers, high leverage, [[Multicollinearity]]
+- Comparison with [[K-Nearest Neighbors]]
 
-### Linear model selection and regularization (Ch. 6)
+## 4 Classification
 
-- Subset selection and stepwise [[Variable Selection]]
-- Ridge and lasso [[Regularization]], and choosing $\lambda$ by cross-validation
-- Dimension reduction via principal components
+- Why not [[Linear Regression]]?
+- [[Logistic Regression]]
+- Generative models: LDA, QDA and naive Bayes
+- A comparison of classification methods
+- [[Generalized Linear Model|Generalized linear models]] and [[Poisson Regression]]
 
-### Tree-based methods (Ch. 8)
+## 5 Resampling Methods
 
-- Growing a [[Decision Tree]]; the [[Gini Index]], [[Entropy]] and [[Residual Sum of Squares]] as splitting criteria
-- Cost-complexity [[Tree Pruning|pruning]]
-- [[Tree Ensemble]]s: [[Bagging]], [[Random Forest]]s and [[Boosting]], with [[Out-of-Bag Error]] and [[Variable Importance]]
+- [[Cross-Validation]]: validation set, leave-one-out and $k$-fold
+- The [[Bootstrap|bootstrap]]
 
-### Deep learning (Ch. 10)
+## 6 Linear Model Selection and Regularization
 
-- Single- and multi-layer [[Neural Network]]s
-- The [[Activation Function]] and why non-linearity is what a network buys
-- Fitting by [[Backpropagation]] and stochastic gradient descent
+- Subset selection ([[Variable Selection]])
+- Shrinkage methods: ridge and lasso [[Regularization|regularization]]
+- Dimension reduction: [[Principal Components Analysis|principal components]] and partial least squares
+- Considerations in high dimensions
 
-### Unsupervised learning (Ch. 12)
+## 7 Moving Beyond Linearity
+
+- Polynomial regression, step functions and basis functions
+- Regression and smoothing splines, local regression
+- Generalized additive models
+
+## 8 Tree-Based Methods
+
+- The basics of [[Decision Tree|decision trees]]; the [[Gini Index]], [[Entropy]] and [[Residual Sum of Squares]] as splitting criteria, and cost-complexity [[Tree Pruning|pruning]]
+- [[Bagging]], [[Random Forest|random forests]] and [[Boosting|boosting]] ([[Tree Ensemble]]), with [[Out-of-Bag Error|out-of-bag error]] and [[Variable Importance|variable importance]]
+- Bayesian additive regression trees
+
+## 9 Support Vector Machines
+
+- Maximal margin classifier, support vector classifier and support vector machines
+- SVMs with more than two classes, and their relationship to [[Logistic Regression]]
+
+## 10 Deep Learning
+
+- Single- and multilayer neural networks ([[Neural Network]]), and the [[Activation Function|activation function]]
+- Convolutional and recurrent neural networks
+- Fitting a neural network by [[Backpropagation|backpropagation]] and gradient descent
+
+## 11 Survival Analysis and Censored Data
+
+- [[Survival Model|Survival]] and [[Hazard Rate|hazard]] functions, [[Censoring]]
+- The Kaplan–Meier survival curve and the log-rank test
+- Regression models with a survival response
+
+## 12 Unsupervised Learning
 
 - [[Principal Components Analysis]]: [[Loading Vector|loading vectors]], scores, the [[Proportion of Variance Explained]] and the [[Scree Plot]]
-- [[K-Means Clustering]] and [[Hierarchical Clustering]], with the [[Dendrogram]] and the choice of [[Linkage]]
+- Missing values and matrix completion
+- [[Clustering]] methods: [[K-Means Clustering]] and [[Hierarchical Clustering|hierarchical clustering]], with the [[Dendrogram]] and the choice of [[Linkage]]
 
-## Links
-- [An Introduction to Statistical Learning (free PDF and resources)](https://www.statlearning.com/)
-- [Springer listing, 2nd edition](https://link.springer.com/book/10.1007/978-1-0716-1418-1)
+## 13 Multiple Testing
+
+- A quick review of [[Hypothesis Testing]]
+- The challenge of multiple testing; family-wise error rate
+- The false discovery rate and resampling approaches

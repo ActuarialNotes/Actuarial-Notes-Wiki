@@ -10,10 +10,62 @@ derived from which `Exam *.md` syllabus page links the concept (earliest exam wi
 do, noted in a trailing comment); the folder is organisational only — the parser keys checks by
 concept name, not by folder.
 
-**79 of 396 concepts remain.**
+**119 of 472 concepts remain.**
 Regenerate with `python3 scripts/list_missing_checks.py`.
 
-## unassigned — not linked from any Exam page (79)
+## exam-mas-ii (49)
+
+- [ ] Activation Function
+- [ ] Autocorrelation Function
+- [ ] Autoregressive Model
+- [ ] Backpropagation
+- [ ] Bagging
+- [ ] Best Linear Unbiased Predictor
+- [ ] Boosting
+- [ ] Bootstrap
+- [ ] Confusion Matrix
+- [ ] Conjugate Prior
+- [ ] Covariance Structure
+- [ ] Dendrogram
+- [ ] Deterministic and Stochastic Trend
+- [ ] Differencing
+- [ ] Double Lift Chart
+- [ ] Empirical Bayes Credibility
+- [ ] Expected Value of Process Variance
+- [ ] Exponential Smoothing
+- [ ] Fixed Effects
+- [ ] Full Credibility Standard
+- [ ] Hierarchical Clustering
+- [ ] Intraclass Correlation
+- [ ] Linkage
+- [ ] Loading Vector
+- [ ] Moving Average Model
+- [ ] Out-of-Bag Error
+- [ ] Partial Autocorrelation Function
+- [ ] Partial Credibility
+- [ ] Predictive Distribution
+- [ ] Proportion of Variance Explained
+- [ ] Quantile Plot
+- [ ] Random Effects
+- [ ] Random Forest
+- [ ] Random Intercept and Slope
+- [ ] Random Walk
+- [ ] Regularization
+- [ ] Restricted Maximum Likelihood
+- [ ] Scree Plot
+- [ ] Seasonality
+- [ ] Stationarity
+- [ ] Supervised Learning
+- [ ] Time Series Decomposition
+- [ ] Time Series Forecast
+- [ ] Tree Pruning
+- [ ] Unsupervised Learning
+- [ ] Variable Importance
+- [ ] Variance Components
+- [ ] Variance of Hypothetical Means
+- [ ] White Noise
+
+## unassigned — not linked from any Exam page (70)
 
 - [ ] AI Agent
 - [ ] Accrued Interest
@@ -26,7 +78,6 @@ Regenerate with `python3 scripts/list_missing_checks.py`.
 - [ ] Amortization Schedule
 - [ ] Attention
 - [ ] Bayesian
-- [ ] Bias
 - [ ] Bloom's Taxonomy
 - [ ] Bond Amortization
 - [ ] Canadian Institute of Actuaries (CIA)
@@ -42,20 +93,16 @@ Regenerate with `python3 scripts/list_missing_checks.py`.
 - [ ] Combined Ratio
 - [ ] Conditional and Marginal Probability Functions
 - [ ] Constraint
-- [ ] Correlation
 - [ ] Covariance and Correlation Coefficient
 - [ ] Credit
-- [ ] Cumulative Distribution Function (CDF)
 - [ ] Decision-Making
 - [ ] Deferred Annuity
 - [ ] Development Factor
 - [ ] Discount
 - [ ] Discount Function
 - [ ] Geometric Increasing Perpetuity
-- [ ] Hypothesis Testing
 - [ ] Increasing Annuity
 - [ ] Law of Large Numbers
-- [ ] Linear Combinations of Random Variables
 - [ ] Loan Amortization
 - [ ] Markov Chain
 - [ ] Nominal Discount Rate
@@ -67,8 +114,6 @@ Regenerate with `python3 scripts/list_missing_checks.py`.
 - [ ] Premium
 - [ ] Price Risk
 - [ ] Probability Addition Rules
-- [ ] Probability Density Function (PDF)
-- [ ] Probability Distributions
 - [ ] Probability Mass Function (PMF)
 - [ ] Probability Multiplication Rules
 - [ ] Probability Rules
@@ -89,8 +134,6 @@ Regenerate with `python3 scripts/list_missing_checks.py`.
 - [ ] Spot Rates and Forward Rates
 - [ ] Standard Deviation (SD)
 - [ ] Target Loss Ratio
-- [ ] Transformations of Random Variables
 - [ ] Trend
 - [ ] VIN Fraud
 - [ ] Variance and Standard Deviation
-- [ ] Variance for Conditional and Marginal Distributions

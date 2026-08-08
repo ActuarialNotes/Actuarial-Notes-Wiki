@@ -18,6 +18,8 @@
 - **Analysis of Deviance** (the GLM analogue) compares nested [[Generalized Linear Model]]s by the change in [[Deviance]], which follows a $\chi^2$ distribution asymptotically
 - ANOVA is a special case of a linear model: it is equivalent to a regression with indicator variables for group membership
 
+![[Media/Figures/ANOVA.svg|340]]
+
 > [!example]- One-Way ANOVA for Claim Severity Across Territories {Example}
 > An actuary tests whether mean claim severity differs across three territories using 30 claims (10 per territory). The ANOVA table shows $\text{SS}_B = 1{,}200$ and $\text{SS}_W = 5{,}400$. Test at $\alpha = 0.05$.
 >

@@ -11,6 +11,8 @@ A **Life Annuity** pays periodic benefits contingent on the survival of one or m
 - Under **constant force of mortality** $\mu$: $\bar{a}_x = \dfrac{1}{\mu + \delta}$
 - Relationship to whole life insurance: $\bar{A}_x + \delta\,\bar{a}_x = 1$
 
+![[Media/Figures/Life_Annuity.svg|340]]
+
 > [!example]- EPV of a Whole Life Annuity Under Constant Force of Mortality {Example}
 > A life has constant force of mortality $\mu = 0.03$ and the force of interest is $\delta = 0.05$. Calculate $\bar{a}_x$.
 >

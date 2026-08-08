@@ -13,6 +13,8 @@
 - Under a **constant force of mortality** $\mu$ and force of interest $\delta$: $\bar{A}_x = \dfrac{\mu}{\mu + \delta}$
 - The **variance** uses the **double-force-of-interest trick**: ${}^2\!\bar{A}_x$ is $\bar{A}_x$ evaluated at $2\delta$
 
+![[Media/Figures/Whole_Life_Insurance.svg|340]]
+
 > [!example]- Net Single Premium Under Constant Force of Mortality {Example}
 > A life is subject to constant force of mortality $\mu = 0.02$ and the force of interest is $\delta = 0.05$. Calculate $\bar{A}_x$.
 >

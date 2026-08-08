@@ -16,6 +16,8 @@ The **Limited Expected Value** (LEV) of a random variable $X$ at limit $u$ is th
 | Exponential$(\theta)$ | $\theta(1 - e^{-u/\theta})$ |
 | Pareto$(\alpha, \theta)$ | $\dfrac{\theta}{\alpha-1}\!\left[1 - \left(\dfrac{\theta}{\theta+u}\right)^{\alpha-1}\right]$ |
 
+![[Media/Figures/Limited_Expected_Value.svg|340]]
+
 > [!example]- Insurer Payment with a Policy Limit {Example}
 > Losses $X \sim \text{Exponential}(\theta = 1{,}000)$. A policy pays losses up to a limit of $u = 2{,}000$. Find the expected payment per loss.
 >

@@ -292,9 +292,11 @@ export function ConceptPopup() {
   // The collect gate and the action menu share one header button. While a
   // concept is uncollected the button *is* the lock: it shows the foil-ringed
   // padlock and opens the collect flow, so the actions behind it (Start Quiz,
-  // Add to Flashcards, Math View, Listen, Learning Progress) are unreachable
+  // Add to Flashcards, Math View, Learning Progress) are unreachable
   // until the card is earned. Once collected the same slot becomes the play
   // button. Non-concept entries (resources, exam pages) have no gate at all.
+  // The Listen toggle sits in the right-hand control cluster instead, and is
+  // gated on the same flag so the lock still covers it.
   const isCollected = collectedCards.some(c => c.name.toLowerCase() === current.name.toLowerCase())
   // A concept past New has necessarily been collected already (grandfathered
   // users included), so treat it as unlocked even if not in the collected store.
@@ -480,14 +482,6 @@ export function ConceptPopup() {
               </button>
               <button
                 type="button"
-                onClick={() => { setListenView(true); setMathView(false); setShowPlayMenu(false) }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
-              >
-                <Headphones className="h-3.5 w-3.5 shrink-0" />
-                Listen
-              </button>
-              <button
-                type="button"
                 onClick={() => { setShowLearningProgress(true); setShowPlayMenu(false) }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors"
               >
@@ -516,19 +510,22 @@ export function ConceptPopup() {
               <Sigma className="h-5 w-5" />
             </button>
           )}
-          {/* Headphones icon — visible only while in Listen view; clicking exits it */}
-          {!focusMode && listenView && (
-            <button
-              type="button"
-              onClick={() => setListenView(false)}
-              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 shrink-0"
-              title="Exit Listen"
-              aria-label="Exit Listen"
-            >
-              <Headphones className="h-5 w-5" />
-            </button>
-          )}
         </div>
+        {/* Listen toggle — sits beside the focus toggle rather than inside the
+            action menu, since it's a view switch like focus mode, not an
+            action. Gated by the collect lock like the menu items are. */}
+        {!focusMode && !actionLocked && (
+          <button
+            type="button"
+            onClick={() => { setListenView(!listenView); if (!listenView) setMathView(false) }}
+            aria-pressed={listenView}
+            className={`inline-flex items-center justify-center h-10 w-10 rounded-lg shrink-0 transition-colors ${listenView ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'text-muted-foreground hover:text-foreground hover:bg-accent'}`}
+            title={listenView ? 'Exit Listen' : 'Listen'}
+            aria-label={listenView ? 'Exit Listen' : 'Listen'}
+          >
+            <Headphones className="h-5 w-5" />
+          </button>
+        )}
         {/* Focus mode toggle — the only control that survives focus mode, so
             there's always a way back out (Esc also works). */}
         <button

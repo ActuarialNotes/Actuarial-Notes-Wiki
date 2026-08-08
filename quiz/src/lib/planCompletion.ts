@@ -93,6 +93,36 @@ export function planConceptsToday(plan: StudyPlan | null): string[] {
 }
 
 /**
+ * Every lower-cased key today's plan concepts can be recognised by: the
+ * syllabus display name, plus the raw `[[target]]` basename for aliased links
+ * (`[[Bond Price|Price]]` is scheduled as "Price" but stored — and referenced
+ * by a question's `wiki_link` — as "Bond Price").
+ *
+ * Lets a caller holding `slugForLink` slugs (the pre-quiz collect gate) ask
+ * whether a concept is in today's plan without re-deriving the alias mapping.
+ */
+export function planConceptKeys(
+  plan: StudyPlan | null,
+  syllabus: WikiExamSyllabus | null,
+): Set<string> {
+  const keys = new Set<string>()
+  const targetByName = new Map<string, string>()
+  for (const topic of syllabus?.topics ?? []) {
+    for (const c of topic.concepts) {
+      const base = c.target?.split('/').pop()?.replace(/\.md$/i, '')
+      if (base) targetByName.set(c.name.toLowerCase(), base.toLowerCase())
+    }
+  }
+  for (const name of planConceptsToday(plan)) {
+    const key = name.toLowerCase()
+    keys.add(key)
+    const target = targetByName.get(key)
+    if (target) keys.add(target)
+  }
+  return keys
+}
+
+/**
  * Decay-adjusted mastery for every concept in a syllabus, keyed by lower-cased
  * display name — the map `buildTodayTargets`/`isConceptDoneToday` read.
  *

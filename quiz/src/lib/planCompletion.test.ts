@@ -5,6 +5,7 @@ import {
   isConceptDoneToday,
   masteryStatesForSyllabus,
   mergeLevelUps,
+  planConceptKeys,
   planConceptsToday,
   planDoneConceptSlugs,
   targetStateFor,
@@ -368,6 +369,50 @@ describe('planConceptsToday', () => {
 
   it('is empty without a plan', () => {
     expect(planConceptsToday(null)).toEqual([])
+  })
+})
+
+describe('planConceptKeys', () => {
+  it('keys today’s concepts by their lower-cased name', () => {
+    const keys = planConceptKeys(plan(['Bayes Theorem'], []), syllabus(['Bayes Theorem']))
+    expect(keys.has('bayes theorem')).toBe(true)
+  })
+
+  it('also keys an aliased concept by its raw target, so a wiki_link slug matches', () => {
+    const aliased: WikiExamSyllabus = {
+      ...syllabus([]),
+      topics: [{ name: 'Bonds', concepts: [{ name: 'Price', target: 'Bond Price' }] }],
+    }
+    const keys = planConceptKeys(plan(['Price'], []), aliased)
+    expect(keys.has('price')).toBe(true)
+    expect(keys.has('bond price')).toBe(true)
+  })
+
+  it('strips the path and .md extension off a target', () => {
+    const nested: WikiExamSyllabus = {
+      ...syllabus([]),
+      topics: [{ name: 'Bonds', concepts: [{ name: 'Price', target: 'Concepts/Bond Price.md' }] }],
+    }
+    expect(planConceptKeys(plan(['Price'], []), nested).has('bond price')).toBe(true)
+  })
+
+  it('uses the review picks in review mode', () => {
+    const reviewing: StudyPlan = {
+      ...plan(['Bayes Theorem'], []),
+      status: 'review_mode',
+      reviewConcepts: ['Covariance'],
+    }
+    const keys = planConceptKeys(reviewing, syllabus(['Bayes Theorem', 'Covariance']))
+    expect(keys.has('covariance')).toBe(true)
+    expect(keys.has('bayes theorem')).toBe(false)
+  })
+
+  it('still keys plan concepts when the syllabus is missing', () => {
+    expect(planConceptKeys(plan(['Bayes Theorem'], []), null).has('bayes theorem')).toBe(true)
+  })
+
+  it('is empty without a plan', () => {
+    expect(planConceptKeys(null, syllabus(['Bayes Theorem'])).size).toBe(0)
   })
 })
 

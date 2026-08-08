@@ -15,13 +15,19 @@ import { Button } from '@/components/ui/button'
 interface Props {
   /** New-state concept names in this quiz (slug form — matches the mastery key). */
   concepts: string[]
+  /**
+   * Lower-cased keys of the concepts today's study plan is asking for
+   * (`planConceptKeys`). Those still uncollected get the rainbow foil border:
+   * collecting them is what lets today's quiz actually advance the plan.
+   */
+  planConcepts?: Set<string>
   /** Proceed into the questions. */
   onStart: () => void
   /** Leave the quiz entirely. */
   onQuit: () => void
 }
 
-export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
+export function PreQuizCollectGate({ concepts, planConcepts, onStart, onQuit }: Props) {
   const openCollect = useCollect(s => s.open)
   const collectedCards = useCollectedCards(s => s.cards)
 
@@ -30,6 +36,11 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
     [collectedCards],
   )
   const remaining = concepts.filter(name => !collectedSet.has(name.toLowerCase())).length
+
+  const isInPlan = (name: string) => planConcepts?.has(name.toLowerCase()) ?? false
+  const highlightedCount = concepts.filter(
+    name => !collectedSet.has(name.toLowerCase()) && isInPlan(name),
+  ).length
 
   return (
     <div className="container max-w-lg mx-auto px-4 sm:px-6 py-8">
@@ -50,14 +61,25 @@ export function PreQuizCollectGate({ concepts, onStart, onQuit }: Props) {
 
       <Card className="ring-1 ring-primary/10 shadow-sm">
         <CardContent className="p-5 space-y-4">
-          <h2 className="text-lg font-semibold leading-tight">Unlock concepts to level up</h2>
+          <div className="space-y-1">
+            <h2 className="text-lg font-semibold leading-tight">Unlock concepts to level up</h2>
+            {highlightedCount > 0 && (
+              <p className="text-xs text-muted-foreground">
+                Outlined concepts are in today's study plan.
+              </p>
+            )}
+          </div>
 
           <ul className="space-y-1.5">
             {concepts.map(name => {
               const isCollected = collectedSet.has(name.toLowerCase())
+              const highlight = !isCollected && isInPlan(name)
               return (
                 <li key={name}>
-                  <div className="flex items-center gap-2.5 rounded-lg px-3 py-2.5">
+                  <div
+                    className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5${highlight ? ' plan-foil-ring' : ''}`}
+                    title={highlight ? "In today's study plan" : undefined}
+                  >
                     {isCollected ? (
                       <Check className="h-4 w-4 text-green-500 shrink-0" />
                     ) : (

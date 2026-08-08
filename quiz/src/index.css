@@ -636,9 +636,15 @@
    that leads the body. Same padding+mask-exclude ring trick, so the border sits
    exactly on the element edge without covering the content underneath — which
    means the host should carry no border of its own, or the two edges double up.
-   `--foil-ring-width` tunes the edge weight per host. */
+   `--foil-ring-width` tunes the edge weight per host.
+
+   Also worn by the pre-quiz collect gate's rows for the concepts in today's
+   study plan (`.plan-foil-ring`): same "this one is live" reading — collecting
+   it is what moves today's plan forward — on a row that otherwise has no
+   border of its own. */
 .lock-foil-ring,
-.simulator-foil-ring {
+.simulator-foil-ring,
+.plan-foil-ring {
   position: relative;
   --foil-ring-width: 1.5px;
 }
@@ -647,8 +653,13 @@
 .simulator-foil-ring {
   --foil-ring-width: 2px;
 }
+/* A list row is wide but short; a hairline keeps a stack of them calm. */
+.plan-foil-ring {
+  --foil-ring-width: 1px;
+}
 .lock-foil-ring::before,
-.simulator-foil-ring::before {
+.simulator-foil-ring::before,
+.plan-foil-ring::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -664,7 +675,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .lock-foil-ring::before,
-  .simulator-foil-ring::before { animation: none; }
+  .simulator-foil-ring::before,
+  .plan-foil-ring::before { animation: none; }
 }
 
 /* Designation-credential rainbow foil — ACAS/ASA/FCAS/FSA share one "earned

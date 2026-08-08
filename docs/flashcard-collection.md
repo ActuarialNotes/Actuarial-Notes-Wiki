@@ -51,6 +51,23 @@ Concepts already collected or already past New (grandfathered users) never
 appear, so a single-concept quiz launched from an already-collected concept
 shows no gate.
 
+### Today's-plan highlight
+
+A quiz usually covers more concepts than today's study plan asks for, so the
+gate marks the rows that actually move the plan forward: an uncollected concept
+that is in today's plan wears the travelling **rainbow foil border**
+(`.plan-foil-ring` in `index.css` — the same material as the L3 flashcard and
+the concept popup's collect icon), and the card gains a one-line legend.
+
+The plan is read by `hooks/useTodayPlanConcepts.ts`, which resolves the
+syllabus for the quiz's exam (derived from the questions' `exam` label via
+`TOPIC_TO_EXAM_ID`) and reduces its plan to the lower-cased key set
+`planConceptKeys` builds (`lib/planCompletion.ts`). That helper keys an aliased
+syllabus link under *both* its display name and its raw target, because the
+plan schedules `[[Bond Price|Price]]` as "Price" while the gate holds the
+`slugForLink` slug "Bond Price". Exams with no configured plan simply get no
+highlight — the gate is unchanged.
+
 ## Where the comprehension checks live
 
 The authored checks are markdown, **one file per concept**, under

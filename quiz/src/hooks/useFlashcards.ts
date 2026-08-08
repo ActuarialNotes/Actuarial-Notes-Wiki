@@ -1,5 +1,12 @@
 import { create } from 'zustand'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
+import { queueDeckSync, queuePacksSync } from '@/lib/flashcardSync'
+
+// The study deck, its custom order and the saved packs. Persisted to
+// localStorage (the immediate source of truth, which keeps this store's API
+// synchronous) and — for signed-in users — mirrored to user_flashcards /
+// user_flashcard_packs so the deck follows the learner across devices. The
+// server writes are fire-and-forget and debounced; see lib/flashcardSync.ts.
 
 export interface FlashCard extends WikiEntryRef {
   addedAt: number
@@ -84,6 +91,12 @@ interface FlashcardsState {
   setCustomOrder: (names: string[]) => void
   addSavedPack: (label: string, concepts: string[]) => void
   deleteSavedPack: (id: string) => void
+  /**
+   * Replace deck, order and packs from the server (see hooks/useFlashcardSync).
+   * Writes through to localStorage but does *not* queue a server push — the
+   * caller decides whether the merged state needs pushing back.
+   */
+  hydrate: (state: { cards: FlashCard[]; customOrder: string[]; savedPacks: SavedFlashcardPack[] }) => void
 }
 
 export const useFlashcards = create<FlashcardsState>((set, get) => ({
@@ -98,6 +111,7 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     const nextOrder = [...customOrder, ref.name]
     save(nextCards)
     saveOrder(nextOrder)
+    queueDeckSync(nextCards, nextOrder)
     set({ cards: nextCards, customOrder: nextOrder })
   },
   removeCard: (name) => {
@@ -106,30 +120,34 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     const nextOrder = customOrder.filter(n => n.toLowerCase() !== name.toLowerCase())
     save(nextCards)
     saveOrder(nextOrder)
+    queueDeckSync(nextCards, nextOrder)
     set({ cards: nextCards, customOrder: nextOrder })
   },
   clearCards: () => {
     save([])
     saveOrder([])
+    queueDeckSync([], [])
     set({ cards: [], customOrder: [] })
   },
   toggleCompleted: (name) => {
-    const { cards } = get()
+    const { cards, customOrder } = get()
     const nextCards = cards.map(c =>
       c.name.toLowerCase() === name.toLowerCase()
         ? { ...c, completedAt: c.completedAt ? undefined : Date.now() }
         : c,
     )
     save(nextCards)
+    queueDeckSync(nextCards, customOrder)
     set({ cards: nextCards })
   },
   // Un-complete every card without removing anything — used by "Study again"
   // at the end of a study session to restart the deck from scratch.
   resetCompleted: () => {
-    const { cards } = get()
+    const { cards, customOrder } = get()
     if (!cards.some(c => c.completedAt)) return
     const nextCards = cards.map(c => (c.completedAt ? { ...c, completedAt: undefined } : c))
     save(nextCards)
+    queueDeckSync(nextCards, customOrder)
     set({ cards: nextCards })
   },
   clearCompleted: () => {
@@ -173,12 +191,15 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     save(nextCards)
     saveOrder(nextOrder)
     persistSavedPacks(nextPacks)
+    queueDeckSync(nextCards, nextOrder)
+    queuePacksSync(nextPacks)
     set({ cards: nextCards, customOrder: nextOrder, savedPacks: nextPacks })
   },
   hasCard: (name) =>
     get().cards.some(c => c.name.toLowerCase() === name.toLowerCase()),
   setCustomOrder: (names) => {
     saveOrder(names)
+    queueDeckSync(get().cards, names)
     set({ customOrder: names })
   },
   addSavedPack: (label, concepts) => {
@@ -190,11 +211,19 @@ export const useFlashcards = create<FlashcardsState>((set, get) => ({
     }
     const next = [...get().savedPacks, newPack]
     persistSavedPacks(next)
+    queuePacksSync(next)
     set({ savedPacks: next })
   },
   deleteSavedPack: (id) => {
     const next = get().savedPacks.filter(p => p.id !== id)
     persistSavedPacks(next)
+    queuePacksSync(next)
     set({ savedPacks: next })
+  },
+  hydrate: ({ cards, customOrder, savedPacks }) => {
+    save(cards)
+    saveOrder(customOrder)
+    persistSavedPacks(savedPacks)
+    set({ cards, customOrder, savedPacks })
   },
 }))

@@ -12,8 +12,45 @@ Level 1 (see [Concept Learning Progression](concept-learning-progression.md)).
    **comprehension check**.
 3. Passing the check **collects** the concept — a card-spin → screen-bloom →
    distilled-drop animation flies into and lights up the Flashcards tab. The
-   concept is recorded as collected (`useCollectedCards`, localStorage) and added
-   to the flashcard gallery.
+   concept is recorded as collected (`useCollectedCards`) and added to the
+   flashcard gallery.
+
+## Where collected cards are stored
+
+`useCollectedCards` (the collected set) and `useFlashcards` (the deck, its
+custom order and the saved packs) write to **localStorage first** — that's what
+keeps their API synchronous, since `isCollected` / `hasCard` are called during
+render all over the app. For a **signed-in** user those writes are also mirrored
+to Supabase (`user_collected_cards`, `user_flashcards`, `user_flashcard_packs`)
+so the deck follows the learner across devices; guests are localStorage-only,
+exactly as before.
+
+`lib/flashcardSync.ts` is the store-agnostic half (pure merges + the Supabase
+reads/writes) and `hooks/useFlashcardSync.ts` the orchestrator, mounted once at
+the app root as `components/FlashcardSync.tsx`. Three things are worth knowing
+before changing it:
+
+- **Row per card, not a JSONB blob.** A deck is a set, and two devices adding
+  different cards have to converge instead of the last writer clobbering the
+  other.
+- **Union once, then the server wins.** The first time a user hydrates on a
+  given device the local state is *unioned* into the server's, so work done as a
+  guest survives signing in. After that the server is the source of truth for
+  that device — a permanent union would resurrect every card deleted elsewhere.
+  The `actuarial_flashcard_sync_user` marker distinguishes the two, and is keyed
+  by user id so signing in as someone else never merges the previous account's
+  cards into theirs.
+- **Writes are debounced and fire-and-forget.** A failed sync never surfaces in
+  the UI; the local store is already updated and the next mutation or hydrate
+  re-pushes. Pending writes are flushed on sign-out and on `pagehide`, and a
+  server refresh is skipped while writes are still queued so it can't revert a
+  change the user just made.
+
+Before this existed, collected cards partly self-healed on a new device: the
+collect modal back-fills the local store for any concept whose (server-synced)
+mastery is past New. That back-fill is still there — it costs nothing and covers
+the case where the sync tables aren't reachable — but it is no longer the only
+thing carrying collection state across devices.
 
 ## Mastery gate
 

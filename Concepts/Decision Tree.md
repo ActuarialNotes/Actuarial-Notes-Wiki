@@ -17,6 +17,8 @@ A **Decision Tree** is a [[Statistical Learning]] method that partitions the pre
 - Decision trees are **highly interpretable** but have high variance — small data changes can produce very different trees
 - [[Tree Ensemble]] methods (bagging, random forests, boosting) reduce variance
 
+![[Media/Figures/Decision_Tree.svg|340]]
+
 > [!example]- Pruning a Decision Tree {Example}
 > A fully grown tree has 10 terminal nodes and training RSS = 50. After pruning to 4 terminal nodes, training RSS = 80. With $\alpha = 5$, which tree is preferred?
 >

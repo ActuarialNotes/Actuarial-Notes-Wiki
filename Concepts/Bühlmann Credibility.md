@@ -18,6 +18,8 @@
 - Bühlmann credibility is the **best linear estimate** of $\mu(\theta)$ given $X_1, \ldots, X_n$
 - When $\theta$ has a conjugate prior, Bühlmann = Bayesian credibility ([[Bayesian Credibility]])
 
+![[Media/Figures/Bühlmann_Credibility.svg|340]]
+
 > [!example]- Bühlmann Credibility Calculation {Example}
 > A risk has process variance $v = 400$ and structural variance $a = 100$. Three years of observations give $\bar{X} = 50$ and the overall mean is $\mu = 40$. Calculate the credibility estimate.
 >

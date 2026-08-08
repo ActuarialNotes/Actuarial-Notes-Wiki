@@ -33,6 +33,8 @@ An **ARIMA$(p, d, q)$** model (Autoregressive Integrated Moving Average) is the 
 
 **Seasonal ARIMA$(p,d,q)(P,D,Q)_s$** adds seasonal AR, differencing, and MA terms at lag $s$.
 
+![[Media/Figures/ARIMA.svg|340]]
+
 > [!example]- AR(1) Forecast {Example}
 > An AR(1) model is fitted: $Y_t = 10 + 0.7 Y_{t-1} + \varepsilon_t$. The most recent observation is $Y_{100} = 15$. Compute the one-step-ahead forecast $\hat{Y}_{101}$.
 >

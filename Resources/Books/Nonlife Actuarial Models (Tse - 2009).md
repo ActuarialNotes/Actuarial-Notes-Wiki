@@ -7,7 +7,7 @@ Edition: 1e
 Publisher: Cambridge University Press
 ISBN: 978-0521764650
 ---
-The loss-modelling reference on the MAS-I syllabus, covering learning objectives B1–B4 and B7–B9. Parts I and IV carry the exam material: claim [[Frequency|frequency]] and [[Severity|severity]] distributions, [[Aggregate Loss Model|aggregate loss models]], and parametric estimation with [[Censoring|censored]] and [[Truncation|truncated]] data.
+On two syllabuses. The loss-modelling reference for [[Exam MAS-I (CAS)|MAS-I]] objectives B1–B4 and B7–B9 — Parts I and IV carry that material: claim [[Frequency|frequency]] and [[Severity|severity]] distributions, [[Aggregate Loss Model|aggregate loss models]], and parametric estimation with [[Censoring|censored]] and [[Truncation|truncated]] data. **Part III is the whole of [[Exam MAS-II (CAS)|MAS-II]] section A** (objectives A1–A2), and is the only part of the book on that syllabus.
 
 ## Part I — Loss Models
 
@@ -44,19 +44,28 @@ The loss-modelling reference on the MAS-I syllabus, covering learning objectives
 
 ### 6 Classical Credibility
 
-- Full and partial credibility ([[Limited Fluctuation Credibility]])
+- The [[Limited Fluctuation Credibility|limited fluctuation]] framework: the probability level $p$ and range parameter $k$
+- The [[Full Credibility Standard|full credibility standard]] for frequency, severity and [[Aggregate Loss Model|aggregate loss]] — the 1,082-claim benchmark and the $1 + \mathrm{CV}^2$ adjustment
+- [[Partial Credibility]] and the square-root rule
+- Choosing the [[Complement of Credibility|complement of credibility]]
 
 ### 7 Bühlmann Credibility
 
-- The [[Bühlmann Credibility]] model and the Bühlmann–Straub extension
+- The greatest-accuracy (least-squares) framework, and how it differs from a probability bound
+- The structural parameters: the [[Expected Value of Process Variance]] $v$ and the [[Variance of Hypothetical Means]] $a$
+- [[Bühlmann Credibility|Bühlmann]] $Z = n/(n+k)$ with $k = v/a$
+- [[Bühlmann-Straub Credibility|Bühlmann–Straub]] for unequal exposures
 
 ### 8 Bayesian Approach
 
-- [[Bayesian]] inference and [[Bayesian Credibility]]; conjugate priors
+- Prior, posterior and [[Predictive Distribution|predictive]] distributions
+- [[Conjugate Prior|Conjugate priors]]: Gamma–Poisson, Beta–Bernoulli, Normal–Normal
+- [[Bayesian Credibility]] as the posterior mean, and its exact agreement with Bühlmann under a conjugate pair
 
 ### 9 Empirical Implementation of Credibility
 
-- Nonparametric, semiparametric and parametric estimation of credibility parameters
+- [[Empirical Bayes Credibility|Non-parametric, semi-parametric and parametric]] estimation of the structural parameters
+- The correction that makes $\hat a$ unbiased, and what to do when it comes out negative
 
 ## Part IV — Model Construction and Evaluation
 

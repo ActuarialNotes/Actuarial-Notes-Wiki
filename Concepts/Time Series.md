@@ -19,6 +19,8 @@ A **Time Series** is a sequence of observations $\{Y_t\}$ indexed by time $t = 1
 - The **autocorrelation function (ACF)** $\rho(h) = \text{Cor}(Y_t, Y_{t+h})$ and **partial ACF (PACF)** describe temporal dependence
 - [[ARIMA]] models are the standard framework for stationary (and differenced) time series
 
+![[Media/Figures/Time_Series.svg|340]]
+
 > [!example]- Identifying Trend and Seasonality {Example}
 > Monthly insurance premium volumes show a consistent upward drift over 5 years and a recurring spike each January. Identify the components.
 >

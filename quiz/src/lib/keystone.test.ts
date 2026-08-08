@@ -22,6 +22,7 @@ const SYLLABUS_FILE: Record<string, string> = {
   'P': 'Exam P-1 (SOA).md',
   'FM': 'Exam FM-2 (SOA).md',
   'MAS-I': 'Exam MAS-I (CAS).md',
+  'MAS-II': 'Exam MAS-II (CAS).md',
   '5': 'Exam 5 (CAS).md',
 }
 

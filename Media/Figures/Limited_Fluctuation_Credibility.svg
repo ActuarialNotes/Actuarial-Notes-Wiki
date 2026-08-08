@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The square-root credibility curve rising to full credibility at the standard</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Classical credibility: √(n / n_F),</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">capped at 1</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Z = min(√(n / 1,082), 1)</text>
+  <line x1="62" y1="92" x2="62" y2="348" class="grid"/>
+  <line x1="127.5" y1="92" x2="127.5" y2="348" class="grid"/>
+  <line x1="193" y1="92" x2="193" y2="348" class="grid"/>
+  <line x1="258.5" y1="92" x2="258.5" y2="348" class="grid"/>
+  <line x1="324" y1="92" x2="324" y2="348" class="grid"/>
+  <line x1="62" y1="348" x2="324" y2="348" class="grid"/>
+  <line x1="62" y1="236.7" x2="324" y2="236.7" class="grid"/>
+  <line x1="62" y1="125.39" x2="324" y2="125.39" class="grid"/>
+  <line x1="62" y1="348" x2="334" y2="348" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="62" y1="348" x2="62" y2="82" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="62" y1="348" x2="62" y2="352" class="tick"/>
+  <text x="62" y="364" text-anchor="middle" class="sm dim">0</text>
+  <line x1="127.5" y1="348" x2="127.5" y2="352" class="tick"/>
+  <text x="127.5" y="364" text-anchor="middle" class="sm dim">0.5k</text>
+  <line x1="193" y1="348" x2="193" y2="352" class="tick"/>
+  <text x="193" y="364" text-anchor="middle" class="sm dim">1.0k</text>
+  <line x1="258.5" y1="348" x2="258.5" y2="352" class="tick"/>
+  <text x="258.5" y="364" text-anchor="middle" class="sm dim">1.5k</text>
+  <line x1="324" y1="348" x2="324" y2="352" class="tick"/>
+  <text x="324" y="364" text-anchor="middle" class="sm dim">2.0k</text>
+  <line x1="58" y1="348" x2="62" y2="348" class="tick"/>
+  <text x="54" y="351.6" text-anchor="end" class="sm dim">0</text>
+  <line x1="58" y1="236.7" x2="62" y2="236.7" class="tick"/>
+  <text x="54" y="240.3" text-anchor="end" class="sm dim">0.5</text>
+  <line x1="58" y1="125.39" x2="62" y2="125.39" class="tick"/>
+  <text x="54" y="128.99" text-anchor="end" class="sm dim">1</text>
+  <polyline points="62,348 63.46,325.44 64.91,316.1 66.37,308.93 67.82,302.88 69.28,297.56 70.73,292.74 72.19,288.32 73.64,284.2 75.1,280.32 76.56,276.66 78.01,273.18 79.47,269.86 80.92,266.66 82.38,263.59 83.83,260.63 85.29,257.77 86.74,254.99 88.2,252.29 89.66,249.67 91.11,247.12 92.57,244.62 94.02,242.19 95.48,239.81 96.93,237.49 98.39,235.21 99.84,232.97 101.3,230.78 102.76,228.63 104.21,226.52 105.67,224.44 107.12,222.4 108.58,220.39 110.03,218.41 111.49,216.46 112.94,214.54 114.4,212.65 115.86,210.78 117.31,208.94 118.77,207.12 120.22,205.33 121.68,203.56 123.13,201.81 124.59,200.08 126.04,198.36 127.5,196.67 128.96,195 130.41,193.35 131.87,191.71 133.32,190.09 134.78,188.49 136.23,186.9 137.69,185.33 139.14,183.77 140.6,182.23 142.06,180.7 143.51,179.19 144.97,177.69 146.42,176.2 147.88,174.73 149.33,173.26 150.79,171.81 152.24,170.38 153.7,168.95 155.16,167.53 156.61,166.13 158.07,164.74 159.52,163.35 160.98,161.98 162.43,160.62 163.89,159.26 165.34,157.92 166.8,156.59 168.26,155.26 169.71,153.95 171.17,152.64 172.62,151.34 174.08,150.05 175.53,148.77 176.99,147.5 178.44,146.23 179.9,144.97 181.36,143.73 182.81,142.48 184.27,141.25 185.72,140.02 187.18,138.8 188.63,137.59 190.09,136.38 191.54,135.18 193,133.99 194.46,132.81 195.91,131.63 197.37,130.46 198.82,129.29 200.28,128.13 201.73,126.97 203.19,125.83 204.64,125.39 206.1,125.39 207.56,125.39 209.01,125.39 210.47,125.39 211.92,125.39 213.38,125.39 214.83,125.39 216.29,125.39 217.74,125.39 219.2,125.39 220.66,125.39 222.11,125.39 223.57,125.39 225.02,125.39 226.48,125.39 227.93,125.39 229.39,125.39 230.84,125.39 232.3,125.39 233.76,125.39 235.21,125.39 236.67,125.39 238.12,125.39 239.58,125.39 241.03,125.39 242.49,125.39 243.94,125.39 245.4,125.39 246.86,125.39 248.31,125.39 249.77,125.39 251.22,125.39 252.68,125.39 254.13,125.39 255.59,125.39 257.04,125.39 258.5,125.39 259.96,125.39 261.41,125.39 262.87,125.39 264.32,125.39 265.78,125.39 267.23,125.39 268.69,125.39 270.14,125.39 271.6,125.39 273.06,125.39 274.51,125.39 275.97,125.39 277.42,125.39 278.88,125.39 280.33,125.39 281.79,125.39 283.24,125.39 284.7,125.39 286.16,125.39 287.61,125.39 289.07,125.39 290.52,125.39 291.98,125.39 293.43,125.39 294.89,125.39 296.34,125.39 297.8,125.39 299.26,125.39 300.71,125.39 302.17,125.39 303.62,125.39 305.08,125.39 306.53,125.39 307.99,125.39 309.44,125.39 310.9,125.39 312.36,125.39 313.81,125.39 315.27,125.39 316.72,125.39 318.18,125.39 319.63,125.39 321.09,125.39 322.54,125.39 324,125.39" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <line x1="62" y1="125.39" x2="324" y2="125.39" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <line x1="203.74" y1="348" x2="203.74" y2="125.39" class="thin dash" stroke="#059669" stroke-width="1.3"/>
+  <text x="199.74" y="117.39" text-anchor="end" class="sm bold">n_F = 1,082</text>
+  <circle cx="101.3" cy="230.78" r="3.6" fill="#d97706"/>
+  <text x="123.3" y="220.78" text-anchor="middle" class="sm">Z = 0.53</text>
+  <text x="180" y="380" text-anchor="middle" class="sm dim">claims n</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">full credibility at the standard, √ below it</text>
+</svg>

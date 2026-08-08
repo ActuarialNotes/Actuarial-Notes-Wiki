@@ -21,6 +21,8 @@ The **AUROC** (Area Under the Receiver Operating Characteristic Curve) is a mode
 - The **[[Lift]]** curve and AUROC both measure ranking quality; AUROC is threshold-independent while lift focuses on specific fractions of the population
 - AUROC is **invariant to class imbalance**, making it suitable for rare-event modeling (e.g., fraud, catastrophic claims)
 
+![[Media/Figures/AUROC.svg|340]]
+
 > [!example]- Interpreting AUROC for a Fraud Model {Example}
 > Two fraud detection models are compared: Model A has AUROC = 0.85; Model B has AUROC = 0.72. What is the Gini coefficient of each, and which model should be preferred?
 >

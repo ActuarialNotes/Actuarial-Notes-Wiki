@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Compound symmetry, AR(1) and unstructured correlation matrices side by side</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">The pattern imposed on within-group</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">correlation</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">V = ZDZᵀ + R</text>
+  <text x="180" y="90" text-anchor="middle" class="sm bold" fill="#3b82f6">compound symmetry</text>
+  <rect x="138" y="96" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.85"/>
+  <rect x="159" y="96" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="180" y="96" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="201" y="96" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="138" y="117" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="159" y="117" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.85"/>
+  <rect x="180" y="117" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="201" y="117" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="138" y="138" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="159" y="138" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="180" y="138" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.85"/>
+  <rect x="201" y="138" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="138" y="159" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="159" y="159" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="180" y="159" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.55"/>
+  <rect x="201" y="159" width="19.5" height="19.5" rx="2" fill="#3b82f6" fill-opacity="0.85"/>
+  <text x="130" y="142" text-anchor="end" class="sm dim">R</text>
+  <text x="180" y="190" text-anchor="middle" class="sm bold" fill="#d97706">AR(1), ρ = 0.6</text>
+  <rect x="138" y="196" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.85"/>
+  <rect x="159" y="196" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
+  <rect x="180" y="196" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.37"/>
+  <rect x="201" y="196" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.27"/>
+  <rect x="138" y="217" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
+  <rect x="159" y="217" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.85"/>
+  <rect x="180" y="217" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
+  <rect x="201" y="217" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.37"/>
+  <rect x="138" y="238" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.37"/>
+  <rect x="159" y="238" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
+  <rect x="180" y="238" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.85"/>
+  <rect x="201" y="238" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
+  <rect x="138" y="259" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.27"/>
+  <rect x="159" y="259" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.37"/>
+  <rect x="180" y="259" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.55"/>
+  <rect x="201" y="259" width="19.5" height="19.5" rx="2" fill="#d97706" fill-opacity="0.85"/>
+  <text x="130" y="242" text-anchor="end" class="sm dim">R</text>
+  <text x="180" y="290" text-anchor="middle" class="sm bold" fill="#7c3aed">unstructured</text>
+  <rect x="138" y="296" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.85"/>
+  <rect x="159" y="296" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.63"/>
+  <rect x="180" y="296" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.31"/>
+  <rect x="201" y="296" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.43"/>
+  <rect x="138" y="317" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.63"/>
+  <rect x="159" y="317" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.85"/>
+  <rect x="180" y="317" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.51"/>
+  <rect x="201" y="317" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.24"/>
+  <rect x="138" y="338" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.31"/>
+  <rect x="159" y="338" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.51"/>
+  <rect x="180" y="338" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.85"/>
+  <rect x="201" y="338" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.57"/>
+  <rect x="138" y="359" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.43"/>
+  <rect x="159" y="359" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.24"/>
+  <rect x="180" y="359" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.57"/>
+  <rect x="201" y="359" width="19.5" height="19.5" rx="2" fill="#7c3aed" fill-opacity="0.85"/>
+  <text x="130" y="342" text-anchor="end" class="sm dim">R</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">darker = more correlated; params 2, 2, 10</text>
+</svg>

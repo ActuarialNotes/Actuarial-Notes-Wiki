@@ -7,6 +7,8 @@
 - **[[Bühlmann Credibility|Bühlmann]] (greatest accuracy) credibility** derives $Z$ from the ratio of between-group variance to total variance; it minimizes mean squared error rather than satisfying a probability bound
 - **[[Bayesian Credibility|Bayesian]]** credibility takes the estimate to be the posterior mean $E[\theta \mid \mathbf{X}]$, and equals Bühlmann exactly for conjugate priors
 
+![[Media/Figures/Credibility_Theory.svg|340]]
+
 > [!example]- Classical vs. Bühlmann Credibility {Example}
 > A rating class has $n = 300$ claims. The full-credibility standard for frequency is $n_0 = 1{,}082$ claims.
 >

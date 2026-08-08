@@ -9,6 +9,8 @@
 - For **excess (increased-limits)** ratemaking, the complement methods are: increased-limits analysis, lower-limits analysis, limits-analysis, and the fitted-curve approach.
 - Desirable properties (Boor): the complement should be **accurate** (low error variance), **unbiased**, **statistically independent** of the experience, **logically related** to the exposure, **available**, and **free of the same distortions** affecting the base data.
 
+![[Media/Figures/Complement_of_Credibility.svg|340]]
+
 > [!example]- Why the Complement Drives Low-Credibility Estimates {Example}
 > A new territory shows an indicated rate change of $+25\%$ but only earns $Z = 0.20$ credibility. The selected complement (statewide trended change) is $+6\%$.
 >

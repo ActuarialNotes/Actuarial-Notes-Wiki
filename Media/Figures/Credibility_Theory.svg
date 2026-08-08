@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A credibility estimate shown as a weighted blend between a manual rate and observed experience</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ah059669" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#059669"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Credibility blends experience with a</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">complement</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Est = Z·X̄ + (1 − Z)·μ</text>
+  <text x="180" y="104" text-anchor="middle" class="sm dim">300 claims against a 1,082-claim standard</text>
+  <rect x="48" y="140" width="124.87" height="20" rx="4" fill="#d97706" fill-opacity="0.28" stroke="#d97706" stroke-width="1.2"/>
+  <rect x="172.87" y="140" width="139.13" height="20" rx="4" fill="#3b82f6" fill-opacity="0.4" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="110.44" y="154" text-anchor="middle" class="sm">manual 380</text>
+  <text x="242.44" y="154" text-anchor="middle" class="sm">own data 420</text>
+  <text x="180" y="131" text-anchor="middle" class="sm dim">Z = 0.53</text>
+  <line x1="48" y1="250" x2="312" y2="250" class="axis"/>
+  <line x1="48" y1="245" x2="48" y2="255" class="tick"/>
+  <text x="48" y="269" text-anchor="middle" class="sm" fill="#d97706">380</text>
+  <line x1="312" y1="245" x2="312" y2="255" class="tick"/>
+  <text x="312" y="269" text-anchor="middle" class="sm" fill="#3b82f6">420</text>
+  <line x1="187.13" y1="216" x2="187.13" y2="243" class="thin" stroke="#059669" stroke-width="1.8" marker-end="url(#ah059669)"/>
+  <text x="187.13" y="209" text-anchor="middle" class="bold" fill="#059669">401</text>
+  <text x="180" y="300" text-anchor="middle" class="sm dim">Z = 0 leans wholly on the complement,</text>
+  <text x="180" y="316" text-anchor="middle" class="sm dim">Z = 1 wholly on the class's own data</text>
+</svg>

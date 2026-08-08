@@ -10,6 +10,8 @@
 - KNN is a **lazy learner** — it stores all training data and does computation at prediction time (no explicit training phase)
 - **Curse of dimensionality**: KNN degrades in high dimensions as distances become uninformative
 
+![[Media/Figures/K-Nearest_Neighbors.svg|340]]
+
 > [!example]- KNN Classification for Fraud Detection {Example}
 > Training data has 5 observations. For a new claim $x_0$, the 3 nearest neighbors have labels: Fraud, Fraud, Not Fraud. What is the KNN ($K=3$) predicted class and estimated probability of fraud?
 >

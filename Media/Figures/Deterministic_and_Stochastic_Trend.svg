@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A trend-stationary series returning to its line against a unit-root series that does not</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Does a shock fade, or move the level for</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">good?</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">α + βt + z_t   vs.   δ + Y_{t−1} + ε_t</text>
+  <text x="180" y="102" text-anchor="middle" class="sm bold" fill="#059669">deterministic — returns to the line</text>
+  <rect x="54" y="110" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
+  <polyline points="54,186.33 324,118.35" class="curve dash" stroke="var(--dim)" stroke-width="1.4"/>
+  <polyline points="54,186.22 60.28,187.33 66.56,182.66 72.84,183.22 79.12,179.77 85.4,180 91.67,177.37 97.95,171.37 104.23,176.31 110.51,171.29 116.79,172.16 123.07,170.24 129.35,168.57 135.63,166.37 141.91,167.51 148.19,161.3 154.47,163.12 160.74,161.67 167.02,143.78 173.3,156.17 179.58,151.8 185.86,151.6 192.14,151.16 198.42,151.49 204.7,149.05 210.98,145.86 217.26,141.96 223.53,141.68 229.81,142.08 236.09,141.75 242.37,138.01 248.65,139.31 254.93,132.8 261.21,136.94 267.49,133.72 273.77,127.67 280.05,127.4 286.33,127.39 292.6,128.2 298.88,127.22 305.16,122.37 311.44,120.67 317.72,125.45 324,121.31" class="curve" stroke="#059669" stroke-width="1.7"/>
+  <line x1="167.02" y1="198" x2="167.02" y2="120.67" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+  <text x="167.02" y="183.33" text-anchor="middle" class="sm bold" fill="#d97706">shock</text>
+  <text x="180" y="238" text-anchor="middle" class="sm bold" fill="#e11d48">stochastic — the level never comes back</text>
+  <rect x="54" y="246" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
+  <polyline points="54,322.86 324,273.04" class="curve dash" stroke="var(--dim)" stroke-width="1.4"/>
+  <polyline points="54,323.33 60.28,322.57 66.56,320.11 72.84,318.61 79.12,313.67 85.4,311.77 91.67,310.88 97.95,311.47 104.23,306.72 110.51,305.08 116.79,304.52 123.07,304.06 129.35,301.01 135.63,299.14 141.91,294.64 148.19,294.65 154.47,294.26 160.74,295.56 167.02,283.95 173.3,284.12 179.58,281.09 185.86,282.23 192.14,281.55 198.42,279.27 204.7,277.2 210.98,278.16 217.26,276.6 223.53,273.5 229.81,275.28 236.09,272.16 242.37,271.63 248.65,271.47 254.93,268.48 261.21,269.56 267.49,267.35 273.77,266.54 280.05,266.75 286.33,263.22 292.6,260.96 298.88,259.22 305.16,257.06 311.44,256.67 317.72,257.53 324,256.79" class="curve" stroke="#e11d48" stroke-width="1.7"/>
+  <line x1="167.02" y1="334" x2="167.02" y2="256.67" class="thin dash" stroke="#d97706" stroke-width="1.3"/>
+  <text x="180" y="372" text-anchor="middle" class="sm dim">detrend the first; difference the second</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">getting it wrong gives a spurious regression</text>
+</svg>

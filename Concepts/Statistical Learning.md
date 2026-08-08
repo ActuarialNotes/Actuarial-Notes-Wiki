@@ -28,6 +28,8 @@
 | [[Clustering]] | Density-based | Unsupervised |
 | [[Neural Network]] | Deep learning | Classification/Regression |
 
+![[Media/Figures/Statistical_Learning.svg|340]]
+
 > [!example]- Bias-Variance Trade-off for KNN {Example}
 > A KNN model is fitted with $K=1$ and separately with $K=100$ for a classification problem. Which has higher bias? Higher variance?
 >

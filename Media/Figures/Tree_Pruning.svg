@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>The cost-complexity score picking a subtree as alpha rises</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Grow it too big, then cut back</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">RSS + α·|T|,  α chosen by CV</text>
+  <line x1="96" y1="108" x2="96" y2="316" class="grid"/>
+  <line x1="152" y1="108" x2="152" y2="316" class="grid"/>
+  <line x1="208" y1="108" x2="208" y2="316" class="grid"/>
+  <line x1="292" y1="108" x2="292" y2="316" class="grid"/>
+  <line x1="68" y1="274.4" x2="320" y2="274.4" class="grid"/>
+  <line x1="68" y1="214.97" x2="320" y2="214.97" class="grid"/>
+  <line x1="68" y1="155.54" x2="320" y2="155.54" class="grid"/>
+  <line x1="68" y1="316" x2="330" y2="316" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="68" y1="316" x2="68" y2="98" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="96" y1="316" x2="96" y2="320" class="tick"/>
+  <text x="96" y="332" text-anchor="middle" class="sm dim">1</text>
+  <line x1="152" y1="316" x2="152" y2="320" class="tick"/>
+  <text x="152" y="332" text-anchor="middle" class="sm dim">3</text>
+  <line x1="208" y1="316" x2="208" y2="320" class="tick"/>
+  <text x="208" y="332" text-anchor="middle" class="sm dim">5</text>
+  <line x1="292" y1="316" x2="292" y2="320" class="tick"/>
+  <text x="292" y="332" text-anchor="middle" class="sm dim">8</text>
+  <line x1="64" y1="274.4" x2="68" y2="274.4" class="tick"/>
+  <text x="60" y="278" text-anchor="end" class="sm dim">300</text>
+  <line x1="64" y1="214.97" x2="68" y2="214.97" class="tick"/>
+  <text x="60" y="218.57" text-anchor="end" class="sm dim">400</text>
+  <line x1="64" y1="155.54" x2="68" y2="155.54" class="tick"/>
+  <text x="60" y="159.14" text-anchor="end" class="sm dim">500</text>
+  <polyline points="96,143.66 152,250.63 208,283.31 292,296.98" class="curve dash" stroke="var(--dim)" stroke-width="1.8"/>
+  <polyline points="96,128.8 152,206.06 208,209.03 292,178.13" class="curve" stroke="#3b82f6" stroke-width="2.4"/>
+  <circle cx="96" cy="128.8" r="3.4" fill="#3b82f6"/>
+  <circle cx="152" cy="206.06" r="3.4" fill="#3b82f6"/>
+  <circle cx="208" cy="209.03" r="5" fill="#059669"/>
+  <circle cx="292" cy="178.13" r="3.4" fill="#3b82f6"/>
+  <text x="208" y="197.03" text-anchor="middle" class="sm bold" fill="#059669">best at α = 25</text>
+  <text x="275.2" y="310.98" text-anchor="end" class="sm dim">RSS</text>
+  <text x="101.6" y="120.8" text-anchor="start" class="sm bold" fill="#3b82f6">RSS + α|T|</text>
+  <text x="180" y="348" text-anchor="middle" class="sm dim">terminal nodes |T|</text>
+  <text x="180" y="366" text-anchor="middle" class="sm dim">raising α collapses the tree from the leaves up</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">grow first, prune second — never stop early</text>
+</svg>

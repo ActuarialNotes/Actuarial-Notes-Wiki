@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>Unlabelled points whose structure has to be inferred without any response</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">No response — only structure to find</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">given X₁, …, Xₙ ∈ ℝᵖ, find structure</text>
+  <line x1="54" y1="318" x2="326" y2="318" class="axis"/>
+  <line x1="54" y1="100" x2="54" y2="318" class="axis"/>
+  <rect x="54" y="100" width="272" height="218" rx="6" fill="var(--soft)" stroke="var(--edge)"/>
+  <circle cx="120.07" cy="182.07" r="3.2" fill="var(--dim)"/>
+  <circle cx="104.92" cy="139.22" r="3.2" fill="var(--dim)"/>
+  <circle cx="137.01" cy="156.83" r="3.2" fill="var(--dim)"/>
+  <circle cx="150.95" cy="142.05" r="3.2" fill="var(--dim)"/>
+  <circle cx="129.69" cy="142.94" r="3.2" fill="var(--dim)"/>
+  <circle cx="173.87" cy="168.47" r="3.2" fill="var(--dim)"/>
+  <circle cx="148.92" cy="180.92" r="3.2" fill="var(--dim)"/>
+  <circle cx="128.48" cy="151.56" r="3.2" fill="var(--dim)"/>
+  <circle cx="86.69" cy="134.66" r="3.2" fill="var(--dim)"/>
+  <circle cx="228.98" cy="146.29" r="3.2" fill="var(--dim)"/>
+  <circle cx="264.52" cy="182.81" r="3.2" fill="var(--dim)"/>
+  <circle cx="215.35" cy="123.81" r="3.2" fill="var(--dim)"/>
+  <circle cx="262.1" cy="123.32" r="3.2" fill="var(--dim)"/>
+  <circle cx="271.1" cy="162.56" r="3.2" fill="var(--dim)"/>
+  <circle cx="237.46" cy="125.47" r="3.2" fill="var(--dim)"/>
+  <circle cx="222.87" cy="173.59" r="3.2" fill="var(--dim)"/>
+  <circle cx="242.48" cy="144.78" r="3.2" fill="var(--dim)"/>
+  <circle cx="238.82" cy="177.66" r="3.2" fill="var(--dim)"/>
+  <circle cx="221.01" cy="245.85" r="3.2" fill="var(--dim)"/>
+  <circle cx="172.68" cy="265.91" r="3.2" fill="var(--dim)"/>
+  <circle cx="221.41" cy="215.99" r="3.2" fill="var(--dim)"/>
+  <circle cx="186.07" cy="230.71" r="3.2" fill="var(--dim)"/>
+  <circle cx="172.66" cy="242.87" r="3.2" fill="var(--dim)"/>
+  <circle cx="213.6" cy="253.1" r="3.2" fill="var(--dim)"/>
+  <circle cx="194.17" cy="267.54" r="3.2" fill="var(--dim)"/>
+  <circle cx="192.65" cy="282.6" r="3.2" fill="var(--dim)"/>
+  <circle cx="209.08" cy="241.3" r="3.2" fill="var(--dim)"/>
+  <circle cx="130.16" cy="161.04" r="30" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <circle cx="249.84" cy="152.32" r="30" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <circle cx="195.44" cy="256.96" r="30" fill="none" stroke="#7c3aed" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="180" y="342" text-anchor="middle" class="sm dim">every point the same colour — there is</text>
+  <text x="180" y="358" text-anchor="middle" class="sm dim">no label to score a fit against</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">PCA and clustering, judged by judgement</text>
+</svg>

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>One sample resampled with replacement into many bootstrap samples</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Resample with replacement, B times</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">SE_B = sd of the B bootstrap estimates</text>
+  <rect x="92" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
+  <text x="105" y="117" text-anchor="middle" class="sm">1</text>
+  <rect x="122" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
+  <text x="135" y="117" text-anchor="middle" class="sm">2</text>
+  <rect x="152" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
+  <text x="165" y="117" text-anchor="middle" class="sm">3</text>
+  <rect x="182" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
+  <text x="195" y="117" text-anchor="middle" class="sm">4</text>
+  <rect x="212" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
+  <text x="225" y="117" text-anchor="middle" class="sm">5</text>
+  <rect x="242" y="100" width="26" height="24" rx="3" fill="var(--dim)" fill-opacity="0.3" stroke="var(--edge)"/>
+  <text x="255" y="117" text-anchor="middle" class="sm">6</text>
+  <text x="180" y="92" text-anchor="middle" class="sm dim">the observed sample</text>
+  <rect x="92" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="105" y="181" text-anchor="middle" class="sm">3</text>
+  <rect x="122" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="135" y="181" text-anchor="middle" class="sm">1</text>
+  <rect x="152" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="165" y="181" text-anchor="middle" class="sm">5</text>
+  <rect x="182" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
+  <text x="195" y="181" text-anchor="middle" class="sm">3</text>
+  <rect x="212" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="225" y="181" text-anchor="middle" class="sm">6</text>
+  <rect x="242" y="164" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="255" y="181" text-anchor="middle" class="sm">2</text>
+  <text x="80" y="181" text-anchor="end" class="sm dim">*1</text>
+  <rect x="92" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="105" y="225" text-anchor="middle" class="sm">2</text>
+  <rect x="122" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
+  <text x="135" y="225" text-anchor="middle" class="sm">2</text>
+  <rect x="152" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="165" y="225" text-anchor="middle" class="sm">4</text>
+  <rect x="182" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="195" y="225" text-anchor="middle" class="sm">6</text>
+  <rect x="212" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="225" y="225" text-anchor="middle" class="sm">1</text>
+  <rect x="242" y="208" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
+  <text x="255" y="225" text-anchor="middle" class="sm">4</text>
+  <text x="80" y="225" text-anchor="end" class="sm dim">*2</text>
+  <rect x="92" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="105" y="269" text-anchor="middle" class="sm">5</text>
+  <rect x="122" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="135" y="269" text-anchor="middle" class="sm">3</text>
+  <rect x="152" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
+  <text x="165" y="269" text-anchor="middle" class="sm">3</text>
+  <rect x="182" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="195" y="269" text-anchor="middle" class="sm">1</text>
+  <rect x="212" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.24" stroke="#3b82f6" stroke-width="1"/>
+  <text x="225" y="269" text-anchor="middle" class="sm">6</text>
+  <rect x="242" y="252" width="26" height="24" rx="3" fill="#3b82f6" fill-opacity="0.5" stroke="#3b82f6" stroke-width="1"/>
+  <text x="255" y="269" text-anchor="middle" class="sm">6</text>
+  <text x="80" y="269" text-anchor="end" class="sm dim">*3</text>
+  <text x="180" y="316" text-anchor="middle" class="sm dim">darker = a repeat draw</text>
+  <text x="180" y="342" text-anchor="middle" class="sm">(1 − 1/n)ⁿ → e⁻¹ : ~37% of rows are left out</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">those left out are the out-of-bag set</text>
+</svg>

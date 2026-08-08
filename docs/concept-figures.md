@@ -1,10 +1,16 @@
 # Concept Figures
 
-Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md` and
-`Exam MAS-I (CAS).md` carries one figure that makes the idea visible — a Venn diagram, a
-payment timeline, an annotated density, a rejection region. They live in
-`Media/Figures/*.svg` and are embedded near the top of each `Concepts/*.md` page, after
-the definition and formula block and before the first `> [!example]` callout.
+Every concept linked from `Exam P-1 (SOA).md`, `Exam FM-2 (SOA).md`,
+`Exam MAS-I (CAS).md` and `Exam MAS-II (CAS).md` carries one figure that makes the idea
+visible — a Venn diagram, a payment timeline, an annotated density, a rejection region,
+a correlogram. They live in `Media/Figures/*.svg` and are embedded near the top of each
+`Concepts/*.md` page, after the definition and formula block and before the first
+`> [!example]` callout.
+
+A concept on two syllabuses gets **one** builder, in the file for the exam that
+introduces it — MAS-I owns the thirteen it shares with MAS-II (`AIC`, `Cross-Validation`,
+`Linear Mixed Model`, …). Two builders for one concept would fight over the same slug,
+and `generate_concept_figures.py` prints a warning when it sees that.
 
 The figures are **generated, not hand-drawn**. Re-run the generator rather than editing
 an SVG by hand — a hand edit will be overwritten on the next run.
@@ -50,6 +56,7 @@ and it never disturbs the one remaining set of hand-authored embeds — the
 | `scripts/figures_exam_p.py` | The 56 Exam P builders, in syllabus order. |
 | `scripts/figures_exam_fm.py` | The 82 Exam FM builders, in syllabus order. |
 | `scripts/figures_exam_mas_i.py` | The 77 Exam MAS-I builders, in syllabus order. |
+| `scripts/figures_exam_mas_ii.py` | The 71 Exam MAS-II builders, in syllabus order (credibility, mixed models, statistical learning, time series). |
 | `scripts/generate_concept_figures.py` | Walks the registry, writes the SVGs, optionally embeds them. |
 
 ## Why hand-written SVG and not matplotlib
@@ -74,8 +81,8 @@ surface and the dark one, so a blue curve is the same blue in either mode.
 
 ## Adding or changing a figure
 
-1. Write a builder in `figures_exam_p.py`, `figures_exam_fm.py` or
-   `figures_exam_mas_i.py` that opens with
+1. Write a builder in `figures_exam_p.py`, `figures_exam_fm.py`,
+   `figures_exam_mas_i.py` or `figures_exam_mas_ii.py` that opens with
    `vcard(title, formula)` and draws into the box, and decorate it with
    `@figure("Concept Name", "alt text", width=WID)`. The concept name must match
    `Concepts/<name>.md` exactly; the slug is derived from it.
@@ -93,14 +100,20 @@ Conventions worth keeping:
   posterior probability), use one — a labelled example teaches more than a generic curve.
 - **Consistent examples across a family.** The loan pages all draw the same 10,000 loan
   at 8% over 8 years; the bond pages the same 1,000 par bond; the discrete multivariate
-  pages the same 3×3 joint PMF. A student reading them in sequence sees one running
-  example from several angles.
+  pages the same 3×3 joint PMF. On MAS-II the credibility pages all price the same
+  300-claim class against a 1,082-claim standard, the mixed-model pages use the same five
+  territories, and the time-series pages draw the same quarterly loss index. A student
+  reading them in sequence sees one running example from several angles.
 - **Label curves where they run**, rather than in a legend box, when there is room —
   a legend is a block of text competing with the picture. Where a legend is
   unavoidable, drop the y-axis name: the two collide in the box's top-left corner.
 - **Stay inside the card.** Text anchored `start` near x = 300, or an axis label under a
   plot whose x-axis sits mid-box (any plot with negative values), runs off or lands on
-  top of something surprisingly easily. Check, don't assume.
+  top of something surprisingly easily. Check, don't assume. Two recurring collisions:
+  `Axes.frame(xlabel=…)` draws at `y1 + 32`, which is exactly where a first footer line
+  wants to sit — pass the axis name as a footer line instead; and a footer formula over
+  ~45 characters is clipped by the card edge, so split it into the two-row form
+  `vcard(title, [row1, row2])`.
 
 ## Interaction with the distribution simulators
 

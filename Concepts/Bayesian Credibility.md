@@ -15,6 +15,8 @@
 | Binomial$(m, \theta)$ | Beta$(\alpha, \beta)$ | Beta$(\alpha + \sum x_i,\, \beta + mn - \sum x_i)$ |
 | Normal$(\theta, \sigma^2)$ | Normal$(\mu_0, \tau^2)$ | Normal (linear combination) |
 
+![[Media/Figures/Bayesian_Credibility.svg|340]]
+
 > [!example]- Bayesian Update for Poisson Claim Frequency {Example}
 > A policyholder's annual claim count $N \sim \text{Poi}(\theta)$. The prior for $\theta$ is Gamma$(2, 0.5)$ (mean $= 2 \times 0.5 = 1$). In 3 years, the policyholder had 0, 2, and 1 claims. Find the posterior mean.
 >

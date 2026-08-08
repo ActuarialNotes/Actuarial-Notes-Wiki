@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>A random walk with drift and its flat forecast with a fan-shaped interval</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <defs>
+    <marker id="ahvaraxis" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="var(--axis)"/></marker>
+  </defs>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">Every shock moves the level permanently</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">Y_t = δ + Y_{t−1} + ε_t</text>
+  <line x1="64" y1="100" x2="64" y2="316" class="grid"/>
+  <line x1="155.76" y1="100" x2="155.76" y2="316" class="grid"/>
+  <line x1="247.53" y1="100" x2="247.53" y2="316" class="grid"/>
+  <line x1="316.35" y1="100" x2="316.35" y2="316" class="grid"/>
+  <line x1="64" y1="316" x2="334" y2="316" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="316" x2="64" y2="90" class="thin" stroke="var(--axis)" stroke-width="1.1" marker-end="url(#ahvaraxis)"/>
+  <line x1="64" y1="316" x2="64" y2="320" class="tick"/>
+  <line x1="155.76" y1="316" x2="155.76" y2="320" class="tick"/>
+  <line x1="247.53" y1="316" x2="247.53" y2="320" class="tick"/>
+  <text x="247.53" y="332" text-anchor="middle" class="sm dim">now</text>
+  <line x1="316.35" y1="316" x2="316.35" y2="320" class="tick"/>
+  <polyline points="64,247.22 71.65,252.4 79.29,258.7 86.94,257.24 94.59,254.29 102.24,249.14 109.88,253.03 117.53,257.85 125.18,258.5 132.82,268.69 140.47,275.13 148.12,260.74 155.76,262.98 163.41,256.25 171.06,248.04 178.71,247.64 186.35,242.58 194,243.47 201.65,237.49 209.29,227.5 216.94,222.96 224.59,223.74 232.24,205.93 239.88,199.26" class="curve" stroke="#3b82f6" stroke-width="1.9"/>
+  <polyline points="247.53,199.26 255.18,195.17 262.82,191.09 270.47,187 278.12,182.91 285.76,178.83 293.41,174.74 301.06,170.65 308.71,166.56 316.35,162.48" class="curve dash" stroke="#059669" stroke-width="2.2"/>
+  <polyline points="247.53,199.26 255.18,178.01 262.82,166.81 270.47,157.27 278.12,148.58 285.76,140.44 293.41,132.69 301.06,125.23 308.71,118.01 316.35,110.98" class="curve" stroke="#059669" stroke-width="1.2"/>
+  <polyline points="247.53,199.26 255.18,212.34 262.82,215.36 270.47,216.73 278.12,217.25 285.76,217.21 293.41,216.79 301.06,216.07 308.71,215.12 316.35,213.98" class="curve" stroke="#059669" stroke-width="1.2"/>
+  <line x1="247.53" y1="316" x2="247.53" y2="111.68" class="thin dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <text x="232.24" y="123.36" text-anchor="end" class="sm bold" fill="#059669">±1.96σ√h</text>
+  <text x="180" y="348" text-anchor="middle" class="sm dim">the forecast is the last value plus hδ</text>
+  <text x="180" y="366" text-anchor="middle" class="sm dim">the interval widens with √h, not h</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">Var(Y_t) = tσ² — it never settles</text>
+</svg>

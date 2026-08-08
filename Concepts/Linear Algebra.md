@@ -19,6 +19,8 @@
 - Eigenvalues solve the **characteristic equation** $\det(A - \lambda I) = 0$
 - The eigenvectors of a covariance matrix are the **principal components** in [[Principal Components Analysis]], and each eigenvalue is the variance explained along its component
 
+![[Media/Figures/Linear_Algebra.svg|340]]
+
 > [!example]- Least-Squares Slope for Two Data Points {Example}
 > Fit $y = \beta x$ (no intercept) by least squares to the points $(x, y) = (1, 2)$ and $(2, 3)$. Find $\hat{\beta}$.
 >

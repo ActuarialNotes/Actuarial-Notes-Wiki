@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 470" width="360" height="470" role="img">
+  <title>An additive seasonal pattern beside a multiplicative one growing with the level</title>
+  <style>:root {
+  --surf: #ffffff; --edge: #e4e4e7; --ink: #18181b; --dim: #6b7280;
+  --grid: #ececf1; --soft: #f4f4f5; --axis: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surf: #1a1d24; --edge: #2f333c; --ink: #f4f4f5; --dim: #a1a1aa;
+    --grid: #272b33; --soft: #22262e; --axis: #6b7280;
+  }
+}
+text {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  fill: var(--ink);
+  font-size: 12px;
+}
+.dim { fill: var(--dim); }
+.ttl { font-size: 14px; font-weight: 600; }
+.fml { font-size: 14px; font-weight: 600; }
+.fml2 { font-size: 12.5px; fill: var(--dim); }
+.sub { font-size: 11px; fill: var(--dim); }
+.sm  { font-size: 10.5px; }
+.bold { font-weight: 600; }
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+.card { fill: var(--surf); stroke: var(--edge); }
+.axis { stroke: var(--axis); stroke-width: 1.1; fill: none; }
+.grid { stroke: var(--grid); stroke-width: 1; fill: none; }
+.tick { stroke: var(--axis); stroke-width: 1; }
+.rule { stroke: var(--edge); stroke-width: 1; fill: none; }
+.soft { fill: var(--soft); }
+.curve { fill: none; stroke-width: 2; stroke-linecap: round;
+         stroke-linejoin: round; }
+.thin  { fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.dash  { stroke-dasharray: 4 3; }
+.dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
+  <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
+  <text x="180" y="40" text-anchor="middle" class="ttl">A pattern repeating at a fixed period s</text>
+  <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
+  <text x="180" y="438" text-anchor="middle" class="fml">s_t = s_{t+s},  Σ s_j = 0</text>
+  <text x="180" y="102" text-anchor="middle" class="sm bold" fill="#3b82f6">additive</text>
+  <rect x="54" y="110" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
+  <polyline points="54,188.38 64,179.02 74,170.77 84,182.54 94,179.85 104,170.49 114,162.25 124,174.01 134,171.33 144,161.97 154,153.72 164,165.49 174,162.8 184,153.44 194,145.2 204,156.96 214,154.28 224,144.92 234,136.67 244,148.44 254,145.75 264,136.4 274,128.15 284,139.92 294,137.23 304,127.87 314,119.63 324,131.39" class="curve" stroke="#3b82f6" stroke-width="1.8"/>
+  <polyline points="54,183.37 324,125.83" class="curve dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <text x="180" y="238" text-anchor="middle" class="sm bold" fill="#7c3aed">multiplicative</text>
+  <rect x="54" y="246" width="270" height="88" rx="5" fill="var(--soft)" stroke="var(--edge)"/>
+  <polyline points="54,324.38 64,316.31 74,308.67 84,320.02 94,317.84 104,308.53 114,299.83 124,313.58 134,311.31 144,300.75 154,290.99 164,307.15 174,304.78 184,292.97 194,282.15 204,300.71 214,298.25 224,285.19 234,273.31 244,294.27 254,291.71 264,277.4 274,264.47 284,287.84 294,285.18 304,269.62 314,255.62 324,281.4" class="curve" stroke="#7c3aed" stroke-width="1.8"/>
+  <polyline points="54,320.14 324,270.21" class="curve dash" stroke="var(--dim)" stroke-width="1.3"/>
+  <text x="180" y="372" text-anchor="middle" class="sm dim">constant swing vs. a constant percentage</text>
+  <text x="180" y="390" text-anchor="middle" class="sm dim">a log transform turns the second into the first</text>
+</svg>

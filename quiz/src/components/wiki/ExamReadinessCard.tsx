@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useId, useMemo, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { Gauge, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ChevronDown, Gauge, X } from 'lucide-react'
 import { useConceptMastery } from '@/hooks/useConceptMastery'
 import { useAuth } from '@/hooks/useAuth'
 import {
@@ -21,10 +22,11 @@ import type { MasteryState } from '@/lib/mastery'
  * click-to-open-a-popup interaction, the dial standing in for a cover graphic.
  *
  * The card is one number: the overall dial and the band it falls in. Every
- * breakdown is a tap away, in the popup — each criterion's score and tally, how
- * the keystone concepts (docs/keystone-concepts.md) are sitting, and the
- * per-section bars. Keystones are listed there rather than in a strip of their
- * own: they are a readiness criterion, so that is where they belong.
+ * breakdown is a tap away, in the popup — which is two criterion bars, one per
+ * scoring criterion, each expanding to the evidence behind its number:
+ * syllabus coverage to the per-learning-objective bars, keystone concepts
+ * (docs/keystone-concepts.md) to the concepts themselves. Both start collapsed,
+ * so the popup opens as the dial plus two bars and goes no deeper until asked.
  *
  * It stays deliberately short of prose: the numbers, the bars and the keystone
  * chips are the content, and the explanation of *how* the score works lives in
@@ -104,17 +106,56 @@ function CriterionBar({ pct }: { pct: number }) {
   )
 }
 
-function CriterionRow({ criterion, children }: { criterion: ReadinessCriterion; children?: ReactNode }) {
-  return (
-    <li className="space-y-1.5">
+/**
+ * One criterion: its bar, its tally, and — behind a chevron — the breakdown
+ * that produced the number. The whole row is the toggle rather than the chevron
+ * alone, so the bar itself is the tap target on a phone. A criterion with
+ * nothing to expand (no sections parsed, no keystones) renders as a plain row
+ * with no chevron, so a disclosure never opens onto an empty panel.
+ */
+function CriterionRow({ criterion, panel }: { criterion: ReadinessCriterion; panel: ReactNode | null }) {
+  const [open, setOpen] = useState(false)
+  const panelId = useId()
+  const expandable = panel != null
+
+  const head = (
+    <>
       <div className="flex items-baseline gap-2">
         <span className="text-sm font-medium">{criterion.label}</span>
         <span className="text-xs text-muted-foreground">{Math.round(criterion.weight * 100)}% of score</span>
         <span className="ml-auto text-sm font-semibold tabular-nums">{Math.round(criterion.pct)}%</span>
+        {expandable && (
+          <ChevronDown
+            className={`h-4 w-4 shrink-0 self-center text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+            aria-hidden="true"
+          />
+        )}
       </div>
       <CriterionBar pct={criterion.pct} />
       <p className="text-xs text-muted-foreground">{criterion.detail}</p>
-      {children}
+    </>
+  )
+
+  return (
+    <li>
+      {expandable ? (
+        <button
+          type="button"
+          onClick={() => setOpen(o => !o)}
+          aria-expanded={open}
+          aria-controls={panelId}
+          className="-mx-1.5 w-full space-y-1.5 rounded-md px-1.5 py-1.5 text-left transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          {head}
+        </button>
+      ) : (
+        <div className="px-1.5 py-1.5 space-y-1.5">{head}</div>
+      )}
+      {expandable && open && (
+        <div id={panelId} className="px-1.5 pb-1 pt-2">
+          {panel}
+        </div>
+      )}
     </li>
   )
 }
@@ -175,62 +216,74 @@ function ExamReadinessModal({ assessment, examLabel, signedIn, onSelectConcept, 
             <h2 className="min-w-0 text-lg font-semibold tracking-tight">{band.label}</h2>
           </div>
 
+          {/* Signed out the score can only ever read zero, so the ask is the
+              control itself rather than a paragraph explaining it. */}
           {!signedIn && (
-            <p className="rounded-md bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
-              Sign in to track progress — the score is built from the concepts you've answered questions on.
-            </p>
+            <div className="flex flex-col items-center gap-1.5">
+              <Link
+                to="/auth"
+                onClick={onClose}
+                className="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Sign in
+              </Link>
+              <p className="text-xs text-muted-foreground">Track learning progress</p>
+            </div>
           )}
 
-          {/* What the score is made of. The keystone criterion carries the
-              keystone list itself — the concepts are the evidence for its
-              number, so they belong under it rather than in a section of their
-              own. This list is the only place the exam names its keystones. */}
-          <section>
-            <h3 className="mb-2 text-sm font-semibold">How it's scored</h3>
-            <ul className="space-y-3.5">
-              {criteria.map(c => (
-                <CriterionRow key={c.id} criterion={c}>
-                  {c.id === 'keystone' && keystone && (
-                    <ul className="flex flex-wrap gap-1.5 pt-1">
-                      {keystone.entries.map(({ concept, state }) => (
-                        <li key={concept.name}>
-                          <button
-                            type="button"
-                            onClick={() => { onSelectConcept(concept.name); onClose() }}
-                            title={concept.why}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-muted/50 px-2.5 py-1 text-sm transition-colors hover:bg-accent"
-                          >
-                            <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT[state]}`} aria-hidden="true" />
-                            {concept.name}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </CriterionRow>
-              ))}
-            </ul>
-          </section>
-
-          {/* Section breakdown */}
-          {sections.length > 0 && (
-            <section>
-              <h3 className="text-sm font-semibold">Syllabus sections</h3>
-              <ul className="mt-2 space-y-2">
-                {sections.map(section => (
-                  <li key={section.name} className="space-y-1">
-                    <div className="flex items-baseline gap-2">
-                      <span className="min-w-0 truncate text-sm">{section.name}</span>
-                      <span className="ml-auto shrink-0 text-xs tabular-nums text-muted-foreground">
-                        {section.level3Count}/{section.total} · {Math.round(section.readinessPct)}%
-                      </span>
-                    </div>
-                    <CriterionBar pct={section.readinessPct} />
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
+          {/* The two criteria, each expanding to the evidence behind its
+              number: syllabus coverage to the per-learning-objective bars,
+              keystone concepts to the concepts themselves. The keystone list
+              lives here rather than in a section of its own — the concepts are
+              what the criterion is scored on — and this is still the only place
+              the exam names its keystones. */}
+          <ul>
+            {criteria.map(c => (
+              <CriterionRow
+                key={c.id}
+                criterion={c}
+                panel={
+                  c.id === 'syllabus'
+                    ? sections.length > 0
+                      ? (
+                        <ul className="space-y-2">
+                          {sections.map(section => (
+                            <li key={section.name} className="space-y-1">
+                              <div className="flex items-baseline gap-2">
+                                <span className="min-w-0 truncate text-sm">{section.name}</span>
+                                <span className="ml-auto shrink-0 text-xs tabular-nums text-muted-foreground">
+                                  {section.level3Count}/{section.total} · {Math.round(section.readinessPct)}%
+                                </span>
+                              </div>
+                              <CriterionBar pct={section.readinessPct} />
+                            </li>
+                          ))}
+                        </ul>
+                      )
+                      : null
+                    : keystone
+                      ? (
+                        <ul className="flex flex-wrap gap-1.5">
+                          {keystone.entries.map(({ concept, state }) => (
+                            <li key={concept.name}>
+                              <button
+                                type="button"
+                                onClick={() => { onSelectConcept(concept.name); onClose() }}
+                                title={concept.why}
+                                className="inline-flex items-center gap-1.5 rounded-full bg-muted/50 px-2.5 py-1 text-sm transition-colors hover:bg-accent"
+                              >
+                                <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT[state]}`} aria-hidden="true" />
+                                {concept.name}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )
+                      : null
+                }
+              />
+            ))}
+          </ul>
         </div>
 
         <div className="flex justify-end px-5 pb-5 pt-4">

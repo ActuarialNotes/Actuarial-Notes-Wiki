@@ -99,6 +99,28 @@ The one thing that can still override them is a host rule using `!important`.
 If something looks wrong after pasting, check for `!important` in the site's
 stylesheet and add `!important` to the matching line in the snippet.
 
+### Why the flip card avoids `aspect-ratio`
+
+Everything inside the flip card is absolutely positioned, so it contributes no
+height of its own — whatever sets the card's height is a single point of
+failure, and if that fails the widget collapses to 0px and disappears
+completely. It once did exactly that: fine in Elementor's editor, invisible
+once published.
+
+So the height comes from a `padding-top: 133.3333%` spacer (the pre-2015
+aspect-ratio trick) rather than the modern `aspect-ratio` one-liner, and the
+structural boxes use `top/left/right/bottom` rather than `inset`. Both are
+things a CSS minifier on a published WordPress page can mangle, and
+`aspect-ratio` additionally has a known bad interaction with
+`container-type: inline-size`.
+
+For the same reason every `cqw` value is written as a px fallback followed by
+`clamp(min, Ncqw, max)`. The clamp is not cosmetic: if the container context
+is ever lost, `cqw` stays valid CSS but silently resolves against the
+*viewport* instead — `8cqw` becomes ~94px on a desktop and bursts the card
+apart, and because the value is still valid no plain fallback would ever kick
+in. The clamp caps it.
+
 ### Surviving a page builder's re-renders
 
 Elementor's live editor re-renders a widget after its script has already run,

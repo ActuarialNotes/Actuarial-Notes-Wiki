@@ -97,25 +97,47 @@
     --an-c3: rgb(250 204 21);   /* gold    */
 
     display: block;
+    position: relative;
     width: 100%;
     max-width: var(--an-card-max);
-    aspect-ratio: 3 / 4;
-    margin-inline: auto;
+    margin-left: auto;
+    margin-right: auto;
     perspective: 1400px;
     cursor: pointer;
     outline: none;
     /* Lets the type below scale with the card's own width. */
     container-type: inline-size;
   }
+  /* The card's height comes from this padding-ratio spacer, NOT from
+     `aspect-ratio`. Everything inside the card is absolutely positioned and so
+     contributes no height of its own, which makes the height declaration a
+     single point of failure: if it is ever dropped the card collapses to 0px
+     and the whole widget silently disappears. `aspect-ratio` is exactly the
+     kind of modern one-liner that gets mangled by a CSS minifier on a
+     published WordPress page, and it has a known bad interaction with
+     `container-type: inline-size` in some engines — both of which show up only
+     after publishing, never in the editor preview. The padding-percentage
+     trick predates all of it and cannot fail.
+     padding-top = height / width = 4 / 3 = 133.3333%. */
+  .an-flip-wrap::before {
+    content: "";
+    display: block;
+    padding-top: 133.3333%;
+  }
   .an-flip-wrap * { box-sizing: border-box; }
   .an-flip-wrap:focus-visible .an-flip-card {
     box-shadow: 0 0 0 3px hsl(263 85% 66% / 0.6);
-    border-radius: 7cqw;
+    border-radius: 18px;
+    border-radius: clamp(10px, 7cqw, 20px);
   }
+  /* Longhand offsets rather than `inset: 0` on the structural boxes, for the
+     same "must not fail after minification" reason as the spacer above. */
   .an-flip-wrap .an-flip-card {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     transform-style: preserve-3d;
     transition: transform 0.7s cubic-bezier(0.4, 0.1, 0.2, 1);
   }
@@ -124,13 +146,17 @@
   }
   .an-flip-wrap .an-flip-face {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    border-radius: 7cqw;
+    border-radius: 18px;
+    border-radius: clamp(10px, 7cqw, 20px);
     background: var(--an-bg);
     color: var(--an-fg);
     backface-visibility: hidden;
@@ -138,7 +164,8 @@
     overflow: hidden;
   }
   .an-flip-wrap .an-flip-front {
-    padding: 8cqw 7cqw;
+    padding: 21px 18px;
+    padding: clamp(10px, 8cqw, 22px) clamp(10px, 7cqw, 20px);
   }
   .an-flip-wrap .an-flip-back {
     transform: rotateY(180deg);
@@ -149,10 +176,14 @@
      pinned to the card edge instead of scrolling away. */
   .an-flip-wrap .an-flip-scroll {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding: 8cqw 7cqw;
+    padding: 21px 18px;
+    padding: clamp(10px, 8cqw, 22px) clamp(10px, 7cqw, 20px);
     scrollbar-width: thin;
     scrollbar-color: hsl(240 15% 72% / 0.5) transparent;
   }
@@ -170,7 +201,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3cqw;
+    gap: 8px;
+    gap: clamp(4px, 3cqw, 10px);
     min-height: 100%;
     width: 100%;
   }
@@ -180,7 +212,10 @@
   .an-flip-wrap .an-flip-face::before {
     content: "";
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     border-radius: inherit;
     padding: 2px;
     background: linear-gradient(115deg, var(--an-c1), var(--an-c2), var(--an-c3), var(--an-c1));
@@ -196,8 +231,14 @@
     to { background-position: 300% 0; }
   }
 
-  /* Type. The px value is the fallback; the cqw line after it scales
-     with the card and wins wherever container queries are supported. */
+  /* Every cqw value below is written as `Npx` then `clamp(min, Ncqw, max)`.
+     Two different failures are covered:
+       - A browser too old to parse cqw drops the second line and uses the px.
+       - A browser that parses cqw but has lost the container context resolves
+         cqw against the *viewport* instead — 8cqw becomes ~94px on a desktop,
+         which would blow the card apart. clamp() caps it.
+     The second case is the nastier one, because the value stays valid CSS and
+     so no fallback would ever kick in. */
   .an-flip-wrap .an-flip-title {
     margin: 0;
     font-weight: 800;
@@ -205,7 +246,7 @@
     letter-spacing: -0.01em;
     color: var(--an-fg);
     font-size: 26px;
-    font-size: 11cqw;
+    font-size: clamp(17px, 11cqw, 30px);
   }
   .an-flip-wrap .an-flip-back-title {
     margin: 0;
@@ -213,14 +254,14 @@
     line-height: 1.2;
     color: var(--an-c2);
     font-size: 17px;
-    font-size: 7.2cqw;
+    font-size: clamp(12px, 7.2cqw, 20px);
   }
   .an-flip-wrap .an-flip-back-text {
     margin: 0;
     line-height: 1.5;
     color: var(--an-muted);
     font-size: 13px;
-    font-size: 5.4cqw;
+    font-size: clamp(10px, 5.4cqw, 15px);
   }
   .an-flip-wrap .an-flip-formula {
     margin: 0;
@@ -229,10 +270,12 @@
     color: var(--an-fg);
     background: hsl(0 0% 100% / 0.06);
     border: 1px solid var(--an-border);
-    border-radius: 3.5cqw;
-    padding: 3.5cqw 4cqw;
+    border-radius: 9px;
+    border-radius: clamp(5px, 3.5cqw, 10px);
+    padding: 9px 10px;
+    padding: clamp(5px, 3.5cqw, 10px) clamp(6px, 4cqw, 12px);
     font-size: 13px;
-    font-size: 5.2cqw;
+    font-size: clamp(10px, 5.2cqw, 14px);
   }
 
   @media (prefers-reduced-motion: reduce) {

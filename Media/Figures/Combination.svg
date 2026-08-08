@@ -39,7 +39,8 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Order ignored: C(4, 2) = 6</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A combination is an unordered selection:</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">C(4, 2) = 6</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="438" text-anchor="middle" class="fml">C(n, k) = n! / [k! (n − k)!]</text>
   <circle cx="78" cy="104" r="18" fill="#3b82f6" fill-opacity="0.14" stroke="#3b82f6" stroke-width="1.4"/>

@@ -43,7 +43,8 @@ text {
     <marker id="ahd97706" viewBox="0 0 8 8" refX="6.6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0.6 L7.4,4 L0,7.4 z" fill="#d97706"/></marker>
   </defs>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Sketch the support, then set the limits</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">A joint density integrates to 1 over its</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">support</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="430" text-anchor="middle" class="fml">∫₀¹ ∫ₓ¹ f(x, y) dy dx</text>
   <text x="180" y="452" text-anchor="middle" class="fml2">support 0 &lt; x &lt; y &lt; 1</text>

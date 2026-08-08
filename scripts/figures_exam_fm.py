@@ -123,7 +123,7 @@ def current_value() -> Fig:
 @figure("Interest Rate", "The interest rate as the two-way bridge between present and "
         "future value", width=WID)
 def interest_rate() -> Fig:
-    f = vcard("The rate is the exchange rate between dates",
+    f = vcard("i is the interest earned per unit, per period",
               ["FV = PV (1 + i)ⁿ", "PV = FV vⁿ"])
 
     f.box(76, 96, 208, 76, colour=AMBER)
@@ -143,7 +143,7 @@ def interest_rate() -> Fig:
 @figure("Simple Interest", "Simple interest growing linearly against compound interest",
         width=WID)
 def simple_interest() -> Fig:
-    f = vcard("Simple interest never earns interest",
+    f = vcard("Simple interest is earned on the principal only",
               ["A(t) = P (1 + i t)", "compound: P (1 + i)ᵗ"])
 
     i = 0.10
@@ -397,7 +397,7 @@ def nominal_discount_convertible() -> Fig:
 @figure("Effective Rate", "One period of growth, and the equivalent nominal rates that "
         "produce it", width=WID)
 def effective_rate() -> Fig:
-    f = vcard("The effective rate is what actually happened",
+    f = vcard("The effective rate is the growth over one full period",
               "1 + i = A(1) / A(0),   here i = 8%")
 
     y = 172
@@ -514,7 +514,7 @@ def equation_of_value() -> Fig:
 @figure("Time Value of Money Equations", "The moves that connect any two valuation dates",
         width=WID)
 def tvm_equations() -> Fig:
-    f = vcard("Every FM calculation is one of these moves",
+    f = vcard("Value moves forward by (1 + i)ⁿ and back by vⁿ",
               ["FV = PV (1 + i)ⁿ,   PV = FV vⁿ", "s₍ₙ₎ = (1 + i)ⁿ a₍ₙ₎"])
 
     nodes = [(88, 122, "PV", AMBER), (272, 122, "FV", GREEN),
@@ -561,7 +561,7 @@ def cash_flow() -> Fig:
 @figure("Annuities", "The annuity family, sorted by payment timing and pattern",
         width=WID)
 def annuities() -> Fig:
-    f = vcard("One payment stream, valued four ways",
+    f = vcard("An annuity is a stream of periodic payments",
               ["a₍ₙ₎ = (1 − vⁿ)/i", "everything else is built from it"])
 
     rows = [
@@ -623,7 +623,7 @@ def level_annuity() -> Fig:
 @figure("Level Payment Annuity", "The two standard annuity factors read off one payment "
         "stream", width=WID)
 def level_payment_annuity() -> Fig:
-    f = vcard("Level payments, two standard factors",
+    f = vcard("Level payments: a₍ₙ₎ for the PV, s₍ₙ₎ for the FV",
               ["a₍ₙ₎ = (1 − vⁿ)/i,   s₍ₙ₎ = ((1+i)ⁿ − 1)/i",
                "at i = 6%, n = 5:  a₍₅₎ = 4.2124,  s₍₅₎ = 5.6371"])
 
@@ -723,7 +723,7 @@ def non_level_annuities() -> Fig:
 @figure("Arithmetic Increasing Annuity", "Payments rising by a constant amount, split "
         "into a level and an increasing piece", width=WID)
 def arithmetic_increasing() -> Fig:
-    f = vcard("A level annuity plus a staircase",
+    f = vcard("Payments rise by a constant amount each period",
               ["(Ia)₍ₙ₎ = (ä₍ₙ₎ − n vⁿ) / i", "(Ia)₍ₙ₎ + (Da)₍ₙ₎ = (n + 1) a₍ₙ₎"])
 
     y = 344
@@ -863,7 +863,7 @@ def payable_continuously() -> Fig:
 @figure("Continuous Annuity", "The continuous annuity as area under the discount curve",
         width=WID)
 def continuous_annuity() -> Fig:
-    f = vcard("The area under the discount curve",
+    f = vcard("Payments arrive as a continuous stream at rate 1",
               ["ā₍ₙ₎ = (1 − vⁿ) / δ", "only the denominator changes: i becomes δ"])
 
     delta = math.log(1.06)
@@ -947,7 +947,7 @@ def amortization() -> Fig:
 @figure("Principal", "The principal portion of each payment growing as the balance falls",
         width=WID)
 def principal() -> Fig:
-    f = vcard("What each payment actually returns",
+    f = vcard("The principal portion is what actually repays the loan",
               ["PR_k = P − I_k = P v^(n−k+1)", "Σ PR_k = L exactly"])
 
     rows, P = _schedule()
@@ -983,7 +983,7 @@ def interest() -> Fig:
 @figure("Outstanding Balance", "The loan balance falling to zero, found prospectively or "
         "retrospectively", width=WID)
 def outstanding_balance() -> Fig:
-    f = vcard("Two routes to the same balance",
+    f = vcard("Prospective or retrospective — the same balance",
               ["prospective:  OB_k = P · a₍ₙ₋ₖ₎",
                "retrospective:  OB_k = L(1+i)ᵏ − P·s₍ₖ₎"])
 
@@ -1076,7 +1076,7 @@ def balloon_payment() -> Fig:
 @figure("Loan Repayment Comparison", "Level payments against constant-principal "
         "repayment on the same loan", width=WID)
 def loan_repayment_comparison() -> Fig:
-    f = vcard("Same loan, two repayment shapes",
+    f = vcard("Level payment versus level principal",
               ["level:  P = L / a₍ₙ₎", "constant principal: interest = i·L·(n+1)/2"])
 
     rows, P = _schedule()
@@ -1498,7 +1498,7 @@ def _macaulay(j, flows=None):
 @figure("Duration", "Duration as the balance point of the discounted cash flows",
         width=WID)
 def duration() -> Fig:
-    f = vcard("Duration is the balance point of the present values",
+    f = vcard("Duration is the average time to payment, weighted by PV",
               ["D_Mac = Σ t · PV(C_t) / P", "measured in periods, not percent"])
 
     j = 0.05
@@ -1685,7 +1685,7 @@ def forward_rate() -> Fig:
 @figure("Yield Curve", "Normal, flat and inverted term structures on one set of axes",
         width=WID)
 def yield_curve() -> Fig:
-    f = vcard("Three shapes the term structure takes",
+    f = vcard("The yield curve plots the spot rate at each maturity",
               ["P = Σ C_t / (1 + s_t)^t", "every maturity has its own spot rate"])
 
     mats = [1, 2, 3, 5, 7, 10, 20, 30]

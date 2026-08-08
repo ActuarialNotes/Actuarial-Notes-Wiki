@@ -18,6 +18,8 @@ import { isAnswerCorrect, isMultiPartAnswerComplete } from '@/lib/parser'
 import type { QuestionFilter, Difficulty, QuizMode } from '@/lib/parser'
 import { decayIfStale } from '@/lib/mastery'
 import { useCollectedCards } from '@/hooks/useCollectedCards'
+import { useTodayPlanConcepts } from '@/hooks/useTodayPlanConcepts'
+import { TOPIC_TO_EXAM_ID } from '@/hooks/useExamProgress'
 import type { ConceptMasteryRecord } from '@/lib/mastery'
 import { slugForLink } from '@/lib/conceptMatch'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
@@ -162,6 +164,16 @@ export default function Quiz() {
   const hasUncollectedNewConcept = newQuizConcepts.some(
     name => !collectedCards.some(c => c.name.toLowerCase() === name.toLowerCase()),
   )
+
+  // Today's study plan for the exam this quiz is drawn from, so the gate can
+  // mark the concepts whose collection would move the plan forward. The quiz's
+  // filters may not name the exam (an ids/concepts launch doesn't), so read it
+  // off the questions themselves.
+  const quizExamKey = useMemo(() => {
+    const label = storeQuestions[0]?.exam ?? filters.exam
+    return label ? (TOPIC_TO_EXAM_ID[label] ?? null) : null
+  }, [storeQuestions, filters.exam])
+  const planConcepts = useTodayPlanConcepts(quizExamKey)
 
   // Show the gate only at the very start of the session (before any answer) so
   // it never interrupts a quiz already in progress, and only once mastery has
@@ -398,6 +410,7 @@ export default function Quiz() {
     return (
       <PreQuizCollectGate
         concepts={newQuizConcepts}
+        planConcepts={planConcepts}
         onStart={() => setCollectGateDismissed(true)}
         onQuit={handleQuit}
       />

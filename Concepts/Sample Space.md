@@ -5,8 +5,7 @@ A **Sample Space** $S$ (or $\Omega$) is the set of all possible outcomes of a ra
 
 > $$S = \{\omega_1, \omega_2, \ldots\}$$
 >
-> $$\text{where each } \omega_i = \text{an elementary outcome}$$
-> $$\text{of the experiment}$$
+> $$\text{where each } \omega_i = \text{an elementary outcome of the experiment}$$
 
 ![[Media/Figures/Sample_Space.svg|340]]
 

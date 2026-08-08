@@ -1,7 +1,7 @@
 **Efficiency** compares estimators by their variance relative to the smallest variance achievable: an [[Unbiasedness|unbiased]] estimator is **efficient** if it attains the Cramér–Rao lower bound, and one estimator is **relatively more efficient** than another if it has smaller variance (equivalently, smaller [[Mean Square Error]]) for the same parameter.
 
 > $$\text{Relative Efficiency}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\text{Var}(\hat{\theta}_2)}{\text{Var}(\hat{\theta}_1)}$$
->
+
 > $$\text{Efficiency}(\hat{\theta}) = \frac{1/I(\theta)}{\text{Var}(\hat{\theta})} \leq 1$$
 
 - $I(\theta)$ is the Fisher information, so $1/I(\theta)$ is the [[Minimum Variance|Cramér–Rao lower bound]] (CRLB); an unbiased estimator with $\text{Efficiency}(\hat{\theta}) = 1$ attains the CRLB and is called **efficient**

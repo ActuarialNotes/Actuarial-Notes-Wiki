@@ -1,7 +1,7 @@
 The **1st-order linear approximation** (or first-order Taylor approximation) estimates the change in bond price for a small change in [[Yield Rate]] $\Delta j$, using [[Modified Duration]]:
 
 > $$\Delta P \approx -D_{Mod} \cdot P \cdot \Delta j$$
->
+
 > $$\frac{\Delta P}{P} \approx -D_{Mod} \cdot \Delta j = -\frac{D_{Mac}}{1+j} \cdot \Delta j$$
 
 - This approximation is accurate for small $\Delta j$ but underestimates price increases and overestimates price decreases for large shifts, because the price-yield relationship is convex

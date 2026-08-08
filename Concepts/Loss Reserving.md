@@ -3,7 +3,7 @@
 - The Total Loss Reserve is generally the sum of [[Case Reserves|case reserves]] and [[IBNR]]:
 
 > $$\text{Total Reserve} = \text{Case Reserves} + \text{IBNR}$$
->
+
 > $$\text{IBNR} = \text{Incurred But Not Reported} + \text{Incurred But Not Enough Reported (IBNER)}$$
 
 > [!example]- Estimating IBNR {Example}

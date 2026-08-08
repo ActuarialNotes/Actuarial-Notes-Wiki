@@ -1,9 +1,9 @@
 **Loan repayment comparison** problems compare two different repayment structures for a loan of the same [[Principal]] $L$ over $n$ periods at rate $i$ — most commonly [[Level Annuity|level payments]] (standard [[Amortization]]) versus **constant-principal** payments (equal principal repaid each period, plus interest on the declining [[Outstanding Balance]]) — and equate or contrast the resulting payments or total interest.
 
 > $$P_{\text{level}} = \frac{L}{a_{\overline{n}|i}}$$
->
+
 > $$\text{Total interest (level)} = n\,P_{\text{level}} - L$$
->
+
 > $$\text{Total interest (constant principal)} = i\,L\cdot\frac{n+1}{2}$$
 
 - Under constant-principal repayment, the principal portion each period is $L/n$, and interest is charged on the declining balance $L\cdot\frac{n-t+1}{n}$ at time $t$; summing the interest over all $n$ periods gives $iL\frac{n+1}{2}$.

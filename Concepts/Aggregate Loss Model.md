@@ -1,9 +1,9 @@
 An **Aggregate Loss Model** models the total (aggregate) losses $S$ from a portfolio as the sum of a **random number** of individual claim amounts:
 
 > $$S = X_1 + X_2 + \cdots + X_N$$
->
+
 > $$E[S] = E[N] \cdot E[X]$$
->
+
 > $$\text{Var}(S) = E[N]\cdot\text{Var}(X) + \text{Var}(N)\cdot(E[X])^2$$
 
 - $N$ is the **claim count** (frequency) random variable; $X_i$ are i.i.d. **claim severity** random variables independent of $N$

@@ -26,12 +26,13 @@ interface WikiFloatingSearchProps {
   pageRefs: WikiEntryRef[]
   pageTitle?: string | null
   pageTitleBadge?: React.ReactNode
+  backLink?: React.ReactNode
   studyPlan?: StudyPlanHeaderData | null
   isInDevelopment?: boolean
   isBeta?: boolean
 }
 
-export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyPlan, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
+export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, backLink, studyPlan, isInDevelopment, isBeta }: WikiFloatingSearchProps) {
   const [index, setIndex] = useState<WikiIndexItem[]>([])
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<Scope>('page')
@@ -287,6 +288,7 @@ export function WikiFloatingSearch({ pageRefs, pageTitle, pageTitleBadge, studyP
           {/* Exam title strip — same height as search bar */}
           {pageTitle && (
             <div className="flex items-center gap-2.5 h-[calc(3.5rem-1px)]">
+              {backLink}
               <span className="font-semibold text-sm truncate flex-1 min-w-0">{pageTitle}</span>
               {hasPlan && (
                 <button

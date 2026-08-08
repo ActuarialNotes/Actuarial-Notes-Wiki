@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useLayoutEffect, useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import type { ConceptAssignment } from '@/lib/studyPlan'
@@ -30,6 +30,7 @@ interface WikiPageContextValue {
   setExamId: (id: string | null) => void
   setPageTitle: (title: string | null) => void
   setPageTitleBadge: (badge: ReactNode) => void
+  setBackLink: (link: ReactNode) => void
   setStudyPlan: (plan: StudyPlanHeaderData | null) => void
   setIsInDevelopment: (v: boolean) => void
   setIsBeta: (v: boolean) => void
@@ -48,6 +49,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const [, setExamIdState] = useState<string | null>(null)
   const [pageTitle, setPageTitleState] = useState<string | null>(null)
   const [pageTitleBadge, setPageTitleBadgeState] = useState<ReactNode>(null)
+  const [backLink, setBackLinkState] = useState<ReactNode>(null)
   const [studyPlan, setStudyPlanState] = useState<StudyPlanHeaderData | null>(null)
   const [isInDevelopment, setIsInDevelopmentState] = useState(false)
   const [isBeta, setIsBetaState] = useState(false)
@@ -59,11 +61,16 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   const setExamId = useCallback((id: string | null) => setExamIdState(id), [])
   const setPageTitle = useCallback((title: string | null) => setPageTitleState(title), [])
   const setPageTitleBadge = useCallback((badge: ReactNode) => setPageTitleBadgeState(badge), [])
+  const setBackLink = useCallback((link: ReactNode) => setBackLinkState(link), [])
   const setStudyPlan = useCallback((plan: StudyPlanHeaderData | null) => setStudyPlanState(plan), [])
   const setIsInDevelopment = useCallback((v: boolean) => setIsInDevelopmentState(v), [])
   const setIsBeta = useCallback((v: boolean) => setIsBetaState(v), [])
 
-  useEffect(() => {
+  // A layout effect so this reset always commits before the descendant page's
+  // own useEffect calls that populate pageTitle/pageTitleBadge/backLink on the
+  // same initial mount — otherwise ordering between this effect and the page's
+  // is unspecified and the page's values can get clobbered back to null.
+  useLayoutEffect(() => {
     // Detect if this is a return to the same wiki page (e.g. coming back from another tab).
     // Read before saving so we can compare the previous location against the current one.
     let isReturn = false
@@ -80,6 +87,7 @@ export function WikiLayout({ children }: { children: ReactNode }) {
     setExamIdState(null)
     setPageTitleState(null)
     setPageTitleBadgeState(null)
+    setBackLinkState(null)
     setStudyPlanState(null)
     setIsInDevelopmentState(false)
     setIsBetaState(false)
@@ -93,12 +101,13 @@ export function WikiLayout({ children }: { children: ReactNode }) {
   }, [location.pathname, location.search, closeOnNavigation])
 
   return (
-    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setStudyPlan, setIsInDevelopment, setIsBeta }}>
+    <WikiPageContext.Provider value={{ setPageRefs, setExamId, setPageTitle, setPageTitleBadge, setBackLink, setStudyPlan, setIsInDevelopment, setIsBeta }}>
       <div className="min-h-screen flex flex-col">
         <WikiFloatingSearch
           pageRefs={pageRefs}
           pageTitle={pageTitle}
           pageTitleBadge={pageTitleBadge}
+          backLink={backLink}
           studyPlan={studyPlan}
           isInDevelopment={isInDevelopment}
           isBeta={isBeta}

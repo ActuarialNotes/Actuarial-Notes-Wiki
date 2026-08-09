@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Calendar, ChevronDown, ChevronUp, X } from 'lucide-react'
 import type { QuizSession } from '@/lib/supabase'
 import { ExamSittingsList } from '@/components/ExamSittingsList'
@@ -7,6 +8,17 @@ import { LOCALIZED_EXAMS } from '@/data/examSittings'
 const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 const STRIP_GAP = 6 // px gap between cells
+
+// The day strip spans the whole card, so the number of cells in view is derived
+// from the width rather than fixed: cells stay about the size they were when the
+// strip was capped at 400px / 7 days, and a wider card simply shows more days.
+const STRIP_CELL_TARGET = 52 // px — preferred cell size
+const STRIP_MIN_PER_VIEW = 7 // never show less than a week
+
+function perViewFor(width: number): number {
+  if (width <= 0) return STRIP_MIN_PER_VIEW
+  return Math.max(STRIP_MIN_PER_VIEW, Math.round((width + STRIP_GAP) / (STRIP_CELL_TARGET + STRIP_GAP)))
+}
 
 /** Which end of the strip an off-screen day sits past. */
 type Side = 'left' | 'right'
@@ -60,9 +72,14 @@ function isoKey(d: Date): string {
   return `${y}-${m}-${day}`
 }
 
-/** `scrollLeft` that puts the day at `idx` in the middle of the 7-cell strip. */
-function centerOffset(el: HTMLElement, idx: number): number {
-  const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+/** Width of one strip cell, given how many are in view. */
+function stripCellWidth(el: HTMLElement, perView: number): number {
+  return (el.clientWidth - (perView - 1) * STRIP_GAP) / perView
+}
+
+/** `scrollLeft` that puts the day at `idx` in the middle of the strip. */
+function centerOffset(el: HTMLElement, idx: number, perView: number): number {
+  const cellW = stripCellWidth(el, perView)
   return Math.max(0, idx * (cellW + STRIP_GAP) - el.clientWidth / 2 + cellW / 2)
 }
 
@@ -76,6 +93,60 @@ function daysUntil(dateStr: string): number {
 interface DayData {
   avgScore: number
   count: number
+}
+
+/**
+ * A countdown pill parked under the expanded timeline, centred on the week
+ * column its date falls in.
+ *
+ * `center` is that column's centre as a fraction of the grid's column area. The
+ * offset is resolved against the pill's measured width rather than left to a
+ * `translateX(-50%)`, because a column near either end would otherwise push half
+ * a pill outside the card — on a phone the whole grid is only a few pills wide,
+ * so this is the common case, not the corner one.
+ */
+function AnchoredPill({ center, children }: { center: number; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [left, setLeft] = useState<number | null>(null)
+  const [measure, remeasure] = useState(0)
+
+  useLayoutEffect(() => {
+    const el = ref.current
+    const track = el?.parentElement
+    if (!el || !track) return
+    const width = track.clientWidth
+    const pill = el.offsetWidth
+    const next = Math.min(Math.max(0, center * width - pill / 2), Math.max(0, width - pill))
+    // The offset doesn't change either width, so settling here can't re-trigger
+    // the observer below.
+    setLeft(prev => (prev !== null && Math.abs(prev - next) < 0.5 ? prev : next))
+  }, [center, measure])
+
+  // Re-place on a resize of the track *or* of the pill itself — the countdown
+  // text narrows as the days tick down, which moves where its centre lands.
+  useEffect(() => {
+    const el = ref.current
+    const track = el?.parentElement
+    if (!el || !track || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(() => remeasure(n => n + 1))
+    ro.observe(track)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  return (
+    <div className="relative h-[26px]">
+      <div
+        ref={ref}
+        className="absolute top-0 max-w-full whitespace-nowrap"
+        // Before the first measurement, fall back to the centred estimate so the
+        // pill doesn't flash in at the left edge.
+        style={left !== null ? { left } : { left: `${center * 100}%`, transform: 'translateX(-50%)' }}
+      >
+        {children}
+      </div>
+    </div>
+  )
 }
 
 interface Props {
@@ -130,6 +201,7 @@ export function ExamHeatmap({
 
   // Scroll strip state
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [perView, setPerView] = useState(STRIP_MIN_PER_VIEW)
 
   const inputRef = useRef<HTMLInputElement>(null)
   const inputReadyRef = useRef<HTMLInputElement>(null)
@@ -248,9 +320,13 @@ export function ExamHeatmap({
   const stripWasShown = useRef(false)
   const autoScrollLeft = useRef<number | null>(null)
   const lastDays = useRef(allDays)
+  const lastPerView = useRef(perView)
   useEffect(() => {
-    const rangeChanged = lastDays.current !== allDays
+    // A resize that changes how many cells are in view shifts every day's
+    // position just as a new range does, so both re-center an untouched strip.
+    const rangeChanged = lastDays.current !== allDays || lastPerView.current !== perView
     lastDays.current = allDays
+    lastPerView.current = perView
     if (!showStrip) { stripWasShown.current = false; autoScrollLeft.current = null; return }
     const el = scrollRef.current
     if (!el) return
@@ -263,9 +339,25 @@ export function ExamHeatmap({
       ? allDays.findIndex(d => d.key === highlightedDay)
       : allDays.findIndex(d => d.isToday)
     if (idx < 0) return
-    el.scrollLeft = centerOffset(el, idx)
+    el.scrollLeft = centerOffset(el, idx, perView)
     autoScrollLeft.current = el.scrollLeft
-  }, [showStrip, allDays, highlightedDay, playbackDay])
+  }, [showStrip, allDays, highlightedDay, playbackDay, perView])
+
+  // How many cells fit across the card. Measured rather than fixed so the strip
+  // can span the card's full width without blowing the cells up.
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el || !showStrip) return
+    const measure = () => setPerView(perViewFor(el.clientWidth))
+    measure()
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure)
+      return () => window.removeEventListener('resize', measure)
+    }
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [showStrip])
 
   // Track whether today's cell is visible in the scroll strip, and which side it's off to
   const [showTodayButton, setShowTodayButton] = useState(false)
@@ -300,7 +392,7 @@ export function ExamHeatmap({
 
     function syncStripPositions() {
       if (!el) return
-      const cellW = (el.clientWidth - 6 * STRIP_GAP) / 7
+      const cellW = stripCellWidth(el, perView)
 
       const todayIdx = allDays.findIndex(d => d.isToday)
       if (todayIdx < 0) {
@@ -325,13 +417,13 @@ export function ExamHeatmap({
       el.removeEventListener('scroll', syncStripPositions)
       window.removeEventListener('resize', syncStripPositions)
     }
-  }, [allDays, showFullTimeline, targetDate, targetReadyDate, playbackDay])
+  }, [allDays, showFullTimeline, targetDate, targetReadyDate, playbackDay, perView])
 
   function scrollToToday() {
     const el = scrollRef.current
     if (!el) return
     const todayIdx = allDays.findIndex(d => d.isToday)
-    if (todayIdx >= 0) el.scrollTo({ left: centerOffset(el, todayIdx), behavior: 'smooth' })
+    if (todayIdx >= 0) el.scrollTo({ left: centerOffset(el, todayIdx, perView), behavior: 'smooth' })
   }
 
   // Smooth-scroll to center highlighted day when it changes
@@ -340,8 +432,8 @@ export function ExamHeatmap({
     const el = scrollRef.current
     const idx = allDays.findIndex(d => d.key === highlightedDay)
     if (idx < 0) return
-    el.scrollTo({ left: centerOffset(el, idx), behavior: 'smooth' })
-  }, [highlightedDay, playbackDay, allDays])
+    el.scrollTo({ left: centerOffset(el, idx, perView), behavior: 'smooth' })
+  }, [highlightedDay, playbackDay, allDays, perView])
 
   // Playback: glide the strip to each new day over the beat it's given, so a
   // run of days reads as one continuous rewind rather than a series of jumps.
@@ -351,7 +443,7 @@ export function ExamHeatmap({
     if (!el || !playbackDay) return
     const idx = allDays.findIndex(d => d.key === playbackDay)
     if (idx < 0) return
-    const target = centerOffset(el, idx)
+    const target = centerOffset(el, idx, perView)
     const from = el.scrollLeft
     const distance = target - from
     if (Math.abs(distance) < 1 || playbackStepMs <= 0) { el.scrollLeft = target; return }
@@ -365,7 +457,7 @@ export function ExamHeatmap({
       if (p < 1) raf = requestAnimationFrame(step)
     })
     return () => cancelAnimationFrame(raf)
-  }, [playbackDay, playbackStepMs, allDays])
+  }, [playbackDay, playbackStepMs, allDays, perView])
 
   // Full-grid memos (only used when showFullTimeline)
   const totalWeeks = useMemo(() => {
@@ -458,9 +550,13 @@ export function ExamHeatmap({
     toggleTimeline(true)
   }
 
-  // Shared date rows
-  const dateRows = (
-    <div className="flex flex-col gap-1 pt-0.5">
+  // Date rows. In the expanded timeline the countdown pills carry each date, so
+  // a row is only rendered for a date that has none — one that isn't set yet, or
+  // one being edited inline (the fallback when there's no Study Plan modal).
+  const showExamRow = editing || !targetDate
+  const showReadyRow = onTargetReadyDateChange !== undefined && (editingReady || !targetReadyDate)
+
+  const examDateRow = (
       <div className="flex items-center gap-1.5">
         {!editing || onOpenStudyPlan ? (
           <button
@@ -503,8 +599,9 @@ export function ExamHeatmap({
           </div>
         )}
       </div>
+  )
 
-      {onTargetReadyDateChange !== undefined && (
+  const readyDateRow = (
         <div className="flex items-center gap-1.5">
           {!editingReady || onOpenStudyPlan ? (
             <button
@@ -545,8 +642,6 @@ export function ExamHeatmap({
             </div>
           )}
         </div>
-      )}
-    </div>
   )
 
   const todayButton = (
@@ -560,36 +655,81 @@ export function ExamHeatmap({
     </button>
   )
 
-  // Day-count pills — rendered into whichever end of the row `pillSides` puts them.
-  const readyPill = readyDaysLeft !== null ? (
+  // Day-count pills. In the strip they're rendered into whichever end of the row
+  // `pillSides` puts them; in the expanded timeline they sit under the week their
+  // date falls in. Both views show the same two pills, so the countdown reads the
+  // same either way.
+  // The expanded pills stand in for the date rows that used to sit under the
+  // grid, so they spell the countdown out and lead with the date those rows
+  // showed. The strip's row is only as wide as the card and has to survive a
+  // phone, so there it stays the abbreviated "21d to prepare".
+  const readyDays = readyDaysLeft !== null ? Math.max(0, readyDaysLeft) : 0
+  const examDays = daysLeft !== null ? Math.max(0, daysLeft) : 0
+  const shortDate = (dateStr: string) =>
+    new Date(dateStr + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+
+  const makeReadyPill = (expanded: boolean) => readyDaysLeft !== null ? (
     <button
       type="button"
       onClick={openReadyDateEditor}
-      className="min-w-0 truncate text-[11px] font-medium px-2 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400 transition-colors"
+      className="min-w-0 max-w-full truncate text-[11px] font-medium px-2 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-600 dark:text-amber-400 transition-colors"
       aria-label="Edit target ready date"
-      title="Edit target ready date"
+      title={readyDateLabel ? `Target ready: ${readyDateLabel} — edit` : 'Edit target ready date'}
     >
-      <span className="font-bold tabular-nums">{Math.max(0, readyDaysLeft)}d</span> to prepare
+      {expanded && targetReadyDate && (
+        <span className="opacity-70">{shortDate(targetReadyDate)} · </span>
+      )}
+      <span className="font-bold tabular-nums">{readyDays}{expanded ? '' : 'd'}</span>
+      {expanded ? ` ${readyDays === 1 ? 'day' : 'days'}` : ''} to prepare
     </button>
   ) : null
 
-  const examPill = daysLeft !== null ? (
+  const makeExamPill = (expanded: boolean) => daysLeft !== null ? (
     <button
       type="button"
       onClick={openExamDateEditor}
-      className="min-w-0 truncate text-[11px] font-medium px-2 py-1 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors"
+      className="min-w-0 max-w-full truncate text-[11px] font-medium px-2 py-1 rounded-full bg-foreground/10 hover:bg-foreground/20 text-foreground/60 hover:text-foreground transition-colors"
       aria-label="Edit exam date"
-      title="Edit exam date"
+      title={examDateLabel ? `Exam: ${examDateLabel} — edit` : 'Edit exam date'}
     >
-      <span className="font-bold tabular-nums">{Math.max(0, daysLeft)}d</span> until exam
+      {expanded && targetDate && (
+        <span className="opacity-70">{shortDate(targetDate)} · </span>
+      )}
+      <span className="font-bold tabular-nums">{examDays}{expanded ? '' : 'd'}</span>
+      {expanded ? ` ${examDays === 1 ? 'day' : 'days'}` : ''} until exam
     </button>
+  ) : null
+
+  const readyPill = makeReadyPill(false)
+  const examPill = makeExamPill(false)
+
+  // Fraction (0–1) across the grid's column area that a date's week column
+  // centres on — what a pill under the grid lines itself up with.
+  function weekCenter(dateStr: string): number {
+    const d = new Date(dateStr + 'T00:00:00')
+    d.setHours(0, 0, 0, 0)
+    const raw = Math.round((mondayOf(d).getTime() - gridStart.getTime()) / (7 * 86400000))
+    const idx = Math.min(totalWeeks - 1, Math.max(0, raw))
+    return (idx + 0.5) / totalWeeks
+  }
+
+  // One pill per row so two nearby dates can't collide, laid out over the same
+  // 16px day-label gutter + flexible column area as the grid above.
+  const timelinePills = (examPill || readyPill) ? (
+    <div className="flex gap-[2px] pt-1.5">
+      <div className="shrink-0" style={{ width: 16 }} />
+      <div className="flex-1 min-w-0 flex flex-col gap-1">
+        {targetDate && examPill && <AnchoredPill center={weekCenter(targetDate)}>{makeExamPill(true)}</AnchoredPill>}
+        {targetReadyDate && readyPill && <AnchoredPill center={weekCenter(targetReadyDate)}>{makeReadyPill(true)}</AnchoredPill>}
+      </div>
+    </div>
   ) : null
 
   return (
     <div className="space-y-3">
       {showStrip ? (
-        /* ── Scrollable day strip (default) — max-w constrains to 7 cells ── */
-        <div className="max-w-[400px] w-full mx-auto flex flex-col gap-3">
+        /* ── Scrollable day strip (default) — spans the full card, `perView` cells wide ── */
+        <div className="w-full flex flex-col gap-3">
           <div
             ref={scrollRef}
             className="overflow-x-auto pt-0.5 pb-2 min-h-[44px] [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-muted/20 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/30 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/50"
@@ -626,7 +766,7 @@ export function ExamHeatmap({
                     key={cell.key}
                     role={isClickable ? 'button' : undefined}
                     onClick={isClickable ? () => onDayClick!(cell.key) : undefined}
-                    style={{ width: `calc((100% - ${6 * STRIP_GAP}px) / 7)`, ...bgStyle }}
+                    style={{ width: `calc((100% - ${(perView - 1) * STRIP_GAP}px) / ${perView})`, ...bgStyle }}
                     className={cls}
                     title={cell.key}
                   >
@@ -744,6 +884,9 @@ export function ExamHeatmap({
             </div>
           </div>
 
+          {/* Day-count pills, parked under the week column each date falls in */}
+          {timelinePills}
+
           {/* Collapse chevron */}
           <button
             type="button"
@@ -757,7 +900,12 @@ export function ExamHeatmap({
         </>
       )}
 
-      {showFullTimeline && !playbackDay && dateRows}
+      {showFullTimeline && !playbackDay && (showExamRow || showReadyRow) && (
+        <div className="flex flex-col gap-1 pt-0.5">
+          {showExamRow && examDateRow}
+          {showReadyRow && readyDateRow}
+        </div>
+      )}
     </div>
   )
 }

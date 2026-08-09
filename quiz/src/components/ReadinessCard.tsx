@@ -1250,11 +1250,22 @@ export function ReadinessCard({
           )}
           {tracePlanBorder && (
             <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+              {/* Rainbow foil ramp — the same sky→fuchsia→gold the collected-card
+                  and lock borders wear, run diagonally across the card so the
+                  traced edge picks up all three. */}
+              <defs>
+                <linearGradient id="study-plan-trace-foil" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="rgb(56 189 248)" />
+                  <stop offset="35%" stopColor="rgb(232 121 249)" />
+                  <stop offset="70%" stopColor="rgb(250 204 21)" />
+                  <stop offset="100%" stopColor="rgb(56 189 248)" />
+                </linearGradient>
+              </defs>
               <rect
                 x={0} y={0} width="100%" height="100%"
                 rx={8} ry={8}
                 fill="none"
-                stroke="hsl(var(--primary))"
+                stroke="url(#study-plan-trace-foil)"
                 strokeWidth={2}
                 pathLength={100}
                 className="study-plan-trace-path"
@@ -1316,7 +1327,7 @@ export function ReadinessCard({
                   return (
                     <div
                       key={group.topicName}
-                      className={`space-y-0.5 rounded-lg px-2 py-1.5 -mx-2 transition-colors duration-200 ${isHighlighted ? 'bg-primary/5 ring-1 ring-primary/20' : ''}`}
+                      className={`space-y-0.5 rounded-lg px-2 py-1.5 -mx-2 transition-colors duration-200 ${isHighlighted ? 'plan-foil-ring bg-gradient-to-br from-sky-400/10 via-fuchsia-400/10 to-amber-300/10' : ''}`}
                     >
                       {/* Topic heading */}
                       <p className="text-xs font-semibold text-muted-foreground truncate">
@@ -1329,7 +1340,7 @@ export function ReadinessCard({
                         const planIdx = studyPlanConceptsForModal.findIndex(c => c.name.toLowerCase() === name.toLowerCase())
                         const isCascadeHighlighted = quizStartConcept === name.toLowerCase()
                         return (
-                          <div key={name} className={`flex items-center gap-2 w-full${(flashingConcept?.toLowerCase() === name.toLowerCase() || isCascadeHighlighted) ? ' concept-row-highlight' : ''}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
+                          <div key={name} className={`flex items-center gap-2 w-full${isCascadeHighlighted ? ' concept-row-foil' : (flashingConcept?.toLowerCase() === name.toLowerCase() ? ' concept-row-highlight' : '')}${recentlyCompletedConcepts.has(name.toLowerCase()) ? ' concept-success' : ''}`}>
                             {isCompleted
                               ? <Check className="h-4 w-4 text-green-500 shrink-0" />
                               : <Circle className="h-4 w-4 text-muted-foreground shrink-0" />}

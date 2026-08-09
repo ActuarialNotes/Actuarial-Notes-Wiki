@@ -13,9 +13,9 @@
      the script. Hand edits here are lost on the next run.
 ============================================================ -->
 <div class="an-radial" data-an-radial>
-  <div class="an-radial-legend"></div>
   <svg class="an-radial-svg" viewBox="0 0 280 280" role="img"
        aria-label="Exam P study guide radial: readiness by syllabus concept"></svg>
+  <div class="an-radial-legend"></div>
 </div>
 
 <style>
@@ -73,7 +73,9 @@
   }
   .an-radial .an-radial-seg {
     cursor: pointer;
-    transition: opacity 100ms, transform 100ms;
+    /* `fill` is in the transition so the intro animation's level-ups ease from
+       one mastery colour to the next instead of snapping. */
+    transition: fill 220ms linear, opacity 100ms, transform 100ms;
     transform-origin: 140px 140px;
   }
   .an-radial .an-radial-seg.an-dim { opacity: 0.35; }
@@ -87,6 +89,17 @@
 
 <script>
 (function () {
+  // ── Intro animation settings ───────────────────────────────────────────
+  // The ring plays up from empty when it scrolls into view, once per page load.
+  var ANIMATE = true;          // false → render the finished ring immediately
+  var ANIMATE_MS = 3200;       // how long the climb takes
+  // true  → every concept climbs to Level 3, so the counter ends on 100%.
+  // false → concepts stop at the mastery levels authored in STATES below,
+  //         so the counter ends on that ring's real score (56% as shipped).
+  var ANIMATE_TO_FULL = true;
+  // Automatically respects prefers-reduced-motion: the finished ring is shown
+  // straight away instead.
+
   // ── Geometry (mirrors the SG_* constants in ReadinessCard.tsx) ──
   var VB = 280, CX = VB / 2, CY = VB / 2;
   var OUTER_R = 126, INNER_R = 74, CONCEPT_GAP = 1.5;
@@ -339,8 +352,24 @@
     });
 
     // ── Centre readout ──
-    var overallPct = computeReadiness(data.topics, stateOf, isKeystone);
-    var pctText = Math.round(overallPct) + '%';
+    // The authored state of each wedge, kept aside so the intro animation can
+    // play the ring up from empty and still know where it is meant to land.
+    var finalStates = segments.map(function (s) { return s.state; });
+
+    // Always derived from whatever the wedges currently show, never from a
+    // stored constant — so the number in the middle and the ring around it
+    // cannot disagree, at rest or mid-animation.
+    function currentPct() {
+      var byName = {};
+      segments.forEach(function (s) { byName[s.conceptName] = s.state; });
+      return computeReadiness(
+        data.topics,
+        function (name) { return byName[name] || 'new'; },
+        isKeystone
+      );
+    }
+
+    var pctText = Math.round(currentPct()) + '%';
     var centre = el('g', {});
     svg.appendChild(centre);
 
@@ -399,7 +428,87 @@
     function setHovered(seg) { hovered = seg; paint(); }
     function setSelected(seg) { selected = seg; paint(); }
 
-    paint();
+    // ── Intro animation ────────────────────────────────────────────────────
+    // The ring starts empty and climbs, wedge by wedge, while the centre
+    // counts up. The percentage is not tweened toward a target — each frame
+    // sets real mastery states and re-derives the number from them, so the
+    // count and the colours stay in lockstep and it lands exactly on the
+    // configured end state.
+    var LEVELS = ['new', 'level1', 'level2', 'level3'];
+    var LEVEL_INDEX = { new: 0, level1: 1, level2: 2, level3: 3, forgotten: 0 };
+
+    function applyStates(pick) {
+      segments.forEach(function (seg, i) { seg.state = pick(seg, i); });
+      paths.forEach(function (entry, i) {
+        entry.node.setAttribute('fill', masteryFill(segments[i].state, segments[i].keystone));
+      });
+      pctText = Math.round(currentPct()) + '%';
+      paint();
+    }
+
+    // Where the ring comes to rest. Defined once and shared by the animation's
+    // last frame, the reduced-motion path and the ANIMATE = false path, so
+    // every visitor ends up looking at the same ring — otherwise someone with
+    // reduced motion would see the authored 56% while everyone else finished
+    // on 100%.
+    function endState(i) {
+      return ANIMATE_TO_FULL ? 'level3' : finalStates[i];
+    }
+
+    function settle() {
+      applyStates(function (seg, i) { return endState(i); });
+    }
+
+    function runIntro() {
+      var n = segments.length;
+      if (n === 0) { settle(); return; }
+
+      // Each wedge starts a little after the one before it, so the fill sweeps
+      // around the ring rather than every wedge brightening at once.
+      var STAGGER = 0.55;          // share of the run spent starting wedges off
+      var RAMP = 1 - STAGGER;      // how long any single wedge takes to climb
+      var targets = segments.map(function (seg, i) {
+        return LEVEL_INDEX[endState(i)];
+      });
+
+      applyStates(function () { return 'new'; });
+
+      var t0 = null;
+      function frame(t) {
+        if (t0 === null) t0 = t;
+        var p = Math.min(1, (t - t0) / ANIMATE_MS);
+        var eased = 1 - Math.pow(1 - p, 3);
+        applyStates(function (seg, i) {
+          var local = (eased - (i / n) * STAGGER) / RAMP;
+          if (local <= 0) return LEVELS[0];
+          if (local >= 1) return LEVELS[targets[i]];
+          return LEVELS[Math.floor(local * targets[i] + 1e-9)];
+        });
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    var reduceMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!ANIMATE || reduceMotion || !window.requestAnimationFrame) {
+      settle();
+    } else if (window.IntersectionObserver) {
+      // Hold the ring empty until it is actually on screen, so a visitor who
+      // scrolls down doesn't arrive after the animation has already finished.
+      applyStates(function () { return 'new'; });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          io.disconnect();
+          runIntro();
+        });
+      }, { threshold: 0.35 });
+      io.observe(root);
+    } else {
+      runIntro();
+    }
   }
 
   // ============================================================

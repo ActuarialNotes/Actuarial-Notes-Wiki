@@ -162,3 +162,29 @@ when the same script runs more than once on a page.
   and `STATES` near the bottom of its `<script>` to show a different exam or a
   different level of progress. The readiness % is computed from that data, so
   it stays honest whatever you set.
+
+### The radial's intro animation
+
+The ring starts empty and climbs, wedge by wedge, while the centre counts up.
+It fires once, when the widget scrolls into view (so a visitor who scrolls
+down doesn't arrive after it has already run), and honours
+`prefers-reduced-motion` by showing the finished ring straight away.
+
+The percentage is **not** tweened toward a target number. Each frame sets real
+mastery states on the wedges and re-derives the score from them with the same
+`computeReadiness` the app uses, so the counter and the colours can never
+disagree, and it lands exactly on its end state.
+
+Settings sit at the top of the `<script>`:
+
+| Constant | Default | Effect |
+| --- | --- | --- |
+| `ANIMATE` | `true` | `false` renders the finished ring immediately |
+| `ANIMATE_MS` | `3200` | Length of the climb |
+| `ANIMATE_TO_FULL` | `true` | `true` takes every concept to Level 3, ending on **100%**. `false` stops at the levels authored in `STATES`, ending on that ring's real score (**56%** as shipped) |
+
+Worth knowing about `ANIMATE_TO_FULL: true`: it ends with the ring all at
+Level 3, so the Level 1 / Level 2 / New swatches in the legend no longer match
+anything on screen, and the realistic in-progress ring is only visible while
+the animation is running. Setting it to `false` ends on the mixed 56% ring
+instead, which keeps every legend entry meaningful.

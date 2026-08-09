@@ -147,7 +147,7 @@ sound like the first card off a deck of twenty.
 | `open` / `close` | A panel or modal sliding in or out |
 | `page` | A flick within one surface — popup prev/next, a flashcard turning over, a swipe |
 | `shuffle` | Riffling the flashcard deck into a new order |
-| `fileAway` | One finished card sliding off the deck during "Clear Completed Flashcards". Climbs across the sweep — see "The combo" |
+| `fileAway` | One finished card going green and collapsing into itself during "Clear Completed Flashcards". Climbs across the sweep — see "The combo" |
 | `correct` | A right answer, anywhere: quiz, comprehension check, flashcard "Got it". Climbs endlessly across a run — see "The combo" |
 | `addToDeck` | A card filed into the study deck ("Add to Flashcards") |
 | `collect` | A flashcard landing in the deck via the collect ceremony |

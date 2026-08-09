@@ -152,7 +152,7 @@ Info      bg-blue-50   text-blue-900    dark:bg-blue-950   dark:text-blue-100
 For text-only state signals use the mid shades: `text-green-600 dark:text-green-400`,
 `text-amber-600 dark:text-amber-400`, `text-red-600 dark:text-red-400`.
 
-**Mastery ladder** (canonical, from `LearningProgressModal.tsx`) — intensity climbs with level:
+**Mastery ladder** — intensity climbs with level:
 
 ```
 New        muted / neutral (no colour)
@@ -161,6 +161,22 @@ Level 2    bg-green-200 text-green-800   dark:bg-green-900/60 dark:text-green-20
 Level 3    bg-green-400 text-green-950   dark:bg-green-800    dark:text-green-100  (+ gold shimmer)
 Forgotten  amber family (the "at risk" signal)
 ```
+
+**Don't retype that table — import it.** `lib/masteryBadge.ts` is the single source
+(`MASTERY_LABEL` / `MASTERY_SHORT_LABEL` / `MASTERY_TINT` / `MASTERY_TEXT` / `MASTERY_FILL`),
+and `components/MasteryBadge.tsx` is the one chip every surface that lists concepts uses —
+the quiz builder, the Today card, the readiness breakdown, the coverage chart, the concept
+popup and detail modal, the flashcard gallery, the learning-progress modal. This table had
+previously been copy-pasted into nine components and drifted into five palettes, one of
+which mapped Level 1 to amber and Level 2 to blue; the same concept then read as a different
+level on two screens. Add `<MasteryBadge state={…} />` to a new list rather than a tenth copy.
+
+⚠️ **Convention — Forgotten is amber, with one exception.** Red means *incorrect / error /
+destructive* (§4.1); a decayed concept is at risk, not wrong, so every mastery **badge** uses
+amber. The Study Guide radial (`lib/masteryFill.ts`) keeps Forgotten red on purpose and is the
+only place that should: its keystone spokes already climb a *gold* ladder (§4.4), so an amber
+"forgotten" spoke would be indistinguishable from a healthy keystone. No badge surface has
+that collision.
 
 ⚠️ **Convention — destructive:** for *actions* (buttons, delete) use the `destructive`
 token, not raw `red`. Reserve raw `red-*` for the incorrect-answer / error-text state pairings
@@ -232,6 +248,28 @@ Spacing uses the default Tailwind 4px scale. A few defaults carry most screens:
   3.5rem collapsed) — fixed overlays that must clear the sidebar read that variable (see the
   concept-popup and gallery-panel rules in `index.css`). Reuse it; don't hard-code 16rem.
 
+### 5.1 Fixed bottom action bars
+
+Several views pin their commit action to the bottom (`Landing`, `Flashcards`, `Search`).
+The shape:
+
+```
+fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0
+border-t border-border bg-background/95 backdrop-blur-sm
+```
+
+`bottom-14` clears the mobile bottom-nav; the `border-t` is not optional — without an edge,
+a row scrolling underneath a translucent bar reads as a clipping bug rather than an overlay.
+
+**Never reserve space for one with a hard-coded `pb-*`.** These bars change height with their
+contents, so the guess is wrong in both directions — it clips the last row or leaves a hole.
+Mount `hooks/useActionBarHeight` on the bar; it publishes the measured height as
+`--action-bar-height` on the document root for as long as the bar exists. The page reads it
+(`paddingBottom: calc(var(--action-bar-height) + 1.5rem)`) and so does anything else parked
+in that corner — the onboarding launcher offsets by it, which is what stops it landing on top
+of the bar's primary button. The variable is absent on pages with no bar, so a
+`var(--action-bar-height, 0px)` fallback is safe to apply unconditionally.
+
 ---
 
 ## 6. Radius, Borders & Elevation
@@ -302,8 +340,30 @@ if you need multiple headings, you probably need multiple cards.
 
 `rounded-full`, `text-xs font-semibold`. Variants: `default`, `secondary`, `destructive`,
 `outline`. Use for status/counts/labels — not as buttons. State badges (mastery, difficulty)
-use the §4 semantic families. `TopicBadge`/`StreakBadge`/`LevelBadge` are the domain-specific
-wrappers — reuse them rather than restyling a raw badge.
+use the §4 semantic families. `TopicBadge`/`StreakBadge`/`LevelBadge`/`MasteryBadge`
+(§4.2) / `QuestionAttemptBadge` are the domain-specific wrappers — reuse them rather than
+restyling a raw badge.
+
+### 7.3a Segmented controls (`ui/SegmentedControl.tsx`)
+
+A small row of mutually exclusive choices — "SOA / CAS", "Today's Plan / By Topic / Mock
+Exam", a question count. **Always this component**, never a hand-rolled row of buttons:
+four of those had accumulated in two different shapes, none announcing itself as a group.
+
+```
+Group:     rounded-lg border border-border bg-muted/50 p-0.5   role="radiogroup" + aria-label
+Option:    h-9 (sm) / h-10 (md) rounded-md                     role="radio" + aria-checked
+Selected:  bg-background text-foreground shadow-sm
+```
+
+Two rules the component enforces for you:
+
+- **The selected option is a raised neutral, never `bg-primary`.** A segmented control is a
+  refinement, not the view's committing action; a solid primary fill here competes with the
+  one button that is (§1.2, §7.1).
+- **Roving tabindex + arrow keys.** One tab stop for the group, arrows move within it and
+  wrap. `role="radio"` also earns the `select` cue from the delegated sound listener, which
+  is the right cue for "picked one of several" (`docs/sound-design.md`).
 
 ### 7.4 Inputs & forms (`input.tsx`, `label.tsx`)
 

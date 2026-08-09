@@ -25,6 +25,11 @@ import { wikiExamIdToProgressKey } from '@/lib/wikiParser'
 import { decayIfStale, type MasteryState } from '@/lib/mastery'
 import type { QuizMode } from '@/lib/parser'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { SegmentedControl, type SegmentedOption } from '@/components/ui/SegmentedControl'
+import { MasteryBadge } from '@/components/MasteryBadge'
+import { useActionBarHeight } from '@/hooks/useActionBarHeight'
+import { useQuestionAttempts } from '@/hooks/useQuestionAttempts'
 import { cn } from '@/lib/utils'
 import { getSittingPdfLink, getExamPdfLink } from '@/data/examPdfLinks'
 
@@ -64,23 +69,14 @@ const MOCK_EXAM_QUESTIONS: Record<string, number> = {
 
 const QUICK_COUNTS = [1, 3, 5, 10]
 
-// ─── Mastery level labels and badge styles ────────────────────────────────────
-
-const STATE_LABEL: Record<MasteryState, string> = {
-  new:      'New',
-  level1:   'Level 1',
-  level2:   'Level 2',
-  level3:   'Level 3',
-  forgotten: 'Forgotten',
-}
-
-const STATE_BADGE: Record<MasteryState, string> = {
-  new:       'border-border text-muted-foreground bg-muted/50',
-  level1:    'border-green-200 text-green-600 bg-green-50 dark:border-green-800 dark:text-green-400 dark:bg-green-950/40',
-  level2:    'border-green-300 text-green-700 bg-green-100 dark:border-green-700 dark:text-green-300 dark:bg-green-950/60',
-  level3:    'border-green-400 text-green-800 bg-green-200 dark:border-green-600 dark:text-green-200 dark:bg-green-950/80',
-  forgotten: 'border-red-200 text-red-600 bg-red-50 dark:border-red-800 dark:text-red-400 dark:bg-red-950/40',
-}
+/**
+ * What the builder is drawing from. This used to be two separate pieces of
+ * state — a `conceptMode` of today/custom, and a `mode` of quiz/mock-exam that
+ * the *question-count* row set — which meant picking "Mock Exam" from a row of
+ * 1/3/5/10 silently changed the view. All three are one choice, so they're one
+ * control now (see `SOURCE_OPTIONS` below).
+ */
+type QuizSource = 'today' | 'custom' | 'mock-exam'
 
 // ─── Collapsible learning-objective group (mirrors example callout style) ─────
 
@@ -91,6 +87,21 @@ function parseGroupWeight(weight?: string): number | null {
   const singleMatch = weight.match(/(\d+(?:\.\d+)?)\s*%/)
   if (singleMatch) return parseFloat(singleMatch[1])
   return null
+}
+
+/** Marks a concept the day's study plan has scheduled. */
+function TodayChip({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary',
+        className,
+      )}
+    >
+      <CalendarCheck className="h-3 w-3 shrink-0" aria-hidden />
+      Today
+    </span>
+  )
 }
 
 function GroupSection({
@@ -110,10 +121,12 @@ function GroupSection({
   conceptLevelMap?: Map<string, MasteryState>
   isPremium?: boolean
 }) {
-  const [open, setOpen] = useState(false)
-  const allSelected = group.subtopics.every(s => selectedSubtopics.includes(s))
-  const someSelected = group.subtopics.some(s => selectedSubtopics.includes(s))
   const selectedCount = group.subtopics.filter(s => selectedSubtopics.includes(s)).length
+  const allSelected = selectedCount === group.subtopics.length
+  const someSelected = selectedCount > 0
+  // A group that already holds restored selections opens itself, so returning to
+  // the builder shows what's picked rather than a wall of collapsed rows.
+  const [open, setOpen] = useState(someSelected)
   const examPercentage = parseGroupWeight(group.weight)
 
   const rowBg = allSelected
@@ -123,63 +136,83 @@ function GroupSection({
     : 'group-hover:bg-accent/30'
 
   return (
-    <div className="rounded-lg overflow-hidden bg-background">
-      <div className="relative">
-        {/* Bar fill: weight indicator, hidden when any subtopics are selected */}
-        {examPercentage !== null && !(allSelected || someSelected) && (
-          <div
-            className="absolute inset-y-0 left-0 bg-card transition-all duration-300"
-            style={{ width: open ? '100%' : `${examPercentage}%` }}
-          />
-        )}
-        <div className="relative z-10 flex items-stretch group">
-          {/* Select-all checkmark circle */}
-          <button
-            type="button"
-            data-sound="tick"
-            onClick={e => onSelectAll(group, e)}
-            className={`flex items-center justify-center px-3 transition-colors duration-150 shrink-0 ${rowBg}`}
-            aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
-          >
-            {allSelected ? (
-              <CheckCircle2 className="h-5 w-5 text-primary" />
-            ) : someSelected ? (
-              <CheckCircle2 className="h-5 w-5 text-primary/40" />
-            ) : (
-              <Circle className="h-5 w-5 text-muted-foreground/60" />
-            )}
-          </button>
+    <div className="overflow-hidden rounded-lg bg-background">
+      <div className="flex items-stretch group">
+        {/* Select-all checkmark circle */}
+        <button
+          type="button"
+          role="checkbox"
+          aria-checked={allSelected ? true : someSelected ? 'mixed' : false}
+          data-sound="tick"
+          onClick={e => onSelectAll(group, e)}
+          className={cn(
+            'flex shrink-0 items-center justify-center px-3 transition-colors duration-150',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+            rowBg,
+          )}
+          aria-label={allSelected ? `Deselect all ${group.name}` : `Select all ${group.name}`}
+        >
+          {allSelected ? (
+            <CheckCircle2 className="h-5 w-5 text-primary" />
+          ) : someSelected ? (
+            <CheckCircle2 className="h-5 w-5 text-primary/40" />
+          ) : (
+            <Circle className="h-5 w-5 text-muted-foreground/60" />
+          )}
+        </button>
 
-          {/* Expand/collapse button */}
-          <button
-            type="button"
-            onClick={() => setOpen(v => !v)}
-            className={`flex-1 py-3 pr-4 text-left transition-colors duration-150 ${rowBg}`}
-            aria-expanded={open}
-          >
-            <div className="flex items-center gap-3 w-full">
-              <span className="font-medium flex-1 text-base text-left text-foreground">
-                {group.name}
-                {group.weight && (
-                  <span className="ml-1.5 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-primary/10 text-primary align-middle">
-                    {group.weight}
+        {/* Expand/collapse button */}
+        <button
+          type="button"
+          onClick={() => setOpen(v => !v)}
+          className={cn(
+            'flex-1 py-3 pr-3 text-left transition-colors duration-150',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
+            rowBg,
+          )}
+          aria-expanded={open}
+        >
+          <div className="flex w-full items-center gap-2">
+            <span className="min-w-0 flex-1 text-sm font-medium leading-snug text-foreground">
+              {group.name}
+            </span>
+            {/* Share of the exam. The number carries it; the bar underneath is
+                the same figure at a glance, on a muted track like every other
+                progress read in the app (style guide §7.5). It used to be a
+                full-height fill behind the row that vanished on selection and
+                grew to 100% on expand — three meanings, one shape. */}
+            {group.weight && (
+              <span className="flex shrink-0 flex-col items-end gap-1">
+                <span className="text-xs font-medium tabular-nums text-muted-foreground">
+                  {group.weight}
+                </span>
+                {examPercentage !== null && (
+                  <span
+                    className="h-1 w-10 overflow-hidden rounded-full bg-muted"
+                    role="img"
+                    aria-label={`${group.weight} of the exam`}
+                  >
+                    <span
+                      className="block h-full rounded-full bg-muted-foreground/50"
+                      style={{ width: `${Math.min(100, examPercentage)}%` }}
+                    />
                   </span>
                 )}
               </span>
-              {selectedCount > 0 && (
-                <span className="text-xs text-muted-foreground shrink-0">
-                  {selectedCount}/{group.subtopics.length}
-                </span>
-              )}
-              <ChevronDown
-                className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
-              />
-            </div>
-          </button>
-        </div>
+            )}
+            {selectedCount > 0 && (
+              <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+                {selectedCount}/{group.subtopics.length}
+              </span>
+            )}
+            <ChevronDown
+              className={`h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
+            />
+          </div>
+        </button>
       </div>
 
-      <div hidden={!open} className="pb-1 pt-1 bg-card">
+      <div hidden={!open} className="bg-card pb-1 pt-1">
         <div className="flex flex-col">
           {group.subtopics.map(subtopic => {
             const isSelected = selectedSubtopics.includes(subtopic)
@@ -189,31 +222,34 @@ function GroupSection({
               <button
                 key={subtopic}
                 type="button"
+                role="checkbox"
+                aria-checked={isSelected}
                 data-sound="tick"
                 onClick={() => onToggle(subtopic)}
-                className={`flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors ${
+                className={cn(
+                  'flex items-center gap-2.5 px-3 py-2.5 text-left transition-colors',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
                   isSelected
-                    ? 'text-primary bg-primary/10 hover:bg-primary/15'
-                    : 'text-primary/60 hover:text-primary hover:bg-primary/5'
-                }`}
+                    ? 'bg-primary/10 text-primary hover:bg-primary/15'
+                    : 'text-foreground hover:bg-accent/40',
+                )}
               >
                 {isSelected ? (
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
                 ) : (
-                  <Circle className="h-4 w-4 shrink-0 text-primary/30" />
+                  <Circle className="h-4 w-4 shrink-0 text-muted-foreground/50" />
                 )}
-                <span className="flex-1 text-sm font-medium leading-snug">
+                <span className="min-w-0 flex-1 text-sm font-medium leading-snug">
                   {subtopic}
                 </span>
-                {isPremium && conceptLevel !== undefined ? (
-                  <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium shrink-0 ${STATE_BADGE[conceptLevel]}`}>
-                    {STATE_LABEL[conceptLevel]}
-                  </span>
-                ) : isToday ? (
-                  <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium shrink-0 ${isSelected ? 'bg-primary/20 text-primary' : 'bg-primary/10 text-primary/70'}`}>
-                    today
-                  </span>
-                ) : null}
+                {/* Both signals, not one or the other. These used to be an
+                    if/else on mastery, and `conceptLevelMap` has an entry for
+                    every concept — so a premium user, the only kind with a
+                    study plan, could never see which concepts were in it. */}
+                {isToday && <TodayChip />}
+                {isPremium && conceptLevel !== undefined && (
+                  <MasteryBadge state={conceptLevel} compact />
+                )}
               </button>
             )
           })}
@@ -247,33 +283,44 @@ function ExamOptionCard({
   const description = subtitle ?? null
 
   return (
-    <button type="button" data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined} onClick={onClick} className="relative text-left w-full">
+    <button
+      type="button"
+      data-tour={exam.value === 'Probability' ? 'quiz-exam-p' : undefined}
+      onClick={onClick}
+      className="relative w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
       <Card className={cn(
         'h-full transition-all duration-150 overflow-hidden',
         isActive
           ? 'bg-primary/10 hover:bg-primary/25'
           : 'hover:bg-accent/30',
       )}>
-        <CardHeader className="pb-3">
+        <CardHeader className="p-4 pb-3">
           <CardTitle className="text-base leading-snug">{exam.label}</CardTitle>
           {description && (
             <CardDescription className="mt-0.5">{description}</CardDescription>
           )}
           <div className="mt-2 flex flex-wrap gap-1.5">
-            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-muted text-muted-foreground">
+            <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
               {questionCount} question{questionCount !== 1 ? 's' : ''}
             </span>
+            {/* Style guide §4.1: blue is the info hue, amber means "caution".
+                A scheduled date is information; being part-way through an exam
+                is neither, so it stays neutral rather than borrowing the
+                warning colour. Beta *is* a caution, and takes the amber that
+                the mobile nav's Research chip already uses for the same word —
+                it used to be emerald here and amber there. */}
             {isActive ? (
               <span className={cn(
-                'inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium',
+                'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
                 targetDate
                   ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+                  : 'bg-muted text-muted-foreground',
               )}>
-                {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In Progress'}
+                {targetDate ? `Exam: ${formatTargetDate(targetDate)}` : 'In progress'}
               </span>
             ) : isBeta ? (
-              <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <span className="inline-flex items-center rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
                 Beta
               </span>
             ) : null}
@@ -299,6 +346,8 @@ export default function Landing() {
   // Per-exam "questions left in today's plan" — badges the exam cards, so the
   // count is visible before an exam is even picked.
   const { byExam: todayQuizByExam } = useTodayQuizCounts()
+  // Attempt history, for the "new to you" read on the question deck.
+  const { byQuestionId: attemptsByQuestionId, tracked: attemptsTracked } = useQuestionAttempts()
 
   const initialTopic = searchParams.get('topic') ?? ''
   const initialMode = (searchParams.get('mode') as QuizMode | null) ?? 'quiz'
@@ -340,14 +389,19 @@ export default function Landing() {
     .map(e => e.value)
 
   const [topic, setTopic] = useState(initialTopic)
-  const [mode, setMode] = useState<QuizMode>(initialMode)
 
   const [selectedConcept, setSelectedConcept] = useState(initialConcept)
+
+  // What the quiz draws from: today's plan, a hand-picked set of topics, or a
+  // mock exam. One choice, one control — `mode` and `conceptMode` below are
+  // read-only views of it, kept so the launch/filter code reads unchanged.
+  const [source, setSource] = useState<QuizSource>(initialMode === 'mock-exam' ? 'mock-exam' : 'custom')
+  const mode: QuizMode = source === 'mock-exam' ? 'mock-exam' : 'quiz'
+  const conceptMode: 'today' | 'custom' = source === 'today' ? 'today' : 'custom'
 
   // Quiz-specific options
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([])
   const [isAdaptive, setIsAdaptive] = useState(false)
-  const [conceptMode, setConceptMode] = useState<'today' | 'custom'>('custom')
   const [count, setCount] = useState<number>(3)
   const reveal = 'during' as const
 
@@ -379,7 +433,7 @@ export default function Landing() {
   // Reset state and restore saved topic selections when exam topic or mode changes
   useEffect(() => {
     setIsAdaptive(false)
-    setConceptMode('custom')
+    setSource(prev => (prev === 'mock-exam' ? prev : 'custom'))
     setSelectedSitting(null)
     userPickedCountRef.current = false
     if (topic && mode === 'quiz') {
@@ -634,13 +688,13 @@ export default function Landing() {
       didApplyOverrideRef.current = true
       setSelectedConcepts(conceptOverrideRef.current)
       conceptOverrideRef.current = null
-      setConceptMode('custom')
+      setSource('custom')
       setIsAdaptive(false)
       return
     }
 
     if (!didApplyOverrideRef.current && examInProgress && isPremium && plan && planConceptCount > 0) {
-      setConceptMode('today')
+      setSource('today')
       setSelectedConcepts([])
       setIsAdaptive(false)
     }
@@ -742,7 +796,7 @@ export default function Landing() {
 
   function toggleConcept(concept: string) {
     setIsAdaptive(false)
-    setConceptMode('custom')
+    setSource('custom')
     setSelectedConcepts(prev =>
       prev.includes(concept) ? prev.filter(s => s !== concept) : [...prev, concept]
     )
@@ -751,13 +805,72 @@ export default function Landing() {
   function selectAllInGroup(group: { subtopics: string[] }, e: React.MouseEvent) {
     e.stopPropagation()
     setIsAdaptive(false)
-    setConceptMode('custom')
+    setSource('custom')
     const allSelected = group.subtopics.every(s => selectedConcepts.includes(s))
     setSelectedConcepts(prev =>
       allSelected
         ? prev.filter(s => !group.subtopics.includes(s))
         : [...new Set([...prev, ...group.subtopics])]
     )
+  }
+
+  // The one control that says what this quiz is drawn from. "Today's Plan" only
+  // appears for a signed-in learner working toward this exam — for everyone else
+  // it isn't a choice, so it isn't offered.
+  const showTodayOption = !!user && examInProgress
+  const sourceOptions = useMemo<SegmentedOption<QuizSource>[]>(() => {
+    const options: SegmentedOption<QuizSource>[] = []
+    if (showTodayOption) {
+      options.push({
+        value: 'today',
+        flex: 2,
+        ariaLabel: isPremium
+          ? `Today's plan${planConceptCount > 0 ? `, ${planConceptCount} concepts` : ''}`
+          : "Today's plan (premium)",
+        label: (
+          <>
+            <CalendarCheck className="h-3.5 w-3.5 shrink-0" aria-hidden />
+            <span className="truncate">Today's Plan</span>
+            {!isPremium && <Lock className="h-3 w-3 shrink-0 text-amber-500" aria-hidden />}
+            {isPremium && planConceptCount > 0 && (
+              <span className="text-xs tabular-nums text-muted-foreground">{planConceptCount}</span>
+            )}
+          </>
+        ),
+      })
+    }
+    options.push({
+      value: 'custom',
+      flex: showTodayOption ? 2 : 1,
+      ariaLabel: selectedConcepts.length > 0
+        ? `By topic, ${selectedConcepts.length} selected`
+        : 'By topic',
+      label: (
+        <>
+          <span className="truncate">By Topic</span>
+          {selectedConcepts.length > 0 && (
+            <span className="text-xs tabular-nums text-muted-foreground">{selectedConcepts.length}</span>
+          )}
+        </>
+      ),
+    })
+    options.push({
+      value: 'mock-exam',
+      flex: showTodayOption ? 2 : 1,
+      label: <span className="truncate">Mock Exam</span>,
+    })
+    return options
+  }, [showTodayOption, isPremium, planConceptCount, selectedConcepts.length])
+
+  function handleSourceChange(next: QuizSource) {
+    setSource(next)
+    if (next === 'today' && isPremium) {
+      setSelectedConcepts([])
+      setIsAdaptive(false)
+    }
+    // Leaving quiz mode invalidates a question count the user picked for it, and
+    // arriving at one should re-run the auto-size for today's plan.
+    if (next !== 'mock-exam') setSelectedSitting(null)
   }
 
   function handleStart() {
@@ -871,6 +984,16 @@ export default function Landing() {
 
   // How many the pool holds, and how many of those the quiz will pull.
   const poolCount = currentPool.length
+
+  // How much of the pool the learner has never seen. "349 questions" barely
+  // moves as topics are picked; "229 new to you" is the number that decides
+  // whether this draw is worth taking. Same attempt history the search rows and
+  // question lists read (see QuestionAttemptBadge in CLAUDE.md) — server-side
+  // only, so `tracked` is false for guests and the line is simply omitted.
+  const poolNewCount = useMemo(
+    () => currentPool.reduce((n, q) => n + (attemptsByQuestionId.has(q.id) ? 0 : 1), 0),
+    [currentPool, attemptsByQuestionId],
+  )
   const quizQuestionCount = mode === 'mock-exam'
     ? (selectedSitting ? poolCount : Math.min(mockExamCount, poolCount))
     : Math.min(count, poolCount)
@@ -932,6 +1055,49 @@ export default function Landing() {
   const hasTopic = topic !== ''
   const hasSelection = hasTopic || selectedConcept !== ''
 
+  // The bottom action bar's real height, published as `--action-bar-height` so
+  // the page below reserves exactly that much and the onboarding launcher can
+  // ride above it instead of landing on the Start button.
+  const actionBarRef = useRef<HTMLDivElement>(null)
+  useActionBarHeight(actionBarRef, hasSelection)
+
+  // ── Question count ────────────────────────────────────────────────────────
+  // "Full plan" carries its own value rather than its numeric count: when the
+  // plan happens to need 3 questions it would otherwise collide with the "3"
+  // option and light both.
+  const countOptions = useMemo<SegmentedOption<string>[]>(() => {
+    const options: SegmentedOption<string>[] = []
+    if (useTodaysPlan && todaysPlanFullCount > 0) {
+      options.push({
+        value: 'full',
+        flex: 2,
+        ariaLabel: `Full plan, ${todaysPlanFullCount} question${todaysPlanFullCount === 1 ? '' : 's'}`,
+        label: <span className="truncate">Full plan</span>,
+      })
+    }
+    for (const n of QUICK_COUNTS) {
+      options.push({
+        value: String(n),
+        ariaLabel: `${n} question${n === 1 ? '' : 's'}`,
+        label: <span className="tabular-nums">{n}</span>,
+        disabled: effectiveAvailableCount > 0 && n > effectiveAvailableCount,
+      })
+    }
+    return options
+  }, [useTodaysPlan, todaysPlanFullCount, effectiveAvailableCount])
+
+  const countValue = useTodaysPlan && count === todaysPlanFullCount ? 'full' : String(count)
+
+  function handleCountChange(next: string) {
+    userPickedCountRef.current = true
+    if (next === 'full') {
+      setCount(todaysPlanFullCount)
+      return
+    }
+    const n = Number(next)
+    setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n))
+  }
+
   // Filter reflecting the current quiz configuration — passed to the search
   // bar so it only previews questions from the active pool.
   const searchFilter = useMemo(() => {
@@ -980,29 +1146,47 @@ export default function Landing() {
   return (
     <>
     <QuizFloatingSearch filter={searchFilter} filterPills={filterPills} />
-    <div className={`container max-w-2xl mx-auto px-4 pt-0 space-y-8 ${hasSelection ? 'pb-72' : 'pb-12'}`}>
-      <div className="sticky top-14 md:top-28 lg:top-14 z-20 bg-background -mx-4 px-4 pt-3 pb-4 space-y-3">
-        {hasTopic && (
-          <button
-            type="button"
-            onClick={() => setTopic('')}
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            <span>change exam</span>
-          </button>
-        )}
-        <div className="flex items-center gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold tracking-tight">{hasTopic ? examLabel : 'Quiz'}</h1>
-            </div>
-            {!user && (
-              <p className="text-xs text-muted-foreground">
-                <a href="/auth" className="text-primary hover:underline">Sign in</a> to save your progress
-              </p>
-            )}
-          </div>
+    {/* Bottom padding tracks the action bar's measured height rather than a
+        fixed guess — the bar grows and shrinks with the deck card and the
+        sitting selector, and the old `pb-72` both clipped and over-reserved. */}
+    <div
+      className="container max-w-2xl mx-auto px-4 pt-0 space-y-6"
+      style={{
+        paddingBottom: hasSelection
+          ? 'calc(var(--action-bar-height, 16rem) + 1.5rem)'
+          : '3rem',
+      }}
+    >
+      {/* One compact row: back out of the exam, and the exam's name. This was a
+          three-row block ~155px tall on a phone, on a screen where fixed chrome
+          already took two-thirds of the viewport. */}
+      {/* Same treatment as the Dashboard's sticky header — a translucent blurred
+          background rather than a rule, which would stop at this container's
+          edge rather than spanning the viewport. */}
+      <div className="sticky top-14 md:top-28 lg:top-14 z-20 -mx-4 space-y-2 bg-background/95 px-4 py-2.5 backdrop-blur-sm">
+        <div className="flex items-center gap-2">
+          {hasTopic && (
+            <button
+              type="button"
+              onClick={() => setTopic('')}
+              aria-label="Change exam"
+              className="-ml-1.5 shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+          )}
+          <h1 className="min-w-0 flex-1 truncate text-2xl font-bold tracking-tight">
+            {hasTopic ? examLabel : 'Quiz'}
+          </h1>
+          {!user && (
+            <Link
+              to="/auth"
+              className="shrink-0 rounded-md text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="text-primary underline-offset-2 hover:underline">Sign in</span>
+              <span className="hidden sm:inline"> to save progress</span>
+            </Link>
+          )}
         </div>
 
         {selectedConcept && (
@@ -1031,24 +1215,18 @@ export default function Landing() {
           {!hasTopic && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">Exam</label>
-                <div className="flex items-center rounded-lg border bg-muted/50 p-0.5 gap-0.5">
-                  {(['SOA', 'CAS'] as const).map(tab => (
-                    <button
-                      key={tab}
-                      type="button"
-                      onClick={() => handleSetFilter(tab)}
-                      className={cn(
-                        'px-5 py-1.5 rounded-md text-sm font-medium transition-colors',
-                        activeFilter === tab
-                          ? 'bg-background text-foreground shadow-sm'
-                          : 'text-muted-foreground hover:text-foreground',
-                      )}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
+                <p className="text-sm font-medium">Exam</p>
+                <SegmentedControl
+                  label="Examining body"
+                  size="sm"
+                  value={activeFilter}
+                  onChange={handleSetFilter}
+                  options={[
+                    { value: 'SOA', label: 'SOA' },
+                    { value: 'CAS', label: 'CAS' },
+                  ]}
+                  className="shrink-0"
+                />
               </div>
               <div className="space-y-4">
                 {filteredTrackGroups.map(group => (
@@ -1082,94 +1260,74 @@ export default function Landing() {
 
           {hasTopic && (
             <>
-              {/* ── Quiz mode options ──────────────────────────────────── */}
-              {mode === 'quiz' && (
-                <div className="space-y-3">
-                  {/* Today's Plan / By Topic segmented control */}
-                  {user && examInProgress && !quizModeResolved && (
-                    <div className="h-9 rounded-xl border border-input bg-muted/30 animate-pulse" />
-                  )}
-                  {user && examInProgress && quizModeResolved && (
-                    <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setConceptMode('today')
-                          if (isPremium) {
-                            setSelectedConcepts([])
-                            setIsAdaptive(false)
-                          }
-                        }}
-                        className={`flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg text-sm font-medium transition-colors ${
-                          conceptMode === 'today'
-                            ? 'bg-primary text-primary-foreground shadow-sm'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
-                        }`}
+              {/* ── What the quiz draws from ───────────────────────────── */}
+              <div className="space-y-3">
+                {!quizModeResolved ? (
+                  <div className="h-11 rounded-lg border border-border bg-muted/50 animate-pulse" />
+                ) : (
+                  <SegmentedControl
+                    label="What to quiz on"
+                    value={source}
+                    onChange={handleSourceChange}
+                    options={sourceOptions}
+                  />
+                )}
+
+                {/* Today's Plan content */}
+                {quizModeResolved && source === 'today' && (
+                  !isPremium ? (
+                    <div className="rounded-lg bg-muted/40 px-4 py-3 flex items-start gap-3">
+                      <div className="flex-1 space-y-1">
+                        <p className="text-sm font-medium">Personalized daily study plan</p>
+                        <p className="text-xs text-muted-foreground">Get a daily study schedule tailored to your exam date and mastery progress.</p>
+                      </div>
+                      <Link
+                        to="/upgrade"
+                        className="shrink-0 px-3 py-1.5 rounded-md bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 transition-colors mt-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                       >
-                        <CalendarCheck className="h-3.5 w-3.5 shrink-0" />
-                        <span>Today's Plan</span>
-                        {!isPremium && <Lock className="h-3 w-3 shrink-0 text-amber-500" />}
-                        {isPremium && planConceptCount > 0 && (
-                          <span className="text-xs opacity-75">· {planConceptCount}</span>
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setConceptMode('custom')}
-                        className={`flex-1 flex items-center justify-center gap-1.5 h-9 rounded-lg text-sm font-medium transition-colors ${
-                          conceptMode === 'custom'
-                            ? 'bg-primary text-primary-foreground shadow-sm'
-                            : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
-                        }`}
-                      >
-                        <span>By Topic</span>
-                        {conceptMode === 'custom' && selectedConcepts.length > 0 && (
-                          <span className="text-xs opacity-75">· {selectedConcepts.length}</span>
-                        )}
-                      </button>
+                        Go Pro
+                      </Link>
                     </div>
-                  )}
+                  ) : planConceptCount === 0 ? (
+                    <div className="rounded-lg bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+                      No concepts scheduled for today. Set your exam date in the dashboard to generate a study plan.
+                    </div>
+                  ) : (
+                    <ul className="overflow-hidden rounded-lg bg-muted/30">
+                      {todayConceptDisplayNames.map(concept => (
+                        <li key={concept} className="flex items-center gap-2.5 px-3 py-2.5">
+                          <Check className="h-4 w-4 shrink-0 text-primary/60" aria-hidden />
+                          <span className="min-w-0 flex-1 text-sm font-medium leading-snug">{concept}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )
+                )}
 
-                  {/* Today's Plan content */}
-                  {user && examInProgress && quizModeResolved && conceptMode === 'today' && (
-                    !isPremium ? (
-                      <div className="rounded-lg bg-muted/40 px-4 py-3 flex items-start gap-3">
-                        <div className="flex-1 space-y-1">
-                          <p className="text-sm font-medium">Personalized daily study plan</p>
-                          <p className="text-xs text-muted-foreground">Get a daily study schedule tailored to your exam date and mastery progress.</p>
-                        </div>
-                        <Link
-                          to="/upgrade"
-                          className="shrink-0 px-3 py-1.5 rounded-md bg-amber-500 text-white text-xs font-semibold hover:bg-amber-600 transition-colors mt-0.5"
-                        >
-                          Go Pro
-                        </Link>
-                      </div>
-                    ) : planConceptCount === 0 ? (
-                      <div className="rounded-lg bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
-                        No concepts scheduled for today. Set your exam date in the dashboard to generate a study plan.
-                      </div>
+                {/* By Topic concept groups */}
+                {quizModeResolved && source === 'custom' && (
+                  <div className="space-y-2">
+                    {conceptsLoading && orderedConcepts.length === 0 ? (
+                      <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>
                     ) : (
-                      <div className="rounded-lg bg-muted/30 overflow-hidden">
-                        <div>
-                          {todayConceptDisplayNames.map(concept => (
-                            <div key={concept} className="flex items-center gap-2.5 px-3 py-2.5">
-                              <Check className="h-4 w-4 shrink-0 text-primary/60" />
-                              <span className="flex-1 text-sm font-medium leading-snug">{concept}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )
-                  )}
-
-                  {/* By Topic concept groups */}
-                  {quizModeResolved && (!user || !examInProgress || conceptMode === 'custom') && (
-                    <div className="space-y-2">
-                      {conceptsLoading && orderedConcepts.length === 0 ? (
-                        <p className="text-xs text-muted-foreground px-1">Loading concepts…</p>
-                      ) : (
-                        groupedConcepts.map(group => (
+                      <>
+                        {/* The default is "everything", and four empty circles
+                            with a live Start button didn't say so. */}
+                        <p className="px-1 text-xs text-muted-foreground">
+                          {selectedConcepts.length === 0
+                            ? 'All topics — pick some to narrow the draw.'
+                            : `${selectedConcepts.length} topic${selectedConcepts.length === 1 ? '' : 's'} selected.`}
+                          {selectedConcepts.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setSelectedConcepts([])}
+                              className="ml-1.5 rounded underline underline-offset-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            >
+                              Clear
+                            </button>
+                          )}
+                        </p>
+                        {groupedConcepts.map(group => (
                           <GroupSection
                             key={group.name}
                             group={group}
@@ -1180,50 +1338,50 @@ export default function Landing() {
                             conceptLevelMap={isPremium ? conceptLevelMap : undefined}
                             isPremium={isPremium}
                           />
-                        ))
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
+                        ))}
+                      </>
+                    )}
+                  </div>
+                )}
 
-              {/* ── Mock Exam mode info ────────────────────────────────── */}
-              {mode === 'mock-exam' && (
-                <div className="rounded-lg bg-muted/40 px-4 py-3 space-y-1">
-                  <p className="text-sm font-medium">
-                    {selectedSitting !== null
-                      ? `${sittingQuestionCount} questions`
-                      : `${mockExamCount} questions`
-                    }
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {selectedSitting !== null
-                      ? `All questions from the ${sittingLabel(selectedSitting.year, selectedSitting.session)} sitting.`
-                      : `Distributed across all ${examLabel} topics to mirror the real exam.`
-                    }
-                    {' '}Answers and explanations are revealed at the end.
-                  </p>
-                  {(() => {
-                    const sitting = selectedSitting
-                    const pdfLink = sitting
-                      ? getSittingPdfLink(topic, sitting.year, sitting.session)
-                      : availableSittings.length === 0
-                        ? getExamPdfLink(topic)
-                        : null
-                    return pdfLink ? (
-                      <a
-                        href={pdfLink.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 hover:underline transition-colors pt-0.5"
-                      >
-                        <FileDown className="h-3 w-3" />
-                        {pdfLink.label}
-                      </a>
-                    ) : null
-                  })()}
-                </div>
-              )}
+                {/* Mock Exam content */}
+                {quizModeResolved && source === 'mock-exam' && (
+                  <div className="rounded-lg bg-muted/40 px-4 py-3 space-y-1">
+                    <p className="text-sm font-medium">
+                      {selectedSitting !== null
+                        ? `${sittingQuestionCount} questions`
+                        : `${mockExamCount} questions`
+                      }
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {selectedSitting !== null
+                        ? `All questions from the ${sittingLabel(selectedSitting.year, selectedSitting.session)} sitting.`
+                        : `Distributed across all ${examLabel} topics to mirror the real exam.`
+                      }
+                      {' '}Answers and explanations are revealed at the end.
+                    </p>
+                    {(() => {
+                      const sitting = selectedSitting
+                      const pdfLink = sitting
+                        ? getSittingPdfLink(topic, sitting.year, sitting.session)
+                        : availableSittings.length === 0
+                          ? getExamPdfLink(topic)
+                          : null
+                      return pdfLink ? (
+                        <a
+                          href={pdfLink.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 hover:underline transition-colors pt-0.5"
+                        >
+                          <FileDown className="h-3 w-3" />
+                          {pdfLink.label}
+                        </a>
+                      ) : null
+                    })()}
+                  </div>
+                )}
+              </div>
 
             </>
           )}
@@ -1232,13 +1390,18 @@ export default function Landing() {
     </div>
 
     {hasSelection && (
-      <div className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 bg-background/95 backdrop-blur-sm">
+      <div
+        ref={actionBarRef}
+        className="fixed bottom-14 md:bottom-0 left-0 lg:left-[var(--sidebar-width)] right-0 z-20 border-t border-border bg-background/95 backdrop-blur-sm"
+      >
         <div className="container max-w-2xl mx-auto px-4 pt-3 pb-4 space-y-3">
           {/* ── Question deck: availability + shuffle the draw ────────── */}
           {poolCount > 0 && (
             <QuestionDeckCard
               available={poolCount}
               selected={quizQuestionCount}
+              newCount={poolNewCount}
+              attemptsTracked={attemptsTracked}
               onShuffle={handleShuffle}
               shuffleTick={shuffleTick}
               justShuffled={justShuffled}
@@ -1246,77 +1409,57 @@ export default function Landing() {
             />
           )}
 
-          <div className="flex rounded-xl border border-input bg-muted/30 p-0.5 gap-0.5">
-            {mode === 'quiz' && useTodaysPlan && todaysPlanFullCount > 0 && (
-              <button
-                type="button"
-                onClick={() => { userPickedCountRef.current = true; setMode('quiz'); setCount(todaysPlanFullCount) }}
-                className={`flex-[2] h-10 rounded-lg text-sm font-bold transition-colors px-2 ${
-                  mode === 'quiz' && count === todaysPlanFullCount
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
-                }`}
-              >
-                Full plan
-              </button>
-            )}
-            {QUICK_COUNTS.map(n => (
-              <button
-                key={n}
-                type="button"
-                onClick={() => { userPickedCountRef.current = true; setMode('quiz'); setCount(Math.min(n, effectiveAvailableCount > 0 ? effectiveAvailableCount : n)) }}
-                className={`flex-1 h-10 rounded-lg text-sm font-bold transition-colors ${
-                  mode === 'quiz' && count === n && effectiveAvailableCount >= n
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
-                }`}
-              >
-                {n}
-              </button>
-            ))}
-            <button
-              type="button"
-              onClick={() => setMode('mock-exam')}
-              className={`flex-[2] h-10 rounded-lg text-sm font-bold transition-colors px-2 ${
-                mode === 'mock-exam'
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/60'
-              }`}
-            >
-              Mock Exam
-            </button>
-          </div>
+          {/* ── How many questions ────────────────────────────────────
+              Counts only. "Mock Exam" used to sit at the end of this row,
+              which made a mode switch look like a quantity — it lives in the
+              source control at the top of the page now. */}
+          {mode === 'quiz' && (
+            <SegmentedControl
+              label="Question count"
+              value={countValue}
+              onChange={handleCountChange}
+              options={countOptions}
+            />
+          )}
 
           {/* ── Sitting selector (real exam sittings) ─────────────────── */}
           {mode === 'mock-exam' && availableSittings.length > 0 && (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground shrink-0">Sitting:</span>
-              <div className="flex gap-1.5 flex-wrap">
+              <span className="text-xs text-muted-foreground shrink-0" id="sitting-label">Sitting:</span>
+              <div className="flex gap-1.5 flex-wrap" role="radiogroup" aria-labelledby="sitting-label">
                 <button
                   type="button"
+                  role="radio"
+                  aria-checked={selectedSitting === null}
                   onClick={() => setSelectedSitting(null)}
-                  className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                  className={cn(
+                    'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
                     selectedSitting === null
                       ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
-                  }`}
+                      : 'bg-muted text-muted-foreground hover:bg-accent hover:text-foreground',
+                  )}
                 >
                   Mix
                 </button>
-                {availableSittings.map(s => {
-                  const isActive = selectedSitting?.year === s.year && selectedSitting?.session === s.session
+                {availableSittings.map(sit => {
+                  const isActive = selectedSitting?.year === sit.year && selectedSitting?.session === sit.session
                   return (
                     <button
-                      key={`${s.year}|${s.session ?? ''}`}
+                      key={`${sit.year}|${sit.session ?? ''}`}
                       type="button"
-                      onClick={() => setSelectedSitting({ year: s.year, session: s.session })}
-                      className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+                      role="radio"
+                      aria-checked={isActive}
+                      onClick={() => setSelectedSitting({ year: sit.year, session: sit.session })}
+                      className={cn(
+                        'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
                         isActive
                           ? 'bg-primary text-primary-foreground'
-                          : 'bg-muted text-muted-foreground hover:text-foreground hover:bg-accent'
-                      }`}
+                          : 'bg-muted text-muted-foreground hover:bg-accent hover:text-foreground',
+                      )}
                     >
-                      {sittingLabel(s.year, s.session)}
+                      {sittingLabel(sit.year, sit.session)}
                     </button>
                   )
                 })}
@@ -1325,21 +1468,31 @@ export default function Landing() {
           )}
 
           <div className="relative">
-            <button
+            <Button
               type="button"
+              size="lg"
               data-tour="start-quiz"
               onClick={handleStart}
-              className="w-full flex items-center justify-center gap-3 px-4 py-4 rounded-xl bg-primary text-primary-foreground text-base font-semibold hover:bg-primary/90 active:bg-primary/80 transition-colors"
+              disabled={quizQuestionCount === 0}
+              className="h-14 w-full gap-3 rounded-xl text-base font-semibold"
             >
-              <Play className="h-5 w-5" />
+              <Play className="h-5 w-5" aria-hidden />
               Start {mode === 'mock-exam' ? 'Mock Exam' : 'Quiz'}
-            </button>
+            </Button>
             {/* Only badge a launch that's actually sized to finish today's plan —
                 picking a smaller count means this quiz won't complete it. */}
             {mode === 'quiz' && useTodaysPlan && count === todaysPlanFullCount && (
               <TodayQuizCornerBadge count={badgeCountFor(todayQuizByExam[examIdForPlan ?? ''])} size="lg" />
             )}
           </div>
+
+          {/* The selection can filter down to nothing; say so rather than
+              launching into the quiz's "No questions found" screen. */}
+          {quizQuestionCount === 0 && (
+            <p className="text-center text-xs text-muted-foreground">
+              No questions match this selection. Pick different topics to start.
+            </p>
+          )}
         </div>
       </div>
     )}

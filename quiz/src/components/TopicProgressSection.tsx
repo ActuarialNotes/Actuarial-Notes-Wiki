@@ -12,6 +12,7 @@ import {
   type MasteryState,
 } from '@/lib/mastery'
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
+import { MASTERY_LABEL, MASTERY_TEXT } from '@/lib/masteryBadge'
 import { ConceptDetailModal } from '@/components/ConceptDetailModal'
 import {
   isScheduledToday,
@@ -21,21 +22,6 @@ import {
   type PacingStatus,
 } from '@/lib/studyPlan'
 
-const STATE_LABEL: Record<MasteryState, string> = {
-  new: 'New',
-  level1: 'Level 1',
-  level2: 'Level 2',
-  level3: 'Level 3',
-  forgotten: 'Forgotten',
-}
-
-const STATE_TEXT_COLOR: Record<MasteryState, string> = {
-  new: 'text-muted-foreground',
-  level1: 'text-green-600 dark:text-green-500',
-  level2: 'text-green-700 dark:text-green-400',
-  level3: 'text-green-800 dark:text-green-300',
-  forgotten: 'text-red-500',
-}
 
 // ── Plan status badge ─────────────────────────────────────────────────────────
 
@@ -241,8 +227,8 @@ export function TopicProgressSection({ syllabus, masteryRecords, studyPlan }: Pr
                             {studyPlan && state !== 'level3' && (
                               <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
                             )}
-                            <span className={`text-xs font-medium shrink-0 ${STATE_TEXT_COLOR[state]}`}>
-                              {STATE_LABEL[state]}
+                            <span className={`text-xs font-medium shrink-0 ${MASTERY_TEXT[state]}`}>
+                              {MASTERY_LABEL[state]}
                             </span>
                           </button>
                         )

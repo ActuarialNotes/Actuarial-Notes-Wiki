@@ -13,6 +13,7 @@ import { type MasteryState } from '@/lib/mastery'
 import type { WikiExamSyllabus } from '@/lib/wikiParser'
 import { NavProgressBar } from '@/components/NavProgressBar'
 import { QuestionAttemptBadge } from '@/components/QuestionAttemptBadge'
+import { MasteryBadge } from '@/components/MasteryBadge'
 
 function linkMatchesConcept(link: string, conceptName: string): boolean {
   const lower = conceptName.toLowerCase()
@@ -26,14 +27,6 @@ const DIFFICULTY_COLORS: Record<Difficulty, string> = {
   easy: 'bg-green-100 text-green-800 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800',
   medium: 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-300 dark:border-yellow-800',
   hard: 'bg-red-100 text-red-800 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800',
-}
-
-const MASTERY_BADGE: Record<MasteryState, { label: string; className: string }> = {
-  new:      { label: 'New',      className: 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:border-gray-700 border' },
-  level1:   { label: 'Level 1',  className: 'bg-green-50 text-green-600 border-green-200 dark:bg-green-950/20 dark:text-green-500 dark:border-green-900 border' },
-  level2:   { label: 'Level 2',  className: 'bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800 border' },
-  level3:   { label: 'Level 3',  className: 'bg-green-200 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-700 border' },
-  forgotten: { label: 'Forgotten', className: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800 border' },
 }
 
 export type TabMode = 'definition' | 'questions' | 'syllabus'
@@ -261,7 +254,6 @@ export function ConceptDetailModal({
   }, [conceptFilter])
 
   const navigate = useNavigate()
-  const badge = MASTERY_BADGE[currentMasteryState] ?? MASTERY_BADGE.new
 
   function openInStudyGuide() {
     navigate(syllabus?.fileName
@@ -371,9 +363,7 @@ export function ConceptDetailModal({
         {/* Header */}
         <div className="flex items-center gap-2 px-4 py-3 shrink-0">
           <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-            <span className={`self-start text-xs px-2 py-0.5 rounded-full ${badge.className}`}>
-              {badge.label}
-            </span>
+            <MasteryBadge state={currentMasteryState} size="sm" className="self-start" />
             <span className="font-semibold text-base truncate">{currentConceptName}</span>
           </div>
           <button

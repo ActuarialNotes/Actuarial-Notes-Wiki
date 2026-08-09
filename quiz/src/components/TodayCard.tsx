@@ -39,20 +39,10 @@ import { getDailyGems } from '@/lib/dailyProgressStore'
 import { useTodayCompletions } from '@/hooks/useTodayCompletions'
 import { buildTodayTargets, isConceptDoneToday } from '@/lib/planCompletion'
 import { StudyPlanCompletionCeremony } from '@/components/StudyPlanCompletionCeremony'
+import { MasteryBadge } from '@/components/MasteryBadge'
+import { MASTERY_LABEL } from '@/lib/masteryBadge'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-
-const STATE_LABEL: Record<MasteryState, string> = {
-  new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
-}
-
-const STATE_BADGE: Record<MasteryState, string> = {
-  new:       'bg-muted text-muted-foreground border-transparent',
-  level1:    'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40',
-  level2:    'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-500/40',
-  level3:    'bg-green-500/15 text-green-700 dark:text-green-300 border-green-500/40',
-  forgotten: 'bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/40',
-}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -188,9 +178,7 @@ function StudyPlanTracker({
                       {studyPlan && state !== 'level3' && (
                         <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
                       )}
-                      <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${STATE_BADGE[state]}`}>
-                        {STATE_LABEL[state]}
-                      </span>
+                      <MasteryBadge state={state} />
                     </button>
                   )
                 })}
@@ -482,7 +470,7 @@ export function TodayCard({
                       <span className={`text-sm flex-1 min-w-0 truncate ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
                         {name}
                       </span>
-                      <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[target]}</span>
+                      <span className="text-xs text-muted-foreground shrink-0">→ {MASTERY_LABEL[target]}</span>
                     </button>
                   </li>
                 )
@@ -531,7 +519,7 @@ export function TodayCard({
                     <li key={i} className="flex items-center gap-1.5 text-xs text-green-700 dark:text-green-400">
                       <span className="font-medium">{lu.conceptSlug}</span>
                       <span className="text-green-500/70">→</span>
-                      <span>{STATE_LABEL[lu.to]}</span>
+                      <span>{MASTERY_LABEL[lu.to]}</span>
                     </li>
                   ))}
               </ul>

@@ -1224,47 +1224,109 @@ summary .katex-display,
 }
 
 /* "Clear Completed Flashcards" sweep. Each card runs one 1050ms timeline
-   (CLEAR_CARD_MS in Flashcards.tsx) in four beats, each one triggering the
+   (CLEAR_CARD_MS in Flashcards.tsx) in five beats, each one triggering the
    next: a green line races around the border and closes (0–40%), green floods
    out from the middle of the card (41–67%), a checkmark is stroked over it
-   (46–70%), and after a beat to land the card tips back and lifts off the deck
-   (75–100%) before it's dropped into a dated pack. Cards start faster than
-   they finish, so several are mid-clear at once and the deck reads as one wave
-   rolling down it rather than a queue. */
+   (46–70%), and after a beat to land the filled card draws a breath and
+   collapses into its own centre (76–90%), leaving a puff of little lines
+   flicking outward from the gap it left (85–100%) before it's dropped into a
+   dated pack. Cards start faster than they finish, so several are mid-clear at
+   once and the deck reads as one wave rolling down it rather than a queue. */
 
 /* Every moving part below animates `transform`, `opacity` or an SVG dash —
-   never a gradient, a clip-path or a box-shadow. That is the difference between
+   never a gradient, a clip-path or a box-shadow. (The one exception, the card's
+   own `visibility` step, is a single discrete flip, not a per-frame tween.)
+   That is the difference between
    this sweep holding 60fps and dropping every other frame: with half a dozen
    cards mid-clear at once, anything that repaints a card-sized area per frame
    is paid six times over. Measured on a 6x-throttled phone profile, 12 cards:
    the old conic-gradient ring plus clip-path wash gave a 33ms p95 (~14 dropped
    frames a sweep); this gives 16.8ms and ~1. */
 
+/* The card itself never moves — it only steps to `visibility: hidden` the
+   instant the implode starts, which drops its background, its ring, its
+   collected-card sheen and all of its text in one go. Doing it with visibility
+   rather than opacity or a scale is what makes the puff of lines possible:
+   visibility is the one hiding mechanism a descendant can opt back out of, so
+   the overlay layers below stay on screen (each re-declares
+   `visibility: visible`) while everything that made this look like a card is
+   gone. The green fill the user sees collapsing is `.flashcard-clear-body`. */
 .flashcard-clearing {
   animation: flashcard-clearing 1050ms both;
   pointer-events: none;
-  transform-origin: 50% 55%;
-  will-change: transform, opacity;
 }
 @keyframes flashcard-clearing {
-  /* The card holds still through the ring and the flood, then takes one breath
-     in and drops away backwards. Only transform and opacity move here — the
-     green halo rides along on the wash's own fade-in below, so nothing has to
-     repaint a shadow per frame with half a dozen cards clearing at once. */
-  0%, 75% {
-    opacity: 1;
-    transform: perspective(900px) translateY(0) rotateX(0deg) scale(1);
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  83% {
-    opacity: 1;
-    transform: perspective(900px) translateY(-9px) rotateX(0deg) scale(1.04);
-    animation-timing-function: cubic-bezier(0.5, 0, 0.85, 0.3);
-  }
-  100% {
-    opacity: 0;
-    transform: perspective(900px) translateY(-56px) rotateX(34deg) scale(0.7);
-  }
+  0%, 74%   { visibility: visible; }
+  75%, 100% { visibility: hidden; }
+}
+
+/* The filled card collapsing to a point. Every layer of the fill — the border
+   ring, the halo, the green wash and the checkmark — is parented here so that
+   one transform on one element implodes all four together; their own timelines
+   (below) are untouched and simply ride along. `inset: 0` + `border-radius:
+   inherit` mean the layers are laid out against exactly the box they used to
+   be laid out against, so nothing inside had to be re-measured. */
+.flashcard-clear-body {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  visibility: visible;
+  pointer-events: none;
+  /* Above the card's own content, as the wash alone used to be — the layers
+     inside now stack against this element rather than against the card. */
+  z-index: 15;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation: flashcard-clear-body 1050ms both;
+}
+@keyframes flashcard-clear-body {
+  /* Holds through the ring and the flood, swells a hair as if it were about to
+     lift off, then gets pulled into its own middle and snuffed out. */
+  0%, 76%  { opacity: 1; transform: scale(1);    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  80%      { opacity: 1; transform: scale(1.05); animation-timing-function: cubic-bezier(0.55, 0.08, 0.78, 0.3); }
+  88%      { opacity: 1; transform: scale(0.05); }
+  90%,100% { opacity: 0; transform: scale(0); }
+}
+
+/* The little "gone" lines. They live outside `.flashcard-clear-body` on
+   purpose: they have to be at full size at 100%, when the card they came from
+   has been at scale 0 for a tenth of a second. Eight strokes in one SVG, moved
+   by a single scale + fade, so the whole puff costs one composited layer. */
+.flashcard-clear-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 92px;
+  height: 92px;
+  margin: -46px 0 0 -46px;
+  z-index: 30;
+  visibility: visible;
+  pointer-events: none;
+  overflow: visible;
+  fill: none;
+  /* The same green the ring and the fill are drawn in, so the lines read as the
+     card's last trace and not as a new colour arriving. It is also the one that
+     survives both themes: green-400 disappears against a light background. */
+  stroke: rgb(34 197 94);
+  /* User units: the 48-unit viewBox is drawn at 92px, so these land at roughly
+     2.5px and 1.7px on screen. */
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  animation: flashcard-clear-burst 1050ms both;
+}
+.flashcard-clear-burst-short {
+  stroke-width: 0.9;
+  opacity: 0.8;
+}
+@keyframes flashcard-clear-burst {
+  /* Two beats, not one. The first is the flick — fully lit at 88%, just as the
+     fill is squeezed out, so the lines read as what's left behind rather than
+     as decoration on a card that is still there. The second is a slower drift
+     outward while they fade, which is what keeps them from looking like a
+     loading spinner that blinked once. */
+  0%, 85% { opacity: 0; transform: scale(0.25); animation-timing-function: cubic-bezier(0.15, 0.75, 0.35, 1); }
+  88%     { opacity: 1; transform: scale(0.8);  animation-timing-function: cubic-bezier(0.3, 0.45, 0.6, 1); }
+  100%    { opacity: 0; transform: scale(1.5); }
 }
 
 /* The green line drawing itself around the card border. An SVG rounded rect
@@ -1291,8 +1353,10 @@ summary .katex-display,
   40%,100% { stroke-dashoffset: 0; }
 }
 @keyframes flashcard-clear-ring-fade {
-  0%, 75% { opacity: 1; }
-  100%    { opacity: 0; }
+  /* Gone by the time the card is a dot, so the outline is never left hanging
+     at full size around a fill that has already shrunk out from under it. */
+  0%, 76%  { opacity: 1; }
+  86%,100% { opacity: 0; }
 }
 
 /* Green flooding out from the middle of the card once the ring closes — a
@@ -1378,8 +1442,13 @@ summary .katex-display,
   .collect-card-snake-ring::before, .collect-card-absorb,
   .collect-bloom, .collect-shake, .flashcard-complete-ripple,
   .flashcard-nav-glow, .flashcard-nav-ring, .flashcard-badge-pop, .collect-done-pop, .flashcard-complete-pop { animation: none; }
-  /* Keep a plain green-flash fade so cards still visibly leave, without motion. */
+  /* Keep a plain green-flash fade so cards still visibly leave, without motion.
+     The card stays visible here (no visibility step) and simply fades, which
+     takes the fill and the checkmark with it — so the implode and its puff of
+     lines are switched off rather than replayed slowly. */
   .flashcard-clearing { animation: flashcard-clearing-fade 0.3s ease-out both; }
+  .flashcard-clear-body { animation: none; transform: none; }
+  .flashcard-clear-burst { display: none; }
   .flashcard-clear-ring, .flashcard-clear-glow { display: none; }
   .flashcard-clear-wash { opacity: 0.9; }
   .flashcard-clear-wash > span { animation: none; transform: scale(1); }

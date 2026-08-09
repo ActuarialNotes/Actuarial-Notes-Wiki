@@ -99,8 +99,8 @@ const GROUP_LABELS: { key: GroupBy; label: string }[] = [
 ]
 
 // How long one card's "clear" animation (border ring → green flood + checkmark
-// → the card tipping back and lifting away; see .flashcard-clearing and friends
-// in index.css) runs.
+// → the card collapsing into its own centre and puffing out a ring of little
+// lines; see .flashcard-clearing and friends in index.css) runs.
 const CLEAR_CARD_MS = 1050
 
 // Gap between one card starting its clear and the next one starting. Shorter
@@ -128,15 +128,33 @@ function clearStaggerFor(count: number): number {
 // of the card; the shared timeline lives in index.css. Each is its own element
 // so that every one of them can animate a transform or an opacity and nothing
 // has to repaint mid-sweep.
+//
+// The four are gathered under one `.flashcard-clear-body` because that wrapper
+// is what implodes at the end — a single transform collapses the finished card
+// to a point. The burst of little "gone" lines is deliberately *outside* it, so
+// it is still full size when the thing it came from has shrunk away to nothing.
 const CLEAR_OVERLAY = (
   <>
-    <svg className="flashcard-clear-ring" width="100%" height="100%" aria-hidden="true">
-      <rect width="100%" height="100%" rx="11" pathLength="100" />
-    </svg>
-    <span className="flashcard-clear-glow" aria-hidden="true" />
-    <span className="flashcard-clear-wash" aria-hidden="true"><span /></span>
-    <svg className="flashcard-clear-check" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M4 12.5 L9.5 18 L20 6.5" />
+    <span className="flashcard-clear-body" aria-hidden="true">
+      <svg className="flashcard-clear-ring" width="100%" height="100%" aria-hidden="true">
+        <rect width="100%" height="100%" rx="11" pathLength="100" />
+      </svg>
+      <span className="flashcard-clear-glow" />
+      <span className="flashcard-clear-wash"><span /></span>
+      <svg className="flashcard-clear-check" viewBox="0 0 24 24">
+        <path d="M4 12.5 L9.5 18 L20 6.5" />
+      </svg>
+    </span>
+    {/* Eight strokes flicking outward from where the card was. One element, one
+        transform: the whole puff is a single scale+fade of this SVG. */}
+    <svg className="flashcard-clear-burst" viewBox="0 0 48 48" aria-hidden="true">
+      {/* Four long spokes on the axes, four shorter and thinner on the
+          diagonals — an even ring reads as a wheel, an uneven one as a puff. */}
+      <path d="M34 24 H44 M14 24 H4 M24 14 V4 M24 34 V44" />
+      <path
+        className="flashcard-clear-burst-short"
+        d="M30.4 17.6 L34.6 13.4 M17.6 17.6 L13.4 13.4 M30.4 30.4 L34.6 34.6 M17.6 30.4 L13.4 34.6"
+      />
     </svg>
   </>
 )

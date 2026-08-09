@@ -642,7 +642,18 @@ export default function OnboardingTour() {
       // Deliberately narrow: a wide pill parked in this corner sits on top of
       // whatever control the page keeps there (the quiz's Confirm Answer button,
       // for one). Icon + dismiss only, so it stays out of the app's way.
-      <div className="fixed bottom-16 right-3 z-[140] md:bottom-4 md:right-4 print:hidden">
+      //
+      // A page with a fixed bottom action bar publishes its height as
+      // `--action-bar-height` (see hooks/useActionBarHeight); ride above it so
+      // the launcher can't land on the bar's primary button. Absent on pages
+      // without one, where the 0px fallback leaves the old resting place.
+      <div
+        className={cn(
+          'fixed right-3 z-[140] md:right-4 print:hidden',
+          'bottom-[calc(4rem+var(--action-bar-height,0px))]',
+          'md:bottom-[calc(1rem+var(--action-bar-height,0px))]',
+        )}
+      >
         <div className="onboarding-launcher-in flex items-center gap-0.5 rounded-full bg-primary p-1 text-primary-foreground shadow-lg ring-1 ring-black/5">
           <button
             type="button"
@@ -683,9 +694,14 @@ export default function OnboardingTour() {
   // it. The card is anchored bottom-right, so only a target that overlaps that
   // corner box forces the move.
   const cardW = Math.min(384, window.innerWidth - 24)
+  // The card now rides above any fixed action bar, so the box it occupies moves
+  // up by the same amount — otherwise a target just under the bar wouldn't
+  // trigger the flip it still needs.
+  const actionBarH =
+    parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--action-bar-height')) || 0
   const cardBox = {
     left: window.innerWidth - 12 - cardW,
-    top: window.innerHeight - 280,
+    top: window.innerHeight - 280 - actionBarH,
   }
   const placeTop =
     !!targetRect &&
@@ -722,7 +738,9 @@ export default function OnboardingTour() {
         className={cn(
           'pointer-events-none fixed z-[140] flex justify-end px-3 print:hidden',
           'inset-x-0 md:inset-x-auto md:right-4',
-          placeTop ? 'top-3 md:top-4' : 'bottom-16 md:bottom-4',
+          placeTop
+            ? 'top-3 md:top-4'
+            : 'bottom-[calc(4rem+var(--action-bar-height,0px))] md:bottom-[calc(1rem+var(--action-bar-height,0px))]',
         )}
       >
         <div

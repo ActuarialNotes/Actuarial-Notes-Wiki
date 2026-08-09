@@ -10,6 +10,14 @@ interface QuestionDeckCardProps {
   available: number
   /** Questions the configured quiz will actually pull. */
   selected: number
+  /** How many of `available` the learner has never attempted. */
+  newCount?: number
+  /**
+   * Whether attempt history is known at all. Server-side only, so a signed-out
+   * visitor gets no "new to you" line rather than a false "all new" — the same
+   * rule `QuestionAttemptBadge` follows.
+   */
+  attemptsTracked?: boolean
   onShuffle: () => void
   /** Bumped on every shuffle; replays the riffle even on back-to-back taps. */
   shuffleTick: number
@@ -22,6 +30,8 @@ interface QuestionDeckCardProps {
 export function QuestionDeckCard({
   available,
   selected,
+  newCount,
+  attemptsTracked = false,
   onShuffle,
   shuffleTick,
   justShuffled,
@@ -37,6 +47,12 @@ export function QuestionDeckCard({
     return () => cancelAnimationFrame(id)
   }, [shuffleTick])
 
+  const subline: string[] = []
+  if (selected > 0 && selected < available) subline.push(`drawing ${selected}`)
+  if (attemptsTracked && newCount !== undefined) {
+    subline.push(newCount === 0 ? 'all attempted before' : `${newCount} new to you`)
+  }
+
   return (
     <div className="flex justify-center">
       <button
@@ -51,7 +67,9 @@ export function QuestionDeckCard({
             : `Shuffle the ${selected} question${selected !== 1 ? 's' : ''} drawn from ${available} available`
         }
         className={[
-          'group relative flex w-full max-w-xs items-center gap-3 rounded-xl bg-card px-4 py-3 text-left',
+          // Full width, like every other control in the action bar it sits in —
+          // a centred max-w-xs card left the bar looking misaligned.
+          'group relative flex w-full items-center gap-3 rounded-xl bg-card px-4 py-3 text-left',
           'transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
           disabled
             ? 'opacity-70'
@@ -59,11 +77,20 @@ export function QuestionDeckCard({
           riffling ? 'deck-card-shuffle' : '',
         ].join(' ')}
       >
-        <div className="flex min-w-0 flex-1 items-baseline gap-1.5">
-          <span className="text-3xl font-bold leading-none tabular-nums">{available}</span>
-          <span className="text-sm text-muted-foreground">
-            question{available !== 1 ? 's' : ''}
-          </span>
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-2xl font-bold leading-none tabular-nums">{available}</span>
+            <span className="text-sm text-muted-foreground">
+              question{available !== 1 ? 's' : ''}
+            </span>
+          </div>
+          {/* Two things the big number doesn't say: how many of the pool this
+              quiz actually pulls (a 35-question mock exam drawn from 349), and
+              how much of it is unseen — the number that decides whether the
+              draw is worth taking. */}
+          {subline.length > 0 && (
+            <span className="text-xs text-muted-foreground">{subline.join(' · ')}</span>
+          )}
         </div>
 
         {/* After a tap the shuffle icon gives way to a worded confirmation —

@@ -1,6 +1,7 @@
 import { isAnswerCorrect } from '@/lib/parser'
 import type { Question } from '@/lib/parser'
 import type { MasteryState } from '@/lib/mastery'
+import { MasteryBadge } from '@/components/MasteryBadge'
 
 interface Response {
   chosen: string | null
@@ -12,21 +13,6 @@ interface TopicCoverageChartProps {
   masteryByTopic?: Map<string, MasteryState>
 }
 
-const STATE_LABEL: Record<MasteryState, string> = {
-  new: 'New',
-  level1: 'Level 1',
-  level2: 'Level 2',
-  level3: 'Level 3',
-  forgotten: 'Forgotten',
-}
-
-const STATE_BADGE_CLASSES: Record<MasteryState, string> = {
-  new:      'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:border-gray-700',
-  level1:   'bg-green-50 text-green-600 border-green-200 dark:bg-green-950/20 dark:text-green-500 dark:border-green-900',
-  level2:   'bg-green-100 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800',
-  level3:   'bg-green-200 text-green-800 border-green-300 dark:bg-green-950 dark:text-green-300 dark:border-green-700',
-  forgotten: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800',
-}
 
 interface SubtopicStat {
   name: string
@@ -66,9 +52,7 @@ export function TopicCoverageChart({ questions, responses, masteryByTopic }: Top
                   {masteryByTopic?.has(stat.name) && (() => {
                     const state = masteryByTopic.get(stat.name)!
                     return (
-                      <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded border text-[10px] font-medium ${STATE_BADGE_CLASSES[state]}`}>
-                        {STATE_LABEL[state]}
-                      </span>
+                      <MasteryBadge state={state} />
                     )
                   })()}
                 </div>

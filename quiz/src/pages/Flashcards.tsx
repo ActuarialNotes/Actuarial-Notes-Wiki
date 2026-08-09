@@ -82,6 +82,8 @@ import { playSound, resetSoundCombo } from '@/lib/soundEngine'
 import { usePageKeyboard } from '@/hooks/useKeyboard'
 import { KeyboardShortcutsHelp } from '@/components/KeyboardShortcutsHelp'
 import { NavProgressBar } from '@/components/NavProgressBar'
+import { MasteryBadge } from '@/components/MasteryBadge'
+import { MASTERY_FILL, MASTERY_TEXT } from '@/lib/masteryBadge'
 
 type GroupBy = 'exam' | 'date' | 'alpha' | 'custom' | 'mastery' | 'shuffle'
 // Packs no longer get their own tab — they live in the "add flashcards" sheet
@@ -159,18 +161,6 @@ const CLEAR_OVERLAY = (
   </>
 )
 
-// The mastery ladder as a single green ramp — grey for New, deepening green for
-// levels 1→3 — matching how the ladder is coloured everywhere else in the app
-// (ConceptDetailModal, TopicProgressSection, the readiness gauge). `fillClass`
-// is the solid form used for progress-bar segments and legend dots; `className`
-// is the tinted badge form.
-const MASTERY_CONFIG: Record<MasteryState, { label: string; className: string; fillClass: string }> = {
-  new:       { label: 'New',       className: 'bg-muted text-muted-foreground',                       fillClass: 'bg-muted-foreground/40' },
-  level1:    { label: '1',         className: 'bg-green-500/10 text-green-600 dark:text-green-500',   fillClass: 'bg-green-500/35' },
-  level2:    { label: '2',         className: 'bg-green-500/20 text-green-700 dark:text-green-400',   fillClass: 'bg-green-500/65' },
-  level3:    { label: '3',         className: 'bg-green-500/30 text-green-800 dark:text-green-300',   fillClass: 'bg-green-600 dark:bg-green-500' },
-  forgotten: { label: 'Forgotten', className: 'bg-rose-500/20 text-rose-600 dark:text-rose-400',      fillClass: 'bg-rose-500/70' },
-}
 
 // Concepts that haven't been collected yet sit below New — they're still behind
 // the collect gate, so they get the faintest fill of all.
@@ -181,12 +171,7 @@ const LOCKED_FILL_CLASS = 'bg-muted-foreground/15'
 const IN_DECK_FILL_CLASS = 'bg-green-500/25'
 
 function MasteryPill({ state }: { state: MasteryState }) {
-  const { label, className } = MASTERY_CONFIG[state]
-  return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${className}`}>
-      {label}
-    </span>
-  )
+  return <MasteryBadge state={state} size="sm" compact />
 }
 
 const BREADCRUMB_RE = /^\[\[[^\]|]*(?:\|[^\]]+)?\]\][^\n]* \/ [^\n]*\n?/
@@ -442,11 +427,11 @@ function PackCard({
   // Ordered most- to least-advanced, so the bar reads as a ramp from deep green
   // down to the empty (locked) tail.
   const legend: { key: string; label: string; count: number; fillClass: string; textClass?: string }[] = [
-    { key: 'level3',    label: 'Level 3',   count: levels.level3,    fillClass: MASTERY_CONFIG.level3.fillClass },
-    { key: 'level2',    label: 'Level 2',   count: levels.level2,    fillClass: MASTERY_CONFIG.level2.fillClass },
-    { key: 'level1',    label: 'Level 1',   count: levels.level1,    fillClass: MASTERY_CONFIG.level1.fillClass },
-    { key: 'forgotten', label: 'Forgotten', count: levels.forgotten, fillClass: MASTERY_CONFIG.forgotten.fillClass, textClass: 'text-rose-600 dark:text-rose-400' },
-    { key: 'new',       label: 'New',       count: levels.new,       fillClass: MASTERY_CONFIG.new.fillClass },
+    { key: 'level3',    label: 'Level 3',   count: levels.level3,    fillClass: MASTERY_FILL.level3 },
+    { key: 'level2',    label: 'Level 2',   count: levels.level2,    fillClass: MASTERY_FILL.level2 },
+    { key: 'level1',    label: 'Level 1',   count: levels.level1,    fillClass: MASTERY_FILL.level1 },
+    { key: 'forgotten', label: 'Forgotten', count: levels.forgotten, fillClass: MASTERY_FILL.forgotten, textClass: MASTERY_TEXT.forgotten },
+    { key: 'new',       label: 'New',       count: levels.new,       fillClass: MASTERY_FILL.new },
     { key: 'locked',    label: 'Locked',    count: levels.locked,    fillClass: LOCKED_FILL_CLASS },
   ]
   const collectedSummary = `${collected} of ${total} collected, ${inDeck} in deck`

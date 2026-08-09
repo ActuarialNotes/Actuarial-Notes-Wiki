@@ -20,6 +20,8 @@ import { aggregateForTopic, decayIfStale, sanitizeMasteryState } from '@/lib/mas
 import { normalizeMasteryToDisplayNames } from '@/lib/conceptMatch'
 import { isKeystone } from '@/lib/keystone'
 import { KEYSTONE_FILL, KEYSTONE_TEXT, LEVEL3_TEXT, LEVEL_FILL, masteryFill } from '@/lib/masteryFill'
+import { MasteryBadge } from '@/components/MasteryBadge'
+import { MASTERY_LABEL } from '@/lib/masteryBadge'
 import { computeExamReadiness, parseSectionWeight } from '@/lib/readiness'
 import type { WikiEntryRef } from '@/lib/wikiRoutes'
 import { todayISO, type StudyPlan, type StudyPlanConfig } from '@/lib/studyPlan'
@@ -349,14 +351,6 @@ function ReviewModeNote({ concepts }: { concepts: string[] }) {
   )
 }
 
-const STATE_BADGE: Record<MasteryState, string> = {
-  new:       'bg-muted text-muted-foreground border-transparent',
-  level1:    'bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/25',
-  level2:    'bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/35',
-  level3:    'bg-green-500/30 text-green-800 dark:text-green-300 border-green-500/50',
-  forgotten: 'bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/40',
-}
-
 function StudyPlanTracker({
   syllabus,
   masteryRecords,
@@ -435,9 +429,7 @@ function StudyPlanTracker({
                         <ConceptScheduleBadge conceptName={c.name} plan={studyPlan} />
                       )}
                       {showMastery && (
-                        <span className={`shrink-0 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${STATE_BADGE[state]}`}>
-                          {STATE_LABEL[state]}
-                        </span>
+                        <MasteryBadge state={state} />
                       )}
                     </button>
                   )
@@ -452,10 +444,6 @@ function StudyPlanTracker({
 }
 
 // ── ReadinessCard ──────────────────────────────────────────────────────────────
-
-const STATE_LABEL: Record<MasteryState, string> = {
-  new: 'New', level1: 'Level 1', level2: 'Level 2', level3: 'Level 3', forgotten: 'Forgotten',
-}
 
 interface Props {
   syllabus: WikiExamSyllabus
@@ -1180,7 +1168,7 @@ export function ReadinessCard({
                               >
                                 {a.conceptName}
                               </button>
-                              <span className="text-xs text-muted-foreground shrink-0">→ {STATE_LABEL[NEXT_STATE[a.initialState] ?? a.initialState]}</span>
+                              <span className="text-xs text-muted-foreground shrink-0">→ {MASTERY_LABEL[NEXT_STATE[a.initialState] ?? a.initialState]}</span>
                             </div>
                           )
                         })}
@@ -1209,7 +1197,7 @@ export function ReadinessCard({
                               >
                                 {lu.conceptSlug}
                               </button>
-                              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {STATE_LABEL[lu.to]}</span>
+                              <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">→ {MASTERY_LABEL[lu.to]}</span>
                             </div>
                           )
                         })}
@@ -1354,7 +1342,7 @@ export function ReadinessCard({
                             >
                               {name}
                             </button>
-                            <span className={`text-xs shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {STATE_LABEL[target]}</span>
+                            <span className={`text-xs shrink-0 ${isCompleted ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-foreground'}`}>→ {MASTERY_LABEL[target]}</span>
                           </div>
                         )
                       })}
@@ -1385,7 +1373,7 @@ export function ReadinessCard({
                             {lu.conceptSlug}
                           </span>
                           <span className="text-xs text-green-600 dark:text-green-400 shrink-0 font-medium">
-                            → {STATE_LABEL[lu.to]}
+                            → {MASTERY_LABEL[lu.to]}
                           </span>
                         </button>
                       )
@@ -1570,7 +1558,7 @@ export function ReadinessCard({
       <DayCompleteInfoPanel
         open={showDayCompleteInfo}
         onClose={() => setShowDayCompleteInfo(false)}
-        conceptsCompleted={examCompletedToday.map(lu => ({ name: lu.conceptSlug, label: STATE_LABEL[lu.to] }))}
+        conceptsCompleted={examCompletedToday.map(lu => ({ name: lu.conceptSlug, label: MASTERY_LABEL[lu.to] }))}
         questionsAnswered={todayQuestionsAnswered}
         gemsEarned={todayGemsEarned}
         bonusClaimed={bonusClaimed}

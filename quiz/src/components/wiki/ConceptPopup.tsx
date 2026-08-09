@@ -30,14 +30,8 @@ import { NavProgressBar } from '@/components/NavProgressBar'
 import { KeystoneName } from '@/components/KeystoneName'
 import { buildMasteryLookup } from '@/lib/conceptMatch'
 import { findKeystone, keystoneProgress } from '@/lib/keystone'
-
-const MASTERY_PILL: Record<MasteryState, { label: string; className: string }> = {
-  new:      { label: 'New', className: 'bg-muted text-muted-foreground' },
-  level1:   { label: '1', className: 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-300' },
-  level2:   { label: '2', className: 'bg-green-200 text-green-800 dark:bg-green-900/60 dark:text-green-200' },
-  level3:   { label: '3', className: 'bg-green-400 text-green-950 dark:bg-green-800 dark:text-green-100' },
-  forgotten: { label: 'F', className: 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300' },
-}
+import { MasteryBadge } from '@/components/MasteryBadge'
+import { MASTERY_LABEL, MASTERY_SHORT_LABEL, MASTERY_TINT } from '@/lib/masteryBadge'
 
 export function ConceptPopup() {
   const { open, list, index, occurrences, occurrenceIndex, navigate, jumpTo, close, dashboardContext, setDashboardFilter } = useConceptPopup()
@@ -349,7 +343,7 @@ export function ConceptPopup() {
               concept is pinned at New by the gate. Opens the combined card +
               learning-progress modal, where it can level up. */}
           {!focusMode && current.kind === 'concept' && !actionLocked && (() => {
-            const pill = MASTERY_PILL[masteryState ?? 'new']
+            const state = masteryState ?? 'new'
             return (
               <button
                 type="button"
@@ -359,10 +353,10 @@ export function ConceptPopup() {
                 // of flashing the collect check while it re-derives mastery.
                 onClick={() => openCollect(current, { collected: true, mastery: masteryState ?? undefined })}
                 title="View flashcard & learning progress"
-                aria-label={`${current.name} — ${pill.label}. View flashcard and progress`}
-                className={`shrink-0 inline-flex items-center justify-center min-w-[1.875rem] h-7 px-2 rounded-full text-xs font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${pill.className}`}
+                aria-label={`${current.name} — ${MASTERY_LABEL[state]}. View flashcard and progress`}
+                className={`shrink-0 inline-flex items-center justify-center min-w-[1.875rem] h-7 px-2 rounded-full text-xs font-bold tabular-nums cursor-pointer hover:opacity-80 transition-opacity ${MASTERY_TINT[state]}`}
               >
-                {pill.label}
+                {MASTERY_SHORT_LABEL[state]}
               </button>
             )
           })()}
@@ -487,11 +481,7 @@ export function ConceptPopup() {
               >
                 <TrendingUp className="h-3.5 w-3.5 shrink-0" />
                 <span className="flex-1 text-left">Learning Progress</span>
-                {masteryState && MASTERY_PILL[masteryState] && (
-                  <span className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-full tabular-nums ${MASTERY_PILL[masteryState]!.className}`}>
-                    {MASTERY_PILL[masteryState]!.label}
-                  </span>
-                )}
+                {masteryState && <MasteryBadge state={masteryState} compact />}
               </button>
             </div>,
             document.body,

@@ -9,36 +9,17 @@ import { summarizeAttemptedQuestions } from '@/lib/learningHistory'
 import { ProgressGraph } from '@/components/ui/LearningProgressGraph'
 import { AttemptedQuestionsList } from '@/components/wiki/AttemptedQuestionsList'
 import { useSoundOnMount } from '@/hooks/useSoundEffects'
+import { MasteryBadge } from '@/components/MasteryBadge'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const LEVEL_COLORS: Record<MasteryState, string> = {
-  new: 'text-muted-foreground bg-muted',
-  level1: 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300',
-  level2: 'bg-green-200 text-green-800 dark:bg-green-900/60 dark:text-green-200',
-  level3: 'bg-green-400 text-green-950 dark:bg-green-800 dark:text-green-100',
-  forgotten: 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300',
-}
-
-const LEVEL_LABELS: Record<MasteryState, string> = {
-  new: 'New',
-  level1: 'Level 1',
-  level2: 'Level 2',
-  level3: 'Level 3',
-  forgotten: 'Forgotten',
-}
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 // `sm` sits inline with a small modal title (the collect modal's header);
 // `md` is the standalone-modal header / level-row pill.
 export function LevelPill({ level, size = 'md' }: { level: MasteryState; size?: 'sm' | 'md' }) {
-  const sizing = size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-5 py-2 text-base'
-  return (
-    <span className={`inline-flex items-center rounded-full font-bold tracking-wide ${sizing} ${LEVEL_COLORS[level]}`}>
-      {LEVEL_LABELS[level]}
-    </span>
-  )
+  return <MasteryBadge state={level} size={size} className="font-bold tracking-wide" />
 }
 
 // ─── Reusable panel ─────────────────────────────────────────────────────────

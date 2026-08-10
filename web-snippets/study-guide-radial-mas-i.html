@@ -1,0 +1,669 @@
+<!-- ============================================================
+     Study guide radial — Exam MAS-I
+     Actuarial Notes — paste this whole file into your CMS block
+     (Elementor "HTML" widget, WordPress Custom HTML, Webflow embed…).
+
+     Select all, copy, paste. There is nothing else to strip out:
+     this file is only the widget.
+
+     One file per exam. Everything above the DEMO DATA block at the
+     bottom is identical in every exam's copy — a fix to the shell has
+     to be made in all of them. Below that block, only the syllabus,
+     the keystone list and the mastery states change.
+
+     Each exam's copy is scoped to its own attribute
+     (data-an-radial-mas-i), so several exams can share one page
+     without one widget's script drawing another's data.
+============================================================ -->
+<div class="an-radial" data-an-radial-mas-i>
+  <svg class="an-radial-svg" viewBox="0 0 280 280" role="img"
+       aria-label="Exam MAS-I study guide radial: readiness by syllabus concept"></svg>
+  <div class="an-radial-legend"></div>
+</div>
+
+<style>
+  .an-radial {
+    --an-radial-max: 300px;
+    --an-fg: hsl(240 30% 96%);
+    --an-muted: hsl(240 15% 68%);
+    width: 100%;
+    max-width: var(--an-radial-max);
+    margin-inline: auto;
+    color: var(--an-fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .an-radial * { box-sizing: border-box; }
+
+  .an-radial .an-radial-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px 12px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--an-muted);
+  }
+  /* font-size/colour are repeated here rather than just inherited from the
+     legend: a host stylesheet with a bare `span { ... }` rule targets these
+     elements directly, and a direct rule always beats an inherited value. */
+  .an-radial .an-radial-legend span.an-radial-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    line-height: 1;
+    color: var(--an-muted);
+  }
+  .an-radial .an-radial-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  .an-radial .an-radial-svg {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+  .an-radial .an-radial-seg {
+    cursor: pointer;
+    /* `fill` is in the transition so the intro animation's level-ups ease from
+       one mastery colour to the next instead of snapping. */
+    transition: fill 220ms linear, opacity 100ms, transform 100ms;
+    transform-origin: 140px 140px;
+  }
+  .an-radial .an-radial-seg.an-dim { opacity: 0.35; }
+  .an-radial .an-radial-seg.an-active { transform: scale(1.04); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .an-radial .an-radial-seg { transition: none; }
+    .an-radial .an-radial-seg.an-active { transform: none; }
+  }
+</style>
+
+<script>
+(function () {
+  // ── Intro animation settings ───────────────────────────────────────────
+  // The ring plays up from empty when it scrolls into view, once per page load.
+  var ANIMATE = true;          // false → render the finished ring immediately
+  var ANIMATE_MS = 10000;       // how long the climb takes
+  // true  → every concept climbs to Level 3, so the counter ends on 100%.
+  // false → concepts stop at the mastery levels authored in STATES below,
+  //         so the counter ends on that ring's real score (42% as shipped).
+  var ANIMATE_TO_FULL = true;
+  // Automatically respects prefers-reduced-motion: the finished ring is shown
+  // straight away instead.
+
+  // ── Geometry (mirrors the SG_* constants in ReadinessCard.tsx) ──
+  var VB = 280, CX = VB / 2, CY = VB / 2;
+  var OUTER_R = 126, INNER_R = 74, CONCEPT_GAP = 1.5;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+
+  // ── Mastery palette (mirrors lib/masteryFill.ts) ──
+  var LEVEL_FILL = {
+    new:       'rgba(34,197,94,0.10)',
+    level1:    'rgba(34,197,94,0.28)',
+    level2:    'rgba(34,197,94,0.62)',
+    level3:    '#22c55e',
+    forgotten: 'rgba(239,68,68,0.45)'
+  };
+  var KEYSTONE_FILL = {
+    new:       'rgba(245,158,11,0.16)',
+    level1:    'rgba(245,158,11,0.42)',
+    level2:    'rgba(245,158,11,0.72)',
+    level3:    '#f59e0b',
+    forgotten: 'rgba(239,68,68,0.45)'
+  };
+  var KEYSTONE_TEXT = '#f59e0b';
+  var LEVEL3_TEXT = '#22c55e';
+  var STATE_LABEL = {
+    new: 'New', level1: 'Level 1', level2: 'Level 2',
+    level3: 'Level 3', forgotten: 'Forgotten'
+  };
+
+  function masteryFill(state, keystone) {
+    return (keystone ? KEYSTONE_FILL : LEVEL_FILL)[state];
+  }
+
+  // ── Arc math (mirrors sgPolar / sgArc) ──
+  function polar(angleDeg, r) {
+    var rad = ((angleDeg - 90) * Math.PI) / 180;
+    return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
+  }
+  function arcPath(startDeg, endDeg, ro, ri) {
+    var s1 = polar(startDeg, ro), e1 = polar(endDeg, ro);
+    var s2 = polar(endDeg, ri),   e2 = polar(startDeg, ri);
+    var lg = endDeg - startDeg > 180 ? 1 : 0;
+    return 'M' + s1.x + ' ' + s1.y +
+           ' A' + ro + ' ' + ro + ' 0 ' + lg + ' 1 ' + e1.x + ' ' + e1.y +
+           ' L' + s2.x + ' ' + s2.y +
+           ' A' + ri + ' ' + ri + ' 0 ' + lg + ' 0 ' + e2.x + ' ' + e2.y + 'Z';
+  }
+
+  // "23-30%" → 26.5 (mirrors parseSectionWeight)
+  function parseWeight(w) {
+    if (!w) return 1;
+    var range = w.match(/(\d+)\s*[-–]\s*(\d+)%/);
+    if (range) return (parseInt(range[1], 10) + parseInt(range[2], 10)) / 2;
+    var single = w.match(/(\d+)%/);
+    return single ? parseInt(single[1], 10) : 1;
+  }
+
+  // Readiness, exactly as lib/readiness.ts computes it: syllabus
+  // coverage (60%) + keystone concepts (40%), each scored as
+  // earned credit (L1=1, L2=2, L3=3) over the maximum possible.
+  function stateCredit(s) {
+    return s === 'level3' ? 3 : s === 'level2' ? 2 : s === 'level1' ? 1 : 0;
+  }
+  function computeReadiness(topics, stateOf, isKeystone) {
+    var weightedSum = 0, totalWeight = 0;
+    topics.forEach(function (t) {
+      var weight = parseWeight(t.weight);
+      var total = t.concepts.length;
+      if (total === 0) return;
+      var credit = 0;
+      t.concepts.forEach(function (c) { credit += stateCredit(stateOf(c)); });
+      weightedSum += (credit / (total * 3)) * 100 * weight;
+      totalWeight += weight;
+    });
+    var syllabusPct = totalWeight > 0 ? weightedSum / totalWeight : 0;
+
+    var keystones = [];
+    topics.forEach(function (t) {
+      t.concepts.forEach(function (c) { if (isKeystone(c)) keystones.push(c); });
+    });
+    if (keystones.length === 0) return syllabusPct;
+
+    var kCredit = 0;
+    keystones.forEach(function (c) { kCredit += stateCredit(stateOf(c)); });
+    var keystonePct = (kCredit / (keystones.length * 3)) * 100;
+
+    return syllabusPct * 0.6 + keystonePct * 0.4;
+  }
+
+  function el(name, attrs) {
+    var node = document.createElementNS(SVGNS, name);
+    for (var k in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, k)) {
+        node.setAttribute(k, attrs[k]);
+      }
+    }
+    return node;
+  }
+
+  function render(root, data) {
+    var svg = root.querySelector('.an-radial-svg');
+    var legend = root.querySelector('.an-radial-legend');
+    var keystoneSet = {};
+    data.keystones.forEach(function (k) { keystoneSet[k.toLowerCase()] = true; });
+
+    function isKeystone(name) { return !!keystoneSet[name.toLowerCase()]; }
+    function stateOf(name) { return data.states[name] || 'new'; }
+
+    // ── Legend: each level shows both palettes in one split dot
+    //    (green half = ordinary concept, gold half = keystone). ──
+    ['level3', 'level2', 'level1', 'new'].forEach(function (s) {
+      var item = document.createElement('span');
+      item.className = 'an-radial-legend-item';
+      var dot = document.createElement('span');
+      dot.className = 'an-radial-dot';
+      dot.style.background = 'linear-gradient(90deg, ' + LEVEL_FILL[s] + ' 50%, ' + KEYSTONE_FILL[s] + ' 50%)';
+      item.appendChild(dot);
+      item.appendChild(document.createTextNode(STATE_LABEL[s]));
+      legend.appendChild(item);
+    });
+    var kItem = document.createElement('span');
+    kItem.className = 'an-radial-legend-item';
+    var kDot = document.createElement('span');
+    kDot.className = 'an-radial-dot';
+    kDot.style.backgroundColor = KEYSTONE_FILL.level3;
+    kItem.appendChild(kDot);
+    kItem.appendChild(document.createTextNode('Keystone'));
+    legend.appendChild(kItem);
+
+    // ── Build one segment per concept, sized by its section weight ──
+    var segments = [];
+    var totalWeight = 0;
+    data.topics.forEach(function (t) { totalWeight += parseWeight(t.weight); });
+    if (!totalWeight) totalWeight = 1;
+
+    var cursor = 0;
+    data.topics.forEach(function (topic) {
+      var topicDeg = (parseWeight(topic.weight) / totalWeight) * 360;
+      var n = topic.concepts.length;
+      if (n === 0) { cursor += topicDeg; return; }
+      var slotDeg = topicDeg / n;
+      var gap = Math.min(CONCEPT_GAP, slotDeg * 0.5);
+
+      topic.concepts.forEach(function (concept) {
+        var startDeg = cursor + gap / 2;
+        var endDeg = cursor + slotDeg - gap / 2;
+        if (endDeg > startDeg + 0.5) {
+          segments.push({
+            startDeg: startDeg,
+            endDeg: endDeg,
+            conceptName: concept,
+            topicName: topic.name,
+            state: stateOf(concept),
+            keystone: isKeystone(concept)
+          });
+        }
+        cursor += slotDeg;
+      });
+    });
+
+    // ── Group consecutive segments back into their topics ──
+    var groups = [];
+    var i = 0;
+    while (i < segments.length) {
+      var name = segments[i].topicName;
+      var j = i;
+      while (j < segments.length && segments[j].topicName === name) j++;
+      var startDeg = segments[i].startDeg;
+      var endDeg = segments[j - 1].endDeg;
+      var lastSegEnd = segments[segments.length - 1].endDeg;
+      var prevEnd = i > 0 ? segments[i - 1].endDeg : lastSegEnd;
+      groups.push({
+        topicName: name,
+        startDeg: startDeg,
+        endDeg: endDeg,
+        midDeg: (startDeg + endDeg) / 2,
+        // i=0 wraps the boundary around 360°→0° so it lands at 12 o'clock
+        boundaryDeg: i > 0 ? (prevEnd + startDeg) / 2
+                           : ((lastSegEnd + startDeg + 360) / 2) % 360
+      });
+      i = j;
+    }
+
+    // ── Track ring ──
+    svg.appendChild(el('circle', {
+      cx: CX, cy: CY, r: (OUTER_R + INNER_R) / 2,
+      fill: 'none', 'stroke-width': OUTER_R - INNER_R,
+      stroke: 'rgba(34,197,94,0.06)'
+    }));
+
+    // ── Concept wedges ──
+    var paths = [];
+    segments.forEach(function (seg) {
+      var p = el('path', {
+        d: arcPath(seg.startDeg, seg.endDeg, OUTER_R, INNER_R),
+        fill: masteryFill(seg.state, seg.keystone)
+      });
+      p.setAttribute('class', 'an-radial-seg');
+      p.addEventListener('mouseenter', function () { setHovered(seg); });
+      p.addEventListener('mouseleave', function () { setHovered(null); });
+      p.addEventListener('click', function () {
+        setSelected(selected === seg ? null : seg);
+      });
+      svg.appendChild(p);
+      paths.push({ seg: seg, node: p });
+    });
+
+    // ── Topic boundary dividers ──
+    groups.forEach(function (g) {
+      var p1 = polar(g.boundaryDeg, INNER_R - 4);
+      var p2 = polar(g.boundaryDeg, OUTER_R + 4);
+      svg.appendChild(el('line', {
+        x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y,
+        stroke: 'currentColor', 'stroke-width': 1,
+        opacity: 0.22, 'stroke-linecap': 'round'
+      }));
+    });
+
+    // ── Curved topic labels, following the arc perimeter ──
+    var defs = el('defs', {});
+    svg.appendChild(defs);
+    groups.forEach(function (g, idx) {
+      var arcSpan = g.endDeg - g.startDeg;
+      if (arcSpan < 16) return;
+      var LABEL_R = OUTER_R + 9;
+      // Bottom half (90°–270°): reverse the arc so text still reads L→R
+      var isBottom = g.midDeg > 90 && g.midDeg < 270;
+      var p1 = isBottom ? polar(g.endDeg, LABEL_R) : polar(g.startDeg, LABEL_R);
+      var p2 = isBottom ? polar(g.startDeg, LABEL_R) : polar(g.endDeg, LABEL_R);
+      var sweepFlag = isBottom ? 0 : 1;
+      var largeArcFlag = arcSpan > 180 ? 1 : 0;
+      var arcLen = (arcSpan / 360) * 2 * Math.PI * LABEL_R;
+      var maxChars = Math.max(2, Math.floor(arcLen / 4.2));
+      var label = g.topicName.length > maxChars
+        ? g.topicName.slice(0, maxChars - 1) + '…'
+        : g.topicName;
+      var pathId = 'an-topic-arc-' + data.uid + '-' + idx;
+
+      defs.appendChild(el('path', {
+        id: pathId,
+        d: 'M' + p1.x + ' ' + p1.y + ' A' + LABEL_R + ' ' + LABEL_R +
+           ' 0 ' + largeArcFlag + ' ' + sweepFlag + ' ' + p2.x + ' ' + p2.y
+      }));
+
+      var text = el('text', { 'font-size': 7, fill: 'currentColor', opacity: 0.65 });
+      var tp = el('textPath', { startOffset: '50%', 'text-anchor': 'middle' });
+      tp.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#' + pathId);
+      tp.setAttribute('href', '#' + pathId);
+      tp.textContent = label;
+      text.appendChild(tp);
+      svg.appendChild(text);
+    });
+
+    // ── Centre readout ──
+    // The authored state of each wedge, kept aside so the intro animation can
+    // play the ring up from empty and still know where it is meant to land.
+    var finalStates = segments.map(function (s) { return s.state; });
+
+    // Always derived from whatever the wedges currently show, never from a
+    // stored constant — so the number in the middle and the ring around it
+    // cannot disagree, at rest or mid-animation.
+    function currentPct() {
+      var byName = {};
+      segments.forEach(function (s) { byName[s.conceptName] = s.state; });
+      return computeReadiness(
+        data.topics,
+        function (name) { return byName[name] || 'new'; },
+        isKeystone
+      );
+    }
+
+    var pctText = Math.round(currentPct()) + '%';
+    var centre = el('g', {});
+    svg.appendChild(centre);
+
+    function drawCentre(seg) {
+      while (centre.firstChild) centre.removeChild(centre.firstChild);
+      if (seg) {
+        var t1 = el('text', {
+          x: CX, y: CY - 18, 'text-anchor': 'middle', 'font-size': 9,
+          fill: 'currentColor', opacity: 0.45, 'font-style': 'italic'
+        });
+        t1.textContent = seg.topicName.length > 24 ? seg.topicName.slice(0, 22) + '…' : seg.topicName;
+
+        var t2 = el('text', {
+          x: CX, y: CY + 2, 'text-anchor': 'middle', 'font-size': 11,
+          fill: 'currentColor', 'font-weight': '700'
+        });
+        t2.textContent = seg.conceptName.length > 20 ? seg.conceptName.slice(0, 18) + '…' : seg.conceptName;
+
+        var t3 = el('text', {
+          x: CX, y: CY + 18, 'text-anchor': 'middle', 'font-size': 10,
+          fill: seg.keystone ? KEYSTONE_TEXT : seg.state === 'level3' ? LEVEL3_TEXT : 'currentColor',
+          opacity: (seg.keystone || seg.state === 'level3') ? 1 : 0.65
+        });
+        t3.textContent = STATE_LABEL[seg.state] + (seg.keystone ? ' · Keystone' : '');
+
+        centre.appendChild(t1); centre.appendChild(t2); centre.appendChild(t3);
+      } else {
+        var p = el('text', {
+          x: CX, y: CY + 10, 'text-anchor': 'middle',
+          'font-size': 30, 'font-weight': '800', fill: 'currentColor'
+        });
+        p.textContent = pctText;
+        var l = el('text', {
+          x: CX, y: CY + 24, 'text-anchor': 'middle',
+          'font-size': 10, fill: 'currentColor', opacity: 0.4
+        });
+        l.textContent = 'readiness';
+        centre.appendChild(p); centre.appendChild(l);
+      }
+    }
+
+    // ── Hover / selection state ──
+    var hovered = null, selected = null;
+    function paint() {
+      var active = hovered || selected;
+      paths.forEach(function (entry) {
+        var isActive = entry.seg === hovered || entry.seg === selected;
+        entry.node.classList.toggle('an-dim', !!active && !isActive);
+        entry.node.classList.toggle('an-active', isActive);
+        var outlined = entry.seg === selected && hovered !== entry.seg;
+        entry.node.setAttribute('stroke', outlined ? 'rgba(255,255,255,0.55)' : 'none');
+        entry.node.setAttribute('stroke-width', outlined ? 1 : 0);
+      });
+      drawCentre(active);
+    }
+    function setHovered(seg) { hovered = seg; paint(); }
+    function setSelected(seg) { selected = seg; paint(); }
+
+    // ── Intro animation ────────────────────────────────────────────────────
+    // The ring starts empty and climbs, wedge by wedge, while the centre
+    // counts up. The percentage is not tweened toward a target — each frame
+    // sets real mastery states and re-derives the number from them, so the
+    // count and the colours stay in lockstep and it lands exactly on the
+    // configured end state.
+    var LEVELS = ['new', 'level1', 'level2', 'level3'];
+    var LEVEL_INDEX = { new: 0, level1: 1, level2: 2, level3: 3, forgotten: 0 };
+
+    function applyStates(pick) {
+      segments.forEach(function (seg, i) { seg.state = pick(seg, i); });
+      paths.forEach(function (entry, i) {
+        entry.node.setAttribute('fill', masteryFill(segments[i].state, segments[i].keystone));
+      });
+      pctText = Math.round(currentPct()) + '%';
+      paint();
+    }
+
+    // Where the ring comes to rest. Defined once and shared by the animation's
+    // last frame, the reduced-motion path and the ANIMATE = false path, so
+    // every visitor ends up looking at the same ring — otherwise someone with
+    // reduced motion would see the authored 42% while everyone else finished
+    // on 100%.
+    function endState(i) {
+      return ANIMATE_TO_FULL ? 'level3' : finalStates[i];
+    }
+
+    function settle() {
+      applyStates(function (seg, i) { return endState(i); });
+    }
+
+    function runIntro() {
+      var n = segments.length;
+      if (n === 0) { settle(); return; }
+
+      // Each wedge starts a little after the one before it, so the fill sweeps
+      // around the ring rather than every wedge brightening at once.
+      var STAGGER = 0.55;          // share of the run spent starting wedges off
+      var RAMP = 1 - STAGGER;      // how long any single wedge takes to climb
+      var targets = segments.map(function (seg, i) {
+        return LEVEL_INDEX[endState(i)];
+      });
+
+      applyStates(function () { return 'new'; });
+
+      var t0 = null;
+      function frame(t) {
+        if (t0 === null) t0 = t;
+        var p = Math.min(1, (t - t0) / ANIMATE_MS);
+        var eased = 1 - Math.pow(1 - p, 3);
+        applyStates(function (seg, i) {
+          var local = (eased - (i / n) * STAGGER) / RAMP;
+          if (local <= 0) return LEVELS[0];
+          if (local >= 1) return LEVELS[targets[i]];
+          return LEVELS[Math.floor(local * targets[i] + 1e-9)];
+        });
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    var reduceMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!ANIMATE || reduceMotion || !window.requestAnimationFrame) {
+      settle();
+    } else if (window.IntersectionObserver) {
+      // Hold the ring empty until it is actually on screen, so a visitor who
+      // scrolls down doesn't arrive after the animation has already finished.
+      applyStates(function () { return 'new'; });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          io.disconnect();
+          runIntro();
+        });
+      }, { threshold: 0.35 });
+      io.observe(root);
+    } else {
+      runIntro();
+    }
+  }
+
+  // ============================================================
+  //  DEMO DATA — Exam MAS-I (CAS). Edit these three to show a
+  //  different level of progress.
+  //    topics    : syllabus sections, their exam weight, concepts
+  //    keystones : the load-bearing concepts, drawn in gold
+  //    states    : new | level1 | level2 | level3 | forgotten
+  //                (anything omitted is treated as "new")
+  // ============================================================
+  var SYLLABUS = [
+    {
+      name: 'Probability Models',
+      weight: '20-30%',
+      concepts: [
+        'Poisson Process', 'Interarrival Time', 'Nonhomogeneous Poisson Process',
+        'Compound Poisson Process', 'Mixed Poisson Process',
+        'Exponential Distribution', 'Limited Expected Value', 'Survival Model',
+        'Hazard Rate', 'Life Table', 'Joint Life', 'Whole Life Insurance',
+        'Life Annuity'
+      ]
+    },
+    {
+      name: 'Statistics',
+      weight: '20-30%',
+      concepts: [
+        'Sample Mean', 'Sample Variance', 'Order Statistics',
+        'Sampling Distribution', 'Maximum Likelihood Estimation',
+        'Method of Moments', 'Sufficient Statistic', 'Unbiasedness',
+        'Mean Square Error', 'Censoring', 'Truncation', 'Hypothesis Testing',
+        'Type I Error', 'Type II Error', 'Aggregate Loss Model'
+      ]
+    },
+    {
+      name: 'Extended Linear Models',
+      weight: '45-55%',
+      concepts: [
+        'Linear Regression', 'Generalized Linear Model', 'Exponential Family',
+        'Link Function', 'Dispersion Parameter', 'Logistic Regression',
+        'Poisson Regression', 'Tweedie Distribution', 'Linear Mixed Model',
+        'Model Structure', 'Categorical Predictor', 'Interaction', 'Offset Variable',
+        'Control Variable', 'Multicollinearity', 'Deviance', 'R-Squared',
+        'Residual Sum of Squares', 'AIC', 'BIC', 'ANOVA', 'Variable Selection',
+        'Cross-Validation', 'Bias-Variance Tradeoff', 'Residual Plot', 'QQ Plot',
+        'Exploratory Data Analysis', 'Histogram'
+      ]
+    }
+  ];
+
+  // Exam MAS-I's keystone catalogue (quiz/src/data/keystoneConcepts.ts).
+  var KEYSTONES = [
+    'Poisson Process', 'Aggregate Loss Model', 'Maximum Likelihood Estimation',
+    'Sampling Distribution', 'Mean Square Error', 'Type I Error',
+    'Hazard Rate', 'Censoring', 'Generalized Linear Model', 'Link Function',
+    'Deviance', 'AIC'
+  ];
+
+  var STATES = {
+    // Probability models — the Poisson half is in good shape
+    'Poisson Process': 'level3', 'Interarrival Time': 'level2',
+    'Nonhomogeneous Poisson Process': 'level2',
+    'Compound Poisson Process': 'level2', 'Mixed Poisson Process': 'level1',
+    'Exponential Distribution': 'level3', 'Limited Expected Value': 'level1',
+    'Survival Model': 'level2', 'Hazard Rate': 'level2',
+    'Life Table': 'level1', 'Joint Life': 'level1',
+    'Whole Life Insurance': 'level1', 'Life Annuity': 'new',
+
+    // Statistics — estimation ahead of testing, loss models last
+    'Sample Mean': 'level3', 'Sample Variance': 'level3',
+    'Order Statistics': 'level2', 'Sampling Distribution': 'level2',
+    'Maximum Likelihood Estimation': 'level2', 'Method of Moments': 'level2',
+    'Sufficient Statistic': 'level1', 'Unbiasedness': 'level2',
+    'Mean Square Error': 'level1', 'Censoring': 'level1',
+    'Truncation': 'level1', 'Hypothesis Testing': 'level2',
+    'Type I Error': 'level2', 'Type II Error': 'level1',
+    'Aggregate Loss Model': 'new',
+
+    // Extended linear models — half the exam, and the work still ahead
+    'Linear Regression': 'level2', 'Generalized Linear Model': 'level1',
+    'Exponential Family': 'level1', 'Link Function': 'level1',
+    'Dispersion Parameter': 'new', 'Logistic Regression': 'level1',
+    'Poisson Regression': 'level1', 'Tweedie Distribution': 'new',
+    'Linear Mixed Model': 'new', 'Model Structure': 'new',
+    'Categorical Predictor': 'level1', 'Interaction': 'level1',
+    'Offset Variable': 'new', 'Control Variable': 'new',
+    'Multicollinearity': 'new', 'Deviance': 'level1', 'R-Squared': 'level2',
+    'Residual Sum of Squares': 'level1', 'AIC': 'level1', 'BIC': 'level1',
+    'ANOVA': 'level1', 'Variable Selection': 'new',
+    'Cross-Validation': 'new', 'Bias-Variance Tradeoff': 'new',
+    'Residual Plot': 'new', 'QQ Plot': 'new',
+    'Exploratory Data Analysis': 'level1', 'Histogram': 'level1'
+  };
+
+  // This widget draws itself, so (unlike the flip card and the quiz) it can't
+  // rely on a delegated listener — it has to run once the markup exists. In a
+  // page builder that isn't guaranteed at script time: Elementor's live editor
+  // re-renders a widget after its script has run, and AJAX page loads inject it
+  // later still. So rather than scanning once and hoping, `scan()` is safe to
+  // call repeatedly (the data-an-bound-mas-i guard makes it a no-op for anything
+  // already drawn) and is re-run whenever the DOM changes.
+  //
+  // The selector and the guard both carry this exam's suffix, so a page holding
+  // several exams' radials never has one widget's script claim another's div.
+  var uid = 0;
+  function scan() {
+    document.querySelectorAll('[data-an-radial-mas-i]').forEach(function (root) {
+      if (root.dataset.anBoundMasI) return;
+      var svg = root.querySelector('.an-radial-svg');
+      var legend = root.querySelector('.an-radial-legend');
+      if (!svg || !legend) return;
+      root.dataset.anBoundMasI = 'true';
+      // Start from a clean slate in case a re-render handed us a half-drawn copy.
+      svg.innerHTML = '';
+      legend.innerHTML = '';
+      render(root, {
+        // The exam is part of the id prefix so the <defs> paths of two radials
+        // on one page can't collide.
+        uid: 'mas-i-' + uid++,
+        topics: SYLLABUS,
+        keystones: KEYSTONES,
+        states: STATES
+      });
+    });
+  }
+
+  scan();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scan);
+  }
+
+  // One shared observer for every radial on the page, whichever exam it belongs
+  // to: each widget adds its own scan to the list, and the observer runs them
+  // all. Coalesced to at most one pass per frame, so watching the whole document
+  // stays cheap even on a busy page.
+  var scans = window.__anRadialScans = window.__anRadialScans || [];
+  scans.push(scan);
+  if (window.MutationObserver && !window.__anRadialObserver) {
+    var pending = false;
+    window.__anRadialObserver = new MutationObserver(function () {
+      if (pending) return;
+      pending = true;
+      var run = function () {
+        pending = false;
+        window.__anRadialScans.forEach(function (fn) { fn(); });
+      };
+      if (window.requestAnimationFrame) window.requestAnimationFrame(run);
+      else window.setTimeout(run, 16);
+    });
+    window.__anRadialObserver.observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    });
+  }
+})();
+</script>

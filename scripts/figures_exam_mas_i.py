@@ -84,7 +84,7 @@ def _zcurve(ax: Axes, mu=0.0, sd=1.0, colour=BLUE, width=2):
 @figure("Stochastic Processes", "Three sample paths of a counting process over the "
         "same time axis", width=WID)
 def stochastic_processes() -> Fig:
-    f = vcard("A process is a whole family of paths",
+    f = vcard("A stochastic process is a random variable at each time",
               ["{ X(t) : t ≥ 0 }", "one path per outcome ω"])
 
     ax = vaxes(f, 0, 10, 0, 7, left=40, top=26, bottom=44)
@@ -136,7 +136,7 @@ def poisson_process() -> Fig:
 @figure("Nonhomogeneous Poisson Process", "A time-varying intensity with the "
         "integrated rate shaded", width=WID)
 def nonhomogeneous_poisson_process() -> Fig:
-    f = vcard("A rate that changes with time",
+    f = vcard("The intensity λ(t) varies with time",
               ["m(t) = ∫₀ᵗ λ(u) du", "N(b) − N(a) ~ Poi(m(b) − m(a))"])
 
     ax = vaxes(f, 0, 6, 0, 16, left=42, top=34, bottom=44)
@@ -300,7 +300,7 @@ def life_table() -> Fig:
 @figure("Joint Life", "Joint-life and last-survivor status curves either side of the "
         "two single lives", width=WID)
 def joint_life() -> Fig:
-    f = vcard("Two lives, two statuses",
+    f = vcard("Joint life fails at the first death, last survivor at the last",
               ["ₜp_xy = ₜpₓ · ₜp_y   (joint life)",
                "ₜp_x̄y = ₜpₓ + ₜp_y − ₜpₓ·ₜp_y   (last survivor)"])
 
@@ -630,7 +630,7 @@ def sufficient_statistic() -> Fig:
 @figure("Sufficiency", "The likelihood factorizing into a piece that sees θ and a "
         "piece that does not", width=WID)
 def sufficiency() -> Fig:
-    f = vcard("The likelihood splits in two",
+    f = vcard("The likelihood factors through T(x): Fisher–Neyman",
               ["f(x₁,…,xₙ | θ) = g(T(x), θ) · h(x)", "Fisher–Neyman factorization"])
 
     f.box(BX0 + 20, BY0 + 30, 300, 44, label="f(x₁, …, xₙ | θ)", colour=BLUE)
@@ -653,7 +653,7 @@ def sufficiency() -> Fig:
 @figure("Maximum Likelihood Estimation", "The log-likelihood curve peaking at the "
         "maximum likelihood estimate", width=WID)
 def maximum_likelihood_estimation() -> Fig:
-    f = vcard("Pick the parameter the data likes best",
+    f = vcard("MLE picks the parameter that maximises the likelihood",
               ["ℓ(θ) = Σ ln f(xᵢ | θ)", "solve ∂ℓ/∂θ = 0"])
 
     ax = vaxes(f, 0.05, 0.55, -72, -48, left=46, top=36, bottom=46)
@@ -696,7 +696,7 @@ def method_of_moments() -> Fig:
 @figure("Fisher Information", "A sharply peaked likelihood beside a flat one, and the "
         "bound the curvature sets", width=WID)
 def fisher_information() -> Fig:
-    f = vcard("Curvature is information",
+    f = vcard("Information is the expected curvature of the log-likelihood",
               ["I(θ) = −E[ ∂²ln f / ∂θ² ]", "Var(θ̂) ≥ 1 / (n I(θ))"])
 
     ax = vaxes(f, -3, 3, -5.2, 0.4, left=44, top=38, bottom=52)
@@ -717,7 +717,7 @@ def fisher_information() -> Fig:
 @figure("Unbiasedness", "Two estimators' sampling distributions, one centred on the "
         "parameter and one not", width=WID)
 def unbiasedness() -> Fig:
-    f = vcard("Right on average, sample after sample",
+    f = vcard("An unbiased estimator centres on θ",
               ["E[θ̂] = θ", "Bias(θ̂) = E[θ̂] − θ = 0"])
 
     ax = vaxes(f, -4, 4, 0, 0.46, left=40, top=54, bottom=48)
@@ -737,7 +737,7 @@ def unbiasedness() -> Fig:
 
 @figure("Bias", "Bias and variance as the two parts of mean square error", width=WID)
 def bias() -> Fig:
-    f = vcard("Off-centre by a fixed amount",
+    f = vcard("Bias is the gap between E[θ̂] and θ",
               ["Bias(θ̂) = E[θ̂] − θ", "MSE = Var(θ̂) + Bias²"])
 
     ax = vaxes(f, -3.4, 4.6, 0, 0.62, left=40, top=44, bottom=76)
@@ -762,7 +762,7 @@ def bias() -> Fig:
 @figure("Consistency", "The sampling distribution collapsing onto the parameter as "
         "the sample grows", width=WID)
 def consistency() -> Fig:
-    f = vcard("It closes in on θ as n grows",
+    f = vcard("A consistent estimator converges to θ as n grows",
               ["θ̂ₙ →ᵖ θ", "P(|θ̂ₙ − θ| > ε) → 0"])
 
     ax = vaxes(f, -3, 3, 0, 3.1, left=40, top=44, bottom=48)
@@ -781,7 +781,7 @@ def consistency() -> Fig:
 @figure("Efficiency", "Two unbiased estimators with different variances against the "
         "Cramér–Rao bound", width=WID)
 def efficiency() -> Fig:
-    f = vcard("Among unbiased estimators, the tightest wins",
+    f = vcard("An efficient estimator attains the Cramér–Rao bound",
               ["eff(θ̂) = [1 / (n I(θ))] / Var(θ̂)", "efficient ⇔ attains the bound"])
 
     ax = vaxes(f, -4, 4, 0, 0.86, left=40, top=52, bottom=52)
@@ -841,7 +841,7 @@ def mean_square_error() -> Fig:
 @figure("Hypothesis Testing", "The null distribution with its rejection region and "
         "the observed statistic", width=WID)
 def hypothesis_testing() -> Fig:
-    f = vcard("Reject when the statistic is too extreme",
+    f = vcard("Reject H₀ when the statistic lands in the rejection region",
               ["reject H₀ if Z > z_α", "α = P(reject H₀ | H₀ true)"])
 
     ax = vaxes(f, -3.6, 3.6, 0, 0.46, left=36, top=52, bottom=50)
@@ -905,7 +905,7 @@ def type_ii_error() -> Fig:
 @figure("Power of a Test", "The power curve rising from α as the truth moves away "
         "from the null", width=WID)
 def power_of_a_test() -> Fig:
-    f = vcard("The chance of catching a real effect",
+    f = vcard("Power is P(reject H₀) when H₁ is true",
               ["Power(θ) = 1 − β(θ)", "Power(θ₀) = α"])
 
     ax = vaxes(f, 4800, 5500, 0, 1.05, left=44, top=42, bottom=50)
@@ -931,7 +931,7 @@ def power_of_a_test() -> Fig:
 @figure("p-Value", "The tail area beyond the observed statistic, compared with α",
         width=WID)
 def p_value() -> Fig:
-    f = vcard("The tail beyond what you observed",
+    f = vcard("The p-value is the tail probability beyond the data",
               ["p = P(statistic this extreme | H₀)", "reject H₀ when p < α"])
 
     ax = vaxes(f, -3.6, 3.6, 0, 0.46, left=36, top=60, bottom=54)
@@ -952,7 +952,7 @@ def p_value() -> Fig:
 @figure("Confidence Interval", "Twenty intervals from twenty samples, one of which "
         "misses the parameter", width=WID)
 def confidence_interval() -> Fig:
-    f = vcard("Coverage is a property of the recipe",
+    f = vcard("The interval is random, the parameter is not",
               ["X̄ ± z_(α/2) · σ/√n", "95% of such intervals cover μ"])
 
     x0, x1 = BX0 + 34, BX1 - 20
@@ -1057,7 +1057,7 @@ def truncation() -> Fig:
 @figure("Extended Linear Model", "The ladder from ordinary regression to the extended "
         "linear model, and what each rung relaxes", width=WID)
 def extended_linear_model() -> Fig:
-    f = vcard("Each rung relaxes one assumption",
+    f = vcard("From linear model to GLM to mixed model",
               ["g(μ) = β₀ + β₁x₁ + ⋯ + βₚxₚ", "distribution and link both chosen"])
 
     rungs = [
@@ -1431,7 +1431,7 @@ def multicollinearity() -> Fig:
 @figure("AIC", "The AIC curve bottoming out where fit stops paying for its "
         "parameters", width=WID)
 def aic() -> Fig:
-    f = vcard("Fit, minus a price per parameter",
+    f = vcard("AIC penalises the log-likelihood by 2 per parameter",
               ["AIC = −2ℓ(β̂) + 2p", "smaller is better"])
 
     ax = vaxes(f, 0.4, 7.6, 4080, 4180, left=56, top=48, bottom=50)
@@ -1452,7 +1452,7 @@ def aic() -> Fig:
 @figure("BIC", "BIC's heavier parameter penalty choosing a smaller model than AIC",
         width=WID)
 def bic() -> Fig:
-    f = vcard("A heavier price per parameter",
+    f = vcard("BIC penalises by ln n per parameter — harsher than AIC",
               ["BIC = −2ℓ(β̂) + p·ln n", "ln n > 2 whenever n ≥ 8"])
 
     ax = vaxes(f, 0.4, 7.6, 0, 60, left=48, top=52, bottom=50)
@@ -1471,7 +1471,7 @@ def bic() -> Fig:
 @figure("Deviance", "Deviance as the gap between the fitted model's likelihood and "
         "the saturated model's", width=WID)
 def deviance() -> Fig:
-    f = vcard("Distance from a perfect fit",
+    f = vcard("Deviance measures the gap from the saturated model",
               ["D = −2[ℓ(fitted) − ℓ(saturated)]", "ΔD between nested models ~ χ²"])
 
     levels = [("saturated model", 0.0, GREEN, "one parameter per row"),
@@ -1522,7 +1522,7 @@ def r_squared() -> Fig:
 @figure("Residual Sum of Squares", "Squared residuals as literal squares hung off the "
         "fitted line", width=WID)
 def residual_sum_of_squares() -> Fig:
-    f = vcard("Add up the squared misses",
+    f = vcard("RSS is the sum of the squared residuals",
               ["RSS = Σ (yᵢ − ŷᵢ)²", "least squares minimises it"])
 
     ax = vaxes(f, 0, 10, 0, 62, left=46, top=48, bottom=48)
@@ -1546,7 +1546,7 @@ def residual_sum_of_squares() -> Fig:
 @figure("ANOVA", "The analysis-of-variance table as a split of the total sum of "
         "squares", width=WID)
 def anova() -> Fig:
-    f = vcard("Split the variation, then take a ratio",
+    f = vcard("ANOVA splits the variation, then takes an F ratio",
               ["F = (SS_Reg / p) / (RSS / (n − p − 1))", "MS = SS / df"])
 
     x0, w = BX0 + 22, 276
@@ -1888,7 +1888,7 @@ def box_plot() -> Fig:
 @figure("Univariate Plot", "The same sample seen three ways: histogram, box plot, "
         "empirical CDF", width=WID)
 def univariate_plot() -> Fig:
-    f = vcard("Three views of one variable",
+    f = vcard("One variable: histogram, box plot, QQ plot",
               ["shape · outliers · quantiles", "no second variable involved"])
 
     px, pw = BX0 + 44, BX1 - BX0 - 64
@@ -1957,7 +1957,7 @@ def scatter_plot() -> Fig:
 @figure("Correlation", "Three scatter clouds at correlations of +0.9, 0 and −0.9",
         width=WID)
 def correlation() -> Fig:
-    f = vcard("How tightly two variables move together",
+    f = vcard("Correlation measures linear association, −1 to 1",
               ["ρ = Cov(X, Y) / (σ_X σ_Y)", "−1 ≤ ρ ≤ 1"])
 
     for i, (r, colour) in enumerate(((0.9, GREEN), (0.0, "var(--dim)"), (-0.9, ROSE))):

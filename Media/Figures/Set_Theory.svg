@@ -45,8 +45,8 @@ text {
     <clipPath id="clipA3"><circle cx="242.0" cy="284" r="36"/></clipPath>
   </defs>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="31" text-anchor="middle" class="ttl">Set operations are the language of</text>
-  <text x="180" y="50" text-anchor="middle" class="ttl">events</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Union, intersection, complement,</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">difference</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="438" text-anchor="middle" class="fml">P(Aᶜ) = 1 − P(A)</text>
   <rect x="30" y="84" width="140" height="104" rx="7" fill="var(--soft)" stroke="var(--edge)" stroke-width="1"/>

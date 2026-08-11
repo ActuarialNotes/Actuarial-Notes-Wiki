@@ -39,7 +39,8 @@ text {
 .dash  { stroke-dasharray: 4 3; }
 .dot   { stroke-dasharray: 1.5 3; stroke-linecap: round; }</style>
   <rect class="card" x="0.6" y="0.6" width="358.8" height="468.8" rx="10"/>
-  <text x="180" y="40" text-anchor="middle" class="ttl">Independence multiplies the areas</text>
+  <text x="180" y="31" text-anchor="middle" class="ttl">Independent events: knowing A does not</text>
+  <text x="180" y="50" text-anchor="middle" class="ttl">change P(B)</text>
   <line x1="28" y1="406" x2="332" y2="406" class="rule"/>
   <text x="180" y="430" text-anchor="middle" class="fml">P(A ∩ B) = P(A) · P(B)</text>
   <text x="180" y="452" text-anchor="middle" class="fml2">0.6 × 0.5 = 0.30</text>

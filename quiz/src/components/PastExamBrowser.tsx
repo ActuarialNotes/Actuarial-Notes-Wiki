@@ -29,15 +29,22 @@ interface Props {
   reportLink?: { url: string; label: string } | null
 }
 
-function StatCell({ rate }: { rate?: number }) {
-  const formatted = formatPassRate(rate)
+/**
+ * A sitting's pass ratio. The label follows the figure rather than the column:
+ * the *effective* ratio is a CAS measure, so an SOA sitting only ever has a raw
+ * pass rate and must not be labelled "eff. pass". A row with neither shows a
+ * dash under whichever label the rest of the shelf is using.
+ */
+function StatCell({ row, effectiveColumn }: { row: PastExamRow; effectiveColumn: boolean }) {
+  const isEffective = row.effectivePassRate !== undefined
+  const formatted = formatPassRate(row.effectivePassRate ?? row.passRate)
   return (
     <span className="flex shrink-0 flex-col items-end">
       <span className="text-sm font-semibold tabular-nums">
         {formatted ?? <span className="text-muted-foreground">—</span>}
       </span>
       <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-        eff. pass
+        {isEffective || (formatted === null && effectiveColumn) ? 'eff. pass' : 'pass rate'}
       </span>
     </span>
   )
@@ -60,6 +67,9 @@ export function PastExamBrowser({
   // carries published figures — a column of em-dashes reads as a broken
   // readout, so until then the header's lookup link is the honest answer.
   const showStats = hasPublishedStats(rows)
+  // Whether this exam's figures are CAS effective ratios at all — decides what
+  // an unfilled row's dash is labelled.
+  const effectiveColumn = rows.some(r => r.effectivePassRate !== undefined)
 
   return (
     <div className="space-y-2">
@@ -144,7 +154,7 @@ export function PastExamBrowser({
                     : 'Not added yet'}
                 </span>
               </span>
-              {showStats && <StatCell rate={row.effectivePassRate ?? row.passRate} />}
+              {showStats && <StatCell row={row} effectiveColumn={effectiveColumn} />}
               {isSelected && <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />}
             </button>
           )
